@@ -619,18 +619,8 @@ function get_property_JSON(contactJSON)
  * 			html object of send email form
  */
 function populate_send_email_details(el){
-	 // Add From address to the form (FROM - current user email)
-	 var CurrentuserModel = Backbone.Model.extend({
-	     //url: '/core/api/imap',
-	     url: '/core/api/users/current-user',
-	     restKey: "domainUser"
-	});
-	var currentuserModel = new CurrentuserModel();
-	currentuserModel.fetch({success: function(data){
-			var model = data.toJSON();
-			$("#emailForm").find( 'input[name="from"]' ).val(model.email);
-	}});
 
+	$("#emailForm", el).find( 'input[name="from"]' ).val(CURRENT_DOMAIN_USER.email);
 	// Fill hidden signature field using userprefs 
 	//$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
 	
