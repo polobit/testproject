@@ -126,8 +126,11 @@ function our_domain_sync()
 
 function add_signup_tag(callback)
 {
-	if (Agile_Contact.tags || Agile_Contact.tags.indexOf("Signup") < 0)
+	console.log(Agile_Contact.tags);
+	console.log(Agile_Contact.tags.indexOf("Signup"));
+	if (!Agile_Contact.tags || Agile_Contact.tags.indexOf("Signup") < 0)
 	{
+		console.log("adding tags");
 		_agile.add_tag("Signup", function(data)
 		{
 			Agile_Contact = data;
