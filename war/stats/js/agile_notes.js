@@ -32,7 +32,6 @@ function agile_addNote(data, callback, email)
 
 	// Get
 	var agile_url = agile_id.getURL() + "/contacts/add-note?callback=?&id=" + agile_id.get() + "&" + params;
-	console.log(agile_url);
 	
 	// Callback
 	agile_json(agile_url, callback);
