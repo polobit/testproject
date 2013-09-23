@@ -188,6 +188,11 @@ public class AnalyticsSQLUtil
 	{
 	    e.printStackTrace();
 	}
+	finally
+	{
+	    // Closes the Connection and ResultSet Objects
+	    GoogleSQL.closeResultSet(rs);
+	}
 
 	return count;
     }
@@ -218,6 +223,11 @@ public class AnalyticsSQLUtil
 	catch (SQLException e)
 	{
 	    e.printStackTrace();
+	}
+	finally
+	{
+	    // Closes the connection and ResultSet Objects
+	    GoogleSQL.closeResultSet(rs);
 	}
 
 	return count;

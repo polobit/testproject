@@ -53,8 +53,8 @@ public class AnalyticsServlet extends HttpServlet
 	// Request URL
 	String url = req.getParameter("url");
 
-	// Email if set in cookie.
-	String email = req.getParameter("email");
+	// Email if set in cookie. Removes trailing spaces if exists.
+	String email = req.getParameter("email").trim();
 
 	// Client IP Address
 	String ip = getClientIP(req);
