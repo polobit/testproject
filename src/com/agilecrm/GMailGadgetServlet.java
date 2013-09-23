@@ -16,6 +16,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -70,6 +71,7 @@ public class GMailGadgetServlet extends HttpServlet
 	result.put("user_exists", true);
 	result.put("api_key", apiKey);
 	result.put("domain", domainUser.domain);
+	result.put("email", domainUser.email);
 
 	// Setup API Key
 	resp.getWriter().println(result.toString());
@@ -92,10 +94,10 @@ public class GMailGadgetServlet extends HttpServlet
     {
 	// Get Current User
 	UserInfo user = (UserInfo) req.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-	
+
 	// Get Gadget Id
 	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
-	
+
 	// Get Cache Id
 	String ownerId = (String) CacheUtil.getCache(oneTimeSessionKey);
 	if (ownerId == null)
@@ -114,11 +116,13 @@ public class GMailGadgetServlet extends HttpServlet
 	System.out.println("domain user : " + domainUser);
 	if (domainUser == null)
 	{
-	    resp.getWriter().println("Sorry, you do not have access to "+NamespaceManager.get()+".agilecrm.com. Please contact your Agile CRM administrator to get a User account.");
+	    resp.getWriter().println(
+		    "Sorry, you do not have access to " + NamespaceManager.get()
+			    + ".agilecrm.com. Please contact your Agile CRM administrator to get a User account.");
 	    return false;
 	}
 	resp.getWriter().println("Saving user " + user.getEmail());
-	
+
 	// Save the gadget_id
 	domainUser.gadget_id = ownerId;
 	domainUser.save();
@@ -160,10 +164,9 @@ public class GMailGadgetServlet extends HttpServlet
 	{
 	    // Send domain exists as false to the client so that it can show
 	    // register message
-	    resp.getWriter()
-		    .println(
-			    "Domain <b>"+ domain +"</b> does not exist. You can register a new one &nbsp;<a href=\"https://"
-				    + "my.agilecrm.com/choose-domain\">here</a>.");
+	    resp.getWriter().println(
+		    "Domain <b>" + domain + "</b> does not exist. You can register a new one &nbsp;<a href=\"https://"
+			    + "my.agilecrm.com/choose-domain\">here</a>.");
 
 	    return;
 	}
@@ -197,11 +200,12 @@ public class GMailGadgetServlet extends HttpServlet
 	// get this value
 	// Basicaly - the popup does the openid authentcation and then maps
 	// this opensocialid using this one-time-session
-	CacheUtil.setCache(oneTimeSessionKey, ownerId);
+	CacheUtil.setCache(oneTimeSessionKey, ownerId, 7);
 
 	JSONObject result = new JSONObject();
 	result.put("user_exists", false);
 	result.put("popup", "https://googleapps.agilecrm.com/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey);
+	result.put("expires_at", new DateUtil().addDays(6).getTime().getTime());
 
 	resp.getWriter().println(result.toString());
     }
