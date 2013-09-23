@@ -8,6 +8,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -172,7 +174,8 @@ public class Opportunity extends Cursor
      * @param ownerId
      *            - Owner id.
      */
-    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability, String track, String ownerId)
+    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
+	    String track, String ownerId)
     {
 	this.name = name;
 	this.description = description;
@@ -303,6 +306,18 @@ public class Opportunity extends Cursor
     }
 
     /**
+     * Sets owner_key to the Case. Annotated with @JsonIgnore to prevent auto
+     * execution of this method (conflict with "PUT" request)
+     * 
+     * @param owner_key
+     */
+    @JsonIgnore
+    public void setOpportunityOwner(Key<DomainUser> ownerKey)
+    {
+	this.ownerKey = ownerKey;
+    }
+
+    /**
      * Saves opportuntiy in dao.
      */
     public void save()
@@ -390,7 +405,8 @@ public class Opportunity extends Cursor
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name + " description:" + description + " expectedValue: "
-		+ expected_value + " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
+		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
+		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }
