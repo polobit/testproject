@@ -1587,14 +1587,13 @@ $(function()
 
 		// show only seconds if hours and mins are zero
 		if (hours == 0 && minutes == 0)
-			return (seconds == 1 ? seconds + "sec" : seconds + "secs");
+			return (seconds + "s");
 
 		// show mins and secs if hours are zero.
 		if (hours == 0)
-			return (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
+			return (minutes + "m ") + (seconds + "s");
 
-		var result = (hours == 1 ? hours + "hr " : hours + "hrs ") + (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec"
-				: seconds + "secs");
+		var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
 		return result;
 	});
 
