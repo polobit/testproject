@@ -8,6 +8,8 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -220,6 +222,18 @@ public class Case extends Cursor
     public void delete()
     {
 	dao.deleteKey(Key.create(Case.class, this.id));
+    }
+
+    /**
+     * Sets owner_key to the Case. Annotated with @JsonIgnore to prevent auto
+     * execution of this method (conflict with "PUT" request)
+     * 
+     * @param owner_key
+     */
+    @JsonIgnore
+    public void setCaseOwner(Key<DomainUser> owner_key)
+    {
+	this.owner_key = owner_key;
     }
 
     /**
