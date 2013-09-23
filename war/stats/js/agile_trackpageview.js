@@ -18,7 +18,6 @@ function agile_trackPageview(callback)
 
 	// Current url
 	var url = document.location.href;
-	console.log(url);
 	if (url !== undefined && url != null)
 		url = encodeURIComponent(url);
 	else
@@ -28,7 +27,6 @@ function agile_trackPageview(callback)
 	var agile = agile_id.get();
 
 	var params = "";
-	console.log("New session " + agile_session.new_session);
 
 	// If it is a new session
 	if (agile_session.new_session)

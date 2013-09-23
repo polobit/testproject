@@ -33,7 +33,6 @@ function agile_createContact(data, callback)
 	// Create json object and append properties
 	var model = {};
 	model.properties = properties;
-	console.log(model);
 	if (data["tags"])
 	{
 		var tags = data["tags"];
@@ -83,9 +82,6 @@ function agile_deleteContact(email, callback)
 function agile_getContact(email, callback)
 {
 	var params = "email={0}".format(encodeURIComponent(email));
-	console.log(agile_id);
-	console.log(agile_id.getURL());
-	console.log(agile_id.get());
 
 	// Get
 	var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params;

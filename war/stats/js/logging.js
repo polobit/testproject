@@ -1,7 +1,7 @@
 function agile_enable_console_logging()
 {
 	// Added debug dummy function
-/*
+
 	var debugging = false; // or true
 	if (typeof console === "undefined" || !debugging)
 	{
@@ -25,7 +25,4 @@ function agile_enable_console_logging()
 			return 0;
 		};
 	}
-*/
-	var console = {};
-	console.log = function(){};
 }

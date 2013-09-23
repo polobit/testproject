@@ -37,7 +37,6 @@ var agile_session = {
 			var current_time_secs = new Date().getUTCSeconds();
 			if ((current_time_secs < prev_session_start_time) || (current_time_secs > (prev_session_start_time + this.cookie_duration_secs)))
 			{
-				console.log("session expired");
 				return this.generate();
 			}
 
@@ -47,7 +46,6 @@ var agile_session = {
 		// Generate session_id and store start date and time in cookie
 		generate : function()
 		{
-			console.log("Creating new session");
 			var session_id = this.random();
 			agile_create_cookie(this.cookie_name, session_id, 0);
 			agile_create_cookie(this.cookie_start_time, new Date().getUTCSeconds(), 0);
