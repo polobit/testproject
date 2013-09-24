@@ -62,8 +62,8 @@
 <meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LOGGED_IN_TIME) %>"/>
 
 <%
-	//String CSS_PATH = "/";
- 	String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
+	String CSS_PATH = "/";
+ 	/* String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/"; */
 %>
 <%
 	String logoutURL = "/login";
@@ -91,9 +91,14 @@
 	href="<%=CSS_PATH%>css/bootstrapSwitch.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-tour.min.css" />
+
+<!-- social suite's css -->
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/socialsuite.css" />
+
 <!-- Unified CSS for All Lib -->
 <link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
 <link href='tpl/min/tpl.js' />
+
 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -172,6 +177,11 @@
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu" style="<%=style_reports %>" ><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
+							
+							<li id="socialsuitemenu"><a href="#socialsuite">
+							     <i class="icon-group icon-white"></i> Social</a>
+							</li>
+
 
 							<li>
 								<form id="searchForm" class=" navbar-search"
