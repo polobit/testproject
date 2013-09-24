@@ -171,11 +171,13 @@ function set_up_widgets(el, widgets_el)
 
 		console.log(model.get('name'));
 
+		model.set('selector', model.get('name').replace( / +/g, ''));
+		
 		/*
 		 * Set the data element in the div so that we can retrieve this in get
 		 * plugin preferences
 		 */
-		$('#' + model.get('name'), widgets_el).data('model', model);
+		$('#' + model.get('selector'), widgets_el).data('model', model);
 
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded
@@ -193,18 +195,18 @@ function set_up_widgets(el, widgets_el)
 			console.log('in widget type custom');
 			console.log(model.get('name'));
 			console.log(model.get('script'));
-			console.log($('#' + model.get('name'), widgets_el));
+			console.log($('#' + model.get('selector'), widgets_el));
 
 			if (model.get('script'))
-				$('#' + model.get('name'), widgets_el).html(model.get('script'));
+				$('#' + model.get('selector'), widgets_el).html(model.get('script'));
 			else
 				getScript(model, function(data)
 				{
 					console.log(data);
-					$('#' + model.get('name'), widgets_el).html(data);
+					$('#' + model.get('selector'), widgets_el).html(data);
 				});
 
-			console.log($('#' + model.get('name'), widgets_el));
+			console.log($('#' + model.get('selector'), widgets_el));
 		}
 
 	}, this);

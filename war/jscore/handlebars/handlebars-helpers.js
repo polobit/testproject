@@ -1801,4 +1801,9 @@ $(function()
 		
 	});
 	
+	
+	Handlebars.registerHelper('remove_spaces', function(value) {
+		  return value.replace( / +/g, '');
+		  
+		 });
 });
