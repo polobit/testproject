@@ -18,7 +18,17 @@ function show_map(el) {
 	// Return, if no address is found 
 	if (!address) 
 		return;
-	address = JSON.parse(address);
+	
+	try
+	{
+		address = JSON.parse(address);
+	}
+	catch (err)
+	{
+		return;
+	}
+	
+	
 
 	// If all the address fields are empty, just return.
 	if (!address.address && !address.city && !address.state
