@@ -312,6 +312,7 @@ $(function()
 	Handlebars.registerHelper('tagslist', function(tags)
 	{
 
+		console.log(tags);
 		var json = {};
 
 		// Store tags in a json, starting letter as key
@@ -362,6 +363,35 @@ $(function()
 		}
 
 		return html;
+	});
+	
+	Handlebars.registerHelper('setupTags', function(tags) {
+		
+		console.log(tags);
+		var json = {};
+
+		var keys = [];
+		// Store tags in a json, starting letter as key
+		for ( var i = 0; i < tags.length; i++)
+		{
+			var tag = tags[i].tag;
+			var key = tag.charAt(0).toUpperCase();
+			console.log(jQuery.inArray( key, keys ) + "key = : " + key);
+			// console.log(tag);
+			if(jQuery.inArray( key, keys ) == -1)
+				keys.push(key);
+		}
+
+		// To sort tags in case-insensitive order i.e. keys in json object
+		keys.sort();
+		console.log(keys);
+		var html = "";
+		for ( var i in keys)
+		{
+			html += "<div class='tag-element'><div class='tag-key'>"+keys[i]+"</div><div class='tag-values' tag-alphabet=\""+keys[i]+"\"></div></div>";
+		}
+		console.log(html);
+		return new Handlebars.SafeString(html);
 	});
 
 	// To show milestones as columns an deals

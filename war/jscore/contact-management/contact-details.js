@@ -133,6 +133,12 @@ $(function(){
        				$.ajax({
        					url: 'core/api/tags/' + tag,
        					type: 'DELETE',
+       					success: function()
+       					{
+       						console.log(tagsCollection);
+       						tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
+       						console.log(tagsCollection);
+       					}
        				});
        			}
         });
@@ -204,11 +210,10 @@ $(function(){
 	       			if ($.inArray(new_tags, old_tags) == -1) 
 	       				$('#added-tags-ul').append('<li style="display:inline-block;" class="tag" data="' + new_tags + '"><span><a class="anchor" href="#tags/'+ new_tags + '" >'+ new_tags + '</a><a class="close remove-tags" id="' + new_tags + '" tag="'+new_tags+'">&times</a></span></li>');
 	       			
-	       			
+	       			console.log(new_tags);
 	       			// Adds the added tags (if new) to tags collection
-	       			$.each(new_tags,function(index, tag) {
-	       				tagsCollection.add({"tag" : tag});
-	       			});
+	       			
+	       				tagsCollection.add(new BaseModel({"tag" : new_tags}));
 	       		}
 	        });
 		}

@@ -301,8 +301,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	// Adds the tags to tags collection 
         	if (tags != undefined && tags.length != 0)
         		{
-        			$.each(tags[0].value,function(index, tag){
-        				tagsCollection.add( {"tag" : tag} );
+        			$.each(tags[0].value, function(index, tag){
+        				console.log(tagsCollection);
+        				tagsCollection.add(new BaseModel({"tag" : tag} ));
         			});
         		}
         	
