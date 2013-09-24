@@ -78,6 +78,14 @@ public class ContactField
 	this.value = value;
     }
 
+    public void updateField(ContactField field)
+    {
+	type = field.type;
+	name = field.name;
+	subtype = field.subtype;
+	value = field.value;
+    }
+
     @Override
     public String toString()
     {
