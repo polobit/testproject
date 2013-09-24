@@ -1,0 +1,58 @@
+<script id="all-domain-users-model-template" type="text/html">
+<td></td>
+<td>{{domain}}</td>
+<td>{{name}}</td>
+<td>{{email}}</td>
+<td>{{is_account_owner}}</td>
+<td>{{#if is_account_owner}}<a href="#" data="{{domain}}" class="delete-namespace btn btn-danger">Delete</a>{{/if}}</td>
+</script>
+
+<script id="all-domain-users-collection-template" type="text/html">
+<div class="row">
+<div class="span12">
+    <div class="page-header">
+        <h1>List of All Domain Users <small>{{count}}</small></h1>
+    </div>
+</div>
+</div>
+<div class="row">
+<div class="span12">
+    {{#unless this.length}}
+    <div class="slate">
+        <div class="slate-content">
+            <div class="box-left">
+                <img alt="Clipboard" src="/img/clipboard.png" />
+            </div>
+            <div class="box-right">
+                <h3>You don't have Domain Users.</h3>
+                <div class="text">
+                    No user is registered yet.
+                </div>
+                <br />
+                <a href="#" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Domain Users </a>
+            </div>
+        </div>
+    </div>
+    {{/unless}}
+    {{#if this.length}}
+    <div class="">
+        <div class="">
+            <table class="table table-striped onlySorting">
+                <thead>
+                    <tr>
+                        <th></th>
+						<th>Domain</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Account Owner</th>
+						<th>Delete Domain</th>
+                    </tr>
+                </thead>
+                <tbody id="all-domain-users-model-list"></tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</div>
+</div>
+</script>
