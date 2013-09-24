@@ -274,7 +274,10 @@ public class Contact extends Cursor
 	    this.properties.add(contactField);
 	}
 	else
-	    field = contactField;
+	{
+	    field.updateField(contactField);
+	}
+
 	save();
     }
 
