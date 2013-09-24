@@ -44,7 +44,6 @@ public class PHPAPI
 	{
 		try
 		{
-			System.out.println("entering create contact");
 			Contact contact = new Contact();
 			List<ContactField> properties = new ArrayList<ContactField>();
 			String[] tags = new String[0];
@@ -60,7 +59,6 @@ public class PHPAPI
 					tagString = tagString.replace("/ /g", " ");
 					tagString = tagString.replace("/, /g", ",");
 					tags = tagString.split(",");
-					System.out.println("tags array" + tags);
 				}
 				else
 				{
@@ -100,8 +98,6 @@ public class PHPAPI
 	{
 		try
 		{
-			System.out.println("entering delete contact");
-			System.out.println("email"+email);
 			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
@@ -330,7 +326,6 @@ public class PHPAPI
 					tags = tags.trim().replaceAll(" +", " ");
 					tags = tags.replaceAll(", ", ",");
 					tagsArray = tags.split(",");
-					System.out.println(" tags array is " + tagsArray);
 				}
 			}
 			contact.removeTags(tagsArray);
@@ -515,11 +510,65 @@ public class PHPAPI
 	{
 		try
 		{
-			System.out.println("entering get contact");
-			System.out.println("email"+email);
 			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				return null;
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(contact);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@PUT
+	@Path("contact")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String updateContact(String data, @QueryParam("id") String apiKey)
+	{
+		try
+		{	
+			JSONObject obj = new JSONObject(data);
+			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			Iterator<?> keys = obj.keys();
+			while(keys.hasNext())
+			{
+				String key = (String) keys.next();
+				if(key.equals("email"))
+					continue;
+				if(key.equals(Contact.FIRST_NAME)||key.equals(Contact.LAST_NAME)||key.equals(Contact.WEBSITE)||
+				   key.equals(Contact.COMPANY)||key.equals(Contact.TITLE)||key.equals("phone")||key.equals(Contact.ADDRESS))
+				{
+					ContactField field = contact.getContactFieldByName(key);
+					if(field == null)
+					{
+						field = new ContactField();
+						String value = obj.getString(key);
+						field.name = key;
+						field.value = value;
+						field.type = FieldType.SYSTEM;
+					}
+					else
+						field.value = obj.getString(key);
+					contact.properties.add(field);
+				}
+				else
+				{
+					ContactField field = new ContactField();
+					String value = obj.getString(key);
+					field.name = key;
+					field.value = value;
+					field.type = FieldType.CUSTOM;
+					contact.properties.add(field);
+				}
+			}
+			if (contact==null)
+				return null;
+			contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+			contact.save();
 			ObjectMapper mapper = new ObjectMapper();
 			return mapper.writeValueAsString(contact);
 		}
