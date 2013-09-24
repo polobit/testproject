@@ -200,7 +200,7 @@ public class GMailGadgetServlet extends HttpServlet
 	// get this value
 	// Basicaly - the popup does the openid authentcation and then maps
 	// this opensocialid using this one-time-session
-	CacheUtil.setCache(oneTimeSessionKey, ownerId, 7);
+	CacheUtil.setCacheForNumberOfDays(oneTimeSessionKey, ownerId, 7);
 
 	JSONObject result = new JSONObject();
 	result.put("user_exists", false);
