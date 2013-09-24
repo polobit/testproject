@@ -1,0 +1,316 @@
+<!-- main social suite container -->
+<script id="socialsuite-streams-collection-template" type="text/html">
+ {{#unless this.length}}  
+            <div class="span3">
+        		<div>
+            		<h3>Howdy, you do not have any added streams.</h3><br />
+            		<p>You can add stream from "Manage Stream" tab.</p>
+        		</div>
+    		</div><!-- span3 end -->
+ {{else}} 
+	<ul id="socialsuite-streams-model-list" class="columns row-fluid ui-sortable"></ul> 
+ {{/unless}}
+</script>
+
+<!-- main column in container -->
+<script id="socialsuite-streams-model-template" type="text/html">
+            <header class="column-header">    
+                {{#if profile_img_url}}
+                  <img src={{profile_img_url}} id={{id}}-profile-img class="user-profile-img pull-left thumbnail" alt="{{screen_name}}'s avatar.">
+                {{/if}}             
+               <!-- <small class="pull-right column-index">{{column_index}}</small> -->
+               {{#if_equals network_type "TWITTER"}}                 
+                 <i class="pull-right margin-hs social-type-icon icon icon-twitter"></i>
+               {{else}}
+                 <i class="pull-right margin-hs social-type-icon icon icon-linkedin"></i>
+               {{/if_equals}}               
+               <h4 class="column-title txt-ellipsis"> 
+                   {{#if_equals stream_type "All_Updates"}}    
+                      <span><b>All Updates</b></span>
+                   {{else}} 
+                      {{#if_equals stream_type "DM_Inbox"}}
+                         <span><b>DM Inbox</b></span>
+                      {{else}} 
+                         {{#if_equals stream_type "DM_Outbox"}}
+                            <span><b>DM Outbox</b></span>
+                         {{else}}
+  					        <span><b>{{stream_type}}</b></span>
+                         {{/if_equals}}
+                      {{/if_equals}}
+                   {{/if_equals}}
+                   {{#if_equals stream_type "Search"}}                 
+ 					   <small>{{keyword}}</small>
+                   {{/if_equals}}
+                   <br>
+ 				   <span class="attribution txt-mute txt-sub-antialiased">@{{screen_name}}</span>
+ 			   </h4> 
+               <span class="column-header-link">
+                 <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="Delete Stream"></i>                     
+                 {{#if_equals stream_type "Home"}}
+                   <i class="pull-right icon icon-home header-action" title="Home Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Mentions"}}
+                   <img src="../img/socialsuite/mentions.png" class="pull-right icon header-action" style="position:relative;right:-2px;" title="Mentions Stream">
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Retweets"}}
+                   <i class="pull-right icon icon-retweet header-action" title="Retweets Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "DM_Inbox"}}
+                   <i class="pull-right icon icon-download-alt header-action" title="DM Inbox Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "DM_Outbox"}}
+                   <i class="pull-right icon icon-upload-alt header-action" title="DM Outbox Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Favorites"}}
+                   <i class="pull-right icon icon-star header-action" title="Favorites Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Sent"}}
+                   <i class="pull-right icon icon-share-alt header-action" title="Sent Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Search"}}
+                   <i class="pull-right icon icon-search header-action" title="Search Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Scheduled"}}
+                   <i class="pull-right icon icon-calendar header-action" title="Scheduled Stream"></i>
+                 {{/if_equals}}
+				 {{#if_equals stream_type "All_Updates"}}
+                   <i class="pull-right icon icon-home header-action" title="All Updates"></i>
+                 {{/if_equals}}
+				 {{#if_equals stream_type "My_Updates"}}
+                   <i class="pull-right icon icon-share-alt header-action" title="My Updates"></i>
+                 {{/if_equals}}				  		
+				 {{#if_equals network_type "TWITTER"}} 		 		
+                   <i class="pull-right icon icon-edit compose-message header-action" stream-id={{id}} title="Compose Message"></i>
+				 {{else}}
+				   <i class="pull-right icon icon-edit share-update header-action" stream-id={{id}} title="Share an update"></i>
+				 {{/if_equals}} 
+               </span>	 
+            </header>
+            <div class="column-content" id="stream">
+                     
+            </div>
+</script>
+
+<!-- sub-column as model but collection in main-column  -->
+<script id="Column-collection-template" type="text/html">
+<div id="Column-model-list" class="chirp-container scroll-v">
+  <div class="" id="socialsuite-error-panel" style="display:none;" >
+  </div>  
+</div>
+</script>
+
+<!-- models for tweets -->
+<script id="Column-model-template" type="text/html">
+{{#if_equals msg_type "Tweet"}}
+<article id={{id}} tweet-id-str={{id_str}} class="stream-item is-actionable {{deleted_msg}}">
+   <div class="item-box">       
+      <div class="tweet">
+           <header class="tweet-header">        
+	          <a class="account-link link-complex block" href="http://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
+		         <div class="obj-left item-img tweet-img">  
+			       <img class="tweet-avatar avatar pull-left thumbnail" src={{user.profile_image_url}} width="40" height="40" alt="{{user.screen_name}}'s avatar" title="Klout Score {{klout_score}}">   
+ 		         </div> 
+ 		         <div class="tweet-user"> 
+ 			        <span class="account-inline txt-ellipsis"> 
+ 						<b class="fullname link-complex-target">{{user.name}}</b> 
+ 						<span class="username txt-mute"><span class="at">@</span>{{user.screen_name}}</span>  
+ 		    		</span> 
+ 				 </div> 
+    		  </a>  
+		   </header> 
+		   <div class="tweet-body"> 
+ 	          <p class="tweet-text with-linebreaks">{{text}}</p>                  
+ 			  <footer class="tweet-footer cf">
+              {{#if retweeted}}
+                 <span class="txt-mute txt-small">{{retweeted}}</span><br>
+              {{/if}}
+              <time class="time-ago txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>                              
+ 	    	  <ul class="tweet-actions">
+                 {{#if direct_message}}
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" data-user-name="{{user.name}}"> 
+                            <i class="icon icon-plus-sign" title="Add Contact"></i>                            
+                         </a> </li>
+                 {{else}}
+                    <li> <a class="tweet-action" href="https://twitter.com/{{user.screen_name}}/status/{{id_str}}" rel="url" target="_blank"> 
+                            <i class="icon icon-external-link" title="Detail Status"></i>                            
+                         </a> </li>	    		
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" data-user-name="{{user.name}}"> 
+                            <i class="icon icon-plus-sign" title="Add Contact"></i>                            
+                         </a> </li>	                 
+ 		    		<li> <a class="tweet-action" href="#socialsuite" rel="reply"> 
+                            <i class="icon icon-reply reply-message" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Reply"></i>                             
+                         </a> </li>                    
+ 		    		<li> <a class="tweet-action" href="#socialsuite" rel="retweet">
+                         {{#if retweeted_by_user}}
+                           <i class="icon icon-retweet undo-retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Retweet" style="color:#00FF40;"></i>
+                         {{else}}
+                             {{#if tweetowner_not_streamuser}}
+                                 <i class="icon icon-retweet retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Retweet"></i>
+                             {{/if}}
+                         {{/if}}
+                         </a> </li>
+ 		    		<li> <a class="tweet-action" href="#socialsuite" rel="favorite"> 
+                         {{#if favorited_by_user}}
+                            <i class="icon icon-star undo-favorite-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
+                         {{else}}
+                            <i class="icon icon-star favorite-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Favorite from {{user.screen_name}}"></i>                             
+                         {{/if}}
+                         </a> </li>
+                 {{/if}}
+ 		    		<li class="dropdown"> 
+                         <a id="{{id_str}}_more_options" class="tweet-action more-options dropdown-toggle" href="#socialsuite" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}> 
+                            <i class="icon icon-ellipsis-horizontal" title="More options"></i> 
+                         </a>
+    					 <ul id="{{id_str}}_more_options_list" aria-labelledby="{{id}}_more_options" class="pull-right more-options-list dropdown-menu" role="menu">
+                                <li role="presentation"><a href="#socialsuite" class="reply-message" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} role="menuitem">Reply to @{{user.screen_name}}</a></li>
+ 							{{#if in_contact}}	
+                                <li class="divider"></li>
+     							<li role="presentation"><a href="#socialsuite" class="add_score" role="menuitem">Add Score to @{{user.screen_name}}</a></li>                            
+                            	<li role="presentation"><a href="#socialsuite" class="add_star" role="menuitem">Add Star to @{{user.screen_name}}</a></li>
+                            	<li role="presentation"><a href="#socialsuite" class="add_campaigns" role="menuitem">Add to Campaigns @{{user.screen_name}}</a></li>
+							{{/if}}
+                            {{#if deletable_tweet}}
+                                <li class="divider"></li>
+                                <li role="presentation"><a href="#socialsuite" class="delete-tweet" role="menuitem" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}>Delete</a></li>                                
+                            {{/if}}
+    					 </ul>
+                    </li>  
+        		</ul>              
+ 			 </footer>  
+    	   </div> 
+		   <i class="sprite tweet-dogear"></i>
+		</div>
+	</div>                        
+</article>
+
+{{else}}
+ {{#stringToJSON this "message"}} {{/stringToJSON}}
+ <article id="{{message.timestamp}}" class="stream-item is-actionable" update_id={{id}} update_time="{{created_time}}">	
+  <div class="item-box">       
+      <div class="tweet">
+         {{#if_equals type "SHARED_ITEM"}}
+			{{#stringToJSON this.message "current-share"}} {{/stringToJSON}}
+			{{#if message.current-share.content}}
+              <header class="tweet-header">
+                  <a class="account-link link-complex block" href="{{message.current-share.content.shortenedUrl}}" rel="user" target="_blank"> 
+		             <div class="obj-left item-img tweet-img">  
+			           <img class="tweet-avatar avatar pull-left thumbnail" src="{{message.owner_picture}}" width="40" height="40" title="Klout Score {{klout_score}}">   
+ 		             </div> 
+ 		             <div class="tweet-user"> 
+ 			           <span class="account-inline txt-ellipsis"> 
+                       {{#if message.current-share.author}}
+ 						  <b class="fullname link-complex-target">{{message.current-share.author.firstName}} {{message.current-share.author.lastName}}</b>
+ 				          <span class="username txt-mute">{{message.current-share.author.headline}}</span>                      
+                       {{/if}} 
+ 		    		   </span> 
+ 				     </div> 
+    		      </a>  
+              </header> 
+		      <div class="tweet-body">
+ 	             <p class="tweet-text mb_0" style="word-break:normal; word-wrap:break-word;">
+				   {{#if message.current-share.content.title}}
+				      {{#if message.current-share.comment}}									
+					    {{show_link_in_statement message.current-share.comment}}<br />
+                        <a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>									
+				      {{else}}									
+					    <a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>
+					  {{/if}}
+				   {{else}}
+					  {{message.current-share.author.firstName}} shared a link {{show_link_in_statement message.current-share.content.shortenedUrl}}
+				   {{/if}}                   
+                 </p>
+                 <img src="{{message.current-share.content.thumbnailUrl}}">  
+ 			     <footer class="tweet-footer cf">             
+                   <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+                   <ul class="tweet-actions">                    
+					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Like in LinkedIn">
+                            <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
+                         </a> </li>
+					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Comment in LinkedIn">
+                            <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
+                         </a> </li>     
+                    <li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Share activity in LinkedIn">
+                            <i class="linkedin_share icon-share" id="{{id}}"></i>                            
+                         </a> </li>
+ 		    	    </ul>
+ 			     </footer>
+              </div>        
+            {{else}}
+               <header class="tweet-header">
+                  <a class="account-link link-complex block" href="{{message.current-share.content.shortenedUrl}}" rel="user" target="_blank"> 
+		             <div class="obj-left item-img tweet-img">  
+			            <img class="tweet-avatar avatar pull-left thumbnail" src="{{message.owner_picture}}" width="40" height="40" title="Klout Score {{klout_score}}">   
+ 		             </div> 
+ 		             <div class="tweet-user"> 
+ 			           <span class="account-inline txt-ellipsis"> 
+                       {{#if message.current-share.author}}
+ 						  <b class="fullname link-complex-target">{{message.current-share.author.firstName}} {{message.current-share.author.lastName}}</b>                       
+                       {{/if}} 
+ 		    		   </span> 
+ 				     </div> 
+    		      </a>  
+              </header> 
+		      <div class="tweet-body">
+                 <p class="mb_0" style="word-break:normal;word-wrap:break-word;">
+					{{show_link_in_statement message.current-share.comment}}
+				 </p>
+ 			     <footer class="tweet-footer cf">             
+                   <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+                   <ul class="tweet-actions">                    
+					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Like in LinkedIn">
+                            <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
+                         </a> </li>
+					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Comment in LinkedIn">
+                            <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
+                         </a> </li>          
+					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Share activity in LinkedIn">
+                            <i class="linkedin_share icon-share" id="{{id}}"></i>                            
+                         </a> </li>
+ 		    	    </ul>
+ 			     </footer>
+              </div>	 
+            {{/if}}
+         {{/if_equals}}
+		 {{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
+             <header class="tweet-header">
+                  <a class="account-link link-complex block" href="{{message.update_owner.publicProfileUrl}}" rel="user" target="_blank"> 
+		             <div class="obj-left item-img tweet-img">  
+			           <img class="tweet-avatar avatar pull-left thumbnail" src="{{message.update_owner.pictureUrl}}" width="40" height="40" title="Klout Score {{klout_score}}">   
+ 		             </div> 
+ 		             <div class="tweet-user"> 
+ 			           <span class="account-inline txt-ellipsis">
+ 						  <b class="fullname link-complex-target">{{message.update_owner.firstName}} {{message.update_owner.lastName}}</b>
+ 		    		   </span> 
+ 				     </div> 
+    		      </a>  
+              </header> 
+		      <div class="tweet-body">
+				 <p class="mb_0" style="word-break:normal; word-wrap:break-word;">
+					Connected to 
+					<a href="{{message.connect_with_person.publicProfileUrl}}" target="_blank">{{message.connect_with_person.firstName}}&nbsp{{message.connect_with_person.lastName}}</a>
+					{{#if message.connect_with_person.headline}}, {{message.connect_with_person.headline}}{{/if}}
+                    {{#if message.connect_with_person.pictureUrl}}
+                         <a href="{{message.connect_with_person.publicProfileUrl}}" target="_blank">
+                           <img class="tweet-avatar avatar thumbnail" src="{{message.connect_with_person.pictureUrl}}" width="40" height="40">
+                         </a>
+                    {{/if}}
+				 </p>
+ 			     <footer class="tweet-footer cf">             
+                   <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+                   <ul class="tweet-actions">
+                    <li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Like in LinkedIn">
+                            <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
+                         </a> </li>
+					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Comment in LinkedIn">
+                            <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
+                         </a> </li>     
+ 		    	    </ul>
+ 			     </footer>
+              </div> 	   
+         {{/if_equals}}
+	   <i class="sprite tweet-dogear"></i>
+	 </div>
+  </div>        
+ </article>
+{{/if_equals}}
+</script>
