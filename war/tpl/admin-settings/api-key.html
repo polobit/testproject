@@ -61,7 +61,7 @@ Track Page View<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.track_page_view();
+ _agile.track_page_view(callback);
 </pre>
 	</div>
 </div>
@@ -71,7 +71,7 @@ Create Contact<div class="clearfix"></div><br/>
     				<div class="span11">
 <pre class="prettyprint linenums">
  _agile.create_contact({"email":"jim@example.com", "first_name":"Jim", "last_name":"Brown",
-			"tags":"tag1, tag2"});
+			"tags":"tag1, tag2"}, callback);
 </pre>
 	</div>
 </div>
@@ -80,7 +80,7 @@ Delete Contact<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.delete_contact('jim@example.com');
+ _agile.delete_contact('jim@example.com', callback);
 </pre>
 	</div>
 </div>
@@ -89,7 +89,7 @@ Add Property<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
-_agile.add_property({"name":"type", "value":"sales"});
+_agile.add_property({"name":"type", "value":"sales"}, callback, optional_contact_email);
 </pre>
 	</div>
 </div>
@@ -98,7 +98,7 @@ Add Tag<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.add_tag('tags2, tag3, tag4');
+ _agile.add_tag('tags2, tag3, tag4', callback, optional_contact_email);
 </pre>
 	</div>
 </div>
@@ -107,7 +107,7 @@ Remove Tag<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.remove_tag('tag4, tag5, tag6');
+ _agile.remove_tag('tag4, tag5, tag6', callback, optional_contact_email);
 </pre>
 	</div>
 </div>
@@ -116,8 +116,8 @@ Add Score<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
-_agile.add_score(10);
-_agile.add_score(-5);
+_agile.add_score(10, callback, optional_contact_email);
+_agile.add_score(-5, callback, optional_contact_email);
 </pre>
 	</div>
 </div>
@@ -138,7 +138,9 @@ _agile.add_score(-5);
 				We currently have the following libraries for your convenience<br/>
 				<ul>
 					<li>Java (example implementation on <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">GitHub</a>)</li>
-					<li>Javascript</li>
+					<li>Javascript - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">GitHub</a></li>
+                    <li>PHP - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">GitHub</a></li>
+                    <li>.NET - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">GitHub</a></li>
 				</ul>
 				We will be publishing API for other languages very soon.
             </div>

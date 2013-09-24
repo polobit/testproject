@@ -9,12 +9,9 @@ var agile_id = {
 		{
 			this.id = id;
 			this.namespace = namespace;
-			console.log(id);
-			console.log(namespace);
 		}, get : function()
 		{
 			// Returns the id of the contact
-			console.log("get id" + this.id);
 			return this.id;
 		}, getURL : function()
 		{

@@ -92,25 +92,7 @@
         {
         	$('#share-by-email').remove();
         }
-        
-        // To append from address defaultly
-		var CurrentuserModel = Backbone.Model.extend({
-		     //url: '/core/api/imap',
-		     url: '/core/api/users/current-user',
-		     restKey: "domainUser"
-		});
-		 
-		var currentuserModel = new CurrentuserModel();
-		
-		currentuserModel.fetch({
-			
-			// Fetches email of Current Domain User
-			success: function(data){
-			
-				var model = data.toJSON();
-				//$("#sharemailForm").find( 'input[name="from"]' ).val(model.email);
-
-				var emailModal = $(getTemplate("share-by-email", model));
+				var emailModal = $(getTemplate("share-by-email", CURRENT_DOMAIN_USER));
 				
 				// Replacing text area break lines
 				var description = $(emailModal).find('textarea').val();
@@ -148,8 +130,6 @@
 					});
 		
 				});
-			 }
-		});
 		
 	});
 	

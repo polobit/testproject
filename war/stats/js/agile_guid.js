@@ -34,7 +34,6 @@ var agile_guid = {
 		// Generate guid
 		generate : function()
 		{
-			console.log("Generating new guid " + this.cookie_name);
 			guid = this.random();
 			agile_create_cookie(this.cookie_name, guid, 365 * 5);
 

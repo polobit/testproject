@@ -1,11 +1,8 @@
 package com.agilecrm.core.api;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -855,7 +852,7 @@ public class JSAPI
     {
     	JSONArray arr = new JSONArray();
     	List<Workflow> workflows = new ArrayList<Workflow>();
-    	workflows = WorkflowUtil.getWorkflowsOfCurrentUser("50");
+    	workflows = WorkflowUtil.getAllWorkflows();
     	for (Workflow workflow : workflows)
     	{
     		JSONObject obj = WorkflowUtil.getWorkflowJSON(workflow.id);
