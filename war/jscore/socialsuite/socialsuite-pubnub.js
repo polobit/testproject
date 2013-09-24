@@ -1,5 +1,5 @@
 /**
- * Creates Pubnub object and subscribe client channel as well as publish on agile_CRM_Channel. 
+ *  Creates Pubnub object and subscribe client channel as well as publish on agile_CRM_Channel. 
  * 
  */
 function initToPubNub() 
