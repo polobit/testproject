@@ -394,6 +394,37 @@ function agile_init_handlers() {
 		});
 	});
 
+	// Click event for Action Menu (Disassociate Gadget).
+	$('.action-disassocite-gadget').die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		
+		var Ac_Holder_Email = "";
+		if (!Is_Localhost){
+			
+			// Get user preferences.
+		    var prefs = new gadgets.Prefs();
+		    Ac_Holder_Email = prefs.getString("agile_user_email");
+		}
+		else{
+			Ac_Holder_Email = Ac_Email;
+		}
+		
+		// Hide whole mail list.
+		$(".gadget-contact-details-tab").hide();
+			
+		// Generate UI for warning message.
+		$('#agile_content').append('<div class="well well-small disassociate-ui" style="margin:0 0 5px 5px;">'
+				+'<p>Do you want to unlink the gadget from Agile CRM account - '+Ac_Holder_Email+' ?</p>'
+				+'<P style="margin:0px;"><input type="button" value="Yes" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",true) class="btn btn-primary" style="padding:2px 6px 2px;">'
+				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px;"></P>'
+				+'</div>');
+		
+		// Adjust gadget height.
+		gadgets.window.adjustHeight();
+		
+	});
+
 	// Click event for search contact.
 	$(".gadget-search-contact").die().live('click', function(e) {
 		// Prevent default functionality.
@@ -675,4 +706,41 @@ function agile_gadget_adjust_width(el, Text_Width, bool){
 function agile_gadget_adjust_height(){
 	if (!Is_Localhost)
 		gadgets.window.adjustHeight();
+}
+
+/**
+ * Disassociate Gadget.
+ * 
+ * @method agile_disassociate_gadget
+ * @param {String} email Contains account holders email id.
+ * @param {boolean} bool Flag for yes and no.
+ */
+function agile_disassociate_gadget(email, bool){
+	
+	if(bool){
+		
+		// Request to disassociate gadget.
+		_agile.disassociate_gadget(function(response) {
+			
+			if(!Is_Localhost){
+				// Reset user preferences
+			    var prefs = new gadgets.Prefs();
+			    prefs.set("agile_user_expire_at", 0);
+				prefs.set("agile_user_exists", "");
+				prefs.set("agile_user_domain", "");
+				prefs.set("agile_user_key", "");
+				
+				// Clear UI.
+				$("#agile_content").html('<img id="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>');
+				// Re-login.
+				agile_login();
+			}
+		}, email);
+	}
+	
+	else{
+		$(".gadget-contact-details-tab").show();
+		$(".disassociate-ui").remove();
+		
+	}
 }

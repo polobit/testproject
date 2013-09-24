@@ -2,17 +2,17 @@
 {{#if prefs}}
 	{{add_tag Widgets}}
 {{/if}}
-	<div class="widget_container" id="{{name}}-container">
+	<div class="widget_container" id="{{remove_spaces name}}-container">
 		<div class="widget_header widget_edit_icons" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
 			<div class="widget_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="widget_header_control">
-					<li><i id="{{name}}-move" class="icon-move {{name}}-move"></i></li>
+					<li><i id="{{remove_spaces name}}-move" class="icon-move {{remove_spaces name}}-move"></i></li>
 					{{#if is_minimized}}
-						<li><a href="#"><i widget="{{name}}" class="widget-maximize icon-plus"></i></a></li>
+						<li><a href="#"><i widget="{{remove_spaces name}}" class="widget-maximize icon-plus"></i></a></li>
 					{{else}}
-						<li><a href="#"><i widget="{{name}}" class="widget-minimize icon-minus"></i></a></li>
+						<li><a href="#"><i widget="{{remove_spaces name}}" class="widget-minimize icon-minus"></i></a></li>
 					{{/if}}
-					<li><a id="{{name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a></li>
+					<li><a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a></li>
 				</ul>
 			</div>
 			<div style="width:14%">
@@ -22,7 +22,7 @@
 				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{name}}{{/if_equals}}</strong>
 			</div>
 		</div>
-		<div class="widgets" id="{{name}}">
+		<div class="widgets" id="{{remove_spaces name}}">
 			{{#unless is_minimized}}
 			<center><img id="widget_load_img" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>
 			{{/unless}}
