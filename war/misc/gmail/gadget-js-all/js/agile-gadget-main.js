@@ -43,7 +43,8 @@ function agile_init_gadget() {
 		head.ready(function() {
 			
 			// Fetch user data from cookie.
-			agile_generate_ui("51ekokl790t85b11ivhim9ep7i","localhost");
+//			agile_generate_ui("51ekokl790t85b11ivhim9ep7i","localhost");
+			agile_generate_ui("3qpvaoo2s27ibehsu6kgc64nn","localhost");
 		});
 	}
 	
@@ -70,7 +71,7 @@ function agile_login() {
     var prefs = new gadgets.Prefs();
     var Agile_User_Exists = prefs.getString("agile_user_exists");
     
-	// Cookie present, Set account.
+	// Set account.
 	if (Agile_User_Exists == "true") {
     	var Agile_User_Key = prefs.getString("agile_user_key");
         var Agile_User_Domain = prefs.getString("agile_user_domain");
@@ -85,28 +86,41 @@ function agile_login() {
 		});
 	}
 	
-	// Cookie present, but new user set domain.
-    else if(Agile_User_Exists == "false") {
+	// New user set domain.
+    else {
     	var Agile_User_Popup = prefs.getString("agile_user_popup");
-		agile_user_setup_load(Agile_User_Popup);
+    	var Agile_User_Expire_At = prefs.getString("agile_user_expire_at");
+		var Today_Date = new Date().getTime();
+    	if(Today_Date < Agile_User_Expire_At)
+    		agile_user_setup_load(Agile_User_Popup);
+    	else{
+    		prefs.set("agile_user_expire_at", 0);
+    		Agile_Send_Auth();
+    	}
 	}
-		
-	// Check for cookie, if not there send login request.
-	else {
-		// Increase counter and append to request, so that it will not be cached.
-		Cache_Counter += 1;
-		var url = Lib_Path + 'gmail?chachecounter=' + Cache_Counter;
-		console.log("Osapi from " + url);
-		/*
-		 * Hit the server, passing in a signed request (and OpenSocial ID), to
-		 * see if we know who the user is.
-		 */
-		osapi.http.get({
-			'href' : url,
-			'format' : 'json',
-			'authz' : 'signed'
-		}).execute(agile_handle_load_response);
-	}
+}
+
+/**
+ * Sends Auth request.
+ * 
+ * @method Agile_Send_Auth
+ * 
+ * */
+function Agile_Send_Auth(){
+	
+	// Increase counter and append to request, so that it will not be cached.
+	Cache_Counter += 1;
+	var url = Lib_Path + 'gmail?chachecounter=' + Cache_Counter;
+	console.log("Osapi from " + url);
+	/*
+	 * Hit the server, passing in a signed request (and OpenSocial ID), to
+	 * see if we know who the user is.
+	 */
+	osapi.http.get({
+		'href' : url,
+		'format' : 'json',
+		'authz' : 'signed'
+	}).execute(agile_handle_load_response);
 }
 
 /**
@@ -121,23 +135,27 @@ function agile_handle_load_response(data) {
 
 	var prefs = new gadgets.Prefs();
     
-    // Check user exists, OpenID must have occurred previously.
-	if (data.content.user_exists != undefined && data.content.user_exists == true) {
-		data.content.user_exists = "true";
-		// Set user preferences.
-		prefs.set("agile_user_key", data.content.api_key);
-		prefs.set("agile_user_domain", data.content.domain);
-		prefs.set("agile_user_exists", data.content.user_exists);
-		agile_login();
-	}
-	
-	// User not exist, go for one time domain registration.
-	else {
-		data.content.user_exists = "false";
-		// Set user preferences.
-		prefs.set("agile_user_popup", data.content.popup);
-		prefs.set("agile_user_exists", data.content.user_exists);
-		agile_user_setup_load(data.content.popup);
+	if(data.content != undefined){
+		// Check user exists, OpenID must have occurred previously.
+		if (data.content.user_exists == true) {
+			data.content.user_exists = "true";
+			// Set user preferences.
+			prefs.set("agile_user_key", data.content.api_key);
+			prefs.set("agile_user_domain", data.content.domain);
+			prefs.set("agile_user_email", data.content.email);
+			prefs.set("agile_user_exists", data.content.user_exists);
+			agile_login();
+		}
+		
+		// User not exist, go for one time domain registration.
+		else {
+			data.content.user_exists = "false";
+			// Set user preferences.
+			prefs.set("agile_user_expire_at", data.content.expires_at);
+			prefs.set("agile_user_popup", data.content.popup);
+			prefs.set("agile_user_exists", data.content.user_exists);
+			agile_user_setup_load(data.content.popup);
+		}
 	}
 }
 
