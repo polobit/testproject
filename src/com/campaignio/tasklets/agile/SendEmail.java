@@ -16,7 +16,6 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
-import com.thirdparty.Mailgun;
 import com.thirdparty.Mandrill;
 
 /**
@@ -379,6 +378,10 @@ public class SendEmail extends TaskletAdapter
 	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
 	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
 
+	// Combine to and cc email
+	if (!StringUtils.isEmpty(cc))
+	    to = to + ", " + cc;
+
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 	String html = getStringValue(nodeJSON, subscriberJSON, data, HTML_EMAIL);
 	String text = getStringValue(nodeJSON, subscriberJSON, data, TEXT_EMAIL);
@@ -435,19 +438,15 @@ public class SendEmail extends TaskletAdapter
 	{
 	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), null);
 
-	    // if cc present, send using Mailgun as it supports 'Cc'
-	    if (!StringUtils.isEmpty(cc))
-		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
-	    else
-		Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
+	    // replyTo, html, text, subscriberJSON, campaignJSON);
+	    Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
 	}
 	else
 	{
-	    // if cc present, send using Mailgun as it supports 'Cc'
-	    if (!StringUtils.isEmpty(cc))
-		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, null, text);
-	    else
-		Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
+	    // Util.sendEmailUsingMailgun(fromEmail, fromName, to, subject,
+	    // replyTo, null, text, subscriberJSON, campaignJSON);
+	    Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
 	}
 
 	// Execute Next One in Loop

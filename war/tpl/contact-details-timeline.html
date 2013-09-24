@@ -109,16 +109,7 @@
                 <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{from}}</div>
                 <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>To:</b> {{to}}
                 </div>
-                
-                {{#if cc}}
-                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>Cc:</b> {{cc}}
-                </div>
-                {{/if}}
-                 
-                {{#if bcc}}
-                <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover"><b>Bcc:</b> {{bcc}}
-                </div>
-                {{/if}}
+            
             {{#if message}}
                 <div class="text"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{message}}}</p></div></div>
                     <div class="right" data="{{message}}"><a href="#" id="tl-mail-popover"><i class="icon-plus"></i></a></div>

@@ -44,18 +44,6 @@ public class ContactEmail
     public String to = null;
 
     /**
-     * Cc email address
-     */
-    @NotSaved(IfDefault.class)
-    public String cc = null;
-
-    /**
-     * Bcc email address
-     */
-    @NotSaved(IfDefault.class)
-    public String bcc = null;
-
-    /**
      * Subject of an email
      */
     @NotSaved(IfDefault.class)

@@ -20,7 +20,6 @@ function add_custom_fields_to_our_domain()
 
 	// Adds current loggedin time
 	add_current_loggedin_time();
-
 }
 
 /**
@@ -126,8 +125,6 @@ function our_domain_sync()
 
 function add_signup_tag(callback)
 {
-	console.log(Agile_Contact.tags);
-	console.log(Agile_Contact.tags.indexOf("Signup"));
 	if (!Agile_Contact.tags || Agile_Contact.tags.indexOf("Signup") < 0)
 	{
 		console.log("adding tags");

@@ -9,6 +9,7 @@ var TAGS;
 var tagsCollection;
 var isTagsTypeaheadActive;
 var tagsTemplate;
+var tagsCollectionView;
 /**
  * Creates a list (tags_list) only with tag values (i.e excludes the keys), 
  * by fetching the tags from server side, if they do not exist at client side (in TAGS). 
@@ -21,24 +22,16 @@ var tagsTemplate;
  */
 function setup_tags_typeahead() {
 	var tags_list = [];
-
+	
+	
 	// Fetches tags collection, if no tags are exist (in TAGS) 
     if(!TAGS)
     	{
-    		
-    		var TagsCollection = Backbone.Collection.extend({
-    			url: '/core/api/tags',
-    			sortKey: 'tag'
-    		});
-    		
-    		tagsCollection = new TagsCollection();
-    		
-    		tagsCollection.fetch({success:function(data){
-    			TAGS = tagsCollection.models;
-    			setup_tags_typeahead();
-    		}});
+    		init_tags_collection();
     		return;
     	}
+    
+    TAGS = tagsCollection.models;
     
     // Iterate TAGS to create tags_list (only with tag values)   
     _(TAGS).each(function (item) { 
@@ -96,7 +89,6 @@ function setup_tags_typeahead() {
 
     			json.tagsWithTime.push({"tag" : tag});
     			
-    			console.log( App_Contacts.contactDetailView.model.toJSON());
     			
     			saveEntity(json, 'core/api/contacts', function(data){
     				$("#addTagsForm").css("display", "none");
@@ -172,8 +164,7 @@ function setup_tags_typeahead() {
     				// Updates to both model and collection
     				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
     				addTagToTimelineDynamically(data.get("tagsWithTime"));
-    				
-    				tagsCollection.add( {"tag" : tag} );
+    				tagsCollection.add(new BaseModel( {"tag" : tag} ));
     			$("#addTagsForm").css("display", "none");
     		    $("#add-tags").css("display", "block");
 
@@ -237,30 +228,18 @@ function setup_tags_typeahead() {
  * 			contacts list view page as html object
  */
 function setup_tags(cel) {
-	if(!tagsCollection || (tagsCollection && tagsCollection.length <= 20))
-	{
-	    // Add Tags
-	    var TagsCollection = Backbone.Collection.extend({
-	        url: '/core/api/tags',
-	        sortKey: 'tag'
-	    });
-	    tagsCollection = new TagsCollection();
-	    tagsCollection.fetch({
-	        success: function () {
-	        	tagsTemplate = getTemplate('tagslist', tagsCollection.toJSON());
-	            var len = $('#tagslist', cel).length;
-	            $('#tagslist', cel).html(tagsTemplate);
 	
-	            TAGS = tagsCollection.models
-	           
-	            // Called to initiate typeahead to the fields with class attribute "tags_typeahead"
-	            setup_tags_typeahead();
-	        }
-	    });
-	    
-	    return;
+	
+	
+	if(!tagsCollection)
+	{
+		
+		init_tags_collection(cel, function(el){
+			$('#tagslist', cel).html(el);
+		});
+		return;
 	}
-	  $('#tagslist', cel).html(tagsTemplate);
+	  $('#tagslist', cel).html(tagsCollectionView.render(true).el);
 }
 
 /**
@@ -311,4 +290,40 @@ function get_new_tags(id){
         return tags;
 //        return tags.split(" ");
     }
+}
+
+function init_tags_collection(cel, callback)
+{
+	tagsCollectionView = new Base_Collection_View({ 
+			url : '/core/api/tags', 
+			sortKey: 'tag',
+			templateKey : 'tags', 
+		});
+	
+	tagsCollectionView.appendItem = append_tag;
+	
+
+	tagsCollection = tagsCollectionView.collection;
+	
+	tagsCollectionView.collection.fetch({success: function(data){
+		  TAGS = tagsCollection.models
+		  
+		// Called to initiate typeahead to the fields with class attribute "tags_typeahead"
+        setup_tags_typeahead();
+		  
+		if(callback && typeof (callback) === "function")
+			callback(tagsCollectionView.render(true).el);		  
+	}});
+}
+
+function append_tag(base_model)
+{
+	var tag = base_model.get('tag');
+	var key = tag.charAt(0).toUpperCase();
+	$( 'div[tag-alphabet="'+key+'"]', this.el).append('<a href="#tags/'+tag+'" id="'+tag.replace( / +/g, '' )+'-in-list">'+tag+'</a>&nbsp;');
+}
+
+function remove_tags(base_model)
+{
+	console.log("removed");	
 }

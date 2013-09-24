@@ -45,7 +45,7 @@ public class EmailsAPI
     {
 	try
 	{
-	    EmailUtil.sendMail(fromEmail, fromEmail, to, null, null, subject, fromEmail, body, null);
+	    EmailUtil.sendMail(fromEmail, fromEmail, to, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{
@@ -68,15 +68,17 @@ public class EmailsAPI
     @Path("contact/send-email")
     @POST
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@FormParam("from") String from, @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc,
-	    @FormParam("subject") String subject, @FormParam("body") String body, @FormParam("signature") String signature)
+    public void sendEmail(@FormParam("from") String from, @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("subject") String subject,
+	    @FormParam("body") String body, @FormParam("signature") String signature)
     {
+	// combine to and cc separated by commas
+	to = to + "," + cc;
 
 	// combine body and signature.
 	body = body + "<br/><div><br/><br/>" + signature + "</div>";
 
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailAndSend(from, to, cc, bcc, subject, body);
+	ContactEmailUtil.saveContactEmailAndSend(from, to, subject, body);
 
     }
 
