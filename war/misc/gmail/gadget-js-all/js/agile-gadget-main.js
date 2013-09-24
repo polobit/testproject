@@ -95,7 +95,7 @@ function agile_login() {
     		agile_user_setup_load(Agile_User_Popup);
     	else{
     		prefs.set("agile_user_expire_at", 0);
-    		Agile_Send_Auth();
+    		agile_send_auth();
     	}
 	}
 }
@@ -103,10 +103,10 @@ function agile_login() {
 /**
  * Sends Auth request.
  * 
- * @method Agile_Send_Auth
+ * @method agile_send_auth
  * 
  * */
-function Agile_Send_Auth(){
+function agile_send_auth(){
 	
 	// Increase counter and append to request, so that it will not be cached.
 	Cache_Counter += 1;
