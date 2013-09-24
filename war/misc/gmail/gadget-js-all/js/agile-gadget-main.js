@@ -18,7 +18,8 @@
  */
 var _agile = _agile || [];
 var Is_Localhost = false;
-var Lib_Path;
+var Lib_Path = "";
+var Ac_Email = "";
 var Contacts_Json = {};
 var Cache_Counter = 0;
 
@@ -35,7 +36,8 @@ function agile_init_gadget() {
 		Is_Localhost = true;
 		// Set library path.
 		Lib_Path = "http://localhost:8888/";
-
+		// Set account holder's email id in global variable.
+		Ac_Email = "test@example.com";
 		// Download scripts.
 		agile_download_scripts();
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
@@ -43,8 +45,7 @@ function agile_init_gadget() {
 		head.ready(function() {
 			
 			// Fetch user data from cookie.
-//			agile_generate_ui("51ekokl790t85b11ivhim9ep7i","localhost");
-			agile_generate_ui("3qpvaoo2s27ibehsu6kgc64nn","localhost");
+			agile_generate_ui("51ekokl790t85b11ivhim9ep7i","localhost");
 		});
 	}
 	
