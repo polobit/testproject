@@ -70,22 +70,14 @@ function agile_build_ui_for_emails(Email_Ids) {
 	$('#agile_content').html('');
 	// Clear contact data.
 	Contacts_Json = {};
+	Contacts_Json = Email_Ids;
 	
 	// Iterate for each mails.
-	$.each(Email_Ids[0], function(index, email) {
-
-		var val = {};
-		var Full_Name = (Email_Ids[1][index]).trim();
-		val.fname = (Full_Name).split(" ")[0];
-		val.lname = (Full_Name).split(" ")[1] == undefined ? "" : (Full_Name).split(" ")[1];
-		val.email = email;
+	$.each(Email_Ids, function(index, val) {
 		
-		// Store user data for future use.
-		Contacts_Json[val.email] = val;
+		// Fill Template with data.
 		agile_fill_individual_template_ui(val, $('#agile_content'));
 	});
-	console.log(Contacts_Json);
-	
 }
 
 /**

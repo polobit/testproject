@@ -326,8 +326,8 @@
      		<div class="fb-like" data-href="https://www.agilecrm.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"
      		      data-font="arial" style="overflow:hidden;display:inline;float:right;"></div>
      		-->
-		<a href="#" id="scroll-top"
-			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a>
+		<!-- <a href="#" id="scroll-top"
+			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a> -->
 	</footer>
 
 	<script src='https://da4o37ei6ybbh.cloudfront.net/js/lib/headjs-min.js'></script>
