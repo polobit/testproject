@@ -419,7 +419,7 @@ function agile_init_handlers() {
 		$('#agile_content').append('<div class="well well-small disassociate-ui" style="margin:0 0 5px 5px;">'
 				+'<p>Do you want to unlink the gadget from Agile CRM account - '+Ac_Holder_Email+' ?</p>'
 				+'<P style="margin:0px;"><input type="button" value="Yes" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",true) class="btn btn-primary" style="padding:2px 6px 2px;">'
-				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px;">'
+				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px; margin-left:10px;">'
 				+'<img class="disassociate-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>'
 				+'</P>'
 				+'</div>');
@@ -728,6 +728,7 @@ function agile_disassociate_gadget(email, bool){
 	else{
 		$(".gadget-contact-details-tab").show();
 		$(".disassociate-ui").remove();
+		agile_gadget_adjust_height();
 	}
 }
 
