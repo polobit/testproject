@@ -90,12 +90,12 @@ function agile_login() {
 	// New user set domain.
     else {
     	var Agile_User_Popup = prefs.getString("agile_user_popup");
-    	var Agile_User_Expire_At = prefs.getString("agile_user_expire_at");
+    	var Agile_User_Expire_At = parseInt(prefs.getString("agile_user_expire_at"));
 		var Today_Date = new Date().getTime();
     	if(Today_Date < Agile_User_Expire_At)
     		agile_user_setup_load(Agile_User_Popup);
     	else{
-    		prefs.set("agile_user_expire_at", 0);
+    		prefs.set("agile_user_expire_at", "0");
     		agile_send_auth();
     	}
 	}
@@ -152,7 +152,7 @@ function agile_handle_load_response(data) {
 		else {
 			data.content.user_exists = "false";
 			// Set user preferences.
-			prefs.set("agile_user_expire_at", data.content.expires_at);
+			prefs.set("agile_user_expire_at", data.content.expires_at.toString());
 			prefs.set("agile_user_popup", data.content.popup);
 			prefs.set("agile_user_exists", data.content.user_exists);
 			agile_user_setup_load(data.content.popup);

@@ -729,7 +729,7 @@ function agile_disassociate_gadget(email, bool){
 			if(!Is_Localhost){
 				// Reset user preferences
 			    var prefs = new gadgets.Prefs();
-			    prefs.set("agile_user_expire_at", 0);
+			    prefs.set("agile_user_expire_at", "0");
 				prefs.set("agile_user_exists", "");
 				prefs.set("agile_user_domain", "");
 				prefs.set("agile_user_key", "");
