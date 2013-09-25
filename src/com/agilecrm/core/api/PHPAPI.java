@@ -150,41 +150,6 @@ public class PHPAPI
 	}
 
 	@POST
-	@Path("score")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String addScore(String data)
-	{
-		try
-		{
-			Contact contact = new Contact();
-			JSONObject obj = new JSONObject(data);
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				String key = (String) keys.next();
-				if (key.equals("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(obj.getString(key));
-					if (contact == null)
-						return null;
-				}
-				if (key.equals("score"))
-				{
-					contact.addScore(obj.getInt(key));
-				}
-			}
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@POST
 	@Path("task")
 	@Consumes("application/json")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -343,7 +308,7 @@ public class PHPAPI
 	@Path("score")
 	@Consumes("application/json")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String subtractScore(String data)
+	public String updateScore(String data)
 	{
 		try
 		{
@@ -362,7 +327,7 @@ public class PHPAPI
 				if (key.equals("score"))
 				{
 					Integer value = obj.getInt(key);
-					contact.subtractScore(value);
+					contact.addScore(value);
 				}
 			}
 			ObjectMapper mapper = new ObjectMapper();

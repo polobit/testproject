@@ -417,7 +417,9 @@ function agile_init_handlers() {
 		$('#agile_content').append('<div class="well well-small disassociate-ui" style="margin:0 0 5px 5px;">'
 				+'<p>Do you want to unlink the gadget from Agile CRM account - '+Ac_Holder_Email+' ?</p>'
 				+'<P style="margin:0px;"><input type="button" value="Yes" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",true) class="btn btn-primary" style="padding:2px 6px 2px;">'
-				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px;"></P>'
+				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px;">'
+				+'<img class="disassociate-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>'
+				+'</P>'
 				+'</div>');
 		
 		// Adjust gadget height.
@@ -719,13 +721,15 @@ function agile_disassociate_gadget(email, bool){
 	
 	if(bool){
 		
+		// Waiting image.
+		$(".disassociate-waiting").show();
 		// Request to disassociate gadget.
 		_agile.disassociate_gadget(function(response) {
 			
 			if(!Is_Localhost){
 				// Reset user preferences
 			    var prefs = new gadgets.Prefs();
-			    prefs.set("agile_user_expire_at", 0);
+			    prefs.set("agile_user_expire_at", "0");
 				prefs.set("agile_user_exists", "");
 				prefs.set("agile_user_domain", "");
 				prefs.set("agile_user_key", "");
