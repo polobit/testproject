@@ -75,8 +75,10 @@ function agile_build_ui_for_emails(Email_Ids) {
 	// Iterate for each mails.
 	$.each(Email_Ids, function(index, val) {
 		
-		// Fill Template with data.
-		agile_fill_individual_template_ui(val, $('#agile_content'));
+		if(index != ""){
+			// Fill Template with data.
+			agile_fill_individual_template_ui(val, $('#agile_content'));
+		}
 	});
 }
 

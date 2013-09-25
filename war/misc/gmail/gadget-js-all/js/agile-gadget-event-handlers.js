@@ -724,8 +724,13 @@ function agile_disassociate_gadget(email, bool){
 		// Waiting image.
 		$(".disassociate-waiting").show();
 		// Request to disassociate gadget.
-		_agile.disassociate_gadget(function(response) {
+		
+		var Url = "https://googleapps.agilecrm.com/gmail?callback=?&disassociate_gadget=true&email=" + email;
+		
+		agile_json(Url, function(response) {
 			
+			// Clear UI.
+			$("#agile_content").html('<img id="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>');
 			if(!Is_Localhost){
 				// Reset user preferences
 			    var prefs = new gadgets.Prefs();
@@ -734,17 +739,14 @@ function agile_disassociate_gadget(email, bool){
 				prefs.set("agile_user_domain", "");
 				prefs.set("agile_user_key", "");
 				
-				// Clear UI.
-				$("#agile_content").html('<img id="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>');
 				// Re-login.
 				agile_login();
-			}
-		}, email);
+			}	
+		});
 	}
 	
 	else{
 		$(".gadget-contact-details-tab").show();
 		$(".disassociate-ui").remove();
-		
 	}
 }
