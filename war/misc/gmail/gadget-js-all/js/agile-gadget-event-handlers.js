@@ -18,11 +18,12 @@ function agile_init_handlers() {
 		e.preventDefault();
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
-				.find(".gadget-contact-form");
+				.find("div.show-form");
+		var that = $(this);
 		var json = [];
 		var data = {};
 		// Form serialization and validation.
-		json = agile_serialize_form(el);
+		json = agile_serialize_form(el.find(".gadget-contact-form"));
 
 		$.each(json, function(index, val) {
 			data[val.name] = val.value;
@@ -33,8 +34,9 @@ function agile_init_handlers() {
 		_agile.create_contact(data, function(response) {
 			// Hide saving image.
 			$('.contact-add-waiting', el).hide(1);
-			// Re-build GUI
-			agile_build_ui();
+			
+			// Generate UI.
+			agile_create_contact_ui(el, that, data.email, response);
 		});
 	});
 
@@ -417,7 +419,7 @@ function agile_init_handlers() {
 		$('#agile_content').append('<div class="well well-small disassociate-ui" style="margin:0 0 5px 5px;">'
 				+'<p>Do you want to unlink the gadget from Agile CRM account - '+Ac_Holder_Email+' ?</p>'
 				+'<P style="margin:0px;"><input type="button" value="Yes" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",true) class="btn btn-primary" style="padding:2px 6px 2px;">'
-				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px;">'
+				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px; margin-left:10px;">'
 				+'<img class="disassociate-waiting" style="display:none;width:16px; margin-left:10px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>'
 				+'</P>'
 				+'</div>');
@@ -443,30 +445,8 @@ function agile_init_handlers() {
 		// Get contact status based on email.
 		agile_getContact(email, function(val) {
 			
-			// Set library path for campaign link, check for local host.
-			if(Is_Localhost)
-				val.ac_path = Lib_Path;
-			else
-				val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
-			
-			// Merge Server response object with Contact_Json object.
-			$.extend(Contacts_Json[email], val);
-
-			// Build show contact form template.
-			agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
-				
-				// Contact not found for requested mail, show add contact in mail list.
-				if (val.id == null) {
-					agile_gadget_adjust_width(el, $(".contact-search-status", el), true);
-					$('.contact-search-status', el).show().delay(4000).hide(1,function(){
-						agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
-					});
-				}	
-				// Contact found, show contact summary. 
-				else {
-					$('.gadget-show-contact', el).trigger('click');
-				}
-			});
+			// Generate UI.
+			agile_create_contact_ui(el, that, email, val);
 		});
 	});
 
@@ -724,27 +704,58 @@ function agile_disassociate_gadget(email, bool){
 		// Waiting image.
 		$(".disassociate-waiting").show();
 		// Request to disassociate gadget.
-		_agile.disassociate_gadget(function(response) {
+		
+		var Url = "https://googleapps.agilecrm.com/gmail?callback=?&disassociate_gadget=true&email=" + email;
+		
+		agile_json(Url, function(response) {
 			
+			// Clear UI.
+			$("#agile_content").html('<img id="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>');
 			if(!Is_Localhost){
 				// Reset user preferences
 			    var prefs = new gadgets.Prefs();
-			    prefs.set("agile_user_expire_at", 0);
+			    prefs.set("agile_user_expire_at", "0");
 				prefs.set("agile_user_exists", "");
 				prefs.set("agile_user_domain", "");
 				prefs.set("agile_user_key", "");
 				
-				// Clear UI.
-				$("#agile_content").html('<img id="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>');
 				// Re-login.
 				agile_login();
-			}
-		}, email);
+			}	
+		});
 	}
 	
 	else{
 		$(".gadget-contact-details-tab").show();
 		$(".disassociate-ui").remove();
-		
+		agile_gadget_adjust_height();
 	}
+}
+
+function agile_create_contact_ui(el, that, email, val){
+	
+	// Set library path for campaign link, check for local host.
+	if(Is_Localhost)
+		val.ac_path = Lib_Path;
+	else
+		val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
+	
+	// Merge Server response object with Contact_Json object.
+	$.extend(Contacts_Json[email], val);
+
+	// Build show contact form template.
+	agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
+		
+		// Contact not found for requested mail, show add contact in mail list.
+		if (val.id == null) {
+			agile_gadget_adjust_width(el, $(".contact-search-status", el), true);
+			$('.contact-search-status', el).show().delay(4000).hide(1,function(){
+				agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
+			});
+		}	
+		// Contact found, show contact summary. 
+		else {
+			$('.gadget-show-contact', el).trigger('click');
+		}
+	});
 }

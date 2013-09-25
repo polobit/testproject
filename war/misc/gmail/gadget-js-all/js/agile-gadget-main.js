@@ -40,7 +40,7 @@ function agile_init_gadget() {
 		Ac_Email = "test@example.com";
 		// Download scripts.
 		agile_download_scripts();
-		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-ui.js');
 
 		head.ready(function() {
 			
@@ -90,12 +90,12 @@ function agile_login() {
 	// New user set domain.
     else {
     	var Agile_User_Popup = prefs.getString("agile_user_popup");
-    	var Agile_User_Expire_At = prefs.getString("agile_user_expire_at");
+    	var Agile_User_Expire_At = parseInt(prefs.getString("agile_user_expire_at"));
 		var Today_Date = new Date().getTime();
     	if(Today_Date < Agile_User_Expire_At)
     		agile_user_setup_load(Agile_User_Popup);
     	else{
-    		prefs.set("agile_user_expire_at", 0);
+    		prefs.set("agile_user_expire_at", "0");
     		agile_send_auth();
     	}
 	}
@@ -152,7 +152,7 @@ function agile_handle_load_response(data) {
 		else {
 			data.content.user_exists = "false";
 			// Set user preferences.
-			prefs.set("agile_user_expire_at", data.content.expires_at);
+			prefs.set("agile_user_expire_at", data.content.expires_at.toString());
 			prefs.set("agile_user_popup", data.content.popup);
 			prefs.set("agile_user_exists", data.content.user_exists);
 			agile_user_setup_load(data.content.popup);
@@ -181,7 +181,20 @@ function agile_user_setup_load(data){
 function agile_download_scripts() {
 
 	console.log("Downloading scripts");
-	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
+	if(!Is_Localhost)
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
+	else{
+		
+		// Handle bars, util and MD5.
+		head.js(Lib_Path + 'lib/handlebars-1.0.0.beta.6-min.js', Lib_Path
+				+ 'jscore/handlebars/handlebars-agile.js', Lib_Path
+				+ 'jscore/handlebars/handlebars-helpers.js', Lib_Path
+				+ 'jscore/util.js', Lib_Path + 'jscore/md5.js');
+		// JS API
+		head.js(Lib_Path + 'stats/min/agile-min.js');
+		// Gadget supporting JavaScript file.
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.js');
+	}
 }
 
 // Window onload event, call method to initiate gadget.

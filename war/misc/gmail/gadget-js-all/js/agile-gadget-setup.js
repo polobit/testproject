@@ -78,7 +78,7 @@ function agile_gadget_open_popup(Agile_Url) {
 				clearInterval(finished_interval);
 				// Reset user preferences
 			    var prefs = new gadgets.Prefs();
-			    prefs.set("agile_user_expire_at", 0);
+			    prefs.set("agile_user_expire_at", "0");
 				prefs.set("agile_user_popup", "");
 				prefs.set("agile_user_exists", "");
 				// Re-login.
