@@ -17,15 +17,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 @XmlRootElement
 public class Stream
 {
-	@Override
-	public String toString()
-	{
-		return "Stream [id=" + id + ", domain_user_id=" + domain_user_id + ", client_channel=" + client_channel
-				+ ", screen_name=" + screen_name + ", stream_type=" + stream_type + ", keyword=" + keyword + ", token="
-				+ token + ", secret=" + secret + ", network_type=" + network_type + ", column_index=" + column_index
-				+ "]";
-	}
-
 	// Unique id of Stream.
 	@Id
 	public Long id;
@@ -135,13 +126,22 @@ public class Stream
 		dao.delete(this);
 	}
 
+	/**
+	 * Before store stream in data store, It will check type of stream is or
+	 * not, Mentions then add screen name as keyword to be search as well as if
+	 * network type is Linkedin then create screen name from first name and last
+	 * name of User.
+	 */
 	@PrePersist
 	void prePersist()
 	{
+		// Stream type is Mentions, keyword is screen name of user.
 		if (this.stream_type.equalsIgnoreCase("Mentions"))
 		{
 			this.keyword = "@" + this.screen_name;
 		}
+
+		// Network type is linked, create screen name.
 		if (this.network_type.toString().equalsIgnoreCase("Linkedin"))
 		{
 			try
@@ -155,5 +155,15 @@ public class Stream
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/** Display all details of Stream. */
+	@Override
+	public String toString()
+	{
+		return "Stream [id=" + id + ", domain_user_id=" + domain_user_id + ", client_channel=" + client_channel
+				+ ", screen_name=" + screen_name + ", stream_type=" + stream_type + ", keyword=" + keyword + ", token="
+				+ token + ", secret=" + secret + ", network_type=" + network_type + ", column_index=" + column_index
+				+ "]";
 	}
 }

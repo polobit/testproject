@@ -1,7 +1,9 @@
-/*on load of social suites page*/
+/** on load of social suites page. */
 (function()
 	  {
 		 console.log("In social-ui.js");
+		 
+		 // Default values
 		 pubnub = null;	   
 		 StreamType = "Home";	
 		 NetworkType = "twitter";
@@ -9,7 +11,7 @@
 	  })();
 
 /**
- * Get stream name from selected option
+ * Get stream name from selected option in list of streams.
  */
 $(document).on("click",".streamtype", function(e)
 		{	
@@ -19,7 +21,7 @@ $(document).on("click",".streamtype", function(e)
 		});
 
 /**
- * Call add-contact form and fill name with twitter's owner. 
+ * Fills name with twitter's owner in add-contact popup form. 
  */
 $(document).on("click",".add-twitter-contact", function(e)
 {
@@ -34,7 +36,7 @@ $(document).on("click",".add-twitter-contact", function(e)
 });
 
 /**
- * Display form with stream details. 
+ * Display popup form with stream details. 
  */
 $(document).on("click",".add-social-stream", function(e)
 {		
@@ -42,37 +44,38 @@ $(document).on("click",".add-social-stream", function(e)
 	
 	if(NetworkType == "linkedin")
 	   {
-		 //show confirmation modal
+		 // Show confirmation modal
 		 $('#linkedinConfirmationModal').modal('show');		 
 		 setupSocialSuiteLinkedinOAuth();
 	   }
+	
 	if(NetworkType == "twitter")
 	   {
-		 //reset all fields
+		 // Reset all fields
 		 $('#streamDetail').each(function() {
 		 this.reset();});
 	
-		 //remove keyword input element
+		 // Remove keyword input element
 		 $('.remove-keyword').remove();
 	
-		 //enable button of add stream on form of stream detail
+		 // Enable button of add stream on form of stream detail
 		 $('#addStreamModal').find('#add-twitter-stream').removeAttr('disabled');
 	
-		 //fill elements on form related to stream.
+		 // Fill elements on form related to stream.
 		 fillStreamDetail();	
 
-		 //show form modal
+		 // Show form modal
 		 $('#addStreamModal').modal('show');
 	   }		
-});//addSocialStream end
-
+});// AddSocialStream end
 
 /**
- * append stream type and keyword to callback url and display confirmation modal.
+ * Fetchs data from popup stream add form and save stream as well as add to the collection, 
+ * publish register message to the server.
  */
 $(document).on("click",".save-twitter-stream", function(e)
 {	
-	//check add-stream button is not enable
+	// Check add-stream button is not enable
 	 if($('#addStreamModal').find('#add-twitter-stream').attr('disabled'))
  		return;
 	
@@ -85,31 +88,31 @@ $(document).on("click",".save-twitter-stream", function(e)
 	// Disables add button to prevent multiple add on click event issues
     $('#addStreamModal').find('#add-twitter-stream').attr('disabled', 'disabled');
 	
-	//Get data from form elements
+	// Get data from form elements
 	var formData = jQuery(streamDetail).serializeArray();	
     var json = {};
     
-    //convert into JSON
+    // Convert into JSON
     jQuery.each(formData, function() {
         json[this.name] = this.value || '';
     });     
     
-    //add collection's column index in stream.
+    // Add collection's column index in stream.
     json["column_index"] = StreamsListView.collection.length + 1;
     
-    //create new stream
+    // Create new stream
     var newStream = new Backbone.Model();
 	newStream.url = '/core/social';
 	newStream.save(json, {
 		success : function(stream) {
 					
-			//close form
+			// Close form
 			$('#addStreamModal').modal('hide');	
 			
-			//append in collection,add new stream 			
+			// Append in collection,add new stream 			
 			socialsuitecall.streams(stream);		
 			
-			//register on server
+			// Register on server
 			var publishJSON = {"message_type":"register", "stream":stream};
 			sendMessage(publishJSON);			
 			},
@@ -118,7 +121,7 @@ $(document).on("click",".save-twitter-stream", function(e)
 });
 
 /**
- * get stream and publish unregister stream.
+ * Gets stream, Delete it from collection and dB and publish unregister stream.
  */
 $(document).on("click",".stream-delete", function(e)
 {		
@@ -128,16 +131,16 @@ $(document).on("click",".stream-delete", function(e)
 	var id = $(this).attr('id');
 	console.log(id);	
 		
-	//fetch stream from collection
+	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(id).toJSON();
 	
-	//stream size is too big, can not handle by pubnub so remove list of tweet.
+	// Stream size is too big, can not handle by pubnub so remove list of tweet.
 	delete stream.tweetListView;	
 	
-	//unregister on server
+	// Unregister on server
 	var publishJSON = {"message_type":"unregister", "stream":stream};
 	sendMessage(publishJSON);
 	
-	//delete stream from collection and DB
+	// Delete stream from collection and DB
 	StreamsListView.collection.get(id).destroy();	
 });

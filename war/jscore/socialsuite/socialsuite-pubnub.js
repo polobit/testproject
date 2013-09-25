@@ -4,13 +4,11 @@
  */
 function initToPubNub() 
 {	
-	//pubnub already defined.
-	if(pubnub != null)
-		{
-		  return;
-		}
+	// Pubnub already defined.
+	if(pubnub != null)		
+		  return;		
 	
-	//pubnub not defined.
+	// Pubnub not defined.
 	var protocol = 'https';
 	
 	head.js(protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js', function() 
@@ -22,10 +20,10 @@ function initToPubNub()
 								ssl : true,
 								origin : 'pubsub.pubnub.com',								 
 							});
-		//Get compatibility with all browsers.
-		//pubnub.ready();
+		// Get compatibility with all browsers.
+		// pubnub.ready();
 		
-		//subscribe to client channel.
+		// Subscribe to client channel.
 		subscribeClientChannel();								
 	  });	
 }
@@ -45,7 +43,7 @@ function subscribeClientChannel()
 		              {					
 		                console.log(message);
 		                
-						//display message in stream. 
+						// Display message in stream. 
 						handleMessage(message);
 		              }, // RECEIVED A MESSAGE.
 	 presence   : function( message, env, channel )
@@ -57,7 +55,7 @@ function subscribeClientChannel()
 		   			  {
 			 			console.log("Agile crm Connected");
 			 			
-			 			//display added streams 
+			 			// Display added streams 
 			 			socialsuitecall.streams();				 
 		   			  },     // CONNECTION ESTABLISHED.
 	 disconnect : function(channel) {console.log(channel+" Disconnected");},  // LOST CONNECTION (OFFLINE).
@@ -74,24 +72,24 @@ function sendMessage(publishJSON)
 	console.log("in publish_message publishJSON: ");
 	console.log(publishJSON);
 	
-	//message to publish is empty.
-	if(publishJSON == null)
-		{
-		 return;
-		}  
+	// Message to publish is empty.
+	if(publishJSON == null)		
+		 return;		  
 
+	// Register stream on server
 	if(publishJSON.message_type == "register")
 		{		
-		  //add img of user to column.
+		  // Adds profile img to stream.
 		  addUserImgToColumn(publishJSON.stream);
 		  
+		  // If networl is Linkedin so no need to publish.
 		  if(publishJSON.stream.network_type == "LINKEDIN")
 		   {
 			 console.log("stream's network is " +publishJSON.stream.network_type);		     
 		     return;
 		   }
 		}
-			//message has data.
+			// Message has data.
 			pubnub.publish
 				({
 					channel : "agile_crm_Channel",
@@ -102,8 +100,9 @@ function sendMessage(publishJSON)
 							console.log("in publish_message Successfully Sent Message!");
 						else // The internet is gone. // TRY SENDING AGAIN!
 			        		{
-							console.log("in publish_message unsuccessfull to Sent Message!");
-							alert("in publish_message unsuccessfully to Sent Message!");
+							 console.log("in publish_message unsuccessfull to Sent Message!");
+							 alert("in publish_message unsuccessfully to Sent Message!");
+							 sendMessage(publishJSON);
 			        		}
 					}
 				});	

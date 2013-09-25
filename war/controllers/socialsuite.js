@@ -8,42 +8,44 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	{		
 		//route : function name
 		
-		//first function on click of tab
+		// First function on click of tab
 		"socialsuite" : "socialsuite",		
 		
-		//add stream
+		// Add stream
 		"add-stream" : "addStream",
 		
-		//streams tab with collection
+		// Streams tab with collection
 		"streams" : "streams",	
 	},
 	
-   /** on click on social tab this function is called, to initialize social suite,
-    * it will include js files
+   /** On click on social tab this function is called, to initialize social suite,
+    * it will include js files.
     */
    socialsuite : function() 
     {
 		console.log("In SocialSuite router");		
 		
+		// Makes tab active
 		$(".active").removeClass("active");
 		$("#socialsuitemenu").addClass("active");	
 
+		// Gets template to display.
 		$('#content').html(getTemplate('socialsuite'),{});	
 		
-		//It is added in home.jsp.
+		// It is added in home.jsp.
 		/*$('head').append('<link rel="stylesheet" href="/css/socialsuite.css" type="text/css" />');*/	
 				
 		head.js('js/designer/ui.js', function(){});		
 				
-	    /*create pubnub object and channel dedicated for new user or relogin */
+	    /* Creates pubnub object and channel dedicated for new user or relogin */
 		initToPubNub();	
 		
-		//display added streams 
+		// Display added streams 
 		this.streams();		
-	}, //socialsuite end	
+	}, // socialsuite end	
 	
 	/**
-	 * Display list of twitter streams. 
+	 * Display list of Twitter and Linkedin streams. 
 	 */
 	addStream : function()
 	{				
@@ -51,18 +53,19 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		
 		head.js('js/designer/ui.js', function(){});
 		
-		//default selected stream
+		// Default selected stream
 		StreamType = "Home";
 		
+		// Gets List Template
 		$('#content').html(getTemplate('socialsuite'),{});
 		$('#socialsuite-tabs-content').html(getTemplate('socialsuite-add-stream'),{});		
 	},//addStream end	
 	   
 	/**
-	  * this will create collection and store social suite in that, all columns 
+	  * This will create collection and store social suite in that, all streams 
 	  * and tweets are displayed from this function and publish msg to register.
 	  * 
-	  * StreamsListView [streamView (tweetListView [tweet] ) ]
+	  * Format : StreamsListView [streamView (tweetListView [tweet] ) ]
 	  */
 	streams : function(stream)
 	 {			
@@ -70,7 +73,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		
 		$('#content').html(getTemplate('socialsuite'),{});		
 		
-		if(!StreamsListView)  //streams not collected from dB
+		if(!StreamsListView)  // Streams not collected from dB
 		{			
 		 console.log("Creating Collection First Time.");
 		 StreamsListView = new Base_Collection_View
@@ -84,12 +87,12 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 	         
 	 	         postRenderCallback : function(el)
 	 	         {
-	 	        	//user have streams so register all of them on server
+	 	        	// User have streams so register all of them on server
 	 		 		 registerAll(); 		 		
 	 	         }
 	 	     });	
 		 
-		 //create new default function of collection
+		 // Creates new default function of collection
 		 StreamsListView.appendItem = this.socialSuiteAppendItem;		 
 		 
 		 StreamsListView.collection.fetch({success : function(data)
@@ -101,31 +104,35 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 	$('#socialsuite-tabs-content').append(StreamsListView.render().el);	 
 	 	return;
 	  }// if end
-		if(StreamsListView != undefined) //streams already collected in collection
+		if(StreamsListView != undefined) // Streams already collected in collection
 			{
 			  console.log("Collection already defined.");
-			  //new stream to add in collection.
+			  // New stream to add in collection.
 			  if(stream)
 				StreamsListView.collection.add(stream);
 			  
 			  $('#socialsuite-tabs-content').append(StreamsListView.render(true).el);
 			  
-			    //make columns draggable.		
+			    // Makes columns draggable.		
 			    setup_dragging_columns();								
 				
-				//create normal time.
+				// Creates normal time.
  		 	    head.js('lib/jquery.timeago.js', function(){	 
  		 		        $(".time-ago", $(".chirp-container")).timeago(); });
 			}		
 		
-		 //remove tweet element from ui
+		 // Remove deleted tweet element from ui
 		 $('.deleted').remove();
-	 }, //streams end
+	 }, // streams end
 		
+	 /**
+	  * Append Model and Collection with Models in Collection.
+	  */
 	 socialSuiteAppendItem : function(base_model)
 	 {	 
 	 	   console.log("base_model in append.");
 	 	   
+	 	   // Stream model in main collection
 		   var streamView = new Base_List_View({
 	 			model : base_model,
 	 			"view" : "inline", 		
@@ -136,6 +143,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 			name : base_model.get("column_index"),
 	 		   });		  
 		   
+		   // Tweet collection in stream model
 	 	   var tweetListView = new Base_Collection_View
 	 		({
 	 	         data: [],
@@ -143,20 +151,21 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 	         individual_tag_name: 'div', 	                  
 	 	     }); 	    
 	 	   
+	 	   // Comparator to sort tweets in tweet collection
 	 	  tweetListView.collection.comparator = function(model) 
 		    { 		  
 		     if (model.get('id'))
 			            return -model.get('id');
 		    };
 	 	   
-	 	   //if model has tweets, need to save them
+	 	   // If model has tweets, need to save them, when user change tab from social
 	 	   if(base_model.has("tweetListView"))
 	 		   {
 	 		      tweetListView.collection.add(base_model.get("tweetListView").toJSON());
 	 			  tweetListView.collection.sort() ;	 			
 	 		   }	 	   
 	 	   
-	 	   //add new tweetList View as collection in stream model
+	 	   // Add new tweetList View as collection in stream model
             base_model.set('tweetListView', tweetListView.collection);	 		
             
 	 		var el = streamView.render().el;
@@ -165,4 +174,5 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 }, // socialSuiteAppendItem end
 });
 
+// Global variable to call function from Router.
 var socialsuitecall = new SocialSuiteRouter();

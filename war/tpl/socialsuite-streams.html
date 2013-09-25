@@ -16,7 +16,7 @@
 <script id="socialsuite-streams-model-template" type="text/html">
             <header class="column-header">    
                 {{#if profile_img_url}}
-                  <img src={{profile_img_url}} id={{id}}-profile-img class="user-profile-img pull-left thumbnail" alt="{{screen_name}}'s avatar.">
+                  <img src={{profile_img_url}} id={{id}}-profile-img class="user-profile-img pull-left thumbnail" alt="{{screen_name}}'s avatar." title="{{screen_name}}'s avatar.">
                 {{/if}}             
                <!-- <small class="pull-right column-index">{{column_index}}</small> -->
                {{#if_equals network_type "TWITTER"}}                 
@@ -124,7 +124,7 @@
               {{#if retweeted}}
                  <span class="txt-mute txt-small">{{retweeted}}</span><br>
               {{/if}}
-              <time class="time-ago txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>                              
+              <time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>                              
  	    	  <ul class="tweet-actions">
                  {{#if direct_message}}
                     <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" data-user-name="{{user.name}}"> 
@@ -142,7 +142,7 @@
                          </a> </li>                    
  		    		<li> <a class="tweet-action" href="#socialsuite" rel="retweet">
                          {{#if retweeted_by_user}}
-                           <i class="icon icon-retweet undo-retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Retweet" style="color:#00FF40;"></i>
+                           <i class="icon icon-retweet undo-retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} retweet-id="{{retweet_id}}" stream-id={{stream_id}} title="Retweet" style="color:#00FF40;"></i>
                          {{else}}
                              {{#if tweetowner_not_streamuser}}
                                  <i class="icon icon-retweet retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Retweet"></i>

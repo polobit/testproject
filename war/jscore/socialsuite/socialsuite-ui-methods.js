@@ -1,5 +1,5 @@
 /**
- * fill details of stream in form.
+ *  Fill details of stream in add-stream form.
  */
 function fillStreamDetail()
 {
@@ -23,9 +23,6 @@ function fillStreamDetail()
 /**
  * Shows setup if user adds LinkedIn stream. Uses ScribeServlet 
  * to create a stream and save it to the dB.
- * 
- * @param plugin_id
- * 			To get the widget and save tokens in it.
  */
 function setupSocialSuiteLinkedinOAuth()
 {
@@ -40,19 +37,19 @@ function setupSocialSuiteLinkedinOAuth()
     var url = '/scribe?service=linkedin&return_url=' + encodeURIComponent(callbackURL) +
         '&stream_type=' + encodeURIComponent(StreamType);
 
-    //Shows a link button in the UI which connects to the above URL
+    // Shows a link button in the UI which connects to the above URL
     $('#linkedinAddStream').html("<a id='add-linkedin-stream' type='button' class='save-linkedin-stream btn btn-primary' href=\"" + url + "\" style='text-decoration: none;'>" + 
     		"Link Your LinkedIn</a>");    
 }
 
 /**
- * register all
+ *  Register all streams on server
  */
 function registerAll()
 { 	
   var streamsJSON = StreamsListView.collection.toJSON();
 		
-  //streams not available OR streams already registered OR pubnub not initialized	
+  // Streams not available OR streams already registered OR pubnub not initialized	
   if(streamsJSON == null || registerAllDone == true || pubnub == null)
 	{
 	  console.log("registerAllDone : "+registerAllDone);
@@ -62,31 +59,31 @@ function registerAll()
    console.log("In registerAll have streams.");       
    console.log(streamsJSON);
 	  	
-   //Get stream
+   // Get stream
    $.each(streamsJSON, function(i, stream)
 	 {	  		       
-	    /* publish data to register on server */
+	    /* Publish data to register on server */
 	 	var publishJSON = {"message_type":"register", "stream":stream};
 	    sendMessage(publishJSON);
 	 });
    
-   //all added streams registered. 
+   // All added streams registered. 
    registerAllDone = true;
    console.log("registerAllDone : "+registerAllDone);  
 }
 
 /**
- * add relevant user img to column.
+ * Add relevant profile img to stream in column header.
  */
 function addUserImgToColumn(stream)
 {	
-	  //Get stream from collection.
+	  // Get stream from collection.
 	  var modelStream = StreamsListView.collection.get(stream.id);	 
 	  console.log(modelStream);
 	  
 	  console.log("to get profile img url");
 	  
-	  //fetching profile image url from twitter server    											  	
+	  // Fetching profile image url from twitter/linkedin server    											  	
 	  $.get("/core/social/getprofileimg/" + stream.id, 
 			    function (url)
 			    {
@@ -96,30 +93,38 @@ function addUserImgToColumn(stream)
 	              modelStream.set("profile_img_url",url);
 	              console.log(modelStream.toJSON());
 	            	
-	              //append in collection 			
+	              // Append in collection 			
 	    		  socialsuitecall.streams(modelStream);
 
-	    		  //get network updates from linkedin
+	    		  // Get network updates from linkedin
 	    		  if(stream.stream_type == "All_Updates")	    			  
 	    		     getSocialSuiteLinkedInNetworkUpdates(stream);
    			    });  
 }
 
 /**
- * add tweet in stream.
+ * Add tweet in stream.
  */
 function handleMessage(tweet)
 {		
-  //add type of message
+  // Add type of message
   tweet["msg_type"] = "Tweet";
 	
-  //Get stream from collection.
+  // We need this messages to reflect actions in all added relevant streams.
+  if(tweet.delete != null)
+	  {
+	    console.log("delete tweet");
+	    return;
+	  }
+  
+  // Get stream from collection.
   var modelStream = StreamsListView.collection.get(tweet.stream_id);	 
   console.log(modelStream);
   
   if(modelStream != null || modelStream != undefined)
 	{		
-	 //search tweet owner's kloutscore.
+	 // Searchs tweet owner's kloutscore.
+	 // Fetches tweet owner's klout id.
 	 var url = "http://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
 
      $.getJSON( url , function(data) {
@@ -127,42 +132,48 @@ function handleMessage(tweet)
         })
      .success(function( data ){
         console.log(data);      
-    	      
+    	
+   	    // Fetches tweet owner's klout score.
     	url = "http://api.klout.com/v2/user.json/"+data.id+"/score?key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
     	      
     	$.getJSON( url, function(data) {
     		  console.log(data);
     	    })
     	 .success( function( userScore ){
-    		//on mouse focus on profile img of tweet shows klout score
+    		// On mouse focus on profile img of tweet shows klout score
             console.log(tweet.user.screen_name +" screen_name : klout_score " + userScore.score);
             tweet["klout_score"] = Math.round(userScore.score);
             
             addTweetToStream(modelStream,tweet);           
-           }) //get klout score of user end
+           }) // Get klout score of user end
          .error(function( jqxhr, textStatus, error ) {
        	   var err = textStatus + ", " + error;
        	   console.log( "klout score of user end Request Failed: " + err );
        	   addTweetToStream(modelStream,tweet);
        	   });
-         })//get klout id of user end
+         })// Get klout id of user end
        .error(function( jqxhr, textStatus, error ) {
     	   var err = textStatus + ", " + error;
     	   console.log( "klout id of user end Request Failed: " + err );
     	   addTweetToStream(modelStream,tweet);
     	   });
-	}//if end
+	}// If end
 }
 
+/**
+ * Add Tweet to relevant stream with some extra tags as per requirement.
+ */
 function addTweetToStream(modelStream,tweet)
 {
-	//if user is tweet owner no need to show retweet icon.
+	// If stream owner is tweet owner no need to show retweet icon.
     if(modelStream.get('screen_name') != tweet.user.screen_name)            	
        tweet["tweetowner_not_streamuser"] = true;      
-    
+
+    // If stream is Sent or tweet owner is stream owner then show delete option.
     if(tweet.stream_type == "Sent" || modelStream.get('screen_name') == tweet.user.screen_name)
     	 tweet["deletable_tweet"] = true;
     
+    // If tweet is DM then show delete options and hide other options.
     if(tweet.stream_type == "DM_Inbox" || tweet.stream_type == "DM_Outbox")
       {
     	tweet["direct_message"] = true;
@@ -171,26 +182,26 @@ function addTweetToStream(modelStream,tweet)
     
     console.log("for add "+modelStream.get('tweetListView').length);
 		
-    //sort stream on tweet id_str basis
+    // Sort stream on tweet id basis which is unique and recent tweet has highest value.
 	modelStream.get('tweetListView').comparator = function(model) 
 	 { 		  
 	  if (model.get('id'))
 	     return -model.get('id');
 	 };
 	   
-	 //Add tweet to stream.
+	 // Add tweet to stream.
 	 modelStream.get('tweetListView').add(tweet);	
 	   
-	 //sort stream on id. so recent tweet come on top.
+	 // Sort stream on id. so recent tweet comes on top.
 	 modelStream.get('tweetListView').sort() ;	   
 	   
-	 //create normal time.
+	 // Create normal time.
 	 head.js('lib/jquery.timeago.js', function(){	 
 		        $(".time-ago", $(".chirp-container")).timeago();	
 			});
 }
 
-//Make columns draggable.
+// Make columns draggable.
 function setup_dragging_columns()
 {
 	console.log("in setup_dragging_columns");
@@ -219,8 +230,8 @@ function setup_dragging_columns()
 						  
 						  var newColumn = $(this).html();
 						  console.log("newColumn :");console.log(newColumn);							
-					    },//update end
-					 }); //sortable end
+					    },// Update end
+					 }); // Sortable end
 				 $('ul.columns').disableSelection();
 			   });	
-}//setup_column_in_columns end
+}// Setup_column_in_columns end
