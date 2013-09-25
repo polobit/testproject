@@ -269,7 +269,9 @@ function agile_crm_add_note(subject, description)
  */
 function agile_crm_get_plugin(pluginName)
 {
+	pluginName = pluginName.replace( / +/g, ''); 
 	console.log('plugin name ' + pluginName);
+	
 	/*
 	 * Retrieves plugin data from the model data which is set to plugin block
 	 * while loading plugins
@@ -291,6 +293,7 @@ function agile_crm_get_plugin(pluginName)
  */
 function agile_crm_get_plugin_prefs(pluginName)
 {
+	pluginName = pluginName.replace( / +/g, '');
 	// Gets data attribute of from the plugin, and return prefs from that object
 	return $('#' + pluginName, App_Contacts.contactDetailView.el).data('model').toJSON().prefs;
 }
@@ -305,6 +308,8 @@ function agile_crm_get_plugin_prefs(pluginName)
  */
 function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 {
+	pluginName = pluginName.replace( / +/g, '');
+	
 	// Get the model from the the element
 	var widget = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
 
