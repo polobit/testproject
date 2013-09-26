@@ -315,7 +315,7 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 	var widget = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
 
 	// Set changed preferences to widget backbone model
-	widget.set({"prefs": prefs}, {silent : true}); 
+	widget.set("prefs", prefs); 
 
 	// URL to connect with widgets
 	widget.url = "core/api/widgets"
@@ -334,7 +334,7 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 			// Execute the callback, passing parameters as necessary
 			callback(data.toJSON());
 		}
-	} }, { silent : true });
+	} });
 
 }
 
