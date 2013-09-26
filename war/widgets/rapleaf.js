@@ -13,7 +13,7 @@ $(function()
 	RAPLEAF_LOADING_IMAGE = '<div id="rap_info_load"><center><img  src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center></div>';
 
 	// Retrieves widget which is fetched using script API
-	var rapleaf_widget = agile_crm_get_plugin(RAPLEAF_PLUGIN_NAME);
+	var rapleaf_widget = agile_crm_get_widget(RAPLEAF_PLUGIN_NAME);
 
 	console.log('In Rapleaf');
 	console.log(rapleaf_widget);
