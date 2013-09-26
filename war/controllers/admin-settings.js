@@ -315,7 +315,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		var view = new Base_Model_View({
 			url : '/core/api/milestone',
 			template : "admin-settings-milestones",
-			reload : true
+			reload : true,
+			postRenderCallback : function(el) {
+				setup_milestones();
+			}
 		});
 		//$('#content').html(view.render().el);
         if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
