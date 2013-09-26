@@ -13,7 +13,7 @@ $(function()
 	CLICKDESK_UPDATE_LOAD_IMAGE = '<center><img id="chats_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
 	// Retrieves widget which is fetched using script API
-	var clickdesk_widget = agile_crm_get_plugin(CLICKDESK_PLUGIN_NAME);
+	var clickdesk_widget = agile_crm_get_widget(CLICKDESK_PLUGIN_NAME);
 
 	console.log('In ClickDesk');
 	console.log(clickdesk_widget);

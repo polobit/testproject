@@ -7,7 +7,7 @@ $(function()
 	TWILIO_LOGS_LOAD_IMAGE = '<center><img id="logs_load" src=\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
 	// Retrieves widget which is fetched using script API
-	var twilio_widget = agile_crm_get_plugin(Twilio_PLUGIN_NAME);
+	var twilio_widget = agile_crm_get_widget(Twilio_PLUGIN_NAME);
 
 	console.log('In Twilio');
 	console.log(twilio_widget);
@@ -96,7 +96,7 @@ $(function()
 		e.preventDefault();
 
 		// Get preferences of Twilio widget by its name
-		var check_twilio_prefs = agile_crm_get_plugin_prefs(Twilio_PLUGIN_NAME);
+		var check_twilio_prefs = agile_crm_get_widget_prefs(Twilio_PLUGIN_NAME);
 		console.log("check_twilio_prefs : " + check_twilio_prefs);
 
 		// check if verification status is success, generate token
