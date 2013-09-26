@@ -20,7 +20,11 @@ var _agile = {
 		create_contact : function(properties, callback)
 		{
 			agile_createContact(properties, callback);				// Create a contact
-		}, 
+		},
+		get_contact : function(email, callback)
+		{
+			agile_getContact(email, callback);
+		},
 		delete_contact : function(email, callback)
 		{
 			agile_deleteContact(email, callback);					// Delete a contact
