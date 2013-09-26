@@ -49,7 +49,7 @@ public class BlobDeleteCron extends HttpServlet
 			BlobInfo info = blobInfoList.next();
 
 			if ((System.currentTimeMillis() - info.getCreation().getTime()) >= (60 * 60 * 1000)
-					&& CacheUtil.getCache(info.getBlobKey().getKeyString()) != null)
+					&& CacheUtil.getCache(info.getBlobKey().getKeyString()) == null)
 			{
 				blobstoreService.delete(info.getBlobKey());
 			}
