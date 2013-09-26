@@ -112,14 +112,14 @@ function bulkActivitiesNoty(type, message, position) {
  * @param position -
  *             position of noty like bottomRight, top etc.
  */
-function showNotyPopUp(type, message, position) {
+function showNotyPopUp(type, message, position, timeout) {
 	
 	// for top position
 	if(position == "top")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 		+ 'lib/noty/layouts/top.js', LIB_PATH
 		+ 'lib/noty/themes/default.js', function(){
-			notySetup(type, message, position)
+			notySetup(type, message, position, timeout)
 		});
 	
 	// for bottomRight position
@@ -128,7 +128,7 @@ function showNotyPopUp(type, message, position) {
 				+ 'lib/noty/layouts/bottom.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-					notySetup(type, message, position)
+					notySetup(type, message, position, timeout)
 				});
 	
 	// for bottomLeft position
@@ -136,7 +136,7 @@ function showNotyPopUp(type, message, position) {
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-						notySetup(type, message, position)
+						notySetup(type, message, position, timeout)
 				});		
 }
 
@@ -149,7 +149,7 @@ function showNotyPopUp(type, message, position) {
  *             message to be shown on noty.
  * @param position -
  *             position of noty like bottomRight, top etc.*/
-function notySetup(type, message, position) {
+function notySetup(type, message, position, noty_timeout) {
 		
 	    // close all other noty before showing current
 	    $.noty.closeAll()
@@ -169,7 +169,7 @@ function notySetup(type, message, position) {
 				speed : 500
 				// opening & closing animation speed
 			},
-			timeout : 2000, // delay for closing event. Set false for sticky
+			timeout : noty_timeout ? noty_timeout : 2000, // delay for closing event. Set false for sticky
 							// notifications
 		});
 	}
