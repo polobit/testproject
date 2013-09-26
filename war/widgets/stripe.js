@@ -12,7 +12,7 @@ $(function()
 	STRIPE_PROFILE_LOAD_IMAGE = '<center><img id="stripe_profile_load" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
 	// Retrieves widget which is fetched using script API
-	var stripe_widget = agile_crm_get_plugin(Stripe_PLUGIN_NAME);
+	var stripe_widget = agile_crm_get_widget(Stripe_PLUGIN_NAME);
 
 	console.log('In Stripe');
 	console.log(stripe_widget);

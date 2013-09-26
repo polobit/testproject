@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
@@ -32,6 +33,8 @@ public class GMailGadgetServlet extends HttpServlet
 {
     public static final String SESSION_KEY_NAME = "one_time_session_key";
     public static final String SESSION_GADGET_NAME = "gadget_key";
+    public static final String DISASSOCIATE_GADGET = "disassociate_gadget";
+    public static final String EMAIL = "email";
 
     /**
      * Validates the request to see if the user is present based on the
@@ -200,13 +203,45 @@ public class GMailGadgetServlet extends HttpServlet
 	// get this value
 	// Basicaly - the popup does the openid authentcation and then maps
 	// this opensocialid using this one-time-session
-	CacheUtil.setCache(oneTimeSessionKey, ownerId, 7);
+	CacheUtil.setCacheForNumberOfDays(oneTimeSessionKey, ownerId, 7);
 
 	JSONObject result = new JSONObject();
 	result.put("user_exists", false);
 	result.put("popup", "https://googleapps.agilecrm.com/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey);
 	result.put("expires_at", new DateUtil().addDays(6).getTime().getTime());
 
+	resp.getWriter().println(result.toString());
+    }
+
+    /**
+     * Dis-associates gadget of a particular user based on user email
+     * 
+     * @param req
+     * @param resp
+     */
+    public void disassociateGadget(HttpServletRequest req, HttpServletResponse resp) throws Exception
+    {
+	// Reads email address of the user
+	String userEmail = req.getParameter(EMAIL);
+	if (StringUtils.isEmpty(userEmail))
+	    return;
+
+	// Gets user based on email address
+	DomainUser user = DomainUserUtil.getDomainUserFromEmail(userEmail);
+
+	// If user exists then gadget id is removed from it and saved
+	if (user != null)
+	{
+	    // Removes gadget id associated with the account and saves it
+	    user.gadget_id = null;
+	    user.save();
+	}
+
+	// Returns disassociated true after disassociation of gadget id (It
+	// returns true even if user does not exist, considering user is already
+	// deleted)
+	JSONObject result = new JSONObject();
+	result.put("DISASSOCIATED", true);
 	resp.getWriter().println(result.toString());
     }
 
@@ -244,6 +279,12 @@ public class GMailGadgetServlet extends HttpServlet
 		else
 		    setup(req, resp); // Setup OpenId Authentication
 
+		return;
+	    }
+
+	    if (req.getParameter(DISASSOCIATE_GADGET) != null)
+	    {
+		disassociateGadget(req, resp);
 		return;
 	    }
 

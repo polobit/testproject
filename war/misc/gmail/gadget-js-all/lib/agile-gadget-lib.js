@@ -605,6 +605,7 @@ $(function()
 	Handlebars.registerHelper('tagslist', function(tags)
 	{
 
+		console.log(tags);
 		var json = {};
 
 		// Store tags in a json, starting letter as key
@@ -655,6 +656,35 @@ $(function()
 		}
 
 		return html;
+	});
+	
+	Handlebars.registerHelper('setupTags', function(tags) {
+		
+		console.log(tags);
+		var json = {};
+
+		var keys = [];
+		// Store tags in a json, starting letter as key
+		for ( var i = 0; i < tags.length; i++)
+		{
+			var tag = tags[i].tag;
+			var key = tag.charAt(0).toUpperCase();
+			console.log(jQuery.inArray( key, keys ) + "key = : " + key);
+			// console.log(tag);
+			if(jQuery.inArray( key, keys ) == -1)
+				keys.push(key);
+		}
+
+		// To sort tags in case-insensitive order i.e. keys in json object
+		keys.sort();
+		console.log(keys);
+		var html = "";
+		for ( var i in keys)
+		{
+			html += "<div class='tag-element'><div class='tag-key'>"+keys[i]+"</div><div class='tag-values' tag-alphabet=\""+keys[i]+"\"></div></div>";
+		}
+		console.log(html);
+		return new Handlebars.SafeString(html);
 	});
 
 	// To show milestones as columns an deals
@@ -1058,7 +1088,16 @@ $(function()
 							if (properties[i].name == "address")
 							{
 								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
-								var address = JSON.parse(properties[i].value);
+								
+								var address = {};
+								try
+								{
+									address = JSON.parse(properties[i].value);
+								}
+								catch(err)
+								{
+									address['address'] = properties[i].value;									
+								}
 
 								// Gets properties (keys) count of given json
 								// object
@@ -1880,13 +1919,14 @@ $(function()
 
 		// show only seconds if hours and mins are zero
 		if (hours == 0 && minutes == 0)
-			return (seconds + "s");
+			return (seconds == 1 ? seconds + "sec" : seconds + "secs");
 
 		// show mins and secs if hours are zero.
 		if (hours == 0)
-			return (minutes + "m ") + (seconds + "s");
+			return (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
 
-		var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
+		var result = (hours == 1 ? hours + "hr " : hours + "hrs ") + (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec"
+				: seconds + "secs");
 		return result;
 	});
 
@@ -2063,6 +2103,11 @@ $(function()
 		
 	});
 	
+	
+	Handlebars.registerHelper('remove_spaces', function(value) {
+		  return value.replace( / +/g, '');
+		  
+		 });
 });
 /**
  * Loading spinner shown while loading
@@ -2624,10 +2669,6 @@ var MD5 = function (string) {
  */
 function agile_get_emails(bool) {
 
-	var emails = [];
-	var names = [];
-	var matches = [];
-	
 	// Generate mails from gmail.
 	if (bool) {
 		// Fetch the array of content matches.

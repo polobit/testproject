@@ -274,7 +274,10 @@ public class Contact extends Cursor
 	    this.properties.add(contactField);
 	}
 	else
-	    field = contactField;
+	{
+	    field.updateField(contactField);
+	}
+
 	save();
     }
 
@@ -322,15 +325,18 @@ public class Contact extends Cursor
 	{
 
 	    oldContact = ContactUtil.getContact(id);
-
-	    if (Type.COMPANY == type
-		    && !getContactFieldValue(NAME).equalsIgnoreCase(oldContact.getContactFieldValue(NAME))
-		    && ContactUtil.companyExists(getContactFieldValue(NAME)))
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
-			.build());
-	    }
+	    //
+	    // if (Type.COMPANY == type
+	    // &&
+	    // !getContactFieldValue(NAME).equalsIgnoreCase(oldContact.getContactFieldValue(NAME))
+	    // && ContactUtil.companyExists(getContactFieldValue(NAME)))
+	    // {
+	    // throw new
+	    // WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+	    // .entity("Sorry, a company with name \'" +
+	    // getContactFieldValue(NAME) + "\' already exists ")
+	    // .build());
+	    // }
 
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags

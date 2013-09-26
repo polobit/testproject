@@ -31,14 +31,18 @@ $(function()
 					'click',
 					function(e)
 					{
+						
+						if($(this).attr('disabled'))
+							return;
+						
 						var upload_valudation_errors = {
 							"first_name_missing" : { "error_message" : "First Name is mandatory. Please select first name." },
 							"last_name_missing" : { "error_message" : "Last Name is mandatory. Please select last name." },
 							"email_missing" : { "error_message" : "Email is mandatory. Please select Email." },
 							"first_name_duplicate" : { "error_message" : " You have assigned First Name to more than one element. Please ensure that first name is assigned to only one element. " },
 							"last_name_duplicate" : { "error_message" : "You have assigned Last Name to more than one element. Please ensure that last name is assigned to only one element." },
-							"company_duplicate" : { "error_message" : "You have assigned Company to more than one element. Please ensure that last name is assigned to only one element." },
-							"job_title_duplicate" : { "error_message" : "You have assigned job description to more than one element. Please ensure that ljob description is assigned to only one element." } }
+							"company_duplicate" : { "error_message" : "You have assigned Company to more than one element. Please ensure that company is assigned to only one element." },
+							"job_title_duplicate" : { "error_message" : "You have assigned job description to more than one element. Please ensure that job description is assigned to only one element." } }
 
 						var models = [];
 
@@ -108,13 +112,15 @@ $(function()
 							$("#import-validation-error").html(getTemplate("import-contacts-validation-message", upload_valudation_errors.job_title_duplicate));
 							return false;
 						}
+						
+						$(this).attr('disabled', true);
 
 						/*
 						 * After validation checks are passed then loading is
 						 * shown
 						 */
 						$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
-						$waiting.insertAfter($('#import-contacts'));
+						$waiting.insertAfter($('#import-cancel'));
 
 						var properties = [];
 
@@ -223,13 +229,12 @@ $(function()
 						// each row in csv file in to a contact
 						$.ajax({ type : 'POST', url : "/core/api/upload/save?key=" + BLOB_KEY, data : JSON.stringify(contact),
 							contentType : "application/json", success : function(data)
-							{
-
-								$waiting.find('#status-message').html('Contacts import task scheduled ').show().delay(3000).hide(1, function()
-								{
+							{								
 									// Navigate to contacts page
-									Backbone.history.navigate("contacts", { trigger : true });
-								});
+									// Sends empty JSON to remove
+									// contact uploaded
+									$('#content').html(getTemplate("import-contacts", {}));
+									showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
 
 								// Calls vefiryUploadStatus with data returned
 								// from the url i.e., key of the memcache

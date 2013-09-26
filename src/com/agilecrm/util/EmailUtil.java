@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.google.appengine.api.NamespaceManager;
+import com.thirdparty.Mailgun;
 import com.thirdparty.Mandrill;
 
 public class EmailUtil
@@ -129,8 +130,19 @@ public class EmailUtil
      * @param text
      * @return response of the remote object
      */
-    public static void sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
+    public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html, String text)
     {
+	// if cc or bcc present, send by Mailgun
+	if (!StringUtils.isEmpty(cc) || !StringUtils.isEmpty(bcc))
+	{
+	    System.out.println("Sending email using Mailgun.");
+
+	    Mailgun.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, EmailUtil.removeNonASCIICharacters(html),
+		    EmailUtil.removeNonASCIICharacters(text));
+	    return;
+	}
+
+	// if no cc or bcc, send by Mandrill
 	Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, EmailUtil.removeNonASCIICharacters(html), EmailUtil.removeNonASCIICharacters(text));
     }
 

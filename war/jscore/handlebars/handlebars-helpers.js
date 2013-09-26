@@ -795,7 +795,16 @@ $(function()
 							if (properties[i].name == "address")
 							{
 								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
-								var address = JSON.parse(properties[i].value);
+								
+								var address = {};
+								try
+								{
+									address = JSON.parse(properties[i].value);
+								}
+								catch(err)
+								{
+									address['address'] = properties[i].value;									
+								}
 
 								// Gets properties (keys) count of given json
 								// object
@@ -1801,4 +1810,9 @@ $(function()
 		
 	});
 	
+	
+	Handlebars.registerHelper('remove_spaces', function(value) {
+		  return value.replace( / +/g, '');
+		  
+		 });
 });

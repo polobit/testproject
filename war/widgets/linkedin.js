@@ -25,11 +25,10 @@ $(function()
 	linkedin_web_url = "";
 
 	// Retrieves widget which is fetched using script API
-	var linkedin_widget = agile_crm_get_plugin(LINKEDIN_PLUGIN_NAME);
+	var linkedin_widget = agile_crm_get_widget(LINKEDIN_PLUGIN_NAME);
 
 	console.log('In LinkedIn');
 	console.log(linkedin_widget);
-
 	// ID of the LinkedIn widget as global variable
 	LinkedIn_Plugin_Id = linkedin_widget.id;
 
@@ -42,7 +41,6 @@ $(function()
 	{
 		setupLinkedinOAuth();
 		return;
-
 	}
 
 	// Global LinkedIn id
