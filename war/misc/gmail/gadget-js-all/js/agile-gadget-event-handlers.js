@@ -416,7 +416,7 @@ function agile_init_handlers() {
 		$(".gadget-contact-details-tab").hide();
 			
 		// Generate UI for warning message.
-		$('#agile_content').append('<div class="well well-small disassociate-ui" style="margin:0 0 5px 5px;">'
+		$('#agile_content').append('<div class="well well-small disassociate-ui" style="margin:0 0 5px 0px;">'
 				+'<p>Do you want to unlink the gadget from Agile CRM account - '+Ac_Holder_Email+' ?</p>'
 				+'<P style="margin:0px;"><input type="button" value="Yes" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",true) class="btn btn-primary" style="padding:2px 6px 2px;">'
 				+'<input type="button" value="No" onclick=agile_disassociate_gadget("'+Ac_Holder_Email+'",false) class="btn btn-primary" style="padding:2px 6px 2px; margin-left:10px;">'
@@ -705,9 +705,10 @@ function agile_disassociate_gadget(email, bool){
 		$(".disassociate-waiting").show();
 		// Request to disassociate gadget.
 		
-		var Url = "https://"+ agile_id.namespace +".agilecrm.com/gmail?callback=?&disassociate_gadget=true&email=" + email;
+//		var Url = "https://"+ agile_id.namespace +".agilecrm.com/gmail?callback=?&disassociate_gadget=true&email=" + email;
+		var url = Lib_Path + "gmail?disassociate_gadget=true&email=" + email;
 		
-		agile_json(Url, function(response) {
+		agile_send_auth(url, function(response) {
 			
 			// Clear UI.
 			$("#agile_content").html('<img id="loading" style="padding-right:5px;" src="https://googleapps.agilecrm.com/img/21-0.gif"></img>');
