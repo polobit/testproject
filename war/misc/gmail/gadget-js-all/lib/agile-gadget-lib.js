@@ -1088,7 +1088,16 @@ $(function()
 							if (properties[i].name == "address")
 							{
 								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
-								var address = JSON.parse(properties[i].value);
+								
+								var address = {};
+								try
+								{
+									address = JSON.parse(properties[i].value);
+								}
+								catch(err)
+								{
+									address['address'] = properties[i].value;									
+								}
 
 								// Gets properties (keys) count of given json
 								// object
@@ -2660,10 +2669,6 @@ var MD5 = function (string) {
  */
 function agile_get_emails(bool) {
 
-	var emails = [];
-	var names = [];
-	var matches = [];
-	
 	// Generate mails from gmail.
 	if (bool) {
 		// Fetch the array of content matches.

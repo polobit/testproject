@@ -12,7 +12,7 @@ $(function()
 	ZENDESK_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
 	// Retrieves widget which is fetched using script API
-	var zendesk_widget = agile_crm_get_plugin(ZENDESK_PLUGIN_NAME);
+	var zendesk_widget = agile_crm_get_widget(ZENDESK_PLUGIN_NAME);
 
 	console.log('In Zendesk');
 	console.log(zendesk_widget);
