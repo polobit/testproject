@@ -222,20 +222,23 @@ public class GMailGadgetServlet extends HttpServlet
     public void disassociateGadget(HttpServletRequest req, HttpServletResponse resp) throws Exception
     {
 	// Reads email address of the user
-	String userEmail = req.getParameter(EMAIL);
-	if (StringUtils.isEmpty(userEmail))
+	String ownerId = req.getParameter("opensocial_owner_id");
+	if (StringUtils.isEmpty(ownerId))
 	    return;
 
 	// Gets user based on email address
-	DomainUser user = DomainUserUtil.getDomainUserFromEmail(userEmail);
+	DomainUser user = DomainUserUtil.getDomainUserFromGadgetId(ownerId);
 
 	// If user exists then gadget id is removed from it and saved
 	if (user != null)
 	{
+	    System.out.println("user : " + user);
 	    // Removes gadget id associated with the account and saves it
 	    user.gadget_id = null;
 	    user.save();
 	}
+
+	System.out.println(user);
 
 	// Returns disassociated true after disassociation of gadget id (It
 	// returns true even if user does not exist, considering user is already
