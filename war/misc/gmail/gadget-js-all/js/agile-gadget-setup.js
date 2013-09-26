@@ -26,7 +26,7 @@ function agile_user_setup(popup_url) {
 	// Clear old UI.
 	$('#agile_content').children().eq(1).remove();
 	// Create UI to let user enter its desired agile domain name.
-	$('#agile_content').append('<div class="well well-small agile-one-time-setup" style="margin:0 0 5px 5px;">'
+	$('#agile_content').append('<div class="well well-small agile-one-time-setup" style="margin:0 0 5px 0px;">'
 			+'<p>Associate your account - one time setup</p>'
 			+'<input id="user_domain" class="input-medium" placeholder="my domain" style="vertical-align:baseline;" type="text" />'
 			+'<span style="font-weight:bold;">.agilecrm.com</span>'

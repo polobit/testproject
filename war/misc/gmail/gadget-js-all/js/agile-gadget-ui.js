@@ -19,10 +19,17 @@ function agile_generate_ui(Api_Key, domain) {
 	_agile.set_account(Api_Key, domain);
 	// Build mail list UI and call callback.
 	agile_build_ui(function() {
+		
+		var Handlers_Path = Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-event-handlers.min.js';
+		var Util_Path = Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-util.min.js';
+		
+		if(Is_Localhost){
+			Handlers_Path = Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-event-handlers.js';
+			Util_Path = Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-util.js';
+		}
+			
 		// Load validation, event handlers and util JS files.
-		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-event-handlers.min.js',
-				Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-util.min.js', 
-				Lib_Path + 'lib/jquery.validate.min.js', function() {
+		head.js(Handlers_Path, Util_Path, Lib_Path + 'lib/jquery.validate.min.js', function() {
 					/*
 					 * User generated events (click, key press, etc.) will be
 					 * available after handlers file loading.
@@ -75,8 +82,10 @@ function agile_build_ui_for_emails(Email_Ids) {
 	// Iterate for each mails.
 	$.each(Email_Ids, function(index, val) {
 		
-		// Fill Template with data.
-		agile_fill_individual_template_ui(val, $('#agile_content'));
+		if(index != ""){
+			// Fill Template with data.
+			agile_fill_individual_template_ui(val, $('#agile_content'));
+		}
 	});
 }
 

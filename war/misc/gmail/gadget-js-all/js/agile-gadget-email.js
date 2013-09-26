@@ -16,10 +16,6 @@
  */
 function agile_get_emails(bool) {
 
-	var emails = [];
-	var names = [];
-	var matches = [];
-	
 	// Generate mails from gmail.
 	if (bool) {
 		// Fetch the array of content matches.

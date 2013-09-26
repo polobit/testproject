@@ -28,7 +28,7 @@ $(function()
 	Twitter_id = "";
 
 	// Retrieves widget which is fetched using script API
-	var twitter_widget = agile_crm_get_plugin(TWITTER_PLUGIN_NAME);
+	var twitter_widget = agile_crm_get_widget(TWITTER_PLUGIN_NAME);
 
 	console.log('In Twitter');
 	console.log(Twitter_follower_ids);
