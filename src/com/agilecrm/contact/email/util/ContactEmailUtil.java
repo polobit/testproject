@@ -2,10 +2,8 @@ package com.agilecrm.contact.email.util;
 
 import java.net.URLEncoder;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -72,20 +70,15 @@ public class ContactEmailUtil
      * @param body
      *            - body
      */
-    public static void saveContactEmailAndSend(String from, String to, String subject, String body)
+    public static void saveContactEmailAndSend(String from, String to, String cc, String bcc, String subject, String body)
     {
 	try
 	{
 	    // Appends common tracking id
 	    long trackerId = Calendar.getInstance().getTimeInMillis();
 
-	    Set<String> toEmailSet = new HashSet<String>();
-	    StringTokenizer st = new StringTokenizer(to, ",");
-
-	    while (st.hasMoreTokens())
-	    {
-		toEmailSet.add(st.nextToken());
-	    }
+	    // Gets emails Set Collection
+	    Set<String> toEmailSet = EmailUtil.getStringTokenSet(to, ",");
 
 	    // Iterate over to email inorder to fetch contact.
 	    for (String toEmail : toEmailSet)
@@ -102,6 +95,10 @@ public class ContactEmailUtil
 		    // Remove trailing commas for to emails
 		    ContactEmail contactEmail = new ContactEmail(contact.id, from, to.replaceAll(",$", ""), subject, body);
 
+		    contactEmail.cc = cc;
+		    contactEmail.bcc = bcc;
+
+		    // Save email-open tracker-id
 		    if (toEmailSet.size() == 1)
 			contactEmail.trackerId = trackerId;
 
@@ -117,7 +114,7 @@ public class ContactEmailUtil
 		body = EmailUtil.appendTrackingImage(body, null, null, trackerId);
 
 	    // Sends email
-	    EmailUtil.sendMail(from, from, to, subject, from, body, null);
+	    EmailUtil.sendMail(from, from, to, cc, bcc, subject, from, body, null);
 	}
 	catch (Exception e)
 	{
