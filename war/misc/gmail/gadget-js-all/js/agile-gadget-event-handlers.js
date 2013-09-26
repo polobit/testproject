@@ -705,7 +705,7 @@ function agile_disassociate_gadget(email, bool){
 		$(".disassociate-waiting").show();
 		// Request to disassociate gadget.
 		
-		var Url = "https://googleapps.agilecrm.com/gmail?callback=?&disassociate_gadget=true&email=" + email;
+		var Url = "https://"+ agile_id.namespace +".agilecrm.com/gmail?callback=?&disassociate_gadget=true&email=" + email;
 		
 		agile_json(Url, function(response) {
 			
