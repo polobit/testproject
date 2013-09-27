@@ -13,7 +13,7 @@ $(function()
 	FRESHBOOKS_LOGS_LOAD_IMAGE = '<center><img id="freshbooks_invoice_load" src="img/ajax-loader-cursor.gif" style="margin-top: 14px;margin-bottom: 10px;"></img></center>';
 
 	// Retrieves widget which is fetched using script API
-	var freshbooks_widget = agile_crm_get_plugin(FRESHBOOKS_PLUGIN_NAME);
+	var freshbooks_widget = agile_crm_get_widget(FRESHBOOKS_PLUGIN_NAME);
 
 	console.log('In FreshBooks');
 	console.log(freshbooks_widget);

@@ -4,8 +4,8 @@
  * agile_widgets.js defines third party JavaScript API.
  * Functionalities provided by script API are
  * <pre>
- * -- Return widget object by widget name			 : agile_crm_get_plugin(pluginName)
- * -- Return widget preferences by widget name	     : agile_crm_get_plugin_prefs(pluginName)
+ * -- Return widget object by widget name			 : agile_crm_get_widget(pluginName)
+ * -- Return widget preferences by widget name	     : agile_crm_get_widget_prefs(pluginName)
  * -- Save widget preferences  by widget name		 : agile_crm_save_widget_prefs(pluginName, preferences)
  * -- Delete widget preferences by widget name       : agile_crm_delete_widget_prefs(pluginName, callback)
  * -- Saves widget property to contact               : agile_crm_save_widget_property_to_contact(propertyName, value)
@@ -267,7 +267,7 @@ function agile_crm_add_note(subject, description)
  * @param pluginName :
  *            name of the plugin to fetch
  */
-function agile_crm_get_plugin(pluginName)
+function agile_crm_get_widget(pluginName)
 {
 	pluginName = pluginName.replace( / +/g, ''); 
 	console.log('plugin name ' + pluginName);
@@ -291,9 +291,10 @@ function agile_crm_get_plugin(pluginName)
  *            name of the plugin to get preferences
  * @returns plugin preferences
  */
-function agile_crm_get_plugin_prefs(pluginName)
+function agile_crm_get_widget_prefs(pluginName)
 {
 	pluginName = pluginName.replace( / +/g, '');
+	console.log("in get widget prefs " + pluginName);
 	// Gets data attribute of from the plugin, and return prefs from that object
 	return $('#' + pluginName, App_Contacts.contactDetailView.el).data('model').toJSON().prefs;
 }
@@ -314,7 +315,7 @@ function agile_crm_save_widget_prefs(pluginName, prefs, callback)
 	var widget = $('#' + pluginName, App_Contacts.contactDetailView.el).data('model');
 
 	// Set changed preferences to widget backbone model
-	widget.set("prefs", prefs);
+	widget.set("prefs", prefs); 
 
 	// URL to connect with widgets
 	widget.url = "core/api/widgets"

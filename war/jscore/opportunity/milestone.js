@@ -29,6 +29,71 @@ $(function(){
 		App_Deals.deals();
 
 	});
+	
+	/**
+	 * To remove the milestone from list.
+	 */
+	$(".milestone-delete").die().live('click', function(e){
+		e.preventDefault();
+		$(this).closest('li').css("display", "none");
+		fill_ordered_milestone();
+	});
+	
+	/**
+	 * Shows input field to add new milestone.
+	 */
+    $("#show_milestone_field").die().live('click', function(e){
+    	e.preventDefault();
+    	$(this).css("display","none");
+    	$('.show_field').css("display","block");
+    	$("#add_new_milestone").focus();
+    });
+    
+	/**
+	 * Adds new milestone to the sortable list.
+	 */
+    $("#add_milestone").die().live('click', function(e){
+    	
+    	e.preventDefault();
+    	$('.show_field').css("display","none");
+    	$("#show_milestone_field").css("display","block");
+    	
+    	var new_milestone = $("#add_new_milestone").val().trim();
+    	
+    	if(!new_milestone || new_milestone.length<=0 || (/^\s*$/).test(new_milestone))
+		{
+			return;
+		}
+
+    	// To add a milestone when "," or "enter" keydown and check input is not empty
+    	if(new_milestone != "")
+    	{
+    		e.preventDefault();
+    	
+    		// Prevents comma (",") as an argument to the input field
+    		$("#add_new_milestone").val("");
+        	
+    		var milestone_list = $(this).closest(".control-group").find('ul.milestone-value-list');
+    		var add_milestone = true;
+    		
+    		// Iterate over already present milestones, to check if this is a new milestone
+    		milestone_list.find('li').each(function(index, elem){
+    			
+    			if(elem.getAttribute('data').toLowerCase() == new_milestone.toLowerCase())
+    			{
+    				add_milestone = false; // milestone exists, don't add
+    				return false;
+    			}
+    		});
+    		
+    		if(add_milestone)
+    		{
+    			milestone_list.append("<li class='tag' data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>");
+    			fill_ordered_milestone();
+    		}
+    	}
+    });
+    
 });
 
 /** 
@@ -97,4 +162,38 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 		}
 	});
 
+}
+
+/**
+ * Sets milestones as sortable list.
+ */
+function setup_milestones(){
+	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
+		$('ul.milestone-value-list').sortable({
+		      cursor : "move",
+		      containment : "#milestone-values",
+		      scroll : false,
+		      // When milestone is dropped its input value is changed 
+		      update : function(event, ui) {
+		    	  fill_ordered_milestone();
+		        }
+	    });
+	});
+}
+
+/**
+ * Edits the value of milestone when sorted or added new or removes milestone.
+ */
+function fill_ordered_milestone(){
+   	var values;
+   	$.each($("ul.milestone-value-list").children(), function(index, data) { 
+   		if($(data).is( ":visible"))
+   		{
+   	   		if(values != undefined)
+   	   			values = values + "," +(($(data).attr("data")).toString().trim());
+   	   		else 
+   	   			values = (($(data).attr("data")).toString().trim());
+   		}
+	});
+   	$("#milestonesForm").find( 'input[name="milestones"]' ).val(values); 
 }

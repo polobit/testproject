@@ -80,5 +80,4 @@ public class Globals
 
     // Mailgun API key
     public static final String MAILGUN_API_KEY_VALUE = "key-6rj8jh4d-ftsq2er2oqneoa7zi3e2-j3";
-
 }

@@ -197,22 +197,32 @@ function set_up_widgets(el, widgets_el)
 			console.log(model.get('script'));
 			console.log($('#' + model.get('selector'), widgets_el));
 
-			if (model.get('script'))
-				$('#' + model.get('selector'), widgets_el).html(model.get('script'));
+			if($('#' + model.get('selector') + '-container').length)
+			{
+				setup_custom_widget(model, widgets_el)
+			}
 			else
-				getScript(model, function(data)
-				{
-					console.log(data);
-					$('#' + model.get('selector'), widgets_el).html(data);
-				});
-
-			console.log($('#' + model.get('selector'), widgets_el));
+			$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e) {
+				setup_custom_widget(model, widgets_el)
+			 });
 		}
-
 	}, this);
 
 	enableWidgetSoring(widgets_el);
 
+}
+
+function setup_custom_widget(model, widgets_el)
+{
+	//$('form', this).focus_first();
+	if (model.get('script'))
+		$('#' + model.get('selector'), widgets_el).html(model.get('script'));
+	else
+		getScript(model, function(data)
+		{
+			console.log(data);
+			$('#' + model.get('selector'), widgets_el).html(data);
+		});
 }
 
 function getScript(model, callback)
