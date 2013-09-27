@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.deferred.TagsDeferredTask;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
@@ -216,8 +217,9 @@ public class Contact extends Cursor
     public static final String URL = "url";
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
+    public static final String PHONE = "phone";
 
-    // Dao
+ // Dao
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
     /**
@@ -265,24 +267,30 @@ public class Contact extends Cursor
      */
     public void addProperty(ContactField contactField)
     {
-	// Ties to get contact field from existing properties based on new field
-	// name.
-	ContactField field = this.getContactFieldByName(contactField.name);
+    	 // Ties to get contact field from existing properties based on new field name.
+    	ContactField field = this.getContactFieldByName(contactField.name);
 
-	// If field is null then new contact field is added to properties.
-	if (field == null)
-	{
-	    if (ContactField.SystemField.valueOf(contactField.name) == null)
-		contactField.type = ContactField.FieldType.CUSTOM;
+    	String fieldName = field == null ? contactField.name : field.name;
+    	FieldType type = FieldType.CUSTOM;
+    	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME)
+    		|| fieldName.equals(EMAIL) || fieldName.equals(TITLE)
+    		|| fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
+    		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
+    		|| fieldName.equals(NAME))
+    	    type = FieldType.SYSTEM;
 
-	    this.properties.add(contactField);
-	}
-	else
-	{
-	    field.updateField(contactField);
-	}
-
-	save();
+    	// If field is null then new contact field is added to properties.
+    	if (field == null)
+    	{
+    	    contactField.type = type;
+    	    this.properties.add(contactField);
+    	}
+    	else
+    	{
+    	    field.type = type;
+    	    field.updateField(contactField);
+    	}
+    	save();
     }
 
     public void removeProperty(String propertyName)
