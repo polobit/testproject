@@ -64,6 +64,7 @@ $(document).on("click",".compose-message", function(e)
         {
         	 $("#spinner-modal").hide();
         
+        	 console.log(data);
         	 if(data == "Successful")
         		 {
                    // On success, shows the status as sent
@@ -90,7 +91,7 @@ $(document).on("click",".compose-message", function(e)
 
             // Error message is shown if error occurs
             alert("Retry after sometime.");
-            alert(data.responseText);            
+            console.log(data.responseText);            
         });
     });
 });
@@ -165,6 +166,7 @@ $(document).on("click",".reply-message", function(e)
         {
         	 $("#spinner-modal").hide();
         	 
+        	 console.log(data);
         	 if(data == "Successful")
     		 {
                // On success, shows the status as sent
@@ -191,7 +193,7 @@ $(document).on("click",".reply-message", function(e)
 
             // Error message is shown if error occurs
             alert("Retry after sometime.");
-            alert(data.responseText);   
+            console.log(data.responseText);   
         });
     });
 });
@@ -267,6 +269,7 @@ $(document).on("click",".direct-message", function(e)
         {
         	 $("#spinner-modal").hide();
         	 
+        	 console.log(data);
         	 if(data == "Successful")
         	 {
                // On success, shows the status as sent
@@ -292,7 +295,7 @@ $(document).on("click",".direct-message", function(e)
 
             // Error message is shown if error occurs
             alert("Retry after sometime.");
-            alert(data.responseText);   
+            console.log(data.responseText);   
         });
     });
 });
@@ -353,7 +356,7 @@ $(document).on("click",".retweet-status", function(e)
     {
         // Error message is shown when error occurs
     	alert("Retry after sometime.");
-        alert(data.responseText);  
+    	console.log(data.responseText);  
     });
 });
 
@@ -425,7 +428,7 @@ $(document).on("click",".undo-retweet-status", function(e)
     {
         // Error message is shown when error occurs
     	alert("Retry after sometime.");
-        alert(data.responseText);  
+    	console.log(data.responseText);  
     });
 });
 
@@ -473,11 +476,15 @@ $(document).on("click",".favorite-status", function(e)
     	// Add back to stream.
     	modelStream.get('tweetListView').add(modelTweet);
     	console.log(modelStream);
+    	
+    	// Create normal time.
+		head.js('lib/jquery.timeago.js', function(){	 
+			        $(".time-ago", $(".chirp-container")).timeago(); });
     }).error(function (data)
     {
         // Error message is shown when error occurs
     	alert("Retry after sometime.");
-        alert(data.responseText);  
+    	console.log(data.responseText);  
     });
 });
 
@@ -526,19 +533,22 @@ $(document).on("click",".undo-favorite-status", function(e)
     	// Add back to stream.
     	modelStream.get('tweetListView').add(modelTweet);
     	console.log(modelStream);
+    	
+    	// Create normal time.
+		head.js('lib/jquery.timeago.js', function(){	 
+			        $(".time-ago", $(".chirp-container")).timeago(); });
     }).error(function (data)
     {
         // Error message is shown when error occurs
     	alert("Retry after sometime.");
-        alert(data.responseText);  
+    	console.log(data.responseText);  
     });
 });
 
 $(document).on("click",".more-options", function(e)
 {	
-  // Close all dropdown of all tweets	
-  $('.dropdown').removeClass("open");  
-  
+  console.log("more-options in function");
+    
   var streamId = $(this).attr("stream-id");
   var tweetId = $(this).attr("tweet-id");
   var tweetIdStr = $(this).attr("tweet-id-str");
@@ -547,49 +557,63 @@ $(document).on("click",".more-options", function(e)
     
   // Fetch stream from collection
   var stream = StreamsListView.collection.get(streamId).toJSON();
+    
+  // Remove extra element from dropdown menu list.
+  $('.list-clear').remove();
+  
+  // Close all dropdowns of other tweets.
+  $('.more-options-list').toggle( false );
+  
+  // Open dropdown with slow speed.
+  $('#'+elementId+'_list').toggle( "slow" );
   
   // Tweet belongs to stream owner so no extra options required.
   if(stream.screen_name == tweetOwner)
 	  return;
   
-  // Check stream owner following to tweet owner.
-  $.get("/core/social/checkfollowing/" + streamId + "/" + tweetOwner,
+// Check stream owner relashionship tweet owner.
+  $.get("/core/social/checkrelationship/" + streamId + "/" + tweetOwner,
     function (data)
 	  {
-	    console.log(data);
-	    
- 	    // Stream owner follows tweet owner then add unfollow option
-	    if(data == "true") 
-	    	{	    	  
-	    	  console.log("in unfollow");
-	          $('#'+elementId+'_list').append('<li><a href="#socialsuite" class="unfollow-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');	    	
-            }
+	     console.log(data);	    
+	     
+	    // Stream owner follows tweet owner then add unfollow option
+	    if(data.follow == "true")
+	    	{
+	      	  console.log("in unfollow");
+	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');
+	    	}
 	    // Stream owner not following tweet owner then add follow option
-	    else if(data == "false")
+	    else if(data.follow == "false")
 	    	{
 	    	  console.log("in follow");
-	    	  $('#'+elementId+'_list').append('<li><a href="#socialsuite" class="follow-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
+	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
 	    	}
+	  
+  	    // Tweet owner is stream owner's follower then add send DM option
+	    if(data.follower == "true")
+           {	    	
+   	         console.log("in send DM");
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
+           }
 	    
-	    // Tweet owner is stream owner's follower then add send DM option
-	    $.get("/core/social/checkfollower/" + streamId + "/" + tweetOwner,
-	    	    function (data1)
-	    		  {	    	      
-	    	       console.log(data1);
-	    	       if(data1 == "true")
-	    	         {	    	
-	    	    	   console.log("in send DM");
-	                   $('#'+elementId+'_list').append('<li><a href="#socialsuite" class="direct-message" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
-                     }
-	    		  });
+	    // Check tweet owner is Block or Unblock
+	    if(data.blocked == "true")
+           {	    	
+   	         console.log("in unblock");
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unblock @'+tweetOwner+'</a></li>');	    	
+            }	    
+        else if(data.blocked == "false")
+            {	    	
+   	          console.log("in block");
+              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Block @'+tweetOwner+'</a></li>');	    	
+            }
 	  }).error(function (data)
-	  {
-	    // Error message is shown when error occurs
-		  alert("Retry after sometime.");
-          alert(data.responseText);  
-	  });
-  
-  $(this).dropdown('toggle');
+		  {
+		    // Error message is shown when error occurs
+			  alert("Retry after sometime.");
+			  console.log(data.responseText);  
+		  });
 });
 
 /**
@@ -619,7 +643,7 @@ $(document).on("click",".follow-user", function(e)
 		    {
 		        // Error message is shown if error occurs
 		    	alert("Retry after sometime.");
-		        alert(data.responseText);  
+		    	console.log(data.responseText);  
 		    });
 		});
 /**
@@ -649,7 +673,68 @@ $(document).on("click",".unfollow-user", function(e)
     {
         // Error message is shown if error occurs
     	alert("Retry after sometime.");
-        alert(data.responseText);  
+    	console.log(data.responseText);  
+    });
+});
+
+/**
+ * Sends block request to Block the contact's Twitter profile in Twitter based on
+ * stream id and Twitter user's screen name.
+ * 
+ * @param stream_id
+ * 			stream id to fetch stream details
+ * @param tweetOwner
+ * 			Twitter user's screen name to send follow request
+ */
+$(document).on("click",".block-user", function(e)
+		 {
+			var streamId = $(this).attr("stream-id");		
+			var tweetOwner = $(this).attr("owner-tweet");
+			console.log(this);
+		    	
+		    $.get("/core/social/blockuser/" + streamId + "/" + tweetOwner, function (data)
+		    {
+		    	console.log(data);
+		    	
+		    	if(data == "true")
+		           alert("You just blocked @"+tweetOwner);
+		    	else if(data == "false")
+		    	   alert("Retry after sometime.");
+		    }).error(function (data)
+		    {
+		        // Error message is shown if error occurs
+		    	alert("Retry after sometime.");
+		    	console.log(data.responseText);  
+		    });
+		});
+/**
+ * Sends unblocked request to unBlocked the contact's Twitter profile in Twitter based on
+ * stream id and Twitter user's screen name.
+ * 
+ * @param stream_id
+ * 			stream id to fetch stream details
+ * @param tweetOwner
+ * 			Twitter user's screen name to send unfollow request
+ */
+$(document).on("click",".unblock-user", function(e)
+ {
+	var streamId = $(this).attr("stream-id");	
+	var tweetOwner = $(this).attr("owner-tweet");
+	console.log(this);
+    	
+    $.get("/core/social/unblockuser/" + streamId + "/" + tweetOwner, function (data)
+    {
+    	console.log(data);
+    	
+    	if(data == "Unblock")
+          alert("You just unblock @"+tweetOwner);
+    	else if(data == "Unsuccessful")
+    		alert("Retry after sometime.");
+    }).error(function (data)
+    {
+        // Error message is shown if error occurs
+    	alert("Retry after sometime.");
+    	console.log(data.responseText);  
     });
 });
 
@@ -703,6 +788,6 @@ $(document).on("click",".delete-tweet", function(e)
     {
         // Error message is shown if error occurs
     	alert("Retry after sometime.");
-        alert(data.responseText);  
+    	console.log(data.responseText);  
     });   
 });

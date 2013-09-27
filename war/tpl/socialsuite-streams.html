@@ -3,7 +3,7 @@
  {{#unless this.length}}  
             <div class="span3">
         		<div>
-            		<h3>Howdy, you do not have any added streams.</h3><br />
+            		<h3>You do not have any added streams.</h3><br />
             		<p>You can add stream from "Manage Stream" tab.</p>
         		</div>
     		</div><!-- span3 end -->
@@ -137,10 +137,10 @@
                     <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" data-user-name="{{user.name}}"> 
                             <i class="icon icon-plus-sign" title="Add Contact"></i>                            
                          </a> </li>	                 
- 		    		<li> <a class="tweet-action" href="#socialsuite" rel="reply"> 
+ 		    		<li> <a class="tweet-action" href="#social" rel="reply"> 
                             <i class="icon icon-reply reply-message" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Reply"></i>                             
                          </a> </li>                    
- 		    		<li> <a class="tweet-action" href="#socialsuite" rel="retweet">
+ 		    		<li> <a class="tweet-action" href="#social" rel="retweet">
                          {{#if retweeted_by_user}}
                            <i class="icon icon-retweet undo-retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} retweet-id="{{retweet_id}}" stream-id={{stream_id}} title="Retweet" style="color:#00FF40;"></i>
                          {{else}}
@@ -149,7 +149,7 @@
                              {{/if}}
                          {{/if}}
                          </a> </li>
- 		    		<li> <a class="tweet-action" href="#socialsuite" rel="favorite"> 
+ 		    		<li> <a class="tweet-action" href="#social" rel="favorite"> 
                          {{#if favorited_by_user}}
                             <i class="icon icon-star undo-favorite-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
                          {{else}}
@@ -157,21 +157,21 @@
                          {{/if}}
                          </a> </li>
                  {{/if}}
- 		    		<li class="dropdown"> 
-                         <a id="{{id_str}}_more_options" class="tweet-action more-options dropdown-toggle" href="#socialsuite" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}> 
+ 		    		<li> 
+                         <a id="{{id_str}}_more_options" class="tweet-action more-options" href="#social" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}> 
                             <i class="icon icon-ellipsis-horizontal" title="More options"></i> 
                          </a>
-    					 <ul id="{{id_str}}_more_options_list" aria-labelledby="{{id}}_more_options" class="pull-right more-options-list dropdown-menu" role="menu">
-                                <li role="presentation"><a href="#socialsuite" class="reply-message" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} role="menuitem">Reply to @{{user.screen_name}}</a></li>
+    					 <ul id="{{id_str}}_more_options_list" class="pull-right more-options-list dropdown-menu" role="menu">
+                                <li role="presentation"><a href="#social" class="reply-message" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} role="menuitem">Tweet to @{{user.screen_name}}</a></li>
  							{{#if in_contact}}	
                                 <li class="divider"></li>
-     							<li role="presentation"><a href="#socialsuite" class="add_score" role="menuitem">Add Score to @{{user.screen_name}}</a></li>                            
-                            	<li role="presentation"><a href="#socialsuite" class="add_star" role="menuitem">Add Star to @{{user.screen_name}}</a></li>
-                            	<li role="presentation"><a href="#socialsuite" class="add_campaigns" role="menuitem">Add to Campaigns @{{user.screen_name}}</a></li>
+     							<li role="presentation"><a href="#social" class="add_score" role="menuitem">Add Score to @{{user.screen_name}}</a></li>                            
+                            	<li role="presentation"><a href="#social" class="add_star" role="menuitem">Add Star to @{{user.screen_name}}</a></li>
+                            	<li role="presentation"><a href="#social" class="add_campaigns" role="menuitem">Add to Campaigns @{{user.screen_name}}</a></li>
 							{{/if}}
                             {{#if deletable_tweet}}
                                 <li class="divider"></li>
-                                <li role="presentation"><a href="#socialsuite" class="delete-tweet" role="menuitem" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}>Delete</a></li>                                
+                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}>Delete</a></li>                                
                             {{/if}}
     					 </ul>
                     </li>  
@@ -223,13 +223,13 @@
  			     <footer class="tweet-footer cf">             
                    <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
                    <ul class="tweet-actions">                    
-					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Like in LinkedIn">
+					<li> <a class="tweet-action" href="#social" rel="tooltip" title="Like in LinkedIn">
                             <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
                          </a> </li>
-					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Comment in LinkedIn">
+					<li> <a class="tweet-action" href="#social" rel="tooltip" title="Comment in LinkedIn">
                             <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
                          </a> </li>     
-                    <li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Share activity in LinkedIn">
+                    <li> <a class="tweet-action" href="#social" rel="tooltip" title="Share activity in LinkedIn">
                             <i class="linkedin_share icon-share" id="{{id}}"></i>                            
                          </a> </li>
  		    	    </ul>
@@ -257,13 +257,13 @@
  			     <footer class="tweet-footer cf">             
                    <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
                    <ul class="tweet-actions">                    
-					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Like in LinkedIn">
+					<li> <a class="tweet-action" href="#social" rel="tooltip" title="Like in LinkedIn">
                             <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
                          </a> </li>
-					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Comment in LinkedIn">
+					<li> <a class="tweet-action" href="#social" rel="tooltip" title="Comment in LinkedIn">
                             <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
                          </a> </li>          
-					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Share activity in LinkedIn">
+					<li> <a class="tweet-action" href="#social" rel="tooltip" title="Share activity in LinkedIn">
                             <i class="linkedin_share icon-share" id="{{id}}"></i>                            
                          </a> </li>
  		    	    </ul>
@@ -298,10 +298,10 @@
  			     <footer class="tweet-footer cf">             
                    <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
                    <ul class="tweet-actions">
-                    <li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Like in LinkedIn">
+                    <li> <a class="tweet-action" href="#social" rel="tooltip" title="Like in LinkedIn">
                             <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
                          </a> </li>
-					<li> <a class="tweet-action" href="#socialsuite" rel="tooltip" title="Comment in LinkedIn">
+					<li> <a class="tweet-action" href="#social" rel="tooltip" title="Comment in LinkedIn">
                             <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
                          </a> </li>     
  		    	    </ul>

@@ -9,7 +9,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		//route : function name
 		
 		// First function on click of tab
-		"socialsuite" : "socialsuite",		
+		"social" : "socialsuite",		
 		
 		// Add stream
 		"add-stream" : "addStream",

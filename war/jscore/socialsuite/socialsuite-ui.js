@@ -17,7 +17,7 @@ $(document).on("click",".streamtype", function(e)
 		{	
 	      StreamType = $(this).val().trim();		  
 	      NetworkType = $(this).attr("network-type").trim(); 
-	      alert(StreamType+" "+NetworkType);
+	      console.log(StreamType+" "+NetworkType);
 		});
 
 /**
@@ -40,7 +40,7 @@ $(document).on("click",".add-twitter-contact", function(e)
  */
 $(document).on("click",".add-social-stream", function(e)
 {		
-	alert("selected netwoek type is : "+NetworkType);
+	console.log("selected netwoek type is : "+NetworkType);
 	
 	if(NetworkType == "linkedin")
 	   {
