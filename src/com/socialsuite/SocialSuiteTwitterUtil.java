@@ -3,6 +3,8 @@ package com.socialsuite;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
+import org.json.JSONObject;
+
 import twitter4j.DirectMessage;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -140,6 +142,7 @@ public class SocialSuiteTwitterUtil
 
 			// Send current update/status
 			Status status = twitter.updateStatus(message + agile);
+			System.out.println("tweetInTwitter : ");
 			System.out.println(JSONUtil.toJSONString(status));
 
 			return (status != null) ? "Successful" : "Unsuccessful";
@@ -175,7 +178,8 @@ public class SocialSuiteTwitterUtil
 
 			// Send reply tweet to particular tweet based on tweet id.
 			Status status = twitter.updateStatus(new StatusUpdate(message + agile).inReplyToStatusId(tweetId));
-			System.out.println(JSONUtil.toJSONString(status));
+			System.out.println("replyTweetInTwitter : ");
+			System.out.println(status.toString());
 
 			return (status != null) ? "Successful" : "Unsuccessful";
 		}
@@ -218,6 +222,8 @@ public class SocialSuiteTwitterUtil
 
 			// Send DM
 			DirectMessage dirMsg = twitter.sendDirectMessage(tweetOwner, message + agile);
+			System.out.println("directMessageInTwitter : ");
+			System.out.println(dirMsg);
 
 			return (dirMsg.getId() == 0) ? "Unsuccessful" : "Successful";
 		}
@@ -296,6 +302,9 @@ public class SocialSuiteTwitterUtil
 	{
 		Twitter twitter = getTwitter(stream);
 		Status status = twitter.createFavorite(tweetId);
+		System.out.println("favoriteStatus : ");
+		System.out.println(status.toString());
+
 		return (status != null) ? "Successful" : "Unsuccessful";
 	}
 
@@ -315,6 +324,9 @@ public class SocialSuiteTwitterUtil
 	{
 		Twitter twitter = getTwitter(stream);
 		Status status = twitter.destroyFavorite(tweetId);
+		System.out.println("undoFavoriteStatus : ");
+		System.out.println(status.toString());
+
 		return (status != null) ? "Successful" : "Unsuccessful";
 	}
 
@@ -334,7 +346,7 @@ public class SocialSuiteTwitterUtil
 	{
 		Twitter twitter = getTwitter(stream);
 		boolean result = twitter.showFriendship(stream.screen_name, tweetOwner).isSourceFollowingTarget();
-		System.out.println("checkFollower result : " + result);
+		System.out.println("checkFollowing result : " + result);
 		return result;
 	}
 
@@ -356,6 +368,45 @@ public class SocialSuiteTwitterUtil
 		boolean result = twitter.showFriendship(stream.screen_name, tweetOwner).isTargetFollowingSource();
 		System.out.println("checkFollower result : " + result);
 		return result;
+	}
+
+	/**
+	 * Connects to the twitter based on stream and check tweet owner's
+	 * relationship with stream user.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetOwner
+	 *            owner of the {@link Tweet}
+	 * @return {@link boolean} with success message
+	 * @throws Exception
+	 */
+	public static String checkRelationship(Stream stream, String tweetOwner) throws SocketTimeoutException,
+			IOException, Exception
+	{
+		JSONObject result = new JSONObject();
+		Twitter twitter = getTwitter(stream);
+
+		// Check tweet owner is following by stream user.
+		if (twitter.showFriendship(stream.screen_name, tweetOwner).isSourceFollowingTarget())
+			result.put("follow", "true");
+		else
+			result.put("follow", "false");
+
+		// Check tweet owner is follower of stream user.
+		if (twitter.showFriendship(stream.screen_name, tweetOwner).isTargetFollowingSource())
+			result.put("follower", "true");
+		else
+			result.put("follower", "false");
+
+		// Check tweet owner is blocked by stream user.
+		if (twitter.showFriendship(stream.screen_name, tweetOwner).isSourceBlockingTarget())
+			result.put("blocked", "true");
+		else
+			result.put("blocked", "false");
+
+		System.out.println("checkFollower result : " + result.toString());
+		return result.toString();
 	}
 
 	/**
@@ -381,6 +432,7 @@ public class SocialSuiteTwitterUtil
 
 			// Check friendship is created
 			boolean connected = twitter.showFriendship(twitter.getId(), user.getId()).isSourceFollowingTarget();
+			System.out.println("connected : " + connected);
 
 			return (connected) ? "true" : "false";
 		}
@@ -401,8 +453,6 @@ public class SocialSuiteTwitterUtil
 	 *            {@link Stream} for accessing token and secret key
 	 * @param tweetOwner
 	 *            {@link String} to access recipient twitter account
-	 * @param tweetId
-	 *            id of the {@link Tweet}
 	 * @return {@link String} with success message
 	 * @throws Exception
 	 */
@@ -417,7 +467,11 @@ public class SocialSuiteTwitterUtil
 			// Unfollow tweet owner.
 			User user = twitter.destroyFriendship(tweetOwner);
 
-			return (user != null) ? "Unfollowed" : "Unsuccessful";
+			// Check friendship is destroyed.
+			boolean connected = twitter.showFriendship(twitter.getId(), user.getId()).isSourceFollowingTarget();
+			System.out.println("connected : " + connected);
+
+			return (connected) ? "Unsuccessful" : "Unfollowed";
 		}
 		catch (TwitterRuntimeException e)
 		{
@@ -429,14 +483,88 @@ public class SocialSuiteTwitterUtil
 	}
 
 	/**
-	 * Connects to the twitter based on stream details and destroys friendship
-	 * (unfollow) between agile user and the person with twitter screen name in
-	 * twitter and tweet id
+	 * Connects to the twitter based on stream details and block tweet owner.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetOwner
+	 *            {@link String} owner of tweet
+	 * @return {@link String} with success message
+	 * @throws Exception
+	 */
+	public static String blockUser(Stream stream, String tweetOwner) throws SocketTimeoutException, IOException,
+			Exception
+	{
+		Twitter twitter = getTwitter(stream);
+		try
+		{
+			System.out.println("in blockUser : " + tweetOwner);
+
+			// Block tweet owner
+			User user = twitter.createBlock(tweetOwner);
+
+			// Check user is blocked.
+			boolean blocked = twitter.showFriendship(twitter.getId(), user.getId()).isSourceBlockingTarget();
+			System.out.println("blocked : " + blocked);
+
+			return (blocked) ? "true" : "false";
+		}
+		catch (TwitterRuntimeException e)
+		{
+			System.out.println("in twitter exception");
+
+			String error = getErrorMessage(e.getMessage());
+			throw new Exception(error);
+		}
+	}
+
+	/**
+	 * Connects to the twitter based on stream details and unblock tweet owner
 	 * 
 	 * @param stream
 	 *            {@link Stream} for accessing token and secret key
 	 * @param tweetOwner
 	 *            {@link String} to access recipient twitter account
+	 * @return {@link String} with success message
+	 * @throws Exception
+	 */
+	public static String unblockUser(Stream stream, String tweetOwner) throws SocketTimeoutException, IOException,
+			Exception
+	{
+		try
+		{
+			System.out.println("in unfollowUser : " + tweetOwner);
+			Twitter twitter = getTwitter(stream);
+
+			// Unblock tweet owner.
+			User user = twitter.destroyBlock(tweetOwner);
+
+			// Check user is unblocked.
+			boolean unblocked = twitter.showFriendship(twitter.getId(), user.getId()).isSourceBlockingTarget();
+			System.out.println("unblocked : " + unblocked);
+
+			return (unblocked) ? "Unsuccessful" : "Unblock";
+		}
+		catch (TwitterRuntimeException e)
+		{
+			System.out.println("in twitter exception");
+
+			String error = getErrorMessage(e.getMessage());
+			throw new Exception(error);
+		}
+	}
+
+	/**
+	 * Deletes tweet based on tweet id, connects with twitter from details of
+	 * stream.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetOwner
+	 *            {@link String} to access recipient twitter account
+	 * @param tweetId
+	 *            {@link Long} id of the {@link Tweet}
+	 * 
 	 * @return {@link String} with success message
 	 * @throws Exception
 	 */

@@ -562,6 +562,51 @@ public class StreamAPI
 	}
 
 	/**
+	 * Connects to {@link SocialSuiteTwitterUtil} based on the stream id given
+	 * and check relationship between tweet owner and stream owner.
+	 * 
+	 * @param streamId
+	 *            {@link Long} stream id, to get {@link Stream} object
+	 * @param tweetOwner
+	 *            {@link String} Owner of the tweet
+	 * @return {@link boolean}
+	 */
+	@Path("/checkrelationship/{streamId}/{tweetOwner}")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN })
+	public String checkRelationship(@PathParam("streamId") Long streamId, @PathParam("tweetOwner") String tweetOwner)
+	{
+		try
+		{
+			Stream stream = StreamUtil.getStream(streamId);
+			if (stream == null)
+				return null;
+
+			// Calls SocialSuiteTwitterUtil method to check tweet owner is
+			// following stream owner
+			return SocialSuiteTwitterUtil.checkRelationship(stream, tweetOwner);
+		}
+		catch (SocketTimeoutException e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
 	 * Connects to {@link SocialSuiteTwitterUtil} user based on the name given
 	 * in stream and sends an follow request to contact in Twitter based on the
 	 * parameter stream id
@@ -634,6 +679,97 @@ public class StreamAPI
 
 			// Send unfollow request to Twitter about tweet owner.
 			return SocialSuiteTwitterUtil.unfollow(stream, tweetOwner);
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * Connects to {@link SocialSuiteTwitterUtil} user based on the name given
+	 * in stream and sends an block request to contact in Twitter based on the
+	 * parameter stream id.
+	 * 
+	 * @param streamId
+	 *            {@link Long} stream id, to get {@link Stream} object
+	 * @param tweetOwner
+	 *            {@link String} Twitter screen name of the contact
+	 * 
+	 * @return {@link String}
+	 */
+	@Path("/blockuser/{streamId}/{tweetOwner}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String blockUser(@PathParam("streamId") Long streamId, @PathParam("tweetOwner") String tweetOwner)
+	{
+		try
+		{
+			System.out.println("in followuser : " + tweetOwner);
+
+			Stream stream = StreamUtil.getStream(streamId);
+			if (stream == null)
+				return null;
+
+			// Calls SocialSuiteTwitterUtil method to send block request of
+			// tweet owner.
+			return SocialSuiteTwitterUtil.blockUser(stream, tweetOwner);
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
+	/**
+	 * Connects to {@link SocialSuiteTwitterUtil} user based on the name given
+	 * in stream and sends an unblock request to contact in Twitter based on the
+	 * parameter stream id.
+	 * 
+	 * @param streamId
+	 *            {@link Long} stream id, to get {@link Stream} object
+	 * @param tweetOwner
+	 *            {@link String} Twitter screen name of the contact
+	 * 
+	 * @return {@link String}
+	 */
+	@Path("/unblockuser/{streamId}/{tweetOwner}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String unblockUser(@PathParam("streamId") Long streamId, @PathParam("tweetOwner") String tweetOwner)
+	{
+		try
+		{
+			System.out.println("in unfollowUser : " + tweetOwner);
+
+			Stream stream = StreamUtil.getStream(streamId);
+			if (stream == null)
+				return null;
+
+			// Send unblock request to Twitter about tweet owner.
+			return SocialSuiteTwitterUtil.unblockUser(stream, tweetOwner);
 		}
 		catch (SocketTimeoutException e)
 		{

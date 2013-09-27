@@ -15,8 +15,8 @@ function fillStreamDetail()
 	    
 	if(StreamType == "Search")
 	  {
-	  	  alert("search");	
-	   	  document.getElementById('searchStreamKeyword').innerHTML='<div class="remove-keyword"><label class="control-label">Keyword <span class="field_req">*</span></label><div class="controls"><input id="keyword" name="keyword" type="text" class="required" required="required" value="" autocapitalize="off"></div></div>';
+		console.log("search");	
+	   	document.getElementById('searchStreamKeyword').innerHTML='<div class="remove-keyword"><label class="control-label">Keyword <span class="field_req">*</span></label><div class="controls"><input id="keyword" name="keyword" type="text" class="required" required="required" value="" autocapitalize="off"></div></div>';
 	  }	 
 }
 

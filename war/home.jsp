@@ -178,7 +178,7 @@
 							<li id="reportsmenu" style="<%=style_reports %>" ><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
 							
-							<li id="socialsuitemenu"><a href="#socialsuite">
+							<li id="socialsuitemenu"><a href="#social">
 							     <i class="icon-group icon-white"></i> Social</a>
 							</li>
 
@@ -333,8 +333,8 @@
 	<script src='https://da4o37ei6ybbh.cloudfront.net/js/lib/headjs-min.js'></script>
 
 	<script>
-	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	//var LIB_PATH = "/";
+	// var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
+	var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
