@@ -20,6 +20,8 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.CSVUtil;
+import com.agilecrm.util.CSVUtil.ImportStatus;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.googlecode.objectify.Key;
 
@@ -192,18 +194,27 @@ public class ContactUtil
      */
     public static Contact searchContactByEmail(String email)
     {
-	if (email == null)
+	if (StringUtils.isBlank(email))
 	    return null;
 
-	return dao.getByProperty("properties.value = ", email);
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("properties.name", Contact.EMAIL);
+	searchMap.put("properties.value", email);
+
+	return dao.getByProperty(searchMap);
     }
 
     public static boolean isExists(String email)
     {
-	if (email == null)
+
+	if (StringUtils.isBlank(email))
 	    return false;
 
-	return dao.getCountByProperty("properties.value = ", email) != 0 ? true : false;
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("properties.name", Contact.EMAIL);
+	searchMap.put("properties.value", email);
+	System.out.println(dao.getCountByProperty(searchMap) != 0 ? true : false);
+	return dao.getCountByProperty(searchMap) != 0 ? true : false;
     }
 
     /**
@@ -234,11 +245,8 @@ public class ContactUtil
 		continue;
 	    }
 
-	    // Gets contacts count with given email address
-	    int availableContactsCount = dao.getCountByProperty("properties.value = ", emailField.value);
-
 	    // If email is not available, then it iterates though other emails
-	    if (availableContactsCount == 0)
+	    if (!isExists(emailField.value))
 		continue;
 
 	    // If count is not 0 and contact is new, then contact is contact is
@@ -515,11 +523,45 @@ public class ContactUtil
 
     }
 
+    public static boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
+    {
+	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	{
+	    CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
+	    return false;
+	}
+
+	if (isDuplicateContact(contact))
+	{
+	    CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.DUPLICATE_CONTACT, 1);
+	    return false;
+	}
+
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
+	{
+	    CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);
+	    return false;
+	}
+
+	Iterator<ContactField> iterator = contact.properties.iterator();
+	while (iterator.hasNext())
+	{
+	    ContactField field = iterator.next();
+	    if (Contact.WEBSITE.equals(field.name) && !isValidURL(field.value))
+		iterator.remove();
+	}
+
+	return true;
+    }
+
     public static boolean isValidFields(Contact contact)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
 		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	{
 	    return false;
+	}
 
 	if (isDuplicateContact(contact))
 	    return false;

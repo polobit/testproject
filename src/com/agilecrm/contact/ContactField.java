@@ -30,6 +30,23 @@ public class ContactField
 	SYSTEM, CUSTOM
     };
 
+    public static enum SystemField
+    {
+	FIRST_NAME(Contact.FIRST_NAME), LAST_NAME(Contact.LAST_NAME), EMAIL(Contact.EMAIL), COMPANY(Contact.COMPANY), TITLE(
+		Contact.TITLE), NAME(Contact.NAME), URL(Contact.URL), WEBSITE(Contact.WEBSITE), ADDRESS(Contact.ADDRESS);
+	String value;
+
+	private SystemField(String value)
+	{
+	    this.value = value;
+	}
+
+	public String getName()
+	{
+	    return value;
+	}
+    }
+
     /**
      * Specifies the type of ContactField
      */
@@ -80,10 +97,15 @@ public class ContactField
 
     public void updateField(ContactField field)
     {
-	type = field.type;
 	name = field.name;
 	subtype = field.subtype;
 	value = field.value;
+	if (SystemField.valueOf(field.name) != null)
+	{
+	    type = FieldType.SYSTEM;
+	    return;
+	}
+	field.type = FieldType.CUSTOM;
     }
 
     @Override
