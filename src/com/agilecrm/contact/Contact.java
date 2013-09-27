@@ -272,7 +272,7 @@ public class Contact extends Cursor
 	// If field is null then new contact field is added to properties.
 	if (field == null)
 	{
-	    if (ContactField.SystemFields.valueOf(contactField.name) == null)
+	    if (ContactField.SystemField.valueOf(contactField.name) == null)
 		contactField.type = ContactField.FieldType.CUSTOM;
 
 	    this.properties.add(contactField);
