@@ -876,6 +876,9 @@ tbody a.no-style-a {
 	font-size:17px;
 	background-color:lightgrey;
 	margin-bottom: 0px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 .milestone-column > ul {
 	height:468px;
@@ -893,21 +896,37 @@ tbody a.no-style-a {
 	padding: 10px;
 	background-color:#f5f5dc;
 }
+
+/* Displaying milestone list values in Admin settings */
+.milestone-value-list > li {
+	margin-right:0px!important;
+	margin-bottom:5px!important;
+	cursor:move;
+	background-color:#f8f8b9!important;
+	border: 1px solid #DDD!important;
+	color:black!important;
+}
+.milestone-value-list > li > div {
+	margin-left:3px;
+}
+.milestone-value-list > li > div > span {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 12em;
+	display: inline-block;
+}
+.milestone-value-list > li > div > a {
+	color:black!important;
+	display: inline-block;
+}
+
 .agile-overflow-ellipsis{
 	display: inline-block;
 	text-overflow:ellipsis;
 	white-space:nowrap;
 	width:100%;
 	overflow:hidden;
-}
-
-
-.agile-overflow-ellipsis {
-	display: inline-block;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	width: 100%;
-	overflow: hidden;
 }
 
 .agile-ellipsis-dynamic {

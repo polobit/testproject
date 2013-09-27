@@ -91,6 +91,9 @@ public class SendMail
     public static final String PASSWORD_CHANGE_NOTIFICATION = "password_change_notification";
     public static final String PASSWORD_CHANGE_NOTIFICATION_SUBJECT = "Your Password has been changed.";
 
+    public static final String CSV_IMPORT_NOTIFICATION = "csv_reports";
+    public static final String CSV_IMPORT_NOTIFICATION_SUBJECT = "CSV Import report";
+
     /**
      * From Name of email.
      */

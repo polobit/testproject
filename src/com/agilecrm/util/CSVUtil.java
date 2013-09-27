@@ -7,9 +7,11 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -31,6 +33,8 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
 
 /**
@@ -47,6 +51,11 @@ import com.googlecode.objectify.Key;
  */
 public class CSVUtil
 {
+    public static enum ImportStatus
+    {
+	TOTAL, SAVED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED
+    }
+
     /**
      * Converts csv file data into json objects and returns HashMap() of Array
      * (result) and Error (duplicates). Validates the duplicates based on given
@@ -205,12 +214,14 @@ public class CSVUtil
 	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
 	AgileUser user = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
+	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 
 	System.out.println(contacts.size());
 
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	List<String> emails = new ArrayList<String>();
+	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
 
 	for (String[] csvValues : contacts)
 	{
@@ -304,7 +315,7 @@ public class CSVUtil
 		tempContact.properties.add(field);
 	    }
 
-	    if (!ContactUtil.isValidFields(tempContact))
+	    if (!ContactUtil.isValidFields(tempContact, status))
 		continue;
 
 	    try
@@ -335,10 +346,40 @@ public class CSVUtil
 	    savedContacts++;
 	}
 
-	System.out.println(savedContacts);
+	calculateTotalFailedContacts(status);
+
+	buildCSVImportStatus(status, ImportStatus.TOTAL, contacts.size());
+	buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
+
+	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
+		new Object[] { domainUser, status });
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
 
 	System.out.println("contact save completed");
+    }
+
+    public static void buildCSVImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, Integer count)
+    {
+	if (statusMap.containsKey(status))
+	{
+	    statusMap.put(status, statusMap.get(status) + count);
+	    statusMap.get(status);
+	    return;
+	}
+
+	statusMap.put(status, count);
+    }
+
+    public static void calculateTotalFailedContacts(Map<ImportStatus, Integer> status)
+    {
+	int total = 0;
+	for (int i : status.values())
+	{
+	    System.out.println(i);
+	    total += i;
+	}
+	System.out.println(total);
+	status.put(ImportStatus.TOTAL_FAILED, total);
     }
 }
