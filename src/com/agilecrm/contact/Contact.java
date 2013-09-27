@@ -342,17 +342,6 @@ public class Contact extends Cursor
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
 	}
-	else
-	{
-	    System.out.println("company name : " + getContactFieldValue(NAME));
-	    System.out.println("company name : " + ContactUtil.companyExists(getContactFieldValue(NAME)));
-	    if (Type.COMPANY == type && ContactUtil.companyExists(getContactFieldValue(NAME)))
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
-			.build());
-	    }
-	}
 
 	// Check for already existing email if any,
 	// loop through for checking multiple emails
