@@ -19,34 +19,6 @@ var DealsRouter = Backbone.Router.extend({
 	deals : function()
 	{
 		// Depending on cookie shows list or milestone view
-		var url = 'core/api/opportunity';
-		var template_key = "opportunities";
-		var individual_tag_name = 'tr';
-
-		// Fetches deals as list
-		this.opportunityCollectionView = new Base_Collection_View({
-			url : url,
-			// restKey: "opportunity",
-			templateKey : template_key,
-			individual_tag_name : individual_tag_name,
-			postRenderCallback : function(el)
-				{
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$(".deal-close-time", el).timeago();
-					});
-		
-					// Shows Milestones Pie
-					pieMilestones();
-		
-					// Shows deals chart
-					dealsLineChart();
-		
-				}
-		});
-
-		this.opportunityCollectionView.collection.fetch();
-
 		if (!readCookie("agile_deal_view"))
 		{
 			template_key = "opportunities-by-milestones";
@@ -83,8 +55,30 @@ var DealsRouter = Backbone.Router.extend({
 			// Shows deals as milestone list view
 			$('#content').html(this.opportunityMilestoneCollectionView.render().el);
 		}
+		// Fetches deals as list
+		this.opportunityCollectionView = new Base_Collection_View({
+			url : 'core/api/opportunity',
+			templateKey : "opportunities",
+			individual_tag_name : 'tr',
+			postRenderCallback : function(el)
+				{
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					{
+						$(".deal-close-time", el).timeago();
+					});
+		
+					// Shows Milestones Pie
+					pieMilestones();
+		
+					// Shows deals chart
+					dealsLineChart();
+		
+				}
+		});
+		this.opportunityCollectionView.collection.fetch();
+		
 		// Shows deals as list view
-		else
+		if (readCookie("agile_deal_view"))
 			$('#content').html(this.opportunityCollectionView.render().el);
 
 		$(".active").removeClass("active");

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>IE Upgradation</title>
+    <title>Agile CRM</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -36,14 +36,15 @@
 			</div> 
 		</div>
 	</div>
-	<div class="container" style="margin-left:20px;">
+	<div class="container">
 		<div class="row">
 			<div class="error-container">
 				<h1>Oops!</h1> 
-				<h2>IE Upgradation</h2>
+				<h2>IE does not support Agile CRM</h2>
 				
 				<div class="error-details">
-					Error - message - The current browser version you are using is not supported. Please upgrade.				
+					Agile CRM currently does not support Internet Explorer. <br/>
+					We use any recent version of  <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a>.
 				</div>
 							
 				<div class="error-actions">
