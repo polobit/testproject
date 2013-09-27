@@ -216,7 +216,6 @@ public class Contact extends Cursor
     public static final String URL = "url";
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
-
     // Dao
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
@@ -272,9 +271,6 @@ public class Contact extends Cursor
 	// If field is null then new contact field is added to properties.
 	if (field == null)
 	{
-	    if (ContactField.SystemFields.valueOf(contactField.name) == null)
-		contactField.type = ContactField.FieldType.CUSTOM;
-
 	    this.properties.add(contactField);
 	}
 	else
@@ -345,17 +341,6 @@ public class Contact extends Cursor
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
-	}
-	else
-	{
-	    System.out.println("company name : " + getContactFieldValue(NAME));
-	    System.out.println("company name : " + ContactUtil.companyExists(getContactFieldValue(NAME)));
-	    if (Type.COMPANY == type && ContactUtil.companyExists(getContactFieldValue(NAME)))
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
-			.build());
-	    }
 	}
 
 	// Check for already existing email if any,

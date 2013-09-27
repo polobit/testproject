@@ -687,7 +687,7 @@ $(function()
 		return new Handlebars.SafeString(html);
 	});
 
-	// To show milestones as columns an deals
+	// To show milestones as columns in deals
 	Handlebars.registerHelper('deals_by_milestones', function(data)
 	{
 		var html = "";
@@ -700,6 +700,22 @@ $(function()
 			}
 			html += "</ul></div>";
 		});
+		return html;
+	});
+	
+	// To show milestones as sortable list
+	Handlebars.registerHelper('milestone_ul', function(data)
+	{
+		var html = "<ul class='milestone-value-list tagsinput' style='list-style:none;'>";
+		if(data)
+		{
+			var milestones = data.split(",");
+			for (var i in milestones)
+			{
+				html += "<li class='tag' data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>";
+			}
+		}
+		html += "</ul>";
 		return html;
 	});
 
