@@ -74,25 +74,7 @@
 	href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
-
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/agilecrm.css" />
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/widget.css" />
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/timeline.css" />
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/jslider.css" />
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/planandupgrade.css" />
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/daterangepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/bootstrapSwitch.css" />
-<link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/bootstrap-tour.min.css" />
-<!-- Unified CSS for All Lib -->
-<link rel='stylesheet' type='text/css' href='<%=CSS_PATH%>css/lib.css' />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css"/>
 <link href='tpl/min/tpl.js' />
 
 
@@ -373,6 +355,15 @@
 
 	});
 	</script>
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css"/>
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css"/>
+<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css"></link>
+<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/jslider.css"></link>
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" ></link>
+<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrapSwitch.css" ></link>
+<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
+<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 
+<!-- Unified CSS for All Lib -->
 </body>
 </html>
