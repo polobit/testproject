@@ -360,12 +360,12 @@ var Base_Collection_View = Backbone.View
 			{
 				this.appendItem(base_model);
 				
-				if(this.collection && this.collection.length)
+			/*	if(this.collection && this.collection.length)
 				{
 					if(this.collection.at(0).attributes.count)
 						this.collection.at(0).attributes.count+=1;
 				}	
-			
+			*/
 				if($('table', this.el).hasClass('onlySorting'))
 					return;
 				

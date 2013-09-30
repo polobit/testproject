@@ -603,4 +603,7 @@ function add_model_cursor(app_collection,mdl)
 	if(app_collection.models.length>=1)
 		app_collection.add(mdl,{at:app_collection.models.length-1});
 	else app_collection.add(mdl);
+	
+	if(app_collection.at(0).attributes.count)
+		app_collection.at(0).attributes.count+=1;
 }
