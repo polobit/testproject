@@ -59,7 +59,7 @@
 %>
 
 
-<meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LOGGED_IN_TIME) %>"/>
+<meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
 
 <%
 	//String CSS_PATH = "/";
@@ -172,7 +172,6 @@
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu" style="<%=style_reports %>" ><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
-
 							<li>
 								<form id="searchForm" class=" navbar-search"
 									style="margin: 5px;">
