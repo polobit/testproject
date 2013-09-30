@@ -487,13 +487,12 @@ public class SalesforceContactToAgileContact
 
 				if (jsonObject.has("Status"))
 				{
-					if (Case.Status.NEW.toString().equalsIgnoreCase(jsonObject.getString("Status")))
-						agileCase.status = Case.Status.NEW;
 
 					if (jsonObject.getString("Status").equalsIgnoreCase("Closed"))
 						agileCase.status = Case.Status.CLOSE;
 
-					if (jsonObject.getString("Status").equalsIgnoreCase("Working")
+					if (jsonObject.getString("Status").equalsIgnoreCase("New")
+							|| jsonObject.getString("Status").equalsIgnoreCase("Working")
 							|| jsonObject.getString("Status").equalsIgnoreCase("Escalated"))
 						agileCase.status = Case.Status.OPEN;
 				}

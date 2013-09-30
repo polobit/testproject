@@ -98,7 +98,7 @@ public class Case extends Cursor
 	 */
 	public static enum Status
 	{
-		NEW, OPEN, CLOSE
+		OPEN, CLOSE
 
 	}
 
