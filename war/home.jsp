@@ -62,8 +62,8 @@
 <meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
 
 <%
-	//String CSS_PATH = "/";
- 	String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
+	String CSS_PATH = "/";
+ 	//String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -357,10 +357,10 @@
 	</script>
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css"/>
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css"/>
-<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/daterangepicker.css"></link>
+<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/date_range_picker.css"></link>
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/jslider.css"></link>
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/planandupgrade.css" ></link>
-<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrapSwitch.css" ></link>
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/plan_and_upgrade.css" ></link>
+<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap_switch.css" ></link>
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 
