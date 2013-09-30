@@ -543,11 +543,12 @@
 						<div class="controls">
 							<select name="milestone" id="milestone" class="required" style="width:210px;">
 								<option value="">Select</option>
-                            	<option value="Open">Open</option>
-								<option value="Won">Won</option>
-                            	<option value="Stage 1">Stage 1</option>
-                           		<option value="Lost">Lost</option>
-							</select>	
+								{{#if milestones.length}}
+									{{#each milestones}}
+										<option value="{{.}}">{{.}}</option>
+									{{/each}}
+								{{/if}}
+                            </select>	
 		  				</div>
 					</div>
 					
