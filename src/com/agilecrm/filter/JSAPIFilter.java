@@ -39,7 +39,8 @@ public class JSAPIFilter implements Filter
      * domain in the url), if key matches request it allowed for further access
      */
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+	    throws IOException, ServletException
     {
 
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -56,18 +57,15 @@ public class JSAPIFilter implements Filter
 	    // Check if ApiKey
 	    if (APIKey.isPresent(agileId))
 	    {
-		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
+			SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Get AgileUser
 		DomainUser domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
 
-		if (userInfo == null || !userInfo.getEmail().equalsIgnoreCase(domainUser.email))
-		{
+		// Domain becomes null if user is deleted
+		if (domainUser != null)
 		    userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
-
-		    httpRequest.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-
-		}
 
 		SessionManager.set(userInfo);
 		chain.doFilter(httpRequest, httpResponse);
