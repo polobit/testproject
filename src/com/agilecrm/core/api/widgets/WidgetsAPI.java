@@ -22,6 +22,9 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.CustomWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.ContactsImportUtil;
 
 /**
  * <code>WidgetsAPI</code> class includes REST calls to interact with
@@ -239,5 +242,35 @@ public class WidgetsAPI
 		}
 
 		return HTTPUtil.accessURLToReadScript(customWidget.url, "POST", data);
+	}
+
+	@Path("salesforce/contacts/{user-id}/{password}/{api-key}")
+	@GET
+	public static void getSalesContacts(@PathParam("user-id") String userId, @PathParam("password") String password,
+			@PathParam("api-key") String apiKey)
+
+	{
+		try
+		{
+
+			ContactPrefs contactPrefs = new ContactPrefs();
+			contactPrefs.type = Type.SALESFORCE;
+			contactPrefs.userName = userId;// "tejaswitest@gmail.com";
+			contactPrefs.password = password;// "agile1234";
+			contactPrefs.apiKey = apiKey;// "CgBv3oy3GAY7eoNNQnx7yb2e";
+			System.out.println("here");
+
+			contactPrefs.save();
+
+			// initialize backend to save contacts
+			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+
 	}
 }
