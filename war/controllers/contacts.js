@@ -826,6 +826,7 @@ var ContactsRouter = Backbone.Router
 			{
 				SELECT_ALL = false;
 				App_Contacts.tag_id = tag_id;
+
 				// If url is not defined set defult url to contacts
 				if (!url)
 				{
@@ -878,8 +879,15 @@ var ContactsRouter = Backbone.Router
 				if(this.contact_custom_view)
 				{
 					//App_Contacts.contactsListView=this.contact_custom_view;
-					
-					var el=App_Contacts.contactsListView.render(true).el;
+					if(!(this.contact_custom_view.collection.url == url))
+						{
+							App_Contacts.contact_custom_view.collection.url = url;
+							App_Contacts.contact_custom_view.collection.fetch()
+							$('#content').html(App_Contacts.contact_custom_view.render().el);
+							return;
+						}
+
+					var el=App_Contacts.contact_custom_view.render(true).el;
 					$('#content').html(el);
 					
 					if (readCookie('company_filter'))
@@ -918,8 +926,9 @@ var ContactsRouter = Backbone.Router
 
 						pieTags(el);
 						setupViews(el, view_data.name);
+					
 						// show list of filters dropdown in contacts list
-						setupContactFilterList(el, tag_id);
+						setupContactFilterList(el, App_Contacts.tag_id);
 					} });
 				
 				// Defines appendItem for custom view
