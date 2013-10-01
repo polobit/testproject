@@ -1,11 +1,30 @@
 <!-- initial script which displayes social suite tabs with Add Stream and Added Streams. -->
-<script id="socialsuite-template" type="text/html">
+<script id="socialsuite-show-streams-template" type="text/html">
 <div class="row">
     <div class="span12">
         <div class="page-header">
-            <h1>Social Suite <!--<small>Manage Social</small>--></h1>  
-            <a href="#add-stream" id="add-stream" class="add-stream-tab btn right" style="top:-30px;position: relative;">
-               <i class="icon-plus-sign"></i> Add Stream
+            <h1>Social Suite <!--<small>Manage Social</small>--></h1>            
+            <a href="#manage-streams" id="manage_streams" class="manage-streams-tab btn right" style="top:-30px;position: relative;">
+               <i class="icon-cog"></i> Manage Streams
+            </a>                      
+        </div>
+    </div>
+</div>         
+
+<div class="row">
+           <div class="span12">              
+                <div id="socialsuite-tabs-content"></div>        
+            </div><!-- span12 end -->       
+</div> <!-- row end -->
+</script>
+
+<script id="socialsuite-manage-streams-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Social Suite <!--<small>Manage Social</small>--></h1>           
+            <a href="#social" id="show_streams" class="show-streams-tab btn right" style="top:-30px;position: relative;">
+               <i class="icon-columns"></i> Show Streams
             </a>                      
         </div>
     </div>

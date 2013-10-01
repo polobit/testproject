@@ -2,23 +2,35 @@
  *  Fill details of stream in add-stream form.
  */
 function fillStreamDetail()
-{
+{	
+	// Empty screen name means Oauth is not done, so warning label will be hidden.
+	$("#twitter_account", $('#addStreamModal')).attr("value",'');
+	
 	$("#user_name", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.name); 
 
 	$("#network_type", $('#addStreamModal')).attr("value","TWITTER"); 
 	    	    
 	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);
 	
+	$("#linkedin_streams").hide();	
+	$('#add_linkedin_stream').hide();
+	
+	$("#twitter_warning").hide();
+	$("#twitter_streams").show();
+	$('#access_to_twitter').show();
+    $('#add_twitter_stream').show();   
+    document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Tweets and retweets posted by the authenticating user and the users they follow.';
+	
 	$("#domain_user_id", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id);
 	
-	$("#client_channel", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id + "_Channel");
-	    
-	if(StreamType == "Search")
-	  {
-		console.log("search");	
-	   	document.getElementById('searchStreamKeyword').innerHTML='<div class="remove-keyword"><label class="control-label">Keyword <span class="field_req">*</span></label><div class="controls"><input id="keyword" name="keyword" type="text" class="required" required="required" value="" autocapitalize="off"></div></div>';
-	  }	 
+	$("#client_channel", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id + "_Channel");	
 }
+
+//Authentication is done, hide warning.
+function hideWarning() {		
+	// Hide warning about authentication access.
+	$("#twitter_warning").hide();
+};
 
 /**
  * Shows setup if user adds LinkedIn stream. Uses ScribeServlet 
@@ -38,8 +50,7 @@ function setupSocialSuiteLinkedinOAuth()
         '&stream_type=' + encodeURIComponent(StreamType);
 
     // Shows a link button in the UI which connects to the above URL
-    $('#linkedinAddStream').html("<a id='add-linkedin-stream' type='button' class='save-linkedin-stream btn btn-primary' href=\"" + url + "\" style='text-decoration: none;'>" + 
-    		"Link Your LinkedIn</a>");    
+    $('#add_linkedin_stream').attr("href",url);    
 }
 
 /**
@@ -199,6 +210,32 @@ function addTweetToStream(modelStream,tweet)
 	 head.js('lib/jquery.timeago.js', function(){	 
 		        $(".time-ago", $(".chirp-container")).timeago();	
 			});
+}
+
+// Bulk delete reflection in UI and at server.
+function deleteStream(streams)
+{
+	console.log("streams"); console.log(streams);
+		
+	// To remove streams on delete from table. 
+	for(var i = 0; i < streams.length; i++) 
+	 {
+		var id = streams[i].id;
+		console.log(id);
+		
+		// Fetch stream from collection
+	    var stream = StreamsListView.collection.get(id).toJSON();
+	
+	    // Stream size is too big, can not handle by pubnub so remove list of tweet.
+	    delete stream.tweetListView;	
+	
+    	// Unregister on server
+	    var publishJSON = {"message_type":"unregister", "stream":stream};
+	    sendMessage(publishJSON);
+	    
+	    // Remove stream form collection.
+	    StreamsListView.collection.remove(stream);
+	}
 }
 
 // Make columns draggable.

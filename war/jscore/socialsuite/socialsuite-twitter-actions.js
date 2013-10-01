@@ -1,5 +1,5 @@
 /**
- * get stream and create tweet and post it.
+ * get stream and create tweet for posting on Twitter.
  */
 $(document).on("click",".compose-message", function(e)
 {	
@@ -72,7 +72,7 @@ $(document).on("click",".compose-message", function(e)
         		 }
         	 else if(data == "Unsuccessful")
         		 {
-                   // On success, shows the status as sent
+                   // On failure, shows the status as retry
                    $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");
         		 }
         	 
@@ -97,7 +97,7 @@ $(document).on("click",".compose-message", function(e)
 });
 
 /**
- * Get stream and create reply tweet and post it.
+ * Get stream and create reply tweet and post it on Twitter.
  */
 $(document).on("click",".reply-message", function(e)
 {	
@@ -174,7 +174,7 @@ $(document).on("click",".reply-message", function(e)
     		 }
         	 else if(data == "Unsuccessful")
     		 {
-         	   // On success, shows the status as sent
+         	   // On failure, shows the status as retry
                $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");
     		 }
         	 
@@ -199,8 +199,7 @@ $(document).on("click",".reply-message", function(e)
 });
 
 /**
- * Sends a direct message to the Twitter profile of the contact based on Twitter Id of the profile
- * set to the contact  
+ * Sends a direct message to the Twitter profile , who is tweet owner.
  */
 $(document).on("click",".direct-message", function(e)
 {	
@@ -260,8 +259,8 @@ $(document).on("click",".direct-message", function(e)
 
         $("#spinner-modal").show();
         
-        // Sends post request to url "/core/social/replytweet/" and Calls StreamsAPI with 
-        // Stream id and Twitter id as path parameters and form as post data
+        // Sends post request to url "/core/social/directmessage/" and Calls StreamsAPI with 
+        // Stream id as path parameters and form as post data
         $.post("/core/social/directmessage/" + streamId ,
         $('#socialsuite-twitter_messageForm').serialize(),
 
@@ -277,7 +276,7 @@ $(document).on("click",".direct-message", function(e)
         	 }
         	 else if(data == "Unsuccessful")
         		{
-                 // On success, shows the status as sent
+                 // On failure, shows the status as retry
                  $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");        		 
         		}
             // Hides the modal after 2 seconds after the sent is shown
@@ -301,10 +300,11 @@ $(document).on("click",".direct-message", function(e)
 });
 
 /**
- * Get stream and perform retweet action.
+ * Get stream and perform retweet action on selected tweet.
  */
 $(document).on("click",".retweet-status", function(e)
 {
+	// Ask for user's confirmation.
 	if(!confirm("Are you sure you want to retweet this status to your followers?"))
  		return;
     
@@ -316,7 +316,7 @@ $(document).on("click",".retweet-status", function(e)
  	 console.log(this);
 	
 	/* Sends get request to url "core/social/retweet/" and Calls StreamAPI with 
-     * Stream id, tweet id and tweet owner as path parameters.
+     * Stream id, tweet id as path parameters.
      */
     $.get("/core/social/retweet/" + streamId + "/" + tweetIdStr,
 
@@ -331,7 +331,7 @@ $(document).on("click",".retweet-status", function(e)
     		  return;
     		}
     	
-        // On success, the color of the retweet is shown green    	
+        // On success, the color of the retweet is shown green.    	
     	// Get stream from collection.
     	var modelStream = StreamsListView.collection.get(streamId);
     	console.log(modelStream);
@@ -362,14 +362,15 @@ $(document).on("click",".retweet-status", function(e)
 
 
 /**
- * Get stream and perform undo-retweet action.
+ * Get stream and perform undo-retweet action on selected tweet.
  */
 $(document).on("click",".undo-retweet-status", function(e)
 {
+	// Ask for confirmation from user.
 	if(!confirm("Are you sure you want to undo retweet this status?"))
  		return;
     
-	// Get the id of the tweet on which retweet is clicked
+	// Get the id of the tweet on which undo-retweet is clicked
      var streamId = $(this).attr("stream-id");
      var tweetId = $(this).attr("tweet-id");
      var tweetIdStr = null; 
@@ -378,7 +379,7 @@ $(document).on("click",".undo-retweet-status", function(e)
  	 var modelStream = StreamsListView.collection.get(streamId);
  	 console.log(modelStream);
  	
-     
+     // If stream type is "Sent" then "tweet-id-str" is tweet handle else "retweet-id" to perform action.
      if(modelStream.toJSON().stream_type == "Sent")
     	 tweetIdStr = $(this).attr("tweet-id-str");
      else if(modelStream.toJSON().stream_type == "Home")
@@ -386,7 +387,7 @@ $(document).on("click",".undo-retweet-status", function(e)
  	 console.log(this);
 	
 	/* Sends get request to url "core/social/undoretweet/" and Calls StreamAPI with 
-     * Stream id, tweet id and tweet owner as path parameters.
+     * Stream id, tweet id and tweet idStr as path parameters.
      */
     $.get("/core/social/undoretweet/" + streamId + "/" + tweetId+ "/" + tweetIdStr,
 
@@ -433,7 +434,7 @@ $(document).on("click",".undo-retweet-status", function(e)
 });
 
 /**
- * Get stream and perform favorite action.
+ * Get stream and perform favorite action on selected tweet.
  */
 $(document).on("click",".favorite-status", function(e)
 {	
@@ -445,7 +446,7 @@ $(document).on("click",".favorite-status", function(e)
  	 console.log(this);
 	
 	/* Sends get request to url "core/social/favorite/" and Calls StreamAPI with 
-     * Stream id, tweet id and tweet owner as path parameters.
+     * Stream id, tweet idStr as path parameters.
      */
     $.get("/core/social/favorite/" + streamId + "/" + tweetIdStr,
 
@@ -460,7 +461,7 @@ $(document).on("click",".favorite-status", function(e)
     		  return;
     		}    
     	
-        // On success, the color of the retweet is shown green    	
+        // On success, the color of the favorite is shown orange.   	
     	// Get stream from collection.
     	var modelStream = StreamsListView.collection.get(streamId);
     	console.log(modelStream);
@@ -490,7 +491,7 @@ $(document).on("click",".favorite-status", function(e)
 
 
 /**
- * Get stream and perform undo-favorite action.
+ * Get stream and perform undo-favorite action on selected tweet.
  */
 $(document).on("click",".undo-favorite-status", function(e)
 {
@@ -502,7 +503,7 @@ $(document).on("click",".undo-favorite-status", function(e)
  	 console.log(this);
 	
 	/* Sends get request to url "core/social/undofavorite/" and Calls StreamAPI with 
-     * Stream id, tweet id and tweet owner as path parameters.
+     * Stream id, tweet idStr as path parameters.
      */
     $.get("/core/social/undofavorite/" + streamId + "/" + tweetIdStr,
 
@@ -517,7 +518,7 @@ $(document).on("click",".undo-favorite-status", function(e)
     		  return;
     		}
     	
-        // On success, Change retweet icon to normal.
+        // On success, Change favorite icon to normal.
     	// Get stream from collection.
     	var modelStream = StreamsListView.collection.get(streamId);
     	console.log(modelStream);
@@ -545,6 +546,16 @@ $(document).on("click",".undo-favorite-status", function(e)
     });
 });
 
+/**
+ * Sends details of tweet and stream id. Method will check whether 
+ * relashionship of stream owner and tweet owner, 
+ * so more options will be displyed as per that. 
+ * 
+ * @param stream_id
+ * 			stream id to fetch stream details.
+ * @param tweetOwner
+ * 			Twitter user's screen name.
+ */
 $(document).on("click",".more-options", function(e)
 {	
   console.log("more-options in function");
@@ -627,10 +638,12 @@ $(document).on("click",".more-options", function(e)
  */
 $(document).on("click",".follow-user", function(e)
 		 {
+			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
 			var tweetOwner = $(this).attr("owner-tweet");
 			console.log(this);
 		    	
+			// Calls method to send request to follow user.
 		    $.get("/core/social/followuser/" + streamId + "/" + tweetOwner, function (data)
 		    {
 		    	console.log(data);
@@ -657,10 +670,12 @@ $(document).on("click",".follow-user", function(e)
  */
 $(document).on("click",".unfollow-user", function(e)
  {
+	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
 	var tweetOwner = $(this).attr("owner-tweet");
 	console.log(this);
     	
+	// Calls method to send request to unfollow user.
     $.get("/core/social/unfollowuser/" + streamId + "/" + tweetOwner, function (data)
     {
     	console.log(data);
@@ -684,14 +699,16 @@ $(document).on("click",".unfollow-user", function(e)
  * @param stream_id
  * 			stream id to fetch stream details
  * @param tweetOwner
- * 			Twitter user's screen name to send follow request
+ * 			Twitter user's screen name to send block request
  */
 $(document).on("click",".block-user", function(e)
 		 {
+			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
 			var tweetOwner = $(this).attr("owner-tweet");
 			console.log(this);
 		    	
+			// Calls method to send request to block user.
 		    $.get("/core/social/blockuser/" + streamId + "/" + tweetOwner, function (data)
 		    {
 		    	console.log(data);
@@ -707,6 +724,7 @@ $(document).on("click",".block-user", function(e)
 		    	console.log(data.responseText);  
 		    });
 		});
+
 /**
  * Sends unblocked request to unBlocked the contact's Twitter profile in Twitter based on
  * stream id and Twitter user's screen name.
@@ -714,14 +732,16 @@ $(document).on("click",".block-user", function(e)
  * @param stream_id
  * 			stream id to fetch stream details
  * @param tweetOwner
- * 			Twitter user's screen name to send unfollow request
+ * 			Twitter user's screen name to send unblock request
  */
 $(document).on("click",".unblock-user", function(e)
  {
+	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
 	var tweetOwner = $(this).attr("owner-tweet");
 	console.log(this);
     	
+	// Calls method to send request to unblock user.
     $.get("/core/social/unblockuser/" + streamId + "/" + tweetOwner, function (data)
     {
     	console.log(data);
@@ -740,19 +760,22 @@ $(document).on("click",".unblock-user", function(e)
 
 /**
  * Sends delete request to Twitter profile in Twitter based on
- * stream id and Twitter user's screen name and tweet id.
+ * stream id, Twitter user's screen name and tweet id.
  */
 $(document).on("click",".delete-tweet", function(e)
  {
+	// Ask confirmation to user.
 	if(!confirm("Are you sure you want to delete this tweet?"))
 		return;
 	
+	// Details to pass on to method.
 	var streamId = $(this).attr("stream-id");	
 	var tweetOwner = $(this).attr("owner-tweet");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
 	console.log(this);
     
+	// Call method with details of tweet to be deleted.
     $.get("/core/social/deletetweet/" + streamId + "/" + tweetOwner+ "/" +tweetIdStr, function (data)
     {
     	console.log("data : "+data);
@@ -780,7 +803,7 @@ $(document).on("click",".delete-tweet", function(e)
         		// Remove tweet element from ui
         		$('.deleted').remove();
         	}
-        else if(data == "Successful")
+        else if(data == "Unsuccessful")
         	{
         		alert("Retry after sometime.");
         	}

@@ -16,6 +16,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
 /**
@@ -95,6 +98,22 @@ public class StreamAPI
 		{
 			stream.delete();
 		}
+	}
+
+	/**
+	 * Deletes the bulk of streams. Bulk operations - delete.
+	 * 
+	 * @param model_ids
+	 *            array of stream ids as String.
+	 * @throws JSONException
+	 */
+	@Path("bulk")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteStreams(@FormParam("ids") String model_ids) throws JSONException
+	{
+		JSONArray streamsJSONArray = new JSONArray(model_ids);
+		Stream.dao.deleteBulkByIds(streamsJSONArray);
 	}
 
 	/**

@@ -102,7 +102,7 @@ function sendMessage(publishJSON)
 			        		{
 							 console.log("in publish_message unsuccessfull to Sent Message!");
 							 alert("in publish_message unsuccessfully to Sent Message!");
-							 sendMessage(publishJSON);
+							 //sendMessage(publishJSON);
 			        		}
 					}
 				});	

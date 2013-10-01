@@ -1,105 +1,43 @@
-<script id="socialsuite-add-stream-template" type="text/html">
-                 <div class="row">
-    				<div class="span12">
-        				<div class="">
-            				<h3><strong><i class="icon-twitter"></i> Twitter Streams</strong></h3>						 							  							
-        				</div>                        
-    				</div>
-				 </div>
+<script id="existing-streams-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h3>Existing Streams</h3>            
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        <div id="slate">
+        </div>         
+        <div class="data-block">
+            <div class="data-container">
+                <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/social/bulk" id="streams-table">
+                    <thead>
+                        <tr>                            
+                            <th>Stream Type</th>
+                            <th>Network Type</th>
+                            <th>Screen Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="existing-streams-model-list">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-				<div class="row">
-					<div class="span9">
-    					<table class="table table-striped">
-            				<thead>
-                				<tr><th></th>     
-                    				<th class="header">Stream</th>
-                    				<th class="header">Description</th>
-                				</tr>
-            				</thead>
-            				<tbody>
-            					<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="home" value="Home" checked></label></td>
-                					<td><i class="icon-home"></i> Home</td>
-                					<td>Tweets and retweets posted by the authenticating user and the users they follow.</td>    
-             					</tr>
-            					<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="mentions" value="Mentions"></label></td>
-                					<td><img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions</td>
-                					<td>Mentions (tweets containing a users's @screen_name) for the authenticating user.</td>          
-                                </tr>
-								<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="retweets" value="Retweets"></label</td>
-                					<td><i class="icon-retweet"></i> Retweets</td>
-                					<td>Tweets authored by the authenticating user that have been retweeted by others.</td>    
-             					</tr>
-            					<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="dm_inbox" value="DM_Inbox"></label</td>
-                					<td><i class="icon-download-alt"></i> DM Inbox</td>
-                					<td>Direct messages sent to the authenticating user.</td>          
-                                </tr>
-								<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="dm_outbox" value="DM_Outbox"></label></td>
-                					<td><i class="icon-upload-alt"></i> DM Outbox</td>
-                					<td>Direct messages sent by the authenticating user.</td>    
-             					</tr>
-            					<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="favorites" value="Favorites"></label></td>
-                					<td><i class="icon-star"></i> Favorites</td>
-                					<td>Tweets favorited by the authenticating user.</td>          
-                                </tr>
-								<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="sent" value="Sent"></label></td>
-                					<td><i class="icon-share-alt"></i> Sent</td>
-                					<td>Tweets authored or retweeted by the authenticating user.</td>    
-             					</tr>
-            					<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="search" value="Search"></label></td>
-                					<td><i class="icon-search"></i> Search</td>
-                					<td>Relevant Tweets matching a specified query.</td>          
-                                </tr>
-								<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="twitter" name="optionsRadios" id="scheduled" value="Scheduled"></label></td>
-                					<td><i class="icon-calendar"></i> Scheduled</td>
-                					<td>Tweets user want to sent in future time.</td>    
-             					</tr>            					
-             			   </tbody>
-    					</table>                        
-					</div>                        
-				</div>
-
-                 <div class="row">
-    				<div class="span12">
-        				<div class="">
-            				<h3><strong><i class="icon-linkedin"></i> Linkedin Streams</strong></h3>						 							  							
-        				</div>                        
-    				</div>
-				 </div>
-
-				<div class="row">
-					<div class="span9">
-    					<table class="table table-striped">
-            				<thead>
-                				<tr><th></th>     
-                    				<th class="header">Stream</th>
-                    				<th class="header">Description</th>
-                				</tr>
-            				</thead>
-            				<tbody>
-            					<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="linkedin" name="optionsRadios" id="all_updates" value="All_Updates"></label></td>
-                					<td><i class="icon-home"></i> All Updates</td>
-                					<td>Updates and shares from authenticated user's connections and groups.</td>    
-             					</tr>            					
-								<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="linkedin" name="optionsRadios" id="my_updates" value="My_Updates"></label</td>
-                					<td><i class="icon-share-alt"></i> My Updates</td>
-                					<td>Updates authored by the authenticating user.</td>    
-             					</tr>
-								<tr><td><label class="checkbox"><input class="streamtype" type="radio" network-type="linkedin" name="optionsRadios" id="scheduled" value="Scheduled"></label></td>
-                					<td><i class="icon-calendar"></i> Scheduled</td>
-                					<td>Updates user want to sent in future time.</td>    
-             					</tr>
-             			   </tbody>
-    					</table>                        
-					</div>                        
-				</div>
-
-                        <!-- Button trigger modal -->
-            			<a class="btn btn-primary left add-social-stream" id="addSocialStream" style="margin-bottom: 15px;position:relative">
-            			  <span><i class="icon-plus-sign"></i></span> Add
-                        </a>            			
-						<a class="btn btn-danger left" id="streams-view" href="#social" style="margin-bottom: 15px;position:relative">Cancel</a></div>			
+<a id="add-stream" class="add-stream add-stream-tab btn left" style="margin-bottom: 15px;position:relative">
+   <i class="icon-plus-sign"></i> Add Stream
+</a>
 </script>
 
+<script id="existing-streams-model-template" type="text/html">
+<td class="data" data={{id}}>{{stream_type}}</td>
+<td>{{network_type}}</td>
+<td>{{screen_name}}</td>
+</script>
 
 <!-- addStreamModal -->
 <div id="addStreamModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addStreamModalLabel" aria-hidden="true"
@@ -107,15 +45,17 @@
 		<div class="modal-header">
 			<button type="button" class="btn close" data-dismiss="modal"
 				aria-hidden="true">X</button>
-			<h3 id="addStreamModalLabel">Stream Details</h3>			
+			<h3 id="addStreamModalLabel">Add Stream</h3>			
 		</div>
 		<div class="modal-body">
 			<form id="streamDetail" name="streamDetail" class="form-horizontal">
         		<fieldset>   
        				<input id="domain_user_id" name="domain_user_id" type="hidden" value=""> 		
         		    <input id="client_channel" name="client_channel" type="hidden" value="">
-            		
-            		<label>"Please allow AgileCRM to <a href="javascript:openTwitter()">access your account</a></label><br/>
+            		<input id="twitter_token" name="token" type="hidden" value="">
+            		<input id="twitter_token_secret" name="secret" type="hidden" value="">
+                    <input id="twitter_account" name="screen_name" type="hidden" value=""> 
+                               		            		
             		<div class="row">
                 		<div class="span5" id="streamDetails">                   
                     		<div class="control-group">
@@ -126,64 +66,51 @@
                     		</div>
                     		<div class="control-group">
                         		<label class="control-label">Network Type </label> 
-                        		<div class="controls">
-                            		<input id="network_type" name="network_type" type="text" value="" readonly="readonly" title= "You cannot edit this field. Please allow access for your account.">
+                        		<div class="controls">    
+                        		    <input id="network_type" name="network_type" type="hidden" value="">                        		
+                            		<select id="select_network_type" name="select_network_type" class="selectpicker">
+  										<option value="TWITTER" data-icon="icon-heart">Twitter</option>
+  										<option value="LINKEDIN">Linkedin</option>  						
+									</select>
                         		</div>
                     		</div>
                     		<div class="control-group">
                         		<label class="control-label">Stream Type </label> 
-                        		<div class="controls">
-                            		<input id="stream_type" name="stream_type" type="text" value="" readonly="readonly" title= "You cannot edit this field. Please allow access for your account.">
+                        		<div class="controls">                            		
+                        		    <input id="stream_type" name="stream_type" type="hidden" value="">
+                            		<select id="twitter_streams" name="twitter_streams" for="twitter">
+  										<option id="home" value="Home"><i class="icon-home"></i> Home</option>
+  										<option id="sent" value="Sent"><i class="icon-share-alt"></i> Sent</option>
+  										<option id="retweets" value="Mentions"><img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions</option>
+  										<option id="search" value="Search"><i class="icon-search"></i> Search</option>
+  										<option id="mentions" value="Retweets"><i class="icon-retweet"></i> Retweets</option>
+  										<option id="favorites" value="Favorites"><i class="icon-star"></i> Favorites</option>
+  										<option id="dm_inbox" value="DM_Inbox"><i class="icon-download-alt"></i> DM Inbox</option>
+  										<option id="dm_outbox" value="DM_Outbox"><i class="icon-upload-alt"></i> DM Outbox</option>
+  										<option id="scheduled" value="Scheduled"><i class="icon-calendar"></i> Scheduled</option>  										
+									</select>
+									<select id="linkedin_streams" name="linkedin_streams" for="linkedin">
+  										<option id="all_updates" value="All_Updates"><i class="icon-home"></i> All Updates</option>
+  										<option id="my_updates" value="My_Updates"><i class="icon-share-alt"></i> My Updates</option>  										
+  										<option id="scheduled" value="Scheduled"><i class="icon-calendar"></i> Scheduled</option>  										
+									</select>
+									<label id="stream_description_label" class="txt-mute txt-small"></label>
                         		</div>
-                    		</div>    
-							<div class="control-group">
-			       	 			<label class="control-label">UserId </label>
-					 			<div class="controls">
-			       					<input id="twitter_account" name="screen_name" type="text" readonly="readonly" class="required" required="required" title= "You cannot edit this field. Please allow access for your account.">
-					 			</div>
-				    		</div>
-				    		<div class="control-group">
-			       	 			<label class="control-label">Token </label>
-					 			<div class="controls">
-				       				<input id="twitter_token" name="token" type="text" readonly="readonly" class="required" required="required" title= "You cannot edit this field. Please allow access for your account.">
-					 			</div>
-			        		</div>				   
-				    		<div class="control-group">
-			       	  			<label class="control-label">Token Secret </label>
-					  			<div class="controls">
-			       					<input id="twitter_token_secret" name="secret" type="text" readonly="readonly" class="required" required="required" title= "You cannot edit this field. Please allow access for your account.">
-					  			</div>
-				    		</div>                    		
-							<div class="control-group" id="searchStreamKeyword">
-  						
-							</div>
+                    		</div>							
+							<div class="control-group" id="search_stream_keyword"> 	</div>
+							<div id="access_to_twitter" class="control-group">
+							  <div class="controls">
+  						        <label title="Please allow access for your account." onmouseover="hideWarning()"><b><a href="javascript:openTwitter()">Link Your Twitter.</a></b></label>
+  						        <label id="twitter_warning" style="color:Red;">Please allow access for your account.</label>
+  						      </div> 
+							</div>							
         	        	</div> <!-- span5 -->   
            			</div><!-- row -->		   			  
         		</fieldset>
     		</form>		   	
 		</div><!-- modal body -->
-		<div class="modal-footer">
-                <a href="#social" id="add-twitter-stream" type="button" class="save-twitter-stream btn btn-primary"> Add </a>			
-			    <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true">Close</button>
-		</div>
-	</div>
-	
-	
-	
-<!-- linkedinConfirmationModal -->
-<div id="linkedinConfirmationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="linkedinConfirmationModalLabel" aria-hidden="true"
-		style="display: none;">
-		<div class="modal-header">
-			<button type="button" class="btn close" data-dismiss="modal"
-				aria-hidden="true">X</button>
-			<h3 id="linkedinConfirmationModalLabel">Stream Details</h3>			
-		</div>
-		<div class="modal-body">					
-            		<label><b>"Please allow AgileCRM to access your Linkedin account."</b></label>            		   	
-		</div><!-- modal body -->
-		<div class="modal-footer">
-                <!-- <a href="" id="add-linkedin-stream" type="button" class="save-linkedin-stream btn btn-primary"> Next </a> -->
-                <div id="linkedinAddStream"></div>			
-			    <!-- <button type="button" class="btn close btn-danger" data-dismiss="modal" aria-hidden="true">Close</button> -->
+		<div class="modal-footer">		
+		        <a href="" id="add_linkedin_stream" class="save-linkedin-stream btn btn-primary" type="button"><i class="icon-plus-sign"></i> Add </a>	         
+                <a href="#social" id="add_twitter_stream" type="button" class="save-twitter-stream btn btn-primary"><i class="icon-plus-sign"></i> Add </a>			    
 		</div>
 	</div>
