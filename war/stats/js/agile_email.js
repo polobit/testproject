@@ -10,3 +10,14 @@ function agile_setEmail(email)
 {
 	agile_guid.set_email(email);
 }
+function agile_getEmail(callback)
+{
+	// Email
+	var email = agile_guid.get_email();
+	
+	// Get
+	var agile_url = agile_id.getURL() + "/email?callback=?&id=" + agile_id.get() + "&email=" + encodeURIComponent(email);
+
+	// Request
+	agile_json(agile_url, callback);
+}
