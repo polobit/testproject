@@ -47,7 +47,6 @@ var DealsRouter = Backbone.Router.extend({
 
 					// Shows deals chart
 					dealsLineChart();
-
 				}
 			});
 			this.opportunityMilestoneCollectionView.collection.fetch();
@@ -72,7 +71,6 @@ var DealsRouter = Backbone.Router.extend({
 		
 					// Shows deals chart
 					dealsLineChart();
-		
 				}
 		});
 		this.opportunityCollectionView.collection.fetch();

@@ -18,6 +18,14 @@
 	
   </head>
   
+<style>
+@media ( min-width : 900px) {
+	body {
+		padding-top: 20px;
+	}
+}
+</style>
+
   <body>
     <div class='navbar navbar-fixed-top'> 
     	<div class='navbar-inner'> 
@@ -37,7 +45,6 @@
 		</div>
 	</div>
 	<div class="container">
-		<div class="row">
 			<div class="error-container">
 				<h1>Oops!</h1> 
 				<h2>IE does not support Agile CRM</h2>
@@ -55,7 +62,6 @@
 					</a>					
 				</div> <!-- /error-actions -->			
 			</div>
-		</div>
 	</div>
   </body>
 </html>
