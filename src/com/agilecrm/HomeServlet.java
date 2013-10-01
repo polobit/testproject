@@ -153,6 +153,9 @@ public class HomeServlet extends HttpServlet
 	    // Gets current domain user and saves current time as logged in
 	    // time.
 	    DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+
+	    setLastLoggedInTime(domainUser);
+
 	    domainUser.setInfo(DomainUser.LOGGED_IN_TIME, new Long(System.currentTimeMillis() / 1000));
 
 	    domainUser.save();
@@ -160,6 +163,22 @@ public class HomeServlet extends HttpServlet
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Set last logged in time.<br/>
+     * Set time from LOGGED_IN_TIME in json. Call before updating current logged
+     * in time.
+     * 
+     * @param domainUser
+     *            - the user to whom info is to be added
+     */
+    private void setLastLoggedInTime(DomainUser domainUser)
+    {
+	if (domainUser.hasInfo(DomainUser.LOGGED_IN_TIME))
+	{
+	    domainUser.setInfo(DomainUser.LAST_LOGGED_IN_TIME, domainUser.getInfo(DomainUser.LOGGED_IN_TIME));
 	}
     }
 

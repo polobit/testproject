@@ -23,7 +23,9 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.workflows.Workflow;
@@ -866,6 +868,28 @@ public class JSAPI
     	e.printStackTrace();
     	return null;
     }
+    }
+    
+    /**
+     * Get all milestones of domain
+     * 
+     * @return String
+     */
+    @Path("contact/get-milestones")
+    @GET
+    @Produces("application/x-javascript")
+    public String getMilestones(){
+    	try
+    	{
+    		Milestone milestone = MilestoneUtil.getMilestones();
+    		ObjectMapper mapper = new ObjectMapper();
+    		return mapper.writeValueAsString(milestone);
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return null;
+    	}
     }
     
     /**

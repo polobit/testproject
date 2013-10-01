@@ -351,17 +351,41 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
+		var that = $(this);
 		$('.gadget-deals-tab-list', el).hide();
-		// Build deals tab UI to add deal.
-		agile_build_form_template($(this), "gadget-deal",
-				".gadget-deals-tab-list", function() {
-			/*
-			 * Load and apply Bootstrap date picker on text
-			 * box in Deal form.
-			 */
-			agile_load_datepicker($('.deal-calender', el), function() {
+		
+		// Send request for template.
+		agile_get_gadget_template("gadget-deal-template", function(data) {
+
+			// Get campaign work-flow data.
+			_agile.get_milestones(function(response){
+				console.log(response);
+				
+				Milestone_Array = response.milestones.split(",");
+				for(var loop in Milestone_Array)
+					Milestone_Array.splice(loop, 1, Milestone_Array[loop].trim());
+				
+				// Take contact data from global object variable.
+				var json = Contacts_Json[el.closest(".show-form").data("content")];
+				json.milestones = Milestone_Array;
+				
+				// Compile template and generate UI.
+				var Handlebars_Template = getTemplate("gadget-deal", json, 'no');
+				// Insert template to container in HTML.
+				that.closest(".gadget-contact-details-tab").find(".gadget-deals-tab-list")
+					.html($(Handlebars_Template));
 				$('.gadget-deals-tab a', el).tab('show');
 				$('.gadget-deals-tab-list', el).show();
+				/*
+				 * Load and apply Bootstrap date picker on text
+				 * box in Deal form.
+				 */
+				agile_load_datepicker($('.deal-calender', el), function() {
+					$('.gadget-deals-tab a', el).tab('show');
+					$('.gadget-deals-tab-list', el).show();
+					// Adjust gadget height.
+					agile_gadget_adjust_height();
+				});
 				// Adjust gadget height.
 				agile_gadget_adjust_height();
 			});

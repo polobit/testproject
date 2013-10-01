@@ -12,7 +12,7 @@ var _agile = {
 		set_email : function(email)
 		{
 			agile_setEmail(email);									// Set contact email
-		}, 
+		},
 		track_page_view : function(callback)
 		{
 			agile_trackPageview(callback);							// Track a particular page
@@ -96,4 +96,8 @@ var _agile = {
 		get_workflows : function (callback)
 		{
 			agile_getWorkflows(callback);							// Get all work-flows created by domain user
+		},
+		get_milestones : function (callback)
+		{
+			agile_getMilestones(callback);							// Get milestones
 		}};
