@@ -67,8 +67,8 @@ public class DomainUserUtil
 
 	    domainUser.password = randomNumber;
 
-	    // Send an email with the new password
-	    SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT, SendMail.FORGOT_PASSWORD, domainUser);
+	    // Send an email with the new password to avoid two notification templates.
+	    // SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT, SendMail.FORGOT_PASSWORD, domainUser);
 
 	    try
 	    {
