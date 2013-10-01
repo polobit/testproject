@@ -366,16 +366,18 @@ var Base_Collection_View = Backbone.View
 						this.collection.at(0).attributes.count+=1;
 				}	
 			*/
+				
+				 // callback for newly added models
+				var appendItemCallback = this.options.appendItemCallback;
+				
+				if(appendItemCallback && typeof (appendItemCallback) === "function")
+					appendItemCallback($(this.el));
+				
 				if($('table', this.el).hasClass('onlySorting'))
 					return;
 				
 				append_checkboxes(this.model_list_element);			
 					
-                // callback for newly added models
-				var appendItemCallback = this.options.appendItemCallback;
-				
-				if(appendItemCallback && typeof (appendItemCallback) === "function")
-					appendItemCallback($(this.el));
 			},
 			/**
 			 * Renders the collection to a template specified in options, uses

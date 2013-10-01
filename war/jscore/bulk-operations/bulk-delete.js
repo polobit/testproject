@@ -51,6 +51,10 @@ $(function(){
 			{
 				if($(table).attr('id') == "contacts")
 					url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+				
+				// For Active Subscribers table
+				if($(table).attr('id') == "active-campaign")
+					url = url + "&filter=all-active-subscribers";
 			}
 			
 			bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
@@ -172,7 +176,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			$('.thead_check').attr("checked", false);
 			
 			// Show bulk operations only when thead check box is checked
-			toggle_contacts_bulk_actions_dropdown(undefined, true);
+			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));
 			
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){

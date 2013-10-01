@@ -60,9 +60,11 @@ $(function(){
 		
 		$(el).find('#delete-checked').remove();
 		
-
-		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
-		
+		if($(table).attr("id") === "active-campaign")
+			$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Remove from Campaign</a>');
+		else
+			$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
+			
 		// Sorts the tables based on their column values
 		sort_tables(table_element);
 	});
@@ -77,7 +79,8 @@ $(function(){
 		if(!$(this).attr('checked'))
 		{
 			$('.tbody_check').removeAttr('checked');
-			toggle_contacts_bulk_actions_dropdown(undefined, true);
+			toggle_contacts_bulk_actions_dropdown(undefined, true,$(this).parents('table').attr('id'));
+			
 		}
 		else
 			$('.tbody_check').attr('checked', 'checked');
@@ -85,7 +88,7 @@ $(function(){
 		console.log($(this).attr('checked'));
 		
 		// Show bulk operations only when thead check box is checked
-		toggle_contacts_bulk_actions_dropdown(this, true);
+		toggle_contacts_bulk_actions_dropdown(this, true,$(this).parents('table').attr('id'));
 		
 	});
 	
@@ -97,7 +100,7 @@ $(function(){
 	$('.tbody_check').live('click', function(event){
 		event.stopPropagation();
 		
-		toggle_contacts_bulk_actions_dropdown(this);
+		toggle_contacts_bulk_actions_dropdown(this,false,$(this).parents('table').attr("id"));
 	});
 });
 

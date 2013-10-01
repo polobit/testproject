@@ -22,7 +22,6 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CSVUtil.ImportStatus;
-import com.agilecrm.workflows.status.CampaignStatus;
 import com.googlecode.objectify.Key;
 
 /**
@@ -283,8 +282,7 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email).count();
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("properties.value = ", email).count();
     }
 
     /**
@@ -387,8 +385,7 @@ public class ContactUtil
 	if (contact == null)
 	    return "?";
 
-	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " "
-		+ contact.getContactFieldValue(Contact.LAST_NAME);
+	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " " + contact.getContactFieldValue(Contact.LAST_NAME);
 
 	return contactName;
     }
@@ -398,10 +395,9 @@ public class ContactUtil
 	try
 	{
 	    Map<String, Object> mp = new HashMap<String, Object>();
-	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact),
-		    new TypeReference<HashMap<String, Object>>()
-		    {
-		    });
+	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact), new TypeReference<HashMap<String, Object>>()
+	    {
+	    });
 	    return mp;
 	}
 	catch (Exception e)
@@ -412,23 +408,8 @@ public class ContactUtil
 
     public static List<Contact> getRecentContacts(String page_size)
     {
-	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId())
-		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
-    }
-
-    /**
-     * Returns total contacts count that are subscribed to a campaign having
-     * given status.
-     * 
-     * @param campaignId
-     *            - CampaignId.
-     * @param status
-     *            - Active or Done.
-     * @return int
-     */
-    public static int getSubscribersCount(String campaignId, String status)
-    {
-	return dao.ofy().query(Contact.class).filter("campaignStatus.status", status).count();
+	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId()).order("-viewed.viewed_time")
+		.limit(Integer.parseInt(page_size)).list();
     }
 
     public static void deleteContactsbyList(List<Contact> contacts)
@@ -452,8 +433,7 @@ public class ContactUtil
      */
     public static Key<Contact> getCompanyByName(String companyName)
     {
-	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name")
-		.filter("properties.value", companyName).getKey();
+	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name").filter("properties.value", companyName).getKey();
 
     }
 
@@ -525,8 +505,7 @@ public class ContactUtil
 
     public static boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
-		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME)) && StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
 	{
 	    CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    return false;
@@ -557,8 +536,7 @@ public class ContactUtil
 
     public static boolean isValidFields(Contact contact)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
-		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME)) && StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
 	{
 	    return false;
 	}
@@ -590,8 +568,7 @@ public class ContactUtil
     public static boolean isValidEmail(final String hex)
     {
 
-	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
@@ -616,53 +593,4 @@ public class ContactUtil
 
     }
 
-    /**
-     * Returns list of contacts having campaignId in the campaignStatus.
-     * 
-     * @param campaignId
-     *            - Campaign Id
-     * @return List<Contact>
-     */
-    public static List<Contact> getContactsByCampaignId(String campaignId)
-    {
-	Map<String, Object> conditionsMap = new HashMap<String, Object>();
-	conditionsMap.put("campaignStatus.campaign_id", campaignId);
-	return dao.listByProperty(conditionsMap);
-    }
-
-    /**
-     * Removes campaignStatus from Contact when corresponding workflow is
-     * deleted.
-     * 
-     * @param campaignId
-     *            - CampaignId of campaign that gets deleted.
-     */
-    public static void removeCampaignStatus(String campaignId)
-    {
-
-	// Gets list of contacts whose campaignId matches in campaignStatus
-	List<Contact> contactList = getContactsByCampaignId(campaignId);
-
-	if (contactList == null)
-	    return;
-
-	// Iterate over contacts
-	for (Contact contact : contactList)
-	{
-	    Iterator<CampaignStatus> campaignStatusIterator = contact.campaignStatus.listIterator();
-
-	    // Iterates over campaignStatus list.
-	    while (campaignStatusIterator.hasNext())
-	    {
-		if (!StringUtils.isEmpty(campaignId) && campaignId.equals(campaignStatusIterator.next().campaign_id))
-		{
-		    campaignStatusIterator.remove();
-		    break;
-		}
-	    }
-
-	    // save changes
-	    contact.save();
-	}
-    }
 }

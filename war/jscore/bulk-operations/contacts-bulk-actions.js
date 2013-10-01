@@ -306,10 +306,17 @@ function get_contacts_bulk_ids()
  * @param {Object}
  *            clicked_ele clicked check-box element
  */
-function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk)
+function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 {
 	SELECT_ALL = false;
 	_BULK_CONTACTS = undefined;
+	
+	if(isCampaign === "active-campaign")
+	{
+		toggle_active_contacts_bulk_actions_dropdown(clicked_ele,isBulk);
+		return;
+	}
+	
 	var total_available_contacts = getAvailableContacts();
 
 	console.log(readCookie('contact_filter'));
