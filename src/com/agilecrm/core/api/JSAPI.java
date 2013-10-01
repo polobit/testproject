@@ -73,12 +73,12 @@ public class JSAPI
 	{
 	    // Search contact based on email, returns empty contact if contact
 	    // is not available with given email
-		
+
+		ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
-	    	return null;
-	    ObjectMapper mapper = new ObjectMapper();
+	    	contact = new Contact();
 	    return mapper.writeValueAsString(contact);
 	}
 	catch (Exception e)
