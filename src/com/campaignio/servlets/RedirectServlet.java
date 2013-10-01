@@ -210,6 +210,10 @@ public class RedirectServlet extends HttpServlet
 
 	JSONObject contactJSON = AgileTaskletUtil.getSubscriberJSON(contact);
 
+	// if null returned due to exception, return empty
+	if (contactJSON == null)
+	    return params;
+
 	// Iterate through JSON and construct all params
 	Iterator<String> itr = contactJSON.keys();
 
