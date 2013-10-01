@@ -181,8 +181,11 @@ function agile_user_setup_load(data){
 function agile_download_scripts() {
 
 	console.log("Downloading scripts");
-	if(!Is_Localhost)
+	if(!Is_Localhost){
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.min.js');
+	}
+		
 	else{
 		
 		// Handle bars, util and MD5.

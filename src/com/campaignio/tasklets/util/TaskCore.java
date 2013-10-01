@@ -48,7 +48,7 @@ public class TaskCore
 	    }
 	    catch (Exception e)
 	    {
-		System.err.println(e);
+		System.err.println("Got Exception in executeCampaign " + e.getMessage());
 		continue;
 	    }
 
