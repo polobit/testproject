@@ -10,7 +10,7 @@
  * @param email	{String}
  * 				email of the contact, property should be added to
  */
-function agile_addProperty(data, callback, email)
+function agile_setProperty(data, callback, email)
 {
 	// Check if email passed as parameter, else get from cookie
 	if (!email)
@@ -28,5 +28,43 @@ function agile_addProperty(data, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/add-property?callback=?&id=" + agile_id.get() + "&" + params;
 	
 	// Callback
+	agile_json(agile_url, callback);
+}
+
+function agile_getProperty(name, callback, email)
+{
+	if (!email)
+		{
+			if(!agile_guid.get_email())
+				{
+					return;
+				}
+			else
+				email = agile_guid.get_email();
+		}
+	if (!name)
+		return;
+	
+	var agile_url = agile_id.getURL() + "/contacts/get-property?callback=?&id=" + agile_id.get() + "&name=" + name + "&email=" + encodeURIComponent(email);
+	
+	agile_json(agile_url, callback);
+}
+
+function agile_removeProperty(name, callback, email)
+{
+	if(!email)
+		{
+			if (!agile_guid.get_email())
+				{
+					return;
+				}
+			else 
+				email = agile_guid.get_email();
+		}
+	if(!name)
+		return;
+	
+	var agile_url = agile_id.getURL() + "/contacts/remove-property?callback=?&id=" + agile_id.get() + "&name=" + name + "&email=" + encodeURIComponent(email);
+	
 	agile_json(agile_url, callback);
 }

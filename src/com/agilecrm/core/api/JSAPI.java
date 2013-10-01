@@ -1,6 +1,7 @@
 package com.agilecrm.core.api;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -19,6 +20,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
@@ -28,6 +30,8 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.gadget.GadgetTemplate;
+import com.agilecrm.util.JSAPIUtil;
+import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -75,11 +79,12 @@ public class JSAPI
 	{
 	    // Search contact based on email, returns empty contact if contact
 	    // is not available with given email
-		
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    System.out.println("Contact " + contact);
 	    if (contact == null)
-	    	return null;
+		return JSAPIUtil.generateContactMissingError();
+
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);
 	}
@@ -125,10 +130,8 @@ public class JSAPI
 	    int count = ContactUtil.searchContactCountByEmail(email);
 	    if (count != 0)
 	    {
-		System.out.println("Duplicate found for " + email);
-		return null;
+		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
 	    }
-
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
 
@@ -136,7 +139,6 @@ public class JSAPI
 	    contact.save();
 
 	    return mapper.writeValueAsString(contact);
-
 	}
 	catch (Exception e)
 	{
@@ -158,21 +160,22 @@ public class JSAPI
     @Produces("application/x-javascript")
     public String deleteContact(@QueryParam("email") String email)
     {
-    try
-    {
-	Contact contact = ContactUtil.searchContactByEmail(email);
-	
-	if(contact == null)
-	return null;
-    contact.delete();
-    JSONObject obj = new JSONObject();
-    obj.put("success", "Contact deleted successfully");
-	return obj.toString();
-    }
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+
+	    if (contact == null)
+		JSAPIUtil.generateContactMissingError();
+
+	    contact.delete();
+	    JSONObject obj = new JSONObject();
+	    obj.put("success", "Contact deleted successfully");
+	    return obj.toString();
+	}
 	catch (Exception e)
 	{
-	e.printStackTrace();
-	return null;
+	    e.printStackTrace();
+	    return null;
 	}
     }
 
@@ -207,11 +210,12 @@ public class JSAPI
 	    // Get Contact
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
 	    // task.setOwner(new Key<AgileUser>(AgileUser.class,
 	    // APIKey.getAgileUserRelatedToAPIKey(key).id));
 	    task.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(key));
-	    if (contact == null)
-		return null;
 
 	    task.contacts = new ArrayList<String>();
 	    task.contacts.add(contact.id.toString());
@@ -260,7 +264,7 @@ public class JSAPI
 	    // Get Contact
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
-		return null;
+		return JSAPIUtil.generateContactMissingError();
 
 	    opportunity.addContactIds(contact.id.toString());
 
@@ -316,7 +320,7 @@ public class JSAPI
 
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
-		return null;
+		return JSAPIUtil.generateContactMissingError();
 
 	    contact.addTags(tagsArray);
 
@@ -349,7 +353,7 @@ public class JSAPI
     @Path("contacts/remove-tags")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Contact removeTags(@QueryParam("email") String email, @QueryParam("tags") String tags)
+    public String removeTags(@QueryParam("email") String email, @QueryParam("tags") String tags)
     {
 	try
 	{
@@ -364,11 +368,11 @@ public class JSAPI
 
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
-		return null;
+		return JSAPIUtil.generateContactMissingError();
 
 	    contact.removeTags(tagsArray);
 
-	    return contact;
+	    return new ObjectMapper().writeValueAsString(contact);
 
 	}
 	catch (Exception e)
@@ -401,7 +405,7 @@ public class JSAPI
 	{
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
-		return null;
+		return JSAPIUtil.generateContactMissingError();
 
 	    contact.addScore(score);
 	    return new ObjectMapper().writeValueAsString(contact);
@@ -435,22 +439,22 @@ public class JSAPI
     @Produces("application/x-javascript")
     public String subtractScore(@QueryParam("email") String email, @QueryParam("score") Integer score)
     {
-    try
-    {
+	try
+	{
 
-	// Get Contact
-	Contact contact = ContactUtil.searchContactByEmail(email);
-	if (contact == null)
+	    // Get Contact
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    contact.subtractScore(score);
+	    return new ObjectMapper().writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	    return null;
-
-	contact.subtractScore(score);
-	return new ObjectMapper().writeValueAsString(contact);
-    }
-    catch (Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
+	}
     }
 
     /**
@@ -475,7 +479,7 @@ public class JSAPI
 	if (contact == null)
 	{
 	    System.out.println("Null contact");
-	    return true;
+	    return false;
 	}
 
 	WorkflowSubscribeUtil.subscribe(contact, workflowId);
@@ -502,17 +506,22 @@ public class JSAPI
     {
 	try
 	{
+	    JSONObject obj = new JSONObject(json);
+	    String value = obj.getString("type");
+	    obj.remove("type");
+	    obj.put("subtype", value);
+
 	    // Fetches contact based on email
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
 	    // Returns if contact is null
 	    if (contact == null)
-		return null;
+		return JSAPIUtil.generateContactMissingError();
 
 	    ObjectMapper mapper = new ObjectMapper();
 
 	    // Reads contact field object from json.
-	    ContactField field = mapper.readValue(json, ContactField.class);
+	    ContactField field = mapper.readValue(obj.toString(), ContactField.class);
 
 	    // Adds/updates field to contact and saves it
 	    contact.addProperty(field);
@@ -542,234 +551,239 @@ public class JSAPI
     @Produces("application / x-javascript")
     public String addNote(@QueryParam("data") String json, @QueryParam("email") String email)
     {
-    try
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if (contact == null)
-    	return null;
-    	ObjectMapper mapper = new ObjectMapper();
-    	Note note = mapper.readValue(json, Note.class);
-   		note.addRelatedContacts(contact.id.toString());
-   		note.save();
-   		System.out.println("note saved");
-   		return mapper.writeValueAsString(note);
-   	}
-   	catch (Exception e)
-   	{
-   		e.printStackTrace();
-   		return null;
-   	}
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    ObjectMapper mapper = new ObjectMapper();
+	    Note note = mapper.readValue(json, Note.class);
+	    note.addRelatedContacts(contact.id.toString());
+	    note.save();
+	    System.out.println("note saved");
+	    return mapper.writeValueAsString(note);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /**
      * Get score from contact based on email of contact
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
      * @return Integer
      */
-    @Path ("contacts/get-score")
+    @Path("contacts/get-score")
     @GET
-    @Produces ("application / x-javascript")
+    @Produces("application / x-javascript")
     public String getScore(@QueryParam("email") String email)
     {
-    try
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if (contact == null)
-    	return null;
-    	else
-    	{
-    		ObjectMapper mapper = new ObjectMapper();
-    		System.out.println("getting score" + contact.lead_score);
-    		return mapper.writeValueAsString(contact.lead_score);
-    	}
-    }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    else
+	    {
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.println("getting score" + contact.lead_score);
+		return mapper.writeValueAsString(contact.lead_score);
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /**
      * Get notes from contact based on email
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
      * @return String (notes)
      */
-    @Path ("contacts/get-notes")
+    @Path("contacts/get-notes")
     @GET
-    @Produces ("application / x-javascript")
+    @Produces("application / x-javascript")
     public String getNotes(@QueryParam("email") String email)
     {
-    try 
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if (contact == null)
-    		return null;
-    	else
-    	{
-    		List<Note> Notes = new ArrayList<Note>();
-    		Notes = NoteUtil.getNotes(contact.id);
-    		ObjectMapper mapper = new ObjectMapper();
-    		JSONArray arr = new JSONArray();
-    		for(Note note : Notes)
-    		{
-    			arr.put(mapper.writeValueAsString(note));
-    		}
-    		return arr.toString();
-    	}
-    }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    else
+	    {
+		List<Note> Notes = new ArrayList<Note>();
+		Notes = NoteUtil.getNotes(contact.id);
+		ObjectMapper mapper = new ObjectMapper();
+		JSONArray arr = new JSONArray();
+		for (Note note : Notes)
+		{
+		    arr.put(mapper.writeValueAsString(note));
+		}
+		return arr.toString();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /**
      * Get contact tags based on email
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
      * @return String (tags)
      */
     @Path("contacts/get-tags")
     @GET
-    @Produces ("application / x-javascript")
+    @Produces("application / x-javascript")
     public String getTags(@QueryParam("email") String email)
     {
-    try
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if (contact == null)
-    	return null;
-    	else
-    	{
-    		ObjectMapper mapper = new ObjectMapper();
-    		System.out.println("getting tags" + contact.tags);
-    		return mapper.writeValueAsString(contact.tags);
-    	}
-    }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+	    else
+	    {
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.println("getting tags" + contact.tags);
+		return mapper.writeValueAsString(contact.tags);
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
     /**
      * Get tasks based on email of the contact
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
-     * @return 
-     * 				String (tasks)
+     * @return String (tasks)
      */
     @Path("contacts/get-tasks")
     @GET
-    @Produces ("application / x-javascript")
+    @Produces("application / x-javascript")
     public String getTasks(@QueryParam("email") String email)
     {
-    try
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if (contact==null)
-    	return null;
-    	List<Task> tasks = new ArrayList<Task>();
-    	tasks = TaskUtil.getContactTasks(contact.id);
-    	ObjectMapper mapper = new ObjectMapper();
-    	JSONArray arr = new JSONArray();
-    	for (Task task : tasks)
-    	{
-    		arr.put(mapper.writeValueAsString(task));
-    	}
-    	return arr.toString();
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    List<Task> tasks = new ArrayList<Task>();
+	    tasks = TaskUtil.getContactTasks(contact.id);
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONArray arr = new JSONArray();
+	    for (Task task : tasks)
+	    {
+		arr.put(mapper.writeValueAsString(task));
+	    }
+	    return arr.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
-    }
-    
+
     /**
      * Get deals based on the email of the contact
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
-     * @return String 
+     * @return String
      */
     @Path("contacts/get-deals")
     @GET
-    @Produces ("application / x-javascript")
+    @Produces("application / x-javascript")
     public String getDeals(@QueryParam("email") String email)
     {
-    try
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if(contact==null)
-    	return null;
-    	List<Opportunity> deals = new ArrayList<Opportunity>();
-    	deals = OpportunityUtil.getCurrentContactDeals(contact.id);
-    	ObjectMapper mapper = new ObjectMapper();
-    	JSONArray arr = new JSONArray();
-    	for (Opportunity deal : deals)
-    	{
-    		arr.put(mapper.writeValueAsString(deal));
-    	}
-    	return arr.toString();
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    List<Opportunity> deals = new ArrayList<Opportunity>();
+	    deals = OpportunityUtil.getCurrentContactDeals(contact.id);
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONArray arr = new JSONArray();
+	    for (Opportunity deal : deals)
+	    {
+		arr.put(mapper.writeValueAsString(deal));
+	    }
+	    return arr.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
-    }
-    
+
     /**
      * Add campaign based on contact email to already existing workflow
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
      * @return String
      */
     @Path("contacts/add-campaign")
     @GET
-    @Produces ("application / x-javascript")
+    @Produces("application / x-javascript")
     public String addCampaign(@QueryParam("data") String json, @QueryParam("email") String email)
     {
-    try
-    {
-    	
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if (contact == null)
-    	return null;
-    	ObjectMapper mapper = new ObjectMapper();
-    	Workflow workflow = mapper.readValue(json, Workflow.class);
-    	WorkflowSubscribeUtil.subscribe(contact, workflow.id);
-    	return mapper.writeValueAsString(workflow);
+	try
+	{
+
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    ObjectMapper mapper = new ObjectMapper();
+	    Workflow workflow = mapper.readValue(json, Workflow.class);
+	    WorkflowSubscribeUtil.subscribe(contact, workflow.id);
+	    return mapper.writeValueAsString(workflow);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
-    }
-    
+
     /**
      * Get campaigns to which contact is subscribed by contact email
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
      * @return String
      */
@@ -778,98 +792,100 @@ public class JSAPI
     @Produces("application / x-javascript")
     public String getCampaigns(@QueryParam("email") String email)
     {
-    try
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if (contact == null)
-    	return null;
-    	
-    	JSONArray arr = new JSONArray();
-    	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
-    	for (CampaignStatus campaignStatus : campaignStatusList)
-    	{
-    		JSONObject workflow = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignStatus.campaign_id));
-    		if (workflow == null)
-    		continue;
-    		arr.put(workflow);
-    	}
-    	return arr.toString();
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    JSONArray arr = new JSONArray();
+	    List<CampaignStatus> campaignStatusList = contact.campaignStatus;
+	    for (CampaignStatus campaignStatus : campaignStatusList)
+	    {
+		JSONObject workflow = WorkflowUtil.getWorkflowJSON(Long.parseLong(campaignStatus.campaign_id));
+		if (workflow == null)
+		    continue;
+		arr.put(workflow);
+	    }
+	    return arr.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
-    }
-    
+
     /**
-     * Get multiple campaign logs to which contact is subscribed based on his email
+     * Get multiple campaign logs to which contact is subscribed based on his
+     * email
      * 
      * @param email
-     * 				email of the contact
+     *            email of the contact
      * 
-     * @return 	String 
+     * @return String
      */
     @Path("contacts/get-campaign-logs")
     @GET
     @Produces("application / x-javascript")
     public String getCampaignLogs(@QueryParam("email") String email)
     {
-    try
-    {
-    	Contact contact = ContactUtil.searchContactByEmail(email);
-    	if(contact == null)
-    		return null;
-    	JSONArray arr = new JSONArray();
-    	ObjectMapper mapper = new ObjectMapper();
-    	List<Log> logs = new ArrayList<Log>();
-    	logs = LogUtil.getSQLLogs(null, contact.id.toString(), "50");
-    	for (Log log : logs)
-    	{
-    		arr.put(mapper.writeValueAsString(log));
-    	}
-    	return arr.toString();
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    JSONArray arr = new JSONArray();
+	    ObjectMapper mapper = new ObjectMapper();
+	    List<Log> logs = new ArrayList<Log>();
+	    logs = LogUtil.getSQLLogs(null, contact.id.toString(), "50");
+	    for (Log log : logs)
+	    {
+		arr.put(mapper.writeValueAsString(log));
+	    }
+	    return arr.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
-    catch(Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
-    }
-    
+
     /**
-     *  Get all work-flows created by the current domain user
-     *  
-     *  @param pagesize
-     *  
-     *  @return 
+     * Get all work-flows created by the current domain user
+     * 
+     * @param pagesize
+     * 
+     * @return
      */
-    @Path ("contacts/get-workflows")
+    @Path("contacts/get-workflows")
     @GET
     @Produces("application / x-javascript")
     public String getWorkflows()
     {
-    try
-    {
-    	JSONArray arr = new JSONArray();
-    	List<Workflow> workflows = new ArrayList<Workflow>();
-    	workflows = WorkflowUtil.getAllWorkflows();
-    	for (Workflow workflow : workflows)
-    	{
-    		JSONObject obj = WorkflowUtil.getWorkflowJSON(workflow.id);
-    		arr.put(obj);
-    		if(obj == null)
-    		continue;
-    	}
-    	return arr.toString();
+	try
+	{
+	    JSONArray arr = new JSONArray();
+	    List<Workflow> workflows = new ArrayList<Workflow>();
+	    workflows = WorkflowUtil.getAllWorkflows();
+	    for (Workflow workflow : workflows)
+	    {
+		JSONObject obj = WorkflowUtil.getWorkflowJSON(workflow.id);
+		arr.put(obj);
+		if (obj == null)
+		    continue;
+	    }
+	    return arr.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
-    catch (Exception e)
-    {
-    	e.printStackTrace();
-    	return null;
-    }
-    }
-    
+
     /**
      * Get all milestones of domain
      * 
@@ -878,50 +894,204 @@ public class JSAPI
     @Path("contact/get-milestones")
     @GET
     @Produces("application/x-javascript")
-    public String getMilestones(){
-    	try
-    	{
-    		Milestone milestone = MilestoneUtil.getMilestones();
-    		ObjectMapper mapper = new ObjectMapper();
-    		return mapper.writeValueAsString(milestone);
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return null;
-    	}
+    public String getMilestones()
+    {
+	try
+	{
+	    Milestone milestone = MilestoneUtil.getMilestones();
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(milestone);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
-    
+
     /**
-	 * @method service
-	 * 
-	 * @param {String} template template name.
-	 * */
-    @Path ("gmail-template")
+     * Update a existing contact
+     * 
+     * @return String
+     */
+    @Path("contact/update")
+    @GET
+    @Produces("application / x-javascript")
+    public String updateContact(@QueryParam("email") String email, @QueryParam("data") String json,
+	    @QueryParam("id") String apiKey)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    JSONObject obj = new JSONObject(json);
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+		JSONObject jobj = new JSONObject();
+		jobj.put("name", key);
+		jobj.put("value", obj.getString(key));
+		ContactField field = mapper.readValue(jobj.toString(), ContactField.class);
+		contact.addProperty(field);
+	    }
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.save();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get email of contact from session cookie
+     * 
+     * @return String
+     */
+    @Path("/email")
+    @GET
+    @Produces("application / x-javascript")
+    public String getEmail(@QueryParam("email") String email)
+    {
+	try
+	{
+	    if (email == null)
+		return null;
+	    JSONObject obj = new JSONObject();
+	    obj.put("email", email);
+	    return obj.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Create company
+     * 
+     * @param data
+     *            company data
+     * @return String
+     */
+    @Path("/company")
+    @GET
+    @Produces("application / x-javascript")
+    public String createCompany(@QueryParam("data") String json, @QueryParam("id") String apiKey)
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    Contact contact = mapper.readValue(json, Contact.class);
+	    contact.type = Type.COMPANY;
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.save();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get property
+     * 
+     * @param name
+     *            name of the property
+     * @return String property value
+     */
+    @Path("contacts/get-property")
+    @GET
+    @Produces("application / x-javascript")
+    public String getProperty(@QueryParam("name") String name, @QueryParam("email") String email)
+    {
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+	    return contact.getContactFieldValue(name);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Remove property
+     * 
+     * @param name
+     *            name of the property
+     * @return String
+     */
+    @Path("contacts/remove-property")
+    @GET
+    @Produces("application / x-javascript")
+    public String removeProperty(@QueryParam("name") String name, @QueryParam("email") String email,
+	    @QueryParam("id") String apiKey)
+    {
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    contact.removeProperty(name);
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.save();
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * @method service
+     * 
+     * @param {String} template template name.
+     * */
+    @Path("gmail-template")
     @GET
     @Produces("application / x-javascript")
     public String getGadgetTemplate(@QueryParam("template") String template)
+    {
+
+	try
 	{
 
-		try {
+	    if (StringUtils.isBlank(template))
+		throw new Exception("Invalid param for template");
 
-			if (StringUtils.isBlank(template))
-				throw new Exception("Invalid param for template");
+	    JSONObject reponseJSON = new JSONObject();
+	    // Creating response data
+	    reponseJSON.put("status", "success");
+	    reponseJSON.put("content", GadgetTemplate.getGadgetTemplate(template));
 
-			JSONObject reponseJSON = new JSONObject();
-			// Creating response data
-			reponseJSON.put("status", "success");
-			reponseJSON.put("content",
-					GadgetTemplate.getGadgetTemplate(template));
+	    // Returning data by calling callback function retrieved from
+	    // request.
 
-			// Returning data by calling callback function retrieved from
-			// request.
-			
-			return reponseJSON.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
-			return null;
-		}
+	    return reponseJSON.toString();
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    // TODO: handle exception
+	    return null;
+	}
+    }
 }

@@ -14,7 +14,6 @@ $(function()
 	 */
 	Handlebars.registerHelper('getPropertyValue', function(items, name)
 	{
-
 		return getPropertyValue(items, name);
 	});
 

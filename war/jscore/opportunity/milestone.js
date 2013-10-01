@@ -78,7 +78,6 @@ $(function(){
     		
     		// Iterate over already present milestones, to check if this is a new milestone
     		milestone_list.find('li').each(function(index, elem){
-    			
     			if(elem.getAttribute('data').toLowerCase() == new_milestone.toLowerCase())
     			{
     				add_milestone = false; // milestone exists, don't add
