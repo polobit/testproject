@@ -6,6 +6,7 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.JSAPIUtil;
 
 /**
  * <code>JSAPIFilter</code> is a simple Servlet Filter for JS API Auth. Verifies
@@ -27,6 +29,8 @@ import com.agilecrm.user.DomainUser;
  */
 public class JSAPIFilter implements Filter
 {
+    private final String callbackParameter = "callback";
+
     @Override
     public void destroy()
     {
@@ -71,10 +75,57 @@ public class JSAPIFilter implements Filter
 		chain.doFilter(httpRequest, httpResponse);
 		return;
 	    }
+	    sendJSONErrorResponse((HttpServletRequest) request, (HttpServletResponse) response,
+		    JSAPIUtil.generateJSONErrorResponse(JSAPIUtil.Errors.UNAUTHORIZED));
+	    return;
 	}
 
-	System.out.println("Error - Key does not match for JS API");
-	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+	sendJSONErrorResponse((HttpServletRequest) request, (HttpServletResponse) response,
+		JSAPIUtil.generateJSONErrorResponse(JSAPIUtil.Errors.API_KEY_MISSING));
+    }
+
+    private void sendJSONErrorResponse(HttpServletRequest request, HttpServletResponse response, String responseString)
+	    throws IOException
+    {
+	if (!isJSONPRequest(request))
+	{
+	    System.out.println("Error - Key does not match for JS API");
+	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+	    return;
+	}
+
+	// enclosed with in callback parameter.
+	ServletOutputStream out = response.getOutputStream();
+	out.println(getCallbackParameter(request) + "(");
+	out.println(responseString);
+	out.println(");");
+
+	response.setContentType("text/javascript");
+    }
+
+    /**
+     * Checks whether request received is a valid JSONP request. It checks for
+     * the callback parameter.
+     * 
+     * @param httpRequest
+     * @return ({@link Boolean}
+     */
+    private boolean isJSONPRequest(HttpServletRequest httpRequest)
+    {
+	String callbackMethod = getCallbackParameter(httpRequest);
+	return (callbackMethod != null && callbackMethod.length() > 0);
+    }
+
+    /**
+     * Reads the callback parameter sent in JSONP request which is a unique
+     * number generated and assigned to widow as a callback function.
+     * 
+     * @param request
+     * @return
+     */
+    private String getCallbackParameter(HttpServletRequest request)
+    {
+	return request.getParameter(callbackParameter);
     }
 
     @Override

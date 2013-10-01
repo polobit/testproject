@@ -3,6 +3,7 @@ package com.campaignio.tasklets.agile.util;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -146,18 +147,31 @@ public class AgileTaskletUtil
 		if (field.name != null && field.value != null)
 		{
 		    // Gets twitter-id from website property
-		    if (field.name.equals("website") && field.subtype.equals("TWITTER"))
+		    if (field.name.equals(Contact.WEBSITE) && field.subtype.equals("TWITTER"))
 			field.name = "twitter_id";
 
 		    // Get LinkedIn id
-		    if (field.name.equals("website") && field.subtype.equals("LINKEDIN"))
+		    if (field.name.equals(Contact.WEBSITE) && field.subtype.equals("LINKEDIN"))
 			field.name = "linkedin_id";
 
 		    // Converts address string to JSONObject
-		    if (field.name.equals("address"))
+		    if (field.name.equals(Contact.ADDRESS))
 		    {
-			subscriberJSON.put("location", new JSONObject(field.value));
+			try
+			{
+			    // Address property is saved as json string with
+			    // city, state
+			    // and country, so converting to json.
+			    subscriberJSON.put("location", new JSONObject(field.value));
+			}
+			catch (JSONException e)
+			{
+			    e.printStackTrace();
+			}
+
+			// Already inserted address as location, so continue
 			continue;
+
 		    }
 
 		    subscriberJSON.put(field.name, field.value);
@@ -193,6 +207,7 @@ public class AgileTaskletUtil
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.err.println("Exception occured while converting contact to subscriberJSON " + e.getMessage());
 	    return null;
 	}
     }

@@ -23,7 +23,7 @@ var _agile = {
 		},
 		get_contact : function(email, callback)
 		{
-			agile_getContact(email, callback);
+			agile_getContact(email, callback);						// Get contact
 		},
 		delete_contact : function(email, callback)
 		{
@@ -49,9 +49,9 @@ var _agile = {
 		{
 			agile_addNote(data, callback, email); 					// Add note to contact
 		},
-		add_property : function(data, callback, email)
+		set_property : function(data, callback, email)
 		{
-			agile_addProperty(data, callback, email);				// Add or update property to contact
+			agile_setProperty(data, callback, email);				// Add or update property to contact
 		},
 		add_task : function(data, callback, email)
 		{
@@ -100,4 +100,24 @@ var _agile = {
 		get_milestones : function (callback)
 		{
 			agile_getMilestones(callback);							// Get milestones
+		},
+		update_contact : function (data, callback, email)
+		{
+			agile_updateContact(data, callback, email);				// Update contact
+		},
+		get_email : function (callback)
+		{
+			agile_getEmail(callback);								// Get email
+		},
+		create_company : function(data, callback)
+		{
+			agile_createCompany(data, callback);					// Create company
+		},
+		get_property : function (name, callback, email)
+		{
+			agile_getProperty(name, callback, email);				// Get property
+		},
+		remove_property : function (name, callback, email)
+		{
+			agile_removeProperty(name,callback,email);				// Remove property
 		}};

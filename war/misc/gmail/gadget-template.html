@@ -3,9 +3,13 @@
 	{{#if id}}
 <!-- conteact exist -->			
 		<div class="contact-minified row-fluid">
-			<a class="gadget-show-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-expand-alt" style="text-decoration:none; margin-right:5px;"></i><span>Show</span></a> {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}})
+			<div style="max-width:95%; display:inline-block;">
+				<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+					<a class="gadget-show-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-expand-alt" style="text-decoration:none; margin-right:5px;"></i><span>Show</span></a><span title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}})" style="cursor:default;"> {{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}} ({{email}}) </span>
+				</div>
+			</div>
 		</div>
-		
+
 		<div class="row-fluid show-contact-summary" style="display:none;"> 
   			
 		</div>
@@ -267,13 +271,12 @@
 				<li>
 					<div style="display:block;" class="activity">
 						<div id="notes" class="activity-text-block">
-							<h4><a style="text-decoration: none"><b>{{ucfirst subject}}</b></a></h4>
-							<pre style="background:none;border:none;">{{description}}</pre>	
-					 		<div class="clear">
-								<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;"> 
-									<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-								</small>
-							</div>
+							<h4><a style="text-decoration: none"><b>{{ucfirst subject}}</b></a></h4><br/>
+							<p style="margin-right:40px;">{{description}}</p>	
+					 		
+							<small class="edit-hover" style="color:#b2b0b1;"> 
+								<time class="note-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+							</small>
 						</div>
 					</div>
 				</li>
@@ -306,23 +309,21 @@
 			<div id="tasks" class="activity-text-block">
 		{{/if}}	
 			{{#if is_complete}}
-				<div style="margin-bottom: 9px;">
-					<span>&#10004;</span>
+				<div style="margin-bottom: 10px;">
 					<h4 class="task-subject" style="text-decoration:line-through;display:inline;">
-						<b style="margin:0px 20px 0px 10px;">{{ucfirst subject}}</b>
+						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
 						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 					</h4>
 				</div>
 			{{else}}
-				<div style="margin-bottom: 9px;">
-					<input data="{{id}}" class="complete-task" type="checkbox" style="visibility:hidden;"/>
+				<div style="margin-bottom: 10px;">
 					<h4 class="task-subject" style="display:inline;">
-						<b style="margin:0px 20px 0px 10px;">{{ucfirst subject}}</b>
+						<a style="text-decoration: none; margin:0px 20px 0px 0;"><b>{{ucfirst subject}}</b></a>
 						<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>	
 					</h4>
 				</div>
 			{{/if}}
-			<div style="margin-left:25px;">
+			<div>
 				<p>
 					<i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}
 					<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span>
@@ -403,8 +404,25 @@
 					<img class="user-img" width="40" height="40" src="https://d13pkp0ru5xuwf.cloudfront.net/css/images/pic.png">
 				{{/if}}
 			</span>
-			<h4><b>{{titleFromEnums log_type}}</b></h4></br>
-			<p>{{{message}}}</p>
+			
+			{{#if_email_sent this "log_type"}}
+	
+				<h4><a style="text-decoration: none"><b>{{Subject}}</b></a></h4></br>
+				<div class="in collapse">
+					<ul style="list-style-type:none; border-bottom:1px solid #ddd; padding-bottom:12px; margin:0px;">
+    		    		<li><strong>From:</strong> {{From}}</li> 
+						<li><strong>To:</strong> {{To}}</li>
+					</ul>
+       				<p style="margin-top:10px">{{{Body}}}</p>
+	    		</div>
+				     
+			{{else}}			
+
+				<h4><a style="text-decoration: none"><b>{{titleFromEnums log_type}}</b></a></h4></br>
+				<p>{{{message}}}</p>
+			
+			{{/if_email_sent}}
+
 			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
 				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 	        	<a target="_blank" class="pull-right" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a>
@@ -534,7 +552,7 @@
                    	<div class="control-group" style="margin:0px; padding-top:6px;">
 						<label class="control-label" for="expected_value"><b>Value</b> <span class="field_req">*</span></label>
                			<div class="controls"> 
-							<input name="expected_value" id="expected_value" placeholder="Value of deal" class="required  digits" type="text" />
+							<input name="expected_value" id="expected_value" max="1000000000000" placeholder="Value of deal" class="required  digits" type="text" />
 						</div>
 					</div>
 					
