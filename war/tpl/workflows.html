@@ -13,8 +13,8 @@
     <td>
         <div>
 		    {{#stringToJSON this "subscribersCount"}}{{/stringToJSON}} 	
-			{{#if subscribersCount.done}}{{subscribersCount.done}}&nbsp;completed{{#if subscribersCount.active}},{{/if}} {{/if}}
-            {{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}
+			<a href="#workflow/{{id}}/completed-contacts" id="done-contacts" class="workflow-results">{{#if subscribersCount.done}}{{subscribersCount.done}}&nbsp;completed</a>{{#if subscribersCount.active}},{{/if}} {{/if}}
+            <a href="#workflow/{{id}}/active-contacts" id="active-contacts" class="workflow-results">{{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}</a>
         </div>
     </td>
     <td>{{#if triggers}} {{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="workflow-results">{{name}}</a> {{/toLinkTrigger}} {{else}} <a href="#trigger-add/{{id}}" class="workflow-results"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>

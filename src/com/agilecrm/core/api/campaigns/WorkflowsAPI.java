@@ -20,7 +20,10 @@ import javax.ws.rs.core.Response.Status;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 
@@ -60,6 +63,22 @@ public class WorkflowsAPI
 	    return WorkflowUtil.getAllWorkflows(Integer.parseInt(count), cursor);
 	}
 	return WorkflowUtil.getAllWorkflows();
+    }
+
+    /**
+     * Returns single workflow for the given id.
+     * 
+     * @param workflowId
+     *            - workflow id
+     * @return
+     */
+    @Path("{workflow-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Workflow getWorkflow(@PathParam("workflow-id") String workflowId)
+    {
+	Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(workflowId));
+	return workflow;
     }
 
     /**
@@ -144,6 +163,60 @@ public class WorkflowsAPI
 	WorkflowDeleteUtil.deleteRelatedEntities(workflowsJSONArray);
 	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
 
+    }
+
+    /**
+     * Returns active subscribers of given campaign.
+     * 
+     * @param workflow_id
+     *            - campaign-id
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("active-contacts/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getActiveContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+
+	List<Contact> contacts = CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.ACTIVE);
+
+	if (contacts == null)
+	    return null;
+
+	JSONArray contactsArr = CampaignSubscribersUtil.insertCampaignId(workflow_id, contacts);
+
+	return contactsArr.toString();
+    }
+
+    /**
+     * Returns list of contacts having campaignStatus Done for the given
+     * campaign-id.
+     * 
+     * @param workflow_id
+     *            - workflow id.
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("completed-contacts/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getCompletedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	List<Contact> contacts = CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.DONE);
+
+	if (contacts == null)
+	    return null;
+
+	JSONArray contactsArr = CampaignSubscribersUtil.insertCampaignId(workflow_id, contacts);
+
+	return contactsArr.toString();
     }
 
 }

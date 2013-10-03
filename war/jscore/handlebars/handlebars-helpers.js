@@ -1830,4 +1830,79 @@ $(function()
 		  return value.replace( / +/g, '');
 		  
 		 });
+	
+	
+	/**
+	 * Returns campaignStatus object from contact campaignStatus array having 
+	 * same campaign-id. It is used to get start and completed time from array.
+	 ***/
+	Handlebars.registerHelper('if_same_campaign',function(object,data,options){
+		
+		var campaignStatusArray = object[data];
+		
+		// if campaignStatus key doesn't exist return.
+		if (data === undefined || campaignStatusArray === undefined)
+			return;
+		
+		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+			{
+			   var current_campaign_id = campaignStatusArray[i].campaign_id;
+
+			   // compares campaign-id of each element of array with 
+			   // object's campaign-id
+			   if (object.campaign_id === current_campaign_id)
+			   {
+				   // if equal, execute template current json
+				   return options.fn(campaignStatusArray[i]);
+			   }
+			}
+			
+	});
+	
+	/**
+	 * Returns campaign-id from one of the active subscribers collection.
+	 **/
+	Handlebars.registerHelper('get_campaign_id', function(object){
+		
+		if (object === undefined || object[0] === undefined)
+			return;
+		
+		return object[0].campaign_id;
+
+	});
+	
+	/**
+	 * Returns other active campaigns in campaign-active subscribers.
+	 **/
+	Handlebars.registerHelper('if_other_active_campaigns',function(object,data,options){
+
+		if (object === undefined || object[data] === undefined)
+			return;
+		
+		var other_campaigns = {};
+		var other_active_campaigns = [];
+		var other_completed_campaigns=[];
+		var campaignStatusArray = object[data];
+		
+		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+		{
+			// neglect same campaign
+			if (campaignStatusArray[i].campaign_id === object.campaign_id)
+				continue;
+			
+			// push all other active campaigns
+			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+				other_active_campaigns.push(campaignStatusArray[i])
+				
+			// push all done campaigns
+			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+				other_completed_campaigns.push(campaignStatusArray[i]);
+		}
+		
+		other_campaigns["active"] = other_active_campaigns;
+		other_campaigns["done"] = other_completed_campaigns;
+		
+		return options.fn(other_campaigns);
+		
+	});
 });

@@ -83,7 +83,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
         position: 'top',
 		width:620,
         open: function(event, ui) {
-			$(this).css({'max-height': 500, 'overflow-y': 'auto'}); 
+			$(this).css({'max-height': 535, 'overflow-y': 'auto'}); 
 		},
         autoOpen: true,        
         buttons: {
