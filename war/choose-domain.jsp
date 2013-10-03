@@ -33,7 +33,7 @@ if(!StringUtils.isEmpty(domain))
 <head>
 <meta charset="utf-8">
  <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
-<title>Choose Your Domain</title>
+<title>Create Your Domain</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -120,7 +120,7 @@ padding-left:10px!important;
 						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
 					</div>
 					 <%}%>
-					 <h3><small>Choose your domain at Agile CRM</small></h3>
+					 <h3><small>Create your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Type Your Domain"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
