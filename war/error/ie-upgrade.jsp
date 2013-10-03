@@ -22,6 +22,7 @@
 @media ( min-width : 900px) {
 	body {
 		padding-top: 20px;
+		padding-left:10%;
 	}
 }
 </style>
