@@ -507,10 +507,17 @@ public class JSAPI
 		try
 		{
 			JSONObject obj = new JSONObject(json);
-			String value = obj.getString("type");
-			obj.remove("type");
-			obj.put("subtype", value);
-
+			Iterator<?> keys = obj.keys();
+			while(keys.hasNext())
+			{
+				String key = (String)keys.next();
+				if (key.equals("type"))
+				{
+					String value = obj.getString(key);
+					obj.remove(key);
+					obj.put("subtype", value);					
+				}
+			}
 			// Fetches contact based on email
 			Contact contact = ContactUtil.searchContactByEmail(email);
 

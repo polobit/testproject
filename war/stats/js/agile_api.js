@@ -120,4 +120,8 @@ var _agile = {
 		remove_property : function (name, callback, email)
 		{
 			agile_removeProperty(name,callback,email);				// Remove property
+		},
+		add_property : function(data, callback, email)
+		{
+			agile_setProperty(data, callback, email);				// Add or update property to contact
 		}};
