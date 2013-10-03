@@ -21,8 +21,8 @@ if (!StringUtils.isEmpty(password)) {
 
 	domainUser.password = EncryptDecryptUtil.decrypt(password);
 
-	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-			SendMail.FORGOT_PASSWORD, domainUser);
+	AppengineMail.sendMail(email, SendMail.PASSWORD_CHANGE_NOTIFICATION_SUBJECT,
+			SendMail.PASSWORD_CHANGE_NOTIFICATION, domainUser);
 	
 	success = "We have sent you an email";
 }
