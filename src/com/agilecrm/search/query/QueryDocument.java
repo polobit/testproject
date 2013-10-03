@@ -213,8 +213,6 @@ public class QueryDocument<T> implements QueryInterface
 			.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).setNumberFoundAccuracy(10000)
 			.build();
 
-	    System.out.println(options);
-
 	    return options;
 	}
 
@@ -281,7 +279,7 @@ public class QueryDocument<T> implements QueryInterface
 	}
 
 	// Return datastore entities based on documents.
-	return getDatastoreEntities(contact_documents);
+	return getDatastoreEntities(contact_documents, Long.valueOf(contact_documents.size()));
     }
 
     /**
@@ -317,8 +315,6 @@ public class QueryDocument<T> implements QueryInterface
 	    else
 		documents.put("availableDocuments", index.search(query_string).getNumberFound());
 	}
-
-	System.out.println("number found : " + documents.get("availableDocuments"));
 
 	documents.put("fetchedDocuments", searchResults);
 
@@ -390,11 +386,9 @@ public class QueryDocument<T> implements QueryInterface
 	// retrieval of documents based on index
 	List<ScoredDocument> DocumentList = new ArrayList<ScoredDocument>(documents);
 
-	System.out.println(DocumentList);
-
 	// Fetches Entites. It fetches based on the template type on the class
 	// in datastore and returns a list
-	List entities = getDatastoreEntities(documents);
+	List entities = getDatastoreEntities(documents, availableResults);
 
 	// If list is empty return
 	if (entities.size() == 0)
@@ -420,12 +414,12 @@ public class QueryDocument<T> implements QueryInterface
      * @param DocumentList
      * @return
      */
-    public List getDatastoreEntities(Collection<ScoredDocument> DocumentList)
+    public List getDatastoreEntities(Collection<ScoredDocument> DocumentList, Long count)
     {
 	String newCursor = null;
 
 	if (clazz != null)
-	    return getGenericEntites(DocumentList);
+	    return getGenericEntites(DocumentList, count);
 
 	Map<Type, List<Long>> typeKeyMap = new HashMap<Type, List<Long>>();
 
@@ -442,7 +436,6 @@ public class QueryDocument<T> implements QueryInterface
 
 	    if (typeKeyMap.containsKey(Type.valueOf(type)))
 	    {
-		System.out.println();
 		typeKeyMap.get(Type.valueOf(type)).add(Long.parseLong(doc.getId()));
 	    }
 	    else
@@ -486,19 +479,21 @@ public class QueryDocument<T> implements QueryInterface
     /**
      * Fetches entities based on generic type set on current class.
      * 
-     * @param DocumentList
+     * @param documentList
      * @return
      */
-    public List<T> getGenericEntites(Collection<ScoredDocument> DocumentList)
+    public List<T> getGenericEntites(Collection<ScoredDocument> documentList, Long count)
     {
 	List<Key<T>> entityKeys = new ArrayList<Key<T>>();
 
+	String cursor = "";
 	// Creates keys out of document ids
-	for (ScoredDocument doc : DocumentList)
+	for (ScoredDocument doc : documentList)
 	{
 	    Key<T> key = new Key<T>(clazz, Long.parseLong(doc.getId()));
 	    entityKeys.add(key);
 	    System.out.println(key);
+	    cursor = doc.getCursor().toWebSafeString();
 	}
 
 	try
@@ -506,7 +501,7 @@ public class QueryDocument<T> implements QueryInterface
 	    // Fetches dao field based on class using reflection API
 	    Field o = clazz.getDeclaredField("dao");
 	    ObjectifyGenericDao<T> dao = (ObjectifyGenericDao<T>) o.get(null);
-	    return dao.fetchAllByKeys(entityKeys);
+	    return (List<T>) setCursors(dao.fetchAllByKeys(entityKeys), cursor, count);
 	}
 	catch (Exception e)
 	{
@@ -516,5 +511,36 @@ public class QueryDocument<T> implements QueryInterface
 
 	return null;
 
+    }
+
+    public static List<com.agilecrm.cursor.Cursor> setCursors(List entities, String cursor, Long numberOfContacts)
+    {
+	if (entities.size() == 0)
+	    return entities;
+
+	Object lastEntity = entities.get(entities.size() - 1);
+	Object firstEntity = entities.get(0);
+
+	if (lastEntity instanceof com.agilecrm.cursor.Cursor)
+	{
+	    com.agilecrm.cursor.Cursor agileCursor = null;
+	    if (cursor != null && entities.size() != 0)
+	    {
+		agileCursor = (com.agilecrm.cursor.Cursor) lastEntity;
+		agileCursor.cursor = cursor;
+	    }
+	}
+
+	if (firstEntity instanceof com.agilecrm.cursor.Cursor)
+	{
+	    com.agilecrm.cursor.Cursor agileCursor = null;
+	    if (cursor != null && numberOfContacts != null && entities.size() != 0)
+	    {
+		agileCursor = (com.agilecrm.cursor.Cursor) lastEntity;
+		agileCursor.count = numberOfContacts.intValue();
+	    }
+	}
+
+	return entities;
     }
 }
