@@ -151,7 +151,7 @@ public class SalesforceContactToAgileContact
 				Contact agileContact = saveCompanyInAgile(jsonObject, ownerKey);
 
 				if (agileContact == null)
-					return;
+					continue;
 
 				System.out.println("notes----------- ");
 				// as note

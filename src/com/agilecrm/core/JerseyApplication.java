@@ -63,6 +63,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.widgets.ZendeskWidgetsAPI.class);
 		s.add(com.agilecrm.core.api.account.AccountDeletionAPI.class);
 		s.add(com.agilecrm.core.api.account.NamespaceStatsAPI.class);
+		s.add(com.thirdparty.salesforce.SalesforceImportAPI.class);
 		return s;
 	}
 }

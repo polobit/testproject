@@ -83,7 +83,24 @@ public class ContactUtilServlet extends HttpServlet
 			GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
 
 		if (contactPrefs.type == Type.SALESFORCE)
-			SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
+		{
+			if (contactPrefs.salesforceFields.contains("accounts"))
+				SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
+
+			if (contactPrefs.salesforceFields.contains("leads"))
+				SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
+
+			if (contactPrefs.salesforceFields.contains("contacts"))
+				SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
+
+			if (contactPrefs.salesforceFields.contains("deals"))
+				SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
+
+			if (contactPrefs.salesforceFields.contains("cases"))
+				SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
+
+			contactPrefs.delete();
+		}
 
 	}
 }

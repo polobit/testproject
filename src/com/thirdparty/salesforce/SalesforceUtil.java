@@ -130,6 +130,20 @@ public class SalesforceUtil
 		return new JSONArray(getEntities(prefs, query)).getJSONObject(0).toString();
 	}
 
+	public static String checkSalesforcePrefs(ContactPrefs prefs) throws Exception
+	{
+		try
+		{
+			String query = "SELECT FirstName FROM User WHERE Email='" + prefs.userName + "'";
+			System.out.println("In check salesforce prefs ------------------------------------");
+			return getEntities(prefs, query);
+		}
+		catch (Exception e)
+		{
+			throw new Exception("Invalid login. Please try again");
+		}
+	}
+
 	public static void main(String[] args)
 	{
 		ContactPrefs prefs = new ContactPrefs();
@@ -139,6 +153,8 @@ public class SalesforceUtil
 
 		try
 		{
+			System.out.println(SalesforceUtil.checkSalesforcePrefs(prefs));
+
 			System.out.println(SalesforceUtil.getContactsFromSalesForce(prefs));
 
 			System.out.println(SalesforceUtil.getLeadsFromSalesForce(prefs));
@@ -160,6 +176,8 @@ public class SalesforceUtil
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
+			// if (e.getMessage().contains("'INVALID_LOGIN'"))
+			// System.out.println("invalid");
 			e.printStackTrace();
 		}
 
