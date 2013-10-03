@@ -158,11 +158,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				
 				// To remove table rows on delete 
 				for(var i = 0; i < index_array.length; i++) 
-					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
-				
-				// Remove stream form socialsuite collection, to be removed from UI.
-				if(table[0].id == "streams-table")
-					deleteStream(data_array);
+					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });				
 			}
 			else
 			{

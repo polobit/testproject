@@ -1,51 +1,9 @@
-<script id="existing-streams-collection-template" type="text/html">
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h3>Existing Streams</h3>            
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span9">
-        <div id="slate">
-        </div>         
-        <div class="data-block">
-            <div class="data-container">
-                <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/social/bulk" id="streams-table">
-                    <thead>
-                        <tr>                            
-                            <th>Stream Type</th>
-                            <th>Network Type</th>
-                            <th>Screen Name</th>
-                        </tr>
-                    </thead>
-                    <tbody id="existing-streams-model-list">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<a id="add-stream" class="add-stream add-stream-tab btn left" style="margin-bottom: 15px;position:relative">
-   <i class="icon-plus-sign"></i> Add Stream
-</a>
-</script>
-
-<script id="existing-streams-model-template" type="text/html">
-<td class="data" data={{id}}>{{stream_type}}</td>
-<td>{{network_type}}</td>
-<td>{{screen_name}}</td>
-</script>
-
 <!-- addStreamModal -->
 <div id="addStreamModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addStreamModalLabel" aria-hidden="true"
 		style="display: none;">
 		<div class="modal-header">
-			<button type="button" class="btn close" data-dismiss="modal"
-				aria-hidden="true">X</button>
-			<h3 id="addStreamModalLabel">Add Stream</h3>			
+			<button class="close" data-dismiss="modal">x</button>
+			<h3 id="addStreamModalLabel"><i class="icon-plus-sign"></i> Add Stream</h3>			
 		</div>
 		<div class="modal-body">
 			<form id="streamDetail" name="streamDetail" class="form-horizontal">
@@ -55,15 +13,10 @@
             		<input id="twitter_token" name="token" type="hidden" value="">
             		<input id="twitter_token_secret" name="secret" type="hidden" value="">
                     <input id="twitter_account" name="screen_name" type="hidden" value=""> 
+                    <input id="user_name" name="user_name" type="hidden" value="">
                                		            		
             		<div class="row">
-                		<div class="span5" id="streamDetails">                   
-                    		<div class="control-group">
-                        		<label class="control-label">Name </label>
-                        		<div class="controls">
-                            		<input id="user_name" name="user_name" type="text" value="" readonly="readonly" title= "You cannot edit this field. Please allow access for your account.">
-                        		</div>
-                    		</div>
+                		<div class="span5" id="streamDetails">
                     		<div class="control-group">
                         		<label class="control-label">Network Type </label> 
                         		<div class="controls">    
@@ -87,12 +40,10 @@
   										<option id="favorites" value="Favorites"><i class="icon-star"></i> Favorites</option>
   										<option id="dm_inbox" value="DM_Inbox"><i class="icon-download-alt"></i> DM Inbox</option>
   										<option id="dm_outbox" value="DM_Outbox"><i class="icon-upload-alt"></i> DM Outbox</option>
-  										<option id="scheduled" value="Scheduled"><i class="icon-calendar"></i> Scheduled</option>  										
-									</select>
+                                    </select>
 									<select id="linkedin_streams" name="linkedin_streams" for="linkedin">
   										<option id="all_updates" value="All_Updates"><i class="icon-home"></i> All Updates</option>
-  										<option id="my_updates" value="My_Updates"><i class="icon-share-alt"></i> My Updates</option>  										
-  										<option id="scheduled" value="Scheduled"><i class="icon-calendar"></i> Scheduled</option>  										
+  										<option id="my_updates" value="My_Updates"><i class="icon-share-alt"></i> My Updates</option>
 									</select>
 									<label id="stream_description_label" class="txt-mute txt-small"></label>
                         		</div>
@@ -110,7 +61,7 @@
     		</form>		   	
 		</div><!-- modal body -->
 		<div class="modal-footer">		
-		        <a href="" id="add_linkedin_stream" class="save-linkedin-stream btn btn-primary" type="button"><i class="icon-plus-sign"></i> Add </a>	         
-                <a href="#social" id="add_twitter_stream" type="button" class="save-twitter-stream btn btn-primary"><i class="icon-plus-sign"></i> Add </a>			    
+		        <a href="" id="add_linkedin_stream" class="save-linkedin-stream btn btn-primary" type="button"> Add </a>	         
+                <a href="#social" id="add_twitter_stream" type="button" class="save-twitter-stream btn btn-primary"> Add </a>			    
 		</div>
 	</div>

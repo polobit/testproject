@@ -10,10 +10,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		
 		// First function on click of tab
 		"social" : "socialsuite",		
-		
-		// Manage streams
-		"manage-streams" : "manageStreams",
-		
+				
 		// Streams tab with collection
 		"streams" : "streams",	
 	},
@@ -38,29 +35,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		// Display added streams 
 		this.streams();		
 	}, // socialsuite end	
-	
-	/**
-	 * Display list of Twitter's and Linkedin's existing streams. 
-	 */
-	manageStreams : function()
-	{				
-		console.log("in manage stream.");
-		
-		existingStreamCollectionView = new Base_Collection_View
-		({
-	         url: "/core/social",
-	         restKey: "stream",
-	         templateKey: "existing-streams",
-	         individual_tag_name: 'tr'        	
-	     });	 
-
-		existingStreamCollectionView.collection.fetch();
-		
-		// Display in table.
-		$('#content').html(getTemplate('socialsuite-manage-streams'),{});
-		$('#socialsuite-tabs-content').html(existingStreamCollectionView.el);	
-	},//manageStreams end	
-		   
+				   
 	/**
 	  * This will create collection and store social suite in that, all streams 
 	  * and tweets are displayed from this function and publish msg to register.

@@ -3,18 +3,25 @@
  */
 function fillStreamDetail()
 {	
-	// Empty screen name means Oauth is not done, so warning label will be hidden.
+	// Empty screen name means Oauth is not done.
 	$("#twitter_account", $('#addStreamModal')).attr("value",'');
 	
+	// User name is current domain user name.
 	$("#user_name", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.name); 
 
+	// Default selected network is Twitter.
 	$("#network_type", $('#addStreamModal')).attr("value","TWITTER"); 
 	    	    
+	// Default Stream type is Home of Twitter. 
 	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);
 	
+	// List of Linkedin streams are hidden.  
 	$("#linkedin_streams").hide();	
+	
+	// Add stream from linkedin is hidden.
 	$('#add_linkedin_stream').hide();
 	
+	// O
 	$("#twitter_warning").hide();
 	$("#twitter_streams").show();
 	$('#access_to_twitter').show();
@@ -210,32 +217,6 @@ function addTweetToStream(modelStream,tweet)
 	 head.js('lib/jquery.timeago.js', function(){	 
 		        $(".time-ago", $(".chirp-container")).timeago();	
 			});
-}
-
-// Bulk delete reflection in UI and at server.
-function deleteStream(streams)
-{
-	console.log("streams"); console.log(streams);
-		
-	// To remove streams on delete from table. 
-	for(var i = 0; i < streams.length; i++) 
-	 {
-		var id = streams[i].id;
-		console.log(id);
-		
-		// Fetch stream from collection
-	    var stream = StreamsListView.collection.get(id).toJSON();
-	
-	    // Stream size is too big, can not handle by pubnub so remove list of tweet.
-	    delete stream.tweetListView;	
-	
-    	// Unregister on server
-	    var publishJSON = {"message_type":"unregister", "stream":stream};
-	    sendMessage(publishJSON);
-	    
-	    // Remove stream form collection.
-	    StreamsListView.collection.remove(stream);
-	}
 }
 
 // Make columns draggable.

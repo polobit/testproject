@@ -145,15 +145,6 @@ $('#linkedin_streams').change(function() {
 	}//switch end
 });
 
-$('#manage-streams').live('click', function(e)
-{
-  e.preventDefault();
-
-  // Show existing stream's list		
-  socialsuitecall.manageStreams();	
-});
-
-
 /**
  * Fetchs data from popup stream add form and save stream as well as add to the collection, 
  * publish register message to the server.
