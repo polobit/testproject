@@ -412,7 +412,9 @@ public class SalesforceContactToAgileContact
 
 				if (jsonObject.has("StageName"))
 				{
+					System.out.println("StageName " + jsonObject.getString("StageName"));
 					mileStonesString = checkAndAddMileStone(mileStonesString, jsonObject.getString("StageName"));
+					System.out.println(i + " " + mileStonesString);
 					agileDeal.milestone = jsonObject.getString("StageName");
 				}
 
@@ -536,10 +538,13 @@ public class SalesforceContactToAgileContact
 	{
 		String[] availableMileStones = milestones.split(",");
 
+		System.out.println("avilable milestones ");
+		System.out.println(availableMileStones.toString());
 		boolean flag = false;
 
 		for (String mile : availableMileStones)
 		{
+			System.out.println("| |" + mile + "| |" + milestone + "| |");
 			if (milestone.equalsIgnoreCase(mile))
 			{
 				flag = true;
@@ -548,7 +553,11 @@ public class SalesforceContactToAgileContact
 		}
 
 		if (!flag)
-			return milestones + ", " + milestone;
+		{
+			System.out.println(milestones + "," + milestone);
+			return milestones + "," + milestone;
+
+		}
 
 		return milestones;
 	}
