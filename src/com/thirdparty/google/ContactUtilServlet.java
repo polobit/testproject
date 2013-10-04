@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs.Type;
@@ -82,25 +84,39 @@ public class ContactUtilServlet extends HttpServlet
 		if (contactPrefs.type == Type.GOOGLE)
 			GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
 
-		if (contactPrefs.type == Type.SALESFORCE)
+		try
 		{
-			if (contactPrefs.salesforceFields.contains("accounts"))
-				SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
 
-			if (contactPrefs.salesforceFields.contains("leads"))
-				SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
+			if (contactPrefs.type == Type.SALESFORCE)
+			{
+				if (contactPrefs.salesforceFields.contains("accounts"))
+					SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
 
-			if (contactPrefs.salesforceFields.contains("contacts"))
-				SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
+				if (contactPrefs.salesforceFields.contains("leads"))
+					SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
 
-			if (contactPrefs.salesforceFields.contains("deals"))
-				SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
+				if (contactPrefs.salesforceFields.contains("contacts"))
+					SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
 
-			if (contactPrefs.salesforceFields.contains("cases"))
-				SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
+				if (contactPrefs.salesforceFields.contains("deals"))
+					SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
 
+				if (contactPrefs.salesforceFields.contains("cases"))
+					SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
+
+				BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+						"Imported successfully from Salesforce");
+			}
+
+		}
+		catch (Exception e)
+		{
+			BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+					"Problem occured while importing. Please try again");
+		}
+		finally
+		{
 			contactPrefs.delete();
 		}
-
 	}
 }
