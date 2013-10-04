@@ -13,25 +13,27 @@
             		<input id="twitter_token" name="token" type="hidden" value="">
             		<input id="twitter_token_secret" name="secret" type="hidden" value="">    
             		<input id="twitter_account" name="screen_name" type="hidden" value="">
-                    <input id="user_name" name="user_name" type="hidden" value="">
                                		            		
             		<div class="row">
                 		<div class="span5" id="streamDetails">
                     		<div class="control-group">
-                        		<label class="control-label">Social Network Type </label> 
+                        		<label class="control-label"><b>Social Network Type </b></label> 
                         		<div class="controls">    
                         		    <input id="network_type" name="network_type" type="hidden" value="">                        		
                             		<select id="select_network_type" name="select_network_type">
+                            		    <option value="NONE" selected="selected">Select social network</option>
   										<option value="TWITTER">Twitter</option>
   										<option value="LINKEDIN">Linkedin</option>  						
 									</select>
+									<label id="network_type_description_label" class="txt-mute txt-small"></label>
                         		</div>
                     		</div>
-                    		<div class="control-group">
-                        		<label class="control-label">Stream Type </label> 
+                    		<div id="select_stream" class="control-group">
+                        		<label class="control-label"><b>Stream Type </b></label> 
                         		<div class="controls">                            		
                         		    <input id="stream_type" name="stream_type" type="hidden" value="">
                             		<select id="twitter_streams" name="twitter_streams" for="twitter">
+                            		    <option value="NONE" selected="selected">Select stream</option>
   										<option id="home" value="Home"> Home</option>
   										<option id="sent" value="Sent"> Sent</option>
   										<option id="retweets" value="Mentions"> Mentions</option>
@@ -42,6 +44,7 @@
   										<option id="dm_outbox" value="DM_Outbox"> DM Outbox</option>
                                     </select>
 									<select id="linkedin_streams" name="linkedin_streams" for="linkedin">
+									    <option value="NONE" selected="selected">Select stream</option>
   										<option id="all_updates" value="All_Updates"> All Updates</option>
   										<option id="my_updates" value="My_Updates"> My Updates</option>
 									</select>
@@ -49,13 +52,13 @@
                         		</div>
                     		</div>							
 							<div class="control-group" id="search_stream_keyword"> 	</div>
-							<div id="access_to_twitter" class="control-group">
+							<div class="control-group">
 							  <div class="controls">
-  						        <label title="Please allow access for your account." onmouseover="hideWarning()"><b><a href="javascript:openTwitter()">Link Your Twitter.</a></b></label>
-  						        <label id="twitter_warning" style="color:Red;">Please allow access for your account.</label>  						               						          						        
+  						        <label id="oauth_link" title="Please allow access for your account." onmouseover="hideWarning()"><b><a href="javascript:openTwitter()">Link Your Twitter.</a></b></label>
+  						        <label id="twitter_warning" style="color:Red;"></label>  						               						          						        
   						      </div> 
 							</div>
-							<div class="control-group">
+							<div id="account_description" class="control-group">
 							  <div class="controls">
   						        <img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="loadImage()" src=""> 
   						        <label id="account_description_label"></label> 						               						          						        

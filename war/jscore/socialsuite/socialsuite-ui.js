@@ -5,10 +5,9 @@
 		 
 		 // Default values
 		 pubnub = null;	   
-		 StreamType = "Home";	
-		 NetworkType = "twitter";
-		 registerAllDone = false;	
-		 $('#twitter_account').hide();
+		 StreamType = null;	
+		 NetworkType = null;
+		 registerAllDone = false;		
 	  })();
 
 /**
@@ -26,8 +25,18 @@ $(document).on("click",".add-twitter-contact", function(e)
 	$("#lname", $('#personModal')).attr("value",lastName);
 });
 
-function loadImage() {
-	$('#access_to_twitter').hide();
+/** After Oauth, display profile image and screen name on form to show Oauth is done.*/
+function loadImage() 
+{	
+	console.log("farah");
+	// Hide Link and warning.
+	$("#oauth_link").hide();	
+	$("#twitter_warning").hide();	
+	
+	// profile image and screen name is visible.
+	$("#account_description").show();
+	
+	// Add screen name to label.
 	document.getElementById('account_description_label').innerHTML='<b>'+$('#twitter_account').val()+'</b>';
 	console.log($('#account_description_label').html());
 }
@@ -42,14 +51,7 @@ $(document).on("click",".add-stream", function(e)
 	 // Reset all fields
 	 $('#streamDetail').each(function() {
 	 this.reset();});
-
-	 // Remove keyword input element
-	 $('.remove-keyword').remove();
-	 
-	 // Make empty twitter profile image and screen name    
-	 $('#account_description_label').empty();
-	 $('#twitter_profile_img_url').replaceWith('<img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="loadImage()" src=""/>');
-
+	
 	 // Enable button of add stream on form of stream detail
 	 $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 
@@ -63,54 +65,115 @@ $(document).on("click",".add-stream", function(e)
 /**
  * Get network type from selected option in list of network.
  */
-$('#select_network_type').change(function() {
+$('#select_network_type').change(function() 
+{	
+	// Make stream type null.
+	StreamType = null;
 	
-    // Make empty twitter profile image and screen name    
-    $('#account_description_label').empty();
-    $('#twitter_profile_img_url').replaceWith('<img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="loadImage()" src=""/>');
+	// Make network type null.
+	NetworkType = null;
 	
+	// Remove keyword input element
+	$('.remove-keyword').remove();
+
+	// Oauth required warning and link hidden. 
+	$("#oauth_link").hide();	
+	$("#twitter_warning").hide();	
+	
+	// profile image and screen name is hidden.
+	$("#account_description").hide();	
+	
+    // Div where Lists are going to display, is hidden when form open. Make it visible.  
+    $("#select_stream").show();	
+    
+	// Display default description for selection of social network.
+	document.getElementById('network_type_description_label').innerHTML='<b><i class="icon-sitemap"></i></b>  You can select your favorite social network type.';
+
+	// Display default description for selection of stream type.
+	document.getElementById('stream_description_label').innerHTML='<b><i class="icon-columns"></i></b>  You can select your favorite stream type.';
+		
     if($(this).val() == 'TWITTER') 
-      {
-    	StreamType = "Home";	
-    	document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Tweets and retweets posted by the authenticating user and the users they follow.';
-    	document.getElementById("twitter_streams").selectedIndex = 0;
-    	// Remove keyword input element
-   	    $('.remove-keyword').remove();
-    	$('select[for=twitter], #twitter_streams').show();        
+      {     	
+    	// Assign value Twitter to network_type. 
         $("#network_type", $('#addStreamModal')).attr("value",'TWITTER');
-        $('#access_to_twitter').show();
+        NetworkType = "TWITTER";
+        
+    	// Display description for Twitter social network.
+    	document.getElementById('network_type_description_label').innerHTML='<i class="icon-twitter"></i> With Social Suite\'s Twitter integration, you have all the access to your tweets, listen using Search Streams, as well as monitor Mentions, Direct Messages, Sent Tweets, Favorited Tweets, and more in dedicated streams.';
+
+    	// Dispaly list of Twitter streams.
+   	    $('select[for=twitter], #twitter_streams').show();
+   	 
+   	    // Show default selection.
+   	    document.getElementById("twitter_streams").selectedIndex = 0;
+   	       	   
+        // Display add button to save twitter stream.
         $('#add_twitter_stream').show();
+        
+        // Hides list of Linkedin streams.
         $('select[for=linkedin], #linkedin_streams').hide();
+        
+        // Hides add button to save Linkedin stream.
         $('#add_linkedin_stream').hide();    
       } 
-    else 
+    else if($(this).val() == 'LINKEDIN') 
       {
-    	// Remove keyword input element
-   	    $('.remove-keyword').remove();
-    	StreamType = "All_Updates";	
-    	document.getElementById("linkedin_streams").selectedIndex = 0;
-    	document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Updates and shares from authenticated user\'s connections and groups.';
-    	$('select[for=linkedin], #linkedin_streams').show();
-        $('#add_linkedin_stream').show();
+    	// Assign value Linkedin to network_type. 
+      	$("#network_type", $('#addStreamModal')).attr("value",'LINKEDIN');
+      	NetworkType = "LINKEDIN";
+      	
+    	// Display description for Linkedin social network.
+    	document.getElementById('network_type_description_label').innerHTML='<i class="icon-linkedin"></i> Connect with clients and monitor industry conversations with Social Suite\'s LinkedIn management. Social Suite allows you to post directly to your Linkedin profile.';
+    	    	
+    	// Dispaly list of Linkedin streams.
+      	$('select[for=linkedin], #linkedin_streams').show();
+      	
+   	    // Show default selection.
+   	    document.getElementById("linkedin_streams").selectedIndex = 0;
+      	
+        // Display add button to save linkedin stream.      	
+      	$('#add_linkedin_stream').show();
+      	
+      	// Setups link to Oauth linked.
         setupSocialSuiteLinkedinOAuth();
+        
+        // Hides list of Twitter streams.
     	$('select[for=twitter], #twitter_streams').hide();    
-    	$("#network_type", $('#addStreamModal')).attr("value",'LINKEDIN');
-    	$('#access_to_twitter').hide();
+    	    	
+    	// Hides add button to save Twitter stream.
         $('#add_twitter_stream').hide();
-        $("#twitter_warning").hide();
+        
+        // Empty screen name means Oauth is not done.
+    	$("#twitter_account", $('#addStreamModal')).attr("value",'');
       }
+    else
+    	{
+    	  fillStreamDetail();
+    	}
 });
 
 /**
  * Get stream name from selected option in list of streams.
  */
-$('#twitter_streams').change(function() {
+$('#twitter_streams').change(function() 
+{
+    // Gets value of selected stream type.	
 	StreamType = $(this).val();
-	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);
-	$("#twitter_warning").hide();
 	
-	 // Remove keyword input element
-	 $('.remove-keyword').remove();
+	// Assign stream type to stream type input.
+	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);
+	
+	if($('#twitter_account').val() == null || $('#twitter_account').val() == '')
+	 {
+    	// Shows link for Oauth.        
+        $("#oauth_link").show();	 
+	 }
+        
+	// Hides twitter warning.
+	$("#twitter_warning").hide();	
+	
+	// Remove keyword input element
+	$('.remove-keyword').remove();
 	 
 	switch (StreamType){
 	case "Search":		  
@@ -141,11 +204,19 @@ $('#twitter_streams').change(function() {
 	case "Scheduled": 
 		  document.getElementById('stream_description_label').innerHTML='<i class="icon-calendar"></i> Tweets user want to sent in future time.';
 		  break;	
+	default :
+		  // Display default description for selection of stream type.
+		  document.getElementById('stream_description_label').innerHTML='<b><i class="icon-columns"></i></b>  You can select your favorite stream type.'; 
+		  break;	
 	}//switch end
 });
 
-$('#linkedin_streams').change(function() {
+$('#linkedin_streams').change(function() 
+{
+	// Gets value of selected stream type.	
 	StreamType = $(this).val();
+	
+	// Assign stream type to stream type input.
 	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);   
 	
 	switch (StreamType){
@@ -158,6 +229,10 @@ $('#linkedin_streams').change(function() {
 	case "Scheduled": 
 		  document.getElementById('stream_description_label').innerHTML='<i class="icon-calendar"></i> Updates user want to sent in future time.';
 	      break;
+	default :
+		  // Display default description for selection of stream type.
+		  document.getElementById('stream_description_label').innerHTML='<b><i class="icon-columns"></i></b>  You can select your favorite stream type.'; 
+		  break;
 	}//switch end
 });
 
@@ -168,15 +243,44 @@ $('#linkedin_streams').change(function() {
 $(document).on("click",".save-twitter-stream", function(e)
 {	
 	// Check add-stream button is not enable
-	 if($('#addStreamModal').find('#add_twitter_stream').attr('disabled'))
+	if($('#addStreamModal').find('#add_twitter_stream').attr('disabled'))
  		return;
 	
+	// Check if network type is not selected.
+	if(NetworkType == null || NetworkType == '' || NetworkType == "NONE")
+	{
+	  // Display warning.
+	  $("#oauth_link").hide();	  
+	  $("#twitter_warning").show();	  
+		
+	  // Add description of warning.
+      document.getElementById('twitter_warning').innerHTML='Please, Select your favorite social network.';
+	  return false;
+	}
+	
+	// Check if stream type is not selected.
+	if(StreamType == null || StreamType == '' || StreamType == "NONE")
+		{
+		  // Display warning.		
+		  $("#oauth_link").hide();	  
+		  $("#twitter_warning").show();
+		
+		  // Add description of warning.
+	      document.getElementById('twitter_warning').innerHTML='Please, Select your favorite stream.';
+		  return false;
+		}
+	 
 	// Check if the Oauth is done.			
 	var screen_name = null;	
 	screen_name = $("[name='screen_name']").val();	
 	if(screen_name == '' || screen_name == null)
 	  {
+   	    // Display warning.		
+		$("#oauth_link").show();	  
 		$("#twitter_warning").show();
+		
+		// Add description of warning.
+	    document.getElementById('twitter_warning').innerHTML='Please, Allow access for your account.';
 		return false;
 	  }
 	

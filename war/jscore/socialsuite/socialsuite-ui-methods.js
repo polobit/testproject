@@ -1,39 +1,42 @@
 /**
- *  Fill details of stream in add-stream form.
+ *  Fill details of stream in add-stream form and arrange elements as per requirement.
  */
 function fillStreamDetail()
 {	
+	StreamType = null;	
+	NetworkType = null;
+	
+	// Remove keyword input element
+	 $('.remove-keyword').remove();
+	 
+	// Oauth required warning and link hidden. 
+	$("#oauth_link").hide();	
+	$("#twitter_warning").hide();	
+	
+	// profile image and screen name is hidden.
+	$("#account_description").hide();	
+	
+	// Div where Lists are going to display, is hidden when form open.  
+	$("#select_stream").hide();
+
+	// Add button for linkedin is hidden.
+	$('#add_linkedin_stream').hide();
+
+	// Add Twitter stream button visible.
+	$('#add_twitter_stream').show();   
+
 	// Empty screen name means Oauth is not done.
 	$("#twitter_account", $('#addStreamModal')).attr("value",'');
-	
-	// User name is current domain user name.
-	$("#user_name", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.name); 
-
-	// Default selected network is Twitter.
-	$("#network_type", $('#addStreamModal')).attr("value","TWITTER"); 
-	    	    
-	// Default Stream type is Home of Twitter. 
-	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);
-	
-	// List of Linkedin streams are hidden.  
-	$("#linkedin_streams").hide();	
-	
-	// Add stream from linkedin is hidden.
-	$('#add_linkedin_stream').hide();
-	
-	// O
-	$("#twitter_warning").hide();
-	$("#twitter_streams").show();
-	$('#access_to_twitter').show();
-    $('#add_twitter_stream').show();   
-    document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Tweets and retweets posted by the authenticating user and the users they follow.';
-	
-	$("#domain_user_id", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id);
-	
+    		
+	// Add value to hidden input element.
+	$("#domain_user_id", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id);	
 	$("#client_channel", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id + "_Channel");	
+	
+	// Display default description for selection of social network.
+	document.getElementById('network_type_description_label').innerHTML='<i class="icon-sitemap"></i> You can select your favorite social network type.';
 }
 
-//Authentication is done, hide warning.
+// Hide twitter warning, when user going to click on Oauth link.
 function hideWarning() {		
 	// Hide warning about authentication access.
 	$("#twitter_warning").hide();
