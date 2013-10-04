@@ -11,18 +11,18 @@
        				<input id="domain_user_id" name="domain_user_id" type="hidden" value=""> 		
         		    <input id="client_channel" name="client_channel" type="hidden" value="">
             		<input id="twitter_token" name="token" type="hidden" value="">
-            		<input id="twitter_token_secret" name="secret" type="hidden" value="">
-                    <input id="twitter_account" name="screen_name" type="hidden" value=""> 
+            		<input id="twitter_token_secret" name="secret" type="hidden" value="">    
+            		<input id="twitter_account" name="screen_name" type="hidden" value="">
                     <input id="user_name" name="user_name" type="hidden" value="">
                                		            		
             		<div class="row">
                 		<div class="span5" id="streamDetails">
                     		<div class="control-group">
-                        		<label class="control-label">Network Type </label> 
+                        		<label class="control-label">Social Network Type </label> 
                         		<div class="controls">    
                         		    <input id="network_type" name="network_type" type="hidden" value="">                        		
-                            		<select id="select_network_type" name="select_network_type" class="selectpicker">
-  										<option value="TWITTER" data-icon="icon-heart">Twitter</option>
+                            		<select id="select_network_type" name="select_network_type">
+  										<option value="TWITTER">Twitter</option>
   										<option value="LINKEDIN">Linkedin</option>  						
 									</select>
                         		</div>
@@ -32,18 +32,18 @@
                         		<div class="controls">                            		
                         		    <input id="stream_type" name="stream_type" type="hidden" value="">
                             		<select id="twitter_streams" name="twitter_streams" for="twitter">
-  										<option id="home" value="Home"><i class="icon-home"></i> Home</option>
-  										<option id="sent" value="Sent"><i class="icon-share-alt"></i> Sent</option>
-  										<option id="retweets" value="Mentions"><img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions</option>
-  										<option id="search" value="Search"><i class="icon-search"></i> Search</option>
-  										<option id="mentions" value="Retweets"><i class="icon-retweet"></i> Retweets</option>
-  										<option id="favorites" value="Favorites"><i class="icon-star"></i> Favorites</option>
-  										<option id="dm_inbox" value="DM_Inbox"><i class="icon-download-alt"></i> DM Inbox</option>
-  										<option id="dm_outbox" value="DM_Outbox"><i class="icon-upload-alt"></i> DM Outbox</option>
+  										<option id="home" value="Home"> Home</option>
+  										<option id="sent" value="Sent"> Sent</option>
+  										<option id="retweets" value="Mentions"> Mentions</option>
+  										<option id="search" value="Search"> Search</option>
+  										<option id="mentions" value="Retweets"> Retweets</option>
+  										<option id="favorites" value="Favorites"> Favorites</option>
+  										<option id="dm_inbox" value="DM_Inbox"> DM Inbox</option>
+  										<option id="dm_outbox" value="DM_Outbox"> DM Outbox</option>
                                     </select>
 									<select id="linkedin_streams" name="linkedin_streams" for="linkedin">
-  										<option id="all_updates" value="All_Updates"><i class="icon-home"></i> All Updates</option>
-  										<option id="my_updates" value="My_Updates"><i class="icon-share-alt"></i> My Updates</option>
+  										<option id="all_updates" value="All_Updates"> All Updates</option>
+  										<option id="my_updates" value="My_Updates"> My Updates</option>
 									</select>
 									<label id="stream_description_label" class="txt-mute txt-small"></label>
                         		</div>
@@ -52,9 +52,15 @@
 							<div id="access_to_twitter" class="control-group">
 							  <div class="controls">
   						        <label title="Please allow access for your account." onmouseover="hideWarning()"><b><a href="javascript:openTwitter()">Link Your Twitter.</a></b></label>
-  						        <label id="twitter_warning" style="color:Red;">Please allow access for your account.</label>
+  						        <label id="twitter_warning" style="color:Red;">Please allow access for your account.</label>  						               						          						        
   						      </div> 
-							</div>							
+							</div>
+							<div class="control-group">
+							  <div class="controls">
+  						        <img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="loadImage()" src=""> 
+  						        <label id="account_description_label"></label> 						               						          						        
+  						      </div> 
+							</div>					
         	        	</div> <!-- span5 -->   
            			</div><!-- row -->		   			  
         		</fieldset>

@@ -7,7 +7,8 @@
 		 pubnub = null;	   
 		 StreamType = "Home";	
 		 NetworkType = "twitter";
-		 registerAllDone = false;		
+		 registerAllDone = false;	
+		 $('#twitter_account').hide();
 	  })();
 
 /**
@@ -25,6 +26,12 @@ $(document).on("click",".add-twitter-contact", function(e)
 	$("#lname", $('#personModal')).attr("value",lastName);
 });
 
+function loadImage() {
+	$('#access_to_twitter').hide();
+	document.getElementById('account_description_label').innerHTML='<b>'+$('#twitter_account').val()+'</b>';
+	console.log($('#account_description_label').html());
+}
+
 /**
  * Display popup form with stream details. 
  */
@@ -38,6 +45,10 @@ $(document).on("click",".add-stream", function(e)
 
 	 // Remove keyword input element
 	 $('.remove-keyword').remove();
+	 
+	 // Make empty twitter profile image and screen name    
+	 $('#account_description_label').empty();
+	 $('#twitter_profile_img_url').replaceWith('<img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="loadImage()" src=""/>');
 
 	 // Enable button of add stream on form of stream detail
 	 $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
@@ -53,6 +64,11 @@ $(document).on("click",".add-stream", function(e)
  * Get network type from selected option in list of network.
  */
 $('#select_network_type').change(function() {
+	
+    // Make empty twitter profile image and screen name    
+    $('#account_description_label').empty();
+    $('#twitter_profile_img_url').replaceWith('<img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="loadImage()" src=""/>');
+	
     if($(this).val() == 'TWITTER') 
       {
     	StreamType = "Home";	
@@ -63,9 +79,9 @@ $('#select_network_type').change(function() {
     	$('select[for=twitter], #twitter_streams').show();        
         $("#network_type", $('#addStreamModal')).attr("value",'TWITTER');
         $('#access_to_twitter').show();
-        $('#add_twitter_stream').show();       
+        $('#add_twitter_stream').show();
         $('select[for=linkedin], #linkedin_streams').hide();
-        $('#add_linkedin_stream').hide();
+        $('#add_linkedin_stream').hide();    
       } 
     else 
       {
@@ -91,7 +107,7 @@ $('#select_network_type').change(function() {
 $('#twitter_streams').change(function() {
 	StreamType = $(this).val();
 	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);
-	$("#twitter_warning").hide();	
+	$("#twitter_warning").hide();
 	
 	 // Remove keyword input element
 	 $('.remove-keyword').remove();
