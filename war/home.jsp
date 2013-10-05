@@ -126,25 +126,36 @@
 							
 							<%
 									//Styling enable/disable navbar tabs(add display:none to diable)
-																																																							
+									Integer count = 0;																																											
 									NavSetting navSetting = NavSettingUtil.getNavSetting();
 									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_reports = "";
 									//style for calendar,cases,deals,campaign resp.
 									
 									if (!navSetting.calendar)
-										style_calendar = " display:none;";
+									    style_calendar =  " display:none;";
+									else
+									    ++count;
 									if (!navSetting.cases)
 										style_cases = " display:none;";
+									else
+									    ++count;
 									if (!navSetting.deals)
 										style_deals = " display:none;";
+									else
+									    ++count;
 									if (!navSetting.campaign)
-										style_campaign = " display:none;";
+									    style_campaign = " display:none;";
+									else
+									    ++count;
 									if (!navSetting.reports)
-										style_reports = " display:none;";
+									    style_reports = " display:none;";
+									else
+									    ++count;
+										
 							%>
 							<li id="contactsmenu"><a href="#contacts"><i
 									class="icon-user icon-white"></i> Contacts</a></li>		
-							<li id="calendarmenu" style="<%=style_calendar %>" ><a href="#calendar"><i
+							<li id="calendarmenu" style="<%=style_calendar %>;" ><a href="#calendar"><i
 									class="icon-calendar icon-white"></i> Calendar</a></li>
 							<li id="casesmenu" style="<%=style_cases %>" ><a href="#cases"><i
 									class="icon-folder-close icon-white"></i> Cases</a></li>
@@ -154,7 +165,36 @@
 									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<li id="reportsmenu" style="<%=style_reports %>" ><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
-							<li>
+							<%  if (count > 4)
+							{
+							   %>
+							
+							<li id="more-menu" class="dropdown">
+										<a class="dropdown-toggle" data-toggle="dropdown" href="">
+											More <i class='caret'></i>
+										</a>
+										<ul class="dropdown-menu drop-drop">
+										<% 
+												if (navSetting.cases){
+										%>		<li id="casesmenu" ><a href="#cases"><i
+												class="icon-folder-close icon-white"></i> Cases</a></li>
+										<% 		} 
+												if (navSetting.deals){
+										%>		<li id="dealsmenu" ><a href="#deals"><i
+												class="icon-money icon-white"></i> Deals</a></li>
+										<%		} 
+												if (navSetting.campaign){
+										%>		<li id="workflowsmenu" ><a href="#workflows"><i
+												class="icon-sitemap icon-white"></i> Campaigns</a></li>
+										<% 		} 
+												if (navSetting.reports){
+										%>		<li id="reportsmenu" ><a href="#reports"><i
+												class="icon-bar-chart icon-white"></i> Reports</a></li>
+										<% 		}%>
+										</ul>
+									</li>	
+							<% }%>
+							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search"
 									style="margin: 5px;">
 									<input id="searchText" type="text" data-provide="typeahead"
@@ -320,7 +360,7 @@
 	
 	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
-	
+
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
 	head.js(JQUERY_LIB_PATH, LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js',LIB_PATH + 'lib/date-formatter.js',  LIB_PATH + 'lib/bootstrap-timepicker-min.js');

@@ -952,3 +952,35 @@ overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@media (min-width: 980px) and (max-width: 1201px)  {
+	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu li:not(:nth-child(n+3)) {
+		display:none;
+	}
+}
+
+
+
+@media (min-width: 1200px) and (max-width: 1250px)  {
+	.agile-menu  > li:nth-child(n + 7):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu li:not(:nth-child(n+4)) {
+		display:none;
+	}
+}
+
+@media (min-width: 1251px) {
+
+	#more-menu {
+		display:none;
+	}
+		
+}
+
+@media (max-width: 979px) {
+	#more-menu {
+		display:none;
+	}
+		
+}
+
