@@ -75,7 +75,6 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css"/>
-<link href='tpl/min/tpl.js' />
 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -128,7 +127,7 @@
 									//Styling enable/disable navbar tabs(add display:none to diable)
 									Integer count = 0;																																											
 									NavSetting navSetting = NavSettingUtil.getNavSetting();
-									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_reports = "";
+									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_reports = "", style_social = "";
 									//style for calendar,cases,deals,campaign resp.
 									
 									if (!navSetting.calendar)
@@ -152,20 +151,35 @@
 									else
 									    ++count;
 										
+										
 							%>
 							<li id="contactsmenu"><a href="#contacts"><i
 									class="icon-user icon-white"></i> Contacts</a></li>		
-							<li id="calendarmenu" style="<%=style_calendar %>;" ><a href="#calendar"><i
+							
+									<% 	if (navSetting.calendar){
+										%>		
+										<li id="calendarmenu" style="<%=style_calendar %>;" >
+											<a href="#calendar"><i
 									class="icon-calendar icon-white"></i> Calendar</a></li>
-							<li id="casesmenu" style="<%=style_cases %>" ><a href="#cases"><i
-									class="icon-folder-close icon-white"></i> Cases</a></li>
-							<li id="dealsmenu" style="<%=style_deals %>" ><a href="#deals"><i
-									class="icon-money icon-white"></i> Deals</a></li>
-							<li id="workflowsmenu" style="<%=style_campaign %>" ><a href="#workflows"><i
-									class="icon-sitemap icon-white"></i> Campaigns</a></li>
-							<li id="reportsmenu" style="<%=style_reports %>" ><a href="#reports"><i
-									class="icon-bar-chart icon-white"></i> Reports</a></li>
-							<%  if (count > 4)
+										<% 		} 
+										 	if (navSetting.cases){
+										%>		<li id="casesmenu" ><a href="#cases"><i
+												class="icon-folder-close icon-white"></i> Cases</a></li>
+										<% 		} 
+												if (navSetting.deals){
+										%>		<li id="dealsmenu" ><a href="#deals"><i
+												class="icon-money icon-white"></i> Deals</a></li>
+										<%		} 
+												if (navSetting.campaign){
+										%>		<li id="workflowsmenu" ><a href="#workflows"><i
+												class="icon-sitemap icon-white"></i> Campaigns</a></li>
+										<% 		} 
+												if (navSetting.reports){
+										%>		<li id="reportsmenu" ><a href="#reports"><i
+												class="icon-bar-chart icon-white"></i> Reports</a></li>
+										<% 		}
+												%>
+							<%  if (count > 3)
 							{
 							   %>
 							
@@ -183,14 +197,16 @@
 										%>		<li id="dealsmenu" ><a href="#deals"><i
 												class="icon-money icon-white"></i> Deals</a></li>
 										<%		} 
-												if (navSetting.campaign){
-										%>		<li id="workflowsmenu" ><a href="#workflows"><i
+												if (navSetting.campaign){											
+										%>
+									
+										<li id="workflowsmenu" ><a href="#workflows"><i
 												class="icon-sitemap icon-white"></i> Campaigns</a></li>
 										<% 		} 
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		}%>
+										<% 		} %>
 										</ul>
 									</li>	
 							<% }%>
