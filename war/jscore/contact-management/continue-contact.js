@@ -152,14 +152,35 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	
     	
     	var tags = get_tags(tagsSourceId);
+    	console.log(obj);
+    	console.log(tags);
     	if (tags != undefined && tags.length != 0) 
     	{
     		obj.tags = [];
-    		obj['tagsWithTime'] = [];
     		
-    		$.each(tags[0].value, function(index, value){
-    			obj.tagsWithTime.push({"tag": value});
-    		});
+    		if(obj['tagsWithTime'].length == 0)
+    		{
+    			$.each(tags[0].value, function(index, value) {
+    				obj.tagsWithTime.push({"tag": value});
+    			});
+    		}
+    		else
+    		{
+    			$.each(tags[0].value, function(index, value) {
+    				var is_new = true;
+    				$.each(obj['tagsWithTime'], function(index, tagObject){
+    					console.log()
+    					if(value == tagObject.tag)
+    					{
+    						is_new = false
+    						return false;
+    					}
+    				});
+    				
+    				if(is_new)
+    					obj.tagsWithTime.push({"tag": value});
+    			});
+    		}
        	}
 	
     }else{
