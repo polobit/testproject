@@ -36,6 +36,22 @@ function fillStreamDetail()
 	document.getElementById('network_type_description_label').innerHTML='<i class="icon-sitemap"></i> You can select your favorite social network type.';
 }
 
+// Add website and select network on continue form in add contact flow.
+function socialsuite_add_website()
+{
+  console.log(TweetOwnerForAddContact);	
+  if (TweetOwnerForAddContact == null)
+	  return;
+   
+  // Add values in continue form after add contact form.
+  // Add website / handle of twitter of tweet owner.
+  $("#website", $('#continueform')).attr("value",TweetOwnerForAddContact);		
+  TweetOwnerForAddContact = null;  
+  
+  // Select network type.
+  $("div.website select").val("TWITTER");
+}
+
 // Hide twitter warning, when user going to click on Oauth link.
 function hideWarning() {		
 	// Hide warning about authentication access.
@@ -146,7 +162,7 @@ function handleMessage(tweet)
 	{		
 	 // Searchs tweet owner's kloutscore.
 	 // Fetches tweet owner's klout id.
-	 var url = "http://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
+	 var url = "https://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
 
      $.getJSON( url , function(data) {
     	 console.log(data);   
@@ -155,7 +171,7 @@ function handleMessage(tweet)
         console.log(data);      
     	
    	    // Fetches tweet owner's klout score.
-    	url = "http://api.klout.com/v2/user.json/"+data.id+"/score?key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
+    	url = "https://api.klout.com/v2/user.json/"+data.id+"/score?key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
     	      
     	$.getJSON( url, function(data) {
     		  console.log(data);
@@ -228,7 +244,7 @@ function setup_dragging_columns()
 	console.log("in setup_dragging_columns");
 	console.log("StreamsListView : ");console.log(StreamsListView);
 	
-	head.js('http://code.jquery.com/ui/1.10.3/jquery-ui.js',
+	head.js('https://code.jquery.com/ui/1.10.3/jquery-ui.js',
 			function()
 			   {
 				$('ul.columns').sortable({

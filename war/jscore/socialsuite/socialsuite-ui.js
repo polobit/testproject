@@ -7,7 +7,8 @@
 		 pubnub = null;	   
 		 StreamType = null;	
 		 NetworkType = null;
-		 registerAllDone = false;		
+		 registerAllDone = false;	
+		 var TweetOwnerForAddContact = null;
 	  })();
 
 /**
@@ -15,14 +16,26 @@
  */
 $(document).on("click",".add-twitter-contact", function(e)
 {
+	// Tweet owner's full name.
 	var fullName = $(this).attr("data-user-name");
 	console.log(fullName);
 	
+	// Tweet owner's description.
+	var description = $(this).attr("description");
+	console.log(description);
+
+	// Tweet owner's handle/Screen name.
+	TweetOwnerForAddContact = $(this).attr("tweet-owner");
+	console.log(TweetOwnerForAddContact);
+	
+	// Separate full name.
 	var firstName = fullName.substr(0,fullName.indexOf(' '));
 	var lastName = fullName.substr(fullName.indexOf(' ')+1);;	
 	
+	// Add values in add contact form.
 	$("#fname", $('#personModal')).attr("value",firstName);
 	$("#lname", $('#personModal')).attr("value",lastName);
+	$("#job_title", $('#personModal')).attr("value",description);		
 });
 
 /** After Oauth, display profile image and screen name on form to show Oauth is done.*/

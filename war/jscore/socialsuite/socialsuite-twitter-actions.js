@@ -104,7 +104,7 @@ $(document).on("click",".reply-message", function(e)
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
-	var tweetOwner = $(this).attr("owner-tweet");
+	var tweetOwner = $(this).attr("tweet-owner");
 	console.log(this);
 	 
 	// Fetch stream from collection
@@ -206,7 +206,7 @@ $(document).on("click",".direct-message", function(e)
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
-	var tweetOwner = $(this).attr("owner-tweet");
+	var tweetOwner = $(this).attr("tweet-owner");
 	console.log(this);
 	 
 	// Fetch stream from collection
@@ -312,7 +312,7 @@ $(document).on("click",".retweet-status", function(e)
      var streamId = $(this).attr("stream-id");
      var tweetId = $(this).attr("tweet-id");
  	 var tweetIdStr = $(this).attr("tweet-id-str");
- 	 var tweetOwner = $(this).attr("owner-tweet"); 	
+ 	 var tweetOwner = $(this).attr("tweet-owner"); 	
  	 console.log(this);
 	
 	/* Sends get request to url "core/social/retweet/" and Calls StreamAPI with 
@@ -442,7 +442,7 @@ $(document).on("click",".favorite-status", function(e)
      var streamId = $(this).attr("stream-id");
      var tweetId = $(this).attr("tweet-id");
  	 var tweetIdStr = $(this).attr("tweet-id-str");
- 	 var tweetOwner = $(this).attr("owner-tweet");
+ 	 var tweetOwner = $(this).attr("tweet-owner");
  	 console.log(this);
 	
 	/* Sends get request to url "core/social/favorite/" and Calls StreamAPI with 
@@ -499,7 +499,7 @@ $(document).on("click",".undo-favorite-status", function(e)
      var streamId = $(this).attr("stream-id");
      var tweetId = $(this).attr("tweet-id");
  	 var tweetIdStr = $(this).attr("tweet-id-str");
- 	 var tweetOwner = $(this).attr("owner-tweet");
+ 	 var tweetOwner = $(this).attr("tweet-owner");
  	 console.log(this);
 	
 	/* Sends get request to url "core/social/undofavorite/" and Calls StreamAPI with 
@@ -563,7 +563,7 @@ $(document).on("click",".more-options", function(e)
   var streamId = $(this).attr("stream-id");
   var tweetId = $(this).attr("tweet-id");
   var tweetIdStr = $(this).attr("tweet-id-str");
-  var tweetOwner = $(this).attr("owner-tweet");
+  var tweetOwner = $(this).attr("tweet-owner");
   var elementId = $(this).attr("id");
     
   // Fetch stream from collection
@@ -592,32 +592,32 @@ $(document).on("click",".more-options", function(e)
 	    if(data.follow == "true")
 	    	{
 	      	  console.log("in unfollow");
-	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');
+	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');
 	    	}
 	    // Stream owner not following tweet owner then add follow option
 	    else if(data.follow == "false")
 	    	{
 	    	  console.log("in follow");
-	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
+	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
 	    	}
 	  
   	    // Tweet owner is stream owner's follower then add send DM option
 	    if(data.follower == "true")
            {	    	
    	         console.log("in send DM");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
            }
 	    
 	    // Check tweet owner is Block or Unblock
 	    if(data.blocked == "true")
            {	    	
    	         console.log("in unblock");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unblock @'+tweetOwner+'</a></li>');	    	
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unblock @'+tweetOwner+'</a></li>');	    	
             }	    
         else if(data.blocked == "false")
             {	    	
    	          console.log("in block");
-              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" owner-tweet='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Block @'+tweetOwner+'</a></li>');	    	
+              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Block @'+tweetOwner+'</a></li>');	    	
             }
 	  }).error(function (data)
 		  {
@@ -640,7 +640,7 @@ $(document).on("click",".follow-user", function(e)
 		 {
 			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
-			var tweetOwner = $(this).attr("owner-tweet");
+			var tweetOwner = $(this).attr("tweet-owner");
 			console.log(this);
 		    	
 			// Calls method to send request to follow user.
@@ -672,7 +672,7 @@ $(document).on("click",".unfollow-user", function(e)
  {
 	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
-	var tweetOwner = $(this).attr("owner-tweet");
+	var tweetOwner = $(this).attr("tweet-owner");
 	console.log(this);
     	
 	// Calls method to send request to unfollow user.
@@ -705,7 +705,7 @@ $(document).on("click",".block-user", function(e)
 		 {
 			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
-			var tweetOwner = $(this).attr("owner-tweet");
+			var tweetOwner = $(this).attr("tweet-owner");
 			console.log(this);
 		    	
 			// Calls method to send request to block user.
@@ -738,7 +738,7 @@ $(document).on("click",".unblock-user", function(e)
  {
 	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
-	var tweetOwner = $(this).attr("owner-tweet");
+	var tweetOwner = $(this).attr("tweet-owner");
 	console.log(this);
     	
 	// Calls method to send request to unblock user.
@@ -770,7 +770,7 @@ $(document).on("click",".delete-tweet", function(e)
 	
 	// Details to pass on to method.
 	var streamId = $(this).attr("stream-id");	
-	var tweetOwner = $(this).attr("owner-tweet");
+	var tweetOwner = $(this).attr("tweet-owner");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
 	console.log(this);

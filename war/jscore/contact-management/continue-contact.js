@@ -422,6 +422,9 @@ function deserialize_contact(contact, template) {
 			}
 		}
 	}
+	
+	// If contact is added from social suite, need to add website.
+	socialsuite_add_website();
 }
 
 /**

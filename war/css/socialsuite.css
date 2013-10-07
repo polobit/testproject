@@ -6,7 +6,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .columns{box-sizing:border-box;height:100%;overflow:visible;margin:0px 0px 0px 0px;}
 .column{margin:0px 5px 8px!important;background-color:#fcfcfc;font-size:1rem;
         white-space:normal;overflow:hidden;position:relative;border:1px solid #a1a1a1;border-radius:4px;}
-.column-header{box-sizing:border-box;position:relative;height:50px;padding:0 10px;color:#444;
+.column-header{box-sizing:border-box;position:relative;height:55px;padding:0 10px;padding-top:2px;color:#444;
                background-color:#eee;line-height:50px;border-bottom:1px solid #ddd}
 .margin-hs{margin-left:5px !important;margin-right:2px !important;}
 .social-type-icon{position:relative;bottom:12px;}
