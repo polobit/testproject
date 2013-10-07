@@ -131,13 +131,13 @@ jQuery.validator.setDefaults({
 				
 				 <% if(!StringUtils.isEmpty(error)){%>
 				 <div class="alert alert-error login-error">
-					<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+					<a class="close" data-dismiss="alert" href="#">&times</a><%=error%> 
 				</div>
 				<%}%>
 				
 				 <% if(!StringUtils.isEmpty(success)){%>
 				<div class="alert alert-success login-success">
-					<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
+					<a class="close" data-dismiss="alert" href="#">&times</a><%=success%> 
 				</div>
 				 <%}%>
 				
