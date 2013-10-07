@@ -28,7 +28,7 @@
 </style>
 
   <body>
-    <div class='navbar navbar-fixed-top'> 
+    <!-- <div class='navbar navbar-fixed-top'> 
     	<div class='navbar-inner'> 
     		<div class='container'> 
     			<a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'> </a> 
@@ -44,24 +44,22 @@
 				</div>			
 			</div> 
 		</div>
-	</div>
+	</div>-->
 	<div class="container">
 			<div class="error-container">
 				<h1>Oops!</h1> 
-				<h2>IE does not support Agile CRM</h2>
 				
 				<div class="error-details">
-					Agile CRM currently does not support Internet Explorer. <br/>
-					We use any recent version of  <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a>.
+					You may use any recent version of  <a href="https://support.google.com/chrome/answer/95346?hl=en">Chrome</a>, <a href="http://www.mozilla.org/en-US/firefox/features">Firefox</a> or <a href="http://support.apple.com/kb/dl1531">Safari</a>.
 				</div>
 							
-				<div class="error-actions">
+				<!--  <div class="error-actions">
 					<a class="btn btn-large btn-primary" href="http://www.agilecrm.com">
 						<i class="icon-chevron-left"></i>
 						&nbsp;
 						Continue						
 					</a>					
-				</div> <!-- /error-actions -->			
+				</div> --> <!-- /error-actions -->			
 			</div>
 	</div>
   </body>

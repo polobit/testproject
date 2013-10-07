@@ -222,6 +222,15 @@
 						</ul>
 
 						<ul class="nav pull-right">
+							
+							<li id="recent-menu" class="dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown" href="" style="padding-left:2px; padding-right:4px;">
+									<i class='caret'></i>
+								</a>
+								<ul class="dropdown-menu" style="width:25em; right:-11px;">
+								</ul>
+							</li>
+							
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="">Add New <i class='caret'></i></a>
 								<ul class="dropdown-menu">

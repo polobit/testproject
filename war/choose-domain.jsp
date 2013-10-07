@@ -124,6 +124,7 @@ padding-left:10px!important;
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Company"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
+						   	   <span style="color:#999">Company Name cannot be changed later</span>
 				   </div>
 				</form>
 				<div class="clearfix"></div>

@@ -102,6 +102,8 @@ function updateDeal(ele) {
 	
 	var value = ele.toJSON();
 	
+	add_recent_view(new BaseModel(value));
+	
 	var dealForm = $("#opportunityUpdateForm");
 	
 	deserializeForm(value, $("#opportunityUpdateForm"));
@@ -199,6 +201,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 			});
 			
 			var deal = data.toJSON();
+			
+			add_recent_view(new BaseModel(deal));
+			
 			// Updates data to timeline
 			if (App_Contacts.contactDetailView
 					&& Current_Route == "contact/"
