@@ -66,12 +66,16 @@ function agile_init_handlers() {
 
 		$('.note-add-waiting', el).show();
 		// Add Note
-		_agile.add_note(data, function(response) {
-
-			$('.note-add-waiting', el).hide(1);
-			// Show notes list, after adding note.
-			$('.gadget-notes-tab', el).trigger('click');
-		}, email.email);
+		_agile.add_note(data,
+				{success: function(val){
+							$('.note-add-waiting', el).hide(1);
+							// Show notes list, after adding note.
+							$('.gadget-notes-tab', el).trigger('click');
+					
+				}, error: function(val){
+									
+											
+				}}, email.email);
 	});
 
 	// Click event for add Task.
@@ -97,12 +101,16 @@ function agile_init_handlers() {
 
 		$('.task-add-waiting', el).show();
 		// Add Task
-		_agile.add_task(data, function(response) {
-
-			$('.task-add-waiting', el).hide(1);
-			// Show tasks list, after adding task.
-			$('.gadget-tasks-tab', el).trigger('click');
-		}, email.email);
+		_agile.add_task(data,
+				{success: function(val){
+							$('.task-add-waiting', el).hide(1);
+							// Show tasks list, after adding task.
+							$('.gadget-tasks-tab', el).trigger('click');
+			
+				}, error: function(val){
+									
+											
+				}}, email.email);
 	});
 
 	// Click event for add Deal.
@@ -128,12 +136,16 @@ function agile_init_handlers() {
 
 		$('.deal-add-waiting', el).show();
 		// Add Deal
-		_agile.add_deal(data, function(response) {
-
-			$('.deal', el).hide(1);
-			// Show deals list, after adding deal.
-			$('.gadget-deals-tab', el).trigger('click');
-		}, email.email);
+		_agile.add_deal(data,
+				{success: function(val){
+							$('.deal-add-waiting', el).hide(1);
+							// Show deals list, after adding deal.
+							$('.gadget-deals-tab', el).trigger('click');
+			
+				}, error: function(val){
+									
+											
+				}}, email.email);
 	});
 	
 	// Click event for add Campaign.
@@ -157,12 +169,16 @@ function agile_init_handlers() {
 		
 		$('.campaign-add-waiting', el).show();
 		// Add Campaign
-		_agile.add_campaign(data, function(response) {
-
-			$('.campaign-add-waiting', el).hide(1);
-			// Show deals list, after adding deal.
-			$('.gadget-campaigns-tab', el).trigger('click');
-		}, email);
+		_agile.add_campaign(data,
+				{success: function(val){
+							$('.campaign-add-waiting', el).hide(1);
+							// Show deals list, after adding deal.
+							$('.gadget-campaigns-tab', el).trigger('click');
+					
+				}, error: function(val){
+									
+											
+				}}, email);
 	});
 
 	// Click event for add Score.
@@ -176,11 +192,16 @@ function agile_init_handlers() {
 		var Old_Score = parseInt($.trim($('.score-value', el).text()), 10);
 		$('.score-value', el).text(Old_Score + 1);
 		// Add Score
-		_agile.add_score(1, function(response) {
-			// Merge Server response object with Contact_Json
-			// object.
-			$.extend(Contacts_Json[email], response);
-		}, email);
+		_agile.add_score(1,
+				{success: function(response){
+							// Merge Server response object with Contact_Json
+							// object.
+							$.extend(Contacts_Json[email], response);
+					
+				}, error: function(val){
+									
+											
+				}}, email);
 	});
 
 	// Click event for subtract Score.
@@ -196,11 +217,16 @@ function agile_init_handlers() {
 		if (Old_Score > 0) {
 			$('.score-value', el).text(Old_Score - 1);
 			// Subtract Score
-			_agile.add_score(-1, function(response) {
-				// Merge Server response object with Contact_Json
-				// object.
-				$.extend(Contacts_Json[email], response);
-			}, email);
+			_agile.add_score(-1,
+					{success: function(response){
+								// Merge Server response object with Contact_Json
+								// object.
+								$.extend(Contacts_Json[email], response);
+						
+					}, error: function(val){
+										
+												
+					}}, email);
 		}
 	});
 
