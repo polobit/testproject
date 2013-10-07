@@ -31,13 +31,18 @@ function agile_init_handlers() {
 		// Show saving image.
 		$('.contact-add-waiting', el).show();
 		// Add contact
-		_agile.create_contact(data, function(response) {
-			// Hide saving image.
-			$('.contact-add-waiting', el).hide(1);
-			
-			// Generate UI.
-			agile_create_contact_ui(el, that, data.email, response);
-		});
+		_agile.create_contact(data, 
+				{success: function(val){
+							// Hide saving image.
+							$('.contact-add-waiting', el).hide(1);
+							// Generate UI.
+							agile_create_contact_ui(el, that, data.email, val);
+							
+				}, error: function(val){
+					
+							$('.contact-add-waiting', el).hide(1);
+							$('.contact-add-status', el).text(val.error).show().delay(5000).hide(1);
+				}});
 	});
 
 	// Click event for add Note.
@@ -434,11 +439,17 @@ function agile_init_handlers() {
 		agile_gadget_adjust_width(el, $(".contact-search-waiting", el), true);
 		$('.contact-search-waiting', el).show();
 		// Get contact status based on email.
-		agile_getContact(email, function(val) {
-			
-			// Generate UI.
-			agile_create_contact_ui(el, that, email, val);
-		});
+		_agile.get_contact(email, 
+				{success: function(val){
+							// Generate UI.
+							agile_create_contact_ui(el, that, email, val);
+							
+				}, error: function(val){
+					
+							val.id = null;
+							// Generate UI.
+							agile_create_contact_ui(el, that, email, val);
+		}});
 	});
 
 	// Click event for toggle show contact.
