@@ -405,7 +405,10 @@ public class SalesforceContactToAgileContact
 		{
 			// checks for duplicate emails and skips contact
 			if (ContactUtil.isExists(jsonObject.getString("Email")))
-				return ContactUtil.searchContactByEmail(jsonObject.getString("Email"));
+				agileContact = ContactUtil.searchContactByEmail(jsonObject.getString("Email"));
+
+			System.out.println("In save contact - agile contact ");
+			System.out.println(agileContact);
 
 			fields.add(new ContactField(Contact.EMAIL, jsonObject.getString("Email"), null));
 		}
