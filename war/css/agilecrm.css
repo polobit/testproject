@@ -985,3 +985,12 @@ overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
 		
 }
 
+/* Disable drop-down menu item, add class="disabled" to <a>
+Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
+*/
+.dropdown-menu a.disabled,
+.dropdown-menu a.disabled:hover{
+	background-color: #ffffff; 
+	color: #000000; 
+}
+

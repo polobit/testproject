@@ -135,9 +135,8 @@ $(function(){
        					type: 'DELETE',
        					success: function()
        					{
-       						console.log(tagsCollection);
-       						tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-       						console.log(tagsCollection);
+       						if(tagsCollection)
+       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
        					}
        				});
        			}
