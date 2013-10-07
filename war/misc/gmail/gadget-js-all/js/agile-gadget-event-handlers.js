@@ -256,17 +256,21 @@ function agile_init_handlers() {
 			$('.tag-waiting', el).show("fast");
 			
 			// Add Tags
-			_agile.add_tag(tags.tags, function(response) {
-
-				$('.tag-waiting', el).hide();
-				// Merge Server response object with Contact_Json
-				// object.
-				$.extend(Contacts_Json[email.email], response);
-				// Add tag to list.
-				agile_build_tag_ui($("#added_tags_ul", el), response);
-				$(".toggle-tag", el).show("medium");
-				agile_gadget_adjust_height();
-			}, email.email);
+			_agile.add_tag(tags.tags,
+					{success: function(response){
+								$('.tag-waiting', el).hide();
+								// Merge Server response object with Contact_Json
+								// object.
+								$.extend(Contacts_Json[email.email], response);
+								// Add tag to list.
+								agile_build_tag_ui($("#added_tags_ul", el), response);
+								$(".toggle-tag", el).show("medium");
+								agile_gadget_adjust_height();		
+						
+					}, error: function(val){
+										
+												
+					}}, email.email);
 		}
 		// If tags are not entered, hide form.
 		else {
@@ -289,17 +293,21 @@ function agile_init_handlers() {
 		});
 		
 		// Remove Tag
-		_agile.remove_tag(tag, function(response) {
-
-			$('.tag-waiting', el).hide();
-			// Merge Server response object with Contact_Json
-			// object.
-			$.extend(Contacts_Json[email], response);
-			// Removing tag from list.
-			agile_build_tag_ui($("#added_tags_ul", el), response);
-			$('.toggle-tag', el).show("medium");
-			agile_gadget_adjust_height();
-		}, email);
+		_agile.remove_tag(tag,
+				{success: function(response){
+							$('.tag-waiting', el).hide();
+							// Merge Server response object with Contact_Json
+							// object.
+							$.extend(Contacts_Json[email], response);
+							// Removing tag from list.
+							agile_build_tag_ui($("#added_tags_ul", el), response);
+							$('.toggle-tag', el).show("medium");
+							agile_gadget_adjust_height();		
+					
+				}, error: function(val){
+									
+											
+				}}, email);
 	});
 
 	// Click event for show add tag.
@@ -389,37 +397,40 @@ function agile_init_handlers() {
 		agile_get_gadget_template("gadget-deal-template", function(data) {
 
 			// Get campaign work-flow data.
-			_agile.get_milestones(function(response){
-				console.log(response);
-				
-				Milestone_Array = response.milestones.split(",");
-				for(var loop in Milestone_Array)
-					Milestone_Array.splice(loop, 1, Milestone_Array[loop].trim());
-				
-				// Take contact data from global object variable.
-				var json = Contacts_Json[el.closest(".show-form").data("content")];
-				json.milestones = Milestone_Array;
-				
-				// Compile template and generate UI.
-				var Handlebars_Template = getTemplate("gadget-deal", json, 'no');
-				// Insert template to container in HTML.
-				that.closest(".gadget-contact-details-tab").find(".gadget-deals-tab-list")
-					.html($(Handlebars_Template));
-				$('.gadget-deals-tab a', el).tab('show');
-				$('.gadget-deals-tab-list', el).show();
-				/*
-				 * Load and apply Bootstrap date picker on text
-				 * box in Deal form.
-				 */
-				agile_load_datepicker($('.deal-calender', el), function() {
-					$('.gadget-deals-tab a', el).tab('show');
-					$('.gadget-deals-tab-list', el).show();
-					// Adjust gadget height.
-					agile_gadget_adjust_height();
-				});
-				// Adjust gadget height.
-				agile_gadget_adjust_height();
-			});
+			_agile.get_milestones(
+					{success: function(response){
+								Milestone_Array = response.milestones.split(",");
+								for(var loop in Milestone_Array)
+									Milestone_Array.splice(loop, 1, Milestone_Array[loop].trim());
+								
+								// Take contact data from global object variable.
+								var json = Contacts_Json[el.closest(".show-form").data("content")];
+								json.milestones = Milestone_Array;
+								
+								// Compile template and generate UI.
+								var Handlebars_Template = getTemplate("gadget-deal", json, 'no');
+								// Insert template to container in HTML.
+								that.closest(".gadget-contact-details-tab").find(".gadget-deals-tab-list")
+									.html($(Handlebars_Template));
+								$('.gadget-deals-tab a', el).tab('show');
+								$('.gadget-deals-tab-list', el).show();
+								/*
+								 * Load and apply Bootstrap date picker on text
+								 * box in Deal form.
+								 */
+								agile_load_datepicker($('.deal-calender', el), function() {
+									$('.gadget-deals-tab a', el).tab('show');
+									$('.gadget-deals-tab-list', el).show();
+									// Adjust gadget height.
+									agile_gadget_adjust_height();
+								});
+								// Adjust gadget height.
+								agile_gadget_adjust_height();		
+						
+					}, error: function(val){
+										
+												
+					}});
 		});
 	});
 	
@@ -436,18 +447,22 @@ function agile_init_handlers() {
 		agile_get_gadget_template("gadget-campaign-template", function(data) {
 
 			// Get campaign work-flow data.
-			_agile.get_workflows(function(response){
-				console.log(response);
-				// Compile template and generate UI.
-				var Handlebars_Template = getTemplate("gadget-campaign", response, 'no');
-				// Insert template to container in HTML.
-				that.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
-						.html($(Handlebars_Template));
-				$('.gadget-campaigns-tab a', el).tab('show');
-				$('.gadget-campaigns-tab-list', el).show();
-				// Adjust gadget height.
-				agile_gadget_adjust_height();
-			});
+			_agile.get_workflows(
+					{success: function(response){
+								// Compile template and generate UI.
+								var Handlebars_Template = getTemplate("gadget-campaign", response, 'no');
+								// Insert template to container in HTML.
+								that.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
+										.html($(Handlebars_Template));
+								$('.gadget-campaigns-tab a', el).tab('show');
+								$('.gadget-campaigns-tab-list', el).show();
+								// Adjust gadget height.
+								agile_gadget_adjust_height();		
+						
+					}, error: function(val){
+										
+												
+					}});
 		});
 	});
 
@@ -549,21 +564,25 @@ function agile_init_handlers() {
 
 		$(".tab-waiting", el).show();
 		// Get Notes.
-		_agile.get_notes(function(response) {
-			
-			// Load Date formatter libraries.
-			head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
-				agile_get_gadget_template("gadget-notes-list-template", function(data) {
-					$(".tab-waiting", el).hide();
-					// Fill notes list in tab.
-					$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
-					// Adjust gadget height.
-					agile_gadget_adjust_height();
-				});
-				// Apply date formatter on date/time field.
-				$("time", el).timeago();
-			});
-		}, email);
+		_agile.get_notes(
+				{success: function(response){
+							// Load Date formatter libraries.
+							head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
+								agile_get_gadget_template("gadget-notes-list-template", function(data) {
+									$(".tab-waiting", el).hide();
+									// Fill notes list in tab.
+									$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
+									// Adjust gadget height.
+									agile_gadget_adjust_height();
+								});
+								// Apply date formatter on date/time field.
+								$("time", el).timeago();
+							});		
+					
+				}, error: function(val){
+									
+											
+				}}, email);
 	});
 	
 	// Click event for tasks tab.
@@ -579,18 +598,22 @@ function agile_init_handlers() {
 		
 		$(".tab-waiting", el).show();
 		// Get Tasks.
-		_agile.get_tasks(function(response) {
-			
-			agile_get_gadget_template("gadget-tasks-list-template", function(data) {
-				$(".tab-waiting", el).hide();
-				// Fill tasks list in tab.	
-				$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
-				$('.gadget-tasks-tab-list', el).show();
-				agile_gadget_adjust_height();
-			});
-			// Apply date formatter on date/time field.
-			$("time", el).timeago();
-		}, email);
+		_agile.get_tasks(
+				{success: function(response){
+							agile_get_gadget_template("gadget-tasks-list-template", function(data) {
+								$(".tab-waiting", el).hide();
+								// Fill tasks list in tab.	
+								$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
+								$('.gadget-tasks-tab-list', el).show();
+								agile_gadget_adjust_height();
+							});
+							// Apply date formatter on date/time field.
+							$("time", el).timeago();		
+					
+				}, error: function(val){
+									
+											
+				}}, email);
 	});
 	
 	// Click event for deals tab.
@@ -606,18 +629,22 @@ function agile_init_handlers() {
 		
 		$(".tab-waiting", el).show();
 		// Get Deals.
-		_agile.get_deals(function(response) {
-			
-			agile_get_gadget_template("gadget-deals-list-template", function(data) {
-				$(".tab-waiting", el).hide();
-				// Fill deals list in tab.	
-				$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
-				$('.gadget-deals-tab-list', el).show();
-				agile_gadget_adjust_height();
-			});
-			// Apply date formatter on date/time field.
-			$("time", el).timeago();
-		}, email);
+		_agile.get_deals(
+				{success: function(response){
+							agile_get_gadget_template("gadget-deals-list-template", function(data) {
+								$(".tab-waiting", el).hide();
+								// Fill deals list in tab.	
+								$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
+								$('.gadget-deals-tab-list', el).show();
+								agile_gadget_adjust_height();
+							});
+							// Apply date formatter on date/time field.
+							$("time", el).timeago();
+					
+				}, error: function(val){
+									
+											
+				}}, email);
 	});
 	
 	// Click event for campaigns tab.
@@ -633,28 +660,32 @@ function agile_init_handlers() {
 		
 		$(".tab-waiting", el).show();
 		// Get Campaigns.
-		_agile.get_campaign_logs(function(response) {
-			
-			agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
-				$(".tab-waiting", el).hide();
-				var lib_json = {};
-				// Set library path for campaign link, check for local host.
-				if(Is_Localhost)
-					lib_json["ac_path"] = Lib_Path;
-				else{
-					lib_json["ac_path"] = "https://"+ agile_id.namespace +".agilecrm.com/";
-				}
-				lib_json["lib_path"] = Lib_Path;
-				lib_json["response"] = response; 
-				
-				// Fill campaigns list in tab.
-				$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', lib_json, 'no'));
-				$('.gadget-campaigns-tab-list', el).show();
-				agile_gadget_adjust_height();
-			});
-			// Apply date formatter on date/time field.
-			$("time", el).timeago();
-		}, email);
+		_agile.get_campaign_logs(
+				{success: function(response){
+							agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
+								$(".tab-waiting", el).hide();
+								var lib_json = {};
+								// Set library path for campaign link, check for local host.
+								if(Is_Localhost)
+									lib_json["ac_path"] = Lib_Path;
+								else{
+									lib_json["ac_path"] = "https://"+ agile_id.namespace +".agilecrm.com/";
+								}
+								lib_json["lib_path"] = Lib_Path;
+								lib_json["response"] = response; 
+								
+								// Fill campaigns list in tab.
+								$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', lib_json, 'no'));
+								$('.gadget-campaigns-tab-list', el).show();
+								agile_gadget_adjust_height();
+							});
+							// Apply date formatter on date/time field.
+							$("time", el).timeago();		
+					
+				}, error: function(val){
+									
+											
+				}}, email);
 	});
 	
 	// Click event for toggle add contact.
