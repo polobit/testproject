@@ -101,15 +101,15 @@ padding-left:10px!important;
 	<div class="account-container">
 		<div class="content clearfix">
 				 <h1>Enter Your Domain</h1>
-				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
+				 <form name='choose_domain' id="choose_domain" method='post' style="padding:10px 0px 0px;border-top: 1px dotted #CCC;">
 						<div id="domain-error"></div>
 					 <h3><small>Enter your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
-          				<input id='subdomain' type="text" placeholder="Type Your Domain"
+          				<input id='subdomain' type="text" placeholder="Company"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				     </div>
 				</form>
-				<div style="margin-left:30%"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
+				<div style="float:right;"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
 				
 					<div class="clearfix"></div>
 		
@@ -143,7 +143,7 @@ padding-left:10px!important;
 					//shows error message
 					if(!error)error = "Domain should be 4 to 12 characters."
 					$("#domain-error").html('<div class="alert alert-error domain-error">'
-							+ '<a class="close" data-dismiss="alert" href="#">×</a>'+ error +'</div>');
+							+ '<a class="close" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
 					error = "";
 					return false;
 				}
