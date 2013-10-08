@@ -37,12 +37,15 @@
 			if(!isValid())
 				return;
 			
+			$('#spinner-sales').show();
+			
+			
 				$.post("/core/api/salesforce/save", $(form).serialize(), function(data)
 				{
 					
 					$("#salesforce_import").html('<br /><div class="well" style="margin-left:10px">' +
 							
-							'<legend>Select the options to import from Salesforce</legend>' + 
+							'<legend>Select the items to import from Salesforce</legend>' + 
 
 							'<form action="" method="post"  id="form">' + 
 
@@ -51,27 +54,27 @@
 							
 										'<div style="margin-left: 50px;"> ' + 
 					                        '<input name="accounts" id="salesforce_accounts" type="checkbox" style="vertical-align:top; " value="true" checked="checked"/>' + 
-											'<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Accounts</label>' + 
+											'<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Accounts<br/><small> Accounts will be saved as Companies </small></label>' + 
 					                    '</div>' + 
 					                    
 					                    '<div style="margin-left: 50px;">' + 
 					                        '<input name="leads" id="salesforce_leads" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-											'<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Leads</label>' + 
+											'<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Leads<br/><small> Leads will be saved as Contacts </small></label>' + 
 					                    '</div>' +
 					                    
 					                    '<div style="margin-left: 50px;">' + 
 					                         '<input name="contacts" id="salesforce_contacts" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-											 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Contacts</label>' + 
+											 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Contacts<br/><small> Contacts will be saved as Contacts </small></label>' + 
 					                    '</div>' +
 					                    
 					                    '<div style="margin-left: 50px;">' + 
 					                         '<input name="deals" id="salesforce_deals" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-											 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Deals</label>' + 
+											 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Deals<br/><small> Deals will be saved as Deals in Agile CRM. <br/> Salesforce milestones will also be imported.</small></label>' + 
 					                    '</div>' + 
 					                    
 					                    '<div style="margin-left: 50px;">' + 
 					                         '<input name="cases" id="salesforce_cases" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-											 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Cases</label>' + 
+											 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Cases<br/><small> Cases will be saved as Cases in Agile CRM.</small></label>' + 
 					                    '</div>' + 
 					                    
 					                    '<div class="clearfix"><a id="salesforce_import_options" class="btn pull-right" style="text-decoration: none; margin-right: 30px;">Import</a></div>' +
@@ -82,7 +85,7 @@
 				}).error(function(data)
 				{
 					$("#salesforce-error").html(data.responseText);
-					
+					$('#spinner-sales').hide();
 					$("#salesforce-error").show();
 				});
 			
@@ -230,10 +233,11 @@ label.error {
 						placeholder="API key" name="apiKey"></input>
 				</div>
 			</div>
-			<div class="clearfix">
-			<a id="save_salesforce_prefs" class="btn pull-right"
+			<div class="clearfix"><div class="pull-right">
+			<span><img src="img/ajax-spinner.gif" id="spinner-sales" style="display:none;"></img></span>
+			<a id="save_salesforce_prefs" class="btn"
 				style="text-decoration: none; margin-right: 30px;">Next</a>
-			</div>
+			</div></div>
 			
 			
 		</form>
