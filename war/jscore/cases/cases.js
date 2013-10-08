@@ -137,6 +137,8 @@ function updatecases(ele)
 {
 	var value = ele.toJSON();
 	
+	add_recent_view(new BaseModel(value));
+	
 	var casesForm = $("#casesUpdateForm");
 	
 	deserializeForm(value,$("#casesUpdateForm"));
@@ -216,7 +218,7 @@ function savecases(formId, modalId, saveBtn, json)
 			
 			var cases = data.toJSON();
 			
-			
+			add_recent_view(new BaseModel(cases));
 			
 			// Updates data to timeline
 			/*If(Contact-Details) page - then adjust timeline*/			

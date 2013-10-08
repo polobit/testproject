@@ -826,7 +826,7 @@ $(function()
 								var count = countJsonProperties(address);
 
 								el = el
-										.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:-5px;padding-top:3px;"><span>');
+										.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:0px;padding-top:3px;"><span>');
 
 								$.each(address, function(key, val)
 								{
@@ -1418,6 +1418,25 @@ $(function()
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('check_json_length', function(content, length, options)
+	{
+		var json_length = 0;
+		for ( var prop in content)
+		{
+			json_length++;
+		}
+		
+		if (json_length == parseInt(length))
+		{
+			for ( var prop in content)
+			{
+				return options.fn({ property : prop, value : content[prop], last : true});
+			}
+		}
+
+		return options.inverse(content);
+	});
+	
 	Handlebars.registerHelper('iterate_json', function(context, options)
 	{
 		var result = "";

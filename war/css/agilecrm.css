@@ -952,3 +952,45 @@ overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@media (min-width: 980px) and (max-width: 1201px)  {
+	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu li:not(:nth-child(n+3)) {
+		display:none;
+	}
+}
+
+
+
+@media (min-width: 1200px) and (max-width: 1250px)  {
+	.agile-menu  > li:nth-child(n + 9):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
+		display:none;
+	}
+
+}
+
+@media (min-width: 1251px) {
+
+	#more-menu {
+		display:none;
+	}
+		
+}
+
+@media (max-width: 979px) {
+	#more-menu {
+		display:none;
+	}
+		
+}
+
+/* Disable drop-down menu item, add class="disabled" to <a>
+Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
+*/
+.dropdown-menu a.disabled,
+.dropdown-menu a.disabled:hover{
+	background-color: #ffffff; 
+	color: #000000; 
+}
+
