@@ -412,13 +412,13 @@ $(function()
 	// To show milestones as sortable list
 	Handlebars.registerHelper('milestone_ul', function(data)
 	{
-		var html = "<ul class='milestone-value-list tagsinput' style='list-style:none;'>";
+		var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
 		if(data)
 		{
 			var milestones = data.split(",");
 			for (var i in milestones)
 			{
-				html += "<li class='tag' data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>";
+				html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>";
 			}
 		}
 		html += "</ul>";
