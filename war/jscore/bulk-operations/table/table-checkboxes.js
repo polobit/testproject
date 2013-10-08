@@ -60,10 +60,7 @@ $(function(){
 		
 		$(el).find('#delete-checked').remove();
 		
-		if($(table).attr("id") === "active-campaign")
-			$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Remove from Campaign</a>');
-		else
-			$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
+		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
 			
 		// Sorts the tables based on their column values
 		sort_tables(table_element);

@@ -16,7 +16,7 @@
                 <div class="box-right">
                     <h3>You do not have any active subscriber currently.</h3>
                     <div class="text">
-                        All active subscribers are removed from campaign successfully.
+                       Active subscribers are the contacts in the added campaign queue.
                     </div>
                 </div>
             </div>
@@ -28,19 +28,20 @@
 	<div class="span10">
  		<div class="data">
         	<div class="data-container">
-		    	<div class="btn btn-danger delete-checked-contacts" id="remove-active-from-campaign" disabled="disabled" style="top: -10px; margin-left:5px; float: left;"> Remove from Campaign</div>
+		    	<div class="btn delete-checked-contacts" id="remove-active-from-campaign" disabled="disabled" style="top: -10px; margin-left:5px; float: left;"> Delete</div>
             	<div class="btn" id="refresh-active-contacts" campaign_id="{{get_campaign_id this}}" style="margin-left: 5px;" title="Refresh"><i class="icon-refresh"></i></div>
             	<br/>
             	<br/>
-            	<div  class="btn-group pull-left" style="margin-left: 5px; display: block; " id="bulk-select"></div>
+            	<!-- Shows selected contacts list and offer to select all if current list is more than the page-size -->
+                <div  class="btn-group pull-left" style="margin-left: 5px; display: block; " id="bulk-select"></div>
             	<br/>
             	<br/>
             	<table class="table table-striped showCheckboxes" url="core/api/bulk/update?workflow_id={{get_campaign_id this}}&action_type=REMOVE_ACTIVE_SUBSCRIBERS" id="active-campaign">
                 	<thead>
                     	<tr>
                         	<th>Contact</th>
-                        	<th>Campaign Start Date</th>
-                        	<th>Other Active/Done Campaigns</th>
+                        	<th>Campaign Date</th>
+                        	<th>Campaigns</th>
                     	</tr>
                 	</thead>
                 	<tbody id="workflow-active-contacts-model-list" route="contact/">
@@ -82,12 +83,12 @@
            
          {{!-- Shows Active campaigns separated by comma --}}
          {{#if this.active}} 
-         <div>
+         <div style="white-space: nowrap; width: 30em; overflow: hidden; text-overflow: ellipsis;">
            Active - {{#toLinkTrigger this.active}}<a href="#workflow/{{campaign_id}}" class="workflow-results">{{#if campaign_name}}{{campaign_name}}{{else}} Active Campaign {{/if}}</a>{{/toLinkTrigger}}
          </div>
          {{/if}}
          {{#if this.done}}
-         <div>
+         <div style="white-space: nowrap; width: 30em; overflow: hidden; text-overflow: ellipsis;">
          	Done - {{#toLinkTrigger this.done}}<a href="#workflow/{{campaign_id}}" class="workflow-results">{{#if campaign_name}}{{campaign_name}}{{else}} Done Campaign {{/if}}</a>{{/toLinkTrigger}}
          </div>
          {{/if}} 
