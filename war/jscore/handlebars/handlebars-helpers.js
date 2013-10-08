@@ -1418,6 +1418,25 @@ $(function()
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('check_json_length', function(content, length, options)
+	{
+		var json_length = 0;
+		for ( var prop in content)
+		{
+			json_length++;
+		}
+		
+		if (json_length == parseInt(length))
+		{
+			for ( var prop in content)
+			{
+				return options.fn({ property : prop, value : content[prop], last : true});
+			}
+		}
+
+		return options.inverse(content);
+	});
+	
 	Handlebars.registerHelper('iterate_json', function(context, options)
 	{
 		var result = "";
