@@ -162,7 +162,8 @@ $(function(){
 		e.preventDefault();
 		
 	    // Add Tags
-		var new_tags = get_new_tags('addTags').trim();
+		var new_tags = get_new_tags('addTags');
+		if(new_tags)new_tags=new_tags.trim();
 		$('#add-tags').css("display", "block");
 		$("#addTagsForm").css("display", "none");
 		
