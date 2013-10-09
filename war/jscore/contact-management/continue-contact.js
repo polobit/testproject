@@ -158,8 +158,9 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	{
     		obj.tags = [];
     		
-    		if(obj['tagsWithTime'].length == 0)
+    		if(!obj['tagsWithTime'] || obj['tagsWithTime'].length == 0)
     		{
+    			obj['tagsWithTime'] = [];
     			$.each(tags[0].value, function(index, value) {
     				obj.tagsWithTime.push({"tag": value});
     			});
