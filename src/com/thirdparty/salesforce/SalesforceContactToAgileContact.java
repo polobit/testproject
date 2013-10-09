@@ -273,7 +273,7 @@ public class SalesforceContactToAgileContact
 						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
 						Date date = formatter.parse(jsonObject.getString("CloseDate"));
 						System.out.println(date.getTime());
-						agileDeal.close_date = date.getTime();
+						agileDeal.close_date = date.getTime() / 1000;
 
 					}
 					catch (ParseException e)

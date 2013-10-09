@@ -155,6 +155,11 @@ $(function()
 			e.preventDefault();
 
 			var tags = get_tags('tagsBulkForm');
+			
+			// To add input field value as tags
+			var tag_input = $('#addBulkTags').val();
+			if(tag_input != "")
+				tags[0].value.push(tag_input);
 
 			if (tags[0].value.length > 0)
 			{

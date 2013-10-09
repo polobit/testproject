@@ -60,12 +60,12 @@ $(function(){
     	
     	var new_milestone = $("#add_new_milestone").val().trim();
     	
-    	if(!new_milestone || new_milestone.length<=0 || (/^\s*$/).test(new_milestone))
+    	if(!new_milestone || new_milestone.length <= 0 || (/^\s*$/).test(new_milestone))
 		{
 			return;
 		}
 
-    	// To add a milestone when "," or "enter" keydown and check input is not empty
+    	// To add a milestone when input is not empty
     	if(new_milestone != "")
     	{
     		e.preventDefault();
@@ -78,7 +78,7 @@ $(function(){
     		
     		// Iterate over already present milestones, to check if this is a new milestone
     		milestone_list.find('li').each(function(index, elem){
-    			if(elem.getAttribute('data').toLowerCase() == new_milestone.toLowerCase())
+    			if($(elem).is( ":visible") && elem.getAttribute('data').toLowerCase() == new_milestone.toLowerCase())
     			{
     				add_milestone = false; // milestone exists, don't add
     				return false;
@@ -87,7 +87,7 @@ $(function(){
     		
     		if(add_milestone)
     		{
-    			milestone_list.append("<li class='tag' data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>");
+    			milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>");
     			fill_ordered_milestone();
     		}
     	}
@@ -169,15 +169,23 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 function setup_milestones(){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestone-value-list').sortable({
-		      cursor : "move",
 		      containment : "#milestone-values",
-		      scroll : false,
 		      // When milestone is dropped its input value is changed 
 		      update : function(event, ui) {
 		    	  fill_ordered_milestone();
 		        }
 	    });
 	});
+}
+
+/**
+ * To capitalize and trim the given string 
+ */
+function capitalize_string(str){
+	str = str.trim().replace(/\b[a-z]/g, function(x) {
+  		    return x.toUpperCase();
+  		});
+	return str;
 }
 
 /**
@@ -188,11 +196,17 @@ function fill_ordered_milestone(){
    	$.each($("ul.milestone-value-list").children(), function(index, data) { 
    		if($(data).is( ":visible"))
    		{
+   			// To capitalize the string
    	   		if(values != undefined)
-   	   			values = values + "," +(($(data).attr("data")).toString().trim());
+   	   			values = values + "," + capitalize_string(($(data).attr("data")).toString());
    	   		else 
-   	   			values = (($(data).attr("data")).toString().trim());
+   	   			values = capitalize_string(($(data).attr("data")).toString());
    		}
 	});
+   	
+   	// To remove the ending "," if present
+   	if(values && values.charAt((values.length)-1) == ",")
+   		values = values.slice(0, -1);
+   	
    	$("#milestonesForm").find( 'input[name="milestones"]' ).val(values); 
 }

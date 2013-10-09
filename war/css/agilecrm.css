@@ -865,7 +865,7 @@ tbody a.no-style-a {
 	border-radius:5px;
 }
 .milestone-column{
-	width:24.9%;
+	width:24.87%;
 	vertical-align:top;
 	border-right:1px solid #bbb;
 	display:inline-block;
@@ -879,6 +879,7 @@ tbody a.no-style-a {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+	text-transform: capitalize;
 }
 .milestone-column > ul {
 	height:468px;
@@ -905,6 +906,8 @@ tbody a.no-style-a {
 	background-color:#f8f8b9!important;
 	border: 1px solid #DDD!important;
 	color:black!important;
+	padding: 5px;
+	border-radius: 5px;
 }
 .milestone-value-list > li > div {
 	margin-left:3px;
@@ -983,5 +986,14 @@ overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
 		display:none;
 	}
 		
+}
+
+/* Disable drop-down menu item, add class="disabled" to <a>
+Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
+*/
+.dropdown-menu a.disabled,
+.dropdown-menu a.disabled:hover{
+	background-color: #ffffff; 
+	color: #000000; 
 }
 
