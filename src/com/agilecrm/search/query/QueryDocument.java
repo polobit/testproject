@@ -257,26 +257,38 @@ public class QueryDocument<T> implements QueryInterface
 	// Gets sorted documents
 	List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(index.search(query_string).getResults());
 
+	String cursorString = contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString();
 	/*
 	 * As text search returns only 1000 in a query, we fetch remaining
 	 * documents.
 	 */
-	if (contact_documents.size() == 1000 && contact_documents.get(999).getCursor() != null)
-	{
-	    options = QueryOptions
-		    .newBuilder()
-		    .setLimit(1000)
-		    .setCursor(
-			    Cursor.newBuilder().setPerResult(true)
-				    .build(contact_documents.get(999).getCursor().toWebSafeString()))
-		    .setFieldsToReturn("type").build();
 
-	    // Build query on query options
-	    query_string = Query.newBuilder().setOptions(options).build(query);
+	if (contact_documents.size() >= 1000 && contact_documents.get(contact_documents.size() - 1).getCursor() != null)
+	    do
+	    {
+		cursorString = contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString();
 
-	    // Fetches next 1000 documents and them to list
-	    contact_documents.addAll(new ArrayList<ScoredDocument>(index.search(query_string).getResults()));
-	}
+		System.out.println("while" + contact_documents.get(contact_documents.size() - 1).getCursor());
+		options = QueryOptions
+			.newBuilder()
+			.setLimit(1000)
+			.setCursor(
+				Cursor.newBuilder()
+					.setPerResult(true)
+					.build(contact_documents.get(contact_documents.size() - 1).getCursor()
+						.toWebSafeString())).setFieldsToReturn("type").build();
+
+		// Build query on query options
+		query_string = Query.newBuilder().setOptions(options).build(query);
+
+		// Fetches next 1000 documents and them to list
+		contact_documents.addAll(new ArrayList<ScoredDocument>(index.search(query_string).getResults()));
+		System.out.println("results fetched : " + contact_documents.size());
+	    } while (contact_documents.get(contact_documents.size() - 1).getCursor() != null
+		    && !StringUtils.equals(cursorString, contact_documents.get(contact_documents.size() - 1)
+			    .getCursor().toWebSafeString()));
+
+	System.out.println("total count  : " + contact_documents.size());
 
 	// Return datastore entities based on documents.
 	return getDatastoreEntities(contact_documents, Long.valueOf(contact_documents.size()));
@@ -495,6 +507,8 @@ public class QueryDocument<T> implements QueryInterface
 	    System.out.println(key);
 	    cursor = doc.getCursor().toWebSafeString();
 	}
+
+	// System.out.println(entityKeys);
 
 	try
 	{
