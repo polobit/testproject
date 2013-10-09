@@ -12,6 +12,8 @@ var dealsView;
 var tasksView;
 var casesView;
 
+var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+
 function fill_company_related_contacts(companyId, htmlId)
 {
 	$('#'+htmlId).html(LOADING_HTML);
@@ -77,6 +79,55 @@ $(function(){
 		})
 		
 	});	
+	
+	//to remove contact from active campaign.
+	$('.remove-active-campaign').die().live('click',function(e){
+		e.preventDefault();
+		
+		if(!confirm("Are you sure to remove "+$(this).attr("contact_name")+" from "+$(this).attr("campaign_name")+" campaign?"))
+			return;
+		
+		var campaign_id = $(this).closest('li').attr('data');
+		var contact_id;
+		
+		// Fetch contact id from model
+		if(App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+			contact_id = App_Contacts.contactDetailView.model.get('id');
+		
+	    // Url to delete
+		var deleteUrl = 'core/api/workflows/remove-active-subscriber/'+campaign_id+'/'+contact_id;
+	    
+	    var $removeActiveCampaign = $(this);
+	    
+	    $.ajax({
+	    	url: deleteUrl,
+	    	type: 'DELETE',
+	    	success: function(data){
+	    	
+	    	var contact_json = App_Contacts.contactDetailView.model.toJSON();
+	    	var campaign_status = contact_json.campaignStatus;
+	    	
+	    	// On success callback, remove from both UI and backbone contact model.
+	    	if(campaign_status !== undefined)
+	    		{
+	    			for(var i = 0,len = campaign_status.length;i<len;i++)
+	    			{
+	    				if(campaign_id === campaign_status[i].campaign_id)
+	    				{
+	    					// Remove from campaignStatus array of contact model
+	    					campaign_status.splice(i,1);
+	    					break;
+	    				}
+	    			}
+	    		}
+	    	
+	    	// Remove li 
+	    	$removeActiveCampaign.closest('li').remove();
+	    	
+	    	}
+	    });
+		
+	});
 /*	
 	$('.ativity-block-ul > li')
 	.live('mouseenter',function(){
@@ -480,65 +531,6 @@ $(function(){
         });
 	});	
 
-//	/**
-//	 * Subscribes the contact to the selected campaign on clicking "Add"
-//	 * button and activates the "Timeline" tab to inserts the campaign 
-//	 * related logs into time-line.  
-//	 */   
-//	$('#campaignSelect').die().live('change',function(e){
-//		e.preventDefault();
-//		
-//		var workflow_id = $('#campaignSelect option:selected').attr('value');
-//		
-//		if(!workflow_id){
-//			return;
-//		}
-//		
-//		$('.add-campaign').find('span.save-status').html(LOADING_HTML);
-//		
-//		var contact_id = App_Contacts.contactDetailView.model.id;
-//		var url = '/core/api/campaigns/enroll/' + contact_id + '/' + workflow_id;
-//
-//		if(!confirm("Are you sure to run selected campaign?"))
-//			return;
-//		
-//		// Gets logs related to a campaign
-//		$.get(url, function(data){
-//			$('.add-campaign').find('span.save-status img').remove();
-//			
-//			// Fetches logs and adds to timeline
-//			var LogsCollection = Backbone.Collection.extend({
-//				url: '/core/api/campaigns/logs/contact/' + contact_id + '/' + workflow_id,
-//			});
-//			var logsCollection = new LogsCollection();
-//			logsCollection .fetch({
-//				success: function(){
-//					
-//					// Activates timeline in contact detail tab and tab content
-//					activate_timeline_tab();
-//					
-//					// If timeline is not defined yet, calls setup_timeline for the first time
-//					if(timelineView.collection.length == 0){
-//						
-//						$.each(logsCollection.toJSON(), function(index, model) {
-//							timelineView.collection.add(model);
-//						});	
-//						
-//						setup_timeline(timelineView.collection.toJSON(), App_Contacts.contactDetailView.el, undefined);
-//					} else{
-//					
-//						// Inserts logs into time-line
-//						$.each(logsCollection.toJSON(), function(index, model) {
-//								var newItem = $(getTemplate("timeline", model));
-//								newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-//								$('#timeline').isotope( 'insert', newItem);
-//						});
-//					}
-//				}
-//			});
-//	   });
-//	});
-	
 	/**
 	 * Delete functionality for activity blocks in contact details
 	 */
@@ -623,7 +615,7 @@ function populate_send_email_details(el){
 	$("#emailForm", el).find( 'input[name="from"]' ).val(CURRENT_DOMAIN_USER.email);
 	// Fill hidden signature field using userprefs 
 	//$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
-	
+
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
 	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate, false, el);

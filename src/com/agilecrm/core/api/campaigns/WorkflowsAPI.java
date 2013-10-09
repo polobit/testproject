@@ -17,15 +17,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.datanucleus.util.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.cron.util.CronUtil;
 
 /**
  * <code>WorkflowsAPI</code> includes REST calls to interact with
@@ -217,6 +220,29 @@ public class WorkflowsAPI
 	JSONArray contactsArr = CampaignSubscribersUtil.insertCampaignId(workflow_id, contacts);
 
 	return contactsArr.toString();
+    }
+
+    /**
+     * Removes subscriber from Cron and updates status to REMOVED
+     * 
+     * @param workflowId
+     *            - workflow id.
+     * @param contactId
+     *            - contact id.
+     */
+    @Path("remove-active-subscriber/{campaign-id}/{contact-id}")
+    @DELETE
+    public void removeActiveSubscriber(@PathParam("campaign-id") String workflowId, @PathParam("contact-id") String contactId)
+    {
+	// if any one of the path params is empty
+	if (StringUtils.isEmpty(contactId) || StringUtils.isEmpty(contactId))
+	    return;
+
+	// Remove from Cron.
+	CronUtil.removeTask(workflowId, contactId);
+
+	// Updates CampaignStatus to REMOVE
+	CampaignStatusUtil.setStatusOfCampaign(contactId, workflowId, CampaignStatus.Status.REMOVED);
     }
 
 }

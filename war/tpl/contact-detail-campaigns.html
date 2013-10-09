@@ -1,12 +1,55 @@
 <script id="campaigns-collection-template" type="text/html">
-<div class="right add-campaign" style="margin-bottom:20px">
-   <!-- <select class="campaignSelect" id='campaignSelect' name="campaignSelect">
-        <option class="campaignSelectOptions" value="">
-            Add to Campaign...
-        </option>
-    </select>
-    <a class="btn" href="#" id="add-selected-campaign" name="add-selected-campaign" style="margin-left: 10px; margin-bottom:9px">Add</a>-->
-    <a class="btn right contact-add-campaign" href="#bulk-campaigns"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+<div style="margin-bottom:20px">
+{{#contact_model}}
+	<div>
+		 {{#contact_campaigns this "campaignStatus"}}
+         
+		 {{!-- Shows Active campaigns like tags --}}
+         {{#if this.active}} 
+         <div>
+           <h3 id="contact-active-campaigns" style="display: inline-block; margin-right: 5px">{{contactShortName}} is active in </h3> <ul class="tagsinput active-campaigns">
+                   {{#each this.active}}
+						<li class="tag" style="display:inline-block;" data="{{campaign_id}}"><span><a
+								class="anchor" href="#workflow/{{campaign_id}}">{{#if campaign_name}}{{campaign_name}}{{else}}Active Campaign{{/if}}</a><a
+								class="close remove-active-campaign" contact_name = "{{contactShortName}}" campaign_name="{{campaign_name}}" title="Remove from Campaign">&times</a></span></li> 
+					{{/each}}
+                    </ul>
+
+            <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+            <form id="add-to-campaign-form" class="show_campaigns_list" style="display:none;">
+            	<div class="control-group">
+                	<div class="controls">
+			        	<select id="campaign-select" class="required" name="campaign_id" style="margin-bottom: -1px;">
+                        	<option value="">Select...</option>
+                      	</select>
+				  	  	<span style="margin-left: 5px;"><a class="btn" id="add-to-campaign" href="#">Add</a></span>
+                      	<span style="margin-left: 5px;"><a class="btn" id="cancel-to-add-campaign" href="#">Cancel</a></span>
+                    </div> 
+			   </div>
+            </form> 
+         </div>
+         
+         {{else}}
+         
+         <a class="add-to-campaign" style="margin-top:1%;" href="#"><i class="icon-plus-sign"></i> Add {{getCurrentContactProperty "first_name"}} to Campaign</a>
+         	<form id="add-to-campaign-form" class="show_campaigns_list" style="display: none;">
+				<div class="control-group">
+                	<div class="controls">
+			        	<select id="campaign-select" class="required" name="campaign_id" style="margin-bottom: -1px;">
+                        	<option value="">Select...</option>
+                      	</select>
+				  	    <span style="margin-left: 5px;"><a class="btn" id="add-to-campaign" href="#">Add</a></span>
+                        <span style="margin-left: 5px;"><a class="btn" id="cancel-to-add-campaign" href="#">Cancel</a></span>
+                    </div> 
+			    </div>
+           </form> 
+         {{/if}}
+
+         {{/contact_campaigns}}
+    </div>
+
+{{/contact_model}}
+
 </div>
 <div class="clearfix"></div>
 		{{#unless this.length}}
@@ -25,8 +68,11 @@
         </div>
         {{/unless}}
         {{#if this.length}}
-          <div style="margin-top:10px"><h2>Campaign Log</h2></div>
-				<ul id="campaigns-model-list" class="ativity-block-ul"></ul>
+          <div style="margin-top:10px">
+		     
+              <h2>Campaign Log</h2>
+          </div>
+		  <ul id="campaigns-model-list" class="ativity-block-ul"></ul>
 		{{/if}}
 </script>
 
@@ -48,22 +94,22 @@
          <a class="email-subject" id={{time}} style="font-weight:bold" href="#collapse-{{time}}">{{Subject}}</a>
 	 </h4></br>
      <div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{time}}">
-				<div>
-         			<p>{{{Body}}}</p>
-				</div>
-      		</div>
-			<div id="collapse-{{time}}" class="collapse activity-email-collapse">
-				<ul class="email-headers">
-                	<li><strong>From:</strong> {{From}}</li> 
-						
-                	<li>
-						<div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
-							<strong>To:</strong> {{To}}
-						</div>
-					</li>
-           		</ul>
-       			<p style="margin-top:10px">{{{Body}}}</p>
-    		</div>
+	     <div>
+             <p>{{{Body}}}</p>
+		 </div>
+     </div>
+	
+	 <div id="collapse-{{time}}" class="collapse activity-email-collapse">
+	     <ul class="email-headers">
+             <li><strong>From:</strong> {{From}}</li> 
+			 <li>
+			     <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+				     <strong>To:</strong> {{To}}
+				 </div>
+			 </li>
+         </ul>
+       	 <p style="margin-top:10px">{{{Body}}}</p>
+    </div>
      
 {{else}}
 <h4><b>{{titleFromEnums log_type}}</b></h4></br>

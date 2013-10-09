@@ -1924,4 +1924,76 @@ $(function()
 		return options.fn(other_campaigns);
 		
 	});
+	
+     /**
+      * Returns Contact Model from contactDetailView collection.
+      * 
+      **/
+	Handlebars.registerHelper('contact_model',function(options){
+		
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		{
+			
+			// To show Active Campaigns list immediately after campaign assigned.
+			if(CONTACT_ASSIGNED_TO_CAMPAIGN)
+			{	
+				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+			
+				// fetches updated contact json
+				var contact_json = $.ajax(
+					 {
+					 type: 'GET',
+					 url: '/core/api/contacts/'+ App_Contacts.contactDetailView.model.get('id'),
+					 async:	false, 
+					 dataType: 'json'
+					 }).responseText;
+			
+				// Updates Contact Detail model
+				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
+            
+				return options.fn(JSON.parse(contact_json));
+			}
+			
+			// if simply Campaigns tab clicked, use current collection
+			return options.fn(App_Contacts.contactDetailView.model.toJSON());
+		}
+	});
+	
+	/**
+	 * Returns json object of active and done subscribers from contact object's
+	 * campaignStatus.
+	 **/
+	Handlebars.registerHelper('contact_campaigns',function(object, data,options){
+		
+		// if campaignStatus is not defined, return
+		if (object === undefined || object[data] === undefined)
+			return;
+
+		// Temporary json to insert active and completed campaigns
+		var campaigns = {};
+		
+		var active_campaigns = [];
+		var completed_campaigns=[];
+		
+		// campaignStatus object of contact
+		var campaignStatusArray = object[data];
+		
+		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+		{
+			// push all active campaigns
+			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+				active_campaigns.push(campaignStatusArray[i])
+				
+			// push all done campaigns
+			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+				completed_campaigns.push(campaignStatusArray[i]);
+		}
+		
+		campaigns["active"] = active_campaigns;
+		campaigns["done"] =  completed_campaigns;
+		
+		// apply obtained campaigns context within 
+	    //contact_campaigns block
+		return options.fn(campaigns);
+	});
 });
