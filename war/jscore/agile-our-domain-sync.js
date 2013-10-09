@@ -79,24 +79,20 @@ function our_domain_sync()
 		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
 		// Gets contact based on the the email of the user logged in
-		agile_getContact(CURRENT_DOMAIN_USER['email'], function(data)
-		{
-			Agile_Contact = data;
-
-			// If contact does not exist, new contact is created
-			// considering it is a new contact
-			if (!Agile_Contact["id"])
-			{
+		agile_getContact(CURRENT_DOMAIN_USER['email'], {
+			success: function(data){
+				Agile_Contact = data;
+				
+				// Shows noty
+				set_profile_noty();
+				
+				// Adds signup tag, if it is not added previously.
+				add_signup_tag();
+				
+			}, error: function(data){
 				var name = CURRENT_DOMAIN_USER['name'];
 				var first_name = name, last_name = name;
-
-				// Split name into first and last name
-				if (name.indexOf(' '))
-				{
-					first_name = name.substr(0, name.indexOf(' '));
-					last_name = name.substr(name.indexOf(' ') + 1);
-				}
-
+				
 				// Creates a new contact and assigns it to global value
 				_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name, "tags" : "Signup" },
 						function(data)
@@ -106,15 +102,7 @@ function our_domain_sync()
 							set_profile_noty();
 							add_custom_fields_to_our_domain();
 						});
-
-				return;
 			}
-			
-			// Shows noty
-			set_profile_noty();
-			
-			// Adds signup tag, if it is not added previously.
-			add_signup_tag();
 		});
 	}
 	catch (err)

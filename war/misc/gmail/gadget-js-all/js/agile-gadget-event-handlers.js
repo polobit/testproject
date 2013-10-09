@@ -478,7 +478,7 @@ function agile_init_handlers() {
 		
 		// Adjust width of mail list for Process icon.
 		agile_gadget_adjust_width(el, $(".contact-search-waiting", el), true);
-		$('.contact-search-waiting', el).show();
+		$('.contact-search-waiting', el).css('visibility','visible');
 		// Get contact status based on email.
 		_agile.get_contact(email, 
 				{success: function(val){
