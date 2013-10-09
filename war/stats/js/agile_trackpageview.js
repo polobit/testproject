@@ -64,10 +64,11 @@ function agile_setemailFromurl()
 			
 			// Get data
 			var k =  decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI("data").replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
-			if(!k) {return;}
+			if(k) {
 			
 			// Get and set email
 			agile_guid.set_email(JSON.parse(k).email);
+			}
 		}
 	}
 }
