@@ -397,14 +397,22 @@ $(function()
 	Handlebars.registerHelper('deals_by_milestones', function(data)
 	{
 		var html = "";
+		var count = Object.keys(data).length;
 		$.each(data, function(key, value)
 		{
-			html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
-			for ( var i in value)
+			if(count == 1 && key == "")
 			{
-				html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				html += '<div class="slate" style="padding:5px 2px;"><div class="slate-content" style="text-align:center;"><h3>You have no milestones defined</h3></div></div>';
 			}
-			html += "</ul></div>";
+			else
+			{
+				html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
+				for ( var i in value)
+				{
+					html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				}
+				html += "</ul></div>";
+			}
 		});
 		return html;
 	});
@@ -418,7 +426,7 @@ $(function()
 			var milestones = data.split(",");
 			for (var i in milestones)
 			{
-				html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>";
+				html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
 			}
 		}
 		html += "</ul>";
@@ -1186,9 +1194,6 @@ $(function()
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-		console.log(value);
-		console.log(parseInt(target));
-		console.log(parseInt(target) > value);
 		if (parseInt(target) > value)
 			return options.inverse(this);
 		else

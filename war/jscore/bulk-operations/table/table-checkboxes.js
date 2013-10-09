@@ -28,6 +28,12 @@ $(function(){
 		    return;
 		}
 		
+		if($(table_element).hasClass('no-sorting'))
+		{	
+		    console.log(table_element);
+		    return;
+		}
+		
 		if($('.grid-view', el).hasClass('showCheckboxes'))
 		{
 			if($(this).find('#delete-checked-grid').length == 0)

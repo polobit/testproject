@@ -87,7 +87,7 @@ $(function(){
     		
     		if(add_milestone)
     		{
-    			milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>");
+    			milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
     			fill_ordered_milestone();
     		}
     	}
@@ -207,6 +207,6 @@ function fill_ordered_milestone(){
    	// To remove the ending "," if present
    	if(values && values.charAt((values.length)-1) == ",")
    		values = values.slice(0, -1);
-   	
+
    	$("#milestonesForm").find( 'input[name="milestones"]' ).val(values); 
 }
