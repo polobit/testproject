@@ -44,7 +44,6 @@ function agile_json(URL, callback)
 	var ud = 'json' + (Math.random() * 100).toString().replace(/\./g, '');
 	window[ud] = function(data)
 	{
-		console.log(callback);
 		if(data['error'])
 			{
 				if(callback && typeof(callback['error']) == "function")

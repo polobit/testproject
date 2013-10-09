@@ -22,7 +22,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @SuppressWarnings("serial")
-public class UnbounceWebhook extends HttpServlet
+public class GravityForm extends HttpServlet
 {
     protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException
     {
@@ -35,7 +35,7 @@ public class UnbounceWebhook extends HttpServlet
 	    List<ContactField> properties = new ArrayList<ContactField>();
 
 	    // Read JSON data
-	    JSONObject obj = new JSONObject(req.getParameter("data.json"));
+	    JSONObject obj = new JSONObject(req.getParameter("data"));
 
 	    // Iterate over JSON data to get form fields
 	    Iterator<?> keys = obj.keys();
@@ -46,9 +46,6 @@ public class UnbounceWebhook extends HttpServlet
 
 		// Get value of form field
 		String value = obj.get(key).toString();
-		String regex = "\\[|\\]";
-		value = value.replaceAll(regex, "");
-		value = value.replaceAll("\"", "");
 
 		// Add property to list of properties
 		properties.add(buildProperty(key, value));
@@ -76,13 +73,13 @@ public class UnbounceWebhook extends HttpServlet
 
 	// Set field type to SYSTEM for name, email, company, title, phone, all
 	// other fields save as CUSTOM.
-	if (name.equals("name") || name.equals(Contact.FIRST_NAME) || name.equalsIgnoreCase("first name"))
+	if (name.equals(Contact.FIRST_NAME))
 	{
 	    field.name = Contact.FIRST_NAME;
 	    field.value = value;
 	    field.type = FieldType.SYSTEM;
 	}
-	else if (name.equals(Contact.LAST_NAME) || name.equalsIgnoreCase("last name"))
+	else if (name.equals(Contact.LAST_NAME))
 	{
 	    field.name = Contact.LAST_NAME;
 	    field.value = value;

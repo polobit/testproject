@@ -47,7 +47,27 @@ function agile_trackPageview(callback)
 		params += "&email=" + encodeURIComponent(agile_guid.get_email()); // get email																			// email
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
+	
+	agile_setemailFromurl();
 
 	// Callback
 	agile_json(agile_url, callback);
+}
+
+function agile_setemailFromurl()
+{
+	// Check if email present in cookie
+	if(!agile_guid.get_email())
+	{
+		// Check if fwd=cd url
+		if (window.location.href.search("fwd=cd")!==-1){
+			
+			// Get data
+			var k =  decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI("data").replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+			if(!k) {return;}
+			
+			// Get and set email
+			agile_guid.set_email(JSON.parse(k).email);
+		}
+	}
 }
