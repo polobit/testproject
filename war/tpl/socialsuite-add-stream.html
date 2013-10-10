@@ -1,3 +1,126 @@
+<script id="socialsuite-social-network-template" type="text/html">
+<div style="text-align: center;">
+<label style="font-size: 15px;"><b>Choose your Social Network</b></label> 
+<div class="row-fluid">
+  <div class="span5">
+ 	<a href="#social" id="twitter_option" class="pull-right network-type" style="text-decoration:none;padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;" value="TWITTER">
+      <i id="twitter_icon" class="icon-twitter icon-5x network-type-icon" title="Twitter"></i><br><b>Twitter</b>     
+    </a>
+  </div><!-- /.span5 -->
+  <div class="span4">				
+    <a href="#social" id="linkedin_option" class="pull-right network-type" style="text-decoration:none;padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;" value="LINKEDIN">						              
+	  <i id="linkedin_icon" class="icon-linkedin icon-5x network-type-icon" title="Linkedin"></i><br><b>Linkedin</b>	  
+	</a>					                
+  </div><!-- /.span4 -->
+</div>	<!-- /.row -->
+</div>
+</script>
+
+<script id="twitter-stream-type-template" type="text/html">
+<div style="text-align: center;">  
+  <div id="account_description" class="row-fluid">
+    <div class="span4"> 
+       <a style="text-decoration:none;"><i class="icon-twitter-sign icon-5x pull-right" style="padding-top:13px;" title="Selected Social Network is Twitter"></i></a>
+    </div>
+    <div class="span4">
+      <label id="account_description_label" style="padding-top: 33px;"></label>
+    </div>
+    <div class="span4">
+      <img id="twitter_profile_img_url" name="twitter_profile_img_url" class="pull-left" onload="onloadProfileImg()" src="">
+    </div>  	 						               						          						        
+  </div>  
+  <hr>
+  <div class="social-stream-types">	
+   <label style="font-size: 15px;"><b>Select the Stream Activity</b></label> 
+   <div class="row-fluid">
+    <div class="span3">
+     <div class="stream-type" id="home" value="Home" title="Home">
+ 	  <a>
+        <i class="icon-home icon-4x"></i><br>Home
+      </a>
+     </div>
+    </div><!-- /.span3 -->    
+    <div class="span3">
+     <div class="stream-type" id="retweets" value="Retweets" title="Retweets">
+ 	  <a>
+        <i class="icon-retweet icon-4x"></i><br>Retweets
+      </a>
+     </div>
+    </div><!-- /.span3 -->	
+	<div class="span3">
+     <div class="stream-type" id="sent" value="Sent" title="Sent">
+ 	  <a>
+        <i class="icon-share-alt icon-4x"></i><br>Sent
+      </a>
+     </div> 
+    </div><!-- /.span3 -->
+	<div class="span3">
+     <div class="stream-type" id="mentions" value="Mentions" title="Mentions">				
+      <a>						              
+	    <img style="width: 40px;height: 40px;" src="../img/socialsuite/mentions.png"><br>Mentions
+	  </a>
+	 </div>				                
+    </div><!-- /.span3 -->
+   </div><!-- /row-->
+   <div class="row-fluid">
+    <div class="span3">
+     <div class="stream-type" id="dm_inbox" value="DM_Inbox" title="DM Inbox">				
+      <a>						              
+	    <i class="icon-download-alt icon-4x"></i><br>DM Inbox
+	  </a>
+     </div>					                
+    </div><!-- /.span3 -->
+    <div class="span3">
+     <div class="stream-type" id="dm_outbox" value="DM_Outbox" title="DM Outbox"> 
+ 	  <a>
+        <i class="icon-upload-alt icon-4x"></i><br>DM Outbox
+      </a>
+     </div>
+    </div><!-- /.span3 -->  
+    <div class="span3">	
+     <div class="stream-type" id="favorites" value="Favorites" title="Favorites">			
+      <a>						              
+	    <i class="icon-star icon-4x"></i><br>Favorites
+	  </a>
+     </div>					                
+    </div><!-- /.span3 -->    
+    <div class="span3">
+     <div class="stream-type" id="search" value="Search" title="Search">		
+      <a>
+	    <i class="icon-search icon-4x"></i><br>Search
+	  </a>      
+     </div>					                
+    </div><!-- /.span3 -->     
+   </div>	<!-- /.row -->
+   <div id="search_stream_keyword" style="padding-top:5px;padding-right:34px;"></div>
+   <label id="stream_description_label" class="txt-mute" style="padding-top: 5px;">  </label> 
+  </div>
+</div>
+</script>
+
+<script id="linkedin-stream-type-template" type="text/html">
+<div class="social-stream-types" style="text-align: center;">
+<label style="font-size: 15px;"><b>Select the Stream Activity :</b></label> 
+<div class="row-fluid">
+  <div class="span5">
+   <div class="stream-type pull-right" id="all_updates" value="All_Updates" title="All Updates">
+ 	<a>
+      <i class="icon-home icon-4x"></i><br>All Updates
+    </a>
+   </div>
+  </div><!-- /.span5 -->
+  <div class="span4">
+   <div class="stream-type pull-right" id="my_updates" value="My_Updates" title="My Updates">				
+    <a>						              
+	  <i class="icon-share-alt icon-4x"></i><br>My Updates
+	</a>					                
+   </div>
+  </div><!-- /.span4 -->
+</div>	<!-- /.row -->
+<label id="stream_description_label" class="txt-mute" style="padding-top: 20px;">  </label>
+</div>
+</script>
+
 <!-- addStreamModal -->
 <div id="addStreamModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addStreamModalLabel" aria-hidden="true"
 		style="display: none;">
@@ -13,64 +136,19 @@
             		<input id="twitter_token" name="token" type="hidden" value="">
             		<input id="twitter_token_secret" name="secret" type="hidden" value="">    
             		<input id="twitter_account" name="screen_name" type="hidden" value="">
-                               		            		
-            		<div class="row">
-                		<div class="span5" id="streamDetails">
-                    		<div class="control-group">
-                        		<label class="control-label"><b>Social Network Type </b></label> 
-                        		<div class="controls">    
-                        		    <input id="network_type" name="network_type" type="hidden" value="">                        		
-                            		<select id="select_network_type" name="select_network_type">
-                            		    <option value="NONE" selected="selected">Select social network</option>
-  										<option value="TWITTER">Twitter</option>
-  										<option value="LINKEDIN">Linkedin</option>  						
-									</select>
-									<label id="network_type_description_label" class="txt-mute txt-small"></label>
-                        		</div>
-                    		</div>
-                    		<div id="select_stream" class="control-group">
-                        		<label class="control-label"><b>Stream Type </b></label> 
-                        		<div class="controls">                            		
-                        		    <input id="stream_type" name="stream_type" type="hidden" value="">
-                            		<select id="twitter_streams" name="twitter_streams" for="twitter">
-                            		    <option value="NONE" selected="selected">Select stream</option>
-  										<option id="home" value="Home"> Home</option>
-  										<option id="sent" value="Sent"> Sent</option>
-  										<option id="retweets" value="Mentions"> Mentions</option>
-  										<option id="search" value="Search"> Search</option>
-  										<option id="mentions" value="Retweets"> Retweets</option>
-  										<option id="favorites" value="Favorites"> Favorites</option>
-  										<option id="dm_inbox" value="DM_Inbox"> DM Inbox</option>
-  										<option id="dm_outbox" value="DM_Outbox"> DM Outbox</option>
-                                    </select>
-									<select id="linkedin_streams" name="linkedin_streams" for="linkedin">
-									    <option value="NONE" selected="selected">Select stream</option>
-  										<option id="all_updates" value="All_Updates"> All Updates</option>
-  										<option id="my_updates" value="My_Updates"> My Updates</option>
-									</select>
-									<label id="stream_description_label" class="txt-mute txt-small"></label>
-                        		</div>
-                    		</div>							
-							<div class="control-group" id="search_stream_keyword"> 	</div>
-							<div class="control-group">
-							  <div class="controls">
-  						        <label id="oauth_link" title="Please allow access for your account." onmouseover="hideWarning()"><b><a href="javascript:openTwitter()">Link Your Twitter.</a></b></label>
-  						        <label id="twitter_warning" style="color:Red;"></label>  						               						          						        
-  						      </div> 
-							</div>
-							<div id="account_description" class="control-group">
-							  <div class="controls">
-  						        <img id="twitter_profile_img_url" name="twitter_profile_img_url" onload="loadImage()" src=""> 
-  						        <label id="account_description_label"></label> 						               						          						        
-  						      </div> 
-							</div>					
-        	        	</div> <!-- span5 -->   
-           			</div><!-- row -->		   			  
+                    <input id="network_type" name="network_type" type="hidden" value="">
+                    <input id="stream_type" name="stream_type" type="hidden" value="">
+            		           		
+                	<div id="streamDetails" class="stream-details">                   		    							
+								
+        	        </div>           					   			  
         		</fieldset>
     		</form>		   	
 		</div><!-- modal body -->
 		<div class="modal-footer">		
-		        <a href="" id="add_linkedin_stream" class="save-linkedin-stream btn btn-primary" type="button"> Add </a>	         
-                <a href="#social" id="add_twitter_stream" type="button" class="save-twitter-stream btn btn-primary"> Add </a>			    
+		        <a href="" id="add_linkedin_stream" type="button" class="save-linkedin-stream btn btn-primary"><i class="icon-plus"></i> Save </a>	         
+                <a href="#social" id="add_twitter_stream" type="button" class="save-twitter-stream btn btn-primary"><i class="icon-plus"></i> Save </a>                			    
 		</div>
 	</div>
+	
+	

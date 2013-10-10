@@ -3,37 +3,37 @@
  */
 function fillStreamDetail()
 {	
-	StreamType = null;	
-	NetworkType = null;
-	
-	// Remove keyword input element
-	 $('.remove-keyword').remove();
+	 // Network Type not selected
+	 NetworkType = null;
 	 
-	// Oauth required warning and link hidden. 
-	$("#oauth_link").hide();	
-	$("#twitter_warning").hide();	
-	
-	// profile image and screen name is hidden.
-	$("#account_description").hide();	
-	
-	// Div where Lists are going to display, is hidden when form open.  
-	$("#select_stream").hide();
-
-	// Add button for linkedin is hidden.
-	$('#add_linkedin_stream').hide();
-
-	// Add Twitter stream button visible.
-	$('#add_twitter_stream').show();   
+	 // Stream Type not selected
+	 StreamType = null;
 
 	// Empty screen name means Oauth is not done.
 	$("#twitter_account", $('#addStreamModal')).attr("value",'');
+
+	// Empty stream type.
+	$("#stream_type", $('#addStreamModal')).attr("value",'');
+	
+	//remove keyword input element
+	$('.remove-keyword').remove();
     		
 	// Add value to hidden input element.
 	$("#domain_user_id", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id);	
-	$("#client_channel", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id + "_Channel");	
+	$("#client_channel", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id + "_Channel");
 	
-	// Display default description for selection of social network.
-	document.getElementById('network_type_description_label').innerHTML='<i class="icon-sitemap"></i> You can select your favorite social network type.';
+	// Add button for twitter is hidden.
+	$('#add_twitter_stream').hide();
+	
+	// Add button for linkedin is hidden.
+	$('#add_linkedin_stream').hide();
+}
+
+// Calls from Profile image onload to fill account holder's name in Form.
+function onloadProfileImg()
+{
+	// Add screen name to label.
+	document.getElementById('account_description_label').innerHTML='<b>'+$('#twitter_account').val()+'</b>';
 }
 
 // Add website and select network on continue form in add contact flow.
@@ -51,12 +51,6 @@ function socialsuite_add_website()
   // Select network type.
   $("div.website select").val("TWITTER");
 }
-
-// Hide twitter warning, when user going to click on Oauth link.
-function hideWarning() {		
-	// Hide warning about authentication access.
-	$("#twitter_warning").hide();
-};
 
 /**
  * Shows setup if user adds LinkedIn stream. Uses ScribeServlet 

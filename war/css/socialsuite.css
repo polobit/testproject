@@ -101,7 +101,8 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
     -webkit-border-radius: 10px;
     border-radius: 10px;
-} 
+}
+
 /* Handle */
 #socialsuite-streams-model-list ::-webkit-scrollbar{
     width: 5px;
@@ -113,3 +114,19 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
      background: rgba(185, 182, 182, 0.8);
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
+
+/* stream type selected button*/
+.stream-type-button-color{background-color:#bbb;}
+
+/* add stream form buttons */
+.stream-type>a{text-decoration:none;}
+
+/* on add stream form padding*/
+.stream-details>div>.row-fluid{padding-top: 25px;}
+#account_description{padding-top: 5px;}
+.social-stream-types>.row-fluid{padding-top: 10px;}
+
+/* stream type div */
+.stream-type{padding: 20px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
+.social-stream-types{padding-left: 35px;}
+
