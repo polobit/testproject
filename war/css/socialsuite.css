@@ -119,7 +119,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .stream-type-button-color{background-color:#bbb;}
 
 /* add stream form buttons */
-.stream-type>a{text-decoration:none;}
+.stream-type>a,.network-type>a{text-decoration:none;}
 
 /* on add stream form padding*/
 .stream-details>div>.row-fluid{padding-top: 25px;}
@@ -130,3 +130,17 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .stream-type{padding: 20px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
 .social-stream-types{padding-left: 35px;}
 
+/* Stream type description */
+.description-hidden,.keyword-hidden{visibility:hidden;}
+#stream_description_label{padding-top: 10px;}
+
+/* searck keyword */
+#search_stream_keyword{padding-top: 18px;padding-left: 154px;}
+
+/* Add Stream Form*/
+.at-center{text-align: center;}
+.font15{font-size: 15px;}
+#twitter_option,#linkedin_option{padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
+#twitter_option:hover,#linkedin_option:hover{background-color:#EDEDED;}
+#addStreamModal>.modal-body{max-height:415px;}
+#account_description_label{padding-top: 33px;}

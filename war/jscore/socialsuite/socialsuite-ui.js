@@ -65,10 +65,10 @@ $(document).on("click",".add-stream", function(e)
 /**
  * On click of social network icon, Calls Oauth for selected network type.
  */
-$(document).on("click",".network-type-icon", function(e)
+$(document).on("click",".network-type", function(e)
 		{ 
 	      // User select Twitter.
-	      if(this.id == "twitter_icon")
+	      if(this.id == "twitter_option")
 	    	  {    
 	    	  	/**
 	    	  	 * Get network type from selected option of social networks. 
@@ -90,7 +90,7 @@ $(document).on("click",".network-type-icon", function(e)
 	    	  }
 	      
 	      // User select Linkedin.
-	      if(this.id == "linkedin_icon")
+	      if(this.id == "linkedin_option")
 	    	  {
 	    	    NetworkType = "LINKEDIN";	
 
@@ -152,7 +152,7 @@ $(document).on("click",".stream-type", function(e)
 			    // Display keyword field.
 			    if(StreamType == "Search")
 			    	{
-			    	  document.getElementById('search_stream_keyword').innerHTML='<div class="remove-keyword"><input id="keyword" name="keyword" type="text" class="required" required="required" autocapitalize="off" placeholder="Keyword.." value=""></div>';
+			    	  document.getElementById('search_stream_keyword').innerHTML='<div class="remove-keyword"><input id="keyword" name="keyword" type="text" class="required" required="required" autocapitalize="off" placeholder="Search Keyword..." value=""></div>';
 			    	}
 			    else
 			    	{
@@ -172,13 +172,19 @@ $(document).on("click",".stream-type", function(e)
  */
 $(document).on("mouseover",".stream-type", function(e)
  {	
+	// To show stream type description.
+	document.getElementById("stream_description_label").className = 'txt-mute';
+	
 	// Gets value of selected stream type.	
 	mouseoverStream = $(this).attr("value");
 	
-	// Changes bg color.
-	$(this).css('background-color', '#EDEDED');
+	var theColorIs = $(this).css("background-color");
 	
-	console.log("in mouseoverStream "+ mouseoverStream)
+	if(theColorIs != 'rgb(187, 187, 187)')
+		{
+		  // Changes bg color.
+	      $(this).css('background-color', '#EDEDED');
+		}
 		
 	switch (mouseoverStream){
 	case "Search":		  
@@ -225,8 +231,8 @@ $(document).on("mouseout",".stream-type", function(e)
 	// Removes bg color.
 	$(this).css('background-color', '');
 	
-	// Remove description.
-	document.getElementById('stream_description_label').innerHTML='  ';
+	// To hide stream type description.
+	document.getElementById("stream_description_label").className = 'description-hidden txt-mute';
   });
 
 /**

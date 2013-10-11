@@ -27,6 +27,9 @@ function fillStreamDetail()
 	
 	// Add button for linkedin is hidden.
 	$('#add_linkedin_stream').hide();
+	
+	// To hide stream type description.
+	document.getElementById("stream_description_label").className = 'description-hidden txt-mute'; 
 }
 
 // Calls from Profile image onload to fill account holder's name in Form.
