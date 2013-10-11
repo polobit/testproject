@@ -54,10 +54,12 @@ function populate_recent_menu()
 
 /**
  * Add/Update model to recent contacts view.
+ * Now non functional.
  * @param mdl - the model to add.
  */
 function add_recent_view(mdl)
 {
+/*	
 	if(recent_view==undefined)
 		populate_recent_menu();
 	
@@ -74,6 +76,7 @@ function add_recent_view(mdl)
 		recent_view.collection.pop({silent:true});
 	
 	recent_view_update_required=true;
+*/	
 }
 
 /**

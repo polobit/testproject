@@ -14,7 +14,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Template <span class="field_req">*</span></label> 
+                        <label class="control-label">Color Theme <span class="field_req">*</span></label> 
                         <div class="controls">
                             <select name="template" id="userPrefsTemplate" class="required">
 								<option value="pink">Purple</option>
@@ -40,9 +40,9 @@
                             <div class="clearfix">
                                 <div class="imgholder">
                                   {{#if pic}}
-                                    <img src="{{pic}}" style="height:75px!important;width:75px!important;" />
+                                    <img class="thumbnail" src="{{pic}}" style="height:75px!important;width:75px!important;" />
                                   {{else}}
-                                    <img src="https://contactuswidget.appspot.com/images/pic.png" style="height:75px!important;width:75px!important;" />
+                                    <img class="thumbnail" src="https://contactuswidget.appspot.com/images/pic.png" style="height:75px!important;width:75px!important;" />
                                   {{/if}}
 								</div>												
                                 <p>

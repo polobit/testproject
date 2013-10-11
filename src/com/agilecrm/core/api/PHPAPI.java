@@ -498,7 +498,11 @@ public class PHPAPI
 		{	
 			JSONObject obj = new JSONObject(data);
 			ObjectMapper mapper = new ObjectMapper();
+			if (!obj.has("email"))
+				return null;
 			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			if (contact==null)
+				return null;
 			Iterator<?> keys = obj.keys();
 			while(keys.hasNext())
 			{

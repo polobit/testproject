@@ -399,6 +399,14 @@
 		<url-pattern>/wufoo</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+	<servlet-name>GravityForm</servlet-name>
+	<servlet-class>com.agilecrm.forms.GravityForm</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GravityForm</servlet-name>
+		<url-pattern>/gform</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>upload_contacts</servlet-name>

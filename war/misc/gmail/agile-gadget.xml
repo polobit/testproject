@@ -76,7 +76,7 @@
 <!--email list -->
 				<div class="contact-list">
 					<div class="agile-no-contact row-fluid">
-						<div class="contact-list-width" style="max-width:95%; display:inline-block;">
+						<div class="contact-list-width" style="max-width:95%; display:inline-block; vertical-align:middle;">
 							<div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 								{{#if fname}}
 									<a class="gadget-search-contact" style="cursor:pointer; margin:0px 8px 0px 5px; text-decoration:underline; font-weight:bold;"><i class="icon-search" style="text-decoration:none; margin-right:5px;"></i><span>Search</span></a><span title="{{fname}} {{lname}} ({{email}})" style="cursor:default;"> {{fname}} {{lname}} ({{email}}) in Agile Contacts</span>
@@ -85,7 +85,7 @@
 								{{/if}}
 							</div>
 						</div>
-						<img class="contact-search-waiting" style="margin-left:20px; display:none; width:13px;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
+						<img class="contact-search-waiting" style="margin-left:20px; visibility:hidden; width:13px; vertical-align:middle;" src="https://googleapps.agilecrm.com/img/ajax-loader-cursor.gif"></img>
 					</div>
 			    </div>
 			</div>
