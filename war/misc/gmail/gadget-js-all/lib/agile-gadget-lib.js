@@ -690,14 +690,22 @@ $(function()
 	Handlebars.registerHelper('deals_by_milestones', function(data)
 	{
 		var html = "";
+		var count = Object.keys(data).length;
 		$.each(data, function(key, value)
 		{
-			html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
-			for ( var i in value)
+			if(count == 1 && key == "")
 			{
-				html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				html += '<div class="slate" style="padding:5px 2px;"><div class="slate-content" style="text-align:center;"><h3>You have no milestones defined</h3></div></div>';
 			}
-			html += "</ul></div>";
+			else
+			{
+				html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
+				for ( var i in value)
+				{
+					html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				}
+				html += "</ul></div>";
+			}
 		});
 		return html;
 	});
@@ -705,13 +713,13 @@ $(function()
 	// To show milestones as sortable list
 	Handlebars.registerHelper('milestone_ul', function(data)
 	{
-		var html = "<ul class='milestone-value-list tagsinput' style='list-style:none;'>";
+		var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
 		if(data)
 		{
 			var milestones = data.split(",");
 			for (var i in milestones)
 			{
-				html += "<li class='tag' data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>";
+				html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
 			}
 		}
 		html += "</ul>";
@@ -1479,9 +1487,6 @@ $(function()
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-		console.log(value);
-		console.log(parseInt(target));
-		console.log(parseInt(target) > value);
 		if (parseInt(target) > value)
 			return options.inverse(this);
 		else
@@ -1711,6 +1716,25 @@ $(function()
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('check_json_length', function(content, length, options)
+	{
+		var json_length = 0;
+		for ( var prop in content)
+		{
+			json_length++;
+		}
+		
+		if (json_length == parseInt(length))
+		{
+			for ( var prop in content)
+			{
+				return options.fn({ property : prop, value : content[prop], last : true});
+			}
+		}
+
+		return options.inverse(content);
+	});
+	
 	Handlebars.registerHelper('iterate_json', function(context, options)
 	{
 		var result = "";
@@ -2197,6 +2221,78 @@ $(function()
 		
 		return options.fn(other_campaigns);
 		
+	});
+	
+     /**
+      * Returns Contact Model from contactDetailView collection.
+      * 
+      **/
+	Handlebars.registerHelper('contact_model',function(options){
+		
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		{
+			
+			// To show Active Campaigns list immediately after campaign assigned.
+			if(CONTACT_ASSIGNED_TO_CAMPAIGN)
+			{	
+				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+			
+				// fetches updated contact json
+				var contact_json = $.ajax(
+					 {
+					 type: 'GET',
+					 url: '/core/api/contacts/'+ App_Contacts.contactDetailView.model.get('id'),
+					 async:	false, 
+					 dataType: 'json'
+					 }).responseText;
+			
+				// Updates Contact Detail model
+				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
+            
+				return options.fn(JSON.parse(contact_json));
+			}
+			
+			// if simply Campaigns tab clicked, use current collection
+			return options.fn(App_Contacts.contactDetailView.model.toJSON());
+		}
+	});
+	
+	/**
+	 * Returns json object of active and done subscribers from contact object's
+	 * campaignStatus.
+	 **/
+	Handlebars.registerHelper('contact_campaigns',function(object, data,options){
+		
+		// if campaignStatus is not defined, return
+		if (object === undefined || object[data] === undefined)
+			return;
+
+		// Temporary json to insert active and completed campaigns
+		var campaigns = {};
+		
+		var active_campaigns = [];
+		var completed_campaigns=[];
+		
+		// campaignStatus object of contact
+		var campaignStatusArray = object[data];
+		
+		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+		{
+			// push all active campaigns
+			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+				active_campaigns.push(campaignStatusArray[i])
+				
+			// push all done campaigns
+			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+				completed_campaigns.push(campaignStatusArray[i]);
+		}
+		
+		campaigns["active"] = active_campaigns;
+		campaigns["done"] =  completed_campaigns;
+		
+		// apply obtained campaigns context within 
+	    //contact_campaigns block
+		return options.fn(campaigns);
 	});
 });
 /**
@@ -2741,4 +2837,4 @@ var MD5 = function (string) {
         var temp = WordToHex(a) + WordToHex(b) + WordToHex(c) + WordToHex(d);
 
         return temp.toLowerCase();
-    };function agile_setAccount(b,a){agile_id.set(b,a)}var _agile={set_account:function(b,a){agile_setAccount(b,a)},set_email:function(a){agile_setEmail(a)},track_page_view:function(a){agile_trackPageview(a)},create_contact:function(a,b){agile_createContact(a,b)},get_contact:function(a,b){agile_getContact(a,b)},delete_contact:function(a,b){agile_deleteContact(a,b)},add_tag:function(b,c,a){agile_addTag(b,c,a)},remove_tag:function(b,c,a){agile_removeTag(b,c,a)},add_score:function(b,c,a){agile_addScore(b,c,a)},subtract_score:function(b,c,a){agile_subtractScore(b,c,a)},add_note:function(b,c,a){agile_addNote(b,c,a)},set_property:function(b,c,a){agile_setProperty(b,c,a)},add_task:function(b,c,a){agile_addTask(b,c,a)},add_deal:function(b,c,a){agile_addDeal(b,c,a)},get_score:function(b,a){agile_getScore(b,a)},get_tags:function(b,a){agile_getTags(b,a)},get_notes:function(b,a){agile_getNotes(b,a)},get_tasks:function(b,a){agile_getTasks(b,a)},get_deals:function(b,a){agile_getDeals(b,a)},add_campaign:function(b,c,a){agile_addCampaign(b,c,a)},get_campaigns:function(b,a){agile_getCampaigns(b,a)},get_campaign_logs:function(b,a){agile_getCampaignlogs(b,a)},get_workflows:function(a){agile_getWorkflows(a)},get_milestones:function(a){agile_getMilestones(a)},update_contact:function(b,c,a){agile_updateContact(b,c,a)},get_email:function(a){agile_getEmail(a)},create_company:function(a,b){agile_createCompany(a,b)},get_property:function(b,c,a){agile_getProperty(b,c,a)},remove_property:function(b,c,a){agile_removeProperty(b,c,a)},add_property:function(b,c,a){agile_setProperty(b,c,a)}};function agile_addCampaign(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contacts/add-campaign?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getCampaigns(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-campaigns?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_getCampaignlogs(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-campaign-logs?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_getWorkflows(b){var a=agile_id.getURL()+"/contacts/get-workflows?callback=?&id="+agile_id.get();agile_json(a,b)}function agile_createContact(a,g){var e=[];for(var f in a){if(a.hasOwnProperty(f)&&f!="tags"){e.push(agile_propertyJSON(f,a[f]))}}var d="original_ref";e.push(agile_propertyJSON(d,agile_read_cookie(agile_guid.cookie_original_ref)));var c={};c.properties=e;if(a.tags){var i=a.tags;var b=i.trim().replace("/ /g"," ");b=i.replace("/, /g",",");c.tags=b.split(",")}var h=agile_id.getURL()+"/contacts?callback=?&id="+agile_id.get()+"&contact="+encodeURIComponent(JSON.stringify(c));agile_json(h,g)}function agile_deleteContact(b,c){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contact/delete?callback=?&id="+agile_id.get()+"&email="+encodeURIComponent(b);agile_json(a,c)}function agile_getContact(b,d){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var c="email={0}".format(encodeURIComponent(b));var a=agile_id.getURL()+"/contact/email?callback=?&id="+agile_id.get()+"&"+c;agile_json(a,d)}function agile_updateContact(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contact/update?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_createCompany(e,f){var d=[];for(var c in e){if(e.hasOwnProperty(c)){d.push(agile_propertyJSON(c,e[c]))}}var b={};b.properties=d;var a=agile_id.getURL()+"/company?callback=?&id="+agile_id.get()+"&data="+encodeURIComponent(JSON.stringify(b));agile_json(a,f)}function agile_propertyJSON(a,d,c){var b={};if(c==undefined){b.type="SYSTEM"}else{b.type=c}b.name=a;b.value=d;return b}function agile_json(a,c){var b="json"+(Math.random()*100).toString().replace(/\./g,"");window[b]=function(d){console.log(c);if(d.error){if(c&&typeof(c.error)=="function"){c.error(d)}return}if(c&&typeof(c.success)=="function"){c.success(d)}if(c&&typeof(c)=="function"){c(d)}};document.getElementsByTagName("body")[0].appendChild((function(){var d=document.createElement("script");d.type="text/javascript";d.src=a.replace("callback=?","callback="+b);return d})())}String.prototype.format=function(){var a=arguments;return this.replace(/{(\d+)}/g,function(b,c){return typeof a[c]!="undefined"?a[c]:b})};function agile_addDeal(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="opportunity={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/opportunity?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getDeals(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-deals?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_setEmail(a){agile_guid.set_email(a)}function agile_getEmail(c){var b=agile_guid.get_email();var a=agile_id.getURL()+"/email?callback=?&id="+agile_id.get()+"&email="+encodeURIComponent(b);agile_json(a,c)}var agile_guid={init:function(){this.cookie_name="agile-crm-guid";this.cookie_email="agile-email";this.cookie_original_ref="agile-original-referrer"},random:function(){var a=function(){return(((1+Math.random())*65536)|0).toString(16).substring(1)};return(a()+a()+"-"+a()+"-"+a()+"-"+a()+"-"+a()+a()+a())},get:function(){var a=agile_read_cookie(this.cookie_name);if(!a){a=this.generate()}return a},generate:function(){guid=this.random();agile_create_cookie(this.cookie_name,guid,365*5);this.set_original_referrer();return guid},reset:function(){agile_create_cookie(this.cookie_name,"",-1)},set_email:function(a){var b=agile_read_cookie(this.cookie_email);if(!b||(b!=a)){this.email=a;if(b){this.reset();agile_session.reset()}agile_create_cookie(this.cookie_email,this.email,365*5)}},get_email:function(){if(this.email){return this.email}var a=agile_read_cookie(this.cookie_email);return a},set_original_referrer:function(){var a=document.referrer;agile_create_cookie(this.cookie_original_ref,a,365*5)}};agile_guid.init();var agile_id={set:function(b,a){this.id=b;this.namespace=a},get:function(){return this.id},getURL:function(){if(!this.namespace||this.namespace=="localhost"){return"http://localhost:8888/core/js/api"}else{return"https://"+this.namespace+".agilecrm.com/core/js/api"}},getNamespace:function(){return this.namespace}};function agile_getMilestones(b){var a=agile_id.getURL()+"/contact/get-milestones?callback=?&id="+agile_id.get();agile_json(a,b)}function agile_addNote(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contacts/add-note?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getNotes(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-notes?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_setProperty(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contacts/add-property?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getProperty(c,d,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}if(!c){return}var a=agile_id.getURL()+"/contacts/get-property?callback=?&id="+agile_id.get()+"&name="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_removeProperty(c,d,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}if(!c){return}var a=agile_id.getURL()+"/contacts/remove-property?callback=?&id="+agile_id.get()+"&name="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_addScore(c,d,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/add-score?callback=?&id="+agile_id.get()+"&score="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_subtractScore(c,d,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/subtract-score?callback=?&id="+agile_id.get()+"&score="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_getScore(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-score?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}var agile_session={init:function(){this.cookie_name="agile-crm-session_id";this.cookie_start_time="agile-crm-session_start_time";this.cookie_duration_secs=60*1000;this.new_session=false},random:function(){var a=function(){return(((1+Math.random())*65536)|0).toString(16).substring(1)};return(a()+a()+"-"+a()+"-"+a()+"-"+a()+"-"+a()+a()+a())},get:function(){var b=agile_read_cookie(this.cookie_name);if(!b){return this.generate()}var a=agile_read_cookie(this.cookie_start_time);var c=new Date().getUTCSeconds();if((c<a)||(c>(a+this.cookie_duration_secs))){return this.generate()}return b},generate:function(){var a=this.random();agile_create_cookie(this.cookie_name,a,0);agile_create_cookie(this.cookie_start_time,new Date().getUTCSeconds(),0);this.new_session=true;return a},reset:function(){agile_create_cookie(this.cookie_name,"",-1);agile_create_cookie(this.cookie_start_time,"",-1)}};agile_session.init();function agile_addTag(c,e,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="email={0}&tags={1}".format(encodeURIComponent(b),encodeURIComponent(c));var a=agile_id.getURL()+"/contacts/add-tags?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_removeTag(c,e,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="email={0}&tags={1}".format(encodeURIComponent(b),encodeURIComponent(c));var a=agile_id.getURL()+"/contacts/remove-tags?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getTags(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-tags?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_addTask(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="task={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/task?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getTasks(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-tasks?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_trackPageview(h){var d=agile_guid.get();var e=agile_session.get();var c=document.location.href;if(c!==undefined&&c!=null){c=encodeURIComponent(c)}else{c=""}var a=agile_id.get();var g="";if(agile_session.new_session){var f=document.referrer;if(f!==undefined&&f!=null&&f!="null"){f=encodeURIComponent(f)}else{f=""}g="guid={0}&sid={1}&url={2}&agile={3}&new=1&ref={4}".format(d,e,c,a,f)}else{g="guid={0}&sid={1}&url={2}&agile={3}".format(d,e,c,a)}if(agile_guid.get_email()){g+="&email="+encodeURIComponent(agile_guid.get_email())}var b="https://"+agile_id.getNamespace()+".agilecrm.com/stats?callback=?&"+g;agile_json(b,h)}function agile_read_cookie(b){b=agile_id.get()+"-"+b;var e=b+"=";var a=document.cookie.split(";");for(var d=0;d<a.length;d++){var f=a[d];while(f.charAt(0)==" "){f=f.substring(1,f.length)}if(f.indexOf(e)==0){return unescape(f.substring(e.length,f.length))}}return null}function agile_create_cookie(c,d,e){c=agile_id.get()+"-"+c;if(e){var b=new Date();b.setTime(b.getTime()+(e*24*60*60*1000));var a="; expires="+b.toGMTString()}else{var a=""}document.cookie=c+"="+escape(d)+a+"; path=/"}function agile_enable_console_logging(){var a=false;if(typeof console==="undefined"||!a){console={log:function(){},error:function(){}}}if(typeof(console.log)==="undefined"||!a){console.log=function(){return 0}}if(typeof(console.error)==="undefined"||!a){console.error=function(){return 0}}};
+    };function agile_setAccount(b,a){agile_id.set(b,a)}var _agile={set_account:function(b,a){agile_setAccount(b,a)},set_email:function(a){agile_setEmail(a)},track_page_view:function(a){agile_trackPageview(a)},create_contact:function(a,b){agile_createContact(a,b)},get_contact:function(a,b){agile_getContact(a,b)},delete_contact:function(a,b){agile_deleteContact(a,b)},add_tag:function(b,c,a){agile_addTag(b,c,a)},remove_tag:function(b,c,a){agile_removeTag(b,c,a)},add_score:function(b,c,a){agile_addScore(b,c,a)},subtract_score:function(b,c,a){agile_subtractScore(b,c,a)},add_note:function(b,c,a){agile_addNote(b,c,a)},set_property:function(b,c,a){agile_setProperty(b,c,a)},add_task:function(b,c,a){agile_addTask(b,c,a)},add_deal:function(b,c,a){agile_addDeal(b,c,a)},get_score:function(b,a){agile_getScore(b,a)},get_tags:function(b,a){agile_getTags(b,a)},get_notes:function(b,a){agile_getNotes(b,a)},get_tasks:function(b,a){agile_getTasks(b,a)},get_deals:function(b,a){agile_getDeals(b,a)},add_campaign:function(b,c,a){agile_addCampaign(b,c,a)},get_campaigns:function(b,a){agile_getCampaigns(b,a)},get_campaign_logs:function(b,a){agile_getCampaignlogs(b,a)},get_workflows:function(a){agile_getWorkflows(a)},get_milestones:function(a){agile_getMilestones(a)},update_contact:function(b,c,a){agile_updateContact(b,c,a)},get_email:function(a){agile_getEmail(a)},create_company:function(a,b){agile_createCompany(a,b)},get_property:function(b,c,a){agile_getProperty(b,c,a)},remove_property:function(b,c,a){agile_removeProperty(b,c,a)},add_property:function(b,c,a){agile_setProperty(b,c,a)}};function agile_addCampaign(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contacts/add-campaign?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getCampaigns(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-campaigns?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_getCampaignlogs(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-campaign-logs?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_getWorkflows(b){var a=agile_id.getURL()+"/contacts/get-workflows?callback=?&id="+agile_id.get();agile_json(a,b)}function agile_createContact(a,g){var e=[];for(var f in a){if(a.hasOwnProperty(f)&&f!="tags"){e.push(agile_propertyJSON(f,a[f]))}}var d="original_ref";e.push(agile_propertyJSON(d,agile_read_cookie(agile_guid.cookie_original_ref)));var c={};c.properties=e;if(a.tags){var i=a.tags;var b=i.trim().replace("/ /g"," ");b=i.replace("/, /g",",");c.tags=b.split(",")}var h=agile_id.getURL()+"/contacts?callback=?&id="+agile_id.get()+"&contact="+encodeURIComponent(JSON.stringify(c));agile_json(h,g)}function agile_deleteContact(b,c){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contact/delete?callback=?&id="+agile_id.get()+"&email="+encodeURIComponent(b);agile_json(a,c)}function agile_getContact(b,d){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var c="email={0}".format(encodeURIComponent(b));var a=agile_id.getURL()+"/contact/email?callback=?&id="+agile_id.get()+"&"+c;agile_json(a,d)}function agile_updateContact(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contact/update?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_createCompany(e,f){var d=[];for(var c in e){if(e.hasOwnProperty(c)){d.push(agile_propertyJSON(c,e[c]))}}var b={};b.properties=d;var a=agile_id.getURL()+"/company?callback=?&id="+agile_id.get()+"&data="+encodeURIComponent(JSON.stringify(b));agile_json(a,f)}function agile_propertyJSON(a,d,c){var b={};if(c==undefined){b.type="SYSTEM"}else{b.type=c}b.name=a;b.value=d;return b}function agile_json(a,c){var b="json"+(Math.random()*100).toString().replace(/\./g,"");window[b]=function(d){if(d.error){if(c&&typeof(c.error)=="function"){c.error(d)}return}if(c&&typeof(c.success)=="function"){c.success(d)}if(c&&typeof(c)=="function"){c(d)}};document.getElementsByTagName("body")[0].appendChild((function(){var d=document.createElement("script");d.type="text/javascript";d.src=a.replace("callback=?","callback="+b);return d})())}String.prototype.format=function(){var a=arguments;return this.replace(/{(\d+)}/g,function(b,c){return typeof a[c]!="undefined"?a[c]:b})};function agile_addDeal(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="opportunity={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/opportunity?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getDeals(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-deals?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_setEmail(a){agile_guid.set_email(a)}function agile_getEmail(c){var b=agile_guid.get_email();var a=agile_id.getURL()+"/email?callback=?&id="+agile_id.get()+"&email="+encodeURIComponent(b);agile_json(a,c)}var agile_guid={init:function(){this.cookie_name="agile-crm-guid";this.cookie_email="agile-email";this.cookie_original_ref="agile-original-referrer"},random:function(){var a=function(){return(((1+Math.random())*65536)|0).toString(16).substring(1)};return(a()+a()+"-"+a()+"-"+a()+"-"+a()+"-"+a()+a()+a())},get:function(){var a=agile_read_cookie(this.cookie_name);if(!a){a=this.generate()}return a},generate:function(){guid=this.random();agile_create_cookie(this.cookie_name,guid,365*5);this.set_original_referrer();return guid},reset:function(){agile_create_cookie(this.cookie_name,"",-1)},set_email:function(a){var b=agile_read_cookie(this.cookie_email);if(!b||(b!=a)){this.email=a;if(b){this.reset();agile_session.reset()}agile_create_cookie(this.cookie_email,this.email,365*5)}},get_email:function(){if(this.email){return this.email}var a=agile_read_cookie(this.cookie_email);return a},set_original_referrer:function(){var a=document.referrer;agile_create_cookie(this.cookie_original_ref,a,365*5)}};agile_guid.init();var agile_id={set:function(b,a){this.id=b;this.namespace=a},get:function(){return this.id},getURL:function(){if(!this.namespace||this.namespace=="localhost"){return"http://localhost:8888/core/js/api"}else{return"https://"+this.namespace+".agilecrm.com/core/js/api"}},getNamespace:function(){return this.namespace}};function agile_getMilestones(b){var a=agile_id.getURL()+"/contact/get-milestones?callback=?&id="+agile_id.get();agile_json(a,b)}function agile_addNote(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contacts/add-note?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getNotes(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-notes?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_setProperty(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="data={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/contacts/add-property?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getProperty(c,d,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}if(!c){return}var a=agile_id.getURL()+"/contacts/get-property?callback=?&id="+agile_id.get()+"&name="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_removeProperty(c,d,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}if(!c){return}var a=agile_id.getURL()+"/contacts/remove-property?callback=?&id="+agile_id.get()+"&name="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_addScore(c,d,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/add-score?callback=?&id="+agile_id.get()+"&score="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_subtractScore(c,d,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/subtract-score?callback=?&id="+agile_id.get()+"&score="+c+"&email="+encodeURIComponent(b);agile_json(a,d)}function agile_getScore(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-score?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}var agile_session={init:function(){this.cookie_name="agile-crm-session_id";this.cookie_start_time="agile-crm-session_start_time";this.cookie_duration_secs=60*1000;this.new_session=false},random:function(){var a=function(){return(((1+Math.random())*65536)|0).toString(16).substring(1)};return(a()+a()+"-"+a()+"-"+a()+"-"+a()+"-"+a()+a()+a())},get:function(){var b=agile_read_cookie(this.cookie_name);if(!b){return this.generate()}var a=agile_read_cookie(this.cookie_start_time);var c=new Date().getUTCSeconds();if((c<a)||(c>(a+this.cookie_duration_secs))){return this.generate()}return b},generate:function(){var a=this.random();agile_create_cookie(this.cookie_name,a,0);agile_create_cookie(this.cookie_start_time,new Date().getUTCSeconds(),0);this.new_session=true;return a},reset:function(){agile_create_cookie(this.cookie_name,"",-1);agile_create_cookie(this.cookie_start_time,"",-1)}};agile_session.init();function agile_addTag(c,e,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="email={0}&tags={1}".format(encodeURIComponent(b),encodeURIComponent(c));var a=agile_id.getURL()+"/contacts/add-tags?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_removeTag(c,e,b){if(!c){return}if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="email={0}&tags={1}".format(encodeURIComponent(b),encodeURIComponent(c));var a=agile_id.getURL()+"/contacts/remove-tags?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getTags(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-tags?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_addTask(c,e,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var d="task={0}&email={1}".format(encodeURIComponent(JSON.stringify(c)),encodeURIComponent(b));var a=agile_id.getURL()+"/task?callback=?&id="+agile_id.get()+"&"+d;agile_json(a,e)}function agile_getTasks(c,b){if(!b){if(!agile_guid.get_email()){return}else{b=agile_guid.get_email()}}var a=agile_id.getURL()+"/contacts/get-tasks?callback=?&id="+agile_id.get()+"&"+"email={0}".format(encodeURIComponent(b));agile_json(a,c)}function agile_trackPageview(h){var d=agile_guid.get();var e=agile_session.get();var c=document.location.href;if(c!==undefined&&c!=null){c=encodeURIComponent(c)}else{c=""}var a=agile_id.get();var g="";if(agile_session.new_session){var f=document.referrer;if(f!==undefined&&f!=null&&f!="null"){f=encodeURIComponent(f)}else{f=""}g="guid={0}&sid={1}&url={2}&agile={3}&new=1&ref={4}".format(d,e,c,a,f)}else{g="guid={0}&sid={1}&url={2}&agile={3}".format(d,e,c,a)}if(agile_guid.get_email()){g+="&email="+encodeURIComponent(agile_guid.get_email())}var b="https://"+agile_id.getNamespace()+".agilecrm.com/stats?callback=?&"+g;agile_setemailFromurl();agile_json(b,h)}function agile_setemailFromurl(){if(!agile_guid.get_email()){if(window.location.href.search("fwd=cd")!==-1){var a=decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]"+encodeURI("data").replace(/[\.\+\*]/g,"\\$&")+"(?:\\=([^&]*))?)?.*$","i"),"$1"));if(a){agile_guid.set_email(JSON.parse(a).email)}}}}function agile_read_cookie(b){b=agile_id.get()+"-"+b;var e=b+"=";var a=document.cookie.split(";");for(var d=0;d<a.length;d++){var f=a[d];while(f.charAt(0)==" "){f=f.substring(1,f.length)}if(f.indexOf(e)==0){return unescape(f.substring(e.length,f.length))}}return null}function agile_create_cookie(c,d,e){c=agile_id.get()+"-"+c;if(e){var b=new Date();b.setTime(b.getTime()+(e*24*60*60*1000));var a="; expires="+b.toGMTString()}else{var a=""}document.cookie=c+"="+escape(d)+a+"; path=/"}function agile_enable_console_logging(){var a=false;if(typeof console==="undefined"||!a){console={log:function(){},error:function(){}}}if(typeof(console.log)==="undefined"||!a){console.log=function(){return 0}}if(typeof(console.error)==="undefined"||!a){console.error=function(){return 0}}};
