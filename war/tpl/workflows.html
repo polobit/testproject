@@ -45,8 +45,13 @@
     <div class="span12">
         <div class="page-header">
             <h1>Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h1>
-            <a href="#campaign-stats" class="btn right" id="campaign-stats" style="top:-30px;position:relative;margin-left:10px"><i class="icon-bar-chart"></i> Compare Campaigns</a>
-            <a href="#workflow-add" class="btn right" id="addWorkflow" style="top:-30px;position:relative"><i class="icon-plus-sign"></i> Add Campaign</a>
+			<div class="btn-group right" style="top:-30px;position:relative">
+            	<a href="#workflow-add" class="btn" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
+            	<a id="campaign-stats" class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+				<ul class="dropdown-menu pull-right">
+					<li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
+				</ul>
+			</div>
             <a href="#triggers" class="btn right" id="add-trigger" style="top:-30px;position:relative; margin-right:10px"><i class="icon-cog"></i> Manage Triggers</a>
         </div>
     </div>
