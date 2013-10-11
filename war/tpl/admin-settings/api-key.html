@@ -48,7 +48,7 @@ You can use javascript API to track page views on your site, add/delete contacts
 	</div>
 </div>
 
-Set Email (Optional)<div class="clearfix"></div><br/>
+Set Email (Mandatory)<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
@@ -61,8 +61,14 @@ Track Page View<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.track_page_view(callback);
-</pre>
+ _agile.track_page_view({
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ })</pre>
 	</div>
 </div>
 
@@ -70,8 +76,24 @@ Create Contact<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.create_contact({"email":"jim@example.com", "first_name":"Jim", "last_name":"Brown",
-			"tags":"tag1, tag2"}, callback);
+ _agile.create_contact({
+  "email": "jim@example.com",
+  "first_name": "Jim",
+  "last_name": "Brown",
+  "company": "abc corp",
+  "title": "lead",
+  "phone": "+1-541-754-3010",
+  "website": "http://www.example.com",
+  "address": "{\"city\":\"new delhi\", \"state\":\"delhi\",\"country\":\"india\"}",
+  "tags": "tag1, tag2"
+}, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});
 </pre>
 	</div>
 </div>
@@ -80,8 +102,14 @@ Delete Contact<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.delete_contact('jim@example.com', callback);
-</pre>
+ _agile.delete_contact('jim@example.com', {
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ });</pre>
 	</div>
 </div>
 
@@ -89,8 +117,18 @@ Add Property<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
-_agile.add_property({"name":"type", "value":"sales", "type":"CUSTOM"}, callback, optional_contact_email);
-</pre>
+_agile.set_property({
+  "name": "phone",
+  "value": "+1-541-754-3010",
+  "type": "mobile"
+}, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});</pre>
 	</div>
 </div>
 
@@ -98,8 +136,14 @@ Add Tag<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.add_tag('tags2, tag3, tag4', callback, optional_contact_email);
-</pre>
+ _agile.add_tag('tags2, tag3, tag4', {
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ });</pre>
 	</div>
 </div>
 
@@ -107,8 +151,14 @@ Remove Tag<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
- _agile.remove_tag('tag4, tag5, tag6', callback, optional_contact_email);
-</pre>
+ _agile.remove_tag('tag4, tag5, tag6', {
+   success: function(data) {
+     console.log("success");
+   },
+   error: function(data) {
+     console.log("error");
+   }
+ });</pre>
 	</div>
 </div>
 
@@ -116,8 +166,24 @@ Add Score<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
 <pre class="prettyprint linenums">
-_agile.add_score(10, callback, optional_contact_email);
-_agile.add_score(-5, callback, optional_contact_email);
+_agile.add_score(10, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});
+
+// Subtract Score
+_agile.add_score(-5, {
+  success: function(data) {
+    console.log("success");
+  },
+  error: function(data) {
+    console.log("error");
+  }
+});
 </pre>
 	</div>
 </div>
@@ -137,7 +203,7 @@ _agile.add_score(-5, callback, optional_contact_email);
 				<p>Agile supports open standard REST. You can use any language which supports REST.</p>
 				We currently have the following libraries for your convenience<br/>
 				<ul>
-					<li>Java (example implementation on <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">GitHub</a>)</li>
+					<li>Java - <a href="https://github.com/agilecrm/java-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/java-api">GitHub</a></li>
 					<li>Javascript - <a href="https://github.com/agilecrm/javascript-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/javascript-api">GitHub</a></li>
                     <li>PHP - <a href="https://github.com/agilecrm/php-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/php-api">GitHub</a></li>
                     <li>.NET - <a href="https://github.com/agilecrm/c-sharp-api" target="_blank" rel="nofollow" title="Link: https://github.com/agilecrm/c-sharp-api">GitHub</a></li>
