@@ -65,10 +65,10 @@ $(document).on("click",".add-stream", function(e)
 /**
  * On click of social network icon, Calls Oauth for selected network type.
  */
-$(document).on("click",".network-type-icon", function(e)
+$(document).on("click",".network-type", function(e)
 		{ 
 	      // User select Twitter.
-	      if(this.id == "twitter_icon")
+	      if(this.id == "twitter_option")
 	    	  {    
 	    	  	/**
 	    	  	 * Get network type from selected option of social networks. 
@@ -90,7 +90,7 @@ $(document).on("click",".network-type-icon", function(e)
 	    	  }
 	      
 	      // User select Linkedin.
-	      if(this.id == "linkedin_icon")
+	      if(this.id == "linkedin_option")
 	    	  {
 	    	    NetworkType = "LINKEDIN";	
 
@@ -175,10 +175,13 @@ $(document).on("mouseover",".stream-type", function(e)
 	// Gets value of selected stream type.	
 	mouseoverStream = $(this).attr("value");
 	
-	// Changes bg color.
-	$(this).css('background-color', '#EDEDED');
+	var theColorIs = $(this).css("background-color");
 	
-	console.log("in mouseoverStream "+ mouseoverStream)
+	if(theColorIs != 'rgb(187, 187, 187)')
+		{
+		  // Changes bg color.
+	      $(this).css('background-color', '#EDEDED');
+		}
 		
 	switch (mouseoverStream){
 	case "Search":		  

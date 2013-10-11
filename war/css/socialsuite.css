@@ -119,7 +119,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .stream-type-button-color{background-color:#bbb;}
 
 /* add stream form buttons */
-.stream-type>a{text-decoration:none;}
+.stream-type>a,.network-type>a{text-decoration:none;}
 
 /* on add stream form padding*/
 .stream-details>div>.row-fluid{padding-top: 25px;}

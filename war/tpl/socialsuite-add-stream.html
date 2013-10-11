@@ -3,14 +3,18 @@
 <label style="font-size: 15px;"><b>Choose your Social Network</b></label> 
 <div class="row-fluid">
   <div class="span5">
- 	<a href="#social" id="twitter_option" class="pull-right network-type" style="text-decoration:none;padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;" value="TWITTER">
+   <div id="twitter_option" class="pull-right network-type" style="padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;" value="TWITTER">
+ 	<a href="#social">
       <i id="twitter_icon" class="icon-twitter icon-5x network-type-icon" title="Twitter"></i><br><b>Twitter</b>     
     </a>
+   </div>
   </div><!-- /.span5 -->
   <div class="span4">				
-    <a href="#social" id="linkedin_option" class="pull-right network-type" style="text-decoration:none;padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;" value="LINKEDIN">						              
+   <div id="linkedin_option" class="pull-right network-type" style="padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;" value="LINKEDIN">
+    <a href="#social">						              
 	  <i id="linkedin_icon" class="icon-linkedin icon-5x network-type-icon" title="Linkedin"></i><br><b>Linkedin</b>	  
-	</a>					                
+	</a>
+   </div>					                
   </div><!-- /.span4 -->
 </div>	<!-- /.row -->
 </div>
@@ -103,18 +107,22 @@
 <label style="font-size: 15px;"><b>Select the Stream Activity :</b></label> 
 <div class="row-fluid">
   <div class="span5">
-   <div class="stream-type pull-right" id="all_updates" value="All_Updates" title="All Updates">
+   <div class="pull-right">
+   <div class="stream-type" id="all_updates" value="All_Updates" title="All Updates">
  	<a>
       <i class="icon-home icon-4x"></i><br>All Updates
     </a>
    </div>
+   </div>
   </div><!-- /.span5 -->
   <div class="span4">
-   <div class="stream-type pull-right" id="my_updates" value="My_Updates" title="My Updates">				
+  <div class="pull-right">
+   <div class="stream-type" id="my_updates" value="My_Updates" title="My Updates">				
     <a>						              
 	  <i class="icon-share-alt icon-4x"></i><br>My Updates
 	</a>					                
    </div>
+  </div>
   </div><!-- /.span4 -->
 </div>	<!-- /.row -->
 <label id="stream_description_label" class="txt-mute" style="padding-top: 20px;">  </label>

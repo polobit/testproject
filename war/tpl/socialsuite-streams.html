@@ -107,7 +107,7 @@
    <div class="item-box">       
       <div class="tweet">
            <header class="tweet-header">        
-	          <a class="account-link link-complex block" href="http://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
+	          <a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
 		         <div class="obj-left item-img tweet-img">  
 			       <img class="tweet-avatar avatar pull-left thumbnail" src={{user.profile_image_url}} width="40" height="40" alt="{{user.screen_name}}'s avatar" title="Klout Score {{klout_score}}">   
  		         </div> 
@@ -120,7 +120,9 @@
     		  </a>  
 		   </header> 
 		   <div class="tweet-body"> 
- 	          <p class="tweet-text with-linebreaks">{{text}}</p>                  
+ 	          <p class="tweet-text">
+                 {{safe_string text}}
+              </p>                  
  			  <footer class="tweet-footer cf">
               {{#if retweeted}}
                  <span class="txt-mute txt-small">{{retweeted}}</span><br>
