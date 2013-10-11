@@ -61,8 +61,10 @@ public class ContactEmailUtil
      * Saves email in datastore. It iterates over the given to emails and gets
      * the contact-id if exists for that email.
      * 
-     * @param from
+     * @param fromEmail
      *            - from email
+     * @param fromName
+     *            - from name
      * @param to
      *            - to email
      * @param subject
@@ -70,7 +72,7 @@ public class ContactEmailUtil
      * @param body
      *            - body
      */
-    public static void saveContactEmailAndSend(String from, String to, String cc, String bcc, String subject, String body)
+    public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body)
     {
 	try
 	{
@@ -93,7 +95,9 @@ public class ContactEmailUtil
 		if (contact != null)
 		{
 		    // Remove trailing commas for to emails
-		    ContactEmail contactEmail = new ContactEmail(contact.id, from, to.replaceAll(",$", ""), subject, body);
+		    ContactEmail contactEmail = new ContactEmail(contact.id, fromEmail, to.replaceAll(",$", ""), subject, body);
+
+		    contactEmail.from_name = fromName;
 
 		    contactEmail.cc = cc;
 		    contactEmail.bcc = bcc;
@@ -114,7 +118,7 @@ public class ContactEmailUtil
 		body = EmailUtil.appendTrackingImage(body, null, null, trackerId);
 
 	    // Sends email
-	    EmailUtil.sendMail(from, from, to, cc, bcc, subject, from, body, null);
+	    EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{

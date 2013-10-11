@@ -38,6 +38,12 @@ public class ContactEmail
     public String from = null;
 
     /**
+     * From name
+     **/
+    @NotSaved(IfDefault.class)
+    public String from_name = null;
+
+    /**
      * To email address
      */
     @NotSaved(IfDefault.class)
@@ -152,7 +158,7 @@ public class ContactEmail
 		date_secs = (System.currentTimeMillis() / 1000) * 1000;
 
 	    // From address should be same as imap format.
-	    from = from + " " + "<" + from + ">";
+	    from = from_name + " " + "<" + from + ">";
 	}
     }
 

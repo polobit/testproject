@@ -581,6 +581,29 @@ $(function(){
 		});
 	});
 	
+	$('#cc-link, #bcc-link').die().live('click', function(e){
+		e.preventDefault();
+		
+		// Hide link
+		$(this).hide();
+		
+		if($(this).attr('id') === 'cc-link')
+		{
+			$('#email_cc').closest('.control-group').show();
+			
+			// Hide div.control-group to reduce space between subject
+			if($(this).parent().find('#bcc-link').css('display') === 'none')
+				$(this).closest('.control-group').hide();
+			
+			return;
+		}
+		
+		if($(this).parent().find('#cc-link').css('display') === 'none')
+			$(this).closest('.control-group').hide();
+		
+		$('#email_bcc').closest('.control-group').show();
+	});
+	
 });
 
 /**
@@ -612,13 +635,15 @@ function get_property_JSON(contactJSON)
  */
 function populate_send_email_details(el){
 
-	$("#emailForm", el).find( 'input[name="from"]' ).val(CURRENT_DOMAIN_USER.email);
+	$("#emailForm",el).find('input[name="from_name"]').val(CURRENT_DOMAIN_USER.name);
+	$("#emailForm", el).find( 'input[name="from_email"]' ).val(CURRENT_DOMAIN_USER.email);
+	
 	// Fill hidden signature field using userprefs 
 	//$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
 
 	// Prefill the templates
 	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
-	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate, false, el);
+	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate, false, el, 'Fill from Template');
 }
 
 /**
