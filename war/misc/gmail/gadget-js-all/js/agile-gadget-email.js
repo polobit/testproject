@@ -30,7 +30,7 @@ function agile_get_emails(bool) {
 		var matches = [{email_from: "devika@faxdesk.com"},{name_from: "Devika Jakkannagari"},
 						{email_to: "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com"},
 						{name_to: "Abhi;;D j p;;"},{email_cc: "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com"},{name_cc: "Dev T1;;Teju"},
-						{email:"devikatest@gmail.com"},{email:"test1@gmail.com"},{email:"test2@gmail.com"},{email:"test1@gmail.com"}]
+						{email:"devikatest@gmail.com"},{email:"test1@gmail.com"},{email:"test2@gmail.com"},{email:"test1@gmail.com"}];
 		return Agile_Build_List(matches, "test1@gmail.com");
 	}
 }
@@ -70,10 +70,12 @@ function Agile_Build_List(obj, Ac_Email){
 		while(mails.length < names.length) mails = [""].concat(mails);
 		var ret = [];
 		for(var i = 0; i < names.length; i++) {
-			var tmp = {};
-			tmp.name = names[i];
-			tmp.email = mails[i];
-			arr.push(tmp);
+			if(mails[0] != ""){
+				var tmp = {};
+				tmp.name = names[i];
+				tmp.email = mails[i];
+				arr.push(tmp);
+			}
 		}
 	}
 	  
@@ -112,15 +114,17 @@ function Agile_Build_List(obj, Ac_Email){
 	Create_Pair(tmpObj["email_cc"], tmpObj["name_cc"], retArr);
 
 	var ret = {};
+	
 	for(var i = 0; i < retArr.length; i++) if(retArr[i]["email"] != Ac_Email){
 		var names = Parse_Name(retArr[i]["name"]);
-		ret[retArr[i]["email"]] = {"email": retArr[i]["email"], "fname":names[0], "lname":names[1]};
+		ret[retArr[i]["email"]] = {"email": retArr[i]["email"], "fname":names[0], "lname":names[1], "mail_exist":false};
 	}
 	
 	for(var i = 0; i < retArr1.length; i++) if(retArr1[i]["email"] != Ac_Email){
 		var names = Parse_Name(retArr1[i]["name"]);
-		if(typeof (ret[retArr1[i]["email"]]) == "undefined")
-			ret[retArr1[i]["email"]] = {"email": retArr1[i]["email"], "fname":names[0], "lname":names[1]};
+		if(typeof (ret[retArr1[i]["email"]]) == "undefined"){
+			ret[retArr1[i]["email"]] = {"email": retArr1[i]["email"], "fname":names[0], "lname":names[1], "mail_exist":false};
+		}
 	}  
 	
 	return ret;

@@ -41,6 +41,7 @@ function agile_init_handlers() {
 				}, error: function(val){
 					
 							$('.contact-add-waiting', el).hide(1);
+							// Show duplicate contact message.
 							$('.contact-add-status', el).text(val.error).show().delay(5000).hide(1);
 				}});
 	});
@@ -474,22 +475,62 @@ function agile_init_handlers() {
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find('.show-form');
 		var that = $(this);
-		var email = $(el).data("content");
+		var email = "";
 		
-		// Adjust width of mail list for Process icon.
-		agile_gadget_adjust_width(el, $(".contact-search-waiting", el), true);
-		$('.contact-search-waiting', el).css('visibility','visible');
+		// Check whether it is Search panel or single email.
+		if(!that.hasClass("search-mail-button")){
+			
+			email = $(el).data("content");
+			// Adjust width of mail list for Process icon.
+			agile_gadget_adjust_width(el, $(".contact-search-waiting", el), true);
+			// Show searching icon.
+			$('.contact-search-waiting', el).css('visibility','visible');
+		}
+		else {
+			
+			email = $(".agile-mail-dropdown").data("email");
+			// Chaeck if requested mail already present in list.
+			if(Contacts_Json[email].mail_exist == true){
+				// Show if contact is present otherwise do nothing.
+				$('#agile_content .show-form').each(function(){
+					if($(this).data('content') == email){
+						$(this).find(".gadget-show-contact").trigger('click');
+						return false;
+					}
+				});
+				console.log("Email is already in list");
+				return;
+			}
+			$('.contact-search-waiting', el).show();
+		}
+				
+		
 		// Get contact status based on email.
 		_agile.get_contact(email, 
 				{success: function(val){
-							// Generate UI.
-							agile_create_contact_ui(el, that, email, val);
 							
+							$('.contact-search-waiting', el).hide();
+							// Generate UI.
+							if(that.hasClass("search-mail-button")){
+								
+								agile_add_mail_to_list(val, email, el);
+							}
+							else{
+								agile_create_contact_ui(el, that, email, val);
+							}							
+				
 				}, error: function(val){
 					
 							val.id = null;
+							$('.contact-search-waiting', el).hide();
 							// Generate UI.
-							agile_create_contact_ui(el, that, email, val);
+							if(that.hasClass("search-mail-button")){
+								$(".contact-search-status", el).show().delay(4000).hide(1);
+								agile_add_mail_to_list(val, email, el);
+							}
+							else{
+								agile_create_contact_ui(el, that, email, val);
+							}
 		}});
 	});
 
@@ -507,8 +548,13 @@ function agile_init_handlers() {
 			var content = Contacts_Json[$(el).data("content")];
 			// Build tags list.
 			agile_build_tag_ui($("#added_tags_ul", el), content);
+
 			// Hide list view of contact.
-			$(".contact-minified", el).toggle();
+			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
+			$(".display-toggle i", el).addClass("icon-collapse-alt").removeClass("icon-expand-alt");
+			$(".display-toggle span", el).text("Hide Details");
+			$(".display-toggle", el).next().hide();
+			
 			agile_gadget_adjust_height();
 			// Show contact summary.
 			$(".show-contact-summary", el).toggle();
@@ -516,19 +562,16 @@ function agile_init_handlers() {
 			// Build tabs.
 			agile_build_form_template(that, "gadget-tabs", ".option-tabs", function() {
 				
-				// Load Bootstrap libraries.
-				head.js(Lib_Path + 'lib/bootstrap.min.js', function() {
-					
-					// Enables Drop down.
-					$('.dropdown-toggle').dropdown();
-					// Enables Tab.
-					$('.gadget_tabs', el).tab();
-					// Show Tabs.
-					$(".option-tabs", el).toggle();
-					agile_gadget_adjust_height();
-					// Show notes tab by default.
-					$('.gadget-notes-tab', el).trigger('click');
-				});
+				// Enables Tab.
+				$('.gadget_tabs', el).tab();
+				// Show Tabs.
+				$(".option-tabs", el).toggle();
+				agile_gadget_adjust_height();
+				// Show notes tab by default.
+				$('.gadget-notes-tab', el).trigger('click');
+				
+				// Enables Drop down.
+				$('.dropdown-toggle').dropdown();
 			});
 		});
 	});
@@ -540,8 +583,13 @@ function agile_init_handlers() {
 		// Set context (HTML container where event is triggered).
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
+
 		// Show list view of contact.
-		$(".contact-minified", el).toggle();
+		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
+		$(".display-toggle i", el).removeClass("icon-collapse-alt").addClass("icon-expand-alt");
+		$(".display-toggle span", el).text("Show");
+		$(".display-toggle", el).next().show();
+		
 		agile_gadget_adjust_height();
 		// hide contact summary.
 		$(".show-contact-summary", el).toggle();
@@ -771,7 +819,7 @@ function agile_create_contact_ui(el, that, email, val){
 	
 	// Merge Server response object with Contact_Json object.
 	$.extend(Contacts_Json[email], val);
-
+	
 	// Build show contact form template.
 	agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
 		
@@ -787,4 +835,59 @@ function agile_create_contact_ui(el, that, email, val){
 			$('.gadget-show-contact', el).trigger('click');
 		}
 	});
+}
+
+/**
+ * 
+ * Add mail to list.
+ * 
+ * @method agile_add_mail_to_list
+ * 
+ */
+function agile_add_mail_to_list(val, email, el){
+
+	// Set library path for campaign link, check for local host.
+	if(Is_Localhost)
+		val.ac_path = Lib_Path;
+	else
+		val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
+	
+	var Contact_Data = {};
+	Contact_Data[email] = Contacts_Json[email];
+	// Merge Server response object with Contact_Json object.
+	$.extend(Contacts_Json[email], val);
+	Contacts_Json[email].mail_exist = true;
+	
+	// Compile template and generate UI.
+	var Individual_Template = getTemplate('gadget', Contact_Data, 'no');
+	// Append contact to container in HTML.
+	$("#agile_content").prepend($(Individual_Template));
+	// Temporarily hide the list.
+	$("#agile_content").children().eq(0).find(".contact-list").hide();
+	
+	// Send request for template.
+	agile_get_gadget_template("gadget-contact-list-template", function(data) {
+
+		// Take contact data from global object variable.
+		var json = Contacts_Json[email];
+		// Compile template and generate UI.
+		var Handlebars_Template = getTemplate("gadget-contact-list", json, 'no');
+		// Insert template to container in HTML.
+		$("#agile_content").children().eq(0).find(".contact-list").html($(Handlebars_Template));
+		// Show temporarily hidden list element.
+		$("#agile_content").children().eq(0).find(".contact-list").show();
+		// Adjust gadget window height.
+		if (!Is_Localhost)
+			gadgets.window.adjustHeight();
+		
+		// Contact found, show contact summary.		
+		if (json.id != null) {
+			$("#agile_content").children().eq(0).find('.gadget-show-contact').trigger('click');
+		}	
+		else{
+			$("#agile_content").children().eq(0).find('.contact-search-status').hide();
+			$("#agile_content").children().eq(0).find(".contact-list-width").css("max-width", "95%");
+		}
+ 	});
+	
 }
