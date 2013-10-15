@@ -33,7 +33,7 @@ public class EmailUtil
 	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)", "<script>-->");
 
 	// If emailBody is text, replace '\n' with <br> is enough
-	if (!(emailBody.contains("</")) || !(emailBody.contains("<body")))
+	if (!(emailBody.contains("</")))
 	{
 	    emailBody = emailBody.replaceAll("(\r\n|\n)", "<br />");
 	    return emailBody;

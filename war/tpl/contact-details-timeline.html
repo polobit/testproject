@@ -50,6 +50,17 @@
             </div>
         {{/if_entity}}
 
+        {{#if_entity "agile_email"}}
+            <div class="timestamp">{{createdTime}}</div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span> Email Opened</h3></div>
+            <div class="date">{{epochToTaskDate createdTime}}</div>
+            <div class="body">
+                <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{subject}}</div>
+                <div class="text" style="color: #999999" ><span><em>Sent on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" trackerId}}</div>
+                <div class="text" style="color: #999999" ><span><em>Opened on</em></span> {{epochToHumanDate "mmmm dd, yyyy 'at' hh:MM tt" createdTime}}</div>
+            </div>
+        {{/if_entity}}
+
         {{#if_entity "deal"}}
             <div class="timestamp">{{created_time}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-money"></i></a></span> Deal</h3></div>
@@ -103,7 +114,14 @@
 
         {{#if_entity "date"}}
             <div class="timestamp">{{date_secs}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i></a></span> {{subject}}</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class="icon-envelope"></i>
+			{{#if trackerId}}
+        		{{#if is_email_opened}}
+        	    		<i class="icon-folder-open-alt" title="Email Opened"></i>
+        		{{/if}}
+    		{{/if}}
+            </a>
+            </span> {{subject}}</h3></div>
             <div class="date">{{epochToTaskDate date_secs}}</div>
             <div class="body">
                 <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{from}}</div>

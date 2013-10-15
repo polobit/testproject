@@ -105,6 +105,12 @@ public class ContactEmail
     @NotSaved(IfDefault.class)
     public Boolean is_email_opened = false;
 
+    /**
+     * To store email opened time
+     **/
+    @NotSaved(IfDefault.class)
+    public Long email_opened_at = 0L;
+
     private static ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(ContactEmail.class);
 
     /**

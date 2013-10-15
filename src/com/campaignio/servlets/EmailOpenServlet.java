@@ -123,6 +123,7 @@ public class EmailOpenServlet extends HttpServlet
 	    for (ContactEmail contactEmail : contactEmails)
 	    {
 		contactEmail.is_email_opened = true;
+		contactEmail.email_opened_at = System.currentTimeMillis() / 1000;
 		contactEmail.save();
 
 		// Shows notification for simple emails.
