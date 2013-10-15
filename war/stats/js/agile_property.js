@@ -31,8 +31,18 @@ function agile_setProperty(data, callback, email)
 	agile_json(agile_url, callback);
 }
 
+/**
+ * Get contact property value by name
+ * @param name
+ * 					name of the contact property. Example : title
+ * @param callback
+ * 					callback function
+ * @param email
+ * 					email of the contact
+ */
 function agile_getProperty(name, callback, email)
 {
+	// Check if email passed as parameter, else get from cookie
 	if (!email)
 		{
 			if(!agile_guid.get_email())
@@ -42,16 +52,28 @@ function agile_getProperty(name, callback, email)
 			else
 				email = agile_guid.get_email();
 		}
+	
+	// Return if property name is not passed as a parameter
 	if (!name)
 		return;
 	
 	var agile_url = agile_id.getURL() + "/contacts/get-property?callback=?&id=" + agile_id.get() + "&name=" + name + "&email=" + encodeURIComponent(email);
 	
+	// Callback
 	agile_json(agile_url, callback);
 }
-
+/**
+ * Remove a contact property by name
+ * @param name
+ * 				name of the property
+ * @param callback
+ * 				callback function
+ * @param email
+ * 				email of the contact
+ */
 function agile_removeProperty(name, callback, email)
 {
+	// Check if email passed as parameter else get from cookie
 	if(!email)
 		{
 			if (!agile_guid.get_email())
@@ -61,10 +83,13 @@ function agile_removeProperty(name, callback, email)
 			else 
 				email = agile_guid.get_email();
 		}
+	
+	// Return if property name is not passed as a parameter
 	if(!name)
 		return;
 	
 	var agile_url = agile_id.getURL() + "/contacts/remove-property?callback=?&id=" + agile_id.get() + "&name=" + name + "&email=" + encodeURIComponent(email);
 	
+	// Callback
 	agile_json(agile_url, callback);
 }
