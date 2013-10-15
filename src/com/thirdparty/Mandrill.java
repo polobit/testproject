@@ -112,13 +112,10 @@ public class Mandrill
 	    // api-key
 	    mailJSON.put(MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
 
-	    // all given params except replyTo are inserted into message json.
-	    JSONObject messageJSON = getMessageJSON(fromEmail, fromName, to, subject, html, text);
-	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
+	    // All email params are inserted into Message json
+	    JSONObject messageJSON = getMessageJSON(fromEmail, fromName, to, replyTo, subject, html, text);
 
-	    // replyTo email in headers
-	    JSONObject headersJSON = getHeadersJSON(replyTo);
-	    mailJSON.put(MANDRILL_HEADERS, headersJSON);
+	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
 	    String response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL, mailJSON.toString());
 
@@ -155,7 +152,7 @@ public class Mandrill
      *            - text body
      * @return JSONObject
      */
-    private static JSONObject getMessageJSON(String fromEmail, String fromName, String to, String subject, String html, String text)
+    private static JSONObject getMessageJSON(String fromEmail, String fromName, String to, String replyTo, String subject, String html, String text)
     {
 	JSONObject messageJSON = new JSONObject();
 
@@ -166,6 +163,9 @@ public class Mandrill
 
 	    // returns To JSONArray of recipient json objects
 	    messageJSON.put(MANDRILL_TO, getRecipientsJSON(to));
+
+	    // returns ReplyTo Header JSON
+	    messageJSON.put(MANDRILL_HEADERS, getHeadersJSON(fromEmail, replyTo));
 
 	    // Mandrill throws validation error if mail json consists of
 	    // non-unicode characters
@@ -187,7 +187,7 @@ public class Mandrill
      * and name.
      * 
      * @param to
-     *            - to email ( or to email string separated by commas)
+     *            - to email (or) to email string separated by commas
      * @return JSONArray
      */
     private static JSONArray getRecipientsJSON(String to)
@@ -223,20 +223,27 @@ public class Mandrill
      * Returns header json by inserting replyTo email into it. Any other header
      * values can also be inserted.
      * 
+     * @param fromEmail
+     *            - from email
      * @param replyTo
      *            - replyTo email.
      * @return JSONObject
      */
-    private static JSONObject getHeadersJSON(String replyTo)
+    private static JSONObject getHeadersJSON(String fromEmail, String replyTo)
     {
 	JSONObject headersJSON = new JSONObject();
 	try
 	{
-	    headersJSON.put(MANDRILL_REPLY_TO, replyTo);
+	    // insert replyTo if not same as from.
+	    if (!fromEmail.equals(replyTo))
+		headersJSON.put(MANDRILL_REPLY_TO, replyTo);
+
 	    headersJSON.put("Content-Type", "application/json; charset=utf-8");
+
 	}
 	catch (Exception e)
 	{
+	    System.err.println("Exception occured in Mandrill headerJSON " + e.getMessage());
 	    e.printStackTrace();
 	}
 
