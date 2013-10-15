@@ -34,13 +34,13 @@
 		
 		$('#save_salesforce_prefs').die().live('click', function(data){
 			
-			if(!isValid())
+			if(!isValid('#salesforce-login-form'))
 				return;
 			
 			$('#spinner-sales').show();
 			
 			
-				$.post("/core/api/salesforce/save", $(form).serialize(), function(data)
+				$.post("/core/api/salesforce/save", $('#salesforce-login-form').serialize(), function(data)
 				{
 					
 					$("#salesforce_import").html('<br /><div class="well" style="margin-left:10px">' +
@@ -159,7 +159,7 @@
 		
 	});
 	
-	 function isValid(){
+	 function isValid(form){
 		 $(form).validate({
 				
 				debug : true,
@@ -204,7 +204,7 @@ label.error {
 
 		<legend>Import from salesforce</legend>
 
-		<form action="" method="post"  id="form">
+		<form action="" method="post"  id="salesforce-login-form">
 
 			<label>Enter your Salesforce details </label><br />
 			
