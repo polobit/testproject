@@ -139,9 +139,19 @@ function agile_updateContact(data, callback, email)
 	agile_json(agile_url, callback);
 }
 
+/**
+ * Creates a company
+ * @param data
+ * 				Company data in JSON format
+ * @param callback
+ * 				callback function
+ */
 function agile_createCompany(data, callback)
 {
+	// Properties array
 	var properties = [];
+	
+	// Iterate data and add properties to array
 	for (var key in data)
 		{
 			if(data.hasOwnProperty(key))
@@ -149,10 +159,13 @@ function agile_createCompany(data, callback)
 					properties.push(agile_propertyJSON(key,data[key]));
 				}
 		}
+
+	// JSON model with properties
 	var model = {};
 	model.properties = properties;
 
 	var agile_url = agile_id.getURL() + "/company?callback=?&id=" + agile_id.get() + "&data=" + encodeURIComponent(JSON.stringify(model));
 
+	// Callback
 	agile_json(agile_url, callback);
 }

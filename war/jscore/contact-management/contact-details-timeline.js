@@ -149,14 +149,16 @@ function load_timeline_details(el, contactId, callback1)
 					
 					$('#time-line', el).find('.loading-img-email').remove();
 					
+					
+					
 					if(emailsCollection.toJSON()[0] && emailsCollection.toJSON()[0]['emails'] && emailsCollection.toJSON()[0]['emails'].length > 0){
 					
-						timelineView.collection.add(emailsCollection.toJSON()[0]['emails']);
+						// Adds Personal Email Opened Track Data to timeline.
+						add_personal_email_opened_to_timeline(emailsCollection.toJSON()[0]['emails'],el);
+
 						// If timeline is not defined yet, calls setup_timeline for the first time
 						if(timelineView.collection.length == 0 && emailsCollection.toJSON()[0]){
-							
-							
-							
+
 							// No callback function is taken as the email takes more time to fetch
 							setup_timeline(timelineView.collection.toJSON(), el, function(el) {
 
@@ -820,6 +822,65 @@ function remove_loading_img(el){
  	 * $('#timeline', el).isotope( 'insert', newItem);
  	 */
 
+ }
+ 
+ /**
+  * Adds Email Opened data having email opened time to timeline.
+  * 
+  * @param emails - Emails JSON.
+  * 
+  * @param el - Backbone el.
+  **/
+ function add_personal_email_opened_to_timeline(emails,el)
+ {
+	// Temporary array to clone emails
+	var emails_clone = [];
+	
+	// Clone emails Array to not affect original emails
+	$.extend(true, emails_clone, emails);
+	
+	var emails_opened = [];
+	 
+	 if (timelineView.collection.length == 0)
+	 	{
+			 $.each(emails_clone,function(index, model){
+				if(model.email_opened_at && model.email_opened_at !== 0)
+			 	{
+				 	// Need createdTime key to sort in timeline.
+					model.createdTime = (model.email_opened_at) * 1000;
+					
+				 	// Temporary entity to identify timeline template
+					model.agile_email = "agile_email";
+				 	
+					// To avoid merging with emails template having date entity
+					model.date = undefined;
+					
+				 	timelineView.collection.add(model);
+			 	}
+			 });
+			 
+			 setup_timeline(timelineView.collection.toJSON(), el);
+	 	}
+	 else
+		 {
+		 $.each(emails_clone, function(index, model){
+				if(model.email_opened_at && model.email_opened_at !== 0)
+			 	{
+					// Need createdTime key to sort in timeline.
+					model.createdTime = (model.email_opened_at) * 1000;
+				 	
+					// Temporary entity to identify timeline template
+					model.agile_email = "agile_email";
+				 	
+					// To avoid merging with emails template having date entity
+					model.date = undefined;
+				 	
+					emails_opened.push(model);
+			 	}
+			 });
+		 
+		 validate_insertion(emails_opened);
+		 }
  }
 
  /**
