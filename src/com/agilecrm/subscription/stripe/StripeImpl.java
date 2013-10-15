@@ -1,6 +1,7 @@
 package com.agilecrm.subscription.stripe;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -70,14 +71,14 @@ public class StripeImpl implements AgileBilling
      * 
      * 
      */
-    public JSONObject createCustomer(CreditCard cardDetails, Plan plan)
-	    throws Exception
+    public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception
     {
 
 	// Creates customer and add subscription to it
-	Customer customer = Customer.create(StripeUtil.getCustomerParams(
-		cardDetails, plan));
+	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails, plan));
 
+	System.out.println(customer);
+	System.out.println(StripeUtil.getJSONFromCustomer(customer));
 	// Return Customer JSON
 	return StripeUtil.getJSONFromCustomer(customer);
 
@@ -97,8 +98,7 @@ public class StripeImpl implements AgileBilling
      * @throws Exception
      *             if
      */
-    public JSONObject updatePlan(JSONObject stripeCustomer, Plan plan)
-	    throws Exception
+    public JSONObject updatePlan(JSONObject stripeCustomer, Plan plan) throws Exception
     {
 
 	// Gets Customer Object to update its plan
@@ -128,8 +128,7 @@ public class StripeImpl implements AgileBilling
      * 
      * @throws Exception
      * */
-    public JSONObject updateCreditCard(JSONObject stripeCustomer,
-	    CreditCard cardDetails) throws Exception
+    public JSONObject updateCreditCard(JSONObject stripeCustomer, CreditCard cardDetails) throws Exception
     {
 
 	/*
@@ -144,7 +143,7 @@ public class StripeImpl implements AgileBilling
 	 * Gets Map of card parameters to be sent to stripe, to update customer
 	 * card details in stripe
 	 */
-	Map<String, Object> cardParams = StripeUtil.getCardParms(cardDetails);
+	Map<String, Object> cardParams = StripeUtil.getCardParams(cardDetails);
 
 	/*
 	 * Adds changed credit card details to map, which is sent to Stripe as
@@ -168,21 +167,53 @@ public class StripeImpl implements AgileBilling
      * 
      * @throws StripeException
      * */
-    public List<Invoice> getInvoices(JSONObject stripeCustomer)
-	    throws StripeException
+    public List<Invoice> getInvoices(JSONObject stripeCustomer) throws StripeException
     {
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 
 	// Sets invoice parameters (Stripe customer id is required to get
 	// invoices of a customer form stripe)
-	invoiceParams.put("customer",
-		StripeUtil.getCustomerFromJson(stripeCustomer).getId());
+	invoiceParams.put("customer", StripeUtil.getCustomerFromJson(stripeCustomer).getId());
 
 	/*
 	 * Fetches all invoices for given stripe customer id and returns
 	 * invoices
 	 */
 	return Invoice.all(invoiceParams).getData();
+    }
+
+    /**
+     * Pay pending invoices immediately
+     * 
+     * @param oldCustomer
+     * @param userId
+     */
+    private void payPendingInvoices(JSONObject stripeCustomer)
+    {
+	try
+	{
+	    /*
+	     * Gets Customer retrieves from stripe based on customer id, to
+	     * update credit card
+	     */
+	    Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
+
+	    // Bill any invoices pending
+	    List<Invoice> invoices = getInvoices(stripeCustomer);
+
+	    Iterator iterator = invoices.iterator();
+
+	    while (iterator.hasNext())
+	    {
+		Invoice invoice = (Invoice) iterator.next();
+		if (!invoice.getPaid())
+		    invoice.pay();
+	    }
+	}
+	catch (Exception e)
+	{
+	}
+
     }
 
     /**
