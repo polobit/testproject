@@ -195,6 +195,8 @@ function agile_download_scripts() {
 				+ 'jscore/util.js', Lib_Path + 'jscore/md5.js');
 		// JS API
 		head.js(Lib_Path + 'stats/min/agile-min.js');
+		// Load Bootstrap libraries.
+		head.js(Lib_Path + 'lib/bootstrap.min.js');
 		// Gadget supporting JavaScript file.
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.js');
 	}

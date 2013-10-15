@@ -123,7 +123,7 @@ function setupTwilioOAuth()
 	// Connects with ScribeServlet for authentication
 	$('#Twilio')
 			.html(
-					'<p class="widget_content" style="border-bottom:none">Call your contacts directly using your Twilio account.</p><a id="twilio-connect-button" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;"></a>');
+					'<div class="widget_content"><p style="border-bottom:none">Call your contacts directly using your Twilio account.</p><a id="twilio-connect-button" class="btn" href="https://www.twilio.com/authorize/CNf63bca035414be121d517a116066a5f8?state=' + encodeURIComponent(window.location.href) + '" style="margin-bottom: 10px;">Link Your Twilio</a></div>');
 
 }
 
