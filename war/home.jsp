@@ -62,8 +62,8 @@
 <meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
 
 <%
-	String CSS_PATH = "/";
- 	//String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
+	//String CSS_PATH = "/";
+ 	String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -151,10 +151,7 @@
 									    style_reports = " display:none;";
 									else
 									    ++count;
-									if(!navSetting.social)
-									    style_social = " display:none;";
-									else
-									    ++count;
+									
 										
 										
 										
@@ -183,11 +180,7 @@
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		}
-												if (navSetting.social){
-													%>		<li id="reportsmenu" ><a href="#social"><i
-															class="icon-comments icon-white"></i> Social</a></li>
-										<% } %>
+										<% 		}%>
 
 							<%  if (count > 3)
 							{
@@ -216,14 +209,7 @@
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		}
-										if (navSetting.social)
-										{ %>
-										
-										<li id="socialsuitemenu"><a href="#social">
-										     <i class="icon-comments icon-white"></i> Social</a>
-										</li>
-										<%} %>
+										<% 		} %>
 										</ul>
 									</li>	
 							<% }%>
