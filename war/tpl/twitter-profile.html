@@ -30,11 +30,11 @@
 		{{else}}
 			<ul class="widget_tab_content"  id="twitter_current_activity" style="display:none;">
 				<li>	
-					{{#if is_connected}}
+					{{#if_equals tweet_count "0"}}
 						{{name}} hasn't tweeted yet
 					{{else}}
 						Only confirmed followers have access to {{name}}'s Tweets and complete profile. Click the "Follow" button to send a follow request.
-					{{/if}}
+					{{/if_equals}}
 				</li>
 			</ul>
 		{{/if}}
