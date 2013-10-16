@@ -147,3 +147,5 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 .waiting-symbol{float: right;bottom: 13px;position: relative;}
 #twitter_profile_img_url{visibility:hidden;width: 1px;height: 1px;}
+.mentions-big-title{font-size:xx-large;}
+.mentions-small-title{position:relative;right:-1px;font-size: larger;margin-top: -20px!important;}
