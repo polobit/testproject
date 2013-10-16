@@ -31,6 +31,8 @@ import com.googlecode.objectify.Key;
  */
 public class BulkActionUtil
 {
+    public static final Integer ENTITIES_FETCH_LIMIT = 500;
+
     /**
      * Defines set of url to which request is to be sent based on the type of
      * bulk action
@@ -40,7 +42,8 @@ public class BulkActionUtil
     {
 	DELETE("/core/api/bulk-actions/delete/contacts"), ASIGN_WORKFLOW("/core/api/bulk-actions/enroll-campaign/%s"), CHANGE_OWNER(
 		"/core/api/bulk-actions/change-owner/%s"), ADD_TAG("/core/api/bulk-actions/contact/tags"), CONTACTS_UPLOAD(
-		"/core/api/bulk-actions/contacts/multi/upload"), REMOVE_ACTIVE_SUBSCRIBERS("/core/api/bulk-actions/remove-active-subscribers/%s");
+		"/core/api/bulk-actions/contacts/multi/upload"), REMOVE_ACTIVE_SUBSCRIBERS(
+		"/core/api/bulk-actions/remove-active-subscribers/%s");
 
 	String url;
 
@@ -81,7 +84,8 @@ public class BulkActionUtil
 
 	// Create Task and push it into Task Queue
 	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).payload(data).header("Content-Type", contentType).header("Host", url).method(type);
+	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).payload(data).header("Content-Type", contentType)
+		.header("Host", url).method(type);
 
 	queue.add(taskOptions);
     }
@@ -112,14 +116,15 @@ public class BulkActionUtil
 	 */
 	if (data.length > 1 && !StringUtils.isEmpty(data[1]))
 	{
-	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).param("data", data[1]).header("Content-Type", contentType)
-		    .header("Host", url).method(type);
+	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).param("data", data[1])
+		    .header("Content-Type", contentType).header("Host", url).method(type);
 
 	    queue.add(taskOptions);
 	    return;
 	}
 
-	taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).header("Content-Type", contentType).header("Host", url).method(type);
+	taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).header("Content-Type", contentType)
+		.header("Host", url).method(type);
 
 	queue.add(taskOptions);
     }
@@ -134,7 +139,8 @@ public class BulkActionUtil
      * @param contentType
      * @param type
      */
-    public static void enrollCampaign(byte[] data, Map<String, Object> parameter, String url, String contentType, Method type)
+    public static void enrollCampaign(byte[] data, Map<String, Object> parameter, String url, String contentType,
+	    Method type)
     {
 	String workflowId = ((String[]) parameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
@@ -152,7 +158,8 @@ public class BulkActionUtil
      * @param contentType
      * @param type
      */
-    public static void enrollCampaign(String id, Map<String, Object> parameter, String url, String contentType, Method type)
+    public static void enrollCampaign(String id, Map<String, Object> parameter, String url, String contentType,
+	    Method type)
     {
 	String workflowId = ((String[]) parameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
@@ -170,7 +177,8 @@ public class BulkActionUtil
      * @param contentType
      * @param type
      */
-    public static void changeOwner(byte[] data, Map<String, Object> parameter, String url, String contentType, Method type)
+    public static void changeOwner(byte[] data, Map<String, Object> parameter, String url, String contentType,
+	    Method type)
     {
 	String ownerId = ((String[]) parameter.get("owner"))[0];
 	url = String.format(url, ownerId);
@@ -283,7 +291,7 @@ public class BulkActionUtil
      * @param domainUserId
      * @return
      */
-    public static List<Contact> getFilterContacts(String criteria, Long domainUserId)
+    public static List<Contact> getFilterContacts(String criteria, String cursor, Long domainUserId)
     {
 	if (criteria.isEmpty())
 	    return new ArrayList<Contact>();
@@ -298,13 +306,13 @@ public class BulkActionUtil
 	    if (StringUtils.isEmpty(tag))
 		return new ArrayList<Contact>();
 
-	    return ContactUtil.getContactsForTag(tag, null, null);
+	    return ContactUtil.getContactsForTag(tag, ENTITIES_FETCH_LIMIT, cursor);
 	}
 
 	if (criteria.equals("#contacts"))
-	    return ContactUtil.getAllContacts(0, null);
+	    return ContactUtil.getAllContacts(ENTITIES_FETCH_LIMIT, cursor);
 
-	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, null, null));
+	return new ArrayList<Contact>(ContactFilterUtil.getContacts(criteria, ENTITIES_FETCH_LIMIT, cursor));
     }
 
     /**
@@ -322,7 +330,8 @@ public class BulkActionUtil
      * @param type
      *            - Request method type.
      */
-    public static void removeActiveSubscribers(byte[] data, Map<String, Object> requestParameter, String url, String contentType, Method type)
+    public static void removeActiveSubscribers(byte[] data, Map<String, Object> requestParameter, String url,
+	    String contentType, Method type)
     {
 	String workflowId = ((String[]) requestParameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
@@ -347,7 +356,8 @@ public class BulkActionUtil
      * @param type
      *            - request method type
      */
-    public static void removeActiveSubscribers(String id, Map<String, Object> requestParameter, String url, String contentType, Method type)
+    public static void removeActiveSubscribers(String id, Map<String, Object> requestParameter, String url,
+	    String contentType, Method type)
     {
 	String workflowId = ((String[]) requestParameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
