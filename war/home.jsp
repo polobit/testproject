@@ -62,8 +62,8 @@
 <meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
 
 <%
-	//String CSS_PATH = "/";
- 	String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
+	String CSS_PATH = "/";
+ 	//String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -75,7 +75,6 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css"/>
-
 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -151,8 +150,6 @@
 									    style_reports = " display:none;";
 									else
 									    ++count;
-									
-										
 										
 										
 							%>
@@ -180,8 +177,8 @@
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		}%>
-
+										<% 		}
+												%>
 							<%  if (count > 3)
 							{
 							   %>
@@ -369,11 +366,11 @@
 			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a> -->
 	</footer>
 
-	<script src='/lib/headjs-min.js'></script>
+	<script src='https://da4o37ei6ybbh.cloudfront.net/js/lib/headjs-min.js'></script>
 
 	<script>
 	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
-	var LIB_PATH = "/";
+	//var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
