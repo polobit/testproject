@@ -29,7 +29,11 @@ var WorkflowsRouter = Backbone.Router
 				"trigger-add/:id" : "triggerAdd",
 				
 				"trigger-add": "triggerAdd",
-				"trigger/:id" : "triggerEdit"
+				"trigger/:id" : "triggerEdit",
+				
+				/* Subscribers*/
+				"workflow/:id/active-contacts": "activeContacts",
+				"workflow/:id/completed-contacts": "completedContacts"
 			},
 
 			/**
@@ -106,7 +110,8 @@ var WorkflowsRouter = Backbone.Router
 			 * @param id
 			 *            Workflow Id
 			 */
-			workflowEdit : function(id) {
+			workflowEdit : function(id, workflow) {
+				
 				if (!this.workflow_list_view
 						|| this.workflow_list_view.collection.length == 0) {
 					this.navigate("workflows", {
@@ -114,9 +119,50 @@ var WorkflowsRouter = Backbone.Router
 					});
 					return;
 				}
-
+ 
 				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
+				if(workflow)
+					this.workflow_model = workflow;
+				else
+					this.workflow_model = this.workflow_list_view.collection.get(id);
+				
+				// Download new one if undefined
+				if(this.workflow_model === undefined)
+				{
+					console.log("Downloading workflow.");
+					
+					// get count value from first attribute count
+					var total_count = this.workflow_list_view.collection.at(0).attributes.count;
+					
+					if (this.workflow_list_view.collection.length !== total_count)
+					{
+						// if not in the collection, download new one.
+						var new_workflow_model = Backbone.Model.extend(
+								{
+									url : '/core/api/workflows/' + id
+								});
+
+							var model = new new_workflow_model();
+							model.id = id;
+							
+							model.fetch(
+							 {
+							 success : function(data)
+									   {
+									       // Call workflowEdit again if not Empty
+										 	if(!$.isEmptyObject(data.toJSON()))
+											{
+												App_Workflows.workflowEdit(id, model);
+												return;
+											}
+										}
+							 });
+						}
+					}
+				
+				if(this.workflow_model === undefined)
+					return;
+				
 				this.workflow_json = this.workflow_model.get("rules");
 
 				var el = $(getTemplate('workflow-add', {}));
@@ -181,6 +227,11 @@ var WorkflowsRouter = Backbone.Router
 				$("#workflowsmenu").addClass("active");
 			},
 
+			/**
+			 * Returns campaign stats graphs data for given campaign-id.
+			 * 
+			 * @param id - workflow id
+			 **/
 			emailReports : function(id) {
 				
 				if (!this.workflow_list_view
@@ -421,5 +472,95 @@ var WorkflowsRouter = Backbone.Router
 
 				var view = view.render();
 				$("#content").html(view.el);
+			},
+			
+			/** 
+			 * Returns list of subscribers having campaignStatus campaignId-ACTIVE
+			 * 
+			 * @param id - workflow id.
+			 **/
+			activeContacts:function(id)
+			{
+				if (!this.workflow_list_view
+						|| this.workflow_list_view.collection.length == 0) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				/* Set the designer JSON. This will be deserialized */
+				this.workflow_model = this.workflow_list_view.collection.get(id);
+				var workflowName = this.workflow_model.get("name");
+				
+				this.active_contacts_collection = new Base_Collection_View({
+					url:'core/api/workflows/active-contacts/'+id,
+					templateKey:'workflow-active-contacts',
+					individual_tag_name : 'tr',
+					cursor : true,
+					page_size : 20,
+					postRenderCallback : function(el) {
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+							$("time.campaign-started-time", el).timeago();
+							
+						});
+						
+						$('#subscribers-campaign-name').text(workflowName);
+					},
+					appendItemCallback:function(el)
+					{
+						$("time.campaign-started-time", el).timeago();
+					}
+				});
+				
+				this.active_contacts_collection.collection.fetch();
+				$("#content").html(this.active_contacts_collection.el);
+				
+			},
+			
+			/**
+			 * Returns list of completed subscribers of given campaign-id having 
+			 * campaignStatus campaignId-DONE
+			 * 
+			 * @param id - workflow id.
+             *
+			 **/
+			completedContacts: function(id){
+				
+				if (!this.workflow_list_view
+						|| this.workflow_list_view.collection.length == 0) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				/* Set the designer JSON. This will be deserialized */
+				this.workflow_model = this.workflow_list_view.collection.get(id);
+				var workflowName = this.workflow_model.get("name");
+				
+				this.completed_contacts_collection = new Base_Collection_View({
+					url:'core/api/workflows/completed-contacts/'+id,
+					templateKey:'workflow-completed-contacts',
+					individual_tag_name : 'tr',
+					cursor : true,
+					page_size : 20,
+					postRenderCallback : function(el) {
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
+							$("time.campaign-started-time", el).timeago();
+							$("time.campaign-completed-time", el).timeago();
+						});
+						
+						$('#subscribers-campaign-name').text(workflowName);
+					},
+					appendItemCallback:function(el)
+					{
+						$("time.campaign-started-time", el).timeago();
+						$("time.campaign-completed-time", el).timeago();
+					}
+				});
+				
+				this.completed_contacts_collection.collection.fetch();
+				$("#content").html(this.completed_contacts_collection.el);
 			}
 		});

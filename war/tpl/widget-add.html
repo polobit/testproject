@@ -2,9 +2,9 @@
 <div class="well widget-add" style="width:220px; height:280px;">
     <img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /> 
 	<br />
-    <h1> {{name}}</h1>
+    <h1 class="overflow-elipsis" style="margin-bottom:0px;" rel="tooltip" title="{{name}}"> {{name}}</h1>
     <br />
-    <div style="width: 220px;height: 90px;margin-bottom: 10px;">
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 5;word-break: break-word;width: 220px !important;height: 90px !important;margin-bottom: 10px;"  rel="tooltip" title="{{description}}">
 		{{description}}
 	</div>
     <div>

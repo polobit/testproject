@@ -2,6 +2,7 @@ package com.thirdparty.google;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Id;
@@ -95,6 +96,9 @@ public class ContactPrefs implements Serializable
 	public ContactPrefs()
 	{
 	}
+
+	@NotSaved
+	public List<String> salesforceFields;
 
 	public ContactPrefs(Type type, String token, String secret, Long expires, String refreshToken)
 	{
@@ -207,6 +211,7 @@ public class ContactPrefs implements Serializable
 	 */
 	public String toString()
 	{
-		return "token: " + token + " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
+		return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token
+				+ " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
 	}
 }

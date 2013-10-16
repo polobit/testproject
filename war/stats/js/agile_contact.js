@@ -65,6 +65,15 @@ function agile_createContact(data, callback)
  */
 function agile_deleteContact(email, callback)
 {
+	if (!email)
+	{
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else 
+			email = agile_guid.get_email();
+	}
 	var agile_url = agile_id.getURL() + "/contact/delete?callback=?&id=" + agile_id.get() + "&email=" + encodeURIComponent(email);
 
 	// Callback
@@ -81,10 +90,81 @@ function agile_deleteContact(email, callback)
  */
 function agile_getContact(email, callback)
 {
+	if (!email)
+	{
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else 
+			email = agile_guid.get_email();
+	}
 	var params = "email={0}".format(encodeURIComponent(email));
 
 	// Get
 	var agile_url = agile_id.getURL() + "/contact/email?callback=?&id=" + agile_id.get() + "&" + params;
+
+	// Callback
+	agile_json(agile_url, callback);
+}
+
+/**
+ * Update contact based on the email 
+ * 
+ * @param data
+ * 				data on JSON format
+ * @param callback
+ * 				callback for updateContact
+ * @param	email
+ * 			email of the contact to update 
+ */
+function agile_updateContact(data, callback, email)
+{
+	if (!email)
+	{
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else 
+			email = agile_guid.get_email();
+	}
+	// Query Params
+	var params = "data={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
+	
+	// Get
+	var agile_url = agile_id.getURL() + "/contact/update?callback=?&id=" + agile_id.get() + "&" + params;
+	
+	// Request
+	agile_json(agile_url, callback);
+}
+
+/**
+ * Creates a company
+ * @param data
+ * 				Company data in JSON format
+ * @param callback
+ * 				callback function
+ */
+function agile_createCompany(data, callback)
+{
+	// Properties array
+	var properties = [];
+	
+	// Iterate data and add properties to array
+	for (var key in data)
+		{
+			if(data.hasOwnProperty(key))
+				{
+					properties.push(agile_propertyJSON(key,data[key]));
+				}
+		}
+
+	// JSON model with properties
+	var model = {};
+	model.properties = properties;
+
+	var agile_url = agile_id.getURL() + "/company?callback=?&id=" + agile_id.get() + "&data=" + encodeURIComponent(JSON.stringify(model));
 
 	// Callback
 	agile_json(agile_url, callback);

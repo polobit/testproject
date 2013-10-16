@@ -10,13 +10,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -174,10 +174,10 @@ public class Workflow extends Cursor
 	try
 	{
 	    // Fetches active contacts having "campaignId-ACTIVE"
-	    int active = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.ACTIVE);
+	    int active = CampaignSubscribersUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.ACTIVE);
 
 	    // Fetches done contacts having "campaignId-DONE"
-	    int done = ContactUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.DONE);
+	    int done = CampaignSubscribersUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.DONE);
 
 	    subscribersCount.put("active", active);
 	    subscribersCount.put("done", done);

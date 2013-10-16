@@ -36,8 +36,9 @@ $(function(){
 		});
 		if(checked){
 			
-			if(!confirm("Are you sure you want to delete?"))
-	    		return;
+			// customize delete confirmation message
+			if(!customize_delete_message(table))
+				return;
 			
 			// Customize the bulk delete operations
 			if(!customize_bulk_delete(id_array, data_array))
@@ -51,12 +52,22 @@ $(function(){
 			{
 				if($(table).attr('id') == "contacts")
 					url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+				
+				// For Active Subscribers table
+				if($(table).attr('id') == "active-campaign")
+					url = url + "&filter=all-active-subscribers";
 			}
 			
 			bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 		}	
 		else
-            $('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+		{
+			// if disabled return
+			if($(this).attr('disabled') === "disabled")
+				return;
+			
+			$('body').find(".select-none").html('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>You have not selected any records to delete. Please select at least one record to continue.</div>').show().delay(3000).hide(1);
+		}
 			
 	});
 	
@@ -172,7 +183,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			$('.thead_check').attr("checked", false);
 			
 			// Show bulk operations only when thead check box is checked
-			toggle_contacts_bulk_actions_dropdown(undefined, true);
+			toggle_contacts_bulk_actions_dropdown(undefined, true,$('.thead_check').parents('table').attr('id'));
 			
 			// Tags re-fetching
 			if(App_Contacts.contactsListView){
@@ -193,4 +204,29 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			}
 		}
 	});
+}
+
+/**
+ * Returns boolean value based on user action on confirmation message.
+ * If OK is clicked returns true, otherwise false.
+ * 
+ * @param table - table object
+ **/
+function customize_delete_message(table)
+{
+	
+	// Default message for all tables
+	var confirm_msg = "Are you sure you want to delete?";
+	
+	// Appends campaign-name for active subscribers
+	if($(table).attr('id') === "active-campaign")
+		confirm_msg = "Are you sure to delete from " +$('#subscribers-campaign-name').text()+" campaign?";
+
+	// Shows confirm alert, if Cancel clicked, return false
+	if(!confirm(confirm_msg))
+		return false;
+	
+	// if OK clicked return true
+	return true;
+	
 }

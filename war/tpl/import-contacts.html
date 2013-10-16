@@ -6,11 +6,11 @@
         </div>
     </div>
 </div>
-
-<div class="span3 well">
+<div class="row-fluid">
+<div class="span4 well" style="height: 200px;">
     <form id="imap-prefs-form">
         <legend>CSV Import <span class="label label-important">Alpha</span></legend>
-		<div style="padding-bottom:10px">
+		<div style="padding-bottom:10px;height:50px;">
 			Import upto 10,000 contacts from a CSV file
 		</div>
         <fieldset>
@@ -18,7 +18,19 @@
         </fieldset>
     </form>
 </div>
+<div class="span4 well" style="height: 200px;">
+    <form id="imap-prefs-form">
+        <legend>Import from Salesforce <span class="label label-important">Alpha</span></legend>
+		<div style="padding-bottom:10px; height:50px;">
+			Import accounts, leads, contacts,  deals and cases from Salesforce
+		</div>
+        <fieldset>
+           <div class="btn" id="import_salesforce" style="display:inline-block;">Import</div>
+        </fieldset>
+    </form>
+</div>
 <div class="clearfix"></div>
+</div>
 </script>
 
 <script id="import-contacts-2-template" type="text/html">
@@ -129,7 +141,7 @@
     <option value="properties_YOUTUBE-website">YouTube</option>
 </optgroup>
 <optgroup label="Address">
-    <option value="properties_address-home">Home</option>
+    <option value="properties_address-address">Home</option>
     <option value="properties_address-city">City</option>
     <option value="properties_address-state">State</option>
     <option value="properties_address-zip">Zip</option>
@@ -146,4 +158,4 @@
 </select>
 
 
-</script>
+</script>	

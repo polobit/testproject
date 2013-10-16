@@ -88,8 +88,8 @@ public class Mailgun
 	    String replyTo, String html, String text)
     {
 	String data = MAILGUN_API_PARAM_FROM + "=" + URLEncoder.encode(getFromEmail(fromName, fromEmail)) + "&"
-		+ MAILGUN_API_PARAM_TO + "=" + URLEncoder.encode(to) + "&" + MAILGUN_API_PARAM_REPLY_TO + "=" + replyTo
-		+ "&" + MAILGUN_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject);
+		+ MAILGUN_API_PARAM_TO + "=" + URLEncoder.encode(to) + "&" + MAILGUN_API_PARAM_SUBJECT + "="
+		+ URLEncoder.encode(subject);
 
 	if (!StringUtils.isEmpty(text))
 	    data += "&" + MAILGUN_API_PARAM_TEXT_BODY + "=" + URLEncoder.encode(text);
@@ -103,8 +103,13 @@ public class Mailgun
 	if (!StringUtils.isEmpty(bcc))
 	    data += "&" + MAILGUN_API_PARAM_BCC + "=" + URLEncoder.encode(bcc);
 
+	// insert replyTo if not same as from
+	if (!StringUtils.isEmpty(replyTo) && !fromEmail.equals(replyTo))
+	    data += "&" + MAILGUN_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo);
+
 	try
 	{
+	    // MailGun uses Base64 Authentication
 	    String response = HTTPUtil.accessURLUsingAuthentication(MAILGUN_API_POST_URL, MAILGUN_API_KEY,
 		    Globals.MAILGUN_API_KEY_VALUE, "POST", data, false, null, null);
 
@@ -128,7 +133,7 @@ public class Mailgun
      */
     private static String getFromEmail(String fromName, String fromEmail)
     {
-	// if fromName is empty, return email
+	// if fromName is empty, simply return email
 	if (StringUtils.isEmpty(fromName))
 	    return fromEmail;
 

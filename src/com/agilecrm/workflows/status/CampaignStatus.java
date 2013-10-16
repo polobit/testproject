@@ -16,13 +16,11 @@ public class CampaignStatus
     /**
      * Time when Start node of workflow started.
      */
-
     public Long start_time = null;
 
     /**
      * Time when last node of workflow ended.
      */
-
     public Long end_time = null;
 
     /**
@@ -31,15 +29,24 @@ public class CampaignStatus
     public String campaign_id = null;
 
     /**
+     * Campaign Name
+     **/
+    public String campaign_name = null;
+
+    /**
      * Status of workflow.
      * 
      */
     public enum Status
     {
-	ACTIVE, DONE
+	ACTIVE, DONE, REMOVED
     };
 
-    public String status;
+    /**
+     * Status is 'campaignId-Status'. Inorder to query in datastore, combined
+     * camapignId and enum Status.
+     */
+    public String status = null;
 
     /**
      * Constructs default CampaignStatus.
@@ -57,14 +64,17 @@ public class CampaignStatus
      *            - end-time of workflow.
      * @param campaign_id
      *            - campaign-id
+     * @param campaign_name
+     *            - CampaignName
      * @param status
      *            - Active or Done.
      */
-    public CampaignStatus(Long start_time, Long end_time, String campaign_id, String status)
+    public CampaignStatus(Long startTime, Long endTime, String campaignId, String campaignName, String status)
     {
-	this.start_time = start_time;
-	this.end_time = end_time;
-	this.campaign_id = campaign_id;
+	this.start_time = startTime;
+	this.end_time = endTime;
+	this.campaign_id = campaignId;
+	this.campaign_name = campaignName;
 	this.status = status;
     }
 }

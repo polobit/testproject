@@ -1,20 +1,11 @@
-// keyCode value of keys used in shortcut.
-var CodeASCII={
-E:"E".charCodeAt(0),
-M:"M".charCodeAt(0),
-N:"N".charCodeAt(0),
-P:"P".charCodeAt(0),
-T:"T".charCodeAt(0),
-Slash:191
-};
-
-/**
- * Returns true if current-route begins with route
- * @param route - route to test
+/** 
+ * Check if route is the current route of the app.
+ * @param route
  * @returns {Boolean}
  */
 function isRoute(route)
 {
+	if(!Current_Route)return false;
 	return (Current_Route.indexOf(route)==0);
 }
 
@@ -27,11 +18,97 @@ function isModalVisible()
 	return $(".modal").is(":visible");
 }
 
+
+$(function(){
+	
+	
+	//head.js(LIB_PATH+'lib/mousetrap.min.js',function(){
+		
+	head.js('/lib/mousetrap.min.js',function(){
+	
+		// Preferences
+		Mousetrap.bind('shift+p',function(){
+			if(isModalVisible())return;
+			App_Settings.navigate("user-prefs",{trigger:true});
+		});
+		
+		// New contact
+		Mousetrap.bind('shift+n',function(){
+			if(!isModalVisible())
+				$('#personModal').modal('show'); 
+		});
+		
+		// New Activity
+		Mousetrap.bind('shift+t',function(){
+			if(!isModalVisible())
+				$('#activityModal').modal('show');
+		});
+		
+		// Edit the current contact
+		Mousetrap.bind('shift+e',function(){
+			if(isRoute("contact/") && !isModalVisible())
+				App_Contacts.navigate("contact-edit",{trigger:true});
+		});
+		
+		// Send mail to current contact
+		Mousetrap.bind('shift+m',function(){
+			if(isRoute("contact/") && !isModalVisible())
+				App_Contacts.navigate("send-email",{trigger:true});
+		});
+		
+		// Focus on search box in main menu
+		Mousetrap.bind('/',function(e){
+			if(isModalVisible())return;
+			document.getElementById('searchText').focus();
+			
+			if(e.preventDefault)
+		        e.preventDefault();
+		    else
+		        e.returnValue = false; // internet explorer
+		});
+		
+		// New of current entity type
+		Mousetrap.bind('n',function(){
+			
+			if(isModalVisible())return;
+			
+			if(isRoute('contact'))
+				$('#personModal').modal('show');
+			else if(isRoute('cases'))
+				showCases();
+			else if(isRoute('deals'))
+				show_deal();
+			else if(isRoute('workflow'))
+				App_Workflows.navigate("workflow-add",{trigger:true});
+			else if(isRoute('report'))
+				App_Reports.navigate("report-add",{trigger:true});
+			else if(isRoute('task') || isRoute('calendar'))
+				$('#activityModal').modal('show');
+		});
+	});
+});
+
+/** OLD CODE Below - Without any library, just native js.
+ * 	Performance not tested, so don't know if this or the one with Mousetrap Library is faster.
+ *
+
+// keyCode value of keys used in shortcut.
+var CodeASCII={
+E:"E".charCodeAt(0),
+M:"M".charCodeAt(0),
+N:"N".charCodeAt(0),
+P:"P".charCodeAt(0),
+T:"T".charCodeAt(0),
+Slash:191
+};
+
+
+
 /**
  * Check if tg is any input tag
  * @param tg - tag name to test.
  * @returns
- */
+ *
 function isInputTag(tg)
 {
 	var tagList=[ "INPUT", "TEXTAREA" ];
@@ -45,7 +122,7 @@ function isInputTag(tg)
 /**
  * Handler function fired when any key is pressed.
  * @param e
- */
+ *
 function keyHandler(e)
 {
 	if((e.target && isInputTag(e.target.tagName)) || isModalVisible())return;
@@ -97,3 +174,4 @@ function keyHandler(e)
 }
 
 window.onkeydown = keyHandler;
+*/

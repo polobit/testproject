@@ -3,22 +3,20 @@ package com.thirdparty.google;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
+import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications;
+import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.api.NamespaceManager;
-import com.google.gdata.data.contacts.ContactEntry;
 import com.googlecode.objectify.Key;
+import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.salesforce.SalesforceImportUtil;
 
 /**
  * <code>ContactUtilServlet</code> contains method to get and import contacts
@@ -30,110 +28,95 @@ import com.googlecode.objectify.Key;
 @SuppressWarnings("serial")
 public class ContactUtilServlet extends HttpServlet
 {
-    public void doPost(HttpServletRequest req, HttpServletResponse res)
-    {
-	doGet(req, res);
-    }
-
-    /**
-     * Called from backends to import contacts into agile
-     */
-    public void doGet(HttpServletRequest req, HttpServletResponse res)
-    {
-
-	try
+	public void doPost(HttpServletRequest req, HttpServletResponse res)
 	{
-
-	    System.out.println("in contact util servlet");
-	    InputStream stream = req.getInputStream();
-	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
-
-	    ByteArrayInputStream b = new ByteArrayInputStream(
-		    contactPrefsByteArray);
-	    ObjectInputStream o = new ObjectInputStream(b);
-
-	    System.out
-		    .println("contactPrefsByteArray " + contactPrefsByteArray);
-	    ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
-
-	    System.out.println("domain user key in contacts util servlet "
-		    + contactPrefs.getDomainUser());
-	    importContacts(contactPrefs);
-
-	}
-	catch (Exception e)
-	{
-	    System.out.println("in sync servlet");
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+		doGet(req, res);
 	}
 
-    }
+	/**
+	 * Called from backends to import contacts into agile
+	 */
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
+	{
 
-    /**
-     * Calls {@link GoogleContactToAgileContactUtil} to retrieve contacts and
-     * saves it in agile
-     * 
-     * @param contactPrefs
-     *            {@link ContactPrefs}
-     * @throws Exception
-     */
-    public static void importContacts(ContactPrefs contactPrefs)
-	    throws Exception
-    {
-
-	// contactPrefs = ContactPrefs.get(contactPrefs.id);
-
-	Key<DomainUser> key = contactPrefs.getDomainUser();
-	String nameSpace = DomainUserUtil.getDomainUser(key.getId()).domain;
-	System.out.println("namespace " + nameSpace);
-
-	NamespaceManager.set(nameSpace);
-
-	if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
-	    refreshPrefsandSave(contactPrefs);
-
-	System.out.println("contactprefs token : " + contactPrefs.token);
-	List<ContactEntry> entries = GoogleContactToAgileContactUtil
-		.retrieveContacts(contactPrefs.token);
-
-	ContactsImportUtil.saveGoogleContactsInAgile(entries, key);
-    }
-
-    /**
-     * If access token is expired, calls method in
-     * {@link GoogleContactToAgileContactUtil} to refresh access token and
-     * updates it in db
-     * 
-     * @param contactPrefs
-     *            {@link ContactPrefs}
-     * @throws Exception
-     */
-    public static void refreshPrefsandSave(ContactPrefs contactPrefs)
-	    throws Exception
-    {
-	System.out.println("in refresh token of google contact prefs");
-	String response = GoogleContactToAgileContactUtil
-		.refreshTokenInGoogle(contactPrefs.refreshToken);
-
-	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(
-		response, new TypeReference<HashMap<String, Object>>()
+		try
 		{
-		});
-	System.out.println(properties.toString());
 
-	if (properties.containsKey("error"))
-	    throw new Exception(String.valueOf(properties.get("error")));
-	else if (properties.containsKey("access_token"))
-	{
-	    contactPrefs.token = String.valueOf(properties.get("access_token"));
-	    contactPrefs.expires = Long.parseLong(String.valueOf(properties
-		    .get("expires_in")));
-	    System.out.println("domiain user key in refresh token method: "
-		    + contactPrefs.getDomainUser());
-	    contactPrefs.save();
+			System.out.println("in contact util servlet");
+			InputStream stream = req.getInputStream();
+			byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
+
+			ByteArrayInputStream b = new ByteArrayInputStream(contactPrefsByteArray);
+			ObjectInputStream o = new ObjectInputStream(b);
+
+			System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
+			ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
+
+			System.out.println("domain user key in contacts util servlet " + contactPrefs.getDomainUser());
+			importContacts(contactPrefs);
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("in sync servlet");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
-    }
+	/**
+	 * Calls {@link GoogleContactToAgileContactUtil} to retrieve contacts and
+	 * saves it in agile
+	 * 
+	 * @param contactPrefs
+	 *            {@link ContactPrefs}
+	 * @throws Exception
+	 */
+	public static void importContacts(ContactPrefs contactPrefs) throws Exception
+	{
+
+		// contactPrefs = ContactPrefs.get(contactPrefs.id);
+
+		Key<DomainUser> key = contactPrefs.getDomainUser();
+		BulkActionUtil.setSessionManager(key.getId());
+
+		if (contactPrefs.type == Type.GOOGLE)
+			GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
+
+		try
+		{
+
+			if (contactPrefs.type == Type.SALESFORCE)
+			{
+				if (contactPrefs.salesforceFields.contains("accounts"))
+					SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
+
+				if (contactPrefs.salesforceFields.contains("leads"))
+					SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
+
+				if (contactPrefs.salesforceFields.contains("contacts"))
+					SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
+
+				if (contactPrefs.salesforceFields.contains("deals"))
+					SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
+
+				if (contactPrefs.salesforceFields.contains("cases"))
+					SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
+
+				BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+						"Imported successfully from Salesforce");
+			}
+
+		}
+		catch (Exception e)
+		{
+			BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+					"Problem occured while importing. Please try again");
+		}
+		finally
+		{
+			contactPrefs.delete();
+		}
+	}
 }

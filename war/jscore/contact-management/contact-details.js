@@ -135,9 +135,8 @@ $(function(){
        					type: 'DELETE',
        					success: function()
        					{
-       						console.log(tagsCollection);
-       						tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
-       						console.log(tagsCollection);
+       						if(tagsCollection)
+       							tagsCollection.remove(tagsCollection.where({'tag': tag})[0]);
        					}
        				});
        			}
@@ -163,7 +162,8 @@ $(function(){
 		e.preventDefault();
 		
 	    // Add Tags
-		var new_tags = get_new_tags('addTags').trim();
+		var new_tags = get_new_tags('addTags');
+		if(new_tags)new_tags=new_tags.trim();
 		$('#add-tags').css("display", "block");
 		$("#addTagsForm").css("display", "none");
 		

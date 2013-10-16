@@ -52,46 +52,79 @@ $(function(){
      * option and then fills the select drop down with all the campaigns by triggering
      * a custom event (fill_campaigns_contact).
      */ 
-    $('.contact-add-campaign').live('click', function(e){
+    $('.contact-add-campaign, .add-to-campaign').live('click', function(e){
     		e.preventDefault();
     	
     		var contact_id = App_Contacts.contactDetailView.model.id;
     		
-    		/*
-    		 * Custom event to fill campaigns. This is triggered from the controller
-    		 * on loading of the form. 
-    		 * This event is died to avoid execution of its functionality multiple
-    		 * times, if it is clicked multiple times (when it is clicked first time 
-    		 * it executes once, if again it is clicked it executes twice and so on).  
-    		 */
+    		// Navigate to Add Campaigns page
+    		if($(this).attr('class') === 'contact-add-campaign')
+    		{
+   			
+	    		/*
+	    		 * Custom event to fill campaigns. This is triggered from the controller
+	    		 * on loading of the form. 
+	    		 * This event is died to avoid execution of its functionality multiple
+	    		 * times, if it is clicked multiple times (when it is clicked first time 
+	    		 * it executes once, if again it is clicked it executes twice and so on).  
+	    		 */
     		
-    		$('body').die('fill_campaigns_contact').live('fill_campaigns_contact', function(event){
+	    		$('body').die('fill_campaigns_contact').live('fill_campaigns_contact', function(event){
+	    			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	    	        fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+	    		});
+	    		
+	    		// Navigate to controller to show the form and then to trigger the custom event
+	    		Backbone.history.navigate("add-campaign", {
+	                trigger: true
+	            });
+    			
+    		}
+    		
+    		// If link clicked is within Campaigns tab, hide link and show form.
+    		if($(this).attr('class') === 'add-to-campaign')
+    		{
+    			$(this).css('display','none');
+    			
+    			$('.show_campaigns_list').css('display','inline-block');
+    			
     			var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-    	        fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
-    		});
+    			
+    		    fillSelect('campaign-select','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate); 
+    		}
     		
-    		// Navigate to controller to show the form and then to trigger the custom event
-    		Backbone.history.navigate("add-campaign", {
-                trigger: true
-            });
     		
     		/*
     		 * Subscribes the contact to selected campaign from the drop down, when
     		 * the Add button is clicked
     		 */
-    		$('#subscribe-contact-campaign').die().live('click',function(e){
+    		$('#subscribe-contact-campaign, #add-to-campaign').die().live('click',function(e){
     			e.preventDefault();
+
+    			var $form;
     			
-    			var $form = $('#contactCampaignForm');
+    			// Add Campaigns form in another page.
+    			if($(this).attr('id') === 'subscribe-contact-campaign')
+    				$form = $('#contactCampaignForm');
+    			
+    			// For within Campaigns tab, campaigns list form
+    			if($(this).attr('id') === 'add-to-campaign')
+    				$form = $('#add-to-campaign-form');
+    			
+    			// Verify form validation
+    			if(!isValidForm($form))
+    				return;
 
     			// Button disabled || Validate Form fails
-    		    if($(this).attr('disabled')=='disabled' || !isValidForm($form))
-    		    {
+    		    if($(this).attr('disabled') == 'disabled')
     		    	return;
-    		    }
     			
     		    var saveButton=$(this);
     		    disable_save_button(saveButton);
+    		    
+    		    // Temporary variable to hide Campaigns list form within
+    		    // Campaigns tab.
+    		    var $add_to_campaign = $(this).attr('id');
     		    
     			// Show loading symbol until model get saved
     		    //$('#contactCampaignForm').find('span.save-status').html(LOADING_HTML);
@@ -108,25 +141,62 @@ $(function(){
     					// Remove loading image
     					//$('#contactCampaignForm').find('span.save-status img').remove();
     	    		    enable_save_button(saveButton);
+    	    		    
+    	    		    // Temp Flag inorder to show Active campaigns immediately.
+    	    		    // if true, downloads contact rather than fetching from collection
+    	    		    CONTACT_ASSIGNED_TO_CAMPAIGN = true;
+    	    		    
+    					// Hides form and shows link within Campaigns tab.
+    	    		    if($add_to_campaign === 'add-to-campaign')
+    					{
+    						$('.show_campaigns_list').css('display','none');
+    						
+    						$('.add-to-campaign').css('display','inline-block');
+    						
+    						// Triggers Campaigns tab click, to update contact model
+    						$('#contactDetailsTab a[href="#campaigns"]').trigger('click');
+    						
+    						return;
+    						
+    					}
+    					
     					// Navigate back to contact detail view
     					Backbone.history.navigate("contact/" + contact_id, {
     						trigger: true
     					});
     				}
     		   });
-    		});
+    		}); // End of Add button of form Event Handler
     		
     		// Click event of campaigns form close button
-    		$('#contact-close-campaign').live('click', function(e){
+    		$('#contact-close-campaign, #cancel-to-add-campaign').live('click', function(e){
     			e.preventDefault();
+    			
+    			// Campaigns tab form
+    			if($(this).attr('id') === 'cancel-to-add-campaign')
+    			{
+    				var $form = $('#add-to-campaign-form');
+    				
+    				// Reset form if any errors
+    				var validator = $('form#add-to-campaign-form').validate();
+    				validator.resetForm();
+    				$form.find('div.controls').removeClass('single-error');
+    				
+    				// Hides form and show link
+    				$('.show_campaigns_list').css('display','none');
+    				$('.add-to-campaign').css('display','inline-block');
+    				
+    				return;
+    			}
     			
     			// Navigate back to contact detail view
     			Backbone.history.navigate("contact/" + contact_id, {
        	            trigger: true
        	        });
-    	    });
+    			
+    	    }); // End of Close button of form Event Handler
             
-    	});
+    	}); // End of Add to Campaign Event Handler
     
 });
 

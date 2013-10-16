@@ -150,3 +150,28 @@ function agile_serialize_form(form) {
 	var json = form.serializeArray();
 	return json;
 }
+
+/**
+ * Utility Event handlers.
+ * 
+ * @method agile_init_util
+ * 
+ */
+function agile_init_util(){
+	
+	// Click event for search contact.
+	$(".mail-list a").die().live('click', function(e) {
+		// Prevent default functionality.
+		e.preventDefault();
+		// Set context (HTML container where event is triggered).
+		var el = $(this).closest("div.gadget-contact-details-tab")
+						.find("div.show-form");
+		
+		var email = $(this).closest("li").data("content");
+		var caption = $(this).text();
+		// Set chosen mail as data-email attribute of <ul>.  
+		$(".agile-mail-dropdown").data("email", email);
+		// Set button text to chosen mail.
+		$(".agile-mail-dropdown").prev().children().eq(0).text(caption);
+	});
+}

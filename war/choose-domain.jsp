@@ -33,7 +33,7 @@ if(!StringUtils.isEmpty(domain))
 <head>
 <meta charset="utf-8">
  <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx"/>
-<title>Choose Your Domain</title>
+<title>Create Your Domain</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -106,8 +106,8 @@ padding-left:10px!important;
 
 	<div class="account-container">
 		<div class="content clearfix">
-				 <h1>Register - Step 1 of 2</h1>
-				 <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();" style="padding:10px 0 15px;border-top: 1px dotted #CCC;">
+				 <h1>Create Your Domain</h1>
+				 <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();" style="padding:10px 0px 5px;border-top: 1px dotted #CCC;">
 						<div id="domain-error"></div>
 						<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
@@ -120,16 +120,16 @@ padding-left:10px!important;
 						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
 					</div>
 					 <%}%>
-					 <h3><small>Choose your domain at Agile CRM</small></h3>
+					 <h3><small>Select your domain at Agile CRM</small></h3>
 					 <div style="padding-top:10px;">
-          				<input id='subdomain' type="text" placeholder="Type Your Domain"
+          				<input id='subdomain' type="text" placeholder="Company"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
+						   	   <span style="color:#999">Company Name cannot be changed later</span>
 				   </div>
 				</form>
-				  <div><input class="btn btn-large btn-primary" type="submit" value="Next"></div>
-				
-				
-					<div class="clearfix"></div>
+				<div class="clearfix"></div>
+				<div><input class="btn btn-large btn-primary" style="float:right;" type="submit" value="Next, Choose User Name"></div>
+				<div class="clearfix"></div>
 		
 		</div>
 	</div>
@@ -167,7 +167,7 @@ padding-left:10px!important;
 				//shows error message
 				if(!error)error = "Domain should be 4 to 12 characters."
 				$("#domain-error").html('<div class="alert alert-error domain-error">'
-						+ '<a class="close" data-dismiss="alert" href="#">×</a>'+ error +'</div>');
+						+ '<a class="close" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
 				error = "";
 				return false;
 			}

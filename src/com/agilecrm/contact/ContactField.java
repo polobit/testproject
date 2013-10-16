@@ -80,10 +80,10 @@ public class ContactField
 
     public void updateField(ContactField field)
     {
-	type = field.type;
 	name = field.name;
 	subtype = field.subtype;
 	value = field.value;
+	type = field.type;
     }
 
     @Override

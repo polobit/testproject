@@ -45,7 +45,7 @@ function getUrlVars()
  * @param template
  *            Template to create options
  */
-function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, el)
+function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, el, defaultSelectOption)
 {
 	// Fetch Collection from URL
 	var collection_def = Backbone.Collection.extend({ url : url,
@@ -78,7 +78,12 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 		if (isUlDropdown)
 			$("#" + selectId, el).empty();
 		else
-			$("#" + selectId, el).empty().append('<option class="default-select" value="">Select...</option>');
+		{
+			if(!defaultSelectOption)
+				defaultSelectOption = "Select...";
+			
+			$("#" + selectId, el).empty().append('<option class="default-select" value="">'+defaultSelectOption+'</option>');
+		}
 
 		// Iterates though each model in the collection and
 		// populates the template using handlebars

@@ -9,12 +9,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 
 /**
  * <code>EmailsAPI</code> is the API class for Emails. It handles sending email
@@ -68,15 +70,25 @@ public class EmailsAPI
     @Path("contact/send-email")
     @POST
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@FormParam("from") String from, @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc,
-	    @FormParam("subject") String subject, @FormParam("body") String body, @FormParam("signature") String signature)
+    public void sendEmail(@FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail, @FormParam("to") String to,
+	    @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
+	    @FormParam("signature") String signature)
     {
 
 	// combine body and signature.
 	body = body + "<br/><div><br/><br/>" + signature + "</div>";
 
+	// Removes traling commas if any
+	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
+
+	if (!StringUtils.isEmpty(cc))
+	    cc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', cc);
+
+	if (!StringUtils.isEmpty(bcc))
+	    bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
+
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailAndSend(from, to, cc, bcc, subject, body);
+	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body);
 
     }
 

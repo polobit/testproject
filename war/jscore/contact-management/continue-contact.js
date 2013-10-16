@@ -152,14 +152,36 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	
     	
     	var tags = get_tags(tagsSourceId);
+    	console.log(obj);
+    	console.log(tags);
     	if (tags != undefined && tags.length != 0) 
     	{
     		obj.tags = [];
-    		obj['tagsWithTime'] = [];
     		
-    		$.each(tags[0].value, function(index, value){
-    			obj.tagsWithTime.push({"tag": value});
-    		});
+    		if(!obj['tagsWithTime'] || obj['tagsWithTime'].length == 0)
+    		{
+    			obj['tagsWithTime'] = [];
+    			$.each(tags[0].value, function(index, value) {
+    				obj.tagsWithTime.push({"tag": value});
+    			});
+    		}
+    		else
+    		{
+    			$.each(tags[0].value, function(index, value) {
+    				var is_new = true;
+    				$.each(obj['tagsWithTime'], function(index, tagObject){
+    					console.log()
+    					if(value == tagObject.tag)
+    					{
+    						is_new = false
+    						return false;
+    					}
+    				});
+    				
+    				if(is_new)
+    					obj.tagsWithTime.push({"tag": value});
+    			});
+    		}
        	}
 	
     }else{
@@ -603,4 +625,7 @@ function add_model_cursor(app_collection,mdl)
 	if(app_collection.models.length>=1)
 		app_collection.add(mdl,{at:app_collection.models.length-1});
 	else app_collection.add(mdl);
+	
+	if(app_collection.at(0).attributes.count)
+		app_collection.at(0).attributes.count+=1;
 }

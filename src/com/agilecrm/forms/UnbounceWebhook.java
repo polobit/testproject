@@ -36,7 +36,6 @@ public class UnbounceWebhook extends HttpServlet
 
 	    // Read JSON data
 	    JSONObject obj = new JSONObject(req.getParameter("data.json"));
-	    System.out.println("Obtained data "+ obj.toString());
 
 	    // Iterate over JSON data to get form fields
 	    Iterator<?> keys = obj.keys();
@@ -77,13 +76,13 @@ public class UnbounceWebhook extends HttpServlet
 
 	// Set field type to SYSTEM for name, email, company, title, phone, all
 	// other fields save as CUSTOM.
-	if (name.equals("name") || name.equals(Contact.FIRST_NAME))
+	if (name.equals("name") || name.equals(Contact.FIRST_NAME) || name.equalsIgnoreCase("first name"))
 	{
 	    field.name = Contact.FIRST_NAME;
 	    field.value = value;
 	    field.type = FieldType.SYSTEM;
 	}
-	if (name.equals(Contact.LAST_NAME))
+	else if (name.equals(Contact.LAST_NAME) || name.equalsIgnoreCase("last name"))
 	{
 	    field.name = Contact.LAST_NAME;
 	    field.value = value;

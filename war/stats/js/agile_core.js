@@ -44,10 +44,20 @@ function agile_json(URL, callback)
 	var ud = 'json' + (Math.random() * 100).toString().replace(/\./g, '');
 	window[ud] = function(data)
 	{
-		if (callback && typeof (callback) === "function")
-		{
-			callback && callback(data);
-		}
+		if(data['error'])
+			{
+				if(callback && typeof(callback['error']) == "function")
+				{
+					callback['error'](data);
+				}
+				return;
+			}
+		
+		if(callback && typeof(callback['success']) == "function")
+			callback['success'](data);
+		
+		if(callback && typeof(callback) == 'function')
+			callback(data);
 	};
 	document.getElementsByTagName('body')[0].appendChild((function()
 	{

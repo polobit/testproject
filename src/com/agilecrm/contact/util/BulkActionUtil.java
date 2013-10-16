@@ -40,7 +40,7 @@ public class BulkActionUtil
     {
 	DELETE("/core/api/bulk-actions/delete/contacts"), ASIGN_WORKFLOW("/core/api/bulk-actions/enroll-campaign/%s"), CHANGE_OWNER(
 		"/core/api/bulk-actions/change-owner/%s"), ADD_TAG("/core/api/bulk-actions/contact/tags"), CONTACTS_UPLOAD(
-		"/core/api/bulk-actions/contacts/multi/upload");
+		"/core/api/bulk-actions/contacts/multi/upload"), REMOVE_ACTIVE_SUBSCRIBERS("/core/api/bulk-actions/remove-active-subscribers/%s");
 
 	String url;
 
@@ -81,10 +81,7 @@ public class BulkActionUtil
 
 	// Create Task and push it into Task Queue
 	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).payload(data).header("Content-Type", contentType)
-		.header("Host", url).method(type)
-
-		.method(type);
+	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).payload(data).header("Content-Type", contentType).header("Host", url).method(type);
 
 	queue.add(taskOptions);
     }
@@ -110,20 +107,19 @@ public class BulkActionUtil
 	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 	/*
-	 * If there are more than on argument in data then it is sent in
+	 * If there are more than one argument in data then it is sent in
 	 * requests
 	 */
 	if (data.length > 1 && !StringUtils.isEmpty(data[1]))
 	{
-	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).param("data", data[1])
-		    .header("Content-Type", contentType).header("Host", url).method(type);
+	    taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).param("data", data[1]).header("Content-Type", contentType)
+		    .header("Host", url).method(type);
 
 	    queue.add(taskOptions);
 	    return;
 	}
 
-	taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).header("Content-Type", contentType)
-		.header("Host", url).method(type);
+	taskOptions = TaskOptions.Builder.withUrl(uri).param("filter", data[0]).header("Content-Type", contentType).header("Host", url).method(type);
 
 	queue.add(taskOptions);
     }
@@ -138,8 +134,7 @@ public class BulkActionUtil
      * @param contentType
      * @param type
      */
-    public static void enrollCampaign(byte[] data, Map<String, Object> parameter, String url, String contentType,
-	    Method type)
+    public static void enrollCampaign(byte[] data, Map<String, Object> parameter, String url, String contentType, Method type)
     {
 	String workflowId = ((String[]) parameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
@@ -157,8 +152,7 @@ public class BulkActionUtil
      * @param contentType
      * @param type
      */
-    public static void enrollCampaign(String id, Map<String, Object> parameter, String url, String contentType,
-	    Method type)
+    public static void enrollCampaign(String id, Map<String, Object> parameter, String url, String contentType, Method type)
     {
 	String workflowId = ((String[]) parameter.get("workflow_id"))[0];
 	url = String.format(url, workflowId);
@@ -176,8 +170,7 @@ public class BulkActionUtil
      * @param contentType
      * @param type
      */
-    public static void changeOwner(byte[] data, Map<String, Object> parameter, String url, String contentType,
-	    Method type)
+    public static void changeOwner(byte[] data, Map<String, Object> parameter, String url, String contentType, Method type)
     {
 	String ownerId = ((String[]) parameter.get("owner"))[0];
 	url = String.format(url, ownerId);
@@ -315,12 +308,63 @@ public class BulkActionUtil
     }
 
     /**
+     * Removes active subscribers from Cron if exists and updates each selected
+     * contact campaign-status
+     * 
+     * @param data
+     *            - Selected subscribers list of ids.
+     * @param requestParameter
+     *            - request data
+     * @param url
+     *            - API url to remove selected active subscribers.
+     * @param contentType
+     *            - Request content-type.
+     * @param type
+     *            - Request method type.
+     */
+    public static void removeActiveSubscribers(byte[] data, Map<String, Object> requestParameter, String url, String contentType, Method type)
+    {
+	String workflowId = ((String[]) requestParameter.get("workflow_id"))[0];
+	url = String.format(url, workflowId);
+
+	System.out.println("Selected Active Subscribers removal url " + url);
+
+	BulkActionUtil.postDataToBulkActionBackend(data, url, contentType, type);
+    }
+
+    /**
+     * Removes all active subscribers from Cron and updates campaign-status of
+     * all active subscribers of that campaign.
+     * 
+     * @param id
+     *            - filter-id to show that all active subscribers are selected
+     * @param requestParameter
+     *            - request data
+     * @param url
+     *            - API url to remove all active subscribers
+     * @param contentType
+     *            - request content type
+     * @param type
+     *            - request method type
+     */
+    public static void removeActiveSubscribers(String id, Map<String, Object> requestParameter, String url, String contentType, Method type)
+    {
+	String workflowId = ((String[]) requestParameter.get("workflow_id"))[0];
+	url = String.format(url, workflowId);
+
+	System.out.println("All Active Subscribers removal url " + url);
+	System.out.println("filter id is " + id);
+
+	BulkActionUtil.postDataToBulkActionBackend(url, contentType, type, id);
+    }
+
+    /**
      * Sets session manager, it is used to get current user when running in
      * backends
      * 
      * @param domainUserId
      */
-    private static void setSessionManager(Long domainUserId)
+    public static void setSessionManager(Long domainUserId)
     {
 	System.out.println("domain user setting session: " + domainUserId);
 	if (SessionManager.get() != null)

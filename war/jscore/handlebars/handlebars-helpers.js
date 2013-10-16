@@ -14,7 +14,6 @@ $(function()
 	 */
 	Handlebars.registerHelper('getPropertyValue', function(items, name)
 	{
-
 		return getPropertyValue(items, name);
 	});
 
@@ -398,14 +397,22 @@ $(function()
 	Handlebars.registerHelper('deals_by_milestones', function(data)
 	{
 		var html = "";
+		var count = Object.keys(data).length;
 		$.each(data, function(key, value)
 		{
-			html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
-			for ( var i in value)
+			if(count == 1 && key == "")
 			{
-				html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				html += '<div class="slate" style="padding:5px 2px;"><div class="slate-content" style="text-align:center;"><h3>You have no milestones defined</h3></div></div>';
 			}
-			html += "</ul></div>";
+			else
+			{
+				html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
+				for ( var i in value)
+				{
+					html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+				}
+				html += "</ul></div>";
+			}
 		});
 		return html;
 	});
@@ -413,13 +420,13 @@ $(function()
 	// To show milestones as sortable list
 	Handlebars.registerHelper('milestone_ul', function(data)
 	{
-		var html = "<ul class='milestone-value-list tagsinput' style='list-style:none;'>";
+		var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
 		if(data)
 		{
 			var milestones = data.split(",");
 			for (var i in milestones)
 			{
-				html += "<li class='tag' data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a><div></li>";
+				html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
 			}
 		}
 		html += "</ul>";
@@ -827,7 +834,7 @@ $(function()
 								var count = countJsonProperties(address);
 
 								el = el
-										.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:-5px;padding-top:3px;"><span>');
+										.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:0px;padding-top:3px;"><span>');
 
 								$.each(address, function(key, val)
 								{
@@ -1187,9 +1194,6 @@ $(function()
 	 */
 	Handlebars.registerHelper('if_greater', function(value, target, options)
 	{
-		console.log(value);
-		console.log(parseInt(target));
-		console.log(parseInt(target) > value);
 		if (parseInt(target) > value)
 			return options.inverse(this);
 		else
@@ -1419,6 +1423,25 @@ $(function()
 		return options.inverse(this);
 	});
 
+	Handlebars.registerHelper('check_json_length', function(content, length, options)
+	{
+		var json_length = 0;
+		for ( var prop in content)
+		{
+			json_length++;
+		}
+		
+		if (json_length == parseInt(length))
+		{
+			for ( var prop in content)
+			{
+				return options.fn({ property : prop, value : content[prop], last : true});
+			}
+		}
+
+		return options.inverse(content);
+	});
+	
 	Handlebars.registerHelper('iterate_json', function(context, options)
 	{
 		var result = "";
@@ -1831,4 +1854,151 @@ $(function()
 		  return value.replace( / +/g, '');
 		  
 		 });
+	
+	
+	/**
+	 * Returns campaignStatus object from contact campaignStatus array having 
+	 * same campaign-id. It is used to get start and completed time from array.
+	 ***/
+	Handlebars.registerHelper('if_same_campaign',function(object,data,options){
+		
+		var campaignStatusArray = object[data];
+		
+		// if campaignStatus key doesn't exist return.
+		if (data === undefined || campaignStatusArray === undefined)
+			return;
+		
+		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+			{
+			   var current_campaign_id = campaignStatusArray[i].campaign_id;
+
+			   // compares campaign-id of each element of array with 
+			   // object's campaign-id
+			   if (object.campaign_id === current_campaign_id)
+			   {
+				   // if equal, execute template current json
+				   return options.fn(campaignStatusArray[i]);
+			   }
+			}
+			
+	});
+	
+	/**
+	 * Returns campaign-id from one of the active subscribers collection.
+	 **/
+	Handlebars.registerHelper('get_campaign_id', function(object){
+		
+		if (object === undefined || object[0] === undefined)
+			return;
+		
+		return object[0].campaign_id;
+
+	});
+	
+	/**
+	 * Returns other active campaigns in campaign-active subscribers.
+	 **/
+	Handlebars.registerHelper('if_other_active_campaigns',function(object,data,options){
+
+		if (object === undefined || object[data] === undefined)
+			return;
+		
+		var other_campaigns = {};
+		var other_active_campaigns = [];
+		var other_completed_campaigns=[];
+		var campaignStatusArray = object[data];
+		
+		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+		{
+			// neglect same campaign
+			if (campaignStatusArray[i].campaign_id === object.campaign_id)
+				continue;
+			
+			// push all other active campaigns
+			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+				other_active_campaigns.push(campaignStatusArray[i])
+				
+			// push all done campaigns
+			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+				other_completed_campaigns.push(campaignStatusArray[i]);
+		}
+		
+		other_campaigns["active"] = other_active_campaigns;
+		other_campaigns["done"] = other_completed_campaigns;
+		
+		return options.fn(other_campaigns);
+		
+	});
+	
+     /**
+      * Returns Contact Model from contactDetailView collection.
+      * 
+      **/
+	Handlebars.registerHelper('contact_model',function(options){
+		
+		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+		{
+			
+			// To show Active Campaigns list immediately after campaign assigned.
+			if(CONTACT_ASSIGNED_TO_CAMPAIGN)
+			{	
+				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
+			
+				// fetches updated contact json
+				var contact_json = $.ajax(
+					 {
+					 type: 'GET',
+					 url: '/core/api/contacts/'+ App_Contacts.contactDetailView.model.get('id'),
+					 async:	false, 
+					 dataType: 'json'
+					 }).responseText;
+			
+				// Updates Contact Detail model
+				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
+            
+				return options.fn(JSON.parse(contact_json));
+			}
+			
+			// if simply Campaigns tab clicked, use current collection
+			return options.fn(App_Contacts.contactDetailView.model.toJSON());
+		}
+	});
+	
+	/**
+	 * Returns json object of active and done subscribers from contact object's
+	 * campaignStatus.
+	 **/
+	Handlebars.registerHelper('contact_campaigns',function(object, data,options){
+		
+		// if campaignStatus is not defined, return
+		if (object === undefined || object[data] === undefined)
+			return;
+
+		// Temporary json to insert active and completed campaigns
+		var campaigns = {};
+		
+		var active_campaigns = [];
+		var completed_campaigns=[];
+		
+		// campaignStatus object of contact
+		var campaignStatusArray = object[data];
+		
+		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+		{
+			// push all active campaigns
+			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
+				active_campaigns.push(campaignStatusArray[i])
+				
+			// push all done campaigns
+			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
+				completed_campaigns.push(campaignStatusArray[i]);
+		}
+		
+		campaigns["active"] = active_campaigns;
+		campaigns["done"] =  completed_campaigns;
+		
+		// apply obtained campaigns context within 
+	    //contact_campaigns block
+		return options.fn(campaigns);
+	});
 });

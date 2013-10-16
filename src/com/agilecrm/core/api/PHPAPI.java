@@ -497,46 +497,27 @@ public class PHPAPI
 		try
 		{	
 			JSONObject obj = new JSONObject(data);
+			ObjectMapper mapper = new ObjectMapper();
+			if (!obj.has("email"))
+				return null;
 			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+			if (contact==null)
+				return null;
 			Iterator<?> keys = obj.keys();
 			while(keys.hasNext())
 			{
 				String key = (String) keys.next();
 				if(key.equals("email"))
 					continue;
-				if(key.equals(Contact.FIRST_NAME)||key.equals(Contact.LAST_NAME)||key.equals(Contact.WEBSITE)||
-				   key.equals(Contact.COMPANY)||key.equals(Contact.TITLE)||key.equals("phone")||key.equals(Contact.ADDRESS))
-				{
-					ContactField field = contact.getContactFieldByName(key);
-					if(field == null)
-					{
-						field = new ContactField();
-						String value = obj.getString(key);
-						field.name = key;
-						field.value = value;
-						field.type = FieldType.SYSTEM;
-					}
-					else
-						field.value = obj.getString(key);
-					contact.properties.add(field);
-				}
-				else
-				{
-					ContactField field = new ContactField();
-					String value = obj.getString(key);
-					field.name = key;
-					field.value = value;
-					field.type = FieldType.CUSTOM;
-					contact.properties.add(field);
-				}
+					JSONObject json = new JSONObject();
+					json.put("name", key);
+					json.put("value",obj.getString(key));
+					ContactField field = mapper.readValue(json.toString(), ContactField.class);
+					contact.addProperty(field);
 			}
-			if (contact==null)
-				return null;
-			contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
-			contact.save();
-			ObjectMapper mapper = new ObjectMapper();
+			
 			return mapper.writeValueAsString(contact);
-		}
+		}		
 		catch (Exception e)
 		{
 			e.printStackTrace();

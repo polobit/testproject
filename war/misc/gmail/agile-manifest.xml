@@ -32,7 +32,7 @@
 	
  	<!-- GADGET -->
 	<Extension id="AgileCRMGadget" type="gadget">
-		<Name>AgileCRM - Built with Love for Small Businesses - contextual
+		<Name>AgileCRM - Sell & Market like Fortune 500 - contextual
 			gadget</Name>
 		<Url>https://www.agilecrm.com/agile-gadget.xml</Url>
 		<Container name="mail" />

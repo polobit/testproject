@@ -83,13 +83,13 @@ public class WufooWebhook extends HttpServlet
 
 	// Set field type to SYSTEM for name, email, company, title, phone, all
 	// other fields save as CUSTOM.
-	if (name.equals("name") || name.equals("first"))
+	if (name.equals("name") || name.equals("first") || name.equalsIgnoreCase("first name"))
 	{
 	    field.name = Contact.FIRST_NAME;
 	    field.type = FieldType.SYSTEM;
 	    field.value = value;
 	}
-	else if (name.equals("last"))
+	else if (name.equals("last") || name.equalsIgnoreCase("last name"))
 	{
 	    field.name = Contact.LAST_NAME;
 	    field.type = FieldType.SYSTEM;

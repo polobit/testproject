@@ -25,7 +25,6 @@ function agile_trackPageview(callback)
 
 	// Get agile_id
 	var agile = agile_id.get();
-
 	var params = "";
 
 	// If it is a new session
@@ -37,17 +36,43 @@ function agile_trackPageview(callback)
 			document_referrer = encodeURIComponent(document_referrer);
 		else
 			document_referrer = "";
-
 		params = "guid={0}&sid={1}&url={2}&agile={3}&new=1&ref={4}".format(guid, session_id, url, agile, document_referrer);
 	}
 	else
 		params = "guid={0}&sid={1}&url={2}&agile={3}".format(guid, session_id, url, agile);
 
+	agile_setEmailFromUrl();
+
 	if (agile_guid.get_email())
-		params += "&email=" + encodeURIComponent(agile_guid.get_email()); // get email																			// email
+
+		params += "&email=" + encodeURIComponent(agile_guid.get_email()); // get email			
 
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
 
 	// Callback
 	agile_json(agile_url, callback);
+}
+
+function agile_setEmailFromUrl()
+{
+	// Check if email present in cookie
+	if(!agile_guid.get_email())
+	{
+		// Check if fwd=cd url
+		if (window.location.href.search("fwd=cd")!==-1){
+			
+			try{
+			// Get data
+			var k =  decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI("data").replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+			if(k) {
+
+				// Get and set email
+				agile_guid.set_email(JSON.parse(k).email);
+				}
+			}
+			catch(e){
+				console.log(e.message);
+			}
+		}
+	}
 }

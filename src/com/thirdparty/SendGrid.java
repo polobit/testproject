@@ -127,7 +127,7 @@ public class SendGrid
 	    queryString += "&" + addToEmailsToParams(toEmailSet);
 
 	    // Reply To
-	    if (!StringUtils.isEmpty(replyTo))
+	    if (!StringUtils.isEmpty(replyTo) && !fromEmail.equals(replyTo))
 		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo);
 
 	    // Text body

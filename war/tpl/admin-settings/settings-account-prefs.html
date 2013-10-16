@@ -13,7 +13,7 @@
                             {{#if plan.plan_id}}
                             {{plan.plan_id}}
                             {{else}}
-                            Free ( <a href="#subscribe" style="text-decoration:underline;">Upgrade</a> )
+                            Free <!--( <a href="#subscribe" style="text-decoration:underline;">Upgrade</a> )-->
                             {{/if}}
                         </div>
                     </div>
@@ -34,15 +34,15 @@
                         </div>
                     </div>
 				</div>
-                <div style="margin-right:80px;">
+                <div style="margin-right:65px;">
                     <div class="right">
                         <div id="upload-container" messg="User image has been uploaded">
                             <div class="clearfix">
                                 <div class="imgholder">
                                     {{#if logo}}
-                                    <img src="{{logo}}" height="75" width="75" />
+                                    <img class="thumbnail" src="{{logo}}" height="75" width="75" />
                                     {{else}}
-                                    <img src="https://contactuswidget.appspot.com/images/pic.png" height="75" width="75" />
+                                    <img class="thumbnail" src="https://contactuswidget.appspot.com/images/pic.png" height="75" width="75" />
                                     {{/if}}													
                                 </div>
                                 <p>

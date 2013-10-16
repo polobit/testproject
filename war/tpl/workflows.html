@@ -13,8 +13,8 @@
     <td>
         <div>
 		    {{#stringToJSON this "subscribersCount"}}{{/stringToJSON}} 	
-			{{#if subscribersCount.done}}{{subscribersCount.done}}&nbsp;completed{{#if subscribersCount.active}},{{/if}} {{/if}}
-            {{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}
+			<a href="#workflow/{{id}}/completed-contacts" id="done-contacts" class="workflow-results">{{#if subscribersCount.done}}{{subscribersCount.done}}&nbsp;completed</a>{{#if subscribersCount.active}},{{/if}} {{/if}}
+            <a href="#workflow/{{id}}/active-contacts" id="active-contacts" class="workflow-results">{{#if subscribersCount.active}}{{subscribersCount.active}}&nbsp;active{{/if}}</a>
         </div>
     </td>
     <td>{{#if triggers}} {{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="workflow-results">{{name}}</a> {{/toLinkTrigger}} {{else}} <a href="#trigger-add/{{id}}" class="workflow-results"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>
@@ -45,8 +45,13 @@
     <div class="span12">
         <div class="page-header">
             <h1>Campaigns <small>{{#campaigns_heading this}}{{/campaigns_heading}}</small></h1>
-            <a href="#campaign-stats" class="btn right" id="campaign-stats" style="top:-30px;position:relative;margin-left:10px"><i class="icon-bar-chart"></i> Compare Campaigns</a>
-            <a href="#workflow-add" class="btn right" id="addWorkflow" style="top:-30px;position:relative"><i class="icon-plus-sign"></i> Add Campaign</a>
+			<div class="btn-group right" style="top:-30px;position:relative">
+            	<a href="#workflow-add" class="btn" id="addWorkflow"><i class="icon-plus-sign"></i> Add Campaign</a>
+            	<a id="campaign-stats" class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+				<ul class="dropdown-menu pull-right">
+					<li><a href="#campaign-stats" id="campaign-stats"><i class="icon-bar-chart"></i> Compare Campaigns</a></li>
+				</ul>
+			</div>
             <a href="#triggers" class="btn right" id="add-trigger" style="top:-30px;position:relative; margin-right:10px"><i class="icon-cog"></i> Manage Triggers</a>
         </div>
     </div>

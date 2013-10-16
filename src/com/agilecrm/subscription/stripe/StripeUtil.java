@@ -57,7 +57,7 @@ public class StripeUtil
 	Map<String, Object> customerParams = new HashMap<String, Object>();
 
 	// Gets credit card details map
-	customerParams.put("card", getCardParms(customerCard));
+	customerParams.put("card", getCardParams(customerCard));
 
 	// Gets plan details map
 	customerParams.put("plan", plan.plan_id);
@@ -82,7 +82,7 @@ public class StripeUtil
      * @throws JsonMappingException
      * @throws IOException
      */
-    public static Map<String, Object> getCardParms(CreditCard cardDetails)
+    public static Map<String, Object> getCardParams(CreditCard cardDetails)
 	    throws JsonParseException, JsonMappingException, IOException
     {
 

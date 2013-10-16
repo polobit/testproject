@@ -21,8 +21,8 @@ if (!StringUtils.isEmpty(password)) {
 
 	domainUser.password = EncryptDecryptUtil.decrypt(password);
 
-	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-			SendMail.FORGOT_PASSWORD, domainUser);
+	AppengineMail.sendMail(email, SendMail.PASSWORD_CHANGE_NOTIFICATION_SUBJECT,
+			SendMail.PASSWORD_CHANGE_NOTIFICATION, domainUser);
 	
 	success = "We have sent you an email";
 }
@@ -154,13 +154,13 @@ jQuery.validator.setDefaults({
 				
 				 <% if(!StringUtils.isEmpty(error)){%>
 				 <div class="alert alert-error login-error">
-					<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+					<a class="close" data-dismiss="alert" href="#">&times</a><%=error%> 
 				</div>
 				<%}%>
 				
 				 <% if(!StringUtils.isEmpty(success)){%>
 				<div class="alert alert-success login-success">
-					<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
+					<a class="close" data-dismiss="alert" href="#">&times</a><%=success%> 
 				</div>
 				 <%}%>
 				

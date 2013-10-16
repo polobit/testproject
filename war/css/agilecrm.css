@@ -522,12 +522,7 @@ html {
 	z-index: 2050!important;
 }
 
-#twilio-connect-button {
-   background: url(../img/plugins/twilio-connect-button.png);
-   width: 130px; height: 34px; display: block; margin: 0 auto;
-  }
 
-#twilio-connect-button:hover { background-position: 0 34px; }
 
 
 /*for information block */
@@ -864,13 +859,13 @@ tbody a.no-style-a {
 	border:1px solid #d5d5d5;
 	border-radius:5px;
 }
-.milestone-column{
-	width:24.9%;
+.milestone-column {
+	width:24.87%;
 	vertical-align:top;
 	border-right:1px solid #bbb;
 	display:inline-block;
 }
-.milestone-heading{
+.milestone-heading {
 	padding: 7px 0px;
 	text-align:center;
 	font-size:17px;
@@ -879,6 +874,7 @@ tbody a.no-style-a {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+	text-transform: capitalize;
 }
 .milestone-column > ul {
 	height:468px;
@@ -905,9 +901,11 @@ tbody a.no-style-a {
 	background-color:#f8f8b9!important;
 	border: 1px solid #DDD!important;
 	color:black!important;
+	padding: 5px;
+	border-radius: 5px;
 }
 .milestone-value-list > li > div {
-	margin-left:3px;
+	margin:0px 0px -6px 3px;
 }
 .milestone-value-list > li > div > span {
 	white-space: nowrap;
@@ -952,3 +950,45 @@ overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@media (min-width: 980px) and (max-width: 1201px)  {
+	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu li:not(:nth-child(n+3)) {
+		display:none;
+	}
+}
+
+
+
+@media (min-width: 1200px) and (max-width: 1250px)  {
+	.agile-menu  > li:nth-child(n + 9):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
+		display:none;
+	}
+
+}
+
+@media (min-width: 1251px) {
+
+	#more-menu {
+		display:none;
+	}
+		
+}
+
+@media (max-width: 979px) {
+	#more-menu {
+		display:none;
+	}
+		
+}
+
+/* Disable drop-down menu item, add class="disabled" to <a>
+Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
+*/
+.dropdown-menu a.disabled,
+.dropdown-menu a.disabled:hover{
+	background-color: #ffffff; 
+	color: #000000; 
+}
+

@@ -38,6 +38,12 @@ public class ContactEmail
     public String from = null;
 
     /**
+     * From name
+     **/
+    @NotSaved(IfDefault.class)
+    public String from_name = null;
+
+    /**
      * To email address
      */
     @NotSaved(IfDefault.class)
@@ -99,6 +105,12 @@ public class ContactEmail
     @NotSaved(IfDefault.class)
     public Boolean is_email_opened = false;
 
+    /**
+     * To store email opened time
+     **/
+    @NotSaved(IfDefault.class)
+    public Long email_opened_at = 0L;
+
     private static ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(ContactEmail.class);
 
     /**
@@ -152,7 +164,7 @@ public class ContactEmail
 		date_secs = (System.currentTimeMillis() / 1000) * 1000;
 
 	    // From address should be same as imap format.
-	    from = from + " " + "<" + from + ">";
+	    from = from_name + " " + "<" + from + ">";
 	}
     }
 

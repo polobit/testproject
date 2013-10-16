@@ -7,6 +7,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
@@ -40,12 +41,12 @@ public class CampaignStatusUtil
 	// ACTIVE status
 	if (status.equals(Status.ACTIVE))
 	{
-	    setCampaignStatusActive(contact, campaignId);
+	    setActiveCampaignStatus(contact, campaignId);
 	    return;
 	}
 
-	// DONE
-	setCampaignStatusDone(contact, campaignId);
+	// DONE or REMOVED
+	setEndCampaignStatus(contact, campaignId, status);
     }
 
     /**
@@ -62,7 +63,7 @@ public class CampaignStatusUtil
      * @param campaignId
      *            - CampaignId of active campaign.
      */
-    private static void setCampaignStatusActive(Contact contact, String campaignId)
+    private static void setActiveCampaignStatus(Contact contact, String campaignId)
     {
 	boolean isNew = true;
 
@@ -78,6 +79,7 @@ public class CampaignStatusUtil
 		campaignStatus.start_time = statusTime;
 		campaignStatus.end_time = null;
 		campaignStatus.status = campaignId + "-" + Status.ACTIVE;
+		campaignStatus.campaign_name = WorkflowUtil.getCampaignName(campaignId);
 
 		// False to avoid new CampaignStatus to be created
 		isNew = false;
@@ -88,7 +90,8 @@ public class CampaignStatusUtil
 	// if subscribed first-time, add campaignStatus to the list.
 	if (isNew)
 	{
-	    CampaignStatus campaignStatus = new CampaignStatus(statusTime, null, campaignId, (campaignId + "-" + Status.ACTIVE));
+	    CampaignStatus campaignStatus = new CampaignStatus(statusTime, null, campaignId, WorkflowUtil.getCampaignName(campaignId),
+		    (campaignId + "-" + Status.ACTIVE));
 	    contact.campaignStatus.add(campaignStatus);
 	}
 
@@ -96,28 +99,30 @@ public class CampaignStatusUtil
     }
 
     /**
-     * Sets campaign-status of contact to DONE, when campaign completed for that
-     * contact. Campaign status done is set when campaign came to hang-up node
-     * which is set in TaskletUtil.
+     * Sets campaign-status of contact to DONE or REMOVED, when campaign
+     * completed or cancelled for that contact respectively. Campaign status
+     * done is set when campaign came to hang-up node which is set in
+     * TaskletUtil. REMOVED is set when active contacts are removed from
+     * campaign.
      * 
      * @param contact
      *            - Contact subscribed to campaign.
      * @param campaignId
      *            - CampaignId of done campaign.
      */
-    private static void setCampaignStatusDone(Contact contact, String campaignId)
+    private static void setEndCampaignStatus(Contact contact, String campaignId, Status status)
     {
 	Long statusTime = Calendar.getInstance().getTimeInMillis() / 1000;
 
 	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
 
-	// Sets end-time and updates status from ACTIVE to DONE.
+	// Sets end-time and updates status from ACTIVE to given status
 	for (CampaignStatus campaignStatus : campaignStatusList)
 	{
 	    if (campaignStatus.campaign_id.equals(campaignId))
 	    {
 		campaignStatus.end_time = statusTime;
-		campaignStatus.status = (campaignStatus.campaign_id) + "-" + Status.DONE;
+		campaignStatus.status = (campaignStatus.campaign_id) + "-" + status;
 		break;
 	    }
 	}

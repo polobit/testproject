@@ -25,7 +25,12 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
+import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.campaignio.cron.util.CronUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
@@ -47,8 +52,8 @@ public class BulkOperationsAPI
     @Path("delete/contacts/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user_id) throws JSONException
+    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter, @PathParam("current_user") Long current_user_id)
+	    throws JSONException
     {
 	Integer count = 0;
 	List<Contact> contacts = new ArrayList<Contact>();
@@ -71,8 +76,7 @@ public class BulkOperationsAPI
 	if (!contacts.isEmpty())
 	    if (contacts.get(0).type.equals(Contact.Type.PERSON))
 	    {
-		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count),
-			"contact(s)");
+		BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count), "contact(s)");
 		return;
 	    }
 
@@ -92,9 +96,8 @@ public class BulkOperationsAPI
     @Path("/change-owner/{new_owner}/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids,
-	    @PathParam("new_owner") String new_owner, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
+    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids, @PathParam("new_owner") String new_owner,
+	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
     {
 	List<Contact> contact_list = null;
 
@@ -107,8 +110,7 @@ public class BulkOperationsAPI
 
 	ContactUtil.changeOwnerToContactsBulk(contact_list, new_owner);
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
-		String.valueOf(contact_list.size()));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE, String.valueOf(contact_list.size()));
     }
 
     /**
@@ -124,9 +126,8 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids,
-	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
-	    @PathParam("current_user_id") Long current_user_id) throws JSONException
+    public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids, @PathParam("workflow-id") Long workflowId,
+	    @FormParam("filter") String filter, @PathParam("current_user_id") Long current_user_id) throws JSONException
     {
 	List<Contact> contact_list = null;
 
@@ -137,8 +138,7 @@ public class BulkOperationsAPI
 
 	WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
-		String.valueOf(contact_list.size()));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN, String.valueOf(contact_list.size()));
     }
 
     /**
@@ -154,8 +154,8 @@ public class BulkOperationsAPI
     @Path("contact/tags/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString,
-	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
+    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
     {
 	System.out.println(filter);
 	System.out.println("current user : " + current_user);
@@ -197,8 +197,7 @@ public class BulkOperationsAPI
 	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
 	    count = contacts.size();
 	}
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(count));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray).toString(), String.valueOf(count));
     }
 
     /**
@@ -245,5 +244,63 @@ public class BulkOperationsAPI
 	    // Delete blob data after contacts are created
 	    BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
 	}
+    }
+
+    /**
+     * Removes all or selected active subscribers of campaign from Cron if
+     * exists and updates the campaign-status of each active subscriber.
+     * 
+     * @param contactIds
+     *            - List of selected contact ids
+     * @param campaign_id
+     *            - Campaign-id
+     * @param allActiveSubscribers
+     *            - shows all active subscribers are selected.
+     * @throws JSONException
+     */
+    @Path("/remove-active-subscribers/{campaign_id}/{current_user_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void removeActiveSubscribersOfCampaign(@FormParam("ids") String contactIds, @PathParam("campaign_id") String campaign_id,
+	    @FormParam("filter") String allActiveSubscribers) throws JSONException
+    {
+
+	// to show in notification
+	int contactSize = 0;
+
+	// if all active subscribers are selected
+	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
+	{
+	    List<Contact> activeContacts = CampaignSubscribersUtil.getAllCampaignSubscribers(campaign_id + "-" + CampaignStatus.Status.ACTIVE);
+
+	    contactSize = activeContacts.size();
+
+	    for (Contact contact : activeContacts)
+	    {
+		// Remove from Cron.
+		CronUtil.removeTask(campaign_id, contact.id.toString());
+
+		// Updates CampaignStatus to REMOVE
+		CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), campaign_id, Status.REMOVED);
+	    }
+
+	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS, String.valueOf(contactSize));
+	    return;
+	}
+
+	// Removes and updates for selected active subscribers
+	JSONArray activeContactsJSONArray = new JSONArray(contactIds);
+	contactSize = activeContactsJSONArray.length();
+
+	for (int i = 0; i < contactSize; i++)
+	{
+	    // Remove from Cron
+	    CronUtil.removeTask(campaign_id, activeContactsJSONArray.getString(i));
+
+	    // Set REMOVED campaignStatus
+	    CampaignStatusUtil.setStatusOfCampaign(activeContactsJSONArray.getString(i), campaign_id, Status.REMOVED);
+	}
+
+	BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS, String.valueOf(contactSize));
     }
 }
