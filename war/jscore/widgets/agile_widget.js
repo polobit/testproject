@@ -146,7 +146,7 @@ function agile_crm_update_contact(propertyName, value, callback)
 	{
 		if (callback && typeof (callback) == "function")
 			callback();
-	} });
+	} }, { silent : true });
 
 }
 

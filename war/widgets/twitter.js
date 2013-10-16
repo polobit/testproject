@@ -1239,8 +1239,7 @@ function sendTwitterMessage(Twitter_id, message)
 			return;
 		}
 
-		$("#spinner-modal").show();
-
+		$(this).text("Saving..");
 		sendRequest("/core/api/widgets/social/message/" + Twitter_Plugin_Id + "/" + Twitter_id, "twitter_messageForm", "twitter_messageModal");
 
 	});
@@ -1300,8 +1299,7 @@ function tweetInTwitter(Twitter_id)
 			return;
 		}
 
-		$("#spinner-modal").show();
-
+		$(this).text("Saving..");
 		sendRequest("/core/api/widgets/social/tweet/" + Twitter_Plugin_Id, "twitter_messageForm", "twitter_messageModal");
 
 	});
@@ -1325,10 +1323,9 @@ function sendRequest(url, formId, modalId)
 
 	function(data)
 	{
-		$("#spinner-modal").hide();
 
 		// On success, shows the status as sent
-		$('#' + modalId).find('span.save-status').html("sent");
+		// $('#' + modalId).find('span.save-status').html("sent");
 
 		// Hides the modal after 2 seconds after the sent is shown
 		setTimeout(function()
@@ -1338,7 +1335,6 @@ function sendRequest(url, formId, modalId)
 
 	}).error(function(data)
 	{
-		$("#spinner-modal").hide();
 
 		/*
 		 * If error occurs while posting modal is removed and error message is

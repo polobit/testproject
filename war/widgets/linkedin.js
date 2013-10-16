@@ -873,7 +873,7 @@ function sendLinkedInAddRequest(Linkedin_id)
 			return;
 		}
 
-		$("#spinner-modal-linked").show();
+		$(this).text("Saving..");
 
 		sendRequestToLinkedIn("/core/api/widgets/social/connect/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
 	});
@@ -923,7 +923,7 @@ function sendLinkedInMessage(Linkedin_id)
 			return;
 		}
 
-		$("#spinner-modal-linked").show();
+		$(this).text("Saving..");
 
 		sendRequestToLinkedIn("/core/api/widgets/social/message/" + LinkedIn_Plugin_Id + "/" + Linkedin_id, 'linkedin_messageForm', 'linkedin_messageModal');
 	});
@@ -947,10 +947,9 @@ function sendRequestToLinkedIn(url, formId, modalId)
 	 */
 	$.post(url, $('#' + formId).serialize(), function(data)
 	{
-		$("#spinner-modal-linked").hide();
 
 		// On success, shows the status as sent
-		$('#' + modalId).find('span.save-status').html("sent");
+		//$('#' + modalId).find('span.save-status').html("sent");
 
 		// Hides the modal after 2 seconds after the sent is shown
 		setTimeout(function()
@@ -960,7 +959,6 @@ function sendRequestToLinkedIn(url, formId, modalId)
 
 	}).error(function(data)
 	{
-		$("#spinner-modal-linked").hide();
 
 		/*
 		 * If error occurs while posting modal is removed and error message is
