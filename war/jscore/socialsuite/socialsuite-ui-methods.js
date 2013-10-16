@@ -1,23 +1,58 @@
 /**
- *  Fill details of stream in add-stream form.
+ *  Fill details of stream in add-stream form and arrange elements as per requirement.
  */
 function fillStreamDetail()
-{
-	$("#user_name", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.name); 
+{	
+	 // Network Type not selected
+	 NetworkType = null;
+	 
+	 // Stream Type not selected
+	 StreamType = null;
 
-	$("#network_type", $('#addStreamModal')).attr("value","TWITTER"); 
-	    	    
-	$("#stream_type", $('#addStreamModal')).attr("value",StreamType);
+	// Empty screen name means Oauth is not done.
+	$("#twitter_account", $('#addStreamModal')).attr("value",'');
+
+	// Empty stream type.
+	$("#stream_type", $('#addStreamModal')).attr("value",'');
 	
-	$("#domain_user_id", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id);
-	
+	//remove keyword input element
+	$('.remove-keyword').remove();
+    		
+	// Add value to hidden input element.
+	$("#domain_user_id", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id);	
 	$("#client_channel", $('#addStreamModal')).attr("value",CURRENT_DOMAIN_USER.id + "_Channel");
-	    
-	if(StreamType == "Search")
-	  {
-		console.log("search");	
-	   	document.getElementById('searchStreamKeyword').innerHTML='<div class="remove-keyword"><label class="control-label">Keyword <span class="field_req">*</span></label><div class="controls"><input id="keyword" name="keyword" type="text" class="required" required="required" value="" autocapitalize="off"></div></div>';
-	  }	 
+	
+	// Add button for twitter is hidden.
+	$('#add_twitter_stream').hide();
+	
+	// Add button for linkedin is hidden.
+	$('#add_linkedin_stream').hide();
+	
+	// To hide stream type description.
+	document.getElementById("stream_description_label").className = 'description-hidden txt-mute'; 
+}
+
+// Calls from Profile image onload to fill account holder's name in Form.
+function onloadProfileImg()
+{
+	// Add screen name to label.
+	document.getElementById('account_description_label').innerHTML='<b>'+$('#twitter_account').val()+'</b>';
+}
+
+// Add website and select network on continue form in add contact flow.
+function socialsuite_add_website()
+{
+  console.log(TweetOwnerForAddContact);	
+  if (TweetOwnerForAddContact == null)
+	  return;
+   
+  // Add values in continue form after add contact form.
+  // Add website / handle of twitter of tweet owner.
+  $("#website", $('#continueform')).attr("value",TweetOwnerForAddContact);		
+  TweetOwnerForAddContact = null;  
+  
+  // Select network type.
+  $("div.website select").val("TWITTER");
 }
 
 /**
@@ -38,8 +73,7 @@ function setupSocialSuiteLinkedinOAuth()
         '&stream_type=' + encodeURIComponent(StreamType);
 
     // Shows a link button in the UI which connects to the above URL
-    $('#linkedinAddStream').html("<a id='add-linkedin-stream' type='button' class='save-linkedin-stream btn btn-primary' href=\"" + url + "\" style='text-decoration: none;'>" + 
-    		"Link Your LinkedIn</a>");    
+    $('#add_linkedin_stream').attr("href",url);    
 }
 
 /**
@@ -125,7 +159,7 @@ function handleMessage(tweet)
 	{		
 	 // Searchs tweet owner's kloutscore.
 	 // Fetches tweet owner's klout id.
-	 var url = "http://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
+	 var url = "https://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
 
      $.getJSON( url , function(data) {
     	 console.log(data);   
@@ -134,7 +168,7 @@ function handleMessage(tweet)
         console.log(data);      
     	
    	    // Fetches tweet owner's klout score.
-    	url = "http://api.klout.com/v2/user.json/"+data.id+"/score?key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
+    	url = "https://api.klout.com/v2/user.json/"+data.id+"/score?key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
     	      
     	$.getJSON( url, function(data) {
     		  console.log(data);
@@ -207,7 +241,7 @@ function setup_dragging_columns()
 	console.log("in setup_dragging_columns");
 	console.log("StreamsListView : ");console.log(StreamsListView);
 	
-	head.js('http://code.jquery.com/ui/1.10.3/jquery-ui.js',
+	head.js('https://code.jquery.com/ui/1.10.3/jquery-ui.js',
 			function()
 			   {
 				$('ul.columns').sortable({

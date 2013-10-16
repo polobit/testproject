@@ -1,12 +1,13 @@
 <!-- main social suite container -->
 <script id="socialsuite-streams-collection-template" type="text/html">
  {{#unless this.length}}  
-            <div class="span3">
+            <div class="span4">
         		<div>
             		<h3>You do not have any added streams.</h3><br />
-            		<p>You can add stream from "Manage Stream" tab.</p>
+            		<p>Save your time and your sanity. Improve productivity by managing all of your social networks within Social Suite.</p>
+                    <p>You can add stream from <b>"Add Stream"</b> button.</p>
         		</div>
-    		</div><!-- span3 end -->
+    		</div><!-- span4 end -->
  {{else}} 
 	<ul id="socialsuite-streams-model-list" class="columns row-fluid ui-sortable"></ul> 
  {{/unless}}
@@ -106,7 +107,7 @@
    <div class="item-box">       
       <div class="tweet">
            <header class="tweet-header">        
-	          <a class="account-link link-complex block" href="http://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
+	          <a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
 		         <div class="obj-left item-img tweet-img">  
 			       <img class="tweet-avatar avatar pull-left thumbnail" src={{user.profile_image_url}} width="40" height="40" alt="{{user.screen_name}}'s avatar" title="Klout Score {{klout_score}}">   
  		         </div> 
@@ -119,7 +120,9 @@
     		  </a>  
 		   </header> 
 		   <div class="tweet-body"> 
- 	          <p class="tweet-text with-linebreaks">{{text}}</p>                  
+ 	          <p class="tweet-text">
+                 {{show_link_in_statement text}}
+              </p>                  
  			  <footer class="tweet-footer cf">
               {{#if retweeted}}
                  <span class="txt-mute txt-small">{{retweeted}}</span><br>
@@ -134,35 +137,35 @@
                     <li> <a class="tweet-action" href="https://twitter.com/{{user.screen_name}}/status/{{id_str}}" rel="url" target="_blank"> 
                             <i class="icon icon-external-link" title="Detail Status"></i>                            
                          </a> </li>	    		
-                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" data-user-name="{{user.name}}"> 
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" tweet-owner={{user.screen_name}} data-user-name="{{user.name}}" description="{{user.description}}"> 
                             <i class="icon icon-plus-sign" title="Add Contact"></i>                            
                          </a> </li>	                 
  		    		<li> <a class="tweet-action" href="#social" rel="reply"> 
-                            <i class="icon icon-reply reply-message" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Reply"></i>                             
+                            <i class="icon icon-reply reply-message" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Reply"></i>                             
                          </a> </li>                    
  		    		<li> <a class="tweet-action" href="#social" rel="retweet">
                          {{#if retweeted_by_user}}
-                           <i class="icon icon-retweet undo-retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} retweet-id="{{retweet_id}}" stream-id={{stream_id}} title="Retweet" style="color:#00FF40;"></i>
+                           <i class="icon icon-retweet undo-retweet-status" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} retweet-id="{{retweet_id}}" stream-id={{stream_id}} title="Retweet" style="color:#00FF40;"></i>
                          {{else}}
                              {{#if tweetowner_not_streamuser}}
-                                 <i class="icon icon-retweet retweet-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Retweet"></i>
+                                 <i class="icon icon-retweet retweet-status" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Retweet"></i>
                              {{/if}}
                          {{/if}}
                          </a> </li>
  		    		<li> <a class="tweet-action" href="#social" rel="favorite"> 
                          {{#if favorited_by_user}}
-                            <i class="icon icon-star undo-favorite-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
+                            <i class="icon icon-star undo-favorite-status" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
                          {{else}}
-                            <i class="icon icon-star favorite-status" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Favorite from {{user.screen_name}}"></i>                             
+                            <i class="icon icon-star favorite-status" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Favorite from {{user.screen_name}}"></i>                             
                          {{/if}}
                          </a> </li>
                  {{/if}}
  		    		<li> 
-                         <a id="{{id_str}}_more_options" class="tweet-action more-options" href="#social" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}> 
+                         <a id="{{id_str}}_more_options" class="tweet-action more-options" href="#social" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}> 
                             <i class="icon icon-ellipsis-horizontal" title="More options"></i> 
                          </a>
     					 <ul id="{{id_str}}_more_options_list" class="pull-right more-options-list dropdown-menu" role="menu">
-                                <li role="presentation"><a href="#social" class="reply-message" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} role="menuitem">Tweet to @{{user.screen_name}}</a></li>
+                                <li role="presentation"><a href="#social" class="reply-message" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} role="menuitem">Tweet to @{{user.screen_name}}</a></li>
  							{{#if in_contact}}	
                                 <li class="divider"></li>
      							<li role="presentation"><a href="#social" class="add_score" role="menuitem">Add Score to @{{user.screen_name}}</a></li>                            
@@ -171,7 +174,7 @@
 							{{/if}}
                             {{#if deletable_tweet}}
                                 <li class="divider"></li>
-                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem" owner-tweet={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}>Delete</a></li>                                
+                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}}>Delete</a></li>                                
                             {{/if}}
     					 </ul>
                     </li>  

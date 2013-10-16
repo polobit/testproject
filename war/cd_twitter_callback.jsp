@@ -2,6 +2,7 @@
 <%@page import="twitter4j.auth.AccessToken"%>
 <%@page import="twitter4j.TwitterFactory"%>
 <%@page import="twitter4j.Twitter"%>
+<%@page import="twitter4j.User"%>
 <%@page import="com.agilecrm.Globals"%>
 <%@page import="org.scribe.builder.api.TwitterApi"%>
 <%@page import="org.scribe.builder.ServiceBuilder"%>
@@ -32,12 +33,14 @@ System.out.println(accessToken);
 
 // Use Twitter4Java to get more details - screenname to show it to the user
  Twitter twitter = new TwitterFactory().getInstance();
+
 twitter.setOAuthConsumer(Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY);
 
 AccessToken accessToken2 = new AccessToken(accessToken.getToken(), accessToken.getSecret());
 twitter.setOAuthAccessToken(accessToken2);
 	    
-
+//Fetches User from Twitter
+User user = twitter.showUser(twitter.getId());
 %>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -56,8 +59,11 @@ $(function()
 	var token = "<%=accessToken.getToken()%>";
 	var tokenSecret = "<%=accessToken.getSecret()%>";
 	var account = "<%=twitter.getScreenName()%>";
+	
+	// Fetches profile image url
+	var profileImgUrl = "<%=user.getProfileImageURL()%>";
 		
-	window.opener.popupTwitterCallback(token, tokenSecret, account);
+	window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
 	window.close();	
 });
 

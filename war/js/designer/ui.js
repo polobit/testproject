@@ -313,11 +313,12 @@ function openTwitter()
 	//return false;
 }
 
-function popupTwitterCallback(token, tokenSecret, account)
+function popupTwitterCallback(token, tokenSecret, account, profileImgUrl)
 {
 	$('#twitter_token_secret').val(tokenSecret);
 	$('#twitter_token').val(token);
 	$('#twitter_account').val(account);
+	$('#twitter_profile_img_url').attr("src",profileImgUrl);
 }
 
 // Iteratator for generating UI Fields

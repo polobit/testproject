@@ -10,10 +10,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		
 		// First function on click of tab
 		"social" : "socialsuite",		
-		
-		// Add stream
-		"add-stream" : "addStream",
-		
+				
 		// Streams tab with collection
 		"streams" : "streams",	
 	},
@@ -31,36 +28,16 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 		// Gets template to display.
 		$('#content').html(getTemplate('socialsuite'),{});	
-		
-		// It is added in home.jsp.
-		/*$('head').append('<link rel="stylesheet" href="/css/socialsuite.css" type="text/css" />');*/	
-				
-		head.js('js/designer/ui.js', function(){});		
-				
+						
 	    /* Creates pubnub object and channel dedicated for new user or relogin */
 		initToPubNub();	
 		
 		// Display added streams 
 		this.streams();		
+		
+		/*head.js('js/lib/jquery.ddslick.min.js', function(){});	*/
 	}, // socialsuite end	
-	
-	/**
-	 * Display list of Twitter and Linkedin streams. 
-	 */
-	addStream : function()
-	{				
-		console.log("in add stream.");
-		
-		head.js('js/designer/ui.js', function(){});
-		
-		// Default selected stream
-		StreamType = "Home";
-		
-		// Gets List Template
-		$('#content').html(getTemplate('socialsuite'),{});
-		$('#socialsuite-tabs-content').html(getTemplate('socialsuite-add-stream'),{});		
-	},//addStream end	
-	   
+				   
 	/**
 	  * This will create collection and store social suite in that, all streams 
 	  * and tweets are displayed from this function and publish msg to register.
@@ -71,7 +48,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 {			
 		console.log("in streams");	
 		
-		$('#content').html(getTemplate('socialsuite'),{});		
+		$('#content').html(getTemplate('socialsuite-show-streams'),{});		
 		
 		if(!StreamsListView)  // Streams not collected from dB
 		{			
@@ -107,6 +84,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		if(StreamsListView != undefined) // Streams already collected in collection
 			{
 			  console.log("Collection already defined.");
+			  
 			  // New stream to add in collection.
 			  if(stream)
 				StreamsListView.collection.add(stream);
@@ -122,7 +100,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			}		
 		
 		 // Remove deleted tweet element from ui
-		 $('.deleted').remove();
+		 $('.deleted').remove();		
 	 }, // streams end
 		
 	 /**

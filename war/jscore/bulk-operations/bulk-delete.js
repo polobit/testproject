@@ -155,14 +155,13 @@ function customize_bulk_delete(id_array, data_array){
 function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, data_array){
 	var json = {};
 	json.ids = JSON.stringify(id_array);
-	
+		
 	$.ajax({
 		url: url,
 		type: 'POST',
 		data: json,
 		success: function() {
-			$(".bulk-delete-loading").remove();
-			
+			$(".bulk-delete-loading").remove();			
 			
 			if(!is_grid_view)
 			{
@@ -170,14 +169,13 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 				
 				// To remove table rows on delete 
 				for(var i = 0; i < index_array.length; i++) 
-					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });
+					$(tbody).find('tr:eq(' + index_array[i] + ')').fadeOut(300, function() { $(this).remove(); });				
 			}
 			else
 			{
 				// To remove table rows on delete 
 				for(var i = 0; i < id_array.length; i++) 
-					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });
-				
+					$("."+id_array[i]).fadeOut(300, function() { $(this).remove(); });				
 			}
 			
 			$('.thead_check').attr("checked", false);
@@ -201,7 +199,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 					var $removeItem = $( '#' + data.id );
 					$('#timeline').isotope('remove', $removeItem);
 				});
-			}
+			}			
 		}
 	});
 }

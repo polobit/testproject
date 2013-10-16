@@ -6,7 +6,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .columns{box-sizing:border-box;height:100%;overflow:visible;margin:0px 0px 0px 0px;}
 .column{margin:0px 5px 8px!important;background-color:#fcfcfc;font-size:1rem;
         white-space:normal;overflow:hidden;position:relative;border:1px solid #a1a1a1;border-radius:4px;}
-.column-header{box-sizing:border-box;position:relative;height:50px;padding:0 10px;color:#444;
+.column-header{box-sizing:border-box;position:relative;height:55px;padding:0 10px;padding-top:2px;color:#444;
                background-color:#eee;line-height:50px;border-bottom:1px solid #ddd}
 .margin-hs{margin-left:5px !important;margin-right:2px !important;}
 .social-type-icon{position:relative;bottom:12px;}
@@ -101,7 +101,8 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
     -webkit-border-radius: 10px;
     border-radius: 10px;
-} 
+}
+
 /* Handle */
 #socialsuite-streams-model-list ::-webkit-scrollbar{
     width: 5px;
@@ -113,3 +114,33 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
      background: rgba(185, 182, 182, 0.8);
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
+
+/* stream type selected button*/
+.stream-type-button-color{background-color:#bbb;}
+
+/* add stream form buttons */
+.stream-type>a,.network-type>a{text-decoration:none;}
+
+/* on add stream form padding*/
+.stream-details>div>.row-fluid{padding-top: 25px;}
+#account_description{padding-top: 5px;}
+.social-stream-types>.row-fluid{padding-top: 10px;}
+
+/* stream type div */
+.stream-type{padding: 20px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
+.social-stream-types{padding-left: 35px;}
+
+/* Stream type description */
+.description-hidden,.keyword-hidden{visibility:hidden;}
+#stream_description_label{padding-top: 10px;}
+
+/* searck keyword */
+#search_stream_keyword{padding-top: 18px;padding-left: 154px;}
+
+/* Add Stream Form*/
+.at-center{text-align: center;}
+.font15{font-size: 15px;}
+#twitter_option,#linkedin_option{padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
+#twitter_option:hover,#linkedin_option:hover{background-color:#EDEDED;}
+#addStreamModal>.modal-body{max-height:415px;}
+#account_description_label{padding-top: 33px;}
