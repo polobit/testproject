@@ -186,7 +186,7 @@
 										<% 		}
 												if (navSetting.social){
 													%>		<li id="reportsmenu" ><a href="#social"><i
-															class="icon-bar-chart icon-white"></i> Social</a></li>
+															class="icon-comments icon-white"></i> Social</a></li>
 										<% } %>
 
 							<%  if (count > 3)
@@ -221,7 +221,7 @@
 										{ %>
 										
 										<li id="socialsuitemenu"><a href="#social">
-										     <i class="icon-group icon-white"></i> Social</a>
+										     <i class="icon-comments icon-white"></i> Social</a>
 										</li>
 										<%} %>
 										</ul>

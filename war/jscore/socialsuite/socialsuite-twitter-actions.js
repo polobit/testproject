@@ -94,8 +94,7 @@ $(document).on("click",".compose-message", function(e)
             console.log(data.responseText);            
         });
     });
-});
-
+}); 
 /**
  * Get stream and create reply tweet and post it on Twitter.
  */

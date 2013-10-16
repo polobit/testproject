@@ -109,7 +109,7 @@ public class SocialSuiteTwitterUtil
 			User user = twitter.showUser(twitter.getId());
 
 			// Fetches profile image url
-			profileImgUrl = user.getProfileImageURL();
+			profileImgUrl = user.getOriginalProfileImageURLHttps();
 
 			System.out.println("profileImgUrl : " + profileImgUrl);
 			return profileImgUrl;

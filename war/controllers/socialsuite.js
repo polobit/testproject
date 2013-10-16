@@ -84,23 +84,23 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		if(StreamsListView != undefined) // Streams already collected in collection
 			{
 			  console.log("Collection already defined.");
-			  
+			  		  
 			  // New stream to add in collection.
 			  if(stream)
 				StreamsListView.collection.add(stream);
 			  
 			  $('#socialsuite-tabs-content').append(StreamsListView.render(true).el);
 			  
-			    // Makes columns draggable.		
-			    setup_dragging_columns();								
-				
-				// Creates normal time.
- 		 	    head.js('lib/jquery.timeago.js', function(){	 
- 		 		        $(".time-ago", $(".chirp-container")).timeago(); });
+			  // Creates normal time.
+ 		 	  head.js('lib/jquery.timeago.js', function(){	 
+ 		 		        $(".time-ago", $(".chirp-container")).timeago(); });		 	 
 			}		
 		
 		 // Remove deleted tweet element from ui
-		 $('.deleted').remove();		
+		 $('.deleted').remove();	
+		 
+		 // Remove waiting symbol.
+		 removeWaiting();
 	 }, // streams end
 		
 	 /**
@@ -140,7 +140,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 	   if(base_model.has("tweetListView"))
 	 		   {
 	 		      tweetListView.collection.add(base_model.get("tweetListView").toJSON());
-	 			  tweetListView.collection.sort() ;	 			
+	 			  tweetListView.collection.sort();	 			 
 	 		   }	 	   
 	 	   
 	 	   // Add new tweetList View as collection in stream model

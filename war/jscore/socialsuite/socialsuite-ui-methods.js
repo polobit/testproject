@@ -29,12 +29,29 @@ function fillStreamDetail()
 	$('#add_linkedin_stream').hide();
 	
 	// To hide stream type description.
-	document.getElementById("stream_description_label").className = 'description-hidden txt-mute'; 
+	document.getElementById("stream_description_label").className = 'description-hidden txt-mute';
+	
+	// Empty hidden profile image on form.	
+	$('#twitter_profile_img_url').attr("src","");
 }
 
 // Calls from Profile image onload to fill account holder's name in Form.
 function onloadProfileImg()
 {
+	// Add button for twitter is shown.
+	$('#add_twitter_stream').show();
+		
+	// Add button for linkedin is hidden.
+	$('#add_linkedin_stream').hide();
+		    		
+    // Add twitter stream types template.
+	$("#streamDetails").html(getTemplate('twitter-stream-type'),{});	
+	
+	// Add profile image to account description.	
+	$('#twitter_profile_img').attr("src",document.getElementById("twitter_profile_img_url").src);
+	
+	console.log("in onloadProfileImg");
+	
 	// Add screen name to label.
 	document.getElementById('account_description_label').innerHTML='<b>'+$('#twitter_account').val()+'</b>';
 }
@@ -145,7 +162,7 @@ function handleMessage(tweet)
   tweet["msg_type"] = "Tweet";
 	
   // We need this messages to reflect actions in all added relevant streams.
-  if(tweet.delete != null)
+  if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
 	    console.log("delete tweet");
 	    return;
@@ -156,10 +173,14 @@ function handleMessage(tweet)
   console.log(modelStream);
   
   if(modelStream != null || modelStream != undefined)
-	{		
+	{
+	  // Temp : Add tweet to model.
+	  addTweetToStream(modelStream,tweet);	  
+	} // If End  
+  
 	 // Searchs tweet owner's kloutscore.
 	 // Fetches tweet owner's klout id.
-	 var url = "https://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
+/*	 var url = "https://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
 
      $.getJSON( url , function(data) {
     	 console.log(data);   
@@ -191,7 +212,7 @@ function handleMessage(tweet)
     	   console.log( "klout id of user end Request Failed: " + err );
     	   addTweetToStream(modelStream,tweet);
     	   });
-	}// If end
+	}// If end*/
 }
 
 /**
@@ -199,6 +220,9 @@ function handleMessage(tweet)
  */
 function addTweetToStream(modelStream,tweet)
 {
+	// Hide waiting symbol.
+	$("#stream-spinner-modal-"+tweet.stream_id).hide();
+	
 	// If stream owner is tweet owner no need to show retweet icon.
     if(modelStream.get('screen_name') != tweet.user.screen_name)            	
        tweet["tweetowner_not_streamuser"] = true;      
@@ -235,37 +259,29 @@ function addTweetToStream(modelStream,tweet)
 			});
 }
 
-// Make columns draggable.
-function setup_dragging_columns()
+// Remove waiting symbol from stream's column header, when user return to social tab.
+function removeWaiting()
 {
-	console.log("in setup_dragging_columns");
-	console.log("StreamsListView : ");console.log(StreamsListView);
+  var streamsJSON = StreamsListView.collection.toJSON();
 	
-	head.js('https://code.jquery.com/ui/1.10.3/jquery-ui.js',
-			function()
-			   {
-				$('ul.columns').sortable({
-					  change:function(event, ui)
-					     {  
-						  $('#socialsuite-streams-model-list > li').scrollLeft($(this).position().left);
-					     }, //change end
-					  update: function(event, ui) 
-					    {						  						  
-						  console.log("StreamsListView : ");console.log(StreamsListView);
-						  var id = ui.item[0].id;
-						  console.log("ui :");console.log(ui);
-						  console.log("ui.item[0] :");console.log(ui.item[0]);
-						  console.log("id :"+id);
-						  console.log("ui.originalPosition :");console.log(ui.originalPosition);
-						  console.log("ui.currentPosition :");console.log(ui.position);
-						  
-						  var oldColumn = StreamsListView.collection.get(id).toJSON();
-						  console.log("oldColumn :");console.log(oldColumn);
-						  
-						  var newColumn = $(this).html();
-						  console.log("newColumn :");console.log(newColumn);							
-					    },// Update end
-					 }); // Sortable end
-				 $('ul.columns').disableSelection();
-			   });	
-}// Setup_column_in_columns end
+  // Streams not available OR streams already registered OR pubnub not initialized	
+  if(streamsJSON == null)
+	{
+	  return;
+	}
+
+  console.log(streamsJSON);		  	
+
+  // Get stream
+  $.each(streamsJSON, function(i, stream)
+		 {	  		
+       	    // Get stream from collection.
+	        var modelStream = StreamsListView.collection.get(stream.id);	
+	  
+	        if(modelStream.get('tweetListView').length >= 1)
+	        	{
+	        	  // Hide waiting symbol.
+			      $("#stream-spinner-modal-"+stream.id).hide();	        	
+	        	}	        
+		 });
+}

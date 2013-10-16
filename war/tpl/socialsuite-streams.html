@@ -19,12 +19,13 @@
                 {{#if profile_img_url}}
                   <img src={{profile_img_url}} id={{id}}-profile-img class="user-profile-img pull-left thumbnail" alt="{{screen_name}}'s avatar." title="{{screen_name}}'s avatar.">
                 {{/if}}             
-               <!-- <small class="pull-right column-index">{{column_index}}</small> -->
+               <!-- <small class="pull-right column-index">{{column_index}}</small> -->               
                {{#if_equals network_type "TWITTER"}}                 
                  <i class="pull-right margin-hs social-type-icon icon icon-twitter"></i>
                {{else}}
                  <i class="pull-right margin-hs social-type-icon icon icon-linkedin"></i>
-               {{/if_equals}}               
+               {{/if_equals}}       
+               <span id="stream-spinner-modal-{{id}}" class="waiting-symbol"><img src="img/ajax-loader-cursor.gif"></img></span>        
                <h4 class="column-title txt-ellipsis"> 
                    {{#if_equals stream_type "All_Updates"}}    
                       <span><b>All Updates</b></span>
@@ -88,15 +89,14 @@
                </span>	 
             </header>
             <div class="column-content" id="stream">
-                     
+                      
             </div>
 </script>
 
 <!-- sub-column as model but collection in main-column  -->
 <script id="Column-collection-template" type="text/html">
 <div id="Column-model-list" class="chirp-container scroll-v">
-  <div class="" id="socialsuite-error-panel" style="display:none;" >
-  </div>  
+   
 </div>
 </script>
 
@@ -124,6 +124,7 @@
                  {{show_link_in_statement text}}
               </p>                  
  			  <footer class="tweet-footer cf">
+              {{#if id_str}}
               {{#if retweeted}}
                  <span class="txt-mute txt-small">{{retweeted}}</span><br>
               {{/if}}
@@ -178,7 +179,8 @@
                             {{/if}}
     					 </ul>
                     </li>  
-        		</ul>              
+        		</ul>     
+              {{/if}}
  			 </footer>  
     	   </div> 
 		   <i class="sprite tweet-dogear"></i>

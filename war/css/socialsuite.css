@@ -124,7 +124,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 /* on add stream form padding*/
 .stream-details>div>.row-fluid{padding-top: 25px;}
 #account_description{padding-top: 5px;}
-.social-stream-types>.row-fluid{padding-top: 10px;}
+.social-stream-types>.row-fluid{padding-top: 15px;}
 
 /* stream type div */
 .stream-type{padding: 20px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
@@ -142,5 +142,8 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .font15{font-size: 15px;}
 #twitter_option,#linkedin_option{padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
 #twitter_option:hover,#linkedin_option:hover{background-color:#EDEDED;}
-#addStreamModal>.modal-body{max-height:415px;}
+#addStreamModal>.modal-body{max-height:425px;}
 #account_description_label{padding-top: 33px;}
+
+.waiting-symbol{float: right;bottom: 13px;position: relative;}
+#twitter_profile_img_url{visibility:hidden;width: 1px;height: 1px;}

@@ -70,23 +70,16 @@ $(document).on("click",".network-type", function(e)
 	      // User select Twitter.
 	      if(this.id == "twitter_option")
 	    	  {    
+	    		// Oauth for twitter.	 
+	    	  	openTwitter();
+	    	  
 	    	  	/**
 	    	  	 * Get network type from selected option of social networks. 
 	    	  	 * Icon can not store value attribute so need store on options.
 	    	  	 */
-	    	  	NetworkType = "TWITTER";	
+	    	  	NetworkType = "TWITTER";
 	    	  	
-	    	    // Add button for twitter is shown.
-	    		$('#add_twitter_stream').show();
-	    			
-	    		// Add button for linkedin is hidden.
-	    		$('#add_linkedin_stream').hide();
-	    			    		
-	    	    // Add twitter stream types template.
-	    		$("#streamDetails").html(getTemplate('twitter-stream-type'),{});	    		
-	    		 
-	    	  	// Oauth for twitter.	 
-	    	  	openTwitter();
+	    	  	console.log("in network-type");
 	    	  }
 	      
 	      // User select Linkedin.
@@ -188,37 +181,37 @@ $(document).on("mouseover",".stream-type", function(e)
 		
 	switch (mouseoverStream){
 	case "Search":		  
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-search"></i> Relevant Tweets matching a specified query.';	   	 
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.';	   	 
 	  	  break;
 	case "Home": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Tweets and retweets posted by the authenticating user and the users they follow.';
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Tweets and retweets of user and followers.';
 	      break;
 	case "Mentions": 
-		  document.getElementById('stream_description_label').innerHTML='<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (tweets containing a users\'s @screen_name) for the authenticating user.';
+		  document.getElementById('stream_description_label').innerHTML='<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users\'s @screen_name).';
 	      break;
 	case "Retweets": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-retweet"></i> Tweets authored by the authenticating user that have been retweeted by others.';
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-retweet"></i> User\'s tweets retweeted by others.';
 		  break;
 	case "DM_Inbox": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-download-alt"></i> Direct messages sent to the authenticating user.';
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-download-alt"></i> Direct messages sent to the user.';
 		  break;
 	case "DM_Outbox": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-upload-alt"></i> Direct messages sent by the authenticating user.';
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-upload-alt"></i> Direct messages sent by the user.';
 		  break;
 	case "Favorites": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-star"></i> Tweets favorited by the authenticating user.';
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-star"></i> User\'s favorite tweets.';
 		  break;
 	case "Sent": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-share-alt"></i> Tweets authored or retweeted by the authenticating user.';
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-share-alt"></i> Tweets sent by the user.';
 		  break;
 	case "Scheduled": 
 		  document.getElementById('stream_description_label').innerHTML='<i class="icon-calendar"></i> Tweets user want to sent in future time.';
 		  break;
 	case "All_Updates": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Updates and shares from authenticated user\'s connections and groups.';	   	  
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';	   	  
 	  	  break;
 	case "My_Updates": 
-		  document.getElementById('stream_description_label').innerHTML='<i class="icon-share-alt"></i> Updates authored by the authenticating user.';
+		  document.getElementById('stream_description_label').innerHTML='<i class="icon-share-alt"></i> Updates authored by the user.';
 	      break;
 	}//switch end	
  });
