@@ -21,70 +21,73 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class NavSetting
 {
-	// dao
-	private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
+    // dao
+    private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
 
-	/**
-	 * Id of the entity
-	 */
-	@Id
-	public Long id = null;
+    /**
+     * Id of the entity
+     */
+    @Id
+    public Long id = null;
 
-	/**
-	 * State of Cases tab in Navbar. <code>true</code> implies visible in
-	 * Navbar.
-	 */
-	@NotSaved(IfDefault.class)
-	public boolean cases = true;
+    /**
+     * State of Cases tab in Navbar. <code>true</code> implies visible in
+     * Navbar.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean cases = true;
 
-	/**
-	 * State of Deals tab in Navbar. <code>true</code> implies visible in
-	 * Navbar.
-	 */
-	@NotSaved(IfDefault.class)
-	public boolean deals = true;
+    /**
+     * State of Deals tab in Navbar. <code>true</code> implies visible in
+     * Navbar.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean deals = true;
 
-	/**
-	 * State of Calendar tab in Navbar. <code>true</code> implies visible in
-	 * Navbar.
-	 */
-	@NotSaved(IfDefault.class)
-	public boolean calendar = true;
+    @NotSaved(IfDefault.class)
+    public boolean social = true;
 
-	/**
-	 * State of Campaign tab in Navbar. <code>true</code> implies visible in
-	 * Navbar.
-	 */
-	@NotSaved(IfDefault.class)
-	public boolean campaign = true;
-	
-	/**
-	 * State of Reports tab in Navbar. <code>true</code> implies visible in
-	 * Navbar.
-	 */
-	@NotSaved(IfDefault.class)
-	public boolean reports = true;
+    /**
+     * State of Calendar tab in Navbar. <code>true</code> implies visible in
+     * Navbar.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean calendar = true;
 
-	/**
-	 * Deafult - <br/>
-	 * Cases - not visible, Rest of the tabs - visible
-	 */
-	public void setDefault()
-	{
-		cases = false;
-		deals = calendar = campaign = reports = true;
-	}
+    /**
+     * State of Campaign tab in Navbar. <code>true</code> implies visible in
+     * Navbar.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean campaign = true;
 
-	public NavSetting()
-	{
-	}
+    /**
+     * State of Reports tab in Navbar. <code>true</code> implies visible in
+     * Navbar.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean reports = true;
 
-	/**
-	 * Save this entity in Datastore
-	 */
-	@JsonIgnore
-	public void save()
-	{
-		dao.put(this);
-	}
+    /**
+     * Deafult - <br/>
+     * Cases - not visible, Rest of the tabs - visible
+     */
+    public void setDefault()
+    {
+	cases = false;
+	deals = calendar = campaign = reports = true;
+    }
+
+    public NavSetting()
+    {
+    }
+
+    /**
+     * Save this entity in Datastore
+     */
+    @JsonIgnore
+    public void save()
+    {
+	dao.put(this);
+    }
 }

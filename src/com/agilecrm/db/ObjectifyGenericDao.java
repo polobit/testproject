@@ -52,6 +52,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
+import com.socialsuite.Stream;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -125,6 +126,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 		// Contacts import
 		ObjectifyService.register(ContactPrefs.class);
+
+		// Social suite's Stream
+		ObjectifyService.register(Stream.class);
 	}
 
 	/**

@@ -219,7 +219,7 @@ public class Contact extends Cursor
     public static final String ADDRESS = "address";
     public static final String PHONE = "phone";
 
- // Dao
+    // Dao
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
     /**
@@ -267,30 +267,30 @@ public class Contact extends Cursor
      */
     public void addProperty(ContactField contactField)
     {
-    	 // Ties to get contact field from existing properties based on new field name.
-    	ContactField field = this.getContactFieldByName(contactField.name);
+	// Ties to get contact field from existing properties based on new field
+	// name.
+	ContactField field = this.getContactFieldByName(contactField.name);
 
-    	String fieldName = field == null ? contactField.name : field.name;
-    	FieldType type = FieldType.CUSTOM;
-    	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME)
-    		|| fieldName.equals(EMAIL) || fieldName.equals(TITLE)
-    		|| fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
-    		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
-    		|| fieldName.equals(NAME))
-    	    type = FieldType.SYSTEM;
+	String fieldName = field == null ? contactField.name : field.name;
+	FieldType type = FieldType.CUSTOM;
+	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
+		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
+		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
+		|| fieldName.equals(NAME))
+	    type = FieldType.SYSTEM;
 
-    	// If field is null then new contact field is added to properties.
-    	if (field == null)
-    	{
-    	    contactField.type = type;
-    	    this.properties.add(contactField);
-    	}
-    	else
-    	{
-    	    field.type = type;
-    	    field.updateField(contactField);
-    	}
-    	save();
+	// If field is null then new contact field is added to properties.
+	if (field == null)
+	{
+	    contactField.type = type;
+	    this.properties.add(contactField);
+	}
+	else
+	{
+	    field.type = type;
+	    field.updateField(contactField);
+	}
+	save();
     }
 
     public void removeProperty(String propertyName)
@@ -353,17 +353,6 @@ public class Contact extends Cursor
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
-	}
-	else
-	{
-	    System.out.println("company name : " + getContactFieldValue(NAME));
-	    System.out.println("company name : " + ContactUtil.companyExists(getContactFieldValue(NAME)));
-	    if (Type.COMPANY == type && ContactUtil.companyExists(getContactFieldValue(NAME)))
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
-			.build());
-	    }
 	}
 
 	// Check for already existing email if any,
