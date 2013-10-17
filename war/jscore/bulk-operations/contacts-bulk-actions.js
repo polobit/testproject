@@ -196,41 +196,85 @@ $(function()
 
 
 	/**
-	 * Bulk operations - Send email Sends email to the bulk of contacts by
-	 * filling up the send email details like email from address, subject and
-	 * body by selecting a template.
+	 * Bulk operations - Sends email to the bulk of contacts by
+	 * filling up the send email details like from, subject and
+	 * body.
 	 */
 	$("#bulk-email").live('click', function(e)
 	{
 		e.preventDefault();
-
-		var email_array = [];
-
-		var table = $('body').find('table.showCheckboxes');
-
-		$(table).find('tr .tbody_check').each(function(index, element)
+		
+		// Selected Contact ids
+		var id_array = get_contacts_bulk_ids();
+		
+		$('body').die('fill_emails').live('fill_emails', function(event)
 		{
 
-			// If element is checked add store it's id in an array
-			if ($(element).is(':checked'))
-			{
-				var json = $(element).closest('tr').data().toJSON();
-				email_array.push(getPropertyValue(json.properties, "email"));
-			}
-		});
-
-		$('body').live('fill_emails', function(event)
-		{
-
+			var $emailForm = $('#emailForm');
+			
 			// Populate from address and templates
 			populate_send_email_details();
+			
+			// Setup HTML Editor
+			setupHTMLEditor($('#body'));
+			
+			var count = 0;
 
-			$("#emailForm").find('input[name="to"]').val(email_array);
+			// when SELECT_ALL is true i.e., all contacts are selected.
+			if(id_array.length === 0)
+			   count = getAvailableContacts();
+			else
+				count = id_array.length;
+			
+			// Shows selected contacts count in Send-email page.
+			$emailForm.find('div#bulk-count').css('display','inline-block');
+			$emailForm.find('div#bulk-count p').html("Selected <b>"+count+" contacts</b> for sending email.");				
+
+			// Hide to,cc and bcc
+			$emailForm.find('input[name="to"]').closest('.control-group').attr('class','hidden');
+			$emailForm.find('a#cc-link').closest('.control-group').attr('class','hidden');
+			
+			// Change ids of Send and Close button, to avoid normal send-email actions.
+			$emailForm.find('.form-actions a#sendEmail').removeAttr('id').attr('id','bulk-send-email');
+			$emailForm.find('.form-actions a#send-email-close').removeAttr('id');
 
 		});
-
+		
 		Backbone.history.navigate("bulk-email", { trigger : true });
+		
+		$('#bulk-send-email').die().live('click',function(e){
+			e.preventDefault();
+			
+			if($(this).attr('disabled'))
+		   	     return;
+			
+			 var $form = $('#emailForm');
+			 
+			// Is valid
+			if(!isValidForm($form))
+		      	return;
+			
+			$(this).attr('disabled', 'disabled');
+			
+			// serialize form.
+			var form_json = serializeForm("emailForm");
+			
+			// Shows message Sending email.
+		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Task Scheduled.</i></p></span>');
+		    $("#msg", this.el).append($save_info);
+			$save_info.show();
+			
+			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
+			
+			var json = {};
+			json.contact_ids = id_array;
+			json.data = JSON.stringify(form_json);
+			
+			postBulkOperationData(url, json, $form, undefined);
+		});
+
 	});
+
 
 	$("#select-all-available-contacts").die().live('click', function(e)
 	{
@@ -316,6 +360,7 @@ function toggle_contacts_bulk_actions_dropdown(clicked_ele, isBulk, isCampaign)
 	SELECT_ALL = false;
 	_BULK_CONTACTS = undefined;
 	
+	// For Active Subscribers table
 	if(isCampaign === "active-campaign")
 	{
 		toggle_active_contacts_bulk_actions_dropdown(clicked_ele,isBulk);
@@ -416,8 +461,6 @@ function getSelectionCriteria()
  */
 function postBulkOperationData(url, data, form, contentType, callback)
 {
-
-	// 
 	if (data.contact_ids && data.contact_ids.length == 0)
 	{
 		console.log(data.contact_ids);

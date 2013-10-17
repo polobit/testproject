@@ -142,14 +142,14 @@ $(function(){
     					//$('#contactCampaignForm').find('span.save-status img').remove();
     	    		    enable_save_button(saveButton);
     	    		    
-    	    		    // Temp Flag inorder to show Active campaigns immediately.
-    	    		    // if true, downloads contact rather than fetching from collection
-    	    		    CONTACT_ASSIGNED_TO_CAMPAIGN = true;
-    	    		    
     					// Hides form and shows link within Campaigns tab.
     	    		    if($add_to_campaign === 'add-to-campaign')
     					{
-    						$('.show_campaigns_list').css('display','none');
+    	    		    	// Temp Flag inorder to show Active campaigns immediately.
+        	    		    // if true, downloads contact rather than fetching from collection
+        	    		    CONTACT_ASSIGNED_TO_CAMPAIGN = true;
+    						
+        	    		    $('.show_campaigns_list').css('display','none');
     						
     						$('.add-to-campaign').css('display','inline-block');
     						
