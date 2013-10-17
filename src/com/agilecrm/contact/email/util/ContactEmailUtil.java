@@ -2,6 +2,7 @@ package com.agilecrm.contact.email.util;
 
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -72,43 +73,32 @@ public class ContactEmailUtil
      * @param body
      *            - body
      */
-    public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body)
+    public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, Contact contact)
     {
 	try
 	{
-	    // Appends common tracking id
-	    long trackerId = Calendar.getInstance().getTimeInMillis();
+	    // Returns set of To Emails
+	    Set<String> toEmailSet = getToEmailSet(to);
 
-	    // Gets emails Set Collection
-	    Set<String> toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+	    // Tracker id for email open
+	    Long trackerId = Calendar.getInstance().getTimeInMillis();
 
-	    // Iterate over to email inorder to fetch contact.
-	    for (String toEmail : toEmailSet)
+	    // If contact is available, no need of fetching contact from
+	    // to-email again.
+	    if (contact != null)
+		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), trackerId);
+	    else
 	    {
-		if (StringUtils.isEmpty(toEmail))
-		    continue;
-
-		// Get contact based on email.
-		Contact contact = ContactUtil.searchContactByEmail(toEmail);
-
-		// Saves email with contact-id
-		if (contact != null)
+		// When multiple emails separated by comma are given
+		for (String toEmail : toEmailSet)
 		{
-		    // Remove trailing commas for to emails
-		    ContactEmail contactEmail = new ContactEmail(contact.id, fromEmail, to.replaceAll(",$", ""), subject, body);
+		    // Get contact based on email.
+		    contact = ContactUtil.searchContactByEmail(toEmail);
 
-		    contactEmail.from_name = fromName;
-
-		    contactEmail.cc = cc;
-		    contactEmail.bcc = bcc;
-
-		    // Save email-open tracker-id
-		    if (toEmailSet.size() == 1)
-			contactEmail.trackerId = trackerId;
-
-		    contactEmail.save();
+		    // Saves email with contact-id
+		    if (contact != null)
+			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), trackerId);
 		}
-
 	    }
 
 	    // Appends tracking image to body if only one email. It is not
@@ -117,8 +107,6 @@ public class ContactEmailUtil
 	    if (toEmailSet.size() == 1)
 		body = EmailUtil.appendTrackingImage(body, null, null, trackerId);
 
-	    // Sends email
-	    EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, fromEmail, body, null);
 	}
 	catch (Exception e)
 	{
@@ -126,6 +114,78 @@ public class ContactEmailUtil
 	    System.out.println("Got Exception while sending email " + e.getMessage());
 	}
 
+	// Sends email
+	EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null);
+    }
+
+    /**
+     * Saves email sent through agilecrm.
+     * 
+     * @param fromEmail
+     *            - from email
+     * @param fromName
+     *            - from name
+     * @param to
+     *            - to email
+     * @param cc
+     *            - cc
+     * @param bcc
+     *            - bcc
+     * @param subject
+     *            - email subject
+     * @param body
+     *            - email body
+     * @param contactId
+     *            - contact id to save w.r.t contact
+     * @param toEmailSize
+     *            - to identify number of To emails separated by comma
+     * @param trackerId
+     *            - tracker id to identify email-open
+     */
+    public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, Long contactId,
+	    int toEmailSize, Long trackerId)
+    {
+
+	// Remove trailing commas for to emails
+	ContactEmail contactEmail = new ContactEmail(contactId, fromEmail, to, subject, body);
+
+	contactEmail.from_name = fromName;
+
+	contactEmail.cc = cc;
+	contactEmail.bcc = bcc;
+
+	// Save email-open tracker-id
+	if (toEmailSize == 1)
+	    contactEmail.trackerId = trackerId;
+
+	contactEmail.save();
+    }
+
+    /**
+     * Returns set collection of To emails separated by commas
+     * 
+     * @param to
+     *            - To email string which may consists emails separated by
+     *            commas
+     * @return Set
+     */
+    public static Set<String> getToEmailSet(String to)
+    {
+	// Set to avoid duplicate emails
+	Set<String> toEmailSet = new HashSet<String>();
+
+	// If only one email is given, add directly to set
+	if (!to.contains(","))
+	{
+	    toEmailSet.add(StringUtils.trim(to));
+	}
+	else
+	{
+	    // Splits multiple emails and add each one to set
+	    toEmailSet = EmailUtil.getStringTokenSet(to, ",");
+	}
+
+	return toEmailSet;
     }
 
     /**
@@ -192,7 +252,7 @@ public class ContactEmailUtil
 	String password = imapPrefs.password;
 	String port = "993";
 
-	String url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail + "&host="
+	String url = "http://imap.agilecrm.com:8080/AgileCRMEmail/imap?user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail + "&host="
 		+ URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&command=imap_email&password="
 		+ URLEncoder.encode(password);
 
@@ -229,7 +289,7 @@ public class ContactEmailUtil
 	String oauth_key = gmailPrefs.token;
 	String oauth_secret = gmailPrefs.secret;
 
-	String url = "http://stats.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName) + "&search_email="
+	String url = "http://imap.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName) + "&search_email="
 		+ searchEmail + "&host=" + URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count
 		+ "&consumer_key=" + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret) + "&oauth_key="
 		+ URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);

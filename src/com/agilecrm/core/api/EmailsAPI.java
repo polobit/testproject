@@ -81,14 +81,14 @@ public class EmailsAPI
 	// Removes traling commas if any
 	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
 
-	if (!StringUtils.isEmpty(cc))
+	if (!StringUtils.isBlank(cc))
 	    cc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', cc);
 
-	if (!StringUtils.isEmpty(bcc))
+	if (!StringUtils.isBlank(bcc))
 	    bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
 
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body);
+	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, null);
 
     }
 

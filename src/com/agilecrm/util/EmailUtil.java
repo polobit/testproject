@@ -112,7 +112,7 @@ public class EmailUtil
 	while (st.hasMoreTokens())
 	{
 	    String email = st.nextToken();
-	    tokenSet.add(email.trim());
+	    tokenSet.add(StringUtils.trim(email));
 	}
 
 	return tokenSet;

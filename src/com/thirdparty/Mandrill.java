@@ -3,6 +3,7 @@ package com.thirdparty;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -234,8 +235,8 @@ public class Mandrill
 	JSONObject headersJSON = new JSONObject();
 	try
 	{
-	    // insert replyTo if not same as from.
-	    if (!fromEmail.equals(replyTo))
+	    // insert replyTo if not empty and not equals to from.
+	    if (!StringUtils.isBlank(replyTo) && !fromEmail.equals(replyTo))
 		headersJSON.put(MANDRILL_REPLY_TO, replyTo);
 
 	    headersJSON.put("Content-Type", "application/json; charset=utf-8");
