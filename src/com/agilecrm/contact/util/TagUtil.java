@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Tag;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.util.CacheUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -115,6 +117,34 @@ public class TagUtil
 	{
 	    return null;
 	}
+    }
+
+    /**
+     * Fetches tags from database only if they are not available in memcache are
+     * hard reload is chosen. When tags are fetched from database they are
+     * stored in memcache
+     * 
+     * @param fetchFromDB
+     * @return
+     */
+    public static List<Tag> getTags(boolean fetchFromDB)
+    {
+	List<Tag> tags = null;
+	// If it is not hardreload, we check for tags in memcache. If tags
+	// are are in memcache those tags are returned without fetching from
+	// DB
+	if (!fetchFromDB)
+	    tags = (List<Tag>) CacheUtil.getCache(NamespaceManager.get() + "_tags");
+
+	if (tags != null)
+	    return tags;
+
+	tags = TagUtil.getTags();
+
+	// Sets tags in memcache for with expiry of 1 hour
+	CacheUtil.setCache(NamespaceManager.get() + "_tags", tags, 2 * 60 * 60 * 1000);
+
+	return tags;
     }
 
     public static int getTagsCount(String tag)

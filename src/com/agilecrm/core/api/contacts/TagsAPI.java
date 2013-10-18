@@ -46,11 +46,11 @@ public class TagsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Tag> getTags()
+    public List<Tag> getTags(@QueryParam("reload") boolean reload)
     {
 	try
 	{
-	    return TagUtil.getTags();
+	    return TagUtil.getTags(reload);
 	}
 	catch (Exception e)
 	{
@@ -70,15 +70,13 @@ public class TagsAPI
     @Path("{tag}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContacts(@PathParam("tag") String tag,
-	    @QueryParam("cursor") String cursor,
+    public List<Contact> getContacts(@PathParam("tag") String tag, @QueryParam("cursor") String cursor,
 	    @QueryParam("page_size") String count)
     {
 	try
 	{
 	    if (count != null)
-		return ContactUtil.getContactsForTag(tag,
-			Integer.parseInt(count), cursor);
+		return ContactUtil.getContactsForTag(tag, Integer.parseInt(count), cursor);
 
 	    return ContactUtil.getContactsForTag(tag, null, null);
 

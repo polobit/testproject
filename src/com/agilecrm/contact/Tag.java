@@ -1,5 +1,7 @@
 package com.agilecrm.contact;
 
+import java.io.Serializable;
+
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,7 +20,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  * 
  */
 @XmlRootElement
-public class Tag
+public class Tag implements Serializable
 {
 
     /**

@@ -292,10 +292,11 @@ function get_new_tags(id){
     }
 }
 
-function init_tags_collection(cel, callback)
+function init_tags_collection(cel, callback, url)
 {
+	url = url ? url : '/core/api/tags'
 	tagsCollectionView = new Base_Collection_View({ 
-			url : '/core/api/tags', 
+			url : url, 
 			sortKey: 'tag',
 			templateKey : 'tags', 
 		});
@@ -327,3 +328,14 @@ function remove_tags(base_model)
 {
 	console.log("removed");	
 }
+
+$(function(){
+	
+	$("#refresh-tags").die().live('click', function(e){
+		e.preventDefault();
+		$('#tagslist', App_Contacts.contactsListView.el).html(LOADING_HTML);
+		init_tags_collection(App_Contacts.contactsListView.el, function(tags){
+			setup_tags(App_Contacts.contactsListView.el);
+		}, 'core/api/tags?reload=true');
+	})
+})
