@@ -24,7 +24,40 @@
                  <i class="pull-right margin-hs social-type-icon icon icon-twitter"></i>
                {{else}}
                  <i class="pull-right margin-hs social-type-icon icon icon-linkedin"></i>
-               {{/if_equals}}       
+               {{/if_equals}}  
+                 {{#if_equals stream_type "Home"}}
+                   <i class="pull-right stream-type-icon icon icon-home" title="Home Stream"></i>                 
+                 {{/if_equals}} 
+                 {{#if_equals stream_type "Mentions"}}
+                   <p class="pull-right stream-type-icon icon mentions-small-title" title="Mentions Stream">@</p>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Retweets"}}
+                   <i class="pull-right stream-type-icon icon icon-retweet" title="Retweets Stream"></i>
+                 {{/if_equals}}                 
+                 {{#if_equals stream_type "DM_Inbox"}}
+                   <i class="pull-right stream-type-icon icon icon-download-alt" title="DM Inbox Stream"></i>
+ 				 {{/if_equals}}                
+                 {{#if_equals stream_type "DM_Outbox"}}
+                   <i class="pull-right stream-type-icon icon icon-upload-alt" title="DM Outbox Stream"></i>
+                 {{/if_equals}}                 
+                 {{#if_equals stream_type "Favorites"}}
+                   <i class="pull-right stream-type-icon icon icon-star" title="Favorites Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Sent"}}
+                   <i class="pull-right stream-type-icon icon icon-share-alt" title="Sent Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Search"}}
+                   <i class="pull-right stream-type-icon icon icon-search" title="Search Stream"></i>
+                 {{/if_equals}}
+                 {{#if_equals stream_type "Scheduled"}}
+                   <i class="pull-right stream-type-icon icon icon-calendar" title="Scheduled Stream"></i>
+                 {{/if_equals}}
+				 {{#if_equals stream_type "All_Updates"}}
+                   <i class="pull-right stream-type-icon icon icon-home" title="All Updates"></i>
+                 {{/if_equals}}
+				 {{#if_equals stream_type "My_Updates"}}
+                   <i class="pull-right stream-type-icon icon icon-share-alt" title="My Updates"></i>
+                 {{/if_equals}}
                <span id="stream-spinner-modal-{{id}}" class="waiting-symbol"><img src="img/ajax-loader-cursor.gif"></img></span>        
                <h4 class="column-title txt-ellipsis"> 
                    {{#if_equals stream_type "All_Updates"}}    
@@ -48,50 +81,7 @@
  			   </h4> 
                <span class="column-header-link">
                  <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="Delete Stream"></i>                     
-                 {{#if_equals stream_type "Home"}}
-                   <i class="pull-right icon icon-home header-action" title="Home Stream"></i>                 
-                 {{else}} 
-                   {{#if_equals stream_type "Mentions"}}
-                     <p class="pull-right icon header-action mentions-small-title" title="Mentions Stream">@</p>
-                   {{else}}
-                     {{#if_equals stream_type "Retweets"}}
-                       <i class="pull-right icon icon-retweet header-action" title="Retweets Stream"></i>
-                     {{else}}                 
-                       {{#if_equals stream_type "DM_Inbox"}}
-                         <i class="pull-right icon icon-download-alt header-action" title="DM Inbox Stream"></i>
- 					   {{else}}                
-                         {{#if_equals stream_type "DM_Outbox"}}
-                           <i class="pull-right icon icon-upload-alt header-action" title="DM Outbox Stream"></i>
-                         {{else}}                 
-                           {{#if_equals stream_type "Favorites"}}
-                             <i class="pull-right icon icon-star header-action" title="Favorites Stream"></i>
-                           {{else}}
-                             {{#if_equals stream_type "Sent"}}
-                               <i class="pull-right icon icon-share-alt header-action" title="Sent Stream"></i>
-                 			 {{else}}
-                 			   {{#if_equals stream_type "Search"}}
-                   				 <i class="pull-right icon icon-search header-action" title="Search Stream"></i>
-                               {{else}}
-                 				 {{#if_equals stream_type "Scheduled"}}
-                   				   <i class="pull-right icon icon-calendar header-action" title="Scheduled Stream"></i>
-                                 {{else}}
-				 				   {{#if_equals stream_type "All_Updates"}}
-                   					 <i class="pull-right icon icon-home header-action" title="All Updates"></i>
-                 				   {{else}}
-				                     {{#if_equals stream_type "My_Updates"}}
-                                       <i class="pull-right icon icon-share-alt header-action" title="My Updates"></i>
-                                     {{/if_equals}}
-                                   {{/if_equals}}
-                                 {{/if_equals}}
-                               {{/if_equals}}
-                             {{/if_equals}}
-                           {{/if_equals}}
-                         {{/if_equals}}
-                       {{/if_equals}}
-                     {{/if_equals}}
-                   {{/if_equals}}
-                 {{/if_equals}}				  		
-				 {{#if_equals network_type "TWITTER"}} 		 		
+                 {{#if_equals network_type "TWITTER"}} 		 		
                    <i class="pull-right icon icon-edit compose-message header-action" stream-id={{id}} title="Compose Message"></i>
 				 {{else}}
 				   <i class="pull-right icon icon-edit share-update header-action" stream-id={{id}} title="Share an update"></i>

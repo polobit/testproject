@@ -10,6 +10,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
                background-color:#eee;line-height:50px;border-bottom:1px solid #ddd}
 .margin-hs{margin-left:5px !important;margin-right:2px !important;}
 .social-type-icon{position:relative;bottom:12px;}
+.stream-type-icon{position:relative;bottom:12px;margin-right:-6px;}
 .column-title{margin-right:35px;font-size:17px;font-weight:normal;padding: 5px;}
 .column-title .attribution{font-weight:normal;font-size:0.7571rem}
 .txt-ellipsis{max-width:100%;overflow:hidden;white-space:nowrap;word-wrap:normal;-ms-text-overflow:ellipsis;-o-text-overflow:ellipsis;text-overflow:ellipsis}

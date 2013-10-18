@@ -37,7 +37,7 @@ function subscribeClientChannel()
 	
   pubnub.subscribe
   ({
-	 channel    : CURRENT_DOMAIN_USER.id +"_Channel1",
+	 channel    : CURRENT_DOMAIN_USER.id +"_Channel",
 	 restore    : true,                                // FETCH MISSED MESSAGES ON PAGE CHANGES.
 	 message    : function( message, env, channel ) 
 		              {					
@@ -92,7 +92,7 @@ function sendMessage(publishJSON)
 			// Message has data.
 			pubnub.publish
 				({
-					channel : "agile_crm_Channel1",
+					channel : "agile_crm_Channel",
 					message : publishJSON,
 					callback : function(info) 
 					{
