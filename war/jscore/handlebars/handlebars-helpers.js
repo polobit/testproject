@@ -387,7 +387,7 @@ $(function()
 		var html = "";
 		for ( var i in keys)
 		{
-			html += "<div class='tag-element'><div class='tag-key'>"+keys[i]+"</div><div class='tag-values' tag-alphabet=\""+keys[i]+"\"></div></div>";
+			html += "<div class='tag-element' style='margin-right:10px'><div class='tag-key'>"+keys[i]+"</div><div class='tag-values' tag-alphabet=\""+keys[i]+"\"></div></div>";
 		}
 		console.log(html);
 		return new Handlebars.SafeString(html);
