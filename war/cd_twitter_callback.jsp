@@ -61,7 +61,7 @@ $(function()
 	var account = "<%=twitter.getScreenName()%>";
 	
 	// Fetches profile image url
-	var profileImgUrl = "<%=user.getProfileImageURL()%>";
+	var profileImgUrl = "<%=user.getOriginalProfileImageURLHttps()%>";
 		
 	window.opener.popupTwitterCallback(token, tokenSecret, account, profileImgUrl);
 	window.close();	

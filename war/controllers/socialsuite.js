@@ -59,7 +59,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 	         restKey: "stream",
 	 	         templateKey: "socialsuite-streams",
 	 	         individual_tag_name: 'div', 
-	 	         className :'app-content container span12 clearfix',
+	 	         className :'app-content container clearfix',
 	 	         id : 'stream_container',        
 	 	         
 	 	         postRenderCallback : function(el)
@@ -101,6 +101,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		 
 		 // Remove waiting symbol.
 		 removeWaiting();
+		
 	 }, // streams end
 		
 	 /**

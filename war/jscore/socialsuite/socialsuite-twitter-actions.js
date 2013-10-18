@@ -781,8 +781,7 @@ $(document).on("click",".delete-tweet", function(e)
         alert(data);        
         
         if(data == "Successful")
-        	{
-        
+        	{        
         		// Get stream from collection.
         		var modelStream = StreamsListView.collection.get(streamId);
         		console.log(modelStream);

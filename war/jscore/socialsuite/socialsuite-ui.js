@@ -18,15 +18,12 @@ $(document).on("click",".add-twitter-contact", function(e)
 {
 	// Tweet owner's full name.
 	var fullName = $(this).attr("data-user-name");
-	console.log(fullName);
-	
+		
 	// Tweet owner's description.
 	var description = $(this).attr("description");
-	console.log(description);
-
+	
 	// Tweet owner's handle/Screen name.
 	TweetOwnerForAddContact = $(this).attr("tweet-owner");
-	console.log(TweetOwnerForAddContact);
 	
 	// Separate full name.
 	var firstName = fullName.substr(0,fullName.indexOf(' '));
@@ -109,8 +106,6 @@ $(document).on("click",".network-type", function(e)
 $(document).on("click",".stream-type", function(e)
 		{	
 		  e.preventDefault();
-	      
-		  console.log(this.className);
 		  
 		  if(this.className == "stream-type stream-type-button-color")
 			  {
@@ -304,7 +299,6 @@ $(document).on("click",".stream-delete", function(e)
 		return;
 		
 	var id = $(this).attr('id');
-	console.log(id);	
 		
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(id).toJSON();

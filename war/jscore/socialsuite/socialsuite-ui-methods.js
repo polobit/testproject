@@ -50,8 +50,6 @@ function onloadProfileImg()
 	// Add profile image to account description.	
 	$('#twitter_profile_img').attr("src",document.getElementById("twitter_profile_img_url").src);
 	
-	console.log("in onloadProfileImg");
-	
 	// Add screen name to label.
 	document.getElementById('account_description_label').innerHTML='<b>'+$('#twitter_account').val()+'</b>';
 }
@@ -59,7 +57,6 @@ function onloadProfileImg()
 // Add website and select network on continue form in add contact flow.
 function socialsuite_add_website()
 {
-  console.log(TweetOwnerForAddContact);	
   if (TweetOwnerForAddContact == null)
 	  return;
    
@@ -120,7 +117,6 @@ function registerAll()
    
    // All added streams registered. 
    registerAllDone = true;
-   console.log("registerAllDone : "+registerAllDone);  
 }
 
 /**
@@ -130,19 +126,12 @@ function addUserImgToColumn(stream)
 {	
 	  // Get stream from collection.
 	  var modelStream = StreamsListView.collection.get(stream.id);	 
-	  console.log(modelStream);
-	  
-	  console.log("to get profile img url");
 	  
 	  // Fetching profile image url from twitter/linkedin server    											  	
 	  $.get("/core/social/getprofileimg/" + stream.id, 
 			    function (url)
 			    {
-			      console.log("profile img url");
-				  console.log(url);
-				  
 	              modelStream.set("profile_img_url",url);
-	              console.log(modelStream.toJSON());
 	            	
 	              // Append in collection 			
 	    		  socialsuitecall.streams(modelStream);
@@ -157,10 +146,7 @@ function addUserImgToColumn(stream)
  * Add tweet in stream.
  */
 function handleMessage(tweet)
-{		
-  // Add type of message
-  tweet["msg_type"] = "Tweet";
-	
+{	
   // We need this messages to reflect actions in all added relevant streams.
   if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
@@ -170,8 +156,7 @@ function handleMessage(tweet)
   
   // Get stream from collection.
   var modelStream = StreamsListView.collection.get(tweet.stream_id);	 
-  console.log(modelStream);
-  
+
   if(modelStream != null || modelStream != undefined)
 	{
 	  // Temp : Add tweet to model.
@@ -219,9 +204,15 @@ function handleMessage(tweet)
  * Add Tweet to relevant stream with some extra tags as per requirement.
  */
 function addTweetToStream(modelStream,tweet)
-{
+{	
 	// Hide waiting symbol.
 	$("#stream-spinner-modal-"+tweet.stream_id).hide();
+
+	// Add type of message
+	if(tweet.text == "Dear you do not have any tweets.")
+		tweet["msg_type"] = "NoTweet";
+	else
+	    tweet["msg_type"] = "Tweet";
 	
 	// If stream owner is tweet owner no need to show retweet icon.
     if(modelStream.get('screen_name') != tweet.user.screen_name)            	
@@ -247,6 +238,13 @@ function addTweetToStream(modelStream,tweet)
 	     return -model.get('id');
 	 };
 	   
+	 if(modelStream.get('tweetListView').length == 1)
+	   {
+		 // Check for no tweet notification and remove it.		 
+		 checkNoTweetNotification(modelStream);
+		 $('.deleted').remove();
+	   }
+		 
 	 // Add tweet to stream.
 	 modelStream.get('tweetListView').add(tweet);	
 	   
@@ -259,6 +257,30 @@ function addTweetToStream(modelStream,tweet)
 			});
 }
 
+// Remove notification about user do not have any tweet.
+function checkNoTweetNotification(modelStream)
+{		
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get('000');
+	
+	if(modelTweet != null || modelTweet != undefined)
+	{
+	  console.log(modelTweet.toJSON());
+
+	  modelTweet.set("deleted_msg","deleted");
+
+	  console.log(modelTweet.toJSON());
+
+  	  // Add back to stream.
+	  modelStream.get('tweetListView').add(modelTweet);
+	  console.log(modelStream);
+
+	  // Remove tweet element from ui
+	  $('.deleted').remove();
+	  console.log("notification dlt");
+	}
+}
+
 // Remove waiting symbol from stream's column header, when user return to social tab.
 function removeWaiting()
 {
@@ -269,8 +291,6 @@ function removeWaiting()
 	{
 	  return;
 	}
-
-  console.log(streamsJSON);		  	
 
   // Get stream
   $.each(streamsJSON, function(i, stream)

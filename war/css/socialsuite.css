@@ -123,29 +123,32 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 /* on add stream form padding*/
 .stream-details>div>.row-fluid{padding-top: 25px;}
-#account_description{padding-top: 5px;}
+#account_description{padding-top: 0px;}
 .social-stream-types>.row-fluid{padding-top: 15px;}
 
 /* stream type div */
-.stream-type{padding: 20px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
+.stream-type{padding: 15px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 55px;}
 .social-stream-types{padding-left: 35px;}
 
 /* Stream type description */
 .description-hidden,.keyword-hidden{visibility:hidden;}
-#stream_description_label{padding-top: 10px;}
+#stream_description_label{padding-top: 10px;margin-bottom: 0px;}
 
 /* searck keyword */
-#search_stream_keyword{padding-top: 18px;padding-left: 154px;}
+#search_stream_keyword{padding-top: 15px;padding-left: 154px;}
 
 /* Add Stream Form*/
 .at-center{text-align: center;}
 .font15{font-size: 15px;}
 #twitter_option,#linkedin_option{padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
 #twitter_option:hover,#linkedin_option:hover{background-color:#EDEDED;}
-#addStreamModal>.modal-body{max-height:425px;}
+#addStreamModal>.modal-body{max-height:419px;}
 #account_description_label{padding-top: 33px;}
 
 .waiting-symbol{float: right;bottom: 13px;position: relative;}
 #twitter_profile_img_url{visibility:hidden;width: 1px;height: 1px;}
 .mentions-big-title{font-size:xx-large;}
 .mentions-small-title{position:relative;right:-1px;font-size: larger;margin-top: -20px!important;}
+#twitter_profile_img{width: 60px;height: 50px;}
+.no-tweet{border-bottom:1px solid #e5e5e5;background-color: darkgray;font-size: 15px;text-align: center;}
+.no-tweet>p{padding-top: 6px;}
