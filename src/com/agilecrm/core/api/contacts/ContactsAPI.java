@@ -441,6 +441,62 @@ public class ContactsAPI
 	contact.addTags(tagsArray);
 	System.out.println("Tags after added : " + contact.tagsWithTime);
     }
+    
+    /**
+     * Add note to a contact based on email address of the contact
+     * 
+     * @param email
+     *            email of contact form parameter
+     * @param note
+     *            note data as string
+     * @throws JSONException
+     */
+    @Path("/email/note/add")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void addNoteToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("note") String note,
+	    @Context HttpServletResponse response) throws JSONException
+    {
+
+	System.out.println("email to search on" + email);
+	JSONObject object = new JSONObject();
+
+	if (StringUtils.isEmpty(note))
+	{
+
+	    object.put("error", "Note could not be added");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return;
+	}
+
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	if (contact == null)
+	{
+	    object.put("error", "No contact found with email address \'" + email + "\'");
+	    HTTPUtil.writeResonse(response, object.toString());
+	    return;
+	}
+
+	//JSONArray tagsJSONArray = new JSONArray(tagsString);
+	//Tag[] tagsArray = null;
+	
+	Note noteObj = new Note();
+	
+	try
+	{
+	    noteObj = new ObjectMapper().readValue(note.toString(), Note.class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	if (noteObj == null)
+	    return;
+
+	noteObj.addRelatedContacts(contact.id.toString());
+	noteObj.save();
+    }
 
     /**
      * delete tags from a contact based on email address of the contact
