@@ -463,7 +463,6 @@ public class ContactsAPI
 
 	if (StringUtils.isEmpty(note))
 	{
-
 	    object.put("error", "Note could not be added");
 	    HTTPUtil.writeResonse(response, object.toString());
 	    return;
@@ -477,9 +476,6 @@ public class ContactsAPI
 	    return;
 	}
 
-	//JSONArray tagsJSONArray = new JSONArray(tagsString);
-	//Tag[] tagsArray = null;
-	
 	Note noteObj = new Note();
 	
 	try
@@ -488,7 +484,6 @@ public class ContactsAPI
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	if (noteObj == null)
