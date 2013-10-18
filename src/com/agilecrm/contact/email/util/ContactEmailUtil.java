@@ -22,6 +22,8 @@ import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.email.MustacheUtil;
+import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 
 /**
  * <code>ConactEmailUtil</code> is the utility class for {@link ContactEmail}.
@@ -465,7 +467,14 @@ public class ContactEmailUtil
 		    continue;
 		}
 
-		saveContactEmailAndSend(fromEmail, fromName, contact.getContactFieldValue(Contact.EMAIL), null, null, subject, body, contact);
+		// Converts contact to JSON
+		JSONObject subscriberJSON = AgileTaskletUtil.getSubscriberJSON(contact).getJSONObject("data");
+
+		// Compiles subject and body mustache templates
+		String replacedSubject = MustacheUtil.compile(subject, subscriberJSON);
+		String replacedBody = MustacheUtil.compile(body, subscriberJSON);
+
+		saveContactEmailAndSend(fromEmail, fromName, contact.getContactFieldValue(Contact.EMAIL), null, null, replacedSubject, replacedBody, contact);
 	    }
 
 	}

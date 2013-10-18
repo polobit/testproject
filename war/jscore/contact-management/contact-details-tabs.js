@@ -431,6 +431,13 @@ $(function(){
 			templateModel.fetch({success: function(data){
 				var model = data.toJSON();
 				
+				var subject = model.subject;
+				var text = model.text;
+				
+				// Apply handlebars template on send-email route 
+				if(Current_Route === 'send-email')
+				{
+				
 				// Get Current Contact
 				var contact = App_Contacts.contactDetailView.model;
 				var json = contact.toJSON();
@@ -443,10 +450,11 @@ $(function(){
 				
 				// Templatize it
 				var template = Handlebars.compile(model.subject);
-				var subject =  template(json);
+				subject =  template(json);
 				
 				template = Handlebars.compile(model.text);
-				var text =  template(json);
+				text =  template(json);
+				}
 				
 				// Commented as we appended HTML editor to text body.						
 				//text = text.replace(/<br>/gi, "\n");
