@@ -210,25 +210,34 @@ function addTweetToStream(modelStream,tweet)
 
 	// Add type of message
 	if(tweet.text == "Dear you do not have any tweets.")
-		tweet["msg_type"] = "NoTweet";
+		{
+		  tweet["msg_type"] = "NoTweet";
+		  tweet["show"] = true;
+		}
 	else
-	    tweet["msg_type"] = "Tweet";
-	
-	// If stream owner is tweet owner no need to show retweet icon.
-    if(modelStream.get('screen_name') != tweet.user.screen_name)            	
-       tweet["tweetowner_not_streamuser"] = true;      
+		{
+	      tweet["msg_type"] = "Tweet";
+	     
+	      // Remove no tweet notification.
+	      if(modelStream.get('tweetListView').length == 1)
+	    	checkNoTweetNotification(modelStream,tweet);
+	      
+	      // If stream owner is tweet owner no need to show retweet icon.
+	      if(modelStream.get('screen_name') != tweet.user.screen_name)            	
+	         tweet["tweetowner_not_streamuser"] = true;      
 
-    // If stream is Sent or tweet owner is stream owner then show delete option.
-    if(tweet.stream_type == "Sent" || modelStream.get('screen_name') == tweet.user.screen_name)
-    	 tweet["deletable_tweet"] = true;
-    
-    // If tweet is DM then show delete options and hide other options.
-    if(tweet.stream_type == "DM_Inbox" || tweet.stream_type == "DM_Outbox")
-      {
-    	tweet["direct_message"] = true;
-        tweet["deletable_tweet"] = true;
-      }
-    
+	      // If stream is Sent or tweet owner is stream owner then show delete option.
+	      if(tweet.stream_type == "Sent" || modelStream.get('screen_name') == tweet.user.screen_name)
+	      	 tweet["deletable_tweet"] = true;
+	      
+	      // If tweet is DM then show delete options and hide other options.
+	      if(tweet.stream_type == "DM_Inbox" || tweet.stream_type == "DM_Outbox")
+	        {
+	          tweet["direct_message"] = true;
+	          tweet["deletable_tweet"] = true;
+	        }
+		}	
+	    
     console.log("for add "+modelStream.get('tweetListView').length);
 		
     // Sort stream on tweet id basis which is unique and recent tweet has highest value.
@@ -237,14 +246,7 @@ function addTweetToStream(modelStream,tweet)
 	  if (model.get('id'))
 	     return -model.get('id');
 	 };
-	   
-	 if(modelStream.get('tweetListView').length == 1)
-	   {
-		 // Check for no tweet notification and remove it.		 
-		 checkNoTweetNotification(modelStream);
-		 $('.deleted').remove();
-	   }
-		 
+	 		 
 	 // Add tweet to stream.
 	 modelStream.get('tweetListView').add(tweet);	
 	   
@@ -257,27 +259,17 @@ function addTweetToStream(modelStream,tweet)
 			});
 }
 
-// Remove notification about user do not have any tweet.
-function checkNoTweetNotification(modelStream)
-{		
+// Remove no tweet notification. Search for that tweet in collection and makes that tweets model hide.
+function checkNoTweetNotification(modelStream,tweet)
+{
 	// Get tweet from stream.
 	var modelTweet = modelStream.get('tweetListView').get('000');
-	
 	if(modelTweet != null || modelTweet != undefined)
 	{
-	  console.log(modelTweet.toJSON());
+	  modelTweet.set("show",false);
 
-	  modelTweet.set("deleted_msg","deleted");
-
-	  console.log(modelTweet.toJSON());
-
-  	  // Add back to stream.
-	  modelStream.get('tweetListView').add(modelTweet);
-	  console.log(modelStream);
-
-	  // Remove tweet element from ui
-	  $('.deleted').remove();
-	  console.log("notification dlt");
+	  // Add back to stream.
+	  modelStream.get('tweetListView').add(modelTweet);	  
 	}
 }
 

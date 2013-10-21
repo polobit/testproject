@@ -192,9 +192,11 @@
 
 {{else}} 
   {{#if_equals msg_type "NoTweet"}}
-	<article id={{id}} class="no-tweet {{deleted_msg}}">
+   {{#if show}}
+	<article id={{id}}_{{stream_id}} class="no-tweet">
        <p>{{text}}</p>              
 	</article>
+   {{/if}}
   {{else}}
     {{#stringToJSON this "message"}} {{/stringToJSON}}
  	<article id="{{message.timestamp}}" class="stream-item is-actionable" update_id={{id}} update_time="{{created_time}}">	
