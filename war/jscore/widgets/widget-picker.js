@@ -128,23 +128,24 @@ $(function()
 			if (Widgets_View && Widgets_View.collection)
 				Widgets_View.collection.add(new BaseModel(data.toJSON()));
 
-			console.log(data.set('is_added', true));
+
+			data.set('is_added', true);
+			models[0].set(data);
 			
-			console.log(models[0].set(data));
-			console.log(Catalog_Widgets_View.collection.toJSON());
-			return;
+
 			/*
 			 * If contacts view is not defined, redirected to list of contacts
 			 * page after adding widget
 			 */
-			if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
+			 
+			/*if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
 			{
 				//Backbone.history.navigate("contacts", { trigger : true });
 				return;
 			}
 
 			// Navigates back to the contact id form
-			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });
+			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });*/
 
 		} });
 
@@ -227,14 +228,14 @@ function update_collection(widget_name)
 	 * If contacts view is not defined, redirected to list of contacts page
 	 * after adding widget
 	 */
-	if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
+	/*if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
 	{
 		Backbone.history.navigate("contacts", { trigger : true });
 
 		return;
 	}
 	// Navigates back to the contact id form
-	Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });
+	Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });*/
 }
 
 function build_custom_widget_form(el)

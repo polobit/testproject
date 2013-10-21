@@ -438,34 +438,23 @@ function showTwitterMatchingProfiles(data)
 
 	// Show matching profiles in Twitter panel
 	$('#Twitter').html(el);
-
+	
+	$('div.carousel-inner > div:first-child', '#Twitter').addClass("active");
+	$('.carousel').carousel('cycle')
+	
 	/*
 	 * Displays Twitter profile details on mouse hover and saves profile on
 	 * click
 	 */
-	$(".twitterImage").die().live('mouseover', function()
+	$(".twitterImage").die().live('click', function(e)
 	{
+		e.preventDefault();
+		
+		console.log('on click in search');
+		
 		// Unique Twitter Id from widget
 		Twitter_id = $(this).attr('id');
 
-		// Aligns details to left in the pop over
-		$(this).popover({ placement : 'left' });
-
-		/*
-		 * Called show to overcome pop over bug (not showing pop over on mouse
-		 * hover for first time)
-		 */
-		$(this).popover('show');
-
-		// on click of any profile, save it to the contact
-		$('#' + Twitter_id).die().live('click', function(e)
-		{
-			e.preventDefault();
-
-			// Hide pop over after clicking on any picture
-			$(this).popover('hide');
-
-			console.log('on click in search');
 
 			// Web url of twitter for this profile
 			var url = "@" + $(this).attr('screen_name');
@@ -476,10 +465,11 @@ function showTwitterMatchingProfiles(data)
 			var propertiesArray = [
 				{ "name" : "website", "value" : url, "subtype" : "TWITTER" }
 			];
+			
 			if (!contact_image)
 			{
 				// Get image link which can be used to save image for contact
-				var twitter_image = $(this).attr('src');
+				var twitter_image = $(this).attr('pic');
 				propertiesArray.push({ "name" : "image", "value" : twitter_image });
 			}
 
@@ -499,8 +489,7 @@ function showTwitterMatchingProfiles(data)
 
 			// show twitter profile by id
 			showTwitterProfile(Twitter_id);
-
-		});
+		
 	});
 
 }

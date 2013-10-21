@@ -5,15 +5,17 @@
 {{else}}
 <p class="a-dotted">Search results for <a href="#" class="linkedin_modify_search">{{this.keywords}}</a></p>
 {{/if_equals}}
-{{#each this.search_results}}
+<div id="myLinkedInCarousel" class="carousel slide" style="margin-top:14px;">
+	<div class="carousel-inner" id="carousel-linked">
+
+	{{#each this.search_results}} 
+		<div class="item">
+
 {{#if picture}}
-<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" is_gravatar_pic="false" src ="{{picture}}" url="{{url}}"
-   summary="{{summary}}" style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
-   data-content="
-       
+
  		<div class='row-fluid' style='padding-bottom:10px;'>
             <div class='span4' style='padding:0px 10px 0px 10px;'>
-              <img style='width:55px;height:55px;' src='{{picture}}'></img>
+              <img  src='{{picture}}'></img>
             </div>
             <div class='span8'>
                <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span> 
@@ -23,15 +25,15 @@
 	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
 		 <p style='font-style: italic;'>{{summary}}</p>
 	  </div>
-"></img>
+	<div>
+		<center><a class='btn linkedinImage' id='{{id}}' is_gravatar_pic="false" pic ='{{picture}}' url='{{url}}' summary='{{summary}}'>Add</a></center>
+	</div>
+
 {{else}}
-<img  rel='popover' data-original-title='LinkedIn Profile' class='linkedinImage thumbnail' id="{{id}}" is_gravatar_pic="true" src ="{{defaultGravatarurl 35}}" url="{{url}}"
-   summary="{{summary}}" style='width: 35px;height: 35px; display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;'
-   data-content="
        
  		<div class='row-fluid' style='padding-bottom:10px;'>
             <div class='span4' style='padding:0px 10px 0px 10px;'>
-              <img style='width:55px;height:55px;' src ='{{defaultGravatarurl 35}}'></img>
+              <img  src ='{{defaultGravatarurl 35}}'></img>
             </div>
             <div class='span8'>
                <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span>
@@ -41,8 +43,21 @@
 	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
 		 <p style='font-style: italic;'>{{summary}}</p>
 	  </div>
-"></img>
+	<div>
+		<center><a class='btn linkedinImage' id='{{id}}' is_gravatar_pic="true" pic ='{{picture}}' url='{{url}}' summary='{{summary}}'>Add</a></center>
+	</div>
+
 {{/if}}
-{{/each}}
+
+			
+		</div>
+	{{/each}}
+            
+    </div>
+
+	<a class="left" href="#myLinkedInCarousel" data-slide="prev" style="text-decoration: none;top: 84%;position: absolute;font: 60%;left:0px">&lsaquo; Prev</a>
+	<a class="right" href="#myLinkedInCarousel" data-slide="next" style="text-decoration: none;top: 84%;position: absolute;font: 60%;right:0px">Next &rsaquo;</a>
+</div>
+
 </div>
 </script>  

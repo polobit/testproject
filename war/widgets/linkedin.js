@@ -263,33 +263,22 @@ function showLinkedinMatchingProfiles(data)
 
 	// Show matching profiles in LinkedIn panel
 	$('#Linkedin').html(getTemplate("linkedin-search-result", Search_details));
+	
+	$('div.carousel-inner > div:first-child', '#Linkedin').addClass("active");
+	$('.carousel').carousel('cycle')
 
 	/*
 	 * Displays LinkedIn profile details on mouse hover of profile, and saves
 	 * profile on click
 	 */
-	$(".linkedinImage").die().live('mouseover', function()
+	$(".linkedinImage").die().live('click', function(e)
 	{
+		e.preventDefault();
+		
 		// Unique LinkedIn Id from widget
 		Linkedin_id = $(this).attr('id');
 
-		// Aligns details to left in the pop over
-		$(this).popover({ placement : 'left' });
-
-		/*
-		 * Called show to overcome pop over bug (not showing pop over on mouse
-		 * hover for first time)
-		 */
-		$(this).popover('show');
-
-		// on click of any profile, save it to the contact
-		$('#' + Linkedin_id).die().live('click', function(e)
-		{
-			e.preventDefault();
-
-			// Hide pop over after clicking on any picture
-			$(this).popover('hide');
-
+		
 			console.log('on click in search');
 
 			// Web URL of LinkedIn for this profile
@@ -312,7 +301,7 @@ function showLinkedinMatchingProfiles(data)
 					 * Get image link which can be used to save image for
 					 * contact
 					 */
-					var linkedin_image = $(this).attr('src');
+					var linkedin_image = $(this).attr('pic');
 					propertiesArray.push({ "name" : "image", "value" : linkedin_image });
 				}
 			}
@@ -333,7 +322,7 @@ function showLinkedinMatchingProfiles(data)
 			// show profile by id
 			showLinkedinProfile(Linkedin_id);
 
-		});
+		
 	});
 
 }
