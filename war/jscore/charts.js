@@ -447,7 +447,6 @@ function pieTags(el, force_reload)
 	if(force_reload)
 		url = url + '?reload=true';
 	
-	alert("force :" + force_reload + ", reload :" + force_reload);
 	
 	pie(url, 'pie-tags-chart', '');
 }
