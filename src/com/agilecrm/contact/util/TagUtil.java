@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -119,6 +123,11 @@ public class TagUtil
 	}
     }
 
+    public static List<Tag> getTags(int size, String cursor)
+    {
+	return dao.fetchAll(size, cursor);
+    }
+
     /**
      * Fetches tags from database only if they are not available in memcache are
      * hard reload is chosen. When tags are fetched from database they are
@@ -150,5 +159,60 @@ public class TagUtil
     public static int getTagsCount(String tag)
     {
 	return dao.getCountByProperty("tag", tag);
+    }
+
+    public static String getStatus(boolean forceLoad)
+    {
+	// If force reload is not there, it tries to fetch it from cache
+	if (!forceLoad)
+	{
+	    String stats = (String) CacheUtil.getCache(NamespaceManager.get() + "_tags_stats");
+
+	    System.out.println("stats from cache : " + stats);
+	    if (stats != null)
+		return stats;
+	}
+
+	List<Tag> tags = TagUtil.getTags(100, null);
+	JSONObject result = new JSONObject();
+	long startTime = System.currentTimeMillis();
+	int previousSize = 0;
+
+	do
+	{
+
+	    // Iterates though first 100 tags to calculate stats
+	    for (int i = previousSize; i < tags.size(); i++)
+	    {
+		Tag tag = tags.get(i);
+		String tagString = tag.tag;
+		int count = ContactUtil.getContactsCountForTag(tag.tag);
+
+		try
+		{
+		    result.put(tagString, count);
+		}
+		catch (JSONException e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+	    }
+
+	    Cursor cursor = (Cursor) tags.get(tags.size() - 1);
+
+	    if (cursor == null || StringUtils.isEmpty(cursor.cursor) || cursor.count <= tags.size()
+		    || cursor.cursor == null
+		    || System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 1000)
+		break;
+
+	    previousSize = tags.size();
+	    tags.addAll(TagUtil.getTags(100, cursor.cursor));
+
+	} while (true);
+
+	CacheUtil.setCache(NamespaceManager.get() + "_tags_stats", result.toString(), 2 * 60 * 60 * 1000);
+	return result.toString();
+
     }
 }

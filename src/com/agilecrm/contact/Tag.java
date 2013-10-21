@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.NotSaved;
 
@@ -20,7 +21,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  * 
  */
 @XmlRootElement
-public class Tag implements Serializable
+public class Tag extends Cursor implements Serializable
 {
 
     /**

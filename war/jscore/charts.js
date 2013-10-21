@@ -441,9 +441,15 @@ function showLine(url, selector, name, yaxis_name)
 /**
  * Shows Pie chart for tags of contacts,
  */
-function pieTags()
+function pieTags(el, force_reload)
 {
-	pie('/core/api/tags/stats', 'pie-tags-chart', '');
+	var url = '/core/api/tags/stats';
+	if(force_reload)
+		url = url + '?reload=true';
+	
+	alert("force :" + force_reload + ", reload :" + force_reload);
+	
+	pie(url, 'pie-tags-chart', '');
 }
 
 /**

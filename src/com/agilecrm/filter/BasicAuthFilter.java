@@ -83,21 +83,25 @@ public class BasicAuthFilter implements Filter
 		    // Get AgileUser
 		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
 
-		    // Gets APIKey, to authenticate the user
-		    String apiKey = APIKey.getAPIKeyRelatedToUser(domainUser.id).api_key;
-
-		    System.out.println(user + " " + password + " " + domainUser + " " + apiKey);
-
-		    // If domain user exists and the APIKey matches, request is
-		    // given access
-		    if (domainUser != null && password.equals(apiKey))
+		    if (domainUser != null)
 		    {
-			UserInfo userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
+			// Gets APIKey, to authenticate the user
+			String apiKey = APIKey.getAPIKeyRelatedToUser(domainUser.id).api_key;
 
-			SessionManager.set(userInfo);
+			System.out.println(user + " " + password + " " + domainUser + " " + apiKey);
 
-			chain.doFilter(httpRequest, httpResponse);
-			return;
+			// If domain user exists and the APIKey matches, request
+			// is
+			// given access
+			if (domainUser != null && password.equals(apiKey))
+			{
+			    UserInfo userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
+
+			    SessionManager.set(userInfo);
+
+			    chain.doFilter(httpRequest, httpResponse);
+			    return;
+			}
 		    }
 		}
 	    }
