@@ -153,7 +153,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
     @Override
     public void delete(String id)
     {
-	index.delete(id);
+	index.deleteAsync(id);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
     private void addToIndex(Document doc)
     {
 	// Adds document to index
-	index.put(doc);
+	index.putAsync(doc);
 	System.out.println(index.getName());
 	// System.out.println(index.getConsistency());
 	System.out.println(index.getSchema());

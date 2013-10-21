@@ -128,9 +128,11 @@ $(function()
 			if (Widgets_View && Widgets_View.collection)
 				Widgets_View.collection.add(new BaseModel(data.toJSON()));
 
+
 			data.set('is_added', true);
 			models[0].set(data);
 			
+
 			/*
 			 * If contacts view is not defined, redirected to list of contacts
 			 * page after adding widget
@@ -138,7 +140,7 @@ $(function()
 			 
 			/*if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
 			{
-				Backbone.history.navigate("contacts", { trigger : true });
+				//Backbone.history.navigate("contacts", { trigger : true });
 				return;
 			}
 
@@ -172,6 +174,11 @@ $(function()
 
 		success : function(data)
 		{
+//			console.log(data.set('is_added',));
+			
+			console.log(models[0].set(data));
+			console.log(Catalog_Widgets_View.collection.findWhere({ name : widget_name }));
+			return;
 			update_collection(widget_name);
 
 		}, dataType : 'json' });
