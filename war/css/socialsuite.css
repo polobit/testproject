@@ -9,8 +9,6 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .column-header{box-sizing:border-box;position:relative;height:55px;padding:0 10px;padding-top:2px;color:#444;
                background-color:#eee;line-height:50px;border-bottom:1px solid #ddd}
 .margin-hs{margin-left:5px !important;margin-right:2px !important;}
-.social-type-icon{position:relative;bottom:12px;}
-.stream-type-icon{position:relative;bottom:12px;margin-right:-6px;}
 .column-title{margin-right:35px;font-size:17px;font-weight:normal;padding: 5px;}
 .column-title .attribution{font-weight:normal;font-size:0.7571rem}
 .txt-ellipsis{max-width:100%;overflow:hidden;white-space:nowrap;word-wrap:normal;-ms-text-overflow:ellipsis;-o-text-overflow:ellipsis;text-overflow:ellipsis}
@@ -18,9 +16,16 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .txt-mute{color:#888}
 .txt-small{font-size:0.5571rem} /* 0.8571rem */
 .txt-sub-antialiased{-webkit-font-smoothing:subpixel-antialiased}
+/* ********************************************************* */
+
+/* stream header icons */
 .column-header-link{position:absolute;top:33px;bottom:-1px;right:12px;color:#888;font-size:10px}
 .column-header-link i{line-height:1;font-size:13px}
-/* ********************************************************* */
+.compose-status{float:right;padding-top: 1px;margin-right: 3px;}
+.social-type-icon{float:right;position:relative;bottom:12px;}
+.stream-type-icon{float:right;position:relative;bottom:12px;margin-right:-6px;}
+.waiting-symbol{float:right;position: relative;bottom: 14px;margin-right:3px;}
+.mentions-small-title{position:relative;right: 3px;font-size: initial!important;}
 
 /* user's profile img in header */
 .user-profile-img{width:40px;height:40px;border-radius:8px;margin-left: -4px;}
@@ -121,6 +126,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 /* add stream form buttons */
 .stream-type>a,.network-type>a{text-decoration:none;}
+.network-type-icon{margin-bottom: 20px;}
 
 /* on add stream form padding*/
 .stream-details>div>.row-fluid{padding-top: 25px;}
@@ -133,7 +139,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 /* Stream type description */
 .description-hidden,.keyword-hidden{visibility:hidden;}
-#stream_description_label{padding-top: 10px;margin-bottom: 0px;}
+#stream_description_label{padding-top: 10px;margin-bottom: 0px;margin-left: 36px;}
 
 /* searck keyword */
 #search_stream_keyword{padding-top: 15px;padding-left: 154px;}
@@ -141,15 +147,14 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 /* Add Stream Form*/
 .at-center{text-align: center;}
 .font15{font-size: 15px;}
-#twitter_option,#linkedin_option{padding: 25px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
+#twitter_option,#linkedin_option{padding:8% 5% 5%;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
 #twitter_option:hover,#linkedin_option:hover{background-color:#EDEDED;}
 #addStreamModal>.modal-body{max-height:419px;}
 #account_description_label{padding-top: 33px;}
 
-.waiting-symbol{float: right;bottom: 13px;position: relative;}
+
 #twitter_profile_img_url{visibility:hidden;width: 1px;height: 1px;}
 .mentions-big-title{font-size:xx-large;}
-.mentions-small-title{position:relative;right:-1px;font-size: larger;margin-top: -20px!important;}
 #twitter_profile_img{width: 60px;height: 50px;}
 .no-tweet{border-bottom:1px solid #e5e5e5;background-color: darkgray;font-size: 15px;text-align: center;}
 .no-tweet>p{padding-top: 6px;}

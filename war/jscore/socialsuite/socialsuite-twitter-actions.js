@@ -28,7 +28,7 @@ $(document).on("click",".compose-message", function(e)
 
     // Append the form into the content
     $('#content').append(message_form_modal);
-
+    
     // Display modal
     $('#socialsuite-twitter_messageModal').on('shown', function () {
 		  
@@ -44,6 +44,16 @@ $(document).on("click",".compose-message", function(e)
     // Shows the modal after filling with details
     $('#socialsuite-twitter_messageModal').modal("show");
     
+    // In compose message text limit is crossed so disable send button.
+    $('#twit-tweet').on('cross', function(){
+        $('#send_tweet').addClass('disabled')
+      });
+      
+    // In compose message text limit is uncrossed so enable send button.  
+    $('#twit-tweet').on('uncross', function(){
+        $('#send_tweet').removeClass('disabled')
+      });
+            
     // On click of send button in the modal, tweet request is sent 
     $('#send_tweet').click(function (e)
     {
@@ -95,6 +105,8 @@ $(document).on("click",".compose-message", function(e)
         });
     });
 }); 
+
+
 /**
  * Get stream and create reply tweet and post it on Twitter.
  */
@@ -144,6 +156,16 @@ $(document).on("click",".reply-message", function(e)
     
     // Shows the modal after filling with details
     $('#socialsuite-twitter_messageModal').modal("show");
+   
+    // In compose message text limit is crossed so disable send button.
+    $('#twit-tweet').on('cross', function(){
+        $('#send_reply').addClass('disabled')
+      });
+      
+    // In compose message text limit is uncrossed so enable send button.  
+    $('#twit-tweet').on('uncross', function(){
+        $('#send_reply').removeClass('disabled')
+      });
     
     // On click of send button in the modal, tweet request is sent 
     $('#send_reply').click(function (e)
@@ -246,6 +268,16 @@ $(document).on("click",".direct-message", function(e)
     
     // Shows the modal after filling with details
     $('#socialsuite-twitter_messageModal').modal("show");
+    
+    // In compose message text limit is crossed so disable send button.
+    $('#twit-tweet').on('cross', function(){
+        $('#send_direct_message').addClass('disabled')
+      });
+      
+    // In compose message text limit is uncrossed so enable send button.  
+    $('#twit-tweet').on('uncross', function(){
+        $('#send_direct_message').removeClass('disabled')
+      });
     
     // On click of send button in the modal, tweet request is sent 
     $('#send_direct_message').click(function (e)

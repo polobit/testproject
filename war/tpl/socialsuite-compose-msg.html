@@ -25,12 +25,12 @@
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls span4" style="margin-left:0px;">
                             {{#if_equals headline "Reply Tweet"}}
-	                        	<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:500px;">{{description}}&nbsp</textarea>
+	                        	<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{description}}&nbsp</textarea>
 							{{else}} <!-- tweet and direct msg -->
-								<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" maxlength="125" style="max-width:500px;"></textarea>
+								<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;"></textarea>
 							{{/if_equals}}  
 							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" style="margin-right:5px;">125</em></small></div>
-	                    </div>
+                        </div>
 	                </div>
 	            </fieldset>
 	        </form>
