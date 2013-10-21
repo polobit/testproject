@@ -178,6 +178,9 @@ public class TagUtil
 	long startTime = System.currentTimeMillis();
 	int previousSize = 0;
 
+	Cursor cursor = (Cursor) tags.get(0);
+	int availableTags = cursor.count == null ? tags.size() : cursor.count;
+
 	do
 	{
 
@@ -199,9 +202,9 @@ public class TagUtil
 		}
 	    }
 
-	    Cursor cursor = (Cursor) tags.get(tags.size() - 1);
+	    cursor = (Cursor) tags.get(tags.size() - 1);
 
-	    if (cursor == null || StringUtils.isEmpty(cursor.cursor) || cursor.count <= tags.size()
+	    if (cursor == null || StringUtils.isEmpty(cursor.cursor) || availableTags <= tags.size()
 		    || cursor.cursor == null
 		    || System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 1000)
 		break;
