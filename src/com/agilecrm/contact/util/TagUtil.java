@@ -196,7 +196,7 @@ public class TagUtil
 		Tag tag = tags.get(i);
 		String tagString = tag.tag;
 
-		if (System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 50000)
+		if (System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 5000)
 		{
 
 		    abort = true;
