@@ -23,9 +23,9 @@
 				</div>
 				<div class='badge badge-info pull-right' style='display: inline-block;' >{{distance}}</div> 
 				<p class='overflow-elipsis' title="{{location}}" style="width: 99% !important;">{{location}}<br/></p>
+				<p>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
             </div>		
       </div>
-	  <p>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
 	  <div  class='ellipsis-multiline' title="{{summary}}" style="height: 40px !important;-webkit-line-clamp: 2;line-height:160%;word-wrap: break-word;word-break: normal;margin-bottom:10px;">
 		 <p style='font-style: italic;margin:0px;'>{{summary}}</p>
 	  </div>
@@ -45,9 +45,10 @@
 				</div>
 				<div class='badge badge-info pull-right' style='display: inline-block;' >{{distance}}</div> 
 				<p class='overflow-elipsis' title="{{location}}" style="width: 99% !important;">{{location}}<br/></p>
+				<p>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
             </div>		
       </div>
-	 <p>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
+	 
 	  <div  class='ellipsis-multiline' title="{{summary}}" style="height: 40px !important;-webkit-line-clamp: 2;line-height:160%;word-wrap: break-word;word-break: normal;margin-bottom:10px;">
 		 <p style='font-style: italic;margin:0px;'>{{summary}}</p>
 	  </div>
