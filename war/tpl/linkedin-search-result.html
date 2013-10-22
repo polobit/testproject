@@ -17,13 +17,17 @@
             <div class='span4' style='padding:0px 10px 0px 10px;'>
               <img  src='{{picture}}'></img>
             </div>
-            <div class='span8'>
-               <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span> 
-			   <p>{{location}}<br/>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
+           <div class='span8'>
+            	<div style="display: inline-block;width: 75%;">
+					<div  class='overflow-elipsis' title="{{name}}" style="line-height:160%;word-wrap: break-word;word-break: normal;margin-bottom:0px;"> <b style='color:#069;font-size:14px;'>{{name}}</b></div>
+				</div>
+				<div class='badge badge-info pull-right' style='display: inline-block;' >{{distance}}</div> 
+				<p class='overflow-elipsis' title="{{location}}" style="width: 99% !important;">{{location}}<br/></p>
             </div>		
       </div>
-	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
-		 <p style='font-style: italic;'>{{summary}}</p>
+	  <p>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
+	  <div  class='ellipsis-multiline' title="{{summary}}" style="height: 40px !important;-webkit-line-clamp: 2;line-height:160%;word-wrap: break-word;word-break: normal;margin-bottom:10px;">
+		 <p style='font-style: italic;margin:0px;'>{{summary}}</p>
 	  </div>
 	<div>
 		<center><a class='btn linkedinImage' id='{{id}}' is_gravatar_pic="false" pic ='{{picture}}' url='{{url}}' summary='{{summary}}'>Add</a></center>
@@ -35,13 +39,17 @@
             <div class='span4' style='padding:0px 10px 0px 10px;'>
               <img  src ='{{defaultGravatarurl 35}}'></img>
             </div>
-            <div class='span8'>
-               <b style='color:#069;font-size:14px;'>{{name}}</b><span class='badge badge-info pull-right'>{{distance}}</span>
-			   <p>{{location}}<br/>{{num_connections}} Connections</p>
+           <div class='span8'>
+            	<div style="display: inline-block;width: 75%;">
+					<div  class='overflow-elipsis' title="{{name}}" style="line-height:160%;word-wrap: break-word;word-break: normal;margin-bottom:0px;"> <b style='color:#069;font-size:14px;'>{{name}}</b></div>
+				</div>
+				<div class='badge badge-info pull-right' style='display: inline-block;' >{{distance}}</div> 
+				<p class='overflow-elipsis' title="{{location}}" style="width: 99% !important;">{{location}}<br/></p>
             </div>		
       </div>
-	  <div  class='row-fluid' style='padding-bottom:10px;word-wrap: break-word;'>
-		 <p style='font-style: italic;'>{{summary}}</p>
+	 <p>{{#if_equals num_connections "500"}}{{num_connections}}+ connections{{else}}{{num_connections}} connections{{/if_equals}}</p>
+	  <div  class='ellipsis-multiline' title="{{summary}}" style="height: 40px !important;-webkit-line-clamp: 2;line-height:160%;word-wrap: break-word;word-break: normal;margin-bottom:10px;">
+		 <p style='font-style: italic;margin:0px;'>{{summary}}</p>
 	  </div>
 	<div>
 		<center><a class='btn linkedinImage' id='{{id}}' is_gravatar_pic="true" pic ='{{picture}}' url='{{url}}' summary='{{summary}}'>Add</a></center>
@@ -49,7 +57,6 @@
 
 {{/if}}
 
-			
 		</div>
 	{{/each}}
             
