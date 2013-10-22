@@ -62,8 +62,8 @@
 <meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
 
 <%
-	String CSS_PATH = "/";
- 	//String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
+	//String CSS_PATH = "/";
+ 	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -366,10 +366,10 @@
 			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a> -->
 	</footer>
 
-	<script src='https://da4o37ei6ybbh.cloudfront.net/js/lib/headjs-min.js'></script>
+	<script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script>
 
 	<script>
-	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
+	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 	//var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
