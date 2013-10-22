@@ -161,7 +161,9 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 		type: 'POST',
 		data: json,
 		success: function() {
-			$(".bulk-delete-loading").remove();			
+			$(".bulk-delete-loading").remove();	
+			
+			showNotyPopUp('information', "Contact(s) delete scheduled", "top", 5000);
 			
 			if(!is_grid_view)
 			{

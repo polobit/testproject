@@ -66,7 +66,7 @@ $(function()
 			json.contact_ids = id_array;
 			postBulkOperationData(url, json, $form, undefined, function(data){
 				enable_save_button(saveButton);
-			})
+			}, 'Contacts owner change scheduled')
 		});
 	});
 
@@ -125,7 +125,7 @@ $(function()
 			json.contact_ids = id_array;
 			postBulkOperationData(url, json, $form,undefined,function(data){
 				enable_save_button(saveButton);
-			});
+			}, 'Camapaign assigning scheduled');
 		});
 
 	});
@@ -183,7 +183,7 @@ $(function()
 					{
 						tagsCollection.add({ "tag" : tag });
 					});
-				});
+				}, 'Tags add scheduled');
 			}
 			else 
 			{
@@ -270,7 +270,7 @@ $(function()
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
 			
-			postBulkOperationData(url, json, $form, undefined);
+			postBulkOperationData(url, json, $form, undefined, "Email scheduled");
 		});
 
 	});
@@ -459,7 +459,7 @@ function getSelectionCriteria()
  * @param contentType
  * @param callback
  */
-function postBulkOperationData(url, data, form, contentType, callback)
+function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
 	if (data.contact_ids && data.contact_ids.length == 0)
 	{
@@ -490,6 +490,13 @@ function postBulkOperationData(url, data, form, contentType, callback)
 			callback(data);
 
 		// On save back to contacts list
-		Backbone.history.navigate("contacts", { trigger : true });
+		Backbone.history.navigate("contacts", { trigger : true });  
+		
+		if(!error_message)
+			{
+				showNotyPopUp('information', "Task scheduled", "top", 5000);
+				return;
+			}
+			showNotyPopUp('information', error_message, "top", 5000);
 	} });
 }
