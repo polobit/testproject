@@ -62,8 +62,8 @@
 <meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
 
 <%
-	//String CSS_PATH = "/";
- 	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+	String CSS_PATH = "/";
+ 	//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -369,7 +369,7 @@
 	<script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script>
 
 	<script>
-	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	//var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
@@ -428,7 +428,7 @@
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap_switch.css" ></link>
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
 <!-- social suite's css -->
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/socialsuite.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/social_suite.css" />
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 
 <!-- Unified CSS for All Lib -->
