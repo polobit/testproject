@@ -128,24 +128,10 @@ public class TagsAPI
     @Path("stats")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getTagsStats()
+    public String getTagsStats(@QueryParam("reload") boolean reload)
     {
-	List<Tag> tags = TagUtil.getTags();
-	JSONObject result = new JSONObject();
-
-	// Iterate
-	try
-	{
-	    for (Tag tag : tags)
-	    {
-		result.put(tag.tag, ContactUtil.getContactsCountForTag(tag.tag));
-	    }
-	    return result.toString();
-	}
-	catch (Exception e)
-	{
-	    return "";
-	}
+	System.out.println("reload : " + reload);
+	return TagUtil.getStatus(reload);
     }
 
     /**

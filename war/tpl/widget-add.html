@@ -1,10 +1,8 @@
 <script id="widgets-add-model-template" type="text/html">
-<div class="well widget-add" style="width:220px; height:280px;">
+<div class="well widget-add" style="width:220px; height:200px;">
     <img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /> 
 	<br />
-    <h1 class="overflow-elipsis" style="margin-bottom:0px;" rel="tooltip" title="{{name}}"> {{name}}</h1>
-    <br />
-    <div class="ellipsis-multiline" style="-webkit-line-clamp: 5;word-break: break-word;width: 220px !important;height: 90px !important;margin-bottom: 10px;"  rel="tooltip" title="{{description}}">
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
 		{{description}}
 	</div>
     <div>
@@ -19,64 +17,61 @@
 </script>
 
 <script id="widgets-add-collection-template" type="text/html">
-<div class="row-fluid">
+<div class="row">
+    
+	<div class="span12">
+        <div class="page-header">
+            <h2>Social <small>Know your customer social activity</small></h2>
+        </div>
+                <div id="social" class="row-fluid">
+                </div><br/>
+    </div>
+	<div class="span12">
+        <div class="page-header">
+            <h2>Customer Support <small>View tickets and chats</small></h2>
+        </div>
+                <div id="support" class="row-fluid">
+                </div><br/>
+    </div>
+	<div class="span12" style="display:none;">
+        <div class="page-header">
+            <h2>Email <small>Send and Receive Email</small></h2>
+        </div>
+                <div id="email" class="row-fluid">
+                </div><br/>
+    </div>
     <div class="span12">
         <div class="page-header">
-            <h2>Manage Widgets</h2>
+            <h2>Calling <small>Make & Receive calls from Agile</small></h2>
         </div>
+                <div id="call" class="row-fluid">
+                </div><br/>
     </div>
-	<ul class="nav nav-tabs row-fluid" id="myTab">
-		<li class="active" align="center"><a data-toggle="tab" href="#social_tab"><h4>Social</h4></a></li>
-		<li align="center"><a data-toggle="tab" href="#support_tab" id="support_software_id"><h4>Support</h4></a></li>
-		<li align="center"><a data-toggle="tab" href="#call_tab" id="call_id"><h4>Call</h4></a></li>
-		<li align="center"><a data-toggle="tab" href="#billing_tab" id="billing_id"><h4>Billing</h4></a></li>
-		<li align="center"><a data-toggle="tab" href="#custom_tab" id="custom_id"><h4>Custom</h4></a></li>
-	</ul>
-	<div class="tab-content" id="myTabContent">
-	<div id="social_tab" class="tab-pane fade active in">
-		<div class="span12" style="margin-top:20px;">
-			<div id="social" class="row-fluid">
-			</div>
-    	</div>
-	</div>
-	<div id="support_tab" class="tab-pane fade">
-		<div  class="span12" style="margin-top:20px;">
-			<div id="support" class="row-fluid">
-			</div>
-    	</div>
-	</div>
-	<div id="call_tab" class="tab-pane fade">
-		<div class="span12" style="margin-top:20px;">
-			<div id="call" class="row-fluid">
-			</div>
-    	</div>
-	</div>
-	<div id="billing_tab" class="tab-pane fade">
-		<div class="span12" style="margin-top:20px;">
-			<div id="billing" class="row-fluid">
-			</div>
-    	</div>
-	</div>
-	<div id="custom_tab" class="tab-pane fade">
-		<div class="span12" style="margin-top:20px;">
+    <div class="span12">
+        <div class="page-header">
+            <h2>Billing <small>View and send invoices</small></h2>
+        </div>
+                <div id="billing" class="row-fluid">
+                </div><br/>
+    </div>
+	<div class="span12">
+		<div class="page-header">
+            <h2>Custom Widgets <small>Add your widgets</small></h2>
+        </div>
 			<div id="custom" class="row-fluid">
 				<div class="span4" id="custom-widget" >
-					<div class="well widget-add" style="width:220px; height:280px;">
+					<div class="well widget-add" style="width:220px; height:200px;">
     					<center><i class="icon-puzzle-piece icon-3x thumbnail" style="padding:19px;"></i></center>
 						<br />
     					<h1>Custom widget</h1>
     					<br />
-    					<div style="width: 220px;height: 90px;margin-bottom: 10px;">
-						</div>
     					<div>
-    						<a class="btn btn-primary" id="add-custom-widget" ><i class="icon-plus" style="margin-right:5px"></i>Add custom widget</a>
+    						<a class="btn btn-primary" id="add-custom-widget" style="margin-top:20px;"><i class="icon-plus" style="margin-right:5px"></i>Add custom widget</a>
 						</div>
 					</div>
 				</div>
 			</div>
     	</div>
-	</div>
-	</div>
 </div>
 </script>
 

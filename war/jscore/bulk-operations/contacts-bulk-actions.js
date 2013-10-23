@@ -66,7 +66,7 @@ $(function()
 			json.contact_ids = id_array;
 			postBulkOperationData(url, json, $form, undefined, function(data){
 				enable_save_button(saveButton);
-			})
+			}, 'Contacts owner change scheduled')
 		});
 	});
 
@@ -125,7 +125,7 @@ $(function()
 			json.contact_ids = id_array;
 			postBulkOperationData(url, json, $form,undefined,function(data){
 				enable_save_button(saveButton);
-			});
+			}, 'Camapaign assigning scheduled');
 		});
 
 	});
@@ -146,6 +146,16 @@ $(function()
 
 		setup_tags_typeahead();
 		
+		$('#addBulkTags').on( "focusout", function(e){
+			e.preventDefault();
+			var tag_input = $(this).val().trim();
+			$(this).val("");
+			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+			{
+				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			}
+			
+		});
 		/**
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
@@ -155,9 +165,20 @@ $(function()
 			e.preventDefault();
 
 			var tags = get_tags('tagsBulkForm');
-			
+
 			// To add input field value as tags
 			var tag_input = $('#addBulkTags').val().trim();
+			$('#addBulkTags').val("");
+			
+			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+			{
+				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			}
+			
+		//	$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			
+			
+			
 			if(tag_input != "")
 				tags[0].value.push(tag_input);
 
@@ -183,7 +204,7 @@ $(function()
 					{
 						tagsCollection.add({ "tag" : tag });
 					});
-				});
+				}, 'Tags add scheduled');
 			}
 			else 
 			{
@@ -270,7 +291,7 @@ $(function()
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
 			
-			postBulkOperationData(url, json, $form, undefined);
+			postBulkOperationData(url, json, $form, undefined, "Email scheduled");
 		});
 
 	});
@@ -459,7 +480,7 @@ function getSelectionCriteria()
  * @param contentType
  * @param callback
  */
-function postBulkOperationData(url, data, form, contentType, callback)
+function postBulkOperationData(url, data, form, contentType, callback, error_message)
 {
 	if (data.contact_ids && data.contact_ids.length == 0)
 	{
@@ -490,6 +511,13 @@ function postBulkOperationData(url, data, form, contentType, callback)
 			callback(data);
 
 		// On save back to contacts list
-		Backbone.history.navigate("contacts", { trigger : true });
+		Backbone.history.navigate("contacts", { trigger : true });  
+		
+		/*if(!error_message)
+			{
+				showNotyPopUp('information', "Task scheduled", "top", 5000);
+				return;
+			}
+			showNotyPopUp('information', error_message, "top", 5000);*/
 	} });
 }

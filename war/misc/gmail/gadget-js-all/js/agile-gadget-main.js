@@ -30,32 +30,32 @@ var Cache_Counter = 0;
  */
 function agile_init_gadget() {
 
-	// Check for Local host, set Lib_Path, check cookie and download scripts.
+	//  ------ Check for Local host, set Lib_Path, check cookie and download scripts. ------ 
 	if (window.location.host.indexOf("localhost") != -1) {
 
 		Is_Localhost = true;
-		// Set library path.
+		//  ------ Set library path. ------ 
 		Lib_Path = "http://localhost:8888/";
-		// Set account holder's email id in global variable.
+		//  ------ Set account holder's email id in global variable. ------ 
 		Ac_Email = "test@example.com";
-		// Download scripts.
+		//  ------ Download scripts. ------ 
 		agile_download_scripts();
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-ui.js');
 
 		head.ready(function() {
 			
-			// Fetch user data from cookie.
+			//  ------ Fetch user data from cookie. ------ 
 			agile_generate_ui("51ekokl790t85b11ivhim9ep7i","localhost");
 		});
 	}
 	
-	// Production version, go for login.
+	//  ------ Production version, go for login. ------ 
 	else {
-		// Set library path.
+		//  ------ Set library path. ------ 
 		Lib_Path = "https://googleapps.agilecrm.com/";
 //		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
 
-		// Login
+		//  ------ Login ------ 
 		agile_login();
 		gadgets.window.adjustHeight();
 	}
@@ -67,27 +67,29 @@ function agile_init_gadget() {
  * @method agile_login
  */
 function agile_login() {
+	
+	console.log("Logging in");
 
-	// Get user preferences.
+	//  ------ Get user preferences. ------ 
     var prefs = new gadgets.Prefs();
     var Agile_User_Exists = prefs.getString("agile_user_exists");
     
-	// Set account.
+	//  ------ Set account. ------ 
 	if (Agile_User_Exists == "true") {
     	var Agile_User_Key = prefs.getString("agile_user_key");
         var Agile_User_Domain = prefs.getString("agile_user_domain");
-		// Download scripts.
+		//  ------ Download scripts. ------ 
 		agile_download_scripts();
     	
-		// Download build UI JavaScript file.
+		//  ------ Download build UI JavaScript file. ------ 
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
 		head.ready(function() {
-			// Set account
+			//  ------ Set account ------ 
 			agile_generate_ui(Agile_User_Key, Agile_User_Domain);
 		});
 	}
 	
-	// New user set domain.
+	//  ------ New user set domain. ------ 
     else {
     	var Agile_User_Popup = prefs.getString("agile_user_popup");
     	var Agile_User_Expire_At = parseInt(prefs.getString("agile_user_expire_at"));
@@ -109,13 +111,13 @@ function agile_login() {
  * */
 function agile_send_auth(url, callback){
 	
-	// Increase counter and append to request, so that it will not be cached.
+	//  ------ Increase counter and append to request, so that it will not be cached. ------ 
 	Cache_Counter += 1;
 	var url = url + '?chachecounter=' + Cache_Counter;
 	console.log("Osapi from: " + url);
-	/*
-	 * Hit the server, passing in a signed request (and OpenSocial ID), to
-	 * see if we know who the user is.
+	/* ------ 
+	 * Hit the server, passing in a signed request (and OpenSocial ID), to 
+	 * see if we know who the user is. ------ 
 	 */
 	osapi.http.get({
 		'href' : url,
@@ -134,13 +136,15 @@ function agile_send_auth(url, callback){
  */
 function agile_handle_load_response(data) {
 
+	console.log("Auth response: " + data);
+	
 	var prefs = new gadgets.Prefs();
     
 	if(data.content != undefined){
-		// Check user exists, OpenID must have occurred previously.
+		//  ------ Check user exists, OpenID must have occurred previously. ------ 
 		if (data.content.user_exists == true) {
 			data.content.user_exists = "true";
-			// Set user preferences.
+			//  ------ Set user preferences. ------ 
 			prefs.set("agile_user_key", data.content.api_key);
 			prefs.set("agile_user_domain", data.content.domain);
 			prefs.set("agile_user_email", data.content.email);
@@ -148,10 +152,10 @@ function agile_handle_load_response(data) {
 			agile_login();
 		}
 		
-		// User not exist, go for one time domain registration.
+		//  ------ User not exist, go for one time domain registration. ------ 
 		else {
 			data.content.user_exists = "false";
-			// Set user preferences.
+			//  ------ Set user preferences. ------ 
 			prefs.set("agile_user_expire_at", data.content.expires_at.toString());
 			prefs.set("agile_user_popup", data.content.popup);
 			prefs.set("agile_user_exists", data.content.user_exists);
@@ -168,7 +172,7 @@ function agile_handle_load_response(data) {
  * */
 function agile_user_setup_load(data){
 
-	// Download build UI JavaScript file.
+	//  ------ Download build UI JavaScript file. ------ 
 	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-setup.min.js', function() {
 		agile_user_setup(data);
 	});
@@ -188,19 +192,19 @@ function agile_download_scripts() {
 		
 	else{
 		
-		// Handle bars, util and MD5.
+		//  ------ Handle bars, util and MD5. ------ 
 		head.js(Lib_Path + 'lib/handlebars-1.0.0.beta.6-min.js', Lib_Path
 				+ 'jscore/handlebars/handlebars-agile.js', Lib_Path
 				+ 'jscore/handlebars/handlebars-helpers.js', Lib_Path
 				+ 'jscore/util.js', Lib_Path + 'jscore/md5.js');
-		// JS API
+		//  ------ JS API ------ 
 		head.js(Lib_Path + 'stats/min/agile-min.js');
-		// Load Bootstrap libraries.
+		//  ------ Load Bootstrap libraries. ------ 
 		head.js(Lib_Path + 'lib/bootstrap.min.js');
-		// Gadget supporting JavaScript file.
+		//  ------ Gadget supporting JavaScript file. ------ 
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.js');
 	}
 }
 
-// Window onload event, call method to initiate gadget.
+//  ------ Window onload event, call method to initiate gadget. ------ 
 window.onload = agile_init_gadget;

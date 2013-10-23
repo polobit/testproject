@@ -336,6 +336,7 @@ $(function(){
 		$('#tagslist', App_Contacts.contactsListView.el).html(LOADING_HTML);
 		init_tags_collection(App_Contacts.contactsListView.el, function(tags){
 			setup_tags(App_Contacts.contactsListView.el);
+			pieTags(App_Contacts.contactsListView.el, true);
 		}, 'core/api/tags?reload=true');
 	})
 })
