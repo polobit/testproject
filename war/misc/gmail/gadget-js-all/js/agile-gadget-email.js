@@ -11,27 +11,27 @@
  * 
  * @method agile_get_emails
  * @param {Boolean}
- *            bool Decide whether mail asked for Local host or gmail.
+ *            Boolean Decide whether mail asked for Local host or gmail.
  * @returns {Array} Returns a formatted array.
  */
-function agile_get_emails(bool) {
+function agile_get_emails(Boolean) {
 
 	//  ------ Generate mails from gmail. ------ 
-	if (bool) {
+	if (Boolean) {
 		//  ------ Fetch the array of content matches. ------ 
-		matches = google.contentmatch.getContentMatches();
-		var prefs = new gadgets.Prefs();
+		Matches = google.contentmatch.getContentMatches();
+		var Gadget_Prefs = new gadgets.Prefs();
 		var Mail_Account_Holder = prefs.getString("agile_user_email");
-		return Agile_Build_List(matches, Mail_Account_Holder);
+		return agile_build_list(Matches, Mail_Account_Holder);
 	}
 	
 	//  ------ Take email and sender's info for local host. ------ 
 	else {
-		var matches = [{email_from: "devika@faxdesk.com"},{name_from: "Devika Jakkannagari"},
+		var Matches = [{email_from: "devika@faxdesk.com"},{name_from: "Devika Jakkannagari"},
 						{email_to: "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com"},
 						{name_to: "Abhi;;D j p;;"},{email_cc: "devikatest1@gmail.com;devikatest@gmail.com;teju@gmail.com"},{name_cc: "Dev T1;;Teju"},
 						{email:"devikatest@gmail.com"},{email:"test1@gmail.com"},{email:"test2@gmail.com"},{email:"test1@gmail.com"}];
-		return Agile_Build_List(matches, "test1@gmail.com");
+		return agile_build_list(Matches, "test1@gmail.com");
 	}
 }
 
@@ -40,92 +40,134 @@ function agile_get_emails(bool) {
  * Removes duplicate emails.
  * Not includes current gmail account holder's email in list.
  * 
- * @method Agile_Build_List
- * @param {Object} obj Unsorted email list object.
+ * @method agile_build_list
+ * @param {Object} Unsorted_Mails Unsorted email list object.
  * @param {String} Ac_Email Account holder's email id.
  * @returns {Object} ret sorted email list object. 
  * */
-function Agile_Build_List(obj, Ac_Email){
+function agile_build_list(Unsorted_Mails, Ac_Email){
 	
-	//  ------ Rearrange 2D mail list object into 1D mail list object. ------ 
-	function compress(matches) {
-		var ret = {};
-		for(var i =0; i < matches.length; i++) {
-			for(var key in matches[i]) {
-				if(typeof(ret[key]) != "undefined")
-					ret[key] += ";";
+	/**
+	 * Rearrange 2D mail list object into 1D mail list object.
+	 * 
+	 * @method Agile_Compress
+	 * @param {Object} Unsorted_Mails Unsorted email list object.
+	 * @returns {Object} Compressed_Mails One Dimensional mail list object. 
+	 * */
+	function agile_compress(Unsorted_Mails) {
+		
+		var Compressed_Mails = {};
+		
+		//  ------ Iterate through unsorted mail list object. ------ 
+		for(var Index =0; Index < Unsorted_Mails.length; Index++) {
+			for(var Key in Unsorted_Mails[Index]) {
+				
+				//  ------ Put body and subject mails together separated by ";". ------
+				if(typeof(Compressed_Mails[Key]) != "undefined")
+					Compressed_Mails[Key] += ";";
+				//  ------ Create Object having key:value pair as "type_of_mail : mail_or_name". ------ 
 				else
-					ret[key] = "";
-				ret[key] +=  matches[i][key];
+					Compressed_Mails[Key] = "";
+				Compressed_Mails[Key] +=  Unsorted_Mails[Index][Key];
 			}
 		}
-		return ret;
+		
+		return Compressed_Mails;
 	}
 	
-	//  ------ Create mail and name pair array. ------ 
-	function Create_Pair(_mail, _name, arr) {
-		names = _name.split(";");
-		mails = _mail.split(";");
-		while(names.length < mails.length) names = [""].concat(names);
-		while(mails.length < names.length) mails = [""].concat(mails);
-		var ret = [];
-		for(var i = 0; i < names.length; i++) {
-			if(mails[0] != ""){
-				var tmp = {};
-				tmp.name = names[i];
-				tmp.email = mails[i];
-				arr.push(tmp);
+	
+	/**
+	 * Create mail and name pair array. By passing corresponding pair of strings.
+	 * 
+	 * @method agile_create_pair
+	 * @param {String} Mail_String mail string.
+	 * @param {String} Name_String name string. 
+	 * @param {Array} Pair_Array array of name and mail pair object.
+	 * */
+	function agile_create_pair(Mail_String, Name_String, Pair_Array) {
+		
+		//  ------ Create name and mail array from name and mail strings passed. ------  
+		Names_Array = Name_String.split(";");
+		Mails_Array = Mail_String.split(";");
+		//  ------ Make mail nad name array of equal length. ------
+		while(Names_Array.length < Mails_Array.length) Names_Array = [""].concat(Names_Array);
+		while(Mails_Array.length < Names_Array.length) Mails_Array = [""].concat(Mails_Array);
+		
+		for(var Index = 0; Index < Names_Array.length; Index++) {
+			
+			if(Mails_Array[0] != ""){
+				var Temporary_Object = {};
+				Temporary_Object.name = Names_Array[Index];
+				Temporary_Object.email = Mails_Array[Index];
+				Pair_Array.push(Temporary_Object);
 			}
 		}
 	}
 	  
-	//  ------ Split name into first name and last name. ------ 
-	function Parse_Name(_name) {
-		names = _name.split(" ");
+
+	/**
+	 * Split name into first name and last name.
+	 * 
+	 * @method agile_parse_name
+	 * @param {String} Full_Name full name string. 
+	 * @returns {Array} return array having first and last name. 
+	 * */
+	function agile_parse_name(Full_Name) {
 		
-		if(names.length == 1) 
-			return [names[0], ""];
+		//  ------ Split the name as first name and last name. ------ 
+		Split_Names = Full_Name.split(" ");
 		
-		var first_name = "", last_name = "";
-		for(var i = 0; i < names.length; i++) {
-			if(i < names.length-1) 
-				first_name += " " + names[i];
+		//  ------ Return first name and empty string, if there is no last name. ------ 
+		if(Split_Names.length == 1) 
+			return [Split_Names[0], ""];
+		
+		var First_Name = "", Last_Name = "";
+		
+		for(var Index = 0; Index < Split_Names.length; Index++) {
+			//  ------ Make all words as first name accept last word. ------  
+			if(Index < Split_Names.length-1) 
+				First_Name += " " + Split_Names[Index];
 			else
-				last_name += " " + names[i]
+				Last_Name += " " + Split_Names[Index]
 		}
 		
-		return [first_name.substr(1), last_name.substr(1)];
+		return [First_Name.substr(1), Last_Name.substr(1)];
 	}
 	  
-	var retArr = [], retArr1 = [];
-	var tmpObj = compress(obj);
+	var Soreted_Mail_1 = [], Soreted_Mail_2 = [];
+	//  ------ Compress mail list into 1 D object. ------ 
+	var Mail_List = agile_compress(Unsorted_Mails);
 
-	if(typeof(tmpObj["email_from"]) == "undefined") tmpObj["email_from"] = "";
-	if(typeof(tmpObj["name_from"]) == "undefined") tmpObj["name_from"] = "";
-	if(typeof(tmpObj["email_to"]) == "undefined") tmpObj["email_to"] = "";
-	if(typeof(tmpObj["name_to"]) == "undefined") tmpObj["name_to"] = "";
-	if(typeof(tmpObj["email_cc"]) == "undefined") tmpObj["email_cc"] = "";
-	if(typeof(tmpObj["name_cc"]) == "undefined") tmpObj["name_cc"] = "";
+	//  ------ Complete mail list object with all type of possible mails. ------ 
+	if(typeof(Mail_List["email_from"]) == "undefined") Mail_List["email_from"] = "";
+	if(typeof(Mail_List["name_from"]) == "undefined") Mail_List["name_from"] = "";
+	if(typeof(Mail_List["email_to"]) == "undefined") Mail_List["email_to"] = "";
+	if(typeof(Mail_List["name_to"]) == "undefined") Mail_List["name_to"] = "";
+	if(typeof(Mail_List["email_cc"]) == "undefined") Mail_List["email_cc"] = "";
+	if(typeof(Mail_List["name_cc"]) == "undefined") Mail_List["name_cc"] = "";
 	
-	if(typeof(tmpObj["email"]) != "undefined")
-		Create_Pair(tmpObj["email"], "", retArr1);
-	Create_Pair(tmpObj["email_from"], tmpObj["name_from"], retArr);
-	Create_Pair(tmpObj["email_to"], tmpObj["name_to"], retArr);
-	Create_Pair(tmpObj["email_cc"], tmpObj["name_cc"], retArr);
+	//  ------ Create array of corresponding name, mail object. ------ 
+	if(typeof(Mail_List["email"]) != "undefined")
+		Create_Pair(Mail_List["email"], "", Soreted_Mail_2);
+	Create_Pair(Mail_List["email_from"], Mail_List["name_from"], Soreted_Mail_1);
+	Create_Pair(Mail_List["email_to"], Mail_List["name_to"], Soreted_Mail_1);
+	Create_Pair(Mail_List["email_cc"], Indexj["name_cc"], Soreted_Mail_1);
 
-	var ret = {};
+	//  ------ Final sorted mail list object. ------ 
+	var Sorted_Mail_List = {};
 	
-	for(var i = 0; i < retArr.length; i++) if(retArr[i]["email"] != Ac_Email){
-		var names = Parse_Name(retArr[i]["name"]);
-		ret[retArr[i]["email"]] = {"email": retArr[i]["email"], "fname":names[0], "lname":names[1], "mail_exist":false};
+	//  ------ Remove duplicate mails and Gmail account owners email from list. ------
+	for(var Index = 0; Index < Soreted_Mail_1.length; Index++) if(Soreted_Mail_1[Index]["email"] != Ac_Email){
+		var Names = parse_name(Soreted_Mail_1[Index]["name"]);
+		Sorted_Mail_List[Soreted_Mail_1[Index]["email"]] = {"email": Soreted_Mail_1[Index]["email"], "fname":Names[0], "lname":Names[1], "mail_exist":false};
 	}
 	
-	for(var i = 0; i < retArr1.length; i++) if(retArr1[i]["email"] != Ac_Email){
-		var names = Parse_Name(retArr1[i]["name"]);
-		if(typeof (ret[retArr1[i]["email"]]) == "undefined"){
-			ret[retArr1[i]["email"]] = {"email": retArr1[i]["email"], "fname":names[0], "lname":names[1], "mail_exist":false};
+	for(var Index = 0; Index < Soreted_Mail_2.length; Index++) if(Soreted_Mail_2[Index]["email"] != Ac_Email){
+		var Names = parse_name(Soreted_Mail_2[Index]["name"]);
+		if(typeof (Sorted_Mail_List[Soreted_Mail_2[Index]["email"]]) == "undefined"){
+			Sorted_Mail_List[Soreted_Mail_2[Index]["email"]] = {"email": Soreted_Mail_2[Index]["email"], "fname":Names[0], "lname":Names[1], "mail_exist":false};
 		}
 	}  
 	
-	return ret;
+	return Sorted_Mail_List;
 }
