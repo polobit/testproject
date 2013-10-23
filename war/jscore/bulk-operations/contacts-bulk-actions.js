@@ -146,6 +146,16 @@ $(function()
 
 		setup_tags_typeahead();
 		
+		$('#addBulkTags').on( "focusout", function(e){
+			e.preventDefault();
+			var tag_input = $(this).val().trim();
+			$(this).val("");
+			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+			{
+				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			}
+			
+		});
 		/**
 		 * Add the tags to the selected contacts by sending the contact ids and
 		 * tags through post request to the appropriate url
@@ -155,9 +165,20 @@ $(function()
 			e.preventDefault();
 
 			var tags = get_tags('tagsBulkForm');
-			
+
 			// To add input field value as tags
 			var tag_input = $('#addBulkTags').val().trim();
+			$('#addBulkTags').val("");
+			
+			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+			{
+				$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			}
+			
+		//	$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			
+			
+			
 			if(tag_input != "")
 				tags[0].value.push(tag_input);
 

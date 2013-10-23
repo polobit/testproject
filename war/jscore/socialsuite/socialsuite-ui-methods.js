@@ -124,22 +124,22 @@ function registerAll()
  */
 function addUserImgToColumn(stream)
 {	
-	  // Get stream from collection.
-	  var modelStream = StreamsListView.collection.get(stream.id);	 
+  // Get stream from collection.
+  var modelStream = StreamsListView.collection.get(stream.id);	 
 	  
-	  // Fetching profile image url from twitter/linkedin server    											  	
-	  $.get("/core/social/getprofileimg/" + stream.id, 
-			    function (url)
-			    {
-	              modelStream.set("profile_img_url",url);
-	            	
-	              // Append in collection 			
-	    		  socialsuitecall.streams(modelStream);
+  // Fetching profile image url from twitter/linkedin server    											  	
+  $.get("/core/social/getprofileimg/" + stream.id, 
+	    function (url)
+	    {
+          modelStream.set("profile_img_url",url);
+ 	            	
+          // Append in collection 			
+		  socialsuitecall.streams(modelStream);
 
-	    		  // Get network updates from linkedin
-	    		  if(stream.stream_type == "All_Updates")	    			  
-	    		     getSocialSuiteLinkedInNetworkUpdates(stream);
-   			    });  
+	      // Get network updates from linkedin
+	      if(stream.stream_type == "All_Updates")	    			  
+	         getSocialSuiteLinkedInNetworkUpdates(stream);
+	    });  
 }
 
 /**
@@ -209,10 +209,12 @@ function addTweetToStream(modelStream,tweet)
 	$("#stream-spinner-modal-"+tweet.stream_id).hide();
 
 	// Add type of message
-	if(tweet.text == "Dear you do not have any tweets.")
+	if(tweet.text == "There is no tweets to show here." || tweet.text == "Dear you do not have any tweets.")
 		{
 		  tweet["msg_type"] = "NoTweet";
 		  tweet["show"] = true;
+		  if(tweet.text == "Dear you do not have any tweets.")
+			  tweet["text"] = "There is no tweets to show here.";
 		}
 	else
 		{
@@ -236,6 +238,9 @@ function addTweetToStream(modelStream,tweet)
 	          tweet["direct_message"] = true;
 	          tweet["deletable_tweet"] = true;
 	        }
+	      
+	      // Converts normal text to tweet with link on url, # and @.
+	      tweet.text = convertTextToTweet(tweet);
 		}	
 	    
     console.log("for add "+modelStream.get('tweetListView').length);
@@ -257,6 +262,52 @@ function addTweetToStream(modelStream,tweet)
 	 head.js('lib/jquery.timeago.js', function(){	 
 		        $(".time-ago", $(".chirp-container")).timeago();	
 			});
+}
+
+function convertTextToTweet(tweet)
+{	
+	var linkableTweetArray = new Array();
+	var tweetText = tweet.text;
+	var regex = new RegExp();
+	
+	// Replace &amp; with &
+	regex = new RegExp("&amp;","g");
+	tweetText = tweetText.replace(regex,'&');
+	 
+	// Split text in array.
+	linkableTweetArray = tweetText.split(/[\s,?&;.'":!)({}]+/);
+	
+	// Remove duplicate words.
+	linkableTweetArray = _.uniq(linkableTweetArray);
+		
+	for (var i = 0; i < linkableTweetArray.length; i++) 
+	  {			
+		if(linkableTweetArray[i].charAt(0) == "@")
+		  {		    
+		    regex = new RegExp(linkableTweetArray[i],"g");		   
+		    tweetText = tweetText.replace(regex,'&lt;a href=\'https://twitter.com/'+linkableTweetArray[i].substring(1)+'\' target=\'_blank\' class=\'cd_hyperlink\'>'+linkableTweetArray[i]+'&lt;/a>');		    
+		  }
+		else if(linkableTweetArray[i].charAt(0) == "#")
+		   {
+		    regex = new RegExp(linkableTweetArray[i],"g");		    
+		    var url = "https://twitter.com/search?q=%23" + linkableTweetArray[i].substring(1) + "&src=hash";
+		    tweetText = tweetText.replace(regex,'&lt;a href=\''+url+'\' target=\'_blank\' class=\'cd_hyperlink\'>'+linkableTweetArray[i]+'&lt;/a>');
+		   }
+	  }
+
+	linkableTweetArray = new Array();
+	linkableTweetArray = tweetText.split(" ");
+	var exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+
+	$.each(linkableTweetArray, function(index, word) {
+		if (word.match(exp))
+			tweetText = tweetText.replace(word, '&lt;a href=\'' + word
+					+ '\' target=\'_blank\' class=\'cd_hyperlink\'>' + word + '&lt;/a>');
+		});
+		
+	 regex = new RegExp("&lt;","g");
+	 tweetText = tweetText.replace(regex,'<');
+	 return tweetText;
 }
 
 // Remove no tweet notification. Search for that tweet in collection and makes that tweets model hide.

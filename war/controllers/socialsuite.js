@@ -33,9 +33,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		initToPubNub();	
 		
 		// Display added streams 
-		this.streams();		
-		
-		/*head.js('js/lib/jquery.ddslick.min.js', function(){});	*/
+		this.streams();			
 	}, // socialsuite end	
 				   
 	/**

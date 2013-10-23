@@ -6,6 +6,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .columns{box-sizing:border-box;height:100%;overflow:visible;margin:0px 0px 0px 0px;}
 .column{margin:0px 5px 8px!important;background-color:#fcfcfc;font-size:1rem;
         white-space:normal;overflow:hidden;position:relative;border:1px solid #a1a1a1;border-radius:4px;}
+.column:focus{outline: -webkit-focus-ring-color auto 5px;}
 .column-header{box-sizing:border-box;position:relative;height:55px;padding:0 10px;padding-top:2px;color:#444;
                background-color:#eee;line-height:50px;border-bottom:1px solid #ddd}
 .margin-hs{margin-left:5px !important;margin-right:2px !important;}
@@ -25,7 +26,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .social-type-icon{float:right;position:relative;bottom:12px;}
 .stream-type-icon{float:right;position:relative;bottom:12px;margin-right:-6px;}
 .waiting-symbol{float:right;position: relative;bottom: 14px;margin-right:3px;}
-.mentions-small-title{position:relative;right: 3px;font-size: initial!important;}
+.mentions-small-title{position:relative;right: 3px;font-size: initial!important;bottom: 13px;}
 
 /* user's profile img in header */
 .user-profile-img{width:40px;height:40px;border-radius:8px;margin-left: -4px;}
@@ -53,11 +54,11 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .tweet:hover .tweet-actions,.is-selected-tweet .tweet-actions{visibility:visible}
 
 /*img with tweet*/
-.obj-left{float:left;margin-right:10px}
-.item-img{width:40px}
-.tweet-img{margin-left:-58px}
-.tweet-avatar{margin-top:2px;margin-bottom:2px}
-.avatar{width:40px;height:40px;border-radius:8px}
+.obj-left{float:left;margin-right:10px;}
+.item-img{width:40px;}
+.tweet-img{margin-left:-58px;}
+.tweet-avatar{margin-top:2px;margin-bottom:2px;}
+.avatar{width:40px;height:40px;border-radius:8px;}
 .pull-left{float:left}
 .pull-right{float:right}
 
@@ -84,7 +85,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 /* tweet actions */
 .tweet-actions{visibility:hidden;float:right}
-.stream-item:hover .tweet-actions{visibility:visible}
+.stream-item:hover .tweet-actions{visibility:visible;margin-top: 2px;}
 .tweet-actions>li{float:left;margin:0 0 0 7px}
 
 /* tweet action */
@@ -111,7 +112,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 /* Handle */
 #socialsuite-streams-model-list ::-webkit-scrollbar{
-    width: 5px;
+    width: 7px;
     margin-right: 4px!important;
 }
 #socialsuite-streams-model-list ::-webkit-scrollbar-thumb{
@@ -155,6 +156,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 #twitter_profile_img_url{visibility:hidden;width: 1px;height: 1px;}
 .mentions-big-title{font-size:xx-large;}
-#twitter_profile_img{width: 60px;height: 50px;}
-.no-tweet{border-bottom:1px solid #e5e5e5;background-color: darkgray;font-size: 15px;text-align: center;}
+#twitter_profile_img{width: 55px;height: 50px;border-radius: 8px;margin-top: -6px;}
+.no-tweet{border-bottom:1px solid #e5e5e5;background-color: whitesmoke;font-size: 15px;text-align: center;}
 .no-tweet>p{padding-top: 6px;}
+#addStreamModal:focus{outline-style: none;}

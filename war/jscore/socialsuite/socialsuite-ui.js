@@ -280,8 +280,8 @@ $(document).on("click",".save-twitter-stream", function(e)
 			$('#addStreamModal').modal('hide');	
 			
 			// Append in collection,add new stream 			
-			socialsuitecall.streams(stream);		
-			
+			socialsuitecall.streams(stream);
+						
 			// Register on server
 			var publishJSON = {"message_type":"register", "stream":stream};
 			sendMessage(publishJSON);			
