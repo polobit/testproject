@@ -15,9 +15,9 @@
  */
 function agile_generate_ui(Api_Key, domain) {
 
-	// Set account.
+	//  ------ Set account. ------ 
 	_agile.set_account(Api_Key, domain);
-	// Build mail list UI and call callback.
+	//  ------ Build mail list UI and call callback. ------ 
 	agile_build_ui(function() {
 		
 		var Handlers_Path = Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-event-handlers.min.js';
@@ -28,11 +28,11 @@ function agile_generate_ui(Api_Key, domain) {
 			Util_Path = Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-util.js';
 		}
 			
-		// Load validation, event handlers and util JS files.
+		//  ------ Load validation, event handlers and util JS files. ------ 
 		head.js(Handlers_Path, Util_Path, Lib_Path + 'lib/jquery.validate.min.js', function() {
-					/*
+					/* ------ 
 					 * User generated events (click, key press, etc.) will be
-					 * available after handlers file loading.
+					 * available after handlers file loading. ------ 
 					 */
 					agile_init_handlers();
 					agile_init_util();
@@ -50,13 +50,13 @@ function agile_generate_ui(Api_Key, domain) {
 function agile_build_ui(callback) {
 
 	var emails;
-	// Get emails
+	//  ------ Get emails ------ 
 	if (!Is_Localhost)
 		emails = agile_get_emails(true);
 	else
 		emails = agile_get_emails(false);
 
-	// Build UI for mails.
+	//  ------ Build UI for mails. ------ 
 	console.log("Building UI");
 	agile_build_ui_for_emails(emails);
 
@@ -74,14 +74,14 @@ function agile_build_ui(callback) {
  */
 function agile_build_ui_for_emails(Email_Ids) {
 
-	// Clear contact data object.
+	//  ------ Clear contact data object. ------ 
 	Contacts_Json = {};
 	Contacts_Json = Email_Ids;
 	
-	// Clear search mail HTML container.
+	//  ------ Clear search mail HTML container. ------ 
 	$('#search_mail_div').html('');
 	
-	// Fill and create html for mail list.
+	//  ------ Fill and create html for mail list. ------ 
 	agile_fill_individual_template_ui(Email_Ids, $("#search_mail_div"));
 	
 	$(".agile-mail-dropdown").data("email", $(".agile-mail-dropdown option:eq(0)").data("content"));
@@ -99,11 +99,11 @@ function agile_build_ui_for_emails(Email_Ids) {
  */
 function agile_fill_individual_template_ui(val, selector) {
 	
-	// Compile template and generate UI.
+	//  ------ Compile template and generate UI. ------ 
 	var Individual_Template = getTemplate('gadget', val, 'no');
-	// Append contact to container in HTML.
+	//  ------ Append contact to container in HTML. ------ 
 	selector.append($(Individual_Template));
-	// Adjust gadget window height.
+	//  ------ Adjust gadget window height. ------ 
 	if (!Is_Localhost)
 		gadgets.window.adjustHeight();
 }
