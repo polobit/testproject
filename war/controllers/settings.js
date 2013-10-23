@@ -24,6 +24,8 @@ var SettingsRouter = Backbone.Router.extend({
 
 		/* Notifications */
 		"notification-prefs" : "notificationPrefs",
+		
+		"add-widget" : "addWidget",
 
 		/* contact-us help email */
 		"contact-us" : "contactUsEmail"
@@ -246,6 +248,17 @@ var SettingsRouter = Backbone.Router.extend({
         $('.notification-prefs-tab').addClass('active'); 
 		//$('#content').html(view.render().el);		
 	},
+	
+	/**
+	 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
+	 */
+	addWidget : function()
+	{
+		$("#content").html(getTemplate("settings"), {});
+		pickWidget();
+
+	},
+	
 	contactUsEmail : function() {
 		$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
 	}

@@ -28,7 +28,9 @@ function pickWidget()
 	Catalog_Widgets_View.collection.fetch();
 
 	// Shows available widgets in the content
-	$('#content').html(Catalog_Widgets_View.el);
+	$('#prefs-tabs-content').html(Catalog_Widgets_View.el);
+	$('#PrefsTab .active').removeClass('active');
+    $('.add-widget-prefs-tab').addClass('active');
 }
 
 /**
@@ -174,11 +176,8 @@ $(function()
 
 		success : function(data)
 		{
-//			console.log(data.set('is_added',));
-			
-			console.log(models[0].set(data));
-			console.log(Catalog_Widgets_View.collection.findWhere({ name : widget_name }));
-			return;
+
+			Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
 			update_collection(widget_name);
 
 		}, dataType : 'json' });
@@ -203,6 +202,9 @@ $(function()
 		success : function(data)
 		{
 			update_collection(widget_name);
+			
+			// Call fetch on collection to update widget models
+			 Catalog_Widgets_View.collection.fetch();
 
 		}, dataType : 'json' });
 	});
@@ -221,21 +223,7 @@ function update_collection(widget_name)
 		Widgets_View.collection.remove(model);
 	}
 
-	// Call fetch on collection to update widget models
-	Catalog_Widgets_View.collection.fetch();
-
-	/*
-	 * If contacts view is not defined, redirected to list of contacts page
-	 * after adding widget
-	 */
-	/*if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
-	{
-		Backbone.history.navigate("contacts", { trigger : true });
-
-		return;
-	}
-	// Navigates back to the contact id form
-	Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });*/
+	
 }
 
 function build_custom_widget_form(el)
@@ -287,9 +275,8 @@ function build_custom_widget_form(el)
 
 				$('#cancel_custom_widget').die().live('click', function(e)
 				{
-					$("#custom-widget").replaceWith(divClone); // Restore
-					// element back
-					// to original
+					// Restore element back to original
+					$("#custom-widget").replaceWith(divClone); 
 				});
 			});
 }
