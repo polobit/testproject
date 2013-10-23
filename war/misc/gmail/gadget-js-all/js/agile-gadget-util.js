@@ -15,16 +15,16 @@
  */
 function agile_build_tag_ui(Tag_List, val) {
 
-	// Remove all tags from list except first, hidden list item.
+	//  ------ Remove all tags from list except first, hidden list item. ------ 
 	$(Tag_List).children("li:gt(0)").remove();
-	// Iterate up to number of tags in array.
+	//  ------ Iterate up to number of tags in array. ------ 
 	for (index = 0; index < val.tags.length; index++) {
-		// Clone hidden list item.
+		//  ------ Clone hidden list item. ------ 
 		var Clone_Element = $(Tag_List).children().eq(0).clone(true);
 		$(Clone_Element).css('display', 'inline-block');
-		// Fill tag value.
+		//  ------ Fill tag value. ------ 
 		$('.tag-name', Clone_Element).text(val.tags[index]);
-		// Append list item to list container.
+		//  ------ Append list item to list container. ------ 
 		Clone_Element.appendTo(Tag_List);
 	}
 }
@@ -44,14 +44,14 @@ function agile_build_tag_ui(Tag_List, val) {
  */
 function agile_build_form_template(that, template, Template_Location, callback) {
 
-	// Send request for template.
+	//  ------ Send request for template. ------ 
 	agile_get_gadget_template(template + "-template", function(data) {
 
-		// Take contact data from global object variable.
+		//  ------ Take contact data from global object variable. ------ 
 		var json = Contacts_Json[that.closest(".show-form").data("content")];
-		// Compile template and generate UI.
+		//  ------ Compile template and generate UI. ------ 
 		var Handlebars_Template = getTemplate(template, json, 'no');
-		// Insert template to container in HTML.
+		//  ------ Insert template to container in HTML. ------ 
 		that.closest(".gadget-contact-details-tab").find(Template_Location)
 				.html($(Handlebars_Template));
 
@@ -72,23 +72,23 @@ function agile_build_form_template(that, template, Template_Location, callback) 
  */
 function agile_get_gadget_template(Template_Name, callback) {
 
-	// Search body for the template.
+	//  ------ Search body for the template. ------ 
 	var content = $("#" + Template_Name).text();
 	if (content) {
 		return callback(content);
 	}
 
-	// URL from where to get template.
+	//  ------ URL from where to get template. ------ 
 	var Agile_Url = agile_id.getURL()
 			+ "/gmail-template?callback=?&id=" + agile_id.get() + "&template=gadget-template";
 
-	// Send cross domain request.
+	//  ------ Send cross domain request. ------ 
 	agile_json(Agile_Url, function(data) {
 
-		// Template from server response.
+		//  ------ Template from server response. ------ 
 		var template = data.content;
 
-		// Add template to body.
+		//  ------ Add template to body. ------ 
 		$("body").append(template);
 
 		if (callback && typeof (callback) === "function") {
@@ -107,11 +107,11 @@ function agile_get_gadget_template(Template_Name, callback) {
  *            callback Function to be called as callback.
  */
 function agile_load_datepicker(calendar, callback) {
-	// Load Bootstrap libraries.
+	//  ------ Load Bootstrap libraries. ------ 
 	head.js(Lib_Path + 'lib/bootstrap.min.js', Lib_Path
 			+ 'lib/bootstrap-datepicker-min.js', function() {
 		
-		// Enables date picker.
+		//  ------ Enables date picker. ------ 
 		calendar.datepicker({
 			format : 'mm/dd/yyyy'
 		});
@@ -159,19 +159,13 @@ function agile_serialize_form(form) {
  */
 function agile_init_util(){
 	
-	// Click event for search contact.
-	$(".mail-list a").die().live('click', function(e) {
-		// Prevent default functionality.
+	//  ------ Click event for search contact. ------ 
+	$("#search_drop_down").die().live('change', function(e) {
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
-		var el = $(this).closest("div.gadget-contact-details-tab")
-						.find("div.show-form");
 		
-		var email = $(this).closest("li").data("content");
-		var caption = $(this).text();
-		// Set chosen mail as data-email attribute of <ul>.  
+		var email = $("#search_drop_down :selected").data("content");
+		//  ------ Set chosen mail as data-email attribute of <ul>. ------   
 		$(".agile-mail-dropdown").data("email", email);
-		// Set button text to chosen mail.
-		$(".agile-mail-dropdown").prev().children().eq(0).text(caption);
 	});
 }

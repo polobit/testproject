@@ -14,7 +14,7 @@ var ContactsRouter = Backbone.Router
 			// "dashboard-test": "dashboard",
 
 			/* Contacts */
-			"contacts" : "contacts", "contact/:id" : "contactDetails", "import" : "importContacts", "add-widget" : "addWidget", "contact-edit" : "editContact",
+			"contacts" : "contacts", "contact/:id" : "contactDetails", "import" : "importContacts",  "contact-edit" : "editContact",
 				"contact-duplicate" : "duplicateContact", "tags/:tag" : "contacts", "send-email" : "sendEmail", "send-email/:id" : "sendEmail",
 				// "add-opportunity": "addOpportunityToContact",
 				"add-campaign" : "addContactToCampaign",
@@ -532,15 +532,6 @@ var ContactsRouter = Backbone.Router
 				$('#content').html(getTemplate("import-contacts", {}));
 			},
 
-			/**
-			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
-			 */
-			addWidget : function()
-			{
-
-				pickWidget();
-
-			},
 
 			/**
 			 * Adds an opportunity to a contact, which is in contact detail

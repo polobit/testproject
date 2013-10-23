@@ -12,51 +12,51 @@
  */
 function agile_init_handlers() {
 
-	// Click event for add contact.
+	//  ------ Click event for add contact. ------ 
 	$('.gadget-contact-validate').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
 		var that = $(this);
 		var json = [];
 		var data = {};
-		// Form serialization and validation.
+		//  ------ Form serialization and validation. ------ 
 		json = agile_serialize_form(el.find(".gadget-contact-form"));
 
 		$.each(json, function(index, val) {
 			data[val.name] = val.value;
 		});
-		// Show saving image.
+		//  ------ Show saving image. ------ 
 		$('.contact-add-waiting', el).show();
-		// Add contact
+		//  ------ Add contact ------ 
 		_agile.create_contact(data, 
 				{success: function(val){
-							// Hide saving image.
+							//  ------ Hide saving image. ------ 
 							$('.contact-add-waiting', el).hide(1);
-							// Generate UI.
+							//  ------ Generate UI. ------ 
 							agile_create_contact_ui(el, that, data.email, val);
 							
 				}, error: function(val){
 					
 							$('.contact-add-waiting', el).hide(1);
-							// Show duplicate contact message.
+							//  ------ Show duplicate contact message. ------ 
 							$('.contact-add-status', el).text(val.error).show().delay(5000).hide(1);
 				}});
 	});
 
-	// Click event for add Note.
+	//  ------ Click event for add Note. ------ 
 	$('.gadget-note-validate').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
 		var json = [];
 		var data = {};
 		var email = {};
-		// Form serialization and validation.
+		//  ------ Form serialization and validation. ------ 
 		json = agile_serialize_form($(el).find(".gadget-note-form"));
 		$.each(json, function(index, val) {
 			if (val.name == "email")
@@ -66,11 +66,11 @@ function agile_init_handlers() {
 		});
 
 		$('.note-add-waiting', el).show();
-		// Add Note
+		//  ------ Add Note ------ 
 		_agile.add_note(data,
 				{success: function(val){
 							$('.note-add-waiting', el).hide(1);
-							// Show notes list, after adding note.
+							//  ------ Show notes list, after adding note. ------ 
 							$('.gadget-notes-tab', el).trigger('click');
 					
 				}, error: function(val){
@@ -79,17 +79,17 @@ function agile_init_handlers() {
 				}}, email.email);
 	});
 
-	// Click event for add Task.
+	//  ------ Click event for add Task. ------ 
 	$('.gadget-task-validate').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find("div.show-form");
 		var json = [];
 		var data = {};
 		var email = {};
-		// Form serialization and validation.
+		//  ------ Form serialization and validation. ------ 
 		json = agile_serialize_form($(el).find(".gadget-task-form"));
 		$.each(json, function(index, val) {
 			if (val.name == "email")
@@ -97,15 +97,15 @@ function agile_init_handlers() {
 			else
 				data[val.name] = val.value;
 		});
-		// Format date.
+		//  ------ Format date. ------ 
 		data.due = new Date(data.due).getTime() / 1000.0;
 
 		$('.task-add-waiting', el).show();
-		// Add Task
+		//  ------ Add Task ------ 
 		_agile.add_task(data,
 				{success: function(val){
 							$('.task-add-waiting', el).hide(1);
-							// Show tasks list, after adding task.
+							//  ------ Show tasks list, after adding task. ------ 
 							$('.gadget-tasks-tab', el).trigger('click');
 			
 				}, error: function(val){
@@ -114,17 +114,17 @@ function agile_init_handlers() {
 				}}, email.email);
 	});
 
-	// Click event for add Deal.
+	//  ------ Click event for add Deal. ------ 
 	$('.gadget-deal-validate').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find("div.show-form");
 		var json = [];
 		var data = {};
 		var email = {};
-		// Form serialization and validation.
+		//  ------ Form serialization and validation. ------ 
 		json = agile_serialize_form($(el).find(".gadget-deal-form"));
 		$.each(json, function(index, val) {
 			if (val.name == "email")
@@ -132,15 +132,15 @@ function agile_init_handlers() {
 			else
 				data[val.name] = val.value;
 		});
-		// Format date.
+		//  ------ Format date. ------ 
 		data.close_date = new Date(data.close_date).getTime() / 1000.0;
 
 		$('.deal-add-waiting', el).show();
-		// Add Deal
+		//  ------ Add Deal ------ 
 		_agile.add_deal(data,
 				{success: function(val){
 							$('.deal-add-waiting', el).hide(1);
-							// Show deals list, after adding deal.
+							//  ------ Show deals list, after adding deal. ------ 
 							$('.gadget-deals-tab', el).trigger('click');
 			
 				}, error: function(val){
@@ -149,17 +149,17 @@ function agile_init_handlers() {
 				}}, email.email);
 	});
 	
-	// Click event for add Campaign.
+	//  ------ Click event for add Campaign. ------ 
 	$('.gadget-campaign-validate').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find("div.show-form");
 		var json = [];
 		var data = {};
 		var email = $(el).data("content");
-		// Form serialization and validation.
+		//  ------ Form serialization and validation. ------ 
 		json = agile_serialize_form($(el).find(".gadget-campaign-form"));
 		$.each(json, function(index, val) {
 			if (val.name == "email")
@@ -169,11 +169,11 @@ function agile_init_handlers() {
 		});
 		
 		$('.campaign-add-waiting', el).show();
-		// Add Campaign
+		//  ------ Add Campaign ------ 
 		_agile.add_campaign(data,
 				{success: function(val){
 							$('.campaign-add-waiting', el).hide(1);
-							// Show deals list, after adding deal.
+							//  ------ Show deals list, after adding deal. ------ 
 							$('.gadget-campaigns-tab', el).trigger('click');
 					
 				}, error: function(val){
@@ -182,21 +182,20 @@ function agile_init_handlers() {
 				}}, email);
 	});
 
-	// Click event for add Score.
+	//  ------ Click event for add Score. ------ 
 	$('.add-score').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.score-scope");
 		var email = $('input[name="email"]', el).val();
-		// Parse score text into integer.
+		//  ------ Parse score text into integer. ------ 
 		var Old_Score = parseInt($.trim($('.score-value', el).text()), 10);
 		$('.score-value', el).text(Old_Score + 1);
-		// Add Score
+		//  ------ Add Score ------ 
 		_agile.add_score(1,
 				{success: function(response){
-							// Merge Server response object with Contact_Json
-							// object.
+							//  ------ Merge Server response object with Contact_Json object. ------ 
 							$.extend(Contacts_Json[email], response);
 					
 				}, error: function(val){
@@ -205,23 +204,22 @@ function agile_init_handlers() {
 				}}, email);
 	});
 
-	// Click event for subtract Score.
+	//  ------ Click event for subtract Score. ------ 
 	$('.subtract-score').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.score-scope");
 		var email = $('input[name="email"]', el).val();
-		// Parse score text into integer.
+		//  ------ Parse score text into integer. ------ 
 		var Old_Score = parseInt($.trim($('.score-value', el).text()), 10);
 
 		if (Old_Score > 0) {
 			$('.score-value', el).text(Old_Score - 1);
-			// Subtract Score
+			//  ------ Subtract Score ------ 
 			_agile.add_score(-1,
 					{success: function(response){
-								// Merge Server response object with Contact_Json
-								// object.
+								//  ------ Merge Server response object with Contact_Json object. ------ 
 								$.extend(Contacts_Json[email], response);
 						
 					}, error: function(val){
@@ -231,16 +229,16 @@ function agile_init_handlers() {
 		}
 	});
 
-	// Click event for add tags.
+	//  ------ Click event for add tags. ------ 
 	$('#contact_add_tags').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.add-tag");
 		var json = [];
 		var tags = {};
 		var email = {};
-		// Form serialization.
+		//  ------ Form serialization. ------ 
 		json = agile_serialize_form($("#add_tags_form", el));
 
 		$.each(json, function(index, val) {
@@ -250,20 +248,19 @@ function agile_init_handlers() {
 				tags[val.name] = val.value;
 		});
 
-		// Send request if tags are entered.
+		//  ------ Send request if tags are entered. ------ 
 		if (tags.tags.length != 0) {
 			
 			$("#add_tags_form", el).hide();
 			$('.tag-waiting', el).show("fast");
 			
-			// Add Tags
+			//  ------ Add Tags ------ 
 			_agile.add_tag(tags.tags,
 					{success: function(response){
 								$('.tag-waiting', el).hide();
-								// Merge Server response object with Contact_Json
-								// object.
+								//  ------ Merge Server response object with Contact_Json object. ------ 
 								$.extend(Contacts_Json[email.email], response);
-								// Add tag to list.
+								//  ------ Add tag to list. ------ 
 								agile_build_tag_ui($("#added_tags_ul", el), response);
 								$(".toggle-tag", el).show("medium");
 								agile_gadget_adjust_height();		
@@ -273,18 +270,18 @@ function agile_init_handlers() {
 												
 					}}, email.email);
 		}
-		// If tags are not entered, hide form.
+		//  ------ If tags are not entered, hide form. ------ 
 		else {
 			$("#add_tags_form", el).hide();
 			$(".toggle-tag", el).show("medium");
 		}
 	});
 
-	// Click event for remove tags.
+	//  ------ Click event for remove tags. ------ 
 	$('.remove-tag').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.add-tag");
 		var email = $(el).find('#add_tags_form input[name="email"]').val();
 		var tag = $(this).prev().text();
@@ -293,14 +290,13 @@ function agile_init_handlers() {
 			$('.tag-waiting', el).show();
 		});
 		
-		// Remove Tag
+		//  ------ Remove Tag ------ 
 		_agile.remove_tag(tag,
 				{success: function(response){
 							$('.tag-waiting', el).hide();
-							// Merge Server response object with Contact_Json
-							// object.
+							//  ------ Merge Server response object with Contact_Json object. ------ 
 							$.extend(Contacts_Json[email], response);
-							// Removing tag from list.
+							//  ------ Removing tag from list. ------ 
 							agile_build_tag_ui($("#added_tags_ul", el), response);
 							$('.toggle-tag', el).show("medium");
 							agile_gadget_adjust_height();		
@@ -311,121 +307,120 @@ function agile_init_handlers() {
 				}}, email);
 	});
 
-	// Click event for show add tag.
+	//  ------ Click event for show add tag. ------ 
 	$('.toggle-tag').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.add-tag");
 		$(".toggle-tag", el).hide("fast", function(){
 			$("#add_tags_form", el).show();
-			// Focus on text box and clear value.
+			//  ------ Focus on text box and clear value. ------ 
 			$('form input[name="tags"]', el).val("").focus();
 			agile_gadget_adjust_height();
 		});
 	});
 
-	// Enter key press event for tag input box.
+	//  ------ Enter key press event for tag input box. ------ 
 	$('#tags').die().live('keypress', function(evt) {
-		// Select event object, because it is different for IE.
+		//  ------ Select event object, because it is different for IE. ------ 
 		var evt = (evt) ? evt : ((event) ? event : null);
 		var node = (evt.target) ? evt.target
 				: ((evt.srcElement) ? evt.srcElement : null);
 
-		// Check for enter key code.
+		//  ------ Check for enter key code. ------ 
 		if (evt.keyCode === 13) {
-			// Prevent default functionality.
+			//  ------ Prevent default functionality. ------ 
 			evt.preventDefault();
-			// Trigger add tag click event.
+			//  ------ Trigger add tag click event. ------ 
 			$(this).next().trigger('click');
 		}
 	});
 	
-	// Click event for Action Menu (add note).
+	//  ------ Click event for Action Menu (add note). ------ 
 	$('.action-add-note').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
 		$('.gadget-notes-tab-list', el).hide();
-		// Build notes tab UI to add note.
+		//  ------ Build notes tab UI to add note. ------ 
 		agile_build_form_template($(this), "gadget-note",
 				".gadget-notes-tab-list", function() {
-			// Show notes tab.
+			//  ------ Show notes tab. ------ 
 			$('.gadget-notes-tab a', el).tab('show');
 			$('.gadget-notes-tab-list', el).show();
-			// Adjust gadget height.
+			//  ------ Adjust gadget height. ------ 
 			agile_gadget_adjust_height();
 		});
 	});
 	
-	// Click event for Action Menu (add task).
+	//  ------ Click event for Action Menu (add task). ------ 
 	$('.action-add-task').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
 		$('.gadget-tasks-tab-list', el).hide();
-		// Build tasks tab UI to add task.
+		//  ------ Build tasks tab UI to add task. ------ 
 		agile_build_form_template($(this), "gadget-task",
 				".gadget-tasks-tab-list", function() {
-			/*
-			 * Load and apply Bootstrap date picker on text
-			 * box in Task form.
+			/* ------ Load and apply Bootstrap date picker on text
+			 * box in Task form. ------ 
 			 */
 			agile_load_datepicker($('.task-calender', el), function() {
 				$('.gadget-tasks-tab a', el).tab('show');
 				$('.gadget-tasks-tab-list', el).show();
-				// Adjust gadget height.
+				//  ------ Adjust gadget height. ------ 
 				agile_gadget_adjust_height();
 			});
 		});
 	});
 	
-	// Click event for Action Menu (add deal).
+	//  ------ Click event for Action Menu (add deal). ------ 
 	$('.action-add-deal').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
 		var that = $(this);
 		$('.gadget-deals-tab-list', el).hide();
 		
-		// Send request for template.
+		//  ------ Send request for template. ------ 
 		agile_get_gadget_template("gadget-deal-template", function(data) {
 
-			// Get campaign work-flow data.
+			//  ------ Get campaign work-flow data. ------ 
 			_agile.get_milestones(
 					{success: function(response){
 								Milestone_Array = response.milestones.split(",");
 								for(var loop in Milestone_Array)
 									Milestone_Array.splice(loop, 1, Milestone_Array[loop].trim());
 								
-								// Take contact data from global object variable.
+								//  ------ Take contact data from global object variable. ------ 
 								var json = Contacts_Json[el.closest(".show-form").data("content")];
 								json.milestones = Milestone_Array;
 								
-								// Compile template and generate UI.
+								//  ------ Compile template and generate UI. ------ 
 								var Handlebars_Template = getTemplate("gadget-deal", json, 'no');
-								// Insert template to container in HTML.
+								//  ------ Insert template to container in HTML. ------ 
 								that.closest(".gadget-contact-details-tab").find(".gadget-deals-tab-list")
 									.html($(Handlebars_Template));
 								$('.gadget-deals-tab a', el).tab('show');
 								$('.gadget-deals-tab-list', el).show();
 								/*
-								 * Load and apply Bootstrap date picker on text
-								 * box in Deal form.
+								 *  ------ Load and apply Bootstrap date picker on text
+								 * box in Deal form. ------ 
 								 */
 								agile_load_datepicker($('.deal-calender', el), function() {
 									$('.gadget-deals-tab a', el).tab('show');
 									$('.gadget-deals-tab-list', el).show();
-									// Adjust gadget height.
+									//  ------ Adjust gadget height. ------ 
 									agile_gadget_adjust_height();
 								});
-								// Adjust gadget height.
+								//  ------ Adjust gadget height. ------ 
 								agile_gadget_adjust_height();		
 						
 					}, error: function(val){
@@ -435,29 +430,29 @@ function agile_init_handlers() {
 		});
 	});
 	
-	// Click event for Action Menu (add to campaign).
+	//  ------ Click event for Action Menu (add to campaign). ------ 
 	$('.action-add-campaign').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
 		var that = $(this);
 		$('.gadget-campaigns-tab-list', el).hide();
-		// Send request for template.
+		//  ------ Send request for template. ------ 
 		agile_get_gadget_template("gadget-campaign-template", function(data) {
 
-			// Get campaign work-flow data.
+			//  ------ Get campaign work-flow data. ------ 
 			_agile.get_workflows(
 					{success: function(response){
-								// Compile template and generate UI.
+								//  ------ Compile template and generate UI. ------ 
 								var Handlebars_Template = getTemplate("gadget-campaign", response, 'no');
-								// Insert template to container in HTML.
+								//  ------ Insert template to container in HTML. ------ 
 								that.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
 										.html($(Handlebars_Template));
 								$('.gadget-campaigns-tab a', el).tab('show');
 								$('.gadget-campaigns-tab-list', el).show();
-								// Adjust gadget height.
+								//  ------ Adjust gadget height. ------ 
 								agile_gadget_adjust_height();		
 						
 					}, error: function(val){
@@ -467,31 +462,31 @@ function agile_init_handlers() {
 		});
 	});
 
-	// Click event for search contact.
+	//  ------ Click event for search contact. ------ 
 	$(".gadget-search-contact").die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find('.show-form');
 		var that = $(this);
 		var email = "";
 		
-		// Check whether it is Search panel or single email.
+		//  ------ Check whether it is Search panel or single email. ------ 
 		if(!that.hasClass("search-mail-button")){
 			
 			email = $(el).data("content");
-			// Adjust width of mail list for Process icon.
+			//  ------ Adjust width of mail list for Process icon. ------ 
 			agile_gadget_adjust_width(el, $(".contact-search-waiting", el), true);
-			// Show searching icon.
+			//  ------ Show searching icon. ------ 
 			$('.contact-search-waiting', el).css('visibility','visible');
 		}
 		else {
 			
 			email = $(".agile-mail-dropdown").data("email");
-			// Chaeck if requested mail already present in list.
+			//  ------ Chaeck if requested mail already present in list. ------ 
 			if(Contacts_Json[email].mail_exist == true){
-				// Show if contact is present otherwise do nothing.
+				//  ------ Show if contact is present otherwise do nothing. ------ 
 				$('#agile_content .show-form').each(function(){
 					if($(this).data('content') == email){
 						$(this).find(".gadget-show-contact").trigger('click');
@@ -505,12 +500,12 @@ function agile_init_handlers() {
 		}
 				
 		
-		// Get contact status based on email.
+		//  ------ Get contact status based on email. ------ 
 		_agile.get_contact(email, 
 				{success: function(val){
 							
 							$('.contact-search-waiting', el).hide();
-							// Generate UI.
+							//  ------ Generate UI. ------ 
 							if(that.hasClass("search-mail-button")){
 								
 								agile_add_mail_to_list(val, email, el);
@@ -523,9 +518,9 @@ function agile_init_handlers() {
 					
 							val.id = null;
 							$('.contact-search-waiting', el).hide();
-							// Generate UI.
+							//  ------ Generate UI. ------ 
 							if(that.hasClass("search-mail-button")){
-								$(".contact-search-status", el).show().delay(4000).hide(1);
+								$(".contact-search-status", el).fadeIn().delay(4000).fadeOut();
 								agile_add_mail_to_list(val, email, el);
 							}
 							else{
@@ -534,96 +529,96 @@ function agile_init_handlers() {
 		}});
 	});
 
-	// Click event for toggle show contact.
+	//  ------ Click event for toggle show contact. ------ 
 	$(".gadget-show-contact").die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find('.show-form');
 		var that = $(this);
-		// Build show contact form template.
+		//  ------ Build show contact form template. ------ 
 		agile_build_form_template(that, "gadget-contact-summary", ".show-contact-summary", function() {
 
 			var content = Contacts_Json[$(el).data("content")];
-			// Build tags list.
+			//  ------ Build tags list. ------ 
 			agile_build_tag_ui($("#added_tags_ul", el), content);
 
-			// Hide list view of contact.
+			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
 			$(".display-toggle i", el).addClass("icon-collapse-alt").removeClass("icon-expand-alt");
 			$(".display-toggle span", el).text("Hide Details");
 			$(".display-toggle", el).next().hide();
 			
 			agile_gadget_adjust_height();
-			// Show contact summary.
+			//  ------ Show contact summary. ------ 
 			$(".show-contact-summary", el).toggle();
 			agile_gadget_adjust_height();
-			// Build tabs.
+			//  ------ Build tabs. ------ 
 			agile_build_form_template(that, "gadget-tabs", ".option-tabs", function() {
 				
-				// Enables Tab.
+				//  ------ Enables Tab. ------ 
 				$('.gadget_tabs', el).tab();
-				// Show Tabs.
+				//  ------ Show Tabs. ------ 
 				$(".option-tabs", el).toggle();
 				agile_gadget_adjust_height();
-				// Show notes tab by default.
+				//  ------ Show notes tab by default. ------ 
 				$('.gadget-notes-tab', el).trigger('click');
 				
-				// Enables Drop down.
+				//  ------ Enables Drop down. ------ 
 				$('.dropdown-toggle').dropdown();
 			});
 		});
 	});
 	
-	// Click event for hide contact info summary
+	//  ------ Click event for hide contact info summary ------ 
 	$(".hide-contact-summery").die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
 
-		// Show list view of contact.
+		//  ------ Show list view of contact. ------ 
 		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
 		$(".display-toggle i", el).removeClass("icon-collapse-alt").addClass("icon-expand-alt");
 		$(".display-toggle span", el).text("Show");
 		$(".display-toggle", el).next().show();
 		
 		agile_gadget_adjust_height();
-		// hide contact summary.
+		//  ------ hide contact summary. ------ 
 		$(".show-contact-summary", el).toggle();
 		agile_gadget_adjust_height();
-		// Show tabs.
+		//  ------ Show tabs. ------ 
 		$(".option-tabs", el).toggle();
 		agile_gadget_adjust_height();
 	});
 
-	// Click event for notes tab.
+	//  ------ Click event for notes tab. ------ 
 	$('.gadget-notes-tab').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find('.show-form');
-		// Clear notes tab data.
+		//  ------ Clear notes tab data. ------ 
 		$('.gadget-notes-tab-list', el).html("");
 		var email = $(el).data("content");
 
 		$(".tab-waiting", el).show();
-		// Get Notes.
+		//  ------ Get Notes. ------ 
 		_agile.get_notes(
 				{success: function(response){
-							// Load Date formatter libraries.
+							//  ------ Load Date formatter libraries. ------ 
 							head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
 								agile_get_gadget_template("gadget-notes-list-template", function(data) {
 									$(".tab-waiting", el).hide();
-									// Fill notes list in tab.
+									//  ------ Fill notes list in tab. ------ 
 									$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
-									// Adjust gadget height.
+									//  ------ Adjust gadget height. ------ 
 									agile_gadget_adjust_height();
 								});
-								// Apply date formatter on date/time field.
+								//  ------ Apply date formatter on date/time field. ------ 
 								$("time", el).timeago();
 							});		
 					
@@ -633,29 +628,29 @@ function agile_init_handlers() {
 				}}, email);
 	});
 	
-	// Click event for tasks tab.
+	//  ------ Click event for tasks tab. ------ 
 	$('.gadget-tasks-tab').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find('.show-form');
-		// Clear tasks tab data.
+		//  ------ Clear tasks tab data. ------ 
 		$('.gadget-tasks-tab-list', el).html("");
 		var email = $(el).data("content");
 		
 		$(".tab-waiting", el).show();
-		// Get Tasks.
+		//  ------ Get Tasks. ------ 
 		_agile.get_tasks(
 				{success: function(response){
 							agile_get_gadget_template("gadget-tasks-list-template", function(data) {
 								$(".tab-waiting", el).hide();
-								// Fill tasks list in tab.	
+								//  ------ Fill tasks list in tab. ------ 	
 								$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
 								$('.gadget-tasks-tab-list', el).show();
 								agile_gadget_adjust_height();
 							});
-							// Apply date formatter on date/time field.
+							//  ------ Apply date formatter on date/time field. ------ 
 							$("time", el).timeago();		
 					
 				}, error: function(val){
@@ -664,29 +659,29 @@ function agile_init_handlers() {
 				}}, email);
 	});
 	
-	// Click event for deals tab.
+	//  ------ Click event for deals tab. ------ 
 	$('.gadget-deals-tab').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find('.show-form');
-		// Clear deals tab data.
+		//  ------ Clear deals tab data. ------ 
 		$('.gadget-deals-tab-list', el).html("");
 		var email = $(el).data("content");
 		
 		$(".tab-waiting", el).show();
-		// Get Deals.
+		//  ------ Get Deals. ------ 
 		_agile.get_deals(
 				{success: function(response){
 							agile_get_gadget_template("gadget-deals-list-template", function(data) {
 								$(".tab-waiting", el).hide();
-								// Fill deals list in tab.	
+								//  ------ Fill deals list in tab. ------ 	
 								$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
 								$('.gadget-deals-tab-list', el).show();
 								agile_gadget_adjust_height();
 							});
-							// Apply date formatter on date/time field.
+							//  ------ Apply date formatter on date/time field. ------ 
 							$("time", el).timeago();
 					
 				}, error: function(val){
@@ -695,25 +690,25 @@ function agile_init_handlers() {
 				}}, email);
 	});
 	
-	// Click event for campaigns tab.
+	//  ------ Click event for campaigns tab. ------ 
 	$('.gadget-campaigns-tab').die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 		.find('.show-form');
-		// Clear campaigns tab data.
+		//  ------ Clear campaigns tab data. ------ 
 		$('.gadget-campaigns-tab-list', el).html("");
 		var email = $(el).data("content");
 		
 		$(".tab-waiting", el).show();
-		// Get Campaigns.
+		//  ------ Get Campaigns. ------ 
 		_agile.get_campaign_logs(
 				{success: function(response){
 							agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
 								$(".tab-waiting", el).hide();
 								var lib_json = {};
-								// Set library path for campaign link, check for local host.
+								//  ------ Set library path for campaign link, check for local host. ------ 
 								if(Is_Localhost)
 									lib_json["ac_path"] = Lib_Path;
 								else{
@@ -722,12 +717,12 @@ function agile_init_handlers() {
 								lib_json["lib_path"] = Lib_Path;
 								lib_json["response"] = response; 
 								
-								// Fill campaigns list in tab.
+								//  ------ Fill campaigns list in tab. ------ 
 								$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', lib_json, 'no'));
 								$('.gadget-campaigns-tab-list', el).show();
 								agile_gadget_adjust_height();
 							});
-							// Apply date formatter on date/time field.
+							//  ------ Apply date formatter on date/time field. ------ 
 							$("time", el).timeago();		
 					
 				}, error: function(val){
@@ -736,14 +731,14 @@ function agile_init_handlers() {
 				}}, email);
 	});
 	
-	// Click event for toggle add contact.
+	//  ------ Click event for toggle add contact. ------ 
 	$(".gadget-add-contact").die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 				.find("div.show-form");
-		// Build contact add template.
+		//  ------ Build contact add template. ------ 
 		agile_build_form_template($(this), "gadget-add-contact", ".show-add-contact-form", function() {
 
 			$(".show-add-contact-form", el).toggle();
@@ -751,17 +746,17 @@ function agile_init_handlers() {
 		});
 	});
 
-	// Click event for cancel button.
+	//  ------ Click event for cancel button. ------ 
 	$(".cancel").die().live('click', function(e) {
-		// Prevent default functionality.
+		//  ------ Prevent default functionality. ------ 
 		e.preventDefault();
 		
 		var $this = $(this).data('tab-identity');
-		// Show tabs default list.
+		//  ------ Show tabs default list. ------ 
 		$('.gadget-' + $this + '-tab').trigger('click');
-		// Set context (HTML container where event is triggered).
+		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab");
-		// Toggle add contact UI.
+		//  ------ Toggle add contact UI. ------ 
 		$(".show-add-contact-form", el).toggle();
 		agile_gadget_adjust_height();
 	});
@@ -811,26 +806,26 @@ function agile_gadget_adjust_height(){
  * */
 function agile_create_contact_ui(el, that, email, val){
 	
-	// Set library path for campaign link, check for local host.
+	//  ------ Set library path for campaign link, check for local host. ------ 
 	if(Is_Localhost)
 		val.ac_path = Lib_Path;
 	else
 		val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
 	
-	// Merge Server response object with Contact_Json object.
+	//  ------ Merge Server response object with Contact_Json object. ------ 
 	$.extend(Contacts_Json[email], val);
-	
-	// Build show contact form template.
+
+	//  ------ Build show contact form template. ------ 
 	agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
 		
-		// Contact not found for requested mail, show add contact in mail list.
+		//  ------ Contact not found for requested mail, show add contact in mail list. ------ 
 		if (val.id == null) {
 			agile_gadget_adjust_width(el, $(".contact-search-status", el), true);
 			$('.contact-search-status', el).show().delay(4000).hide(1,function(){
 				agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
 			});
 		}	
-		// Contact found, show contact summary. 
+		//  ------ Contact found, show contact summary. ------  
 		else {
 			$('.gadget-show-contact', el).trigger('click');
 		}
@@ -846,7 +841,7 @@ function agile_create_contact_ui(el, that, email, val){
  */
 function agile_add_mail_to_list(val, email, el){
 
-	// Set library path for campaign link, check for local host.
+	//  ------ Set library path for campaign link, check for local host. ------ 
 	if(Is_Localhost)
 		val.ac_path = Lib_Path;
 	else
@@ -854,33 +849,33 @@ function agile_add_mail_to_list(val, email, el){
 	
 	var Contact_Data = {};
 	Contact_Data[email] = Contacts_Json[email];
-	// Merge Server response object with Contact_Json object.
+	//  ------ Merge Server response object with Contact_Json object. ------ 
 	$.extend(Contacts_Json[email], val);
 	Contacts_Json[email].mail_exist = true;
 	
-	// Compile template and generate UI.
+	//  ------ Compile template and generate UI. ------ 
 	var Individual_Template = getTemplate('gadget', Contact_Data, 'no');
-	// Append contact to container in HTML.
+	//  ------ Append contact to container in HTML. ------ 
 	$("#agile_content").prepend($(Individual_Template));
-	// Temporarily hide the list.
+	//  ------ Temporarily hide the list. ------ 
 	$("#agile_content").children().eq(0).find(".contact-list").hide();
 	
-	// Send request for template.
+	//  ------ Send request for template. ------ 
 	agile_get_gadget_template("gadget-contact-list-template", function(data) {
 
-		// Take contact data from global object variable.
+		//  ------ Take contact data from global object variable. ------ 
 		var json = Contacts_Json[email];
-		// Compile template and generate UI.
+		//  ------ Compile template and generate UI. ------ 
 		var Handlebars_Template = getTemplate("gadget-contact-list", json, 'no');
-		// Insert template to container in HTML.
+		//  ------ Insert template to container in HTML. ------ 
 		$("#agile_content").children().eq(0).find(".contact-list").html($(Handlebars_Template));
-		// Show temporarily hidden list element.
+		//  ------ Show temporarily hidden list element. ------ 
 		$("#agile_content").children().eq(0).find(".contact-list").show();
-		// Adjust gadget window height.
+		//  ------ Adjust gadget window height. ------ 
 		if (!Is_Localhost)
 			gadgets.window.adjustHeight();
 		
-		// Contact found, show contact summary.		
+		//  ------ Contact found, show contact summary. ------ 		
 		if (json.id != null) {
 			$("#agile_content").children().eq(0).find('.gadget-show-contact').trigger('click');
 		}	
