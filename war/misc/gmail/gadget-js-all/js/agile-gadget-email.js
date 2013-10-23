@@ -16,16 +16,16 @@
  */
 function agile_get_emails(bool) {
 
-	// Generate mails from gmail.
+	//  ------ Generate mails from gmail. ------ 
 	if (bool) {
-		// Fetch the array of content matches.
+		//  ------ Fetch the array of content matches. ------ 
 		matches = google.contentmatch.getContentMatches();
 		var prefs = new gadgets.Prefs();
 		var Mail_Account_Holder = prefs.getString("agile_user_email");
 		return Agile_Build_List(matches, Mail_Account_Holder);
 	}
 	
-	// Take email and sender's info for local host.
+	//  ------ Take email and sender's info for local host. ------ 
 	else {
 		var matches = [{email_from: "devika@faxdesk.com"},{name_from: "Devika Jakkannagari"},
 						{email_to: "abhi@gashok.mygbiz.com;rahul@gashok.mygbiz.com;dheeraj@gashok.mygbiz.com;chandan@gashok.mygbiz.com;abhiranjan@gashok.mygbiz.com"},
@@ -47,7 +47,7 @@ function agile_get_emails(bool) {
  * */
 function Agile_Build_List(obj, Ac_Email){
 	
-	// Rearrange 2D mail list object into 1D mail list object.
+	//  ------ Rearrange 2D mail list object into 1D mail list object. ------ 
 	function compress(matches) {
 		var ret = {};
 		for(var i =0; i < matches.length; i++) {
@@ -62,7 +62,7 @@ function Agile_Build_List(obj, Ac_Email){
 		return ret;
 	}
 	
-	// Create mail and name pair array.
+	//  ------ Create mail and name pair array. ------ 
 	function Create_Pair(_mail, _name, arr) {
 		names = _name.split(";");
 		mails = _mail.split(";");
@@ -79,7 +79,7 @@ function Agile_Build_List(obj, Ac_Email){
 		}
 	}
 	  
-	// Split name into first name and last name.
+	//  ------ Split name into first name and last name. ------ 
 	function Parse_Name(_name) {
 		names = _name.split(" ");
 		
