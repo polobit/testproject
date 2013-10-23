@@ -67,6 +67,8 @@ function agile_init_gadget() {
  * @method agile_login
  */
 function agile_login() {
+	
+	console.log("Logging in");
 
 	// Get user preferences.
     var prefs = new gadgets.Prefs();
@@ -134,6 +136,8 @@ function agile_send_auth(url, callback){
  */
 function agile_handle_load_response(data) {
 
+	console.log("Auth response: " + data);
+	
 	var prefs = new gadgets.Prefs();
     
 	if(data.content != undefined){

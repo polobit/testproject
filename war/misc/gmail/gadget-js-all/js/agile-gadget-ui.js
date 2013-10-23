@@ -20,9 +20,6 @@ function agile_generate_ui(Api_Key, domain) {
 	// Build mail list UI and call callback.
 	agile_build_ui(function() {
 		
-		// Enables Drop down.
-		$('.dropdown-toggle').dropdown();
-		
 		var Handlers_Path = Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-event-handlers.min.js';
 		var Util_Path = Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-util.min.js';
 		
@@ -87,8 +84,7 @@ function agile_build_ui_for_emails(Email_Ids) {
 	// Fill and create html for mail list.
 	agile_fill_individual_template_ui(Email_Ids, $("#search_mail_div"));
 	
-	$(".agile-mail-dropdown").prev().children().eq(0).text($(".agile-mail-dropdown li:eq(0) a").text());
-	$(".agile-mail-dropdown").data("email", $(".agile-mail-dropdown li:eq(0)").data("content"));
+	$(".agile-mail-dropdown").data("email", $(".agile-mail-dropdown option:eq(0)").data("content"));
 }
 
 /**
@@ -111,3 +107,5 @@ function agile_fill_individual_template_ui(val, selector) {
 	if (!Is_Localhost)
 		gadgets.window.adjustHeight();
 }
+
+	

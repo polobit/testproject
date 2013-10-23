@@ -160,18 +160,12 @@ function agile_serialize_form(form) {
 function agile_init_util(){
 	
 	// Click event for search contact.
-	$(".mail-list a").die().live('click', function(e) {
+	$("#search_drop_down").die().live('change', function(e) {
 		// Prevent default functionality.
 		e.preventDefault();
-		// Set context (HTML container where event is triggered).
-		var el = $(this).closest("div.gadget-contact-details-tab")
-						.find("div.show-form");
 		
-		var email = $(this).closest("li").data("content");
-		var caption = $(this).text();
+		var email = $("#search_drop_down :selected").data("content");
 		// Set chosen mail as data-email attribute of <ul>.  
 		$(".agile-mail-dropdown").data("email", email);
-		// Set button text to chosen mail.
-		$(".agile-mail-dropdown").prev().children().eq(0).text(caption);
 	});
 }

@@ -525,7 +525,7 @@ function agile_init_handlers() {
 							$('.contact-search-waiting', el).hide();
 							// Generate UI.
 							if(that.hasClass("search-mail-button")){
-								$(".contact-search-status", el).show().delay(4000).hide(1);
+								$(".contact-search-status", el).fadeIn().delay(4000).fadeOut();
 								agile_add_mail_to_list(val, email, el);
 							}
 							else{
@@ -819,7 +819,7 @@ function agile_create_contact_ui(el, that, email, val){
 	
 	// Merge Server response object with Contact_Json object.
 	$.extend(Contacts_Json[email], val);
-	
+
 	// Build show contact form template.
 	agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
 		
