@@ -81,7 +81,7 @@
                    <br>
  				   <span class="attribution txt-mute txt-sub-antialiased">@{{screen_name}}</span>
  			   </h4> 
-               <span class="column-header-link">
+               <span class="column-header-link is-actionable">
                  <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="Delete Stream"></i>                     
                  {{#if_equals network_type "TWITTER"}} 		 		
                    <i class="compose-status icon icon-edit compose-message header-action" stream-id={{id}} title="Compose Message"></i>
@@ -123,7 +123,7 @@
 		   </header> 
 		   <div class="tweet-body"> 
  	          <p class="tweet-text">
-                 {{show_link_in_statement text}}
+                 {{safe_string text}}
               </p>                  
  			  <footer class="tweet-footer cf">
               {{#if id_str}}
