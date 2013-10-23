@@ -492,11 +492,11 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		// On save back to contacts list
 		Backbone.history.navigate("contacts", { trigger : true });  
 		
-		if(!error_message)
+		/*if(!error_message)
 			{
 				showNotyPopUp('information', "Task scheduled", "top", 5000);
 				return;
 			}
-			showNotyPopUp('information', error_message, "top", 5000);
+			showNotyPopUp('information', error_message, "top", 5000);*/
 	} });
 }
