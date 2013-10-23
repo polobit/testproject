@@ -169,3 +169,14 @@ function agile_init_util(){
 		$(".agile-mail-dropdown").data("email", email);
 	});
 }
+
+/**
+ * Adjust height of gadget window.
+ * 
+ * @method agile_gadget_adjust_height
+ * 
+ * */
+function agile_gadget_adjust_height(){
+	if (!Is_Localhost)
+		gadgets.window.adjustHeight();
+}

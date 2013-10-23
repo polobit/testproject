@@ -34,7 +34,6 @@ function agile_generate_ui(Api_Key, domain) {
 					 * User generated events (click, key press, etc.) will be
 					 * available after handlers file loading. ------ 
 					 */
-					agile_init_handlers();
 					agile_init_util();
 				});
 	});
