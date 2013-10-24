@@ -125,7 +125,7 @@ $(function()
 			json.contact_ids = id_array;
 			postBulkOperationData(url, json, $form,undefined,function(data){
 				enable_save_button(saveButton);
-			}, 'Camapaign assigning scheduled');
+			}, 'Campaign assigning scheduled');
 		});
 
 	});
