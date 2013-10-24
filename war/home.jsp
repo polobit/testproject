@@ -215,7 +215,7 @@
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
 										<% 		} 
-												if (navSetting.reports){
+												if (navSetting.social){
 										%>		<li id="socialsuitemenu"><a href="#social">
                                                  <i class="icon-comments icon-white"></i> Social</a>
                                               </li>
