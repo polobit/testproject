@@ -17,20 +17,20 @@
 		e.preventDefault();
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.score-scope");
-		var email = $('input[name="email"]', el).val();
+		var Email = $('input[name="email"]', el).val();
 		//  ------ Parse score text into integer. ------ 
 		var Old_Score = parseInt($.trim($('.score-value', el).text()), 10);
 		$('.score-value', el).text(Old_Score + 1);
 		//  ------ Add Score ------ 
 		_agile.add_score(1,
-				{success: function(response){
+				{success: function(Response){
 							//  ------ Merge Server response object with Contact_Json object. ------ 
-							$.extend(Contacts_Json[email], response);
+							$.extend(Contacts_Json[Email], Response);
 					
-				}, error: function(val){
+				}, error: function(Response){
 									
 											
-				}}, email);
+				}}, Email);
 	});
 
 	
@@ -41,7 +41,7 @@
 		e.preventDefault();
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.score-scope");
-		var email = $('input[name="email"]', el).val();
+		var Email = $('input[name="email"]', el).val();
 		//  ------ Parse score text into integer. ------ 
 		var Old_Score = parseInt($.trim($('.score-value', el).text()), 10);
 
@@ -49,14 +49,14 @@
 			$('.score-value', el).text(Old_Score - 1);
 			//  ------ Subtract Score ------ 
 			_agile.add_score(-1,
-					{success: function(response){
+					{success: function(Response){
 								//  ------ Merge Server response object with Contact_Json object. ------ 
-								$.extend(Contacts_Json[email], response);
+								$.extend(Contacts_Json[Email], Response);
 						
-					}, error: function(val){
+					}, error: function(Response){
 										
 												
-					}}, email);
+					}}, Email);
 		}
 	});
 	

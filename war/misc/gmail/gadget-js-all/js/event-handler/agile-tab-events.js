@@ -20,18 +20,18 @@
 		.find('.show-form');
 		//  ------ Clear notes tab data. ------ 
 		$('.gadget-notes-tab-list', el).html("");
-		var email = $(el).data("content");
+		var Email = $(el).data("content");
 
 		$(".tab-waiting", el).show();
 		//  ------ Get Notes. ------ 
 		_agile.get_notes(
-				{success: function(response){
+				{success: function(Response){
 							//  ------ Load Date formatter libraries. ------ 
 							head.js(Lib_Path + 'lib/date-formatter.js', Lib_Path + 'lib/jquery.timeago.js', function() {
-								agile_get_gadget_template("gadget-notes-list-template", function(data) {
+								agile_get_gadget_template("gadget-notes-list-template", function(Data) {
 									$(".tab-waiting", el).hide();
 									//  ------ Fill notes list in tab. ------ 
-									$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', response, 'no'));
+									$('.gadget-notes-tab-list', el).html(getTemplate('gadget-notes-list', Response, 'no'));
 									//  ------ Adjust gadget height. ------ 
 									agile_gadget_adjust_height();
 								});
@@ -39,10 +39,10 @@
 								$("time", el).timeago();
 							});		
 					
-				}, error: function(val){
+				}, error: function(Response){
 									
 											
-				}}, email);
+				}}, Email);
 	});
 	
 
@@ -56,26 +56,26 @@
 		.find('.show-form');
 		//  ------ Clear tasks tab data. ------ 
 		$('.gadget-tasks-tab-list', el).html("");
-		var email = $(el).data("content");
+		var Email = $(el).data("content");
 		
 		$(".tab-waiting", el).show();
 		//  ------ Get Tasks. ------ 
 		_agile.get_tasks(
-				{success: function(response){
-							agile_get_gadget_template("gadget-tasks-list-template", function(data) {
+				{success: function(Response){
+							agile_get_gadget_template("gadget-tasks-list-template", function(Data) {
 								$(".tab-waiting", el).hide();
 								//  ------ Fill tasks list in tab. ------ 	
-								$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', response, 'no'));
+								$('.gadget-tasks-tab-list', el).html(getTemplate('gadget-tasks-list', Response, 'no'));
 								$('.gadget-tasks-tab-list', el).show();
 								agile_gadget_adjust_height();
 							});
 							//  ------ Apply date formatter on date/time field. ------ 
 							$("time", el).timeago();		
 					
-				}, error: function(val){
+				}, error: function(Response){
 									
 											
-				}}, email);
+				}}, Email);
 	});
 	
 
@@ -89,26 +89,26 @@
 		.find('.show-form');
 		//  ------ Clear deals tab data. ------ 
 		$('.gadget-deals-tab-list', el).html("");
-		var email = $(el).data("content");
+		var Email = $(el).data("content");
 		
 		$(".tab-waiting", el).show();
 		//  ------ Get Deals. ------ 
 		_agile.get_deals(
-				{success: function(response){
-							agile_get_gadget_template("gadget-deals-list-template", function(data) {
+				{success: function(Response){
+							agile_get_gadget_template("gadget-deals-list-template", function(Data) {
 								$(".tab-waiting", el).hide();
 								//  ------ Fill deals list in tab. ------ 	
-								$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', response, 'no'));
+								$('.gadget-deals-tab-list', el).html(getTemplate('gadget-deals-list', Response, 'no'));
 								$('.gadget-deals-tab-list', el).show();
 								agile_gadget_adjust_height();
 							});
 							//  ------ Apply date formatter on date/time field. ------ 
 							$("time", el).timeago();
 					
-				}, error: function(val){
+				}, error: function(Response){
 									
 											
-				}}, email);
+				}}, Email);
 	});
 	
 	
@@ -122,36 +122,36 @@
 		.find('.show-form');
 		//  ------ Clear campaigns tab data. ------ 
 		$('.gadget-campaigns-tab-list', el).html("");
-		var email = $(el).data("content");
+		var Email = $(el).data("content");
 		
 		$(".tab-waiting", el).show();
 		//  ------ Get Campaigns. ------ 
 		_agile.get_campaign_logs(
-				{success: function(response){
-							agile_get_gadget_template("gadget-campaigns-list-template", function(data) {
+				{success: function(Response){
+							agile_get_gadget_template("gadget-campaigns-list-template", function(Data) {
 								$(".tab-waiting", el).hide();
-								var lib_json = {};
+								var Lib_Json = {};
 								//  ------ Set library path for campaign link, check for local host. ------ 
 								if(Is_Localhost)
-									lib_json["ac_path"] = Lib_Path;
+									Lib_Json["ac_path"] = Lib_Path;
 								else{
-									lib_json["ac_path"] = "https://"+ agile_id.namespace +".agilecrm.com/";
+									Lib_Json["ac_path"] = "https://"+ agile_id.namespace +".agilecrm.com/";
 								}
-								lib_json["lib_path"] = Lib_Path;
-								lib_json["response"] = response; 
+								Lib_Json["lib_path"] = Lib_Path;
+								Lib_Json["response"] = Response; 
 								
 								//  ------ Fill campaigns list in tab. ------ 
-								$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', lib_json, 'no'));
+								$('.gadget-campaigns-tab-list', el).html(getTemplate('gadget-campaigns-list', Lib_Json, 'no'));
 								$('.gadget-campaigns-tab-list', el).show();
 								agile_gadget_adjust_height();
 							});
 							//  ------ Apply date formatter on date/time field. ------ 
 							$("time", el).timeago();		
 					
-				}, error: function(val){
+				}, error: function(Response){
 									
 											
-				}}, email);
+				}}, Email);
 	});
 	
 	

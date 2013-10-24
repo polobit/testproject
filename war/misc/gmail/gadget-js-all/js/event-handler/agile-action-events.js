@@ -64,27 +64,27 @@
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		var that = $(this);
+		var That = $(this);
 		$('.gadget-deals-tab-list', el).hide();
 		
 		//  ------ Send request for template. ------ 
-		agile_get_gadget_template("gadget-deal-template", function(data) {
+		agile_get_gadget_template("gadget-deal-template", function(Data) {
 
 			//  ------ Get campaign work-flow data. ------ 
 			_agile.get_milestones(
-					{success: function(response){
-								Milestone_Array = response.milestones.split(",");
-								for(var loop in Milestone_Array)
-									Milestone_Array.splice(loop, 1, Milestone_Array[loop].trim());
+					{success: function(Response){
+								Milestone_Array = Response.milestones.split(",");
+								for(var Loop in Milestone_Array)
+									Milestone_Array.splice(Loop, 1, Milestone_Array[Loop].trim());
 								
 								//  ------ Take contact data from global object variable. ------ 
-								var json = Contacts_Json[el.closest(".show-form").data("content")];
-								json.milestones = Milestone_Array;
+								var Json = Contacts_Json[el.closest(".show-form").data("content")];
+								Json.milestones = Milestone_Array;
 								
 								//  ------ Compile template and generate UI. ------ 
-								var Handlebars_Template = getTemplate("gadget-deal", json, 'no');
+								var Handlebars_Template = getTemplate("gadget-deal", Json, 'no');
 								//  ------ Insert template to container in HTML. ------ 
-								that.closest(".gadget-contact-details-tab").find(".gadget-deals-tab-list")
+								That.closest(".gadget-contact-details-tab").find(".gadget-deals-tab-list")
 									.html($(Handlebars_Template));
 								$('.gadget-deals-tab a', el).tab('show');
 								$('.gadget-deals-tab-list', el).show();
@@ -101,7 +101,7 @@
 								//  ------ Adjust gadget height. ------ 
 								agile_gadget_adjust_height();		
 						
-					}, error: function(val){
+					}, error: function(Response){
 										
 												
 					}});
@@ -117,25 +117,25 @@
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find("div.show-form");
-		var that = $(this);
+		var That = $(this);
 		$('.gadget-campaigns-tab-list', el).hide();
 		//  ------ Send request for template. ------ 
-		agile_get_gadget_template("gadget-campaign-template", function(data) {
+		agile_get_gadget_template("gadget-campaign-template", function(Data) {
 
 			//  ------ Get campaign work-flow data. ------ 
 			_agile.get_workflows(
-					{success: function(response){
+					{success: function(Response){
 								//  ------ Compile template and generate UI. ------ 
-								var Handlebars_Template = getTemplate("gadget-campaign", response, 'no');
+								var Handlebars_Template = getTemplate("gadget-campaign", Response, 'no');
 								//  ------ Insert template to container in HTML. ------ 
-								that.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
+								That.closest(".gadget-contact-details-tab").find(".gadget-campaigns-tab-list")
 										.html($(Handlebars_Template));
 								$('.gadget-campaigns-tab a', el).tab('show');
 								$('.gadget-campaigns-tab-list', el).show();
 								//  ------ Adjust gadget height. ------ 
 								agile_gadget_adjust_height();		
 						
-					}, error: function(val){
+					}, error: function(Response){
 										
 												
 					}});

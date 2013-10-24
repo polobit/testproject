@@ -17,13 +17,13 @@
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find('.show-form');
-		var that = $(this);
-		var email = "";
+		var That = $(this);
+		var Email = "";
 		
 		//  ------ Check whether it is Search panel or single email. ------ 
-		if(!that.hasClass("search-mail-button")){
+		if(!That.hasClass("search-mail-button")){
 			
-			email = $(el).data("content");
+			Email = $(el).data("content");
 			//  ------ Adjust width of mail list for Process icon. ------ 
 			agile_gadget_adjust_width(el, $(".contact-search-waiting", el), true);
 			//  ------ Show searching icon. ------ 
@@ -31,12 +31,12 @@
 		}
 		else {
 			
-			email = $(".agile-mail-dropdown").data("email");
+			Email = $(".agile-mail-dropdown").data("email");
 			//  ------ Chaeck if requested mail already present in list. ------ 
-			if(Contacts_Json[email].mail_exist == true){
+			if(Contacts_Json[Email].mail_exist == true){
 				//  ------ Show if contact is present otherwise do nothing. ------ 
 				$('#agile_content .show-form').each(function(){
-					if($(this).data('content') == email){
+					if($(this).data('content') == Email){
 						$(this).find(".gadget-show-contact").trigger('click');
 						return false;
 					}
@@ -48,30 +48,30 @@
 		}
 				
 		//  ------ Get contact status based on email. ------ 
-		_agile.get_contact(email, 
-				{success: function(val){
+		_agile.get_contact(Email, 
+				{success: function(Response){
 							
 							$('.contact-search-waiting', el).hide();
 							//  ------ Generate UI. ------ 
-							if(that.hasClass("search-mail-button")){
+							if(That.hasClass("search-mail-button")){
 								
-								agile_add_mail_to_list(val, email, el);
+								agile_add_mail_to_list(Response, Email, el);
 							}
 							else{
-								agile_create_contact_ui(el, that, email, val);
+								agile_create_contact_ui(el, That, Email, Response);
 							}							
 				
-				}, error: function(val){
+				}, error: function(Response){
 					
-							val.id = null;
+							Response.id = null;
 							$('.contact-search-waiting', el).hide();
 							//  ------ Generate UI. ------ 
-							if(that.hasClass("search-mail-button")){
+							if(That.hasClass("search-mail-button")){
 								$(".contact-search-status", el).fadeIn().delay(4000).fadeOut();
-								agile_add_mail_to_list(val, email, el);
+								agile_add_mail_to_list(Response, Email, el);
 							}
 							else{
-								agile_create_contact_ui(el, that, email, val);
+								agile_create_contact_ui(el, That, Email, Response);
 							}
 		}});
 	});
@@ -102,13 +102,13 @@
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.gadget-contact-details-tab")
 					.find('.show-form');
-		var that = $(this);
+		var That = $(this);
 		//  ------ Build show contact form template. ------ 
-		agile_build_form_template(that, "gadget-contact-summary", ".show-contact-summary", function() {
+		agile_build_form_template(That, "gadget-contact-summary", ".show-contact-summary", function() {
 
-			var content = Contacts_Json[$(el).data("content")];
+			var Json = Contacts_Json[$(el).data("content")];
 			//  ------ Build tags list. ------ 
-			agile_build_tag_ui($("#added_tags_ul", el), content);
+			agile_build_tag_ui($("#added_tags_ul", el), Json);
 
 			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
@@ -121,7 +121,7 @@
 			$(".show-contact-summary", el).toggle();
 			agile_gadget_adjust_height();
 			//  ------ Build tabs. ------ 
-			agile_build_form_template(that, "gadget-tabs", ".option-tabs", function() {
+			agile_build_form_template(That, "gadget-tabs", ".option-tabs", function() {
 				
 				//  ------ Enables Tab. ------ 
 				$('.gadget_tabs', el).tab();
@@ -169,10 +169,10 @@
  * @method agile_gadget_adjust_width
  * @param {Object} el Jquery object gives the current object.
  * @param {Object} Text_Width Jquery object of text to be shown.
- * @param {Boolean} bool Boolean variable.
+ * @param {Boolean} Boolean Boolean variable.
  * */
-function agile_gadget_adjust_width(el, Text_Width, bool){
-	if(bool){
+function agile_gadget_adjust_width(el, Text_Width, Boolean){
+	if(Boolean){
 		var Total_Width = $(".agile-no-contact", el).width();
 		var Total_Text_width = parseInt(Text_Width.width(), 10) + parseInt(Text_Width.css("margin-left"), 10) + 10;
 		var Rest_Width = (((Total_Width - Total_Text_width)/Total_Width)*100) + "%";
@@ -191,25 +191,25 @@ function agile_gadget_adjust_width(el, Text_Width, bool){
  * @param {Object} el It is a jquery object which refers to the current contact container in DOM.
  * @param {Object} that It is jquery object which refer to current event object.
  * @param {String} email Email of the current contact.
- * @param {JSON} val Response JSON object/array/string.
+ * @param {JSON} Val Response JSON object/array/string.
  * 
  * */
-function agile_create_contact_ui(el, that, email, val){
+function agile_create_contact_ui(el, That, Email, Val){
 	
 	//  ------ Set library path for campaign link, check for local host. ------ 
 	if(Is_Localhost)
-		val.ac_path = Lib_Path;
+		Val.ac_path = Lib_Path;
 	else
-		val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
+		Val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
 	
 	//  ------ Merge Server response object with Contact_Json object. ------ 
-	$.extend(Contacts_Json[email], val);
+	$.extend(Contacts_Json[Email], Val);
 
 	//  ------ Build show contact form template. ------ 
-	agile_build_form_template(that, "gadget-contact-list", ".contact-list", function() {
+	agile_build_form_template(That, "gadget-contact-list", ".contact-list", function() {
 		
 		//  ------ Contact not found for requested mail, show add contact in mail list. ------ 
-		if (val.id == null) {
+		if (Val.id == null) {
 			agile_gadget_adjust_width(el, $(".contact-search-status", el), true);
 			$('.contact-search-status', el).show().delay(4000).hide(1,function(){
 				agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
@@ -231,19 +231,19 @@ function agile_create_contact_ui(el, that, email, val){
  * @method agile_add_mail_to_list
  * 
  */
-function agile_add_mail_to_list(val, email, el){
+function agile_add_mail_to_list(Val, Email, el){
 
 	//  ------ Set library path for campaign link, check for local host. ------ 
 	if(Is_Localhost)
-		val.ac_path = Lib_Path;
+		Val.ac_path = Lib_Path;
 	else
-		val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
+		Val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
 	
 	var Contact_Data = {};
-	Contact_Data[email] = Contacts_Json[email];
+	Contact_Data[Email] = Contacts_Json[Email];
 	//  ------ Merge Server response object with Contact_Json object. ------ 
-	$.extend(Contacts_Json[email], val);
-	Contacts_Json[email].mail_exist = true;
+	$.extend(Contacts_Json[Email], Val);
+	Contacts_Json[Email].mail_exist = true;
 	
 	//  ------ Compile template and generate UI. ------ 
 	var Individual_Template = getTemplate('gadget', Contact_Data, 'no');
@@ -256,9 +256,9 @@ function agile_add_mail_to_list(val, email, el){
 	agile_get_gadget_template("gadget-contact-list-template", function(data) {
 
 		//  ------ Take contact data from global object variable. ------ 
-		var json = Contacts_Json[email];
+		var Json = Contacts_Json[Email];
 		//  ------ Compile template and generate UI. ------ 
-		var Handlebars_Template = getTemplate("gadget-contact-list", json, 'no');
+		var Handlebars_Template = getTemplate("gadget-contact-list", Json, 'no');
 		//  ------ Insert template to container in HTML. ------ 
 		$("#agile_content").children().eq(0).find(".contact-list").html($(Handlebars_Template));
 		//  ------ Show temporarily hidden list element. ------ 
@@ -268,7 +268,7 @@ function agile_add_mail_to_list(val, email, el){
 			gadgets.window.adjustHeight();
 		
 		//  ------ Contact found, show contact summary. ------ 		
-		if (json.id != null) {
+		if (Json.id != null) {
 			$("#agile_content").children().eq(0).find('.gadget-show-contact').trigger('click');
 		}	
 		else{
