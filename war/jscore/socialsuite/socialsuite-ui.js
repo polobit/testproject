@@ -284,7 +284,10 @@ $(document).on("click",".save-twitter-stream", function(e)
 						
 			// Register on server
 			var publishJSON = {"message_type":"register", "stream":stream};
-			sendMessage(publishJSON);			
+			sendMessage(publishJSON);		
+			
+			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+			
 			},
 	error : function(data){console.log(data);},
 	});	
