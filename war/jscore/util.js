@@ -79,10 +79,10 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 			$("#" + selectId, el).empty();
 		else
 		{
-			if(!defaultSelectOption)
+			if (!defaultSelectOption)
 				defaultSelectOption = "Select...";
-			
-			$("#" + selectId, el).empty().append('<option class="default-select" value="">'+defaultSelectOption+'</option>');
+
+			$("#" + selectId, el).empty().append('<option class="default-select" value="">' + defaultSelectOption + '</option>');
 		}
 
 		// Iterates though each model in the collection and
@@ -233,12 +233,14 @@ function property_JSON(name, id, type)
 		json.type = type;
 
 	json.name = name;
-	
-	var elem=$('#' + id), elem_type=elem.attr('type'), elem_value;
-    
-    if(elem_type=='checkbox')elem_value=elem.is(':checked')?'on':'off';
-    else elem_value=elem.val();
-    
+
+	var elem = $('#' + id), elem_type = elem.attr('type'), elem_value;
+
+	if (elem_type == 'checkbox')
+		elem_value = elem.is(':checked') ? 'on' : 'off';
+	else
+		elem_value = elem.val();
+
 	json.value = elem_value;
 	return json;
 }
@@ -261,31 +263,43 @@ function saveEntity(object, url, callback)
 
 /**
  * Returns GMT time.
+ * 
  * @param date
  * @returns
  */
 function getGMTTimeFromDate(date)
 {
-	console.log(date);
+	var current_sys_date = new Date();
+	console.log(new Date().getHours());
+	console.log(new Date().getMinutes());
+	console.log(new Date().getSeconds());
+	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate())
+	date = (new Date(date.getFullYear(), date.getMonth(), date.getDate(), current_sys_date.getHours(), current_sys_date.getMinutes(), current_sys_date
+			.getSeconds(), current_sys_date.getMilliseconds()));
+
+	console.log(date.getTime() + date.getTimezoneOffset());
+
 	// Adding offset to date returns GMT time
 	return date.getTime() + date.getTimezoneOffset();
 }
 
 /**
  * Returns local epoch time based form GMT time
+ * 
  * @param time_in_milliseconds
  * @returns {Number}
  */
 function getLocalTimeFromGMTMilliseconds(time_in_milliseconds)
 {
 	var date = new Date(parseInt(time_in_milliseconds));
-	
+
 	// Subtracting epoch offset from epoch time;
-	return  date.getTime() - date.getTimezoneOffset();
+	return date.getTime() - date.getTimezoneOffset();
 }
 
 /**
  * Adds tag to 'OUR' domain.
+ * 
  * @param tag
  */
 function addTagAgile(tag)
@@ -308,6 +322,7 @@ function addTagAgile(tag)
 function checkTagAgile(tag)
 {
 
+	console.log(Agile_Contact);
 	if (Agile_Contact && Agile_Contact.tags)
 		return Agile_Contact.tags.indexOf(tag) > -1;
 
