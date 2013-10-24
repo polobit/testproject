@@ -17,40 +17,40 @@
 		e.preventDefault();
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.add-tag");
-		var json = [];
-		var tags = {};
-		var email = {};
+		var Json = [];
+		var Tags = {};
+		var Email = {};
 		//  ------ Form serialization. ------ 
-		json = agile_serialize_form($("#add_tags_form", el));
+		Json = agile_serialize_form($("#add_tags_form", el));
 
-		$.each(json, function(index, val) {
-			if (val.name == "email")
-				email[val.name] = val.value;
+		$.each(Json, function(index, Val) {
+			if (Val.name == "email")
+				Email[Val.name] = Val.value;
 			else
-				tags[val.name] = val.value;
+				Tags[Val.name] = Val.value;
 		});
 
 		//  ------ Send request if tags are entered. ------ 
-		if (tags.tags.length != 0) {
+		if (Tags.tags.length != 0) {
 			
 			$("#add_tags_form", el).hide();
 			$('.tag-waiting', el).show("fast");
 			
 			//  ------ Add Tags ------ 
-			_agile.add_tag(tags.tags,
-					{success: function(response){
+			_agile.add_tag(Tags.tags,
+					{success: function(Response){
 								$('.tag-waiting', el).hide();
 								//  ------ Merge Server response object with Contact_Json object. ------ 
-								$.extend(Contacts_Json[email.email], response);
+								$.extend(Contacts_Json[Email.email], Response);
 								//  ------ Add tag to list. ------ 
-								agile_build_tag_ui($("#added_tags_ul", el), response);
+								agile_build_tag_ui($("#added_tags_ul", el), Response);
 								$(".toggle-tag", el).show("medium");
 								agile_gadget_adjust_height();		
 						
-					}, error: function(val){
+					}, error: function(Response){
 										
 												
-					}}, email.email);
+					}}, Email.email);
 		}
 		//  ------ If tags are not entered, hide form. ------ 
 		else {
@@ -67,28 +67,28 @@
 		e.preventDefault();
 		//  ------ Set context (HTML container where event is triggered). ------ 
 		var el = $(this).closest("div.add-tag");
-		var email = $(el).find('#add_tags_form input[name="email"]').val();
-		var tag = $(this).prev().text();
+		var Email = $(el).find('#add_tags_form input[name="email"]').val();
+		var Tag = $(this).prev().text();
 		
 		$('.toggle-tag', el).hide("fast",function(){
 			$('.tag-waiting', el).show();
 		});
 		
 		//  ------ Remove Tag ------ 
-		_agile.remove_tag(tag,
-				{success: function(response){
+		_agile.remove_tag(Tag,
+				{success: function(Response){
 							$('.tag-waiting', el).hide();
 							//  ------ Merge Server response object with Contact_Json object. ------ 
-							$.extend(Contacts_Json[email], response);
+							$.extend(Contacts_Json[Email], Response);
 							//  ------ Removing tag from list. ------ 
-							agile_build_tag_ui($("#added_tags_ul", el), response);
+							agile_build_tag_ui($("#added_tags_ul", el), Response);
 							$('.toggle-tag', el).show("medium");
 							agile_gadget_adjust_height();		
 					
-				}, error: function(val){
+				}, error: function(Response){
 									
 											
-				}}, email);
+				}}, Email);
 	});
 
 	
@@ -110,16 +110,16 @@
 	
 //  ------------------------------------------------- Enter key press event for tag input box ---------------------------------
 
-	$('#tags').die().live('keypress', function(evt) {
+	$('#tags').die().live('keypress', function(Evt) {
 		//  ------ Select event object, because it is different for IE. ------ 
-		var evt = (evt) ? evt : ((event) ? event : null);
-		var node = (evt.target) ? evt.target
-				: ((evt.srcElement) ? evt.srcElement : null);
+		var Evt = (Evt) ? Evt : ((Event) ? Event : null);
+		var Node = (Evt.target) ? Evt.target
+				: ((Evt.srcElement) ? Evt.srcElement : null);
 
 		//  ------ Check for enter key code. ------ 
-		if (evt.keyCode === 13) {
+		if (Evt.keyCode === 13) {
 			//  ------ Prevent default functionality. ------ 
-			evt.preventDefault();
+			Evt.preventDefault();
 			//  ------ Trigger add tag click event. ------ 
 			$(this).next().trigger('click');
 		}

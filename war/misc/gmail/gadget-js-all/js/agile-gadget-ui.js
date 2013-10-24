@@ -13,10 +13,10 @@
  * @param {String}
  *            domain User's registered domain.
  */
-function agile_generate_ui(Api_Key, domain) {
+function agile_generate_ui(Api_Key, Domain) {
 
 	//  ------ Set account. ------ 
-	_agile.set_account(Api_Key, domain);
+	_agile.set_account(Api_Key, Domain);
 	//  ------ Build mail list UI and call callback. ------ 
 	agile_build_ui(function() {
 		
@@ -48,16 +48,16 @@ function agile_generate_ui(Api_Key, domain) {
  */
 function agile_build_ui(callback) {
 
-	var emails;
+	var Emails;
 	//  ------ Get emails ------ 
 	if (!Is_Localhost)
-		emails = agile_get_emails(true);
+		Emails = agile_get_emails(true);
 	else
-		emails = agile_get_emails(false);
+		Emails = agile_get_emails(false);
 
 	//  ------ Build UI for mails. ------ 
 	console.log("Building UI");
-	agile_build_ui_for_emails(emails);
+	agile_build_ui_for_emails(Emails);
 
 	if (callback && typeof (callback) === "function") {
 		callback();
@@ -96,12 +96,12 @@ function agile_build_ui_for_emails(Email_Ids) {
  *            selector jQuery selector object, location for appending contact
  *            list.
  */
-function agile_fill_individual_template_ui(val, selector) {
+function agile_fill_individual_template_ui(Val, Selector) {
 	
 	//  ------ Compile template and generate UI. ------ 
-	var Individual_Template = getTemplate('gadget', val, 'no');
+	var Individual_Template = getTemplate('gadget', Val, 'no');
 	//  ------ Append contact to container in HTML. ------ 
-	selector.append($(Individual_Template));
+	Selector.append($(Individual_Template));
 	//  ------ Adjust gadget window height. ------ 
 	if (!Is_Localhost)
 		gadgets.window.adjustHeight();

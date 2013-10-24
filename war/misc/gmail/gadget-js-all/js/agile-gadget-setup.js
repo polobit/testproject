@@ -11,18 +11,18 @@
  * 
  * @method agile_user_setup
  * @param {Object}
- *            popup_url Contains one time session key with URL for request of
+ *            Popup_Url Contains one time session key with URL for request of
  *            association.
  */
-function agile_user_setup(popup_url) {
+function agile_user_setup(Popup_Url) {
 	
 	//  ------ Hide Loading Icon ------ 
 	$('#loading').hide();
 	
 	//  ------ E-mail from gmail account abc@userdomain.com --> domain = userdomain.com ------ 
-	var domain = gadgets.util.getUrlParameters().pid;
+	var Domain = gadgets.util.getUrlParameters().pid;
 	//  ------ Make URL to set-up user account. ------ 
-	var Url_Root = popup_url + "&hd=" + domain;
+	var Url_Root = Popup_Url + "&hd=" + Domain;
 	//  ------ Clear old UI. ------ 
 	$('#agile_content').html("");
 	//  ------ Create UI to let user enter its desired agile domain name. ------ 
@@ -66,7 +66,7 @@ function agile_gadget_open_popup(Agile_Url) {
 		$('#loading').show();
 		gadgets.window.adjustHeight();
 		
-		var popup = window.open(Agile_Url, 'OpenID', 'height=400,width=400');
+		var Popup = window.open(Agile_Url, 'OpenID', 'height=400,width=400');
 		//  ------ Check every 100 ms if the popup is closed. ------ 
 		finished_interval = setInterval(function() {
 			/* ------ 
@@ -74,7 +74,7 @@ function agile_gadget_open_popup(Agile_Url) {
 			 * closed it. Verify with the server in case the user closed the
 			 * popup. ------ 
 			 */
-			if (popup.closed) {
+			if (Popup.closed) {
 				clearInterval(finished_interval);
 				//  ------ Reset user preferences ------ 
 			    var Gadget_Prefs = new gadgets.Prefs();

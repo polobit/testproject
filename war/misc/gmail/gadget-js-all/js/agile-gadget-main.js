@@ -44,7 +44,7 @@ function agile_init_gadget() {
 
 		head.ready(function() {
 			
-			//  ------ Fetch user data from cookie. ------ 
+			//  ------ Set user data and generate UI. ------ 
 			agile_generate_ui("51ekokl790t85b11ivhim9ep7i","localhost");
 		});
 	}
@@ -84,12 +84,12 @@ function agile_login() {
 		//  ------ Download build UI JavaScript file. ------ 
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-ui.min.js');
 		head.ready(function() {
-			//  ------ Set account ------ 
+			//  ------ Set account and generate UI. ------ 
 			agile_generate_ui(Agile_User_Key, Agile_User_Domain);
 		});
 	}
 	
-	//  ------ New user set domain. ------ 
+	//  ------ New user set domain, go for One Time Setup. ------ 
     else {
     	var Agile_User_Popup = Gadget_Prefs.getString("agile_user_popup");
     	var Agile_User_Expire_At = parseInt(Gadget_Prefs.getString("agile_user_expire_at"));
@@ -109,18 +109,18 @@ function agile_login() {
  * @method agile_send_auth
  * 
  * */
-function agile_send_auth(url, callback){
+function agile_send_auth(Url, callback){
 	
 	//  ------ Increase counter and append to request, so that it will not be cached. ------ 
 	Timestamp += 1;
-	var url = url + '?chachecounter=' + Timestamp;
-	console.log("Osapi from: " + url);
+	var Url = Url + '?Timestamp=' + Timestamp;
+	console.log("Osapi from: " + Url);
 	/* ------ 
 	 * Hit the server, passing in a signed request (and OpenSocial ID), to 
 	 * see if we know who the user is. ------ 
 	 */
 	osapi.http.get({
-		'href' : url,
+		'href' : Url,
 		'format' : 'json',
 		'authz' : 'signed'
 	}).execute(callback);
@@ -136,7 +136,8 @@ function agile_send_auth(url, callback){
  */
 function agile_handle_load_response(data) {
 
-	console.log("Auth response: " + data);
+	console.log("Auth response: ");
+	console.log(data);
 	
 	var Gadget_Prefs = new gadgets.Prefs();
     
