@@ -13,7 +13,7 @@
  * Global variables:- 1) _agile - Access agile API methods through it, 2)
  * Is_Localhost - Local host identifier, 3) Lib_Path - Set library path based on
  * local host or production. 4) Contacts_Json - holds contact detail object,
- * which helps in loading contacts without sending server request. 5) Cache_Counter -
+ * which helps in loading contacts without sending server request. 5) Timestamp -
  * Helps in making new Auth request every time. 
  */
 var _agile = _agile || [];
@@ -21,7 +21,7 @@ var Is_Localhost = false;
 var Lib_Path = "";
 var Ac_Email = "";
 var Contacts_Json = {};
-var Cache_Counter = 0;
+var Timestamp = 0;
 
 /**
  * Initialize gadget for Local host or Production.
@@ -71,13 +71,13 @@ function agile_login() {
 	console.log("Logging in");
 
 	//  ------ Get user preferences. ------ 
-    var prefs = new gadgets.Prefs();
-    var Agile_User_Exists = prefs.getString("agile_user_exists");
+    var Gadget_Prefs = new gadgets.Prefs();
+    var Agile_User_Exists = Gadget_Prefs.getString("agile_user_exists");
     
 	//  ------ Set account. ------ 
 	if (Agile_User_Exists == "true") {
-    	var Agile_User_Key = prefs.getString("agile_user_key");
-        var Agile_User_Domain = prefs.getString("agile_user_domain");
+    	var Agile_User_Key = Gadget_Prefs.getString("agile_user_key");
+        var Agile_User_Domain = Gadget_Prefs.getString("agile_user_domain");
 		//  ------ Download scripts. ------ 
 		agile_download_scripts();
     	
@@ -91,13 +91,13 @@ function agile_login() {
 	
 	//  ------ New user set domain. ------ 
     else {
-    	var Agile_User_Popup = prefs.getString("agile_user_popup");
-    	var Agile_User_Expire_At = parseInt(prefs.getString("agile_user_expire_at"));
+    	var Agile_User_Popup = Gadget_Prefs.getString("agile_user_popup");
+    	var Agile_User_Expire_At = parseInt(Gadget_Prefs.getString("agile_user_expire_at"));
 		var Today_Date = new Date().getTime();
     	if(Today_Date < Agile_User_Expire_At)
     		agile_user_setup_load(Agile_User_Popup);
     	else{
-    		prefs.set("agile_user_expire_at", "0");
+    		Gadget_Prefs.set("agile_user_expire_at", "0");
     		agile_send_auth(Lib_Path + 'gmail', agile_handle_load_response);
     	}
 	}
@@ -112,8 +112,8 @@ function agile_login() {
 function agile_send_auth(url, callback){
 	
 	//  ------ Increase counter and append to request, so that it will not be cached. ------ 
-	Cache_Counter += 1;
-	var url = url + '?chachecounter=' + Cache_Counter;
+	Timestamp += 1;
+	var url = url + '?chachecounter=' + Timestamp;
 	console.log("Osapi from: " + url);
 	/* ------ 
 	 * Hit the server, passing in a signed request (and OpenSocial ID), to 
@@ -138,17 +138,17 @@ function agile_handle_load_response(data) {
 
 	console.log("Auth response: " + data);
 	
-	var prefs = new gadgets.Prefs();
+	var Gadget_Prefs = new gadgets.Prefs();
     
 	if(data.content != undefined){
 		//  ------ Check user exists, OpenID must have occurred previously. ------ 
 		if (data.content.user_exists == true) {
 			data.content.user_exists = "true";
 			//  ------ Set user preferences. ------ 
-			prefs.set("agile_user_key", data.content.api_key);
-			prefs.set("agile_user_domain", data.content.domain);
-			prefs.set("agile_user_email", data.content.email);
-			prefs.set("agile_user_exists", data.content.user_exists);
+			Gadget_Prefs.set("agile_user_key", data.content.api_key);
+			Gadget_Prefs.set("agile_user_domain", data.content.domain);
+			Gadget_Prefs.set("agile_user_email", data.content.email);
+			Gadget_Prefs.set("agile_user_exists", data.content.user_exists);
 			agile_login();
 		}
 		
@@ -156,9 +156,9 @@ function agile_handle_load_response(data) {
 		else {
 			data.content.user_exists = "false";
 			//  ------ Set user preferences. ------ 
-			prefs.set("agile_user_expire_at", data.content.expires_at.toString());
-			prefs.set("agile_user_popup", data.content.popup);
-			prefs.set("agile_user_exists", data.content.user_exists);
+			Gadget_Prefs.set("agile_user_expire_at", data.content.expires_at.toString());
+			Gadget_Prefs.set("agile_user_popup", data.content.popup);
+			Gadget_Prefs.set("agile_user_exists", data.content.user_exists);
 			agile_user_setup_load(data.content.popup);
 		}
 	}

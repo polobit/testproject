@@ -77,10 +77,10 @@ function agile_gadget_open_popup(Agile_Url) {
 			if (popup.closed) {
 				clearInterval(finished_interval);
 				//  ------ Reset user preferences ------ 
-			    var prefs = new gadgets.Prefs();
-			    prefs.set("agile_user_expire_at", "0");
-				prefs.set("agile_user_popup", "");
-				prefs.set("agile_user_exists", "");
+			    var Gadget_Prefs = new gadgets.Prefs();
+			    Gadget_Prefs.set("agile_user_expire_at", "0");
+				Gadget_Prefs.set("agile_user_popup", "");
+				Gadget_Prefs.set("agile_user_exists", "");
 				//  ------ Re-login. ------ 
 				agile_login();
 			}

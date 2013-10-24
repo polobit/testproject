@@ -21,7 +21,7 @@ function agile_get_emails(Boolean) {
 		//  ------ Fetch the array of content matches. ------ 
 		Matches = google.contentmatch.getContentMatches();
 		var Gadget_Prefs = new gadgets.Prefs();
-		var Mail_Account_Holder = prefs.getString("agile_user_email");
+		var Mail_Account_Holder = Gadget_Prefs.getString("agile_user_email");
 		return agile_build_list(Matches, Mail_Account_Holder);
 	}
 	
@@ -148,22 +148,22 @@ function agile_build_list(Unsorted_Mails, Ac_Email){
 	
 	//  ------ Create array of corresponding name, mail object. ------ 
 	if(typeof(Mail_List["email"]) != "undefined")
-		Create_Pair(Mail_List["email"], "", Soreted_Mail_2);
-	Create_Pair(Mail_List["email_from"], Mail_List["name_from"], Soreted_Mail_1);
-	Create_Pair(Mail_List["email_to"], Mail_List["name_to"], Soreted_Mail_1);
-	Create_Pair(Mail_List["email_cc"], Indexj["name_cc"], Soreted_Mail_1);
+		agile_create_pair(Mail_List["email"], "", Soreted_Mail_2);
+	agile_create_pair(Mail_List["email_from"], Mail_List["name_from"], Soreted_Mail_1);
+	agile_create_pair(Mail_List["email_to"], Mail_List["name_to"], Soreted_Mail_1);
+	agile_create_pair(Mail_List["email_cc"], Mail_List["name_cc"], Soreted_Mail_1);
 
 	//  ------ Final sorted mail list object. ------ 
 	var Sorted_Mail_List = {};
 	
 	//  ------ Remove duplicate mails and Gmail account owners email from list. ------
 	for(var Index = 0; Index < Soreted_Mail_1.length; Index++) if(Soreted_Mail_1[Index]["email"] != Ac_Email){
-		var Names = parse_name(Soreted_Mail_1[Index]["name"]);
+		var Names = agile_parse_name(Soreted_Mail_1[Index]["name"]);
 		Sorted_Mail_List[Soreted_Mail_1[Index]["email"]] = {"email": Soreted_Mail_1[Index]["email"], "fname":Names[0], "lname":Names[1], "mail_exist":false};
 	}
 	
 	for(var Index = 0; Index < Soreted_Mail_2.length; Index++) if(Soreted_Mail_2[Index]["email"] != Ac_Email){
-		var Names = parse_name(Soreted_Mail_2[Index]["name"]);
+		var Names = agile_parse_name(Soreted_Mail_2[Index]["name"]);
 		if(typeof (Sorted_Mail_List[Soreted_Mail_2[Index]["email"]]) == "undefined"){
 			Sorted_Mail_List[Soreted_Mail_2[Index]["email"]] = {"email": Soreted_Mail_2[Index]["email"], "fname":Names[0], "lname":Names[1], "mail_exist":false};
 		}
