@@ -144,6 +144,73 @@ public class QueryDocumentUtil
 	return query;
     }
 
+    public static String createTimeQuery(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
+	    String rhs_new)
+    {
+	// Formated to build query
+	String date = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(rhs));
+
+	// Created on date condition
+	if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.EQUALS))
+	{
+	    query = buildNestedCondition("AND", query, lhs + "=" + date);
+	}
+
+	// Created after given date
+	else if (condition.equals(SearchRule.RuleCondition.AFTER))
+	{
+	    query = buildNestedCondition("AND", query, lhs + " >" + date);
+	}
+
+	// Created before particular date
+	else if (condition.equals(SearchRule.RuleCondition.BEFORE))
+	{
+	    query = buildNestedCondition("AND", query, lhs + " < " + date);
+	}
+
+	// Created Between given dates
+	else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
+	{
+	    if (rhs_new != null)
+	    {
+		String to_date = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(rhs_new));
+
+		query = buildNestedCondition("AND", query, lhs + " >= " + date);
+		query = buildNestedCondition("AND", query, lhs + " <= " + to_date);
+	    }
+	}
+
+	// Created in last number of days
+	else if (condition.equals(SearchRule.RuleCondition.LAST))
+	{
+	    long fromDateInSecs = new DateUtil().removeDays(Integer.parseInt(rhs) - 1).getTime().getTime();
+
+	    System.out.println(new DateUtil(new Date(fromDateInSecs)).getTime().toGMTString());
+
+	    String fromDate = SearchUtil.getDateWithoutTimeComponent(fromDateInSecs);
+
+	    System.out.println("from date = " + fromDate + " lhs = " + lhs);
+
+	    query = buildNestedCondition("AND", query, lhs + " >= " + fromDate);
+	}
+	else if (condition.equals(SearchRule.RuleCondition.NEXT))
+	{
+	    long limitTime = new DateUtil().addDays(Integer.parseInt(rhs) - 1).getTime().getTime();
+	    String formatedLimitDate = SearchUtil.getDateWithoutTimeComponent(limitTime);
+
+	    long currentTime = new Date().getTime();
+
+	    String formatedCurrentDate = SearchUtil.getDateWithoutTimeComponent(currentTime);
+
+	    query = buildNestedCondition("AND", query, lhs + " >=" + formatedCurrentDate);
+	    query = buildNestedCondition("AND", query, lhs + " <= " + formatedLimitDate);
+
+	}
+
+	return query;
+
+    }
+
     /**
      * Creates query on Date/Time fields. As equals query is not working on date
      * queries, this function queries using a hack; queries on the epoch time
@@ -163,7 +230,7 @@ public class QueryDocumentUtil
      * @param rhs_new
      * @return
      */
-    public static String createTimeQuery(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
+    public static String createTimeQuery1(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
 	    String rhs_new)
     {
 

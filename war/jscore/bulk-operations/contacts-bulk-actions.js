@@ -125,7 +125,7 @@ $(function()
 			json.contact_ids = id_array;
 			postBulkOperationData(url, json, $form,undefined,function(data){
 				enable_save_button(saveButton);
-			}, 'Camapaign assigning scheduled');
+			}, 'Campaign assigning scheduled');
 		});
 
 	});
@@ -513,11 +513,11 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 		// On save back to contacts list
 		Backbone.history.navigate("contacts", { trigger : true });  
 		
-		/*if(!error_message)
+		if(!error_message)
 			{
 				showNotyPopUp('information', "Task scheduled", "top", 5000);
 				return;
 			}
-			showNotyPopUp('information', error_message, "top", 5000);*/
+			showNotyPopUp('information', error_message, "top", 5000);
 	} });
 }
