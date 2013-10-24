@@ -11,7 +11,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -67,8 +66,10 @@ public class DomainUserUtil
 
 	    domainUser.password = randomNumber;
 
-	    // Send an email with the new password to avoid two notification templates.
-	    // SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT, SendMail.FORGOT_PASSWORD, domainUser);
+	    // Send an email with the new password to avoid two notification
+	    // templates.
+	    // SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
+	    // SendMail.FORGOT_PASSWORD, domainUser);
 
 	    try
 	    {
@@ -278,8 +279,7 @@ public class DomainUserUtil
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
-		.get();
+	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
 
 	NamespaceManager.set(oldNamespace);
 	return user;
@@ -307,5 +307,15 @@ public class DomainUserUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
+
+    /**
+     * Overloads getUsers method to fetch domain users without domain parameter.
+     * 
+     * @return List<DomainUser>
+     */
+    public static List<DomainUser> getUsers()
+    {
+	return getUsers(NamespaceManager.get());
     }
 }

@@ -43,7 +43,7 @@ public class BulkActionUtil
 	DELETE("/core/api/bulk-actions/delete/contacts"), ASIGN_WORKFLOW("/core/api/bulk-actions/enroll-campaign/%s"), CHANGE_OWNER(
 		"/core/api/bulk-actions/change-owner/%s"), ADD_TAG("/core/api/bulk-actions/contact/tags"), CONTACTS_UPLOAD(
 		"/core/api/bulk-actions/contacts/multi/upload"), REMOVE_ACTIVE_SUBSCRIBERS("/core/api/bulk-actions/remove-active-subscribers/%s"), SEND_EMAIL(
-		"/core/api/bulk-actions/contacts/send-email");
+		"/core/api/bulk-actions/contacts/send-email"), EXPORT_CONTACTS_CSV("/core/api/bulk-actions/contacts/export-contacts-csv");
 
 	String url;
 

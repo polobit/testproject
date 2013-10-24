@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.export.ContactCSVExport;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -450,5 +451,94 @@ public class BulkOperationsAPI
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.SEND_EMAIL, String.valueOf(count));
+    }
+
+    /**
+     * Sends email with contacts csv as an attachment
+     * 
+     * @param currentUserId
+     *            - Current user id.
+     * @param contact_ids
+     *            - list of Contact ids.
+     * @param filter
+     *            - filter id
+     * @param data
+     *            - data request parameter
+     * @throws JSONException
+     */
+    @Path("/contacts/export-contacts-csv/{current_user_id}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void exportContactsCSV(@PathParam("current_user_id") Long currentUserId, @FormParam("contact_ids") String contact_ids,
+	    @FormParam("filter") String filter) throws JSONException
+    {
+	int count = 0;
+
+	List<Contact> contacts_list = new ArrayList<Contact>();
+	String path = null;
+
+	// If filter is not empty, 500 contacts are fetched on every
+	// iteration
+	if (!StringUtils.isEmpty(filter))
+	{
+	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, currentUserId);
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    int firstTime = 0;
+
+	    do
+	    {
+		count += contacts_list.size();
+
+		// Create new file for first time, then append content to the
+		// existing file.
+		++firstTime;
+		if (firstTime == 1)
+		    path = ContactCSVExport.writeContactCSVToBlobstore(contacts_list, false);
+		else
+		    ContactCSVExport.editExistingBlobFile(path, contacts_list, false);
+
+		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, currentUserId);
+
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+		    continue;
+		}
+
+		break;
+	    }
+	    while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+
+	}
+	else if (!StringUtils.isEmpty(contact_ids))
+	{
+	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+
+	    count += contacts_list.size();
+
+	    // Create new file and write to blob and close the channel. All
+	    // contacts are fetched at a time, so no need of editing existing
+	    // file.
+	    path = ContactCSVExport.writeContactCSVToBlobstore(contacts_list, true);
+	}
+
+	// Close the blob write channel after all contacts completed.
+	if (!StringUtils.isEmpty(filter))
+	    ContactCSVExport.editExistingBlobFile(path, null, true);
+
+	// Retrieves data of file having given path
+	String fileData = ContactCSVExport.retrieveBlobFileData(path);
+
+	// Sends email.
+	ContactCSVExport.exportContactCSVAsEmail(currentUserId, fileData);
+
+	// Deletes blob
+	ContactCSVExport.deleteBlobFile(path);
+
+	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV, String.valueOf(count));
     }
 }

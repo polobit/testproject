@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 
@@ -86,6 +87,26 @@ public class Mandrill
     public static final String MANDRILL_REPLY_TO = "Reply-To";
 
     /**
+     * Mandrill array of supported attachments to add to the message
+     */
+    public static final String MANDRILL_ATTACHMENTS = "attachments";
+
+    /**
+     * MIME type of the attachment
+     */
+    public static final String MANDRILL_ATTACHMENT_MIME_TYPE = "type";
+
+    /**
+     * File name of the attachment
+     */
+    public static final String MANDRILL_ATTACHMENT_FILE_NAME = "name";
+
+    /**
+     * Content of the attachment as a base64-encoded string
+     */
+    public static final String MANDRILL_ATTACHMENT_FILE_CONTENT = "content";
+
+    /**
      * Sends email using Mandrill API with the given parameters.
      * 
      * @param fromEmail
@@ -103,7 +124,7 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
+    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text, String... attachments)
     {
 	try
 	{
@@ -114,7 +135,7 @@ public class Mandrill
 	    mailJSON.put(MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
 
 	    // All email params are inserted into Message json
-	    JSONObject messageJSON = getMessageJSON(fromEmail, fromName, to, replyTo, subject, html, text);
+	    JSONObject messageJSON = getMessageJSON(fromEmail, fromName, to, replyTo, subject, html, text, attachments);
 
 	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
@@ -153,7 +174,8 @@ public class Mandrill
      *            - text body
      * @return JSONObject
      */
-    private static JSONObject getMessageJSON(String fromEmail, String fromName, String to, String replyTo, String subject, String html, String text)
+    private static JSONObject getMessageJSON(String fromEmail, String fromName, String to, String replyTo, String subject, String html, String text,
+	    String... attachments)
     {
 	JSONObject messageJSON = new JSONObject();
 
@@ -174,6 +196,8 @@ public class Mandrill
 
 	    messageJSON.put(MANDRILL_HTML, html);
 	    messageJSON.put(MANDRILL_TEXT, text);
+
+	    messageJSON.put(MANDRILL_ATTACHMENTS, getAttachmentsJSON(attachments));
 	}
 	catch (Exception e)
 	{
@@ -218,6 +242,50 @@ public class Mandrill
 	}
 
 	return toJSONArray;
+    }
+
+    /**
+     * Returns JSONArray of attachment JSON. Mandrill attachment should have
+     * type, filename and file content.
+     * 
+     * @param attachments
+     * @return JSONArray
+     */
+    private static JSONArray getAttachmentsJSON(String... attachments)
+    {
+	// If no attachment is given then return
+	if (attachments.length == 0)
+	    return null;
+
+	JSONArray attachmentsArray = new JSONArray();
+
+	try
+	{
+	    // MIME Type
+	    String mimeType = attachments[0];
+
+	    // Attachment File name
+	    String fileName = attachments[1];
+
+	    // Attachment File Content
+	    String fileContent = attachments[2];
+
+	    JSONObject attachment = new JSONObject();
+	    attachment.put(MANDRILL_ATTACHMENT_MIME_TYPE, mimeType);
+	    attachment.put(MANDRILL_ATTACHMENT_FILE_NAME, fileName);
+
+	    // Mandrill accepts only Base64 encoded content
+	    attachment.put(MANDRILL_ATTACHMENT_FILE_CONTENT, Base64Encoder.encode(fileContent));
+
+	    attachmentsArray.put(attachment);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in getAttachmentsJSON " + e.getMessage());
+	}
+
+	return attachmentsArray;
     }
 
     /**
