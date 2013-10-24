@@ -63,7 +63,7 @@
 
 <%
 	String CSS_PATH = "/";
- 	//String CSS_PATH = "//da4o37ei6ybbh.cloudfront.net/";
+ 	//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -150,6 +150,10 @@
 									    style_reports = " display:none;";
 									else
 									    ++count;
+									if (!navSetting.social)
+									    style_social = " display:none;";
+									else
+									    ++count;
 										
 										
 							%>
@@ -177,8 +181,12 @@
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		}
-												%>
+										 <%     }
+												if (navSetting.social){
+                                         %>   <li id="socialsuitemenu"><a href="#social">
+                                                 <i class="icon-comments icon-white"></i> Social</a>
+                                              </li>
+                                          <% } %>
 							<%  if (count > 3)
 							{
 							   %>
@@ -206,6 +214,11 @@
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
+										<% 		} 
+												if (navSetting.social){
+										%>		<li id="socialsuitemenu"><a href="#social">
+                                                 <i class="icon-comments icon-white"></i> Social</a>
+                                              </li>
 										<% 		} %>
 										</ul>
 									</li>	
@@ -366,10 +379,10 @@
 			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a> -->
 	</footer>
 
-	<script src='https://da4o37ei6ybbh.cloudfront.net/js/lib/headjs-min.js'></script>
+	<script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script>
 
 	<script>
-	 var LIB_PATH = "//da4o37ei6ybbh.cloudfront.net/js/";
+	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	//var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
@@ -428,7 +441,7 @@
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap_switch.css" ></link>
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
 <!-- social suite's css -->
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/socialsuite.css" />
+<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/social_suite.css" />
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 
 <!-- Unified CSS for All Lib -->

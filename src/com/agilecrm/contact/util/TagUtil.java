@@ -9,10 +9,14 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.deferred.TagStatsDeferredTask;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 
 /**
@@ -163,11 +167,13 @@ public class TagUtil
 
     public static String getStatus(boolean forceLoad)
     {
+	long startTime = System.currentTimeMillis();
 	// If force reload is not there, it tries to fetch it from cache
 	if (!forceLoad)
 	{
-	    String stats = (String) CacheUtil.getCache(NamespaceManager.get() + "_tags_stats");
+	    String stats = (String) CacheUtil.getCache(NamespaceManager.get() + "_tag_stats");
 
+	    System.out.println("namespace : " + NamespaceManager.get() + "_tag_stats");
 	    System.out.println("stats from cache : " + stats);
 	    if (stats != null)
 		return stats;
@@ -175,12 +181,12 @@ public class TagUtil
 
 	List<Tag> tags = TagUtil.getTags(100, null);
 	JSONObject result = new JSONObject();
-	long startTime = System.currentTimeMillis();
+
 	int previousSize = 0;
 
 	Cursor cursor = (Cursor) tags.get(0);
 	int availableTags = cursor.count == null ? tags.size() : cursor.count;
-
+	boolean abort = false;
 	do
 	{
 
@@ -189,11 +195,21 @@ public class TagUtil
 	    {
 		Tag tag = tags.get(i);
 		String tagString = tag.tag;
+
+		if (System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 5000)
+		{
+
+		    abort = true;
+
+		    System.out.println("completed : " + tags.size());
+		    break;
+		}
 		int count = ContactUtil.getContactsCountForTag(tag.tag);
 
 		try
 		{
 		    result.put(tagString, count);
+
 		}
 		catch (JSONException e)
 		{
@@ -206,7 +222,7 @@ public class TagUtil
 
 	    if (cursor == null || StringUtils.isEmpty(cursor.cursor) || availableTags <= tags.size()
 		    || cursor.cursor == null
-		    || System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 1000)
+		    || System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 5000 || abort)
 		break;
 
 	    previousSize = tags.size();
@@ -214,7 +230,20 @@ public class TagUtil
 
 	} while (true);
 
-	CacheUtil.setCache(NamespaceManager.get() + "_tags_stats", result.toString(), 2 * 60 * 60 * 1000);
+	System.out.println("total tags fetched : " + tags.size() + "total found : " + availableTags);
+
+	CacheUtil.setCache(NamespaceManager.get() + "_tag_stats", result.toString(), 2 * 60 * 60 * 1000);
+
+	if (abort)
+	{
+
+	    TagStatsDeferredTask task = new TagStatsDeferredTask(cursor, availableTags);
+
+	    // Add to queue
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder.withPayload(task));
+	}
+
 	return result.toString();
 
     }

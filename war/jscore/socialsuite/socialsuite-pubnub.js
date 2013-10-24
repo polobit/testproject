@@ -41,10 +41,11 @@ function subscribeClientChannel()
 	 restore    : true,                                // FETCH MISSED MESSAGES ON PAGE CHANGES.
 	 message    : function( message, env, channel ) 
 		              {					
-		                console.log(message);
-		                
-						// Display message in stream. 
+		                console.log(message);		                
+						
+		                // Display message in stream. 
 						handleMessage(message);
+						
 		              }, // RECEIVED A MESSAGE.
 	 presence   : function( message, env, channel )
 		              {
