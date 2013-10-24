@@ -649,7 +649,7 @@ function agile_add_mail_to_list(Val, Email, el){
 // ------------------------------------------------- agile-score-event.js --------------------------------------------- START --
 
 /**
- * All events related to score board.
+ * All events related to score board UI block.
  * Add Score/ Subtract Score.
  * 
  * @author Dheeraj

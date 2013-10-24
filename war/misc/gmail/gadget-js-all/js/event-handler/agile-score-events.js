@@ -3,7 +3,7 @@
 // ------------------------------------------------- agile-score-event.js --------------------------------------------- START --
 
 /**
- * All events related to score board.
+ * All events related to score board UI block.
  * Add Score/ Subtract Score.
  * 
  * @author Dheeraj
