@@ -212,7 +212,6 @@
 												class="icon-sitemap icon-white"></i> Campaigns</a></li>
 										<% 		} 
 												if (navSetting.social){
-<<<<<<< HEAD
 													%>		<li id="socialsuitemenu"><a href="#social">
 			                                                 <i class="icon-comments icon-white"></i> Social</a>
 			                                              </li>
@@ -223,16 +222,6 @@
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
 										<% 		} %>
 										
-=======
-										%>		<li id="socialsuitemenu"><a href="#social">
-			                                      <i class="icon-comments icon-white"></i> Social</a>
-			                                    </li>
-										<% 		}
-												if (navSetting.reports){
-										%>		<li id="reportsmenu" ><a href="#reports"><i
-												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		}%>
->>>>>>> 25f9f92f033a853da050fec46a16982f0db7b4d3
 										</ul>
 									</li>	
 							<% }%>
