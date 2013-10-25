@@ -178,15 +178,16 @@
 										%>		<li id="workflowsmenu" ><a href="#workflows"><i
 												class="icon-sitemap icon-white"></i> Campaigns</a></li>
 										<% 		} 
+												if (navSetting.social){
+								         %>   <li id="socialsuitemenu"><a href="#social">
+								           <i class="icon-comments icon-white"></i> Social</a>
+								                                              </li>
+								        <% } 
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										 <%     }
-												if (navSetting.social){
-                                         %>   <li id="socialsuitemenu"><a href="#social">
-                                                 <i class="icon-comments icon-white"></i> Social</a>
-                                              </li>
-                                          <% } %>
+										 <%     } %>
+										
 							<%  if (count > 3)
 							{
 							   %>
@@ -211,15 +212,17 @@
 										<li id="workflowsmenu" ><a href="#workflows"><i
 												class="icon-sitemap icon-white"></i> Campaigns</a></li>
 										<% 		} 
+												if (navSetting.social){
+													%>		<li id="socialsuitemenu"><a href="#social">
+			                                                 <i class="icon-comments icon-white"></i> Social</a>
+			                                              </li>
+													<% 		} 
+													
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		} 
-												if (navSetting.social){
-										%>		<li id="socialsuitemenu"><a href="#social">
-                                                 <i class="icon-comments icon-white"></i> Social</a>
-                                              </li>
 										<% 		} %>
+										
 										</ul>
 									</li>	
 							<% }%>
