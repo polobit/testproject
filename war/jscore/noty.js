@@ -169,7 +169,7 @@ function notySetup(type, message, position, noty_timeout) {
 				speed : 500
 				// opening & closing animation speed
 			},
-			timeout : noty_timeout ? noty_timeout : 2000, // delay for closing event. Set false for sticky
+			timeout : noty_timeout ? noty_timeout : 20000, // delay for closing event. Set false for sticky
 							// notifications
 		});
 	}

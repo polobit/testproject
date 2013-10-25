@@ -1,4 +1,6 @@
 var StreamsListView;
+var TempStreamsListView;
+
 /**
  * Creates backbone router to create and access streams of the user.
  */
@@ -76,7 +78,11 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 				StreamsListView.collection.add(new BaseModel(stream));
 		 		}});
 	 	
-	 	$('#socialsuite-tabs-content').append(StreamsListView.render().el);	 
+	 	$('#socialsuite-tabs-content').append(StreamsListView.render().el);	
+	 	
+	    // Creates temporary collection to store tweets when user not in social tab.
+		 createTempCollection();
+		
 	 	return;
 	  }// if end
 		if(StreamsListView != undefined) // Streams already collected in collection
@@ -85,13 +91,19 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			  		  
 			  // New stream to add in collection.
 			  if(stream)
-				StreamsListView.collection.add(stream);
-			  
+				{
+				  StreamsListView.collection.add(stream);
+				  TempStreamsListView.collection.add(stream);
+				}
+			 		  			  
 			  $('#socialsuite-tabs-content').append(StreamsListView.render(true).el);
 			  
 			  // Creates normal time.
  		 	  head.js('lib/jquery.timeago.js', function(){	 
- 		 		        $(".time-ago", $(".chirp-container")).timeago(); });		 	 
+ 		 		        $(".time-ago", $(".chirp-container")).timeago(); });
+ 		 	  
+ 		 	  // Check for new tweets and show notification.
+			  checkNewTweets();
 			}		
 		
 		 // Remove deleted tweet element from ui

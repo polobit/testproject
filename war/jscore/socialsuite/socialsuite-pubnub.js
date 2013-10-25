@@ -79,9 +79,9 @@ function sendMessage(publishJSON)
 
 	// Register stream on server
 	if(publishJSON.message_type == "register")
-		{		
+		{	
 		  // Adds profile img to stream.
-		  addUserImgToColumn(publishJSON.stream);
+		  addUserImgToColumn(publishJSON.stream);		  
 		  
 		  // If networl is Linkedin so no need to publish.
 		  if(publishJSON.stream.network_type == "LINKEDIN")
@@ -102,7 +102,7 @@ function sendMessage(publishJSON)
 						else // The internet is gone. // TRY SENDING AGAIN!
 			        		{
 							 console.log("in publish_message unsuccessfull to Sent Message!");
-							 alert("in publish_message unsuccessfully to Sent Message!");
+							 alert("You are not connected with Twitter server or you have problem with connection!");
 							 //sendMessage(publishJSON);
 			        		}
 					}

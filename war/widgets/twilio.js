@@ -598,7 +598,7 @@ function registerClickEvents(from_number)
 		console.log("Twilio sound URL: " + sound_url);
 
 		// plays call conversion
-		playSound(sound_url, "true");
+		play_sound(sound_url, "true");
 	});
 
 	/*

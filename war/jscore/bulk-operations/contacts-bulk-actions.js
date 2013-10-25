@@ -296,6 +296,70 @@ $(function()
 
 	});
 
+	/**
+	 * Bulk Operations - Exports selected contacts in a CSV file as an attachment 
+	 * to email of current domain user.
+	 **/
+	$("#bulk-contacts-export").live('click', function(e)
+			{
+				e.preventDefault();
+
+				// Removes if previous modals exist.
+				if ($('#contacts-export-csv-modal').size() != 0)
+				{
+					$('#contacts-export-csv-modal').remove();
+				}
+				
+				// Selected Contact ids
+				var id_array = get_contacts_bulk_ids();
+				
+				var count = 0;
+
+				// when SELECT_ALL is true i.e., all contacts are selected.
+				if(id_array.length === 0)
+				   count = getAvailableContacts();
+				else
+					count = id_array.length;
+
+				var contacts_csv_modal = $(getTemplate('contacts-export-csv-modal'),{});
+				$(contacts_csv_modal).find('.export-contacts-count').html("<b>"+count+" contacts</b>");
+				contacts_csv_modal.modal('show');
+				
+				// If Yes clicked
+				$('#contacts-export-csv-confirm').die().live('click',function(e){
+					e.preventDefault();
+					
+					if($(this).attr('disabled'))
+				   	     return;
+					
+					$(this).attr('disabled', 'disabled');
+					
+				  // Shows message
+				    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+				    $(this).parent('.modal-footer').find('.contacts-export-csv-message').append($save_info);
+					$save_info.show();
+					
+					var url = '/core/api/bulk/update?action_type=EXPORT_CONTACTS_CSV';
+					
+					var json = {};
+					json.contact_ids = id_array;
+					
+					postBulkOperationData(url, json, undefined, undefined, function(){
+
+						// hide modal after 15 secs
+						setTimeout(function(){contacts_csv_modal.modal('hide');}, 3000);
+						
+						// Uncheck contacts table and hide bulk actions button.
+						$('body').find('#bulk-actions').css('display', 'none');
+						$('body').find('#bulk-select').css('display', 'none');
+						$('table#contacts').find('.thead_check').removeAttr('checked');
+						$('table#contacts').find('.tbody_check').removeAttr('checked');
+						
+					});
+				});
+
+			});
+	
 
 	$("#select-all-available-contacts").die().live('click', function(e)
 	{
@@ -500,12 +564,15 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 
 		$save_info = $('<div style="display:inline-block"><small><p class="text-success"><i>Task Scheduled.</i></p></small></div>');
 
-		var save_msg=$(form).find('.form-actions');
+		if(form !== undefined)
+		{
+			var save_msg=$(form).find('.form-actions');
 		
-		if(save_msg.find('.text-success'))
-			save_msg.find('.text-success').parent().parent().remove(); // erase previous message.
+			if(save_msg.find('.text-success'))
+				save_msg.find('.text-success').parent().parent().remove(); // erase previous message.
 
-		save_msg.append($save_info);
+			save_msg.append($save_info);
+		}
 
 		if (callback && typeof (callback) === "function")
 			callback(data);

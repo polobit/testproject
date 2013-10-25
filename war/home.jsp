@@ -127,7 +127,7 @@
 									//Styling enable/disable navbar tabs(add display:none to diable)
 									Integer count = 0;																																											
 									NavSetting navSetting = NavSettingUtil.getNavSetting();
-									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_reports = "", style_social = "";
+									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_social = "", style_reports = "";
 									//style for calendar,cases,deals,campaign resp.
 									
 									if (!navSetting.calendar)
@@ -146,15 +146,14 @@
 									    style_campaign = " display:none;";
 									else
 									    ++count;
-									if (!navSetting.reports)
-									    style_reports = " display:none;";
-									else
-									    ++count;
 									if (!navSetting.social)
 									    style_social = " display:none;";
 									else
-									    ++count;
-										
+									    ++count;							
+									if (!navSetting.reports)
+									    style_reports = " display:none;";
+									else
+									    ++count;										
 										
 							%>
 							<li id="contactsmenu"><a href="#contacts"><i
@@ -213,6 +212,7 @@
 												class="icon-sitemap icon-white"></i> Campaigns</a></li>
 										<% 		} 
 												if (navSetting.social){
+<<<<<<< HEAD
 													%>		<li id="socialsuitemenu"><a href="#social">
 			                                                 <i class="icon-comments icon-white"></i> Social</a>
 			                                              </li>
@@ -223,6 +223,16 @@
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
 										<% 		} %>
 										
+=======
+										%>		<li id="socialsuitemenu"><a href="#social">
+			                                      <i class="icon-comments icon-white"></i> Social</a>
+			                                    </li>
+										<% 		}
+												if (navSetting.reports){
+										%>		<li id="reportsmenu" ><a href="#reports"><i
+												class="icon-bar-chart icon-white"></i> Reports</a></li>
+										<% 		}%>
+>>>>>>> 25f9f92f033a853da050fec46a16982f0db7b4d3
 										</ul>
 									</li>	
 							<% }%>
