@@ -9,6 +9,7 @@
 		 NetworkType = null;
 		 registerAllDone = false;	
 		 TweetOwnerForAddContact = null;
+		 collectTweetInTemp = false;
 	  })();
 
 /**
@@ -286,8 +287,9 @@ $(document).on("click",".save-twitter-stream", function(e)
 			var publishJSON = {"message_type":"register", "stream":stream};
 			sendMessage(publishJSON);		
 			
+			// Scroll down the page till end, so user can see newly added stream.
 			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
-			
+						
 			},
 	error : function(data){console.log(data);},
 	});	
@@ -315,4 +317,37 @@ $(document).on("click",".stream-delete", function(e)
 	
 	// Delete stream from collection and DB
 	StreamsListView.collection.get(id).destroy();	
+});
+
+/**
+ * Add tweets from temp collection to original collection and remove notification.
+ */
+$(document).on("click",".add-new-tweets", function(e)
+{	
+	// Remove notification of new tweets on stream.
+    document.getElementById(this.id).innerHTML= '';
+	
+    // Get stream id.
+    var streamId = $(this).attr('data');
+    
+    // Get stream from collection.
+    var originalStream = StreamsListView.collection.get(streamId);
+    var tempStream = TempStreamsListView.collection.get(streamId);
+    
+    // Get tweet collection from stream.
+    var tweetCollection = originalStream.get('tweetListView');
+    
+    // Add new tweets from temp collection to original collection.
+    tweetCollection.add(tempStream.get("tweetListView").toJSON());
+    
+    // Sort tweet collection on id. so recent tweet comes on top.
+    tweetCollection.sort();    
+	   
+	// Create normal time.
+	head.js('lib/jquery.timeago.js', function(){	 
+		        $(".time-ago", $(".chirp-container")).timeago();	
+			});
+	 
+	// Clear temp tweet collection.
+	tempStream.get("tweetListView").reset()
 });
