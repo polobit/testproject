@@ -16,7 +16,7 @@ function initOwnerslist() {
 				
 	});
 	$("ul#owner-tasks li a").die().live("click", function() {
-		$('.task-heading').text('<span>' + $(this).html() + '</span>');
+		$('.task-heading').text($(this).html());
 		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
 	});
 	updateData(getParams());
