@@ -11,7 +11,9 @@ function initOwnerslist() {
 				$(this).closest("ul").data("selected_item", id);
 				$(this).closest(".btn-group").find(".selected_name")
 						.text(name);
-				updateData(getParams());
+				var url = getParams();
+				updateData(url);
+				
 	});
 	$("ul#owner-tasks li a").die().live("click", function() {
 		$('.task-heading').text($(this).html());
@@ -40,8 +42,10 @@ function updateData(params) {
 		url : '/core/api/tasks/based' + params,
 		restKey : "task",
 		templateKey : "tasks-list",
+		cursor : true, page_size : 25,
 		individual_tag_name : 'tr',
 		postRenderCallback : function(el) {
+			$('.task-heading').append('&nbsp<small>' + getCount(this.App_Calendar.allTasksListView.collection.toJSON()) + '</small>');
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 				$(".task-due-time", el).timeago();
 			});
@@ -73,6 +77,12 @@ function getParams() {
 		params += ("&type=" + type);
 	// Get owner name and append it to params
 	var owner = $('#owner-tasks').data("selected_item");
+	if(owner == 'my-pending-tasks')
+	{
+		params += ("&pending=" + true);
+		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
+		return params;
+	}
 	if (owner)
 		params += ("&owner=" + owner);
 	else if(owner == undefined)

@@ -178,14 +178,15 @@
 												class="icon-sitemap icon-white"></i> Campaigns</a></li>
 										<% 		} 
 												if (navSetting.social){
-			                            %>      <li id="socialsuitemenu"><a href="#social">
-			                                       <i class="icon-comments icon-white"></i> Social</a>
-			                                    </li>
-			                            <%      }
+								         %>   <li id="socialsuitemenu"><a href="#social">
+								           <i class="icon-comments icon-white"></i> Social</a>
+								                                              </li>
+								        <% } 
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										 <%     }%>
+										 <%     } %>
+										
 							<%  if (count > 3)
 							{
 							   %>
@@ -211,14 +212,16 @@
 												class="icon-sitemap icon-white"></i> Campaigns</a></li>
 										<% 		} 
 												if (navSetting.social){
-										%>		<li id="socialsuitemenu"><a href="#social">
-			                                      <i class="icon-comments icon-white"></i> Social</a>
-			                                    </li>
-										<% 		}
+													%>		<li id="socialsuitemenu"><a href="#social">
+			                                                 <i class="icon-comments icon-white"></i> Social</a>
+			                                              </li>
+													<% 		} 
+													
 												if (navSetting.reports){
 										%>		<li id="reportsmenu" ><a href="#reports"><i
 												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		}%>
+										<% 		} %>
+										
 										</ul>
 									</li>	
 							<% }%>
@@ -431,7 +434,10 @@
 		
 
 	});
+
+	head.js('lib/user-voice.js');
 	</script>
+	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css"/>
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css"/>
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/date_range_picker.css"></link>
