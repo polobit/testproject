@@ -434,7 +434,10 @@
 		
 
 	});
+
+	head.js('lib/user-voice.js');
 	</script>
+	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css"/>
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css"/>
 <link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/date_range_picker.css"></link>
