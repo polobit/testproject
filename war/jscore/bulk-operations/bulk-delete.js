@@ -221,7 +221,7 @@ function customize_delete_message(table)
 	
 	// Appends campaign-name for active subscribers
 	if($(table).attr('id') === "active-campaign")
-		confirm_msg = "Are you sure to delete from " +$('#subscribers-campaign-name').text()+" campaign?";
+		confirm_msg = "Delete selected contacts from " +$('#subscribers-campaign-name').text()+" Campaign?";
 
 	// Shows confirm alert, if Cancel clicked, return false
 	if(!confirm(confirm_msg))

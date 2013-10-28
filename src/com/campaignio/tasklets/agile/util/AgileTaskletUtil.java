@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile.util;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -230,5 +231,26 @@ public class AgileTaskletUtil
 	}
 
 	return subscriberJSONArray;
+    }
+
+    /**
+     * Returns date set to mid-night in millisecs.
+     * 
+     * @param days
+     *            - Given number of days.
+     * @return Long
+     */
+    public static Long getDateInEpoch(String days)
+    {
+	Calendar calendar = Calendar.getInstance();
+
+	// Add duration and make time set to midnight of that day.
+	calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(days));
+	calendar.set(Calendar.HOUR_OF_DAY, 0);
+	calendar.set(Calendar.MINUTE, 0);
+	calendar.set(Calendar.SECOND, 0);
+	calendar.set(Calendar.MILLISECOND, 0);
+
+	return calendar.getTimeInMillis() / 1000;
     }
 }

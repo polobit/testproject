@@ -1,7 +1,6 @@
 package com.campaignio.tasklets.agile;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.json.JSONObject;
@@ -116,7 +115,7 @@ public class AddTask extends TaskletAdapter
 	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 
 	// Gets due date in epoch from dueDays
-	Long epochTime = getDueDateInEpoch(dueDays);
+	Long epochTime = AgileTaskletUtil.getDateInEpoch(dueDays);
 
 	// Contact Id
 	String contactId = AgileTaskletUtil.getId(subscriberJSON);
@@ -136,32 +135,11 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category + "<br/> Type: "
-		+ priority + " <br/> Date: " + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category
+		+ "<br/> Type: " + priority + " <br/> Date: " + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-    }
-
-    /**
-     * Returns due date in millisecs.
-     * 
-     * @param dueDays
-     *            - Given number of due days for task.
-     * @return Long
-     */
-    private Long getDueDateInEpoch(String dueDays)
-    {
-	Calendar calendar = Calendar.getInstance();
-
-	// Add duration and make time set to midnight of that day.
-	calendar.add(Calendar.DAY_OF_MONTH, Integer.parseInt(dueDays));
-	calendar.set(Calendar.HOUR_OF_DAY, 0);
-	calendar.set(Calendar.MINUTE, 0);
-	calendar.set(Calendar.SECOND, 0);
-	calendar.set(Calendar.MILLISECOND, 0);
-
-	return calendar.getTimeInMillis() / 1000;
     }
 
     /**

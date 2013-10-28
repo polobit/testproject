@@ -225,6 +225,8 @@ $(function()
 	{
 		e.preventDefault();
 		
+		var count = 0;
+		
 		// Selected Contact ids
 		var id_array = get_contacts_bulk_ids();
 		
@@ -239,8 +241,6 @@ $(function()
 			// Setup HTML Editor
 			setupHTMLEditor($('#body'));
 			
-			var count = 0;
-
 			// when SELECT_ALL is true i.e., all contacts are selected.
 			if(id_array.length === 0)
 			   count = getAvailableContacts();
@@ -275,15 +275,11 @@ $(function()
 			if(!isValidForm($form))
 		      	return;
 			
-			$(this).attr('disabled', 'disabled');
+			// Disables send button and change text to Sending...
+			disable_send_button($(this));
 			
 			// serialize form.
 			var form_json = serializeForm("emailForm");
-			
-			// Shows message Sending email.
-		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Task Scheduled.</i></p></span>');
-		    $("#msg", this.el).append($save_info);
-			$save_info.show();
 			
 			var url = '/core/api/bulk/update?action_type=SEND_EMAIL';
 			
@@ -291,7 +287,7 @@ $(function()
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
 			
-			postBulkOperationData(url, json, $form, undefined, "Email scheduled");
+			postBulkOperationData(url, json, $form, null, function(){ enable_send_button($('#bulk-send-email'));}, "Emails queued for " + count +" contact(s). They will be sent shortly.");
 		});
 
 	});

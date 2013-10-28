@@ -494,15 +494,11 @@ $(function(){
 		if(!isValidForm($('#emailForm')))
 	      	return;
 		
-		$(this).attr('disabled', 'disabled');
+		// Disables send button and change text to Sending...
+		disable_send_button($(this));
 		
 		// serialize form.
 		var json = serializeForm("emailForm");
-		
-		// Shows message Sending email.
-	    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
-	    $("#msg", this.el).append($save_info);
-		$save_info.show();
 		
 		// Navigates to previous page on sending email
 		$.ajax({
@@ -511,16 +507,15 @@ $(function(){
 				url: 'core/api/emails/contact/send-email',
 				success:function(){
 					
-					     $('#sendEmail').removeAttr('disabled');
-					     
-					     // Hide Sending email note.
-					     $save_info.hide();
-					     
-			             window.history.back();
+					    // Enables Send Email button.
+					    enable_send_button($('#sendEmail'));
+			            
+					    window.history.back();
 		                 },
 		        error: function()
 		               {
-		        	      $('#sendEmail').removeAttr('disabled');
+		        	      
+		        	      enable_send_button($('#sendEmail'));
 		        	      console.log("Error occured while sending email");
 		               }
 		});
@@ -677,3 +672,29 @@ function activate_timeline_tab(){
 		fill_company_related_contacts(App_Contacts.contactDetailView.model.id,'company-contacts'); 
 	}
 }
+
+/**
+ * Disables Send button of SendEmail and change text from Send to Sending...
+ * 
+ * @param elem - element to be disabled.
+ * 
+ **/
+function disable_send_button(elem)
+{
+	elem.css('min-width',elem.width()+'px')
+		.attr('disabled', 'disabled')
+		.attr('data-send-text',elem.text())
+		.text('Sending...');
+}
+
+/**
+ * Enables disabled Send button and keep old text
+ * 
+ * @param elem - element to be enabled.
+ * 
+ **/
+function enable_send_button(elem)
+{
+	elem.text(elem.attr('data-send-text')).removeAttr('disabled data-send-text');
+}
+

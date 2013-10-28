@@ -174,8 +174,7 @@ public class Opportunity extends Cursor
      * @param ownerId
      *            - Owner id.
      */
-    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
-	    String track, String ownerId)
+    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability, String track, String ownerId)
     {
 	this.name = name;
 	this.description = description;
@@ -389,6 +388,10 @@ public class Opportunity extends Cursor
 	ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 	System.out.println("OwnerKey" + ownerKey);
 
+	// Session doesn't exist when adding deal from Campaigns.
+	if (SessionManager.get() == null)
+	    return;
+
 	AgileUser user = AgileUser.getCurrentAgileUser();
 
 	if (user == null)
@@ -405,8 +408,7 @@ public class Opportunity extends Cursor
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
-		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name + " description:" + description + " expectedValue: "
+		+ expected_value + " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }

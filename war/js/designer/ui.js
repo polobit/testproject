@@ -32,6 +32,9 @@ function getTab(selector, tabName, originalTabName) {
     // Get Tab	
     if (originalTabName == undefined) originalTabName = tabName
     
+    // Replace spaces with _ as id doesn't allow spaces. Naresh 28/10/2013
+    originalTabName = originalTabName.replace(/\s/g, '_');
+    
     var actualTabID = originalTabName + '-tab';
     
     
@@ -323,7 +326,6 @@ function popupTwitterCallback(token, tokenSecret, account, profileImgUrl)
 
 // Iteratator for generating UI Fields
 function _generateUIFields(selector, ui) {
-
 
 	// Original Definition
 	var originalDefinition = ui["org"];
