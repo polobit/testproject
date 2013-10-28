@@ -241,18 +241,26 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatedToOwnerOfType(String type, String owner)
+    public static List<Task> getTasksRelatedToOwnerOfType(String type, String owner, boolean pending, Integer max,
+	    String cursor)
     {
 	try
 	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
 	    Query<Task> query = dao.ofy().query(Task.class);
 	    if (StringUtils.isNotBlank(type))
-		query = query.filter("type", type);
+		searchMap.put("type", type);
 
 	    if (StringUtils.isNotBlank(owner))
-		query = query.filter("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
+		searchMap.put("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
 
-	    return query.limit(50).list();
+	    if (pending)
+		searchMap.put("is_complete", !pending);
+
+	    if (max != null)
+		return dao.fetchAll(max, cursor, searchMap);
+
+	    return dao.listByProperty(searchMap);
 
 	}
 	catch (Exception e)

@@ -1074,10 +1074,7 @@ $(function()
 	// Get Count
 	Handlebars.registerHelper('count', function()
 	{
-		if (this[0] && this[0].count && (this[0].count != -1))
-			return "(" + this[0].count + " Total)";
-		else
-			return "(" + this.length + " Total)";
+		return getCount(this);
 	});
 	
 	Handlebars.registerHelper('contacts_count', function(){

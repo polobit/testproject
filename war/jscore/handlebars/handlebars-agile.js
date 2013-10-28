@@ -290,3 +290,12 @@ function getCurrentContactProperty(value)
 		return getPropertyValue(contact_properties, value);
 	}
 }
+
+function getCount(collection)
+{
+	console.log(collection);
+	if (collection[0] && collection[0].count && (collection[0].count != -1))
+		return "(" + collection[0].count + " Total)";
+	else
+		return "(" + collection.length + " Total)";	
+}
