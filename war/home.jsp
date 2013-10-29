@@ -228,7 +228,7 @@
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search"
 									style="margin: 5px;">
-									<input id="searchText" type="text" data-provide="typeahead"
+									<input id="searchText" type="text" style="line-height:17px" data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query"
 										placeholder="Search"></input> <input id="search-results"
 										type="image" src="img/SearchIcon.png" class="searchbox" />
