@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -16,8 +15,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -115,9 +112,13 @@ public class ContactCSVExport
 	    // Blob file Path
 	    path = file.getFullPath();
 
+	    System.out.println("Path of blob file in writeContactCSVToBlobstore " + path);
+
 	    // All contacts are obtained at a time.
 	    if (isNoFilter == true)
 	    {
+		System.out.println("No filter is given, so closing channel immediately.");
+
 		lock = true;
 		writeChannel = fileService.openWriteChannel(file, lock);
 
@@ -130,6 +131,7 @@ public class ContactCSVExport
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.err.println("Exception occured in writeContactCSVToBlobstore " + e.getMessage());
 	}
 
 	return path;
@@ -149,6 +151,16 @@ public class ContactCSVExport
     {
 	try
 	{
+
+	    System.out.println("Editing existing blob file...");
+
+	    // If path is null return;
+	    if (path == null)
+	    {
+		System.out.println("Given blob file path is null in editExistingBlobFile");
+		return;
+	    }
+
 	    // Get a file service
 	    FileService fileService = FileServiceFactory.getFileService();
 	    AppEngineFile file = new AppEngineFile(path);
@@ -167,14 +179,18 @@ public class ContactCSVExport
 
 	    }
 
+	    System.out.println("Closing blob file finally...");
+
 	    // Close channel completely when contacts list completed
 	    lock = true;
 	    writeChannel = fileService.openWriteChannel(file, lock);
+
 	    writeChannel.closeFinally();
 
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    System.err.println("Exception occured in editExistingBlobFile " + e.getMessage());
 	}
     }
@@ -201,6 +217,9 @@ public class ContactCSVExport
 
 	    for (Contact contact : contactList)
 	    {
+		if (contact == null)
+		    continue;
+
 		List<ContactField> properties = contact.getProperties();
 		String str[] = insertContactProperties(properties, indexMap, headers.length);
 		writer.writeNext(str);
@@ -212,6 +231,7 @@ public class ContactCSVExport
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.err.println("Exception occured in writeContactCSV " + e.getMessage());
 	}
     }
 
@@ -314,40 +334,40 @@ public class ContactCSVExport
 
 	    if (field.name.equals(Contact.EMAIL))
 	    {
-		if (field.subtype.equals("home"))
+		if ("home".equals(field.subtype))
 		    str[indexMap.get(EMAIL_HOME)] = field.value;
 
-		if (field.subtype.equals("work"))
+		if ("work".equals(field.subtype))
 		    str[indexMap.get(EMAIL_WORK)] = field.value;
 	    }
 
 	    if (field.name.equals(Contact.PHONE))
 	    {
-		if (field.subtype.equals("work"))
+		if ("work".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_WORK)] = field.value;
 		}
-		if (field.subtype.equals("home"))
+		if ("home".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_HOME)] = field.value;
 		}
-		if (field.subtype.equals("mobile"))
+		if ("mobile".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_MOBILE)] = field.value;
 		}
-		if (field.subtype.equals("main"))
+		if ("main".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_MAIN)] = field.value;
 		}
-		if (field.subtype.equals("home fax"))
+		if ("home fax".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_HOME_FAX)] = field.value;
 		}
-		if (field.subtype.equals("work fax"))
+		if ("work fax".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_WORK_FAX)] = field.value;
 		}
-		if (field.subtype.equals("other"))
+		if ("other".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_OTHER)] = field.value;
 		}
@@ -355,37 +375,37 @@ public class ContactCSVExport
 
 	    if (field.name.equals(Contact.WEBSITE))
 	    {
-		if (field.subtype.equals("URL"))
+		if ("URL".equals(field.subtype))
 		    str[indexMap.get(WEBSITE)] = field.value;
 
-		if (field.subtype.equals("LINKEDIN") || field.subtype.equals("LINKED_IN"))
+		if ("LINKEDIN".equals(field.subtype) || "LINKED_IN".equals(field.subtype))
 		    str[indexMap.get(LINKEDIN)] = field.value;
 
-		if (field.subtype.equals("TWITTER"))
+		if ("TWITTER".equals(field.subtype))
 		    str[indexMap.get(TWITTER)] = field.value;
 
-		if (field.subtype.equals("SKYPE"))
+		if ("SKYPE".equals(field.subtype))
 		    str[indexMap.get(SKYPE)] = field.value;
 
-		if (field.subtype.equals("FACEBOOK"))
+		if ("FACEBOOK".equals(field.subtype))
 		    str[indexMap.get(FACEBOOK)] = field.value;
 
-		if (field.subtype.equals("XING"))
+		if ("XING".equals(field.subtype))
 		    str[indexMap.get(XING)] = field.value;
 
-		if (field.subtype.equals("FEED"))
+		if ("FEED".equals(field.subtype))
 		    str[indexMap.get(BLOG)] = field.value;
 
-		if (field.subtype.equals("FLICKR"))
+		if ("FLICKR".equals(field.subtype))
 		    str[indexMap.get(FLICKR)] = field.value;
 
-		if (field.subtype.equals("GOOGLE-PLUS"))
+		if ("GOOGLE-PLUS".equals(field.subtype))
 		    str[indexMap.get(GOOGLE_PLUS)] = field.value;
 
-		if (field.subtype.equals("GITHUB"))
+		if ("GITHUB".equals(field.subtype))
 		    str[indexMap.get(GITHUB)] = field.value;
 
-		if (field.subtype.equals("YOUTUBE"))
+		if ("YOUTUBE".equals(field.subtype))
 		    str[indexMap.get(YOUTUBE)] = field.value;
 	    }
 
@@ -395,11 +415,20 @@ public class ContactCSVExport
 		{
 		    JSONObject addressJSON = new JSONObject(field.value);
 
-		    str[indexMap.get(ADDRESS)] = addressJSON.getString("address");
-		    str[indexMap.get(CITY)] = addressJSON.getString("city");
-		    str[indexMap.get(STATE)] = addressJSON.getString("state");
-		    str[indexMap.get(COUNTRY)] = addressJSON.getString("country");
-		    str[indexMap.get(ZIP)] = addressJSON.getString("zip");
+		    if (addressJSON.has("address"))
+			str[indexMap.get(ADDRESS)] = addressJSON.getString("address");
+
+		    if (addressJSON.has("city"))
+			str[indexMap.get(CITY)] = addressJSON.getString("city");
+
+		    if (addressJSON.has("state"))
+			str[indexMap.get(STATE)] = addressJSON.getString("state");
+
+		    if (addressJSON.has("country"))
+			str[indexMap.get(COUNTRY)] = addressJSON.getString("country");
+
+		    if (addressJSON.has("zip"))
+			str[indexMap.get(ZIP)] = addressJSON.getString("zip");
 		}
 		catch (Exception e)
 		{
@@ -412,10 +441,13 @@ public class ContactCSVExport
 	    {
 		try
 		{
-		    str[indexMap.get(field.name)] = field.value;
+		    // add if not null
+		    if (field.value != null)
+			str[indexMap.get(field.name)] = field.value;
 		}
 		catch (Exception e)
 		{
+		    System.out.println("Exception field values - " + field.name + ":" + field.value);
 		    System.err.print("Got exception in insertContactProperties customfields " + e.getMessage());
 		    continue;
 		}
@@ -434,12 +466,26 @@ public class ContactCSVExport
      */
     public static String retrieveBlobFileData(String path)
     {
+	// if null return
+	if (path == null)
+	{
+	    System.out.println("Obtained file path is null in retrieveBlobFileData");
+	    return null;
+	}
+
 	// Get a file service
 	FileService fileService = FileServiceFactory.getFileService();
 	AppEngineFile file = new AppEngineFile(path);
 
 	// Now read from the file using the Blobstore API
 	BlobKey blobKey = fileService.getBlobKey(file);
+
+	// if blobKey null return
+	if (blobKey == null)
+	{
+	    System.out.println("BlobKey of file having path " + path + " is null");
+	    return null;
+	}
 
 	// Returns data in byte[]
 	BlobstoreService blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
@@ -458,18 +504,22 @@ public class ContactCSVExport
      * @param data
      *            - CSV data.
      */
-    public static void exportContactCSVAsEmail(Long currentUserId, String data)
+    public static void exportContactCSVAsEmail(String email, String data)
     {
-	DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
-
-	if (user == null || StringUtils.isBlank(user.email))
+	// if fileData null, return
+	if (data == null)
+	{
+	    System.out.println("Rejected to export csv. Data is null.");
 	    return;
+	}
+
+	System.out.println("Domain User email is " + email);
 
 	// Mandrill attachment should contain mime-type, file-name and
 	// file-content.
 	String[] strArr = { "text/csv", "Contacts.csv", data };
 
-	Mandrill.sendMail("noreply@agilecrm.com", "Agile CRM", user.email, "Agile CRM Contacts CSV", null, "Please find the attachment.", null, strArr);
+	Mandrill.sendMail("noreply@agilecrm.com", "Agile CRM", email, "Agile CRM Contacts CSV", null, "Please find the attachment.", null, strArr);
     }
 
     /**
@@ -480,6 +530,8 @@ public class ContactCSVExport
      */
     public static void deleteBlobFile(String path)
     {
+	System.out.println("Deleting Blob File under ContactCSVExport...");
+
 	try
 	{
 	    // Get a file service
