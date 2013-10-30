@@ -1674,14 +1674,13 @@ $(function()
 
 		// show only seconds if hours and mins are zero
 		if (hours == 0 && minutes == 0)
-			return (seconds == 1 ? seconds + "sec" : seconds + "secs");
+			return (seconds + "s");
 
 		// show mins and secs if hours are zero.
 		if (hours == 0)
-			return (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
+			return (minutes + "m ") + (seconds + "s");
 
-		var result = (hours == 1 ? hours + "hr " : hours + "hrs ") + (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec"
-				: seconds + "secs");
+		var result = (hours + "h ") + (minutes + "m ") + (seconds +"s");
 		return result;
 	});
 
@@ -2010,4 +2009,38 @@ $(function()
 	    //contact_campaigns block
 		return options.fn(campaigns);
 	});
+	
+	/**
+	 * Verifies given urls length and returns options hash based on 
+	 * restricted count value.
+	 * 
+	 **/
+	Handlebars.registerHelper("if_more_urls",function(url_json, url_json_length,options){
+		var RESTRICT_URLS_COUNT = 3;
+		var temp_urls_array = [];
+		var context_json={};
+	
+		// If length is less than restricted, compile 
+		// else block with given url_json
+		if(url_json_length < RESTRICT_URLS_COUNT)
+			return options.inverse(url_json);
+		
+		// Insert urls until restricted count reached
+		for(var i=0; i< url_json.length; i++)
+			{
+				if(i === RESTRICT_URLS_COUNT)
+					break;
+				
+				temp_urls_array.push(url_json[i]);
+			}
+			
+		context_json.urls = temp_urls_array;
+		
+		// More remained
+		context_json.more = url_json_length - RESTRICT_URLS_COUNT;
+		
+		return options.fn(context_json);
+		
+	});
+	
 });
