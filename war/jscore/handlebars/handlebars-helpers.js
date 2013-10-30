@@ -811,13 +811,14 @@ $(function()
 					'address_Element',
 					function(properties)
 					{
-
+						var properties_count = 0;
+						console.log("_____________________________________________________________");
 						for ( var i = 0, l = properties.length; i < l; i++)
 						{
-
+							
 							if (properties[i].name == "address")
 							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
+								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
 								
 								var address = {};
 								try
@@ -833,9 +834,14 @@ $(function()
 								// object
 								var count = countJsonProperties(address);
 
+								if(properties_count != 0)
+							
+									 el = el
+                                     .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+								else
 								el = el
-										.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:0px;padding-top:3px;"><span>');
-
+                                .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div><span>');
+								
 								$.each(address, function(key, val)
 								{
 									if (--count == 0)
@@ -850,6 +856,10 @@ $(function()
 									el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
 								el = el.concat('</span></div></div>');
 								return new Handlebars.SafeString(el);
+							}
+							else if(properties[i].name == "phone" || properties[i].name == "email")
+							{
+								++properties_count;
 							}
 						}
 					});
@@ -1674,14 +1684,13 @@ $(function()
 
 		// show only seconds if hours and mins are zero
 		if (hours == 0 && minutes == 0)
-			return (seconds == 1 ? seconds + "sec" : seconds + "secs");
+			return (seconds + "s");
 
 		// show mins and secs if hours are zero.
 		if (hours == 0)
-			return (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec" : seconds + "secs");
+			return (minutes + "m ") + (seconds + "s");
 
-		var result = (hours == 1 ? hours + "hr " : hours + "hrs ") + (minutes == 1 ? minutes + "min " : minutes + "mins ") + (seconds == 1 ? seconds + "sec"
-				: seconds + "secs");
+		var result = (hours + "h ") + (minutes + "m ") + (seconds +"s");
 		return result;
 	});
 
@@ -2010,4 +2019,38 @@ $(function()
 	    //contact_campaigns block
 		return options.fn(campaigns);
 	});
+	
+	/**
+	 * Verifies given urls length and returns options hash based on 
+	 * restricted count value.
+	 * 
+	 **/
+	Handlebars.registerHelper("if_more_urls",function(url_json, url_json_length,options){
+		var RESTRICT_URLS_COUNT = 3;
+		var temp_urls_array = [];
+		var context_json={};
+	
+		// If length is less than restricted, compile 
+		// else block with given url_json
+		if(url_json_length < RESTRICT_URLS_COUNT)
+			return options.inverse(url_json);
+		
+		// Insert urls until restricted count reached
+		for(var i=0; i< url_json.length; i++)
+			{
+				if(i === RESTRICT_URLS_COUNT)
+					break;
+				
+				temp_urls_array.push(url_json[i]);
+			}
+			
+		context_json.urls = temp_urls_array;
+		
+		// More remained
+		context_json.more = url_json_length - RESTRICT_URLS_COUNT;
+		
+		return options.fn(context_json);
+		
+	});
+	
 });

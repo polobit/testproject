@@ -66,19 +66,15 @@ $(function(){
 		
 	});	
 	
-	// To create toggle collapse for contact-detail web-stats tab. 
-	$('.page-visit').die().live('click', function(e) {
+	// Hide More link and truncated webstats and show complete web stats.
+	$('#more-page-urls').die().live('click',function(e){
 		e.preventDefault();
-		var href = $(this).attr("href");
-		var id = $(this).attr('id');
-		$(".collapse-" + id).hide();
-		$(href).collapse('toggle');
 		
-		$(href).on("hidden", function(){
-			$(".collapse-" + id).show();
-		})
+		$(this).css('display','none');
+		$(this).parent().parent().find('#truncated-webstats').css('display','none');
 		
-	});	
+		$(this).parent().parent().find('#complete-webstats').removeAttr('style');
+	});
 	
 	//to remove contact from active campaign.
 	$('.remove-active-campaign').die().live('click',function(e){

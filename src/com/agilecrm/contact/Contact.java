@@ -287,7 +287,7 @@ public class Contact extends Cursor
 	}
 	else
 	{
-	    field.type = type;
+	    contactField.type = type;
 	    field.updateField(contactField);
 	}
 	save();

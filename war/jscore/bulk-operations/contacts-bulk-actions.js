@@ -339,7 +339,7 @@ $(function()
 					
 					var json = {};
 					json.contact_ids = id_array;
-					
+					json.data = CURRENT_DOMAIN_USER["email"];
 					postBulkOperationData(url, json, undefined, undefined, function(){
 
 						// hide modal after 15 secs
