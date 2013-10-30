@@ -186,22 +186,13 @@ function agile_user_setup_load(data){
 function agile_download_scripts() {
 
 	console.log("Downloading scripts");
+	//  ------ handlebars, md5, util, bootstrap, agile-min ------ 
+	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
 	if(!Is_Localhost){
-		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
+		//  ------ Gadget supporting JavaScript file minified. ------ 
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.min.js');
 	}
-		
 	else{
-		
-		//  ------ Handle bars, util and MD5. ------ 
-		head.js(Lib_Path + 'lib/handlebars-1.0.0.beta.6-min.js', Lib_Path
-				+ 'jscore/handlebars/handlebars-agile.js', Lib_Path
-				+ 'jscore/handlebars/handlebars-helpers.js', Lib_Path
-				+ 'jscore/util.js', Lib_Path + 'jscore/md5.js');
-		//  ------ JS API ------ 
-		head.js(Lib_Path + 'stats/min/agile-min.js');
-		//  ------ Load Bootstrap libraries. ------ 
-		head.js(Lib_Path + 'lib/bootstrap.min.js');
 		//  ------ Gadget supporting JavaScript file. ------ 
 		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.js');
 	}
