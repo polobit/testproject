@@ -59,8 +59,7 @@ public interface AgileBilling
      * 
      * @throws Exception
      */
-    public JSONObject updateCreditCard(JSONObject billingData, CreditCard cardDetails)
-	    throws Exception;
+    public JSONObject updateCreditCard(JSONObject billingData, CreditCard cardDetails) throws Exception;
 
     /**
      * Gets list of customer subscription invoices
@@ -95,4 +94,5 @@ public interface AgileBilling
      * @throws Exception
      */
     public void cancelSubscription(JSONObject billingData) throws Exception;
+
 }

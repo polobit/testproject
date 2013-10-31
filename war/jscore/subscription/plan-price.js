@@ -9,7 +9,7 @@ PLANS_COSTS_JSON.enterprise = "99.99";
 var PLANS_DISCOUNTS_JSON = {};
 PLANS_DISCOUNTS_JSON.monthly = "0";
 PLANS_DISCOUNTS_JSON.yearly = "20";
-PLANS_DISCOUNTS_JSON.twoyears = "30";
+PLANS_DISCOUNTS_JSON.twoyears = "40";
 
 // User existing plan name
 var user_existing_plan_name = "";
@@ -141,6 +141,8 @@ function setPlan(user_plan)
 
 
 
+
+
 $(function()
 		{
 		
@@ -232,6 +234,12 @@ $(function()
 	        plan_json.plan_type = plan.toUpperCase()+"_"+ cycle.toUpperCase();
 	        plan_json.cycle = cycle;
 	        
+	    	// Set coupon Only for Pro users
+			delete plan_json["coupon_code"];
+			var couponCode = $("#coupon_code").val();
+			 if (couponCode)
+				plan_json.coupon_code = couponCode;
+	        
 	        if(cycle != "Two Years")
 	        	{
 	        	 	plan_json.yearly_discount = ([cost * 12] - [variable.yearly * quantity * 12]).toFixed(2);
@@ -261,5 +269,30 @@ $(function()
 		    }
 		    
       	});
+      	
+     // Check coupon functionality
+    	$("#check_valid_coupon").die().live(
+    			'click',
+    			function() {
+
+    				// Get coupon input value
+    				var couponId = $("#coupon_code").val();
+    				if (!couponId) {
+    					$("#coupon_code_container").find(".error").html(
+    							"test test test");
+    					return false;
+    				}
+
+    				$("#coupon_code_container i").removeAttr("class");
+    				var iconClass = "icon-", that = $(this);
+
+    				// Check coupon status
+    				checkValidCoupon(couponId, function(response) {
+    					iconClass += (response) ? "ok" : "remove";
+    					$("#coupon_code_container i").removeAttr("class").addClass(
+    							iconClass);
+    				});
+
+    			});
     	
 });	   

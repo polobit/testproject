@@ -20,6 +20,7 @@ public class Plan
     public PlanType plan_type = null;
     public String plan_id = null;
     public Integer quantity = null;
+    public String coupon = null;
 
     public Plan()
     {

@@ -137,8 +137,8 @@
 
 			<div class="" id="choose_users"
 				style="border: 1px solid whiteSmoke; padding-top: 10px; border-radius: 5px; margin-top: 15px;">
-				<div class="row-fluid">
-					<div class="span5"  style="margin-left: 40px;">
+				<div class="row">
+					<div class="span4"  style="margin-left: 40px;">
 						<label><h3>
 								<b id="choose_users_popover" rel="popover" data-placement="right"
 								data-content="Choose number of users using this slider."
@@ -150,19 +150,41 @@
 								value="1" />
 						</div>
 					</div>
-					<div class="span6" style="margin-top: 45px;">
-						<span style="font-size: 15px;"><b>Monthly Cost : </b></span> <span
-							style="color: #FA782D; font-size: 30px;">$<span
-							id="users_total_cost">22.49</span></span>( for <span
-							style="color: #FA782D;" id="users_quantity">1</span> Users )
+				<div class="span4" style="margin-top: 45px; margin-left: 0px;">
+						<form class="form-horizontal">
+							<div class="control-group">
+								<label class="control-label"> <span style="font-size: 15px;"><b>Monthly Cost: </b></span></label>
+								<div class="controls">
+									<span style="color: #FA782D; font-size: 30px;">$<span id="users_total_cost">21.24</span></span>
+									<p class="help-block" style="margin-top: 0px">
+										( for <span style="color: #FA782D;" id="users_quantity">1</span>
+										users )
+									</p>
+								</div>
+							</div>
+						</form>
 					</div>
+
+				
+			<div class="span6" style="margin-left: 40px;display:none" id="coupon_code_container">
+						<form class="">
+								<label class="control-label"> <span
+									style="font-size: 15px;"><b>Coupon Code: </b><span style="font-size: 10px;">(Only for Credit Card)</span></span></label>
+									<input type="text" placeholder="Enter Promo Code" id="coupon_code" style="margin-bottom: 0px;" rel="tooltip" title="" />
+									<input type="button" class="btn" value="Validate" id="check_valid_coupon" style="margin: 0px 3px;" />
+ 									<i class=""></i><br/> <span class="error" style="color: #df382c;"></span>
+						</form>
+					</div>
+	
 				</div>
 				<div class="row-fluid"
 					style="text-align: center; margin-top: 25px; margin-bottom: 15px;">
 					<a href="#purchase-plan" id="purchase-plan"
 						class="btn btn-large btn-primary" style="padding: 15px 30px;"><b>Proceed
-							to Payment</b></a>
+							to Payment</b></a><br/><br/>
+						<p style="color:#999;" id="subscribe_plan_tooltext">You will be asked to provide your card details</p>
 				</div>
+
 			</div>
 		</div>
 	</div>
