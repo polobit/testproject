@@ -8,8 +8,7 @@
 		 StreamType = null;	
 		 NetworkType = null;
 		 registerAllDone = false;	
-		 TweetOwnerForAddContact = null;
-		 collectTweetInTemp = false;
+		 TweetOwnerForAddContact = null;		 
 	  })();
 
 /**
@@ -289,7 +288,19 @@ $(document).on("click",".save-twitter-stream", function(e)
 			
 			// Scroll down the page till end, so user can see newly added stream.
 			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
-						
+			
+			// Get recent stream from database, suppose we add directly this stream so it will create reference 
+			// and data replicated in both.
+     		$.getJSON("/core/social/getstream/" + stream.id,function(data)
+     		   		  {
+     					console.log("data after fetching client from db");
+     		   		    console.log(data);
+     		   		    
+     		   		    if(data != null)
+     		   		    	{	 		      
+     		   		           TempStreamsListView.collection.add(data);
+     		   		    	} // client json if end
+     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
 			},
 	error : function(data){console.log(data);},
 	});	
@@ -334,12 +345,17 @@ $(document).on("click",".add-new-tweets", function(e)
     var originalStream = StreamsListView.collection.get(streamId);
     var tempStream = TempStreamsListView.collection.get(streamId);
     
+    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
+    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
+    
     // Get tweet collection from stream.
     var tweetCollection = originalStream.get('tweetListView');
     
     // Add new tweets from temp collection to original collection.
     tweetCollection.add(tempStream.get("tweetListView").toJSON());
-    
+    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
+    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
+        
     // Sort tweet collection on id. so recent tweet comes on top.
     tweetCollection.sort();    
 	   
@@ -349,5 +365,8 @@ $(document).on("click",".add-new-tweets", function(e)
 			});
 	 
 	// Clear temp tweet collection.
-	tempStream.get("tweetListView").reset()
+	tempStream.get("tweetListView").reset();
+	console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
+    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
+    
 });
