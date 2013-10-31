@@ -82,9 +82,16 @@ $(function(){
 		updateDeal($(this).data());
 	});
 	
+	$('.milestones > li').live('mouseenter', function () {
+		$(this).find('.deal-options').css("display","inline");
+	});
+	
+	$('.milestones > li').live('mouseleave', function () {
+		$(this).find('.deal-options').css("display","none");
+	});
 	
 	/**
-	 * Milestone view edit
+	 * Milestone view deal edit
 	 */
 	$('.deal-edit').live('click', function(e) {
 		e.preventDefault();
@@ -92,7 +99,26 @@ $(function(){
         var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
 		updateDeal(currentDeal);
 	});
-    
+
+	
+	/**
+	 * Milestone view deal delete
+	 */
+	$('.deal-delete').live('click', function(e) {
+		e.preventDefault();
+        var data = $(this).closest('.data').attr('data');
+        
+        var that = this;
+		$.ajax({
+			url: 'core/api/opportunity/' + data,
+			type: 'DELETE',
+			data: data,
+			success: function() {
+				// Removes deal from list
+				$(that).closest('li').css("display","none");
+			}
+		});
+	});
 });
 
 /**

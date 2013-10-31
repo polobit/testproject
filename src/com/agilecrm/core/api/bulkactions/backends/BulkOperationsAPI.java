@@ -470,9 +470,17 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void exportContactsCSV(@PathParam("current_user_id") Long currentUserId, @FormParam("contact_ids") String contact_ids,
-	    @FormParam("filter") String filter) throws JSONException
+	    @FormParam("filter") String filter, @FormParam("data") String data) throws JSONException
     {
 	int count = 0;
+
+	if (StringUtils.isBlank(data))
+	{
+	    System.out.println("Not proceeding further as data is null.");
+	    return;
+	}
+
+	System.out.println("Email obtained is " + data);
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	String path = null;
@@ -513,6 +521,8 @@ public class BulkOperationsAPI
 	    }
 	    while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
+	    // Close channel after contacts completed
+	    ContactCSVExport.editExistingBlobFile(path, null, true);
 	}
 	else if (!StringUtils.isEmpty(contact_ids))
 	{
@@ -526,15 +536,11 @@ public class BulkOperationsAPI
 	    path = ContactCSVExport.writeContactCSVToBlobstore(contacts_list, true);
 	}
 
-	// Close the blob write channel after all contacts completed.
-	if (!StringUtils.isEmpty(filter))
-	    ContactCSVExport.editExistingBlobFile(path, null, true);
-
 	// Retrieves data of file having given path
 	String fileData = ContactCSVExport.retrieveBlobFileData(path);
 
 	// Sends email.
-	ContactCSVExport.exportContactCSVAsEmail(currentUserId, fileData);
+	ContactCSVExport.exportContactCSVAsEmail(data, fileData);
 
 	// Deletes blob
 	ContactCSVExport.deleteBlobFile(path);
