@@ -811,13 +811,14 @@ $(function()
 					'address_Element',
 					function(properties)
 					{
-
+						var properties_count = 0;
+						console.log("_____________________________________________________________");
 						for ( var i = 0, l = properties.length; i < l; i++)
 						{
-
+							
 							if (properties[i].name == "address")
 							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
+								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
 								
 								var address = {};
 								try
@@ -833,9 +834,14 @@ $(function()
 								// object
 								var count = countJsonProperties(address);
 
+								if(properties_count != 0)
+							
+									 el = el
+                                     .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+								else
 								el = el
-										.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div style="border-top: 1px solid #f5f5f5;margin-top:0px;padding-top:3px;"><span>');
-
+                                .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div><span>');
+								
 								$.each(address, function(key, val)
 								{
 									if (--count == 0)
@@ -850,6 +856,10 @@ $(function()
 									el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
 								el = el.concat('</span></div></div>');
 								return new Handlebars.SafeString(el);
+							}
+							else if(properties[i].name == "phone" || properties[i].name == "email")
+							{
+								++properties_count;
 							}
 						}
 					});

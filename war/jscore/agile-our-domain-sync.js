@@ -30,7 +30,7 @@ function add_current_loggedin_time()
 {
 	// Gets current time, and updates the last loggedin time.
 	var date_object = new Date();
-	var date = date_object.getUTCMonth() + "/" + date_object.getUTCDate() + "/" + date_object.getUTCFullYear();
+	var date = date_object.getUTCMonth() + 1 + "/" + date_object.getUTCDate() + "/" + date_object.getUTCFullYear();
 
 	console.log(date);
 	// Gets logged in time property.
