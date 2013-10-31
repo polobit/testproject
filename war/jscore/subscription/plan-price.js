@@ -1,15 +1,15 @@
 var plan_json = [];
 //Plans with costs
 var PLANS_COSTS_JSON = {};
-PLANS_COSTS_JSON.lite = "14.99";
-PLANS_COSTS_JSON.pro = "24.99";
-PLANS_COSTS_JSON.enterprise = "49.99";
+PLANS_COSTS_JSON.basic = "24.99";
+PLANS_COSTS_JSON.professional = "49.99";
+PLANS_COSTS_JSON.enterprise = "99.99";
 
 // Plans intervals JSON
 var PLANS_DISCOUNTS_JSON = {};
 PLANS_DISCOUNTS_JSON.monthly = "0";
-PLANS_DISCOUNTS_JSON.yearly = "15";
-PLANS_DISCOUNTS_JSON.twoyears = "33.34";
+PLANS_DISCOUNTS_JSON.yearly = "20";
+PLANS_DISCOUNTS_JSON.twoyears = "30";
 
 // User existing plan name
 var user_existing_plan_name = "";
@@ -214,7 +214,7 @@ $(function()
 			  user_existing_plan_name = USER_DETAILS.getCurrentPlanId(USER_BILLING_PREFS);
 			 
 			  // Check the plan
-	          var selected_plan_name = "plan-" + amount +"-"+ months;
+	          var selected_plan_name = amount +"-"+ months;
 	          
 	          if(selected_plan_name.toLowerCase()+"-" + quantity == user_existing_plan_name+"-"+USER_DETAILS.getQuantity(USER_BILLING_PREFS))
 	          {
@@ -246,14 +246,14 @@ $(function()
 	        
 	        
 	        
-	        var plan_id = (months > 1) ? "plan-" + PLANS_COSTS_JSON[plan] + "-" + months : "plan-" + PLANS_COSTS_JSON[plan];
+	        var plan_id = (months > 1) ? PLANS_COSTS_JSON[plan] + "-" + months : PLANS_COSTS_JSON[plan];
 	        
 	        
 	        plan_json.plan_id = plan_id;
 	        plan_json.discount = discount;
 		    plan_json.quantity = quantity;
 		    plan_json.current_plan = USER_DETAILS.getCurrentPlanName(USER_BILLING_PREFS);
-		    
+		    console.log(plan_json);
 		    if(!$.isEmptyObject(USER_CREDIRCARD_DETAILS)){
 		    	
 		    	console.log(USER_CREDIRCARD_DETAILS);

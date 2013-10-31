@@ -174,7 +174,7 @@ var Base_Model_View = Backbone.View
 				 * element of the view.
 				 */
 				var formId = $(this.el).find('form').attr('id');
-
+				
 				var saveCallback = this.options.saveCallback;
 				
 				// Represents form element
@@ -184,8 +184,10 @@ var Base_Model_View = Backbone.View
 				if($form.find('.save').attr('disabled'))
 					return;
 				
+								
 				// Disables save button to prevent multiple click event issues
-				disable_save_button($form.find('.save'));
+				disable_save_button($(e.currentTarget));
+				
 				
 				// Represents validations result of the form, and json
 				// represents serialized data in the form
