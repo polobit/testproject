@@ -160,8 +160,10 @@ function handleMessage(tweet)
 
   if(modelStream != null || modelStream != undefined)
 	{
+	  console.log("Current_Route: "+Current_Route+" focused: "+focused);
+	  
 	  // User on #social
-	  if(Current_Route == "social")
+	  if(Current_Route == "social" && focused == true)
 		  {
 		   
 		    // New tweet notification not yet clicked.
@@ -186,7 +188,13 @@ function handleMessage(tweet)
 		  {
 		    console.log("not in social suite");
 		    // Add tweet to temp collection, user on another tab.
-  	        addTweetToTempCollection(tweet);  	        
+  	        addTweetToTempCollection(tweet);  	
+  	        
+  	        if(Current_Route == "social")
+  	        	{
+  	        	  // Change notification to show number of new tweets.
+			      checkNewTweets();
+  	        	}
 		  }
 	} // If End  
     
