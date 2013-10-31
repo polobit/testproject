@@ -8,8 +8,18 @@
 		 StreamType = null;	
 		 NetworkType = null;
 		 registerAllDone = false;	
-		 TweetOwnerForAddContact = null;		 
+		 TweetOwnerForAddContact = null;
+		 focused = true;
 	  })();
+
+
+
+window.onfocus = function() {
+    focused = true;
+};
+window.onblur = function() {
+    focused = false;
+};
 
 /**
  * Fills name with twitter's owner in add-contact popup form. 

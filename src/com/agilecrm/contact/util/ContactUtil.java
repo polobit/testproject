@@ -593,4 +593,26 @@ public class ContactUtil
 
     }
 
+    /**
+     * Returns contact owner id.
+     * 
+     * @param contactId
+     *            - Contact id
+     * @return Long
+     */
+    public static Long getContactOwnerId(Long contactId)
+    {
+	Contact contact = getContact(contactId);
+
+	if (contact == null)
+	    return null;
+
+	DomainUser contactOwner = contact.getOwner();
+
+	// if contactOwner is null, return
+	if (contactOwner == null)
+	    return null;
+
+	return contactOwner.id;
+    }
 }
