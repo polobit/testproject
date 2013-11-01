@@ -1,11 +1,12 @@
 /**
- * This servlet is used to read unbounce data and create contact 
- * with properties specified to associated agile api key owner
+ * This servlet is used to read gravity form data and create contact 
+ * with properties specified to associated agile API key owner
  */
 package com.agilecrm.forms;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,9 +30,9 @@ public class GravityForm extends HttpServlet
 	try
 	{
 	    // Read API Key
-	    String apiKey = req.getParameter("api-key");
+	    String tagString = req.getParameter("api-key");
 
-	    Contact contact = new Contact();
+	    Contact contact = null;
 	    List<ContactField> properties = new ArrayList<ContactField>();
 
 	    // Read JSON data
@@ -46,15 +47,38 @@ public class GravityForm extends HttpServlet
 
 		// Get value of form field
 		String value = obj.get(key).toString();
+		
+		// Check if data contains email, search contact based on email
+		if(key.contains("email")){
+			contact = ContactUtil.searchContactByEmail(value);
+		
+			// If contact not found create new contact
+			if(contact==null)
+				contact = new Contact();
+		}
+		// If data does not contain email create new contact
+		else contact= new Contact();
 
 		// Add property to list of properties
 		properties.add(buildProperty(key, value));
 	    }
+	    
+	    // Format tagString and split into tagsWithKey array
+	    String[] tagsWithKey = new String[0];
+	    tagString = tagString.trim();
+		tagString = tagString.replace("/, /g", ",");
+		tagsWithKey = tagString.split(",");
+		
+		// Remove API key from tagsWithKey array
+		String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
+	    
 	    // Add properties to contact and set contact owner
 	    contact.properties = properties;
-	    if (APIKey.getDomainUserRelatedToAPIKey(apiKey) != null)
+	    contact.addTags(tags);
+	    
+	    if (APIKey.getDomainUserRelatedToAPIKey(tagsWithKey[0]) != null)
 	    {
-		contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+		contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]));
 
 		// Save contact
 		contact.save();
@@ -115,9 +139,9 @@ public class GravityForm extends HttpServlet
 	{
 	    if (ContactUtil.isValidEmail(value))
 	    {
-		field.name = Contact.EMAIL;
-		field.value = value;
-		field.type = FieldType.SYSTEM;
+	    	field.name = Contact.EMAIL;
+	    	field.value = value;
+	    	field.type = FieldType.SYSTEM;
 	    }
 	}
 	else

@@ -10,6 +10,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	routes : {
 	/* Subscription page */
 	"subscribe" : "subscribe",
+	"subscribe/:id" : "subscribe",
 
 	/* Updating subscription details */
 	"updatecard" : "updateCreditCard", "updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
@@ -22,7 +23,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	 * function also sets account statistics in the subscription page, using
 	 * post render callback of the Base_Model_View
 	 */
-	subscribe : function()
+	subscribe : function(id)
 	{
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -56,6 +57,10 @@ var SubscribeRouter = Backbone.Router.extend({
 			else
 				element = setPriceTemplete("free", el);
 
+			// Show Coupon code input field
+			id = (id && id == "coupon") ? id : "";
+			showCouponCodeContainer(id);
+			
 			head.js(LIB_PATH + '/lib/jquery.slider.min.js', function()
 			{
 				if ($.isEmptyObject(data))
@@ -182,6 +187,9 @@ var SubscribeRouter = Backbone.Router.extend({
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", window : 'subscribe', isNew : true, data : plan,
 			postRenderCallback : function(el)
 			{
+				// Discount
+				showCouponDiscountAmount(plan_json, el);
+				
 				card_expiry(el);
 				head.js(LIB_PATH + 'lib/countries.js', function()
 				{

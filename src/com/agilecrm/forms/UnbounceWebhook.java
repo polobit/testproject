@@ -1,11 +1,12 @@
 /**
  * This servlet is used to read unbounce data and create contact 
- * with properties specified to associated agile api key owner
+ * with properties specified to associated agile API key owner
  */
 package com.agilecrm.forms;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,13 +30,19 @@ public class UnbounceWebhook extends HttpServlet
 	try
 	{
 	    // Read API Key
-	    String apiKey = req.getParameter("api-key");
+		String tagString = req.getParameter("api-key");
 
-	    Contact contact = new Contact();
 	    List<ContactField> properties = new ArrayList<ContactField>();
 
 	    // Read JSON data
 	    JSONObject obj = new JSONObject(req.getParameter("data.json"));
+	    obj.remove("variant");
+	    obj.remove("page_uuid");
+	    obj.remove("page_url");
+	    obj.remove("date_submitted");
+	    obj.remove("time_submitted");
+	    
+	    Contact contact = null;
 
 	    // Iterate over JSON data to get form fields
 	    Iterator<?> keys = obj.keys();
@@ -49,15 +56,38 @@ public class UnbounceWebhook extends HttpServlet
 		String regex = "\\[|\\]";
 		value = value.replaceAll(regex, "");
 		value = value.replaceAll("\"", "");
+		
+		// Check if data contains email, search contact based on email
+		if(key.contains("email")){
+			contact = ContactUtil.searchContactByEmail(value);
+		
+			// If contact is not found create new contact
+			if(contact==null)
+				contact = new Contact();
+		}
+		// If data does not contain email create new contact
+		else contact = new Contact();
 
 		// Add property to list of properties
 		properties.add(buildProperty(key, value));
 	    }
+	    
+	    // Format tagString and split into tagsWithKey array
+	    String[] tagsWithKey = new String[0];
+	    tagString = tagString.trim();
+		tagString = tagString.replace("/, /g", ",");
+		tagsWithKey = tagString.split(",");
+		
+		// Remove API key from tagsWithKey array
+		String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
+	    
 	    // Add properties to contact and set contact owner
 	    contact.properties = properties;
-	    if (APIKey.getDomainUserRelatedToAPIKey(apiKey) != null)
+	    contact.addTags(tags);
+	    
+	    if (APIKey.getDomainUserRelatedToAPIKey(tagsWithKey[0]) != null)
 	    {
-		contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+		contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]));
 
 		// Save contact
 		contact.save();
@@ -118,9 +148,9 @@ public class UnbounceWebhook extends HttpServlet
 	{
 	    if (ContactUtil.isValidEmail(value))
 	    {
-		field.name = Contact.EMAIL;
-		field.value = value;
-		field.type = FieldType.SYSTEM;
+	    	field.name = Contact.EMAIL;
+	    	field.value = value;
+	    	field.type = FieldType.SYSTEM;
 	    }
 	}
 	else

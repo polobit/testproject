@@ -1,12 +1,16 @@
 <script id="tasks-collection-template" type="text/html">
 <header>
-    <h3 style="margin-left:3px">
+    <h3 style="margin-left:3px;display:inline-block!important;">
         <!--<span><i class="icon-edit"></i></span>--> 
         My Tasks
         <span style="vertical-align:text-top;margin-left:-3px">         
-        <img border="0" src="/img/help.png" style="height:6px;vertical-align:top" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover" />
+        <img border="0" src="/img/help.png" style="height:6px;vertical-align:top;" rel="popover" data-placement="right" data-content="Tasks are like to-dos. Result oriented. You can assign a category such as call, email etc and add them to your calendar." id="element" data-trigger="hover" />
         </span>
     </h3>
+		<span class="right" style="margin-top:6px;">
+    		 <span class="add-task" style="margin-right:5px;"><a href="#" title="Add Task"><i class="icon-plus"/></a></span>
+			 <a href="#tasks" class="tasks-table" title="All Tasks" id="tasks-list"><i class="icon-list"/></a>
+		</span>
 </header>
 {{#unless this.length}}
 <div class="slate" style="padding:5px 2px;">
