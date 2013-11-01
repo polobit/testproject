@@ -8,8 +8,8 @@
         </span>
     </h3>
 		<span class="right" style="margin-top:6px;">
-    		 <span class="add-task" style="margin-right:5px;"><a href="#" title="Add Task"><i class="icon-plus"/></a></span>
-			 <a href="#tasks" class="tasks-table" title="All Tasks" id="tasks-list"><i class="icon-list"/></a>
+    		 <span class="add-task" style="margin-right:5px;"><a href="#" style="text-decoration:none!important;" title="Add Task"><i class="icon-plus"/></a></span>
+			 <a href="#tasks" style="text-decoration:none!important;" class="tasks-table" title="All Tasks" id="tasks-list"><i class="icon-list"/></a>
 		</span>
 </header>
 {{#unless this.length}}
@@ -52,6 +52,15 @@
   			<p style="margin:5px 0px;"> 
 				<span class="label">{{task_property type}}</span><span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 			</p>
+  			<!--<p style="margin:5px 0px;"> 
+				<span class="label">{{task_property type}}</span><span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				<span>	
+					{{#if this.contacts}}
+						<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
+						{{#related_to_one contacts}}{{/related_to_one}}
+					{{/if}}{{#if_greater this.contacts.length "3"}}<span>,..</span>{{/if_greater}}
+				</span>
+			</p>-->
         	<p>
         		<time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time>
 	   		</p>

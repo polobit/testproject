@@ -77,7 +77,7 @@
 	</div>
 	<div>
 		<small>
-			<time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
+			<time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="max-width: 70%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 11px;border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
 		</small>
 		<span class="right deal-options" style="display:none;">
 			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
