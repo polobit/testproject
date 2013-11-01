@@ -69,6 +69,37 @@ function socialsuite_add_website()
   $("div.website select").val("TWITTER");
 }
 
+// Change property of website and select network in add contact form.
+function changeProperty()
+{
+  var display = $('#network_handle', $('#personModal')).css("display");	
+  var picDisplay = $("#pic", $('#personModal')).css("display");
+  var picValue = $("#pic", $('#personModal')).html();
+  
+  console.log("display: "+display+" picDisplay: "+picDisplay);
+  console.log("picValue:" +picValue);
+	
+  if((picDisplay == 'inline' || picDisplay == 'block') && (picValue != null || picValue != ''))
+	{
+	  if(display == 'none')
+		  document.getElementById("network_handle").className = 'after-img-load-hide'; 
+	  else if (display == 'block')
+		  document.getElementById("network_handle").className = 'after-img-load-show';
+		
+	  document.getElementById("handle").className = 'add-form-input';
+	}  
+  else if(picDisplay == 'none' || picDisplay == null)
+	{
+	  if(display == 'none')
+		  document.getElementById("network_handle").className = 'network-handle'; 
+	  else if (display == 'block' && picValue == null)
+		  document.getElementById("network_handle").className = 'socialsuite-network-handle';
+	  
+	  document.getElementById("handle").className = '';
+	}
+}
+
+
 /**
  * Shows setup if user adds LinkedIn stream. Uses ScribeServlet 
  * to create a stream and save it to the dB.
@@ -162,7 +193,7 @@ function handleMessage(tweet)
 	{
 	  console.log("Current_Route: "+Current_Route+" focused: "+focused);
 	  
-	  // User on #social
+	  // User on #social as well as window is active.
 	  if(Current_Route == "social" && focused == true)
 		  {
 		   
@@ -187,7 +218,7 @@ function handleMessage(tweet)
 	  else
 		  {
 		    console.log("not in social suite");
-		    // Add tweet to temp collection, user on another tab.
+		    // Add tweet to temp collection, user on another tab or window is inactive.
   	        addTweetToTempCollection(tweet);  	
   	        
   	        if(Current_Route == "social")
@@ -244,6 +275,7 @@ function handleMessage(tweet)
 function addTweetToStream(modelStream,tweet)
 {	
 	console.log("In addTweetToStream.");
+	console.log(tweet.text);
 	
 	// Hide waiting symbol.
 	$("#stream-spinner-modal-"+tweet.stream_id).hide();
@@ -284,6 +316,7 @@ function addTweetToStream(modelStream,tweet)
 		}	
 	    
     console.log("add at "+modelStream.get('tweetListView').length);
+    console.log(tweet.text);
 		
     // Sort stream on tweet id basis which is unique and recent tweet has highest value.
 	modelStream.get('tweetListView').comparator = function(model) 
