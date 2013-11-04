@@ -79,7 +79,7 @@ function changeProperty()
   console.log("display: "+display+" picDisplay: "+picDisplay);
   console.log("picValue:" +picValue);
 	
-  if((picDisplay == 'inline' || picDisplay == 'block') && (picValue != null || picValue != ''))
+  if((picDisplay == 'inline' || picDisplay == 'block') && picValue != '')
 	{
 	  if(display == 'none')
 		  document.getElementById("network_handle").className = 'after-img-load-hide'; 
@@ -88,11 +88,11 @@ function changeProperty()
 		
 	  document.getElementById("handle").className = 'add-form-input';
 	}  
-  else if(picDisplay == 'none' || picDisplay == null)
+  else if((picDisplay == 'none' || picDisplay == null || picDisplay == '') || (picValue == null || picValue == ''))
 	{
 	  if(display == 'none')
 		  document.getElementById("network_handle").className = 'network-handle'; 
-	  else if (display == 'block' && picValue == null)
+	  else if (display == 'block')
 		  document.getElementById("network_handle").className = 'socialsuite-network-handle';
 	  
 	  document.getElementById("handle").className = '';

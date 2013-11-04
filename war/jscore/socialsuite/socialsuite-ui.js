@@ -60,13 +60,19 @@ $(document).on("click",".add-twitter-contact", function(e)
 $('#personModal').on('hidden.bs.modal', function () {
 	document.getElementById("network_handle").className = 'network-handle';
 	document.getElementById("handle").className = ''; 
-	});
-
-// If img is shown then reduce size of network handle on add contact form.
-$('#personModal').on('show.bs.modal', function () {
 	changeProperty();
 	});
 
+// If img is shown then reduce size of network handle on add contact form.
+$('#personModal').on('shown.bs.modal', function () {
+	changeProperty();
+	});
+$('#personModal').on('show.bs.modal', function () {
+	changeProperty();
+	});
+$( "#pic" ).change(function() {
+	changeProperty();
+	});
 /**
  * Display popup form with stream details. 
  */
