@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -13,8 +14,10 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
@@ -48,6 +51,7 @@ public class StripeImpl implements AgileBilling
     static
     {
 	Stripe.apiKey = Globals.STRIPE_API_KEY;
+	Stripe.apiVersion = "2012-09-24";
     }
 
     /**
@@ -109,8 +113,42 @@ public class StripeImpl implements AgileBilling
 	updateParams.put("plan", plan.plan_id);
 	updateParams.put("quantity", plan.quantity);
 
+	if (!StringUtils.isEmpty(plan.coupon))
+	    updateParams.put("coupon", plan.coupon);
+	System.out.println(updateParams);
+
+	updateParams.put("prorate", false);
+
+	com.stripe.model.Subscription oldSubscription = customer.getSubscription();
+	com.stripe.model.Plan oldPlan = (oldSubscription == null) ? null : oldSubscription.getPlan();
+	com.stripe.model.Plan newPlan = com.stripe.model.Plan.retrieve(plan.plan_id);
+
+	// Add prorate based on upgrade/downgrade
+	if (oldPlan == null
+		|| (newPlan.getAmount() * plan.quantity) > (oldPlan.getAmount() * oldSubscription.getQuantity()))
+	{
+	    updateParams.put("prorate", true);
+
+	}
+
 	// Updates customer with changed plan
 	customer.updateSubscription(updateParams);
+
+	// Create the invoice and pay immediately
+	if (updateParams.get("prorate").equals("true"))
+	{
+	    Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
+	    invoiceItemParams.put("customer", customer.getId());
+	    try
+	    {
+		Invoice invoice = Invoice.create(invoiceItemParams);
+		if (invoice != null)
+		    invoice.pay();
+	    }
+	    catch (Exception e)
+	    {
+	    }
+	}
 
 	// Returns Customer object as JSONObject
 	return StripeUtil.getJSONFromCustomer(customer);
@@ -252,4 +290,24 @@ public class StripeImpl implements AgileBilling
 	// Cancels subscription in stripe
 	customer.cancelSubscription();
     }
+
+    public static JSONObject getCoupon(String couponId) throws Exception
+    {
+
+	try
+	{
+	    // Retrieve coupon from Stripe
+	    Coupon coupon = Coupon.retrieve(couponId);
+
+	    // Convert to JSON
+	    return new JSONObject(new Gson().toJson(coupon));
+
+	}
+	catch (Exception e)
+	{
+	}
+
+	return new JSONObject();
+    }
+
 }

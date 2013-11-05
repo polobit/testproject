@@ -1,15 +1,15 @@
 var plan_json = [];
 //Plans with costs
 var PLANS_COSTS_JSON = {};
-PLANS_COSTS_JSON.lite = "14.99";
-PLANS_COSTS_JSON.pro = "24.99";
-PLANS_COSTS_JSON.enterprise = "49.99";
+PLANS_COSTS_JSON.basic = "24.99";
+PLANS_COSTS_JSON.professional = "49.99";
+PLANS_COSTS_JSON.enterprise = "99.99";
 
 // Plans intervals JSON
 var PLANS_DISCOUNTS_JSON = {};
 PLANS_DISCOUNTS_JSON.monthly = "0";
-PLANS_DISCOUNTS_JSON.yearly = "15";
-PLANS_DISCOUNTS_JSON.twoyears = "33.34";
+PLANS_DISCOUNTS_JSON.yearly = "20";
+PLANS_DISCOUNTS_JSON.twoyears = "40";
 
 // User existing plan name
 var user_existing_plan_name = "";
@@ -141,6 +141,8 @@ function setPlan(user_plan)
 
 
 
+
+
 $(function()
 		{
 		
@@ -214,7 +216,7 @@ $(function()
 			  user_existing_plan_name = USER_DETAILS.getCurrentPlanId(USER_BILLING_PREFS);
 			 
 			  // Check the plan
-	          var selected_plan_name = "plan-" + amount +"-"+ months;
+	          var selected_plan_name = amount +"-"+ months;
 	          
 	          if(selected_plan_name.toLowerCase()+"-" + quantity == user_existing_plan_name+"-"+USER_DETAILS.getQuantity(USER_BILLING_PREFS))
 	          {
@@ -232,6 +234,12 @@ $(function()
 	        plan_json.plan_type = plan.toUpperCase()+"_"+ cycle.toUpperCase();
 	        plan_json.cycle = cycle;
 	        
+	    	// Set coupon Only for Pro users
+			delete plan_json["coupon_code"];
+			var couponCode = $("#coupon_code").val();
+			 if (couponCode)
+				plan_json.coupon_code = couponCode;
+	        
 	        if(cycle != "Two Years")
 	        	{
 	        	 	plan_json.yearly_discount = ([cost * 12] - [variable.yearly * quantity * 12]).toFixed(2);
@@ -246,14 +254,14 @@ $(function()
 	        
 	        
 	        
-	        var plan_id = (months > 1) ? "plan-" + PLANS_COSTS_JSON[plan] + "-" + months : "plan-" + PLANS_COSTS_JSON[plan];
+	        var plan_id = (months > 1) ? PLANS_COSTS_JSON[plan] + "-" + months : PLANS_COSTS_JSON[plan];
 	        
 	        
 	        plan_json.plan_id = plan_id;
 	        plan_json.discount = discount;
 		    plan_json.quantity = quantity;
 		    plan_json.current_plan = USER_DETAILS.getCurrentPlanName(USER_BILLING_PREFS);
-		    
+		    console.log(plan_json);
 		    if(!$.isEmptyObject(USER_CREDIRCARD_DETAILS)){
 		    	
 		    	console.log(USER_CREDIRCARD_DETAILS);
@@ -261,5 +269,30 @@ $(function()
 		    }
 		    
       	});
+      	
+     // Check coupon functionality
+    	$("#check_valid_coupon").die().live(
+    			'click',
+    			function() {
+
+    				// Get coupon input value
+    				var couponId = $("#coupon_code").val();
+    				if (!couponId) {
+    					$("#coupon_code_container").find(".error").html(
+    							"test test test");
+    					return false;
+    				}
+
+    				$("#coupon_code_container i").removeAttr("class");
+    				var iconClass = "icon-", that = $(this);
+
+    				// Check coupon status
+    				checkValidCoupon(couponId, function(response) {
+    					iconClass += (response) ? "ok" : "remove";
+    					$("#coupon_code_container i").removeAttr("class").addClass(
+    							iconClass);
+    				});
+
+    			});
     	
 });	   

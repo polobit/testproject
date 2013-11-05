@@ -2,6 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -85,13 +86,22 @@ public class AddDeal extends TaskletAdapter
 	// Contact Id
 	String contactId = AgileTaskletUtil.getId(subscriberJSON);
 
-	// Contact ownerId.
-	String contactOwnerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
-
 	try
 	{
+	    // Contact ownerId.
+	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
+
+	    if (contactOwnerId == null)
+	    {
+		System.out.println("No owner");
+
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		return;
+	    }
+
 	    // Add Deal with given values
-	    addDeal(dealName, expectedValue, probability, description, milestone, epochTime, contactId, getOwnerId(givenOwnerId, contactOwnerId));
+	    addDeal(dealName, expectedValue, probability, description, milestone, epochTime, contactId, getOwnerId(givenOwnerId, contactOwnerId.toString()));
 
 	    // Add log
 	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Deal Title: " + dealName + "<br/> Value: "

@@ -14,12 +14,13 @@ public class Plan
 {
     public static enum PlanType
     {
-	LITE_MONTHLY, PRO_MONTHLY, ENTERPIRSE_MONTHLY, LITE_YEARLY, PRO_YEARLY, ENTERPRISE_YEARLY
+	BASIC_MONTHLY, PROFESSIONAL_MONTHLY, ENTERPRISE_MONTHLY, ENTERPRISE_YEARLY, BASIC_YEARLY, PROFESSIONAL_YEARLY, LITE_MONTHLY, LITE_YEARLY, PRO_MONTHLY, PRO_YEARLY
     }
 
     public PlanType plan_type = null;
     public String plan_id = null;
     public Integer quantity = null;
+    public String coupon = null;
 
     public Plan()
     {

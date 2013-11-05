@@ -33,6 +33,9 @@ var SocialSuiteRouter = Backbone.Router.extend({
 						
 	    /* Creates pubnub object and channel dedicated for new user or relogin */
 		initToPubNub();	
+
+		console.log("StreamsListView: ");console.log(StreamsListView);
+		 console.log("TempStreamsListView: ");console.log(TempStreamsListView);
 		
 		// Display added streams 
 		this.streams();			
@@ -92,8 +95,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			  // New stream to add in collection.
 			  if(stream)
 				{
-				  StreamsListView.collection.add(stream);
-				  TempStreamsListView.collection.add(stream);
+				  StreamsListView.collection.add(stream);				  
 				}
 			 		  			  
 			  $('#socialsuite-tabs-content').append(StreamsListView.render(true).el);
@@ -112,6 +114,8 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		 // Remove waiting symbol.
 		 removeWaiting();
 		
+		 console.log("StreamsListView: ");console.log(StreamsListView);
+		 console.log("TempStreamsListView: ");console.log(TempStreamsListView);
 	 }, // streams end
 		
 	 /**

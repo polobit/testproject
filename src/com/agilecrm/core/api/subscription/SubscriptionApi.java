@@ -7,12 +7,14 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.stripe.exception.StripeException;
@@ -94,8 +96,8 @@ public class SubscriptionApi
 	     * If Exception is raised during subscription send the exception
 	     * message to client
 	     */
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -119,8 +121,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
     }
@@ -142,6 +144,14 @@ public class SubscriptionApi
 	return Subscription.updateCreditCard(card_details);
     }
 
+    @Path("coupon/{coupon}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String checkCoupon(@PathParam("coupon") String coupon) throws Exception
+    {
+	return StripeImpl.getCoupon(coupon).toString();
+    }
+
     /**
      * Fetches invoices of subscription details
      * 
@@ -158,8 +168,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -182,8 +192,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -201,8 +211,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 }
