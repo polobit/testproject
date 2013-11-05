@@ -75,7 +75,7 @@
     </div>
    	
 	<script src='https://googleapps.agilecrm.com/lib/headjs-min.js'></script>
-	<script src='https://googleapps.agilecrm.com/lib/jquery.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 	<script src='https://googleapps.agilecrm.com/misc/gmail/gadget-js-all/min/agile-gadget-main.min.js'></script>
    	
 	<script id="gadget-template" type="text/html">
