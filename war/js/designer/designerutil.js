@@ -1,0 +1,293 @@
+/**
+ * designerutil.js is the newly added js for adding required utility methods. It 
+ * initializes merge fields, modifies URL Visited validation based on condition
+ * and initialize tags typeahead.
+ * 
+ * @author Naresh
+ *  
+ **/
+
+/**
+ * Inserts selected value of merge-fields into target-id field.
+ * 
+ * @param ele - select element.
+ * @param target_id - id of target field where value should be inserted.
+ * 
+ **/
+function insertSelectedMergeField(ele,target_id)
+{
+	// current value
+	var curValue = $(ele).find(':selected').val();
+	
+	// inserts text based on cursor.
+	insertAtCaret(target_id, curValue)
+}
+
+/**
+ * MergeFields function to fetch all available merge-fields.
+ **/
+function getMergeFields()
+{
+	var options=
+	{
+		"Add Merge Field": "",
+		"First Name": "{{first_name}}",
+		"Last Name": "{{last_name}}",
+		"Score": "{{score}}",
+		"Created Date": "{{created_date}}",
+		"Modified Date": "{{modified_date}}",
+		"Email": "{{email}}",
+		"Company": "{{company}}",
+		"Title": "{{title}}",
+		"Website": "{{website}}",
+		"Phone":"{{phone}}",
+		"City": "{{location.city}}",
+		"State":"{{location.state}}",
+		"Country":"{{location.country}}",
+		"Twitter Id":"{{twitter_id}}",
+		"LinkedIn Id":"{{linkedin_id}}",
+		"Owner Name":"{{owner.name}}",
+		"Owner Email":"{{owner.email}}"
+	};
+	
+	// Get Custom Fields in template format
+	var custom_fields = get_custom_fields();
+	
+	console.log("Custom Fields are");
+	console.log(custom_fields);
+	
+	// Merges options json and custom fields json
+	var merged_json = merge_jsons({}, options, custom_fields);
+	
+	return merged_json;
+}
+
+/**
+ * Returns custom fields in format required for merge fields. 
+ * E.g., Nick Name:{{Nick Name}}
+ */
+function get_custom_fields()
+{
+    var url = window.location.protocol + '//' + window.location.host;
+	
+	// Sends GET request for customfields.
+    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
+	
+	// Parse stringify json
+	var data = JSON.parse(msg);
+	
+	var customfields = {};
+	
+	// Iterate over data and get field labels of each custom field
+	$.each(data, function(index,obj)
+			{
+					// Iterate over single custom field to get field-label
+		            $.each(obj, function(key, value){
+						
+						// Needed only field labels for merge fields
+						if(key == 'field_label')
+							customfields[value] = "{{" + value+"}}"
+					});
+			});	
+	
+	return customfields;
+}
+
+/**
+ * Returns merged json of two json objects
+ **/
+function merge_jsons(target, object1, object2)
+{
+	return $.extend(target, object1, object2);
+}
+
+/**
+ * Function to insert text on cursor position in textarea. It inserts 
+ * the supplied text into the textarea of given id. 
+ * 
+ * @param textareaId - Id of textarea.
+ * 
+ * @param text - text to be inserted, here like merge field
+ **/
+function insertAtCaret(textareaId,text) {
+    var txtarea = document.getElementById(textareaId);
+    var scrollPos = txtarea.scrollTop;
+    var strPos = 0;
+    var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
+    	"ff" : (document.selection ? "ie" : false ) );
+    if (br == "ie") { 
+    	txtarea.focus();
+    	var range = document.selection.createRange();
+    	range.moveStart ('character', -txtarea.value.length);
+    	strPos = range.text.length;
+    }
+    else if (br == "ff") strPos = txtarea.selectionStart;
+
+    var front = (txtarea.value).substring(0,strPos);  
+    var back = (txtarea.value).substring(strPos,txtarea.value.length); 
+    txtarea.value=front+text+back;
+    strPos = strPos + text.length;
+    if (br == "ie") { 
+    	txtarea.focus();
+    	var range = document.selection.createRange();
+    	range.moveStart ('character', -txtarea.value.length);
+    	range.moveStart ('character', strPos);
+    	range.moveEnd ('character', 0);
+    	range.select();
+    }
+    else if (br == "ff") {
+    	txtarea.selectionStart = strPos;
+    	txtarea.selectionEnd = strPos;
+    	txtarea.focus();
+    }
+    txtarea.scrollTop = scrollPos;
+}
+
+
+/**
+ * It is onchange event callback for Url Visited url-type select option.
+ * Based on two options available:
+ * 1. Contains - It allows part of the text of url, the type should be text.
+ * 2. Exact Match - It allows complete url.
+ * 
+ * @param ele - select element
+ * @param target_id - id of target element where changes should affect.
+ */
+function url_visited_select_callback(ele, target_id)
+{
+    // current value
+    var curValue = $(ele).find(':selected').val();
+    
+    var tempObj = $('<span />').insertBefore('#' + target_id);
+	 
+    // if 'contains' selected, make type attribute 'text'
+	if(curValue === 'contains')
+    {
+		// replacing type attribute from url to text
+		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj).focus();
+    }
+     
+    // if 'exact_match' selected, make type attribute 'url'
+	if(curValue === 'exact_match')
+    {
+		// replacing type attribute to url.
+		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj).focus();
+    }
+	
+	tempObj.remove();
+}
+
+
+/**
+ * Retrieves tag objects from TagsAPI. Inserts each tag value 
+ * within tag object into an array.
+ **/
+function get_tags()
+{
+	// Fetch tags from collection if defined
+	if(window.parent.tagsCollection)
+	{
+		console.log("Fetching tags from collection...");
+		
+		var tags_JSON = window.parent.tagsCollection.toJSON();
+		return get_tags_array(tags_JSON);
+	}
+	
+	var url = window.location.protocol + '//' + window.location.host;
+		
+	// Sends GET request for tags.
+	var msg = $.ajax({type: "GET", url: url+'/core/api/tags', async: false, dataType:'json'}).responseText;
+		
+	// Parse stringify json
+	var data = JSON.parse(msg);
+	
+	return get_tags_array(data);
+}
+
+/**
+ * Returns array of tags. Separates tags from tag objects and inserts each 
+ * tag into an array.
+ * 
+ * @param data - Tag objects 
+ **/
+function get_tags_array(data)
+{
+	var tags = [];
+	
+	// Iterate over data and insert tag values into tags array.
+	$.each(data, function(index,obj)
+			{
+					// Iterate over single tag object to get tag value.
+			        $.each(obj, function(key, value){
+							
+					// Needed only tag values.
+					if(key == 'tag')
+						tags[index] = value;
+			
+			        });
+				});
+	
+	return tags;
+	
+}
+
+/**
+ * Initialize tags typeahead using jquery ui auto-complete. Shows typeahead on
+ * multiple tags separated by comma.
+ **/
+function init_tags_typeahead()
+{
+	// fetch array of tags.
+	var tags_array = get_tags();
+	
+	// Initialize tags typeahead for Tags and CheckTags node
+   //$('#tag_names, #tag_value').autocomplete({source: tags_array});
+
+	$( "#tag_names, #tag_value" )
+    .autocomplete({
+      minLength: 0,
+      source: function( request, response ) {
+        // delegate back to autocomplete, but extract the last term
+        response( $.ui.autocomplete.filter(
+        		tags_array, extractLast( request.term ) ) );
+      },
+      focus: function() {
+        // prevent value inserted on focus
+        return false;
+      },
+      select: function( event, ui ) {
+        
+    	var terms = split( this.value );
+        
+        // remove the current input
+        terms.pop();
+        
+        // Prevent duplicate tags to insert
+        if($.inArray(ui.item.value, terms) === -1)
+        {
+        	// add the selected item
+        	terms.push( ui.item.value );
+        }
+        
+        // add placeholder to get the comma-and-space at the end
+        terms.push( "" );
+        this.value = terms.join( ", " );
+        
+        return false;
+      }
+    });
+}
+
+/**
+ * Utility function to split string based on comma
+ **/
+function split( val ) {
+    return val.split( /,\s*/ );
+  }
+
+/**
+ * Utility function for array to get last element
+ **/
+function extractLast( term ) {
+    return split( term ).pop();
+  }

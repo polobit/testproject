@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -42,6 +43,7 @@ public class ContactCSVExport
     public static final String TITLE = "Title";
     public static final String COMPANY = "Company";
 
+    public static final String PHONE_DEFAULT = "Phone(default)";
     public static final String PHONE_WORK = "Phone(Work)";
     public static final String PHONE_HOME = "Phone(Home)";
     public static final String PHONE_MOBILE = "Phone(Mobile)";
@@ -50,9 +52,11 @@ public class ContactCSVExport
     public static final String PHONE_WORK_FAX = "Phone(Work fax)";
     public static final String PHONE_OTHER = "Phone(Other)";
 
+    public static final String EMAIL_DEFAULT = "Email(default)";
     public static final String EMAIL_HOME = "Email(Home)";
     public static final String EMAIL_WORK = "Email(Work)";
 
+    public static final String WEBSITE_DEFAULT = "Website(default)";
     public static final String WEBSITE = "Website";
     public static final String SKYPE = "Skype";
     public static final String TWITTER = "Twitter";
@@ -243,9 +247,10 @@ public class ContactCSVExport
      */
     public static String[] getCSVHeadersForContact()
     {
-	String[] headers = { FIRST_NAME, LAST_NAME, TITLE, COMPANY, EMAIL_HOME, EMAIL_WORK, PHONE_WORK, PHONE_HOME, PHONE_MOBILE, PHONE_MAIN, PHONE_HOME_FAX,
-		PHONE_WORK_FAX, PHONE_OTHER, ADDRESS, CITY, STATE, COUNTRY, ZIP, WEBSITE, SKYPE, TWITTER, LINKEDIN, FACEBOOK, XING, BLOG, GOOGLE_PLUS, FLICKR,
-		GITHUB, YOUTUBE };
+	// CSV Header will get initialized in the same order
+	String[] headers = { FIRST_NAME, LAST_NAME, TITLE, COMPANY, EMAIL_DEFAULT, EMAIL_HOME, EMAIL_WORK, PHONE_DEFAULT, PHONE_WORK, PHONE_HOME, PHONE_MOBILE,
+		PHONE_MAIN, PHONE_HOME_FAX, PHONE_WORK_FAX, PHONE_OTHER, ADDRESS, CITY, STATE, COUNTRY, ZIP, WEBSITE_DEFAULT, WEBSITE, SKYPE, TWITTER,
+		LINKEDIN, FACEBOOK, XING, BLOG, GOOGLE_PLUS, FLICKR, GITHUB, YOUTUBE };
 
 	return appendCustomFieldsToHeaders(headers);
     }
@@ -334,6 +339,10 @@ public class ContactCSVExport
 
 	    if (field.name.equals(Contact.EMAIL))
 	    {
+		// if email subtype is null
+		if (StringUtils.isBlank(field.subtype))
+		    str[indexMap.get(EMAIL_DEFAULT)] = field.value;
+
 		if ("home".equals(field.subtype))
 		    str[indexMap.get(EMAIL_HOME)] = field.value;
 
@@ -343,6 +352,10 @@ public class ContactCSVExport
 
 	    if (field.name.equals(Contact.PHONE))
 	    {
+		// if phone subtype is null
+		if (StringUtils.isBlank(field.subtype))
+		    str[indexMap.get(PHONE_DEFAULT)] = field.value;
+
 		if ("work".equals(field.subtype))
 		{
 		    str[indexMap.get(PHONE_WORK)] = field.value;
@@ -375,6 +388,10 @@ public class ContactCSVExport
 
 	    if (field.name.equals(Contact.WEBSITE))
 	    {
+		// if website subtype is null
+		if (StringUtils.isBlank(field.subtype))
+		    str[indexMap.get(WEBSITE_DEFAULT)] = field.value;
+
 		if ("URL".equals(field.subtype))
 		    str[indexMap.get(WEBSITE)] = field.value;
 
