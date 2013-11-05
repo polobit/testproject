@@ -71,13 +71,13 @@ function agile_login() {
 	console.log("Logging in");
 
 	//  ------ Get user preferences. ------ 
-    var Gadget_Prefs = new gadgets.Prefs();
-    var Agile_User_Exists = Gadget_Prefs.getString("agile_user_exists");
+    var Agile_Gadget_Prefs = new gadgets.Prefs();
+    var Agile_User_Exists = Agile_Gadget_Prefs.getString("agile_user_exists");
     
 	//  ------ Set account. ------ 
 	if (Agile_User_Exists == "true") {
-    	var Agile_User_Key = Gadget_Prefs.getString("agile_user_key");
-        var Agile_User_Domain = Gadget_Prefs.getString("agile_user_domain");
+    	var Agile_User_Key = Agile_Gadget_Prefs.getString("agile_user_key");
+        var Agile_User_Domain = Agile_Gadget_Prefs.getString("agile_user_domain");
 		//  ------ Download scripts. ------ 
 		agile_download_scripts();
     	
@@ -91,13 +91,13 @@ function agile_login() {
 	
 	//  ------ New user set domain, go for One Time Setup. ------ 
     else {
-    	var Agile_User_Popup = Gadget_Prefs.getString("agile_user_popup");
-    	var Agile_User_Expire_At = parseInt(Gadget_Prefs.getString("agile_user_expire_at"));
+    	var Agile_User_Popup = Agile_Gadget_Prefs.getString("agile_user_popup");
+    	var Agile_User_Expire_At = parseInt(Agile_Gadget_Prefs.getString("agile_user_expire_at"));
 		var Today_Date = new Date().getTime();
     	if(Today_Date < Agile_User_Expire_At)
     		agile_user_setup_load(Agile_User_Popup);
     	else{
-    		Gadget_Prefs.set("agile_user_expire_at", "0");
+    		Agile_Gadget_Prefs.set("agile_user_expire_at", "0");
     		agile_send_auth(Lib_Path + 'gmail', agile_handle_load_response);
     	}
 	}
@@ -139,7 +139,7 @@ function agile_handle_load_response(data) {
 	console.log("Auth response: ");
 	console.log(data);
 	
-	var Gadget_Prefs = new gadgets.Prefs();
+	var Agile_Gadget_Prefs = new gadgets.Prefs();
     
 	if(data.content != undefined){
 		//  ------ Check user exists, OpenID must have occurred previously. ------ 

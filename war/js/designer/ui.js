@@ -173,7 +173,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
         	selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
     });
     
-    // Returns select option with onchange EventHandler
+    // Returns select option with onchange EventHandler - Naresh
     if(selectEventHandler && selectEventHandler.indexOf("insertSelectedMergeField") === 0)
     	{
            // Needed right align for Text and Html tab of Send Email node.
@@ -426,7 +426,7 @@ function _generateUIFields(selector, ui) {
             continue;
         }
         
-      // MergeFields Select Option
+        // MergeFields Select Option - Naresh
         if(uiFieldType == "merge_fields")
         {
            addLabel(uiFieldDefinition.label, container);
@@ -610,174 +610,4 @@ function resetUI(selector)
 	selector.find("select").val("");
 	selector.find("textarea").val("");
 	
-}
-
-/**
- * Inserts selected value of merge-fields into target-id field.
- * 
- * @param ele - select element.
- * @param target_id - id of target field where value should be inserted.
- * 
- **/
-function insertSelectedMergeField(ele,target_id)
-{
-	// current value
-	var curValue = $(ele).find(':selected').val();
-	
-	// inserts text based on cursor.
-	insertAtCaret(target_id, curValue)
-}
-
-/**
- * MergeFields function to fetch all available merge-fields.
- **/
-function getMergeFields()
-{
-	var options=
-	{
-		"Add Merge Field": "",
-		"First Name": "{{first_name}}",
-		"Last Name": "{{last_name}}",
-		"Score": "{{score}}",
-		"Created Date": "{{created_date}}",
-		"Modified Date": "{{modified_date}}",
-		"Email": "{{email}}",
-		"Company": "{{company}}",
-		"Title": "{{title}}",
-		"Website": "{{website}}",
-		"Phone":"{{phone}}",
-		"City": "{{location.city}}",
-		"State":"{{location.state}}",
-		"Country":"{{location.country}}",
-		"Twitter Id":"{{twitter_id}}",
-		"LinkedIn Id":"{{linkedin_id}}",
-		"Owner Name":"{{owner.name}}",
-		"Owner Email":"{{owner.email}}"
-	};
-	
-	// Get Custom Fields in template format
-	var custom_fields = get_custom_fields();
-	
-	console.log("Custom Fields are");
-	console.log(custom_fields);
-	
-	// Merges options json and custom fields json
-	var merged_json = merge_jsons({}, options, custom_fields);
-	
-	return merged_json;
-}
-
-/**
- * Returns custom fields in format required for merge fields. 
- * E.g., Nick Name:{{Nick Name}}
- */
-function get_custom_fields()
-{
-    var url = window.location.protocol + '//' + window.location.host;
-	
-	// Sends GET request for customfields.
-    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
-	
-	// Parse stringify json
-	var data = JSON.parse(msg);
-	
-	var customfields = {};
-	
-	// Iterate over data and get field labels of each custom field
-	$.each(data, function(index,obj)
-			{
-					// Iterate over single custom field to get field-label
-		            $.each(obj, function(key, value){
-						
-						// Needed only field labels for merge fields
-						if(key == 'field_label')
-							customfields[value] = "{{" + value+"}}"
-					});
-			});	
-	
-	return customfields;
-}
-
-/**
- * Returns merged json of two json objects
- **/
-function merge_jsons(target, object1, object2)
-{
-	return $.extend(target, object1, object2);
-}
-
-/**
- * Function to insert text on cursor position in textarea. It inserts 
- * the supplied text into the textarea of given id. 
- * 
- * @param textareaId - Id of textarea.
- * 
- * @param text - text to be inserted, here like merge field
- **/
-function insertAtCaret(textareaId,text) {
-    var txtarea = document.getElementById(textareaId);
-    var scrollPos = txtarea.scrollTop;
-    var strPos = 0;
-    var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ? 
-    	"ff" : (document.selection ? "ie" : false ) );
-    if (br == "ie") { 
-    	txtarea.focus();
-    	var range = document.selection.createRange();
-    	range.moveStart ('character', -txtarea.value.length);
-    	strPos = range.text.length;
-    }
-    else if (br == "ff") strPos = txtarea.selectionStart;
-
-    var front = (txtarea.value).substring(0,strPos);  
-    var back = (txtarea.value).substring(strPos,txtarea.value.length); 
-    txtarea.value=front+text+back;
-    strPos = strPos + text.length;
-    if (br == "ie") { 
-    	txtarea.focus();
-    	var range = document.selection.createRange();
-    	range.moveStart ('character', -txtarea.value.length);
-    	range.moveStart ('character', strPos);
-    	range.moveEnd ('character', 0);
-    	range.select();
-    }
-    else if (br == "ff") {
-    	txtarea.selectionStart = strPos;
-    	txtarea.selectionEnd = strPos;
-    	txtarea.focus();
-    }
-    txtarea.scrollTop = scrollPos;
-}
-
-
-/**
- * It is onchange event callback for Url Visited url-type select option.
- * Based on two options available:
- * 1. Contains - It allows part of the text of url, the type should be text.
- * 2. Exact Match - It allows complete url.
- * 
- * @param ele - select element
- * @param target_id - id of target element where changes should affect.
- */
-function url_visited_select_callback(ele, target_id)
-{
-    // current value
-    var curValue = $(ele).find(':selected').val();
-    
-    var tempObj = $('<span />').insertBefore('#' + target_id);
-	 
-    // if 'contains' selected, make type attribute 'text'
-	if(curValue === 'contains')
-    {
-		// replacing type attribute from url to text
-		$('#' + target_id).detach().attr('type', 'text').insertAfter(tempObj).focus();
-    }
-     
-    // if 'exact_match' selected, make type attribute 'url'
-	if(curValue === 'exact_match')
-    {
-		// replacing type attribute to url.
-		$('#' + target_id).detach().attr('type', 'url').insertAfter(tempObj).focus();
-    }
-	
-	tempObj.remove();
 }
