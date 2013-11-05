@@ -16,6 +16,7 @@ $(function()
 		if (val.length == 0)
 		{
 			$('#pic').css("display", "none");
+			changeProperty();
 			return;
 		}
 		
@@ -23,7 +24,7 @@ $(function()
 		var pic = getPicByEmail(val, 45);
 		if (pic != undefined && pic != null)
 		{
-			var el = $('<img class="imgholder thumbnail person-img" style="display: inline;" src="' + pic + '"></img>');
+			var el = $('<img class="imgholder thumbnail person-img" onload="changeProperty()" style="display: inline;"  src="' + pic + '"></img>');
 			$('#pic').html(el).show();
 			$("img").error(function()
 			{

@@ -3,6 +3,7 @@ package com.campaignio.tasklets.agile;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.AgileUser;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
@@ -49,7 +50,7 @@ public class AddNote extends TaskletAdapter
 	    String contactId = AgileTaskletUtil.getId(subscriberJSON);
 
 	    // Get Contact Owner Id.
-	    String ownerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
+	    Long ownerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
 	    if (ownerId == null)
 	    {
@@ -61,7 +62,7 @@ public class AddNote extends TaskletAdapter
 	    }
 
 	    // Add note
-	    addNote(subject, description, contactId, AgileTaskletUtil.getAgileUserKey(Long.parseLong(ownerId)));
+	    addNote(subject, description, contactId, AgileTaskletUtil.getAgileUserKey(ownerId));
 	}
 	catch (Exception e)
 	{

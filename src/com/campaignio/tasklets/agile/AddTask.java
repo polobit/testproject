@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
+import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -120,13 +121,22 @@ public class AddTask extends TaskletAdapter
 	// Contact Id
 	String contactId = AgileTaskletUtil.getId(subscriberJSON);
 
-	// Contact ownerId.
-	String contactOwnerId = AgileTaskletUtil.getContactOwnerIdFromSubscriberJSON(subscriberJSON);
-
 	try
 	{
+	    // Contact ownerId.
+	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
+
+	    if (contactOwnerId == null)
+	    {
+		System.out.println("No owner");
+
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		return;
+	    }
+
 	    // Adds task
-	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId);
+	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId.toString());
 	}
 	catch (Exception e)
 	{

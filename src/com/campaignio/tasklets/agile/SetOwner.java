@@ -47,7 +47,7 @@ public class SetOwner extends TaskletAdapter
 	    String ownerName = setOwner(subscriberJSON, ownerId);
 
 	    // Creates log for SetOwner
-	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Owner is set to " + ownerName,
+	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Owner set to <b>" + ownerName + "</b>",
 		    LogType.SET_OWNER.toString());
 	}
 	catch (Exception e)

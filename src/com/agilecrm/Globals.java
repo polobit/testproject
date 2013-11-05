@@ -52,7 +52,7 @@ public class Globals
     public static final String PAYPAL = "Paypal";
 
     // Stripe
-    public static final String STRIPE_API_KEY = "sk_28JToWfgk6F4wJ9o21W6e6qaNXqe5";
+    public static final String STRIPE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
     public static final String STRIPE_CLIENT_ID = "ca_1EEFJHQS129OoDorXXdlqVYwyCq8RyPA";
 
     // Stripe events

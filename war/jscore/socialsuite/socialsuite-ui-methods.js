@@ -69,6 +69,37 @@ function socialsuite_add_website()
   $("div.website select").val("TWITTER");
 }
 
+// Change property of website and select network in add contact form.
+function changeProperty()
+{
+  var display = $('#network_handle', $('#personModal')).css("display");	
+  var picDisplay = $("#pic", $('#personModal')).css("display");
+  var picValue = $("#pic", $('#personModal')).html();
+  
+  console.log("display: "+display+" picDisplay: "+picDisplay);
+  console.log("picValue:" +picValue);
+	
+  if((picDisplay == 'inline' || picDisplay == 'block') && picValue != '')
+	{
+	  if(display == 'none')
+		  document.getElementById("network_handle").className = 'after-img-load-hide'; 
+	  else if (display == 'block')
+		  document.getElementById("network_handle").className = 'after-img-load-show';
+		
+	  document.getElementById("handle").className = 'add-form-input';
+	}  
+  else if((picDisplay == 'none' || picDisplay == null || picDisplay == '') || (picValue == null || picValue == ''))
+	{
+	  if(display == 'none')
+		  document.getElementById("network_handle").className = 'network-handle'; 
+	  else if (display == 'block')
+		  document.getElementById("network_handle").className = 'socialsuite-network-handle';
+	  
+	  document.getElementById("handle").className = '';
+	}
+}
+
+
 /**
  * Shows setup if user adds LinkedIn stream. Uses ScribeServlet 
  * to create a stream and save it to the dB.
@@ -131,6 +162,7 @@ function addUserImgToColumn(stream)
   $.get("/core/social/getprofileimg/" + stream.id, 
 	    function (url)
 	    {
+	      // Set url in stream model.
           modelStream.set("profile_img_url",url);
  	            	
           // Append in collection 			
@@ -146,7 +178,7 @@ function addUserImgToColumn(stream)
  * Add tweet in stream.
  */
 function handleMessage(tweet)
-{	
+{		
   // We need this messages to reflect actions in all added relevant streams.
   if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
@@ -159,28 +191,46 @@ function handleMessage(tweet)
 
   if(modelStream != null || modelStream != undefined)
 	{
-	  if(Current_Route == "social")
+	  console.log("Current_Route: "+Current_Route+" focused: "+focused);
+	  
+	  // User on #social as well as window is active.
+	  if(Current_Route == "social" && focused == true)
 		  {
+		   
+		    // New tweet notification not yet clicked.
 		    if( $('#new_tweet_notification_'+tweet.stream_id).is(':empty') == false)  
 		      {
+		    	 console.log("not clicked");
 		    	// User did not click on notification so continue adding tweets in temp collection.
 		    	addTweetToTempCollection(tweet);  
 		    	
-		    	// Change notification.
+		    	// Change notification to show number of new tweets.
 				checkNewTweets();
 		      }		    	
 		    else
 		      {
-		    	// Add tweet to model.
+		    	console.log("no notification");
+		    	console.log("call from handleMessage to addTweetToStream");
+		    	// Add tweet to model in normal way.
 		    	addTweetToStream(modelStream,tweet);
 		      }
 		  }
 	  else
 		  {
-		    // Add tweet to temp collection.
-  	        addTweetToTempCollection(tweet);  	        
+		    console.log("not in social suite");
+		    // Add tweet to temp collection, user on another tab or window is inactive.
+  	        addTweetToTempCollection(tweet);  	
+  	        
+  	        if(Current_Route == "social")
+  	        	{
+  	        	  // Change notification to show number of new tweets.
+			      checkNewTweets();
+  	        	}
 		  }
 	} // If End  
+    
+     console.log("StreamsListView: ");console.log(StreamsListView);
+	 console.log("TempStreamsListView: ");console.log(TempStreamsListView);
   
 	 // Searchs tweet owner's kloutscore.
 	 // Fetches tweet owner's klout id.
@@ -225,6 +275,7 @@ function handleMessage(tweet)
 function addTweetToStream(modelStream,tweet)
 {	
 	console.log("In addTweetToStream.");
+	console.log(tweet.text);
 	
 	// Hide waiting symbol.
 	$("#stream-spinner-modal-"+tweet.stream_id).hide();
@@ -264,7 +315,8 @@ function addTweetToStream(modelStream,tweet)
 	      tweet.text = convertTextToTweet(tweet);
 		}	
 	    
-    console.log("for add "+modelStream.get('tweetListView').length);
+    console.log("add at "+modelStream.get('tweetListView').length);
+    console.log(tweet.text);
 		
     // Sort stream on tweet id basis which is unique and recent tweet has highest value.
 	modelStream.get('tweetListView').comparator = function(model) 
@@ -291,21 +343,18 @@ function addTweetToStream(modelStream,tweet)
  */
 function addTweetToTempCollection(tweet)
 {	
-	console.log("In addTweetToCollection.");
-		
-	//if(!TempStreamsListView)  // Streams not collected from dB
-	{		 
-	 console.log(TempStreamsListView.collection.length);
+  console.log("In addTweetToCollection.");
+  console.log(TempStreamsListView.collection.length);
 		  
-     // Get stream from collection.
-	 var modelStream = TempStreamsListView.collection.get(tweet.stream_id);
+  // Get stream from collection.
+  var modelStream = TempStreamsListView.collection.get(tweet.stream_id);
 	 			  
-	 // Add tweet to model.
-	 addTweetToStream(modelStream,tweet);
-	}
+  console.log("call from addTweetToTempCollection to addTweetToStream");
+  // Add tweet to stream model.
+  addTweetToStream(modelStream,tweet);
 }
 
-/* create temporary collection to store tweets when user not on social tab.*/
+/** Create temporary collection to store tweets when user not on social tab.*/
 function createTempCollection()
 {
   console.log("In createTempCollection.");	
@@ -350,12 +399,12 @@ function convertTextToTweet(tweet)
 		
 	for (var i = 0; i < linkableTweetArray.length; i++) 
 	  {			
-		if(linkableTweetArray[i].charAt(0) == "@")
+		if(linkableTweetArray[i].charAt(0) == "@") // Mentions
 		  {		    
 		    regex = new RegExp(linkableTweetArray[i],"g");		   
 		    tweetText = tweetText.replace(regex,'&lt;a href=\'https://twitter.com/'+linkableTweetArray[i].substring(1)+'\' target=\'_blank\' class=\'cd_hyperlink\'>'+linkableTweetArray[i]+'&lt;/a>');		    
 		  }
-		else if(linkableTweetArray[i].charAt(0) == "#")
+		else if(linkableTweetArray[i].charAt(0) == "#") // Hashtags
 		   {
 		    regex = new RegExp(linkableTweetArray[i],"g");		    
 		    var url = "https://twitter.com/search?q=%23" + linkableTweetArray[i].substring(1) + "&src=hash";
@@ -363,8 +412,9 @@ function convertTextToTweet(tweet)
 		   }
 	  }
 
+	// URL
 	linkableTweetArray = new Array();
-	linkableTweetArray = tweetText.split(" ");
+	linkableTweetArray = tweetText.split(" "); 
 	var exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
 	$.each(linkableTweetArray, function(index, word) {
@@ -381,11 +431,14 @@ function convertTextToTweet(tweet)
 // Remove no tweet notification. Search for that tweet in collection and makes that tweets model hide.
 function clearNoTweetNotification(modelStream)
 {
+	console.log("In clearNoTweetNotification.");
+	
 	// Get tweet from stream.
 	var modelTweet = modelStream.get('tweetListView').get('000');
 	
 	if(modelTweet != null || modelTweet != undefined)
 	{
+      // Set show false, so handlebar condition check will avoid to display.
 	  modelTweet.set("show",false);
 
 	  // Add back to stream.
@@ -398,7 +451,7 @@ function removeWaiting()
 {
   var streamsJSON = StreamsListView.collection.toJSON();
 	
-  // Streams not available OR streams already registered OR pubnub not initialized	
+  // Streams not available.	
   if(streamsJSON == null)
 	{
 	  return;
@@ -421,10 +474,12 @@ function removeWaiting()
 /* Check for new tweets when user was not in social tab. 
  * Show new tweet notification on respective stream.*/
 function checkNewTweets()
-{
+{ 
+  console.log("In checkNewTweets.");
+  
   var streamsJSON = TempStreamsListView.collection.toJSON();
 
-  // Streams not available OR streams already registered OR pubnub not initialized	
+  // Streams not available.	
   if(streamsJSON == null)
 	{
 	  return;
@@ -432,22 +487,38 @@ function checkNewTweets()
 
   // Get stream
   $.each(streamsJSON, function(i, stream)
-		 {	  		
+		 {	  	
+	        var newTweet = true;
+	        
      	    // Get stream from collection.
 	        var modelStream = TempStreamsListView.collection.get(stream.id);	
 	        
-	        // Remove no tweet notification.		      
-		    clearNoTweetNotification(StreamsListView.collection.get(stream.id));
-	        
 	        if(modelStream.get('tweetListView').length == 1)
 	        	{
-	        	  // Add notification of new tweets on stream.
-	  		      document.getElementById('new_tweet_notification_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweet </p>';	        	  	        	
+	        	  // Get tweet from stream.
+	        	  var modelTweet = modelStream.get('tweetListView').get('000');
+	        	
+                  // "There is no tweet" is added in stream, so need to show notification for that. 
+	        	  if(modelTweet != null || modelTweet != undefined)
+	        		  {	        		   
+	        		    newTweet = false;
+	        		  }
+	        	  else // New tweet is common tweet so need to add notification.
+	        		  {
+	        		    // Add notification of new tweets on stream.
+		  		        document.getElementById('new_tweet_notification_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweet </p>';
+	        		  }	        	  	        	
 	        	}
 	        else if(modelStream.get('tweetListView').length > 1)
         	    {
         	      // Add notification of new tweets on stream.
   		          document.getElementById('new_tweet_notification_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweets </p>';	        	  	        	
         	    }
+	        
+	        if(newTweet == true && modelStream.get('tweetListView').length >= 1)
+	        	{
+	        	  // Remove no tweet notification.		      
+			      clearNoTweetNotification(StreamsListView.collection.get(stream.id));
+	        	}
 		 });      	
 }
