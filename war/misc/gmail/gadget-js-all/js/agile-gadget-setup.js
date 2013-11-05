@@ -28,8 +28,9 @@ function agile_user_setup(Popup_Url) {
 	//  ------ Create UI to let user enter its desired agile domain name. ------ 
 	$('#agile_content').append('<div class="well well-small agile-one-time-setup" style="margin:0px; border-radius:0px; background-color:#f2f2f2; box-shadow:none; border-bottom:0px; border-left:0px; border-right:0px;">'
 			+'<p>Associate your account - one time setup</p>'
-			+'<input id="user_domain" class="input-medium" placeholder="my domain" style="vertical-align:baseline;" type="text" />'
+			+'<input id="user_domain" class="input-medium" placeholder="my domain" style="vertical-align:baseline; margin-bottom:4px;" type="text" />'
 			+'<span style="font-weight:bold;">.agilecrm.com</span>'
+			+'<p style="color:#b2b0b1;"><small>Enter the part before ".agilecrm.com" that you use to access your Agile CRM account.</small></p>'
 			+'<P style="margin:0px;"><input type="button" value="Associate" onclick=agile_gadget_open_popup("'+Url_Root+'") class="btn btn-primary" style="padding:2px 6px 2px;">'
 			+'<span id="notify_user" style="display:none; margin-left:20px; color:indianred;"><i>Please enter your domain.</i></span></P>'
 			+'</div>');
@@ -50,7 +51,7 @@ function agile_gadget_open_popup(Agile_Url) {
 	var User_Domain = $('#user_domain');
 	//  ------ Text box validation for empty box. ------ 
 	if (User_Domain.val() == 'my domain' || User_Domain.val() == '') {
-		$('#notify_user').fadeIn().delay(3000).hide(1);
+		$('#notify_user').fadeIn().delay(3000).fadeOut();
 		User_Domain.focus();
 	}
 	//  ------ Open pop-up. ------ 
@@ -77,10 +78,10 @@ function agile_gadget_open_popup(Agile_Url) {
 			if (Popup.closed) {
 				clearInterval(finished_interval);
 				//  ------ Reset user preferences ------ 
-			    var Gadget_Prefs = new gadgets.Prefs();
-			    Gadget_Prefs.set("agile_user_expire_at", "0");
-				Gadget_Prefs.set("agile_user_popup", "");
-				Gadget_Prefs.set("agile_user_exists", "");
+			    var Agile_Gadget_Prefs = new gadgets.Prefs();
+			    Agile_Gadget_Prefs.set("agile_user_expire_at", "0");
+				Agile_Gadget_Prefs.set("agile_user_popup", "");
+				Agile_Gadget_Prefs.set("agile_user_exists", "");
 				//  ------ Re-login. ------ 
 				agile_login();
 			}

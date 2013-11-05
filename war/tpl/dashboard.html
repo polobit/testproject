@@ -56,10 +56,6 @@
 		Plan: Free Plan <br/>
 		Users: {{users_count}} of 2<br/>
 	</p>
-	<p>
-		<a style="text-decoration: underline;" href="#contact-us">Please
-			upgrade your account</a> to create more users. It takes only 10 seconds.
-	</p>
 {{else}}
 	<h3 style="font-size: 20px;text-decoration:underline;">Account Info</h3>
 	<p style="padding-top: 10px;">
@@ -67,6 +63,10 @@
 		Users: {{users_count}} of 2 &nbsp;<a style="text-decoration: underline;" href="#users-add">Add User</a><br/>
 	</p>
 {{/if_equals}}
+<p>
+		<a style="text-decoration: underline;" href="#subscribe">Please
+			upgrade your account</a> to create more users. It takes only 10 seconds.
+	</p>
 </div>
 </script>
 
@@ -78,14 +78,14 @@
 		Plan: {{plan.plan_id}}<br />
 		Users: {{userCount}} of {{plan.quantity}} 
 	{{#if_equals userCount plan.quantity}}
-	<br />
-		<a style="text-decoration: underline;" href="#contact-us">Please
-			upgrade your account</a> to create more users. It takes only 10 seconds.
-	</p>
+	 &nbsp;<a style="text-decoration: underline;" href="#subscribe">Add User</a> <br />
 	{{else}}
 		 &nbsp;<a style="text-decoration: underline;" href="#users-add">Add User</a> <br />
 	{{/if_equals}}
-	<p>Thanks for enrolling in our preferred plan.</p>
+<br />
+		<a style="text-decoration: underline;" href="#subscribe">Please
+			upgrade your account</a> to create more users. It takes only 10 seconds.
+	</p>
 </div>
 </script>
 

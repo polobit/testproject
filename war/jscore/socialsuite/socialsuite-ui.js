@@ -42,9 +42,37 @@ $(document).on("click",".add-twitter-contact", function(e)
 	// Add values in add contact form.
 	$("#fname", $('#personModal')).attr("value",firstName);
 	$("#lname", $('#personModal')).attr("value",lastName);
-	$("#job_title", $('#personModal')).attr("value",description);		
+	$("#job_title", $('#personModal')).attr("value",description);	
+	
+	document.getElementById("network_handle").className = 'socialsuite-network-handle';
+	$("#handle", $('#personModal')).attr("value",TweetOwnerForAddContact);
+	
+	// Add website / handle of twitter of tweet owner.
+	$("#website", $('#personModal')).attr("value",TweetOwnerForAddContact);		
+	  	  
+	// Select network type.
+	$("div.website select").val("TWITTER");
+	
+	changeProperty();
 });
 
+// Hide network handle from add contact form.
+$('#personModal').on('hidden.bs.modal', function () {
+	document.getElementById("network_handle").className = 'network-handle';
+	document.getElementById("handle").className = ''; 
+	changeProperty();
+	});
+
+// If img is shown then reduce size of network handle on add contact form.
+$('#personModal').on('shown.bs.modal', function () {
+	changeProperty();
+	});
+$('#personModal').on('show.bs.modal', function () {
+	changeProperty();
+	});
+$( "#pic" ).change(function() {
+	changeProperty();
+	});
 /**
  * Display popup form with stream details. 
  */
@@ -291,13 +319,13 @@ $(document).on("click",".save-twitter-stream", function(e)
 			
 			// Append in collection,add new stream 			
 			socialsuitecall.streams(stream);
-						
-			// Register on server
-			var publishJSON = {"message_type":"register", "stream":stream};
-			sendMessage(publishJSON);		
 			
 			// Scroll down the page till end, so user can see newly added stream.
 			$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
+			
+			// Register on server
+			var publishJSON = {"message_type":"register", "stream":stream};
+			sendMessage(publishJSON);	
 			
 			// Get recent stream from database, suppose we add directly this stream so it will create reference 
 			// and data replicated in both.
@@ -379,4 +407,6 @@ $(document).on("click",".add-new-tweets", function(e)
 	console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
     console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
     
+    // Remove waiting symbol.
+	removeWaiting();
 });
