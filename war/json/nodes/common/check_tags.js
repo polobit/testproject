@@ -20,7 +20,7 @@
 			"fieldType": "input",
 			"type": "text" 
 		},{
-            "label": "Check whether given tag exists on a contact.",
+            "label": "Checks whether given tag exists for a contact. If multiple tags separated by comma are given, then the condition will be evaluated to Yes only when ALL tags exists for that contact.<br/><br/>For example, if 'lead, paid' are given then the condition will be evaluated to Yes only if both lead and paid exists, otherwise No if only lead exists.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

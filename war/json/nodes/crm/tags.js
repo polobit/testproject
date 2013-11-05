@@ -27,6 +27,7 @@
 			
 		},{
 			"label": "Tag",
+			"required": "required",
 			"category": "Info",
 			"name": "tag_names",
             "id":"tag_names",

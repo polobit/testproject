@@ -73,6 +73,12 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Init validator
     initValidator($("#nodeui"), saveNode);
     
+    // Init tags typeahead for Tags or Check Tags node. Naresh 30/10/2013
+    if(nodeJSONDefinition.name === "Tags" || nodeJSONDefinition.name === "Check Tags")
+    {
+    	init_tags_typeahead();
+    }
+    
     // Clear Global Operations Queues (for dynamic edit)
     clearGridOperations();
 
