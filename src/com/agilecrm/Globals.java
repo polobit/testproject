@@ -55,14 +55,6 @@ public class Globals
     public static final String STRIPE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
     public static final String STRIPE_CLIENT_ID = "ca_1EEFJHQS129OoDorXXdlqVYwyCq8RyPA";
 
-    // Stripe events
-    public static final String STRIPE_INVOICE_PAYMENT_FAILED = "invoice.payment_failed";
-    public static final String STRIPE_SUBSCRIPTION_DELETED = "customer.subscription.deleted";
-    public static final String STRIPE_CUSTOMER_DELETED = "customer.deleted";
-    public static final String STRIPE_INVOICE_PAYMENT_SUCCEEDED = "invoice.payment_succeeded";
-    public static final String STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED = "customer.subscription.updated";
-    public static final String STRIPE_CHARGE_REFUNDED = "charge.refunded";
-
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
 

@@ -3,6 +3,7 @@ package com.agilecrm.subscription.stripe.webhooks;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,14 @@ public class StripeWebhookServlet extends HttpServlet
 	Stripe.apiKey = Globals.STRIPE_API_KEY;
 	Stripe.apiVersion = "2012-09-24";
     }
+
+    // Stripe events
+    public static final String STRIPE_INVOICE_PAYMENT_FAILED = "invoice.payment_failed";
+    public static final String STRIPE_SUBSCRIPTION_DELETED = "customer.subscription.deleted";
+    public static final String STRIPE_CUSTOMER_DELETED = "customer.deleted";
+    public static final String STRIPE_INVOICE_PAYMENT_SUCCEEDED = "invoice.payment_succeeded";
+    public static final String STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED = "customer.subscription.updated";
+    public static final String STRIPE_CHARGE_REFUNDED = "charge.refunded";
 
     public void service(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
@@ -119,7 +128,7 @@ public class StripeWebhookServlet extends HttpServlet
 	     * 
 	     * If payment is done set subscription flag to success
 	     */
-	    if (eventJSON.getString("type").equals(Globals.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
+	    if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_INVOICE_PAYMENT_SUCCEEDED))
 	    {
 		setSubscriptionFlag(Subscription.BillingStatus.BILLING_SUCCESS);
 
@@ -135,7 +144,7 @@ public class StripeWebhookServlet extends HttpServlet
 		customizeEventAttributes(event, user);
 
 		SendMail.sendMail(user.email, SendMail.FIRST_PAYMENT_RECEIVED_SUBJECT, SendMail.FIRST_PAYMENT_RECEIVED,
-			event);
+			getcustomDataForMail(event));
 	    }
 
 	    /**
@@ -144,7 +153,7 @@ public class StripeWebhookServlet extends HttpServlet
 	     * If payment failed set subscription flag is set to failed and
 	     * mails sent to respective domain users
 	     */
-	    else if (eventJSON.getString("type").equals(Globals.STRIPE_INVOICE_PAYMENT_FAILED))
+	    else if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_INVOICE_PAYMENT_FAILED))
 	    {
 		// Get number of attempts
 		String attempCount = eventJSON.getJSONObject("data").getJSONObject("object").getString("attempt_count");
@@ -162,12 +171,10 @@ public class StripeWebhookServlet extends HttpServlet
 	     * If Customer is deleted from stripe then delete subscription
 	     * Entity and send an email to domain owner
 	     */
-	    else if (eventJSON.getString("type").equals(Globals.STRIPE_CUSTOMER_DELETED))
+	    else if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_CUSTOMER_DELETED))
 	    {
 		// Get domain owner
 		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
-
-		System.out.println("email should be sent to domain user : " + user);
 
 		event = customizeEventAttributes(event, user);
 
@@ -186,7 +193,7 @@ public class StripeWebhookServlet extends HttpServlet
 	     * If subscription is deleted from stripe then set the status the
 	     * set subscription status flag to subscription deleted
 	     */
-	    else if (eventJSON.getString("type").equals(Globals.STRIPE_SUBSCRIPTION_DELETED))
+	    else if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_SUBSCRIPTION_DELETED))
 	    {
 
 		// Get domain owner
@@ -203,7 +210,6 @@ public class StripeWebhookServlet extends HttpServlet
 			SendMail.FAILED_BILLINGS_FINAL_TIME, getcustomDataForMail(event));
 
 		Subscription subscription = Subscription.getSubscription();
-		System.out.println(subscription);
 		subscription.delete();
 
 		// Set flag to SUBSCRIPTION_DELETED
@@ -215,7 +221,7 @@ public class StripeWebhookServlet extends HttpServlet
 	     * 
 	     * Sends mail to domain owner regarding charge refund
 	     */
-	    else if (eventJSON.getString("type").equals(Globals.STRIPE_CHARGE_REFUNDED))
+	    else if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_CHARGE_REFUNDED))
 	    {
 		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
 
@@ -231,10 +237,11 @@ public class StripeWebhookServlet extends HttpServlet
 	     * 
 	     * Sends mail to domain owner, when subscription is updated
 	     */
-	    else if (eventJSON.getString("type").equals(Globals.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED))
+	    else if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED))
 	    {
-		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
+		DomainUser user = DomainUserUtil.getCurrentDomainUser();
 
+		System.out.println(user);
 		if (user == null)
 		    return;
 
@@ -275,7 +282,7 @@ public class StripeWebhookServlet extends HttpServlet
 
 	// If type is customer deletion stripe return customer object which
 	// contains description(which is set to namespace)
-	if (eventType.equals(Globals.STRIPE_CUSTOMER_DELETED))
+	if (eventType.equals(StripeWebhookServlet.STRIPE_CUSTOMER_DELETED))
 	{
 	    // Read description from event json
 	    String namespace = eventJSON.getJSONObject("data").getJSONObject("object").getString("description");
@@ -373,10 +380,20 @@ public class StripeWebhookServlet extends HttpServlet
      */
     public void setSubscriptionFlag(Subscription.BillingStatus status)
     {
-	// Set status and save subscription
-	Subscription subscription = Subscription.getSubscription();
-	subscription.status = status;
-	subscription.save();
+	try
+	{
+	    NamespaceManager.set("");
+	    // Set status and save subscription
+	    Subscription subscription = Subscription.getSubscription();
+	    System.out.println(subscription);
+	    subscription.status = status;
+	    subscription.save();
+	}
+	catch (Exception e)
+
+	{
+
+	}
     }
 
     /**
@@ -393,10 +410,14 @@ public class StripeWebhookServlet extends HttpServlet
     {
 	String namespace = NamespaceManager.get();
 
-	System.out.println(event.getData().getObject().toString());
-
 	// Get the attibutes from event object
-	Map<String, Object> attributes = new HashMap<String, Object>();
+	Map<String, Object> attributes = event.getData().getPreviousAttributes();
+
+	// if (STRIPE_INVOICE_PAYMENT_SUCCEEDED.equals(event.getType()))
+	// return event;
+
+	if (attributes == null)
+	    attributes = new HashMap<String, Object>();
 
 	// Set custom attributes "namespace", "user_name"
 
@@ -432,6 +453,8 @@ public class StripeWebhookServlet extends HttpServlet
 	// Gets customer JSON string from customer object
 	String stripeJSONString = new Gson().toJson(stripeObject);
 
+	Map<String, Object> plan = new HashMap<String, Object>();
+
 	try
 	{
 
@@ -440,7 +463,17 @@ public class StripeWebhookServlet extends HttpServlet
 
 	    // Retrieves Object customer object from stripe, based on customerId
 	    customer = Customer.retrieve(customerId, Globals.STRIPE_API_KEY);
+	    com.stripe.model.Subscription subscription = customer.getSubscription();
 
+	    if (STRIPE_INVOICE_PAYMENT_SUCCEEDED.equals(event.getType()))
+	    {
+		JSONObject stripeJSONJSON = new JSONObject(stripeJSONString);
+
+		plan.put("price", stripeJSONJSON.getInt("total") / 100);
+		plan.put("start_date", new Date(subscription.getCurrentPeriodStart() * 1000).toString());
+		plan.put("end_date", new Date(subscription.getCurrentPeriodEnd() * 1000).toString());
+		System.out.println(plan);
+	    }
 	}
 	catch (Exception e)
 	{
@@ -448,7 +481,8 @@ public class StripeWebhookServlet extends HttpServlet
 	    e.printStackTrace();
 	}
 
-	Object object[] = { event, customer };
+	Object object[] = { event, customer, plan };
 	return object;
     }
+
 }
