@@ -23,44 +23,37 @@
 <section>
     <form>
         <table class="table hide">
-            <b id="overdue-heading" style="display: none">Overdue</b>
-            <tbody id="overdue" style="display: none; margin:3px"></tbody>
+            <b id="overdue-heading" style="display: none;">Overdue</b>
+            <tbody id="overdue" style="display: inline;"></tbody>
         </table>
         <table class="table hide">
             <b id="today-heading" style="display: none">Today</b>	
-            <tbody id="today" style="display: none; margin:3px"></tbody>
+            <tbody id="today" style="display: inline;"></tbody>
         </table>
         <table class="table hide">
             <b id="tomorrow-heading" style="display: none">Tomorrow</b>
-            <tbody id="tomorrow" style="display: none; margin:3px"></tbody>
+            <tbody id="tomorrow" style="display: inline;"></tbody>
         </table>
         <table class="table hide">
             <b id="next-week-heading" style="display: none">Next Week</b>
-            <tbody id="next-week" style="display: none; margin:3px"></tbody>
+            <tbody id="next-week" style="display: inline;"></tbody>
         </table>
     </form>
 </section>
 {{/if}}
-
 </script>
 
 <script id="tasks-model-template" type="text/html">
-	<td style="border-top:1px dotted #DDD"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
-	<td style="border-top:1px dotted #DDD">
+	<td style="border-top:1px dotted #DDD;"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
+	<td>
 		<div>
-  			<p style="word-break: break-word;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></p>
-  			<p style="margin:5px 0px;"> 
+  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></p>
+  			{{#if this.contacts}}
+				<p style="white-space: nowrap;width: 11em;overflow: hidden;text-overflow: ellipsis;">{{#related_to_one contacts}}{{/related_to_one}}</p>
+			{{/if}}{{#if_greater this.contacts.length "3"}}<span>,..</span>{{/if_greater}}
+  			<p style="margin:0px 0px 5px 0px;"> 
 				<span class="label">{{task_property type}}</span><span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 			</p>
-  			<!--<p style="margin:5px 0px;"> 
-				<span class="label">{{task_property type}}</span><span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
-				<span>	
-					{{#if this.contacts}}
-						<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
-						{{#related_to_one contacts}}{{/related_to_one}}
-					{{/if}}{{#if_greater this.contacts.length "3"}}<span>,..</span>{{/if_greater}}
-				</span>
-			</p>-->
         	<p>
         		<time class="task-due-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time>
 	   		</p>
