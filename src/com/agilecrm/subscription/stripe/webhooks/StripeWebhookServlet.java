@@ -239,7 +239,7 @@ public class StripeWebhookServlet extends HttpServlet
 	     */
 	    else if (eventJSON.getString("type").equals(StripeWebhookServlet.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED))
 	    {
-		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		DomainUser user = DomainUserUtil.getDomainOwner(newNamespace);
 
 		System.out.println(user);
 		if (user == null)
