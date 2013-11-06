@@ -32,32 +32,34 @@ public class WufooWebhook extends HttpServlet
 	try
 	{
 	    // Read hand shake key (agile API key) to authenticate data
-	    String tagString = req.getParameter("HandshakeKey");
-	    System.out.println("handshake key " + tagString);
-
-	    Contact contact = null;
+		String tagString = req.getParameter("HandshakeKey");
+		System.out.println("handshake key "+ tagString);
+	   
+		Contact contact = null;
 	    List<ContactField> properties = new ArrayList<ContactField>();
 
 	    // Get fields structure from form data and iterate JSON
 	    JSONObject obj = new JSONObject(req.getParameter("FieldStructure"));
+	    
+	    System.out.println("field structure "+ obj.toString());
+	    
 	    JSONArray arr = obj.getJSONArray("Fields");
 	    for (int i = 0; i < arr.length(); i++)
 	    {
+	    	
 		JSONObject json = arr.getJSONObject(i);
-
+		
 		// Check if data contains email, search contact based on email
-		if (json.getString("Title").contains("email"))
-		{
-		    contact = ContactUtil.searchContactByEmail(req.getParameter(json.getString("ID")));
-		    System.out.println("contact is " + contact);
-
-		    // If contact is not found create new contact
-		    if (contact == null)
-			contact = new Contact();
+		if(json.getString("Title").toLowerCase().contains("email")){
+			contact = ContactUtil.searchContactByEmail(req.getParameter(json.getString("ID")));
+			System.out.println("contact is "+ contact);
+		
+		// If contact is not found create new contact
+			if(contact==null)
+				contact = new Contact();
 		}
 		// If data does not contain email create new contact
-		else
-		    contact = new Contact();
+		else contact = new Contact();
 
 		// Add properties to list of properties
 		properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID"))));
@@ -83,23 +85,32 @@ public class WufooWebhook extends HttpServlet
 	    // Format tagString and split into tagsWithKey array
 	    String[] tagsWithKey = new String[0];
 	    tagString = tagString.trim();
-	    tagString = tagString.replace("/, /g", ",");
-	    tagsWithKey = tagString.split(",");
-	    System.out.println("length of tags with key " + tagsWithKey.length);
+		tagString = tagString.replace("/, /g", ",");
+		tagsWithKey = tagString.split(",");
+		System.out.println("length of tags with key " + tagsWithKey.length);
+		
+		// Remove API key from tagsWithKey array
+		String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
+		System.out.println("length of tags " + tags.length);
+		
+		System.out.println("contact is "+contact);
 
-	    // Remove API key from tagsWithKey array
-	    String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
-	    System.out.println("length of tags " + tags.length);
-
+	    try{
+	    System.out.println("properties "+ properties);
 	    // Add properties to contact and set contact owner
 	    contact.properties = properties;
 	    contact.addTags(tags);
-
-	    System.out.println("api key is " + tagsWithKey[0]);
-
+	    }
+	    catch(Exception e){
+	    	e.printStackTrace();
+	    	return;
+	    }
+	    
+	    System.out.println("api key is "+ tagsWithKey[0]);
+	    
 	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
-	    System.out.println("owner id is " + owner.getId());
-
+	    System.out.println("owner id is "+ owner.getId());
+	    
 	    if (owner != null)
 	    {
 		contact.setContactOwner(owner);
@@ -108,8 +119,8 @@ public class WufooWebhook extends HttpServlet
 	}
 	catch (Exception e)
 	{
-	    System.out.println("exception occured");
 	    e.printStackTrace();
+	    System.out.println("exception occured");
 	    return;
 	}
     }
@@ -163,9 +174,9 @@ public class WufooWebhook extends HttpServlet
 	{
 	    if (ContactUtil.isValidEmail(value))
 	    {
-		field.name = Contact.EMAIL;
-		field.value = value;
-		field.type = FieldType.SYSTEM;
+	    	field.name = Contact.EMAIL;
+	    	field.value = value;
+	    	field.type = FieldType.SYSTEM;
 	    }
 	}
 	else
@@ -176,4 +187,4 @@ public class WufooWebhook extends HttpServlet
 	}
 	return field;
     }
-}
+	}
