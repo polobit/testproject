@@ -21,6 +21,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
 
 @SuppressWarnings("serial")
 public class WufooWebhook extends HttpServlet
@@ -30,7 +32,9 @@ public class WufooWebhook extends HttpServlet
 	try
 	{
 	    // Read hand shake key (agile API key) to authenticate data
-		String tagString = req.getParameter("HandshakeKey");
+	    String tagString = req.getParameter("HandshakeKey");
+	    System.out.println("handshake key " + tagString);
+
 	    Contact contact = null;
 	    List<ContactField> properties = new ArrayList<ContactField>();
 
@@ -40,17 +44,20 @@ public class WufooWebhook extends HttpServlet
 	    for (int i = 0; i < arr.length(); i++)
 	    {
 		JSONObject json = arr.getJSONObject(i);
-		
+
 		// Check if data contains email, search contact based on email
-		if(json.getString("Title").contains("email")){
-			contact = ContactUtil.searchContactByEmail(req.getParameter(json.getString("ID")));
-		
-		// If contact is not found create new contact
-			if(contact==null)
-				contact = new Contact();
+		if (json.getString("Title").contains("email"))
+		{
+		    contact = ContactUtil.searchContactByEmail(req.getParameter(json.getString("ID")));
+		    System.out.println("contact is " + contact);
+
+		    // If contact is not found create new contact
+		    if (contact == null)
+			contact = new Contact();
 		}
 		// If data does not contain email create new contact
-		else contact = new Contact();
+		else
+		    contact = new Contact();
 
 		// Add properties to list of properties
 		properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID"))));
@@ -76,24 +83,32 @@ public class WufooWebhook extends HttpServlet
 	    // Format tagString and split into tagsWithKey array
 	    String[] tagsWithKey = new String[0];
 	    tagString = tagString.trim();
-		tagString = tagString.replace("/, /g", ",");
-		tagsWithKey = tagString.split(",");
-		
-		// Remove API key from tagsWithKey array
-		String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
-	    
+	    tagString = tagString.replace("/, /g", ",");
+	    tagsWithKey = tagString.split(",");
+	    System.out.println("length of tags with key " + tagsWithKey.length);
+
+	    // Remove API key from tagsWithKey array
+	    String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
+	    System.out.println("length of tags " + tags.length);
+
 	    // Add properties to contact and set contact owner
 	    contact.properties = properties;
 	    contact.addTags(tags);
-	    
-	    if (APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]) != null)
+
+	    System.out.println("api key is " + tagsWithKey[0]);
+
+	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+	    System.out.println("owner id is " + owner.getId());
+
+	    if (owner != null)
 	    {
-		contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]));
+		contact.setContactOwner(owner);
 		contact.save();
 	    }
 	}
 	catch (Exception e)
 	{
+	    System.out.println("exception occured");
 	    e.printStackTrace();
 	    return;
 	}
@@ -148,9 +163,9 @@ public class WufooWebhook extends HttpServlet
 	{
 	    if (ContactUtil.isValidEmail(value))
 	    {
-	    	field.name = Contact.EMAIL;
-	    	field.value = value;
-	    	field.type = FieldType.SYSTEM;
+		field.name = Contact.EMAIL;
+		field.value = value;
+		field.type = FieldType.SYSTEM;
 	    }
 	}
 	else
