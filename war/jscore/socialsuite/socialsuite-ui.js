@@ -10,15 +10,21 @@
 		 registerAllDone = false;	
 		 TweetOwnerForAddContact = null;
 		 focused = true;
+		 notActiveFrom = null;
 	  })();
 
 
 
 window.onfocus = function() {
     focused = true;
+    if(notActiveFrom != null)
+    	{
+    	
+    	}
 };
 window.onblur = function() {
     focused = false;
+    
 };
 
 /**
@@ -375,8 +381,7 @@ $(document).on("click",".action-notify", function(e)
 {	
 	// Get relation for action.
 	var relation = $(this).attr('rel');
-	alert(relation);
-
+	
 	// Get stream id.
     var streamId = $(this).attr('data');
 
