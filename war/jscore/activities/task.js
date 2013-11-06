@@ -360,7 +360,7 @@ function append_tasks(base_model) {
 	if (due < 0) {
 		$('#overdue', this.el).append(itemView.render().el);
 		$('#overdue', this.el).find('tr:last').data(base_model);
-		$('#overdue', this.el).parent('table').show();
+		$('#overdue', this.el).parent('table').css("display","block");
 		$('#overdue-heading', this.el).show();
 		$('#overdue', this.el).show();
 	}
@@ -369,7 +369,7 @@ function append_tasks(base_model) {
 	if (due == 0) {
 		$('#today', this.el).append(itemView.render().el);
 		$('#today', this.el).find('tr:last').data(base_model);
-		$('#today', this.el).parent('table').show();
+		$('#today', this.el).parent('table').css("display","block");
 		$('#today', this.el).show();
 		$('#today-heading', this.el).show();
 	}
@@ -378,7 +378,7 @@ function append_tasks(base_model) {
 	if (due == 1) {
 		$('#tomorrow', this.el).append(itemView.render().el);
 		$('#tomorrow', this.el).find('tr:last').data(base_model);
-		$('#tomorrow', this.el).parent('table').show();
+		$('#tomorrow', this.el).parent('table').css("display","block");
 		$('#tomorrow', this.el).show();
 		$('#tomorrow-heading', this.el).show();
 	}
@@ -387,7 +387,7 @@ function append_tasks(base_model) {
 	if (due > 1) {
 		$('#next-week', this.el).append(itemView.render().el);
 		$('#next-week', this.el).find('tr:last').data(base_model);
-		$('#next-week', this.el).parent('table').show();
+		$('#next-week', this.el).parent('table').css("display","block");
 		$('#next-week', this.el).show();
 		$('#next-week-heading', this.el).show();
 	}

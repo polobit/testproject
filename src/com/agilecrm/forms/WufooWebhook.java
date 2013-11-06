@@ -21,6 +21,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
 
 @SuppressWarnings("serial")
 public class WufooWebhook extends HttpServlet
@@ -31,19 +33,26 @@ public class WufooWebhook extends HttpServlet
 	{
 	    // Read hand shake key (agile API key) to authenticate data
 		String tagString = req.getParameter("HandshakeKey");
-	    Contact contact = null;
+		System.out.println("handshake key "+ tagString);
+	   
+		Contact contact = null;
 	    List<ContactField> properties = new ArrayList<ContactField>();
 
 	    // Get fields structure from form data and iterate JSON
 	    JSONObject obj = new JSONObject(req.getParameter("FieldStructure"));
+	    
+	    System.out.println("field structure "+ obj.toString());
+	    
 	    JSONArray arr = obj.getJSONArray("Fields");
 	    for (int i = 0; i < arr.length(); i++)
 	    {
+	    	
 		JSONObject json = arr.getJSONObject(i);
 		
 		// Check if data contains email, search contact based on email
-		if(json.getString("Title").contains("email")){
+		if(json.getString("Title").toLowerCase().contains("email")){
 			contact = ContactUtil.searchContactByEmail(req.getParameter(json.getString("ID")));
+			System.out.println("contact is "+ contact);
 		
 		// If contact is not found create new contact
 			if(contact==null)
@@ -78,23 +87,40 @@ public class WufooWebhook extends HttpServlet
 	    tagString = tagString.trim();
 		tagString = tagString.replace("/, /g", ",");
 		tagsWithKey = tagString.split(",");
+		System.out.println("length of tags with key " + tagsWithKey.length);
 		
 		// Remove API key from tagsWithKey array
 		String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
-	    
+		System.out.println("length of tags " + tags.length);
+		
+		System.out.println("contact is "+contact);
+
+	    try{
+	    System.out.println("properties "+ properties);
 	    // Add properties to contact and set contact owner
 	    contact.properties = properties;
 	    contact.addTags(tags);
+	    }
+	    catch(Exception e){
+	    	e.printStackTrace();
+	    	return;
+	    }
 	    
-	    if (APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]) != null)
+	    System.out.println("api key is "+ tagsWithKey[0]);
+	    
+	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+	    System.out.println("owner id is "+ owner.getId());
+	    
+	    if (owner != null)
 	    {
-		contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]));
+		contact.setContactOwner(owner);
 		contact.save();
 	    }
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println("exception occured");
 	    return;
 	}
     }
@@ -161,4 +187,4 @@ public class WufooWebhook extends HttpServlet
 	}
 	return field;
     }
-}
+	}

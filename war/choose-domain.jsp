@@ -161,11 +161,11 @@ padding-left:10px!important;
 		function validateAndSubmit() {
 			var subdomain = $("#subdomain").val();
 			// validates the domain value
-			if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 12 
+			if(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 20 
 		        || !isAlphaNumeric(subdomain) || !isNotValid(subdomain))
 			{
 				//shows error message
-				if(!error)error = "Domain should be 4 to 12 characters."
+				if(!error)error = "Domain should be 4 to 20 characters."
 				$("#domain-error").html('<div class="alert alert-error domain-error">'
 						+ '<a class="close" data-dismiss="alert" href="#">&times</a>'+ error +'</div>');
 				error = "";
@@ -193,7 +193,7 @@ padding-left:10px!important;
 		function isAlphaNumeric(subdomain) {
 			subdomain = subdomain.toString();
 		  
-		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{3,12}$/);
+		  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{3,20}$/);
 		  if(!regularExpression.test(subdomain)) {
 		        error = "Domain should start with an alphabet and special characters are not allowed.";
 				return false;

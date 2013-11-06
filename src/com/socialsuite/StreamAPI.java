@@ -184,19 +184,16 @@ public class StreamAPI
 		}
 		catch (SocketTimeoutException e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 					.entity("Request timed out. Refresh and try again.").build());
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 					.entity("An error occured. Refresh and try again.").build());
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
@@ -236,19 +233,16 @@ public class StreamAPI
 		}
 		catch (SocketTimeoutException e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 					.entity("Request timed out. Refresh and try again.").build());
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 					.entity("An error occured. Refresh and try again.").build());
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
@@ -288,19 +282,16 @@ public class StreamAPI
 		}
 		catch (SocketTimeoutException e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 					.entity("Request timed out. Refresh and try again.").build());
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 					.entity("An error occured. Refresh and try again.").build());
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}

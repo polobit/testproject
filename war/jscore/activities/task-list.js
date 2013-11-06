@@ -16,7 +16,9 @@ function initOwnerslist() {
 				
 	});
 	$("ul#owner-tasks li a").die().live("click", function() {
-		$('.task-heading').text($(this).html());
+		
+		$('.task-heading').html($(this).html() +'&nbsp<small class="tasks-count"></small>');
+		//$('.task-heading').text($(this).html());
 		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
 	});
 	updateData(getParams());
@@ -45,7 +47,7 @@ function updateData(params) {
 		cursor : true, page_size : 25,
 		individual_tag_name : 'tr',
 		postRenderCallback : function(el) {
-			$('.task-heading').append('&nbsp<small>' + getCount(this.App_Calendar.allTasksListView.collection.toJSON()) + '</small>');
+			$('.tasks-count').html(getCount(this.App_Calendar.allTasksListView.collection.toJSON()));
 			head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
 				$(".task-due-time", el).timeago();
 			});
