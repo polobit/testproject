@@ -178,15 +178,7 @@ function addUserImgToColumn(stream)
  * Add tweet in stream.
  */
 function handleMessage(tweet)
-{		
-  // Error message from server "Rate limit exceeded."
-  if(tweet.id == "001") //(tweet.delete != null)
-	  {
-	    alert(tweet.text);
-	    displayErrorInStream(tweet);
-	    return;
-	  }
-	
+{ 
   // We need this messages to reflect actions in all added relevant streams.
   if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
@@ -238,43 +230,7 @@ function handleMessage(tweet)
 	} // If End  
     
      console.log("StreamsListView: ");console.log(StreamsListView);
-	 console.log("TempStreamsListView: ");console.log(TempStreamsListView);
-  
-	 // Searchs tweet owner's kloutscore.
-	 // Fetches tweet owner's klout id.
-/*	 var url = "https://api.klout.com/v2/identity.json/twitter?screenName="+tweet.user.screen_name+"&key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
-
-     $.getJSON( url , function(data) {
-    	 console.log(data);   
-        })
-     .success(function( data ){
-        console.log(data);      
-    	
-   	    // Fetches tweet owner's klout score.
-    	url = "https://api.klout.com/v2/user.json/"+data.id+"/score?key=89tdcs5g6ztxvef3q72mwzc6&callback=?";
-    	      
-    	$.getJSON( url, function(data) {
-    		  console.log(data);
-    	    })
-    	 .success( function( userScore ){
-    		// On mouse focus on profile img of tweet shows klout score
-            console.log(tweet.user.screen_name +" screen_name : klout_score " + userScore.score);
-            tweet["klout_score"] = Math.round(userScore.score);
-            
-            addTweetToStream(modelStream,tweet);           
-           }) // Get klout score of user end
-         .error(function( jqxhr, textStatus, error ) {
-       	   var err = textStatus + ", " + error;
-       	   console.log( "klout score of user end Request Failed: " + err );
-       	   addTweetToStream(modelStream,tweet);
-       	   });
-         })// Get klout id of user end
-       .error(function( jqxhr, textStatus, error ) {
-    	   var err = textStatus + ", " + error;
-    	   console.log( "klout id of user end Request Failed: " + err );
-    	   addTweetToStream(modelStream,tweet);
-    	   });
-	}// If end*/
+	 console.log("TempStreamsListView: ");console.log(TempStreamsListView); 
 }
 
 /**
@@ -353,11 +309,23 @@ function addTweetToTempCollection(tweet)
 {	
   console.log("In addTweetToCollection.");
   console.log(TempStreamsListView.collection.length);
-		  
-  // Get stream from collection.
-  var modelStream = TempStreamsListView.collection.get(tweet.stream_id);
+	
+  var modelStream = null;  
+  
+  if(tweet.id == "000")
+	  {
+	     console.log("got 000");
+	     // Get stream from collection.
+	     modelStream = StreamsListView.collection.get(tweet.stream_id);        
+	  }
+  else
+	  {
+	     // Get stream from temp collection.
+	     modelStream = TempStreamsListView.collection.get(tweet.stream_id);
+	  }
 	 			  
   console.log("call from addTweetToTempCollection to addTweetToStream");
+  
   // Add tweet to stream model.
   addTweetToStream(modelStream,tweet);
 }
@@ -472,12 +440,15 @@ function removeWaiting()
 	        var modelStream = StreamsListView.collection.get(stream.id);
 	        var tempModelStream = TempStreamsListView.collection.get(stream.id);
 	  
-	        // If any collection have some tweets then remove waiting.
-	        if(modelStream.get('tweetListView').length >= 1 || tempModelStream.get('tweetListView').length >= 1)
+	        if((modelStream != null || modelStream != undefined) && (tempModelStream != null || tempModelStream != undefined))
+	    	{	        
+	          // If any collection have some tweets then remove waiting.
+	          if(modelStream.get('tweetListView').length >= 1 || tempModelStream.get('tweetListView').length >= 1)
 	        	{
 	        	  // Hide waiting symbol.
 			      $("#stream-spinner-modal-"+stream.id).hide();	        	
-	        	}        
+	        	}
+	    	}
 		 });
 }
 
@@ -502,8 +473,9 @@ function checkNewTweets()
 	        
      	    // Get stream from collection.
 	        var modelStream = TempStreamsListView.collection.get(stream.id);	
-	        
-	        if(modelStream.get('tweetListView').length == 1)
+	        if(modelStream != null || modelStream != undefined)
+	    	{	        
+	         if(modelStream.get('tweetListView').length == 1)
 	        	{
 	        	  // Get tweet from stream.
 	        	  var modelTweet = modelStream.get('tweetListView').get('000');
@@ -511,7 +483,7 @@ function checkNewTweets()
                   // "There is no tweet" is added in stream, so need to show notification for that. 
 	        	  if(modelTweet != null || modelTweet != undefined)
 	        		  {	        		   
-	        		    newTweet = false;
+	        		    newTweet = false;	        		    
 	        		  }
 	        	  else // New tweet is common tweet so need to add notification.
 	        		  {
@@ -522,7 +494,7 @@ function checkNewTweets()
 		  		        $('#stream_notifications_'+stream.id).attr("rel",'add-new-tweet');
 	        		  }	        	  	        	
 	        	}
-	        else if(modelStream.get('tweetListView').length > 1)
+	         else if(modelStream.get('tweetListView').length > 1)
         	    {
         	      // Add notification of new tweets on stream.
   		          document.getElementById('stream_notifications_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweets </p>';
@@ -531,38 +503,13 @@ function checkNewTweets()
 	  		      $('#stream_notifications_'+stream.id).attr("rel",'add-new-tweet');
         	    }
 	        
-	        if(newTweet == true && modelStream.get('tweetListView').length >= 1)
+	         if(newTweet == true && modelStream.get('tweetListView').length >= 1)
 	        	{
 	        	  // Remove no tweet notification.		      
 			      clearNoTweetNotification(StreamsListView.collection.get(stream.id));
 	        	}
+	    	}
 		 });      	
-}
-
-
-/**
- * When request rate limit is exceeded so Twitter server send code 88, It will not accept any more REST call.
- * User have to wait for some time and retry again.
- * We need to display notification for that in relavant stream.
- */
-function displayErrorInStream(errorMsg)
-{		
-	var streamId = null;
-	
-	// Get stream id.
-	if(errorMsg.id == "001")
-		streamId = errorMsg.stream_id;
-	else
-		streamId = errorMsg.id;
-
-	// Hide waiting symbol.
-	$("#stream-spinner-modal-"+streamId).hide();
-	
-    // Add notification of new tweets on stream.
-    document.getElementById('stream_notifications_'+streamId).innerHTML= '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
-      
-    // Add relation from <div> for notification.
-    $('#stream_notifications_'+streamId).attr("rel",'retry');
 }
 
 /**
@@ -601,19 +548,3 @@ function addNewTempTweet(streamId)
     // Remove waiting symbol.
 	removeWaiting();	
 }
-
-/**
- * Send register message again to twitter server.
- */
- function registerStreamAgain(streamId)
- {
-	// Fetch stream from collection
-	var stream = StreamsListView.collection.get(streamId).toJSON();
-	 
-	// Register on server
-	var publishJSON = {"message_type":"register", "stream":stream};
-	sendMessage(publishJSON);	
-	
-	// Show waiting symbol.
-	$("#stream-spinner-modal-"+streamId).show();
- }

@@ -9,22 +9,14 @@
 		 NetworkType = null;
 		 registerAllDone = false;	
 		 TweetOwnerForAddContact = null;
-		 focused = true;
-		 notActiveFrom = null;
+		 focused = true;		 
 	  })();
 
-
-
 window.onfocus = function() {
-    focused = true;
-    if(notActiveFrom != null)
-    	{
-    	
-    	}
+    focused = true;    
 };
 window.onblur = function() {
-    focused = false;
-    
+    focused = false;    
 };
 
 /**
@@ -390,8 +382,6 @@ $(document).on("click",".action-notify", function(e)
     
 	if(relation == "add-new-tweet")
 		addNewTempTweet(streamId);
-	else if(relation == "retry")
-	    registerStreamAgain(streamId);
 	
 	// Remove relation from <div> for notification.
 	$(this).attr("rel",'');
