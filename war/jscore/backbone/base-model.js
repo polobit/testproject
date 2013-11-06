@@ -380,8 +380,8 @@ var Base_Model_View = Backbone.View
 									error : function(model, response) {
 										
 										// Removes disabled attribute of save button
-										enable_save_button($form.find('.save'));
-										
+										enable_save_button($(e.currentTarget));
+										console.log(response);
 										// Hide loading on error
 										//$save_info.hide();
 

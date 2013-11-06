@@ -35,7 +35,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		initToPubNub();	
 
 		console.log("StreamsListView: ");console.log(StreamsListView);
-		 console.log("TempStreamsListView: ");console.log(TempStreamsListView);
+		console.log("TempStreamsListView: ");console.log(TempStreamsListView);
 		
 		// Display added streams 
 		this.streams();			
@@ -96,7 +96,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			  if(stream)
 				{
 				  StreamsListView.collection.add(stream);				  
-				}
+				}	
 			 		  			  
 			  $('#socialsuite-tabs-content').append(StreamsListView.render(true).el);
 			  
@@ -105,7 +105,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
  		 		        $(".time-ago", $(".chirp-container")).timeago(); });
  		 	  
  		 	  // Check for new tweets and show notification.
-			  checkNewTweets();
+			  checkNewTweets();			  
 			}		
 		
 		 // Remove deleted tweet element from ui

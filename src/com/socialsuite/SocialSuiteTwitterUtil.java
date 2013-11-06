@@ -139,13 +139,19 @@ public class SocialSuiteTwitterUtil
 		{
 			Twitter twitter = getTwitter(stream);
 			String agile = " via @agile_crm";
+			String result = null;
 
 			// Send current update/status
 			Status status = twitter.updateStatus(message + agile);
 			System.out.println("tweetInTwitter : ");
 			System.out.println(JSONUtil.toJSONString(status));
 
-			return (status != null) ? "Successful" : "Unsuccessful";
+			if (status.toString().contains(message))
+				result = "Successful";
+
+			System.out.println("result: " + result);
+
+			return result;
 		}
 		catch (TwitterRuntimeException e)
 		{
@@ -175,13 +181,19 @@ public class SocialSuiteTwitterUtil
 		{
 			Twitter twitter = getTwitter(stream);
 			String agile = " via @agile_crm";
+			String result = null;
 
 			// Send reply tweet to particular tweet based on tweet id.
 			Status status = twitter.updateStatus(new StatusUpdate(message + agile).inReplyToStatusId(tweetId));
 			System.out.println("replyTweetInTwitter : ");
 			System.out.println(status.toString());
 
-			return (status != null) ? "Successful" : "Unsuccessful";
+			if (status.toString().contains(message))
+				result = "Successful";
+
+			System.out.println("result: " + result);
+
+			return result;
 		}
 		catch (TwitterRuntimeException e)
 		{
@@ -212,12 +224,13 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-
 			String agile = " via @agile_crm";
+			String result = null;
+
 			if (!twitter.showFriendship(stream.screen_name, tweetOwner).isSourceFollowedByTarget())
 			{
-				System.out.println("You can send a message only to persons who is following you");
-				return "You can send a message only to persons who is following you";
+				System.out.println("You can send a message only to persons who is following you.");
+				return "You can send a message only to persons who is following you.";
 			}
 
 			// Send DM
