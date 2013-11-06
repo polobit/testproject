@@ -90,7 +90,7 @@
 				 {{/if_equals}} 
                </span>	 
             </header>
-            <div id="new_tweet_notification_{{id}}" class="new-tweet-notification add-new-tweets" data={{id}}></div>
+            <div id="stream_notifications_{{id}}" class="stream-notifications action-notify" data={{id}} rel=""></div>
             <div id="stream" class="column-content">
                       
             </div>
@@ -134,7 +134,7 @@
               <time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>                              
  	    	  <ul class="tweet-actions">
                  {{#if direct_message}}
-                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" data-user-name="{{user.name}}"> 
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" tweet-owner={{user.screen_name}} data-user-name="{{user.name}}" description="{{user.description}}"> 
                             <i class="icon icon-plus-sign" title="Add Contact"></i>                            
                          </a> </li>
                  {{else}}
