@@ -179,6 +179,14 @@ function addUserImgToColumn(stream)
  */
 function handleMessage(tweet)
 {		
+  // Error message from server "Rate limit exceeded."
+  if(tweet.id == "001") //(tweet.delete != null)
+	  {
+	    alert(tweet.text);
+	    displayErrorInStream(tweet);
+	    return;
+	  }
+	
   // We need this messages to reflect actions in all added relevant streams.
   if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
@@ -198,7 +206,7 @@ function handleMessage(tweet)
 		  {
 		   
 		    // New tweet notification not yet clicked.
-		    if( $('#new_tweet_notification_'+tweet.stream_id).is(':empty') == false)  
+		    if( $('#stream_notifications_'+tweet.stream_id).is(':empty') == false)  
 		      {
 		    	 console.log("not clicked");
 		    	// User did not click on notification so continue adding tweets in temp collection.
@@ -461,13 +469,15 @@ function removeWaiting()
   $.each(streamsJSON, function(i, stream)
 		 {	  		
        	    // Get stream from collection.
-	        var modelStream = StreamsListView.collection.get(stream.id);	
+	        var modelStream = StreamsListView.collection.get(stream.id);
+	        var tempModelStream = TempStreamsListView.collection.get(stream.id);
 	  
-	        if(modelStream.get('tweetListView').length >= 1)
+	        // If any collection have some tweets then remove waiting.
+	        if(modelStream.get('tweetListView').length >= 1 || tempModelStream.get('tweetListView').length >= 1)
 	        	{
 	        	  // Hide waiting symbol.
 			      $("#stream-spinner-modal-"+stream.id).hide();	        	
-	        	}	        
+	        	}        
 		 });
 }
 
@@ -506,13 +516,19 @@ function checkNewTweets()
 	        	  else // New tweet is common tweet so need to add notification.
 	        		  {
 	        		    // Add notification of new tweets on stream.
-		  		        document.getElementById('new_tweet_notification_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweet </p>';
+		  		        document.getElementById('stream_notifications_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweet </p>';
+
+		  		        // Add relation from <div> for notification.
+		  		        $('#stream_notifications_'+stream.id).attr("rel",'add-new-tweet');
 	        		  }	        	  	        	
 	        	}
 	        else if(modelStream.get('tweetListView').length > 1)
         	    {
         	      // Add notification of new tweets on stream.
-  		          document.getElementById('new_tweet_notification_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweets </p>';	        	  	        	
+  		          document.getElementById('stream_notifications_'+stream.id).innerHTML= '<p>'+modelStream.get('tweetListView').length+' new Tweets </p>';
+  		          
+  		          // Add relation from <div> for notification.
+	  		      $('#stream_notifications_'+stream.id).attr("rel",'add-new-tweet');
         	    }
 	        
 	        if(newTweet == true && modelStream.get('tweetListView').length >= 1)
@@ -522,3 +538,82 @@ function checkNewTweets()
 	        	}
 		 });      	
 }
+
+
+/**
+ * When request rate limit is exceeded so Twitter server send code 88, It will not accept any more REST call.
+ * User have to wait for some time and retry again.
+ * We need to display notification for that in relavant stream.
+ */
+function displayErrorInStream(errorMsg)
+{		
+	var streamId = null;
+	
+	// Get stream id.
+	if(errorMsg.id == "001")
+		streamId = errorMsg.stream_id;
+	else
+		streamId = errorMsg.id;
+
+	// Hide waiting symbol.
+	$("#stream-spinner-modal-"+streamId).hide();
+	
+    // Add notification of new tweets on stream.
+    document.getElementById('stream_notifications_'+streamId).innerHTML= '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
+      
+    // Add relation from <div> for notification.
+    $('#stream_notifications_'+streamId).attr("rel",'retry');
+}
+
+/**
+ * Add tweets from temp collection to original collection and remove notification.
+ */
+function addNewTempTweet(streamId)
+{
+    // Get stream from collection.
+    var originalStream = StreamsListView.collection.get(streamId);
+    var tempStream = TempStreamsListView.collection.get(streamId);
+    
+    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
+    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
+    
+    // Get tweet collection from stream.
+    var tweetCollection = originalStream.get('tweetListView');
+    
+    // Add new tweets from temp collection to original collection.
+    tweetCollection.add(tempStream.get("tweetListView").toJSON());
+    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
+    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
+        
+    // Sort tweet collection on id. so recent tweet comes on top.
+    tweetCollection.sort();    
+	   
+	// Create normal time.
+	head.js('lib/jquery.timeago.js', function(){	 
+		        $(".time-ago", $(".chirp-container")).timeago();	
+			});
+	 
+	// Clear temp tweet collection.
+	tempStream.get("tweetListView").reset();
+	console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
+    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
+    
+    // Remove waiting symbol.
+	removeWaiting();	
+}
+
+/**
+ * Send register message again to twitter server.
+ */
+ function registerStreamAgain(streamId)
+ {
+	// Fetch stream from collection
+	var stream = StreamsListView.collection.get(streamId).toJSON();
+	 
+	// Register on server
+	var publishJSON = {"message_type":"register", "stream":stream};
+	sendMessage(publishJSON);	
+	
+	// Show waiting symbol.
+	$("#stream-spinner-modal-"+streamId).show();
+ }
