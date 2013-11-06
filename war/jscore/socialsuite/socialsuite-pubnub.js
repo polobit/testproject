@@ -102,7 +102,7 @@ function sendMessage(publishJSON)
 						else // The internet is gone. // TRY SENDING AGAIN!
 			        		{
 							 console.log("in publish_message unsuccessfull to Sent Message!");
-							 alert("You are not connected with Twitter server or you have problem with connection!");
+							 showNotyPopUp('information', "You are not connected with Twitter server or you have problem with connection!", "top", 5000);							 
 							 //sendMessage(publishJSON);
 			        		}
 					}
