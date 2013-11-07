@@ -132,7 +132,7 @@ public class GMailGadgetServlet extends HttpServlet
 
 	resp.getWriter()
 		.println(
-			"You have successfully associated your gadget with your AgileCRM account. Please close this popup and signout from Gmail and signin again to start using it.");
+			"You have successfully associated your gadget with your AgileCRM account. Please close this popup to start using gadget.");
 
 	return false;
     }
