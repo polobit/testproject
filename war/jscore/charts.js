@@ -43,7 +43,6 @@ function pie(url, selector, name)
 	var chart;
 	setupCharts(function()
 	{
-
 		// Fetches data from to get tags informations
 		// i.e., {"tags1" :" number of contacts with 'tags1', "tags2" : "number
 		// of contacts with tags2"}
@@ -57,13 +56,16 @@ function pie(url, selector, name)
 							// Highcharts
 							var pieData = [];
 							var total = 0;
+							var count = 0;
 
 							// Iterates through data and calculate total number
 							$.each(data, function(k, v)
 							{
 								total += v;
+								count ++;
 							});
 
+							console.log(data);
 							// Iterates through data, gets each tag, count and
 							// calculate
 							// percentage of each tag
@@ -71,6 +73,7 @@ function pie(url, selector, name)
 							{
 								var item = [];
 
+								
 								// Push tag name in to array
 								item.push(k);
 
@@ -78,7 +81,9 @@ function pie(url, selector, name)
 								item.push(v / total * 100);
 								pieData.push(item);
 							})
-
+							
+							var animation = count > 20 ? false : true;
+							
 							// Initializes Highcharts,
 							chart = new Highcharts.Chart(
 									{
@@ -105,6 +110,7 @@ function pie(url, selector, name)
 										legend : { itemWidth : 75, },
 										plotOptions : {
 											pie : {
+												 animation: animation,
 												allowPointSelect : true,
 												cursor : 'pointer',
 												borderWidth : 0,
