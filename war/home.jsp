@@ -16,6 +16,7 @@
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.account.NavSetting"%>
 <%@page import="com.agilecrm.account.util.NavSettingUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <html lang="en">
 <head>
