@@ -58,7 +58,7 @@ public class WufooWebhook extends HttpServlet
 					contact = new Contact();
 
 				// Add properties to list of properties
-				properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")),contact));
+				properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")), contact));
 				Iterator<?> keys = json.keys();
 				while (keys.hasNext())
 				{
@@ -73,7 +73,7 @@ public class WufooWebhook extends HttpServlet
 
 							// Add properties to list of properties
 							properties.add(buildProperty(subObj.getString("Label"),
-									req.getParameter(subObj.getString("ID")),contact));
+									req.getParameter(subObj.getString("ID")), contact));
 						}
 					}
 				}
@@ -108,7 +108,7 @@ public class WufooWebhook extends HttpServlet
 	{
 		name = name.toLowerCase();
 		ContactField field = contact.getContactFieldByName(name);
-		if(field==null)
+		if (field == null)
 			field = new ContactField();
 
 		// Set field type to SYSTEM for name, email, company, title, phone, all
