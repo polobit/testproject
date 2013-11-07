@@ -60,6 +60,10 @@ $(document).on("click",".compose-message", function(e)
     $('#send_tweet').click(function (e)
     {
         e.preventDefault();
+        
+        // Check Send button is not enable
+    	if($("#send_tweet").hasClass('disabled'))
+    		return;
 
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))
@@ -177,6 +181,10 @@ $(document).on("click",".reply-message", function(e)
     {
         e.preventDefault();
 
+        // Check Send button is not enable
+    	if($("#send_reply").hasClass('disabled'))
+    		return;
+        
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
@@ -292,6 +300,10 @@ $(document).on("click",".direct-message", function(e)
     {
         e.preventDefault();
 
+        // Check Send button is not enable
+    	if($("#send_direct_message").hasClass('disabled'))
+    		return;
+        
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
