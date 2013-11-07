@@ -151,6 +151,32 @@ function registerAll()
 }
 
 /**
+ *  Unregister all streams on server
+ */
+function unregisterAll()
+{ 	
+  // Collection not defined.	
+  if(!StreamsListView)
+	return;
+	
+  var streamsJSON = StreamsListView.collection.toJSON();
+		
+  // Streams not available OR pubnub not initialized.	
+  if(streamsJSON == null || pubnub == null)
+	return;
+	  	
+   // Get stream
+   $.each(streamsJSON, function(i, stream)
+	 {	  		       
+	    // Stream size is too big, can not handle by pubnub so remove list of tweet.
+		delete stream.tweetListView;	
+		
+		// Unregister on server
+		var publishJSON = {"message_type":"unregister", "stream":stream};
+		sendMessage(publishJSON);
+	 });  
+}
+/**
  * Add relevant profile img to stream in column header.
  */
 function addUserImgToColumn(stream)
@@ -183,6 +209,14 @@ function handleMessage(tweet)
   if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
 	    console.log("delete tweet");
+	    return;
+	  }
+  
+  //Error message from server "Rate limit exceeded."
+  if(tweet.id == "001") //(tweet.delete != null)
+	  {
+	    alert(tweet.text);
+	    displayErrorInStream(tweet);
 	    return;
 	  }
   
@@ -548,3 +582,44 @@ function addNewTempTweet(streamId)
     // Remove waiting symbol.
 	removeWaiting();	
 }
+
+/**
+ * When request rate limit is exceeded so Twitter server send code 88, It will not accept any more REST call.
+ * User have to wait for some time and retry again.
+ * We need to display notification for that in relavant stream.
+ */
+function displayErrorInStream(errorMsg)
+{		
+	var streamId = null;
+	
+	// Get stream id.
+	if(errorMsg.id == "001") // from Tweet
+		streamId = errorMsg.stream_id;
+	else  // from Stream
+		streamId = errorMsg.id;
+
+	// Hide waiting symbol.
+	$("#stream-spinner-modal-"+streamId).hide();
+	
+    // Add notification of error on stream.
+    document.getElementById('stream_notifications_'+streamId).innerHTML= '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
+      
+    // Add relation from <div> for notification.
+    $('#stream_notifications_'+streamId).attr("rel",'retry');
+}
+
+/**
+ * Send register message again to twitter server.
+ */
+ function registerStreamAgain(streamId)
+ {
+	// Fetch stream from collection
+	var stream = StreamsListView.collection.get(streamId).toJSON();
+	 
+	// Register on server
+	var publishJSON = {"message_type":"register", "stream":stream};
+	sendMessage(publishJSON);	
+	
+	// Show waiting symbol.
+	$("#stream-spinner-modal-"+streamId).show();
+ }

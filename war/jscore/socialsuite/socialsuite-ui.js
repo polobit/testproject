@@ -12,12 +12,23 @@
 		 focused = true;		 
 	  })();
 
+// To collect tweets in temp collection.
 window.onfocus = function() {
     focused = true;    
 };
 window.onblur = function() {
     focused = false;    
 };
+
+// After clicking on logout, unregister all streams on server.
+$('a').click(function(event) {
+   var herfLogout = $(this).attr("href");
+   if(herfLogout == "/login")
+     {
+	   alert(herfLogout);
+	   unregisterAll(); 
+     }
+});
 
 /**
  * Fills name with twitter's owner in add-contact popup form. 
@@ -382,6 +393,8 @@ $(document).on("click",".action-notify", function(e)
     
 	if(relation == "add-new-tweet")
 		addNewTempTweet(streamId);
+	else if(relation == "retry")
+	    registerStreamAgain(streamId);
 	
 	// Remove relation from <div> for notification.
 	$(this).attr("rel",'');
