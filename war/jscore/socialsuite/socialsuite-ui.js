@@ -24,8 +24,7 @@ window.onblur = function() {
 $('a').click(function(event) {
    var herfLogout = $(this).attr("href");
    if(herfLogout == "/login")
-     {
-	   alert(herfLogout);
+     {	   
 	   unregisterAll(); 
      }
 });
