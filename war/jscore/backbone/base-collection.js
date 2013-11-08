@@ -222,6 +222,9 @@ var Base_Collection_View = Backbone.View
 						{
 							var hash = window.location.hash;
 							
+							// Unregister all streams on server.
+							unregisterAll();
+
 							// Firefox do not support window.location.origin, so protocol is explicitly added to host
 							window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
 							return;

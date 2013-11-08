@@ -175,6 +175,10 @@ function unregisterAll()
 		var publishJSON = {"message_type":"unregister", "stream":stream};
 		sendMessage(publishJSON);
 	 });  
+   
+   // Flush all data.
+   registerAllDone = false;	
+   StreamsListView = undefined;
 }
 /**
  * Add relevant profile img to stream in column header.
