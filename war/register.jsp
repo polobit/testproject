@@ -160,7 +160,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
                     <input class="input-xlarge field required" maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 					<div style="margin-top:7px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the <a href="https://www.agilecrm.com/terms.html" target="_blank">Terms and conditions</a><input type="checkbox" checked="checked" name="agree" class="required"></label>
-					  <input type='submit' style="margin-top:20px;" value="Create my account >>" class='btn btn-large btn-primary'>
+					  <input type='submit' style="margin-top:20px;" value="Create  >>" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
 				</form>
