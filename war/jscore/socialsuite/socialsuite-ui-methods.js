@@ -287,8 +287,8 @@ function addTweetToStream(modelStream,tweet)
 		{
 		  tweet["msg_type"] = "NoTweet";
 		  tweet["show"] = true;
-		  if(tweet.text == "Dear you do not have any tweets.")
-			  tweet["text"] = "There is no tweets to show here.";
+		  //if(tweet.text == "Dear you do not have any tweets.")
+		  tweet["text"] = "There are no tweets to show here.";
 		}
 	else
 		{
@@ -312,6 +312,9 @@ function addTweetToStream(modelStream,tweet)
 	          tweet["direct_message"] = true;
 	          tweet["deletable_tweet"] = true;
 	        }
+	      
+	      // Save original text for other actions.
+	      tweet["original_text"] = tweet.text;
 	      
 	      // Converts normal text to tweet with link on url, # and @.
 	      tweet.text = convertTextToTweet(tweet);
