@@ -28,7 +28,7 @@
 												<td width="388" valign="bottom">
 							<h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px">Payment Received</h2>
 												</td>
-											    <td width="170" valign="bottom" align="right"><img src="" width="150" alt="AgileCRM" style="display:block">
+											    <td width="170" valign="bottom" align="right"><img src="https://agilecrm.s3.amazonaws.com/email/agilecrm-logo.jpg" width="150" alt="AgileCRM" style="display:block">
 											    </td>
 										    </tr>
 									    </tbody>
@@ -50,21 +50,31 @@
 						     	<tr>
 							    <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Arial,Helvetica,sans-serif">
 							    <br>
-							    Dear  {{data.previousAttributes.user_name}},
+							    Dear  {{Event.data.previousAttributes.user_name}},
 							    <br>
 							    <br>
 							 Thanks for using Agile CRM!
 
                                <br>
-                {{#data.object.lines.data}}
-                We have received a payment of &cent; {{plan.amount}}.<br>
-                {{/data.object.lines.data}}
-                <br>
+                We have received a payment of ${{HashMap.price}}.<br/>
+                <br/>
+                 <br/>
+         <b>Payment Details</b><br/>
+         {{#Event.data.object.lines.data}}
+         	Plan Type: {{plan.name}}<br/>
+         	Number of Users: {{quantity}}<br/>
+         {{/Event.data.object.lines.data}}
+         
+         Credit card on File (last four): {{Customer.activeCard.last4}}<br/>
+<br/>
+This charge will appear on your credit card statement as "AgileCRM.com".
+<br/>
+<br/>
                
          
 <br>
 <br>
-If you have any questions or need help, please feel free to contact us.             
+If you have any questions or need help, please feel free to contact us at billing@agilecrm.com.             
 
 <br>
                   

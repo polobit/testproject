@@ -3,9 +3,11 @@
  */
 $(document).on("click",".compose-message", function(e)
 {	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	  
 	var streamId = $(this).attr("stream-id");
-	console.log(this);
-	 
+	
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(streamId).toJSON();
 	
@@ -58,6 +60,10 @@ $(document).on("click",".compose-message", function(e)
     $('#send_tweet').click(function (e)
     {
         e.preventDefault();
+        
+        // Check Send button is not enable
+    	if($("#send_tweet").hasClass('disabled'))
+    		return;
 
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))
@@ -79,11 +85,7 @@ $(document).on("click",".compose-message", function(e)
         		 {
                    // On success, shows the status as sent
                    $('#socialsuite-twitter_messageModal').find('span.save-status').html("Sent");
-        		 }
-        	 else if(data == "Unsuccessful")
-        		 {
-                   // On failure, shows the status as retry
-                   $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");
+                   showNotyPopUp('information', "Your Tweet was posted!", "top", 5000);
         		 }
         	 
             // Hides the modal after 2 seconds after the sent is shown
@@ -97,11 +99,16 @@ $(document).on("click",".compose-message", function(e)
         	 $("#spinner-modal").hide();
         	 
             // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').remove();
+            $('#socialsuite-twitter_messageModal').modal("hide");
 
+            var result = data.responseText;
+            console.log(result);   
+            
             // Error message is shown if error occurs
-            alert("Retry after sometime.");
-            console.log(data.responseText);            
+            if(result.trim() == "Status is a duplicate.")
+               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
+            else
+               showNotyPopUp('information', "Retry after sometime.", "top", 5000);
         });
     });
 }); 
@@ -112,11 +119,13 @@ $(document).on("click",".compose-message", function(e)
  */
 $(document).on("click",".reply-message", function(e)
 {	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
 	var tweetOwner = $(this).attr("tweet-owner");
-	console.log(this);
 	 
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(streamId).toJSON();
@@ -172,6 +181,10 @@ $(document).on("click",".reply-message", function(e)
     {
         e.preventDefault();
 
+        // Check Send button is not enable
+    	if($("#send_reply").hasClass('disabled'))
+    		return;
+        
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
@@ -192,13 +205,9 @@ $(document).on("click",".reply-message", function(e)
     		 {
                // On success, shows the status as sent
                $('#socialsuite-twitter_messageModal').find('span.save-status').html("Sent");
+               showNotyPopUp('information', "Your Tweet to @"+tweetOwner+" has been sent!", "top", 5000);               
     		 }
-        	 else if(data == "Unsuccessful")
-    		 {
-         	   // On failure, shows the status as retry
-               $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");
-    		 }
-        	 
+        	         	 
             // Hides the modal after 2 seconds after the sent is shown
             setTimeout(function ()
             {
@@ -210,11 +219,16 @@ $(document).on("click",".reply-message", function(e)
         	 $("#spinner-modal").hide();
         	 
             // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').remove();
+            $('#socialsuite-twitter_messageModal').modal("hide");
 
+            var result = data.responseText;
+            console.log(result);   
+            
             // Error message is shown if error occurs
-            alert("Retry after sometime.");
-            console.log(data.responseText);   
+            if(result.trim() == "Status is a duplicate.")
+               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
+            else
+               showNotyPopUp('information', "Retry after sometime.", "top", 5000);   
         });
     });
 });
@@ -224,12 +238,14 @@ $(document).on("click",".reply-message", function(e)
  */
 $(document).on("click",".direct-message", function(e)
 {	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
 	var tweetOwner = $(this).attr("tweet-owner");
-	console.log(this);
-	 
+		 
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(streamId).toJSON();
 	
@@ -284,6 +300,10 @@ $(document).on("click",".direct-message", function(e)
     {
         e.preventDefault();
 
+        // Check Send button is not enable
+    	if($("#send_direct_message").hasClass('disabled'))
+    		return;
+        
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
@@ -308,7 +328,8 @@ $(document).on("click",".direct-message", function(e)
         	 else if(data == "Unsuccessful")
         		{
                  // On failure, shows the status as retry
-                 $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");        		 
+                 $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");   
+                 showNotyPopUp('information', "Retry after sometime.", "top", 5000);
         		}
             // Hides the modal after 2 seconds after the sent is shown
             setTimeout(function ()
@@ -321,10 +342,10 @@ $(document).on("click",".direct-message", function(e)
         	 $("#spinner-modal").hide();
         	 
             // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').remove();
+            $('#socialsuite-twitter_messageModal').modal("hide");
 
             // Error message is shown if error occurs
-            alert("Retry after sometime.");
+            showNotyPopUp('information', "Retry after sometime.", "top", 5000);
             console.log(data.responseText);   
         });
     });
@@ -358,7 +379,7 @@ $(document).on("click",".retweet-status", function(e)
     	// Retweet is Unsuccessful.
     	if(data == "Unsuccessful")
     		{
-    		  alert("Retry after sometime.");
+    		  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     		  return;
     		}
     	
@@ -386,7 +407,7 @@ $(document).on("click",".retweet-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -429,7 +450,7 @@ $(document).on("click",".undo-retweet-status", function(e)
     	// Undo-Retweet is Unsuccessful.
     	if(data == "Unsuccessful")
     		{
-    		  alert("Retry after sometime.");
+    		  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     		  return;
     		}    	
     	
@@ -459,7 +480,7 @@ $(document).on("click",".undo-retweet-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -488,7 +509,7 @@ $(document).on("click",".favorite-status", function(e)
     	// Favorite is Unsuccessful.
     	if(data == "Unsuccessful")
     		{
-    		  alert("Retry after sometime.");
+    		  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     		  return;
     		}    
     	
@@ -515,7 +536,7 @@ $(document).on("click",".favorite-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -545,7 +566,7 @@ $(document).on("click",".undo-favorite-status", function(e)
     	// Favorite is Unsuccessful.
     	if(data == "Unsuccessful")
     		{
-    		  alert("Retry after sometime.");
+    		  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     		  return;
     		}
     	
@@ -572,7 +593,7 @@ $(document).on("click",".undo-favorite-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -653,7 +674,7 @@ $(document).on("click",".more-options", function(e)
 	  }).error(function (data)
 		  {
 		    // Error message is shown when error occurs
-			  alert("Retry after sometime.");
+		      showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 			  console.log(data.responseText);  
 		  });
 });
@@ -680,13 +701,13 @@ $(document).on("click",".follow-user", function(e)
 		    	console.log(data);
 		    	
 		    	if(data == "true")
-		           alert("Now you are following @"+tweetOwner);
+		    		showNotyPopUp('information', "Now you are following @"+tweetOwner, "top", 5000);		           
 		    	else if(data == "false")
-		    	   alert("Retry after sometime.");
+		    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    }).error(function (data)
 		    {
 		        // Error message is shown if error occurs
-		    	alert("Retry after sometime.");
+		    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    	console.log(data.responseText);  
 		    });
 		});
@@ -712,13 +733,13 @@ $(document).on("click",".unfollow-user", function(e)
     	console.log(data);
     	
     	if(data == "Unfollowed")
-          alert("Now you are not following @"+tweetOwner);
+    		showNotyPopUp('information', "Now you are not following @"+tweetOwner, "top", 5000);          
     	else if(data == "Unsuccessful")
-    		alert("Retry after sometime.");
+    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -745,13 +766,13 @@ $(document).on("click",".block-user", function(e)
 		    	console.log(data);
 		    	
 		    	if(data == "true")
-		           alert("You just blocked @"+tweetOwner);
+		    		showNotyPopUp('information', "You just blocked @"+tweetOwner, "top", 5000);		           
 		    	else if(data == "false")
-		    	   alert("Retry after sometime.");
+		    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    }).error(function (data)
 		    {
 		        // Error message is shown if error occurs
-		    	alert("Retry after sometime.");
+		    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    	console.log(data.responseText);  
 		    });
 		});
@@ -778,13 +799,13 @@ $(document).on("click",".unblock-user", function(e)
     	console.log(data);
     	
     	if(data == "Unblock")
-          alert("You just unblock @"+tweetOwner);
-    	else if(data == "Unsuccessful")
-    		alert("Retry after sometime.");
+    		showNotyPopUp('information', "You just unblock @"+tweetOwner, "top", 5000);
+        else if(data == "Unsuccessful")
+    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -810,37 +831,33 @@ $(document).on("click",".delete-tweet", function(e)
     $.get("/core/social/deletetweet/" + streamId + "/" + tweetOwner+ "/" +tweetIdStr, function (data)
     {
     	console.log("data : "+data);
-        alert(data);        
         
         if(data == "Successful")
         	{        
         		// Get stream from collection.
         		var modelStream = StreamsListView.collection.get(streamId);
-        		console.log(modelStream);
-    	
+        		    	
         		// Get tweet from stream.
         		var modelTweet = modelStream.get('tweetListView').get(tweetId);
-        		console.log(modelTweet.toJSON());
-    	
+        		    	
         		modelTweet.set("deleted_msg","deleted");
-    	
-        		console.log(modelTweet.toJSON());
     	
         		// Add back to stream.
         		modelStream.get('tweetListView').add(modelTweet);
-        		console.log(modelStream);
-    	
+        		
+        		showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);
+        		    	
         		// Remove tweet element from ui
         		$('.deleted').remove();
         	}
         else if(data == "Unsuccessful")
         	{
-        		alert("Retry after sometime.");
+        	   showNotyPopUp('information', "Retry after sometime.", "top", 5000);
         	}
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });   
 });
