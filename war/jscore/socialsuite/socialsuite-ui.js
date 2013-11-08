@@ -20,13 +20,24 @@ window.onblur = function() {
     focused = false;    
 };
 
+// On close tab/window unregister all streams on server.
+$(window).unload(function() {	
+	unregisterAll();
+	});
+
+/*window.onbeforeunload = function(e){	
+    var msg = 'Are you sure?';
+    e = e || window.event;
+    if(e)
+        e.returnValue = msg;
+    return msg;
+}*/
+
 // After clicking on logout, unregister all streams on server.
 $('a').click(function(event) {
    var herfLogout = $(this).attr("href");
    if(herfLogout == "/login")
-     {	   
-	   unregisterAll(); 
-     }
+     unregisterAll();      
 });
 
 /**

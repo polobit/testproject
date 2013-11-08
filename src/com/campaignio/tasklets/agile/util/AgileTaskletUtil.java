@@ -275,9 +275,15 @@ public class AgileTaskletUtil
 
 	try
 	{
+	    System.out.println("Encoding string " + str);
+
 	    // Converts string into default encoded.
 	    String encodedString = new String(str.getBytes(DEFAULT_ENCODING), DEFAULT_ENCODING);
+
+	    System.out.println("After encoding " + encodedString);
+
 	    return encodedString;
+
 	}
 	catch (UnsupportedEncodingException e)
 	{

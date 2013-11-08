@@ -32,14 +32,18 @@ public class GravityForm extends HttpServlet
 	{
 		try
 		{
-			// Read API Key
+			// Get API Key with tags
 			String tagString = req.getParameter("api-key");
-
-			Contact contact = null;
 			List<ContactField> properties = new ArrayList<ContactField>();
 
-			// Read JSON data
+			// Get JSON data
 			JSONObject obj = new JSONObject(req.getParameter("data"));
+
+			// Get email from JSON and search for contact
+			String email = obj.getString("email");
+			Contact contact = ContactUtil.searchContactByEmail(email);
+			if (contact == null)
+				contact = new Contact();
 
 			// Iterate over JSON data to get form fields
 			Iterator<?> keys = obj.keys();
@@ -51,19 +55,6 @@ public class GravityForm extends HttpServlet
 				// Get value of form field
 				String value = obj.get(key).toString();
 
-				// Check if data contains email, search contact based on email
-				if (key.toLowerCase().contains("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(value);
-
-					// If contact not found create new contact
-					if (contact == null)
-						contact = new Contact();
-				}
-				// If data does not contain email create new contact
-				else
-					contact = new Contact();
-
 				// Add property to list of properties
 				properties.add(buildProperty(key, value, contact));
 			}
@@ -73,19 +64,18 @@ public class GravityForm extends HttpServlet
 			tagString = tagString.replace("/, /g", ",");
 			String[] tagsWithKey = tagString.split(",");
 
-			// Remove API key from tagsWithKey array and set contact owner
+			// Get tags from tagsWithKey array and set contact owner
 			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 			if (owner != null)
 			{
 				contact.setContactOwner(owner);
+
+				// Add properties to contact and set contact owner
+				contact.properties = properties;
+				contact.addTags(tags);
 				contact.save();
 			}
-
-			// Add properties to contact and set contact owner
-			contact.properties = properties;
-			contact.addTags(tags);
-			contact.save();
 		}
 		catch (Exception e)
 		{
@@ -96,6 +86,7 @@ public class GravityForm extends HttpServlet
 
 	public static ContactField buildProperty(String name, String value, Contact contact)
 	{
+		// Get contact field of contact, based on its name
 		ContactField field = contact.getContactFieldByName(name);
 		if (field == null)
 			field = new ContactField();

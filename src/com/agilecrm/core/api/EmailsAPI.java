@@ -1,5 +1,8 @@
 package com.agilecrm.core.api;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -7,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -70,13 +74,26 @@ public class EmailsAPI
     @Path("contact/send-email")
     @POST
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail, @FormParam("to") String to,
-	    @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
-	    @FormParam("signature") String signature)
+    public void sendEmail(@Context HttpServletRequest request, @FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail,
+	    @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc, @FormParam("subject") String subject,
+	    @FormParam("body") String body, @FormParam("signature") String signature)
     {
+	try
+	{
+	    request.setCharacterEncoding("UTF-8");
+	}
+	catch (UnsupportedEncodingException e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Exception occured while setting encoding from request...");
+	}
 
 	// combine body and signature.
 	body = body + "<br/><div><br/><br/>" + signature + "</div>";
+
+	System.out.println("Request Encoding is " + request.getCharacterEncoding());
+	System.out.println("Body " + body);
+	System.out.println("Encoded Body is " + AgileTaskletUtil.getUTF8String(body));
 
 	// Removes traling commas if any
 	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
