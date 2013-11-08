@@ -31,13 +31,12 @@ public class WufooWebhook extends HttpServlet
 	{
 		try
 		{
-			// Read hand shake key (agile API key with tags) to
-			// get contact owner, tags
+			// Get API key and tags
 			String tagString = req.getParameter("HandshakeKey");
 			Contact contact = null;
 			List<ContactField> properties = new ArrayList<ContactField>();
 
-			// Get fields structure from form data and iterate JSON
+			// Get fields from field structure and iterate
 			JSONObject obj = new JSONObject(req.getParameter("FieldStructure"));
 			JSONArray arr = obj.getJSONArray("Fields");
 			for (int i = 0; i < arr.length(); i++)
@@ -46,16 +45,15 @@ public class WufooWebhook extends HttpServlet
 
 				// Check if data contains email, search contact based on email
 				if (json.getString("Title").toLowerCase().contains("email"))
-				{
 					contact = ContactUtil.searchContactByEmail(req.getParameter(json.getString("ID")));
 
-					// If contact is not found create new contact
-					if (contact == null)
-						contact = new Contact();
-				}
-				// If data does not contain email create new contact
-				else
+				// If contact is not found create new contact
+				if (contact == null)
 					contact = new Contact();
+			}
+			for (int i = 0; i < arr.length(); i++)
+			{
+				JSONObject json = arr.getJSONObject(i);
 
 				// Add properties to list of properties
 				properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")), contact));
@@ -89,13 +87,10 @@ public class WufooWebhook extends HttpServlet
 			if (owner != null)
 			{
 				contact.setContactOwner(owner);
+				contact.properties = properties;
+				contact.addTags(tags);
 				contact.save();
 			}
-
-			// Add properties and tags to contact
-			contact.properties = properties;
-			contact.addTags(tags);
-			contact.save();
 		}
 		catch (Exception e)
 		{
@@ -107,6 +102,8 @@ public class WufooWebhook extends HttpServlet
 	public static ContactField buildProperty(String name, String value, Contact contact)
 	{
 		name = name.toLowerCase();
+
+		// Get contact field of contact, based on its name
 		ContactField field = contact.getContactFieldByName(name);
 		if (field == null)
 			field = new ContactField();
