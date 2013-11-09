@@ -77,11 +77,8 @@ function agile_gadget_open_popup(Agile_Url) {
 			 */
 			if (Popup.closed) {
 				clearInterval(finished_interval);
-				//  ------ Reset user preferences ------ 
-			    var Agile_Gadget_Prefs = new gadgets.Prefs();
-			    Agile_Gadget_Prefs.set("agile_user_expire_at", "0");
-				Agile_Gadget_Prefs.set("agile_user_popup", "");
-				Agile_Gadget_Prefs.set("agile_user_exists", "");
+				//  ------ Reset cookie. ------ 
+				agile_gadget_erase_cookie("agile_cookie");
 				//  ------ Re-login. ------ 
 				agile_login();
 			}

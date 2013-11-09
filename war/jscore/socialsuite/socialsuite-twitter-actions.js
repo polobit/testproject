@@ -3,9 +3,11 @@
  */
 $(document).on("click",".compose-message", function(e)
 {	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	  
 	var streamId = $(this).attr("stream-id");
-	console.log(this);
-	 
+	
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(streamId).toJSON();
 	
@@ -58,11 +60,16 @@ $(document).on("click",".compose-message", function(e)
     $('#send_tweet').click(function (e)
     {
         e.preventDefault();
+        
+        // Check Send button is not enable
+    	if($("#send_tweet").hasClass('disabled'))
+    		return;
 
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))
             return;
 
+        $('#send_tweet').addClass('disabled');
         $("#spinner-modal").show();
         
         // Sends post request to url "/core/social/tweet/" and Calls StreamsAPI with 
@@ -73,17 +80,12 @@ $(document).on("click",".compose-message", function(e)
         function (data)
         {
         	 $("#spinner-modal").hide();
-        
-        	 console.log(data);
+                	 
         	 if(data == "Successful")
         		 {
                    // On success, shows the status as sent
                    $('#socialsuite-twitter_messageModal').find('span.save-status').html("Sent");
-        		 }
-        	 else if(data == "Unsuccessful")
-        		 {
-                   // On failure, shows the status as retry
-                   $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");
+                   showNotyPopUp('information', "Your Tweet was posted!", "top", 5000);
         		 }
         	 
             // Hides the modal after 2 seconds after the sent is shown
@@ -97,11 +99,15 @@ $(document).on("click",".compose-message", function(e)
         	 $("#spinner-modal").hide();
         	 
             // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').remove();
+            $('#socialsuite-twitter_messageModal').modal("hide");
 
+            var result = data.responseText;
+                       
             // Error message is shown if error occurs
-            alert("Retry after sometime.");
-            console.log(data.responseText);            
+            if(result.trim() == "Status is a duplicate.")
+               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
+            else
+               showNotyPopUp('information', "Retry after sometime.", "top", 5000);
         });
     });
 }); 
@@ -112,11 +118,13 @@ $(document).on("click",".compose-message", function(e)
  */
 $(document).on("click",".reply-message", function(e)
 {	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
 	var tweetOwner = $(this).attr("tweet-owner");
-	console.log(this);
 	 
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(streamId).toJSON();
@@ -172,10 +180,15 @@ $(document).on("click",".reply-message", function(e)
     {
         e.preventDefault();
 
+        // Check Send button is not enable
+    	if($("#send_reply").hasClass('disabled'))
+    		return;
+        
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
 
+        $('#send_reply').addClass('disabled');
         $("#spinner-modal").show();
         
         // Sends post request to url "/core/social/replytweet/" and Calls StreamsAPI with 
@@ -186,19 +199,14 @@ $(document).on("click",".reply-message", function(e)
         function (data)
         {
         	 $("#spinner-modal").hide();
-        	 
-        	 console.log(data);
+        	        	
         	 if(data == "Successful")
     		 {
                // On success, shows the status as sent
                $('#socialsuite-twitter_messageModal').find('span.save-status').html("Sent");
+               showNotyPopUp('information', "Your Tweet to @"+tweetOwner+" has been sent!", "top", 5000);               
     		 }
-        	 else if(data == "Unsuccessful")
-    		 {
-         	   // On failure, shows the status as retry
-               $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");
-    		 }
-        	 
+        	         	 
             // Hides the modal after 2 seconds after the sent is shown
             setTimeout(function ()
             {
@@ -210,11 +218,15 @@ $(document).on("click",".reply-message", function(e)
         	 $("#spinner-modal").hide();
         	 
             // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').remove();
+            $('#socialsuite-twitter_messageModal').modal("hide");
 
+            var result = data.responseText;
+                      
             // Error message is shown if error occurs
-            alert("Retry after sometime.");
-            console.log(data.responseText);   
+            if(result.trim() == "Status is a duplicate.")
+               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
+            else
+               showNotyPopUp('information', "Retry after sometime.", "top", 5000);   
         });
     });
 });
@@ -224,12 +236,14 @@ $(document).on("click",".reply-message", function(e)
  */
 $(document).on("click",".direct-message", function(e)
 {	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
 	var tweetOwner = $(this).attr("tweet-owner");
-	console.log(this);
-	 
+		 
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(streamId).toJSON();
 	
@@ -284,10 +298,15 @@ $(document).on("click",".direct-message", function(e)
     {
         e.preventDefault();
 
+        // Check Send button is not enable
+    	if($("#send_direct_message").hasClass('disabled'))
+    		return;
+        
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
 
+        $('#send_direct_message').addClass('disabled');
         $("#spinner-modal").show();
         
         // Sends post request to url "/core/social/directmessage/" and Calls StreamsAPI with 
@@ -298,8 +317,7 @@ $(document).on("click",".direct-message", function(e)
         function (data)
         {
         	 $("#spinner-modal").hide();
-        	 
-        	 console.log(data);
+        	        	
         	 if(data == "Successful")
         	 {
                // On success, shows the status as sent
@@ -308,7 +326,8 @@ $(document).on("click",".direct-message", function(e)
         	 else if(data == "Unsuccessful")
         		{
                  // On failure, shows the status as retry
-                 $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");        		 
+                 $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");   
+                 showNotyPopUp('information', "Retry after sometime.", "top", 5000);
         		}
             // Hides the modal after 2 seconds after the sent is shown
             setTimeout(function ()
@@ -321,10 +340,10 @@ $(document).on("click",".direct-message", function(e)
         	 $("#spinner-modal").hide();
         	 
             // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').remove();
+            $('#socialsuite-twitter_messageModal').modal("hide");
 
             // Error message is shown if error occurs
-            alert("Retry after sometime.");
+            showNotyPopUp('information', "Retry after sometime.", "top", 5000);
             console.log(data.responseText);   
         });
     });
@@ -335,59 +354,197 @@ $(document).on("click",".direct-message", function(e)
  */
 $(document).on("click",".retweet-status", function(e)
 {
-	// Ask for user's confirmation.
-	if(!confirm("Are you sure you want to retweet this status to your followers?"))
- 		return;
-    
-	// Get the id of the tweet on which retweet is clicked
-     var streamId = $(this).attr("stream-id");
-     var tweetId = $(this).attr("tweet-id");
- 	 var tweetIdStr = $(this).attr("tweet-id-str");
- 	 var tweetOwner = $(this).attr("tweet-owner"); 	
- 	 console.log(this);
-	
-	/* Sends get request to url "core/social/retweet/" and Calls StreamAPI with 
-     * Stream id, tweet id as path parameters.
-     */
-    $.get("/core/social/retweet/" + streamId + "/" + tweetIdStr,
 
-    function (data)
+	var streamId = $(this).attr("stream-id");
+	var tweetId = $(this).attr("tweet-id");	
+	
+	// Get stream from collection.
+	var modelStream = StreamsListView.collection.get(streamId);	
+	
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get(tweetId);
+	var tweet = modelTweet.toJSON();
+		
+	// Store info in a json, to send it to the modal window when making send tweet request
+    var json = {};
+
+    // Set headline of modal window as Send Message
+    json["headline"] = "Retweet";
+        
+    // Information to be shown in the modal to the user while sending message    
+    json["info"] = "Status of "+"@" + tweet.user.screen_name;
+
+    json["description"] = tweet.original_text;
+    json["tweetId"] = tweet.id_str;
+    json["tweetOwner"] = tweet.user.screen_name;    
+       
+    // If modal already exists remove to show a new one
+    $('#socialsuite-twitter_RTModal').remove();
+
+    // Populate the modal template with the above json details in the form
+    var message_form_modal = getTemplate("socialsuite-twitter-RT", json);
+
+    // Append the form into the content
+    $('#content').append(message_form_modal);
+    
+    $('#socialsuite-twitter_RTModal').on('shown', function () {		  
+		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+			  $(".twit-tweet-limit").limit({
+			  	  maxChars: 125,
+			  	  counter: "#twitter-retweet-counter"
+			  	});
+			  $('#socialsuite-twitter_RTModal').find('#twit-edit-tweet').focus();
+		  });
+	   });   
+    
+    // Shows the modal after filling with details
+    $('#socialsuite-twitter_RTModal').modal("show");
+	
+    $('#send_retweet').show();
+    $('#edit_retweet').show();      
+    $('#twit-retweet').show();
+    $('#send_edit_tweet').hide();
+    $('#twit-edit-tweet').hide();
+    $('#div-for-count').hide();
+    
+    // On click of send button in the modal, retweet request is sent 
+    $('#send_retweet').click(function (e)
     {
-    	console.log(data);
+      e.preventDefault();
+        
+      // Check Send button is not enable
+      if($("#send_retweet").hasClass('disabled') && $("#edit_retweet").hasClass('disabled'))
+    	return;
     	
-    	// Retweet is Unsuccessful.
-    	if(data == "Unsuccessful")
-    		{
-    		  alert("Retry after sometime.");
-    		  return;
-    		}
-    	
-        // On success, the color of the retweet is shown green.    	
-    	// Get stream from collection.
-    	var modelStream = StreamsListView.collection.get(streamId);
-    	console.log(modelStream);
-    	
-    	// Get tweet from stream.
-    	var modelTweet = modelStream.get('tweetListView').get(tweetId);
-    	console.log(modelTweet.toJSON());
-    	
-    	// Update attribute in tweet.
-    	modelTweet.set("retweeted_by_user","true");
-    	modelTweet.set("retweet_id",data);
-    	console.log(modelTweet.toJSON());
-    	
-    	// Add back to stream.
-    	modelStream.get('tweetListView').add(modelTweet);
-    	console.log(modelStream);
-    	
-    	// Create normal time.
-   	    head.js('lib/jquery.timeago.js', function(){	 
-   		        $(".time-ago", $(".chirp-container")).timeago();});	
-    }).error(function (data)
+      $('#send_retweet').addClass('disabled');
+      $('#edit_retweet').addClass('disabled');
+      $("#spinner-modal").show();
+    	 
+      /* Sends get request to url "core/social/retweet/" and Calls StreamAPI with 
+       * Stream id, tweet id as path parameters.
+       */
+      $.get("/core/social/retweet/" + streamId + "/" + tweet.id_str,
+
+      function (data)
+       {    	   
+    	 $("#spinner-modal").hide();
+   
+         // Hides the modal after 2 seconds after the sent is shown
+         setTimeout(function ()
+         {
+           $('#socialsuite-twitter_RTModal').modal("hide");
+         }, 2000);
+       	
+       	// Retweet is Unsuccessful.
+       	if(data == "Unsuccessful")
+       	  {       		
+       	    showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+       		return;
+       	  }
+       	
+        // On success, the color of the retweet is shown green. Update attribute in tweet.
+       	modelTweet.set("retweeted_by_user","true");
+       	modelTweet.set("retweet_id",data);       	
+       	
+       	// Add back to stream.
+       	modelStream.get('tweetListView').add(modelTweet);
+       	       	
+       	// Create normal time.
+      	    head.js('lib/jquery.timeago.js', function(){	 
+      		        $(".time-ago", $(".chirp-container")).timeago();});	
+       }).error(function (data)
+       {
+    	 $("#spinner-modal").hide();
+    	 $('#socialsuite-twitter_RTModal').modal("hide");
+         
+    	 // Error message is shown when error occurs
+       	 showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+       	 console.log(data.responseText);  
+       });
+    });
+
+   // On click of edit button in the modal, retweet edit. 
+    $('#edit_retweet').click(function (e)
     {
-        // Error message is shown when error occurs
-    	alert("Retry after sometime.");
-    	console.log(data.responseText);  
+      e.preventDefault();
+        
+      // Check Send button is not enable
+      if($("#send_retweet").hasClass('disabled') && $("#edit_retweet").hasClass('disabled'))
+    	return;
+    	
+      $('#send_retweet').hide();
+      $('#edit_retweet').hide();      
+      $('#twit-retweet').hide();
+      $('#send_edit_tweet').show();
+      $('#twit-edit-tweet').show();
+      $('#div-for-count').show();         
+      
+    });
+    
+    // In compose message text limit is crossed so disable send button.
+    $('#twit-edit-tweet').on('cross', function(){
+        $('#send_edit_tweet').addClass('disabled')
+      });
+      
+    // In compose message text limit is uncrossed so enable send button.  
+    $('#twit-edit-tweet').on('uncross', function(){
+        $('#send_edit_tweet').removeClass('disabled')
+      });
+    
+    
+    // On click of send button in the modal, tweet request is sent 
+    $('#send_edit_tweet').click(function (e)
+    {
+        e.preventDefault();
+        
+        // Check Send button is not enable
+    	if($("#send_edit_tweet").hasClass('disabled'))
+    		return;
+    	
+        // Checks whether all the input fields are filled
+        if (!isValidForm($("#socialsuite-twitter_RTForm")))
+            return;
+
+        $('#send_edit_tweet').addClass('disabled');
+        $("#spinner-modal").show();
+        
+        // Sends post request to url "/core/social/tweet/" and Calls StreamsAPI with 
+        // Stream id and Twitter id as path parameters and form as post data
+        $.post("/core/social/tweet/" + streamId ,
+        $('#socialsuite-twitter_RTForm').serialize(),
+
+        function (data)
+        {
+        	 $("#spinner-modal").hide();
+                	 
+        	 if(data == "Successful")
+        		 {
+                   // On success, shows the status as sent
+                   $('#socialsuite-twitter_RTModal').find('span.save-status').html("Sent");
+                   showNotyPopUp('information', "Your Tweet was posted!", "top", 5000);
+        		 }
+        	 
+            // Hides the modal after 2 seconds after the sent is shown
+            setTimeout(function ()
+            {
+                $('#socialsuite-twitter_RTModal').modal("hide");
+            }, 2000);
+
+        }).error(function (data)
+        {
+        	 $("#spinner-modal").hide();
+        	 
+            // If error occurs while posting modal is removed and error message is shown
+            $('#socialsuite-twitter_RTModal').modal("hide");
+
+            var result = data.responseText;
+                       
+            // Error message is shown if error occurs
+            if(result.trim() == "Status is a duplicate.")
+               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
+            else
+               showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+        });
     });
 });
 
@@ -406,50 +563,42 @@ $(document).on("click",".undo-retweet-status", function(e)
      var tweetId = $(this).attr("tweet-id");
      var tweetIdStr = null; 
     	 
-   // Get stream from collection.
+    // Get stream from collection.
  	 var modelStream = StreamsListView.collection.get(streamId);
- 	 console.log(modelStream);
- 	
+ 	  	
      // If stream type is "Sent" then "tweet-id-str" is tweet handle else "retweet-id" to perform action.
      if(modelStream.toJSON().stream_type == "Sent")
     	 tweetIdStr = $(this).attr("tweet-id-str");
      else if(modelStream.toJSON().stream_type == "Home")
     	 tweetIdStr = $(this).attr("retweet-id");
- 	 console.log(this);
-	
+ 	
 	/* Sends get request to url "core/social/undoretweet/" and Calls StreamAPI with 
      * Stream id, tweet id and tweet idStr as path parameters.
      */
     $.get("/core/social/undoretweet/" + streamId + "/" + tweetId+ "/" + tweetIdStr,
 
     function (data)
-    {    	
-    	console.log(data);
-    	
+    {   
     	// Undo-Retweet is Unsuccessful.
     	if(data == "Unsuccessful")
     		{
-    		  alert("Retry after sometime.");
+    		  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     		  return;
     		}    	
     	
         // On success, Change retweet icon to normal.    	
     	// Get tweet from stream.
     	var modelTweet = modelStream.get('tweetListView').get(tweetId);
-    	console.log(modelTweet.toJSON());
-    	
+    	    	
     	// Delete tweet from stream
     	if(modelTweet.toJSON().stream_type == "Sent")
     		 modelTweet.set("deleted_msg","deleted");
     	else    		
     	   modelTweet.unset("retweeted_by_user");
     	
-    	console.log(modelTweet.toJSON());
-    	
     	// Add back to stream.
     	modelStream.get('tweetListView').add(modelTweet);
-    	console.log(modelStream);
-    	
+    	    	
     	 // Remove tweet element from ui
 		 $('.deleted').remove();
 		 
@@ -459,7 +608,7 @@ $(document).on("click",".undo-retweet-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -474,48 +623,41 @@ $(document).on("click",".favorite-status", function(e)
      var tweetId = $(this).attr("tweet-id");
  	 var tweetIdStr = $(this).attr("tweet-id-str");
  	 var tweetOwner = $(this).attr("tweet-owner");
- 	 console.log(this);
-	
+ 	 
 	/* Sends get request to url "core/social/favorite/" and Calls StreamAPI with 
      * Stream id, tweet idStr as path parameters.
      */
     $.get("/core/social/favorite/" + streamId + "/" + tweetIdStr,
 
     function (data)
-    {
-    	console.log(data);
-    	
+    {    	
     	// Favorite is Unsuccessful.
     	if(data == "Unsuccessful")
     		{
-    		  alert("Retry after sometime.");
+    		  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     		  return;
     		}    
     	
         // On success, the color of the favorite is shown orange.   	
     	// Get stream from collection.
     	var modelStream = StreamsListView.collection.get(streamId);
-    	console.log(modelStream);
-    	
+    	    	
     	// Get tweet from stream.
     	var modelTweet = modelStream.get('tweetListView').get(tweetId);
-    	console.log(modelTweet.toJSON());
-    	
+    	    	
     	// Update attribute in tweet.
     	modelTweet.set("favorited_by_user","true");
-    	console.log(modelTweet.toJSON());
-    	
+    	    	
     	// Add back to stream.
     	modelStream.get('tweetListView').add(modelTweet);
-    	console.log(modelStream);
-    	
+    	    	
     	// Create normal time.
 		head.js('lib/jquery.timeago.js', function(){	 
 			        $(".time-ago", $(".chirp-container")).timeago(); });
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -531,48 +673,41 @@ $(document).on("click",".undo-favorite-status", function(e)
      var tweetId = $(this).attr("tweet-id");
  	 var tweetIdStr = $(this).attr("tweet-id-str");
  	 var tweetOwner = $(this).attr("tweet-owner");
- 	 console.log(this);
-	
+ 		
 	/* Sends get request to url "core/social/undofavorite/" and Calls StreamAPI with 
      * Stream id, tweet idStr as path parameters.
      */
     $.get("/core/social/undofavorite/" + streamId + "/" + tweetIdStr,
 
     function (data)
-    {    	
-    	console.log(data);
-    	
+    {     	
     	// Favorite is Unsuccessful.
     	if(data == "Unsuccessful")
     		{
-    		  alert("Retry after sometime.");
+    		  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     		  return;
     		}
     	
         // On success, Change favorite icon to normal.
     	// Get stream from collection.
     	var modelStream = StreamsListView.collection.get(streamId);
-    	console.log(modelStream);
-    	
+    	    	
     	// Get tweet from stream.
     	var modelTweet = modelStream.get('tweetListView').get(tweetId);
-    	console.log(modelTweet.toJSON());
-    	
+    	    	
     	// Delete tweet from stream
     	modelTweet.unset("favorited_by_user");
-    	console.log(modelTweet.toJSON());
-    	
+    	    	
     	// Add back to stream.
     	modelStream.get('tweetListView').add(modelTweet);
-    	console.log(modelStream);
-    	
+    	    	
     	// Create normal time.
 		head.js('lib/jquery.timeago.js', function(){	 
 			        $(".time-ago", $(".chirp-container")).timeago(); });
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -588,9 +723,7 @@ $(document).on("click",".undo-favorite-status", function(e)
  * 			Twitter user's screen name.
  */
 $(document).on("click",".more-options", function(e)
-{	
-  console.log("more-options in function");
-    
+{	      
   var streamId = $(this).attr("stream-id");
   var tweetId = $(this).attr("tweet-id");
   var tweetIdStr = $(this).attr("tweet-id-str");
@@ -616,44 +749,42 @@ $(document).on("click",".more-options", function(e)
 // Check stream owner relashionship tweet owner.
   $.get("/core/social/checkrelationship/" + streamId + "/" + tweetOwner,
     function (data)
-	  {
-	     console.log(data);	    
-	     
+	  {	    
 	    // Stream owner follows tweet owner then add unfollow option
 	    if(data.follow == "true")
 	    	{
-	      	  console.log("in unfollow");
+	      	  //console.log("in unfollow");
 	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');
 	    	}
 	    // Stream owner not following tweet owner then add follow option
 	    else if(data.follow == "false")
 	    	{
-	    	  console.log("in follow");
+	    	  //console.log("in follow");
 	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
 	    	}
 	  
   	    // Tweet owner is stream owner's follower then add send DM option
 	    if(data.follower == "true")
            {	    	
-   	         console.log("in send DM");
+   	         //console.log("in send DM");
              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
            }
 	    
 	    // Check tweet owner is Block or Unblock
 	    if(data.blocked == "true")
            {	    	
-   	         console.log("in unblock");
+   	         //console.log("in unblock");
              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unblock @'+tweetOwner+'</a></li>');	    	
             }	    
         else if(data.blocked == "false")
             {	    	
-   	          console.log("in block");
+   	          //console.log("in block");
               $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Block @'+tweetOwner+'</a></li>');	    	
             }
 	  }).error(function (data)
 		  {
 		    // Error message is shown when error occurs
-			  alert("Retry after sometime.");
+		      showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 			  console.log(data.responseText);  
 		  });
 });
@@ -672,21 +803,18 @@ $(document).on("click",".follow-user", function(e)
 			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
 			var tweetOwner = $(this).attr("tweet-owner");
-			console.log(this);
-		    	
+					    	
 			// Calls method to send request to follow user.
 		    $.get("/core/social/followuser/" + streamId + "/" + tweetOwner, function (data)
-		    {
-		    	console.log(data);
-		    	
+		    {		    	
 		    	if(data == "true")
-		           alert("Now you are following @"+tweetOwner);
+		    		showNotyPopUp('information', "Now you are following @"+tweetOwner, "top", 5000);		           
 		    	else if(data == "false")
-		    	   alert("Retry after sometime.");
+		    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    }).error(function (data)
 		    {
 		        // Error message is shown if error occurs
-		    	alert("Retry after sometime.");
+		    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    	console.log(data.responseText);  
 		    });
 		});
@@ -704,21 +832,18 @@ $(document).on("click",".unfollow-user", function(e)
 	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
 	var tweetOwner = $(this).attr("tweet-owner");
-	console.log(this);
-    	
+	    	
 	// Calls method to send request to unfollow user.
     $.get("/core/social/unfollowuser/" + streamId + "/" + tweetOwner, function (data)
-    {
-    	console.log(data);
-    	
+    {    	
     	if(data == "Unfollowed")
-          alert("Now you are not following @"+tweetOwner);
+    		showNotyPopUp('information', "Now you are not following @"+tweetOwner, "top", 5000);          
     	else if(data == "Unsuccessful")
-    		alert("Retry after sometime.");
+    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -737,21 +862,18 @@ $(document).on("click",".block-user", function(e)
 			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
 			var tweetOwner = $(this).attr("tweet-owner");
-			console.log(this);
-		    	
+			    	
 			// Calls method to send request to block user.
 		    $.get("/core/social/blockuser/" + streamId + "/" + tweetOwner, function (data)
 		    {
-		    	console.log(data);
-		    	
 		    	if(data == "true")
-		           alert("You just blocked @"+tweetOwner);
+		    		showNotyPopUp('information', "You just blocked @"+tweetOwner, "top", 5000);		           
 		    	else if(data == "false")
-		    	   alert("Retry after sometime.");
+		    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    }).error(function (data)
 		    {
 		        // Error message is shown if error occurs
-		    	alert("Retry after sometime.");
+		    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 		    	console.log(data.responseText);  
 		    });
 		});
@@ -770,21 +892,18 @@ $(document).on("click",".unblock-user", function(e)
 	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
 	var tweetOwner = $(this).attr("tweet-owner");
-	console.log(this);
-    	
+	
 	// Calls method to send request to unblock user.
     $.get("/core/social/unblockuser/" + streamId + "/" + tweetOwner, function (data)
-    {
-    	console.log(data);
-    	
+    {    	
     	if(data == "Unblock")
-          alert("You just unblock @"+tweetOwner);
-    	else if(data == "Unsuccessful")
-    		alert("Retry after sometime.");
+    		showNotyPopUp('information', "You just unblock @"+tweetOwner, "top", 5000);
+        else if(data == "Unsuccessful")
+    		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });
 });
@@ -804,43 +923,36 @@ $(document).on("click",".delete-tweet", function(e)
 	var tweetOwner = $(this).attr("tweet-owner");
 	var tweetId = $(this).attr("tweet-id");
 	var tweetIdStr = $(this).attr("tweet-id-str");
-	console.log(this);
-    
+	
 	// Call method with details of tweet to be deleted.
     $.get("/core/social/deletetweet/" + streamId + "/" + tweetOwner+ "/" +tweetIdStr, function (data)
-    {
-    	console.log("data : "+data);
-        alert(data);        
-        
+    {    
         if(data == "Successful")
         	{        
         		// Get stream from collection.
         		var modelStream = StreamsListView.collection.get(streamId);
-        		console.log(modelStream);
-    	
+        		    	
         		// Get tweet from stream.
         		var modelTweet = modelStream.get('tweetListView').get(tweetId);
-        		console.log(modelTweet.toJSON());
-    	
+        		    	
         		modelTweet.set("deleted_msg","deleted");
-    	
-        		console.log(modelTweet.toJSON());
     	
         		// Add back to stream.
         		modelStream.get('tweetListView').add(modelTweet);
-        		console.log(modelStream);
-    	
+        		
+        		showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);
+        		    	
         		// Remove tweet element from ui
         		$('.deleted').remove();
         	}
         else if(data == "Unsuccessful")
         	{
-        		alert("Retry after sometime.");
+        	   showNotyPopUp('information', "Retry after sometime.", "top", 5000);
         	}
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	alert("Retry after sometime.");
+    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
     	console.log(data.responseText);  
     });   
 });

@@ -374,18 +374,29 @@ public class SendEmail extends TaskletAdapter
 
 	// Get From, Message
 	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data, FROM_EMAIL);
+
+	// Converts fromName into UTF-8 to support International characters
 	String fromName = getStringValue(nodeJSON, subscriberJSON, data, FROM_NAME);
+	fromName = AgileTaskletUtil.getUTF8String(fromName);
 
 	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
 	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
 
+	// Converts subject into UTF-8 to support International characters
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
+	subject = AgileTaskletUtil.getUTF8String(subject);
+
+	// Converts html into UTF-8 to support International characters
 	String html = getStringValue(nodeJSON, subscriberJSON, data, HTML_EMAIL);
+	html = AgileTaskletUtil.getUTF8String(html);
+
+	// Converts text into UTF-8 to support International characters
 	String text = getStringValue(nodeJSON, subscriberJSON, data, TEXT_EMAIL);
+	text = AgileTaskletUtil.getUTF8String(text);
+
 	String replyTo = getStringValue(nodeJSON, subscriberJSON, data, REPLY_TO);
 
 	String keyword = getStringValue(nodeJSON, subscriberJSON, data, PURL_KEYWORD);
-
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, TRACK_CLICKS);
 
 	// Check if we need to convert links

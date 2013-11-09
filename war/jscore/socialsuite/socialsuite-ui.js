@@ -9,17 +9,36 @@
 		 NetworkType = null;
 		 registerAllDone = false;	
 		 TweetOwnerForAddContact = null;
-		 focused = true;
+		 focused = true;		 
 	  })();
 
-
-
+// To collect tweets in temp collection.
 window.onfocus = function() {
-    focused = true;
+    focused = true;    
 };
 window.onblur = function() {
-    focused = false;
+    focused = false;    
 };
+
+// On close tab/window unregister all streams on server.
+$(window).unload(function() {	
+	unregisterAll();
+	});
+
+/*window.onbeforeunload = function(e){	
+    var msg = 'Are you sure?';
+    e = e || window.event;
+    if(e)
+        e.returnValue = msg;
+    return msg;
+}*/
+
+// After clicking on logout, unregister all streams on server.
+$('a').click(function(event) {
+   var herfLogout = $(this).attr("href");
+   if(herfLogout == "/login")
+     unregisterAll();      
+});
 
 /**
  * Fills name with twitter's owner in add-contact popup form. 
@@ -369,44 +388,24 @@ $(document).on("click",".stream-delete", function(e)
 });
 
 /**
- * Add tweets from temp collection to original collection and remove notification.
+ * Get relation and perform action as per that.
  */
-$(document).on("click",".add-new-tweets", function(e)
+$(document).on("click",".action-notify", function(e)
 {	
-	// Remove notification of new tweets on stream.
-    document.getElementById(this.id).innerHTML= '';
+	// Get relation for action.
+	var relation = $(this).attr('rel');
 	
-    // Get stream id.
+	// Get stream id.
     var streamId = $(this).attr('data');
+
+    // Remove notification of new tweets on stream.
+    document.getElementById(this.id).innerHTML= '';
     
-    // Get stream from collection.
-    var originalStream = StreamsListView.collection.get(streamId);
-    var tempStream = TempStreamsListView.collection.get(streamId);
-    
-    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
-    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
-    
-    // Get tweet collection from stream.
-    var tweetCollection = originalStream.get('tweetListView');
-    
-    // Add new tweets from temp collection to original collection.
-    tweetCollection.add(tempStream.get("tweetListView").toJSON());
-    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
-    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
-        
-    // Sort tweet collection on id. so recent tweet comes on top.
-    tweetCollection.sort();    
-	   
-	// Create normal time.
-	head.js('lib/jquery.timeago.js', function(){	 
-		        $(".time-ago", $(".chirp-container")).timeago();	
-			});
-	 
-	// Clear temp tweet collection.
-	tempStream.get("tweetListView").reset();
-	console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
-    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
-    
-    // Remove waiting symbol.
-	removeWaiting();
-});
+	if(relation == "add-new-tweet")
+		addNewTempTweet(streamId);
+	else if(relation == "retry")
+	    registerStreamAgain(streamId);
+	
+	// Remove relation from <div> for notification.
+	$(this).attr("rel",'');
+ });

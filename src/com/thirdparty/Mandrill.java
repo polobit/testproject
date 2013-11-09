@@ -195,6 +195,7 @@ public class Mandrill
 	    messageJSON.put(MANDRILL_SUBJECT, subject);
 
 	    messageJSON.put(MANDRILL_HTML, html);
+
 	    messageJSON.put(MANDRILL_TEXT, text);
 
 	    messageJSON.put(MANDRILL_ATTACHMENTS, getAttachmentsJSON(attachments));
@@ -307,7 +308,7 @@ public class Mandrill
 	    if (!StringUtils.isBlank(replyTo) && !fromEmail.equals(replyTo))
 		headersJSON.put(MANDRILL_REPLY_TO, replyTo);
 
-	    headersJSON.put("Content-Type", "application/json; charset=utf-8");
+	    headersJSON.put("Content-Type", "application/json; charset=UTF-8");
 
 	}
 	catch (Exception e)
