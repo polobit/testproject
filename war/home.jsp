@@ -28,7 +28,6 @@
 <meta name="globalsign-domain-verification"
 	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 
-<!-- Le styles -->
 <%
 	//Check if it is being access directly and not through servlet
 	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
@@ -85,17 +84,6 @@
 <!--[if lt IE 8]>
     <script src="lib/ie/json.js"></script>
    <![endif]-->
-
-
-<!-- Le fav and touch icons -->
-<link rel="apple-touch-icon-precomposed" sizes="144x144"
-	href="../assets/ico/apple-touch-icon-144-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="114x114"
-	href="../assets/ico/apple-touch-icon-114-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="72x72"
-	href="../assets/ico/apple-touch-icon-72-precomposed.png">
-<link rel="apple-touch-icon-precomposed"
-	href="../assets/ico/apple-touch-icon-57-precomposed.png">
 
 </head>
 
