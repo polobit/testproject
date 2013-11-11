@@ -71,7 +71,8 @@ public class ContactsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContacts(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    public List<Contact> getContacts(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("reload") boolean force_reload)
     {
 	if (count != null)
 	{
@@ -441,7 +442,7 @@ public class ContactsAPI
 	contact.addTags(tagsArray);
 	System.out.println("Tags after added : " + contact.tagsWithTime);
     }
-    
+
     /**
      * Add note to a contact based on email address of the contact
      * 
@@ -477,7 +478,7 @@ public class ContactsAPI
 	}
 
 	Note noteObj = new Note();
-	
+
 	try
 	{
 	    noteObj = new ObjectMapper().readValue(note.toString(), Note.class);

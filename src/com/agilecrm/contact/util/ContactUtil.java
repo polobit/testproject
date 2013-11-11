@@ -146,10 +146,15 @@ public class ContactUtil
      */
     public static List<Contact> getAllContacts(int max, String cursor)
     {
+	return getAllContacts(max, cursor, false);
+    }
+
+    public static List<Contact> getAllContacts(int max, String cursor, boolean forceReload)
+    {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("type", Type.PERSON);
 	if (max != 0)
-	    return dao.fetchAll(max, cursor, searchMap);
+	    return dao.fetchAll(max, cursor, searchMap, forceReload);
 
 	return dao.listByProperty(searchMap);
     }
@@ -282,7 +287,8 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("properties.value = ", email).count();
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		.filter("properties.value = ", email).count();
     }
 
     /**
@@ -385,7 +391,8 @@ public class ContactUtil
 	if (contact == null)
 	    return "?";
 
-	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " " + contact.getContactFieldValue(Contact.LAST_NAME);
+	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " "
+		+ contact.getContactFieldValue(Contact.LAST_NAME);
 
 	return contactName;
     }
@@ -395,9 +402,10 @@ public class ContactUtil
 	try
 	{
 	    Map<String, Object> mp = new HashMap<String, Object>();
-	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact), new TypeReference<HashMap<String, Object>>()
-	    {
-	    });
+	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact),
+		    new TypeReference<HashMap<String, Object>>()
+		    {
+		    });
 	    return mp;
 	}
 	catch (Exception e)
@@ -408,8 +416,8 @@ public class ContactUtil
 
     public static List<Contact> getRecentContacts(String page_size)
     {
-	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId()).order("-viewed.viewed_time")
-		.limit(Integer.parseInt(page_size)).list();
+	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId())
+		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
     }
 
     public static void deleteContactsbyList(List<Contact> contacts)
@@ -433,7 +441,8 @@ public class ContactUtil
      */
     public static Key<Contact> getCompanyByName(String companyName)
     {
-	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name").filter("properties.value", companyName).getKey();
+	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name")
+		.filter("properties.value", companyName).getKey();
 
     }
 
@@ -505,7 +514,8 @@ public class ContactUtil
 
     public static boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME)) && StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
 	{
 	    CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    return false;
@@ -536,7 +546,8 @@ public class ContactUtil
 
     public static boolean isValidFields(Contact contact)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME)) && StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
 	{
 	    return false;
 	}
@@ -568,7 +579,8 @@ public class ContactUtil
     public static boolean isValidEmail(final String hex)
     {
 
-	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 

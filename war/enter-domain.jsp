@@ -109,15 +109,15 @@ padding-left:10px!important;
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
 				     </div>
 				</form>
-				<div style="float:right;"><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
+				<div><input class="btn btn-large btn-primary" type="submit" value="Submit"></div>
 				
 					<div class="clearfix"></div>
 		
 		</div>
 	</div>
 	 <div style="text-align: center; line-height: 19px;">
-	   Not yet created domain? <a href="/choose-domain">Click here</a><br/>
-	   Forgot <a href="/forgot-domain">Domain?</a>
+	   New User? <a href="/choose-domain">Click here</a><br/>
+	   <a href="/forgot-domain"> Forgot Domain?</a>
 	 </div>
 </div>
 

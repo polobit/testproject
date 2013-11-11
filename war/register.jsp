@@ -69,16 +69,6 @@ margin-bottom:0px;
 }
 </style>
 
-<!-- Le fav and touch icons -->
-<link rel="shortcut icon" href="../assets/ico/favicon.ico">
-<link rel="apple-touch-icon-precomposed" sizes="144x144"
-	href="../assets/ico/apple-touch-icon-144-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="114x114"
-	href="../assets/ico/apple-touch-icon-114-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="72x72"
-	href="../assets/ico/apple-touch-icon-72-precomposed.png">
-<link rel="apple-touch-icon-precomposed"
-	href="../assets/ico/apple-touch-icon-57-precomposed.png">
 
  <!-- JQUery Core and UI CDN -->
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
@@ -131,7 +121,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				 <h1 style="font-size:29px;">Create your First User</h1>
 				 <h3><small></small></h3>
 				<div id="openid_btns" style="float: left;padding:5px 0 15px;border-top: 1px dotted #CCC;border-bottom: 1px dotted #CCC;border-right: none;border-left: none;">
-				        <h3><small>Sign up with one Click</small></h3>
+				        <!-- <h3><small>Sign up u</small></h3> -->
 				         <% if(!StringUtils.isEmpty(error)){%>
 				        <div class="alert alert-error login-error">
 							<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
@@ -160,7 +150,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
                     <input class="input-xlarge field required" maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 					<div style="margin-top:7px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the <a href="https://www.agilecrm.com/terms.html" target="_blank">Terms and conditions</a><input type="checkbox" checked="checked" name="agree" class="required"></label>
-					  <input type='submit' style="float:right;margin-top:7px;" value="Create my account >>" class='btn btn-large btn-primary'>
+					  <input type='submit' style="margin-top:20px;" value="Create  >>" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
 				</form>

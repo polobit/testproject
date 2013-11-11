@@ -106,16 +106,35 @@ $(function(){
 	 */
 	$('.deal-delete').live('click', function(e) {
 		e.preventDefault();
-        var data = $(this).closest('.data').attr('data');
+        var id = $(this).closest('.data').attr('data');
         
+        if(!confirm("Are you sure you want to delete?"))
+			return;
+        
+		var id_array = [];
+		var id_json = {};
+		
+		// Create array with entity id.
+		id_array.push(id);
+		
+		// Set entity id array in to json object with key ids, 
+		// where ids are read using form param
+		id_json.ids = JSON.stringify(id_array);
+
         var that = this;
 		$.ajax({
-			url: 'core/api/opportunity/' + data,
-			type: 'DELETE',
-			data: data,
+			url: 'core/api/opportunity/bulk',
+			type: 'POST',
+			data: id_json,
 			success: function() {
 				// Removes deal from list
 				$(that).closest('li').css("display","none");
+				
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
 			}
 		});
 	});

@@ -160,7 +160,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .no-tweet,.stream-notifications{border-bottom:1px solid #e5e5e5;background-color: whitesmoke;font-size: 15px;text-align: center;}
 .no-tweet>p,.stream-notifications>p{padding-top: 6px;}
 #addStreamModal:focus{outline-style: none;}
-.stream-notifications{cursor:pointer;}
+.stream-notifications{cursor:pointer;background-color:lightYellow;}
 
 
 /* Elements on add contact form */
