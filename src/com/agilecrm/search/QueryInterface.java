@@ -23,8 +23,7 @@ public interface QueryInterface
 {
     public static enum Type
     {
-	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(
-		Case.class);
+	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(Case.class);
 
 	private Class clazz;
 
@@ -79,4 +78,15 @@ public interface QueryInterface
      * @return
      */
     Collection<?> advancedSearch(List<SearchRule> rules, Integer count, String cursor);
+
+    /**
+     * Returns the number of results for the advanced search based on the list
+     * of search rules
+     * 
+     * @param rule
+     * @param count
+     * @param cursor
+     * @return
+     */
+    int advancedSearchCount(List<SearchRule> rules);
 }
