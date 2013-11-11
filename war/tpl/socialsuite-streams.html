@@ -145,7 +145,7 @@
                             <i class="icon icon-plus-sign" title="Add Contact"></i>                            
                          </a> </li>	                 
  		    		<li> <a class="tweet-action" href="#social" rel="reply"> 
-                            <i class="icon icon-reply reply-message" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} title="Reply"></i>                             
+                            <i class="icon icon-reply reply-message" tweet-id={{id}} stream-id={{stream_id}} title="Reply"></i>                             
                          </a> </li>                    
  		    		<li> <a class="tweet-action" href="#social" rel="retweet">
                          {{#if retweeted_by_user}}
@@ -169,13 +169,7 @@
                             <i class="icon icon-ellipsis-horizontal" title="More Options"></i> 
                          </a>
     					 <ul id="{{id_str}}_more_options_list" class="pull-right more-options-list dropdown-menu" role="menu">
-                                <li role="presentation"><a href="#social" class="reply-message" tweet-owner={{user.screen_name}} tweet-id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} role="menuitem">Tweet to @{{user.screen_name}}</a></li>
- 							{{#if in_contact}}	
-                                <li class="divider"></li>
-     							<li role="presentation"><a href="#social" class="add_score" role="menuitem">Add Score to @{{user.screen_name}}</a></li>                            
-                            	<li role="presentation"><a href="#social" class="add_star" role="menuitem">Add Star to @{{user.screen_name}}</a></li>
-                            	<li role="presentation"><a href="#social" class="add_campaigns" role="menuitem">Add to Campaigns @{{user.screen_name}}</a></li>
-							{{/if}}
+                                <li role="presentation"><a href="#social" class="reply-message" tweet-id={{id}} stream-id={{stream_id}} role="menuitem">Tweet to @{{user.screen_name}}</a></li> 							
                             {{#if deletable_tweet}}
                                 <li class="divider"></li>
                                 <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem" tweet-id={{id}} stream-id={{stream_id}}>Delete</a></li>                                

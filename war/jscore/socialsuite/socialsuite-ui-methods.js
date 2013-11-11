@@ -279,7 +279,7 @@ function addTweetToStream(modelStream,tweet)
 		  tweet["msg_type"] = "NoTweet";
 		  tweet["show"] = true;
 		  //if(tweet.text == "Dear you do not have any tweets.")
-		  tweet.text = "There are no tweets to show here.";
+		  tweet.text = "No Tweets to show here.";
 		}
 	else
 		{
@@ -530,7 +530,10 @@ function checkNewTweets()
 			      clearNoTweetNotification(StreamsListView.collection.get(stream.id));
 	        	}
 	    	}
-		 });      	
+		 });  
+  
+    //Remove deleted tweet element from ui
+	 $('.deleted').remove();
 }
 
 /**

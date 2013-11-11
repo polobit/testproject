@@ -22,30 +22,9 @@ $(document).on("click",".compose-message", function(e)
 
     json["description"] = "What's happening?" /*+ Twitter_current_profile_screen_name*/;
 	    
-    // If modal already exists remove to show a new one
-    $('#socialsuite-twitter_messageModal').remove();
-
-    // Populate the modal template with the above json details in the form
-    var message_form_modal = getTemplate("socialsuite-twitter-message", json);
-
-    // Append the form into the content
-    $('#content').append(message_form_modal);
-    
-    // Display modal
-    $('#socialsuite-twitter_messageModal').on('shown', function () {
-		  
-		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 125,
-			  	  counter: "#twitter-counter"
-			  	});
-			  $('#socialsuite-twitter_messageModal').find('#twit-tweet').focus();
-		  });
-	});
-    
-    // Shows the modal after filling with details
-    $('#socialsuite-twitter_messageModal').modal("show");
-    
+    // Display Modal
+    displayModal("socialsuite-twitter_messageModal","socialsuite-twitter-message",json,"twitter-counter","twit-tweet");
+            
     // In compose message text limit is crossed so disable send button.
     $('#twit-tweet').on('cross', function(){
         $('#send_tweet').addClass('disabled')
@@ -89,25 +68,12 @@ $(document).on("click",".compose-message", function(e)
         		 }
         	 
             // Hides the modal after 2 seconds after the sent is shown
-            setTimeout(function ()
-            {
-                $('#socialsuite-twitter_messageModal').modal("hide");
-            }, 2000);
+        	 hideModal("socialsuite-twitter_messageModal");          
 
         }).error(function (data)
         {
-        	 $("#spinner-modal").hide();
-        	 
-            // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').modal("hide");
-
-            var result = data.responseText;
-                       
-            // Error message is shown if error occurs
-            if(result.trim() == "Status is a duplicate.")
-               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
-            else
-               showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+          // Displays Error Notification.
+          displayError("socialsuite-twitter_messageModal",data);
         });
     });
 }); 
@@ -123,12 +89,15 @@ $(document).on("click",".reply-message", function(e)
 	
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
-	var tweetIdStr = $(this).attr("tweet-id-str");
-	var tweetOwner = $(this).attr("tweet-owner");
-	 
-	// Fetch stream from collection
-	var stream = StreamsListView.collection.get(streamId).toJSON();
 	
+	// Get stream from collection.
+	var modelStream = StreamsListView.collection.get(streamId);	
+	var stream = modelStream.toJSON();
+	
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get(tweetId);
+	var tweet = modelTweet.toJSON();
+		 
 	// Store info in a json, to send it to the modal window when making send tweet request
     var json = {};
 
@@ -136,35 +105,15 @@ $(document).on("click",".reply-message", function(e)
     json["headline"] = "Reply Tweet";
         
     // Information to be shown in the modal to the user while sending message    
-    json["info"] = "Reply "+"@" + tweetOwner +" from " + stream.screen_name;
+    json["info"] = "Reply "+"@" + tweet.user.screen_name +" from " + stream.screen_name;
 
-    json["description"] = "@" + tweetOwner;
-    json["tweetId"] = tweetIdStr;
-    json["tweetOwner"] = tweetOwner;    
+    json["description"] = "@" + tweet.user.screen_name;
+    json["tweetId"] = tweet.id_str;
+    json["tweetOwner"] = tweet.user.screen_name;    
 	    
-    // If modal already exists remove to show a new one
-    $('#socialsuite-twitter_messageModal').remove();
-
-    // Populate the modal template with the above json details in the form
-    var message_form_modal = getTemplate("socialsuite-twitter-message", json);
-
-    // Append the form into the content
-    $('#content').append(message_form_modal);
-
-    $('#socialsuite-twitter_messageModal').on('shown', function () {
-		  
-		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 125,
-			  	  counter: "#twitter-counter"
-			  	});
-			  $('#socialsuite-twitter_messageModal').find('#twit-tweet').focus();
-		  });
-	});
-    
-    // Shows the modal after filling with details
-    $('#socialsuite-twitter_messageModal').modal("show");
-   
+    // Display Modal
+    displayModal("socialsuite-twitter_messageModal","socialsuite-twitter-message",json,"twitter-counter","twit-tweet");
+         
     // In compose message text limit is crossed so disable send button.
     $('#twit-tweet').on('cross', function(){
         $('#send_reply').addClass('disabled')
@@ -204,29 +153,15 @@ $(document).on("click",".reply-message", function(e)
     		 {
                // On success, shows the status as sent
                $('#socialsuite-twitter_messageModal').find('span.save-status').html("Sent");
-               showNotyPopUp('information', "Your Tweet to @"+tweetOwner+" has been sent!", "top", 5000);               
+               showNotyPopUp('information', "Your Tweet to @"+tweet.user.screen_name+" has been sent!", "top", 5000);               
     		 }
         	         	 
             // Hides the modal after 2 seconds after the sent is shown
-            setTimeout(function ()
-            {
-                $('#socialsuite-twitter_messageModal').modal("hide");
-            }, 2000);
-
+        	 hideModal("socialsuite-twitter_messageModal");
         }).error(function (data)
         {
-        	 $("#spinner-modal").hide();
-        	 
-            // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').modal("hide");
-
-            var result = data.responseText;
-                      
-            // Error message is shown if error occurs
-            if(result.trim() == "Status is a duplicate.")
-               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
-            else
-               showNotyPopUp('information', "Retry after sometime.", "top", 5000);   
+        	// Displays Error Notification.
+            displayError("socialsuite-twitter_messageModal",data);
         });
     });
 });
@@ -241,12 +176,15 @@ $(document).on("click",".direct-message", function(e)
 
 	var streamId = $(this).attr("stream-id");
 	var tweetId = $(this).attr("tweet-id");
-	var tweetIdStr = $(this).attr("tweet-id-str");
-	var tweetOwner = $(this).attr("tweet-owner");
-		 
-	// Fetch stream from collection
-	var stream = StreamsListView.collection.get(streamId).toJSON();
 	
+	// Get stream from collection.
+	var modelStream = StreamsListView.collection.get(streamId);	
+	var stream = modelStream.toJSON();
+	
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get(tweetId);
+	var tweet = modelTweet.toJSON();
+
 	// Store info in a json, to send it to the modal window when making send tweet request
     var json = {};
 
@@ -254,35 +192,15 @@ $(document).on("click",".direct-message", function(e)
     json["headline"] = "Direct Message";
         
     // Information to be shown in the modal to the user while sending message    
-    json["info"] = "Direct message from "+stream.screen_name + " to " + tweetOwner;
+    json["info"] = "Direct message from "+stream.screen_name + " to " + tweet.user.screen_name;
     
     json["description"] = "Tip: you can send a message to anyone who follows you."
-    json["tweetId"] = tweetIdStr;
-    json["tweetOwner"] = tweetOwner;    
+    json["tweetId"] = tweet.id_str;
+    json["tweetOwner"] = tweet.user.screen_name;    
 	    
-    // If modal already exists remove to show a new one
-    $('#socialsuite-twitter_messageModal').remove();
-
-    // Populate the modal template with the above json details in the form
-    var message_form_modal = getTemplate("socialsuite-twitter-message", json);
-
-    // Append the form into the content
-    $('#content').append(message_form_modal);
-
-    $('#socialsuite-twitter_messageModal').on('shown', function () {
-		  
-		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 125,
-			  	  counter: "#twitter-counter"
-			  	});
-			  $('#socialsuite-twitter_messageModal').find('#twit-tweet').focus();
-		  });
-	});
-    
-    // Shows the modal after filling with details
-    $('#socialsuite-twitter_messageModal').modal("show");
-    
+    // Display Modal
+    displayModal("socialsuite-twitter_messageModal","socialsuite-twitter-message",json,"twitter-counter","twit-tweet");
+       
     // In compose message text limit is crossed so disable send button.
     $('#twit-tweet').on('cross', function(){
         $('#send_direct_message').addClass('disabled')
@@ -329,22 +247,13 @@ $(document).on("click",".direct-message", function(e)
                  $('#socialsuite-twitter_messageModal').find('span.save-status').html("Retry");   
                  showNotyPopUp('information', "Retry after sometime.", "top", 5000);
         		}
+        	 
             // Hides the modal after 2 seconds after the sent is shown
-            setTimeout(function ()
-            {
-                $('#socialsuite-twitter_messageModal').modal("hide");
-            }, 2000);
-
+        	 hideModal("socialsuite-twitter_messageModal");
         }).error(function (data)
         {
-        	 $("#spinner-modal").hide();
-        	 
-            // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_messageModal').modal("hide");
-
-            // Error message is shown if error occurs
-            showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-            console.log(data.responseText);   
+        	// Displays Error Notification.
+            displayError("socialsuite-twitter_messageModal",data);   
         });
     });
 });
@@ -378,28 +287,9 @@ $(document).on("click",".retweet-status", function(e)
     json["tweetId"] = tweet.id_str;
     json["tweetOwner"] = tweet.user.screen_name;    
        
-    // If modal already exists remove to show a new one
-    $('#socialsuite-twitter_RTModal').remove();
-
-    // Populate the modal template with the above json details in the form
-    var message_form_modal = getTemplate("socialsuite-twitter-RT", json);
-
-    // Append the form into the content
-    $('#content').append(message_form_modal);
-    
-    $('#socialsuite-twitter_RTModal').on('shown', function () {		  
-		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 125,
-			  	  counter: "#twitter-retweet-counter"
-			  	});
-			  $('#socialsuite-twitter_RTModal').find('#twit-edit-tweet').focus();
-		  });
-	   });   
-    
-    // Shows the modal after filling with details
-    $('#socialsuite-twitter_RTModal').modal("show");
-	
+    // Display Modal
+    displayModal("socialsuite-twitter_RTModal","socialsuite-twitter-RT",json,"twitter-retweet-counter","twit-edit-tweet");
+        	
     $('#send_retweet').show();
     $('#edit_retweet').show();      
     $('#twit-retweet').show();
@@ -430,10 +320,7 @@ $(document).on("click",".retweet-status", function(e)
     	 $("#spinner-modal").hide();
    
          // Hides the modal after 2 seconds after the sent is shown
-         setTimeout(function ()
-         {
-           $('#socialsuite-twitter_RTModal').modal("hide");
-         }, 2000);
+    	 hideModal("socialsuite-twitter_RTModal");
        	
        	// Retweet is Unsuccessful.
        	if(data == "Unsuccessful")
@@ -454,12 +341,8 @@ $(document).on("click",".retweet-status", function(e)
       		        $(".time-ago", $(".chirp-container")).timeago();});	
        }).error(function (data)
        {
-    	 $("#spinner-modal").hide();
-    	 $('#socialsuite-twitter_RTModal').modal("hide");
-         
-    	 // Error message is shown when error occurs
-       	 showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-       	 console.log(data.responseText);  
+    	  // Displays Error Notification.
+          displayError("socialsuite-twitter_RTModal",data);    	   
        });
     });
 
@@ -525,25 +408,11 @@ $(document).on("click",".retweet-status", function(e)
         		 }
         	 
             // Hides the modal after 2 seconds after the sent is shown
-            setTimeout(function ()
-            {
-                $('#socialsuite-twitter_RTModal').modal("hide");
-            }, 2000);
-
+        	 hideModal("socialsuite-twitter_RTModal");
         }).error(function (data)
         {
-        	 $("#spinner-modal").hide();
-        	 
-            // If error occurs while posting modal is removed and error message is shown
-            $('#socialsuite-twitter_RTModal').modal("hide");
-
-            var result = data.responseText;
-                       
-            // Error message is shown if error occurs
-            if(result.trim() == "Status is a duplicate.")
-               showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
-            else
-               showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+        	// Displays error notification
+        	displayError("socialsuite-twitter_RTModal",data);
         });
     });
 });
@@ -609,8 +478,7 @@ $(document).on("click",".undo-retweet-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-    	console.log(data.responseText);  
+    	displayError(null,data);
     });
 });
 
@@ -660,8 +528,7 @@ $(document).on("click",".favorite-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-    	console.log(data.responseText);  
+    	displayError(null,data);  
     });
 });
 
@@ -712,8 +579,7 @@ $(document).on("click",".undo-favorite-status", function(e)
     }).error(function (data)
     {
         // Error message is shown when error occurs
-    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-    	console.log(data.responseText);  
+    	displayError(null,data);
     });
 });
 
@@ -767,38 +633,37 @@ $(document).on("click",".more-options", function(e)
 	    if(data.follow == "true")
 	    	{
 	      	  //console.log("in unfollow");
-	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');
+	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');
 	    	}
 	    // Stream owner not following tweet owner then add follow option
 	    else if(data.follow == "false")
 	    	{
 	    	  //console.log("in follow");
-	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
+	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
 	    	}
 	  
   	    // Tweet owner is stream owner's follower then add send DM option
 	    if(data.follower == "true")
            {	    	
    	         //console.log("in send DM");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message" tweet-id='+tweetId+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
            }
 	    
 	    // Check tweet owner is Block or Unblock
 	    if(data.blocked == "true")
            {	    	
    	         //console.log("in unblock");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Unblock @'+tweetOwner+'</a></li>');	    	
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Unblock @'+tweetOwner+'</a></li>');	    	
             }	    
         else if(data.blocked == "false")
             {	    	
    	          //console.log("in block");
-              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+' tweet-id='+tweetId+' tweet-id-str='+tweetIdStr+' stream-id='+streamId+'>Block @'+tweetOwner+'</a></li>');	    	
+              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Block @'+tweetOwner+'</a></li>');	    	
             }
 	  }).error(function (data)
 		  {
 		    // Error message is shown when error occurs
-		      showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-			  console.log(data.responseText);  
+	    	displayError(null,data);
 		  });
 });
 
@@ -827,8 +692,7 @@ $(document).on("click",".follow-user", function(e)
 		    }).error(function (data)
 		    {
 		        // Error message is shown if error occurs
-		    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-		    	console.log(data.responseText);  
+		    	displayError(null,data);  
 		    });
 		});
 /**
@@ -856,8 +720,7 @@ $(document).on("click",".unfollow-user", function(e)
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-    	console.log(data.responseText);  
+    	displayError(null,data); 
     });
 });
 
@@ -886,8 +749,7 @@ $(document).on("click",".block-user", function(e)
 		    }).error(function (data)
 		    {
 		        // Error message is shown if error occurs
-		    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-		    	console.log(data.responseText);  
+		    	displayError(null,data);
 		    });
 		});
 
@@ -916,8 +778,7 @@ $(document).on("click",".unblock-user", function(e)
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-    	console.log(data.responseText);  
+    	displayError(null,data);
     });
 });
 
@@ -967,7 +828,64 @@ $(document).on("click",".delete-tweet", function(e)
     }).error(function (data)
     {
         // Error message is shown if error occurs
-    	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-    	console.log(data.responseText);  
+    	displayError(null,data);
     });   
 });
+
+// Displays Modal.
+function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
+{
+	// If modal already exists remove to show a new one
+    $('#'+modalToDisplay).remove();
+
+    // Populate the modal template with the above json details in the form
+    var message_form_modal = getTemplate(templt, json);
+
+    // Append the form into the content
+    $('#content').append(message_form_modal);
+    
+    // Display modal
+    $('#'+modalToDisplay).on('shown', function () {
+		  
+		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+			  $(".twit-tweet-limit").limit({
+			  	  maxChars: 125,
+			  	  counter: "#"+counterVar
+			  	});
+			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();
+		  });
+	});
+    
+    // Shows the modal after filling with details
+    $('#'+modalToDisplay).modal("show");	
+}
+// Hides the modal after 2 seconds after the sent is shown
+function hideModal(modalToHide)
+{
+  setTimeout(function ()
+   {
+     $('#'+modalToHide).modal("hide");
+   }, 2000);
+}
+
+// Displays Error notification.
+function displayError(modalToDisplay,data)
+{
+	$("#spinner-modal").hide();
+	 
+	if(modalToDisplay != null)
+	  {
+	    // If error occurs while posting modal is removed and error message is shown
+	    $('#'+modalToDisplay).modal("hide");
+	  }
+
+	var result = data.responseText;
+               
+    // Error message is shown if error occurs
+    if(result.trim() == "Status is a duplicate.")
+       showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);            
+    else
+       showNotyPopUp('information', "Retry after sometime.", "top", 5000);	
+    
+    console.log(data.responseText); 
+}

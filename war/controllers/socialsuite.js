@@ -22,7 +22,8 @@ var SocialSuiteRouter = Backbone.Router.extend({
     */
    socialsuite : function() 
     {
-		console.log("In SocialSuite router");		
+		console.log("In SocialSuite router");	
+		initializeSocialSuite();
 		
 		// Makes tab active
 		$(".active").removeClass("active");
