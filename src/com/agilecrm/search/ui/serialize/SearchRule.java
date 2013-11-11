@@ -62,4 +62,10 @@ public class SearchRule implements Serializable
      * entity or on opportunity entity
      */
     public RuleType ruleType = null;
+
+    // To String
+    public String toString()
+    {
+	return LHS + " " + CONDITION + " " + RHS + " " + RHS_NEW + " " + nested_condition + " " + nested_lhs + " " + nested_rhs;
+    }
 }

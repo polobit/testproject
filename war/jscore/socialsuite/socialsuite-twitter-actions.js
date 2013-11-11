@@ -562,15 +562,19 @@ $(document).on("click",".undo-retweet-status", function(e)
      var streamId = $(this).attr("stream-id");
      var tweetId = $(this).attr("tweet-id");
      var tweetIdStr = null; 
-    	 
+    
     // Get stream from collection.
- 	 var modelStream = StreamsListView.collection.get(streamId);
- 	  	
-     // If stream type is "Sent" then "tweet-id-str" is tweet handle else "retweet-id" to perform action.
+ 	var modelStream = StreamsListView.collection.get(streamId);	
+ 	
+ 	// Get tweet from stream.
+ 	var modelTweet = modelStream.get('tweetListView').get(tweetId);
+ 	var tweet = modelTweet.toJSON();
+          	
+    // If stream type is "Sent" then "tweet-id-str" is tweet handle else "retweet-id" to perform action.
      if(modelStream.toJSON().stream_type == "Sent")
-    	 tweetIdStr = $(this).attr("tweet-id-str");
+    	 tweetIdStr = tweet.id_str;
      else if(modelStream.toJSON().stream_type == "Home")
-    	 tweetIdStr = $(this).attr("retweet-id");
+    	 tweetIdStr = tweet.retweet_id;
  	
 	/* Sends get request to url "core/social/undoretweet/" and Calls StreamAPI with 
      * Stream id, tweet id and tweet idStr as path parameters.
@@ -586,12 +590,9 @@ $(document).on("click",".undo-retweet-status", function(e)
     		  return;
     		}    	
     	
-        // On success, Change retweet icon to normal.    	
-    	// Get tweet from stream.
-    	var modelTweet = modelStream.get('tweetListView').get(tweetId);
-    	    	
+        // On success, Change retweet icon to normal.
     	// Delete tweet from stream
-    	if(modelTweet.toJSON().stream_type == "Sent")
+    	if(tweet.stream_type == "Sent")
     		 modelTweet.set("deleted_msg","deleted");
     	else    		
     	   modelTweet.unset("retweeted_by_user");
@@ -621,8 +622,16 @@ $(document).on("click",".favorite-status", function(e)
 	// Get the id of the tweet on which retweet is clicked
      var streamId = $(this).attr("stream-id");
      var tweetId = $(this).attr("tweet-id");
- 	 var tweetIdStr = $(this).attr("tweet-id-str");
- 	 var tweetOwner = $(this).attr("tweet-owner");
+     
+    // Get stream from collection.
+  	 var modelStream = StreamsListView.collection.get(streamId);	
+  	
+  	// Get tweet from stream.
+  	 var modelTweet = modelStream.get('tweetListView').get(tweetId);
+  	 var tweet = modelTweet.toJSON();
+  	
+ 	 var tweetIdStr = tweet.id_str;
+ 	 var tweetOwner = tweet.user.screen_name;
  	 
 	/* Sends get request to url "core/social/favorite/" and Calls StreamAPI with 
      * Stream id, tweet idStr as path parameters.
@@ -639,13 +648,7 @@ $(document).on("click",".favorite-status", function(e)
     		}    
     	
         // On success, the color of the favorite is shown orange.   	
-    	// Get stream from collection.
-    	var modelStream = StreamsListView.collection.get(streamId);
-    	    	
-    	// Get tweet from stream.
-    	var modelTweet = modelStream.get('tweetListView').get(tweetId);
-    	    	
-    	// Update attribute in tweet.
+      	// Update attribute in tweet.
     	modelTweet.set("favorited_by_user","true");
     	    	
     	// Add back to stream.
@@ -671,8 +674,16 @@ $(document).on("click",".undo-favorite-status", function(e)
 	// Get the id of the tweet on which retweet is clicked
      var streamId = $(this).attr("stream-id");
      var tweetId = $(this).attr("tweet-id");
- 	 var tweetIdStr = $(this).attr("tweet-id-str");
- 	 var tweetOwner = $(this).attr("tweet-owner");
+    
+    // Get stream from collection.
+  	 var modelStream = StreamsListView.collection.get(streamId);	
+  	
+  	// Get tweet from stream.
+  	 var modelTweet = modelStream.get('tweetListView').get(tweetId);
+  	 var tweet = modelTweet.toJSON();
+  	
+ 	 var tweetIdStr = tweet.id_str;
+ 	 var tweetOwner = tweet.user.screen_name;
  		
 	/* Sends get request to url "core/social/undofavorite/" and Calls StreamAPI with 
      * Stream id, tweet idStr as path parameters.
@@ -688,13 +699,7 @@ $(document).on("click",".undo-favorite-status", function(e)
     		  return;
     		}
     	
-        // On success, Change favorite icon to normal.
-    	// Get stream from collection.
-    	var modelStream = StreamsListView.collection.get(streamId);
-    	    	
-    	// Get tweet from stream.
-    	var modelTweet = modelStream.get('tweetListView').get(tweetId);
-    	    	
+        // On success, Change favorite icon to normal.    	
     	// Delete tweet from stream
     	modelTweet.unset("favorited_by_user");
     	    	
@@ -725,13 +730,21 @@ $(document).on("click",".undo-favorite-status", function(e)
 $(document).on("click",".more-options", function(e)
 {	      
   var streamId = $(this).attr("stream-id");
-  var tweetId = $(this).attr("tweet-id");
-  var tweetIdStr = $(this).attr("tweet-id-str");
-  var tweetOwner = $(this).attr("tweet-owner");
+  var tweetId = $(this).attr("tweet-id");  
   var elementId = $(this).attr("id");
     
+  //Get stream from collection.
+  var modelStream = StreamsListView.collection.get(streamId);	
+	
+  // Get tweet from stream.
+  var modelTweet = modelStream.get('tweetListView').get(tweetId);
+  var tweet = modelTweet.toJSON();
+
+  var tweetIdStr = tweet.id_str;
+  var tweetOwner = tweet.user.screen_name; 
+  
   // Fetch stream from collection
-  var stream = StreamsListView.collection.get(streamId).toJSON();
+  var stream = modelStream.toJSON();
     
   // Remove extra element from dropdown menu list.
   $('.list-clear').remove();
@@ -920,21 +933,23 @@ $(document).on("click",".delete-tweet", function(e)
 	
 	// Details to pass on to method.
 	var streamId = $(this).attr("stream-id");	
-	var tweetOwner = $(this).attr("tweet-owner");
 	var tweetId = $(this).attr("tweet-id");
-	var tweetIdStr = $(this).attr("tweet-id-str");
+	
+	 //Get stream from collection.
+	  var modelStream = StreamsListView.collection.get(streamId);	
+		
+	  // Get tweet from stream.
+	  var modelTweet = modelStream.get('tweetListView').get(tweetId);
+	  var tweet = modelTweet.toJSON();
+
+	  var tweetIdStr = tweet.id_str;
+	  var tweetOwner = tweet.user.screen_name; 
 	
 	// Call method with details of tweet to be deleted.
     $.get("/core/social/deletetweet/" + streamId + "/" + tweetOwner+ "/" +tweetIdStr, function (data)
     {    
         if(data == "Successful")
-        	{        
-        		// Get stream from collection.
-        		var modelStream = StreamsListView.collection.get(streamId);
-        		    	
-        		// Get tweet from stream.
-        		var modelTweet = modelStream.get('tweetListView').get(tweetId);
-        		    	
+        	{     	
         		modelTweet.set("deleted_msg","deleted");
     	
         		// Add back to stream.

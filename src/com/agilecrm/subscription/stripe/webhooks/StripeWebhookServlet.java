@@ -469,7 +469,7 @@ public class StripeWebhookServlet extends HttpServlet
 	    {
 		JSONObject stripeJSONJSON = new JSONObject(stripeJSONString);
 
-		plan.put("price", stripeJSONJSON.getInt("total") / 100);
+		plan.put("price", Float.valueOf(stripeJSONJSON.getString("total")) / 100);
 		plan.put("start_date", new Date(subscription.getCurrentPeriodStart() * 1000).toString());
 		plan.put("end_date", new Date(subscription.getCurrentPeriodEnd() * 1000).toString());
 		System.out.println(plan);
@@ -484,5 +484,4 @@ public class StripeWebhookServlet extends HttpServlet
 	Object object[] = { event, customer, plan };
 	return object;
     }
-
 }

@@ -63,17 +63,6 @@ padding-left:10px!important;
 }
 </style>
 
-<!-- Le fav and touch icons -->
-<link rel="shortcut icon" href="../assets/ico/favicon.ico">
-<link rel="apple-touch-icon-precomposed" sizes="144x144"
-	href="../assets/ico/apple-touch-icon-144-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="114x114"
-	href="../assets/ico/apple-touch-icon-114-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="72x72"
-	href="../assets/ico/apple-touch-icon-72-precomposed.png">
-<link rel="apple-touch-icon-precomposed"
-	href="../assets/ico/apple-touch-icon-57-precomposed.png">
-
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -120,15 +109,16 @@ padding-left:10px!important;
 						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
 					</div>
 					 <%}%>
-					 <h3><small>Select your domain at Agile CRM</small></h3>
+					 <!-- <h3><small>Select your domain at Agile CRM</small></h3> -->
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Company"
 						   	   name="subdomain" class="input-medium field required" autocapitalize="off"><b> .agilecrm.com</b>
-						   	   <span style="color:#999">Company Name cannot be changed later</span>
+						   	  <!--  <span style="color:#999"></span>
+						   	   -->
 				   </div>
 				</form>
 				<div class="clearfix"></div>
-				<div><input class="btn btn-large btn-primary" style="float:right;" type="submit" value="Next, Choose User Name"></div>
+				<div><input class="btn btn-large btn-primary" style="" type="submit" value="Next >>	"></div>
 				<div class="clearfix"></div>
 		
 		</div>
