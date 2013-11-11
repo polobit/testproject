@@ -1,13 +1,21 @@
 <!-- main social suite container -->
 <script id="socialsuite-streams-collection-template" type="text/html">
- {{#unless this.length}}  
-            <div class="span4">
-        		<div>
-            		<h3>You do not have any added streams.</h3><br />
-            		<p>Save your time and your sanity. Improve productivity by managing all of your social networks within Social Suite.</p>
-                    <p>You can add stream from <b>"Add Stream"</b> button.</p>
-        		</div>
-    		</div><!-- span4 end -->
+ {{#unless this.length}} 
+
+ <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You have not associated any social accounts currently.</h3>
+                    <div class="text">
+                     	Track relevant conversations and participate. Import prospective customers and run multichannel campaigns.  
+                    </div>
+               		Get started by add a social stream.
+				 </div>
+            </div>
+        </div>
  {{else}} 
 	<ul id="socialsuite-streams-model-list" class="columns row-fluid ui-sortable"></ul> 
  {{/unless}}

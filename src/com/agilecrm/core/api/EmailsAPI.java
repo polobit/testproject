@@ -1,7 +1,5 @@
 package com.agilecrm.core.api;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -78,22 +76,8 @@ public class EmailsAPI
 	    @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc, @FormParam("subject") String subject,
 	    @FormParam("body") String body, @FormParam("signature") String signature)
     {
-	try
-	{
-	    request.setCharacterEncoding("UTF-8");
-	}
-	catch (UnsupportedEncodingException e)
-	{
-	    e.printStackTrace();
-	    System.out.println("Exception occured while setting encoding from request...");
-	}
-
 	// combine body and signature.
 	body = body + "<br/><div><br/><br/>" + signature + "</div>";
-
-	System.out.println("Request Encoding is " + request.getCharacterEncoding());
-	System.out.println("Body " + body);
-	System.out.println("Encoded Body is " + AgileTaskletUtil.getUTF8String(body));
 
 	// Removes traling commas if any
 	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
@@ -124,7 +108,7 @@ public class EmailsAPI
      */
     @Path("imap-email")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8" })
     public String getEmails(@QueryParam("e") String searchEmail, @QueryParam("o") String offset, @QueryParam("c") String count)
     {
 	try
@@ -166,5 +150,4 @@ public class EmailsAPI
 	    return null;
 	}
     }
-
 }

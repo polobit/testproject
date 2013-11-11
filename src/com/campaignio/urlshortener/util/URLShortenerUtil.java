@@ -1,7 +1,5 @@
 package com.campaignio.urlshortener.util;
 
-import java.net.URLEncoder;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -92,6 +90,7 @@ public class URLShortenerUtil
 
 	// Gets current namespace to append url
 	String domain = NamespaceManager.get();
+
 	System.out.println("Namespace in URLShortenerUtil: " + domain);
 
 	String domainKey = "";
@@ -110,7 +109,7 @@ public class URLShortenerUtil
 	else
 	{
 	    keyword = keyword.replace(" ", "_");
-	    keyword = URLEncoder.encode(keyword) + "/";
+	    keyword = keyword + "/";
 	}
 
 	return URLShortener.SHORTENER_URL + keyword + domainKey + "-" + urlKey;

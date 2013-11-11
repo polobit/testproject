@@ -217,7 +217,7 @@ public class ContactEmailUtil
 	    {
 		ObjectMapper mapper = new ObjectMapper();
 		String emailString = mapper.writeValueAsString(contactEmail);
-		imapEmails.put(new JSONObject(AgileTaskletUtil.getUTF8String(emailString)));
+		imapEmails.put(new JSONObject(emailString));
 	    }
 	}
 	catch (Exception e)

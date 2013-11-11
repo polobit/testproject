@@ -123,6 +123,14 @@ public class NamespaceUtil
 	String host = url.getHost().toString();
 
 	// Eg., return 'admin' from 'admin.agilecrm.com'
-	return host.split("\\.")[0];
+	return host.contains("-dot-") ? host.split("\\-dot-")[0] : host.split("\\.")[0];
     }
+
+    public static String getNamespaceFromURL(String host)
+    {
+	System.out.println(host.contains("-dot-"));
+	// Eg., return 'admin' from 'admin.agilecrm.com'
+	return host.contains("-dot-") ? host.split("\\-dot-")[0] : host.split("\\.")[0];
+    }
+
 }

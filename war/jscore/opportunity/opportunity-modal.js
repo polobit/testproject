@@ -129,6 +129,12 @@ $(function(){
 			success: function() {
 				// Removes deal from list
 				$(that).closest('li').css("display","none");
+				
+				// Shows Milestones Pie
+				pieMilestones();
+	
+				// Shows deals chart
+				dealsLineChart();
 			}
 		});
 	});

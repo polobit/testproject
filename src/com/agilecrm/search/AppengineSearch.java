@@ -35,8 +35,7 @@ public class AppengineSearch<T>
 
 	try
 	{
-	    builder = (BuilderInterface) Class.forName("com.agilecrm.search.document." + type + "Document")
-		    .newInstance();
+	    builder = (BuilderInterface) Class.forName("com.agilecrm.search.document." + type + "Document").newInstance();
 
 	    index = builder.getIndex();
 	    query = new QueryDocument<T>(index, clazz);
@@ -143,6 +142,21 @@ public class AppengineSearch<T>
     public Collection getAdvacnedSearchResults(List<SearchRule> rules, Integer count, String cursor)
     {
 	return query.advancedSearch(rules, count, cursor);
+    }
+
+    /**
+     * Similar to advanced search method. It takes count and cursor, used to
+     * fetch results in limited sets
+     * 
+     * @param rules
+     * @param count
+     * @param cursor
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    public int getAdvancedSearchResultsCount(List<SearchRule> rules)
+    {
+	return query.advancedSearchCount(rules);
     }
 
 }

@@ -1,10 +1,8 @@
 package com.campaignio.tasklets.agile.util;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -257,39 +255,5 @@ public class AgileTaskletUtil
 	calendar.set(Calendar.MILLISECOND, 0);
 
 	return calendar.getTimeInMillis() / 1000;
-    }
-
-    /**
-     * Returns encoded string. Mostly UTF-8 is used for encoding different kind
-     * of international characters for sending through internet.
-     * 
-     * @param str
-     *            - String need to be encoded
-     * @return String
-     */
-    public static String getUTF8String(String str)
-    {
-	// if null or empty return
-	if (StringUtils.isBlank(str))
-	    return str;
-
-	try
-	{
-	    System.out.println("Encoding string " + str);
-
-	    // Converts string into default encoded.
-	    String encodedString = new String(str.getBytes(DEFAULT_ENCODING), DEFAULT_ENCODING);
-
-	    System.out.println("After encoding " + encodedString);
-
-	    return encodedString;
-
-	}
-	catch (UnsupportedEncodingException e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while encoding...");
-	    return str;
-	}
     }
 }

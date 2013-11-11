@@ -114,6 +114,8 @@ public class QueryDocument<T> implements QueryInterface
     public Collection<T> advancedSearch(List<SearchRule> rules)
     {
 
+	System.out.println(rules);
+
 	// Construct query string based on SearchRule object
 	String query = QueryDocumentUtil.constructQuery(rules);
 
@@ -144,6 +146,29 @@ public class QueryDocument<T> implements QueryInterface
 
 	// return query results
 	return processQuery(query, count, cursor);
+    }
+
+    /**
+     * Advanced search used with cursor, used to show filter results.
+     */
+    @Override
+    public int advancedSearchCount(List<SearchRule> rules)
+    {
+	// If index is null return without querying
+	if (index == null)
+	    return 0;
+
+	// Construct query based on rules
+	String query = QueryDocumentUtil.constructQuery(rules);
+	System.out.println("query build is : " + query);
+
+	if (StringUtils.isEmpty(query))
+	    return 0;
+
+	// Get Documents for this query
+	List<ScoredDocument> contactDocuments = getDocuments(query);
+
+	return contactDocuments.size();
     }
 
     /**
@@ -225,9 +250,8 @@ public class QueryDocument<T> implements QueryInterface
     }
 
     /**
-     * processes query and return collection of contacts. It returns all the the
-     * entities (entities from datastore related to document ids returned in
-     * search)
+     * processes query and return the actual QueryDocuments of contacts. Added
+     * by Manohar
      * 
      * @param query
      *            {@link String}
@@ -235,12 +259,8 @@ public class QueryDocument<T> implements QueryInterface
      *            {@link Reports.ReportType}
      * @return
      */
-    private Collection<T> processQuery(String query)
+    private List<ScoredDocument> getDocuments(String query)
     {
-	// If index is null return without querying
-	if (index == null)
-	    return null;
-
 	/*
 	 * Sets query options only to get id of document (enough to get get
 	 * respective contacts). Default query returns without page limit it max
@@ -256,6 +276,9 @@ public class QueryDocument<T> implements QueryInterface
 
 	// Gets sorted documents
 	List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(index.search(query_string).getResults());
+
+	if (contact_documents.size() == 0)
+	    return new ArrayList();
 
 	String cursorString = contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString();
 	/*
@@ -289,6 +312,29 @@ public class QueryDocument<T> implements QueryInterface
 			    .getCursor().toWebSafeString()));
 
 	System.out.println("total count  : " + contact_documents.size());
+
+	return contact_documents;
+    }
+
+    /**
+     * processes query and return collection of contacts. It returns all the the
+     * entities (entities from datastore related to document ids returned in
+     * search)
+     * 
+     * @param query
+     *            {@link String}
+     * @param type
+     *            {@link Reports.ReportType}
+     * @return
+     */
+    private Collection<T> processQuery(String query)
+    {
+	// If index is null return without querying
+	if (index == null)
+	    return null;
+
+	// Get Documents for this query
+	List<ScoredDocument> contact_documents = getDocuments(query);
 
 	// Return datastore entities based on documents.
 	return getDatastoreEntities(contact_documents, Long.valueOf(contact_documents.size()));
