@@ -230,11 +230,13 @@ public class QueryDocument<T> implements QueryInterface
 	     */
 	    if (cursor == null)
 
-		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page).setCursor(Cursor.newBuilder().setPerResult(true).build())
-			.setNumberFoundAccuracy(10000).build();
+		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
+			.setCursor(Cursor.newBuilder().setPerResult(true).build()).setNumberFoundAccuracy(10000)
+			.build();
 	    else
-		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page).setCursor(Cursor.newBuilder().setPerResult(true).build(cursor))
-			.setNumberFoundAccuracy(10000).build();
+		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
+			.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).setNumberFoundAccuracy(10000)
+			.build();
 
 	    return options;
 	}
@@ -243,7 +245,8 @@ public class QueryDocument<T> implements QueryInterface
 	if (index == null)
 	    return null;
 
-	return QueryOptions.newBuilder().setReturningIdsOnly(true).setLimit(Long.valueOf(index.search(query).getNumberFound()).intValue()).build();
+	return QueryOptions.newBuilder().setReturningIdsOnly(true)
+		.setLimit(Long.valueOf(index.search(query).getNumberFound()).intValue()).build();
     }
 
     /**
@@ -264,19 +267,19 @@ public class QueryDocument<T> implements QueryInterface
 	 * 1000 entities. To all matching results, documents should be fetch in
 	 * sets of 1000 documents at time
 	 */
-	QueryOptions options = QueryOptions.newBuilder().setLimit(1000).setCursor(Cursor.newBuilder().setPerResult(true).build()).setFieldsToReturn("type")
+	QueryOptions options = QueryOptions.newBuilder().setLimit(1000)
+		.setCursor(Cursor.newBuilder().setPerResult(true).build()).setFieldsToReturn("type")
 		.setNumberFoundAccuracy(10000).build();
 
 	// Builds query on query options
 	Query query_string = Query.newBuilder().setOptions(options).build(query);
 
-	
 	// Gets sorted documents
 	List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(index.search(query_string).getResults());
 
-	if(contact_documents.size() == 0)
+	if (contact_documents.size() == 0)
 	    return new ArrayList();
-	
+
 	String cursorString = contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString();
 	/*
 	 * As text search returns only 1000 in a query, we fetch remaining
@@ -293,8 +296,10 @@ public class QueryDocument<T> implements QueryInterface
 			.newBuilder()
 			.setLimit(1000)
 			.setCursor(
-				Cursor.newBuilder().setPerResult(true).build(contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString()))
-			.setFieldsToReturn("type").build();
+				Cursor.newBuilder()
+					.setPerResult(true)
+					.build(contact_documents.get(contact_documents.size() - 1).getCursor()
+						.toWebSafeString())).setFieldsToReturn("type").build();
 
 		// Build query on query options
 		query_string = Query.newBuilder().setOptions(options).build(query);
@@ -302,9 +307,9 @@ public class QueryDocument<T> implements QueryInterface
 		// Fetches next 1000 documents and them to list
 		contact_documents.addAll(new ArrayList<ScoredDocument>(index.search(query_string).getResults()));
 		System.out.println("results fetched : " + contact_documents.size());
-	    }
-	    while (contact_documents.get(contact_documents.size() - 1).getCursor() != null
-		    && !StringUtils.equals(cursorString, contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString()));
+	    } while (contact_documents.get(contact_documents.size() - 1).getCursor() != null
+		    && !StringUtils.equals(cursorString, contact_documents.get(contact_documents.size() - 1)
+			    .getCursor().toWebSafeString()));
 
 	System.out.println("total count  : " + contact_documents.size());
 
