@@ -3,7 +3,7 @@ package com.agilecrm;
 public class Globals
 {
 
-    public static String[] URLS = { "agilecrm.com", "helptor.com" };
+    public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com" };
 
     public static String GOOGLE_APPS_DOMAIN = "googleapps";
 
