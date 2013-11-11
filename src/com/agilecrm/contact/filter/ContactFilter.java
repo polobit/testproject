@@ -138,4 +138,17 @@ public class ContactFilter implements Serializable
 
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
     }
+
+    /**
+     * Queries contacts based on {@link List} of {@link SearchRule} specified,
+     * applying 'AND' condition on after each {@link SearchRule}. Builds a query
+     * and returns the count as opposed to actual results using
+     * {@link AppengineSearch}. Very useful while running query reports
+     * 
+     * @return {@link Collection}
+     */
+    public int queryContactsCount()
+    {
+	return new AppengineSearch<Contact>(Contact.class).getAdvancedSearchResultsCount(rules);
+    }
 }

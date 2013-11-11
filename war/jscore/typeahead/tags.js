@@ -339,4 +339,4 @@ $(function(){
 			pieTags(App_Contacts.contactsListView.el, true);
 		}, 'core/api/tags?reload=true');
 	})
-})
+});
