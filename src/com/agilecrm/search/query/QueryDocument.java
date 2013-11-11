@@ -254,9 +254,13 @@ public class QueryDocument<T> implements QueryInterface
 	// Builds query on query options
 	Query query_string = Query.newBuilder().setOptions(options).build(query);
 
+	
 	// Gets sorted documents
 	List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(index.search(query_string).getResults());
 
+	if(contact_documents.size() == 0)
+	    return new ArrayList();
+	
 	String cursorString = contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString();
 	/*
 	 * As text search returns only 1000 in a query, we fetch remaining
