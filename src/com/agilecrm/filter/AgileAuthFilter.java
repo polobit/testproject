@@ -18,6 +18,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -46,7 +47,8 @@ public class AgileAuthFilter implements Filter
      * to login page, where new session cookie is set.
      */
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+	    throws IOException, ServletException
     {
 	System.out.println("Agile Auth Filter");
 
@@ -58,7 +60,8 @@ public class AgileAuthFilter implements Filter
 
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the domain
-	if (httpRequest.getRequestURI().contains("js/api") || httpRequest.getRequestURI().contains("php/api") ||httpRequest.getRequestURI().contains("/core/api/bulk-actions"))
+	if (httpRequest.getRequestURI().contains("js/api") || httpRequest.getRequestURI().contains("php/api")
+		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions"))
 	{
 	    System.out.println("JS API - ignoring filter");
 	    chain.doFilter(request, response);
@@ -105,7 +108,8 @@ public class AgileAuthFilter implements Filter
 
 	// Check if the domain of the user is same as namespace. Otherwise,
 	// Redirect
-	if (domainUser != null && domainUser.domain != null && domain != null && !domain.equalsIgnoreCase(domainUser.domain))
+	if (domainUser != null && domainUser.domain != null && domain != null
+		&& !domain.equalsIgnoreCase(domainUser.domain))
 	{
 	    // Probably forward to the domain again he registered
 	    System.out.println("Forwarding to actual domain " + domainUser.domain);
@@ -113,7 +117,8 @@ public class AgileAuthFilter implements Filter
 	    // Remove from Current Session
 	    ((HttpServletRequest) request).getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
-	    httpResponse.sendRedirect("https://" + domainUser.domain + ".agilecrm.com");
+	    System.out.println(VersioningUtil.getLoginUrl(domainUser.domain, request));
+	    httpResponse.sendRedirect(VersioningUtil.getLoginUrl(domainUser.domain, request));
 	    return;
 	}
 

@@ -18,6 +18,7 @@ import com.agilecrm.GMailGadgetServlet;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.utils.SystemProperty;
@@ -76,10 +77,12 @@ public class NamespaceFilter implements Filter
 	    return true;
 
 	// Read Subdomain
-	String subdomain = request.getServerName().split("\\.")[0];
+	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
+	System.out.println(subdomain);
 
 	// Excludes if it is running in backends
-	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL) || BackendServiceFactory.getBackendService().getCurrentBackend() != null)
+	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL)
+		|| BackendServiceFactory.getBackendService().getCurrentBackend() != null)
 	    return true;
 
 	// Lowercase
@@ -158,10 +161,11 @@ public class NamespaceFilter implements Filter
 	     * Request url should be changed if there is one time session key,
 	     * so session
 	     */
-	    if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)) && !StringUtils.isEmpty(appsDomain))
+	    if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME))
+		    && !StringUtils.isEmpty(appsDomain))
 	    {
 		// Get Namespace
-		String namespace = appsDomain.split("\\.")[0];
+		String namespace = NamespaceUtil.getNamespaceFromURL(appsDomain);
 		System.out.println("Setting Google Apps - Namespace " + appsDomain);
 
 		// Get Current URL and Redirect to xxx.agilecrm.com
@@ -199,7 +203,8 @@ public class NamespaceFilter implements Filter
     {
 	// Redirect to choose domain page if not localhost - on localhost - we
 	// do it on empty namespace
-	if (!request.getServerName().equalsIgnoreCase("localhost") && !request.getServerName().equalsIgnoreCase("127.0.0.1"))
+	if (!request.getServerName().equalsIgnoreCase("localhost")
+		&& !request.getServerName().equalsIgnoreCase("127.0.0.1"))
 	{
 	    try
 	    {
@@ -224,8 +229,11 @@ public class NamespaceFilter implements Filter
      * @param chain
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+	    ServletException
     {
+	System.out.println(request.getServerName());
+
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
 	// "/backend" (crons, StripeWebhooks etc..)

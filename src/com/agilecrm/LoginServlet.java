@@ -15,6 +15,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -94,7 +95,8 @@ public class LoginServlet extends HttpServlet
 	    e.printStackTrace();
 
 	    // Send to Login Page
-	    request.getRequestDispatcher("login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request, response);
+	    request.getRequestDispatcher("login.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
+		    response);
 	    return;
 	}
 
@@ -164,7 +166,8 @@ public class LoginServlet extends HttpServlet
 	// Check if user is registered by OpenID, if yes then throw exception
 	// notifying him of OpenID registeration
 	if (domainUser.isOpenIdRegisteredUser())
-	    throw new Exception("Looks like you have registered using Google or Yahoo account. Please use the same to login. ");
+	    throw new Exception(
+		    "Looks like you have registered using Google or Yahoo account. Please use the same to login. ");
 
 	// Check if Encrypted passwords are same
 	if (!StringUtils.equals(MD5Util.getMD5HashedPassword(password), domainUser.getHashedString())
@@ -173,12 +176,12 @@ public class LoginServlet extends HttpServlet
 		throw new Exception("Incorrect password. Please try again.");
 
 	// Read Subdomain
-	String subdomain = request.getServerName().split("\\.")[0];
+	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
 
 	if (!subdomain.equalsIgnoreCase(domainUser.domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-		throw new Exception("User with same email address is registered in " + domainUser.domain + " domain. <a href=https://" + domainUser.domain
-			+ ".agilecrm.com> Click here</a> to login");
+		throw new Exception("User with same email address is registered in " + domainUser.domain
+			+ " domain. <a href=https://" + domainUser.domain + ".agilecrm.com> Click here</a> to login");
 
 	// Set Cookie and forward to /home
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
