@@ -94,7 +94,8 @@ public class NamespaceFilter implements Filter
 	    url = url.substring(1);
 
 	// If not agilecrm.com or helptor.com etc. - show chooseDomain
-	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase()))
+	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase())
+		&& !url.toLowerCase().contains(Globals.SUB_VERSION_URL))
 	{
 	    redirectToChooseDomain(request, response);
 	    return false;

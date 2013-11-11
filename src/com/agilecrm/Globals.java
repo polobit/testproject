@@ -4,6 +4,7 @@ public class Globals
 {
 
     public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com" };
+    public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
     public static String GOOGLE_APPS_DOMAIN = "googleapps";
 
@@ -53,6 +54,8 @@ public class Globals
 
     // Stripe
     public static final String STRIPE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    // public static final String STRIPE_API_KEY =
+    // "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String STRIPE_CLIENT_ID = "ca_1EEFJHQS129OoDorXXdlqVYwyCq8RyPA";
 
     // Max Plan Users
