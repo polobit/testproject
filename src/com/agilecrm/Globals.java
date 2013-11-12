@@ -22,11 +22,13 @@ public class Globals
 
     // API user name
     // public static final String SENDGRID_API_USER_NAME = "shelley";
-    public static final String SENDGRID_API_USER_NAME = "naveen123";
+    // public static final String SENDGRID_API_USER_NAME = "naveen123";
+    public static final String SENDGRID_API_USER_NAME = "agilecrm";
 
     // API key
     // public static final String SENDGRID_API_KEY = "mantra800pbx";
-    public static final String SENDGRID_API_KEY = "mantra123";
+    // public static final String SENDGRID_API_KEY = "mantra123";
+    public static final String SENDGRID_API_KEY = "send@agile1";
 
     // GMAIL
     public static final String GMAIL_API_KEY = "anonymous";
