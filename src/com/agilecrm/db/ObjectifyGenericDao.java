@@ -454,12 +454,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (result instanceof com.agilecrm.cursor.Cursor)
 		{
 
-		    System.out.println(this.clazz.getSimpleName());
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
 		    Object object = CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get());
 
 		    if (object != null)
-			agileCursor.count = Integer.valueOf((String) object);
+			agileCursor.count = (Integer) object;
 		    else
 		    {
 			long startTime = System.currentTimeMillis();
