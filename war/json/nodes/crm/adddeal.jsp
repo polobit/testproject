@@ -30,7 +30,8 @@
 			"required": "required",
 	        "fieldType": "input",
 	        "type": "number",
-	        "min": "0" 
+	        "min": "0",
+	        "max": "1000000000000" 
 
 		},{
 			"label": "Probability (%)",
