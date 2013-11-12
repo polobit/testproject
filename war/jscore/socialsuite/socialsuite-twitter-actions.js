@@ -1,7 +1,9 @@
+(function(){
+
 /**
  * get stream and create tweet for posting on Twitter.
  */
-$(document).on("click",".compose-message", function(e)
+$(".compose-message").die().live("click", function(e)
 {	
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
@@ -82,7 +84,7 @@ $(document).on("click",".compose-message", function(e)
 /**
  * Get stream and create reply tweet and post it on Twitter.
  */
-$(document).on("click",".reply-message", function(e)
+$(".reply-message").die().live("click", function(e)
 {	
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
@@ -169,7 +171,7 @@ $(document).on("click",".reply-message", function(e)
 /**
  * Sends a direct message to the Twitter profile , who is tweet owner.
  */
-$(document).on("click",".direct-message", function(e)
+$(".direct-message").die().live("click", function(e)
 {	
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
@@ -261,7 +263,7 @@ $(document).on("click",".direct-message", function(e)
 /**
  * Get stream and perform retweet action on selected tweet.
  */
-$(document).on("click",".retweet-status", function(e)
+$(".retweet-status").die().live("click", function(e)
 {
 
 	var streamId = $(this).attr("stream-id");
@@ -421,7 +423,7 @@ $(document).on("click",".retweet-status", function(e)
 /**
  * Get stream and perform undo-retweet action on selected tweet.
  */
-$(document).on("click",".undo-retweet-status", function(e)
+$(".undo-retweet-status").die().live("click", function(e)
 {
 	// Ask for confirmation from user.
 	if(!confirm("Are you sure you want to undo retweet this status?"))
@@ -485,7 +487,7 @@ $(document).on("click",".undo-retweet-status", function(e)
 /**
  * Get stream and perform favorite action on selected tweet.
  */
-$(document).on("click",".favorite-status", function(e)
+$(".favorite-status").die().live("click", function(e)
 {	
 	// Get the id of the tweet on which retweet is clicked
      var streamId = $(this).attr("stream-id");
@@ -536,7 +538,7 @@ $(document).on("click",".favorite-status", function(e)
 /**
  * Get stream and perform undo-favorite action on selected tweet.
  */
-$(document).on("click",".undo-favorite-status", function(e)
+$(".undo-favorite-status").die().live("click", function(e)
 {
 	// Get the id of the tweet on which retweet is clicked
      var streamId = $(this).attr("stream-id");
@@ -593,7 +595,7 @@ $(document).on("click",".undo-favorite-status", function(e)
  * @param tweetOwner
  * 			Twitter user's screen name.
  */
-$(document).on("click",".more-options", function(e)
+$(".more-options").die().live("click", function(e)
 {	      
   var streamId = $(this).attr("stream-id");
   var tweetId = $(this).attr("tweet-id");  
@@ -676,7 +678,7 @@ $(document).on("click",".more-options", function(e)
  * @param tweetOwner
  * 			Twitter user's screen name to send follow request
  */
-$(document).on("click",".follow-user", function(e)
+$(".follow-user").die().live("click", function(e)
 		 {
 			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
@@ -704,7 +706,7 @@ $(document).on("click",".follow-user", function(e)
  * @param tweetOwner
  * 			Twitter user's screen name to send unfollow request
  */
-$(document).on("click",".unfollow-user", function(e)
+$(".unfollow-user").die().live("click", function(e)
  {
 	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
@@ -733,7 +735,7 @@ $(document).on("click",".unfollow-user", function(e)
  * @param tweetOwner
  * 			Twitter user's screen name to send block request
  */
-$(document).on("click",".block-user", function(e)
+$(".block-user").die().live("click", function(e)
 		 {
 			// Details to be pass on to method.
 			var streamId = $(this).attr("stream-id");		
@@ -762,7 +764,7 @@ $(document).on("click",".block-user", function(e)
  * @param tweetOwner
  * 			Twitter user's screen name to send unblock request
  */
-$(document).on("click",".unblock-user", function(e)
+$(".unblock-user").die().live("click", function(e)
  {
 	// Details to be pass on to method.
 	var streamId = $(this).attr("stream-id");	
@@ -786,7 +788,7 @@ $(document).on("click",".unblock-user", function(e)
  * Sends delete request to Twitter profile in Twitter based on
  * stream id, Twitter user's screen name and tweet id.
  */
-$(document).on("click",".delete-tweet", function(e)
+$(".delete-tweet").die().live("click", function(e)
  {
 	// Ask confirmation to user.
 	if(!confirm("Are you sure you want to delete this tweet?"))
@@ -831,6 +833,8 @@ $(document).on("click",".delete-tweet", function(e)
     	displayError(null,data);
     });   
 });
+
+})(); // init end
 
 // Displays Modal.
 function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
