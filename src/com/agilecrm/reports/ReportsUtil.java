@@ -26,6 +26,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>ReportsUtil</code> is utility class, it provides functionalities to
@@ -100,7 +101,8 @@ public class ReportsUtil
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
 
 	    // Send reports email
-	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS, new Object[] { results, fieldsList });
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
+		    new Object[] { results, fieldsList });
 	}
     }
 
@@ -117,7 +119,7 @@ public class ReportsUtil
 
 	// Iterate through each filter and add results collection
 	// To store reports in collection
-	Collection reportList = report.generateReports();
+	Collection reportList = report.generateReports(100, null);
 
 	Map<String, Object> domain_details = new HashMap<String, Object>();
 
@@ -187,9 +189,10 @@ public class ReportsUtil
 
 			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
 
-			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON, new TypeReference<HashMap<String, Object>>()
-			{
-			});
+			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON,
+				new TypeReference<HashMap<String, Object>>()
+				{
+				});
 
 			customProperties.add(customField);
 		    }
@@ -277,6 +280,11 @@ public class ReportsUtil
 
     }
 
+    public static List<Key<Reports>> getAllReportsKeysByDuration(String duration)
+    {
+	return Reports.dao.listKeysByProperty("duration", duration);
+    }
+
     /**
      * Fetches all the available reports
      * 
@@ -285,6 +293,11 @@ public class ReportsUtil
     public static List<Reports> fetchAllReports()
     {
 	return Reports.dao.fetchAll();
+    }
+
+    public static List<Key<Reports>> fetchAllReportKeys()
+    {
+	return Reports.dao.listAllKeys();
     }
 
     /**

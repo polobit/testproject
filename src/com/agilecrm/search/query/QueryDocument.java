@@ -165,10 +165,7 @@ public class QueryDocument<T> implements QueryInterface
 	if (StringUtils.isEmpty(query))
 	    return 0;
 
-	// Get Documents for this query
-	List<ScoredDocument> contactDocuments = getDocuments(query);
-
-	return contactDocuments.size();
+	return (int) index.search(query).getNumberFound();
     }
 
     /**
