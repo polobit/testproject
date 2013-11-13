@@ -240,4 +240,35 @@ public class DateUtil
 	String date = sdf.format(calendar.getTime());
 	return date;
     }
+
+    /**
+     * Gets the difference in number of months between two dates
+     * 
+     * @param first
+     *            date and second date
+     * @return difference in double
+     */
+    public static double monthsBetween(String endTime, String startTime)
+    {
+	// Get all the months first. Then create a filter monthly for tag1 while
+	// running monthly reports on tags2
+	Calendar date1 = Calendar.getInstance();
+	date1.setTimeInMillis(Long.parseLong(endTime));
+
+	Calendar date2 = Calendar.getInstance();
+	date2.setTimeInMillis(Long.parseLong(startTime));
+
+	double monthsBetween = 0;
+	// difference in month for years
+	monthsBetween = (date1.get(Calendar.YEAR) - date2.get(Calendar.YEAR)) * 12;
+	// difference in month for months
+	monthsBetween += date1.get(Calendar.MONTH) - date2.get(Calendar.MONTH);
+	// difference in month for days
+	if (date1.get(Calendar.DAY_OF_MONTH) != date1.getActualMaximum(Calendar.DAY_OF_MONTH)
+		&& date1.get(Calendar.DAY_OF_MONTH) != date1.getActualMaximum(Calendar.DAY_OF_MONTH))
+	{
+	    monthsBetween += ((date1.get(Calendar.DAY_OF_MONTH) - date2.get(Calendar.DAY_OF_MONTH)) / 31d);
+	}
+	return monthsBetween;
+    }
 }
