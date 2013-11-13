@@ -195,7 +195,7 @@ public class TagSearchUtil
 	    JSONObject tagsCount = new JSONObject();
 
 	    int tag1Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
-	    int tag2Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+	    int tag2Count = getTagCount(contactFilter, tag2, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
 
 	    // Get Tag Ratio
 	    float tagRatio = 0;
