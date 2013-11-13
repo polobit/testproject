@@ -10,7 +10,7 @@
 function setupCharts(callback)
 {
 
-	head.js(LIB_PATH + 'lib/flot/highcharts.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', function()
+	head.js(LIB_PATH + 'lib/flot/highcharts-3.js', LIB_PATH + 'lib/flot/highcharts-exporting.js', LIB_PATH + 'lib/flot/funnel.js', function()
 	{
 
 		// Checks if callback is available, if available calls the callback
@@ -330,9 +330,21 @@ function find_series_with_name(series, name)
  *            title of the chart.
  * @param yaxis_name - 
  *            name for y-axis
+ * @param show_loading
+ * 				shows loading image
  */
-function showLine(url, selector, name, yaxis_name)
+function showLine(url, selector, name, yaxis_name, show_loading)
 {
+	
+	// Show loading image if required
+	if(typeof show_loading === 'undefined')
+	{
+		// Old calls were not showing loading image..
+	}
+	else
+		$('#' + selector).html(LOADING_HTML);
+	
+	
 	var chart;
 
 	// Loads Highcharts plugin using setupCharts and sets up line chart in the
@@ -403,7 +415,8 @@ function showLine(url, selector, name, yaxis_name)
 			        dateTimeLabelFormats: {
 			            //don't display the dummy year  month: '%e.%b',
 			            year: '%b'
-			        }
+			        },
+			        minTickInterval: 24 * 3600 * 1000
 			    },
 			    yAxis: {
 			        title: {
@@ -443,6 +456,202 @@ function showLine(url, selector, name, yaxis_name)
 		});
 	});
 }
+
+/**
+ * Function to show funnel bsed on the data
+ * <p>
+ * Shows funnel
+ * </p>
+ * 
+ * @param url - 
+ *            to fetch json data inorder to render graph.
+ * @param selector - 
+ *            id or class of an element where charts should render.
+ * @param name - 
+ *            title of the chart.
+ * @param show_loading
+ * 				shows loading image
+ */
+function showFunnel(url, selector, name, show_loading)
+{
+	// Show loading image if required
+	if(typeof show_loading === 'undefined')
+	{
+		// Old calls were not showing loading image..
+	}
+	else
+		$('#' + selector).html(LOADING_HTML);
+
+	var chart;
+
+	// Loads Highcharts plugin using setupCharts and sets up line chart in the
+	// callback
+	setupCharts(function()
+	{
+
+		// Loads statistics details from backend i.e.,[{closed
+		// date:{total:value, pipeline: value},...]
+		$.getJSON(url, function(data)
+		{
+			
+			var funnel_data = [];
+			
+			$.each(data, function(i,v){
+				
+				// iterate through each data
+				$.each(v, function(k1,v1){
+					var each_data = [];
+					each_data.push(k1, v1);
+					funnel_data.push(each_data);
+				});
+				
+			});
+			
+			console.log(funnel_data);
+			
+			chart = new Highcharts.Chart({
+		        chart: {
+		            type: 'funnel',
+		            marginRight: 100,
+		            renderTo: selector
+		        },
+		        title: {
+		            text: name,
+		            x: -50
+		        },
+		        plotOptions: {
+		            series: {
+		                dataLabels: {
+		                    enabled: true,
+		                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+		                    color: 'black',
+		                    softConnector: true
+		                },
+		                neckWidth: '30%',
+		                neckHeight: '25%'
+		                
+		                //-- Other available options
+		                // height: pixels or percent
+		                // width: pixels or percent
+		            }
+		        },
+		        legend: {
+		            enabled: false
+		        },
+		        series: [{
+		            name: 'Contacts',
+		            data: funnel_data
+		        }]
+		    });
+			
+		});
+	});
+}
+
+
+/**
+ * Function to build Cohorts
+ * <p>
+ * The data is not manipulated and the server sends it the required format. We do not use showBar code to decode as some of the data in the cohorts are not sent back 
+ * </p>
+ * 
+ * @param url - 
+ *            to fetch json data inorder to render graph.
+ * @param selector - 
+ *            id or class of an element where charts should render.
+ * @param name - 
+ *            title of the chart.
+ * @param yaxis_name - 
+ *            name for y-axis
+ * @param show_loading
+ * 				shows loading image
+ */
+function showCohorts(url, selector, name, yaxis_name, show_loading)
+{
+	
+	// Show loading image if required
+	if(typeof show_loading === 'undefined')
+	{
+		// Old calls were not showing loading image..
+	}
+	else
+		$('#' + selector).html(LOADING_HTML);
+	
+	
+	var chart;
+
+	// Loads Highcharts plugin using setupCharts and sets up line chart in the
+	// callback
+	setupCharts(function()
+	{
+
+		// Loads statistics details from backend i.e.,[{closed
+		// date:{total:value, pipeline: value},...]
+		$.getJSON(url, function(data)
+		{
+
+			// Categories are closed dates
+			var categories = data.categories;
+			
+			// Data with total and pipeline values
+			var series = data.series;
+
+			// After loading and processing all data, highcharts are initialized
+			// setting preferences and data to show
+			chart = new Highcharts.Chart({
+			    chart: {
+			        renderTo: selector,
+			        type: 'line',
+			        marginRight: 130,
+			        marginBottom: 25,
+			        zoomType: 'x'
+			    },
+			    title: {
+			        text: name,
+			        x: -20//center
+			    },
+			    xAxis: {
+			       categories: categories
+			    },
+			    yAxis: {
+			        title: {
+			            text: yaxis_name
+			        },
+			        plotLines: [
+			            {
+			                value: 0,
+			                width: 1,
+			                color: '#808080'
+			            }
+			        ],
+			        min: 0
+			    },
+			    //Tooltip to show details,
+			    ongraphtooltip: {
+			        formatter: function(){
+			            return'<b>'+this.series.name+'</b><br/>'+Highcharts.dateFormat('%e.%b',
+			            this.x)+': '+this.y.toFixed(2);
+			        }
+			    },
+			    legend: {
+			        layout: 'vertical',
+			        align: 'right',
+			        verticalAlign: 'top',
+			        x: -10,
+			        y: 100,
+			        borderWidth: 0
+			    },
+			    //Sets the series of data to be shown in the graph,shows total 
+			    //and pipeline
+			    series: series,
+			    exporting: {
+			        enabled: false
+			    }
+			});
+		});
+	});
+}
+
 
 /**
  * Shows Pie chart for tags of contacts,
