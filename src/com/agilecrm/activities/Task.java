@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -45,7 +46,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class Task
+public class Task extends Cursor
 {
     // Key
     @Id
