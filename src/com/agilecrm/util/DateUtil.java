@@ -116,7 +116,7 @@ public class DateUtil
 
 	Date d = cal.getTime();
 	long time = d.getTime();
-	time -= days * 24 * 3600 * 1000;
+	time -= days * 24 * 3600 * 1000l;
 	d.setTime(time);
 	cal.setTime(d);
 
