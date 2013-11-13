@@ -14,9 +14,9 @@ var First_Nodes_Toolbar_Global = new Array("json/nodes/email/send_email.jsp",
 		"json/nodes/common/wait.js", "json/nodes/email/clicked.js",
 		"json/nodes/crm/tags.js", "json/nodes/common/score.js", "json/nodes/common/url.js"
 		, "json/nodes/social/tweet.js", "json/nodes/email/ab.js");
-var Second_Nodes_Toolbar_Global = new Array("json/nodes/crm/set_owner.jsp","json/nodes/crm/addtask.jsp","json/nodes/crm/adddeal.jsp",
+var Second_Nodes_Toolbar_Global = new Array("json/nodes/crm/addtask.jsp","json/nodes/crm/adddeal.jsp",
 		"json/nodes/crm/addnote.js","json/nodes/common/check_tags.js",
-		"json/nodes/crm/transfer.jsp","json/nodes/developers/condition.js", "json/nodes/developers/jsonio.js");
+		"json/nodes/crm/transfer.jsp","json/nodes/developers/condition.js", "json/nodes/crm/set_owner.jsp", "json/nodes/developers/jsonio.js");
 
 /*
  * var First_Nodes_Toolbar_Global = new Array("json/nodes/sms/sendmessage.js",

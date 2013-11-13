@@ -75,10 +75,7 @@ function changeProperty()
   var display = $('#network_handle', $('#personModal')).css("display");	
   var picDisplay = $("#pic", $('#personModal')).css("display");
   var picValue = $("#pic", $('#personModal')).html();
-  
-  console.log("display: "+display+" picDisplay: "+picDisplay);
-  console.log("picValue:" +picValue);
-	
+  	
   if((picDisplay == 'inline' || picDisplay == 'block') && picValue != '')
 	{
 	  if(display == 'none')
@@ -133,10 +130,7 @@ function registerAll()
 	{
 	  console.log("registerAllDone : "+registerAllDone);
 	  return;
-	}
-
-   console.log("In registerAll have streams.");       
-   console.log(streamsJSON);
+	}  
 	  	
    // Get stream
    $.each(streamsJSON, function(i, stream)
@@ -218,8 +212,7 @@ function handleMessage(tweet)
   
   //Error message from server "Rate limit exceeded."
   if(tweet.id == "001") //(tweet.delete != null)
-	  {
-	    alert(tweet.text);
+	  {	    
 	    displayErrorInStream(tweet);
 	    return;
 	  }
@@ -238,7 +231,8 @@ function handleMessage(tweet)
 		    // New tweet notification not yet clicked.
 		    if( $('#stream_notifications_'+tweet.stream_id).is(':empty') == false)  
 		      {
-		    	 console.log("not clicked");
+		    	console.log("not clicked");
+		    	
 		    	// User did not click on notification so continue adding tweets in temp collection.
 		    	addTweetToTempCollection(tweet);  
 		    	
@@ -248,7 +242,7 @@ function handleMessage(tweet)
 		    else
 		      {
 		    	console.log("no notification");
-		    	console.log("call from handleMessage to addTweetToStream");
+		    	
 		    	// Add tweet to model in normal way.
 		    	addTweetToStream(modelStream,tweet);
 		      }
@@ -256,6 +250,7 @@ function handleMessage(tweet)
 	  else
 		  {
 		    console.log("not in social suite");
+		    
 		    // Add tweet to temp collection, user on another tab or window is inactive.
   	        addTweetToTempCollection(tweet);  	
   	        
@@ -265,10 +260,7 @@ function handleMessage(tweet)
 			      checkNewTweets();
   	        	}
 		  }
-	} // If End  
-    
-     console.log("StreamsListView: ");console.log(StreamsListView);
-	 console.log("TempStreamsListView: ");console.log(TempStreamsListView); 
+	} // If End
 }
 
 /**
@@ -277,7 +269,6 @@ function handleMessage(tweet)
 function addTweetToStream(modelStream,tweet)
 {	
 	console.log("In addTweetToStream.");
-	console.log(tweet.text);
 	
 	// Hide waiting symbol.
 	$("#stream-spinner-modal-"+tweet.stream_id).hide();
@@ -288,7 +279,7 @@ function addTweetToStream(modelStream,tweet)
 		  tweet["msg_type"] = "NoTweet";
 		  tweet["show"] = true;
 		  //if(tweet.text == "Dear you do not have any tweets.")
-		  tweet["text"] = "There are no tweets to show here.";
+		  tweet.text = "No Tweets to show here.";
 		}
 	else
 		{
@@ -320,8 +311,7 @@ function addTweetToStream(modelStream,tweet)
 	      tweet.text = convertTextToTweet(tweet);
 		}	
 	    
-    console.log("add at "+modelStream.get('tweetListView').length);
-    console.log(tweet.text);
+    console.log("add at "+modelStream.get('tweetListView').length);   
 		
     // Sort stream on tweet id basis which is unique and recent tweet has highest value.
 	modelStream.get('tweetListView').comparator = function(model) 
@@ -347,10 +337,7 @@ function addTweetToStream(modelStream,tweet)
  * so temporarily add Tweet to temp collection.
  */
 function addTweetToTempCollection(tweet)
-{	
-  console.log("In addTweetToCollection.");
-  console.log(TempStreamsListView.collection.length);
-	
+{
   var modelStream = null;  
   
   if(tweet.id == "000")
@@ -364,8 +351,6 @@ function addTweetToTempCollection(tweet)
 	     // Get stream from temp collection.
 	     modelStream = TempStreamsListView.collection.get(tweet.stream_id);
 	  }
-	 			  
-  console.log("call from addTweetToTempCollection to addTweetToStream");
   
   // Add tweet to stream model.
   addTweetToStream(modelStream,tweet);
@@ -374,7 +359,6 @@ function addTweetToTempCollection(tweet)
 /** Create temporary collection to store tweets when user not on social tab.*/
 function createTempCollection()
 {
-  console.log("In createTempCollection.");	
   if(!TempStreamsListView)  // Streams not collected from dB
 	{	
 	 TempStreamsListView = new Base_Collection_View
@@ -448,8 +432,6 @@ function convertTextToTweet(tweet)
 // Remove no tweet notification. Search for that tweet in collection and makes that tweets model hide.
 function clearNoTweetNotification(modelStream)
 {
-	console.log("In clearNoTweetNotification.");
-	
 	// Get tweet from stream.
 	var modelTweet = modelStream.get('tweetListView').get('000');
 	
@@ -497,8 +479,6 @@ function removeWaiting()
  * Show new tweet notification on respective stream.*/
 function checkNewTweets()
 { 
-  console.log("In checkNewTweets.");
-  
   var streamsJSON = TempStreamsListView.collection.toJSON();
 
   // Streams not available.	
@@ -550,7 +530,10 @@ function checkNewTweets()
 			      clearNoTweetNotification(StreamsListView.collection.get(stream.id));
 	        	}
 	    	}
-		 });      	
+		 });  
+  
+    //Remove deleted tweet element from ui
+	 $('.deleted').remove();
 }
 
 /**
@@ -562,16 +545,11 @@ function addNewTempTweet(streamId)
     var originalStream = StreamsListView.collection.get(streamId);
     var tempStream = TempStreamsListView.collection.get(streamId);
     
-    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
-    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
-    
     // Get tweet collection from stream.
     var tweetCollection = originalStream.get('tweetListView');
     
     // Add new tweets from temp collection to original collection.
     tweetCollection.add(tempStream.get("tweetListView").toJSON());
-    console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
-    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
         
     // Sort tweet collection on id. so recent tweet comes on top.
     tweetCollection.sort();    
@@ -583,10 +561,8 @@ function addNewTempTweet(streamId)
 	 
 	// Clear temp tweet collection.
 	tempStream.get("tweetListView").reset();
-	console.log("tempStream: ");console.log(tempStream.get("tweetListView").toJSON());
-    console.log("originalStream: ");console.log(originalStream.get("tweetListView").toJSON());
-    
-    // Remove waiting symbol.
+
+	// Remove waiting symbol.
 	removeWaiting();	
 }
 

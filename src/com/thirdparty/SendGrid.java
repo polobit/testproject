@@ -1,5 +1,6 @@
 package com.thirdparty;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Set;
@@ -107,8 +108,7 @@ public class SendGrid
      *            - Workflow object in json.
      * @return String
      */
-    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text,
-	    JSONObject subscriberJSON, JSONObject campaignJSON)
+    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
     {
 
 	// String tokens obtained by delimiter are added to set
@@ -120,25 +120,25 @@ public class SendGrid
 	try
 	{
 	    // Query string
-	    String queryString = defaultQueryString + SENDGRID_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject) + "&" + SENDGRID_API_PARAM_FROM + "="
-		    + URLEncoder.encode(fromEmail) + "&" + SENDGRID_API_PARAM_FROM_NAME + "=" + URLEncoder.encode(fromName);
+	    String queryString = defaultQueryString + SENDGRID_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject, "UTF-8") + "&" + SENDGRID_API_PARAM_FROM
+		    + "=" + URLEncoder.encode(fromEmail, "UTF-8") + "&" + SENDGRID_API_PARAM_FROM_NAME + "=" + URLEncoder.encode(fromName, "UTF-8");
 
 	    // Appends To emails
 	    queryString += "&" + addToEmailsToParams(toEmailSet);
 
 	    // Reply To
 	    if (!StringUtils.isEmpty(replyTo) && !fromEmail.equals(replyTo))
-		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo);
+		queryString += "&" + SENDGRID_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo, "UTF-8");
 
 	    // Text body
 	    if (text != null)
 	    {
-		queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "=" + URLEncoder.encode(text);
+		queryString += "&" + SENDGRID_API_PARAM_TEXT_BODY + "=" + URLEncoder.encode(text, "UTF-8");
 	    }
 	    // HTML body
 	    if (html != null)
 	    {
-		queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html);
+		queryString += "&" + SENDGRID_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html, "UTF-8");
 	    }
 
 	    System.out.println("QueryString  \n" + queryString + "\n\n");
@@ -164,8 +164,9 @@ public class SendGrid
      * @param toEmails
      *            - Set consisting of emails.
      * @return String
+     * @throws UnsupportedEncodingException
      */
-    private static String addToEmailsToParams(Set<String> toEmails)
+    private static String addToEmailsToParams(Set<String> toEmails) throws UnsupportedEncodingException
     {
 	String multipleTo = "";
 
@@ -174,7 +175,7 @@ public class SendGrid
 	// Adds multiple - to[]="email1" & to[]="email2"
 	while (itr.hasNext())
 	{
-	    multipleTo += SENDGRID_API_PARAM_MULTIPLE_TO + "=" + URLEncoder.encode(itr.next());
+	    multipleTo += SENDGRID_API_PARAM_MULTIPLE_TO + "=" + URLEncoder.encode(itr.next(), "UTF-8");
 
 	    // appends '&' except for last one.
 	    if (itr.hasNext())

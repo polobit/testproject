@@ -86,27 +86,27 @@ public class Mailgun
      */
     public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html, String text)
     {
-	String data = MAILGUN_API_PARAM_FROM + "=" + URLEncoder.encode(getFromEmail(fromName, fromEmail)) + "&" + MAILGUN_API_PARAM_TO + "="
-		+ URLEncoder.encode(to) + "&" + MAILGUN_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject);
-
-	if (!StringUtils.isEmpty(text))
-	    data += "&" + MAILGUN_API_PARAM_TEXT_BODY + "=" + URLEncoder.encode(text);
-
-	if (!StringUtils.isEmpty(html))
-	    data += "&" + MAILGUN_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html);
-
-	if (!StringUtils.isEmpty(cc))
-	    data += "&" + MAILGUN_API_PARAM_CC + "=" + URLEncoder.encode(cc);
-
-	if (!StringUtils.isEmpty(bcc))
-	    data += "&" + MAILGUN_API_PARAM_BCC + "=" + URLEncoder.encode(bcc);
-
-	// insert replyTo if not same as from
-	if (!StringUtils.isBlank(replyTo) && !fromEmail.equals(replyTo))
-	    data += "&" + MAILGUN_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo);
-
 	try
 	{
+	    String data = MAILGUN_API_PARAM_FROM + "=" + URLEncoder.encode(getFromEmail(fromName, fromEmail), "UTF-8") + "&" + MAILGUN_API_PARAM_TO + "="
+		    + URLEncoder.encode(to, "UTF-8") + "&" + MAILGUN_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject, "UTF-8");
+
+	    if (!StringUtils.isEmpty(text))
+		data += "&" + MAILGUN_API_PARAM_TEXT_BODY + "=" + URLEncoder.encode(text, "UTF-8");
+
+	    if (!StringUtils.isEmpty(html))
+		data += "&" + MAILGUN_API_PARAM_HTML_BODY + "=" + URLEncoder.encode(html, "UTF-8");
+
+	    if (!StringUtils.isEmpty(cc))
+		data += "&" + MAILGUN_API_PARAM_CC + "=" + URLEncoder.encode(cc, "UTF-8");
+
+	    if (!StringUtils.isEmpty(bcc))
+		data += "&" + MAILGUN_API_PARAM_BCC + "=" + URLEncoder.encode(bcc, "UTF-8");
+
+	    // insert replyTo if not same as from
+	    if (!StringUtils.isBlank(replyTo) && !fromEmail.equals(replyTo))
+		data += "&" + MAILGUN_API_PARAM_REPLY_TO + "=" + URLEncoder.encode(replyTo, "UTF-8");
+
 	    // MailGun uses Base64 Authentication
 	    String response = HTTPUtil.accessURLUsingAuthentication(MAILGUN_API_POST_URL, MAILGUN_API_KEY, Globals.MAILGUN_API_KEY_VALUE, "POST", data, false,
 		    null, null);
@@ -116,6 +116,7 @@ public class Mailgun
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.err.println("Exception occured in Mailgun while sending mail...");
 	}
     }
 
