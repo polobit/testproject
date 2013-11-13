@@ -89,8 +89,8 @@ $(".reply-message").die().live("click", function(e)
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
 	
-	var streamId = $(this).attr("stream-id");
-	var tweetId = $(this).attr("tweet-id");
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetId = ($(this).closest('article').attr('id'));
 	
 	// Get stream from collection.
 	var modelStream = StreamsListView.collection.get(streamId);	
@@ -118,28 +118,28 @@ $(".reply-message").die().live("click", function(e)
          
     // In compose message text limit is crossed so disable send button.
     $('#twit-tweet').on('cross', function(){
-        $('#send_reply').addClass('disabled')
+        $('#send_tweet').addClass('disabled')
       });
       
     // In compose message text limit is uncrossed so enable send button.  
     $('#twit-tweet').on('uncross', function(){
-        $('#send_reply').removeClass('disabled')
+        $('#send_tweet').removeClass('disabled')
       });
     
     // On click of send button in the modal, tweet request is sent 
-    $('#send_reply').click(function (e)
+    $('#send_tweet').click(function (e)
     {
         e.preventDefault();
 
         // Check Send button is not enable
-    	if($("#send_reply").hasClass('disabled'))
+    	if($("#send_tweet").hasClass('disabled'))
     		return;
         
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
 
-        $('#send_reply').addClass('disabled');
+        $('#send_tweet').addClass('disabled');
         $("#spinner-modal").show();
         
         // Sends post request to url "/core/social/replytweet/" and Calls StreamsAPI with 
@@ -176,8 +176,8 @@ $(".direct-message").die().live("click", function(e)
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
 
-	var streamId = $(this).attr("stream-id");
-	var tweetId = $(this).attr("tweet-id");
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetId = ($(this).closest('article').attr('id'));
 	
 	// Get stream from collection.
 	var modelStream = StreamsListView.collection.get(streamId);	
@@ -205,28 +205,28 @@ $(".direct-message").die().live("click", function(e)
        
     // In compose message text limit is crossed so disable send button.
     $('#twit-tweet').on('cross', function(){
-        $('#send_direct_message').addClass('disabled')
+        $('#send_tweet').addClass('disabled')
       });
       
     // In compose message text limit is uncrossed so enable send button.  
     $('#twit-tweet').on('uncross', function(){
-        $('#send_direct_message').removeClass('disabled')
+        $('#send_tweet').removeClass('disabled')
       });
     
     // On click of send button in the modal, tweet request is sent 
-    $('#send_direct_message').click(function (e)
+    $('#send_tweet').click(function (e)
     {
         e.preventDefault();
 
         // Check Send button is not enable
-    	if($("#send_direct_message").hasClass('disabled'))
+    	if($("#send_tweet").hasClass('disabled'))
     		return;
         
         // Checks whether all the input fields are filled
         if (!isValidForm($("#socialsuite-twitter_messageForm")))        
             return;        
 
-        $('#send_direct_message').addClass('disabled');
+        $('#send_tweet').addClass('disabled');
         $("#spinner-modal").show();
         
         // Sends post request to url "/core/social/directmessage/" and Calls StreamsAPI with 
@@ -265,9 +265,8 @@ $(".direct-message").die().live("click", function(e)
  */
 $(".retweet-status").die().live("click", function(e)
 {
-
-	var streamId = $(this).attr("stream-id");
-	var tweetId = $(this).attr("tweet-id");	
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetId = ($(this).closest('article').attr('id'));
 	
 	// Get stream from collection.
 	var modelStream = StreamsListView.collection.get(streamId);	
@@ -430,9 +429,9 @@ $(".undo-retweet-status").die().live("click", function(e)
  		return;
     
 	// Get the id of the tweet on which undo-retweet is clicked
-     var streamId = $(this).attr("stream-id");
-     var tweetId = $(this).attr("tweet-id");
-     var tweetIdStr = null; 
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetId = ($(this).closest('article').attr('id'));
+    var tweetIdStr = null; 
     
     // Get stream from collection.
  	var modelStream = StreamsListView.collection.get(streamId);	
@@ -490,8 +489,8 @@ $(".undo-retweet-status").die().live("click", function(e)
 $(".favorite-status").die().live("click", function(e)
 {	
 	// Get the id of the tweet on which retweet is clicked
-     var streamId = $(this).attr("stream-id");
-     var tweetId = $(this).attr("tweet-id");
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetId = ($(this).closest('article').attr('id'));
      
     // Get stream from collection.
   	 var modelStream = StreamsListView.collection.get(streamId);	
@@ -541,8 +540,8 @@ $(".favorite-status").die().live("click", function(e)
 $(".undo-favorite-status").die().live("click", function(e)
 {
 	// Get the id of the tweet on which retweet is clicked
-     var streamId = $(this).attr("stream-id");
-     var tweetId = $(this).attr("tweet-id");
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetId = ($(this).closest('article').attr('id'));
     
     // Get stream from collection.
   	 var modelStream = StreamsListView.collection.get(streamId);	
@@ -596,9 +595,9 @@ $(".undo-favorite-status").die().live("click", function(e)
  * 			Twitter user's screen name.
  */
 $(".more-options").die().live("click", function(e)
-{	      
-  var streamId = $(this).attr("stream-id");
-  var tweetId = $(this).attr("tweet-id");  
+{	
+  var streamId = ($(this).closest('article').attr('stream-id'));
+  var tweetId = ($(this).closest('article').attr('id'));
   var elementId = $(this).attr("id");
     
   //Get stream from collection.
@@ -635,32 +634,32 @@ $(".more-options").die().live("click", function(e)
 	    if(data.follow == "true")
 	    	{
 	      	  //console.log("in unfollow");
-	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Unfollow @'+tweetOwner+'</a></li>');
+	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+'>Unfollow @'+tweetOwner+'</a></li>');
 	    	}
 	    // Stream owner not following tweet owner then add follow option
 	    else if(data.follow == "false")
 	    	{
 	    	  //console.log("in follow");
-	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Follow @'+tweetOwner+'</a></li>');
+	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+'>Follow @'+tweetOwner+'</a></li>');
 	    	}
 	  
   	    // Tweet owner is stream owner's follower then add send DM option
 	    if(data.follower == "true")
            {	    	
    	         //console.log("in send DM");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message" tweet-id='+tweetId+' stream-id='+streamId+'>Send Direct Message</a></li>');	    	
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message">Send Direct Message</a></li>');	    	
            }
 	    
 	    // Check tweet owner is Block or Unblock
 	    if(data.blocked == "true")
            {	    	
    	         //console.log("in unblock");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Unblock @'+tweetOwner+'</a></li>');	    	
+             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+'>Unblock @'+tweetOwner+'</a></li>');	    	
             }	    
         else if(data.blocked == "false")
             {	    	
    	          //console.log("in block");
-              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+' stream-id='+streamId+'>Block @'+tweetOwner+'</a></li>');	    	
+              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+'>Block @'+tweetOwner+'</a></li>');	    	
             }
 	  }).error(function (data)
 		  {
@@ -681,7 +680,7 @@ $(".more-options").die().live("click", function(e)
 $(".follow-user").die().live("click", function(e)
 		 {
 			// Details to be pass on to method.
-			var streamId = $(this).attr("stream-id");		
+			var streamId = ($(this).closest('article').attr('stream-id'));		
 			var tweetOwner = $(this).attr("tweet-owner");
 					    	
 			// Calls method to send request to follow user.
@@ -709,7 +708,7 @@ $(".follow-user").die().live("click", function(e)
 $(".unfollow-user").die().live("click", function(e)
  {
 	// Details to be pass on to method.
-	var streamId = $(this).attr("stream-id");	
+	var streamId = ($(this).closest('article').attr('stream-id'));	
 	var tweetOwner = $(this).attr("tweet-owner");
 	    	
 	// Calls method to send request to unfollow user.
@@ -738,7 +737,7 @@ $(".unfollow-user").die().live("click", function(e)
 $(".block-user").die().live("click", function(e)
 		 {
 			// Details to be pass on to method.
-			var streamId = $(this).attr("stream-id");		
+			var streamId = ($(this).closest('article').attr('stream-id'));		
 			var tweetOwner = $(this).attr("tweet-owner");
 			    	
 			// Calls method to send request to block user.
@@ -767,7 +766,7 @@ $(".block-user").die().live("click", function(e)
 $(".unblock-user").die().live("click", function(e)
  {
 	// Details to be pass on to method.
-	var streamId = $(this).attr("stream-id");	
+	var streamId = ($(this).closest('article').attr('stream-id'));	
 	var tweetOwner = $(this).attr("tweet-owner");
 	
 	// Calls method to send request to unblock user.
@@ -795,8 +794,8 @@ $(".delete-tweet").die().live("click", function(e)
 		return;
 	
 	// Details to pass on to method.
-	var streamId = $(this).attr("stream-id");	
-	var tweetId = $(this).attr("tweet-id");
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetId = ($(this).closest('article').attr('id'));
 	
 	 //Get stream from collection.
 	  var modelStream = StreamsListView.collection.get(streamId);	
@@ -833,6 +832,28 @@ $(".delete-tweet").die().live("click", function(e)
     	displayError(null,data);
     });   
 });
+
+/* Show calender and time for selection. */
+$(".tweet-scheduling").die().live("click", function(e)
+ {
+	$("#schedule").toggle();
+	$("#send_tweet").toggle();
+	$("#schedule_tweet").toggle();
+	
+	if($("#schedule").css("display") == "block" )
+	 { 	   
+	   this.className = "tweet-scheduling tweet-scheduling-active";
+	   $('input.date').val(new Date().format('dd/mm/yyyy'));
+	   $('#scheduled_date').datepicker({ format : 'dd/mm/yyyy' });
+	   $('#scheduled_time').timepicker({template: 'modal', showMeridian: false, defaultTime: 'current'});	      
+	 }
+	else
+	 {
+	   this.className = "tweet-scheduling";
+	   $('input.date').val()='';
+	   $('#scheduled_time').attr("value",'');	   
+	 }
+ });
 
 })(); // init end
 

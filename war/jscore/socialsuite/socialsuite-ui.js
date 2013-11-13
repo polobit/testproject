@@ -39,14 +39,23 @@ function initializeSocialSuite()
 	 */
 	$(".add-twitter-contact").die().live("click", function(e)
 	{
+		var streamId = ($(this).closest('article').attr('stream-id'));
+		var tweetId = ($(this).closest('article').attr('id'));
+		
+		// Get stream from collection.
+		var modelStream = StreamsListView.collection.get(streamId);		
+		
+		// Get tweet from stream.
+		var tweet = modelStream.get('tweetListView').get(tweetId).toJSON();
+				
 		// Tweet owner's full name.
-		var fullName = $(this).attr("data-user-name");
+		var fullName = tweet.user.name;
 			
 		// Tweet owner's description.
-		var description = $(this).attr("description");
+		var description = tweet.user.description;
 		
 		// Tweet owner's handle/Screen name.
-		TweetOwnerForAddContact = $(this).attr("tweet-owner");
+		TweetOwnerForAddContact = tweet.user.screen_name;
 		
 		// Separate full name.
 		var firstName = fullName.substr(0,fullName.indexOf(' '));
