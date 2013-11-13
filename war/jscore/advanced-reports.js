@@ -76,5 +76,5 @@ function showCohortsGraphs(tag1, tag2)
  */
 function showRatioGraphs(tag1, tag2)
 {
-	showCohorts('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', 'Ratio Analysis', tag1 + ' vs ' + tag2, true);
+	showLine('core/api/reports/ratio/' + tag1 + "/" + tag2 + "/" + getOptions(), 'ratio-chart', 'Ratio Analysis', tag1 + ' vs ' + tag2, true);
 }

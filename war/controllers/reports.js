@@ -8,7 +8,15 @@ var ReportsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Reports */
-	"reports" : "reports", "report-add" : "reportAdd", "report-edit/:id" : "reportEdit", "report-results/:id" : "reportInstantResults" },
+	"reports" : "reports", 
+	"report-add" : "reportAdd", 
+	"report-edit/:id" : "reportEdit", 
+	"report-results/:id" : "reportInstantResults",
+	"report-funnel/:tags": "showFunnelReport",
+	"report-growth/:tags": "showGrowthReport",
+	"report-cohorts/:tag1/:tag2": "showCohortsReport",
+	"report-ratio/:tag1/:tag2": "showRatioReport"
+	},
 
 	/**
 	 * Shows list of reports, with an option to add new report
@@ -178,4 +186,110 @@ var ReportsRouter = Backbone.Router.extend({
 		report_results_view.collection.fetch();
 
 		$("#content").html(report_results_view.render().el);
-	} })
+	},
+	
+	/**
+	 * Returns Funnel reports based on tags
+	 * 
+	 * @param tags - workflow id
+	 **/
+	showFunnelReport : function(tags) {
+		
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH
+				+ 'lib/date-range-picker.js', function() 
+		{
+			// Load Reports Template
+			$("#content").html(
+					getTemplate("report-funnel", {}));
+			
+			// Set the name
+			$('#reports-funnel-tags').text(tags);
+
+			initFunnelCharts(function()
+			{
+				showFunnelGraphs(tags);
+			});
+		});
+
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+	},
+	
+	/**
+	 * Returns growth report based on the tags
+	 * 
+	 * @param tags - comma separated tags
+	 **/
+	showGrowthReport : function(tags) {
+		
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH
+				+ 'lib/date-range-picker.js', function() {
+
+			// Load Reports Template
+			$("#content").html(getTemplate("report-growth", {}));
+			
+			// Set the name
+			$('#reports-growth-tags').text(tags);
+
+			initFunnelCharts(function()
+			{
+				showGrowthGraphs(tags);
+			});
+		});
+
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+	},
+	
+	/**
+	 * Returns Cohorts Graphs with two tag1
+	 * 
+	 * @param id - workflow id
+	 **/
+	showCohortsReport : function(tag1, tag2) {
+		
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH
+				+ 'lib/date-range-picker.js', function() {
+
+			// Load Reports Template
+			$("#content").html(getTemplate("report-cohorts", {}));
+			
+			// Set the name
+			$('#reports-cohorts-tags').text(tag1  + " versus " + tag2);
+
+			initFunnelCharts(function()
+			{
+				showCohortsGraphs(tag1, tag2);
+			});
+		});
+
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+	},
+	/**
+	 * Returns Cohorts Graphs with two tag1
+	 * 
+	 * @param id - workflow id
+	 **/
+	showRatioReport : function(tag1, tag2) {
+		
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH
+				+ 'lib/date-range-picker.js', function() {
+
+			// Load Reports Template
+			$("#content").html(getTemplate("report-ratio", {}));
+			
+			// Set the name
+			$('#reports-ratio-tags').text(tag1  + " versus " + tag2);
+
+			initFunnelCharts(function()
+			{
+				showRatioGraphs(tag1, tag2);
+			});
+		});
+
+		$(".active").removeClass("active");
+		$("#reportsmenu").addClass("active");
+	}
+	
+});

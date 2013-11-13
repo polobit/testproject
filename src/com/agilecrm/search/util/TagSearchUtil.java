@@ -1,5 +1,6 @@
 package com.agilecrm.search.util;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
@@ -41,11 +42,11 @@ public class TagSearchUtil
 
 	SearchRule searchRule = new SearchRule();
 	searchRule.LHS = "tags_time";
-	searchRule.CONDITION = searchRule.CONDITION.EQUALS;
+	searchRule.CONDITION = SearchRule.RuleCondition.EQUALS;
 	searchRule.RHS = tag;
 
 	searchRule.RHS_NEW = null;
-	searchRule.nested_condition = searchRule.CONDITION.BETWEEN;
+	searchRule.nested_condition = SearchRule.RuleCondition.BETWEEN;
 	searchRule.nested_lhs = startTime;
 	searchRule.nested_rhs = endTime;
 
@@ -96,45 +97,6 @@ public class TagSearchUtil
     }
 
     /**
-     * Returns the tag count for a given filter from start to end time every day
-     * 
-     * @param ContactFilter
-     *            - the filter to be used. If null, it uses all contacts
-     * @param tag
-     *            - tag to search for
-     * @param startTime
-     *            - start time of the range
-     * @param end
-     *            - end time of the range
-     * 
-     * @return {@link JSONObject}
-     */
-    public static JSONObject getTagCountDaily(ContactFilter contactFilter, String tags[], String startTime, String endTime) throws Exception
-    {
-	return getTagCount(contactFilter, tags, startTime, endTime, Calendar.DAY_OF_MONTH);
-    }
-
-    /**
-     * Returns the tag count for a given filter from start to end time every
-     * month
-     * 
-     * @param ContactFilter
-     *            - the filter to be used. If null, it uses all contacts
-     * @param tag
-     *            - tag to search for
-     * @param startTime
-     *            - start time of the range
-     * @param end
-     *            - end time of the range
-     * 
-     * @return {@link JSONObject}
-     */
-    public static JSONObject getTagCountMonthly(ContactFilter contactFilter, String tags[], String startTime, String endTime) throws Exception
-    {
-	return getTagCount(contactFilter, tags, startTime, endTime, Calendar.MONTH);
-    }
-
-    /**
      * Returns the tag count daily for a given filter from start to end time
      * 
      * @param ContactFilter
@@ -177,6 +139,70 @@ public class TagSearchUtil
 		int count = getTagCount(contactFilter, tag, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
 		tagsCount.put(tag, count);
 	    }
+
+	    // Put time and tags array
+	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
+
+	    startTimeMilli = startCalendar.getTimeInMillis();
+	}
+	while (startTimeMilli <= endTimeMilli);
+
+	return tagsCountJSONObject;
+    }
+
+    /**
+     * Returns the ratio of two tags count daily for a given filter from start
+     * to end time
+     * 
+     * @param ContactFilter
+     *            - the filter to be used. If null, it uses all contacts
+     * @param tag1
+     *            - tag1 to search for
+     * @param tag2
+     *            - tag2 to search for
+     * 
+     * @param startTime
+     *            - start time of the range
+     * @param end
+     *            - end time of the range
+     * 
+     * @return an object in the format required by highcharts
+     */
+    public static JSONObject getRatioTagCount(ContactFilter contactFilter, String tag1, String tag2, String startTime, String endTime, int type)
+	    throws Exception
+    {
+	JSONObject tagsCountJSONObject = new JSONObject();
+
+	// Sets calendar with start time.
+	Calendar startCalendar = Calendar.getInstance();
+	startCalendar.setTimeInMillis(Long.parseLong(startTime));
+	long startTimeMilli = startCalendar.getTimeInMillis();
+
+	// Sets calendar with end time.
+	Calendar endCalendar = Calendar.getInstance();
+	endCalendar.setTimeInMillis(Long.parseLong(endTime));
+	long endTimeMilli = endCalendar.getTimeInMillis();
+
+	if (endTimeMilli < startTimeMilli)
+	    return null;
+
+	do
+	{
+	    // Get End Time by adding a day, week or month
+	    startCalendar.add(type, 1);
+
+	    // Get Tag Count for each tag
+	    JSONObject tagsCount = new JSONObject();
+
+	    int tag1Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+	    int tag2Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+
+	    // Get Tag Ratio
+	    float tagRatio = 0;
+	    if (tag2Count != 0)
+		tagRatio = (tag2Count / tag1Count) * 100f;
+
+	    tagsCount.put("Conversion", round(tagRatio, 2));
 
 	    // Put time and tags array
 	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
@@ -290,10 +316,36 @@ public class TagSearchUtil
 
     private static int percentage(int count1, int count2)
     {
+	return (int) percentageF(count1, count2, 2);
+    }
+
+    /**
+     * Round to certain number of decimals
+     * 
+     * @param d
+     * @param decimalPlace
+     * @return
+     */
+    private static float round(float d, int decimalPlace)
+    {
+	BigDecimal bd = new BigDecimal(Float.toString(d));
+	bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+	return bd.floatValue();
+    }
+
+    /**
+     * Find the percentage rounded to certain decimals
+     * 
+     * @param d
+     * @param decimalPlace
+     * @return
+     */
+    private static float percentageF(int count1, int count2, int decimalPlace)
+    {
 	if (count1 == 0 || count2 == 0)
 	    return 0;
 
 	float percentage = ((count1 - count2) * 100f / count1);
-	return (int) percentage;
+	return round(percentage, decimalPlace);
     }
 }
