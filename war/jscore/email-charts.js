@@ -89,8 +89,15 @@ function getOptions()
 	// Add Timezone offset
 	var d = new Date();
 	options += ("&time_zone=" + d.getTimezoneOffset());
-
+	
+	// If Frequency is present - send frequency too
+	if($('#frequency').length > 0)
+	{
+		// Get Frequency
+		var frequency = $( "#frequency").val();
+		options += ("&frequency=" + frequency);
+	}
+	
 	// console.log("options " + options);
-
 	return options;
 }

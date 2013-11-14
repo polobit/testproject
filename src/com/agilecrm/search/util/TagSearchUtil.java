@@ -1,9 +1,16 @@
 package com.agilecrm.search.util;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.util.DateUtil;
 
 /**
  * <code> TagSearchUtil </code> contains utility methods to search for tags with
@@ -13,11 +20,44 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 public class TagSearchUtil
 {
     /**
-     * Normalizes all the contact properties and added to a map with key
-     * normalized field name.
+     * Utility function to provide the SearchRule to be used to create
+     * ContactFilters
+     * 
+     * @param tag
+     *            - tag to search for
+     * @param startTime
+     *            - start time of the range
+     * @param end
+     *            - end time of the range
+     * 
+     * @return SearchRule
+     */
+    private static SearchRule getSearchRule(String tag, String startTime, String endTime)
+    {
+	// Create Search Rule
+
+	// [tags_time EQUALS Activist null BETWEEN 1383320887015 1384102087075]
+	// return LHS + " " + CONDITION + " " + RHS + " " + RHS_NEW + " " +
+	// nested_condition + " " + nested_lhs + " " + nested_rhs;
+
+	SearchRule searchRule = new SearchRule();
+	searchRule.LHS = "tags_time";
+	searchRule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	searchRule.RHS = tag;
+
+	searchRule.RHS_NEW = null;
+	searchRule.nested_condition = SearchRule.RuleCondition.BETWEEN;
+	searchRule.nested_lhs = startTime;
+	searchRule.nested_rhs = endTime;
+
+	return searchRule;
+    }
+
+    /**
+     * Returns the tag count for a given filter from start to end time
      * 
      * @param ContactFilter
-     *            - if it has to be applied on a filter or it uses all contacts
+     *            - the filter to be used. If null, it uses all contacts
      * @param tag
      *            - tag to search for
      * @param startTime
@@ -29,21 +69,6 @@ public class TagSearchUtil
      */
     public static int getTagCount(ContactFilter contactFilter, String tag, String startTime, String endTime)
     {
-	// Create Search Rule
-
-	// [tags_time EQUALS Activist null BETWEEN 1383320887015 1384102087075]
-	// return LHS + " " + CONDITION + " " + RHS + " " + RHS_NEW + " " +
-	// nested_condition + " " + nested_lhs + " " + nested_rhs;
-
-	SearchRule searchRule = new SearchRule();
-	searchRule.LHS = "tags_time";
-	searchRule.CONDITION = searchRule.CONDITION.EQUALS;
-	searchRule.RHS = tag;
-
-	searchRule.RHS_NEW = null;
-	searchRule.nested_condition = searchRule.CONDITION.BETWEEN;
-	searchRule.nested_lhs = startTime;
-	searchRule.nested_rhs = endTime;
 
 	// Create Contact Filter if not present
 	if (contactFilter == null)
@@ -52,7 +77,7 @@ public class TagSearchUtil
 	}
 
 	// Add the tag find rule
-	contactFilter.rules.add(searchRule);
+	contactFilter.rules.add(getSearchRule(tag, startTime, endTime));
 
 	// Get Count
 	try
@@ -63,6 +88,264 @@ public class TagSearchUtil
 	catch (Exception e)
 	{
 	}
+	finally
+	{
+	    contactFilter.rules.remove(contactFilter.rules.size() - 1);
+	    System.out.println(contactFilter);
+	}
 	return 0;
+    }
+
+    /**
+     * Returns the tag count daily for a given filter from start to end time
+     * 
+     * @param ContactFilter
+     *            - the filter to be used. If null, it uses all contacts
+     * @param tag
+     *            - tag to search for
+     * @param startTime
+     *            - start time of the range
+     * @param end
+     *            - end time of the range
+     * 
+     * @return an object in the format required by highcharts
+     */
+    public static JSONObject getTagCount(ContactFilter contactFilter, String tags[], String startTime, String endTime, int type) throws Exception
+    {
+	JSONObject tagsCountJSONObject = new JSONObject();
+
+	// Sets calendar with start time.
+	Calendar startCalendar = Calendar.getInstance();
+	startCalendar.setTimeInMillis(Long.parseLong(startTime));
+	long startTimeMilli = startCalendar.getTimeInMillis();
+
+	// Sets calendar with end time.
+	Calendar endCalendar = Calendar.getInstance();
+	endCalendar.setTimeInMillis(Long.parseLong(endTime));
+	long endTimeMilli = endCalendar.getTimeInMillis();
+
+	if (endTimeMilli < startTimeMilli)
+	    return null;
+
+	do
+	{
+	    // Get End Time by adding a day, week or month
+	    startCalendar.add(type, 1);
+
+	    // Get Tag Count for each tag
+	    JSONObject tagsCount = new JSONObject();
+	    for (String tag : tags)
+	    {
+		int count = getTagCount(contactFilter, tag, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+		tagsCount.put(tag, count);
+	    }
+
+	    // Put time and tags array
+	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
+
+	    startTimeMilli = startCalendar.getTimeInMillis();
+	}
+	while (startTimeMilli <= endTimeMilli);
+
+	return tagsCountJSONObject;
+    }
+
+    /**
+     * Returns the ratio of two tags count daily for a given filter from start
+     * to end time
+     * 
+     * @param ContactFilter
+     *            - the filter to be used. If null, it uses all contacts
+     * @param tag1
+     *            - tag1 to search for
+     * @param tag2
+     *            - tag2 to search for
+     * 
+     * @param startTime
+     *            - start time of the range
+     * @param end
+     *            - end time of the range
+     * 
+     * @return an object in the format required by highcharts
+     */
+    public static JSONObject getRatioTagCount(ContactFilter contactFilter, String tag1, String tag2, String startTime, String endTime, int type)
+	    throws Exception
+    {
+	JSONObject tagsCountJSONObject = new JSONObject();
+
+	// Sets calendar with start time.
+	Calendar startCalendar = Calendar.getInstance();
+	startCalendar.setTimeInMillis(Long.parseLong(startTime));
+	long startTimeMilli = startCalendar.getTimeInMillis();
+
+	// Sets calendar with end time.
+	Calendar endCalendar = Calendar.getInstance();
+	endCalendar.setTimeInMillis(Long.parseLong(endTime));
+	long endTimeMilli = endCalendar.getTimeInMillis();
+
+	if (endTimeMilli < startTimeMilli)
+	    return null;
+
+	do
+	{
+	    // Get End Time by adding a day, week or month
+	    startCalendar.add(type, 1);
+
+	    // Get Tag Count for each tag
+	    JSONObject tagsCount = new JSONObject();
+
+	    int tag1Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+	    int tag2Count = getTagCount(contactFilter, tag2, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
+
+	    // Get Tag Ratio
+	    float tagRatio = 0;
+	    if (tag2Count != 0)
+		tagRatio = (tag2Count / tag1Count) * 100f;
+
+	    tagsCount.put("Conversion", round(tagRatio, 2));
+
+	    // Put time and tags array
+	    tagsCountJSONObject.put(startTimeMilli / 1000 + "", tagsCount);
+
+	    startTimeMilli = startCalendar.getTimeInMillis();
+	}
+	while (startTimeMilli <= endTimeMilli);
+
+	return tagsCountJSONObject;
+    }
+
+    /**
+     * Returns the Cohorts data comparing tag1 and tag2 over the span of time
+     * 
+     * @param tag1
+     *            - tag1 to search for
+     * @param tag2
+     *            - tag2 to be searched
+     * 
+     * @param startTime
+     *            - start time of the range
+     * @param end
+     *            - end time of the range
+     * 
+     * @return {@link JSONObject}
+     */
+    public static JSONObject getCohortsMonthly(String tag1, String tag2, String startTime, String endTime) throws Exception
+    {
+	// Get the number of months
+	int numMonths = (int) DateUtil.monthsBetween(endTime, startTime);
+
+	System.out.println("Num months " + numMonths);
+
+	// Get Cohorts Tag
+	JSONObject cohortsJSONObject = new JSONObject();
+	cohortsJSONObject.put("categories", new JSONArray());
+	cohortsJSONObject.put("series", new JSONArray());
+
+	// Get numMonths & numMonths Matrix
+	for (int i = 0; i <= numMonths; i++)
+	{
+	    // Get the Start Calendar
+	    Calendar startCalendar = Calendar.getInstance();
+	    startCalendar.setTimeInMillis(Long.parseLong(startTime));
+
+	    // Add i months to start off with
+	    startCalendar.add(Calendar.MONTH, i);
+
+	    // Get tag1 created Count for this month
+	    Calendar endCalendar = (Calendar) startCalendar.clone();
+	    endCalendar.add(Calendar.MONTH, 1);
+	    int tag1Count = getTagCount(null, tag1, startCalendar.getTimeInMillis() + "", endCalendar.getTimeInMillis() + "");
+
+	    cohortsJSONObject.getJSONArray("categories").put("Month " + i);
+
+	    // Create a filter for users who have been created for the tag1 so
+	    // that we can use in cohorts
+	    ContactFilter contactFilter = new ContactFilter();
+	    contactFilter.rules.add(getSearchRule(tag1, startCalendar.getTimeInMillis() + "", endCalendar.getTimeInMillis() + ""));
+
+	    JSONObject monthCohortJSONObject = new JSONObject();
+	    monthCohortJSONObject.put("name", new SimpleDateFormat("MMM ''yy").format(startCalendar.getTime()));
+	    monthCohortJSONObject.put("data", new JSONArray());
+	    monthCohortJSONObject.put("org", new JSONArray());
+
+	    // Get for each month
+	    for (int j = 0; j < numMonths; j++)
+	    {
+		// Get the total tag2 count created with this month for that
+		// filter
+		endCalendar = (Calendar) startCalendar.clone();
+		endCalendar.add(Calendar.MONTH, (j + 1));
+
+		System.out.println("Counting " + tag1 + " for " + new SimpleDateFormat("MMM ''yy").format(startCalendar.getTime()) + " vs "
+			+ new SimpleDateFormat("MMM ''yy").format(endCalendar.getTime()));
+
+		double numDifference = DateUtil.monthsBetween(endCalendar.getTimeInMillis() + "", Calendar.getInstance().getTimeInMillis() + "");
+
+		// If the date is in future, we do not do anything
+		if (numDifference > 1)
+		{
+		    System.out.println("Skipping");
+		    break;
+		}
+
+		// Get Total Counts within start time to this endtime
+		int tag2Count = getTagCount(contactFilter, tag2, startCalendar.getTimeInMillis() + "", endCalendar.getTimeInMillis() + "");
+
+		monthCohortJSONObject.getJSONArray("data").put(percentage(tag1Count, tag2Count));
+		monthCohortJSONObject.getJSONArray("org").put(tag1Count - tag2Count);
+
+		// Add this to cohort chart
+		// cohortsJSONObject = addToMonthlyCohort(cohortsJSONObject, (j
+		// + 1), startCalendar, tag2Count);
+	    }
+
+	    cohortsJSONObject.getJSONArray("series").put(monthCohortJSONObject);
+	}
+
+	return cohortsJSONObject;
+    }
+
+    /**
+     * Utility Function to Calculate Percentage
+     * 
+     * @param tag1
+     *            - tag1 to search for
+     * @param tag2
+     *            - tag2 to be searched
+     * */
+
+    private static int percentage(int count1, int count2)
+    {
+	return (int) percentageF(count1, count2, 2);
+    }
+
+    /**
+     * Round to certain number of decimals
+     * 
+     * @param d
+     * @param decimalPlace
+     * @return
+     */
+    private static float round(float d, int decimalPlace)
+    {
+	BigDecimal bd = new BigDecimal(Float.toString(d));
+	bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+	return bd.floatValue();
+    }
+
+    /**
+     * Find the percentage rounded to certain decimals
+     * 
+     * @param d
+     * @param decimalPlace
+     * @return
+     */
+    private static float percentageF(int count1, int count2, int decimalPlace)
+    {
+	if (count1 == 0 || count2 == 0)
+	    return 0;
+
+	float percentage = ((count1 - count2) * 100f / count1);
+	return round(percentage, decimalPlace);
     }
 }

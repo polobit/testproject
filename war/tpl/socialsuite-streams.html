@@ -114,7 +114,7 @@
 <!-- models for tweets -->
 <script id="Column-model-template" type="text/html">
 {{#if_equals msg_type "Tweet"}}
-<article id={{id}} tweet-id-str={{id_str}} class="stream-item is-actionable {{deleted_msg}}">
+<article id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} class="stream-item is-actionable {{deleted_msg}}">
    <div class="item-box">       
       <div class="tweet">
            <header class="tweet-header">        
@@ -142,45 +142,45 @@
               <time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>                              
  	    	  <ul class="tweet-actions">
                  {{#if direct_message}}
-                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" tweet-owner={{user.screen_name}} data-user-name="{{user.name}}" description="{{user.description}}"> 
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal"> 
                             <i class="icon icon-plus-sign" title="Add Contact"></i>                            
                          </a> </li>
                  {{else}}
                     <li> <a class="tweet-action" href="https://twitter.com/{{user.screen_name}}/status/{{id_str}}" rel="url" target="_blank"> 
                             <i class="icon icon-external-link" title="Detail Status"></i>                            
                          </a> </li>	    		
-                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" tweet-owner={{user.screen_name}} data-user-name="{{user.name}}" description="{{user.description}}"> 
+                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal"> 
                             <i class="icon icon-plus-sign" title="Add Contact"></i>                            
                          </a> </li>	                 
  		    		<li> <a class="tweet-action" href="#social" rel="reply"> 
-                            <i class="icon icon-reply reply-message" tweet-id={{id}} stream-id={{stream_id}} title="Reply"></i>                             
+                            <i class="icon icon-reply reply-message" title="Reply"></i>                             
                          </a> </li>                    
  		    		<li> <a class="tweet-action" href="#social" rel="retweet">
                          {{#if retweeted_by_user}}
-                           <i class="icon icon-retweet undo-retweet-status"  tweet-id={{id}} stream-id={{stream_id}} title="Retweet" style="color:#00FF40;"></i>
+                           <i class="icon icon-retweet undo-retweet-status" title="Retweet" style="color:#00FF40;"></i>
                          {{else}}
                              {{#if tweetowner_not_streamuser}}
-                                 <i class="icon icon-retweet retweet-status" tweet-id={{id}} stream-id={{stream_id}} title="Retweet"></i>
+                                 <i class="icon icon-retweet retweet-status" title="Retweet"></i>
                              {{/if}}
                          {{/if}}
                          </a> </li>
  		    		<li> <a class="tweet-action" href="#social" rel="favorite"> 
                          {{#if favorited_by_user}}
-                            <i class="icon icon-star undo-favorite-status" tweet-id={{id}} stream-id={{stream_id}} style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
+                            <i class="icon icon-star undo-favorite-status" style="color:orange;" title="Unfavorite from {{user.screen_name}}"></i>                             
                          {{else}}
-                            <i class="icon icon-star favorite-status" tweet-id={{id}} stream-id={{stream_id}} title="Favorite from {{user.screen_name}}"></i>                             
+                            <i class="icon icon-star favorite-status" title="Favorite from {{user.screen_name}}"></i>                             
                          {{/if}}
                          </a> </li>
                  {{/if}}
  		    		<li> 
-                         <a id="{{id_str}}_more_options" class="tweet-action more-options" href="#social" tweet-id={{id}} stream-id={{stream_id}}> 
+                         <a id="{{id_str}}_more_options" class="tweet-action more-options" href="#social"> 
                             <i class="icon icon-ellipsis-horizontal" title="More Options"></i> 
                          </a>
     					 <ul id="{{id_str}}_more_options_list" class="pull-right more-options-list dropdown-menu" role="menu">
-                                <li role="presentation"><a href="#social" class="reply-message" tweet-id={{id}} stream-id={{stream_id}} role="menuitem">Tweet to @{{user.screen_name}}</a></li> 							
+                                <li role="presentation"><a href="#social" class="reply-message"  role="menuitem">Tweet to @{{user.screen_name}}</a></li> 							
                             {{#if deletable_tweet}}
                                 <li class="divider"></li>
-                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem" tweet-id={{id}} stream-id={{stream_id}}>Delete</a></li>                                
+                                <li role="presentation"><a href="#social" class="delete-tweet" role="menuitem">Delete</a></li>                                
                             {{/if}}
     					 </ul>
                     </li>  

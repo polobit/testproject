@@ -1,0 +1,27 @@
+<script id="report-funnel-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">                
+             <div id="reportrange" class="pull-right" style="padding:4px 8px;box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);">
+                <i class="icon-calendar icon-large"></i>
+                <span id="range">{{date-range "today" "-6"}}</span>
+              </div>
+            <h1>Funnel Reports<small> - <span id="reports-funnel-tags"></span></small></h1>
+        </div>
+    </div>
+</div>
+
+<div>	
+	<!-- Funnel Reports -->
+	<div id="email-reports">	
+		<div class="row"><div class="span12"><h2></h2></div>
+			<div id="funnel-chart" style="width:100%; height:500px;padding-top:50px;margin-left:25px;"></div>
+		</div>
+		<hr />
+	</div>
+	<!-- End of Email Reports -->  
+
+   </div>
+</div>
+
+</script>

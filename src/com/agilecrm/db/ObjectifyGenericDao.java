@@ -454,19 +454,19 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (result instanceof com.agilecrm.cursor.Cursor)
 		{
 
-		    System.out.println(this.clazz.getSimpleName());
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-		    Object object = CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get());
+		    Object object = CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get()
+			    + "_count");
 
 		    if (object != null)
-			agileCursor.count = Integer.valueOf((String) object);
+			agileCursor.count = (Integer) object;
 		    else
 		    {
 			long startTime = System.currentTimeMillis();
 			agileCursor.count = query.count();
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 3 * 1000)
-			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get(),
+			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
 				    agileCursor.count, 2 * 60 * 60 * 1000);
 		    }
 
@@ -506,6 +506,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	Query<T> q = ofy().query(clazz);
 	q.filter(propName, propValue);
+	return asKeyList(q.fetchKeys());
+    }
+
+    public List<Key<T>> listAllKeys()
+    {
+	Query<T> q = ofy().query(clazz);
 	return asKeyList(q.fetchKeys());
     }
 

@@ -12,6 +12,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>DomainUserUtil</code> is utility class used to process data of
@@ -241,6 +242,40 @@ public class DomainUserUtil
 	}
     }
 
+    public static List<DomainUser> getAllDomainOwners()
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> filter = new HashMap<String, Object>();
+	    filter.put("is_account_owner", true);
+	    return dao.fetchAll();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    public static List<Key<DomainUser>> getAllDomainOwnerKeys()
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> filter = new HashMap<String, Object>();
+	    filter.put("is_account_owner", true);
+	    return dao.listKeysByProperty(filter);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
     /**
      * Returns list of domain users based on page size.
      * 
@@ -279,7 +314,8 @@ public class DomainUserUtil
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true).get();
+	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
+		.get();
 
 	NamespaceManager.set(oldNamespace);
 	return user;

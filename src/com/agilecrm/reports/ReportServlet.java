@@ -1,16 +1,18 @@
 package com.agilecrm.reports;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.reports.deferred.ReportsDeferredTask;
-import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>ReportServlet</code> process reports, based on duration or report
@@ -42,12 +44,15 @@ public class ReportServlet extends HttpServlet
 	    return;
 
 	System.out.println("Duration : " + duration);
-	Set<String> domains = NamespaceUtil.getAllNamespaces();
 
-	for (String domain : domains)
+	List<Key<DomainUser>> keys = DomainUserUtil.getAllDomainOwnerKeys();
+
+	System.out.println("domain owners :" + keys);
+
+	for (Key<DomainUser> key : keys)
 	{
 	    // Created a deferred task for report generation
-	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(domain, duration);
+	    ReportsDeferredTask reportsDeferredTask = new ReportsDeferredTask(key.getId(), duration);
 
 	    // Add to queue
 	    Queue queue = QueueFactory.getQueue("reports-queue");

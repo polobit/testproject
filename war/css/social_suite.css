@@ -5,7 +5,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .scroll-v{overflow-y: scroll; height:450px;}
 .columns{box-sizing:border-box;height:100%;overflow:visible;margin:0px 0px 0px 0px;}
 .column{margin:0px 5px 8px!important;background-color:#fcfcfc;font-size:1rem;
-        white-space:normal;overflow:hidden;position:relative;border:1px solid #a1a1a1;border-radius:4px;max-height: 510px;}
+        white-space:normal;overflow:hidden;position:relative;border:1px solid #a1a1a1;border-radius:4px;height: 510px;}
 .column:focus{outline: -webkit-focus-ring-color auto 5px;}
 .column-header{box-sizing:border-box;position:relative;height:55px;padding:0 10px;padding-top:2px;color:#444;
                background-color:#eee;line-height:50px;border-bottom:1px solid #ddd}
@@ -135,7 +135,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .social-stream-types>.row-fluid{padding-top: 15px;}
 
 /* stream type div */
-.stream-type{padding: 15px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 55px;}
+.stream-type{padding: 15px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 55px;cursor:pointer;}
 .social-stream-types{padding-left: 35px;}
 
 /* Stream type description */
@@ -169,3 +169,10 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .after-img-load-show{padding-left: 90px;margin-top: -56px;display: block;}
 .after-img-load-hide{padding-left: 90px;margin-top: -56px;display: none;}
 .add-form-input{width: 139px;}
+
+/* Elements on add compose tweet form */
+#socialsuite-twitter_messageForm{margin: 0 0 0 0;}
+.tweet-scheduling{cursor:pointer;width: 30px;margin-bottom: 5px;margin-top: -20px;text-align: center;padding-top: 5px;}
+.tweet-scheduling-active{background-color:#EDEDED;}
+.width-65{width:65px;}
+.width-150{width:150px;}

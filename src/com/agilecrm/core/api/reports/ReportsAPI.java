@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.reports;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,11 +17,14 @@ import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONException;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
+import com.agilecrm.search.util.TagSearchUtil;
 
 /**
  * <code>ReportsAPI</code> lass includes REST calls to interact with
@@ -108,8 +112,7 @@ public class ReportsAPI
     @Path("/show-results/{report_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection<Contact> getReportResults(@PathParam("report_id") String id,
-	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public Collection<Contact> getReportResults(@PathParam("report_id") String id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 	try
 	{
@@ -176,4 +179,120 @@ public class ReportsAPI
 
     }
 
+    /**
+     * Funnel Reports based on tags. Returns json-array data required for
+     * generating graphs.
+     * 
+     * @param tags
+     *            - comma separated tags
+     * @param startTime
+     *            - Start Time.
+     * @param endTime
+     *            - EndTime.
+     * @param timeZone
+     *            - client timezone.
+     * @return email-stats json string
+     * 
+     * */
+    @Path("/funnel/{tags}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getFunnelStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+	    @QueryParam("time_zone") String timeZone)
+    {
+	JSONArray tagsJSONArray = new JSONArray();
+	try
+	{
+	    // Get tags with a comma or | tokenized
+	    String[] tags = tagsString.split(",");
+
+	    // For each tag, get the occurrences for this time frame
+	    for (String tag : tags)
+	    {
+		int count = TagSearchUtil.getTagCount(null, tag, startTime, endTime);
+		tagsJSONArray.put(new JSONObject().put(tag, count));
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	// Create New Contact Filter
+	return tagsJSONArray.toString();
+    }
+
+    /**
+     * Growth Reports based on tags. Returns json-array data required for
+     * generating graphs.
+     * 
+     * @param tags
+     *            - comma separated tags
+     * @param startTime
+     *            - Start Time.
+     * @param endTime
+     *            - EndTime.
+     * @param timeZone
+     *            - client timezone.
+     * @return email-stats json string
+     * 
+     * */
+    @Path("/growth/{tags}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+	    @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency) throws Exception
+    {
+	// Get tags with a comma or | tokenized
+	String[] tags = tagsString.split(",");
+	int type = getType(frequency);
+
+	// Get Tags Daily
+	return TagSearchUtil.getTagCount(null, tags, startTime, endTime, type).toString();
+    }
+
+    /*
+     * Utility function to return the calendar type based on the frequency in
+     * the URL
+     */
+    private int getType(String frequency)
+    {
+	int type = Calendar.DAY_OF_MONTH;
+
+	if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+	    type = Calendar.MONTH;
+	if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+	    type = Calendar.WEEK_OF_YEAR;
+
+	return type;
+    }
+
+    /**
+     * Ratio Reports based on the two tags. Returns json-array data required for
+     * generating graphs.
+     * 
+     * @param tag1
+     *            - first tag
+     * @param tag2
+     *            - second tag
+     * @param startTime
+     *            - Start Time.
+     * @param endTime
+     *            - EndTime.
+     * @param timeZone
+     *            - client timezone.
+     * @return email-stats json string
+     * 
+     * */
+    @Path("/ratio/{tag1}/{tag2}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getRatioStats(@PathParam("tag1") String tag1, @PathParam("tag2") String tag2, @QueryParam("start_time") String startTime,
+	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency) throws Exception
+    {
+	int type = getType(frequency);
+
+	// Get Cohorts Monthly
+	return TagSearchUtil.getRatioTagCount(null, tag1, tag2, startTime, endTime, type).toString();
+    }
 }
