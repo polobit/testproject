@@ -35,7 +35,7 @@ public class NamespaceUtil
     public static Set<String> getAllNamespaces()
     {
 	// Get All Users
-	List<DomainUser> domainList = DomainUserUtil.getAllUsers();
+	List<DomainUser> domainList = DomainUserUtil.getAllDomainOwners();
 
 	Set<String> domains = new HashSet<String>();
 	for (DomainUser domainUser : domainList)

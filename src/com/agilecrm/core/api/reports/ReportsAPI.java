@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.reports;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONException;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -239,18 +241,35 @@ public class ReportsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
-	    @QueryParam("time_zone") String timeZone) throws Exception
+	    @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency) throws Exception
     {
 	// Get tags with a comma or | tokenized
 	String[] tags = tagsString.split(",");
+	int type = getType(frequency);
 
 	// Get Tags Daily
-	return TagSearchUtil.getTagCountDaily(null, tags, startTime, endTime).toString();
+	return TagSearchUtil.getTagCount(null, tags, startTime, endTime, type).toString();
+    }
+
+    /*
+     * Utility function to return the calendar type based on the frequency in
+     * the URL
+     */
+    private int getType(String frequency)
+    {
+	int type = Calendar.DAY_OF_MONTH;
+
+	if (StringUtils.equalsIgnoreCase(frequency, "monthly"))
+	    type = Calendar.MONTH;
+	if (StringUtils.equalsIgnoreCase(frequency, "weekly"))
+	    type = Calendar.WEEK_OF_YEAR;
+
+	return type;
     }
 
     /**
-     * Cohorts Reports based on the two tags. Returns json-array data required
-     * for generating graphs.
+     * Ratio Reports based on the two tags. Returns json-array data required for
+     * generating graphs.
      * 
      * @param tag1
      *            - first tag
@@ -265,13 +284,15 @@ public class ReportsAPI
      * @return email-stats json string
      * 
      * */
-    @Path("/cohorts/{tag1}/{tag2}")
+    @Path("/ratio/{tag1}/{tag2}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getGrowthStats(@PathParam("tag1") String tag1, @PathParam("tag2") String tag2, @QueryParam("start_time") String startTime,
-	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone) throws Exception
+    public String getRatioStats(@PathParam("tag1") String tag1, @PathParam("tag2") String tag2, @QueryParam("start_time") String startTime,
+	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency) throws Exception
     {
+	int type = getType(frequency);
+
 	// Get Cohorts Monthly
-	return TagSearchUtil.getCohortsMonthly(tag1, tag2, startTime, endTime).toString();
+	return TagSearchUtil.getRatioTagCount(null, tag1, tag2, startTime, endTime, type).toString();
     }
 }
