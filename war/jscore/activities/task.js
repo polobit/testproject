@@ -369,11 +369,14 @@ function append_tasks(base_model) {
 	if (due < 0) {
 		
 		var heading = $('#overdue-heading', this.el);
-		if(increaseCount(heading) > 5)
+		var count = increaseCount(heading) 
+		
+		if(count > 5)
 		{
 			return;
 		}
 		$('#overdue', this.el).append(itemView.render().el);
+		if(count ==5) $('#overdue', this.el).append('<div style="float:right;padding-bottom:10px"><a href="#tasks">more</a></div>');
 		$('#overdue', this.el).find('tr:last').data(base_model);
 		$('#overdue', this.el).parent('table').css("display","block");
 		heading.show();
@@ -384,7 +387,8 @@ function append_tasks(base_model) {
 	if (due == 0) {
 		
 		var heading = $('#today-heading', this.el);
-		if(increaseCount(heading) > 5)
+		var count = increaseCount(heading); 
+		if(count > 5)
 		{
 			return;
 		}
@@ -392,6 +396,7 @@ function append_tasks(base_model) {
 			return;
 		
 		$('#today', this.el).append(itemView.render().el);
+		if(count ==5) $('#today', this.el).append('<div style="float:right;padding-bottom:10px"><a href="#tasks">more</a></div>');
 		$('#today', this.el).find('tr:last').data(base_model);
 		$('#today', this.el).parent('table').css("display","block");
 		$('#today', this.el).show();
@@ -401,12 +406,14 @@ function append_tasks(base_model) {
 	// Tomorrow
 	if (due == 1) {
 		var heading = $('#tomorrow-heading', this.el);
-		if(increaseCount(heading) > 5)
+		var count = increaseCount(heading); 
+		if(count > 5)
 		{
 			return;
 		}
 		
 		$('#tomorrow', this.el).append(itemView.render().el);
+		if(count ==5) $('#tomorrow', this.el).append('<div style="float:right;padding-bottom:10px"><a href="#tasks">more</a></div>');
 		$('#tomorrow', this.el).find('tr:last').data(base_model);
 		$('#tomorrow', this.el).parent('table').css("display","block");
 		$('#tomorrow', this.el).show();
@@ -416,12 +423,14 @@ function append_tasks(base_model) {
 	// Next Week
 	if (due > 1) {
 		var heading = $('#next-week-heading', this.el);
-		if(increaseCount(heading) > 5)
+		var count = increaseCount(heading); 
+		if(count > 5)
 		{
 			return;
 		}
 		
 		$('#next-week', this.el).append(itemView.render().el);
+		if(count ==5) $('#next-week', this.el).append('<div style="float:right;padding-bottom:10px"><a href="#tasks">more</a></div>');
 		$('#next-week', this.el).find('tr:last').data(base_model);
 		$('#next-week', this.el).parent('table').css("display","block");
 		$('#next-week', this.el).show();
