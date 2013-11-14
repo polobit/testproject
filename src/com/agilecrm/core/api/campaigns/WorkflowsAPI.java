@@ -162,9 +162,10 @@ public class WorkflowsAPI
     {
 	JSONArray workflowsJSONArray = new JSONArray(model_ids);
 
+	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
+
 	// Deletes CampaignStats
 	WorkflowDeleteUtil.deleteRelatedEntities(workflowsJSONArray);
-	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
 
     }
 
@@ -181,7 +182,7 @@ public class WorkflowsAPI
      */
     @Path("active-contacts/{id}")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
     public String getActiveContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 
@@ -209,7 +210,7 @@ public class WorkflowsAPI
      */
     @Path("completed-contacts/{id}")
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
     public String getCompletedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 	List<Contact> contacts = CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.DONE);
