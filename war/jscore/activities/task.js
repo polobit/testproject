@@ -337,6 +337,15 @@ function get_due(due) {
 	return Math.floor((due - date) / (24 * 3600));
 }
 
+function increaseCount(heading)
+{
+	var count = heading.find('.count').attr('count');
+	 
+	count = count ? parseInt(count) + 1 : 1;
+	heading.find('.count').attr('count', count);
+	heading.find('.count').text("(" + count +  " total)");
+	return count;
+}
 /**
  * Based on due date arranges the tasks UI
  * 
@@ -354,19 +363,34 @@ function append_tasks(base_model) {
 		tagName : 'tr',
 	});
 
+	
 	// add to the right box - overdue, today, tomorrow etc.
 	var due = get_due(base_model.get('due'));
-	
 	if (due < 0) {
+		
+		var heading = $('#overdue-heading', this.el);
+		if(increaseCount(heading) > 5)
+		{
+			return;
+		}
 		$('#overdue', this.el).append(itemView.render().el);
 		$('#overdue', this.el).find('tr:last').data(base_model);
 		$('#overdue', this.el).parent('table').css("display","block");
-		$('#overdue-heading', this.el).show();
+		heading.show();
 		$('#overdue', this.el).show();
 	}
 
 	// Today
 	if (due == 0) {
+		
+		var heading = $('#today-heading', this.el);
+		if(increaseCount(heading) > 5)
+		{
+			return;
+		}
+		if($('#today > tr', this.el).length > 4)
+			return;
+		
 		$('#today', this.el).append(itemView.render().el);
 		$('#today', this.el).find('tr:last').data(base_model);
 		$('#today', this.el).parent('table').css("display","block");
@@ -376,6 +400,12 @@ function append_tasks(base_model) {
 
 	// Tomorrow
 	if (due == 1) {
+		var heading = $('#tomorrow-heading', this.el);
+		if(increaseCount(heading) > 5)
+		{
+			return;
+		}
+		
 		$('#tomorrow', this.el).append(itemView.render().el);
 		$('#tomorrow', this.el).find('tr:last').data(base_model);
 		$('#tomorrow', this.el).parent('table').css("display","block");
@@ -385,6 +415,12 @@ function append_tasks(base_model) {
 
 	// Next Week
 	if (due > 1) {
+		var heading = $('#next-week-heading', this.el);
+		if(increaseCount(heading) > 5)
+		{
+			return;
+		}
+		
 		$('#next-week', this.el).append(itemView.render().el);
 		$('#next-week', this.el).find('tr:last').data(base_model);
 		$('#next-week', this.el).parent('table').css("display","block");
