@@ -317,6 +317,9 @@ function initializeSocialSuite()
 				
 		// Disables add button to prevent multiple add on click event issues
 	    $('#addStreamModal').find('#add_twitter_stream').attr('disabled', 'disabled');
+	    
+	    // Show notification for adding stream.
+	    showNotyPopUp('information', "Adding Stream...", "top", 2500);
 		
 		// Get data from form elements
 		var formData = jQuery(streamDetail).serializeArray();	
@@ -337,7 +340,7 @@ function initializeSocialSuite()
 			success : function(stream) {
 						
 				// Close form
-				$('#addStreamModal').modal('hide');	
+				//$('#addStreamModal').modal('hide');	
 				
 				// Append in collection,add new stream 			
 				socialsuitecall.streams(stream);
@@ -360,6 +363,20 @@ function initializeSocialSuite()
 	     		   		    	{	 		      
 	     		   		           TempStreamsListView.collection.add(data);
 	     		   		    	} // client json if end
+	     		   		    
+	     		   		    // Notification for stream added.
+	     		   		    showNotyPopUp('information', "Stream added!", "top", 2500);
+	     		   		    
+	     		   		    setTimeout(function ()
+	     		   			  {
+	     		   		        // Find selected stream id.
+		     		   		    var idOfStreamType = $('#addStreamModal').find("div[value='"+StreamType+"']").attr('id');
+		     		   		    $("#"+idOfStreamType).click();
+		     		   		    
+		     		   		    // Make send button enable
+		     		   		    $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
+	     		   			  }, 3000);    		   		    
+	     		   			     		   		
 	     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
 				},
 		error : function(data){console.log(data);},
