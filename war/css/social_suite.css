@@ -157,10 +157,10 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 #twitter_profile_img_url{visibility:hidden;width: 1px;height: 1px;}
 .mentions-big-title{font-size:xx-large;}
 #twitter_profile_img{width: 55px;height: 50px;border-radius: 8px;margin-top: -6px;}
-.no-tweet,.stream-notifications{border-bottom:1px solid #e5e5e5;background-color: whitesmoke;font-size: 15px;text-align: center;}
+.no-tweet,.stream-notifications{border-bottom:1px solid #e5e5e5;background-color:lightYellow;font-size: 15px;text-align: center;}
 .no-tweet>p,.stream-notifications>p{padding-top: 6px;}
 #addStreamModal:focus{outline-style: none;}
-.stream-notifications{cursor:pointer;background-color:lightYellow;}
+.stream-notifications{cursor:pointer;}
 
 
 /* Elements on add contact form */

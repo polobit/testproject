@@ -23,4 +23,5 @@ String url = service.getAuthorizationUrl(token);
 System.out.println(url + " " + token.getToken() + " " + token.getSecret());
  
 response.sendRedirect(url);
+
 %>
