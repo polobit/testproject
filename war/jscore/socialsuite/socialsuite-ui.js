@@ -39,14 +39,23 @@ function initializeSocialSuite()
 	 */
 	$(".add-twitter-contact").die().live("click", function(e)
 	{
+		var streamId = ($(this).closest('article').attr('stream-id'));
+		var tweetId = ($(this).closest('article').attr('id'));
+		
+		// Get stream from collection.
+		var modelStream = StreamsListView.collection.get(streamId);		
+		
+		// Get tweet from stream.
+		var tweet = modelStream.get('tweetListView').get(tweetId).toJSON();
+				
 		// Tweet owner's full name.
-		var fullName = $(this).attr("data-user-name");
+		var fullName = tweet.user.name;
 			
 		// Tweet owner's description.
-		var description = $(this).attr("description");
+		var description = tweet.user.description;
 		
 		// Tweet owner's handle/Screen name.
-		TweetOwnerForAddContact = $(this).attr("tweet-owner");
+		TweetOwnerForAddContact = tweet.user.screen_name;
 		
 		// Separate full name.
 		var firstName = fullName.substr(0,fullName.indexOf(' '));
@@ -308,6 +317,9 @@ function initializeSocialSuite()
 				
 		// Disables add button to prevent multiple add on click event issues
 	    $('#addStreamModal').find('#add_twitter_stream').attr('disabled', 'disabled');
+	    
+	    // Show notification for adding stream.
+	    showNotyPopUp('information', "Adding Stream...", "top", 2500);
 		
 		// Get data from form elements
 		var formData = jQuery(streamDetail).serializeArray();	
@@ -328,7 +340,7 @@ function initializeSocialSuite()
 			success : function(stream) {
 						
 				// Close form
-				$('#addStreamModal').modal('hide');	
+				//$('#addStreamModal').modal('hide');	
 				
 				// Append in collection,add new stream 			
 				socialsuitecall.streams(stream);
@@ -351,6 +363,20 @@ function initializeSocialSuite()
 	     		   		    	{	 		      
 	     		   		           TempStreamsListView.collection.add(data);
 	     		   		    	} // client json if end
+	     		   		    
+	     		   		    // Notification for stream added.
+	     		   		    showNotyPopUp('information', "Stream added!", "top", 2500);
+	     		   		    
+	     		   		    setTimeout(function ()
+	     		   			  {
+	     		   		        // Find selected stream id.
+		     		   		    var idOfStreamType = $('#addStreamModal').find("div[value='"+StreamType+"']").attr('id');
+		     		   		    $("#"+idOfStreamType).click();
+		     		   		    
+		     		   		    // Make send button enable
+		     		   		    $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
+	     		   			  }, 3000);    		   		    
+	     		   			     		   		
 	     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
 				},
 		error : function(data){console.log(data);},

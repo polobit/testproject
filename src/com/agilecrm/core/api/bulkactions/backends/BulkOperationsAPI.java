@@ -34,6 +34,7 @@ import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
@@ -546,5 +547,47 @@ public class BulkOperationsAPI
 	ContactCSVExport.deleteBlobFile(path);
 
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV, String.valueOf(count));
+    }
+
+    /**
+     * Removes workflow related entities like logs, crons, contact's
+     * campaign-status. Inorder to avoid Deadline exception when workflow is
+     * deleted, it's related entities are deleted using backend.
+     * 
+     * @param campaignId
+     *            - deleted campaign id.
+     */
+    @Path("/remove-workflow-related/{campaign_id}")
+    @POST
+    public void removeWorkflowRelatedEntities(@PathParam("campaign_id") String campaignId)
+    {
+	System.out.println("Removing workflow related entities through backend...");
+
+	System.out.println("Campaign id is " + campaignId);
+
+	System.out.println("Namespace in backend is " + NamespaceManager.get());
+
+	if (StringUtils.isBlank(campaignId))
+	{
+	    System.out.println("Campaign id is null or empty...");
+	    return;
+	}
+
+	try
+	{
+	    // Deletes CampaignStatus from contact
+	    CampaignSubscribersUtil.removeCampaignStatus(campaignId);
+
+	    // Deletes Related Crons.
+	    CronUtil.removeTask(campaignId, null);
+
+	    // Deletes logs of workflow
+	    LogUtil.deleteSQLLogs(campaignId, null);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while deleting workflow related entities" + e.getMessage());
+	}
     }
 }

@@ -147,10 +147,13 @@ public class SocialSuiteTwitterUtil
 			System.out.println(JSONUtil.toJSONString(status));
 
 			if (status.toString().contains(message))
+			{
 				result = "Successful";
 
+				System.out.println("result: " + result);
+				return result;
+			}
 			System.out.println("result: " + result);
-
 			return result;
 		}
 		catch (TwitterRuntimeException e)

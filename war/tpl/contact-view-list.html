@@ -1,7 +1,4 @@
 <script id="contact-view-collection-template" type="text/html">
-<div class="btn-group right" style="position:relative">
-    <button class="btn custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
-    <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 	<div class="btn-group right">
         <a href="#personModal" class="btn right" data-toggle="modal" style="margin-left:5px;"><i class="icon-plus-sign"></i> Add Contact</a>
         <a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
@@ -10,20 +7,23 @@
 			<li><a href="#import">Import from other CRMs</a></li>
 		</ul>
 	</div>
-    <ul id="contact-view-model-list" class="pull-right dropdown-menu">
-        <li>
-            <a href="#contacts" class="DefaultView">Default</a>
-			<a href="#contacts" class="GridView">Grid View</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-            <a href="#contact-views">Add/Edit View</a>
-        </li>
-	{{#if this.length}}
-        <li class="divider"></li>
-	{{/if}}
-    </ul>
-</div>
+	<div class="btn-group right" style="position:relative;margin-left:0px;">
+    	<button class="btn custom_view"><i class="icon-list" style="margin-right:3px"></i></button>
+    	<button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+    	<ul id="contact-view-model-list" class="pull-right dropdown-menu">
+        	<li>
+            	<a href="#contacts" class="DefaultView">Default</a>
+				<a href="#contacts" class="GridView">Grid View</a>
+        	</li>
+        	<li class="divider"></li>
+        	<li>
+            	<a href="#contact-views">Add/Edit View</a>
+        	</li>
+		{{#if this.length}}
+        	<li class="divider"></li>
+		{{/if}}
+    	</ul>
+	</div>
 </script>
 
 <script id="contact-view-model-template" type="text/html">
