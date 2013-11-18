@@ -276,6 +276,15 @@ function init_tags_typeahead()
         return false;
       }
     });
+	
+	// Add scroll for tags list
+	$('#tag_names, #tag_value').parents('body').find('.ui-autocomplete').css(
+			{'max-height': '200px',
+			 'overflow-y': 'scroll',
+			 /* prevent horizontal scrollbar */
+			 'overflow-x': 'hidden'
+			});
+		
 }
 
 /**
