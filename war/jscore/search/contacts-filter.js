@@ -382,7 +382,7 @@ function fillCustomFields(fields, el, callback)
 			console.log(condition.find("option.created_time").addClass(field.field_label));
 		}
 		condition.append('<option value="EQUALS" class="'+field.field_label+'">is</option>');
-		condition.append("<option value="'NOTEQUALS'" class='"+field.field_label+"'>isn't</option>');
+		condition.append("<option value='NOTEQUALS' class='"+field.field_label+"'>isn't</option>");
 			
 		if(field.field_data)
 		rhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
