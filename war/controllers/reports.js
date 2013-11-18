@@ -39,14 +39,16 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportAdd : function()
 	{
-		currentRoute(route);
+		var count = 0;
+		alert(Current_Route);
 		$("#content").html(LOADING_HTML);
 		CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "reports", isNew : true,
 			postRenderCallback : function(el)
 			{
 				// Counter to set when script is loaded. Used to avoid flash in page
-				var count = 0;
+				if(count != 0)
+					return;
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
 				{
 
@@ -104,6 +106,8 @@ var ReportsRouter = Backbone.Router.extend({
 		var report_model = new Base_Model_View({ url : 'core/api/reports',change:false, model : report, template : "reports-add", window : 'reports',
 			postRenderCallback : function(el)
 			{
+				if(count != 0)
+					return;
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
 				{
 
