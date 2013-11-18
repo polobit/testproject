@@ -35,6 +35,16 @@ public class CustomFieldDefUtil
 	return dao.fetchAll();
     }
 
+    public static List<CustomFieldDef> getCustomFields(boolean isSearchable)
+    {
+	return dao.listByProperty("searchable", isSearchable);
+    }
+
+    public static List<CustomFieldDef> getSearchableCustomFields()
+    {
+	return getCustomFields(true);
+    }
+
     /**
      * Fetches a custom field based on the id
      * 
@@ -68,7 +78,7 @@ public class CustomFieldDefUtil
 
     public static List<CustomFieldDef> getFieldByType(String type)
     {
-	return dao.listByProperty("field_type",
-		CustomFieldDef.Type.valueOf(type.toUpperCase()));
+	return dao.listByProperty("field_type", CustomFieldDef.Type.valueOf(type.toUpperCase()));
     }
+
 }

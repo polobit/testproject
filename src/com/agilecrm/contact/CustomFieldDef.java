@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Indexed;
 /**
  * <code>CustomFieldDef<code> stores the fields of type text, date, list, textarea and check-box.
  * Custom fields are the fields used to store custom information, i.e user desired information.
- * <p>
+ * <p>`
  * Custom fields could be added to the user desired scope also, and the scope could be a 
  * person or company or deal. User can also make these fields as required. 
  * While adding a custom field, the user can enable the 'searchable' checkbox to enable search on these fields. 
@@ -77,7 +77,8 @@ public class CustomFieldDef
     };
 
     // Dao
-    public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
+    public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
+	    CustomFieldDef.class);
 
     /**
      * Default constructor
@@ -102,7 +103,8 @@ public class CustomFieldDef
      * @param is_required
      *            required status of the custom field
      */
-    public CustomFieldDef(Type fieldType, String fieldLabel, String fieldDescription, String fieldData, boolean is_required)
+    public CustomFieldDef(Type fieldType, String fieldLabel, String fieldDescription, String fieldData,
+	    boolean is_required)
     {
 	this.field_data = fieldData;
 	this.field_description = fieldDescription;
@@ -142,7 +144,8 @@ public class CustomFieldDef
     @Override
     public String toString()
     {
-	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type + ", field_label: " + field_label + ", field_description: " + field_description
-		+ ", field_data: " + field_data + "is_required :" + is_required + "searchable" + searchable + "}";
+	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type + ", field_label: " + field_label
+		+ ", field_description: " + field_description + ", field_data: " + field_data + "is_required :"
+		+ is_required + "searchable" + searchable + "}";
     }
 }
