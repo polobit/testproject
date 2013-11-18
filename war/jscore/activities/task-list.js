@@ -21,8 +21,8 @@ function initOwnerslist() {
 		//$('.task-heading').text($(this).html());
 		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
 	});
-	updateData(getParams());
-	pieTasks(getParams());
+	updateData(getParams() + "&owner=" + CURRENT_DOMAIN_USER.id + "&pending=" + true);
+	pieTasks(getParams() + "&owner=" + CURRENT_DOMAIN_USER.id + "&pending=" + true);
 }
 
 var allTasksListView;
