@@ -313,8 +313,9 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 								if(newMilestone != oldMilestone)
 								{
 									milestone[i].owner_id = milestone[i].owner.id;
-									milestone[i].milestone = newMilestone;
-									modelJSON.get(newMilestone).push(milestone[i]);
+									//milestone[i].milestone = newMilestone;
+									//modelJSON.get(newMilestone).push(milestone[i]);
+									modelJSON.get(newMilestone).push(deal);
 									milestone.splice(i, 1);
 								}
 								else 
