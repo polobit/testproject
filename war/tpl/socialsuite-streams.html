@@ -34,40 +34,14 @@
                  <i class="pull-right margin-hs social-type-icon icon icon-twitter"></i>
                {{else}}
                  <i class="margin-hs social-type-icon icon icon-linkedin"></i>
-               {{/if_equals}}  
-                 {{#if_equals stream_type "Home"}}
-                   <i class="stream-type-icon icon icon-home" title="Home Stream"></i>                 
-                 {{/if_equals}} 
-                 {{#if_equals stream_type "Mentions"}}
+               {{/if_equals}}     
+
+               {{#if_equals stream_type "Mentions"}}
                    <p class="stream-type-icon icon mentions-small-title" title="Mentions Stream">@</p>
-                 {{/if_equals}}
-                 {{#if_equals stream_type "Retweets"}}
-                   <i class="stream-type-icon icon icon-retweet" title="Retweets Stream"></i>
-                 {{/if_equals}}                 
-                 {{#if_equals stream_type "DM_Inbox"}}
-                   <i class="stream-type-icon icon icon-download-alt" title="DM Inbox Stream"></i>
- 				 {{/if_equals}}                
-                 {{#if_equals stream_type "DM_Outbox"}}
-                   <i class="stream-type-icon icon icon-upload-alt" title="DM Outbox Stream"></i>
-                 {{/if_equals}}                 
-                 {{#if_equals stream_type "Favorites"}}
-                   <i class="stream-type-icon icon icon-star" title="Favorites Stream"></i>
-                 {{/if_equals}}
-                 {{#if_equals stream_type "Sent"}}
-                   <i class="stream-type-icon icon icon-share-alt" title="Sent Stream"></i>
-                 {{/if_equals}}
-                 {{#if_equals stream_type "Search"}}
-                   <i class="stream-type-icon icon icon-search" title="Search Stream"></i>
-                 {{/if_equals}}
-                 {{#if_equals stream_type "Scheduled"}}
-                   <i class="stream-type-icon icon icon-calendar" title="Scheduled Stream"></i>
-                 {{/if_equals}}
-				 {{#if_equals stream_type "All_Updates"}}
-                   <i class="stream-type-icon icon icon-home" title="All Updates"></i>
-                 {{/if_equals}}
-				 {{#if_equals stream_type "My_Updates"}}
-                   <i class="stream-type-icon icon icon-share-alt" title="My Updates"></i>
-                 {{/if_equals}}
+               {{else}}
+                   <i class="stream-type-icon icon {{get_stream_icon stream_type}}" title="{{stream_type}} Stream"></i>
+               {{/if_equals}}
+                 
                <span id="stream-spinner-modal-{{id}}" class="waiting-symbol"><img src="img/ajax-loader-cursor.gif"></img></span>
                </span>        
                <h4 class="column-title txt-ellipsis"> 
@@ -133,7 +107,7 @@
 		   </header> 
 		   <div class="tweet-body"> 
  	          <p class="tweet-text">
-                 {{safe_string text}}
+                 {{safe_tweet text}}
               </p>                  
  			  <footer class="tweet-footer cf">
               {{#if id_str}}
