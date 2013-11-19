@@ -28,7 +28,7 @@
         <div class="data-block">
             <div class="data-container">
                 <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/opportunity/bulk" id="deal-list">
-                    <col width="30px"><col width="20%"><col width="30%"><col width="13%"><col width="13%"><col width="15%"><col width="8%">
+                    <col width="30px"><col width="20%"><col width="27%"><col width="14%"><col width="13%"><col width="15%"><col width="10%">
 					<thead>
                         <tr>
                             <th>Opportunity</th>
@@ -82,7 +82,7 @@
 	<b style="height:auto;display:inline-block;">{{name}}</b>
 </td>
 <td>
-	<div style="height:auto;max-height:50px;display:inline-block;">
+	<div style="height:auto;max-height:50px;display:inline-block;width:158px!important;">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -91,7 +91,7 @@
         		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
        {{/each}}
-	</div>{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
+	</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
 <td value="{{expected_value}}"><div>{{numberWithCommas expected_value}}{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}</div></td>
 <td><div style="">{{milestone}} ({{probability}}%) </div></td>
