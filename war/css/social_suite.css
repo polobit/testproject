@@ -77,7 +77,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 
 /* tweet text */
-.tweet-text{white-space:pre-line;margin:-1.4em 0 9px 0;word-wrap: break-word;} /*with-linebreaks */
+.tweet-text{white-space:pre-line;margin:-1.4em 0 9px 0;word-wrap: break-word;word-break: normal;} /*with-linebreaks */
 
 /* *** */
 .tweet-footer{margin-top:-7px}
@@ -172,7 +172,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 
 /* Elements on add compose tweet form */
 #socialsuite-twitter_messageForm{margin: 0 0 0 0;}
-.tweet-scheduling{cursor:pointer;width: 30px;margin-bottom: 5px;margin-top: -20px;text-align: center;padding-top: 5px;}
+.tweet-scheduling{cursor:pointer;width: 30px;margin-bottom: 5px;margin-top: -6px;text-align: center;padding-top: 5px;}
 .tweet-scheduling-active{background-color:#EDEDED;}
 .width-65{width:65px;}
 .width-150{width:150px;}

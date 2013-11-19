@@ -43,7 +43,7 @@ public class Stream
 	/**
 	 * Keyword for search stream.
 	 */
-	public String keyword;;
+	public String keyword;
 
 	/** Private keys of client. it required to do authentication on Twitter. */
 	public String token;

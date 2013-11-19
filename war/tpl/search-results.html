@@ -1,4 +1,5 @@
-<script id="search-model-template" type="text/html">
+<script id="search-model-template" type="text/html">	
+	<td></td>
 	<td class="data" data="{{id}}">
     	<div style="display: inline; padding-right: 10px; height: auto;">
         	{{#if_contact_type "PERSON"}} <img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display: inline; width:40px; height:40px; " /> {{/if_contact_type}}
@@ -56,6 +57,7 @@
                 <table id="contacts_search" class="table table-striped" url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
                     <thead>
                         <tr>
+							<th></th>
                             <th>Name</th>
                             <th>Work</th>
                             <th>Tags</th>
