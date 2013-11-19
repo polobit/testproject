@@ -287,7 +287,7 @@ $(function()
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
 			
-			postBulkOperationData(url, json, $form, null, function(){ enable_send_button($('#bulk-send-email'));}, "Emails queued for " + count +" contact(s). They will be sent shortly.");
+			postBulkOperationData(url, json, $form, null, function(){ enable_send_button($('#bulk-send-email'));}, "Emails have been queued for " + count +" contacts. They will be sent shortly.");
 		});
 
 	});
