@@ -1,0 +1,84 @@
+<script id="gmap-table-model-template" type="text/html">
+
+<td style="cursor:default;" class="select_checkbox">
+	<input class="tbody_check" type="checkbox"/>
+</td>
+
+<td class="data" data="{{id}}">
+	<div class="row-fluid">
+    	<div style="display:inline;padding-right:5px;height:auto;">
+        	{{#if_contact_type "PERSON"}}
+        		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        	{{/if_contact_type}}
+        
+			{{#if_contact_type "COMPANY"}}
+        		<img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} />
+        	{{/if_contact_type}}
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
+        	{{#if_contact_type "PERSON"}}
+        		<b>	{{getPropertyValue properties "first_name"}}
+        		{{getPropertyValue properties "last_name"}} </b>
+        		<br />
+        		{{email}}
+        	{{/if_contact_type}}
+{{#if email}}
+        	{{email}}
+{{else}}
+			Anonymous
+{{/if}}
+			{{#if_contact_type "COMPANY"}}
+        		<b>{{getPropertyValue properties "name"}}</b></br>
+        		{{getPropertyValue properties "url"}}
+        	{{/if_contact_type}}
+		</div>
+	</div>
+</td>
+
+<td><div>{{mx_time}}</div></td>
+
+<td><div>{{city_lat_long}}</div></td>
+
+<td><div>{{user_agent}}</div></td>
+
+</script>
+
+<script id="gmap-table-collection-template" type="text/html">
+
+<div class="row-fluid">
+	<div class="span12">
+		{{#unless this.length}}
+			<div class="filter-criteria">
+					
+			</div>
+			<div id="slate"></div>
+	{{/unless}}
+		{{#if this.length}}
+		<div class="data">
+			<div class="data-container"></div>
+			<table id="contacts" class="table table-striped showCheckboxes agile-ellipsis-dynamic"
+				url="core/api/bulk/update?action_type=DELETE">
+				<col width="5%">
+				<col width="30%">
+				<col width="15%">
+				<col width="25%">
+				<col width="25%">
+				<div class="filter-criteria"></div>
+				<thead>
+					<tr>
+						<th><input class="thead_check" type="checkbox"></input></th>
+						<th>Name</th>
+						<th>Last Visited</th>						
+						<th>Location</th>
+						<th>Device Type</th>
+					</tr>
+				</thead>
+				<tbody id="gmap-table-model-list" class="gmap-table-model-list"
+					route="contact/" style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{{/if}}
+</div>
+</script>
