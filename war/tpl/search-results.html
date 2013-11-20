@@ -1,26 +1,30 @@
 <script id="search-model-template" type="text/html">	
 	<td></td>
-	<td class="data" data="{{id}}">
+	<td class="data" data="{{id}}" style=" white-space: nowrap;">
     	<div style="display: inline; padding-right: 10px; height: auto;">
         	{{#if_contact_type "PERSON"}} <img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display: inline; width:40px; height:40px; " /> {{/if_contact_type}}
         	{{#if_contact_type "COMPANY"}} <img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
     	</div>
-    	<div style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; white-space: nowrap; width: 12em; overflow: hidden;">
+    	<div style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; width: 14em; overflow: hidden;">
         	{{#if_contact_type "PERSON"}} <b> {{getPropertyValue properties
         	"first_name"}} {{getPropertyValue properties "last_name"}} </b> <br />
         	{{getPropertyValue properties "email"}} {{/if_contact_type}}
         	{{#if_contact_type "COMPANY"}} <b>{{getPropertyValue properties
         	"name"}}</b></br> {{getPropertyValue properties "url"}} {{/if_contact_type}}
     	</div>
-    	<div style="float: right"></div>
 	</td>
-	<td>{{getPropertyValue properties "title"}}<br />
-    	{{getPropertyValue properties "company"}}
+	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;width:8em;overflow:hidden;">
+		{{getPropertyValue properties "title"}}<br />
+    	{{getPropertyValue properties "company"}}</div>
 	</td>
-	<td>{{#each tags}} <b><span class="label">{{this}}</span></b>
-    	{{/each}}
+	<td>
+		<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">
+			{{#each tags}}
+				<span class="label">{{this}}</span>
+			{{/each}}
+		</div>
 	</td>
-	<td>{{lead_score}}</td>
+	<td style="width:6em;">{{lead_score}}</td>
 </script>
 
 <script id="search-collection-template" type="text/html">
@@ -55,7 +59,8 @@
                     </ul>
                 </div>
                 <table id="contacts_search" class="table table-striped" url="core/api/bulk/update?action_type=DELETE" style="overflow: scroll">
-                    <thead>
+                    <colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
+					<thead>
                         <tr>
 							<th></th>
                             <th>Name</th>
