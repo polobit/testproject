@@ -132,13 +132,13 @@ public class QueryDocumentUtil
 	    // Queries on created or updated times
 	    if (lhs.contains("time") && !lhs.contains("tags"))
 	    {
-		query = createTimeQuery(query, lhs, condition, rhs, rhs_new);
+		query = createTimeQueryEpoch(query, lhs, condition, rhs, rhs_new);
 	    }
 
 	    if (lhs.contains("time") && lhs.contains("tags"))
 	    {
-		query = createTimeQuery(query, SearchUtil.normalizeString(rhs) + "_time", nestedCondition, nestedLhs,
-			nestedRhs);
+		query = createTimeQueryEpoch(query, SearchUtil.normalizeString(rhs) + "_time", nestedCondition,
+			nestedLhs, nestedRhs);
 	    }
 	}
 	return query;
@@ -365,6 +365,110 @@ public class QueryDocumentUtil
 	    query = buildNestedCondition("AND", query, lhs + " >=" + formatedCurrentDate);
 	    query = buildNestedCondition("AND", query, lhs + " <= " + formatedLimitDate);
 
+	}
+
+	return query;
+
+    }
+
+    public static String createTimeQueryEpoch(String query, String lhs, SearchRule.RuleCondition condition, String rhs,
+	    String rhs_new)
+    {
+
+	// Gets date from rhs (selected value)
+	Date startDate = new DateUtil(new Date(Long.parseLong(rhs))).toMidnight().getTime();
+
+	/*
+	 * End date i.e., to the end time of start date, it counts complete one
+	 * day. Querying between start and end epoch times returns date equals
+	 * query query
+	 */
+	Date endDate = new DateUtil(startDate).addDays(1).toMidnight().getTime();
+
+	// Day start and end epoch times are calculated.
+	String dayStartEpochTime = String.valueOf(startDate.getTime() / 1000);
+	String dayEndEpochTime = String.valueOf(endDate.getTime() / 1000);
+
+	// Created on date condition
+	if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.EQUALS))
+	{
+	    String epochQuery = "";
+
+	    // First create query based on epoch time, take it in to temp string
+	    // as it should be combined with a OR query on date fields to
+	    // support old data
+	    epochQuery = lhs + "_epoch" + ">=" + dayStartEpochTime;
+
+	    query = buildNestedCondition("AND", epochQuery, lhs + "_epoch" + "<=" + dayEndEpochTime);
+
+	}
+
+	// Created after given date.
+	else if (condition.equals(SearchRule.RuleCondition.AFTER))
+	{
+	    String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
+
+	    query = buildNestedCondition("AND", query, epochQuery);
+	}
+
+	// Created before particular date
+	else if (condition.equals(SearchRule.RuleCondition.BEFORE))
+	{
+	    String epochQuery = lhs + "_epoch < " + dayStartEpochTime;
+
+	    query = buildNestedCondition("AND", query, epochQuery);
+	}
+
+	// Created Between given dates
+	else if (condition.equals(SearchRule.RuleCondition.BETWEEN))
+	{
+	    if (rhs_new != null)
+	    {
+
+		Date toDate = new DateUtil(new Date(Long.parseLong(rhs_new))).getTime();
+
+		String toDateEpoch = String.valueOf(toDate.getTime() / 1000);
+
+		String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
+
+		epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + toDateEpoch);
+
+		query = buildNestedCondition("AND", query, epochQuery);
+	    }
+	}
+
+	// Created in last number of days
+	else if (condition.equals(SearchRule.RuleCondition.LAST))
+	{
+	    // Get epoch time of starting date i.e., before x days, current date
+	    // - x days
+	    long fromDateInSecs = new DateUtil().removeDays(Integer.parseInt(rhs)).toMidnight().getTime().getTime() / 1000;
+
+	    int days = Integer.parseInt(rhs);
+
+	    // Current epoch time to get current time.
+	    long currentEpochTime = new DateUtil().getTime().getTime() / 1000;
+
+	    fromDateInSecs = currentEpochTime - days * 24 * 3600;
+
+	    String epochQuery = lhs + "_epoch >= " + String.valueOf(fromDateInSecs);
+
+	    epochQuery = buildNestedCondition("AND", epochQuery, lhs + "_epoch <= " + String.valueOf(currentEpochTime));
+
+	    // Constructs OR query on both epoch query and date query, as ON
+	    // date condition is not working we have an extra fields which save
+	    // epoch time
+	    query = buildNestedCondition("AND", query, epochQuery);
+
+	}
+	else if (condition.equals(SearchRule.RuleCondition.NEXT))
+	{
+	    long currentTime = new Date().getTime();
+
+	    long limitTime = currentTime + (Integer.parseInt(rhs) - 1) * 24 * 3600;
+
+	    query = buildNestedCondition("AND", query, lhs + " >=" + currentTime);
+	    query = buildNestedCondition("AND", query, lhs + " <=" + limitTime);
 	}
 
 	return query;
