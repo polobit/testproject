@@ -274,13 +274,10 @@ function getGMTTimeFromDate(date)
 	console.log(new Date().getMinutes());
 	console.log(new Date().getSeconds());
 	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate())
-	date = (new Date(date.getFullYear(), date.getMonth(), date.getDate(), current_sys_date.getHours(), current_sys_date.getMinutes(), current_sys_date
-			.getSeconds(), current_sys_date.getMilliseconds()));
-
-	console.log(date.getTime() + date.getTimezoneOffset());
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 
 	// Adding offset to date returns GMT time
-	return date.getTime() + date.getTimezoneOffset();
+	return date.getTime();
 }
 
 /**
