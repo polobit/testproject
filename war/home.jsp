@@ -62,8 +62,8 @@
 <meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
 
 <%
-	String CSS_PATH = "/";
- 	//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+	// String CSS_PATH = "/";
+ 	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -374,7 +374,7 @@
 
 	<script>
 	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	//var LIB_PATH = "/";
+	// var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
@@ -406,8 +406,6 @@
 	// Fetch/Create contact from our domain
 	var Agile_Contact = {};
 	
-
-	
 	head.ready(function() {	
 		// Remove the loadinng 
 		$('body').css('background-image', 'none');
@@ -416,7 +414,8 @@
 		
 		head.js('jscore/min/js-all-min.js', 'stats/min/agile-min.js', function() {
 
-		
+			// Load User voice then
+			setTimeout(function(){head.js('lib/user-voice.js');}, 20000);	
 	}); 
 		
 		
@@ -424,7 +423,7 @@
 
 	});
 
-	head.js('lib/user-voice.js');
+	
 	</script>
 	
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css"/>
