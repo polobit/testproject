@@ -701,8 +701,10 @@ var ContactsRouter = Backbone.Router
 
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{
-							chainFilters(el);
-							$('#content').html(el);
+							chainFilters(el, undefined, function(){
+								$('#content').html(el);
+							});
+
 						})
 					} });
 
@@ -725,10 +727,10 @@ var ContactsRouter = Backbone.Router
 						$("#content").html(LOADING_HTML);
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{
-							chainFilters(el);
-							deserializeChainedSelect($(el).find('form'), contact_filter.toJSON().rules);
+							chainFilters(el, contact_filter.toJSON(), function(){
+								$("#content").html(el);
+							});
 							scramble_input_names($(el).find('#filter-settings'));
-							$("#content").html(el);
 						})
 					},
 					saveCallback:function(data)

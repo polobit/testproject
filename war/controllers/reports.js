@@ -39,12 +39,16 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportAdd : function()
 	{
+		var count = 0;
+		alert(Current_Route);
 		$("#content").html(LOADING_HTML);
+		CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "reports", isNew : true,
 			postRenderCallback : function(el)
 			{
 				// Counter to set when script is loaded. Used to avoid flash in page
-				var count = 0;
+				if(count != 0)
+					return;
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
 				{
 
@@ -57,18 +61,18 @@ var ReportsRouter = Backbone.Router.extend({
 						
 						++count;
 						if(count > 1)
-							$("#content").html(report_add.el);
+							$("#content").html(el)
 					});
 				}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
 				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 				{
 					scramble_input_names($(el).find('div#report-settings'));
-					chainFilters(el);
-					
-					++count;
-					if(count > 1)
-						$("#content").html(report_add.el);
+					chainFilters(el, undefined, function(){
+						++count;
+						if(count > 1)
+							$("#content").html(el)
+					});
 				});
 
 			} });
@@ -102,6 +106,8 @@ var ReportsRouter = Backbone.Router.extend({
 		var report_model = new Base_Model_View({ url : 'core/api/reports',change:false, model : report, template : "reports-add", window : 'reports',
 			postRenderCallback : function(el)
 			{
+				if(count != 0)
+					return;
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
 				{
 
@@ -111,14 +117,7 @@ var ReportsRouter = Backbone.Router.extend({
 						$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
 						++count;
 						if(count > 1)
-							$("#content").html(report_model.el);
-						
-						$.each(report.toJSON()['fields_set'], function(index, field)
-						{
-							$('#multipleSelect', el).multiSelect('select', field);
-						});
-
-						$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
+							deserialize_multiselect(report.toJSON(), el);
 					})
 					
 					
@@ -126,16 +125,16 @@ var ReportsRouter = Backbone.Router.extend({
 
 				}, '<option value="custom_{{field_label}}">{{field_label}}</option>', true, el);
 
-				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				head.js(LIB_PATH + 'lib/jquery-ui.min.js', LIB_PATH + 'lib/agile.jquery.chained.min.js', LIB_PATH + 'lib/jquery.multi-select.js', function()
 				{
 
-					chainFilters(el);
-					deserializeChainedSelect($(el).find('form'), report.toJSON().rules);
-					scramble_input_names($(el).find('div#report-settings'));
 					
-					++count;
-					if(count > 1)
-						$("#content").html(report_model.el);
+					chainFilters(el, report.toJSON(), function(){
+						++count 
+						if(count > 1)
+								deserialize_multiselect(report.toJSON(), el);
+					});
+					scramble_input_names($(el).find('div#report-settings'));
 				});
 
 			}});

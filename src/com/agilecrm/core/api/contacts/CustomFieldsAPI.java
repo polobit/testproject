@@ -58,6 +58,27 @@ public class CustomFieldsAPI
     }
 
     /**
+     * Gets all custom fields
+     * 
+     * @return List of custom fields
+     */
+    @Path("/searchable")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getSearchableCustomFields()
+    {
+	try
+	{
+	    return CustomFieldDefUtil.getSearchableCustomFields();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
      * Gets all custom fields by type
      * 
      * @return List of custom fields
@@ -119,8 +140,8 @@ public class CustomFieldsAPI
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry, a custom field with that name is already present.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, a custom field with that name is already present.").build());
 	}
 	return customField;
     }
@@ -143,8 +164,8 @@ public class CustomFieldsAPI
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry, a custom field with that name is already present.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, a custom field with that name is already present.").build());
 	}
 	return customField;
     }

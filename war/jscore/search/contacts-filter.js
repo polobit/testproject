@@ -25,6 +25,8 @@ function scramble_input_names(el)
 
 $(function()
 {
+	CUSTOM_FIELDS = undefined;
+	
 	// Filter Contacts- Clone Multiple
 	$("i.filter-contacts-multiple-add").die().live('click', function(e)
 	{
@@ -223,7 +225,34 @@ function revertToDefaultContacts()
  * 
  * @param el
  */
-function chainFilters(el)
+function chainFilters(el, data, callback)
+{
+	if(!CUSTOM_FIELDS)
+	{
+		$("#content").html(LOADING_HTML);
+		fillCustomFieldsInFilters(el, function(){
+			show_chained_fields(el, data, true);
+			if (callback && typeof (callback) === "function")
+			{
+				// execute the callback, passing parameters as necessary
+				callback();
+			}
+			
+		})
+		return;
+	}
+	
+	fillCustomFields(CUSTOM_FIELDS, el)
+	show_chained_fields(el, data);
+	if (callback && typeof (callback) === "function")
+	{
+		// execute the callback, passing parameters as necessary
+		callback();
+	}
+	
+}
+
+function show_chained_fields(el, data, forceShow)
 {
 	var LHS, condition, RHS, RHS_NEW, NESTED_CONDITION, NESTED_RHS, NESTED_LHS;
 
@@ -238,17 +267,23 @@ function chainFilters(el)
 	NESTED_CONDITION = $("#nested_condition", el);
 	NESTED_RHS = $("#nested_rhs", el);
 	NESTED_LHS = $("#nested_lhs", el);
+	
 	// Chaining dependencies of input fields with jquery.chained.js
 	RHS.chained(condition);
 	condition.chained(LHS);
-
+	
 	RHS_NEW.chained(condition);
 	NESTED_CONDITION.chained(LHS);
 	NESTED_LHS.chained(NESTED_CONDITION);
 	NESTED_RHS.chained(NESTED_CONDITION);
 
+
+
+	if(data && data.rules)
+		deserializeChainedSelect($(el).find('form'), data.rules);
+	
 	// If LHS selected is tags then typeahead is enabled on rhs field
-	if (($(':selected', LHS).val()).indexOf('tags') != -1)
+	if ($(':selected', LHS).val() && ($(':selected', LHS).val()).indexOf('tags') != -1)
 	{
 		addTagsDefaultTypeahead(RHS)
 	}
@@ -266,6 +301,7 @@ function chainFilters(el)
 		}
 
 	})
+	
 }
 
 /**
@@ -310,4 +346,52 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 
 	// $("input", element).attr("data-provide","typeahead");
 	$("input", element).typeahead({ "source" : tags_array });
+}
+
+
+function fillCustomFieldsInFilters(el, callback)
+{
+
+	$.getJSON("core/api/custom-fields/searchable", function(fields){
+			CUSTOM_FIELDS = fields;
+		
+		fillCustomFields(fields, el, callback)
+	})
+}
+
+function fillCustomFields(fields, el, callback)
+{
+	
+	var lhs_element = $("#LHS > select > #custom-fields", el);
+	console.log(lhs_element);
+	var rhs_element = $("#RHS > select", el);
+	var condition = $("#condition > select", el);
+	console.log(condition);
+	console.log(rhs_element);
+	for(var i = 0; i < fields.length ; i++)
+	{
+		if(i == 0)
+			lhs_element.show();
+		
+		var field = fields[i];
+		console.log(field);
+		lhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
+		
+		if(field.field_type == "DATE")
+		{
+			console.log(condition.find("option.created_time").addClass(field.field_label));
+		}
+		condition.append('<option value="EQUALS" class="'+field.field_label+'">is</option>');
+		condition.append("<option value='NOTEQUALS' class='"+field.field_label+"'>isn't</option>");
+			
+		if(field.field_data)
+		rhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
+		console.log(el);
+	}
+	
+	if (callback && typeof (callback) === "function")
+	{
+		// execute the callback, passing parameters as necessary
+		callback();
+	}
 }

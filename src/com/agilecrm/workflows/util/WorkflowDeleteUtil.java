@@ -3,11 +3,10 @@ package com.agilecrm.workflows.util;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
-import com.campaignio.cron.util.CronUtil;
-import com.campaignio.logger.util.LogUtil;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 /**
  * <code>WorkflowDeleteUtil</code> is the utility class that handles deleting
@@ -34,24 +33,19 @@ public class WorkflowDeleteUtil
 	    try
 	    {
 		campaignId = campaignIds.getString(i);
-		// System.out.println("CampaignId " + campaignId);
+		System.out.println("CampaignId in deleteRelatedEntities " + campaignId + " of namespace " + namespace);
 	    }
 	    catch (JSONException e)
 	    {
 		e.printStackTrace();
 	    }
 
-	    // Deletes Related Crons.
-	    CronUtil.removeTask(campaignId, null);
-
-	    // Deletes logs of workflow
-	    LogUtil.deleteSQLLogs(campaignId, null);
-
 	    // Deletes twitter-jobs of campaign
 	    TwitterJobQueueUtil.removeTwitterJobs(campaignId, null, namespace);
 
-	    // Deletes CampaignStatus from contact
-	    CampaignSubscribersUtil.removeCampaignStatus(campaignId);
+	    // Deletes remaining related entities using backend, to avoid
+	    // Deadline exception.
+	    BulkActionUtil.postDataToBulkActionBackend("/core/api/bulk-actions/remove-workflow-related/" + campaignId, "", Method.POST, campaignId);
 
 	}
     }

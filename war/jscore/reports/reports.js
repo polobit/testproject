@@ -129,3 +129,17 @@ function reportsContactTableView(base_model)
 	$(('#' + this.options.templateKey + '-model-list'), this.el).find('tr:last').data(
 			base_model);
 }
+
+function deserialize_multiselect(data, el)
+{
+	$("#content").html(el);
+	
+	if(!data['fields_set'])
+		return;
+	$.each(data['fields_set'], function(index, field)
+	{
+		$('#multipleSelect', el).multiSelect('select', field);
+	});
+
+	$('.ms-selection', el).children('ul').addClass('multiSelect').attr("name", "fields_set").attr("id", "fields_set").sortable();
+}
