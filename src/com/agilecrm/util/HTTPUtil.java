@@ -133,7 +133,7 @@ public class HTTPUtil
 	URL url = new URL(postURL);
 	URLConnection conn = url.openConnection();
 	conn.setDoOutput(true);
-	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
 	if (data != null)
 	{
 	    wr.write(data);
@@ -225,9 +225,8 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURLUsingAuthentication(String url, String username, String password,
-	    String requestMethod, String data, boolean setContentLength, String contentType, String acceptType)
-	    throws Exception
+    public static String accessURLUsingAuthentication(String url, String username, String password, String requestMethod, String data,
+	    boolean setContentLength, String contentType, String acceptType) throws Exception
     {
 	HttpURLConnection connection = null;
 

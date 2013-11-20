@@ -16,6 +16,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -23,7 +24,7 @@ import com.google.appengine.api.files.AppEngineFile;
 import com.google.appengine.api.files.FileService;
 import com.google.appengine.api.files.FileServiceFactory;
 import com.google.appengine.api.files.FileWriteChannel;
-import com.thirdparty.Mandrill;
+import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>ContactCSVExport</code> handles building CSV file for obtained
@@ -536,7 +537,9 @@ public class ContactCSVExport
 	// file-content.
 	String[] strArr = { "text/csv", "Contacts.csv", data };
 
-	Mandrill.sendMail("noreply@agilecrm.com", "Agile CRM", email, "Agile CRM Contacts CSV", null, "Please find the attachment.", null, strArr);
+	System.out.println("Namespace in exportContactCSVAsEmail " + NamespaceManager.get());
+	Mandrill.sendMail(NamespaceManager.get(), "noreply@agilecrm.com", "Agile CRM", email, "Agile CRM Contacts CSV", null, "Please find the attachment.",
+		null, strArr);
     }
 
     /**
