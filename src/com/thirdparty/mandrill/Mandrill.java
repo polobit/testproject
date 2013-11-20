@@ -11,7 +11,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
-import com.thirdparty.mandrill.exception.ReTryException;
+import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
@@ -162,10 +162,10 @@ public class Mandrill
 		if (StringUtils.contains(response, "Unknown_Subaccount"))
 		{
 		    // throw retry exception and create new subaccount
-		    throw new ReTryException("Unknown Mandrill Subaccount");
+		    throw new RetryException("Unknown Mandrill Subaccount");
 		}
 	    }
-	    catch (ReTryException e)
+	    catch (RetryException e)
 	    {
 		// Creates new subaccount
 		MandrillSubAccounts.createMandrillSubAccount(subaccount);
@@ -237,7 +237,8 @@ public class Mandrill
 	    messageJSON.put(MANDRILL_ATTACHMENTS, getAttachmentsJSON(attachments));
 
 	    // Domain as subaccount
-	    messageJSON.put(MandrillSubAccounts.MANDRILL_SUBACCOUNT, subaccount);
+	    if (!StringUtils.isBlank(subaccount))
+		messageJSON.put(MandrillSubAccounts.MANDRILL_SUBACCOUNT, subaccount);
 	}
 	catch (Exception e)
 	{
@@ -315,7 +316,7 @@ public class Mandrill
 	    attachment.put(MANDRILL_ATTACHMENT_FILE_NAME, fileName);
 
 	    // Mandrill accepts only Base64 encoded content
-	    attachment.put(MANDRILL_ATTACHMENT_FILE_CONTENT, Base64Encoder.encode(fileContent));
+	    attachment.put(MANDRILL_ATTACHMENT_FILE_CONTENT, Base64Encoder.encode(fileContent.getBytes("UTF-8")));
 
 	    attachmentsArray.put(attachment);
 	}

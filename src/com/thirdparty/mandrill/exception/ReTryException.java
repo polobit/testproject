@@ -1,16 +1,16 @@
 package com.thirdparty.mandrill.exception;
 
 /**
- * <code>ReTryException</code> is a custom exception class to throw Retry
+ * <code>RetryException</code> is a custom exception class to throw Retry
  * exception.
  * 
  * @author Naresh
  * 
  */
 @SuppressWarnings("serial")
-public class ReTryException extends Exception
+public class RetryException extends Exception
 {
-    public ReTryException(String message)
+    public RetryException(String message)
     {
 	super(message);
     }

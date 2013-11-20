@@ -1,5 +1,6 @@
 package com.agilecrm.contact.export;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.channels.Channels;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -24,7 +26,6 @@ import com.google.appengine.api.files.AppEngineFile;
 import com.google.appengine.api.files.FileService;
 import com.google.appengine.api.files.FileServiceFactory;
 import com.google.appengine.api.files.FileWriteChannel;
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>ContactCSVExport</code> handles building CSV file for obtained
@@ -509,7 +510,16 @@ public class ContactCSVExport
 	BlobstoreService blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
 	byte[] data = blobStoreService.fetchData(blobKey, 0, BlobstoreService.MAX_BLOB_FETCH_SIZE - 1);
 
-	String str = new String(data);
+	String str = null;
+	try
+	{
+	    str = new String(data, "UTF-8");
+	}
+	catch (UnsupportedEncodingException e)
+	{
+	    e.printStackTrace();
+	}
+
 	return str;
 
     }
@@ -522,7 +532,7 @@ public class ContactCSVExport
      * @param data
      *            - CSV data.
      */
-    public static void exportContactCSVAsEmail(String email, String data)
+    public static void exportContactCSVAsEmail(String currentUser, String data, String total)
     {
 	// if fileData null, return
 	if (data == null)
@@ -531,15 +541,34 @@ public class ContactCSVExport
 	    return;
 	}
 
-	System.out.println("Domain User email is " + email);
+	System.out.println("Domain User email is " + currentUser);
+
+	JSONObject currentUserJSON = null;
+	String toEmail = null;
+	String domain = null;
+	try
+	{
+	    currentUserJSON = new JSONObject(currentUser);
+	    toEmail = currentUserJSON.getString("email");
+	    domain = currentUserJSON.getString("domain");
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in exportContactCSVAsEmail " + e.getMessage());
+	}
 
 	// Mandrill attachment should contain mime-type, file-name and
 	// file-content.
 	String[] strArr = { "text/csv", "Contacts.csv", data };
 
 	System.out.println("Namespace in exportContactCSVAsEmail " + NamespaceManager.get());
-	Mandrill.sendMail(NamespaceManager.get(), "noreply@agilecrm.com", "Agile CRM", email, "Agile CRM Contacts CSV", null, "Please find the attachment.",
-		null, strArr);
+	System.out.println("Domain is  " + domain);
+
+	HashMap<String, String> map = new HashMap<String, String>();
+	map.put("count", total);
+
+	SendMail.sendMail(toEmail, SendMail.EXPORT_CONTACTS_CSV_SUBJECT, SendMail.EXPORT_CONTACTS_CSV, map, strArr);
     }
 
     /**
