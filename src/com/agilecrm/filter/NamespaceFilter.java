@@ -81,8 +81,7 @@ public class NamespaceFilter implements Filter
 	System.out.println(subdomain);
 
 	// Excludes if it is running in backends
-	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL)
-		|| BackendServiceFactory.getBackendService().getCurrentBackend() != null)
+	if (subdomain.equalsIgnoreCase(Globals.BULK_ACTION_BACKENDS_URL) || BackendServiceFactory.getBackendService().getCurrentBackend() != null)
 	    return true;
 
 	// Lowercase
@@ -94,8 +93,7 @@ public class NamespaceFilter implements Filter
 	    url = url.substring(1);
 
 	// If not agilecrm.com or helptor.com etc. - show chooseDomain
-	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase())
-		&& !url.toLowerCase().contains(Globals.SUB_VERSION_URL))
+	if (!Arrays.asList(Globals.URLS).contains(url.toLowerCase()) && !url.toLowerCase().contains(Globals.SUB_VERSION_URL))
 	{
 	    redirectToChooseDomain(request, response);
 	    return false;
@@ -162,8 +160,7 @@ public class NamespaceFilter implements Filter
 	     * Request url should be changed if there is one time session key,
 	     * so session
 	     */
-	    if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME))
-		    && !StringUtils.isEmpty(appsDomain))
+	    if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)) && !StringUtils.isEmpty(appsDomain))
 	    {
 		// Get Namespace
 		String namespace = NamespaceUtil.getNamespaceFromURL(appsDomain);
@@ -204,8 +201,7 @@ public class NamespaceFilter implements Filter
     {
 	// Redirect to choose domain page if not localhost - on localhost - we
 	// do it on empty namespace
-	if (!request.getServerName().equalsIgnoreCase("localhost")
-		&& !request.getServerName().equalsIgnoreCase("127.0.0.1"))
+	if (!request.getServerName().equalsIgnoreCase("localhost") && !request.getServerName().equalsIgnoreCase("127.0.0.1"))
 	{
 	    try
 	    {
@@ -230,10 +226,16 @@ public class NamespaceFilter implements Filter
      * @param chain
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-	    ServletException
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
     {
 	System.out.println(request.getServerName());
+
+	/*
+	 * DomainUser domainUser = new DomainUser(null, "manohar@agilecrm.com",
+	 * "manohar", "password", true, true); try { domainUser.save(); } catch
+	 * (Exception e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); }
+	 */
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
