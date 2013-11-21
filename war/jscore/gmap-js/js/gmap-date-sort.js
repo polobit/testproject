@@ -56,10 +56,11 @@ function gmap_search_by_date(DateRange){
 	
 	console.log("url: " + DateRangeUrl);
 	
+	$("#map-tab-waiting").fadeIn();
 	$.getJSON( DateRangeUrl, function( Response ) {
 	    
 		console.log("Response: ", Response);
-		
+		$("#map-tab-waiting").fadeOut();
 		if(Response != null) {
 			for(var Key in Response){
 				Response[Key].z_index = parseInt(Key);
