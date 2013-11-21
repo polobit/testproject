@@ -40,7 +40,6 @@ var ReportsRouter = Backbone.Router.extend({
 	reportAdd : function()
 	{
 		var count = 0;
-		alert(Current_Route);
 		$("#content").html(LOADING_HTML);
 		CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "reports", isNew : true,
