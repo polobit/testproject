@@ -16,9 +16,9 @@ public class GmapQueryUtil {
 		// Returns (sign)HH:mm from total minutes.
 		String timeZoneOffset = GoogleSQLUtil.convertMinutesToTime(timeZone);
 
-		String q2 = "SELECT p1.guid, p1.email, max(mx2_time) as mx_time, p1.city_lat_long, "
-				+ "p1.user_agent FROM "
-				+ "(SELECT guid, email, max(stats_time) as mx2_time, city_lat_long, user_agent FROM " 
+		String q2 = "SELECT p1.guid, p1.email, max(mx2_time) as visit_time, p1.city_lat_long, "
+				+ "p1.user_agent, p1.city, p1.region, p1.country FROM "
+				+ "(SELECT guid, email, max(stats_time) as mx2_time, city_lat_long, user_agent, city, region, country FROM " 
 				+ "page_views WHERE domain = "
 				+ GoogleSQLUtil.encodeSQLColumnValue(userDomain)
 				+ " AND DATE(" + addConvertTZ(timeZoneOffset)
@@ -26,14 +26,14 @@ public class GmapQueryUtil {
 				+ ")  AND DATE(" + GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate) + ")"
 				+ " group by email "
 				+ "UNION "
-				+ "SELECT guid, email, max(stats_time), city_lat_long, user_agent FROM " 
+				+ "SELECT guid, email, max(stats_time), city_lat_long, user_agent, city, region, country FROM " 
 				+ "page_views WHERE domain = " 
 				+ GoogleSQLUtil.encodeSQLColumnValue(userDomain)
 				+ " AND DATE(" + addConvertTZ(timeZoneOffset)
 				+ ") BETWEEN DATE(" + GoogleSQLUtil.encodeSQLColumnValue(convertedStartDate) 
 				+ ")  AND DATE(" + GoogleSQLUtil.encodeSQLColumnValue(convertedEndDate) + ")"
 				+ " GROUP BY guid) p1 "
-				+ "group by guid";
+				+ "group by guid order by visit_time desc";
 
 		
 		System.out.println("sids query is: " + q2);

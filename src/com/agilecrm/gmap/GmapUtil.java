@@ -28,33 +28,29 @@ public class GmapUtil{
      *            - limit to get number of logs.
      * @return logs array string.
      */
-    public static List<Log> getSQLLogs(String campaignId, String subscriberId, String limit)
+    public static List<GmapLogs> getGmapVisitors(String userDomain, String startDate, String endDate, String timeZone)
     {
-	String domain = NamespaceManager.get();
+		if (StringUtils.isEmpty(userDomain))
+		    return null;
 	
-	domain="dheerajtest";
-
-	if (StringUtils.isEmpty(domain))
-	    return null;
-
-	// get SQL logs
-	JSONArray logs = CampaignLogsSQLUtil.getLogs(campaignId, subscriberId, domain, limit);
-
-	if (logs == null)
-	    return null;
-
-	try
-	{
-	    // to attach contact and campaign-name to each log.
-	    return new ObjectMapper().readValue(logs.toString(), new TypeReference<List<Log>>()
-	    {
-	    });
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
+		// get Gmap visitor's data
+		JSONArray visitorsLogs = GmapQueryUtil.getVisitorsLatLong(userDomain, startDate, endDate, timeZone);
+	
+		if (visitorsLogs == null)
+		    return null;
+	
+		try
+		{
+		    // to attach contact and visitor's data to each result.
+		    return new ObjectMapper().readValue(visitorsLogs.toString(), new TypeReference<List<GmapLogs>>()
+		    {
+		    });
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    return null;
+		}
     }
 
 } 
