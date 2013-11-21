@@ -1150,7 +1150,14 @@ $(function()
 			return options.fn(this);
 		}
 	});
+	
+	Handlebars.registerHelper('wrap_entity', function(item, options)
+			 {
 
+			  if ( item)
+			   return options.fn(item);
+			});
+	
 	/**
 	 * Returns modified message for timeline logs
 	 */
@@ -2077,4 +2084,17 @@ $(function()
 
 			});
 	
+	/**
+	 * put user address location togather separated by comma. 
+	 * */
+	Handlebars.registerHelper('user_location', function(){
+		
+		var City = this.city == "?" ? "" : (this.city + ", ");
+		var Region = this.region == "?" ? "" : (this.region + ", ");
+		var Country = this.country;
+		if( this.city == "?" && this.region == "?" )
+			Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " +this.country + " )");
+		
+		return (City + Region + Country).trim();
+	});
 });

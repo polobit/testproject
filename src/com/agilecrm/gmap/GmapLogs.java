@@ -14,12 +14,28 @@ public class GmapLogs {
 	
 	public String guid;
 	
-	public String stats_time;
+	public String visit_time;
 	
 	public String city_lat_long;
 	
 	public String email;
 	
+	public String user_agent;
+	
+	public String city;
+	
+	public String region;
+	
+	public String country;
+	
+	/**
+     * Default Log.
+     */
+    public GmapLogs()
+    {
+
+    }
+    
 	/**
      * Returns name of contact that subscribes to campaign as an xml element.
      * 
@@ -29,7 +45,7 @@ public class GmapLogs {
     @XmlElement
     public Contact getContact() throws Exception
     {
-	if (email != null)
+	if (email != "")
 	{
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 

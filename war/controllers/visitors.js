@@ -24,14 +24,12 @@ var VisitorsRouter = Backbone.Router
 							
 							try {
 								if (google.maps) {
-									agile_initialize_gmap();
+									gmap_initialize(el);
 								}
 							} catch (err) {
 
-								agile_gmap_load_script();
+								gmap_load_script(el);
 							}
-							
-							agile_gmap_date_range(el);
 						}
 					});
 					

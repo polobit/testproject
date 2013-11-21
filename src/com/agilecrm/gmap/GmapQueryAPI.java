@@ -14,24 +14,21 @@ import org.json.JSONArray;
 
 import com.analytics.Analytics;
 import com.analytics.util.AnalyticsSQLUtil;
+import com.campaignio.logger.Log;
 
 @Path ("api/gmap")
 public class GmapQueryAPI {
 	
 	@Path("daterange")
 	@GET 
-	@Produces({ MediaType.APPLICATION_JSON })
-	public String getVisitorsByDomain(@QueryParam("user_domain") String userDomain, @QueryParam("start_date") String startDate, @QueryParam("end_date") String endDate, @QueryParam("time_zone") String timeZoneOffset)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<GmapLogs> getVisitorsByDomain(@QueryParam("user_domain") String userDomain, @QueryParam("start_date") String startDate, @QueryParam("end_date") String endDate, @QueryParam("time_zone") String timeZoneOffset)
     {
-    	JSONArray visitorsLatLong = GmapQueryUtil.getVisitorsLatLong(userDomain, startDate, endDate, timeZoneOffset);
+		List<GmapLogs> visitorsLatLong = GmapUtil.getGmapVisitors(userDomain, startDate, endDate, timeZoneOffset);
 
 		try
 		{
-			return visitorsLatLong.toString();
-			// to attach parsed user-agent string
-			//return new ObjectMapper().readValue(visitorsLatLong.toString(), new TypeReference<List<Analytics>>()
-			//		{
-			//		});
+			return visitorsLatLong;
 		}
 		catch (Exception e)
 		{
