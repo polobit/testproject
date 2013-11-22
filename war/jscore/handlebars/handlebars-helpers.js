@@ -1150,7 +1150,14 @@ $(function()
 			return options.fn(this);
 		}
 	});
+	
+	Handlebars.registerHelper('wrap_entity', function(item, options)
+			 {
 
+			  if ( item)
+			   return options.fn(item);
+			});
+	
 	/**
 	 * Returns modified message for timeline logs
 	 */
@@ -1192,8 +1199,8 @@ $(function()
 	Handlebars.registerHelper('if_equals', function(value, target, options)
 	{
 
-		console.log("typeof target: " + typeof target + " target: " + target);
-		console.log("typeof value: " + typeof value + " value: " + value);
+		/*console.log("typeof target: " + typeof target + " target: " + target);
+		console.log("typeof value: " + typeof value + " value: " + value);*/
 		/*
 		 * typeof is used beacuse !target returns true if it is empty string,
 		 * when string is empty it should not go undefined
@@ -2053,4 +2060,41 @@ $(function()
 		
 	});
 	
+	Handlebars.registerHelper('safe_tweet', function(data)
+			{			
+		        data = data.trim();
+				return new Handlebars.SafeString(data);
+			});
+	
+	Handlebars.registerHelper('get_stream_icon', function(name)
+			{
+				if (!name)
+					return;
+
+				var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
+						"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-calendar", "All_Updates" : "icon-home",
+						"My_Updates" : "icon-share-alt" };
+
+				name = name.trim();
+
+				if (icon_json[name])
+					return icon_json[name];
+
+				return "icon-globe";
+
+			});
+	
+	/**
+	 * put user address location togather separated by comma. 
+	 * */
+	Handlebars.registerHelper('user_location', function(){
+		
+		var City = this.city == "?" ? "" : (this.city + ", ");
+		var Region = this.region == "?" ? "" : (this.region + ", ");
+		var Country = this.country;
+		if( this.city == "?" && this.region == "?" )
+			Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " +this.country + " )");
+		
+		return (City + Region + Country).trim();
+	});
 });

@@ -1,4 +1,4 @@
-package com.thirdparty;
+package com.thirdparty.mandrill;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -11,6 +11,8 @@ import com.agilecrm.Globals;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.thirdparty.mandrill.exception.RetryException;
+import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
  * <code>Mandrill</code> is the core class to send mail using Mandrill API. The
@@ -24,9 +26,14 @@ public class Mandrill
 {
 
     /**
-     * Mandrill REST API URL to send mail
+     * Mandrill core REST API URL
      */
-    public static final String MANDRILL_API_POST_URL = "https://mandrillapp.com/api/1.0/messages/send.json";
+    public static final String MANDRILL_API_POST_URL = "https://mandrillapp.com/api/1.0/";
+
+    /**
+     * Mandrill Message Call URL to send mail
+     */
+    public static final String MANDRILL_API_MESSAGE_CALL = "messages/send.json";
 
     /**
      * Mandrill API key param
@@ -109,6 +116,9 @@ public class Mandrill
     /**
      * Sends email using Mandrill API with the given parameters.
      * 
+     * @param subaccount
+     *            - Namespace is set as Mandrill subaccount id.
+     * 
      * @param fromEmail
      *            - from email.
      * @param fromName
@@ -124,7 +134,8 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text, String... attachments)
+    public static String sendMail(String subaccount, String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text,
+	    String... attachments)
     {
 	try
 	{
@@ -135,13 +146,37 @@ public class Mandrill
 	    mailJSON.put(MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
 
 	    // All email params are inserted into Message json
-	    JSONObject messageJSON = getMessageJSON(fromEmail, fromName, to, replyTo, subject, html, text, attachments);
+	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, replyTo, subject, html, text, attachments);
 
 	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
-	    String response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL, mailJSON.toString());
+	    String response = null;
+	    try
+	    {
+		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 
-	    System.out.println("Response: " + response);
+		System.out.println("Response for first attempt " + response);
+
+		// Mandrill returns 'Unknown_Subaccount' error message when the
+		// provided subaccount id does not exist.
+		if (StringUtils.contains(response, "Unknown_Subaccount"))
+		{
+		    // throw retry exception and create new subaccount
+		    throw new RetryException("Unknown Mandrill Subaccount");
+		}
+	    }
+	    catch (RetryException e)
+	    {
+		// Creates new subaccount
+		MandrillSubAccounts.createMandrillSubAccount(subaccount);
+
+		System.out.println("Resending email with subaccount " + subaccount + "...");
+
+		// Send email again.
+		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
+
+		System.out.println("Response for second attempt " + response);
+	    }
 
 	    return response;
 	}
@@ -149,9 +184,7 @@ public class Mandrill
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-
-	    System.out.println(e.getMessage());
-
+	    System.err.println("Exception occured in sendMail of Mandrill " + e.getMessage());
 	    return e.getMessage();
 	}
     }
@@ -160,6 +193,8 @@ public class Mandrill
      * Returns message json built upon from-email, from-name, to, subject,html
      * and text.
      * 
+     * @param subaccount
+     *            TODO
      * @param fromEmail
      *            - from email.
      * @param fromName
@@ -172,10 +207,11 @@ public class Mandrill
      *            - html body
      * @param text
      *            - text body
+     * 
      * @return JSONObject
      */
-    private static JSONObject getMessageJSON(String fromEmail, String fromName, String to, String replyTo, String subject, String html, String text,
-	    String... attachments)
+    private static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String to, String replyTo, String subject, String html,
+	    String text, String... attachments)
     {
 	JSONObject messageJSON = new JSONObject();
 
@@ -199,6 +235,10 @@ public class Mandrill
 	    messageJSON.put(MANDRILL_TEXT, text);
 
 	    messageJSON.put(MANDRILL_ATTACHMENTS, getAttachmentsJSON(attachments));
+
+	    // Domain as subaccount
+	    if (!StringUtils.isBlank(subaccount))
+		messageJSON.put(MandrillSubAccounts.MANDRILL_SUBACCOUNT, subaccount);
 	}
 	catch (Exception e)
 	{
@@ -276,7 +316,7 @@ public class Mandrill
 	    attachment.put(MANDRILL_ATTACHMENT_FILE_NAME, fileName);
 
 	    // Mandrill accepts only Base64 encoded content
-	    attachment.put(MANDRILL_ATTACHMENT_FILE_CONTENT, Base64Encoder.encode(fileContent));
+	    attachment.put(MANDRILL_ATTACHMENT_FILE_CONTENT, Base64Encoder.encode(fileContent.getBytes("UTF-8")));
 
 	    attachmentsArray.put(attachment);
 	}

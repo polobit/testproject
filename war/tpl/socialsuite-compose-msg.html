@@ -17,7 +17,9 @@
 	        <form id="socialsuite-twitter_messageForm" name="socialsuite-twitter_messageForm" method="post">
 	            <fieldset>
                     <input name="tweetId" type="hidden" value={{tweetId}} />
-                    <input name="tweetOwner" type="hidden" value={{tweetOwner}} />                    
+                    <input name="tweetOwner" type="hidden" value={{tweetOwner}} />  
+                    <input name="streamId" type="hidden" value={{streamId}} />
+
 					<div style="margin-bottom:10px;">
 						{{info}}
 					</div>	                
@@ -52,9 +54,9 @@
                 </div> 
 	        </form>            
 	    </div>
-	    <div class="modal-footer">
-			<a href="#social" class="btn btn-primary" id="send_tweet" rel="{{headline}}">Send</a>
-			<a href="#social" class="btn btn-primary" id="schedule_tweet" rel="{{headline}}" style="display:none;">Schedule</a>
+	    <div class="modal-footer" rel="{{headline}}">
+			<a href="#social" class="btn btn-primary" id="send_tweet">Send</a>
+			<a href="#social" class="btn btn-primary" id="schedule_tweet" style="display:none;">Schedule</a>
 			<span><img src="img/ajax-spinner.gif" id="spinner-modal" style="display:none;"></img></span>
 	        <span class="save-status"></span>
 	    </div>

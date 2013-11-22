@@ -3,7 +3,8 @@ package com.agilecrm.util.email;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
-import com.thirdparty.Mandrill;
+import com.google.appengine.api.NamespaceManager;
+import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
@@ -94,6 +95,9 @@ public class SendMail
     public static final String CSV_IMPORT_NOTIFICATION = "csv_reports";
     public static final String CSV_IMPORT_NOTIFICATION_SUBJECT = "CSV Import report";
 
+    public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
+    public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
+
     /**
      * From Name of email.
      */
@@ -138,9 +142,11 @@ public class SendMail
      *            From email.
      * @param fromName
      *            From name.
+     * @param args
+     *            - Variable args to send email attachment
      */
     @SuppressWarnings("unused")
-    public static void sendMail(String to, String subject, String template, Object object, String from, String fromName)
+    public static void sendMail(String to, String subject, String template, Object object, String from, String fromName, String... args)
     {
 	try
 	{
@@ -208,8 +214,10 @@ public class SendMail
 		return;
 	    }
 
+	    System.out.println("Namespace in SendMail is " + NamespaceManager.get());
+
 	    // Send Email
-	    Mandrill.sendMail(from, fromName, to, subject, from, emailHTML, emailBody);
+	    Mandrill.sendMail(NamespaceManager.get(), from, fromName, to, subject, from, emailHTML, emailBody, args);
 	}
 	catch (Exception e)
 	{
@@ -229,9 +237,11 @@ public class SendMail
      *            Name of template.
      * @param object
      *            Respective object with the template.
+     * @param args
+     *            - Variable args to send email attachment.
      */
-    public static void sendMail(String to, String subject, String template, Object object)
+    public static void sendMail(String to, String subject, String template, Object object, String... args)
     {
-	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME);
+	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME, args);
     }
 }

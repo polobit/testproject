@@ -100,18 +100,17 @@ $(function(){
 		updateDeal(currentDeal);
 	});
 
-	
 	/**
 	 * Milestone view deal delete
 	 */
 	$('.deal-delete').live('click', function(e) {
 		e.preventDefault();
-        var id = $(this).closest('.data').attr('data');
-        
         if(!confirm("Are you sure you want to delete?"))
 			return;
         
-		var id_array = [];
+        var id = $(this).closest('.data').attr('data');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var id_array = [];
 		var id_json = {};
 		
 		// Create array with entity id.
@@ -127,6 +126,15 @@ $(function(){
 			type: 'POST',
 			data: id_json,
 			success: function() {
+
+				// Checks and deletes the deal from milestone array
+				var milestone_array = App_Deals.opportunityMilestoneCollectionView.collection.models[0].get(milestone);
+				for(var i in milestone_array)
+				{
+					if(milestone_array[i].id == id)
+						milestone_array.splice(i, 1);
+				}
+	
 				// Removes deal from list
 				$(that).closest('li').css("display","none");
 				

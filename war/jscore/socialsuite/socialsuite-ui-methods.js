@@ -311,6 +311,7 @@ function addTweetToStream(modelStream,tweet)
 	      tweet.text = convertTextToTweet(tweet);
 		}	
 	    
+	console.log("tweet : "+tweet.text);
     console.log("add at "+modelStream.get('tweetListView').length);   
 		
     // Sort stream on tweet id basis which is unique and recent tweet has highest value.
@@ -329,7 +330,7 @@ function addTweetToStream(modelStream,tweet)
 	 // Create normal time.
 	 head.js('lib/jquery.timeago.js', function(){	 
 		        $(".time-ago", $(".chirp-container")).timeago();	
-			});
+			});	 
 }
 
 /**
@@ -387,11 +388,12 @@ function convertTextToTweet(tweet)
 	var linkableTweetArray = new Array();
 	var tweetText = tweet.text;
 	var regex = new RegExp();
+	var temp;
 	
 	// Replace &amp; with &
 	regex = new RegExp("&amp;","g");
 	tweetText = tweetText.replace(regex,'&');
-	 
+	
 	// Split text in array.
 	linkableTweetArray = tweetText.split(/[\s,?&;.'":!)({}]+/);
 	
@@ -403,7 +405,7 @@ function convertTextToTweet(tweet)
 		if(linkableTweetArray[i].charAt(0) == "@") // Mentions
 		  {		    
 		    regex = new RegExp(linkableTweetArray[i],"g");		   
-		    tweetText = tweetText.replace(regex,'&lt;a href=\'https://twitter.com/'+linkableTweetArray[i].substring(1)+'\' target=\'_blank\' class=\'cd_hyperlink\'>'+linkableTweetArray[i]+'&lt;/a>');		    
+		    tweetText = tweetText.replace(regex,'&lt;a href=\'https://twitter.com/'+linkableTweetArray[i].substring(1)+'\' target=\'_blank\' class=\'cd_hyperlink\'>'+linkableTweetArray[i]+'&lt;/a>');
 		  }
 		else if(linkableTweetArray[i].charAt(0) == "#") // Hashtags
 		   {
@@ -415,7 +417,7 @@ function convertTextToTweet(tweet)
 
 	// URL
 	linkableTweetArray = new Array();
-	linkableTweetArray = tweetText.split(" "); 
+	linkableTweetArray = tweetText.split(/\s/); 
 	var exp = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
 
 	$.each(linkableTweetArray, function(index, word) {
@@ -423,9 +425,9 @@ function convertTextToTweet(tweet)
 			tweetText = tweetText.replace(word, '&lt;a href=\'' + word
 					+ '\' target=\'_blank\' class=\'cd_hyperlink\'>' + word + '&lt;/a>');
 		});
-		
+		 
 	 regex = new RegExp("&lt;","g");
-	 tweetText = tweetText.replace(regex,'<');
+	 tweetText = tweetText.replace(regex,'<');		 
 	 return tweetText;
 }
 
@@ -539,9 +541,9 @@ function checkNewTweets()
 /**
  * Add tweets from temp collection to original collection and remove notification.
  */
-function addNewTempTweet(streamId)
+function mergeCollections(streamId)
 {
-    // Get stream from collection.
+    // Get stream from collections.
     var originalStream = StreamsListView.collection.get(streamId);
     var tempStream = TempStreamsListView.collection.get(streamId);
     

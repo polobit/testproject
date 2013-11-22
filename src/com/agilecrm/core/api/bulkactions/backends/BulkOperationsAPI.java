@@ -482,6 +482,7 @@ public class BulkOperationsAPI
 	}
 
 	System.out.println("Email obtained is " + data);
+	System.out.println("Namespace is in exportContactsCSV " + NamespaceManager.get());
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	String path = null;
@@ -541,7 +542,7 @@ public class BulkOperationsAPI
 	String fileData = ContactCSVExport.retrieveBlobFileData(path);
 
 	// Sends email.
-	ContactCSVExport.exportContactCSVAsEmail(data, fileData);
+	ContactCSVExport.exportContactCSVAsEmail(data, fileData, String.valueOf(count));
 
 	// Deletes blob
 	ContactCSVExport.deleteBlobFile(path);
