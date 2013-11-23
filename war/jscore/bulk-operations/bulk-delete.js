@@ -164,7 +164,7 @@ function bulk_delete_operation(url, id_array, index_array, table, is_grid_view, 
 			$(".bulk-delete-loading").remove();	
 			
 			if($(table).attr('id') == "contacts")
-				showNotyPopUp('information', "Contact(s) delete scheduled", "top", 5000);
+				showNotyPopUp('information', "Your contacts deletion will be processed shortly", "top", 5000);
 			
 			if(!is_grid_view)
 			{

@@ -1,6 +1,6 @@
 
 
-function agile_gmap_date_range(el){
+function gmap_date_range(el, callback){
 	
 
 		// Bootstrap date range picker.
@@ -19,12 +19,15 @@ function agile_gmap_date_range(el){
 		] } }, function(start, end)
 		{
 			$('#gmap_date_range span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
-			agile_gmap_search_by_date($('#gmap_date_range span').text());
+			gmap_search_by_date($('#gmap_date_range span').text());
 		});
-
+		
+		if(callback && typeof(callback) == "function"){
+			callback();
+		}
 }
 
-function agile_gmap_search_by_date(DateRange){
+function gmap_search_by_date(DateRange){
 	console.clear();
 	console.log(DateRange);
 	
@@ -53,32 +56,22 @@ function agile_gmap_search_by_date(DateRange){
 	
 	console.log("url: " + DateRangeUrl);
 	
-	agile_gmap_create_table_view(DateRangeUrl);
-	return;
-	
+	$("#map-tab-waiting").fadeIn();
 	$.getJSON( DateRangeUrl, function( Response ) {
 	    
 		console.log("Response: ", Response);
-		  
-//		for(var Key in Response){
-//			Response[Key].z_index = parseInt(Key);
-//		}
-//		agile_gmap_add_marker(Response);
+		$("#map-tab-waiting").fadeOut();
+		if(Response != null) {
+			for(var Key in Response){
+				Response[Key].z_index = parseInt(Key);
+			}
+			gmap_add_marker(Response);
+			gmap_create_table_view("", Response);
+		}
+		
+		else {
+			console.log("No recent visitors available for this date range.")
+		}
 	});
 }
 
-$(".gmap-sort-date-range").die().live('click', function(){
-
-  var User_Domain = "our";
-  var User_Domain = agile_id.getNamespace();
-
-  $.getJSON( "core/api/web-stats/visitors?user_domain=" + encodeURIComponent(User_Domain), function( Response ) {
-    console.clear();  
-	console.log(Response);
-	  
-	for(var Key in Response){
-	  Response[Key].z_index = parseInt(Key);
-	}
-	agile_gmap_add_marker(Response);
-  });
-});
