@@ -129,6 +129,8 @@ public class TwilioVoiceServlet extends HttpServlet
     {
 	// Retrieve domain user id from request
 	String userId = request.getParameter("user_id");
+	String fromNumber = request.getParameter("verified_number");
+	
 	System.out.println("User Id in Twilio verifying number : " + userId);
 
 	if (userId != null)
@@ -148,6 +150,7 @@ public class TwilioVoiceServlet extends HttpServlet
 
 	    // save verification status in widget
 	    widget.addProperty("verificaton_status", verificationStatus);
+	    widget.addProperty("verified_number", fromNumber);
 	    widget.save();
 	    System.out.println("widget saved");
 	}
