@@ -7,16 +7,11 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.workflows.status.CampaignStatus.Status;
-import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -157,36 +152,6 @@ public class Workflow extends Cursor
 	    return domainUser.name;
 
 	return "";
-    }
-
-    /**
-     * Returns subscribers count (active and done) of a workflow. When campaign
-     * runs on single or bulk contacts, it means the contacts are active and we
-     * show the count of active subscribers. Similarly, when campaign completed
-     * on same number of contacts, we show the count of done subscribers.
-     * 
-     * @return String
-     */
-    @XmlElement
-    public String getSubscribersCount()
-    {
-	JSONObject subscribersCount = new JSONObject();
-	try
-	{
-	    // Fetches active contacts having "campaignId-ACTIVE"
-	    int active = CampaignSubscribersUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.ACTIVE);
-
-	    // Fetches done contacts having "campaignId-DONE"
-	    int done = CampaignSubscribersUtil.getSubscribersCount(id.toString(), id.toString() + "-" + Status.DONE);
-
-	    subscribersCount.put("active", active);
-	    subscribersCount.put("done", done);
-	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
-	return subscribersCount.toString();
     }
 
     /**

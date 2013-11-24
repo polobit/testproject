@@ -242,28 +242,28 @@
 					
 <script id="company-contacts-model-template" type="text/html">
 	<td></td>
-	<td class="data" data="{{id}}">
+	<td class="data" data="{{id}}" style="white-space:nowrap;">
     	<div style="display:inline;padding-right:10px;height:auto;">
         		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
     	</div>
-    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:14em;overflow:hidden;">
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
         		<b>	{{getPropertyValue properties "first_name"}}
         		{{getPropertyValue properties "last_name"}} </b>
         		<br />
         		{{getPropertyValue properties "email"}}
     	</div>
 	</td>
-	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
+	<td><div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;width:8em;overflow:hidden;">{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}</div>
 	</td>
 	<td> 
-<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:clip;white-space:nowrap;width:15em;overflow:hidden;">
+<div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;">
 	{{#each tags}}
-    	<b><span class="label">{{this}}</span></b>
+    	<span class="label">{{this}}</span>
     {{/each}}
 </div>
 	</td>
-	<td><div>{{lead_score}}</div></td>
+	<td style="width:6em;"><div>{{lead_score}}</div></td>
 </script>
 
 <script id="company-contacts-collection-template" type="text/html">
@@ -277,6 +277,7 @@
 	<br/>
 		
 			<table id="contacts" class="table table-striped" style="overflow: scroll; border-radius: 5px; -webkit-border-radius: 5px; margin-bottom:0px; border: 1px solid #dddddd; border-collapse: separate;">
+				<colgroup><col width="10px"><col width="40%"><col width="20%"><col width="25%"><col width="12%"></colgroup>
 				<thead>
 					<tr><th></th>
 						<th>Name</th>

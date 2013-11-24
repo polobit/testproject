@@ -375,6 +375,8 @@ function initializeSocialSuite()
 		     		   		    
 		     		   		    // Make send button enable
 		     		   		    $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
+		     		   		    
+		     		   		    StreamType="";
 	     		   			  }, 3000);    		   		    
 	     		   			     		   		
 	     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
@@ -422,7 +424,7 @@ function initializeSocialSuite()
 	    document.getElementById(this.id).innerHTML= '';
 	    
 		if(relation == "add-new-tweet")
-			addNewTempTweet(streamId);
+			mergeCollections(streamId);
 		else if(relation == "retry")
 		    registerStreamAgain(streamId);
 		
