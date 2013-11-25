@@ -21,7 +21,7 @@
 						<label class="control-label">Condition</label>
 						<div class="controls" >
 							<table style="background-color: transparent"
-								class="reports-condition-table chained-table">
+								class="web-rule-contact-condition-table chained-table">
 								<tbody>
 									<tr class="chained controls" name="rules" style="padding-left: 100px">
 										<td>
@@ -37,17 +37,14 @@
 													<optgroup label="Page conditions" id="page-conditions">
 														<option value="page">Page</option>
 														<option value="referrer">Referrer</option>
+														<option value="visit">Visit</option>
 													</optgroup>
 													<optgroup label="Contact Data" id="page-conditions">
-														<option value="first_name">First Name</option>
-														<option value="email">Email Address</option>
-														<option value="company">Company</option>
-														<option value="title">Job Title</option>
-														<option value="phone">Phone Number</option>
-														<option value="created_time">Created</option>
-														<option value="updated_time">Updated</option>
 														<option value="tags" selected="selected">Tag</option>
 														<option value="tags_time">Tag And Created Date</option>
+														<option value="created_time">Created</option>
+														<option value="company">Company</option>
+														<option value="title">Job Title</option>
 														<option value="owner_id">Owner</option>
 													</optgroup>
 													<optgroup label="Custom Fields" id="custom-fields"
@@ -59,9 +56,9 @@
 										<td class="codition-block span2">
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 100%;">
-													<option value="MATCHES" class="page">Matches</option>
+													<option value="MATCHES" class="page referrer">Matches</option>
 													<option value="EQUALS"
-														class="page first_name tags_time phone tags company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="referrer page first_name tags_time phone tags company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS"
 														url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS"
@@ -81,12 +78,14 @@
 														last</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
+													<option value="FIRST_TIME" class="visit">First time</option>
+													<option value="REPEAT" class="visit">Repeat</option>
 												</select>
 											</div>
 										</td>
 										<td class="rhs-block controls span2"
 											style="vertical-align: top; max-width: 120px;">
-											<div id="RHS" class="rhs" name="RHS">
+											<div id="RHS" class="rhs" name="RHS" style="width:92%">
 												<input type="text" name="temp" style="width: 92%"
 													class="EQUALS NOTEQUALS ANYOF required MATCHES" /> <input
 													type="text" name="temp" style="width: 92%"
@@ -99,6 +98,7 @@
 													name="updated_date" style="width: 92%"
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" />
+											
 											</div>
 										</td>
 										<td class="controls span2"
@@ -140,11 +140,12 @@
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
-										<td style="vertical-align: top;"><i
-											class="filter-contacts-multiple-add icon-plus"
-											style="display: inline-block; margin-right: 5px; cursor: pointer;"></i><i
+
+										<td style="vertical-align: top;"><div style="width:50px"><i
+											class="filter-contacts-web-rule-multiple-add icon-plus"
+											style="display: inline-block; margin-right: 10px;margin-left:5px; cursor: pointer;"></i><i
 											class="filter-contacts-multiple-remove icon-remove-circle"
-											style="display: none; cursor: pointer;"></i></td>
+											style="display: none; cursor: pointer;"></i><div></td>
 									</tr>
 								</tbody>
 							</table>
@@ -171,7 +172,7 @@
 										<td class="controls"
 											style="vertical-align: top;">
 											<div name="RHS" id="WEB_RULE_RHS" style="max-width: 235px;">
-												<select class="required" name="temp" >
+												<select class="required" name="temp" style="max-width:125px">
 													<option value="model_popup" class="POPUP">Model Popup</option>
 													<option value="corner_noty " class="POPUP">Corner Noty</option>
 												</select>
@@ -202,11 +203,11 @@
 														class="confirmation information" rows="6"></textarea>
 												</div>
 										</td>
-										<td style="vertical-align: top;"><i
+										<td style="vertical-align: top;"><div style="width:50px"><i
 											class="web-rule-multiple-add icon-plus"
-											style="display: inline-block; margin-right: 5px; cursor: pointer;"></i><i
+											style="display: inline-block; margin-right: 10px;margin-left: 10px; cursor: pointer;"></i><i
 											class="filter-contacts-multiple-remove icon-remove-circle"
-											style="display: none; cursor: pointer;"></i></td>
+											style="display: none; cursor: pointer;"></i></div></td>
 									</tr>
 								</tbody>
 								</table>

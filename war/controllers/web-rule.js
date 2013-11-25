@@ -17,7 +17,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			isNew : true, 
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				head.js('lib/agile.jquery.chained.min.js', function()
 						{
 							
 					

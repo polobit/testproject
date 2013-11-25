@@ -43,20 +43,7 @@ $(function()
 	});
 	
 	
-	// Filter Contacts- Clone Multiple
-	$("i.web-rule-multiple-add").die().live('click', function(e)
-	{
-		// To solve chaining issue when cloned
-		var htmlContent = $(getTemplate("webrules-add", {})).find('tr.webrule-actions').clone();
-		
-		scramble_input_names($(htmlContent));
-
-		chainWebRules(htmlContent);
-
-		// var htmlContent = $(this).closest("tr").clone();
-		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		$(this).parents("tbody").append(htmlContent);
-	});
+	
 
 	// Filter Contacts- Remove Multiple
 	$("i.filter-contacts-multiple-remove").die().live('click', function(e)

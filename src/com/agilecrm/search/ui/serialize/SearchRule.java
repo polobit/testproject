@@ -23,7 +23,7 @@ public class SearchRule implements Serializable
 
     public enum RuleCondition
     {
-	EQUALS, ON, AFTER, BEFORE, BETWEEN, LAST, NEXT, NOTEQUALS, MATCHES, IS_GREATER_THAN, IS_LESS_THAN
+	EQUALS, ON, AFTER, BEFORE, BETWEEN, LAST, NEXT, NOTEQUALS, MATCHES, IS_GREATER_THAN, IS_LESS_THAN, FIRST_TIME, REPEAT
     }
 
     /**
