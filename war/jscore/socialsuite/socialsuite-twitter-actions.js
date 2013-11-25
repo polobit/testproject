@@ -621,8 +621,8 @@ $(".more-options").die().live("click", function(e)
   var tweetOwner = tweet.user.screen_name; 
   
   // Fetch stream from collection
-  var stream = modelStream.toJSON();
-    
+  var stream = modelStream.toJSON();    
+  
   // Remove extra element from dropdown menu list.
   $('.list-clear').remove();
   
@@ -630,12 +630,12 @@ $(".more-options").die().live("click", function(e)
   $('.more-options-list').toggle( false );
   
   // Open dropdown with slow speed.
-  $('#'+elementId+'_list').toggle( "slow" );
-  
+  $('#'+elementId+'_list', $('#'+streamId)).toggle( "slow" );
+    
   // Tweet belongs to stream owner so no extra options required.
   if(stream.screen_name == tweetOwner)
 	  return;
-  
+    
 // Check stream owner relashionship tweet owner.
   $.get("/core/social/checkrelationship/" + streamId + "/" + tweetOwner,
     function (data)
@@ -644,32 +644,32 @@ $(".more-options").die().live("click", function(e)
 	    if(data.follow == "true")
 	    	{
 	      	  //console.log("in unfollow");
-	          $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+'>Unfollow @'+tweetOwner+'</a></li>');
+	          $('#'+elementId+'_list', $('#'+streamId)).append('<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner='+tweetOwner+'>Unfollow @'+tweetOwner+'</a></li>');
 	    	}
 	    // Stream owner not following tweet owner then add follow option
 	    else if(data.follow == "false")
 	    	{
 	    	  //console.log("in follow");
-	    	  $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+'>Follow @'+tweetOwner+'</a></li>');
+	    	  $('#'+elementId+'_list', $('#'+streamId)).append('<li class="list-clear"><a href="#social" class="follow-user" tweet-owner='+tweetOwner+'>Follow @'+tweetOwner+'</a></li>');
 	    	}
 	  
   	    // Tweet owner is stream owner's follower then add send DM option
 	    if(data.follower == "true")
            {	    	
    	         //console.log("in send DM");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="direct-message">Send Direct Message</a></li>');	    	
+             $('#'+elementId+'_list', $('#'+streamId)).append('<li class="list-clear"><a href="#social" class="direct-message">Send Direct Message</a></li>');	    	
            }
 	    
 	    // Check tweet owner is Block or Unblock
 	    if(data.blocked == "true")
            {	    	
    	         //console.log("in unblock");
-             $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+'>Unblock @'+tweetOwner+'</a></li>');	    	
+             $('#'+elementId+'_list', $('#'+streamId)).append('<li class="list-clear"><a href="#social" class="unblock-user" tweet-owner='+tweetOwner+'>Unblock @'+tweetOwner+'</a></li>');	    	
             }	    
         else if(data.blocked == "false")
             {	    	
    	          //console.log("in block");
-              $('#'+elementId+'_list').append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+'>Block @'+tweetOwner+'</a></li>');	    	
+              $('#'+elementId+'_list', $('#'+streamId)).append('<li class="list-clear"><a href="#social" class="block-user" tweet-owner='+tweetOwner+'>Block @'+tweetOwner+'</a></li>');	    	
             }
 	  }).error(function (data)
 		  {
