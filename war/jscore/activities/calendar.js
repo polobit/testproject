@@ -65,7 +65,8 @@ function showCalendar() {
         select: function(start, end, allDay) {
         	// Show a new event
             $('#activityModal').modal('show');
-            highlight_vent();
+            highlight_event();
+            
             // Set Date for Event
             var dateFormat = 'mm/dd/yyyy';
             $('#task-date-1').val(start.format(dateFormat));

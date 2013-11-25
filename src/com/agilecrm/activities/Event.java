@@ -5,8 +5,11 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -89,7 +92,43 @@ public class Event
      */
     @NotSaved(IfDefault.class)
     public Key<Contact> contact = null;
+    
+    /**
+     * List of contact ids related to a task
+     */
+    @NotSaved(IfDefault.class)
+    public List<String> contacts = null;
+    
+    /**
+     * List of contact keys related to a task
+     */
+    private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+    
+    /**
+     * While saving an event it contains list of contact keys, but while
+     * retrieving includes complete contact object.
+     * 
+     * @return List of contact objects
+     */
+    @XmlElement
+    public List<Contact> getContacts()
+    {
+	return Contact.dao.fetchAllByKeys(this.related_contacts);
+    }
 
+    /**
+     * Returns list of contacts related to task.
+     * 
+     * @param id
+     *            - Event Id.
+     * @return list of Contacts
+     */
+    public List<Contact> getContacts(Long id)
+    {
+	Event event = EventUtil.getEvent(id);
+	return event.getContacts();
+    }
+    
     /**
      * Owner key of the event
      */
@@ -102,7 +141,7 @@ public class Event
     List<Long> search_range = null;
 
     // Dao
-    private static ObjectifyGenericDao<Event> dao = new ObjectifyGenericDao<Event>(Event.class);
+    public static ObjectifyGenericDao<Event> dao = new ObjectifyGenericDao<Event>(Event.class);
 
     /**
      * Default constructor
@@ -170,6 +209,17 @@ public class Event
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
+	
+	if (this.contacts != null)
+	{
+	    // Create list of Contact keys
+	    for (String contact_id : this.contacts)
+	    {
+		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
+	    }
+
+	    this.contacts = null;
+	}
 
 	search_range = new ArrayList<Long>();
 	search_range.add(start);

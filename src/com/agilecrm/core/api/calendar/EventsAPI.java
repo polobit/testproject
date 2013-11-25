@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -14,7 +15,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.EventUtil;
 
 /**
@@ -136,5 +141,22 @@ public class EventsAPI
     {
 	event.save();
 	return event;
+    }
+    
+    /**
+     * Deletes events bulk
+     * 
+     * @param model_ids
+     *            event ids, read as form parameter from request url
+     * @throws JSONException
+     */
+    @Path("bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
+    {
+	JSONArray eventsJSONArray = new JSONArray(model_ids);
+
+	Event.dao.deleteBulkByIds(eventsJSONArray);
     }
 }

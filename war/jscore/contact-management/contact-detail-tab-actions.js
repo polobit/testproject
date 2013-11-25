@@ -18,6 +18,15 @@ $(function(){
 		});
 	});
 	
+	// Event edit in contact details tab
+	$(".event-edit-contact-tab").die().live('click', function(e){
+		e.preventDefault();
+		var id = $(this).attr('data');
+		var value = eventsView.collection.get(id).toJSON();
+		deserializeForm(value, $("#updateActivityForm"));
+    	$("#updateActivityModal").modal('show');
+	});
+	
 	$(".complete-task").die().live('click', function(e){
 		e.preventDefault();
 		if ($(this).is(':checked')) {

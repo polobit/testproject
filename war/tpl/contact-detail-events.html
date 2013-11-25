@@ -1,26 +1,78 @@
-<script id="events-collection-template" type="text/html">
-<br>
-<h2>List of Events</h2>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Start</th>
-                <th>End</th>
-            </tr>
-        </thead>
-        <tbody id='events-model-list'></tbody>
-</table>
-<br>
+<script id="contact-events-collection-template" type="text/html">
+		{{#unless this.length}}
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                <div class="box-right">
+                    <h3>You have no events for {{contactShortName}}.</h3>
+                    <div class="text">
+                        You can add a event related to a contact.
+                    </div>
+                    <a href="#" class="btn blue btn-slate-action contact-add-event"><i class="icon-plus-sign"></i>  Add Event</a>
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+        {{#if this.length}}
+	<div class="page-header" style="margin-top: 0px !important">
+		<a href="#" class="btn right contact-add-event" style="position:relative"><span><i class='icon-plus-sign'/></span> Add Event</a>
+	</div>
+			<ul id="contact-events-model-list" class="ativity-block-ul"></ul>
+		{{/if}} 
 </script>
 
-<script id="events-modal-template" type="text/html">
-    <td><icon class='deleteNote icon-remove-circle'></icon></td>    
-    <td>{{id}} </td>
-    <td>{{title}} </td>
-    <td>{{start}}</td>
-    <td>{{end}}</td>
-    <br/>
+<script id="contact-events-model-template" type="text/html">
+
+<div class="activity" style="display:block;">
+	<div id="events" class="activity-text-block">
+	<span class="activity-block-owner">
+		{{#if ownerPic}}
+			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
+		{{else}}
+			<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
+		{{/if}}
+		<span class="owner-name">{{taskOwner.name}}</span>
+	</span>
+	<div style="margin-bottom: 9px;"><h4 class="event-title" style="display:inline;"><b style="margin:0px 20px 20px 0px;">{{title}}</b><span class="label">{{color}}</span></h4></div>
+
+  <div style="">
+	<p>
+		<span>Starts : <time class="event-created-time" datetime="{{epochToHumanDate "" start}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start}}</time></span>
+		{{#if allDay}} ( all day )
+		{{else}}
+		<span>( Duration : <time class="event-created-time" datetime="{{epochToHumanDate "" end}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end}}</time> )</span>
+		{{/if}}
+	</p>
+	<div class="clear">
+		<div style="margin-bottom: 9px;">	
+		{{#each contacts}}
+           	{{#if id}}
+				{{#isDuplicateContactProperty properties "email"}}
+
+					{{else}}
+						{{#if_contact_type "PERSON"}}	
+							<a href="#contact/{{id}}">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>,
+        				{{/if_contact_type}}
+						{{#if_contact_type "COMPANY"}}
+        					<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>,
+        				{{/if_contact_type}}
+				{{/isDuplicateContactProperty}}
+           		
+           	{{/if}}
+       	{{/each}}
+		</div>
+		 <small class="edit-hover" style="margin-right:10px"> 
+			<time class="event-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
+		</small>
+		<span class="actions pull-right">
+			<a title="Edit"  data="{{id}}" class="event-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
+            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/events/bulk"><i></i></span></a>
+        </span>
+	</div>
+  </div>
+</div>
+</div>
+
 </script>

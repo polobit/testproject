@@ -31,6 +31,23 @@ $(function(){
 					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
 		});
     });
+	
+	/**
+	 * Displays activity modal with all event features,  to add a event 
+	 * related to the contact in contact detail view. Also prepends the 
+	 * contact name to related to field of activity modal.
+	 */ 
+    $('.contact-add-event').live('click', function(e){
+    	e.preventDefault();
+
+    	var	el = $("#activityForm");
+		$('#activityModal').modal('show');
+		highlight_event();
+		// Displays contact name, to indicate the task is related to the contact
+		fill_relation(el);
+		agile_type_ahead("event_related_to", el, contacts_typeahead);
+
+    });
     
     /**
      * Displays note modal, to add a note related to the contact in contact 

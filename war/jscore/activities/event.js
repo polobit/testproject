@@ -10,7 +10,6 @@
 
 $(function()
 {
-
 	/**
 	 * Shows activity modal, and highlights the event form features (Shows event
 	 * form and hides task form, changes color and font-weight)
@@ -19,7 +18,8 @@ $(function()
 	$('#show-activity').live('click', function(e)
 	{
 		e.preventDefault();
-		highlight_vent();
+		highlight_event();
+
 		$("#activityModal").modal('show');
 	});
 
@@ -29,8 +29,10 @@ $(function()
 	$(".add-event").live('click', function(e)
 	{
 		e.preventDefault();
+
 		$('#activityModal').modal('show');
-		highlight_vent();
+		highlight_event();
+		
 		/*
 		 * $('#task-date-1').val(new Date().format('mm/dd/yyyy'));
 		 * $("#event-date-1").val(new Date().format('mm/dd/yyyy'));
@@ -138,7 +140,10 @@ $(function()
 	 */
 	$('#activityModal').on('shown', function()
 	{
-
+        // Show related to contacts list
+		var el = $("#activityForm");
+		agile_type_ahead("event_related_to", el, contacts_typeahead);
+		
 		/**
 		 * Fills current time only when there is no time in the fields
 		 */
@@ -158,7 +163,10 @@ $(function()
 	 */
 	$('#updateActivityModal').on('show', function()
 	{
-
+        // Show related to contacts list
+		var el = $("#updateActivityForm");
+		agile_type_ahead("event_related_to", el, contacts_typeahead);
+		
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 
@@ -182,6 +190,22 @@ $(function()
 		$('#' + this.id).find('.error').removeClass('error');
 		
 	});
+	
+	/**
+	 * Hide event of update task modal. Removes the relatedTo field elements if
+	 * any, when the modal is hidden in order to not to show them again when the
+	 * modal is shown next
+	 * 
+	 */
+	$('#updateActivityModal').on('hidden', function() {
+
+		$("#updateActivityForm").find("li").remove();
+	});
+	$('#activityModal').on('hidden', function() {
+
+		$("#activityForm").find("li").remove();
+	});
+
 
 	/**
 	 * Highlights the event features (Shows event form and hides task form,
@@ -190,7 +214,7 @@ $(function()
 	$("#event").click(function(e)
 	{
 		e.preventDefault();
-		highlight_vent();
+		highlight_event();
 	});
 
 });
@@ -199,7 +223,7 @@ $(function()
  * Highlights the event portion of activity modal (Shows event form and hides
  * task form, changes color and font-weight)
  */
-function highlight_vent()
+function highlight_event()
 {
 	$("#hiddentask").val("event");
 	$("#event").css({ "color" : "black" });
@@ -355,13 +379,47 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 
 		// $('#calendar').fullCalendar( 'refetchEvents' );
 
-		// When updating an event remove the old event from fullCalendar
-		if (isUpdate)
-			$('#calendar').fullCalendar('removeEvents', json.id);
+		if (Current_Route == 'calendar') {
+			
+			// When updating an event remove the old event from fullCalendar
+			if (isUpdate)
+				$('#calendar').fullCalendar('removeEvents', json.id);
 
-		$('#calendar').fullCalendar('renderEvent', data.toJSON());
+			$('#calendar').fullCalendar('renderEvent', data.toJSON());
+		}
+		// Updates data to temeline
+		else if (App_Contacts.contactDetailView
+				&& Current_Route == "contact/"
+						+ App_Contacts.contactDetailView.model.get('id')) {
 
-		App_Calendar.navigate("calendar", { trigger : true });
+			// Add model to collection. Disabled sort while adding and called
+			// sort explicitly, as sort is not working when it is called by add
+			// function
+			if (eventsView && eventsView.collection)
+			{
+				eventsView.collection.add(new BaseModel(data), { sort : false });
+				eventsView.collection.sort();
+			}
+			
+			/*
+			 * Verifies whether the added task is related to the contact in
+			 * contact detail view or not
+			 */
+			$.each(task.contacts, function(index, contact) {
+				if (contact.id == App_Contacts.contactDetailView.model
+						.get('id')) {
+
+					// Activates "Timeline" tab and its tab content in
+					// contact detail view
+					// activate_timeline_tab();
+					add_entity_to_timeline(data);
+
+					return false;
+				}
+			});
+		}
+		else
+			App_Calendar.navigate("calendar", { trigger : true });
 	} });
 }
 

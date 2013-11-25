@@ -26,7 +26,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
@@ -259,6 +261,29 @@ public class ContactsAPI
 	try
 	{
 	    return TaskUtil.getContactTasks(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Events of a contact, which is in contact detail view
+     * 
+     * @param id
+     *            contact id to get its related entities (events)
+     * @return list of events related to a contact
+     */
+    @Path("/{contact-id}/events")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Event> getEvents(@PathParam("contact-id") Long id)
+    {
+	try
+	{
+	    return EventUtil.getContactEvents(id);
 	}
 	catch (Exception e)
 	{

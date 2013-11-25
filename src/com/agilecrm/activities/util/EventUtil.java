@@ -3,6 +3,8 @@ package com.agilecrm.activities.util;
 import java.util.List;
 
 import com.agilecrm.activities.Event;
+import com.agilecrm.activities.Task;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.googlecode.objectify.Key;
@@ -64,6 +66,20 @@ public class EventUtil
 	}
     }
 
+    /**
+     * Gets events related to a particular contact
+     * 
+     * @param contactId
+     *            contact id to get the events related to a contact
+     * @return List of events related to a contact
+     * @throws Exception
+     */
+    public static List<Event> getContactEvents(Long contactId) throws Exception
+    {
+	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
+	return dao.listByProperty("related_contacts = ", contactKey);
+    }
+    
     /**
      * Fetches all the events, which are in the given search range
      * 

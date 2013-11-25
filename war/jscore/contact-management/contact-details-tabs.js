@@ -9,6 +9,7 @@
  */
 var notesView;
 var dealsView; 
+var eventsView;
 var tasksView;
 var casesView;
 
@@ -159,6 +160,30 @@ $(function(){
 	});
 	
 	/**
+	 * Fetches all the events related to the contact and shows the events collection 
+	 * as a table in its tab-content, when "Events" tab is clicked.
+	 */
+	$('#contactDetailsTab a[href="#events"]').live('click', function (e){
+		e.preventDefault();
+	    id = App_Contacts.contactDetailView.model.id;
+		eventsView = new Base_Collection_View({
+            url: '/core/api/contacts/' + id + "/events",
+            restKey: "event",
+            templateKey: "contact-events",
+            individual_tag_name: 'li',
+            sortKey:"created_time",
+            descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".event-created-time", el).timeago();
+              	})
+            }
+        });
+		eventsView.collection.fetch();
+        $('#events', this.el).html(eventsView.el);
+	});
+	
+	/**
 	 * Fetches all the notes related to the contact and shows the tasks collection 
 	 * as a table in its tab-content, when "Tasks" tab is clicked.
 	 */
@@ -228,25 +253,6 @@ $(function(){
         });
 		casesView.collection.fetch();
         $('#cases').html(casesView.el);
-		
-	});
-	
-	/**
-	 * Fetches all the events related to the contact and shows the events collection 
-	 * as a table in its tab-content, when "Events" tab is clicked.
-	 * 
-	 * "Events" tab is not there for now.
-	 */
-	$('#contactDetailsTab a[href="#events"]').live('click', function (e){
-		e.preventDefault();
-		var eventsView = new Base_Collection_View({
-			url: 'core/api/events',
-            restKey: "events",
-            templateKey: "events",
-            individual_tag_name: 'tr'
-        });
-        eventsView.collection.fetch();
-        $('#events', this.el).html(eventsView.el);
 		
 	});
 	

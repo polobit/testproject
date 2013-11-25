@@ -20,7 +20,7 @@
                         <div id="addEvent" class="control-group span3">
                             <label class="control-label"><b>Event Name </b><span class="field_req">*</span></label>
                             <div class="controls">
-                                <input id="title" placeholder="Name of the event" type="text" name="title" class="required input-block-level" />
+                                <input id="title" placeholder="Name of the event" type="text" name="title" class="required" />
                             </div>
                         </div>
                         <div class="span2 control-group">
@@ -74,6 +74,17 @@
                             	<input type="checkbox" name="allDay" id="allDay" />						
                             	<div style="display:inline-block;margin-top:1px;">All day event</div>
                         	</label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label"><b>Related To</b></label>
+                        <div class="controls">
+                            <div>
+                                <div class="pull-left">
+                                    <ul name="contacts" class="contacts tags tagsinput"></ul>
+                                </div>
+                                <input type="text" id="event_related_to" class="typeahead typeahead_contacts" data-provide="typeahead" data-mode="multiple" size="40" />
+                            </div>
                         </div>
                     </div>
                 </fieldset>
