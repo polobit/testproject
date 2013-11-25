@@ -409,6 +409,15 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>CallNotification</servlet-name>
+		<servlet-class>com.call.notification</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CallNotification</servlet-name>
+		<url-pattern>/call</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>upload_contacts</servlet-name>
 		<servlet-class>com.agilecrm.contact.upload.blob.UploadServlet</servlet-class>
 	</servlet>

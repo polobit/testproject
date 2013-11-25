@@ -365,7 +365,7 @@ function initializeSocialSuite()
 	     		   		    	} // client json if end
 	     		   		    
 	     		   		    // Notification for stream added.
-	     		   		    showNotyPopUp('information', "Stream added!", "top", 2500);
+	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 2500);
 	     		   		    
 	     		   		    setTimeout(function ()
 	     		   			  {

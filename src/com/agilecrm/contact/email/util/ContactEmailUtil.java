@@ -254,7 +254,7 @@ public class ContactEmailUtil
 	String password = imapPrefs.password;
 	String port = "993";
 
-	String url = "http://imap.agilecrm.com:8080/AgileCRMEmail/imap?user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail + "&host="
+	String url = "https://agile-imap.appspot.com/imap?user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail + "&host="
 		+ URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&command=imap_email&password="
 		+ URLEncoder.encode(password);
 
@@ -291,10 +291,10 @@ public class ContactEmailUtil
 	String oauth_key = gmailPrefs.token;
 	String oauth_secret = gmailPrefs.secret;
 
-	String url = "http://imap.agilecrm.com:8080/AgileCRMEmail/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName) + "&search_email="
-		+ searchEmail + "&host=" + URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count
-		+ "&consumer_key=" + URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret) + "&oauth_key="
-		+ URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
+	String url = "https://agile-imap.appspot.com/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail
+		+ "&host=" + URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
+		+ URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret) + "&oauth_key=" + URLEncoder.encode(oauth_key)
+		+ "&oauth_secret=" + URLEncoder.encode(oauth_secret);
 
 	return url;
     }
