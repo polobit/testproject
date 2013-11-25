@@ -119,7 +119,11 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	if (isValidField(form_id+' #fname'))properties.push(property_JSON('first_name', form_id+' #fname'));
    
     	if (isValidField(form_id+' #lname'))properties.push(property_JSON('last_name', form_id+' #lname'));
-    
+    	
+    	// Add profile_img
+        if(form_id == "personForm")        	
+           if (isValidField(form_id+' #image'))properties.push(property_JSON('image', form_id+' #image'));     	  	  
+   
     	///give preference to autofilled company, ignore any text in textfield for filling company name
     	var company_el=$("#"+form_id+" [name='contact_company_id']").find('li');
     	if(company_el && company_el.length)	
@@ -303,8 +307,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     if (id != null) obj['id'] = id;
     
     obj["created_time"] = created_time;
-    
-    
+       
     // Saves contact
     var contactModel = new BaseModel();
     contactModel.url = 'core/api/contacts';

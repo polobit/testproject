@@ -14,7 +14,11 @@ var WorkflowsRouter = Backbone.Router
 				"workflows" : "workflows",
 				"workflow-add" : "workflowAdd",
 				"workflow/:id" : "workflowEdit",
-
+				
+				/* workflow templates*/
+				"workflow-templates":"workflowTemplates",
+				"workflow-add/:t":"workflowAddTemplate",
+				
 				/* Logs */
 				"workflows/logs/:id" : "logsToCampaign",
 
@@ -101,6 +105,72 @@ var WorkflowsRouter = Backbone.Router
 
 				$('#content').html(getTemplate('workflow-add', {}));
 				initiate_tour("workflows-add", $('#content'));
+			},
+			
+			/**
+			 * Fetches various default workflow template jsons such as newsletter etc and build UI
+			 * to show various templates to select workflow template.
+			 * 
+			 **/
+			workflowTemplates: function(){
+				if (!this.workflow_list_view
+						|| !this.workflow_list_view.collection) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				// Insert workflow categories template into content div
+				var $workflow_categories_template  = $('#content').html(getTemplate('workflow-categories', {}));
+
+				console.log(this.worflow_templates_json === undefined);
+				var workflow_templates = this.worflow_templates_json;
+			    
+				// Download template jsons, if undefined.
+				if(workflow_templates === undefined)
+			    {
+					console.log("Downloading template jsons...");
+					
+					// to maintain scope of 'this' inside callback
+					var that = this;
+					var origin = location.origin;
+					
+					// Download template jsons
+					$.getJSON(origin + '/workflow-default-templates', function(data){
+						
+						// Initialize workflow_templates_json
+						that.worflow_templates_json = data;
+						
+						// build UI with obtained templates json
+						build_workflow_templates(data, $workflow_categories_template);
+					});
+			    	
+			    	return;
+			    }
+				
+				build_workflow_templates(workflow_templates, $workflow_categories_template);
+			},
+			
+			/**
+			 * Shows constructed workflow that matches with the template_name.
+			 * 
+			 * @param template_name - template name.
+			 **/
+			workflowAddTemplate: function(template_name){
+				if (!this.workflow_list_view
+						|| !this.workflow_list_view.collection) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				// Returns workflow json with the template name and initialize this.workflow_json.
+				this.workflow_json = JSON.stringify(get_template_json(this.worflow_templates_json, template_name));
+				
+				$('#content').html(getTemplate('workflow-add',{}));
+				
 			},
 
 			/**

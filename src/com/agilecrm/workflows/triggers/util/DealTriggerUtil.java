@@ -33,11 +33,10 @@ public class DealTriggerUtil
     public static void executeTriggerForNewDeal(Opportunity opportunity)
     {
 	// Executes trigger when deal is created.
-	if (opportunity != null && opportunity.id == null)
-	{
-	    executeTriggerForDeals(opportunity.getContacts(), Trigger.Type.DEAL_IS_ADDED);
+	if (opportunity == null)
 	    return;
-	}
+
+	executeTriggerForDealsBasedOnCondition(opportunity.getContacts(), Trigger.Type.DEAL_IS_ADDED);
     }
 
     /**
@@ -66,7 +65,7 @@ public class DealTriggerUtil
 		if (opportunityObject == null)
 		    continue;
 
-		executeTriggerForDeals(opportunityObject.getContacts(), Trigger.Type.DEAL_IS_DELETED);
+		executeTriggerForDealsBasedOnCondition(opportunityObject.getContacts(), Trigger.Type.DEAL_IS_DELETED);
 	    }
 	}
 	catch (Exception e)
@@ -74,6 +73,49 @@ public class DealTriggerUtil
 	    e.printStackTrace();
 	    System.out.println("Got Exception in executeTriggerForDeleteDeal " + e.getMessage());
 	}
+    }
+
+    /**
+     * Executes trigger for deals based on old opportunity. If old opportunity
+     * is null, it means new deal is created.
+     * 
+     * @param oldOpportunity
+     *            - Opportunity before save.
+     * @param newOpportunity
+     *            - Updated opportunity.
+     */
+    public static void executeTriggerToDeal(Opportunity oldOpportunity, Opportunity newOpportunity)
+    {
+	// new deal
+	if (oldOpportunity == null)
+	{
+	    executeTriggerForNewDeal(newOpportunity);
+	    return;
+	}
+
+	// checks milestone change in a deal.
+	checkMilestoneChange(oldOpportunity, newOpportunity);
+
+    }
+
+    /**
+     * Verifies whether milestone is changed for a deal.
+     * 
+     * @param oldOpportunity
+     *            - Opportunity before save.
+     * @param newOpportunity
+     *            - Updated opportunity.
+     */
+    public static void checkMilestoneChange(Opportunity oldOpportunity, Opportunity newOpportunity)
+    {
+	// if no change in milestone return
+	if ((oldOpportunity.milestone.equals(newOpportunity.milestone)))
+	    return;
+
+	System.out.println("Milestone changed from " + oldOpportunity.milestone + " to " + newOpportunity.milestone + " of deal " + newOpportunity.name);
+
+	// execute trigger for deal milestone change.
+	executeTriggerForDealsBasedOnCondition(newOpportunity.getContacts(), Trigger.Type.DEAL_MILESTONE_CHANGED);
     }
 
     /**
@@ -85,7 +127,7 @@ public class DealTriggerUtil
      * @param condition
      *            Trigger condition for deals.
      */
-    public static void executeTriggerForDeals(List<Contact> contactsList, Type condition)
+    public static void executeTriggerForDealsBasedOnCondition(List<Contact> contactsList, Type condition)
     {
 
 	// if deal has no related contacts

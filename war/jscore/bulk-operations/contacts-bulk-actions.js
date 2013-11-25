@@ -287,7 +287,7 @@ $(function()
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
 			
-			postBulkOperationData(url, json, $form, null, function(){ enable_send_button($('#bulk-send-email'));}, "Emails queued for " + count +" contact(s). They will be sent shortly.");
+			postBulkOperationData(url, json, $form, null, function(){ enable_send_button($('#bulk-send-email'));}, "Emails have been queued for " + count +" contacts. They will be sent shortly.");
 		});
 
 	});
@@ -318,7 +318,7 @@ $(function()
 					count = id_array.length;
 
 				var contacts_csv_modal = $(getTemplate('contacts-export-csv-modal'),{});
-				$(contacts_csv_modal).find('.export-contacts-count').html("<b>"+count+" contacts</b>");
+				//$(contacts_csv_modal).find('.export-contacts-count').html("<b>"+count+" contacts</b>");
 				contacts_csv_modal.modal('show');
 				
 				// If Yes clicked
@@ -351,7 +351,7 @@ $(function()
 						$('table#contacts').find('.thead_check').removeAttr('checked');
 						$('table#contacts').find('.tbody_check').removeAttr('checked');
 						
-					});
+					}, "Exporting " + count + " contacts as CSV scheduled.");
 				});
 
 			});

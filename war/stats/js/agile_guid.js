@@ -10,6 +10,7 @@ var agile_guid = {
 			this.cookie_name = 'agile-crm-guid';
 			this.cookie_email = 'agile-email';
 			this.cookie_original_ref = 'agile-original-referrer';
+			this.new_guid = false;
 		},
 		
 		// Generate random number like 81a996ac-812c-7677-4b33-e3c2e0ba3050
@@ -39,6 +40,7 @@ var agile_guid = {
 
 			// first referrer set
 			this.set_original_referrer();
+			this.new_guid = true;
 			return guid;
 		}, 
 		

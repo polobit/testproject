@@ -28,6 +28,7 @@
                                         <option value="CONTACT_IS_ADDED">Contact is added</option>
                                         <option value="DEAL_IS_ADDED">Deal is added</option>
                                         <option value="DEAL_IS_DELETED">Deal is deleted</option>
+                                        <option value="DEAL_MILESTONE_CHANGED">Deal milestone changed</option>
                                         <option value="ADD_SCORE" id="add-score">Score (>=)</option>
                                     </select>
                                 </div>
@@ -37,7 +38,7 @@
                             <div id="RHS" name="RHS">
                                 <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE ">Value  <span class="field_req">*</span></label>
                                 <div class="controls">
-                                    <input type="text" value="{{custom_tags}}" id="custom_tags" name="custom_tags" class="trigger-tags span2 TAG_IS_ADDED TAG_IS_DELETED" style="margin-bottom: -1px" placeholder="Enter tags" />
+                                    <input type="text" value="{{custom_tags}}" id="custom_tags" name="custom_tags" class="trigger-tags TAG_IS_ADDED TAG_IS_DELETED" style="margin-bottom: -1px" placeholder="Enter tag" />
                                     {{#if custom_score}}
                                     <input type="text" value="{{this.custom_score}}"id="add-score-value" name="custom_score" class="ADD_SCORE required custom-value digits" />
                                     {{else}}

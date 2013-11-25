@@ -71,9 +71,23 @@ function initializeSocialSuite()
 		
 		// Add website / handle of twitter of tweet owner.
 		$("#website", $('#personModal')).attr("value",TweetOwnerForAddContact);		
+		$("#image", $('#personModal')).attr("value",tweet.user.profile_image_url);
 		  	  
 		// Select network type.
 		$("div.website select").val("TWITTER");
+		
+		
+		// If picture is not null and undefined, display it by given width, else display none
+		var pic = tweet.user.profile_image_url;
+		if (pic != undefined && pic != null)
+		{
+			var el = $('<img class="imgholder thumbnail person-img" onload="changeProperty()" style="display: inline;"  src="' + pic + '"></img>');
+			$('#pic').html(el).show();
+			$("img").error(function()
+			{
+				$('#pic').css("display", "none");
+			});
+		}
 		
 		changeProperty();
 	});
@@ -82,6 +96,8 @@ function initializeSocialSuite()
 	$('#personModal').on('hidden.bs.modal', function () {
 		document.getElementById("network_handle").className = 'network-handle';
 		document.getElementById("handle").className = ''; 
+		$('#pic').css("display", "none");
+		$('#pic').empty();
 		changeProperty();
 		});
 
@@ -95,6 +111,7 @@ function initializeSocialSuite()
 	$( "#pic" ).change(function() {
 		changeProperty();
 		});
+
 	/**
 	 * Display popup form with stream details. 
 	 */
@@ -365,7 +382,7 @@ function initializeSocialSuite()
 	     		   		    	} // client json if end
 	     		   		    
 	     		   		    // Notification for stream added.
-	     		   		    showNotyPopUp('information', "Stream added!", "top", 2500);
+	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 2500);
 	     		   		    
 	     		   		    setTimeout(function ()
 	     		   			  {
