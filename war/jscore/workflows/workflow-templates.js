@@ -121,4 +121,4 @@ var workflow_template_attributes=
 	        "name": "trial_conversion",
 	        "description": "Identify who among your free/trial users are ready to convert and reach out to them."
 	    }
-	}
+	};

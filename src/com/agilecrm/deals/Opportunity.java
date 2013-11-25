@@ -13,6 +13,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -328,15 +329,21 @@ public class Opportunity extends Cursor
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
 
-	    // Executes trigger when new deal is created with related
-	    // contacts as trigger needs contact objects
-	    if (this.id == null)
-		DealTriggerUtil.executeTriggerForNewDeal(this);
 	}
 
 	Long id = this.id;
 
+	// old opportunity (or deal) having id.
+	Opportunity oldOpportunity = null;
+
+	// cache old data to compare new and old in triggers
+	if (id != null)
+	    oldOpportunity = OpportunityUtil.getOpportunity(id);
+
 	dao.put(this);
+
+	// Executes trigger
+	DealTriggerUtil.executeTriggerToDeal(oldOpportunity, this);
 
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Opportunity> search = new AppengineSearch<Opportunity>(Opportunity.class);
