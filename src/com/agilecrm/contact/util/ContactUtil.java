@@ -207,6 +207,16 @@ public class ContactUtil
 
 	return dao.getByProperty(searchMap);
     }
+    
+    public static Contact searchContactByPhoneNumber(String phoneNumber){
+    	if(StringUtils.isBlank(phoneNumber))
+    		return null;
+    	Map<String, Object> searchMap = new HashMap<String, Object>();
+    	searchMap.put("properties.name", Contact.PHONE);
+    	searchMap.put("properties.value", phoneNumber);
+    	
+    	return dao.getByProperty(searchMap);
+    }
 
     public static boolean isExists(String email)
     {

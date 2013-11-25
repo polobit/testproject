@@ -80,6 +80,12 @@ function subscribeToPubNub(domain)
 				bulkActivitiesNoty('information', message);
 				return;
 			}
+			
+			// shows call notification
+			if(message.type == "CALL"){
+				showNotyPopUp('information', message.message, "bottomRight");
+				return;
+			}
 
 			// sets notification for notification preferences.
 			_setupNotification(message);
