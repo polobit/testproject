@@ -229,9 +229,7 @@ function setup_tags_typeahead() {
  */
 function setup_tags(cel) {
 	
-	
-	
-	if(!tagsCollection)
+	if(!tagsCollection || !tagsCollectionView)
 	{
 		
 		init_tags_collection(cel, function(el){
