@@ -12,7 +12,6 @@
 function serializeForm(form_id) {
 	var arr = $('#' + form_id).serializeArray(), obj = {};
 
-	console.log(arr);
 	/*
 	 * Serializes check box, though serialization for check box is available in
 	 * SerializeArray which return "on", if checked. Since it is required to
@@ -72,13 +71,15 @@ function serializeForm(form_id) {
 	 */
 	// Stores build rules based on chained select
 	
-	var chained_selects = $('#' + form_id + ' .chained');
+	var chained_selects = $('#' + form_id + ' .chained-table');
 	$.each(chained_selects, function(index, element){
 		var json_array = [];
-	arr = arr.concat($(element).map(function() {
+	arr = arr.concat($(element).find('tr').map(function() {
 		var json_object = {};
-		$.each($(element).find('div').children(), function(index, data) {
-			console.log(element);
+		console.log($(element).find('div'));
+		console.log($(this).find('div').children());
+		$.each($(this).find('div').children(), function(index, data) {
+			console.log($(data).parent().attr('name'));
 			// Gets the name of the tr
 			var name = $(data).parent().attr('name');
 			var value;
@@ -96,16 +97,14 @@ function serializeForm(form_id) {
 			// Set if value of input/select is valid
 			if (value != null && value != "")
 				json_object[name] = value;
+			// Pushes each rule built from chained select in to an JSON array
+			console.log(json_object);
 		});
-
-		// Pushes each rule built from chained select in to an JSON array
 		json_array.push(json_object);
 		
-		console.log(json_array);
-
 		// Maps json array with name "rules"
 		return {
-			"name" : $(element).attr('name'),
+			"name" : $(this).attr('name'),
 			"value" : json_array
 		};
 
@@ -135,7 +134,6 @@ $(function(){
 			}
 		}
   
-		console.log(elem);
 		if (elem) {
 			$(elem).focus();
 		}

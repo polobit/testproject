@@ -379,30 +379,25 @@ function fillCustomFields(fields, el, callback)
 {
 	
 	var lhs_element = $("#LHS > select > #custom-fields", el);
-	console.log(lhs_element);
 	var rhs_element = $("#RHS > select", el);
 	var condition = $("#condition > select", el);
-	console.log(condition);
-	console.log(rhs_element);
 	for(var i = 0; i < fields.length ; i++)
 	{
 		if(i == 0)
 			lhs_element.show();
 		
 		var field = fields[i];
-		console.log(field);
 		lhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
 		
 		if(field.field_type == "DATE")
 		{
-			console.log(condition.find("option.created_time").addClass(field.field_label));
+			condition.find("option.created_time").addClass(field.field_label);
 		}
 		condition.append('<option value="EQUALS" class="'+field.field_label+'">is</option>');
 		condition.append("<option value='NOTEQUALS' class='"+field.field_label+"'>isn't</option>");
 			
 		if(field.field_data)
 		rhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
-		console.log(el);
 	}
 	
 	if (callback && typeof (callback) === "function")

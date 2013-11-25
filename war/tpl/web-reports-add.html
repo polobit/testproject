@@ -21,7 +21,7 @@
 						<label class="control-label">Condition</label>
 						<div class="controls" >
 							<table style="background-color: transparent"
-								class="reports-condition-table">
+								class="reports-condition-table chained-table">
 								<tbody>
 									<tr class="chained controls" name="rules" style="padding-left: 100px">
 										<td>
@@ -155,14 +155,14 @@
 						<label class="control-label">Action</label>
 						<div class="controls">
 							<table style="background-color: transparent"
-								class="reports-condition-table actions" >
+								class="reports-condition-table actions chained-table" >
 								<tbody>
 									<tr class="chained controls webrule-actions" style="padding-left: 100px" name="actions"> 
 										<td class="lhs-block" style="vertical-align: top;">
 										<div id="action" name="action">
 											<select class="required" style="width: 125px;">
 												<option value="POPUP">Shop Popup</option>
-												<option value="RUN_CAMPAIGN" class="campaign" 
+												<option value="ASSIGN_CAMPAIGN" class="campaign" 
 													related="WEB_RULE_RHS" url="core/api/workflows"
 													parse_key="id" parse_value="name">Assign Campaign</option>
 											</select>
