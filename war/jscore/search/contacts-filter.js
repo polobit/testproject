@@ -44,7 +44,7 @@ $(function()
 	
 	
 	// Filter Contacts- Clone Multiple
-	$("i.filter-contacts-multiple-add").die().live('click', function(e)
+	$("i.web-rule-multiple-add").die().live('click', function(e)
 	{
 		// To solve chaining issue when cloned
 		var htmlContent = $(getTemplate("webrules-add", {})).find('tr.webrule-actions').clone();
