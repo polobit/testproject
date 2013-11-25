@@ -80,45 +80,45 @@ function get_template_json(templates_json, template_name)
 var workflow_template_attributes=
 {
 	    "newsletter": {
-	        "icon": "icon-globe",
+	        "icon": "icon-file-text",
 	        "title": "Newsletter",
 	        "name": "newsletter",
-	        "description": "Send newsletter and track campaign email open and click rate."
+	        "description": "Send a newsletter and see reports on opens and clicks."
 	    },
 	    "auto_responder": {
 	        "icon": "icon-magic",
-	        "title": "Auto Responder",
+	        "title": "Autoresponder",
 	        "name": "auto_responder",
-	        "description": "Send email automatically after certain waiting period."
+	        "description": "Send emails and followup automatically after a specified duration."
 	    },
 	    "lead_scoring": {
-	        "icon": "icon-flag-checkered",
+	        "icon": "icon-star-half-full",
 	        "title": "Lead Scoring",
 	        "name": "lead_scoring",
-	        "description": "Increase score of your lead on a fly when email-link clicked."
+	        "description": "Score your leads when they click email links and browse the website."
 	    },
 	    "cart_abandonment": {
 	        "icon": "icon-shopping-cart",
 	        "title": "Cart Abandonment",
 	        "name": "cart_abandonment",
-	        "description": "Get back your customer by sending discount coupons."
+	        "description": "Detect when your users abandon cart and send them relavent communication."
 	    },
 	    "targeted_promo": {
 	        "icon": "icon-bullseye",
 	        "title": "Targeted Promo",
 	        "name": "targeted_promo",
-	        "description": "Promote your product so that it reach right customers."
+	        "description": "Send relevant and timely promotional communication to users based on their interests and actions."
 	    },
 	    "user_onboarding": {
-	        "icon": "icon-level-up",
+	        "icon": "icon-plane",
 	        "title": "User Onboarding",
 	        "name": "user_onboarding",
-	        "description": "Make your customer feel comfortable with your product/service."
+	        "description": "Help your users with timely communication to bring them onboard and improve retention."
 	    },
 	    "trial_conversion": {
-	        "icon": "icon-gift",
+	        "icon": "icon-level-up",
 	        "title": "Trial Conversion",
 	        "name": "trial_conversion",
-	        "description": "Convert your trial customers into paid ones."
+	        "description": "Identify who among your free/trial users are ready to convert and reach out to them."
 	    }
 	}
