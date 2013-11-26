@@ -503,7 +503,7 @@ public class ContactUtil
 		for (Contact contact : contacts_list)
 		{
 			contact.setContactOwner(newOwnerKey);
-			Key<DomainUser> userKey = contact.setContactOwnerKey();
+			Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 			if (!new_owner.equals(userKey))
 				search.edit(contact);
@@ -528,7 +528,7 @@ public class ContactUtil
 		for (Contact contact : contacts_list)
 		{
 			contact.setContactOwner(newOwnerKey);
-			Key<DomainUser> userKey = contact.setContactOwnerKey();
+			Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 			if (!new_owner.equals(userKey))
 				search.edit(contact);
