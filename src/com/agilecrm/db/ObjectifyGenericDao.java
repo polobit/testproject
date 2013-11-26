@@ -88,7 +88,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		ObjectifyService.register(CustomFieldDef.class);
 		ObjectifyService.register(CustomView.class);
 		ObjectifyService.register(ContactFilter.class);
-	ObjectifyService.register(WebRule.class);
+		ObjectifyService.register(WebRule.class);
 
 		ObjectifyService.register(Note.class);
 		ObjectifyService.register(UserPrefs.class);
@@ -410,8 +410,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		if (!forceLoad)
 			return fetchAll(max, cursor, map);
 
-		CacheUtil.deleteCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get());
-		return fetchAll(max, cursor, map, forceLoad);
+		System.out.println("cached result : "
+				+ CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count"));
+		CacheUtil.deleteCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count");
+		return fetchAll(max, cursor, map);
 	}
 
 	/**
@@ -429,7 +431,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	 *            to filter the entities based on a property
 	 * @return list of entities
 	 */
-	public List<T> fetchAll(int max, String cursor, Map<String, Object> map, boolean... forceLoad)
+	public List<T> fetchAll(int max, String cursor, Map<String, Object> map)
+	{
+		return fetchAll(max, cursor, map, false, true);
+	}
+
+	public List<T> fetchAll(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache)
 	{
 		Query<T> query = ofy().query(clazz);
 		if (map != null)
@@ -438,6 +445,11 @@ public class ObjectifyGenericDao<T> extends DAOBase
 				query.filter(propName, map.get(propName));
 			}
 
+		return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
+	}
+
+	public List<T> fetchAllWithCursor(int max, String cursor, Query<T> query, boolean forceLoad, boolean cache)
+	{
 		if (cursor != null)
 			query.startCursor(Cursor.fromWebSafeString(cursor));
 
@@ -461,8 +473,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 				{
 
 					com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-					Object object = CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get()
-							+ "_count");
+					Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
+							+ NamespaceManager.get() + "_count");
 
 					if (object != null)
 						agileCursor.count = (Integer) object;
@@ -471,7 +483,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 						long startTime = System.currentTimeMillis();
 						agileCursor.count = query.count();
 						long endTime = System.currentTimeMillis();
-						if ((endTime - startTime) > 3 * 1000)
+						if ((endTime - startTime) > 3 * 1000 && cache)
 							CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
 									agileCursor.count, 2 * 60 * 60 * 1000);
 					}
