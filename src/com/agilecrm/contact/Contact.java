@@ -333,7 +333,6 @@ public class Contact extends Cursor
 
 		Contact oldContact = null;
 
-		System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{");
 		if (id != null)
 		{
 
@@ -395,7 +394,6 @@ public class Contact extends Cursor
 			// Execute notification for contacts
 			ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
 
-		System.out.println("update : " + isDocumentUpdateRequired(oldContact));
 		if (oldContact != null && isDocumentUpdateRequired(oldContact))
 			return;
 
