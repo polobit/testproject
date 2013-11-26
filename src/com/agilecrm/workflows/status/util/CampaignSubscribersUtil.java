@@ -111,11 +111,10 @@ public class CampaignSubscribersUtil
      */
     public static List<Contact> getSubscribers(int max, String cursor, String status)
     {
-	System.out.println("Obtained cursor is asdfasdfasd " + cursor);
 	Map<String, Object> subscribers = new HashMap<String, Object>();
 	subscribers.put("campaignStatus.status", status);
 
-	return dao.fetchAll(max, cursor, subscribers);
+	return dao.fetchAll(max, cursor, subscribers, true, false);
     }
 
     /**
