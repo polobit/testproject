@@ -32,6 +32,8 @@ import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.gadget.GadgetTemplate;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
+import com.agilecrm.webrules.WebRule;
+import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -508,14 +510,14 @@ public class JSAPI
 		{
 			JSONObject obj = new JSONObject(json);
 			Iterator<?> keys = obj.keys();
-			while(keys.hasNext())
+			while (keys.hasNext())
 			{
-				String key = (String)keys.next();
+				String key = (String) keys.next();
 				if (key.equals("type"))
 				{
 					String value = obj.getString(key);
 					obj.remove(key);
-					obj.put("subtype", value);					
+					obj.put("subtype", value);
 				}
 			}
 			// Fetches contact based on email
@@ -1098,6 +1100,23 @@ public class JSAPI
 		{
 			e.printStackTrace();
 			// TODO: handle exception
+			return null;
+		}
+	}
+
+	@Path("web-rules")
+	@GET
+	@Produces("application / x-javascript")
+	public String getWebRules()
+	{
+		List<WebRule> webRules = WebRuleUtil.getAllWebRules();
+		ObjectMapper mapper = new ObjectMapper();
+		try
+		{
+			return mapper.writeValueAsString(webRules);
+		}
+		catch (Exception e)
+		{
 			return null;
 		}
 	}
