@@ -124,4 +124,8 @@ var _agile = {
 		add_property : function(data, callback, email)
 		{
 			agile_setProperty(data, callback, email);				// Add or update property to contact
+		},
+		web_rules : function(callback)
+		{
+			agile_webRules(callback);								// Get all web rules associated with domain
 		}};
