@@ -343,7 +343,7 @@ function increaseCount(heading)
 	 
 	count = count ? parseInt(count) + 1 : 1;
 	heading.find('.count').attr('count', count);
-	heading.find('.count').text("(" + count +  " total)");
+	heading.find('.count').text("(" + count +  ")");
 	return count;
 }
 /**
