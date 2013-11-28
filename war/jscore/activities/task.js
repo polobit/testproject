@@ -284,15 +284,6 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 			else if (App_Contacts.contactDetailView
 					&& Current_Route == "contact/"
 							+ App_Contacts.contactDetailView.model.get('id')) {
-
-				// Add model to collection. Disabled sort while adding and called
-				// sort explicitly, as sort is not working when it is called by add
-				// function
-				if (tasksView && tasksView.collection)
-				{
-					tasksView.collection.add(new BaseModel(data), { sort : false });
-					tasksView.collection.sort();
-				}
 				
 				/*
 				 * Verifies whether the added task is related to the contact in
@@ -302,6 +293,22 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 					if (contact.id == App_Contacts.contactDetailView.model
 							.get('id')) {
 
+						// Add model to collection. Disabled sort while adding and called
+						// sort explicitly, as sort is not working when it is called by add
+						// function
+						if (tasksView && tasksView.collection)
+						{
+							if(tasksView.collection.get(data.id))
+							{
+								tasksView.collection.get(data.id).set(new BaseModel(data));
+							}
+							else
+							{
+								tasksView.collection.add(new BaseModel(data), { sort : false });
+								tasksView.collection.sort();
+							}
+						}
+						
 						// Activates "Timeline" tab and its tab content in
 						// contact detail view
 						// activate_timeline_tab();
@@ -343,7 +350,7 @@ function increaseCount(heading)
 	 
 	count = count ? parseInt(count) + 1 : 1;
 	heading.find('.count').attr('count', count);
-	heading.find('.count').text("(" + count +  " total)");
+	heading.find('.count').text("(" + count +  ")");
 	return count;
 }
 /**

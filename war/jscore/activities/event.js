@@ -325,8 +325,6 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	}
 
 	var json = serializeForm(formId);
-	console.log(json);
-	console.log(JSON.stringify(json));
 
 	if(json.allDay){ json.end=json.start; json.start_time="00:00"; json.end_time="23:45"; }// for all day, assume ending in last of that day.
 	
@@ -378,7 +376,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 		$('#' + modalName).modal('hide');
 
 		// $('#calendar').fullCalendar( 'refetchEvents' );
-
+		var event = data.toJSON();
 		if (Current_Route == 'calendar') {
 			
 			// When updating an event remove the old event from fullCalendar
@@ -392,23 +390,30 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 				&& Current_Route == "contact/"
 						+ App_Contacts.contactDetailView.model.get('id')) {
 
-			// Add model to collection. Disabled sort while adding and called
-			// sort explicitly, as sort is not working when it is called by add
-			// function
-			if (eventsView && eventsView.collection)
-			{
-				eventsView.collection.add(new BaseModel(data), { sort : false });
-				eventsView.collection.sort();
-			}
-			
 			/*
 			 * Verifies whether the added task is related to the contact in
 			 * contact detail view or not
 			 */
-			$.each(task.contacts, function(index, contact) {
+			$.each(event.contacts, function(index, contact) {
 				if (contact.id == App_Contacts.contactDetailView.model
 						.get('id')) {
 
+					// Add model to collection. Disabled sort while adding and called
+					// sort explicitly, as sort is not working when it is called by add
+					// function
+					if (eventsView && eventsView.collection)
+					{
+						if(eventsView.collection.get(data.id))
+						{
+							eventsView.collection.get(data.id).set(new BaseModel(data));
+						}
+						else
+						{
+							eventsView.collection.add(new BaseModel(data), { sort : false });
+							eventsView.collection.sort();
+						}
+					}
+					
 					// Activates "Timeline" tab and its tab content in
 					// contact detail view
 					// activate_timeline_tab();

@@ -32,8 +32,6 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
     // Turn off browser default auto complete
     $('#' + id, el).attr("autocomplete", "off");
-    console.log(isSearch + "," + urlParams + ", " + noResultText + ", " + url);
-    console.log(url);
     if(!url)
     	url = "core/api/search/"
     	

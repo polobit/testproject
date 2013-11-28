@@ -12,6 +12,7 @@ var ReportsRouter = Backbone.Router.extend({
 	"report-add" : "reportAdd", 
 	"report-edit/:id" : "reportEdit", 
 	"report-results/:id" : "reportInstantResults",
+	"report-charts/:type" : "reportCharts",
 	"report-funnel/:tags": "showFunnelReport",
 	"report-growth/:tags": "showGrowthReport",
 	"report-cohorts/:tag1/:tag2": "showCohortsReport",
@@ -288,6 +289,26 @@ var ReportsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#reportsmenu").addClass("active");
+	},
+	reportCharts : function(type)
+	{
+		var el = "";
+		if(type)
+		 el = $(getTemplate("report-"+type+"-form", {}));
+		else
+		 el = $(getTemplate("report-growth", {}));
+		
+		$("#content").html(el);	
+		
+		if(type && (type == 'growth' || type == 'funnel'))
+		{
+			setup_tags_typeahead();
+			return;
+		}
+		$.each($("#tags-reports", el), function(i, element){
+			console.log(element);
+			addTagsDefaultTypeahead(element);
+		});
 	}
 	
 });

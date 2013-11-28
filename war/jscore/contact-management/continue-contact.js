@@ -156,8 +156,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	
     	
     	var tags = get_tags(tagsSourceId);
-    	console.log(obj);
-    	console.log(tags);
+    	
     	if (tags != undefined && tags.length != 0) 
     	{
     		obj.tags = [];
@@ -171,20 +170,22 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     		}
     		else
     		{
+    			var tag_objects_temp = [];
     			$.each(tags[0].value, function(index, value) {
     				var is_new = true;
-    				$.each(obj['tagsWithTime'], function(index, tagObject){
-    					console.log()
+    				$.each(obj['tagsWithTime'], function(index, tagObject) {
     					if(value == tagObject.tag)
     					{
+    						tag_objects_temp.push(tagObject);
     						is_new = false
     						return false;
     					}
     				});
     				
     				if(is_new)
-    					obj.tagsWithTime.push({"tag": value});
+    					tag_objects_temp.push({"tag": value});
     			});
+    			obj['tagsWithTime']= tag_objects_temp; 
     		}
        	}
 	
