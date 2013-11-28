@@ -2097,4 +2097,15 @@ $(function()
 		
 		return (City + Region + Country).trim();
 	});
+	
+	/**
+	 * Trims trailing spaces
+	 **/
+	Handlebars.registerHelper('trim_space', function(value){
+		
+		if(value === undefined)
+			return value;
+		
+		return value.trim();
+	});
 });
