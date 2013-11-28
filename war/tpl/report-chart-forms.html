@@ -1,0 +1,116 @@
+<script id="report-funnel-form-template" type="text/html">
+<div class="span6">
+    <div class="well">
+	<legend>Funnel graph</legend>
+        <form id="funnel-graph"  class="form-horizontal">
+            <fieldset style="margin-left:-60px">
+                <div class="control-group">  
+					  <label class="control-label">Tags <span class="field_req">*</span></label>       
+                    <div class="controls">
+                        <div class="pull-left">
+                        	<ul name="tags" class= "tagsinput tags"></ul>
+                        </div>              
+                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead" placeholder="Enter tags separated by comma"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+						<input class="hide" name="report_chart_type" value="FUNNEL"/>      
+              		</div>
+                </div>
+            </fieldset>
+				  <div class="form-actions">          
+                     <a href="#" type="submit" class="btn btn-primary report-chorts" class="btn btn-primary">Show</a>
+                    <span class="save-status"></span>
+                </div>
+        </form>
+    </div>
+</div>
+</script>
+
+<script id="report-growth-form-template" type="text/html">
+<div class="span6">
+    <div class="well">
+<legend>Growth graph</legend>
+        <form id="growth-graph" class="form-horizontal">
+            <fieldset style="margin-left:-60px">
+                <div class="control-group">  
+					  <label class="control-label">Tags <span class="field_req">*</span></label>       
+                    <div class="controls">
+                        <div class="pull-left">
+                        	<ul name="tags" class= "tagsinput tags"></ul>
+                        </div>              
+                        <input name="tags" type="text" id="addBulkTags" class="tags-typeahead" placeholder="Enter tags separated by comma"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+						<input class="hide" name="report_chart_type" value="GROWTH"/>      
+              		</div>
+                </div>
+            </fieldset>	
+ 				 <div class="form-actions">          
+                     <a href="#" type="submit" class="btn btn-primary report-chorts" class="btn btn-primary">Show</a>
+                    <span class="save-status"></span>
+                </div>
+        </form>
+    </div>
+</div>
+</script>
+
+<script id="report-cohorts-form-template" type="text/html">
+<div class="span6">
+    <div class="well">
+<legend>Cohorts graph</legend>
+        <form id="cohorts-graph" class="form-horizontal">
+            <fieldset style="margin-left:-60px">
+                <div class="control-group">  
+					  <label class="control-label">Tag 1<span class="field_req">*</span></label>       
+                    <div class="controls" id="tags-reports">
+                        <input name="tag1" type="text" id="addBulkTags1" class="tags-typeahead-one required"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+						<input class="hide" name="report_chart_type" value="RATIO"/>      
+              		</div>
+                </div>
+				 <div class="control-group">  
+					  <label class="control-label">Tag 2<span class="field_req">*</span></label>       
+                    <div class="controls" id="tags-reports">
+                        <input name="tag2" type="text" id="addBulkTags2" class="tags-typeahead-one required"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+              		</div>
+                </div>
+            </fieldset>
+				  <div class="form-actions">          
+                     <a href="#" type="submit" class="btn btn-primary report-chorts" class="btn btn-primary">Show</a>
+                    <span class="save-status"></span>
+                </div>
+        </form>
+    </div>
+</div>
+</script>
+
+<script id="report-ratio-form-template" type="text/html">
+
+<div class="span6">
+    <div class="well">
+<legend>Ratio graph</legend>
+        <form id="ratio-graph" class="form-horizontal">
+            <fieldset style="margin-left:-60px">
+                <div class="control-group">  
+					  <label class="control-label">Tag 1<span class="field_req">*</span></label>       
+                    <div class="controls" id="tags-reports">
+                        <input name="tag1" type="text" id="addBulkTags1" class="tags-typeahead-one required"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+						<input class="hide" name="report_chart_type" value="RATIO"/>      
+              		</div>
+                </div>
+				 <div class="control-group">  
+					  <label class="control-label">Tag 2<span class="field_req">*</span></label>       
+                    <div class="controls" id="tags-reports">
+                        <input name="tag2" type="text" id="addBulkTags2" class="tags-typeahead-one required"/>
+						<span class="error-tags" style="display:none;color:red;">This field is required.</span>
+              		</div>
+                </div>
+            </fieldset>
+ 				 <div class="form-actions">          
+                     <a href="#" type="submit" class="btn btn-primary report-chorts" class="btn btn-primary">Show</a>
+                    <span class="save-status"></span>
+                </div>
+        </form>
+    </div>
+</div>
+</script>
