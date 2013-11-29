@@ -1,4 +1,6 @@
-ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571rem}
+.app-content>ul,.app-content>li,.tweet-body>ul,.tweet-body>li,.tweet-actions>ul,.tweet-actions>li,.tweet-footer>ul,.tweet-footer>li{padding:0;margin:0}
+.app-content>ul,.tweet-body>ul,.tweet-actions>ul,.tweet-footer>ul{list-style:none}
+.app-content>small,.tweet-body>small{font-size:0.8571rem}
 
 .app-content{position:relative;left:0;right:0;bottom:0;padding:20px 5px 15px 15px;}
 .scroll-v-app-content{overflow-y: scroll;height:700px;}/*if height:500px then only scroll bar is shown  */
@@ -130,28 +132,30 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .network-type-icon{margin-bottom: 20px;}
 
 /* on add stream form padding*/
-.stream-details>div>.row-fluid{padding-top: 25px;}
+.stream-details>div>.row-fluid{padding-top: 10px;}
 #account_description{padding-top: 0px;}
-.social-stream-types>.row-fluid{padding-top: 15px;}
+.social-stream-types>.row-fluid{padding-top: 10px;}
 
 /* stream type div */
-.stream-type{padding: 15px 12px 10px 12px;border: 1px solid #d2d2d2;width: 55px;height: 55px;cursor:pointer;}
-.social-stream-types{padding-left: 35px;}
+.stream-type{padding: 15px 8px 10px 8px;border: 1px solid #d2d2d2;width:70px;cursor:pointer;font-size: 12px;float: right;}
+.social-stream-types{padding-left: 30px;}
 
 /* Stream type description */
 .description-hidden,.keyword-hidden{visibility:hidden;}
-#stream_description_label{padding-top: 10px;margin-bottom: 0px;margin-left: 36px;}
+#stream_description_label{padding-top: 10px;margin-bottom: 0px;margin-left: 92px;}
 
 /* searck keyword */
-#search_stream_keyword{padding-top: 15px;padding-left: 154px;}
+#search_stream_keyword{padding-top: 15px;padding-left: 29%;}
 
 /* Add Stream Form*/
 .at-center{text-align: center;}
 .font15{font-size: 15px;}
 #twitter_option,#linkedin_option{padding:8% 5% 5%;border: 1px solid #d2d2d2;width: 55px;height: 58px;}
 #twitter_option:hover,#linkedin_option:hover{background-color:#EDEDED;}
-#addStreamModal>.modal-body{max-height:419px;}
-#account_description_label{padding-top: 33px;}
+#addStreamModal>.modal-body{padding:0 0 0 0;max-height:460px;}
+#addStreamModal{width:500px;}
+.at-center>hr{margin: 10px 0;}
+#account_description_label{padding-top: 30px;}
 
 
 #twitter_profile_img_url{visibility:hidden;width: 1px;height: 1px;}
@@ -171,7 +175,7 @@ ul,ol,dl,li,dd{padding:0;margin:0}ul,ol{list-style:none}small{font-size:0.8571re
 .add-form-input{width: 139px;}
 
 /* Elements on add compose tweet form */
-#socialsuite-twitter_messageForm{margin: 0 0 0 0;}
+#socialsuite_twitter_messageForm{margin: 0 0 0 0;}
 .tweet-scheduling{cursor:pointer;width: 30px;margin-bottom: 5px;margin-top: -6px;text-align: center;padding-top: 5px;}
 .tweet-scheduling-active{background-color:#EDEDED;}
 .width-65{width:65px;}

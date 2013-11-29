@@ -1,6 +1,5 @@
 package com.socialsuite;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Id;
@@ -63,12 +62,21 @@ public class ScheduledUpdate
 	/**
 	 * ScheduledUpdate Date.
 	 */
-	public Date date;
+	public String scheduled_date;
 
 	/**
 	 * ScheduledUpdate Time.
 	 */
-	public String time;
+	public String scheduled_time;
+
+	public Long schedule;
+	/**
+	 * Tweet owner's profile img.
+	 */
+	public String profileImg;
+	public String headline;
+	public String tweetOwner;
+	public String tweetId;
 
 	/** object of objectify for dB operations on ScheduledUpdate. */
 	public static ObjectifyGenericDao<ScheduledUpdate> dao = new ObjectifyGenericDao<ScheduledUpdate>(
@@ -98,7 +106,8 @@ public class ScheduledUpdate
 	 *            - message to be included in scheduled update.
 	 */
 	public ScheduledUpdate(Long domain_user_id, String screen_name, String network_type, String token, String secret,
-			String message, Date date, String time)
+			String message, String scheduled_date, String scheduled_time, String profileImg, String headline,
+			String tweetOwner, String tweetId, Long schedule)
 	{
 		System.out.println("In ScheduledUpdate constructor " + message + " networkType : " + network_type);
 		this.domain_user_id = domain_user_id;
@@ -107,8 +116,13 @@ public class ScheduledUpdate
 		this.token = token;
 		this.secret = secret;
 		this.message = message;
-		this.date = date;
-		this.time = time;
+		this.scheduled_date = scheduled_date;
+		this.scheduled_time = scheduled_time;
+		this.profileImg = profileImg;
+		this.headline = headline;
+		this.tweetOwner = tweetOwner;
+		this.tweetId = tweetId;
+		this.schedule = schedule;
 	}
 
 	/**
@@ -129,15 +143,13 @@ public class ScheduledUpdate
 		dao.delete(this);
 	}// delete end
 
-	/**
-	 * Display Scheduled update in string.
-	 */
 	@Override
 	public String toString()
 	{
 		return "ScheduledUpdate [id=" + id + ", domain_user_id=" + domain_user_id + ", screen_name=" + screen_name
 				+ ", token=" + token + ", secret=" + secret + ", network_type=" + network_type + ", message=" + message
-				+ ", date=" + date + ", time=" + time + "]";
+				+ ", date=" + scheduled_date + ", time=" + scheduled_time + ", profileImg=" + profileImg
+				+ ", headline=" + headline + ", tweetOwner=" + tweetOwner + ", tweetId=" + tweetId + "]";
 	}
 
 	/**
@@ -151,7 +163,7 @@ public class ScheduledUpdate
 	{
 		try
 		{
-			// search ScheduledUpdate and return
+			// search ScheduledUpdate on id.
 			return dao.get(id);
 		}
 		catch (EntityNotFoundException e)
@@ -160,6 +172,20 @@ public class ScheduledUpdate
 			// e.printStackTrace();
 			return null;
 		}
+	}// getScheduledUpdate end
+
+	/**
+	 * Gets value of a ScheduledUpdate object, matched with the given
+	 * screen_name.
+	 * 
+	 * @param screen_name
+	 *            - screen_name of account holder.
+	 * @return value of the matched entity.
+	 */
+	public static List<ScheduledUpdate> getScheduledUpdates(String screen_name)
+	{
+		// search ScheduledUpdate on screen_name.
+		return dao.listByProperty("screen_name", screen_name);
 	}// getScheduledUpdate end
 
 	/**

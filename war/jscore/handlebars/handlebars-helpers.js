@@ -2067,7 +2067,7 @@ $(function()
 					return;
 
 				var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
-						"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-calendar", "All_Updates" : "icon-home",
+						"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
 						"My_Updates" : "icon-share-alt" };
 
 				name = name.trim();

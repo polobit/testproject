@@ -91,7 +91,7 @@
 <!-- models for tweets -->
 <script id="Column-model-template" type="text/html">
 {{#if_equals msg_type "Tweet"}}
-<article id={{id}} tweet-id-str={{id_str}} stream-id={{stream_id}} class="stream-item is-actionable {{deleted_msg}}">
+<article id={{id}} tweet-id-str="{{id_str}}" stream-id={{stream_id}} class="stream-item is-actionable {{deleted_msg}}">
    <div class="item-box">       
       <div class="tweet">
            <header class="tweet-header">        
@@ -161,7 +161,17 @@
                             {{/if}}
     					 </ul>
                     </li>  
-        		</ul>     
+        		</ul>
+              {{else}}
+                <time class="txt-mute txt-small time-ellipsis" datetime="{{scheduled_date}}">Scheduled for {{scheduled_date}} {{scheduled_time}}</time>
+                <ul class="tweet-actions">
+                   <li> <a class="tweet-action edit-scheduled" href="#social" rel="edit"> 
+                           <i class="icon icon-edit" title="Edit"></i>                            
+                         </a> </li>	                 
+ 		    	   <li> <a class="tweet-action delete-scheduled" href="#social" rel="delete"> 
+                            <i class="icon icon-trash" title="Delete"></i>                             
+                         </a> </li>  
+				</ul>  
               {{/if}}
  			 </footer>  
     	   </div> 
