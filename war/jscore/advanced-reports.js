@@ -43,6 +43,12 @@ function initFunnelCharts(callback)
 		$('#frequency').change(function(){callback();});
 	}
 	
+	
+	fillSelect("filter", "core/api/filters", undefined, function(){
+		$('#filter').change(function(){callback();});
+		
+	}, '<option class="default-select" value="{{id}}">{{name}}</option>', false, undefined, "All");
+	
 	callback();
 }
 

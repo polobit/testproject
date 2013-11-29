@@ -98,6 +98,15 @@ function getOptions()
 		options += ("&frequency=" + frequency);
 	}
 	
+	// If Frequency is present - send frequency too
+	if($('#filter').length > 0)
+	{
+		// Get Frequency
+		var filter_id = $( "#filter").val();
+		if(filter_id !="" && filter_id != "ALL")
+		options += ("&filter=" + filter_id);
+	}
+	
 	// console.log("options " + options);
 	return options;
 }
