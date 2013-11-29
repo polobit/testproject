@@ -487,19 +487,31 @@ $(function()
 		return (monthArray[intMonth] + " " + intDay);
 	});
 
+
 	/**
 	 * Helper function to return task color based on it's priority
 	 */
 	Handlebars.registerHelper('task_label_color', function(priority)
 	{
-		if (priority == 'HIGH')
+		if (priority == 'HIGH' || priority == 'red')
 			return 'important';
-
-		if (priority == 'NORMAL')
+		if (priority == 'NORMAL' || priority == '#36C')
 			return 'info';
-
-		if (priority == 'LOW')
+		if (priority == 'LOW' || priority == 'green')
 			return 'success';
+	});
+
+	/**
+	 * Helper function to return event label based on it's priority
+	 */
+	Handlebars.registerHelper('event_priority', function(priority)
+	{
+		if (priority == 'red')
+			return 'High';
+		if (priority == '#36C')
+			return 'Normal';
+		if (priority == 'green')
+			return 'Low';
 	});
 
 	/**
@@ -2079,5 +2091,16 @@ $(function()
 			Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " +this.country + " )");
 		
 		return (City + Region + Country).trim();
+	});
+	
+	/**
+	 * Trims trailing spaces
+	 **/
+	Handlebars.registerHelper('trim_space', function(value){
+		
+		if(value === undefined)
+			return value;
+		
+		return value.trim();
 	});
 });
