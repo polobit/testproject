@@ -957,10 +957,13 @@ $(function()
 	 */
 	Handlebars.registerHelper('stringToJSON', function(object, key, options)
 	{
+		console.log(object);
+		console.log(key);
 		if (key)
 		{
 			try
 			{
+				
 				object[key] = JSON.parse(object[key]);
 			}
 			finally
@@ -1099,26 +1102,6 @@ $(function()
 			return "(" + this.length + " Total)";
 	})
 
-	/**
-	 * Converts string to JSON
-	 */
-	Handlebars.registerHelper('stringToJSON', function(object, key, options)
-			{
-				if (key)
-				{
-					try
-					{
-						object[key] = JSON.parse(object[key]);
-						return options.fn(object[key]);
-					}
-					catch (err)
-					{
-						return options.fn(object[key]);
-					}
-				}
-
-				return options.fn(JSON.parse(object));
-			});
 
 	/**
 	 * Convert string to lower case
