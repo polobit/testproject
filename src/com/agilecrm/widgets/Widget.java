@@ -182,9 +182,16 @@ public class Widget
 	 */
 	public void save()
 	{
-		this.user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+		if(user == null)
+		user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
 
 		dao.put(this);
+	}
+	
+
+	public void setOwner(Key<AgileUser> user)
+	{
+		this.user = user;
 	}
 
 	/**

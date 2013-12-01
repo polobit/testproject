@@ -82,16 +82,16 @@ $(function()
 	 * When user clicks on add-widget, gets the widget-name which is set to add
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
-	 */
+	 *//*
 	$('.add-widget').live('click', function(e)
 	{
 
 		console.log($(this));
-		/*
+		
 		 * We make add button on a widget disabled on click of it. This is done
 		 * to avoid continuous click in a short time, like double click on add
 		 * button
-		 */
+		 
 		if ($(this).attr("disabled"))
 			return;
 
@@ -107,16 +107,16 @@ $(function()
 		if (Catalog_Widgets_View == null)
 			return;
 
-		/*
+		
 		 * Get widget model from collection based on the name attribute of the
 		 * widget model
-		 */
+		 
 		var models = Catalog_Widgets_View.collection.where({ name : widget_name });
 
-		/*
+		
 		 * Saves widget model and on success navigate back to contact detailed
 		 * view
-		 */
+		 
 		var widgetModel = new Backbone.Model();
 
 		console.log(widgetModel);
@@ -133,25 +133,10 @@ $(function()
 
 			data.set('is_added', true);
 			models[0].set(data);
-			
-
-			/*
-			 * If contacts view is not defined, redirected to list of contacts
-			 * page after adding widget
-			 */
-			 
-			/*if (!App_Contacts || !App_Contacts.contactDetailView || !App_Contacts.contactDetailView.model)
-			{
-				//Backbone.history.navigate("contacts", { trigger : true });
-				return;
-			}
-
-			// Navigates back to the contact id form
-			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, { trigger : true });*/
 
 		} });
 
-	});
+	});*/
 
 	// Deleting widget
 	/**
@@ -166,22 +151,10 @@ $(function()
 		// If not confirmed to delete, return
 		if (!confirm("Are you sure to delete " + widget_name))
 			return;
+		
+		delete_widget(widget_name);
 
-		/*
-		 * Sends Delete request with widget name as path parameter, and on
-		 * success fetches the widgets to reflect the changes is_added, to show
-		 * add widget in the view instead of delete option
-		 */
-		$.ajax({ type : 'DELETE', url : '/core/api/widgets/' + widget_name, contentType : "application/json; charset=utf-8",
-
-		success : function(data)
-		{
-
-			Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
-			update_collection(widget_name);
-
-		}, dataType : 'json' });
-	});
+		});
 
 	$('#remove-widget').die().live('click', function(e)
 	{
@@ -208,8 +181,30 @@ $(function()
 
 		}, dataType : 'json' });
 	});
+	
+	
+	
 
 });
+
+function delete_widget(widget_name)
+{
+	/*
+	 * Sends Delete request with widget name as path parameter, and on
+	 * success fetches the widgets to reflect the changes is_added, to show
+	 * add widget in the view instead of delete option
+	 */
+	$.ajax({ type : 'DELETE', url : '/core/api/widgets/' + widget_name, contentType : "application/json; charset=utf-8",
+
+	success : function(data)
+	{
+
+		Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
+		update_collection(widget_name);
+
+	}, dataType : 'json' });
+
+}
 
 function update_collection(widget_name)
 {

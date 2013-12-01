@@ -315,6 +315,54 @@ public class LinkedInTwitterWidgetsAPI
 	}
 	return null;
     }
+    
+    /**
+     * Connects to {@link LinkedInUtil} or {@link TwitterUtil} based on the name
+     * given in widget and fetches profile of the contact in LinkedIn or Twitter
+     * based on the parameter social id
+     * 
+     * @param widgetId
+     *            {@link Long} plugin-id/widget id, to get {@link Widget} object
+     * @param socialId
+     *            {@link String} LinkedIn id or Twitter id of the contact
+     * @return {@link SocialSearchResult}
+     */
+    @Path("profile/{widget-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public SocialSearchResult getSocialProfileById(@PathParam("widget-id") Long widgetId)
+    {
+	// Retrieves widget based on id
+	Widget widget = WidgetUtil.getWidget(widgetId);
+
+	if (widget == null)
+	    return null;
+
+	try
+	{
+	    // Gets profile from LinkedInUtil based on socialId
+	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
+		return LinkedInProfile.getLinkedInProfile(widget);
+//
+//	    // Gets profile from TwitterUtil based on socialId
+//	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+//		return TwitterProfile.getTwitterProfile(widget);
+	}
+
+	catch (SocketTimeoutException e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
+	}
+	catch (IOException e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	}
+	return null;
+    }
 
     /**
      * Retrieves the work positions of a person in LinkedIn based on LinkedIn id

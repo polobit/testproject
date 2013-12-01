@@ -76,4 +76,64 @@ public class LinkedInProfile
 		}
 	}
 
+	
+	/**
+	 * Fetches LinkedIn profiles for the current user, token and secret are
+	 * retrieved from the widget object and LinkedinId sent. Result is wrapped
+	 * in to {@link SocialSearchResult} class
+	 * 
+	 * @param widget
+	 *            {@link Widget}, for accessing token and secret key
+	 *
+	 * @return {@link SocialSearchResult}
+	 * @throws Exception
+	 */
+	public static SocialSearchResult getLinkedInProfile(Widget widget)
+			throws SocketTimeoutException, IOException, Exception{
+				
+				try
+				{
+					// Creates a client with token and secret retrieved from widget
+					final LinkedInApiClient client = LinkedInUtil.factory.createLinkedInApiClient(widget.getProperty("token"),
+							widget.getProperty("secret"));
+			
+					/*
+					 * Requests the client to return profile details by specifying the
+					 * fields to be returned
+					 */
+					Person person = client.getProfileForCurrentUser(EnumSet.of(ProfileField.PICTURE_URL,
+							ProfileField.ID,ProfileField.FIRST_NAME, ProfileField.LAST_NAME, ProfileField.SUMMARY, ProfileField.HEADLINE,
+							ProfileField.LOCATION_NAME, ProfileField.NUM_CONNECTIONS, ProfileField.PUBLIC_PROFILE_URL,
+							ProfileField.ID, ProfileField.DISTANCE, ProfileField.CURRENT_SHARE, ProfileField.CURRENT_STATUS,
+							ProfileField.POSITIONS_COMPANY, ProfileField.THREE_CURRENT_POSITIONS,
+							ProfileField.THREE_PAST_POSITIONS, ProfileField.POSITIONS, ProfileField.POSITIONS_ID,
+							ProfileField.POSITIONS_TITLE, ProfileField.POSITIONS_SUMMARY, ProfileField.POSITIONS_START_DATE,
+							ProfileField.POSITIONS_END_DATE, ProfileField.POSITIONS_IS_CURRENT, ProfileField.POSITIONS_TITLE,
+							ProfileField.POSITIONS_COMPANY_ID, ProfileField.POSITIONS_COMPANY_INDUSTRY,
+							ProfileField.POSITIONS_COMPANY_TICKER, ProfileField.POSITIONS_COMPANY_NAME,
+							ProfileField.POSITIONS_COMPANY_SIZE, ProfileField.POSITIONS_COMPANY));
+			
+					// wraps person details into a search result
+					SocialSearchResult result = LinkedInUtil.wrapPersonDetailsInSearchResult(person);
+			
+					result.current_update = person.getCurrentStatus();
+			
+					/*
+					 * Distance is 1 for direct connections and 0 for their own profile
+					 */
+					if (!(person.getDistance() > 1l))
+						result.is_connected = true;
+			
+					// Retrieves work positions of the person
+					result.searchResult = LinkedInExperience.fetchExperienceOfPerson(person, person.getId(), client);
+			
+					return result;
+			
+				}
+				catch (Exception e)
+				{
+					// Handles exception thrown by LinkedIn and throws proper exceptions
+					throw LinkedInUtil.handleExceptionInLinkedIn(e);
+				}
+			}
 }

@@ -113,7 +113,7 @@ function savefreshBooksPrefs()
 {
 	// Store the data given by the user as JSON
 	var freshbooks_prefs = {};
-	freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apikey").val();
+	freshbooks_prefs["freshbooks_apiKey"] = $("#freshbooks_apiKey").val();
 	freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
 
 	// Saves the preferences into widget with FreshBooks widget name
