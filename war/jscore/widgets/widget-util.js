@@ -3,6 +3,12 @@ $(function()
 	$("#widget-prefs-save").die().live('click', function(e){
 		e.preventDefault();
 		
+		if($(this).attr('disabled') == "disabled")
+			return;
+		
+		$(this).attr('disabled', 'disabled');
+		
+		
 		// Read from from 
 		var form = $(this).parents('form');
 		
@@ -13,8 +19,21 @@ $(function()
 		
 		// Serializes form daa
 		var form_data = serializeForm(form_id);
-		if(!data.prefs)
-			data["prefs"] = {};
+		
+		
+		
+		try
+		{
+		
+			if(data.prefs)
+				data["prefs"] = JSON.parse(data["prefs"]);
+			else
+				data["prefs"] = {};
+		}
+		catch(err)
+		{
+		}
+			
 		
 		// Update prefs
 		$.each(form_data, function(key, value){
@@ -24,8 +43,11 @@ $(function()
 		if(data.prefs)
 			data.prefs = JSON.stringify(data.prefs);
 		
+		var that =this;
 		// Save entity
 		saveEntity(data, "core/api/widgets", function(data){
+			$(form).data('widget', data);
+			$(that).removeAttr('disabled');
 		})
 	});
 	
