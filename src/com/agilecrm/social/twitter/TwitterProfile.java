@@ -99,7 +99,8 @@ public class TwitterProfile
 		try
 		{
 			// Fetch Twitter user profile based on twitter Id
-			User user = twitter.showUser("");
+			User user = twitter.showUser(twitter.getId());
+			
 
 			SocialSearchResult result = new SocialSearchResult();
 

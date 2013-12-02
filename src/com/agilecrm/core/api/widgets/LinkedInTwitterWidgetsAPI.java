@@ -330,7 +330,7 @@ public class LinkedInTwitterWidgetsAPI
     @Path("profile/{widget-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public SocialSearchResult getSocialProfileById(@PathParam("widget-id") Long widgetId)
+    public SocialSearchResult getSocialProfile(@PathParam("widget-id") Long widgetId)
     {
 	// Retrieves widget based on id
 	Widget widget = WidgetUtil.getWidget(widgetId);
@@ -343,10 +343,10 @@ public class LinkedInTwitterWidgetsAPI
 	    // Gets profile from LinkedInUtil based on socialId
 	    if (widget.name.equalsIgnoreCase("LINKEDIN"))
 		return LinkedInProfile.getLinkedInProfile(widget);
-//
-//	    // Gets profile from TwitterUtil based on socialId
-//	    else if (widget.name.equalsIgnoreCase("TWITTER"))
-//		return TwitterProfile.getTwitterProfile(widget);
+
+	    // Gets profile from TwitterUtil based on socialId
+	    else if (widget.name.equalsIgnoreCase("TWITTER"))
+		return TwitterProfile.getTwitterProfile(widget);
 	}
 
 	catch (SocketTimeoutException e)
