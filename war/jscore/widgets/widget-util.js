@@ -29,6 +29,8 @@ $(function()
 				data["prefs"] = JSON.parse(data["prefs"]);
 			else
 				data["prefs"] = {};
+			
+			console.log(data["prefs"]);
 		}
 		catch(err)
 		{
@@ -45,8 +47,8 @@ $(function()
 		
 		var that =this;
 		// Save entity
-		saveEntity(data, "core/api/widgets", function(data){
-			$(form).data('widget', data);
+		saveEntity(data, "core/api/widgets", function(result){
+			$(form).data('widget', result.toJSON());
 			$(that).removeAttr('disabled');
 		})
 	});
