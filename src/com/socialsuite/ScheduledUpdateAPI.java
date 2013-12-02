@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -40,11 +41,26 @@ public class ScheduledUpdateAPI
 	{
 		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
 		scheduledUpdate.save();
-
-		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
 		return scheduledUpdate;
 	}
 
+	/**
+	 * Update existing scheduledUpdate in database related to current domain user.
+	 * 
+	 * @param scheduledUpdate
+	 *            - Object of {@link ScheduledUpdate}
+	 */
+	@PUT
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ScheduledUpdate updateScheduledUpdate(ScheduledUpdate scheduledUpdate)
+	{
+		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
+		scheduledUpdate.save();		
+		return scheduledUpdate;
+	}
+
+	
 	/**
 	 * Return the list of ScheduledUpdate available in dB related to current
 	 * Domain User.

@@ -289,7 +289,7 @@ function addTweetToStream(modelStream,tweet)
 	      if(modelStream.get('tweetListView').length == 1)
 	    	clearNoTweetNotification(modelStream);
 	      
-	      // If stream owner is tweet owner no need to show retweet icon.
+	      // If stream owner is tweet owner no need to show retweet icon.0
 	      if(modelStream.get('screen_name') != tweet.user.screen_name)            	
 	         tweet["tweetowner_not_streamuser"] = true;      
 
@@ -678,6 +678,44 @@ function addScheduledUpdateInStream(scheduledUpdate)
 		   scheduledUpdate["text"] = scheduledUpdate.message;
 		  
 		   handleMessage(scheduledUpdate);
+		   console.log(scheduledUpdate);
 		 }	   
-   	 });  
+   	 }); 
+    
+     // Remove deleted tweet element from ui
+	 $('.deleted').remove();
+}
+
+/**
+ * Updates added Scheduled Update In Stream. 
+ */
+function updateScheduledUpdateInStream(scheduledUpdate,streamJSON)
+{
+	console.log("In updateScheduledUpdateInStream");
+	var newscheduledUpdate = scheduledUpdate.toJSON();
+  
+	//Get stream from collection.
+	var modelStream = StreamsListView.collection.get(streamJSON.id);	
+		
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get(newscheduledUpdate.id);
+	 	
+	// Update new data in tweet.
+	modelTweet.set("scheduled_time",newscheduledUpdate.scheduled_time);
+	modelTweet.set("scheduled_date",newscheduledUpdate.scheduled_date);  	
+	modelTweet.set("message",newscheduledUpdate.message);
+	modelTweet.set("original_text",newscheduledUpdate.message);
+	
+	var tweet = modelTweet.toJSON();
+	tweet.text = newscheduledUpdate.message;	
+	tweet.text = convertTextToTweet(tweet);
+
+	// Converts normal text to tweet with link on url, # and @.
+	modelTweet.set("text",tweet.text);    
+	
+    // Add back to stream.
+    modelStream.get('tweetListView').add(modelTweet);
+    
+    // Remove deleted tweet element from ui
+	$('.deleted').remove();
 }
