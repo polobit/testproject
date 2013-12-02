@@ -1,6 +1,34 @@
 $(function()
 {
-
+	$("#widget-prefs-save").die().live('click', function(e){
+		e.preventDefault();
+		
+		// Read from from 
+		var form = $(this).parents('form');
+		
+		// Gets widget object
+		var data = $(form).data('widget');
+		
+		var form_id = $(form).attr('id');
+		
+		// Serializes form daa
+		var form_data = serializeForm(form_id);
+		if(!data.prefs)
+			data["prefs"] = {};
+		
+		// Update prefs
+		$.each(form_data, function(key, value){
+			data["prefs"][key] = value;
+		});
+		
+		if(data.prefs)
+			data.prefs = JSON.stringify(data.prefs);
+		
+		// Save entity
+		saveEntity(data, "core/api/widgets", function(data){
+		})
+	});
+	
 });
 
 
@@ -258,16 +286,20 @@ function set_up_access(widget_name, template_id, data, url, model)
 		el = $(getTemplate("widget-settings",json));
 		json['outgoing_numbers'] = data;
 		
+		
 	 }
+	console.log(json);
 	
 	
 	//merged_json =  $.extend(merged_json, model, data);
 	
-	console.log(json);
-	json['prefs'] = '{"verification_status":"success", "verified_number":"+919491544841"}';
-	
 	$('#widget-settings', el).html(getTemplate(widget_name.toLowerCase() + "-revoke-access", json));
+	
 	$('#prefs-tabs-content').html(el);
+	
+	$('#prefs-tabs-content').find('form').data('widget', json);
+	console.log(json);
+	console.log($('#prefs-tabs-content').find('form').data('widget'));
 
 	$('#PrefsTab .active').removeClass('active');
 	$('.add-widget-prefs-tab').addClass('active');
