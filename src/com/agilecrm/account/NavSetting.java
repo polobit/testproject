@@ -76,6 +76,7 @@ public class NavSetting
     {
 	cases = false;
 	deals = calendar = campaign = reports = true;
+	social = false;
     }
 
     public NavSetting()
