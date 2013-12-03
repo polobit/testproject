@@ -118,14 +118,8 @@ public class LinkedInProfile
 			
 					result.current_update = person.getCurrentStatus();
 			
-					/*
-					 * Distance is 1 for direct connections and 0 for their own profile
-					 */
-					if (!(person.getDistance() > 1l))
-						result.is_connected = true;
-			
 					// Retrieves work positions of the person
-					result.searchResult = LinkedInExperience.fetchExperienceOfPerson(person, person.getId(), client);
+					//result.searchResult = LinkedInExperience.fetchExperienceOfPerson(person, person.getId(), client);
 			
 					return result;
 			
