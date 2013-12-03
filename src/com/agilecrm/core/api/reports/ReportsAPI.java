@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.util.TagSearchUtil;
@@ -198,7 +199,8 @@ public class ReportsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getFunnelStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
-	    @QueryParam("time_zone") String timeZone)
+ @QueryParam("time_zone") String timeZone,
+			@QueryParam("filter") String filterId)
     {
 	JSONArray tagsJSONArray = new JSONArray();
 	try
@@ -206,10 +208,14 @@ public class ReportsAPI
 	    // Get tags with a comma or | tokenized
 	    String[] tags = tagsString.split(",");
 
+			ContactFilter filter = null;
+			if (filterId != null)
+				filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
+
 	    // For each tag, get the occurrences for this time frame
 	    for (String tag : tags)
 	    {
-		int count = TagSearchUtil.getTagCount(null, tag, startTime, endTime);
+				int count = TagSearchUtil.getTagCount(filter, tag, startTime, endTime);
 		tagsJSONArray.put(new JSONObject().put(tag, count));
 	    }
 	}
@@ -241,14 +247,20 @@ public class ReportsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
-	    @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency) throws Exception
+ @QueryParam("time_zone") String timeZone,
+			@QueryParam("frequency") String frequency, @QueryParam("filter") String filterId) throws Exception
     {
 	// Get tags with a comma or | tokenized
 	String[] tags = tagsString.split(",");
 	int type = getType(frequency);
 
-	// Get Tags Daily
-	return TagSearchUtil.getTagCount(null, tags, startTime, endTime, type).toString();
+		ContactFilter filter = null;
+		if (filterId != null)
+			filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
+
+
+		// Get Tags Daily
+		return TagSearchUtil.getTagCount(filter, tags, startTime, endTime, type).toString();
     }
 
     /*
@@ -288,11 +300,18 @@ public class ReportsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getRatioStats(@PathParam("tag1") String tag1, @PathParam("tag2") String tag2, @QueryParam("start_time") String startTime,
-	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency) throws Exception
+ @QueryParam("end_time") String endTime,
+			@QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency,
+			@QueryParam("filter") String filterId) throws Exception
     {
 	int type = getType(frequency);
 
+	ContactFilter filter = null;
+		if (filterId != null)
+			filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
+
+
 	// Get Cohorts Monthly
-	return TagSearchUtil.getRatioTagCount(null, tag1, tag2, startTime, endTime, type).toString();
+		return TagSearchUtil.getRatioTagCount(filter, tag1, tag2, startTime, endTime, type).toString();
     }
 }

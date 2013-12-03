@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
@@ -60,12 +61,15 @@ public class TwilioServlet extends HttpServlet
 	 */
 	String accountSid = request.getParameter("AccountSid");
 
-	Widget widget = WidgetUtil.getWidget("Twilio");
 
+	Widget widget = DefaultWidgets.getDefaultWidgetByName("Twilio");
+	
+	System.out.println("widget" + widget);
+	
 	// if widget not found for Twilio, redirect without saving to state
 	if (widget == null)
 	{
-	    System.out.println("widget not found redirected to : " + state);
+	    System.out.println("widget not foun : " + state);
 	    response.sendRedirect(state);
 	    return;
 	}

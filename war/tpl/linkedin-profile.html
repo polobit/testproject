@@ -309,3 +309,34 @@
 	    </form>
 	</div>
 </script>
+
+<script id="linkedin-login-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+	Build professional relationships with contacts and keep a tab on their business interests.
+	<p style='margin: 10px 0px 5px 0px;' >
+		<a class='btn' href="{{url}}" style='text-decoration: none;'>Link Your LinkedIn</a>
+	</p>
+</div>
+</script>
+
+
+<script id="linkedin-revoke-access-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+	<div class="row-fluid">
+		<div class="span4">
+			<img src="{{profile.picture}}" width="70" height="70" alt="" class="thumbnail"/>
+		</div>
+		<div class="span7">
+			<p class="title_txt"><a href="{{profile.url}}" target="_blank" >{{profile.name}}</a></p>
+			<p>{{profile.location}}</p>
+			<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement profile.summary}}</p>
+		</div>
+	</div>
+	<div>
+		<p style='margin: 10px 0px 5px 0px;' >
+			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Linkedin">Revoke Access</a>
+			<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Linkedin">Cancel</a>
+		</p>
+	</div>
+</div>
+</script>

@@ -969,10 +969,13 @@ $(function()
 	 */
 	Handlebars.registerHelper('stringToJSON', function(object, key, options)
 	{
+		console.log(object);
+		console.log(key);
 		if (key)
 		{
 			try
 			{
+				
 				object[key] = JSON.parse(object[key]);
 			}
 			finally
@@ -1111,26 +1114,6 @@ $(function()
 			return "(" + this.length + " Total)";
 	})
 
-	/**
-	 * Converts string to JSON
-	 */
-	Handlebars.registerHelper('stringToJSON', function(object, key, options)
-			{
-				if (key)
-				{
-					try
-					{
-						object[key] = JSON.parse(object[key]);
-						return options.fn(object[key]);
-					}
-					catch (err)
-					{
-						return options.fn(object[key]);
-					}
-				}
-
-				return options.fn(JSON.parse(object));
-			});
 
 	/**
 	 * Convert string to lower case
@@ -2084,7 +2067,7 @@ $(function()
 					return;
 
 				var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
-						"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-calendar", "All_Updates" : "icon-home",
+						"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
 						"My_Updates" : "icon-share-alt" };
 
 				name = name.trim();

@@ -289,7 +289,7 @@ function addTweetToStream(modelStream,tweet)
 	      if(modelStream.get('tweetListView').length == 1)
 	    	clearNoTweetNotification(modelStream);
 	      
-	      // If stream owner is tweet owner no need to show retweet icon.
+	      // If stream owner is tweet owner no need to show retweet icon.0
 	      if(modelStream.get('screen_name') != tweet.user.screen_name)            	
 	         tweet["tweetowner_not_streamuser"] = true;      
 
@@ -596,7 +596,7 @@ function displayErrorInStream(errorMsg)
 /**
  * Send register message again to twitter server.
  */
- function registerStreamAgain(streamId)
+function registerStreamAgain(streamId)
  {
 	// Fetch stream from collection
 	var stream = StreamsListView.collection.get(streamId).toJSON();
@@ -608,3 +608,114 @@ function displayErrorInStream(errorMsg)
 	// Show waiting symbol.
 	$("#stream-spinner-modal-"+streamId).show();
  }
+
+/**
+ * Gets Scheduled Updates fron DB and adds into Stream.
+ */
+function getScheduledUpdate(stream)
+{   	
+  // Get updates of relevant stream from database. 
+  $.getJSON("/core/scheduledupdate/getscheduledupdates/" + stream.screen_name,function(data)
+	{
+	  console.log("data after fetching client from db");
+	  console.log(data);
+		  
+	  if(data.length)
+	   	{	
+	      // Get schedule update
+	      $.each(data, function(i, update)
+		     {	 
+	    	   var user = {};
+	    	   user["screen_name"] = stream.screen_name;
+	    	   user["profile_image_url"] = update.profileImg;    	   
+	    	   update["stream_type"] = stream.stream_type;
+	    	   update["stream_id"] = stream.id;
+	    	   update["user"] = user;	
+	    	   update["text"] = update.message;
+	    	   	    	   
+	    	   handleMessage(update);
+		   	 });
+		}		
+	  else
+		{		  
+		   var update = {};
+		   var user = {};
+    	   user["screen_name"] = stream.screen_name;    	   
+    	   update["stream_type"] = stream.stream_type;
+    	   update["stream_id"] = stream.id;
+    	   update["user"] = user;	
+    	   update["text"] = "There is no tweets to show here.";
+    	   update["id"] = "000";
+    	
+		   handleMessage(update);
+		}
+	}).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
+}
+
+/**
+ * Adds newly added Scheduled Update In Stream. 
+ */
+function addScheduledUpdateInStream(scheduledUpdate)
+{
+	console.log("In addScheduledUpdateInStream");
+	scheduledUpdate = scheduledUpdate.toJSON();
+    
+	// Get stream from collection.
+	var streams = StreamsListView.collection.models; 
+
+    // Get scheduled stream match with screen name of update.
+    $.each(streams, function(i, stream)
+     {	 
+	   stream = stream.toJSON();	
+	   if(stream.screen_name == scheduledUpdate.screen_name && stream.stream_type == "Scheduled") 
+		 {		   
+		   var user = {};
+		   user["screen_name"] = stream.screen_name;
+		   user["profile_image_url"] = scheduledUpdate.profileImg;    	   
+		   scheduledUpdate["stream_type"] = stream.stream_type;
+		   scheduledUpdate["stream_id"] = stream.id;
+		   scheduledUpdate["user"] = user;	
+		   scheduledUpdate["text"] = scheduledUpdate.message;
+		  
+		   handleMessage(scheduledUpdate);
+		   console.log(scheduledUpdate);
+		 }	   
+   	 }); 
+    
+     // Remove deleted tweet element from ui
+	 $('.deleted').remove();
+}
+
+/**
+ * Updates added Scheduled Update In Stream. 
+ */
+function updateScheduledUpdateInStream(scheduledUpdate,streamJSON)
+{
+	console.log("In updateScheduledUpdateInStream");
+	var newscheduledUpdate = scheduledUpdate.toJSON();
+  
+	//Get stream from collection.
+	var modelStream = StreamsListView.collection.get(streamJSON.id);	
+		
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get(newscheduledUpdate.id);
+	 	
+	// Update new data in tweet.
+	modelTweet.set("scheduled_time",newscheduledUpdate.scheduled_time);
+	modelTweet.set("scheduled_date",newscheduledUpdate.scheduled_date);  	
+	modelTweet.set("message",newscheduledUpdate.message);
+	modelTweet.set("original_text",newscheduledUpdate.message);
+	
+	var tweet = modelTweet.toJSON();
+	tweet.text = newscheduledUpdate.message;	
+	tweet.text = convertTextToTweet(tweet);
+
+	// Converts normal text to tweet with link on url, # and @.
+	modelTweet.set("text",tweet.text);    
+	
+    // Add back to stream.
+    modelStream.get('tweetListView').add(modelTweet);
+    
+    // Remove deleted tweet element from ui
+	$('.deleted').remove();
+}

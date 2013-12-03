@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.googlecode.objectify.Key;
 import com.twilio.sdk.verbs.Dial;
 import com.twilio.sdk.verbs.Number;
 import com.twilio.sdk.verbs.TwiMLException;
@@ -151,6 +152,7 @@ public class TwilioVoiceServlet extends HttpServlet
 	    // save verification status in widget
 	    widget.addProperty("verificaton_status", verificationStatus);
 	    widget.addProperty("verified_number", fromNumber);
+	    widget.setOwner(new Key<AgileUser>(AgileUser.class, agileUser.id));
 	    widget.save();
 	    System.out.println("widget saved");
 	}

@@ -1,6 +1,6 @@
 <script id="socialsuite-twitter-message-template" type="text/html">
 	<!-- New (Note) Modal views -->
-	<div class="modal hide fade message-modal" id="socialsuite-twitter_messageModal" style="width:400px; left:55%;word-wrap: break-word;">
+	<div class="modal hide fade message-modal" id="socialsuite_twitter_messageModal" style="width:400px; left:55%;word-wrap: break-word;">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
 			{{#if_equals headline "Direct Message"}}
@@ -14,11 +14,13 @@
 			{{/if_equals}}
 	    </div>
 	    <div class="modal-body agile-modal-body">
-	        <form id="socialsuite-twitter_messageForm" name="socialsuite-twitter_messageForm" method="post">
+	        <form id="socialsuite_twitter_messageForm" name="socialsuite_twitter_messageForm" method="post">
 	            <fieldset>
                     <input name="tweetId" type="hidden" value={{tweetId}} />
                     <input name="tweetOwner" type="hidden" value={{tweetOwner}} />  
                     <input name="streamId" type="hidden" value={{streamId}} />
+                    <input name="profileImg" type="hidden" value={{profileImg}} />
+                    <input name="headline" type="hidden" value={{headline}} />
 
 					<div style="margin-bottom:10px;">
 						{{info}}
@@ -26,16 +28,25 @@
 	                <div class="control-group">
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls span4" style="margin-left:0px;">
-                            {{#if_equals headline "Reply Tweet"}}
+                            {{#if message}} <!-- Edit Scheduled Update -->
+                              <input name="id" type="hidden" value={{id}} />
+                              {{#if_equals headline "Reply Tweet"}}
+	                        	<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{message}}</textarea>
+							  {{else}} <!-- tweet and direct msg -->
+								<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{message}}</textarea>
+							  {{/if_equals}}
+                            {{else}}
+                              {{#if_equals headline "Reply Tweet"}}
 	                        	<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{description}}&nbsp</textarea>
-							{{else}} <!-- tweet and direct msg -->
+							  {{else}} <!-- tweet and direct msg -->
 								<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;"></textarea>
-							{{/if_equals}}  
+							  {{/if_equals}}  
+                            {{/if}}
 							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" style="margin-right:5px;">125</em></small></div>
                         </div>
 	                </div>
 	            </fieldset>
-                <div class="tweet-scheduling" title="Scheduling">
+                <div id="tweet_scheduling" class="tweet-scheduling" title="Scheduling">
                    <i class="icon-time icon-2x"></i>
                 </div>
                 <div id="schedule" class="row" style="display:none;">

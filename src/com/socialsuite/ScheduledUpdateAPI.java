@@ -1,12 +1,11 @@
 package com.socialsuite;
 
-import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -26,7 +25,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
  * @author Farah
  * 
  */
-@Path("/social/scheduledupdate")
+@Path("/scheduledupdate")
 public class ScheduledUpdateAPI
 {
 	/**
@@ -36,35 +35,63 @@ public class ScheduledUpdateAPI
 	 *            - Object of {@link ScheduledUpdate}
 	 */
 	@POST
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN })
-	public ScheduledUpdate createScheduledUpdate(@FormParam("streamId") Long streamId,
-			@FormParam("scheduled_date") Date date, @FormParam("scheduled_time") String time,
-			@FormParam("message") String message)
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ScheduledUpdate createScheduledUpdate(ScheduledUpdate scheduledUpdate)
 	{
-		Stream stream = StreamUtil.getStream(streamId);
-		ScheduledUpdate scheduledUpdate = new ScheduledUpdate(stream.domain_user_id, stream.screen_name,
-				stream.network_type.toString(), stream.token, stream.secret, message, date, time);
-		System.out.print("scheduledUpdate message:" + scheduledUpdate.message + "scheduledUpdate n/w type: "
-				+ scheduledUpdate.network_type);
-
 		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
 		scheduledUpdate.save();
-		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
 		return scheduledUpdate;
 	}
 
+	/**
+	 * Update existing scheduledUpdate in database related to current domain user.
+	 * 
+	 * @param scheduledUpdate
+	 *            - Object of {@link ScheduledUpdate}
+	 */
+	@PUT
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ScheduledUpdate updateScheduledUpdate(ScheduledUpdate scheduledUpdate)
+	{
+		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
+		scheduledUpdate.save();		
+		return scheduledUpdate;
+	}
+
+	
 	/**
 	 * Return the list of ScheduledUpdate available in dB related to current
 	 * Domain User.
 	 * 
 	 * @return List<ScheduledUpdate> - Objects ScheduledUpdate
 	 */
+	/*
+	 * @GET
+	 * 
+	 * @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	 * public List<ScheduledUpdate> getAllScheduledUpdates() {
+	 * System.out.println("In getAllScheduledUpdates."); return
+	 * ScheduledUpdate.getScheduledUpdates(); }
+	 */
+
+	/**
+	 * Return the list of ScheduledUpdate available in dB related to
+	 * screen_name.
+	 * 
+	 * @param screen_name
+	 *            - screen_name of account holder.
+	 * 
+	 * @return List<ScheduledUpdate> - Objects ScheduledUpdate
+	 */
 	@GET
+	@Path("/getscheduledupdates/{screen_name}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<ScheduledUpdate> getAllScheduledUpdates()
+	public List<ScheduledUpdate> getScheduledUpdates(@PathParam("screen_name") String screen_name)
 	{
-		System.out.println("In getAllScheduledUpdates.");
-		return ScheduledUpdate.getScheduledUpdates();
+		System.out.println("In getAScheduledUpdates : " + screen_name);
+		return ScheduledUpdate.getScheduledUpdates(screen_name);
 	}
 
 	/**
@@ -90,15 +117,20 @@ public class ScheduledUpdateAPI
 	 * @param id
 	 *            - unique scheduled update id.
 	 */
-	@DELETE
+	@GET
 	@Path("/{id}")
-	public void deleteScheduledUpdate(@PathParam("id") Long id)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteScheduledUpdate(@PathParam("id") Long id)
 	{
 		System.out.print("Delete scheduled update id : " + id);
+
 		ScheduledUpdate scheduledUpdate = ScheduledUpdate.getScheduledUpdate(id);
+
 		if (scheduledUpdate != null)
 		{
 			scheduledUpdate.delete();
+			return "Successful";
 		}
+		return null;
 	}
 }

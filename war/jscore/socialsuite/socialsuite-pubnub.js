@@ -83,12 +83,21 @@ function sendMessage(publishJSON)
 		  // Adds profile img to stream.
 		  addUserImgToColumn(publishJSON.stream);		  
 		  
-		  // If networl is Linkedin so no need to publish.
+		  // If network is Linkedin so no need to publish.
 		  if(publishJSON.stream.network_type == "LINKEDIN")
 		   {
 			 console.log("stream's network is " +publishJSON.stream.network_type);		     
 		     return;
 		   }
+
+		  // If stream type is Scheduled so no need to publish.
+		  if(publishJSON.stream.stream_type == "Scheduled")
+		   {
+			 console.log("stream's type is " +publishJSON.stream.stream_type);	
+			 getScheduledUpdate(publishJSON.stream);
+		     return;
+		   }
+
 		}
 			// Message has data.
 			pubnub.publish

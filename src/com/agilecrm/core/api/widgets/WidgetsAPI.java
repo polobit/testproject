@@ -65,6 +65,21 @@ public class WidgetsAPI
 		// Returns list of widgets saved by current user
 		return WidgetUtil.getAddedWidgetsForCurrentUser();
 	}
+	
+	
+	/**
+	 * Gets List of widgets added for current user
+	 * 
+	 * @return {@link List} of {@link Widget}
+	 */
+	@Path("{widget_name}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Widget getWidgetByName(@PathParam("widget_name") String name)
+	{
+		// Returns list of widgets saved by current user
+		return WidgetUtil.getWidget(name);
+	}
 
 	/**
 	 * Saves a widget, can also save custom widget by specifying script url to

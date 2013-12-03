@@ -150,6 +150,9 @@ function getOutgoingNumbers(callback)
 		// If data is not defined return
 		if (!data)
 			return;
+		
+		console.log("In getting twilio numbers");
+		console.log(data);
 
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
@@ -215,17 +218,17 @@ function checkTwilioNumbersAndGenerateToken(twilio_prefs)
 	// Retrieves outgoing numbers from Twilio
 	getOutgoingNumbers(function(data)
 	{
-		console.log("Twilio outgoing numbers: " + data.PhoneNumber);
+		console.log("Twilio outgoing numbers: " + data[0].PhoneNumber);
 
 		// If no numbers, show set up
-		if (!data.PhoneNumber)
+		if (!data[0].PhoneNumber)
 		{
 			$('#Twilio').html(getTemplate('twilio-initial', {}));
 			return;
 		}
 
 		// Else generate Twilio token for calls
-		checkTwilioPrefsAndGenerateToken(twilio_prefs, data.PhoneNumber);
+		checkTwilioPrefsAndGenerateToken(twilio_prefs, data[0].PhoneNumber);
 	});
 }
 
@@ -592,6 +595,19 @@ function registerClickEvents(from_number)
 	$("#record_sound_play").die().live("click", function(e)
 	{
 		e.preventDefault();
+		
+		/**
+		 * We make play button on a widget disabled on click of it. This is done
+		 * to avoid continuous click in a short time, like double click on add
+		 * button
+		 */
+		/*
+		if ($(this).attr("disabled"))
+			return;
+
+		// set attribute disabled as disabled
+		$(this).attr("disabled", "disabled");
+		*/
 
 		// Sound URL from Twilio to play call
 		var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
@@ -599,6 +615,8 @@ function registerClickEvents(from_number)
 
 		// plays call conversion
 		play_sound(sound_url, "true");
+		
+		//$(this).removeAttr("disabled");
 	});
 
 	/*
