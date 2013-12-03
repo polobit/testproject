@@ -19,7 +19,8 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.servlets.deferred.EmailClickDeferredTask;
+import com.campaignio.servlets.deferred.EmailTrackingDeferredTask;
+import com.campaignio.tasklets.agile.Clicked;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.urlshortener.URLShortener;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
@@ -60,7 +61,7 @@ public class RedirectServlet extends HttpServlet
 
 	// If Domain not found, return. This could be if the URL is tampered or
 	// using contactspot URLs
-	if (StringUtils.isEmpty(domain))
+	if (StringUtils.isBlank(domain))
 	    return;
 
 	System.out.println("Domain from short url is " + domain);
@@ -115,7 +116,7 @@ public class RedirectServlet extends HttpServlet
 	    resp.sendRedirect(normalisedLongURL + params);
 
 	    // Interrupt cron tasks of clicked.
-	    interruptCronTasksOfClicked(urlShortener.tracker_id, normalisedLongURL);
+	    interruptCronTasksOfClicked(urlShortener.tracker_id, normalisedLongURL, urlShortener.getOpenTrackingId());
 	}
 	finally
 	{
@@ -245,16 +246,16 @@ public class RedirectServlet extends HttpServlet
      * @param longURL
      *            - Original url to show as custom-data in clicked log.
      */
-    private void interruptCronTasksOfClicked(String trackerId, String longURL)
+    private void interruptCronTasksOfClicked(String trackerId, String longURL, String openTrackingId)
     {
 	try
 	{
 	    // Insert long url as custom value.
 	    JSONObject urlJSON = new JSONObject();
-	    urlJSON.put("long_url", longURL);
+	    urlJSON.put(Clicked.LINK_CLICKED_LONG, longURL);
 
 	    // Interrupt clicked in DeferredTask
-	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(trackerId, urlJSON.toString());
+	    EmailTrackingDeferredTask emailClickDeferredTask = new EmailTrackingDeferredTask(trackerId, urlJSON.toString(), openTrackingId);
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}

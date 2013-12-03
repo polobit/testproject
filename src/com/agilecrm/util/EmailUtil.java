@@ -79,7 +79,12 @@ public class EmailUtil
 
 	// for campaign email
 	if (!(StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
+	{
 	    queryParams = "c=" + campaignId + "&s=" + subscriberId;
+
+	    if (trackerId != null)
+		queryParams += "&t=" + trackerId;
+	}
 
 	// for contact email append trackerId
 	else
@@ -142,8 +147,8 @@ public class EmailUtil
 	}
 
 	// if no cc or bcc, send by Mandrill
-	// Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html,
-	// text);
+	// Mandrill.sendMail(NamespaceManager.get(), fromEmail, fromName, to,
+	// subject, replyTo, html, text);
 	SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
     }
 }

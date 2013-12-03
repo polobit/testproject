@@ -1,5 +1,5 @@
 {
-    "name": "Opened",
+    "name": "Opened?",
     "thumbnail": "json/nodes/images/email/opened.png",
     "icon": "json/nodes/icons/email/opened.png",
     "info": "Event is triggered when customer opens your email. Only emails in HTML format can be tracked.",
@@ -8,22 +8,18 @@
     "company": "mantra",
     "language": "en",
     "branches":"no,yes",
-    "type":"voice",
-     "phonesystem": {
-                    "type": "static-vxml-form-url",
-                    "url": "/vxml/wait.jsp" 
-                },
+    "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Opened",
     "category": "Email",
     "ui": [{
 			"label": " Max wait time",
 			"required": "required",
             "category": "Info",
-			"name": "wait_time",
-            "id":"wait_time",
-			"value":"3",
+			"name": "duration",
+            "id":"duration",
 			"title": "Enter the max wait time.",
 			"fieldType": "input",
-            "type": "text" 
+            "type": "number",
+            "min": "0"
 			
 		},{   
 			"label": "Type",
