@@ -128,8 +128,9 @@ public class TwilioUtil {
 		// parameters to be sent in the verification process
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("PhoneNumber", from);
-		params.put("StatusCallback", "https://" + NamespaceManager.get() + ".agilecrm.com/verification?user_id="
-				+ SessionManager.get().getDomainId());
+		params.put("StatusCallback", "https://" + NamespaceManager.get()
+				+ "-dot-sandbox-dot-agile-crm-cloud.appspot.com/verification?user_id="
+				+ SessionManager.get().getDomainId() + "&verified_number=" + from);
 
 		// make a post request to verify number
 		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + client.getAccountSid()
