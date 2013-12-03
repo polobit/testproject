@@ -50,6 +50,7 @@ $(function()
 		saveEntity(data, "core/api/widgets", function(result){
 			$(form).data('widget', result.toJSON());
 			$(that).removeAttr('disabled');
+			Backbone.history.navigate("add-widget", { trigger : true });
 		})
 	});
 	
@@ -248,11 +249,19 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	
 	var el;
 	var models;
-	
+	$('#prefs-tabs-content').html(LOADING_HTML);
 	if(model)
 		el = $(getTemplate("widget-settings", model));
 	else
 	 {
+		if(!Catalog_Widgets_View)
+		{
+			$.getJSON('core/api/widgets/'+ widget_name, function(data){
+				show_set_up_widget(widget_name, template_id, url, data);
+			})
+			return;
+		}
+			
 		models= Catalog_Widgets_View.collection.where({ name : widget_name });
 		el = $(getTemplate("widget-settings", models[0].toJSON()));
 	 }
@@ -292,50 +301,65 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 function set_up_access(widget_name, template_id, data, url, model)
 {
-	$("#content").html(getTemplate("settings"), {});
-	
-	var el;
-	var json;
-	
-	if(model)
-	{
-		el = $(getTemplate("widget-settings", model));
-		model['outgoing_numbers'] = data;
-		json = model;
-	}
-	else
-	 {
-		models= Catalog_Widgets_View.collection.where({ name : widget_name });
-		json = models[0].toJSON();
-		el = $(getTemplate("widget-settings",json));
-		json['outgoing_numbers'] = data;
-		
-		
-	 }
-	console.log(json);
-	
-	
-	//merged_json =  $.extend(merged_json, model, data);
-	
-	$('#widget-settings', el).html(getTemplate(widget_name.toLowerCase() + "-revoke-access", json));
-	
-	$('#prefs-tabs-content').html(el);
-	
-	$('#prefs-tabs-content').find('form').data('widget', json);
-	console.log(json);
-	console.log($('#prefs-tabs-content').find('form').data('widget'));
+ $("#content").html(getTemplate("settings"), {});
+ 
+ var el;
+ var json;
+ $('#prefs-tabs-content').html(LOADING_HTML);
+ if(model)
+ {
+  el = $(getTemplate("widget-settings", model));
+  json = model;
+ }
+ else
+  {
+	 if(!Catalog_Widgets_View)
+		{
+			$.getJSON('core/api/widgets/'+ widget_name, function(data1){
+				set_up_access(widget_name, template_id, data, url, data1)
+			})
+			return;
+		}
+	 
+  models= Catalog_Widgets_View.collection.where({ name : widget_name });
+  json = models[0].toJSON();
+  el = $(getTemplate("widget-settings",json));
+  }
+ 
+ if(json.name == "Twilio")
+  json['outgoing_numbers'] = data;
+ 
+ else if(json.name == "Linkedin" || json.name == "Twitter")
+  json['profile'] = data;
+ 
+ else
+  json['custom_data'] = data;
+ 
+ console.log(json);
+ 
+ 
+ //merged_json =  $.extend(merged_json, model, data);
+ 
+ $('#widget-settings', el).html(getTemplate(widget_name.toLowerCase() + "-revoke-access", json));
+ 
+ $('#prefs-tabs-content').html(el);
+ 
+ $('#prefs-tabs-content').find('form').data('widget', json);
+ console.log(json);
+ console.log($('#prefs-tabs-content').find('form').data('widget'));
 
-	$('#PrefsTab .active').removeClass('active');
-	$('.add-widget-prefs-tab').addClass('active');
+ $('#PrefsTab .active').removeClass('active');
+ $('.add-widget-prefs-tab').addClass('active');
 
-	$(".revoke-widget").die().live('click', function(e){
-		
-		console.log($(this).attr("widget-name"));
-		delete_widget(widget_name);
-		show_set_up_widget(widget_name, template_id, url, model);
-	});
-	
+ $(".revoke-widget").die().live('click', function(e){
+  
+  console.log($(this).attr("widget-name"));
+  delete_widget(widget_name);
+  show_set_up_widget(widget_name, template_id, url, model);
+ });
+ 
 }
+
 
 function fill_form(id, widget_name, template_id)
 {
@@ -353,5 +377,6 @@ function fill_fields(fieldsJSON)
 	for (i in fieldsJSON)
 		$("#" + i).val(fieldsJSON[i]);
 }
+
 
 

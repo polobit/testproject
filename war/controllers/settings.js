@@ -227,43 +227,92 @@ var SettingsRouter = Backbone.Router
 
 			Linkedin : function(id)
 			{
-				if (!id)
-				{
+					if (!id)
+					{
+						show_set_up_widget("Linkedin", 'linkedin-login', '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href) + "/linkedin");
+					}
+					else
+					{
+						if(!isNaN(parseInt(id)))
+						{
+							$.getJSON("core/api/widgets/social/profile/" + id, function(data)
+							{
+								set_up_access("Linkedin", 'linkedin-login', data, '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
+								
+							});
+							return;
+							
+						}			
+					
+					
+						$.getJSON("core/api/widgets/Linkedin", function(data1)
+						{
+							console.log(data1);
+							
+							if(data1)
+							{
+								$.getJSON("core/api/widgets/social/profile/" + data1.id, function(data)
+										{
+											set_up_access("Linkedin", 'linkedin-login', data, '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"), data1);
+											return;
+											
+										});
+											
+							}
+							else
+							{
+								show_set_up_widget("Linkedin", 'linkedin-login', '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href));
+							}
+						}); 
+						
 
-					/*
-					 * Creates a URL, which on click can connect to scribe using
-					 * parameters sent and returns back to the profile based on
-					 * return URL provided and saves widget preferences in widget
-					 * based on plugin id
-					 */
-					var url = '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href) + "/linkedin";
-					show_set_up_widget("Linkedin", 'linkedin-login', url);
-				}
-				else
-					window.location.href = "/#add-widget";
-					console.log("hi");
+					}
 
 			},
 
 			Twitter : function(id)
 			{
-
+				
 				if (!id)
 				{
-					/*
-					 * Creates a URL, which on click can connect to scribe using
-					 * parameters sent and returns back to the profile based on
-					 * return URL provided and saves widget preferences in widget
-					 * based on plugin id
-					 */
-					var url = '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href) + "/twitter";
-					
-					show_set_up_widget("Twitter", 'twitter-login', url);
+					show_set_up_widget("Twitter", 'twitter-login', '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href) + "/twitter");
 				}
 				else
-					window.location.href = "/#add-widget";
-					console.log("hi");
+				{
+					if(!isNaN(parseInt(id)))
+					{
+						$.getJSON("core/api/widgets/social/profile/" + id, function(data)
+						{
+							set_up_access("Twitter", 'twitter-login', data, '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"));
+							
+						});
+						return;
+						
+					}			
+				
+				
+					$.getJSON("core/api/widgets/Twitter", function(data1)
+					{
+						console.log(data1);
+						
+						if(data1)
+						{
+							$.getJSON("core/api/widgets/social/profile/" + data1.id, function(data)
+									{
+										set_up_access("Twitter", 'twitter-login', data, '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"), data1);
+										return;
+										
+									});
+										
+						}
+						else
+						{
+							show_set_up_widget("Twitter", 'twitter-login', '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href));
+						}
+					}); 
+					
 
+				}
 				
 			},
 
@@ -360,24 +409,40 @@ var SettingsRouter = Backbone.Router
 
 			Stripe : function(id)
 			{
-				if (!id)
-				{
-					console.log('In Stripe OAuth');
-
-					/*
-					 * Creates a URL, which on click can connect to scribe using
-					 * parameters sent and returns back to the profile based on
-					 * callbackURLL provided and saves widget preferences in
-					 * widget based on Stripe_Plugin_Id
-					 */
-					var url = '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + "/stripe" ;
-
-					show_set_up_widget("Stripe", 'stripe-login', url);
-				}
-				else
-					window.location.href = "/#add-widget";
-					console.log("hi");
-
+				
+				  if (!id)
+					{
+						show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + "/stripe");
+					}
+					else
+					{
+						{
+							$.getJSON("core/api/custom-fields", function(data) {
+								set_up_access("Stripe", 'stripe-login', data, '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Stripe/stripe"));
+							})
+							return;
+							
+						}			
+					
+					
+						$.getJSON("core/api/widgets/Stripe", function(data1)
+						{
+							console.log(data1);
+							
+							if(data1)
+							{
+								$.getJSON("core/api/custom-fields", function(data) {
+								set_up_access("stripe", 'stripe-login', data, '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Stripe/stripe"), data1);
+								});
+								return;						
+								
+							}
+							else
+							{
+								show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href));
+							}
+						});
+					}
 			},
 
 			Custom : function(id)
