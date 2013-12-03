@@ -10,7 +10,6 @@ import org.json.XML;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.AgileUser;
-import com.agilecrm.util.VersioningUtil;
 import com.agilecrm.widgets.Widget;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
@@ -121,24 +120,20 @@ public class TwilioUtil {
 	 * @return {@link JSONObject} with the verification status
 	 * @throws Exception
 	 */
-	public static JSONObject verifyOutgoingNumbers(Widget widget, String from)
-			throws Exception {
+	public static JSONObject verifyOutgoingNumbers(Widget widget, String from) throws Exception
+	{
 		// Get Twilio client configured with account SID and authToken
 		TwilioRestClient client = getTwilioClient(widget);
-		
 
 		// parameters to be sent in the verification process
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("PhoneNumber", from);
-		params.put(
-				"StatusCallback",
-				"https://yaswanth-dot-sandbox-dot-agile-crm-cloud.appspot.com/verification?user_id=5050606662189056"
-						+"&verified_number=" + from);
+		params.put("StatusCallback", "https://" + NamespaceManager.get() + ".agilecrm.com/verification?user_id="
+				+ SessionManager.get().getDomainId());
 
 		// make a post request to verify number
-		TwilioRestResponse response = client.request("/" + APIVERSION
-				+ "/Accounts/" + client.getAccountSid() + "/OutgoingCallerIds",
-				"POST", params);
+		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + client.getAccountSid()
+				+ "/OutgoingCallerIds", "POST", params);
 
 		System.out.println("Twilio verify: " + response.getResponseText());
 
@@ -149,8 +144,7 @@ public class TwilioUtil {
 		if (response.isError())
 			throwProperException(response);
 
-		return XML.toJSONObject(response.getResponseText()).getJSONObject(
-				"TwilioResponse");
+		return XML.toJSONObject(response.getResponseText()).getJSONObject("TwilioResponse");
 
 	}
 
