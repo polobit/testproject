@@ -89,10 +89,30 @@
         </div>
         {{/if}}
     </div>
+    <div class="span3">
+        <div class="data-block">
+            <div class="well">
+				<h3>
+                    Help
+                </h3>
+                <br />
+				<p>You can define custom fields for Contacts here. They apper in new contact form in Agile and can also be updated using our <a href="#analytics-code">API</a>.</p>
+				Agile provides the following custom field types:<br/>
+				<ul>
+					<li>Text field - A simple text field</li>
+					<li>Date field - A calendar date input field. (if you are providing this field value via API, provide the epoch number)</li>
+					<li>List field - A drop down list option</li>
+					<li>Check box - A true/false check box option</li>
+					<li>Text area -A large text input field</li>
+				</ul>
+				Enabling the 'Searchable' option in the custom field dialog will allow you to search contacts in Agile using the custom field value.
+            </div>
+        </div>
+    </div>
 </div>
 <div id="custom-field-modal"></div>
-
 </script>
+
 <script id="admin-settings-customfields-model-template" type="text/html">
     <td>{{field_label}} </td>
     <td>{{field_description}} </td>

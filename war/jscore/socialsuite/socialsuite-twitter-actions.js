@@ -5,6 +5,8 @@
  */
 $(".compose-message").die().live("click", function(e)
 {	
+	ScheduledEdit = false;
+	
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
 	  
@@ -90,6 +92,8 @@ $(".compose-message").die().live("click", function(e)
  */
 $(".reply-message").die().live("click", function(e)
 {	
+	ScheduledEdit = false;
+	
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
 	
@@ -181,6 +185,8 @@ $(".reply-message").die().live("click", function(e)
  */
 $(".direct-message").die().live("click", function(e)
 {	
+	ScheduledEdit = false;
+	
 	// Close all dropdowns of all tweets.
 	$('.more-options-list').toggle( false );
 
@@ -277,6 +283,10 @@ $(".direct-message").die().live("click", function(e)
  */
 $(".retweet-status").die().live("click", function(e)
 {
+	ScheduledEdit = false;
+	
+	$('#socialsuite_twitter_messageModal').remove();
+	
 	var streamId = ($(this).closest('article').attr('stream-id'));
 	var tweetId = ($(this).closest('article').attr('id'));
 	
@@ -300,6 +310,7 @@ $(".retweet-status").die().live("click", function(e)
     json["tweetId"] = tweet.id_str;
     json["tweetOwner"] = tweet.user.screen_name;  
     json["streamId"] = streamId;
+    json["profileImg"] = $("#"+streamId+"-profile-img").prop("src");
        
     // Display Modal
     displayModal("socialsuite_twitter_RTModal","socialsuite-twitter-RT",json,"twitter-retweet-counter","twit-edit-tweet");
@@ -310,6 +321,7 @@ $(".retweet-status").die().live("click", function(e)
     $('#send_edit_tweet').hide();
     $('#twit-edit-tweet').hide();
     $('#div-for-count').hide();
+    $('#RT_scheduling').hide();
     
     // On click of send button in the modal, retweet request is sent 
     $('#send_retweet').click(function (e)
@@ -374,7 +386,8 @@ $(".retweet-status").die().live("click", function(e)
       $('#twit-retweet').hide();
       $('#send_edit_tweet').show();
       $('#twit-edit-tweet').show();
-      $('#div-for-count').show();         
+      $('#div-for-count').show(); 
+      $('#RT_scheduling').show();
       
     });
     
@@ -846,46 +859,93 @@ $(".delete-tweet").die().live("click", function(e)
     });   
 });
 
-/* Show calender and time for selection. */
-$(".tweet-scheduling").die().live("click", function(e)
+/* Show calender and time for selection on message modal. */
+$("#tweet_scheduling").die().live("click", function(e)
  {
-	$("#schedule").toggle();
-	$("#send_tweet").toggle();
-	$("#schedule_tweet").toggle();
+  if(!ScheduledEdit)
+	{
+	  $("#schedule").toggle();	
+	  $("#send_tweet").toggle();
+	  $("#schedule_tweet").toggle();	
 	
-	if($("#schedule").css("display") == "block" )
+	  if($("#schedule").css("display") == "block" )
+	   { 	   
+	     this.className = "tweet-scheduling tweet-scheduling-active";
+	     $('input.date').val(new Date().format('mm/dd/yyyy'));
+	     $('#scheduled_date').datepicker({ format : 'mm/dd/yyyy' });
+	     $('#scheduled_time').timepicker({template: 'modal', showMeridian: false, defaultTime: 'current'});	      
+	   }
+	  else
+	   {
+	    this.className = "tweet-scheduling";
+	    //$('input.date').val()='';
+	    $('#scheduled_time').attr("value",'');	   
+	   }
+	}
+ });
+
+/* Show calender and time for selection on RT modal. */
+$("#RT_scheduling").die().live("click", function(e)
+ {
+	$("#RT_schedule").toggle();	
+	$("#send_edit_tweet").toggle();
+	$("#schedule_RT").toggle();	
+	
+	if($("#RT_schedule").css("display") == "block" )
 	 { 	   
 	   this.className = "tweet-scheduling tweet-scheduling-active";
 	   $('input.date').val(new Date().format('mm/dd/yyyy'));
-	   $('#scheduled_date').datepicker({ format : 'mm/dd/yyyy' });
-	   $('#scheduled_time').timepicker({template: 'modal', showMeridian: false, defaultTime: 'current'});	      
+	   $('#RT_scheduled_date').datepicker({ format : 'mm/dd/yyyy' });
+	   $('#RT_scheduled_time').timepicker({template: 'modal', showMeridian: false, defaultTime: 'current'});	      
 	 }
 	else
 	 {
 	   this.className = "tweet-scheduling";
-	   $('input.date').val()='';
-	   $('#scheduled_time').attr("value",'');	   
+	   //$('input.date').val()='';
+	   $('#RT_scheduled_time').attr("value",'');	   
 	 }
  });
 
+
 /* Adds scheduledUpdate in DB and adds into Stream.*/
-$("#schedule_tweet").die().live("click", function(e)
+$(".schedule-tweet").die().live("click", function(e)
 {
 	e.preventDefault();
-    	
-    // Check Send button is not enable
-	if($("#schedule_tweet").hasClass('disabled'))
-		return;
+	var formName = null;
+	var modalName = null;
+	var formData = null;
+	
+	if(this.id == "schedule_tweet")
+	  {
+	    // Check Send button is not enable
+		if($("#schedule_tweet").hasClass('disabled'))
+			return;
+		formName = "socialsuite_twitter_messageForm";
+		modalName = "socialsuite_twitter_messageModal";
+		
+   	    // Get data from form elements
+		formData = jQuery(socialsuite_twitter_messageForm).serializeArray();	
+	  }
+	else if(this.id == "schedule_RT")
+	  {
+	    // Check Send button is not enable
+		if($("#schedule_RT").hasClass('disabled'))
+			return;
+		formName = "socialsuite_twitter_RTForm";
+		modalName = "socialsuite_twitter_RTModal";
+		
+   	    // Get data from form elements
+		formData = jQuery(socialsuite_twitter_RTForm).serializeArray();
+	  }	
 
     // Checks whether all the input fields are filled
-    if (!isValidForm($("#socialsuite_twitter_messageForm")))
+    if (!isValidForm($("#"+formName)))
         return;    
 
     $('#schedule_tweet').addClass('disabled');
+    $('#schedule_RT').addClass('disabled');
     $("#spinner-modal").show();
-    
-   // Get data from form elements
-	var formData = jQuery(socialsuite_twitter_messageForm).serializeArray();	
+  
     var json = {};
     
     // Convert into JSON
@@ -893,6 +953,7 @@ $("#schedule_tweet").die().live("click", function(e)
         json[this.name] = this.value || '';
     });     
         
+    console.log(json);
     //Get stream from collection.
     var stream = StreamsListView.collection.get(json.streamId).toJSON();
     
@@ -918,16 +979,19 @@ $("#schedule_tweet").die().live("click", function(e)
             if(scheduledUpdate != null)
               {
                 // On success, shows the status as sent
-                $('#socialsuite_twitter_messageModal').find('span.save-status').html("Saved");
+                $('#'+formName).find('span.save-status').html("Saved");
                 showNotyPopUp('information', "Your Tweet has been scheduled!", "top", 5000);
                 
                 // Hides the modal after 2 seconds after the sent is shown
-                hideModal("socialsuite_twitter_messageModal");
+                hideModal(modalName);
+                                
+                console.log(ScheduledEdit);
                 
-                if(scheduledUpdate.id != null)
+                if(ScheduledEdit)
                 {
                   // Update scheduledUpdate in stream.
                   updateScheduledUpdateInStream(scheduledUpdate,stream);
+                  ScheduledEdit = false;
                 }
                 else
                   {
@@ -938,7 +1002,7 @@ $("#schedule_tweet").die().live("click", function(e)
 		},
 		error : function(data){
 			// Displays Error Notification.
-            displayError("socialsuite_twitter_messageModal",data);},
+            displayError(modalName,data);},
 		});           
 });
 
@@ -1019,22 +1083,28 @@ $(".edit-scheduled").die().live("click", function(e)
 	}  
   else if(tweet.headline == "Reply")
 	{
-	  tweet["info"] = "Reply "+"@" + tweet.user.screen_name +" from " + stream.screen_name;
-	  tweet["description"] = "@" + tweet.user.screen_name;
+	  tweet["info"] = "Reply "+"@" + tweet.tweetOwner +" from " + stream.screen_name;
+	  tweet["description"] = "@" + tweet.tweetOwner;
 	  tweet["headline"] = "Reply Tweet";
 	}
   else if(tweet.headline == "Direct")
 	{
-	  tweet["info"] = "Direct message from "+stream.screen_name + " to " + tweet.user.screen_name;	    
+	  tweet["info"] = "Direct message from "+stream.screen_name + " to " + tweet.tweetOwner;	    
 	  tweet["description"] = "Tip: you can send a message to anyone who follows you."
 	  tweet["headline"] = "Direct Message";
 	}
-    
+  else if(tweet.headline == "Retweet")
+	{
+	  tweet["info"] = "Status of @" + tweet.tweetOwner;  
+	  tweet["headline"] = "Retweet";
+	}
+  
   tweet["streamId"] = streamId;
    
   //Display Modal
   displayModal("socialsuite_twitter_messageModal","socialsuite-twitter-message",tweet,"twitter-counter","twit-tweet");
-    
+  ScheduledEdit = true;  
+  
   $("#schedule").show();
   $("#send_tweet").hide();
   $("#schedule_tweet").show();
