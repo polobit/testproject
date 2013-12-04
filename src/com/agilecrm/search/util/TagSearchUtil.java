@@ -197,10 +197,13 @@ public class TagSearchUtil
 	    int tag1Count = getTagCount(contactFilter, tag1, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
 	    int tag2Count = getTagCount(contactFilter, tag2, startTimeMilli + "", startCalendar.getTimeInMillis() + "");
 
+	    System.out.println("tag1 : " + tag1 + " - " + tag1Count + "tag2 : "
+		    + tag2 + " - " + tag2Count);
+
 	    // Get Tag Ratio
 	    float tagRatio = 0;
 	    if (tag2Count != 0)
-		tagRatio = (tag2Count / tag1Count) * 100f;
+		tagRatio = ((float) tag2Count / tag1Count) * 100f;
 
 	    tagsCount.put("Conversion", round(tagRatio, 2));
 

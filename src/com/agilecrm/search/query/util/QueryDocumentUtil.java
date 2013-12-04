@@ -376,18 +376,19 @@ public class QueryDocumentUtil
     {
 
 	// Gets date from rhs (selected value)
-	Date startDate = new DateUtil(new Date(Long.parseLong(rhs))).toMidnight().getTime();
+
+	Long startTimeEpoch = Long.parseLong(rhs);
+	Long endTimeEpoch = startTimeEpoch + 24 * 60 * 60 * 1000;
 
 	/*
 	 * End date i.e., to the end time of start date, it counts complete one
 	 * day. Querying between start and end epoch times returns date equals
 	 * query query
 	 */
-	Date endDate = new DateUtil(startDate).addDays(1).toMidnight().getTime();
 
 	// Day start and end epoch times are calculated.
-	String dayStartEpochTime = String.valueOf(startDate.getTime() / 1000);
-	String dayEndEpochTime = String.valueOf(endDate.getTime() / 1000);
+	String dayStartEpochTime = String.valueOf(startTimeEpoch / 1000);
+	String dayEndEpochTime = String.valueOf(endTimeEpoch / 1000);
 
 	// Created on date condition
 	if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.EQUALS))
@@ -427,7 +428,10 @@ public class QueryDocumentUtil
 
 		Date toDate = new DateUtil(new Date(Long.parseLong(rhs_new))).getTime();
 
-		String toDateEpoch = String.valueOf(toDate.getTime() / 1000);
+		String toDateEpoch = String
+			.valueOf(Long.parseLong(rhs_new) / 1000);
+
+
 
 		String epochQuery = lhs + "_epoch >= " + dayStartEpochTime;
 
@@ -442,14 +446,13 @@ public class QueryDocumentUtil
 	{
 	    // Get epoch time of starting date i.e., before x days, current date
 	    // - x days
-	    long fromDateInSecs = new DateUtil().removeDays(Integer.parseInt(rhs)).toMidnight().getTime().getTime() / 1000;
 
 	    int days = Integer.parseInt(rhs);
 
 	    // Current epoch time to get current time.
 	    long currentEpochTime = new DateUtil().getTime().getTime() / 1000;
 
-	    fromDateInSecs = currentEpochTime - days * 24 * 3600;
+	    long fromDateInSecs = currentEpochTime - days * 24 * 3600;
 
 	    String epochQuery = lhs + "_epoch >= " + String.valueOf(fromDateInSecs);
 
