@@ -1,7 +1,6 @@
 package com.agilecrm.contact.email.util;
 
 import java.net.URLEncoder;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,13 +81,10 @@ public class ContactEmailUtil
 	    // Returns set of To Emails
 	    Set<String> toEmailSet = getToEmailSet(to);
 
-	    // Tracker id for email open
-	    Long trackerId = Calendar.getInstance().getTimeInMillis();
-
 	    // If contact is available, no need of fetching contact from
 	    // to-email again.
 	    if (contact != null)
-		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), trackerId);
+		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size());
 	    else
 	    {
 		// When multiple emails separated by comma are given
@@ -99,15 +95,9 @@ public class ContactEmailUtil
 
 		    // Saves email with contact-id
 		    if (contact != null)
-			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), trackerId);
+			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size());
 		}
 	    }
-
-	    // Appends tracking image to body if only one email. It is not
-	    // possible to append image at the same time to show all given
-	    // emails to the recipient.
-	    if (toEmailSet.size() == 1)
-		body = EmailUtil.appendTrackingImage(body, null, null, trackerId);
 
 	}
 	catch (Exception e)
@@ -141,11 +131,9 @@ public class ContactEmailUtil
      *            - contact id to save w.r.t contact
      * @param toEmailSize
      *            - to identify number of To emails separated by comma
-     * @param trackerId
-     *            - tracker id to identify email-open
      */
     public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, Long contactId,
-	    int toEmailSize, Long trackerId)
+	    int toEmailSize)
     {
 
 	// Remove trailing commas for to emails
@@ -155,10 +143,6 @@ public class ContactEmailUtil
 
 	contactEmail.cc = cc;
 	contactEmail.bcc = bcc;
-
-	// Save email-open tracker-id
-	if (toEmailSize == 1)
-	    contactEmail.trackerId = trackerId;
 
 	contactEmail.save();
     }

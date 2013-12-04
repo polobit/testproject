@@ -15,6 +15,8 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
+import com.agilecrm.util.JSONUtil;
+
 /**
  * <code>AppengineMail</code> is an alternative to send grid email, it is used
  * to resend the password if user do not recieve/ if sendgrid fails to send
@@ -184,7 +186,7 @@ public class AppengineMail
 
 	    // Merge JSONObjects as a single JSONObject in order to get all
 	    // values in a single object
-	    JSONObject mergedJSON = MustacheUtil.mergeJSONs(jsonObjectArray);
+	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
 
 	    // Read template - HTML
 	    String emailHTML = MustacheUtil.templatize(template + SendMail.TEMPLATE_HTML_EXT, mergedJSON);

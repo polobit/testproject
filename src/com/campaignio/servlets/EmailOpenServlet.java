@@ -2,7 +2,6 @@ package com.campaignio.servlets;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.email.ContactEmail;
-import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -22,7 +19,8 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.servlets.deferred.EmailTrackingDeferredTask;
+import com.campaignio.servlets.deferred.EmailOpenDeferredTask;
+import com.campaignio.tasklets.agile.SendEmail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -59,9 +57,6 @@ public class EmailOpenServlet extends HttpServlet
 	// CampaignId
 	String campaignId = request.getParameter("c");
 
-	// TrackerId for contact emails
-	String trackerId = request.getParameter("t");
-
 	// Fetches domain name from url. E.g. From admin.agilecrm.com, returns
 	// admin
 	URL url = new URL(request.getRequestURL().toString());
@@ -75,7 +70,7 @@ public class EmailOpenServlet extends HttpServlet
 
 	try
 	{
-	    addLogAndShowNotification(subscriberId, campaignId, trackerId);
+	    addLogAndShowNotification(subscriberId, campaignId);
 	}
 	finally
 	{
@@ -87,7 +82,7 @@ public class EmailOpenServlet extends HttpServlet
 
 	// Interrupt Campaign cron tasks.
 	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(subscriberId))
-	    interruptCronTasksOfOpened(trackerId);
+	    interruptCronTasksOfOpened(campaignId, subscriberId);
     }
 
     /**
@@ -98,10 +93,10 @@ public class EmailOpenServlet extends HttpServlet
      * @param campaignId
      *            - Campaign Id.
      */
-    private void addLogAndShowNotification(String subscriberId, String campaignId, String trackerId)
+    private void addLogAndShowNotification(String subscriberId, String campaignId)
     {
 	// Campaign Emails
-	if (!(StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
+	if (!StringUtils.isEmpty(campaignId) && !StringUtils.isEmpty(subscriberId))
 	{
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
 
@@ -114,25 +109,8 @@ public class EmailOpenServlet extends HttpServlet
 		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(subscriberId)), workflow.name, null);
 	    }
 
-	    return;
-
 	}
 
-	// Personal Emails
-	if (!StringUtils.isEmpty(trackerId))
-	{
-	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long.parseLong(trackerId));
-
-	    for (ContactEmail contactEmail : contactEmails)
-	    {
-		contactEmail.is_email_opened = true;
-		contactEmail.email_opened_at = System.currentTimeMillis() / 1000;
-		contactEmail.save();
-
-		// Shows notification for simple emails.
-		showEmailOpenedNotification(ContactUtil.getContact(contactEmail.contact_id), null, contactEmail.subject);
-	    }
-	}
     }
 
     /**
@@ -171,9 +149,6 @@ public class EmailOpenServlet extends HttpServlet
 		return;
 	    }
 
-	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
-		    new JSONObject().put("custom_value", new JSONObject().put("email_opened", "personal").put("email_subject", emailSubject)));
-
 	}
 	catch (Exception e)
 	{
@@ -187,11 +162,22 @@ public class EmailOpenServlet extends HttpServlet
      * @param openTrackingId
      *            - Send Email open tracking id.
      */
-    private void interruptCronTasksOfOpened(String openTrackingId)
+    private void interruptCronTasksOfOpened(String campaignId, String subscriberId)
     {
-	// Interrupt opened in DeferredTask
-	EmailTrackingDeferredTask emailTrackingDeferredTask = new EmailTrackingDeferredTask(null, null, openTrackingId);
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.add(TaskOptions.Builder.withPayload(emailTrackingDeferredTask));
+	try
+	{
+	    // set email_open true
+	    JSONObject customData = new JSONObject();
+	    customData.put(SendEmail.EMAIL_OPEN, true);
+
+	    // Interrupt opened in DeferredTask
+	    EmailOpenDeferredTask emailOpenDeferredTask = new EmailOpenDeferredTask(campaignId, subscriberId, customData.toString());
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder.withPayload(emailOpenDeferredTask));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 }

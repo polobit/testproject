@@ -15,13 +15,9 @@ import com.thirdparty.PubNub;
  * 
  */
 
+@SuppressWarnings("serial")
 public class NotificationsDeferredTask implements DeferredTask
 {
-    /**
-     * Serial ID
-     */
-    private static final long serialVersionUID = 2713282877446898897L;
-
     /**
      * Object data
      * */

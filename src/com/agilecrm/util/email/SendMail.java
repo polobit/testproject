@@ -3,6 +3,7 @@ package com.agilecrm.util.email;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
+import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -197,7 +198,7 @@ public class SendMail
 
 	    // Merge JSONObjects as a single JSONObject in order to get all
 	    // values in a single object
-	    JSONObject mergedJSON = MustacheUtil.mergeJSONs(jsonObjectArray);
+	    JSONObject mergedJSON = JSONUtil.mergeJSONs(jsonObjectArray);
 
 	    System.out.println("mergedJson in sendemail" + mergedJSON);
 

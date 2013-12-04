@@ -19,8 +19,8 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
-import com.campaignio.servlets.deferred.EmailTrackingDeferredTask;
-import com.campaignio.tasklets.agile.Clicked;
+import com.campaignio.servlets.deferred.EmailClickDeferredTask;
+import com.campaignio.tasklets.agile.SendEmail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.urlshortener.URLShortener;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
@@ -116,7 +116,7 @@ public class RedirectServlet extends HttpServlet
 	    resp.sendRedirect(normalisedLongURL + params);
 
 	    // Interrupt cron tasks of clicked.
-	    interruptCronTasksOfClicked(urlShortener.tracker_id, normalisedLongURL, urlShortener.getOpenTrackingId());
+	    interruptCronTasksOfClicked(urlShortener.tracker_id, normalisedLongURL, urlShortener.campaign_id, subscriberId);
 	}
 	finally
 	{
@@ -246,16 +246,17 @@ public class RedirectServlet extends HttpServlet
      * @param longURL
      *            - Original url to show as custom-data in clicked log.
      */
-    private void interruptCronTasksOfClicked(String trackerId, String longURL, String openTrackingId)
+    private void interruptCronTasksOfClicked(String clickTrackingId, String longURL, String campaignId, String subscriberId)
     {
+
 	try
 	{
-	    // Insert long url as custom value.
-	    JSONObject urlJSON = new JSONObject();
-	    urlJSON.put(Clicked.LINK_CLICKED_LONG, longURL);
+	    JSONObject interruptedData = new JSONObject();
+	    interruptedData.put(SendEmail.EMAIL_CLICK, true);
+	    interruptedData.put(SendEmail.EMAIL_OPEN, true);
 
 	    // Interrupt clicked in DeferredTask
-	    EmailTrackingDeferredTask emailClickDeferredTask = new EmailTrackingDeferredTask(trackerId, urlJSON.toString(), openTrackingId);
+	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId, subscriberId, interruptedData.toString());
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}
