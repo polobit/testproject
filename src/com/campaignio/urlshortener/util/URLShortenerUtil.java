@@ -76,10 +76,11 @@ public class URLShortenerUtil
      * @return shortened url appending with keyword and random number
      * @throws Exception
      */
-    @SuppressWarnings("deprecation")
-    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId) throws Exception
+    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId, String openTrackingId)
+	    throws Exception
     {
 	URLShortener urlShortener = new URLShortener(url, subscriberId, trackingId, campaignId);
+	urlShortener.setOpenTrackingId(openTrackingId);
 	urlShortener.save();
 
 	// Get Key
@@ -96,9 +97,7 @@ public class URLShortenerUtil
 	String domainKey = "";
 
 	if (StringUtils.isEmpty(domain))
-	{
 	    return null;
-	}
 
 	// Converts domain using Rot13.
 	domainKey = Rot13.convertStringUsingRot13(domain);

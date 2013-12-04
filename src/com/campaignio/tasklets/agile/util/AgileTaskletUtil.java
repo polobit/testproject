@@ -139,6 +139,13 @@ public class AgileTaskletUtil
 	if (contact == null)
 	    return null;
 
+	// Return if contact is company.
+	if (contact.type.equals(Contact.Type.COMPANY))
+	{
+	    System.err.println("Campaign cannot be executed for company contact.");
+	    return null;
+	}
+
 	try
 	{
 	    JSONObject subscriberJSON = new JSONObject();

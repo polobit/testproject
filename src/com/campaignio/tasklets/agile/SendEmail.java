@@ -171,9 +171,26 @@ public class SendEmail extends TaskletAdapter
     public static String URLS_SHORTENED = "urls_shortened";
 
     /**
-     * Tracking id
+     * Click event tracking id
      */
-    public static String TRACKING_ID = "tracking_id";
+    public static String CLICK_TRACKING_ID = "click_tracking_id";
+
+    /**
+     * Open event tracking id
+     */
+    public static String OPEN_TRACKING_ID = "open_tracking_id";
+
+    /**
+     * Flags to communicate b/w Opened and Clicked nodes.
+     */
+    public static String EMAIL_OPEN = "email_open";
+    public static String EMAIL_CLICK = "email_click";
+
+    /**
+     * To verify click and open tracking ids within workflow
+     */
+    public static String VERIFY_CLICK_TID = "verify_click_tid";
+    public static String VERIFY_OPEN_TID = "verify_open_tid";
 
     /*
      * Unsubscribe Links public static String UNSUBSCRIBE_LINK =
@@ -388,7 +405,11 @@ public class SendEmail extends TaskletAdapter
 	String replyTo = getStringValue(nodeJSON, subscriberJSON, data, REPLY_TO);
 
 	String keyword = getStringValue(nodeJSON, subscriberJSON, data, PURL_KEYWORD);
+
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, TRACK_CLICKS);
+
+	// To track email open and useful to wakeup Opened node.
+	data.put(OPEN_TRACKING_ID, Calendar.getInstance().getTimeInMillis() / 2);
 
 	// Check if we need to convert links
 	if (trackClicks != null && trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
@@ -397,7 +418,7 @@ public class SendEmail extends TaskletAdapter
 	    {
 		// Generate a random number which can be used for tracking
 		// clicks
-		data.put(TRACKING_ID, Calendar.getInstance().getTimeInMillis());
+		data.put(CLICK_TRACKING_ID, Calendar.getInstance().getTimeInMillis());
 
 		// Get Keyword
 		text = convertLinks(text, " ", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
@@ -435,7 +456,8 @@ public class SendEmail extends TaskletAdapter
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), null);
+	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		    Long.parseLong(data.getString(OPEN_TRACKING_ID)));
 
 	    // if cc present, send using Mailgun as it supports 'Cc'
 	    if (!StringUtils.isEmpty(cc))
@@ -484,8 +506,9 @@ public class SendEmail extends TaskletAdapter
 	    // Avoid image and shorten urls
 	    if (isSpecialLink(tokens[i]))
 	    {
-		// Shorten URL
-		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(TRACKING_ID), campaignId);
+		// To track open when shorten url is clicked
+		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(CLICK_TRACKING_ID), campaignId,
+			data.getString(OPEN_TRACKING_ID));
 
 		if (url == null)
 		    continue;
@@ -576,4 +599,5 @@ public class SendEmail extends TaskletAdapter
 
 	return message;
     }
+
 }

@@ -37,6 +37,11 @@ public class URLShortener
     public String tracker_id;
 
     /**
+     * Open tracking id inorder to track open when link clicked
+     */
+    private String open_tracking_id = null;
+
+    /**
      * Campaign Id
      */
     public String campaign_id;
@@ -74,6 +79,27 @@ public class URLShortener
 	this.subscriber_id = subscriberId;
 	this.tracker_id = trackerId;
 	this.campaign_id = campaignId;
+    }
+
+    /**
+     * Sets open tracking id.
+     * 
+     * @param openTrackingId
+     *            - Email open tracking id.
+     */
+    public void setOpenTrackingId(String openTrackingId)
+    {
+	this.open_tracking_id = openTrackingId;
+    }
+
+    /**
+     * Returns open tracking id
+     * 
+     * @return String
+     */
+    public String getOpenTrackingId()
+    {
+	return this.open_tracking_id;
     }
 
     /**

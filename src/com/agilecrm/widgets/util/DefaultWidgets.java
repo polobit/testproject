@@ -114,4 +114,19 @@ public class DefaultWidgets
 		}
 		return widget;
 	}
+
+	public static Widget getDefaultWidgetByName(String widgetName)
+	{
+		List<Widget> widgets = getAvailableDefaultWidgets();
+
+		for (Widget widget : widgets)
+		{
+			System.out.println(widget.name);
+			System.out.println(widgetName);
+
+			if (widget.name.equalsIgnoreCase(widgetName))
+				return widget;
+		}
+		return null;
+	}
 }

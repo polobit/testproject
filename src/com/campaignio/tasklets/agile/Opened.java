@@ -11,17 +11,19 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
 /**
- * <code>Clicked</code> represents Clicked node in a workflow. It takes duration
- * period and duration type such as Days, Hours and Minutes. It fires when any
- * click event occurs in sent mail. The duration is to make next node wait for
- * required duration in a workflow. The branches Yes and No separates workflow
- * for click events. Clicked uses {@link Cron} to manages the timeout or
- * interrupt events.
+ * <code>Opened</code> represents opened node in workflow. Opened uses
+ * {@link Cron} to manages the timeout or interrupt events.
+ * <p>
+ * It is not always possible to track email open using 1X1 image, e.g., gmail.
+ * So click event is also considered as open event in a workflow. When Open node
+ * is followed by Clicked node, both nodes should be wakeup if open is tracked
+ * by Clicked
+ * </p>
  * 
- * @author Manohar
+ * @author Naresh
  * 
  */
-public class Clicked extends TaskletAdapter
+public class Opened extends TaskletAdapter
 {
     /**
      * Duration period
@@ -34,49 +36,37 @@ public class Clicked extends TaskletAdapter
     public static String DURATION_TYPE = "duration_type";
 
     /**
-     * If clicked then Yes
+     * If opened then Yes
      */
     public static String BRANCH_YES = "Yes";
 
     /**
-     * If not clicked then No
+     * If not opened then No
      */
     public static String BRANCH_NO = "No";
 
     /**
-     * Long URL
-     */
-    public static String LINK_CLICKED_LONG = "link_clicked_long";
-
-    /**
-     * Short URL
-     */
-    public static String LINK_CLICKED_SHORT = "link_clicked_short";
-
-    /**
-     * Executes clicked node based on wakeup time.
+     * Executes opened node based on given duration.
      * 
      * @param campaignJSON
-     *            - CampaignJSON.
+     *            - complete campaign json.
      * @param subscriberJSON
-     *            - SubscriberJSON.
+     *            - contact json
      * @param data
-     *            - data json used within workflow.
+     *            - workflow data
      * @param nodeJSON
-     *            - Node JSON.
+     *            - current node json
      **/
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	// Wake up clicked node when EMAIL_CLICK is true. It gets set in Opened
-	// node when Opened node is before clicked
-	if (data.has(SendEmail.EMAIL_CLICK) && data.getBoolean(SendEmail.EMAIL_CLICK))
+	// Wakeup Opened node along with clicked node. EMAIL_OPEN is set to true
+	// in Clicked node
+	if (data.has(SendEmail.EMAIL_OPEN) && data.getBoolean(SendEmail.EMAIL_OPEN))
 	{
-	    // Executes next tasklet of Yes branch
-	    interrupted(campaignJSON, subscriberJSON, data, nodeJSON, new JSONObject(data.toString()));
+	    interrupted(campaignJSON, subscriberJSON, data, nodeJSON, null);
 
-	    // Reset email_click
-	    data.put(SendEmail.EMAIL_CLICK, false);
-
+	    // Reset EMAIL_OPEN
+	    data.put(SendEmail.EMAIL_OPEN, false);
 	    return;
 	}
 
@@ -88,9 +78,9 @@ public class Clicked extends TaskletAdapter
 	long timeout = CronUtil.getTimer(duration, durationType);
 
 	// Get Tracker Id
-	if (data.has(SendEmail.CLICK_TRACKING_ID))
+	if (data.has(SendEmail.OPEN_TRACKING_ID))
 	{
-	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, data.getString(SendEmail.CLICK_TRACKING_ID), null, null);
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, data.getString(SendEmail.OPEN_TRACKING_ID), null, null);
 	}
 	else
 	{
@@ -99,7 +89,7 @@ public class Clicked extends TaskletAdapter
     }
 
     /**
-     * Executes when link clicked within the given period.
+     * Executes when email opened within the given period.
      * 
      * @param campaignJSON
      *            - CampaignJSON.
@@ -110,17 +100,20 @@ public class Clicked extends TaskletAdapter
      * @param nodeJSON
      *            - Node JSON.
      * @param customData
-     *            - custom data if any like long-url.
+     *            - custom data like open tracking id.
      * 
      **/
     public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, JSONObject customData) throws Exception
     {
-	// Set EMAIL_OPEN true to wakeup Opened node too
-	if (customData.has(SendEmail.VERIFY_OPEN_TID))
+	// When Open node is followed by clicked node in workflow, wakeup
+	// Clicked node too.
+	if (customData != null && customData.length() != 0)
 	{
-	    // To match appropriate SendEmail node from multiple in a workflow.
-	    if (data.getString(SendEmail.OPEN_TRACKING_ID).equals(customData.getString(SendEmail.VERIFY_OPEN_TID)))
-		data.put(SendEmail.EMAIL_OPEN, true);
+	    // Set email_click to true
+	    data.put(SendEmail.EMAIL_CLICK, customData.getBoolean(SendEmail.EMAIL_CLICK));
+
+	    // long url clicked in email.
+	    data.put(Clicked.LINK_CLICKED_LONG, customData.getString(Clicked.LINK_CLICKED_LONG));
 	}
 
 	// Execute Next One in Loop (Yes)
@@ -128,7 +121,7 @@ public class Clicked extends TaskletAdapter
     }
 
     /**
-     * Executes after given time-period in the clicked node completes.
+     * Executes after given time-period in the email opened node completes.
      * 
      * @param campaignJSON
      *            - CampaignJSON.
@@ -142,7 +135,8 @@ public class Clicked extends TaskletAdapter
     public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Creates log for clicked when there are no clicks
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "No Clicks", LogType.CLICKED.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Email not opened within given duration.",
+		LogType.OPENED.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);

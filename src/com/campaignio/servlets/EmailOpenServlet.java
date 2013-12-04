@@ -22,7 +22,11 @@ import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
+import com.campaignio.servlets.deferred.EmailTrackingDeferredTask;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>EmailOpenServlet</code> is the servlet that track emails opened. The
@@ -63,13 +67,6 @@ public class EmailOpenServlet extends HttpServlet
 	URL url = new URL(request.getRequestURL().toString());
 	String namespace = NamespaceUtil.getNamespaceFromURL(url);
 
-	// for sandbox url
-	if (namespace.contains("sandbox-dot-agile-crm-cloud"))
-	{
-	    System.out.println("Setting namespace for sandbox url " + namespace);
-	    namespace = namespace.split("-")[0];
-	}
-
 	if (StringUtils.isEmpty(namespace))
 	    return;
 
@@ -87,6 +84,10 @@ public class EmailOpenServlet extends HttpServlet
 
 	// Redirect to image.
 	res.sendRedirect("/img/1X1.png");
+
+	// Interrupt Campaign cron tasks.
+	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(subscriberId))
+	    interruptCronTasksOfOpened(trackerId);
     }
 
     /**
@@ -112,6 +113,8 @@ public class EmailOpenServlet extends HttpServlet
 		// Shows notification for campaign-emails
 		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(subscriberId)), workflow.name, null);
 	    }
+
+	    return;
 
 	}
 
@@ -176,5 +179,19 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Interrupts email opened in Cron
+     * 
+     * @param openTrackingId
+     *            - Send Email open tracking id.
+     */
+    private void interruptCronTasksOfOpened(String openTrackingId)
+    {
+	// Interrupt opened in DeferredTask
+	EmailTrackingDeferredTask emailTrackingDeferredTask = new EmailTrackingDeferredTask(null, null, openTrackingId);
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(emailTrackingDeferredTask));
     }
 }

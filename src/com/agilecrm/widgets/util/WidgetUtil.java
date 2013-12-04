@@ -59,7 +59,11 @@ public class WidgetUtil
 		for (Widget widget : widgets)
 			for (Widget currentWidget : currentWidgets)
 				if (currentWidget.name.equals(widget.name))
+				{
 					widget.is_added = true;
+					widget.id = currentWidget.id;
+					widget.prefs = currentWidget.prefs;
+				}
 
 		return widgets;
 	}

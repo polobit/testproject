@@ -143,3 +143,49 @@
 	</div>
 {{/check_length}}
 </script>
+
+<script id="stripe-login-template" type="text/html">
+<div class="widget_content" style="border-bottom:none;line-height: 160%;">
+	See the contact\'s subscriptions history and payments from your Stripe account.
+	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your Stripe</a>
+</div>
+</script>
+
+
+<script id="stripe-revoke-access-template" type="text/html">
+
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+
+{{#if_equals custom_data.length "0"}}
+				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+	{{else}}
+				{{#stringToJSON this "prefs"}}{{/stringToJSON}}
+<form id="reportsForm">
+<fieldset style="margin-left: 20px">
+		<div class="control-group" style="margin-left: -20px">
+				<label class="control-label">Custom field<span class="field_req">*</span></label>
+				<div class="controls" id="contactTypeAhead">
+
+			<select name="stripe_field_name" id="stripe_custom_field" class="required span10" style="width:100%" >
+				{{#each custom_data}}
+					{{#if_equals ../prefs.stripe_field_name field_label}}
+						<option selected="selected" value={{field_label}}>{{field_label}}</option>
+						{{else}}	
+							<option value={{field_label}}>{{field_label}}</option>
+					{{/if_equals}}
+				{{/each}}
+			</select>
+			</div>
+			</div>
+		</fieldset>
+				<p style='margin: 10px 0px 5px 0px;' >
+					<a class='btn btn-primary' style='text-decoration: none;' widget-name="Stripe" id="widget-prefs-save">Save</a>
+					<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Stripe">Revoke Access</a>
+					<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Stripe">Cancel</a>
+				</p> 
+	</div>
+</form>
+{{/if_equals}}
+</div>
+
+</script>
