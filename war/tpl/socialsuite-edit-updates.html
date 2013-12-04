@@ -9,7 +9,11 @@
 	        <form id="socialsuite_twitter_RTForm" name="socialsuite_twitter_RTForm" method="post">
 	            <fieldset>
  					<input name="tweetId" type="hidden" value={{tweetId}} />
-                    <input name="tweetOwner" type="hidden" value={{tweetOwner}} /> 
+                    <input name="tweetOwner" type="hidden" value={{tweetOwner}} />
+                    <input name="streamId" type="hidden" value={{streamId}} />
+                    <input name="profileImg" type="hidden" value={{profileImg}} />
+                    <input name="headline" type="hidden" value="Retweet" />    
+
 					<div style="margin-bottom:10px;">
 						{{info}}
 					</div>	                
@@ -22,12 +26,30 @@
                           </div>
 	                </div>
 	            </fieldset>
+                <div id="RT_scheduling" class="RT-scheduling" title="Scheduling">
+                   <i class="icon-time icon-2x"></i>
+                </div>
+                <div id="RT_schedule" class="row" style="display:none;">
+                 <div id="schedule_date" class="control-group span3 width-150">
+                   <label class="control-label"><b>Date </b></label>
+                   <div class="controls">
+                     <input id="RT_scheduled_date" class="required width-150 date" type="text" name="scheduled_date" placeholder="mm/dd/yyyy">							
+                   </div>
+                 </div>
+                 <div id="schedule_time" class="control-group span2 width-65">
+                   <label class="control-label"><b>Time </b></label>
+                   <div class="controls">
+                     <input id="RT_scheduled_time" class="required width-65" type="text" name="scheduled_time" placeholder="time">		
+                   </div>
+                 </div>
+                </div>
 	        </form>
 	    </div>
 	    <div class="modal-footer">
             <a href="#social" class="btn" id="edit_retweet">Edit</a>
             <a href="#social" class="btn btn-primary" id="send_retweet">Retweet</a>
     		<a href="#social" class="btn btn-primary" id="send_edit_tweet" style="display:none;">Send</a>
+            <a href="#social" class="btn btn-primary schedule-tweet" id="schedule_RT" style="display:none;">Schedule</a>
     		<span><img src="img/ajax-spinner.gif" id="spinner-modal" style="display:none;"></img></span>
 	        <span class="save-status"></span>
 	    </div>

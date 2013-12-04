@@ -9,7 +9,8 @@
 		 NetworkType = null;
 		 registerAllDone = false;	
 		 TweetOwnerForAddContact = null;
-		 focused = true;		 
+		 focused = true;
+		 ScheduledEdit = false;
 	  })();
 
 // To collect tweets in temp collection.
@@ -112,6 +113,12 @@ function initializeSocialSuite()
 		changeProperty();
 		});
 
+	// Makes ScheduledEdit flag false to show normal update flow.
+	$('#socialsuite_twitter_messageModal').on('show.bs.modal', function () {
+		ScheduledEdit = false;
+		$('#socialsuite_twitter_RTModal').remove();	
+		});
+		
 	/**
 	 * Display popup form with stream details. 
 	 */
@@ -366,14 +373,14 @@ function initializeSocialSuite()
 				$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
 				
 				// Register on server
-				var publishJSON = {"message_type":"register", "stream":stream};
+				var publishJSON = {"message_type":"register", "stream":stream.toJSON()};
 				sendMessage(publishJSON);	
 				
 				// Get recent stream from database, suppose we add directly this stream so it will create reference 
 				// and data replicated in both.
 	     		$.getJSON("/core/social/getstream/" + stream.id,function(data)
 	     		   		  {
-	     					console.log("data after fetching client from db");
+	     					console.log("data after fetching streams from db");
 	     		   		    console.log(data);
 	     		   		    
 	     		   		    if(data != null)
