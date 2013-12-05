@@ -389,7 +389,7 @@ function initializeSocialSuite()
 	     		   		    	} // client json if end
 	     		   		    
 	     		   		    // Notification for stream added.
-	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 2500);
+	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
 	     		   		    
 	     		   		    setTimeout(function ()
 	     		   			  {
@@ -401,7 +401,7 @@ function initializeSocialSuite()
 		     		   		    $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 		     		   		    
 		     		   		    StreamType="";
-	     		   			  }, 3000);    		   		    
+	     		   			  }, 4000);    		   		    
 	     		   			     		   		
 	     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
 				},

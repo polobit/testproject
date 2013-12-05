@@ -618,7 +618,7 @@ function getScheduledUpdate(stream)
   $.getJSON("/core/scheduledupdate/getscheduledupdates/" + stream.screen_name,function(data)
 	{
 	  console.log("data after fetching sc. updates from db");
-	  console.log(data); console.log("farah");console.log(stream);
+	  console.log(data);
 		  
 	  if(data.length)
 	   	{	

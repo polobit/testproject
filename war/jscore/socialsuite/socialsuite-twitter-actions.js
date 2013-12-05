@@ -90,6 +90,10 @@ $(".compose-message").die().live("click", function(e)
 $('#twit-tweet').die().live("mouseleave", function(e)
 		{$('#twit-tweet').keypress();});
 
+$('#twit-edit-tweet').die().live("mouseleave", function(e)
+		{$('#twit-edit-tweet').keypress();});
+
+
 /**
  * Get stream and create reply tweet and post it on Twitter.
  */
@@ -1013,7 +1017,7 @@ $(".schedule-tweet").die().live("click", function(e)
  * Sends delete request to DB and delete scheduled update.
  */
 $(".delete-scheduled").die().live("click", function(e)
- {
+ {		
 	// Ask confirmation to user.
 	if(!confirm("Are you sure you want to delete this tweet?"))
 		return;
