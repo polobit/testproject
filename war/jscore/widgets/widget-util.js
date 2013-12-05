@@ -48,10 +48,8 @@ $(function()
 			
 			 if(Catalog_Widgets_View && Catalog_Widgets_View.collection)
 			   {
-				 alert("in");
 			    var models = Catalog_Widgets_View.collection.where({ name : data["name"] });
 			    if(models && models[0]){
-			    	alert("in modelas")
 			    	 models[0].set({ 'prefs' : data.prefs });
 			    	 console.log( Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
 			    }
@@ -60,10 +58,8 @@ $(function()
 			 
 			 if(Widgets_View && Widgets_View.collection)
 			   {
-				 alert("in");
 			    var models = Widgets_View.collection.where({ name : data["name"] });
 			    if(models && models[0]){
-			    	alert("in modelas")
 			    	 models[0].set({ 'prefs' : data.prefs });
 			    	 console.log( Widgets_View.collection.where({ name : data["name"] })[0]);
 			    }
