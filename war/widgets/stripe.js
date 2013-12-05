@@ -49,6 +49,8 @@ $(function()
 
 	// Parse string Stripe widget preferences as JSON
 	var stripe_widget_prefs = JSON.parse(stripe_widget.prefs);
+	
+	console.log(stripe_widget_prefs);
 
 	/*
 	 * Retrieve name of the custom field in which Stripe customer IDs are
