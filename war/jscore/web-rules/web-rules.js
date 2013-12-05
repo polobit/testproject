@@ -1,4 +1,4 @@
-function chainWebRules(el)
+function chainWebRules(el, data)
 {
 	$("#campaign-actions", el).chained($("#action", el));
 	$("#action-details", el).chained($("#action", el));
@@ -7,6 +7,7 @@ function chainWebRules(el)
 	$("#noty-type", el).chained($("#action", el));
 	$("#noty-title", el).chained($("#noty-type", el));
 	$("#noty-message", el).chained($("#noty-type", el));
+	//deserializeChainedSelect1($(el).find('form'), data.rules);
 }
 
 $(function()
@@ -20,7 +21,6 @@ $(function()
 				scramble_input_names($(htmlContent));
 
 				chainWebRules(htmlContent);
-
 				// var htmlContent = $(this).closest("tr").clone();
 				$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 				$(this).parents("tbody").append(htmlContent);
