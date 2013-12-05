@@ -86,6 +86,9 @@ $(".compose-message").die().live("click", function(e)
     });
 }); 
 
+// On copy paste from mouse right click call key press to check cross limit.
+$('#twit-tweet').die().live("mouseleave", function(e)
+		{$('#twit-tweet').keypress();});
 
 /**
  * Get stream and create reply tweet and post it on Twitter.
