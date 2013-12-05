@@ -86,6 +86,13 @@ $(".compose-message").die().live("click", function(e)
     });
 }); 
 
+// On copy paste from mouse right click call key press to check cross limit.
+$('#twit-tweet').die().live("mouseleave", function(e)
+		{$('#twit-tweet').keypress();});
+
+$('#twit-edit-tweet').die().live("mouseleave", function(e)
+		{$('#twit-edit-tweet').keypress();});
+
 
 /**
  * Get stream and create reply tweet and post it on Twitter.
@@ -1010,7 +1017,7 @@ $(".schedule-tweet").die().live("click", function(e)
  * Sends delete request to DB and delete scheduled update.
  */
 $(".delete-scheduled").die().live("click", function(e)
- {
+ {		
 	// Ask confirmation to user.
 	if(!confirm("Are you sure you want to delete this tweet?"))
 		return;
@@ -1146,7 +1153,7 @@ function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 125,
+			  	  maxChars: 126,
 			  	  counter: "#"+counterVar
 			  	});
 			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();

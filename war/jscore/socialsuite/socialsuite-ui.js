@@ -284,7 +284,7 @@ function initializeSocialSuite()
 			  document.getElementById('stream_description_label').innerHTML='<i class="icon-share-alt"></i> Tweets sent by the user.';
 			  break;
 		case "Scheduled": 
-			  document.getElementById('stream_description_label').innerHTML='<i class="icon-calendar"></i> Tweets user want to sent in future time.';
+			  document.getElementById('stream_description_label').innerHTML='<i class="icon-time"></i> Tweets scheduled for sending later.';
 			  break;
 		case "All_Updates": 
 			  document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';	   	  
@@ -389,7 +389,7 @@ function initializeSocialSuite()
 	     		   		    	} // client json if end
 	     		   		    
 	     		   		    // Notification for stream added.
-	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 2500);
+	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
 	     		   		    
 	     		   		    setTimeout(function ()
 	     		   			  {
@@ -401,7 +401,7 @@ function initializeSocialSuite()
 		     		   		    $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 		     		   		    
 		     		   		    StreamType="";
-	     		   			  }, 3000);    		   		    
+	     		   			  }, 4000);    		   		    
 	     		   			     		   		
 	     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
 				},

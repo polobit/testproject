@@ -43,9 +43,37 @@ $(function()
 		});
 		
 		if(data.prefs)
+		{
 			data.prefs = JSON.stringify(data.prefs);
+			
+			 if(Catalog_Widgets_View && Catalog_Widgets_View.collection)
+			   {
+				 alert("in");
+			    var models = Catalog_Widgets_View.collection.where({ name : data["name"] });
+			    if(models && models[0]){
+			    	alert("in modelas")
+			    	 models[0].set({ 'prefs' : data.prefs });
+			    	 console.log( Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
+			    }
+			    
+			   }
+			 
+			 if(Widgets_View && Widgets_View.collection)
+			   {
+				 alert("in");
+			    var models = Widgets_View.collection.where({ name : data["name"] });
+			    if(models && models[0]){
+			    	alert("in modelas")
+			    	 models[0].set({ 'prefs' : data.prefs });
+			    	 console.log( Widgets_View.collection.where({ name : data["name"] })[0]);
+			    }
+			    
+			   }
+		}
+			
 		
 		var that =this;
+		
 		// Save entity
 		saveEntity(data, "core/api/widgets", function(result){
 			$(form).data('widget', result.toJSON());
@@ -365,11 +393,14 @@ function fill_form(id, widget_name, template_id)
 {
 	var model = Catalog_Widgets_View.collection.get(id);
 	console.log(model.get("prefs"));
-
-	var prefsJSON = JSON.parse(model.get("prefs"));
-
+	
 	show_set_up_widget(widget_name, template_id);
-	fill_fields(prefsJSON);
+	
+	if(model && model.get("prefs"))
+	{
+		var prefsJSON = JSON.parse(model.get("prefs"));
+		fill_fields(prefsJSON);
+	}
 }
 
 function fill_fields(fieldsJSON)
