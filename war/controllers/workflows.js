@@ -487,12 +487,17 @@ var WorkflowsRouter = Backbone.Router
 								var type = currentTrigger.toJSON()['type'];
 
 								// Shows the Value field with given value
-								$('#trigger-type', el).find(
-										'option[value=' + type + ']').attr(
+								$('#trigger-type', el).val(type).attr(
 										"selected", "selected").trigger(
 										'change');
 
-								$('#trigger-type', el).trigger('change');
+								// Populate milestones list and make obtained milestone selected.
+								if(type === 'DEAL_MILESTONE_IS_CHANGED'){
+									
+									var trigger_deal_milestone_value = currentTrigger.toJSON()['trigger_deal_milestone'];
+									populate_milestones_in_trigger($('form#addTriggerForm', el), 'trigger-deal-milestone', trigger_deal_milestone_value);
+
+								}
 
 								// Calls TagsTypeAhead on focus event.
 								if (type == 'TAG_IS_ADDED'
@@ -502,7 +507,7 @@ var WorkflowsRouter = Backbone.Router
 												e.preventDefault();
 												addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));
 											});
-
+								
 								var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 								/**

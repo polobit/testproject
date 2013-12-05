@@ -22,6 +22,8 @@ var ReportsRouter = Backbone.Router.extend({
 
 	reports : function() {
 	$("#content").html(getTemplate('report-categories', {}));
+	$(".active").removeClass("active");
+	$("#reportsmenu").addClass("active");
 	},
 	/*
 	 * Shows list of reports, with an option to add new report

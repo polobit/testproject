@@ -78,6 +78,23 @@ public class TriggerUtil
     }
 
     /**
+     * Returns triggers based on milestone.
+     * 
+     * @param milestone
+     *            - milestone given in deal milestone trigger.
+     * @return List of triggers
+     */
+    public static List<Trigger> getTriggersByMilestone(String milestone)
+    {
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	conditionsMap.put("trigger_deal_milestone", milestone);
+	conditionsMap.put("type", Trigger.Type.DEAL_MILESTONE_IS_CHANGED);
+
+	return dao.listByProperty(conditionsMap);
+    }
+
+    /**
      * Returns list of triggers with respect to campaign-id
      * 
      * @param campaignId
