@@ -1,14 +1,15 @@
 package com.agilecrm.plugin.oauth;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
-import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
  * <code>TwilioServlet</code> handles OAuth request from Twilio server
@@ -36,8 +37,11 @@ public class TwilioServlet extends HttpServlet
 	String state = request.getParameter("state");
 	System.out.println("Twilio state after OAuth " + state);
 
+	URL url = new URL(state);
+
 	// Extract the NameSpace from state
-	String nameSpace = state.split("://")[1].split("\\.")[0];
+	String nameSpace = NamespaceUtil.getNamespaceFromURL(url);
+
 	System.out.println("Twilio NameSpace after OAuth " + nameSpace);
 
 	String sessionAttribute = request.getParameter("from_domain");
