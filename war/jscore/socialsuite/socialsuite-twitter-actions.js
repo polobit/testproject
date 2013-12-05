@@ -1146,7 +1146,7 @@ function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 125,
+			  	  maxChars: 126,
 			  	  counter: "#"+counterVar
 			  	});
 			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();
