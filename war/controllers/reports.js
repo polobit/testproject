@@ -9,6 +9,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 	/* Reports */
 	"reports" : "reports", 
+	"email-reports" : "emailReports",
 	"report-add" : "reportAdd", 
 	"report-edit/:id" : "reportEdit", 
 	"report-results/:id" : "reportInstantResults",
@@ -19,10 +20,13 @@ var ReportsRouter = Backbone.Router.extend({
 	"report-ratio/:tag1/:tag2": "showRatioReport"
 	},
 
-	/**
+	reports : function() {
+	$("#content").html(getTemplate('report-categories', {}));
+	},
+	/*
 	 * Shows list of reports, with an option to add new report
 	 */
-	reports : function()
+	emailReports : function()
 	{
 		this.reports = new Base_Collection_View({ url : '/core/api/reports', restKey : "reports", templateKey : "report", individual_tag_name : 'tr' });
 
@@ -43,7 +47,7 @@ var ReportsRouter = Backbone.Router.extend({
 		var count = 0;
 		$("#content").html(LOADING_HTML);
 		CUSTOM_FIELDS = undefined;
-		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "reports", isNew : true,
+		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "email-reports", isNew : true,
 			postRenderCallback : function(el)
 			{
 				// Counter to set when script is loaded. Used to avoid flash in page
