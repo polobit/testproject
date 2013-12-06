@@ -68,18 +68,12 @@ function create_tour_steps(el)
 				"element" : "#add-trigger",
 				"title" : "Triggers",
 				"content" : "Create conditions to trigger your campaigns automatically. <br/><br/> <strong>Eg:</strong> when a tag is added or when a contact reaches a score.<br/>",
-				"placement" : "bottom", "el" : el, "backdrop" : true, },
-			{
-				"element" : "#workflows-tour-step",
-				"title" : "Sample Campaigns",
-				"content" : "I have created few sample campaigns for you to get a hang of them.<br/><br/> <strong>Multistep Responders</strong> - simple email with an automated followup after few days <br/><br/> <strong>Multichannel Campaigns</strong> - email and engage on Twitter if they have opened your your email <br/><br/> <strong>Cart Abandonment made simple</strong> - send a coupon to someone who has added an item in the cart but hasn't finished the checkout in 3 days. <br/>",
-				"placement" : "right", "el" : el, "backdrop" : true, },
+				"placement" : "bottom", "el" : el, "backdrop" : true, }
 	]
 	Agile_Tour["workflows-add"] = [
 		{ "element" : "#workflowform", "title" : "Visual Campaigns",
 			"content" : "Create your campaigns and workflows visually.<br/> Just drag and drop the nodes. Connect them to the workflow.<br/>",
 			"placement" : "top", "el" : el, "backdrop" : true, }
-
 	]
 
 }
