@@ -7,7 +7,8 @@ function chainWebRules(el, data)
 	$("#noty-type", el).chained($("#action", el));
 	$("#noty-title", el).chained($("#noty-type", el));
 	$("#noty-message", el).chained($("#noty-type", el));
-	//deserializeChainedSelect1($(el).find('form'), data.rules);
+	if(data && data.actions)
+		deserializeChainedSelect1($(el).find('form'), data.actions);
 }
 
 $(function()
