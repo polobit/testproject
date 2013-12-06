@@ -948,11 +948,7 @@ $(".schedule-tweet").die().live("click", function(e)
     // Checks whether all the input fields are filled
     if (!isValidForm($("#"+formName)))
         return;    
-
-    $('#schedule_tweet').addClass('disabled');
-    $('#schedule_RT').addClass('disabled');
-    $("#spinner-modal").show();
-  
+    
     var json = {};
     
     // Convert into JSON
@@ -961,6 +957,14 @@ $(".schedule-tweet").die().live("click", function(e)
     });     
         
     console.log(json);
+    
+    if(!scheduledRangeCheck(json.scheduled_date,json.scheduled_time))
+    	return;
+    
+    $('#schedule_tweet').addClass('disabled');
+    $('#schedule_RT').addClass('disabled');
+    $("#spinner-modal").show();
+  
     //Get stream from collection.
     var stream = StreamsListView.collection.get(json.streamId).toJSON();
     
@@ -1136,6 +1140,36 @@ $(".edit-scheduled").die().live("click", function(e)
 
 })(); // init end
 
+// Check valid scheduled.
+function scheduledRangeCheck(scheduledDate,scheduledTime)
+{
+	console.log(scheduledDate+" "+scheduledTime);	
+		
+	var today = new Date().format('mm/dd/yyyy');
+	var now = new Date();
+	now = now.getHours()+':'+now.getMinutes();
+	
+	console.log("current date is : "+ today+" current time is : "+ now);
+	
+	if (scheduledDate < today) // Past Date
+	 {
+	   alert("Please select Date in future.");
+	   return false;
+	 }	
+	else if(scheduledDate == today)	// Present Date
+	 {
+		if(scheduledTime < now) // Past Time
+		 {
+			alert("Please select Time in future.");
+			return false;
+		 }
+		else // Future Time
+	     return true;
+	 }
+	else if(scheduledDate > today) // Future Date
+	  return true;	 
+}
+
 // Displays Modal.
 function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
 {
@@ -1163,6 +1197,7 @@ function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
     // Shows the modal after filling with details
     $('#'+modalToDisplay).modal("show");	
 }
+
 // Hides the modal after 2 seconds after the sent is shown
 function hideModal(modalToHide)
 {

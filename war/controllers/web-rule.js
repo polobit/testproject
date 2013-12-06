@@ -45,6 +45,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			}
 		});		
 		
+		$("#content").html(LOADING_HTML);
 		web_reports_add.render();
 	},
 	
@@ -81,6 +82,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			}
 		});		
 		
+		$("#content").html(LOADING_HTML);
 		web_reports_add.render();
 	}
 });
