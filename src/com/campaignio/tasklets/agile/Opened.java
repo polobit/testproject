@@ -2,6 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.util.JSONUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
@@ -59,33 +60,13 @@ public class Opened extends TaskletAdapter
      **/
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	// Wakeup Opened node along with clicked node. EMAIL_OPEN is set to true
-	// in Clicked node
-	if (data.has(SendEmail.EMAIL_OPEN) && data.getBoolean(SendEmail.EMAIL_OPEN))
-	{
-	    interrupted(campaignJSON, subscriberJSON, data, nodeJSON, null);
-
-	    // Reset EMAIL_OPEN
-	    data.put(SendEmail.EMAIL_OPEN, false);
-	    return;
-	}
-
 	// Get Duration, Type
 	String duration = getStringValue(nodeJSON, subscriberJSON, data, DURATION);
 	String durationType = getStringValue(nodeJSON, subscriberJSON, data, DURATION_TYPE);
 
 	// Add ourselves to Cron Queue
 	long timeout = CronUtil.getTimer(duration, durationType);
-
-	// Get Tracker Id
-	if (data.has(SendEmail.OPEN_TRACKING_ID))
-	{
-	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, data.getString(SendEmail.OPEN_TRACKING_ID), null, null);
-	}
-	else
-	{
-	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
-	}
+	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
     }
 
     /**
@@ -105,16 +86,9 @@ public class Opened extends TaskletAdapter
      **/
     public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, JSONObject customData) throws Exception
     {
-	// When Open node is followed by clicked node in workflow, wakeup
-	// Clicked node too.
-	if (customData != null && customData.length() != 0)
-	{
-	    // Set email_click to true
-	    data.put(SendEmail.EMAIL_CLICK, customData.getBoolean(SendEmail.EMAIL_CLICK));
 
-	    // long url clicked in email.
-	    data.put(Clicked.LINK_CLICKED_LONG, customData.getString(Clicked.LINK_CLICKED_LONG));
-	}
+	// Merge customData json with data json.
+	data = JSONUtil.mergeJSONs(new JSONObject[] { data, customData });
 
 	// Execute Next One in Loop (Yes)
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);

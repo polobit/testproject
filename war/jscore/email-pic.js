@@ -29,6 +29,7 @@ $(function()
 			$("img").error(function()
 			{
 				$('#pic').css("display", "none");
+				changeProperty();
 			});
 		}
 	});

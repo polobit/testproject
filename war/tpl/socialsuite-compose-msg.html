@@ -12,6 +12,9 @@
             {{#if_equals headline "Reply Tweet"}}
 				<h3><i class="icon-share"></i> {{headline}}</h3>
 			{{/if_equals}}
+            {{#if_equals headline "Retweet"}}
+				<h3><i class="icon-retweet"></i> {{headline}}</h3>
+			{{/if_equals}}
 	    </div>
 	    <div class="modal-body agile-modal-body">
 	        <form id="socialsuite_twitter_messageForm" name="socialsuite_twitter_messageForm" method="post">
@@ -42,7 +45,7 @@
 								<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;"></textarea>
 							  {{/if_equals}}  
                             {{/if}}
-							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" style="margin-right:5px;">125</em></small></div>
+							<div class="right"><small style="font-style: italic;">Characters Left <em id="twitter-counter" style="margin-right:5px;">126</em></small></div>
                         </div>
 	                </div>
 	            </fieldset>
@@ -65,9 +68,9 @@
                 </div> 
 	        </form>            
 	    </div>
-	    <div class="modal-footer" rel="{{headline}}">
+	    <div class="modal-footer">
 			<a href="#social" class="btn btn-primary" id="send_tweet">Send</a>
-			<a href="#social" class="btn btn-primary" id="schedule_tweet" style="display:none;">Schedule</a>
+			<a href="#social" class="btn btn-primary schedule-tweet" id="schedule_tweet" style="display:none;">Schedule</a>
 			<span><img src="img/ajax-spinner.gif" id="spinner-modal" style="display:none;"></img></span>
 	        <span class="save-status"></span>
 	    </div>

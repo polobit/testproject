@@ -9,7 +9,8 @@
 		 NetworkType = null;
 		 registerAllDone = false;	
 		 TweetOwnerForAddContact = null;
-		 focused = true;		 
+		 focused = true;
+		 ScheduledEdit = false;
 	  })();
 
 // To collect tweets in temp collection.
@@ -112,6 +113,12 @@ function initializeSocialSuite()
 		changeProperty();
 		});
 
+	// Makes ScheduledEdit flag false to show normal update flow.
+	$('#socialsuite_twitter_messageModal').on('show.bs.modal', function () {
+		ScheduledEdit = false;
+		$('#socialsuite_twitter_RTModal').remove();	
+		});
+		
 	/**
 	 * Display popup form with stream details. 
 	 */
@@ -277,7 +284,7 @@ function initializeSocialSuite()
 			  document.getElementById('stream_description_label').innerHTML='<i class="icon-share-alt"></i> Tweets sent by the user.';
 			  break;
 		case "Scheduled": 
-			  document.getElementById('stream_description_label').innerHTML='<i class="icon-calendar"></i> Tweets user want to sent in future time.';
+			  document.getElementById('stream_description_label').innerHTML='<i class="icon-time"></i> Tweets scheduled for sending later.';
 			  break;
 		case "All_Updates": 
 			  document.getElementById('stream_description_label').innerHTML='<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';	   	  
@@ -366,14 +373,14 @@ function initializeSocialSuite()
 				$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
 				
 				// Register on server
-				var publishJSON = {"message_type":"register", "stream":stream};
+				var publishJSON = {"message_type":"register", "stream":stream.toJSON()};
 				sendMessage(publishJSON);	
 				
 				// Get recent stream from database, suppose we add directly this stream so it will create reference 
 				// and data replicated in both.
 	     		$.getJSON("/core/social/getstream/" + stream.id,function(data)
 	     		   		  {
-	     					console.log("data after fetching client from db");
+	     					console.log("data after fetching streams from db");
 	     		   		    console.log(data);
 	     		   		    
 	     		   		    if(data != null)
@@ -382,7 +389,7 @@ function initializeSocialSuite()
 	     		   		    	} // client json if end
 	     		   		    
 	     		   		    // Notification for stream added.
-	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 2500);
+	     		   		    showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
 	     		   		    
 	     		   		    setTimeout(function ()
 	     		   			  {
@@ -394,7 +401,7 @@ function initializeSocialSuite()
 		     		   		    $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 		     		   		    
 		     		   		    StreamType="";
-	     		   			  }, 3000);    		   		    
+	     		   			  }, 4000);    		   		    
 	     		   			     		   		
 	     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
 				},

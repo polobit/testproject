@@ -76,11 +76,9 @@ public class URLShortenerUtil
      * @return shortened url appending with keyword and random number
      * @throws Exception
      */
-    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId, String openTrackingId)
-	    throws Exception
+    public static String getShortURL(String url, String keyword, String subscriberId, String trackingId, String campaignId) throws Exception
     {
 	URLShortener urlShortener = new URLShortener(url, subscriberId, trackingId, campaignId);
-	urlShortener.setOpenTrackingId(openTrackingId);
 	urlShortener.save();
 
 	// Get Key
@@ -92,15 +90,11 @@ public class URLShortenerUtil
 	// Gets current namespace to append url
 	String domain = NamespaceManager.get();
 
-	System.out.println("Namespace in URLShortenerUtil: " + domain);
-
-	String domainKey = "";
-
 	if (StringUtils.isEmpty(domain))
 	    return null;
 
 	// Converts domain using Rot13.
-	domainKey = Rot13.convertStringUsingRot13(domain);
+	String domainKey = Rot13.convertStringUsingRot13(domain);
 
 	// When keyword is null initialize with space
 	if (keyword == null || keyword.trim().length() == 0)

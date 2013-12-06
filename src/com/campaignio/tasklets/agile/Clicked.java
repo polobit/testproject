@@ -2,6 +2,7 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
+import com.agilecrm.util.JSONUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log.LogType;
@@ -67,22 +68,24 @@ public class Clicked extends TaskletAdapter
      **/
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
-	// Wake up clicked node when EMAIL_CLICK is true. It gets set in Opened
-	// node when Opened node is before clicked
-	if (data.has(SendEmail.EMAIL_CLICK) && data.getBoolean(SendEmail.EMAIL_CLICK))
-	{
-	    // Executes next tasklet of Yes branch
-	    interrupted(campaignJSON, subscriberJSON, data, nodeJSON, new JSONObject(data.toString()));
-
-	    // Reset email_click
-	    data.put(SendEmail.EMAIL_CLICK, false);
-
-	    return;
-	}
-
 	// Get Duration, Type
 	String duration = getStringValue(nodeJSON, subscriberJSON, data, DURATION);
 	String durationType = getStringValue(nodeJSON, subscriberJSON, data, DURATION_TYPE);
+
+	// Wakeup clicked node too along with Opened node (for click event)
+	// using email_click flag. Clicked node cannot wake up simultaneously as
+	// it did not exist in cron at the time of click event if Opened node
+	// precedes.
+	if (data.has(SendEmail.EMAIL_CLICK) && data.getBoolean(SendEmail.EMAIL_CLICK))
+	{
+	    // Reset email_click to not affect next Clicked node in workflow.
+	    data.remove(SendEmail.EMAIL_CLICK);
+
+	    // Proceed to YES
+	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
+
+	    return;
+	}
 
 	// Add ourselves to Cron Queue
 	long timeout = CronUtil.getTimer(duration, durationType);
@@ -115,13 +118,7 @@ public class Clicked extends TaskletAdapter
      **/
     public void interrupted(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, JSONObject customData) throws Exception
     {
-	// Set EMAIL_OPEN true to wakeup Opened node too
-	if (customData.has(SendEmail.VERIFY_OPEN_TID))
-	{
-	    // To match appropriate SendEmail node from multiple in a workflow.
-	    if (data.getString(SendEmail.OPEN_TRACKING_ID).equals(customData.getString(SendEmail.VERIFY_OPEN_TID)))
-		data.put(SendEmail.EMAIL_OPEN, true);
-	}
+	data = JSONUtil.mergeJSONs(new JSONObject[] { data, customData });
 
 	// Execute Next One in Loop (Yes)
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);

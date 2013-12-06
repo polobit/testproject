@@ -138,7 +138,7 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			String agile = " via @agile_crm";
+			String agile = " via @agilecrm";
 			String result = null;
 
 			// Send current update/status
@@ -183,7 +183,7 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			String agile = " via @agile_crm";
+			String agile = " via @agilecrm";
 			String result = null;
 
 			// Send reply tweet to particular tweet based on tweet id.
@@ -227,7 +227,7 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			String agile = " via @agile_crm";
+			String agile = " via @agilecrm";
 			String result = null;
 
 			if (!twitter.showFriendship(stream.screen_name, tweetOwner).isSourceFollowedByTarget())

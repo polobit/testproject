@@ -1,0 +1,49 @@
+<script id="webrule-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Web Rules</h1>
+            <a href="#webrules-add" class="btn right" id="addWebrule" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add WebRule</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+		 <div id="slate">
+         </div>
+        {{#if this.length}}
+        <table class="table table-bordered table-striped showCheckboxes" url="core/api/webrule/bulk">
+            <thead>
+                <tr>
+                    <th>Name</th>
+					<th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="webrule-model-list" route="webrule-edit/">
+            </tbody>
+        </table>
+		{{/if}}
+    </div>
+    <div class="span3">
+        <div class="well">
+            <h3>
+                What are Webrules?
+            </h3>
+            <br />
+            <p>Define your rules online and AgileCRM will show the popups automatically.
+</p>
+<img src="https://www.agilecrm.com/img/crm/saas/saas-grabber.png"></img>
+        </div>
+    </div>
+</div>
+</script>
+<script id="webrule-model-template" type="text/html">
+<td  data="{{id}}" class="data" style="cursor:pointer">
+{{name}}
+</td>
+<td>
+{{#each actions}}
+	{{titleFromEnums action}}
+{{/each}}
+</td>
+</script>

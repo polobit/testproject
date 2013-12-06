@@ -38,37 +38,6 @@ public class MustacheUtil
     private static final JsonFactory JSON_FACTORY = new MappingJsonFactory();
 
     /**
-     * Merges array of JSONObjects into a single JSONObject.
-     * 
-     * @param objs
-     *            Array of JSONObjects (not JSONArray).
-     * @return single merge JSONOobject.
-     */
-    @SuppressWarnings("rawtypes")
-    public static JSONObject mergeJSONs(JSONObject[] objs)
-    {
-	JSONObject merged = new JSONObject();
-	try
-	{
-	    for (JSONObject obj : objs)
-	    {
-		Iterator it = obj.keys();
-		while (it.hasNext())
-		{
-		    String key = (String) it.next();
-		    merged.put(key, obj.get(key));
-		}
-	    }
-	}
-	catch (Exception e)
-	{
-	    System.out.println("Exception in mergeJSON");
-	}
-
-	return merged;
-    }
-
-    /**
      * Gets template file using Util class and compiles template with
      * JSONObject.
      * 

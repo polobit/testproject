@@ -137,7 +137,7 @@ function registerAll()
 	 {	  		       
 	    /* Publish data to register on server */
 	 	var publishJSON = {"message_type":"register", "stream":stream};
-	    sendMessage(publishJSON);
+	    sendMessage(publishJSON);	 	 
 	 });
    
    // All added streams registered. 
@@ -617,7 +617,7 @@ function getScheduledUpdate(stream)
   // Get updates of relevant stream from database. 
   $.getJSON("/core/scheduledupdate/getscheduledupdates/" + stream.screen_name,function(data)
 	{
-	  console.log("data after fetching client from db");
+	  console.log("data after fetching sc. updates from db");
 	  console.log(data);
 		  
 	  if(data.length)

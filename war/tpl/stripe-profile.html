@@ -146,7 +146,7 @@
 
 <script id="stripe-login-template" type="text/html">
 <div class="widget_content" style="border-bottom:none;line-height: 160%;">
-	See the contact\'s subscriptions history and payments from your Stripe account.
+	See the contact's subscriptions history and payments from your Stripe account.
 	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your Stripe</a>
 </div>
 </script>
@@ -160,18 +160,18 @@
 				<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
 	{{else}}
 				{{#stringToJSON this "prefs"}}{{/stringToJSON}}
-<form id="reportsForm">
+<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p><form id="reportsForm">
 <fieldset style="margin-left: 20px">
 		<div class="control-group" style="margin-left: -20px">
-				<label class="control-label">Custom field<span class="field_req">*</span></label>
+				<label class="control-label">Current custom field</label>
 				<div class="controls" id="contactTypeAhead">
-
+			
 			<select name="stripe_field_name" id="stripe_custom_field" class="required span10" style="width:100%" >
 				{{#each custom_data}}
 					{{#if_equals ../prefs.stripe_field_name field_label}}
-						<option selected="selected" value={{field_label}}>{{field_label}}</option>
+						<option selected="selected" value="{{field_label}}">{{field_label}}</option>
 						{{else}}	
-							<option value={{field_label}}>{{field_label}}</option>
+							<option value="{{field_label}}">{{field_label}}</option>
 					{{/if_equals}}
 				{{/each}}
 			</select>

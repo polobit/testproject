@@ -186,12 +186,6 @@ public class SendEmail extends TaskletAdapter
     public static String EMAIL_OPEN = "email_open";
     public static String EMAIL_CLICK = "email_click";
 
-    /**
-     * To verify click and open tracking ids within workflow
-     */
-    public static String VERIFY_CLICK_TID = "verify_click_tid";
-    public static String VERIFY_OPEN_TID = "verify_open_tid";
-
     /*
      * Unsubscribe Links public static String UNSUBSCRIBE_LINK =
      * "http://usertracker.contactuswidget.appspot.com/cd_unsubscribe.jsp?id=";
@@ -408,9 +402,6 @@ public class SendEmail extends TaskletAdapter
 
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, TRACK_CLICKS);
 
-	// To track email open and useful to wakeup Opened node.
-	data.put(OPEN_TRACKING_ID, Calendar.getInstance().getTimeInMillis() / 2);
-
 	// Check if we need to convert links
 	if (trackClicks != null && trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
 	{
@@ -449,15 +440,10 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
-	// Creates log for sending email
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		getSendEmailLogMessage(fromEmail, to, subject, text, html), LogType.EMAIL_SENT.toString());
-
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    Long.parseLong(data.getString(OPEN_TRACKING_ID)));
+	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON));
 
 	    // if cc present, send using Mailgun as it supports 'Cc'
 	    if (!StringUtils.isEmpty(cc))
@@ -473,6 +459,10 @@ public class SendEmail extends TaskletAdapter
 	    else
 		SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
 	}
+
+	// Creates log for sending email
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		getSendEmailLogMessage(fromEmail, to, subject, text, html), LogType.EMAIL_SENT.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -507,8 +497,7 @@ public class SendEmail extends TaskletAdapter
 	    if (isSpecialLink(tokens[i]))
 	    {
 		// To track open when shorten url is clicked
-		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(CLICK_TRACKING_ID), campaignId,
-			data.getString(OPEN_TRACKING_ID));
+		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(CLICK_TRACKING_ID), campaignId);
 
 		if (url == null)
 		    continue;

@@ -227,6 +227,13 @@ function checkTwilioNumbersAndGenerateToken(twilio_prefs)
 			return;
 		}
 
+		if(twilio_prefs.verification_status && twilio_prefs.verification_status == "success" && twilio_prefs.verified_number)
+		{
+			checkTwilioPrefsAndGenerateToken(twilio_prefs, twilio_prefs.verified_number);
+			return;
+		}
+			
+		
 		// Else generate Twilio token for calls
 		checkTwilioPrefsAndGenerateToken(twilio_prefs, data[0].PhoneNumber);
 	});
