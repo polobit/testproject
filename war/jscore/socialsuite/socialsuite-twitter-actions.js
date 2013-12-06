@@ -948,11 +948,7 @@ $(".schedule-tweet").die().live("click", function(e)
     // Checks whether all the input fields are filled
     if (!isValidForm($("#"+formName)))
         return;    
-
-    $('#schedule_tweet').addClass('disabled');
-    $('#schedule_RT').addClass('disabled');
-    $("#spinner-modal").show();
-  
+    
     var json = {};
     
     // Convert into JSON
@@ -961,6 +957,14 @@ $(".schedule-tweet").die().live("click", function(e)
     });     
         
     console.log(json);
+    
+    /*if(!scheduledRangeCheck(json.scheduled_date,json.scheduled_time,modalName))
+    	return;*/
+    
+    $('#schedule_tweet').addClass('disabled');
+    $('#schedule_RT').addClass('disabled');
+    $("#spinner-modal").show();
+  
     //Get stream from collection.
     var stream = StreamsListView.collection.get(json.streamId).toJSON();
     
@@ -1136,6 +1140,34 @@ $(".edit-scheduled").die().live("click", function(e)
 
 })(); // init end
 
+// Check valid scheduled.
+function scheduledRangeCheck(scheduledDate,scheduledTime,modalName)
+{
+	console.log(scheduledDate+" "+scheduledTime+" "+modalName);	
+	var selectedDate = null;
+	
+	if(modalName == "socialsuite_twitter_messageModal")
+		{
+		  //"socialsuite_twitter_messageForm";	  
+		  selectedDate = $('#scheduled_date').datepicker('getDate');		  
+		}
+	else if(modalName == "socialsuite_twitter_RTModal")
+		{
+		  //"socialsuite_twitter_RTForm";    RT_scheduled_date		  
+		  selectedDate = $('#RT_scheduled_date').datepicker('getDate');
+		}
+	
+	var now = new Date();
+	console.log(selectedDate + " "+ now);
+	if (selectedDate < now) 
+	{
+	  alert("selected date is in the past");
+	  return false;
+	}
+	else	
+	  return true;
+}
+
 // Displays Modal.
 function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
 {
@@ -1163,6 +1195,7 @@ function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
     // Shows the modal after filling with details
     $('#'+modalToDisplay).modal("show");	
 }
+
 // Hides the modal after 2 seconds after the sent is shown
 function hideModal(modalToHide)
 {

@@ -16,7 +16,8 @@
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
 <%@page import="com.agilecrm.account.NavSetting"%>
 <%@page import="com.agilecrm.account.util.NavSettingUtil"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <html lang="en">
 <head>
@@ -51,7 +52,7 @@
 
 	// Check if someone is using old -11 etc templates
 	if (StringUtils.isNumeric(template)
-	|| template.equalsIgnoreCase("default"))
+			|| template.equalsIgnoreCase("default"))
 		template = "pink";
 
 	String width = currentUserPrefs.width;
@@ -59,11 +60,12 @@
 %>
 
 
-<meta name="last-login-time" content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME) %>"/>
+<meta name="last-login-time"
+	content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
 	// String CSS_PATH = "/";
- 	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -74,7 +76,8 @@
 	href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/agilecrm.css"/>
+<link rel="stylesheet" type="text/css"
+	href="<%=CSS_PATH%>css/agilecrm.css" />
 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -111,113 +114,137 @@
 								} else {
 							%>
 
-							
+
 							<%
-									//Styling enable/disable navbar tabs(add display:none to diable)
-									Integer count = 0;																																											
+								//Styling enable/disable navbar tabs(add display:none to diable)
+									Integer count = 0;
 									NavSetting navSetting = NavSettingUtil.getNavSetting();
 									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_social = "", style_reports = "";
 									//style for calendar,cases,deals,campaign resp.
-									
+
 									if (!navSetting.calendar)
-									    style_calendar =  " display:none;";
+										style_calendar = " display:none;";
 									else
-									    ++count;
+										++count;
 									if (!navSetting.cases)
 										style_cases = " display:none;";
 									else
-									    ++count;
+										++count;
 									if (!navSetting.deals)
 										style_deals = " display:none;";
 									else
-									    ++count;
+										++count;
 									if (!navSetting.campaign)
-									    style_campaign = " display:none;";
+										style_campaign = " display:none;";
 									else
-									    ++count;
+										++count;
 									if (!navSetting.social)
-									    style_social = " display:none;";
+										style_social = " display:none;";
 									else
-									    ++count;							
+										++count;
 									if (!navSetting.reports)
-									    style_reports = " display:none;";
+										style_reports = " display:none;";
 									else
-									    ++count;										
-										
+										++count;
 							%>
 							<li id="contactsmenu"><a href="#contacts"><i
-									class="icon-user icon-white"></i> Contacts</a></li>		
-							
-									<% 	if (navSetting.calendar){
-										%>		
-										<li id="calendarmenu" style="<%=style_calendar %>;" >
-											<a href="#calendar"><i
-									class="icon-calendar icon-white"></i> Calendar</a></li>
-										<% 		} 
-										 	if (navSetting.cases){
-										%>		<li id="casesmenu" ><a href="#cases"><i
-												class="icon-folder-close icon-white"></i> Cases</a></li>
-										<% 		} 
-												if (navSetting.deals){
-										%>		<li id="dealsmenu" ><a href="#deals"><i
-												class="icon-money icon-white"></i> Deals</a></li>
-										<%		} 
-												if (navSetting.campaign){
-										%>		<li id="workflowsmenu" ><a href="#workflows"><i
-												class="icon-sitemap icon-white"></i> Campaigns</a></li>
-										<% 		} 
-												if (navSetting.social){
-								         %>   <li id="socialsuitemenu"><a href="#social">
-								           <i class="icon-comments icon-white"></i> Social</a>
-								                                              </li>
-								        <% } 
-												if (navSetting.reports){
-										%>		<li id="reportsmenu" ><a href="#reports"><i
-												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										 <%     } %>
-										
-							<%  if (count > 3)
-							{
-							   %>
-							
-							<li id="more-menu" class="dropdown">
-										<a class="dropdown-toggle" data-toggle="dropdown" href="">
-											More <i class='caret'></i>
-										</a>
-										<ul class="dropdown-menu drop-drop">
-										<% 
-												if (navSetting.cases){
-										%>		<li id="casesmenu" ><a href="#cases"><i
-												class="icon-folder-close icon-white"></i> Cases</a></li>
-										<% 		} 
-												if (navSetting.deals){
-										%>		<li id="dealsmenu" ><a href="#deals"><i
-												class="icon-money icon-white"></i> Deals</a></li>
-										<%		} 
-												if (navSetting.campaign){											
-										%>
-									
-										<li id="workflowsmenu" ><a href="#workflows"><i
-												class="icon-sitemap icon-white"></i> Campaigns</a></li>
-										<% 		} 
-												if (navSetting.social){
-													%>		<li id="socialsuitemenu"><a href="#social">
-			                                                 <i class="icon-comments icon-white"></i> Social</a>
-			                                              </li>
-													<% 		} 
-													
-												if (navSetting.reports){
-										%>		<li id="reportsmenu" ><a href="#reports"><i
-												class="icon-bar-chart icon-white"></i> Reports</a></li>
-										<% 		} %>
-										
-										</ul>
-									</li>	
-							<% }%>
+									class="icon-user icon-white"></i> Contacts</a></li>
+
+							<%
+								if (navSetting.calendar) {
+							%>
+							<li id="calendarmenu" style="<%=style_calendar%>;"><a
+								href="#calendar"><i class="icon-calendar icon-white"></i>
+									Calendar</a></li>
+							<%
+								}
+									if (navSetting.cases) {
+							%>
+							<li id="casesmenu"><a href="#cases"><i
+									class="icon-folder-close icon-white"></i> Cases</a></li>
+							<%
+								}
+									if (navSetting.deals) {
+							%>
+							<li id="dealsmenu"><a href="#deals"><i
+									class="icon-money icon-white"></i> Deals</a></li>
+							<%
+								}
+									if (navSetting.campaign) {
+							%>
+							<li id="workflowsmenu"><a href="#workflows"><i
+									class="icon-sitemap icon-white"></i> Campaigns</a></li>
+							<%
+								}
+									if (navSetting.social) {
+							%>
+							<li id="socialsuitemenu"><a href="#social"> <i
+									class="icon-comments icon-white"></i> Social
+							</a></li>
+							<%
+								}
+									if (navSetting.reports) {
+							%>
+							<li id="reportsmenu"><a href="#reports"><i
+									class="icon-bar-chart icon-white"></i> Reports</a></li>
+							<%
+								}
+							%>
+
+							<%
+								if (count > 3) {
+							%>
+
+							<li id="more-menu" class="dropdown"><a
+								class="dropdown-toggle" data-toggle="dropdown" href=""> More
+									<i class='caret'></i>
+							</a>
+								<ul class="dropdown-menu drop-drop">
+									<%
+										if (navSetting.cases) {
+									%>
+									<li id="casesmenu"><a href="#cases"><i
+											class="icon-folder-close icon-white"></i> Cases</a></li>
+									<%
+										}
+												if (navSetting.deals) {
+									%>
+									<li id="dealsmenu"><a href="#deals"><i
+											class="icon-money icon-white"></i> Deals</a></li>
+									<%
+										}
+												if (navSetting.campaign) {
+									%>
+
+									<li id="workflowsmenu"><a href="#workflows"><i
+											class="icon-sitemap icon-white"></i> Campaigns</a></li>
+									<%
+										}
+												if (navSetting.social) {
+									%>
+									<li id="socialsuitemenu"><a href="#social"> <i
+											class="icon-comments icon-white"></i> Social
+									</a></li>
+									<%
+										}
+
+												if (navSetting.reports) {
+									%>
+									<li id="reportsmenu"><a href="#reports"><i
+											class="icon-bar-chart icon-white"></i> Reports</a></li>
+									<%
+										}
+									%>
+
+								</ul></li>
+							<%
+								}
+							%>
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search"
 									style="margin: 5px;">
-									<input id="searchText" type="text" style="line-height:17px" data-provide="typeahead"
+									<input id="searchText" type="text" style="line-height: 17px"
+										data-provide="typeahead"
 										class="typeahead typeahead_contacts search-query"
 										placeholder="Search"></input> <input id="search-results"
 										type="image" src="img/SearchIcon.png" class="searchbox" />
@@ -226,15 +253,15 @@
 						</ul>
 
 						<ul class="nav pull-right">
-							
-						<!--	<li id="recent-menu" class="dropdown">
+
+							<!--	<li id="recent-menu" class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="" style="padding-left:2px; padding-right:4px;">
 									<i class='caret'></i>
 								</a>
 								<ul class="dropdown-menu" style="width:25em; right:-11px;">
 								</ul>
 							</li> -->
-							
+
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="">Add New <i class='caret'></i></a>
 								<ul class="dropdown-menu">
@@ -264,7 +291,8 @@
 																+ "'style='height: 26px; width: 26px; margin-right: 3px; display: inline;padding:2px !important' class='thumbnail'></img>");
 													else
 														out.println("<img src='img/gravatar.png' style='height: 26px; width: 26px; margin-right: 3px; display: inline;padding:2px !important' class='thumbnail'></img>");
-											%> <span> <b style="font-size: 13px;margin-right: 20px;"><%=user.getEmail()%></b></span>
+											%> <span> <b
+												style="font-size: 13px; margin-right: 20px;"><%=user.getEmail()%></b></span>
 
 									</a></li>
 									<li><a href="#user-prefs"><i class="icon-cog"></i>
@@ -274,10 +302,10 @@
 										if (domainUser != null && domainUser.is_admin)
 												out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li>");
 									%>
-
+									<li><a href="#subscribe"><i class="icon-level-up"></i>
+											Plan & Upgrade</a></li>
 									<li><a href="#contact-us"><i class="icon-pencil"></i>
 											Contact Us</a></li>
-
 									<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
 											Logout</a></li>
 
@@ -337,9 +365,11 @@
 				style="font-weight: bold; cursor: pointer; vertical-align: -17px; margin-right: 30px;"
 				id="help-page">Help</a>
 		</div>
-		<div style="display:inline;float:right;">
-            <a style="font-weight:bold;cursor:pointer;vertical-align:-17px;margin-right: 30px;" id="agile-page-tour">Tour</a>
-        </div> 
+		<div style="display: inline; float: right;">
+			<a
+				style="font-weight: bold; cursor: pointer; vertical-align: -17px; margin-right: 30px;"
+				id="agile-page-tour">Tour</a>
+		</div>
 
 		<div style="width: 290px; display: inline-block; margin-top: 15px;">
 			Like AgileCRM?<b> Share it -</b>
@@ -425,18 +455,26 @@
 
 	
 	</script>
-	
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/widget.css"/>
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/timeline.css"/>
-<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/date_range_picker.css"></link>
-<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/jslider.css"></link>
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/plan_and_upgrade.css" ></link>
-<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap_switch.css" ></link>
-<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
-<!-- social suite's css -->
-<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/social_suite.css" />
-<link rel="stylesheet"  type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 
-<!-- Unified CSS for All Lib -->
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/widget.css" />
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/timeline.css" />
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/date_range_picker.css"></link>
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/jslider.css"></link>
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/plan_and_upgrade.css"></link>
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/bootstrap_switch.css"></link>
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
+	<!-- social suite's css -->
+	<link rel="stylesheet" type="text/css"
+		href="<%=CSS_PATH%>css/social_suite.css" />
+	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
+
+	<!-- Unified CSS for All Lib -->
 </body>
 </html>

@@ -83,7 +83,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 			} });
 
-		
+		$("#content").html(LOADING_HTML);
 		report_add.render();
 		
 	},
@@ -145,6 +145,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 			}});
 
+		$("#content").html(LOADING_HTML);
 		report_model.render();
 		
 	},
