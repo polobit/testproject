@@ -19,7 +19,6 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleType;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.workflows.Workflow;
 
 public class Defaults
 {
@@ -29,7 +28,6 @@ public class Defaults
 	saveDefaultTasks();
 	saveDefaultEvents();
 	saveDefaultDeals();
-	saveDefaultWorkflows();
 	saveDefaultReports();
     }
 
@@ -163,29 +161,6 @@ public class Defaults
 	event1.start = date1.getTime().getTime() / 1000;
 	event1.end = date1.getTime().getTime() / 1000 + 1800;
 	event1.save();
-    }
-
-    /**
-     * Creates default Workflows.
-     */
-    private void saveDefaultWorkflows()
-    {
-	try
-	{
-	    Workflow workflow = new Workflow("Sample Auto Responder", FileStreamUtil.readResource("misc/campaign-strings/sample_auto_responder.txt"));
-	    workflow.save();
-
-	    Workflow workflow1 = new Workflow("Sample Cart Abandonment", FileStreamUtil.readResource("misc/campaign-strings/sample_cart_abandonment.txt"));
-	    workflow1.save();
-
-	    Workflow workflow2 = new Workflow("Sample Email & Twitter Campaign",
-		    FileStreamUtil.readResource("misc/campaign-strings/sample_email_n_twitter_campaign.txt"));
-	    workflow2.save();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
     }
 
     /**
