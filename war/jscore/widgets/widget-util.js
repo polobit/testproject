@@ -46,25 +46,7 @@ $(function()
 		{
 			data.prefs = JSON.stringify(data.prefs);
 			
-			 if(Catalog_Widgets_View && Catalog_Widgets_View.collection)
-			   {
-			    var models = Catalog_Widgets_View.collection.where({ name : data["name"] });
-			    if(models && models[0]){
-			    	 models[0].set({ 'prefs' : data.prefs });
-			    	 console.log( Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
-			    }
-			    
-			   }
-			 
-			 if(Widgets_View && Widgets_View.collection)
-			   {
-			    var models = Widgets_View.collection.where({ name : data["name"] });
-			    if(models && models[0]){
-			    	 models[0].set({ 'prefs' : data.prefs });
-			    	 console.log( Widgets_View.collection.where({ name : data["name"] })[0]);
-			    }
-			    
-			   }
+			update_collection_with_prefs(data);
 		}
 			
 		
@@ -80,10 +62,33 @@ $(function()
 	
 });
 
-
+function update_collection_with_prefs(data)
+{
+	 if(Catalog_Widgets_View && Catalog_Widgets_View.collection)
+	   {
+	    var models = Catalog_Widgets_View.collection.where({ name : data["name"] });
+	    if(models && models[0]){
+	    	 models[0].set({ 'prefs' : data.prefs });
+	    	 console.log( Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
+	    }
+	    
+	   }
+	 
+	 if(Widgets_View && Widgets_View.collection)
+	   {
+	    var models = Widgets_View.collection.where({ name : data["name"] });
+	    if(models && models[0]){
+	    	 models[0].set({ 'prefs' : data.prefs });
+	    	 console.log( Widgets_View.collection.where({ name : data["name"] })[0]);
+	    }
+	    
+	   }
+}
 
 function clickdesk_save_widget_prefs()
 {
+	$('#save_clickdesk_prefs').unbind("click");
+	
 	// On click of save button, check input and save details
 	$('#save_clickdesk_prefs').die().live('click', function(e)
 	{
@@ -94,7 +99,7 @@ function clickdesk_save_widget_prefs()
 			return;
 
 		// Saves ClickDesk preferences in ClickDesk widget object
-		saveClickDeskPrefs();
+		saveClickDeskWidgetPrefs();
 	});
 }
 
@@ -102,7 +107,7 @@ function clickdesk_save_widget_prefs()
  * Calls method in script API (agile_widget.js) to save ClickDesk preferences in
  * ClickDesk widget object
  */
-function saveClickDeskPrefs()
+function saveClickDeskWidgetPrefs()
 {
 	// Retrieve and store the ClickDesk preferences entered by the user as JSON
 	var ClickDesk_prefs = {};
@@ -119,6 +124,8 @@ function saveClickDeskPrefs()
 
 function freshbook_save_widget_prefs()
 {
+	$('#freshbooks_save_token').unbind("click");
+	
 	// On click of save button, check input and save details
 	$('#freshbooks_save_token').die().live('click', function(e)
 	{
@@ -131,7 +138,7 @@ function freshbook_save_widget_prefs()
 		}
 
 		// Saves FreshBooks preferences in FreshBooks widget object
-		savefreshBooksPrefs();
+		savefreshBooksWidgetPrefs();
 	});
 }
 
@@ -139,7 +146,7 @@ function freshbook_save_widget_prefs()
  * Calls method in script API (agile_widget.js) to save FreshBooks preferences
  * in FreshBooks widget object
  */
-function savefreshBooksPrefs()
+function savefreshBooksWidgetPrefs()
 {
 	// Store the data given by the user as JSON
 	var freshbooks_prefs = {};
@@ -156,6 +163,9 @@ function savefreshBooksPrefs()
 
 function rapleaf_save_widget_prefs()
 {
+	
+	$('#save_api_key').unbind("click");
+	
 	// Saves the API key
 	$('#save_api_key').die().live('click', function(e)
 	{
@@ -168,7 +178,7 @@ function rapleaf_save_widget_prefs()
 		}
 
 		// Saves Rapleaf preferences in Rapleaf widget object
-		saveRaplefPrefs();
+		saveRaplefWidgetPrefs();
 	});
 }
 
@@ -176,12 +186,12 @@ function rapleaf_save_widget_prefs()
  * Calls method in script API (agile_widget.js) to save Rapleaf preferences in
  * Rapleaf widget object
  */
-function saveRaplefPrefs()
+function saveRaplefWidgetPrefs()
 {
 	// Retrieve and store the Rapleaf API key entered by the user
 	var Rapleaf_prefs = {};
 	Rapleaf_prefs["rapleaf_api_key"] = $("#rapleaf_api_key").val();
-
+	
 	// Saves the preferences into widget with Rapleaf widget name
 	save_widget_prefs("Rapleaf", JSON.stringify(Rapleaf_prefs), function(data)
 	{
@@ -197,6 +207,8 @@ function saveRaplefPrefs()
  */
 function zendesk_save_widget_prefs()
 {
+	
+	$('#save_prefs').unbind("click");
 
 	// On click of save button, check input and save details
 	$('#save_prefs').die().live('click', function(e)
@@ -209,7 +221,7 @@ function zendesk_save_widget_prefs()
 			return;
 		}
 		// Saves Zendesk preferences in ClickDesk widget object
-		saveZendeskPrefs();
+		saveZendeskWidgetPrefs();
 
 	});
 
@@ -219,7 +231,7 @@ function zendesk_save_widget_prefs()
  * Calls method in script API (agile_widget.js) to save Zendesk preferences in
  * Zendesk widget object
  */
-function saveZendeskPrefs()
+function saveZendeskWidgetPrefs()
 {
 	// Retrieve and store the Zendesk preferences entered by the user as JSON
 	var zendesk_prefs = {};
@@ -263,6 +275,8 @@ function save_widget_prefs(pluginName, prefs, callback)
 		data.set('is_added', true);
 		models[0].set(data);
 		window.location.href = "#add-widget";
+		
+		update_collection_with_prefs(data);
 	} });
 
 }
@@ -292,6 +306,18 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	
 	console.log(el);
 	
+	if (widget_name == "Zendesk")
+		zendesk_save_widget_prefs();
+
+	else if (widget_name == "ClickDesk")
+		clickdesk_save_widget_prefs();
+
+	else if (widget_name == "FreshBooks")
+		freshbook_save_widget_prefs();
+
+	else if (widget_name == "Rapleaf")
+		rapleaf_save_widget_prefs();
+	
 	// Shows available widgets in the content
 	if (url)
 		{
@@ -309,17 +335,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	$('#PrefsTab .active').removeClass('active');
 	$('.add-widget-prefs-tab').addClass('active');
 
-	if (widget_name == "Zendesk")
-		zendesk_save_widget_prefs();
-
-	else if (widget_name == "ClickDesk")
-		clickdesk_save_widget_prefs();
-
-	else if (widget_name == "FreshBooks")
-		freshbook_save_widget_prefs();
-
-	else if (widget_name == "Rapleaf")
-		rapleaf_save_widget_prefs();
+	
 
 }
 
