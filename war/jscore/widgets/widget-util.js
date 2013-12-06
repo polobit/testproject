@@ -64,6 +64,7 @@ $(function()
 
 function update_collection_with_prefs(data)
 {
+	console.log(data);
 	 if(Catalog_Widgets_View && Catalog_Widgets_View.collection)
 	   {
 	    var models = Catalog_Widgets_View.collection.where({ name : data["name"] });
@@ -276,6 +277,8 @@ function save_widget_prefs(pluginName, prefs, callback)
 		models[0].set(data);
 		window.location.href = "#add-widget";
 		
+		console.log(data);
+		
 		update_collection_with_prefs(data);
 	} });
 
@@ -422,4 +425,17 @@ function fill_fields(fieldsJSON)
 }
 
 
+function widgetError(id, template_id, error, disable_check)
+{
+	// build JSON with error message
+	var error_json = {};
+	error_json['message'] = error;
+	error_json['disable_check'] = disable_check;
 
+	/*
+	 * Get error template and fill it with error message and show it in the div
+	 * with given id
+	 */
+	$('#' + id).html(getTemplate(template_id, error_json));
+
+}

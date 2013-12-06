@@ -104,7 +104,7 @@ public class Rapleaf
 
 	// If it is not JSON, an exception is raised
 	if (!rapleafResponse.startsWith("{"))
-	    throw new Exception("Invalid API Key. Please try again");
+	    throw new Exception(rapleafResponse);
 
 	// Converts JSON string into JSONObject
 	JSONObject rapleafJSONObject = new JSONObject(rapleafResponse);
