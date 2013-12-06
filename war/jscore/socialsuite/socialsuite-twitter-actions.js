@@ -958,8 +958,8 @@ $(".schedule-tweet").die().live("click", function(e)
         
     console.log(json);
     
-    /*if(!scheduledRangeCheck(json.scheduled_date,json.scheduled_time,modalName))
-    	return;*/
+    if(!scheduledRangeCheck(json.scheduled_date,json.scheduled_time))
+    	return;
     
     $('#schedule_tweet').addClass('disabled');
     $('#schedule_RT').addClass('disabled');
@@ -1141,31 +1141,33 @@ $(".edit-scheduled").die().live("click", function(e)
 })(); // init end
 
 // Check valid scheduled.
-function scheduledRangeCheck(scheduledDate,scheduledTime,modalName)
+function scheduledRangeCheck(scheduledDate,scheduledTime)
 {
-	console.log(scheduledDate+" "+scheduledTime+" "+modalName);	
-	var selectedDate = null;
-	
-	if(modalName == "socialsuite_twitter_messageModal")
-		{
-		  //"socialsuite_twitter_messageForm";	  
-		  selectedDate = $('#scheduled_date').datepicker('getDate');		  
-		}
-	else if(modalName == "socialsuite_twitter_RTModal")
-		{
-		  //"socialsuite_twitter_RTForm";    RT_scheduled_date		  
-		  selectedDate = $('#RT_scheduled_date').datepicker('getDate');
-		}
-	
+	console.log(scheduledDate+" "+scheduledTime);	
+		
+	var today = new Date().format('mm/dd/yyyy');
 	var now = new Date();
-	console.log(selectedDate + " "+ now);
-	if (selectedDate < now) 
-	{
-	  alert("selected date is in the past");
-	  return false;
-	}
-	else	
-	  return true;
+	now = now.getHours()+':'+now.getMinutes();
+	
+	console.log("current date is : "+ today+" current time is : "+ now);
+	
+	if (scheduledDate < today) // Past Date
+	 {
+	   alert("Please select Date in future.");
+	   return false;
+	 }	
+	else if(scheduledDate == today)	// Present Date
+	 {
+		if(scheduledTime < now) // Past Time
+		 {
+			alert("Please select Time in future.");
+			return false;
+		 }
+		else // Future Time
+	     return true;
+	 }
+	else if(scheduledDate > today) // Future Date
+	  return true;	 
 }
 
 // Displays Modal.
