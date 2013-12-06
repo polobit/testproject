@@ -133,6 +133,19 @@ $(function()
 			addTagsDefaultTypeahead(element);
 		}
 	});
+	
+	$("#condition > select").die().live('change', function(e){
+		e.preventDefault();
+
+		if ($(this).find("option:selected").hasClass('tags'))
+		{
+			var element = $(this).parents().closest('tr').find('div#RHS');
+			addTagsDefaultTypeahead(element);
+		}
+		
+	})
+	
+	
 });
 
 /**
@@ -245,6 +258,7 @@ function chainFilters(el, data, callback)
 		return;
 	}
 	
+	console.log(data);
 	fillCustomFields(CUSTOM_FIELDS, el)
 	show_chained_fields(el, data);
 	if (callback && typeof (callback) === "function")
@@ -296,7 +310,7 @@ function show_chained_fields(el, data, forceShow)
 	$('.lhs', el).die().live('change', function(e)
 	{
 		e.preventDefault();
-		var value = $('.lhs', el).val();
+		var value = $(this).val();
 
 		if (value.indexOf('tags') != -1)
 		{
@@ -304,7 +318,6 @@ function show_chained_fields(el, data, forceShow)
 		}
 
 	})
-	
 }
 
 /**
