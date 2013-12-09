@@ -25,6 +25,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.util.TagSearchUtil;
 
 /**
@@ -119,6 +121,14 @@ public class ReportsAPI
 	{
 	    // Fetches report based on report id
 	    Reports report = ReportsUtil.getReport(Long.parseLong(id));
+
+	    // Search rule to specify type is person
+	    SearchRule rule = new SearchRule();
+	    rule.RHS = "PERSON";
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.LHS = "type";
+
+	    report.rules.add(rule);
 
 	    // Generates report results
 	    Collection<Contact> contacts = report.generateReports(Integer.parseInt(count), cursor);
