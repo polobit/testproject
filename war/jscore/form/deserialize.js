@@ -364,6 +364,7 @@ function deserializeChainedSelect1(form, el)
     function (index, data)
     {
 
+    	console.log(index);
         // Finds the rule html element
         var rule_element = ($(form)
             .find('.webrule-actions'))[0];
@@ -389,7 +390,7 @@ function deserializeChainedSelect1(form, el)
 
             // Loads jquery chained plugin for chaining
             // the input fields
-            head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
+            head.js('lib/agile.jquery.chained.min.js',
 
             function ()
             {
