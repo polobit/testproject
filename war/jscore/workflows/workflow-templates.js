@@ -8,6 +8,9 @@
  **/
 function build_workflow_templates(templates_json_array, workflow_templates_template)
 {
+	// Add default template before adding dynamic templates
+	$(workflow_templates_template).find('#general').append(getTemplate('workflow-template-attributes', workflow_template_attributes["default"]));
+	
 	$.each(templates_json_array, function(index, category_templates_json){
 		build_template(category_templates_json, workflow_templates_template);
 	});
@@ -79,6 +82,12 @@ function get_template_json(templates_json, template_name)
  **/
 var workflow_template_attributes=
 {
+	    "default":{
+	    	 "icon": "icon-file",
+		     "title": "Default",
+		     "name": "default",
+		     "description": "Create a campaign on your own."
+	    },
 	    "newsletter": {
 	        "icon": "icon-file-text",
 	        "title": "Newsletter",
@@ -86,7 +95,7 @@ var workflow_template_attributes=
 	        "description": "Send a newsletter and see reports on opens and clicks."
 	    },
 	    "auto_responder": {
-	        "icon": "icon-magic",
+	        "icon": "icon-time",
 	        "title": "Autoresponder",
 	        "name": "auto_responder",
 	        "description": "Send emails and followup automatically after a specified duration."
