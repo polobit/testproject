@@ -91,7 +91,7 @@ public class ScheduledUpdateAPI
 	public List<ScheduledUpdate> getScheduledUpdates(@PathParam("screen_name") String screen_name)
 	{
 		System.out.println("In getAScheduledUpdates : " + screen_name);
-		return ScheduledUpdate.getScheduledUpdates(screen_name);
+		return ScheduleUpdateUtil.getScheduledUpdates(screen_name);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class ScheduledUpdateAPI
 	public ScheduledUpdate getScheduledUpdate(@PathParam("id") Long id) throws EntityNotFoundException
 	{
 		System.out.print("In get stream Id : " + id);
-		return ScheduledUpdate.getScheduledUpdate(id);
+		return ScheduleUpdateUtil.getScheduledUpdate(id);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public class ScheduledUpdateAPI
 	{
 		System.out.print("Delete scheduled update id : " + id);
 
-		ScheduledUpdate scheduledUpdate = ScheduledUpdate.getScheduledUpdate(id);
+		ScheduledUpdate scheduledUpdate = ScheduleUpdateUtil.getScheduledUpdate(id);
 
 		if (scheduledUpdate != null)
 		{

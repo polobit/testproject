@@ -977,9 +977,21 @@ $(".schedule-tweet").die().live("click", function(e)
     delete json.streamId;
     
     // Appending schedule.
-	var schedule = (json.scheduled_time).split(":");
-	json["schedule"] = new Date(json.scheduled_date * 1000).setHours(schedule[0], schedule[1]) / 1000.0;
-            
+	var schedulearray = (json.scheduled_time).split(":");
+	console.log("schedulearray: "+schedulearray);
+	
+	var sdate = new Date(json.scheduled_date);
+	console.log("sdate: "+sdate);
+	
+	sdate = sdate.setHours(schedulearray[0], schedulearray[1]) / 1000.0;
+	console.log("sdate: "+sdate);
+	
+	json.schedule =sdate;	
+	console.log("json.schedule: "+json.schedule);
+	
+	var myDate = new Date( json.schedule *1000);
+	console.log(myDate.toGMTString()+"   "+myDate.toLocaleString());
+		
     // Create new scheduledUpdate
     var newUpdate = new Backbone.Model();
 	newUpdate.url = '/core/scheduledupdate';
@@ -1147,7 +1159,10 @@ function scheduledRangeCheck(scheduledDate,scheduledTime)
 		
 	var today = new Date().format('mm/dd/yyyy');
 	var now = new Date();
-	now = now.getHours()+':'+now.getMinutes();
+	
+	var min = (now.getMinutes()<10?'0':'') + now.getMinutes();
+	
+	now = now.getHours()+':'+min;
 	
 	console.log("current date is : "+ today+" current time is : "+ now);
 	
