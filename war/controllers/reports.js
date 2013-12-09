@@ -109,7 +109,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 		// Gets a report to edit, from reports collection, based on id
 		var report = this.reports.collection.get(id);
-		var report_model = new Base_Model_View({ url : 'core/api/reports',change:false, model : report, template : "reports-add", window : 'reports',
+		var report_model = new Base_Model_View({ url : 'core/api/reports',change:false, model : report, template : "reports-add", window : "email-reports",
 			postRenderCallback : function(el)
 			{
 				if(count != 0)
