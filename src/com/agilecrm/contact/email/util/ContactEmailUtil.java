@@ -236,7 +236,10 @@ public class ContactEmailUtil
 	String userName = imapPrefs.user_name;
 	String host = imapPrefs.server_name;
 	String password = imapPrefs.password;
-	String port = "993";
+
+	String port = "143";
+	if (imapPrefs.is_secure)
+	    port = "993";
 
 	String url = "https://agile-imap.appspot.com/imap?user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail + "&host="
 		+ URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&command=imap_email&password="
