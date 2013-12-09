@@ -613,6 +613,8 @@ $(function()
 
 			if (element.indexOf("properties_") != -1)
 				element = element.split("properties_")[1];
+			if(element.indexOf("custom_") == 0)
+				element = element.split("custom_")[1];
 
 			element = element.replace("_", " ")
 

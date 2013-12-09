@@ -115,6 +115,20 @@ function reportsContactTableView(base_model)
 	// Iterates through, each field name and appends the field according to
 	// order of the fields
 	$.each(fields, function(index, field_name) {
+		
+		if(field_name.indexOf("custom_") != -1)
+		{
+			field_name = field_name.split("custom_")[1]; 	
+			var property = getProperty(contact.properties, field_name);
+			if(!property)
+				property = {};
+
+			final_html_content += getTemplate('contacts-custom-view-custom', property);
+			return;
+		}
+		
+		
+		
 		if(field_name.indexOf("properties_") != -1)
 			field_name = field_name.split("properties_")[1];
 		

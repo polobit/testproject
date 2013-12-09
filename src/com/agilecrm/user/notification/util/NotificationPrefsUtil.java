@@ -170,7 +170,7 @@ public class NotificationPrefsUtil
      *            - Object to be sent in notification such as Contact or Deal.
      * @return JSONObject
      */
-    private static JSONObject getNotificationJSON(Object object)
+    public static JSONObject getNotificationJSON(Object object)
     {
 
 	String objectStr = null;

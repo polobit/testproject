@@ -285,6 +285,10 @@ var SettingsRouter = Backbone.Router
 						{
 							set_up_access("Twitter", 'twitter-login', data, '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"));
 							
+						}).error(function(data){
+							
+							console.log(data);
+						
 						});
 						return;
 						

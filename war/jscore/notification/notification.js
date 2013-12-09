@@ -81,9 +81,11 @@ function subscribeToPubNub(domain)
 				return;
 			}
 			
+			
 			// shows call notification
 			if(message.type == "CALL"){
-				showNotyPopUp('information', message.message, "bottomRight");
+				var html = getTemplate('call-notification', message);
+				showNoty('information', html, 'bottomRight', "CALL");
 				return;
 			}
 
@@ -364,7 +366,6 @@ function showSwitchChanges(el)
  */
 function showNoty(type, message, position, notification_type)
 {
-
 	// Don't show notifications when disabled by user
 	if (!notification_prefs.control_notifications)
 		return;
@@ -372,6 +373,13 @@ function showNoty(type, message, position, notification_type)
 	// Check for html5 notification permission.
 	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
 	{
+		if(notification_type=="CALL"){
+			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find('#calling-contact-id').text(),
+									  $(message).find('#call-notification-text').text(), $(message).find('#calling-contact-id').attr('href'),
+									  $(message).find('#calling-contact-id').attr('href').split('/')[1] + '-' + "CALL");
+			return;
+		}
+		
 		show_desktop_notification(getImageUrl(message,notification_type), getNotificationType(notification_type), getTextMessage(message), getId(message), getId(message).split(
 				'/')[1] + '-' + notification_type);
 		return;
@@ -440,6 +448,8 @@ function getTextMessage(message)
 	return name + " " + type;
 }
 
+
+
 /**
  * Returns converted notification-type. E.g., TAG_ADDED to New Tag
  */
@@ -466,7 +476,6 @@ function getId(message)
 	{
 		return $(message).find('#notification-contact-id').attr('href');
 	}
-
 	return $(message).find('#notification-deal-id').attr('href');
 }
 
@@ -490,7 +499,6 @@ function getImageUrl(message, notification_type)
 		
 		return $('span:eq(0)', message).attr('id');
 		}
-	
 
 	return '/img/deal.png';
 }

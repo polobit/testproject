@@ -178,7 +178,7 @@
 											style="vertical-align: top;">
 											<div name="RHS" id="WEB_RULE_RHS" style="max-width: 235px;">
 												<select class="required" name="temp" style="max-width:125px">
-													<option value="model_popup" class="POPUP">Model Popup</option>
+													<option value="model_popup" class="POPUP">Modal Popup</option>
 													<option value="corner_noty " class="POPUP">Corner Noty</option>
 												</select>
 											</div>
@@ -198,14 +198,19 @@
 											style="vertical-align: top; max-width: 120px;">
 											<div id="noty-title" name="title">
 													<input type="text" name="temp" style="width: 92%"
-														class="confirmation form information input required" />
+														class="confirmation information input required" placeholder="Title"/>
+														<input type="text" name="temp" style="width: 92%"
+														class="form input required" placeholder="Form id"/>
 											</div>
 										</td>
 										<td class="controls span2"
 											style="vertical-align: top; max-width: 120px;">
 												<div id="noty-message" name="popup_text">
 													<textarea  cols="35" style="width: 92%"
-														class="confirmation information custom_html" rows="6"></textarea>
+														class="custom_html" rows="6" placeholder="paste HTML context"></textarea>
+													
+													<textarea  cols="35" style="width: 92%"
+														class="information confirmation" rows="6" placeholder="Message"></textarea>
 												</div>
 										</td>
 										<td style="vertical-align: top;"><div style="width:50px"><i
