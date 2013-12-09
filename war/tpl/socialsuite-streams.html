@@ -164,6 +164,7 @@
         		</ul>
               {{else}}
                 <time class="txt-mute txt-small time-ellipsis" datetime="{{scheduled_date}}">Scheduled for {{scheduled_date}} {{scheduled_time}} as {{headline}}</time>
+                <!--<time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{epochToHumanDate "" schedule}}">{{schedule}}</time>-->
                 {{#if_equals tweetOwner "/"}}
                   <span style="display:none;"></span>
                 {{else}}
