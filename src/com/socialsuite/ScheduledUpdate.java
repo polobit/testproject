@@ -1,18 +1,11 @@
 package com.socialsuite;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.annotation.Indexed;
 
 /**
  * <code>ScheduledUpdate</code> class stores the details of a update (of social
@@ -82,6 +75,12 @@ public class ScheduledUpdate
 	public String tweetOwner;
 	public String tweetId;
 
+	/**
+	 * Namespace
+	 */
+	@Indexed
+	public String namespace;
+
 	/** object of objectify for dB operations on ScheduledUpdate. */
 	public static ObjectifyGenericDao<ScheduledUpdate> dao = new ObjectifyGenericDao<ScheduledUpdate>(
 			ScheduledUpdate.class);
@@ -135,7 +134,26 @@ public class ScheduledUpdate
 	public void save()
 	{
 		System.out.println("In ScheduledUpdate save, networkType : " + this.network_type);
-		dao.put(this);
+
+		// Set namespace for first time.
+		if (id == null)
+			namespace = NamespaceManager.get();
+
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+
+		try
+		{
+			dao.put(this);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
 	}// save end
 
 	/**
@@ -144,7 +162,21 @@ public class ScheduledUpdate
 	 */
 	public void delete()
 	{
-		dao.delete(this);
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+
+		try
+		{
+			dao.delete(this);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
 	}// delete end
 
 	@Override
@@ -155,95 +187,4 @@ public class ScheduledUpdate
 				+ ", date=" + scheduled_date + ", time=" + scheduled_time + ", profileImg=" + profileImg
 				+ ", headline=" + headline + ", tweetOwner=" + tweetOwner + ", tweetId=" + tweetId + "]";
 	}
-
-	/**
-	 * Gets value of a ScheduledUpdate object, matched with the given Id.
-	 * 
-	 * @param id
-	 *            ScheduledUpdate id of the object to get its value.
-	 * @return value of the matched entity.
-	 */
-	public static ScheduledUpdate getScheduledUpdate(Long id)
-	{
-		try
-		{
-			// search ScheduledUpdate on id.
-			return dao.get(id);
-		}
-		catch (EntityNotFoundException e)
-		{
-			// ScheduledUpdate not found
-			// e.printStackTrace();
-			return null;
-		}
-	}// getScheduledUpdate end
-
-	/**
-	 * Gets value of a ScheduledUpdate object, matched with the given
-	 * screen_name.
-	 * 
-	 * @param screen_name
-	 *            - screen_name of account holder.
-	 * @return value of the matched entity.
-	 */
-	public static List<ScheduledUpdate> getScheduledUpdates(String screen_name)
-	{
-		// search ScheduledUpdate on screen_name.
-		return dao.listByProperty("screen_name", screen_name);
-	}// getScheduledUpdate end
-
-	/**
-	 * Gets value of a ScheduledUpdate objects, related with the current date
-	 * and time.
-	 * 
-	 * @return list of value of the matched entity.
-	 */
-	public static List<ScheduledUpdate> getScheduledUpdatesToPost()
-	{
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-
-		try
-		{
-			System.out.println("In get getScheduledUpdatesToPost.");
-
-			Date date = new Date();
-			String modifiedDate = new SimpleDateFormat("MM/dd/yyyy").format(date);
-			String currentTime = date.getHours() + ":" + date.getMinutes();
-
-			searchMap.put("scheduled_date", modifiedDate);
-			searchMap.put("scheduled_time <=", currentTime);
-
-			return dao.listByProperty(searchMap);
-		}
-		catch (Exception e)
-		{
-			// ScheduledUpdates not found
-			e.printStackTrace();
-			return null;
-		}
-	}// getScheduledUpdatesToPost end
-
-	/**
-	 * Gets value of a ScheduledUpdate objects, related with the current
-	 * domainUser.
-	 * 
-	 * @return list of value of the matched entity.
-	 */
-	public static List<ScheduledUpdate> getScheduledUpdates()
-	{
-		DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
-
-		try
-		{
-			System.out.println("In get ScheduledUpdates.");
-			return dao.listByProperty("domain_user_id", domainUser.id);
-		}
-		catch (Exception e)
-		{
-			// ScheduledUpdates not found
-			e.printStackTrace();
-			return null;
-		}
-	}// getScheduledUpdates end
-
 }

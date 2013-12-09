@@ -129,7 +129,7 @@ public class TwilioUtil {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("PhoneNumber", from);
 		params.put("StatusCallback", "https://" + NamespaceManager.get()
-				+ "-dot-sandbox-dot-agile-crm-cloud.appspot.com/verification?user_id="
+		+ ".agilecrm.com/verification?user_id="
 				+ SessionManager.get().getDomainId() + "&verified_number=" + from);
 
 		// make a post request to verify number
