@@ -35,7 +35,7 @@ var CONTENT_JSON = {
 		"description" : "Campaign or workflow is an intelligent sales and marketing automation process for sending your contacts relevant information at the right time.",
 		//"learn_more" : "click here to learn more",
 		"button_text" : "Add Campaign",
-		"route" : "#workflow-add",
+		"route" : "#workflow-templates",
 		"image" : "/img/clipboard.png"
 	},
 	"deals" : {

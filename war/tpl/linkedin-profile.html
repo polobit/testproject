@@ -200,7 +200,7 @@
 	                    <div class="controls">
 							{{#if_equals headline "Send Message"}}
 								<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	                        
-								<input type="text" placeholder="About" name="subject" id="subject" class="required span4" maxlength="150" />
+								<input type="text" placeholder="About" name="subject" id="subject" class="required span4" maxlength="150" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
 							{{else}}
 								<select name="subject" class="required span4" >
 									<option value="Indicated you as friend">Friend</option>
@@ -215,10 +215,10 @@
 	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
 	                    <div class="controls span4" style="margin-left:0px;">
 							{{#if_equals headline "Connect"}}
-	                        	<textarea rows="4" class="required span4 linkedin_connect_limit" name="message" id="link-connect" data-provide="limit" data-counter="#counter"  style="max-width:500px;" maxlength="275">{{description}}</textarea>
+	                        	<textarea rows="4" class="required span4 linkedin_connect_limit" name="message" id="link-connect" data-provide="limit" data-counter="#counter"  style="max-width:500px;" maxlength="275" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }">{{description}}</textarea>
 								<div class="right"><small style="font-style: italic;">Characters Left <em id="linkedin_counter" style="margin-right:5px;">275</em></small></div> 
 							{{else}}
-	                        	<textarea rows="4" class="required span4 linkedin_message_limit" name="message" id="link-message" style="max-width:500px;" maxlength="7000"></textarea>
+	                        	<textarea rows="4" class="required span4 linkedin_message_limit" name="message" id="link-message" style="max-width:500px;" maxlength="7000" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></textarea>
 							{{/if_equals}} 
 	                    </div>
 	                </div>
@@ -328,7 +328,7 @@
 		</div>
 		<div class="span7">
 			<p class="title_txt"><a href="{{profile.url}}" target="_blank" >{{profile.name}}</a></p>
-			<p>{{profile.location}}</p>
+			<p style="margin:0px;">{{profile.location}}</p>
 			<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement profile.summary}}</p>
 		</div>
 	</div>

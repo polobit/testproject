@@ -45,6 +45,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			}
 		});		
 		
+		$("#content").html(LOADING_HTML);
 		web_reports_add.render();
 	},
 	
@@ -66,7 +67,6 @@ var WebreportsRouter = Backbone.Router.extend({
 			 model : webrule,
 			template : "webrules-add", 
 			window : "webrules", 
-			isNew : true, 
 			postRenderCallback : function(el)
 			{
 				head.js('lib/agile.jquery.chained.min.js', function()
@@ -81,6 +81,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			}
 		});		
 		
+		$("#content").html(LOADING_HTML);
 		web_reports_add.render();
 	}
 });

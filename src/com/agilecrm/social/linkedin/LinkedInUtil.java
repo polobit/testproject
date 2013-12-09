@@ -256,8 +256,11 @@ public class LinkedInUtil
 	{
 		System.out.println("Exception message: " + exception.getMessage());
 
-		if (exception.getMessage().contains("The token used in the OAuth request is not valid"))
+		if (exception.getMessage().contains("The token used in the OAuth request is not valid") || exception.getMessage().contains("[unauthorized]. restricted"))
 			return new Exception("Access granted to your linkedin account has expired.");
+		
+		if(exception.getMessage().contains("[invalid.profile.access]. You don't have access to the profile"))
+			return new Exception("LinkedIn doesn't allow you to access this profile");
 
 		/*
 		 * We extract the inner exception from LinkedIn exception, since it is

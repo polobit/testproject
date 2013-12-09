@@ -352,3 +352,92 @@ function deserializeChainedSelect(form, el)
         });
     })
 }
+
+
+
+function deserializeChainedSelect1(form, el)
+{
+
+    // Iterates through JSON array of rules, to fill
+    // a chained select
+    $.each(el,
+    function (index, data)
+    {
+
+        // Finds the rule html element
+        var rule_element = ($(form)
+            .find('.webrule-actions'))[0];
+        console.log(rule_element);
+        /*
+         * If more than one rule clones the fields and relate with
+         * jquery.chained.js
+         */
+        if (index > 0)
+        {
+            var parent_element = $(rule_element).parent();
+
+            console.log(parent_element);
+            /*
+             * Gets the Template for input and select
+             * fields
+             */
+            rule_element = $(getTemplate("webrules-add", {})).find('tr.webrule-actions')
+                .clone();
+
+            // Add remove icon for rule
+            $(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+
+            // Loads jquery chained plugin for chaining
+            // the input fields
+            head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
+
+            function ()
+            {
+
+                /*
+                 * Chains dependencies of input fields with
+                 * jquery.chained.js based on the rule element
+                 */
+            	chainWebRules(rule_element);
+
+                $(parent_element).append(rule_element);
+            });
+        }
+
+        $.each(data, function (i, value)
+        {
+        	console.log(i +", " + value);
+            var input_element = ($(rule_element).find('*[name="'+ i +'"]').children())[0];
+         
+            console.log(input_element.tagName.toLowerCase() == "input" || input_element.tagName.toLowerCase() == "textarea")
+            // If input field set is value for input field, checks it chained select elements
+            // date fields should be filled with date
+            if (input_element.tagName.toLowerCase() == "input" || input_element.tagName.toLowerCase() == "textarea")
+            {
+                $(
+                input_element)
+                    .val(
+                value);
+                return;
+            }
+            
+            // Gets related select field
+            var option_element = $(input_element).children()
+            console.log(option_element);
+            // Iterates through options in select field
+            $.each(option_element, function (index, element)
+            {
+                // Selects the option
+                if ($(element).attr('value') == value)
+                {
+                    $(element).attr("selected",
+                        "selected");
+                    console.log(input_element);
+                    $(input_element).trigger("change");
+                    return;
+                }
+            });
+        });
+    })
+}
+

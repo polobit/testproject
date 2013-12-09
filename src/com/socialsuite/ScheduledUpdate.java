@@ -1,6 +1,10 @@
 package com.socialsuite;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -189,6 +193,37 @@ public class ScheduledUpdate
 	}// getScheduledUpdate end
 
 	/**
+	 * Gets value of a ScheduledUpdate objects, related with the current date
+	 * and time.
+	 * 
+	 * @return list of value of the matched entity.
+	 */
+	public static List<ScheduledUpdate> getScheduledUpdatesToPost()
+	{
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+
+		try
+		{
+			System.out.println("In get getScheduledUpdatesToPost.");
+
+			Date date = new Date();
+			String modifiedDate = new SimpleDateFormat("MM/dd/yyyy").format(date);
+			String currentTime = date.getHours() + ":" + date.getMinutes();
+
+			searchMap.put("scheduled_date", modifiedDate);
+			searchMap.put("scheduled_time <=", currentTime);
+
+			return dao.listByProperty(searchMap);
+		}
+		catch (Exception e)
+		{
+			// ScheduledUpdates not found
+			e.printStackTrace();
+			return null;
+		}
+	}// getScheduledUpdatesToPost end
+
+	/**
 	 * Gets value of a ScheduledUpdate objects, related with the current
 	 * domainUser.
 	 * 
@@ -210,4 +245,5 @@ public class ScheduledUpdate
 			return null;
 		}
 	}// getScheduledUpdates end
+
 }
