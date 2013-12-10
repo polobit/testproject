@@ -74,7 +74,8 @@
         {{#if this.length}}
         <div class="data-block">
             <div class="data-container">
-                <table class="table table-bordered showCheckboxes" url="core/api/custom-fields/bulk">
+                <table class="table table-bordered showCheckboxes agile-ellipsis-dynamic" url="core/api/custom-fields/bulk">
+				<colgroup><col width="30px"><col width="35%"><col width="35%"><col width="30%"></colgroup>
                     <thead>
                         <tr>
                             <th>Field Label</th>
@@ -114,8 +115,8 @@
 </script>
 
 <script id="admin-settings-customfields-model-template" type="text/html">
-    <td>{{field_label}} </td>
-    <td>{{field_description}} </td>
+    <td><div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">{{field_label}}</div> </td>
+    <td><div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">{{field_description}}</div> </td>
     <td>{{field_type}}</td>
     <br/>
 </script>
