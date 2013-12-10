@@ -9,16 +9,17 @@
            {{/if}}
            <b> {{creatorName}}</b>
         </div>
-    </td>-->
+    </td>
     <td>
         <div>
-			<a href="#workflow/{{id}}/active-contacts" id="active-contacts" class="workflow-results">active</a>, 
-            <a href="#workflow/{{id}}/completed-contacts" id="done-contacts" class="workflow-results">completed</a>
+			<a href="#workflow/{{id}}/active-contacts" id="active-contacts" class="stop-propagation">active</a>, 
+            <a href="#workflow/{{id}}/completed-contacts" id="done-contacts" class="stop-propagation">completed</a>
         </div>
-    </td>
-    <td>{{#if triggers}} {{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="workflow-results">{{name}}</a> {{/toLinkTrigger}} {{else}} <a href="#trigger-add/{{id}}" class="workflow-results"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>
-	<td><a href="#workflows/logs/{{id}}" class="workflow-results">Logs</a></td>
-    <td><a href="#email-reports/{{id}}" class="workflow-results">Stats</a></td>
+    </td>-->
+    <td>{{#if triggers}} {{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a> {{/toLinkTrigger}} {{else}} <a href="#trigger-add/{{id}}" class="stop-propagation"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>
+	<td><a href="#workflow/{{id}}/active-contacts" class="workflow-subscribers stop-propagation">Subscribers</a></td>
+	<td><a href="#workflows/logs/{{id}}" class="stop-propagation">Logs</a></td>
+    <td><a href="#email-reports/{{id}}" class="stop-propagation">Stats</a></td>
     <td> 
         {{#if updated_time}}
         <div>
@@ -82,7 +83,7 @@
                             <th class="hide">Id</th>
                             <th>Name</th>
                        <!-- <th>Creator</th> -->
-                            <th>Subscribers</th>
+                       <!-- <th>Subscribers</th> -->
                             <th>Triggers</th>
                         </tr>
                     </thead>
