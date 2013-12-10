@@ -20,8 +20,12 @@ public class TemplatesAPI
     @Produces(MediaType.TEXT_PLAIN)
     public String getTemplateNames(@QueryParam("directory") String directory)
     {
-	JSONArray response = new JSONArray(Arrays.asList(GadgetTemplate
-		.getFilesNames(directory)));
+	String[] files = GadgetTemplate
+		.getFilesNames(directory);
+	if (files == null)
+	    return null;
+
+	JSONArray response = new JSONArray(Arrays.asList(files));
 
 	return response.toString();
     }
