@@ -2105,4 +2105,28 @@ $(function()
 		
 		return value.trim();
 	});
+	
+	/**
+	 * Returns reputation name based on value
+	 * 
+	 **/
+	Handlebars.registerHelper('get_subaccount_reputation', function(value){
+		
+		if(value == 0 || value == 1)
+			return "Unknown";
+		
+		if(value < 50)
+			return "Bad";
+		
+		if(value >= 50 && value < 75)
+			return "Ok";
+		
+		if(value >= 75 && value < 90)
+			return "Good";
+		
+		if(value >= 90)
+			return "Excellant";
+		
+	});
+	
 });
