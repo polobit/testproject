@@ -59,6 +59,18 @@ function isValidForm(form) {
 		return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
 	}," Please enter a valid email.");
 	
+	jQuery.validator.addMethod("multi-tags", function(value, element){
+		
+		var	tag_input = $(element).val()
+		$(element).val("");
+		if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+		{
+			$(element).closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+		}
+		
+		return $(element).closest(".control-group").find('ul.tags > li').length > 0 ? true : false;
+	}," This field is required.");
+	
 	$(form).validate({
 		rules : {
 			atleastThreeMonths : true,
