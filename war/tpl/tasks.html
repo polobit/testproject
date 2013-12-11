@@ -20,6 +20,7 @@
 </div>
 {{/unless}}
 {{#if this.length}}
+<table style="display:block;overflow:hidden!important;"><tbody><tr><td>
 <section>
     <form>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
@@ -49,6 +50,7 @@
         </table>
     </form>
 </section>
+</td></tr></tbody></table>
 {{/if}}
 </script>
 
@@ -56,9 +58,9 @@
 	<td style="border-top:1px dotted #DDD;"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 	<td style="width:100%!important;">
 		<div>
-  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></p>
+  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b class="activate-link" style="white-space: normal!important;">{{else}}<b style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</b></p>
   			{{#if this.contacts}}
-				<p class="activate-link" style="white-space: nowrap;width:50%;overflow: hidden;text-overflow: ellipsis;">{{#related_to_one contacts}}{{/related_to_one}}</p>
+				<p class="activate-link" style="white-space: nowrap;width:11em;overflow: hidden;text-overflow: ellipsis;">{{#related_to_one contacts}}{{/related_to_one}}</p>
 			{{/if}}
   			<p style="margin:0px 0px 5px 0px;line-height: 20px;"> 
 				<span class="label">{{task_property type}}</span><span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
