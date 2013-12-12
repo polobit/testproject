@@ -300,10 +300,8 @@
 
 									<%
 										if (domainUser != null && domainUser.is_admin)
-												out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li>");
+												out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li><li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
 									%>
-									<li><a href="#subscribe"><i class="icon-level-up"></i>
-											Plan & Upgrade</a></li>
 									<li><a href="#contact-us"><i class="icon-pencil"></i>
 											Contact Us</a></li>
 									<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
