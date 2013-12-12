@@ -189,3 +189,4 @@
 
 /* scheduled-update-actions */
 .scheduled-update-actions>li>a{padding:0!important;line-height:none!important;line-height: 1.28578em!important;}
+#scheduled_updates_list>li{height:479px;background-color:#fcfcfc;overflow:hidden;position:relative;}

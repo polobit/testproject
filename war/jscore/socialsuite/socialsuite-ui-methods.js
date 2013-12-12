@@ -617,31 +617,24 @@ function registerStreamAgain(streamId)
  * Gets Scheduled Updates fron DB and adds into Stream.
  */
 function getScheduledUpdate()
-{ 	
-  // Get updates of relevant stream from database. 
-  $.getJSON("/core/scheduledupdate/getscheduledupdates",function(data)
+{ 
+  console.log("In getScheduledUpdate");
+	
+  if(!ScheduledUpdatesView)  // Streams not collected from dB
 	{
-	  console.log("data after fetching sc. updates from db");
-	  console.log(data);
-		  
-	  if(data.length)
-	   	{	
-	      // Get schedule update
-	      $.each(data, function(i, update)
-		     {	    	   
-	    	   addScheduledUpdateInStream(update);
-		   	 });
-		}		
-	  else
-		{		  
-		   var update = {};		   	   
-    	   update["message"] = "No Tweets to show here.";
-    	   update["id"] = "000";
-    	   
-    	   addScheduledUpdateInStream(update);
-		}
-	}).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
-}
+	  ScheduledUpdatesView = new Base_Collection_View
+		({
+			 url : "/core/scheduledupdate/getscheduledupdates",
+	         restKey: "scheduledUpdate",
+	         templateKey: "socialsuite-scheduled-updates",
+	         individual_tag_name: 'li',
+	     });	
+	  
+	  ScheduledUpdatesView.collection.fetch();	  
+	}
+  
+  $('#scheduled_updates_list').append(ScheduledUpdatesView.render(true).el);  
+ }
 
 /**
  * Adds newly added Scheduled Update In Stream. 
@@ -650,35 +643,26 @@ function addScheduledUpdateInStream(scheduledUpdate)
 {
 	console.log("In addScheduledUpdateInStream");	
 	console.log(scheduledUpdate);	
-	
-	// Hide waiting symbol.
-	$("#schduled-spinner-modal").hide();
-	
-	// Add type of message
-	if(scheduledUpdate.message == "No Tweets to show here.")
-		{
-		  scheduledUpdate["msg_type"] = "NoTweet";
-		  scheduledUpdate["show"] = true;		 
-		}
+		
+	if(ScheduledEdit == true)
+	  {
+		// Get scheduled update from collection.
+		var newScheduledUpdate = ScheduledUpdatesView.collection.get(scheduledUpdate.id);
+		
+		// Set new data.
+		newScheduledUpdate.set("message",scheduledUpdate.message);
+		newScheduledUpdate.set("scheduled_date",scheduledUpdate.scheduled_date);
+		newScheduledUpdate.set("scheduled_time",scheduledUpdate.scheduled_time);
+		    	
+		// Add back to stream.
+		ScheduledUpdatesView.collection.add(newScheduledUpdate);		
+		
+		ScheduledEdit = false;
+	  }
 	else
-		{
-	      // Remove no tweet notification.
-	      /*if(modelStream.get('tweetListView').length == 1)
-	    	clearNoTweetNotification(modelStream);
-	      */
-	      
-		  scheduledUpdate["msg_type"] = "Tweet";	      	  
-		}    
-	    
-	 // Add update into list.	   
-	 $('#scheduled-updates-model-list').append(getTemplate("socialsuite-scheduled-update", scheduledUpdate));
-	
-	 // Create normal time.
-	 head.js('lib/jquery.timeago.js', function(){	 
-		        $(".time-ago", $(".scheduled-updates-list")).timeago();	
-			});
-	 
-     // Remove deleted tweet element from ui
-	 $('.deleted').remove();
+	  {
+		// Add scheduled update in collection.
+		ScheduledUpdatesView.collection.add(scheduledUpdate);
+	  }	  	
 }
 

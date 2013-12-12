@@ -1035,18 +1035,18 @@ $(".delete-scheduled").die().live("click", function(e)
     $.get("/core/scheduledupdate/" + tweetId, function (data)
     {    
         if(data == "Successful")
-        	{     	
-        	    //document.getElementById(tweetId).className = "stream-item is-actionable deleted";
-    	        		
-        		showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);
-        		    	
-        		// Remove tweet element from ui
-        		$('.deleted').remove();
-        	}
+          {     	 	
+            var scheduledUpdate = ScheduledUpdatesView.collection.get(tweetId);
+        	 
+        	// Delete scheduled update from ui.
+        	ScheduledUpdatesView.collection.remove(scheduledUpdate); 
+         	
+        	showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);        		    	
+          }
         else if(data == "Unsuccessful")
-        	{
-        	   showNotyPopUp('information', "Retry after sometime.", "top", 5000);
-        	}
+          {
+        	showNotyPopUp('information', "Retry after sometime.", "top", 5000);
+          }
     }).error(function (data)
     {
         // Error message is shown if error occurs
@@ -1062,72 +1062,67 @@ $(".edit-scheduled").die().live("click", function(e)
   // Ask confirmation to user.
   if(!confirm("Are you sure you want to edit this scheduled update?"))
 	return;
-	
-  // Hide dropdown.
-  $("#show_scheduled_updates").click();
   
   // Details to pass on to method. 
   var tweetId = ($(this).closest('article').attr('id'));
-	
-  // Gets update from DB.
-  $.get("/core/scheduledupdate/getscheduledupdate/" + tweetId, function (tweet)
-	 {	  
-		   //tweet = tweet.toJSON();		   
-		   console.log(tweet);
+
+  // Get scheduled update from collection.
+  var scheduledUpdate = ScheduledUpdatesView.collection.get(tweetId).toJSON();
+  
+  console.log(scheduledUpdate);
 	          
-		   // Information to be shown in the modal to the user while sending/scheduling message
-		   if(tweet.headline == "Tweet")
-		 	{
-		 	  tweet["info"] = "Status from " + stream.screen_name;
-		 	  tweet["description"] = "What's happening?";
-		 	}  
-		   else if(tweet.headline == "Reply")
-		 	{
-		 	  tweet["info"] = "Reply "+"@" + tweet.tweetOwner +" from " + stream.screen_name;
-		 	  tweet["description"] = "@" + tweet.tweetOwner;
-		 	  tweet["headline"] = "Reply Tweet";
-		 	}
-		   else if(tweet.headline == "Direct")
-		 	{
-		 	  tweet["info"] = "Direct message from "+stream.screen_name + " to " + tweet.tweetOwner;	    
-		 	  tweet["description"] = "Tip: you can send a message to anyone who follows you."
-		 	  tweet["headline"] = "Direct Message";
-		 	}
-		   else if(tweet.headline == "Retweet")
-		 	{
-		 	  tweet["info"] = "Status of @" + tweet.tweetOwner;  
-		 	  tweet["headline"] = "Retweet";
-		 	}		   
+  // Information to be shown in the modal to the user while sending/scheduling message
+  if(scheduledUpdate.headline == "Tweet")
+	{
+	   scheduledUpdate["info"] = "Status from " + scheduledUpdate.screen_name;
+	   scheduledUpdate["description"] = "What's happening?";
+ 	}  
+  else if(scheduledUpdate.headline == "Reply")
+ 	{
+	   scheduledUpdate["info"] = "Reply "+"@" + scheduledUpdate.tweetOwner +" from " + scheduledUpdate.screen_name;
+       scheduledUpdate["description"] = "@" + scheduledUpdate.tweetOwner;
+	   scheduledUpdate["headline"] = "Reply Tweet";
+ 	}
+  else if(scheduledUpdate.headline == "Direct")
+ 	{
+	   scheduledUpdate["info"] = "Direct message from "+scheduledUpdate.screen_name + " to " + scheduledUpdate.tweetOwner;	    
+	   scheduledUpdate["description"] = "Tip: you can send a message to anyone who follows you."
+	   scheduledUpdate["headline"] = "Direct Message";
+ 	}
+  else if(scheduledUpdate.headline == "Retweet")
+ 	{
+	   scheduledUpdate["info"] = "Status of @" + scheduledUpdate.tweetOwner;  
+	   scheduledUpdate["headline"] = "Retweet";
+ 	}		   
 		    
-		   //Display Modal
-		   displayModal("socialsuite_twitter_messageModal","socialsuite-twitter-message",tweet,"twitter-counter","twit-tweet");
-		   ScheduledEdit = true;  
+  // Display Modal
+  displayModal("socialsuite_twitter_messageModal","socialsuite-twitter-message",scheduledUpdate,"twitter-counter","twit-tweet");
+  
+  // Modal with Details for modifications.
+  ScheduledEdit = true;  
 		   
-		   $("#schedule").show();
-		   $("#send_tweet").hide();
-		   $("#schedule_tweet").show();
-		 			  	   
-		   $("#tweet_scheduling").className = "tweet-scheduling tweet-scheduling-active";
-		   $('input.date',$('#schedule')).val(tweet.scheduled_date);
-		   $("#scheduled_date",$('#schedule')).datepicker({ format : 'mm/dd/yyyy' });
-		   $("#scheduled_time",$('#schedule')).timepicker({template: 'modal', showMeridian: false, defaultTime: tweet.scheduled_time});	      
-		 	 
-		   // In compose message text limit is crossed so disable send button.
-		   $('#twit-tweet').on('cross', function(){
-		       $('#send_tweet').addClass('disabled');
-		       $('#schedule_tweet').addClass('disabled');
-		     });
+  $("#schedule").show();
+  $("#send_tweet").hide();
+  $("#schedule_tweet").show();
+ 			  	   
+  $("#tweet_scheduling").className = "tweet-scheduling tweet-scheduling-active";
+  $('input.date',$('#schedule')).val(scheduledUpdate.scheduled_date);
+  $("#scheduled_date",$('#schedule')).datepicker({ format : 'mm/dd/yyyy' });
+  $("#scheduled_time",$('#schedule')).timepicker({template: 'modal', showMeridian: false, defaultTime: scheduledUpdate.scheduled_time});	      
+	 	 
+  // In compose message text limit is crossed so disable send button.
+  $('#twit-tweet').on('cross', function()
+   {
+     $('#send_tweet').addClass('disabled');
+     $('#schedule_tweet').addClass('disabled');
+   });
 		     
-		   // In compose message text limit is uncrossed so enable send button.  
-		   $('#twit-tweet').on('uncross', function(){
-		       $('#send_tweet').removeClass('disabled');
-		       $('#schedule_tweet').removeClass('disabled');
-		     });	     
-	 }).error(function (data)
-		{
-	        // Error message is shown if error occurs
-	    	displayError(null,data);
-	    });    
+  // In compose message text limit is uncrossed so enable send button.  
+  $('#twit-tweet').on('uncross', function()
+   {
+	$('#send_tweet').removeClass('disabled');
+	$('#schedule_tweet').removeClass('disabled');
+   });	     
 });
 
 })(); // init end

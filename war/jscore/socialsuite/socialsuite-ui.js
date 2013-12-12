@@ -466,10 +466,7 @@ function initializeSocialSuite()
 	{
 	  // Toggle dropdown with slow speed.
 	  $('.scheduled-updates-list').toggle();
-	  
-	  // Clears List.
-	  document.getElementById('scheduled-updates-model-list').innerHTML = "";
-	  
+	  	  
 	  var display = $('.scheduled-updates-list').css("display");	
 	  
 	  // If open then only fetch DB.
@@ -477,10 +474,10 @@ function initializeSocialSuite()
 		getScheduledUpdate();
 	});		
 	
-	$(document).on("mouseleave",".scheduled-updates-list", function(e)
+	$('.scheduled-updates-list').die().live("mouseleave", function(e)
 	 {
 	  // Hide dropdown.
-	  $("#show_scheduled_updates").click();
+	  //$("#show_scheduled_updates").click();
 	 });
 }
 
