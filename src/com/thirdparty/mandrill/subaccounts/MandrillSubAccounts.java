@@ -22,9 +22,14 @@ import com.thirdparty.mandrill.Mandrill;
 public class MandrillSubAccounts
 {
     /**
-     * Mandrill API Subaccount call to manage subaccounts through API.
+     * Mandrill API Subaccount call to add subaccounts through API.
      */
-    public static final String MANDRILL_API_SUBACCOUNT_CALL = "subaccounts/add.json";
+    public static final String MANDRILL_API_SUBACCOUNT_ADD_CALL = "subaccounts/add.json";
+
+    /**
+     * Mandrill API Subaccount call to get subaccount info through API
+     */
+    public static final String MANDRILL_API_SUBACCOUNT_INFO_CALL = "subaccounts/info.json";
 
     /**
      * Mandrill subaccount key which is embedded in message json. It is used to
@@ -72,7 +77,7 @@ public class MandrillSubAccounts
 	    subaccount.put(MANDRILL_SUBACCOUNT_ID, subaccountId);
 	    subaccount.put(MANDRILL_SUBACCOUNT_NAME, subaccountId);
 
-	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + MANDRILL_API_SUBACCOUNT_CALL, subaccount.toString());
+	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + MANDRILL_API_SUBACCOUNT_ADD_CALL, subaccount.toString());
 	    System.out.println("Response for creating subaccount: " + response);
 
 	}
@@ -81,5 +86,37 @@ public class MandrillSubAccounts
 	    e.printStackTrace();
 	}
 
+    }
+
+    /**
+     * Returns subaccount info json from Mandrill. The info json consists of
+     * last 30 days email-send activity stats including hard bounces, soft
+     * bounces etc.
+     * 
+     * @param subaccountId
+     *            - subaccount id which is agilecrm domain
+     * @return String of subaccount info
+     */
+    public static String getSubAccountInfo(String subaccountId)
+    {
+	JSONObject info = new JSONObject();
+
+	try
+	{
+	    info.put(Mandrill.MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
+	    info.put(MANDRILL_SUBACCOUNT_ID, subaccountId);
+
+	    // Request for subaccount json.
+	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + MANDRILL_API_SUBACCOUNT_INFO_CALL, info.toString());
+
+	    return response;
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in getSubAccountInfo... " + e.getMessage());
+	    return null;
+	}
     }
 }

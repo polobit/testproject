@@ -114,19 +114,22 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	accountPrefs : function() {
 		$('#content').html(isAdmintemplate);
-		var view = new Base_Model_View({
-			url : '/core/api/account-prefs',
-			template : "admin-settings-account-prefs"
-		});
 
-		//$('#content').html(view.render().el);
         if(($('#content').find('#admin-prefs-tabs-content').html()) == null){
         	console.log("nooooooooooooo ele accountPrefs");
         	getAdminSettings(function(){
         		App_Admin_Settings.accountPrefs();
         	});
         }
-		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+       
+        var $account_activity = $('#content').find('#admin-prefs-tabs-content').html(getTemplate('settings-account-activity',{}));
+		
+        // load account prefs
+        load_admin_account_prefs($account_activity);
+        
+		// load email account info
+		load_account_email_activity($account_activity);
+		
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.account-prefs-tab').addClass('active');
 	},

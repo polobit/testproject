@@ -218,7 +218,7 @@ public class SendMail
 	    System.out.println("Namespace in SendMail is " + NamespaceManager.get());
 
 	    // Send Email
-	    Mandrill.sendMail(NamespaceManager.get(), from, fromName, to, subject, from, emailHTML, emailBody, args);
+	    Mandrill.sendMail(from, fromName, to, subject, from, emailHTML, emailBody, args);
 	}
 	catch (Exception e)
 	{

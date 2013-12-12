@@ -11,6 +11,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.exception.RetryException;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
@@ -134,11 +135,13 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(String subaccount, String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text,
-	    String... attachments)
+    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text, String... attachments)
     {
 	try
 	{
+	    // Considering AgileCRM domain name is mandrill subaccount.
+	    String subaccount = NamespaceManager.get();
+
 	    // Complete mail json to be sent
 	    JSONObject mailJSON = new JSONObject();
 
