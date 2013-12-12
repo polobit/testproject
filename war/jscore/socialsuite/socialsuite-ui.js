@@ -477,7 +477,7 @@ function initializeSocialSuite()
 	$('.scheduled-updates-list').die().live("mouseleave", function(e)
 	 {
 	  // Hide dropdown.
-	  //$("#show_scheduled_updates").click();
+	  $("#show_scheduled_updates").click();
 	 });
 }
 
