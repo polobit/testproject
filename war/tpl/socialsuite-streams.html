@@ -161,23 +161,7 @@
                             {{/if}}
     					 </ul>
                     </li>  
-        		</ul>
-              {{else}}
-                <time class="txt-mute txt-small time-ellipsis" datetime="{{scheduled_date}}">Scheduled for {{scheduled_date}} {{scheduled_time}} as {{headline}}</time>
-                <!--<time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{epochToHumanDate "" schedule}}">{{schedule}}</time>-->
-                {{#if_equals tweetOwner "/"}}
-                  <span style="display:none;"></span>
-                {{else}}
-                   <span class="txt-mute txt-small">Message to {{tweetOwner}}</span>
-                {{/if_equals}}
-                <ul class="tweet-actions">
-                   <li> <a class="tweet-action edit-scheduled" href="#social" rel="edit"> 
-                           <i class="icon icon-edit" title="Edit"></i>                            
-                         </a> </li>	                 
- 		    	   <li> <a class="tweet-action delete-scheduled" href="#social" rel="delete"> 
-                            <i class="icon icon-trash" title="Delete"></i>                             
-                         </a> </li>  
-				</ul>  
+        		</ul>             
               {{/if}}
  			 </footer>  
     	   </div> 

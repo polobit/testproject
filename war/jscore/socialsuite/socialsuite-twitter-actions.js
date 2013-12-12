@@ -954,8 +954,8 @@ $(".schedule-tweet").die().live("click", function(e)
     // Convert into JSON
     jQuery.each(formData, function() {
         json[this.name] = this.value || '';
-    });     
-        
+    });        
+    
     console.log(json);
     
     if(!scheduledRangeCheck(json.scheduled_date,json.scheduled_time))
@@ -965,29 +965,26 @@ $(".schedule-tweet").die().live("click", function(e)
     $('#schedule_RT').addClass('disabled');
     $("#spinner-modal").show();
   
-    //Get stream from collection.
-    var stream = StreamsListView.collection.get(json.streamId).toJSON();
+    if(json.streamId != "/")
+     {   	
+    	//Get stream from collection.
+    	var stream = StreamsListView.collection.get(json.streamId).toJSON();
     
-    json["domain_user_id"] = stream.domain_user_id;
-    json["screen_name"] = stream.screen_name;
-    json["network_type"] = stream.network_type;
-    json["token"] = stream.token;
-    json["secret"] = stream.secret;
+    	json["domain_user_id"] = stream.domain_user_id;
+    	json["screen_name"] = stream.screen_name;
+    	json["network_type"] = stream.network_type;
+    	json["token"] = stream.token;
+    	json["secret"] = stream.secret;    	
+     }
     
     delete json.streamId;
+    console.log(json);
     
     // Appending schedule.
-	var schedulearray = (json.scheduled_time).split(":");
-	console.log("schedulearray: "+schedulearray);
-	
-	var sdate = new Date(json.scheduled_date);
-	console.log("sdate: "+sdate);
-	
-	sdate = sdate.setHours(schedulearray[0], schedulearray[1]) / 1000.0;
-	console.log("sdate: "+sdate);
-	
-	json.schedule =sdate;	
-	console.log("json.schedule: "+json.schedule);
+	var schedulearray = (json.scheduled_time).split(":");	
+	var sdate = new Date(json.scheduled_date);	
+	sdate = sdate.setHours(schedulearray[0], schedulearray[1]) / 1000.0;	
+	json.schedule =sdate;		
 	
 	var myDate = new Date( json.schedule *1000);
 	console.log(myDate.toGMTString()+"   "+myDate.toLocaleString());
@@ -1010,17 +1007,10 @@ $(".schedule-tweet").die().live("click", function(e)
                                 
                 console.log(ScheduledEdit);
                 
-                if(ScheduledEdit)
-                {
-                  // Update scheduledUpdate in stream.
-                  updateScheduledUpdateInStream(scheduledUpdate,stream);
-                  ScheduledEdit = false;
-                }
-                else
-                  {
-                   // Add scheduledUpdate in stream.
-                   addScheduledUpdateInStream(scheduledUpdate);                		
-                  }
+                scheduledUpdate = scheduledUpdate.toJSON();                
+                
+                // Add scheduledUpdate in stream.
+                addScheduledUpdateInStream(scheduledUpdate);
               }
 		},
 		error : function(data){
@@ -1038,27 +1028,16 @@ $(".delete-scheduled").die().live("click", function(e)
 	if(!confirm("Are you sure you want to delete this tweet?"))
 		return;
 	
-	// Details to pass on to method.
-	var streamId = ($(this).closest('article').attr('stream-id'));
+	// Details to pass on to method.	
 	var tweetId = ($(this).closest('article').attr('id'));
-	
-	 //Get stream from collection.
-	  var modelStream = StreamsListView.collection.get(streamId);	
-		
-	  // Get tweet from stream.
-	  var modelTweet = modelStream.get('tweetListView').get(tweetId);
-	  var tweet = modelTweet.toJSON();
 
 	// Call method with details of tweet to be deleted.
     $.get("/core/scheduledupdate/" + tweetId, function (data)
     {    
         if(data == "Successful")
         	{     	
-        		modelTweet.set("deleted_msg","deleted");
-    	
-        		// Add back to stream.
-        		modelStream.get('tweetListView').add(modelTweet);
-        		
+        	    //document.getElementById(tweetId).className = "stream-item is-actionable deleted";
+    	        		
         		showNotyPopUp('information', "Your tweet has been deleted.", "top", 5000);
         		    	
         		// Remove tweet element from ui
@@ -1084,70 +1063,71 @@ $(".edit-scheduled").die().live("click", function(e)
   if(!confirm("Are you sure you want to edit this scheduled update?"))
 	return;
 	
-  // Details to pass on to method.
-  var streamId = ($(this).closest('article').attr('stream-id'));
+  // Hide dropdown.
+  $("#show_scheduled_updates").click();
+  
+  // Details to pass on to method. 
   var tweetId = ($(this).closest('article').attr('id'));
 	
-  //Get stream from collection.
-  var modelStream = StreamsListView.collection.get(streamId);	
-  var stream = modelStream.toJSON();	
-  
-  // Get tweet from stream.
-  var modelTweet = modelStream.get('tweetListView').get(tweetId);
-  var tweet = modelTweet.toJSON();
-  
-  console.log(tweet);
-          
-  // Information to be shown in the modal to the user while sending/scheduling message
-  if(tweet.headline == "Tweet")
-	{
-	  tweet["info"] = "Status from " + stream.screen_name;
-	  tweet["description"] = "What's happening?";
-	}  
-  else if(tweet.headline == "Reply")
-	{
-	  tweet["info"] = "Reply "+"@" + tweet.tweetOwner +" from " + stream.screen_name;
-	  tweet["description"] = "@" + tweet.tweetOwner;
-	  tweet["headline"] = "Reply Tweet";
-	}
-  else if(tweet.headline == "Direct")
-	{
-	  tweet["info"] = "Direct message from "+stream.screen_name + " to " + tweet.tweetOwner;	    
-	  tweet["description"] = "Tip: you can send a message to anyone who follows you."
-	  tweet["headline"] = "Direct Message";
-	}
-  else if(tweet.headline == "Retweet")
-	{
-	  tweet["info"] = "Status of @" + tweet.tweetOwner;  
-	  tweet["headline"] = "Retweet";
-	}
-  
-  tweet["streamId"] = streamId;
-   
-  //Display Modal
-  displayModal("socialsuite_twitter_messageModal","socialsuite-twitter-message",tweet,"twitter-counter","twit-tweet");
-  ScheduledEdit = true;  
-  
-  $("#schedule").show();
-  $("#send_tweet").hide();
-  $("#schedule_tweet").show();
-			  	   
-  $("#tweet_scheduling").className = "tweet-scheduling tweet-scheduling-active";
-  $('input.date',$('#schedule')).val(tweet.scheduled_date);
-  $("#scheduled_date",$('#schedule')).datepicker({ format : 'mm/dd/yyyy' });
-  $("#scheduled_time",$('#schedule')).timepicker({template: 'modal', showMeridian: false, defaultTime: tweet.scheduled_time});	      
-	 
-  // In compose message text limit is crossed so disable send button.
-  $('#twit-tweet').on('cross', function(){
-      $('#send_tweet').addClass('disabled');
-      $('#schedule_tweet').addClass('disabled');
-    });
-    
-  // In compose message text limit is uncrossed so enable send button.  
-  $('#twit-tweet').on('uncross', function(){
-      $('#send_tweet').removeClass('disabled');
-      $('#schedule_tweet').removeClass('disabled');
-    });
+  // Gets update from DB.
+  $.get("/core/scheduledupdate/getscheduledupdate/" + tweetId, function (tweet)
+	 {	  
+		   //tweet = tweet.toJSON();		   
+		   console.log(tweet);
+	          
+		   // Information to be shown in the modal to the user while sending/scheduling message
+		   if(tweet.headline == "Tweet")
+		 	{
+		 	  tweet["info"] = "Status from " + stream.screen_name;
+		 	  tweet["description"] = "What's happening?";
+		 	}  
+		   else if(tweet.headline == "Reply")
+		 	{
+		 	  tweet["info"] = "Reply "+"@" + tweet.tweetOwner +" from " + stream.screen_name;
+		 	  tweet["description"] = "@" + tweet.tweetOwner;
+		 	  tweet["headline"] = "Reply Tweet";
+		 	}
+		   else if(tweet.headline == "Direct")
+		 	{
+		 	  tweet["info"] = "Direct message from "+stream.screen_name + " to " + tweet.tweetOwner;	    
+		 	  tweet["description"] = "Tip: you can send a message to anyone who follows you."
+		 	  tweet["headline"] = "Direct Message";
+		 	}
+		   else if(tweet.headline == "Retweet")
+		 	{
+		 	  tweet["info"] = "Status of @" + tweet.tweetOwner;  
+		 	  tweet["headline"] = "Retweet";
+		 	}		   
+		    
+		   //Display Modal
+		   displayModal("socialsuite_twitter_messageModal","socialsuite-twitter-message",tweet,"twitter-counter","twit-tweet");
+		   ScheduledEdit = true;  
+		   
+		   $("#schedule").show();
+		   $("#send_tweet").hide();
+		   $("#schedule_tweet").show();
+		 			  	   
+		   $("#tweet_scheduling").className = "tweet-scheduling tweet-scheduling-active";
+		   $('input.date',$('#schedule')).val(tweet.scheduled_date);
+		   $("#scheduled_date",$('#schedule')).datepicker({ format : 'mm/dd/yyyy' });
+		   $("#scheduled_time",$('#schedule')).timepicker({template: 'modal', showMeridian: false, defaultTime: tweet.scheduled_time});	      
+		 	 
+		   // In compose message text limit is crossed so disable send button.
+		   $('#twit-tweet').on('cross', function(){
+		       $('#send_tweet').addClass('disabled');
+		       $('#schedule_tweet').addClass('disabled');
+		     });
+		     
+		   // In compose message text limit is uncrossed so enable send button.  
+		   $('#twit-tweet').on('uncross', function(){
+		       $('#send_tweet').removeClass('disabled');
+		       $('#schedule_tweet').removeClass('disabled');
+		     });	     
+	 }).error(function (data)
+		{
+	        // Error message is shown if error occurs
+	    	displayError(null,data);
+	    });    
 });
 
 })(); // init end

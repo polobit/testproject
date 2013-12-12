@@ -20,6 +20,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.socialsuite.util.SocialSuiteLinkedinUtil;
+import com.socialsuite.util.SocialSuiteTwitterUtil;
+import com.socialsuite.util.StreamUtil;
 
 /**
  * <code>StreamAPI</code> is the API class for Social Suite Stream. This class

@@ -1,5 +1,5 @@
-.app-content>ul,.app-content>li,.tweet-body>ul,.tweet-body>li,.tweet-actions>ul,.tweet-actions>li,.tweet-footer>ul,.tweet-footer>li{padding:0;margin:0}
-.app-content>ul,.tweet-body>ul,.tweet-actions>ul,.tweet-footer>ul{list-style:none}
+.app-content>ul,.app-content>li,.tweet-body>ul,.tweet-body>li,.tweet-actions>ul,.tweet-actions>li,.tweet-footer>ul,.tweet-footer>li{padding:0!important;margin:0!important;}
+.app-content>ul,.tweet-body>ul,.tweet-actions>ul,.tweet-footer>ul{list-style:none!important}
 .app-content>small,.tweet-body>small{font-size:0.8571rem}
 
 .app-content{position:relative;left:0;right:0;bottom:0;padding:20px 5px 15px 15px;}
@@ -53,7 +53,7 @@
 .tweet{display:block}
 .tweet:before,.tweet:after{display:block;content:" "}
 .tweet:after{clear:both}
-.tweet:hover .tweet-actions,.is-selected-tweet .tweet-actions{visibility:visible}
+.tweet:hover .tweet-actions,.is-selected-tweet .tweet-actions{visibility:visible!important;}
 
 /*img with tweet*/
 .obj-left{float:left;margin-right:10px;}
@@ -86,14 +86,14 @@
 .cf{display:block}.cf:before,.cf:after{display:block;content:" "}.cf:after{clear:both}
 
 /* tweet actions */
-.tweet-actions{visibility:hidden;float:right}
-.stream-item:hover .tweet-actions{visibility:visible;margin-top: 2px;}
-.tweet-actions>li{float:left;margin:0 0 0 7px}
+.tweet-actions{visibility:hidden!important;float:right!important}
+.stream-item:hover .tweet-actions{visibility:visible!important;margin-top: 2px!important;}
+.tweet-actions>li{float:left!important;margin:0 0 0 7px!important;}
 
 /* tweet action */
-.tweet-action{display:block;color:#888}
-.tweet-action:hover,.tweet-action:focus,.tweet-action:active,.tweet-action.is-selected{color:#111;text-decoration:none}
-.tweet-action .icon{display:block;font-size:1em;line-height:15px;height:15px;width:15px}
+.tweet-action{display:block!important;color:#888!important}
+.tweet-action:hover,.tweet-action:focus,.tweet-action:active,.tweet-action.is-selected{color:#111!important;text-decoration:none!important;background-color:white!important}
+.tweet-action .icon{display:block!important;font-size:1em!important;line-height:15px!important;height:15px!important;width:15px!important;}
 
 /* icon */
 .icon{display:inline-block;vertical-align:baseline;font-size:1em;height:1em;width:1em}
@@ -106,18 +106,24 @@
 
 
 /* Track */
-#socialsuite-streams-model-list ::-webkit-scrollbar-track {
+#socialsuite-streams-model-list ::-webkit-scrollbar-track,
+#scheduled_updates_list ::-webkit-scrollbar-track
+{
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
     -webkit-border-radius: 10px;
     border-radius: 10px;
 }
 
 /* Handle */
-#socialsuite-streams-model-list ::-webkit-scrollbar{
+#socialsuite-streams-model-list ::-webkit-scrollbar,
+#scheduled_updates_list ::-webkit-scrollbar
+{
     width: 7px;
     margin-right: 4px!important;
 }
-#socialsuite-streams-model-list ::-webkit-scrollbar-thumb{
+#socialsuite-streams-model-list ::-webkit-scrollbar-thumb,
+#scheduled_updates_list ::-webkit-scrollbar-thumb
+{
     -webkit-border-radius: 10px;
     border-radius: 10px;
      background: rgba(185, 182, 182, 0.8);
@@ -138,11 +144,11 @@
 
 /* stream type div */
 .stream-type{padding: 15px 8px 10px 8px;border: 1px solid #d2d2d2;width:70px;cursor:pointer;font-size: 12px;float: right;}
-.social-stream-types{padding-left: 30px;}
+.social-stream-types{padding-right: 20px;}
 
 /* Stream type description */
 .description-hidden,.keyword-hidden{visibility:hidden;}
-#stream_description_label{padding-top: 10px;margin-bottom: 0px;margin-left: 92px;}
+#stream_description_label{padding-top: 10px;margin-bottom: 0px;margin-left: 26px;}
 
 /* searck keyword */
 #search_stream_keyword{padding-top: 15px;padding-left: 29%;}
@@ -180,3 +186,6 @@
 .tweet-scheduling-active{background-color:#EDEDED;}
 .width-65{width:65px;}
 .width-150{width:150px;}
+
+/* scheduled-update-actions */
+.scheduled-update-actions>li>a{padding:0!important;line-height:none!important;line-height: 1.28578em!important;}
