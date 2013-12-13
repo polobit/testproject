@@ -88,16 +88,7 @@ function sendMessage(publishJSON)
 		   {
 			 console.log("stream's network is " +publishJSON.stream.network_type);		     
 		     return;
-		   }
-		  
-		  // If stream type is Scheduled so no need to publish.
-		  if(publishJSON.stream.stream_type == "Scheduled")
-		   {
-			 console.log("stream's type is " +publishJSON.stream.stream_type);	
-			 getScheduledUpdate(publishJSON.stream);
-		     return;
-		   }
-
+		   }		  
 		}
 			// Message has data.
 			pubnub.publish

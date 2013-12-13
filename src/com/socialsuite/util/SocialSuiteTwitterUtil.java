@@ -1,4 +1,4 @@
-package com.socialsuite;
+package com.socialsuite.util;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -16,6 +16,8 @@ import twitter4j.auth.AccessToken;
 
 import com.agilecrm.Globals;
 import com.agilecrm.util.JSONUtil;
+import com.socialsuite.Stream;
+import com.socialsuite.StreamAPI;
 
 /**
  * <code>SocialSuiteTwitterUtil</code> class creates a client which connects to

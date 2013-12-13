@@ -121,12 +121,34 @@ public class QueryDocumentUtil
 		     */
 		    query = buildNestedCondition("AND", query, newQuery);
 		}
-
-		// For not queries
-		else
+		
+		else if(condition.equals(SearchRule.RuleCondition.NOTEQUALS))
 		{
+			// For not queries
 		    query = buildNestedCondition("NOT", query, newQuery);
 		}
+		
+		// For equals condition
+		else if (condition.equals(SearchRule.RuleCondition.IS_GREATER_THAN))
+		{
+			newQuery = lhs + ">" + SearchUtil.normalizeString(rhs);
+			
+		    /*
+		     * Build query by passing condition old query and new query
+		     */
+		    query = buildNestedCondition("AND", query, newQuery);
+		}
+		
+		else if (condition.equals(SearchRule.RuleCondition.IS_LESS_THAN))
+		{
+			newQuery = lhs + "<" + SearchUtil.normalizeString(rhs);
+			
+		    /*
+		     * Build query by passing condition old query and new query
+		     */
+		    query = buildNestedCondition("AND", query, newQuery);
+		}
+
 	    }
 
 	    // Queries on created or updated times
