@@ -9,21 +9,9 @@
 			</a>             
             <div class="btn-group right" style="position:relative;margin-right:5px;top:-30px;">       
               <button id="show_scheduled_updates" class="btn"><i class="icon-time icon"></i></button>
-
               <ul id="scheduled_updates_list" class="pull-right dropdown-menu scheduled-updates-list" role="menu" style="width: 280px;"> 
-               <li style="height:479px;background-color:#fcfcfc;overflow:hidden;position:relative;>  
-                <header style="box-sizing: border-box; position: relative;padding: 0 10px;color: #444;background-color: #eee;">                                                   
-                  <span id="schduled-spinner-modal" class="waiting-symbol" style="bottom: -5px;"><img src="img/ajax-loader-cursor.gif"></img></span>                          
-                  <h5 class="column-title txt-ellipsis"><span>Scheduled Updates</span></h5> 
-                </header>
-                <div id="schduled_notifications" class="stream-notifications action-notify"></div>
-                <div id="stream" class="column-content">
-                  <div id="scheduled-updates-model-list" class="chirp-container scroll-v">  
-
-                  </div>      
-                </div>                              
-               </li>   	           	
-    	      </ul>
+              
+              </ul>
             </div>      
         </div>
     </div>
@@ -38,8 +26,19 @@
 </div> <!-- row end -->
 </script>
                  
+<script id="socialsuite-scheduled-updates-collection-template" type="text/html">
+ <header style="box-sizing: border-box; position: relative;padding: 0 10px;color: #444;background-color:white;">
+    <h5 class="column-title txt-ellipsis"><span>Scheduled Updates</span></h5> 
+ </header>
+ <div id="schduled_notifications" class="stream-notifications action-notify"></div>
+ <div id="stream" class="column-content">
+  <div id="socialsuite-scheduled-updates-model-list" class="chirp-container scroll-v">  
 
-<script id="socialsuite-scheduled-update-template" type="text/html">
+  </div>      
+</div>
+</script>
+
+<script id="socialsuite-scheduled-updates-model-template" type="text/html">
 <article id={{id}} class="stream-item is-actionable">
    <div class="item-box">       
       <div class="tweet">
