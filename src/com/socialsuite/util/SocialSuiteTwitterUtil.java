@@ -140,11 +140,11 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			String agile = " via @agilecrm";
+			/* String agile = " via @agilecrm"; */
 			String result = null;
 
 			// Send current update/status
-			Status status = twitter.updateStatus(message + agile);
+			Status status = twitter.updateStatus(message);
 			System.out.println("tweetInTwitter : ");
 			System.out.println(JSONUtil.toJSONString(status));
 
@@ -185,11 +185,11 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			String agile = " via @agilecrm";
+			/* String agile = " via @agilecrm"; */
 			String result = null;
 
 			// Send reply tweet to particular tweet based on tweet id.
-			Status status = twitter.updateStatus(new StatusUpdate(message + agile).inReplyToStatusId(tweetId));
+			Status status = twitter.updateStatus(new StatusUpdate(message).inReplyToStatusId(tweetId));
 			System.out.println("replyTweetInTwitter : ");
 			System.out.println(status.toString());
 
@@ -229,7 +229,7 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			String agile = " via @agilecrm";
+			/* String agile = " via @agilecrm"; */
 			String result = null;
 
 			if (!twitter.showFriendship(stream.screen_name, tweetOwner).isSourceFollowedByTarget())
@@ -239,7 +239,7 @@ public class SocialSuiteTwitterUtil
 			}
 
 			// Send DM
-			DirectMessage dirMsg = twitter.sendDirectMessage(tweetOwner, message + agile);
+			DirectMessage dirMsg = twitter.sendDirectMessage(tweetOwner, message);
 			System.out.println("directMessageInTwitter : ");
 			System.out.println(dirMsg);
 
