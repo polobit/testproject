@@ -1,5 +1,6 @@
 var StreamsListView;
 var TempStreamsListView;
+var ScheduledUpdatesView;
 
 /**
  * Creates backbone router to create and access streams of the user.

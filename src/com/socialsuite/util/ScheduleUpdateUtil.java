@@ -1,16 +1,14 @@
-package com.socialsuite;
+package com.socialsuite.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.socialsuite.ScheduledUpdate;
+import com.socialsuite.Stream;
 
 public class ScheduleUpdateUtil
 {
@@ -72,7 +70,8 @@ public class ScheduleUpdateUtil
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				if (e.getMessage().contains("Status is a duplicate"))
+					update.delete();
 			}
 
 			updates.remove(0);
@@ -91,22 +90,14 @@ public class ScheduleUpdateUtil
 		String oldNamespace = NamespaceManager.get();
 		NamespaceManager.set("");
 
-		Map<String, Object> searchMap = new HashMap<String, Object>();
 		List<ScheduledUpdate> updates = null;
 
 		try
 		{
 			System.out.println("In get getScheduledUpdatesToPost.");
 
-			Date date = new Date();
-			String modifiedDate = new SimpleDateFormat("MM/dd/yyyy").format(date);
-			String currentTime = date.getHours() + ":" + date.getMinutes();
-
-			searchMap.put("scheduled_date", modifiedDate);
-			searchMap.put("scheduled_time <=", currentTime);
-
-			updates = dao.listByProperty(searchMap);
-
+			long epoch = System.currentTimeMillis() / 1000;
+			updates = dao.listByProperty("schedule <=", epoch);
 		}
 		catch (Exception e)
 		{

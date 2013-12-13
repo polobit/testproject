@@ -1,10 +1,12 @@
-package com.socialsuite;
+package com.socialsuite.cron;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.socialsuite.util.ScheduleUpdateUtil;
 
 @SuppressWarnings("serial")
 public class ScheduledUpdateCron extends HttpServlet

@@ -9,8 +9,12 @@ import java.util.Map;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.reports.Reports;
+import com.agilecrm.reports.ReportsUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.DateUtil;
@@ -53,7 +57,20 @@ public class ContactFilterUtil
 
 	    System.out.println(filter);
 	    System.out.println(filter.rules);
+	  
+	    if(filter.rules != null)
+	    {
+		    // Search rule to specify type is person
+		    SearchRule rule = new SearchRule();
+		    rule.RHS = "PERSON";
+		    rule.CONDITION = RuleCondition.EQUALS;
+		    rule.LHS = "type";
 
+		    filter.rules.add(rule);
+	    }
+	    
+	    
+	    
 	    // Queries based on list of search rules in the filter object
 	    return new ArrayList<Contact>(filter.queryContacts(count, cursor));
 	}
