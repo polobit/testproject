@@ -539,8 +539,8 @@ public class ContactUtil
 
 	public static boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
 	{
-		if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
-				&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+		if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
+				&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 		{
 			CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 			return false;
@@ -548,8 +548,8 @@ public class ContactUtil
 
 		if (isDuplicateContact(contact))
 		{
-			CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.DUPLICATE_CONTACT, 1);
-			return false;
+			mergeContactFields(contact);
+			return true;
 		}
 
 		if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
@@ -567,6 +567,32 @@ public class ContactUtil
 		}
 
 		return true;
+	}
+	
+	public static void mergeContactFeilds(Contact newContact, Contact oldContact)
+	{
+		for(ContactField field : oldContact.properties)
+		{
+			ContactField existingField = newContact.getContactField(field.name);
+			if(existingField == null)
+				newContact.properties.add(field);
+		}
+		
+		
+		
+		newContact.id = oldContact.id;
+	}
+	
+	public static void mergeContactFields(Contact contact)
+	{
+		String email = contact.getContactFieldValue(Contact.EMAIL);
+		if(email == null)
+			return;
+		
+		Contact oldContact = searchContactByEmail(email);
+		
+		if(oldContact != null)
+			mergeContactFeilds(contact, oldContact);
 	}
 
 	public static boolean isValidFields(Contact contact)

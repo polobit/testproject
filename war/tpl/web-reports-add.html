@@ -177,8 +177,8 @@
 										<div id="action" name="action">
 											<select class="required" >
 												<option value="POPUP">Show Popup</option>
-												<option value="model_popup" class="POPUP">Modal Popup</option>
-												<option value="corner_noty" class="POPUP">Corner Noty</option>
+												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
+												<option value="CORNER_NOTY" class="POPUP">Corner Noty</option>
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
 													related="WEB_RULE_RHS" url="core/api/workflows"
 													parse_key="id" parse_value="name">Assign Campaign</option>
@@ -205,10 +205,10 @@
 											style="vertical-align: top; ">
 											<div name="popup_pattern" id="noty-type">
 												<select class="required" style="width: 100%;">
-													<option value="confirmation" class="POPUP model_popup">Confirmation</option>
-													<option value="information" class="POPUP model_popup corner_noty">Information</option>
-													<option value="form" class="POPUP corner_noty model_popup">Form on website</option>
-													<option value="custom_html" class="POPUP corner_noty model_popup">Custom HTML</option>
+													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option>
+													<option value="information" class="POPUP MODAL_POPUP CORNER_NOTY">Information</option>
+													<option value="form" class="POPUP CORNER_NOTY MODAL_POPUP">Form on website</option>
+													<option value="custom_html" class="POPUP CORNER_NOTY MODAL_POPUP">Custom HTML</option>
 												</select>
 											</div>
 										</td>
