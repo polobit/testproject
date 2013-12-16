@@ -1890,31 +1890,21 @@ $(function()
 		if (data === undefined || campaignStatusArray === undefined)
 			return;
 		
+		// Get campaign-id from hash
+		var current_campaign_id = getIdFromHash();
+		
 		for (var i=0, len = campaignStatusArray.length; i < len; i++)
 			{
-			   var current_campaign_id = campaignStatusArray[i].campaign_id;
 
 			   // compares campaign-id of each element of array with 
-			   // object's campaign-id
-			   if (object.campaign_id === current_campaign_id)
+			   // current campaign-id
+			   if (campaignStatusArray[i].campaign_id === current_campaign_id)
 			   {
 				   // if equal, execute template current json
 				   return options.fn(campaignStatusArray[i]);
 			   }
 			}
 			
-	});
-	
-	/**
-	 * Returns campaign-id from one of the active subscribers collection.
-	 **/
-	Handlebars.registerHelper('get_campaign_id', function(object){
-		
-		if (object === undefined || object[0] === undefined)
-			return;
-		
-		return object[0].campaign_id;
-
 	});
 	
 	/**
@@ -1930,10 +1920,12 @@ $(function()
 		var other_completed_campaigns=[];
 		var campaignStatusArray = object[data];
 		
+		var current_campaign_id = getIdFromHash();
+		
 		for (var i=0, len = campaignStatusArray.length; i < len; i++)
 		{
 			// neglect same campaign
-			if (campaignStatusArray[i].campaign_id === object.campaign_id)
+			if (current_campaign_id === campaignStatusArray[i].campaign_id)
 				continue;
 			
 			// push all other active campaigns
@@ -2112,21 +2104,39 @@ $(function()
 	 **/
 	Handlebars.registerHelper('get_subaccount_reputation', function(value){
 		
-		if(value == 0 || value == 1)
-			return "Unknown";
+		if(value >= 75)
+			return "Good ("+value+")";
 		
-		if(value < 50)
-			return "Bad";
+		return "Unknown ("+value+")";
+	});
+	
+	/**
+	 * Returns id from hash. It returns id from hash iff
+	 * id exists at last.
+	 * 
+	 **/
+	Handlebars.registerHelper('get_id_from_hash', function(){
 		
-		if(value >= 50 && value < 75)
-			return "Ok";
+		return getIdFromHash();
+	
+	});
+	
+	Handlebars.registerHelper('get_subscribers_type_from_hash', function(){
 		
-		if(value >= 75 && value < 90)
-			return "Good";
+		// Returns "workflows" from "#workflows"
+		var hash = window.location.hash.substr(1);
 		
-		if(value >= 90)
-			return "Excellant";
+		if(hash.indexOf("all") != -1)
+			return "All";
 		
+		if(hash.indexOf("active") != -1)
+			return "Active";
+		
+		if(hash.indexOf("completed") != -1)
+			return "Completed";
+		
+		if(hash.indexOf("removed") != -1)
+			return "Removed";
 	});
 	
 });
