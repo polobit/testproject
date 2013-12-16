@@ -68,6 +68,7 @@ public class JerseyApplication extends Application
 	s.add(com.thirdparty.salesforce.SalesforceImportAPI.class);
 	s.add(com.agilecrm.gmap.GmapQueryAPI.class);
 	s.add(com.agilecrm.core.api.webrule.WebRuleAPI.class);
+	s.add(com.agilecrm.core.api.TemplatesAPI.class);
 	return s;
     }
 }
