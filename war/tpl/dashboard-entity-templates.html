@@ -179,7 +179,7 @@
 {{#if this.length}}
 		<div class="data">
 			<div class="data-container">
-			<table id="contacts" class="table table-striped no-sorting"
+			<table id="contacts" class="table table-striped agile-ellipsis-dynamic no-sorting"
 				url="core/api/contacts/bulk" style="overflow: fixed; width:100%;word-break: break-all;table-layout:fixed">
 				<colgroup>
 				<col width="41%">
@@ -246,10 +246,10 @@
 {{#if this.length}}
     <div class="data">
         <div class="data-container">
-            <table class="table table-striped no-sorting" id="logs-table" url="core/api/campaigns/logs/bulk">
+            <table class="table table-striped agile-ellipsis-dynamic no-sorting" id="logs-table" url="core/api/campaigns/logs/bulk">
+				<colgroup><col width="35%"><col width="20%"><col width="12%"><col width="20%"><col width="13%"></colgroup>
                 <thead>
                      <tr style="background-color:#EDF3FE;">
-                        <th></th>
                         <th>Contact</th>
                         <th>Campaign</th>
                         <th>Type</th>
@@ -270,7 +270,6 @@
 
 <script id="dashboard-campaign-logs-model-template" type="text/html">
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
-<td></td>
 <td class="data" data={{subscriber_id}} style="width:20em;">
 	<div style="display:inline;padding-right:10px;height:auto;">
     	<img class="thumbnail" src="{{gravatarurl contact.properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />

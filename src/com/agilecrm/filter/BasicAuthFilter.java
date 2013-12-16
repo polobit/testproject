@@ -19,6 +19,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.MD5Util;
 import com.google.gdata.util.common.base.Charsets;
 
 /**
@@ -83,8 +84,17 @@ public class BasicAuthFilter implements Filter
 		    // Get AgileUser
 		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
 
-		    if (domainUser != null)
+		    if (domainUser != null && !StringUtils.isEmpty(password))
 		    {
+		    
+		    String hashedPassword = MD5Util.getMD5HashedPassword(password);
+		    if(password.equals(hashedPassword))
+		    {
+		    	setUser(domainUser);
+			    chain.doFilter(httpRequest, httpResponse);
+			    return;
+		    }
+		    
 			// Gets APIKey, to authenticate the user
 			String apiKey = APIKey.getAPIKeyRelatedToUser(domainUser.id).api_key;
 
@@ -95,10 +105,7 @@ public class BasicAuthFilter implements Filter
 			// given access
 			if (domainUser != null && password.equals(apiKey))
 			{
-			    UserInfo userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
-
-			    SessionManager.set(userInfo);
-
+				setUser(domainUser);
 			    chain.doFilter(httpRequest, httpResponse);
 			    return;
 			}
@@ -110,6 +117,13 @@ public class BasicAuthFilter implements Filter
 	System.out.println("Error");
 	httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"" + _realm + "\"");
 	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+    
+    public void setUser(DomainUser domainUser)
+    {
+    	  UserInfo userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
+
+		    SessionManager.set(userInfo);
     }
 
     @Override

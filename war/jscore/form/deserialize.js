@@ -382,11 +382,11 @@ function deserializeChainedSelect1(form, el)
              * Gets the Template for input and select
              * fields
              */
-            rule_element = $(getTemplate("webrules-add", {})).find('tr.webrule-actions')
+            rule_element = $(getTemplate("webrules-add", {})).find('.webrule-actions')
                 .clone();
 
             // Add remove icon for rule
-            $(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+            $(rule_element).find("i.webrule-multiple-remove").css("display", "inline-block");
 
             // Loads jquery chained plugin for chaining
             // the input fields
@@ -408,8 +408,9 @@ function deserializeChainedSelect1(form, el)
         $.each(data, function (i, value)
         {
         	console.log(i +", " + value);
+        	console.log(rule_element);
             var input_element = ($(rule_element).find('*[name="'+ i +'"]').children())[0];
-         
+         console.log($(rule_element).find('*[name="'+ i +'"]'));
             console.log(input_element.tagName.toLowerCase() == "input" || input_element.tagName.toLowerCase() == "textarea")
             // If input field set is value for input field, checks it chained select elements
             // date fields should be filled with date

@@ -69,7 +69,7 @@ class WebRuleAction
 {
     public enum Action
     {
-	POPUP, ASSIGN_CAMPAIGN, ADD_TAG
+    	POPUP, ASSIGN_CAMPAIGN, ADD_TAG, MODAL_POPUP, CORNER_NOTY;
     }
     
     public Action action = null;

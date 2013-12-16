@@ -74,12 +74,9 @@ function serializeForm(form_id) {
 	var chained_selects = $('#' + form_id + ' .chained-table');
 	$.each(chained_selects, function(index, element){
 		var json_array = [];
-	arr = arr.concat($(element).find('tr').map(function() {
+	arr = arr.concat($(element).find('.chained').map(function() {
 		var json_object = {};
-		console.log($(element).find('div'));
-		console.log($(this).find('div').children());
 		$.each($(this).find('div').children(), function(index, data) {
-			console.log($(data).parent().attr('name'));
 			// Gets the name of the tr
 			var name = $(data).parent().attr('name');
 			var value;
@@ -98,10 +95,9 @@ function serializeForm(form_id) {
 			if (value != null && value != "")
 				json_object[name] = value;
 			// Pushes each rule built from chained select in to an JSON array
-			console.log(json_object);
 		});
 		json_array.push(json_object);
-		
+	
 		// Maps json array with name "rules"
 		return {
 			"name" : $(this).attr('name'),
