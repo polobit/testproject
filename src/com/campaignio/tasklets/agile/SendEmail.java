@@ -461,8 +461,7 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		getSendEmailLogMessage(fromEmail, to, subject, text, html), LogType.EMAIL_SENT.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -556,37 +555,4 @@ public class SendEmail extends TaskletAdapter
 
 	return false;
     }
-
-    /**
-     * Returns log message by appending delimiter and email fields into string.
-     * 
-     * @param from
-     *            - From Email.
-     * @param to
-     *            - To Email.
-     * @param subject
-     *            - Email Subject.
-     * @param text
-     *            - Text body
-     * @param html
-     *            - Html body
-     * @return String
-     */
-    private String getSendEmailLogMessage(String from, String to, String subject, String text, String html)
-    {
-	// Custom delimiter to separate email fields as email body may contain
-	// any type of character
-	final String AGILE_CRM_DELIMITER = "_aGiLeCrM";
-
-	String message = "From: " + from + AGILE_CRM_DELIMITER + " To: " + to + AGILE_CRM_DELIMITER + " Subject: " + subject;
-
-	// if html is not empty, insert html as Body
-	if (!StringUtils.isEmpty(html))
-	    message += AGILE_CRM_DELIMITER + " Body:" + EmailUtil.parseEmailData(html);
-	else
-	    message += AGILE_CRM_DELIMITER + " Body:" + text;
-
-	return message;
-    }
-
 }

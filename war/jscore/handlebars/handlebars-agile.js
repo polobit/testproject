@@ -299,3 +299,23 @@ function getCount(collection)
 	else
 		return "(" + collection.length + " Total)";	
 }
+
+/**
+ * Returns id from hash. Id must be last in hash.
+ **/
+function getIdFromHash(){
+	
+	// Returns "workflows" from "#workflows"
+	var hash = window.location.hash.substr(1);
+	
+	// remove trailing slash '/'
+	if(hash.substr(-1) === "/")
+	{
+		hash = hash.replace(/\/$/, "");
+	}
+	
+	// Returns campaign_id from "workflow/all-contacts/campaign_id".
+	var id = hash.split('/').pop();
+	
+	return id;
+}

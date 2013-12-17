@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -47,6 +44,25 @@ public class CampaignSubscribersUtil
 	Map<String, Object> conditionsMap = new HashMap<String, Object>();
 	conditionsMap.put("campaignStatus.campaign_id", campaignId);
 	return dao.listByProperty(conditionsMap);
+    }
+
+    /**
+     * Returns list of contacts based on cursor.
+     * 
+     * @param max
+     *            - limit per request
+     * @param cursor
+     *            - Cursor
+     * @param campaignId
+     *            - workflow id.
+     * @return
+     */
+    public static List<Contact> getContactsByCampaignId(int max, String cursor, String campaignId)
+    {
+	Map<String, Object> subscribers = new HashMap<String, Object>();
+	subscribers.put("campaignStatus.campaign_id", campaignId);
+
+	return dao.fetchAll(max, cursor, subscribers, true, false);
     }
 
     /**
@@ -129,31 +145,4 @@ public class CampaignSubscribersUtil
 	return dao.ofy().query(Contact.class).filter("campaignStatus.status", status).list();
     }
 
-    public static JSONArray insertCampaignId(String campaignId, List<Contact> contacts)
-    {
-	if (contacts == null)
-	    return null;
-
-	JSONArray contactsArr = new JSONArray();
-
-	try
-	{
-
-	    for (Contact contact : contacts)
-	    {
-		ObjectMapper mapper = new ObjectMapper();
-		String contactStr = mapper.writeValueAsString(contact);
-
-		JSONObject json = new JSONObject(contactStr).put("campaign_id", campaignId);
-		contactsArr.put(json);
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Got an exception while inserting campaign-id into contacts list " + e.getMessage());
-	}
-
-	return contactsArr;
-    }
 }
