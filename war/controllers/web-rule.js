@@ -59,6 +59,8 @@ var WebreportsRouter = Backbone.Router.extend({
 			return;
 		}
 
+		var count = 0;
+		
 		// Gets a report to edit, from reports collection, based on id
 		var webrule = this.webrules.collection.get(id);
 		
@@ -69,15 +71,17 @@ var WebreportsRouter = Backbone.Router.extend({
 			window : "webrules", 
 			postRenderCallback : function(el)
 			{
+				if(count > 0)
+					return;
 				head.js('lib/agile.jquery.chained.min.js', function()
-						{
-							
+						{	
 							chainFilters(el, webrule.toJSON(), function(){
 								chainWebRules(el, webrule.toJSON());
 								$("#content").html(el);
 							});
-
+							
 						})
+						count ++;
 			}
 		});		
 		
