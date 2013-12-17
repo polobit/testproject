@@ -121,27 +121,47 @@ function setupSocialSuiteLinkedinOAuth()
 /**
  *  Register all streams on server
  */
-function registerAll()
-{ 	
+function registerAll(index)
+{	
+  console.log("In registerAll.");
+  //console.log(index + " "+registerCounter+" "+StreamsListView.collection.length);
+  
   var streamsJSON = StreamsListView.collection.toJSON();
 		
-  // Streams not available OR streams already registered OR pubnub not initialized	
-  if(streamsJSON == null || registerAllDone == true || pubnub == null)
+  // Streams not available OR streams already registered OR pubnub not initialized OR (index 0 stream is done and RC is increased.)	
+  if(streamsJSON == null || registerAllDone == true || pubnub == null || (registerCounter != null && index == 0))
 	{
 	  console.log("registerAllDone : "+registerAllDone);
 	  return;
 	}  
-	  	
-   // Get stream
-   $.each(streamsJSON, function(i, stream)
-	 {	  		       
-	    /* Publish data to register on server */
-	 	var publishJSON = {"message_type":"register", "stream":stream};
-	    sendMessage(publishJSON);	 	 
-	 });
-   
-   // All added streams registered. 
-   registerAllDone = true;
+	
+   // Get stream.
+   var stream = StreamsListView.collection.at(index);
+   console.log(stream);
+  
+   // Check stream is present or added in collection.
+   if(stream == null || stream == undefined)
+	  return;
+    
+   // Check ACK done with stream.
+   //console.log(stream.get('tweetListView').where({text: "ACK"}));
+  
+   // First stream from collection to register and assign value to RC.
+   if(index == 0 && registerCounter == null)
+	 {
+	   registerCounter = 0;
+	   
+	   if(addImgDone == false)
+	     addUserImgToColumn();
+	 }	 
+     
+   // Publish data to register on server 
+   var publishJSON = {"message_type":"register", "stream":stream};
+   sendMessage(publishJSON);
+	    
+   // All added streams registered.
+   if(registerCounter == (StreamsListView.collection.length-1)) 
+     registerAllDone = true;
 }
 
 /**
@@ -163,38 +183,45 @@ function unregisterAll()
 	 
    // Flush all data.
    registerAllDone = false;	
+   registerCounter = null;
+   addImgDone = false;
    StreamsListView = undefined;
 }
 
 /**
  * Add relevant profile img to stream in column header.
  */
-function addUserImgToColumn(stream)
+function addUserImgToColumn()
 {	
-  // Get stream from collection.
-  var modelStream = StreamsListView.collection.get(stream.id);	 
+  console.log("In addUserImgToColumn");	
+	
+  var streamsJSON = StreamsListView.collection.toJSON();
+                    
+   // Get stream
+   $.each(streamsJSON, function(i, stream)
+     {
+	  // Get stream from collection.
+      var modelStream = StreamsListView.collection.get(stream.id);	 
 	  
-  // Fetching profile image url from twitter/linkedin server    											  	
-  $.get("/core/social/getprofileimg/" + stream.id, 
+      // Fetching profile image url from twitter/linkedin server    											  	
+      $.get("/core/social/getprofileimg/" + stream.id, 
 	    function (url)
 	    {
 	      // Set url in stream model.
           modelStream.set("profile_img_url",url);
  	            	
           // Append in collection 			
-		  socialsuitecall.streams(modelStream);
-
-	      // Get network updates from linkedin
-	      if(stream.stream_type == "All_Updates")	    			  
-	         getSocialSuiteLinkedInNetworkUpdates(stream);
+		  socialsuitecall.streams(modelStream);	      
 	    });  
+     });   
+   addImgDone = true;   
 }
 
 /**
  * Add tweet in stream.
  */
 function handleMessage(tweet)
-{ 
+{ 	
   // We need this messages to reflect actions in all added relevant streams.
   if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
@@ -214,7 +241,7 @@ function handleMessage(tweet)
 
   if(modelStream != null || modelStream != undefined)
 	{
-	  console.log("Current_Route: "+Current_Route+" focused: "+focused);
+	  //console.log("Current_Route: "+Current_Route+" focused: "+focused);
 	  
 	  // User on #social as well as window is active.
 	  if(Current_Route == "social" && focused == true)
@@ -223,7 +250,7 @@ function handleMessage(tweet)
 		    // New tweet notification not yet clicked.
 		    if( $('#stream_notifications_'+tweet.stream_id).is(':empty') == false)  
 		      {
-		    	console.log("not clicked");
+		    	//console.log("not clicked");
 		    	
 		    	// User did not click on notification so continue adding tweets in temp collection.
 		    	addTweetToTempCollection(tweet);  
@@ -233,7 +260,7 @@ function handleMessage(tweet)
 		      }		    	
 		    else
 		      {
-		    	console.log("no notification");
+		    	//console.log("no notification");
 		    	
 		    	// Add tweet to model in normal way.
 		    	addTweetToStream(modelStream,tweet);
@@ -241,7 +268,7 @@ function handleMessage(tweet)
 		  }
 	  else
 		  {
-		    console.log("not in social suite");
+		    //console.log("not in social suite");
 		    
 		    // Add tweet to temp collection, user on another tab or window is inactive.
   	        addTweetToTempCollection(tweet);  	
@@ -273,6 +300,11 @@ function addTweetToStream(modelStream,tweet)
 		  //if(tweet.text == "Dear you do not have any tweets.")
 		  tweet.text = "No Tweets to show here.";
 		}
+	else if(tweet.type == "ACK")
+		{
+		 tweet["msg_type"] = "ACK";
+		 tweet["text"] = "ACK";		 
+		}		
 	else
 		{
 	      tweet["msg_type"] = "Tweet";
@@ -307,8 +339,8 @@ function addTweetToStream(modelStream,tweet)
 	      tweet.text = convertTextToTweet(tweet);
 		}	
 	    
-	console.log("tweet : "+tweet.text);
-    console.log("add at "+modelStream.get('tweetListView').length);   
+	//console.log("tweet : "+tweet.text);
+    //console.log("add at "+modelStream.get('tweetListView').length);   
 		
     // Sort stream on tweet id basis which is unique and recent tweet has highest value.
 	modelStream.get('tweetListView').comparator = function(model) 
@@ -321,12 +353,18 @@ function addTweetToStream(modelStream,tweet)
 	 modelStream.get('tweetListView').add(tweet);	
 	   
 	 // Sort stream on id. so recent tweet comes on top.
-	 modelStream.get('tweetListView').sort() ;	   
+	 modelStream.get('tweetListView').sort();		    
 	   
 	 // Create normal time.
 	 head.js('lib/jquery.timeago.js', function(){	 
 		        $(".time-ago", $(".chirp-container")).timeago();	
-			});	 
+			});		 
+	 
+	 if(tweet.type == "ACK")
+		{
+		  registerCounter++;
+		  registerAll(registerCounter);
+		}	
 }
 
 /**
@@ -634,7 +672,7 @@ function getScheduledUpdate()
 function addScheduledUpdateInStream(scheduledUpdate)
 {
 	console.log("In addScheduledUpdateInStream");	
-	console.log(scheduledUpdate);	
+	//console.log(scheduledUpdate);	
 		
 	if(ScheduledEdit == true)
 	  {
