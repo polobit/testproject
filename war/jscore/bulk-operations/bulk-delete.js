@@ -52,8 +52,10 @@ $(function(){
 			{
 				if($(table).attr('id') == "contacts")
 					url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
-				
-				// For Active Subscribers table
+			}
+			
+			// For Active Subscribers table
+			if(SUBSCRIBERS_SELECT_ALL == true){	
 				if($(table).attr('id') == "active-campaign")
 					url = url + "&filter=all-active-subscribers";
 			}
