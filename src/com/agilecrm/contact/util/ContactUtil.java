@@ -255,7 +255,6 @@ public class ContactUtil
 
 			if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
 			{
-				System.out.println("it is blank");
 				System.out.println(contact.properties.contains(emailField));
 				contact.properties.remove(emailField);
 				continue;
@@ -546,11 +545,6 @@ public class ContactUtil
 			return false;
 		}
 
-		if (isDuplicateContact(contact))
-		{
-			mergeContactFields(contact);
-			return true;
-		}
 
 		if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 		{
@@ -569,30 +563,45 @@ public class ContactUtil
 		return true;
 	}
 	
-	public static void mergeContactFeilds(Contact newContact, Contact oldContact)
+	public static Contact mergeContactFeilds(Contact newContact, Contact oldContact)
 	{
-		for(ContactField field : oldContact.properties)
+		
+		
+		for(ContactField field : newContact.properties)
 		{
-			ContactField existingField = newContact.getContactField(field.name);
-			if(existingField == null)
-				newContact.properties.add(field);
+			if(field.name ==null || field.value == null)
+				continue;
+			
+			ContactField existingField = oldContact.getContactField(field.name);
+				if(existingField == null)
+				{
+					oldContact.properties.add(field);
+					continue;
+				}
+			
+				existingField.value = field.value;
 		}
 		
+		oldContact.tags.addAll(newContact.tags);
 		
-		
-		newContact.id = oldContact.id;
+		return oldContact;
 	}
 	
-	public static void mergeContactFields(Contact contact)
+	public static Contact mergeContactFields(Contact contact)
 	{
 		String email = contact.getContactFieldValue(Contact.EMAIL);
+		
 		if(email == null)
-			return;
+			return contact;
 		
 		Contact oldContact = searchContactByEmail(email);
 		
 		if(oldContact != null)
-			mergeContactFeilds(contact, oldContact);
+			return mergeContactFeilds(contact, oldContact);
+		
+		return contact;
+		
+		
 	}
 
 	public static boolean isValidFields(Contact contact)

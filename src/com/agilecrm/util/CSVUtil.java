@@ -236,12 +236,19 @@ public class CSVUtil
 
 	    if (!ContactUtil.isValidFields(tempContact, status))
 		continue;
+	    
+	    System.out.println(tempContact.getContactFieldValue(Contact.EMAIL));
+	    
+	    // If contact is duplicate, it fetches old contact and updates data.
+		if (ContactUtil.isDuplicateContact(tempContact))
+		{
+			tempContact = ContactUtil.mergeContactFields(tempContact);
+		}
 
 	    try
 	    {
-		System.out.println(tempContact.getProperties());
+	    	
 		tempContact.save();
-		System.out.println(notes_positions);
 
 		// Creates notes, set CSV heading as subject and value as
 		// description.
