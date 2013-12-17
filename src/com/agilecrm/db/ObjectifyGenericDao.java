@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 
 import org.json.JSONArray;
 
+import com.agilecrm.UploadDocument.Document;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
@@ -137,6 +138,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 		// Social suite's ScheduledUpdate
 		ObjectifyService.register(ScheduledUpdate.class);
+		
+		// Upload Document
+		ObjectifyService.register(Document.class);
 	}
 
 	/**
