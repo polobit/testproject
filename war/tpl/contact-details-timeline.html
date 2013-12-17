@@ -90,24 +90,9 @@
                 <div class="caption" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
-                {{#if_email_sent this "log_type"}}
-
-                    <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>From:</b> {{From}}</div>
-                    <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
-                        <b>To:</b> {{To}}
-                    </div>
-                    <div class="caption" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden"><b>Subject:</b> {{Subject}}</div>
-
-                    <div class="text"><div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;"><div> <p>{{{Body}}}</p></div></div>
-                        <div class="right" data="{{Body}}"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
-                    </div>
-
-                {{else}}
-
                     <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{{message}}}
                         <div class="right" data="{{message}}"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
                     </div>   
-                {{/if_email_sent}}
             {{/if}}        
             </div>
         {{/if_entity}}

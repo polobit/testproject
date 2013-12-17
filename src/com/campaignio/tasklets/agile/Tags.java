@@ -72,7 +72,7 @@ public class Tags extends TaskletAdapter
 		if (type.equals(ADD))
 		{
 		    contact.addTags(tagsArray);
-		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Tags added - " + tagNames,
+		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Tags added - " + tags,
 			    LogType.TAGS.toString());
 
 		}
@@ -81,7 +81,7 @@ public class Tags extends TaskletAdapter
 		else
 		{
 		    contact.removeTags(tagsArray);
-		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Tags deleted - " + tagNames,
+		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Tags deleted - " + tags,
 			    LogType.TAGS.toString());
 		}
 	    }

@@ -93,7 +93,6 @@ $('#twit-tweet').die().live("mouseleave", function(e)
 $('#twit-edit-tweet').die().live("mouseleave", function(e)
 		{$('#twit-edit-tweet').keypress();});
 
-
 /**
  * Get stream and create reply tweet and post it on Twitter.
  */
@@ -395,7 +394,6 @@ $(".retweet-status").die().live("click", function(e)
       $('#twit-edit-tweet').show();
       $('#div-for-count').show(); 
       $('#RT_scheduling').show();
-      
     });
     
     // In compose message text limit is crossed so disable send button.
@@ -407,7 +405,6 @@ $(".retweet-status").die().live("click", function(e)
     $('#twit-edit-tweet').on('uncross', function(){
         $('#send_edit_tweet').removeClass('disabled')
       });
-    
     
     // On click of send button in the modal, tweet request is sent 
     $('#send_edit_tweet').click(function (e)
@@ -1177,7 +1174,7 @@ function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
 		  
 		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
 			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 126,
+			  	  maxChars: 140,
 			  	  counter: "#"+counterVar
 			  	});
 			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();

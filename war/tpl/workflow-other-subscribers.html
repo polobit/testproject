@@ -1,0 +1,100 @@
+<script id="workflow-other-subscribers-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <div class="right">
+				<div class="btn-group">
+  					<button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+    					{{get_subscribers_type_from_hash}} Subscribers <span class="caret"></span>
+  					</button>
+  					<ul class="dropdown-menu" role="menu">
+    					<li><a href="#workflow/all-subscribers/{{get_id_from_hash}}">All Subscribers</a></li>
+						<li><a href="#workflow/active-subscribers/{{get_id_from_hash}}">Active</a></li>
+						<li><a href="#workflow/completed-subscribers/{{get_id_from_hash}}">Completed</a></li>
+                        <li><a href="#workflow/removed-subscribers/{{get_id_from_hash}}">Removed</a></li>
+					</ul>
+				</div>
+			</div>
+			<h1>{{get_subscribers_type_from_hash}} Subscribers<small> - <span id="subscribers-campaign-name"></span><span> {{count}}</span></small></h1>
+        </div>
+    </div>
+</div>
+
+{{!-- Shows pad-content if subscribers are empty --}}
+{{#unless this.length}}
+<div id="subscribers-slate"></div>
+{{/unless}}
+
+{{#if this.length}}
+<div class="row">
+	<div class="span10"
+		<div class="data">
+        	<div class="data-container">
+            	<table class="table table-striped onlySorting">
+                	<thead>
+                    	<tr>
+                        	<th>Contact</th>
+                        	<th>Campaign Date</th>
+							<!--<th>Status</th>-->
+							<th>Campaigns</th>
+                    	</tr>
+                	</thead>
+                	<tbody id="workflow-other-subscribers-model-list" route="contact/">
+                	</tbody>
+            	</table>
+        	</div>
+    	</div>
+	</div>
+</div>
+{{/if}}
+</script>
+<script id="workflow-other-subscribers-model-template" type="text/html">
+<td class="data" data={{id}} style="width:20em;">
+	<div style="display:inline;padding-right:10px;height:auto;">
+    	<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+    </div>
+ 	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
+    	<b>	{{contact_name properties type}} </b>
+        <br />
+        	{{getPropertyValue properties "email"}}
+    </div>
+    <div style="float:right"></div>
+</td>
+<td>
+    <div>
+        <small class="edit-hover"> 
+		    <span><em>Started</em>&nbsp;</span>
+                {{#if_same_campaign this "campaignStatus"}}
+                <time class="campaign-started-time" datetime="{{epochToHumanDate "" start_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" start_time}}</time>
+                </br>
+				{{#if this.end_time}}
+				<span><em>Completed</em>&nbsp;</span>
+                <time class="campaign-completed-time" datetime="{{epochToHumanDate "" end_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" end_time}}</time>
+                {{/if}}
+				{{/if_same_campaign}}
+        </small>
+    </div>
+</td>
+<!--<td>
+ {{#if_same_campaign this "campaignStatus"}} {{#if this.end_time}}Completed{{else}} Active{{/if}} {{/if_same_campaign}}
+</td> -->
+<td style="width: 50%">
+    <div style="word-break:break-all">
+		{{#if_other_active_campaigns this "campaignStatus"}}
+           
+         {{!-- Shows Active campaigns separated by comma --}}
+         {{#if this.active}} 
+         <div style="white-space: nowrap; width: 30em; overflow: hidden; text-overflow: ellipsis;">
+           Active - {{#toLinkTrigger this.active}}<a href="#workflow/{{campaign_id}}" class="stop-propagation">{{#if campaign_name}}{{campaign_name}}{{else}} Active Campaign {{/if}}</a>{{/toLinkTrigger}}
+         </div>
+         {{/if}}
+         {{#if this.done}}
+         <div style="white-space: nowrap; width: 30em; overflow: hidden; text-overflow: ellipsis;">
+         	Done - {{#toLinkTrigger this.done}}<a href="#workflow/{{campaign_id}}" class="stop-propagation">{{#if campaign_name}}{{campaign_name}}{{else}} Done Campaign {{/if}}</a>{{/toLinkTrigger}}
+         </div>
+         {{/if}} 
+   
+        {{/if_other_active_campaigns}}
+	</div>
+</td>
+</script>

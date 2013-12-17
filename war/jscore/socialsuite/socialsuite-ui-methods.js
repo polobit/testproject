@@ -151,29 +151,21 @@ function unregisterAll()
 { 	
   // Collection not defined.	
   if(!StreamsListView)
-	return;
-	
-  var streamsJSON = StreamsListView.collection.toJSON();
+	return;	
 		
   // Streams not available OR pubnub not initialized.	
-  if(streamsJSON == null || pubnub == null)
-	return;
-	  	
-   // Get stream
-   $.each(streamsJSON, function(i, stream)
-	 {	  		       
-	    // Stream size is too big, can not handle by pubnub so remove list of tweet.
-		delete stream.tweetListView;	
-		
-		// Unregister on server
-		var publishJSON = {"message_type":"unregister", "stream":stream};
-		sendMessage(publishJSON);
-	 });  
+  if(StreamsListView == undefined || pubnub == null)
+	return;	  	
    
+  // Unregister on server
+  var publishJSON = {"message_type":"unregister_all","client_channel":CURRENT_DOMAIN_USER.id +"_Channel" };
+  sendMessage(publishJSON);
+	 
    // Flush all data.
    registerAllDone = false;	
    StreamsListView = undefined;
 }
+
 /**
  * Add relevant profile img to stream in column header.
  */
