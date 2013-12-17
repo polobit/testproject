@@ -35,7 +35,11 @@ var ContactsRouter = Backbone.Router
 				"gmail" : "email", "twitter" : "socialPrefs", "linkedin" : "socialPrefs",
 
 				/* Search results */
-				"contacts/search/:query" : "searchResults" },
+				"contacts/search/:query" : "searchResults",
+				
+				/* Call */
+				"contacts/call-lead/:first/:last" : "addLead"},
+				
 			initialize : function()
 			{
 
@@ -969,4 +973,20 @@ var ContactsRouter = Backbone.Router
 
 				$('#content').html(searchResultsView.render().el);
 
-			} });
+			},
+			
+			/*
+			 * Show personModal when phone number from call doesnt match with
+			 * contacts
+			 */
+
+			addLead : function(first, last)
+			{
+				$('#personModal').on("shown", function(){
+					$(this).find('#fname').val(first);
+					$(this).find('#lname').val(last);
+				});
+				$('#personModal').modal();
+			}
+			
+		});
