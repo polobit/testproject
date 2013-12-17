@@ -28,25 +28,31 @@ public class CallNotification extends HttpServlet
 	{
 		String apiKey = req.getParameter("api-key");
 		String phoneNumber = req.getParameter("number");
+		String firstName = req.getParameter("fname");
+		String lastName = req.getParameter("lname");
+		String namespace = NamespaceManager.get();
+
 		PrintWriter out = res.getWriter();
-		if(StringUtils.isBlank(apiKey)){
+		if (StringUtils.isBlank(apiKey))
+		{
 			out.println("API KEY MISSING");
 			return;
 		}
-		if (!APIKey.isPresent(apiKey)){
+		if (!APIKey.isPresent(apiKey))
+		{
 			out.println("INVALID API KEY");
 			return;
 		}
 		Contact contact = ContactUtil.searchContactByPhoneNumber(phoneNumber);
-		if (contact == null){
-			out.println("CONTACT NOT FOUND");
-			return;
+		if (contact == null)
+		{
+			res.sendRedirect("https://" + namespace + "agilecrm.com/#contacts/call-lead/" + firstName + "/" + lastName);
 		}
 		try
 		{
 			JSONObject obj = NotificationPrefsUtil.getNotificationJSON(contact);
 			obj.put("type", "CALL");
-			PubNub.pubNubPush(NamespaceManager.get(), obj);
+			PubNub.pubNubPush(namespace, obj);
 		}
 		catch (Exception e)
 		{
