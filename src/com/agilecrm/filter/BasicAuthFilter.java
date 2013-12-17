@@ -84,7 +84,7 @@ public class BasicAuthFilter implements Filter
 		    // Get AgileUser
 		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
 
-		    if (domainUser != null && !StringUtils.isEmpty(password))
+		    if(domainUser != null && !StringUtils.isEmpty(password))
 		    {
 		    
 		    String hashedPassword = MD5Util.getMD5HashedPassword(password);
