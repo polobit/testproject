@@ -1,4 +1,4 @@
-package com.socialsuite;
+package com.socialsuite.util;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -26,6 +26,8 @@ import com.google.code.linkedinapi.schema.Network;
 import com.google.code.linkedinapi.schema.Person;
 import com.google.code.linkedinapi.schema.Update;
 import com.google.code.linkedinapi.schema.VisibilityType;
+import com.socialsuite.Stream;
+import com.socialsuite.StreamAPI;
 
 /**
  * <code>LinkedinUtil</code> class creates a client which connects to LinkedIn

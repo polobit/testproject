@@ -64,6 +64,15 @@
 		<url-pattern>/backend/cron/twitter</url-pattern>
 	</servlet-mapping>
 
+    <servlet>
+		<servlet-name>ScheduledUpdateCron</servlet-name>
+		<servlet-class>com.socialsuite.cron.ScheduledUpdateCron</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ScheduledUpdateCron</servlet-name>
+		<url-pattern>/backend/cron/scheduledupdate</url-pattern>
+	</servlet-mapping>
+
 
 	<servlet>
 		<servlet-name>login</servlet-name>

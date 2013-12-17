@@ -304,6 +304,10 @@ function addTweetToStream(modelStream,tweet)
 	          tweet["deletable_tweet"] = true;
 	        }
 	      
+	      var checkRT = modelStream.get('screen_name')+" retweeted";
+	      if(tweet.retweeted == checkRT)
+	    	  tweet["retweeted_by_user"] = true;
+	      
 	      // Save original text for other actions.
 	      tweet["original_text"] = tweet.text;
 	      
@@ -612,110 +616,53 @@ function registerStreamAgain(streamId)
 /**
  * Gets Scheduled Updates fron DB and adds into Stream.
  */
-function getScheduledUpdate(stream)
-{   	
-  // Get updates of relevant stream from database. 
-  $.getJSON("/core/scheduledupdate/getscheduledupdates/" + stream.screen_name,function(data)
+function getScheduledUpdate()
+{ 
+  console.log("In getScheduledUpdate");
+	
+  if(!ScheduledUpdatesView)  // Streams not collected from dB
 	{
-	  console.log("data after fetching sc. updates from db");
-	  console.log(data);
-		  
-	  if(data.length)
-	   	{	
-	      // Get schedule update
-	      $.each(data, function(i, update)
-		     {	 
-	    	   var user = {};
-	    	   user["screen_name"] = stream.screen_name;
-	    	   user["profile_image_url"] = update.profileImg;    	   
-	    	   update["stream_type"] = stream.stream_type;
-	    	   update["stream_id"] = stream.id;
-	    	   update["user"] = user;	
-	    	   update["text"] = update.message;
-	    	   	    	   
-	    	   handleMessage(update);
-		   	 });
-		}		
-	  else
-		{		  
-		   var update = {};
-		   var user = {};
-    	   user["screen_name"] = stream.screen_name;    	   
-    	   update["stream_type"] = stream.stream_type;
-    	   update["stream_id"] = stream.id;
-    	   update["user"] = user;	
-    	   update["text"] = "There is no tweets to show here.";
-    	   update["id"] = "000";
-    	
-		   handleMessage(update);
-		}
-	}).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
-}
+	  ScheduledUpdatesView = new Base_Collection_View
+		({
+			 url : "/core/scheduledupdate/getscheduledupdates",
+	         restKey: "scheduledUpdate",
+	         templateKey: "socialsuite-scheduled-updates",
+	         individual_tag_name: 'li',
+	     });	
+	  
+	  ScheduledUpdatesView.collection.fetch();	  
+	}
+  
+  $('#scheduled_updates_list').append(ScheduledUpdatesView.render(true).el);  
+ }
 
 /**
  * Adds newly added Scheduled Update In Stream. 
  */
 function addScheduledUpdateInStream(scheduledUpdate)
 {
-	console.log("In addScheduledUpdateInStream");
-	scheduledUpdate = scheduledUpdate.toJSON();
-    
-	// Get stream from collection.
-	var streams = StreamsListView.collection.models; 
-
-    // Get scheduled stream match with screen name of update.
-    $.each(streams, function(i, stream)
-     {	 
-	   stream = stream.toJSON();	
-	   if(stream.screen_name == scheduledUpdate.screen_name && stream.stream_type == "Scheduled") 
-		 {		   
-		   var user = {};
-		   user["screen_name"] = stream.screen_name;
-		   user["profile_image_url"] = scheduledUpdate.profileImg;    	   
-		   scheduledUpdate["stream_type"] = stream.stream_type;
-		   scheduledUpdate["stream_id"] = stream.id;
-		   scheduledUpdate["user"] = user;	
-		   scheduledUpdate["text"] = scheduledUpdate.message;
-		  
-		   handleMessage(scheduledUpdate);
-		   console.log(scheduledUpdate);
-		 }	   
-   	 }); 
-    
-     // Remove deleted tweet element from ui
-	 $('.deleted').remove();
-}
-
-/**
- * Updates added Scheduled Update In Stream. 
- */
-function updateScheduledUpdateInStream(scheduledUpdate,streamJSON)
-{
-	console.log("In updateScheduledUpdateInStream");
-	var newscheduledUpdate = scheduledUpdate.toJSON();
-  
-	//Get stream from collection.
-	var modelStream = StreamsListView.collection.get(streamJSON.id);	
+	console.log("In addScheduledUpdateInStream");	
+	console.log(scheduledUpdate);	
 		
-	// Get tweet from stream.
-	var modelTweet = modelStream.get('tweetListView').get(newscheduledUpdate.id);
-	 	
-	// Update new data in tweet.
-	modelTweet.set("scheduled_time",newscheduledUpdate.scheduled_time);
-	modelTweet.set("scheduled_date",newscheduledUpdate.scheduled_date);  	
-	modelTweet.set("message",newscheduledUpdate.message);
-	modelTweet.set("original_text",newscheduledUpdate.message);
-	
-	var tweet = modelTweet.toJSON();
-	tweet.text = newscheduledUpdate.message;	
-	tweet.text = convertTextToTweet(tweet);
-
-	// Converts normal text to tweet with link on url, # and @.
-	modelTweet.set("text",tweet.text);    
-	
-    // Add back to stream.
-    modelStream.get('tweetListView').add(modelTweet);
-    
-    // Remove deleted tweet element from ui
-	$('.deleted').remove();
+	if(ScheduledEdit == true)
+	  {
+		// Get scheduled update from collection.
+		var newScheduledUpdate = ScheduledUpdatesView.collection.get(scheduledUpdate.id);
+		
+		// Set new data.
+		newScheduledUpdate.set("message",scheduledUpdate.message);
+		newScheduledUpdate.set("scheduled_date",scheduledUpdate.scheduled_date);
+		newScheduledUpdate.set("scheduled_time",scheduledUpdate.scheduled_time);
+		    	
+		// Add back to stream.
+		ScheduledUpdatesView.collection.add(newScheduledUpdate);		
+		
+		ScheduledEdit = false;
+	  }
+	else
+	  {
+		// Add scheduled update in collection.
+		ScheduledUpdatesView.collection.add(scheduledUpdate);
+	  }	  	
 }
+

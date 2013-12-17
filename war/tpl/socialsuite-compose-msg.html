@@ -33,6 +33,11 @@
 	                    <div class="controls span4" style="margin-left:0px;">
                             {{#if message}} <!-- Edit Scheduled Update -->
                               <input name="id" type="hidden" value={{id}} />
+							  <input name="domain_user_id" type="hidden" value={{domain_user_id}} />
+							  <input name="screen_name" type="hidden" value={{screen_name}} />
+							  <input name="network_type" type="hidden" value={{network_type}} />
+							  <input name="token" type="hidden" value={{token}} />
+                              <input name="secret" type="hidden" value={{secret}} />
                               {{#if_equals headline "Reply Tweet"}}
 	                        	<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{message}}</textarea>
 							  {{else}} <!-- tweet and direct msg -->

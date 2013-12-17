@@ -11,7 +11,6 @@
         	{{#if_contact_type "COMPANY"}} <b>{{getPropertyValue properties
         	"name"}}</b></br> {{getPropertyValue properties "url"}} {{/if_contact_type}}
     	</div>
-    	<div style="float: right"></div>
 	</td>
 	<td>{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}
@@ -53,7 +52,7 @@
                         <li><a href="#" id="bulk-tags">Add tags</a></li>
                     </ul>
                 </div>
-                <table id="contacts_search" class="table table-striped onlySorting" url="core/api/contacts/bulk" style="overflow: scroll">
+                <table id="contacts_search" class="table table-striped agile-ellipsis-dynamic onlySorting" url="core/api/contacts/bulk" style="overflow: scroll">
                     <thead>
                         <tr style="text-transform: capitalize;">
                             {{reportsContactTableHeadings "fields_set"}}

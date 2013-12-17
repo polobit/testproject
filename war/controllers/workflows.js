@@ -136,8 +136,14 @@ var WorkflowsRouter = Backbone.Router
 					var that = this;
 					var origin = location.origin;
 					
+					// Show loading image.
+					$('.workflow-templates-loading-img', $workflow_categories_template).append(LOADING_HTML);
+					
 					// Download template jsons
 					$.getJSON(origin + '/workflow-default-templates', function(data){
+						
+						// Remove loading image.
+						$('.loading').remove();
 						
 						// Initialize workflow_templates_json
 						that.worflow_templates_json = data;
@@ -581,6 +587,9 @@ var WorkflowsRouter = Backbone.Router
 						});
 						
 						$('#subscribers-campaign-name').text(workflowName);
+						
+						// Add href to Completed Subscribers
+						$('a#completed-subscribers-link').attr('href', '#workflow/'+id+'/completed-contacts');
 					},
 					appendItemCallback:function(el)
 					{
@@ -627,6 +636,9 @@ var WorkflowsRouter = Backbone.Router
 						});
 						
 						$('#subscribers-campaign-name').text(workflowName);
+						
+						// Add href to Active Subscribers
+						$('a#active-subscribers-link', el).attr('href', '#workflow/'+id+'/active-contacts');
 					},
 					appendItemCallback:function(el)
 					{

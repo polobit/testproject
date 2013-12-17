@@ -1,4 +1,4 @@
-package com.socialsuite;
+package com.socialsuite.util;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.socialsuite.Stream;
 
 /**
  * <code>StreamUtil</code> is the utility class for {@link Stream}. It fetches

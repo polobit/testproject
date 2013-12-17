@@ -11,7 +11,7 @@ import org.jsoup.select.Elements;
 
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
-import com.thirdparty.SendGrid;
+import com.thirdparty.mandrill.Mandrill;
 
 public class EmailUtil
 {
@@ -140,8 +140,7 @@ public class EmailUtil
 	}
 
 	// if no cc or bcc, send by Mandrill
-	// Mandrill.sendMail(NamespaceManager.get(), fromEmail, fromName, to,
-	// subject, replyTo, html, text);
-	SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+	Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+
     }
 }

@@ -1,5 +1,6 @@
 <Script id="webrules-add-template" type="text/html">
-<div class="span12">
+
+<div class="span9">
 	<div class="well">
 		<form id="reportsForm1" class="form-horizontal">
 			<div name="rules" class="formsection chainedSelect">
@@ -42,6 +43,7 @@
 													<optgroup label="Contact Data" id="page-conditions">
 														<option value="tags" selected="selected">Tag</option>
 														<option value="tags_time">Tag And Created Date</option>
+														<option value="lead_score">Score</option>
 														<option value="created_time">Created</option>
 														<option value="company">Company</option>
 														<option value="title">Job Title</option>
@@ -67,6 +69,9 @@
 														class="first_name company owner tags org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 												
 
+													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
+													<option value="IS_LESS_THAN" class="lead_score">less than</option>
+																
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>													
 
@@ -103,6 +108,8 @@
 													name="updated_date" style="width: 92%"
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" />
+													<input type="text" name="temp" style="width:92%"
+													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
 											
 											</div>
 										</td>
@@ -160,67 +167,81 @@
 			<div class="control-group" style="margin-left: -19px;">
 						<label class="control-label">Action</label>
 						<div class="controls">
+								<div class="webrule-actions chained-table"> 
+							<div class="alert" style="width:50%">
 							<table style="background-color: transparent"
-								class="reports-condition-table actions chained-table" >
-								<tbody>
-									<tr class="chained controls webrule-actions" style="padding-left: 100px" name="actions"> 
+								class="reports-condition-table actions" >
+								<tbody class="chained"  name="actions">
+									<tr>
 										<td class="lhs-block" style="vertical-align: top;">
 										<div id="action" name="action">
-											<select class="required" style="width: 125px;">
+											<select class="required" >
 												<option value="POPUP">Show Popup</option>
+												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
+												<option value="CORNER_NOTY" class="POPUP">Corner Noty</option>
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
 													related="WEB_RULE_RHS" url="core/api/workflows"
 													parse_key="id" parse_value="name">Assign Campaign</option>
 											</select>
 										</div>
-										</td>	
+										</td>
+											<td style="vertical-align: top;"><div style="width:50px"><i
+												class="web-rule-multiple-add icon-plus"
+											style="display: inline-block; margin-right: 10px;margin-left: 10px; cursor: pointer;"></i><i
+											class="webrule-multiple-remove icon-remove-circle"
+											style="display: none; cursor: pointer;"></i></div></td>
+									</tr>
+									<tr>	
 										<td class="controls"
 											style="vertical-align: top;">
-											<div name="RHS" id="WEB_RULE_RHS" style="max-width: 235px;">
+											<div name="RHS" id="WEB_RULE_RHS" >
 												<select class="required" name="temp" style="max-width:125px">
-													<option value="model_popup" class="POPUP">Modal Popup</option>
-													<option value="corner_noty " class="POPUP">Corner Noty</option>
 												</select>
 											</div>
 										</td>
+									</tr>
+									<tr>
 										<td class="controls"
-											style="vertical-align: top; max-width: 120px;">
+											style="vertical-align: top; ">
 											<div name="popup_pattern" id="noty-type">
 												<select class="required" style="width: 100%;">
-													<option value="confirmation" class="POPUP">Confirmation</option>
-													<option value="information" class="POPUP">Information</option>
-													<option value="form" class="POPUP">Form on website</option>
-													<option value="custom_html" class="POPUP">Custom HTML</option>
+													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option>
+													<option value="information" class="POPUP MODAL_POPUP CORNER_NOTY">Information</option>
+													<option value="form" class="POPUP CORNER_NOTY MODAL_POPUP">Form on website</option>
+													<option value="custom_html" class="POPUP CORNER_NOTY MODAL_POPUP">Custom HTML</option>
 												</select>
 											</div>
 										</td>
+									</tr>
+									<tr>
 										<td class="controls span2"
-											style="vertical-align: top; max-width: 120px;">
+											style="vertical-align: top;">
 											<div id="noty-title" name="title">
-													<input type="text" name="temp" style="width: 92%"
+													<input type="text" name="temp" 
 														class="confirmation information input required" placeholder="Title"/>
 														<input type="text" name="temp" style="width: 92%"
 														class="form input required" placeholder="Form id"/>
 											</div>
 										</td>
+									</tr>
+									<tr>
 										<td class="controls span2"
-											style="vertical-align: top; max-width: 120px;">
+											style="vertical-align: top;">
 												<div id="noty-message" name="popup_text">
-													<textarea  cols="35" style="width: 92%"
+													<textarea  cols="35" style=""
 														class="custom_html" rows="6" placeholder="paste HTML context"></textarea>
 													
-													<textarea  cols="35" style="width: 92%"
+													<textarea  cols="70" 
 														class="information confirmation" rows="6" placeholder="Message"></textarea>
 												</div>
 										</td>
-										<td style="vertical-align: top;"><div style="width:50px"><i
-											class="web-rule-multiple-add icon-plus"
-											style="display: inline-block; margin-right: 10px;margin-left: 10px; cursor: pointer;"></i><i
-											class="filter-contacts-multiple-remove icon-remove-circle"
-											style="display: none; cursor: pointer;"></i></div></td>
 									</tr>
+										
+									
 								</tbody>
 								</table>
+								</div>
+</div>
 							</div>
 					</div>
 			{{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />
@@ -232,6 +253,10 @@
 			</fieldset>
 		</form>
 	</div>
+</div>
+
+<div class="span">
+
 </div>
 </script>
 
