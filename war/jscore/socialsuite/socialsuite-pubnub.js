@@ -81,7 +81,7 @@ function sendMessage(publishJSON)
 	if(publishJSON.message_type == "register")
 		{	
 		  // Adds profile img to stream.
-		  addUserImgToColumn(publishJSON.stream);		  
+		  //addUserImgToColumn(publishJSON.stream);		  
 		  
 		  // If network is Linkedin so no need to publish.
 		  if(publishJSON.stream.network_type == "LINKEDIN")

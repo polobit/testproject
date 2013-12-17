@@ -63,10 +63,15 @@ function deserializeForm(data, form)
                  */
                 if (fel.hasClass('date'))
                 {
-                	
-                    fel.val(new Date(el * 1000)
+                	try
+                	{
+                		fel.val(new Date(el * 1000)
                         .format('mm/dd/yyyy'));
-
+                	}
+                	catch(err)
+                	{
+                		
+                	}
                     fel.datepicker(
                     {
                         format: 'mm/dd/yyyy',
