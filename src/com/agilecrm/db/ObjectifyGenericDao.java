@@ -13,7 +13,6 @@ import javax.persistence.Transient;
 
 import org.json.JSONArray;
 
-import com.agilecrm.UploadDocument.Document;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
@@ -30,6 +29,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.document.Document;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.AgileUser;
