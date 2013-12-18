@@ -77,7 +77,7 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/agilecrm.css" />
+	href="/css/agilecrm.css" />
 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -472,7 +472,7 @@
 		href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
 	<!-- social suite's css -->
 	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/social_suite.css" />
+		href="/css/social_suite.css" />
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 
 	<!-- Unified CSS for All Lib -->
