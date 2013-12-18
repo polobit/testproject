@@ -133,7 +133,12 @@ public class BasicAuthFilter implements Filter
 	boolean isValidAPIKey(String apiKey, DomainUser user)
 	{
 		// Gets APIKey, to authenticate the user
-		String apiKeyFromDB = APIKey.getAPIKeyRelatedToUser(user.id).api_key;
+		APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
+
+		if (key == null)
+			return false;
+
+		String apiKeyFromDB = key.api_key;
 
 		// Checks APIKey received in request and APIKey from DB
 		if (StringUtils.equals(apiKey, apiKeyFromDB))
@@ -152,6 +157,7 @@ public class BasicAuthFilter implements Filter
 	 */
 	boolean isValidPassword(String password, DomainUser user)
 	{
+
 		// Encodes password received in request, so it can be verified with
 		// encoded pasword in domain user
 		String hashedPassword = MD5Util.getMD5HashedPassword(password);
