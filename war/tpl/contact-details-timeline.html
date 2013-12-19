@@ -90,8 +90,8 @@
                 <div class="caption" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
 
             {{#if message}}
-                    <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{{message}}}
-                        <div class="right" data="{{message}}"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
+                    <div class="text" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden">{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}
+                        <div class="right" data="{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}"><a href="#" id="tl-log-popover"><i class="icon-plus"></i></a></div>
                     </div>   
             {{/if}}        
             </div>
