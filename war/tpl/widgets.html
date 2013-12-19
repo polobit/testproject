@@ -12,7 +12,17 @@
 					{{else}}
 						<li><a href="#"><i widget="{{remove_spaces name}}" class="widget-minimize icon-minus"></i></a></li>
 					{{/if}}
-					<li><a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a></li>
+					<li>
+					{{#if_equals name "Linkedin"}}
+						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+					{{else}}
+						{{#if_equals name "Twitter"}}
+							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+						{{else}}
+							<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+						{{/if_equals}}
+					{{/if_equals}}
+					</li>
 				</ul>
 			</div>
 			<div style="width:14%">

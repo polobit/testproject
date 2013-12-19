@@ -29,6 +29,7 @@ import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.document.Document;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.AgileUser;
@@ -137,6 +138,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 		// Social suite's ScheduledUpdate
 		ObjectifyService.register(ScheduledUpdate.class);
+		
+		// Upload Document
+		ObjectifyService.register(Document.class);
 	}
 
 	/**

@@ -61,19 +61,15 @@ var DealsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr',
 			postRenderCallback : function(el)
 				{
-					// To aviod dual load of graphs in milestone view.
-					if (readCookie("agile_deal_view"))
+					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							$(".deal-close-time", el).timeago();
-						});
-						// Shows Milestones Pie
-						pieMilestones();
-			
-						// Shows deals chart
-						dealsLineChart();
-					}
+						$(".deal-close-time", el).timeago();
+					});
+					// Shows Milestones Pie
+					pieMilestones();
+		
+					// Shows deals chart
+					dealsLineChart();
 				}
 		});
 		this.opportunityCollectionView.collection.fetch();

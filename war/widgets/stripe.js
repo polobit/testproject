@@ -20,22 +20,6 @@ $(function()
 	// ID of the Stripe widget as global variable
 	Stripe_Plugin_Id = stripe_widget.id;
 
-	// Register click events
-	/*
-	 * On click of reset button of ClickDesk widget, Stripe widget preferences
-	 * are deleted and initial set up is called
-	 */
-	$('#Stripe_plugin_delete').die().live('click', function(e)
-	{
-		e.preventDefault();
-
-		// preferences are saved as undefined and set up Stripe OAuth is shown
-		agile_crm_save_widget_prefs(Stripe_PLUGIN_NAME, undefined, function(data)
-		{
-			setupStripeOAuth();
-		});
-	});
-
 	/*
 	 * Gets Stripe widget preferences, required to check whether to show setup
 	 * button or to fetch details. If undefined - considering first time usage

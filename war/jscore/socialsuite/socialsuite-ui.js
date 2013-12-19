@@ -11,6 +11,8 @@
 		 TweetOwnerForAddContact = null;
 		 focused = true;
 		 ScheduledEdit = false;
+		 registerCounter = null;
+		 addImgDone = false;
 	  })();
 
 // To collect tweets in temp collection.
@@ -474,10 +476,18 @@ function initializeSocialSuite()
 		getScheduledUpdate();
 	});		
 	
+	// Hide drop down.
 	$('.scheduled-updates-list').die().live("mouseleave", function(e)
 	 {
 	  // Hide dropdown.
 	  $("#show_scheduled_updates").click();
 	 });
+	
+	// Add agile text to message text area. 
+	$("#add_message").die().live("click", function(e)
+	  {
+		var quote = "Sell & Market like Fortune 500 with @agilecrm";
+		$("#twit-tweet").append(quote); 
+	  });	
 }
 

@@ -55,7 +55,7 @@
 												</select>
 											</div>
 										</td>
-										<td class="codition-block span2">
+										<td class="codition-block span2" style="vertical-align:top">
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 100%;">
 													<option value="MATCHES" class="page referrer">Matches</option>
@@ -94,8 +94,8 @@
 											</div>
 										</td>
 										<td class="rhs-block controls span2"
-											style="vertical-align: top; max-width: 120px;">
-											<div id="RHS" class="rhs" name="RHS" style="width:92%">
+											style="vertical-align: top;">
+											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp" style="width: 92%"
 													class="EQUALS NOTEQUALS ANYOF required MATCHES" /> <input
 													type="text" name="temp" style="width: 92%"
@@ -166,6 +166,7 @@
 			</div>
 			<div class="control-group" style="margin-left: -19px;">
 						<label class="control-label">Action</label>
+<div class="pull-right" id="action-image"></div>
 						<div class="controls">
 								<div class="webrule-actions chained-table"> 
 							<div class="alert" style="width:50%">
@@ -176,12 +177,14 @@
 										<td class="lhs-block" style="vertical-align: top;">
 										<div id="action" name="action">
 											<select class="required" >
-												<option value="POPUP">Show Popup</option>
+											 <optgroup label="Popup">
 												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
 												<option value="CORNER_NOTY" class="POPUP">Corner Noty</option>
+											</optgroup>
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
 													related="WEB_RULE_RHS" url="core/api/workflows"
-													parse_key="id" parse_value="name">Assign Campaign</option>
+													parse_key="id" parse_value="name">Add Campaign</option>
+
 											</select>
 										</div>
 										</td>
@@ -241,6 +244,7 @@
 								</tbody>
 								</table>
 								</div>
+
 </div>
 							</div>
 					</div>

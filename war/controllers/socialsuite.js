@@ -65,7 +65,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 	         postRenderCallback : function(el)
 	 	         {
 	 	        	// User have streams so register all of them on server
-	 		 		 registerAll(); 		 		
+	 		 		 registerAll(0); 		 		
 	 	         }
 	 	     });	
 		 

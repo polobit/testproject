@@ -164,8 +164,7 @@
         		</ul>             
               {{/if}}
  			 </footer>  
-    	   </div> 
-		   <i class="sprite tweet-dogear"></i>
+    	   </div>		   
 		</div>
 	</div>                        
 </article>
@@ -176,136 +175,7 @@
 	<article id={{id}}_{{stream_id}} class="no-tweet">
        <p>{{text}}</p>              
 	</article>
-   {{/if}}
-  {{else}}
-    {{#stringToJSON this "message"}} {{/stringToJSON}}
- 	<article id="{{message.timestamp}}" class="stream-item is-actionable" update_id={{id}} update_time="{{created_time}}">	
-  	<div class="item-box">       
-    	  <div class="tweet">
-        	 {{#if_equals type "SHARED_ITEM"}}
-				{{#stringToJSON this.message "current-share"}} {{/stringToJSON}}
-				{{#if message.current-share.content}}
-            	  <header class="tweet-header">
-                	  <a class="account-link link-complex block" href="{{message.current-share.content.shortenedUrl}}" rel="user" target="_blank"> 
-		             	<div class="obj-left item-img tweet-img">  
-			           		<img class="tweet-avatar avatar pull-left thumbnail" src="{{message.owner_picture}}" width="40" height="40" title="Klout Score {{klout_score}}">   
- 		             	</div> 
- 		             	<div class="tweet-user"> 
- 			           	   <span class="account-inline txt-ellipsis"> 
-                       		{{#if message.current-share.author}}
- 						  		<b class="fullname link-complex-target">{{message.current-share.author.firstName}} {{message.current-share.author.lastName}}</b>
- 				          		<span class="username txt-mute">{{message.current-share.author.headline}}</span>                      
-                       		{{/if}} 
- 		    		   	   </span> 
- 				     	</div> 
-    		      	  </a>  
-                  </header> 
-		          <div class="tweet-body">
- 	                 <p class="tweet-text mb_0" style="word-break:normal; word-wrap:break-word;">
-				       {{#if message.current-share.content.title}}
-				         {{#if message.current-share.comment}}									
-					       {{show_link_in_statement message.current-share.comment}}<br />
-                           <a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>									
-				         {{else}}									
-					       <a target="_blank" href="{{message.current-share.content.shortenedUrl}}">{{message.current-share.content.title}}</a>
-					     {{/if}}
-				       {{else}}
-					     {{message.current-share.author.firstName}} shared a link {{show_link_in_statement message.current-share.content.shortenedUrl}}
-				       {{/if}}                   
-                     </p>
-                     <img src="{{message.current-share.content.thumbnailUrl}}">  
- 			         <footer class="tweet-footer cf">             
-                       <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-                       <ul class="tweet-actions">                    
-					     <li> <a class="tweet-action" href="#social" rel="tooltip" title="Like in LinkedIn">
-                              <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
-                              </a> </li>
-					     <li> <a class="tweet-action" href="#social" rel="tooltip" title="Comment in LinkedIn">
-                              <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
-                              </a> </li>     
-                         <li> <a class="tweet-action" href="#social" rel="tooltip" title="Share activity in LinkedIn">
-                              <i class="linkedin_share icon-share" id="{{id}}"></i>                            
-                              </a> </li>
- 		    	       </ul>
- 			         </footer>
-                   </div>        
-                 {{else}}
-                   <header class="tweet-header">
-                     <a class="account-link link-complex block" href="{{message.current-share.content.shortenedUrl}}" rel="user" target="_blank"> 
-		                <div class="obj-left item-img tweet-img">  
-			               <img class="tweet-avatar avatar pull-left thumbnail" src="{{message.owner_picture}}" width="40" height="40" title="Klout Score {{klout_score}}">   
- 		                </div> 
- 		                <div class="tweet-user"> 
- 			               <span class="account-inline txt-ellipsis"> 
-                             {{#if message.current-share.author}}
- 						       <b class="fullname link-complex-target">{{message.current-share.author.firstName}} {{message.current-share.author.lastName}}</b>                       
-                             {{/if}} 
- 		    		       </span> 
- 				        </div> 
-    		          </a>  
-                   </header> 
-		           <div class="tweet-body">
-                     <p class="mb_0" style="word-break:normal;word-wrap:break-word;">
-					   {{show_link_in_statement message.current-share.comment}}
-				     </p>
- 			         <footer class="tweet-footer cf">             
-                       <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-                       <ul class="tweet-actions">                    
-					     <li> <a class="tweet-action" href="#social" rel="tooltip" title="Like in LinkedIn">
-                              <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
-                              </a> </li>
-					     <li> <a class="tweet-action" href="#social" rel="tooltip" title="Comment in LinkedIn">
-                              <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
-                              </a> </li>          
-					     <li> <a class="tweet-action" href="#social" rel="tooltip" title="Share activity in LinkedIn">
-                              <i class="linkedin_share icon-share" id="{{id}}"></i>                            
-                              </a> </li>
- 		    	       </ul>
- 			         </footer>
-                   </div>	 
-                 {{/if}}
-               {{/if_equals}}
-		       {{#if_equals type "CONNECTION_ADDED_CONNECTIONS"}}
-                 <header class="tweet-header">
-                     <a class="account-link link-complex block" href="{{message.update_owner.publicProfileUrl}}" rel="user" target="_blank"> 
-		                <div class="obj-left item-img tweet-img">  
-			                <img class="tweet-avatar avatar pull-left thumbnail" src="{{message.update_owner.pictureUrl}}" width="40" height="40" title="Klout Score {{klout_score}}">   
- 		                </div> 
- 		                <div class="tweet-user"> 
- 			               <span class="account-inline txt-ellipsis">
- 						      <b class="fullname link-complex-target">{{message.update_owner.firstName}} {{message.update_owner.lastName}}</b>
- 		    		       </span> 
- 				        </div> 
-    		         </a>  
-                 </header> 
-		         <div class="tweet-body">
-				   <p class="mb_0" style="word-break:normal; word-wrap:break-word;">
-					Connected to 
-	  				 <a href="{{message.connect_with_person.publicProfileUrl}}" target="_blank">{{message.connect_with_person.firstName}}&nbsp{{message.connect_with_person.lastName}}</a>
-					  {{#if message.connect_with_person.headline}}, {{message.connect_with_person.headline}}{{/if}}
-                      {{#if message.connect_with_person.pictureUrl}}
-                         <a href="{{message.connect_with_person.publicProfileUrl}}" target="_blank">
-                           <img class="tweet-avatar avatar thumbnail" src="{{message.connect_with_person.pictureUrl}}" width="40" height="40">
-                         </a>
-                      {{/if}}
-				   </p>
- 			       <footer class="tweet-footer cf">             
-                     <time class="time-ago txt-small time-ellipsis" datetime="{{epochToHumanDate "" created_time}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
-                     <ul class="tweet-actions">
-                        <li> <a class="tweet-action" href="#social" rel="tooltip" title="Like in LinkedIn">
-                             <i class="linkedin_like icon icon-thumbs-up" id="{{id}}"></i>                            
-                             </a> </li>
-					    <li> <a class="tweet-action" href="#social" rel="tooltip" title="Comment in LinkedIn">
-                             <i class="linkedin_comment icon icon-comment-alt" id="{{id}}"></i>                            
-                             </a> </li>     
- 		    	     </ul>
- 			        </footer>
-                   </div> 	   
-                 {{/if_equals}}
-	             <i class="sprite tweet-dogear"></i>
-	           </div>
-             </div>        
-        </article>
-     {{/if_equals}}
+   {{/if}}  
+  {{/if_equals}}
 {{/if_equals}}
 </script>
