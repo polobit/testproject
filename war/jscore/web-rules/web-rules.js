@@ -44,7 +44,7 @@ function chainWebRules(el, data, isNew)
 	if(data && data.actions)
 		deserializeChainedSelect1($(el).find('form'), data.actions);
 	
-	scramble_input_names(el)
+	scramble_input_names($(".reports-condition-table", el))
 }
 
 $(function()
