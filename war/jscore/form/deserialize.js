@@ -425,6 +425,9 @@ function deserializeChainedSelect1(form, el)
                 input_element)
                     .val(
                 value);
+                if($(input_element).hasClass('custom_html'))
+                	setupHTMLEditor($(input_element), value);
+                
                 return;
             }
             
