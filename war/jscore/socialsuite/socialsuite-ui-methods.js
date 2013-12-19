@@ -229,7 +229,7 @@ function handleMessage(tweet)
 	    return;
 	  }
   
-  //Error message from server "Rate limit exceeded."
+  //Error message from server "Rate limit exceeded." or "server not connected."
   if(tweet.id == "001") //(tweet.delete != null)
 	  {	    
 	    displayErrorInStream(tweet);
@@ -375,7 +375,7 @@ function addTweetToTempCollection(tweet)
 {
   var modelStream = null;  
   
-  if(tweet.id == "000")
+  if(tweet.id == "000" || tweet.type == "ACK")
 	  {
 	     console.log("got 000");
 	     // Get stream from collection.
@@ -516,7 +516,7 @@ function removeWaiting()
 function checkNewTweets()
 { 
   var streamsJSON = TempStreamsListView.collection.toJSON();
-
+  
   // Streams not available.	
   if(streamsJSON == null)
 	{
@@ -530,6 +530,7 @@ function checkNewTweets()
 	        
      	    // Get stream from collection.
 	        var modelStream = TempStreamsListView.collection.get(stream.id);	
+	        
 	        if(modelStream != null || modelStream != undefined)
 	    	{	        
 	         if(modelStream.get('tweetListView').length == 1)
@@ -604,13 +605,16 @@ function mergeCollections(streamId)
 
 /**
  * When request rate limit is exceeded so Twitter server send code 88, It will not accept any more REST call.
+ * When Twitter service or network is unavailable
  * User have to wait for some time and retry again.
  * We need to display notification for that in relavant stream.
  */
 function displayErrorInStream(errorMsg)
-{		
+{	
+	console.log("errorMsg: ");
+	console.log(errorMsg);
 	var streamId = null;
-	
+
 	// Get stream id.
 	if(errorMsg.id == "001") // from Tweet
 		streamId = errorMsg.stream_id;
@@ -620,11 +624,20 @@ function displayErrorInStream(errorMsg)
 	// Hide waiting symbol.
 	$("#stream-spinner-modal-"+streamId).hide();
 	
-    // Add notification of error on stream.
-    document.getElementById('stream_notifications_'+streamId).innerHTML= '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
-      
-    // Add relation from <div> for notification.
-    $('#stream_notifications_'+streamId).attr("rel",'retry');
+	var modelTempStream = TempStreamsListView.collection.get(streamId);
+	var modelStream = StreamsListView.collection.get(streamId);
+	
+	if(modelStream.get('tweetListView').length == 0 && modelTempStream.get('tweetListView').length == 0)		
+	{
+		console.log("There is nothing to display");
+		console.log(modelStream.get('tweetListView'));console.log(modelTempStream.get('tweetListView'));
+		
+	    // Add notification of error on stream.
+	    document.getElementById('stream_notifications_'+streamId).innerHTML= '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
+	      
+	    // Add relation from <div> for notification.
+	    $('#stream_notifications_'+streamId).attr("rel",'retry');	
+	}
 }
 
 /**

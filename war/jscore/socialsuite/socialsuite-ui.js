@@ -329,8 +329,10 @@ function initializeSocialSuite()
 		
 		// Check if stream type is not selected.
 		if(StreamType == null || StreamType == '')
-			{		  		
-			  alert("You have to select your favorite stream type.");
+			{		 
+			  // To show error description.
+			  document.getElementById("stream_description_label").className = 'txt-mute';
+			  document.getElementById('stream_description_label').innerHTML='<span style="color: red;"><i class="icon-exclamation"></i> You have to select your favorite stream type.</span>';			  
 			  return;
 			}
 		
