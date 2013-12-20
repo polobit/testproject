@@ -37,7 +37,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					
 					
 							chainFilters(el, undefined, function(){
-								chainWebRules(el);
+								chainWebRules(el, undefined, true);
 								$("#content").html(el);
 							});
 

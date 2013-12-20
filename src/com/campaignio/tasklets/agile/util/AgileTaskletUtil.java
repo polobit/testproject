@@ -155,14 +155,18 @@ public class AgileTaskletUtil
 	    // Contact Properties
 	    for (ContactField field : properties)
 	    {
+		// If field is null just continue
+		if (field == null)
+		    continue;
+
 		if (field.name != null && field.value != null)
 		{
 		    // Gets twitter-id from website property
-		    if (field.name.equals(Contact.WEBSITE) && field.subtype.equals("TWITTER"))
+		    if (field.name.equals(Contact.WEBSITE) && "TWITTER".equals(field.subtype))
 			field.name = "twitter_id";
 
 		    // Get LinkedIn id
-		    if (field.name.equals(Contact.WEBSITE) && field.subtype.equals("LINKEDIN"))
+		    if (field.name.equals(Contact.WEBSITE) && "LINKEDIN".equals(field.subtype))
 			field.name = "linkedin_id";
 
 		    // Converts address string to JSONObject
@@ -178,6 +182,7 @@ public class AgileTaskletUtil
 			catch (JSONException e)
 			{
 			    e.printStackTrace();
+			    System.err.println("Exception occured while converting address string to json " + e.getMessage());
 			}
 
 			// Already inserted address as location, so continue
