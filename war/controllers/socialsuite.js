@@ -16,6 +16,9 @@ var SocialSuiteRouter = Backbone.Router.extend({
 				
 		// Streams tab with collection
 		"streams" : "streams",	
+		
+		// Scheduled updates on new page
+		"scheduledmessages" : "scheduledmessages",
 	},
 	
    /** On click on social tab this function is called, to initialize social suite,
@@ -31,7 +34,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		$("#socialsuitemenu").addClass("active");	
 
 		// Gets template to display.
-		$('#content').html(getTemplate('socialsuite'),{});	
+		$('#content').html(getTemplate('socialsuite-show-streams'),{});	
 						
 	    /* Creates pubnub object and channel dedicated for new user or relogin */
 		initToPubNub();	
@@ -48,7 +51,10 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	  */
 	streams : function(stream)
 	 {			
-		$('#content').html(getTemplate('socialsuite-show-streams'),{});		
+		$('#content').html(getTemplate('socialsuite-show-streams'),{});	
+		
+		// Check scheduled updates.
+		checkScheduledUpdates();
 		
 		if(!StreamsListView)  // Streams not collected from dB
 		{			
@@ -109,7 +115,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		 $('.deleted').remove();	
 		 
 		 // Remove waiting symbol.
-		 removeWaiting();
+		 removeWaiting();				 
 	 }, // streams end
 		
 	 /**
@@ -159,6 +165,33 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 		$('#stream', el).html(tweetListView.render(true).el);
 	 		$('#socialsuite-streams-model-list', this.el).append(el);	 		
 	 }, // socialSuiteAppendItem end
+	 
+	 /** On click on scheduled update time button in socialsuite will 
+	  * display scheduled updates if user have any.
+	  */
+	 scheduledmessages : function() 
+	    {
+			console.log("In scheduledmessages.");	
+						
+			// Makes tab active
+			$(".active").removeClass("active");
+
+			// Gets template to display.
+			$('#content').html(getTemplate('socialsuite-scheduled-updates'),{});
+			
+		    ScheduledUpdatesView = new Base_Collection_View
+			     ({
+				     url : "/core/scheduledupdate/getscheduledupdates",
+				     restKey: "scheduledUpdate",
+				     templateKey: "socialsuite-scheduled-updates",
+				     individual_tag_name: 'tr',
+				 });	
+				  
+			ScheduledUpdatesView.collection.fetch();	  
+						  
+			$('#socialsuite-scheduled-updates-content').append(ScheduledUpdatesView.render(true).el);  
+							
+		}, // scheduledmessages end	
 });
 
 // Global variable to call function from Router.

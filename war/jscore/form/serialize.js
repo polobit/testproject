@@ -77,6 +77,11 @@ function serializeForm(form_id) {
 	arr = arr.concat($(element).find('.chained').map(function() {
 		var json_object = {};
 		$.each($(this).find('div').children(), function(index, data) {
+			
+			var tagName = $(data)[0].tagName;
+			
+			if(!(tagName == "TEXTAREA" || tagName == "INPUT" || tagName == "SELECT"))
+				return;
 			// Gets the name of the tr
 			var name = $(data).parent().attr('name');
 			var value;
@@ -89,7 +94,10 @@ function serializeForm(form_id) {
 
 			// Value of input/select
 			else
-				var value = $(data).val();
+				{
+				if($(data).attr('name') != "_wysihtml5_mode")
+					var value = $(data).val();
+				}
 
 			// Set if value of input/select is valid
 			if (value != null && value != "")

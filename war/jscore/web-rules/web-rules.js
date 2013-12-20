@@ -1,4 +1,4 @@
-function chainWebRules(el, data)
+function chainWebRules(el, data, isNew)
 {
 	$("#campaign-actions", el).chained($("#action", el), function(){
 	});
@@ -16,36 +16,53 @@ function chainWebRules(el, data)
 						return false;
 					}
 				});
-	
+				
+				
 			}
 	});
 	$("#campaign", el).chained($("#action", el));
+	$("#other-actions", el).chained($("#action", el), function(el, self){
+		
+		// Enable tags typeahead if tags field is available 
+		var element = $(".tags", self);
+		if(element.length > 0)
+			addTagsDefaultTypeahead(self);
+	});
 	$("#noty-type", el).chained($("#action", el));
 	$("#noty-title", el).chained($("#noty-type", el));
 	$("#noty-message", el).chained($("#noty-type", el), function(el, self){
 		var text_area = $('textarea', self); 
+		
+		console.log(text_area.val());
+		
+		if(!isNew)
+			return;
+			
 		if($(text_area).hasClass("custom_html"))
 			setupHTMLEditor($(text_area));
-		
 	});
 	if(data && data.actions)
 		deserializeChainedSelect1($(el).find('form'), data.actions);
+	
+	scramble_input_names($(".reports-condition-table", el))
 }
 
 $(function()
 		{
 			// Filter Contacts- Clone Multiple
-			$("i.web-rule-multiple-add").die().live('click', function(e)
+			$(".web-rule-multiple-add").die().live('click', function(e)
 			{
+				e.preventDefault();
 				// To solve chaining issue when cloned
 				var htmlContent = $(getTemplate("webrules-add", {})).find('.webrule-actions > div').clone();
 				
 				scramble_input_names($(htmlContent));
 
-				chainWebRules(htmlContent);
+				chainWebRules(htmlContent, undefined, true);
 				// var htmlContent = $(this).closest("tr").clone();
 				$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
-				$(this).parents(".webrule-actions").append(htmlContent);
+				console.log($(".webrule-actions"))
+				$(".webrule-actions").append(htmlContent);
 			});
 			
 			// Filter Contacts- Remove Multiple
