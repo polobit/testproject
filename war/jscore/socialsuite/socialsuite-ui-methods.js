@@ -657,27 +657,25 @@ function registerStreamAgain(streamId)
  }
 
 /**
- * Gets Scheduled Updates fron DB and adds into Stream.
+ * Gets Scheduled Updates fron DB and show button or hide it.
  */
-function getScheduledUpdate()
-{ 
-  console.log("In getScheduledUpdate");
-	
-  if(!ScheduledUpdatesView)  // Streams not collected from dB
-	{
-	  ScheduledUpdatesView = new Base_Collection_View
-		({
-			 url : "/core/scheduledupdate/getscheduledupdates",
-	         restKey: "scheduledUpdate",
-	         templateKey: "socialsuite-scheduled-updates",
-	         individual_tag_name: 'li',
-	     });	
-	  
-	  ScheduledUpdatesView.collection.fetch();	  
-	}
-  
-  $('#scheduled_updates_list').append(ScheduledUpdatesView.render(true).el);  
- }
+function checkScheduledUpdates()
+{
+	$.getJSON("/core/scheduledupdate/getscheduledupdates",function(data)
+	   		  {
+				console.log("data after fetching scheduled updates from db");
+	   		    console.log(data);
+	   		    
+	   		    if(data.length != 0)	   		    		 	
+	   		    	 $("#show_scheduled_updates").show();	   		    		   		    
+	   		    else
+	   		      $("#show_scheduled_updates").hide();
+	   	      }).error(function(jqXHR, textStatus, errorThrown) 
+	   	    		  { 
+	   	    	        $("#show_scheduled_updates").hide();
+	   	    	        console.log("Error occured in scheduled updates search."); 
+	   	    	      });	
+}
 
 /**
  * Adds newly added Scheduled Update In Stream. 
@@ -685,7 +683,7 @@ function getScheduledUpdate()
 function addScheduledUpdateInStream(scheduledUpdate)
 {
 	console.log("In addScheduledUpdateInStream");	
-	//console.log(scheduledUpdate);	
+	console.log(scheduledUpdate);	
 		
 	if(ScheduledEdit == true)
 	  {
@@ -705,7 +703,8 @@ function addScheduledUpdateInStream(scheduledUpdate)
 	else
 	  {
 		// Add scheduled update in collection.
-		ScheduledUpdatesView.collection.add(scheduledUpdate);
+		if(Current_Route == "scheduledmessages")
+		  ScheduledUpdatesView.collection.add(scheduledUpdate);
 	  }	  	
 }
 
