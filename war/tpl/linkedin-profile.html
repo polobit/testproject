@@ -324,7 +324,11 @@
 <div class='widget_content' style='border-bottom:none;line-height: 160%;' >
 	<div class="row-fluid">
 		<div class="span4">
+		{{#if profile.picture}}
 			<img src="{{profile.picture}}" width="70" height="70" alt="" class="thumbnail"/>
+		{{else}}
+			<img src="{{defaultGravatarurl 70}}" width="70" height="70" alt="" class="thumbnail"/>
+		{{/if}}
 		</div>
 		<div class="span7">
 			<p class="title_txt"><a href="{{profile.url}}" target="_blank" >{{profile.name}}</a></p>
