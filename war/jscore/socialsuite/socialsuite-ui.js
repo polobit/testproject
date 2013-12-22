@@ -462,34 +462,16 @@ function initializeSocialSuite()
 		// Remove deleted tweet element from ui
 		$('.deleted').remove();
 	 });	
-	
-	/**
-	 * Get scheduled updates of current domain user.
-	 */
-	$("#show_scheduled_updates").die().live("click", function(e)
-	{
-	  // Toggle dropdown with slow speed.
-	  $('.scheduled-updates-list').toggle();
-	  	  
-	  var display = $('.scheduled-updates-list').css("display");	
-	  
-	  // If open then only fetch DB.
-	  if (display == 'block')
-		getScheduledUpdate();
-	});		
-	
-	// Hide drop down.
-	$('.scheduled-updates-list').die().live("mouseleave", function(e)
-	 {
-	  // Hide dropdown.
-	  $("#show_scheduled_updates").click();
-	 });
-	
+		
 	// Add agile text to message text area. 
 	$("#add_message").die().live("click", function(e)
 	  {
 		var quote = "Sell & Market like Fortune 500 with @agilecrm";
 		$("#twit-tweet").append(quote); 
+		
+		$("#link-text").html("<b>Thank you.</b>"); 
+		
+		setTimeout(function (){ $("#link-text").hide(); }, 2000);
 	  });	
 }
 
