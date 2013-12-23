@@ -1,6 +1,6 @@
-function chainWebRules(el, data, isNew)
+function chainWebRules(el, data, isNew, actions)
 {
-	var element_clone = $(el)[0];
+	var element_clone = $(el).clone();
 	
 	$("#campaign-actions", el).chained($("#action", el), function(){
 	});
@@ -16,36 +16,42 @@ function chainWebRules(el, data, isNew)
 						$('select', $(self)).find('option[value='+ action.RHS +']').attr("selected", "selected");
 						return false;
 					}
-				});
-				
-				
+				});	
 			}
-	});
-	$("#campaign", el).chained($("#action", el));
-	$("#other-actions", el).chained($("#action", el), function(el, self){
 		
 		// Enable tags typeahead if tags field is available 
 		var element = $(".tags", self);
 		if(element.length > 0)
 			addTagsDefaultTypeahead(self);
+		
 	});
+	$("#campaign", el).chained($("#action", el));
+	
+	
+	$("#noty-title", el).chained($("#noty-type", el), function(){
+		alert("hainesdf");
+	});
+	
 	$("#noty-type", el).chained($("#action", el));
+	
 	$("#noty-message", el).chained($("#noty-type", el), function(el, self){
 		var text_area = $('textarea', self); 
-		
-			
-		if(isNew && $(text_area).hasClass("custom_html"))
+		if($(text_area).hasClass("custom_html"))
 			{
-			setupHTMLEditor($(text_area));
+				if(actions && actions[0])
+					{
+					setupHTMLEditor($(text_area), actions[0].popup_text);
+					actions = undefined;
+					}
+				else
+					setupHTMLEditor($(text_area));
 			}
 	});
-	$("#noty-title", el).chained($("#noty-type", el));
 	
 	if(data && data.actions)
-		deserializeChainedSelect1($(el).find('form'), data.actions, el);
+		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone, data.actions[0]);
 	
 	scramble_input_names($(".reports-condition-table", element_clone))
-	return element_clone;
 }
 
 $(function()
@@ -59,7 +65,6 @@ $(function()
 				
 				//scramble_input_names($(htmlContent));
 
-				
 				
 				chainWebRules($(htmlContent)[0], undefined, true);
 				// var htmlContent = $(this).closest("tr").clone();
@@ -79,9 +84,10 @@ $(function()
 			{
 				// To solve chaining issue when cloned
 				var htmlContent = $(getTemplate("webrules-add", {})).find('.web-rule-contact-condition-table tr').clone();
-				console.log(htmlContent);
 				scramble_input_names($(htmlContent));
 
+				$(this).hide();
+				
 				chainFilters(htmlContent);
 
 				// var htmlContent = $(this).closest("tr").clone();
