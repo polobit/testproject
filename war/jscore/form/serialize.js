@@ -95,8 +95,8 @@ function serializeForm(form_id) {
 			// Value of input/select
 			else
 				{
-				if($(data).attr('name') != "_wysihtml5_mode")
-					var value = $(data).val();
+				if(!json_object[name])
+					value = $(data).val();
 				}
 
 			// Set if value of input/select is valid

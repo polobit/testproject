@@ -258,7 +258,7 @@ function deserializeMultipleForms(data, form)
 
 
 
-function deserializeChainedSelect(form, el)
+function deserializeChainedSelect(form, el, el_self)
 {
 
     // Iterates through JSON array of rules, to fill
@@ -283,19 +283,20 @@ function deserializeChainedSelect(form, el)
              * Gets the Template for input and select
              * fields
              */
-            rule_element = $(getTemplate("filter-contacts", {})).find('tr')
-                .clone();
+            rule_element = $($(el_self).clone().find('.chained'))[0];
 
             // Add remove icon for rule
             $(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 
+            
+            
             // Loads jquery chained plugin for chaining
             // the input fields
-            head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
+          //  head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
 
-            function ()
-            {
-
+            //function ()
+            //{
+            	
                 /*
                  * Chains dependencies of input fields with
                  * jquery.chained.js based on the rule element
@@ -303,151 +304,178 @@ function deserializeChainedSelect(form, el)
 				chainFilters(rule_element);
 
                 $(parent_element).append(rule_element);
-            });
+                deserializeChainedElement(data, rule_element);
+                
+            //});
+            
+            return;
         }
+        
+        deserializeChainedElement(data, rule_element);
+    })
+}
 
-        $.each(data, function (i, value)
+function deserializeChainedElement(data, rule_element)
+{
+    $.each(data, function (i, value)
+    {
+        var input_element = ($(rule_element).find('*[name="'+ i +'"]').children())[0];
+        if(!input_element)
+        	return;
+     
+        // If input field set is value for input field, checks it chained select elements
+        // date fields should be filled with date
+        if (input_element.tagName.toLowerCase() == "input")
         {
-            var input_element = ($(rule_element).find('*[name="'+ i +'"]').children())[0];
-         
-            // If input field set is value for input field, checks it chained select elements
-            // date fields should be filled with date
-            if (input_element.tagName.toLowerCase() == "input")
+
+        	// Fills date in to fields and initialize datepicker on the field
+            if ($(input_element).hasClass('date'))
             {
-
-            	// Fills date in to fields and initialize datepicker on the field
-                if ($(input_element).hasClass('date'))
+            	value = getLocalTimeFromGMTMilliseconds(value);
+            	 
+                $(input_element).val(new Date(parseInt(value))
+                    .format('mm/dd/yyyy'));
+                
+                $(input_element).datepicker(
                 {
-                	value = getLocalTimeFromGMTMilliseconds(value);
-                	 
-                    $(input_element).val(new Date(parseInt(value))
-                        .format('mm/dd/yyyy'));
-                    
-                    $(input_element).datepicker(
-                    {
-                        format: 'mm/dd/yyyy',
-                    });
-                    
-                    $(input_element).datepicker('update');
+                    format: 'mm/dd/yyyy',
+                });
+                
+                $(input_element).datepicker('update');
 
-                    return;
-                }
-                $(
-                input_element)
-                    .val(
-                value);
                 return;
             }
+            $(
+            input_element)
+                .val(
+            value);
+            return;
+        }
 
-            // Gets related select field
-            var option_element = $(input_element).children()
+        // Gets related select field
+        var option_element = $("option", input_element);
 
-            // Iterates through options in select field
-            $.each(option_element, function (index, element)
+        // Iterates through options in select field
+        $.each(option_element, function (index, element)
+        {
+            // Selects the option
+            if ($(element).attr('value') == value)
             {
-                // Selects the option
-                if ($(element).attr('value') == value)
+                $(element).attr("selected",
+                    "selected");
+                $(input_element).trigger("change");
+                return;
+            }
+        });
+    });
+
+}
+
+function deserializeChainedElementWebrule(data, rule_element)
+{
+    $.each(data, function (i, value)
+            {
+                var input_element = ($(rule_element).find('*[name="'+ i +'"]').children())[0];
+                if(!input_element)
+                	return;
+                // If input field set is value for input field, checks it chained select elements
+                // date fields should be filled with date
+                if (input_element.tagName.toLowerCase() == "input" || input_element.tagName.toLowerCase() == "textarea")
                 {
-                    $(element).attr("selected",
-                        "selected");
-                    $(input_element).trigger("change");
+                    $(
+                    input_element)
+                        .val(
+                    value);
+                    if($(input_element).hasClass('custom_html'))
+                    	setupHTMLEditor($(input_element), value);
+                    
                     return;
                 }
-            });
-        });
-    })
+                
+                // Gets related select field
+                var option_element = $(input_element).children()
+                
+                // Iterates through options in select field
+                $.each($("option", option_element), function (index, element)
+                {
+                    // Selects the option
+                    if ($(element).attr('value') == value)
+                    {
+                        $(element).attr("selected",
+                            "selected");
+                        $(input_element).trigger("change");
+                        return;
+                    }
+                });
+            });	
 }
 
 
 
-function deserializeChainedSelect1(form, el)
+function deserializeChainedSelect1(form, el, element)
 {
 
+	var self = $(element).find('.webrule-actions');
+	var rule_element_default = $(self).html();
+	console.log(rule_element_default);
     // Iterates through JSON array of rules, to fill
     // a chained select
     $.each(el,
     function (index, data)
     {
-
-    	console.log(index);
         // Finds the rule html element
         var rule_element = ($(form)
             .find('.webrule-actions'))[0];
-        console.log(rule_element);
+        
+        
         /*
          * If more than one rule clones the fields and relate with
          * jquery.chained.js
          */
         if (index > 0)
         {
-            var parent_element = $(rule_element).parent();
-
+            var parent_element = $(rule_element);
             console.log(parent_element);
+
             /*
              * Gets the Template for input and select
              * fields
              */
-            rule_element = $(getTemplate("webrules-add", {})).find('.webrule-actions')
-                .clone();
-
-            // Add remove icon for rule
-            $(rule_element).find("i.webrule-multiple-remove").css("display", "inline-block");
-
+            
+      
             // Loads jquery chained plugin for chaining
             // the input fields
-            head.js('lib/agile.jquery.chained.min.js',
+         //   head.js('lib/agile.jquery.chained.min.js',
 
-            function ()
-            {
+           // function ()
+            //{
+            	
+            	  rule_element = $(rule_element_default);
+
+
+            	
+                // Add remove icon for rule
+                $(rule_element).find("i.webrule-multiple-remove").css("display", "inline-block");
+
 
                 /*
                  * Chains dependencies of input fields with
                  * jquery.chained.js based on the rule element
                  */
             	chainWebRules(rule_element);
-
-                $(parent_element).append(rule_element);
-            });
-        }
-
-        $.each(data, function (i, value)
-        {
-        	console.log(i +", " + value);
-        	console.log(rule_element);
-            var input_element = ($(rule_element).find('*[name="'+ i +'"]').children())[0];
-         console.log($(rule_element).find('*[name="'+ i +'"]'));
-            console.log(input_element.tagName.toLowerCase() == "input" || input_element.tagName.toLowerCase() == "textarea")
-            // If input field set is value for input field, checks it chained select elements
-            // date fields should be filled with date
-            if (input_element.tagName.toLowerCase() == "input" || input_element.tagName.toLowerCase() == "textarea")
-            {
-                $(
-                input_element)
-                    .val(
-                value);
-                if($(input_element).hasClass('custom_html'))
-                	setupHTMLEditor($(input_element), value);
+            	
+            	 deserializeChainedElementWebrule(data, rule_element);
                 
-                return;
-            }
-            
-            // Gets related select field
-            var option_element = $(input_element).children()
-            console.log(option_element);
-            // Iterates through options in select field
-            $.each(option_element, function (index, element)
-            {
-                // Selects the option
-                if ($(element).attr('value') == value)
-                {
-                    $(element).attr("selected",
-                        "selected");
-                    console.log(input_element);
-                    $(input_element).trigger("change");
-                    return;
-                }
-            });
-        });
+            	 $(self).append(rule_element);
+               
+                
+               
+         //   });
+        //    return;
+            	 return;
+        }
+        
+        deserializeChainedElementWebrule(data, rule_element);
     })
 }
 
