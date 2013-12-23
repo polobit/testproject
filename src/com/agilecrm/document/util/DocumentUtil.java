@@ -65,6 +65,44 @@ public class DocumentUtil
     }
 
     /**
+     * Returns list of contacts related to document.
+     * 
+     * @param id
+     *            - Document Id.
+     * @return list of Contacts
+     */
+    public List<Contact> getContacts(Long id)
+    {
+	Document document = getDocument(id);
+	return document.getContacts();
+    }
+
+    /**
+     * Returns list of deals related to document.
+     * 
+     * @param id
+     *            - Document Id.
+     * @return list of Deals
+     */
+    public List<Opportunity> getDeals(Long id)
+    {
+	Document document = getDocument(id);
+	return document.getDeals();
+    }
+
+    /**
+     * Returns list of cases related to document.
+     * 
+     * @param id
+     *            - Document Id.
+     * @return list of Cases
+     */
+    public List<Case> getCases(Long id)
+    {
+	Document document = getDocument(id);
+	return document.getCases();
+    }
+    /**
      * Gets documents related to a particular contact
      * 
      * @param contactId
