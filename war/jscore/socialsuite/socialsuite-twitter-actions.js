@@ -1125,6 +1125,50 @@ $(".edit-scheduled").die().live("click", function(e)
    });	     
 });
 
+/**
+ * Get tweet, show tweet with list of retweeted user details.
+ */
+$(".show-retweet").die().live("click", function(e)
+{	
+	ScheduledEdit = false;
+	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	  
+	// Details to be pass on to method.
+	var streamId = ($(this).closest('article').attr('stream-id'));	
+	var tweetId = ($(this).closest('article').attr('id'));
+	var tweetIdStr = ($(this).closest('article').attr('tweet-id-str'));
+	
+	
+    //Get stream from collection.
+	var modelStream = StreamsListView.collection.get(streamId);	
+		
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get(tweetId);
+	var tweet = modelTweet.toJSON();
+	
+    // Display Modal
+    displayModal("socialsuite_RT_userlistModal","socialsuite-RT-userlist",tweet,null,null);
+            
+    $("#spinner-modal").show();
+  
+    var RTUserListView = new Base_Collection_View
+    ({
+	     url : function()
+			{
+				return '/core/social/getrtusers/' + streamId+ "/" + tweetIdStr;
+			},
+	     restKey: "user",
+	     templateKey: "socialsuite-RT-userlist",
+	     individual_tag_name: 'li',
+	 });	
+	  
+    RTUserListView.collection.fetch();	 
+			  
+    $('#RTuser_list').html(RTUserListView.render(true).el);    
+});
+
 })(); // init end
 
 // Check valid scheduled.
@@ -1172,17 +1216,20 @@ function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
     // Append the form into the content
     $('#content').append(message_form_modal);
     
-    // Display modal
-    $('#'+modalToDisplay).on('shown', function () {
-		  
-		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 140,
-			  	  counter: "#"+counterVar
-			  	});
-			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();
-		  });
-	});
+    if(counterVar!= null && focusElmnt!= null)
+      {
+        // Display modal
+        $('#'+modalToDisplay).on('shown', function () {
+    		  
+    		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+    			  $(".twit-tweet-limit").limit({
+    			  	  maxChars: 140,
+    			  	  counter: "#"+counterVar
+    			  	});
+    			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();
+    		  });
+    	});    	
+      }
     
     // Shows the modal after filling with details
     $('#'+modalToDisplay).modal("show");	
