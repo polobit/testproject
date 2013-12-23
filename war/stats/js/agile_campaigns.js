@@ -87,3 +87,29 @@ function agile_getWorkflows(callback)
 	// Callback
 	agile_json(agile_url, callback);
 }
+
+/**
+* Remove a campaign based on the email of the contact
+* 
+* @param email
+* 				email of the contact
+*/
+function agile_unsubscribeCampaign(data, callback, email)
+{
+	if (!email)
+	{
+		if (!agile_guid.get_email())
+		{
+			return;
+		}
+		else 
+			email = agile_guid.get_email();
+	}
+	var params = "data={0}&email={1}".format(encodeURIComponent(JSON.stringify(data)), encodeURIComponent(email));
+	
+	// Get
+	var agile_url = agile_id.getURL() + "/contacts/unsubscribe-campaign?callback=?&id=" + agile_id.get() + "&" + params;
+	
+	// Callback
+	agile_json(agile_url, callback);
+}
