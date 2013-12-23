@@ -1,12 +1,13 @@
 function chainWebRules(el, data, isNew)
 {
+	var element_clone = $(el)[0];
+	
 	$("#campaign-actions", el).chained($("#action", el), function(){
 	});
 	$("#action-details", el).chained($("#action", el),  function(){
 	});
 	$("#WEB_RULE_RHS", el).chained($("#action", el), function(el, self){
 
-		console.log(data);
 		if(data && data.actions)
 			{
 				$.each(data.actions, function(index, action){
@@ -29,22 +30,22 @@ function chainWebRules(el, data, isNew)
 			addTagsDefaultTypeahead(self);
 	});
 	$("#noty-type", el).chained($("#action", el));
-	$("#noty-title", el).chained($("#noty-type", el));
 	$("#noty-message", el).chained($("#noty-type", el), function(el, self){
 		var text_area = $('textarea', self); 
 		
-		console.log(text_area.val());
-		
-		if(!isNew)
-			return;
 			
-		if($(text_area).hasClass("custom_html"))
+		if(isNew && $(text_area).hasClass("custom_html"))
+			{
 			setupHTMLEditor($(text_area));
+			}
 	});
-	if(data && data.actions)
-		deserializeChainedSelect1($(el).find('form'), data.actions);
+	$("#noty-title", el).chained($("#noty-type", el));
 	
-	scramble_input_names($(".reports-condition-table", el))
+	if(data && data.actions)
+		deserializeChainedSelect1($(el).find('form'), data.actions, el);
+	
+	scramble_input_names($(".reports-condition-table", element_clone))
+	return element_clone;
 }
 
 $(function()
@@ -56,13 +57,15 @@ $(function()
 				// To solve chaining issue when cloned
 				var htmlContent = $(getTemplate("webrules-add", {})).find('.webrule-actions > div').clone();
 				
-				scramble_input_names($(htmlContent));
+				//scramble_input_names($(htmlContent));
 
-				chainWebRules(htmlContent, undefined, true);
+				
+				
+				chainWebRules($(htmlContent)[0], undefined, true);
 				// var htmlContent = $(this).closest("tr").clone();
 				$(htmlContent).find("i.webrule-multiple-remove").css("display", "inline-block");
-				console.log($(".webrule-actions"))
 				$(".webrule-actions").append(htmlContent);
+				
 			});
 			
 			// Filter Contacts- Remove Multiple

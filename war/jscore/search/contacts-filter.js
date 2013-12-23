@@ -258,7 +258,6 @@ function chainFilters(el, data, callback)
 		return;
 	}
 	
-	console.log(data);
 	fillCustomFields(CUSTOM_FIELDS, el)
 	show_chained_fields(el, data);
 	if (callback && typeof (callback) === "function")
@@ -271,6 +270,7 @@ function chainFilters(el, data, callback)
 
 function show_chained_fields(el, data, forceShow)
 {
+	var el_self = $(el).clone();
 	var LHS, condition, RHS, RHS_NEW, NESTED_CONDITION, NESTED_RHS, NESTED_LHS;
 
 	// LHS, RHS, condition blocks are read from DOM
@@ -297,7 +297,7 @@ function show_chained_fields(el, data, forceShow)
 
 
 	if(data && data.rules)
-		deserializeChainedSelect($(el).find('form'), data.rules);
+		deserializeChainedSelect($(el).find('form'), data.rules, el_self.find('form'));
 	
 	// If LHS selected is tags then typeahead is enabled on rhs field
 	if ($(':selected', LHS).val() && ($(':selected', LHS).val()).indexOf('tags') != -1)
