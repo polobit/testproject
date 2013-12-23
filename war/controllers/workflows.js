@@ -174,6 +174,10 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 				
+				/* Reset the designer JSON */
+				this.workflow_json = undefined;
+				this.workflow_model = undefined;
+				
 				// Returns workflow json with the template name and initialize this.workflow_json.
 				this.workflow_json = JSON.stringify(get_template_json(this.worflow_templates_json, template_name));
 				
