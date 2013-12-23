@@ -101,6 +101,7 @@ var ContactsRouter = Backbone.Router
 				// Tags, Search & default browse comes to the same function
 				if (tag_id)
 				{
+					
 					// erase filter cookie
 					eraseCookie('contact_filter');
 					eraseCookie('company_filter');
@@ -123,6 +124,8 @@ var ContactsRouter = Backbone.Router
 					filter_id = null;
 
 					url = '/core/api/tags/' + tag_id;
+					
+					tag_id = unescape(tag_id);
 				}
 				else
 				{
