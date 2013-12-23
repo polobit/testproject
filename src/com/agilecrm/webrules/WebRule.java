@@ -67,11 +67,13 @@ class WebRuleAction
 {
 	public enum Action
 	{
-		POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY;
+		POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT;
 	}
 
 	public Action action = null;
 	public String RHS = null;
+
+	public String position = null;
 
 	public String popup_pattern = null;
 

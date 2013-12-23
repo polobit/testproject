@@ -27,7 +27,7 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#campaign", el).chained($("#action", el));
 	
-	
+	$("#possition", el).chained($("#action", el));
 	$("#noty-title", el).chained($("#noty-type", el), function(){
 	});
 	
