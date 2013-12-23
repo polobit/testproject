@@ -1006,8 +1006,11 @@ $(".schedule-tweet").die().live("click", function(e)
                 
                 scheduledUpdate = scheduledUpdate.toJSON();                
                 
-                // Add scheduledUpdate in stream.
+                // Add scheduled in collection.
                 addScheduledUpdateInStream(scheduledUpdate);
+                
+                // scheduled updates available.
+                 $("#show_scheduled_updates").show();
               }
 		},
 		error : function(data){
@@ -1061,7 +1064,7 @@ $(".edit-scheduled").die().live("click", function(e)
 	return;
   
   // Details to pass on to method. 
-  var tweetId = ($(this).closest('article').attr('id'));
+  var tweetId = ($(this).attr('data'));
 
   // Get scheduled update from collection.
   var scheduledUpdate = ScheduledUpdatesView.collection.get(tweetId).toJSON();
