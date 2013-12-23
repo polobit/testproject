@@ -29,7 +29,6 @@ function chainWebRules(el, data, isNew, actions)
 	
 	
 	$("#noty-title", el).chained($("#noty-type", el), function(){
-		alert("hainesdf");
 	});
 	
 	$("#noty-type", el).chained($("#action", el));
