@@ -414,8 +414,6 @@ function deserializeChainedSelect1(form, el, element) {
 							// {
 							var new_rule_element = $(rule_element_default).clone();
 
-							if(++index == el.length)
-								
 							// Add remove icon for rule
 							$(new_rule_element).find("i.webrule-multiple-remove")
 									.css("display", "inline-block");

@@ -33,6 +33,8 @@ function chainWebRules(el, data, isNew, actions)
 	
 	$("#noty-type", el).chained($("#action", el));
 	
+	$("#timer", el).chained($("#delay", el));
+	$("#delay", el).chained($("#action", el));
 	$("#noty-message", el).chained($("#noty-type", el), function(el, self){
 		var text_area = $('textarea', self); 
 		if($(text_area).hasClass("custom_html"))
