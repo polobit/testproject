@@ -347,11 +347,32 @@ function deserializeChainedElement(data, rule_element) {
 
 function deserializeChainedElementWebrule(data, rule_element) {
 	$.each(data, function(i, value) {
-		var input_element = ($(rule_element).find('*[name="' + i + '"]')
-				.children())[0];
+		var input_element_set = $(rule_element).find('*[name="' + i + '"]')
+				.children();
 		
-		if (!input_element)
+		var input_element = input_element_set[0];  
+		if(!input_element)
 			return;
+		
+		var tag_name = input_element.tagName.toLowerCase();
+		if(tag_name != "input"
+				&& tag_name != "textarea" && tag_name != "select" && input_element_set.length > 1)
+			$.each(input_element_set, function(index, input){
+				if(index == 0)
+					return;
+				tag_name = input.tagName.toLowerCase();
+				if(tag_name == "input"
+					|| tag_name == "textarea" || tag_name == "select")
+					{
+						input_element = input;
+						return false;
+					}
+					
+			})
+		
+		if(!input_element)
+			return;
+		
 		// If input field set is value for input field, checks it chained select
 		// elements
 		// date fields should be filled with date

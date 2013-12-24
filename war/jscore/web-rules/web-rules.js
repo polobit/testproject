@@ -31,7 +31,15 @@ function chainWebRules(el, data, isNew, actions)
 	$("#noty-title", el).chained($("#noty-type", el), function(){
 	});
 	
-	$("#noty-type", el).chained($("#action", el));
+	$("#noty-type", el).chained($("#action", el), function(el, self){
+		var value = $("select", el).val();
+		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
+			{
+				el.closest('table').siblings('div').find(".web-rule-prevew").show();
+			return;
+			}
+		el.closest('table').siblings('div').find(".web-rule-prevew").hide();
+	});
 	
 	$("#timer", el).chained($("#delay", el));
 	$("#delay", el).chained($("#action", el));
@@ -53,6 +61,32 @@ function chainWebRules(el, data, isNew, actions)
 		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone, data.actions[0]);
 	
 	scramble_input_names($(".reports-condition-table", element_clone))
+}
+
+function show_web_rule_action_preview(action)
+{
+	if(!action)
+		return;
+	head.js("lib/web-rule/lib/mootools-core-1.3.1.js", "lib/web-rule/lib/mootools-more-1.3.1.1.js", "lib/web-rule/simple-modal.js", function(){
+		var modal_options = {};
+		modal_options["show_btn_cancel"] = true;
+		console.log(modal_options);
+		
+		var actions = [];
+		actions.push(action);
+		var json = {};
+		json["actions"] = actions;
+		
+		var actions_array = [];
+		actions_array.push(json);
+		
+		perform_actions(actions_array, false);
+	});
+	
+	
+	
+	
+
 }
 
 $(function()
@@ -98,7 +132,6 @@ $(function()
 			
 			$("#action > select").die().live('change', function(){
 				
-				var isPopup = $("option:selected", $(this)).hasClass('POPUP');
 				if(isPopup)
 					$("#action-image").html('<img style="padding-right:30px;width:200px;height:200px" src= "https://www.agilecrm.com/img/crm/saas/saas-grabber.png"></img>');
 				else
@@ -112,4 +145,12 @@ $(function()
 					setupHTMLEditor($("#noty-message > textarea"));
 			})*/
 			
+			
+			$(".web-rule-prevew").die().live('click', function(e){
+				e.preventDefault();
+				console.log($(this).parent().siblings('table'));
+				console.log(serializeChainedElement($(this).parent().siblings('table')));
+				
+				show_web_rule_action_preview(serializeChainedElement($(this).parent().siblings('table')));
+			});
 		});

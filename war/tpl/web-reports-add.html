@@ -170,7 +170,7 @@
 					<div class="pull-right" id="action-image"></div>
 						<div class="controls">
 								<div class="webrule-actions chained-table"> 
-							<div class="alert" style="width:52%">
+							<div class="alert" style="width:52%;margin-bottom: 5%;">
 							<table style="background-color: transparent"
 								class="reports-condition-table actions" >
 								<tbody class="chained"  name="actions">
@@ -180,7 +180,7 @@
 											<select class="required" >
 											 <optgroup label="Popup">
 												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
-												<option value="NOTY" class="POPUP">Corner Noty</option>
+												<option value="CORNER_NOTY" class="POPUP">Corner Noty</option>
 											</optgroup>
 											<optgroup label="Campaign">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -231,7 +231,7 @@
 											<div name="popup_pattern" id="noty-type" style="margin-top:3px">
 												<select class="required">
 													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option>
-													<option value="information" class="POPUP MODAL_POPUP NOTY">Information</option>
+													<option value="information" class="POPUP MODAL_POPUP CORNER_NOTY">Information</option>
 													<option value="form" class="POPUP MODAL_POPUP">Form on website</option>
 													<option value="custom_html" class="MODAL_POPUP">Custom HTML</option>
 												</select>
@@ -245,11 +245,11 @@
 											style="vertical-align: top; ">
 											<div name="position" id="possition" style="margin-top:3px">
 												<select class="required">
-													<option value="CORNER" class="NOTY">Corner</option>
-													<option value="RIGHT" class="NOTY">Right</option>
-													<option value="LEFT" class="NOTY">Left</option>
-													<option value="BOTTOM" class="NOTY">Bottom</option>
-													<option value="TOP" class="NOTY">Top</option>
+													<option value="CORNER" class="CORNER_NOTY">Corner</option>
+													<option value="RIGHT" class="CORNER_NOTY">Right</option>
+													<option value="LEFT" class="CORNER_NOTY">Left</option>
+													<option value="BOTTOM" class="CORNER_NOTY">Bottom</option>
+													<option value="TOP" class="CORNER_NOTY">Top</option>
 												</select>
 											</div>
 											</div>
@@ -281,19 +281,13 @@
 										<td class="controls"
 											style="vertical-align: top;">
 											<div name="delay" id="delay">
-												<div class="pull-left" style="padding-top:10px"><b style="color:#474444">When to show: </b><div>
-												<select class="required" style="margin-left:50px;margin-top:3px;">
-													<optgroup label="Timer">
-														<option value="IMMEDIATE" class="MODAL_POPUP NOTY">Immediate</option>
-														<option value="AFTER_SECS" class="MODAL_POPUP NOTY">After Certain Time</option>
-														<option value="AFTER_CUSTOM_SECS" class="MODAL_POPUP NOTY">Custom Time</option>
-													</optgroup>
-													<optgroup label="Scroll">
-														<option value="FIRST_SCROLL" class="MODAL_POPUP NOTY">First Scroll</option>
-														<option value="END_OF_PAGE" class="MODAL_POPUP NOTY">End Of Page</option>
-														<option value="EXIT" class="MODAL_POPUP NOTY">Exit</option>
-													</optgroup>
-		
+												<div class="pull-left" style="padding-top:10px"><b style="color:#474444">When to show: </b></div></br></br>
+												<select class="required" style="margin-top:-2px;margin-left:50px">
+														<option value="IMMEDIATE" class="MODAL_POPUP CORNER_NOTY">Immediate</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP CORNER_NOTY">After Certain Time</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP CORNER_NOTY">First Scroll</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP CORNER_NOTY">End Of Page</option>
+														<option value="EXIT" class="MODAL_POPUP CORNER_NOTY">Exit</option>
 												</select>
 											</div>
 										
@@ -304,12 +298,7 @@
 										<td class="controls"
 											style="vertical-align: top; ">
 											<div name="timer" id="timer" style="margin-top:3px;margin-left:50px">
-												<select class="required">
-													<option value="5" class="AFTER_SECS">5 Seconds</option>
-													<option value="10" class="AFTER_SECS">10 Seconds</option>
-													<option value="15" class="AFTER_SECS">15 Seconds</option>
-												</select>	
-												<input type="number" class="AFTER_CUSTOM_SECS" placeholder="Enter Seconds"></input>
+												<input type="number" class="AFTER_SECS" placeholder="Enter Seconds"></input>
 											</div>
 											</div>
 										</td>
@@ -317,10 +306,13 @@
 									
 								</tbody>
 								</table>
+									<div class="pull-right" style="width: 5%;margin-bottom:10px;margin-top: 10px;float: right;"><a href="#" class="web-rule-prevew">Preview</a></div>
 								</div>
 
+
 </div>
-<div class="pull-right" style="width:48%;margin-top:-10px"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
+
+<div class="pull-right" style="width:50%;margin-top:-10px"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
 							</div>
 					</div>
 			{{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />
