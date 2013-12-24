@@ -696,7 +696,8 @@ function addScheduledUpdateInStream(scheduledUpdate)
 		newScheduledUpdate.set("scheduled_time",scheduledUpdate.scheduled_time);
 		    	
 		// Add back to stream.
-		ScheduledUpdatesView.collection.add(newScheduledUpdate);		
+		ScheduledUpdatesView.collection.add(newScheduledUpdate);	
+		$('#socialsuite-scheduled-updates-content').append(ScheduledUpdatesView.render(true).el);
 		
 		ScheduledEdit = false;
 	  }

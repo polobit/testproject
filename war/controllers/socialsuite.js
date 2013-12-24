@@ -183,7 +183,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			     ({
 				     url : "/core/scheduledupdate/getscheduledupdates",
 				     restKey: "scheduledUpdate",
-				     templateKey: "socialsuite-scheduled-updates",
+				     templateKey: "socialsuite-scheduled-updates",				     			    
 				     individual_tag_name: 'tr',
 				 });	
 				  

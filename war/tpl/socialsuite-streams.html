@@ -114,12 +114,12 @@
  			  <footer class="tweet-footer cf">
               {{#if id_str}}
               {{#if retweeted}}
-                 <span class="txt-mute txt-small show-retweet">{{retweeted}}</span><br>
+                 <a class="txt-mute txt-small show-retweet">{{retweeted}}</a><br>
               {{/if}}
               <time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>                              
  	    	  <ul class="tweet-actions">
                  {{#if direct_message}}
-                    <li> <a class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" tweet-owner={{user.screen_name}} data-user-name="{{user.name}}" description="{{user.description}}"> 
+                    <li> <a href="#social" class="tweet-action add-twitter-contact" href="#personModal" class="btn right" data-toggle="modal" tweet-owner={{user.screen_name}} data-user-name="{{user.name}}" description="{{user.description}}"> 
                             <i class="icon icon-plus-sign" title="Add Contact"></i>                            
                          </a> </li>
                  {{else}}
