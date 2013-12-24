@@ -547,7 +547,7 @@ public class BulkOperationsAPI
 	// Deletes blob
 	ContactCSVExport.deleteBlobFile(path);
 
-	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV, String.valueOf(count));
+	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
     }
 
     /**

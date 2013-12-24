@@ -13,7 +13,8 @@ public class BulkActionNotifications
 	BULK_ACTIONS(""), DELETE("%s %s deleted"), ADD_TAGS("Tag(s) %s added to %s contacts"), ENROLL_CAMPAIGN("%s Contacts added to campaign"), OWNER_CHANGE(
 		"Owner changed for %s contacts"), CONTACTS_IMPORT("%s contacts uploaded"), CONTACTS_IMPORT_MESSAGE("%s"), CONTACTS_CSV_IMPORT(
 		"%s contacts imported"), REMOVE_ACTIVE_SUBSCRIBERS("%s subscribers successfully removed from campaign"), SEND_EMAIL(
-		"Email successfully sent for %s contacts."), EXPORT_CONTACTS_CSV("Contacts CSV file with %s contacts exported successfully.");
+		"Email successfully sent for %s contacts."), EXPORT_CONTACTS_CSV(
+		"Contact import operation is complete. Email is sent to you with the CSV file.");
 
 	String message;
 
