@@ -1114,7 +1114,21 @@ $(function()
 		}
 		else
 			return "(" + this.length + " Total)";
-	})
+	});
+	
+	/**
+	 * 
+	 * Returns subscribers count without parenthesis
+	 * 
+	 **/
+	Handlebars.registerHelper('subscribers_count', function(){
+		
+		if(this[0] && this[0].count && (this[0].count != -1))
+			return this[0].count + " Total";
+		
+		return this.length + " Total";
+			
+	});
 
 
 	/**
@@ -1562,7 +1576,7 @@ $(function()
 	{
 		return value.replace(/[\[\]]+/, '');
 	});
-
+	
 	/**
 	 * Shows list of triggers separated by comma
 	 */
@@ -2102,11 +2116,37 @@ $(function()
 	 * 
 	 **/
 	Handlebars.registerHelper('get_subaccount_reputation', function(value){
+		var type = "";
+		var reputation="Unknown";
 		
-		if(value >= 75)
-			return "Good ("+value+")";
+		if(value > 1 && value < 20)
+		{
+			type = "important";
+			reputation="Poor";
+		}
+		else if(value >=20 && value < 50)
+		{
+			type="warning";
+			reputation="Poor";
+		}
+		else if(value >=50 && value < 75)
+		{
+           type="info";
+           reputation="OK";
+		}
+		else if(value >= 75 && value < 90)
+		{
+			type="inverse";
+			reputation="Good";
+		}
+		else if(value >=90)
+		{
+			type="success";
+			reputation="Excellant";
+		}
+		    
+	    return "<span style='font-size:13px;' class='label label-"+type+"'>"+reputation+"</span> <!--<span class='badge badge-"+type+"'>"+value+"</span>-->";
 		
-		return "Unknown ("+value+")";
 	});
 	
 	/**

@@ -159,7 +159,7 @@ public class EmailsAPI
      * @return String
      * @throws Exception
      */
-    @Path("email-activity")
+    @Path("email-stats")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getEmailActivityFromMandrill() throws Exception

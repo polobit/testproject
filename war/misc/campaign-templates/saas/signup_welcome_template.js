@@ -29,7 +29,7 @@
             "JsonValues": [],
             "States": [
                 {
-                    "start": "PBXHWo1PHDnoJ"
+                    "start": "PBXuTyCw5MT2x"
                 }
             ]
         },
@@ -899,21 +899,21 @@
                 "branches": "yes"
             },
             "id": "PBXHWo1PHDnoJ",
-            "xPosition": 460,
-            "yPosition": 144,
-            "displayname": "Send Newsletter ",
+            "xPosition": 467,
+            "yPosition": 250,
+            "displayname": "Welcome email",
             "JsonValues": [
                 {
                     "name": "nodename",
-                    "value": "Send Newsletter "
+                    "value": "Welcome email"
                 },
                 {
                     "name": "from_name",
-                    "value": "Updates"
+                    "value": "My Company"
                 },
                 {
                     "name": "from_email",
-                    "value": "updates@mycompany.com"
+                    "value": "hello@mycompany.com"
                 },
                 {
                     "name": "to_email",
@@ -925,7 +925,7 @@
                 },
                 {
                     "name": "subject",
-                    "value": "Here what's happening from our end"
+                    "value": "Thanks for signing up {{first_name}}"
                 },
                 {
                     "name": "replyto_email",
@@ -937,7 +937,7 @@
                 },
                 {
                     "name": "text_email",
-                    "value": "\r\nText version of newsletter here."
+                    "value": "\r\nText version of message"
                 },
                 {
                     "name": "merge_fields",
@@ -945,7 +945,7 @@
                 },
                 {
                     "name": "html_email",
-                    "value": "<div style=\"background-color: #f2f2f2; margin: 0; padding: 0; min-height: 100%!important; width: 100%!important;\"><center>\r\n<table style=\"background-color: #f2f2f2; margin: 0px; padding: 0px; border-collapse: collapse !important; min-height: 100% !important; width: 100% !important;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 40px 20px; margin: 0; min-height: 100%!important; width: 100%!important;\" align=\"center\" valign=\"top\">\r\n<table style=\"width: 600px; border-collapse: collapse!important;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"center\" valign=\"top\"><a style=\"text-decoration: none;\" title=\"Your Logo here\" href=\"https://www.yoursite.com\" target=\"_blank\"> <img style=\"border: 0; color: #6dc6dd!important; font-family: Helvetica,Arial,sans-serif; font-size: 60px; font-weight: bold; min-height: auto!important; letter-spacing: -4px; line-height: 100%; outline: none; text-align: center; text-decoration: none;\" src=\"https://www.MYSITE.com/img/logo.png\" alt=\"Your Logo here\" /> </a></td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-top: 30px; padding-bottom: 30px;\" align=\"center\" valign=\"top\">\r\n<table style=\"background-color: #ffffff; border-collapse: separate !important; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; width: 100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding-right: 40px; padding-left: 40px;\" align=\"center\" valign=\"top\">\r\n<table style=\"border-collapse: collapse !important; width: 100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"center\" valign=\"top\" width=\"\">\r\n<table style=\"border-collapse: collapse !important; width: 100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"left\" valign=\"top\" width=\"75px\">\r\n<table style=\"border-collapse: collapse !important; background-color: #6dc6dd; width: 75px;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"padding: 40px 15px 5px; text-align: center; color: #ffffff; line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-size: 14px; font-weight: bold;\" align=\"center\" valign=\"bottom\">Digest</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding: 5px 15px 20px; text-align: center; color: #ffffff; line-height: 100%; font-family: Helvetica,Arial,sans-serif; font-size: 40px; font-weight: bold;\" align=\"center\" valign=\"top\">1</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n<td style=\"padding-top: 40px; padding-left: 40px; color: #606060; font-family: Helvetica,Arial,sans-serif; font-size: 15px; line-height: 150%; text-align: left;\" align=\"left\" valign=\"top\">\r\n<h1 style=\"font-family: Helvetica,Arial,sans-serif; font-size: 40px; font-weight: bold; letter-spacing: -1px; line-height: 115%; margin: 0; padding: 0; text-align: left; color: #606060!important; text-decoration: none!important;\">Title</h1>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"color: #606060; font-family: Helvetica,Arial,sans-serif; font-size: 15px; line-height: 150%; text-align: left; padding: 40px;\" align=\"center\" valign=\"top\">\r\n<p>Hello&nbsp;{{first_name}},</p>\r\n<p>Some introductory text</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-bottom: 30px;\" align=\"center\" valign=\"top\">\r\n<table style=\"border-collapse: collapse !important; width: 100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"border-top: 2px solid #f2f2f2; padding-top: 40px; padding-right: 40px; padding-bottom: 30px; padding-left: 40px; color: #606060; font-family: Helvetica,Arial,sans-serif; font-size: 15px; line-height: 150%; text-align: left;\" align=\"center\" valign=\"top\">\r\n<h3 style=\"font-family: Helvetica,Arial,sans-serif; font-size: 18px; font-weight: bold; letter-spacing: -.5px; line-height: 115%; margin: 0; padding: 0; text-align: center; color: #606060!important; text-decoration: none!important;\">News Item 1</h3>\r\n<p>Text here.</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-right: 40px; padding-left: 40px;\" align=\"center\" valign=\"top\"><img style=\"border: 1px solid #c8c8c8; border-radius: 5px;\" src=\"https://www.yoursite.com/image1.png\" alt=\"insert image 1\" /></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-bottom: 30px;\" align=\"center\" valign=\"top\">\r\n<table style=\"border-collapse: collapse !important; width: 100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"border-top: 2px solid #f2f2f2; padding-top: 40px; padding-right: 40px; padding-bottom: 30px; padding-left: 40px; color: #606060; font-family: Helvetica,Arial,sans-serif; font-size: 15px; line-height: 150%; text-align: left;\" align=\"center\" valign=\"top\">\r\n<h3 style=\"font-family: Helvetica,Arial,sans-serif; font-size: 18px; font-weight: bold; letter-spacing: -.5px; line-height: 115%; margin: 0; padding: 0; text-align: center; color: #606060!important; text-decoration: none!important;\">News Item 2</h3>\r\n<p>Text here.</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-right: 40px; padding-left: 40px;\" align=\"center\" valign=\"top\"><img style=\"border: 1px solid #c8c8c8; border-radius: 5px;\" src=\"https://www.agilecrm.com/img/email-images/ScreenShot2013-09-02at20334PM.png\" alt=\"Triggers\" /></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-bottom: 30px;\" align=\"center\" valign=\"top\">\r\n<table style=\"border-collapse: collapse !important; width: 100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"border-top: 2px solid #f2f2f2; padding-top: 40px; padding-right: 40px; padding-bottom: 30px; padding-left: 40px; color: #606060; font-family: Helvetica,Arial,sans-serif; font-size: 15px; line-height: 150%; text-align: left;\" align=\"center\" valign=\"top\">\r\n<h3 style=\"font-family: Helvetica,Arial,sans-serif; font-size: 18px; font-weight: bold; letter-spacing: -.5px; line-height: 115%; margin: 0; padding: 0; text-align: center; color: #606060!important; text-decoration: none!important;\">News Item 3</h3>\r\n<p>Text here.</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-right: 40px; padding-left: 40px;\" align=\"center\" valign=\"top\"><img style=\"border: 1px solid #c8c8c8; border-radius: 5px;\" src=\"https://www.agilecrm.com/img/email-images/users.png\" alt=\"Campaign Authentication\" /></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td style=\"padding-right: 40px; padding-bottom: 40px; padding-left: 40px;\" align=\"center\" valign=\"middle\">\r\n<table style=\"background-color: #6dc6dd; border-collapse: separate!important; border-radius: 3px;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"color: #ffffff; font-family: Helvetica,Arial,sans-serif; font-size: 15px; font-weight: bold; line-height: 100%; padding-top: 18px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px;\" align=\"center\" valign=\"middle\"><a style=\"color: #ffffff; text-decoration: none;\" href=\"https://www.MYSITE.com/newsletter\" target=\"_blank\">C</a>all To Action</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td align=\"center\" valign=\"top\">\r\n<table style=\"border-collapse: collapse !important; width: 100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td style=\"color: #606060; font-family: Helvetica,Arial,sans-serif; font-size: 13px; line-height: 125%;\" align=\"center\" valign=\"top\">\r\n<p style=\"margin: -5px;\"><img style=\"vertical-align: middle;\" src=\"https://www.MYSITE.com/logo.png\" alt=\"\" /> Your Caption</p>\r\n<p style=\"margin: 10px;\"><a style=\"padding: 6px; color: black; border: none;\" href=\"https://twitter.com/agile_crm\" target=\"_blank\"><img style=\"border: none;\" src=\"https://www.agilecrm.com/img/twitter-icon.png\" alt=\"twitter\" /></a> <a style=\"padding: 6px; border: none;\" href=\"https://www.facebook.com/CRM.Agile\" target=\"_blank\"><img style=\"border: none;\" src=\"https://www.agilecrm.com/img/facebook-icon.png\" alt=\"fb\" /></a> <a style=\"padding: 6px; border: none;\" href=\"https://plus.google.com/109484059291748745615/posts\" target=\"_blank\"><img style=\"border: none;\" src=\"https://www.agilecrm.com/img/googleplus-icon.png\" alt=\"gplus\" /></a></p>\r\n<p><a href=\"https://www.agilecrm.com\" target=\"_blank\">www.mysite.com</a></p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td align=\"center\" valign=\"top\">&nbsp;</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</center></div>"
+                    "value": "\r\nHTML version here"
                 },
                 {
                     "name": "track_clicks",
@@ -971,6 +971,78 @@
             "States": [
                 {
                     "yes": "hangup"
+                }
+            ]
+        },
+        {
+            "NodeDefinition": {
+                "name": "Wait",
+                "thumbnail": "json/nodes/images/common/wait.png",
+                "icon": "json/nodes/icons/common/wait.png",
+                "info": "Wait for a specified duration before next action. Useful for responders and periodic emails.",
+                "help": "Wait for a specified duration before next action. Useful for responders and periodic emails.",
+                "author": "John",
+                "company": "mantra",
+                "language": "en",
+                "branches": "yes",
+                "workflow_tasklet_class_name": "com.campaignio.tasklets.agile.Wait",
+                "category": "Utilities",
+                "ui": [
+                    {
+                        "label": " Duration",
+                        "required": "required",
+                        "category": "Settings",
+                        "name": "duration",
+                        "id": "duration",
+                        "title": "Enter the duration period.",
+                        "fieldType": "input",
+                        "type": "number"
+                    },
+                    {
+                        "label": "Type",
+                        "required": "required",
+                        "category": "Settings",
+                        "name": "duration_type",
+                        "id": "duration_type",
+                        "title": "Select the type of duration.",
+                        "options": {
+                            "Days": "days",
+                            "Hours": "hours",
+                            "Minutes": "mins"
+                        },
+                        "fieldType": "select",
+                        "type": "select"
+                    },
+                    {
+                        "label": "Wait for a specified duration before proceeding to the next step.<br/>For example, send email-1, wait for 2 days and then send email-2.",
+                        "category": "Help",
+                        "fieldType": "label",
+                        "type": "label"
+                    }
+                ],
+                "url": "json/nodes/common/wait.js"
+            },
+            "id": "PBXuTyCw5MT2x",
+            "xPosition": 443,
+            "yPosition": 125,
+            "displayname": "Wait 5min after Signup",
+            "JsonValues": [
+                {
+                    "name": "nodename",
+                    "value": "Wait 5min after Signup"
+                },
+                {
+                    "name": "duration",
+                    "value": "5"
+                },
+                {
+                    "name": "duration_type",
+                    "value": "mins"
+                }
+            ],
+            "States": [
+                {
+                    "yes": "PBXHWo1PHDnoJ"
                 }
             ]
         }
