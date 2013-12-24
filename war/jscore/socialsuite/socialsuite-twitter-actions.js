@@ -1060,8 +1060,8 @@ $(".delete-scheduled").die().live("click", function(e)
 $(".edit-scheduled").die().live("click", function(e)
 {
   // Ask confirmation to user.
-  if(!confirm("Are you sure you want to edit this scheduled update?"))
-	return;
+  //if(!confirm("Are you sure you want to edit this scheduled update?"))
+	//return;
   
   // Details to pass on to method. 
   var tweetId = ($(this).attr('data'));
@@ -1167,7 +1167,104 @@ $(".show-retweet").die().live("click", function(e)
     RTUserListView.collection.fetch();	 
 			  
     $('#RTuser_list').html(RTUserListView.render(true).el);    
+    
+ // Create normal time.
+	head.js('lib/jquery.timeago.js', function(){	 
+		        $(".time-ago", $("#socialsuite_RT_userlistModal")).timeago();	
+			});
 });
+
+/**
+ * get stream and create tweet for posting on Twitter to user who RT owner's tweet.
+ */
+$(".tweet-to-user").die().live("click", function(e)
+{	
+	// Hide modal before showing message modal.
+	$("#socialsuite_RT_userlistModal").modal("hide"); 
+	
+	ScheduledEdit = false;
+	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	  
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetOwner =$(this).attr("tweet-owner");
+	
+	// Fetch stream from collection
+	var stream = StreamsListView.collection.get(streamId).toJSON();
+		
+	// Store info in a json, to send it to the modal window when making send tweet request
+    var json = {};
+
+    // Set headline of modal window as Send Message
+    json["headline"] = "Reply Tweet";
+        
+    // Information to be shown in the modal to the user while sending message    
+    json["info"] = "Reply "+"@" + tweetOwner +" from " + stream.screen_name;
+
+    json["description"] = "@" + tweetOwner;    
+    json["tweetOwner"] = tweetOwner;   
+    json["streamId"] = streamId;
+    json["profileImg"] = $("#"+streamId+"-profile-img").prop("src");
+	    
+    // Display Modal
+    displayModal("socialsuite_twitter_messageModal","socialsuite-twitter-message",json,"twitter-counter","twit-tweet");
+            
+    // In compose message text limit is crossed so disable send button.
+    $('#twit-tweet').on('cross', function(){
+        $('#send_tweet').addClass('disabled');
+        $('#schedule_tweet').addClass('disabled');
+      });
+      
+    // In compose message text limit is uncrossed so enable send button.  
+    $('#twit-tweet').on('uncross', function(){
+        $('#send_tweet').removeClass('disabled');
+        $('#schedule_tweet').removeClass('disabled');
+      });
+            
+    // On click of send button in the modal, tweet request is sent 
+    $('#send_tweet').click(function (e)
+    {
+        e.preventDefault();
+        
+        // Check Send button is not enable
+    	if($("#send_tweet").hasClass('disabled'))
+    		return;
+
+        // Checks whether all the input fields are filled
+        if (!isValidForm($("#socialsuite_twitter_messageForm")))
+            return;
+
+        $('#send_tweet').addClass('disabled');
+        $("#spinner-modal").show();
+        
+        // Sends post request to url "/core/social/tweet/" and Calls StreamsAPI with 
+        // Stream id and Twitter id as path parameters and form as post data
+        $.post("/core/social/tweet/" + streamId ,
+        $('#socialsuite_twitter_messageForm').serialize(),
+
+        function (data)
+        {
+        	 $("#spinner-modal").hide();
+                	 
+        	 if(data == "Successful")
+        		 {
+                   // On success, shows the status as sent
+                   $('#socialsuite_twitter_messageModal').find('span.save-status').html("Sent");
+                   showNotyPopUp('information', "Your Tweet was posted!", "top", 5000);
+        		 }
+        	 
+            // Hides the modal after 2 seconds after the sent is shown
+        	 hideModal("socialsuite_twitter_messageModal");          
+
+        }).error(function (data)
+        {
+          // Displays Error Notification.
+          displayError("socialsuite_twitter_messageModal",data);
+        });
+    });
+}); 
+
 
 })(); // init end
 
