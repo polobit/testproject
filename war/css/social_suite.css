@@ -1,5 +1,5 @@
-.app-content>ul,.app-content>li,.tweet-body>ul,.tweet-body>li,.tweet-actions>ul,.tweet-actions>li,.tweet-footer>ul,.tweet-footer>li{padding:0!important;margin:0!important;}
-.app-content>ul,.tweet-body>ul,.tweet-actions>ul,.tweet-footer>ul{list-style:none!important}
+.RTuserlist-modal,.app-content>ul,.app-content>li,.tweet-body>ul,.tweet-body>li,.tweet-actions>ul,.tweet-actions>li,.tweet-footer>ul,.tweet-footer>li{padding:0!important;margin:0!important;}
+.RTuserlist-modal,.app-content>ul,.tweet-body>ul,.tweet-actions>ul,.tweet-footer>ul{list-style:none!important}
 .app-content>small,.tweet-body>small{font-size:0.8571rem}
 
 .app-content{position:relative;left:0;right:0;bottom:0;padding:20px 5px 15px 15px;}
@@ -84,6 +84,7 @@
 /* *** */
 .tweet-footer{margin-top:-7px}
 .cf{display:block}.cf:before,.cf:after{display:block;content:" "}.cf:after{clear:both}
+.show-retweet:hover{color: black;}
 
 /* tweet actions */
 .tweet-actions{visibility:hidden!important;float:right!important}

@@ -4,7 +4,6 @@ import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
@@ -138,19 +137,6 @@ public class Document
     }
 
     /**
-     * Returns list of contacts related to document.
-     * 
-     * @param id
-     *            - Document Id.
-     * @return list of Contacts
-     */
-    public List<Contact> getContacts(Long id)
-    {
-	Document document = DocumentUtil.getDocument(id);
-	return document.getContacts();
-    }
-
-    /**
      * While saving a document it contains list of case keys, but while
      * retrieving includes complete case object.
      * 
@@ -163,19 +149,6 @@ public class Document
     }
 
     /**
-     * Returns list of cases related to document.
-     * 
-     * @param id
-     *            - Document Id.
-     * @return list of Cases
-     */
-    public List<Case> getCases(Long id)
-    {
-	Document document = DocumentUtil.getDocument(id);
-	return document.getCases();
-    }
-
-    /**
      * While saving a document it contains list of deal keys, but while
      * retrieving includes complete deal object.
      * 
@@ -185,19 +158,6 @@ public class Document
     public List<Opportunity> getDeals()
     {
 	return Opportunity.dao.fetchAllByKeys(this.related_deals);
-    }
-
-    /**
-     * Returns list of deals related to document.
-     * 
-     * @param id
-     *            - Document Id.
-     * @return list of Deals
-     */
-    public List<Opportunity> getDeals(Long id)
-    {
-	Document document = DocumentUtil.getDocument(id);
-	return document.getDeals();
     }
 
     /**

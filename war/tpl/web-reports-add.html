@@ -152,11 +152,13 @@
 											</div>
 										</td>
 
-										<td style="vertical-align: top;"><div style="width:50px"><i
-											class="filter-contacts-web-rule-multiple-add icon-plus"
-											style="display: inline-block; margin-right: 10px;margin-left:5px; cursor: pointer;"></i><i
+										<td style="vertical-align: top;"><div style="width:50px">
+											<i
 											class="filter-contacts-multiple-remove icon-remove-circle"
-											style="display: none; cursor: pointer;"></i><div></td>
+											style="display: none; cursor: pointer;"></i>
+											<i
+											class="filter-contacts-web-rule-multiple-add icon-plus"
+											style="display: inline-block; margin-right: 10px;margin-left:5px; cursor: pointer;"></i><div></td>
 									</tr>
 								</tbody>
 							</table>
@@ -165,7 +167,7 @@
 			</div>
 			<div class="control-group" style="margin-left: -19px;padding-top:20px">
 						<label class="control-label">Action</label>
-<div class="pull-right" id="action-image"></div>
+					<div class="pull-right" id="action-image"></div>
 						<div class="controls">
 								<div class="webrule-actions chained-table"> 
 							<div class="alert" style="width:52%">
@@ -178,7 +180,7 @@
 											<select class="required" >
 											 <optgroup label="Popup">
 												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
-												<option value="CORNER_NOTY" class="POPUP">Corner Noty</option>
+												<option value="NOTY" class="POPUP">Corner Noty</option>
 											</optgroup>
 											<optgroup label="Campaign">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -200,6 +202,7 @@
 												<option value="SUBTRACT_SCORE" class="campaign" 
 													related="WEB_RULE_RHS">Substract Score</option>
 											</optgroup>
+												<option value="JAVA_SCRIPT">Java Script</option>
 											</select>
 										</div>
 										</td>
@@ -211,18 +214,24 @@
 										<td class="controls"
 											style="vertical-align: top;">
 											<div name="RHS" id="WEB_RULE_RHS" style="margin-top:3px">
-												<select class="required" name="temp" style="max-width:125px">
 												</select>
+												<input type="number" name="temp" class="ADD_SCORE required number" placeholder="Enter score to add"></input>
+												<input type="number" name="temp" class="SUBTRACT_SCORE required number" placeholder="Enter score to substract"></input>
+												<input type="number" name="temp" class="required number" placeholder="Enter score to substract"></input>
+												<input type="text" class="REMOVE_TAG ADD_TAG tags" placeholder="Enter tag"></input>
+												<textarea  cols="35" class="JAVA_SCRIPT" rows="6" placeholder="JAVA_SCRIPT"></textarea>
 											</div>
 										</td>
 									</tr>
+									
+							
 									<tr>
 										<td class="controls"
 											style="vertical-align: top; ">
 											<div name="popup_pattern" id="noty-type" style="margin-top:3px">
 												<select class="required">
 													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option>
-													<option value="information" class="POPUP MODAL_POPUP CORNER_NOTY">Information</option>
+													<option value="information" class="POPUP MODAL_POPUP NOTY">Information</option>
 													<option value="form" class="POPUP MODAL_POPUP">Form on website</option>
 													<option value="custom_html" class="MODAL_POPUP">Custom HTML</option>
 												</select>
@@ -230,19 +239,22 @@
 											</div>
 										</td>
 									</tr>
+							
 									<tr>
 										<td class="controls"
 											style="vertical-align: top; ">
-											<div name="popup_pattern" id="other-actions" style="margin-top:3px">
-												<input type="number" name="temp" class="ADD_SCORE required number" placeholder="Enter score to add"></input>
-												<input type="number" name="temp" class="SUBTRACT_SCORE required number" placeholder="Enter score to substract"></input>
-												<input type="number" name="temp" class="required number" placeholder="Enter score to substract"></input>
-												<input type="text" class="REMOVE_TAG ADD_TAG tags" placeholder="Enter tag"></input>
+											<div name="position" id="possition" style="margin-top:3px">
+												<select class="required">
+													<option value="CORNER" class="NOTY">Corner</option>
+													<option value="RIGHT" class="NOTY">Right</option>
+													<option value="LEFT" class="NOTY">Left</option>
+													<option value="BOTTOM" class="NOTY">Bottom</option>
+													<option value="TOP" class="NOTY">Top</option>
+												</select>
 											</div>
 											</div>
 										</td>
 									</tr>
-
 
 									<tr>
 										<td class="controls span2"
@@ -259,14 +271,49 @@
 										<td class="controls span2"
 											style="vertical-align: top;">
 												<div id="noty-message" name="popup_text"  style="padding-top:10px">
-													<textarea  cols="35" style=""
-														class="information confirmation span4" rows="6" placeholder="paste HTML context"></textarea>
-													<textarea  cols="35" style=""
-														class="custom_html span4" rows="6" placeholder="paste HTML context"></textarea>
+													<textarea  cols="35" class="information confirmation span4" rows="6" placeholder="paste HTML context"></textarea>
+													<textarea  cols="35" class="custom_html span4" rows="6" placeholder="paste HTML context"></textarea>
 												</div>
 										</td>
 									</tr>
 										
+									<tr>
+										<td class="controls"
+											style="vertical-align: top;">
+											<div name="delay" id="delay">
+												<div class="pull-left" style="padding-top:10px"><b style="color:#474444">When to show: </b><div>
+												<select class="required" style="margin-left:50px;margin-top:3px;">
+													<optgroup label="Timer">
+														<option value="IMMEDIATE" class="MODAL_POPUP NOTY">Immediate</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP NOTY">After Certain Time</option>
+														<option value="AFTER_CUSTOM_SECS" class="MODAL_POPUP NOTY">Custom Time</option>
+													</optgroup>
+													<optgroup label="Scroll">
+														<option value="FIRST_SCROLL" class="MODAL_POPUP NOTY">First Scroll</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP NOTY">End Of Page</option>
+														<option value="EXIT" class="MODAL_POPUP NOTY">Exit</option>
+													</optgroup>
+		
+												</select>
+											</div>
+										
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td class="controls"
+											style="vertical-align: top; ">
+											<div name="timer" id="timer" style="margin-top:3px;margin-left:50px">
+												<select class="required">
+													<option value="5" class="AFTER_SECS">5 Seconds</option>
+													<option value="10" class="AFTER_SECS">10 Seconds</option>
+													<option value="15" class="AFTER_SECS">15 Seconds</option>
+												</select>	
+												<input type="number" class="AFTER_CUSTOM_SECS" placeholder="Enter Seconds"></input>
+											</div>
+											</div>
+										</td>
+									</tr>
 									
 								</tbody>
 								</table>

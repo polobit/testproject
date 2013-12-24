@@ -35,10 +35,7 @@ var ContactsRouter = Backbone.Router
 				"gmail" : "email", "twitter" : "socialPrefs", "linkedin" : "socialPrefs",
 
 				/* Search results */
-				"contacts/search/:query" : "searchResults",
-				
-				/* Call */
-				"contacts/call-lead/:first/:last" : "addLead"},
+				"contacts/search/:query" : "searchResults"},
 				
 			initialize : function()
 			{
@@ -104,6 +101,7 @@ var ContactsRouter = Backbone.Router
 				// Tags, Search & default browse comes to the same function
 				if (tag_id)
 				{
+					
 					// erase filter cookie
 					eraseCookie('contact_filter');
 					eraseCookie('company_filter');
@@ -126,6 +124,8 @@ var ContactsRouter = Backbone.Router
 					filter_id = null;
 
 					url = '/core/api/tags/' + tag_id;
+					
+					tag_id = unescape(tag_id);
 				}
 				else
 				{
@@ -973,20 +973,5 @@ var ContactsRouter = Backbone.Router
 
 				$('#content').html(searchResultsView.render().el);
 
-			},
-			
-			/*
-			 * Show personModal when phone number from call doesnt match with
-			 * contacts
-			 */
-
-			addLead : function(first, last)
-			{
-				$('#personModal').on("shown", function(){
-					$(this).find('#fname').val(first);
-					$(this).find('#lname').val(last);
-				});
-				$('#personModal').modal();
 			}
-			
 		});

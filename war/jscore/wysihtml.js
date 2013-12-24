@@ -43,10 +43,11 @@ function setupHTMLEditor(selector, data) {
 				console.log('setting up text');
 				console.log(selector.html());
 				
-				selector.wysihtml5();
+				if(!$(selector).data('wysihtml5'))
+					selector.wysihtml5();
 				
 				if(data)
-				selector.data("wysihtml5").editor.setValue(data, false);
+					selector.data("wysihtml5").editor.setValue(data, false);
 				
 			});
 }
