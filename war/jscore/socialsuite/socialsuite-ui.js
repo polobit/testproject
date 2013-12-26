@@ -329,8 +329,10 @@ function initializeSocialSuite()
 		
 		// Check if stream type is not selected.
 		if(StreamType == null || StreamType == '')
-			{		  		
-			  alert("You have to select your favorite stream type.");
+			{		 
+			  // To show error description.
+			  document.getElementById("stream_description_label").className = 'txt-mute';
+			  document.getElementById('stream_description_label').innerHTML='<span style="color: red;"><i class="icon-exclamation"></i> You have to select your favorite stream type.</span>';			  
 			  return;
 			}
 		
@@ -460,34 +462,16 @@ function initializeSocialSuite()
 		// Remove deleted tweet element from ui
 		$('.deleted').remove();
 	 });	
-	
-	/**
-	 * Get scheduled updates of current domain user.
-	 */
-	$("#show_scheduled_updates").die().live("click", function(e)
-	{
-	  // Toggle dropdown with slow speed.
-	  $('.scheduled-updates-list').toggle();
-	  	  
-	  var display = $('.scheduled-updates-list').css("display");	
-	  
-	  // If open then only fetch DB.
-	  if (display == 'block')
-		getScheduledUpdate();
-	});		
-	
-	// Hide drop down.
-	$('.scheduled-updates-list').die().live("mouseleave", function(e)
-	 {
-	  // Hide dropdown.
-	  $("#show_scheduled_updates").click();
-	 });
-	
+		
 	// Add agile text to message text area. 
 	$("#add_message").die().live("click", function(e)
 	  {
 		var quote = "Sell & Market like Fortune 500 with @agilecrm";
 		$("#twit-tweet").append(quote); 
+		
+		$("#link-text").html("<b>Thank you.</b>"); 
+		
+		setTimeout(function (){ $("#link-text").hide(); }, 2000);
 	  });	
 }
 

@@ -342,7 +342,7 @@ $(function()
 					json.data = JSON.stringify(CURRENT_DOMAIN_USER);
 					postBulkOperationData(url, json, undefined, undefined, function(){
 
-						// hide modal after 15 secs
+						// hide modal after 3 secs
 						setTimeout(function(){contacts_csv_modal.modal('hide');}, 3000);
 						
 						// Uncheck contacts table and hide bulk actions button.
@@ -351,7 +351,7 @@ $(function()
 						$('table#contacts').find('.thead_check').removeAttr('checked');
 						$('table#contacts').find('.tbody_check').removeAttr('checked');
 						
-					}, "Exporting " + count + " contacts as CSV scheduled.");
+					}, "no_noty");
 				});
 
 			});
@@ -575,6 +575,10 @@ function postBulkOperationData(url, data, form, contentType, callback, error_mes
 
 		// On save back to contacts list
 		Backbone.history.navigate("contacts", { trigger : true });  
+		
+		// If no_noty is given as error message, neglect noty
+		if(error_message === "no_noty")
+			return;
 		
 		if(!error_message)
 			{

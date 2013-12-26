@@ -7,11 +7,8 @@
             <a id="add-stream" class="add-stream add-stream-tab btn right" style="top:-30px;position: relative;">
  			  <i class="icon icon-plus-sign"></i> Add Stream
 			</a>             
-            <div class="btn-group right" style="position:relative;margin-right:5px;top:-30px;">       
-              <button id="show_scheduled_updates" class="btn"><i class="icon-time icon"></i></button>
-              <ul id="scheduled_updates_list" class="pull-right dropdown-menu scheduled-updates-list" role="menu" style="width: 280px;"> 
-              
-              </ul>
+            <div class="right" style="position:relative;margin-right:5px;top:-30px;">       
+              <a href="#scheduledmessages" id="show_scheduled_updates" class="btn" style="display:none;"><i class="icon-time icon"></i></a>              
             </div>      
         </div>
     </div>
@@ -24,60 +21,4 @@
                 </div>        
             </div><!-- span12 end -->       
 </div> <!-- row end -->
-</script>
-                 
-<script id="socialsuite-scheduled-updates-collection-template" type="text/html">
- <header style="box-sizing: border-box; position: relative;padding: 0 10px;color: #444;background-color:white;">
-    <h5 class="column-title txt-ellipsis"><span>Scheduled Updates</span></h5> 
- </header>
- <div id="schduled_notifications" class="stream-notifications action-notify"></div>
- <div id="stream" class="column-content">
-  <div id="socialsuite-scheduled-updates-model-list" class="chirp-container scroll-v">  
-
-  </div>      
-</div>
-</script>
-
-<script id="socialsuite-scheduled-updates-model-template" type="text/html">
-<article id={{id}} class="stream-item is-actionable">
-   <div class="item-box">       
-      <div class="tweet">
-           <header class="tweet-header">        
-	          <a class="account-link link-complex block" href="https://twitter.com/{{screen_name}}" rel="user" target="_blank"> 
-		         <div style="margin-left: -72px;float: left;width: 40px;">  
-			       <img class="tweet-avatar avatar pull-left thumbnail" src={{profileImg}} width="40" height="40" alt="{{screen_name}}'s avatar">   
- 		         </div> 
- 		         <div class="tweet-user" style="margin-left: -17px;"> 
- 			        <span class="account-inline txt-ellipsis"> 	
-                        <b class="link-complex-target"><span class="at">@</span>{{screen_name}}</b>
- 		    		</span> 
- 				 </div> 
-    		  </a>  
-		   </header> 
-		   <div class="tweet-body"> 
- 	          <p class="tweet-text">
-                 {{safe_tweet message}}
-              </p>                  
- 			  <footer class="tweet-footer cf">
-                <time class="txt-mute txt-small time-ellipsis" datetime="{{scheduled_date}}">Scheduled for {{scheduled_date}} {{scheduled_time}} as {{headline}}</time>
-                <!--<time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{epochToHumanDate "" schedule}}">{{schedule}}</time>-->
-                {{#if_equals tweetOwner "/"}}
-                  <span style="display:none;"></span>
-                {{else}}
-                   <span class="txt-mute txt-small">Message to {{tweetOwner}}</span>
-                {{/if_equals}}
-                <ul class="scheduled-update-actions tweet-actions">
-                   <li> <a class="tweet-action edit-scheduled" href="#social" rel="edit"> 
-                           <i class="icon icon-edit" title="Edit"></i>                            
-                         </a> </li>	                 
- 		    	   <li> <a class="tweet-action delete-scheduled" href="#social" rel="delete"> 
-                            <i class="icon icon-trash" title="Delete"></i>                             
-                         </a> </li>  
-				</ul>                
- 			 </footer>  
-    	   </div> 
-		   <i class="sprite tweet-dogear"></i>
-		</div>
-	</div>                        
-</article>
-</script>
+</script>    

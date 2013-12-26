@@ -118,7 +118,7 @@ function populateUsers(id, el ,value, key, callback) {
  * @param dealDetails - dealDetails value
  * @param value - Deal Object
  **/
-function populateMilestones(el, dealsDetails, value, callback){
+function populateMilestones(el, dealsDetails, value, callback, defaultSelectOption){
 
 	 // Fill milestones in select options
     var milestone_model = Backbone.Model.extend({
@@ -160,7 +160,7 @@ function populateMilestones(el, dealsDetails, value, callback){
 								// execute the callback, passing parameters as necessary
 								callback($('#milestone').html());
 							}
-						});
+						}, defaultSelectOption);
     			   }
     });
 }

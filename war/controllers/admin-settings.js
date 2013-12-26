@@ -64,7 +64,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		"all-domain-users" : "allDomainUsers",
 		
 		/* Menu settings - select modules on menu bar*/
-		"menu-settings":"menu_settings"
+		"menu-settings":"menu_settings",
+			
+		/* Mandrill Email Activity*/
+		"email-stats" : "emailStats"
 	},
 	
 	/**
@@ -346,5 +349,20 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 	allDomainUsersCollectionView.collection.fetch();
     $('#content').html(allDomainUsersCollectionView.el);
+	},
+	
+	/**
+	 * Fetches Mandrill subaccount usage info.
+	 **/
+	emailStats: function(){
+		var emailStatsModelView = new Base_Model_View({
+			url: 'core/api/emails/email-stats',
+			template : 'admin-settings-email-stats',
+		});
+		
+		$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
+        $('#content').find('#AdminPrefsTab .active').removeClass('active');
+        $('#content').find('.stats-tab').addClass('active');
+		
 	}
 });

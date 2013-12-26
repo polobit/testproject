@@ -15,69 +15,73 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class WebRule
 {
-    @Id
-    public Long id;
+	@Id
+	public Long id;
 
-    @NotSaved(IfDefault.class)
-    public String name = null;
+	@NotSaved(IfDefault.class)
+	public String name = null;
 
+	@NotSaved(IfDefault.class)
+	@Embedded
+	public List<SearchRule> rules = new ArrayList<SearchRule>();
 
-    @NotSaved(IfDefault.class)
-    @Embedded
-    public List<SearchRule> rules = new ArrayList<SearchRule>();
+	@NotSaved(IfDefault.class)
+	@Embedded
+	public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
 
-    @NotSaved(IfDefault.class)
-    @Embedded
-    public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
+	public String action = null;
 
-    public String action = null;
-    
-    @NotSaved(IfDefault.class)
-    public Long campaign_id = 0L;
-    
-    @NotSaved(IfDefault.class)
-    public String popup_type = null;
-    
-    @NotSaved(IfDefault.class)
-    public String popup_pattern = null;
-    
-    @NotSaved(IfDefault.class)
-    public String title = null;
+	@NotSaved(IfDefault.class)
+	public Long campaign_id = 0L;
 
-    @NotSaved(IfDefault.class)
-    public String popup_text = null;
+	@NotSaved(IfDefault.class)
+	public String popup_type = null;
 
-    public static ObjectifyGenericDao<WebRule> dao = new ObjectifyGenericDao<WebRule>(
-	    WebRule.class);
+	@NotSaved(IfDefault.class)
+	public String popup_pattern = null;
 
-    public WebRule()
-    {
+	@NotSaved(IfDefault.class)
+	public String title = null;
 
-    }
+	@NotSaved(IfDefault.class)
+	public String popup_text = null;
 
-    /**
-     * Saves the report
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
+	public static ObjectifyGenericDao<WebRule> dao = new ObjectifyGenericDao<WebRule>(WebRule.class);
+
+	public WebRule()
+	{
+
+	}
+
+	/**
+	 * Saves the report
+	 */
+	public void save()
+	{
+		dao.put(this);
+	}
 }
 
 @XmlRootElement
 class WebRuleAction
 {
-    public enum Action
-    {
-    	POPUP, ASSIGN_CAMPAIGN, ADD_TAG, MODAL_POPUP, CORNER_NOTY;
-    }
-    
-    public Action action = null;
-    public String RHS = null;
+	public enum Action
+	{
+		POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT, RUN_JAVASCRIPT;
+	}
 
-    public String popup_pattern = null;
+	public Action action = null;
+	public String RHS = null;
 
-    public String title = null;
+	public String position = null;
 
-    public String popup_text = null;
+	public String popup_pattern = null;
+
+	public String title = null;
+
+	public String popup_text = null;
+
+	public String delay = null;
+
+	public Long timer = 0L;
 }

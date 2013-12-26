@@ -50,11 +50,13 @@ public class WorkflowDefaultTemplatesServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
 
-	String[] GENERAL_CATEGORY = { "general/newsletter_template.js", "general/auto_responder_template.js", "general/lead_scoring_template.js" };
+	String[] GENERAL_CATEGORY = { "general/newsletter_template.js", "general/auto_responder_template.js" };
 	String[] ECOMMERCE_CATEGORY = { "ecommerce/cart_abandonment_template.js", "ecommerce/targeted_promo_template.js" };
-	String[] SAAS_CATEGORY = { "saas/trial_conversion_template.js", "saas/user_onboarding_template.js" };
+	String[] SAAS_CATEGORY = { "saas/signup_welcome_template.js", "saas/user_onboarding_template.js", "saas/trial_conversion_template.js" };
+	String[] MARKETING_AUTOMATION_CATEGORY = { "marketing-automation/lead_scoring_template.js", "marketing-automation/social_campaign_template.js",
+		"marketing-automation/ab_testing_template.js" };
 
-	String[][] categories = { GENERAL_CATEGORY, ECOMMERCE_CATEGORY, SAAS_CATEGORY };
+	String[][] categories = { GENERAL_CATEGORY, ECOMMERCE_CATEGORY, SAAS_CATEGORY, MARKETING_AUTOMATION_CATEGORY };
 
 	// all workflow jsons from campaign-templates folder.
 	JSONArray workflowTemplates = getAllWorkflowTemplates(categories);

@@ -319,7 +319,7 @@ function append_tag(base_model)
 {
 	var tag = base_model.get('tag');
 	var key = tag.charAt(0).toUpperCase();
-	$( 'div[tag-alphabet="'+key+'"]', this.el).append('<a href="#tags/'+tag+'" id="'+tag.replace( / +/g, '' )+'-in-list">'+tag+'</a>&nbsp;');
+	$( 'div[tag-alphabet="'+key+'"]', this.el).append('<a href="#tags/'+escape(tag)+'" id="'+tag.replace( / +/g, '' )+'-in-list">'+tag+'</a>&nbsp;');
 }
 
 function remove_tags(base_model)

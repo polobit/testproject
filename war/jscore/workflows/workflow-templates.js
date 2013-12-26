@@ -9,7 +9,7 @@
 function build_workflow_templates(templates_json_array, workflow_templates_template)
 {
 	// Add default template before adding dynamic templates
-	$(workflow_templates_template).find('#general').append(getTemplate('workflow-template-attributes', workflow_template_attributes["default"]));
+	$(workflow_templates_template).find('#general').append(getTemplate('workflow-template-attributes', workflow_template_attributes["custom"]));
 	
 	$.each(templates_json_array, function(index, category_templates_json){
 		build_template(category_templates_json, workflow_templates_template);
@@ -17,7 +17,8 @@ function build_workflow_templates(templates_json_array, workflow_templates_templ
 }
 
 /**
- * Arranges templates UI w.r.t category like general, saas etc.
+ * Arranges templates UI w.r.t category like general, saas etc. The category name should 
+ * match with id in the template.
  * 
  * @param category_templates_json - Category json having list of templates.
  * 
@@ -82,11 +83,11 @@ function get_template_json(templates_json, template_name)
  **/
 var workflow_template_attributes=
 {
-	    "default":{
+	    "custom":{
 	    	 "icon": "icon-file",
-		     "title": "Default",
-		     "name": "default",
-		     "description": "Create a campaign on your own."
+		     "title": "Custom",
+		     "name": "custom",
+		     "description": "Start with an empty campaign."
 	    },
 	    "newsletter": {
 	        "icon": "icon-file-text",
@@ -129,5 +130,23 @@ var workflow_template_attributes=
 	        "title": "Trial Conversion",
 	        "name": "trial_conversion",
 	        "description": "Identify who among your free/trial users are ready to convert and reach out to them."
+	    },
+	    "social_campaign":{
+	    	"icon":"icon-twitter",
+	    	"title": "Social Campaign",
+	    	"name": "social_campaign",
+	    	"description": "Reachout to prospects on social media. Send automated Tweets."
+	    },
+	    "ab_testing":{
+	    	"icon":"icon-beaker",
+	    	"title": "A/B Test",
+	    	"name": "ab_testing",
+	    	"description": "A/B test your emails. Compare results and optimize messages."
+	    },
+	    "signup_welcome":{
+	    	"icon": "icon-gift",
+	    	"title": "Signup Welcome",
+	    	"name": "signup_welcome",
+	    	"description": "Send a welcome email after users signup."
 	    }
 	};

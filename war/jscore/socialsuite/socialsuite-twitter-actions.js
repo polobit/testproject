@@ -1006,8 +1006,11 @@ $(".schedule-tweet").die().live("click", function(e)
                 
                 scheduledUpdate = scheduledUpdate.toJSON();                
                 
-                // Add scheduledUpdate in stream.
+                // Add scheduled in collection.
                 addScheduledUpdateInStream(scheduledUpdate);
+                
+                // scheduled updates available.
+                 $("#show_scheduled_updates").show();
               }
 		},
 		error : function(data){
@@ -1057,11 +1060,11 @@ $(".delete-scheduled").die().live("click", function(e)
 $(".edit-scheduled").die().live("click", function(e)
 {
   // Ask confirmation to user.
-  if(!confirm("Are you sure you want to edit this scheduled update?"))
-	return;
+  //if(!confirm("Are you sure you want to edit this scheduled update?"))
+	//return;
   
   // Details to pass on to method. 
-  var tweetId = ($(this).closest('article').attr('id'));
+  var tweetId = ($(this).attr('data'));
 
   // Get scheduled update from collection.
   var scheduledUpdate = ScheduledUpdatesView.collection.get(tweetId).toJSON();
@@ -1122,6 +1125,147 @@ $(".edit-scheduled").die().live("click", function(e)
    });	     
 });
 
+/**
+ * Get tweet, show tweet with list of retweeted user details.
+ */
+$(".show-retweet").die().live("click", function(e)
+{	
+	ScheduledEdit = false;
+	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	  
+	// Details to be pass on to method.
+	var streamId = ($(this).closest('article').attr('stream-id'));	
+	var tweetId = ($(this).closest('article').attr('id'));
+	var tweetIdStr = ($(this).closest('article').attr('tweet-id-str'));
+	
+	
+    //Get stream from collection.
+	var modelStream = StreamsListView.collection.get(streamId);	
+		
+	// Get tweet from stream.
+	var modelTweet = modelStream.get('tweetListView').get(tweetId);
+	var tweet = modelTweet.toJSON();
+	
+    // Display Modal
+    displayModal("socialsuite_RT_userlistModal","socialsuite-RT-userlist",tweet,null,null);
+            
+    $("#spinner-modal").show();
+  
+    var RTUserListView = new Base_Collection_View
+    ({
+	     url : function()
+			{
+				return '/core/social/getrtusers/' + streamId+ "/" + tweetIdStr;
+			},
+	     restKey: "user",
+	     templateKey: "socialsuite-RT-userlist",
+	     individual_tag_name: 'li',
+	 });	
+	  
+    RTUserListView.collection.fetch();	 
+			  
+    $('#RTuser_list').html(RTUserListView.render(true).el);    
+    
+ // Create normal time.
+	head.js('lib/jquery.timeago.js', function(){	 
+		        $(".time-ago", $("#socialsuite_RT_userlistModal")).timeago();	
+			});
+});
+
+/**
+ * get stream and create tweet for posting on Twitter to user who RT owner's tweet.
+ */
+$(".tweet-to-user").die().live("click", function(e)
+{	
+	// Hide modal before showing message modal.
+	$("#socialsuite_RT_userlistModal").modal("hide"); 
+	
+	ScheduledEdit = false;
+	
+	// Close all dropdowns of all tweets.
+	$('.more-options-list').toggle( false );
+	  
+	var streamId = ($(this).closest('article').attr('stream-id'));
+	var tweetOwner =$(this).attr("tweet-owner");
+	
+	// Fetch stream from collection
+	var stream = StreamsListView.collection.get(streamId).toJSON();
+		
+	// Store info in a json, to send it to the modal window when making send tweet request
+    var json = {};
+
+    // Set headline of modal window as Send Message
+    json["headline"] = "Reply Tweet";
+        
+    // Information to be shown in the modal to the user while sending message    
+    json["info"] = "Reply "+"@" + tweetOwner +" from " + stream.screen_name;
+
+    json["description"] = "@" + tweetOwner;    
+    json["tweetOwner"] = tweetOwner;   
+    json["streamId"] = streamId;
+    json["profileImg"] = $("#"+streamId+"-profile-img").prop("src");
+	    
+    // Display Modal
+    displayModal("socialsuite_twitter_messageModal","socialsuite-twitter-message",json,"twitter-counter","twit-tweet");
+            
+    // In compose message text limit is crossed so disable send button.
+    $('#twit-tweet').on('cross', function(){
+        $('#send_tweet').addClass('disabled');
+        $('#schedule_tweet').addClass('disabled');
+      });
+      
+    // In compose message text limit is uncrossed so enable send button.  
+    $('#twit-tweet').on('uncross', function(){
+        $('#send_tweet').removeClass('disabled');
+        $('#schedule_tweet').removeClass('disabled');
+      });
+            
+    // On click of send button in the modal, tweet request is sent 
+    $('#send_tweet').click(function (e)
+    {
+        e.preventDefault();
+        
+        // Check Send button is not enable
+    	if($("#send_tweet").hasClass('disabled'))
+    		return;
+
+        // Checks whether all the input fields are filled
+        if (!isValidForm($("#socialsuite_twitter_messageForm")))
+            return;
+
+        $('#send_tweet').addClass('disabled');
+        $("#spinner-modal").show();
+        
+        // Sends post request to url "/core/social/tweet/" and Calls StreamsAPI with 
+        // Stream id and Twitter id as path parameters and form as post data
+        $.post("/core/social/tweet/" + streamId ,
+        $('#socialsuite_twitter_messageForm').serialize(),
+
+        function (data)
+        {
+        	 $("#spinner-modal").hide();
+                	 
+        	 if(data == "Successful")
+        		 {
+                   // On success, shows the status as sent
+                   $('#socialsuite_twitter_messageModal').find('span.save-status').html("Sent");
+                   showNotyPopUp('information', "Your Tweet was posted!", "top", 5000);
+        		 }
+        	 
+            // Hides the modal after 2 seconds after the sent is shown
+        	 hideModal("socialsuite_twitter_messageModal");          
+
+        }).error(function (data)
+        {
+          // Displays Error Notification.
+          displayError("socialsuite_twitter_messageModal",data);
+        });
+    });
+}); 
+
+
 })(); // init end
 
 // Check valid scheduled.
@@ -1169,17 +1313,20 @@ function displayModal(modalToDisplay,templt,json,counterVar,focusElmnt)
     // Append the form into the content
     $('#content').append(message_form_modal);
     
-    // Display modal
-    $('#'+modalToDisplay).on('shown', function () {
-		  
-		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
-			  $(".twit-tweet-limit").limit({
-			  	  maxChars: 140,
-			  	  counter: "#"+counterVar
-			  	});
-			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();
-		  });
-	});
+    if(counterVar!= null && focusElmnt!= null)
+      {
+        // Display modal
+        $('#'+modalToDisplay).on('shown', function () {
+    		  
+    		  head.js(LIB_PATH + 'lib/bootstrap-limit.js', function(){
+    			  $(".twit-tweet-limit").limit({
+    			  	  maxChars: 140,
+    			  	  counter: "#"+counterVar
+    			  	});
+    			  $('#'+modalToDisplay).find('#'+focusElmnt).focus();
+    		  });
+    	});    	
+      }
     
     // Shows the modal after filling with details
     $('#'+modalToDisplay).modal("show");	

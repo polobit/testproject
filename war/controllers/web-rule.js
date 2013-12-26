@@ -37,7 +37,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					
 					
 							chainFilters(el, undefined, function(){
-								chainWebRules(el);
+								chainWebRules(el, undefined, true);
 								$("#content").html(el);
 							});
 
@@ -76,7 +76,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				head.js('lib/agile.jquery.chained.min.js', function()
 						{	
 							chainFilters(el, webrule.toJSON(), function(){
-								chainWebRules(el, webrule.toJSON());
+								chainWebRules(el, webrule.toJSON(), false, webrule.toJSON()["actions"]);
 								$("#content").html(el);
 							});
 							

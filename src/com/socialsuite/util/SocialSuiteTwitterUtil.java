@@ -2,10 +2,13 @@ package com.socialsuite.util;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.List;
 
 import org.json.JSONObject;
 
 import twitter4j.DirectMessage;
+import twitter4j.Paging;
+import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -619,5 +622,19 @@ public class SocialSuiteTwitterUtil
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
+	}
+
+	public static List<Status> getRTUsers(Stream stream, Long tweetId) throws Exception 
+	{
+		Twitter twitter = getTwitter(stream);
+				
+		List<Status> userList;		
+		
+		userList =  twitter.getRetweets(tweetId);	
+		
+		for(Status st : userList)
+			System.out.println("st: "+st.toString());
+		
+		return userList;
 	}
 }

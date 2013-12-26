@@ -66,6 +66,6 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 		{
 			trigger_form.find('select#' + milestones_select_id).val(trigger_deal_milestone_value).attr('selected', 'selected').trigger('change');
 		}
-	});
+	}, "Select new milestone...");
 
 }
