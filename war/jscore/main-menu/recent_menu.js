@@ -46,10 +46,24 @@ function populate_recent_menu()
 		
 			$(recent_view.el).append(itemView.render().el);
 		};
+		
+		try{
+		var arr = JSON.parse(localStorage.recentItems);
+		
+		for(var i=0;i<arr.length;++i)
+			recent_view.collection.push(new BaseModel(arr[i]));
+			
+		recent_view_update_required=true;	
+		}catch(ex){
+			console.log('EXCEPTION - '+ex);
+		}
 	}
 	
-	// default text, when list is empty.
-	$('#recent-menu>ul').html('<li style="text-align:center;"><a class="disabled">No Recent Activity</a></li>');
+	
+	
+	if(recent_view.collection.length==0)	// default text, when list is empty.
+		$('#recent-menu>ul').html('<li style="text-align:center;"><a class="disabled">No Recent Activity</a></li>');
+	else recent_view.render(true);			// populate elements if filled from localStorage
 }
 
 /**
@@ -59,24 +73,36 @@ function populate_recent_menu()
  */
 function add_recent_view(mdl)
 {
-/*	
+	
 	if(recent_view==undefined)
 		populate_recent_menu();
 	
 	// Add model to front of the collection, so most frequent ones are on top.
 	
-	if(!recent_view.collection.get(mdl.get('id')))
+	if(!recent_view.collection.get(mdl.get('id'))){
+		
+		if(recent_view.collection.length>=MAX_RECENT)
+			recent_view.collection.pop({silent:true});
+		
 		recent_view.collection.unshift(mdl);
+	}	
 	else {
 		recent_view.collection.remove(mdl,{ silent: true });
 		recent_view.collection.unshift(mdl);
 	}
 	
-	if(recent_view.collection.length>MAX_RECENT)
-		recent_view.collection.pop({silent:true});
+	
 	
 	recent_view_update_required=true;
-*/	
+
+	var arr=[];
+	
+	for(var i=0;i<recent_view.collection.models.length;++i)
+	{
+		arr.push(recent_view.collection.models[i].attributes);
+	}
+	
+	localStorage.recentItems = JSON.stringify(arr); // save current list to localStorage
 }
 
 /**

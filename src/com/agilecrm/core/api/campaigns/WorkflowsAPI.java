@@ -39,7 +39,7 @@ import com.campaignio.cron.util.CronUtil;
  * class from database.
  * </p>
  * 
- * @author Manohar
+ * @author Naresh
  * 
  */
 @Path("/api/workflows")
@@ -180,20 +180,12 @@ public class WorkflowsAPI
      *            - cursor object
      * @return
      */
-    @Path("active-contacts/{id}")
+    @Path("active-subscribers/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
-    public String getActiveContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public List<Contact> getActiveContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
-
-	List<Contact> contacts = CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.ACTIVE);
-
-	if (contacts == null)
-	    return null;
-
-	JSONArray contactsArr = CampaignSubscribersUtil.insertCampaignId(workflow_id, contacts);
-
-	return contactsArr.toString();
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.ACTIVE);
     }
 
     /**
@@ -208,19 +200,31 @@ public class WorkflowsAPI
      *            - cursor object
      * @return
      */
-    @Path("completed-contacts/{id}")
+    @Path("completed-subscribers/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
-    public String getCompletedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public List<Contact> getCompletedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
-	List<Contact> contacts = CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.DONE);
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.DONE);
+    }
 
-	if (contacts == null)
-	    return null;
-
-	JSONArray contactsArr = CampaignSubscribersUtil.insertCampaignId(workflow_id, contacts);
-
-	return contactsArr.toString();
+    /**
+     * Returns removed subscribers of given campaign.
+     * 
+     * @param workflow_id
+     *            - campaign-id
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("removed-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Contact> getRemovedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.REMOVED);
     }
 
     /**
@@ -246,4 +250,23 @@ public class WorkflowsAPI
 	CampaignStatusUtil.setStatusOfCampaign(contactId, workflowId, CampaignStatus.Status.REMOVED);
     }
 
+    /**
+     * Returns all subscribers including acive, completed and removed
+     * subscribers of given campaign.
+     * 
+     * @param workflow_id
+     *            - workflow id.
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("all-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getAllWorkflowContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getContactsByCampaignId(Integer.parseInt(count), cursor, workflow_id);
+    }
 }

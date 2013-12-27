@@ -30,7 +30,8 @@
 
 {{#if_equals entity_type "case"}}
 	<div style="display: inline;margin-top:10px; height: auto;">
-		<i class="icon-folder-close icon-3x" id="minus" style="height: 10px; cursor: pointer"></i>
+		<!--<i class="icon-folder-close icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-folder-close icon-3x thumbnail" id="minus" style="cursor: pointer; width:40px; height:40px; "></i>
 	</div>
 	<div style="height:4em;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;">
 		<b>{{title}}</b><br /> {{description}}
@@ -39,7 +40,8 @@
 
 {{#if_equals entity_type "deal"}}
 	<div style="display: inline;margin-top:10px; height: auto;">
-		<i class="icon-money icon-3x" id="minus" style="height: 10px; cursor: pointer"></i>
+		<!-- <i class="icon-money icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-money thumbnail" id="minus" style="cursor: pointer; width:40px; height:38px; padding-top:6px; font-size:2.75em;"></i>
 	</div>
 	<div style="height:4em;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;">
 		 <b>{{name}}</b><br /> {{description}}

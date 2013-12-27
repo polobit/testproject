@@ -37,12 +37,17 @@ $(function() {
 /**
  * Sets HTML Editor for UserPrefs, EmailTemplates etc.
  **/
-function setupHTMLEditor(selector) {
+function setupHTMLEditor(selector, data) {
 	head.js(LIB_PATH + 'lib/wysihtml5-0.3.0-min.js', LIB_PATH + 'lib/bootstrap-wysihtml5-min.js',
 			function() {
 				console.log('setting up text');
 				console.log(selector.html());
-
-				selector.wysihtml5();
+				
+				if(!$(selector).data('wysihtml5'))
+					selector.wysihtml5();
+				
+				if(data)
+					selector.data("wysihtml5").editor.setValue(data, false);
+				
 			});
 }

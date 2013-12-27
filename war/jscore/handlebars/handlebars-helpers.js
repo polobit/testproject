@@ -1114,7 +1114,21 @@ $(function()
 		}
 		else
 			return "(" + this.length + " Total)";
-	})
+	});
+	
+	/**
+	 * 
+	 * Returns subscribers count without parenthesis
+	 * 
+	 **/
+	Handlebars.registerHelper('subscribers_count', function(){
+		
+		if(this[0] && this[0].count && (this[0].count != -1))
+			return this[0].count + " Total";
+		
+		return this.length + " Total";
+			
+	});
 
 
 	/**
@@ -1562,7 +1576,7 @@ $(function()
 	{
 		return value.replace(/[\[\]]+/, '');
 	});
-
+	
 	/**
 	 * Shows list of triggers separated by comma
 	 */
@@ -1820,58 +1834,57 @@ $(function()
 			});
 	
 	/**
-	 * Identifies EMAIL_SENT campaign-log string and splits the log string based on 
+	 *  Identifies EMAIL_SENT campaign-log string and splits the log string based on 
 	 * '_aGiLeCrM' delimiter into To, From, Subject and Body.
 	 * 
 	 **/
-	Handlebars.registerHelper("if_email_sent",function(object,key,options){
-		
-		// delimiter for campaign send-email log
-		var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
-		
-		// if log_type is EMAIL_SENT
-		if(object[key] === "EMAIL_SENT")
-		{
-			// Splits logs message
-			var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
-			
-			// Json to apply for handlebar template
-			var json = {};
-			
-			if(email_fields === undefined)
-				return options.inverse(object);
-			
-			// Iterates inorder to insert each field into json
-			for(var i=0;i<email_fields.length;i++)
-			{
-				// Splits based on colon. E.g "To: naresh@agilecrm.com"
-				var arrcolon = email_fields[i].split(":");
-				
-				// Inserts LHS of colon as key. E.g., To
-				var key = arrcolon[0];
-				key=key.trim(); // if key starts with space, it can't accessible
-				
-				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
-				var value = arrcolon.slice(1).join(":"); // join the remaining string based on colon, 
-				                                        //only first occurence of colon is needed
-				value = value.trim();
-				
-				json[key] = value;
-			}
-			
-			// inserts time into json
-			json.time = object["time"];
-
-			// apply customized json to template.
-			return options.fn(json);
-		}	
-		
-		// if not EMAIL_SENT log, goto else in the template
-		return options.inverse(object);
-		
-	});
-	
-	
+	  Handlebars.registerHelper("if_email_sent",function(object,key,options){
+	    
+	     // delimiter for campaign send-email log
+	    var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
+	     
+	     // if log_type is EMAIL_SENT
+	    if(object[key] === "EMAIL_SENT")
+	     {
+	       // Splits logs message
+	       var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
+	       
+	       // Json to apply for handlebar template
+	       var json = {};
+	       
+	       if(email_fields === undefined)
+	         return options.inverse(object);
+	       
+	       // Iterates inorder to insert each field into json
+	       for(var i=0;i<email_fields.length;i++)
+	       {
+	         // Splits based on colon. E.g "To: naresh@agilecrm.com"
+	         var arrcolon = email_fields[i].split(":");
+	         
+	         // Inserts LHS of colon as key. E.g., To
+	         var key = arrcolon[0];
+	         key=key.trim(); // if key starts with space, it can't accessible
+	         
+	         // Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+	         var value = arrcolon.slice(1).join(":"); // join the remaining string based on colon, 
+	                                                 //only first occurence of colon is needed
+	         value = value.trim();
+	         
+	         json[key] = value;
+	       }
+	       
+	       // inserts time into json
+	       json.time = object["time"];
+	 
+	       // apply customized json to template.
+	       return options.fn(json);
+	     }  
+	     
+	     // if not EMAIL_SENT log, goto else in the template
+	     return options.inverse(object);
+	     
+	   });
+	 
 	Handlebars.registerHelper('remove_spaces', function(value) {
 		  return value.replace( / +/g, '');
 		  
@@ -1890,31 +1903,21 @@ $(function()
 		if (data === undefined || campaignStatusArray === undefined)
 			return;
 		
+		// Get campaign-id from hash
+		var current_campaign_id = getIdFromHash();
+		
 		for (var i=0, len = campaignStatusArray.length; i < len; i++)
 			{
-			   var current_campaign_id = campaignStatusArray[i].campaign_id;
 
 			   // compares campaign-id of each element of array with 
-			   // object's campaign-id
-			   if (object.campaign_id === current_campaign_id)
+			   // current campaign-id
+			   if (campaignStatusArray[i].campaign_id === current_campaign_id)
 			   {
 				   // if equal, execute template current json
 				   return options.fn(campaignStatusArray[i]);
 			   }
 			}
 			
-	});
-	
-	/**
-	 * Returns campaign-id from one of the active subscribers collection.
-	 **/
-	Handlebars.registerHelper('get_campaign_id', function(object){
-		
-		if (object === undefined || object[0] === undefined)
-			return;
-		
-		return object[0].campaign_id;
-
 	});
 	
 	/**
@@ -1930,10 +1933,12 @@ $(function()
 		var other_completed_campaigns=[];
 		var campaignStatusArray = object[data];
 		
+		var current_campaign_id = getIdFromHash();
+		
 		for (var i=0, len = campaignStatusArray.length; i < len; i++)
 		{
 			// neglect same campaign
-			if (campaignStatusArray[i].campaign_id === object.campaign_id)
+			if (current_campaign_id === campaignStatusArray[i].campaign_id)
 				continue;
 			
 			// push all other active campaigns
@@ -2105,4 +2110,72 @@ $(function()
 		
 		return value.trim();
 	});
+	
+	/**
+	 * Returns reputation name based on value
+	 * 
+	 **/
+	Handlebars.registerHelper('get_subaccount_reputation', function(value){
+		var type = "";
+		var reputation="Unknown";
+		
+		if(value > 1 && value < 20)
+		{
+			type = "important";
+			reputation="Poor";
+		}
+		else if(value >=20 && value < 50)
+		{
+			type="warning";
+			reputation="Poor";
+		}
+		else if(value >=50 && value < 75)
+		{
+           type="info";
+           reputation="OK";
+		}
+		else if(value >= 75 && value < 90)
+		{
+			type="inverse";
+			reputation="Good";
+		}
+		else if(value >=90)
+		{
+			type="success";
+			reputation="Excellant";
+		}
+		    
+	    return "<span style='font-size:13px;' class='label label-"+type+"'>"+reputation+"</span> <!--<span class='badge badge-"+type+"'>"+value+"</span>-->";
+		
+	});
+	
+	/**
+	 * Returns id from hash. It returns id from hash iff
+	 * id exists at last.
+	 * 
+	 **/
+	Handlebars.registerHelper('get_id_from_hash', function(){
+		
+		return getIdFromHash();
+	
+	});
+	
+	Handlebars.registerHelper('get_subscribers_type_from_hash', function(){
+		
+		// Returns "workflows" from "#workflows"
+		var hash = window.location.hash.substr(1);
+		
+		if(hash.indexOf("all") != -1)
+			return "All";
+		
+		if(hash.indexOf("active") != -1)
+			return "Active";
+		
+		if(hash.indexOf("completed") != -1)
+			return "Completed";
+		
+		if(hash.indexOf("removed") != -1)
+			return "Removed";
+	});
+	
 });

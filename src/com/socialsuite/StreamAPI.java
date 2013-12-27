@@ -19,7 +19,12 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import twitter4j.Status;
+
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.socialsuite.util.SocialSuiteLinkedinUtil;
+import com.socialsuite.util.SocialSuiteTwitterUtil;
+import com.socialsuite.util.StreamUtil;
 
 /**
  * <code>StreamAPI</code> is the API class for Social Suite Stream. This class
@@ -848,6 +853,54 @@ public class StreamAPI
 		}
 	}
 
+	/**
+	 * Connects to {@link SocialSuiteTwitterUtil} user based on the name given
+	 * in stream and fetch list of users who retweeted given tweet.
+	 * 
+	 * @param streamId
+	 *            {@link Long} stream id, to get {@link Stream} object
+	 * @param tweetId
+	 *            {@link String} Id of the tweet to delete in Twitter
+	 * 
+	 * @return List of user.
+	 */
+	@GET
+	@Path("/getrtusers/{streamId}/{tweetId}")	
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Status> getRTUsers(@PathParam("streamId") Long streamId, 
+			@PathParam("tweetId") Long tweetId)
+	{
+		try
+		{
+			System.out.println("in API getRTUsers : " + tweetId);
+
+			Stream stream = StreamUtil.getStream(streamId);
+			if (stream == null)
+				return null;
+
+			// Delete tweet on Twitter as per user's request.
+			return SocialSuiteTwitterUtil.getRTUsers(stream,tweetId);
+		}
+		catch (SocketTimeoutException e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+	
 	/**
 	 * Connects to {@link SocialSuiteLinkedinUtil} and sends the post or share
 	 * in Linkedin based on the parameter of stream.

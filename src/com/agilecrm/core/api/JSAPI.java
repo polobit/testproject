@@ -36,8 +36,11 @@ import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log;
 import com.campaignio.logger.util.LogUtil;
 
@@ -1117,6 +1120,40 @@ public class JSAPI
 		}
 		catch (Exception e)
 		{
+			return null;
+		}
+	}
+	
+	/**
+	 * Unsubscribe contact from campaign based in email of contact
+	 * 
+	 * @param email
+	 *            email of the contact
+	 * 
+	 * @return String
+	 */
+	@Path("contacts/unsubscribe-campaign")
+	@GET
+	@Produces("application / x-javascript")
+	public String unsubscribeCampaign(@QueryParam("data") String json, @QueryParam("email") String email)
+	{
+		try
+		{
+			Contact contact = ContactUtil.searchContactByEmail(email);
+			if (contact == null)
+				return JSAPIUtil.generateContactMissingError();
+
+			ObjectMapper mapper = new ObjectMapper();
+			Workflow workflow = mapper.readValue(json, Workflow.class);
+			
+			CronUtil.removeTask(workflow.id.toString(), contact.id.toString());
+			CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), Status.REMOVED);
+			
+			return mapper.writeValueAsString(contact);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 			return null;
 		}
 	}

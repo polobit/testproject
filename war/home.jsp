@@ -77,7 +77,7 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/agilecrm.css" />
+	href="/css/agilecrm.css" />
 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -254,13 +254,13 @@
 
 						<ul class="nav pull-right">
 
-							<!--	<li id="recent-menu" class="dropdown">
+							<li id="recent-menu" class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="" style="padding-left:2px; padding-right:4px;">
 									<i class='caret'></i>
 								</a>
 								<ul class="dropdown-menu" style="width:25em; right:-11px;">
 								</ul>
-							</li> -->
+							</li> 
 
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="">Add New <i class='caret'></i></a>
@@ -300,10 +300,8 @@
 
 									<%
 										if (domainUser != null && domainUser.is_admin)
-												out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li>");
+												out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li><li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
 									%>
-									<li><a href="#subscribe"><i class="icon-level-up"></i>
-											Plan & Upgrade</a></li>
 									<li><a href="#contact-us"><i class="icon-pencil"></i>
 											Contact Us</a></li>
 									<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
@@ -472,8 +470,11 @@
 		href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
 	<!-- social suite's css -->
 	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/social_suite.css" />
+		href="/css/social_suite.css" />
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
+	
+	<link rel="stylesheet" type="text/css"
+		href="css/simplemodal.css"></link>
 
 	<!-- Unified CSS for All Lib -->
 </body>

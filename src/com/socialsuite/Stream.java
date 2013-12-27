@@ -5,6 +5,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.socialsuite.util.SocialSuiteLinkedinUtil;
 
 /**
  * <code>Stream</code> class stores the details of a Stream (of social suite

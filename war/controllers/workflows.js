@@ -36,8 +36,10 @@ var WorkflowsRouter = Backbone.Router
 				"trigger/:id" : "triggerEdit",
 				
 				/* Subscribers*/
-				"workflow/:id/active-contacts": "activeContacts",
-				"workflow/:id/completed-contacts": "completedContacts"
+				"workflow/all-subscribers/:id":"allSubscribers",
+				"workflow/active-subscribers/:id": "activeSubscribers",
+				"workflow/completed-subscribers/:id": "completedSubscribers",
+				"workflow/removed-subscribers/:id": "removedSubscribers"
 			},
 
 			/**
@@ -171,6 +173,10 @@ var WorkflowsRouter = Backbone.Router
 					});
 					return;
 				}
+				
+				/* Reset the designer JSON */
+				this.workflow_json = undefined;
+				this.workflow_model = undefined;
 				
 				// Returns workflow json with the template name and initialize this.workflow_json.
 				this.workflow_json = JSON.stringify(get_template_json(this.worflow_templates_json, template_name));
@@ -555,12 +561,35 @@ var WorkflowsRouter = Backbone.Router
 				$("#content").html(view.el);
 			},
 			
+			/**
+			 * Returns all subscribers including active, completed and removed.
+			 * @param id - workflow id.
+			 **/
+			allSubscribers: function(id){
+				if (!this.workflow_list_view
+						|| this.workflow_list_view.collection.length == 0) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				var all_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/all-subscribers/'+id, 'workflow-other-subscribers');
+				all_subscribers_collection.collection.fetch({
+					success: function(collection){
+						if(collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "all-subscribers");
+					}
+				});
+				$("#content").html(all_subscribers_collection.el);
+			},
+			
 			/** 
 			 * Returns list of subscribers having campaignStatus campaignId-ACTIVE
 			 * 
 			 * @param id - workflow id.
 			 **/
-			activeContacts:function(id)
+			activeSubscribers:function(id)
 			{
 				if (!this.workflow_list_view
 						|| this.workflow_list_view.collection.length == 0) {
@@ -570,35 +599,18 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 				
-				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+				this.active_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/active-subscribers/'+id, 'workflow-active-contacts');
 				
-				this.active_contacts_collection = new Base_Collection_View({
-					url:'core/api/workflows/active-contacts/'+id,
-					templateKey:'workflow-active-contacts',
-					individual_tag_name : 'tr',
-					cursor : true,
-					page_size : 20,
-					postRenderCallback : function(el) {
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-							$("time.campaign-started-time", el).timeago();
-							
-						});
+				this.active_subscribers_collection.collection.fetch({
+					success: function(collection){
 						
-						$('#subscribers-campaign-name').text(workflowName);
-						
-						// Add href to Completed Subscribers
-						$('a#completed-subscribers-link').attr('href', '#workflow/'+id+'/completed-contacts');
-					},
-					appendItemCallback:function(el)
-					{
-						$("time.campaign-started-time", el).timeago();
+						// show pad content
+						if(collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "active-subscribers");
 					}
 				});
 				
-				this.active_contacts_collection.collection.fetch();
-				$("#content").html(this.active_contacts_collection.el);
+				$("#content").html(this.active_subscribers_collection.el);
 				
 			},
 			
@@ -609,7 +621,7 @@ var WorkflowsRouter = Backbone.Router
 			 * @param id - workflow id.
              *
 			 **/
-			completedContacts: function(id){
+			completedSubscribers: function(id){
 				
 				if (!this.workflow_list_view
 						|| this.workflow_list_view.collection.length == 0) {
@@ -619,35 +631,43 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 				
-				/* Set the designer JSON. This will be deserialized */
-				this.workflow_model = this.workflow_list_view.collection.get(id);
-				var workflowName = this.workflow_model.get("name");
+				var completed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/completed-subscribers/'+id, 'workflow-other-subscribers');
 				
-				this.completed_contacts_collection = new Base_Collection_View({
-					url:'core/api/workflows/completed-contacts/'+id,
-					templateKey:'workflow-completed-contacts',
-					individual_tag_name : 'tr',
-					cursor : true,
-					page_size : 20,
-					postRenderCallback : function(el) {
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-							$("time.campaign-started-time", el).timeago();
-							$("time.campaign-completed-time", el).timeago();
-						});
+				completed_subscribers_collection.collection.fetch({
+					success: function(collection){
 						
-						$('#subscribers-campaign-name').text(workflowName);
-						
-						// Add href to Active Subscribers
-						$('a#active-subscribers-link', el).attr('href', '#workflow/'+id+'/active-contacts');
-					},
-					appendItemCallback:function(el)
-					{
-						$("time.campaign-started-time", el).timeago();
-						$("time.campaign-completed-time", el).timeago();
+						// show pad content
+						if(collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "completed-subscribers");
+					}
+				});
+				$("#content").html(completed_subscribers_collection.el);
+			},
+			
+			/**
+			 * Returns list of subscribers removed from a campaign.
+			 * @param id - workflow id.
+			 **/
+			removedSubscribers: function(id){
+				if (!this.workflow_list_view
+						|| this.workflow_list_view.collection.length == 0) {
+					this.navigate("workflows", {
+						trigger : true
+					});
+					return;
+				}
+				
+				var removed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/removed-subscribers/'+id, 'workflow-other-subscribers');
+				
+				removed_subscribers_collection.collection.fetch({
+					success: function(collection){
+
+						// show pad content
+						if(collection.length === 0)
+							fill_subscribers_slate('subscribers-slate', "removed-subscribers");
 					}
 				});
 				
-				this.completed_contacts_collection.collection.fetch();
-				$("#content").html(this.completed_contacts_collection.el);
+				$("#content").html(removed_subscribers_collection.el);
 			}
 		});

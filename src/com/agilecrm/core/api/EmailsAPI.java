@@ -19,6 +19,8 @@ import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
  * <code>EmailsAPI</code> is the API class for Emails. It handles sending email
@@ -149,5 +151,29 @@ public class EmailsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Returns mandrill subaccount information
+     * 
+     * @return String
+     * @throws Exception
+     */
+    @Path("email-stats")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getEmailActivityFromMandrill() throws Exception
+    {
+	// Returns mandrill subaccount info if created, otherwise error json.
+	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get());
+
+	// If subaccount did not exist, return null
+	if (StringUtils.contains(info, "Unknown_Subaccount"))
+	{
+	    System.out.println("Mandrill sub-account is not yet created or can't get info. So return null");
+	    return null;
+	}
+
+	return info;
     }
 }

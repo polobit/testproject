@@ -850,6 +850,31 @@ tbody a.no-style-a {
     background: rgba(185, 182, 182, 0.8);
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
+
+#tags ::-webkit-scrollbar {
+	 width: 10px;
+    margin-right: 4px!important;
+}
+
+
+/* Horizontal scroll */
+#tags ::-webkit-scrollbar:horizontal {
+	height:10px;
+}
+/* Track */
+#tags ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+/* Handle */
+#tags ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(185, 182, 182, 0.8);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+
 /* For UI in deals milestones */
 .milestone-main{
 	white-space:nowrap;

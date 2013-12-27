@@ -20,31 +20,37 @@
 </div>
 {{/unless}}
 {{#if this.length}}
+<table style="display:block;overflow:hidden!important;"><tbody><tr><td>
 <section>
     <form>
-        <table class="table hide">
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
             <div id="overdue-heading" style="display: none;"><b >Overdue</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="overdue" style="display: inline;"></tbody>
         </table>
-        <table class="table hide">
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
             <div id="today-heading" style="display: none"><b >Today</b>	
 			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="today" style="display: inline;"></tbody>
         </table>
-        <table class="table hide">
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
             <div id="tomorrow-heading" style="display: none"><b >Tomorrow</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="tomorrow" style="display: inline;"></tbody>
         </table>
-        <table class="table hide">
+        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
 		<div id="next-week-heading" style="display: none">
             <b >Next Week</b>
 			&nbsp<small class="count" count="0">(10)</small></div>
+			<colgroup><col width="30px"><col width="99%"></colgroup>
             <tbody id="next-week" style="display: inline;"></tbody>
         </table>
     </form>
 </section>
+</td></tr></tbody></table>
 {{/if}}
 </script>
 
@@ -52,11 +58,11 @@
 	<td style="border-top:1px dotted #DDD;"> <input type="checkbox" data='{{id}}' class='tasks-select'> </td>
 	<td style="width:100%!important;">
 		<div>
-  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b class="activate-link">{{else}}<b>{{/is_link}}{{safe_string subject}}</b></p>
+  			<p style="word-break: break-word!important;-ms-word-break: break-all;word-break: break-all;">{{#is_link subject}}<b class="activate-link" style="white-space: normal!important;">{{else}}<b style="white-space: normal!important;">{{/is_link}}{{safe_string subject}}</b></p>
   			{{#if this.contacts}}
-				<p class="activate-link" style="white-space: nowrap;width: 11em;overflow: hidden;text-overflow: ellipsis;">{{#related_to_one contacts}}{{/related_to_one}}</p>
+				<p class="activate-link" style="white-space: nowrap;">{{#related_to_one contacts}}{{/related_to_one}}</p>
 			{{/if}}
-  			<p style="margin:0px 0px 5px 0px;"> 
+  			<p style="margin:0px 0px 5px 0px;line-height: 20px;"> 
 				<span class="label">{{task_property type}}</span><span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
 			</p>
         	<p>

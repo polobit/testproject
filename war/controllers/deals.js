@@ -65,7 +65,6 @@ var DealsRouter = Backbone.Router.extend({
 					{
 						$(".deal-close-time", el).timeago();
 					});
-		
 					// Shows Milestones Pie
 					pieMilestones();
 		

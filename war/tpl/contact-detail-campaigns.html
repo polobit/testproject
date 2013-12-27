@@ -1,4 +1,4 @@
-<script id="campaigns-collection-template" type="text/html">
+\<script id="campaigns-collection-template" type="text/html">
 <div style="margin-bottom:20px">
 {{#contact_model}}
 	<div>
@@ -102,35 +102,9 @@
 		{{/if}}
 	</span>
 
-{{#if_email_sent this "log_type"}}
+	<h4><b>{{titleFromEnums log_type}}</b></h4></br>
 
-     <h4>
-         <a class="email-subject" id={{time}} style="font-weight:bold" href="#collapse-{{time}}">{{Subject}}</a>
-	 </h4></br>
-     <div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{time}}">
-	     <div>
-             <p>{{{Body}}}</p>
-		 </div>
-     </div>
-	
-	 <div id="collapse-{{time}}" class="collapse activity-email-collapse">
-	     <ul class="email-headers">
-             <li><strong>From:</strong> {{From}}</li> 
-			 <li>
-			     <div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
-				     <strong>To:</strong> {{To}}
-				 </div>
-			 </li>
-         </ul>
-       	 <p style="margin-top:10px">{{{Body}}}</p>
-    </div>
-     
-{{else}}
-<h4><b>{{titleFromEnums log_type}}</b></h4></br>
-
- <p>{{{message}}}</p>
-
-{{/if_email_sent}}	
+ 	<p>{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
 
     <small class="edit-hover">
 		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>

@@ -102,7 +102,7 @@ public class TwilioUtil {
 		 * number if it is an array
 		 */
 		if (outgoingCallerIds.get("OutgoingCallerId") instanceof JSONObject)
-			return new JSONArray(
+			return new JSONArray().put(
 					outgoingCallerIds.getJSONObject("OutgoingCallerId"));
 
 		return outgoingCallerIds.getJSONArray("OutgoingCallerId");

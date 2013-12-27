@@ -121,9 +121,12 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
  * @param callback
  *            function to be called after select if created
  */
-function fillTokenizedSelect(selectId, array, callback)
+function fillTokenizedSelect(selectId, array, callback, defaultSelectOption)
 {
-	$("#" + selectId).empty().append('<option value="">Select...</option>');
+	if (!defaultSelectOption)
+		defaultSelectOption = "Select...";
+	
+	$("#" + selectId).empty().append('<option value="">'+defaultSelectOption+'</option>');
 
 	// Iterates though each element in array and creates a options to select
 	// field and

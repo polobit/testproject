@@ -50,7 +50,7 @@ function currentRoute(route)
 	set_profile_noty();
 	// Reset it to uncheck checkboxes for bulk actions on route change
 	SELECT_ALL = false;
-	console.log(tour);
+	SUBSCRIBERS_SELECT_ALL = false;
 	if (tour)
 	{
 		tour.end();

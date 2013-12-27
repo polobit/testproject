@@ -121,27 +121,47 @@ function setupSocialSuiteLinkedinOAuth()
 /**
  *  Register all streams on server
  */
-function registerAll()
-{ 	
+function registerAll(index)
+{	
+  console.log("In registerAll.");
+  //console.log(index + " "+registerCounter+" "+StreamsListView.collection.length);
+  
   var streamsJSON = StreamsListView.collection.toJSON();
 		
-  // Streams not available OR streams already registered OR pubnub not initialized	
-  if(streamsJSON == null || registerAllDone == true || pubnub == null)
+  // Streams not available OR streams already registered OR pubnub not initialized OR (index 0 stream is done and RC is increased.)	
+  if(streamsJSON == null || registerAllDone == true || pubnub == null || (registerCounter != null && index == 0))
 	{
 	  console.log("registerAllDone : "+registerAllDone);
 	  return;
 	}  
-	  	
-   // Get stream
-   $.each(streamsJSON, function(i, stream)
-	 {	  		       
-	    /* Publish data to register on server */
-	 	var publishJSON = {"message_type":"register", "stream":stream};
-	    sendMessage(publishJSON);	 	 
-	 });
-   
-   // All added streams registered. 
-   registerAllDone = true;
+	
+   // Get stream.
+   var stream = StreamsListView.collection.at(index);
+   console.log(stream);
+  
+   // Check stream is present or added in collection.
+   if(stream == null || stream == undefined)
+	  return;
+    
+   // Check ACK done with stream.
+   //console.log(stream.get('tweetListView').where({text: "ACK"}));
+  
+   // First stream from collection to register and assign value to RC.
+   if(index == 0 && registerCounter == null)
+	 {
+	   registerCounter = 0;
+	   
+	   if(addImgDone == false)
+	     addUserImgToColumn();
+	 }	 
+     
+   // Publish data to register on server 
+   var publishJSON = {"message_type":"register", "stream":stream};
+   sendMessage(publishJSON);
+	    
+   // All added streams registered.
+   if(registerCounter == (StreamsListView.collection.length-1)) 
+     registerAllDone = true;
 }
 
 /**
@@ -151,58 +171,57 @@ function unregisterAll()
 { 	
   // Collection not defined.	
   if(!StreamsListView)
-	return;
-	
-  var streamsJSON = StreamsListView.collection.toJSON();
+	return;	
 		
   // Streams not available OR pubnub not initialized.	
-  if(streamsJSON == null || pubnub == null)
-	return;
-	  	
-   // Get stream
-   $.each(streamsJSON, function(i, stream)
-	 {	  		       
-	    // Stream size is too big, can not handle by pubnub so remove list of tweet.
-		delete stream.tweetListView;	
-		
-		// Unregister on server
-		var publishJSON = {"message_type":"unregister", "stream":stream};
-		sendMessage(publishJSON);
-	 });  
+  if(StreamsListView == undefined || pubnub == null)
+	return;	  	
    
+  // Unregister on server
+  var publishJSON = {"message_type":"unregister_all","client_channel":CURRENT_DOMAIN_USER.id +"_Channel" };
+  sendMessage(publishJSON);
+	 
    // Flush all data.
    registerAllDone = false;	
+   registerCounter = null;
+   addImgDone = false;
    StreamsListView = undefined;
 }
+
 /**
  * Add relevant profile img to stream in column header.
  */
-function addUserImgToColumn(stream)
+function addUserImgToColumn()
 {	
-  // Get stream from collection.
-  var modelStream = StreamsListView.collection.get(stream.id);	 
+  console.log("In addUserImgToColumn");	
+	
+  var streamsJSON = StreamsListView.collection.toJSON();
+                    
+   // Get stream
+   $.each(streamsJSON, function(i, stream)
+     {
+	  // Get stream from collection.
+      var modelStream = StreamsListView.collection.get(stream.id);	 
 	  
-  // Fetching profile image url from twitter/linkedin server    											  	
-  $.get("/core/social/getprofileimg/" + stream.id, 
+      // Fetching profile image url from twitter/linkedin server    											  	
+      $.get("/core/social/getprofileimg/" + stream.id, 
 	    function (url)
 	    {
 	      // Set url in stream model.
           modelStream.set("profile_img_url",url);
  	            	
           // Append in collection 			
-		  socialsuitecall.streams(modelStream);
-
-	      // Get network updates from linkedin
-	      if(stream.stream_type == "All_Updates")	    			  
-	         getSocialSuiteLinkedInNetworkUpdates(stream);
+		  socialsuitecall.streams(modelStream);	      
 	    });  
+     });   
+   addImgDone = true;   
 }
 
 /**
  * Add tweet in stream.
  */
 function handleMessage(tweet)
-{ 
+{ 	
   // We need this messages to reflect actions in all added relevant streams.
   if(tweet["delete"] != null) //(tweet.delete != null)
 	  {
@@ -210,7 +229,7 @@ function handleMessage(tweet)
 	    return;
 	  }
   
-  //Error message from server "Rate limit exceeded."
+  //Error message from server "Rate limit exceeded." or "server not connected."
   if(tweet.id == "001") //(tweet.delete != null)
 	  {	    
 	    displayErrorInStream(tweet);
@@ -222,7 +241,7 @@ function handleMessage(tweet)
 
   if(modelStream != null || modelStream != undefined)
 	{
-	  console.log("Current_Route: "+Current_Route+" focused: "+focused);
+	  //console.log("Current_Route: "+Current_Route+" focused: "+focused);
 	  
 	  // User on #social as well as window is active.
 	  if(Current_Route == "social" && focused == true)
@@ -231,7 +250,7 @@ function handleMessage(tweet)
 		    // New tweet notification not yet clicked.
 		    if( $('#stream_notifications_'+tweet.stream_id).is(':empty') == false)  
 		      {
-		    	console.log("not clicked");
+		    	//console.log("not clicked");
 		    	
 		    	// User did not click on notification so continue adding tweets in temp collection.
 		    	addTweetToTempCollection(tweet);  
@@ -241,7 +260,7 @@ function handleMessage(tweet)
 		      }		    	
 		    else
 		      {
-		    	console.log("no notification");
+		    	//console.log("no notification");
 		    	
 		    	// Add tweet to model in normal way.
 		    	addTweetToStream(modelStream,tweet);
@@ -249,7 +268,7 @@ function handleMessage(tweet)
 		  }
 	  else
 		  {
-		    console.log("not in social suite");
+		    //console.log("not in social suite");
 		    
 		    // Add tweet to temp collection, user on another tab or window is inactive.
   	        addTweetToTempCollection(tweet);  	
@@ -281,6 +300,11 @@ function addTweetToStream(modelStream,tweet)
 		  //if(tweet.text == "Dear you do not have any tweets.")
 		  tweet.text = "No Tweets to show here.";
 		}
+	else if(tweet.type == "ACK")
+		{
+		 tweet["msg_type"] = "ACK";
+		 tweet["text"] = "ACK";		 
+		}		
 	else
 		{
 	      tweet["msg_type"] = "Tweet";
@@ -304,6 +328,10 @@ function addTweetToStream(modelStream,tweet)
 	          tweet["deletable_tweet"] = true;
 	        }
 	      
+	      var checkRT = modelStream.get('screen_name')+" retweeted";
+	      if(tweet.retweeted == checkRT)
+	    	  tweet["retweeted_by_user"] = true;
+	      
 	      // Save original text for other actions.
 	      tweet["original_text"] = tweet.text;
 	      
@@ -311,8 +339,8 @@ function addTweetToStream(modelStream,tweet)
 	      tweet.text = convertTextToTweet(tweet);
 		}	
 	    
-	console.log("tweet : "+tweet.text);
-    console.log("add at "+modelStream.get('tweetListView').length);   
+	//console.log("tweet : "+tweet.text);
+    //console.log("add at "+modelStream.get('tweetListView').length);   
 		
     // Sort stream on tweet id basis which is unique and recent tweet has highest value.
 	modelStream.get('tweetListView').comparator = function(model) 
@@ -325,12 +353,18 @@ function addTweetToStream(modelStream,tweet)
 	 modelStream.get('tweetListView').add(tweet);	
 	   
 	 // Sort stream on id. so recent tweet comes on top.
-	 modelStream.get('tweetListView').sort() ;	   
+	 modelStream.get('tweetListView').sort();		    
 	   
 	 // Create normal time.
 	 head.js('lib/jquery.timeago.js', function(){	 
 		        $(".time-ago", $(".chirp-container")).timeago();	
-			});	 
+			});		 
+	 
+	 if(tweet.type == "ACK")
+		{
+		  registerCounter++;
+		  registerAll(registerCounter);
+		}	
 }
 
 /**
@@ -341,7 +375,7 @@ function addTweetToTempCollection(tweet)
 {
   var modelStream = null;  
   
-  if(tweet.id == "000")
+  if(tweet.id == "000" || tweet.type == "ACK")
 	  {
 	     console.log("got 000");
 	     // Get stream from collection.
@@ -482,7 +516,7 @@ function removeWaiting()
 function checkNewTweets()
 { 
   var streamsJSON = TempStreamsListView.collection.toJSON();
-
+  
   // Streams not available.	
   if(streamsJSON == null)
 	{
@@ -496,6 +530,7 @@ function checkNewTweets()
 	        
      	    // Get stream from collection.
 	        var modelStream = TempStreamsListView.collection.get(stream.id);	
+	        
 	        if(modelStream != null || modelStream != undefined)
 	    	{	        
 	         if(modelStream.get('tweetListView').length == 1)
@@ -570,13 +605,16 @@ function mergeCollections(streamId)
 
 /**
  * When request rate limit is exceeded so Twitter server send code 88, It will not accept any more REST call.
+ * When Twitter service or network is unavailable
  * User have to wait for some time and retry again.
  * We need to display notification for that in relavant stream.
  */
 function displayErrorInStream(errorMsg)
-{		
+{	
+	console.log("errorMsg: ");
+	console.log(errorMsg);
 	var streamId = null;
-	
+
 	// Get stream id.
 	if(errorMsg.id == "001") // from Tweet
 		streamId = errorMsg.stream_id;
@@ -586,11 +624,20 @@ function displayErrorInStream(errorMsg)
 	// Hide waiting symbol.
 	$("#stream-spinner-modal-"+streamId).hide();
 	
-    // Add notification of error on stream.
-    document.getElementById('stream_notifications_'+streamId).innerHTML= '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
-      
-    // Add relation from <div> for notification.
-    $('#stream_notifications_'+streamId).attr("rel",'retry');
+	var modelTempStream = TempStreamsListView.collection.get(streamId);
+	var modelStream = StreamsListView.collection.get(streamId);
+	
+	if(modelStream.get('tweetListView').length == 0 && modelTempStream.get('tweetListView').length == 0)		
+	{
+		console.log("There is nothing to display");
+		console.log(modelStream.get('tweetListView'));console.log(modelTempStream.get('tweetListView'));
+		
+	    // Add notification of error on stream.
+	    document.getElementById('stream_notifications_'+streamId).innerHTML= '<p>Request rate limit exceeded, Retry after some time. <i class="icon icon-refresh" title="Retry again."></i></p>';
+	      
+	    // Add relation from <div> for notification.
+	    $('#stream_notifications_'+streamId).attr("rel",'retry');	
+	}
 }
 
 /**
@@ -610,46 +657,24 @@ function registerStreamAgain(streamId)
  }
 
 /**
- * Gets Scheduled Updates fron DB and adds into Stream.
+ * Gets Scheduled Updates fron DB and show button or hide it.
  */
-function getScheduledUpdate(stream)
-{   	
-  // Get updates of relevant stream from database. 
-  $.getJSON("/core/scheduledupdate/getscheduledupdates/" + stream.screen_name,function(data)
-	{
-	  console.log("data after fetching sc. updates from db");
-	  console.log(data);
-		  
-	  if(data.length)
-	   	{	
-	      // Get schedule update
-	      $.each(data, function(i, update)
-		     {	 
-	    	   var user = {};
-	    	   user["screen_name"] = stream.screen_name;
-	    	   user["profile_image_url"] = update.profileImg;    	   
-	    	   update["stream_type"] = stream.stream_type;
-	    	   update["stream_id"] = stream.id;
-	    	   update["user"] = user;	
-	    	   update["text"] = update.message;
-	    	   	    	   
-	    	   handleMessage(update);
-		   	 });
-		}		
-	  else
-		{		  
-		   var update = {};
-		   var user = {};
-    	   user["screen_name"] = stream.screen_name;    	   
-    	   update["stream_type"] = stream.stream_type;
-    	   update["stream_id"] = stream.id;
-    	   update["user"] = user;	
-    	   update["text"] = "There is no tweets to show here.";
-    	   update["id"] = "000";
-    	
-		   handleMessage(update);
-		}
-	}).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
+function checkScheduledUpdates()
+{
+	$.getJSON("/core/scheduledupdate/getscheduledupdates",function(data)
+	   		  {
+				console.log("data after fetching scheduled updates from db");
+	   		    console.log(data);
+	   		    
+	   		    if(data.length != 0)	   		    		 	
+	   		    	 $("#show_scheduled_updates").show();	   		    		   		    
+	   		    else
+	   		      $("#show_scheduled_updates").hide();
+	   	      }).error(function(jqXHR, textStatus, errorThrown) 
+	   	    		  { 
+	   	    	        $("#show_scheduled_updates").hide();
+	   	    	        console.log("Error occured in scheduled updates search."); 
+	   	    	      });	
 }
 
 /**
@@ -657,65 +682,30 @@ function getScheduledUpdate(stream)
  */
 function addScheduledUpdateInStream(scheduledUpdate)
 {
-	console.log("In addScheduledUpdateInStream");
-	scheduledUpdate = scheduledUpdate.toJSON();
-    
-	// Get stream from collection.
-	var streams = StreamsListView.collection.models; 
-
-    // Get scheduled stream match with screen name of update.
-    $.each(streams, function(i, stream)
-     {	 
-	   stream = stream.toJSON();	
-	   if(stream.screen_name == scheduledUpdate.screen_name && stream.stream_type == "Scheduled") 
-		 {		   
-		   var user = {};
-		   user["screen_name"] = stream.screen_name;
-		   user["profile_image_url"] = scheduledUpdate.profileImg;    	   
-		   scheduledUpdate["stream_type"] = stream.stream_type;
-		   scheduledUpdate["stream_id"] = stream.id;
-		   scheduledUpdate["user"] = user;	
-		   scheduledUpdate["text"] = scheduledUpdate.message;
-		  
-		   handleMessage(scheduledUpdate);
-		   console.log(scheduledUpdate);
-		 }	   
-   	 }); 
-    
-     // Remove deleted tweet element from ui
-	 $('.deleted').remove();
-}
-
-/**
- * Updates added Scheduled Update In Stream. 
- */
-function updateScheduledUpdateInStream(scheduledUpdate,streamJSON)
-{
-	console.log("In updateScheduledUpdateInStream");
-	var newscheduledUpdate = scheduledUpdate.toJSON();
-  
-	//Get stream from collection.
-	var modelStream = StreamsListView.collection.get(streamJSON.id);	
+	console.log("In addScheduledUpdateInStream");	
+	console.log(scheduledUpdate);	
 		
-	// Get tweet from stream.
-	var modelTweet = modelStream.get('tweetListView').get(newscheduledUpdate.id);
-	 	
-	// Update new data in tweet.
-	modelTweet.set("scheduled_time",newscheduledUpdate.scheduled_time);
-	modelTweet.set("scheduled_date",newscheduledUpdate.scheduled_date);  	
-	modelTweet.set("message",newscheduledUpdate.message);
-	modelTweet.set("original_text",newscheduledUpdate.message);
-	
-	var tweet = modelTweet.toJSON();
-	tweet.text = newscheduledUpdate.message;	
-	tweet.text = convertTextToTweet(tweet);
-
-	// Converts normal text to tweet with link on url, # and @.
-	modelTweet.set("text",tweet.text);    
-	
-    // Add back to stream.
-    modelStream.get('tweetListView').add(modelTweet);
-    
-    // Remove deleted tweet element from ui
-	$('.deleted').remove();
+	if(ScheduledEdit == true)
+	  {
+		// Get scheduled update from collection.
+		var newScheduledUpdate = ScheduledUpdatesView.collection.get(scheduledUpdate.id);
+		
+		// Set new data.
+		newScheduledUpdate.set("message",scheduledUpdate.message);
+		newScheduledUpdate.set("scheduled_date",scheduledUpdate.scheduled_date);
+		newScheduledUpdate.set("scheduled_time",scheduledUpdate.scheduled_time);
+		    	
+		// Add back to stream.
+		ScheduledUpdatesView.collection.add(newScheduledUpdate);	
+		$('#socialsuite-scheduled-updates-content').append(ScheduledUpdatesView.render(true).el);
+		
+		ScheduledEdit = false;
+	  }
+	else
+	  {
+		// Add scheduled update in collection.
+		if(Current_Route == "scheduledmessages")
+		  ScheduledUpdatesView.collection.add(scheduledUpdate);
+	  }	  	
 }
+

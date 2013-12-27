@@ -3,6 +3,7 @@ package com.socialsuite;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -11,7 +12,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.socialsuite.util.ScheduleUpdateUtil;
 
 /**
  * <code>ScheduledUpdateAPI</code> is the API class for Social Suite
@@ -45,7 +50,8 @@ public class ScheduledUpdateAPI
 	}
 
 	/**
-	 * Update existing scheduledUpdate in database related to current domain user.
+	 * Update existing scheduledUpdate in database related to current domain
+	 * user.
 	 * 
 	 * @param scheduledUpdate
 	 *            - Object of {@link ScheduledUpdate}
@@ -56,25 +62,25 @@ public class ScheduledUpdateAPI
 	public ScheduledUpdate updateScheduledUpdate(ScheduledUpdate scheduledUpdate)
 	{
 		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
-		scheduledUpdate.save();		
+		scheduledUpdate.save();
 		return scheduledUpdate;
 	}
 
-	
 	/**
 	 * Return the list of ScheduledUpdate available in dB related to current
 	 * Domain User.
 	 * 
 	 * @return List<ScheduledUpdate> - Objects ScheduledUpdate
 	 */
-	/*
-	 * @GET
-	 * 
-	 * @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	 * public List<ScheduledUpdate> getAllScheduledUpdates() {
-	 * System.out.println("In getAllScheduledUpdates."); return
-	 * ScheduledUpdate.getScheduledUpdates(); }
-	 */
+
+	@GET
+	@Path("/getscheduledupdates")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<ScheduledUpdate> getAllScheduledUpdates()
+	{
+		System.out.println("In getAllScheduledUpdates.");
+		return ScheduleUpdateUtil.getScheduledUpdates();
+	}
 
 	/**
 	 * Return the list of ScheduledUpdate available in dB related to
@@ -104,7 +110,7 @@ public class ScheduledUpdateAPI
 	 */
 	@GET
 	@Path("/getscheduledupdate/{id}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON })
 	public ScheduledUpdate getScheduledUpdate(@PathParam("id") Long id) throws EntityNotFoundException
 	{
 		System.out.print("In get stream Id : " + id);
@@ -132,5 +138,23 @@ public class ScheduledUpdateAPI
 			return "Successful";
 		}
 		return null;
+	}
+
+	/**
+	 * Deletes the bulk of scheduled updates. Bulk operations - delete.
+	 * 
+	 * @param model_ids
+	 *            array of deal ids as String.
+	 * @throws JSONException
+	 */
+	@Path("/bulk")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteScheduledUpdates(@FormParam("ids") String model_ids) throws JSONException
+	{
+		System.out.println("In deleteScheduledUpdates.");
+		JSONArray scheduledUpdatesJSONArray = new JSONArray(model_ids);
+
+		ScheduledUpdate.dao.deleteBulkByIds(scheduledUpdatesJSONArray);
 	}
 }

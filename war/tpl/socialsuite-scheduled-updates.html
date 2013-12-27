@@ -1,0 +1,76 @@
+<!-- initial script which displayes social suite tabs with Add Stream and Added Streams. -->
+<script id="socialsuite-scheduled-updates-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Scheduled Messages</h1>
+        </div>
+    </div>
+</div>         
+
+<div class="row">
+           <div class="span12">              
+                <div id="socialsuite-scheduled-updates-content">
+                     
+                </div>        
+            </div><!-- span12 end -->       
+</div> <!-- row end -->
+</script>    
+
+<script id="socialsuite-scheduled-updates-collection-template" type="text/html">	
+<div class="data-block">
+         <div class="data-container">          	
+			<table id="schedule-updates" class="table table-striped showCheckboxes agile-ellipsis-dynamic"
+				url="core/scheduledupdate/bulk">
+                <col width="30px">
+				<col width="25%">
+				<col width="30%">
+				<col width="15%">
+				<col width="15%">
+                <col width="20%">
+				<thead>
+					<tr>
+						<th><input class="thead_check" type="checkbox"></input></th>
+						<th>User</th>
+						<th>Message</th>
+						<th>Schedule</th>
+						<th>Message Type</th>
+                        <th>For/Of</th>
+					</tr>
+				</thead>
+				<tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list"
+					style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+         </div>
+</div>		
+</script>
+
+<script id="socialsuite-scheduled-updates-model-template" type="text/html">	
+	<td class="data" data="{{id}}">
+	<div class="row-fluid">
+      <a class="account-link link-complex block" href="https://twitter.com/{{screen_name}}" rel="user" target="_blank">    
+    	<div style="display:inline;padding-right:5px;height:auto;">   
+           <img class="tweet-avatar avatar pull-left thumbnail" src={{profileImg}} style="width:40px;height:40px;" alt="{{screen_name}}'s avatar" title="{{screen_name}}'s avatar">     	
+    	</div>
+    	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
+        		<span class="account-inline txt-ellipsis"> 	
+                        <b class="link-complex-target"><span class="at">@</span>{{screen_name}}</b>
+ 		        </span> 
+        		<br/>
+        		{{network_type}}        	
+	    </div>
+      </a>
+	</div>
+	</td>
+	<td class="edit-scheduled is-actionable" data="{{id}}">{{message}}</td>
+	<td class="edit-scheduled is-actionable" data="{{id}}">{{scheduled_date}}<br>{{scheduled_time}}</td>
+	<td class="edit-scheduled is-actionable" data="{{id}}">{{headline}}</td>
+    <td class="edit-scheduled is-actionable" data="{{id}}">
+       {{#if_equals tweetOwner "/"}}
+         <span style="display:none;"></span>
+       {{else}}
+         <span>{{tweetOwner}}</span>
+       {{/if_equals}}
+    </td>
+</script>

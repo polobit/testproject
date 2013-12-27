@@ -81,23 +81,14 @@ function sendMessage(publishJSON)
 	if(publishJSON.message_type == "register")
 		{	
 		  // Adds profile img to stream.
-		  addUserImgToColumn(publishJSON.stream);		  
+		  //addUserImgToColumn(publishJSON.stream);		  
 		  
 		  // If network is Linkedin so no need to publish.
 		  if(publishJSON.stream.network_type == "LINKEDIN")
 		   {
 			 console.log("stream's network is " +publishJSON.stream.network_type);		     
 		     return;
-		   }
-		  
-		  // If stream type is Scheduled so no need to publish.
-		  if(publishJSON.stream.stream_type == "Scheduled")
-		   {
-			 console.log("stream's type is " +publishJSON.stream.stream_type);	
-			 getScheduledUpdate(publishJSON.stream);
-		     return;
-		   }
-
+		   }		  
 		}
 			// Message has data.
 			pubnub.publish
@@ -111,7 +102,10 @@ function sendMessage(publishJSON)
 						else // The internet is gone. // TRY SENDING AGAIN!
 			        		{
 							 console.log("in publish_message unsuccessfull to Sent Message!");
-							 showNotyPopUp('information', "You are not connected with Twitter server or you have problem with connection!", "top", 5000);							 
+							 showNotyPopUp('information', "You are not connected with Twitter server or you have problem with connection!", "top", 5000);
+							 displayErrorInStream(publishJSON.stream);
+							 registerCounter++;
+							 registerAll(registerCounter);
 							 //sendMessage(publishJSON);
 			        		}
 					}

@@ -128,4 +128,8 @@ var _agile = {
 		web_rules : function(callback)
 		{
 			agile_webRules(callback);								// Get all web rules associated with domain
+		},
+		unsubscribe_campaign : function(data, callback, email)
+		{
+			agile_unsubscribeCampaign(data, callback, email);		// Unsubscribe a contact from campaign based on email
 		}};

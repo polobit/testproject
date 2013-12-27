@@ -70,11 +70,11 @@ function create_tour_steps(el)
 				"content" : "Create conditions to trigger your campaigns automatically. <br/><br/> <strong>Eg:</strong> when a tag is added or when a contact reaches a score.<br/>",
 				"placement" : "bottom", "el" : el, "backdrop" : true, }
 	]
-	Agile_Tour["workflows-add"] = [
+/*	Agile_Tour["workflows-add"] = [
 		{ "element" : "#workflowform", "title" : "Visual Campaigns",
 			"content" : "Create your campaigns and workflows visually.<br/> Just drag and drop the nodes. Connect them to the workflow.<br/>",
 			"placement" : "top", "el" : el, "backdrop" : true, }
-	]
+	]*/
 
 }
 
