@@ -17,10 +17,11 @@ $(function()
 		
 		var form_id = $(form).attr('id');
 		
+		if(!isValidForm($(form)))
+			   return;
+		
 		// Serializes form daa
 		var form_data = serializeForm(form_id);
-		
-		
 		
 		try
 		{
