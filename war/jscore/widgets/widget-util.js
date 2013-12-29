@@ -349,7 +349,12 @@ function set_up_access(widget_name, template_id, data, url, model)
  
  var el;
  var json;
+ var models;
+ 
  $('#prefs-tabs-content').html(LOADING_HTML);
+ $('#PrefsTab .active').removeClass('active');
+ $('.add-widget-prefs-tab').addClass('active');
+ 
  if(model)
  {
   el = $(getTemplate("widget-settings", model));
@@ -440,3 +445,55 @@ function widgetError(id, template_id, error, disable_check)
 	$('#' + id).html(getTemplate(template_id, error_json));
 
 }
+
+function setUpError(widget_name, template_id, error_data, error_url, model)
+{
+	
+	 $("#content").html(getTemplate("settings"), {});
+	 
+	 var el;
+	 var models;
+	 var json;
+	 
+	 $('#prefs-tabs-content').html(LOADING_HTML);
+	 $('#PrefsTab .active').removeClass('active');
+	 $('.add-widget-prefs-tab').addClass('active');
+	 
+	 if(model)
+	 {
+	  el = $(getTemplate("widget-settings", model));
+	  json = model;
+	 }
+	 else
+	  {
+		 if(!Catalog_Widgets_View)
+			{
+				$.getJSON('core/api/widgets/'+ widget_name, function(data1){
+					setUpError(widget_name, template_id, error_data, error_url, data1)
+				})
+				return;
+			}
+		 
+	  models= Catalog_Widgets_View.collection.where({ name : widget_name });
+	  json = models[0].toJSON();
+	  el = $(getTemplate("widget-settings",json));
+	  }
+	 
+	 json['error_message'] = error_data;
+	 json['error_url'] = error_url;
+	 
+	 //merged_json =  $.extend(merged_json, model, data);
+	 
+	 $('#widget-settings', el).html(getTemplate(template_id, json));
+	 
+	 $('#prefs-tabs-content').html(el);
+	 
+	 $('#prefs-tabs-content').find('form').data('widget', json);
+	 
+	 $('#PrefsTab .active').removeClass('active');
+	 $('.add-widget-prefs-tab').addClass('active');
+	
+}
+
+
+
