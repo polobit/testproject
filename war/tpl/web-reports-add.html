@@ -43,7 +43,7 @@
 													<optgroup label="Contact Data" id="page-conditions">
 														<option value="tags" selected="selected">Tag</option>
 														<option value="tags_time">Tag And Created Date</option>
-														<option value="lead_score">Score</option>
+														<option value="lead_score">Lead Score</option>
 														<option value="created_time">Created</option>
 														<option value="company">Company</option>
 														<option value="title">Job Title</option>
@@ -60,6 +60,7 @@
 												<select name="temp" style="width: 100%;">
 													<option value="MATCHES" class="page referrer" placeholder="Enter URL">Matches</option>
 													<option value="EQUALS" class="referrer page" placeholder="Enter URL">is</option>
+													<option value="NOTEQUALS" class="referrer" placeholder="Enter URL">isn't</option>
 													<option value="EQUALS"
 														class="first_name phone  company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS"
@@ -69,9 +70,10 @@
 													<option value="NOTEQUALS"
 														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 												
-
+													<option value="EQUALS" class="lead_score" placeholder="Enter Score">is</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
+	
 																
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>													
@@ -282,13 +284,13 @@
 										<td class="controls"
 											style="vertical-align: top;">
 											<div name="delay" id="delay">
-												<div class="pull-left" style="padding-top:10px"><b style="color:#474444">When to show: </b></div></br></br>
+												<div class="pull-left" style="padding-top:10px"><span style="color:#474444">When to show</span></div></br></br>
 												<select class="required" style="margin-top:-2px;margin-left:50px">
 														<option value="IMMEDIATE" class="MODAL_POPUP CORNER_NOTY">Immediate</option>
-														<option value="AFTER_SECS" class="MODAL_POPUP CORNER_NOTY">After Certain Time</option>
-														<option value="FIRST_SCROLL" class="MODAL_POPUP CORNER_NOTY">First Scroll</option>
-														<option value="END_OF_PAGE" class="MODAL_POPUP CORNER_NOTY">End Of Page</option>
-														<option value="EXIT" class="MODAL_POPUP CORNER_NOTY">Exit</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP CORNER_NOTY">After certain time</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP CORNER_NOTY">On starting scroll</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP CORNER_NOTY">On reaching end of page</option>
+														<option value="EXIT" class="MODAL_POPUP CORNER_NOTY">About to exit page</option>
 												</select>
 											</div>
 										
