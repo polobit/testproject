@@ -362,7 +362,7 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	$("input", element).typeahead({ "source" : tags_array });
+	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag");
 }
 
 
