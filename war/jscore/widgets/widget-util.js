@@ -18,7 +18,11 @@ $(function()
 		var form_id = $(form).attr('id');
 		
 		if(!isValidForm($(form)))
+			{
+			   $(this).removeAttr('disabled')
 			   return;
+			}
+			
 		
 		// Serializes form daa
 		var form_data = serializeForm(form_id);
