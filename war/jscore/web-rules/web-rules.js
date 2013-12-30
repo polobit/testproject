@@ -130,13 +130,6 @@ $(function()
 				$(this).parents("tbody").append(htmlContent);
 			});
 			
-			$("#action > select").die().live('change', function(){
-				
-				if(isPopup)
-					$("#action-image").html('<img style="padding-right:30px;width:200px;height:200px" src= "https://www.agilecrm.com/img/crm/saas/saas-grabber.png"></img>');
-				else
-					$("#action-image").empty();
-			});
 			
 			/*$("#noty-type > select").die().live('change', function(){
 				console.log($(this).attr('class'));
@@ -148,8 +141,6 @@ $(function()
 			
 			$(".web-rule-prevew").die().live('click', function(e){
 				e.preventDefault();
-				console.log($(this).parent().siblings('table'));
-				console.log(serializeChainedElement($(this).parent().siblings('table')));
 				
 				show_web_rule_action_preview(serializeChainedElement($(this).parent().siblings('table')));
 			});
