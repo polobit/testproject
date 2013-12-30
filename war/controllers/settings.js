@@ -239,6 +239,11 @@ var SettingsRouter = Backbone.Router
 							{
 								set_up_access("Linkedin", 'linkedin-login', data, '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
 								
+							}).error(function(data){
+								
+								console.log(data);
+								setUpError("Linkedin", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1");
+							
 							});
 							return;
 							
@@ -254,9 +259,14 @@ var SettingsRouter = Backbone.Router
 								$.getJSON("core/api/widgets/social/profile/" + data1.id, function(data)
 										{
 											set_up_access("Linkedin", 'linkedin-login', data, '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"), data1);
-											return;
 											
+										}).error(function(data){
+											
+											console.log(data);
+											setUpError("Linkedin", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1", data1);
+										
 										});
+										return;
 											
 							}
 							else
@@ -288,6 +298,7 @@ var SettingsRouter = Backbone.Router
 						}).error(function(data){
 							
 							console.log(data);
+							setUpError("Twitter", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twitter/twitter1");
 						
 						});
 						return;
@@ -301,12 +312,17 @@ var SettingsRouter = Backbone.Router
 						
 						if(data1)
 						{
-							$.getJSON("core/api/widgets/social/profile/" + data1.id, function(data)
+									$.getJSON("core/api/widgets/social/profile/" + data1.id, function(data)
 									{
 										set_up_access("Twitter", 'twitter-login', data, '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"), data1);
-										return;
 										
+										
+									}).error(function(data)
+									{
+										setUpError("Twitter", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twitter/twitter1", data1);
 									});
+									
+									return;
 										
 						}
 						else
@@ -367,10 +383,14 @@ var SettingsRouter = Backbone.Router
 									return;
 								
 								set_up_access("Twilio", 'twilio-login', data, encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twilio/twilio" ));
-								return;
 								
+							}).error(function(data)
+									{
+								setUpError("Twilio", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1");
 							});
+							
 							return;
+
 						}			
 					
 					
@@ -388,7 +408,12 @@ var SettingsRouter = Backbone.Router
 											
 									set_up_access("Twilio", 'twilio-login', data1, encodeURIComponent(window.location.href), data);
 											
+								}).error(function(data)
+										{
+									setUpError("Twilio", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1", data);
 								});
+								
+								return;
 							
 							}
 							else
