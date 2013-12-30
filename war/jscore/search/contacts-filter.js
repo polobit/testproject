@@ -287,7 +287,12 @@ function show_chained_fields(el, data, forceShow)
 	NESTED_LHS = $("#nested_lhs", el);
 	
 	// Chaining dependencies of input fields with jquery.chained.js
-	RHS.chained(condition);
+	RHS.chained(condition, function(chained_el, self){
+		var placeholder = $(chained_el).find('option:selected').attr("placeholder");
+		
+		if(placeholder)
+		$("input", self).attr("placeholder", placeholder);
+	});
 	condition.chained(LHS);
 	
 	RHS_NEW.chained(condition);

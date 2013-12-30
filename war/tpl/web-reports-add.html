@@ -58,9 +58,10 @@
 										<td class="codition-block span2" style="vertical-align:top">
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 100%;">
-													<option value="MATCHES" class="page referrer">Matches</option>
+													<option value="MATCHES" class="page referrer" placeholder="Enter URL">Matches</option>
+													<option value="EQUALS" class="referrer page" placeholder="Enter URL">is</option>
 													<option value="EQUALS"
-														class="referrer page first_name phone  company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name phone  company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS"
 														url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS"
@@ -88,7 +89,7 @@
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
 													<option value="FIRST_TIME" class="visit">First time</option>
-													<option value="REPEAT" class="visit">Repeat</option>
+													<option value="REPEAT" class="visit">Recurring</option>
 												</select>
 											</div>
 										</td>
@@ -108,7 +109,7 @@
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" />
 													<input type="text" name="temp" style="width:92%"
-													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
+													class="IS_GREATER_THAN IS_LESS_THAN number required" placeholder="Enter Score"/> 
 											
 											</div>
 										</td>
