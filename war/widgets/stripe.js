@@ -100,8 +100,12 @@ function setUpStripeCustomField(stripe_widget_prefs)
 	// Retrieve all custom from Agile account
 	$.get("/core/api/custom-fields/type/text", function(data)
 	{
+		// Include 'stripe_field_name' to stripe_widget_prefs and save
+		stripe_widget_prefs['custom_fields'] = data;
+
+		
 		// Fill template with custom fields and show it in Stripe widget panel
-		$('#Stripe').html(getTemplate('stripe-custom-field', data));
+		$('#Stripe').html(getTemplate('stripe-custom-field', stripe_widget_prefs));
 
 	}, "json").error(function(data)
 	{
@@ -120,6 +124,9 @@ function setUpStripeCustomField(stripe_widget_prefs)
 
 		// Get the selected value from list of custom fields
 		var stripe_custom_field_name = $('#stripe_custom_field_name').val();
+		
+		if(!stripe_custom_field_name)
+			return;
 
 		// Include 'stripe_field_name' to stripe_widget_prefs and save
 		stripe_widget_prefs['stripe_field_name'] = stripe_custom_field_name;
@@ -155,10 +162,33 @@ function showStripeProfile(stripe_custom_field_name)
 	// If customer id is undefined, message is shown
 	if (!customer_id)
 	{
-		stripeError(Stripe_PLUGIN_NAME, "Please provide the Stripe customer id for this contact");
-		return;
-	}
+		
+		 $('#stripe_contact_id_save').die().live('click', function(e){
+			   
+			   e.preventDefault();
 
+			   if(!isValidForm($('#stripe_contact_id_form')))
+			    return;
+			   
+			   customer_id = $('#stripe_contact_id').val();
+			   
+			   agile_crm_save_contact_property(stripe_custom_field_name, "", customer_id, "CUSTOM");
+			   
+			   showStripeProfile(stripe_custom_field_name);
+			   return;
+			   
+			  });
+	
+	
+		 $('#Stripe').html("<div><form class='widget_content' style='border-bottom:none;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
+		    "<fieldset><p>Please provide the Stripe customer id for this contact</p>" +
+		    "<div class='control-group' style='margin-bottom:0px'><div class='controls'>" +
+		    "<input type='text' class='required' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe customer id' onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
+		    "</div></div><a href='#' class='btn' id='stripe_contact_id_save'>Save</a>" +
+		    "</fieldset></form></div>");
+		  
+		 return;
+	}
 	// Retrieve Stripe profile and shows profile in Stripe panel on success
 	getStripeProfile(customer_id, function(data)
 	{

@@ -104,7 +104,7 @@
 								<input type="hidden" placeholder="Ticket Id" name="ticketNumber" id="ticketNumber" class="required span4" value="{{id}}"/>
 							{{else}}
 								<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	                        
-								<input type="text" placeholder="Subject" name="subject" id="subject" class="required span4" />
+								<input type="text" placeholder="Subject" name="subject" id="subject" class="required span4" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
 							{{/if_equals}}							
 	                    </div>
 	                </div>

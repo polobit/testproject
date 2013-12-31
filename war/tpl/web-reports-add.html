@@ -36,14 +36,14 @@
 												<select name="temp" class="lhs" id="LHS"
 													style="width: 125px;">
 													<optgroup label="Page conditions" id="page-conditions">
-														<option value="page">Page</option>
-														<option value="referrer">Referrer</option>
+														<option value="page">Page URL</option>
+														<option value="referrer">Referrer URL</option>
 														<option value="visit">Visit</option>
 													</optgroup>
 													<optgroup label="Contact Data" id="page-conditions">
 														<option value="tags" selected="selected">Tag</option>
 														<option value="tags_time">Tag And Created Date</option>
-														<option value="lead_score">Score</option>
+														<option value="lead_score">Lead Score</option>
 														<option value="created_time">Created</option>
 														<option value="company">Company</option>
 														<option value="title">Job Title</option>
@@ -58,19 +58,22 @@
 										<td class="codition-block span2" style="vertical-align:top">
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 100%;">
-													<option value="MATCHES" class="page referrer">Matches</option>
+													<option value="MATCHES" class="page referrer" placeholder="Enter URL">Matches</option>
+													<option value="EQUALS" class="referrer page" placeholder="Enter URL">is</option>
+													<option value="NOTEQUALS" class="referrer" placeholder="Enter URL">isn't</option>
 													<option value="EQUALS"
-														class="referrer page first_name tags_time phone tags company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
+														class="first_name phone  company title org_tag jobtitle email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">is</option>
 													<option value="EQUALS" class="owner_id" related="RHS"
 														url="core/api/users" parse_key="id" parse_value="name">is</option>
 													<option value="NOTEQUALS" class="owner_id" related="RHS"
 														url="core/api/users" parse_key="id" parse_value="name">isn't</option>
 													<option value="NOTEQUALS"
-														class="first_name company owner tags org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
+														class="first_name company owner org_tag title email phone city state postalCode org_name custom_label custom_sfsadf org_custom_label org_custom_sfsadf">isn't</option>
 												
-
+													<option value="EQUALS" class="lead_score" placeholder="Enter Score">is</option>
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
+	
 																
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>													
@@ -88,7 +91,7 @@
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
 													<option value="FIRST_TIME" class="visit">First time</option>
-													<option value="REPEAT" class="visit">Repeat</option>
+													<option value="REPEAT" class="visit">Recurring</option>
 												</select>
 											</div>
 										</td>
@@ -108,7 +111,7 @@
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" />
 													<input type="text" name="temp" style="width:92%"
-													class="IS_GREATER_THAN IS_LESS_THAN number required"/> 
+													class="IS_GREATER_THAN IS_LESS_THAN number required" placeholder="Enter Score"/> 
 											
 											</div>
 										</td>
@@ -170,7 +173,7 @@
 					<div class="pull-right" id="action-image"></div>
 						<div class="controls">
 								<div class="webrule-actions chained-table"> 
-							<div class="alert" style="width:52%">
+							<div class="alert" style="width:52%;margin-bottom: 5%;">
 							<table style="background-color: transparent"
 								class="reports-condition-table actions" >
 								<tbody class="chained"  name="actions">
@@ -180,7 +183,7 @@
 											<select class="required" >
 											 <optgroup label="Popup">
 												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
-												<option value="NOTY" class="POPUP">Corner Noty</option>
+												<option value="CORNER_NOTY" class="POPUP">Noty Message</option>
 											</optgroup>
 											<optgroup label="Campaign">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -231,7 +234,7 @@
 											<div name="popup_pattern" id="noty-type" style="margin-top:3px">
 												<select class="required">
 													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option>
-													<option value="information" class="POPUP MODAL_POPUP NOTY">Information</option>
+													<option value="information" class="POPUP MODAL_POPUP CORNER_NOTY">Information</option>
 													<option value="form" class="POPUP MODAL_POPUP">Form on website</option>
 													<option value="custom_html" class="MODAL_POPUP">Custom HTML</option>
 												</select>
@@ -245,11 +248,12 @@
 											style="vertical-align: top; ">
 											<div name="position" id="possition" style="margin-top:3px">
 												<select class="required">
-													<option value="CORNER" class="NOTY">Corner</option>
-													<option value="RIGHT" class="NOTY">Right</option>
-													<option value="LEFT" class="NOTY">Left</option>
-													<option value="BOTTOM" class="NOTY">Bottom</option>
-													<option value="TOP" class="NOTY">Top</option>
+													<option value="RIGHT_BOTTOM" class="CORNER_NOTY">Right Bottom</option>
+													<option value="RIGHT_TOP" class="CORNER_NOTY">Right Top</option>
+													<option value="LEFT_BOTTOM" class="CORNER_NOTY">Left Bottom</option>
+													<option value="LEFT_TOP" class="CORNER_NOTY">Left Top</option>
+													<option value="BOTTOM" class="CORNER_NOTY">Bottom</option>
+													<option value="TOP" class="CORNER_NOTY">Top</option>
 												</select>
 											</div>
 											</div>
@@ -261,7 +265,7 @@
 											style="vertical-align: top;">
 											<div id="noty-title" name="title" style="margin-top:3px">
 													<input type="text" name="temp" 
-														class="confirmation information input required" placeholder="Title"/>
+														class="confirmation information CORNER_NOTY input required" placeholder="Title"/>
 														<input type="text" name="temp" style="width: 92%"
 														class="form input required" placeholder="Form id"/>
 												
@@ -281,19 +285,13 @@
 										<td class="controls"
 											style="vertical-align: top;">
 											<div name="delay" id="delay">
-												<div class="pull-left" style="padding-top:10px"><b style="color:#474444">When to show: </b><div>
-												<select class="required" style="margin-left:50px;margin-top:3px;">
-													<optgroup label="Timer">
-														<option value="IMMEDIATE" class="MODAL_POPUP NOTY">Immediate</option>
-														<option value="AFTER_SECS" class="MODAL_POPUP NOTY">After Certain Time</option>
-														<option value="AFTER_CUSTOM_SECS" class="MODAL_POPUP NOTY">Custom Time</option>
-													</optgroup>
-													<optgroup label="Scroll">
-														<option value="FIRST_SCROLL" class="MODAL_POPUP NOTY">First Scroll</option>
-														<option value="END_OF_PAGE" class="MODAL_POPUP NOTY">End Of Page</option>
-														<option value="EXIT" class="MODAL_POPUP NOTY">Exit</option>
-													</optgroup>
-		
+												<div class="pull-left" style="padding-top:10px"><span style="color:#474444">When to show</span></div></br></br>
+												<select class="required" style="margin-top:-2px;margin-left:50px">
+														<option value="IMMEDIATE" class="MODAL_POPUP CORNER_NOTY">Immediate</option>
+														<option value="AFTER_SECS" class="MODAL_POPUP CORNER_NOTY">After certain time</option>
+														<option value="FIRST_SCROLL" class="MODAL_POPUP CORNER_NOTY">On starting scroll</option>
+														<option value="END_OF_PAGE" class="MODAL_POPUP CORNER_NOTY">On reaching end of page</option>
+														<option value="EXIT" class="MODAL_POPUP CORNER_NOTY">About to exit page</option>
 												</select>
 											</div>
 										
@@ -304,12 +302,7 @@
 										<td class="controls"
 											style="vertical-align: top; ">
 											<div name="timer" id="timer" style="margin-top:3px;margin-left:50px">
-												<select class="required">
-													<option value="5" class="AFTER_SECS">5 Seconds</option>
-													<option value="10" class="AFTER_SECS">10 Seconds</option>
-													<option value="15" class="AFTER_SECS">15 Seconds</option>
-												</select>	
-												<input type="number" class="AFTER_CUSTOM_SECS" placeholder="Enter Seconds"></input>
+												<input type="number" class="AFTER_SECS" placeholder="Enter Seconds"></input>
 											</div>
 											</div>
 										</td>
@@ -317,10 +310,13 @@
 									
 								</tbody>
 								</table>
+									<div class="pull-right" style="width: 5%;margin-bottom:10px;margin-top: 10px;float: right;"><a href="#" class="web-rule-prevew">Preview</a></div>
 								</div>
 
+
 </div>
-<div class="pull-right" style="width:48%;margin-top:-10px"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
+
+<div class="pull-right" style="width:50%;margin-top:-10px"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
 							</div>
 					</div>
 			{{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />

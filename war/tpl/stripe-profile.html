@@ -116,12 +116,13 @@
 
 <script id="stripe-custom-field-template" type="text/html">
 <div class="widget_content">
-{{#if_equals this.length "0"}}
+{{#if_equals this.custom_fields.length "0"}}
 	<p>Stripe id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
 {{else}}
 	<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required span10" style="width:100%" >
-		{{#each this}}
+     		<option class="default-select" value="">-Select-</option>
+		{{#each this.custom_fields}}
 			<option value="{{field_label}}">{{field_label}} 
 			</option>
 		{{/each}}
@@ -167,6 +168,7 @@
 				<div class="controls" id="contactTypeAhead">
 			
 			<select name="stripe_field_name" id="stripe_custom_field" class="required span10" style="width:100%" >
+     				<option class="default-select" value="">-Select-</option>
 				{{#each custom_data}}
 					{{#if_equals ../prefs.stripe_field_name field_label}}
 						<option selected="selected" value="{{field_label}}">{{field_label}}</option>

@@ -254,13 +254,13 @@
 
 						<ul class="nav pull-right">
 
-							<!--	<li id="recent-menu" class="dropdown">
+							<li id="recent-menu" class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="" style="padding-left:2px; padding-right:4px;">
 									<i class='caret'></i>
 								</a>
 								<ul class="dropdown-menu" style="width:25em; right:-11px;">
 								</ul>
-							</li> -->
+							</li> 
 
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="">Add New <i class='caret'></i></a>
@@ -472,6 +472,9 @@
 	<link rel="stylesheet" type="text/css"
 		href="/css/social_suite.css" />
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
+	
+	<link rel="stylesheet" type="text/css"
+		href="css/simplemodal.css"></link>
 
 	<!-- Unified CSS for All Lib -->
 </body>

@@ -28,10 +28,22 @@ function chainWebRules(el, data, isNew, actions)
 	$("#campaign", el).chained($("#action", el));
 	
 	$("#possition", el).chained($("#action", el));
-	$("#noty-title", el).chained($("#noty-type", el), function(){
-	});
+	$("#noty-title", el).chained($("#noty-type", el));
 	
-	$("#noty-type", el).chained($("#action", el));
+	$("#noty-type", el).chained($("#action", el), function(el, self){
+		var value = $("select", el).val();
+		if(value == "CORNER_NOTY")
+			{
+				$(self).hide();
+			}
+		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
+			{
+				el.closest('table').siblings('div').find(".web-rule-prevew").show();
+			return;
+			}
+		
+		el.closest('table').siblings('div').find(".web-rule-prevew").hide();
+	});
 	
 	$("#timer", el).chained($("#delay", el));
 	$("#delay", el).chained($("#action", el));
@@ -53,6 +65,32 @@ function chainWebRules(el, data, isNew, actions)
 		deserializeChainedSelect1($(el).find('form'), data.actions, element_clone, data.actions[0]);
 	
 	scramble_input_names($(".reports-condition-table", element_clone))
+}
+
+function show_web_rule_action_preview(action)
+{
+	if(!action)
+		return;
+	head.js("lib/web-rule/lib/mootools-core-1.3.1.js", "lib/web-rule/lib/mootools-more-1.3.1.1.js", "lib/web-rule/simple-modal.js", function(){
+		var modal_options = {};
+		modal_options["show_btn_cancel"] = true;
+		console.log(modal_options);
+		
+		var actions = [];
+		actions.push(action);
+		var json = {};
+		json["actions"] = actions;
+		
+		var actions_array = [];
+		actions_array.push(json);
+		
+		perform_actions(actions_array, false);
+	});
+	
+	
+	
+	
+
 }
 
 $(function()
@@ -96,14 +134,6 @@ $(function()
 				$(this).parents("tbody").append(htmlContent);
 			});
 			
-			$("#action > select").die().live('change', function(){
-				
-				var isPopup = $("option:selected", $(this)).hasClass('POPUP');
-				if(isPopup)
-					$("#action-image").html('<img style="padding-right:30px;width:200px;height:200px" src= "https://www.agilecrm.com/img/crm/saas/saas-grabber.png"></img>');
-				else
-					$("#action-image").empty();
-			});
 			
 			/*$("#noty-type > select").die().live('change', function(){
 				console.log($(this).attr('class'));
@@ -112,4 +142,10 @@ $(function()
 					setupHTMLEditor($("#noty-message > textarea"));
 			})*/
 			
+			
+			$(".web-rule-prevew").die().live('click', function(e){
+				e.preventDefault();
+				
+				show_web_rule_action_preview(serializeChainedElement($(this).parent().siblings('table')));
+			});
 		});
