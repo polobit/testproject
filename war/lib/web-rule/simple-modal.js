@@ -113,13 +113,13 @@ var SimpleModal = new Class({
 		// Require title && contents && callback
         case "confirm":			
 			// Add button confirm
-			this.addButton(this.options.btn_ok, "btn primary btn-margin", function(){
+			this.addButton(this.options.btn_ok, "simple_modal_btn primary simple_modal_btn-margin", function(){
 				try{ options.callback() } catch(err){};
 				this.hide();
 			})
           
 			// Add button cancel
-			this.addButton(this.options.btn_cancel, "btn secondary");
+			this.addButton(this.options.btn_cancel, "simple_modal_btn secondary");
 			
 			// Rendering
 			var node = this._drawWindow(options);
@@ -175,7 +175,7 @@ var SimpleModal = new Class({
         default:
 			// Alert
 			// Add button
-			this.addButton(this.options.btn_ok, "btn primary");
+			this.addButton(this.options.btn_ok, "simple_modal_btn primary");
 		
 			// Rendering
 			var node = this._drawWindow(options);
