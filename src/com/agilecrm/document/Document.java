@@ -187,7 +187,55 @@ public class Document
 	this.network_type = network;
 	this.url = url;
     }
+    
+    /**
+     * Gets contacts related with document.
+     * 
+     * @return list of contact objects as xml element related with a document.
+     */
+    @XmlElement(name = "contact_ids")
+    public List<String> getContact_ids()
+    {
+	contact_ids = new ArrayList<String>();
 
+	for (Key<Contact> contactKey : related_contacts)
+	    contact_ids.add(String.valueOf(contactKey.getId()));
+
+	return contact_ids;
+    }
+    
+    /**
+     * Gets cases related with document.
+     * 
+     * @return list of case objects as xml element related with a document.
+     */
+    @XmlElement(name = "case_ids")
+    public List<String> getCase_ids()
+    {
+	case_ids = new ArrayList<String>();
+
+	for (Key<Case> caseKey : related_cases)
+	    case_ids.add(String.valueOf(caseKey.getId()));
+
+	return case_ids;
+    }
+    
+    /**
+     * Gets deals related with document.
+     * 
+     * @return list of deal objects as xml element related with a document.
+     */
+    @XmlElement(name = "deal_ids")
+    public List<String> getDeal_ids()
+    {
+	deal_ids = new ArrayList<String>();
+
+	for (Key<Opportunity> dealKey : related_deals)
+	    deal_ids.add(String.valueOf(dealKey.getId()));
+
+	return deal_ids;
+    }
+    
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
@@ -239,7 +287,7 @@ public class Document
 	// Initializes created Time
 	if (upload_time == 0L)
 	    upload_time = System.currentTimeMillis() / 1000;
-
+	
 	if (contact_ids != null)
 	{
 	    for (String contact_id : this.contact_ids)
@@ -269,6 +317,16 @@ public class Document
 	// Saves domain user key
 	ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+	return "id: " + id + " relatesto: " + contact_ids + " name: " + name + " Owner " + owner_id;
     }
 
 }

@@ -513,6 +513,17 @@ $(function()
 		if (priority == 'green')
 			return 'Low';
 	});
+	
+	/**
+	 * Helper function to return type based on it's network type
+	 */
+	Handlebars.registerHelper('network', function(type)
+	{
+		if (type == 'GOOGLE')
+			return 'Google Drive Document';
+		if (type == 'S3')
+			return 'Uploaded Document';
+	});
 
 	/**
 	 * Helper function to return date (Jan 10, 2012) from epoch time (users

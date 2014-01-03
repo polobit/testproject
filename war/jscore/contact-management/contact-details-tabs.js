@@ -12,6 +12,7 @@ var dealsView;
 var eventsView;
 var tasksView;
 var casesView;
+var documentsView;
 
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
@@ -181,6 +182,30 @@ $(function(){
         });
 		eventsView.collection.fetch();
         $('#events', this.el).html(eventsView.el);
+	});
+	
+	/**
+	 * Fetches all the documents related to the contact and shows the documents collection 
+	 * as a table in its tab-content, when "Documents" tab is clicked.
+	 */
+	$('#contactDetailsTab a[href="#documents"]').live('click', function (e){
+		e.preventDefault();
+	    id = App_Contacts.contactDetailView.model.id;
+	    documentsView = new Base_Collection_View({
+            url: '/core/api/documents/' + id + "/documents",
+            restKey: "document",
+            templateKey: "contact-documents",
+            individual_tag_name: 'li',
+            sortKey:"upload_time",
+            descending: true,
+            postRenderCallback: function(el) {
+            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
+            		 $(".document-created-time", el).timeago();
+              	})
+            }
+        });
+	    documentsView.collection.fetch();
+        $('#documents', this.el).html(documentsView.el);
 	});
 	
 	/**
