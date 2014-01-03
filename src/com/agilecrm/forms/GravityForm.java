@@ -45,6 +45,9 @@ public class GravityForm extends HttpServlet
 			if (contact == null)
 				contact = new Contact();
 
+			// Address JSON
+			JSONObject addJson = new JSONObject();
+
 			// Iterate over JSON data to get form fields
 			Iterator<?> keys = obj.keys();
 			while (keys.hasNext())
@@ -55,9 +58,26 @@ public class GravityForm extends HttpServlet
 				// Get value of form field
 				String value = obj.get(key).toString();
 
-				// Add property to list of properties
-				properties.add(buildProperty(key, value, contact));
+				// Build Address JSON
+				if (key.equalsIgnoreCase("country"))
+					addJson.put("country", value);
+				else if (key.equalsIgnoreCase("state"))
+					addJson.put("state", value);
+				else if (key.equalsIgnoreCase("city"))
+					addJson.put("city", value);
+				else if (key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code")
+						|| key.equalsIgnoreCase("postal code"))
+					addJson.put("zip", value);
+				else if (key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location")
+						|| key.equalsIgnoreCase("street"))
+					addJson.put("address", value);
+				else
+
+					// Add property to list of properties
+					properties.add(buildProperty(key, value, contact));
 			}
+			if (addJson.length() != 0)
+				properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
 
 			// Format tagString and split into tagsWithKey array
 			tagString = tagString.trim();
@@ -86,62 +106,148 @@ public class GravityForm extends HttpServlet
 
 	public static ContactField buildProperty(String name, String value, Contact contact)
 	{
-		// Get contact field of contact, based on its name
-		ContactField field = contact.getContactFieldByName(name);
-		if (field == null)
-			field = new ContactField();
+		// Initialize ContactField
+		ContactField field = null;
 
 		// Set field type to SYSTEM for name, email, company, title, phone, all
 		// other fields save as CUSTOM.
-		if (name.equals(Contact.FIRST_NAME))
+		if (name.equalsIgnoreCase(Contact.FIRST_NAME) || name.equalsIgnoreCase("name")
+				|| name.equalsIgnoreCase("first name") || name.equalsIgnoreCase("first"))
 		{
+			name = Contact.FIRST_NAME;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.FIRST_NAME;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
-		else if (name.equals(Contact.LAST_NAME))
+		else if (name.equalsIgnoreCase(Contact.LAST_NAME) || name.equalsIgnoreCase("last name")
+				|| name.equalsIgnoreCase("last"))
 		{
+			name = Contact.LAST_NAME;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.LAST_NAME;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
-		else if (name.contains("organisation") || name.contains("organization") || name.equals(Contact.COMPANY))
+		else if (name.toLowerCase().contains("organisation") || name.toLowerCase().contains("organization")
+				|| name.toLowerCase().equals(Contact.COMPANY))
 		{
+			name = Contact.COMPANY;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.COMPANY;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
-		else if (name.equals("designation") || name.equals(Contact.TITLE))
+		else if (name.equalsIgnoreCase("designation") || name.equalsIgnoreCase(Contact.TITLE))
 		{
+			name = Contact.TITLE;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.TITLE;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
-		else if (name.contains("phone"))
+		else if (name.toLowerCase().contains("phone"))
 		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "work";
+			name = "phone";
+			field = contact.getContactFieldByName(name);
+			if (field == null || field.subtype.equals("home"))
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "work";
+			}
+			else if (field.subtype.equals("work"))
+			{
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "work";
+			}
+			else
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "work";
+			}
 		}
-		else if (name.contains("mobile"))
+		else if (name.toLowerCase().contains("mobile"))
 		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "home";
+			name = "phone";
+			field = contact.getContactFieldByName(name);
+			if (field == null || field.subtype.equals("work"))
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "home";
+			}
+			else if (field.subtype.equals("home"))
+			{
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "home";
+			}
+			else
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "home";
+			}
 		}
-		else if (name.contains("email"))
+		else if (name.toLowerCase().contains("email"))
 		{
 			if (ContactUtil.isValidEmail(value))
 			{
+				name = Contact.EMAIL;
+				field = contact.getContactFieldByName(name);
+				if (field == null)
+					field = new ContactField();
 				field.name = Contact.EMAIL;
 				field.value = value;
 				field.type = FieldType.SYSTEM;
 			}
 		}
+		else if (name.toLowerCase().contains("website"))
+		{
+			name = Contact.WEBSITE;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
+			field.name = Contact.WEBSITE;
+			field.value = value;
+			field.type = FieldType.SYSTEM;
+		}
+		else if (name.equals("address"))
+		{
+			name = Contact.ADDRESS;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
+			field.name = Contact.ADDRESS;
+			field.value = value;
+			field.type = FieldType.SYSTEM;
+		}
 		else
 		{
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = name;
 			field.value = value;
 			field.type = FieldType.CUSTOM;
