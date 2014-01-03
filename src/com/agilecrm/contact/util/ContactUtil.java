@@ -545,7 +545,6 @@ public class ContactUtil
 			return false;
 		}
 
-
 		if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 		{
 			CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);
@@ -562,46 +561,50 @@ public class ContactUtil
 
 		return true;
 	}
-	
+
 	public static Contact mergeContactFeilds(Contact newContact, Contact oldContact)
 	{
-		
-		
-		for(ContactField field : newContact.properties)
+
+		for (ContactField field : newContact.properties)
 		{
-			if(field.name ==null || field.value == null)
+			if (field.name == null || field.value == null)
 				continue;
-			
+
 			ContactField existingField = oldContact.getContactField(field.name);
-				if(existingField == null)
-				{
-					oldContact.properties.add(field);
-					continue;
-				}
-			
-				existingField.value = field.value;
+			if (existingField == null)
+			{
+				oldContact.properties.add(field);
+				continue;
+			}
+
+			existingField.value = field.value;
 		}
-		
+
 		oldContact.tags.addAll(newContact.tags);
-		
+
 		return oldContact;
 	}
-	
+
 	public static Contact mergeContactFields(Contact contact)
 	{
-		String email = contact.getContactFieldValue(Contact.EMAIL);
-		
-		if(email == null)
+		List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+		if (emails.size() == 0)
 			return contact;
-		
-		Contact oldContact = searchContactByEmail(email);
-		
-		if(oldContact != null)
+
+		Contact oldContact = null;
+		for (ContactField field : emails)
+		{
+			oldContact = searchContactByEmail(field.value);
+			if (oldContact != null)
+				break;
+		}
+
+		if (oldContact != null)
 			return mergeContactFeilds(contact, oldContact);
-		
+
 		return contact;
-		
-		
+
 	}
 
 	public static boolean isValidFields(Contact contact)
