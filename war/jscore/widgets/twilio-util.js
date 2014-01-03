@@ -47,45 +47,7 @@ $(function(){
 					});
 		});
 
-		/*
-		 * On click of Twilio proceed button after verifying numbers, we will check
-		 * the verification status of the number and generate token to make calls,
-		 * else set up to verify number is shown again
-		 */
-		/*$('#twilio_proceed_settings').die().live('click', function(e)
-		{
-			e.preventDefault();
 
-			// check if verification status is success, generate token
-			
-				$.getJSON("core/api/widgets/Twilio", function(data)
-						{
-							console.log(data);
-							
-							if(data)
-							{
-								if (data.prefs.verificaton_status || data.prefs.verificaton_status == "success")
-								{
-									console.log(data);
-									$.getJSON("/core/api/widgets/twilio/numbers/" + data.id,  function(data1)
-									{
-										if (!data1)
-											return;
-												
-										set_up_access("Twilio", 'twilio-login', data1, encodeURIComponent(window.location.href), data);
-												
-									});
-								
-								}
-								
-								// else if it is failure, show set up to verify
-								else if (data.prefs.verificaton_status == "failure")
-									console.log("failure");
-							}
-						});
-
-			
-		});*/
 	
 });
 
@@ -120,8 +82,10 @@ function verifyNumberFromTwilio(from_number, id, callback)
 
 	}).error(function(data)
 	{
-		console.log("in error")
+		setUpError("Twilio", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twilio/twilio2");
 	});
+	
+	return;
 }
 
 

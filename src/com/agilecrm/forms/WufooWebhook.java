@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
@@ -51,12 +52,34 @@ public class WufooWebhook extends HttpServlet
 				if (contact == null)
 					contact = new Contact();
 			}
+
+			// Address JSON
+			JSONObject addressJson = new JSONObject();
+
 			for (int i = 0; i < arr.length(); i++)
 			{
 				JSONObject json = arr.getJSONObject(i);
 
-				// Add properties to list of properties
-				properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")), contact));
+				// Build Address JSON from normal text fields
+				if (json.getString("Title").equalsIgnoreCase("street address")
+						|| json.getString("Title").equalsIgnoreCase("street")
+						|| json.getString("Title").equalsIgnoreCase("location"))
+					addressJson.put("address", req.getParameter(json.getString("ID")));
+				else if (json.getString("Title").equalsIgnoreCase("country"))
+					addressJson.put("country", req.getParameter(json.getString("ID")));
+				else if (json.getString("Title").equalsIgnoreCase("city"))
+					addressJson.put("city", req.getParameter(json.getString("ID")));
+				else if (json.getString("Title").equalsIgnoreCase("state"))
+					addressJson.put("state", req.getParameter(json.getString("ID")));
+				else if (json.getString("Title").equalsIgnoreCase("zip")
+						|| json.getString("Title").equalsIgnoreCase("postal code")
+						|| json.getString("Title").equalsIgnoreCase("zip code"))
+					addressJson.put("zip", req.getParameter(json.getString("ID")));
+				else if (!json.getString("Title").equals("Address"))
+
+					// Add properties to list of properties
+					properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")),
+							contact));
 				Iterator<?> keys = json.keys();
 				while (keys.hasNext())
 				{
@@ -65,17 +88,42 @@ public class WufooWebhook extends HttpServlet
 					if (key.equals("SubFields"))
 					{
 						JSONArray subArr = json.getJSONArray("SubFields");
+
+						// Address JSON
+						JSONObject addJson = new JSONObject();
+						String addField = new String();
 						for (int j = 0; j < subArr.length(); j++)
 						{
 							JSONObject subObj = subArr.getJSONObject(j);
 
-							// Add properties to list of properties
-							properties.add(buildProperty(subObj.getString("Label"),
-									req.getParameter(subObj.getString("ID")), contact));
+							// Build Address JSON from fancy pants address field
+							if (subObj.getString("Label").equals("Street Address"))
+								addField = req.getParameter(subObj.getString("ID"));
+							else if (subObj.getString("Label").equals("Address Line 2"))
+								addField = addField + ", " + req.getParameter(subObj.getString("ID"));
+							else if (subObj.getString("Label").equals("City"))
+								addJson.put("city", req.getParameter(subObj.getString("ID")));
+							else if (subObj.getString("Label").equals("State / Province / Region"))
+								addJson.put("state", req.getParameter(subObj.getString("ID")));
+							else if (subObj.getString("Label").equals("Country"))
+								addJson.put("country", req.getParameter(subObj.getString("ID")));
+							else if (subObj.getString("Label").equals("Postal / Zip Code"))
+								addJson.put("zip", req.getParameter(subObj.getString("ID")));
+							else
+
+								// Add properties to list of properties
+								properties.add(buildProperty(subObj.getString("Label"),
+										req.getParameter(subObj.getString("ID")), contact));
 						}
+						if (addJson.length() != 0 && addField != null)
+							addJson.put("address", addField);
+						properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
 					}
 				}
 			}
+			if (addressJson.length() != 0)
+				properties.add(buildProperty(Contact.ADDRESS, addressJson.toString(), contact));
+
 			// Format tagString and split into tagsWithKey array
 			tagString = tagString.trim();
 			tagString = tagString.replace("/, /g", ",");
@@ -99,66 +147,150 @@ public class WufooWebhook extends HttpServlet
 		}
 	}
 
-	public static ContactField buildProperty(String name, String value, Contact contact)
+	public static ContactField buildProperty(String name, String value, Contact contact) throws JSONException
 	{
-		name = name.toLowerCase();
-
-		// Get contact field of contact, based on its name
-		ContactField field = contact.getContactFieldByName(name);
-		if (field == null)
-			field = new ContactField();
+		// Initialize ContactField
+		ContactField field = null;
 
 		// Set field type to SYSTEM for name, email, company, title, phone, all
 		// other fields save as CUSTOM.
-		if (name.equals("name") || name.equals("first") || name.equalsIgnoreCase("first name"))
+		if (name.equalsIgnoreCase("name") || name.equalsIgnoreCase("first") || name.equalsIgnoreCase("first name")
+				|| name.equalsIgnoreCase(Contact.FIRST_NAME))
 		{
+			name = Contact.FIRST_NAME;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.FIRST_NAME;
 			field.type = FieldType.SYSTEM;
 			field.value = value;
 		}
-		else if (name.equals("last") || name.equalsIgnoreCase("last name"))
+		else if (name.equalsIgnoreCase("last") || name.equalsIgnoreCase("last name")
+				|| name.equalsIgnoreCase(Contact.LAST_NAME))
 		{
+			name = Contact.LAST_NAME;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.LAST_NAME;
 			field.type = FieldType.SYSTEM;
 			field.value = value;
 		}
-		else if (name.contains("organisation") || name.contains("organization") || name.equals(Contact.COMPANY))
+		else if (name.toLowerCase().contains("organisation") || name.toLowerCase().contains("organization")
+				|| name.equalsIgnoreCase(Contact.COMPANY))
 		{
+			name = Contact.COMPANY;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.COMPANY;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
-		else if (name.contains("designation") || name.equals(Contact.TITLE))
+		else if (name.toLowerCase().contains("designation") || name.equalsIgnoreCase(Contact.TITLE))
 		{
+			name = Contact.TITLE;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = Contact.TITLE;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
-		else if (name.contains("phone"))
+		else if (name.toLowerCase().contains("phone"))
 		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "work";
+			name = "phone";
+			field = contact.getContactFieldByName(name);
+			if (field == null || field.subtype.equals("home"))
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "work";
+			}
+			else if (field.subtype.equals("work"))
+			{
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "work";
+			}
+			else
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "work";
+			}
 		}
-		else if (name.contains("mobile"))
+		else if (name.toLowerCase().contains("mobile"))
 		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "home";
+			name = "phone";
+			field = contact.getContactFieldByName(name);
+			if (field == null || field.subtype.equals("work"))
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "home";
+			}
+			else if (field.subtype.equals("home"))
+			{
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "home";
+			}
+			else
+			{
+				field = new ContactField();
+				field.name = "phone";
+				field.value = value;
+				field.type = FieldType.SYSTEM;
+				field.subtype = "home";
+			}
 		}
-		else if (name.contains("email"))
+		else if (name.toLowerCase().contains("email"))
 		{
 			if (ContactUtil.isValidEmail(value))
 			{
+				name = Contact.EMAIL;
+				field = contact.getContactFieldByName(name);
+				if (field == null)
+					field = new ContactField();
 				field.name = Contact.EMAIL;
 				field.value = value;
 				field.type = FieldType.SYSTEM;
 			}
 		}
+		else if (name.toLowerCase().contains("website"))
+		{
+			name = Contact.WEBSITE;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
+			field.name = Contact.WEBSITE;
+			field.value = value;
+			field.type = FieldType.SYSTEM;
+		}
+		else if (name.equals("address"))
+		{
+			name = Contact.ADDRESS;
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
+			field.name = Contact.ADDRESS;
+			field.value = value;
+			field.type = FieldType.SYSTEM;
+		}
 		else
 		{
+			field = contact.getContactFieldByName(name);
+			if (field == null)
+				field = new ContactField();
 			field.name = name;
 			field.value = value;
 			field.type = FieldType.CUSTOM;

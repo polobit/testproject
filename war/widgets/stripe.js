@@ -183,7 +183,7 @@ function showStripeProfile(stripe_custom_field_name)
 		 $('#Stripe').html("<div><form class='widget_content' style='border-bottom:none;' id='stripe_contact_id_form' name='stripe_contact_id_form' method='post'>" +
 		    "<fieldset><p>Please provide the Stripe customer id for this contact</p>" +
 		    "<div class='control-group' style='margin-bottom:0px'><div class='controls'>" +
-		    "<input type='text' class='required' name='stripe_contact_id' id='stripe_contact_id' placeholder='Stripe customer id' onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
+		    "<input type='text' class='required' name='stripe_contact_id' style='width:90%' id='stripe_contact_id' placeholder='Stripe customer id' onkeydown='if (event.keyCode == 13) { event.preventDefault(); }'></input>" +
 		    "</div></div><a href='#' class='btn' id='stripe_contact_id_save'>Save</a>" +
 		    "</fieldset></form></div>");
 		  

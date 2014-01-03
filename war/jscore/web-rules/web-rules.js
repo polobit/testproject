@@ -28,16 +28,21 @@ function chainWebRules(el, data, isNew, actions)
 	$("#campaign", el).chained($("#action", el));
 	
 	$("#possition", el).chained($("#action", el));
-	$("#noty-title", el).chained($("#noty-type", el), function(){
-	});
+	$("#noty-title", el).chained($("#noty-type", el));
 	
 	$("#noty-type", el).chained($("#action", el), function(el, self){
 		var value = $("select", el).val();
+		$(self).show();
+		if(value == "CORNER_NOTY")
+			{
+				$(self).hide();
+			}
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
 			{
 				el.closest('table').siblings('div').find(".web-rule-prevew").show();
 			return;
 			}
+		
 		el.closest('table').siblings('div').find(".web-rule-prevew").hide();
 	});
 	
@@ -141,7 +146,6 @@ $(function()
 			
 			$(".web-rule-prevew").die().live('click', function(e){
 				e.preventDefault();
-				
-				show_web_rule_action_preview(serializeChainedElement($(this).parent().siblings('table')));
+				show_web_rule_action_preview(serializeChainedElement($(this).closest('table')));
 			});
 		});

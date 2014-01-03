@@ -121,9 +121,7 @@
 {{else}}
 	<p>Stripe id for each contact is stored in a text custom field. Select the custom field to be used.</p>
 	<select name="stripe_field" id="stripe_custom_field_name" class="required span10" style="width:100%" >
-		{{#unless this.stripe_field_name}}
      		<option class="default-select" value="">-Select-</option>
-    	{{/unless}}
 		{{#each this.custom_fields}}
 			<option value="{{field_label}}">{{field_label}} 
 			</option>
@@ -170,9 +168,7 @@
 				<div class="controls" id="contactTypeAhead">
 			
 			<select name="stripe_field_name" id="stripe_custom_field" class="required span10" style="width:100%" >
-				{{#unless prefs.stripe_field_name}}
      				<option class="default-select" value="">-Select-</option>
-    			{{/unless}}
 				{{#each custom_data}}
 					{{#if_equals ../prefs.stripe_field_name field_label}}
 						<option selected="selected" value="{{field_label}}">{{field_label}}</option>
