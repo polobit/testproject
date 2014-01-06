@@ -81,9 +81,35 @@ function appendMergeFieldsToSelect(merge_fields)
 
 $(function()
 {	
-	// Load HTML into Tiny MCE
-	var initHTML = window.opener.$('#' + getUrlVars()["id"]).val();
-	$('#content').val(initHTML);
+	try{
+		
+		// Load HTML into Tiny MCE.
+		if(getUrlVars()["id"] !== undefined)
+		{
+		var initHTML = window.opener.$('#' + getUrlVars()["id"]).val();
+		$('#content').val(initHTML);
+		}
+	
+	    // Fetches html content and load into Tiny MCE editor
+	    if(getUrlVars()["url"] !== undefined){
+	    	
+	    	var url = getUrlVars()["url"];
+	    	
+	    	if(url !== undefined)
+	    		{
+	    		
+	    		// Fetch html and fill into tinymce
+	    		$.get(location.origin+ '/misc/email-templates/'+url, function(value){
+	    		$('#content').val(value); 
+	    		});
+	    		
+	    		}
+	    }
+	}
+	catch(err){
+		console.log("Error occured");
+		console.log(err);
+	}
 	
 	// Load in tinymce
 	tinyMCE.init({
@@ -118,10 +144,15 @@ $(function()
         */
 	});
 	
+	try{
 	// Gets MergeFields and append them to select option.
 	getMergeFields();
+	}
+	catch(err){
+		console.log(err);
+	}
 	
-	$('#save_html').click(function(e){
+	$('#save_html').live('click', function(e){
 		
 		e.preventDefault();
 		
@@ -135,7 +166,8 @@ $(function()
 		}
 		
 		// Return Back here
-		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
+		//window.opener.tinyMCECallBack(getUrlVars()["id"], html);
+		window.opener.tinyMCECallBack("tinyMCEhtml_email", html);
 		window.close();
 	});
 	

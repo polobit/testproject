@@ -246,6 +246,25 @@ function loadTinyMCE(name)
 	
 }
 
+function load_email_templates()
+{
+	// If not empty, redirect to tinymce
+	if($('#tinyMCEhtml_email').val() !== "")
+	{
+		loadTinyMCE("tinyMCEhtml_email");
+		return;
+	}
+	
+	var new_window = window.open('email_templates.jsp', 'name','status=1, height=900, width=800, scrollbars=true');
+	
+	if(window.focus)
+		{
+		new_window.focus();
+		}
+	
+	return false;
+}
+
 function tinyMCECallBack(name, htmlVal)
 {
 	$('#' + name).val(htmlVal);
@@ -260,7 +279,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
 
-	var htmlDiv = "<label>HTML: <a href='#' onclick='loadTinyMCE(\"tinyMCE" + textAreaName + "\")'>(Load in HTML Editor)</a></label><br/><br/>";	
+	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates()'>(Load in HTML Editor)</a></label><br/><br/>";	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName + "' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
 	htmlDiv += "<br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
