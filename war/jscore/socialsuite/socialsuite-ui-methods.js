@@ -2,9 +2,8 @@
 function OnScrollDiv(elementDiv)
 {
   if($(elementDiv).scrollTop() + $(elementDiv).innerHeight() >= $(elementDiv)[0].scrollHeight)
-     {
-       alert('end reached');
-       
+     {      
+	   console.log(elementDiv);
        var streamId = ($(elementDiv).closest('li').attr('id'));   	   
    	
    	   // Get stream from collection.
@@ -16,6 +15,21 @@ function OnScrollDiv(elementDiv)
 	   var modelTweet = modelStream.get('tweetListView').at(modelStream.get('tweetListView').length - 2);
 	   var tweet = modelTweet.toJSON();	  
 	   console.log(tweet);
+	      
+	   console.log($("#"+tweet.id).offset());
+  	   console.log($(elementDiv).scrollTop());
+  	   
+  	   // Store reference to top message
+       var currMsg = $("#"+tweet.id);
+            
+       console.log($(currMsg).offset());
+  	   console.log($(elementDiv).scrollTop());
+  	          
+       // Store current scroll/offset
+       var curOffset = currMsg.offset().top - $(elementDiv).scrollTop();
+       console.log(curOffset);
+      	   
+	   //$(this).append('<span id="stream-waiting-modal-'+streamId+'"><img src="img/ajax-loader-cursor.gif"></img></span>');
 	   
    	/*
    	 * Calls TwitterAPI class to request for 20 more updates tweeted before
@@ -26,10 +40,7 @@ function OnScrollDiv(elementDiv)
    	{
    		console.log(data);
    		console.log(data.length);
-   		
-   		// Removes loading button after fetching updates
-   		$('#spinner-tweets').hide();
-   		
+   		   		
    		// If no more updates available, show message.
    		if (data.length == 0)
    		{
@@ -47,15 +58,18 @@ function OnScrollDiv(elementDiv)
    	   		  console.log(myObject);
    	   	      handleMessage(myObject);
    			}   		
+   		
+   	 // Set scroll to current position minus previous offset/scroll
+   		console.log(currMsg.offset().top-curOffset);
+        $("#"+$(elementDiv).attr("id")).scrollTop(currMsg.offset().top-curOffset);
+        console.log(currMsg.offset().top-curOffset);        
+        
    	}).error(function(data)
-   	{
-   		// Removes loading button if error occurs
-   		$('#spinner-tweets').hide();
-
+   	{   		
    		// Error message is shown to the user
 		showNotyPopUp('information', data.responseText, "top", 5000);
 		console.log(data);
-   	});      
+   	});      	   
  }
 }
 
