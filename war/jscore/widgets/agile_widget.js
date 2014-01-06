@@ -606,3 +606,22 @@ function agile_crm_save_widget_property_to_contact(propertyName, value, callback
 
 
 }
+
+function add_node_to_timeline(name, title, body, time)
+{
+	var model = {};
+	model['id'] = name;
+	model['body'] = body;
+	model["title"] = title;
+	
+	if (time && (time / 100000000000) > 1)
+		model["time"] = time;
+	else
+		model["time"] = time;
+	
+	model["entity_type"] = "custom";
+	
+	add_entity_to_timeline(new BaseModel(model));
+}
+
+
