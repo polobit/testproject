@@ -260,12 +260,7 @@ public class Contact extends Cursor
 		return properties;
 	}
 
-	/**
-	 * Adds {@link ContactField} to properties list.
-	 * 
-	 * @param contactField
-	 */
-	public void addProperty(ContactField contactField)
+	public ContactField addpropertyWithoutSaving(ContactField contactField)
 	{
 		// Ties to get contact field from existing properties based on new field
 		// name.
@@ -290,6 +285,17 @@ public class Contact extends Cursor
 			contactField.type = type;
 			field.updateField(contactField);
 		}
+		return field;
+	}
+
+	/**
+	 * Adds {@link ContactField} to properties list.
+	 * 
+	 * @param contactField
+	 */
+	public void addProperty(ContactField contactField)
+	{
+		addpropertyWithoutSaving(contactField);
 		save();
 	}
 
@@ -315,7 +321,7 @@ public class Contact extends Cursor
 		// Iterates through all the properties and returns matching property
 		for (ContactField field : properties)
 		{
-			if(field.name == null)
+			if (field.name == null)
 				continue;
 			if (field.name.equals(fieldName))
 				fields.add(field);
@@ -371,14 +377,13 @@ public class Contact extends Cursor
 			if (myMail != null && !myMail.isEmpty())
 				countEmails = dao.getCountByProperty("properties.value = ", myMail);
 
-			
 			// Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
 			// otherwise if countEmails==1, make sure its not due to previous
 			// value of this(current) Contact
 			if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
 			{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-				.entity("Sorry, a contact with this email already exists " + myMail).build());
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+						.entity("Sorry, a contact with this email already exists " + myMail).build());
 			}
 		}
 

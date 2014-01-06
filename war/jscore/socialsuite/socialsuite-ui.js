@@ -472,6 +472,7 @@ function initializeSocialSuite()
 		$("#link-text").html("<b>Thank you.</b>"); 
 		
 		setTimeout(function (){ $("#link-text").hide(); }, 2000);
-	  });	
+	  });
+		
 }
 

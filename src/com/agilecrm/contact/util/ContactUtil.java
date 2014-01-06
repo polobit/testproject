@@ -545,7 +545,6 @@ public class ContactUtil
 			return false;
 		}
 
-
 		if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 		{
 			CSVUtil.buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);
@@ -562,46 +561,103 @@ public class ContactUtil
 
 		return true;
 	}
-	
+
+	/**
+	 * Merge new contact data to oldcontact. If fields are email, website, phone
+	 * or url, new field is added if not duplicate value.
+	 * 
+	 * @param newContact
+	 * @param oldContact
+	 * @return
+	 */
 	public static Contact mergeContactFeilds(Contact newContact, Contact oldContact)
 	{
-		
-		
-		for(ContactField field : newContact.properties)
+
+		/**
+		 * Iterates through new properties in new contacts
+		 */
+		for (ContactField field : newContact.properties)
 		{
-			if(field.name ==null || field.value == null)
+			// If field name of value is null, continues with remaining fields.
+			if (field.name == null || field.value == null)
 				continue;
-			
-			ContactField existingField = oldContact.getContactField(field.name);
-				if(existingField == null)
+
+			// If email, website, phone, url, if value is not duplicate then new
+			// field is added.
+			if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name)
+					|| Contact.PHONE.equals(field.name) || Contact.URL.equals(field.name))
+			{
+				System.out.println("*************");
+				System.out.println("name : " + field.name + ", " + "value" + field.value);
+				// Fetches all contact fields by property name
+				List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
+
+				boolean newField = true;
+				for (ContactField contactField : contactFields)
 				{
-					oldContact.properties.add(field);
-					continue;
+					// If field value is equal to existing property, set
+					// subtype, there could be change in subtype
+					if (field.value.equals(contactField.value))
+					{
+						contactField.subtype = field.subtype;
+
+						// Sets it to false so property wont be added again.
+						newField = false;
+						continue;
+					}
 				}
-			
-				existingField.value = field.value;
+
+				System.out.println("new field" + newField);
+				if (newField)
+				{
+					System.out.println(field);
+					System.out.println(oldContact.getContactPropertiesList(Contact.EMAIL));
+					System.out.println("adding new");
+					oldContact.properties.add(field);
+					System.out.println(oldContact.getContactPropertiesList(Contact.EMAIL));
+				}
+				continue;
+			}
+
+			// Read property by name
+			ContactField existingField = oldContact.getContactField(field.name);
+
+			if (existingField == null)
+			{
+				oldContact.properties.add(field);
+				continue;
+			}
+
+			existingField.value = field.value;
+			if (!StringUtils.isEmpty(field.subtype))
+				existingField.subtype = field.subtype;
 		}
-		
+
 		oldContact.tags.addAll(newContact.tags);
-		
+
 		return oldContact;
 	}
-	
+
 	public static Contact mergeContactFields(Contact contact)
 	{
-		String email = contact.getContactFieldValue(Contact.EMAIL);
-		
-		if(email == null)
+		List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
+
+		if (emails.size() == 0)
 			return contact;
-		
-		Contact oldContact = searchContactByEmail(email);
-		
-		if(oldContact != null)
+
+		Contact oldContact = null;
+		for (ContactField field : emails)
+		{
+			oldContact = searchContactByEmail(field.value);
+			if (oldContact != null)
+				break;
+		}
+
+		if (oldContact != null)
 			return mergeContactFeilds(contact, oldContact);
-		
+
 		return contact;
-		
-		
+
 	}
 
 	public static boolean isValidFields(Contact contact)

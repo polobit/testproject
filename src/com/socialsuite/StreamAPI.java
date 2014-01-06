@@ -860,15 +860,14 @@ public class StreamAPI
 	 * @param streamId
 	 *            {@link Long} stream id, to get {@link Stream} object
 	 * @param tweetId
-	 *            {@link String} Id of the tweet to delete in Twitter
+	 *            {@link String} Id of the tweet to fetch details from Twitter
 	 * 
 	 * @return List of user.
 	 */
 	@GET
-	@Path("/getrtusers/{streamId}/{tweetId}")	
+	@Path("/getrtusers/{streamId}/{tweetId}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Status> getRTUsers(@PathParam("streamId") Long streamId, 
-			@PathParam("tweetId") Long tweetId)
+	public List<Status> getRTUsers(@PathParam("streamId") Long streamId, @PathParam("tweetId") Long tweetId)
 	{
 		try
 		{
@@ -878,8 +877,8 @@ public class StreamAPI
 			if (stream == null)
 				return null;
 
-			// Delete tweet on Twitter as per user's request.
-			return SocialSuiteTwitterUtil.getRTUsers(stream,tweetId);
+			// Get users on Twitter as per user's request.
+			return SocialSuiteTwitterUtil.getRTUsers(stream, tweetId);
 		}
 		catch (SocketTimeoutException e)
 		{
@@ -900,7 +899,55 @@ public class StreamAPI
 					.build());
 		}
 	}
-	
+
+	/**
+	 * Connects to {@link SocialSuiteTwitterUtil} user based on the name given
+	 * in stream and fetch past tweets from given tweet id.
+	 * 
+	 * @param stream
+	 *            {@link Stream} stream, to get {@link Stream} details.
+	 * @param tweetId
+	 *            {@link String} Id of the tweet to get past tweets from this.
+	 * @return
+	 * 
+	 * @return List of status.
+	 */
+	@GET
+	@Path("/pasttweets/{streamId}/{tweetId}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String getPastTweets(@PathParam("streamId") Long streamId, @PathParam("tweetId") Long tweetId)
+	{
+		try
+		{
+			Stream stream = StreamUtil.getStream(streamId);
+			if (stream == null)
+				return null;
+
+			System.out.println("in API getPastTweets : " + tweetId);
+
+			// Fetch past tweets on Twitter as per user's request.
+			return SocialSuiteTwitterUtil.getPastTweets(stream, tweetId).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and try again.").build());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occured. Refresh and try again.").build());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
 	/**
 	 * Connects to {@link SocialSuiteLinkedinUtil} and sends the post or share
 	 * in Linkedin based on the parameter of stream.

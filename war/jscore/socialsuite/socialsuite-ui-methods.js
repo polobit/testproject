@@ -1,3 +1,64 @@
+
+function OnScrollDiv(elementDiv)
+{
+  if($(elementDiv).scrollTop() + $(elementDiv).innerHeight() >= $(elementDiv)[0].scrollHeight)
+     {
+       alert('end reached');
+       
+       var streamId = ($(elementDiv).closest('li').attr('id'));   	   
+   	
+   	   // Get stream from collection.
+   	   var modelStream = StreamsListView.collection.get(streamId);	
+   	   var stream = modelStream.toJSON();
+   	   console.log(stream);
+   	  	
+   	   // Get tweet from stream.
+	   var modelTweet = modelStream.get('tweetListView').at(modelStream.get('tweetListView').length - 2);
+	   var tweet = modelTweet.toJSON();	  
+	   console.log(tweet);
+	   
+   	/*
+   	 * Calls TwitterAPI class to request for 20 more updates tweeted before
+   	 * the tweet id of the last update
+   	 */   	
+   	$.getJSON("/core/social/pasttweets/" + stream.id + "/" + tweet.id ,
+   	function(data)
+   	{
+   		console.log(data);
+   		console.log(data.length);
+   		
+   		// Removes loading button after fetching updates
+   		$('#spinner-tweets').hide();
+   		
+   		// If no more updates available, show message.
+   		if (data.length == 0)
+   		{
+   			showNotyPopUp('information', "No more updates available for stream"+ stream.stream_type +" of "+ stream.screen_name, "top", 5000);   			
+   			return;
+   		}
+   		
+   		/*
+   		 * Populate the collection with update stream details and show
+   		 */
+   		var i; var myObject;
+   		for(i=0; i<data.length; i++)
+   			{
+   			  myObject = eval('(' + data[i] + ')');
+   	   		  console.log(myObject);
+   	   	      handleMessage(myObject);
+   			}   		
+   	}).error(function(data)
+   	{
+   		// Removes loading button if error occurs
+   		$('#spinner-tweets').hide();
+
+   		// Error message is shown to the user
+		showNotyPopUp('information', data.responseText, "top", 5000);
+		console.log(data);
+   	});      
+ }
+}
+
 /**
  *  Fill details of stream in add-stream form and arrange elements as per requirement.
  */

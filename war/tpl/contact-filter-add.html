@@ -47,17 +47,24 @@
 										<td class="lhs-block span2">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs" id="LHS" style="width: 125px;">
-													<option value="tags" selected="selected">Tag</option>
-													<option value="first_name">First Name</option>
-													<option value="tags_time">Tag And CreatedDate</option>
-													<option value="lead_score">Score</option>
-													<option value="title">Job Title</option>
-													<option value="email">Email Address</option>
-													<option value="phone">Phone Number</option>
-													<option value="created_time">Created</option>
-													<option value="updated_time">Updated</option>
-													<option value="company">Company</option>
-													<option value="owner_id">Owner</option>
+													<optgroup label="Tag">
+														<option value="tags" selected="selected">Tag</option>
+														<option value="tags_time">Tag And Created Date</option>
+														<option value="lead_score">Score</option>
+													</optgroup>
+													<optgroup label="Date">
+														<option value="created_time">Created</option>
+														<option value="updated_time">Updated</option>
+													</optgroup>
+ 													<optgroup label="Properties">
+														<option value="first_name">First Name</option>
+														<option value="email">Email Address</option>
+														<option value="company">Company</option>
+														<option value="title">Job Title</option>
+														<option value="phone">Phone Number</option>
+														<option value="owner_id">Owner</option>
+													</optgroup>
+												
 													 <optgroup label="Custom Fields" id="custom-fields" class="hide">
 													</optgroup>
 												</select>

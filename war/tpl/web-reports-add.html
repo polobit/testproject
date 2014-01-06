@@ -170,7 +170,6 @@
 			</div>
 			<div class="control-group" style="margin-left: -19px;padding-top:20px">
 						<label class="control-label">Action</label>
-					<div class="pull-right" id="action-image"></div>
 						<div class="controls">
 								<div class="webrule-actions chained-table"> 
 							<div class="alert" style="width:52%;margin-bottom: 5%;">
@@ -204,7 +203,7 @@
 													related="WEB_RULE_RHS">Add Score</option>
 												<option value="SUBTRACT_SCORE" class="campaign" 
 													related="WEB_RULE_RHS">Substract Score</option>
-											</optgroup>
+											</optgroup label="Execute code">
 												<option value="JAVA_SCRIPT">Java Script</option>
 											</select>
 										</div>
@@ -222,7 +221,7 @@
 												<input type="number" name="temp" class="SUBTRACT_SCORE required number" placeholder="Enter score to substract"></input>
 												<input type="number" name="temp" class="required number" placeholder="Enter score to substract"></input>
 												<input type="text" class="REMOVE_TAG ADD_TAG tags" placeholder="Enter tag"></input>
-												<textarea  cols="35" class="JAVA_SCRIPT" rows="6" placeholder="JAVA_SCRIPT"></textarea>
+												<textarea  cols="35" class="JAVA_SCRIPT" rows="6" placeholder="Enter Javascript"></textarea>
 											</div>
 										</td>
 									</tr>
@@ -277,6 +276,7 @@
 												<div id="noty-message" name="popup_text"  style="padding-top:10px">
 													<textarea  cols="35" class="information confirmation span4" rows="6" placeholder="paste HTML context"></textarea>
 													<textarea  cols="35" class="custom_html span4" rows="6" placeholder="paste HTML context"></textarea>
+													<div style="float:right" class="web-rule-prevew"><a href="#">Preview</a></div>
 												</div>
 										</td>
 									</tr>
@@ -310,13 +310,12 @@
 									
 								</tbody>
 								</table>
-									<div class="pull-right" style="width: 5%;margin-bottom:10px;margin-top: 10px;float: right;"><a href="#" class="web-rule-prevew">Preview</a></div>
 								</div>
 
 
 </div>
 
-<div class="pull-right" style="width:50%;margin-top:-10px"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
+<div class="pull-right" style="width:50%;margin-top:-4%"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
 							</div>
 					</div>
 			{{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />

@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import twitter4j.DirectMessage;
 import twitter4j.Paging;
-import twitter4j.ResponseList;
+import twitter4j.Query;
+import twitter4j.QueryResult;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -16,6 +18,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.TwitterRuntimeException;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
+import twitter4j.internal.org.json.JSONArray;
 
 import com.agilecrm.Globals;
 import com.agilecrm.util.JSONUtil;
@@ -624,17 +627,382 @@ public class SocialSuiteTwitterUtil
 		}
 	}
 
-	public static List<Status> getRTUsers(Stream stream, Long tweetId) throws Exception 
+	/**
+	 * Fetches all user's who retweeted this tweet, based on tweet id, connects
+	 * with twitter from details of stream.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetId
+	 *            {@link Long} id of the {@link Tweet}
+	 * 
+	 * @return {@link List} with all RT status
+	 * @throws Exception
+	 */
+	public static List<Status> getRTUsers(Stream stream, Long tweetId) throws Exception
 	{
 		Twitter twitter = getTwitter(stream);
-				
-		List<Status> userList;		
-		
-		userList =  twitter.getRetweets(tweetId);	
-		
-		for(Status st : userList)
-			System.out.println("st: "+st.toString());
-		
+
+		List<Status> userList;
+
+		userList = twitter.getRetweets(tweetId);
+
+		for (Status st : userList)
+			System.out.println("st: " + st.toString());
+
 		return userList;
 	}
+
+	/**
+	 * Collects past tweets from max_id, connects with twitter from details of
+	 * stream.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetId
+	 *            {@link Long} id of the {@link Tweet} to get tweets before this
+	 *            id.
+	 * 
+	 * @return {@link JSONArray} with past tweets
+	 * @throws Exception
+	 */
+	public static JSONArray getPastTweets(Stream stream, Long tweetId) throws Exception
+	{
+		if (stream.stream_type.equalsIgnoreCase("Search"))
+			return getSearchResults(stream, tweetId);
+		else if (stream.stream_type.equalsIgnoreCase("DM_Inbox") || stream.stream_type.equalsIgnoreCase("DM_Outbox"))
+			return getDirectMessages(stream, tweetId);
+		else
+			return getStatuses(stream, tweetId);
+	}
+
+	/**
+	 * Accepts search results from REST calls to twitter and creates new small
+	 * JSON and send to user on appropriate channel.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetId
+	 *            {@link Long} id of the {@link Tweet} to get tweets before this
+	 *            id.
+	 * 
+	 * @return {@link JSONArray} with past tweets
+	 */
+	private static JSONArray getSearchResults(Stream stream, Long tweetId) throws Exception
+	{
+		Twitter twitter = getTwitter(stream);
+
+		JSONObject tweetJson = new JSONObject();
+		JSONArray resultList = new JSONArray();
+
+		QueryResult queryResult;
+		Query query = new Query(stream.keyword);
+		query.setCount(20);
+
+		System.out.println("search keyword :" + query);
+
+		// get search results as per keyword
+		queryResult = twitter.search(query);
+
+		List<Status> statuses = queryResult.getTweets();
+
+		for (Status qst : statuses)
+		{
+			// check with friends ids
+			if (qst.getText() != null)
+			{
+				// create new small tweet
+				tweetJson = createNewTweet(qst, "user");
+
+				// add id of tweet
+				tweetJson.put("id", qst.getId());
+				tweetJson.put("id_str", qst.getId());// ("id_str"));
+
+				// check stream user retweeted this tweet.
+				if (qst.isRetweetedByMe())
+					tweetJson.put("retweeted_by_user", true);
+
+				// check stream user Favorited this tweet.
+				if (qst.isFavorited())
+					tweetJson.put("favorited_by_user", true);
+
+				// add type of API
+				tweetJson.put("type", "REST");
+
+				// add stream id
+				tweetJson.put("stream_id", stream.id);
+
+				// add stream type
+				tweetJson.put("stream_type", stream.stream_type);
+			}
+
+			System.out.println(tweetJson.toString());
+			resultList.put(tweetJson);
+		}// for end
+
+		return resultList;
+	}
+
+	/**
+	 * Accepts direct message results from REST calls to twitter and creates new
+	 * small JSON and send to user on appropriate channel.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetId
+	 *            {@link Long} id of the {@link Tweet} to get tweets before this
+	 *            id.
+	 * 
+	 * @return {@link JSONArray} with past tweets
+	 */
+	private static JSONArray getDirectMessages(Stream stream, Long tweetId) throws Exception
+	{
+		Twitter twitter = getTwitter(stream);
+
+		List<DirectMessage> dmList = null;
+		JSONObject tweetJson = new JSONObject();
+		JSONArray resultList = new JSONArray();
+
+		if (stream.stream_type.equalsIgnoreCase("DM_Inbox"))
+			dmList = twitter.getDirectMessages(new Paging(1).maxId(tweetId));
+		else if (stream.stream_type.equalsIgnoreCase("DM_Outbox"))
+			dmList = twitter.getSentDirectMessages(new Paging(1).maxId(tweetId));
+
+		for (DirectMessage directmessage : dmList)
+		{
+			if (stream.screen_name.equalsIgnoreCase(directmessage.getRecipientScreenName()))
+			{
+				// user is recipient, DM_Inbox tweet
+				// create new small tweet
+				tweetJson = createNewTweet(directmessage, "sender");
+			}
+			else
+			{
+				// user is sender, DM_Outbox tweet
+				// create new small tweet
+				tweetJson = createNewTweet(directmessage, "recipient");
+			}
+
+			if (directmessage.getText() != null)
+			{
+				// add id of tweet
+				tweetJson.put("id", directmessage.getId());
+				tweetJson.put("id_str", directmessage.getId());// ("id_str"));
+
+				// add type of API
+				tweetJson.put("type", "REST");
+
+				// add stream id
+				tweetJson.put("stream_id", stream.id);
+
+				// add stream type
+				tweetJson.put("stream_type", stream.stream_type);
+			}
+
+			System.out.println(tweetJson);
+			resultList.put(tweetJson);
+		} // for end
+
+		return resultList;
+	}
+
+	/**
+	 * Accepts Home, Sent,Favorites, Retweets etc. results from REST calls to
+	 * twitter and creates new small JSON.
+	 * 
+	 * @param stream
+	 *            {@link Stream} for accessing token and secret key
+	 * @param tweetId
+	 *            {@link Long} id of the {@link Tweet} to get tweets before this
+	 *            id.
+	 * 
+	 * @return {@link JSONArray} with past tweets
+	 */
+	private static JSONArray getStatuses(Stream stream, Long tweetId) throws Exception
+	{
+		Twitter twitter = getTwitter(stream);
+
+		List<Status> postList = null;
+		JSONObject tweetJson = new JSONObject();
+		JSONArray resultList = new JSONArray();
+
+		if (stream.stream_type.equalsIgnoreCase("Home"))
+			postList = twitter.getHomeTimeline(new Paging(1).maxId(tweetId));
+		else if (stream.stream_type.equalsIgnoreCase("Mentions"))
+			postList = twitter.getMentionsTimeline(new Paging(1).maxId(tweetId));
+		else if (stream.stream_type.equalsIgnoreCase("Retweets"))
+			postList = twitter.getRetweetsOfMe(new Paging(1).maxId(tweetId));
+		else if (stream.stream_type.equalsIgnoreCase("Favorites"))
+			postList = twitter.getFavorites(new Paging(1).maxId(tweetId));
+		else if (stream.stream_type.equalsIgnoreCase("Sent"))
+			postList = twitter.getUserTimeline(new Paging(1).maxId(tweetId));
+
+		if (postList == null || postList.isEmpty())
+			return null;
+
+		for (Status status : postList)
+		{
+			if (status == null)
+				continue;
+
+			if (status.getText() != null)
+			{
+				if (stream.stream_type.equals("Sent") && (status.getRetweetedStatus() != null))
+				{
+					// tweet owner is not user.
+					if (status.isRetweetedByMe())
+					{
+						// create small tweet.
+						tweetJson = createNewTweet(status.getRetweetedStatus(), "user");
+
+						tweetJson.put("retweeted", stream.screen_name + " retweeted");
+					}
+				}
+				else if (stream.stream_type.equals("Home") && (status.getRetweetedStatus() != null))
+				{
+					// create new small tweet
+					tweetJson = createNewTweet(status.getRetweetedStatus(), "user");
+
+					tweetJson.put("retweeted", status.getUser().getScreenName() + " retweeted");
+				}
+				else
+				{
+					// create new small tweet
+					tweetJson = createNewTweet(status, "user");
+
+					if (status.getRetweetCount() != 0 || status.getRetweetCount() != -1)
+						tweetJson.put("retweeted", status.getRetweetCount() + " retweets");
+				}
+
+				// add id of tweet
+				tweetJson.put("id", status.getId());	
+				tweetJson.put("id_str", status.getId());// ("id_str"));
+
+				if (status.getCurrentUserRetweetId() > 0)
+					tweetJson.put("retweet_id", status.getCurrentUserRetweetId()); // ("id_str"));
+
+				// check stream user retweeted this tweet.
+				if (status.isRetweetedByMe())
+					tweetJson.put("retweeted_by_user", true);
+
+				// check stream user Favorited this tweet.
+				if (status.isFavorited())
+					tweetJson.put("favorited_by_user", true);
+
+				// add type of API
+				tweetJson.put("type", "REST");
+
+				// add stream id
+				tweetJson.put("stream_id", stream.id);
+
+				// add stream type
+				tweetJson.put("stream_type", stream.stream_type);
+
+				// check tweet is retweeted by stream user.
+				boolean retweeted_by_user = status.isRetweetedByMe();
+
+				if (retweeted_by_user == true)
+					tweetJson.put("retweeted_by_user", retweeted_by_user);
+				else if (tweetJson.has("retweeted"))
+				{
+					if (tweetJson.get("retweeted").toString().equalsIgnoreCase(stream.screen_name + " retweeted"))
+					{
+						tweetJson.put("retweeted_by_user", true);
+					}
+				}
+			}
+
+			System.out.println(tweetJson);
+			resultList.put(tweetJson);
+		}// for end
+
+		return resultList;
+	}
+
+	/**
+	 * Accepts tweet in JSONObject format and create new tweet in same
+	 * JSONObject format.
+	 * 
+	 * @param userJson
+	 *            - received tweet from Twitter (JSONObject).
+	 * 
+	 * @return newUserJSON - new tweet (JSONObject).
+	 */
+	private static JSONObject createNewTweet(Status status, String owner)
+	{
+		JSONObject newTweetJSON = new JSONObject();
+		JSONObject newUserJSON = new JSONObject();
+
+		try
+		{
+			// create new small tweetJSON.
+			if (status.getText() != null)
+			{
+				newTweetJSON.put("text", status.getText());
+
+				newTweetJSON.put("created_at", status.getCreatedAt());
+
+				// create user JSON.
+				if (owner.equalsIgnoreCase("user"))
+				{
+					newUserJSON.put("id", status.getUser().getId());
+					newUserJSON.put("name", status.getUser().getName());
+					newUserJSON.put("screen_name", status.getUser().getScreenName());
+					newUserJSON.put("profile_image_url", status.getUser().getProfileImageUrlHttps());
+					newUserJSON.put("description", status.getUser().getDescription());
+				}
+
+				// add userJSON in tweetJSON.
+				newTweetJSON.put("user", newUserJSON);
+			}
+		}
+		catch (JSONException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return newTweetJSON;
+	}
+
+	private static JSONObject createNewTweet(DirectMessage directmessage, String owner)
+	{
+		JSONObject newTweetJSON = new JSONObject();
+		JSONObject newUserJSON = new JSONObject();
+
+		try
+		{
+			// create new small tweetJSON.
+			if (directmessage.getText() != null)
+			{
+				newTweetJSON.put("text", directmessage.getText());
+
+				newTweetJSON.put("created_at", directmessage.getCreatedAt());
+
+				// create user JSON.
+				if (owner.equalsIgnoreCase("sender"))
+				{
+					newUserJSON.put("id", directmessage.getSenderId());
+					newUserJSON.put("name", directmessage.getSender().getName());
+					newUserJSON.put("screen_name", directmessage.getSenderScreenName());
+					newUserJSON.put("profile_image_url", directmessage.getSender().getProfileImageUrlHttps());
+					newUserJSON.put("description", directmessage.getSender().getDescription());
+				}
+				else if (owner.equalsIgnoreCase("recipient"))
+				{
+					newUserJSON.put("id", directmessage.getRecipientId());
+					newUserJSON.put("name", directmessage.getRecipient().getName());
+					newUserJSON.put("screen_name", directmessage.getRecipientScreenName());
+					newUserJSON.put("profile_image_url", directmessage.getRecipient().getProfileImageUrlHttps());
+					newUserJSON.put("description", directmessage.getRecipient().getDescription());
+				}
+				// add userJSON in tweetJSON.
+				newTweetJSON.put("user", newUserJSON);
+			}
+		}
+		catch (JSONException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		return newTweetJSON;
+	}
+
 }
