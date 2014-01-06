@@ -716,7 +716,7 @@ public class SocialSuiteTwitterUtil
 
 				// add id of tweet
 				tweetJson.put("id", qst.getId());
-				tweetJson.put("id_str", qst.getId());// ("id_str"));
+				tweetJson.put("id_str", String.valueOf(qst.getId()));
 
 				// check stream user retweeted this tweet.
 				if (qst.isRetweetedByMe())
@@ -787,7 +787,7 @@ public class SocialSuiteTwitterUtil
 			{
 				// add id of tweet
 				tweetJson.put("id", directmessage.getId());
-				tweetJson.put("id_str", directmessage.getId());// ("id_str"));
+				tweetJson.put("id_str", String.valueOf(directmessage.getId()));
 
 				// add type of API
 				tweetJson.put("type", "REST");
@@ -870,13 +870,13 @@ public class SocialSuiteTwitterUtil
 					// create new small tweet
 					tweetJson = createNewTweet(status, "user");
 
-					if (status.getRetweetCount() != 0 || status.getRetweetCount() != -1)
+					if (status.getRetweetCount() > 0)
 						tweetJson.put("retweeted", status.getRetweetCount() + " retweets");
 				}
 
 				// add id of tweet
-				tweetJson.put("id", status.getId());	
-				tweetJson.put("id_str", status.getId());// ("id_str"));
+				tweetJson.put("id", status.getId());
+				tweetJson.put("id_str", String.valueOf(status.getId()));
 
 				if (status.getCurrentUserRetweetId() > 0)
 					tweetJson.put("retweet_id", status.getCurrentUserRetweetId()); // ("id_str"));
@@ -940,7 +940,7 @@ public class SocialSuiteTwitterUtil
 			{
 				newTweetJSON.put("text", status.getText());
 
-				newTweetJSON.put("created_at", status.getCreatedAt());
+				newTweetJSON.put("created_at", status.getCreatedAt().toLocaleString());
 
 				// create user JSON.
 				if (owner.equalsIgnoreCase("user"))
@@ -975,7 +975,7 @@ public class SocialSuiteTwitterUtil
 			{
 				newTweetJSON.put("text", directmessage.getText());
 
-				newTweetJSON.put("created_at", directmessage.getCreatedAt());
+				newTweetJSON.put("created_at", directmessage.getCreatedAt().toLocaleString());
 
 				// create user JSON.
 				if (owner.equalsIgnoreCase("sender"))
