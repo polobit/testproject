@@ -12,7 +12,6 @@ $(function(){
 		$('#' + this.id).find('.error').removeClass('error');
 	});
 	
-    
     /**
      * "Hide" event of note modal to remove contacts appended to related to field
      * and validation errors
@@ -31,11 +30,8 @@ $(function(){
 	$(".link").live('click', function(e)
 	{
 		e.preventDefault();
-		//$('#uploadDocumentForm').find('#url').html("");
 		$('#uploadDocumentForm').find('#error').html("");
 		var id = $(this).find("a").attr("id").toUpperCase();
-		$('#uploadDocumentForm').find("#network_type").val(id);
-		$('#uploadDocumentForm').find("#upload_url").val("");
 		
 		if(id && id == "GOOGLE")
 			var newwindow = window.open("upload-google-document.jsp?id=upload-form", 'name','height=510,width=800');
@@ -74,10 +70,10 @@ $(function(){
  			return false;
  		}
  		
- 		var url = $('#uploadDocumentForm').find('#upload_url').val();
+ 		var url = $('#' + form_id).find('#upload_url').val();
  		if(url == "")
  		{
- 			$('#uploadDocumentForm').find('#error').html('<div class="alert alert-error">Sorry! Document not attached properly.</div>');
+ 			$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Document not attached properly.</div>');
  			enable_save_button($(saveBtn));
  			return;
  		}
@@ -89,7 +85,11 @@ $(function(){
 
  				// Removes disabled attribute of save button
  				enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
-
+ 				
+ 				$('#' + form_id).find('#url').html("");
+ 				$('#' + form_id).find("#network_type").val("");
+ 				$('#' + form_id).find("#upload_url").val("");
+ 				
  				//$('#' + modalId).find('span.save-status img').remove();
  				$('#' + modal_id).modal('hide');
 
@@ -159,9 +159,9 @@ $(function(){
 });	
 
 
-function saveDocumentURL(url)
+function saveDocumentURL(url, network)
 {
+	$('#uploadDocumentForm').find("#network_type").val(network);
    	$('#uploadDocumentForm').find('#upload_url').val(url);
    	$('#uploadDocumentForm').find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
-	
 }

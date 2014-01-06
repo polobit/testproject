@@ -48,7 +48,8 @@
       {
       	 if (window.opener)
     	 {
-      		 window.opener.saveDocumentURL(url);
+      		var network = "GOOGLE";
+      		 window.opener.saveDocumentURL(url, network);
       	     window.close();
       	 }
       	 return;
@@ -62,6 +63,7 @@
 	     $('#google_doc_validate').on('click',function(e){
 	 		e.preventDefault();
 	 		var url = $('#documentForm').find('#upload_url').val();
+	 		var network = "GOOGLE";
 	 		if(url)
 	        	returnBack(url);
 	     });
