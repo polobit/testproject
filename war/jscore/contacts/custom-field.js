@@ -100,6 +100,8 @@ function show_custom_fields_helper(custom_fields, properties){
 	// Create Field for each custom field  to insert into the desired form 
 	$.each(custom_fields, function(index, field)
 	{
+		if(!field.field_type)
+			return;
 		// If field type is list create a select dropdown
 		if(field.field_type.toLowerCase() == "list")
 		{
