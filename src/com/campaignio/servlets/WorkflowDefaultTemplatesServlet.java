@@ -1,6 +1,8 @@
 package com.campaignio.servlets;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -103,6 +105,7 @@ public class WorkflowDefaultTemplatesServlet extends HttpServlet
     {
 	String category = null;
 	JSONArray templates = new JSONArray();
+
 	try
 	{
 	    for (String path : type)
@@ -115,11 +118,15 @@ public class WorkflowDefaultTemplatesServlet extends HttpServlet
 
 		try
 		{
-		    JSONObject json = new JSONObject(templateString);
+		    // LinkedHashMap to preserve JSON Order as
+		    // org.json.JSONObject doesn't preserve. E.g., {template=
+		    // newsletter,json={}}
+		    Map<String, String> templateMap = new LinkedHashMap<String, String>();
+		    templateMap.put("template", path.split("/")[1].split("_template.js")[0]);
+		    templateMap.put("json", templateString);
 
-		    // JSONObject with template and json(template json) as key
-		    // value pairs. E.g., {template: newsletter, json:{}}
-		    templates.put(new JSONObject().put("template", path.split("/")[1].split("_template.js")[0]).put("json", json));
+		    // Insert each template map into array.
+		    templates.put(templateMap);
 		}
 		catch (Exception e)
 		{
@@ -137,4 +144,5 @@ public class WorkflowDefaultTemplatesServlet extends HttpServlet
 	    return null;
 	}
     }
+
 }

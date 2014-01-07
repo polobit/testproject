@@ -146,12 +146,12 @@ var WorkflowsRouter = Backbone.Router
 						
 						// Remove loading image.
 						$('.loading').remove();
-						
+
 						// Initialize workflow_templates_json
 						that.worflow_templates_json = data;
 						
 						// build UI with obtained templates json
-						build_workflow_templates(data, $workflow_categories_template);
+						build_workflow_templates(that.worflow_templates_json, $workflow_categories_template);
 					});
 			    	
 			    	return;
@@ -179,7 +179,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = undefined;
 				
 				// Returns workflow json with the template name and initialize this.workflow_json.
-				this.workflow_json = JSON.stringify(get_template_json(this.worflow_templates_json, template_name));
+				this.workflow_json = get_template_json(this.worflow_templates_json, template_name);
 				
 				$('#content').html(getTemplate('workflow-add',{}));
 				

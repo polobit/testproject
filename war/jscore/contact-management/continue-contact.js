@@ -120,8 +120,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
    
     	if (isValidField(form_id+' #lname'))properties.push(property_JSON('last_name', form_id+' #lname'));
     	
-    	// Add profile_img
-        if(form_id == "personForm")        	
+    	// Add profile_img from both forms. 
+        //if(form_id == "personForm")        	
            if (isValidField(form_id+' #image'))properties.push(property_JSON('image', form_id+' #image'));     	  	  
    
     	///give preference to autofilled company, ignore any text in textfield for filling company name
