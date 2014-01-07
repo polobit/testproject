@@ -607,7 +607,7 @@ function agile_crm_save_widget_property_to_contact(propertyName, value, callback
 
 }
 
-function add_node_to_timeline(name, title, body, time)
+function agile_crm_add_event_to_timeline(name, title, body, time)
 {
 	var model = {};
 	model['id'] = name;
