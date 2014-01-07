@@ -67,6 +67,14 @@ public class NavSetting
      */
     @NotSaved(IfDefault.class)
     public boolean reports = true;
+    
+
+    /**
+     * State of Documents tab in Navbar. <code>true</code> implies visible in
+     * Navbar.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean documents = true;
 
     /**
      * Deafult - <br/>
@@ -74,9 +82,8 @@ public class NavSetting
      */
     public void setDefault()
     {
-	cases = false;
+	cases = documents = social = false;
 	deals = calendar = campaign = reports = true;
-	social = false;
     }
 
     public NavSetting()

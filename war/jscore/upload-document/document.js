@@ -1,5 +1,15 @@
 $(function(){ 
 	
+	// For adding new document from contact-details
+	$(".documents-add").die().live('click', function(e){
+		e.preventDefault();
+		var el = $("#uploadDocumentForm");
+		$("#uploadDocumentModal").modal('show');
+
+		// Contacts type-ahead
+		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+	});
+	
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
@@ -147,7 +157,7 @@ $(function(){
  					});
  				}
  				else {
- 					App_Deals.navigate("documents", {
+ 					App_Documents.navigate("documents", {
  						trigger : true
  					});
  				}

@@ -19,6 +19,7 @@ $(function()
 	App_Cases = new CasesRouter();
 	App_Visitors = new VisitorsRouter();
 	App_WebReports = new WebreportsRouter();
+	App_Documents = new DocumentsRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)

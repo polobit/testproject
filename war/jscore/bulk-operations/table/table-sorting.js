@@ -82,6 +82,11 @@ function sort_tables(table) {
 	    		sort_tasks(table);
 	    		return;
 	    	}
+	    if(table_id == "document-list")
+    	{
+    		sort_documents(table);
+    		return;
+    	}
 	    
     	basic_table_sort(table);
 
@@ -121,7 +126,6 @@ function sort_tasks(table)
 
 function sort_deals(table)
 {
-	console.log(table);
 	$(table).tablesorter({ 
         headers: { 
         	0 : {sorter : false	},
@@ -131,7 +135,20 @@ function sort_deals(table)
         	4 : {sorter : 'text'},
 			5 : {sorter : 'time-ago'},
         	6 : {sorter : false}
-        },
+        }
+    });
+}
+
+function sort_documents(table)
+{
+	$(table).tablesorter({ 
+        headers: { 
+        	0 : {sorter : false	},
+        	1 : {sorter : 'text'},
+        	2 : {sorter : 'text'},
+        	3 : {sorter : false},
+			4 : {sorter : 'time-ago'}
+        }
     });
 }
 

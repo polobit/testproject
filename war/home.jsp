@@ -119,7 +119,7 @@
 								//Styling enable/disable navbar tabs(add display:none to diable)
 									Integer count = 0;
 									NavSetting navSetting = NavSettingUtil.getNavSetting();
-									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_social = "", style_reports = "";
+									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_social = "", style_reports = "", style_documents = "";
 									//style for calendar,cases,deals,campaign resp.
 
 									if (!navSetting.calendar)
@@ -144,6 +144,10 @@
 										++count;
 									if (!navSetting.reports)
 										style_reports = " display:none;";
+									else
+										++count;
+									if (!navSetting.documents)
+										style_documents = " display:none;";
 									else
 										++count;
 							%>
@@ -189,6 +193,12 @@
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
 							<%
 								}
+									if (navSetting.documents) {
+							%>
+								<li id="documentsmenu"><a href="#documents"><i
+										class="icon-file icon-white"></i> Documents</a></li>
+							<%
+								}
 							%>
 
 							<%
@@ -232,6 +242,12 @@
 									%>
 									<li id="reportsmenu"><a href="#reports"><i
 											class="icon-bar-chart icon-white"></i> Reports</a></li>
+									<%
+										}
+												if (navSetting.documents) {
+									%>
+									<li id="documentsmenu"><a href="#documents"><i
+											class="icon-file icon-white"></i> Documents</a></li>
 									<%
 										}
 									%>
