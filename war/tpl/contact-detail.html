@@ -150,7 +150,7 @@
 						style="display: inline; vertical-align: top; margin-bottom: 10px">
 						{{#if tagsWithTime.length}} {{#each tagsWithTime}}
 						<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
-								class="anchor" href="#tags/{{this.tag}}">{{this.tag}}</a><a
+								class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> {{/each}}
 						{{/if}}
 					</ul>
