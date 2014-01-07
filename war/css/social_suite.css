@@ -108,7 +108,7 @@
 
 /* Track */
 #socialsuite-streams-model-list ::-webkit-scrollbar-track,
-#scheduled_updates_list ::-webkit-scrollbar-track
+#RTuser_list ::-webkit-scrollbar-track
 {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
     -webkit-border-radius: 10px;
@@ -117,13 +117,13 @@
 
 /* Handle */
 #socialsuite-streams-model-list ::-webkit-scrollbar,
-#scheduled_updates_list ::-webkit-scrollbar
+#RTuser_list ::-webkit-scrollbar
 {
     width: 7px;
     margin-right: 4px!important;
 }
 #socialsuite-streams-model-list ::-webkit-scrollbar-thumb,
-#scheduled_updates_list ::-webkit-scrollbar-thumb
+#RTuser_list ::-webkit-scrollbar-thumb
 {
     -webkit-border-radius: 10px;
     border-radius: 10px;
@@ -188,6 +188,5 @@
 .width-65{width:65px;}
 .width-150{width:150px;}
 
-/* scheduled-update-actions */
-.scheduled-update-actions>li>a{padding:0!important;line-height:none!important;line-height: 1.28578em!important;}
-#scheduled_updates_list>li{height:479px;background-color:#fcfcfc;overflow:hidden;position:relative;}
+/* RT user list modal */
+.RTuserlist-modal{background-color: ghostwhite;overflow-y: scroll; max-height:250px;}

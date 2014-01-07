@@ -2,7 +2,7 @@
  * Creates backbone router for Documents create, read and update
  * operations
  */
-var DocumentRouter = Backbone.Router.extend({
+var DocumentsRouter = Backbone.Router.extend({
 
 	routes : {
 
@@ -20,12 +20,13 @@ var DocumentRouter = Backbone.Router.extend({
 		this.DocumentCollectionView = new Base_Collection_View({
 			url : 'core/api/documents',
 			templateKey : "documents",
+			sortKey:'upload_time',
 			individual_tag_name : 'tr',
 			postRenderCallback : function(el)
 				{
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 					{
-						$(".documents-update-time", el).timeago();
+						$(".document-created-time", el).timeago();
 					});
 				}
 		});
