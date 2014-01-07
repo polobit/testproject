@@ -59,7 +59,7 @@ function initializeSocialSuite()
 		
 		// Tweet owner's handle/Screen name.
 		TweetOwnerForAddContact = tweet.user.screen_name;
-		
+				
 		// Separate full name.
 		var firstName = fullName.substr(0,fullName.indexOf(' '));
 		var lastName = fullName.substr(fullName.indexOf(' ')+1);;	

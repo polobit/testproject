@@ -1,78 +1,3 @@
-
-function OnScrollDiv(elementDiv)
-{
-  if($(elementDiv).scrollTop() + $(elementDiv).innerHeight() >= $(elementDiv)[0].scrollHeight)
-     {      
-	   console.log(elementDiv);
-       var streamId = ($(elementDiv).closest('li').attr('id'));   	   
-   	
-   	   // Get stream from collection.
-   	   var modelStream = StreamsListView.collection.get(streamId);	
-   	   var stream = modelStream.toJSON();
-   	   console.log(stream);
-   	  	
-   	   // Get tweet from stream.
-	   var modelTweet = modelStream.get('tweetListView').at(modelStream.get('tweetListView').length - 2);
-	   var tweet = modelTweet.toJSON();	  
-	   console.log(tweet);
-	      
-	   console.log($("#"+tweet.id).offset());
-  	   console.log($(elementDiv).scrollTop());
-  	   
-  	   // Store reference to top message
-       var currMsg = $("#"+tweet.id);
-            
-       console.log($(currMsg).offset());
-  	   console.log($(elementDiv).scrollTop());
-  	          
-       // Store current scroll/offset
-       var curOffset = currMsg.offset().top - $(elementDiv).scrollTop();
-       console.log(curOffset);
-      	   
-	   //$(this).append('<span id="stream-waiting-modal-'+streamId+'"><img src="img/ajax-loader-cursor.gif"></img></span>');
-	   
-   	/*
-   	 * Calls TwitterAPI class to request for 20 more updates tweeted before
-   	 * the tweet id of the last update
-   	 */   	
-   	$.getJSON("/core/social/pasttweets/" + stream.id + "/" + tweet.id ,
-   	function(data)
-   	{
-   		console.log(data);
-   		console.log(data.length);
-   		   		
-   		// If no more updates available, show message.
-   		if (data.length == 0)
-   		{
-   			showNotyPopUp('information', "No more updates available for stream"+ stream.stream_type +" of "+ stream.screen_name, "top", 5000);   			
-   			return;
-   		}
-   		
-   		/*
-   		 * Populate the collection with update stream details and show
-   		 */
-   		var i; var myObject;
-   		for(i=0; i<data.length; i++)
-   			{
-   			  myObject = eval('(' + data[i] + ')');
-   	   		  console.log(myObject);
-   	   	      handleMessage(myObject);
-   			}   		
-   		
-   	 // Set scroll to current position minus previous offset/scroll
-   		console.log(currMsg.offset().top-curOffset);
-        $("#"+$(elementDiv).attr("id")).scrollTop(currMsg.offset().top-curOffset);
-        console.log(currMsg.offset().top-curOffset);        
-        
-   	}).error(function(data)
-   	{   		
-   		// Error message is shown to the user
-		showNotyPopUp('information', data.responseText, "top", 5000);
-		console.log(data);
-   	});      	   
- }
-}
-
 /**
  *  Fill details of stream in add-stream form and arrange elements as per requirement.
  */
@@ -132,8 +57,17 @@ function onloadProfileImg()
 // Add website and select network on continue form in add contact flow.
 function socialsuite_add_website()
 {
-  if (TweetOwnerForAddContact == null)
+  if(TweetOwnerForAddContact == null)
+	{
+	  // Network handle.
+	  $("#website", $('#continueform')).attr("value","");		
+	  	  
+	  // Network type.
+	  $("div.website select").val("");
+	  
+	  TweetOwnerForAddContact = null;
 	  return;
+	}	  
    
   // Add values in continue form after add contact form.
   // Add website / handle of twitter of tweet owner.
@@ -141,7 +75,7 @@ function socialsuite_add_website()
   TweetOwnerForAddContact = null;  
   
   // Select network type.
-  $("div.website select").val("TWITTER");
+  $("div.website select").val("TWITTER"); 
 }
 
 // Change property of website and select network in add contact form.
@@ -784,3 +718,77 @@ function addScheduledUpdateInStream(scheduledUpdate)
 	  }	  	
 }
 
+/**
+ * Checks scroll reached to end or not. 
+ * Suppose it reached to end then call past tweets and add to stream 
+ * as well as maintain scrolls current position.
+ * 
+ * @param elementDiv - element where scrollDown performed
+ */
+function OnScrollDiv(elementDiv)
+{
+  if($(elementDiv).scrollTop() + $(elementDiv).innerHeight() >= $(elementDiv)[0].scrollHeight)
+     {      
+	   console.log(elementDiv);
+       var streamId = ($(elementDiv).closest('li').attr('id'));   	   
+   	
+   	   // Get stream from collection.
+   	   var modelStream = StreamsListView.collection.get(streamId);
+   	   
+   	   if(modelStream == undefined || modelStream == null)
+   	      return;
+   	   
+   	   var stream = modelStream.toJSON();
+   	   console.log(stream);
+   	  	
+   	   // Get tweet from stream.
+	   var modelTweet = modelStream.get('tweetListView').at(modelStream.get('tweetListView').length - 2);
+	   var tweet = modelTweet.toJSON();	  
+	   console.log(tweet);
+  	   
+  	   // Store reference to top message
+       var currMsg = $("#"+tweet.id);
+  	          
+       // Store current scroll/offset
+       var curOffset = currMsg.offset().top - $(elementDiv).scrollTop();       
+      	   
+	   //$(this).append('<span id="stream-waiting-modal-'+streamId+'"><img src="img/ajax-loader-cursor.gif"></img></span>');
+	   
+   	/*
+   	 * Calls TwitterAPI class to request for 20 more updates tweeted before
+   	 * the tweet id of the last update
+   	 */   	
+   	$.getJSON("/core/social/pasttweets/" + stream.id + "/" + tweet.id ,
+   	function(data)
+   	{
+   		console.log(data);
+   		
+   		// If no more updates available, show message.
+   		if (data.length == 0)
+   		{
+   			showNotyPopUp('information', "No more updates available for stream"+ stream.stream_type +" of "+ stream.screen_name, "top", 5000);   			
+   			return;
+   		}
+   		
+   		/*
+   		 * Populate the collection with update stream details and show
+   		 */
+   		var i; var myObject;
+   		for(i=0; i<data.length; i++)
+   			{
+   			  myObject = eval('(' + data[i] + ')');
+   	   		  console.log(myObject);
+   	   	      handleMessage(myObject);
+   			}   		
+   		
+   	    // Set scroll to current position minus previous offset/scroll
+   	    var scrollOnDiv = $('#'+streamId).find('#Column-model-list');
+   		scrollOnDiv.scrollTop((currMsg.offset().top - curOffset)+650);
+   	}).error(function(data)
+   	{   		
+   		// Error message is shown to the user
+		showNotyPopUp('information', data.responseText, "top", 5000);
+		console.log(data);
+   	});      	   
+ }
+}
