@@ -102,6 +102,11 @@ $(function()
 		// console.log(encodedUrl.length + " " + encodedUrl);
 		return encodedUrl;
 	});
+	
+	Handlebars.registerHelper('encodeString', function(url)
+			{
+				return encodeURIComponent(url);
+			});
 
 	/**
 	 * Helper function to return image for an entity (contact). Checks for
