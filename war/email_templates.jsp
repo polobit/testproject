@@ -204,8 +204,10 @@ function getMergeFields(){
 	<a href="#">
 	<img src="/misc/email-templates/{{preview}}" width=250px height=500px alt="Template layout image"/>
 	</a>
+    <p style="font-style:italic;">{{name}}</p>
 </li>
 {{/each}}
+</ul>
 </script>
 
 </body>
