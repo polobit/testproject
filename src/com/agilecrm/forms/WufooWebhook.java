@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,19 +62,22 @@ public class WufooWebhook extends HttpServlet
 				JSONObject json = arr.getJSONObject(i);
 
 				// Build Address JSON from normal text fields
-				if (json.getString("Title").equalsIgnoreCase("street address")
-						|| json.getString("Title").equalsIgnoreCase("street")
-						|| json.getString("Title").equalsIgnoreCase("location"))
+				if ((json.getString("Title").equalsIgnoreCase("street address")
+						|| json.getString("Title").equalsIgnoreCase("street") || json.getString("Title")
+						.equalsIgnoreCase("location")) && !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 					addressJson.put("address", req.getParameter(json.getString("ID")));
-				else if (json.getString("Title").equalsIgnoreCase("country"))
+				else if ((json.getString("Title").equalsIgnoreCase("country"))
+						&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 					addressJson.put("country", req.getParameter(json.getString("ID")));
-				else if (json.getString("Title").equalsIgnoreCase("city"))
+				else if ((json.getString("Title").equalsIgnoreCase("city"))
+						&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 					addressJson.put("city", req.getParameter(json.getString("ID")));
-				else if (json.getString("Title").equalsIgnoreCase("state"))
+				else if ((json.getString("Title").equalsIgnoreCase("state"))
+						&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 					addressJson.put("state", req.getParameter(json.getString("ID")));
-				else if (json.getString("Title").equalsIgnoreCase("zip")
-						|| json.getString("Title").equalsIgnoreCase("postal code")
-						|| json.getString("Title").equalsIgnoreCase("zip code"))
+				else if ((json.getString("Title").equalsIgnoreCase("zip")
+						|| json.getString("Title").equalsIgnoreCase("postal code") || json.getString("Title")
+						.equalsIgnoreCase("zip code")) && !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 					addressJson.put("zip", req.getParameter(json.getString("ID")));
 				else if (!json.getString("Title").equals("Address"))
 
@@ -101,13 +105,17 @@ public class WufooWebhook extends HttpServlet
 								addField = req.getParameter(subObj.getString("ID"));
 							else if (subObj.getString("Label").equals("Address Line 2"))
 								addField = addField + ", " + req.getParameter(subObj.getString("ID"));
-							else if (subObj.getString("Label").equals("City"))
+							else if (subObj.getString("Label").equals("City")
+									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("city", req.getParameter(subObj.getString("ID")));
-							else if (subObj.getString("Label").equals("State / Province / Region"))
+							else if (subObj.getString("Label").equals("State / Province / Region")
+									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("state", req.getParameter(subObj.getString("ID")));
-							else if (subObj.getString("Label").equals("Country"))
+							else if (subObj.getString("Label").equals("Country")
+									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("country", req.getParameter(subObj.getString("ID")));
-							else if (subObj.getString("Label").equals("Postal / Zip Code"))
+							else if (subObj.getString("Label").equals("Postal / Zip Code")
+									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("zip", req.getParameter(subObj.getString("ID")));
 							else
 
@@ -115,7 +123,7 @@ public class WufooWebhook extends HttpServlet
 								properties.add(buildProperty(subObj.getString("Label"),
 										req.getParameter(subObj.getString("ID")), contact));
 						}
-						if (addJson.length() != 0 && addField != null)
+						if (!addField.equals(", "))
 							addJson.put("address", addField);
 						properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
 					}
