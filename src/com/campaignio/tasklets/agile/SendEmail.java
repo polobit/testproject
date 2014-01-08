@@ -17,7 +17,7 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.thirdparty.Mailgun;
-import com.thirdparty.SendGrid;
+import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>SendEmail</code> represents SendEmail node in a workflow. Sends email
@@ -449,7 +449,7 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.isEmpty(cc))
 		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
 	    else
-		SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+		Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
 	}
 	else
 	{
@@ -457,7 +457,7 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.isEmpty(cc))
 		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, null, text);
 	    else
-		SendGrid.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
+		Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
 	}
 
 	// Creates log for sending email
