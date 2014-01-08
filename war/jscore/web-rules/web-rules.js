@@ -26,15 +26,34 @@ function chainWebRules(el, data, isNew, actions)
 		
 	});
 	$("#campaign", el).chained($("#action", el));
-	
+	$("#noty-title", el).chained($("#action", el), function(select, self){
+		if($("select", select).val() == "CORNER_NOTY")
+			{
+				$(self).hide();
+				return;
+			}
+		$(self).show();
+		
+	});
 	$("#possition", el).chained($("#action", el));
-	$("#noty-title", el).chained($("#noty-type", el));
+	$("#noty-title", el).chained($("#noty-type", el), function(el, self){
+		console.log(self);
+		console.log($("select", el).val());
+		var value = $("select", self).val();
+		if(value == "CORNER_NOTY")
+		{
+			console.log($(self));
+			$(self).hide();
+		}
+		
+	});
 	
 	$("#noty-type", el).chained($("#action", el), function(el, self){
 		var value = $("select", el).val();
 		$(self).show();
 		if(value == "CORNER_NOTY")
 			{
+			console.log($(self));
 				$(self).hide();
 			}
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")

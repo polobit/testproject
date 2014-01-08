@@ -102,6 +102,11 @@ $(function()
 		// console.log(encodedUrl.length + " " + encodedUrl);
 		return encodedUrl;
 	});
+	
+	Handlebars.registerHelper('encodeString', function(url)
+			{
+				return encodeURIComponent(url);
+			});
 
 	/**
 	 * Helper function to return image for an entity (contact). Checks for
@@ -353,7 +358,9 @@ $(function()
 
 			for ( var i = 0; i < array.length; i++)
 			{
-				var hrefTag = "#tags/" + array[i];
+				console.log("************************");
+				console.log(array[i]);
+				var hrefTag = "#tags/" + encodeURIComponent(array[i]);
 
 				html += ('<a href=\"' + hrefTag + '\" >' + array[i] + '</a> ');
 			}

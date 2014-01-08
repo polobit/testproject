@@ -2,11 +2,8 @@ $(function(){
 	$(".task-edit-contact-tab").die().live('click', function(e){
 		e.preventDefault();
 		var id = $(this).attr('data');
-		console.log(id);
-		console.log(tasksView.collection.get(id));
 		var value = tasksView.collection.get(id).toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
-    	console.log("contact details tab owner list");
     	$("#updateTaskModal").modal('show');
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data){
@@ -138,20 +135,19 @@ $(function(){
 		e.preventDefault();
 		var el = $("#uploadDocumentForm");
 		$("#uploadDocumentModal").modal('show');
-		
-		// Fills owner select element
-		populateUsers("owners-list", el, undefined, undefined, function(data){
-			
-			$("#uploadDocumentForm").find("#owners-list").html(data);
-			$("#owners-list", $("#uploadDocumentForm")).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-			$("#owners-list", $("#uploadDocumentForm")).closest('div').find('.loading-img').hide();
-		});
+
 		// Contacts type-ahead
 		agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
 
     	var json = App_Contacts.contactDetailView.model.toJSON();
     	var contact_name = getContactName(json);
     	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
-		
+	});
+	
+	// For updating document from contact-details
+	$(".document-edit-contact-tab").die().live('click', function(e){
+		e.preventDefault();
+		var id = $(this).attr('data');
+		updateDocument(documentsView.collection.get(id));
 	});
 });

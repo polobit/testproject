@@ -82,7 +82,9 @@ public class NavSetting
      */
     public void setDefault()
     {
-	cases = documents = social = false;
+	cases = false;
+	documents = false;
+	social = false;
 	deals = calendar = campaign = reports = true;
     }
 
