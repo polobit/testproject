@@ -15,7 +15,7 @@ $(function(){
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#uploadDocumentModal').on('show', function() {
+	$('#uploadDocumentModal, #uploadDocumentUpdateModal').on('show', function() {
 
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
@@ -25,17 +25,18 @@ $(function(){
 	});
 	
     /**
-     * "Hide" event of note modal to remove contacts appended to related to field
+     * "Hide" event of document modal to remove contacts appended to related to field
      * and validation errors
      */ 
-    $('#uploadDocumentModal').on('hidden', function () {
+    $('#uploadDocumentModal, #uploadDocumentUpdateModal').on('hidden', function () {
     	
 		// Removes appended contacts from related-to field
-		$("#uploadDocumentForm").find("li").remove();
-		$('#uploadDocumentForm').find('#error').html("");
+		$("form").find("li").remove();
+		$('form').find('#error').html("");
 		
 		// Removes validation error messages
 		remove_validation_errors('uploadDocumentModal');
+		remove_validation_errors('uploadDocumentUpdateModal');
 
     });
 
@@ -45,7 +46,7 @@ $(function(){
 	$(".link").live('click', function(e)
 	{
 		e.preventDefault();
-		$('#uploadDocumentForm').find('#error').html("");
+		$('form').find('#error').html("");
 		var id = $(this).find("a").attr("id").toUpperCase();
 		
 		if(id && id == "GOOGLE")
@@ -61,17 +62,48 @@ $(function(){
 	});
 	
 	/**
-	 * To validate the new document form
+	 * To validate the document form
 	 */
     $('#document_validate').on('click',function(e){
  		e.preventDefault();
  		
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
     	var form_id = $(this).closest('.upload-document-modal').find('form').attr("id");
-    	saveDocument(form_id, modal_id, this, false)
+    	
+    	if(form_id == "uploadDocumentForm")
+    		saveDocument(form_id, modal_id, this, false);
+    	else
+    		saveDocument(form_id, modal_id, this, true);
 	});
+    
+    /** 
+     * Document list view edit
+     */
+     $('#documents-model-list > tr > td:not(":first-child")').live('click', function(e) {
+ 		e.preventDefault();
+ 		updateDocument($(this).closest('tr').data());
+ 	});
 
 });	
+
+/**
+ * Show document popup for updating
+ */ 
+function updateDocument(ele) {
+	
+	var value = ele.toJSON();
+	
+	add_recent_view(new BaseModel(value));
+
+	var documentUpdateForm = $("#uploadDocumentUpdateForm");
+
+	deserializeForm(value, $("#uploadDocumentUpdateForm"));
+	$('#uploadDocumentUpdateForm').find('#url').html('<a href="'+ value.url +'" target="_blank">'+ value.url +'</a>');
+	$('#uploadDocumentUpdateModal').modal('show');
+	
+	// Call setupTypeAhead to get contacts
+	agile_type_ahead("document_relates_to_contacts", documentUpdateForm, contacts_typeahead);
+}
 
 /**
  * Return url of document from JSP and appends to form

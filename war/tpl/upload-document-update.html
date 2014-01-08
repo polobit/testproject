@@ -1,5 +1,5 @@
 <!-- Add (Documents) Modal views -->
-<div class="modal hide fade upload-document-modal" id="uploadDocumentModal">
+<div class="modal hide fade upload-document-modal" id="uploadDocumentUpdateModal">
 <style>
 .link {
 	padding: 10% 5%;
@@ -19,11 +19,12 @@
 </style>
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
-		<h3><i class="icon-plus-sign"></i> Add Document</h3>
+		<h3> Edit Document</h3>
 	</div>
 	<div class="modal-body">
-		<form id="uploadDocumentForm" name="uploadDocumentForm" method="post">
+		<form id="uploadDocumentUpdateForm" name="uploadDocumentUpdateForm" method="post">
 			<fieldset>
+				<input name="id" type="hidden"/>
 				<div class="row-fluid">
 					<div class="control-group">
 						<label class="control-label"><b>Title </b><span
