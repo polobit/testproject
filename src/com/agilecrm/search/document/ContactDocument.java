@@ -75,15 +75,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		Document.Builder doc = Document.newBuilder();
 
 		// Processes contact property fields and tags(in normalized form)
-		Map<String, String> fields = SearchUtil.getFieldsMap(contact);
-
-		/*
-		 * Sets fields to document from the map of contact fields values
-		 */
-		for (Map.Entry<String, String> e : fields.entrySet())
-		{
-			doc.addField(Field.newBuilder().setName(e.getKey()).setText(e.getValue()));
-		}
+		Map<String, String> fields = SearchUtil.getFieldsMap(contact, doc);
 
 		// Sets created date to document with out time component(Search API
 		// support date without time component)
@@ -153,7 +145,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	@Override
 	public void delete(String id)
 	{
-		index.deleteAsync(id);
+		index.remove(id);
 	}
 
 	@Override
@@ -172,7 +164,16 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	private void addToIndex(Document doc)
 	{
 		// Adds document to index
-		index.putAsync(doc);
+		try
+		{
+			index.add(doc);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
 		System.out.println(index.getName());
 		// System.out.println(index.getConsistency());
 		System.out.println(index.getSchema());
