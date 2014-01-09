@@ -98,7 +98,7 @@ function isValid(){
 
 <div class="well" style="height:215px; width:390px ">
 
-<legend>Browse your document to Upload</legend>
+<legend>Upload Document</legend>
 
 
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
