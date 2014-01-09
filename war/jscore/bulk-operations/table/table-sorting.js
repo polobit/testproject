@@ -152,7 +152,8 @@ function sort_documents(table)
         	1 : {sorter : 'text'},
         	2 : {sorter : 'text'},
         	3 : {sorter : false},
-			4 : {sorter : 'time-ago'}
+			4 : {sorter : 'time-ago'},
+			5 : {sorter : false	}
         }
     });
 }
