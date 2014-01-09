@@ -192,11 +192,11 @@
 							<li id="reportsmenu"><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
 							<%
-								}
-									if (navSetting.documents) {
+								//}
+								//	if (navSetting.documents) {
 							%>
-								<li id="documentsmenu"><a href="#documents"><i
-										class="icon-file icon-white"></i> Documents</a></li>
+								<!-- <li id="documentsmenu"><a href="#documents"><i
+										class="icon-file icon-white"></i> Documents</a></li> -->
 							<%
 								}
 							%>
@@ -243,11 +243,11 @@
 									<li id="reportsmenu"><a href="#reports"><i
 											class="icon-bar-chart icon-white"></i> Reports</a></li>
 									<%
-										}
-												if (navSetting.documents) {
+										//}
+										//		if (navSetting.documents) {
 									%>
-									<li id="documentsmenu"><a href="#documents"><i
-											class="icon-file icon-white"></i> Documents</a></li>
+									<!--  <li id="documentsmenu"><a href="#documents"><i
+											class="icon-file icon-white"></i> Documents</a></li>-->
 									<%
 										}
 									%>
