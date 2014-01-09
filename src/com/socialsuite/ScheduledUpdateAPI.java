@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.socialsuite.util.ScheduleUpdateUtil;
 
@@ -155,6 +156,11 @@ public class ScheduledUpdateAPI
 		System.out.println("In deleteScheduledUpdates.");
 		JSONArray scheduledUpdatesJSONArray = new JSONArray(model_ids);
 
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+
 		ScheduledUpdate.dao.deleteBulkByIds(scheduledUpdatesJSONArray);
+
+		NamespaceManager.set(oldNamespace);
 	}
 }

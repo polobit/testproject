@@ -87,6 +87,11 @@ function sort_tables(table) {
     		sort_documents(table);
     		return;
     	}
+	    if(table_id == "schedule-updates")
+    	{
+    		sort_schedule_updates(table);
+    		return;
+    	} 
 	    
     	basic_table_sort(table);
 
@@ -150,6 +155,19 @@ function sort_documents(table)
 			4 : {sorter : 'time-ago'}
         }
     });
+}
+
+function sort_schedule_updates(table)
+{
+	$(table).tablesorter({ 
+        headers: {
+        	0 : {sorter : false},
+        	1 : {sorter : 'text'},
+        	2 : {sorter : 'text'},
+        	3 : {sorter : false},
+            4 : {sorter:'text'}			
+        } 
+    }); 
 }
 
 
