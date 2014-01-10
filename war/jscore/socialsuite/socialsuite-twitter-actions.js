@@ -1282,23 +1282,25 @@ function scheduledRangeCheck(scheduledDate,scheduledTime)
 	
 	console.log("current date is : "+ today+" current time is : "+ now);
 	
-	if (scheduledDate < today) // Past Date
-	 {
-	   alert("Please select Date in future.");
-	   return false;
-	 }	
-	else if(scheduledDate == today)	// Present Date
-	 {
-		if(scheduledTime < now) // Past Time
-		 {
-			alert("Please select Time in future.");
-			return false;
-		 }
-		else // Future Time
-	     return true;
-	 }
-	else if(scheduledDate > today) // Future Date
-	  return true;	 
+	// selected schedule.
+	var schedulearray = (scheduledTime).split(":");	
+	var sdate = new Date(scheduledDate);	
+	var selectedSchedule = sdate.setHours(schedulearray[0], schedulearray[1]) / 1000.0;	
+			
+	// current schedule.
+	var currentSchedulearray = (now).split(":");	
+	var currentSdate = new Date(today);	
+	var currentSchedule = currentSdate.setHours(currentSchedulearray[0], currentSchedulearray[1]) / 1000.0;	
+
+	console.log("selectedSchedule : "+ selectedSchedule+" currentSchedule : "+ currentSchedule);
+	
+	if(selectedSchedule > currentSchedule) // Future Time
+		return true;
+	else // Past Time
+	    {
+		   alert("Please select Date/Time in future.");
+		   return false;
+		 }	
 }
 
 // Displays Modal.

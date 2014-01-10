@@ -221,7 +221,7 @@
 												<input type="number" name="temp" class="SUBTRACT_SCORE required number" placeholder="Enter score to substract"></input>
 												<input type="number" name="temp" class="required number" placeholder="Enter score to substract"></input>
 												<input type="text" class="REMOVE_TAG ADD_TAG tags" placeholder="Enter tag"></input>
-												<textarea  cols="35" class="JAVA_SCRIPT required" rows="6" placeholder="Enter Javascript"></textarea>
+												<textarea  cols="35" name="webrule-javascript" class="JAVA_SCRIPT required" rows="6" placeholder="Enter Javascript"></textarea>
 											</div>
 										</td>
 									</tr>
@@ -265,7 +265,7 @@
 											<div id="noty-title" name="title" style="margin-top:3px">
 													<input type="text" name="temp" 
 														class="confirmation information CORNER_NOTY MODAL_POPUP input required" placeholder="Title"/>
-														<input type="text" name="temp" style="width: 92%"
+														<input type="text" name="temp-title" style="width: 92%"
 														class="form input required" placeholder="Form id"/>
 												
 										</td>
@@ -274,8 +274,8 @@
 										<td class="controls span2"
 											style="vertical-align: top;">
 												<div id="noty-message" name="popup_text"  style="padding-top:10px">
-													<textarea  cols="35" class="information confirmation span4" rows="6" placeholder="paste HTML context"></textarea>
-													<textarea  cols="35" class="custom_html span4" rows="6" placeholder="paste HTML context"></textarea>
+													<textarea  cols="35" name="webrule-information-field" class="information confirmation span4 required" rows="6" placeholder="paste HTML context"></textarea>
+													<textarea  cols="35" name="webrule-custom-html" class="custom_html span4 required" rows="6" placeholder="paste HTML context"></textarea>
 													<div style="float:right" class="web-rule-prevew"><a href="#">Preview</a></div>
 												</div>
 										</td>
@@ -291,7 +291,7 @@
 														<option value="AFTER_SECS" class="MODAL_POPUP CORNER_NOTY">After certain time</option>
 														<option value="FIRST_SCROLL" class="MODAL_POPUP CORNER_NOTY">On starting scroll</option>
 														<option value="END_OF_PAGE" class="MODAL_POPUP CORNER_NOTY">On reaching end of page</option>
-														<option value="EXIT" class="MODAL_POPUP CORNER_NOTY">About to exit page</option>
+														<!-- <option value="EXIT" class="MODAL_POPUP CORNER_NOTY">About to exit page</option> -->
 												</select>
 											</div>
 										

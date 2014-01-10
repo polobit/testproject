@@ -647,9 +647,6 @@ public class SocialSuiteTwitterUtil
 
 		userList = twitter.getRetweets(tweetId);
 
-		for (Status st : userList)
-			System.out.println("st: " + st.toString());
-
 		return userList;
 	}
 
@@ -736,7 +733,6 @@ public class SocialSuiteTwitterUtil
 				tweetJson.put("stream_type", stream.stream_type);
 			}
 
-			System.out.println(tweetJson.toString());
 			resultList.put(tweetJson);
 		}// for end
 
@@ -799,7 +795,6 @@ public class SocialSuiteTwitterUtil
 				tweetJson.put("stream_type", stream.stream_type);
 			}
 
-			System.out.println(tweetJson);
 			resultList.put(tweetJson);
 		} // for end
 
@@ -912,7 +907,6 @@ public class SocialSuiteTwitterUtil
 				}
 			}
 
-			System.out.println(tweetJson);
 			resultList.put(tweetJson);
 		}// for end
 

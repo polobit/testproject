@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
@@ -72,19 +73,19 @@ public class UnbounceWebhook extends HttpServlet
 				value = value.replaceAll("\"", "");
 
 				// Build address JSON
-				if (key.equalsIgnoreCase("country"))
+				if (key.equalsIgnoreCase("country") && !StringUtils.isBlank(value))
 					addJson.put("country", value);
-				else if (key.equalsIgnoreCase("state"))
+				else if (key.equalsIgnoreCase("state") && !StringUtils.isBlank(value))
 					addJson.put("state", value);
-				else if (key.equalsIgnoreCase("province") || key.equalsIgnoreCase("city"))
+				else if ((key.equalsIgnoreCase("province") || key.equalsIgnoreCase("city")) && !StringUtils.isBlank(value))
 					addJson.put("city", value);
-				else if (key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code")
-						|| key.equalsIgnoreCase("postal code"))
+				else if ((key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code") || key
+						.equalsIgnoreCase("postal code")) && !StringUtils.isBlank(value))
 					addJson.put("zip", value);
-				else if (key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location")
-						|| key.equalsIgnoreCase("street"))
+				else if ((key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location") || key
+						.equalsIgnoreCase("street")) && !StringUtils.isBlank(value))
 					addJson.put("address", value);
-				else if (key.equalsIgnoreCase("stateprovince"))
+				else if (key.equalsIgnoreCase("stateprovince") && !StringUtils.isBlank(value))
 					addJson.put("state", value);
 				else
 

@@ -29,13 +29,14 @@
         <div class="data-block">
             <div class="data-container">
                 <table class="table table-striped showCheckboxes" url="core/api/documents/bulk" id="document-list">
-				 <col width="30px"><col width="30%"><col width="20%"><col width="30%"><col width="19%">
+				 <col width="30px"><col width="30%"><col width="18%"><col width="28%"><col width="18%"><col width="6%">
                     <thead>
                         <tr>
                             <th>Title</th>
 							<th>Type</th>
                             <th>Related To</th>
-                            <th>Created</th>
+                            <th>Upload Date</th>
+							<th>Owner</th>
                         </tr>
                     </thead>
                     <tbody id="documents-model-list" style="cursor:pointer;">
@@ -66,13 +67,13 @@
 </td>
 <td>
 	<div>
-		{{network network_type}}
+		{{network network_type}}<b class="activate-link">
     	{{#if_equals network_type "GOOGLE"}}
 			<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>
 		{{/if_equals}}
 		{{#if_equals network_type "S3"}}
 			<a href="{{url}}" target="_blank"><i class="icon-download-alt" title="Download Document"></i></a>
-		{{/if_equals}}
+		{{/if_equals}}</b>
 	</div>
 </td>
 <td>
@@ -88,8 +89,17 @@
 	</div>
 </td>
 <td>
-	<div style="width:9em;"> 
+	<div style="width:10em;"> 
 		<time class="document-created-time" value="{{upload_time}}" datetime="{{epochToHumanDate "" upload_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" upload_time}}</time>
 	</div>
+</td><td>
+    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
+       {{#if pic}}
+        <img class="thumbnail" src="{{pic}}" width="40px" height="40px" title="{{owner.name}}" />
+	   {{else}}
+		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
+       {{/if}}
+    </div>
 </td>
+
 </script>
