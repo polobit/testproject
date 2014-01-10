@@ -1148,6 +1148,8 @@ $(".show-retweet").die().live("click", function(e)
 	var modelTweet = modelStream.get('tweetListView').get(tweetId);
 	var tweet = modelTweet.toJSON();
 	
+	console.log(tweet);
+	
     // Display Modal
     displayModal("socialsuite_RT_userlistModal","socialsuite-RT-userlist",tweet,null,null);
             
@@ -1157,7 +1159,7 @@ $(".show-retweet").die().live("click", function(e)
     ({
 	     url : function()
 			{
-				return '/core/social/getrtusers/' + streamId+ "/" + tweetIdStr;
+				return '/core/social/getrtusers/' + streamId+ "/" + tweet.id_str;
 			},
 	     restKey: "user",
 	     templateKey: "socialsuite-RT-userlist",
