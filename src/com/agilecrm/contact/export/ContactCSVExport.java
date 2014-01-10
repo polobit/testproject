@@ -658,12 +658,33 @@ public class ContactCSVExport
 	byte[] allTheBytes = new byte[0];
 	long amountLeftToRead = blobSize;
 	long startIndex = 0;
-	while (amountLeftToRead > 0)
+	int attempt = 0;
+
+	while (amountLeftToRead > 0 && attempt < 5)
 	{
 	    long amountToReadNow = Math.min(BlobstoreService.MAX_BLOB_FETCH_SIZE - 1, amountLeftToRead);
 	    byte[] chunkOfBytes = blobStoreService.fetchData(blobKey, startIndex, startIndex + amountToReadNow - 1);
 
-	    allTheBytes = ArrayUtils.addAll(allTheBytes, chunkOfBytes);
+	    try
+	    {
+		allTheBytes = ArrayUtils.addAll(allTheBytes, chunkOfBytes);
+	    }
+	    catch (Exception e)
+	    {
+		System.err.println("Exception occured " + e.getMessage());
+
+		System.out.println("Total size obtained till exception " + allTheBytes.length);
+
+		// As we can fetch 32MB per API call, creating another service
+		blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
+
+		amountLeftToRead += amountToReadNow;
+		startIndex -= amountToReadNow;
+
+		System.out.println("Attempting " + attempt + " time(s)");
+
+		attempt++;
+	    }
 
 	    amountLeftToRead -= amountToReadNow;
 	    startIndex += amountToReadNow;
