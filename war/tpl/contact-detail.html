@@ -81,6 +81,12 @@
 											to Campaign</a></li>
 									<li><a href='#send-email' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
+
+                                    {{#if_propertyName "phone"}}
+                                    <li><a href='#' class="contact-make-call" fname="{{getPropertyValue properties
+										"first_name"}}" lname="{{getPropertyValue properties "last_name"}}" image="{{getPropertyValue properties
+										"image"}}" phone="{{getPropertyValue properties "phone"}}"><i class="icon-phone"></i> Call</a></li>
+                                    {{/if_propertyName}}
 								</ul>
 							</div>
 						</div>
