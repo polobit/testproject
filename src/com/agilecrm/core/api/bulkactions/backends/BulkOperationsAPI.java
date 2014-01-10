@@ -538,11 +538,12 @@ public class BulkOperationsAPI
 	    path = ContactCSVExport.writeContactCSVToBlobstore(contacts_list, true);
 	}
 
-	// Retrieves data of file having given path
-	String fileData = ContactCSVExport.retrieveBlobFileData(path);
+	// Retrieves partitions of data of a file having given path
+	List<String> fileData = ContactCSVExport.retrieveBlobFileData(path);
 
-	// Sends email.
-	ContactCSVExport.exportContactCSVAsEmail(data, fileData, String.valueOf(count));
+	// Send every partition(25MB) as separate email
+	for (String partition : fileData)
+	    ContactCSVExport.exportContactCSVAsEmail(data, partition, String.valueOf(count));
 
 	// Deletes blob
 	ContactCSVExport.deleteBlobFile(path);

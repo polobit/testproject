@@ -1,6 +1,5 @@
 package com.agilecrm.contact.export;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.channels.Channels;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
@@ -16,9 +16,12 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -76,6 +79,9 @@ public class ContactCSVExport
     public static final String STATE = "State";
     public static final String COUNTRY = "Country";
     public static final String ZIP = "Zip Code";
+
+    public static final String TAGS = "Tags";
+    public static final String TAGS_TIME = "Tags time";
 
     /**
      * Constructs contact csv and write to blobstore. Returns blob file path to
@@ -226,8 +232,7 @@ public class ContactCSVExport
 		if (contact == null)
 		    continue;
 
-		List<ContactField> properties = contact.getProperties();
-		String str[] = insertContactProperties(properties, indexMap, headers.length);
+		String str[] = insertContactProperties(contact, indexMap, headers.length);
 		writer.writeNext(str);
 	    }
 
@@ -252,7 +257,7 @@ public class ContactCSVExport
 	// CSV Header will get initialized in the same order
 	String[] headers = { FIRST_NAME, LAST_NAME, TITLE, COMPANY, EMAIL_DEFAULT, EMAIL_HOME, EMAIL_WORK, PHONE_DEFAULT, PHONE_WORK, PHONE_HOME, PHONE_MOBILE,
 		PHONE_MAIN, PHONE_HOME_FAX, PHONE_WORK_FAX, PHONE_OTHER, ADDRESS, CITY, STATE, COUNTRY, ZIP, WEBSITE_DEFAULT, WEBSITE, SKYPE, TWITTER,
-		LINKEDIN, FACEBOOK, XING, BLOG, GOOGLE_PLUS, FLICKR, GITHUB, YOUTUBE };
+		LINKEDIN, FACEBOOK, XING, BLOG, GOOGLE_PLUS, FLICKR, GITHUB, YOUTUBE, TAGS, TAGS_TIME };
 
 	return appendCustomFieldsToHeaders(headers);
     }
@@ -320,10 +325,12 @@ public class ContactCSVExport
      *            - CSV headers to build array with headers array length.
      * @return String[]
      */
-    public static String[] insertContactProperties(List<ContactField> properties, Map<String, Integer> indexMap, int headersLength)
+    public static String[] insertContactProperties(Contact contact, Map<String, Integer> indexMap, int headersLength)
     {
 	// Initialize new array to insert as new row.
 	String str[] = new String[headersLength];
+
+	List<ContactField> properties = contact.properties;
 
 	for (ContactField field : properties)
 	{
@@ -473,7 +480,45 @@ public class ContactCSVExport
 	    }
 
 	}
+
+	List<String> tags = new ArrayList<String>();
+	List<String> tagsTimes = new ArrayList<String>();
+
+	for (Tag tag : contact.tagsWithTime)
+	{
+	    tags.add(tag.tag);
+	    tagsTimes.add(String.valueOf(tag.createdTime));
+	}
+
+	str[indexMap.get(TAGS)] = convertListToString(tags);
+	str[indexMap.get(TAGS_TIME)] = convertListToString(tagsTimes);
+
 	return str;
+    }
+
+    /**
+     * Returns String from list with each element separated by commas.
+     * 
+     * @param list
+     *            - List to convert
+     * @return String of elements separated by commas
+     */
+    public static String convertListToString(List<String> list)
+    {
+	String strigifiedList = "";
+	int length = list.size();
+
+	for (int i = 0; i < length; i++)
+	{
+	    if (i >= (length - 1))
+	    {
+		strigifiedList += list.get(i);
+		break;
+	    }
+	    strigifiedList += list.get(i) + ", ";
+	}
+
+	return strigifiedList;
     }
 
     /**
@@ -483,7 +528,7 @@ public class ContactCSVExport
      *            - blob file path.
      * @return String
      */
-    public static String retrieveBlobFileData(String path)
+    public static List<String> retrieveBlobFileData(String path)
     {
 	// if null return
 	if (path == null)
@@ -506,22 +551,18 @@ public class ContactCSVExport
 	    return null;
 	}
 
-	// Returns data in byte[]
-	BlobstoreService blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
-	byte[] data = blobStoreService.fetchData(blobKey, 0, BlobstoreService.MAX_BLOB_FETCH_SIZE - 1);
+	// Get blob info
+	BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
 
-	String str = null;
-	try
-	{
-	    str = new String(data, "UTF-8");
-	}
-	catch (UnsupportedEncodingException e)
-	{
-	    e.printStackTrace();
-	}
+	// BlobstoreService blobStoreService =
+	// BlobstoreServiceFactory.getBlobstoreService();
 
-	return str;
+	// Get size
+	Long blobSize = blobInfo.getSize();
+	System.out.println("blobSize = " + blobSize);
 
+	// Returns partitions of data in list
+	return readBlobFilePartionsInList(blobKey);
     }
 
     /**
@@ -601,4 +642,112 @@ public class ContactCSVExport
 	}
     }
 
+    /**
+     * Reads entire blob data
+     * 
+     * @param blobKey
+     *            - blobKey
+     * @param blobSize
+     *            - blob size
+     * @param blobStoreService
+     *            - blobstore service
+     * @return byte[]
+     */
+    public static byte[] readBlobData(BlobKey blobKey, long blobSize, BlobstoreService blobStoreService)
+    {
+	byte[] allTheBytes = new byte[0];
+	long amountLeftToRead = blobSize;
+	long startIndex = 0;
+	while (amountLeftToRead > 0)
+	{
+	    long amountToReadNow = Math.min(BlobstoreService.MAX_BLOB_FETCH_SIZE - 1, amountLeftToRead);
+	    byte[] chunkOfBytes = blobStoreService.fetchData(blobKey, startIndex, startIndex + amountToReadNow - 1);
+
+	    allTheBytes = ArrayUtils.addAll(allTheBytes, chunkOfBytes);
+
+	    amountLeftToRead -= amountToReadNow;
+	    startIndex += amountToReadNow;
+	}
+
+	return allTheBytes;
+    }
+
+    /**
+     * Returns complete byte data in partitions. It can be used to overcome the
+     * mail limit like Mandrill allows 25MB per message
+     * 
+     * @param blobKey
+     *            - Blob key
+     * @return partitions in List
+     */
+    public static List<String> readBlobFilePartionsInList(BlobKey blobKey)
+    {
+
+	if (blobKey == null)
+	    return null;
+
+	// Get blob info
+	BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+	BlobstoreService blobStoreService = BlobstoreServiceFactory.getBlobstoreService();
+
+	// Get size
+	Long blobSize = blobInfo.getSize();
+	System.out.println("blobSize = " + blobSize);
+
+	byte[] blobData = readBlobData(blobKey, blobSize, blobStoreService);
+	String bytesInString = "";
+
+	// Returns byte data in list
+	List<String> blobPartitionList = new ArrayList<>();
+
+	System.out.println("blobData = " + blobData.length);
+
+	long maxSize = (25 * 1024 * 1024);
+
+	// Max iterations
+	long iterations = (blobSize / maxSize) + 1;
+	System.out.println("blobSize iterations = " + iterations);
+
+	try
+	{
+	    bytesInString = new String(blobData, "UTF-8");
+	}
+	catch (Exception e)
+	{
+	    bytesInString = new String(blobData);
+	}
+
+	System.out.println(bytesInString.length());
+
+	for (int i = 0; i < iterations; i++)
+	{
+	    String data = "";
+	    int beginIndex = (int) (i * maxSize), endIndex = (int) (maxSize * (i + 1));
+	    try
+	    {
+		data = bytesInString.substring(beginIndex, endIndex);
+
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("1 " + e.getMessage());
+		endIndex = bytesInString.length();
+		try
+		{
+		    data = bytesInString.substring(beginIndex, endIndex);
+		}
+		catch (Exception e2)
+		{
+		    System.out.println("2 " + e2.getMessage());
+		}
+	    }
+
+	    blobPartitionList.add(data);
+
+	}
+
+	System.out.println(blobPartitionList.size());
+	return blobPartitionList;
+
+    }
 }
