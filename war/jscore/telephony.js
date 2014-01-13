@@ -28,15 +28,30 @@ $(function()
     	  alert(name +"'s contact number not added."); 
     	  return;
     	}
-    	
-    	if(!setStateActive())
-		  if(!setUser(name, phone, image))    
-    	    callUser();
+    	    	
+		  if(!setUser(name, phone, image)) 
+			  {
+    	        callUser();
+    	        
+    	        // After call receive.
+    	        setStateActive()
+			  }
      });    
+    
+    $(".call_end").die().live("click", function(e)
+     {
+    	e.preventDefault();    	
+    	console.log("In call_end");
+
+    	endCall();
+    	setStateInActive()
+        clearUser();    	
+     });    
+    
   });
 
 
-//Active candy bar UI.
+//Active call candy bar UI.
 function setStateActive()
 {
   console.log("In setStateActive");	
@@ -44,7 +59,7 @@ function setStateActive()
   return false;
 }
 
-// Inactive candy bar UI.
+// Inactive call candy bar UI.
 function setStateInActive()
 {
   console.log("In setStateInActive");	

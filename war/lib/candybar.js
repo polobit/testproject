@@ -48,13 +48,13 @@
       },
       calling: {
         buttons: [{
-          cls: 'cancel',
+          cls: 'cancel call_end',
           label: 'Cancel'
         }]
       },
       active: {
         buttons: [{
-          cls: 'end',
+          cls: 'end call_end',
           label: 'End Call'
         }],
         timer: true
