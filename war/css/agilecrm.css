@@ -1016,8 +1016,8 @@ Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
 	background-color: #ffffff; 
 	color: #000000; 
 }
-.dynamic-option {
+.rhs > .dynamic-option {
 	max-width:125px;
 }
-
+ 
 
