@@ -56,26 +56,18 @@ function onloadProfileImg()
 
 // Add website and select network on continue form in add contact flow.
 function socialsuite_add_website()
-{
-  if(TweetOwnerForAddContact == null)
+{   
+  if(TweetOwnerForAddContact != null)
 	{
-	  // Network handle.
-	  $("#website", $('#continueform')).attr("value","");		
-	  	  
-	  // Network type.
-	  $("div.website select").val("");
+	  // Add values in continue form after add contact form.
+	  // Add website / handle of twitter of tweet owner.
+	  $("#website", $('#continueform')).attr("value",TweetOwnerForAddContact);		
+	  		  
+	  // Select network type.
+	  $("div.website select").val("TWITTER");
 	  
 	  TweetOwnerForAddContact = null;
-	  return;
-	}	  
-   
-  // Add values in continue form after add contact form.
-  // Add website / handle of twitter of tweet owner.
-  $("#website", $('#continueform')).attr("value",TweetOwnerForAddContact);		
-  TweetOwnerForAddContact = null;  
-  
-  // Select network type.
-  $("div.website select").val("TWITTER"); 
+	}
 }
 
 // Change property of website and select network in add contact form.
