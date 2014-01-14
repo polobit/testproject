@@ -48,264 +48,265 @@ import com.googlecode.objectify.Key;
  */
 public class CSVUtil
 {
-    public static enum ImportStatus
-    {
-	TOTAL, SAVED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED
-    }
-
-    /**
-     * Returns CSV headings from stream object. Reads first line
-     * 
-     * @param stream
-     * @return
-     * @throws Exception
-     */
-    public static List<String> getCSVHeadings(InputStream stream) throws Exception
-    {
-	// Reads blob data line by line upto first 10 line of file
-	LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
-
-	if (!iterator.hasNext())
-	    throw new Exception("Invalid CSV file");
-
-	// Reads the first line
-	String csv = iterator.nextLine();
-
-	System.out.println(csv);
-
-	// Creates csv reader from headings
-	CSVReader reader = new CSVReader(new StringReader(csv.trim()));
-
-	// Get Header Liner
-	String[] headers = reader.readNext();
-	if (headers == null)
+	public static enum ImportStatus
 	{
-	    System.out.println("Empty List");
-	    throw new Exception("Empty CSV");
+		TOTAL, SAVED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED
 	}
 
-	// Creates list of headings
-	List<String> headersList = new ArrayList<String>(Arrays.asList(headers));
-
-	return headersList;
-
-    }
-
-    /**
-     * Creates contacts from CSV string using a contact prototype built from
-     * import page. It takes owner id to sent contact owner explicitly instead
-     * of using session manager, as there is a chance of getting null in
-     * backends.
-     * 
-     * Contact is saved only if there is email exists and it is a valid email
-     * 
-     * @param blobStream
-     * @param contact
-     * @param ownerId
-     * @throws IOException
-     */
-    public static void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
-	    throws IOException
-    {
-
-	// Reads blob data line by line upto first 10 line of file
-	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
-
-	System.out.println(contact);
-	CSVReader reader = new CSVReader(csvStream);
-
-	List<String[]> contacts = reader.readAll();
-
-	if (contacts.isEmpty())
-	    return;
-
-	String[] headings = contacts.remove(0);
-
-	contact.type = Contact.Type.PERSON;
-
-	LinkedHashSet<String> tags = new LinkedHashSet<String>();
-
-	tags.addAll(contact.tags);
-
-	List<ContactField> properties = contact.properties;
-
-	// Creates domain user key, which is set as a contact owner
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
-
-	AgileUser user = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
-	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
-
-	System.out.println(contacts.size());
-
-	// Counters to count number of contacts saved contacts
-	int savedContacts = 0;
-	List<String> emails = new ArrayList<String>();
-	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
-
-	for (String[] csvValues : contacts)
+	/**
+	 * Returns CSV headings from stream object. Reads first line
+	 * 
+	 * @param stream
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<String> getCSVHeadings(InputStream stream) throws Exception
 	{
-	    Set<Integer> notes_positions = new TreeSet<Integer>();
+		// Reads blob data line by line upto first 10 line of file
+		LineIterator iterator = IOUtils.lineIterator(stream, "UTF-8");
 
-	    Contact tempContact = new Contact();
-	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
-	    tempContact.properties = contact.properties;
+		if (!iterator.hasNext())
+			throw new Exception("Invalid CSV file");
 
-	    // Sets owner of contact explicitly. If owner is not set,
-	    // contact
-	    // prepersist
-	    // tries to read it from session, and session is not shared with
-	    // backends
-	    tempContact.setContactOwner(ownerKey);
+		// Reads the first line
+		String csv = iterator.nextLine();
 
-	    tempContact.properties = new ArrayList<ContactField>();
+		System.out.println(csv);
 
-	    for (int j = 0; j < csvValues.length; j++)
-	    {
+		// Creates csv reader from headings
+		CSVReader reader = new CSVReader(new StringReader(csv.trim()));
 
-		if (StringUtils.isBlank(csvValues[j]))
-		    continue;
-
-		csvValues[j] = csvValues[j].trim();
-
-		System.out.println(properties.get(j));
-		ContactField field = properties.get(j);
-
-		// This is hardcoding but found no way to get
-		// tags
-		// from the CSV file
-		if (field == null)
+		// Get Header Liner
+		String[] headers = reader.readNext();
+		if (headers == null)
 		{
-		    continue;
+			System.out.println("Empty List");
+			throw new Exception("Empty CSV");
 		}
 
-		if ("tags".equals(field.name))
+		// Creates list of headings
+		List<String> headersList = new ArrayList<String>(Arrays.asList(headers));
+
+		return headersList;
+
+	}
+
+	/**
+	 * Creates contacts from CSV string using a contact prototype built from
+	 * import page. It takes owner id to sent contact owner explicitly instead
+	 * of using session manager, as there is a chance of getting null in
+	 * backends.
+	 * 
+	 * Contact is saved only if there is email exists and it is a valid email
+	 * 
+	 * @param blobStream
+	 * @param contact
+	 * @param ownerId
+	 * @throws IOException
+	 */
+	public static void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
+			throws IOException
+	{
+
+		// Reads blob data line by line upto first 10 line of file
+		Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
+
+		System.out.println(contact);
+		CSVReader reader = new CSVReader(csvStream);
+
+		List<String[]> contacts = reader.readAll();
+
+		if (contacts.isEmpty())
+			return;
+
+		String[] headings = contacts.remove(0);
+
+		contact.type = Contact.Type.PERSON;
+
+		LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+		tags.addAll(contact.tags);
+
+		List<ContactField> properties = contact.properties;
+
+		// Creates domain user key, which is set as a contact owner
+		Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+		AgileUser user = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
+		DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+		System.out.println(contacts.size());
+
+		// Counters to count number of contacts saved contacts
+		int savedContacts = 0;
+		List<String> emails = new ArrayList<String>();
+		Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
+
+		for (String[] csvValues : contacts)
 		{
-		    // Multiple tags are supported. Multiple tags are added
-		    // split at , or ;
-		    String[] tagsArray = csvValues[j].split("[,;]+");
+			Set<Integer> notes_positions = new TreeSet<Integer>();
 
-		    for (String tag : tagsArray)
-			tempContact.tags.add(tag);
-		    continue;
-		}
-		if (Contact.ADDRESS.equals(field.name))
-		{
-		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
+			Contact tempContact = new Contact();
+			tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
+			tempContact.properties = contact.properties;
 
-		    JSONObject addressJSON = new JSONObject();
+			// Sets owner of contact explicitly. If owner is not set,
+			// contact
+			// prepersist
+			// tries to read it from session, and session is not shared with
+			// backends
+			tempContact.setContactOwner(ownerKey);
 
-		    try
-		    {
-			if (addressField != null && addressField.value != null)
+			tempContact.properties = new ArrayList<ContactField>();
+
+			for (int j = 0; j < csvValues.length; j++)
 			{
-			    addressJSON = new JSONObject(addressField.value);
-			    addressJSON.put(field.value, csvValues[j]);
-			    addressField.value = addressJSON.toString();
+
+				if (StringUtils.isBlank(csvValues[j]))
+					continue;
+
+				csvValues[j] = csvValues[j].trim();
+
+				ContactField field = properties.get(j);
+
+				// This is hardcoding but found no way to get
+				// tags
+				// from the CSV file
+				if (field == null)
+				{
+					continue;
+				}
+
+				if ("tags".equals(field.name))
+				{
+					// Multiple tags are supported. Multiple tags are added
+					// split at , or ;
+					String[] tagsArray = csvValues[j].split("[,;]+");
+
+					for (String tag : tagsArray)
+						tempContact.tags.add(tag);
+					continue;
+				}
+				if (Contact.ADDRESS.equals(field.name))
+				{
+					ContactField addressField = tempContact.getContactField(contact.ADDRESS);
+
+					JSONObject addressJSON = new JSONObject();
+
+					try
+					{
+						if (addressField != null && addressField.value != null)
+						{
+							addressJSON = new JSONObject(addressField.value);
+							addressJSON.put(field.value, csvValues[j]);
+							addressField.value = addressJSON.toString();
+						}
+						else
+						{
+							addressJSON.put(field.value, csvValues[j]);
+							tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+									field.type.toString()));
+						}
+
+					}
+					catch (JSONException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					continue;
+				}
+				if ("note".equals(field.name))
+				{
+					notes_positions.add(j);
+					continue;
+				}
+
+				// To avoid saving ignore field value/ and avoid fields with
+				// empty values
+				if (field.name == null || StringUtils.isEmpty(field.value))
+					continue;
+
+				field.value = csvValues[j];
+
+				tempContact.properties.add(field);
+
+				System.out.println("**********************" + field.name + " *********************");
+				System.out.println("******************" + field.value + "******************");
 			}
-			else
+
+			System.out.println(contact.properties);
+
+			if (!ContactUtil.isValidFields(tempContact, status))
+				continue;
+
+			// If contact is duplicate, it fetches old contact and updates data.
+			if (ContactUtil.isDuplicateContact(tempContact))
 			{
-			    addressJSON.put(field.value, csvValues[j]);
-			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
-				    field.type.toString()));
+				tempContact = ContactUtil.mergeContactFields(tempContact);
 			}
 
-		    }
-		    catch (JSONException e)
-		    {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
-		    continue;
-		}
-		if ("note".equals(field.name))
-		{
-		    System.out.println("note");
-		    notes_positions.add(j);
-		    continue;
-		}
+			try
+			{
 
-		// To avoid saving ignore field value/ and avoid fields with
-		// empty values
-		if (field.name == null || StringUtils.isEmpty(field.value))
-		    continue;
+				tempContact.save();
 
-		field.value = csvValues[j];
+				// Creates notes, set CSV heading as subject and value as
+				// description.
+				for (Integer i : notes_positions)
+				{
+					Note note = new Note();
+					note.subject = headings[i];
+					note.description = csvValues[i];
+					note.addRelatedContacts(String.valueOf(tempContact.id));
 
-		tempContact.properties.add(field);
-	    }
-
-	    if (!ContactUtil.isValidFields(tempContact, status))
-		continue;
-	    
-	    System.out.println(tempContact.getContactFieldValue(Contact.EMAIL));
-	    
-	    // If contact is duplicate, it fetches old contact and updates data.
-		if (ContactUtil.isDuplicateContact(tempContact))
-		{
-			tempContact = ContactUtil.mergeContactFields(tempContact);
+					note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+					note.save();
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("exception while saving contacts");
+				e.printStackTrace();
+			}
+			// Increase counter on each contact save
+			savedContacts++;
 		}
 
-	    try
-	    {
-	    	
-		tempContact.save();
+		calculateTotalFailedContacts(status);
 
-		// Creates notes, set CSV heading as subject and value as
-		// description.
-		for (Integer i : notes_positions)
-		{
-		    Note note = new Note();
-		    note.subject = headings[i];
-		    note.description = csvValues[i];
-		    note.addRelatedContacts(String.valueOf(tempContact.id));
+		buildCSVImportStatus(status, ImportStatus.TOTAL, contacts.size());
+		buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 
-		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
-		    note.save();
-		}
-	    }
-	    catch (Exception e)
-	    {
-		System.out.println("exception while saving contacts");
-		e.printStackTrace();
-	    }
-	    // Increase counter on each contact save
-	    savedContacts++;
+		SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
+				new Object[] { domainUser, status });
+		// Send notification after contacts save complete
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+
+		System.out.println("contact save completed");
 	}
 
-	calculateTotalFailedContacts(status);
-
-	buildCSVImportStatus(status, ImportStatus.TOTAL, contacts.size());
-	buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
-
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
-		new Object[] { domainUser, status });
-	// Send notification after contacts save complete
-	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
-
-	System.out.println("contact save completed");
-    }
-
-    public static void buildCSVImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, Integer count)
-    {
-	if (statusMap.containsKey(status))
+	public static void buildCSVImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, Integer count)
 	{
-	    statusMap.put(status, statusMap.get(status) + count);
-	    statusMap.get(status);
-	    return;
+		if (statusMap.containsKey(status))
+		{
+			statusMap.put(status, statusMap.get(status) + count);
+			statusMap.get(status);
+			return;
+		}
+
+		statusMap.put(status, count);
 	}
 
-	statusMap.put(status, count);
-    }
-
-    public static void calculateTotalFailedContacts(Map<ImportStatus, Integer> status)
-    {
-	int total = 0;
-	for (int i : status.values())
+	public static void calculateTotalFailedContacts(Map<ImportStatus, Integer> status)
 	{
-	    System.out.println(i);
-	    total += i;
+		int total = 0;
+		for (int i : status.values())
+		{
+			System.out.println(i);
+			total += i;
+		}
+		System.out.println(total);
+		status.put(ImportStatus.TOTAL_FAILED, total);
 	}
-	System.out.println(total);
-	status.put(ImportStatus.TOTAL_FAILED, total);
-    }
 }

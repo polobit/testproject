@@ -81,6 +81,12 @@
 											to Campaign</a></li>
 									<li><a href='#send-email' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
+
+                                    {{#property_is_exists "phone" properties}}
+                                    <li><a href='#' class="contact-make-call" fname="{{getPropertyValue properties
+										"first_name"}}" lname="{{getPropertyValue properties "last_name"}}" image="{{getPropertyValue properties
+										"image"}}" phone="{{getPropertyValue properties "phone"}}"><i class="icon-phone"></i> Call</a></li>
+                                    {{/property_is_exists}}
 								</ul>
 							</div>
 						</div>
@@ -271,7 +277,11 @@
 								<div style="padding:0px 10px 2px 0px; display: inline-block;line-height: 20px" class="span9">
 									{{#each this}}
 									<div>
-										<a href="tel:{{value}}">{{value}}</a> {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
+                                        <a href='#' class="contact-make-call" fname="{{getCurrentContactProperty "first_name"}}" 
+                                         lname="{{getCurrentContactProperty "last_name"}}" image="{{getCurrentContactProperty "image"}}" 
+                                         phone="{{value}}"><i class="icon-phone"></i></a>                                       
+										<a href="tel:{{value}}">{{value}}</a> 
+                                        {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
 									</div>
 									{{/each}}
 								</div>

@@ -628,6 +628,16 @@ public class ContactUtil
 				continue;
 			}
 
+			// If company is different then
+			if (existingField.name.equals(Contact.COMPANY))
+			{
+				if (!StringUtils.equals(existingField.value, field.value))
+				{
+					oldContact.contact_company_id = null;
+					oldContact.contact_company_key = null;
+				}
+			}
+
 			existingField.value = field.value;
 			if (!StringUtils.isEmpty(field.subtype))
 				existingField.subtype = field.subtype;

@@ -647,6 +647,21 @@ public class SocialSuiteTwitterUtil
 
 		userList = twitter.getRetweets(tweetId);
 
+		System.out.println("userList: " + userList.size());
+
+		if (userList.size() == 0)
+		{
+			Status msg = twitter.showStatus(tweetId);
+			System.out.println("msg: " + msg);
+
+			if (msg.getRetweetCount() > 0)
+			{
+				if (msg.getRetweetedStatus() != null)
+					userList = twitter.getRetweets(msg.getRetweetedStatus().getId());
+				System.out.println("new userList: " + userList.size());
+			}
+		}
+
 		return userList;
 	}
 
