@@ -45,7 +45,7 @@ function returnBack()
 	 if (window.opener)
 	 {
 		 var network = "S3";
-		 window.opener.saveDocumentURL(url, network);
+		 window.opener.saveDocumentURL(url, network, window.location.search);
 	     window.close();
 	 }
 	 return;
