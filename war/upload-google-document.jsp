@@ -38,9 +38,8 @@
         }
         if(url)
         {
-        	$('#documentForm').find('#url').html(url);
         	$('#documentForm').find('#upload_url').val(url);
-        	$('#documentForm').find('#google_doc_validate').show();
+        	returnBack(url);
         }
       }
       
@@ -49,25 +48,11 @@
       	 if (window.opener)
     	 {
       		var network = "GOOGLE";
-      		 window.opener.saveDocumentURL(url, network);
-      	     window.close();
+      		window.opener.saveDocumentURL(url, network, window.location.search);
+      	    window.close();
       	 }
       	 return;
       }
-    </script>
-    
-    <script>
-     $(function(){
-    	 
-    	 // Saves the url of selected document
-	     $('#google_doc_validate').on('click',function(e){
-	 		e.preventDefault();
-	 		var url = $('#documentForm').find('#upload_url').val();
-	 		var network = "GOOGLE";
-	 		if(url)
-	        	returnBack(url);
-	     });
-     });
     </script>
     
     <style>
@@ -83,19 +68,15 @@
 			<!-- Document form  -->
 			<form id="documentForm" name="documentForm" method="post">
 				<fieldset>
-					<div class="row-fluid" id="url"></div>
 					<div class="row-fluid">
-						<a class="btn" style="margin-top:5px;" id="choose" onclick=loadPicker();>Select Document</a>
+						<a class="btn" style="margin-top:5px;" onclick=loadPicker();>Select Document</a>
 						<input type="hidden" name="url" id="upload_url" class="required"/>
 					</div>
 				</fieldset>
-				<div>
-			        <a href="#" style="float:right;" class="btn btn-primary hide" id="google_doc_validate">Done </a>
-			    </div>
 			</form>
 		</div>
 	</div>
     <!-- The Google API Loader script. -->
-    <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
 </body>
 </html>

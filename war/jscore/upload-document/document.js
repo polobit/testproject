@@ -28,14 +28,30 @@ $(function(){
      * "Hide" event of document modal to remove contacts appended to related to field
      * and validation errors
      */ 
-    $('#uploadDocumentModal, #uploadDocumentUpdateModal').on('hidden', function () {
-    	
-		// Removes appended contacts from related-to field
-		$("form").find("li").remove();
-		$('form').find('#error').html("");
+    $('#uploadDocumentModal').on('hidden', function () {
+    	// Removes appended contacts from related-to field
+    	$(this).find('form').find("li").remove();
+    	$(this).find('form').find('#error').html("");
 		
 		// Removes validation error messages
 		remove_validation_errors('uploadDocumentModal');
+
+    });
+    
+    /**
+     * "Hide" event of document modal to remove contacts appended to related to field
+     * and validation errors
+     */ 
+    $('#uploadDocumentUpdateModal').on('hidden', function () {
+    	// Removes appended contacts from related-to field
+    	$(this).find('form').find("li").remove();
+    	console.log($(this).find('form').find('#network_type').closest(".controls").html());
+    	console.log($(this).find('form').find('#network_type').closest(".controls").find(".link").html());
+    	$(this).find('form').find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
+    	$(this).find('form').find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
+    	$(this).find('form').find('#error').html("");
+		
+		// Removes validation error messages
 		remove_validation_errors('uploadDocumentUpdateModal');
 
     });
@@ -46,13 +62,14 @@ $(function(){
 	$(".link").live('click', function(e)
 	{
 		e.preventDefault();
-		$('form').find('#error').html("");
-		var id = $(this).find("a").attr("id").toUpperCase();
+		$(this).closest('form').find('#error').html("");
+		var form_id = $(this).closest('form').attr("id");
+		var id = $(this).find("a").attr("id");
 		
 		if(id && id == "GOOGLE")
-			var newwindow = window.open("upload-google-document.jsp?id=upload-form", 'name','height=510,width=800');
+			var newwindow = window.open("upload-google-document.jsp?id="+ form_id, 'name','height=510,width=800');
 		else if(id && id == "S3")
-			var newwindow = window.open("upload-custom-document.jsp?id=upload-form", 'name','height=310,width=500');
+			var newwindow = window.open("upload-custom-document.jsp?id="+ form_id, 'name','height=310,width=500');
 		
 		if (window.focus)
 		{
@@ -62,14 +79,14 @@ $(function(){
 	});
 	
 	/**
-	 * To validate the document form
+	 * To validate the document add or edit forms
 	 */
-    $('#document_validate').on('click',function(e){
+    $('#document_validate, #document_update_validate').on('click',function(e){
  		e.preventDefault();
- 		
+
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
     	var form_id = $(this).closest('.upload-document-modal').find('form').attr("id");
-    	
+    
     	if(form_id == "uploadDocumentForm")
     		saveDocument(form_id, modal_id, this, false);
     	else
@@ -98,7 +115,9 @@ function updateDocument(ele) {
 	var documentUpdateForm = $("#uploadDocumentUpdateForm");
 
 	deserializeForm(value, $("#uploadDocumentUpdateForm"));
-	$('#uploadDocumentUpdateForm').find('#url').html('<a href="'+ value.url +'" target="_blank">'+ value.url +'</a>');
+	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").find(".icon-ok").css("display", "inline");
+	$('#uploadDocumentUpdateForm').find("#" + value.network_type).closest(".link").css("background-color", "#EDEDED");
+	//$('#uploadDocumentUpdateForm').find('#url').html('<a href="'+ value.url +'" target="_blank">'+ value.url +'</a>');
 	$('#uploadDocumentUpdateModal').modal('show');
 	
 	// Call setupTypeAhead to get contacts
@@ -110,12 +129,17 @@ function updateDocument(ele) {
  * @param url
  * @param network
  */
-function saveDocumentURL(url, network)
+function saveDocumentURL(url, network, id)
 {
-	var form_id = $("form").closest('.upload-document-modal').find('form').attr("id");
+	id = id.split("?id=")[1];
+	var form_id = id.split("&")[0];
 	$('#' + form_id).find("#network_type").val(network);
+	$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
+	$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
+	$('#' + form_id).find("#" + network).closest(".link").find(".icon-ok").css("display", "inline");
+	$('#' + form_id).find('#' + network).closest(".link").css("background-color", "#EDEDED");
    	$('#' + form_id).find('#upload_url').val(url);
-   	$('#' + form_id).find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
+    //$('#' + form_id).find('#url').html('<a href="'+ url +'" target="_blank">'+ url +'</a>');
 }
 
 /**
@@ -149,6 +173,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate)
 	var url = $('#' + form_id).find('#upload_url').val();
 	if(url == "")
 	{
+		$('#' + form_id).find('#network_type').find(".icon-ok").css("display", "none");
+		$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
 		$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Document not attached properly.</div>');
 		enable_save_button($(saveBtn));
 		return;
@@ -164,6 +190,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate)
 			
 			$('#' + form_id).find('#url').html("");
 			$('#' + form_id).find("#network_type").val("");
+			$('#' + form_id).find('#network_type').find(".icon-ok").css("display", "none");
+			$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
 			$('#' + form_id).find("#upload_url").val("");
 			
 			//$('#' + modalId).find('span.save-status img').remove();

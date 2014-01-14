@@ -20,7 +20,7 @@
                     <div class="text">
 						You can add document by clicking the button below or the one on the right side of the page.
                     </div>
-                    <a href="#" class="documents-add btn blue"><i class="icon-plus-sign"></i>  Add Document</a>
+                    <a href="#" class="documents-add btn"><i class="icon-plus-sign"></i>  Add Document</a>
                 </div>
             </div>
         </div>
@@ -29,11 +29,10 @@
         <div class="data-block">
             <div class="data-container">
                 <table class="table table-striped showCheckboxes" url="core/api/documents/bulk" id="document-list">
-				 <col width="30px"><col width="30%"><col width="18%"><col width="28%"><col width="18%"><col width="6%">
+				 <col width="30px"><col width="35%"><col width="35%"><col width="20%"><col width="10%">
                     <thead>
                         <tr>
                             <th>Title</th>
-							<th>Type</th>
                             <th>Related To</th>
                             <th>Upload Date</th>
 							<th>Owner</th>
@@ -64,8 +63,6 @@
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
 	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:20em; overflow:hidden;display:inline-block;">{{name}}</b>
-</td>
-<td>
 	<div>
 		{{network network_type}}<b class="activate-link">
     	{{#if_equals network_type "GOOGLE"}}

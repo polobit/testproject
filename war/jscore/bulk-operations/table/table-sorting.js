@@ -150,10 +150,9 @@ function sort_documents(table)
         headers: { 
         	0 : {sorter : false	},
         	1 : {sorter : 'text'},
-        	2 : {sorter : 'text'},
-        	3 : {sorter : false},
-			4 : {sorter : 'time-ago'},
-			5 : {sorter : false	}
+        	2 : {sorter : false},
+			3 : {sorter : 'time-ago'},
+			4 : {sorter : false	}
         }
     });
 }
