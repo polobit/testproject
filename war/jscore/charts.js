@@ -121,7 +121,7 @@ function pie(url, selector, name)
 														if (this.percentage <= 2)
 															return "";
 														return (this.percentage).toFixed(2) + ' %';
-													}, distance : 2 }, showInLegend : false, innerSize : '30%', size : '75%', shadow : true, borderWidth : 2 },
+													}, distance : 2 }, showInLegend : false, innerSize : '30%', size : '75%', shadow : true, borderWidth : 0 },
 											series : { events : { mouseOver : function()
 											{
 												$('.tooltip-default-message').hide();
