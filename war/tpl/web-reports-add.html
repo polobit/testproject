@@ -183,6 +183,7 @@
 											 <optgroup label="Popup">
 												<option value="MODAL_POPUP" class="POPUP">Modal Popup</option>
 												<option value="CORNER_NOTY" class="POPUP">Noty Message</option>
+												<option value="FORM">Form on website</option>
 											</optgroup>
 											<optgroup label="Campaign">
 												<option value="ASSIGN_CAMPAIGN" class="campaign" 
@@ -203,8 +204,10 @@
 													related="WEB_RULE_RHS">Add Score</option>
 												<option value="SUBTRACT_SCORE" class="campaign" 
 													related="WEB_RULE_RHS">Substract Score</option>
-											</optgroup label="Execute code">
+											</optgroup>
+											<optgroup label="Execute code">
 												<option value="JAVA_SCRIPT">Java Script</option>
+											</opt>
 											</select>
 										</div>
 										</td>
@@ -215,13 +218,15 @@
 									<tr>	
 										<td class="controls"
 											style="vertical-align: top;">
-											<div name="RHS" id="WEB_RULE_RHS" style="margin-top:3px">
+											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css" style="margin-top:3px;max-width:100% !important">
 												</select>
 												<input type="number" name="temp" class="ADD_SCORE required number" placeholder="Enter score to add"></input>
 												<input type="number" name="temp" class="SUBTRACT_SCORE required number" placeholder="Enter score to substract"></input>
 												<input type="number" name="temp" class="required number" placeholder="Enter score to substract"></input>
 												<input type="text" class="REMOVE_TAG ADD_TAG tags" placeholder="Enter tag"></input>
-												<textarea  cols="35" name="webrule-javascript" class="JAVA_SCRIPT required" rows="6" placeholder="Enter Javascript"></textarea>
+												<textarea  cols="60" name="webrule-javascript" class="JAVA_SCRIPT required" rows="6" placeholder="">function agile_js_code_exec() {
+													 // Copy your code here 
+												}</textarea>
 											</div>
 										</td>
 									</tr>
@@ -233,10 +238,13 @@
 											<div name="popup_pattern" id="noty-type" style="margin-top:3px">
 												<select class="required">
 													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option>
-													<option value="information" class="POPUP MODAL_POPUP CORNER_NOTY">Information</option>
-													<option value="form" class="POPUP MODAL_POPUP">Form on website</option>
+													<option value="information" class="POPUP MODAL_POPUP">Information</option>
+													<option value="information" class="CORNER_NOTY">Information</option>
 													<option value="custom_html" class="MODAL_POPUP">Custom HTML</option>
 												</select>
+<input type="text" name="temp-title" style="width: 92%"
+														class="FORM input required" placeholder="Form id"/>
+												
 											</div>
 											</div>
 										</td>

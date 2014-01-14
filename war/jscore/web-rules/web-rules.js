@@ -27,6 +27,12 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#campaign", el).chained($("#action", el));
 	$("#noty-title", el).chained($("#action", el), function(select, self){
+		console.log(select);
+		console.log(self);
+		console.log("________________________________");
+		console.log($("select", select).val())
+		console.log($("select", select).val() == "CORNER_NOTY")
+		console.log(self);
 		if($("select", select).val() == "CORNER_NOTY")
 			{
 				$(self).hide();
@@ -36,25 +42,31 @@ function chainWebRules(el, data, isNew, actions)
 		
 	});
 	$("#possition", el).chained($("#action", el));
-	$("#noty-title", el).chained($("#noty-type", el), function(el, self){
-		console.log(self);
-		console.log($("select", el).val());
-		var value = $("select", self).val();
-		if(value == "CORNER_NOTY")
+	$("#noty-title", el).chained($("#noty-type", el), function(select, self){
+		console.log($(select));
+		console.log($(self));
+		console.log($("select option:selected", select).hasClass("CORNER_NOTY"));
+		if($("select option:selected", select).hasClass("CORNER_NOTY"))
 		{
-			console.log($(self));
+			console.log($(select).addClass("hide"));
 			$(self).hide();
+			$(select).hide();
+			return;
 		}
-		
+		$(select).show();
+		$(self).show();
 	});
 	
-	$("#noty-type", el).chained($("#action", el), function(el, self){
-		var value = $("select", el).val();
+	$("#noty-type", el).chained($("#action", el), function(select, self){
+		var value = $("select", select).val();
 		$(self).show();
 		if(value == "CORNER_NOTY")
 			{
-			console.log($(self));
 				$(self).hide();
+			}
+		else
+			{
+				$(self).show();
 			}
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
 			{
