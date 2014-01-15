@@ -27,12 +27,6 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#campaign", el).chained($("#action", el));
 	$("#noty-title", el).chained($("#action", el), function(select, self){
-		console.log(select);
-		console.log(self);
-		console.log("________________________________");
-		console.log($("select", select).val())
-		console.log($("select", select).val() == "CORNER_NOTY")
-		console.log(self);
 		if($("select", select).val() == "CORNER_NOTY")
 			{
 				$(self).hide();
@@ -43,12 +37,8 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#possition", el).chained($("#action", el));
 	$("#noty-title", el).chained($("#noty-type", el), function(select, self){
-		console.log($(select));
-		console.log($(self));
-		console.log($("select option:selected", select).hasClass("CORNER_NOTY"));
 		if($("select option:selected", select).hasClass("CORNER_NOTY"))
 		{
-			console.log($(select).addClass("hide"));
 			$(self).hide();
 			$(select).hide();
 			return;
@@ -106,7 +96,6 @@ function show_web_rule_action_preview(action)
 	head.js("lib/web-rule/lib/mootools-core-1.3.1.js", "lib/web-rule/lib/mootools-more-1.3.1.1.js", "lib/web-rule/simple-modal.js", function(){
 		var modal_options = {};
 		modal_options["show_btn_cancel"] = true;
-		console.log(modal_options);
 		
 		var actions = [];
 		actions.push(action);

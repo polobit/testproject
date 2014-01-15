@@ -284,7 +284,7 @@ function deserializeChainedSelect(form, el, el_self) {
 			 * Chains dependencies of input fields with jquery.chained.js based
 			 * on the rule element
 			 */
-			chainFilters(rule_element);
+			chainFilters(rule_element, el);
 
 			$(parent_element).append(rule_element);
 			deserializeChainedElement(data, rule_element);
@@ -337,6 +337,12 @@ function deserializeChainedElement(data, rule_element) {
 			// Selects the option
 			if ($(element).attr('value') == value) {
 				$(element).attr("selected", "selected");
+				var url = $(element).attr("url");
+				if(url)
+					{
+					$(element).attr("data", data.RHS);
+					console.log($(element));
+					}
 				$(input_element).trigger("change");
 				return;
 			}

@@ -248,6 +248,7 @@ function fill_custom_field_values(form, content)
 					{
 						return;
 					}
+				console.log($(element[0]).hasClass("date_input"))
 					var tagName = element[0].tagName.toLowerCase();
 					var type = element.attr("type");
 
@@ -257,6 +258,16 @@ function fill_custom_field_values(form, content)
 							{
 								element.attr("checked", "checked"); 
 								return;
+							}
+						else if($(element[0]).hasClass("date_input"))
+							{
+							try {
+								element.attr("value", new Date(property.value * 1000)
+										.format('mm/dd/yyyy'));
+								return;
+							} catch (err) {
+
+							}
 							}
 						
 						element.attr("value", property.value);							
