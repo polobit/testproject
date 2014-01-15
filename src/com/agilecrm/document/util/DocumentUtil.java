@@ -64,6 +64,13 @@ public class DocumentUtil
 	}
     }
 
+    public static List<Document> getDocuments(int max, String cursor)
+    {
+	if (max != 0)
+		return dao.fetchAll(max, cursor);
+	return getDocuments();
+    }
+
     /**
      * Returns list of contacts related to document.
      * 
