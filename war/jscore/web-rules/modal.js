@@ -661,8 +661,8 @@ function perform_actions(data, validate) {
 						document.id('simple-modal').fade('show')
 					}), 200);
 					var tw = new Fx.Tween(document.id('simple-modal'), {
-						duration : 600,
-						transition : 'bounce:out',
+						duration : 0,
+						//transition : 'bounce:out',
 						link : 'cancel',
 						property : 'top'
 					}).start(-400, 150)
