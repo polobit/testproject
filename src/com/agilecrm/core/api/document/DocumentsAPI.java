@@ -11,11 +11,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 
@@ -41,8 +43,12 @@ public class DocumentsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Document> getAllDocuments()
+    public List<Document> getAllDocuments(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+	if (count != null)
+	{
+	    return DocumentUtil.getDocuments((Integer.parseInt(count)), cursor);
+	}
 	return DocumentUtil.getDocuments();
     }
 

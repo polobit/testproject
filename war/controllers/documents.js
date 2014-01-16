@@ -20,6 +20,8 @@ var DocumentsRouter = Backbone.Router.extend({
 		this.DocumentCollectionView = new Base_Collection_View({
 			url : 'core/api/documents',
 			templateKey : "documents",
+			cursor : true,
+			page_size : 10, 
 			sortKey:'upload_time',
 			individual_tag_name : 'tr',
 			postRenderCallback : function(el)

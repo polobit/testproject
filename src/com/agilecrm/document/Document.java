@@ -2,6 +2,7 @@ package com.agilecrm.document;
 
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
@@ -30,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-public class Document
+public class Document extends Cursor
 {
     /**
      * Document Id.
