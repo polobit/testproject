@@ -758,7 +758,7 @@ function OnScrollDiv(elementDiv)
    		// If no more updates available, show message.
    		if (data.length == 0)
    		{
-   			showNotyPopUp('information', "No more updates available for stream"+ stream.stream_type +" of "+ stream.screen_name, "top", 5000);   			
+   			showNotyPopUp('information', "No more updates available for stream"+ stream.stream_type +" of "+ stream.screen_name, "top", 7000);   			
    			return;
    		}
    		
