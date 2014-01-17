@@ -33,7 +33,7 @@ Verifier verifier = new Verifier(oAuthVerifier);
 StringBuffer callbackURL = request.getRequestURL();
 int index = callbackURL.lastIndexOf("/");
 callbackURL.replace(index, callbackURL.length(), "").append("/cd_twitter_callback.jsp");
-OAuthService service = new ServiceBuilder().provider(TwitterApi.class).callback(callbackURL.toString()).apiKey(Globals.TWITTER_API_KEY)
+OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).callback(callbackURL.toString()).apiKey(Globals.TWITTER_API_KEY)
 	.apiSecret(Globals.TWITTER_SECRET_KEY).build();
 
 // Get Access Token
