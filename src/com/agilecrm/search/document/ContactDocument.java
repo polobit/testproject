@@ -97,7 +97,6 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		{
 			Date updatedDate = DateUtils.truncate(new Date(contact.updated_time * 1000), Calendar.DATE);
 
-			System.out.println(updatedDate);
 			doc.addField(Field.newBuilder().setName("updated_time").setDate(updatedDate));
 
 			doc.addField(Field.newBuilder().setName("updated_time_epoch").setNumber(contact.updated_time));
@@ -173,10 +172,6 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-
-		System.out.println(index.getName());
-		// System.out.println(index.getConsistency());
-		System.out.println(index.getSchema());
 
 	}
 

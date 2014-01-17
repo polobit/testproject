@@ -72,11 +72,9 @@ public class SearchUtil
 			 * Replaces special characters with "_" in field name
 			 */
 			String field_name = contactField.name.replaceAll("[^a-zA-Z0-9_]", "_");
-			System.out.println("**********************************" + field_name);
 
 			if (customField != null && customField.field_type == CustomFieldDef.Type.DATE)
 			{
-				System.out.println("field : " + customField.field_type);
 				try
 				{
 					doc.addField(Field.newBuilder().setName(field_name).setNumber(Double.valueOf(contactField.value)));
