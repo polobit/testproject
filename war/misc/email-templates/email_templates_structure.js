@@ -246,29 +246,6 @@
             ]
         },
         {
-            "label": "Other",
-            "category": "other",
-            "themes": [
-                {
-                    "label": "High Definition",
-                    "name": "high-definition",
-                    "theme_preview": "other/high-definition/theme-preview/dark.png",
-                    "layouts": [
-                        {
-                            "name": "Dark",
-                            "preview": "other/high-definition/dark/preview/dark.png",
-                            "url": "other/high-definition/dark/index.html"
-                        },
-                        {
-                            "name": "Light",
-                            "preview": "other/high-definition/light/preview/light.png",
-                            "url": "other/high-definition/light/index.html"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "label": "e-Commerce",
             "category": "ecommerce",
             "themes": [
@@ -291,6 +268,29 @@
                             "name": "Hardware",
                             "preview": "ecommerce/ecommerce-email-template/theme-preview/hardware.png",
                             "url": "ecommerce/ecommerce-email-template/hardware.html"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Other",
+            "category": "other",
+            "themes": [
+                {
+                    "label": "High Definition",
+                    "name": "high-definition",
+                    "theme_preview": "other/high-definition/theme-preview/dark.png",
+                    "layouts": [
+                        {
+                            "name": "Dark",
+                            "preview": "other/high-definition/dark/preview/dark.png",
+                            "url": "other/high-definition/dark/index.html"
+                        },
+                        {
+                            "name": "Light",
+                            "preview": "other/high-definition/light/preview/light.png",
+                            "url": "other/high-definition/light/index.html"
                         }
                     ]
                 }

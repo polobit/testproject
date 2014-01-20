@@ -60,11 +60,11 @@ function chainWebRules(el, data, isNew, actions)
 			}
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
 			{
-				el.closest('table').siblings('div').find(".web-rule-prevew").show();
+			select.closest('table').siblings('div').find(".web-rule-prevew").show();
 			return;
 			}
 		
-		el.closest('table').siblings('div').find(".web-rule-prevew").hide();
+		select.closest('table').siblings('div').find(".web-rule-prevew").hide();
 	});
 	
 	$("#timer", el).chained($("#delay", el));
