@@ -77,7 +77,8 @@ public class SearchUtil
 			{
 				try
 				{
-					doc.addField(Field.newBuilder().setName(field_name).setNumber(Double.valueOf(contactField.value)));
+					doc.addField(Field.newBuilder().setName(normalizeString(contactField.name) + "_time_epoch")
+							.setNumber(Double.valueOf(contactField.value)));
 				}
 				catch (NumberFormatException e)
 				{
