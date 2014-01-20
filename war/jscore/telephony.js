@@ -1,7 +1,7 @@
 /*        <link rel="stylesheet" href="site.css">
         <link rel="stylesheet" href="build/candybar.css">
         <script src="build/candybar.js"></script>
-*/
+
 var cb;
 //var dialer;
 
@@ -44,10 +44,10 @@ $(function()
 	//window.dialer.render();
 
 	// OPTIONALLY: you can also add event listeners later if you prefer.
-	/*dialer.on('call', function (number) {
+	dialer.on('call', function (number) {
 	    // assuming you've created a phone object..
 	    phone.dial(number);
-	});*/
+	});
 	      
     
     $(".contact-make-call").die().live("click", function(e)
@@ -65,13 +65,13 @@ $(function()
     	  return;
     	}  	
     	    	    	
-		  /*if(!setUser(name, phone, image)) 
+		  if(!setUser(name, phone, image)) 
 			  {
     	        callUser();
     	        
     	        // After call receive.
     	        setStateActive()
-			  }*/
+			  }
     	
     	window.dialer.render();
      });    
@@ -150,3 +150,4 @@ function endCall()
   cb.endGently();
   return false;	
 }
+*/

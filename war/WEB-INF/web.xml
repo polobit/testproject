@@ -91,15 +91,7 @@
 		<servlet-name>register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>UpdateData</servlet-name>
-		<servlet-class>com.agilecrm.UpdateExistingData</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>UpdateData</servlet-name>
-		<url-pattern>backend/updatedata</url-pattern>
-	</servlet-mapping>
+
 
 	<!-- Rest Easy -->
 	<context-param>
@@ -235,15 +227,7 @@
 	
 	
 	
-	<servlet>
-		<servlet-name>TextSearchDelete</servlet-name>
-		<servlet-class>com.agilecrm.TextSearchDBDeleteServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>TextSearchDelete</servlet-name>
-		<url-pattern>/backend/delete/text/data</url-pattern>
-	</servlet-mapping>
-
+	
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>
