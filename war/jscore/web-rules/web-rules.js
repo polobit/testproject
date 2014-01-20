@@ -64,7 +64,7 @@ function chainWebRules(el, data, isNew, actions)
 			return;
 			}
 		
-		el.closest('table').siblings('div').find(".web-rule-prevew").hide();
+		select.closest('table').siblings('div').find(".web-rule-prevew").hide();
 	});
 	
 	$("#timer", el).chained($("#delay", el));
