@@ -551,14 +551,12 @@ public class ContactUtil
 			return false;
 		}
 
-		Iterator<ContactField> iterator = contact.properties.iterator();
-		while (iterator.hasNext())
-		{
-			ContactField field = iterator.next();
-			if (Contact.WEBSITE.equals(field.name) && !isValidURL(field.value))
-				iterator.remove();
-		}
-
+		/*
+		 * Iterator<ContactField> iterator = contact.properties.iterator();
+		 * while (iterator.hasNext()) { ContactField field = iterator.next(); if
+		 * (Contact.WEBSITE.equals(field.name) && !isValidURL(field.value))
+		 * iterator.remove(); }
+		 */
 		return true;
 	}
 
@@ -573,6 +571,10 @@ public class ContactUtil
 	public static Contact mergeContactFeilds(Contact newContact, Contact oldContact)
 	{
 
+		System.out.println("properties ***********************************");
+
+		System.out.println(newContact.properties);
+		System.out.println(oldContact.properties);
 		/**
 		 * Iterates through new properties in new contacts
 		 */
@@ -587,8 +589,13 @@ public class ContactUtil
 			if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name)
 					|| Contact.PHONE.equals(field.name) || Contact.URL.equals(field.name))
 			{
-				System.out.println("*************");
-				System.out.println("name : " + field.name + ", " + "value" + field.value);
+				if (Contact.WEBSITE.equals(field.name))
+				{
+					System.out.println("*************");
+					System.out.println("name : " + field.name + ", " + "value" + field.value);
+					System.out.println("***********************");
+				}
+
 				// Fetches all contact fields by property name
 				List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
 
@@ -606,7 +613,6 @@ public class ContactUtil
 						continue;
 					}
 				}
-
 				System.out.println("new field" + newField);
 				if (newField)
 				{

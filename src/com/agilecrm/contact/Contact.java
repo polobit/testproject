@@ -419,6 +419,21 @@ public class Contact extends Cursor
 		search.edit(this);
 	}
 
+	public void update()
+	{
+		if (this.id == null || this.id == 0l)
+			return;
+
+		dao.put(this);
+
+		// Enables to build "Document" search on current entity
+		AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+
+		// If contact is new then add it to document else edit document
+		search.edit(this);
+
+	}
+
 	/**
 	 * Checks if search document record is to be updated.
 	 * 
@@ -594,7 +609,24 @@ public class Contact extends Cursor
 	 * 
 	 * @param tags
 	 */
-	public void removeTags(Tag[] tags)
+	public void removeTags(Tag[] tags, boolean... deleteTags)
+	{
+		Set<String> tagslist = removeTagsWithoutSaving(tags);
+
+		this.save();
+
+		boolean isUpdateRequired = true;
+		if (deleteTags != null)
+		{
+			isUpdateRequired = deleteTags[0];
+		}
+
+		if (isUpdateRequired)
+			// Delete tags from Tag class
+			TagUtil.deleteTags(tagslist);
+	}
+
+	public Set<String> removeTagsWithoutSaving(Tag[] tags)
 	{
 		Set<String> tagslist = new HashSet<String>();
 
@@ -613,10 +645,8 @@ public class Contact extends Cursor
 		// field
 		// before saving contact.
 		this.tags.clear();
-		this.save();
 
-		// Delete tags from Tag class
-		TagUtil.deleteTags(tagslist);
+		return tagslist;
 	}
 
 	/**
@@ -690,6 +720,28 @@ public class Contact extends Cursor
 		if (execute_notification)
 			ContactNotificationPrefsUtil.executeNotificationForDeleteContact(this);
 
+		dao.delete(this);
+
+		new AppengineSearch<Contact>(Contact.class).delete(id.toString());
+
+		// Delete Notes
+		NoteUtil.deleteAllNotes(id);
+
+		// Delete Tags
+		TagUtil.deleteTags(tags);
+
+		// Delete Crons.
+		CronUtil.removeTask(null, id.toString());
+
+		// Deletes logs of contact.
+		LogUtil.deleteSQLLogs(null, id.toString());
+
+		// Deletes TwitterCron
+		TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
+	}
+
+	public void deleteAsync()
+	{
 		dao.delete(this);
 
 		new AppengineSearch<Contact>(Contact.class).delete(id.toString());
@@ -878,7 +930,7 @@ public class Contact extends Cursor
 			if (viewed_time != 0L)
 			{
 				viewed.viewed_time = viewed_time;
-				viewed.viewer_id = SessionManager.get().getDomainId();
+				// viewed.viewer_id = SessionManager.get().getDomainId();
 			}
 		}
 

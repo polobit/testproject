@@ -138,7 +138,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 		// Social suite's ScheduledUpdate
 		ObjectifyService.register(ScheduledUpdate.class);
-		
+
 		// Upload Document
 		ObjectifyService.register(Document.class);
 	}
@@ -188,6 +188,16 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	public void delete(T entity)
 	{
 		ofy().delete(entity);
+	}
+
+	/**
+	 * Deletes an entity from database Asynchronously
+	 * 
+	 * @param entity
+	 */
+	public void deleteAsync(T entity)
+	{
+		ofy().async().delete(entity);
 	}
 
 	/**
