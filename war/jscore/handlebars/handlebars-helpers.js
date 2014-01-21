@@ -2136,25 +2136,20 @@ $(function()
 	Handlebars.registerHelper('get_subaccount_reputation', function(value){
 		var type = "";
 		var reputation="Unknown";
-		
-		if(value > 1 && value < 20)
+
+		if(value > 1 && value < 40)
 		{
 			type = "important";
 			reputation="Poor";
 		}
-		else if(value >=20 && value < 50)
+		else if(value >= 40 && value < 75)
 		{
-			type="warning";
-			reputation="Poor";
-		}
-		else if(value >=50 && value < 75)
-		{
-           type="info";
-           reputation="OK";
+           type="";
+           reputation="Ok";
 		}
 		else if(value >= 75 && value < 90)
 		{
-			type="inverse";
+			type="success";
 			reputation="Good";
 		}
 		else if(value >=90)
