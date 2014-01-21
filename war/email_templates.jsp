@@ -18,28 +18,28 @@
  			text-align: center; 
  		}
  
- 		h2
- 		{
-    		padding-left: 90px;
- 		}
  
  		hr
  		{
    			margin: 0px 90px 30px 90px;
  		}
  		
- 		input.btn
- 		{ 
-			cursor: pointer; 
-		}
+ 		h1,h2,h3,h4,h5,h6{margin:0;font-family:Ubuntu;font-weight:400;color:#525252;text-rendering:optimizelegibility;}
+		h1{font-size:30px;line-height:36px;}
+		h2{font-size:24px;line-height:36px;}
+		h3{font-size:18px;line-height:27px;}
+ 		
+ 		.page-header{padding-bottom:17px;margin:18px 0;border-bottom:1px solid #f5f5f5;}
 	</style>
 
 </head>
 
 <body>
 
-	<div id="theme-preview-container">
+	<div id="preview-container">
 		<!-- Container for theme previews -->
+		<div id="preview-container-title" class="page-header" style="margin-left:85px;"></div>
+		<div id="preview-container-content"></div>
 	</div>
 
 <script>
@@ -55,6 +55,9 @@ $(function(){
       // When any theme is clicked, opens respective layouts
       $('li.theme-preview>a').die().live('click', function(e){
     	    e.preventDefault();
+    	    
+    	    var title = '<h2>Select a Layout/Color Template</h2>';
+    		$('#preview-container-title').html(title);
     	     
     	   // Get label to identify clicked theme in json
     	   var label = $(this).parent().find('input').val();
@@ -69,7 +72,7 @@ $(function(){
     				
     				if(theme.label === label){
     				var el = getTemplate('layout-preview', theme);
-    				$('#theme-preview-container').html(el);
+    				$('#preview-container-content').html(el);
     				
     				flag = false;
     				return false;
@@ -83,28 +86,13 @@ $(function(){
         });
       
       
-      // When any layout is clicked, loads respective html into tinymce editor
-      $('li.layout-preview>a').die().live('click', function(e){
-    	  e.preventDefault();
-    	  
-        var url = $(this).parent().attr("data");
-    	  
-    	var newwindow = window.open('cd_tiny_mce.jsp?url=' + url,'tiny_mce','status=1, height=900,width=800');
-   	     
-  	 	if (window.focus)
-  	 	{
-  	 		newwindow.focus();
-  	 	}
-  	 
-      });
-      
       // When Back is clicked, render theme previews
       $('#layout-preview-back').die().live('click', function(e){
     	
     	  e.preventDefault();
     	
     	  // Reset container to avoid append
-    	  $('#theme-preview-container').html("");
+    	  $('#preview-container-title, #preview-container-content').html("");
     		
     	  // render theme previews
     	  render_theme_previews();
@@ -132,16 +120,20 @@ $(function(){
 }
 
 /**
- * Render theme-preview-container with theme previews.
+ * Render preview-container with theme previews.
  **/
 function render_theme_previews()
 {
+	var title = '<h2>Select a Theme</h2>';
+	
+	$('#preview-container-title').html(title);
+	
 	$.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
 
 		// Initialize the theme preview container 
 		var el = getTemplate('theme-preview', value);
 		
-		$('#theme-preview-container').append(el);
+		$('#preview-container-content').append(el);
 		
 	});
 }
@@ -190,8 +182,9 @@ function getMergeFields(){
 
 {{#if this}}
 	<div>
-		<h2>{{label}}</h2>
-		<hr/>
+		<div class="page-header" style="margin-left: 85px;">
+			<h3>{{label}}</h3>
+		</div>
 	
 		<ul style="list-style: none;">
 		{{#each themes}}
@@ -215,13 +208,13 @@ function getMergeFields(){
 <script id="layout-preview-template" type="text/x-handlebars-template">
 <!-- To navigate to theme previews -->
 <div>
-	<input type="button" class="btn" id="layout-preview-back" value="Back">
+	<a href="#" id="layout-preview-back" style="margin-left:90px; font-size: 18px;"><< Back</a>
 </div>
 
 <ul style="list-style: none;">
 {{#each layouts}}
-	<li class="layout-preview" data="{{url}}">
-		<a href="#">
+	<li class="layout-preview">
+		<a href="cd_tiny_mce.jsp?url={{url}}">
 			<img src="/misc/email-templates/{{preview}}" width=250px height=500px alt="Template layout image"/>
 		</a>
     	
