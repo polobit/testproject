@@ -114,7 +114,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				// Create options based on list values
 				$.each(list_values,function(index, value){
 					if(value != "")
-						list_options = list_options.concat('<option value='+value+'>'+value+'</option>');
+						list_options = list_options.concat('<option value="'+value.trim()+'">'+value.trim()+'</option>');
 				});
 				
 				// Create select drop down by checking it's required nature
@@ -278,7 +278,8 @@ function fill_custom_field_values(form, content)
 					}
 				if(tagName == "select")
 					{
-						element.find('option[value='+property.value+']').attr("selected", "selected");
+						if(property.value)
+						element.find('option[value="'+property.value.trim()+'"]').attr("selected", "selected");
 					}
 			}
 			

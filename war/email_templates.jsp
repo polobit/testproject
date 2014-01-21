@@ -1,39 +1,46 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>AgileCRM Email Templates</title>
+	<title>AgileCRM Email Templates</title>
 
-<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=7" /><![endif]-->
-<!--[if lt IE 8]><style type="text/css" media="all">@import url("css/ie.css");</style><![endif]-->
-<!--[if IE]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
+	<script type="text/javascript" src="lib/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/handlebars-1.0.0.beta.6-min.js"></script>
 
-<script type="text/javascript" src="lib/jquery.min.js"></script>
-<script type="text/javascript" src="lib/handlebars-1.0.0.beta.6-min.js"></script>
-
-<style>
- li.theme-preview, li.layout-preview
- {
- 	width: 350px;
- 	height: 600px;
- 	display: inline-block;
- 	text-align: center; 
- }
-</style>
+	<style>
+		li.theme-preview, li.layout-preview
+ 		{
+ 			width: 350px;
+ 			height: 600px;
+ 			display: inline-block;
+ 			text-align: center; 
+ 		}
+ 
+ 
+ 		hr
+ 		{
+   			margin: 0px 90px 30px 90px;
+ 		}
+ 		
+ 		h1,h2,h3,h4,h5,h6{margin:0;font-family:Ubuntu;font-weight:400;color:#525252;text-rendering:optimizelegibility;}
+		h1{font-size:30px;line-height:36px;}
+		h2{font-size:24px;line-height:36px;}
+		h3{font-size:18px;line-height:27px;}
+ 		
+ 		.page-header{padding-bottom:17px;margin:18px 0;border-bottom:1px solid #f5f5f5;}
+	</style>
 
 </head>
 
 <body>
-<div id="header">
-	<select id="template-selector">
-		<option value="">Select email template</option>
-	</select>
-</div>
 
-<div id="theme-preview-container">
-	<!-- Container for theme previews -->
-</div>
+	<div id="preview-container">
+		<!-- Container for theme previews -->
+		<div id="preview-container-title" class="page-header" style="margin-left:85px;"></div>
+		<div id="preview-container-content"></div>
+	</div>
 
 <script>
 
@@ -46,12 +53,16 @@ $(function(){
       get_email_templates_json();
       
       // When any theme is clicked, opens respective layouts
-      $('li.theme-preview').die().live('click', function(e){
+      $('li.theme-preview>a').die().live('click', function(e){
     	    e.preventDefault();
+    	    
+    	    var title = '<h2>Select a Layout/Color Template</h2>';
+    		$('#preview-container-title').html(title);
     	     
     	   // Get label to identify clicked theme in json
-    	   var label = $(this).find('p').text();
+    	   var label = $(this).parent().find('input').val();
     	
+    	    // load all layouts of clicked theme
     	    $.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
     			
     	    	// to exit on condition met
@@ -61,7 +72,7 @@ $(function(){
     				
     				if(theme.label === label){
     				var el = getTemplate('layout-preview', theme);
-    				$('#theme-preview-container').html(el);
+    				$('#preview-container-content').html(el);
     				
     				flag = false;
     				return false;
@@ -75,70 +86,55 @@ $(function(){
         });
       
       
-      // When any layout is clicked, loads respective html into tinymce editor
-      $('li.layout-preview').die().live('click', function(e){
+      // When Back is clicked, render theme previews
+      $('#layout-preview-back').die().live('click', function(e){
+    	
     	  e.preventDefault();
-    	  
-    	  var url = $(this).attr("data");
-    	  
-    	var newwindow = window.open('cd_tiny_mce.jsp?url=' + url,'tinymce','status=1, height=900,width=800');
-   	     
-  	 	if (window.focus)
-  	 	{
-  	 		newwindow.focus();
-  	 	}
-  	 
-      });
-      
-      // Shows respective theme previews based on selected category.
-      $('#template-selector').die().live('change', function(e){
-    	  e.preventDefault();
-    	  
-    	  var category =  $(this).val();
-    	  
-    	  if(category === '')
-    	  {
-    		var el = getTemplate('theme-preview', undefined);
-			$('#theme-preview-container').html(el);
-			
-			return;
-    	  }
-    	  
-    	 $.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
-    		 
-    		 if(value["category"] === category){
-    			
-    			var el = getTemplate('theme-preview', value);
- 				$('#theme-preview-container').html(el);
-    	    	
- 				return false;
-       	      }
-    		 
-    	 }); 
+    	
+    	  // Reset container to avoid append
+    	  $('#preview-container-title, #preview-container-content').html("");
+    		
+    	  // render theme previews
+    	  render_theme_previews();
     	  
       });
       
 });
 
 /**
- * Fetches email_templates_structure.js and fills select element with categories.
+ * Fetches email_templates_structure.js and render themes.
  **/
  function get_email_templates_json()
 {
-	$.getJSON(location.origin+'/misc/email-templates/email_templates_structure.js', function(data){
+		// Fetch email_templates_structure.js and render
+		$.getJSON(location.origin+'/misc/email-templates/email_templates_structure.js', function(data){
 
-		// Initialize global variable to reuse data
-		EMAIL_TEMPLATES_JSON = data;
-		
-		$.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
-
-			$('#template-selector').append('<option value='+value.category+'>'+ value.label+'</option>');
-     		
-			// Initialize the theme preview container 
-			var el = getTemplate('theme-preview', undefined);
-			$('#theme-preview-container').html(el);
+			// Initialize global variable to reuse data
+			EMAIL_TEMPLATES_JSON = data;
 			
+			// render theme previews
+			render_theme_previews();
+		
 		});
+	
+}
+
+/**
+ * Render preview-container with theme previews.
+ **/
+function render_theme_previews()
+{
+	var title = '<h2>Select a Theme</h2>';
+	
+	$('#preview-container-title').html(title);
+	
+	$.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
+
+		// Initialize the theme preview container 
+		var el = getTemplate('theme-preview', value);
+		
+		$('#preview-container-content').append(el);
+		
 	});
 }
 
@@ -175,37 +171,55 @@ function getMergeFields(){
 }
 </script>
 
+<!-- Preview Templates  -->
 <script id="theme-preview-template" type="text/x-handlebars-template">
 {{#unless this}}
 <div style="text-align:center;">
-<img src="img/empty-email-template.png" alt="Empty image template" style="margin-top:10%">
-<p style="font-style:italic;">No email template selected.</p>
+	<img src="img/21-0.gif" alt="Empty image template" style="margin-top:10%">
+	<p style="font-style:italic;">Loading...</p>
 </div>
 {{/unless}}
 
 {{#if this}}
-<ul style="list-style: none;">
-{{#each themes}}
-<li class="theme-preview">
-	<a href="#">
-	<img src="/misc/email-templates/{{theme_preview}}" width=250px height=500px alt="Email template image"/>
-	</a>
-    <p style="font-style:italic;">{{label}}</p>
-</li>
-{{/each}}
-</ul>
+	<div>
+		<div class="page-header" style="margin-left: 85px;">
+			<h3>{{label}}</h3>
+		</div>
+	
+		<ul style="list-style: none;">
+		{{#each themes}}
+			<li class="theme-preview">
+				<!-- Make image as clickable -->
+				<a href="#">
+					<img src="/misc/email-templates/{{theme_preview}}" width=250px height=500px alt="Email template image"/>
+				</a>
+    			
+				<p style="font-style:italic;">{{label}} ({{this.layouts.length}})</p>
+    			
+				<!-- To identify the theme clicked -->
+ 				<input type="hidden" value="{{label}}">
+			</li>
+		{{/each}}
+		</ul>
+	</div>
 {{/if}}
 </script>
 
 <script id="layout-preview-template" type="text/x-handlebars-template">
+<!-- To navigate to theme previews -->
+<div>
+	<a href="#" id="layout-preview-back" style="margin-left:90px; font-size: 18px;"><< Back</a>
+</div>
+
 <ul style="list-style: none;">
 {{#each layouts}}
-<li class="layout-preview" data="{{url}}">
-	<a href="#">
-	<img src="/misc/email-templates/{{preview}}" width=250px height=500px alt="Template layout image"/>
-	</a>
-    <p style="font-style:italic;">{{name}}</p>
-</li>
+	<li class="layout-preview">
+		<a href="cd_tiny_mce.jsp?url={{url}}">
+			<img src="/misc/email-templates/{{preview}}" width=250px height=500px alt="Template layout image"/>
+		</a>
+    	
+		<p style="font-style:italic;">{{name}}</p>
+	</li>
 {{/each}}
 </ul>
 </script>

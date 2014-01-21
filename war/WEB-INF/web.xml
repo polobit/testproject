@@ -92,6 +92,7 @@
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
 
+
 	<!-- Rest Easy -->
 	<context-param>
 		<param-name>resteasy.scan</param-name>
@@ -223,7 +224,10 @@
 		<url-pattern>/backend/voice</url-pattern>
 		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
-
+	
+	
+	
+	
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>

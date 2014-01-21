@@ -237,7 +237,8 @@ function generateDefaultUI(uiFieldDefinition) {
 
 function loadTinyMCE(name)
 {
-	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name','status=1, height=900,width=800');
+	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name',strWindowFeatures);
 	if (window.focus)
 	{
 		newwindow.focus();
@@ -255,7 +256,8 @@ function load_email_templates()
 		return;
 	}
 	
-	var new_window = window.open('email_templates.jsp', 'name','status=1, height=900, width=800, scrollbars=true');
+	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+	var new_window = window.open('email_templates.jsp', 'name',strWindowFeatures);
 	
 	if(window.focus)
 		{

@@ -79,7 +79,7 @@ public class ScribeUtil
 
 		// If service type Twitter, creates a Service, specific to Twitter
 		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_TWITTER))
-			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_TWITTER, TwitterApi.class, callback,
+			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_TWITTER, TwitterApi.SSL.class, callback,
 					Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY, null);
 
 		// If service type Stripe, creates a Service, specific to Stripe
@@ -285,16 +285,14 @@ public class ScribeUtil
 				{
 				});
 
-		
 		// Gets widget name from the session
 		String serviceType = (String) req.getSession().getAttribute("service_type");
 
 		System.out.println("serviceName " + serviceType);
-				
+
 		// update widget with tokens
 		saveWidgetPrefsByName(serviceType, properties);
-				
-		
+
 	}
 
 	/**
