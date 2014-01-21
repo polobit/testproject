@@ -70,12 +70,13 @@ $(function()
 	 */
 	Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
 	{
+
 		var exclude_by_subtype = ["LINKEDIN", "TWITTER"];
 		var exclude_by_name = ["title"];
 		
 		var fields = getContactCustomProperties(items);
-		var exclusive_fields = [];
 		
+		var exclusive_fields = [];
 		for(var i =0 ; i < fields.length ; i++)
 		{
 			if(jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
@@ -84,12 +85,36 @@ $(function()
 			}
 			exclusive_fields.push(fields[i]);
 		}
-
+		
 		if (exclusive_fields.length == 0)
-			return options.inverse(exclusive_fields);
+				return options.inverse(exclusive_fields);
+		
+		$.getJSON("core/api/custom-fields/type/DATE", function(data){
+			if(data.length == 0)
+				return options.fn(exclusive_fields);
+			
+			for(var j =0; j < data.length ; j ++)
+			{
+				for(var i = 0; i< exclusive_fields.length ; i++)
+				{
+					if(exclusive_fields[i].name == data[j].field_label)
+						try
+						{
+							var d = new Date(parseInt(exclusive_fields[i].value) * 1000);
+							exclusive_fields[i].value = d.getUTCMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+						}
+					catch(err)
+					{
+						exclusive_fields[i].value = exclusive_fields[i].value;
+					}
+				}
+			}
+			updateCustomData(options.fn(exclusive_fields));
+		});
 
-		return options.fn(exclusive_fields);
+
 	});
+	
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
@@ -527,9 +552,9 @@ $(function()
 	Handlebars.registerHelper('network', function(type)
 	{
 		if (type == 'GOOGLE')
-			return 'Google Drive Document';
+			return 'Google Drive Doc';
 		if (type == 'S3')
-			return 'Uploaded Document';
+			return 'Uploaded Doc';
 	});
 
 	/**

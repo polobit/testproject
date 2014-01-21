@@ -1,14 +1,14 @@
 /**
  * Tags
  */
-var CANCELLED = "cancelled";
+var CANCELED = "Canceled";
 var SIGN_UP = "Signup";
 	
 // Subject for account cancellation note
-var ACCOUNT_CANCELLED_NOTE_SUBJECT = "Account Cancelled";
+var ACCOUNT_CANCELED_NOTE_SUBJECT = "Account Canceled";
 
 // Account cancellation cusom field
-var ACCOUNT_CANCELLED_CUSTOM_FIELD_NAME = "Account Cancelled";
+var ACCOUNT_CANCELED_CUSTOM_FIELD_NAME = "Cancel Reason";
 
 /**
  * Adds domain and loggedin date in contact in our domain
@@ -44,6 +44,7 @@ function add_current_loggedin_time()
 	var current_date_object = new Date();
 	var current_date_string = current_date_object.getUTCMonth() + 1 + "/" + current_date_object.getUTCDate() + "/" + current_date_object.getUTCFullYear();
 
+	console.log(parseInt(current_date_object.getTime()/1000));
 	
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
@@ -61,7 +62,7 @@ function add_current_loggedin_time()
 	if (existing_date_string && existing_date_string == current_date_string)
 		return;
 
-	loggedin_time_property = create_contact_custom_field("Last login", current_date_object.getTime()/1000, 'CUSTOM');
+	loggedin_time_property = create_contact_custom_field("Last login", parseInt(current_date_object.getTime()/1000), 'CUSTOM');
 
 	_agile.add_property(loggedin_time_property);
 }
@@ -82,16 +83,16 @@ function create_contact_custom_field(name, value, type, subtype)
 
 }
 
-function add_account_cancelled_info(info, callback)
+function add_account_canceled_info(info, callback)
 {
-	var custom_field = create_contact_custom_field(ACCOUNT_CANCELLED_CUSTOM_FIELD_NAME, info["reason"], 'CUSTOM');
+	var custom_field = create_contact_custom_field(ACCOUNT_CANCELED_CUSTOM_FIELD_NAME, info["reason"], 'CUSTOM');
 	_agile.add_property(custom_field, function(data) {
-		add_tag_our_domain(CANCELLED, function(data){
+		add_tag_our_domain(CANCELED, function(data){
 
 			if(info["reason_info"])
 				{
 				var note = {};
-				note.subject = ACCOUNT_CANCELLED_NOTE_SUBJECT;
+				note.subject = ACCOUNT_CANCELED_NOTE_SUBJECT;
 				note.description = info["reason_info"];
 				
 				_agile.add_note(note, function (data) {
@@ -104,7 +105,14 @@ function add_account_cancelled_info(info, callback)
 						}
 						
 			    });
+				return;
 				}
+			
+			if (callback && typeof (callback) === "function")
+			{
+				callback();
+			}
+			
 			});
 		});
 }

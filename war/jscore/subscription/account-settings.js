@@ -18,7 +18,7 @@ var ACCOUNT_STATS;
  *            element to show stats
  * @author Yaswanth
  */
-function set_up_account_stats(el)
+function set_up_account_stats(el, callback)
 {
 
 	/**
@@ -31,6 +31,11 @@ function set_up_account_stats(el)
 		postRenderCallback: function(el) {
 			
 			ACCOUNT_STATS = account_stats.model.toJSON();
+			
+			if (callback && typeof (callback) === "function")
+			{
+				callback(ACCOUNT_STATS);
+			}
 		}
 	});
 
@@ -70,7 +75,7 @@ $(function()
 					success : function()
 					{
 						
-						add_account_cancelled_info(ACCOUNT_DELETE_REASON_JSON, function(data){
+						add_account_canceled_info(ACCOUNT_DELETE_REASON_JSON, function(data){
 							
 							$("#warning-deletion-feedback").modal('hide');	
 							// Show loading in content
@@ -94,7 +99,7 @@ $(function()
 
 				$("#warning-deletion-feedback").remove();
 				// Shows account stats warning template with stats(data used)
-				var el = getTemplate('warning-feedback', ACCOUNT_STATS);
+				var el = getTemplate('warning-feedback', {});
 
 				// Appends to content, warning is modal can call show if
 				// appended in content
@@ -116,9 +121,22 @@ $(function()
 					ACCOUNT_DELETE_REASON_JSON["reason"] = $("input[name=cancellation_reason]:checked").val();
 					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
 					$(".modal-body").html(LOADING_HTML);
-					var delete_step1_el = $(getTemplate('warning', {}));
+					var delete_step1_el = "";
+					if(ACCOUNT_STATS)
+						delete_step1_el = $(getTemplate('warning', ACCOUNT_STATS));
+					else
+						{
+							set_up_account_stats(el, function(data){
+								delete_step1_el = $(getTemplate('warning', data));
+								$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+								$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+							})
+							return;
+						}
+						 
 					$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
 					$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+					
 				});
 				
 			})
