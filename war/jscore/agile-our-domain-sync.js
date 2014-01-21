@@ -1,7 +1,7 @@
 /**
  * Tags
  */
-var CANCELED = "canceled";
+var CANCELED = "Canceled";
 var SIGN_UP = "Signup";
 	
 // Subject for account cancellation note
