@@ -997,7 +997,7 @@ $(".schedule-tweet").die().live("click", function(e)
               {
                 // On success, shows the status as sent
                 $('#'+formName).find('span.save-status').html("Saved");
-                showNotyPopUp('information', "Your Tweet has been scheduled!", "top", 5000);
+                //showNotyPopUp('information', "Your Tweet has been scheduled!", "top", 5000);
                 
                 // Hides the modal after 2 seconds after the sent is shown
                 hideModal(modalName);
