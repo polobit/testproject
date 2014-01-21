@@ -28,3 +28,37 @@
     </div>
 </div>
 </script>
+
+<script id="warning-feedback-template" type="text/html">
+<div id="warning-deletion-feedback" class="modal hide">
+    <div class="modal-header warning-header" style="background-color:#DA4F49">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 font-color="background-color:black">Make sure you want to do this</h3>
+    </div>
+    <div class="modal-body">
+
+            <p>
+			   <b>We are sorry to see you go. What are your reasons to leave us and how can we improve?</b>
+            </p>
+        <ul style="list-style-type:none;">
+            <li>
+						<input type="radio" name="cancellation_reason" value="Did not like it" id="neverPlayed"  style="display:inline"/>
+				        <label for="Did not like it" style="display:inline">Did not like it</label>
+            </li>
+			<li>
+						<input type="radio" name="cancellation_reason" value="Did not meet my requirements" id="neverPlayed"  style="display:inline"/>
+				        <label for="Did not meet my requirements" style="display:inline">Did not meet my requirements</label>
+            </li>
+			<li>
+						<input type="radio" name="cancellation_reason" value="Just used to try" id="neverPlayed"  style="display:inline"/>
+				        <label for=" Just used to try" style="display:inline"> Just used to try</label>
+            </li>
+        </ul>
+	<div style="padding-left:10%"><textarea  cols="25" name="account_delete_reason" id="account_delete_reason" span4 required" rows="6"></textarea></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" id="warning-feedback-save" class="btn btn-danger ">Delete Account</a>
+    </div>
+</div>
+</script>
