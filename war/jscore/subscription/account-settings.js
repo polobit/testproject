@@ -75,7 +75,7 @@ $(function()
 					success : function()
 					{
 						
-						add_account_cancelled_info(ACCOUNT_DELETE_REASON_JSON, function(data){
+						add_account_canceled_info(ACCOUNT_DELETE_REASON_JSON, function(data){
 							
 							$("#warning-deletion-feedback").modal('hide');	
 							// Show loading in content
