@@ -21,8 +21,7 @@ var DocumentsRouter = Backbone.Router.extend({
 			url : 'core/api/documents',
 			templateKey : "documents",
 			cursor : true,
-			page_size : 15, 
-			sortKey:'upload_time',
+			page_size : 20, 
 			individual_tag_name : 'tr',
 			postRenderCallback : function(el)
 				{

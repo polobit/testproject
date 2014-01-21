@@ -1,3 +1,6 @@
+
+var existingDocumentsView;
+
 $(function(){
 	$(".task-edit-contact-tab").die().live('click', function(e){
 		e.preventDefault();
@@ -150,4 +153,83 @@ $(function(){
 		var id = $(this).attr('data');
 		updateDocument(documentsView.collection.get(id));
 	});
+	
+	/**
+	 * For showing existing documents
+	 */
+	$(".document-exist").die().live('click', function(e){
+		e.preventDefault();
+	    
+		var el = $("#existinguploadDocumentForm");
+		$("#existingDocumentModal").modal('show');
+		$("#existingDocumentModal").find('.save-status').html("");
+		
+		if(! existingDocumentsView)
+		{
+			existingDocumentsView = new Base_Collection_View({ 
+				url : 'core/api/documents',
+				restKey : "documents",
+				templateKey : "contact-document",
+				descending : true,
+				sortKey :'upload_time',
+				individual_tag_name : 'tr',
+				postRenderCallback : function(el)
+					{
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							$(".document-created-time", el).timeago();
+						});
+					}
+			});
+		}
+		existingDocumentsView.collection.fetch();
+		$("#document-list", this.el).html(existingDocumentsView.render().el);
+
+	});
+	
+	/**
+	 * When a existing document is selected changing background color
+	 */
+	$("#contact-document-model-list > tr").die().live('click', function(e){
+		$("#existingDocumentModal").find('.save-status').html("");
+		$("#contact-document-model-list").find("tr.documentSelected").removeClass("documentSelected");
+		$(this).closest("tr").addClass("documentSelected");
+	});
+	
+	/**
+	 * For adding existing document to current contact
+	 */
+	$("#existing_document_update").die().live('click', function(e){
+		e.preventDefault();
+	    var saveBtn = $(this);
+		
+	    var document_id = $("#contact-document-model-list").find(".documentSelected").find('.data').attr('data');
+	    
+	    // To check whether the document is selected or not
+	    if(document_id == undefined)
+	    {
+	    	$("#existingDocumentModal").find('.save-status').html('<span style="color:red;">Please select a document</span>');
+	    	enable_save_button($(saveBtn));
+	    	return;
+	    }
+	    	
+	    var json = existingDocumentsView.collection.get(document_id).toJSON();
+
+		// To get the contact id and converting into string
+		var contact_id = App_Contacts.contactDetailView.model.id + "";
+	    
+	    // Checks whether the selected document is already attached to that contact
+	    if((json.contact_ids).indexOf(contact_id) < 0)
+	    {
+	    	json.contact_ids.push(contact_id);
+	    	saveDocument(null, "existingDocumentModal", saveBtn, false, json);
+	    }
+	    else
+	    {
+	    	enable_save_button($(saveBtn));
+	    	$('#existingDocumentModal').modal('hide');
+	    	return;
+	    }
+	});
+	
 });

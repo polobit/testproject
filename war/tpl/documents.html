@@ -64,13 +64,7 @@
 <td data="{{id}}" class="data">
 	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:20em; overflow:hidden;display:inline-block;">{{name}}</b>
 	<div>
-		{{network network_type}}<b class="activate-link">
-    	{{#if_equals network_type "GOOGLE"}}
-			<a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a>
-		{{/if_equals}}
-		{{#if_equals network_type "S3"}}
-			<a href="{{url}}" target="_blank"><i class="icon-download-alt" title="Download Document"></i></a>
-		{{/if_equals}}</b>
+		{{network network_type}}&nbsp;&nbsp;<b class="activate-link"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
 	</div>
 </td>
 <td>

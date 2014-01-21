@@ -45,8 +45,6 @@ $(function(){
     $('#uploadDocumentUpdateModal').on('hidden', function () {
     	// Removes appended contacts from related-to field
     	$(this).find('form').find("li").remove();
-    	console.log($(this).find('form').find('#network_type').closest(".controls").html());
-    	console.log($(this).find('form').find('#network_type').closest(".controls").find(".link").html());
     	$(this).find('form').find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
     	$(this).find('form').find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
     	$(this).find('form').find('#error').html("");
@@ -86,11 +84,14 @@ $(function(){
 
  		var modal_id = $(this).closest('.upload-document-modal').attr("id");
     	var form_id = $(this).closest('.upload-document-modal').find('form').attr("id");
+    	
+    	// serialize form.
+    	var json = serializeForm(form_id);
     
     	if(form_id == "uploadDocumentForm")
-    		saveDocument(form_id, modal_id, this, false);
+    		saveDocument(form_id, modal_id, this, false, json);
     	else
-    		saveDocument(form_id, modal_id, this, true);
+    		saveDocument(form_id, modal_id, this, true, json);
 	});
     
     /** 
@@ -150,11 +151,8 @@ function saveDocumentURL(url, network, id)
  * @param update
  * @returns {Boolean}
  */
-function saveDocument(form_id, modal_id, saveBtn, isUpdate)
+function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 {
-	// serialize form.
-	var json = serializeForm(form_id);
-	
 	// Returns, if the save button has disabled attribute
 	if ($(saveBtn).attr('disabled'))
 		return;
@@ -162,22 +160,26 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate)
 	// Disables save button to prevent multiple click event issues
 	disable_save_button($(saveBtn));
 	
-	if (!isValidForm('#' + form_id)) {
-
-		// Removes disabled attribute of save button
-		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
-		
-		return false;
-	}
-	
-	var url = $('#' + form_id).find('#upload_url').val();
-	if(url == "")
+	// While attaching document is from existing documenst list, no need of form verification.
+	if(form_id)
 	{
-		$('#' + form_id).find('#network_type').find(".icon-ok").css("display", "none");
-		$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-		$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Document not attached properly.</div>');
-		enable_save_button($(saveBtn));
-		return;
+		if (!isValidForm('#' + form_id)) {
+
+			// Removes disabled attribute of save button
+			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
+			
+			return false;
+		}
+		
+		var url = $('#' + form_id).find('#upload_url').val();
+		if(url == "")
+		{
+			$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
+			$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
+			$('#' + form_id).find('#error').html('<div class="alert alert-error">Sorry! Document not attached properly.</div>');
+			enable_save_button($(saveBtn));
+			return;
+		}
 	}
 	
 	var newDocument = new Backbone.Model();
@@ -188,18 +190,21 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate)
 			// Removes disabled attribute of save button
 			enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 			
-			$('#' + form_id).find('#url').html("");
-			$('#' + form_id).find("#network_type").val("");
-			$('#' + form_id).find('#network_type').find(".icon-ok").css("display", "none");
-			$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
-			$('#' + form_id).find("#upload_url").val("");
+			// While attaching document is from existing documenst list, no need of form verification.
+			if(form_id)
+			{
+				$('#' + form_id).find("#network_type").val("");
+				$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
+				$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
+				$('#' + form_id).find("#upload_url").val("");
+				
+				$('#' + form_id).each(function() {
+					this.reset();
+				});
+			}
 			
 			//$('#' + modalId).find('span.save-status img').remove();
 			$('#' + modal_id).modal('hide');
-
-			$('#' + form_id).each(function() {
-				this.reset();
-			});
 			
 			var document = data.toJSON();
 			add_recent_view(new BaseModel(document));
