@@ -45,52 +45,81 @@ function set_up_account_stats(el)
  */
 $(function()
 {
+	ACCOUNT_DELETE_REASON_JSON = undefined;
+	/**
+	 * If user clicks on confirm delete the modal is hidden and
+	 * delete request is sent to "core/api/delete/account"
+	 */
+	$("#confirm-delete-account").die().live('click',
+			function(e)
+			{
+				e.preventDefault();
+
+				// Hides modal
+				$(".modal-body").html(LOADING_HTML);
+
+				
+
+				/**
+				 * Sends delete request to delete account , on
+				 * success send to login
+				 */
+				$.ajax({
+					type : "DELETE",
+					url : "core/api/delete/account",
+					success : function()
+					{
+						
+						add_account_cancelled_info(ACCOUNT_DELETE_REASON_JSON, function(data){
+							
+							$("#warning-deletion-feedback").modal('hide');	
+							// Show loading in content
+							$("#content").html(LOADING_HTML);
+							// Navigate to login page after delete
+							window.location.href = window.location.href
+									.split('#')[0]
+									+ 'login';
+						})
+						
+						
+					}
+				});
+			});
+	
+
 	$("#cancel-account").die().live('click',
 			function(e)
 			{
 				e.preventDefault();
 
+				$("#warning-deletion-feedback").remove();
 				// Shows account stats warning template with stats(data used)
-				var el = getTemplate('warning', ACCOUNT_STATS);
+				var el = getTemplate('warning-feedback', ACCOUNT_STATS);
 
 				// Appends to content, warning is modal can call show if
 				// appended in content
 				$('#content').append(el);
 
 				// Shows warning modal
-				$("#warning-deletion").modal('show');
+				$("#warning-deletion-feedback").modal('show');
 
-				/**
-				 * If user clicks on confirm delete the modal is hidden and
-				 * delete request is sent to "core/api/delete/account"
-				 */
-				$("#confirm-delete-account").click(
-						function(e)
-						{
-							e.preventDefault();
+				// Undefines delete reason, if use chose not to delete account in delete process
+				$("#warning-deletion-feedback").on('hidden', function(){
+					ACCOUNT_DELETE_REASON_JSON = undefined;
+				});
 
-							// Hides modal
-							$("#warning-deletion").modal('hide');
-
-							// Show loading in content
-							$("#content").html(LOADING_HTML);
-
-							/**
-							 * Sends delete request to delete account , on
-							 * success send to login
-							 */
-							$.ajax({
-								type : "DELETE",
-								url : "core/api/delete/account",
-								success : function()
-								{
-
-									// Navigate to login page after delete
-									window.location.href = window.location.href
-											.split('#')[0]
-											+ 'login';
-								}
-							});
-						});
+				
+				
+				$("#warning-feedback-save").die().live('click', function(e){
+					e.preventDefault();
+					ACCOUNT_DELETE_REASON_JSON = {};
+					ACCOUNT_DELETE_REASON_JSON["reason"] = $("input[name=cancellation_reason]:checked").val();
+					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
+					$(".modal-body").html(LOADING_HTML);
+					var delete_step1_el = $(getTemplate('warning', {}));
+					$(".modal-body").css("padding", 0 ).html($(".modal-body", $(delete_step1_el)));
+					$(".modal-footer").html($(".modal-footer", $(delete_step1_el)).html());
+				});
+				
 			})
 });

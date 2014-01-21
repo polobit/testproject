@@ -237,7 +237,8 @@ function generateDefaultUI(uiFieldDefinition) {
 
 function loadTinyMCE(name)
 {
-	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name','status=1, height=900,width=800');
+	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+	var newwindow = window.open('cd_tiny_mce.jsp?id=' + name,'name',strWindowFeatures);
 	if (window.focus)
 	{
 		newwindow.focus();
@@ -255,7 +256,8 @@ function load_email_templates()
 		return;
 	}
 	
-	var new_window = window.open('email_templates.jsp', 'name','status=1, height=900, width=800, scrollbars=true');
+	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+	var new_window = window.open('email_templates.jsp', 'name',strWindowFeatures);
 	
 	if(window.focus)
 		{
@@ -279,7 +281,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
 
-	var htmlDiv = "<label>HTML: <a href='#' onclick='loadTinyMCE(\"tinyMCE" + textAreaName + "\")'>(Load in HTML Editor)</a></label><br/><br/>";	
+	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates()'>(Load in HTML Editor)</a></label><br/><br/>";	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName + "' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
 	htmlDiv += "<br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 

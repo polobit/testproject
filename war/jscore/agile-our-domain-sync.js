@@ -1,4 +1,16 @@
 /**
+ * Tags
+ */
+var CANCELLED = "cancelled";
+var SIGN_UP = "Signup";
+	
+// Subject for account cancellation note
+var ACCOUNT_CANCELLED_NOTE_SUBJECT = "Account Cancelled";
+
+// Account cancellation cusom field
+var ACCOUNT_CANCELLED_CUSTOM_FIELD_NAME = "Account Cancelled";
+
+/**
  * Adds domain and loggedin date in contact in our domain
  */
 function add_custom_fields_to_our_domain()
@@ -36,8 +48,12 @@ function add_current_loggedin_time()
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
 	
-	var existing_date_object = new Date(loggedin_time_property.value);
-	var existing_date_string = existing_date_object.getUTCMonth() + 1 + "/" + existing_date_object.getUTCDate() + "/" + existing_date_object.getUTCFullYear();
+	var existing_date_string = "";
+	if(loggedin_time_property)
+		{
+		var existing_date_object = new Date(loggedin_time_property.value);
+		existing_date_string = existing_date_object.getUTCMonth() + 1 + "/" + existing_date_object.getUTCDate() + "/" + existing_date_object.getUTCFullYear();
+		}
 	
 
 	// If loggedin time is defined and it is not equal to current date then it
@@ -64,6 +80,33 @@ function create_contact_custom_field(name, value, type, subtype)
 	console.log(value);
 	return json;
 
+}
+
+function add_account_cancelled_info(info, callback)
+{
+	var custom_field = create_contact_custom_field(ACCOUNT_CANCELLED_CUSTOM_FIELD_NAME, info["reason"], 'CUSTOM');
+	_agile.add_property(custom_field, function(data) {
+		add_tag_our_domain(CANCELLED, function(data){
+
+			if(info["reason_info"])
+				{
+				var note = {};
+				note.subject = ACCOUNT_CANCELLED_NOTE_SUBJECT;
+				note.description = info["reason_info"];
+				
+				_agile.add_note(note, function (data) {
+						console.log(data);
+						Agile_Contact = data;
+						
+						if (callback && typeof (callback) === "function")
+						{
+							callback();
+						}
+						
+			    });
+				}
+			});
+		});
 }
 
 function our_domain_sync()
@@ -98,7 +141,7 @@ function our_domain_sync()
 				var first_name = name, last_name = name;
 				
 				// Creates a new contact and assigns it to global value
-				_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name, "tags" : "Signup" },
+				_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name, "tags" : SIGN_UP },
 						function(data)
 						{
 							Agile_Contact = data;
@@ -117,27 +160,39 @@ function our_domain_sync()
 
 function add_signup_tag(callback)
 {
-	if (!Agile_Contact.tags || Agile_Contact.tags.indexOf("Signup") < 0)
+	if (!Agile_Contact.tags || Agile_Contact.tags.indexOf(SIGN_UP) < 0)
 	{
 		console.log("adding tags");
-		_agile.add_tag("Signup", function(data)
-		{
-			Agile_Contact = data;
-
-			if (callback && typeof (callback) === "function")
-			{
-				callback();
-			}
-			// Calling to add custom fields here so avoid data loss due to asyn
-			// requests
-			add_custom_fields_to_our_domain();
-		});
-
+		add_tag_our_domain(SIGN_UP, function(data)
+				{
+						// Calling to add custom fields here so avoid data loss
+						// due to asyn
+						// requests
+						add_custom_fields_to_our_domain();
+						
+						if (callback && typeof (callback) === "function")
+						{
+							callback();
+						}
+				})
 		return;
 	}
 
 	// Calling to add custom fields here so avoid data loss due to asyn requests
 	add_custom_fields_to_our_domain();
+}
+
+function add_tag_our_domain(tag, callback)
+{
+	_agile.add_tag(tag, function(data)
+			{
+				Agile_Contact = data;
+
+				if (callback && typeof (callback) === "function")
+				{
+					callback(data);
+				}
+			})
 }
 
 function setup_our_domain_sync()

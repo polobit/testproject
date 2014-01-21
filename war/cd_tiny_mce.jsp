@@ -12,8 +12,17 @@
 <!--[if lt IE 8]><style type="text/css" media="all">@import url("css/ie.css");</style><![endif]-->
 <!--[if IE]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
 
+<style>
+h1,h2,h3,h4,h5,h6{margin:0;font-family:Ubuntu;font-weight:400;color:#525252;text-rendering:optimizelegibility;}
+h1{font-size:30px;line-height:36px;}
+h2{font-size:24px;line-height:36px;}
+h3{font-size:18px;line-height:27px;}
+
+.page-header{padding-bottom:17px;margin:18px 0;border-bottom:1px solid #f5f5f5;}
+</style>
+
 <script type="text/javascript" src="lib/jquery.min.js"></script>
-<script type="text/javascript" src="js/designer/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
 
 //Read a page's GET URL variables and return them as an associative array.
@@ -88,10 +97,17 @@ $(function()
 		{
 		var initHTML = window.opener.$('#' + getUrlVars()["id"]).val();
 		$('#content').val(initHTML);
+		
+		// Initialize tinymce editor with content
+		init_tinymce();
+		
 		}
 	
 	    // Fetches html content and load into Tiny MCE editor
 	    if(getUrlVars()["url"] !== undefined){
+	    	
+	    	// Show Back link for email templates
+	    	$('#navigate-back').css('display','inline-block');
 	    	
 	    	var url = getUrlVars()["url"];
 	    	
@@ -101,6 +117,10 @@ $(function()
 	    		// Fetch html and fill into tinymce
 	    		$.get(location.origin+ '/misc/email-templates/'+url, function(value){
 	    		$('#content').val(value); 
+	    		
+	    		// Initialize tinymce editor after content obtained
+	    		init_tinymce();
+	    		
 	    		});
 	    		
 	    		}
@@ -111,42 +131,11 @@ $(function()
 		console.log(err);
 	}
 	
-	// Load in tinymce
-	tinyMCE.init({
-        // General options
-        mode : "textareas",
-        theme : "advanced",
-        width : "300",
-        plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
-
-        // Theme options
-        theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor",
-        theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,|,insertdate,inserttime",
-        theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl",
-        theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak,|,insertfile,insertimage,|, preview,code",
-        theme_advanced_toolbar_location : "top",
-        theme_advanced_toolbar_align : "left",
-        theme_advanced_statusbar_location : "bottom",
-        theme_advanced_resizing : true,
-
-        // Skin options
-        skin : "o2k7",
-        skin_variant : "silver"
-
-        // Example content CSS (should be your site CSS)
-        /*content_css : "css/example.css",
-
-        // Drop lists for link/image/media/template dialogs
-        template_external_list_url : "js/template_list.js",
-        external_link_list_url : "js/link_list.js",
-        external_image_list_url : "js/image_list.js",
-        media_external_list_url : "js/media_list.js"
-        */
-	});
-	
-	try{
+	try
+	{
 	// Gets MergeFields and append them to select option.
 	getMergeFields();
+	
 	}
 	catch(err){
 		console.log(err);
@@ -156,7 +145,7 @@ $(function()
 		
 		e.preventDefault();
 		
-		var html = tinyMCE.activeEditor.getContent({format : 'text'});
+		var html = tinyMCE.activeEditor.getContent({format : 'html'});
 		html = html.trim();
 		
 		if(isNotValid(html))
@@ -169,6 +158,14 @@ $(function()
 		//window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.opener.tinyMCECallBack("tinyMCEhtml_email", html);
 		window.close();
+	});
+	
+	// Navigate history back on Back is clicked
+	$('#navigate-back').die().live('click', function(e){
+		e.preventDefault();
+		
+		window.history.back();
+		
 	});
 	
 });
@@ -186,49 +183,72 @@ function validateInput()
 	
 	return true;
 }
+
+/**
+ * Initialize the tinymce editor 
+ **/
+function init_tinymce()
+{
+	 tinymce.init({
+	    	selector:'textarea',
+	    	theme: "modern",
+	        plugins: [
+	            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+	            "searchreplace wordcount visualblocks visualchars code fullscreen",
+	            "insertdatetime media nonbreaking save table contextmenu directionality",
+	            "paste textcolor"
+	        ],
+	        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+	        toolbar2: "print preview media | forecolor backcolor emoticons",
+	        image_advtab: true
+	    
+	    });
+}
 </script>
 
 </head>
 
 <body>
 <div id="hld" style='padding:10px'>
-<div class="wrapper" style='min-width:450px;'><!-- wrapper begins -->
+	<div class="wrapper" style='min-width:450px;'>
 
-<div class="block small" style="width:100%; float:left;background-color: #f5f5f5;padding-left: 10px;-webkit-box-shadow: inset 0 1px 1px;border: 1px solid rgba(0, 0, 0, 0.05);border-radius: 4px;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
+	<!-- wrapper begins -->
+		<div class="block small" style="width:100%; float:left;background-color: #f5f5f5;padding: 10px 10px;-webkit-box-shadow: inset 0 1px 1px;border: 1px solid rgba(0, 0, 0, 0.05);border-radius: 4px;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
+			<div class="block_head">
+				<div class="bheadl"></div>
+				<div class="bheadr"></div>
+				<div class="page-header"><h2>HTML Editor</h2></div>
 
+				<!-- Merge Fields List -->
+				<div style="margin-bottom:10px; height: 25px;">
 
-<div class="block_head">
-<div class="bheadl"></div>
-<div class="bheadr"></div>
-<h2>HTML Editor</h2>
+    				<!-- Back link to navigate to history back  -->
+					<a href="#" id="navigate-back" style="font-size: 18px; display:none;">Back </a>
+	
+					<select style="float:right;" onchange='insertSelectedMergeField(this,"content")' name='merge_fields' title='Select required merge field to insert into editor.' id="merge_fields">
+    				</select>
+				</div>
+				<!-- End of Merge Fields list -->
+			</div>
+			<!-- .block_head ends -->
+
+			<div class="block_content center">
+			<!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
+
+				<form method="post" action="somepage">
+					<textarea name="content" id='content' rows="30" cols="90"></textarea>
+ 					<br/>
+ 					<p><input type="submit" id="save_html" class="submit long" style="cursor:pointer;padding: 5px 25px 5px 25px;font-size: 15px;float: right; font-weight: bold;" value="Save"/> &nbsp;</p>
+ 					</form>
+ 			</div>
+			<!-- .block_content ends -->
+
+			<div class="bendl"></div>
+			<div class="bendr"></div>
+		</div>
+	</div>
+<!-- wrapper ends -->
 </div>
-<!-- .block_head ends -->
-
-<!-- Merge Fields List -->
-<div style="margin-bottom:10px">
-    <select onchange='insertSelectedMergeField(this,"content")' name='merge_fields' title='Select required merge field to insert into editor.' id="merge_fields">
-    </select>
-</div>
-<!-- End of Merge Fields list -->
-
-<div class="block_content center">
-<!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
-
-<form method="post" action="somepage">
- <textarea name="content" id='content' rows="30" cols="90"></textarea>
- <br/>
- <p><input type="submit" id="save_html" class="submit long" style="cursor:pointer;" value="Save"/> &nbsp;</p>
- </form>
- </div>
-<!-- .block_content ends -->
-
-<div class="bendl"></div>
-<div class="bendr"></div>
-
-</div>
-
-</div>
-<!-- wrapper ends --></div>
 <!-- #hld ends -->
 
 </body>
