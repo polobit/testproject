@@ -44,6 +44,7 @@ function add_current_loggedin_time()
 	var current_date_object = new Date();
 	var current_date_string = current_date_object.getUTCMonth() + 1 + "/" + current_date_object.getUTCDate() + "/" + current_date_object.getUTCFullYear();
 
+	console.log(parseInt(current_date_object.getTime()/1000));
 	
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
@@ -61,7 +62,7 @@ function add_current_loggedin_time()
 	if (existing_date_string && existing_date_string == current_date_string)
 		return;
 
-	loggedin_time_property = create_contact_custom_field("Last login", current_date_object.getTime()/1000, 'CUSTOM');
+	loggedin_time_property = create_contact_custom_field("Last login", parseInt(current_date_object.getTime()/1000), 'CUSTOM');
 
 	_agile.add_property(loggedin_time_property);
 }
