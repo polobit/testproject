@@ -90,7 +90,7 @@ function appendMergeFieldsToSelect(merge_fields)
 
 $(function()
 {	
-	try{
+try{
 		
 		// Load HTML into Tiny MCE.
 		if(getUrlVars()["id"] !== undefined)
@@ -98,8 +98,8 @@ $(function()
 		var initHTML = window.opener.$('#' + getUrlVars()["id"]).val();
 		$('#content').val(initHTML);
 		
-		// Initialize tinymce editor with content
-		init_tinymce();
+		 // Initialize tinymce editor with content
+        init_tinymce();
 		
 		}
 	
@@ -113,16 +113,15 @@ $(function()
 	    	
 	    	if(url !== undefined)
 	    		{
-	    		
+
 	    		// Fetch html and fill into tinymce
 	    		$.get(location.origin+ '/misc/email-templates/'+url, function(value){
-	    		$('#content').val(value); 
-	    		
-	    		// Initialize tinymce editor after content obtained
-	    		init_tinymce();
-	    		
-	    		});
-	    		
+	    			
+	    			$('#content').val(value);
+	    			
+	    			// Initialize tinymce editor after content obtained
+                    init_tinymce();
+	    			});
 	    		}
 	    }
 	}
@@ -133,6 +132,7 @@ $(function()
 	
 	try
 	{
+		
 	// Gets MergeFields and append them to select option.
 	getMergeFields();
 	
@@ -140,14 +140,14 @@ $(function()
 	catch(err){
 		console.log(err);
 	}
-	
+
 	$('#save_html').live('click', function(e){
 		
 		e.preventDefault();
 		
-		var html = tinyMCE.activeEditor.getContent({format : 'html'});
-		html = html.trim();
-		
+		var html = tinyMCE.activeEditor.getContent({format: 'html'});
+        html = html.trim();
+        
 		if(isNotValid(html))
 		{
 			showError("Please enter a valid html message");
@@ -189,20 +189,19 @@ function validateInput()
  **/
 function init_tinymce()
 {
-	 tinymce.init({
-	    	selector:'textarea',
-	    	theme: "modern",
-	        plugins: [
-	            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-	            "searchreplace wordcount visualblocks visualchars code fullscreen",
-	            "insertdatetime media nonbreaking save table contextmenu directionality",
-	            "paste textcolor"
-	        ],
-	        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-	        toolbar2: "print preview media | forecolor backcolor emoticons",
-	        image_advtab: true
-	    
-	    });
+	tinymce.init({
+        mode: "textareas",
+		theme: "modern",
+        plugins: [
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen fullpage",
+            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "paste textcolor"
+        ],
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons"
+       
+    });
 }
 </script>
 
