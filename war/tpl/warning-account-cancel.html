@@ -36,18 +36,15 @@
         <h3 font-color="background-color:black">Make sure you want to do this</h3>
     </div>
     <div class="modal-body">
-
             <p>
 			   <b>We are sorry to see you go. What are your reasons to leave us and how can we improve?</b>
             </p>
+<form id="cancelation-feedback-form">
         <ul style="list-style-type:none;">
             <li>
+					<label for="Did not like it" style="display:inline">
 						<input type="radio" name="cancellation_reason" value="No need"  style="display:inline"/>
-				        <label for="Did not like it" style="display:inline">Was just checking it out</label>
-            </li>
-			<li>
-						<input type="radio" name="cancellation_reason" value="No fit" style="display:inline"/>
-				        <label for="No fit" style="display:inline">Doesn't meet my requirements</label>
+				       Was just checking it out</label>
             </li>
 			<li>
 						<input type="radio" name="cancellation_reason" value="Overkill" style="display:inline"/>
@@ -58,16 +55,22 @@
 				        <label for="Hard to use" style="display:inline">Hard to use</label>
             </li>
 			<li>
-						<input type="radio" name="cancellation_reason" value="Costly"  style="display:inline"/>
+						<input type="radio" name="cancellation_reason" value="Costly" style="display:inline"/>
 				        <label for="Costly for me" style="display:inline">Costly for me</label>
             </li>
 			<li>
-						<input type="radio" name="cancellation_reason" value="Other"  style="display:inline"/>
+						<input type="radio" name="cancellation_reason" class="extra_info" value="No fit" style="display:inline"/>
+				        <label for="No fit" style="display:inline">Doesn't meet my requirements</label>
+            </li>
+			<li>
+						<input type="radio" name="cancellation_reason" value="Other"  checked="checked" class="extra_info" style="display:inline"/>
 				        <label for="Other" style="display:inline">Other</label>
             </li>
         </ul>
-	<div style="padding-left:10%"><textarea  cols="25" name="account_delete_reason" id="account_delete_reason" span4 required" rows="6"></textarea></div>
+<div style="padding-left:10%" class="controls"><textarea  cols="35" name="account_delete_reason"  class="required" id="account_delete_reason" span4 required" rows="6"></textarea></div>
     </div>
+</form>
+	
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Close</a>
         <a href="#" id="warning-feedback-save" class="btn btn-danger ">Delete Account</a>

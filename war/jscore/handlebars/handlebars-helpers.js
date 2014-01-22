@@ -100,7 +100,7 @@ $(function()
 					if(exclusive_fields[i].name == data[j].field_label)
 						try
 						{
-							var d = new Date(parseInt(exclusive_fields[i].value) * 1000);
+							var d = new Date(parseInt(exclusive_fields[i].value  * 1000));
 							exclusive_fields[i].value = d.getUTCMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
 						}
 					catch(err)

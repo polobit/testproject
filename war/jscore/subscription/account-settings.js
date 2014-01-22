@@ -97,6 +97,7 @@ $(function()
 			{
 				e.preventDefault();
 
+				
 				$("#warning-deletion-feedback").remove();
 				// Shows account stats warning template with stats(data used)
 				var el = getTemplate('warning-feedback', {});
@@ -112,14 +113,39 @@ $(function()
 				$("#warning-deletion-feedback").on('hidden', function(){
 					ACCOUNT_DELETE_REASON_JSON = undefined;
 				});
+				
+				
+				$("input[name=cancellation_reason]").change(function(){
+					if(this.checked && $(this).hasClass("extra_info"))
+						{
+							$("#account_delete_reason").parent("div").show();
+							return;
+						}
+					
+					$("#account_delete_reason").parent("div").hide();
+				})
 
+				
 				
 				
 				$("#warning-feedback-save").die().live('click', function(e){
 					e.preventDefault();
+					
+					var form = $("#cancelation-feedback-form");
+					
+					if(!isValidForm(form))
+					{
+						return;
+					}
+					
+					var input =  $("input[name=cancellation_reason]:checked");
+				
+					
+						
+					
 					ACCOUNT_DELETE_REASON_JSON = {};
-					ACCOUNT_DELETE_REASON_JSON["reason"] = $("input[name=cancellation_reason]:checked").val();
-					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
+					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
+					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $(input).val();
 					$(".modal-body").html(LOADING_HTML);
 					var delete_step1_el = "";
 					if(ACCOUNT_STATS)
