@@ -84,11 +84,32 @@ $(function()
 			}
 			exclusive_fields.push(fields[i]);
 		}
-
+		
 		if (exclusive_fields.length == 0)
-			return options.inverse(exclusive_fields);
-
-		return options.fn(exclusive_fields);
+				return options.inverse(exclusive_fields);
+		
+		$.getJSON("core/api/custom-fields/type/DATE", function(data){
+			if(data.length == 0)
+				return options.fn(exclusive_fields);
+			
+			for(var j =0; j < data.length ; j ++)
+			{
+				for(var i = 0; i< exclusive_fields.length ; i++)
+				{
+					if(exclusive_fields[i].name == data[j].field_label)
+						try
+						{
+							var d = new Date(parseInt(exclusive_fields[i].value  * 1000));
+							exclusive_fields[i].value = d.getUTCMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+						}
+					catch(err)
+					{
+						exclusive_fields[i].value = exclusive_fields[i].value;
+					}
+				}
+			}
+			updateCustomData(options.fn(exclusive_fields));
+		});
 	});
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
