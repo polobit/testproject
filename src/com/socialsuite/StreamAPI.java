@@ -913,9 +913,10 @@ public class StreamAPI
 	 * @return List of status.
 	 */
 	@GET
-	@Path("/pasttweets/{streamId}/{tweetId}")
+	@Path("/pasttweets/{streamId}/{tweetId}/{tweetIdStr}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String getPastTweets(@PathParam("streamId") Long streamId, @PathParam("tweetId") Long tweetId)
+	public String getPastTweets(@PathParam("streamId") Long streamId, @PathParam("tweetId") Long tweetId,
+			@PathParam("tweetIdStr") Long tweetIdStr)
 	{
 		try
 		{
@@ -926,7 +927,13 @@ public class StreamAPI
 			System.out.println("in API getPastTweets : " + tweetId);
 
 			// Fetch past tweets on Twitter as per user's request.
-			return SocialSuiteTwitterUtil.getPastTweets(stream, tweetId).toString();
+			twitter4j.internal.org.json.JSONArray resultList = SocialSuiteTwitterUtil.getPastTweets(stream, tweetId,
+					tweetIdStr);
+
+			if (resultList == null || resultList.length() == 0)
+				return null;
+
+			return resultList.toString();
 		}
 		catch (SocketTimeoutException e)
 		{
