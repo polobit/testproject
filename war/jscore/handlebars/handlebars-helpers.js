@@ -70,13 +70,12 @@ $(function()
 	 */
 	Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
 	{
-
 		var exclude_by_subtype = ["LINKEDIN", "TWITTER"];
 		var exclude_by_name = ["title"];
 		
 		var fields = getContactCustomProperties(items);
-		
 		var exclusive_fields = [];
+		
 		for(var i =0 ; i < fields.length ; i++)
 		{
 			if(jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
@@ -85,36 +84,12 @@ $(function()
 			}
 			exclusive_fields.push(fields[i]);
 		}
-		
+
 		if (exclusive_fields.length == 0)
-				return options.inverse(exclusive_fields);
-		
-		$.getJSON("core/api/custom-fields/type/DATE", function(data){
-			if(data.length == 0)
-				return options.fn(exclusive_fields);
-			
-			for(var j =0; j < data.length ; j ++)
-			{
-				for(var i = 0; i< exclusive_fields.length ; i++)
-				{
-					if(exclusive_fields[i].name == data[j].field_label)
-						try
-						{
-							var d = new Date(parseInt(exclusive_fields[i].value) * 1000);
-							exclusive_fields[i].value = d.getUTCMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
-						}
-					catch(err)
-					{
-						exclusive_fields[i].value = exclusive_fields[i].value;
-					}
-				}
-			}
-			updateCustomData(options.fn(exclusive_fields));
-		});
+			return options.inverse(exclusive_fields);
 
-
+		return options.fn(exclusive_fields);
 	});
-	
 
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
@@ -552,9 +527,9 @@ $(function()
 	Handlebars.registerHelper('network', function(type)
 	{
 		if (type == 'GOOGLE')
-			return 'Google Drive Doc';
+			return 'Google Drive Document';
 		if (type == 'S3')
-			return 'Uploaded Doc';
+			return 'Uploaded Document';
 	});
 
 	/**
@@ -1760,11 +1735,11 @@ $(function()
 	 */
 	Handlebars.registerHelper('checkOriginalRef', function(original_ref)
 	{
-
 		if (!getCurrentContactProperty(original_ref))
 			return "unknown";
 
 		var url = getCurrentContactProperty(original_ref);
+		
 		url = url.split('/');
 		url = (url[0] + '//' + url[2]);
 		return new Handlebars.SafeString(
@@ -1776,18 +1751,37 @@ $(function()
 	 */
 	Handlebars.registerHelper('queryWords', function(original_ref)
 	{
+		// Check if original referrer exists
 		if (getCurrentContactProperty(original_ref))
 		{
-			var turl = getCurrentContactProperty(original_ref);
-			var rurl = 'www.google.';
-			var uurl = turl.split('/');
-			uurl = uurl[2];
-			uurl = uurl.slice(0, 11);
-			if (uurl === rurl)
+			// Get input url from contact properties and initialize reference url
+			var inputUrl = getCurrentContactProperty(original_ref);
+			var referenceUrl = 'www.google.';
+			
+			// Get host from input url and compare with reference url if equal
+			var tempUrl = inputUrl.split('/');
+			tempUrl = tempUrl[2].slice(0, 11);
+			if (tempUrl === referenceUrl)
 			{
-				turl = turl.split("&q=");
-				turl = turl[1].split("+").join(" ");
-				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
+				// Get search term from input url
+				var parser = document.createElement('a');
+				parser.href = inputUrl;
+				var search = parser.search;
+				
+				// If search term exists, check if 'q' parameter exists, and return its value
+				if (search.length > 1)
+				{
+					search = search.split('&');
+					var length = search.length;
+					for ( var i = 0; i < length; i++)
+					{
+						if (search[i].indexOf('q=') != -1)
+						{
+							search = search[i].split('=');
+							return new Handlebars.SafeString('( Keyword : ' + search[1].split('+').join(" ") + ' )');
+						}
+					}
+				}
 			}
 			else
 				return;
