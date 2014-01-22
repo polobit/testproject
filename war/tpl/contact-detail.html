@@ -318,7 +318,7 @@
 										style="width: auto; height: 200px; display: none; margin: 10px 10px 15px;">
 									</div>
 								</div>
-								{{/property_is_exists}} {{#getContactCustomPropertiesExclusively
+								{{/property_is_exists}}<div class="custom-data"> {{#getContactCustomPropertiesExclusively
 								properties}}
 								<div class="pull-left row-fluid">
 									<h4	style="margin-left: 10px;border-bottom: 1px solid #f5f5f5">Custom Fields</h4>									
@@ -333,11 +333,12 @@
 												{{else}}
 												<div class="span9"
 													style="padding:4px 10px 0px 0px; display: inline-block; border-bottom: 1px solid whitesmoke;">
-														{{/if_equals}} {{value}}</div>
+														{{/if_equals}} {{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
 												</div>
 									{{/each_with_index}}
 									</div>
 									{{/getContactCustomPropertiesExclusively}}
+									</div>
 
 
 								</div>
