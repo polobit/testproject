@@ -393,12 +393,15 @@ function fillCustomFields(fields, el, callback)
 			lhs_element.show();
 		
 		var field = fields[i];
-		lhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
+		
 		
 		if(field.field_type == "DATE")
 		{
-			condition.find("option.created_time").addClass(field.field_label);
+			lhs_element.append('<option value="'+field.field_label+'_time">'+field.field_label+'</option>');
+			condition.find("option.created_time").addClass(field.field_label+'_time');
 		}
+		else
+			lhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
 		condition.append('<option value="EQUALS" class="'+field.field_label+'">is</option>');
 		condition.append("<option value='NOTEQUALS' class='"+field.field_label+"'>isn't</option>");
 			

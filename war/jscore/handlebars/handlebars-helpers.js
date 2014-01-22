@@ -1735,11 +1735,11 @@ $(function()
 	 */
 	Handlebars.registerHelper('checkOriginalRef', function(original_ref)
 	{
-
 		if (!getCurrentContactProperty(original_ref))
 			return "unknown";
 
 		var url = getCurrentContactProperty(original_ref);
+		
 		url = url.split('/');
 		url = (url[0] + '//' + url[2]);
 		return new Handlebars.SafeString(
@@ -1751,18 +1751,37 @@ $(function()
 	 */
 	Handlebars.registerHelper('queryWords', function(original_ref)
 	{
+		// Check if original referrer exists
 		if (getCurrentContactProperty(original_ref))
 		{
-			var turl = getCurrentContactProperty(original_ref);
-			var rurl = 'www.google.';
-			var uurl = turl.split('/');
-			uurl = uurl[2];
-			uurl = uurl.slice(0, 11);
-			if (uurl === rurl)
+			// Get input url from contact properties and initialize reference url
+			var inputUrl = getCurrentContactProperty(original_ref);
+			var referenceUrl = 'www.google.';
+			
+			// Get host from input url and compare with reference url if equal
+			var tempUrl = inputUrl.split('/');
+			tempUrl = tempUrl[2].slice(0, 11);
+			if (tempUrl === referenceUrl)
 			{
-				turl = turl.split("&q=");
-				turl = turl[1].split("+").join(" ");
-				return new Handlebars.SafeString('( Keyword : ' + turl + ' )');
+				// Get search term from input url
+				var parser = document.createElement('a');
+				parser.href = inputUrl;
+				var search = parser.search;
+				
+				// If search term exists, check if 'q' parameter exists, and return its value
+				if (search.length > 1)
+				{
+					search = search.split('&');
+					var length = search.length;
+					for ( var i = 0; i < length; i++)
+					{
+						if (search[i].indexOf('q=') != -1)
+						{
+							search = search[i].split('=');
+							return new Handlebars.SafeString('( Keyword : ' + search[1].split('+').join(" ") + ' )');
+						}
+					}
+				}
 			}
 			else
 				return;

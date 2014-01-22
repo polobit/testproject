@@ -10,14 +10,26 @@
                     <div class="text">
                         You can add a document related to a contact.
                     </div>
-                    <a href="#" class="btn blue btn-slate-action contact-add-document"><i class="icon-plus-sign"></i>  Add Document</a>
+         			<div class="btn-group" style="margin-top:12px;">
+        				<a href="#" class="btn right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        				<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" class="document-exist">Existing Document</a></li>
+						</ul>
+					</div>
                 </div>
             </div>
         </div>
         {{/unless}}
         {{#if this.length}}
 	<div class="page-header" style="margin-top: 0px !important">
-		<a href="#" class="btn right contact-add-document" style="position:relative"><span><i class='icon-plus-sign'/></span> Add Document</a>
+        <div class="btn-group right">
+        	<a href="#" class="btn right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
+        	<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+			<ul class="dropdown-menu pull-right">
+				<li><a href="#" class="document-exist">Existing Document</a></li>
+			</ul>
+		</div>
 	</div>
 			<ul id="contact-documents-model-list" class="ativity-block-ul"></ul>
 		{{/if}} 
@@ -77,5 +89,4 @@
   </div>
 </div>
 </div>
-
 </script>

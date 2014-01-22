@@ -167,6 +167,12 @@
 									class="icon-folder-close icon-white"></i> Cases</a></li>
 							<%
 								}
+									if (navSetting.documents) {
+							%>
+								<li id="documentsmenu"><a href="#documents"><i
+										class="icon-file icon-white"></i> Documents</a></li> 
+							<%
+								}
 									if (navSetting.deals) {
 							%>
 							<li id="dealsmenu"><a href="#deals"><i
@@ -191,12 +197,6 @@
 							<li id="reportsmenu"><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
 							<%
-								//}
-								//	if (navSetting.documents) {
-							%>
-								<!-- <li id="documentsmenu"><a href="#documents"><i
-										class="icon-file icon-white"></i> Documents</a></li> -->
-							<%
 								}
 							%>
 
@@ -214,6 +214,12 @@
 									%>
 									<li id="casesmenu"><a href="#cases"><i
 											class="icon-folder-close icon-white"></i> Cases</a></li>
+									<%
+										}
+												if (navSetting.documents) {
+									%>
+									<li id="documentsmenu"><a href="#documents"><i
+											class="icon-file icon-white"></i> Documents</a></li>
 									<%
 										}
 												if (navSetting.deals) {
@@ -241,12 +247,6 @@
 									%>
 									<li id="reportsmenu"><a href="#reports"><i
 											class="icon-bar-chart icon-white"></i> Reports</a></li>
-									<%
-										//}
-										//		if (navSetting.documents) {
-									%>
-									<!--  <li id="documentsmenu"><a href="#documents"><i
-											class="icon-file icon-white"></i> Documents</a></li>-->
 									<%
 										}
 									%>
