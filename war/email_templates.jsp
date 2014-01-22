@@ -56,7 +56,7 @@ $(function(){
       $('li.theme-preview>a').die().live('click', function(e){
     	    e.preventDefault();
     	    
-    	    var title = '<h2>Select a Layout/Color Template</h2>';
+    	    var title = '<h2>Select a Layout/Color</h2>';
     		$('#preview-container-title').html(title);
     	     
     	   // Get label to identify clicked theme in json
@@ -124,7 +124,7 @@ $(function(){
  **/
 function render_theme_previews()
 {
-	var title = '<h2>Select a Theme</h2>';
+	var title = '<h2>Select a Template</h2>';
 	
 	$('#preview-container-title').html(title);
 	

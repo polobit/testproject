@@ -159,6 +159,9 @@ function registerAll(index)
    // Publish data to register on server 
    var publishJSON = {"message_type":"register", "stream":stream};
    sendMessage(publishJSON);
+   
+   // Global flag set.
+   streamRegisterCall = true;
 	    
    // All added streams registered.
    if(registerCounter == (StreamsListView.collection.length-1)) 
@@ -343,29 +346,32 @@ function addTweetToStream(modelStream,tweet)
 	//console.log("tweet : "+tweet.text);
     //console.log("add at "+modelStream.get('tweetListView').length);   
 		
-    // Sort stream on tweet id basis which is unique and recent tweet has highest value.
-	modelStream.get('tweetListView').comparator = function(model) 
-	 { 		  
-	  if (model.get('id'))
-	     return -model.get('id');
-	 };
-	 		 
-	 // Add tweet to stream.
-	 modelStream.get('tweetListView').add(tweet);	
-	   
-	 // Sort stream on id. so recent tweet comes on top.
-	 modelStream.get('tweetListView').sort();		    
-	   
-	 // Create normal time.
-	 head.js('lib/jquery.timeago.js', function(){	 
-		        $(".time-ago", $(".chirp-container")).timeago();	
-			});		 
-	 
-	 if(tweet.type == "ACK")
+	// On scroll down collect 5 tweets in JSON Array and then add to stream.
+	if(scrollDownCall == true)
 		{
-		  registerCounter++;
-		  registerAll(registerCounter);
-		}	
+		  checkPastTweetAdd(tweet);
+		  return;
+		}		
+	
+	// After stream registration on server collect 5 tweets in JSON Array and then add to stream.
+	if(streamRegisterCall == true)
+		{
+		  checkRESTTweetAdd(tweet);
+		  
+		  // Ack from server that shows current streams registeration is done.
+		  if(tweet.type == "ACK")
+			{
+			  streamRegisterCall = false;
+			  addRESTTweetsToStream();
+			  
+			  registerCounter++;
+			  registerAll(registerCounter);
+			}		  
+		  return;
+		}		
+	
+    // Update collection.
+	updateCollection(tweet, modelStream);	
 }
 
 /**
@@ -718,18 +724,28 @@ function addScheduledUpdateInStream(scheduledUpdate)
  * @param elementDiv - element where scrollDown performed
  */
 function OnScrollDiv(elementDiv)
-{
-  if($(elementDiv).scrollTop() + $(elementDiv).innerHeight() >= $(elementDiv)[0].scrollHeight)
-     {      
-	   console.log(elementDiv);
+{   
+  // Check scroll bar is reached to end and function is not called before. 	
+  if(($(elementDiv).scrollTop() + $(elementDiv).innerHeight() >= $(elementDiv)[0].scrollHeight) 
+	  && ($(elementDiv).attr("data") == "0"))
+     {	   	  
+	  
+	   // Function is alredy called for this stream.
+	   $(elementDiv).attr("data","1");	  
+	   
+	   console.log("In OnScrollDiv.");
+	  
+	   // Get stream id.
        var streamId = ($(elementDiv).closest('li').attr('id'));   	   
    	
    	   // Get stream from collection.
    	   var modelStream = StreamsListView.collection.get(streamId);
    	   
+   	   // Stream not found.
    	   if(modelStream == undefined || modelStream == null)
    	      return;
    	   
+   	   // model to json.
    	   var stream = modelStream.toJSON();
    	   console.log(stream);
    	  	
@@ -744,46 +760,207 @@ function OnScrollDiv(elementDiv)
        // Store current scroll/offset
        var curOffset = currMsg.offset().top - $(elementDiv).scrollTop();       
       	   
-	   //$(this).append('<span id="stream-waiting-modal-'+streamId+'"><img src="img/ajax-loader-cursor.gif"></img></span>');
+       // Append loading icon.
+	   $(elementDiv).append('<span id="stream-waiting-modal-'+streamId+'" class="span6" style="margin-top: 3px;"><img class="pull-right" style="width:20px;height:20px;" src="img/ajax-spinner.gif"></span>');
 	   
    	/*
    	 * Calls TwitterAPI class to request for 20 more updates tweeted before
    	 * the tweet id of the last update
    	 */   	
-   	$.getJSON("/core/social/pasttweets/" + stream.id + "/" + tweet.id ,
+   	$.getJSON("/core/social/pasttweets/" + stream.id + "/" + tweet.id + "/" + tweet.id_str ,
    	function(data)
    	{
+   		console.log("data");
    		console.log(data);
    		
    		// If no more updates available, show message.
-   		if (data.length == 0)
-   		{
-   			showNotyPopUp('information', "No more updates available for stream "+ stream.stream_type +" of "+ stream.screen_name, "top", 5000);   			
+   		if(data == null)
+   		 {
+   			showNotyPopUp('information', "No more updates available for stream "+ stream.stream_type +" of "+ stream.screen_name, "top", 5000);
+   			
+   			// Remove loading icon.
+   			$('#stream-waiting-modal-'+streamId).remove();
+   			
+   			// Do not call this function again.
+   			$(elementDiv).attr("data","1");
+   			
+   			// Twitter icon and up arrow appended in stream to show no more tweets available.
+   			$(elementDiv).append('<span id="past-tweet-end-'+streamId+'" class="span6" style="margin-top: 3px;color: #888;"><i class="pull-right icon icon-long-arrow-up"></i><i class="pull-right icon icon-twitter"></i></span>');
    			return;
-   		}
+   		 }
+   		if (data.length == 0)
+   		 {
+   			showNotyPopUp('information', "No more updates available for stream "+ stream.stream_type +" of "+ stream.screen_name, "top", 5000);
+   			$('#stream-waiting-modal-'+streamId).remove();
+   			$(elementDiv).attr("data","1");
+   			$(elementDiv).append('<span id="past-tweet-end-'+streamId+'" class="span6" style="margin-top: 3px;color: #888;"><i class="pull-right icon icon-long-arrow-up"></i><i class="pull-right icon icon-twitter"></i></span>');
+   			return;
+   		 }
    		
    		/*
    		 * Populate the collection with update stream details and show
    		 */
    		var i; var myObject;
+   		
+   		// Global flag set.
+   		scrollDownCall = true;
+   		
    		for(i=0; i<data.length; i++)
    			{
+   			  // String to json.
    			  myObject = eval('(' + data[i] + ')');
    	   		  console.log(myObject);
+   	   		  
+   	   		  // Add tweet to stram.
    	   	      handleMessage(myObject);
+   	   	      
+   	   	      // All tweets done.
+   	   	      if(i+1 == data.length)
+   	   	         scrollDownCall = false;
    			}   		
+   		
+   		// Add remaining tweets.
+   		if(scrollDownCall == false && pastTweetsCount != 0 && pastTweets.length != 0)
+    	      addPastTweetsToStream();
    		
    	    // Set scroll to current position minus previous offset/scroll
    	    var scrollOnDiv = $('#'+streamId).find('#Column-model-list');
    		scrollOnDiv.scrollTop((currMsg.offset().top - curOffset)+650);
+   		
+   		// Remove loading icon.
+   		$('#stream-waiting-modal-'+streamId).remove();
+   		
+   		// One function call for current stream is over.
+   		$(elementDiv).attr("data","0");
+   		
    	}).error(function(data)
-   	{   		
+   	{   
+   		// Loading icon remove.
+   		$('#stream-waiting-modal-'+streamId).remove();
+   		
+   		// One function call for current stream is over.
+   		$(elementDiv).attr("data","0");
+   		
+   		var result = data.responseText;
+   		
    		// Error message is shown to the user
    		if(data.responseText == "")
    			showNotyPopUp('information', "No more updates available for stream "+ stream.stream_type +" of "+ stream.screen_name, "top", 7000);
+   		else if (result.indexOf("rate") != -1)
+   		    showNotyPopUp('information', "Request rate limit exceeded, Retry after some time.", "top", 5000);
+   		else if (result.indexOf("Could not fetch URL") != -1)
+   			showNotyPopUp('information', "Please, check your internet connection.", "top", 5000);
    		else
    			showNotyPopUp('information', data.responseText, "top", 5000);
-		console.log(data);
+		console.log(data);		
    	});      	   
  }
+}
+
+// Checks counter and adds tweet in json array. 
+function checkPastTweetAdd(tweet)
+{
+	 // If collected tweets less than 5.
+	  if(pastTweetsCount < 5)
+		{
+		  // Add tweet in json array.
+		  pastTweets[pastTweetsCount] = tweet;
+		  
+		  // Increment counter.
+		  pastTweetsCount++;		  
+		}
+	  else if(pastTweetsCount == 5) 
+		{
+		  // If collected tweets are 5 then add them in to stream.
+		  addPastTweetsToStream();			  
+		}	
+}
+
+// Checks counter and adds tweet in json array.
+function checkRESTTweetAdd(tweet)
+{
+	// If collected tweets less than 5.
+	  if(restTweetsCount < 5)
+		{
+		  // Add tweet in json array.
+		  restTweets[restTweetsCount] = tweet;
+		  
+		  // Increment counter.
+		  restTweetsCount++;		  
+		}
+	  else if(restTweetsCount == 5) 
+		{
+		  // If collected tweets are 5 then add them in to stream.
+		  addRESTTweetsToStream();			  
+		}
+}
+
+/**
+ * Fetches relavant stream model from collection 
+ * and update that collection with past tweets fetched on scroll down. 
+ */
+function addPastTweetsToStream()
+{ 
+  // If no tweets to add in collection.	
+  if(pastTweets.length == 0)
+	  return;
+  
+  console.log("In addPastTweetsToStream.");
+	
+  // Get stream from collection.
+  var modelStream = StreamsListView.collection.get(pastTweets[0].stream_id);
+	  
+  // Update collection.
+  updateCollection(pastTweets,modelStream);
+  
+  // Reset json array and counter.
+  pastTweetsCount = 0;
+  pastTweets = [];
+}
+
+/**
+ * Fetches relavant stream model from collection 
+ * and update that collection with REST tweets fetched after registration. 
+ */
+function addRESTTweetsToStream()
+{ 
+  // If no tweets to add in collection.	
+  if(restTweets.length == 0)
+     return;
+	
+  console.log("In addRESTTweetsToStream.");
+	
+  // Get stream from collection.
+  var modelStream = StreamsListView.collection.get(restTweets[0].stream_id);
+	  
+  // Update collection.
+  updateCollection(restTweets,modelStream);
+  
+  // Reset json array and counter.
+  restTweetsCount = 0;
+  restTweets = [];
+}
+
+/**
+ * Add given tweets in given stream model.
+ */
+function updateCollection(tweet, modelStream)
+{
+	// Sort stream on tweet id basis which is unique and recent tweet has highest value.
+	modelStream.get('tweetListView').comparator = function(model) 
+	 { 		  
+	  if (model.get('id'))
+	     return -model.get('id');
+	 };
+	 		 
+	 // Add tweet to stream.
+	 modelStream.get('tweetListView').add(tweet);	
+	   
+	 // Sort stream on id. so recent tweet comes on top.
+	 modelStream.get('tweetListView').sort();		    
+	   
+	 // Create normal time.
+	 head.js('lib/jquery.timeago.js', function(){	 
+		        $(".time-ago", $(".chirp-container")).timeago();	
+			});		 	
 }
