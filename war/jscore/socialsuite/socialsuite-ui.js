@@ -13,6 +13,18 @@
 		 ScheduledEdit = false;
 		 registerCounter = null;
 		 addImgDone = false;
+		 
+		 // Flag for Scroll down reached to end of stream.
+		 scrollDownCall = false;
+		 
+		 // How many Tweets ready for display.
+		 pastTweetsCount = 0;
+		 
+		 // Flag for stream REST tweets.
+		 streamRegisterCall = false;
+		 
+		 // How many REAT Tweets ready for display.
+		 restTweetsCount = 0;
 	  })();
 
 // To collect tweets in temp collection.

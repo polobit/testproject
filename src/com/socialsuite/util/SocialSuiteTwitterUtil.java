@@ -678,14 +678,14 @@ public class SocialSuiteTwitterUtil
 	 * @return {@link JSONArray} with past tweets
 	 * @throws Exception
 	 */
-	public static JSONArray getPastTweets(Stream stream, Long tweetId) throws Exception
+	public static JSONArray getPastTweets(Stream stream, Long tweetId, Long tweetIdStr) throws Exception
 	{
 		if (stream.stream_type.equalsIgnoreCase("Search"))
-			return getSearchResults(stream, tweetId);
+			return getSearchResults(stream, tweetId, tweetIdStr);
 		else if (stream.stream_type.equalsIgnoreCase("DM_Inbox") || stream.stream_type.equalsIgnoreCase("DM_Outbox"))
-			return getDirectMessages(stream, tweetId);
+			return getDirectMessages(stream, tweetId, tweetIdStr);
 		else
-			return getStatuses(stream, tweetId);
+			return getStatuses(stream, tweetId, tweetIdStr);
 	}
 
 	/**
@@ -700,7 +700,7 @@ public class SocialSuiteTwitterUtil
 	 * 
 	 * @return {@link JSONArray} with past tweets
 	 */
-	private static JSONArray getSearchResults(Stream stream, Long tweetId) throws Exception
+	private static JSONArray getSearchResults(Stream stream, Long tweetId, Long tweetIdStr) throws Exception
 	{
 		Twitter twitter = getTwitter(stream);
 
@@ -717,6 +717,15 @@ public class SocialSuiteTwitterUtil
 		queryResult = twitter.search(query);
 
 		List<Status> statuses = queryResult.getTweets();
+
+		if (statuses.size() == 1)
+		{
+			System.out.println("resultList: " + statuses);
+			System.out.println(tweetIdStr);
+
+			if (tweetIdStr == statuses.get(0).getId())
+				return null;
+		}
 
 		for (Status qst : statuses)
 		{
@@ -751,6 +760,7 @@ public class SocialSuiteTwitterUtil
 			resultList.put(tweetJson);
 		}// for end
 
+		System.out.println("resultList: " + resultList);
 		return resultList;
 	}
 
@@ -766,7 +776,7 @@ public class SocialSuiteTwitterUtil
 	 * 
 	 * @return {@link JSONArray} with past tweets
 	 */
-	private static JSONArray getDirectMessages(Stream stream, Long tweetId) throws Exception
+	private static JSONArray getDirectMessages(Stream stream, Long tweetId, Long tweetIdStr) throws Exception
 	{
 		Twitter twitter = getTwitter(stream);
 
@@ -778,6 +788,15 @@ public class SocialSuiteTwitterUtil
 			dmList = twitter.getDirectMessages(new Paging(1).maxId(tweetId));
 		else if (stream.stream_type.equalsIgnoreCase("DM_Outbox"))
 			dmList = twitter.getSentDirectMessages(new Paging(1).maxId(tweetId));
+
+		if (dmList.size() == 1)
+		{
+			System.out.println("resultList: " + dmList);
+			System.out.println(tweetIdStr);
+
+			if (tweetIdStr == dmList.get(0).getId())
+				return null;
+		}
 
 		for (DirectMessage directmessage : dmList)
 		{
@@ -813,6 +832,7 @@ public class SocialSuiteTwitterUtil
 			resultList.put(tweetJson);
 		} // for end
 
+		System.out.println("resultList: " + resultList);
 		return resultList;
 	}
 
@@ -828,7 +848,7 @@ public class SocialSuiteTwitterUtil
 	 * 
 	 * @return {@link JSONArray} with past tweets
 	 */
-	private static JSONArray getStatuses(Stream stream, Long tweetId) throws Exception
+	private static JSONArray getStatuses(Stream stream, Long tweetId, Long tweetIdStr) throws Exception
 	{
 		Twitter twitter = getTwitter(stream);
 
@@ -848,7 +868,19 @@ public class SocialSuiteTwitterUtil
 			postList = twitter.getUserTimeline(new Paging(1).maxId(tweetId));
 
 		if (postList == null || postList.isEmpty())
+		{
+			System.out.println("resultList: " + postList);
 			return null;
+		}
+
+		if (postList.size() == 1)
+		{
+			System.out.println("resultList: " + postList);
+			System.out.println(tweetIdStr);
+
+			if (tweetIdStr == postList.get(0).getId())
+				return null;
+		}
 
 		for (Status status : postList)
 		{
@@ -925,6 +957,7 @@ public class SocialSuiteTwitterUtil
 			resultList.put(tweetJson);
 		}// for end
 
+		System.out.println("resultList: " + resultList);
 		return resultList;
 	}
 
