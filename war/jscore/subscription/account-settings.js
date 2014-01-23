@@ -145,7 +145,7 @@ $(function()
 					
 					ACCOUNT_DELETE_REASON_JSON = {};
 					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
-					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $(input).val();
+					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
 					$(".modal-body").html(LOADING_HTML);
 					var delete_step1_el = "";
 					if(ACCOUNT_STATS)
