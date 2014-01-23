@@ -114,7 +114,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				// Create options based on list values
 				$.each(list_values,function(index, value){
 					if(value != "")
-						list_options = list_options.concat('<option value="'+value.trim()+'">'+value.trim()+'</option>');
+						list_options = list_options.concat('<option value="'+value+'">'+value+'</option>');
 				});
 				
 				// Create select drop down by checking it's required nature
