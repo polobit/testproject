@@ -187,6 +187,12 @@ var SocialSuiteRouter = Backbone.Router.extend({
 				     restKey: "scheduledUpdate",
 				     templateKey: "socialsuite-scheduled-updates",				     			    
 				     individual_tag_name: 'tr',
+				     postRenderCallback : function(el) {
+				    	 
+				    	// Creates normal time.
+			 		 	head.js('lib/jquery.timeago.js', function(){	 
+			 		 		        $(".time-ago", $(".edit-scheduled")).timeago(); });
+				     },
 				 });	
 				  
 			ScheduledUpdatesView.collection.fetch();	  

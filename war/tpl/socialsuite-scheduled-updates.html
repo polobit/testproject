@@ -25,7 +25,7 @@
                 <col width="30px">
 				<col width="25%">
 				<col width="30%">
-				<col width="15%">
+				<col width="20%">
 				<col width="15%">
                 <col width="20%">
 				<thead>
@@ -64,7 +64,9 @@
 	</div>
 	</td>
 	<td class="edit-scheduled is-actionable" data="{{id}}">{{message}}</td>
-	<td class="edit-scheduled is-actionable" data="{{id}}">{{scheduled_date}}<br>{{scheduled_time}}</td>
+	<td class="edit-scheduled is-actionable" data="{{id}}">
+       <time class="time-ago" datetime="{{epochToHumanDate "" schedule}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
+    </td>
 	<td class="edit-scheduled is-actionable" data="{{id}}">{{headline}}</td>
     <td class="edit-scheduled is-actionable" data="{{id}}">
        {{#if_equals tweetOwner "/"}}

@@ -23,7 +23,7 @@
 		 // Flag for stream REST tweets.
 		 streamRegisterCall = false;
 		 
-		 // How many REAT Tweets ready for display.
+		 // How many REST Tweets ready for display.
 		 restTweetsCount = 0;
 	  })();
 
