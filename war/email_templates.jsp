@@ -124,9 +124,14 @@ $(function(){
  **/
 function render_theme_previews()
 {
-	var title = '<h2>Select a Template</h2>';
+	var title = '<h2 style="display:inline;">Select a Template</h2>';
 	
-	$('#preview-container-title').html(title);
+	var html_link = '<div style="display:inline;">'
+					+'<a href="cd_tiny_mce.jsp" style="float:right;text-decoration: none;">'
+						+'<h2>Create your own email >></h2>'
+					+'</a></div>'
+	
+	$('#preview-container-title').html(title + html_link);
 	
 	$.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
 
