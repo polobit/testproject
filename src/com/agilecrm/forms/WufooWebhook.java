@@ -6,6 +6,7 @@ package com.agilecrm.forms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.countrycodemap.CountryCodeMap;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
@@ -112,8 +114,11 @@ public class WufooWebhook extends HttpServlet
 									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("state", req.getParameter(subObj.getString("ID")));
 							else if (subObj.getString("Label").equals("Country")
-									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
-								addJson.put("country", req.getParameter(subObj.getString("ID")));
+									&& !StringUtils.isBlank(req.getParameter(json.getString("ID")))){
+								HashMap<String, String> countryCode = new HashMap<String, String>();
+								countryCode = CountryCodeMap.countrycodemap();
+								String code = countryCode.get(req.getParameter(subObj.getString("ID")));
+								addJson.put("country", code);}
 							else if (subObj.getString("Label").equals("Postal / Zip Code")
 									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("zip", req.getParameter(subObj.getString("ID")));

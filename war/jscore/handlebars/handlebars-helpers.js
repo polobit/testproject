@@ -101,8 +101,10 @@ $(function()
                                     if(exclusive_fields[i].name == data[j].field_label)
                                             try
                                             {
-                                                    exclusive_fields[i]["subtype"] = data[j].field_type;
-                                                    exclusive_fields[i].value = exclusive_fields[i].value * 1000;
+                                            		exclusive_fields[i].value = exclusive_fields[i].value * 1000;
+                                            		if(!isNaN(exclusive_fields[i].value))
+                                                 	  exclusive_fields[i]["subtype"] = data[j].field_type;
+                                                    
                                             }
                                     catch(err)
                                     {
