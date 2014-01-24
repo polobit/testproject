@@ -18,13 +18,7 @@
 		 scrollDownCall = false;
 		 
 		 // How many Tweets ready for display.
-		 pastTweetsCount = 0;
-		 
-		 // Flag for stream REST tweets.
-		 streamRegisterCall = false;
-		 
-		 // How many REST Tweets ready for display.
-		 restTweetsCount = 0;
+		 pastTweetsCount = 0;		
 	  })();
 
 // To collect tweets in temp collection.

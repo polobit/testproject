@@ -124,6 +124,15 @@ try{
 	    			});
 	    		}
 	    }
+	    
+	    // Show empty editor if none of templates selected
+	    if(getUrlVars()["id"] === undefined && getUrlVars()["url"] === undefined)
+	    {
+	    	// Show Back link for email templates
+	    	$('#navigate-back').css('display','inline-block');
+	    	
+	    	init_tinymce();
+	    }
 	}
 	catch(err){
 		console.log("Error occured");
