@@ -1,4 +1,4 @@
-<script id="typeahead-contacts-template" type="text/html">
+<script id="typeahead-contacts-model-template" type="text/html">
 <div>
 	{{#if_equals type "COMPANY"}}
 	<div style="display: inline; padding-right: 10px; height: auto;">
@@ -62,4 +62,17 @@
 
 </div>
 
+</script>
+
+<script id="typeahead-contacts-collection-template" type="text/html">
+<div id="contact-typeahead-heading" style="display:none;margin-left:5px"><b>Contacts</b></div>
+	<div id="contact-results">
+	</div>
+<div id="deal-typeahead-heading" style="display:none;margin-left:5px"><b>Deals</b></div>
+	<div id="deals-results">
+	</div>
+<div id="case-typeahead-heading" style="display:none;margin-left:5px"><b>Cases</b></div>	
+	<div id="case-results">
+	</div>
+	<div id="typeahead-contacts-model-list"></div>
 </script>

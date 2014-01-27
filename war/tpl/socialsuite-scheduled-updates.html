@@ -51,7 +51,7 @@
 	<div class="row-fluid">
       <a class="account-link link-complex block" href="https://twitter.com/{{screen_name}}" rel="user" target="_blank">    
     	<div style="display:inline;padding-right:5px;height:auto;">   
-           <img class="tweet-avatar avatar pull-left thumbnail" src={{profileImg}} style="width:40px;height:40px;" alt="{{screen_name}}'s avatar" title="{{screen_name}}'s avatar">     	
+           <img class="tweet-avatar avatar pull-left thumbnail" src="{{profileImg}}" style="width:40px;height:40px;" alt="{{screen_name}}'s avatar" title="{{screen_name}}'s avatar">     	
     	</div>
     	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:70%">
         		<span class="account-inline txt-ellipsis"> 	
@@ -65,7 +65,7 @@
 	</td>
 	<td class="edit-scheduled is-actionable" data="{{id}}">{{message}}</td>
 	<td class="edit-scheduled is-actionable" data="{{id}}">
-       <time class="time-ago" datetime="{{epochToHumanDate "" schedule}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
+       <time class="time-ago" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
     </td>
 	<td class="edit-scheduled is-actionable" data="{{id}}">{{headline}}</td>
     <td class="edit-scheduled is-actionable" data="{{id}}">

@@ -2,7 +2,6 @@ var StreamsListView;
 var TempStreamsListView;
 var ScheduledUpdatesView;
 var pastTweets = [];
-var restTweets = [];
 
 /**
  * Creates backbone router to create and access streams of the user.
