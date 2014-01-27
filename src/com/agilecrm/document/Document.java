@@ -7,8 +7,11 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -260,6 +263,39 @@ public class Document extends Cursor
 	    }
 	}
 	return null;
+    }
+
+    /**
+     * Gets picture of owner who created deal. Owner picture is retrieved from
+     * user prefs of domain user who created deal and is used to display owner
+     * picture in deals list.
+     * 
+     * @return picture of owner.
+     * @throws Exception
+     *             when agileuser doesn't exist with respect to owner key.
+     */
+    @XmlElement(name = "ownerPic")
+    public String getOwnerPic() throws Exception
+    {
+	AgileUser agileuser = null;
+	UserPrefs userprefs = null;
+
+	try
+	{
+	    // Get owner pic through agileuser prefs
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
+	    if (agileuser != null)
+		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+	    if (userprefs != null)
+		return userprefs.pic;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+
+	}
+
+	return "";
     }
 
     /**

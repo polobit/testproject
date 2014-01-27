@@ -43,7 +43,6 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         source: function (query, process) {
         	
         	
-        	console.log(url);
         	/* Resets the results before query */
         	CONTACTS = {};
 
@@ -153,26 +152,8 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             }
 
             // Stores all the matched elements (<li> drop down) in items
-            items = $(CONTACTS).map(function (i, item){
-
-                		/* Check if item if of company type get
-                		 * company name instead of first name
-                		 * and last name of person
-                		 */
-                			var fullname = getContactName(item) +  "-" +  item.id;
-
-                			console.log(fullname);
-                			
-                		// Sets data-value to name
-                		i = $(that.options.item).attr('data-value', fullname);
-
-                		// To add border to all after li except to last one
-                		i.addClass('typeahead-border');
-                		
-                		// Returns template, can be contact or company compares in template
-                		i.find('a').html(getTemplate('typeahead-contacts', item));
-                		return i[0];
-            		});
+            items = buildcategorizedResultDropdown (CONTACTS, that.options);
+            	
             
             items.css("overflow", "hidden");
 
@@ -218,7 +199,6 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
                     return this.query; // return text of query to set in input field
                 }
                 
-                console.log(items_temp);
                 
                 // Navigates the item to its detail view
                 isSearch(TYPEHEAD_TAGS[items], items_temp);
@@ -313,7 +293,6 @@ function contacts_typeahead(data)
 function getContactName(contact)
 {
 	var name="";
-	
 	if(!contact.type || contact.type == 'PERSON')
 	{	
 		var first_name = getPropertyValue(contact.properties, "first_name");
@@ -339,4 +318,87 @@ function getContactName(contact)
 	// if nothing found, assume Company and return with id.
 	
 	return 'Company '+contact.id;
+}
+
+function buildcategorizedResultDropdown(items, options)
+{	
+	var contact_custom_view = new Base_Collection_View({ 
+		data : items,
+		templateKey : "typeahead-contacts", 
+		individual_tag_name : 'li' ,
+		typeahead_options:options
+	});
+	
+	contact_custom_view.appendItem = appendItemInResult;
+	
+	var el = contact_custom_view.render(true).el;
+	return $(el);
+		
+	/*$(items).each(function (i, item){
+		
+		if()
+
+    		 Check if item if of company type get
+    		 * company name instead of first name
+    		 * and last name of person
+    		 
+    			var fullname = getContactName(item) +  "-" +  item.id;
+
+    			console.log(fullname);
+    			
+    		// Sets data-value to name
+    		i = $(that.options.item).attr('data-value', fullname);
+
+    		// To add border to all after li except to last one
+    		i.addClass('typeahead-border');
+    		
+    		// Returns template, can be contact or company compares in template
+    		i.find('a').html(getTemplate('typeahead-contacts', item));
+    		return i[0];
+		});*/
+}
+
+function appendItemInResult(item)
+{
+
+	var fullname = getContactName(item.toJSON()) +  "-" +  item.id;
+
+	
+	var itemView = new Base_List_View({
+		model : item,
+		"view" : "inline",
+		template : this.options.templateKey + "-model",
+		tagName : 'tr',
+	});
+	
+	// Sets data-value to name
+	i = $(this.options.typeahead_options.item).attr('data-value', fullname);
+
+	// To add border to all after li except to last one
+	i.addClass('typeahead-border');
+	// Returns template, can be contact or company compares in template
+	i.find('a').html(itemView.render(true).el);
+	
+	
+	var type = item.toJSON().entity_type;
+	if(type)
+	{
+		if(type == "contact_entity")
+			{
+			
+				$("#contact-typeahead-heading", this.el).show();
+				$("#contact-results", this.el).append(i);
+			}
+		if(type == "deal")
+			{
+				$("#deal-typeahead-heading",  this.el).show();
+				$("#deals-results", this.el).append(i);
+			}
+		if(type == "entity_type")
+			{
+				$("#case-typeahead-heading",  this.el).show();
+				$("#case-results", this.el).append(i);
+			}
+	}
+
 }
