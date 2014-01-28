@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.persistence.Embedded;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
@@ -458,6 +459,22 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			{
 				query.filter(propName, map.get(propName));
 			}
+
+		return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
+	}
+
+	public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
+			String orderBy)
+	{
+		Query<T> query = ofy().query(clazz);
+		if (map != null)
+			for (String propName : map.keySet())
+			{
+				query.filter(propName, map.get(propName));
+			}
+
+		if (!StringUtils.isEmpty(orderBy))
+			query.order(orderBy);
 
 		return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
 	}

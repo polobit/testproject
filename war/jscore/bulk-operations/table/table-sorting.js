@@ -164,7 +164,7 @@ function sort_schedule_updates(table)
         	0 : {sorter : false},
         	1 : {sorter : 'text'},
         	2 : {sorter : 'text'},
-        	3 : {sorter : false},
+        	3 : {sorter : 'time-ago'},
             4 : {sorter:'text'}			
         } 
     }); 

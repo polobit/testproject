@@ -170,7 +170,7 @@
 									if (navSetting.documents) {
 							%>
 								<li id="documentsmenu"><a href="#documents"><i
-										class="icon-file icon-white"></i> Documents</a></li> 
+										class="icon-file icon-white"></i> Docs</a></li> 
 							<%
 								}
 									if (navSetting.deals) {
@@ -219,7 +219,7 @@
 												if (navSetting.documents) {
 									%>
 									<li id="documentsmenu"><a href="#documents"><i
-											class="icon-file icon-white"></i> Documents</a></li>
+											class="icon-file icon-white"></i> Docs</a></li>
 									<%
 										}
 												if (navSetting.deals) {

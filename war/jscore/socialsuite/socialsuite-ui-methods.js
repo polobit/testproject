@@ -159,10 +159,7 @@ function registerAll(index)
    // Publish data to register on server 
    var publishJSON = {"message_type":"register", "stream":stream};
    sendMessage(publishJSON);
-   
-   // Global flag set.
-   streamRegisterCall = true;
-	    
+  	    
    // All added streams registered.
    if(registerCounter == (StreamsListView.collection.length-1)) 
      registerAllDone = true;
@@ -284,6 +281,10 @@ function handleMessage(tweet)
   	        	}
 		  }
 	} // If End
+  
+ //Remove deleted tweet element from ui
+ $('.deleted').remove();	
+
 }
 
 /**
@@ -313,8 +314,10 @@ function addTweetToStream(modelStream,tweet)
 		{
 	      tweet["msg_type"] = "Tweet";
 	     
+	      console.log(modelStream.get('tweetListView').length);
+	      
 	      // Remove no tweet notification.
-	      if(modelStream.get('tweetListView').length == 1)
+	      if(modelStream.get('tweetListView').length == 2)
 	    	clearNoTweetNotification(modelStream);
 	      
 	      // If stream owner is tweet owner no need to show retweet icon.0
@@ -349,28 +352,18 @@ function addTweetToStream(modelStream,tweet)
 	// On scroll down collect 5 tweets in JSON Array and then add to stream.
 	if(scrollDownCall == true)
 		{
-		  checkPastTweetAdd(tweet);
+		  checkPastTweetAdd(tweet,modelStream);
 		  return;
 		}		
+		
+	// Ack from server that shows current streams registeration is done.
+	  if(tweet.type == "ACK")
+		{		  
+		  registerCounter++;
+		  registerAll(registerCounter);
+		}
 	
-	// After stream registration on server collect 5 tweets in JSON Array and then add to stream.
-	if(streamRegisterCall == true)
-		{
-		  checkRESTTweetAdd(tweet);
-		  
-		  // Ack from server that shows current streams registeration is done.
-		  if(tweet.type == "ACK")
-			{
-			  streamRegisterCall = false;
-			  addRESTTweetsToStream();
-			  
-			  registerCounter++;
-			  registerAll(registerCounter);
-			}		  
-		  return;
-		}		
-	
-    // Update collection.
+	// Update collection.
 	updateCollection(tweet, modelStream);	
 }
 
@@ -475,8 +468,12 @@ function convertTextToTweet(tweet)
 // Remove no tweet notification. Search for that tweet in collection and makes that tweets model hide.
 function clearNoTweetNotification(modelStream)
 {
+	console.log("In clearNoTweetNotification.");
+	
 	// Get tweet from stream.
 	var modelTweet = modelStream.get('tweetListView').get('000');
+	
+	console.log(modelTweet);
 	
 	if(modelTweet != null || modelTweet != undefined)
 	{
@@ -857,7 +854,7 @@ function OnScrollDiv(elementDiv)
 }
 
 // Checks counter and adds tweet in json array. 
-function checkPastTweetAdd(tweet)
+function checkPastTweetAdd(tweet,modelStream)
 {
 	 // If collected tweets less than 5.
 	  if(pastTweetsCount < 5)
@@ -871,73 +868,28 @@ function checkPastTweetAdd(tweet)
 	  else if(pastTweetsCount == 5) 
 		{
 		  // If collected tweets are 5 then add them in to stream.
-		  addPastTweetsToStream();			  
+		  addPastTweetsToStream(modelStream);			  
 		}	
-}
-
-// Checks counter and adds tweet in json array.
-function checkRESTTweetAdd(tweet)
-{
-	// If collected tweets less than 5.
-	  if(restTweetsCount < 5)
-		{
-		  // Add tweet in json array.
-		  restTweets[restTweetsCount] = tweet;
-		  
-		  // Increment counter.
-		  restTweetsCount++;		  
-		}
-	  else if(restTweetsCount == 5) 
-		{
-		  // If collected tweets are 5 then add them in to stream.
-		  addRESTTweetsToStream();			  
-		}
 }
 
 /**
  * Fetches relavant stream model from collection 
  * and update that collection with past tweets fetched on scroll down. 
  */
-function addPastTweetsToStream()
+function addPastTweetsToStream(modelStream)
 { 
   // If no tweets to add in collection.	
   if(pastTweets.length == 0)
 	  return;
   
-  console.log("In addPastTweetsToStream.");
-	
-  // Get stream from collection.
-  var modelStream = StreamsListView.collection.get(pastTweets[0].stream_id);
-	  
+  console.log("In addPastTweetsToStream.");	
+ 
   // Update collection.
   updateCollection(pastTweets,modelStream);
   
   // Reset json array and counter.
   pastTweetsCount = 0;
   pastTweets = [];
-}
-
-/**
- * Fetches relavant stream model from collection 
- * and update that collection with REST tweets fetched after registration. 
- */
-function addRESTTweetsToStream()
-{ 
-  // If no tweets to add in collection.	
-  if(restTweets.length == 0)
-     return;
-	
-  console.log("In addRESTTweetsToStream.");
-	
-  // Get stream from collection.
-  var modelStream = StreamsListView.collection.get(restTweets[0].stream_id);
-	  
-  // Update collection.
-  updateCollection(restTweets,modelStream);
-  
-  // Reset json array and counter.
-  restTweetsCount = 0;
-  restTweets = [];
 }
 
 /**

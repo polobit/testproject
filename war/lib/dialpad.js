@@ -144,7 +144,6 @@
 }
 
   var phoney = window.ATT && window.ATT.phoneNumber || window.phoney;
-  console.log(phoney);
 
   var Dialpad = function (spec) {
     var config = spec || {},
