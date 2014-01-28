@@ -647,6 +647,7 @@ function perform_actions(data, validate) {
 				if (_agile_webrules[i].actions[t].popup_pattern == "custom_html") {
 					modal_data.contents = _agile_webrules[i].actions[t].popup_text;
 					modal_options.hideHeader = true;
+					modal_options.hideFooter = true;
 				}
 
 				// Build options for webrule action (modal) right now hardcoded
