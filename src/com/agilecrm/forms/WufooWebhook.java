@@ -37,12 +37,14 @@ public class WufooWebhook extends HttpServlet
 		{
 			// Get API key and tags
 			String tagString = req.getParameter("HandshakeKey");
+
 			Contact contact = null;
 			List<ContactField> properties = new ArrayList<ContactField>();
 
 			// Get fields from field structure and iterate
 			JSONObject obj = new JSONObject(req.getParameter("FieldStructure"));
 			JSONArray arr = obj.getJSONArray("Fields");
+
 			for (int i = 0; i < arr.length(); i++)
 			{
 				JSONObject json = arr.getJSONObject(i);
@@ -81,7 +83,7 @@ public class WufooWebhook extends HttpServlet
 						|| json.getString("Title").equalsIgnoreCase("postal code") || json.getString("Title")
 						.equalsIgnoreCase("zip code")) && !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 					addressJson.put("zip", req.getParameter(json.getString("ID")));
-				else if (!json.getString("Title").equals("Address"))
+				else if (!StringUtils.isBlank(json.getString("Title")) && !json.getString("Title").equals("Address"))
 
 					// Add properties to list of properties
 					properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")),
@@ -114,15 +116,17 @@ public class WufooWebhook extends HttpServlet
 									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("state", req.getParameter(subObj.getString("ID")));
 							else if (subObj.getString("Label").equals("Country")
-									&& !StringUtils.isBlank(req.getParameter(json.getString("ID")))){
+									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
+							{
 								HashMap<String, String> countryCode = new HashMap<String, String>();
 								countryCode = CountryCodeMap.countrycodemap();
 								String code = countryCode.get(req.getParameter(subObj.getString("ID")));
-								addJson.put("country", code);}
+								addJson.put("country", code);
+							}
 							else if (subObj.getString("Label").equals("Postal / Zip Code")
 									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("zip", req.getParameter(subObj.getString("ID")));
-							else
+							else if (!StringUtils.isBlank(subObj.getString("Label")))
 
 								// Add properties to list of properties
 								properties.add(buildProperty(subObj.getString("Label"),
@@ -134,6 +138,7 @@ public class WufooWebhook extends HttpServlet
 					}
 				}
 			}
+
 			if (addressJson.length() != 0)
 				properties.add(buildProperty(Contact.ADDRESS, addressJson.toString(), contact));
 
@@ -145,6 +150,9 @@ public class WufooWebhook extends HttpServlet
 			// Remove API key from tagsWithKey array and set contact owner
 			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+
+			System.out.println("owner is " + owner);
+
 			if (owner != null)
 			{
 				contact.setContactOwner(owner);
@@ -156,6 +164,7 @@ public class WufooWebhook extends HttpServlet
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			System.out.println("exception is " + e.getMessage());
 			return;
 		}
 	}

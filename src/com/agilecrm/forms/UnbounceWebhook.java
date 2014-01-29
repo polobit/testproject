@@ -77,7 +77,8 @@ public class UnbounceWebhook extends HttpServlet
 					addJson.put("country", value);
 				else if (key.equalsIgnoreCase("state") && !StringUtils.isBlank(value))
 					addJson.put("state", value);
-				else if ((key.equalsIgnoreCase("province") || key.equalsIgnoreCase("city")) && !StringUtils.isBlank(value))
+				else if ((key.equalsIgnoreCase("province") || key.equalsIgnoreCase("city"))
+						&& !StringUtils.isBlank(value))
 					addJson.put("city", value);
 				else if ((key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code") || key
 						.equalsIgnoreCase("postal code")) && !StringUtils.isBlank(value))
@@ -87,7 +88,7 @@ public class UnbounceWebhook extends HttpServlet
 					addJson.put("address", value);
 				else if (key.equalsIgnoreCase("stateprovince") && !StringUtils.isBlank(value))
 					addJson.put("state", value);
-				else
+				else if (!StringUtils.isBlank(value))
 
 					// Add property to list of properties
 					properties.add(buildProperty(key, value, contact));
