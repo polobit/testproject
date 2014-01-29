@@ -552,7 +552,7 @@ public class Contact extends Cursor
 	 * 
 	 * @param tags
 	 */
-	public void addTags(String[] tags)
+	public void addTags(String... tags)
 	{
 		int oldTagsCount = tagsWithTime.size();
 
@@ -616,7 +616,7 @@ public class Contact extends Cursor
 		this.save();
 
 		boolean isUpdateRequired = true;
-		if (deleteTags != null)
+		if (deleteTags != null && deleteTags.length >= 1)
 		{
 			isUpdateRequired = deleteTags[0];
 		}
