@@ -11,6 +11,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
+import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -218,7 +220,7 @@ public class AgileTaskletUtil
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
 
 	    // Add Id and data
-	    return new JSONObject().put("data", subscriberJSON).put("id", contact.id);
+	    return new JSONObject().put("data", subscriberJSON).put("id", contact.id).put("isUnsubscribedAll", isUnsubscribedAll(contact));
 	}
 	catch (Exception e)
 	{
@@ -267,5 +269,47 @@ public class AgileTaskletUtil
 	calendar.set(Calendar.MILLISECOND, 0);
 
 	return calendar.getTimeInMillis() / 1000;
+    }
+
+    /**
+     * Checks whether contact's unsubscribeStatus contains ALL type, inorder to
+     * avoid further sending emails through campaign. If contains ALL, return
+     * true, otherwise false.
+     * 
+     * @param contact
+     *            - Contact object
+     * @return boolean value
+     */
+    public static boolean isUnsubscribedAll(Contact contact)
+    {
+	// By default false
+	boolean isAll = false;
+
+	try
+	{
+	    // Iterating from the end, to get status faster
+	    for (int i = contact.unsubscribeStatus.size() - 1; i >= 0; i--)
+	    {
+		UnsubscribeStatus unsubscribeStatus = contact.unsubscribeStatus.get(i);
+
+		if (unsubscribeStatus == null)
+		    continue;
+
+		// If unsubscribe type is ALL, break and return true
+		if (unsubscribeStatus.unsubscribeType == UnsubscribeType.ALL)
+		{
+		    System.out.println("Contact has All status...");
+		    isAll = true;
+		    break;
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.print("Exception occured while iterating unsubscribe status " + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return isAll;
     }
 }

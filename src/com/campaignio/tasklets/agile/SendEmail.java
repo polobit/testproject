@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -8,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.campaignio.logger.Log.LogType;
@@ -16,6 +18,7 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -215,6 +218,25 @@ public class SendEmail extends TaskletAdapter
 	    return;
 	}
 
+	// Verify Unsubscribed status
+	if (subscriberJSON.has("isUnsubscribedAll"))
+	{
+	    if (subscriberJSON.getBoolean("isUnsubscribedAll"))
+	    {
+		System.err.println("Skipping SendEmail node for " + subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
+			+ " as it is Unsubscribed from All.");
+
+		// Add log
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+			"Email sending skipped for this contact as it is unsubscribed.", LogType.UNSUBSCRIBED.toString());
+
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+
+		return;
+	    }
+	}
+
 	// Get Scheduled Time and Day
 	String on = getStringValue(nodeJSON, subscriberJSON, data, ON);
 	String at = getStringValue(nodeJSON, subscriberJSON, data, AT);
@@ -377,10 +399,17 @@ public class SendEmail extends TaskletAdapter
 	{
 	    // Get Data
 	    if (subscriberJSON.has("data"))
-		subscriberJSON.getJSONObject("data").put("UnsubscribeLink", UNSUBSCRIBE_LINK + AgileTaskletUtil.getId(subscriberJSON));
+		subscriberJSON.getJSONObject("data").put(
+			"UnsubscribeLink",
+			"https://" + NamespaceManager.get() + "-dot-sandbox-dot-agile-crm-cloud.appspot.com/unsubscribe?sid="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
+				+ URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
 	}
 	catch (Exception e)
 	{
+	    System.err.println("Exception occured in SendEmail while inserting unsubscribe link " + e.getMessage());
+	    e.printStackTrace();
 	}
 
 	// Get From, Message

@@ -457,6 +457,24 @@
 		<url-pattern>/workflow-default-templates</url-pattern>
 	</servlet-mapping>
 
+   <servlet>
+   		<servlet-name>Unsubscribe</servlet-name>
+   		<jsp-file>/unsubscribe.jsp</jsp-file>
+   </servlet>
+   <servlet-mapping>
+   		<servlet-name>Unsubscribe</servlet-name>
+   		<url-pattern>/unsubscribe</url-pattern>
+   </servlet-mapping>
+   
+   <servlet>
+   		<servlet-name>Confirmation</servlet-name>
+   		<jsp-file>/confirmation.jsp</jsp-file>
+   </servlet>
+   <servlet-mapping>
+   		<servlet-name>Confirmation</servlet-name>
+   		<url-pattern>/confirmation</url-pattern>
+   </servlet-mapping>
+
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
