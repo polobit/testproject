@@ -557,7 +557,7 @@ $(function()
 	Handlebars.registerHelper('network', function(type)
 	{
 		if (type == 'GOOGLE')
-			return 'Google Drive Document';
+			return 'Google Drive';
 		if (type == 'S3')
 			return 'Uploaded Document';
 	});
