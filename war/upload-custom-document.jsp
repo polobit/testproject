@@ -9,7 +9,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload New Custom Document</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-pink.min.css" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/lib/bootstrap.min.js"></script>
