@@ -225,9 +225,8 @@ public class Contact extends Cursor
      */
     @NotSaved(IfDefault.class)
     @Embedded
-    public List<UnsubscribeStatus> unsubscribeStatus = new ArrayList<UnsubscribeStatus>();
+    public List<UnsubscribeStatus> unsubscribeStatus = new ArrayList<UnsubscribeStatus>();// Dao
 
-    // Dao
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
     /**
@@ -558,7 +557,7 @@ public class Contact extends Cursor
      * 
      * @param tags
      */
-    public void addTags(String[] tags)
+    public void addTags(String... tags)
     {
 	int oldTagsCount = tagsWithTime.size();
 
@@ -622,7 +621,7 @@ public class Contact extends Cursor
 	this.save();
 
 	boolean isUpdateRequired = true;
-	if (deleteTags != null)
+	if (deleteTags != null && deleteTags.length >= 1)
 	{
 	    isUpdateRequired = deleteTags[0];
 	}
@@ -1060,5 +1059,4 @@ class ViewedDetails
     {
 
     }
-
 }
