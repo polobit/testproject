@@ -40,6 +40,16 @@ $(function(){
 
         var name = $('#workflow-name').val();
         
+        var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
+        var unsubscribe_description = $('#unsubscribe-description').val();
+        var unsubscribe_action = $('#unsubscribe-action').val();
+        
+        var unsubscribe_json ={
+        		               		"tag":unsubscribe_tag,
+        		               		"description": unsubscribe_description,
+        		               		"action":unsubscribe_action
+        		               }
+        
         // Check for valid name
         if (isNotValid(name)) {
             alert("Name not valid");
@@ -62,6 +72,7 @@ $(function(){
             workflowJSON = App_Workflows.workflow_model;
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
+            App_Workflows.workflow_model.set("unsubscribe", unsubscribe_json);
             App_Workflows.workflow_model.save({}, {success: function(){
             	
             	enable_save_button($clicked_button);
@@ -90,7 +101,8 @@ $(function(){
 
             workflowJSON.name = name;
             workflowJSON.rules = designerJSON;
-
+            workflowJSON.unsubscribe = unsubscribe_json;
+            
             var workflow = new Backbone.Model(workflowJSON);
             App_Workflows.workflow_list_view.collection.create(workflow,{
             	    success:function(){  
@@ -175,5 +187,42 @@ $(function(){
 			$(this).children('div.modal-body').find("iframe").removeAttr("src");
 		});
 	});
+	
+	$('#workflow-unsubscribe-option').die().live('click', function(e){
+		e.preventDefault();
+		//$(this).css('display','none');
+		//$('#workflow-unsubscribe-block').show('slow');
+	});
+	
+	$('#workflow-unsubscribe-block').live('shown', function(){
+		$('#workflow-unsubscribe-option').html('[-] Unsubscribe Option');
+	});
+	
+	$('#workflow-unsubscribe-block').live('hidden', function(){
+		$('#workflow-unsubscribe-option').html('[+] Unsubscribe Option');
+	});
+	
+	/*$('#unsubscribe-condition').die().live('change', function(e){
+		e.preventDefault();
+		
+		var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
+			           + "campaign will work as expected)";
+		
+		var this_text = "Contact will be removed from this campaign";
+		
+		var ask_text = "Prompts the user with options to either unsubscribe from this campaign or all communication";
+		
+		var $p_ele = $(this).closest('div.controls').parent().find('small');
+		
+		if($(this).val() == "UNSUBSCRIBE_FROM_ALL")
+			$p_ele.html(all_text);
+		
+		if($(this).val() == "UNSUBSCRIBE_FROM_THIS_CAMPAIGN")
+			$p_ele.html(this_text);
+		
+		if($(this).val() == "ASK_USER")
+			$p_ele.html(ask_text);
+		
+	});*/
 
 });

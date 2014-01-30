@@ -3,6 +3,8 @@ package com.agilecrm.workflows.status.util;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -33,20 +35,31 @@ public class CampaignStatusUtil
      */
     public static void setStatusOfCampaign(String contactId, String campaignId, Status status)
     {
-	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
-
-	if (contact == null)
+	if (StringUtils.isBlank(contactId) || StringUtils.isBlank(campaignId))
 	    return;
 
-	// ACTIVE status
-	if (status.equals(Status.ACTIVE))
+	try
 	{
-	    setActiveCampaignStatus(contact, campaignId);
-	    return;
-	}
+	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 
-	// DONE or REMOVED
-	setEndCampaignStatus(contact, campaignId, status);
+	    if (contact == null)
+		return;
+
+	    // ACTIVE status
+	    if (status.equals(Status.ACTIVE))
+	    {
+		setActiveCampaignStatus(contact, campaignId);
+		return;
+	    }
+
+	    // DONE or REMOVED
+	    setEndCampaignStatus(contact, campaignId, status);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.print("Exception occured while setting campaign-status " + e.getMessage());
+	}
     }
 
     /**
