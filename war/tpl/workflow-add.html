@@ -3,7 +3,6 @@
     <div class="span12">
         <div class="well">
             <form id="workflowform">
-                
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label"><b>Name of campaign:</b> <span class="field_req">*</span></label>
@@ -19,6 +18,59 @@
                     <IFRAME SRC="designer.html" id="designer" frameBorder="0" name="designer" WIDTH="100%" HEIGHT="900px"></IFRAME>
                     </div>
 					<br />
+                    <br />
+                 
+                    <div>
+					<a href="#" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block">[+] Unsubscribe Option</a>
+					</div>
+					<div class="collapse" id="workflow-unsubscribe-block">
+                       <fieldset> <legend>Unsubscribe</legend>
+						<table style="border: 0px; background-color: hsl(0, 0%, 96%);">
+							<tbody>
+								<tr>
+									<td rowspan="2">
+										<div class="control-group">
+											<label class="control-label">
+											Campaign Description
+											</label>
+                    						<div class="controls">
+											<textarea name="description" id="unsubscribe-description" rows="2" cols="55" placeholder="To be shown on unsubscribe window..." style="width: 450px;"></textarea>
+											</div>
+										</div>
+                       				</td>
+                       				<td>
+                    					<div class="control-group">
+											<label class="control-label" style="display: inline-block; margin-left: 25px; margin-top: 6px;">
+											On link click
+											</label>
+											<div class="controls" style="float: right;">
+												<select name="action" id="unsubscribe-action">
+													<option value="UNSUBSCRIBE_FROM_ALL">Unsubscribe from ALL</option>
+                                    				<option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Unsubscribe from this campaign</option>
+                                    				<option value="ASK_USER">Ask user</option>
+												</select>
+											</div>
+                    					</div>
+                        			</td>
+                        		</tr>
+                        		<tr>
+									<td>
+                    					<div class="control-group">
+											<label class="control-label" style="display: inline-block;margin-left: 26px;">
+												Add tag for unsubscribed contacts
+											</label>
+											<div class="controls" style="display: inline-block; margin-left: 4px;">
+											<input type="text" name="tag" id="unsubscribe-tag" placeholder="Tag name like unsubscribe">
+											</div>
+                    					</div>
+                       				</td>
+								</tr>
+                       		</tbody>
+						</table>
+					</fieldset>
+					</div>
+                   
+                    <br />
                     <br />
                     <button class="btn btn-primary" id="save-workflow-bottom">Save Campaign</button>
                     <a href="#workflows" class="btn">Cancel</a>

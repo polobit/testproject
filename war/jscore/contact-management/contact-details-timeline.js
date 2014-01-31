@@ -115,7 +115,7 @@ function load_timeline_details(el, contactId, callback1)
 						if(model.log_type == 'WAIT' || model.log_type == 'CLICKED' || model.log_type == 'ADD_NOTE' 
 							|| model.log_type == 'TAGS' || model.log_type == 'ADD_TASK' 
 								|| model.log_type == 'JSONIO' || model.log_type == 'TRANSFER' 
-									|| model.log_type == 'EMAIL_SENDING_FAILED')
+									|| model.log_type == 'EMAIL_SENDING_FAILED' || model.log_type == 'UNSUBSCRIBED')
 							return true;
 						
 						logs_array.push(model);			
