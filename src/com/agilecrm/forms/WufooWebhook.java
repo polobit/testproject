@@ -23,8 +23,10 @@ import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.countrycodemap.CountryCodeMap;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
@@ -38,7 +40,9 @@ public class WufooWebhook extends HttpServlet
 			// Get API key and tags
 			String tagString = req.getParameter("HandshakeKey");
 
+			// Create contact, properties and notes list
 			Contact contact = null;
+			List<Note> notes = new ArrayList<Note>();
 			List<ContactField> properties = new ArrayList<ContactField>();
 
 			// Get fields from field structure and iterate
@@ -83,11 +87,19 @@ public class WufooWebhook extends HttpServlet
 						|| json.getString("Title").equalsIgnoreCase("postal code") || json.getString("Title")
 						.equalsIgnoreCase("zip code")) && !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 					addressJson.put("zip", req.getParameter(json.getString("ID")));
+				else if (json.getString("Type").equals("textarea"))
+				{
+					Note note = new Note();
+					note.subject = req.getParameter(json.getString("Title"));
+					note.description = req.getParameter(json.getString("ID"));
+					notes.add(note);
+				}
 				else if (!StringUtils.isBlank(json.getString("Title")) && !json.getString("Title").equals("Address"))
 
 					// Add properties to list of properties
 					properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")),
 							contact));
+
 				Iterator<?> keys = json.keys();
 				while (keys.hasNext())
 				{
@@ -155,10 +167,24 @@ public class WufooWebhook extends HttpServlet
 
 			if (owner != null)
 			{
+				Key<AgileUser> user = new Key<AgileUser>(AgileUser.class, owner.getId());
 				contact.setContactOwner(owner);
+
+				System.out.println("properties are " + properties);
+
 				contact.properties = properties;
 				contact.addTags(tags);
 				contact.save();
+
+				for (Note note : notes)
+				{
+					if (!StringUtils.isBlank(note.toString()))
+					{
+						note.addRelatedContacts(contact.id.toString());
+						note.setOwner(user);
+						note.save();
+					}
+				}
 			}
 		}
 		catch (Exception e)
