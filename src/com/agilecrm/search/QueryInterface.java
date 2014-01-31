@@ -6,6 +6,7 @@ import java.util.List;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.document.Document;
 import com.agilecrm.search.ui.serialize.SearchRule;
 
 /**
@@ -23,7 +24,7 @@ public interface QueryInterface
 {
     public static enum Type
     {
-	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(Case.class);
+	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(Case.class), DOCUMENT(Document.class);
 
 	private Class clazz;
 

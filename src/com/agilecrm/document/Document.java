@@ -5,11 +5,13 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
@@ -77,6 +79,12 @@ public class Document extends Cursor
      */
     @NotSaved(IfDefault.class)
     public String url = null;
+    
+    /**
+     * Entity type.
+     */
+    @NotSaved
+    public String entity_type = "document";
 
     /**
      * Contact ids of related contacts for a document.
@@ -304,6 +312,17 @@ public class Document extends Cursor
     public void save()
     {
 	dao.put(this);
+	
+	// Enables to build "Document" search on current entity
+	AppengineSearch<Document> search = new AppengineSearch<Document>(Document.class);
+
+	// If doc is new then add it to document else edit document
+	if (id == null)
+	{
+	    search.add(this);
+	    return;
+	}
+	search.edit(this);
     }
 
     /**
@@ -312,6 +331,7 @@ public class Document extends Cursor
     public void delete()
     {
 	dao.delete(this);
+	new AppengineSearch<Document>(Document.class).delete(id.toString());
     }
 
     /**
