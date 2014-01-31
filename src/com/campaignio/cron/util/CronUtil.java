@@ -283,35 +283,6 @@ public class CronUtil
     }
 
     /**
-     * Interrupt method to wake up crons based on campaignId and subscriberId
-     * 
-     * @param campaignId
-     *            - campaign id of campaign saved in cron
-     * @param subscriberId
-     *            - subscriber id of campaign saved in cron
-     * @param interruptData
-     *            - data that can be passed to respective tasklet when
-     *            interrupted
-     */
-    public static void interrupt(String campaignId, String subscriberId, JSONObject interruptData)
-    {
-	if (campaignId == null || subscriberId == null)
-	    return;
-
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-
-	searchMap.put("campaign_id", campaignId);
-	searchMap.put("subscriber_id", subscriberId);
-
-	List<Cron> cronJobs = dao.listByProperty(searchMap);
-
-	// Execute in another tasklet
-	executeTasklets(cronJobs, Cron.CRON_TYPE_INTERRUPT, interruptData);
-
-	dao.deleteAll(cronJobs);
-    }
-
-    /**
      * Executes tasklets based upon wakeup or timeout using deferred task.
      * 
      * @param cronJobs
