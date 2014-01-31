@@ -431,6 +431,11 @@ public class SendEmail extends TaskletAdapter
 
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, TRACK_CLICKS);
 
+	// Unique id to track open. It should differ from Clicked inorder to
+	// avoid waking Clicked tasks when opened. Also both ids are
+	// concatenated to wakeup Open node with Clicked.
+	data.put(OPEN_TRACKING_ID, AgileTaskletUtil.getId(campaignJSON) + AgileTaskletUtil.getId(subscriberJSON));
+
 	// Check if we need to convert links
 	if (trackClicks != null && trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
 	{
@@ -524,7 +529,7 @@ public class SendEmail extends TaskletAdapter
 	    // Avoid image and shorten urls
 	    if (isSpecialLink(tokens[i]))
 	    {
-		// To track open when shorten url is clicked
+		// To track open and click when shorten url is clicked.
 		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(CLICK_TRACKING_ID), campaignId);
 
 		if (url == null)

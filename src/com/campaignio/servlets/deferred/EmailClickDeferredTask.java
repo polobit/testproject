@@ -75,8 +75,8 @@ public class EmailClickDeferredTask implements DeferredTask
 	    CronUtil.interrupt(clickTrackingId, null, null, new JSONObject(interruptedData));
 
 	    // Wakeup Opened node based on campaignId and
-	    // subscriberId. Opened node did not have any tracking id
-	    CronUtil.interrupt(campaignId, subscriberId, new JSONObject(interruptedData));
+	    // subscriberId.
+	    CronUtil.interrupt(campaignId + subscriberId, null, null, new JSONObject(interruptedData));
 
 	}
 	catch (Exception e)

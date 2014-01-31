@@ -13,7 +13,7 @@
                             {{#if plan.plan_id}}
                             {{plan.plan_id}}
                             {{else}}
-                            Free <!--( <a href="#subscribe" style="text-decoration:underline;">Upgrade</a> )-->
+                            Free ( <a href="#subscribe" style="text-decoration:underline;">Upgrade</a> | <a href="#" id="cancel-account" style="text-decoration:underline;">Cancel Account</a>)
                             {{/if}}
                         </div>
                     </div>
@@ -57,7 +57,6 @@
             <div class="clearfix"></div>
             <div class="form-actions">
                 <a href="#" type="submit" class="save btn btn-primary">Save Changes</a>
-				<a href="#" id="cancel-account" class="btn btn-danger pull-right">Delete Account</a> 
             </div>
         </fieldset>
     </form>

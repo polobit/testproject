@@ -66,7 +66,17 @@ public class Opened extends TaskletAdapter
 
 	// Add ourselves to Cron Queue
 	long timeout = CronUtil.getTimer(duration, durationType);
-	CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, null, null);
+
+	// Get Tracker Id
+	if (data.has(SendEmail.OPEN_TRACKING_ID))
+	{
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, data.getString(SendEmail.OPEN_TRACKING_ID), null, null);
+	}
+	else
+	{
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, data.getString(SendEmail.OPEN_TRACKING_ID), null, null);
+	}
+
     }
 
     /**
