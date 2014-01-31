@@ -37,13 +37,13 @@
        {{/unless}}
        {{#if this.length}}
 		<table id="contact-document" class="table agile-ellipsis-dynamic no-sorting">
-				<colgroup><col width="10px"><col width="45%"><col width="35%"><col width="20%"></colgroup>
+				<colgroup><col width="10px"><col width="50%"><col width="25%"><col width="25%"></colgroup>
 				<thead>
 					<tr>
 						<th></th>
 						<th>Title</th>
 						<th>Type</th>
-						<th>Updated Date</th>
+						<th>Uploaded Date</th>
 					</tr>
 				</thead>
 				<tbody id="contact-document-model-list" style="cursor:pointer;overflow:hidden;">
@@ -55,7 +55,7 @@
 <script id="contact-document-model-template" type="text/html">
 <td></td>
 <td data="{{id}}" class="data">
-	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:15em; overflow:hidden;display:inline-block;">{{name}}</b>
+	<b style="display:inline-block;">{{name}}</b>
 </td>
 <td>
 	<div>{{network network_type}}</div>

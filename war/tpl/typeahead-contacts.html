@@ -44,6 +44,24 @@
 
 </div>
 
+<!-- Document Result -->
+{{#if_equals entity_type "document"}}
+<div style="display: inline;margin-top:10px height: auto;">
+		<ul style="display: inline-block; list-style-type: none; margin-left: 0px;">								
+			<li>
+				<!-- <i class="icon-folder-close icon-3x" id="minus" style="height: 10px; cursor: pointer"></i> -->
+				<i class="icon-file icon-3x thumbnail" id="minus" style="cursor: pointer; width:40px; height:40px; "></i>
+			</li>
+		</ul>
+	</div>
+	<div
+		style="height: 55px; display: inline-block; vertical-align: -20px; margin-left: 2px;margin-top:40px text-overflow: ellipsis; white-space: nowrap; width: 15em; overflow: hidden; vertical-align: top;">
+		 <b>{{name}}</b><br /> {{network network_type}}
+	</div>
+	{{/if_equals}}
+
+</div>
+
 <!-- Case Result -->
 {{#if_equals entity_type "case"}}
 <div style="display: inline;margin-top:10px height: auto;">
@@ -70,6 +88,9 @@
 	</div>
 <div id="deal-typeahead-heading" style="display:none;margin-left:5px"><b>Deals</b></div>
 	<div id="deals-results">
+	</div>
+<div id="document-typeahead-heading" style="display:none;margin-left:5px"><b>Documents</b></div>	
+	<div id="document-results">
 	</div>
 <div id="case-typeahead-heading" style="display:none;margin-left:5px"><b>Cases</b></div>	
 	<div id="case-results">

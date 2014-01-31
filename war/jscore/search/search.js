@@ -57,6 +57,12 @@ function navigateToDetailsPage(data, name)
 		updateDeal(new BaseModel(model));
 		return;
 	}
+	if(model.entity_type == "document")
+	{
+		console.log(model);
+		updateDocument(new BaseModel(model));
+		return;
+	}
 		updatecases(new BaseModel(model));
 }
 

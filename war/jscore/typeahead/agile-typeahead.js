@@ -394,11 +394,16 @@ function appendItemInResult(item)
 				$("#deal-typeahead-heading",  this.el).show();
 				$("#deals-results", this.el).append(i);
 			}
-		if(type == "entity_type")
+		if(type == "case")
 			{
 				$("#case-typeahead-heading",  this.el).show();
 				$("#case-results", this.el).append(i);
 			}
+		if(type == "document")
+		{
+			$("#document-typeahead-heading",  this.el).show();
+			$("#document-results", this.el).append(i);
+		}
 	}
 
 }

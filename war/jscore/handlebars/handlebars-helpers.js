@@ -559,7 +559,7 @@ $(function()
 		if (type == 'GOOGLE')
 			return 'Google Drive';
 		if (type == 'S3')
-			return 'Uploaded Document';
+			return 'Uploaded Doc';
 	});
 
 	/**
