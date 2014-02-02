@@ -161,28 +161,16 @@
 									Calendar</a></li>
 							<%
 								}
-									if (navSetting.cases) {
+									if (navSetting.campaign) {
 							%>
-							<li id="casesmenu"><a href="#cases"><i
-									class="icon-folder-close icon-white"></i> Cases</a></li>
-							<%
-								}
-									if (navSetting.documents) {
-							%>
-								<li id="documentsmenu"><a href="#documents"><i
-										class="icon-file icon-white"></i> Docs</a></li> 
+							<li id="workflowsmenu"><a href="#workflows"><i
+									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<%
 								}
 									if (navSetting.deals) {
 							%>
 							<li id="dealsmenu"><a href="#deals"><i
 									class="icon-money icon-white"></i> Deals</a></li>
-							<%
-								}
-									if (navSetting.campaign) {
-							%>
-							<li id="workflowsmenu"><a href="#workflows"><i
-									class="icon-sitemap icon-white"></i> Campaigns</a></li>
 							<%
 								}
 									if (navSetting.social) {
@@ -192,10 +180,22 @@
 							</a></li>
 							<%
 								}
+									if (navSetting.documents) {
+							%>
+								<li id="documentsmenu"><a href="#documents"><i
+										class="icon-file icon-white"></i> Docs</a></li> 
+							<%
+								}
 									if (navSetting.reports) {
 							%>
 							<li id="reportsmenu"><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
+							<%
+								}
+									if (navSetting.cases) {
+							%>
+							<li id="casesmenu"><a href="#cases"><i
+									class="icon-folder-close icon-white"></i> Cases</a></li>
 							<%
 								}
 							%>
@@ -210,29 +210,16 @@
 							</a>
 								<ul class="dropdown-menu drop-drop">
 									<%
-										if (navSetting.cases) {
+										if (navSetting.campaign) {
 									%>
-									<li id="casesmenu"><a href="#cases"><i
-											class="icon-folder-close icon-white"></i> Cases</a></li>
-									<%
-										}
-												if (navSetting.documents) {
-									%>
-									<li id="documentsmenu"><a href="#documents"><i
-											class="icon-file icon-white"></i> Docs</a></li>
+									<li id="workflowsmenu"><a href="#workflows"><i
+											class="icon-sitemap icon-white"></i> Campaigns</a></li>									
 									<%
 										}
 												if (navSetting.deals) {
 									%>
 									<li id="dealsmenu"><a href="#deals"><i
 											class="icon-money icon-white"></i> Deals</a></li>
-									<%
-										}
-												if (navSetting.campaign) {
-									%>
-
-									<li id="workflowsmenu"><a href="#workflows"><i
-											class="icon-sitemap icon-white"></i> Campaigns</a></li>
 									<%
 										}
 												if (navSetting.social) {
@@ -242,15 +229,25 @@
 									</a></li>
 									<%
 										}
-
+												if (navSetting.documents) {
+									%>
+									<li id="documentsmenu"><a href="#documents"><i
+											class="icon-file icon-white"></i> Docs</a></li>
+									<%
+										}
 												if (navSetting.reports) {
 									%>
 									<li id="reportsmenu"><a href="#reports"><i
-											class="icon-bar-chart icon-white"></i> Reports</a></li>
+											class="icon-bar-chart icon-white"></i> Reports</a></li>											
+									<%
+										}
+												if (navSetting.cases) {
+									%>
+									<li id="casesmenu"><a href="#cases"><i
+											class="icon-folder-close icon-white"></i> Cases</a></li>
 									<%
 										}
 									%>
-
 								</ul></li>
 							<%
 								}
@@ -273,8 +270,7 @@
 								<a class="dropdown-toggle" data-toggle="dropdown" href="" style="padding-left:2px; padding-right:4px;">
 									<i class='caret'></i>
 								</a>
-								<ul class="dropdown-menu" style="width:25em; right:-11px;">
-								</ul>
+								
 							</li> 
 
 							<li class="dropdown" id="menu1"><a class="dropdown-toggle"
