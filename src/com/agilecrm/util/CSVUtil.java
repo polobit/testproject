@@ -50,7 +50,7 @@ public class CSVUtil
 {
 	public static enum ImportStatus
 	{
-		TOTAL, SAVED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED
+		TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS
 	}
 
 	/**
@@ -139,6 +139,7 @@ public class CSVUtil
 
 		// Counters to count number of contacts saved contacts
 		int savedContacts = 0;
+		int mergedContacts = 0;
 		List<String> emails = new ArrayList<String>();
 		Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
 
@@ -216,7 +217,7 @@ public class CSVUtil
 					}
 					continue;
 				}
-				if ("note".equals(field.name))
+				if ("notes".equals(field.name))
 				{
 					notes_positions.add(j);
 					continue;
@@ -231,25 +232,42 @@ public class CSVUtil
 
 				tempContact.properties.add(field);
 
-				System.out.println("**********************" + field.name + " *********************");
-				System.out.println("******************" + field.value + "******************");
 			}
-
-			System.out.println(contact.properties);
 
 			if (!ContactUtil.isValidFields(tempContact, status))
 				continue;
 
+			boolean isMerged = false;
 			// If contact is duplicate, it fetches old contact and updates data.
 			if (ContactUtil.isDuplicateContact(tempContact))
 			{
 				tempContact = ContactUtil.mergeContactFields(tempContact);
+				isMerged = true;
 			}
 
 			try
 			{
+				tempContact.save(false);
+			}
+			catch (Exception e)
+			{
+				System.out.println("exception raised while saving contact "
+						+ tempContact.getContactFieldValue(Contact.EMAIL));
+				e.printStackTrace();
 
-				tempContact.save();
+			}
+			if (isMerged)
+			{
+				mergedContacts++;
+			}
+			else
+			{
+				// Increase counter on each contact save
+				savedContacts++;
+			}
+
+			try
+			{
 
 				// Creates notes, set CSV heading as subject and value as
 				// description.
@@ -269,21 +287,30 @@ public class CSVUtil
 				System.out.println("exception while saving contacts");
 				e.printStackTrace();
 			}
-			// Increase counter on each contact save
-			savedContacts++;
+
 		}
 
 		calculateTotalFailedContacts(status);
 
 		buildCSVImportStatus(status, ImportStatus.TOTAL, contacts.size());
-		buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
+
+		if (mergedContacts > 0)
+		{
+			buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts + mergedContacts);
+			buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+			buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
+		}
+		else
+		{
+			buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
+		}
 
 		SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
 				new Object[] { domainUser, status });
+
 		// Send notification after contacts save complete
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
 
-		System.out.println("contact save completed");
 	}
 
 	public static void buildCSVImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, Integer count)
