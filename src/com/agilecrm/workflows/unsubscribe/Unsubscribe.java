@@ -2,8 +2,8 @@ package com.agilecrm.workflows.unsubscribe;
 
 /**
  * <code>Unsubscribe</code> is the base class that represents Unsubscribe option
- * of a workflow. It holds description of campaign, action and tag to
- * unsubscribe when Unsubscribe link is clicked in email sent through campaign.
+ * of a workflow. It holds action and tag to unsubscribe when Unsubscribe link
+ * is clicked in email sent through campaign.
  * <p>
  * It is embedded class for Workflow. CRUD operations are done along with
  * Workflow.
@@ -14,11 +14,6 @@ package com.agilecrm.workflows.unsubscribe;
  */
 public class Unsubscribe
 {
-
-    /**
-     * Description of campaign to be shown on unsubscribe page
-     */
-    public String description = null;
 
     /**
      * To show respective content in unsubscribe page based on action
@@ -44,21 +39,18 @@ public class Unsubscribe
     }
 
     /**
-     * Constructs a new {@link Unsubscribe} with description, action and tag.
+     * Constructs a new {@link Unsubscribe} with action and tag.
      * 
-     * @param description
-     *            - Description of campaign
      * @param action
      *            - Type of action to be taken when unsubscribe link is clicked.
      * @param tag
      *            - Tag to be added for unsubscribed subscriber.
      * 
      */
-    public Unsubscribe(String tag, Action action, String description)
+    public Unsubscribe(String tag, Action action)
     {
 	this.tag = tag;
 	this.action = action;
-	this.description = description;
     }
 
 }

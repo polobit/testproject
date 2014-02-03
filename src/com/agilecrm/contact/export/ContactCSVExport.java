@@ -609,7 +609,8 @@ public class ContactCSVExport
 	HashMap<String, String> map = new HashMap<String, String>();
 	map.put("count", total);
 
-	SendMail.sendMail(toEmail, SendMail.EXPORT_CONTACTS_CSV_SUBJECT, SendMail.EXPORT_CONTACTS_CSV, map, strArr);
+	SendMail.sendMail(toEmail, SendMail.EXPORT_CONTACTS_CSV_SUBJECT, SendMail.EXPORT_CONTACTS_CSV, map, SendMail.AGILE_FROM_EMAIL,
+		SendMail.AGILE_FROM_NAME, strArr);
     }
 
     /**

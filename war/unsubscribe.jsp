@@ -1,22 +1,33 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.workflows.unsubscribe.Unsubscribe.Action"%>
+<%@page import="com.agilecrm.account.util.AccountPrefsUtil"%>
+<%@page import="com.agilecrm.account.AccountPrefs"%>
 <%@page import="com.agilecrm.workflows.Workflow"%>
 <%@page import="com.agilecrm.workflows.util.WorkflowUtil"%>
 <%@page import="com.agilecrm.workflows.unsubscribe.Unsubscribe"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.util.Base64Encoder"%>
 <%@page import="com.agilecrm.util.NamespaceUtil"%>
+<%@page import="com.agilecrm.account.AccountPrefs" %>
+<%@page import="com.agilecrm.account.util.AccountPrefsUtil" %>
 
 <%
-    String campaignId = request.getParameter("cid");
+    		String campaignId = request.getParameter("cid");
 			String contactId = request.getParameter("sid");
 			String email = request.getParameter("e");
 
-			// Get domain name from request url E.g., admin from admin.agilecrm.com
-			String domain = NamespaceUtil.getNamespaceFromURL(request
-					.getServerName());
-
-			System.out.println("Domain is " + domain);
-
+			String company = "";
+			try
+			{
+				AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
+				company = accountPrefs.company_name;
+			}
+			catch(Exception e)
+			{
+		    	e.printStackTrace();
+		    	System.err.println("Exception occured while getting company " + e.getMessage());
+			}
+			
 			if (StringUtils.isBlank(campaignId)
 					|| StringUtils.isBlank(contactId))
 				return;
@@ -89,6 +100,13 @@ label {
 	text-align: left;
 	font-weight: bold;
 	position: relative;
+}
+
+label.error{
+   color: red;
+   font-weight: normal;
+   font-size: 12px;
+   display:none;
 }
 
 .field-group {
@@ -341,32 +359,32 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 }
 </style>
 <script type="text/javascript" src="lib/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 </head>
 
 <body>
 	<div class="wrapper rounded6" id="templateContainer">
-		<h1><%=domain%></h1>
+		<h1><%=company%></h1>
 		<div id="templateBody" class="bodyContent rounded6">
 			<h2>Unsubscribe</h2>
-			<form id="unsubscribe-form" action="/confirmation" method="post">
+			<form id="unsubscribe-form" action="/confirmation" method="post" onsubmit="return isValid();" novalidate>
 				<div id="unsubscribe-template"></div>
+				<div class="error"></div>
 				<label for="email-address">Email Address <span
 					style="color: red">*</span></label>
 				<div class="field-group focused-field">
 					<input type="email" name="email" value="<%=email%>"
-						id="email-address" placeholder="Email to unsubscribe" required />
+						id="email-address" placeholder="Email to unsubscribe" required/>
 				</div>
+				<label for="email-address" class="error">Please enter a valid email address.</label>
 				<br /> <input class="button" type="submit" value="Unsubscribe" />
 			</form>
 		</div>
 	</div>
 	<br />
-	<div style="float: right; padding-right: 20px;">
-		<span
-			style="display: inherit; margin-right: 50px; font-style: italic; font-family: Times New Roman; font-size: 10px; margin-bottom: -10px;">Powered
-			by</span> <a href="https://www.agilecrm.com" target="_blank"> <img
-			src="https://my.clickdesk.com/img/plugins/agilecrm.png"
-			alt="Logo for AgileCRM" style="height: 50px; width: 120px;">
+	<div>
+		<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 85px;">Powered
+			by</span> <a href="https://www.agilecrm.com" target="_blank"> <img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 120px;">
 		</a>
 	</div>
 
@@ -374,29 +392,31 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 <input type="hidden" name="cid" value="<%=campaignId%>">
 <input type="hidden" name="status" value="current">
 <input type="hidden" name="t" value="<%=workflow.unsubscribe.tag%>">
+<input type="hidden" name="company" value="<%=company%>">
+<input type="hidden" name="c_name" value="<%= workflow.name%>">
 
-<p>You are about to be unsubscribed from <b>this</b> campaign <%if (!StringUtils.isBlank(workflow.unsubscribe.description)) {
-				out.println("(" + workflow.unsubscribe.description + ")");
-			}%> </p>
+<p>You are about to be removed from the Campaign - <%= workflow.name %></p>
 </script>
 
-	<script id="remove-from-all-campaigns-template" type="text/html">
+<script id="remove-from-all-campaigns-template" type="text/html">
 <input type="hidden" name="cid" value="<%=campaignId%>">
 <input type="hidden" name="status" value="all">
 <input type="hidden" name="t" value="<%=workflow.unsubscribe.tag%>">
+<input type="hidden" name="company" value="<%=company%>">
 
 <p>You are about to be removed from <b>all</b> communication from this sender</p>
 </script>
 
-	<script id="ask-the-user-template" type="text/html">
+<script id="ask-the-user-template" type="text/html">
 <input type="hidden" name="cid" value="<%=campaignId%>">
 <input type="hidden" name="t" value="<%=workflow.unsubscribe.tag%>">
+<input type="hidden" name="company" value="<%=company%>">
+<input type="hidden" name="c_name" value="<%= workflow.name%>">
 
-<input type="radio" name="status" value="current" required/> Unsubscribe from <b>this</b> campaign <%if (!StringUtils.isBlank(workflow.unsubscribe.description)) {
-				out.println("(" + workflow.unsubscribe.description + ")");
-			}%>
+<input type="radio" name="status" id="current" value="current"/> Remove me from this campaign - <%= workflow.name %>
 <br/>
-<input type="radio" name="status" value="all" required/> Unsubscribe from <b>all</b> communication from the sender			
+<input type="radio" name="status" value="all" id="all" required checked/> Stop ALL communication from this sender.
+<label for="status" class="error">Please select any one of the options</label>			
 </script>
 
 	<script>
@@ -404,20 +424,20 @@ $(function(){
 	
 	var name="<%=workflow.unsubscribe.action%>";
 
-			// Default, if nothing matches
+	// Default, if nothing matches
 			var template = "<p>Sorry to see you go...</p>";
 
-			if (name === "UNSUBSCRIBE_FROM_THIS_CAMPAIGN")
+			if (name === "<%=Action.UNSUBSCRIBE_FROM_THIS_CAMPAIGN%>")
 			{
 				template = $('#remove-from-this-campaign-template').html();
 			}
 
-			if (name === "UNSUBSCRIBE_FROM_ALL")
+			if (name === "<%=Action.UNSUBSCRIBE_FROM_ALL%>")
 			{
 				template = $('#remove-from-all-campaigns-template').html();
 			}
 
-			if (name === "ASK_USER")
+			if (name === "<%=Action.ASK_USER%>")
 			{
 				template = $('#ask-the-user-template').html();
 			}
@@ -425,6 +445,27 @@ $(function(){
 			$('#unsubscribe-template').html(template);
 
 		});
+		
+		function isValid()
+		{
+			$('#unsubscribe-form').validate({
+				rules: {
+							status:{ 
+										required: true
+								   },
+							email: {
+										required: true, 
+										email:true
+								   }
+			           },
+			    submitHandler: function(form){
+			    				form.submit();
+			                    }
+				
+			});
+			
+			return $('#unsubscribe-form').valid();
+		}
 	</script>
 </body>
 
