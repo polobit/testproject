@@ -75,7 +75,7 @@ function chainWebRules(el, data, isNew, actions)
 			{
 				if(actions && actions[0])
 					{
-					setupHTMLEditor($(text_area), actions[0].popup_text);
+					setupHTMLEditor($(text_area), actions[0].popup_text.value);
 					actions = undefined;
 					}
 				else

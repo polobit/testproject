@@ -114,16 +114,6 @@ $(function()
 					ACCOUNT_DELETE_REASON_JSON = undefined;
 				});
 				
-				
-				$("input[name=cancellation_reason]").change(function(){
-					if(this.checked && $(this).hasClass("extra_info"))
-						{
-							$("#account_delete_reason").parent("div").show();
-							return;
-						}
-					
-					$("#account_delete_reason").parent("div").hide();
-				})
 
 				
 				

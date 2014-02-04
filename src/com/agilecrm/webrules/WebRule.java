@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -53,6 +55,13 @@ public class WebRule
 
 	}
 
+	@PostLoad
+	void postLoad()
+	{
+		System.out.println("post load");
+		System.out.println(actions.get(0).popup_text);
+	}
+
 	/**
 	 * Saves the report
 	 */
@@ -79,7 +88,7 @@ class WebRuleAction
 
 	public String title = null;
 
-	public String popup_text = null;
+	public Text popup_text = null;
 
 	public String delay = null;
 
