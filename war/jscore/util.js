@@ -297,34 +297,3 @@ function getLocalTimeFromGMTMilliseconds(time_in_milliseconds)
 	return date.getTime() - date.getTimezoneOffset();
 }
 
-/**
- * Adds tag to 'OUR' domain.
- * 
- * @param tag
- */
-function addTagAgile(tag)
-{
-	// Checks if tag is already available.
-	if (checkTagAgile(tag))
-		return;
-
-	// Adds tag
-	_agile.add_tag(tag, function(data)
-	{
-		Agile_Contact = data;
-		if (!checkTagAgile(tag))
-			Agile_Contact.tags.push(tag)
-		set_profile_noty();
-	});
-}
-
-// Checks if tag exists
-function checkTagAgile(tag)
-{
-
-	console.log(Agile_Contact);
-	if (Agile_Contact && Agile_Contact.tags)
-		return Agile_Contact.tags.indexOf(tag) > -1;
-
-	return false;
-}

@@ -74,6 +74,9 @@ $(function(){
             App_Workflows.workflow_model.save({}, {success: function(){
             	
             	enable_save_button($clicked_button);
+            	
+            	// Adds tag in our domain
+            	add_tag_our_domain(CAMPAIGN_TAG);
             	//$('#workflowform').find('#save-workflow').removeAttr('disabled');
                
                //$(".save-workflow-img").remove();
