@@ -3,7 +3,8 @@
  */
 var CANCELED = "Canceled";
 var SIGN_UP = "Signup";
-var CAMPAIGN_TAG = "Campaigns"
+var CAMPAIGN_TAG = "Campaigns";
+var CODE_SETUP_TAG = "Code setup";
 	
 // Subject for account cancellation note
 var ACCOUNT_CANCELED_NOTE_SUBJECT = "Account Canceled";
