@@ -48,9 +48,31 @@
 	</div>
 {{/if_equals}}
 
+{{#if_equals entity_type "document"}}
+<div style="display: inline;margin-top:10px; height: auto;">
+		<!-- <i class="icon-file-text icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-file-text thumbnail" id="minus" style="cursor: pointer; width:40px; height:38px; padding-top:6px; font-size:2.75em;"></i>
+	</div>
+	<div style="height:4em;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;margin-left:5px">
+		 <b>{{name}}</b><br /> {{description}}
+	</div>
+{{else}}
+{{#if network_type}}
+<div style="display: inline;margin-top:10px; height: auto;">
+		<!-- <i class="fa-file-text icon-3x" id="minus" style="cursor: pointer; position:relative; top:10px;"></i> -->
+		<i class="icon-file-text thumbnail" id="minus" style="cursor: pointer; width:40px; height:38px; padding-top:6px; font-size:2.75em;"></i>
+	</div>
+	<div style="height:4em;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%;margin-left:5px">
+		 <b>{{name}}</b><br /> 
+	</div>
+{{/if}}
+{{/if_equals}}
+
 </a>
 </script>
 
 <script id="recent-menu-collection-template" type="text/html">
-	
+	<ul class="dropdown-menu" style="width:25em; right:-11px;" id="recent-menu-model-list">
+		<li><a class="disabled" style="color:black;"><b>Recently Viewed ({{this.length}})</b></a></li><li class="divider"></li>
+	</ul>
 </script>

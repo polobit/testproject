@@ -21,49 +21,37 @@ function populate_recent_menu()
 {
 	if(!recent_view)
 	{	
+		var arr = [];
+		try{
+			arr = JSON.parse(localStorage.recentItems);
+		}
+		catch(err)
+		{
+			
+		}
 		recent_view = new Base_Collection_View({
 //			url: 'core/api/contacts/recent?page_size=5' ,
 			restKey: "contacts",
 			templateKey: "recent-menu",
+			data : arr,
 			individual_tag_name: 'li',
 			sort_collection: false,
 			postRenderCallback : function(el)
 			{
-				$('#recent-menu>ul').html('<li><a class="disabled" style="color:black;"><b>Recently Viewed ('+recent_view.collection.length+')</b></a></li><li class="divider"></li>');
-				$('#recent-menu>ul').append(el.children());
+				$('#recent-menu').append($(el).html())
 			}
 		});
+		
+		recent_view.render(true);
 
-		// custom appendItem as we need list of <li>s
-		recent_view.appendItem = function(base_model){
 		
-			var itemView = new Base_List_View({
-				model : base_model,
-				"view" : "inline",
-				template : "recent-menu-model",
-				tagName : 'li',
-			});
-		
-			$(recent_view.el).append(itemView.render().el);
-		};
-		
-		try{
-		var arr = JSON.parse(localStorage.recentItems);
-		
-		for(var i=0;i<arr.length;++i)
-			recent_view.collection.push(new BaseModel(arr[i]));
-			
-		recent_view_update_required=true;	
-		}catch(ex){
-			console.log('EXCEPTION - '+ex);
-		}
-	}
-	
 	
 	
 	if(recent_view.collection.length==0)	// default text, when list is empty.
 		$('#recent-menu>ul').html('<li style="text-align:center;"><a class="disabled">No Recent Activity</a></li>');
-	else recent_view.render(true);			// populate elements if filled from localStorage
+	else {recent_view.render(true);
+	}			// populate elements if filled from localStorage
+}
 }
 
 /**
@@ -87,7 +75,8 @@ function add_recent_view(mdl)
 		recent_view.collection.unshift(mdl);
 	}	
 	else {
-		recent_view.collection.remove(mdl,{ silent: true });
+			recent_view.collection.remove(mdl, { silent: true });
+		
 		recent_view.collection.unshift(mdl);
 	}
 	
@@ -125,9 +114,13 @@ function modelAction(elem)
 	{
 		updateDeal(entity);
 	}
-	else if(type=='case')
+	else if(type == 'case')
 	{
 		updatecases(entity);
+	}
+	else if(type == 'document' || entity.attributes.network_type)
+	{
+		updateDocument(entity);
 	}
 	
 	recent_view_update_required=true;
@@ -140,7 +133,10 @@ $(function(){
 	
 		if(recent_view==undefined)
 			populate_recent_menu();
-		else if(recent_view_update_required)recent_view.render(true);
+		else if(recent_view_update_required)
+			{
+			recent_view.render(true);
+			}
 		
 		recent_view_update_required=false;
 	});
@@ -152,7 +148,7 @@ $(function(){
 	});
 	
 	// when an entry clicked
-	$('#recent-menu').on('click','ul>li',function(e){
+	$('#recent-menu').on('click','ul>li',function(e) {
 		e.stopPropagation();
 		
 		var selected_element=$(e.target).closest('[data-id]',$(this));
