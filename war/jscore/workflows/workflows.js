@@ -41,12 +41,10 @@ $(function(){
         var name = $('#workflow-name').val();
         
         var unsubscribe_tag = $('#unsubscribe-tag').val().trim();
-        var unsubscribe_description = $('#unsubscribe-description').val();
         var unsubscribe_action = $('#unsubscribe-action').val();
         
         var unsubscribe_json ={
         		               		"tag":unsubscribe_tag,
-        		               		"description": unsubscribe_description,
         		               		"action":unsubscribe_action
         		               }
         
@@ -195,18 +193,18 @@ $(function(){
 	});
 	
 	$('#workflow-unsubscribe-block').live('shown', function(){
-		$('#workflow-unsubscribe-option').html('[-] Unsubscribe Option');
+		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Unsubscribe Option');
 	});
 	
 	$('#workflow-unsubscribe-block').live('hidden', function(){
-		$('#workflow-unsubscribe-option').html('[+] Unsubscribe Option');
+		$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Unsubscribe Option');
 	});
 	
-	/*$('#unsubscribe-condition').die().live('change', function(e){
+	$('#unsubscribe-action').die().live('change', function(e){
 		e.preventDefault();
 		
 		var all_text = "Contact will not receive any further emails from any campaign (i.e., the 'Send Email' option will not work. However, other actions in" 
-			           + "campaign will work as expected)";
+			           + " campaign will work as expected)";
 		
 		var this_text = "Contact will be removed from this campaign";
 		
@@ -223,6 +221,6 @@ $(function(){
 		if($(this).val() == "ASK_USER")
 			$p_ele.html(ask_text);
 		
-	});*/
+	});
 
 });

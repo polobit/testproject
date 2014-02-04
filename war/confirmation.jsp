@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.util.email.SendMail"%>
+<%@page import="com.agilecrm.workflows.Workflow"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.contact.Contact"%>
 <%@page import="com.agilecrm.contact.util.ContactUtil"%>
@@ -8,6 +11,7 @@
 <%@page import="com.agilecrm.workflows.status.CampaignStatus.Status"%>
 <%@page import="com.agilecrm.workflows.status.util.CampaignStatusUtil"%>
 <%@page import="com.campaignio.cron.util.CronUtil"%>
+<%@page import="com.thirdparty.mandrill.Mandrill" %>
 
 <html>
 <head>
@@ -321,6 +325,10 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    String status = request.getParameter("status");
 			    String tag = request.getParameter("t");
 			    String email = request.getParameter("email");
+			    String campaign_name = request.getParameter("c_name");
+			    
+			    // Used to send as from name in confirmation email
+			    String company = request.getParameter("company");
 
 			    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email);
 
@@ -353,15 +361,9 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    if ("all".equals(status))
 						type = UnsubscribeType.ALL;
 
-					    // First time unsubscribe
-					    if (contact.unsubscribeStatus.size() == 0)
-					    {
-						UnsubscribeStatus unsubscribeStatus = new UnsubscribeStatus(campaignId, type);
-						contact.unsubscribeStatus.add(unsubscribeStatus);
-					    }
-					    else
-					    {
-						// Update older one having same campaign id
+					    boolean isNew = true;
+					    
+					    // Update older one having same campaign id
 						for (UnsubscribeStatus uns : contact.unsubscribeStatus)
 						{
 						    if (uns == null)
@@ -370,9 +372,16 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						    if (campaignId.equals(uns.campaign_id))
 						    {
 							uns.unsubscribeType = type;
+							isNew = false;
 							break;
 						    }
 						}
+					 
+					    // First time unsubscribe
+					    if (isNew)
+					    {
+						UnsubscribeStatus unsubscribeStatus = new UnsubscribeStatus(campaignId, type);
+						contact.unsubscribeStatus.add(unsubscribeStatus);
 					    }
 
 					    contact.save();
@@ -388,13 +397,24 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 
 					    // Delete Related Crons.
 					    CronUtil.removeTask(campaignId, contactId);
-
+					    
+					    HashMap<String, String> map = new HashMap<String, String>();
+						
+					    if ("all".equals(status))
+						map.put("company", company);
+					    
+					    if("current".equals(status))
+						map.put("campaign_name", campaign_name);
+						 
+						if(map.size() != 0)
+						   SendMail.sendMail(email, SendMail.UNSUBSCRIBE_CONFIRMATION_SUBJECT,SendMail.UNSUBSCRIBE_CONFIRMATION , map, "noreply@agilecrm.com", company);
 					}
 					catch (Exception e)
 					{
 					    e.printStackTrace();
 					    System.err.println("Exception occured while confirmation " + e.getMessage());
 					}
+			
 			%>
 
 			<%
@@ -403,12 +423,9 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 		</div>
 	</div>
 	<br />
-	<div style="float: right; padding-right: 20px;">
-		<span
-			style="display: inherit; margin-right: 50px; font-style: italic; font-family: Times New Roman; font-size: 10px; margin-bottom: -10px;">Powered
-			by</span> <a href="https://www.agilecrm.com" target="_blank"> <img
-			src="https://my.clickdesk.com/img/plugins/agilecrm.png"
-			alt="Logo for AgileCRM" style="height: 50px; width: 120px;">
+	<div>
+		<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 85px;">Powered
+			by</span> <a href="https://www.agilecrm.com" target="_blank"> <img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 120px;">
 		</a>
 	</div>
 </body>

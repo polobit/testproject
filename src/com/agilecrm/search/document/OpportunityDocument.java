@@ -55,8 +55,6 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	// Adds document to Index
 	addToIndex(doc.setId(opportunity.id.toString()).build());
 
-	// Adds document to Index
-	addToIndex(doc.setId(opportunity.id.toString()).build());
     }
 
     @Override

@@ -53,8 +53,6 @@ public class DocumentDocument extends com.agilecrm.search.document.Document impl
 	// Adds document to Index
 	addToIndex(doc.setId(document.id.toString()).build());
 
-	// Adds document to Index
-	addToIndex(doc.setId(document.id.toString()).build());
     }
 
     @Override

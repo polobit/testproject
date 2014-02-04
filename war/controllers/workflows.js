@@ -256,9 +256,8 @@ var WorkflowsRouter = Backbone.Router
 				  var unsubscribe = this.workflow_model.get("unsubscribe");
 			      
 				  $('#unsubscribe-tag').val(unsubscribe.tag);
-			      $('#unsubscribe-description').val(unsubscribe.description);
-			      $('#unsubscribe-condition').val(unsubscribe.condition);
-			      $('#unsubscribe-condition').trigger('change');
+			      $('#unsubscribe-action').val(unsubscribe.action);
+			      $('#unsubscribe-action').trigger('change');
 			},
 
 			/**
