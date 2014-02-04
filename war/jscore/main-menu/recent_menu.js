@@ -114,9 +114,13 @@ function modelAction(elem)
 	{
 		updateDeal(entity);
 	}
-	else if(type=='case')
+	else if(type == 'case')
 	{
 		updatecases(entity);
+	}
+	else if(type == 'document' || entity.attributes.network_type)
+	{
+		updateDocument(entity);
 	}
 	
 	recent_view_update_required=true;
@@ -144,7 +148,7 @@ $(function(){
 	});
 	
 	// when an entry clicked
-	$('#recent-menu').on('click','ul>li',function(e){
+	$('#recent-menu').on('click','ul>li',function(e) {
 		e.stopPropagation();
 		
 		var selected_element=$(e.target).closest('[data-id]',$(this));
