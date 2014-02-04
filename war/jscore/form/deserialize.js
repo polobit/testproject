@@ -386,7 +386,11 @@ function deserializeChainedElementWebrule(data, rule_element) {
 				|| input_element.tagName.toLowerCase() == "textarea") {
 			$(input_element).val(value);
 			if ($(input_element).hasClass('custom_html')) {
-				setupHTMLEditor($(input_element), value);
+				
+				if(value.value)
+					setupHTMLEditor($(input_element), value.value);
+				else
+					setupHTMLEditor($(input_element), value);
 			}
 
 			return;
