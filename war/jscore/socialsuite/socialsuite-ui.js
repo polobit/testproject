@@ -414,6 +414,10 @@ function initializeSocialSuite()
 	     		   			  }, 4000);    		   		    
 	     		   			     		   		
 	     		   	      }).error(function(jqXHR, textStatus, errorThrown) { alert("error occurred!"); });	
+	     		
+	     		// Adds tag in 'our' domain to track usage
+	     		addTagAgile(SOCIAL_TAG);
+	     		
 				},
 		error : function(data){console.log(data);},
 		});	

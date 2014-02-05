@@ -236,6 +236,7 @@ $(function()
 									$('#content').html(getTemplate("import-contacts", {}));
 									showNotyPopUp('information', "Contacts are now being imported. You will be notified on email when it is done", "top", 5000);
 
+									addTagAgile(IMPORT_TAG);
 								// Calls vefiryUploadStatus with data returned
 								// from the url i.e., key of the memcache
 								// verifyUploadStatus(data);
