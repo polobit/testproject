@@ -13,7 +13,7 @@
          			<div class="btn-group" style="margin-top:12px;">
         				<a href="#" class="btn right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
         				<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-						<ul class="dropdown-menu">
+						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
 							<li><a href="#" class="document-exist">Existing Document</a></li>
 						</ul>
 					</div>
@@ -45,7 +45,7 @@
 		{{else}}
 			<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
 		{{/if}}
-		<span class="owner-name">{{taskOwner.name}}</span>
+		<span class="owner-name">{{owner.name}}</span>
 	</span>
 	<div style="margin-bottom: 9px;"><h4 class="document-title" style="display:inline;"><b style="margin:0px 20px 20px 0px;">{{name}}</b></h4></div>
 

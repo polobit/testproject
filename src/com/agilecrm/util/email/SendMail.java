@@ -99,6 +99,9 @@ public class SendMail
     public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
 
+    public static final String UNSUBSCRIBE_CONFIRMATION = "unsubscribe_confirmation";
+    public static final String UNSUBSCRIBE_CONFIRMATION_SUBJECT = "Unsubscribe";
+
     /**
      * From Name of email.
      */
@@ -241,8 +244,8 @@ public class SendMail
      * @param args
      *            - Variable args to send email attachment.
      */
-    public static void sendMail(String to, String subject, String template, Object object, String... args)
+    public static void sendMail(String to, String subject, String template, Object object)
     {
-	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME, args);
+	sendMail(to, subject, template, object, AGILE_FROM_EMAIL, AGILE_FROM_NAME);
     }
 }

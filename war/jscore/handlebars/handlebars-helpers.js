@@ -101,9 +101,13 @@ $(function()
                                     if(exclusive_fields[i].name == data[j].field_label)
                                             try
                                             {
-                                            		exclusive_fields[i].value = exclusive_fields[i].value * 1000;
-                                            		if(!isNaN(exclusive_fields[i].value))
+                                            	var value = exclusive_fields[i].value * 1000;
+                                            		
+                                            		if(!isNaN(value))
+                                            		{
+                                            			exclusive_fields[i].value = value;
                                                  	  exclusive_fields[i]["subtype"] = data[j].field_type;
+                                            		}
                                                     
                                             }
                                     catch(err)
@@ -553,9 +557,9 @@ $(function()
 	Handlebars.registerHelper('network', function(type)
 	{
 		if (type == 'GOOGLE')
-			return 'Google Drive Document';
+			return 'Google Drive';
 		if (type == 'S3')
-			return 'Uploaded Document';
+			return 'Uploaded Doc';
 	});
 
 	/**

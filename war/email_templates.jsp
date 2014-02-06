@@ -124,12 +124,12 @@ $(function(){
  **/
 function render_theme_previews()
 {
-	var title = '<h2 style="display:inline;">Select a Template</h2>';
+	var title = '<h2>Select a Template</h2>';
 	
-	var html_link = '<div style="display:inline;">'
-					+'<a href="cd_tiny_mce.jsp" style="float:right;text-decoration: none;">'
-						+'<h2>Create your own email >></h2>'
-					+'</a></div>'
+	var html_link = '<span style="display:inline; float: right; margin-top: -25px;">'
+					+'<a href="cd_tiny_mce.jsp" style="font-size: 18px;">'
+						+'Create your own >>'
+					+'</a></span>'
 	
 	$('#preview-container-title').html(title + html_link);
 	

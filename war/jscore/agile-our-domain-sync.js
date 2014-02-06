@@ -3,6 +3,11 @@
  */
 var CANCELED = "Canceled";
 var SIGN_UP = "Signup";
+var CAMPAIGN_TAG = "Campaigns";
+var CODE_SETUP_TAG = "Code setup";
+var IMPORT_TAG = "Import";
+var SOCIAL_TAG = "Social";
+var WIDGET_TAG = "Widgets";
 	
 // Subject for account cancellation note
 var ACCOUNT_CANCELED_NOTE_SUBJECT = "Account Canceled";
@@ -189,9 +194,22 @@ function add_signup_tag(callback)
 	// Calling to add custom fields here so avoid data loss due to asyn requests
 	add_custom_fields_to_our_domain();
 }
-
+function hasTagInContact(tag)
+{
+	if(!tag)
+		return false;
+	
+	if (Agile_Contact && (!Agile_Contact.tags || Agile_Contact.tags.indexOf(tag) < 0))
+		return false;
+	
+	return true;
+	
+}
 function add_tag_our_domain(tag, callback)
 {
+	if(hasTagInContact(tag))
+		return;
+	
 	_agile.add_tag(tag, function(data)
 			{
 				Agile_Contact = data;
@@ -206,4 +224,36 @@ function add_tag_our_domain(tag, callback)
 function setup_our_domain_sync()
 {
 	our_domain_sync();
+}
+
+/**
+ * Adds tag to 'OUR' domain.
+ * 
+ * @param tag
+ */
+function addTagAgile(tag)
+{
+	// Checks if tag is already available.
+	if (checkTagAgile(tag))
+		return;
+
+	// Adds tag
+	_agile.add_tag(tag, function(data)
+	{
+		Agile_Contact = data;
+		if (!checkTagAgile(tag))
+			Agile_Contact.tags.push(tag)
+		set_profile_noty();
+	});
+}
+
+// Checks if tag exists
+function checkTagAgile(tag)
+{
+
+	console.log(Agile_Contact);
+	if (Agile_Contact && Agile_Contact.tags)
+		return Agile_Contact.tags.indexOf(tag) > -1;
+
+	return false;
 }

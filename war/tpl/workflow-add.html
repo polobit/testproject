@@ -3,7 +3,6 @@
     <div class="span12">
         <div class="well">
             <form id="workflowform">
-                
                 <fieldset>
                     <div class="control-group">
                         <label class="control-label"><b>Name of campaign:</b> <span class="field_req">*</span></label>
@@ -19,6 +18,40 @@
                     <IFRAME SRC="designer.html" id="designer" frameBorder="0" name="designer" WIDTH="100%" HEIGHT="900px"></IFRAME>
                     </div>
 					<br />
+                    <br />
+                 
+                    <div>
+						<a href="#" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block"><span><i class="icon-plus"></i></span> Unsubscribe Option</a>
+					</div>
+					<br/>
+					<div class="collapse" id="workflow-unsubscribe-block">
+                    	<div class="control-group">
+							<label class="control-label" style="display: inline-block;">
+								On link click
+							</label>
+							<div class="controls" style="display: inline-block; margin-left: 168px;">
+								<select name="action" id="unsubscribe-action">
+									<option value="UNSUBSCRIBE_FROM_ALL">Unsubscribe from ALL</option>
+                                    <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Unsubscribe from this campaign</option>
+                                    <option value="ASK_USER">Ask user</option>
+								</select>
+							</div>
+							<br/>
+                            <small> Contact will not receive any further emails from any campaign
+(i.e., the 'Send Email' option will not work. However, other actions in campaign will work as expected).</small>
+                    	</div>
+                        <br/>
+                    	<div class="control-group">
+							<label class="control-label" style="display: inline-block;">
+								Add tag for unsubscribed contacts
+							</label>
+							<div class="controls" style="display: inline-block; margin-left: 55px;">
+								<input type="text" name="tag" id="unsubscribe-tag" placeholder="Tag name like unsubscribe">
+							</div>
+                    	</div>
+					</div>
+                   
+                    <br />
                     <br />
                     <button class="btn btn-primary" id="save-workflow-bottom">Save Campaign</button>
                     <a href="#workflows" class="btn">Cancel</a>

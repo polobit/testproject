@@ -72,7 +72,7 @@ public class GravityForm extends HttpServlet
 				else if ((key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location") || key
 						.equalsIgnoreCase("street")) && !StringUtils.isBlank(value))
 					addJson.put("address", value);
-				else
+				else if (!StringUtils.isBlank(value))
 
 					// Add property to list of properties
 					properties.add(buildProperty(key, value, contact));

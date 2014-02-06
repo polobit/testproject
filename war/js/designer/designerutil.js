@@ -25,12 +25,15 @@ function insertSelectedMergeField(ele,target_id)
 
 /**
  * MergeFields function to fetch all available merge-fields.
+ * 
+ * @param type - to add specific fields for specific nodes
+ *               like unsubscribe link to SendEmail node
  **/
-function getMergeFields()
+function getMergeFields(type)
 {
 	var options=
 	{
-		"Add Merge Field": "",
+		"Select Merge Field": "",
 		"First Name": "{{first_name}}",
 		"Last Name": "{{last_name}}",
 		"Score": "{{score}}",
@@ -58,6 +61,20 @@ function getMergeFields()
 	
 	// Merges options json and custom fields json
 	var merged_json = merge_jsons({}, options, custom_fields);
+	
+	// If type is send_email add unsubscribe link
+	if(type !== undefined && type == "send_email")
+	{
+		// Rename Select Merge field for Send Email
+		var json_str = JSON.stringify(merged_json);
+		
+		var replaced_json =  json_str.replace("Select Merge Field","Add Merge Field");
+		
+		// Parsing the altered string
+		merged_json = JSON.parse(replaced_json);
+		
+		merged_json["Unsubscribe Link"] = "{{UnsubscribeLink}}";
+	}
 	
 	return merged_json;
 }

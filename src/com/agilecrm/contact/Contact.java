@@ -33,6 +33,7 @@ import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
+import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
@@ -219,7 +220,13 @@ public class Contact extends Cursor
 	public static final String ADDRESS = "address";
 	public static final String PHONE = "phone";
 
-	// Dao
+	/**
+	 * Unsubscribe status
+	 */
+	@NotSaved(IfDefault.class)
+	@Embedded
+	public List<UnsubscribeStatus> unsubscribeStatus = new ArrayList<UnsubscribeStatus>();// Dao
+
 	public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
 	/**
@@ -552,7 +559,7 @@ public class Contact extends Cursor
 	 * 
 	 * @param tags
 	 */
-	public void addTags(String[] tags)
+	public void addTags(String... tags)
 	{
 		int oldTagsCount = tagsWithTime.size();
 
@@ -616,7 +623,7 @@ public class Contact extends Cursor
 		this.save();
 
 		boolean isUpdateRequired = true;
-		if (deleteTags != null)
+		if (deleteTags != null && deleteTags.length >= 1)
 		{
 			isUpdateRequired = deleteTags[0];
 		}

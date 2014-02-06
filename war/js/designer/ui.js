@@ -159,7 +159,13 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
 
     // Gets MergeFields Option object
     if(uiFieldDefinition.fieldType == "merge_fields")
-    	options = getMergeFields();
+    {
+    	// To add unsubscribe link to merge fields of only SendEmail node
+    	if(uiFieldDefinition.target_type == "tinyMCEhtml_email" || uiFieldDefinition.target_type == "text_email")
+    		options = getMergeFields("send_email");
+    	else
+    		options = getMergeFields();
+    }
     	
     // Populate Options
     $.each(

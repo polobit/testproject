@@ -2,6 +2,7 @@ package com.agilecrm.workflows;
 
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -14,6 +15,7 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.unsubscribe.Unsubscribe;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
@@ -81,6 +83,13 @@ public class Workflow extends Cursor
     @NotSaved(IfDefault.class)
     @Indexed
     private Key<DomainUser> creator_key = null;
+
+    /**
+     * Unsubscribe options
+     */
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public Unsubscribe unsubscribe = new Unsubscribe();
 
     /**
      * Initialize DataAccessObject.

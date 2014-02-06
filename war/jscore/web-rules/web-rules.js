@@ -8,12 +8,14 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#WEB_RULE_RHS", el).chained($("#action", el), function(el, self){
 
-		if(data && data.actions)
+		var select = $('select', $(self));
+		
+		if(data)
 			{
-				$.each(data.actions, function(index, action){
+				$.each(data, function(index, action){
 					if(action.action == "ASSIGN_CAMPAIGN")
 					{
-						$('select', $(self)).find('option[value='+ action.RHS +']').attr("selected", "selected");
+						$(select).find('option[value='+ action.RHS +']').attr("selected", "selected");
 						return false;
 					}
 				});	
@@ -75,7 +77,7 @@ function chainWebRules(el, data, isNew, actions)
 			{
 				if(actions && actions[0])
 					{
-					setupHTMLEditor($(text_area), actions[0].popup_text);
+					setupHTMLEditor($(text_area), actions[0].popup_text.value);
 					actions = undefined;
 					}
 				else

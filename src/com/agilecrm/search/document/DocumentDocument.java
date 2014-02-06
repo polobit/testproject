@@ -5,42 +5,40 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.agilecrm.deals.Opportunity;
+import com.agilecrm.document.Document;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.StringUtils2;
-import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
 import com.googlecode.objectify.Key;
 
-public class OpportunityDocument extends com.agilecrm.search.document.Document implements BuilderInterface
+public class DocumentDocument extends com.agilecrm.search.document.Document implements BuilderInterface
 {
 
     @Override
     public void add(Object entity)
     {
-	Opportunity opportunity = (Opportunity) entity;
+	Document document = (Document) entity;
 
-	Document.Builder doc = Document.newBuilder();
+	com.google.appengine.api.search.Document.Builder doc = com.google.appengine.api.search.Document.newBuilder();
 
 	Set<String> fields = new HashSet<String>();
 
-	fields.add(opportunity.name);
-	fields.add(opportunity.description);
+	fields.add(document.name);
 
 	doc.addField(Field.newBuilder().setName("search_tokens")
 		.setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
 
-	doc.addField(Field.newBuilder().setName("type").setText(Type.OPPORTUNITY.toString()));
+	doc.addField(Field.newBuilder().setName("type").setText(Type.DOCUMENT.toString()));
 
-	DomainUser opportunityOwner = null;
+	DomainUser documentOwner = null;
 
 	try
 	{
-	    opportunityOwner = opportunity.getOwner();
+	    documentOwner = document.getOwner();
 	}
 	catch (Exception e)
 	{
@@ -49,11 +47,11 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	}
 
 	// Sets owner of the opportunity
-	if (opportunityOwner != null)
-	    doc.addField(Field.newBuilder().setName("owner_id").setText(opportunity.id.toString()));
+	if (documentOwner != null)
+	    doc.addField(Field.newBuilder().setName("owner_id").setText(document.id.toString()));
 
 	// Adds document to Index
-	addToIndex(doc.setId(opportunity.id.toString()).build());
+	addToIndex(doc.setId(document.id.toString()).build());
 
     }
 
@@ -82,9 +80,9 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
      * Adds Document to index
      * 
      * @param doc
-     *            {@link Document}
+     *            {@link com.google.appengine.api.search.Document}
      */
-    private void addToIndex(Document doc)
+    private void addToIndex(com.google.appengine.api.search.Document doc)
     {
 	// Adds document to index
 	index.put(doc);
@@ -98,12 +96,12 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
     public List getResults(List<Long> ids)
     {
 	// TODO Auto-generated method stub
-	List<Key<Opportunity>> opportunity_keys = new ArrayList<Key<Opportunity>>();
+	List<Key<Document>> document_keys = new ArrayList<Key<Document>>();
 	for (Long id : ids)
 	{
-	    opportunity_keys.add(new Key<Opportunity>(Opportunity.class, id));
+	    document_keys.add(new Key<Document>(Document.class, id));
 	}
 
-	return Opportunity.dao.fetchAllByKeys(opportunity_keys);
+	return Document.dao.fetchAllByKeys(document_keys);
     }
 }

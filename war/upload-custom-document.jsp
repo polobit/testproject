@@ -1,7 +1,6 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="java.util.Date"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -9,7 +8,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload New Custom Document</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-pink.min.css" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap-<%=request.getParameter("t")%>.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/lib/bootstrap.min.js"></script>
