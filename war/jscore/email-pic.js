@@ -40,6 +40,6 @@ function getPicByEmail(email, width)
 	//get picture by email from gravatar.com
 	if (email)
 	{
-		return 'https://secure.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + width + '&d=404';
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
 	}
 }

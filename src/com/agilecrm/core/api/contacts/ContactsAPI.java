@@ -725,4 +725,25 @@ public class ContactsAPI
 			return null;
 		}
 	}
+
+	/**
+	 * Gets a contact based on its contact number
+	 * 
+	 * @param number
+	 *            phone number of a contact to fetch it
+	 * @return contact related to phone number
+	 */
+	@Path("/search/phonenumber/{phone_number}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Contact searchContactByPhoneNumber(@PathParam("phone_number") String sipPhoneNumber)
+	{
+		System.out.println("In searchContactByPhoneNumber : " + sipPhoneNumber);
+		int positionOfColon = sipPhoneNumber.indexOf(":");
+		int positionOfAt = sipPhoneNumber.indexOf("@");
+		String phoneNumber = sipPhoneNumber.substring(positionOfColon, positionOfAt);
+		System.out.println("In searchContactByPhoneNumber : " + phoneNumber);
+
+		return ContactUtil.searchContactByPhoneNumber(phoneNumber);
+	}
 }

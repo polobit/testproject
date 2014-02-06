@@ -253,8 +253,58 @@ function saveZendeskWidgetPrefs()
 	});
 }
 
+/**
+ * Shows setup if user adds Sip widget for the first time or clicks on reset
+ * icon on Sip panel in the UI
+ * 
+ */
+function sip_save_widget_prefs()
+{
+	
+	$('#save_prefs').unbind("click");
+
+	// On click of save button, check input and save details
+	$('#save_prefs').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#sip_login_form")))
+		{
+			return;
+		}
+		// Saves Sip preferences in ClickDesk widget object
+		saveSipWidgetPrefs();
+
+	});
+
+}
+
+/**
+ * Calls method in script API (agile_widget.js) to save Sip preferences in
+ * Sip widget object
+ */
+function saveSipWidgetPrefs()
+{
+	// Retrieve and store the Sip preferences entered by the user as JSON
+	var sip_prefs = {};
+	sip_prefs["sip_username"] = $("#sip_username").val();
+	sip_prefs["sip_password"] = $("#sip_password").val();
+	sip_prefs["sip_publicid"] = $("#sip_publicid").val();
+	sip_prefs["sip_privateid"] = $("#sip_privateid").val();
+	sip_prefs["sip_realm"] = $("#sip_realm").val();
+
+	// Saves the preferences into widget with sip widget name
+	save_widget_prefs("Sip", JSON.stringify(sip_prefs), function(data)
+	{
+		console.log('In sip save success');
+		console.log(data);
+	});
+}
+
 function save_widget_prefs(pluginName, prefs, callback)
 {
+	console.log("In save_widget_prefs.");
 	/*
 	 * Get widget model from collection based on the name attribute of the
 	 * widget model
@@ -325,6 +375,9 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 	else if (widget_name == "Rapleaf")
 		rapleaf_save_widget_prefs();
+	
+	else if (widget_name == "Sip")
+		sip_save_widget_prefs();
 	
 	// Shows available widgets in the content
 	if (url)

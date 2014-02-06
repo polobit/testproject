@@ -27,8 +27,8 @@ var SettingsRouter = Backbone.Router
 			"add-widget" : "addWidget",
 
 			"Linkedin/:id" : "Linkedin", "Twitter/:id" : "Twitter", "Rapleaf/:id" : "Rapleaf", "ClickDesk/:id" : "ClickDesk", "Zendesk/:id" : "Zendesk",
-				"Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
-				"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk", "Twilio" : "Twilio",
+			"Sip/:id" : "Sip", "Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
+				"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk","Sip" : "Sip", "Twilio" : "Twilio",
 				"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
 
 				/* contact-us help email */
@@ -95,8 +95,11 @@ var SettingsRouter = Backbone.Router
 				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
 				itemView.model.fetch();
 
+				// Adds header
+				$('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3><br/></div>");
+				
 				// Adds Gmail Prefs
-				$('#prefs-tabs-content').html(itemView.render().el);
+				$('#prefs-tabs-content').append(itemView.render().el);
 
 				// Gets IMAP Prefs
 				var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
@@ -362,6 +365,15 @@ var SettingsRouter = Backbone.Router
 
 			},
 
+			Sip : function(id)
+			{
+				if (!id)
+					show_set_up_widget("Sip", 'sip-login');
+				else
+					fill_form(id, "Sip", 'sip-login');
+
+			},
+			
 			Twilio : function(id)
 			{
 
