@@ -64,8 +64,8 @@
 	content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
-	// String CSS_PATH = "/";
-	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+	 String CSS_PATH = "/";
+	//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 <%
 	String logoutURL = "/login";
@@ -91,7 +91,8 @@
 </head>
 
 <body>
-	<div id="wrap">
+    <div id="dialpadDiv"></div>
+	<div id="wrap">	    
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container<%=width%>">
@@ -413,8 +414,8 @@
 	<script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script>
 
 	<script>
-	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	//var LIB_PATH = "/";
+	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
@@ -486,11 +487,19 @@
 	<!-- telephony css -->
 	<link rel="stylesheet" type="text/css"
 		href="/css/candybar.css" />
+	<link rel="stylesheet" type="text/css"
+		href="/css/dialpad.css" />
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 	
 	<link rel="stylesheet" type="text/css"
 		href="css/simplemodal.css"></link>
 
-	<!-- Unified CSS for All Lib -->
+	<!-- Unified CSS for All Lib -->	
+	
+	 <!-- Audios -->
+    <audio id="audio_remote" autoplay="autoplay" />
+    <audio id="ringtone" loop src="/sounds/ringtone.wav" />
+    <audio id="ringbacktone" loop src="/sounds/ringbacktone.wav" />
+    <audio id="dtmfTone" src="/sounds/dtmf.wav" />
 </body>
 </html>

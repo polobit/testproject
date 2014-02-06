@@ -435,10 +435,10 @@ $(function()
 		var email = getPropertyValue(items, "email");
 		if (email)
 		{
-			return 'https://secure.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
+			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
 		}
 
-		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
 
 	});
 
@@ -447,7 +447,7 @@ $(function()
 		// Default image
 		var img = DEFAULT_GRAVATAR_url;
 
-		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
 	});
 
 	Handlebars.registerHelper('emailGravatarurl', function(width, email)
@@ -457,10 +457,10 @@ $(function()
 
 		if (email)
 		{
-			return 'https://secure.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
+			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
 		}
 
-		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
 	});
 
 	/**
@@ -2690,7 +2690,7 @@ function checkTagAgile(tag)
  * md5.js deals with implementing the md5 cryptographic hash function 
  * which takes arbitrary-sized data and output a fixed-length (16) hash value.
  */
-var MD5 = function (string) {
+var Agile_MD5 = function (string) {
 
         function RotateLeft(lValue, iShiftBits) {
             return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
