@@ -460,7 +460,7 @@ function deserializeChainedSelect1(form, el, element) {
 							 * Chains dependencies of input fields with
 							 * jquery.chained.js based on the rule element
 							 */
-							chainWebRules(new_rule_element, undefined, false,
+							chainWebRules(new_rule_element, el, false,
 									actions);
 
 							deserializeChainedElementWebrule(data,
