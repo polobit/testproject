@@ -27,8 +27,8 @@ var SettingsRouter = Backbone.Router
 			"add-widget" : "addWidget",
 
 			"Linkedin/:id" : "Linkedin", "Twitter/:id" : "Twitter", "Rapleaf/:id" : "Rapleaf", "ClickDesk/:id" : "ClickDesk", "Zendesk/:id" : "Zendesk",
-				"Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
-				"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk", "Twilio" : "Twilio",
+			"Sip/:id" : "Sip", "Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
+				"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk","Sip" : "Sip", "Twilio" : "Twilio",
 				"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
 
 				/* contact-us help email */
@@ -362,6 +362,15 @@ var SettingsRouter = Backbone.Router
 
 			},
 
+			Sip : function(id)
+			{
+				if (!id)
+					show_set_up_widget("Sip", 'sip-login');
+				else
+					fill_form(id, "Sip", 'sip-login');
+
+			},
+			
 			Twilio : function(id)
 			{
 

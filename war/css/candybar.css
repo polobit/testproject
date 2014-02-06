@@ -17,7 +17,7 @@ body {
   #callStatus.visible {
     top: 40px; }
   #callStatus.havatar .callActions {
-    left: 100px; }
+    /* left: 100px; */ }
   #callStatus.havatar .caller {
     margin-left: 90px; }
   #callStatus.incoming {
@@ -152,7 +152,8 @@ body {
     -ms-filter: progid:DXImageTransform.Microsoft.Shadow(Color=rgba(0, 0, 0, 0.3),Direction=135,Strength=3); }
     #callStatus button:hover {
       background-color: rgba(255, 255, 255, 0.4); }
-    #callStatus button:active {
+    /* #callStatus button:active { */
+    #callStatus button{
       box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 3px;
       -moz-box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 3px;
       -webkit-box-shadow: inset rgba(0, 0, 0, 0.2) 0 1px 3px;
