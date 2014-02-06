@@ -95,8 +95,11 @@ var SettingsRouter = Backbone.Router
 				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
 				itemView.model.fetch();
 
+				// Adds header
+				$('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3><br/></div>");
+				
 				// Adds Gmail Prefs
-				$('#prefs-tabs-content').html(itemView.render().el);
+				$('#prefs-tabs-content').append(itemView.render().el);
 
 				// Gets IMAP Prefs
 				var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
