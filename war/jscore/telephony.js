@@ -28,6 +28,9 @@ $(function()
                 			          console.log("In telephony getting sip widget.");	
                 			          console.log(sip_widget);	
                 			         
+                			          if(sip_widget == null)
+                			        	  return;
+                			          
                 			          SIP_WIDGET_OBJECT = sip_widget;
                 			          
                 			          if(sip_widget.prefs != undefined )
