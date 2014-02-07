@@ -777,7 +777,7 @@ function OnScrollDiv(elementDiv)
    			// Remove loading icon.
    			$('#stream-waiting-modal-'+streamId).remove();
    			
-   			// Do not call this function again.
+   			// Do not call this function again once its called on one scroll.
    			$(elementDiv).attr("data","1");
    			
    			// Twitter icon and up arrow appended in stream to show no more tweets available.

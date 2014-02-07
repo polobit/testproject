@@ -224,6 +224,9 @@ var Base_Collection_View = Backbone.View
 							
 							// Unregister all streams on server.
 							unregisterAll();
+							
+							// Unregister on SIP server.
+							sipUnRegister();
 
 							// Firefox do not support window.location.origin, so protocol is explicitly added to host
 							window.location.href = window.location.protocol + "//" + window.location.host+"/login"+hash;
