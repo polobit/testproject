@@ -65,7 +65,7 @@ public class DefaultWidgets
 				"/widgets/stripe.js", "/img/plugins/Stripe.png", "/widgets/stripe-small-logo.png", null,
 				WidgetType.BILLING));
 		widgets.add(new Widget("Sip",
-				" Stay connected to your users with Sip phone numbers in 40 countries all over the globe.",
+				"Make and receive calls from your contacts using any SIP account.",
 				"/widgets/sip.js", "/widgets/sip-logo-small.png", "/widgets/sip-logo-small.png", null, null));
 
 		System.out.println("Default widgets ");
