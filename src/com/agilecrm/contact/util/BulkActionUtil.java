@@ -1,5 +1,7 @@
 package com.agilecrm.contact.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -255,8 +257,10 @@ public class BulkActionUtil
 	 * @param criteria
 	 * @param domainUserId
 	 * @return {@link List} of {@link Key}
+	 * @throws UnsupportedEncodingException
 	 */
 	public static List<Key<Contact>> getFilterContactsKeys(String criteria, Long domainUserId)
+			throws UnsupportedEncodingException
 	{
 		// If criteria is empty returns empty list
 		if (criteria.isEmpty())
@@ -273,7 +277,7 @@ public class BulkActionUtil
 			String[] tagCondition = StringUtils.split("#tags/");
 			String tag = tagCondition.length > 0 ? tagCondition[1] : "";
 
-			return Contact.dao.listKeysByProperty("tagsWithTime.tag", tag);
+			return Contact.dao.listKeysByProperty("tagsWithTime.tag", URLDecoder.decode(tag, "UTF-8"));
 		}
 
 		// If criteria is '#contacts' then keys of all available contacts are
@@ -305,10 +309,20 @@ public class BulkActionUtil
 			String[] tagCondition = criteria.split("#tags/");
 			System.out.println(tagCondition.length);
 			String tag = tagCondition.length > 0 ? tagCondition[1] : "";
+
 			if (StringUtils.isEmpty(tag))
 				return new ArrayList<Contact>();
 
-			return ContactUtil.getContactsForTag(tag, ENTITIES_FETCH_LIMIT, cursor);
+			try
+			{
+				return ContactUtil.getContactsForTag(URLDecoder.decode(tag, "UTF-8"), ENTITIES_FETCH_LIMIT, cursor);
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new ArrayList<Contact>();
+			}
 		}
 
 		if (criteria.equals("#contacts"))
