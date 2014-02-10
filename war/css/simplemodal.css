@@ -17,8 +17,8 @@
 *     </div>
 *   </div>
 *   <div class="simple-modal-footer">
-*     <a class="btn primary" href="#">Primary</a>
-*     <a class="btn secondary" href="#">Secondary</a>
+*     <a class="simple_modal_btn primary" href="#">Primary</a>
+*     <a class="simple_modal_btn secondary" href="#">Secondary</a>
 *   </div>
 * </div>
 */
@@ -42,8 +42,8 @@
 }
 .simple-modal {
   /* Style rewrite */
-
-  width: 600px;
+  
+  width: 275px;
   left: 20px;
   top: 20px;
   /* */
@@ -135,7 +135,7 @@
   margin-bottom: 0;
   text-align: center;
 }
-.simple-modal .simple-modal-footer a.btn {
+.simple-modal .simple-modal-footer a.simple_modal_btn {
   text-decoration: none;
   cursor: pointer;
   display: inline-block;
@@ -152,21 +152,21 @@
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
 }
-.simple-modal .simple-modal-footer a.btn.primary {
+.simple-modal .simple-modal-footer a.simple_modal_btn.primary {
   color: #FFF;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
   background-color: #999;
   background-repeat: repeat-x;
   margin-right: 15px;
 }
-.simple-modal .simple-modal-footer a.btn.primary:hover {
+.simple-modal .simple-modal-footer a.simple_modal_btn.primary:hover {
   border: 1px solid #444;
   background-color: #444;
 }
-.simple-modal .simple-modal-footer a.btn.secondary {
+.simple-modal .simple-modal-footer a.simple_modal_btn.secondary {
   padding: 5px 2px 6px;
 }
-.simple-modal .simple-modal-footer a.btn.secondary:hover {
+.simple-modal .simple-modal-footer a.simple_modal_btn.secondary:hover {
   color: #999;
 }
 /* Draggable style */
@@ -199,3 +199,4 @@
 .simple-modal.hide-footer .simple-modal-footer {
   display: none;
 }
+

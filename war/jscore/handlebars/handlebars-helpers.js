@@ -426,7 +426,6 @@ $(function()
 		{
 			html += "<div class='tag-element' style='margin-right:10px'><div class='tag-key'>"+keys[i]+"</div><div class='tag-values' tag-alphabet=\""+keys[i]+"\"></div></div>";
 		}
-		console.log(html);
 		return new Handlebars.SafeString(html);
 	});
 
