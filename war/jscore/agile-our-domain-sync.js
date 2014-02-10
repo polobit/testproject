@@ -138,6 +138,8 @@ function our_domain_sync()
 
 		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
+		initWebrules();
+		
 		// Gets contact based on the the email of the user logged in
 		agile_getContact(CURRENT_DOMAIN_USER['email'], {
 			success: function(data){
@@ -256,4 +258,14 @@ function checkTagAgile(tag)
 		return Agile_Contact.tags.indexOf(tag) > -1;
 
 	return false;
+}
+
+var GLOBAL_WEBRULE_FLAG;
+function initWebrules()
+{
+	head.js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/lib/head.load.min.js", "/lib/web-rule/modal.1.js", function(){
+		_agile_execute_webrules();
+		GLOBAL_WEBRULE_FLAG = true;
+	})
+	
 }

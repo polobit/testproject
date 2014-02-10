@@ -17,8 +17,8 @@
 *     </div>
 *   </div>
 *   <div class="simple-modal-footer">
-*     <a class="btn primary" href="#">Primary</a>
-*     <a class="btn secondary" href="#">Secondary</a>
+*     <a class="simple_modal_btn primary" href="#">Primary</a>
+*     <a class="simple_modal_btn secondary" href="#">Secondary</a>
 *   </div>
 * </div>
 */
@@ -35,15 +35,14 @@
   background-color: #000000;
   background-position: center center;
   background-repeat: no-repeat;
-  background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#291a49));
+/*  background: -webkit-gradient(radial, center center, 0, center center, 460, from(#ffffff), to(#291a49));
   background: -webkit-radial-gradient(circle, #ffffff, #291a49);
   background: -moz-radial-gradient(circle, #ffffff, #291a49);
-  background: -ms-radial-gradient(circle, #ffffff, #291a49);
+  background: -ms-radial-gradient(circle, #ffffff, #291a49); */
 }
 .simple-modal {
   /* Style rewrite */
 
-  width: 600px;
   left: 20px;
   top: 20px;
   /* */
@@ -56,16 +55,16 @@
   font-size: 13px;
   font-weight: normal;
   line-height: 18px;
-  background-color: #FFFFFF;
+  /* background-color: #FFFFFF; 
   border: 1px solid #EAEEFA;
   border: 1px solid rgba(234, 238, 250, 0.6);
   -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
   -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);*/
   z-index: 99999;
-  border-radius: 6px;
+  /* border-radius: 6px;
   -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
+  -moz-border-radius: 6px; */
 }
 .simple-modal .simple-modal-header {
   padding: 5px 15px;
@@ -80,7 +79,8 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 36px;
 }
-.simple-modal a.close, .simple-modal a.previous-image, .simple-modal a.next-image {
+/* .simple-modal a.close, .simple-modal a.previous-image, .simple-modal a.next-image { */
+.simple-modal .simple-modal a.previous-image, .simple-modal a.next-image {
   position: absolute;
   top: 16px;  
   color: #999;
@@ -91,7 +91,9 @@
   text-decoration: none;
 }
 .simple-modal a.close {
-  right: 15px;
+  position: absolute;
+  right: -16px;
+  top: -18px;
 }
 .simple-modal a.previous-image {
   right: 80px;  
@@ -99,16 +101,18 @@
 .simple-modal a.next-image {
   right: 60px;
 }
-.simple-modal a.close:hover, .simple-modal a.previous-image:hover, .simple-modal a.next-image:hover {
-  color: #444;
+/* .simple-modal a.close:hover, .simple-modal a.previous-image:hover, .simple-modal a.next-image:hover { */
+.simple-modal .simple-modal a.previous-image:hover, .simple-modal a.next-image:hover {
+	color: #444;
 }
-.simple-modal .simple-modal-body {
+/* .simple-modal .simple-modal-body {
   padding: 15px;
-  /* Extra style */
+  Extra style
 
-}
+} */
 .simple-modal .simple-modal-body div.contents {
-  overflow: hidden;
+   overflow: hidden;
+   width: auto;
 }
 .simple-modal .simple-modal-body p {
   font-size: 13px;
@@ -135,7 +139,7 @@
   margin-bottom: 0;
   text-align: center;
 }
-.simple-modal .simple-modal-footer a.btn {
+.simple-modal .simple-modal-footer a.simple_modal_btn {
   text-decoration: none;
   cursor: pointer;
   display: inline-block;
@@ -152,21 +156,21 @@
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
 }
-.simple-modal .simple-modal-footer a.btn.primary {
+.simple-modal .simple-modal-footer a.simple_modal_btn.primary {
   color: #FFF;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
   background-color: #999;
   background-repeat: repeat-x;
   margin-right: 15px;
 }
-.simple-modal .simple-modal-footer a.btn.primary:hover {
+.simple-modal .simple-modal-footer a.simple_modal_btn.primary:hover {
   border: 1px solid #444;
   background-color: #444;
 }
-.simple-modal .simple-modal-footer a.btn.secondary {
+.simple-modal .simple-modal-footer a.simple_modal_btn.secondary {
   padding: 5px 2px 6px;
 }
-.simple-modal .simple-modal-footer a.btn.secondary:hover {
+.simple-modal .simple-modal-footer a.simple_modal_btn.secondary:hover {
   color: #999;
 }
 /* Draggable style */
@@ -199,3 +203,4 @@
 .simple-modal.hide-footer .simple-modal-footer {
   display: none;
 }
+
