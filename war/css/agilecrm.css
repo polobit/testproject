@@ -986,7 +986,7 @@ overflow: scroll;width:100%;word-break: break-all;table-layout:fixed
 
 
 @media (min-width: 1200px) and (max-width: 1250px)  {
-	.agile-menu  > li:nth-child(n + 9):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	.agile-menu  > li:nth-child(n + 10):not(.nav-bar-search):not(#more-menu)   {     display:none }	
 	#more-menu  {
 		display:none;
 	}
