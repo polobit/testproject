@@ -1,6 +1,7 @@
 <script id="settings-user-prefs-template" type="text/html">
 <!--  Contact View Detail in Detailed mode - when only one contact is shown -->
-<div class="span8 well">
+<div class="row">
+	<div class="span8 well">
     <form id="userPrefs" class="form-horizontal">
         <fieldset>
             <input name="id" type="hidden" value="{{id}}" /> 		
@@ -259,11 +260,18 @@
                     </label>       
                 </div>
             </div>
+            <div class="control-group">
+                <div class="controls">
+					<a href="#change-password">Change Password</a>      
+                </div>
+            </div>
+
             <div class="form-actions">
                 <a href="#" type="submit" class="save btn btn-primary">Save Changes</a>
                 <!--<a href="#settings" class="btn ">Cancel</a>-->
             </div>
         </fieldset>
     </form>
+	</div>
 </div>
 </script>

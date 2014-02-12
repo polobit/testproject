@@ -69,7 +69,7 @@ function insertSelectedMergeField(ele,target_id)
 function getMergeFields()
 {
 	// get merge fields
-	var merge_fields = window.opener.getMergeFields();
+	var merge_fields = window.opener.getMergeFields('send_email');
 	
 	appendMergeFieldsToSelect(merge_fields);
 	
