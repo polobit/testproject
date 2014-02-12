@@ -2202,7 +2202,7 @@ $(function()
 		else if(value >=90)
 		{
 			type="success";
-			reputation="Excellant";
+			reputation="Excellent";
 		}
 		    
 	    return "<span style='font-size:13px;' class='label label-"+type+"'>"+reputation+"</span> <!--<span class='badge badge-"+type+"'>"+value+"</span>-->";
