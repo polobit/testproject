@@ -16,7 +16,7 @@ $(function()
 		console.log(callbackURL);
 
 		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL);
+		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL) + "&interval=DAILY";
 
 		// this code is used, if once permission is granted, we refresh the
 		// tokens and import without asking for permission again and again

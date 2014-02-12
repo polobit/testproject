@@ -192,7 +192,10 @@ public class ScribeUtil
 		 * token
 		 */
 		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE))
+		{
+			System.out.println("***********************" + req.getSession().getAttribute("interval"));
 			saveGooglePrefs(code);
+		}
 	}
 
 	/**

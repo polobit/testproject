@@ -491,8 +491,6 @@
 		href="/css/dialpad.css" />
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 	
-	<link rel="stylesheet" type="text/css"
-		href="css/simplemodal.css"></link>
 
 	<!-- Unified CSS for All Lib -->	
 	

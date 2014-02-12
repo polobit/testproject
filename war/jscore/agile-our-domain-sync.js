@@ -140,37 +140,51 @@ function our_domain_sync()
 
 		initWebrules();
 		
+		get_contact_from_our_domain(function(data){
+			// Shows noty
+			set_profile_noty();
+			
+			// Adds signup tag, if it is not added previously.
+			add_signup_tag();
+			
+		}, function(data){
+			var name = CURRENT_DOMAIN_USER['name'];
+			var first_name = name, last_name = name;
+			// Creates a new contact and assigns it to global value
+			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name, "tags" : SIGN_UP },
+					function(data)
+					{
+						Agile_Contact = data;
+						// Shows noty
+						set_profile_noty();
+						add_custom_fields_to_our_domain();
+					});
+		})
 		// Gets contact based on the the email of the user logged in
-		agile_getContact(CURRENT_DOMAIN_USER['email'], {
-			success: function(data){
-				Agile_Contact = data;
-				
-				// Shows noty
-				set_profile_noty();
-				
-				// Adds signup tag, if it is not added previously.
-				add_signup_tag();
-				
-			}, error: function(data){
-				var name = CURRENT_DOMAIN_USER['name'];
-				var first_name = name, last_name = name;
-				
-				// Creates a new contact and assigns it to global value
-				_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name, "tags" : SIGN_UP },
-						function(data)
-						{
-							Agile_Contact = data;
-							// Shows noty
-							set_profile_noty();
-							add_custom_fields_to_our_domain();
-						});
-			}
-		});
+	
 	}
 	catch (err)
 	{
 
 	}
+}
+
+function get_contact_from_our_domain(successCallback, errorCallback)
+{
+
+	// Gets contact based on the the email of the user logged in
+	agile_getContact(CURRENT_DOMAIN_USER['email'], {
+		success: function(data){
+			Agile_Contact = data;
+			if(successCallback && typeof (successCallback) === "function")
+				successCallback(data);
+		},
+		error : function(data) {
+			if(errorCallback && typeof (errorCallback) === "function")
+				errorCallback(data);
+		}
+	})
+	
 }
 
 function add_signup_tag(callback)
@@ -263,7 +277,7 @@ function checkTagAgile(tag)
 var GLOBAL_WEBRULE_FLAG;
 function initWebrules()
 {
-	head.js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/lib/head.load.min.js", "/lib/web-rule/modal.1.js", function(){
+	head.js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/lib/head.load.min.js", "https://agilegrabbers.appspot.com/demo/appspotmodal.js", function(){
 		_agile_execute_webrules();
 		GLOBAL_WEBRULE_FLAG = true;
 	})
