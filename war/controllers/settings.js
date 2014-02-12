@@ -11,6 +11,9 @@ var SettingsRouter = Backbone.Router
 
 			/* User preferences */
 			"user-prefs" : "userPrefs",
+			
+			/* Change Password */
+			"change-password" : "changePassword",
 
 			/* Email (Gmail / IMAP) */
 			"email" : "email",
@@ -27,8 +30,8 @@ var SettingsRouter = Backbone.Router
 			"add-widget" : "addWidget",
 
 			"Linkedin/:id" : "Linkedin", "Twitter/:id" : "Twitter", "Rapleaf/:id" : "Rapleaf", "ClickDesk/:id" : "ClickDesk", "Zendesk/:id" : "Zendesk",
-				"Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
-				"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk", "Twilio" : "Twilio",
+			"Sip/:id" : "Sip", "Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
+				"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk","Sip" : "Sip", "Twilio" : "Twilio",
 				"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
 
 				/* contact-us help email */
@@ -64,6 +67,71 @@ var SettingsRouter = Backbone.Router
 			},
 
 			/**
+			 * Creates a Model to show and edit Personal Preferences, and sets
+			 * HTML Editor. Reloads the page on save success.
+			 */
+			changePassword : function()
+			{
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#prefs-tabs-content').append(getTemplate("settings-change-password"), {});
+				$('#PrefsTab .active').removeClass('active');
+				$('.user-prefs-tab').addClass('active');
+				
+				$("#saveNewPassword").on("click", function(e){
+					
+					e.preventDefault();
+					var saveBtn = $('#saveNewPassword');
+					
+					// Returns, if the save button has disabled attribute
+					if ($(saveBtn).attr('disabled'))
+						return;
+
+					// Disables save button to prevent multiple click event issues
+					disable_save_button($(saveBtn));
+					
+					var form_id = $(this).closest('form').attr("id");
+					
+					if (!isValidForm('#'+ form_id)) {
+
+						// Removes disabled attribute of save button
+						enable_save_button($(saveBtn));
+						return false;
+					}
+
+					// Show loading symbol until model get saved
+					$('#changePasswordForm').find('span.save-status').html(LOADING_HTML);
+
+					var json = serializeForm(form_id);
+
+					$.ajax({
+						url: '/core/api/user-prefs/changePassword',
+						type: 'PUT',
+						data: json,
+						success: function() {
+							$('#changePasswordForm').find('span.save-status').html("<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(3000);
+							enable_save_button($(saveBtn));
+							$('#' + form_id).each(function() {
+								this.reset();
+							});
+							history.back(-1);
+						},
+						error: function(response) {
+							$('#' + form_id).each(function() {
+								this.reset();
+							});
+							$('#changePasswordForm').find('span.save-status').html("");
+							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append("<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(3000);
+							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
+							enable_save_button($(saveBtn));
+						}
+					});
+
+				});
+			},
+
+			/**
 			 * Shows social preferences (LinkedIn and Twitter) to get access.
 			 * Loads linkedIn and then appends Twitter to the view
 			 */
@@ -95,8 +163,11 @@ var SettingsRouter = Backbone.Router
 				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
 				itemView.model.fetch();
 
+				// Adds header
+				$('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3><br/></div>");
+				
 				// Adds Gmail Prefs
-				$('#prefs-tabs-content').html(itemView.render().el);
+				$('#prefs-tabs-content').append(itemView.render().el);
 
 				// Gets IMAP Prefs
 				var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
@@ -362,6 +433,15 @@ var SettingsRouter = Backbone.Router
 
 			},
 
+			Sip : function(id)
+			{
+				if (!id)
+					show_set_up_widget("Sip", 'sip-login');
+				else
+					fill_form(id, "Sip", 'sip-login');
+
+			},
+			
 			Twilio : function(id)
 			{
 

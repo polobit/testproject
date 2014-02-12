@@ -8,6 +8,7 @@
     <div>
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if is_added}}
+				{{add_tag "Widgets"}}
     			<a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
 				<a href="#Custom-widget/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
     		{{else}}
@@ -16,6 +17,7 @@
 			<a class="btn btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>
 		{{else}}
 			{{#if is_added}}
+				{{add_tag "Widgets"}}
     			<a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
 				<a href="#{{name}}/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
     		{{else}}
@@ -125,7 +127,11 @@
  
 <script id="widget-settings-template" type="text/html">
 <div class="well" style="width:300px;">
+{{#if_equals name "Sip"}}
+    <center><span style="font-size: 65px;width: 210px;height: 70px;" class="thumbnail"><i class="icon icon-phone"></i>SIP</span></center>
+{{else}}
     <center><img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /></center>
+{{/if_equals}}  
 	<div class='widget_content' id="widget-settings" style='border-bottom:none;line-height: 160%;' widget-name="{{name}}">
 	</div>
 </div>

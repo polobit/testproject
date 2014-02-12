@@ -168,10 +168,10 @@ $(function()
 		var email = getPropertyValue(items, "email");
 		if (email)
 		{
-			return 'https://secure.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
+			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
 		}
 
-		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
 
 	});
 
@@ -180,7 +180,7 @@ $(function()
 		// Default image
 		var img = DEFAULT_GRAVATAR_url;
 
-		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
 	});
 
 	Handlebars.registerHelper('emailGravatarurl', function(width, email)
@@ -190,10 +190,10 @@ $(function()
 
 		if (email)
 		{
-			return 'https://secure.gravatar.com/avatar/' + MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
+			return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + "&d=" + escape(img);
 		}
 
-		return 'https://secure.gravatar.com/avatar/' + MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
+		return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
 	});
 
 	/**
@@ -412,7 +412,6 @@ $(function()
 		{
 			var tag = tags[i].tag;
 			var key = tag.charAt(0).toUpperCase();
-			console.log(jQuery.inArray( key, keys ) + "key = : " + key);
 			// console.log(tag);
 			if(jQuery.inArray( key, keys ) == -1)
 				keys.push(key);
@@ -422,11 +421,10 @@ $(function()
 		keys.sort();
 		console.log(keys);
 		var html = "";
-		for ( var i in keys)
+		for ( var i =0 ;i < keys.length ; i ++)
 		{
 			html += "<div class='tag-element' style='margin-right:10px'><div class='tag-key'>"+keys[i]+"</div><div class='tag-values' tag-alphabet=\""+keys[i]+"\"></div></div>";
 		}
-		console.log(html);
 		return new Handlebars.SafeString(html);
 	});
 

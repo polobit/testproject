@@ -577,6 +577,7 @@ public class StripeWebhookServlet extends HttpServlet
 	}
 
 	private void updateContactInOurDomain(Contact contact, String email, Subscription subscription, String planString)
+			throws JSONException
 	{
 		System.out.println("subsription object" + subscription + ", plan " + planString);
 		String plan = null;
@@ -622,12 +623,14 @@ public class StripeWebhookServlet extends HttpServlet
 			ContactField stripeCustomField = contact.getContactField("Stripe Id");
 			if (stripeCustomField == null)
 			{
-				field = new ContactField("Plan", plan, null);
+				// Converts Customer JSON to customer object
+				Customer customer = new Gson().fromJson(subscription.billing_data_json_string, Customer.class);
+
+				field = new ContactField("Stripe Id", customer.getId(), null);
 				field.type = ContactField.FieldType.CUSTOM;
 				contact.addProperty(field);
 				isUpdateRequired = true;
 			}
-			
 
 			if (isUpdateRequired)
 				contact.save();

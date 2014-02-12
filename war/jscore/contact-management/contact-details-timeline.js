@@ -745,7 +745,9 @@ function remove_loading_img(el){
 						});
 				}
 				
+				addTagAgile(CODE_SETUP_TAG);	
 			}
+			
 		},
 		error: function(){
 			is_mails_fetched = true;

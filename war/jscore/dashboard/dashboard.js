@@ -15,8 +15,29 @@ function setup_dashboard(el)
 	show_dashboard_tasks(el);
 	show_dashboard_deals(el);
 	show_dashboard_workflows(el);
+	initBlogSync();
 }
 
+/*
+ *  Gets the Blog posts
+ */
+function initBlogSync()
+{
+	head.js(LIB_PATH + 'lib/jquery.feeds.min.js', function() {
+
+	   $('#blog_sync_container').feeds({
+	      feeds: {
+	          blog: "https://www.agilecrm.com/blog/feed/"
+	      },
+	      max : 3,
+	      entryTemplate: function(entry) { 
+	          return '<strong>' + '<a href="' +  entry.link  + '" title = "' + entry.title + '" target="_blank" >' + entry.title + '</a></strong>' + 
+	                  '<p style="padding-top:5px;margin-bottom:15px">' + entry.contentSnippet.replace('<a','<a target="_blank"') + '</br> </p>';
+	      }
+	   });
+	});
+ 
+}
 
 /**
  * Fetches recently viewed contacts bu current user. It fetches last viewed

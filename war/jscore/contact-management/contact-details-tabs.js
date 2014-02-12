@@ -363,6 +363,7 @@ $(function(){
 				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
 				return;
 			}
+			addTagAgile(CODE_SETUP_TAG);
 		});
 		
 		var statsView = new Base_Collection_View({

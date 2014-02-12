@@ -210,7 +210,7 @@ td {
   font-family: sans-serif; }
  */
 .dialerwrapper {
-  width: 280px;
+  width: 20%;
   height: 350px;
   background-color: #cccccc; }
   .dialerwrapper .numberEntry {
@@ -218,7 +218,7 @@ td {
     height: 15%;
     text-align: center;
     text-shadow: 1px 1px 0 #555555;
-    font-size: 2em;
+    font-size: 1.6em;
     color: white;
     outline: 0;
     border: 0;
@@ -304,6 +304,7 @@ td {
     cursor: pointer; }
 
 #screen {
+  margin-top: 25px;
   overflow: hidden;
   padding: 15px 15px 0 15px;
   z-index: 99; }
@@ -311,7 +312,7 @@ td {
     background-color: #555555; }
   #screen header, #screen footer {
     height: 40px;
-    width: 100%;
+    width: 20%;
     padding: 10px 0;
     display: block; }
     #screen header nav, #screen footer nav {

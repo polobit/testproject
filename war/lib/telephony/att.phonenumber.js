@@ -1,5 +1,7 @@
 /*global io MediaServices Phono*/
 (function () {
+	
+	console.log("In att.phonenumber.js");
     // Utils and references
     var root = this,
         att = {};

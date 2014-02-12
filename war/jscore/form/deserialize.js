@@ -353,6 +353,8 @@ function deserializeChainedElement(data, rule_element) {
 
 function deserializeChainedElementWebrule(data, rule_element) {
 	$.each(data, function(i, value) {
+		if(value.value)
+			value = value.value;
 		var input_element_set = $(rule_element).find('*[name="' + i + '"]')
 				.children();
 		
@@ -388,7 +390,10 @@ function deserializeChainedElementWebrule(data, rule_element) {
 			if ($(input_element).hasClass('custom_html')) {
 				
 				if(value.value)
+				{
+					$(input_element).val(value.value);
 					setupHTMLEditor($(input_element), value.value);
+				}
 				else
 					setupHTMLEditor($(input_element), value);
 			}
@@ -455,7 +460,7 @@ function deserializeChainedSelect1(form, el, element) {
 							 * Chains dependencies of input fields with
 							 * jquery.chained.js based on the rule element
 							 */
-							chainWebRules(new_rule_element, undefined, false,
+							chainWebRules(new_rule_element, el, false,
 									actions);
 
 							deserializeChainedElementWebrule(data,
