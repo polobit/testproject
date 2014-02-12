@@ -3,10 +3,8 @@ package com.thirdparty.google;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
-
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
-import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -73,9 +71,7 @@ public class ContactsImportUtil
 			objectOutputStream.writeObject(contactPrefs);
 			System.out.println("byte array length in initialize backends: " + byteArrayStream.toByteArray().length);
 			taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet")
-					.payload(byteArrayStream.toByteArray())
-					.header("Host", BackendServiceFactory.getBackendService().getBackendAddress("b1"))
-					.method(Method.POST);
+					.payload(byteArrayStream.toByteArray()).method(Method.POST);
 			queue.add(taskOptions);
 		}
 		catch (Exception e)

@@ -404,6 +404,7 @@ function fillCustomFields(fields, el, callback)
 			lhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
 		condition.append('<option value="EQUALS" class="'+field.field_label+'">is</option>');
 		condition.append("<option value='NOTEQUALS' class='"+field.field_label+"'>isn't</option>");
+		condition.append("<option value='MATCHES' class='"+field.field_label+"'>contains</option>");
 			
 		if(field.field_data)
 		rhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');

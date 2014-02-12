@@ -16,6 +16,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -86,6 +87,16 @@ public class ContactPrefs implements Serializable
 	{
 		GOOGLE, ZOHO, SUGAR, SALESFORCE
 	}
+
+	// Category of report generation - daily, weekly, monthly.
+	public static enum Duration
+	{
+		DAILY, WEEKLY, MONTHLY
+	};
+
+	@Indexed
+	@NotSaved(IfDefault.class)
+	public Duration duration;
 
 	/**
 	 * Enum type which specifies sources from which we import contacts

@@ -11,6 +11,9 @@ var SettingsRouter = Backbone.Router
 
 			/* User preferences */
 			"user-prefs" : "userPrefs",
+			
+			/* Change Password */
+			"change-password" : "changePassword",
 
 			/* Email (Gmail / IMAP) */
 			"email" : "email",
@@ -61,6 +64,71 @@ var SettingsRouter = Backbone.Router
 				$('#PrefsTab .active').removeClass('active');
 				$('.user-prefs-tab').addClass('active');
 				// $('#content').html(view.render().el);
+			},
+
+			/**
+			 * Creates a Model to show and edit Personal Preferences, and sets
+			 * HTML Editor. Reloads the page on save success.
+			 */
+			changePassword : function()
+			{
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#prefs-tabs-content').append(getTemplate("settings-change-password"), {});
+				$('#PrefsTab .active').removeClass('active');
+				$('.user-prefs-tab').addClass('active');
+				
+				$("#saveNewPassword").on("click", function(e){
+					
+					e.preventDefault();
+					var saveBtn = $('#saveNewPassword');
+					
+					// Returns, if the save button has disabled attribute
+					if ($(saveBtn).attr('disabled'))
+						return;
+
+					// Disables save button to prevent multiple click event issues
+					disable_save_button($(saveBtn));
+					
+					var form_id = $(this).closest('form').attr("id");
+					
+					if (!isValidForm('#'+ form_id)) {
+
+						// Removes disabled attribute of save button
+						enable_save_button($(saveBtn));
+						return false;
+					}
+
+					// Show loading symbol until model get saved
+					$('#changePasswordForm').find('span.save-status').html(LOADING_HTML);
+
+					var json = serializeForm(form_id);
+
+					$.ajax({
+						url: '/core/api/user-prefs/changePassword',
+						type: 'PUT',
+						data: json,
+						success: function() {
+							$('#changePasswordForm').find('span.save-status').html("<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(3000);
+							enable_save_button($(saveBtn));
+							$('#' + form_id).each(function() {
+								this.reset();
+							});
+							history.back(-1);
+						},
+						error: function(response) {
+							$('#' + form_id).each(function() {
+								this.reset();
+							});
+							$('#changePasswordForm').find('span.save-status').html("");
+							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append("<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(3000);
+							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
+							enable_save_button($(saveBtn));
+						}
+					});
+
+				});
 			},
 
 			/**
