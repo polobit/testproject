@@ -79,6 +79,15 @@ $(function()
       });
    
 	});
+
+$(".dialpad").die().live("click", function(e)
+  {
+     e.preventDefault();    	
+     console.log("In dialpad");
+					    	
+	//console.log(window.dialer);		    	
+	$("#dialpadDiv").html(window.dialer.render());
+  });    	
 	
   $(".make-call").die().live("click", function(e)
     {
@@ -86,7 +95,7 @@ $(function()
 		   	   console.log("In make-call");
 		    	
 		       //console.log(window.dialer);		    	
-		      // $("#dialpadDiv").html(window.dialer.render());
+		       //$("#dialpadDiv").html(window.dialer.render());
 		       
 		   	   // SIP
 		       if(makeCall('sip:huma@sip2sip.info'))
@@ -118,8 +127,10 @@ $(function()
     	  alert(name +"'s contact number not added."); 
     	  return;
     	}  	
-    	    	    	
-		  if(!setUser(name, phone, image)) 
+    	    	 
+    	clearUser();
+    	
+		if(!setUser(name, phone, image)) 
 			  {
 			    // SIP
 			    if(makeCall(phone))
@@ -162,6 +173,10 @@ $(function()
 function sipStackEventsListener(e /*SIPml.Stack.Event*/) 
 {
 	console.log("In sipStack event Listner.");
+	console.log(e.type);
+	console.log(e.description);
+	
+	tsk_utils_log_info('==agile stack event = ' + e.type);
 	
     switch (e.type) {
         case 'started':
@@ -177,6 +192,9 @@ function sipStackEventsListener(e /*SIPml.Stack.Event*/)
                 SIP_REGISTER_SESSION = null;
                 SIP_SESSION_CALL = null;
 
+                stopRingbackTone();
+                stopRingTone();
+                
                 console.log("In sipStack event Listner. stopping "+e.type);
                 displayInSip("Disconnected: "+e.description);
                 showNotyPopUp('information', "Disconnected with SIP because "+e.description, "top", 5000);
@@ -194,6 +212,8 @@ function sipStackEventsListener(e /*SIPml.Stack.Event*/)
         case 'm_permission_refused': 
             {
         	  console.log("In sipStack event Listner. m_permission_refused "+e.type);
+        	  stopRingbackTone();
+        	  stopRingTone();
         	  showNotyPopUp('information', "Media stream permission denied.", "top", 5000);   
         	  $(".call_end").click();
         	  break;
@@ -206,6 +226,10 @@ function sipStackEventsListener(e /*SIPml.Stack.Event*/)
 function sipSessionEventsListener(e /* SIPml.Session.Event */) 
 {	
 	console.log("In sip Session event Listner.");
+	console.log(e.type);
+	console.log(e.description);
+	
+	tsk_utils_log_info('==agile session event = ' + e.type);
 	
     switch (e.type) {
         case 'connecting': 
@@ -235,6 +259,8 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
             	 console.log("call Connected.");
                  console.log("In sip Session event Listner. "+ e.description );                 
                  
+                 stopRingbackTone();
+                 stopRingTone();
                  setStateActive(); 
                }
               break;
@@ -254,18 +280,36 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
                 }
                 else if (e.session == SIP_SESSION_CALL) 
                 {
+                	console.log("call terminated.");
+                	
                 	// Call terminated.
                 	SIP_SESSION_CALL = null;
-                	console.log("call terminated.");
+                	stopRingbackTone();
+                	stopRingTone();
                 	console.log("In sip Session event Listner. "+ e.description );
                 	
                 	// Display
                 	setStateInActive()
                 	endCall();
+                	
+                	showNotyPopUp('information', e.description, "top", 5000);
                 }
                 break;
             } // 'terminating' | 'terminated'
-        case 'i_ao_request':{ console.log("In sip Session event Listner. i_ao_request "+e.type); break;}
+        case 'i_ao_request':
+              {
+        	   console.log("In sip Session event Listner. i_ao_request "+e.type);
+        	   
+        	   if(e.session == SIP_SESSION_CALL){
+                   var iSipResponseCode = e.getSipResponseCode();
+                   if (iSipResponseCode == 180 || iSipResponseCode == 183) {
+                       startRingbackTone();
+                       alert("Remote ringing....");
+                   }
+               }
+        	   
+        	   break;
+        	  }
         case 'media_added': { console.log("In sip Session event Listner. media_added "+e.type); break;}
         case 'media_removed':{ console.log("In sip Session event Listner. media_removed "+e.type); break;}
         case 'i_request':{ console.log("In sip Session event Listner. i_request "+e.type); break;}
@@ -277,21 +321,17 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
         case 'message_error':{ console.log("In sip Session event Listner. message_error "+e.type); break;}
         case 'webrtc_error': { console.log("In sip Session event Listner. webrtc_error "+e.type); break;}
         
-        case 'm_early_media': { console.log("In sip Session event Listner. m_early_media "+e.type); break;}
+        case 'm_early_media': 
+             { 
+        	   console.log("In sip Session event Listner. m_early_media "+e.type); 
+        	   stopRingbackTone();
+        	   stopRingTone(); 
+        	   break;
+        	 }
         case 'm_stream_audio_local_added': { console.log("In sip Session event Listner. m_stream_audio_local_added "+e.type); break;}
         case 'm_stream_audio_local_removed': { console.log("In sip Session event Listner. m_stream_audio_local_removed "+e.type); break;}
         case 'm_stream_audio_remote_added': { console.log("In sip Session event Listner. m_stream_audio_remote_added "+e.type); break;}
-        case 'm_stream_audio_remote_removed': { console.log("In sip Session event Listner. m_stream_audio_remote_removed "+e.type); break;}
-        case 'i_ect_new_call': { console.log("In sip Session event Listner. i_ect_new_call "+e.type); break;}
-        case 'o_ect_trying': { console.log("In sip Session event Listner. o_ect_trying "+e.type); break;}
-        case 'o_ect_accepted': { console.log("In sip Session event Listner. o_ect_accepted "+e.type); break;}
-        case 'o_ect_completed': { console.log("In sip Session event Listner. o_ect_completed "+e.type); break;}
-        case 'i_ect_completed': { console.log("In sip Session event Listner. i_ect_completed "+e.type); break;}
-        case 'o_ect_failed': { console.log("In sip Session event Listner. o_ect_failed "+e.type); break;}
-        case 'i_ect_failed': { console.log("In sip Session event Listner. i_ect_failed "+e.type); break;}
-        case 'o_ect_notify': { console.log("In sip Session event Listner. o_ect_notify "+e.type); break;}
-        case 'i_ect_notify': { console.log("In sip Session event Listner. i_ect_notify "+e.type); break;}
-        case 'i_ect_requested ': { console.log("In sip Session event Listner. i_ect_requested "+e.type); break;}
+        case 'm_stream_audio_remote_removed': { console.log("In sip Session event Listner. m_stream_audio_remote_removed "+e.type); break;} 
         case 'i_info': { console.log("In sip Session event Listner. i_info "+e.type); break;}
         default: {alert("In sip Session event Listner. "+e.type); break;}
     }
@@ -306,6 +346,11 @@ function sipRegister()
 {
  console.log("In sipRegister.");
  console.log(SIP_START);
+ 
+ Config_Call =  { 			            
+         audio_remote: document.getElementById('audio_remote'),		                
+         events_listener: { events: '*', listener: sipSessionEventsListener }
+       };
  
  if(SIP_START == false)	
   {	
@@ -336,13 +381,14 @@ function sipRegister()
 		  {				
 			
 			// Define sip stack
-			SIP_STACK =  new SIPml.Stack({realm: credentials.sip_realm, 
+			SIP_STACK =  new SIPml.Stack({
+				                             realm: credentials.sip_realm, 
 				                             impi: credentials.sip_privateid, 
 				                             impu: credentials.sip_publicid, 
 				                             password: credentials.sip_password, 
 				                             display_name: credentials.sip_username,				                          
-				                             events_listener: { events: '*', listener: sipStackEventsListener },
-				                            });
+				                             events_listener: { events: '*', listener: sipStackEventsListener }
+				                          });
 			
 			
 			  /* SIP_STACK = new SIPml.Stack({realm: "sip2sip.info", 
@@ -389,7 +435,7 @@ function sipLogin()
      {                	
          // LogIn (REGISTER) as soon as the stack finish starting
      	SIP_REGISTER_SESSION = SIP_STACK.newSession('register', {                        
-             events_listener: { events: '*', listener: sipSessionEventsListener },
+             events_listener: { events: '*', listener: sipSessionEventsListener }
          });
      	SIP_REGISTER_SESSION.register();
      }
@@ -406,7 +452,7 @@ function newCall(e)
   console.log(SIP_SESSION_CALL);
  
 	
-	if (SIP_SESSION_CALL) 
+	if (SIP_SESSION_CALL != null) 
     {
 	  console.log("already in call.");	
 		
@@ -418,14 +464,7 @@ function newCall(e)
   else 
     {
 	   SIP_SESSION_CALL = e.newSession;
-    
-	   Config_Call =  { 
-			            video_local: document.getElementById('video-local'),
-                        video_remote: document.getElementById('video-remote'),
-			            audio_remote: document.getElementById('audio-remote'),		                
-		                events_listener: { events: '*', listener: sipSessionEventsListener },
-		              };
-	   
+       
 	   // start listening for events
 	   SIP_SESSION_CALL.setConfiguration(Config_Call);
 	   
@@ -440,8 +479,11 @@ function showIncomingCall()
 {
 	console.log("In showIncomingCall.");	
 	
+	clearUser();
+	
 	if(!setUser(SIP_SESSION_CALL.getRemoteFriendlyName(), SIP_SESSION_CALL.getRemoteUri(), null)) 
 	  {
+		startRingTone();
 		receiveCall();		
 	  }	
 	
@@ -453,6 +495,8 @@ function showIncomingCall()
 function showOutgoingingCall()
 {
 	console.log("In showOutgoingingCall.");	
+	
+	clearUser();
 	
 	// Display
 	if(!setUser(SIP_SESSION_CALL.getRemoteFriendlyName(), SIP_SESSION_CALL.getRemoteUri(), null)) 
@@ -487,7 +531,9 @@ function rejectCall()
 function makeCall(phoneNumber) 
 {
   console.log("In makeCall.");	
-  if (SIP_STACK && !SIP_SESSION_CALL) 
+  console.log(SIP_SESSION_CALL);
+  
+  if (SIP_STACK && !SIP_SESSION_CALL && !tsk_string_is_null_or_empty(phoneNumber)) 
     {      
       // create call session
 	  SIP_SESSION_CALL = SIP_STACK.newSession('call-audio', Config_Call);
@@ -502,7 +548,7 @@ function makeCall(phoneNumber)
         }     
       return true;
     }  
-  else if(SIP_STACK && SIP_SESSION_CALL)
+  else if(SIP_STACK != null && SIP_SESSION_CALL != null)
 	  {
 	    showNotyPopUp('information', "You are already in call.", "top", 5000);
 	    return false;
@@ -532,7 +578,7 @@ function findContact()
 	$.getJSON("/core/api/contacts/search/phonenumber/" + SIP_SESSION_CALL.getRemoteUri(),
 		   	function(caller)
 		   	{ 	
-		      console.log("In findContact caller is:  "+caller);
+		      console.log("In findContact caller is:  "); console.log(caller);
 		      /*if(caller != null)
 		        {
 			      setUser(caller.name, caller.phone, caller.img);
@@ -557,21 +603,25 @@ function displayInSip(message)
 }
 
 /* functions related to audio */
-function startRingTone() 
-{
-	console.log("In startRingTone.");
+function startRingTone() {
     try { ringtone.play(); }
     catch (e) { }
 }
 
-function stopRingTone() 
-{
-	console.log("In stopRingTone.");
+function stopRingTone() {
     try { ringtone.pause(); }
     catch (e) { }
 }
 
+function startRingbackTone() {
+    try { ringbacktone.play(); }
+    catch (e) { }
+}
 
+function stopRingbackTone() {
+    try { ringbacktone.pause(); }
+    catch (e) { }
+}
 
 /*  candybar related functions*/
 //Active call candy bar UI.

@@ -57,12 +57,16 @@
         buttons: [{
           cls: 'end call_end',
           label: 'End Call'
+        },
+        {
+          cls: 'dialpad',
+          label: 'Dialpad'
         }],
         timer: true
       },
       inactive: {
         buttons: [],
-        clearUser: true,
+        clearUser: false,
         hidden: true
       },
       ending: {
