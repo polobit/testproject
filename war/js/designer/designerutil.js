@@ -73,7 +73,7 @@ function getMergeFields(type)
 		// Parsing the altered string
 		merged_json = JSON.parse(replaced_json);
 		
-		merged_json["Unsubscribe Link"] = "{{{UnsubscribeLink}}}";
+		merged_json["Unsubscribe Link"] = "{{{unsubscribe_link}}}";
 	}
 	
 	return merged_json;

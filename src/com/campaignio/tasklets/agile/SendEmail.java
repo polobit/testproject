@@ -400,10 +400,10 @@ public class SendEmail extends TaskletAdapter
 	    // Get Data
 	    if (subscriberJSON.has("data"))
 		subscriberJSON.getJSONObject("data").put(
-			"UnsubscribeLink",
+			"unsubscribe_link",
 			"https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
-				+ URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&" + "cid="
-				+ URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&" + "e="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
 				+ URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
 	}
 	catch (Exception e)
@@ -590,4 +590,5 @@ public class SendEmail extends TaskletAdapter
 
 	return false;
     }
+
 }
