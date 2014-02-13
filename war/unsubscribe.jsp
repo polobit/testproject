@@ -13,8 +13,18 @@
 
 <%
     		String campaignId = request.getParameter("cid");
+
+            // When & is converted to amp; in url
+            if(StringUtils.isBlank(campaignId))
+        	campaignId = request.getParameter("amp;cid");
+        	
 			String contactId = request.getParameter("sid");
+			
 			String email = request.getParameter("e");
+			
+			// When & is converted to amp; in url
+			if(StringUtils.isBlank(email))
+			    email = request.getParameter("amp;e");
 
 			String company = "";
 			try
@@ -30,7 +40,11 @@
 			
 			if (StringUtils.isBlank(campaignId)
 					|| StringUtils.isBlank(contactId))
-				return;
+			{
+			    System.err.println("Got both ids empty. Unsubscribe campaignId " + campaignId + " and contact id " + contactId + " are empty.");
+			    out.println("Oops! something went wrong. Please try again later.");
+			    return;
+			}
 
 			Workflow workflow = WorkflowUtil.getWorkflow(Long
 					.parseLong(campaignId));
@@ -384,7 +398,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 	<br />
 	<div>
 		<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 85px;">Powered
-			by</span> <a href="https://www.agilecrm.com" target="_blank"> <img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 120px;">
+			by</span> <a href="https://www.agilecrm.com?src=unsubscribe-page" target="_blank"> <img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 120px;">
 		</a>
 	</div>
 
