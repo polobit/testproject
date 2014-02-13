@@ -50,5 +50,21 @@ $(function()
 		// });
 
 	});
+	
+	$("#google-import-prefs-delete").die().live("click", function(e){
+		e.preventDefault();
+		var disabled = $(this).attr("disabled");
+		if(disabled)
+			return;
+		
+		$(this).attr("disabled", "disabled");
+		
+		$(this).after(LOADING_HTML);
+		
+		console.log(App_Admin_Settings.contact_sync_google.model.destroy({success : function(){
+			App_Admin_Settings.contact_sync_google.model.set("id", undefined);
+			App_Admin_Settings.contact_sync_google.render(true);
+		}}));
+	});
 
 });

@@ -34,7 +34,6 @@ import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
-import com.thirdparty.google.ContactsImportUtil;
 
 /**
  * <code>ScribeUtil</code> class contains methods to be used by
@@ -347,7 +346,7 @@ public class ScribeUtil
 			contactPrefs.save();
 
 			// initialize backend to save contacts
-			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+			// ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 		}
 	}
 

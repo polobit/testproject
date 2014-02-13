@@ -1,9 +1,7 @@
 package com.thirdparty.google;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
@@ -51,18 +49,21 @@ public class ContactPrefs implements Serializable
 	 * Access token for OAuth
 	 */
 	@NotSaved(IfDefault.class)
+	@JsonIgnore
 	public String token = null;
 
 	/**
 	 * Secret token for OAuth
 	 */
 	@NotSaved(IfDefault.class)
+	@JsonIgnore
 	public String secret = null;
 
 	/**
 	 * Refresh token for OAuth to exchange for access token
 	 */
 	@NotSaved(IfDefault.class)
+	@JsonIgnore
 	public String refreshToken = null;
 
 	/**
@@ -123,7 +124,7 @@ public class ContactPrefs implements Serializable
 	/**
 	 * ContactPrefs DAO.
 	 */
-	private static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(ContactPrefs.class);
+	public static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(ContactPrefs.class);
 
 	/**
 	 * Saves ContactPrefs in database
@@ -197,22 +198,6 @@ public class ContactPrefs implements Serializable
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	/**
-	 * Retrieves {@link ContactPrefs} based on enum {@link Type}
-	 * 
-	 * @param type
-	 *            {@link Type} from which contacts are imported
-	 * @return
-	 */
-	public static ContactPrefs getPrefsByType(Type type)
-	{
-
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("type", type);
-		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
-		return dao.getByProperty(searchMap);
 	}
 
 	/*
