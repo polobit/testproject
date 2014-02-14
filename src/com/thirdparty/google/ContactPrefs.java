@@ -8,11 +8,13 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
-import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.gdata.util.common.base.StringUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -89,6 +91,16 @@ public class ContactPrefs implements Serializable
 		GOOGLE, ZOHO, SUGAR, SALESFORCE
 	}
 
+	/**
+	 * Enum type which specifies sources from which we import contacts
+	 */
+	@NotSaved(IfDefault.class)
+	public Type type = null;
+
+	public ContactPrefs()
+	{
+	}
+
 	// Category of report generation - daily, weekly, monthly.
 	public static enum Duration
 	{
@@ -99,15 +111,14 @@ public class ContactPrefs implements Serializable
 	@NotSaved(IfDefault.class)
 	public Duration duration;
 
-	/**
-	 * Enum type which specifies sources from which we import contacts
-	 */
-	@NotSaved(IfDefault.class)
-	public Type type = null;
-
-	public ContactPrefs()
+	// Category of report generation - daily, weekly, monthly.
+	public static enum SYNC_TYPE
 	{
-	}
+		CLIENT_TO_AGILE, AGILE_TO_CLIENT, TWO_WAY
+	};
+
+	@NotSaved(IfDefault.class)
+	public SYNC_TYPE sync_type = null;
 
 	@NotSaved
 	public List<String> salesforceFields;
@@ -179,25 +190,27 @@ public class ContactPrefs implements Serializable
 		dao.delete(this);
 	}
 
-	/**
-	 * Retrieves {@link ContactPrefs} based on its id from database
-	 * 
-	 * @param id
-	 *            {@link Long} id of {@link ContactPrefs}
-	 * @return
-	 */
-	public static ContactPrefs get(Long id)
+	public void setPrefs(JSONObject object)
 	{
+		String duration = null;
+		String type = null;
+		System.out.println(object);
 		try
 		{
-			return dao.get(id);
+			duration = object.getString("duration");
+			type = object.getString("sync_type");
 		}
-		catch (EntityNotFoundException e)
+		catch (JSONException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
+
+		if (!StringUtil.isEmpty(duration))
+			this.duration = Duration.valueOf(duration);
+		if (!StringUtil.isEmpty(type))
+			sync_type = SYNC_TYPE.valueOf(type);
+
 	}
 
 	/*
