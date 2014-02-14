@@ -226,9 +226,6 @@
 												<input type="number" name="temp" class="SUBTRACT_SCORE required number" placeholder="Enter score to substract"></input>
 												<input type="number" name="temp" class="required number" placeholder="Enter score to substract"></input>
 												<input type="text" name="tags-action" class="REMOVE_TAG ADD_TAG tags required" placeholder="Enter tag"></input>
-												<textarea  cols="60" name="webrule-javascript" class="JAVA_SCRIPT required" rows="6" placeholder="">function agile_js_code_exec() {
-													 // Copy your code here 
-												}</textarea>
 											</div>
 										</td>
 									</tr>
@@ -239,10 +236,12 @@
 											style="vertical-align: top; ">
 											<div name="popup_pattern" id="noty-type" style="margin-top:3px">
 												<select class="required">
-													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option>
-													<option value="information" class="POPUP MODAL_POPUP">Information</option>
-													<option value="information" class="CORNER_NOTY">Information</option>
 													<option value="custom_html" class="MODAL_POPUP">Custom HTML</option>
+													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option> 
+													<option value="information" class="POPUP MODAL_POPUP">Information</option> 
+													<option value="information" class="CORNER_NOTY">Information</option>
+													<option value="code" class="JAVA_SCRIPT" style="display:none">Code</option>
+													
 												</select>
 <input type="text" name="temp-title" style="width: 92%"
 														class="FORM input required" placeholder="Form id"/>
@@ -284,9 +283,13 @@
 										<td class="controls span2"
 											style="vertical-align: top;">
 												<div id="noty-message" name="popup_text"  style="padding-top:10px">
-													<textarea  cols="35" name="webrule-information-field" class="information confirmation span4 required" rows="6" placeholder="paste HTML context"></textarea>
-													<textarea  cols="35" name="webrule-custom-html" class="custom_html span4 required" rows="6" placeholder="paste HTML context"></textarea>
-													<div style="float:right" class="web-rule-prevew"><a href="#">Preview</a></div>
+ 													<a href='#' id="tiny_mce_webrules_link" style="float:right;display:none">(Load in HTML Editor)</a>
+													<textarea  cols="35" name="webrule-information-field" class="information confirmation MODAL_POPUP span4 required" rows="6" placeholder="paste HTML context"></textarea>
+													<textarea  cols="35" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html span4 required MODAL_POPUP" rows="6" placeholder="Paste HTML context"></textarea>
+<textarea  cols="60" name="webrule-javascript" class="code required" rows="6" placeholder="">function agile_js_code_exec() {
+													 // Copy your code here 
+												}()</textarea>
+											<!--		<div style="float:right" class="web-rule-prevew"><a href="#">Preview</a></div> -->
 												</div>
 										</td>
 									</tr>
