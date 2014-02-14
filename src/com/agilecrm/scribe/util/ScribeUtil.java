@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.GoogleApi;
@@ -34,7 +36,6 @@ import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
-import com.thirdparty.google.ContactsImportUtil;
 
 /**
  * <code>ScribeUtil</code> class contains methods to be used by
@@ -192,7 +193,25 @@ public class ScribeUtil
 		 * token
 		 */
 		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE))
-			saveGooglePrefs(code);
+		{
+			String query = req.getSession().getAttribute("query").toString();
+			System.out.println("*************************************************************");
+			System.out.println(query);
+			JSONObject object = null;
+			try
+			{
+				object = new JSONObject(query);
+				System.out.println(object);
+
+			}
+			catch (JSONException e)
+			{
+				object = new JSONObject();
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			saveGooglePrefs(code, object);
+		}
 	}
 
 	/**
@@ -304,7 +323,7 @@ public class ScribeUtil
 	 *            {@link String} code retrieved after OAuth
 	 * @throws IOException
 	 */
-	public static void saveGooglePrefs(String code) throws IOException
+	public static void saveGooglePrefs(String code, JSONObject object) throws IOException
 	{
 		System.out.println("In google save token");
 
@@ -341,10 +360,14 @@ public class ScribeUtil
 			ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null,
 					(Long.parseLong((String.valueOf(properties.get("expires_in"))))),
 					((String) properties.get("refresh_token")));
+
+			contactPrefs.setPrefs(object);
+			System.out.println(contactPrefs.duration);
+			System.out.println(contactPrefs.sync_type);
 			contactPrefs.save();
 
 			// initialize backend to save contacts
-			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+			// ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 		}
 	}
 

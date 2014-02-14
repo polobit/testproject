@@ -1,20 +1,20 @@
 package com.thirdparty.google;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
-import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.gdata.util.common.base.StringUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -51,18 +51,21 @@ public class ContactPrefs implements Serializable
 	 * Access token for OAuth
 	 */
 	@NotSaved(IfDefault.class)
+	@JsonIgnore
 	public String token = null;
 
 	/**
 	 * Secret token for OAuth
 	 */
 	@NotSaved(IfDefault.class)
+	@JsonIgnore
 	public String secret = null;
 
 	/**
 	 * Refresh token for OAuth to exchange for access token
 	 */
 	@NotSaved(IfDefault.class)
+	@JsonIgnore
 	public String refreshToken = null;
 
 	/**
@@ -88,6 +91,16 @@ public class ContactPrefs implements Serializable
 		GOOGLE, ZOHO, SUGAR, SALESFORCE
 	}
 
+	/**
+	 * Enum type which specifies sources from which we import contacts
+	 */
+	@NotSaved(IfDefault.class)
+	public Type type = null;
+
+	public ContactPrefs()
+	{
+	}
+
 	// Category of report generation - daily, weekly, monthly.
 	public static enum Duration
 	{
@@ -98,15 +111,14 @@ public class ContactPrefs implements Serializable
 	@NotSaved(IfDefault.class)
 	public Duration duration;
 
-	/**
-	 * Enum type which specifies sources from which we import contacts
-	 */
-	@NotSaved(IfDefault.class)
-	public Type type = null;
-
-	public ContactPrefs()
+	// Category of report generation - daily, weekly, monthly.
+	public static enum SYNC_TYPE
 	{
-	}
+		CLIENT_TO_AGILE, AGILE_TO_CLIENT, TWO_WAY
+	};
+
+	@NotSaved(IfDefault.class)
+	public SYNC_TYPE sync_type = null;
 
 	@NotSaved
 	public List<String> salesforceFields;
@@ -123,7 +135,7 @@ public class ContactPrefs implements Serializable
 	/**
 	 * ContactPrefs DAO.
 	 */
-	private static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(ContactPrefs.class);
+	public static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(ContactPrefs.class);
 
 	/**
 	 * Saves ContactPrefs in database
@@ -178,41 +190,27 @@ public class ContactPrefs implements Serializable
 		dao.delete(this);
 	}
 
-	/**
-	 * Retrieves {@link ContactPrefs} based on its id from database
-	 * 
-	 * @param id
-	 *            {@link Long} id of {@link ContactPrefs}
-	 * @return
-	 */
-	public static ContactPrefs get(Long id)
+	public void setPrefs(JSONObject object)
 	{
+		String duration = null;
+		String type = null;
+		System.out.println(object);
 		try
 		{
-			return dao.get(id);
+			duration = object.getString("duration");
+			type = object.getString("sync_type");
 		}
-		catch (EntityNotFoundException e)
+		catch (JSONException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
-	}
 
-	/**
-	 * Retrieves {@link ContactPrefs} based on enum {@link Type}
-	 * 
-	 * @param type
-	 *            {@link Type} from which contacts are imported
-	 * @return
-	 */
-	public static ContactPrefs getPrefsByType(Type type)
-	{
+		if (!StringUtil.isEmpty(duration))
+			this.duration = Duration.valueOf(duration);
+		if (!StringUtil.isEmpty(type))
+			sync_type = SYNC_TYPE.valueOf(type);
 
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("type", type);
-		searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
-		return dao.getByProperty(searchMap);
 	}
 
 	/*

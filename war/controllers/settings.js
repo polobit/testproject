@@ -23,6 +23,9 @@ var SettingsRouter = Backbone.Router
 
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
+			
+			/* Web to Lead */
+			"web-to-lead" : "webToLead",
 
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
@@ -31,11 +34,11 @@ var SettingsRouter = Backbone.Router
 
 			"Linkedin/:id" : "Linkedin", "Twitter/:id" : "Twitter", "Rapleaf/:id" : "Rapleaf", "ClickDesk/:id" : "ClickDesk", "Zendesk/:id" : "Zendesk",
 			"Sip/:id" : "Sip", "Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
-				"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk","Sip" : "Sip", "Twilio" : "Twilio",
-				"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
+			"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk","Sip" : "Sip", "Twilio" : "Twilio",
+			"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
 
 				/* contact-us help email */
-				"contact-us" : "contactUsEmail" },
+			"contact-us" : "contactUsEmail" },
 
 			/**
 			 * Shows all the options to access user's Preferences
@@ -74,14 +77,14 @@ var SettingsRouter = Backbone.Router
 			{
 				$("#content").html(getTemplate("settings"), {});
 
-				$('#prefs-tabs-content').append(getTemplate("settings-change-password"), {});
+				$('#prefs-tabs-content').html(getTemplate("settings-change-password"), {});
 				$('#PrefsTab .active').removeClass('active');
 				$('.user-prefs-tab').addClass('active');
 				
 				$("#saveNewPassword").on("click", function(e){
 					
 					e.preventDefault();
-					var saveBtn = $('#saveNewPassword');
+					var saveBtn = $(this);
 					
 					// Returns, if the save button has disabled attribute
 					if ($(saveBtn).attr('disabled'))
@@ -247,6 +250,17 @@ var SettingsRouter = Backbone.Router
 				$('#PrefsTab .active').removeClass('active');
 				$('.email-templates-tab').addClass('active');
 				// $("#content").html(view.el);
+			},
+			
+			/**
+			 * 
+			 */
+			webToLead : function()
+			{
+				$("#content").html(getTemplate("settings"), {});
+				$("#prefs-tabs-content").html(getTemplate("settings-web-to-lead"), {});
+				$('#PrefsTab .active').removeClass('active');
+				$('.web-to-lead-tab').addClass('active');
 			},
 
 			/**
