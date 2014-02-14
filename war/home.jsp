@@ -486,8 +486,6 @@
 		href="/css/social_suite.css" />
 	<!-- telephony css -->
 	<link rel="stylesheet" type="text/css"
-		href="/css/candybar.css" />
-	<link rel="stylesheet" type="text/css"
 		href="/css/dialpad.css" />
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 	
