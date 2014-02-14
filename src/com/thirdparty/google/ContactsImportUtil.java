@@ -9,6 +9,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * <code>ContactsImporter</code> contains methods to initialize backend process
@@ -29,7 +30,7 @@ public class ContactsImportUtil
 	 */
 	public static void initializeImport(String type)
 	{
-		ContactPrefs contactPrefs = ContactPrefs.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
+		ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
 
 		System.out.println("in initialize backends");
 		System.out.println(contactPrefs);

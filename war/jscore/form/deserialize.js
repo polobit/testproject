@@ -392,10 +392,11 @@ function deserializeChainedElementWebrule(data, rule_element) {
 				if(value.value)
 				{
 					$(input_element).val(value.value);
-					setupHTMLEditor($(input_element), value.value);
 				}
-				else
-					setupHTMLEditor($(input_element), value);
+				//	setupHTMLEditor($(input_element), value.value);
+				//}
+				//else
+					//setupHTMLEditor($(input_element), value);
 			}
 
 			return;

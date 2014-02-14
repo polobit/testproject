@@ -42,7 +42,7 @@
 					|| StringUtils.isBlank(contactId))
 			{
 			    System.err.println("Got both ids empty. Unsubscribe campaignId " + campaignId + " and contact id " + contactId + " are empty.");
-			    out.println("Oops! some error occurred. Please try again later.");
+			    out.println("Oops! something went wrong. Please try again later.");
 			    return;
 			}
 

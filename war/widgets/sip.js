@@ -136,7 +136,7 @@ function showSipProfile()
                 	}                	                  	        
                   else
                     {
-                	  data["msg"] = "Disconnected : Please verify your settings.";
+                	  data["msg"] = "You can make and receive calls with SIP.";
                 	  $(".contact-make-call").hide();
                 	  $(".make-call").hide();
                 	}
@@ -144,13 +144,5 @@ function showSipProfile()
            	   
             	  //Fill template with data and append it to Sip panel
             	  $('#Sip').html(getTemplate('sip-profile', data));
-                  
-                  /*head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
-                 		 {
-                	       console.log("Sip call from showSipProfile.");
-                	       
-                 		   // initialize SIPML5
-                            SIPml.init(sipRegister);
-                 		 });*/
                }
 }
