@@ -77,6 +77,7 @@ public class UserPrefsAPI
 	    userPrefs.task_reminder = prefs.task_reminder;
 	    userPrefs.timezone = prefs.timezone;
 	    userPrefs.currency = prefs.currency;
+	    userPrefs.keyboard_shotcuts = prefs.keyboard_shotcuts;
 
 	    userPrefs.save();
 	    return userPrefs;

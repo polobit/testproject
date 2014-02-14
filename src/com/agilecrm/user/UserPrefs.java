@@ -99,6 +99,12 @@ public class UserPrefs
      */
     @NotSaved(IfDefault.class)
     public boolean task_reminder = true;
+    
+    /**
+     * Enable or disable keyboard shortcuts.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean keyboard_shotcuts = false;
 
     /**
      * UserPrefs Dao.
@@ -130,8 +136,10 @@ public class UserPrefs
      *            - Signature.
      * @param task_reminder
      *            - Boolean value whether set or not.
+     * @param keyboard_shotcuts
+     *            - Boolean value whether enable or not.
      */
-    public UserPrefs(Long userId, String name, String image, String template, String width, String signature, boolean task_reminder)
+    public UserPrefs(Long userId, String name, String image, String template, String width, String signature, boolean task_reminder, boolean keyboard_shotcuts)
     {
 	this.name = name;
 	this.pic = image;
@@ -139,6 +147,7 @@ public class UserPrefs
 	this.width = width;
 	this.signature = signature;
 	this.task_reminder = task_reminder;
+	this.keyboard_shotcuts = keyboard_shotcuts;
 
 	this.user = new Key<AgileUser>(AgileUser.class, userId);
     }

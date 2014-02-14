@@ -71,12 +71,7 @@
 	    $('.hide-modal', helpModal).click(function(){
 	    		helpModal.modal('hide');
 	    });
-		/* For toggling help modal popup */
-		$('#keyboard-shortcuts').die().live('click', function(e){
-			var keyShortModal = $(getTemplate("shortcut-keys"),{});
-			keyShortModal.modal('show');
-		});
-	    
+   
 	});
 	
 	/* For opening the footer icons in seperate popup window */
