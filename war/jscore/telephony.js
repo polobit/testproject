@@ -69,10 +69,10 @@ $(".dialpad").die().live("click", function(e)
 		   	   console.log("In make-call");		    			      
 		   	   
 		   	   // SIP
-		       if(makeCall('18004321000@proxy.ideasip.com'))
+		       if(makeCall('sip:+18004321000@proxy.ideasip.com'))
 		       { 
 		    	 USER_NAME = "Agile";
-		    	 USER_NUMBER = "18004321000@proxy.ideasip.com";
+		    	 USER_NUMBER = "sip:+18004321000@proxy.ideasip.com";
 		    	   
 			     // Display
 		    	 showCallNotyPopup("outgoing","confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> '+USER_NAME+"  "+USER_NUMBER);  
@@ -386,7 +386,7 @@ function sipRegister()
 				                             impi: credentials.sip_privateid, 
 				                             impu: credentials.sip_publicid, 
 				                             password: credentials.sip_password, 
-				                             display_name: credentials.sip_username,				                            
+				                             display_name: credentials.sip_username,
 				                             websocket_proxy_url: url,
 				                             enable_rtcweb_breaker: true,
 				                             events_listener: { events: '*', listener: sipStackEventsListener }
