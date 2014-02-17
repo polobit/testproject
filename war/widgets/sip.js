@@ -92,12 +92,18 @@ function saveSipPrefs()
 	// Retrieve and store the Sip preferences entered by the user as JSON
 	var sip_prefs = {};
 	sip_prefs["sip_username"] = $("#sip_username").val();
-	sip_prefs["sip_password"] = $("#sip_password").val();
-	sip_prefs["sip_publicid"] = $("#sip_publicid").val();
 	sip_prefs["sip_privateid"] = $("#sip_privateid").val();
 	sip_prefs["sip_realm"] = $("#sip_realm").val();
-
-	console.log(sip_prefs);
+	sip_prefs["sip_password"] = $("#sip_password").val();
+	
+	sip_prefs["sip_publicid"] = "sip:"+$("#sip_privateid").val()+"@"+$("#sip_realm").val();
+		 
+	if ($('#sip_wsenable').is(':checked'))
+    	sip_prefs["sip_wsenable"] = "true";
+    else
+    	sip_prefs["sip_wsenable"] = "false";
+    
+    console.log(sip_prefs);
 		
 	// Saves the preferences into widget with sip widget name
 	agile_crm_save_widget_prefs(SIP_PLUGIN_NAME, JSON.stringify(sip_prefs), function(data)
