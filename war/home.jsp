@@ -484,9 +484,7 @@
 	<!-- social suite's css -->
 	<link rel="stylesheet" type="text/css"
 		href="/css/social_suite.css" />
-	<!-- telephony css -->
-	<link rel="stylesheet" type="text/css"
-		href="/css/dialpad.css" />
+	
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 	
 
@@ -494,8 +492,8 @@
 	
 	<!-- Audios -->	
     <audio id="audio_remote" autoplay="autoplay" />
-    <audio id="ringtone" loop src="/sounds/ringtone.wav" />
-    <audio id="ringbacktone" loop src="/sounds/ringbacktone.wav" />
-    <audio id="dtmfTone" src="/sounds/dtmf.wav" />
+    <audio id="ringtone" loop><source src="/sounds/ringtone.wav" type="audio/wav" preload="auto"></source></audio>
+    <audio id="ringbacktone" loop><source src="/sounds/ringbacktone.wav" type="audio/wav" preload="auto"></source></audio>
+    <audio id="dtmfTone"><source src="/sounds/dtmf.wav" type="audio/wav" preload="auto"></source></audio>
 </body>
 </html>

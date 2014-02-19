@@ -52,60 +52,32 @@ $(function()
                 	}
                  }
             },10000); // 20 sec	
-	
-	head.js(LIB_PATH + 'lib/telephony/att.phonenumber.js',LIB_PATH + 'lib/telephony/dialpad.js',function()
-	{
-		console.log("After including files.");
-		
-		window.dialer = new Dialpad({
-        onPress: function (key) {
-            console.log('a key was pressed', key);
-        },
-        onCallableNumber: function (number) {
-            console.log('we have a number that seems callable', number);
-        },
-        onHide: function () {
-            console.log('removed it');
-        },
-        onCall: function (number) {
-            console.log('The call button was pressed', number);
-        }
-      });
-   
-	});
+
 
 $(".dialpad").die().live("click", function(e)
   {
      e.preventDefault();    	
      console.log("In dialpad");
-					    	
-	//console.log(window.dialer);		    	
-	$("#dialpadDiv").html(window.dialer.render());
+	     
+     var dialpadModal = $(getTemplate("dialpad-modal"),{});
+     dialpadModal.modal('show');    
   });    	
 	
   $(".make-call").die().live("click", function(e)
     {
 	           e.preventDefault();    	
 		   	   console.log("In make-call");		    			      
-		       
+		   	   
 		   	   // SIP
-		       if(makeCall('sip:huma@sip2sip.info'))
+		       if(makeCall('sip:+18004321000@proxy.ideasip.com'))
 		       { 
-		    	 USER_NAME = "farah";
-		    	 USER_NUMBER = "sip:huma@sip2sip.info";
+		    	 USER_NAME = "Agile";
+		    	 USER_NUMBER = "sip:+18004321000@proxy.ideasip.com";
 		    	   
 			     // Display
 		    	 showCallNotyPopup("outgoing","confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> '+USER_NAME+"  "+USER_NUMBER);  
-		       }		       
-   });    
-		    
-  $(".close_dialer").die().live("click", function(e)
-   {
-      e.preventDefault();    	
-  	  console.log("In close_dialer");
-   	      	    	
-      $("#dialpadDiv").html("");
-   });
+		       }       
+   });  
   
   $(".contact-make-call").die().live("click", function(e)
      {
@@ -382,7 +354,8 @@ function sipRegister()
 	SIP_START = true;
 	console.log(SIP_STACK);
 	console.log(SIP_REGISTER_SESSION);
-
+	
+    var url = null;
 	var credentials = eval('(' + SIP_WIDGET_OBJECT.prefs + ')');
 	console.log(credentials);
 	console.log(credentials.sip_publicid);
@@ -403,14 +376,19 @@ function sipRegister()
 			}
 		else
 		  {				
-			
+			// Check websocket_proxy_url
+			if(credentials.sip_wsenable == "true")
+			   url = "ws://54.83.12.176:10060";
+								
 			// Define sip stack
 			SIP_STACK =  new SIPml.Stack({
 				                             realm: credentials.sip_realm, 
 				                             impi: credentials.sip_privateid, 
 				                             impu: credentials.sip_publicid, 
 				                             password: credentials.sip_password, 
-				                             display_name: credentials.sip_username,				                          
+				                             display_name: credentials.sip_username,
+				                             websocket_proxy_url: url,
+				                             enable_rtcweb_breaker: true,
 				                             events_listener: { events: '*', listener: sipStackEventsListener }
 				                          });
 			
@@ -593,22 +571,52 @@ function findContact()
 }
 
 /* functions related to audio */
+
+function sipSendDTMF(c){
+	console.log("In sipSendDTMF: " + c);
+	
+    if(SIP_SESSION_CALL && c){
+        if(SIP_SESSION_CALL.dtmf(c) == 0)
+        {
+          try 
+            { 
+           	 var sound = $("#dtmfTone")[0];
+    	     sound.load();
+    	     sound.play(); 
+            } catch(e){ }
+        }
+    }
+}
+
 function startRingTone() {
-    try { ringtone.play(); }
+	console.log("In startRingTone");
+    try 
+    {     	
+     var sound = $("#ringtone")[0];
+	     sound.load();
+	     sound.play();
+    }
     catch (e) { }
 }
 
 function stopRingTone() {
+	console.log("In stopRingTone");
     try { ringtone.pause(); }
     catch (e) { }
 }
 
 function startRingbackTone() {
-    try { ringbacktone.play(); }
-    catch (e) { }
+	console.log("In startRingbackTone");
+    try 
+    {     	
+     var sound = $("#ringbacktone")[0];
+	     sound.load();
+	     sound.play();
+    } catch (e) { }
 }
 
 function stopRingbackTone() {
+	console.log("In stopRingbackTone");
     try { ringbacktone.pause(); }
     catch (e) { }
 }
