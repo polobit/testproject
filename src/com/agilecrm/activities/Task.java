@@ -57,7 +57,7 @@ public class Task extends Cursor
      */
     public enum Type
     {
-	CALL, EMAIL, FOLLOW_UP, MEETING, MILESTONE, SEND, TWEET
+	CALL, EMAIL, FOLLOW_UP, MEETING, MILESTONE, SEND, TWEET, OTHER
     };
 
     /**
