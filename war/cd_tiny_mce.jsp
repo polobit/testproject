@@ -92,10 +92,13 @@ $(function()
 {	
 try{
 		
+	    var textarea_id = getUrlVars()["id"];
+	    var url = getUrlVars()["url"];
+	
 		// Load HTML into Tiny MCE.
-		if(getUrlVars()["id"] !== undefined)
+		if(textarea_id !== undefined && url === undefined)
 		{
-		var initHTML = window.opener.$('#' + getUrlVars()["id"]).val();
+		var initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
 		
 		 // Initialize tinymce editor with content
@@ -104,34 +107,27 @@ try{
 		}
 	
 	    // Fetches html content and load into Tiny MCE editor
-	    if(getUrlVars()["url"] !== undefined){
+	    if(textarea_id !== undefined && url !== undefined){
 	    	
 	    	// Show Back link for email templates
 	    	$('#navigate-back').css('display','inline-block');
 	    	
-	    	var url = getUrlVars()["url"];
-	    	
-	    	if(url !== undefined)
-	    		{
-
 	    		// Fetch html and fill into tinymce
-	    		$.get(location.origin+ '/misc/email-templates/'+url, function(value){
+	    		$.get(location.origin+url, function(value){
 	    			
 	    			$('#content').val(value);
 	    			
 	    			// Initialize tinymce editor after content obtained
                     init_tinymce();
 	    			});
-	    		}
 	    }
 	    
 	    // Show empty editor if none of templates selected
-	    if(getUrlVars()["id"] === undefined && getUrlVars()["url"] === undefined)
+	    if(window.history.length > 1)
 	    {
 	    	// Show Back link for email templates
 	    	$('#navigate-back').css('display','inline-block');
 	    	
-	    	init_tinymce();
 	    }
 	}
 	catch(err){
@@ -164,8 +160,7 @@ try{
 		}
 		
 		// Return Back here
-		//window.opener.tinyMCECallBack(getUrlVars()["id"], html);
-		window.opener.tinyMCECallBack("tinyMCEhtml_email", html);
+		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
 	});
 	
@@ -209,6 +204,8 @@ function init_tinymce()
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
         toolbar2: "print preview media | forecolor backcolor",
+        valid_elements: "*[*]",
+        extended_valid_elements: "*[*]",
         style_formats: [
                         {
                             title: "Headers",
