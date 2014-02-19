@@ -132,59 +132,59 @@
                     ]
                 },
                 {
-                    "label": "i-Elegant Newsletter",
-                    "title": "i-elegant-newsletter",
-                    "theme_preview": "/misc/email-templates/newsletter/i-elegant-newsletter/theme-preview/i-elegant-newsletter.png",
+                    "label": "Elegant Newsletter",
+                    "title": "elegant-newsletter",
+                    "theme_preview": "/misc/email-templates/newsletter/elegant-newsletter/theme-preview/elegant-newsletter.png",
                     "layouts": [
                         {
                             "title": "Black",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/black/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/black/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/black/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/black/HTML/index.html"
                         },
                         {
                             "title": "Blue-green",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/blue-green/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/blue-green/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/blue-green/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/blue-green/HTML/index.html"
                         },
                         {
                             "title": "Blue light and dark",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/bluelightanddark/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/bluelightanddark/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/bluelightanddark/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/bluelightanddark/HTML/index.html"
                         },
                         {
                             "title": "Brown",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/brown/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/brown/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/brown/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/brown/HTML/index.html"
                         },
                         {
                             "title": "Gray",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/gray/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/gray/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/gray/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/gray/HTML/index.html"
                         },
                         {
                             "title": "Gray light and dark",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/graylightanddark/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/graylightanddark/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/graylightanddark/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/graylightanddark/HTML/index.html"
                         },
                         {
                             "title": "Green",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/green/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/green/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/green/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/green/HTML/index.html"
                         },
                         {
                             "title": "Light-blue",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/light-blue/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/light-blue/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/light-blue/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/light-blue/HTML/index.html"
                         },
                         {
                             "title": "Orange",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/orange/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/orange/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/orange/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/orange/HTML/index.html"
                         },
                         {
                             "title": "Orange and dark gray",
-                            "href": "/misc/email-templates/newsletter/i-elegant-newsletter/orange_darkgray/preview/index.png",
-                            "link": "/misc/email-templates/newsletter/i-elegant-newsletter/orange_darkgray/HTML/index.html"
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/orange_darkgray/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/orange_darkgray/HTML/index.html"
                         }
                     ]
                 }
