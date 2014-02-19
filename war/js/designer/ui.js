@@ -263,7 +263,7 @@ function load_email_templates()
 	}
 	
 	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
-	var new_window = window.open('email_templates.jsp', 'name',strWindowFeatures);
+	var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=email', 'name',strWindowFeatures);
 	
 	if(window.focus)
 		{

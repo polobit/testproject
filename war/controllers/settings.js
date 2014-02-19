@@ -120,9 +120,6 @@ var SettingsRouter = Backbone.Router
 							history.back(-1);
 						},
 						error: function(response) {
-							$('#' + form_id).each(function() {
-								this.reset();
-							});
 							$('#changePasswordForm').find('span.save-status').html("");
 							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append("<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
 							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(3000);
