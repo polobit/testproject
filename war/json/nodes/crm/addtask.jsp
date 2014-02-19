@@ -32,7 +32,8 @@
 		        "Meeting":"MEETING",
 		        "Milestone":"MILESTONE",
 		        "Send":"SEND",
-		        "Tweet":"TWEET"
+		        "Tweet":"TWEET",
+		        "Other":"OTHER"
 
 	          },
 	         "fieldType": "select",

@@ -69,6 +69,11 @@ public class AddTask extends TaskletAdapter
      * Tweet
      */
     public static String TWEET = "TWEET";
+    
+    /**
+     * Other
+     */
+    public static String OTHER = "OTHER";
 
     /**
      * Task priority type
