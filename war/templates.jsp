@@ -21,6 +21,14 @@
 		String LIB_PATH = "/";
 	%>
 	
+	<%
+	   // HTML textarea id
+	   String id = request.getParameter("id");
+	
+	   // To differ email templates vs modal templates
+	   String type = request.getParameter("t");
+	%>
+	
 	<!-- Bootstrap  -->
 	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 	<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
@@ -62,13 +70,29 @@
 <script>
 
 // Global variable to reuse obtained email templates json
-var EMAIL_TEMPLATES_JSON = undefined;
+var TEMPLATES_JSON = undefined;
 
 $(function(){
 	
-       // Gets email_templates_structure.js
-      get_email_templates_json();
+	// textarea id
+	var id = '<%=id%>';
+	var type = '<%=type%>';
+	
+	if(id === undefined)
+		return;
+		
+	var url;
+	
+      if(type === 'email')
+      		url='/misc/email-templates/email_templates_structure.js';
+
+      if(type === 'web_rules')
+    	  url='/misc/';
       
+    	  
+   		// Gets email_templates_structure.js
+		get_templates_json(url);
+   
       // When any theme is clicked, opens respective layouts
       $('div.theme-preview>a').die().live('click', function(e){
     	    e.preventDefault();
@@ -78,7 +102,7 @@ $(function(){
     	   var layouts=[];
     	
     	    // load all layouts of clicked theme
-    	    $.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
+    	    $.each(TEMPLATES_JSON["templates"], function(index, value){
     			
     	    	// to exit on condition met
     	    	var flag = true;
@@ -99,22 +123,7 @@ $(function(){
     			
     		});
     	    
-           // Show layouts of each theme in fancybox
-           $.fancybox.open(layouts,{
-            	 helpers : {
-            	        overlay : {
-            	            css : {
-            	                'background' : 'rgba(58, 42, 45, 0.95)'
-            	            }
-            	        }
-            	    },
-            	    beforeLoad: function() {
-
-            	    this.href =location.origin+'/misc/email-templates/'+this.href;
-                    
-                   this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?url='+this.link+'">Load in Editor</a>';
-                }
-        	}); // End of fancybox
+    	    init_fancy_box(layouts);
             
         }); // End of click handler
        
@@ -123,13 +132,13 @@ $(function(){
 /**
  * Fetches email_templates_structure.js and render themes.
  **/
- function get_email_templates_json()
+ function get_templates_json(url)
 {
 		// Fetch email_templates_structure.js and render
-		$.getJSON(location.origin+'/misc/email-templates/email_templates_structure.js', function(data){
+		$.getJSON(location.origin + url, function(data){
 
 			// Initialize global variable to reuse data
-			EMAIL_TEMPLATES_JSON = data;
+			TEMPLATES_JSON = data;
 			
 			// render theme previews
 			render_theme_previews();
@@ -144,15 +153,16 @@ $(function(){
 function render_theme_previews()
 {
 	var title = '<h2>Select a Template</h2>';
+	var textarea_id = '<%= id%>';
 	
 	var html_link = '<span style="display:inline; float: right; margin-top: -32px;">'
-					+'<a class="btn" href="cd_tiny_mce.jsp">'
+					+'<a class="btn" href="cd_tiny_mce.jsp?id='+textarea_id+'">'
 						+'Create your own'
 					+'</a></span>'
 	
 	$('#preview-container-title').html(title + html_link);
 	
-	$.each(EMAIL_TEMPLATES_JSON["email_templates"], function(index, value){
+	$.each(TEMPLATES_JSON["templates"], function(index, value){
 
 		// Initialize the theme preview container 
 		var el = getTemplate('theme-preview', value);
@@ -193,6 +203,29 @@ function getMergeFields(){
 	var merge_fields = window.opener.getMergeFields();
 	return merge_fields;
 }
+
+function init_fancy_box(content_array)
+{
+	
+	var t_id = '<%=id%>';
+	
+	  // Shows content array in fancybox
+    $.fancybox.open(content_array,{
+     	 helpers : {
+     	        overlay : {
+     	            css : {
+     	                'background' : 'rgba(58, 42, 45, 0.95)'
+     	            }
+     	        }
+     	    },
+     	    beforeLoad: function() {
+
+     	    this.href = location.origin + this.href;
+             
+            this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
+         }
+ 	}); // End of fancybox
+}
 </script>
 
 <!-- Preview Templates  -->
@@ -216,7 +249,7 @@ function getMergeFields(){
 				<div class="theme-preview">
 				<!-- Make image as clickable -->
 				<a href="#">
-					<img src="/misc/email-templates/{{theme_preview}}" width="226px" height="136px" style="border-radius: 3px;border: 3px solid #e0e5e9;background: #fff;" alt="Email template image"/>
+					<img src="{{theme_preview}}" width="226px" height="136px" style="border-radius: 3px;border: 3px solid #e0e5e9;background: #fff;" alt="Email template image"/>
 				</a>
 				<p style="padding-top: 15px;">{{label}} ({{this.layouts.length}})</p>
     			
