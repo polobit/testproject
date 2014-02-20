@@ -225,6 +225,8 @@ $(function()
 			return "icon-reply";
 		if (item == "tweet")
 			return "icon-share-alt";
+		if (item == "other")
+			return "icon-tasks";
 
 	});
 
