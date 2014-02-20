@@ -1,26 +1,3 @@
-<script type="text/html" id="workflow-template-attributes-template">
-<div class="span3">
-    <div class="well" style="text-align: center;">
-        <!-- Icon and Title -->
-        <div>
-            <div style="padding:20px 0px 10px;">
-                <i class="{{icon}} icon-4x"></i>
-            </div>
-            <b>{{title}}</b>
-        </div>
-        <br />
-        <!-- Description -->
-        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;"  rel="tooltip" title="{{description}}">
-            {{description}}
-        </div>
-        <!-- Add button -->
-        <div style="/*margin: 40px auto;	width: 50%;*/">
-            <a class="btn btn-primary workflow-template-add" href="#workflow-add/{{name}}">Go</a>
-        </div>
-    </div>
-</div>
-</script>
-
 <script type="text/html" id="workflow-categories-template">
 <div class="row">
     <div class="span12">
@@ -36,36 +13,241 @@
             <h2>General</h2>
         </div>
         <div id="general" class="row">
-        	<div class="workflow-templates-loading-img" style="padding-left:23px;"></div>
-        </div>
-        <br/>
+			<div class="span3">
+    			<div class="well" style="text-align: center;">
+        		<!-- Icon and Title -->
+        			<div>
+            			<div style="padding:20px 0px 10px;">
+                			<i class="icon-file-text icon-4x"></i>
+            			</div>
+            			<b>Newsletter</b>
+        			</div>
+        			<br>
+        			<!-- Description -->
+        			<div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Send a newsletter and see reports on opens and clicks">
+            			Send a newsletter and see reports on opens and clicks
+        			</div>
+        			<!-- Add button -->
+        			<div style="/*margin: 40px auto;	width: 50%;*/">
+            			<a class="btn btn-primary workflow-template-add" href="#workflow-add/general/newsletter">Go</a>
+        			</div>
+    			</div>
+			</div>
+
+			<div class="span3">
+    			<div class="well" style="text-align: center;">
+        			<!-- Icon and Title -->
+        			<div>
+            			<div style="padding:20px 0px 10px;">
+                			<i class="icon-time icon-4x"></i>
+            			</div>
+            			<b>Autoresponder</b>
+        			</div>
+        			<br>
+        			<!-- Description -->
+        			<div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Send emails and follow-up automatically after a specified duration">
+            			Send emails and follow-up automatically after a specified duration
+        			</div>
+        			<!-- Add button -->
+        			<div style="/*margin: 40px auto;	width: 50%;*/">
+            			<a class="btn btn-primary workflow-template-add" href="#workflow-add/general/auto_responder">Go</a>
+        			</div>
+    			</div>
+			</div>
+		</div>
+        <br>
     </div>
     <div class="span12">
         <div class="page-header">
             <h2>Marketing Automation</h2>
         </div>
         <div id="marketing-automation" class="row">
-        	<div class="workflow-templates-loading-img" style="padding-left:23px;"></div>
+        
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-star-half-full icon-4x"></i>
+            </div>
+            <b>Lead Scoring</b>
         </div>
-        <br/>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Score your leads when they click email links and browse the website">
+            Score your leads when they click email links and browse the website
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/marketing-automation/lead_scoring">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-twitter icon-4x"></i>
+            </div>
+            <b>Social Campaign</b>
+        </div>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Reach out to prospects on social media. Send automated Tweets">
+            Reach out to prospects on social media. Send automated Tweets
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/marketing-automation/social_campaign">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-beaker icon-4x"></i>
+            </div>
+            <b>A/B Test</b>
+        </div>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="A/B test your emails. Compare results and optimize messages">
+            A/B test your emails. Compare results and optimize messages
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/marketing-automation/ab_testing">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+        <br>
     </div>
     <div class="span12">
         <div class="page-header">
             <h2>SaaS</h2>
         </div>
         <div id="saas" class="row">
-        	<div class="workflow-templates-loading-img" style="padding-left:23px;"></div>
+        
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-gift icon-4x"></i>
+            </div>
+            <b>Signup Welcome</b>
         </div>
-        <br/>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Send a welcome email after users signup">
+            Send a welcome email after users signup
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/saas/signup_welcome">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-plane icon-4x"></i>
+            </div>
+            <b>User Onboarding</b>
+        </div>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Help your users with timely communication to bring them onboard and improve retention">
+            Help your users with timely communication to bring them onboard and improve retention
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/saas/user_onboarding">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-level-up icon-4x"></i>
+            </div>
+            <b>Trial Conversion</b>
+        </div>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Identify who among your free/trial users are ready to convert and reach out to them">
+            Identify who among your free/trial users are ready to convert and reach out to them
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/saas/trial_conversion">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+        <br>
     </div>
     <div class="span12">
         <div class="page-header">
             <h2>E-commerce</h2>
         </div>
         <div id="ecommerce" class="row">
-        	<div class="workflow-templates-loading-img" style="padding-left:23px;"></div>
+        
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-shopping-cart icon-4x"></i>
+            </div>
+            <b>Cart Abandonment</b>
         </div>
-        <br/>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Detect when your users abandon cart and send them relavent communication">
+            Detect when your users abandon cart and send them relavent communication
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/ecommerce/cart_abandonment">Go</a>
+        </div>
+    </div>
+</div>
+
+<div class="span3">
+    <div class="well" style="text-align: center;">
+        <!-- Icon and Title -->
+        <div>
+            <div style="padding:20px 0px 10px;">
+                <i class="icon-bullseye icon-4x"></i>
+            </div>
+            <b>Targeted Promo</b>
+        </div>
+        <br>
+        <!-- Description -->
+        <div class="ellipsis-multiline" style="/*-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;*/margin-bottom: 20px;" rel="tooltip" title="Send relevant and timely promotional communication to users based on their interests and actions">
+            Send relevant and timely promotional communication to users based on their interests and actions
+        </div>
+        <!-- Add button -->
+        <div style="/*margin: 40px auto;	width: 50%;*/">
+            <a class="btn btn-primary workflow-template-add" href="#workflow-add/ecommerce/targeted_promo">Go</a>
+        </div>
+    </div>
+</div>
+</div>
+        <br>
     </div>
 </div>
 </script>
