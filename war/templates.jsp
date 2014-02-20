@@ -87,7 +87,7 @@ $(function(){
       		url='/misc/email-templates/email_templates_structure.js';
 
       if(type === 'web_rules')
-    	  url='/misc/';
+    	  url='/misc/modal-templates/modal_templates_structure.js';
       
     	  
    		// Gets email_templates_structure.js
@@ -249,7 +249,7 @@ function init_fancy_box(content_array)
 				<div class="theme-preview">
 				<!-- Make image as clickable -->
 				<a href="#">
-					<img src="{{theme_preview}}" width="226px" height="136px" style="border-radius: 3px;border: 3px solid #e0e5e9;background: #fff;" alt="Email template image"/>
+					<img src="{{theme_preview}}" width="226px" height="136px" style="border-radius: 3px;border: 3px solid #e0e5e9;background: #fff;" alt="Template image"/>
 				</a>
 				<p style="padding-top: 15px;">{{label}} ({{this.layouts.length}})</p>
     			
