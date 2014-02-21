@@ -98,6 +98,7 @@ public class ReportsUtil
 			if (results.get("report_results") != null)
 			{
 				Collection resultsCollection = (Collection) results.get("report_results");
+				System.out.println("available = " + resultsCollection.size());
 				if (resultsCollection.size() == 0)
 					continue;
 

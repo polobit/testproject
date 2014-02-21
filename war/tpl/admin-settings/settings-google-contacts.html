@@ -1,5 +1,5 @@
 <script id="import-google-contacts-template" type="text/html">
-<div class="span5 well" style="height: 200px;">
+<div class="span5 well">
     <form id="google-contacts-import-form" class="form-horizontal">
         <legend>Google Contacts <span class="label label-important">Alpha</span></legend>
         <fieldset>
@@ -25,6 +25,33 @@
 				</select>
 			</div>
 	</div>
+{{#if id}}
+ 	<div class="control-group" style="margin-left:-50px">
+		<label class="control-label" style="text-align:">Sync from</label> 
+           <div class="controls">
+				<select name="sync_from_group" class="required">
+				<option value="">Select</option>
+				{{#each groups}}
+					{{#if groupId}}	
+						<option value="{{groupId}}">{{groupName}}</option>
+					{{else}}
+						<option value="{{atomId}}">{{groupName}}</option>
+					{{/if}}
+				{{/each}}
+				</select>
+			</div>
+	</div>
+
+<div class="control-group" style="margin-left:-50px">
+		<label class="control-label" style="text-align:">Sync To</label> 
+           <div class="controls">
+				<select name="sync_to_group" class="required">
+					<option value="ALL_CONTACT">All Contacts</option>
+					<option value="AGILE_CRM">Agile CRM</option>
+				</select>
+			</div>
+	</div>
+{{/if}}
 		 <input name="id" type="hidden" value="{{id}}" />
       <div class="form-actions">
 		{{#unless id}}			

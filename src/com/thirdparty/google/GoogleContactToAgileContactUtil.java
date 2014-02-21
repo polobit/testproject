@@ -1,10 +1,15 @@
 package com.thirdparty.google;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.Globals;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.util.HTTPUtil;
 import com.google.gdata.client.Query;
@@ -12,8 +17,14 @@ import com.google.gdata.client.authn.oauth.GoogleOAuthParameters;
 import com.google.gdata.client.authn.oauth.OAuthHmacSha1Signer;
 import com.google.gdata.client.authn.oauth.OAuthSigner;
 import com.google.gdata.client.contacts.ContactsService;
+import com.google.gdata.data.DateTime;
+import com.google.gdata.data.batch.BatchOperationType;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
+import com.google.gdata.data.contacts.ContactGroupFeed;
+import com.google.gdata.data.extensions.Email;
+import com.google.gdata.model.batch.BatchUtils;
+import com.google.gdata.util.ServiceException;
 
 /**
  * <code>GoogleContactToAgileContactUtil</code> class Contains methods to
@@ -47,7 +58,7 @@ public class GoogleContactToAgileContactUtil
 		oauthParameters.setOAuthConsumerSecret(Globals.GOOGLE_SECRET_KEY);
 		oauthParameters.setScope(GOOGLE_CONTACTS_BASE_URL);
 		oauthParameters.setOAuthToken(token);
-		contactService = new ContactsService("agile");
+		contactService = new ContactsService("Agile Contacts");
 		contactService.setProtocolVersion(ContactsService.Versions.V3);
 		contactService.setOAuthCredentials(oauthParameters, signer);
 		return contactService;
@@ -61,35 +72,130 @@ public class GoogleContactToAgileContactUtil
 	 * @return {@link List} of {@link ContactEntry}
 	 * @throws Exception
 	 */
-	public static List<ContactEntry> retrieveContacts(String accessToken) throws Exception
+	public static List<ContactEntry> retrieveContacts(ContactPrefs prefs) throws Exception
 	{
+		String accessToken = prefs.token;
+
 		// build service with all the tokens
 		ContactsService contactService = getService(accessToken);
 
-		// Get all the available groups in gmail account
-		ContactFeed resultFeed = getGroups(contactService, accessToken);
+		/*
+		 * GoogleContactToAgileContact.printAllGroups(accessToken); int i1 = 1;
+		 * if (1 + i1 == 2) return null;
+		 */
 
-		String temp = "";
+		URL feedUrl = null;
+		Query myQuery = null;
+		try
+		{
 
-		for (int i = 0; i < resultFeed.getEntries().size(); i++)
-			if (resultFeed.getEntries().get(i).getTitle().getPlainText().contains("System Group: My Contacts"))
-				temp = resultFeed.getEntries().get(i).getId();
+			System.out.println(prefs.sync_from_group);
+			feedUrl = new URL(prefs.sync_from_group + "?access_token=" + accessToken);
+			// Build query with URL
+			myQuery = new Query(feedUrl);
 
-		URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?" + "access_token=" + accessToken);
+		}
+		catch (MalformedURLException e)
+		{
+			// feedUrl = new
+			// URL("https://www.google.com/m8/feeds/contacts/default/full" +
+			// "?access_token=" + accessToken);
+			feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL + "groups/default/full/" + "?access_token=" + accessToken);
+			// Build query with URL
+			myQuery = new Query(feedUrl);
+			myQuery.setStringCustomParameter("group", prefs.sync_from_group);
+		}
 
-		// Build query with URL
-		Query myQuery = new Query(feedUrl);
-		myQuery.setStartIndex(1);
+		System.out.println(feedUrl);
+
+		// myQuery.setStartIndex(1);
 		// sets my contacts group id
-		myQuery.setStringCustomParameter("group", temp);
-		myQuery.setMaxResults(2000);
+		// myQuery.setMaxResults(30);
+		DateTime dateTime = new DateTime(prefs.last_synched);
+		myQuery.setUpdatedMin(dateTime);
+
+		// Get all the available groups in gmail account
 
 		// queries google for contacts
-		resultFeed = contactService.query(myQuery, ContactFeed.class);
+		ContactGroupFeed resultFeed = contactService.getFeed(myQuery, ContactGroupFeed.class);
 
 		System.out.println("total results from google " + resultFeed.getTotalResults());
+		return null;
+	}
 
-		return resultFeed.getEntries();
+	public static void updateContacts(List<Contact> contacts, String token) throws Exception
+	{
+		// Feed that hold s all the batch request entries.
+		ContactFeed requestFeed = new ContactFeed();
+
+		ContactsService contactService = getService(token);
+
+		for (Contact contact : contacts)
+		{
+			// Create a ContactGroupEntry for the create request.
+			ContactEntry createContact = new ContactEntry();
+
+			final String NO_YOMI = null;
+			com.google.gdata.data.extensions.Name contactTwoName = new com.google.gdata.data.extensions.Name();
+
+			String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
+			String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
+
+			System.out.println(firstName + ", " + lastName);
+			String fullName = "";
+			if (!StringUtils.isEmpty(firstName))
+			{
+				fullName += firstName;
+				contactTwoName.setGivenName(new com.google.gdata.data.extensions.GivenName(firstName, NO_YOMI));
+			}
+
+			if (!StringUtils.isEmpty(lastName))
+			{
+				fullName += " " + lastName;
+				contactTwoName.setFamilyName(new com.google.gdata.data.extensions.FamilyName(lastName, NO_YOMI));
+			}
+
+			contactTwoName.setFullName(new com.google.gdata.data.extensions.FullName(fullName, NO_YOMI));
+
+			System.out.println();
+			if (contactTwoName.hasGivenName())
+				createContact.setName(contactTwoName);
+
+			List<ContactField> emailFields = contact.getContactPropertiesList(Contact.EMAIL);
+			for (ContactField field : emailFields)
+			{
+				Email primaryMail = new Email();
+				primaryMail.setAddress(field.value);
+				if (!StringUtils.isEmpty(field.subtype))
+					primaryMail.setRel("http://schemas.google.com/g/2005#"
+							+ StringUtils.lowerCase(field.subtype.toLowerCase()));
+				else
+					primaryMail.setRel("http://schemas.google.com/g/2005#work");
+
+				createContact.addEmailAddress(primaryMail);
+			}
+
+			System.out.println(contact.id + ", " + contact.getContactFieldValue(Contact.EMAIL));
+			BatchUtils.setBatchId(createContact, contact.id.toString());
+			BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
+			requestFeed.getEntries().add(createContact);
+
+		}
+
+		// Submit the batch request to the server.
+		ContactFeed responseFeed = contactService.batch(new URL(
+				"https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token), requestFeed);
+		System.out.println(responseFeed.getEtag());
+		System.out.println(responseFeed.getEntries());
+
+		// Check the status of each operation.
+		for (ContactEntry entry : responseFeed.getEntries())
+		{
+			String batchId = BatchUtils.getBatchId(entry);
+			com.google.gdata.data.batch.BatchStatus status = com.google.gdata.data.batch.BatchUtils
+					.getBatchStatus(entry);
+			System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
+		}
 	}
 
 	/**
@@ -104,6 +210,13 @@ public class GoogleContactToAgileContactUtil
 	 */
 	public static ContactFeed getGroups(ContactsService contactService, String accessToken) throws Exception
 	{
+		return getGroups(contactService, GOOGLE_CONTACTS_BASE_URL + "groups/default/full", accessToken);
+	}
+
+	public static ContactFeed getGroups(ContactsService contactService, String url, String accessToken)
+			throws IOException, ServiceException
+	{
+
 		URL feedUrl = new URL(GOOGLE_CONTACTS_BASE_URL + "groups/default/full?" + "access_token=" + accessToken);
 
 		// Build query with URL

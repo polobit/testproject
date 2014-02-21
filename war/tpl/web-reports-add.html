@@ -38,7 +38,7 @@
 													<optgroup label="Page conditions" id="page-conditions">
 														<option value="page" selected="selected">Page URL</option>
 														<option value="referrer">Referrer URL</option>
-														<option value="visit">Visit</option>
+														<option value="visit">Show</option>
 													</optgroup>
 													<optgroup label="Contact Data" id="page-conditions">
 														<option value="tags">Tag</option>
@@ -92,8 +92,10 @@
 														last</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
 													<option value="ANYOF" class="tag">is any of</option>
-													<option value="FIRST_TIME" class="visit">First time</option>
-													<option value="REPEAT" class="visit">Recurring</option>
+													<option value="EVERYTIME" class="visit">Everytime</option>
+													<option value="ONCE_PER_SESSION" class="visit">Once per session</option>	
+													<option value="ONLY_ONCE" class="visit">Only once</option>
+													
 												</select>
 											</div>
 										</td>
@@ -304,7 +306,7 @@
 														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY">After certain time</option>
 														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY">On starting scroll</option>
 														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY">On reaching end of page</option>
-														<!-- <option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY">About to exit page</option> -->
+														 <option value="EXIT" class="MODAL_POPUP FORM CORNER_NOTY">About to exit page</option> 
 												</select>
 											</div>
 										

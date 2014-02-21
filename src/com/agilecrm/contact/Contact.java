@@ -987,7 +987,11 @@ public class Contact extends Cursor
 
 		ContactField field = this.getContactField("image");
 		if (field != null)
+		{
 			field.value = LinkedInUtil.changeImageUrl(field.value);
+			if (StringUtils.contains(field.value, "twimg.com"))
+				properties.remove(field);
+		}
 
 		if (contact_company_key != null) // fill company name in
 		// properties['COMPANY']

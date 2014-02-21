@@ -58,9 +58,9 @@ public class ContactPrefsAPI
 
 		ContactPrefs currentPrefs = ContactPrefsUtil.get(prefs.id);
 
-		ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
+		ContactPrefs updatedPrefs = ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
 
-		currentPrefs.save();
+		updatedPrefs.save();
 	}
 
 	/**
