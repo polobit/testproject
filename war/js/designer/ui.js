@@ -287,7 +287,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 	if(uiFieldDefinition.value != undefined)
 		value = uiFieldDefinition.value;
 
-	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates()'>(Load in HTML Editor)</a></label><br/><br/>";	
+	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates()'>(Select a Template / Load from Editor)</a></label><br/><br/>";	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName + "' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
 	htmlDiv += "<br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
