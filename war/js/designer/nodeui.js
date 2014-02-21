@@ -184,6 +184,9 @@ function saveNode(e) {
 		}
 		 templateContinue(nodeId);
 		 
+		 // Shows 'Save Campaign' message. Naresh (21/02/2014)
+		 window.parent.$("#workflow-edit-msg").fadeIn(1000).fadeOut(2500);
+		   	
         // close the dialog after the node is constructed			
         $("#nodeui").dialog('close');
        
