@@ -1,6 +1,7 @@
 package com.thirdparty.google.utl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.agilecrm.session.SessionManager;
@@ -8,6 +9,7 @@ import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.ContactPrefs.Type;
 
 public class ContactPrefsUtil
@@ -56,10 +58,25 @@ public class ContactPrefsUtil
 		}
 	}
 
+	public static List<ContactPrefs> getprefs()
+	{
+		return ContactPrefs.dao.fetchAll();
+	}
+
+	public static List<ContactPrefs> getprefs(Duration duration)
+	{
+		Map<String, Object> queryMap = new HashMap<String, Object>();
+		queryMap.put("duration", duration);
+
+		return ContactPrefs.dao.listByProperty(queryMap);
+	}
+
 	public static ContactPrefs mergePrefs(ContactPrefs currentPrefs, ContactPrefs updatedPrefs)
 	{
-		currentPrefs.duration = updatedPrefs.duration;
-		currentPrefs.sync_type = updatedPrefs.sync_type;
-		return currentPrefs;
+		updatedPrefs.token = currentPrefs.token;
+		updatedPrefs.secret = currentPrefs.secret;
+		System.out.println(updatedPrefs.sync_from_group);
+		System.out.println(updatedPrefs.sync_to_group);
+		return updatedPrefs;
 	}
 }

@@ -1,9 +1,12 @@
 package com.thirdparty.google;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -82,6 +85,13 @@ public class ContactPrefs implements Serializable
 	@NotSaved(IfDefault.class)
 	public Long lastModifedAt = 0L;
 
+	@NotSaved(IfDefault.class)
+	public Long last_synched = 0L;
+
+	@NotSaved
+	@Embedded
+	public List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
+
 	// domain user key
 	@JsonIgnore
 	private Key<DomainUser> domainUser;
@@ -96,6 +106,17 @@ public class ContactPrefs implements Serializable
 	 */
 	@NotSaved(IfDefault.class)
 	public Type type = null;
+
+	public static enum GoogleGroup
+	{
+		ALL_CONTACT, AGILE_CRM
+	}
+
+	@NotSaved(IfDefault.class)
+	public GoogleGroup sync_to_group = GoogleGroup.AGILE_CRM;
+
+	@NotSaved(IfDefault.class)
+	public String sync_from_group = "Contacts";
 
 	public ContactPrefs()
 	{
@@ -160,6 +181,25 @@ public class ContactPrefs implements Serializable
 			domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}
 
+	@PostLoad
+	void postLoad()
+	{
+		if (type == Type.GOOGLE)
+		{
+			try
+			{
+				groups = GoogleContactToAgileContact.getGroups(token);
+				System.out.println(GoogleContactToAgileContact.getGroups(token));
+
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	/**
 	 * Sets domianUser key.
 	 * 
@@ -169,6 +209,11 @@ public class ContactPrefs implements Serializable
 	public void setDomainUser(Key<DomainUser> domianUser)
 	{
 		this.domainUser = domianUser;
+	}
+
+	public Key<DomainUser> getDomainUser(Key<DomainUser> domianUser)
+	{
+		return domianUser;
 	}
 
 	/**
@@ -223,4 +268,14 @@ public class ContactPrefs implements Serializable
 		return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token
 				+ " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
 	}
+}
+
+@XmlRootElement
+class GoogleGroupDetails
+{
+	public String atomId = null;
+	public String editLisk = null;
+	public String groupId = null;
+	public String groupName = null;
+	public String selfLink = null;
 }

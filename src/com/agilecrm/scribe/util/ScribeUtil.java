@@ -36,6 +36,7 @@ import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.ContactsImportUtil;
 
 /**
  * <code>ScribeUtil</code> class contains methods to be used by
@@ -334,6 +335,7 @@ public class ScribeUtil
 
 		oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
 		oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
+
 		oAuthRequest.addBodyParameter("scope", "");
 		oAuthRequest.addBodyParameter("redirect_uri",
 				"https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
@@ -367,7 +369,7 @@ public class ScribeUtil
 			contactPrefs.save();
 
 			// initialize backend to save contacts
-			// ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 		}
 	}
 
