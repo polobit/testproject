@@ -25,55 +25,58 @@ import com.googlecode.objectify.Key;
 @SuppressWarnings("serial")
 public class ReportsDeferredTask implements DeferredTask
 {
-    /**
-     * Domain of the account
-     */
-    private String domain;
+	/**
+	 * Domain of the account
+	 */
+	private String domain;
 
-    private Long domain_id;
+	private Long domain_id;
 
-    /**
-     * Duration of report
-     */
-    private String duration;
+	/**
+	 * Duration of report
+	 */
+	private String duration;
 
-    public ReportsDeferredTask(String domain, String duration)
-    {
-	this.domain = domain;
-	this.duration = duration;
-    }
-
-    public ReportsDeferredTask(Long domain_id, String duration)
-    {
-	this.domain_id = domain_id;
-	this.duration = duration;
-    }
-
-    @Override
-    public void run()
-    {
-	DomainUser user = DomainUserUtil.getDomainUser(domain_id);
-
-	domain = user != null ? user.domain : null;
-
-	if (StringUtils.isEmpty(domain))
-	    return;
-
-	String oldNamespace = NamespaceManager.get();
-
-	NamespaceManager.set(domain);
-	try
+	public ReportsDeferredTask(String domain, String duration)
 	{
-	    // Util function fetches reports based on duration, generates
-	    // reports and sends report
-	    for (Key<Reports> reportKey : ReportsUtil.getAllReportsKeysByDuration(duration))
-	    {
-		ReportsUtil.sendReport(reportKey.getId());
-	    }
+		this.domain = domain;
+		this.duration = duration;
 	}
-	finally
+
+	public ReportsDeferredTask(Long domain_id, String duration)
 	{
-	    NamespaceManager.set(oldNamespace);
+		this.domain_id = domain_id;
+		this.duration = duration;
 	}
-    }
+
+	@Override
+	public void run()
+	{
+		if (domain == null && domain_id != null)
+		{
+			DomainUser user = DomainUserUtil.getDomainUser(domain_id);
+
+			domain = user != null ? user.domain : null;
+
+			if (StringUtils.isEmpty(domain))
+				return;
+		}
+
+		String oldNamespace = NamespaceManager.get();
+
+		NamespaceManager.set(domain);
+		try
+		{
+			// Util function fetches reports based on duration, generates
+			// reports and sends report
+			for (Key<Reports> reportKey : ReportsUtil.getAllReportsKeysByDuration(duration))
+			{
+				ReportsUtil.sendReport(reportKey.getId());
+			}
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
+	}
 }
