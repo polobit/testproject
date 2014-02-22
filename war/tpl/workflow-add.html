@@ -22,33 +22,37 @@
                     <br />
                  
                     <div>
-						<a href="#" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block"><span><i class="icon-plus"></i></span> Unsubscribe Option</a>
+						<a href="#" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block"><span><i class="icon-plus"></i></span> Manage Unsubscription</a>
 					</div>
 					<br/>
 					<div class="collapse" id="workflow-unsubscribe-block">
-                    	<div class="control-group">
-							<label class="control-label" style="display: inline-block;">
-								When unsubscribe link is clicked
+                    	<p class="help-block">Agile can unsubscribe your contacts from either the current campaign or all campaigns (ongoing and future)</p>
+						<div class="control-group">
+							<label class="control-label" style="float: left; width: 140px; padding-top: 5px;">
+								Unsubscribe Action:
 							</label>
-							<div class="controls" style="display: inline-block; margin-left: 61px;">
+							<div class="controls" style="margin-left: 61px;">
 								<select name="action" id="unsubscribe-action">
-									<option value="ASK_USER">Show unsubscribe options</option>
-									<option value="UNSUBSCRIBE_FROM_ALL">Unsubscribe from ALL campaigns</option>
-                                    <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Unsubscribe from this campaign</option>
+									<option value="ASK_USER">Prompt User (Recommended)</option>
+									<option value="UNSUBSCRIBE_FROM_ALL">All Campaigns</option>
+                                    <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Current Campaign only</option>
 								</select>
 							</div>
-							<br/>
-                            <small>Prompts the user with options to either unsubscribe from this campaign or all communication</small>
+							<!--<br/>
+                            <small>Prompts the user with options to either unsubscribe from this campaign or all communication</small>-->
                     	</div>
                         <br/>
+                        <p class="help-block">Agile can add the tags automatically when your contact unsubscribes. You can run more campaigns against this tag in future.</p>
                     	<div class="control-group">
-							<label class="control-label" style="display: inline-block;">
-								Add tag for unsubscribed contacts
+							<label class="control-label" style="float: left; width: 140px; padding-top: 5px;">
+								Tags:
 							</label>
-							<div class="controls" style="display: inline-block; margin-left: 55px;">
-								<input type="text" name="tag" id="unsubscribe-tag" placeholder="Enter a tag">
+							<div class="controls" style="margin-left: 55px;">
+								<input type="text" name="tag" id="unsubscribe-tag" placeholder="Separate tags with comma">
 							</div>
                     	</div>
+                        <br/>
+                        <p class="help-block">Unsubscribed contacts are not sent any further emails or tweets but other actions such as lead scoring will still continue to execute.</p>
 					</div>
                    
                     <br />

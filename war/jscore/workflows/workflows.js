@@ -196,11 +196,11 @@ $(function(){
 	});
 	
 	$('#workflow-unsubscribe-block').live('shown', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Unsubscribe Option');
+		$('#workflow-unsubscribe-option').html('<span><i class="icon-minus"></i></span> Manage Unsubscription');
 	});
 	
 	$('#workflow-unsubscribe-block').live('hidden', function(){
-		$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Unsubscribe Option');
+		$('#workflow-unsubscribe-option').html('<span><i class="icon-plus"></i></span> Manage Unsubscription');
 	});
 	
 	$('#unsubscribe-action').die().live('change', function(e){
