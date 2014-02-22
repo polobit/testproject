@@ -1,9 +1,13 @@
 package com.agilecrm.user.util;
 
+import org.json.JSONObject;
+
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.core.api.prefs.IMAPAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.util.HTTPUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -63,5 +67,26 @@ public class IMAPEmailPrefsUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Throws exception if the prefs are invalid.
+     * 
+     * @param id
+     *            - IMAPEmailPrefs prefs
+     */
+    public static void checkImapPrefs(IMAPEmailPrefs prefs) throws Exception
+    {
+	String url = ContactEmailUtil.getIMAPURLForPrefs(prefs, "info@agilecrm.com", "0", "1");
+
+	// Access URL
+	String jsonResult = HTTPUtil.accessURL(url);
+
+	// Convert to json.
+	JSONObject emails = new JSONObject(jsonResult);
+
+	// Throw Exception if there is any error
+	if (emails.has("errormssg"))
+	    throw new Exception("Error saving: " + emails.getString("errormssg"));
     }
 }

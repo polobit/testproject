@@ -233,6 +233,12 @@ public class ContactEmailUtil
 	if (imapPrefs == null)
 	    return null;
 
+	return getIMAPURLForPrefs(imapPrefs, searchEmail, offset, count);
+    }
+
+    public static String getIMAPURLForPrefs(IMAPEmailPrefs imapPrefs, String searchEmail, String offset, String count)
+    {
+
 	String userName = imapPrefs.user_name;
 	String host = imapPrefs.server_name;
 	String password = imapPrefs.password;
