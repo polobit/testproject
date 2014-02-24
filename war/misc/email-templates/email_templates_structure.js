@@ -235,14 +235,14 @@
                     "label": "Minimalistic",
                     "title": "minimalistic",
                     "theme_preview": {
-                        "theme_small": "/misc/email-templates/email/responders/theme-preview/payment_template.png",
-                        "theme_big": "/misc/email-templates/email/responders/theme-preview/payment_template_b.png"
+                        "theme_small": "/misc/email-templates/transactional/minimalistic/theme-preview/payment_template.png",
+                        "theme_big": "/misc/email-templates/transactional/minimalistic/theme-preview/payment_template_b.png"
                     },
                     "layouts": [
                         {
                             "title": "Payment",
-                            "href": "/misc/email-templates/email/responders/theme-preview/payment_template_b.png",
-                            "link": "/misc/email-templates/email/responders/payment_template.html"
+                            "href": "/misc/email-templates/transactional/minimalistic/theme-preview/payment_template_b.png",
+                            "link": "/misc/email-templates/transactional/minimalistic/payment_template.html"
                         }
                     ]
                 }
