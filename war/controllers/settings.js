@@ -89,7 +89,7 @@ var SettingsRouter = Backbone.Router
 					// Returns, if the save button has disabled attribute
 					if ($(saveBtn).attr('disabled'))
 						return;
-
+					
 					// Disables save button to prevent multiple click event issues
 					disable_save_button($(saveBtn));
 					
@@ -98,6 +98,14 @@ var SettingsRouter = Backbone.Router
 					if (!isValidForm('#'+ form_id)) {
 
 						// Removes disabled attribute of save button
+						enable_save_button($(saveBtn));
+						return false;
+					}
+					// Returns if same password is given
+					if($("#current_pswd").val() == $("#new_pswd").val())
+					{
+						$('#changePasswordForm').find('span.save-status').html("<span style='color:red;margin-left:10px;'>Current and New Password can not be the same.</span>");
+						$('#changePasswordForm').find('span.save-status').find("span").fadeOut(3000);
 						enable_save_button($(saveBtn));
 						return false;
 					}
