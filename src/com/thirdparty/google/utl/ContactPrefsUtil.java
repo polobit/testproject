@@ -11,6 +11,7 @@ import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.GoogleGroupDetails;
 
 public class ContactPrefsUtil
 {
@@ -75,8 +76,31 @@ public class ContactPrefsUtil
 	{
 		updatedPrefs.token = currentPrefs.token;
 		updatedPrefs.secret = currentPrefs.secret;
+		updatedPrefs.refreshToken = currentPrefs.refreshToken;
 		System.out.println(updatedPrefs.sync_from_group);
 		System.out.println(updatedPrefs.sync_to_group);
 		return updatedPrefs;
+	}
+
+	public static GoogleGroupDetails getGroup(String title, ContactPrefs prefs)
+	{
+		for (GoogleGroupDetails group : prefs.groups)
+		{
+			if (title.equals(group.groupName))
+				return group;
+		}
+
+		return null;
+	}
+
+	public static GoogleGroupDetails getGroupBasedOnID(String atomId, ContactPrefs prefs)
+	{
+		for (GoogleGroupDetails group : prefs.groups)
+		{
+			if (atomId.equals(group.atomId))
+				return group;
+		}
+
+		return null;
 	}
 }

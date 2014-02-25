@@ -133,7 +133,7 @@ $(function(){
         	// Close current one
         	$.fancybox.close();
         	
-        	var label = $(this).attr("data");
+        	var title = $(this).attr("data");
         	
         	var layouts=[];
         	
@@ -145,7 +145,7 @@ $(function(){
     	    	
     			$.each(value.themes, function(index, theme){
     				
-    				if(theme.label === label){
+    				if(theme.title === title){
 
     				layouts= theme.layouts;
     				
@@ -286,7 +286,7 @@ function show_fancy_box(content_array, href, title)
 			<div class="span5">
 				<div class="theme-preview">
 				<!-- Make image as clickable -->
-				<a class="fancybox" rel="theme_previews" href="{{theme_preview.theme_big}}" title="{{label}}">
+				<a class="fancybox" rel="theme_previews" href="{{theme_preview.theme_big}}" title="{{title}}">
 					<img src="{{theme_preview.theme_small}}" width="226px" height="136px" style="border-radius: 3px;border: 3px solid #e0e5e9;background: #fff;" alt="Template image"/>
 				</a>
 				<p style="padding-top: 15px;">{{label}} ({{this.layouts.length}})</p>

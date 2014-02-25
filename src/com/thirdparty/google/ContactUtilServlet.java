@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
@@ -48,7 +49,6 @@ public class ContactUtilServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
-
 		try
 		{
 
@@ -92,10 +92,9 @@ public class ContactUtilServlet extends HttpServlet
 
 		for (ContactPrefs pref : prefs)
 		{
-			System.out.println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPp");
-			importContacts(pref);
-			// GoogleContactToAgileContactUtil.updateContacts(ContactUtil.getAll(10,
-			// null), pref.token);
+			GoogleContactToAgileContactUtil.refreshTokenInGoogle(pref.refreshToken);
+			// importContacts(pref);
+			GoogleContactToAgileContactUtil.updateContacts(ContactUtil.getAll(10, null), pref);
 		}
 
 		GoogleContactsDeferredTask task1 = new GoogleContactsDeferredTask("", duration);
@@ -132,7 +131,18 @@ public class ContactUtilServlet extends HttpServlet
 		BulkActionUtil.setSessionManager(key.getId());
 
 		if (contactPrefs.type == Type.GOOGLE)
-			GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
+		{
+			try
+			{
+				GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
+			}
+			catch (Exception e)
+			{
+				System.out.println("(((((((((((((((((exception))))))))))))))))))");
+				System.out.println(e.getMessage());
+			}
+
+		}
 
 		try
 		{
@@ -166,7 +176,7 @@ public class ContactUtilServlet extends HttpServlet
 		}
 		finally
 		{
-			contactPrefs.delete();
+			// contactPrefs.delete();
 		}
 	}
 }
