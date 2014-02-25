@@ -32,11 +32,7 @@
 				<select name="sync_from_group" class="required">
 				<option value="">Select</option>
 				{{#each groups}}
-					{{#if groupId}}	
-						<option value="{{groupId}}">{{groupName}}</option>
-					{{else}}
 						<option value="{{atomId}}">{{groupName}}</option>
-					{{/if}}
 				{{/each}}
 				</select>
 			</div>
@@ -46,8 +42,14 @@
 		<label class="control-label" style="text-align:">Sync To</label> 
            <div class="controls">
 				<select name="sync_to_group" class="required">
-					<option value="ALL_CONTACT">All Contacts</option>
-					<option value="AGILE_CRM">Agile CRM</option>
+				{{#each groups}}
+					{{#if_equals groupName "Agile"}}
+						<option value="{{atomId}}" selected="selected">{{groupName}}</option>
+					{{/if_equals}}
+					{{#if_equals groupName "Contacts"}}
+						<option value="{{atomId}}">{{groupName}}</option>
+					{{/if_equals}}
+				{{/each}}
 				</select>
 			</div>
 	</div>

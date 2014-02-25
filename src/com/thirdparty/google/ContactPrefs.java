@@ -107,16 +107,11 @@ public class ContactPrefs implements Serializable
 	@NotSaved(IfDefault.class)
 	public Type type = null;
 
-	public static enum GoogleGroup
-	{
-		ALL_CONTACT, AGILE_CRM
-	}
+	@NotSaved(IfDefault.class)
+	public String sync_to_group = null;
 
 	@NotSaved(IfDefault.class)
-	public GoogleGroup sync_to_group = GoogleGroup.AGILE_CRM;
-
-	@NotSaved(IfDefault.class)
-	public String sync_from_group = "Contacts";
+	public String sync_from_group = "http://www.google.com/m8/feeds/groups/yaswanth52%40gmail.com/base/6";
 
 	public ContactPrefs()
 	{
@@ -268,14 +263,4 @@ public class ContactPrefs implements Serializable
 		return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token
 				+ " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
 	}
-}
-
-@XmlRootElement
-class GoogleGroupDetails
-{
-	public String atomId = null;
-	public String editLisk = null;
-	public String groupId = null;
-	public String groupName = null;
-	public String selfLink = null;
 }
