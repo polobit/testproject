@@ -336,10 +336,6 @@ public class GoogleContactToAgileContact
 
 	public static List<GoogleGroupDetails> getGroups(String token) throws Exception
 	{
-
-		if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
-			refreshGoogleContactPrefsandSave(contactPrefs);
-
 		ContactsService service = GoogleContactToAgileContactUtil.getService(token);
 
 		// Request the feed

@@ -5,6 +5,8 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.reports.ReportServlet;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.reports.ReportsUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.googlecode.objectify.Key;
@@ -50,9 +52,15 @@ public class ReportsDeferredTask implements DeferredTask
 	@Override
 	public void run()
 	{
+		if (domain == null && domain_id != null)
+		{
+			DomainUser user = DomainUserUtil.getDomainUser(domain_id);
 
-		if (StringUtils.isEmpty(domain))
-			return;
+			domain = user != null ? user.domain : null;
+
+			if (StringUtils.isEmpty(domain))
+				return;
+		}
 
 		String oldNamespace = NamespaceManager.get();
 
