@@ -989,7 +989,7 @@ public class Contact extends Cursor
 		if (field != null)
 		{
 			field.value = LinkedInUtil.changeImageUrl(field.value);
-			if (StringUtils.contains(field.value, "twimg.com"))
+			if (StringUtils.contains(field.value, "twimg0-"))
 				properties.remove(field);
 		}
 
