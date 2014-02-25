@@ -3,19 +3,30 @@ package com.thirdparty.google;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.NamespaceUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
+import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 import com.thirdparty.salesforce.SalesforceImportUtil;
 
 /**
@@ -38,10 +49,18 @@ public class ContactUtilServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
-
 		try
 		{
 
+			req.getParameter("type");
+
+			String duration = req.getParameter("duration");
+
+			if (!StringUtils.isEmpty(duration))
+			{
+				automateImportContacts(duration);
+				return;
+			}
 			System.out.println("in contact util servlet");
 			InputStream stream = req.getInputStream();
 			byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
@@ -65,6 +84,36 @@ public class ContactUtilServlet extends HttpServlet
 
 	}
 
+	private void automateImportContacts(String frequency) throws Exception
+	{
+		Duration duration = ContactPrefs.Duration.valueOf(frequency);
+		List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(duration);
+		Set<String> domains = NamespaceUtil.getAllNamespaces();
+
+		for (ContactPrefs pref : prefs)
+		{
+			GoogleContactToAgileContactUtil.refreshTokenInGoogle(pref.refreshToken);
+			// importContacts(pref);
+			GoogleContactToAgileContactUtil.updateContacts(ContactUtil.getAll(10, null), pref);
+		}
+
+		GoogleContactsDeferredTask task1 = new GoogleContactsDeferredTask("", duration);
+
+		// Add to queue
+		Queue queue1 = QueueFactory.getDefaultQueue();
+		queue1.add(TaskOptions.Builder.withPayload(task1));
+
+		for (String domain : domains)
+		{
+
+			GoogleContactsDeferredTask task = new GoogleContactsDeferredTask(domain, duration);
+
+			// Add to queue
+			Queue queue = QueueFactory.getDefaultQueue();
+			queue.add(TaskOptions.Builder.withPayload(task));
+		}
+	}
+
 	/**
 	 * Calls {@link GoogleContactToAgileContactUtil} to retrieve contacts and
 	 * saves it in agile
@@ -82,7 +131,18 @@ public class ContactUtilServlet extends HttpServlet
 		BulkActionUtil.setSessionManager(key.getId());
 
 		if (contactPrefs.type == Type.GOOGLE)
-			GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
+		{
+			try
+			{
+				GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
+			}
+			catch (Exception e)
+			{
+				System.out.println("(((((((((((((((((exception))))))))))))))))))");
+				System.out.println(e.getMessage());
+			}
+
+		}
 
 		try
 		{
@@ -116,7 +176,7 @@ public class ContactUtilServlet extends HttpServlet
 		}
 		finally
 		{
-			contactPrefs.delete();
+			// contactPrefs.delete();
 		}
 	}
 }

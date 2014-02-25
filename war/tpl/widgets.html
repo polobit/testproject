@@ -2,7 +2,11 @@
 {{#if prefs}}
 	{{add_tag "Widgets"}}
 {{/if}}
-	<div class="widget_container" id="{{remove_spaces name}}-container">
+    {{#if_equals name "Sip"}}
+	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;">
+    {{else}}
+      <div class="widget_container" id="{{remove_spaces name}}-container"> 
+    {{/if_equals}}
 		<div class="widget_header widget_edit_icons" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
 			<div class="widget_header_icons pull-right clear-fix" style="display:none;">
 				<ul class="widget_header_control">

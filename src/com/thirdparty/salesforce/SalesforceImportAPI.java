@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 
 @Path("/api/salesforce")
 public class SalesforceImportAPI
@@ -75,7 +76,7 @@ public class SalesforceImportAPI
 	{
 		System.out.println("In SalesforceImportAPI save");
 
-		ContactPrefs contactPrefs = ContactPrefs.getPrefsByType(Type.SALESFORCE);
+		ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(Type.SALESFORCE);
 
 		System.out.println(contactPrefs);
 		try

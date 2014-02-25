@@ -18,13 +18,25 @@ function isModalVisible()
 	return $(".modal").is(":visible");
 }
 
-
 $(function(){
 	
+	/* To enable or disable the keyboard shortcuts	 */
+	if(CURRENT_USER_PREFS.keyboard_shotcuts)
+		enableKeyboardShotcuts();
 	
-	//head.js(LIB_PATH+'lib/mousetrap.min.js',function(){
-		
-	head.js('/lib/mousetrap.min.js',function(){
+	/* For toggling keyboard shortcuts modal popup */
+	$('#keyboard-shortcuts').die().live('click', function(e){
+		var keyShortModal = $(getTemplate("shortcut-keys"),{});
+		keyShortModal.modal('show');
+	});
+});
+
+/**
+ * Enables keyboard shortcuts based on user prefs.
+ */
+function enableKeyboardShotcuts()
+{
+	head.js(LIB_PATH+'lib/mousetrap.min.js',function(){
 	
 		// Preferences
 		Mousetrap.bind('shift+p',function(){
@@ -86,7 +98,7 @@ $(function(){
 				$('#activityModal').modal('show');
 		});
 	});
-});
+}
 
 /** OLD CODE Below - Without any library, just native js.
  * 	Performance not tested, so don't know if this or the one with Mousetrap Library is faster.

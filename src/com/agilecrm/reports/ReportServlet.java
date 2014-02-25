@@ -29,12 +29,6 @@ public class ReportServlet extends HttpServlet
 		doGet(req, res);
 	}
 
-	/*
-	 * Based on the duration parameter in the url respective reports are
-	 * fetched, on fetching the reports entities they are organized in a map
-	 * with its domain as a key, deferred task is created with map of reports
-	 * which fetches the reports results and mail them to their respective users
-	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
 		// Get duration parameter to fetch filter for that duration
@@ -60,4 +54,5 @@ public class ReportServlet extends HttpServlet
 			queue.add(TaskOptions.Builder.withPayload(reportsDeferredTask));
 		}
 	}
+
 }

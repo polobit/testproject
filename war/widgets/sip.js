@@ -92,12 +92,18 @@ function saveSipPrefs()
 	// Retrieve and store the Sip preferences entered by the user as JSON
 	var sip_prefs = {};
 	sip_prefs["sip_username"] = $("#sip_username").val();
-	sip_prefs["sip_password"] = $("#sip_password").val();
-	sip_prefs["sip_publicid"] = $("#sip_publicid").val();
 	sip_prefs["sip_privateid"] = $("#sip_privateid").val();
 	sip_prefs["sip_realm"] = $("#sip_realm").val();
-
-	console.log(sip_prefs);
+	sip_prefs["sip_password"] = $("#sip_password").val();
+	
+	sip_prefs["sip_publicid"] = "sip:"+$("#sip_privateid").val()+"@"+$("#sip_realm").val();
+		 
+	if ($('#sip_wsenable').is(':checked'))
+    	sip_prefs["sip_wsenable"] = "true";
+    else
+    	sip_prefs["sip_wsenable"] = "false";
+    
+    console.log(sip_prefs);
 		
 	// Saves the preferences into widget with sip widget name
 	agile_crm_save_widget_prefs(SIP_PLUGIN_NAME, JSON.stringify(sip_prefs), function(data)
@@ -136,7 +142,7 @@ function showSipProfile()
                 	}                	                  	        
                   else
                     {
-                	  data["msg"] = "Disconnected : Please verify your settings.";
+                	  data["msg"] = "You can make and receive calls with SIP.";
                 	  $(".contact-make-call").hide();
                 	  $(".make-call").hide();
                 	}
@@ -144,13 +150,5 @@ function showSipProfile()
            	   
             	  //Fill template with data and append it to Sip panel
             	  $('#Sip').html(getTemplate('sip-profile', data));
-                  
-                  /*head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
-                 		 {
-                	       console.log("Sip call from showSipProfile.");
-                	       
-                 		   // initialize SIPML5
-                            SIPml.init(sipRegister);
-                 		 });*/
                }
 }

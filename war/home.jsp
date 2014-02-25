@@ -315,6 +315,8 @@
 										if (domainUser != null && domainUser.is_admin)
 												out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li><li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
 									%>
+									<li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i>
+											Help Videos</a></li>
 									<li><a href="#contact-us"><i class="icon-pencil"></i>
 											Contact Us</a></li>
 									<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
@@ -414,8 +416,8 @@
 	<script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script>
 
 	<script>
-	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	var LIB_PATH = "/";
+	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	//var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
@@ -428,8 +430,8 @@
 	// Get current domain user json
 	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 	
-	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
+	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
@@ -484,20 +486,16 @@
 	<!-- social suite's css -->
 	<link rel="stylesheet" type="text/css"
 		href="/css/social_suite.css" />
-	<!-- telephony css -->
-	<link rel="stylesheet" type="text/css"
-		href="/css/candybar.css" />
-	<link rel="stylesheet" type="text/css"
-		href="/css/dialpad.css" />
+	
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 	
 
 	<!-- Unified CSS for All Lib -->	
 	
-	 <!-- Audios -->
+	<!-- Audios -->	
     <audio id="audio_remote" autoplay="autoplay" />
-    <audio id="ringtone" loop src="/sounds/ringtone.wav" />
-    <audio id="ringbacktone" loop src="/sounds/ringbacktone.wav" />
-    <audio id="dtmfTone" src="/sounds/dtmf.wav" />
+    <audio id="ringtone" loop><source src="/sounds/ringtone.wav" type="audio/wav" preload="auto"></source></audio>
+    <audio id="ringbacktone" loop><source src="/sounds/ringbacktone.wav" type="audio/wav" preload="auto"></source></audio>
+    <audio id="dtmfTone"><source src="/sounds/dtmf.wav" type="audio/wav" preload="auto"></source></audio>
 </body>
 </html>

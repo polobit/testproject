@@ -4,15 +4,15 @@ cron:
   schedule: every 2 mins
 
 - description: daily reports
-  url: /backend/cron/reports/?duration=DAILY
+  url: /backend/cron/reports?duration=DAILY
   schedule: every day 23:30
   
 - description: Monthly reports
-  url: /backend/cron/reports/?duration=MONTHLY
+  url: /backend/cron/reports?duration=MONTHLY
   schedule: 1st friday of month 23:55
   
 - description: Weekly reports
-  url: /backend/cron/reports/?duration=WEEKLY
+  url: /backend/cron/reports?duration=WEEKLY
   schedule: every friday 23:50 
   
 - description: Due Tasks Reminder
@@ -38,3 +38,15 @@ cron:
 - description: ScheduledUpdate Submit
   url: /backend/cron/scheduledupdate
   schedule: every 5 mins
+
+- description: Google Contacts daily Sync
+  url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=DAILY
+  schedule: every day 23:30
+
+- description: Google Contacts weekly Sync
+  url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=WEEKLY
+  schedule: every friday 23:50 
+
+- description: Google Contacts monthly Sync
+  url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=MONTHLY
+  schedule: 1st friday of month 23:55

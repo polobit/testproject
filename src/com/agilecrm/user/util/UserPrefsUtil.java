@@ -78,7 +78,8 @@ public class UserPrefsUtil
 		"pink",
 		"",
 		"- Sent using <a href=\"https://www.agilecrm.com\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\">AgileCRM</a>",
-		true);
+		true,
+		false);
 	userPrefs.save();
 	return userPrefs;
     }

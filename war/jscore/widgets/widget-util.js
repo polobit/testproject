@@ -289,10 +289,18 @@ function saveSipWidgetPrefs()
 	// Retrieve and store the Sip preferences entered by the user as JSON
 	var sip_prefs = {};
 	sip_prefs["sip_username"] = $("#sip_username").val();
-	sip_prefs["sip_password"] = $("#sip_password").val();
-	sip_prefs["sip_publicid"] = $("#sip_publicid").val();
 	sip_prefs["sip_privateid"] = $("#sip_privateid").val();
 	sip_prefs["sip_realm"] = $("#sip_realm").val();
+	sip_prefs["sip_password"] = $("#sip_password").val();
+	
+	sip_prefs["sip_publicid"] = "sip:"+$("#sip_privateid").val()+"@"+$("#sip_realm").val();
+	    
+    if ($('#sip_wsenable').is(':checked'))
+    	sip_prefs["sip_wsenable"] = "true";
+    else
+    	sip_prefs["sip_wsenable"] = "false";
+    
+    console.log(sip_prefs);
 
 	// Saves the preferences into widget with sip widget name
 	save_widget_prefs("Sip", JSON.stringify(sip_prefs), function(data)
@@ -469,6 +477,9 @@ function set_up_access(widget_name, template_id, data, url, model)
 
 function fill_form(id, widget_name, template_id)
 {
+	console.log("In fill_form");
+	console.log(id+" "+ widget_name+" "+ template_id);
+	
 	var model = Catalog_Widgets_View.collection.get(id);
 	console.log(model.get("prefs"));
 	
@@ -484,7 +495,17 @@ function fill_form(id, widget_name, template_id)
 function fill_fields(fieldsJSON)
 {
 	for (i in fieldsJSON)
-		$("#" + i).val(fieldsJSON[i]);
+		{
+		  if(i == "sip_wsenable")
+			  {
+			     if(fieldsJSON[i] == 'true')
+			     $("#" + i).attr( 'checked', 'checked' );
+			  }			
+		  else
+		    $("#" + i).val(fieldsJSON[i]);
+		  
+		  
+		}
 }
 
 

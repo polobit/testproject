@@ -448,15 +448,6 @@
 		<url-pattern>/backend/cron/blobs-delete</url-pattern>
 	</servlet-mapping>
 	
-	<servlet>
-		<servlet-name>WorkflowDefaultTemplatesServlet</servlet-name>
-		<servlet-class>com.campaignio.servlets.WorkflowDefaultTemplatesServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>WorkflowDefaultTemplatesServlet</servlet-name>
-		<url-pattern>/workflow-default-templates</url-pattern>
-	</servlet-mapping>
-
    <servlet>
    		<servlet-name>Unsubscribe</servlet-name>
    		<jsp-file>/unsubscribe.jsp</jsp-file>

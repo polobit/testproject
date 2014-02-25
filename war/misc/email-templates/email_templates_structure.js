@@ -1,190 +1,190 @@
 {
-    "email_templates": [
+    "templates": [
         {
             "label": "Newsletter",
             "category": "newsletter",
             "themes": [
                 {
                     "label": "News newsletter",
-                    "name": "news-newsletter",
-                    "theme_preview": "newsletter/news-newsletter/theme-preview/news-newsletter-preview.png",
+                    "title": "news-newsletter",
+                    "theme_preview": "/misc/email-templates/newsletter/news-newsletter/theme-preview/news-newsletter.png",
                     "layouts": [
                         {
-                            "name":"All Featured + No Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZ News Template - All Featured + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - All Featured + No Sidebar.html"
+                            "title":"All Featured + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZ News Template - All Featured + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - All Featured + No Sidebar.html"
                         },
                         {
-                            "name":"Featured Content + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZ News Template - Featured Content + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Featured Content + Left Sidebar.html"
+                            "title":"Featured Content + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZ News Template - Featured Content + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Featured Content + Left Sidebar.html"
                         },
                         {
-                            "name":"Featured Content + No Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZ News Template - Featured Content + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Featured Content + No Sidebar.html"
+                            "title":"Featured Content + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZ News Template - Featured Content + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Featured Content + No Sidebar.html"
                         },
                         {
-                            "name":"Featured Content + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZ News Template - Featured Content + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Featured Content + Right Sidebar.html"
+                            "title":"Featured Content + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZ News Template - Featured Content + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Featured Content + Right Sidebar.html"
                         },
                         {
-                            "name":"Image Header + Featured Content + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZ News Template - Image Header + Featured Content + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Image Header + Featured Content + Left Sidebar.html"
+                            "title":"Image Header + Featured Content + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZ News Template - Image Header + Featured Content + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Image Header + Featured Content + Left Sidebar.html"
                         },
                         {
-                            "name":"Image Header + Featured Content + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZ News Template - Image Header + Featured Content + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Image Header + Featured Content + Right Sidebar.html"
+                            "title":"Image Header + Featured Content + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZ News Template - Image Header + Featured Content + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Image Header + Featured Content + Right Sidebar.html"
                         },
                         {
-                            "name":"Image Header + Featured Content + No Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZNewsTemplate-Image Header + Featured Content + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Image Header + Featured Content + No Sidebar.html"
+                            "title":"Image Header + Featured Content + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZNewsTemplate-Image Header + Featured Content + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Image Header + Featured Content + No Sidebar.html"
                         },
                         {
-                            "name":"Image Header +No Featured + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZNewsTemplate-Image Header +No Featured + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Image Header + No Featured + Left Sidebar.html"
+                            "title":"Image Header +No Featured + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZNewsTemplate-Image Header +No Featured + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Image Header + No Featured + Left Sidebar.html"
                         },
                         {
-                            "name":"Image Header + No Featured + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZNewsTemplate-Image Header + No Featured + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - Image Header + No Featured + Right Sidebar.html"
+                            "title":"Image Header + No Featured + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZNewsTemplate-Image Header + No Featured + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - Image Header + No Featured + Right Sidebar.html"
                         },
                         {
-                            "name":"No Featured + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZNewsTemplate-No Featured + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - No Featured + Left Sidebar.html"
+                            "title":"No Featured + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZNewsTemplate-No Featured + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - No Featured + Left Sidebar.html"
                         },
                         {
-                            "name":"No Featured + No Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZ News Template -No Featured + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - No Featured + No Sidebar.html"
+                            "title":"No Featured + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZ News Template -No Featured + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - No Featured + No Sidebar.html"
                         },
                         {
-                            "name":"No Featured + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/dark/preview/EZNewsTemplate-No Featured + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/dark/EZ News Template - No Featured + Right Sidebar.html"
+                            "title":"No Featured + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/dark/preview/EZNewsTemplate-No Featured + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/dark/EZ News Template - No Featured + Right Sidebar.html"
                         },
                         {
-                            "name":"All Featured + No Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZ News Template - All Featured + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - All Featured + No Sidebar.html"
+                            "title":"All Featured + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZ News Template - All Featured + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - All Featured + No Sidebar.html"
                         },
                         {
-                            "name":"Featured Content + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZ News Template - Featured Content + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Featured Content + Left Sidebar.html"
+                            "title":"Featured Content + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZ News Template - Featured Content + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Featured Content + Left Sidebar.html"
                         },
                         {
-                            "name":"Featured Content + No Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZ News Template - Featured Content + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Featured Content + No Sidebar.html"
+                            "title":"Featured Content + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZ News Template - Featured Content + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Featured Content + No Sidebar.html"
                         },
                         {
-                            "name":"Featured Content + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZ News Template - Featured Content + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Featured Content + Right Sidebar.html"
+                            "title":"Featured Content + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZ News Template - Featured Content + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Featured Content + Right Sidebar.html"
                         },
                         {
-                            "name":"Image Header + Featured Content + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZ News Template - Image Header + Featured Content + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Image Header + Featured Content + Left Sidebar.html"
+                            "title":"Image Header + Featured Content + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZ News Template - Image Header + Featured Content + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Image Header + Featured Content + Left Sidebar.html"
                         },
                         {
-                            "name":"Image Header + Featured Content + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZ News Template - Image Header + Featured Content + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Image Header + Featured Content + Right Sidebar.html"
+                            "title":"Image Header + Featured Content + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZ News Template - Image Header + Featured Content + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Image Header + Featured Content + Right Sidebar.html"
                         },
                         {
-                            "name":"Image Header + Featured Content + No Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZNewsTemplate-Image Header + Featured Content + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Image Header + Featured Content + No Sidebar.html"
+                            "title":"Image Header + Featured Content + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZNewsTemplate-Image Header + Featured Content + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Image Header + Featured Content + No Sidebar.html"
                         },
                         {
-                            "name":"Image Header +No Featured + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZNewsTemplate-Image Header +No Featured + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Image Header + No Featured + Left Sidebar.html"
+                            "title":"Image Header +No Featured + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZNewsTemplate-Image Header +No Featured + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Image Header + No Featured + Left Sidebar.html"
                         },
                         {
-                            "name":"Image Header + No Featured + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZNewsTemplate-Image Header + No Featured + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - Image Header + No Featured + Right Sidebar.html"
+                            "title":"Image Header + No Featured + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZNewsTemplate-Image Header + No Featured + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - Image Header + No Featured + Right Sidebar.html"
                         },
                         {
-                            "name":"No Featured + Left Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZNewsTemplate-No Featured + Left Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - No Featured + Left Sidebar.html"
+                            "title":"No Featured + Left Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZNewsTemplate-No Featured + Left Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - No Featured + Left Sidebar.html"
                         },
                         {
-                            "name":"No Featured + No Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZ News Template -No Featured + No Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - No Featured + No Sidebar.html"
+                            "title":"No Featured + No Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZ News Template -No Featured + No Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - No Featured + No Sidebar.html"
                         },
                         {
-                            "name":"No Featured + Right Sidebar",
-                            "preview": "newsletter/news-newsletter/light/preview/EZNewsTemplate-No Featured + Right Sidebar.png",
-                            "url": "newsletter/news-newsletter/light/EZ News Template - No Featured + Right Sidebar.html"
+                            "title":"No Featured + Right Sidebar",
+                            "href": "/misc/email-templates/newsletter/news-newsletter/light/preview/EZNewsTemplate-No Featured + Right Sidebar.png",
+                            "link": "/misc/email-templates/newsletter/news-newsletter/light/EZ News Template - No Featured + Right Sidebar.html"
                         }
                     ]
                 },
                 {
-                    "label": "i-Elegant Newsletter",
-                    "name": "i-elegant-newsletter",
-                    "theme_preview": "newsletter/i-elegant-newsletter/theme-preview/i-Elelgant Newsletter.png",
+                    "label": "Elegant Newsletter",
+                    "title": "elegant-newsletter",
+                    "theme_preview": "/misc/email-templates/newsletter/elegant-newsletter/theme-preview/elegant-newsletter.png",
                     "layouts": [
                         {
-                            "name": "Black",
-                            "preview": "newsletter/i-elegant-newsletter/black/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/black/HTML/index.html"
+                            "title": "Black",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/black/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/black/HTML/index.html"
                         },
                         {
-                            "name": "Blue-green",
-                            "preview": "newsletter/i-elegant-newsletter/blue-green/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/blue-green/HTML/index.html"
+                            "title": "Blue-green",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/blue-green/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/blue-green/HTML/index.html"
                         },
                         {
-                            "name": "Blue light and dark",
-                            "preview": "newsletter/i-elegant-newsletter/bluelightanddark/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/bluelightanddark/HTML/index.html"
+                            "title": "Blue light and dark",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/bluelightanddark/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/bluelightanddark/HTML/index.html"
                         },
                         {
-                            "name": "Brown",
-                            "preview": "newsletter/i-elegant-newsletter/brown/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/brown/HTML/index.html"
+                            "title": "Brown",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/brown/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/brown/HTML/index.html"
                         },
                         {
-                            "name": "Gray",
-                            "preview": "newsletter/i-elegant-newsletter/gray/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/gray/HTML/index.html"
+                            "title": "Gray",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/gray/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/gray/HTML/index.html"
                         },
                         {
-                            "name": "Gray light and dark",
-                            "preview": "newsletter/i-elegant-newsletter/graylightanddark/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/graylightanddark/HTML/index.html"
+                            "title": "Gray light and dark",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/graylightanddark/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/graylightanddark/HTML/index.html"
                         },
                         {
-                            "name": "Green",
-                            "preview": "newsletter/i-elegant-newsletter/green/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/green/HTML/index.html"
+                            "title": "Green",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/green/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/green/HTML/index.html"
                         },
                         {
-                            "name": "Light-blue",
-                            "preview": "newsletter/i-elegant-newsletter/light-blue/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/light-blue/HTML/index.html"
+                            "title": "Light-blue",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/light-blue/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/light-blue/HTML/index.html"
                         },
                         {
-                            "name": "Orange",
-                            "preview": "newsletter/i-elegant-newsletter/orange/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/orange/HTML/index.html"
+                            "title": "Orange",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/orange/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/orange/HTML/index.html"
                         },
                         {
-                            "name": "Orange and dark gray",
-                            "preview": "newsletter/i-elegant-newsletter/orange_darkgray/preview/index.png",
-                            "url": "newsletter/i-elegant-newsletter/orange_darkgray/HTML/index.html"
+                            "title": "Orange and dark gray",
+                            "href": "/misc/email-templates/newsletter/elegant-newsletter/orange_darkgray/preview/index.png",
+                            "link": "/misc/email-templates/newsletter/elegant-newsletter/orange_darkgray/HTML/index.html"
                         }
                     ]
                 }
@@ -196,50 +196,50 @@
             "themes": [
                 {
                     "label": "New year Newsletter",
-                    "name": "new-year-newsletter",
-                    "theme_preview": "holiday/new-year-newsletter/theme-preview/index_blue.png",
+                    "title": "new-year-newsletter",
+                    "theme_preview": "/misc/email-templates/holiday/new-year-newsletter/theme-preview/new-year-newsletter.png",
                     "layouts": [
                         {
-                            "name": "Blue",
-                            "preview": "holiday/new-year-newsletter/theme-preview/index_blue.png",
-                            "url": "holiday/new-year-newsletter/index_blue.html"
+                            "title": "Blue",
+                            "href": "/misc/email-templates/holiday/new-year-newsletter/theme-preview/index_blue.png",
+                            "link": "/misc/email-templates/holiday/new-year-newsletter/index_blue.html"
                         },
                         {
-                            "name": "Green",
-                            "preview": "holiday/new-year-newsletter/theme-preview/index_green.png",
-                            "url": "holiday/new-year-newsletter/index_green.html"
+                            "title": "Green",
+                            "href": "/misc/email-templates/holiday/new-year-newsletter/theme-preview/index_green.png",
+                            "link": "/misc/email-templates/holiday/new-year-newsletter/index_green.html"
                         },
                         {
-                            "name": "Message",
-                            "preview": "holiday/new-year-newsletter/theme-preview/index_message.png",
-                            "url": "holiday/new-year-newsletter/index_message.html"
+                            "title": "Message",
+                            "href": "/misc/email-templates/holiday/new-year-newsletter/theme-preview/index_message.png",
+                            "link": "/misc/email-templates/holiday/new-year-newsletter/index_message.html"
                         },
                         {
-                            "name": "Red",
-                            "preview": "holiday/new-year-newsletter/theme-preview/index_red.png",
-                            "url": "holiday/new-year-newsletter/index_red.html"
+                            "title": "Red",
+                            "href": "/misc/email-templates/holiday/new-year-newsletter/theme-preview/index_red.png",
+                            "link": "/misc/email-templates/holiday/new-year-newsletter/index_red.html"
                         }
                     ]
                 },
                 {
                     "label": "Winter Sale Responsive",
-                    "name": "winter-sale-responsive",
-                    "theme_preview": "holiday/winter-sale-responsive/theme-preview/index-1.png",
+                    "title": "winter-sale-responsive",
+                    "theme_preview": "/misc/email-templates/holiday/winter-sale-responsive/theme-preview/winter-sale-responsive.png",
                     "layouts": [
                         {
-                            "name": "Index-1",
-                            "preview": "holiday/winter-sale-responsive/theme-preview/index-1.png",
-                            "url": "holiday/winter-sale-responsive/index-1.html"
+                            "title": "Index-1",
+                            "href": "/misc/email-templates/holiday/winter-sale-responsive/theme-preview/index-1.png",
+                            "link": "/misc/email-templates/holiday/winter-sale-responsive/index-1.html"
                         },
                         {
-                            "name": "Index-2",
-                            "preview": "holiday/winter-sale-responsive/theme-preview/index-2.png",
-                            "url": "holiday/winter-sale-responsive/index-2.html"
+                            "title": "Index-2",
+                            "href": "/misc/email-templates/holiday/winter-sale-responsive/theme-preview/index-2.png",
+                            "link": "/misc/email-templates/holiday/winter-sale-responsive/index-2.html"
                         },
                         {
-                            "name": "Index-3",
-                            "preview": "holiday/winter-sale-responsive/theme-preview/index-3.png",
-                            "url": "holiday/winter-sale-responsive/index-3.html"
+                            "title": "Index-3",
+                            "href": "/misc/email-templates/holiday/winter-sale-responsive/theme-preview/index-3.png",
+                            "link": "/misc/email-templates/holiday/winter-sale-responsive/index-3.html"
                         }
                     ]
                 }
@@ -250,28 +250,46 @@
             "category": "ecommerce",
             "themes": [
                 {
-                    "label": "e-Commerce Email",
-                    "name": "ecommerce-email-template",
-                    "theme_preview": "ecommerce/ecommerce-email-template/theme-preview/general.png",
+                    "label": "e-Commerce",
+                    "title": "ecommerce-email-template",
+                    "theme_preview": "/misc/email-templates/ecommerce/ecommerce-email-template/theme-preview/ecommerce.png",
                     "layouts": [
                         {
-                            "name": "General",
-                            "preview": "ecommerce/ecommerce-email-template/theme-preview/general.png",
-                            "url": "ecommerce/ecommerce-email-template/general.html"
+                            "title": "General",
+                            "href": "/misc/email-templates/ecommerce/ecommerce-email-template/theme-preview/general.png",
+                            "link": "/misc/email-templates/ecommerce/ecommerce-email-template/general.html"
                         },
                         {
-                            "name": "Feminine",
-                            "preview": "ecommerce/ecommerce-email-template/theme-preview/feminine.png",
-                            "url": "ecommerce/ecommerce-email-template/feminine.html"
+                            "title": "Feminine",
+                            "href": "/misc/email-templates/ecommerce/ecommerce-email-template/theme-preview/feminine.png",
+                            "link": "/misc/email-templates/ecommerce/ecommerce-email-template/feminine.html"
                         },
                         {
-                            "name": "Hardware",
-                            "preview": "ecommerce/ecommerce-email-template/theme-preview/hardware.png",
-                            "url": "ecommerce/ecommerce-email-template/hardware.html"
+                            "title": "Hardware",
+                            "href": "/misc/email-templates/ecommerce/ecommerce-email-template/theme-preview/hardware.png",
+                            "link": "/misc/email-templates/ecommerce/ecommerce-email-template/hardware.html"
                         }
                     ]
                 }
             ]
+        },
+        {
+        	"label":"Transactional",
+        	"category":"transactional",
+        	"themes":[
+        	          {
+        	        	  "label":"Minimalistic",
+        	        	  "title": "minimalistic",
+        	        	  "theme_preview": "/misc/email-templates/email/responders/theme-preview/payment_template.png",
+        	        	  "layouts": [
+        	        	              {
+        	        	            	  "title":"Payment",
+        	        	            	  "href":"/misc/email-templates/email/responders/theme-preview/payment_template_b.png",
+        	        	            	  "link": "/misc/email-templates/email/responders/payment_template.html"
+        	        	              }
+        	        	              ]
+        	          }
+        	          ]
         },
         {
             "label": "Other",
@@ -279,18 +297,18 @@
             "themes": [
                 {
                     "label": "High Definition",
-                    "name": "high-definition",
-                    "theme_preview": "other/high-definition/theme-preview/dark.png",
+                    "title": "high-definition",
+                    "theme_preview": "/misc/email-templates/other/high-definition/theme-preview/high-definition.png",
                     "layouts": [
                         {
-                            "name": "Dark",
-                            "preview": "other/high-definition/dark/preview/dark.png",
-                            "url": "other/high-definition/dark/index.html"
+                            "title": "Dark",
+                            "href": "/misc/email-templates/other/high-definition/dark/preview/dark.png",
+                            "link": "/misc/email-templates/other/high-definition/dark/index.html"
                         },
                         {
-                            "name": "Light",
-                            "preview": "other/high-definition/light/preview/light.png",
-                            "url": "other/high-definition/light/index.html"
+                            "title": "Light",
+                            "href": "/misc/email-templates/other/high-definition/light/preview/light.png",
+                            "link": "/misc/email-templates/other/high-definition/light/index.html"
                         }
                     ]
                 }

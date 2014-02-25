@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.GoogleApi;
@@ -193,8 +195,23 @@ public class ScribeUtil
 		 */
 		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE))
 		{
-			System.out.println("***********************" + req.getSession().getAttribute("interval"));
-			saveGooglePrefs(code);
+			String query = req.getSession().getAttribute("query").toString();
+			System.out.println("*************************************************************");
+			System.out.println(query);
+			JSONObject object = null;
+			try
+			{
+				object = new JSONObject(query);
+				System.out.println(object);
+
+			}
+			catch (JSONException e)
+			{
+				object = new JSONObject();
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			saveGooglePrefs(code, object);
 		}
 	}
 
@@ -307,7 +324,7 @@ public class ScribeUtil
 	 *            {@link String} code retrieved after OAuth
 	 * @throws IOException
 	 */
-	public static void saveGooglePrefs(String code) throws IOException
+	public static void saveGooglePrefs(String code, JSONObject object) throws IOException
 	{
 		System.out.println("In google save token");
 
@@ -318,6 +335,7 @@ public class ScribeUtil
 
 		oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
 		oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
+
 		oAuthRequest.addBodyParameter("scope", "");
 		oAuthRequest.addBodyParameter("redirect_uri",
 				"https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
@@ -344,6 +362,10 @@ public class ScribeUtil
 			ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null,
 					(Long.parseLong((String.valueOf(properties.get("expires_in"))))),
 					((String) properties.get("refresh_token")));
+
+			contactPrefs.setPrefs(object);
+			System.out.println(contactPrefs.duration);
+			System.out.println(contactPrefs.sync_type);
 			contactPrefs.save();
 
 			// initialize backend to save contacts

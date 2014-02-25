@@ -199,15 +199,29 @@ function loadTinyMCE(name)
 	
 }
 
-function load_email_templates()
+function load_modal_templates()
 {
+	// If not empty, redirect to tinymce
+	if($('#tinyMCEhtml_email').val() !== "")
+	{
 		loadTinyMCE("tinyMCEhtml_email");
 		return;
+	}
+	
+	var strWindowFeatures = "height=650, width=800,menubar=no,location=yes,resizable=yes,scrollbars=yes,status=yes";
+	var new_window = window.open('templates.jsp?id=tinyMCEhtml_email&t=web_rules', 'name', strWindowFeatures);
+	
+	if(window.focus)
+		{
+			new_window.focus();
+		}
+	
+	return false;
 }
 
 $("#tiny_mce_webrules_link").die().live("click", function(e){
 	e.preventDefault();
-	load_email_templates();
+	load_modal_templates();
 })
 
 function tinyMCECallBack(name, htmlVal)

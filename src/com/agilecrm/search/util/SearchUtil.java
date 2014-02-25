@@ -46,6 +46,9 @@ public class SearchUtil
 		// Sets contactField objects in to map
 		for (ContactField contactField : contact.properties)
 		{
+			// if (StringUtils.isEmpty(contactField.value))
+			// continue;
+
 			CustomFieldDef customField = null;
 
 			/*

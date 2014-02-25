@@ -69,7 +69,7 @@ function insertSelectedMergeField(ele,target_id)
 function getMergeFields()
 {
 	// get merge fields
-	var merge_fields = window.opener.getMergeFields();
+	var merge_fields = window.opener.getMergeFields('send_email');
 	
 	appendMergeFieldsToSelect(merge_fields);
 	
@@ -92,10 +92,13 @@ $(function()
 {	
 try{
 		
+	    var textarea_id = getUrlVars()["id"];
+	    var url = getUrlVars()["url"];
+	
 		// Load HTML into Tiny MCE.
-		if(getUrlVars()["id"] !== undefined)
+		if(textarea_id !== undefined && url === undefined)
 		{
-		var initHTML = window.opener.$('#' + getUrlVars()["id"]).val();
+		var initHTML = window.opener.$('#' + textarea_id).val();
 		$('#content').val(initHTML);
 		
 		 // Initialize tinymce editor with content
@@ -104,34 +107,27 @@ try{
 		}
 	
 	    // Fetches html content and load into Tiny MCE editor
-	    if(getUrlVars()["url"] !== undefined){
+	    if(textarea_id !== undefined && url !== undefined){
 	    	
 	    	// Show Back link for email templates
 	    	$('#navigate-back').css('display','inline-block');
 	    	
-	    	var url = getUrlVars()["url"];
-	    	
-	    	if(url !== undefined)
-	    		{
-
 	    		// Fetch html and fill into tinymce
-	    		$.get(location.origin+ '/misc/email-templates/'+url, function(value){
+	    		$.get(location.origin+url, function(value){
 	    			
 	    			$('#content').val(value);
 	    			
 	    			// Initialize tinymce editor after content obtained
                     init_tinymce();
 	    			});
-	    		}
 	    }
 	    
 	    // Show empty editor if none of templates selected
-	    if(getUrlVars()["id"] === undefined && getUrlVars()["url"] === undefined)
+	    if(window.history.length > 1)
 	    {
 	    	// Show Back link for email templates
 	    	$('#navigate-back').css('display','inline-block');
 	    	
-	    	init_tinymce();
 	    }
 	}
 	catch(err){
@@ -164,8 +160,7 @@ try{
 		}
 		
 		// Return Back here
-		//window.opener.tinyMCECallBack(getUrlVars()["id"], html);
-		window.opener.tinyMCECallBack("tinyMCEhtml_email", html);
+		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
 	});
 	
@@ -208,7 +203,280 @@ function init_tinymce()
             "paste textcolor"
         ],
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        toolbar2: "print preview media | forecolor backcolor emoticons"
+        toolbar2: "print preview media | forecolor backcolor",
+        valid_elements: "*[*]",
+        extended_valid_elements: "*[*]",
+        style_formats: [
+                        {
+                            title: "Headers",
+                            items: [
+                                {
+                                    title: "Header 1",
+                                    format: "h1"
+                                },
+                                {
+                                    title: "Header 2",
+                                    format: "h2"
+                                },
+                                {
+                                    title: "Header 3",
+                                    format: "h3"
+                                },
+                                {
+                                    title: "Header 4",
+                                    format: "h4"
+                                },
+                                {
+                                    title: "Header 5",
+                                    format: "h5"
+                                },
+                                {
+                                    title: "Header 6",
+                                    format: "h6"
+                                }
+                            ]
+                        },
+                        {
+                            title: "Inline",
+                            items: [
+                                {
+                                    title: "Bold",
+                                    icon: "bold",
+                                    format: "bold"
+                                },
+                                {
+                                    title: "Italic",
+                                    icon: "italic",
+                                    format: "italic"
+                                },
+                                {
+                                    title: "Underline",
+                                    icon: "underline",
+                                    format: "underline"
+                                },
+                                {
+                                    title: "Strikethrough",
+                                    icon: "strikethrough",
+                                    format: "strikethrough"
+                                },
+                                {
+                                    title: "Superscript",
+                                    icon: "superscript",
+                                    format: "superscript"
+                                },
+                                {
+                                    title: "Subscript",
+                                    icon: "subscript",
+                                    format: "subscript"
+                                },
+                                {
+                                    title: "Code",
+                                    icon: "code",
+                                    format: "code"
+                                }
+                            ]
+                        },
+                        {
+                            title: "Blocks",
+                            items: [
+                                {
+                                    title: "Paragraph",
+                                    format: "p"
+                                },
+                                {
+                                    title: "Blockquote",
+                                    format: "blockquote"
+                                },
+                                {
+                                    title: "Div",
+                                    format: "div"
+                                },
+                                {
+                                    title: "Pre",
+                                    format: "pre"
+                                }
+                            ]
+                        },
+                        {
+                            title: "Alignment",
+                            items: [
+                                {
+                                    title: "Left",
+                                    icon: "alignleft",
+                                    format: "alignleft"
+                                },
+                                {
+                                    title: "Center",
+                                    icon: "aligncenter",
+                                    format: "aligncenter"
+                                },
+                                {
+                                    title: "Right",
+                                    icon: "alignright",
+                                    format: "alignright"
+                                },
+                                {
+                                    title: "Justify",
+                                    icon: "alignjustify",
+                                    format: "alignjustify"
+                                }
+                            ]
+                        },
+                        {
+                            title: "Font Family",
+                            items: [
+                                {
+                                    title: 'Arial',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'arial'
+                                    }
+                                },
+                                {
+                                    title: 'BookAntiqua',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'bookantiqua'
+                                    }
+                                },
+                                {
+                                    title: 'Comic Sans MS',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'comic sans ms, sans-serif'
+                                    }
+                                },
+                                {
+                                    title: 'Courier New',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'courier new, monospace'
+                                    }
+                                },
+                                {
+                                    title: 'Garamond',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'garamond, serif'
+                                    }
+                                },
+                                {
+                                	title: 'Georgia',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'georgia, serif'
+                                    }
+                                }, 
+                                {
+                                    title: 'Helvetica',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'helvetica'
+                                    }
+                                },
+                                {
+                                    title: 'Impact',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'impact,chicago'
+                                    }
+                                },
+                                {
+                                    title: 'OpenSans',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'OpenSans'
+                                    }
+                                },
+                                {
+                                    title: 'Sans Serif',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'arial, helvetica, sans-serif'
+                                    }
+                                },
+                                {
+                                    title: 'Serif',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'times new roman, serif'
+                                    }
+                                },
+                                {
+                                	title: 'Tahoma',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'tahoma, sans-serif'
+                                    }
+                                },
+                                {
+                                    title: 'Terminal',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'terminal,monaco'
+                                    }
+                                },
+                                {
+                                    title: 'TimesNewRoman',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'timesnewroman,times'
+                                    }
+                                },
+                                {
+                                	title: 'Trebuchet MS',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'trebuchet ms, sans-serif'
+                                    }
+                                },
+                                {
+                                    title: 'Verdana',
+                                    inline: 'span',
+                                    styles: {
+                                        'font-family': 'Verdana'
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            title: "Font Size",
+                            items: [
+                                {
+                                    title: 'Small',
+                                    inline: 'span',
+                                    styles: {
+                                        fontSize: 'x-small',
+                                        'font-size': 'x-small'
+                                    }
+                                },
+                                {
+                                    title: 'Normal',
+                                    inline: 'span',
+                                    styles: {
+                                        fontSize: 'small',
+                                        'font-size': 'small'
+                                    }
+                                },
+                                {
+                                    title: 'Large',
+                                    inline: 'span',
+                                    styles: {
+                                        fontSize: 'large',
+                                        'font-size': 'large'
+                                    }
+                                },
+                                {
+                                    title: 'Huge',
+                                    inline: 'span',
+                                    styles: {
+                                        fontSize: 'xx-large',
+                                        'font-size': 'xx-large'
+                                    }
+                                }
+                            ]
+                        }
+                    ]
        
     });
 }

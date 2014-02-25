@@ -165,10 +165,10 @@ public class ScribeServlet extends HttpServlet
 		{
 			// After building service, redirects to authorization page
 			url = service.getAuthorizationUrl(null);
-			String interval = req.getParameter("interval");
+			String query = req.getParameter("query");
 
-			if (interval != null)
-				req.getSession().setAttribute("interval", interval);
+			if (query != null)
+				req.getSession().setAttribute("query", query);
 
 			System.out.println("Redirect URL OAuth2: " + url);
 		}

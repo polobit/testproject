@@ -741,7 +741,7 @@ public class ContactsAPI
 		System.out.println("In searchContactByPhoneNumber : " + sipPhoneNumber);
 		int positionOfColon = sipPhoneNumber.indexOf(":");
 		int positionOfAt = sipPhoneNumber.indexOf("@");
-		String phoneNumber = sipPhoneNumber.substring(positionOfColon, positionOfAt);
+		String phoneNumber = sipPhoneNumber.substring(positionOfColon + 1, positionOfAt);
 		System.out.println("In searchContactByPhoneNumber : " + phoneNumber);
 
 		return ContactUtil.searchContactByPhoneNumber(phoneNumber);

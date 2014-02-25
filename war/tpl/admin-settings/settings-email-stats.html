@@ -20,83 +20,36 @@
 {{#if this.id}}
 <div class="span8 well">
     <div class="row">
-        	<div class="span3">
-				<h3 style="display: inline;">Reputation  - </h3>
-				<span style="display: inline;">{{{get_subaccount_reputation reputation}}}</span>
-			</div>
+        <div class="span4">
+			<h3 style="display: inline;">Reputation </h3>
+			<span style="display: inline;">{{{get_subaccount_reputation reputation}}}</span>
+		</div>
     </div>
-    <br/>
-<div class="row">
-        <div class="span4">
-            <h3>Emails Sent</h3>
+    <br/><br/>
+	<div class="row-fluid">
+        <div class="span6">
+            <h3 style="text-align: center;">Emails Sent</h3>
+			<table class="table table-bordered">
+				<tbody>
+					<tr><th>This Hour</th><td>{{sent_hourly}}</td></tr>
+					<tr><th>This Week</th><td>{{sent_weekly}}</td></tr>
+					<tr><th>This Month</th><td>{{sent_monthly}}</td></tr>
+					<tr><th>Overall</th><td>{{sent_total}}</td></tr>
+				</tbody>
+			</table>
         </div>
-    </div>
-<br/>
-    <div class="row">
-        <div class="span4">
-          <ul class="unstyled">  
-			<li>
-				<label style="display: initial;">This hour - </label>
-				<p style="display: initial; font-size: 15px;"> {{sent_hourly}}</p>
-			</li>
-			<br/>
-			<li>
-				<label style="display: initial;">This week - </label>
- 				<p style="display: initial; font-size: 15px;">{{sent_weekly}}</p>
-			</li>
-		  </ul>
-        </div>
-        <div class="span4">
-		  <ul class="unstyled">
-			<li>
-				<label style="display: initial;">This month - </label>
-				<p style="display: initial; font-size: 15px;"> {{sent_monthly}}</p>
-			</li>
-			<br/>
-            <li>
-				<label style="display: initial;">Total emails sent - </label>
-				<p style="display: initial; font-size: 15px;"> {{sent_total}}</p>
-			</li>
-		  </ul>
+        <div class="span6">
+            <h3 style="text-align: center;">Bounces ( Last 30 Days )</h3>
+			<table class="table table-bordered">
+				<tbody>
+					<tr><th>Hard Bounce</th><td>{{last_30_days.hard_bounces}}</td></tr>
+					<tr><th>Soft Bounce</th><td>{{last_30_days.soft_bounces}}</td></tr>
+					<tr><th>Rejects</th><td>{{last_30_days.rejects}}</td></tr>
+					<tr><th>Spam Complaints</th><td>{{last_30_days.complaints}}</td></tr>
+				</tbody>
+			</table>
         </div>
     </div>
-    <br/>
-    <div class="row">
-        <div class="span4">
-            <h3>Last 30 Day Stats</h3>
-        </div>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="span4">
-            <ul class="unstyled">
-                <li>
-					<label style="display: initial;">Hard Bounces - </label>
-					<p style="display: initial; font-size: 15px;"> {{last_30_days.hard_bounces}}</p>
-				</li>
-                <br/>
-                <li>
-					<label style="display: initial;">Soft Bounces - </label>
-					<p style="display: initial; font-size: 15px;"> {{last_30_days.soft_bounces}}</p>
-				</li>
-            </ul>
-        </div>
-        <div class="span4">
-            <h3></h3>
-            <ul class="unstyled">
-                <li>
-					<label style="display: initial;">Rejects - </label>
-					<p style="display: initial; font-size: 15px;">{{last_30_days.rejects}}</p>
-				</li>
-                <br/>
-                <li>
-					<label style="display: initial;">Spam Complaints - </label>
-					<p style="display: initial; font-size: 15px;">{{last_30_days.complaints}}</p>
-				</li>
-            </ul>
-        </div>
-    </div>
-    <br/>
 </div>
 {{/if}}
 </script>

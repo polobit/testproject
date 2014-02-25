@@ -64,8 +64,7 @@ public class DefaultWidgets
 				"Stripe enables individuals and businesses to accept payments over the internet.",
 				"/widgets/stripe.js", "/img/plugins/Stripe.png", "/widgets/stripe-small-logo.png", null,
 				WidgetType.BILLING));
-		widgets.add(new Widget("Sip",
-				"Make and receive calls from your contacts using any SIP account.",
+		widgets.add(new Widget("Sip", "Make and receive calls from your contacts using any SIP account.",
 				"/widgets/sip.js", "/widgets/sip-logo-small.png", "/widgets/sip-logo-small.png", null, null));
 
 		System.out.println("Default widgets ");
@@ -89,7 +88,7 @@ public class DefaultWidgets
 		if (Arrays.asList(new String[] { "ClickDesk", "Zendesk" }).contains(widgetName))
 			return WidgetType.SUPPORT;
 
-		if (Arrays.asList(new String[] { "Twilio", /*"Sip"*/ }).contains(widgetName))
+		if (Arrays.asList(new String[] { "Twilio", "Sip" }).contains(widgetName))
 			return WidgetType.CALL;
 
 		if (Arrays.asList(new String[] { "FreshBooks", "Stripe" }).contains(widgetName))
