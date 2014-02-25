@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.campaignio.tasklets.agile.util.AgileTaskletUtil"%>
 <%@page import="com.agilecrm.util.email.SendMail"%>
 <%@page import="com.agilecrm.workflows.Workflow"%>
 <%@page import="java.util.HashMap"%>
@@ -390,7 +391,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 
 					    // Add unsubscribe tag
 					    if (!StringUtils.isBlank(tag))
-						contact.addTags(new String[] { tag });
+						contact.addTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
 
 					    // Add Removed status to contact
 					    CampaignStatusUtil.setStatusOfCampaign(contactId, campaignId, Status.REMOVED);

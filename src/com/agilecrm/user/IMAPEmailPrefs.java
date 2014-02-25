@@ -78,7 +78,7 @@ public class IMAPEmailPrefs
     /**
      * Use SSL or not, true for SSL.
      */
-    public boolean is_secure = false;
+    public boolean is_secure = true;
 
     /**
      * SMTP host.

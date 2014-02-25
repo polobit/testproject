@@ -9,7 +9,8 @@
                         <div class="controls">
 							<a data-toggle="modal" id="workflow-designer-help" class="right" style="font-size:10px;margin-top:-20px;cursor:pointer; clear:both;">Need help. Watch our tutorial.</a>
                             <input name="workflow-name" type="text" id="workflow-name" class="span3 required" placeholder="Name of campaign" />
-                            <a href="#workflows" class="btn right" style="position:relative">Cancel</a>
+                            <span id="workflow-edit-msg" style="margin-left: 130px; display: none; color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>
+							<a href="#workflows" class="btn right" style="position:relative">Cancel</a>
                             <button class="btn btn-primary right" id="save-workflow-top" style="position:relative; margin-right:5px">Save Campaign</button>
                             <div style="display:inline-block;position:relative; margin-right:5px;margin-top:8px" class="save-workflow-img right"></div>
                         </div>
@@ -21,34 +22,37 @@
                     <br />
                  
                     <div>
-						<a href="#" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block"><span><i class="icon-plus"></i></span> Unsubscribe Option</a>
+						<a href="#" id="workflow-unsubscribe-option" data-toggle="collapse" data-target="#workflow-unsubscribe-block"><span><i class="icon-plus"></i></span> Manage Unsubscription</a>
 					</div>
 					<br/>
 					<div class="collapse" id="workflow-unsubscribe-block">
-                    	<div class="control-group">
-							<label class="control-label" style="display: inline-block;">
-								On link click
+                    	<small>Agile can unsubscribe your contacts from either the current campaign or all campaigns (ongoing and future)</small>
+						<div class="control-group">
+							<label class="control-label" style="float: left; width: 140px; padding-top: 5px;">
+								<b>Unsubscribe Action:</b>
 							</label>
-							<div class="controls" style="display: inline-block; margin-left: 168px;">
+							<div class="controls" style="margin-left: 61px;">
 								<select name="action" id="unsubscribe-action">
-									<option value="UNSUBSCRIBE_FROM_ALL">Unsubscribe from ALL</option>
-                                    <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Unsubscribe from this campaign</option>
-                                    <option value="ASK_USER">Ask user</option>
+									<option value="ASK_USER">Prompt User (Recommended)</option>
+									<option value="UNSUBSCRIBE_FROM_ALL">All Campaigns</option>
+                                    <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Current Campaign only</option>
 								</select>
 							</div>
-							<br/>
-                            <small> Contact will not receive any further emails from any campaign
-(i.e., the 'Send Email' option will not work. However, other actions in campaign will work as expected).</small>
+							<!--<br/>
+                            <small>Prompts the user with options to either unsubscribe from this campaign or all communication</small>-->
                     	</div>
                         <br/>
+                        <small>Agile can add the tags automatically when your contact unsubscribes. You can run more campaigns against this tag in future.</small>
                     	<div class="control-group">
-							<label class="control-label" style="display: inline-block;">
-								Add tag for unsubscribed contacts
+							<label class="control-label" style="float: left; width: 140px; padding-top: 5px;">
+								<b>Tags:</b>
 							</label>
-							<div class="controls" style="display: inline-block; margin-left: 55px;">
-								<input type="text" name="tag" id="unsubscribe-tag" placeholder="Tag name like unsubscribe">
+							<div class="controls" style="margin-left: 55px;">
+								<input type="text" name="tag" id="unsubscribe-tag" placeholder="Separate tags with comma">
 							</div>
                     	</div>
+                        <br/>
+                        <small>Unsubscribed contacts are not sent any further emails or tweets but other actions such as lead scoring will still continue to execute.</small>
 					</div>
                    
                     <br />

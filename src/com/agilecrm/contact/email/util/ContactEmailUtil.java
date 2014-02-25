@@ -233,6 +233,25 @@ public class ContactEmailUtil
 	if (imapPrefs == null)
 	    return null;
 
+	return getIMAPURLForPrefs(imapPrefs, searchEmail, offset, count);
+    }
+
+    /**
+     * Returns IMAP url
+     * 
+     * @param imapPrefs
+     *            - IMAPEmailPrefs
+     * @param searchEmail
+     *            - email
+     * @param offset
+     *            - offset
+     * @param count
+     *            - emails count
+     * @return String
+     */
+    public static String getIMAPURLForPrefs(IMAPEmailPrefs imapPrefs, String searchEmail, String offset, String count)
+    {
+
 	String userName = imapPrefs.user_name;
 	String host = imapPrefs.server_name;
 	String password = imapPrefs.password;
@@ -269,6 +288,25 @@ public class ContactEmailUtil
 	if (gmailPrefs == null)
 	    return null;
 
+	return getGmailURLForPrefs(gmailPrefs, searchEmail, offset, count);
+
+    }
+
+    /**
+     * Returns Gmail URL
+     * 
+     * @param gmailPrefs
+     *            - SocialPrefs
+     * @param searchEmail
+     *            - search email
+     * @param offset
+     *            - offset
+     * @param count
+     *            - emails count
+     * @return String
+     */
+    public static String getGmailURLForPrefs(SocialPrefs gmailPrefs, String searchEmail, String offset, String count)
+    {
 	String userName = gmailPrefs.email;
 	String host = "imap.gmail.com";
 	String port = "993";
