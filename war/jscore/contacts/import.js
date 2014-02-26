@@ -72,9 +72,10 @@ $(function()
 		}}));
 	});
 	
-	$("#google-import-prefs-save").die().live('click', function(e){
+	$(".save-contact-prefs").die().live('click', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
+		var sync = $(this).attr("sync");
 		if(disabled)
 			return;
 		
@@ -89,8 +90,15 @@ $(function()
 		
 		App_Admin_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
 		
+		var url = App_Admin_Settings.contact_sync_google.model.url;
+		if(sync)
+		{
+			
+			App_Admin_Settings.contact_sync_google.model.url = url + "?sync=true"
+		}
 		App_Admin_Settings.contact_sync_google.model.save({success : function(data){
 				App_Admin_Settings.contact_sync_google.render(true);
+				App_Admin_Settings.contact_sync_google.model.url = url;
 			}});
 	})
 

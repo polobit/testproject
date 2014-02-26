@@ -25,7 +25,9 @@ public class ContactSyncUtil
 	public static void syncContacts(ContactPrefs contactPrefs) throws Exception
 	{
 		if (contactPrefs.sync_type == SYNC_TYPE.CLIENT_TO_AGILE)
+		{
 			ContactsSyncToAgile.importGoogleContacts(contactPrefs);
+		}
 		else if (contactPrefs.sync_type == SYNC_TYPE.AGILE_TO_CLIENT)
 		{
 			ContactsSynctoGoogle.updateContacts(contactPrefs);
@@ -33,10 +35,11 @@ public class ContactSyncUtil
 		else if (contactPrefs.sync_type == SYNC_TYPE.TWO_WAY)
 		{
 			ContactsSyncToAgile.importGoogleContacts(contactPrefs);
+			contactPrefs.last_synched_from_client = System.currentTimeMillis();
 			ContactsSynctoGoogle.updateContacts(contactPrefs);
+			contactPrefs.last_synched_to_client = System.currentTimeMillis();
 		}
 
-		contactPrefs.last_synched = System.currentTimeMillis();
 		contactPrefs.save();
 
 	}
@@ -165,9 +168,9 @@ public class ContactSyncUtil
 			page = 500;
 		}
 
-		Long time = pref.last_synched;
+		Long time = pref.last_synched_to_client;
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		queryMap.put("updated_time > ", time);
+		queryMap.put("updated_time > ", time / 1000);
 
 		if (pref.my_contacts)
 			queryMap.put("owner_key", pref.getDomainUser());
@@ -181,9 +184,10 @@ public class ContactSyncUtil
 		{
 			page = 500;
 		}
-		Long time = pref.last_synched;
+		Long time = pref.last_synched_to_client;
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		queryMap.put("created_time > ", time);
+		System.out.println(time / 1000);
+		queryMap.put("created_time >", time / 1000);
 
 		if (pref.my_contacts)
 			queryMap.put("owner_key", pref.getDomainUser());

@@ -20,6 +20,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.contacts.ContactsService;
+import com.google.gdata.data.DateTime;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.extensions.Email;
@@ -100,8 +101,10 @@ public class ContactsSyncToAgile
 		// myQuery.setStartIndex(1);
 		// sets my contacts group id
 		myQuery.setMaxResults(200);
-		// DateTime dateTime = new DateTime(prefs.last_synched);
-		// myQuery.setUpdatedMin(dateTime);
+		DateTime dateTime = new DateTime(prefs.last_synched_from_client);
+		myQuery.setUpdatedMin(dateTime);
+
+		myQuery.setStringCustomParameter("orderby", "lastmodified");
 
 		// Get all the available groups in gmail account
 
@@ -309,7 +312,12 @@ public class ContactsSyncToAgile
 			System.out.println(agileContact);
 			agileContact.setContactOwner(ownerKey);
 			agileContact.save();
-			counter++;
+
+			Long created_at = entry.getUpdated().getValue();
+
+			prefs.last_synched_from_client = created_at > prefs.last_synched_from_client ? created_at
+					: prefs.last_synched_from_client;
+
 			System.out.println("Contact's ETag: " + entry.getEtag());
 			System.out.println("----------------------------------------");
 		}

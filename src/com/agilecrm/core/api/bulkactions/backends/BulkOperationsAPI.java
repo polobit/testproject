@@ -563,29 +563,9 @@ public class BulkOperationsAPI
 
 	@Path("/contact-sync/google/{duration}")
 	@POST
-	public void syncGoogleContacts(@PathParam("duration") String duration, @FormParam("perfs_id") Long pref_id)
+	public void syncGoogleContacts(@PathParam("duration") String duration)
 	{
 		System.out.println("BACKENDS START");
-		System.out.println("prefs" + pref_id);
-		if (pref_id != null)
-		{
-			ContactPrefs contactPrefs = ContactPrefsUtil.get(pref_id);
-			System.out.println(contactPrefs);
-			if (contactPrefs != null)
-			{
-				BulkActionUtil.setSessionManager(contactPrefs.getDomainUser().getId());
-				try
-				{
-					ContactSyncUtil.syncContacts(contactPrefs);
-				}
-				catch (Exception e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return;
-			}
-		}
 
 		if (StringUtils.isEmpty(duration))
 			return;
@@ -594,6 +574,7 @@ public class BulkOperationsAPI
 
 		List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(interval);
 
+		System.out.println(prefs);
 		for (ContactPrefs pref : prefs)
 		{
 			try

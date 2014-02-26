@@ -93,7 +93,10 @@ public class ContactPrefs implements Serializable
 	public Long lastModifedAt = 0L;
 
 	@NotSaved(IfDefault.class)
-	public Long last_synched = 0L;
+	public Long last_synched_to_client = 0L;
+
+	@NotSaved(IfDefault.class)
+	public Long last_synched_from_client = 0L;
 
 	@NotSaved
 	@Embedded
@@ -130,11 +133,11 @@ public class ContactPrefs implements Serializable
 	// Category of report generation - daily, weekly, monthly.
 	public static enum Duration
 	{
-		DAILY, WEEKLY, MONTHLY
+		DAILY, WEEKLY, MONTHLY, ONCE
 	};
 
 	@NotSaved(IfDefault.class)
-	public Duration duration;
+	public Duration duration = Duration.ONCE;
 
 	// Category of report generation - daily, weekly, monthly.
 	public static enum SYNC_TYPE

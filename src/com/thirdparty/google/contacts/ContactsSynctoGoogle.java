@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.google.gdata.client.Query;
@@ -68,7 +70,8 @@ public class ContactsSynctoGoogle
 	{
 		try
 		{
-			updateContacts(ContactSyncUtil.fetchNewContactsToSync(prefs, 500, null), prefs);
+			synCreatedContacts(prefs, 500, null);
+
 		}
 		catch (Exception e)
 		{
@@ -78,13 +81,94 @@ public class ContactsSynctoGoogle
 
 		try
 		{
-			updateContacts(ContactSyncUtil.fetchNewContactsToSync(prefs, 500, null), prefs);
+			synUpdatedContacts(prefs, 500, null);
 		}
 		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public static void synUpdatedContacts(ContactPrefs prefs, Integer page, String cursor)
+	{
+		int MAX_FETCH_SIZE = 5000;
+		int fetched = 0;
+		List<Contact> contacts_list = ContactSyncUtil.fetchUpdatedContactsToSync(prefs, page, cursor);
+
+		System.out.println(contacts_list);
+		if (contacts_list.isEmpty())
+			return;
+
+		String currentCursor = null;
+		String previousCursor = null;
+		do
+		{
+			fetched += contacts_list.size();
+			previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+			try
+			{
+				updateContacts(contacts_list, prefs);
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if (!StringUtils.isEmpty(previousCursor))
+			{
+				contacts_list = ContactSyncUtil.fetchUpdatedContactsToSync(prefs, 500, previousCursor);
+
+				currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+				continue;
+			}
+
+			break;
+		} while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor)
+				&& fetched <= MAX_FETCH_SIZE);
+	}
+
+	public static void synCreatedContacts(ContactPrefs prefs, Integer page, String cursor)
+	{
+		int MAX_FETCH_SIZE = 5000;
+		int fetched = 0;
+		List<Contact> contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
+
+		System.out.println("fetch newly created contacts :" + contacts_list);
+
+		if (contacts_list.isEmpty())
+			return;
+
+		String currentCursor = null;
+		String previousCursor = null;
+		do
+		{
+			fetched += contacts_list.size();
+			previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+
+			try
+			{
+				updateContacts(contacts_list, prefs);
+			}
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if (!StringUtils.isEmpty(previousCursor))
+			{
+				contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
+
+				currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+				continue;
+			}
+
+			break;
+		} while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor)
+				&& fetched <= MAX_FETCH_SIZE);
 	}
 
 	public static void updateContacts(List<Contact> contacts, ContactPrefs prefs) throws Exception
@@ -117,14 +201,16 @@ public class ContactsSynctoGoogle
 			{
 				BatchUtils.setBatchOperationType(createContact, BatchOperationType.UPDATE);
 				updateFeed.getEntries().add(createContact);
+				updateRequestCount++;
 			}
 			else
 			{
 				BatchUtils.setBatchOperationType(createContact, BatchOperationType.INSERT);
 				requestFeed.getEntries().add(createContact);
+				insertRequestCount++;
 			}
 
-			if (insertRequestCount >= 100 || i >= contacts.size() - 1)
+			if (insertRequestCount >= 90 || i >= contacts.size() - 1)
 			{
 				// Submit the batch request to the server.
 				responseFeed = contactService.batch(new URL(
@@ -134,7 +220,7 @@ public class ContactsSynctoGoogle
 				requestFeed = new ContactFeed();
 			}
 
-			if (updateRequestCount >= 100 || i >= contacts.size() - 1)
+			if (updateRequestCount >= 90 || i >= contacts.size() - 1)
 			{
 				responseFeed1 = contactService.batch(new URL(
 						"https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token),

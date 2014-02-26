@@ -7,25 +7,25 @@
 		<label class="control-label" style="text-align:">Type</label> 
            <div class="controls">
 				<select class="required" name="sync_type">
-					<option value="">Select</option>
 					<option value="CLIENT_TO_AGILE">Google to Agile</option>
 					<option value="AGILE_TO_CLIENT">Agile to Google</option>
 					<option value="TWO_WAY">Two way</option>
 				</select>
 			</div>
 	</div>
+{{#if id}}
 	 <div class="control-group" style="margin-left:-50px">
 		<label class="control-label" style="text-align:">Frequency</label> 
            <div class="controls">
 				<select class="required" name="duration">
-					<option value="">Select</option>
+					<option value="ONCE">Only once</option>
 					<option value="DAILY">Daily</option>
 					<option value="WEEKLY">Weekly</option>
 					<option value="MONTHLY">Monthly</option>
 				</select>
 			</div>
 	</div>
-{{#if id}}
+
  	<div class="control-group" style="margin-left:-50px">
 		<label class="control-label" style="text-align:">Sync from</label> 
            <div class="controls">
@@ -63,8 +63,8 @@
     	       <div class="btn" id="google-import" style="display:inline-block;">Connect</div>
 			{{else}}
 				<div class="btn btn-danger" id="google-import-prefs-delete" style="display:inline-block;">Delete</div>
-				<div class="btn" id="google-import-prefs-save" style="display:inline-block;">Save</div>
-				<!-- <div class="btn" id="google-import-sync" style="display:inline-block;">Sync</div> -->
+				<div class="btn save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;">Save</div>
+				 <div class="btn save-contact-prefs" sync = "true" id="google-import-sync" style="display:inline-block;">Sync</div> 
 		{{/unless}}
 	 </div>
         </fieldset>
