@@ -1,14 +1,14 @@
-package com.thirdparty.google;
+package com.thirdparty.google.contacts;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -16,28 +16,126 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactEntry;
-import com.google.gdata.data.contacts.ContactGroupEntry;
-import com.google.gdata.data.contacts.ContactGroupFeed;
-import com.google.gdata.data.contacts.GroupMembershipInfo;
+import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.data.extensions.Email;
-import com.google.gdata.data.extensions.ExtendedProperty;
 import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
 import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
+import com.google.gdata.util.ServiceException;
 import com.googlecode.objectify.Key;
-import com.thirdparty.google.ContactPrefs.Duration;
-import com.thirdparty.google.utl.ContactPrefsUtil;
+import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.GoogleServiceUtil;
 
-public class GoogleContactToAgileContact
+public class ContactsSyncToAgile
 {
+
+	public static void importGoogleContacts(ContactPrefs contactPrefs) throws Exception
+	{
+		if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
+			GoogleServiceUtil.refreshGoogleContactPrefsandSave(contactPrefs);
+
+		System.out.println("contactprefs token : " + contactPrefs.token);
+		List<ContactEntry> entries = ContactsSyncToAgile.retrieveContacts(contactPrefs);
+
+		saveGoogleContactsInAgile(entries, contactPrefs);
+		contactPrefs.last_synched = System.currentTimeMillis();
+		contactPrefs.save();
+
+	}
+
+	/**
+	 * Retrieves contacts from Google querying for my contacts
+	 * 
+	 * @param accessToken
+	 *            {@link String} access token retrieved from oauth
+	 * @return {@link List} of {@link ContactEntry}
+	 * @throws Exception
+	 */
+	public static List<ContactEntry> retrieveContacts(ContactPrefs prefs) throws Exception
+	{
+
+		String accessToken = prefs.token;
+
+		// build service with all the tokens
+		ContactsService contactService = GoogleServiceUtil.getService(accessToken);
+
+		/*
+		 * GoogleContactToAgileContact.printAllGroups(accessToken); int i1 = 1;
+		 * if (1 + i1 == 2) return null;
+		 */
+
+		URL feedUrl = null;
+		Query myQuery = null;
+
+		System.out.println(prefs.sync_from_group);
+		try
+		{
+			feedUrl = new URL("https://www.google.com/m8/feeds/contacts/default/full" + "?access_token=" + accessToken);
+		}
+		catch (MalformedURLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// Build query with URL
+		myQuery = new Query(feedUrl);
+
+		System.out.println("******************************");
+
+		prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group);
+		System.out.println(prefs.sync_from_group);
+		myQuery.setStringCustomParameter("group", prefs.sync_from_group);
+		System.out.println("feed url" + myQuery.getFeedUrl());
+
+		// myQuery.setStartIndex(1);
+		// sets my contacts group id
+		myQuery.setMaxResults(200);
+		// DateTime dateTime = new DateTime(prefs.last_synched);
+		// myQuery.setUpdatedMin(dateTime);
+
+		// Get all the available groups in gmail account
+
+		// ContactFeed feed = contactService.getFeed(myQuery,
+		// ContactFeed.class);
+		// System.out.println(feed.getEntries());
+		// ContactGroupEntry entry = contactService.getEntry(feedUrl,
+		// ContactGroupEntry.class);
+		// System.out.println("________________________" + entry.getEdited() +
+		// ", " + entry.getTitle().getPlainText());
+		ContactFeed resultFeed = null;
+		try
+		{
+			resultFeed = contactService.getFeed(myQuery, ContactFeed.class);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ServiceException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Create a Group entry for the retrieve request.
+		/*
+		 * Group retrieveContactGroup = new Group(); retrieveContactGroup.Id =
+		 * "https://www.google.com/m8/feeds/groups/default/private/full/retrieveContactGroupId"
+		 * ; retrieveContactGroup.BatchData = new GDataBatchEntryDat("retrieve",
+		 * GDataBatchOperationType.query);
+		 */
+		System.out.println(resultFeed.getEntries());
+
+		System.out.println("total results from google " + resultFeed.getEntries().size());
+		return resultFeed.getEntries();
+	}
 
 	/**
 	 * Maps google contact with agile contact and saves contact in agile.
@@ -217,193 +315,4 @@ public class GoogleContactToAgileContact
 
 	}
 
-	public static boolean hasGroup(ContactEntry entry, String group)
-	{
-		if (entry.hasEmailAddresses())
-		{
-			for (Email email : entry.getEmailAddresses())
-			{
-
-				System.out.println(email.getAddress());
-			}
-		}
-		List<GroupMembershipInfo> infos = entry.getGroupMembershipInfos();
-		System.out.println(infos.size());
-		for (GroupMembershipInfo info : infos)
-		{
-
-			System.out.println(info.getHref());
-			System.out.println(group);
-			if (StringUtils.equals(group, info.getHref()))
-				return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * If access token is expired, calls method in
-	 * {@link GoogleContactToAgileContactUtil} to refresh access token and
-	 * updates it in db
-	 * 
-	 * @param contactPrefs
-	 *            {@link ContactPrefs}
-	 * @throws Exception
-	 */
-	public static void refreshGoogleContactPrefsandSave(ContactPrefs contactPrefs) throws Exception
-	{
-		System.out.println("in refresh token of google contact prefs");
-		String response = GoogleContactToAgileContactUtil.refreshTokenInGoogle(contactPrefs.refreshToken);
-
-		// Creates HashMap from response JSON string
-		HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-				new TypeReference<HashMap<String, Object>>()
-				{
-				});
-		System.out.println(properties.toString());
-
-		if (properties.containsKey("error"))
-			throw new Exception(String.valueOf(properties.get("error")));
-		else if (properties.containsKey("access_token"))
-		{
-			contactPrefs.token = String.valueOf(properties.get("access_token"));
-			contactPrefs.expires = Long.parseLong(String.valueOf(properties.get("expires_in")));
-			System.out.println("domiain user key in refresh token method: " + contactPrefs.getDomainUser());
-			contactPrefs.save();
-		}
-
-	}
-
-	public static void importGoogleContacts(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
-	{
-
-		String nameSpace = DomainUserUtil.getDomainUser(key.getId()).domain;
-		System.out.println("namespace " + nameSpace);
-
-		NamespaceManager.set(nameSpace);
-		System.out.println(contactPrefs.token);
-		// refreshGoogleContactPrefsandSave(contactPrefs);
-		System.out.println(contactPrefs.token);
-
-		// printAllGroups(contactPrefs.token);
-		importGoogleContacts(contactPrefs);
-
-	}
-
-	public static void printAllGroups(String token) throws Exception
-	{
-		// Request the feed
-		URL feedUrl = new URL("https://www.google.com/m8/feeds/groups/default/full" + "?access_token=" + token);
-		System.out.println(feedUrl);
-		System.out.println(token);
-		System.out.println("**********************************");
-		Query myQuery = new Query(feedUrl);
-
-		ContactsService service = GoogleContactToAgileContactUtil.getService(token);
-		ContactGroupFeed resultFeed = service.query(myQuery, ContactGroupFeed.class);
-
-		for (ContactGroupEntry groupEntry : resultFeed.getEntries())
-		{
-			System.out.println("Atom Id: " + groupEntry.getId());
-			System.out.println("Group Name: " + groupEntry.getTitle().getPlainText());
-			System.out.println("Last Updated: " + groupEntry.getUpdated());
-
-			System.out.println("Extended Properties:");
-			for (ExtendedProperty property : groupEntry.getExtendedProperties())
-			{
-				if (property.getValue() != null)
-				{
-					System.out.println("  " + property.getName() + "(value) = " + property.getValue());
-				}
-				else if (property.getXmlBlob() != null)
-				{
-					System.out.println("  " + property.getName() + "(xmlBlob) = " + property.getXmlBlob().getBlob());
-				}
-			}
-			System.out.println("Self Link: " + groupEntry.getSelfLink().getHref());
-			if (!groupEntry.hasSystemGroup())
-			{
-				// System groups do not have an edit link
-				System.out.println("Edit Link: " + groupEntry.getEditLink().getHref());
-				System.out.println("ETag: " + groupEntry.getEtag());
-			}
-			if (groupEntry.hasSystemGroup())
-			{
-				System.out.println("System Group Id: " + groupEntry.getSystemGroup().getId());
-			}
-		}
-	}
-
-	public static List<GoogleGroupDetails> getGroups(String token) throws Exception
-	{
-		ContactsService service = GoogleContactToAgileContactUtil.getService(token);
-
-		// Request the feed
-		URL feedUrl = new URL("https://www.google.com/m8/feeds/groups/default/full" + "?access_token=" + token);
-		Query myQuery = new Query(feedUrl);
-
-		ContactGroupFeed resultFeed = service.query(myQuery, ContactGroupFeed.class);
-
-		List<GoogleGroupDetails> groupsList = new ArrayList<GoogleGroupDetails>();
-
-		System.out.println("_********************************************************sdfSDFSDF"
-				+ resultFeed.getEntries().size());
-
-		for (ContactGroupEntry groupEntry : resultFeed.getEntries())
-		{
-			System.out.println("here");
-			System.out.println(groupEntry);
-			GoogleGroupDetails details = new GoogleGroupDetails(groupEntry);
-			groupsList.add(details);
-		}
-		return groupsList;
-	}
-
-	public static void importGoogleContacts(ContactPrefs contactPrefs) throws Exception
-	{
-		if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
-			refreshGoogleContactPrefsandSave(contactPrefs);
-
-		System.out.println("contactprefs token : " + contactPrefs.token);
-		List<ContactEntry> entries = GoogleContactToAgileContactUtil.retrieveContacts(contactPrefs);
-
-		saveGoogleContactsInAgile(entries, contactPrefs);
-		contactPrefs.last_synched = System.currentTimeMillis();
-		contactPrefs.save();
-
-	}
-
-	public static void importGoogleContacts(String namespace, Duration duration)
-
-	{
-		String oldNamespace = NamespaceManager.get();
-		try
-		{
-
-			NamespaceManager.set(namespace);
-			List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(duration);
-
-			if (prefs == null || prefs.isEmpty())
-				return;
-			for (ContactPrefs contactPrefs : prefs)
-			{
-				try
-				{
-					importGoogleContacts(contactPrefs);
-				}
-				catch (Exception e)
-				{
-
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					continue;
-				}
-			}
-		}
-		finally
-		{
-			NamespaceManager.set(oldNamespace);
-		}
-
-	}
 }

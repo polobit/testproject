@@ -1,4 +1,4 @@
-package com.thirdparty.google;
+package com.thirdparty.google.groups;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,6 +11,7 @@ public class GoogleGroupDetails
 	public String editLisk = null;
 	public String groupId = null;
 	public String groupName = null;
+	public String groupTitle = null;
 	public String selfLink = null;
 
 	public GoogleGroupDetails()
@@ -22,11 +23,14 @@ public class GoogleGroupDetails
 	{
 		atomId = groupEntry.getId();
 		selfLink = groupEntry.getSelfLink().getHref();
+
+		groupName = groupEntry.getTitle().getPlainText();
+
 		if (groupEntry.hasSystemGroup())
 		{
-			groupName = groupEntry.getSystemGroup().getValue();
-			groupId = groupEntry.getSystemGroup().getId();
+			groupName = groupEntry.getSystemGroup().getId();
+			groupId = groupName;
 		}
-		groupName = groupEntry.getTitle().getPlainText();
+
 	}
 }
