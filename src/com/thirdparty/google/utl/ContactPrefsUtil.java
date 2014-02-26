@@ -11,7 +11,7 @@ import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.ContactPrefs.Type;
-import com.thirdparty.google.GoogleGroupDetails;
+import com.thirdparty.google.groups.GoogleGroupDetails;
 
 public class ContactPrefsUtil
 {
@@ -47,9 +47,20 @@ public class ContactPrefsUtil
 	 */
 	public static ContactPrefs get(Long id)
 	{
+		return get(new Key<ContactPrefs>(ContactPrefs.class, id));
+
+	}
+
+	public static List<Key<ContactPrefs>> getAllKeysBasedOnDuration(Duration duration)
+	{
+		return ContactPrefs.dao.listKeysByProperty("duration", duration);
+	}
+
+	public static ContactPrefs get(Key<ContactPrefs> prefsKey)
+	{
 		try
 		{
-			return ContactPrefs.dao.get(id);
+			return ContactPrefs.dao.get(prefsKey);
 		}
 		catch (EntityNotFoundException e)
 		{
@@ -77,8 +88,6 @@ public class ContactPrefsUtil
 		updatedPrefs.token = currentPrefs.token;
 		updatedPrefs.secret = currentPrefs.secret;
 		updatedPrefs.refreshToken = currentPrefs.refreshToken;
-		System.out.println(updatedPrefs.sync_from_group);
-		System.out.println(updatedPrefs.sync_to_group);
 		return updatedPrefs;
 	}
 
@@ -86,6 +95,11 @@ public class ContactPrefsUtil
 	{
 		for (GoogleGroupDetails group : prefs.groups)
 		{
+			if (prefs.sync_from_group == null && group.groupName.equals("Contacts"))
+			{
+				prefs.sync_from_group = group.atomId;
+			}
+
 			if (title.equals(group.groupName))
 				return group;
 		}
@@ -98,7 +112,11 @@ public class ContactPrefsUtil
 		for (GoogleGroupDetails group : prefs.groups)
 		{
 			if (atomId.equals(group.atomId))
+			{
+				System.out
+						.println("test test test testtest testtest testtest testtest testtest testtest testtest test");
 				return group;
+			}
 		}
 
 		return null;

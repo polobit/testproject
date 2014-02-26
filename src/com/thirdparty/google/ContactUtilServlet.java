@@ -3,8 +3,6 @@ package com.thirdparty.google;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,19 +12,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
-import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
-import com.thirdparty.google.utl.ContactPrefsUtil;
 import com.thirdparty.salesforce.SalesforceImportUtil;
 
 /**
@@ -49,19 +44,20 @@ public class ContactUtilServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 	{
+
 		try
 		{
 
-			req.getParameter("type");
+			System.out.println("in contact util servlet");
+			String type = req.getParameter("type");
+			String cron = req.getParameter("cron");
 
-			String duration = req.getParameter("duration");
-
-			if (!StringUtils.isEmpty(duration))
+			if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
 			{
-				automateImportContacts(duration);
+				String duration = req.getParameter("duration");
+				syncGoogleContacts(duration);
 				return;
 			}
-			System.out.println("in contact util servlet");
 			InputStream stream = req.getInputStream();
 			byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
 
@@ -84,34 +80,27 @@ public class ContactUtilServlet extends HttpServlet
 
 	}
 
-	private void automateImportContacts(String frequency) throws Exception
+	public void syncGoogleContacts(String duration)
 	{
-		Duration duration = ContactPrefs.Duration.valueOf(frequency);
-		List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(duration);
-		Set<String> domains = NamespaceUtil.getAllNamespaces();
-
-		for (ContactPrefs pref : prefs)
-		{
-			GoogleContactToAgileContactUtil.refreshTokenInGoogle(pref.refreshToken);
-			// importContacts(pref);
-			GoogleContactToAgileContactUtil.updateContacts(ContactUtil.getAll(10, null), pref);
-		}
-
+		System.out.println("duration" + duration);
 		GoogleContactsDeferredTask task1 = new GoogleContactsDeferredTask("", duration);
 
+		// Create Task and push it into Task Queue
+		Queue queue1 = QueueFactory.getQueue("contact-sync-queue");
+
 		// Add to queue
-		Queue queue1 = QueueFactory.getDefaultQueue();
 		queue1.add(TaskOptions.Builder.withPayload(task1));
 
-		for (String domain : domains)
-		{
-
-			GoogleContactsDeferredTask task = new GoogleContactsDeferredTask(domain, duration);
-
-			// Add to queue
-			Queue queue = QueueFactory.getDefaultQueue();
-			queue.add(TaskOptions.Builder.withPayload(task));
-		}
+		/*
+		 * for (String namespace : NamespaceUtil.getAllNamespaces()) {
+		 * GoogleContactsDeferredTask task = new
+		 * GoogleContactsDeferredTask(namespace, duration);
+		 * 
+		 * // Create Task and push it into Task Queue Queue queue =
+		 * QueueFactory.getQueue("contact-sync-queue");
+		 * 
+		 * // Add to queue queue.add(TaskOptions.Builder.withPayload(task)); }
+		 */
 	}
 
 	/**
@@ -132,16 +121,7 @@ public class ContactUtilServlet extends HttpServlet
 
 		if (contactPrefs.type == Type.GOOGLE)
 		{
-			try
-			{
-				GoogleContactToAgileContact.importGoogleContacts(contactPrefs, key);
-			}
-			catch (Exception e)
-			{
-				System.out.println("(((((((((((((((((exception))))))))))))))))))");
-				System.out.println(e.getMessage());
-			}
-
+			ContactSyncUtil.syncContacts(contactPrefs);
 		}
 
 		try
@@ -176,7 +156,7 @@ public class ContactUtilServlet extends HttpServlet
 		}
 		finally
 		{
-			// contactPrefs.delete();
+			contactPrefs.delete();
 		}
 	}
 }

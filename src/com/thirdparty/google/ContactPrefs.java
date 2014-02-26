@@ -19,9 +19,12 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.google.gdata.util.common.base.StringUtil;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
+import com.thirdparty.google.groups.GoogleGroupDetails;
+import com.thirdparty.google.groups.util.ContactGroupUtil;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * <code>ContactPrefs</code> class stores the details of different sources to
@@ -71,6 +74,10 @@ public class ContactPrefs implements Serializable
 	@JsonIgnore
 	public String refreshToken = null;
 
+	@NotSaved(IfDefault.class)
+	@Unindexed
+	public boolean my_contacts = false;
+
 	/**
 	 * If access token expire time is specified, we store it
 	 */
@@ -111,7 +118,10 @@ public class ContactPrefs implements Serializable
 	public String sync_to_group = null;
 
 	@NotSaved(IfDefault.class)
-	public String sync_from_group = "http://www.google.com/m8/feeds/groups/yaswanth52%40gmail.com/base/6";
+	public String sync_from_group = null;
+
+	@NotSaved(IfDefault.class)
+	public String conflict = null;
 
 	public ContactPrefs()
 	{
@@ -123,7 +133,6 @@ public class ContactPrefs implements Serializable
 		DAILY, WEEKLY, MONTHLY
 	};
 
-	@Indexed
 	@NotSaved(IfDefault.class)
 	public Duration duration;
 
@@ -138,6 +147,9 @@ public class ContactPrefs implements Serializable
 
 	@NotSaved
 	public List<String> salesforceFields;
+
+	public static String AGILE = "Agile";
+	public static String CLIENT = "Client";
 
 	public ContactPrefs(Type type, String token, String secret, Long expires, String refreshToken)
 	{
@@ -170,7 +182,7 @@ public class ContactPrefs implements Serializable
 
 		createdAt = System.currentTimeMillis();
 		if (expires != 0l)
-			expires = createdAt + expires * 1000;
+			expires = createdAt + (expires * 1000);
 
 		if (domainUser == null)
 			domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
@@ -181,17 +193,28 @@ public class ContactPrefs implements Serializable
 	{
 		if (type == Type.GOOGLE)
 		{
-			try
-			{
-				groups = GoogleContactToAgileContact.getGroups(token);
-				System.out.println(GoogleContactToAgileContact.getGroups(token));
+			fillGroups();
+		}
+	}
 
-			}
-			catch (Exception e)
+	private void fillGroups()
+	{
+		try
+		{
+			groups = ContactGroupUtil.getGroups(this);
+			GoogleGroupDetails agileGroup = ContactPrefsUtil.getGroup("Agile", this);
+			if (agileGroup == null)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				agileGroup = new GoogleGroupDetails();
+				// agileGroup.atomId = "Agile";
+				agileGroup.groupName = "Agile";
+				groups.add(agileGroup);
 			}
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

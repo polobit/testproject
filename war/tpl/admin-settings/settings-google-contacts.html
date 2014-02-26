@@ -30,7 +30,6 @@
 		<label class="control-label" style="text-align:">Sync from</label> 
            <div class="controls">
 				<select name="sync_from_group" class="required">
-				<option value="">Select</option>
 				{{#each groups}}
 						<option value="{{atomId}}">{{groupName}}</option>
 				{{/each}}
@@ -44,7 +43,11 @@
 				<select name="sync_to_group" class="required">
 				{{#each groups}}
 					{{#if_equals groupName "Agile"}}
-						<option value="{{atomId}}" selected="selected">{{groupName}}</option>
+						{{#if atomId}}
+								<option value="{{atomId}}" selected="selected">{{groupName}}</option>
+							{{else}}
+								<option value="{{groupName}}" selected="selected">{{groupName}}</option>
+						{{/if}}
 					{{/if_equals}}
 					{{#if_equals groupName "Contacts"}}
 						<option value="{{atomId}}">{{groupName}}</option>
@@ -61,7 +64,7 @@
 			{{else}}
 				<div class="btn btn-danger" id="google-import-prefs-delete" style="display:inline-block;">Delete</div>
 				<div class="btn" id="google-import-prefs-save" style="display:inline-block;">Save</div>
-				<div class="btn" id="google-import-sync" style="display:inline-block;">Sync</div>
+				<!-- <div class="btn" id="google-import-sync" style="display:inline-block;">Sync</div> -->
 		{{/unless}}
 	 </div>
         </fieldset>
