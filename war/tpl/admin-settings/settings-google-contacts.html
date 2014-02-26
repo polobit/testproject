@@ -6,7 +6,7 @@
 	<div class="control-group" style="margin-left:-50px">
 		<label class="control-label" style="text-align:">Type</label> 
            <div class="controls">
-				<select class="required" name="sync_type">
+				<select class="required" name="sync_type" id="sync-type">
 					<option value="CLIENT_TO_AGILE">Google to Agile</option>
 					<option value="AGILE_TO_CLIENT">Agile to Google</option>
 					<option value="TWO_WAY">Two way</option>
@@ -26,7 +26,7 @@
 			</div>
 	</div>
 
- 	<div class="control-group" style="margin-left:-50px">
+ 	<div class="control-group" style="margin-left:-50px" >
 		<label class="control-label" style="text-align:">Sync from</label> 
            <div class="controls">
 				<select name="sync_from_group" class="required">
@@ -36,8 +36,16 @@
 				</select>
 			</div>
 	</div>
+{{#if_equals sync_type "AGILE_TO_CLIENT"}}
+	<div class="control-group" style="margin-left:-50px" id="sync_to_group_controlgroup">
+{{else}}
+{{#if_equals sync_type "TWO_WAY"}}
+<div class="control-group" style="margin-left:-50px" id="sync_to_group_controlgroup">
+{{else}}
+<div class="control-group" style="margin-left:-50px;display:none" id="sync_to_group_controlgroup">
+{{/if_equals}}
+{{/if_equals}}
 
-<div class="control-group" style="margin-left:-50px">
 		<label class="control-label" style="text-align:">Sync To</label> 
            <div class="controls">
 				<select name="sync_to_group" class="required">
@@ -57,6 +65,16 @@
 			</div>
 	</div>
 {{/if}}
+
+<div class="control-group" style="margin-left:-50px" id="my_contacts_sync_group">
+	<div class="controls">
+       <label class="checkbox">
+          <input  type="checkbox" name="my_contacts" value="true" checked="checked">
+             Sync only my contacts
+        </label>       
+    </div>
+</div>
+
 		 <input name="id" type="hidden" value="{{id}}" />
       <div class="form-actions">
 		{{#unless id}}			

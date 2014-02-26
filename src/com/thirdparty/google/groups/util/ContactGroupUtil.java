@@ -98,6 +98,7 @@ public class ContactGroupUtil
 	public static List<GoogleGroupDetails> getGroups(ContactPrefs contactPrefs) throws Exception
 	{
 		System.out.println(contactPrefs.expires);
+		System.out.println(contactPrefs.expires - 60000);
 		if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
 		{
 			System.out.println(contactPrefs.token);

@@ -76,7 +76,7 @@ public class ContactPrefs implements Serializable
 
 	@NotSaved(IfDefault.class)
 	@Unindexed
-	public boolean my_contacts = false;
+	public boolean my_contacts = true;
 
 	/**
 	 * If access token expire time is specified, we store it
@@ -186,10 +186,12 @@ public class ContactPrefs implements Serializable
 		createdAt = System.currentTimeMillis();
 		if (expires != 0l)
 		{
+			System.out.println(expires);
 			if (expires / 100000000000l > 1)
 				expires = createdAt + (expires);
 			else
 				expires = createdAt + (expires * 1000);
+			System.out.println(expires);
 		}
 
 		if (domainUser == null)

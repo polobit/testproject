@@ -66,11 +66,27 @@ $(function()
 		
 		$(this).after(LOADING_HTML);
 		
-		console.log(App_Admin_Settings.contact_sync_google.model.destroy({success : function(){
-			App_Admin_Settings.contact_sync_google.model.clear();
-			App_Admin_Settings.contact_sync_google.render(true);
+		console.log(App_Settings.contact_sync_google.model.destroy({success : function(){
+			App_Settings.contact_sync_google.model.clear();
+			App_Settings.contact_sync_google.render(true);
 		}}));
 	});
+	
+	$("#sync-type").die().live('change', function(e){
+		e.preventDefault();
+		var value = $(this).val();
+		if(value == "AGILE_TO_CLIENT" || value == "TWO_WAY")
+			{
+				$("#sync_to_group_controlgroup").show();
+				$("#my_contacts_sync_group").show();
+			}
+		else
+			{
+				$("#sync_to_group_controlgroup").hide();
+				$("#my_contacts_sync_group").hide();
+			}
+		
+	})
 	
 	$(".save-contact-prefs").die().live('click', function(e){
 		e.preventDefault();
@@ -88,17 +104,17 @@ $(function()
 		
 		$(this).after(LOADING_HTML);
 		
-		App_Admin_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
+		App_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
 		
-		var url = App_Admin_Settings.contact_sync_google.model.url;
+		var url = App_Settings.contact_sync_google.model.url;
 		if(sync)
 		{
 			
-			App_Admin_Settings.contact_sync_google.model.url = url + "?sync=true"
+			App_Settings.contact_sync_google.model.url = url + "?sync=true"
 		}
-		App_Admin_Settings.contact_sync_google.model.save({success : function(data){
-				App_Admin_Settings.contact_sync_google.render(true);
-				App_Admin_Settings.contact_sync_google.model.url = url;
+		App_Settings.contact_sync_google.model.save({success : function(data){
+				App_Settings.contact_sync_google.render(true);
+				App_Settings.contact_sync_google.model.url = url;
 			}});
 	})
 

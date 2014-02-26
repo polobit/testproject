@@ -38,7 +38,9 @@ var SettingsRouter = Backbone.Router
 			"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
 
 				/* contact-us help email */
-			"contact-us" : "contactUsEmail" },
+			"contact-us" : "contactUsEmail",
+			"contact-sync" : "contactSync"
+				},
 
 			/**
 			 * Shows all the options to access user's Preferences
@@ -581,4 +583,22 @@ var SettingsRouter = Backbone.Router
 			contactUsEmail : function()
 			{
 				$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
-			} });
+			},
+			
+			contactSync : function() {
+				$("#content").html(getTemplate("settings"), {});
+				
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+				
+				this.contact_sync_google = new Base_Model_View({
+					url: 'core/api/contactprefs/google',
+					template : 'import-google-contacts',
+				});
+				
+				$('#prefs-tabs-content').html(this.contact_sync_google.render().el);
+				
+			}
+		
+		
+		});
