@@ -11,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -563,9 +564,32 @@ public class BulkOperationsAPI
 
 	@Path("/contact-sync/google/{duration}")
 	@POST
-	public void syncGoogleContacts(@PathParam("duration") String duration)
+	public void syncGoogleContacts(@PathParam("duration") String duration, @QueryParam("perfs_id") Long pref_id)
 	{
+		if (pref_id != null)
+		{
+			ContactPrefs contactPrefs = ContactPrefsUtil.get(pref_id);
+			if (contactPrefs != null)
+			{
+				BulkActionUtil.setSessionManager(contactPrefs.getDomainUser().getId());
+				try
+				{
+					ContactSyncUtil.syncContacts(contactPrefs);
+				}
+				catch (Exception e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return;
+			}
+		}
+
+		if (StringUtils.isEmpty(duration))
+			return;
+
 		Duration interval = Duration.valueOf(duration);
+
 		List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(interval);
 
 		for (ContactPrefs pref : prefs)

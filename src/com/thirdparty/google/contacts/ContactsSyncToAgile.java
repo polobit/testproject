@@ -74,6 +74,7 @@ public class ContactsSyncToAgile
 		Query myQuery = null;
 
 		System.out.println(prefs.sync_from_group);
+
 		try
 		{
 			feedUrl = new URL("https://www.google.com/m8/feeds/contacts/default/full" + "?access_token=" + accessToken);
@@ -88,9 +89,13 @@ public class ContactsSyncToAgile
 
 		System.out.println("******************************");
 
-		prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group);
-		System.out.println(prefs.sync_from_group);
-		myQuery.setStringCustomParameter("group", prefs.sync_from_group);
+		if (prefs.sync_from_group != null)
+		{
+			prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group);
+			System.out.println(prefs.sync_from_group);
+			myQuery.setStringCustomParameter("group", prefs.sync_from_group);
+		}
+
 		System.out.println("feed url" + myQuery.getFeedUrl());
 
 		// myQuery.setStartIndex(1);

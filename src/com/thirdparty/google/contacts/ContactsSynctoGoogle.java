@@ -66,10 +66,9 @@ public class ContactsSynctoGoogle
 
 	public static void updateContacts(ContactPrefs prefs)
 	{
-		List<Contact> newContacts = ContactSyncUtil.fetchNewContactsToSync(prefs, 100, null);
 		try
 		{
-			updateContacts(newContacts, prefs);
+			updateContacts(ContactSyncUtil.fetchNewContactsToSync(prefs, 500, null), prefs);
 		}
 		catch (Exception e)
 		{
@@ -77,10 +76,9 @@ public class ContactsSynctoGoogle
 			e.printStackTrace();
 		}
 
-		List<Contact> updatedcontacts = ContactSyncUtil.fetchNewContactsToSync(prefs, 100, null);
 		try
 		{
-			// updateContacts(updatedcontacts, prefs);
+			updateContacts(ContactSyncUtil.fetchNewContactsToSync(prefs, 500, null), prefs);
 		}
 		catch (Exception e)
 		{
@@ -126,7 +124,7 @@ public class ContactsSynctoGoogle
 				requestFeed.getEntries().add(createContact);
 			}
 
-			if (insertRequestCount <= 100)
+			if (insertRequestCount >= 100 || i >= contacts.size() - 1)
 			{
 				// Submit the batch request to the server.
 				responseFeed = contactService.batch(new URL(
@@ -136,7 +134,7 @@ public class ContactsSynctoGoogle
 				requestFeed = new ContactFeed();
 			}
 
-			if (updateRequestCount <= 100)
+			if (updateRequestCount >= 100 || i >= contacts.size() - 1)
 			{
 				responseFeed1 = contactService.batch(new URL(
 						"https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token),

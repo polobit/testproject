@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -48,16 +47,14 @@ public class ContactUtilServlet extends HttpServlet
 		try
 		{
 
-			System.out.println("in contact util servlet");
-			String type = req.getParameter("type");
-			String cron = req.getParameter("cron");
-
-			if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
-			{
-				String duration = req.getParameter("duration");
-				syncGoogleContacts(duration);
-				return;
-			}
+			/*
+			 * System.out.println("in contact util servlet"); String type =
+			 * req.getParameter("type"); String cron = req.getParameter("cron");
+			 * 
+			 * if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron)) { String
+			 * duration = req.getParameter("duration");
+			 * syncGoogleContacts(duration); return; }
+			 */
 			InputStream stream = req.getInputStream();
 			byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
 
@@ -156,7 +153,7 @@ public class ContactUtilServlet extends HttpServlet
 		}
 		finally
 		{
-			contactPrefs.delete();
+			// contactPrefs.delete();
 		}
 	}
 }

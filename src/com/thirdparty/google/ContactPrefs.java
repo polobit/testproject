@@ -182,7 +182,12 @@ public class ContactPrefs implements Serializable
 
 		createdAt = System.currentTimeMillis();
 		if (expires != 0l)
-			expires = createdAt + (expires * 1000);
+		{
+			if (expires / 100000000000l > 1)
+				expires = createdAt + (expires);
+			else
+				expires = createdAt + (expires * 1000);
+		}
 
 		if (domainUser == null)
 			domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
@@ -197,7 +202,7 @@ public class ContactPrefs implements Serializable
 		}
 	}
 
-	private void fillGroups()
+	public void fillGroups()
 	{
 		try
 		{

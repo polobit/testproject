@@ -19,7 +19,6 @@ public class ContactPrefsUtil
 	{
 		ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(type);
 		prefs.delete();
-
 	}
 
 	/**
@@ -93,6 +92,9 @@ public class ContactPrefsUtil
 
 	public static GoogleGroupDetails getGroup(String title, ContactPrefs prefs)
 	{
+		if (prefs.groups.isEmpty())
+			prefs.fillGroups();
+
 		for (GoogleGroupDetails group : prefs.groups)
 		{
 			if (prefs.sync_from_group == null && group.groupName.equals("Contacts"))
