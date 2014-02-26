@@ -102,9 +102,15 @@ public class ContactsSynctoGoogle
 		ContactsService contactService = GoogleServiceUtil.getService(token);
 
 		GoogleGroupDetails group = ContactGroupUtil.createGroup(prefs, "Agile");
+
+		int insertRequestCount = 0;
+		int updateRequestCount = 0;
+		ContactFeed responseFeed1 = null;
+		ContactFeed responseFeed = null;
 		// contacts = new ArrayList<Contact>();
-		for (Contact contact : contacts)
+		for (int i = 0; i < contacts.size(); i++)
 		{
+			Contact contact = contacts.get(i);
 
 			ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
 
@@ -120,14 +126,26 @@ public class ContactsSynctoGoogle
 				requestFeed.getEntries().add(createContact);
 			}
 
+			if (insertRequestCount <= 100)
+			{
+				// Submit the batch request to the server.
+				responseFeed = contactService.batch(new URL(
+						"https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token),
+						requestFeed);
+				insertRequestCount = 0;
+				requestFeed = new ContactFeed();
+			}
+
+			if (updateRequestCount <= 100)
+			{
+				responseFeed1 = contactService.batch(new URL(
+						"https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token),
+						updateFeed);
+				updateRequestCount = 0;
+				updateFeed = new ContactFeed();
+			}
+
 		}
-
-		// Submit the batch request to the server.
-		ContactFeed responseFeed = contactService.batch(new URL(
-				"https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token), requestFeed);
-
-		ContactFeed responseFeed1 = contactService.batch(new URL(
-				"https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token), updateFeed);
 
 		// Check the status of each operation.
 		for (ContactEntry entry : responseFeed.getEntries())

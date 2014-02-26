@@ -157,9 +157,14 @@ public class ContactSyncUtil
 
 	public static List<Contact> fetchUpdatedContactsToSync(ContactPrefs pref, Integer page, String cursor)
 	{
+		if (page == null || page == 0)
+		{
+			page = 500;
+		}
+
 		Long time = pref.last_synched;
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		// queryMap.put("updated_time", time);
+		queryMap.put("updated_time > ", time);
 
 		if (pref.my_contacts)
 			queryMap.put("owner_key", pref.getDomainUser());
@@ -169,9 +174,13 @@ public class ContactSyncUtil
 
 	public static List<Contact> fetchNewContactsToSync(ContactPrefs pref, Integer page, String cursor)
 	{
+		if (page == null || page == 0)
+		{
+			page = 500;
+		}
 		Long time = pref.last_synched;
 		Map<String, Object> queryMap = new HashMap<String, Object>();
-		// queryMap.put("created_time", time);
+		queryMap.put("created_time > ", time);
 
 		if (pref.my_contacts)
 			queryMap.put("owner_key", pref.getDomainUser());
