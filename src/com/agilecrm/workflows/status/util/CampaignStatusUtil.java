@@ -80,7 +80,7 @@ public class CampaignStatusUtil
     {
 	boolean isNew = true;
 
-	Long statusTime = Calendar.getInstance().getTimeInMillis() / 1000;
+	Long statusTime = System.currentTimeMillis() / 1000;
 
 	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
 
@@ -125,7 +125,7 @@ public class CampaignStatusUtil
      */
     private static void setEndCampaignStatus(Contact contact, String campaignId, Status status)
     {
-	Long statusTime = Calendar.getInstance().getTimeInMillis() / 1000;
+	Long statusTime = System.currentTimeMillis() / 1000;
 
 	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
 

@@ -173,7 +173,7 @@ public class EmailOpenServlet extends HttpServlet
 	    // Interrupt opened in DeferredTask
 	    EmailOpenDeferredTask emailOpenDeferredTask = new EmailOpenDeferredTask(campaignId, subscriberId, customData.toString());
 	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(emailOpenDeferredTask));
+	    queue.addAsync(TaskOptions.Builder.withPayload(emailOpenDeferredTask));
 	}
 	catch (Exception e)
 	{

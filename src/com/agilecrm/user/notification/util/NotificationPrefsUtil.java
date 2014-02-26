@@ -75,8 +75,8 @@ public class NotificationPrefsUtil
      */
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
-	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT",
-		"ANY_CONTACT", false, true, false, false, false, false, "alert_1");
+	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT", "ANY_CONTACT", false, true, false, false,
+		false, false, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -109,7 +109,7 @@ public class NotificationPrefsUtil
 
 	NotificationsDeferredTask notificationsDeferredTask = new NotificationsDeferredTask(domain, json.toString());
 	Queue queue = QueueFactory.getQueue("notification-queue");
-	queue.add(TaskOptions.Builder.withPayload(notificationsDeferredTask));
+	queue.addAsync(TaskOptions.Builder.withPayload(notificationsDeferredTask));
     }
 
     /**
@@ -273,8 +273,7 @@ public class NotificationPrefsUtil
 		// Contact properties of type PERSON
 		if (contactJSON.getString("type").equals("PERSON"))
 		{
-		    if (property.getString("name").equals("first_name")
-			    || property.getString("name").equals("last_name")
+		    if (property.getString("name").equals("first_name") || property.getString("name").equals("last_name")
 			    || property.getString("name").equals("email") || property.getString("name").equals("image"))
 			propertyArray.put(property);
 		}
