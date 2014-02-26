@@ -66,7 +66,15 @@
 	</div>
 {{/if}}
 
+{{#if_equals sync_type "AGILE_TO_CLIENT"}}
 <div class="control-group" style="margin-left:-50px" id="my_contacts_sync_group">
+{{else}}
+{{#if_equals sync_type "TWO_WAY"}}
+<div class="control-group" style="margin-left:-50px" id="my_contacts_sync_group">
+{{else}}
+<div class="control-group" style="margin-left:-50px;display:none" id="my_contacts_sync_group">
+{{/if_equals}}
+{{/if_equals}}
 	<div class="controls">
        <label class="checkbox">
           <input  type="checkbox" name="my_contacts" value="true" checked="checked">
