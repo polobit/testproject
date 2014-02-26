@@ -369,7 +369,7 @@ public class ScribeUtil
 			contactPrefs.save();
 
 			// initialize backend to save contacts
-			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+			ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
 		}
 	}
 

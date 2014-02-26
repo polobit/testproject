@@ -44,7 +44,6 @@ public class ContactsSyncToAgile
 		List<ContactEntry> entries = ContactsSyncToAgile.retrieveContacts(contactPrefs);
 
 		saveGoogleContactsInAgile(entries, contactPrefs);
-		contactPrefs.last_synched = System.currentTimeMillis();
 		contactPrefs.save();
 
 	}

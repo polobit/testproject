@@ -36,6 +36,9 @@ public class ContactSyncUtil
 			ContactsSynctoGoogle.updateContacts(contactPrefs);
 		}
 
+		contactPrefs.last_synched = System.currentTimeMillis();
+		contactPrefs.save();
+
 	}
 
 	public static void syncContactsDeferredTask(Long id)

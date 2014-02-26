@@ -11,7 +11,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -564,11 +563,14 @@ public class BulkOperationsAPI
 
 	@Path("/contact-sync/google/{duration}")
 	@POST
-	public void syncGoogleContacts(@PathParam("duration") String duration, @QueryParam("perfs_id") Long pref_id)
+	public void syncGoogleContacts(@PathParam("duration") String duration, @FormParam("perfs_id") Long pref_id)
 	{
+		System.out.println("BACKENDS START");
+		System.out.println("prefs" + pref_id);
 		if (pref_id != null)
 		{
 			ContactPrefs contactPrefs = ContactPrefsUtil.get(pref_id);
+			System.out.println(contactPrefs);
 			if (contactPrefs != null)
 			{
 				BulkActionUtil.setSessionManager(contactPrefs.getDomainUser().getId());
@@ -606,6 +608,30 @@ public class BulkOperationsAPI
 			}
 		}
 
+	}
+
+	@Path("/contact-sync/google/duration/{prefs_id}")
+	@POST
+	public void syncGoogleContactsBasedOnPrefs(@PathParam("prefs_id") String pref_id)
+	{
+		if (pref_id == null)
+			return;
+
+		ContactPrefs contactPrefs = ContactPrefsUtil.get(Long.parseLong(pref_id));
+		System.out.println(contactPrefs);
+
+		if (contactPrefs == null)
+			return;
+
+		try
+		{
+			ContactSyncUtil.syncContacts(contactPrefs);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

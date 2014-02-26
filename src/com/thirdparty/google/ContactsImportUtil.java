@@ -5,10 +5,12 @@ import java.io.ObjectOutputStream;
 
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
+import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -73,7 +75,7 @@ public class ContactsImportUtil
 			System.out.println("byte array length in initialize backends: " + byteArrayStream.toByteArray().length);
 			taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet")
 					.payload(byteArrayStream.toByteArray()).method(Method.POST);
-			queue.add(taskOptions);
+			queue.addAsync(taskOptions);
 		}
 		catch (Exception e)
 		{
@@ -81,5 +83,17 @@ public class ContactsImportUtil
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void initilaizeGoogleSyncBackend(Long id)
+	{
+		System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+		GoogleContactsDeferredTask task = new GoogleContactsDeferredTask(NamespaceManager.get(), id);
+
+		// Create Task and push it into Task Queue
+		Queue queue = QueueFactory.getQueue("contact-sync-queue");
+
+		// Add to queue
+		queue.addAsync(TaskOptions.Builder.withPayload(task));
 	}
 }
