@@ -77,7 +77,7 @@ public class TaskCore
 		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(AgileTaskletUtil.getId(campaignJSON),
 			subscriberJSON.toString());
 		Queue queue = QueueFactory.getQueue("campaign-queue");
-		queue.add(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
+		queue.addAsync(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
 	    }
 	    catch (Exception e)
 	    {

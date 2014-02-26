@@ -83,7 +83,7 @@ public class WorkflowSubscribeUtil
 	{
 	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString());
 	    Queue queue = QueueFactory.getQueue("campaign-queue");
-	    queue.add(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
+	    queue.addAsync(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
 	}
 	catch (Exception e)
 	{

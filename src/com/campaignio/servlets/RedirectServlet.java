@@ -258,7 +258,7 @@ public class RedirectServlet extends HttpServlet
 	    // Interrupt clicked in DeferredTask
 	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId, subscriberId, interruptedData.toString());
 	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(emailClickDeferredTask));
+	    queue.addAsync(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}
 	catch (Exception e)
 	{

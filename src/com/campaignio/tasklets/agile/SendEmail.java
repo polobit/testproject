@@ -443,7 +443,7 @@ public class SendEmail extends TaskletAdapter
 	    {
 		// Generate a random number which can be used for tracking
 		// clicks
-		data.put(CLICK_TRACKING_ID, Calendar.getInstance().getTimeInMillis());
+		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
 		// Get Keyword
 		text = convertLinks(text, " ", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
@@ -483,7 +483,7 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.isEmpty(cc))
 		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
 	    else
-		Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+		Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
 	}
 	else
 	{
@@ -491,11 +491,15 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.isEmpty(cc))
 		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, null, text);
 	    else
-		Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
+		Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, null, text);
 	}
+
+	long log_start_time = System.currentTimeMillis();
 
 	// Creates log for sending email
 	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
+
+	System.out.println("Processing time is " + (System.currentTimeMillis() - log_start_time) + "ms");
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -584,8 +588,8 @@ public class SendEmail extends TaskletAdapter
 	isContains = Arrays.asList(extensions).contains(str.substring(str.lastIndexOf('.')).toLowerCase());
 
 	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !str.toLowerCase().startsWith("http://goo.gl")
-		&& !str.toLowerCase().startsWith("http://agle.cc") && !str.toLowerCase().startsWith("http://unscr.be")
-		&& !str.toLowerCase().contains("unsubscribe") && !isContains)
+		&& !str.toLowerCase().startsWith("https://www.agilecrm.com") && !str.toLowerCase().startsWith("http://agle.cc")
+		&& !str.toLowerCase().startsWith("http://unscr.be") && !str.toLowerCase().contains("unsubscribe") && !isContains)
 	    return true;
 
 	return false;
