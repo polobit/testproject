@@ -37,7 +37,7 @@ public class GoogleSQL
 		// Load the class that provides the new "jdbc:google:mysql://"
 		// prefix.
 		Class.forName("com.mysql.jdbc.GoogleDriver");
-		url = "jdbc:google:mysql://agiledbs:agile/stats";
+		url = "jdbc:google:mysql://agiledbs:agile/stats?user=root";
 
 		System.out.println("Google sql url is " + url);
 	    }
@@ -45,7 +45,7 @@ public class GoogleSQL
 	    {
 		// Local MySQL instance to use during development.
 		Class.forName("com.mysql.jdbc.Driver");
-		url = "jdbc:mysql://127.0.0.1:3306/guestbook?user=root";
+		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
 
 		// Alternatively, connect to a Google Cloud SQL instance using:
 		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
@@ -66,7 +66,7 @@ public class GoogleSQL
 	}
 	catch (Exception ex)
 	{
-	    System.out.println(" Error getting the connection object ");
+	    System.out.println(" Error getting the connection object " + ex.getMessage());
 	    ex.printStackTrace();
 	}
 
