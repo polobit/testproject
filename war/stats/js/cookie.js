@@ -57,8 +57,16 @@ function agile_create_cookie(name, value, days)
 		var expires = "; expires=" + date.toGMTString();
 	}
 	else
-
 		// If days is null, undefined or "" set expires as ""
 		var expires = "";
-	document.cookie = name + "=" + escape(value) + expires + "; path=/";
+	
+	// Make it a domain level cookie so that it is persistent among sub domains
+	var document_cookie = "";
+	var subdomain = window.location.hostname.replace(/([a-zA-Z0-9]+.)/,"");
+	if(subdomain.length > 5 ) // Avoid .co.uk etc.
+	{
+		document_cookie = ";document=." + subdomain;
+	}
+	
+	document.cookie = name + "=" + escape(value) + expires + "; path=/" + document_cookie;
 }
