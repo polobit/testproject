@@ -6,7 +6,9 @@ var SIP_SESSION_CALL;
 var Config_Call;
 var READY_STATE_TIMER;
 var CALL;
-var USER_NAME;var USER_IMG;var USER_NUMBER;
+var USER_NAME;
+var USER_IMG;
+var USER_NUMBER;
 
 $(function()
   {			
@@ -58,9 +60,20 @@ $(".dialpad").die().live("click", function(e)
   {
      e.preventDefault();    	
      console.log("In dialpad");
-	     
-     var dialpadModal = $(getTemplate("dialpad-modal"),{});
-     dialpadModal.modal('show');    
+     
+     console.log($('.noty_message').find('.dialpad_btns').html());
+     
+     // If noty do not have dialpad then add
+     if($('.noty_message').find('.dialpad_btns').html() == null)
+       {
+    	 var dialpad = $(getTemplate("dialpad"),{});    
+         $(".noty_message").append(dialpad);	 
+       }
+     else
+       {
+    	 // If noty has dialpad then remove
+         $("#dialpad_btns").remove(); 
+       }      
   });    	
 	
   $(".make-call").die().live("click", function(e)
@@ -73,9 +86,16 @@ $(".dialpad").die().live("click", function(e)
 		       { 
 		    	 USER_NAME = "Agile";
 		    	 USER_NUMBER = "sip:+18004321000@proxy.ideasip.com";
-		    	   
+		   	   
+		   	/*if(makeCall('sip:farah@sip2sip.info'))
+		       { 
+		    	 USER_NAME = "farah";
+		    	 USER_NUMBER = "sip:farah@sip2sip.info";
+		    */	   
 			     // Display
-		    	 showCallNotyPopup("outgoing","confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> '+USER_NAME+"  "+USER_NUMBER);  
+		    	 showCallNotyPopup("outgoing","confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> '+USER_NAME+"  "+USER_NUMBER+"<br>",false);
+		    	 
+		    	 //findContact(); //for testing	
 		       }       
    });  
   
@@ -102,10 +122,8 @@ $(".dialpad").die().live("click", function(e)
 	    	USER_IMG = image;
 			
 		  	// Display
-        	 showCallNotyPopup("outgoing","confirm", '<i class="icon icon-phone"></i><b>Calling : </b><br>'+USER_NAME+" "+USER_NUMBER);
-        	 
-        	 //findContact(); for testing	
-		  }		
+        	 showCallNotyPopup("outgoing","confirm", '<i class="icon icon-phone"></i><b>Calling : </b><br>'+USER_NAME+"   "+USER_NUMBER+"<br>",false);        	 
+          }		
      });    
         
     $(".hangup").die().live("click", function(e)
@@ -114,7 +132,7 @@ $(".dialpad").die().live("click", function(e)
     	console.log("In hangup");
          
     	// Display    	    	
-    	showCallNotyPopup("hangup","information", "<b>Call ended with : </b><br>"+USER_NAME+" "+USER_NUMBER);
+    	showCallNotyPopup("hangup","information", "<b>Call ended with : </b><br>"+USER_NAME+"   "+USER_NUMBER+"<br>",false);
 
     	// SIP
     	hangupCall();
@@ -125,7 +143,7 @@ $(".dialpad").die().live("click", function(e)
     	console.log("In ignore.");    	
     	 
     	// Display
-    	showCallNotyPopup("ignored","error", "<b>Ignored call : </b><br>"+USER_NAME+" "+USER_NUMBER);
+    	showCallNotyPopup("ignored","error", "<b>Ignored call : </b><br>"+USER_NAME+"   "+USER_NUMBER+"<br>", 5000);
     	
     	// SIP
     	SIP_SESSION_CALL.reject(Config_Call);    	    	  
@@ -173,7 +191,7 @@ function sipStackEventsListener(e /*SIPml.Stack.Event*/)
                 
                 console.log("In sipStack event Listner. stopping "+e.type);
                 
-                showNotyPopUp('information', "Disconnected with SIP because "+e.description, "top", 5000);
+               showCallNotyPopup("disconnected",'error', "SIP: There was an error registering your account to SIP. Please modify and try again.",false);
                 break;
             }
         case 'i_new_call':
@@ -192,7 +210,7 @@ function sipStackEventsListener(e /*SIPml.Stack.Event*/)
         	  stopRingbackTone();
         	  stopRingTone();
         	  
-        	  showCallNotyPopup("mediaDeny",'warning', "Media stream permission denied.");  
+        	  showCallNotyPopup("mediaDeny",'warning', "Media stream permission denied.",false);  
         	  
         	  // SIP
           	  hangupCall(); 
@@ -229,7 +247,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
         		 console.log("SIP server Connected.");
         		 message = "You can make and receive calls with SIP.";
             	               
-            	 //showNotyPopUp('information', "You are register with SIP.", "top", 5000);
+            	 showCallNotyPopup("register",'information', "SIP: You are now registered to make and receive calls successfully.",false);
             	 $(".contact-make-call").show();
            	     $(".make-call").show();
                }
@@ -242,7 +260,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
                  stopRingbackTone();
                  stopRingTone();
                  
-                 showCallNotyPopup("connected","success", "<b>On call : </b><br>"+USER_NAME+" "+USER_NUMBER);
+                 showCallNotyPopup("connected","success", "<b>On call : </b><br>"+USER_NAME+"   "+USER_NUMBER+"<br>",false);
                }
               break;
             } // 'connecting' | 'connected'
@@ -260,7 +278,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 
                     console.log("In sip Session event Listner. "+ e.description );
                 
-                    showNotyPopUp('information', "Disconnected with SIP because "+e.description, "top", 5000);
+                    showCallNotyPopup("disconnected",'error', "Disconnected with SIP because "+e.description, 5000);
                 }
                 else if (e.session == SIP_SESSION_CALL) 
                 {
@@ -271,20 +289,22 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
                 	stopRingTone();               	              		
                 	
                 	if(e.description == "Request Cancelled")
-                 	   showCallNotyPopup("missedCall","error", "<b>Missed call : </b><br>"+USER_NAME+" "+USER_NUMBER);
+                 	   showCallNotyPopup("missedCall","error", "<b>Missed call : </b><br>"+USER_NAME+"   "+USER_NUMBER+"<br>",false);
                 	else if(e.description == "PSTN calls are forbidden")
-                  	   showCallNotyPopup("forbidden","error", "PSTN calls are forbidden");
+                  	   showCallNotyPopup("forbidden","error", "PSTN calls are forbidden",false);
                 	else if(e.description == "Not acceptable here")
-                   	   showCallNotyPopup("noresponce","error", "Not acceptable here"); 
+                   	   showCallNotyPopup("noresponce","error", "Not acceptable here",false); 
                 	else if(e.description == "Media stream permission denied")
                        showCallNotyPopup("permissiondenied","error", "Media stream permission denied");                 	
                 	else if (e.description == "Call terminated")
-                	   showCallNotyPopup("hangup","information", "<b>Call ended with : <b><br>"+USER_NAME+" "+USER_NUMBER);
+                	   showCallNotyPopup("hangup","information", "<b>Call ended with : <b><br>"+USER_NAME+"   "+USER_NUMBER+"<br>",false);
                 	else if (e.description == "Decline")
-                 	   showCallNotyPopup("decline","error", "Decline");
+                 	   showCallNotyPopup("decline","error", "Decline",false);
                 	else if (e.description == "Request Timeout")
-                  	   showCallNotyPopup("requestTimeout","error", "Request Timeout");                 	
-                	                	
+                  	   showCallNotyPopup("requestTimeout","error", "Request Timeout",false);
+                	else if (e.description == "Hackers Forbidden")
+                   	   showCallNotyPopup("requestTimeout","error", "Hackers Forbidden",false);
+                	                	                	
                 	// Call terminated.
                 	SIP_SESSION_CALL = null;
                 	USER_NAME = null;
@@ -495,7 +515,7 @@ function showIncomingCall()
 {
 	console.log("In showIncomingCall.");	
 	
-	showCallNotyPopup("incoming","confirm", '<i class="icon icon-phone"></i><b>Incoming call :</b><br> '+USER_NAME+" "+USER_NUMBER);
+	showCallNotyPopup("incoming","confirm", '<i class="icon icon-phone"></i><b>Incoming call :</b><br> '+USER_NAME+"   "+USER_NUMBER+"<br>",false);
 	
 	startRingTone();
 
@@ -520,7 +540,7 @@ function makeCall(phoneNumber)
     	  SIP_SESSION_CALL = null;
     	  console.log('Failed to make call');
     	  
-    	  showCallNotyPopup("failed","error", "Failed to make call.");
+    	  showCallNotyPopup("failed","error", "Failed to make call.",false);
     	  
           return false;
         }      
@@ -540,7 +560,8 @@ function makeCall(phoneNumber)
 
 function findContact()
 {
-	console.log("In findContact. " + SIP_SESSION_CALL.getRemoteUri());
+	//var n = "+918564789652";
+	console.log("In findContact. "+ SIP_SESSION_CALL.getRemoteUri());
 	$.getJSON("/core/api/contacts/search/phonenumber/" + SIP_SESSION_CALL.getRemoteUri(),
 		   	function(caller)
 		   	{ 	
@@ -561,7 +582,7 @@ function findContact()
 				       USER_IMG = caller.properties[2].value;
 				      
 				       if(CALL != undefined)
-				        CALL.setText('<i class="icon icon-phone"></i><b>Incoming call : </b><br>'+USER_NAME+" "+USER_NUMBER);
+				        CALL.setText('<i class="icon icon-phone"></i><b>Incoming call : </b><br>'+USER_NAME+"   "+USER_NUMBER);
 			         }
 		        }		
 		   	}).error(function(data)
@@ -625,7 +646,7 @@ function stopRingbackTone() {
  * noty functions 
  */
 
-function showCallNotyPopup(state, type, message)
+function showCallNotyPopup(state, type, message, duration)
 {
 	console.log("In showCallNotyPopup");
 	
@@ -640,13 +661,13 @@ function showCallNotyPopup(state, type, message)
 	      else if (state == "connected") // success
 	    	  connectedCallNoty(message);	
 	      else if(state == "outgoing")
-	    	  outgoingCallNoty(message);
+	    	  outgoingCallNoty(message);	     	  
 	      else
-	    	  showCallNoty(type, message);			  
+	    	  showCallNoty(type, message, duration);			  
 	   });	
 }
 
-function showCallNoty(type, message)
+function showCallNoty(type, message, duration)
 {
 	console.log("In showCallNoty");
 	
@@ -656,7 +677,8 @@ function showCallNoty(type, message)
 	CALL = noty({
 		text        : message,
 		type        : type,		
-		layout      : "bottomRight"		
+		layout      : "bottomRight",
+		timeout     : duration, // delay for closing event. Set false for sticky notifications
 	  });	
 }
 
