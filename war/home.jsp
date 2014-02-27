@@ -90,8 +90,7 @@
    <![endif]-->     
 </head>
 
-<body>
-    <div id="dialpadDiv"></div>
+<body>    
 	<div id="wrap">	    
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
@@ -413,11 +412,12 @@
 			class="btn btn-mini btn-flat btn-primary pull-right">Top &uarr;</a> -->
 	</footer>
 
-	<script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script>
+	<!-- <script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script> -->
+	<script src='/lib/headjs-min.js'></script>
 
 	<script>
-	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	//var LIB_PATH = "/";
+	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	var LIB_PATH = "/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
@@ -430,8 +430,8 @@
 	// Get current domain user json
 	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 	
-	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-	// var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
+	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->

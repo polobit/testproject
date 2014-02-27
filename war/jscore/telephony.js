@@ -9,52 +9,25 @@ var CALL;
 var USER_NAME;
 var USER_IMG;
 var USER_NUMBER;
+var Notifi_Call;
+
+
+window.addEventListener("offline", function(e) 
+		{ console.log("offline");
+		  sipUnRegister();
+		}, false);
+
+window.addEventListener("online", function(e) 
+		{ console.log("online");
+		  sipStart();
+		}, false);
 
 $(function()
   {			
 	console.log("In telephony.js");
 	
-	READY_STATE_TIMER = setTimeout(function () 
-			{
-              if (document.readyState === "complete") 
-                 {
-                    clearInterval(READY_STATE_TIMER);
-                    
-                    console.log(SIP_STACK);
-                	console.log(SIP_REGISTER_SESSION);
-                	
-                	if(SIP_START == false)
-                	{
-                		// Get Sip widget
-                		 $.getJSON("/core/api/widgets/Sip",function (sip_widget)
-                				    {	 
-                			          console.log("In telephony getting sip widget.");	
-                			          console.log(sip_widget);	
-                			         
-                			          if(sip_widget == null)
-                			        	  return;
-                			          
-                			          SIP_WIDGET_OBJECT = sip_widget;
-                			          
-                			          if(sip_widget.prefs != undefined )
-                			        	 {			
-                			        	   head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
-                			        		 {
-                			        		   console.log("Sip call from telephony for widget.");
-                			        		   
-                			        		   // initialize SIPML5
-                			                   SIPml.init(sipRegister);
-                			        		 });					        	   		            
-                			        	 }		          
-                				    }).error(function (data)
-                				    {
-                				    	console.log("In sip error");
-                				    	console.log(data);
-                				    });
-                	}
-                 }
-            },10000); // 20 sec	
-
+	// Register SIP
+	sipStart();	
 
 $(".dialpad").die().live("click", function(e)
   {
@@ -82,16 +55,16 @@ $(".dialpad").die().live("click", function(e)
 		   	   console.log("In make-call");		    			      
 		   	   
 		   	   // SIP
-		       if(makeCall('sip:+18004321000@proxy.ideasip.com'))
+		       /*if(makeCall('sip:+18004321000@proxy.ideasip.com'))
 		       { 
 		    	 USER_NAME = "Agile";
-		    	 USER_NUMBER = "sip:+18004321000@proxy.ideasip.com";
+		    	 USER_NUMBER = "sip:+18004321000@proxy.ideasip.com";*/
 		   	   
-		   	/*if(makeCall('sip:farah@sip2sip.info'))
+		   	if(makeCall('sip:farah@sip2sip.info'))
 		       { 
 		    	 USER_NAME = "farah";
 		    	 USER_NUMBER = "sip:farah@sip2sip.info";
-		    */	   
+		    	   
 			     // Display
 		    	 showCallNotyPopup("outgoing","confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> '+USER_NAME+"  "+USER_NUMBER+"<br>",false);
 		    	 
@@ -146,7 +119,12 @@ $(".dialpad").die().live("click", function(e)
     	showCallNotyPopup("ignored","error", "<b>Ignored call : </b><br>"+USER_NAME+"   "+USER_NUMBER+"<br>", 5000);
     	
     	// SIP
-    	SIP_SESSION_CALL.reject(Config_Call);    	    	  
+    	SIP_SESSION_CALL.reject(Config_Call);
+    	
+    	if (Notifi_Call) {
+    		Notifi_Call.cancel();
+    		Notifi_Call = null;
+        }
       });
     
     $('.answer').die().live("click", function(e)
@@ -158,6 +136,56 @@ $(".dialpad").die().live("click", function(e)
      });
         
   });
+
+
+	
+
+function sipStart()
+{
+	console.log("In sipStart.");
+	console.log(SIP_START);
+	console.log(SIP_STACK);
+	console.log(SIP_REGISTER_SESSION);
+	
+	READY_STATE_TIMER = setTimeout(function () 
+			{
+              if (document.readyState === "complete") 
+                 {
+                    clearInterval(READY_STATE_TIMER);                   
+                	
+                	if(SIP_START == false)
+                	{
+                		// Get Sip widget
+                		 $.getJSON("/core/api/widgets/Sip",function (sip_widget)
+                				    {	 
+                			          console.log("In sipStart getting sip widget.");	
+                			          console.log(sip_widget);	
+                			         
+                			          if(sip_widget == null)
+                			        	  return;
+                			          
+                			          SIP_WIDGET_OBJECT = sip_widget;
+                			          
+                			          if(sip_widget.prefs != undefined )
+                			        	 {			
+                			        	   head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
+                			        		 {
+                			        		   console.log("Sip call from sipStart for widget.");
+                			        		   
+                			        		   // initialize SIPML5
+                			                   SIPml.init(sipRegister);
+                			        		 });					        	   		            
+                			        	 }		          
+                				    }).error(function (data)
+                				    {
+                				    	console.log("In sip error");
+                				    	console.log(data);
+                				    });
+                	}
+                 }
+            },10000); // 10 sec
+}
+
 
 /* SIP event listeners */
 //Callback function for SIP Stack or Events Listener for sip stack
@@ -247,9 +275,22 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
         		 console.log("SIP server Connected.");
         		 message = "You can make and receive calls with SIP.";
             	               
+        		 // Play sound on register.
+        		 startRingTone();
+        		 var runTimer = setTimeout(function () 
+        					{       		              
+        		              clearInterval(runTimer);
+        		              stopRingTone();
+        					},2000); // 2 sec 
+        		 
             	 showCallNotyPopup("register",'information', "SIP: You are now registered to make and receive calls successfully.",false);
             	 $(".contact-make-call").show();
            	     $(".make-call").show();
+           	     
+           	     // enable notifications if not already done
+                 if (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0) {
+                     window.webkitNotifications.requestPermission();
+                 }
                }
              else if (e.session == SIP_SESSION_CALL) 
                {
@@ -261,6 +302,11 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
                  stopRingTone();
                  
                  showCallNotyPopup("connected","success", "<b>On call : </b><br>"+USER_NAME+"   "+USER_NUMBER+"<br>",false);
+                 
+                 if (Notifi_Call) {
+             		Notifi_Call.cancel();
+             		Notifi_Call = null;
+                 }
                }
               break;
             } // 'connecting' | 'connected'
@@ -310,6 +356,11 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
                 	USER_NAME = null;
                 	USER_NUMBER = null;
                 	USER_IMG = null;
+                	
+                	if (Notifi_Call) {
+                		Notifi_Call.cancel();
+                		Notifi_Call = null;
+                    }
                 }
                 break;
             } // 'terminating' | 'terminated'
@@ -442,9 +493,19 @@ function sipRegister()
 }
 
 //sends SIP REGISTER (expires=0) to logout
-function sipUnRegister() {
-    if (SIP_STACK) {
+function sipUnRegister() 
+{
+	console.log("In sipUnRegister.");
+    if (SIP_STACK) 
+    {    	
     	SIP_STACK.stop(); // shutdown all sessions
+    	SIP_START = false;
+        SIP_STACK = undefined;
+        SIP_REGISTER_SESSION = undefined;
+        SIP_SESSION_CALL = undefined;
+        USER_NAME = null;
+        USER_NUMBER = null;
+        USER_IMG = null;
     }
 }
 
@@ -469,10 +530,9 @@ function sipLogin()
 function newCall(e)
 {
   console.log("In newCall."); 
-  console.log(SIP_SESSION_CALL);
- 
+  console.log(SIP_SESSION_CALL); 
 	
-	if (SIP_SESSION_CALL != null) 
+  if (SIP_SESSION_CALL != null) 
     {
 	  console.log("already in call.");	
 		
@@ -482,7 +542,7 @@ function newCall(e)
       e.newSession.hangup(); // comment this line for multi-line support     
     }
   else 
-    {
+    {	  
 	  SIP_SESSION_CALL = e.newSession;
        
 	  // start listening for events
@@ -493,7 +553,8 @@ function newCall(e)
       
       USER_NAME = sRemoteName;	  
 	  USER_NUMBER = SIP_SESSION_CALL.getRemoteUri();
-	  
+	 	  
+	  // Show noty
       showIncomingCall();
     } 
 }
@@ -506,7 +567,12 @@ function hangupCall()
 	   	stopRingTone();
 	    console.log("Terminating the call...");
 	    SIP_SESSION_CALL.hangup({events_listener: { events: '*', listener: sipSessionEventsListener }});
-	 }   	
+	 }  
+	
+	if (Notifi_Call) {
+		Notifi_Call.cancel();
+		Notifi_Call = null;
+    }
 }
 
 
@@ -518,10 +584,76 @@ function showIncomingCall()
 	showCallNotyPopup("incoming","confirm", '<i class="icon icon-phone"></i><b>Incoming call :</b><br> '+USER_NAME+"   "+USER_NUMBER+"<br>",false);
 	
 	startRingTone();
-
+	
+	//if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
+	//show_desktop_notification(imageURL, title, message, link, tag);
+	//show_desktop_notification("/img/plugins/sipIcon.png", "Incoming Call :", USER_NAME+"   "+USER_NUMBER, undefined, "SipCall");
+	
+	// permission already asked when we registered
+    if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0) 
+       {
+          if (Notifi_Call) 
+            {
+        	  Notifi_Call.cancel();
+            }
+          Notifi_Call = window.webkitNotifications.createNotification('/img/plugins/sipIcon.png', 'Incoming call :', USER_NAME+"   "+USER_NUMBER);
+          Notifi_Call.onclose = function () { Notifi_Call = null; };
+          Notifi_Call.show();
+        }    
+		
+	//notifyMe();	
+	
 	// Find contact for incoming call and update display.
 	findContact();	
 }
+
+function notifyMe() {
+	console.log("In notifyMe");
+	
+	
+	var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+	
+	console.log(Notification.permission);
+	  // Let's check if the browser supports notifications
+	  if (!("Notification" in window)) {
+	    alert("This browser does not support desktop notification");
+	  }
+
+	  // Let's check if the user is okay to get some notification
+	  else if (Notification.permission == "granted") {
+	    // If it's okay let's create a notification
+		 Notifi_Call = new Notification("Incoming Call :", {
+		    body : USER_NAME+"   "+USER_NUMBER,
+		    tag :  "SipCall",
+		    icon : '/img/plugins/sipIcon.png'
+		});
+	  }
+
+	  // Otherwise, we need to ask the user for permission
+	  // Note, Chrome does not implement the permission static property
+	  // So we have to check for NOT 'denied' instead of 'default'
+	  else if (Notification.permission != 'denied') {
+	    Notification.requestPermission(function (permission) {
+
+	      // Whatever the user answers, we make sure we store the information
+	      if(!('permission' in Notification)) {
+	        Notification.permission = permission;
+	      }
+
+	      // If the user is okay, let's create a notification
+	      if (permission == "granted") {
+	         Notifi_Call = new Notification("Incoming Call :", {
+	  		    body : USER_NAME+"   "+USER_NUMBER,
+	  		    tag :  "SipCall",
+	  		    icon : '/img/plugins/sipIcon.png'
+	  		});
+	      }
+	    });
+	  }
+
+	  // At last, if the user already denied any notification, and you 
+	  // want to be respectful there is no need to bother him any more.
+	}
 
 // Makes a call (SIP INVITE)
 function makeCall(phoneNumber) 
@@ -642,8 +774,7 @@ function stopRingbackTone() {
     catch (e) { }
 }
 
-/* 
- * noty functions 
+/** noty functions 
  */
 
 function showCallNotyPopup(state, type, message, duration)
@@ -717,7 +848,6 @@ function connectedCallNoty(message)
 		              ]
 	  });	
 }
-
 
 function outgoingCallNoty(message)
 {
