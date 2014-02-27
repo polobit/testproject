@@ -182,20 +182,21 @@ public class ContactPrefs implements Serializable
 	@PrePersist
 	public void prePersist()
 	{
-
-		createdAt = System.currentTimeMillis();
-		if (expires != 0l)
-		{
-			System.out.println(expires);
-			if (expires / 100000000000l > 1)
-				expires = createdAt + (expires);
-			else
-				expires = createdAt + (expires * 1000);
-			System.out.println(expires);
-		}
-
 		if (domainUser == null)
 			domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+	}
+
+	@JsonIgnore
+	public void setExpiryTime(Long time)
+	{
+		createdAt = System.currentTimeMillis();
+
+		System.out.println(expires);
+		if (expires / 100000000000l > 1)
+			expires = createdAt + (expires);
+		else
+			expires = createdAt + (expires * 1000);
+		System.out.println(expires);
 	}
 
 	@PostLoad
@@ -213,12 +214,29 @@ public class ContactPrefs implements Serializable
 		{
 			groups = ContactGroupUtil.getGroups(this);
 			GoogleGroupDetails agileGroup = ContactPrefsUtil.getGroup("Agile", this);
-			if (agileGroup == null)
+			List<GoogleGroupDetails> groupList = ContactPrefsUtil.getGroupList("Agile", this);
+			if (groupList.isEmpty())
 			{
 				agileGroup = new GoogleGroupDetails();
 				// agileGroup.atomId = "Agile";
 				agileGroup.groupName = "Agile";
 				groups.add(agileGroup);
+			}
+			else if (groupList.size() > 1)
+			{
+				for (GoogleGroupDetails googleGroup : groupList)
+				{
+					// @NotSaved(IfDefault.class)
+					// public Long last_synched_to_client = 0L;
+
+					// @NotSaved(IfDefault.class)
+					// public Long last_synched_from_client = 0L;
+					if (googleGroup.atomId.equals(last_synched_to_client)
+							|| googleGroup.atomId.equals(last_synched_from_client))
+					{
+						ContactGroupUtil.deleteGroup(this, googleGroup.atomId);
+					}
+				}
 			}
 		}
 		catch (Exception e)

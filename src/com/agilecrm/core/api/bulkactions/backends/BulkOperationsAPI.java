@@ -606,6 +606,8 @@ public class BulkOperationsAPI
 
 		try
 		{
+			BulkActionUtil.setSessionManager(contactPrefs.getDomainUser().getId());
+			System.out.println("Namespacemanager : " + NamespaceManager.get());
 			ContactSyncUtil.syncContacts(contactPrefs);
 		}
 		catch (Exception e)

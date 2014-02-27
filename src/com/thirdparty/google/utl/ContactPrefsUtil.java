@@ -1,5 +1,6 @@
 package com.thirdparty.google.utl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +108,26 @@ public class ContactPrefsUtil
 		}
 
 		return null;
+	}
+
+	public static List<GoogleGroupDetails> getGroupList(String title, ContactPrefs prefs)
+	{
+		if (prefs.groups.isEmpty())
+			prefs.fillGroups();
+
+		List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
+		for (GoogleGroupDetails group : prefs.groups)
+		{
+			if (prefs.sync_from_group == null && group.groupName.equals("Contacts"))
+			{
+				prefs.sync_from_group = group.atomId;
+			}
+
+			if (title.equals(group.groupName))
+				groups.add(group);
+		}
+
+		return groups;
 	}
 
 	public static GoogleGroupDetails getGroupBasedOnID(String atomId, ContactPrefs prefs)

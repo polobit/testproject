@@ -208,6 +208,21 @@ public class ContactGroupUtil
 		return newGroupCreated;
 	}
 
+	public static void deleteGroup(ContactPrefs prefs, String atomId)
+	{
+		try
+		{
+			URL groupUrl = new URL(atomId);
+			ContactsService service = GoogleServiceUtil.getService(prefs.apiKey);
+			service.delete(groupUrl);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Retrieves available groups in google contacts
 	 * 

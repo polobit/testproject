@@ -70,7 +70,7 @@ public class ContactsSynctoGoogle
 	{
 		try
 		{
-			synCreatedContacts(prefs, 500, null);
+			synCreatedContacts(prefs, 200, null);
 
 		}
 		catch (Exception e)
@@ -81,7 +81,7 @@ public class ContactsSynctoGoogle
 
 		try
 		{
-			synUpdatedContacts(prefs, 500, null);
+			synUpdatedContacts(prefs, 200, null);
 		}
 		catch (Exception e)
 		{
@@ -92,7 +92,7 @@ public class ContactsSynctoGoogle
 
 	public static void synUpdatedContacts(ContactPrefs prefs, Integer page, String cursor)
 	{
-		int MAX_FETCH_SIZE = 5000;
+		int MAX_FETCH_SIZE = 1000;
 		int fetched = 0;
 		List<Contact> contacts_list = ContactSyncUtil.fetchUpdatedContactsToSync(prefs, page, cursor);
 
@@ -104,6 +104,7 @@ public class ContactsSynctoGoogle
 		String previousCursor = null;
 		do
 		{
+			System.out.println(fetched);
 			fetched += contacts_list.size();
 			previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
 
@@ -132,11 +133,12 @@ public class ContactsSynctoGoogle
 
 	public static void synCreatedContacts(ContactPrefs prefs, Integer page, String cursor)
 	{
-		int MAX_FETCH_SIZE = 5000;
+		int MAX_FETCH_SIZE = 1000;
 		int fetched = 0;
+		System.out.println("fetching fetching fetching");
 		List<Contact> contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
 
-		System.out.println("fetch newly created contacts :" + contacts_list);
+		System.out.println("fetch newly created contacts :" + contacts_list.size());
 
 		if (contacts_list.isEmpty())
 			return;
@@ -145,8 +147,10 @@ public class ContactsSynctoGoogle
 		String previousCursor = null;
 		do
 		{
+			System.out.println("in loop");
 			fetched += contacts_list.size();
 			previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+			System.out.println(previousCursor);
 
 			try
 			{
@@ -160,7 +164,7 @@ public class ContactsSynctoGoogle
 
 			if (!StringUtils.isEmpty(previousCursor))
 			{
-				contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
+				contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, previousCursor);
 
 				currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
 				continue;
@@ -193,6 +197,10 @@ public class ContactsSynctoGoogle
 		for (int i = 0; i < contacts.size(); i++)
 		{
 			Contact contact = contacts.get(i);
+
+			if (contact.getContactFieldValue("Contact type") != null
+					&& contact.updated_time <= prefs.last_synched_to_client)
+				continue;
 
 			ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
 

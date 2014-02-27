@@ -366,6 +366,7 @@ public class ScribeUtil
 			contactPrefs.setPrefs(object);
 			System.out.println(contactPrefs.duration);
 			System.out.println(contactPrefs.sync_type);
+			contactPrefs.setExpiryTime(contactPrefs.expires);
 			contactPrefs.save();
 
 			// initialize backend to save contacts

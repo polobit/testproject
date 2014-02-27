@@ -34,8 +34,9 @@ public class GoogleContactsDeferredTask implements DeferredTask
 	public void run()
 	{
 		// TODO Auto-generated method stub
-		// if (StringUtils.isEmpty(namespace))
-		// return;
+		/*
+		 * if (StringUtils.isEmpty(namespace)) return;
+		 */
 
 		syncGooglecontacts(namespace, duration);
 	}

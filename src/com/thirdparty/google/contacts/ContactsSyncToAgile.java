@@ -294,9 +294,9 @@ public class ContactsSyncToAgile
 
 			LinkedHashSet<String> tags = new LinkedHashSet<String>();
 			tags.add("Gmail contact");
+			fields.add(new ContactField("Contact type", "Google", null));
 
 			agileContact.tags = tags;
-
 			// title is not given as job description instead displaying name
 			// from google
 			// if (entry.getTitle() != null

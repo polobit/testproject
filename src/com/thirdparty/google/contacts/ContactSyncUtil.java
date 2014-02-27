@@ -24,12 +24,14 @@ public class ContactSyncUtil
 {
 	public static void syncContacts(ContactPrefs contactPrefs) throws Exception
 	{
+		System.out.println("syn started");
 		if (contactPrefs.sync_type == SYNC_TYPE.CLIENT_TO_AGILE)
 		{
 			ContactsSyncToAgile.importGoogleContacts(contactPrefs);
 		}
 		else if (contactPrefs.sync_type == SYNC_TYPE.AGILE_TO_CLIENT)
 		{
+			System.out.println("sync type " + contactPrefs.sync_type);
 			ContactsSynctoGoogle.updateContacts(contactPrefs);
 		}
 		else if (contactPrefs.sync_type == SYNC_TYPE.TWO_WAY)
@@ -192,6 +194,13 @@ public class ContactSyncUtil
 		if (pref.my_contacts)
 			queryMap.put("owner_key", pref.getDomainUser());
 
-		return Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
+		System.out.println(queryMap);
+		System.out.println("fetching");
+
+		System.out.println(Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time"));
+		List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
+
+		System.out.println("contacts fount : " + contacts.size());
+		return contacts;
 	}
 }
