@@ -143,7 +143,7 @@ function showSipProfile()
                   else
                     { 
                 	  // Register on Sip.
-                	  //sipStart();
+                	  sipStart();
                 	  
                 	  data["msg"] = "Need to register on SIP.";
                 	  $(".contact-make-call").hide();
