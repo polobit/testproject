@@ -38,10 +38,12 @@ public class ScribeServlet extends HttpServlet
 	public static final String SERVICE_TYPE_TWITTER = "twitter";
 	public static final String SERVICE_TYPE_GMAIL = "gmail";
 	public static final String SERVICE_TYPE_GOOGLE = "google";
+	public static final String SERVICE_TYPE_GOOGLE_CALENDAR = "google_calendar";
 	public static final String SERVICE_TYPE_STRIPE = "stripe";
 	public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
 	public static final String STRIPE_SCOPE = "read_only";
-	public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
+	public static final String GOOGLE_CONTACTS_SCOPE = "https://www.googleapis.com/auth/calendar";
+	public static final String GOOGLE_CALENDAR_SCOPE = "https://www.google.com/m8/feeds/";
 	public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
 
 	/**
@@ -161,7 +163,8 @@ public class ScribeServlet extends HttpServlet
 		Token token = null;
 
 		// OAuth 2.0
-		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
+		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR))
 		{
 			// After building service, redirects to authorization page
 			url = service.getAuthorizationUrl(null);
@@ -225,7 +228,8 @@ public class ScribeServlet extends HttpServlet
 		OAuthService service = null;
 
 		// OAuth 2.0 requires code parameter
-		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE))
+		if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR))
 			code = req.getParameter("code");
 
 		// OAuth 1.0 requires token and verifier
