@@ -138,5 +138,5 @@ $(function()
     	SIP_SESSION_CALL.accept(Config_Call);  
      });
         
-  });}
+  });
 
