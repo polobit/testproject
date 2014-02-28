@@ -537,12 +537,16 @@ $(function(){
 					
 					    // Enables Send Email button.
 					    enable_send_button($('#sendEmail'));
-			            
-					    window.history.back();
+					    
+					    var route = Current_Route + "";
+					   
+			            if(route.match("send-email") != null)
+			            	App_Contacts.navigate("contact/" + App_Contacts.contactDetailView.model.id, {trigger:true});
+			            else
+			            	window.history.back();
 		                 },
 		        error: function()
 		               {
-		        	      
 		        	      enable_send_button($('#sendEmail'));
 		        	      console.log("Error occured while sending email");
 		               }
