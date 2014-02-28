@@ -37,6 +37,8 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
+import com.thirdparty.google.GoogleServiceUtil;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 
 /**
  * <code>ScribeUtil</code> class contains methods to be used by
@@ -94,6 +96,12 @@ public class ScribeUtil
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE,
 					com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
 					Globals.GOOGLE_SECRET_KEY, ScribeServlet.GOOGLE_CONTACTS_SCOPE);
+
+		// If service type Google, creates a Service, specific to Google
+		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
+			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR,
+					com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CALENDAR_CLIENT_ID,
+					Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_CONTACTS_SCOPE);
 
 		// Creates a Service, specific to Gmail
 		else
@@ -212,6 +220,10 @@ public class ScribeUtil
 				e.printStackTrace();
 			}
 			saveGooglePrefs(code, object);
+		}
+		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
+		{
+			saveGoogleCalenderPrefs(code, null);
 		}
 	}
 
@@ -372,6 +384,18 @@ public class ScribeUtil
 			// initialize backend to save contacts
 			ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
 		}
+	}
+
+	public static void saveGoogleCalenderPrefs(String code, JSONObject object) throws IOException
+	{
+		HashMap<String, Object> result = GoogleServiceUtil.refreshGoogleCalenderToken1(code);
+		System.out.println(result);
+		String refresh_token = String.valueOf(result.get("refresh_token"));
+		String access_token = String.valueOf(result.get("access_token"));
+
+		GoogleCalenderPrefs pref = new GoogleCalenderPrefs(refresh_token, access_token);
+		pref.setExpiryTime(Integer.valueOf(result.get("expires_in").toString()));
+		pref.save();
 	}
 
 	/**

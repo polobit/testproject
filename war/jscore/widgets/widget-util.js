@@ -346,7 +346,10 @@ function save_widget_prefs(pluginName, prefs, callback)
 		
 		// Stop old stack.
 		if(SIP_START == true)
-		  sipUnRegister()
+		  {
+			SIP_UPDATED = true;
+			sipUnRegister();
+		  }		  
 		
 		// Register on Sip.
   	    sipStart();

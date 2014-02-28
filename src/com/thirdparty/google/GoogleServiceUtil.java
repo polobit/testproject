@@ -1,10 +1,8 @@
 package com.thirdparty.google;
 
-import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.scribe.model.OAuthRequest;
@@ -114,20 +112,54 @@ public class GoogleServiceUtil
 
 	}
 
-	public static String refreshGoogleCalenderToken(String code)
+	/**
+	 * Exchanges refresh token for an access token after the expire of access
+	 * token
+	 * 
+	 * @param refreshToken
+	 *            {@link String} refresh token retrieved from OAuth
+	 * @return {@link String} JSON response
+	 * @throws Exception
+	 */
+	public static String refreshTokenInGoogleForCalendar(String refreshToken)
 	{
 		// Build data to post with all tokens
-		String data = "client_id=396214664382-slcp1d7laq2u7hfv4n9e5g8hdgmar4nr.apps.googleusercontent.com&client_secret=25dYhC_QhDFgX-rNuL4aZHkV"
-				+ "&grant_type=authorization_code&code=" + code + "&redirect_uri=http://localhost:8888";
+		String data = "client_id=" + Globals.GOOGLE_CALENDAR_CLIENT_ID + "&client_secret="
+				+ Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
 		// send request and return response
 		try
 		{
-			System.out.println("((((((((((())))))))))))))))))))))))))))");
+			return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
+					data, true, "", "");
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	public static String refreshGoogleCalenderToken(String code)
+	{
+		// Build data to post with all tokens
+		String data = "client_id=396214664382-slcp1d7laq2u7hfv4n9e5g8hdgmar4nr.apps.googleusercontent.com&client_secret=25dYhC_QhDFgX-rNuL4aZHkV"
+				+ "&grant_type=authorization_code&code="
+				+ code
+				+ "&scope="
+				+ URLEncoder.encode("https://www.googleapis.com/auth/calendar");
+
+		// send request and return response
+		try
+		{
 			System.out.println(new GoogleApi().getAccessTokenEndpoint());
 			System.out.println(data);
-			return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
-					data, true, "application/x-www-form-urlencoded", "");
+			String result = HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "",
+					"POST", data, true, "application/x-www-form-urlencoded", "");
+			System.out.println(result);
+			return result;
 
 		}
 		catch (Exception e)
@@ -139,35 +171,43 @@ public class GoogleServiceUtil
 
 	}
 
-	public static String refreshGoogleCalenderToken1(String code) throws JsonParseException, JsonMappingException,
-			IOException
+	public static HashMap<String, Object> refreshGoogleCalenderToken1(String code)
 	{
-		/*
-		 * Make a post request and retrieve tokens
-		 */
+		try
+		{
+			/*
+			 * Make a post request and retrieve tokens
+			 */
 
-		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
-		oAuthRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
-		oAuthRequest.addBodyParameter("client_id",
-				"396214664382-slcp1d7laq2u7hfv4n9e5g8hdgmar4nr.apps.googleusercontent.com");
-		oAuthRequest.addBodyParameter("client_secret", "25dYhC_QhDFgX-rNuL4aZHkV");
+			OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
+			oAuthRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
+			oAuthRequest.addBodyParameter("client_id",
+					"396214664382-slcp1d7laq2u7hfv4n9e5g8hdgmar4nr.apps.googleusercontent.com");
+			oAuthRequest.addBodyParameter("client_secret", "25dYhC_QhDFgX-rNuL4aZHkV");
 
-		oAuthRequest.addBodyParameter("scope", "https://www.googleapis.com/auth/calendar");
-		// oAuthRequest.addBodyParameter(key, value)("redirect_uri", "");
-		oAuthRequest.addBodyParameter("code", code);
-		oAuthRequest.addBodyParameter("grant_type", "authorization_code");
-		System.out.println(oAuthRequest.getCompleteUrl());
+			oAuthRequest.addBodyParameter("scope", "https://www.googleapis.com/auth/calendar");
+			// oAuthRequest.addBodyParameter("access_type", "offline");
+			oAuthRequest.addBodyParameter("redirect_uri",
+					"https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+			oAuthRequest.addBodyParameter("code", code);
+			oAuthRequest.addBodyParameter("grant_type", "authorization_code");
+			System.out.println(oAuthRequest.getCompleteUrl());
 
-		Response response = oAuthRequest.send();
+			Response response = oAuthRequest.send();
 
-		// Creates HashMap from response JSON string
-		HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(),
-				new TypeReference<HashMap<String, Object>>()
-				{
-				});
+			// Creates HashMap from response JSON string
+			HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(),
+					new TypeReference<HashMap<String, Object>>()
+					{
+					});
 
-		System.out.println(properties.toString());
-		return properties.toString();
+			System.out.println(properties.toString());
+			return properties;
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	public static void main(String[] args)
