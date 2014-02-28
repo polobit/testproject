@@ -490,12 +490,6 @@
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 	
 
-	<!-- Unified CSS for All Lib -->	
-	
-	<!-- Audios -->	
-    <audio id="audio_remote" autoplay="autoplay" />
-    <audio id="ringtone" loop><source src="/sounds/ringtone.wav" type="audio/wav" preload="auto"></source></audio>
-    <audio id="ringbacktone" loop><source src="/sounds/ringbacktone.wav" type="audio/wav" preload="auto"></source></audio>
-    <audio id="dtmfTone"><source src="/sounds/dtmf.wav" type="audio/wav" preload="auto"></source></audio>
+	<!-- Unified CSS for All Lib -->		
 </body>
 </html>
