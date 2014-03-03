@@ -10,7 +10,7 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * NavSetting Entity <br/>
+ * MenuSetting Entity <br/>
  * <br/>
  * Holds state of various tabs in Navbar.<code>true</code> implies enabled in
  * view.
@@ -19,10 +19,10 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class NavSetting
+public class MenuSetting
 {
     // dao
-    private static ObjectifyGenericDao<NavSetting> dao = new ObjectifyGenericDao<NavSetting>(NavSetting.class);
+    private static ObjectifyGenericDao<MenuSetting> dao = new ObjectifyGenericDao<MenuSetting>(MenuSetting.class);
 
     /**
      * Id of the entity
@@ -88,7 +88,7 @@ public class NavSetting
 	deals = calendar = campaign = reports = true;
     }
 
-    public NavSetting()
+    public MenuSetting()
     {
     }
 
