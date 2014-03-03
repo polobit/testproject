@@ -192,7 +192,7 @@ $(function(){
 		e.preventDefault();
 	    id = App_Contacts.contactDetailView.model.id;
 	    documentsView = new Base_Collection_View({
-            url: '/core/api/documents/' + id + "/documents",
+            url: '/core/api/documents/' + id + "/docs",
             restKey: "document",
             templateKey: "contact-documents",
             individual_tag_name: 'li',
