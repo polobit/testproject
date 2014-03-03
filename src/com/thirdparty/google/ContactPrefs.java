@@ -108,7 +108,7 @@ public class ContactPrefs implements Serializable
 
     public static enum Type
     {
-        GOOGLE, ZOHO, SUGAR, SALESFORCE
+	GOOGLE, ZOHO, SUGAR, SALESFORCE
     }
 
     /**
@@ -133,7 +133,7 @@ public class ContactPrefs implements Serializable
     // Category of report generation - daily, weekly, monthly.
     public static enum Duration
     {
-        DAILY, WEEKLY, MONTHLY, ONCE
+	DAILY, WEEKLY, MONTHLY, ONCE
     };
 
     @NotSaved(IfDefault.class)
@@ -142,7 +142,7 @@ public class ContactPrefs implements Serializable
     // Category of report generation - daily, weekly, monthly.
     public static enum SYNC_TYPE
     {
-        CLIENT_TO_AGILE, AGILE_TO_CLIENT, TWO_WAY
+	CLIENT_TO_AGILE, AGILE_TO_CLIENT, TWO_WAY
     };
 
     @NotSaved(IfDefault.class)
@@ -156,11 +156,11 @@ public class ContactPrefs implements Serializable
 
     public ContactPrefs(Type type, String token, String secret, Long expires, String refreshToken)
     {
-        this.type = type;
-        this.token = token;
-        this.secret = secret;
-        this.refreshToken = refreshToken;
-        this.expires = expires;
+	this.type = type;
+	this.token = token;
+	this.secret = secret;
+	this.refreshToken = refreshToken;
+	this.expires = expires;
     }
 
     /**
@@ -173,7 +173,7 @@ public class ContactPrefs implements Serializable
      */
     public void save()
     {
-        dao.put(this);
+	dao.put(this);
     }
 
     /**
@@ -182,68 +182,68 @@ public class ContactPrefs implements Serializable
     @PrePersist
     public void prePersist()
     {
-        if (domainUser == null)
-            domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+	if (domainUser == null)
+	    domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
     }
 
     @JsonIgnore
     public void setExpiryTime(Long time)
     {
-        createdAt = System.currentTimeMillis();
+	createdAt = System.currentTimeMillis();
 
-        System.out.println(expires);
-        if (expires / 100000000000l > 1)
-            expires = createdAt + (expires);
-        else
-            expires = createdAt + (expires * 1000);
-        System.out.println(expires);
+	System.out.println(expires);
+	if (expires / 100000000000l > 1)
+	    expires = createdAt + (expires);
+	else
+	    expires = createdAt + (expires * 1000);
+	System.out.println(expires);
     }
 
     @PostLoad
     void postLoad()
     {
-        if (type == Type.GOOGLE)
-        {
-            fillGroups();
-        }
+	if (type == Type.GOOGLE)
+	{
+	    fillGroups();
+	}
     }
 
     public void fillGroups()
     {
-        try
-        {
-            groups = ContactGroupUtil.getGroups(this);
-            GoogleGroupDetails agileGroup = ContactPrefsUtil.getGroup("Agile", this);
-            List<GoogleGroupDetails> groupList = ContactPrefsUtil.getGroupList("Agile", this);
-            if (groupList.isEmpty())
-            {
-                agileGroup = new GoogleGroupDetails();
-                // agileGroup.atomId = "Agile";
-                agileGroup.groupName = "Agile";
-                groups.add(agileGroup);
-            }
-            else if (groupList.size() > 1)
-            {
-                for (GoogleGroupDetails googleGroup : groupList)
-                {
-                    // @NotSaved(IfDefault.class)
-                    // public Long last_synched_to_client = 0L;
+	try
+	{
+	    groups = ContactGroupUtil.getGroups(this);
+	    GoogleGroupDetails agileGroup = ContactPrefsUtil.getGroup("Agile", this);
+	    List<GoogleGroupDetails> groupList = ContactPrefsUtil.getGroupList("Agile", this);
+	    if (groupList.isEmpty())
+	    {
+		agileGroup = new GoogleGroupDetails();
+		// agileGroup.atomId = "Agile";
+		agileGroup.groupName = "Agile";
+		groups.add(agileGroup);
+	    }
+	    else if (groupList.size() > 1)
+	    {
+		for (GoogleGroupDetails googleGroup : groupList)
+		{
+		    // @NotSaved(IfDefault.class)
+		    // public Long last_synched_to_client = 0L;
 
-                    // @NotSaved(IfDefault.class)
-                    // public Long last_synched_from_client = 0L;
-                    if (googleGroup.atomId.equals(last_synched_to_client)
-                            || googleGroup.atomId.equals(last_synched_from_client))
-                    {
-                        ContactGroupUtil.deleteGroup(this, googleGroup.atomId);
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+		    // @NotSaved(IfDefault.class)
+		    // public Long last_synched_from_client = 0L;
+		    if (googleGroup.atomId.equals(last_synched_to_client)
+			    || googleGroup.atomId.equals(last_synched_from_client))
+		    {
+			ContactGroupUtil.deleteGroup(this, googleGroup.atomId);
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -254,12 +254,12 @@ public class ContactPrefs implements Serializable
      */
     public void setDomainUser(Key<DomainUser> domianUser)
     {
-        this.domainUser = domianUser;
+	this.domainUser = domianUser;
     }
 
     public Key<DomainUser> getDomainUser(Key<DomainUser> domianUser)
     {
-        return domianUser;
+	return domianUser;
     }
 
     /**
@@ -269,8 +269,8 @@ public class ContactPrefs implements Serializable
      */
     public Key<DomainUser> getDomainUser()
     {
-        System.out.println("domain user key : " + domainUser);
-        return domainUser;
+	System.out.println("domain user key : " + domainUser);
+	return domainUser;
     }
 
     /**
@@ -278,29 +278,32 @@ public class ContactPrefs implements Serializable
      */
     public void delete()
     {
-        dao.delete(this);
+	dao.delete(this);
     }
 
     public void setPrefs(JSONObject object)
     {
-        String duration = null;
-        String type = null;
-        System.out.println(object);
-        try
-        {
-            duration = object.getString("duration");
-            type = object.getString("sync_type");
-        }
-        catch (JSONException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+	if (object == null)
+	    return;
 
-        if (!StringUtil.isEmpty(duration))
-            this.duration = Duration.valueOf(duration);
-        if (!StringUtil.isEmpty(type))
-            sync_type = SYNC_TYPE.valueOf(type);
+	String duration = null;
+	String type = null;
+	System.out.println(object);
+	try
+	{
+	    duration = object.getString("duration");
+	    type = object.getString("sync_type");
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (!StringUtil.isEmpty(duration))
+	    this.duration = Duration.valueOf(duration);
+	if (!StringUtil.isEmpty(type))
+	    sync_type = SYNC_TYPE.valueOf(type);
 
     }
 
@@ -311,7 +314,7 @@ public class ContactPrefs implements Serializable
      */
     public String toString()
     {
-        return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token
-                + " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
+	return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token
+		+ " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
     }
 }

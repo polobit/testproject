@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
@@ -203,21 +202,7 @@ public class ScribeUtil
 	 */
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE))
 	{
-	    String query = req.getSession().getAttribute("query").toString();
-	    JSONObject object = null;
-	    try
-	    {
-		object = new JSONObject(query);
-		System.out.println(object);
-
-	    }
-	    catch (JSONException e)
-	    {
-		object = new JSONObject();
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	    saveGooglePrefs(code, object);
+	    saveGooglePrefs(code, null);
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
 	{
