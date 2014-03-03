@@ -19,7 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.Event;
-import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.EventUtil;
 
 /**
@@ -38,125 +37,123 @@ import com.agilecrm.activities.util.EventUtil;
 public class EventsAPI
 {
 
-    /**
-     * Gets List of events matched to a search range
-     * 
-     * @param req
-     *            HttpServletRequest parameter
-     * @return List of events matched to a search range
-     */
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Event> getEvents(@Context HttpServletRequest req)
-    {
-	String start = req.getParameter("start");
-	String end = req.getParameter("end");
-
-	System.out.println("Start: " + start + " End: " + end);
-	if (start == null || end == null)
+	/**
+	 * Gets List of events matched to a search range
+	 * 
+	 * @param req
+	 *            HttpServletRequest parameter
+	 * @return List of events matched to a search range
+	 */
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Event> getEvents(@Context HttpServletRequest req)
 	{
-	    System.out.println("Start " + start + " " + end
-		    + " - incorrect params. Provide a range");
-	    return null;
+		String start = req.getParameter("start");
+		String end = req.getParameter("end");
+
+		System.out.println("Start: " + start + " End: " + end);
+		if (start == null || end == null)
+		{
+			System.out.println("Start " + start + " " + end + " - incorrect params. Provide a range");
+			return null;
+		}
+
+		try
+		{
+			return EventUtil.getEvents(Long.parseLong(start), Long.parseLong(end));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	try
+	/**
+	 * Gets an event based on id
+	 * 
+	 * @param id
+	 *            unique id of event
+	 * @return {@link Event}
+	 */
+	@Path("{id}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Event getEvent(@PathParam("id") Long id)
 	{
-	    return EventUtil.getEvents(Long.parseLong(start),
-		    Long.parseLong(end));
+		Event event = EventUtil.getEvent(id);
+		return event;
 	}
-	catch (Exception e)
+
+	/**
+	 * Deletes an event based on id
+	 * 
+	 * @param id
+	 *            unique id of event
+	 */
+	@Path("{id}")
+	@DELETE
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void deleteEvent(@PathParam("id") Long id)
 	{
-	    e.printStackTrace();
-	    return null;
+		try
+		{
+			Event event = EventUtil.getEvent(id);
+			if (event != null)
+				event.delete();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-    }
 
-    /**
-     * Gets an event based on id
-     * 
-     * @param id
-     *            unique id of event
-     * @return {@link Event}
-     */
-    @Path("{id}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Event getEvent(@PathParam("id") Long id)
-    {
-	Event event = EventUtil.getEvent(id);
-	return event;
-    }
-
-    /**
-     * Deletes an event based on id
-     * 
-     * @param id
-     *            unique id of event
-     */
-    @Path("{id}")
-    @DELETE
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteEvent(@PathParam("id") Long id)
-    {
-	try
+	/**
+	 * Saves a new event in database
+	 * 
+	 * @param event
+	 *            {@link Event} from form data
+	 * @return {@link Event}
+	 */
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Event createEvent(Event event)
 	{
-	    Event event = EventUtil.getEvent(id);
-	    if (event != null)
-		event.delete();
+		event.save();
+		return event;
 	}
-	catch (Exception e)
+
+	/**
+	 * Updates an existing event
+	 * 
+	 * @param event
+	 *            {@link Event}
+	 * @return {@link Event}
+	 */
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Event updateEvent(Event event)
 	{
-	    e.printStackTrace();
+		event.save();
+		return event;
 	}
-    }
 
-    /**
-     * Saves a new event in database
-     * 
-     * @param event
-     *            {@link Event} from form data
-     * @return {@link Event}
-     */
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Event createEvent(Event event)
-    {
-	event.save();
-	return event;
-    }
+	/**
+	 * Deletes events bulk
+	 * 
+	 * @param model_ids
+	 *            event ids, read as form parameter from request url
+	 * @throws JSONException
+	 */
+	@Path("bulk")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
+	{
+		JSONArray eventsJSONArray = new JSONArray(model_ids);
 
-    /**
-     * Updates an existing event
-     * 
-     * @param event
-     *            {@link Event}
-     * @return {@link Event}
-     */
-    @PUT
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Event updateEvent(Event event)
-    {
-	event.save();
-	return event;
-    }
-    
-    /**
-     * Deletes events bulk
-     * 
-     * @param model_ids
-     *            event ids, read as form parameter from request url
-     * @throws JSONException
-     */
-    @Path("bulk")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteEvents(@FormParam("ids") String model_ids) throws JSONException
-    {
-	JSONArray eventsJSONArray = new JSONArray(model_ids);
-
-	Event.dao.deleteBulkByIds(eventsJSONArray);
-    }
+		Event.dao.deleteBulkByIds(eventsJSONArray);
+	}
 }

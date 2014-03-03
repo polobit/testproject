@@ -101,7 +101,7 @@ public class ScribeUtil
 		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR,
 					com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CALENDAR_CLIENT_ID,
-					Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_CONTACTS_SCOPE);
+					Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_CALENDAR_SCOPE);
 
 		// Creates a Service, specific to Gmail
 		else

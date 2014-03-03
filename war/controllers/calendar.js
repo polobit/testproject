@@ -23,8 +23,7 @@ var CalendarRouter = Backbone.Router.extend({
 
 		// Typahead also uses jqueryui - if you are changing the version here,
 		// change it there too
-		head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js',
-				function() {
+		head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function() {
 					showCalendar()
 				});
 

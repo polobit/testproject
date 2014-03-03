@@ -42,8 +42,8 @@ public class ScribeServlet extends HttpServlet
 	public static final String SERVICE_TYPE_STRIPE = "stripe";
 	public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
 	public static final String STRIPE_SCOPE = "read_only";
-	public static final String GOOGLE_CONTACTS_SCOPE = "https://www.googleapis.com/auth/calendar";
-	public static final String GOOGLE_CALENDAR_SCOPE = "https://www.google.com/m8/feeds/";
+	public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
+	public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
 	public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
 
 	/**

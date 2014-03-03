@@ -586,18 +586,44 @@ var SettingsRouter = Backbone.Router
 			},
 			
 			contactSync : function() {
+				
+				
+				
 				$("#content").html(getTemplate("settings"), {});
 				
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
-				
+				// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+
 				this.contact_sync_google = new Base_Model_View({
 					url: 'core/api/contactprefs/google',
 					template : 'import-google-contacts',
 				});
 				
-				$('#prefs-tabs-content').html(this.contact_sync_google.render().el);
+
+
+				// Adds header
+				$('#prefs-tabs-content').html('<div id="contact-prefs" class="span4"></div><div id="calendar-prefs" class="span4"></div>');
 				
+				// Adds Gmail Prefs
+				$('#contact-prefs').append(this.contact_sync_google.render().el);
+
+				
+				this.calendar_sync_google = new Base_Model_View({
+					url: 'core/api/calendar-prefs/get',
+					template : 'import-google-calendar',
+				});
+				
+				//console.log(getTemplate("import-google-contacts", {}));
+				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
+				
+				// Gets IMAP Prefs
+				/*var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
+
+				// Appends IMAP
+				$('#prefs-tabs-content').append(itemView2.render().el);
+				$('#PrefsTab .active').removeClass('active');
+				$('.email-tab').addClass('active');*/
 			}
 		
 		

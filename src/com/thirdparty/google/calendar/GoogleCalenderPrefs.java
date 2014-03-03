@@ -36,7 +36,7 @@ public class GoogleCalenderPrefs
 	@NotSaved(IfDefault.class)
 	public Long expires_at = 0l;
 
-	@NotSaved(IfDefault.class)
+	@NotSaved
 	public String access_token = null;
 
 	// domain user key
