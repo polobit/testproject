@@ -35,7 +35,6 @@ import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
-import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 
@@ -365,7 +364,7 @@ public class ScribeUtil
 	    contactPrefs.save();
 
 	    // initialize backend to save contacts
-	    ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
+	    // ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
 	}
     }
 
