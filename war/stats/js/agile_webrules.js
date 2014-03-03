@@ -16,7 +16,11 @@ function agile_webRules(callback)
 function _agile_execute_web_rules()
 {
 	// Download web rules and call _agile_webrules
-	_agile_require_js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/agile-webrules.js", _agile_webrules)
+	_agile_require_js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/agile-webrules.js", 
+			function(){
+				_agile_require_js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/lib/head.load.min.js", _agile_webrules);
+			});
+	);
 }
 
 /*
