@@ -384,14 +384,25 @@ public class ScribeUtil
 	}
     }
 
+    /**
+     * Using Authorization code fetching from Oauth request, request is set to
+     * exchange refresh token with auth code.
+     * 
+     * @param code
+     * @param object
+     * @throws IOException
+     */
     public static void saveGoogleCalenderPrefs(String code, JSONObject object) throws IOException
     {
+	// Exchanges access token/refresh token with extracted Authorization
+	// code
 	HashMap<String, Object> result = GoogleServiceUtil.refreshGoogleCalenderToken(code);
 	System.out.println(result);
 	String refresh_token = String.valueOf(result.get("refresh_token"));
 	String access_token = String.valueOf(result.get("access_token"));
 
 	GoogleCalenderPrefs pref = new GoogleCalenderPrefs(refresh_token, access_token);
+	// Sets expiry time and saves prefs
 	pref.setExpiryTime(Integer.valueOf(result.get("expires_in").toString()));
 	pref.save();
     }

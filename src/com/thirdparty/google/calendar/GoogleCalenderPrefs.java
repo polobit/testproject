@@ -28,14 +28,24 @@ public class GoogleCalenderPrefs
     @Id
     public Long id;
 
+    /**
+     * Refresh token. Annotated with JSON Ignore to avoid sending refresh_token
+     * to client.
+     */
     @JsonIgnore
     @NotSaved(IfDefault.class)
     public String refresh_token = null;
 
+    /**
+     * Expiry time of access token
+     */
     // Expiry time in milliseconds
-    @NotSaved(IfDefault.class)
+    @NotSaved
     public Long expires_at = 0l;
 
+    /**
+     * Access token is generated based on refresh token.
+     */
     @NotSaved
     public String access_token = null;
 
@@ -44,7 +54,7 @@ public class GoogleCalenderPrefs
     private Key<DomainUser> domainUserKey = null;
 
     public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
-            GoogleCalenderPrefs.class);
+	    GoogleCalenderPrefs.class);
 
     public GoogleCalenderPrefs()
     {
@@ -53,70 +63,83 @@ public class GoogleCalenderPrefs
 
     public GoogleCalenderPrefs(String refresh_token, String access_token)
     {
-        this.refresh_token = refresh_token;
-        this.access_token = access_token;
+	this.refresh_token = refresh_token;
+	this.access_token = access_token;
     }
 
+    /**
+     * Sets expiry time according to expires in attribute set when access token
+     * is fetched using refresh token/
+     * 
+     * @param time
+     */
     @JsonIgnore
     public void setExpiryTime(Integer time)
     {
-        expires_at = System.currentTimeMillis() + (time - 120) * 1000;
+	expires_at = System.currentTimeMillis() + (time - 120) * 1000;
     }
 
+    /**
+     * After expiry of existing token new token is fetched us
+     * 
+     * @throws JsonParseException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
     public void refreshToken() throws JsonParseException, JsonMappingException, IOException
     {
 
-        if (refresh_token == null)
-            return;
+	if (refresh_token == null)
+	    return;
 
-        String response = GoogleServiceUtil.refreshTokenInGoogleForCalendar(refresh_token);
+	String response = GoogleServiceUtil.refreshTokenInGoogleForCalendar(refresh_token);
 
-        // Creates HashMap from response JSON string
-        HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-                new TypeReference<HashMap<String, Object>>()
-                {
-                });
-        System.out.println(properties.toString());
+	// Creates HashMap from response JSON string
+	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
+		new TypeReference<HashMap<String, Object>>()
+		{
+		});
+	System.out.println(properties.toString());
 
-        if (properties.containsKey("access_token"))
-        {
-            access_token = String.valueOf(properties.get("access_token"));
-            setExpiryTime(Integer.parseInt(String.valueOf(properties.get("expires_in"))));
-            save();
-        }
+	if (properties.containsKey("access_token"))
+	{
+	    access_token = String.valueOf(properties.get("access_token"));
+	    setExpiryTime(Integer.parseInt(String.valueOf(properties.get("expires_in"))));
+	    save();
+	}
     }
 
     @PostLoad
     void postLoad()
     {
-        if (System.currentTimeMillis() >= expires_at)
-            try
-            {
-                refreshToken();
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+	if (System.currentTimeMillis() >= expires_at)
+	    try
+	    {
+		refreshToken();
+	    }
+	    catch (IOException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
     }
 
     @PrePersist
     void prePersist()
     {
-        if (domainUserKey == null)
-            domainUserKey = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+	if (domainUserKey == null)
+	    domainUserKey = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 
     }
 
     public void save()
     {
-        dao.put(this);
+	dao.put(this);
     }
 
     public void delete()
     {
-        dao.delete(this);
+	dao.delete(this);
     }
 
 }

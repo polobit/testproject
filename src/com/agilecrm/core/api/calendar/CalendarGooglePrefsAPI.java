@@ -13,29 +13,41 @@ import com.thirdparty.google.calendar.util.GooglecalendarPrefsUtil;
 public class CalendarGooglePrefsAPI
 {
 
-	@Path("/get")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public GoogleCalenderPrefs getCalendarPrefs()
-	{
-		return GooglecalendarPrefsUtil.getCalendarPref();
-	}
+    /**
+     * Returns calendar prefs with out access token. It is used for showing
+     * settings in prefs page.
+     * 
+     * @return
+     */
+    @Path("/get")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public GoogleCalenderPrefs getCalendarPrefs()
+    {
+	return GooglecalendarPrefsUtil.getCalendarPref();
+    }
 
-	@Path("/refresh-token")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public GoogleCalenderPrefs getCurrentUserCalendarPrefs()
-	{
-		return GooglecalendarPrefsUtil.getPrefsAndRefreshToken();
-	}
+    /**
+     * Fetches current user calendar prefs and updated access token using
+     * refresh token.
+     * 
+     * @return
+     */
+    @Path("/refresh-token")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public GoogleCalenderPrefs getCurrentUserCalendarPrefs()
+    {
+	return GooglecalendarPrefsUtil.getPrefsAndRefreshToken();
+    }
 
-	@DELETE
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void deleteContactPrefs()
-	{
-		System.out.println("delete");
-		GoogleCalenderPrefs prefs = GooglecalendarPrefsUtil.getCalendarPref();
-		if (prefs != null)
-			prefs.delete();
-	}
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteContactPrefs()
+    {
+	System.out.println("delete");
+	GoogleCalenderPrefs prefs = GooglecalendarPrefsUtil.getCalendarPref();
+	if (prefs != null)
+	    prefs.delete();
+    }
 }

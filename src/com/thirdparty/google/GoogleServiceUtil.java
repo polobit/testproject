@@ -31,26 +31,26 @@ public class GoogleServiceUtil
      */
     public static void refreshGoogleContactPrefsandSave(ContactPrefs contactPrefs) throws Exception
     {
-        System.out.println("in refresh token of google contact prefs");
-        String response = GoogleServiceUtil.refreshTokenInGoogle(contactPrefs.refreshToken);
+	System.out.println("in refresh token of google contact prefs");
+	String response = GoogleServiceUtil.refreshTokenInGoogle(contactPrefs.refreshToken);
 
-        // Creates HashMap from response JSON string
-        HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-                new TypeReference<HashMap<String, Object>>()
-                {
-                });
-        System.out.println(properties.toString());
+	// Creates HashMap from response JSON string
+	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
+		new TypeReference<HashMap<String, Object>>()
+		{
+		});
+	System.out.println(properties.toString());
 
-        if (properties.containsKey("error"))
-            throw new Exception(String.valueOf(properties.get("error")));
-        else if (properties.containsKey("access_token"))
-        {
-            contactPrefs.token = String.valueOf(properties.get("access_token"));
-            contactPrefs.expires = Long.parseLong(String.valueOf(properties.get("expires_in")));
-            System.out.println("domiain user key in refresh token method: " + contactPrefs.getDomainUser());
-            contactPrefs.setExpiryTime(contactPrefs.expires);
-            contactPrefs.save();
-        }
+	if (properties.containsKey("error"))
+	    throw new Exception(String.valueOf(properties.get("error")));
+	else if (properties.containsKey("access_token"))
+	{
+	    contactPrefs.token = String.valueOf(properties.get("access_token"));
+	    contactPrefs.expires = Long.parseLong(String.valueOf(properties.get("expires_in")));
+	    System.out.println("domiain user key in refresh token method: " + contactPrefs.getDomainUser());
+	    contactPrefs.setExpiryTime(contactPrefs.expires);
+	    contactPrefs.save();
+	}
 
     }
 
@@ -69,17 +69,17 @@ public class GoogleServiceUtil
      */
     public static ContactsService getService(String token) throws Exception
     {
-        GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
-        ContactsService contactService;
-        OAuthSigner signer = new OAuthHmacSha1Signer();
-        oauthParameters.setOAuthConsumerKey(Globals.GOOGLE_CLIENT_ID);
-        oauthParameters.setOAuthConsumerSecret(Globals.GOOGLE_SECRET_KEY);
-        oauthParameters.setScope(GOOGLE_CONTACTS_BASE_URL);
-        oauthParameters.setOAuthToken(token);
-        contactService = new ContactsService("Agile Contacts");
-        contactService.setProtocolVersion(ContactsService.Versions.V3);
-        contactService.setOAuthCredentials(oauthParameters, signer);
-        return contactService;
+	GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
+	ContactsService contactService;
+	OAuthSigner signer = new OAuthHmacSha1Signer();
+	oauthParameters.setOAuthConsumerKey(Globals.GOOGLE_CLIENT_ID);
+	oauthParameters.setOAuthConsumerSecret(Globals.GOOGLE_SECRET_KEY);
+	oauthParameters.setScope(GOOGLE_CONTACTS_BASE_URL);
+	oauthParameters.setOAuthToken(token);
+	contactService = new ContactsService("Agile Contacts");
+	contactService.setProtocolVersion(ContactsService.Versions.V3);
+	contactService.setOAuthCredentials(oauthParameters, signer);
+	return contactService;
     }
 
     /**
@@ -93,22 +93,22 @@ public class GoogleServiceUtil
      */
     public static String refreshTokenInGoogle(String refreshToken)
     {
-        // Build data to post with all tokens
-        String data = "client_id=" + Globals.GOOGLE_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_SECRET_KEY
-                + "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	// Build data to post with all tokens
+	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_SECRET_KEY
+		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
-        // send request and return response
-        try
-        {
-            return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
-                    data, true, "", "");
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+	// send request and return response
+	try
+	{
+	    return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
+		    data, true, "", "");
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
 
     }
 
@@ -123,60 +123,68 @@ public class GoogleServiceUtil
      */
     public static String refreshTokenInGoogleForCalendar(String refreshToken)
     {
-        // Build data to post with all tokens
-        String data = "client_id=" + Globals.GOOGLE_CALENDAR_CLIENT_ID + "&client_secret="
-                + Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	// Build data to post with all tokens
+	String data = "client_id=" + Globals.GOOGLE_CALENDAR_CLIENT_ID + "&client_secret="
+		+ Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
-        // send request and return response
-        try
-        {
-            return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
-                    data, true, "", "");
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+	// send request and return response
+	try
+	{
+	    return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
+		    data, true, "", "");
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
 
     }
 
+    /**
+     * Fetches google calendar access token using refresh token. Makes OAuth
+     * request to specified with client id and secrect and including refresh
+     * token. token.
+     * 
+     * @param code
+     * @return
+     */
     public static HashMap<String, Object> refreshGoogleCalenderToken(String code)
     {
-        try
-        {
-            /*
-             * Make a post request and retrieve tokens
-             */
+	try
+	{
+	    /*
+	     * Make a post request and retrieve tokens
+	     */
 
-            OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
-            oAuthRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CALENDAR_CLIENT_ID);
-            oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_CALENDAR_SECRET_KEY);
+	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
+	    oAuthRequest.addHeader("Content-Type", "application/x-www-form-urlencoded");
+	    oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CALENDAR_CLIENT_ID);
+	    oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_CALENDAR_SECRET_KEY);
 
-            oAuthRequest.addBodyParameter("scope", ScribeServlet.GOOGLE_CALENDAR_SCOPE);
-            // oAuthRequest.addBodyParameter("access_type", "offline");
-            oAuthRequest.addBodyParameter("redirect_uri",
-                    "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
-            oAuthRequest.addBodyParameter("code", code);
-            oAuthRequest.addBodyParameter("grant_type", "authorization_code");
-            System.out.println(oAuthRequest.getCompleteUrl());
+	    oAuthRequest.addBodyParameter("scope", ScribeServlet.GOOGLE_CALENDAR_SCOPE);
+	    // oAuthRequest.addBodyParameter("access_type", "offline");
+	    oAuthRequest.addBodyParameter("redirect_uri",
+		    "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+	    oAuthRequest.addBodyParameter("code", code);
+	    oAuthRequest.addBodyParameter("grant_type", "authorization_code");
+	    System.out.println(oAuthRequest.getCompleteUrl());
 
-            Response response = oAuthRequest.send();
+	    Response response = oAuthRequest.send();
 
-            // Creates HashMap from response JSON string
-            HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(),
-                    new TypeReference<HashMap<String, Object>>()
-                    {
-                    });
+	    // Creates HashMap from response JSON string
+	    HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(),
+		    new TypeReference<HashMap<String, Object>>()
+		    {
+		    });
 
-            System.out.println(properties.toString());
-            return properties;
-        }
-        catch (Exception e)
-        {
-            return null;
-        }
+	    System.out.println(properties.toString());
+	    return properties;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }
