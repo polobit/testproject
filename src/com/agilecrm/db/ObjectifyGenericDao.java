@@ -17,7 +17,7 @@ import org.json.JSONArray;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
-import com.agilecrm.account.NavSetting;
+import com.agilecrm.account.MenuSetting;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.cases.Case;
@@ -132,7 +132,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		ObjectifyService.register(Reports.class);
 
 		ObjectifyService.register(Case.class);
-		ObjectifyService.register(NavSetting.class);
+		ObjectifyService.register(MenuSetting.class);
 
 		// Contacts import
 		ObjectifyService.register(ContactPrefs.class);
