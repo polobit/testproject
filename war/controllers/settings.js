@@ -603,7 +603,7 @@ var SettingsRouter = Backbone.Router
 
 
 				// Adds header
-				$('#prefs-tabs-content').html('<div id="contact-prefs" class="span4"></div><div id="calendar-prefs" class="span4"></div>');
+				$('#prefs-tabs-content').html('<div id="contact-prefs" class="span4"></div><div id="calendar-prefs" class="span4"></div><div id="email-prefs" class="span3"></div>');
 				
 				// Adds Gmail Prefs
 				$('#contact-prefs').append(this.contact_sync_google.render().el);
@@ -616,6 +616,15 @@ var SettingsRouter = Backbone.Router
 				
 				//console.log(getTemplate("import-google-contacts", {}));
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
+				
+				
+				var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
+				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
+				itemView.model.fetch();
+
+				// Adds Gmail Prefs
+				$('#email-prefs').html(itemView.render().el);
+
 				
 				// Gets IMAP Prefs
 				/*var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
