@@ -11,17 +11,13 @@ $(function()
 	$('#google-import').die().live('click', function(e)
 	{
 
-		if(!isValidForm("#google-contacts-import-form"))
-		{
-			return;
-		};
 		
 		// URL to return, after fetching token and secret key from LinkedIn
 		var callbackURL = window.location.href;
 		console.log(callbackURL);
 
 		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL) + "&query=" + JSON.stringify(serializeForm("google-contacts-import-form"));
+		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL);
 
 		// this code is used, if once permission is granted, we refresh the
 		// tokens and import without asking for permission again and again

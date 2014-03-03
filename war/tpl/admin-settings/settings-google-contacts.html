@@ -1,5 +1,10 @@
 <script id="import-google-contacts-template" type="text/html">
 <div class="well">
+{{#unless id}}
+ <legend>Google Contacts <span class="label label-important">Alpha</span></legend>
+<p>Imports contacts from google</p>
+{{/unless}}
+{{#if id}}
     <form id="google-contacts-import-form" class="form-horizontal">
         <legend>Google Contacts <span class="label label-important">Alpha</span></legend>
         <fieldset>
@@ -13,7 +18,7 @@
 				</select>
 			</div>
 	</div>
-{{#if id}}
+
 	 <div class="control-group" style="margin-left:-80px">
 		<label class="control-label" style="text-align:">Frequency</label> 
            <div class="controls">
