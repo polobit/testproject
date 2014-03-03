@@ -196,7 +196,7 @@ $(function(){
             restKey: "document",
             templateKey: "contact-documents",
             individual_tag_name: 'li',
-            sortKey:"upload_time",
+            sortKey:"uploaded_time",
             descending: true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
