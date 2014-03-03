@@ -25,99 +25,98 @@ import com.thirdparty.google.GoogleServiceUtil;
 @XmlRootElement
 public class GoogleCalenderPrefs
 {
-	@Id
-	public Long id;
+    @Id
+    public Long id;
 
-	@JsonIgnore
-	@NotSaved(IfDefault.class)
-	public String refresh_token = null;
+    @JsonIgnore
+    @NotSaved(IfDefault.class)
+    public String refresh_token = null;
 
-	// Expiry time in milliseconds
-	@NotSaved(IfDefault.class)
-	public Long expires_at = 0l;
+    // Expiry time in milliseconds
+    @NotSaved(IfDefault.class)
+    public Long expires_at = 0l;
 
-	@NotSaved
-	public String access_token = null;
+    @NotSaved
+    public String access_token = null;
 
-	// domain user key
-	@JsonIgnore
-	private Key<DomainUser> domainUserKey = null;
+    // domain user key
+    @JsonIgnore
+    private Key<DomainUser> domainUserKey = null;
 
-	public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
-			GoogleCalenderPrefs.class);
+    public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
+            GoogleCalenderPrefs.class);
 
-	public GoogleCalenderPrefs()
-	{
+    public GoogleCalenderPrefs()
+    {
 
-	}
+    }
 
-	public GoogleCalenderPrefs(String refresh_token, String access_token)
-	{
-		this.refresh_token = refresh_token;
-		this.access_token = access_token;
-	}
+    public GoogleCalenderPrefs(String refresh_token, String access_token)
+    {
+        this.refresh_token = refresh_token;
+        this.access_token = access_token;
+    }
 
-	@JsonIgnore
-	public void setExpiryTime(Integer time)
-	{
-		expires_at = System.currentTimeMillis() + (time - 120) * 1000;
-	}
+    @JsonIgnore
+    public void setExpiryTime(Integer time)
+    {
+        expires_at = System.currentTimeMillis() + (time - 120) * 1000;
+    }
 
-	public void refreshToken() throws JsonParseException, JsonMappingException, IOException
-	{
+    public void refreshToken() throws JsonParseException, JsonMappingException, IOException
+    {
 
-		if (refresh_token == null)
-			return;
+        if (refresh_token == null)
+            return;
 
-		String response = GoogleServiceUtil.refreshTokenInGoogleForCalendar(refresh_token);
+        String response = GoogleServiceUtil.refreshTokenInGoogleForCalendar(refresh_token);
 
-		// Creates HashMap from response JSON string
-		HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-				new TypeReference<HashMap<String, Object>>()
-				{
-				});
-		System.out.println(properties.toString());
+        // Creates HashMap from response JSON string
+        HashMap<String, Object> properties = new ObjectMapper().readValue(response,
+                new TypeReference<HashMap<String, Object>>()
+                {
+                });
+        System.out.println(properties.toString());
 
-		if (properties.containsKey("access_token"))
-		{
-			access_token = String.valueOf(properties.get("access_token"));
-			setExpiryTime(Integer.parseInt(String.valueOf(properties.get("expires_in"))));
-			save();
-		}
+        if (properties.containsKey("access_token"))
+        {
+            access_token = String.valueOf(properties.get("access_token"));
+            setExpiryTime(Integer.parseInt(String.valueOf(properties.get("expires_in"))));
+            save();
+        }
+    }
 
-	}
+    @PostLoad
+    void postLoad()
+    {
+        if (System.currentTimeMillis() >= expires_at)
+            try
+            {
+                refreshToken();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+    }
 
-	@PostLoad
-	void postLoad()
-	{
-		if (System.currentTimeMillis() >= expires_at)
-			try
-			{
-				refreshToken();
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
+    @PrePersist
+    void prePersist()
+    {
+        if (domainUserKey == null)
+            domainUserKey = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 
-	@PrePersist
-	void prePersist()
-	{
-		if (domainUserKey == null)
-			domainUserKey = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+    }
 
-	}
+    public void save()
+    {
+        dao.put(this);
+    }
 
-	public void save()
-	{
-		dao.put(this);
-	}
-
-	public void delete()
-	{
-		dao.delete(this);
-	}
+    public void delete()
+    {
+        dao.delete(this);
+    }
 
 }

@@ -50,12 +50,11 @@ function fill_events_from_google(data)
 
 
 
-var _agile_calendar = null
 /**
  * Shows the calendar
  */
 function showCalendar() {
-   _agile_calendar = $('#calendar').fullCalendar({
+  $('#calendar').fullCalendar({
     	
        /**
         * Renders the events displaying currently on fullCalendar
