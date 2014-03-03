@@ -171,7 +171,7 @@ $(function(){
 				restKey : "documents",
 				templateKey : "contact-document",
 				descending : true,
-				sortKey :'upload_time',
+				sortKey :'uploaded_time',
 				individual_tag_name : 'tr',
 				postRenderCallback : function(el)
 					{

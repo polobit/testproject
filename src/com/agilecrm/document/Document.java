@@ -55,7 +55,7 @@ public class Document extends Cursor
 	/**
 	 * Uploaded time of a Document.
 	 */
-	public Long upload_time = 0L;
+	public Long uploaded_time = 0L;
 
 	/**
 	 * Extension of a Document.
@@ -344,8 +344,8 @@ public class Document extends Cursor
 	private void PrePersist()
 	{
 		// Initializes created Time
-		if (upload_time == 0L)
-			upload_time = System.currentTimeMillis() / 1000;
+		if (uploaded_time == 0L)
+			uploaded_time = System.currentTimeMillis() / 1000;
 
 		if (contact_ids != null)
 		{
