@@ -25,7 +25,6 @@ function isDefined(x) {
 function agile_transform_options(sourceOptions, start, end)
 {	
 	// Setup GC for First time
-	console.log("calendar " + gapi);
 	//console.log(gapi.client.calendar);
 	
 	if(isDefined(gapi) && isDefined(gapi.client) && isDefined(gapi.client.calendar) ){ 
@@ -42,7 +41,6 @@ function agile_transform_options(sourceOptions, start, end)
 // Setup Google Calendar
 function setupGC(callback)
 {
-	console.log("Set up GC");
 	
 	// Configure Calendar
 	gapi_helper.configure({
@@ -76,7 +74,6 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 	request.execute(function(resp) {
 		for (var i = 0; i < resp.items.length; i++) {	
 			var fc_event = google2fcEvent(resp.items[i]);
-			console.log(fc_event)
 			// Add event
 			$('#calendar').fullCalendar( 'renderEvent', fc_event  )
 		}
