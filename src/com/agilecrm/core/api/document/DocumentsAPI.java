@@ -17,18 +17,16 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 
-
 /**
- * <code>DocumentsAPI</code> includes REST calls to interact with {@link Document} class
- * to initiate Document CRUD operations
+ * <code>DocumentsAPI</code> includes REST calls to interact with
+ * {@link Document} class to initiate Document CRUD operations
  * <p>
- * It is called from client side to add, updates, fetch and delete the documents.
- * It also interacts with {@link DocumentUtil} class to fetch the data of Document class
- * from database.
+ * It is called from client side to add, updates, fetch and delete the
+ * documents. It also interacts with {@link DocumentUtil} class to fetch the
+ * data of Document class from database.
  * </p>
  */
 @Path("/api/documents")
@@ -139,7 +137,7 @@ public class DocumentsAPI
 
 	Document.dao.deleteBulkByIds(documentsJSONArray);
     }
-    
+
     /**
      * Documents of a contact, when in contact detail view
      * 
@@ -147,7 +145,7 @@ public class DocumentsAPI
      *            id of contact
      * @return list of documents related to a contact
      */
-    @Path("/{contact-id}/documents")
+    @Path("/{contact-id}/docs")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Document> getContactDocument(@PathParam("contact-id") Long id)
@@ -162,7 +160,7 @@ public class DocumentsAPI
 	    return null;
 	}
     }
-    
+
     /**
      * Documents of a case
      * 
@@ -170,7 +168,7 @@ public class DocumentsAPI
      *            id of case
      * @return list of documents related to a case
      */
-    @Path("/{case-id}/documents")
+    @Path("/{case-id}/docs")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Document> getCaseDocument(@PathParam("case-id") Long id)
@@ -185,7 +183,7 @@ public class DocumentsAPI
 	    return null;
 	}
     }
-    
+
     /**
      * Documents of a deal
      * 
@@ -193,7 +191,7 @@ public class DocumentsAPI
      *            id of deal
      * @return list of documents related to a deal
      */
-    @Path("/{deal-id}/documents")
+    @Path("/{deal-id}/docs")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Document> getCurrentContactDocument(@PathParam("deal-id") Long id)
