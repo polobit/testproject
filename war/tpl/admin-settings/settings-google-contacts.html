@@ -1,14 +1,14 @@
 <script id="import-google-contacts-template" type="text/html">
 <div class="well">
 {{#unless id}}
-<legend>Google Contacts Sync <span class="label label-important">Beta</span></legend>
+<legend>Contacts <span class="label label-important">Beta</span></legend>
 <p>Setup contact sync with your Gmail or Googl Apps account.</p>
 <hr style="border-bottom:1px solid #e5e5e5!important"/>
  <div class="btn" id="google-import" style="display:inline-block;">Setup</div>
 {{/unless}}
 {{#if id}}
     <form id="google-contacts-import-form" class="form-horizontal">
-        <legend>Google Contacts Sync <span class="label label-important">Beta</span><span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span></legend>
+        <legend>Contacts <span class="label label-important">Beta</span><span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span></legend>
         <fieldset>
 	<div class="control-group" style="margin-left:-80px">
 		<label class="control-label" style="text-align:">Type</label> 
