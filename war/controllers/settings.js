@@ -39,7 +39,7 @@ var SettingsRouter = Backbone.Router
 
 				/* contact-us help email */
 			"contact-us" : "contactUsEmail",
-			"contact-sync" : "contactSync"
+			"google-sync" : "contactSync"
 				},
 
 			/**
