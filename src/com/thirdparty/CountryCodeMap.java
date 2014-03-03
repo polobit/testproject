@@ -1,4 +1,4 @@
-package com.agilecrm.countrycodemap;
+package com.thirdparty;
 
 import java.util.HashMap;
 

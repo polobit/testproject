@@ -1,8 +1,8 @@
 /**
- * This servlet is used to read unbounce data and create contact 
+ * This servlet is used to read gravity form data and create contact 
  * with properties specified to associated agile API key owner
  */
-package com.agilecrm.forms;
+package com.thirdparty;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
 @SuppressWarnings("serial")
-public class UnbounceWebhook extends HttpServlet
+public class GravityForm extends HttpServlet
 {
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException
 	{
@@ -38,20 +38,10 @@ public class UnbounceWebhook extends HttpServlet
 			List<ContactField> properties = new ArrayList<ContactField>();
 
 			// Get JSON data
-			JSONObject obj = new JSONObject(req.getParameter("data.json"));
-			obj.remove("variant");
-			obj.remove("page_uuid");
-			obj.remove("page_url");
-			obj.remove("date_submitted");
-			obj.remove("time_submitted");
+			JSONObject obj = new JSONObject(req.getParameter("data"));
 
-			// Get email from JSON and format
+			// Get email from JSON and search for contact
 			String email = obj.getString("email");
-			String reg = "\\[|\\]";
-			email = email.replaceAll(reg, "");
-			email = email.replaceAll("\"", "");
-
-			// Search contact based on email
 			Contact contact = ContactUtil.searchContactByEmail(email);
 			if (contact == null)
 				contact = new Contact();
@@ -66,19 +56,15 @@ public class UnbounceWebhook extends HttpServlet
 				// Get name of form field
 				String key = (String) keys.next();
 
-				// Get value of form field and format
+				// Get value of form field
 				String value = obj.get(key).toString();
-				String regex = "\\[|\\]";
-				value = value.replaceAll(regex, "");
-				value = value.replaceAll("\"", "");
 
-				// Build address JSON
+				// Build Address JSON
 				if (key.equalsIgnoreCase("country") && !StringUtils.isBlank(value))
 					addJson.put("country", value);
 				else if (key.equalsIgnoreCase("state") && !StringUtils.isBlank(value))
 					addJson.put("state", value);
-				else if ((key.equalsIgnoreCase("province") || key.equalsIgnoreCase("city"))
-						&& !StringUtils.isBlank(value))
+				else if (key.equalsIgnoreCase("city") && !StringUtils.isBlank(value))
 					addJson.put("city", value);
 				else if ((key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code") || key
 						.equalsIgnoreCase("postal code")) && !StringUtils.isBlank(value))
@@ -86,8 +72,6 @@ public class UnbounceWebhook extends HttpServlet
 				else if ((key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location") || key
 						.equalsIgnoreCase("street")) && !StringUtils.isBlank(value))
 					addJson.put("address", value);
-				else if (key.equalsIgnoreCase("stateprovince") && !StringUtils.isBlank(value))
-					addJson.put("state", value);
 				else if (!StringUtils.isBlank(value))
 
 					// Add property to list of properties
@@ -101,16 +85,14 @@ public class UnbounceWebhook extends HttpServlet
 			tagString = tagString.replace("/, /g", ",");
 			String[] tagsWithKey = tagString.split(",");
 
-			// Get tags from tagsWithKey array
+			// Get tags from tagsWithKey array and set contact owner
 			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
-
-			// Set contact owner
 			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 			if (owner != null)
 			{
 				contact.setContactOwner(owner);
 
-				// Add properties and tags to contact
+				// Add properties to contact and set contact owner
 				contact.properties = properties;
 				contact.addTags(tags);
 				contact.save();
@@ -130,7 +112,7 @@ public class UnbounceWebhook extends HttpServlet
 
 		// Set field type to SYSTEM for name, email, company, title, phone, all
 		// other fields save as CUSTOM.
-		if (name.equalsIgnoreCase("name") || name.equalsIgnoreCase(Contact.FIRST_NAME)
+		if (name.equalsIgnoreCase(Contact.FIRST_NAME) || name.equalsIgnoreCase("name")
 				|| name.equalsIgnoreCase("first name") || name.equalsIgnoreCase("first"))
 		{
 			name = Contact.FIRST_NAME;
@@ -153,7 +135,7 @@ public class UnbounceWebhook extends HttpServlet
 			field.type = FieldType.SYSTEM;
 		}
 		else if (name.toLowerCase().contains("organisation") || name.toLowerCase().contains("organization")
-				|| name.equalsIgnoreCase(Contact.COMPANY))
+				|| name.toLowerCase().equals(Contact.COMPANY))
 		{
 			name = Contact.COMPANY;
 			field = contact.getContactFieldByName(name);
@@ -163,7 +145,7 @@ public class UnbounceWebhook extends HttpServlet
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
-		else if (name.toLowerCase().contains("designation") || name.equalsIgnoreCase(Contact.TITLE))
+		else if (name.equalsIgnoreCase("designation") || name.equalsIgnoreCase(Contact.TITLE))
 		{
 			name = Contact.TITLE;
 			field = contact.getContactFieldByName(name);

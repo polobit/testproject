@@ -396,7 +396,7 @@
 	
 	<servlet>
 	<servlet-name>UnbounceWebhook</servlet-name>
-	<servlet-class>com.agilecrm.forms.UnbounceWebhook</servlet-class>
+	<servlet-class>com.thirdparty.UnbounceWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UnbounceWebhook</servlet-name>
@@ -405,7 +405,7 @@
 	
 	<servlet>
 	<servlet-name>WufooWebhook</servlet-name>
-	<servlet-class>com.agilecrm.forms.WufooWebhook</servlet-class>
+	<servlet-class>com.thirdparty.WufooWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>WufooWebhook</servlet-name>
@@ -414,7 +414,7 @@
 	
 	<servlet>
 	<servlet-name>GravityForm</servlet-name>
-	<servlet-class>com.agilecrm.forms.GravityForm</servlet-class>
+	<servlet-class>com.thirdparty.GravityForm</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GravityForm</servlet-name>
