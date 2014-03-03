@@ -116,6 +116,11 @@ $(function()
 		{
 			show_noty = true;
 			App_Settings.contact_sync_google.model.url = url + "?sync=true"
+			if(!confirm("Are you sure you want to sync now?"))
+			{
+				App_Settings.contact_sync_google.render(true);
+	    		return;
+			}
 			showNotyPopUp("information", "Contacts sync started", "top", 1000);
 		}
 		App_Settings.contact_sync_google.model.save({success : function(data){
