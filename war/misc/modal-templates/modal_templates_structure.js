@@ -1,7 +1,7 @@
 {
     "templates": [
         {
-            "label": "Information Popup",
+            "label": "Information",
             "category": "information",
             "themes": [
                 {
@@ -37,7 +37,7 @@
             ]
         },
         {
-            "label": "Confirmation Popup",
+            "label": "Confirmation",
             "category": "confirmation",
             "themes": [
                 {
@@ -73,7 +73,7 @@
             ]
         },
         {
-            "label": "Email Form Popup",
+            "label": "Email Form",
             "category": "form",
             "themes": [
                 {
@@ -118,6 +118,132 @@
                             "title": "newsletter-form",
                             "href": "/misc/modal-templates/form/newsletter/images/newsletter.png",
                             "link": "/misc/modal-templates/form/newsletter/newsletter.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Bold",
+                    "title": "bold-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/bold/images/bold.png",
+                        "theme_big": "/misc/modal-templates/form/bold/images/bold.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "bold-form",
+                            "href": "/misc/modal-templates/form/bold/images/bold.png",
+                            "link": "/misc/modal-templates/form/bold/bold.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Image Split",
+                    "title": "image-split-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/image-split/images/image-split.png",
+                        "theme_big": "/misc/modal-templates/form/image-split/images/image-split.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "image-split-form",
+                            "href": "/misc/modal-templates/form/image-split/images/image-split.png",
+                            "link": "/misc/modal-templates/form/image-split/image-split.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Minimal",
+                    "title": "minimal-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/minimal/images/minimal.png",
+                        "theme_big": "/misc/modal-templates/form/minimal/images/minimal.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "minimal-form",
+                            "href": "/misc/modal-templates/form/minimal/images/minimal.png",
+                            "link": "/misc/modal-templates/form/minimal/minimal.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Peep Out",
+                    "title": "peep-out-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/peep-out/images/peep-out.png",
+                        "theme_big": "/misc/modal-templates/form/peep-out/images/peep-out.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "peep-out-form",
+                            "href": "/misc/modal-templates/form/peep-out/images/peep-out.png",
+                            "link": "/misc/modal-templates/form/peep-out/peep-out.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Valentine",
+                    "title": "valentine-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/valentine/images/valentine.png",
+                        "theme_big": "/misc/modal-templates/form/valentine/images/valentine.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "valentine-form",
+                            "href": "/misc/modal-templates/form/valentine/images/valentine.png",
+                            "link": "/misc/modal-templates/form/valentine/valentine.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Split Message",
+                    "title": "split-message-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/split-message/images/split-message.png",
+                        "theme_big": "/misc/modal-templates/form/split-message/images/split-message.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "split-message-form",
+                            "href": "/misc/modal-templates/form/split-message/images/split-message.png",
+                            "link": "/misc/modal-templates/form/split-message/split-message.html"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Choice",
+            "category": "choice",
+            "themes": [
+                {
+                    "label": "Choice Four",
+                    "title": "choice-four-choice",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/choice/choice-four/images/choice-four.png",
+                        "theme_big": "/misc/modal-templates/choice/choice-four/images/choice-four.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "choice-four-choice",
+                            "href": "/misc/modal-templates/choice/choice-four/images/choice-four.png",
+                            "link": "/misc/modal-templates/choice/choice-four/choice-four.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Choice Two",
+                    "title": "choice-two-choice",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/choice/choice-two/images/choice-two.png",
+                        "theme_big": "/misc/modal-templates/choice/choice-two/images/choice-two.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "choice-two-choice",
+                            "href": "/misc/modal-templates/choice/choice-two/images/choice-two.png",
+                            "link": "/misc/modal-templates/choice/choice-two/choice-two.html"
                         }
                     ]
                 }
