@@ -165,7 +165,8 @@ function showCalendar() {
    	    * @param {Object} event to update or delete
    	    */ 
    	    eventClick: function (event) {
-   	    	
+   	    	if(isNaN(event.id))
+   	    		return;
    	    	// Deserialize
    	    	deserializeForm(event, $("#updateActivityForm"));
    	    	

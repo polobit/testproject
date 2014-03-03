@@ -75,9 +75,17 @@ $(function()
 			{
 				$("#sync_to_group_controlgroup").show();
 				$("#my_contacts_sync_group").show();
+				if(value == "AGILE_TO_CLIENT")
+				{
+					$("#sync_from_group_controlgroup").hide();
+					return;
+				}
+				
+				$("#sync_from_group_controlgroup").show();
 			}
 		else
 			{
+				$("#sync_from_group_controlgroup").show();
 				$("#sync_to_group_controlgroup").hide();
 				$("#my_contacts_sync_group").hide();
 			}
@@ -103,14 +111,17 @@ $(function()
 		App_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
 		
 		var url = App_Settings.contact_sync_google.model.url;
+		var show_noty = false;
 		if(sync)
 		{
-			
+			show_noty = true;
 			App_Settings.contact_sync_google.model.url = url + "?sync=true"
+			showNotyPopUp("information", "Contacts sync started", "top", 1000);
 		}
 		App_Settings.contact_sync_google.model.save({success : function(data){
 				App_Settings.contact_sync_google.render(true);
 				App_Settings.contact_sync_google.model.url = url;
+				
 			}});
 	})
 
