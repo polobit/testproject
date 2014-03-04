@@ -11,7 +11,7 @@ var SettingsRouter = Backbone.Router
 
 			/* User preferences */
 			"user-prefs" : "userPrefs",
-			
+
 			/* Change Password */
 			"change-password" : "changePassword",
 
@@ -23,7 +23,7 @@ var SettingsRouter = Backbone.Router
 
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
-			
+
 			/* Web to Lead */
 			"web-to-lead" : "webToLead",
 
@@ -33,24 +33,12 @@ var SettingsRouter = Backbone.Router
 			"add-widget" : "addWidget",
 
 			"Linkedin/:id" : "Linkedin", "Twitter/:id" : "Twitter", "Rapleaf/:id" : "Rapleaf", "ClickDesk/:id" : "ClickDesk", "Zendesk/:id" : "Zendesk",
-			"Sip/:id" : "Sip", "Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom", "Linkedin" : "Linkedin",
-			"Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk","Sip" : "Sip", "Twilio" : "Twilio",
-			"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
+				"Sip/:id" : "Sip", "Twilio/:id" : "Twilio", "FreshBooks/:id" : "FreshBooks", "Stripe/:id" : "Stripe", "Custom-widget/:id" : "Custom",
+				"Linkedin" : "Linkedin", "Twitter" : "Twitter", "Rapleaf" : "Rapleaf", "ClickDesk" : "ClickDesk", "Zendesk" : "Zendesk", "Sip" : "Sip",
+				"Twilio" : "Twilio", "FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
 
 				/* contact-us help email */
-			"contact-us" : "contactUsEmail",
-			"google-apps" : "contactSync"
-				},
-
-			/**
-			 * Shows all the options to access user's Preferences
-			 */
-			/*
-			 * settings : function() { var html = getTemplate("settings", {});
-			 * $('#content').html(html); // Update Menu
-			 * $(".active").removeClass("active");
-			 * $("#settingsmenu").addClass("active"); },
-			 */
+				"contact-us" : "contactUsEmail", "google-apps" : "contactSync" },
 
 			/**
 			 * Creates a Model to show and edit Personal Preferences, and sets
@@ -82,63 +70,76 @@ var SettingsRouter = Backbone.Router
 				$('#prefs-tabs-content').html(getTemplate("settings-change-password"), {});
 				$('#PrefsTab .active').removeClass('active');
 				$('.user-prefs-tab').addClass('active');
-				
-				$("#saveNewPassword").on("click", function(e){
-					
-					e.preventDefault();
-					var saveBtn = $(this);
-					
-					// Returns, if the save button has disabled attribute
-					if ($(saveBtn).attr('disabled'))
-						return;
-					
-					// Disables save button to prevent multiple click event issues
-					disable_save_button($(saveBtn));
-					
-					var form_id = $(this).closest('form').attr("id");
-					
-					if (!isValidForm('#'+ form_id)) {
 
-						// Removes disabled attribute of save button
-						enable_save_button($(saveBtn));
-						return false;
-					}
-					// Returns if same password is given
-					if($("#current_pswd").val() == $("#new_pswd").val())
-					{
-						$('#changePasswordForm').find('span.save-status').html("<span style='color:red;margin-left:10px;'>Current and New Password can not be the same.</span>");
-						$('#changePasswordForm').find('span.save-status').find("span").fadeOut(3000);
-						enable_save_button($(saveBtn));
-						return false;
-					}
+				// Save button action of change password form, If it is out of
+				// this router wont navigate properly
+				$("#saveNewPassword").on(
+						"click",
+						function(e)
+						{
 
-					// Show loading symbol until model get saved
-					$('#changePasswordForm').find('span.save-status').html(LOADING_HTML);
+							e.preventDefault();
+							var saveBtn = $(this);
 
-					var json = serializeForm(form_id);
+							// Returns, if the save button has disabled
+							// attribute
+							if ($(saveBtn).attr('disabled'))
+								return;
 
-					$.ajax({
-						url: '/core/api/user-prefs/changePassword',
-						type: 'PUT',
-						data: json,
-						success: function() {
-							$('#changePasswordForm').find('span.save-status').html("<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(3000);
-							enable_save_button($(saveBtn));
-							$('#' + form_id).each(function() {
-								this.reset();
-							});
-							history.back(-1);
-						},
-						error: function(response) {
-							$('#changePasswordForm').find('span.save-status').html("");
-							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append("<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
-							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(3000);
-							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
-							enable_save_button($(saveBtn));
-						}
-					});
+							// Disables save button to prevent multiple click
+							// event issues
+							disable_save_button($(saveBtn));
 
-				});
+							var form_id = $(this).closest('form').attr("id");
+
+							if (!isValidForm('#' + form_id))
+							{
+
+								// Removes disabled attribute of save button
+								enable_save_button($(saveBtn));
+								return false;
+							}
+							// Returns if same password is given
+							if ($("#current_pswd").val() == $("#new_pswd").val())
+							{
+								$('#changePasswordForm').find('span.save-status').html(
+										"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same.</span>");
+								$('#changePasswordForm').find('span.save-status').find("span").fadeOut(3000);
+								enable_save_button($(saveBtn));
+								return false;
+							}
+
+							// Show loading symbol until model get saved
+							$('#changePasswordForm').find('span.save-status').html(LOADING_HTML);
+
+							var json = serializeForm(form_id);
+
+							$.ajax({
+								url : '/core/api/user-prefs/changePassword',
+								type : 'PUT',
+								data : json,
+								success : function()
+								{
+									$('#changePasswordForm').find('span.save-status').html(
+											"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(3000);
+									enable_save_button($(saveBtn));
+									$('#' + form_id).each(function()
+									{
+										this.reset();
+									});
+									history.back(-1);
+								},
+								error : function(response)
+								{
+									$('#changePasswordForm').find('span.save-status').html("");
+									$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
+											"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+									$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(3000);
+									$('#changePasswordForm').find('input[name="current_pswd"]').focus();
+									enable_save_button($(saveBtn));
+								} });
+
+						});
 			},
 
 			/**
@@ -175,7 +176,7 @@ var SettingsRouter = Backbone.Router
 
 				// Adds header
 				$('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3><br/></div>");
-				
+
 				// Adds Gmail Prefs
 				$('#prefs-tabs-content').append(itemView.render().el);
 
@@ -190,7 +191,6 @@ var SettingsRouter = Backbone.Router
 
 			/**
 			 * Shows list of email templates, with an option to add new template
-			 * 
 			 */
 			emailTemplates : function()
 			{
@@ -258,9 +258,9 @@ var SettingsRouter = Backbone.Router
 				$('.email-templates-tab').addClass('active');
 				// $("#content").html(view.el);
 			},
-			
+
 			/**
-			 * 
+			 * Web to lead links to website pages
 			 */
 			webToLead : function()
 			{
@@ -317,117 +317,173 @@ var SettingsRouter = Backbone.Router
 
 			},
 
+			/**
+			 * Manages Linked in widget
+			 */
 			Linkedin : function(id)
 			{
-					if (!id)
-					{
-						show_set_up_widget("Linkedin", 'linkedin-login', '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href) + "/linkedin");
-					}
-					else
-					{
-						if(!isNaN(parseInt(id)))
-						{
-							$.getJSON("core/api/widgets/social/profile/" + id, function(data)
-							{
-								set_up_access("Linkedin", 'linkedin-login', data, '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
-								
-							}).error(function(data){
-								
-								console.log(data);
-								setUpError("Linkedin", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1");
-							
-							});
-							return;
-							
-						}			
-					
-					
-						$.getJSON("core/api/widgets/Linkedin", function(data1)
-						{
-							console.log(data1);
-							
-							if(data1)
-							{
-								$.getJSON("core/api/widgets/social/profile/" + data1.id, function(data)
-										{
-											set_up_access("Linkedin", 'linkedin-login', data, '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"), data1);
-											
-										}).error(function(data){
-											
-											console.log(data);
-											setUpError("Linkedin", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1", data1);
-										
-										});
-										return;
-											
-							}
-							else
-							{
-								show_set_up_widget("Linkedin", 'linkedin-login', '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href));
-							}
-						}); 
-						
-
-					}
-
-			},
-
-			Twitter : function(id)
-			{
-				
 				if (!id)
 				{
-					show_set_up_widget("Twitter", 'twitter-login', '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href) + "/twitter");
+					show_set_up_widget("Linkedin", 'linkedin-login',
+							'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href) + "/linkedin");
 				}
 				else
 				{
-					if(!isNaN(parseInt(id)))
+					if (!isNaN(parseInt(id)))
 					{
-						$.getJSON("core/api/widgets/social/profile/" + id, function(data)
-						{
-							set_up_access("Twitter", 'twitter-login', data, '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"));
-							
-						}).error(function(data){
-							
-							console.log(data);
-							setUpError("Twitter", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twitter/twitter1");
-						
-						});
+						$
+								.getJSON(
+										"core/api/widgets/social/profile/" + id,
+										function(data)
+										{
+											set_up_access(
+													"Linkedin",
+													'linkedin-login',
+													data,
+													'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
+
+										}).error(
+										function(data)
+										{
+
+											console.log(data);
+											setUpError("Linkedin", "widget-settings-error", data.responseText,
+													window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1");
+
+										});
 						return;
-						
-					}			
-				
-				
-					$.getJSON("core/api/widgets/Twitter", function(data1)
-					{
-						console.log(data1);
-						
-						if(data1)
-						{
-									$.getJSON("core/api/widgets/social/profile/" + data1.id, function(data)
+
+					}
+
+					$
+							.getJSON(
+									"core/api/widgets/Linkedin",
+									function(data1)
 									{
-										set_up_access("Twitter", 'twitter-login', data, '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"), data1);
-										
-										
-									}).error(function(data)
-									{
-										setUpError("Twitter", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twitter/twitter1", data1);
+										console.log(data1);
+
+										if (data1)
+										{
+											$
+													.getJSON(
+															"core/api/widgets/social/profile/" + data1.id,
+															function(data)
+															{
+																set_up_access(
+																		"Linkedin",
+																		'linkedin-login',
+																		data,
+																		'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"),
+																		data1);
+
+															})
+													.error(
+															function(data)
+															{
+
+																console.log(data);
+																setUpError("Linkedin", "widget-settings-error", data.responseText,
+																		window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin1", data1);
+
+															});
+											return;
+
+										}
+										else
+										{
+											show_set_up_widget("Linkedin", 'linkedin-login',
+													'/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href));
+										}
 									});
-									
-									return;
-										
-						}
-						else
-						{
-							show_set_up_widget("Twitter", 'twitter-login', '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href));
-						}
-					}); 
-					
 
 				}
-				
+
 			},
 
+			/**
+			 * Manages Twitter widget
+			 */
+			Twitter : function(id)
+			{
+
+				if (!id)
+				{
+					show_set_up_widget("Twitter", 'twitter-login',
+							'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href) + "/twitter");
+				}
+				else
+				{
+					if (!isNaN(parseInt(id)))
+					{
+						$
+								.getJSON(
+										"core/api/widgets/social/profile/" + id,
+										function(data)
+										{
+											set_up_access(
+													"Twitter",
+													'twitter-login',
+													data,
+													'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"));
+
+										}).error(
+										function(data)
+										{
+
+											console.log(data);
+											setUpError("Twitter", "widget-settings-error", data.responseText,
+													window.location.protocol + "//" + window.location.host + "/#Twitter/twitter1");
+
+										});
+						return;
+
+					}
+
+					$
+							.getJSON(
+									"core/api/widgets/Twitter",
+									function(data1)
+									{
+										console.log(data1);
+
+										if (data1)
+										{
+											$
+													.getJSON(
+															"core/api/widgets/social/profile/" + data1.id,
+															function(data)
+															{
+																set_up_access(
+																		"Twitter",
+																		'twitter-login',
+																		data,
+																		'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twitter/twitter"),
+																		data1);
+
+															}).error(
+															function(data)
+															{
+																setUpError("Twitter", "widget-settings-error", data.responseText,
+																		window.location.protocol + "//" + window.location.host + "/#Twitter/twitter1", data1);
+															});
+
+											return;
+
+										}
+										else
+										{
+											show_set_up_widget("Twitter", 'twitter-login',
+													'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href));
+										}
+									});
+
+				}
+
+			},
+
+			/**
+			 * Manages Rapleaf widget
+			 */
 			Rapleaf : function(id)
 			{
 				if (!id)
@@ -436,6 +492,9 @@ var SettingsRouter = Backbone.Router
 					fill_form(id, "Rapleaf", 'rapleaf-login');
 			},
 
+			/**
+			 * Manages Clickdesk widget
+			 */
 			ClickDesk : function(id)
 			{
 				if (!id)
@@ -445,6 +504,9 @@ var SettingsRouter = Backbone.Router
 
 			},
 
+			/**
+			 * Manages Zendesk widget
+			 */
 			Zendesk : function(id)
 			{
 				if (!id)
@@ -454,6 +516,9 @@ var SettingsRouter = Backbone.Router
 
 			},
 
+			/**
+			 * Manages Sip widget
+			 */
 			Sip : function(id)
 			{
 				if (!id)
@@ -462,72 +527,83 @@ var SettingsRouter = Backbone.Router
 					fill_form(id, "Sip", 'sip-login');
 
 			},
-			
+
+			/**
+			 * Manages Twilio widget
+			 */
 			Twilio : function(id)
 			{
 
-				
 				if (!id)
 				{
 					show_set_up_widget("Twilio", 'twilio-login', encodeURIComponent(window.location.href) + "/twilio");
 				}
-					
-				else 
-				{
-					
-						if(!isNaN(parseInt(id)))
-						{
-							$.getJSON("/core/api/widgets/twilio/numbers/" + id,  function(data)
-							{
-								// 	If data is not defined return
-								if (!data)
-									return;
-								
-								set_up_access("Twilio", 'twilio-login', data, encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twilio/twilio" ));
-								
-							}).error(function(data)
-									{
-								setUpError("Twilio", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1");
-							});
-							
-							return;
 
-						}			
-					
-					
-						$.getJSON("core/api/widgets/Twilio", function(data)
+				else
+				{
+
+					if (!isNaN(parseInt(id)))
+					{
+						$.getJSON(
+								"/core/api/widgets/twilio/numbers/" + id,
+								function(data)
+								{
+									// If data is not defined return
+									if (!data)
+										return;
+
+									set_up_access("Twilio", 'twilio-login', data,
+											encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Twilio/twilio"));
+
+								}).error(
+								function(data)
+								{
+									setUpError("Twilio", "widget-settings-error", data.responseText,
+											window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1");
+								});
+
+						return;
+
+					}
+
+					$.getJSON("core/api/widgets/Twilio", function(data)
+					{
+						console.log(data);
+
+						if (data)
 						{
 							console.log(data);
-							
-							if(data)
+							$.getJSON("/core/api/widgets/twilio/numbers/" + data.id, function(data1)
 							{
-								console.log(data);
-								$.getJSON("/core/api/widgets/twilio/numbers/" + data.id,  function(data1)
-								{
-									if (!data1)
-										return;
-											
-									set_up_access("Twilio", 'twilio-login', data1, encodeURIComponent(window.location.href), data);
-											
-								}).error(function(data)
-										{
-									setUpError("Twilio", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1", data);
-								});
-								
-								return;
-							
-							}
-							else
-							{
-								show_set_up_widget("Twilio", 'twilio-login', encodeURIComponent(window.location.href) + "/twilio");
-							}
-						}); 
-						
-						// window.location.href = "/#add-widget";
+								if (!data1)
+									return;
+
+								set_up_access("Twilio", 'twilio-login', data1, encodeURIComponent(window.location.href), data);
+
+							}).error(
+									function(data)
+									{
+										setUpError("Twilio", "widget-settings-error", data.responseText,
+												window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1", data);
+									});
+
+							return;
+
+						}
+						else
+						{
+							show_set_up_widget("Twilio", 'twilio-login', encodeURIComponent(window.location.href) + "/twilio");
+						}
+					});
+
+					// window.location.href = "/#add-widget";
 				}
 
 			},
 
+			/**
+			 * Manages FreshBooks widget
+			 */
 			FreshBooks : function(id)
 			{
 				if (!id)
@@ -537,87 +613,108 @@ var SettingsRouter = Backbone.Router
 
 			},
 
+			/**
+			 * Manages Stripe widget
+			 */
 			Stripe : function(id)
 			{
-				
-				  if (!id)
-					{
-						show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + "/stripe");
-					}
-					else
-					{
-						{
-							$.getJSON("core/api/custom-fields", function(data) {
-								set_up_access("Stripe", 'stripe-login', data, '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Stripe/stripe"));
-							})
-							return;
-							
-						}			
-					
-					
-						$.getJSON("core/api/widgets/Stripe", function(data1)
-						{
-							console.log(data1);
-							
-							if(data1)
-							{
-								$.getJSON("core/api/custom-fields", function(data) {
-								set_up_access("stripe", 'stripe-login', data, '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Stripe/stripe"), data1);
-								});
-								return;						
-								
-							}
-							else
-							{
-								show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href));
-							}
-						});
-					}
-			},
 
+				if (!id)
+				{
+					show_set_up_widget("Stripe", 'stripe-login', '/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href) + "/stripe");
+				}
+				else
+				{
+					{
+						$
+								.getJSON(
+										"core/api/custom-fields",
+										function(data)
+										{
+											set_up_access(
+													"Stripe",
+													'stripe-login',
+													data,
+													'/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Stripe/stripe"));
+										})
+						return;
+
+					}
+
+					$
+							.getJSON(
+									"core/api/widgets/Stripe",
+									function(data1)
+									{
+										console.log(data1);
+
+										if (data1)
+										{
+											$
+													.getJSON(
+															"core/api/custom-fields",
+															function(data)
+															{
+																set_up_access(
+																		"stripe",
+																		'stripe-login',
+																		data,
+																		'/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Stripe/stripe"),
+																		data1);
+															});
+											return;
+
+										}
+										else
+										{
+											show_set_up_widget("Stripe", 'stripe-login',
+													'/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.href));
+										}
+									});
+				}
+			},
+			/**
+			 * Manages widget added by user
+			 */
 			Custom : function(id)
 			{
 
 			},
 
+			/**
+			 * Contact us email
+			 */
 			contactUsEmail : function()
 			{
 				$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
 			},
-			
-			contactSync : function() {
-				
-				
-				
+
+			/**
+			 * Contact synchronization with Google
+			 */
+			contactSync : function()
+			{
+
 				$("#content").html(getTemplate("settings"), {});
-				
+
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
 				// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 
-				this.contact_sync_google = new Base_Model_View({
-					url: 'core/api/contactprefs/google',
-					template : 'import-google-contacts',
-				});
-				
-
+				this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
 
 				// Adds header
-				$('#prefs-tabs-content').html('<div id="contact-prefs" class="span4"></div><div id="calendar-prefs" class="span4"></div><div id="email-prefs" class="span3"></div>');
-				
+				$('#prefs-tabs-content').html(
+						'<div id="contact-prefs" class="span4"></div><div id="calendar-prefs" class="span4"></div><div id="email-prefs" class="span3"></div>');
+
 				// Adds Gmail Prefs
 				$('#contact-prefs').append(this.contact_sync_google.render().el);
 
-				
-				this.calendar_sync_google = new Base_Model_View({
-					url: 'core/api/calendar-prefs/get',
-					template : 'import-google-calendar',
-				});
-				
-				//console.log(getTemplate("import-google-contacts", {}));
+				this.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar', });
+
+				// console.log(getTemplate("import-google-contacts", {}));
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
-				
-				
+
 				var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
 				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
 				itemView.model.fetch();
@@ -625,15 +722,15 @@ var SettingsRouter = Backbone.Router
 				// Adds Gmail Prefs
 				$('#email-prefs').html(itemView.render().el);
 
-				
 				// Gets IMAP Prefs
-				/*var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
-
-				// Appends IMAP
-				$('#prefs-tabs-content').append(itemView2.render().el);
-				$('#PrefsTab .active').removeClass('active');
-				$('.email-tab').addClass('active');*/
+				/*
+				 * var itemView2 = new Base_Model_View({ url : '/core/api/imap',
+				 * template : "settings-imap-prefs" });
+				 *  // Appends IMAP
+				 * $('#prefs-tabs-content').append(itemView2.render().el);
+				 * $('#PrefsTab .active').removeClass('active');
+				 * $('.email-tab').addClass('active');
+				 */
 			}
-		
-		
+
 		});

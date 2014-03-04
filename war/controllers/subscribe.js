@@ -9,8 +9,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Subscription page */
-	"subscribe" : "subscribe",
-	"subscribe/:id" : "subscribe",
+	"subscribe" : "subscribe", "subscribe/:id" : "subscribe",
 
 	/* Updating subscription details */
 	"updatecard" : "updateCreditCard", "updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
@@ -60,7 +59,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
-			
+
 			head.js(LIB_PATH + '/lib/jquery.slider.min.js', function()
 			{
 				if ($.isEmptyObject(data))
@@ -189,7 +188,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				// Discount
 				showCouponDiscountAmount(plan_json, el);
-				
+
 				card_expiry(el);
 				head.js(LIB_PATH + 'lib/countries.js', function()
 				{

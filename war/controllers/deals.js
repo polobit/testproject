@@ -7,14 +7,13 @@ var DealsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Deals/Opportunity */
-	"deals" : "deals",
-	},
+	"deals" : "deals", },
 
 	/**
 	 * Fetches all the opportunities as list and also as milestone lists.
-	 * Fetching both makes easy to add/get deal to the list rather than milestone lists. 
-	 * Based on deal_view cookie it show deals to user.
-	 * Also fetches Milestones pie-chart and Details graph if deals exist.
+	 * Fetching both makes easy to add/get deal to the list rather than
+	 * milestone lists. Based on deal_view cookie it show deals to user. Also
+	 * fetches Milestones pie-chart and Details graph if deals exist.
 	 */
 	deals : function()
 	{
@@ -24,22 +23,20 @@ var DealsRouter = Backbone.Router.extend({
 			template_key = "opportunities-by-milestones";
 			individual_tag_name = "div";
 			url = 'core/api/opportunity/byMilestone';
-			
+
 			// Fetchs deals by milestones list
-			this.opportunityMilestoneCollectionView = new Base_Collection_View({
-				url : url,
-				templateKey : template_key,
-				individual_tag_name : individual_tag_name,
-				postRenderCallback : function(el)
+			this.opportunityMilestoneCollectionView = new Base_Collection_View({ url : url, templateKey : template_key,
+				individual_tag_name : individual_tag_name, postRenderCallback : function(el)
 				{
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 					{
 						$(".deal-close-time", el).timeago();
 					});
-					
+
 					$('#opportunities-by-milestones-model-list > div').addClass("milestone-main");
-					//$('.milestone-main :last-child').find("ul").closest('div').css({"border-right":"none"});
-					
+					// $('.milestone-main
+					// :last-child').find("ul").closest('div').css({"border-right":"none"});
+
 					setup_deals_in_milestones();
 
 					// Shows Milestones Pie
@@ -47,33 +44,28 @@ var DealsRouter = Backbone.Router.extend({
 
 					// Shows deals chart
 					dealsLineChart();
-				}
-			});
+				} });
 			this.opportunityMilestoneCollectionView.collection.fetch();
-			
+
 			// Shows deals as milestone list view
 			$('#content').html(this.opportunityMilestoneCollectionView.render().el);
 		}
 		// Fetches deals as list
-		this.opportunityCollectionView = new Base_Collection_View({
-			url : 'core/api/opportunity',
-			templateKey : "opportunities",
-			individual_tag_name : 'tr',
+		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',
 			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$(".deal-close-time", el).timeago();
-					});
-					// Shows Milestones Pie
-					pieMilestones();
-		
-					// Shows deals chart
-					dealsLineChart();
-				}
-		});
+					$(".deal-close-time", el).timeago();
+				});
+				// Shows Milestones Pie
+				pieMilestones();
+
+				// Shows deals chart
+				dealsLineChart();
+			} });
 		this.opportunityCollectionView.collection.fetch();
-		
+
 		// Shows deals as list view
 		if (readCookie("agile_deal_view"))
 			$('#content').html(this.opportunityCollectionView.render().el);
@@ -82,4 +74,4 @@ var DealsRouter = Backbone.Router.extend({
 		$("#dealsmenu").addClass("active");
 	}
 
- });
+});

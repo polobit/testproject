@@ -1,42 +1,33 @@
 /**
- * Creates backbone router for Documents create, read and update
- * operations
+ * Creates backbone router for Documents create, read and update operations
  */
 var DocumentsRouter = Backbone.Router.extend({
 
 	routes : {
 
 	/* Documents */
-	"documents" : "documents",
-	},
-	
+	"documents" : "documents", },
+
 	/**
-	 * Fetches all the documents as list.
-	 * Fetching makes easy to add/get document to the list.
+	 * Fetches all the documents as list. Fetching makes easy to add/get
+	 * document to the list.
 	 */
 	documents : function()
 	{
 		// Fetches documents as list
-		this.DocumentCollectionView = new Base_Collection_View({
-			url : 'core/api/documents',
-			templateKey : "documents",
-			cursor : true,
-			page_size : 20, 
-			individual_tag_name : 'tr',
-			postRenderCallback : function(el)
+		this.DocumentCollectionView = new Base_Collection_View({ url : 'core/api/documents', templateKey : "documents", cursor : true, page_size : 20,
+			individual_tag_name : 'tr', postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$(".document-created-time", el).timeago();
-					});
-				}
-		});
+					$(".document-created-time", el).timeago();
+				});
+			} });
 		this.DocumentCollectionView.collection.fetch();
-		
+
 		// Shows deals as list view
 		$('#content').html(this.DocumentCollectionView.render().el);
 
 		$(".active").removeClass("active");
 		$("#documentsmenu").addClass("active");
-	}
-});
+	} });
