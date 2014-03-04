@@ -93,7 +93,8 @@ function google2fcEvent(google) {
       end: google.end.date || google.end.dateTime,
       allDay: google.start.date ? true : false,
       google: google, // keep a reference to the original,
-      color: 'orange'
+      color: 'orange',
+      editable : false
     };
     if (fc.allDay) {
       // subtract 1 from end date: Google all-day end dates are exclusive

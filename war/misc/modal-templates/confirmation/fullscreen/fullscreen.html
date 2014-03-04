@@ -3,17 +3,20 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<title>Popup</title>
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css" />
-	<style>
+	<!--<link href="style.css" rel="stylesheet" type="text/css" />-->
+
+<style>
 body {
 	background: #333;
-	width: 1200px;
-	height: 602px;
+	width:1200px;
+	height:602px;
 	}
 #popup {
-	background: #f9f9f8 url('https://agilegrabbers.appspot.com/demo/templatecss/bg.png');
+	background: #f9f9f8 url('https://s3.amazonaws.com/PopupTemplates/confirmation/fullscreen/images/bg.png');
 	color: #000!important;
 	font: 62px/66px 'Open Sans', Arial, sans-serif!important;
 	letter-spacing: 0;
+	position: fixed;
 	width: 1200px;
 	}
 	#popup-body {
@@ -50,7 +53,7 @@ body {
 	position: relative;
 	}
 	#popup-buttons a {
-		background: #ec4905 url('https://agilegrabbers.appspot.com/demo/templatecss/button-bg.png');
+		background: #ec4905 url('https://s3.amazonaws.com/PopupTemplates/confirmation/fullscreen/images/button-bg.png');
 		border-bottom: 14px solid #761816;
 			-webkit-border-radius: 70px;
 			-moz-border-radius: 70px;
@@ -67,7 +70,7 @@ body {
 		width: 460px;
 		}
 		#popup-buttons a.button-gray {
-			background: #757575 url('https://agilegrabbers.appspot.com/demo/templatecss/button-bg-gray.png');
+			background: #757575 url('https://s3.amazonaws.com/PopupTemplates/confirmation/fullscreen/images/button-bg-gray.png');
 			border-color: #464646;
 			left: auto;
 			right: 0;
@@ -107,7 +110,10 @@ body {
 	#popup-content-copyright a {
 		color: #fe4600;
 		}
-	</style>
+
+
+
+</style>
 </head>
 <body>
 
@@ -115,16 +121,15 @@ body {
 	<div id="popup-body">
 		<div id="popup-content">
 			<p>
-				<small>Do you want to</small>
-				Convert <span>your</span> Bounce Traffic
+				<small>Smart Popups</small>
+				Convert <span>your</span> Abandoning Visitors
 				<big>Into revenue?</big>
 			</p>
 			<div id="popup-buttons">
-				<a href="#" class="button button-orange"><b>Yes</b> show me how</a>
+				<a href="#" class="button button-orange"><b>Yes</b> register for a webinar</a>
 				<span>or</span>
-				<a href="#" class="button button-gray"><b>No</b> I like when visitors bounce</a>
+				<a href="#" class="button button-gray"><b>No</b> Not now</a>
 			</div>
-			<div id="popup-content-copyright"><a href="https://www.agilecrm.com/" target="_blank">powered by Agile CRM</a></div>
 		</div>
 	</div>
 </div>

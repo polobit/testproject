@@ -84,6 +84,11 @@ public class Mandrill
     public static final String MANDRILL_RECIPIENT_EMAIL = "email";
 
     /**
+     * Type param to differ cc, to and bcc
+     */
+    public static final String MANDRILL_RECIPIENT_HEADER_TYPE = "type";
+
+    /**
      * Mandrill Headers param. Optional extra headers to add to the message
      * (most headers are allowed). ReplyTo is added to headers.
      */
@@ -120,6 +125,22 @@ public class Mandrill
     public static final String MANDRILL_ATTACHMENT_FILE_CONTENT = "content";
 
     /**
+     * Mandrill Dynamic merge variables to add dynamic content
+     */
+    public static final String MANDRILL_MERGE_VARS = "merge_vars";
+    public static final String MANDRILL_MERGE = "merge";
+    public static final String MANDRILL_MERGE_RCPT = "rcpt";
+    public static final String MANDRILL_MERGE_RCPT_VARS = "vars";
+
+    public static final String MANDRILL_MERGE_RCPT_VAR_NAME = "name";
+    public static final String MANDRILL_MERGE_RCPT_VAR_CONTENT = "content";
+
+    /**
+     * Boolean variable to populate multiple 'To' emails or not
+     */
+    public static final String MANDRILL_PRESERVE_RECIPIENTS = "preserve_recipients";
+
+    /**
      * Sends email using Mandrill API with the given parameters.
      * 
      * @param subaccount
@@ -154,19 +175,13 @@ public class Mandrill
 	    // All email params are inserted into Message json
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, replyTo, subject, html, text, attachments);
 
-	    // Set async to send emails asynchronously
-	    if (async)
-	    {
-		System.out.println("Mandril async enabled");
-		messageJSON.put(MANDRILL_ASYNC, true);
-	    }
-
 	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
 	    String response = null;
 	    try
 	    {
 		long start_time = System.currentTimeMillis();
+
 		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 
 		long process_time = System.currentTimeMillis() - start_time;
@@ -401,7 +416,9 @@ public class Mandrill
 	    // Use Mandrill test api key for naresh1 domain having username
 	    // nrsh.mkl@gmail.com
 	    if (StringUtils.equals(subaccount, "naresh1"))
+	    {
 		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRILL_TEST_API_KEY_VALUE);
+	    }
 	    else
 		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
 	}

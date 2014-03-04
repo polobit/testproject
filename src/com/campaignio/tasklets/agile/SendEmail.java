@@ -9,7 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
 import com.campaignio.logger.Log.LogType;
@@ -20,7 +22,6 @@ import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>SendEmail</code> represents SendEmail node in a workflow. Sends email
@@ -395,22 +396,7 @@ public class SendEmail extends TaskletAdapter
     public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	// Add Unsubscription Link
-	try
-	{
-	    // Get Data
-	    if (subscriberJSON.has("data"))
-		subscriberJSON.getJSONObject("data").put(
-			"unsubscribe_link",
-			"https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
-				+ URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
-				+ URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
-				+ URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured in SendEmail while inserting unsubscribe link " + e.getMessage());
-	    e.printStackTrace();
-	}
+	addUnsubscribeLink(subscriberJSON, campaignJSON);
 
 	// Get From, Message
 	String fromEmail = getStringValue(nodeJSON, subscriberJSON, data, FROM_EMAIL);
@@ -474,6 +460,9 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
+	// Records email sent count of an account
+	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get());
+
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
@@ -483,7 +472,7 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.isEmpty(cc))
 		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
 	    else
-		Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
+		MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
 	}
 	else
 	{
@@ -491,15 +480,11 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.isEmpty(cc))
 		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, null, text);
 	    else
-		Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, null, text);
+		MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
 	}
-
-	long log_start_time = System.currentTimeMillis();
 
 	// Creates log for sending email
 	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
-
-	System.out.println("Processing time is " + (System.currentTimeMillis() - log_start_time) + "ms");
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -595,4 +580,34 @@ public class SendEmail extends TaskletAdapter
 	return false;
     }
 
+    /**
+     * Adds unsubscribe link to subscriber json with subscribe-id, campaign-id
+     * and email as query params
+     * 
+     * @param subscriberJSON
+     *            - subscriberJSON
+     * @param campaignJSON
+     *            -campaignJSON
+     */
+    private static void addUnsubscribeLink(JSONObject subscriberJSON, JSONObject campaignJSON)
+    {
+
+	try
+	{
+	    // Get Data
+	    if (subscriberJSON.has("data"))
+		subscriberJSON.getJSONObject("data").put(
+			"unsubscribe_link",
+			"https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
+				+ URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
+				+ URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in SendEmail while inserting unsubscribe link " + e.getMessage());
+	    e.printStackTrace();
+	}
+
+    }
 }
