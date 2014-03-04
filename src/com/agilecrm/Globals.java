@@ -35,12 +35,12 @@ public class Globals
     public static final String GMAIL_SECRET_KEY = "anonymous";
 
     // GMAIL
-    public static final String GOOGLE_CLIENT_ID = "145775096137-r94sivqd1770vpmqt1njb8u8g4ncc54j.apps.googleusercontent.com";
-    public static final String GOOGLE_SECRET_KEY = "XXOZALUH59vRuGUiJG6jB3bU";// "21kj3QAnEAkCJs6fmrcDghAI";
+    public static final String GOOGLE_CLIENT_ID = "661717543880-elcdgrfs73tl9mbimhmkiqcgic7lqu3i.apps.googleusercontent.com";
+    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";// "21kj3QAnEAkCJs6fmrcDghAI";
 
     // GMAIL
-    public static final String GOOGLE_CALENDAR_CLIENT_ID = "107162350081-hc9qiqijuut1kacsnlubds313p2majai.apps.googleusercontent.com";// "391091478365.apps.googleusercontent.com";
-    public static final String GOOGLE_CALENDAR_SECRET_KEY = "qX7TvneY-fPvWJEOHR3w0koA";// "21kj3QAnEAkCJs6fmrcDghAI";
+    public static final String GOOGLE_CALENDAR_CLIENT_ID = GOOGLE_CLIENT_ID;// "391091478365.apps.googleusercontent.com";
+    public static final String GOOGLE_CALENDAR_SECRET_KEY = GOOGLE_SECRET_KEY;// "21kj3QAnEAkCJs6fmrcDghAI";
 
     // LINKED IN
     public static final String LINKED_IN_API_KEY = "kuft8xqzrnfi";// "zh4a4mmt5o9i";

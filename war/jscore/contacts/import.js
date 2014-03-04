@@ -114,20 +114,32 @@ $(function()
 		var show_noty = false;
 		if(sync)
 		{
-			show_noty = true;
-			App_Settings.contact_sync_google.model.url = url + "?sync=true"
 			if(!confirm("Are you sure you want to sync now?"))
 			{
 				App_Settings.contact_sync_google.render(true);
 	    		return;
 			}
-			showNotyPopUp("information", "Contacts sync started", "top", 1000);
+			else
+			{
+				App_Settings.contact_sync_google.model.url = url + "?sync=true"
+				App_Settings.contact_sync_google.model.save({success : function(data){
+					App_Settings.contact_sync_google.render(true);
+					App_Settings.contact_sync_google.model.url = url;
+					
+				}});
+			
+				showNotyPopUp("information", "Contacts sync started", "top", 1000);
+			}
+			return;
+			
 		}
+		
 		App_Settings.contact_sync_google.model.save({success : function(data){
 				App_Settings.contact_sync_google.render(true);
 				App_Settings.contact_sync_google.model.url = url;
 				
 			}});
+		
 	})
 
 });
