@@ -39,7 +39,9 @@ var SettingsRouter = Backbone.Router
 
 				/* contact-us help email */
 			"contact-us" : "contactUsEmail",
-			"google-apps" : "contactSync"
+			"google-apps" : "contactSync",
+			"google-apps/contacts" : "google_apps_contacts" ,
+			"google-apps/calendar" : "google_apps_calendar" 
 				},
 
 			/**
@@ -633,6 +635,78 @@ var SettingsRouter = Backbone.Router
 				$('#prefs-tabs-content').append(itemView2.render().el);
 				$('#PrefsTab .active').removeClass('active');
 				$('.email-tab').addClass('active');*/
+			},
+			
+			google_apps_contacts: function()
+			{
+
+				$("#content").html(getTemplate("settings"), {});
+				
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+				
+					var options = {
+							url : "core/api/contactprefs/GOOGLE",
+						template : "import-google-contacts-setup",
+						postRenderCallback : function(el)
+						{
+							console.log(el);
+							//App_Settings.setup_google_contacts.model = App_Settings.contact_sync_google.model;
+						}
+					};
+				
+					var fetch_prefs = true;
+					if(this.contact_sync_google && this.contact_sync_google.model)
+					{
+						options["model"] = this.contact_sync_google.model;
+						fetch_prefs = false;
+					}
+					else
+					{
+						this.contact_sync_google = new Base_Model_View({
+							url: 'core/api/contactprefs/google',
+							template : 'import-google-contacts',
+						});
+					}
+					
+				this.setup_google_contacts = new Base_Model_View(options);
+				
+				if(fetch_prefs)
+				{
+					$("#prefs-tabs-content").html(this.setup_google_contacts.render().el);
+					return;
+				}
+				$("#prefs-tabs-content").html(this.setup_google_contacts.render(true).el);
+			},
+			
+			google_apps_calendar : function()
+			{
+				$("#content").html(getTemplate("settings"), {});
+				
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+				
+					var options = {
+							
+							url : "core/api/calendar-prefs/get",
+							template : "import-google-calendar-setup"
+					};
+				
+					var fetch_prefs = true;
+					if(this.calendar_sync_google && this.calendar_sync_google.model)
+					{
+						options["model"] = this.calendar_sync_google.model;
+						fetch_prefs = false;
+					}
+					
+				this.setup_google_calendar = new Base_Model_View(options);
+				
+				if(fetch_prefs)
+				{
+					$("#prefs-tabs-content").html(this.setup_google_calendar.render().el);
+					return;
+				}
+				$("#prefs-tabs-content").html(this.setup_google_calendar.render(true).el);
 			}
 		
 		
