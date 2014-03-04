@@ -2,12 +2,13 @@
 <head>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<title>Popup</title>
-	<link href="http://fonts.googleapis.com/css?family=Bree+Serif:400,700" rel="stylesheet" type="text/css" />
-	<style>
+	<link href="https://fonts.googleapis.com/css?family=Bree+Serif:400,700" rel="stylesheet" type="text/css" />
+	<!--<link href="style.css" rel="stylesheet" type="text/css" />-->
+<style>
 body {
-	width: 700px;
-	height: 483px;
 	background: #333;
+	width: 700px;
+	height: 475px;
 	}
 #popup {
 	background: #fff;
@@ -15,10 +16,15 @@ body {
 	color: #8e8e8e!important;
 	font: 24px/28px Helvetica, Arial, sans-serif!important;
 	letter-spacing: 0;
+	position: fixed;
 	width: 700px;
 	}
 	#popup-top {
 		height: 11px;
+		position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
 		}
 		#popup-top > div {
 			height: 11px;
@@ -68,6 +74,10 @@ body {
 		padding: 10px 6px;
 		width: 330px;
 		}
+		#popup-form input.text.text-error {
+			border-color: #c00;
+			color: #c00!important;
+			}
 		#popup-form input.text:focus {
 			border-color: #999;
 			}
@@ -88,11 +98,16 @@ body {
 		font-family: 'Bree Serif', sans-serif!important;
 		font-size: 18px;
 		line-height: 22px;
+		outline: 0;
 		padding: 15px;
 		width: 330px;
 		}
+		#popup-form input.button:active {
+			position: relative;
+				top: 2px;
+				}
 	#popup-form-image {
-		background: url('https://agilegrabbers.appspot.com/demo/templatecss/form-image.png');
+		background: url('https://s3.amazonaws.com/PopupTemplates/form/newsletter/images/form-image.png');
 		height: 245px;
 		position: absolute;
 			left: -310px;
@@ -100,7 +115,7 @@ body {
 		width: 280px;
 		}
 	#popup-form-arrow {
-		background: url('https://agilegrabbers.appspot.com/demo/templatecss/form-arrow.png');
+		background: url('https://s3.amazonaws.com/PopupTemplates/form/newsletter/images/form-arrow.png');
 		height: 56px;
 		position: absolute;
 			left: -40px;
@@ -116,7 +131,9 @@ body {
 		right: 20px;
 		bottom: 20px;
 	}
-	</style>
+
+
+</style>
 </head>
 <body>
 
@@ -129,16 +146,15 @@ body {
 	</div>
 	<div id="popup-body">
 		<div id="popup-content">
-			<p><big>Free Case Study</big></p>
-			<p><em>How to Convert Your Abandoning Visitors into Revenue</em></p>
+			<p><big>ADD smart popups today</big></p>
+			<p><em>Convert Your Abandoning Visitors into Revenue</em></p>
 			<div id="popup-form">
 				<p><input type="text" class="text" placeholder="Enter Your Name" /></p>
 				<p><input type="text" class="text" placeholder="Enter Your Email" /></p>
-				<p><input type="submit" class="button" value="Give Me The Free Case Study" />
+				<p><input type="submit" class="button" value="I want to upgrade FREE" />
 				<div id="popup-form-arrow"></div>
 				<div id="popup-form-image"></div>
 			</div>
-			<div id="popup-content-copyright"><a href="https://www.agilecrm.com/" target="_blank">powered by Agile CRM</a></div>
 		</div>
 	</div>
 </div>

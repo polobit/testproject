@@ -3,7 +3,10 @@
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 	<title>Popup</title>
 	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" type="text/css" />
-	<style>
+	<!--<link href="style.css" rel="stylesheet" type="text/css" />-->
+
+<style>
+
 body {
 	background: #333;
 	width: 800px;
@@ -15,6 +18,8 @@ body {
 	color: #fff!important;
 	font: 26px/30px 'Open Sans', Helvetica, Arial, sans-serif!important;
 	letter-spacing: 0;
+	position: fixed;
+	width: 800px;
 	}
 	#popup-body {
 		border: 8px dashed white;
@@ -59,6 +64,11 @@ body {
 		padding: 14px 15px 12px;
 		text-align: center;
 		width: 600px;
+		   -webkit-transition: all 0.2s ease-in-out;
+		   -moz-transition: all 0.2s ease-in-out;
+		   -o-transition: all 0.2s ease-in-out;
+		   -ms-transition: all 0.2s ease-in-out;
+		   transition: all 0.2s ease-in-out;
 		}
 		#popup-form input.text:focus {
 			border-color: #999;
@@ -83,9 +93,15 @@ body {
 		cursor: pointer;
 		font-size: 30px;
 		line-height: 34px;
+		outline: 0;
 		padding: 15px;
 		width: 600px;
 		}
+		#popup-form input.button:active {
+			box-shadow: 0px 5px 0px #333, 0px 9px 25px rgba(0,0,0,0.7);
+			position: relative;
+			top: 4px;
+			}
 #popup-content-copyright {
 	font-family: Helvetica Nueue, Helvetica, Arial, Times, sans-serif!important;
 	font-size: 18px!important;
@@ -96,20 +112,21 @@ body {
 		bottom: 30px;
 	}
 
-	</style>
+
+</style>
 </head>
 <body>
 
 <div id="popup">
 	<div id="popup-body">
 		<div id="popup-content">
-			<p><big>Convert Exiting Web Visitors Into Leads.</big></p>
-			<p>Try Exit Monitor for free. No credit card required.</p>
+			<p><big>Subscribe to our Newsletter. Save $25.</big></p>
+			<small>Agile CRM as all you need. Free for 2 users. </small>
 			<div id="popup-form">
 				<p><input type="text" class="text" placeholder="Enter your email address" /></p>
-				<p><input type="submit" class="button" value="Show Me How" />
+				<p><input type="submit" class="button" value="Subscribe Now" />
 			</div>
-			<p><small><a href="#">No thanks, I don't 	want to increase my revenue</a></p></small>
+			<p><small><a href="#">Your personal email will never be shared with third parties</a></p></small>
 		</div>
 	</div>
 </div>
