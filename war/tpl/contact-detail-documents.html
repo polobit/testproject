@@ -73,11 +73,12 @@
        	{{/each}}
 		</div>
 		 <small class="edit-hover" style="margin-right:10px"> 
-			<time class="document-created-time" datetime="{{epochToHumanDate "" upload_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" upload_time}}</time>
+			<time class="document-created-time" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
 		</small>
 		<span class="actions pull-right">
 			<a title="Edit"  data="{{id}}" class="document-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
-            <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>
+			<a title="Detach"  data="{{id}}" class="document-unlink-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-unlink"></i> </a>
+            <!--<a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/documents/bulk"><i></i></span></a>-->
         </span>
 	</div>
   </div>

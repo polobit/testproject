@@ -141,8 +141,11 @@ function showSipProfile()
                 	  $(".make-call").show();
                 	}                	                  	        
                   else
-                    {
-                	  data["msg"] = "You can make and receive calls with SIP.";
+                    { 
+                	  // Register on Sip.
+                	  sipStart();
+                	  
+                	  data["msg"] = "Need to register on SIP.";
                 	  $(".contact-make-call").hide();
                 	  $(".make-call").hide();
                 	}

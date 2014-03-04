@@ -2,8 +2,8 @@
  * Zoomifier code to show their template in send email template
  */
  function loadZoomifierDocSelector() {
-	 var loggedInUser = "zoomifierdemo@zoomifier.com";
-	 var selectedContact = "mudassar.merchant@gmail.com";
+	 var loggedInUser = CURRENT_DOMAIN_USER.email;
+	 var selectedContact = getPropertyValue(App_Contacts.contactDetailView.model.attributes.properties, "email");
 	 var picker = new Zoomifier.PickerBuilder().
 				setPartnerKey('dwqs4rxjksqpldwqklnpes8hs=').
 				setCallback(zoomifierDocSelectionCallback).

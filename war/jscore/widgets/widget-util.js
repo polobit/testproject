@@ -343,6 +343,16 @@ function save_widget_prefs(pluginName, prefs, callback)
 		console.log(data);
 		
 		update_collection_with_prefs(data);
+		
+		// Stop old stack.
+		if(SIP_START == true)
+		  {
+			SIP_UPDATED = true;
+			sipUnRegister();
+		  }		  
+		
+		// Register on Sip.
+  	    sipStart();
 	} });
 
 }

@@ -65,7 +65,7 @@ public class DefaultWidgets
 				"/widgets/stripe.js", "/img/plugins/Stripe.png", "/widgets/stripe-small-logo.png", null,
 				WidgetType.BILLING));
 		widgets.add(new Widget("Sip", "Make and receive calls from your contacts using any SIP account.",
-				"/widgets/sip.js", "/widgets/sip-logo-small.png", "/widgets/sip-logo-small.png", null, null));
+				"/widgets/sip.js", "/widgets/sip-logo-small.png", "/widgets/sip-logo-small.png", null, WidgetType.CALL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

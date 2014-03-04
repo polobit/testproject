@@ -67,8 +67,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		"menu-settings":"menu_settings",
 			
 		/* Mandrill Email Activity*/
-		"email-stats" : "emailStats",
-		"contact-sync" : "contactSync"
+		"email-stats" : "emailStats"
+		
 	},
 	
 	/**
@@ -79,7 +79,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
-			url : '/core/api/navbarsets',
+			url : '/core/api/menusetting',
 			template : "admin-settings-menu-settings",
 			reload : true
 		});
@@ -365,16 +365,5 @@ var AdminSettingsRouter = Backbone.Router.extend({
         $('#content').find('#AdminPrefsTab .active').removeClass('active');
         $('#content').find('.stats-tab').addClass('active');
 		
-	},
-	contactSync : function() {
-		this.contact_sync_google = new Base_Model_View({
-			url: 'core/api/contactprefs/google',
-			template : 'import-google-contacts',
-		});
-		
-		$('#content').html(isAdmintemplate);
-		$('#content').find('#admin-prefs-tabs-content').html(this.contact_sync_google .render().el);
-        $('#content').find('#AdminPrefsTab .active').removeClass('active');
-        $('#content').find('.sync-tab').addClass('active');
 	}
 });

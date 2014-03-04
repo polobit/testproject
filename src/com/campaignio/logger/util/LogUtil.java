@@ -41,8 +41,14 @@ public class LogUtil
 	if (StringUtils.isEmpty(domain) || StringUtils.isEmpty(campaignId) || StringUtils.isEmpty(subscriberId))
 	    return;
 
+	// To know SQL process time
+	long startTime = System.currentTimeMillis();
+
 	// Insert to SQL
 	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId), subscriberId, message, logType);
+
+	long processTime = System.currentTimeMillis() - startTime;
+	System.out.println("Process time for adding log is " + processTime + "ms");
     }
 
     /**
@@ -63,8 +69,14 @@ public class LogUtil
 	if (StringUtils.isEmpty(domain))
 	    return null;
 
+	// To know SQL process time
+	long startTime = System.currentTimeMillis();
+
 	// get SQL logs
 	JSONArray logs = CampaignLogsSQLUtil.getLogs(campaignId, subscriberId, domain, limit);
+
+	long processTime = System.currentTimeMillis() - startTime;
+	System.out.println("Process time for getting logs is " + processTime + "ms");
 
 	if (logs == null)
 	    return null;
@@ -96,6 +108,12 @@ public class LogUtil
 	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
 	    return;
 
+	// To know SQL process time
+	long startTime = System.currentTimeMillis();
 	CampaignLogsSQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain);
+
+	long processTime = System.currentTimeMillis() - startTime;
+	System.out.println("Process time for deleteing logs is " + processTime + "ms");
+
     }
 }

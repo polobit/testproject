@@ -11,17 +11,13 @@ $(function()
 	$('#google-import').die().live('click', function(e)
 	{
 
-		if(!isValidForm("#google-contacts-import-form"))
-		{
-			return;
-		};
 		
 		// URL to return, after fetching token and secret key from LinkedIn
 		var callbackURL = window.location.href;
 		console.log(callbackURL);
 
 		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL) + "&query=" + JSON.stringify(serializeForm("google-contacts-import-form"));
+		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL);
 
 		// this code is used, if once permission is granted, we refresh the
 		// tokens and import without asking for permission again and again
@@ -66,15 +62,40 @@ $(function()
 		
 		$(this).after(LOADING_HTML);
 		
-		console.log(App_Admin_Settings.contact_sync_google.model.destroy({success : function(){
-			App_Admin_Settings.contact_sync_google.model.clear();
-			App_Admin_Settings.contact_sync_google.render(true);
+		console.log(App_Settings.contact_sync_google.model.destroy({success : function(){
+			App_Settings.contact_sync_google.model.clear();
+			App_Settings.contact_sync_google.render(true);
 		}}));
 	});
 	
-	$("#google-import-prefs-save").die().live('click', function(e){
+	$("#sync-type").die().live('change', function(e){
+		e.preventDefault();
+		var value = $(this).val();
+		if(value == "AGILE_TO_CLIENT" || value == "TWO_WAY")
+			{
+				$("#sync_to_group_controlgroup").show();
+				$("#my_contacts_sync_group").show();
+				if(value == "AGILE_TO_CLIENT")
+				{
+					$("#sync_from_group_controlgroup").hide();
+					return;
+				}
+				
+				$("#sync_from_group_controlgroup").show();
+			}
+		else
+			{
+				$("#sync_from_group_controlgroup").show();
+				$("#sync_to_group_controlgroup").hide();
+				$("#my_contacts_sync_group").hide();
+			}
+		
+	})
+	
+	$(".save-contact-prefs").die().live('click', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
+		var sync = $(this).attr("sync");
 		if(disabled)
 			return;
 		
@@ -87,11 +108,38 @@ $(function()
 		
 		$(this).after(LOADING_HTML);
 		
-		App_Admin_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
+		App_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
 		
-		App_Admin_Settings.contact_sync_google.model.save({success : function(data){
-				App_Admin_Settings.contact_sync_google.render(true);
+		var url = App_Settings.contact_sync_google.model.url;
+		var show_noty = false;
+		if(sync)
+		{
+			if(!confirm("Are you sure you want to sync now?"))
+			{
+				App_Settings.contact_sync_google.render(true);
+	    		return;
+			}
+			else
+			{
+				App_Settings.contact_sync_google.model.url = url + "?sync=true"
+				App_Settings.contact_sync_google.model.save({success : function(data){
+					App_Settings.contact_sync_google.render(true);
+					App_Settings.contact_sync_google.model.url = url;
+					
+				}});
+			
+				showNotyPopUp("information", "Contacts sync started", "top", 1000);
+			}
+			return;
+			
+		}
+		
+		App_Settings.contact_sync_google.model.save({success : function(data){
+				App_Settings.contact_sync_google.render(true);
+				App_Settings.contact_sync_google.model.url = url;
+				
 			}});
+		
 	})
 
 });

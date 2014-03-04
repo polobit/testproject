@@ -10,7 +10,7 @@ import java.sql.Statement;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.google.appengine.api.rdbms.AppEngineDriver;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>GoogleSQL</code> handles connection and runs queries of google cloud
@@ -27,18 +27,49 @@ public class GoogleSQL
      */
     public static Connection getGoogleSQLConnection()
     {
+
+	String url = null;
+
+	try
+	{
+	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+	    {
+		// Load the class that provides the new "jdbc:google:mysql://"
+		// prefix.
+		Class.forName("com.mysql.jdbc.GoogleDriver");
+		url = "jdbc:google:mysql://agiledbs:agile/stats?user=root";
+
+		System.out.println("Google sql url is " + url);
+	    }
+	    else
+	    {
+		// Local MySQL instance to use during development.
+		Class.forName("com.mysql.jdbc.Driver");
+		url = "jdbc:mysql://localhost:3306/stats?user=root&password=mysql123";
+
+		// Alternatively, connect to a Google Cloud SQL instance using:
+		// jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	Connection conn = null;
 
 	try
 	{
-	    DriverManager.registerDriver(new AppEngineDriver());
-	    conn = DriverManager.getConnection("jdbc:google:rdbms://agiledbs:agile/stats");
+	    System.out.println("The connection url is  " + url);
+
+	    conn = DriverManager.getConnection(url);
 	}
 	catch (Exception ex)
 	{
-	    System.out.println(" Error getting the connection object ");
+	    System.out.println(" Error getting the connection object " + ex.getMessage());
 	    ex.printStackTrace();
 	}
+
 	return conn;
     }
 

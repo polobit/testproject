@@ -304,8 +304,8 @@ public class CronUtil
 
 	    CronDeferredTask cronDeferredTask = new CronDeferredTask(cron.namespace, cron.campaign_id, cron.data_string, cron.subscriber_json_string,
 		    cron.node_json_string, wakeupOrInterrupt, customData.toString());
-	    Queue queue = QueueFactory.getQueue("campaign-queue");
-	    queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));
+	    Queue queue = QueueFactory.getQueue("cron-queue");
+	    queue.addAsync(TaskOptions.Builder.withPayload(cronDeferredTask));
 	}
     }
 

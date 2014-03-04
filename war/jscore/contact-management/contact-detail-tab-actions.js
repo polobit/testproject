@@ -171,7 +171,7 @@ $(function(){
 				restKey : "documents",
 				templateKey : "contact-document",
 				descending : true,
-				sortKey :'upload_time',
+				sortKey :'uploaded_time',
 				individual_tag_name : 'tr',
 				postRenderCallback : function(el)
 					{
@@ -230,6 +230,29 @@ $(function(){
 	    	$('#existingDocumentModal').modal('hide');
 	    	return;
 	    }
+	});
+	
+	// For unlinking document from contact-details
+	$(".document-unlink-contact-tab").die().live('click', function(e){
+		e.preventDefault();
+		var id = $(this).attr('data');
+		var json = documentsView.collection.get(id).toJSON();
+		
+		// To get the contact id and converting into string
+		var contact_id = App_Contacts.contactDetailView.model.id + "";
+		
+	    // Removes the contact id from related to contacts
+		json.contact_ids.splice(json.contact_ids.indexOf(contact_id),1);
+		
+		// Updates the document object and hides 
+		var newDocument = new Backbone.Model();
+		newDocument.url = 'core/api/documents';
+		newDocument.save(json, {
+			success : function(data) {
+				documentsView.collection.remove(json);
+				documentsView.render(true);
+			}
+		});
 	});
 	
 });

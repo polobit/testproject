@@ -1,6 +1,5 @@
 package com.campaignio.tasklets.agile;
 
-import java.util.Calendar;
 import java.util.Random;
 
 import org.json.JSONObject;
@@ -49,7 +48,7 @@ public class AB extends TaskletAdapter
 	try
 	{
 	    // Generate Random Number
-	    Random random = new Random(Calendar.getInstance().getTimeInMillis());
+	    Random random = new Random(System.currentTimeMillis());
 	    double r = random.nextDouble();
 
 	    // Go with A or B

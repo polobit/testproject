@@ -6,10 +6,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -48,7 +52,7 @@ public class ContactPrefsAPI
 	@Path("/{type}")
 	@PUT
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void updateContactPrefs(@PathParam("type") String type, ContactPrefs prefs)
+	public void updateContactPrefs(@PathParam("type") String type, ContactPrefs prefs, @QueryParam("sync") String sync)
 	{
 
 		System.out.println("in contact prefs api");
@@ -61,6 +65,11 @@ public class ContactPrefsAPI
 		ContactPrefs updatedPrefs = ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
 
 		updatedPrefs.save();
+
+		System.out.println("Sync" + sync);
+
+		if (!StringUtils.isEmpty(sync))
+			ContactsImportUtil.initilaizeGoogleSyncBackend(updatedPrefs.id);
 	}
 
 	/**

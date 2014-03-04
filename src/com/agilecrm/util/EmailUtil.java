@@ -140,7 +140,7 @@ public class EmailUtil
 	}
 
 	// if no cc or bcc, send by Mandrill
-	Mandrill.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
 
     }
 }

@@ -95,6 +95,11 @@ public class Mandrill
     public static final String MANDRILL_REPLY_TO = "Reply-To";
 
     /**
+     * Mandrill Async param to send asynchronously
+     */
+    public static final String MANDRILL_ASYNC = "async";
+
+    /**
      * Mandrill array of supported attachments to add to the message
      */
     public static final String MANDRILL_ATTACHMENTS = "attachments";
@@ -135,28 +140,38 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text, String... attachments)
+    public static String sendMail(boolean async, String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text,
+	    String... attachments)
     {
 	try
 	{
-	    // Considering AgileCRM domain name is mandrill subaccount.
+	    // Considering AgileCRM domain name as mandrill subaccount.
 	    String subaccount = NamespaceManager.get();
 
 	    // Complete mail json to be sent
-	    JSONObject mailJSON = new JSONObject();
-
-	    // api-key
-	    mailJSON.put(MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
+	    JSONObject mailJSON = setMandrillAPIKey(subaccount);
 
 	    // All email params are inserted into Message json
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, replyTo, subject, html, text, attachments);
+
+	    // Set async to send emails asynchronously
+	    if (async)
+	    {
+		System.out.println("Mandril async enabled");
+		messageJSON.put(MANDRILL_ASYNC, true);
+	    }
 
 	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
 	    String response = null;
 	    try
 	    {
+		long start_time = System.currentTimeMillis();
 		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
+
+		long process_time = System.currentTimeMillis() - start_time;
+
+		System.out.println("Process time for sending mandrill " + process_time + "ms");
 
 		System.out.println("Response for first attempt " + response);
 
@@ -318,8 +333,13 @@ public class Mandrill
 	    attachment.put(MANDRILL_ATTACHMENT_MIME_TYPE, mimeType);
 	    attachment.put(MANDRILL_ATTACHMENT_FILE_NAME, fileName);
 
-	    // Mandrill accepts only Base64 encoded content
-	    attachment.put(MANDRILL_ATTACHMENT_FILE_CONTENT, Base64Encoder.encode(fileContent.getBytes("UTF-8")));
+	    try
+	    {// Mandrill accepts only Base64 encoded content
+		attachment.put(MANDRILL_ATTACHMENT_FILE_CONTENT, Base64Encoder.encode(fileContent.getBytes("UTF-8")));
+	    }
+	    catch (Exception e)
+	    {
+	    }
 
 	    attachmentsArray.put(attachment);
 	}
@@ -361,5 +381,36 @@ public class Mandrill
 	}
 
 	return headersJSON;
+    }
+
+    /**
+     * Sets Mandrill api key in mailJSON. TestAPI key is used for naresh1 domain
+     * to test performance in Test mode where emails can't be sent but stats can
+     * be viewed in mandrill account
+     * 
+     * @param subaccount
+     *            - current namespace
+     * @return mailJSON
+     */
+    public static JSONObject setMandrillAPIKey(String subaccount)
+    {
+	JSONObject mailJSON = new JSONObject();
+
+	try
+	{
+	    // Use Mandrill test api key for naresh1 domain having username
+	    // nrsh.mkl@gmail.com
+	    if (StringUtils.equals(subaccount, "naresh1"))
+		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRILL_TEST_API_KEY_VALUE);
+	    else
+		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while adding mandrill API key " + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return mailJSON;
     }
 }

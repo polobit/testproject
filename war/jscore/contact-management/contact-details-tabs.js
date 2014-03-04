@@ -192,11 +192,11 @@ $(function(){
 		e.preventDefault();
 	    id = App_Contacts.contactDetailView.model.id;
 	    documentsView = new Base_Collection_View({
-            url: '/core/api/documents/' + id + "/documents",
+            url: '/core/api/documents/' + id + "/docs",
             restKey: "document",
             templateKey: "contact-documents",
             individual_tag_name: 'li',
-            sortKey:"upload_time",
+            sortKey:"uploaded_time",
             descending: true,
             postRenderCallback: function(el) {
             	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
@@ -537,12 +537,16 @@ $(function(){
 					
 					    // Enables Send Email button.
 					    enable_send_button($('#sendEmail'));
-			            
-					    window.history.back();
+					    
+					    var route = Current_Route + "";
+					   
+			            if(route.match("send-email") != null)
+			            	App_Contacts.navigate("contact/" + App_Contacts.contactDetailView.model.id, {trigger:true});
+			            else
+			            	window.history.back();
 		                 },
 		        error: function()
 		               {
-		        	      
 		        	      enable_send_button($('#sendEmail'));
 		        	      console.log("Error occured while sending email");
 		               }

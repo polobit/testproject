@@ -40,7 +40,7 @@ public class TaskReminder
 	{
 	    TaskReminderDeferredTask taskReminderDeferredTask = new TaskReminderDeferredTask(domain);
 	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
+	    queue.addAsync(TaskOptions.Builder.withPayload(taskReminderDeferredTask));
 	}
     }
 }

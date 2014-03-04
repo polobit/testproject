@@ -741,7 +741,14 @@ public class ContactsAPI
 		System.out.println("In searchContactByPhoneNumber : " + sipPhoneNumber);
 		int positionOfColon = sipPhoneNumber.indexOf(":");
 		int positionOfAt = sipPhoneNumber.indexOf("@");
-		String phoneNumber = sipPhoneNumber.substring(positionOfColon + 1, positionOfAt);
+
+		String phoneNumber = null;
+
+		if (positionOfColon != -1 && positionOfAt != -1)
+			phoneNumber = sipPhoneNumber.substring(positionOfColon + 1, positionOfAt);
+		else
+			phoneNumber = sipPhoneNumber;
+
 		System.out.println("In searchContactByPhoneNumber : " + phoneNumber);
 
 		return ContactUtil.searchContactByPhoneNumber(phoneNumber);

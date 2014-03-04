@@ -38,7 +38,9 @@ var SettingsRouter = Backbone.Router
 			"FreshBooks" : "FreshBooks", "Stripe" : "Stripe", "Custom-widget" : "Custom",
 
 				/* contact-us help email */
-			"contact-us" : "contactUsEmail" },
+			"contact-us" : "contactUsEmail",
+			"google-apps" : "contactSync"
+				},
 
 			/**
 			 * Shows all the options to access user's Preferences
@@ -89,7 +91,7 @@ var SettingsRouter = Backbone.Router
 					// Returns, if the save button has disabled attribute
 					if ($(saveBtn).attr('disabled'))
 						return;
-
+					
 					// Disables save button to prevent multiple click event issues
 					disable_save_button($(saveBtn));
 					
@@ -98,6 +100,14 @@ var SettingsRouter = Backbone.Router
 					if (!isValidForm('#'+ form_id)) {
 
 						// Removes disabled attribute of save button
+						enable_save_button($(saveBtn));
+						return false;
+					}
+					// Returns if same password is given
+					if($("#current_pswd").val() == $("#new_pswd").val())
+					{
+						$('#changePasswordForm').find('span.save-status').html("<span style='color:red;margin-left:10px;'>Current and New Password can not be the same.</span>");
+						$('#changePasswordForm').find('span.save-status').find("span").fadeOut(3000);
 						enable_save_button($(saveBtn));
 						return false;
 					}
@@ -573,4 +583,57 @@ var SettingsRouter = Backbone.Router
 			contactUsEmail : function()
 			{
 				$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
-			} });
+			},
+			
+			contactSync : function() {
+				
+				
+				
+				$("#content").html(getTemplate("settings"), {});
+				
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+				// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+
+				this.contact_sync_google = new Base_Model_View({
+					url: 'core/api/contactprefs/google',
+					template : 'import-google-contacts',
+				});
+				
+
+
+				// Adds header
+				$('#prefs-tabs-content').html('<div id="contact-prefs" class="span4"></div><div id="calendar-prefs" class="span4"></div><div id="email-prefs" class="span3"></div>');
+				
+				// Adds Gmail Prefs
+				$('#contact-prefs').append(this.contact_sync_google.render().el);
+
+				
+				this.calendar_sync_google = new Base_Model_View({
+					url: 'core/api/calendar-prefs/get',
+					template : 'import-google-calendar',
+				});
+				
+				//console.log(getTemplate("import-google-contacts", {}));
+				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
+				
+				
+				var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
+				var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
+				itemView.model.fetch();
+
+				// Adds Gmail Prefs
+				$('#email-prefs').html(itemView.render().el);
+
+				
+				// Gets IMAP Prefs
+				/*var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
+
+				// Appends IMAP
+				$('#prefs-tabs-content').append(itemView2.render().el);
+				$('#PrefsTab .active').removeClass('active');
+				$('.email-tab').addClass('active');*/
+			}
+		
+		
+		});
