@@ -23,7 +23,7 @@
 				<select class="required" name="sync_type" id="sync-type">
 					<option value="CLIENT_TO_AGILE">Google to Agile</option>
 					<option value="AGILE_TO_CLIENT">Agile to Google</option>
-					<option value="TWO_WAY">Both way</option>
+					<option value="TWO_WAY">Both ways</option>
 				</select>
 			</div>
 	</div>
@@ -32,7 +32,7 @@
 	<div class="control-group" style="margin-left:-80px;display:none" id="sync_from_group_controlgroup">
 {{else}}
 	<div class="control-group" style="margin-left:-80px" id="sync_from_group_controlgroup">
-		<label class="control-label" style="text-align:">Sync from</label> 
+		<label class="control-label" style="text-align:">Sync From</label> 
            <div class="controls">
 				<select name="sync_from_group" class="required">
 				{{#each groups}}
@@ -43,6 +43,7 @@
 				{{/each}}
 				</select>
 			</div>
+			<p class="help-block" style="margin-left:160px; margin-top:8px">Google contact  group to sync from.</p>
 	</div>
 {{/if_equals}}
 {{#if_equals sync_type "AGILE_TO_CLIENT"}}
@@ -72,6 +73,7 @@
 				{{/each}}
 				</select>
 			</div>
+	<p class="help-block" style="margin-left:160px; margin-top:8px">Google contact  group to sync to.</p>
 	</div>
 
 	 <div class="control-group" style="margin-left:-80px">
