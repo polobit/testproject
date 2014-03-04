@@ -289,9 +289,14 @@ function show_chained_fields(el, data, forceShow)
 	// Chaining dependencies of input fields with jquery.chained.js
 	RHS.chained(condition, function(chained_el, self){
 		var placeholder = $(chained_el).find('option:selected').attr("placeholder");
-		
+		console.log(placeholder)
 		if(placeholder)
-		$("input", self).attr("placeholder", placeholder);
+		{
+			console.log(placeholder.indexOf("Tag"))
+			console.log(placeholder +" " + placeholder.indexOf("Tag") < 0 +", " +placeholder.indexOf("Tag"))
+			$("input", self).attr("placeholder", placeholder);
+		}
+		
 	});
 	condition.chained(LHS);
 	
@@ -367,7 +372,7 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 	});
 
 	// $("input", element).attr("data-provide","typeahead");
-	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag");
+	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag").width("92%");
 }
 
 

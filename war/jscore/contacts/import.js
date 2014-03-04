@@ -11,17 +11,13 @@ $(function()
 	$('#google-import').die().live('click', function(e)
 	{
 
-		if(!isValidForm("#google-contacts-import-form"))
-		{
-			return;
-		};
 		
 		// URL to return, after fetching token and secret key from LinkedIn
 		var callbackURL = window.location.href;
 		console.log(callbackURL);
 
 		// For every request of import, it will ask to grant access
-		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL) + "&query=" + JSON.stringify(serializeForm("google-contacts-import-form"));
+		window.location = "/scribe?service=google&return_url=" + encodeURIComponent(callbackURL);
 
 		// this code is used, if once permission is granted, we refresh the
 		// tokens and import without asking for permission again and again
@@ -79,9 +75,17 @@ $(function()
 			{
 				$("#sync_to_group_controlgroup").show();
 				$("#my_contacts_sync_group").show();
+				if(value == "AGILE_TO_CLIENT")
+				{
+					$("#sync_from_group_controlgroup").hide();
+					return;
+				}
+				
+				$("#sync_from_group_controlgroup").show();
 			}
 		else
 			{
+				$("#sync_from_group_controlgroup").show();
 				$("#sync_to_group_controlgroup").hide();
 				$("#my_contacts_sync_group").hide();
 			}
@@ -107,15 +111,35 @@ $(function()
 		App_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
 		
 		var url = App_Settings.contact_sync_google.model.url;
+		var show_noty = false;
 		if(sync)
 		{
+			if(!confirm("Are you sure you want to sync now?"))
+			{
+				App_Settings.contact_sync_google.render(true);
+	    		return;
+			}
+			else
+			{
+				App_Settings.contact_sync_google.model.url = url + "?sync=true"
+				App_Settings.contact_sync_google.model.save({success : function(data){
+					App_Settings.contact_sync_google.render(true);
+					App_Settings.contact_sync_google.model.url = url;
+					
+				}});
 			
-			App_Settings.contact_sync_google.model.url = url + "?sync=true"
+				showNotyPopUp("information", "Contacts sync started", "top", 1000);
+			}
+			return;
+			
 		}
+		
 		App_Settings.contact_sync_google.model.save({success : function(data){
 				App_Settings.contact_sync_google.render(true);
 				App_Settings.contact_sync_google.model.url = url;
+				
 			}});
+		
 	})
 
 });

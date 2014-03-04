@@ -9,3 +9,34 @@ function agile_webRules(callback)
 	// Callback
 	agile_json(agile_url, callback);
 }
+
+/**
+ * Download all web rules and execute them
+ */
+function _agile_execute_web_rules()
+{
+	// Download web rules and call _agile_webrules
+	_agile_require_js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/agile-webrules.js", function(){_agile_webrules();});
+}
+
+/*
+ * Loads js file during the run time and executes callback
+ */
+function _agile_require_js(file, callback) {
+	   var script = document.getElementsByTagName('script')[0],
+	   newjs = document.createElement('script');
+
+	  // IE
+	  newjs.onreadystatechange = function () {
+	     if (newjs.readyState === 'loaded' || newjs.readyState === 'complete') {
+	        newjs.onreadystatechange = null;
+	        callback();
+	     }
+	  };
+	  // others
+	  newjs.onload = function () {
+	     callback();
+	  }; 
+	  newjs.src = file;
+	  script.parentNode.insertBefore(newjs, script);
+	}

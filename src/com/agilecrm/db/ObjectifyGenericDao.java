@@ -15,10 +15,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
-import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
-import com.agilecrm.account.NavSetting;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.cases.Case;
@@ -132,7 +130,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Reports.class);
 
 	ObjectifyService.register(Case.class);
-	ObjectifyService.register(NavSetting.class);
+	ObjectifyService.register(MenuSetting.class);
 
 	// Contacts import
 	ObjectifyService.register(ContactPrefs.class);
@@ -146,8 +144,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// Upload Document
 	ObjectifyService.register(Document.class);
 
-	// AccountEmailStats
-	ObjectifyService.register(AccountEmailStats.class);
+	// Calendar prefs
+	ObjectifyService.register(GoogleCalenderPrefs.class);
     }
 
     /**

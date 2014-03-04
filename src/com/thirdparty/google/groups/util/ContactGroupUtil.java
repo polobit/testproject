@@ -113,8 +113,11 @@ public class ContactGroupUtil
 		ContactsService service = GoogleServiceUtil.getService(token);
 
 		// Request the feed
-		URL feedUrl = new URL("https://www.google.com/m8/feeds/groups/default/full" + "?access_token=" + token);
+		URL feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full" + "?access_token="
+				+ token);
 		Query myQuery = new Query(feedUrl);
+		System.out.println(feedUrl);
+		System.out.println(token);
 
 		ContactGroupFeed resultFeed = service.query(myQuery, ContactGroupFeed.class);
 

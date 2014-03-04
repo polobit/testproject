@@ -14,8 +14,8 @@
 <%@page import="com.google.appengine.api.users.User"%>
 <%@page import="com.google.appengine.api.users.UserService"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
-<%@page import="com.agilecrm.account.NavSetting"%>
-<%@page import="com.agilecrm.account.util.NavSettingUtil"%>
+<%@page import="com.agilecrm.account.MenuSetting"%>
+<%@page import="com.agilecrm.account.util.MenuSettingUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -31,7 +31,7 @@
 	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 
 <%
-	//Check if it is being access directly and not through servlet
+    //Check if it is being access directly and not through servlet
 	if (request.getAttribute("javax.servlet.forward.request_uri") == null) {
 		response.sendRedirect("/login");
 		return;
@@ -64,11 +64,11 @@
 	content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
-	 String CSS_PATH = "/";
+    String CSS_PATH = "/";
 	//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 <%
-	String logoutURL = "/login";
+    String logoutURL = "/login";
 	UserInfo user = SessionManager.get();
 %>
 
@@ -105,50 +105,50 @@
 						<ul class="nav agile-menu">
 							<li id="homemenu" class="active"></li>
 							<%
-								if ("admin".equals(domainUser.domain)) {
-									out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
-									out.println("<ul class='nav pull-right' style='float:right!important;'><li><a href="
-											+ logoutURL
-											+ "><i class='icon-off'></i>Logout</a></li>");
-								} else {
+							    if ("admin".equals(domainUser.domain)) {
+																							out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
+																							out.println("<ul class='nav pull-right' style='float:right!important;'><li><a href="
+																									+ logoutURL
+																									+ "><i class='icon-off'></i>Logout</a></li>");
+																						} else {
 							%>
 
 
 							<%
-								//Styling enable/disable navbar tabs(add display:none to diable)
-									Integer count = 0;
-									NavSetting navSetting = NavSettingUtil.getNavSetting();
-									String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_social = "", style_reports = "", style_documents = "";
-									//style for calendar,cases,deals,campaign resp.
+							    //Styling enable/disable navbar tabs(add display:none to diable)
+																							Integer count = 0;
+																							MenuSetting navSetting = MenuSettingUtil.getMenuSetting();
+																							String style_calendar = "", style_cases = "", style_deals = "", style_campaign = "", style_social = "", style_reports = "", style_documents = "";
+																							//style for calendar,cases,deals,campaign resp.
 
-									if (!navSetting.calendar)
-										style_calendar = " display:none;";
-									else
-										++count;
-									if (!navSetting.cases)
-										style_cases = " display:none;";
-									else
-										++count;
-									if (!navSetting.deals)
-										style_deals = " display:none;";
-									else
-										++count;
-									if (!navSetting.campaign)
-										style_campaign = " display:none;";
-									else
-										++count;
-									if (!navSetting.social)
-										style_social = " display:none;";
-									else
-										++count;
-									if (!navSetting.reports)
-										style_reports = " display:none;";
-									else
-										++count;
-									if (!navSetting.documents)
-										style_documents = " display:none;";
-									else
-										++count;
+																							if (!navSetting.calendar)
+																								style_calendar = " display:none;";
+																							else
+																								++count;
+																							if (!navSetting.cases)
+																								style_cases = " display:none;";
+																							else
+																								++count;
+																							if (!navSetting.deals)
+																								style_deals = " display:none;";
+																							else
+																								++count;
+																							if (!navSetting.campaign)
+																								style_campaign = " display:none;";
+																							else
+																								++count;
+																							if (!navSetting.social)
+																								style_social = " display:none;";
+																							else
+																								++count;
+																							if (!navSetting.reports)
+																								style_reports = " display:none;";
+																							else
+																								++count;
+																							if (!navSetting.documents)
+																								style_documents = " display:none;";
+																							else
+																								++count;
 							%>
 							<li id="contactsmenu"><a href="#contacts"><i
 									class="icon-user icon-white"></i> Contacts</a></li>
@@ -490,12 +490,6 @@
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 	
 
-	<!-- Unified CSS for All Lib -->	
-	
-	<!-- Audios -->	
-    <audio id="audio_remote" autoplay="autoplay" />
-    <audio id="ringtone" loop><source src="/sounds/ringtone.wav" type="audio/wav" preload="auto"></source></audio>
-    <audio id="ringbacktone" loop><source src="/sounds/ringbacktone.wav" type="audio/wav" preload="auto"></source></audio>
-    <audio id="dtmfTone"><source src="/sounds/dtmf.wav" type="audio/wav" preload="auto"></source></audio>
+	<!-- Unified CSS for All Lib -->		
 </body>
 </html>

@@ -2,7 +2,7 @@
  *  This servlet is used to read wufoo data and add contact with specified properties to 
  *  the associated agile api key owner
  */
-package com.agilecrm.forms;
+package com.thirdparty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,6 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.countrycodemap.CountryCodeMap;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;

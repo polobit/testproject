@@ -79,7 +79,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		$('#content').html(isAdmintemplate);
 		var view = new Base_Model_View({
-			url : '/core/api/navbarsets',
+			url : '/core/api/menusetting',
 			template : "admin-settings-menu-settings",
 			reload : true
 		});

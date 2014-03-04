@@ -35,8 +35,12 @@ public class Globals
     public static final String GMAIL_SECRET_KEY = "anonymous";
 
     // GMAIL
-    public static final String GOOGLE_CLIENT_ID = "1083001419784-5mulh8j912grvga060i4pr6usaub9pk9.apps.googleusercontent.com";// "391091478365.apps.googleusercontent.com";
-    public static final String GOOGLE_SECRET_KEY = "MLCeQy3Ljrsg6bkZ-0aYlJux";// "21kj3QAnEAkCJs6fmrcDghAI";
+    public static final String GOOGLE_CLIENT_ID = "661717543880-elcdgrfs73tl9mbimhmkiqcgic7lqu3i.apps.googleusercontent.com";
+    public static final String GOOGLE_SECRET_KEY = "qExl7mLlRlE_fjnw0YkxAeW5";// "21kj3QAnEAkCJs6fmrcDghAI";
+
+    // GMAIL
+    public static final String GOOGLE_CALENDAR_CLIENT_ID = GOOGLE_CLIENT_ID;// "391091478365.apps.googleusercontent.com";
+    public static final String GOOGLE_CALENDAR_SECRET_KEY = GOOGLE_SECRET_KEY;// "21kj3QAnEAkCJs6fmrcDghAI";
 
     // LINKED IN
     public static final String LINKED_IN_API_KEY = "kuft8xqzrnfi";// "zh4a4mmt5o9i";
