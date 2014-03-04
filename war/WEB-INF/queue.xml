@@ -48,4 +48,13 @@
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
   </queue>
+  
+  <!-- pull queues -->
+  <queue>
+  <name>email-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+      <task-retry-limit>1</task-retry-limit>	  
+  </retry-parameters>
+  </queue>
 </queue-entries>

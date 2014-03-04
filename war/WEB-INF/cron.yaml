@@ -3,6 +3,10 @@ cron:
   url: /backend/cron
   schedule: every 2 mins
 
+- description: Emails Sender
+  url: /backend/cron/email-pull
+  schedule: every 1 mins
+  
 - description: daily reports
   url: /backend/cron/reports?duration=DAILY
   schedule: every day 23:30

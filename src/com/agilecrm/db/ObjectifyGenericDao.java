@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.NavSetting;
@@ -144,6 +145,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// Upload Document
 	ObjectifyService.register(Document.class);
+
+	// AccountEmailStats
+	ObjectifyService.register(AccountEmailStats.class);
     }
 
     /**

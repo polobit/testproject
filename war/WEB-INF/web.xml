@@ -448,6 +448,24 @@
 		<url-pattern>/backend/cron/blobs-delete</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>EmailPullCron</servlet-name>
+		<servlet-class>com.agilecrm.mandrill.servlets.EmailPullCron</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmailPullCron</servlet-name>
+		<url-pattern>/backend/cron/email-pull</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BackendEmailPull</servlet-name>
+		<servlet-class>com.agilecrm.mandrill.servlets.BackendEmailPull</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BackendEmailPull</servlet-name>
+		<url-pattern>/backend-email-pull</url-pattern>
+	</servlet-mapping>
+	
    <servlet>
    		<servlet-name>Unsubscribe</servlet-name>
    		<jsp-file>/unsubscribe.jsp</jsp-file>

@@ -42,7 +42,12 @@ public class WorkflowSubscribeUtil
 	if (campaignJSON == null)
 	    return;
 
+	long start_time = System.currentTimeMillis();
+
 	TaskCore.executeCampaign(campaignJSON, subscriberJSONArray);
+
+	long process_time = System.currentTimeMillis() - start_time;
+	System.out.println("Processed time for executeCampaign is " + process_time);
     }
 
     /**
