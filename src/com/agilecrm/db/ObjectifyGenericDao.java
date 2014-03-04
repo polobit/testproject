@@ -15,8 +15,10 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.account.APIKey;
+import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
+import com.agilecrm.account.MenuSetting;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.cases.Case;
@@ -60,6 +62,7 @@ import com.googlecode.objectify.util.DAOBase;
 import com.socialsuite.ScheduledUpdate;
 import com.socialsuite.Stream;
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 
 /**
  * <code>ObjectifyGenericDao</code> is a generic class for all the entities,
@@ -146,6 +149,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// Calendar prefs
 	ObjectifyService.register(GoogleCalenderPrefs.class);
+
+	// AccountEmailStats
+	ObjectifyService.register(AccountEmailStats.class);
     }
 
     /**
