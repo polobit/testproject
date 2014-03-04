@@ -3,6 +3,8 @@ package com.agilecrm.user;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.codec.DecoderException;
@@ -168,6 +170,16 @@ public class IMAPEmailPrefs
      */
     public void save()
     {
+	// Verify imap credentials
+	try
+	{
+	    IMAPEmailPrefsUtil.checkImapPrefs(this);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	}
+
 	dao.put(this);
     }
 
