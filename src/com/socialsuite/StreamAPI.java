@@ -22,17 +22,24 @@ import org.json.JSONException;
 import twitter4j.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.socialsuite.util.SocialSuiteLinkedinUtil;
 import com.socialsuite.util.SocialSuiteTwitterUtil;
 import com.socialsuite.util.StreamUtil;
 
 /**
  * <code>StreamAPI</code> is the API class for Social Suite Stream. This class
- * includes REST calls to interact with Stream class, LinkedIn class, Twitter
- * class to access social results
+ * includes REST calls to interact with Stream class, Twitter class to access
+ * social results
  * <p>
- * It is called from client side for Adding a stream, Searching LinkedIn/
- * Twitter profiles, Sending posts/updates. Also used to show available streams.
+ * It is called from client side for Adding a stream, Deleting a stream, Getting
+ * all stream to show in social suite, Searching Twitter profiles, Sending
+ * posts/updates, Perform actions related to tweets. Also used to show available
+ * streams.
+ * </p>
+ * <p>
+ * To perform actions on tweets, It needs token and secret from stream. Stream
+ * have details and credentials about user's twitter account. All tweet actions
+ * are completed from REST API, which needs to create twitter object from
+ * Twitter Factory.
  * </p>
  * 
  * @author Farah
@@ -52,7 +59,6 @@ public class StreamAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Stream createStream(Stream stream)
 	{
-		System.out.print("Stream stream_type:" + stream.stream_type + "Stream n/w type: " + stream.network_type);
 		stream.save();
 		return stream;
 	}
@@ -66,7 +72,6 @@ public class StreamAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<Stream> getAllStreams()
 	{
-		System.out.println("In getAllStreams.");
 		return StreamUtil.getStreams();
 	}
 
@@ -83,7 +88,6 @@ public class StreamAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Stream getStream(@PathParam("id") Long id) throws EntityNotFoundException
 	{
-		System.out.print("In get stream Id : " + id);
 		return StreamUtil.getStream(id);
 	}
 
@@ -97,7 +101,6 @@ public class StreamAPI
 	@Path("/{id}")
 	public void deleteStream(@PathParam("id") Long id)
 	{
-		System.out.print("Delete stream id : " + id);
 		Stream stream = StreamUtil.getStream(id);
 		if (stream != null)
 		{
@@ -135,25 +138,10 @@ public class StreamAPI
 	{
 		try
 		{
-			System.out.print("In get stream Id : " + streamId);
 			Stream stream = StreamUtil.getStream(streamId);
-			System.out.print("In get stream network_type : " + stream.network_type);
 
 			if (stream.network_type.toString().equals("TWITTER"))
 				return SocialSuiteTwitterUtil.getUsersProfileImgUrl(stream);
-			else if (stream.network_type.toString().equals("LINKEDIN"))
-
-				return SocialSuiteLinkedinUtil.getUsersProfileImgUrl(stream);
-		}
-		catch (SocketTimeoutException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			return null;
 		}
 		catch (Exception e)
 		{
@@ -731,7 +719,7 @@ public class StreamAPI
 	{
 		try
 		{
-			System.out.println("in followuser : " + tweetOwner);
+			System.out.println("in blockUser : " + tweetOwner);
 
 			Stream stream = StreamUtil.getStream(streamId);
 			if (stream == null)
@@ -777,7 +765,7 @@ public class StreamAPI
 	{
 		try
 		{
-			System.out.println("in unfollowUser : " + tweetOwner);
+			System.out.println("in unblockUser : " + tweetOwner);
 
 			Stream stream = StreamUtil.getStream(streamId);
 			if (stream == null)
@@ -934,96 +922,6 @@ public class StreamAPI
 				return null;
 
 			return resultList.toString();
-		}
-		catch (SocketTimeoutException e)
-		{
-			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and try again.").build());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occured. Refresh and try again.").build());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * Connects to {@link SocialSuiteLinkedinUtil} and sends the post or share
-	 * in Linkedin based on the parameter of stream.
-	 * 
-	 * @param streamId
-	 *            {@link Long} stream id, to get {@link Stream} object
-	 * @return {@link String}
-	 */
-	@Path("/shareupdate/{streamId}")
-	@POST
-	@Produces(MediaType.TEXT_PLAIN)
-	public String shareUpdate(@PathParam("streamId") Long streamId, @FormParam("comment_text") String commentText,
-			@FormParam("share_with") String shareWith)
-	{
-		try
-		{
-			Stream stream = StreamUtil.getStream(streamId);
-			if (stream == null)
-				return null;
-
-			// Share update status from stream owner on relevant Linkedin
-			// account.
-			return SocialSuiteLinkedinUtil.shareLinkedInUpdate(stream, commentText, shareWith);
-		}
-		catch (SocketTimeoutException e)
-		{
-			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("Request timed out. Refresh and try again.").build());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-					.entity("An error occured. Refresh and try again.").build());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-	}
-
-	/**
-	 * Return the updates from Linkedin account related to stream user.
-	 * 
-	 * @param id
-	 *            - unique stream id.
-	 * 
-	 * @return updates<List> - updates from Linkedin.
-	 * @throws Exception
-	 * @throws IOException
-	 * @throws SocketTimeoutException
-	 */
-	@GET
-	@Path("/updates/{id}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<com.agilecrm.social.stubs.SocialUpdateStream> getLinkedInNetworkUpdates(@PathParam("id") Long id)
-	{
-		try
-		{
-			System.out.println(" In getLinkedInNetworkUpdates : " + id);
-			Stream stream = StreamUtil.getStream(id);
-			if (stream == null)
-				return null;
-
-			// Get network updates from Linkedin account relevant to stream.
-			return SocialSuiteLinkedinUtil.getLinkedInUpdate(stream);
 		}
 		catch (SocketTimeoutException e)
 		{

@@ -1,4 +1,4 @@
-package com.socialsuite;
+package com.socialsuite.cron;
 
 import java.util.List;
 
@@ -45,7 +45,6 @@ public class ScheduledUpdateAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ScheduledUpdate createScheduledUpdate(ScheduledUpdate scheduledUpdate)
 	{
-		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
 		scheduledUpdate.save();
 		return scheduledUpdate;
 	}
@@ -62,7 +61,6 @@ public class ScheduledUpdateAPI
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ScheduledUpdate updateScheduledUpdate(ScheduledUpdate scheduledUpdate)
 	{
-		System.out.println("scheduledUpdate: " + scheduledUpdate.toString());
 		scheduledUpdate.save();
 		return scheduledUpdate;
 	}
@@ -79,7 +77,6 @@ public class ScheduledUpdateAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<ScheduledUpdate> getAllScheduledUpdates()
 	{
-		System.out.println("In getAllScheduledUpdates.");
 		return ScheduleUpdateUtil.getScheduledUpdates();
 	}
 
@@ -97,7 +94,6 @@ public class ScheduledUpdateAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<ScheduledUpdate> getScheduledUpdates(@PathParam("screen_name") String screen_name)
 	{
-		System.out.println("In getAScheduledUpdates : " + screen_name);
 		return ScheduleUpdateUtil.getScheduledUpdates(screen_name);
 	}
 
@@ -114,7 +110,6 @@ public class ScheduledUpdateAPI
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ScheduledUpdate getScheduledUpdate(@PathParam("id") Long id) throws EntityNotFoundException
 	{
-		System.out.print("In get stream Id : " + id);
 		return ScheduleUpdateUtil.getScheduledUpdate(id);
 	}
 
@@ -129,8 +124,6 @@ public class ScheduledUpdateAPI
 	@Produces(MediaType.TEXT_PLAIN)
 	public String deleteScheduledUpdate(@PathParam("id") Long id)
 	{
-		System.out.print("Delete scheduled update id : " + id);
-
 		ScheduledUpdate scheduledUpdate = ScheduleUpdateUtil.getScheduledUpdate(id);
 
 		if (scheduledUpdate != null)
@@ -153,7 +146,6 @@ public class ScheduledUpdateAPI
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public void deleteScheduledUpdates(@FormParam("ids") String model_ids) throws JSONException
 	{
-		System.out.println("In deleteScheduledUpdates.");
 		JSONArray scheduledUpdatesJSONArray = new JSONArray(model_ids);
 
 		String oldNamespace = NamespaceManager.get();
