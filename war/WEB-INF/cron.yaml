@@ -43,3 +43,16 @@ cron:
   url: /backend/cron/scheduledupdate
   schedule: every 5 mins
 
+- description: Google Contacts daily Sync
+  url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=DAILY
+  schedule: every day 23:30
+
+- description: Google Contacts weekly Sync
+  url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=WEEKLY
+  schedule: every friday 23:50 
+
+- description: Google Contacts monthly Sync
+  url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=MONTHLY
+  schedule: 1st friday of month 23:55
+
+
