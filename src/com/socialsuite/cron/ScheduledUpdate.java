@@ -1,4 +1,4 @@
-package com.socialsuite;
+package com.socialsuite.cron;
 
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -112,7 +112,6 @@ public class ScheduledUpdate
 			String message, String scheduled_date, String scheduled_time, String profileImg, String headline,
 			String tweetOwner, String tweetId, Long schedule)
 	{
-		System.out.println("In ScheduledUpdate constructor " + message + " networkType : " + network_type);
 		this.domain_user_id = domain_user_id;
 		this.screen_name = screen_name;
 		this.network_type = NetworkTypeEnum.valueOf(network_type.toUpperCase());
@@ -133,8 +132,6 @@ public class ScheduledUpdate
 	 */
 	public void save()
 	{
-		System.out.println("In ScheduledUpdate save, networkType : " + this.network_type);
-
 		// Set namespace for first time.
 		if (id == null)
 			namespace = NamespaceManager.get();

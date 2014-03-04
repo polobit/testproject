@@ -66,7 +66,7 @@ public class JerseyApplication extends Application
 		s.add(com.agilecrm.core.api.account.NamespaceStatsAPI.class);
 		s.add(com.agilecrm.core.api.document.DocumentsAPI.class);
 		s.add(com.socialsuite.StreamAPI.class);
-		s.add(com.socialsuite.ScheduledUpdateAPI.class);
+		s.add(com.socialsuite.cron.ScheduledUpdateAPI.class);
 		s.add(com.thirdparty.salesforce.SalesforceImportAPI.class);
 		s.add(com.agilecrm.gmap.GmapQueryAPI.class);
 		s.add(com.agilecrm.core.api.webrule.WebRuleAPI.class);

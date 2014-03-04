@@ -7,8 +7,8 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.socialsuite.ScheduledUpdate;
 import com.socialsuite.Stream;
+import com.socialsuite.cron.ScheduledUpdate;
 
 public class ScheduleUpdateUtil
 {

@@ -67,8 +67,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
-
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -83,7 +81,6 @@ public class SocialSuiteTwitterUtil
 	 */
 	private static String getErrorMessage(String error)
 	{
-		System.out.println(error);
 		if (error.contains("message - ") && error.contains("code - "))
 		{
 			error = error.substring(error.indexOf("message - ") + 10, error.indexOf("code - "));
@@ -104,7 +101,6 @@ public class SocialSuiteTwitterUtil
 	 */
 	public static String getUsersProfileImgUrl(Stream stream) throws IllegalStateException
 	{
-		System.out.println("in getUsersProfileURL in SocialSuiteTwitterUtil");
 		String profileImgUrl = null;
 		Twitter twitter;
 
@@ -166,7 +162,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -191,24 +186,18 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			/* String agile = " via @agilecrm"; */
 			String result = null;
 
 			// Send reply tweet to particular tweet based on tweet id.
 			Status status = twitter.updateStatus(new StatusUpdate(message).inReplyToStatusId(tweetId));
-			System.out.println("replyTweetInTwitter : ");
-			System.out.println(status.toString());
 
 			if (status.toString().contains(message))
 				result = "Successful";
-
-			System.out.println("result: " + result);
 
 			return result;
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -235,12 +224,10 @@ public class SocialSuiteTwitterUtil
 		try
 		{
 			Twitter twitter = getTwitter(stream);
-			/* String agile = " via @agilecrm"; */
 			String result = null;
 
 			if (!twitter.showFriendship(stream.screen_name, tweetOwner).isSourceFollowedByTarget())
 			{
-				System.out.println("You can send a message only to persons who is following you.");
 				return "You can send a message only to persons who is following you.";
 			}
 
@@ -253,8 +240,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
-
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -278,7 +263,6 @@ public class SocialSuiteTwitterUtil
 
 		// Retweet status
 		Status reTweet = twitter.retweetStatus(tweetId);
-		System.out.println("reTweet : " + reTweet);
 		System.out.println("reTweet id : " + reTweet.getId());
 
 		return (reTweet != null) ? String.valueOf(reTweet.getId()) : "Unsuccessful";
@@ -305,7 +289,6 @@ public class SocialSuiteTwitterUtil
 
 		// Delete only retweeted status and not original tweet.
 		Status status = twitter.destroyStatus(tweetIdStr);
-		System.out.println("undo retweet return status : " + status.toString());
 
 		return (status != null) ? "Successful" : "Unsuccessful";
 	}
@@ -326,8 +309,6 @@ public class SocialSuiteTwitterUtil
 	{
 		Twitter twitter = getTwitter(stream);
 		Status status = twitter.createFavorite(tweetId);
-		System.out.println("favoriteStatus : ");
-		System.out.println(status.toString());
 
 		return (status != null) ? "Successful" : "Unsuccessful";
 	}
@@ -348,8 +329,6 @@ public class SocialSuiteTwitterUtil
 	{
 		Twitter twitter = getTwitter(stream);
 		Status status = twitter.destroyFavorite(tweetId);
-		System.out.println("undoFavoriteStatus : ");
-		System.out.println(status.toString());
 
 		return (status != null) ? "Successful" : "Unsuccessful";
 	}
@@ -462,8 +441,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
-
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -485,7 +462,6 @@ public class SocialSuiteTwitterUtil
 	{
 		try
 		{
-			System.out.println("in unfollowUser : " + tweetOwner);
 			Twitter twitter = getTwitter(stream);
 
 			// Unfollow tweet owner.
@@ -499,8 +475,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
-
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -522,8 +496,6 @@ public class SocialSuiteTwitterUtil
 		Twitter twitter = getTwitter(stream);
 		try
 		{
-			System.out.println("in blockUser : " + tweetOwner);
-
 			// Block tweet owner
 			User user = twitter.createBlock(tweetOwner);
 
@@ -535,8 +507,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
-
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -557,7 +527,6 @@ public class SocialSuiteTwitterUtil
 	{
 		try
 		{
-			System.out.println("in unfollowUser : " + tweetOwner);
 			Twitter twitter = getTwitter(stream);
 
 			// Unblock tweet owner.
@@ -571,8 +540,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
-
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -597,7 +564,6 @@ public class SocialSuiteTwitterUtil
 	{
 		try
 		{
-			System.out.println("in deleteTweet : " + tweetOwner + " tweet id : " + tweetId);
 			Twitter twitter = getTwitter(stream);
 			String result = null;
 
@@ -620,8 +586,6 @@ public class SocialSuiteTwitterUtil
 		}
 		catch (TwitterRuntimeException e)
 		{
-			System.out.println("in twitter exception");
-
 			String error = getErrorMessage(e.getMessage());
 			throw new Exception(error);
 		}
@@ -647,18 +611,14 @@ public class SocialSuiteTwitterUtil
 
 		userList = twitter.getRetweets(tweetId);
 
-		System.out.println("userList: " + userList.size());
-
 		if (userList.size() == 0)
 		{
 			Status msg = twitter.showStatus(tweetId);
-			System.out.println("msg: " + msg);
 
 			if (msg.getRetweetCount() > 0)
 			{
 				if (msg.getRetweetedStatus() != null)
 					userList = twitter.getRetweets(msg.getRetweetedStatus().getId());
-				System.out.println("new userList: " + userList.size());
 			}
 		}
 
@@ -711,8 +671,6 @@ public class SocialSuiteTwitterUtil
 		Query query = new Query(stream.keyword);
 		query.setCount(20);
 
-		System.out.println("search keyword :" + query);
-
 		// get search results as per keyword
 		queryResult = twitter.search(query);
 
@@ -720,9 +678,6 @@ public class SocialSuiteTwitterUtil
 
 		if (statuses.size() == 1)
 		{
-			System.out.println("resultList: " + statuses);
-			System.out.println(tweetIdStr);
-
 			if (tweetIdStr == statuses.get(0).getId())
 				return null;
 		}
@@ -791,9 +746,6 @@ public class SocialSuiteTwitterUtil
 
 		if (dmList.size() == 1)
 		{
-			System.out.println("resultList: " + dmList);
-			System.out.println(tweetIdStr);
-
 			if (tweetIdStr == dmList.get(0).getId())
 				return null;
 		}
@@ -869,15 +821,11 @@ public class SocialSuiteTwitterUtil
 
 		if (postList == null || postList.isEmpty())
 		{
-			System.out.println("resultList: " + postList);
 			return null;
 		}
 
 		if (postList.size() == 1)
 		{
-			System.out.println("resultList: " + postList);
-			System.out.println(tweetIdStr);
-
 			if (tweetIdStr == postList.get(0).getId())
 				return null;
 		}
@@ -1046,5 +994,4 @@ public class SocialSuiteTwitterUtil
 		}
 		return newTweetJSON;
 	}
-
 }

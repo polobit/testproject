@@ -7,9 +7,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -59,16 +57,6 @@ public class IMAPAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public IMAPEmailPrefs createIMAPEmailPrefs(IMAPEmailPrefs prefs)
     {
-	// Verify imap credentials
-	try
-	{
-	    IMAPEmailPrefsUtil.checkImapPrefs(prefs);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
-
 	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
 	prefs.save();
 	return prefs;
@@ -86,16 +74,6 @@ public class IMAPAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public IMAPEmailPrefs updateIMAPEmailPrefs(IMAPEmailPrefs prefs)
     {
-	// Verify imap credentials
-	try
-	{
-	    IMAPEmailPrefsUtil.checkImapPrefs(prefs);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
-
 	prefs.setAgileUser(new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id));
 
 	prefs.save();

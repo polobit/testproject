@@ -9,7 +9,7 @@
   <property name="com.google.gdata.DisableCookieHandler" value="true"/>
 </system-properties>
 
-<use-google-connector-j>true</use-google-connector-j>
+<!-- <use-google-connector-j>true</use-google-connector-j> -->
 
  <!-- Error pages configuration 
  <static-error-handlers>
