@@ -89,7 +89,7 @@ function ts2googleDate(ts) {
 // Convert Google Event to Full Calendar Event  
 function google2fcEvent(google) {
     var fc = {
-       id : google.id;
+       id : google.id,
       title: google.summary,
       start: google.start.date || google.start.dateTime,
       end: google.end.date || google.end.dateTime,
