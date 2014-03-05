@@ -1,5 +1,8 @@
 /* functions related to audio */
 
+/**
+ * Add audio tag in home.jsp after SIP registration is done successfully.
+ */
 function addAudio()
 {
 	var audioElmt = document.getElementById("audio_remote");
@@ -16,6 +19,9 @@ function addAudio()
 	}
 }
 
+/**
+ * On incoming call it starts.
+ */
 function startRingTone()
 {
 	try
@@ -29,6 +35,9 @@ function startRingTone()
 	}
 }
 
+/**
+ * After receive / missed / ignore from user and on error it stops.
+ */
 function stopRingTone()
 {
 	try
@@ -40,6 +49,9 @@ function stopRingTone()
 	}
 }
 
+/**
+ * On outgoing call after remote connect it will starts.
+ */
 function startRingbackTone()
 {
 	try
@@ -53,6 +65,9 @@ function startRingbackTone()
 	}
 }
 
+/**
+ * After received / missed / ignored from callee and on error it stops.
+ */
 function stopRingbackTone()
 {
 	try
