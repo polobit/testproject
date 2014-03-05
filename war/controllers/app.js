@@ -59,7 +59,7 @@ function currentRoute(route)
 	}
 	if (GLOBAL_WEBRULE_FLAG)
 	{
-		_agile_execute_webrules();
+		_agile_execute_web_rules();
 	}
 	// disposeEvents();
 }
