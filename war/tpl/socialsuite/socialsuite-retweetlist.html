@@ -1,40 +1,41 @@
 <script id="socialsuite-RT-userlist-template" type="text/html">
 <div class="modal hide fade message-modal" id="socialsuite_RT_userlistModal" style="width:400px; left:55%;word-wrap: break-word;">
   <div class="modal-header">
-    <button class="close" data-dismiss="modal">x</button>
-    <h3>{{retweeted}}</h3>			
+     <button class="close" data-dismiss="modal">x</button>
+     <h3>{{retweeted}}</h3>			
   </div>
   <div class="modal-body agile-modal-body" style="padding:0;">	       
-   <article class="stream-item">
-    <div class="item-box">       
-     <div class="tweet">
-       <header class="tweet-header" style="padding-bottom: 15px;">        
-         <a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
-           <div class="obj-left item-img tweet-img">  
-	         <img class="tweet-avatar avatar pull-left thumbnail" src={{user.profile_image_url}} width="40" height="40" alt="{{user.screen_name}}'s avatar">   
- 		   </div> 
- 		   <div class="tweet-user"> 
- 		     <span class="account-inline txt-ellipsis"> 
- 		 	   <b class="fullname link-complex-target">{{user.name}}</b> 
- 			   <span class="username txt-mute"><span class="at">@</span>{{user.screen_name}}</span>  
- 		     </span> 
- 		   </div> 
-    	 </a>  
-	   </header> 
-	   <div class="tweet-body"> <p class="tweet-text"> {{safe_tweet text}} </p> </div>	
-       <footer class="tweet-footer cf">
-         <time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>
-	   </footer>  
-	 </div>
-	</div>                        
-  </article>
-  <article stream-id="{{stream_id}}" id="RTuser_list">
+     <article class="stream-item">
+       <div class="item-box">       
+         <div class="tweet">
+            <header class="tweet-header" style="padding-bottom: 15px;">        
+               <a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
+                 <div class="obj-left item-img tweet-img">  
+	                <img class="tweet-avatar avatar pull-left thumbnail" src={{user.profile_image_url}} width="40" height="40" alt="{{user.screen_name}}'s avatar">   
+ 		         </div> 
+ 		         <div class="tweet-user"> 
+ 		            <span class="account-inline txt-ellipsis"> 
+ 		 	          <b class="fullname link-complex-target">{{user.name}}</b> 
+ 			          <span class="username txt-mute"><span class="at">@</span>{{user.screen_name}}</span>  
+ 		            </span> 
+ 		         </div> 
+    	       </a>  
+	        </header> 
+	        <div class="tweet-body"> 
+               <p class="tweet-text"> {{safe_tweet text}} </p> 
+            </div>	
+            <footer class="tweet-footer cf">
+               <time class="time-ago txt-mute txt-small time-ellipsis" datetime="{{created_at}}">{{created_at}}</time>
+	        </footer>  
+	     </div>
+	   </div>                        
+     </article>
+     <article stream-id="{{stream_id}}" id="RTuser_list">
             <img src="img/ajax-spinner.gif" id="spinner-modal" style="display:none;"></img>
-  </article>	        
- </div>
+     </article>	        
+   </div>
 </div>
 </script>
-
 
 <script id="socialsuite-RT-userlist-collection-template" type="text/html">	
 <ul id="socialsuite-RT-userlist-model-list" class="RTuserlist-modal">
@@ -45,8 +46,8 @@
 <script id="socialsuite-RT-userlist-model-template" type="text/html">	
 <li id="{{id}}" class="stream-item">
   <div class="item-box">       
-    <div class="tweet">
-      <header class="tweet-header" style="padding-bottom: 15px;">        
+     <div class="tweet">
+       <header class="tweet-header" style="padding-bottom: 15px;">        
          <a class="account-link link-complex block" href="https://twitter.com/{{user.screenName}}" rel="user" target="_blank"> 
            <div class="obj-left item-img tweet-img">  
 	         <img class="tweet-avatar pull-left thumbnail" src={{user.profileImageUrlHttps}} width="30px" height="30px" style="border-radius: 8px;" alt="{{user.screenName}}'s avatar">   
@@ -58,15 +59,15 @@
  		     </span> 
  		   </div> 
     	 </a>  
-	  </header> 
-	  <div class="tweet-body"> 
-          <p class="tweet-text txt-mute"> {{user.followersCount}} Followers </p> 
-      </div>
-      <footer class="right" style="margin-top: -28px;">
+	   </header> 
+	   <div class="tweet-body"> 
+           <p class="tweet-text txt-mute"> {{user.followersCount}} Followers </p> 
+       </div>
+       <footer class="right" style="margin-top: -28px;">
           <button class="tweet-to-user" tweet-owner="{{user.screenName}}"><i class="icon icon-share" title="Tweet to {{user.screenName}}"></i></button>    	  		   
           <button class="follow-user" tweet-owner="{{user.screenName}}"><i class="icon-twitter"></i> Follow</button>
-      </footer>
-	</div><!-- tweet -->
-  </div><!-- item-box end-->                        
+       </footer>
+	 </div>
+  </div>                        
 </li>
 </script>

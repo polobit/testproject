@@ -1,6 +1,6 @@
-/** 
- * This file contains all event related actions on tweet, 
- * Like tweet, delete tweet, follow, unfollow, RT, etc.
+/**
+ * This file contains all event related actions on tweet, Like tweet, delete
+ * tweet, follow, unfollow, RT, etc.
  */
 
 $(function()
@@ -711,7 +711,7 @@ $(function()
 											// Stream owner follows tweet owner
 											// then add unfollow option
 											if (data.follow == "true")
-											{												
+											{
 												$('#' + elementId + '_list', $('#' + streamId))
 														.append(
 																'<li class="list-clear"><a href="#social" class="unfollow-user" tweet-owner=' + tweetOwner + '>Unfollow @' + tweetOwner + '</a></li>');
@@ -918,7 +918,7 @@ $(function()
 			displayError(null, data);
 		});
 	});
-	
+
 	/**
 	 * Get tweet, show tweet with list of retweeted user details.
 	 */
