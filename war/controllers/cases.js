@@ -1,33 +1,24 @@
 /**
- * Creates backbone router for Case create, read and update 
- * operations
- **/
+ * Creates backbone router for Case create, read and update operations
+ */
 var CasesRouter = Backbone.Router.extend({
 
-    routes: {
-        "cases": "listCases",
-    },
-    
-    /**
-     * Fetches all the case and shows them as a list. 
-     *  
-     */
-    listCases: function () 
-	{	
-		this.casesCollectionView = new Base_Collection_View({ 
-			url: 'core/api/cases',
-			restKey: "case",
-			templateKey: "cases",
-			individual_tag_name: 'tr'
-		});
+routes : { "cases" : "listCases", },
 
-    	this.casesCollectionView.collection.fetch();
-        
-        $('#content').html(this.casesCollectionView.render().el);
+/**
+ * Fetches all the case and shows them as a list.
+ * 
+ */
+listCases : function()
+{
+	this.casesCollectionView = new Base_Collection_View({ url : 'core/api/cases', restKey : "case", templateKey : "cases", individual_tag_name : 'tr' });
 
-        $(".active").removeClass("active");
-        $("#casesmenu").addClass("active");        
-    }
-	
+	this.casesCollectionView.collection.fetch();
+
+	$('#content').html(this.casesCollectionView.render().el);
+
+	$(".active").removeClass("active");
+	$("#casesmenu").addClass("active");
+}
+
 });
-    

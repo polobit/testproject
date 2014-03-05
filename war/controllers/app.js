@@ -20,6 +20,7 @@ $(function()
 	App_Visitors = new VisitorsRouter();
 	App_WebReports = new WebreportsRouter();
 	App_Documents = new DocumentsRouter();
+	App_Widgets = new WidgetsRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
@@ -46,7 +47,6 @@ var Current_Route;
 function currentRoute(route)
 {
 	Current_Route = window.location.hash.split("#")[1];
-	console.log("in app/js : " + Current_Route);
 	activateInfiniScroll();
 	set_profile_noty();
 	// Reset it to uncheck checkboxes for bulk actions on route change
@@ -57,9 +57,9 @@ function currentRoute(route)
 		tour.end();
 		tour = null;
 	}
-	if(GLOBAL_WEBRULE_FLAG)
-		{
+	if (GLOBAL_WEBRULE_FLAG)
+	{
 		_agile_execute_webrules();
-		}
+	}
 	// disposeEvents();
 }

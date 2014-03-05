@@ -77,6 +77,34 @@ function getTemplate(templateName, context, download)
 	{
 		templateHTML = downloadSynchronously("tpl/min/admin.js");
 	}
+	if (templateName.indexOf("bulk-actions") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/bulk-actions.js");
+	}
+	if (templateName.indexOf("gmap") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/gmap.js");
+	}
+	if (templateName.indexOf("report") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/report.js");
+	}
+	if (templateName.indexOf("workflow") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/workflow.js");
+	}
+	if (templateName.indexOf("purchase") == 0 || templateName.indexOf("subscription") == 0 || templateName.indexOf("subscribe") == 0 || templateName.indexOf("invoice") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/billing.js");
+	}
+	if (templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("widget") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/widget.js");
+	}
+	if (templateName.indexOf("socialsuite") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/socialsuite.js");
+	}
 	if (templateHTML)
 	{
 		// console.log("Adding " + templateHTML);

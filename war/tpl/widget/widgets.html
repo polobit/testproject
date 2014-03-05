@@ -1,0 +1,67 @@
+<script id="widgets-model-template" type="text/html">
+{{#if prefs}}
+	{{add_tag "Widgets"}}
+{{/if}}
+    {{#if_equals name "Sip"}}
+	  <div class="widget_container" id="{{remove_spaces name}}-container" style="display:none;">
+    {{else}}
+      <div class="widget_container" id="{{remove_spaces name}}-container"> 
+    {{/if_equals}}
+		<div class="widget_header widget_edit_icons" onmouseover="showIcons(this); return false;" onmouseout="hideIcons(this); return false;">
+			<div class="widget_header_icons pull-right clear-fix" style="display:none;">
+				<ul class="widget_header_control">
+					<li><i id="{{remove_spaces name}}-move" class="icon-move {{remove_spaces name}}-move"></i></li>
+					{{#if is_minimized}}
+						<li><a href="#"><i widget="{{remove_spaces name}}" class="widget-maximize icon-plus"></i></a></li>
+					{{else}}
+						<li><a href="#"><i widget="{{remove_spaces name}}" class="widget-minimize icon-minus"></i></a></li>
+					{{/if}}
+					<li>
+					{{#if_equals name "Linkedin"}}
+						<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+					{{else}}
+						{{#if_equals name "Twitter"}}
+							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+						{{else}}
+							<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+						{{/if_equals}}
+					{{/if_equals}}
+					</li>
+				</ul>
+			</div>
+			<div style="width:14%">
+				<img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/>
+			</div>
+			<div class="widget_header_name overflow-elipsis" style="width:80%">
+				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{name}}{{/if_equals}}</strong>
+			</div>
+		</div>
+		<div class="widgets" id="{{remove_spaces name}}">
+			{{#unless is_minimized}}
+			<center><img id="widget_load_img" src="img/ajax-loader-cursor.gif" style="margin-top: 10px;margin-bottom: 14px;"></img></center>
+			{{/unless}}
+		</div>
+	</div>
+</script>
+
+<script id="widgets-collection-template" type="text/html">
+{{#unless this.length}}
+	<div class="widget_container">
+		<div class="widget_header">
+			<div class="pull-left">
+				<strong><i class="icon-puzzle-piece"></i>&nbsp;&nbsp;Try some widgets</strong>
+			</div></div>
+		<div class="widgets">
+			<div style="margin:10px;">
+				<p>See more information about your contacts with widgets. Choose from a range of widgets - social, communications, customer billing, support and more.</p>
+				<div class="clearfix"></div>
+			</div>
+			<a class="btn btn-primary" href='#add-widget' style="margin:0px 10px 10px;"><i class="icon-plus-sign"></i>&nbsp;&nbsp;Add widgets</a>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+{{else}}
+ <ul class="widget-sortable" id="widgets-model-list" style="margin:0px 0px"></ul>
+ <a class="btn btn-primary pull-right" href='#add-widget'><i class="icon-plus-sign"></i>&nbsp;&nbsp;Manage widgets</a>
+{{/unless}}
+</script>

@@ -5,12 +5,17 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.socialsuite.util.SocialSuiteLinkedinUtil;
 
 /**
  * <code>Stream</code> class stores the details of a Stream (of social suite
  * user) of client. The class attributes are id, domainUser, screenName,
  * networkType, data of a Stream, token and secret.
+ * <p>
+ * Streams may belongs to same account with same type, but have unique Id. Each
+ * twitter stream register on socialsuite server to get updates by streaming.
+ * Stream's details are required to perform any action related to tweet, like
+ * RT, Tweet, Follow, DM etc.
+ * </p>
  * 
  * @author Farah
  * 
@@ -61,6 +66,10 @@ public class Stream
 	 */
 	public NetworkTypeEnum network_type;
 
+	/**
+	 * It will be maintain sequence of stream when drag-drop functionality of
+	 * stream is implemented.
+	 */
 	public int column_index;
 
 	/** object of objectify for dB operations on Stream. */
@@ -97,7 +106,6 @@ public class Stream
 	public Stream(Long domain_user_id, String client_channel, String screen_name, String network_type,
 			String stream_type, String keyword, String token, String secret, int column_index)
 	{
-		System.out.println("In stream constructor " + stream_type + " networkType : " + network_type);
 		this.domain_user_id = domain_user_id;
 		this.client_channel = client_channel;
 		this.screen_name = screen_name;
@@ -114,7 +122,6 @@ public class Stream
 	 */
 	public void save()
 	{
-		System.out.println("In stream save, networkType : " + this.network_type);
 		dao.put(this);
 	}// save end
 
@@ -129,9 +136,7 @@ public class Stream
 
 	/**
 	 * Before store stream in data store, It will check type of stream is or
-	 * not, Mentions then add screen name as keyword to be search as well as if
-	 * network type is Linkedin then create screen name from first name and last
-	 * name of User.
+	 * not, Mentions then add screen name as keyword to be search.
 	 */
 	@PrePersist
 	void prePersist()
@@ -140,21 +145,6 @@ public class Stream
 		if (this.stream_type.equalsIgnoreCase("Mentions"))
 		{
 			this.keyword = "@" + this.screen_name;
-		}
-
-		// Network type is linked, create screen name.
-		if (this.network_type.toString().equalsIgnoreCase("Linkedin"))
-		{
-			try
-			{
-				String userName = SocialSuiteLinkedinUtil.getLinkedInUserName(this.token, this.secret);
-				System.out.println("Linkedin screen name is : ");
-				this.screen_name = userName;
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
 		}
 	}
 

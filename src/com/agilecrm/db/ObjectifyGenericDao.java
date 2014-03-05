@@ -59,8 +59,8 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
-import com.socialsuite.ScheduledUpdate;
 import com.socialsuite.Stream;
+import com.socialsuite.cron.ScheduledUpdate;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 

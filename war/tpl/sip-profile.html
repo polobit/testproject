@@ -1,33 +1,55 @@
 <script id="sip-profile-template" type="text/html">
 <div class="widget_content">
   <div class="row-fluid">  
-     <div><p>{{msg}}</p></div>  
+     <div>
+        <p>{{msg}}</p>
+     </div>  
   </div>
 <div>
 </script>
 
 <script id="sip-login-template" type="text/html">
-	<div display:inline;  line-height:12px;word-wrap: break-word;">
-		<form class="widget_content" style="border-bottom:none;" id="sip_login_form" name="sip_login_form" method="post">
-	    	<fieldset>
-				<p style='line-height:140%;'>Make and receive calls from your contacts using any SIP account.</p>
-				<p>
+<div display:inline;  line-height:12px;word-wrap: break-word;">
+	<form class="widget_content" style="border-bottom:none;" id="sip_login_form" name="sip_login_form" method="post">
+    	<fieldset>
+		      <p style='line-height:140%;'>
+                   Make and receive calls from your contacts using any SIP account.
+              </p>
+			  <p>
 				<label><b>Enter your Sip details </b></label>
                 <label style="width: 100%;" align="center" id="sip_reg_status"></label>
-				<div class="control-group"><div class="controls"><input type="text" id="sip_username" class="input-medium required widget_input_box" style="width:90%" title="e.g. John Doe, ACME Inc" value="" name="username" placeholder="Full 'Friendly' Display Name"></input></div></div>
-                <div class="control-group"><div class="controls"><input type="text" id="sip_realm" class="input-medium required widget_input_box" style="width:90%" title="e.g. computer.network, proxy.domain.com" value="" name="realm" placeholder="Server (SIP Proxy or Virtual PBX)"></input></div></div>				
-                <div class="control-group"><div class="controls"><input type="text" id="sip_privateid" class="input-medium required widget_input_box" style="width:90%" title="e.g. 555123456 (or John.Doe)" value="" name="privateid" placeholder="SIP Number (or User Number)"></input></div></div>				
-                <div class="control-group"><div class="controls"><input type="password" id="sip_password" class="input-medium required widget_input_box" style="width:90%" title="Password" value="" name="password" placeholder="Password"></input></div></div>
+				<div class="control-group">
+                     <div class="controls">
+                         <input type="text" id="sip_username" class="input-medium required widget_input_box" style="width:90%" title="e.g. John Doe, ACME Inc" value="" name="username" placeholder="Full 'Friendly' Display Name"></input>
+                     </div>
+                </div>
+                <div class="control-group">
+                     <div class="controls">
+                          <input type="text" id="sip_realm" class="input-medium required widget_input_box" style="width:90%" title="e.g. computer.network, proxy.domain.com" value="" name="realm" placeholder="Server (SIP Proxy or Virtual PBX)"></input>
+                     </div>
+                </div>				
+                <div class="control-group">
+                     <div class="controls">
+                          <input type="text" id="sip_privateid" class="input-medium required widget_input_box" style="width:90%" title="e.g. 555123456 (or John.Doe)" value="" name="privateid" placeholder="SIP Number (or User Number)"></input>
+                     </div>
+                </div>				
+                <div class="control-group">
+                     <div class="controls">
+                          <input type="password" id="sip_password" class="input-medium required widget_input_box" style="width:90%" title="Password" value="" name="password" placeholder="Password"></input>
+                     </div>
+                </div>
                 <input type="checkbox" id="sip_wsenable" name="wsenable" title="Websocket URL"></input> Enable SIP Legacy Mode
-                <!-- <div class="control-group"><div class="controls"><input type="text" id="sip_publicid" class="input-medium required widget_input_box" style="width:90%" title="e.g. sip:+33600000000@doubango.org" value="" name="publicid" placeholder="Authorization User Name"></input></div></div> -->                							
-				</p>
-				<a href="#" id="save_prefs" class="btn btn-primary" style="text-decoration:none;">Save</a>
-				<a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>
-                <br>
-                <p style="line-height: 25px;padding:0px;">Don't have an SIP account? <a href="http://www.voip-info.org/wiki/view/Sip+Trunking+Providers" target="_blank"> SignUp </a></p>
-			 </fieldset>
-	    </form>
-	</div>
+              </p>
+			  <a href="#" id="save_prefs" class="btn btn-primary" style="text-decoration:none;">Save</a>
+			  <a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+              <br>
+              <p style="line-height: 25px;padding:0px;">
+                  Don't have an SIP account? 
+                  <a href="http://www.voip-info.org/wiki/view/Sip+Trunking+Providers" target="_blank"> SignUp </a>
+              </p>
+		 </fieldset>
+    </form>
+</div>
 </script>
 
 

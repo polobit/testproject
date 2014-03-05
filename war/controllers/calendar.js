@@ -6,15 +6,14 @@
 var CalendarRouter = Backbone.Router.extend({
 
 	routes : {
-		/* Shows fullCalendar page */
-		"calendar" : "calendar",
-		"tasks" : "tasks"
-	},
+	/* Shows fullCalendar page */
+	"calendar" : "calendar", "tasks" : "tasks" },
 	/**
 	 * Activates the calendar menu and loads minified fullcalendar and jquery-ui
 	 * to show calendar view. Also shows tasks list in separate section.
 	 */
-	calendar : function() {
+	calendar : function()
+	{
 
 		$(".active").removeClass("active");
 		$("#calendarmenu").addClass("active");
@@ -23,23 +22,20 @@ var CalendarRouter = Backbone.Router.extend({
 
 		// Typahead also uses jqueryui - if you are changing the version here,
 		// change it there too
-		head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function() {
-					showCalendar()
+		head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
+		{
+			showCalendar()
+		});
+
+		this.tasksListView = new Base_Collection_View({ url : '/core/api/tasks', restKey : "task", templateKey : "tasks", individual_tag_name : 'tr',
+			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$(".task-due-time", el).timeago();
 				});
 
-		this.tasksListView = new Base_Collection_View({
-			url : '/core/api/tasks',
-			restKey : "task",
-			templateKey : "tasks",
-			individual_tag_name : 'tr',
-			postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".task-due-time", el).timeago();
-              	});
-        
-            	  
-            }
-		});
+			} });
 
 		// Tasks has its own appendItem function to show the status (overdue,
 		// today, tomorrow and next-week)
@@ -50,21 +46,21 @@ var CalendarRouter = Backbone.Router.extend({
 	},
 
 	/* Show tasks list when All Tasks clicked under calendar page. */
-	tasks : function() {
-		
+	tasks : function()
+	{
+
 		$('#content').html(getTemplate("tasks-list-header", {}));
-			
-		fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner() 
+
+		fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
 		{
-			
+
 			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
 			$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>My Pending Tasks</a></li>");
-			
-			// To Updated task list based on user selection of type and owner 
+
+			// To Updated task list based on user selection of type and owner
 			initOwnerslist();
-		}, "<li><a href='{{id}}'>My Tasks</a></li>",true);
-		
+		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
+
 		$(".active").removeClass("active");
 		$("#calendarmenu").addClass("active");
-	}
-});
+	} });

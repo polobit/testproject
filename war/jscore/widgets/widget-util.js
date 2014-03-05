@@ -345,9 +345,9 @@ function save_widget_prefs(pluginName, prefs, callback)
 		update_collection_with_prefs(data);
 		
 		// Stop old stack.
-		if(SIP_START == true)
+		if(Sip_Start == true)
 		  {
-			SIP_UPDATED = true;
+			Sip_Updated = true;
 			sipUnRegister();
 		  }		  
 		
