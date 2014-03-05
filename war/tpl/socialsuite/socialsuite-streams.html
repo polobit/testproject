@@ -1,82 +1,84 @@
 <!-- main social suite container -->
 <script id="socialsuite-streams-collection-template" type="text/html">
-{{#unless this.length}} 
-  <div class="slate">
+{{#unless this.length}}
+ <div class="slate">
     <div class="slate-content">
-        <div class="box-left">
-             <img alt="Clipboard" src="/img/clipboard.png" />
-        </div>
-        <div class="box-right">
-           <h3>You have not associated any social accounts currently.</h3>
-           <div class="text"> 
-               Track relevant conversations and participate. Import prospective customers and run multichannel campaigns.
-           </div>
-           Get started by adding a social stream.<br>
-           <a id="add-stream" class="add-stream add-stream-tab btn">
- 			  <i class="icon icon-plus-sign"></i> Add Stream
-		   </a> 
-		</div>
+       <div class="box-left">
+            <img alt="Clipboard" src="/img/clipboard.png" />
+       </div>
+       <div class="box-right">
+            <h3>You have not associated any social accounts currently.</h3>
+            <div class="text">
+               	Track relevant conversations and participate. Import prospective customers and run multichannel campaigns.  
+            </div>
+          		Get started by adding a social stream.<br>
+                <a id="add-stream" class="add-stream add-stream-tab btn">
+ 		          <i class="icon icon-plus-sign"></i> Add Stream
+		        </a> 
+	   </div>
     </div>
-  </div>
+ </div>
 {{else}} 
-  <ul id="socialsuite-streams-model-list" class="columns row-fluid ui-sortable"></ul> 
+  <ul id="socialsuite-streams-model-list" class="columns row-fluid ui-sortable">  </ul> 
 {{/unless}}
 </script>
 
 <!-- main column in container -->
 <script id="socialsuite-streams-model-template" type="text/html">
-<header class="column-header">   
-   {{#if profile_img_url}}
+<header class="column-header">    
+  {{#if profile_img_url}}
      <img src={{profile_img_url}} id={{id}}-profile-img class="user-profile-img pull-left thumbnail" alt="{{screen_name}}'s avatar." title="{{screen_name}}'s avatar.">
-   {{/if}}             
-   <!-- <small class="pull-right column-index">{{column_index}}</small> -->    
-   <span>           
-     {{#if_equals network_type "TWITTER"}}                 
-        <i class="pull-right margin-hs social-type-icon icon icon-twitter"></i>               
-     {{/if_equals}}     
-     {{#if_equals stream_type "Mentions"}}
-        <p class="stream-type-icon icon mentions-small-title" title="Mentions Stream">@</p>
-     {{else}}
-        <i class="stream-type-icon icon {{get_stream_icon stream_type}}" title="{{stream_type}} Stream"></i>
-     {{/if_equals}}
-     <span id="stream-spinner-modal-{{id}}" class="waiting-symbol">
-        <img src="img/ajax-loader-cursor.gif"></img>
-     </span>
-   </span>        
-   <h4 class="column-title txt-ellipsis"> 
-     {{#if_equals stream_type "All_Updates"}}    
-        <span><b>All Updates</b></span>
-     {{else}} 
-       {{#if_equals stream_type "DM_Inbox"}}
-         <span><b>DM Inbox</b></span>
-       {{else}} 
-         {{#if_equals stream_type "DM_Outbox"}}
-            <span><b>DM Outbox</b></span>
-         {{else}}
-  	        <span><b>{{stream_type}}</b></span>
-         {{/if_equals}}
-       {{/if_equals}}
-     {{/if_equals}}
-     {{#if_equals stream_type "Search"}}                 
- 	    <small>{{keyword}}</small>
-     {{/if_equals}}
-     <br>
- 	 <span class="attribution txt-mute txt-sub-antialiased">@{{screen_name}}</span>
+  {{/if}}             
+  <!-- <small class="pull-right column-index">{{column_index}}</small> -->    
+  <span>           
+    {{#if_equals network_type "TWITTER"}}                 
+        <i class="pull-right margin-hs social-type-icon icon icon-twitter"></i>
+    {{else}}
+        <i class="margin-hs social-type-icon icon icon-linkedin"></i>
+    {{/if_equals}}     
+
+    {{#if_equals stream_type "Mentions"}}
+         <p class="stream-type-icon icon mentions-small-title" title="Mentions Stream">@</p>
+    {{else}}
+         <i class="stream-type-icon icon {{get_stream_icon stream_type}}" title="{{stream_type}} Stream"></i>
+    {{/if_equals}}
+                 
+    <span id="stream-spinner-modal-{{id}}" class="waiting-symbol">
+         <img src="img/ajax-loader-cursor.gif"></img>
+    </span>
+  </span>        
+  <h4 class="column-title txt-ellipsis"> 
+      {{#if_equals stream_type "All_Updates"}}    
+          <span><b>All Updates</b></span>
+      {{else}} 
+        {{#if_equals stream_type "DM_Inbox"}}
+           <span><b>DM Inbox</b></span>
+        {{else}} 
+           {{#if_equals stream_type "DM_Outbox"}}
+               <span><b>DM Outbox</b></span>
+           {{else}}
+  		       <span><b>{{stream_type}}</b></span>
+           {{/if_equals}}
+        {{/if_equals}}
+      {{/if_equals}}
+      {{#if_equals stream_type "Search"}}                 
+ 		 <small>{{keyword}}</small>
+      {{/if_equals}}
+      <br>
+ 	  <span class="attribution txt-mute txt-sub-antialiased">@{{screen_name}}</span>
    </h4> 
    <span class="column-header-link is-actionable">
-     <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="Delete Stream"></i>                     
-     {{#if_equals network_type "TWITTER"}} 		 		
-        <i class="compose-status icon icon-edit compose-message header-action" stream-id={{id}} title="Compose Message"></i>
-	 {{else}}
-	    <i class="compose-status icon icon-edit share-update header-action" stream-id={{id}} title="Share an update"></i>
-	 {{/if_equals}} 
+      <i class="pull-right icon icon-trash stream-delete header-action" id={{id}} title="Delete Stream"></i>                     
+      {{#if_equals network_type "TWITTER"}} 		 		
+          <i class="compose-status icon icon-edit compose-message header-action" stream-id={{id}} title="Compose Message"></i>
+	  {{else}}
+	      <i class="compose-status icon icon-edit share-update header-action" stream-id={{id}} title="Share an update"></i>
+	  {{/if_equals}} 
    </span>	 
 </header>
-<div id="stream_notifications_{{id}}" class="stream-notifications action-notify" data={{id}} rel="">
-
-</div>
-<div id="stream" class="column-content">                   
-
+<div id="stream_notifications_{{id}}" class="stream-notifications action-notify" data={{id}} rel=""></div>
+<div id="stream" class="column-content">
+                      
 </div>
 </script>
 
@@ -91,7 +93,7 @@
 <script id="Column-model-template" type="text/html">
 {{#if_equals msg_type "Tweet"}}
   <article id={{id}} tweet-id-str="{{id_str}}" stream-id={{stream_id}} class="stream-item is-actionable {{deleted_msg}}">
-   <div class="item-box">       
+    <div class="item-box">       
       <div class="tweet">
            <header class="tweet-header">        
 	          <a class="account-link link-complex block" href="https://twitter.com/{{user.screen_name}}" rel="user" target="_blank"> 
@@ -168,6 +170,7 @@
 		</div>
 	</div>                        
   </article>
+
 {{else}} 
   {{#if_equals msg_type "NoTweet"}}
    {{#if show}}

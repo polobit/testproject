@@ -70,6 +70,8 @@ function addScheduledUpdateInStream(scheduledUpdate)
 		// Set new data.
 		newScheduledUpdate.set("message", scheduledUpdate.message);
 		newScheduledUpdate.set("schedule", scheduledUpdate.schedule);
+		newScheduledUpdate.set("scheduled_date", scheduledUpdate.scheduled_date);
+		newScheduledUpdate.set("scheduled_time", scheduledUpdate.scheduled_time);
 
 		// Add back to stream.
 		Scheduled_Updates_View.collection.add(newScheduledUpdate);

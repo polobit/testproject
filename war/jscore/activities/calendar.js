@@ -220,12 +220,12 @@ $(function(){
 		$(this).attr("disabled", "disabled");
 		
 		$(this).after(LOADING_HTML);
-		App_Settings.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Settings.calendar_sync_google.model.destroy({success : function(){
+		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+		console.log(App_Widgets.calendar_sync_google.model.destroy({success : function(){
 			
-			App_Settings.calendar_sync_google.model.clear();
-			App_Settings.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-			App_Settings.calendar_sync_google.render(true);
+			App_Widgets.calendar_sync_google.model.clear();
+			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
+				App_Widgets.calendar_sync_google.render(true);
 			erase_google_calendar_prefs_cookie();
 			
 		}}));
