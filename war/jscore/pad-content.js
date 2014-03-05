@@ -97,6 +97,14 @@ var CONTENT_JSON = {
 		"button_text" : "Add Email Template",
 		"route" : "#email-template-add",
 		"image" : "/img/clipboard.png"
+	},
+	
+	"webrules" : {
+		
+		"title" : "Engage visitors on website",
+		"description" : "Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <documentation ref:https://github.com/agilecrm/agile-popups>.",
+		"button_text" : "Add Web Rule",
+		"route" : "#webrules-add",
 	}
 	
 };
