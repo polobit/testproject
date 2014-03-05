@@ -130,9 +130,7 @@ public class GMailGadgetServlet extends HttpServlet
 	domainUser.gadget_id = ownerId;
 	domainUser.save();
 
-	resp.getWriter()
-		.println(
-			"You have successfully associated your gadget with your AgileCRM account. Please close this popup to start using gadget.");
+	resp.getWriter().println("You have successfully associated your gadget with your AgileCRM account. Please close this popup to start using gadget.");
 
 	return false;
     }

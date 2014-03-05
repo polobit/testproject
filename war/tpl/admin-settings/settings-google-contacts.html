@@ -1,18 +1,31 @@
 <script id="import-google-contacts-template" type="text/html">
-
-<div class="well">
-  <legend>Contacts <span class="label label-important">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend>
-	<div class="row-fluid">	
-		{{#unless id}}
-		<div style="display:inline" class="span3"><img src="/img/icons/google-contacts.png" style="width:80px;height:80px" ></img> </div>
-		<div style="display:inline" class="span9">
-				<p style="padding-top:5px">Setup contact sync with your Gmail or Google Apps account.</p>
-		</div>
-		{{else}}
-			<div style="display:inline;float:right" class="span7"><img src="/img/icons/google-contacts.png" style="width:80px;height:80px" ></img> </div>
-		{{/unless}}
-
+	<div class="well widget-add" style="width:220px; height:220px;">
+    <img class="thumbnail" src="/img/icons/google-contacts-logo.jpg" style="width:210px; height:70px;" />
+	<br />
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 75px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Agile can periodically sync your contacts in your CRM with your Google Contacts.
 	</div>
+    <div>
+			{{#if id}}
+    			<a class="btn btn-danger"  id="google-import-prefs-delete" >Delete</a>
+				<a href="#google-apps/contacts" class="btn" id="setting-widget">Settings</a>
+    		{{else}}
+    			<div class="btn" id="google-import" style="display:inline-block;">Setup</div>
+    		{{/if}}
+	</div>
+</div>
+</script>
+<script id="import-google-contacts-setup-template" type="text/html">
+
+	<div class="well span4">
+ 	<!-- <legend>Contacts <span class="label label-important">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
+   <center> <img class="thumbnail" src="/img/icons/google-contacts-logo.jpg" style="width:210px; height:70px;" /></center>
+	<br />
+{{#unless id}}
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Setup contact sync with your Gmail or Google Apps account.
+	</div>
+{{/unless}}
 {{#if id}}
 
     <form id="google-contacts-import-form" class="form-horizontal">
@@ -23,7 +36,7 @@
 				<select class="required" name="sync_type" id="sync-type">
 					<option value="CLIENT_TO_AGILE">Google to Agile</option>
 					<option value="AGILE_TO_CLIENT">Agile to Google</option>
-					<option value="TWO_WAY">Both way</option>
+					<option value="TWO_WAY">Both ways</option>
 				</select>
 			</div>
 	</div>
@@ -32,7 +45,8 @@
 	<div class="control-group" style="margin-left:-80px;display:none" id="sync_from_group_controlgroup">
 {{else}}
 	<div class="control-group" style="margin-left:-80px" id="sync_from_group_controlgroup">
-		<label class="control-label" style="text-align:">Sync from</label> 
+{{/if_equals}}
+		<label class="control-label" style="text-align:">Sync From</label> 
            <div class="controls">
 				<select name="sync_from_group" class="required">
 				{{#each groups}}
@@ -43,8 +57,9 @@
 				{{/each}}
 				</select>
 			</div>
+<span class="help-block" style="margin-left:160px; margin-top:8px">Google contact  group to sync from.</span>
 	</div>
-{{/if_equals}}
+
 {{#if_equals sync_type "AGILE_TO_CLIENT"}}
 	<div class="control-group" style="margin-left:-80px" id="sync_to_group_controlgroup">
 {{else}}
@@ -72,6 +87,7 @@
 				{{/each}}
 				</select>
 			</div>
+	<span class="help-block" style="margin-left:160px; margin-top:8px">Google contact  group to sync to.</span>
 	</div>
 
 	 <div class="control-group" style="margin-left:-80px">
@@ -87,7 +103,6 @@
 	</div>
 
  
-{{/if}}
 
 {{#if_equals sync_type "AGILE_TO_CLIENT"}}
 <div class="control-group" style="margin-left:-80px" id="my_contacts_sync_group">
@@ -107,16 +122,11 @@
 </div>
 
 		 <input name="id" type="hidden" value="{{id}}" />
-	{{#if id}}	
+
       <div class="form-actions">
-			<div class="btn save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Save</div>
-			<div class="btn btn-danger" id="google-import-prefs-delete" style="display:inline-block;">Delete</div>
+			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Save</div>
+			<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 	 </div>
-	{{else}}
-		<hr style="border-bottom:1px solid #e5e5e5!important"/>
-		<div style="text-align: center">
-			 <div class="btn" id="google-import" style="display:inline-block;">Setup</div>
-		</div>
 	{{/if}}
         </fieldset>
     </form>
