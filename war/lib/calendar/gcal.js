@@ -75,7 +75,8 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 		for (var i = 0; i < resp.items.length; i++) {	
 			var fc_event = google2fcEvent(resp.items[i]);
 			// Add event
-			$('#calendar').fullCalendar( 'renderEvent', fc_event  )
+			$('#calendar').fullCalendar('removeEvents', fc_event.id);
+			$('#calendar').fullCalendar( 'renderEvent', fc_event )
 		}
 	});
 }
@@ -88,6 +89,7 @@ function ts2googleDate(ts) {
 // Convert Google Event to Full Calendar Event  
 function google2fcEvent(google) {
     var fc = {
+       id : google.id;
       title: google.summary,
       start: google.start.date || google.start.dateTime,
       end: google.end.date || google.end.dateTime,
