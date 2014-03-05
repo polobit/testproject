@@ -108,23 +108,23 @@ $(function()
 		
 		$(this).after(LOADING_HTML);
 		
-		App_Settings.contact_sync_google.model.set(serializeForm("google-contacts-import-form"));
+		App_Settings.setup_google_contacts.model.set(serializeForm("google-contacts-import-form"));
 		
-		var url = App_Settings.contact_sync_google.model.url;
+		var url = App_Settings.setup_google_contacts.model.url;
 		var show_noty = false;
 		if(sync)
 		{
 			if(!confirm("Are you sure you want to sync now?"))
 			{
-				App_Settings.contact_sync_google.render(true);
+				App_Settings.setup_google_contacts.render(true);
 	    		return;
 			}
 			else
 			{
-				App_Settings.contact_sync_google.model.url = url + "?sync=true"
-				App_Settings.contact_sync_google.model.save({success : function(data){
-					App_Settings.contact_sync_google.render(true);
-					App_Settings.contact_sync_google.model.url = url;
+				App_Settings.setup_google_contacts.model.url = url + "?sync=true"
+				App_Settings.setup_google_contacts.model.save({success : function(data){
+					App_Settings.setup_google_contacts.render(true);
+					App_Settings.setup_google_contacts.model.url = url;
 					
 				}});
 			
@@ -134,9 +134,9 @@ $(function()
 			
 		}
 		
-		App_Settings.contact_sync_google.model.save({success : function(data){
-				App_Settings.contact_sync_google.render(true);
-				App_Settings.contact_sync_google.model.url = url;
+		App_Settings.setup_google_contacts.model.save({success : function(data){
+				App_Settings.setup_google_contacts.render(true);
+				App_Settings.setup_google_contacts.model.url = url;
 				
 			}});
 		

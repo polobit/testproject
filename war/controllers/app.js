@@ -57,9 +57,9 @@ function currentRoute(route)
 		tour.end();
 		tour = null;
 	}
-	if(GLOBAL_WEBRULE_FLAG)
-		{
+	if (GLOBAL_WEBRULE_FLAG)
+	{
 		_agile_execute_webrules();
-		}
+	}
 	// disposeEvents();
 }

@@ -1,0 +1,93 @@
+<script id="socialsuite-twitter-message-template" type="text/html">
+<!-- New (Note) Modal views -->
+<div class="modal hide fade message-modal" id="socialsuite_twitter_messageModal" style="width:400px; left:55%;word-wrap: break-word;">
+   <div class="modal-header">
+     <button class="close" data-dismiss="modal">x</button>
+ 	 {{#if_equals headline "Direct Message"}}
+	   	<h3><i class="icon-envelope"></i> {{headline}}</h3>
+	 {{/if_equals}}
+	 {{#if_equals headline "Tweet"}}
+		<h3><i class="icon-twitter"></i> {{headline}}</h3>
+	 {{/if_equals}}
+     {{#if_equals headline "Reply Tweet"}}
+		<h3><i class="icon-share"></i> {{headline}}</h3>
+	 {{/if_equals}}
+     {{#if_equals headline "Retweet"}}
+		<h3><i class="icon-retweet"></i> {{headline}}</h3>
+	 {{/if_equals}}
+   </div>
+   <div class="modal-body agile-modal-body">
+     <form id="socialsuite_twitter_messageForm" name="socialsuite_twitter_messageForm" method="post">
+       <fieldset>
+         <input name="tweetId" type="hidden" value={{tweetId}} />
+         <input name="tweetOwner" type="hidden" value={{tweetOwner}} />  
+         <input name="streamId" type="hidden" value={{streamId}} />
+         <input name="profileImg" type="hidden" value={{profileImg}} />
+         <input name="headline" type="hidden" value={{headline}} />
+
+  		 <div style="margin-bottom:10px;">
+			{{info}}
+		 </div>	                
+	     <div class="control-group">
+	       <label class="control-label">
+              <b>Message: </b>
+              <span class="field_req">*</span>
+           </label>
+	       <div class="controls span4" style="margin-left:0px;">
+              {{#if message}} <!-- Edit Scheduled Update -->
+                 <input name="id" type="hidden" value={{id}} />
+			     <input name="domain_user_id" type="hidden" value={{domain_user_id}} />
+				 <input name="screen_name" type="hidden" value={{screen_name}} />
+				 <input name="network_type" type="hidden" value={{network_type}} />
+				 <input name="token" type="hidden" value={{token}} />
+                 <input name="secret" type="hidden" value={{secret}} />
+                 {{#if_equals headline "Reply Tweet"}}
+	              	<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{message}}</textarea>
+				 {{else}} <!-- tweet and direct msg -->
+					<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{message}}</textarea>
+				 {{/if_equals}}
+              {{else}}
+                 {{#if_equals headline "Reply Tweet"}}
+	               	<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="Reply Message to {{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;">{{description}}&nbsp</textarea>
+				 {{else}} <!-- tweet and direct msg -->
+					<textarea rows="4" class="required span4 twit-tweet-limit" placeholder="{{description}}" name="message" id="twit-tweet" data-provide="limit" data-counter="#counter" style="max-width:500px;"></textarea>
+				 {{/if_equals}}  
+              {{/if}}
+			  <div class="right">
+                  <small style="font-style: italic;">Characters Left 
+                    <em id="twitter-counter" style="margin-right:5px;">140</em>
+                  </small>
+              </div>
+            </div>
+	      </div>
+       </fieldset>
+       <div id="tweet_scheduling" class="tweet-scheduling" title="Scheduling">
+           <i class="icon-time icon-2x" style="color: gray;"></i>
+       </div>
+       <div id="schedule" class="row" style="display:none;">
+         <div id="schedule_date" class="control-group span3 width-150">
+           <label class="control-label"><b>Date </b></label>
+           <div class="controls">
+             <input id="scheduled_date" class="required width-150 date" type="text" name="scheduled_date" placeholder="mm/dd/yyyy">							
+           </div>
+         </div>
+         <div id="schedule_time" class="control-group span2 width-65">
+           <label class="control-label"><b>Time </b></label>
+           <div class="controls">
+             <input id="scheduled_time" class="required width-65" type="text" name="scheduled_time" placeholder="time">		
+           </div>
+         </div>
+       </div> 
+     </form>   
+     <span id="link-text" class="is-actionable right" style="margin-right: 70px;font:menu;">
+        <a id="add_message" style="color:grey;">Spread the word about Agile CRM</a>
+     </span>         
+   </div>
+   <div class="modal-footer">
+	 <a href="#social" class="btn btn-primary" id="send_tweet">Send</a>
+	 <a href="#social" class="btn btn-primary schedule-tweet" id="schedule_tweet" style="display:none;">Schedule</a>
+	 <span><img src="img/ajax-spinner.gif" id="spinner-modal" style="display:none;"></img></span>
+	 <span class="save-status"></span>
+   </div>
+</div>
+</script>

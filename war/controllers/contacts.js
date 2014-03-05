@@ -5,7 +5,7 @@
  * @module Contact management & filters
  */
 
-CONTACTS_HARD_RELOAD=true;
+CONTACTS_HARD_RELOAD = true;
 
 var ContactsRouter = Backbone.Router
 		.extend({
@@ -14,7 +14,7 @@ var ContactsRouter = Backbone.Router
 			// "dashboard-test": "dashboard",
 
 			/* Contacts */
-			"contacts" : "contacts", "contact/:id" : "contactDetails", "import" : "importContacts",  "contact-edit" : "editContact",
+			"contacts" : "contacts", "contact/:id" : "contactDetails", "import" : "importContacts", "contact-edit" : "editContact",
 				"contact-duplicate" : "duplicateContact", "tags/:tag" : "contacts", "send-email" : "sendEmail", "send-email/:id" : "sendEmail",
 				// "add-opportunity": "addOpportunityToContact",
 				"add-campaign" : "addContactToCampaign",
@@ -35,8 +35,8 @@ var ContactsRouter = Backbone.Router
 				"gmail" : "email", "twitter" : "socialPrefs", "linkedin" : "socialPrefs",
 
 				/* Search results */
-				"contacts/search/:query" : "searchResults"},
-				
+				"contacts/search/:query" : "searchResults" },
+
 			initialize : function()
 			{
 
@@ -53,15 +53,16 @@ var ContactsRouter = Backbone.Router
 
 				$(".active").removeClass("active");
 
-				var time_int=parseInt($('meta[name="last-login-time"]').attr('content'));
-				var time_date=new Date(time_int*1000);
-				
-				var el = $(getTemplate('dashboard1', { time_sec: (time_date).toString().toLowerCase(), time_format: ""}));
+				var time_int = parseInt($('meta[name="last-login-time"]').attr('content'));
+				var time_date = new Date(time_int * 1000);
+
+				var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
 				$("#content").html(el);
-				
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){	 
+
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
 					$("span#last-login-time").timeago();
-		        });
+				});
 				setup_dashboard(el);
 				// loadDynamicTimeline("my-timeline", el);
 			},
@@ -80,7 +81,7 @@ var ContactsRouter = Backbone.Router
 
 				// If contacts are selected then un selects them
 				SELECT_ALL = false;
-				
+
 				var max_contacts_count = 20;
 				var template_key = "contacts";
 				var individual_tag_name = "tr";
@@ -93,15 +94,15 @@ var ContactsRouter = Backbone.Router
 				var url = '/core/api/contacts';
 				var collection_is_reverse = false;
 				this.tag_id = tag_id;
-				
-				if(readCookie('company_filter'))
-				{	
+
+				if (readCookie('company_filter'))
+				{
 					eraseCookie('contact_filter');
 				}
 				// Tags, Search & default browse comes to the same function
 				if (tag_id)
 				{
-					
+
 					// erase filter cookie
 					eraseCookie('contact_filter');
 					eraseCookie('company_filter');
@@ -124,7 +125,7 @@ var ContactsRouter = Backbone.Router
 					filter_id = null;
 
 					url = '/core/api/tags/' + tag_id;
-					
+
 					tag_id = unescape(tag_id);
 				}
 				else
@@ -183,8 +184,8 @@ var ContactsRouter = Backbone.Router
 				/**
 				 * If collection is already defined and contacts are fetched the
 				 * show results instead of initializing collection again
-
-
+				 * 
+				 * 
 				 */
 				if (CONTACTS_HARD_RELOAD == true)
 				{
@@ -194,8 +195,8 @@ var ContactsRouter = Backbone.Router
 
 				if (this.contactsListView && this.contactsListView.collection)
 				{
-					this.contactsListView.collection.url=url;
-					
+					this.contactsListView.collection.url = url;
+
 					$('#content').html(this.contactsListView.render(true).el);
 
 					$(".active").removeClass("active");
@@ -207,13 +208,8 @@ var ContactsRouter = Backbone.Router
 				 * cursor and page_size options are taken to activate
 				 * infiniScroll
 				 */
-				this.contactsListView = new Base_Collection_View({ 
-					url : url, 
-					templateKey : template_key, 
-					individual_tag_name : individual_tag_name,
-					cursor : true, page_size : 25, 
-					sort_collection : collection_is_reverse, 
-					postRenderCallback : function(el)
+				this.contactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : individual_tag_name,
+					cursor : true, page_size : 25, sort_collection : collection_is_reverse, postRenderCallback : function(el)
 					{
 
 						// Contacts are fetched when the app loads in
@@ -317,7 +313,7 @@ var ContactsRouter = Backbone.Router
 				{
 					// Set url to core/api/contacts (If filters are loaded
 					// contacts url is changed so set it back)
-					
+
 					this.contactsListView.collection.url = "core/api/contacts";
 					contact = this.contactsListView.collection.get(id);
 					contact_collection = this.contactsListView.collection;
@@ -325,7 +321,7 @@ var ContactsRouter = Backbone.Router
 				}
 
 				add_recent_view(contact);
-				
+
 				// If contact is of type company , go to company details page
 				if (contact.get('type') == 'COMPANY')
 				{
@@ -536,7 +532,6 @@ var ContactsRouter = Backbone.Router
 				$('#content').html(getTemplate("import-contacts", {}));
 			},
 
-
 			/**
 			 * Adds an opportunity to a contact, which is in contact detail
 			 * view. Populates users and milestones from postRenderCallback of
@@ -648,16 +643,15 @@ var ContactsRouter = Backbone.Router
 							});
 
 						}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
-					},
-					saveCallback:function(data)
+					}, saveCallback : function(data)
 					{
-						var viewValue=readCookie('contact_view');
-						if(viewValue && viewValue==data.id)
+						var viewValue = readCookie('contact_view');
+						if (viewValue && viewValue == data.id)
 						{
-							CONTACTS_HARD_RELOAD=true;
-							App_Contacts.contactViewModel=undefined;
+							CONTACTS_HARD_RELOAD = true;
+							App_Contacts.contactViewModel = undefined;
 						}
-					}});
+					} });
 
 				$("#content").html(contactView.render().el);
 
@@ -675,27 +669,39 @@ var ContactsRouter = Backbone.Router
 				// Show the email form with the email prefilled from the
 				// curtrent contact
 				var model = this.contactDetailView.model;
-				var sendEmailView = new Base_Model_View({ model : model, template : "send-email", postRenderCallback : function(el)
-				{
-					if (id)
-						$("#emailForm", el).find('input[name="to"]').val(id);
-					
-					// Checks Zoomifier tag for contact
-					if(checkTagAgile("Zoomifier"))
-					{
-						// Appends zoomifier link to attach their documents.
-						head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
+				var sendEmailView = new Base_Model_View(
+						{
+							model : model,
+							template : "send-email",
+							postRenderCallback : function(el)
 							{
-								$("#emailForm", el).find('textarea[name="body"]').closest(".controls").append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
-							});
-					}
-						
-					// Populate from address and templates
-					populate_send_email_details(el);
+								if (id)
+									$("#emailForm", el).find('input[name="to"]').val(id);
 
-					// Setup HTML Editor
-					setupHTMLEditor($('#body', el));
-				} });
+								// Checks Zoomifier tag for contact
+								if (checkTagAgile("Zoomifier"))
+								{
+									// Appends zoomifier link to attach their
+									// documents.
+									head
+											.js(
+													LIB_PATH + 'lib/zoomifier.contentpicker.min.js',
+													function()
+													{
+														$("#emailForm", el)
+																.find('textarea[name="body"]')
+																.closest(".controls")
+																.append(
+																		'<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
+													});
+								}
+
+								// Populate from address and templates
+								populate_send_email_details(el);
+
+								// Setup HTML Editor
+								setupHTMLEditor($('#body', el));
+							} });
 				$("#content").html(sendEmailView.render().el);
 			},
 			contactfilters : function()
@@ -712,11 +718,11 @@ var ContactsRouter = Backbone.Router
 				var contacts_filter = new Base_Model_View({ url : 'core/api/filters', template : "filter-contacts", isNew : "true", window : "contact-filters",
 					postRenderCallback : function(el)
 					{
-					
 
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{
-							chainFilters(el, undefined, function(){
+							chainFilters(el, undefined, function()
+							{
 								$('#content').html(el);
 							});
 
@@ -742,18 +748,18 @@ var ContactsRouter = Backbone.Router
 						$("#content").html(LOADING_HTML);
 						head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
 						{
-							chainFilters(el, contact_filter.toJSON(), function(){
+							chainFilters(el, contact_filter.toJSON(), function()
+							{
 								$("#content").html(el);
 							});
 							scramble_input_names($(el).find('#filter-settings'));
 						})
-					},
-					saveCallback:function(data)
+					}, saveCallback : function(data)
 					{
-						var filterValue=readCookie('contact_filter');
-						if(filterValue && filterValue==data.id)CONTACTS_HARD_RELOAD=true;
-					}});
-
+						var filterValue = readCookie('contact_filter');
+						if (filterValue && filterValue == data.id)
+							CONTACTS_HARD_RELOAD = true;
+					} });
 
 				$("#content").html(LOADING_HTML);
 				ContactFilter.render();
@@ -841,8 +847,8 @@ var ContactsRouter = Backbone.Router
 					url = "core/api/contacts";
 				}
 
-				if(CONTACTS_HARD_RELOAD == true)
-				{ 
+				if (CONTACTS_HARD_RELOAD == true)
+				{
 					this.contact_custom_view = undefined;
 					CONTACTS_HARD_RELOAD = false;
 					view_data = undefined;
@@ -884,20 +890,20 @@ var ContactsRouter = Backbone.Router
 				}
 
 				// If defined
-				if(this.contact_custom_view)
+				if (this.contact_custom_view)
 				{
-					//App_Contacts.contactsListView=this.contact_custom_view;
-					if(!(this.contact_custom_view.collection.url == url))
-						{
-							App_Contacts.contact_custom_view.collection.url = url;
-							App_Contacts.contact_custom_view.collection.fetch()
-							$('#content').html(App_Contacts.contact_custom_view.render().el);
-							return;
-						}
+					// App_Contacts.contactsListView=this.contact_custom_view;
+					if (!(this.contact_custom_view.collection.url == url))
+					{
+						App_Contacts.contact_custom_view.collection.url = url;
+						App_Contacts.contact_custom_view.collection.fetch()
+						$('#content').html(App_Contacts.contact_custom_view.render().el);
+						return;
+					}
 
-					var el=App_Contacts.contact_custom_view.render(true).el;
+					var el = App_Contacts.contact_custom_view.render(true).el;
 					$('#content').html(el);
-					
+
 					if (readCookie('company_filter'))
 						$('#contact-heading', el).text('Companies');
 
@@ -906,20 +912,14 @@ var ContactsRouter = Backbone.Router
 					setupViews(el, view_data.name);
 					setupContactFilterList(el, tag_id);
 
-					$(".active").removeClass("active"); // Activate Contacts Navbar tab
+					$(".active").removeClass("active"); // Activate Contacts
+														// Navbar tab
 					$("#contactsmenu").addClass("active");
 					return;
 				}
-				
-				this.contact_custom_view = new Base_Collection_View({ 
-					url : url, 
-					restKey : "contact", 
-					modelData : view_data,
-					templateKey : "contacts-custom-view", 
-					individual_tag_name : 'tr', 
-					cursor : true, 
-					page_size : 25, 
-					sort_collection : false,
+
+				this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data,
+					templateKey : "contacts-custom-view", individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false,
 					postRenderCallback : function(el)
 					{
 						App_Contacts.contactsListView = App_Contacts.contact_custom_view;
@@ -934,17 +934,17 @@ var ContactsRouter = Backbone.Router
 
 						pieTags(el);
 						setupViews(el, view_data.name);
-					
+
 						// show list of filters dropdown in contacts list
 						setupContactFilterList(el, App_Contacts.tag_id);
 					} });
-				
+
 				// Defines appendItem for custom view
 				this.contact_custom_view.appendItem = contactTableView;
 
 				// Fetch collection
 				this.contact_custom_view.collection.fetch();
-				
+
 				$('#content').html(this.contact_custom_view.el);
 
 				// Activate Contacts Navbar tab
@@ -984,5 +984,4 @@ var ContactsRouter = Backbone.Router
 
 				$('#content').html(searchResultsView.render().el);
 
-			}
-		});
+			} });
