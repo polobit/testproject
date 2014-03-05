@@ -46,7 +46,6 @@ var Current_Route;
 function currentRoute(route)
 {
 	Current_Route = window.location.hash.split("#")[1];
-	console.log("in app/js : " + Current_Route);
 	activateInfiniScroll();
 	set_profile_noty();
 	// Reset it to uncheck checkboxes for bulk actions on route change
