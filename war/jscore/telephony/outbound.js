@@ -1,6 +1,12 @@
-// Makes a call (SIP INVITE)
+/**
+ * Makes a call (SIP INVITE). Outgoing call.
+ * 
+ * @param phoneNumber
+ * @returns {Boolean}
+ */
 function makeCall(phoneNumber)
 {
+	// Check Stack is available, Session is empty and phone number is available.
 	if (Sip_Stack && !Sip_Session_Call && !tsk_string_is_null_or_empty(phoneNumber))
 	{
 		// create call session
@@ -9,6 +15,7 @@ function makeCall(phoneNumber)
 		// make call
 		if (Sip_Session_Call.call(phoneNumber) != 0)
 		{
+			// If failed.
 			Sip_Session_Call = null;
 			showCallNotyPopup("failed", "error", "Failed to make call.", false);
 
@@ -28,16 +35,24 @@ function makeCall(phoneNumber)
 	}
 }
 
-// terminates the call (SIP BYE or CANCEL)
+/**
+ * terminates the call (SIP BYE or CANCEL)
+ */
 function hangupCall()
 {
+	// Call session not null.
 	if (Sip_Session_Call != null)
 	{
+		// stop ringtone.
 		stopRingTone();
+		
 		console.log("Terminating the call...");
+		
+		// Hangup call
 		Sip_Session_Call.hangup({ events_listener : { events : '*', listener : sipSessionEventsListener } });
 	}
 
+	// Close notification.
 	if (Notifi_Call)
 	{
 		Notifi_Call.cancel();
