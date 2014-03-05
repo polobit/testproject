@@ -12,14 +12,14 @@ import com.socialsuite.util.ScheduleUpdateUtil;
 public class ScheduledUpdateCron extends HttpServlet
 {
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
-	{
-		doGet(request, response);
-	}
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+	doGet(request, response);
+    }
 
-	// Get Request
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
-	{
-		ScheduleUpdateUtil.postUpdates();
-	}
+    // Get Request
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
+    {
+	ScheduleUpdateUtil.postUpdates();
+    }
 }
