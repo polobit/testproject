@@ -44,12 +44,10 @@ function chainWebRules(el, data, isNew, actions)
 			{
 				if(value == "MODAL_POPUP")
 				$("#tiny_mce_webrules_link", self).show();
-				select.closest('table').siblings('div').find(".web-rule-prevew").show();
+				self.find(".web-rule-preview").show();
 			return;
 			}
-		console.log(select);
-		console.log(select.closest('table').siblings('div').find(".web-rule-prevew"));
-		select.closest('table').siblings('div').find(".web-rule-prevew").hide();
+		self.find(".web-rule-preview").hide();
 	});
 	
 	if(data && data.actions)
@@ -138,9 +136,20 @@ $(function()
 			})*/
 			
 			
-			$(".web-rule-prevew").die().live('click', function(e){
+			$(".web-rule-preview").die().live('click', function(e){
 				e.preventDefault();
-				show_web_rule_action_preview(serializeChainedElement($(this).closest('table')));
+				var that = this;
+				_agile_require_js("https://agilegrabbers.appspot.com/demo/agile-webrules-min.js", function(){
+
+					// Serializes webrule action to show preview
+					var action = serializeChainedElement($(that).closest('table'));
+					// Popup va'ue should be in a json object with key value, as it is returned that way from server text field
+					var popup_text = {};
+					popup_text["value"] = action.popup_text;
+					action.popup_text = popup_text
+					
+						_agile_execute_action(action);
+					});
 			});
 		});
 
