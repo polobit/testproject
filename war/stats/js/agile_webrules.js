@@ -16,7 +16,7 @@ function agile_webRules(callback)
 function _agile_execute_web_rules()
 {
 	// Download web rules and call _agile_webrules
-	_agile_require_js("/stats/min/agile-webrules-min.js", function(){_agile_webrules();});
+	_agile_require_js("https://"+ agile_id.getNamespace() +"-dot-sandbox-dot-agile-crm-cloud.appspot.com/stats/min/agile-webrules-min.js", function(){_agile_webrules();});
 }
 
 /*
