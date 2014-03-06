@@ -35,8 +35,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 		User_Number = null;
 		User_Img = null;
 
-		// Stop sound.
-		stopRingbackTone();
+		// Stop sound.		
 		stopRingTone();
 
 		break;
@@ -49,6 +48,8 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	}
 	case 'starting':
 	{
+		// Add audio tags in home page.
+		addAudio();
 		break;
 	}
 	case 'm_permission_requested':
@@ -61,8 +62,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	}
 	case 'm_permission_refused':
 	{
-		// Stop sound.
-		stopRingbackTone();
+		// Stop sound.		
 		stopRingTone();
 
 		// Display
@@ -94,12 +94,6 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 	switch (e.type) {
 	case 'connecting':
 	{
-		if (e.session == Sip_Register_Session)
-		{
-			// Add audio tags in home page.
-			addAudio();
-		}
-
 		break;
 	}
 	case 'sent_request':
@@ -113,14 +107,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			message = "You can make and receive calls with SIP.";
 
 			// Play sound on sip register.
-			startRingTone();
-
-			// Stop sound after 2 sec.
-			var runTimer = setTimeout(function()
-			{
-				clearInterval(runTimer);
-				stopRingTone();
-			}, 2000); // 2 sec
+			play_sound();
 
 			// Display.
 			showCallNotyPopup("register", 'information', "SIP: You are now registered to make and receive calls successfully.", 5000);
@@ -138,7 +125,6 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 		else if (e.session == Sip_Session_Call)
 		{
 			// Call received.
-			stopRingbackTone();
 			stopRingTone();
 
 			// Display.
@@ -182,7 +168,6 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 		else if (e.session == Sip_Session_Call)
 		{
 			// call terminated.
-			stopRingbackTone();
 			stopRingTone();
 
 			// Show state of call.
@@ -209,6 +194,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_Number = null;
 			User_Img = null;
 
+			// Close html5 notification.
 			if (Notifi_Call)
 			{
 				Notifi_Call.cancel();
@@ -225,7 +211,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			if (iSipResponseCode == 180 || iSipResponseCode == 183)
 			{
 				// On outgoing call.
-				startRingbackTone();
+				startRingTone("ringbacktone");
 				console.log("Remote ringing....");
 			}
 		}
@@ -276,7 +262,6 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 	case 'm_early_media':
 	{
 		// Call refused.
-		stopRingbackTone();
 		stopRingTone();
 		break;
 	}

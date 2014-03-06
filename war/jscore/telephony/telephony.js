@@ -32,6 +32,9 @@ var No_Internet = false;
 // Time Counter.
 var Ready_State_Timer;
 
+// Audio object
+var Sip_Audio;
+
 // If user get disconnect from internet.
 window.addEventListener("offline", function(e)
 {
