@@ -95,6 +95,10 @@ function addTweetToStream(modelStream, tweet)
 	}
 	else
 	{
+		console.log(tweet);
+		if(tweet.text == null || tweet.user == null)
+			return;
+		
 		tweet["msg_type"] = "Tweet";
 
 		console.log(modelStream.get('tweetListView').length);

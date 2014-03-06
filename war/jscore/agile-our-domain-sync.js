@@ -277,9 +277,6 @@ function checkTagAgile(tag)
 var GLOBAL_WEBRULE_FLAG;
 function initWebrules()
 {
-	head.js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/lib/head.load.min.js", "https://agilegrabbers.appspot.com/demo/appspotmodal.js", function(){
-		_agile_execute_webrules();
+		_agile_execute_web_rules();
 		GLOBAL_WEBRULE_FLAG = true;
-	})
-	
 }

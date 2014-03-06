@@ -1,5 +1,9 @@
 /* SIP related functions */
 
+/**
+ * SIPml initialization, stack creation and session regisration does after
+ * adding sip widget / updating sip widget / re-login user.
+ */
 function sipStart()
 {
 	console.log("In sipStart.");
@@ -7,12 +11,16 @@ function sipStart()
 	console.log(Sip_Stack);
 	console.log(Sip_Register_Session);
 
+	// After 15 sec procedure will start.
 	Ready_State_Timer = setTimeout(function()
 	{
+		// after DOM ready.
 		if (document.readyState === "complete")
 		{
+			// Clear 15 sec duration to avoid loop calling.
 			clearInterval(Ready_State_Timer);
 
+			// If sip not register yet.
 			if (Sip_Start == false)
 			{
 				// Get Sip widget
@@ -28,7 +36,7 @@ function sipStart()
 						head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
 						{
 							// initialize SIPML5
-							if (SIPml.isInitialized())
+							if (SIPml.isInitialized()) // If already done.
 								sipRegister();
 							else
 								SIPml.init(sipRegister);
@@ -49,13 +57,19 @@ function sipStart()
  */
 function sipRegister()
 {
+
+	// Properties for session object.
 	Config_Call = { audio_remote : document.getElementById('audio_remote'), events_listener : { events : '*', listener : sipSessionEventsListener } };
 
+	// If sip is not started yet.
 	if (Sip_Start == false)
 	{
+		// Set flag to avoid recall.
 		Sip_Start = true;
 
 		var url = null;
+
+		// Get widget details.
 		var credentials = eval('(' + Sip_Widget_Object.prefs + ')');
 
 		var message = null;
@@ -64,7 +78,7 @@ function sipRegister()
 		{
 			// Check Sip Public Identity is valid.
 			var o_impu = tsip_uri.prototype.Parse(credentials.sip_publicid);
-            
+
 			if (!o_impu || !o_impu.s_user_name || !o_impu.s_host)
 			{
 				Sip_Start = false;
@@ -94,13 +108,15 @@ function sipRegister()
 		catch (e)
 		{
 			Sip_Start = false;
-			message = e + " Please provide valid credentials.";			
+			message = e + " Please provide valid credentials.";
 			showCallNotyPopup("failed", "error", message, 5000);
 		}
 	}
 }
 
-// Register or login on sip server for session.
+/**
+ * Register or login on sip server for session.
+ */
 function sipLogin()
 {
 	try
@@ -115,13 +131,21 @@ function sipLogin()
 	}
 }
 
-// sends SIP REGISTER (expires=0) to logout
+/**
+ * sends SIP REGISTER (expires=0) to logout. Sip unregister stack and session,
+ * On logout / window close / SIP details in Sip widget modified.
+ */
 function sipUnRegister()
 {
+	// Check stack available.
 	if (Sip_Stack)
 	{
-		var done = Sip_Stack.stop(); // shutdown all sessions
+		// shutdown all sessions
+		var done = Sip_Stack.stop();
+
 		console.log("Sip_Stack.stop() :" + done);
+
+		// If not then recursive call.
 		if (done != 0)
 			sipUnRegister();
 	}

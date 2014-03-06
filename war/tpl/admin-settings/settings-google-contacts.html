@@ -19,7 +19,9 @@
 
 	<div class="well span4">
  	<!-- <legend>Contacts <span class="label label-important">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
-   <center> <img class="thumbnail" src="/img/icons/google-contacts-logo.jpg" style="width:210px; height:70px;" /></center>
+
+	<span class="label label-important" style="float:right">Beta</span>
+   <center> <img class="thumbnail" src="/img/icons/google-contacts-logo.jpg" style="width:210px; height:70px;margin-left:40px" /></center>
 	<br />
 {{#unless id}}
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
@@ -90,7 +92,7 @@
 	<span class="help-block" style="margin-left:160px; margin-top:8px">Google contact  group to sync to.</span>
 	</div>
 
-	 <div class="control-group" style="margin-left:-80px">
+		<div class="control-group" style="margin-left:-80px">
 		<label class="control-label" style="text-align:">Frequency</label> 
            <div class="controls">
 				<select class="required" name="duration">
@@ -120,8 +122,10 @@
         </label>       
     </div>
 </div>
+<span style="font-size:14px;float:right;margin-top:-20px" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"> Sync now</a></span>
 
 		 <input name="id" type="hidden" value="{{id}}" />
+
 
       <div class="form-actions">
 			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Save</div>
