@@ -180,11 +180,6 @@ public class SendEmail extends TaskletAdapter
     public static String CLICK_TRACKING_ID = "click_tracking_id";
 
     /**
-     * Open event tracking id
-     */
-    public static String OPEN_TRACKING_ID = "open_tracking_id";
-
-    /**
      * Flags to communicate b/w Opened and Clicked nodes.
      */
     public static String EMAIL_OPEN = "email_open";
@@ -417,10 +412,9 @@ public class SendEmail extends TaskletAdapter
 
 	String trackClicks = getStringValue(nodeJSON, subscriberJSON, data, TRACK_CLICKS);
 
-	// Unique id to track open. It should differ from Clicked inorder to
-	// avoid waking Clicked tasks when opened. Also both ids are
-	// concatenated to wakeup Open node with Clicked.
-	data.put(OPEN_TRACKING_ID, AgileTaskletUtil.getId(campaignJSON) + AgileTaskletUtil.getId(subscriberJSON));
+	// Temporary variables to hold ids
+	String subscriberId = AgileTaskletUtil.getId(subscriberJSON);
+	String campaignId = AgileTaskletUtil.getId(campaignJSON);
 
 	// Check if we need to convert links
 	if (trackClicks != null && trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
@@ -432,26 +426,26 @@ public class SendEmail extends TaskletAdapter
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
 		// Get Keyword
-		text = convertLinks(text, " ", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
-		html = convertLinks(html, " ", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		text = convertLinks(text, " ", data, keyword, subscriberId, campaignId);
+		html = convertLinks(html, " ", data, keyword, subscriberId, campaignId);
 
-		text = convertLinks(text, "\n", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
-		html = convertLinks(html, "\n", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		text = convertLinks(text, "\n", data, keyword, subscriberId, campaignId);
+		html = convertLinks(html, "\n", data, keyword, subscriberId, campaignId);
 
-		text = convertLinks(text, "\r", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
-		html = convertLinks(html, "\r", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		text = convertLinks(text, "\r", data, keyword, subscriberId, campaignId);
+		html = convertLinks(html, "\r", data, keyword, subscriberId, campaignId);
 
-		text = convertLinks(text, "<", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
-		html = convertLinks(html, "<", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		text = convertLinks(text, "<", data, keyword, subscriberId, campaignId);
+		html = convertLinks(html, "<", data, keyword, subscriberId, campaignId);
 
-		text = convertLinks(text, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, subscriberId, campaignId);
+		html = convertLinks(html, "\"", data, keyword, subscriberId, campaignId);
 
-		text = convertLinks(text, "'", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
-		html = convertLinks(html, "'", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		text = convertLinks(text, "'", data, keyword, subscriberId, campaignId);
+		html = convertLinks(html, "'", data, keyword, subscriberId, campaignId);
 
-		text = convertLinks(text, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
-		html = convertLinks(html, "\"", data, keyword, AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON));
+		text = convertLinks(text, "\"", data, keyword, subscriberId, campaignId);
+		html = convertLinks(html, "\"", data, keyword, subscriberId, campaignId);
 
 	    }
 	    catch (Exception e)
@@ -466,7 +460,7 @@ public class SendEmail extends TaskletAdapter
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
-	    html = EmailUtil.appendTrackingImage(html, AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON));
+	    html = EmailUtil.appendTrackingImage(html, campaignId, subscriberId);
 
 	    // if cc present, send using Mailgun as it supports 'Cc'
 	    if (!StringUtils.isEmpty(cc))
@@ -484,7 +478,7 @@ public class SendEmail extends TaskletAdapter
 	}
 
 	// Creates log for sending email
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subject: " + subject, LogType.EMAIL_SENT.toString());
+	LogUtil.addLogToSQL(campaignId, subscriberId, "Subject: " + subject, LogType.EMAIL_SENT.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -589,7 +583,7 @@ public class SendEmail extends TaskletAdapter
      * @param campaignJSON
      *            -campaignJSON
      */
-    private static void addUnsubscribeLink(JSONObject subscriberJSON, JSONObject campaignJSON)
+    public void addUnsubscribeLink(JSONObject subscriberJSON, JSONObject campaignJSON)
     {
 
 	try
@@ -610,4 +604,5 @@ public class SendEmail extends TaskletAdapter
 	}
 
     }
+
 }

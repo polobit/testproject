@@ -51,6 +51,10 @@ public class EmailOpenServlet extends HttpServlet
      **/
     public void service(HttpServletRequest request, HttpServletResponse res) throws IOException
     {
+
+	// Redirect to image.
+	res.sendRedirect("/img/1X1.png");
+
 	// Contact Id
 	String subscriberId = request.getParameter("s");
 
@@ -76,9 +80,6 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-
-	// Redirect to image.
-	res.sendRedirect("/img/1X1.png");
 
 	// Interrupt Campaign cron tasks.
 	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(subscriberId))

@@ -57,7 +57,7 @@ public class EmailOpenDeferredTask implements DeferredTask
 	try
 	{
 	    // Interrupt Opened node
-	    CronUtil.interrupt(campaignId + subscriberId, null, null, new JSONObject(customData));
+	    CronUtil.interrupt(campaignId, subscriberId, null, new JSONObject(customData));
 	}
 	catch (Exception e)
 	{

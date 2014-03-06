@@ -42,7 +42,7 @@ public class MandrillUtil
     /**
      * Limit to fetch pull-queue tasks. Max limit to fetch is 1000
      */
-    public static final int COUNT_LIMIT = 250;
+    public static final int COUNT_LIMIT = 500;
 
     /**
      * Mandrill merge vars surrounded by *| |*. Merge vars are case-insensitive.

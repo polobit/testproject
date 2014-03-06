@@ -2,7 +2,7 @@ package com.agilecrm.user.util;
 
 import org.json.JSONObject;
 
-import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.contact.email.util.ContactImapUtil;
 import com.agilecrm.core.api.prefs.IMAPAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -77,7 +77,7 @@ public class IMAPEmailPrefsUtil
      */
     public static void checkImapPrefs(IMAPEmailPrefs prefs) throws Exception
     {
-	String url = ContactEmailUtil.getIMAPURLForPrefs(prefs, "info@agilecrm.com", "0", "1");
+	String url = ContactImapUtil.getIMAPURLForPrefs(prefs, "info@agilecrm.com", "0", "1");
 
 	// Access URL
 	String jsonResult = HTTPUtil.accessURL(url);
