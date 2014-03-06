@@ -5,9 +5,11 @@
  */
 function initToPubNub()
 {
+	console.log(Pubnub);
 	// Pubnub already defined.
-	if (Pubnub != null)
-		return;
+	if(Pubnub != undefined)
+	 if (Pubnub != null)
+	 	 return;
 
 	// Pubnub not defined.
 	var protocol = 'https';
@@ -15,7 +17,7 @@ function initToPubNub()
 	head.js(protocol + '://pubnub.a.ssl.fastly.net/pubnub-3.4.min.js', function()
 	{
 		// CREATE A PUBNUB OBJECT
-		Pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-5139e454-1edf-4bc1-b0b4-7ee86bb313fe', 'subscribe_key' : 'sub-c-e77c03c6-d284-11e2-b3bf-02ee2ddab7fe',
+		Pubnub = PUBNUB.init({ 'publish_key' : 'pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274', 'subscribe_key' : 'sub-c-118f8482-92c3-11e2-9b69-12313f022c90',
 			ssl : true, origin : 'pubsub.pubnub.com', });
 		// Get compatibility with all browsers.
 		// Pubnub.ready();

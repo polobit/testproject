@@ -9,7 +9,7 @@ function isArray(a)
     return Object.prototype.toString.apply(a) === '[object Array]';
 }
 
-function load_events_from_google()
+function load_events_from_google(start, end, test, callback)
 {
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs";
 	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
@@ -20,7 +20,7 @@ function load_events_from_google()
 		console.log(prefs);
 		if(prefs.expires_at - (2 * 60 * 1000)  >= new Date().getTime())
 		{
-			fill_events_from_google(prefs);
+			fill_events_from_google(prefs, start, end, callback);
 			return;
 		}
 		erase_google_calendar_prefs_cookie()
@@ -31,7 +31,7 @@ function load_events_from_google()
 		if(!doc)
 			return;
 		createCookie("_agile_google_calendar_prefs", JSON.stringify(doc));
-		fill_events_from_google(doc);
+		fill_events_from_google(doc, start, end, callback);
  	});
 }
 
@@ -40,11 +40,17 @@ function erase_google_calendar_prefs_cookie()
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs";
 	eraseCookie(google_calendar_cookie_name);
 }
-
-function fill_events_from_google(data)
+function fill_events_from_google(data, start, end, callback)
 {
 	head.js('lib/calendar/gcal.js', 'https://apis.google.com/js/client.js', 'https://rawgithub.com/dr-skot/gapi-helper/master/gapi-helper.js', function(){
-		$('#calendar').fullCalendar( 'addEventSource', {token:data.access_token, dataType:'agile-gcal'});		
+		console.log("***********************added************************");
+		console.log(callback)
+		if (callback && typeof (callback) === "function" )
+		callback({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"});
+	//	agile_transform_options({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"}, start, end)
+		//agile_transform_options({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"}, start, end);
+		//$('#calendar').fullCalendar( 'removeEventSource', );
+		//$('#calendar').fullCalendar( 'addEventSource', {token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"});		
 	});
 }
 
@@ -66,7 +72,7 @@ function showCalendar() {
         */
     	
         eventSources :[{events: function (start, end, callback) {
-        	load_events_from_google();
+        
             $.getJSON('/core/api/events?start=' + start.getTime() / 1000 + "&end=" + end.getTime() / 1000, function (doc) {
                 
             	if(doc)
@@ -76,7 +82,11 @@ function showCalendar() {
             		
             	}
             });
-        }}],
+        }},
+        {
+        	events: load_events_from_google,
+        	className : "google-calendar"
+        }],
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -84,6 +94,7 @@ function showCalendar() {
         },
         loading: function (bool) {
             if (bool) {
+            	
                 $('#loading').show();
                 
             } else {
@@ -220,12 +231,12 @@ $(function(){
 		$(this).attr("disabled", "disabled");
 		
 		$(this).after(LOADING_HTML);
-		App_Settings.calendar_sync_google.model.url = "/core/api/calendar-prefs"
-		console.log(App_Settings.calendar_sync_google.model.destroy({success : function(){
+		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
+		console.log(App_Widgets.calendar_sync_google.model.destroy({success : function(){
 			
-			App_Settings.calendar_sync_google.model.clear();
-			App_Settings.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
-			App_Settings.calendar_sync_google.render(true);
+			App_Widgets.calendar_sync_google.model.clear();
+			App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs/get"
+				App_Widgets.calendar_sync_google.render(true);
 			erase_google_calendar_prefs_cookie();
 			
 		}}));

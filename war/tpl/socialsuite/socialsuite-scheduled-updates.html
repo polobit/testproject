@@ -5,8 +5,8 @@
         <div class="page-header">
             <h1>Scheduled Messages</h1>
         </div>
-    </div><!-- span12 end -->
-</div> <!-- row end -->     
+    </div>
+</div>         
 
 <div class="row">
            <div class="span12">              
@@ -19,29 +19,30 @@
 
 <script id="socialsuite-scheduled-updates-collection-template" type="text/html">	
 <div class="data-block">
-   <div class="data-container">          	
-	  <table id="schedule-updates" class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/scheduledupdate/bulk">
-         <col width="30px">
-   	     <col width="25%">
-		 <col width="30%">
-		 <col width="20%">
-		 <col width="15%">
-         <col width="20%">
-		 <thead>
-			<tr>
-		      <th><input class="thead_check" type="checkbox"></input></th>
-			  <th>User</th>
-			  <th>Message</th>
-			  <th>Schedule</th>
-			  <th>Message Type</th>
-              <th>Recipient</th>
-			</tr>
-		 </thead>
-		 <tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list" style="overflow: scroll;overflow:hidden;">
-		 
-         </tbody>
-	 </table>
-   </div>
+         <div class="data-container">          	
+			<table id="schedule-updates" class="table table-striped showCheckboxes agile-ellipsis-dynamic"
+				url="core/scheduledupdate/bulk">
+                <col width="30px">
+				<col width="25%">
+				<col width="30%">
+				<col width="20%">
+				<col width="15%">
+                <col width="20%">
+				<thead>
+					<tr>
+						<th><input class="thead_check" type="checkbox"></input></th>
+						<th>User</th>
+						<th>Message</th>
+						<th>Schedule</th>
+						<th>Message Type</th>
+                        <th>Recipient</th>
+					</tr>
+				</thead>
+				<tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list"
+					style="overflow: scroll;overflow:hidden;">
+				</tbody>
+			</table>
+         </div>
 </div>		
 </script>
 
@@ -64,14 +65,14 @@
 </td>
 <td class="edit-scheduled is-actionable" data="{{id}}">{{message}}</td>
 <td class="edit-scheduled is-actionable" data="{{id}}">
-   <time class="time-ago" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
+    <time class="time-ago" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
 </td>
 <td class="edit-scheduled is-actionable" data="{{id}}">{{headline}}</td>
 <td class="edit-scheduled is-actionable" data="{{id}}">
-   {{#if_equals tweetOwner "/"}}
-      <span style="display:none;"></span>
-   {{else}}
-      <span>{{tweetOwner}}</span>
-   {{/if_equals}}
+    {{#if_equals tweetOwner "/"}}
+         <span style="display:none;"></span>
+    {{else}}
+         <span>{{tweetOwner}}</span>
+    {{/if_equals}}
 </td>
 </script>

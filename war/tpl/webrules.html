@@ -3,14 +3,12 @@
     <div class="span12">
         <div class="page-header">
             <h1>Web Rules<span class="label label-important" style="vertical-align:top;margin:10px">Beta</span></h1>
-            <a href="#webrules-add" class="btn right" id="addWebrule" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add WebRule</a>
+            <a href="#webrules-add" class="btn right" id="addWebrule" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add Web Rule</a>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="span9">
-		 <div id="slate">
-         </div>
         {{#if this.length}}
         <table class="table table-bordered table-striped showCheckboxes" url="core/api/webrule/bulk">
             <thead>
@@ -22,6 +20,8 @@
             <tbody id="webrule-model-list" route="webrule-edit/">
             </tbody>
         </table>
+		{{else}}
+			<div id="slate"></div>
 		{{/if}}
     </div>
     <div class="span3">
@@ -35,7 +35,7 @@ Webrules allows you to perform certain actions when people visit your website. <
 For example, when a contact in agile visits your support page, put him into a campaign that asks if they need any help. 
 Or, When there is an anonymous visitor on the pricing page, pop up a signup form..
 </p>
-<img src="https://www.agilecrm.com/img/crm/saas/saas-grabber.png"></img>
+<img src="/img/web-rules/web-grabbers-demo.png"></img>
         </div>
     </div>
 </div>

@@ -95,6 +95,10 @@ function addTweetToStream(modelStream, tweet)
 	}
 	else
 	{
+		console.log(tweet);
+		if(tweet.text == null || tweet.user == null)
+			return;
+		
 		tweet["msg_type"] = "Tweet";
 
 		console.log(modelStream.get('tweetListView').length);
@@ -559,7 +563,7 @@ function OnScrollDiv(elementDiv)
 
 							// Add remaining tweets.
 							if (Scroll_Down_Call == false && Past_Tweets_Count != 0 && Past_Tweets.length != 0)
-								addPastTweetsToStream();
+								addPastTweetsToStream(modelStream);
 
 							// Set scroll to current position minus previous
 							// offset/scroll

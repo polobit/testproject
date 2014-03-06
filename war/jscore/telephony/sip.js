@@ -1,5 +1,8 @@
 /* SIP event listeners */
-//Callback function for SIP Stack or Events Listener for sip stack
+
+/**
+ * Callback function for SIP Stack or Events Listener for sip stack
+ */
 function sipStackEventsListener(e /* SIPml.Stack.Event */)
 {
 	console.log("In sipStack event Listner.");
@@ -11,6 +14,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	switch (e.type) {
 	case 'started':
 	{
+		// Register on sip.
 		sipLogin();
 		break;
 	}
@@ -22,6 +26,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	case 'stopping':
 	case 'stopped':
 	{
+		// Empty all data.
 		Sip_Start = false;
 		Sip_Stack = null;
 		Sip_Register_Session = null;
@@ -30,18 +35,21 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 		User_Number = null;
 		User_Img = null;
 
-		stopRingbackTone();
+		// Stop sound.		
 		stopRingTone();
 
 		break;
 	}
 	case 'i_new_call':
 	{
+		// Incoming call.
 		newCall(e);
 		break;
 	}
 	case 'starting':
 	{
+		// Add audio tags in home page.
+		addAudio();
 		break;
 	}
 	case 'm_permission_requested':
@@ -54,12 +62,13 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	}
 	case 'm_permission_refused':
 	{
-		stopRingbackTone();
+		// Stop sound.		
 		stopRingTone();
 
+		// Display
 		showCallNotyPopup("mediaDeny", 'warning', "SIP: Media stream permission denied.", false);
 
-		// SIP
+		// SIP hangup call.
 		hangupCall();
 		break;
 	}
@@ -71,7 +80,9 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	}
 };
 
-// Callback function for SIP sessions (INVITE, REGISTER, MESSAGE...)
+/**
+ * Callback function for SIP sessions (INVITE, REGISTER, MESSAGE...)
+ */
 function sipSessionEventsListener(e /* SIPml.Session.Event */)
 {
 	console.log("In sip Session event Listner.");
@@ -83,12 +94,6 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 	switch (e.type) {
 	case 'connecting':
 	{
-		if (e.session == Sip_Register_Session)
-		{
-			// Add audio tags in home page.
-			addAudio();
-		}
-
 		break;
 	}
 	case 'sent_request':
@@ -101,15 +106,13 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 		{
 			message = "You can make and receive calls with SIP.";
 
-			// Play sound on register.
-			startRingTone();
-			var runTimer = setTimeout(function()
-			{
-				clearInterval(runTimer);
-				stopRingTone();
-			}, 2000); // 2 sec
+			// Play sound on sip register.
+			play_sound();
 
+			// Display.
 			showCallNotyPopup("register", 'information', "SIP: You are now registered to make and receive calls successfully.", 5000);
+
+			// call action and telephone icon, Make visible.
 			$(".contact-make-call").show();
 			$(".make-call").show();
 
@@ -122,11 +125,12 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 		else if (e.session == Sip_Session_Call)
 		{
 			// Call received.
-			stopRingbackTone();
 			stopRingTone();
 
+			// Display.
 			showCallNotyPopup("connected", "success", "<b>On call : </b><br>" + User_Name + "   " + User_Number + "<br>", false);
 
+			// Close html5 notification.
 			if (Notifi_Call)
 			{
 				Notifi_Call.cancel();
@@ -164,9 +168,9 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 		else if (e.session == Sip_Session_Call)
 		{
 			// call terminated.
-			stopRingbackTone();
 			stopRingTone();
 
+			// Show state of call.
 			if (e.description == "Request Cancelled")
 				showCallNotyPopup("missedCall", "error", "<b>Missed call : </b><br>" + User_Name + "   " + User_Number + "<br>", false);
 			else if (e.description == "PSTN calls are forbidden")
@@ -190,6 +194,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_Number = null;
 			User_Img = null;
 
+			// Close html5 notification.
 			if (Notifi_Call)
 			{
 				Notifi_Call.cancel();
@@ -205,7 +210,8 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			var iSipResponseCode = e.getSipResponseCode();
 			if (iSipResponseCode == 180 || iSipResponseCode == 183)
 			{
-				startRingbackTone();
+				// On outgoing call.
+				startRingTone("ringbacktone");
 				console.log("Remote ringing....");
 			}
 		}
@@ -255,7 +261,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 
 	case 'm_early_media':
 	{
-		stopRingbackTone();
+		// Call refused.
 		stopRingTone();
 		break;
 	}

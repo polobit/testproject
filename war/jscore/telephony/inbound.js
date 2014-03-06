@@ -1,6 +1,9 @@
-// New session call for incoming call.
+/**
+ * On i_new_call event of sip stack, New session is created and noty displyed.
+ */
 function newCall(e)
-{	
+{
+	// Session for call is already created.
 	if (Sip_Session_Call != null)
 	{
 		showNotyPopUp('information', "You are already in call.", "top", 5000);
@@ -10,11 +13,13 @@ function newCall(e)
 	}
 	else
 	{
+		// Create new session for call.
 		Sip_Session_Call = e.newSession;
 
-		// start listening for events
+		// start listening for events and set properties.
 		Sip_Session_Call.setConfiguration(Config_Call);
 
+		// Assign display name and number for noty.
 		var sRemoteName = (Sip_Session_Call.getRemoteFriendlyName() || 'unknown');
 		User_Name = sRemoteName;
 		User_Number = Sip_Session_Call.getRemoteUri();
@@ -29,31 +34,38 @@ function showIncomingCall()
 {
 	showCallNotyPopup("incoming", "confirm", '<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + User_Name + "   " + User_Number + "<br>", false);
 
-	startRingTone();
+	// Incoming call sound play.
+	startRingTone("ringtone");
 
+	// Not working
 	// if (window.webkitNotifications &&
 	// window.webkitNotifications.checkPermission() == 0)
 	// show_desktop_notification(imageURL, title, message, link, tag);
 	// show_desktop_notification("/img/plugins/sipIcon.png", "Incoming Call :",
 	// User_Name+" "+User_Number, undefined, "SipCall");
 
-	// permission already asked when we registered
+	// notification display permission already asked when we registered
 	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
 	{
+		// If already displaying notification
 		if (Notifi_Call)
 		{
 			Notifi_Call.cancel();
 		}
+		
+		// Set properties.
 		Notifi_Call = window.webkitNotifications.createNotification('/img/plugins/sipIcon.png', 'Incoming call :', User_Name + "   " + User_Number);
+		
+		// Onclick of close.
 		Notifi_Call.onclose = function()
 		{
 			Notifi_Call = null;
 		};
+		
+		// Display notification.
 		Notifi_Call.show();
 	}
-
-	// notifyMe();
-
+	
 	// Find contact for incoming call and update display.
 	findContact();
 }

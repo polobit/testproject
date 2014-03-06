@@ -6,8 +6,7 @@
 /** On load of social suites page. */
 $(function()
 {
-	// Default values
-	Pubnub = null;
+	// Default values	
 	Stream_Type = null;
 	Network_Type = null;
 	Register_All_Done = false;

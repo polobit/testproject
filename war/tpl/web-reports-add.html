@@ -38,7 +38,7 @@
 													<optgroup label="Page conditions" id="page-conditions">
 														<option value="page" selected="selected">Page URL</option>
 														<option value="referrer">Referrer URL</option>
-														<option value="visit">Show</option>
+														<option value="visit">Frequency</option>
 													</optgroup>
 													<optgroup label="Contact Data" id="page-conditions">
 														<option value="tags">Tag</option>
@@ -176,7 +176,7 @@
 						<label class="control-label">Action</label>
 						<div class="controls">
 								<div class="webrule-actions chained-table"> 
-							<div class="alert" style="width:52%;margin-bottom: 5%;border-color:#DDD; background-color:#E5E5E5">
+							<div class="alert" style="width:65%;margin-bottom: 5%;border-color:#DDD; background-color:#E5E5E5">
 							<table style="background-color: transparent"
 								class="reports-condition-table actions" >
 								<tbody class="chained"  name="actions">
@@ -232,27 +232,6 @@
 										</td>
 									</tr>
 									
-							
-									<tr>
-										<td class="controls"
-											style="vertical-align: top; ">
-											<div name="popup_pattern" id="noty-type" style="margin-top:3px">
-												<select class="required">
-													<option value="custom_html" class="MODAL_POPUP">Custom HTML</option>
-													<option value="confirmation" class="POPUP MODAL_POPUP">Confirmation</option> 
-													<option value="information" class="POPUP MODAL_POPUP">Information</option> 
-													<option value="information" class="CORNER_NOTY">Information</option>
-													<option value="code" class="JAVA_SCRIPT" style="display:none">Code</option>
-													
-												</select>
-<input type="text" name="temp-title" style="width: 92%"
-														class="FORM input required" placeholder="Form id"/>
-												
-											</div>
-											</div>
-										</td>
-									</tr>
-							
 									<tr>
 										<td class="controls"
 											style="vertical-align: top; ">
@@ -269,30 +248,23 @@
 											</div>
 										</td>
 									</tr>
-
 									<tr>
-										<td class="controls span2"
-											style="vertical-align: top;">
-											<div id="noty-title" name="title" style="margin-top:3px">
-													<input type="text" name="temp-title-0" 
-														class="confirmation information CORNER_NOTY MODAL_POPUP input required" placeholder="Title"/>
-														<input type="text" name="temp-title1" style="width: 92%"
-														class="form input required" placeholder="Form id"/>
-												
-										</td>
-									</tr>
-									<tr>
-										<td class="controls span2"
+										<td class="controls"
 											style="vertical-align: top;">
 												<div id="noty-message" name="popup_text"  style="padding-top:10px">
- 													<a href='#' id="tiny_mce_webrules_link" style="float:right;display:none">(Load in HTML Editor)</a>
-													<textarea  cols="50" name="webrule-information-field" class="information confirmation MODAL_POPUP span4 required" rows="6" placeholder="paste HTML context"></textarea>
-													<textarea  cols="50" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html span4 required MODAL_POPUP" rows="6" placeholder="Paste HTML context"></textarea>
-<textarea  cols="60" name="webrule-javascript" class="code required" rows="8" placeholder="">function agile_js_code_exec() {
-													 // Copy your code here 
-												}()</textarea>
-											<!--		<div style="float:right" class="web-rule-prevew"><a href="#">Preview</a></div> -->
+ 													<a href='#' id="tiny_mce_webrules_link" style="float:right;display:none">(Select a template / Edit in HTML editor)</a>
+													<textarea  cols="50" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required" rows="10" placeholder="paste HTML context"></textarea>
+													<textarea  cols="50" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html span5 required MODAL_POPUP" rows="10" placeholder="Paste HTML context"></textarea>
+<textarea  cols="60" name="webrule-javascript" class="code  JAVA_SCRIPT span5 required" rows="10" placeholder="">function agile_js_code_exec() {
+    // Copy your code here
+
+
+
+}()</textarea>
+									<input type="text" name="temp-title" style="width: 92%" class="FORM input required" placeholder="Form id">
+													<div style="float:right;display:none" class="web-rule-preview"><a href="#">Preview</a></div> 
 												</div>
+
 										</td>
 									</tr>
 										
@@ -330,7 +302,7 @@
 
 </div>
 
-<div class="pull-right" style="width:50%;margin-top:-4%"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
+<div class="pull-right" style="width: 37%;margin-top:-4%"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
 							</div>
 					</div>
 			{{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />

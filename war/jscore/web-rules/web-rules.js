@@ -29,69 +29,25 @@ function chainWebRules(el, data, isNew, actions)
 	});
 	$("#campaign", el).chained($("#action", el));
 	
-
-	$("#noty-title", el).chained($("#action", el), function(select, self){
-		if($("select", select).val() == "CORNER_NOTY")
-			{
-				$(self).hide();
-				return;
-			}
-		$(self).show();
-		
-	});
 	$("#possition", el).chained($("#action", el));
-	$("#noty-title", el).chained($("#noty-type", el), function(select, self){
-		var select_field = $("select option:selected", select);
-		if(select_field.hasClass("CORNER_NOTY") || select_field.hasClass("JAVA_SCRIPT"))
-		{
-			$(self).hide();
-			$(select).hide();
-			return;
-		}
-		$(select).show();
-		$(self).show();
-	});
-	
 
 	
 	$("#timer", el).chained($("#delay", el));
 	$("#delay", el).chained($("#action", el));
 	
-	$("#noty-message", el).chained($("#noty-type", el), function(el, self){
-		var text_area = $('textarea', self); 
-		if($(text_area).hasClass("custom_html"))
-			{
-			
-			$("#tiny_mce_webrules_link", self).show();
-
-			}
-		else {
-			$("#tiny_mce_webrules_link", self).hide();
-		}
-	});
-	
-	$("#noty-type", el).chained($("#action", el), function(select, self){
+	$("#noty-message", el).chained($("#action", el), function(select, self){
 		var value = $("select", select).val();
 		$(self).show();
 		console.log(value);
-		if(value == "CORNER_NOTY" || value == "JAVA_SCRIPT")
-			{
-			console.log($(self));
-			console.log("here");
-				$(self).hide();
-			}
-		else
-			{
-				$(self).show();
-			}
+	
 		if(value == "MODAL_POPUP" || value == "CORNER_NOTY")
 			{
-			select.closest('table').siblings('div').find(".web-rule-prevew").show();
+				if(value == "MODAL_POPUP")
+				$("#tiny_mce_webrules_link", self).show();
+				self.find(".web-rule-preview").show();
 			return;
 			}
-		console.log(select);
-		console.log(select.closest('table').siblings('div').find(".web-rule-prevew"));
-		select.closest('table').siblings('div').find(".web-rule-prevew").hide();
+		self.find(".web-rule-preview").hide();
 	});
 	
 	if(data && data.actions)
@@ -180,9 +136,20 @@ $(function()
 			})*/
 			
 			
-			$(".web-rule-prevew").die().live('click', function(e){
+			$(".web-rule-preview").die().live('click', function(e){
 				e.preventDefault();
-				show_web_rule_action_preview(serializeChainedElement($(this).closest('table')));
+				var that = this;
+				_agile_require_js("https://agilegrabbers.appspot.com/demo/agile-webrules-min.js", function(){
+
+					// Serializes webrule action to show preview
+					var action = serializeChainedElement($(that).closest('table'));
+					// Popup va'ue should be in a json object with key value, as it is returned that way from server text field
+					var popup_text = {};
+					popup_text["value"] = action.popup_text;
+					action.popup_text = popup_text
+					
+						_agile_execute_action(action);
+					});
 			});
 		});
 
