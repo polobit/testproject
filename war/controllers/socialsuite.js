@@ -2,6 +2,7 @@ var Streams_List_View;
 var Temp_Streams_List_View;
 var Scheduled_Updates_View;
 var Past_Tweets = [];
+var Pubnub = null;
 
 /**
  * Creates backbone router to create and access streams of the user.

@@ -8,8 +8,25 @@
 
 var fc = $.fullCalendar;
 
+alert(fc.sourceFetchers.length)
+fc.sourceFetchers = [];
 // Transforms the event sources to Google Calendar Events
 fc.sourceFetchers.push(function(sourceOptions, start, end) {
+	console.log(sourceOptions);
+	if(sourceOptions.className == "google-calendar")
+	{	
+		console.log("*************************");
+		console.log(sourceOptions);
+		if (sourceOptions.events && typeof (sourceOptions.events) === "function")
+	{
+		sourceOptions.events(start, end, null, function(data){
+		
+			agile_transform_options(data, start, end);
+		})
+	}
+	return;
+	}
+	
 	if (sourceOptions.dataType == 'agile-gcal') {
 		return agile_transform_options(sourceOptions, start, end);
 	}
@@ -70,12 +87,12 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
         maxResults: 10000, // max results causes problems: http://goo.gl/FqwIFh
         singleEvents: true
     });
-    
+    console.log("________________fetched__________________");
 	request.execute(function(resp) {
 		for (var i = 0; i < resp.items.length; i++) {	
 			var fc_event = google2fcEvent(resp.items[i]);
 			// Add event
-			$('#calendar').fullCalendar('removeEvents', fc_event.id);
+		//	$('#calendar').fullCalendar('removeEvents', fc_event.id);
 			$('#calendar').fullCalendar( 'renderEvent', fc_event )
 		}
 	});
