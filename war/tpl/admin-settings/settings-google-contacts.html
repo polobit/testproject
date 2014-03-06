@@ -1,6 +1,6 @@
 <script id="import-google-contacts-template" type="text/html">
 	<div class="well widget-add" style="width:220px; height:220px;">
-    <img class="thumbnail" src="/img/icons/google-contacts-logo.jpg" style="width:210px; height:70px;" />
+    <img class="thumbnail" src="/img/icons/google-contacts-sync.png" style="width:210px; height:70px;" />
 	<br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 75px !important;margin-bottom: 20px;"  rel="tooltip" >
 		Agile can periodically sync your contacts in your CRM with your Google Contacts.
@@ -21,7 +21,7 @@
  	<!-- <legend>Contacts <span class="label label-important">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
 
 	<span class="label label-important" style="float:right">Beta</span>
-   <center> <img class="thumbnail" src="/img/icons/google-contacts-logo.jpg" style="width:210px; height:70px;margin-left:40px" /></center>
+   <center> <img class="thumbnail" src="/img/icons/google-contacts-sync.png" style="width:210px; height:70px;margin-left:40px" /></center>
 	<br />
 {{#unless id}}
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
@@ -54,12 +54,16 @@
 				{{#each groups}}
 					{{#if_equals groupName "Agile"}}
 						{{else}}
+					{{#if_equals groupName "Contacts"}}
+						<option value="{{atomId}}">My Contacts (Recommended)</option>
+						{{else}}
 						<option value="{{atomId}}">{{groupName}}</option>
+				{{/if_equals}}
 					{{/if_equals}}
 				{{/each}}
 				</select>
 			</div>
-<span class="help-block" style="margin-left:160px; margin-top:8px">Google contact  group to sync from.</span>
+<span class="help-block" style="margin-left:160px; margin-top:8px"><small>Google contact  group to sync from.</small></span>
 	</div>
 
 {{#if_equals sync_type "AGILE_TO_CLIENT"}}
@@ -78,18 +82,18 @@
 				{{#each groups}}
 					{{#if_equals groupName "Agile"}}
 						{{#if atomId}}
-								<option value="{{atomId}}" selected="selected">{{groupName}}</option>
+								<option value="{{atomId}}" selected="selected">{{groupName}}  (Recommended)</option>
 							{{else}}
-								<option value="{{groupName}}" selected="selected">{{groupName}}</option>
+								<option value="{{groupName}}" selected="selected">{{groupName}}  (Recommended)</option>
 						{{/if}}
 					{{/if_equals}}
 					{{#if_equals groupName "Contacts"}}
-						<option value="{{atomId}}">{{groupName}}</option>
+						<option value="{{atomId}}">My Contacts</option>
 					{{/if_equals}}
 				{{/each}}
 				</select>
 			</div>
-	<span class="help-block" style="margin-left:160px; margin-top:8px">Google contact  group to sync to.</span>
+	<span class="help-block" style="margin-left:160px; margin-top:8px"><small>Google contact  group to sync to.</small></span>
 	</div>
 
 		<div class="control-group" style="margin-left:-80px">
@@ -122,13 +126,11 @@
         </label>       
     </div>
 </div>
-<span style="font-size:14px;float:right;margin-top:-20px" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"> Sync now</a></span>
-
 		 <input name="id" type="hidden" value="{{id}}" />
 
 
       <div class="form-actions">
-			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Save</div>
+			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
 			<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 	 </div>
 	{{/if}}

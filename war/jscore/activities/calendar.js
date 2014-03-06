@@ -9,7 +9,7 @@ function isArray(a)
     return Object.prototype.toString.apply(a) === '[object Array]';
 }
 
-function load_events_from_google(start, end, test, callback)
+function load_events_from_google(callback)
 {
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs";
 	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
@@ -20,7 +20,7 @@ function load_events_from_google(start, end, test, callback)
 		console.log(prefs);
 		if(prefs.expires_at - (2 * 60 * 1000)  >= new Date().getTime())
 		{
-			fill_events_from_google(prefs, start, end, callback);
+			fill_events_from_google(prefs, callback);
 			return;
 		}
 		erase_google_calendar_prefs_cookie()
@@ -31,7 +31,7 @@ function load_events_from_google(start, end, test, callback)
 		if(!doc)
 			return;
 		createCookie("_agile_google_calendar_prefs", JSON.stringify(doc));
-		fill_events_from_google(doc, start, end, callback);
+		fill_events_from_google(doc, callback);
  	});
 }
 
@@ -40,18 +40,11 @@ function erase_google_calendar_prefs_cookie()
 	var google_calendar_cookie_name = "_agile_google_calendar_prefs";
 	eraseCookie(google_calendar_cookie_name);
 }
-function fill_events_from_google(data, start, end, callback)
+function fill_events_from_google(data, callback)
 {
-	head.js('lib/calendar/gcal.js', 'https://apis.google.com/js/client.js', 'https://rawgithub.com/dr-skot/gapi-helper/master/gapi-helper.js', function(){
-		console.log("***********************added************************");
-		console.log(callback)
-		if (callback && typeof (callback) === "function" )
+	
+	if (callback && typeof (callback) === "function")
 		callback({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"});
-	//	agile_transform_options({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"}, start, end)
-		//agile_transform_options({token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"}, start, end);
-		//$('#calendar').fullCalendar( 'removeEventSource', );
-		//$('#calendar').fullCalendar( 'addEventSource', {token:data.access_token, dataType:'agile-gcal', className:"agile-gcal"});		
-	});
 }
 
 
@@ -60,6 +53,10 @@ function fill_events_from_google(data, start, end, callback)
  * Shows the calendar
  */
 function showCalendar() {
+	
+	// Customized fetch options
+	_init_gcal_options();
+	
   $('#calendar').fullCalendar({
     	
        /**
@@ -84,8 +81,7 @@ function showCalendar() {
             });
         }},
         {
-        	events: load_events_from_google,
-        	className : "google-calendar"
+        	dataType : 'agile-gcal'
         }],
         header: {
             left: 'prev,next today',
@@ -95,11 +91,13 @@ function showCalendar() {
         loading: function (bool) {
             if (bool) {
             	
-                $('#loading').show();
+            	  $("#loading_calendar_events").remove();
+            	  $('.fc-header-left').append('<span id="loading_calendar_events" style="margin-left:5px;vertical-align:middle">loading...</span>').show();
+                $('.fc-header-left').show();
                 
             } else {
-                $('#loading').hide();
-                
+              //  $('#loading').hide();
+            	 $("#loading_calendar_events").hide();
                 $('#subscribe-ical').css('display','block');
                 start_tour('calendar');
             }
