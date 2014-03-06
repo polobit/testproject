@@ -4,11 +4,15 @@
  */
 
 // All Routers are global
-var App_Contacts, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases;
+var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets;
 var Collection_View = {};
 $(function()
 {
 	App_Contacts = new ContactsRouter();
+	App_Contact_Views = new ContactViewsRouter();
+	App_Contact_Filters = new ContactFiltersRouter();
+	App_Contact_Bulk_Actions = new ContactBulkActionRouter();
+	App_Contact_Search = new ContactSearchRouter();
 	App_Workflows = new WorkflowsRouter();
 	App_Deals = new DealsRouter();
 	App_Admin_Settings = new AdminSettingsRouter();
