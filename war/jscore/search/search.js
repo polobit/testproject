@@ -31,7 +31,7 @@ function showSearchResults()
 		App_Contacts = new ContactsRouter();
 
 	// Initialize contacts search results view
-	App_Contacts.navigate("contacts/search/" + query_text, { trigger : true });
+	App_Contact_Search.navigate("contacts/search/" + query_text, { trigger : true });
 }
 
 function navigateToDetailsPage(data, name)
