@@ -67,7 +67,6 @@ public class MenuSetting
      */
     @NotSaved(IfDefault.class)
     public boolean reports = true;
-    
 
     /**
      * State of Documents tab in Navbar. <code>true</code> implies visible in
@@ -75,6 +74,13 @@ public class MenuSetting
      */
     @NotSaved(IfDefault.class)
     public boolean documents = true;
+
+    /**
+     * State of Documents tab in Navbar. <code>true</code> implies visible in
+     * Navbar.
+     */
+    @NotSaved(IfDefault.class)
+    public boolean web_rules = false;
 
     /**
      * Deafult - <br/>
