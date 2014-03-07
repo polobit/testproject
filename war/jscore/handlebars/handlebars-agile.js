@@ -77,7 +77,7 @@ function getTemplate(templateName, context, download)
 	{
 		templateHTML = downloadSynchronously("tpl/min/admin.js");
 	}
-	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("contact-company") == 0)
+	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("contact-company") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/contact-detail.js");
 	}
