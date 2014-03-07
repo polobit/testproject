@@ -8,7 +8,8 @@
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="org.codehaus.jackson.map.ObjectMapper"%>
-<%@page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <html lang="en">
 <head>
@@ -56,15 +57,17 @@
 
 <%
     String CSS_PATH = "/";
-	//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+			//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" type="text/css" href="/css/agilecrm.css" />
+<link rel="stylesheet" type="text/css" 
+	href="/css/agilecrm.css" />
 
+<script src='/lib/head.load.min.js'></script>
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -78,9 +81,9 @@
 
 <body>
 	<div id="wrap">
-	
-	    <!-- Including header(Navigation Bar) page -->
-		<jsp:include page="header.jsp"/>
+
+		<!-- Including header(Navigation Bar) page -->
+		<jsp:include page="header.jsp" />
 
 		<div class="container<%=width%>" id="agilecrm-container">
 			<div id="content">
@@ -120,14 +123,17 @@
 
 	</div>
 	<!-- Including Footer page -->
-	<jsp:include page="footer.jsp"/>
-	
-		<!-- <script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script> -->
-	<script src='/lib/headjs-min.js'></script>
+	<jsp:include page="footer.jsp" />
+
+	<!-- <script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script> -->
+	<!-- <script src='/lib/headjs-min.js'></script> -->
 
 	<script>
 	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	var LIB_PATH = "/";
+	
+	var CSS_PATH = "/";
+	//var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 	
 	var IS_CONSOLE_ENABLED = <%=debug%>;
 	var LOCAL_SERVER = <%=debug%>;
@@ -145,7 +151,7 @@
 
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
-	head.js(JQUERY_LIB_PATH, LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js',LIB_PATH + 'lib/date-formatter.js',  LIB_PATH + 'lib/bootstrap-timepicker-min.js');
+	head.load(JQUERY_LIB_PATH, LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js',LIB_PATH + 'lib/date-formatter.js',  LIB_PATH + 'lib/bootstrap-timepicker-min.js');
 	
 	<!-- Backbone -->
 	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
@@ -171,30 +177,14 @@
 			setTimeout(function(){head.js('lib/user-voice.js');}, 20000);	
 		}); 
 	});
-
 	
 	</script>
+	
+		<!-- Unified CSS for All Lib -->
 
-	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/widget.css" />
-	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/timeline.css" />
-	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/date_range_picker.css"></link>
-	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/jslider.css"></link>
-	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/plan_and_upgrade.css"></link>
-	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/bootstrap_switch.css"></link>
-	<link rel="stylesheet" type="text/css"
-		href="<%=CSS_PATH%>css/bootstrap-tour.min.css"></link>
-	<!-- social suite's css -->
-	<link rel="stylesheet" type="text/css" href="/css/social_suite.css" />
+	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/all-agile.css"></link>
 
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 
-
-	<!-- Unified CSS for All Lib -->
 </body>
 </html>
