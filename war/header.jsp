@@ -104,7 +104,7 @@
 								if (menuSetting.web_rules || true) {
 							%>
 									<li id="web-rules-menu"><a href="#web-rules"><i
-											class="icon-folder-close icon-white"></i> Web Rules</a></li>
+											class="icon-folder-close icon-globe"></i> Web Rules</a></li>
 							<%
 						    }
 								if (menuSetting.documents || true) {
@@ -155,7 +155,7 @@
 														if (menuSetting.web_rules || true) {
 									%>
 										<li id="web-rules-menu"><a href="#web-rules"><i
-											class="icon-folder-close icon-white"></i> Web Rules</a></li>
+											class="icon-folder-close icon-globe"></i> Web Rules</a></li>
 									
 									<%
 									    }
