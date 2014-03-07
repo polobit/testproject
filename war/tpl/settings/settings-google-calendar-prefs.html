@@ -1,0 +1,48 @@
+<script id="import-google-calendar-template" type="text/html">
+	<div class="well widget-add" style="width:220px; height:220px;">
+    <img class="thumbnail" src="/img/icons/google-calendar-sync.png" style="width:210px; height:70px;" />
+	<br />
+   <div style="height: 80px !important;"margin-bottom: 20px;">
+{{#if id}}
+	You have successfully associated your Google Calendar with Agile. Your events will be popped up automatically in the <a href="#calendar">calendar</a>.
+{{else}}
+		By enabling access to your Google Calendar, we'll automatically sync your events in your Google Calendar with Agile <a href="#calendar">calendar</a>.
+{{/if}}
+	</div>
+    <div style="margin-top:15px">
+			{{#if id}}
+    			<a class="btn btn-danger" id="sync-google-calendar-delete">Delete</a>
+    		{{else}}
+    				<a class="btn" id="sync-google-calendar">Setup</a>
+    		{{/if}}
+	</div>
+</div>
+</script>
+
+
+<script id="import-google-calendar-setup-template" type="text/html">
+	<div class="well" style="width:300px;">
+ 	<!-- <legend>Contacts <span class="label label-important">Beta</span>{{#if id}}<span style="font-size:14px;float:right" title="Sync Contacts" title="Sync Contacts"><a class="icon-refresh save-contact-prefs" href="#" sync = "true" id="google-import-sync"  style="cursor:pointer;text-decoration:none"></a></span>{{/if}}</legend> -->
+   <center> <img class="thumbnail" src="/img/icons/google-calendar-sync.png" style="width:210px; height:70px;" /></center>
+	<br />
+    <div style="height: 80px !important;"margin-bottom: 20px;">
+		{{#if id}}
+			<p style="padding-top:5px">By enabling access to your Google Calendar, we'll automatically sync your events in your Google Calendar with Agile.</p>
+			{{else}}
+			<p style="padding-top:5px">You have successfully associated your Google Calendar with Agile. Your events will be popped up automatically in the calendar.</p>
+				
+		{{/if}}
+	</div>
+sdfsdfsdfsfdf
+<hr style="border-bottom:1px solid #e5e5e5!important"/>
+<div style="text-align: center">
+	{{#if id}}
+			<a class="btn" href="#google-apps">Close</a>
+		{{else}}		
+			<a class="btn" id="sync-google-calendar">Setup</a>
+		</div>
+	{{/if}}
+</div>
+</div>
+</div>
+</script>
