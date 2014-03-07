@@ -11,17 +11,13 @@ function sipSendDTMF(c)
 	// session for call is active and number is available.
 	if (Sip_Session_Call && c)
 	{
+		// play sound.
+		play_sound("dtmf");
+		
 		// send dtmf on SIP
 		if (Sip_Session_Call.dtmf(c) == 0)
 		{
-			try
-			{
-				// play sound.
-				play_sound("dtmf");
-			}
-			catch (e)
-			{
-			}
+			// Dtmf sent.
 		}
 	}
 }

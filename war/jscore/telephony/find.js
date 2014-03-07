@@ -16,7 +16,7 @@ function findContact()
 		if (caller != null)
 		{
 			// Get details to update call noty.
-			if (caller.properties[0].name == 'first_name' && caller.properties[1].name == 'last_name' && caller.properties[2].name == 'image')
+			if (caller.properties[0].name == 'first_name' && caller.properties[1].name == 'last_name')
 			{
 				User_Name = caller.properties[0].value + " " + caller.properties[1].value;
 				User_Number = Sip_Session_Call.getRemoteUri();

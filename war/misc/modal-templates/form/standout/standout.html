@@ -124,12 +124,13 @@ body {
 			<small>Agile CRM as all you need. Free for 2 users. </small>
 			<div id="popup-form">
 				<p><input type="text" class="text" placeholder="Enter your email address" /></p>
-				<p><input type="submit" class="button" value="Subscribe Now" />
+				<p><input type="submit" onclick="window.parent._agile_save_form(true, function(){console.log('save');})" class="button" value="Subscribe Now" />
 			</div>
 			<p><small><a href="#">Your personal email will never be shared with third parties</a></p></small>
 		</div>
 	</div>
 </div>
 
+<script>window.parent._agile_load_fields();</script>
 </body>
 </html>
