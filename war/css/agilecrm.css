@@ -1103,7 +1103,7 @@ tbody a.no-style-a {
 }
 */
 
-@media (min-width: 980px) and (max-width: 1201px)  {
+@media (min-width: 980px) and (max-width: 1199px)  {
 	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	
 	#more-menu li:not(:nth-child(n+3)) {
 		display:none;

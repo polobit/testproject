@@ -71,31 +71,43 @@
 							<%
 							    if (menuSetting.calendar || true) {
 							%>
-							<li id="calendarmenu"><a href="#calendar"> <i
-									class="icon-calendar icon-white"></i> Calendar
-							</a></li>
+									<li id="calendarmenu"><a href="#calendar"> <i
+											class="icon-calendar icon-white"></i> Calendar
+									</a></li>
 							<%
 							    }
-											if (menuSetting.campaign || true) {
+							if (menuSetting.deals || true) {
+							    %>
+							    <li id="dealsmenu"><a href="#deals"><i
+										class="icon-money icon-white"></i> Deals</a></li>
+							<% 
+								}
+							if (menuSetting.campaign || true) {
+								%>
+									<li id="workflowsmenu"><a href="#workflows"><i
+										class="icon-sitemap icon-white"></i> Campaigns</a></li>
+							<%
+								}
+								if (menuSetting.cases || true) {
 							%>
-							<li id="workflowsmenu"><a href="#workflows"><i
-									class="icon-sitemap icon-white"></i> Campaigns</a></li>
+									<li id="casesmenu"><a href="#cases"><i
+									class="icon-folder-close icon-white"></i> Cases</a></li>
 							<%
-							    }
-											if (menuSetting.deals || true) {
+								 }
+								if (menuSetting.social || true) {
 							%>
-							<li id="dealsmenu"><a href="#deals"><i
-									class="icon-money icon-white"></i> Deals</a></li>
+									<li id="socialsuitemenu"><a href="#social"> <i
+										class="icon-comments icon-white"></i> Social
+									</a></li>
 							<%
-							    }
-											if (menuSetting.social || true) {
+								}
+								if (menuSetting.web_rules || true) {
 							%>
-							<li id="socialsuitemenu"><a href="#social"> <i
-									class="icon-comments icon-white"></i> Social
-							</a></li>
+									<li id="web-rules-menu"><a href="#web-rules"><i
+											class="icon-folder-close icon-white"></i> Web Rules</a></li>
 							<%
-							    }
-											if (menuSetting.documents || true) {
+						    }
+								if (menuSetting.documents || true) {
 							%>
 							<li id="documentsmenu"><a href="#documents"><i
 									class="icon-file icon-white"></i> Docs</a></li>
@@ -105,18 +117,6 @@
 							%>
 							<li id="reportsmenu"><a href="#reports"><i
 									class="icon-bar-chart icon-white"></i> Reports</a></li>
-							<%
-							    }
-											if (menuSetting.cases || true) {
-							%>
-							<li id="casesmenu"><a href="#cases"><i
-									class="icon-folder-close icon-white"></i> Cases</a></li>
-							<%
-							    }
-								if (menuSetting.web_rules || true) {
-							%>
-							<li id="web-rules-menu"><a href="#web-rules"><i
-									class="icon-folder-close icon-white"></i> Web Rules</a></li>
 							<%
 							    }
 							%>
@@ -137,8 +137,10 @@
 											class="icon-sitemap icon-white"></i> Campaigns</a></li>
 									<%
 									    }
-														if (menuSetting.deals || true) {
+														if (menuSetting.cases || true) {
 									%>
+									<li id="casesmenu"><a href="#cases"><i
+											class="icon-folder-close icon-white"></i> Cases</a></li>
 									<li id="dealsmenu"><a href="#deals"><i
 											class="icon-money icon-white"></i> Deals</a></li>
 									<%
@@ -150,28 +152,23 @@
 									</a></li>
 									<%
 									    }
+														if (menuSetting.web_rules || true) {
+									%>
+										<li id="web-rules-menu"><a href="#web-rules"><i
+											class="icon-folder-close icon-white"></i> Web Rules</a></li>
+									
+									<%
+									    }
 														if (menuSetting.documents || true) {
 									%>
 									<li id="documentsmenu"><a href="#documents"><i
 											class="icon-file icon-white"></i> Docs</a></li>
 									<%
 									    }
-														if (menuSetting.reports || true) {
+													if (menuSetting.reports || true) {
 									%>
-									<li id="reportsmenu"><a href="#reports"><i
+								<li id="reportsmenu"><a href="#reports"><i
 											class="icon-bar-chart icon-white"></i> Reports</a></li>
-									<%
-									    }
-														if (menuSetting.cases || true) {
-									%>
-									<li id="casesmenu"><a href="#cases"><i
-											class="icon-folder-close icon-white"></i> Cases</a></li>
-									<%
-									    }
-													if (menuSetting.web_rules || true) {
-									%>
-									<li id="web-rules-menu"><a href="#web-rules"><i
-											class="icon-folder-close icon-white"></i> Web Rules</a></li>
 									<%
 									    }
 									%>

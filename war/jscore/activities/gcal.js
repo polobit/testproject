@@ -14,7 +14,7 @@ function isDefined(x) {
 function _init_gcal_options()
 {
 	var fc = $.fullCalendar;
-
+	fc.sourceFetchers = [];
 	// Transforms the event sources to Google Calendar Events
 	fc.sourceFetchers.push(function(sourceOptions, start, end) {
 		if (sourceOptions.dataType == 'agile-gcal') {

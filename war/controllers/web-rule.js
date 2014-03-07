@@ -6,9 +6,11 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Settings */
-	"webrules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit" },
+	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit" },
 	webrules : function()
 	{
+		$(".active").removeClass("active");
+		$("#web-rules-menu").addClass("active");
 		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr' });
 
 		this.webrules.collection.fetch();
