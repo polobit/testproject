@@ -122,12 +122,13 @@ body {
 				<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod.</p>
 				<p><label>Your Name:</label><input type="text" class="popup-text" /></p>
 				<p><label>Your E-mail:</label><input type="text" class="popup-text" /></p>
-				<p class="popup-button"><input type="submit" class="popup-button" value="Subscribe Now!" /></p>
+				<p class="popup-button"><input type="submit"  onclick="window.parent._agile_save_form(true, function(){console.log('save');})" class="popup-button" value="Subscribe Now!" /></p>
 				<p><small>Your personal information will not be shared with any third party<br>
 			</div>
 		</div>
 	</div>
 </div>
 
+<script>window.parent._agile_load_fields();</script>
 </body>
 </html>
