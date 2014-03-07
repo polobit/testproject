@@ -92,9 +92,15 @@ function sipRegister()
 					url = "ws://54.83.12.176:10060";
 
 				// Define sip stack
-				Sip_Stack = new SIPml.Stack({ realm : credentials.sip_realm, impi : credentials.sip_privateid, impu : credentials.sip_publicid,
-					password : credentials.sip_password, display_name : credentials.sip_username, websocket_proxy_url : url, enable_rtcweb_breaker : true,
-					events_listener : { events : '*', listener : sipStackEventsListener } });
+				Sip_Stack = new SIPml.Stack({ realm : credentials.sip_realm, 
+					                          impi : credentials.sip_privateid, 
+					                          impu : credentials.sip_publicid,
+					                          password : credentials.sip_password, 
+					                          display_name : credentials.sip_username, 
+					                          websocket_proxy_url : url, 
+					                          enable_rtcweb_breaker : true,
+					                          events_listener : { events : '*', listener : sipStackEventsListener } 
+				                             });
 
 				// sip stack start
 				if (Sip_Stack.start() != 0)

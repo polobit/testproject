@@ -77,9 +77,29 @@ function getTemplate(templateName, context, download)
 	{
 		templateHTML = downloadSynchronously("tpl/min/admin.js");
 	}
+	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("contact-company") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/contact-detail.js");
+	}
+	if (templateName.indexOf("contact-filter") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/contact-filter.js");
+	}
+	if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0  || templateName.indexOf("contacts-custom") == 0 || templateName.indexOf("contacts-grid") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/contact-view.js");
+	}
 	if (templateName.indexOf("bulk-actions") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/bulk-actions.js");
+	}
+	if (templateName.indexOf("case") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/case.js");
+	}
+	if (templateName.indexOf("document") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/document.js");
 	}
 	if (templateName.indexOf("gmap") == 0)
 	{
@@ -89,7 +109,7 @@ function getTemplate(templateName, context, download)
 	{
 		templateHTML = downloadSynchronously("tpl/min/report.js");
 	}
-	if (templateName.indexOf("workflow") == 0)
+	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/workflow.js");
 	}

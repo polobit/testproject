@@ -17,9 +17,7 @@ function sipSendDTMF(c)
 			try
 			{
 				// play sound.
-				var sound = $("#dtmfTone")[0];
-				sound.load();
-				sound.play();
+				play_sound("dtmf");
 			}
 			catch (e)
 			{

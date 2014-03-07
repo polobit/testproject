@@ -3,8 +3,8 @@ package com.agilecrm.mandrill.util.deferred;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 /**
- * <code>MandrillDeferredTask</code> is the deferred task that handles email
- * info
+ * <code>MandrillDeferredTask</code> is the deferred task that handles send
+ * email details of every task
  * 
  * @author Naresh
  * 
@@ -21,6 +21,26 @@ public class MandrillDeferredTask implements DeferredTask
     public String html = null;
     public String text = null;
 
+    /**
+     * Constructs a new {@link MandrillDeferredTask}
+     * 
+     * @param subaccount
+     *            - domain name
+     * @param fromEmail
+     *            - from email
+     * @param fromName
+     *            - from name
+     * @param to
+     *            - to email
+     * @param subject
+     *            - subject
+     * @param replyTo
+     *            - reply to email
+     * @param html
+     *            - html content
+     * @param text
+     *            - text content
+     */
     public MandrillDeferredTask(String subaccount, String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
     {
 	this.subaccount = subaccount;

@@ -90,24 +90,22 @@ public class WorkflowTemplateUtil
 	    return null;
 	}
 
-	return saveTemplateToDB(category, templateName, templateString);
+	return saveTemplateToDB(templateName, templateString);
     }
 
     /**
-     * Saves template json along with category, template_name to datastore.
+     * Saves template json along with template_name to datastore.
      * 
-     * @param category
-     *            - template category
      * @param templateName
      *            - template name
      * @param templateString
      *            - complete workflow template rules json
      * @return WorkflowTemplate
      */
-    public static WorkflowTemplate saveTemplateToDB(String category, String templateName, String templateString)
+    public static WorkflowTemplate saveTemplateToDB(String templateName, String templateString)
     {
 	// Save
-	WorkflowTemplate workflowTemplate = new WorkflowTemplate(category, templateName, templateString);
+	WorkflowTemplate workflowTemplate = new WorkflowTemplate(templateName, templateString);
 	workflowTemplate.save();
 
 	return workflowTemplate;

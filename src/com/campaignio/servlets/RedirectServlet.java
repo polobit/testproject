@@ -79,21 +79,6 @@ public class RedirectServlet extends HttpServlet
 		return;
 	    }
 
-	    // Get Contact
-	    String subscriberId = urlShortener.subscriber_id;
-	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
-
-	    // Get Workflow to add to log (campaign name) and show notification
-	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(urlShortener.campaign_id));
-	    if (workflow != null)
-	    {
-		// Add log
-		addEmailClickedLog(urlShortener.campaign_id, subscriberId, urlShortener.long_url, workflow.name);
-
-		// Show notification
-		showEmailClickedNotification(contact, workflow.name, urlShortener.long_url);
-	    }
-
 	    // Remove spaces, \n and \r
 	    String normalisedLongURL = normaliseLongURL(urlShortener.long_url);
 
@@ -101,6 +86,10 @@ public class RedirectServlet extends HttpServlet
 	    String params = "?fwd=cd";
 	    if (urlShortener.long_url.contains("?"))
 		params = "&fwd=cd";
+
+	    // Get Contact
+	    String subscriberId = urlShortener.subscriber_id;
+	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriberId));
 
 	    if (contact == null)
 	    {
@@ -114,6 +103,17 @@ public class RedirectServlet extends HttpServlet
 	    System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
 
 	    resp.sendRedirect(normalisedLongURL + params);
+
+	    // Get Workflow to add to log (campaign name) and show notification
+	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(urlShortener.campaign_id));
+	    if (workflow != null)
+	    {
+		// Add log
+		addEmailClickedLog(urlShortener.campaign_id, subscriberId, urlShortener.long_url, workflow.name);
+
+		// Show notification
+		showEmailClickedNotification(contact, workflow.name, urlShortener.long_url);
+	    }
 
 	    // Interrupt cron tasks of clicked.
 	    interruptCronTasksOfClicked(urlShortener.tracker_id, normalisedLongURL, urlShortener.campaign_id, subscriberId);

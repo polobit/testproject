@@ -35,7 +35,7 @@ function showIncomingCall()
 	showCallNotyPopup("incoming", "confirm", '<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + User_Name + "   " + User_Number + "<br>", false);
 
 	// Incoming call sound play.
-	startRingTone();
+	startRingTone("ringtone");
 
 	// Not working
 	// if (window.webkitNotifications &&

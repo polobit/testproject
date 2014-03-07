@@ -27,13 +27,6 @@ public class WorkflowTemplate
     public Long id;
 
     /**
-     * Workflow template category. It represents sub-folder of
-     * campaign-templates. Category name should match with sub-folder name
-     */
-    @NotSaved(IfDefault.class)
-    public String category = null;
-
-    /**
      * Workflow template resource name excluding _template.js
      */
     @Indexed
@@ -68,9 +61,8 @@ public class WorkflowTemplate
      * @param rules
      *            - workflow json
      */
-    public WorkflowTemplate(String category, String templateName, String rules)
+    public WorkflowTemplate(String templateName, String rules)
     {
-	this.category = category;
 	this.template_name = templateName;
 	this.rules = rules;
     }
