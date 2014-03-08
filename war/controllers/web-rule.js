@@ -18,7 +18,7 @@ var WebreportsRouter = Backbone.Router.extend({
 	},
 	web_reports_add : function()
 	{
-		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "webrules-add", window : "webrules", isNew : true,
+		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "webrules-add", window : "web-rules", isNew : true,
 			postRenderCallback : function(el)
 			{
 				head.js('lib/agile.jquery.chained.min.js', function()
@@ -52,7 +52,7 @@ var WebreportsRouter = Backbone.Router.extend({
 		// Gets a report to edit, from reports collection, based on id
 		var webrule = this.webrules.collection.get(id);
 
-		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : "webrules-add", window : "webrules",
+		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : "webrules-add", window : "web-rules",
 			postRenderCallback : function(el)
 			{
 				if (count > 0)
