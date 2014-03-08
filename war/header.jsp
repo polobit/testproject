@@ -110,7 +110,7 @@
 								if (menuSetting.documents || true) {
 							%>
 							<li id="documentsmenu"><a href="#documents"><i
-									class="icon-file icon-white"></i> Docs</a></li>
+									class="icon-file icon-white"></i> Documents</a></li>
 							<%
 							    }
 											if (menuSetting.reports || true) {
@@ -162,7 +162,7 @@
 														if (menuSetting.documents || true) {
 									%>
 									<li id="documentsmenu"><a href="#documents"><i
-											class="icon-file icon-white"></i> Docs</a></li>
+											class="icon-file icon-white"></i> Documents</a></li>
 									<%
 									    }
 													if (menuSetting.reports || true) {
