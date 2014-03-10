@@ -187,6 +187,9 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 				showCallNotyPopup("requestTimeout", "error", "SIP: Request Timeout.", false);
 			else if (e.description == "Hackers Forbidden")
 				showCallNotyPopup("hackersForbidden", "error", "SIP: Hackers Forbidden.", false);
+			else if (e.description == "User not found")
+				showCallNotyPopup("userNotFound", "error", "SIP: User not found.", false);
+			
 
 			// Call terminated.
 			Sip_Session_Call = null;
