@@ -4,18 +4,18 @@
  * 
  * @param c
  */
-function sipSendDTMF(c)
+function sipSendDTMF(digit)
 {
-	console.log("In sipSendDTMF: " + c);
+	console.log("In sipSendDTMF: " + digit);
 
 	// session for call is active and number is available.
-	if (Sip_Session_Call && c)
+	if (Sip_Session_Call && digit)
 	{
 		// play sound.
 		play_sound("dtmf");
 		
 		// send dtmf on SIP
-		if (Sip_Session_Call.dtmf(c) == 0)
+		if (Sip_Session_Call.dtmf(digit) == 0)
 		{
 			// Dtmf sent.
 		}

@@ -131,10 +131,10 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			showCallNotyPopup("connected", "success", "<b>On call : </b><br>" + User_Name + "   " + User_Number + "<br>", false);
 
 			// Close html5 notification.
-			if (Notifi_Call)
+			if (Notify_Call)
 			{
-				Notifi_Call.cancel();
-				Notifi_Call = null;
+				Notify_Call.cancel();
+				Notify_Call = null;
 			}
 		}
 		break;
@@ -195,10 +195,10 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			User_Img = null;
 
 			// Close html5 notification.
-			if (Notifi_Call)
+			if (Notify_Call)
 			{
-				Notifi_Call.cancel();
-				Notifi_Call = null;
+				Notify_Call.cancel();
+				Notify_Call = null;
 			}
 		}
 		break;
