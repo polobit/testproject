@@ -83,12 +83,15 @@ function calculate_profile()
 
 }
 
+function set_profile_noty()
+{
+	}
 /**
  * Sets up noty message to be shown. It iterates though profile stats calculated
  * in calculate_profile() method and creates noty template with appropriate
  * message
  */
-function set_profile_noty()
+function set_profile_noty1()
 {
 	console.log(Agile_Contact);
 	if(jQuery.isEmptyObject(Agile_Contact))
