@@ -144,7 +144,7 @@ table {
 }
 
 .rating span.star:hover:before,.rating span.rating-value,.rating span.star:hover 
-	   ~ span.star:before {
+	    ~ span.star:before {
 	content: "\2605";
 	color: #e3cf7a;
 }
@@ -165,7 +165,7 @@ table {
 	/* IE10+ */
 	background-image: -o-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 	/* Opera 11.10+ */
-	filter: progid:DXImageTransform.Microsoft.gradient(     startColorstr='#f5f5f5',
+	filter: progid:DXImageTransform.Microsoft.gradient(      startColorstr='#f5f5f5',
 		endColorstr='#eeeeee', GradientType=0); /* IE6-9 */
 	background-image: linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 	/* W3C */
@@ -365,7 +365,7 @@ table .headerSortUp::after {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
-	filter: alpha(opacity =       60);
+	filter: alpha(opacity =         60);
 	-khtml-opacity: 0.6;
 	-moz-opacity: 0.6;
 	opacity: 0.6;
@@ -373,7 +373,7 @@ table .headerSortUp::after {
 
 table .headerSortDown::after,table .headerSortDown:hover::after {
 	visibility: visible;
-	filter: alpha(opacity =       60);
+	filter: alpha(opacity =         60);
 	-khtml-opacity: 0.6;
 	-moz-opacity: 0.6;
 	opacity: 0.6;
@@ -1065,63 +1065,14 @@ tbody a.no-style-a {
 	table-layout: fixed
 }
 
-.agile-ellipsis-dynamic
->tbody>tr>td
-*:not(
-.ellipsis-multiline){
-max-width
-
-
-:
-
- 
-
-100%;
-height
-
-
-:
-
- 
-
-auto
-
-
-;
-text-overflow
-
-
-:
-
- 
-
-ellipsis
-
-
-;
-white-space
-
-
-:
-
- 
-
-nowrap
-
-
-;
-overflow
-
-
-:
-
- 
-
-hidden
-
-
-;
+.agile-ellipsis-dynamic > tbody> tr > td *:not(.ellipsis-multiline){	
+	max-width:100%;
+	height:auto;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
 }
+
 .ellipsis-multiline {
 	width: 100% !important;
 	height: 60px !important;
@@ -1134,254 +1085,62 @@ hidden
 	text-overflow: ellipsis;
 }
 /**
-@media ( min-width : 980px) and (max-width: 1201px) {
-	.agile-menu
-	>
-	li
-	
-	
-	:nth-child(n + 6)
-	
-	
-	:not
-	
-	 
-	
-	(
-	.nav-bar-search
-	
-	 
-	
-	)
-	:not
-	
-	 
-	
-	(
-	#more-menu
-	
-	 
-	
-	)
-	{
-	display
-	
-	
-	:
-	
-	 
-	
-	none
-	
-	
-	
-
-}
-
-#more-menu
-
- 
-
-li
-
-
-:not
-
- 
-
-(
-:nth-child(n+3)
-
- 
-
-)
-{
-display
-
-
-:
-
- 
-
-none
-
-
-;
-}
-}
-@media ( min-width : 1200px) and (max-width: 1250px) {
-	.agile-menu
-	>
-	li
-	
-	
-	:nth-child(n + 10)
-	
-	
-	:not
-	
-	 
-	
-	(
-	.nav-bar-search
-	
-	 
-	
-	)
-	:not
-	
-	 
-	
-	(
-	#more-menu
-	
-	
-		
-	
-	)
-	{
-	display
-	
-	
-	:
-	
-	 
-	
-	none
-	
-	
-	
-
-}
-
-#more-menu {
-	display: none;
-}
-
-}
-@media ( min-width : 1251px) and (max-width: 1300px) {
-	.agile-menu
-	>
-	li
-	
-	
-	:nth-child(n + 10)
-	
-	
-	:not
-	
-	 
-	
-	(
-	.nav-bar-search
-	
-	 
-	
-	)
-	:not
-	
-	 
-	
-	(
-	#more-menu
-	
-	
-		
-	
-	)
-	{
-	display
-	
-	
-	:
-	
-	 
-	
-	none
-	
-	
-	
-
-}
-
-#more-menu {
-	display: none;
-}
-
-}
-@media ( min-width : 1300px) {
-	.agile-menu
-	>
-	li
-	
-	
-	:nth-child(n + 12)
-	
-	
-	:not
-	
-	 
-	
-	(
-	.nav-bar-search
-	
-	 
-	
-	)
-	:not
-	
-	 
-	
-	(
-	#more-menu
-	
-	
-		
-	
-	)
-	{
-	display
-	
-	
-	:
-	
-	 
-	
-	none
-	
-	
-	
-
-}
-
-#more-menu {
-	display: none;
-}
-
-}
-@media ( max-width : 979px) {
-	#more-menu {
-		display: none;
-	}
-}
-*/
-@media (min-width: 980px) and (max-width: 1199px)  {
+@media (min-width: 980px) and (max-width: 1201px)  {
 	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	
 	#more-menu li:not(:nth-child(n+3)) {
 		display:none;
 	}
 }
 
-
-@media (min-width: 1200px)   {
-	.agile-menu  > li:nth-child(n + 9):not(.nav-bar-search):not(#more-menu)   {     display:none }	
-	#more-menu li:not(:nth-child(n+5)) {
+@media (min-width: 1200px) and (max-width: 1250px)  {
+	.agile-menu  > li:nth-child(n + 10):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
 		display:none;
 	}
 
 }
 
+@media (min-width: 1251px) and (max-width: 1300px) {
 
+	.agile-menu  > li:nth-child(n + 10):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
+		display:none;
+	}
+}
+
+@media (min-width: 1300px) {
+
+	.agile-menu  > li:nth-child(n + 12):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
+		display:none;
+	}
+}
+
+@media (max-width: 979px) {
+	#more-menu {
+		display:none;
+	}
+}
+*/
+@media ( min-width : 980px) and (max-width: 1199px) {
+	.agile-menu>li:nth-child(n + 6):not(.nav-bar-search ):not(#more-menu )
+		{
+		display: none
+	}
+	#more-menu li:not(:nth-child(n+2) ) {
+		display: none;
+	}
+}
+
+@media ( min-width : 1200px)  {
+	.agile-menu>li:nth-child(n + 9):not(.nav-bar-search ):not(#more-menu )
+		{
+		display: none
+	}
+	#more-menu li:not(:nth-child(n+5) ) {
+		display: none;
+	}
+}
 
 
 /* Disable drop-down menu item, add class="disabled" to <a>
