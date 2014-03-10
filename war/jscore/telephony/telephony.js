@@ -22,7 +22,7 @@ var User_Number;
 var CALL;
 
 // HTML5 notification.
-var Notifi_Call;
+var Notify_Call;
 
 // Sip flags.
 var Sip_Start = false;

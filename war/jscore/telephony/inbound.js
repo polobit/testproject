@@ -48,22 +48,22 @@ function showIncomingCall()
 	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
 	{
 		// If already displaying notification
-		if (Notifi_Call)
+		if (Notify_Call)
 		{
-			Notifi_Call.cancel();
+			Notify_Call.cancel();
 		}
 		
 		// Set properties.
-		Notifi_Call = window.webkitNotifications.createNotification('/img/plugins/sipIcon.png', 'Incoming call :', User_Name + "   " + User_Number);
+		Notify_Call = window.webkitNotifications.createNotification('/img/plugins/sipIcon.png', 'Incoming call :', User_Name + "   " + User_Number);
 		
 		// Onclick of close.
-		Notifi_Call.onclose = function()
+		Notify_Call.onclose = function()
 		{
-			Notifi_Call = null;
+			Notify_Call = null;
 		};
 		
 		// Display notification.
-		Notifi_Call.show();
+		Notify_Call.show();
 	}
 	
 	// Find contact for incoming call and update display.

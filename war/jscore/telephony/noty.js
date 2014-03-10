@@ -18,7 +18,7 @@ function notifyMe()
 	else if (Notification.permission == "granted")
 	{
 		// If it's okay let's create a notification
-		Notifi_Call = new Notification("Incoming Call :", { body : User_Name + "   " + User_Number, tag : "SipCall", icon : '/img/plugins/sipIcon.png' });
+		Notify_Call = new Notification("Incoming Call :", { body : User_Name + "   " + User_Number, tag : "SipCall", icon : '/img/plugins/sipIcon.png' });
 	}
 
 	// Otherwise, we need to ask the user for permission
@@ -38,7 +38,7 @@ function notifyMe()
 			// If the user is okay, let's create a notification
 			if (permission == "granted")
 			{
-				Notifi_Call = new Notification("Incoming Call :",
+				Notify_Call = new Notification("Incoming Call :",
 						{ body : User_Name + "   " + User_Number, tag : "SipCall", icon : '/img/plugins/sipIcon.png' });
 			}
 		});
