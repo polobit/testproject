@@ -66,8 +66,9 @@
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css" 
 	href="/css/agilecrm.css" />
-
-<script src='/lib/head.load.min.js'></script>
+	
+ <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
+<script src='/lib/head.load.min.js'></script> 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
