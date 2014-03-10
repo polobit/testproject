@@ -1065,7 +1065,8 @@ tbody a.no-style-a {
 	table-layout: fixed
 }
 
-.agile-ellipsis-dynamic>tbody>tr>td
+.agile-ellipsis-dynamic
+>tbody>tr>td
 *:not(
 .ellipsis-multiline){
 max-width

@@ -20,8 +20,10 @@ function sipStart()
 			// Clear 15 sec duration to avoid loop calling.
 			clearInterval(Ready_State_Timer);
 
+			if (Sip_Start == true)
+				return;	
 			// If sip not register yet.
-			if (Sip_Start == false)
+			else  //(Sip_Start == false)
 			{
 				// Get Sip widget
 				$.getJSON("/core/api/widgets/Sip", function(sip_widget)
@@ -61,8 +63,10 @@ function sipRegister()
 	// Properties for session object.
 	Config_Call = { audio_remote : document.getElementById('audio_remote'), events_listener : { events : '*', listener : sipSessionEventsListener } };
 
+	if (Sip_Start == true)
+		return;	
 	// If sip is not started yet.
-	if (Sip_Start == false)
+	else  //(Sip_Start == false)
 	{
 		// Set flag to avoid recall.
 		Sip_Start = true;

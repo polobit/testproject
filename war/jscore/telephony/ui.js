@@ -109,10 +109,10 @@ $(function()
 		Sip_Session_Call.reject(Config_Call);
 
 		// Remove html5 notification.
-		if (Notifi_Call)
+		if (Notify_Call)
 		{
-			Notifi_Call.cancel();
-			Notifi_Call = null;
+			Notify_Call.cancel();
+			Notify_Call = null;
 		}
 	});
 
