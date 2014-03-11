@@ -1,5 +1,5 @@
 var plan_json = [];
-var INTERVALS = ["monthly", "yearly", "biyearly"];
+var INTERVALS = ["monthly", "yearly", "biennial"];
 //Plans with costs
 var PLANS_COSTS_JSON = {};
 PLANS_COSTS_JSON.starter = "14.99";
@@ -10,24 +10,24 @@ PLANS_COSTS_JSON.pro = "79.99";
 var PLANS_DISCOUNTS_JSON = {};
 PLANS_DISCOUNTS_JSON.monthly = "0";
 PLANS_DISCOUNTS_JSON.yearly = "20";
-PLANS_DISCOUNTS_JSON.twoyears = "40";
+PLANS_DISCOUNTS_JSON.biennial = "40";
 
 var PLANS_DISCOUNTS_JSON_NEW = {};
 
 PLANS_DISCOUNTS_JSON_NEW.starter = {};
 PLANS_DISCOUNTS_JSON_NEW.starter.monthly = "0";
 PLANS_DISCOUNTS_JSON_NEW.starter.yearly = "33.355";
-PLANS_DISCOUNTS_JSON_NEW.starter.twoyears = "40";
+PLANS_DISCOUNTS_JSON_NEW.starter.biennial = "40";
 
 PLANS_DISCOUNTS_JSON_NEW.regular = {};
 PLANS_DISCOUNTS_JSON_NEW.regular.monthly = "0";
 PLANS_DISCOUNTS_JSON_NEW.regular.yearly = "20";
-PLANS_DISCOUNTS_JSON_NEW.regular.twoyears = "40";
+PLANS_DISCOUNTS_JSON_NEW.regular.biennial = "40";
 
 PLANS_DISCOUNTS_JSON_NEW.pro = {};
 PLANS_DISCOUNTS_JSON_NEW.pro.monthly = "0";
 PLANS_DISCOUNTS_JSON_NEW.pro.yearly = "18.75";
-PLANS_DISCOUNTS_JSON_NEW.pro.twoyears = "40";
+PLANS_DISCOUNTS_JSON_NEW.pro.biennial = "40";
 
 var PLAN_DETAILS = {
 		getPlanPrice : function(plan_name) {
@@ -239,7 +239,7 @@ $(function()
 	       
 	          if($('.monthly').hasClass("plan-select")){cycle = "Monthly";months = 1; discount = PLAN_DETAILS.getDiscount(plan, "monthly")}
 	          else if($('.yearly').hasClass("plan-select")){cycle = "Yearly";months = 12;discount = PLAN_DETAILS.getDiscount(plan, "yearly")}
-	          else if($('.twoyears').hasClass("plan-select")){cycle = "Two Years";months = 24;discount = PLAN_DETAILS.getDiscount(plan, "twoyears")}
+	          else if($('.biennial').hasClass("plan-select")){cycle = "biennial";months = 24;discount = PLAN_DETAILS.getDiscount(plan, "biennial")}
 	          
 	          var variable = [];
 			  var amount = PLANS_COSTS_JSON[plan];
@@ -277,10 +277,10 @@ $(function()
 			 if (couponCode)
 				plan_json.coupon_code = couponCode;
 	        
-	        if(cycle != "Two Years")
+	        if(cycle != "biennial")
 	        	{
 	        	 	plan_json.yearly_discount = ([cost * 12] - [variable.yearly * quantity * 12]).toFixed(2);
-	        	 	plan_json.bi_yearly_discount = ([cost * 24] - [variable.twoyears * quantity * 24]).toFixed(2);
+	        	 	plan_json.bi_yearly_discount = ([cost * 24] - [variable.biennial * quantity * 24]).toFixed(2);
 	        	}
 	        
 	        if((USER_DETAILS.getPlanType(USER_BILLING_PREFS) + "-" + USER_DETAILS.getQuantity(USER_BILLING_PREFS) + "-" + USER_DETAILS.getPlanInterval(USER_BILLING_PREFS)) == (plan + "-" + quantity + "-" + cycle)){
