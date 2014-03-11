@@ -36,19 +36,19 @@ function show_desktop_notification(imageURL, title, message, link, tag) {
 				trigger : true
 			});
 
-			// open_user_panel(sessionId);
-			this.cancel();
+			this.close();
 		};
+		
 		setTimeout(function() {
-			notification.cancel();
+			notification.close();
 		}, '30000');
+		
 		// Show when tab is inactive
 		if (!window.closed)
 		{	
 			if (notification_prefs.notification_sound != 'no_sound')
 				play_sound(notification_prefs.notification_sound);
 			
-			notification.show();
 		}
 }
 
