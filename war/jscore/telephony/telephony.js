@@ -7,13 +7,16 @@ var Sip_Register_Session;
 // Sip call session.
 var Sip_Session_Call;
 
-// Sip call session properties.
+/*
+ * Sip call session properties. Used to create incoming call, outgoing call, and
+ * sip registration. Even we need when user reject or accept call.
+ */
 var Config_Call;
 
 // Sip widget.
 var Sip_Widget_Object;
 
-// User details of callee / contact user.
+// User details of callee / contact user. We can not set fields in session. 
 var User_Name;
 var User_Img;
 var User_Number;
@@ -28,9 +31,6 @@ var Notify_Call;
 var Sip_Start = false;
 var Sip_Updated = false;
 var No_Internet = false;
-
-// Time Counter.
-var Ready_State_Timer;
 
 // Audio object
 var Sip_Audio;

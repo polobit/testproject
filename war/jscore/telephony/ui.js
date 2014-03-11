@@ -27,23 +27,24 @@ $(function()
 
 	/**
 	 * On click of call action on contact page from list, will make SIP call to
-	 * hard coded number.
+	 * hard coded number. For Testing purpose. Call action is not visible to
+	 * user.
 	 */
 	$(".make-call").die().live("click", function(e)
 	{
 		e.preventDefault();
 
 		// SIP
-		if (makeCall('sip:+18004321000@proxy.ideasip.com'))
-		{
-			// Hard coded user details.
-			User_Name = "Agile";
-			User_Number = "sip:+18004321000@proxy.ideasip.com";
+		/*
+		 * if (makeCall('sip:+18004321000@proxy.ideasip.com')) { // Hard coded
+		 * user details. User_Name = "Agile"; User_Number =
+		 * "sip:+18004321000@proxy.ideasip.com";
+		 */
 
-			/*
-			 * if(makeCall('sip:farah@sip2sip.info')) { User_Name = "farah";
-			 * User_Number = "sip:farah@sip2sip.info";
-			 */
+		if (makeCall('sip:farah@sip2sip.info'))
+		{
+			User_Name = "farah";
+			User_Number = "sip:farah@sip2sip.info";
 
 			// Display
 			showCallNotyPopup("outgoing", "confirm", '<i class="icon icon-phone"></i><b>Calling :</b><br> ' + User_Name + "  " + User_Number + "<br>", false);
