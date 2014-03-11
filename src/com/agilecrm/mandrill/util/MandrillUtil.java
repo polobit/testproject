@@ -336,7 +336,7 @@ public class MandrillUtil
 	JSONArray vars = new JSONArray();
 
 	vars.put(getVarJSON(MandrillMergeVars.SUBJECT.toString(), subject));
-	vars.put(getVarJSON(MandrillMergeVars.HTML_CONTENT.toString(), html));
+	vars.put(getVarJSON(MandrillMergeVars.HTML_CONTENT.toString(), getHTML(html, text)));
 	vars.put(getVarJSON(MandrillMergeVars.TEXT_CONTENT.toString(), text));
 
 	return vars;
@@ -367,4 +367,40 @@ public class MandrillUtil
 
 	return var;
     }
+
+    /**
+     * Returns HTML if not empty, otherwise text
+     * 
+     * @param html
+     *            - html body
+     * @param text
+     *            - text body
+     * @return String
+     * 
+     */
+    public static String getHTML(String html, String text)
+    {
+	// return html if not empty
+	if (!StringUtils.isBlank(html))
+	    return html;
+
+	return convertTextIntoHtml(text);
+    }
+
+    /**
+     * Returns text body replacing with br tags where necessary
+     * 
+     * @param text
+     *            - text body
+     * @return String
+     */
+    public static String convertTextIntoHtml(String text)
+    {
+	if (StringUtils.isBlank(text))
+	    return text;
+
+	return text.replaceAll("(\r\n|\n)", "<br>").replaceAll("((?<= ) | (?= ))", "&nbsp;");
+
+    }
+
 }

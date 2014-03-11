@@ -110,31 +110,13 @@ $(function()
 		App_Widgets.setup_google_contacts.model.set(serializeForm("google-contacts-import-form"));
 		console.log(App_Widgets.setup_google_contacts.model.toJSON())
 		var url = App_Widgets.setup_google_contacts.model.url;
-		var show_noty = false;
-		if(App_Widgets.setup_google_contacts.model.get("duration") == "ONCE")
-			if(!confirm("Are you sure you want to sync now?"))
-			{
-				App_Widgets.setup_google_contacts.render(true);
-	    		return;
-			}
-			else
-			{
-				$(this).after(LOADING_HTML);
-				App_Widgets.setup_google_contacts.model.url = url + "?sync=true"
-				App_Widgets.setup_google_contacts.model.save({success : function(data){
-					App_Widgets.setup_google_contacts.render(true);
-					App_Widgets.setup_google_contacts.model.url = url;
-					
-				}});
-			
-				showNotyPopUp("information", "Contacts sync started", "top", 1000);
-			}
-			
+
 		$(this).after(LOADING_HTML);
+		App_Widgets.setup_google_contacts.model.url = url + "?sync=true"
 		App_Widgets.setup_google_contacts.model.save({success : function(data){
 			App_Widgets.setup_google_contacts.render(true);
 			App_Widgets.setup_google_contacts.model.url = url;
-				
+			showNotyPopUp("information", "Contacts sync started", "top", 1000);
 			}});
 		
 	})
