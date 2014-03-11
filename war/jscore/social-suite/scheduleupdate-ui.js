@@ -1,6 +1,6 @@
 /** 
  * This file contains all event related actions on Scheduled updates, 
- * Like add scheduled update, edit schedueld update, delete, etc.
+ * Like add scheduled update, edit scheduled update, delete, etc.
  */
 
 $(function()

@@ -54,8 +54,7 @@ function startRingTone(sound)
 
 /**
  * Incoming call: After receive / missed / ignore from user and on error it
- * stops. 
- * Outgoing call: After received / missed / ignored from callee and on
+ * stops. Outgoing call: After received / missed / ignored from callee and on
  * error it stops.
  */
 function stopRingTone()

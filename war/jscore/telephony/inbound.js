@@ -37,34 +37,8 @@ function showIncomingCall()
 	// Incoming call sound play.
 	startRingTone("ringtone");
 
-	// Not working
-	// if (window.webkitNotifications &&
-	// window.webkitNotifications.checkPermission() == 0)
-	// show_desktop_notification(imageURL, title, message, link, tag);
-	// show_desktop_notification("/img/plugins/sipIcon.png", "Incoming Call :",
-	// User_Name+" "+User_Number, undefined, "SipCall");
-
-	// notification display permission already asked when we registered
-	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
-	{
-		// If already displaying notification
-		if (Notify_Call)
-		{
-			Notify_Call.cancel();
-		}
-		
-		// Set properties.
-		Notify_Call = window.webkitNotifications.createNotification('/img/plugins/sipIcon.png', 'Incoming call :', User_Name + "   " + User_Number);
-		
-		// Onclick of close.
-		Notify_Call.onclose = function()
-		{
-			Notify_Call = null;
-		};
-		
-		// Display notification.
-		Notify_Call.show();
-	}
+    // notification display permission already asked when we registered	
+	show_desktop_notification("../img/plugins/sipIcon.png", "Incoming Call :", User_Name + " " + User_Number, undefined, "SipCall");
 	
 	// Find contact for incoming call and update display.
 	findContact();
