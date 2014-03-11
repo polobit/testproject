@@ -1,33 +1,4 @@
 /**
- * When Admin settings are triggered to check whether the current user has admin
- * privilege.
- */
-var isAdmintemplate;
-$(function()
-{
-	this.adminView = new Base_Model_View({ url : "/core/api/users/current-user", data : CURRENT_DOMAIN_USER, template : "admin-settings" });
-	isAdmintemplate = this.adminView.render(true).el;
-});
-
-/**
- * Appends Admin tabs to the page even when refreshed the page.
- * 
- * @param callback
- */
-function getAdminSettings(callback)
-{
-	App_Admin_Settings.adminViewTemp = new Base_Model_View({ url : "/core/api/users/current-user", data : CURRENT_DOMAIN_USER, template : "admin-settings" });
-
-	if (callback && typeof (callback) === "function")
-	{
-		// execute the callback, passing parameters as
-		// necessary
-		$('#content').html(App_Admin_Settings.adminViewTemp.render(true).el);
-		callback();
-	}
-}
-
-/**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
  * 
@@ -72,17 +43,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	menu_settings : function()
 	{
-		$('#content').html(isAdmintemplate);
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		var view = new Base_Model_View({ url : '/core/api/menusetting', template : "admin-settings-menu-settings", reload : true });
 
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele accountPrefs");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.menu_settings();
-			});
-		}
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.menu-settings-tab').addClass('active');
@@ -94,18 +62,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	accountPrefs : function()
 	{
-		$('#content').html(isAdmintemplate);
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		var view = new Base_Model_View({ url : '/core/api/account-prefs', template : "admin-settings-account-prefs" });
 
-		// $('#content').html(view.render().el);
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele accountPrefs");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.accountPrefs();
-			});
-		}
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.account-prefs-tab').addClass('active');
@@ -116,7 +80,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	users : function()
 	{
-		$('#content').html(isAdmintemplate);
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		this.usersListView = new Base_Collection_View({ url : '/core/api/users', restKey : "domainUser", templateKey : "admin-settings-users",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
@@ -127,15 +96,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			} });
 		this.usersListView.collection.fetch();
 
-		// $('#content').html(this.usersListView.el);
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele users");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.users();
-			});
-		}
 		$('#content').find('#admin-prefs-tabs-content').html(this.usersListView.el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.users-tab').addClass('active');
@@ -147,7 +107,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	usersAdd : function()
 	{
-		$('#content').html(isAdmintemplate);
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users',
 			postRenderCallback : function(el)
 			{
@@ -155,15 +120,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					addTagAgile("User invited");
 			} });
 
-		// $('#content').html(view.render().el);
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele usersAdd");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.usersAdd();
-			});
-		}
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.users-tab').addClass('active');
@@ -176,7 +132,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	userEdit : function(id)
 	{
-		$('#content').html(isAdmintemplate);
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+
 		// If users list is not defined then take back to users template
 		if (!this.usersListView || !this.usersListView.collection.get(id))
 		{
@@ -193,15 +155,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		 */
 		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users' });
 
-		// $('#content').html(view.render().el);
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele userEdit");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.userEdit(id);
-			});
-		}
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.users-tab').addClass('active');
@@ -220,20 +173,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	customFields : function()
 	{
-		$('#content').html(isAdmintemplate);
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		this.customFieldsListView = new Base_Collection_View({ url : '/core/api/custom-fields', restKey : "customFieldDefs",
 			templateKey : "admin-settings-customfields", individual_tag_name : 'tr' });
 
 		this.customFieldsListView.collection.fetch();
-		// $('#content').html(this.customFieldsListView.el);
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele customFields");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.customFields();
-			});
-		}
+
 		$('#content').find('#admin-prefs-tabs-content').html(this.customFieldsListView.el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.custom-fields-tab').addClass('active');
@@ -246,16 +196,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	analyticsCode : function()
 	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
 		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
 				prettyPrint();
 			} });
-			$('#content').html(isAdmintemplate);
-			$('#admin-prefs-tabs-content').html(view.el);
-			$('#AdminPrefsTab .active').removeClass('active');
-			$('.analytics-code-tab').addClass('active');
+			$("#content").html(getTemplate("admin-settings"), {});
+			$('#content').find('#admin-prefs-tabs-content').html(view.el);
+			$('#content').find('#AdminPrefsTab .active').removeClass('active');
+			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
 		});
 	},
@@ -265,16 +220,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	api : function()
 	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
 		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-model", postRenderCallback : function(el)
 			{
 				prettyPrint();
 			} });
-			$('#content').html(isAdmintemplate);
-			$('#admin-prefs-tabs-content').html(view.el);
-			$('#AdminPrefsTab .active').removeClass('active');
-			$('.analytics-code-tab').addClass('active');
+			$("#content").html(getTemplate("admin-settings"), {});
+			$('#content').find('#admin-prefs-tabs-content').html(view.el);
+			$('#content').find('#AdminPrefsTab .active').removeClass('active');
+			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
 		});
 	},
@@ -285,23 +245,39 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	milestones : function()
 	{
-		$('#content').html(isAdmintemplate);
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		var view = new Base_Model_View({ url : '/core/api/milestone', template : "admin-settings-milestones", reload : true, postRenderCallback : function(el)
 		{
 			setup_milestones();
 		} });
-		// $('#content').html(view.render().el);
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele milestones");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.milestones();
-			});
-		}
+
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.milestones-tab').addClass('active');
+	},
+
+	/**
+	 * Fetches Mandrill subaccount usage info.
+	 */
+	emailStats : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+		var emailStatsModelView = new Base_Model_View({ url : 'core/api/emails/email-stats', template : 'admin-settings-email-stats', });
+
+		$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.stats-tab').addClass('active');
+
 	},
 
 	/**
@@ -314,24 +290,4 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		allDomainUsersCollectionView.collection.fetch();
 		$('#content').html(allDomainUsersCollectionView.el);
-	},
-
-	/**
-	 * Fetches Mandrill subaccount usage info.
-	 */
-	emailStats : function()
-	{
-		var emailStatsModelView = new Base_Model_View({ url : 'core/api/emails/email-stats', template : 'admin-settings-email-stats', });
-		if (($('#content').find('#admin-prefs-tabs-content').html()) == null)
-		{
-			console.log("nooooooooooooo ele milestones");
-			getAdminSettings(function()
-			{
-				App_Admin_Settings.emailStats();
-			});
-		}
-		$('#content').find('#admin-prefs-tabs-content').html(emailStatsModelView.render().el);
-		$('#content').find('#AdminPrefsTab .active').removeClass('active');
-		$('#content').find('.stats-tab').addClass('active');
-
 	} });
