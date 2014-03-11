@@ -1,7 +1,6 @@
 
 <script id="admin-settings-template" type="text/html">
 <!-- Check whether DomainUSer has admin Privileges -->
-{{#if is_admin}}
 <div class="row">
     <div class="span12">
         <div class="page-header">
@@ -9,46 +8,6 @@
         </div>
     </div>
 </div>
-<!--<div class="span12" style="margin-left: -20px;">
-    <div class="span3 offset well">
-        <div class="settings-content">
-            <legend>Account Preferences</legend>
-            Choose your plan, upload your company logo and set up your company name to appear on the dashboard.
-        </div>
-        <a class="btn btn-primary" href="#account-prefs">Go</a>
-    </div>
-    <div class="span3 offset well">
-        <div class="settings-content">
-            <legend>Users</legend>
-            Add, edit or delete users who can access your CRM.
-        </div>
-        <a class="btn btn-primary" href="#users">Go</a>
-    </div>
-    <div class="span3 offset well">
-        <div class="settings-content">
-            <legend>Custom Fields</legend>
-            Include custom information about contact, company, deal or activity.
-        </div>
-        <a class="btn btn-primary" href="#custom-fields">Go</a>
-    </div>
-</div>
-<div class="span12" style="margin-left: -20px;">
-    <div class="span3 offset well">
-        <div class="settings-content">
-            <legend>API & Analytics </legend>
-            Create/Delete contacts, tags and notes directly from your website using JS API.
-        </div>
-        <a class="btn btn-primary" href="#analytics-code">Go</a>
-    </div>
-    <div class="span3 offset well">
-        <div class="settings-content">
-            <legend>Milestones</legend>
-            Configure milestones for your deals.
-        </div>
-        <a class="btn btn-primary" href="#milestones">Go</a>
-    </div>
-</div>-->
-
 
 <div class="row">
 	<div class="span12">
@@ -58,7 +17,7 @@
 			<li class="custom-fields-tab"><a href="#custom-fields">Custom Fields</a></li>
 			<li class="analytics-code-tab"><a href="#analytics-code">API & Analytics</a></li>
 			<li class="milestones-tab"><a href="#milestones">Milestones</a></li>
-			<li class="menu-settings-tab"><a href="#menu-settings">Menu Settings</a></li>
+		<!-- <li class="menu-settings-tab"><a href="#menu-settings">Menu Settings</a></li> -->
             <li class="stats-tab"><a href="#email-stats">Email Stats</a></li>
 		</ul>
 		<div class="tab-content">
@@ -66,7 +25,4 @@
 		</div>
 	</div>
 </div>
-{{else}}
-You have no Admin Privileges
-{{/if}}
 </script>

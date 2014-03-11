@@ -118,6 +118,8 @@ public class RegisterServlet extends HttpServlet
 	// We create a new user if the domain user is not found
 	if (userInfo != null)
 	{
+	    System.out.println("user info : " + userInfo);
+	    System.out.println("namespace :" + NamespaceManager.get());
 	    if (DomainUserUtil.count() == 0)
 	    {
 		DomainUser domainUser = createUser(request, response, userInfo, "");
@@ -126,6 +128,7 @@ public class RegisterServlet extends HttpServlet
 	    }
 
 	    String redirect = (String) request.getSession().getAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+	    System.out.println("redirect :" + redirect);
 
 	    if (redirect != null)
 	    {

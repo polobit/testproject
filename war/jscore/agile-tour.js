@@ -186,7 +186,7 @@ function initiate_tour(key, el)
 		create_tour_steps(el);
 
 	if (Agile_Tour[key])
-		head.js('lib/bootstrap-tour-agile.min.js', function()
+		head.load(CSS_PATH+'css/bootstrap-tour.min.css', 'lib/bootstrap-tour-agile.min.js', function()
 		{
 			// Uses bootstrap tour
 			tour = new Tour({ name : key + "-tour", debug : true, useLocalStorage : true, endOnLast : true, onEnd : function(tour)

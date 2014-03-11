@@ -95,7 +95,6 @@ $(function()
 	$(".save-contact-prefs").die().live('click', function(e){
 		e.preventDefault();
 		var disabled = $(this).attr("disabled");
-		var sync = $(this).attr("sync");
 		if(disabled)
 			return;
 		
@@ -106,38 +105,18 @@ $(function()
 				
 		$(this).attr("disabled", "disabled");
 		
-		$(this).after(LOADING_HTML);
+	
 		
 		App_Widgets.setup_google_contacts.model.set(serializeForm("google-contacts-import-form"));
-		
+		console.log(App_Widgets.setup_google_contacts.model.toJSON())
 		var url = App_Widgets.setup_google_contacts.model.url;
-		var show_noty = false;
-		if(sync)
-		{
-			if(!confirm("Are you sure you want to sync now?"))
-			{
-				App_Widgets.setup_google_contacts.render(true);
-	    		return;
-			}
-			else
-			{
-				App_Widgets.setup_google_contacts.model.url = url + "?sync=true"
-				App_Widgets.setup_google_contacts.model.save({success : function(data){
-					App_Widgets.setup_google_contacts.render(true);
-					App_Widgets.setup_google_contacts.model.url = url;
-					
-				}});
-			
-				showNotyPopUp("information", "Contacts sync started", "top", 1000);
-			}
-			return;
-			
-		}
-		
+
+		$(this).after(LOADING_HTML);
+		App_Widgets.setup_google_contacts.model.url = url + "?sync=true"
 		App_Widgets.setup_google_contacts.model.save({success : function(data){
 			App_Widgets.setup_google_contacts.render(true);
 			App_Widgets.setup_google_contacts.model.url = url;
-				
+			showNotyPopUp("information", "Contacts sync started", "top", 1000);
 			}});
 		
 	})

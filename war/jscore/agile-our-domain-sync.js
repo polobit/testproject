@@ -156,7 +156,7 @@ function our_domain_sync()
 					{
 						Agile_Contact = data;
 						// Shows noty
-						set_profile_noty();
+						//set_profile_noty();
 						add_custom_fields_to_our_domain();
 					});
 		})
@@ -259,7 +259,7 @@ function addTagAgile(tag)
 		Agile_Contact = data;
 		if (!checkTagAgile(tag))
 			Agile_Contact.tags.push(tag)
-		set_profile_noty();
+		//set_profile_noty();
 	});
 }
 

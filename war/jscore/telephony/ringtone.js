@@ -7,40 +7,43 @@ function addAudio()
 {
 	var audioElmt = document.getElementById("audio_remote");
 
-	console.log("audioElmt");console.log(audioElmt);
-	
+	console.log("audioElmt");
+	console.log(audioElmt);
+
 	// Already added.
 	if (audioElmt != null)
 		return;
 	else if (audioElmt == null) // not added.
 	{
 		// add audio
-		$('body')
-				.append(
-						'<!-- Sip Audios --><audio id="audio_remote" autoplay="autoplay" />');
+		$('body').append('<!-- Sip Audios --><audio id="audio_remote" autoplay="autoplay" />');
 	}
 }
 
 /**
- * On incoming call it starts.
- * On outgoing call after remote connect it will starts.
+ * On incoming call it starts. On outgoing call after remote connect it will
+ * starts.
  */
 function startRingTone(sound)
 {
 	try
-	{		
-		Sip_Audio = new Audio("../res/"+sound+".mp3");
-		Sip_Audio.loop = true;
-		/*Sip_Audio.autoplay = true;
-		Sip_Audio.preload="auto";*/
-		
-		var onEnded = function() {
-			//console.log("play");
-		    this.play();
-		};
+	{
+		Sip_Audio = new Audio("../res/" + sound + ".mp3");
+		if (typeof Sip_Audio.loop == 'boolean')
+		{
+			Sip_Audio.loop = true;
+		}
+		else
+		{
+			var onEnded = function()
+			{
+				console.log("play");
+				this.play();
+			};
 
-		Sip_Audio.addEventListener('ended', onEnded, false);
-		
+			Sip_Audio.addEventListener('ended', onEnded, false);
+		}
+
 		Sip_Audio.play();
 	}
 	catch (e)
@@ -50,8 +53,10 @@ function startRingTone(sound)
 }
 
 /**
- * Incoming call: After receive / missed / ignore from user and on error it stops.
- * Outgoinging call: After received / missed / ignored from callee and on error it stops.
+ * Incoming call: After receive / missed / ignore from user and on error it
+ * stops. 
+ * Outgoing call: After received / missed / ignored from callee and on
+ * error it stops.
  */
 function stopRingTone()
 {

@@ -52,7 +52,7 @@ function currentRoute(route)
 {
 	Current_Route = window.location.hash.split("#")[1];
 	activateInfiniScroll();
-	set_profile_noty();
+//	set_profile_noty();
 	// Reset it to uncheck checkboxes for bulk actions on route change
 	SELECT_ALL = false;
 	SUBSCRIBERS_SELECT_ALL = false;

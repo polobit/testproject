@@ -146,7 +146,8 @@ $(function()
 					// Popup va'ue should be in a json object with key value, as it is returned that way from server text field
 					var popup_text = {};
 					popup_text["value"] = action.popup_text;
-					action.popup_text = popup_text
+					action.popup_text = popup_text;
+					action.delay = "IMMEDIATE";
 					
 						_agile_execute_action(action);
 					});

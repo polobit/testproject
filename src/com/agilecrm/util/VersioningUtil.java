@@ -22,7 +22,7 @@ public class VersioningUtil
      */
     public static String getDefaultLoginUrl(String domain)
     {
-	return "https://" + domain + "agilecrm.com";
+	return "https://" + domain + ".agilecrm.com/";
     }
 
     /**

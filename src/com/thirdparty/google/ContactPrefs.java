@@ -224,16 +224,19 @@ public class ContactPrefs implements Serializable
 	    }
 	    else if (groupList.size() > 1)
 	    {
+		System.out.println("duplicate groups = " + groupList);
 		for (GoogleGroupDetails googleGroup : groupList)
 		{
 		    // @NotSaved(IfDefault.class)
 		    // public Long last_synched_to_client = 0L;
 
+		    System.out.println("duplicate groups = " + googleGroup.atomId);
+
 		    // @NotSaved(IfDefault.class)
 		    // public Long last_synched_from_client = 0L;
-		    if (googleGroup.atomId.equals(last_synched_to_client)
-			    || googleGroup.atomId.equals(last_synched_from_client))
+		    if (!(googleGroup.atomId.equals(sync_from_group) || googleGroup.atomId.equals(sync_to_group)))
 		    {
+			System.out.println("delete + " + googleGroup.atomId);
 			ContactGroupUtil.deleteGroup(this, googleGroup.atomId);
 		    }
 		}
@@ -314,7 +317,7 @@ public class ContactPrefs implements Serializable
      */
     public String toString()
     {
-	return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token
-		+ " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
+	return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token + " secret: " + secret + "refreshToken: "
+		+ refreshToken + " expires: " + expires;
     }
 }
