@@ -1,15 +1,49 @@
 var plan_json = [];
+var INTERVALS = ["monthly", "yearly", "biyearly"];
 //Plans with costs
 var PLANS_COSTS_JSON = {};
-PLANS_COSTS_JSON.basic = "24.99";
-PLANS_COSTS_JSON.professional = "49.99";
-PLANS_COSTS_JSON.enterprise = "99.99";
+PLANS_COSTS_JSON.starter = "14.99";
+PLANS_COSTS_JSON.regular = "49.99";
+PLANS_COSTS_JSON.pro = "79.99";
 
 // Plans intervals JSON
 var PLANS_DISCOUNTS_JSON = {};
 PLANS_DISCOUNTS_JSON.monthly = "0";
 PLANS_DISCOUNTS_JSON.yearly = "20";
 PLANS_DISCOUNTS_JSON.twoyears = "40";
+
+var PLANS_DISCOUNTS_JSON_NEW = {};
+
+PLANS_DISCOUNTS_JSON_NEW.starter = {};
+PLANS_DISCOUNTS_JSON_NEW.starter.monthly = "0";
+PLANS_DISCOUNTS_JSON_NEW.starter.yearly = "33.355";
+PLANS_DISCOUNTS_JSON_NEW.starter.twoyears = "40";
+
+PLANS_DISCOUNTS_JSON_NEW.regular = {};
+PLANS_DISCOUNTS_JSON_NEW.regular.monthly = "0";
+PLANS_DISCOUNTS_JSON_NEW.regular.yearly = "20";
+PLANS_DISCOUNTS_JSON_NEW.regular.twoyears = "40";
+
+PLANS_DISCOUNTS_JSON_NEW.pro = {};
+PLANS_DISCOUNTS_JSON_NEW.pro.monthly = "0";
+PLANS_DISCOUNTS_JSON_NEW.pro.yearly = "18.75";
+PLANS_DISCOUNTS_JSON_NEW.pro.twoyears = "40";
+
+var PLAN_DETAILS = {
+		getPlanPrice : function(plan_name) {
+			return PLANS_COSTS_JSON[plan_name];
+		},
+		getDiscountedPrice : function(plan_name, interval)
+		{
+			var price = this.getPlanPrice(plan_name);
+			var discount = PLANS_DISCOUNTS_JSON_NEW[plan_name][interval];
+			return price * (100 - discount)/100; 
+		},
+		getDiscount : function(plan_name, interval)
+		{
+			return PLANS_DISCOUNTS_JSON_NEW[plan_name][interval];
+		}
+}
 
 // User existing plan name
 var user_existing_plan_name = "";
@@ -118,7 +152,7 @@ function setPriceTemplete(user_plan, element)
 function setPlan(user_plan)
 {
 	try{
-		var interval = "yearly", plan_type = "pro";
+		var interval = "yearly", plan_type = "regular";
 		if(user_plan != "free" && user_plan != "super")
 		{
 			plan_type = USER_DETAILS.getPlanType(USER_BILLING_PREFS);
@@ -129,8 +163,9 @@ function setPlan(user_plan)
 		}
 	
 		
-		$("ul.tagsli a." + interval).trigger("click");
 		$("input[value='" + plan_type + "']").trigger("click");
+		$("ul.tagsli a." + interval).trigger("click");
+		
 		
 		
 	}catch(err){
@@ -147,7 +182,7 @@ $(function()
 		{
 		
 		$('.plan-collection-in').die().live('click', function(e){
-	  		
+			 
 			$(this).find("[name='pro_vs_lite']").attr('checked','checked');
 			var plan_type = "";
 	  		$('.plan-collection-in').each(function(index, element){
@@ -181,11 +216,12 @@ $(function()
 			var plan_interval = $(this).attr("class");
 			plan_interval = plan_interval.replace("plan-select", "");
 			plan_interval = plan_interval.trim();
+
 			
-			var discount = PLANS_DISCOUNTS_JSON[plan_interval];
-			for(var key in PLANS_COSTS_JSON){
+			
+			for(var key in PLANS_COSTS_JSON) {
 				var amount = PLANS_COSTS_JSON[key];
-				
+				var discount = 	PLAN_DETAILS.getDiscount(key, plan_interval);
 				var discount_amount = amount - ((discount/100) * amount);
 				$('#'+ key +'_plan_price').html(discount_amount.toFixed(2));
 			}
@@ -200,17 +236,18 @@ $(function()
 	          var plan = $("input[name='pro_vs_lite']:checked").val();
 	          var discount = "", months = "";
 	          
-	          if($('.monthly').hasClass("plan-select")){cycle = "Monthly";months = 1; discount = PLANS_DISCOUNTS_JSON["monthly"];}
-	          else if($('.yearly').hasClass("plan-select")){cycle = "Yearly";months = 12;discount = PLANS_DISCOUNTS_JSON["yearly"];}
-	          else if($('.twoyears').hasClass("plan-select")){cycle = "Two Years";months = 24;discount = PLANS_DISCOUNTS_JSON["twoyears"];}
+	       
+	          if($('.monthly').hasClass("plan-select")){cycle = "Monthly";months = 1; discount = PLAN_DETAILS.getDiscount(plan, "monthly")}
+	          else if($('.yearly').hasClass("plan-select")){cycle = "Yearly";months = 12;discount = PLAN_DETAILS.getDiscount(plan, "yearly")}
+	          else if($('.twoyears').hasClass("plan-select")){cycle = "Two Years";months = 24;discount = PLAN_DETAILS.getDiscount(plan, "twoyears")}
 	          
 	          var variable = [];
 			  var amount = PLANS_COSTS_JSON[plan];
-			  for(var percent in PLANS_DISCOUNTS_JSON)
+			  for(var interval in PLANS_DISCOUNTS_JSON_NEW[plan])
 			    {
-					value = PLANS_DISCOUNTS_JSON[percent];
-					var discount_amount = amount - ((value/100) * amount);
-					variable[percent] = discount_amount.toFixed(2);
+				  	var percent = PLAN_DETAILS.getDiscount(plan, interval);
+					var discount_amount = PLAN_DETAILS.getDiscountedPrice(plan, interval);
+					variable[interval] = discount_amount.toFixed(2);
 				}
 		
 			  user_existing_plan_name = USER_DETAILS.getCurrentPlanId(USER_BILLING_PREFS);
@@ -261,10 +298,8 @@ $(function()
 	        plan_json.discount = discount;
 		    plan_json.quantity = quantity;
 		    plan_json.current_plan = USER_DETAILS.getCurrentPlanName(USER_BILLING_PREFS);
-		    console.log(plan_json);
 		    if(!$.isEmptyObject(USER_CREDIRCARD_DETAILS)){
 		    	
-		    	console.log(USER_CREDIRCARD_DETAILS);
 		    	plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
 		    }
 		    
