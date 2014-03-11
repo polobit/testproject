@@ -30,7 +30,10 @@ function add_custom_fields_to_our_domain()
 		// Add custom property to contact
 		_agile.add_property(create_contact_custom_field("Domain", CURRENT_DOMAIN_USER["domain"], "CUSTOM"), function(data)
 		{
-			add_current_loggedin_time();
+			add_tag_our_domain(SIGN_UP, function(){
+				add_current_loggedin_time();
+			})
+		
 		});
 		return;
 	}
@@ -151,12 +154,12 @@ function our_domain_sync()
 			var name = CURRENT_DOMAIN_USER['name'];
 			var first_name = name, last_name = name;
 			// Creates a new contact and assigns it to global value
-			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name, "tags" : SIGN_UP },
+			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name },
 					function(data)
 					{
 						Agile_Contact = data;
 						// Shows noty
-						set_profile_noty();
+						//set_profile_noty();
 						add_custom_fields_to_our_domain();
 					});
 		})
@@ -224,7 +227,13 @@ function hasTagInContact(tag)
 function add_tag_our_domain(tag, callback)
 {
 	if(hasTagInContact(tag))
+	{
+		if (callback && typeof (callback) === "function")
+		{
+			callback(data);
+		}
 		return;
+	}
 	
 	_agile.add_tag(tag, function(data)
 			{
@@ -234,7 +243,7 @@ function add_tag_our_domain(tag, callback)
 				{
 					callback(data);
 				}
-			})
+			});
 }
 
 function setup_our_domain_sync()
