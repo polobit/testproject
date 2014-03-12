@@ -19,6 +19,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 public class TaskletWorkflowDeferredTask implements DeferredTask
 {
     String campaignId, subscriberJSONString;
+    public String namespace;
 
     /**
      * Constructs a new {@link TaskletWorkflowDeferredTask}.
@@ -28,10 +29,11 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
      * @param subscriberJSONString
      *            contact details.
      */
-    public TaskletWorkflowDeferredTask(String campaignId, String subscriberJSONString)
+    public TaskletWorkflowDeferredTask(String campaignId, String subscriberJSONString, String namespace)
     {
 	this.campaignId = campaignId;
 	this.subscriberJSONString = subscriberJSONString;
+	this.namespace = namespace;
     }
 
     /*
@@ -42,8 +44,12 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
     @Override
     public void run()
     {
+	String oldNamespace = NamespaceManager.get();
+
 	try
 	{
+	    NamespaceManager.set(namespace);
+
 	    System.out.println("Executing tasklet in namespace " + NamespaceManager.get());
 
 	    JSONObject subscriberJSON = new JSONObject(subscriberJSONString);
@@ -56,13 +62,16 @@ public class TaskletWorkflowDeferredTask implements DeferredTask
 	    if (campaignJSON == null)
 		return;
 
-	    // Check in memcache if it is already executing
 	    TaskCore.executeWorkflow(campaignJSON, subscriberJSON);
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured in TaskletUtilDeferredTask " + e.getMessage());
 	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 }

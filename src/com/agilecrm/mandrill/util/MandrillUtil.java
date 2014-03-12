@@ -1,7 +1,6 @@
 package com.agilecrm.mandrill.util;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
@@ -9,17 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.Globals;
+import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.appengine.api.backends.BackendServiceFactory;
-import com.google.appengine.api.taskqueue.LeaseOptions;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.google.appengine.api.taskqueue.TaskOptions;
-import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.thirdparty.mandrill.Mandrill;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
@@ -79,64 +73,9 @@ public class MandrillUtil
     public static void sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
     {
 	String subaccount = NamespaceManager.get();
-
 	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to, subject, replyTo, html, text);
-	Queue queue = QueueFactory.getQueue("email-pull-queue");
-	queue.addAsync(TaskOptions.Builder.withMethod(TaskOptions.Method.PULL).payload(mandrillDeferredTask).tag(fromEmail));
-    }
 
-    /**
-     * Process all lease tasks of pull queue
-     */
-    public static void processAllTasks()
-    {
-	while (true)
-	{
-	    if (!MandrillUtil.processTasks())
-		break;
-
-	    System.out.println("Getting next " + COUNT_LIMIT + " tasks...");
-
-	    continue;
-	}
-
-	return;
-
-    }
-
-    /**
-     * Lease tasks from pull queue and execute them.
-     * 
-     * @return
-     */
-    public static boolean processTasks()
-    {
-	// Get tasks
-	Queue q = QueueFactory.getQueue("email-pull-queue");
-
-	List<TaskHandle> taskhandles = null;
-
-	try
-	{
-	    taskhandles = q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(LEASE_PERIOD, TimeUnit.SECONDS).countLimit(COUNT_LIMIT).groupByTag());
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while leasing tasks " + e.getMessage());
-	}
-
-	if (taskhandles == null || taskhandles.size() == 0)
-	    return false;
-
-	long start_time = System.currentTimeMillis();
-
-	sendMandrillMails(taskhandles);
-
-	long process_time = System.currentTimeMillis() - start_time;
-	System.out.println("Processed time for all taskhandles is " + process_time);
-
-	return true;
-
+	PullQueueUtil.addToPullQueue("email-pull-queue", mandrillDeferredTask, fromEmail);
     }
 
     /**
@@ -184,36 +123,9 @@ public class MandrillUtil
 
 	HttpClientUtil.accessPostURLUsingHttpClient(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 
-	// Deletes pull queue tasks
-	deleteTasks("email-pull-queue", tasks);
-    }
+	// Records email sent count
+	AccountEmailStatsUtil.recordAccountEmailStats(firstMandrillDefferedTask.subaccount, tasks.size());
 
-    /**
-     * Delete tasks of a queue
-     * 
-     * @param queue
-     *            - queue name
-     * @param tasks
-     *            - tasks to delete
-     */
-    public static void deleteTasks(String queue, List<TaskHandle> tasks)
-    {
-	// Delete Tasks
-	Queue q = QueueFactory.getQueue(queue);
-	q.deleteTask(tasks);
-    }
-
-    /**
-     * Process tasks in backend
-     */
-    public static void processTasksInBackend()
-    {
-	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
-
-	// Create Task and push it into Task Queue
-	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-	TaskOptions taskOptions = TaskOptions.Builder.withUrl("/backend-email-pull").header("Host", url).method(Method.POST);
-	queue.addAsync(taskOptions);
     }
 
     /**
@@ -336,7 +248,9 @@ public class MandrillUtil
 	JSONArray vars = new JSONArray();
 
 	vars.put(getVarJSON(MandrillMergeVars.SUBJECT.toString(), subject));
-	vars.put(getVarJSON(MandrillMergeVars.HTML_CONTENT.toString(), html));
+
+	vars.put(getVarJSON(MandrillMergeVars.HTML_CONTENT.toString(), getHTML(html, text)));
+
 	vars.put(getVarJSON(MandrillMergeVars.TEXT_CONTENT.toString(), text));
 
 	return vars;
@@ -366,5 +280,41 @@ public class MandrillUtil
 	}
 
 	return var;
+    }
+
+    /**
+     * Returns HTML if not empty, otherwise text
+     * 
+     * @param html
+     *            - html body
+     * @param text
+     *            - text body
+     * @return String
+     * 
+     */
+    public static String getHTML(String html, String text)
+    {
+	// return html if not empty
+	if (!StringUtils.isBlank(html))
+	    return html;
+
+	return convertTextIntoHtml(text);
+    }
+
+    /**
+     * Returns text body replacing with <br>
+     * tags where necessary
+     * 
+     * @param text
+     *            - text body
+     * @return String
+     */
+    public static String convertTextIntoHtml(String text)
+    {
+	if (StringUtils.isBlank(text))
+	    return text;
+
+	return text.replaceAll("(\r\n|\n)", "<br>").replaceAll("((?<= ) | (?= ))", "&nbsp;");
+
     }
 }

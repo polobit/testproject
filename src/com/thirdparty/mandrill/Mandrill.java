@@ -177,6 +177,10 @@ public class Mandrill
 
 	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
+	    // Set mandrill async
+	    if (async)
+		mailJSON.put(MANDRILL_ASYNC, true);
+
 	    String response = null;
 	    try
 	    {
