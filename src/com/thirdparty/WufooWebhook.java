@@ -146,8 +146,10 @@ public class WufooWebhook extends HttpServlet
 										req.getParameter(subObj.getString("ID")), contact));
 						}
 						if (!(addField.equals(", ") || addField.equals("")))
+						{
 							addJson.put("address", addField);
-						properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
+							properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
+						}
 					}
 				}
 			}
