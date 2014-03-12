@@ -28,12 +28,6 @@ $(function(){
 		    return;
 		}
 		
-		if($(table_element).hasClass('no-sorting'))
-		{	
-		    console.log(table_element);
-		    return;
-		}
-		
 		if($('.grid-view', el).hasClass('showCheckboxes'))
 		{
 			if($(this).find('#delete-checked-grid').length == 0)
@@ -68,6 +62,12 @@ $(function(){
 		
 		$(table).after('<div class="row-fluid"><div class="span6  select-none"></div></div><a href="#" class="btn btn-danger left" id="delete-checked" style="margin-bottom: 15px"> Delete</a>');
 			
+		if($(table_element).hasClass('no-sorting'))
+		{	
+		    console.log(table_element);
+		    return;
+		}
+
 		// Sorts the tables based on their column values
 		sort_tables(table_element);
 	});
