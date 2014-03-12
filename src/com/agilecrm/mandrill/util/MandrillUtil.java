@@ -248,6 +248,7 @@ public class MandrillUtil
 	JSONArray vars = new JSONArray();
 
 	vars.put(getVarJSON(MandrillMergeVars.SUBJECT.toString(), subject));
+
 	vars.put(getVarJSON(MandrillMergeVars.HTML_CONTENT.toString(), getHTML(html, text)));
 
 	vars.put(getVarJSON(MandrillMergeVars.TEXT_CONTENT.toString(), text));
@@ -301,7 +302,8 @@ public class MandrillUtil
     }
 
     /**
-     * Returns text body replacing with br tags where necessary
+     * Returns text body replacing with <br>
+     * tags where necessary
      * 
      * @param text
      *            - text body
