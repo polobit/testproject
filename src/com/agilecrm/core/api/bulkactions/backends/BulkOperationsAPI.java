@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
@@ -209,6 +210,9 @@ public class BulkOperationsAPI
 	    WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
 	    count += contact_list.size();
 	}
+
+	System.out.println("Total contacts subscribed to campaign " + workflowId + " is " + String.valueOf(count));
+
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN, String.valueOf(count));
     }
 
@@ -455,6 +459,9 @@ public class BulkOperationsAPI
 	    int noEmailsCount = ContactBulkEmailUtil.sendBulkContactEmails(emailData, contacts_list);
 	    count += contacts_list.size() - noEmailsCount;
 	}
+
+	// Record email sent stats
+	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), count);
 
 	BulkActionNotifications.publishconfirmation(BulkAction.SEND_EMAIL, String.valueOf(count));
     }

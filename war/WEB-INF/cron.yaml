@@ -4,7 +4,11 @@ cron:
   schedule: every 2 mins
 
 - description: Emails Sender
-  url: /backend/cron/email-pull
+  url: /backend/cron/cron-pull?q=email-pull-queue
+  schedule: every 1 mins
+  
+- description: Campaigns Execution
+  url: /backend/cron/cron-pull?q=campaign-pull-queue
   schedule: every 1 mins
   
 - description: daily reports

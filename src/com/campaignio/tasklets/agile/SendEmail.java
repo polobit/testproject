@@ -9,7 +9,6 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
@@ -454,9 +453,6 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
-	// Records email sent count of an account
-	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get());
-
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
@@ -567,7 +563,7 @@ public class SendEmail extends TaskletAdapter
 	isContains = Arrays.asList(extensions).contains(str.substring(str.lastIndexOf('.')).toLowerCase());
 
 	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !str.toLowerCase().startsWith("http://goo.gl")
-		&& !str.toLowerCase().startsWith("https://www.agilecrm.com") && !str.toLowerCase().startsWith("http://agle.cc")
+		&& !str.toLowerCase().contains(".agilecrm.com") && !str.toLowerCase().startsWith("http://agle.cc")
 		&& !str.toLowerCase().startsWith("http://unscr.be") && !str.toLowerCase().contains("unsubscribe") && !isContains)
 	    return true;
 

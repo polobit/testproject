@@ -6,13 +6,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskCore;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>WorkflowSubscribeUtil</code> is the utility class that handles
@@ -42,12 +41,8 @@ public class WorkflowSubscribeUtil
 	if (campaignJSON == null)
 	    return;
 
-	long start_time = System.currentTimeMillis();
-
 	TaskCore.executeCampaign(campaignJSON, subscriberJSONArray);
 
-	long process_time = System.currentTimeMillis() - start_time;
-	System.out.println("Processed time for executeCampaign is " + process_time);
     }
 
     /**
@@ -84,11 +79,13 @@ public class WorkflowSubscribeUtil
      */
     public static void subscribeWithSubscriberJSON(JSONObject subscriberJSON, Long workflowId)
     {
+	String namespace = NamespaceManager.get();
+
 	try
 	{
-	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString());
-	    Queue queue = QueueFactory.getQueue("campaign-queue");
-	    queue.addAsync(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
+	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString(),
+		    namespace);
+	    PullQueueUtil.addToPullQueue("campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
 	}
 	catch (Exception e)
 	{
