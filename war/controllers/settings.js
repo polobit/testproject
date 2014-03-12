@@ -24,9 +24,6 @@ var SettingsRouter = Backbone.Router.extend({
 			/* Email templates */
 			"email-templates" : "emailTemplates", "email-template-add" : "emailTemplateAdd", "email-template/:id" : "emailTemplateEdit",
 
-			/* Web to Lead */
-			"web-to-lead" : "webToLead",
-
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 			
@@ -107,8 +104,8 @@ var SettingsRouter = Backbone.Router.extend({
 					if ($("#current_pswd").val() == $("#new_pswd").val())
 					{
 						$('#changePasswordForm').find('span.save-status').html(
-								"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same.</span>");
-						$('#changePasswordForm').find('span.save-status').find("span").fadeOut(3000);
+								"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same</span>");
+						$('#changePasswordForm').find('span.save-status').find("span").fadeOut(5000);
 						enable_save_button($(saveBtn));
 						return false;
 					}
@@ -125,7 +122,7 @@ var SettingsRouter = Backbone.Router.extend({
 						success : function()
 						{
 							$('#changePasswordForm').find('span.save-status').html(
-									"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(3000);
+									"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
 							enable_save_button($(saveBtn));
 							$('#' + form_id).each(function()
 							{
@@ -138,7 +135,7 @@ var SettingsRouter = Backbone.Router.extend({
 							$('#changePasswordForm').find('span.save-status').html("");
 							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
 									"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
-							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(3000);
+							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
 							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
 							enable_save_button($(saveBtn));
 						} });
@@ -261,17 +258,6 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $("#content").html(view.el);
-	},
-
-	/**
-	 * Web to lead links to website pages
-	 */
-	webToLead : function()
-	{
-		$("#content").html(getTemplate("settings"), {});
-		$("#prefs-tabs-content").html(getTemplate("settings-web-to-lead"), {});
-		$('#PrefsTab .active').removeClass('active');
-		$('.web-to-lead-tab').addClass('active');
 	},
 
 	/**
