@@ -14,7 +14,6 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
-import org.scribe.builder.api.GoogleApi;
 import org.scribe.builder.api.LinkedInApi;
 import org.scribe.builder.api.TwitterApi;
 import org.scribe.model.OAuthRequest;
@@ -76,35 +75,33 @@ public class ScribeUtil
 
 	// If service type LinkedIn, creates a Service, specific to LinkedIn
 	if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_LINKED_IN))
-	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_LINKED_IN, LinkedInApi.class, callback,
-		    Globals.LINKED_IN_API_KEY, Globals.LINKED_IN_SECRET_KEY, null);
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_LINKED_IN, LinkedInApi.class, callback, Globals.LINKED_IN_API_KEY,
+		    Globals.LINKED_IN_SECRET_KEY, null);
 
 	// If service type Twitter, creates a Service, specific to Twitter
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_TWITTER))
-	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_TWITTER, TwitterApi.SSL.class, callback,
-		    Globals.TWITTER_API_KEY, Globals.TWITTER_SECRET_KEY, null);
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_TWITTER, TwitterApi.SSL.class, callback, Globals.TWITTER_API_KEY,
+		    Globals.TWITTER_SECRET_KEY, null);
 
 	// If service type Stripe, creates a Service, specific to Stripe
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE))
-	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_STRIPE, StripeApi.class, callback,
-		    Globals.STRIPE_CLIENT_ID, Globals.STRIPE_API_KEY, ScribeServlet.STRIPE_SCOPE);
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_STRIPE, StripeApi.class, callback, Globals.STRIPE_CLIENT_ID, Globals.STRIPE_API_KEY,
+		    ScribeServlet.STRIPE_SCOPE);
 
 	// If service type Google, creates a Service, specific to Google
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE))
-	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE,
-		    com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE, com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
 		    Globals.GOOGLE_SECRET_KEY, ScribeServlet.GOOGLE_CONTACTS_SCOPE);
 
 	// If service type Google, creates a Service, specific to Google
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
-	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR,
-		    com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CALENDAR_CLIENT_ID,
-		    Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_CALENDAR_SCOPE);
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR, com.agilecrm.scribe.api.GoogleApi.class, callback,
+		    Globals.GOOGLE_CALENDAR_CLIENT_ID, Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_CALENDAR_SCOPE);
 
 	// Creates a Service, specific to Gmail
 	else
-	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GMAIL, GoogleApi.class, callback,
-		    Globals.GMAIL_API_KEY, Globals.GMAIL_SECRET_KEY, ScribeServlet.GMAIL_SCOPE);
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GMAIL, com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
+		    Globals.GOOGLE_CLIENT_ID, ScribeServlet.GMAIL_SCOPE);
 
 	return service;
     }
@@ -131,8 +128,8 @@ public class ScribeUtil
      *            {@link String} scope to be appended to request if required
      * @return configured {@link OAuthService}
      */
-    public static OAuthService getSpecificService(HttpServletRequest req, String serviceType,
-	    Class<? extends Api> apiClass, String callback, String apiKey, String apiSecret, String scope)
+    public static OAuthService getSpecificService(HttpServletRequest req, String serviceType, Class<? extends Api> apiClass, String callback, String apiKey,
+	    String apiSecret, String scope)
     {
 
 	// Gets session and sets attribute "oauth.service" to service type
@@ -141,12 +138,10 @@ public class ScribeUtil
 	// if scope is null return service without scope
 	if (scope == null)
 	    // Creates a Service, by configuring API key, Secret key
-	    return new ServiceBuilder().provider(apiClass).callback(callback).apiKey(apiKey).apiSecret(apiSecret)
-		    .build();
+	    return new ServiceBuilder().provider(apiClass).callback(callback).apiKey(apiKey).apiSecret(apiSecret).build();
 
 	// if scope is needed in the service
-	return new ServiceBuilder().provider(apiClass).callback(callback).apiKey(apiKey).apiSecret(apiSecret)
-		.scope(scope).build();
+	return new ServiceBuilder().provider(apiClass).callback(callback).apiKey(apiKey).apiSecret(apiSecret).scope(scope).build();
     }
 
     /**
@@ -171,21 +166,20 @@ public class ScribeUtil
      *            refresh token
      * @throws IOException
      */
-    public static void saveTokens(HttpServletRequest req, OAuthService service, AgileUser agileUser,
-	    String serviceName, Token accessToken, String code) throws IOException
+    public static void saveTokens(HttpServletRequest req, OAuthService service, AgileUser agileUser, String serviceName, Token accessToken, String code)
+	    throws IOException
     {
 	/*
 	 * If service name is Twitter or LinkedIn, widget is fetched by
 	 * plugin_id in session and widget is updated with new token key and
 	 * secret key
 	 */
-	if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_TWITTER)
-		|| serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_LINKED_IN))
+	if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_TWITTER) || serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_LINKED_IN))
 	    saveLinkedInOrTwitterPrefs(req, accessToken);
 
 	// If Service type is Gmail, save preferences in social prefs
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GMAIL))
-	    saveGmailPrefs(accessToken, service, agileUser);
+	    saveGooglePrefs1(code, null);
 
 	/*
 	 * if service type is stripe, we post the code and get the access token
@@ -260,14 +254,12 @@ public class ScribeUtil
 
 	System.out.println(response.getBody());
 
-	HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
-		new TypeReference<HashMap<String, String>>()
-		{
-		});
+	HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, String>>()
+	{
+	});
 
 	// save GMail prefs in db
-	SocialPrefs gmailPrefs = new SocialPrefs(agileUser, SocialPrefs.Type.GMAIL, accessToken.getToken(),
-		accessToken.getSecret(), properties);
+	SocialPrefs gmailPrefs = new SocialPrefs(agileUser, SocialPrefs.Type.GMAIL, accessToken.getToken(), accessToken.getSecret(), properties);
 	gmailPrefs.save();
     }
 
@@ -288,16 +280,15 @@ public class ScribeUtil
 	/*
 	 * Make a post request and retrieve tokens
 	 */
-	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format(
-		"https://connect.stripe.com/oauth/token?code=%s&grant_type=%s", code, "authorization_code"));
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format("https://connect.stripe.com/oauth/token?code=%s&grant_type=%s", code,
+		"authorization_code"));
 
 	oAuthRequest.addHeader("Authorization", "Bearer " + Globals.STRIPE_API_KEY);
 
 	Response response = oAuthRequest.send();
-	HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
-		new TypeReference<HashMap<String, String>>()
-		{
-		});
+	HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, String>>()
+	{
+	});
 
 	// Gets widget name from the session
 	String serviceType = (String) req.getSession().getAttribute("service_type");
@@ -331,31 +322,82 @@ public class ScribeUtil
 	oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
 
 	oAuthRequest.addBodyParameter("scope", "");
-	oAuthRequest.addBodyParameter("redirect_uri",
-		"https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+	oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
 	oAuthRequest.addBodyParameter("code", code);
 	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
 
 	Response response = oAuthRequest.send();
 
 	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(),
-		new TypeReference<HashMap<String, Object>>()
-		{
-		});
+	HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, Object>>()
+	{
+	});
 
 	System.out.println(properties.toString());
 
 	// if post gives error, notifies user about it
 	if (properties.containsKey("error"))
-	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
-		    "Authentication failed. Please import again");
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Authentication failed. Please import again");
 	else
 	{
 	    // after getting access token save prefs in db
-	    ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null,
-		    (Long.parseLong((String.valueOf(properties.get("expires_in"))))),
-		    ((String) properties.get("refresh_token")));
+	    ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null, (Long.parseLong((String
+		    .valueOf(properties.get("expires_in"))))), ((String) properties.get("refresh_token")));
+
+	    contactPrefs.setPrefs(object);
+	    System.out.println(contactPrefs.duration);
+	    System.out.println(contactPrefs.sync_type);
+	    contactPrefs.setExpiryTime(contactPrefs.expires);
+	    contactPrefs.save();
+
+	    // initialize backend to save contacts
+	    // ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
+	}
+    }
+
+    /**
+     * If service type is google, we make a post request with the code and get
+     * the access token and ContactPrefs object is saved in database with new
+     * access token and refresh token
+     * 
+     * @param code
+     *            {@link String} code retrieved after OAuth
+     * @throws IOException
+     */
+    public static void saveGooglePrefs1(String code, JSONObject object) throws IOException
+    {
+	System.out.println("In google save token");
+
+	/*
+	 * Make a post request and retrieve tokens
+	 */
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
+
+	oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
+	oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
+
+	oAuthRequest.addBodyParameter("scope", "");
+	oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+	oAuthRequest.addBodyParameter("code", code);
+	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
+
+	Response response = oAuthRequest.send();
+
+	// Creates HashMap from response JSON string
+	HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, Object>>()
+	{
+	});
+
+	System.out.println(properties.toString());
+
+	// if post gives error, notifies user about it
+	if (properties.containsKey("error"))
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Authentication failed. Please import again");
+	else
+	{
+	    // after getting access token save prefs in db
+	    ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null, (Long.parseLong((String
+		    .valueOf(properties.get("expires_in"))))), ((String) properties.get("refresh_token")));
 
 	    contactPrefs.setPrefs(object);
 	    System.out.println(contactPrefs.duration);
