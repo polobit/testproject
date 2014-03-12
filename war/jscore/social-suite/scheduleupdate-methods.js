@@ -39,15 +39,14 @@ function scheduledRangeCheck(scheduledDate, scheduledTime)
  */
 function checkScheduledUpdates()
 {
-	$.getJSON("/core/scheduledupdate/getscheduledupdates", function(data)
+	$.getJSON("/core/scheduledupdate/getscheduledupdatescount", function(data)
 	{
 		console.log("data after fetching scheduled updates from db");
 		console.log(data);
 
-		if (data.length != 0)
+		if (data != 0)
 			$("#show_scheduled_updates").show();
-		else
-			$("#show_scheduled_updates").hide();
+		
 	}).error(function(jqXHR, textStatus, errorThrown)
 	{
 		$("#show_scheduled_updates").hide();
@@ -62,7 +61,7 @@ function addScheduledUpdateInStream(scheduledUpdate)
 {
 	console.log(scheduledUpdate);
 
-	if (Scheduled_Edit == true)
+	/*if (Scheduled_Edit == true)
 	{
 		// Get scheduled update from collection.
 		var newScheduledUpdate = Scheduled_Updates_View.collection.get(scheduledUpdate.id);
@@ -80,9 +79,9 @@ function addScheduledUpdateInStream(scheduledUpdate)
 		Scheduled_Edit = false;
 	}
 	else
-	{
+	{*/
 		// Add scheduled update in collection.
-		if (Current_Route == "scheduledmessages")
+		/*if (Current_Route == "scheduledmessages")*/
 			Scheduled_Updates_View.collection.add(scheduledUpdate);
-	}
+	//}
 }

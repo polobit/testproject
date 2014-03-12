@@ -34,125 +34,140 @@ import com.socialsuite.util.ScheduleUpdateUtil;
 @Path("/scheduledupdate")
 public class ScheduledUpdateAPI
 {
-    /**
-     * Create new scheduledUpdate in database related to current domain user.
-     * 
-     * @param scheduledUpdate
-     *            - Object of {@link ScheduledUpdate}
-     */
-    @POST
-    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ScheduledUpdate createScheduledUpdate(ScheduledUpdate scheduledUpdate)
-    {
-	scheduledUpdate.save();
-	return scheduledUpdate;
-    }
-
-    /**
-     * Update existing scheduledUpdate in database related to current domain
-     * user.
-     * 
-     * @param scheduledUpdate
-     *            - Object of {@link ScheduledUpdate}
-     */
-    @PUT
-    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ScheduledUpdate updateScheduledUpdate(ScheduledUpdate scheduledUpdate)
-    {
-	scheduledUpdate.save();
-	return scheduledUpdate;
-    }
-
-    /**
-     * Return the list of ScheduledUpdate available in dB related to current
-     * Domain User.
-     * 
-     * @return List<ScheduledUpdate> - Objects ScheduledUpdate
-     */
-
-    @GET
-    @Path("/getscheduledupdates")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<ScheduledUpdate> getAllScheduledUpdates()
-    {
-	return ScheduleUpdateUtil.getScheduledUpdates();
-    }
-
-    /**
-     * Return the list of ScheduledUpdate available in dB related to
-     * screen_name.
-     * 
-     * @param screen_name
-     *            - screen_name of account holder.
-     * 
-     * @return List<ScheduledUpdate> - Objects ScheduledUpdate
-     */
-    @GET
-    @Path("/getscheduledupdates/{screen_name}")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<ScheduledUpdate> getScheduledUpdates(@PathParam("screen_name") String screen_name)
-    {
-	return ScheduleUpdateUtil.getScheduledUpdates(screen_name);
-    }
-
-    /**
-     * Return the details of ScheduledUpdate as per Id.
-     * 
-     * @param id
-     *            - unique ScheduledUpdate id.
-     * 
-     * @return ScheduledUpdate - Object with required ScheduledUpdate id.
-     */
-    @GET
-    @Path("/getscheduledupdate/{id}")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public ScheduledUpdate getScheduledUpdate(@PathParam("id") Long id) throws EntityNotFoundException
-    {
-	return ScheduleUpdateUtil.getScheduledUpdate(id);
-    }
-
-    /**
-     * Delete scheduled update as per Id.
-     * 
-     * @param id
-     *            - unique scheduled update id.
-     */
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String deleteScheduledUpdate(@PathParam("id") Long id)
-    {
-	ScheduledUpdate scheduledUpdate = ScheduleUpdateUtil.getScheduledUpdate(id);
-
-	if (scheduledUpdate != null)
+	/**
+	 * Create new scheduledUpdate in database related to current domain user.
+	 * 
+	 * @param scheduledUpdate
+	 *            - Object of {@link ScheduledUpdate}
+	 */
+	@POST
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ScheduledUpdate createScheduledUpdate(ScheduledUpdate scheduledUpdate)
 	{
-	    scheduledUpdate.delete();
-	    return "Successful";
+		scheduledUpdate.save();
+		return scheduledUpdate;
 	}
-	return null;
-    }
 
-    /**
-     * Deletes the bulk of scheduled updates. Bulk operations - delete.
-     * 
-     * @param model_ids
-     *            array of deal ids as String.
-     * @throws JSONException
-     */
-    @Path("/bulk")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteScheduledUpdates(@FormParam("ids") String model_ids) throws JSONException
-    {
-	JSONArray scheduledUpdatesJSONArray = new JSONArray(model_ids);
+	/**
+	 * Update existing scheduledUpdate in database related to current domain
+	 * user.
+	 * 
+	 * @param scheduledUpdate
+	 *            - Object of {@link ScheduledUpdate}
+	 */
+	@PUT
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ScheduledUpdate updateScheduledUpdate(ScheduledUpdate scheduledUpdate)
+	{
+		scheduledUpdate.save();
+		return scheduledUpdate;
+	}
 
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
+	/**
+	 * Return the list of ScheduledUpdate available in dB related to current
+	 * Domain User.
+	 * 
+	 * @return List<ScheduledUpdate> - Objects ScheduledUpdate
+	 */
 
-	ScheduledUpdate.dao.deleteBulkByIds(scheduledUpdatesJSONArray);
+	@GET
+	@Path("/getscheduledupdates")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<ScheduledUpdate> getAllScheduledUpdates()
+	{
+		return ScheduleUpdateUtil.getScheduledUpdates();
+	}
 
-	NamespaceManager.set(oldNamespace);
-    }
+	/**
+	 * Return the count of ScheduledUpdate available in dB related to current
+	 * Domain User.
+	 * 
+	 * @return int - count of Objects ScheduledUpdate
+	 */
+
+	@GET
+	@Path("/getscheduledupdatescount")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public int getScheduledUpdatesCount()
+	{
+		return ScheduleUpdateUtil.getScheduledUpdatesCount();
+	}
+
+	/**
+	 * Return the list of ScheduledUpdate available in dB related to
+	 * screen_name.
+	 * 
+	 * @param screen_name
+	 *            - screen_name of account holder.
+	 * 
+	 * @return List<ScheduledUpdate> - Objects ScheduledUpdate
+	 */
+	@GET
+	@Path("/getscheduledupdates/{screen_name}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<ScheduledUpdate> getScheduledUpdates(@PathParam("screen_name") String screen_name)
+	{
+		return ScheduleUpdateUtil.getScheduledUpdates(screen_name);
+	}
+
+	/**
+	 * Return the details of ScheduledUpdate as per Id.
+	 * 
+	 * @param id
+	 *            - unique ScheduledUpdate id.
+	 * 
+	 * @return ScheduledUpdate - Object with required ScheduledUpdate id.
+	 */
+	@GET
+	@Path("/getscheduledupdate/{id}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ScheduledUpdate getScheduledUpdate(@PathParam("id") Long id) throws EntityNotFoundException
+	{
+		return ScheduleUpdateUtil.getScheduledUpdate(id);
+	}
+
+	/**
+	 * Delete scheduled update as per Id.
+	 * 
+	 * @param id
+	 *            - unique scheduled update id.
+	 */
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String deleteScheduledUpdate(@PathParam("id") Long id)
+	{
+		ScheduledUpdate scheduledUpdate = ScheduleUpdateUtil.getScheduledUpdate(id);
+
+		if (scheduledUpdate != null)
+		{
+			scheduledUpdate.delete();
+			return "Successful";
+		}
+		return null;
+	}
+
+	/**
+	 * Deletes the bulk of scheduled updates. Bulk operations - delete.
+	 * 
+	 * @param model_ids
+	 *            array of deal ids as String.
+	 * @throws JSONException
+	 */
+	@Path("/bulk")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteScheduledUpdates(@FormParam("ids") String model_ids) throws JSONException
+	{
+		JSONArray scheduledUpdatesJSONArray = new JSONArray(model_ids);
+
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+
+		ScheduledUpdate.dao.deleteBulkByIds(scheduledUpdatesJSONArray);
+
+		NamespaceManager.set(oldNamespace);
+	}
 }

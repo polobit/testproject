@@ -1,34 +1,46 @@
-/** 
- * This file contains all event related actions on Scheduled updates, 
- * Like add scheduled update, edit scheduled update, delete, etc.
+/**
+ * This file contains all event related actions on Scheduled updates, Like add
+ * scheduled update, edit scheduled update, delete, etc.
  */
 
 $(function()
 {
 	/* Show calender and time for selection on message modal. */
-	$("#tweet_scheduling").die().live("click", function(e)
-	{
-		if (!Scheduled_Edit)
-		{
-			$("#schedule").toggle();
-			$("#send_tweet").toggle();
-			$("#schedule_tweet").toggle();
+	$("#tweet_scheduling").die().live(
+			"click",
+			function(e)
+			{
+				if (!Scheduled_Edit)
+				{
+					$("#schedule").toggle();
+					$("#send_tweet").toggle();
+					$("#schedule_tweet").toggle();
 
-			if ($("#schedule").css("display") == "block")
-			{
-				this.className = "tweet-scheduling tweet-scheduling-active";
-				$('input.date').val(new Date().format('mm/dd/yyyy'));
-				$('#scheduled_date').datepicker({ format : 'mm/dd/yyyy' });
-				$('#scheduled_time').timepicker({ template : 'modal', showMeridian : false, defaultTime : 'current' });
-			}
-			else
-			{
-				this.className = "tweet-scheduling";
-				// $('input.date').val()='';
-				$('#scheduled_time').attr("value", '');
-			}
-		}
-	});
+					if ($("#schedule").css("display") == "block")
+					{
+						this.className = "tweet-scheduling tweet-scheduling-active";
+						$('input.date').val(new Date().format('mm/dd/yyyy'));
+						$('#scheduled_date').datepicker({ startDate : "today", autoclose : true, todayHighlight : true, format : 'mm/dd/yyyy' }).on(
+								'changeDate', function(ev)
+								{
+									// this is date change
+									var dateData = new Date(ev.date);
+									console.log(dateData);
+								});
+						$('#scheduled_time').timepicker({ template : 'modal', showMeridian : false, defaultTime : 'current' }).on('changeTime.timepicker',
+								function(e)
+								{
+									console.log(e.time.value);
+								});
+					}
+					else
+					{
+						this.className = "tweet-scheduling";
+						// $('input.date').val()='';
+						$('#scheduled_time').attr("value", '');
+					}
+				}
+			});
 
 	/* Show calender and time for selection on RT modal. */
 	$("#RT_scheduling").die().live("click", function(e)
@@ -41,7 +53,7 @@ $(function()
 		{
 			this.className = "tweet-scheduling tweet-scheduling-active";
 			$('input.date').val(new Date().format('mm/dd/yyyy'));
-			$('#RT_scheduled_date').datepicker({ format : 'mm/dd/yyyy' });
+			$('#RT_scheduled_date').datepicker({ startDate : "today", autoclose : true, todayHighlight : true, format : 'mm/dd/yyyy' });
 			$('#RT_scheduled_time').timepicker({ template : 'modal', showMeridian : false, defaultTime : 'current' });
 		}
 		else
@@ -115,7 +127,7 @@ $(function()
 		}
 
 		delete json.streamId;
-		
+
 		// Appending schedule.
 		var schedulearray = (json.scheduled_time).split(":");
 		var sdate = new Date(json.scheduled_date);
@@ -262,5 +274,5 @@ $(function()
 			$('#send_tweet').removeClass('disabled');
 			$('#schedule_tweet').removeClass('disabled');
 		});
-	});	
+	});
 });

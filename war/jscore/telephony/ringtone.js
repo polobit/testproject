@@ -3,12 +3,8 @@
 /**
  * Add audio tag in home.jsp after SIP registration is done successfully.
  */
-function addAudio()
-{
+function addAudio() {
 	var audioElmt = document.getElementById("audio_remote");
-
-	console.log("audioElmt");
-	console.log(audioElmt);
 
 	// Already added.
 	if (audioElmt != null)
@@ -16,7 +12,9 @@ function addAudio()
 	else if (audioElmt == null) // not added.
 	{
 		// add audio
-		$('body').append('<!-- Sip Audios --><audio id="audio_remote" autoplay="autoplay" />');
+		$('body')
+				.append(
+						'<!-- Sip Audios --><audio id="audio_remote" autoplay="autoplay" />');
 	}
 }
 
@@ -24,19 +22,13 @@ function addAudio()
  * On incoming call it starts. On outgoing call after remote connect it will
  * starts.
  */
-function startRingTone(sound)
-{
-	try
-	{
+function startRingTone(sound) {
+	try {
 		Sip_Audio = new Audio("../res/" + sound + ".mp3");
-		if (typeof Sip_Audio.loop == 'boolean')
-		{
+		if (typeof Sip_Audio.loop == 'boolean') {
 			Sip_Audio.loop = true;
-		}
-		else
-		{
-			var onEnded = function()
-			{
+		} else {
+			var onEnded = function() {
 				console.log("play");
 				this.play();
 			};
@@ -45,9 +37,7 @@ function startRingTone(sound)
 		}
 
 		Sip_Audio.play();
-	}
-	catch (e)
-	{
+	} catch (e) {
 		console.log("Error Sip_Audio play.");
 	}
 }
@@ -57,14 +47,10 @@ function startRingTone(sound)
  * stops. Outgoing call: After received / missed / ignored from callee and on
  * error it stops.
  */
-function stopRingTone()
-{
-	try
-	{
+function stopRingTone() {
+	try {
 		Sip_Audio.pause();
-	}
-	catch (e)
-	{
+	} catch (e) {
 		console.log("Error Sip_Audio stop.");
 	}
 }
