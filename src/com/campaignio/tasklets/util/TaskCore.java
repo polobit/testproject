@@ -3,11 +3,10 @@ package com.campaignio.tasklets.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.NamespaceManager;
 
 public class TaskCore
 {
@@ -74,10 +73,14 @@ public class TaskCore
 		// Execute it in a task queue each batch
 		// executeWorkflow(campaignJSON, subscriberJSON);
 
+		String namespace = NamespaceManager.get();
+
 		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(AgileTaskletUtil.getId(campaignJSON),
-			subscriberJSON.toString());
-		Queue queue = QueueFactory.getQueue("campaign-queue");
-		queue.addAsync(TaskOptions.Builder.withPayload(taskletWorkflowDeferredTask));
+			subscriberJSON.toString(), namespace);
+
+		// Add deferred tasks to pull queue with namespace as tag
+		PullQueueUtil.addToPullQueue("campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
+
 	    }
 	    catch (Exception e)
 	    {

@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
 import com.thirdparty.mandrill.Mandrill;
@@ -141,6 +142,9 @@ public class EmailUtil
 
 	// if no cc or bcc, send by Mandrill
 	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
+
+	// Record Email Stats
+	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
 
     }
 }

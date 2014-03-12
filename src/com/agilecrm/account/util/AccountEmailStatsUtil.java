@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 /**
@@ -21,12 +22,16 @@ public class AccountEmailStatsUtil
 	return dao.getByProperty("subaccount", subAccount);
     }
 
-    public static void recordAccountEmailStats(String subAccount)
+    public static void recordAccountEmailStats(String subAccount, int currentCount)
     {
 
 	// if domain is empty
 	if (StringUtils.isBlank(subAccount))
 	    return;
+
+	String oldNamespace = NamespaceManager.get();
+
+	NamespaceManager.set(subAccount);
 
 	try
 	{
@@ -44,13 +49,17 @@ public class AccountEmailStatsUtil
 		as = new AccountEmailStats(subAccount, 0);
 	    }
 
-	    as.count++;
+	    as.count += currentCount;
 	    as.save();
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured while recording account email stats... " + e.getMessage());
 	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 }

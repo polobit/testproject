@@ -31,62 +31,60 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ContactPrefsAPI
 {
 
-	/**
-	 * Fetches import contact preferences.
-	 * 
-	 * If count is null fetches all the contacts at once
-	 * 
-	 * 
-	 * @return {@link ContactPrefs}
-	 */
-	@Path("/{type}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public ContactPrefs getContactPrefs(@PathParam("type") String type)
-	{
+    /**
+     * Fetches import contact preferences based on type and current user.
+     * 
+     * 
+     * @return {@link ContactPrefs}
+     */
+    @Path("/{type}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ContactPrefs getContactPrefs(@PathParam("type") String type)
+    {
 
-		System.out.println("in contact prefs api");
-		return ContactPrefsUtil.getPrefsByType(Type.GOOGLE);
-	}
+	System.out.println("in contact prefs api");
+	return ContactPrefsUtil.getPrefsByType(Type.GOOGLE);
+    }
 
-	@Path("/{type}")
-	@PUT
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void updateContactPrefs(@PathParam("type") String type, ContactPrefs prefs, @QueryParam("sync") String sync)
-	{
+    @Path("/{type}")
+    @PUT
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void updateContactPrefs(@PathParam("type") String type, ContactPrefs prefs, @QueryParam("sync") String sync)
+    {
 
-		System.out.println("in contact prefs api");
+	System.out.println("in contact prefs api");
 
-		if (prefs.id == null)
-			return;
+	if (prefs.id == null)
+	    return;
 
-		ContactPrefs currentPrefs = ContactPrefsUtil.get(prefs.id);
+	ContactPrefs currentPrefs = ContactPrefsUtil.get(prefs.id);
 
-		ContactPrefs updatedPrefs = ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
+	ContactPrefs updatedPrefs = ContactPrefsUtil.mergePrefs(currentPrefs, prefs);
 
-		updatedPrefs.save();
+	updatedPrefs.save();
 
-		System.out.println("Sync" + sync);
+	System.out.println("Sync" + sync);
 
-		if (!StringUtils.isEmpty(sync))
-			ContactsImportUtil.initilaizeGoogleSyncBackend(updatedPrefs.id);
-	}
+	if (!StringUtils.isEmpty(sync))
+	    ContactsImportUtil.initilaizeGoogleSyncBackend(updatedPrefs.id);
+    }
 
-	/**
-	 * Fetches import contact preferences.
-	 * 
-	 * If count is null fetches all the contacts at once
-	 * 
-	 * 
-	 * @return {@link ContactPrefs}
-	 */
-	@Path("{type}")
-	@DELETE
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void deleteContactPrefs(@PathParam("type") String type)
-	{
-		ContactPrefs.Type prefsType = ContactPrefs.Type.valueOf(type.toUpperCase());
-		if (prefsType != null)
-			ContactPrefsUtil.delete(prefsType);
-	}
+    /**
+     * Fetches import contact preferences.
+     * 
+     * If count is null fetches all the contacts at once
+     * 
+     * 
+     * @return {@link ContactPrefs}
+     */
+    @Path("{type}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteContactPrefs(@PathParam("type") String type)
+    {
+	ContactPrefs.Type prefsType = ContactPrefs.Type.valueOf(type.toUpperCase());
+	if (prefsType != null)
+	    ContactPrefsUtil.delete(prefsType);
+    }
 }

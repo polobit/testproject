@@ -22,9 +22,30 @@ import com.thirdparty.google.groups.GoogleGroupDetails;
 
 public class ContactSyncUtil
 {
+    /**
+     * Initializes deferred task with contacts prefs id which initializes
+     * backeds task to start and start sync process
+     * 
+     * @param id
+     */
+    public static void syncContactsDeferredTask(Long id)
+    {
+	GoogleContactsSyncDeferredTask task = new GoogleContactsSyncDeferredTask(id);
+
+	Queue queue = QueueFactory.getQueue("contact-sync-queue");
+	queue.add(TaskOptions.Builder.withPayload(task));
+    }
+
+    /**
+     * Calls sync methods based on sync type chosen.
+     * 
+     * @param contactPrefs
+     * @throws Exception
+     */
     public static void syncContacts(ContactPrefs contactPrefs) throws Exception
     {
 	System.out.println("syn started");
+
 	if (contactPrefs.sync_type == SYNC_TYPE.CLIENT_TO_AGILE)
 	{
 	    ContactsSyncToAgile.importGoogleContacts(contactPrefs);
@@ -37,23 +58,55 @@ public class ContactSyncUtil
 	else if (contactPrefs.sync_type == SYNC_TYPE.TWO_WAY)
 	{
 	    ContactsSyncToAgile.importGoogleContacts(contactPrefs);
-	    contactPrefs.last_synched_from_client = System.currentTimeMillis();
+	    contactPrefs.last_synced_from_client = System.currentTimeMillis();
 	    ContactsSynctoGoogle.updateContacts(contactPrefs);
-	    contactPrefs.last_synched_to_client = System.currentTimeMillis();
+	    contactPrefs.last_synced_to_client = System.currentTimeMillis();
 	}
 
+	// Contacts prefs save to persist sync times
 	contactPrefs.save();
 
     }
 
-    public static void syncContactsDeferredTask(Long id)
+    public static List<Contact> fetchUpdatedContactsToSync(ContactPrefs pref, Integer page, String cursor)
     {
-	GoogleContactsSyncDeferredTask task = new GoogleContactsSyncDeferredTask(id);
+	if (page == null || page == 0)
+	{
+	    page = 500;
+	}
 
-	// Add to queue
-	Queue queue = QueueFactory.getQueue("contact-sync-queue");
-	queue.add(TaskOptions.Builder.withPayload(task));
+	Long time = pref.last_synced_to_client;
+	Map<String, Object> queryMap = new HashMap<String, Object>();
+	queryMap.put("updated_time > ", time / 1000);
 
+	if (pref.my_contacts)
+	    queryMap.put("owner_key", pref.getDomainUser());
+
+	return Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-updated_time");
+    }
+
+    public static List<Contact> fetchNewContactsToSync(ContactPrefs pref, Integer page, String cursor)
+    {
+	if (page == null || page == 0)
+	{
+	    page = 500;
+	}
+	Long time = pref.last_synced_to_client;
+	Map<String, Object> queryMap = new HashMap<String, Object>();
+	System.out.println(time / 1000);
+	queryMap.put("created_time >", time / 1000);
+
+	if (pref.my_contacts)
+	    queryMap.put("owner_key", pref.getDomainUser());
+
+	System.out.println(queryMap);
+	System.out.println("fetching");
+
+	System.out.println(Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time"));
+	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
+
+	System.out.println("contacts fount : " + contacts.size());
+	return contacts;
     }
 
     public static ContactEntry createContactEntry(Contact contact, GoogleGroupDetails groupEntry, ContactPrefs prefs)
@@ -162,44 +215,4 @@ public class ContactSyncUtil
 	return null;
     }
 
-    public static List<Contact> fetchUpdatedContactsToSync(ContactPrefs pref, Integer page, String cursor)
-    {
-	if (page == null || page == 0)
-	{
-	    page = 500;
-	}
-
-	Long time = pref.last_synched_to_client;
-	Map<String, Object> queryMap = new HashMap<String, Object>();
-	queryMap.put("updated_time > ", time / 1000);
-
-	if (pref.my_contacts)
-	    queryMap.put("owner_key", pref.getDomainUser());
-
-	return Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-updated_time");
-    }
-
-    public static List<Contact> fetchNewContactsToSync(ContactPrefs pref, Integer page, String cursor)
-    {
-	if (page == null || page == 0)
-	{
-	    page = 500;
-	}
-	Long time = pref.last_synched_to_client;
-	Map<String, Object> queryMap = new HashMap<String, Object>();
-	System.out.println(time / 1000);
-	queryMap.put("created_time >", time / 1000);
-
-	if (pref.my_contacts)
-	    queryMap.put("owner_key", pref.getDomainUser());
-
-	System.out.println(queryMap);
-	System.out.println("fetching");
-
-	System.out.println(Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time"));
-	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
-
-	System.out.println("contacts fount : " + contacts.size());
-	return contacts;
-    }
 }

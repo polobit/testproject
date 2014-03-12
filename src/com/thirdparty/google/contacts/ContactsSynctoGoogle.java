@@ -21,6 +21,7 @@ import com.thirdparty.google.groups.util.ContactGroupUtil;
 
 public class ContactsSynctoGoogle
 {
+    static int MAX_FETCH_SIZE = 1000;
 
     public static List<ContactEntry> retrieveContactBasedOnQuery(Contact contact, ContactPrefs prefs)
     {
@@ -31,12 +32,8 @@ public class ContactsSynctoGoogle
 	    query_text = " " + email.value;
 	}
 
-	// query_text = query_text + " " +
-	// contact.getContactFieldValue(Contact.FIRST_NAME) + " "
-	// + contact.getContactFieldValue(Contact.LAST_NAME);
 	try
 	{
-
 	    return ContactsSynctoGoogle.retrieveContactBasedOnQuery(query_text, prefs);
 	}
 	catch (Exception e)
@@ -64,12 +61,21 @@ public class ContactsSynctoGoogle
 
     }
 
+    /**
+     * Fetches both new and updated contacts in agile and calls method to send
+     * save request to google
+     * 
+     * @param prefs
+     */
     public static void updateContacts(ContactPrefs prefs)
     {
 	try
 	{
+	    /*
+	     * Fetches new contacts created up to max size set in subsets of 200
+	     * as max size for batch request
+	     */
 	    synCreatedContacts(prefs, 200, null);
-
 	}
 	catch (Exception e)
 	{
@@ -79,6 +85,9 @@ public class ContactsSynctoGoogle
 
 	try
 	{
+	    // Fetches updated contacts up to max size set in subsets of 200 as
+	    // max size
+	    // for batch request
 	    synUpdatedContacts(prefs, 200, null);
 	}
 	catch (Exception e)
@@ -129,9 +138,16 @@ public class ContactsSynctoGoogle
 	while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor) && fetched <= MAX_FETCH_SIZE);
     }
 
+    /**
+     * Fetch newly created contacts after last synced time.
+     * 
+     * @param prefs
+     * @param page
+     * @param cursor
+     */
     public static void synCreatedContacts(ContactPrefs prefs, Integer page, String cursor)
     {
-	int MAX_FETCH_SIZE = 1000;
+
 	int fetched = 0;
 	System.out.println("fetching fetching fetching");
 	List<Contact> contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
@@ -196,7 +212,7 @@ public class ContactsSynctoGoogle
 	{
 	    Contact contact = contacts.get(i);
 
-	    if (contact.getContactFieldValue("Contact type") != null && contact.updated_time <= prefs.last_synched_to_client)
+	    if (contact.getContactFieldValue("Contact type") != null && contact.updated_time <= prefs.last_synced_to_client)
 		continue;
 
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
