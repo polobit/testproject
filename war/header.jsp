@@ -141,8 +141,6 @@
 									%>
 									<li id="casesmenu"><a href="#cases"><i
 											class="icon-folder-close icon-white"></i> Cases</a></li>
-									<li id="dealsmenu"><a href="#deals"><i
-											class="icon-money icon-white"></i> Deals</a></li>
 									<%
 									    }
 														if (menuSetting.social || true) {

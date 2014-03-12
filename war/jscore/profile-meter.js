@@ -7,7 +7,8 @@ var Is_Profile_Guider_Closed = false;
 /*
  * Global values of each step.
  */
-var Profile_Settings = { "Email" : "",
+var Profile_Settings = {
+	"Email" : "",
 // "User_invited" : "#users",
 // "Widgets" : 10
 // "Share" : "#",
@@ -27,14 +28,16 @@ Profile_Setup_Messages.Share = "Are you liking Agile? Spread the love.";
 // Initial percentage after first time login
 var Initial_Total = 65;
 
-var Profile_Info = { "Welcome" : false, "Email" : false,
-// "User_invited" : false,
-// "Widgets" : false,
-"total" : Initial_Total };
+var Profile_Info = {
+	"Welcome" : false,
+	"Email" : false,
+	// "User_invited" : false,
+	// "Widgets" : false,
+	"total" : Initial_Total
+};
 
 // Calculate based on tags added in 'OUR' domain
-function calculate_profile()
-{
+function calculate_profile() {
 
 	// Get tags from global contact fetched from 'OUR' domain.
 	var tags = Agile_Contact.tags;
@@ -52,16 +55,14 @@ function calculate_profile()
 
 	// Iterates thought each field in Profile_Settings and finds whether tag is
 	// available in contact
-	$.each(Profile_Settings, function(key, value)
-	{
+	$.each(Profile_Settings, function(key, value) {
 		// Replaces "_" with space, that is how tag is saved in 'our' domain
 		var temp_key = key.indexOf("_") != -1 ? key.replace("_", " ") : key;
 
 		// Checks if tag is available in contact. Sets true in JSON object if
 		// tag is available, which indicates that step can be excluded from
 		// showing in noty.
-		if (tags.indexOf(temp_key) != -1)
-		{
+		if (tags.indexOf(temp_key) != -1) {
 			Profile_Info[key] = true;
 
 			// Calculates complete percentage
@@ -84,31 +85,29 @@ function calculate_profile()
 }
 
 function set_profile_noty() {
-	
+
 }
+
 /**
  * Sets up noty message to be shown. It iterates though profile stats calculated
  * in calculate_profile() method and creates noty template with appropriate
  * message
  */
-function set_profile_noty1()
-{
+function set_profile_noty1() {
 	console.log(Agile_Contact);
-	if(jQuery.isEmptyObject(Agile_Contact))
+	if (jQuery.isEmptyObject(Agile_Contact))
 		return;
-	
+
 	// Gets profile stats
 	var profile_stats = calculate_profile();
 
 	// Removes noty before building
 	remove_profile_noty();
 
-	$.each(profile_stats, function(key, value)
-	{
+	$.each(profile_stats, function(key, value) {
 		console.log(profile_stats);
 		// If value is false, then noty is built with that respective message
-		if (value == false)
-		{
+		if (value == false) {
 			var json = {};
 			json.message = Profile_Setup_Messages[key];
 			json.route = Profile_Settings[key];
@@ -124,54 +123,57 @@ function set_profile_noty1()
  * 
  * @param content
  */
-function show_noty_on_top_of_panel(content)
-{
+function show_noty_on_top_of_panel(content) {
 	if (Is_Profile_Guider_Closed)
 		return;
 
 	$('body').find('#wrap').find('#notify-container').remove();
 	$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top', '0px');
-	$('body').find('#wrap').find('#agilecrm-container').css('padding-top', '60px');
+	$('body').find('#wrap').find('#agilecrm-container').css('padding-top',
+			'60px');
 
 	$('body').find('#wrap').find('#notify-container').remove();
 	$('body').find('#wrap').prepend(getTemplate("sticky-noty", content));
 	$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top', '34px');
-	$('body').find('#wrap').find('#agilecrm-container').css('padding-top', '96px');
+	$('body').find('#wrap').find('#agilecrm-container').css('padding-top',
+			'96px');
 }
 
 /**
  * Removes noty and re-arranges the navbar layout by removing 60px padding which
  * is added to show naoty
  */
-function remove_profile_noty()
-{
+function remove_profile_noty() {
 	$('body').find('#wrap').find('#notify-container').remove();
 	$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top', '0px');
-	$('body').find('#wrap').find('#agilecrm-container').css('padding-top', '60px');
+	$('body').find('#wrap').find('#agilecrm-container').css('padding-top',
+			'60px');
 }
 
-$(function()
-{
+$(function() {
 	/**
 	 * User can exlicitly disable noty in current session. Along with removing
 	 * the noty a flag is set, which is checked before showing noty
 	 */
-	$('span.notify-close').die().live('click', function()
-	{
-		// Flat which indicates user has disables
-		Is_Profile_Guider_Closed = true;
-		$(this).parent().slideUp("slow", function()
-		{
-			$('body').find('#wrap').find('.navbar-fixed-top').css('margin-top', '0px');
-			$('body').find('#wrap').find('#agilecrm-container').css('padding-top', '60px');
-		});
-	});
+	$('span.notify-close').die().live(
+			'click',
+			function() {
+				// Flat which indicates user has disables
+				Is_Profile_Guider_Closed = true;
+				$(this).parent().slideUp(
+						"slow",
+						function() {
+							$('body').find('#wrap').find('.navbar-fixed-top')
+									.css('margin-top', '0px');
+							$('body').find('#wrap').find('#agilecrm-container')
+									.css('padding-top', '60px');
+						});
+			});
 
 	/**
 	 * Removes welcome message and shows next step
 	 */
-	$('#noty-welcome-user').die().live('click', function(e)
-	{
+	$('#noty-welcome-user').die().live('click', function(e) {
 		e.preventDefault();
 		delete Profile_Info["Welcome"];
 		set_profile_noty();
