@@ -37,9 +37,9 @@ public class ContactSyncUtil
 	else if (contactPrefs.sync_type == SYNC_TYPE.TWO_WAY)
 	{
 	    ContactsSyncToAgile.importGoogleContacts(contactPrefs);
-	    contactPrefs.last_synched_from_client = System.currentTimeMillis();
+	    contactPrefs.last_synced_from_client = System.currentTimeMillis();
 	    ContactsSynctoGoogle.updateContacts(contactPrefs);
-	    contactPrefs.last_synched_to_client = System.currentTimeMillis();
+	    contactPrefs.last_synced_to_client = System.currentTimeMillis();
 	}
 
 	contactPrefs.save();
@@ -169,7 +169,7 @@ public class ContactSyncUtil
 	    page = 500;
 	}
 
-	Long time = pref.last_synched_to_client;
+	Long time = pref.last_synced_to_client;
 	Map<String, Object> queryMap = new HashMap<String, Object>();
 	queryMap.put("updated_time > ", time / 1000);
 
@@ -185,7 +185,7 @@ public class ContactSyncUtil
 	{
 	    page = 500;
 	}
-	Long time = pref.last_synched_to_client;
+	Long time = pref.last_synced_to_client;
 	Map<String, Object> queryMap = new HashMap<String, Object>();
 	System.out.println(time / 1000);
 	queryMap.put("created_time >", time / 1000);
