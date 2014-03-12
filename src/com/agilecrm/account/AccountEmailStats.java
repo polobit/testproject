@@ -29,7 +29,7 @@ public class AccountEmailStats
     @NotSaved(IfDefault.class)
     public long updated_time = 0L;
 
-    private static ObjectifyGenericDao<AccountEmailStats> dao = new ObjectifyGenericDao<>(AccountEmailStats.class);
+    private static ObjectifyGenericDao<AccountEmailStats> dao = new ObjectifyGenericDao<AccountEmailStats>(AccountEmailStats.class);
 
     AccountEmailStats()
     {
