@@ -449,21 +449,21 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>EmailPullCron</servlet-name>
-		<servlet-class>com.agilecrm.mandrill.servlets.EmailPullCron</servlet-class>
+		<servlet-name>CronPullServlet</servlet-name>
+		<servlet-class>com.agilecrm.queues.cron.CronPullServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>EmailPullCron</servlet-name>
-		<url-pattern>/backend/cron/email-pull</url-pattern>
+		<servlet-name>CronPullServlet</servlet-name>
+		<url-pattern>/backend/cron/cron-pull/*</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>BackendEmailPull</servlet-name>
-		<servlet-class>com.agilecrm.mandrill.servlets.BackendEmailPull</servlet-class>
+		<servlet-name>BackendPullServlet</servlet-name>
+		<servlet-class>com.agilecrm.queues.backend.BackendPullServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>BackendEmailPull</servlet-name>
-		<url-pattern>/backend-email-pull</url-pattern>
+		<servlet-name>BackendPullServlet</servlet-name>
+		<url-pattern>/backend-pull</url-pattern>
 	</servlet-mapping>
 	
    <servlet>
