@@ -136,7 +136,6 @@ public class ContactPrefsUtil
 	{
 	    if (atomId.equals(group.atomId))
 	    {
-		System.out.println("test test test testtest testtest testtest testtest testtest testtest testtest test");
 		return group;
 	    }
 	}

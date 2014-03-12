@@ -236,6 +236,11 @@ $(function()
 	          var plan = $("input[name='pro_vs_lite']:checked").val();
 	          var discount = "", months = "";
 	          
+	          if(!plan)
+	         {
+	        	  alert("Please select a plan to proceed");
+	        	  return false;
+	         }
 	       
 	          if($('.monthly').hasClass("plan-select")){cycle = "Monthly";months = 1; discount = PLAN_DETAILS.getDiscount(plan, "monthly")}
 	          else if($('.yearly').hasClass("plan-select")){cycle = "Yearly";months = 12;discount = PLAN_DETAILS.getDiscount(plan, "yearly")}
