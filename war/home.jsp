@@ -129,9 +129,10 @@
 	<!-- <script src='https://dpm72z3r2fvl4.cloudfront.net/js/lib/headjs-min.js'></script> -->
 	<!-- <script src='/lib/headjs-min.js'></script> -->
 
+
 	<script>
-	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	var LIB_PATH = "/";
+	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	//var LIB_PATH = "/";
 	
 	var CSS_PATH = "/";
 	//var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
