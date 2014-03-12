@@ -93,10 +93,10 @@ public class ContactPrefs implements Serializable
     public Long lastModifedAt = 0L;
 
     @NotSaved(IfDefault.class)
-    public Long last_synched_to_client = 0L;
+    public Long last_synced_to_client = 0L;
 
     @NotSaved(IfDefault.class)
-    public Long last_synched_from_client = 0L;
+    public Long last_synced_from_client = 0L;
 
     @NotSaved
     @Embedded

@@ -47,9 +47,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 		break;
 	}
 	case 'starting':
-	{
-		// Add audio tags in home page.
-		addAudio();
+	{		
 		break;
 	}
 	case 'm_permission_requested':

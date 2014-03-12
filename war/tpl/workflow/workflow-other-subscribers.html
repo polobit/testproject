@@ -33,6 +33,7 @@
             	<table class="table table-striped onlySorting">
                 	<thead>
                     	<tr>
+							<th></th>
                         	<th>Contact</th>
                         	<th>Campaign Date</th>
 							<!--<th>Status</th>-->
@@ -49,6 +50,7 @@
 {{/if}}
 </script>
 <script id="workflow-other-subscribers-model-template" type="text/html">
+<td></td>
 <td class="data" data={{id}} style="width:20em;">
 	<div style="display:inline;padding-right:10px;height:auto;">
     	<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px;" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>

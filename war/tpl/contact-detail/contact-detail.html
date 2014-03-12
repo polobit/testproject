@@ -83,7 +83,7 @@
 											class="icon-envelope-alt"></i> Send Email</a></li>
 
                                     {{#property_is_exists "phone" properties}}
-                                    <li><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
+                                    <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
 										"first_name"}}" lname="{{getPropertyValue properties "last_name"}}" image="{{getPropertyValue properties
 										"image"}}" phone="{{getPropertyValue properties "phone"}}"><i class="icon-phone"></i> Call</a></li>
                                     {{/property_is_exists}}

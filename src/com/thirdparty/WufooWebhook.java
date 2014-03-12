@@ -91,9 +91,11 @@ public class WufooWebhook extends HttpServlet
 					Note note = new Note();
 					note.subject = req.getParameter(json.getString("Title"));
 					note.description = req.getParameter(json.getString("ID"));
-					notes.add(note);
+					if (!StringUtils.isBlank(note.description))
+						notes.add(note);
 				}
-				else if (!StringUtils.isBlank(json.getString("Title")) && !json.getString("Title").equals("Address"))
+				else if (!StringUtils.isBlank(json.getString("Title")) && !json.getString("Title").equals("Address")
+						&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 
 					// Add properties to list of properties
 					properties.add(buildProperty(json.getString("Title"), req.getParameter(json.getString("ID")),
@@ -137,15 +139,17 @@ public class WufooWebhook extends HttpServlet
 							else if (subObj.getString("Label").equals("Postal / Zip Code")
 									&& !StringUtils.isBlank(req.getParameter(json.getString("ID"))))
 								addJson.put("zip", req.getParameter(subObj.getString("ID")));
-							else if (!StringUtils.isBlank(subObj.getString("Label")))
-
+							else if (!StringUtils.isBlank(subObj.getString("Label"))
+									&& !StringUtils.isBlank(req.getParameter(subObj.getString("ID"))))
 								// Add properties to list of properties
 								properties.add(buildProperty(subObj.getString("Label"),
 										req.getParameter(subObj.getString("ID")), contact));
 						}
-						if (!addField.equals(", "))
+						if (!(addField.equals(", ") || addField.equals("")))
+						{
 							addJson.put("address", addField);
-						properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
+							properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
+						}
 					}
 				}
 			}
@@ -177,12 +181,9 @@ public class WufooWebhook extends HttpServlet
 
 				for (Note note : notes)
 				{
-					if (!StringUtils.isBlank(note.toString()))
-					{
-						note.addRelatedContacts(contact.id.toString());
-						note.setOwner(user);
-						note.save();
-					}
+					note.addRelatedContacts(contact.id.toString());
+					note.setOwner(user);
+					note.save();
 				}
 			}
 		}
