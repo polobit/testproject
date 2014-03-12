@@ -24,6 +24,7 @@ public class ContactPrefsUtil
 
     /**
      * Retrieves {@link ContactPrefs} based on enum {@link ContactPrefs.Type}
+     * and current domain user (@link {@link DomainUser})
      * 
      * @param type
      *            {@link ContactPrefs.Type} from which contacts are imported
@@ -31,7 +32,6 @@ public class ContactPrefsUtil
      */
     public static ContactPrefs getPrefsByType(ContactPrefs.Type type)
     {
-
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("type", type);
 	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
