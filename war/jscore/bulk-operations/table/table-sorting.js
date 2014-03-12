@@ -77,11 +77,11 @@ function sort_tables(table) {
 	    		sort_deals(table);
 	    		return;
 	    	}
-	    if(table_id == "task-list")
+/*	    if(table_id == "task-list")
 	    	{
 	    		sort_tasks(table);
 	    		return;
-	    	}
+	    	}*/
 	    if(table_id == "document-list")
     	{
     		sort_documents(table);
