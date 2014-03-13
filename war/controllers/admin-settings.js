@@ -31,7 +31,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"menu-settings" : "menu_settings",
 
 	/* Mandrill Email Activity */
-	"email-stats" : "emailStats"
+	"email-stats" : "emailStats",
+
+	/* Web to Lead */
+	"web-to-lead" : "webToLead"
 
 	},
 
@@ -279,6 +282,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('.stats-tab').addClass('active');
 
 	},
+
+	/**
+	 * Web to lead links to website pages
+	 */
+	webToLead : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+		$('#content').find('#admin-prefs-tabs-content').html(getTemplate("admin-settings-web-to-lead"), {});
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.web-to-lead-tab').addClass('active');
+	},
+
 
 	/**
 	 * Creates a Model to show All Domain Users.

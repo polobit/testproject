@@ -135,7 +135,7 @@ public class ContactGroupUtil
 	return groupsList;
     }
 
-    public static GoogleGroupDetails createGroup(ContactPrefs prefs, String group) throws ServiceException, Exception
+    public static GoogleGroupDetails getSyncToGroup(ContactPrefs prefs, String group) throws ServiceException, Exception
     {
 	ContactsService service = GoogleServiceUtil.getService(prefs.token);
 
@@ -150,7 +150,6 @@ public class ContactGroupUtil
 		GoogleGroupDetails syncToGroup = ContactPrefsUtil.getGroupBasedOnID(prefs.sync_to_group, prefs);
 		if (syncToGroup != null && syncToGroup.atomId != null)
 		    return syncToGroup;
-
 	    }
 	    catch (MalformedURLException e)
 	    {
