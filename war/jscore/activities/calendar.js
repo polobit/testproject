@@ -1,7 +1,9 @@
 /**
-
+ * 
  * Describes the given object is an array or not
- * @param {Object} a to verify array or not 
+ * 
+ * @param {Object}
+ *            a to verify array or not
  * @returns {Boolean} true if given param is array else false
  */
 function isArray(a)
@@ -9,38 +11,65 @@ function isArray(a)
     return Object.prototype.toString.apply(a) === '[object Array]';
 }
 
+/**
+ * Loads events from google calendar using tokens either from cookies or token
+ * from backend when token in cookie is epired
+ * 
+ * @param callback
+ */
 function load_events_from_google(callback)
 {
-	var google_calendar_cookie_name = "_agile_google_calendar_prefs";
+	// Name of the cookie to store/fetch calendar prefs. Current user id is set
+	// in cookie name to avoid
+	// showing tasks in different users calendar if logged in same browser
+	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
+	
+	// Reads existing cookie
 	var _agile_calendar_prefs_cookie = readCookie(google_calendar_cookie_name);
-	console.log(_agile_calendar_prefs_cookie);
+	
+	// If cookie is not null, then it check it token is still valid; checks
+	// based on expiry time.
 	if(_agile_calendar_prefs_cookie && _agile_calendar_prefs_cookie != "null")
 	{
 		var prefs = JSON.parse(_agile_calendar_prefs_cookie);
-		console.log(prefs);
+
+		// Checks if token expired. It considers expire before 2 minutes window
+		// of actual expiry time.
 		if(prefs.expires_at - (2 * 60 * 1000)  >= new Date().getTime())
 		{
-			fill_events_from_google(prefs, callback);
+			// Returns token to the callback accoring to specification of gcal
+			get_google_calendar_event_source(prefs, callback);
 			return;
 		}
+		
+		// Erases cookie if token is expired and sends request to backend to
+		// acquire new token
 		erase_google_calendar_prefs_cookie()
 		
 	}
 	
-	$.getJSON('/core/api/calendar-prefs/refresh-token', function (doc) {
-		if(!doc)
+	// Fetch new token from backen, saves in cookie, and token is returned to gcal  
+	$.getJSON('/core/api/calendar-prefs/refresh-token', function (prefs) {
+		if(!prefs)
 			return;
-		createCookie("_agile_google_calendar_prefs", JSON.stringify(doc));
-		fill_events_from_google(doc, callback);
+		
+		// Creates cookie
+		createCookie(google_calendar_cookie_name, JSON.stringify(prefs));
+		get_google_calendar_event_source(prefs, callback);
  	});
 }
 
+/**
+ * Erases calendar cookie
+ */
 function erase_google_calendar_prefs_cookie()
 {
-	var google_calendar_cookie_name = "_agile_google_calendar_prefs";
+	var google_calendar_cookie_name = "_agile_google_calendar_prefs_" + CURRENT_DOMAIN_USER.id;
 	eraseCookie(google_calendar_cookie_name);
 }
-function fill_events_from_google(data, callback)
+
+// Returns token in to gcal callback in specified format
+function get_google_calendar_event_source(data, callback)
 {
 	
 	if (callback && typeof (callback) === "function")
@@ -60,13 +89,17 @@ function showCalendar() {
   $('#calendar').fullCalendar({
     	
        /**
-        * Renders the events displaying currently on fullCalendar
-        * @method events
-        * @param {Object} start fullCalendar current section start day date object
-        * @param {Object} end fullCalendar current section end day date object
-        * @param {function} callback displays the events on fullCalendar
-        * 
-        */
+		 * Renders the events displaying currently on fullCalendar
+		 * 
+		 * @method events
+		 * @param {Object}
+		 *            start fullCalendar current section start day date object
+		 * @param {Object}
+		 *            end fullCalendar current section end day date object
+		 * @param {function}
+		 *            callback displays the events on fullCalendar
+		 * 
+		 */
     	
         eventSources :[{events: function (start, end, callback) {
         
@@ -96,7 +129,7 @@ function showCalendar() {
                 $('.fc-header-left').show();
                 
             } else {
-              //  $('#loading').hide();
+              // $('#loading').hide();
             	 $("#loading_calendar_events").hide();
                 $('#subscribe-ical').css('display','block');
                 start_tour('calendar');
@@ -107,13 +140,17 @@ function showCalendar() {
 		editable: true,
 		theme: false,
 	   /**
-	    * Shows event pop-up modal with pre-filled date and time values, 
-	    * when we select a day or multiple days of the fullCalendar 
-	    * @method select
-	    * @param {Object} start start-date of the event
-	    * @param {Object} end end-date of the event
-	    * @param {Boolean} allDay   
-	    */	
+		 * Shows event pop-up modal with pre-filled date and time values, when
+		 * we select a day or multiple days of the fullCalendar
+		 * 
+		 * @method select
+		 * @param {Object}
+		 *            start start-date of the event
+		 * @param {Object}
+		 *            end end-date of the event
+		 * @param {Boolean}
+		 *            allDay
+		 */	
         select: function(start, end, allDay) {
         	// Show a new event
             $('#activityModal').modal('show');
@@ -137,15 +174,24 @@ function showCalendar() {
             
 		},
 	   /**
-	    * Updates the event by changing start and end date, when it is 
-	    * dragged to another location on fullCalendar.
-	    * @method eventDrop
-	    * @param {Object} event1 event with new start and end date
-	    * @param {Number} dayDelta holds the number of days the event was moved forward
-	    * @param {Number} minuteDelta holds the number of minutes the event was moved forward
-	    * @param {Boolean} allDay weather the event has been dropped on a day in month view or not
-	    * @param {Function} revertFunc sets the event back to it's original position
-	    */	
+		 * Updates the event by changing start and end date, when it is dragged
+		 * to another location on fullCalendar.
+		 * 
+		 * @method eventDrop
+		 * @param {Object}
+		 *            event1 event with new start and end date
+		 * @param {Number}
+		 *            dayDelta holds the number of days the event was moved
+		 *            forward
+		 * @param {Number}
+		 *            minuteDelta holds the number of minutes the event was
+		 *            moved forward
+		 * @param {Boolean}
+		 *            allDay weather the event has been dropped on a day in
+		 *            month view or not
+		 * @param {Function}
+		 *            revertFunc sets the event back to it's original position
+		 */	
 		eventDrop: function(event1, dayDelta, minuteDelta, allDay, revertFunc) {      
 	    
 			
@@ -169,10 +215,12 @@ function showCalendar() {
 	        eventModel.save(event);	        
    	    },
    	   /**
-   	    * Updates or deletes an event by clicking on it
-   	    * @method eventClick
-   	    * @param {Object} event to update or delete
-   	    */ 
+		 * Updates or deletes an event by clicking on it
+		 * 
+		 * @method eventClick
+		 * @param {Object}
+		 *            event to update or delete
+		 */ 
    	    eventClick: function (event) {
    	    	if(isNaN(event.id))
    	    		return;
