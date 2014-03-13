@@ -46,7 +46,7 @@ public class PullQueueUtil
      * 
      * @return List<TaskHandle>
      */
-    public static List<TaskHandle> leaseTasksFromQueue(String queueName, int leasePeriod, int countLimit) throws Exception
+    public static List<TaskHandle> leaseTasksFromQueue(String queueName, int leasePeriod, int countLimit)
     {
 	try
 	{
@@ -54,16 +54,17 @@ public class PullQueueUtil
 	    Queue q = QueueFactory.getQueue(queueName);
 
 	    return q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS).countLimit(countLimit).groupByTag());
+
 	}
 	catch (TransientFailureException e)
 	{
 	    e.printStackTrace();
-	    System.err.println("TransientFailureException occured " + e.getMessage());
+	    System.err.println("TransientFailureException occured when leasing tasks from " + queueName + " and exception message is " + e.getMessage());
 	}
 	catch (ApiDeadlineExceededException e)
 	{
 	    e.printStackTrace();
-	    System.err.println("ApiDeadlineExceededException occured " + e.getMessage());
+	    System.err.println("ApiDeadlineExceededException occured when leasing tasks from " + queueName + " and exception message is " + e.getMessage());
 	}
 
 	return null;

@@ -81,7 +81,7 @@ public class PullScheduler
     public int getLeasePeriod(String queueName)
     {
 	if (StringUtils.equals(queueName, "campaign-pull-queue"))
-	    return 3600;
+	    return 7200;
 
 	return DEFAULT_LEASE_PERIOD;
     }
@@ -107,11 +107,14 @@ public class PullScheduler
      * @throws Exception
      *             when failed to lease tasks
      */
-    public void run() throws Exception
+    public void run()
     {
 	while (shouldContinue())
 	{
 	    List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
+
+	    if (tasks == null || tasks.isEmpty())
+		break;
 
 	    processTasks(tasks);
 
@@ -141,7 +144,7 @@ public class PullScheduler
 		return true;
 	}
 
-	System.err.println("Some deadline occured. Not continuing " + isCron);
+	System.err.println("Some deadline occured. IsCron value is " + isCron);
 
 	return false;
     }
