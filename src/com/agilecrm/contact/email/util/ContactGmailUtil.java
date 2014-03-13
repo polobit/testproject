@@ -1,11 +1,18 @@
 package com.agilecrm.contact.email.util;
 
+import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.util.SocialPrefsUtil;
+import com.thirdparty.google.GoogleServiceUtil;
 
 public class ContactGmailUtil
 {
@@ -24,15 +31,49 @@ public class ContactGmailUtil
     @SuppressWarnings("deprecation")
     public static String getGmailURL(String searchEmail, String offset, String count)
     {
-    	// Get Gmail Social Prefs
-    	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-    	SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
-    
-    	if (gmailPrefs == null)
-    		return null;
-    
-    	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs, searchEmail, offset, count);
-    
+	// Get Gmail Social Prefs
+	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
+	SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+
+	if (gmailPrefs == null)
+	    return null;
+
+	if (gmailPrefs.expires_at > 0l && gmailPrefs.expires_at <= System.currentTimeMillis())
+	{
+	    gmailPrefs.token = GoogleServiceUtil.refreshTokenInGoogle(gmailPrefs.refresh_token);
+	}
+
+	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs, searchEmail, offset, count);
+
+    }
+
+    public static void resetAccessToken(SocialPrefs prefs)
+    {
+
+	String response = GoogleServiceUtil.refreshTokenInGoogle(prefs.refresh_token);
+
+	// Creates HashMap from response JSON string
+	HashMap<String, Object> properties;
+	try
+	{
+	    properties = new ObjectMapper().readValue(response, new TypeReference<HashMap<String, Object>>()
+	    {
+	    });
+	}
+	catch (IOException e)
+	{
+	    properties = new HashMap<String, Object>();
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	System.out.println(properties.toString());
+
+	if (properties.containsKey("access_token"))
+	{
+	    prefs.token = String.valueOf(properties.get("access_token"));
+	    prefs.expires_at = System.currentTimeMillis() + Integer.parseInt(String.valueOf(properties.get("expires_in")));
+	    prefs.save();
+	}
     }
 
     /**
@@ -50,22 +91,30 @@ public class ContactGmailUtil
      */
     public static String getGmailURLForPrefs(SocialPrefs gmailPrefs, String searchEmail, String offset, String count)
     {
-    	String userName = gmailPrefs.email;
-    	String host = "imap.gmail.com";
-    	String port = "993";
-    	String consumerKey = "anonymous";
-    	String consumerSecret = "anonymous";
-    
-    	String oauth_key = gmailPrefs.token;
-    	String oauth_secret = gmailPrefs.secret;
-    
-    	String url = "https://agile-imap.appspot.com/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
-    			+ "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(host) + "&port="
-    			+ URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
-    			+ URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
-    			+ "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
-    
-    	return url;
+	String userName = gmailPrefs.email;
+	String host = "imap.gmail.com";
+	String port = "993";
+	String consumerKey = "anonymous";
+	String consumerSecret = "anonymous";
+
+	String oauth_key = gmailPrefs.token;
+	String oauth_secret = gmailPrefs.secret;
+
+	String command = "oauth_email";
+
+	// Gmail Prefs has been updated from oauth1 (deprecated) to oauth2. For
+	// oauth2, we store secret as v2
+	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
+	{
+	    return "https://agile-imap.appspot.com/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail
+		    + "&host=" + URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
+		    + URLEncoder.encode(oauth_key);
+	}
+
+	return "https://agile-imap.appspot.com/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail + "&host="
+		+ URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
+		+ URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret) + "&oauth_key=" + URLEncoder.encode(oauth_key)
+		+ "&oauth_secret=" + URLEncoder.encode(oauth_secret);
     }
 
 }

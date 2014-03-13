@@ -113,9 +113,6 @@ public class PullScheduler
 	{
 	    List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
 
-	    if (tasks == null || tasks.isEmpty())
-		continue;
-
 	    processTasks(tasks);
 
 	    PullQueueUtil.deleteTasks(queueName, tasks);
@@ -157,6 +154,10 @@ public class PullScheduler
      */
     public void processTasks(List<TaskHandle> tasks)
     {
+
+	if (tasks == null || tasks.isEmpty())
+	    return;
+
 	for (TaskHandle taskHandle : tasks)
 	{
 	    DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());

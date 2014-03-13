@@ -62,7 +62,17 @@ public class SocialPrefs
     /**
      * Social group token.
      */
-    public String token;
+    @NotSaved(IfDefault.class)
+    public String token = null;
+
+    /**
+     * Refresh token is saved for Oauth 2.0
+     */
+    @NotSaved(IfDefault.class)
+    public String refresh_token = null;
+
+    @NotSaved(IfDefault.class)
+    public Long expires_at = 0L;
 
     /**
      * Social group secret.
@@ -132,6 +142,8 @@ public class SocialPrefs
 
 	if (properties.containsKey("email"))
 	    this.email = properties.get("email");
+	if (properties.containsKey("picture"))
+	    this.picture = properties.get("picture");
 	System.out.println(properties);
     }
 

@@ -563,6 +563,11 @@ public class BulkOperationsAPI
 	BulkActionNotifications.publishconfirmation(BulkAction.EXPORT_CONTACTS_CSV);
     }
 
+    /**
+     * Fetches Contact prefs based on duration in path and initializes sync
+     * 
+     * @param duration
+     */
     @Path("/contact-sync/google/{duration}")
     @POST
     public void syncGoogleContacts(@PathParam("duration") String duration)
@@ -574,6 +579,7 @@ public class BulkOperationsAPI
 
 	Duration interval = Duration.valueOf(duration);
 
+	// Fetches all Prefs and start sync
 	List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(interval);
 
 	System.out.println(prefs);
@@ -593,6 +599,13 @@ public class BulkOperationsAPI
 
     }
 
+    /**
+     * Fetches {@link ContactPrefs} based on prefs id and initializes contact
+     * sync
+     * 
+     * @param pref_id
+     */
+
     @Path("/contact-sync/google/duration/{prefs_id}")
     @POST
     public void syncGoogleContactsBasedOnPrefs(@PathParam("prefs_id") String pref_id)
@@ -600,6 +613,7 @@ public class BulkOperationsAPI
 	if (pref_id == null)
 	    return;
 
+	// Fetches contact prefs object and initilizes sync
 	ContactPrefs contactPrefs = ContactPrefsUtil.get(Long.parseLong(pref_id));
 	System.out.println(contactPrefs);
 

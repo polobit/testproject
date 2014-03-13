@@ -12,6 +12,8 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
+import com.google.appengine.api.taskqueue.TransientFailureException;
+import com.google.apphosting.api.ApiProxy.ApiDeadlineExceededException;
 
 /**
  * <code>PullQueueUtil</code> is the utility class for appengine pull queue
@@ -46,10 +48,25 @@ public class PullQueueUtil
      */
     public static List<TaskHandle> leaseTasksFromQueue(String queueName, int leasePeriod, int countLimit) throws Exception
     {
-	// Get tasks
-	Queue q = QueueFactory.getQueue(queueName);
+	try
+	{
+	    // Get tasks
+	    Queue q = QueueFactory.getQueue(queueName);
 
-	return q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS).countLimit(countLimit).groupByTag());
+	    return q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS).countLimit(countLimit).groupByTag());
+	}
+	catch (TransientFailureException e)
+	{
+	    e.printStackTrace();
+	    System.err.println("TransientFailureException occured " + e.getMessage());
+	}
+	catch (ApiDeadlineExceededException e)
+	{
+	    e.printStackTrace();
+	    System.err.println("ApiDeadlineExceededException occured " + e.getMessage());
+	}
+
+	return null;
 
     }
 
@@ -81,6 +98,9 @@ public class PullQueueUtil
      */
     public static void deleteTasks(String queue, List<TaskHandle> tasks)
     {
+	if (tasks == null || tasks.isEmpty())
+	    return;
+
 	// Delete Tasks
 	Queue q = QueueFactory.getQueue(queue);
 	q.deleteTask(tasks);

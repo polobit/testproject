@@ -1,14 +1,11 @@
 package com.thirdparty.google.contacts;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.ContactField;
-import com.google.gdata.client.Query;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.batch.BatchOperationType;
 import com.google.gdata.data.contacts.ContactEntry;
@@ -22,44 +19,6 @@ import com.thirdparty.google.groups.util.ContactGroupUtil;
 public class ContactsSynctoGoogle
 {
     static int MAX_FETCH_SIZE = 1000;
-
-    public static List<ContactEntry> retrieveContactBasedOnQuery(Contact contact, ContactPrefs prefs)
-    {
-	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
-	String query_text = "";
-	for (ContactField email : emails)
-	{
-	    query_text = " " + email.value;
-	}
-
-	try
-	{
-	    return ContactsSynctoGoogle.retrieveContactBasedOnQuery(query_text, prefs);
-	}
-	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	    return new ArrayList<ContactEntry>();
-	}
-    }
-
-    public static List<ContactEntry> retrieveContactBasedOnQuery(String query_text, ContactPrefs prefs) throws Exception
-    {
-	ContactsService service = GoogleServiceUtil.getService(prefs.token);
-	URL feelURL = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?access_token=" + prefs.token);
-
-	Query query = new Query(feelURL);
-	System.out.println(prefs.sync_to_group);
-	query.setStringCustomParameter("group", prefs.sync_to_group);
-	query.setStringCustomParameter("q", query_text);
-	query.setMaxResults(1);
-
-	ContactFeed feed = service.getFeed(query, ContactFeed.class);
-
-	return feed.getEntries();
-
-    }
 
     /**
      * Fetches both new and updated contacts in agile and calls method to send
@@ -95,6 +54,70 @@ public class ContactsSynctoGoogle
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Fetch newly created contacts after last synced time.
+     * 
+     * @param prefs
+     * @param page
+     * @param cursor
+     */
+    public static void synCreatedContacts(ContactPrefs prefs, Integer page, String cursor)
+    {
+
+	int fetched = 0;
+	System.out.println("fetching fetching fetching");
+
+	// Fetches first set of contacts up to page size
+	List<Contact> contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
+
+	System.out.println("fetch newly created contacts :" + contacts_list.size());
+
+	if (contacts_list.isEmpty())
+	    return;
+
+	// Fetches sets of contats of size of page size up to Max fetch size
+	String currentCursor = null;
+	String previousCursor = null;
+	do
+	{
+	    // Gets number of contacts fetched
+	    fetched += contacts_list.size();
+
+	    // sets cursor to preview cursor
+	    previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
+	    System.out.println(previousCursor);
+
+	    try
+	    {
+		// Updates fetched contacts
+		updateContacts(contacts_list, prefs);
+	    }
+	    catch (Exception e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
+	    /*
+	     * If cursor is not empty next set of contacts are fetched and
+	     * cursor is set to current cursorl; it will be compared with
+	     * previous cursor, if both are same loop will exit to avoid
+	     * infinite loop if contact list constantly sets same cursor on last
+	     * contact
+	     */
+	    if (!StringUtils.isEmpty(previousCursor))
+	    {
+		contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, previousCursor);
+
+		currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+		continue;
+	    }
+
+	    break;
+	}
+	while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor) && fetched <= MAX_FETCH_SIZE);
     }
 
     public static void synUpdatedContacts(ContactPrefs prefs, Integer page, String cursor)
@@ -139,56 +162,13 @@ public class ContactsSynctoGoogle
     }
 
     /**
-     * Fetch newly created contacts after last synced time.
+     * Updates/Creates contacts in google contacts in user specied group of
+     * default/recommended group "Agile"
      * 
+     * @param contacts
      * @param prefs
-     * @param page
-     * @param cursor
+     * @throws Exception
      */
-    public static void synCreatedContacts(ContactPrefs prefs, Integer page, String cursor)
-    {
-
-	int fetched = 0;
-	System.out.println("fetching fetching fetching");
-	List<Contact> contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
-
-	System.out.println("fetch newly created contacts :" + contacts_list.size());
-
-	if (contacts_list.isEmpty())
-	    return;
-
-	String currentCursor = null;
-	String previousCursor = null;
-	do
-	{
-	    System.out.println("in loop");
-	    fetched += contacts_list.size();
-	    previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
-	    System.out.println(previousCursor);
-
-	    try
-	    {
-		updateContacts(contacts_list, prefs);
-	    }
-	    catch (Exception e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-
-	    if (!StringUtils.isEmpty(previousCursor))
-	    {
-		contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, previousCursor);
-
-		currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
-		continue;
-	    }
-
-	    break;
-	}
-	while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor) && fetched <= MAX_FETCH_SIZE);
-    }
-
     public static void updateContacts(List<Contact> contacts, ContactPrefs prefs) throws Exception
     {
 	String token = prefs.token;
@@ -199,22 +179,37 @@ public class ContactsSynctoGoogle
 	// Feed that hold s all the batch request entries.
 	ContactFeed updateFeed = new ContactFeed();
 
+	// Fetches contacts service
 	ContactsService contactService = GoogleServiceUtil.getService(token);
 
-	GoogleGroupDetails group = ContactGroupUtil.createGroup(prefs, "Agile");
+	// Gets sync to group set by user, if it is not set then default sync
+	// froup will be returned (created and returned if it does not exist)
+	GoogleGroupDetails group = ContactGroupUtil.getSyncToGroup(prefs, "Agile");
 
+	// Insert contact and updated contact are recorded as batch request to
+	// create/update is limited to 100 per request.
 	int insertRequestCount = 0;
 	int updateRequestCount = 0;
-	ContactFeed responseFeed1 = null;
+
 	ContactFeed responseFeed = null;
-	// contacts = new ArrayList<Contact>();
+
+	System.out.println("contacts to be synced in agile :" + contacts.size());
+	/**
+	 * Iterates through each contacts and adds a batch request based on
+	 * whether it is new contact or updated contact
+	 */
 	for (int i = 0; i < contacts.size(); i++)
 	{
+	    System.out.println(i);
 	    Contact contact = contacts.get(i);
 
-	    if (contact.getContactFieldValue("Contact type") != null && contact.updated_time <= prefs.last_synced_to_client)
+	    System.out.println(prefs.last_synced_to_client);
+	    System.out.println(contact.updated_time);
+	    if (contact.updated_time != 0 && contact.updated_time <= prefs.last_synced_to_client)
 		continue;
 
+	    // Create google supported contact entry based on current contact
+	    // data
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
 
 	    BatchUtils.setBatchId(createContact, contact.id.toString());
@@ -231,7 +226,7 @@ public class ContactsSynctoGoogle
 		insertRequestCount++;
 	    }
 
-	    if (insertRequestCount >= 90 || i >= contacts.size() - 1)
+	    if (insertRequestCount >= 95 || i >= contacts.size() - 1)
 	    {
 		// Submit the batch request to the server.
 		responseFeed = contactService.batch(new URL("https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token),
@@ -240,22 +235,22 @@ public class ContactsSynctoGoogle
 		requestFeed = new ContactFeed();
 	    }
 
-	    if (updateRequestCount >= 90 || i >= contacts.size() - 1)
+	    if (updateRequestCount >= 95 || i >= contacts.size() - 1)
 	    {
-		responseFeed1 = contactService.batch(new URL("https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token),
-			updateFeed);
+		contactService.batch(new URL("https://www.google.com/m8/feeds/contacts/default/full/batch?" + "access_token=" + token), updateFeed);
 		updateRequestCount = 0;
 		updateFeed = new ContactFeed();
 	    }
 
 	}
 
-	// Check the status of each operation.
-	for (ContactEntry entry : responseFeed.getEntries())
-	{
-	    String batchId = BatchUtils.getBatchId(entry);
-	    com.google.gdata.data.batch.BatchStatus status = com.google.gdata.data.batch.BatchUtils.getBatchStatus(entry);
-	    System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
-	}
+	if (responseFeed != null)
+	    // Check the status of each operation.
+	    for (ContactEntry entry : responseFeed.getEntries())
+	    {
+		String batchId = BatchUtils.getBatchId(entry);
+		com.google.gdata.data.batch.BatchStatus status = com.google.gdata.data.batch.BatchUtils.getBatchStatus(entry);
+		System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
+	    }
     }
 }
