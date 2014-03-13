@@ -179,7 +179,7 @@ public class ScribeUtil
 
 	// If Service type is Gmail, save preferences in social prefs
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GMAIL))
-	    saveGooglePrefs1(code, null);
+	    saveGmailPrefs(code, service, agileUser);
 
 	/*
 	 * if service type is stripe, we post the code and get the access token
@@ -241,15 +241,22 @@ public class ScribeUtil
      *            current {@link AgileUser}
      * @throws IOException
      */
-    public static void saveGmailPrefs(Token accessToken, OAuthService service, AgileUser agileUser) throws IOException
+    public static void saveGmailPrefs(String code, OAuthService service, AgileUser agileUser) throws IOException
     {
 	System.out.println("Saving Gmail Prefs");
 
+	HashMap<String, Object> tokenMap = GoogleServiceUtil.exchangeAuthTokenForAccessToken(code, ScribeServlet.GMAIL_SCOPE);
+
+	System.out.println(tokenMap);
 	/*
 	 * Signed get request is made to retrieve access token and secret
 	 */
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, "https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
-	service.signRequest(accessToken, oAuthRequest);
+	Token token = new Token(((String) tokenMap.get("access_token")), "dummy");
+	System.out.println(token);
+	System.out.println(service);
+	service.signRequest(token, oAuthRequest);
+	System.out.println(service.getAuthorizationUrl(token));
 	Response response = oAuthRequest.send();
 
 	System.out.println(response.getBody());
@@ -258,8 +265,11 @@ public class ScribeUtil
 	{
 	});
 
+	System.out.println(properties);
 	// save GMail prefs in db
-	SocialPrefs gmailPrefs = new SocialPrefs(agileUser, SocialPrefs.Type.GMAIL, accessToken.getToken(), accessToken.getSecret(), properties);
+	SocialPrefs gmailPrefs = new SocialPrefs(agileUser, SocialPrefs.Type.GMAIL, ((String) tokenMap.get("access_token")), "v2", properties);
+	gmailPrefs.refresh_token = ((String) tokenMap.get("refresh_token"));
+	gmailPrefs.expires_at = System.currentTimeMillis() + (Long.parseLong((String.valueOf(tokenMap.get("expires_in")))) - 120) * 1000;
 	gmailPrefs.save();
     }
 
@@ -313,101 +323,30 @@ public class ScribeUtil
     {
 	System.out.println("In google save token");
 
-	/*
-	 * Make a post request and retrieve tokens
-	 */
-	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
-
-	oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
-	oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
-
-	oAuthRequest.addBodyParameter("scope", "");
-	oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
-	oAuthRequest.addBodyParameter("code", code);
-	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
-
-	Response response = oAuthRequest.send();
-
 	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, Object>>()
-	{
-	});
+	HashMap<String, Object> properties = GoogleServiceUtil.exchangeAuthTokenForAccessToken(code, "");
 
 	System.out.println(properties.toString());
 
 	// if post gives error, notifies user about it
-	if (properties.containsKey("error"))
-	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Authentication failed. Please import again");
-	else
+	if (properties.isEmpty() || properties.containsKey("error"))
 	{
-	    // after getting access token save prefs in db
-	    ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null, (Long.parseLong((String
-		    .valueOf(properties.get("expires_in"))))), ((String) properties.get("refresh_token")));
-
-	    contactPrefs.setPrefs(object);
-	    System.out.println(contactPrefs.duration);
-	    System.out.println(contactPrefs.sync_type);
-	    contactPrefs.setExpiryTime(contactPrefs.expires);
-	    contactPrefs.save();
-
-	    // initialize backend to save contacts
-	    // ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Authentication failed");
+	    return;
 	}
-    }
 
-    /**
-     * If service type is google, we make a post request with the code and get
-     * the access token and ContactPrefs object is saved in database with new
-     * access token and refresh token
-     * 
-     * @param code
-     *            {@link String} code retrieved after OAuth
-     * @throws IOException
-     */
-    public static void saveGooglePrefs1(String code, JSONObject object) throws IOException
-    {
-	System.out.println("In google save token");
+	// after getting access token save prefs in db
+	ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null, (Long.parseLong((String.valueOf(properties
+		.get("expires_in"))))), ((String) properties.get("refresh_token")));
 
-	/*
-	 * Make a post request and retrieve tokens
-	 */
-	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
+	contactPrefs.setPrefs(object);
+	System.out.println(contactPrefs.duration);
+	System.out.println(contactPrefs.sync_type);
+	contactPrefs.setExpiryTime(contactPrefs.expires);
+	contactPrefs.save();
 
-	oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
-	oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
-
-	oAuthRequest.addBodyParameter("scope", "");
-	oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
-	oAuthRequest.addBodyParameter("code", code);
-	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
-
-	Response response = oAuthRequest.send();
-
-	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, Object>>()
-	{
-	});
-
-	System.out.println(properties.toString());
-
-	// if post gives error, notifies user about it
-	if (properties.containsKey("error"))
-	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Authentication failed. Please import again");
-	else
-	{
-	    // after getting access token save prefs in db
-	    ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null, (Long.parseLong((String
-		    .valueOf(properties.get("expires_in"))))), ((String) properties.get("refresh_token")));
-
-	    contactPrefs.setPrefs(object);
-	    System.out.println(contactPrefs.duration);
-	    System.out.println(contactPrefs.sync_type);
-	    contactPrefs.setExpiryTime(contactPrefs.expires);
-	    contactPrefs.save();
-
-	    // initialize backend to save contacts
-	    // ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
-	}
+	// initialize backend to save contacts
+	// ContactsImportUtil.initilaizeGoogleSyncBackend(contactPrefs.id);
     }
 
     /**
@@ -422,7 +361,7 @@ public class ScribeUtil
     {
 	// Exchanges access token/refresh token with extracted Authorization
 	// code
-	HashMap<String, Object> result = GoogleServiceUtil.refreshGoogleCalenderToken(code);
+	HashMap<String, Object> result = GoogleServiceUtil.exchangeAuthTokenForAccessToken(code, ScribeServlet.GOOGLE_CALENDAR_SCOPE);
 	System.out.println(result);
 	String refresh_token = String.valueOf(result.get("refresh_token"));
 	String access_token = String.valueOf(result.get("access_token"));

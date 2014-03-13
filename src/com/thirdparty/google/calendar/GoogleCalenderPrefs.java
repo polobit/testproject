@@ -53,8 +53,7 @@ public class GoogleCalenderPrefs
     @JsonIgnore
     private Key<DomainUser> domainUserKey = null;
 
-    public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
-	    GoogleCalenderPrefs.class);
+    public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(GoogleCalenderPrefs.class);
 
     public GoogleCalenderPrefs()
     {
@@ -92,13 +91,12 @@ public class GoogleCalenderPrefs
 	if (refresh_token == null)
 	    return;
 
-	String response = GoogleServiceUtil.refreshTokenInGoogleForCalendar(refresh_token);
+	String response = GoogleServiceUtil.refreshTokenInGoogle(refresh_token);
 
 	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-		new TypeReference<HashMap<String, Object>>()
-		{
-		});
+	HashMap<String, Object> properties = new ObjectMapper().readValue(response, new TypeReference<HashMap<String, Object>>()
+	{
+	});
 	System.out.println(properties.toString());
 
 	if (properties.containsKey("access_token"))

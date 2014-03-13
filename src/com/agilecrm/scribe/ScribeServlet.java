@@ -269,6 +269,9 @@ public class ScribeServlet extends HttpServlet
 	    return;
 	}
 
+	// Get Service to retrive access token
+	service = ScribeUtil.getService(req, resp, serviceName);
+
 	System.out.println("service name in save token " + serviceName);
 
 	ScribeUtil.saveTokens(req, service, agileUser, serviceName, accessToken, code);
