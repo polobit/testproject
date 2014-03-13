@@ -79,7 +79,7 @@ public class GoogleCalenderPrefs
     }
 
     /**
-     * After expiry of existing token new token is fetched us
+     * After expiry of existing token, new token is fetched.
      * 
      * @throws JsonParseException
      * @throws JsonMappingException
@@ -91,6 +91,9 @@ public class GoogleCalenderPrefs
 	if (refresh_token == null)
 	    return;
 
+	/**
+	 * Fethches new access token using refresh token
+	 */
 	String response = GoogleServiceUtil.refreshTokenInGoogle(refresh_token);
 
 	// Creates HashMap from response JSON string
