@@ -10,11 +10,23 @@ import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 
 public class GooglecalendarPrefsUtil
 {
+    /**
+     * Fetches calendar prefs based on id
+     * 
+     * @param id
+     * @return
+     */
     public static GoogleCalenderPrefs getCalendarPref(Long id)
     {
 	return getCalendarPref(new Key<GoogleCalenderPrefs>(GoogleCalenderPrefs.class, id));
     }
 
+    /**
+     * Fetches calendar prefs based on prefs key
+     * 
+     * @param prefsKey
+     * @return
+     */
     public static GoogleCalenderPrefs getCalendarPref(Key<GoogleCalenderPrefs> prefsKey)
     {
 	try
@@ -36,8 +48,8 @@ public class GooglecalendarPrefsUtil
      */
     public static GoogleCalenderPrefs getCalendarPref()
     {
-	GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(
-		DomainUser.class, SessionManager.get().getDomainId()));
+	GoogleCalenderPrefs prefs = GoogleCalenderPrefs.dao.getByProperty("domainUserKey", new Key<DomainUser>(DomainUser.class, SessionManager.get()
+		.getDomainId()));
 
 	return prefs;
 

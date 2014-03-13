@@ -71,7 +71,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.gmap.GmapQueryAPI.class);
 	s.add(com.agilecrm.core.api.webrule.WebRuleAPI.class);
 	s.add(com.agilecrm.core.api.TemplatesAPI.class);
-	s.add(com.agilecrm.core.api.calendar.CalendarGooglePrefsAPI.class);
+	s.add(com.agilecrm.core.api.calendar.GoogleCalendarPrefsAPI.class);
 	return s;
     }
 }

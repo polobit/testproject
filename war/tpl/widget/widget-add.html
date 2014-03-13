@@ -13,12 +13,18 @@
 		{{#if_equals widget_type "CUSTOM"}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
-    			<a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
-				<a href="#Custom-widget/{{id}}" class="btn" id="setting-widget" set-widget-name="{{name}}">Settings</a>
+				<div class="btn-group" style="display:inline-block;">
+        			<a class="btn btn-danger" id="delete-widget" widget-name="{{name}}">Delete</a>
+        			<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a id="remove-widget" widget-name="{{name}}">Uninstall</a></li>
+					</ul>
+				</div>
+				<a href="#Custom-widget/{{id}}" class="btn" style="display:inline-block;margin-top:-22px;" id="setting-widget" set-widget-name="{{name}}">Settings</a>
     		{{else}}
     			<a class="btn btn-primary add-widget" href="#Custom-widget" widget-name="{{name}}"><i class="icon-plus" style="margin-right:5px"></i>Add</a>
-    		{{/if}}
-			<a class="btn btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>
+				<a class="btn btn-danger" id="remove-widget" widget-name="{{name}}">Uninstall</a>    		
+			{{/if}}
 		{{else}}
 			{{#if is_added}}
 				{{add_tag "Widgets"}}
@@ -35,42 +41,42 @@
 <script id="widgets-add-collection-template" type="text/html">
 <div class="row">
     
-	<div class="span12">
+	<div class="span11">
         <div class="page-header">
             <h2>Social <small>Know your customer social activity</small></h2>
         </div>
                 <div id="social" class="row-fluid">
                 </div><br/>
     </div>
-	<div class="span12">
+	<div class="span11">
         <div class="page-header">
             <h2>Customer Support <small>View tickets and chats</small></h2>
         </div>
                 <div id="support" class="row-fluid">
                 </div><br/>
     </div>
-	<div class="span12" style="display:none;">
+	<div class="span11" style="display:none;">
         <div class="page-header">
             <h2>Email <small>Send and Receive Email</small></h2>
         </div>
                 <div id="email" class="row-fluid">
                 </div><br/>
     </div>
-    <div class="span12">
+    <div class="span11">
         <div class="page-header">
             <h2>Calling <small>Make & Receive calls from Agile</small></h2>
         </div>
                 <div id="call" class="row-fluid">
                 </div><br/>
     </div>
-    <div class="span12">
+    <div class="span11">
         <div class="page-header">
             <h2>Billing <small>View and send invoices</small></h2>
         </div>
                 <div id="billing" class="row-fluid">
                 </div><br/>
     </div>
-	<div class="span12">
+	<div class="span11">
 		<div class="page-header">
             <h2>Custom Widgets <small>Add your widgets</small></h2>
         </div>
