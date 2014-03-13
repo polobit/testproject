@@ -42,12 +42,14 @@
 	<td><div style="text-decoration:line-through;text-overflow:ellipsis;text-align:justify;white-space:nowrap;max-width:15em;overflow:hidden;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
     <td><div style="text-decoration:line-through"><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label">{{task_property type}}</span></div></td>
     <td><div style="text-decoration:line-through"><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></div></td>
-    <td><div style="text-decoration:line-through"><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>	
+    <!-- <td><div style="text-decoration:line-through"><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td> -->
+	<td><div>{{epochToHumanDate "dd mmm yyyy" due}}</div></td>	
 {{else}}
 	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;max-width:15em;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
     <td><div><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label">{{task_property type}}</span></div></td>
     <td><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></td>
-	<td><div><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>	
+	<!-- <td><div><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</time></div></td>	-->
+	<td><div>{{epochToHumanDate "dd mmm yyyy" due}}</div></td>	
 {{/if}}
 	<td>
 		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
