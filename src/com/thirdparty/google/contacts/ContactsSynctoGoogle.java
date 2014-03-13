@@ -193,17 +193,23 @@ public class ContactsSynctoGoogle
 
 	ContactFeed responseFeed = null;
 
+	System.out.println("contacts to be synced in agile :" + contacts.size());
 	/**
 	 * Iterates through each contacts and adds a batch request based on
 	 * whether it is new contact or updated contact
 	 */
 	for (int i = 0; i < contacts.size(); i++)
 	{
+	    System.out.println(i);
 	    Contact contact = contacts.get(i);
 
-	    if (contact.getContactFieldValue("Contact type") != null && contact.updated_time <= prefs.last_synced_to_client)
+	    System.out.println(prefs.last_synced_to_client);
+	    System.out.println(contact.updated_time);
+	    if (contact.updated_time != 0 && contact.updated_time <= prefs.last_synced_to_client)
 		continue;
 
+	    // Create google supported contact entry based on current contact
+	    // data
 	    ContactEntry createContact = ContactSyncUtil.createContactEntry(contact, group, prefs);
 
 	    BatchUtils.setBatchId(createContact, contact.id.toString());
@@ -238,12 +244,13 @@ public class ContactsSynctoGoogle
 
 	}
 
-	// Check the status of each operation.
-	for (ContactEntry entry : responseFeed.getEntries())
-	{
-	    String batchId = BatchUtils.getBatchId(entry);
-	    com.google.gdata.data.batch.BatchStatus status = com.google.gdata.data.batch.BatchUtils.getBatchStatus(entry);
-	    System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
-	}
+	if (responseFeed != null)
+	    // Check the status of each operation.
+	    for (ContactEntry entry : responseFeed.getEntries())
+	    {
+		String batchId = BatchUtils.getBatchId(entry);
+		com.google.gdata.data.batch.BatchStatus status = com.google.gdata.data.batch.BatchUtils.getBatchStatus(entry);
+		System.out.println(batchId + ": " + status.getCode() + " (" + status.getReason() + ")");
+	    }
     }
 }

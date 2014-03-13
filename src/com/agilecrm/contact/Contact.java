@@ -409,8 +409,17 @@ public class Contact extends Cursor
 	    // Execute notification for contacts
 	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
 
-	if (oldContact != null && isDocumentUpdateRequired(oldContact))
+	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
+
+	// Updated time is updated only if particular fields are changed. It is
+	// updated only when search document is tobe updated
+	updated_time = System.currentTimeMillis() / 1000;
+	if (viewed_time != 0L)
+	{
+	    viewed.viewed_time = viewed_time;
+	    // viewed.viewer_id = SessionManager.get().getDomainId();
+	}
 
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
@@ -454,13 +463,13 @@ public class Contact extends Cursor
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size() || contact.star_value != star_value
 		|| contact.lead_score != lead_score)
-	    return false;
+	    return true;
 
 	// Checks if tags are changed
 	for (String tag : contact.tags)
 	{
 	    if (!currentContactTags.contains(tag))
-		return false;
+		return true;
 	}
 
 	// Checks of properties has any change
@@ -473,15 +482,15 @@ public class Contact extends Cursor
 		continue;
 
 	    if (!properties.contains(property))
-		return false;
+		return true;
 	}
 
 	// Checks if owner changed. It should be considered as contact update
 	// and update the document with updated time
 	if (!contact.owner_key.equals(owner_key))
-	    return false;
+	    return true;
 
-	return true;
+	return false;
     }
 
     /**
@@ -928,15 +937,6 @@ public class Contact extends Cursor
 	if (created_time == 0L && id == null)
 	{
 	    created_time = System.currentTimeMillis() / 1000;
-	}
-	else
-	{
-	    updated_time = System.currentTimeMillis() / 1000;
-	    if (viewed_time != 0L)
-	    {
-		viewed.viewed_time = viewed_time;
-		// viewed.viewer_id = SessionManager.get().getDomainId();
-	    }
 	}
 
 	// If tags are not empty, considering they are simple tags and adds them

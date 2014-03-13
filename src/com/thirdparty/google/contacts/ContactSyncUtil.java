@@ -3,6 +3,7 @@ package com.thirdparty.google.contacts;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -10,9 +11,12 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.client.Query;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactEntry;
@@ -22,8 +26,11 @@ import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.FamilyName;
 import com.google.gdata.data.extensions.FullName;
 import com.google.gdata.data.extensions.GivenName;
+import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
 import com.google.gdata.data.extensions.Organization;
+import com.google.gdata.data.extensions.PhoneNumber;
+import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
 import com.thirdparty.google.GoogleServiceUtil;
@@ -185,7 +192,8 @@ public class ContactSyncUtil
     }
 
     /**
-     * Retrieves contacts from google based on emails in the contact
+     * Retrieves contacts from google based on emails in the contact. Used to
+     * check if contact to be update is new or existing one in google
      * 
      * @param contact
      * @param prefs
@@ -298,7 +306,6 @@ public class ContactSyncUtil
 	    queryMap.put("owner_key", pref.getDomainUser());
 
 	System.out.println(queryMap);
-	System.out.println("fetching");
 
 	System.out.println(Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time"));
 	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
@@ -317,8 +324,168 @@ public class ContactSyncUtil
 	return CopyFromGoogleContact(entry, contact);
     }
 
+    public static Contact createContactInAgile(ContactEntry googleContactEntry)
+    {
+	// checks if google contact has email and skips it
+	if ((!googleContactEntry.hasEmailAddresses() || googleContactEntry.getEmailAddresses().size() == 0)
+		|| (googleContactEntry.getEmailAddresses().size() == 1 && googleContactEntry.getEmailAddresses().get(0).getAddress() == null))
+	    return null;
+
+	List<ContactField> fields = new ArrayList<ContactField>();
+
+	Contact agileContact = new Contact();
+	boolean isDuplicateContact = false;
+	String duplicateEmail = "";
+	for (Email email : googleContactEntry.getEmailAddresses())
+	    if (email.getAddress() != null)
+	    {
+		System.out.println("Email: " + email.getAddress());
+
+		// checks for duplicate emails and skips contact
+		if (ContactUtil.isExists(email.getAddress()))
+		{
+		    duplicateEmail = email.getAddress();
+		    isDuplicateContact = true;
+		}
+
+		fields.add(new ContactField(Contact.EMAIL, email.getAddress(), null));
+	    }
+
+	if (googleContactEntry.hasName())
+	{
+	    System.out.println(googleContactEntry.getName());
+	}
+
+	if (googleContactEntry.hasName())
+	{
+	    Name name = googleContactEntry.getName();
+
+	    System.out.println("name" + name);
+	    if (name.hasGivenName() && name.hasFamilyName())
+	    {
+		System.out.println(name.hasFamilyName());
+		System.out.println(name.hasGivenName());
+		System.out.println(name.hasFullName());
+		if (name.hasFamilyName())
+		    fields.add(new ContactField(Contact.LAST_NAME, name.getFamilyName().getValue(), null));
+
+		if (name.hasGivenName())
+		    fields.add(new ContactField(Contact.FIRST_NAME, name.getGivenName().getValue(), null));
+	    }
+	    else if (name.hasFullName())
+		fields.add(new ContactField(Contact.FIRST_NAME, name.getFullName().getValue(), null));
+
+	}
+
+	if (googleContactEntry.hasOrganizations())
+	    if (googleContactEntry.getOrganizations().get(0).hasOrgName() && googleContactEntry.getOrganizations().get(0).getOrgName().hasValue())
+		fields.add(new ContactField(Contact.COMPANY, googleContactEntry.getOrganizations().get(0).getOrgName().getValue(), null));
+
+	if (googleContactEntry.hasPhoneNumbers())
+	    for (PhoneNumber phone : googleContactEntry.getPhoneNumbers())
+		if (phone.getPhoneNumber() != null)
+		    fields.add(new ContactField("phone", googleContactEntry.getPhoneNumbers().get(0).getPhoneNumber(), null));
+
+	if (googleContactEntry.hasStructuredPostalAddresses())
+	    for (StructuredPostalAddress address : googleContactEntry.getStructuredPostalAddresses())
+	    {
+		System.out.println("in structured address");
+
+		JSONObject json = new JSONObject();
+		String addr = "";
+		if (address.hasStreet())
+		    addr = addr + address.getStreet().getValue();
+		if (address.hasSubregion())
+		    addr = addr + ", " + address.getSubregion().getValue();
+		if (address.hasRegion())
+		    addr = addr + ", " + address.getRegion().getValue();
+
+		System.out.println(addr);
+		try
+		{
+		    if (!StringUtils.isBlank(addr))
+			json.put("address", addr);
+
+		    if (address.hasCity() && address.getCity().hasValue())
+			json.put("city", address.getCity().getValue());
+
+		    if (address.hasCountry() && address.getCountry().hasValue())
+			json.put("country", address.getCountry().getValue());
+
+		    if (address.hasPostcode() && address.getPostcode().hasValue())
+			json.put("zip", address.getPostcode().getValue());
+		}
+		catch (JSONException e)
+		{
+		    continue;
+		}
+
+		fields.add(new ContactField("address", json.toString(), null));
+
+	    }
+
+	if (googleContactEntry.hasImAddresses())
+	    for (Im im : googleContactEntry.getImAddresses())
+	    {
+		if (im.hasAddress())
+		{
+		    String subType = "";
+		    if (im.hasProtocol() && im.getProtocol() != null)
+		    {
+			if (im.getProtocol().indexOf("#") >= 0 && im.getProtocol().substring(im.getProtocol().indexOf("#") + 1).equalsIgnoreCase("SKYPE"))
+			    subType = "SKYPE";
+			if (im.getProtocol().indexOf("#") >= 0 && im.getProtocol().substring(im.getProtocol().indexOf("#") + 1).equalsIgnoreCase("GOOGLE_TALK"))
+			    subType = "GOOGLE-PLUS";
+			System.out.println("subtype: " + subType);
+		    }
+
+		    if (!StringUtils.isBlank(subType))
+			fields.add(new ContactField("website", im.getAddress(), subType));
+		    else
+			fields.add(new ContactField("website", im.getAddress(), null));
+
+		}
+
+	    }
+
+	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+	tags.add("Gmail contact");
+	fields.add(new ContactField("Contact type", "Google", null));
+
+	agileContact.tags = tags;
+	// title is not given as job description instead displaying name
+	// from google
+	// if (entry.getTitle() != null
+	// && entry.getTitle().getPlainText() != null)
+	// {
+	// System.out.println("title " + entry.getTitle().getPlainText());
+	// fields.add(new ContactField("title", null, entry.getTitle()
+	// .getPlainText()));
+	// }
+
+	agileContact.properties = fields;
+
+	if (isDuplicateContact)
+	{
+	    Contact existingAgileContact = ContactUtil.searchContactByEmail(duplicateEmail);
+	    agileContact.id = existingAgileContact.id;
+	    if (!agileContact.isDocumentUpdateRequired(existingAgileContact))
+		return null;
+
+	    agileContact = mergeContacts(agileContact, existingAgileContact, null);
+	}
+
+	return agileContact;
+    }
+
+    public static Contact mergeContacts(Contact newContact, Contact oldContact, ContactPrefs prefs)
+    {
+	return ContactUtil.mergeContactFeilds(newContact, oldContact);
+    }
+
     public static Contact CopyFromGoogleContact(ContactEntry entry, Contact contact)
     {
+
 	return null;
     }
 
