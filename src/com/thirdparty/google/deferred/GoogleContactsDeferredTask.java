@@ -34,13 +34,22 @@ public class GoogleContactsDeferredTask implements DeferredTask
     public void run()
     {
 	// TODO Auto-generated method stub
-	/*
-	 * if (StringUtils.isEmpty(namespace)) return;
-	 */
+
+	// Returns If Namespace is empty
+	if (StringUtils.isEmpty(namespace))
+	    return;
 
 	syncGooglecontacts(namespace, duration);
     }
 
+    /**
+     * Fetches Contact prefs based on duration in namesace and initializes
+     * backends to sync contacts. This method works for both contact prefs in
+     * namespace and specific contact prefs id.
+     * 
+     * @param namespace
+     * @param duration
+     */
     public void syncGooglecontacts(String namespace, String duration)
 
     {
@@ -48,23 +57,27 @@ public class GoogleContactsDeferredTask implements DeferredTask
 	try
 	{
 
+	    // Fetches address of backends
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 	    NamespaceManager.set(namespace);
 
-	    String uri = "/core/api/bulk-actions/contact-sync/google/";
+	    // Backends uri
+	    String URI = "/core/api/bulk-actions/contact-sync/google/";
 
 	    System.out.println(duration);
 	    TaskOptions taskOptions = null;
+
 	    if (!StringUtils.isEmpty(duration))
-		uri = uri + duration;
+		URI = URI + duration;
+
 	    if (contactPrefsId != null)
 	    {
-		taskOptions = TaskOptions.Builder.withUrl(uri + "duration/" + String.valueOf(contactPrefsId)).header("Host", url).method(Method.POST);
+		taskOptions = TaskOptions.Builder.withUrl(URI + "duration/" + String.valueOf(contactPrefsId)).header("Host", url).method(Method.POST);
 	    }
 	    else
 	    {
-		taskOptions = TaskOptions.Builder.withUrl(uri).header("Host", url).method(Method.POST);
+		taskOptions = TaskOptions.Builder.withUrl(URI).header("Host", url).method(Method.POST);
 	    }
 
 	    System.out.println(taskOptions.getUrl());

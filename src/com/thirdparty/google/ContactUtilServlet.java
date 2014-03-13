@@ -15,6 +15,7 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -25,8 +26,8 @@ import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
 import com.thirdparty.salesforce.SalesforceImportUtil;
 
 /**
- * <code>ContactUtilServlet</code> contains method to get and import contacts
- * into agile
+ * <code>ContactUtilServlet</code> contains method to get and import contacts.
+ * Initialized using cron into agile
  * 
  * @author Tejaswi
  * 
@@ -36,7 +37,7 @@ public class ContactUtilServlet extends HttpServlet
 {
     public void doPost(HttpServletRequest req, HttpServletResponse res)
     {
-        doGet(req, res);
+	doGet(req, res);
     }
 
     /**
@@ -45,63 +46,67 @@ public class ContactUtilServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
 
-        try
-        {
+	try
+	{
 
-            System.out.println("in contact util servlet");
-            String type = req.getParameter("type");
-            String cron = req.getParameter("cron");
+	    System.out.println("in contact util servlet");
+	    String type = req.getParameter("type");
+	    String cron = req.getParameter("cron");
 
-            if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
-            {
-                String duration = req.getParameter("duration");
-                syncGoogleContacts(duration);
-                return;
-            }
+	    /**
+	     * If sync type is google the contact sync based on duration is
+	     * initialized
+	     */
+	    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
+	    {
+		String duration = req.getParameter("duration");
+		syncGoogleContacts(duration);
+		return;
+	    }
 
-            InputStream stream = req.getInputStream();
-            byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
+	    InputStream stream = req.getInputStream();
+	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
 
-            ByteArrayInputStream b = new ByteArrayInputStream(contactPrefsByteArray);
-            ObjectInputStream o = new ObjectInputStream(b);
+	    ByteArrayInputStream b = new ByteArrayInputStream(contactPrefsByteArray);
+	    ObjectInputStream o = new ObjectInputStream(b);
 
-            System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
-            ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
+	    System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
+	    ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
 
-            System.out.println("domain user key in contacts util servlet " + contactPrefs.getDomainUser());
-            importContacts(contactPrefs);
+	    System.out.println("domain user key in contacts util servlet " + contactPrefs.getDomainUser());
+	    importContacts(contactPrefs);
 
-        }
-        catch (Exception e)
-        {
-            System.out.println("in sync servlet");
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+	}
+	catch (Exception e)
+	{
+	    System.out.println("in sync servlet");
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
     }
 
+    /**
+     * Fetches all namesapces and initializes deferred task which fetches
+     * contact prefs based on sync duration set.
+     * 
+     * @param duration
+     */
     public void syncGoogleContacts(String duration)
     {
-        System.out.println("duration" + duration);
-        GoogleContactsDeferredTask task1 = new GoogleContactsDeferredTask("", duration);
+	System.out.println("duration" + duration);
 
-        // Create Task and push it into Task Queue
-        Queue queue1 = QueueFactory.getQueue("contact-sync-queue");
+	// Create Task and push it into Task Queue
+	Queue queue = QueueFactory.getQueue("contact-sync-queue");
 
-        // Add to queue
-        queue1.add(TaskOptions.Builder.withPayload(task1));
+	// Add to queue
+	for (String namespace : NamespaceUtil.getAllNamespaces())
+	{
+	    GoogleContactsDeferredTask task = new GoogleContactsDeferredTask(namespace, duration);
 
-        /*
-         * for (String namespace : NamespaceUtil.getAllNamespaces()) {
-         * GoogleContactsDeferredTask task = new
-         * GoogleContactsDeferredTask(namespace, duration);
-         * 
-         * // Create Task and push it into Task Queue Queue queue =
-         * QueueFactory.getQueue("contact-sync-queue");
-         * 
-         * // Add to queue queue.add(TaskOptions.Builder.withPayload(task)); }
-         */
+	    // Add to queue
+	    queue.add(TaskOptions.Builder.withPayload(task));
+	}
     }
 
     /**
@@ -115,51 +120,49 @@ public class ContactUtilServlet extends HttpServlet
     public static void importContacts(ContactPrefs contactPrefs) throws Exception
     {
 
-        // contactPrefs = ContactPrefs.get(contactPrefs.id);
+	// contactPrefs = ContactPrefs.get(contactPrefs.id);
 
-        Key<DomainUser> key = contactPrefs.getDomainUser();
-        BulkActionUtil.setSessionManager(key.getId());
+	Key<DomainUser> key = contactPrefs.getDomainUser();
+	BulkActionUtil.setSessionManager(key.getId());
 
-        if (contactPrefs.type == Type.GOOGLE)
-        {
-            ContactSyncUtil.syncContacts(contactPrefs);
-            return;
-        }
+	if (contactPrefs.type == Type.GOOGLE)
+	{
+	    ContactSyncUtil.syncContacts(contactPrefs);
+	    return;
+	}
 
-        try
-        {
+	try
+	{
 
-            if (contactPrefs.type == Type.SALESFORCE)
-            {
-                if (contactPrefs.salesforceFields.contains("accounts"))
-                    SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
+	    if (contactPrefs.type == Type.SALESFORCE)
+	    {
+		if (contactPrefs.salesforceFields.contains("accounts"))
+		    SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
 
-                if (contactPrefs.salesforceFields.contains("leads"))
-                    SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
+		if (contactPrefs.salesforceFields.contains("leads"))
+		    SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
 
-                if (contactPrefs.salesforceFields.contains("contacts"))
-                    SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
+		if (contactPrefs.salesforceFields.contains("contacts"))
+		    SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
 
-                if (contactPrefs.salesforceFields.contains("deals"))
-                    SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
+		if (contactPrefs.salesforceFields.contains("deals"))
+		    SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
 
-                if (contactPrefs.salesforceFields.contains("cases"))
-                    SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
+		if (contactPrefs.salesforceFields.contains("cases"))
+		    SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
 
-                BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
-                        "Imported successfully from Salesforce");
-            }
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Imported successfully from Salesforce");
+	    }
 
-        }
-        catch (Exception e)
-        {
-            BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
-                    "Problem occured while importing. Please try again");
-        }
-        finally
-        {
-            // contactPrefs.delete();
-        }
+	}
+	catch (Exception e)
+	{
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Problem occured while importing. Please try again");
+	}
+	finally
+	{
+	    // contactPrefs.delete();
+	}
     }
 
 }
