@@ -31,6 +31,23 @@ function createCookie(name, value, days)
 	document.cookie = name + "=" + escape(value) + expires + "; path=/";
 }
 
+function createCookieInAllAgileSubdomains(name, value, days)
+{
+	// If days is not equal to null, undefined or ""
+	if (days)
+	{
+		var date = new Date();
+
+		// Set cookie variable's updated expire time in milliseconds
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		var expires = "; expires=" + date.toGMTString();
+	}
+	else
+		// If days is null, undefined or "" set expires as ""
+		var expires = "";
+	document.cookie = name + "=" + escape(value) + expires + "; path=/; domain=agilecrm.com";
+}
+
 /**
  * Used to read a particular variable's value from document.cookie
  * 
