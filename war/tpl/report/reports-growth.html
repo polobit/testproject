@@ -1,29 +1,31 @@
 <script id="report-growth-template" type="text/html">
 <div class="row">
     <div class="span12">
-        <div class="page-header">                
+        <div class="page-header" style="padding-bottom:40px!important">                
              <div id="reportrange" class="pull-right" style="padding:4px 8px;box-shadow: 0 0px 2px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1);">
                 <i class="icon-calendar icon-large"></i>
                 <span id="range">{{date-range "today" "-6"}}</span>
               </div>
+		
+            <h1>Growth Reports</h1>
 
-			<div class='pull-right' style="padding:0px 8px;">
+			<div class="ellipsis-multiline" style="padding-top: 5px;float: left;height:35px!important; width:40%!important;-webkit-line-clamp:2!important"> <span id="reports-growth-tags"></span></div>
+
+			<div class='pull-right' style="padding:5px 8px 10px">
 				<select name="frequency" id="frequency" class="required" style="width:100px">
 					<option value="daily">Daily</option>
 					<option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                 </select>
 			</div>
-			<div class='pull-right' style="padding:0px 8px;">
-				<select name="filter" id="filter" class="required" style="width:100px">
+			<div class='pull-right' style="padding:5px 8px 10px">
+				<select name="filter" id="filter" class="required">
 					<option value="ALL">All</option>
                 </select>
 			</div>
-
-
-            <h1>Growth Reports<small> - <span id="reports-growth-tags"></span></small></h1>
-        </div>
     </div>
+        </div>
+
 </div>
 
 <div>	
