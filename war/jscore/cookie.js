@@ -45,7 +45,7 @@ function createCookieInAllAgileSubdomains(name, value, days)
 	else
 		// If days is null, undefined or "" set expires as ""
 		var expires = "";
-	document.cookie = name + "=" + escape(value) + expires + "; path=/;";
+	document.cookie = name + "=" + escape(value) + expires + "; path=/; domain=agilecrm.com";
 }
 
 /**
