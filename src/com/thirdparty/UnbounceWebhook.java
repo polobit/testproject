@@ -72,29 +72,32 @@ public class UnbounceWebhook extends HttpServlet
 				value = value.replaceAll(regex, "");
 				value = value.replaceAll("\"", "");
 
-				// Build address JSON
-				if (key.equalsIgnoreCase("country") && !StringUtils.isBlank(value))
-					addJson.put("country", value);
-				else if (key.equalsIgnoreCase("state") && !StringUtils.isBlank(value))
-					addJson.put("state", value);
-				else if ((key.equalsIgnoreCase("province") || key.equalsIgnoreCase("city"))
-						&& !StringUtils.isBlank(value))
-					addJson.put("city", value);
-				else if ((key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code") || key
-						.equalsIgnoreCase("postal code")) && !StringUtils.isBlank(value))
-					addJson.put("zip", value);
-				else if ((key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location") || key
-						.equalsIgnoreCase("street")) && !StringUtils.isBlank(value))
-					addJson.put("address", value);
-				else if (key.equalsIgnoreCase("stateprovince") && !StringUtils.isBlank(value))
-					addJson.put("state", value);
-				else if (!StringUtils.isBlank(value))
+				if (!StringUtils.isBlank(value))
+				{
 
-					// Add property to list of properties
-					properties.add(buildProperty(key, value, contact));
+					// Build address JSON
+					if (key.equalsIgnoreCase("country"))
+						addJson.put("country", value);
+					else if (key.equalsIgnoreCase("state"))
+						addJson.put("state", value);
+					else if ((key.equalsIgnoreCase("province")) && !StringUtils.isBlank(value))
+						addJson.put("city", value);
+					else if ((key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code") || key
+							.equalsIgnoreCase("postal code")))
+						addJson.put("zip", value);
+					else if ((key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location") || key
+							.equalsIgnoreCase("street")))
+						addJson.put("address", value);
+					else if (key.equalsIgnoreCase("stateprovince"))
+						addJson.put("state", value);
+					else
+
+						// Add property to list of properties
+						properties.add(buildProperty(key, value));
+				}
 			}
 			if (addJson.length() != 0)
-				properties.add(buildProperty(Contact.ADDRESS, addJson.toString(), contact));
+				properties.add(buildProperty(Contact.ADDRESS, addJson.toString()));
 
 			// Format tagString and split into tagsWithKey array
 			tagString = tagString.trim();
@@ -111,7 +114,30 @@ public class UnbounceWebhook extends HttpServlet
 				contact.setContactOwner(owner);
 
 				// Add properties and tags to contact
-				contact.properties = properties;
+				List<ContactField> newProperties = properties;
+				List<ContactField> oldProperties = contact.properties;
+				List<ContactField> updatedProperties = new ArrayList<ContactField>();
+				List<ContactField> outdatedProperties = new ArrayList<ContactField>();
+
+				if (oldProperties.size() != 0)
+				{
+					for (ContactField oldProperty : oldProperties)
+					{
+						for (ContactField newProperty : newProperties)
+						{
+							if (StringUtils.equals(oldProperty.name, newProperty.name)
+									&& (StringUtils.equals(oldProperty.subtype, newProperty.subtype)))
+							{
+								outdatedProperties.add(oldProperty);
+							}
+						}
+					}
+					oldProperties.removeAll(outdatedProperties);
+					updatedProperties.addAll(oldProperties);
+				}
+				updatedProperties.addAll(newProperties);
+
+				contact.properties = updatedProperties;
 				contact.addTags(tags);
 				contact.save();
 			}
@@ -123,20 +149,16 @@ public class UnbounceWebhook extends HttpServlet
 		}
 	}
 
-	public static ContactField buildProperty(String name, String value, Contact contact)
+	public static ContactField buildProperty(String name, String value)
 	{
 		// Initialize ContactField
-		ContactField field = null;
+		ContactField field = new ContactField();
 
 		// Set field type to SYSTEM for name, email, company, title, phone, all
 		// other fields save as CUSTOM.
 		if (name.equalsIgnoreCase("name") || name.equalsIgnoreCase(Contact.FIRST_NAME)
 				|| name.equalsIgnoreCase("first name") || name.equalsIgnoreCase("first"))
 		{
-			name = Contact.FIRST_NAME;
-			field = contact.getContactFieldByName(name);
-			if (field == null)
-				field = new ContactField();
 			field.name = Contact.FIRST_NAME;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
@@ -144,10 +166,6 @@ public class UnbounceWebhook extends HttpServlet
 		else if (name.equalsIgnoreCase(Contact.LAST_NAME) || name.equalsIgnoreCase("last name")
 				|| name.equalsIgnoreCase("last"))
 		{
-			name = Contact.LAST_NAME;
-			field = contact.getContactFieldByName(name);
-			if (field == null)
-				field = new ContactField();
 			field.name = Contact.LAST_NAME;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
@@ -155,88 +173,34 @@ public class UnbounceWebhook extends HttpServlet
 		else if (name.toLowerCase().contains("organisation") || name.toLowerCase().contains("organization")
 				|| name.equalsIgnoreCase(Contact.COMPANY))
 		{
-			name = Contact.COMPANY;
-			field = contact.getContactFieldByName(name);
-			if (field == null)
-				field = new ContactField();
 			field.name = Contact.COMPANY;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
 		else if (name.toLowerCase().contains("designation") || name.equalsIgnoreCase(Contact.TITLE))
 		{
-			name = Contact.TITLE;
-			field = contact.getContactFieldByName(name);
-			if (field == null)
-				field = new ContactField();
 			field.name = Contact.TITLE;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
 		else if (name.toLowerCase().contains("phone"))
 		{
-			name = "phone";
-			field = contact.getContactFieldByName(name);
-			if (field == null || field.subtype.equals("home"))
-			{
-				field = new ContactField();
-				field.name = "phone";
-				field.value = value;
-				field.type = FieldType.SYSTEM;
-				field.subtype = "work";
-			}
-			else if (field.subtype.equals("work"))
-			{
-				field.name = "phone";
-				field.value = value;
-				field.type = FieldType.SYSTEM;
-				field.subtype = "work";
-			}
-			else
-			{
-				field = new ContactField();
-				field.name = "phone";
-				field.value = value;
-				field.type = FieldType.SYSTEM;
-				field.subtype = "work";
-			}
+			field.name = "phone";
+			field.value = value;
+			field.type = FieldType.SYSTEM;
+			field.subtype = "work";
 		}
 		else if (name.toLowerCase().contains("mobile"))
 		{
-			name = "phone";
-			field = contact.getContactFieldByName(name);
-			if (field == null || field.subtype.equals("work"))
-			{
-				field = new ContactField();
-				field.name = "phone";
-				field.value = value;
-				field.type = FieldType.SYSTEM;
-				field.subtype = "home";
-			}
-			else if (field.subtype.equals("home"))
-			{
-				field.name = "phone";
-				field.value = value;
-				field.type = FieldType.SYSTEM;
-				field.subtype = "home";
-			}
-			else
-			{
-				field = new ContactField();
-				field.name = "phone";
-				field.value = value;
-				field.type = FieldType.SYSTEM;
-				field.subtype = "home";
-			}
+			field.name = "phone";
+			field.value = value;
+			field.type = FieldType.SYSTEM;
+			field.subtype = "home";
 		}
 		else if (name.toLowerCase().contains("email"))
 		{
 			if (ContactUtil.isValidEmail(value))
 			{
-				name = Contact.EMAIL;
-				field = contact.getContactFieldByName(name);
-				if (field == null)
-					field = new ContactField();
 				field.name = Contact.EMAIL;
 				field.value = value;
 				field.type = FieldType.SYSTEM;
@@ -244,29 +208,18 @@ public class UnbounceWebhook extends HttpServlet
 		}
 		else if (name.toLowerCase().contains("website"))
 		{
-			name = Contact.WEBSITE;
-			field = contact.getContactFieldByName(name);
-			if (field == null)
-				field = new ContactField();
 			field.name = Contact.WEBSITE;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
 		else if (name.equals("address"))
 		{
-			name = Contact.ADDRESS;
-			field = contact.getContactFieldByName(name);
-			if (field == null)
-				field = new ContactField();
 			field.name = Contact.ADDRESS;
 			field.value = value;
 			field.type = FieldType.SYSTEM;
 		}
 		else
 		{
-			field = contact.getContactFieldByName(name);
-			if (field == null)
-				field = new ContactField();
 			field.name = name;
 			field.value = value;
 			field.type = FieldType.CUSTOM;
