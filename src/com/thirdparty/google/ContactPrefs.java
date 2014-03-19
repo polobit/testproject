@@ -208,11 +208,19 @@ public class ContactPrefs implements Serializable
 	}
     }
 
+    /**
+     * Fill groups in fetching from google
+     */
     public void fillGroups()
     {
 	try
 	{
+	    // Fetches froups from google
 	    groups = ContactGroupUtil.getGroups(this);
+
+	    // Get group Agile from set, and deletes if there is a duplicate
+	    // Agile group, or add one if there are none (Adds only in the list
+	    // to show in UI does not create at this point)
 	    GoogleGroupDetails agileGroup = ContactPrefsUtil.getGroup("Agile", this);
 	    List<GoogleGroupDetails> groupList = ContactPrefsUtil.getGroupList("Agile", this);
 	    if (groupList.isEmpty())
