@@ -1,4 +1,17 @@
+/**
+ * To show the dates or time in words of time-ago plugin.
+ * @param element
+ */
+function includeTimeAgo(element){
+	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+			{
+				$("time", element).timeago();
+			});
+}
 
+/**
+ * To fill the tasklist ordered by default 
+ */
 function initOwnerslist() {
 	
 	// Click events to agents dropdown and department
@@ -43,14 +56,17 @@ function updateData(params) {
 		this.App_Calendar.allTasksListView = new Base_Collection_View({
 		url : '/core/api/tasks/based' + params,
 		restKey : "task",
+		sortKey :'due',
 		templateKey : "tasks-list",
 		cursor : true, page_size : 25,
 		individual_tag_name : 'tr',
 		postRenderCallback : function(el) {
 			$('.tasks-count').html(getCount(this.App_Calendar.allTasksListView.collection.toJSON()));
-			head.js(LIB_PATH + 'lib/jquery.timeago.js', function() {
-				$(".task-due-time", el).timeago();
-			});
+			includeTimeAgo(el);
+		},
+		appendItemCallback : function(el)
+		{
+			includeTimeAgo(el);
 		}
 
 	});

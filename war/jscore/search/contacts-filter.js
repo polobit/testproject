@@ -28,8 +28,9 @@ $(function()
 	CUSTOM_FIELDS = undefined;
 	
 	// Filter Contacts- Clone Multiple
-	$("i.filter-contacts-multiple-add").die().live('click', function(e)
+	$(".filter-contacts-multiple-add").die().live('click', function(e)
 	{
+		e.preventDefault();
 		// To solve chaining issue when cloned
 		var htmlContent = $(getTemplate("filter-contacts", {})).find('tr').clone();
 		
@@ -37,10 +38,10 @@ $(function()
 
 		chainFilters(htmlContent);
 
-		$(this).hide();
+//		$(this).hide();
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
-		$(this).parents("tbody").append(htmlContent);
+		$(this).siblings("table").find("tbody").append(htmlContent);
 	});
 	
 	

@@ -1,19 +1,22 @@
 <script id="import-google-calendar-template" type="text/html">
-	<div class="well widget-add" style="width:220px; height:220px;">
+	<div class="well widget-add" style="width:220px; height:270px;">
     <img class="thumbnail" src="/img/icons/google-calendar-sync.png" style="width:210px; height:70px;" />
 	<br />
-   <div style="height: 80px !important;"margin-bottom: 20px;">
+   <div style="height: 120px !important;"margin-bottom: 20px;">
 {{#if id}}
 	You have successfully associated your Google Calendar with Agile. Your events will be popped up automatically in the <a href="#calendar">calendar</a>.
 {{else}}
 		By enabling access to your Google Calendar, we'll automatically sync your events in your Google Calendar with Agile <a href="#calendar">calendar</a>.
 {{/if}}
+<br/>
+<div>You can also <a href="#icalModal" data-toggle="modal" id="subscribe-ical" >setup Agile calendar inside Google</a></div> 
+<br/>
 	</div>
     <div style="margin-top:15px">
 			{{#if id}}
     			<a class="btn btn-danger" id="sync-google-calendar-delete">Disable</a>
     		{{else}}
-    				<a class="btn" id="sync-google-calendar">Setup</a>
+    				<a class="btn" id="sync-google-calendar">Enable</a>
     		{{/if}}
 	</div>
 </div>

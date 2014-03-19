@@ -77,11 +77,11 @@ function getTemplate(templateName, context, download)
 	{
 		templateHTML = downloadSynchronously("tpl/min/admin.js");
 	}
-	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("contact-company") == 0)
+	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/contact-detail.js");
 	}
-	if (templateName.indexOf("contact-filter") == 0)
+	if (templateName.indexOf("contact-filter") == 0 || templateName.indexOf("filter-contacts") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/contact-filter.js");
 	}

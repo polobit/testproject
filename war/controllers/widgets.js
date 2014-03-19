@@ -392,7 +392,7 @@ var WidgetsRouter = Backbone.Router.extend({
 		$('.contact-sync-tab').addClass('active');
 		// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 
-		this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
+		this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 
 		// Adds header
 		$('#prefs-tabs-content').html(
@@ -431,7 +431,7 @@ var WidgetsRouter = Backbone.Router.extend({
 		$('#PrefsTab .active').removeClass('active');
 		$('.contact-sync-tab').addClass('active');
 
-		var options = { url : "core/api/contactprefs/GOOGLE", template : "import-google-contacts-setup", postRenderCallback : function(el)
+		var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup", postRenderCallback : function(el)
 		{
 			console.log(el);
 			// App_Settings.setup_google_contacts.model =

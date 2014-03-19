@@ -28,10 +28,8 @@ var DealsRouter = Backbone.Router.extend({
 			this.opportunityMilestoneCollectionView = new Base_Collection_View({ url : url, templateKey : template_key,
 				individual_tag_name : individual_tag_name, postRenderCallback : function(el)
 				{
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-					{
-						$(".deal-close-time", el).timeago();
-					});
+					// To show timeago for close date
+					includeTimeAgo(el);
 
 					$('#opportunities-by-milestones-model-list > div').addClass("milestone-main");
 					// $('.milestone-main
@@ -54,16 +52,20 @@ var DealsRouter = Backbone.Router.extend({
 		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',
 			postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-				{
-					$(".deal-close-time", el).timeago();
-				});
+				// Showing time ago plugin for close date
+				includeTimeAgo(el);
 				// Shows Milestones Pie
 				pieMilestones();
 
 				// Shows deals chart
 				dealsLineChart();
-			} });
+			},
+			appendItemCallback : function(el)
+			{ 
+				// To show timeago for models appended by infini scroll
+				includeTimeAgo(el);
+			}
+			});
 		this.opportunityCollectionView.collection.fetch();
 
 		// Shows deals as list view
