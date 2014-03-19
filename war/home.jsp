@@ -164,7 +164,9 @@
 	if(HANDLEBARS_PRECOMPILATION)
 		head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/precompiled/tpl.js");
 	else
-		head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
+		head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js");
+	
+	// head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
 	
 	<!-- Country Names from country codes -->
 	head.js(LIB_PATH + 'lib/country-from-code.js');
@@ -183,6 +185,8 @@
 			
 			if(HANDLEBARS_PRECOMPILATION)
 				downloadSynchronously("tpl/min/precompiled/tpl.html");
+			else
+				downloadSynchronously("tpl/min/tpl.js");
 			
 			// Load User voice then
 			setTimeout(function(){head.js('lib/user-voice.js');}, 20000);	
