@@ -174,24 +174,30 @@ function fill_subscribers_slate(id, type)
 {
 	var SUBSCRIBERS_PAD_CONTENT = {
 		    "active-subscribers": {
-		        "title": "You do not have any active subscriber currently.",
-		        "description": " Active subscribers are the contacts in the added campaign queue.",
+		        "title": "Campaign does not have any active subscriber",
+		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
+		        "button_text" : "Add subscribers",
+				"route" : "#contacts",
 		        "image": "/img/clipboard.png"
 		    },
 		    "completed-subscribers": {
-		        "title": "You do not have any completed subscriber currently.",
-		        "description": "Completed subscribers are the contacts completed in the added campaign queue.",
+		        "title": "No contact assigned to this campaign",
+		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
+		        "button_text" : "Add subscribers",
+				"route" : "#contacts",
 		        "image": "/img/clipboard.png"
 		    },
 		    "removed-subscribers": {
-		        "title": "You do not have any removed subscriber currently.",
-		        "description": "Removed subscribers are the contacts deleted from the active campaign.",
+		        "title": "No contact removed from this campaign",
+		        "description": "Removed subscribers are the contacts deleted from the active campaign",
 		        "image": "/img/clipboard.png"
 		    },
 		    "all-subscribers": {
-		        "title": "You do not have any subscriber currently.",
-		        "description": "Subscribers are the contacts added to the campaign.",
-		        "image": "/img/clipboard.png"
+		        "title": "No current or past subscribers for this campaign",
+		        "description": "You can add subscribers from Contacts tab - using the Bulk Actions option",
+		        "button_text" : "Add subscribers",
+				"route" : "#contacts",
+				"image": "/img/clipboard.png"
 		    }
 		}
 
