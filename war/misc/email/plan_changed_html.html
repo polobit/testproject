@@ -41,7 +41,8 @@
 		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">Your Agile CRM plan has changed</h2>
 				 </td>
 				<td width="170" valign="bottom" align="right">
-				<img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" width="150" alt="AgileCRM" style="display:block"></img>
+				
+			<img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" width="150" alt="AgileCRM" style="display:block"></img>
 				</td>
 			   </tr>
 			  </tbody>
@@ -70,11 +71,11 @@
         We would like to notify you of a change in your Agile CRM Subscription. You have either changed the subscription or this change has been done as per your request to our support team.<br/>
 <br/>
 <b>Plan Details</b><br/>
-         Old Plan : {{Event.data.previousAttributes.plan.name}}  ({{Event.data.previousAttributes.quantity}} users),<br/>
+         Old Plan : {{#Event.data.previousAttributes.plan.name}}{{Event.data.previousAttributes.plan.name}} {{/Event.data.previousAttributes.plan.name}} {{^Event.data.previousAttributes.plan.name}} {{Event.data.object.plan.name}} {{/Event.data.previousAttributes.plan.name}} ({{Event.data.previousAttributes.quantity}} {{^Event.data.previousAttributes.quantity}} {{Event.data.object.quantity}} {{/Event.data.previousAttributes.quantity}} users),<br/>
          New Plan : {{Event.data.object.plan.name}}  ({{Event.data.object.quantity}} users)<br/>
 <br/>
 <b>Have questions or need help?</b><br/>
-Drop us an <a  href="mailto:care@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
+Drop us an <a  href="mailto:billing@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
 <br/>
 Thanks for being a valued customer.
 <br/>

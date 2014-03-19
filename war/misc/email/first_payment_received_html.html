@@ -28,7 +28,8 @@
 												<td width="388" valign="bottom">
 							<h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px">Payment Received</h2>
 												</td>
-											    <td width="170" valign="bottom" align="right"><img src="https://agilecrm.s3.amazonaws.com/email/agilecrm-logo.jpg" width="150" alt="AgileCRM" style="display:block">
+												
+											    <td width="170" valign="bottom" align="right"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" width="150" alt="AgileCRM" style="display:block">
 											    </td>
 										    </tr>
 									    </tbody>
@@ -61,8 +62,10 @@
                  <br/>
          <b>Payment Details</b><br/>
          {{#Event.data.object.lines.data}}
-         	Plan Type: {{plan.name}}<br/>
-         	Number of Users: {{quantity}}<br/>
+         	{{#plan.name}}
+         		Plan: {{plan.name}}<br/>
+         		Number of Users: {{quantity}}<br/>
+         	{{/plan.name}}
          {{/Event.data.object.lines.data}}
          
          Credit card on File (last four): {{Customer.activeCard.last4}}<br/>
