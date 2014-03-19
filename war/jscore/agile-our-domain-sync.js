@@ -141,7 +141,7 @@ function our_domain_sync()
 
 		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
-		//initWebrules();
+		initWebrules();
 		
 		get_contact_from_our_domain(function(data){
 			// Shows noty
@@ -286,6 +286,6 @@ function checkTagAgile(tag)
 var GLOBAL_WEBRULE_FLAG;
 function initWebrules()
 {
-	//	_agile_execute_web_rules();
-		//GLOBAL_WEBRULE_FLAG = true;
+		_agile_execute_web_rules();
+		GLOBAL_WEBRULE_FLAG = true;
 }
