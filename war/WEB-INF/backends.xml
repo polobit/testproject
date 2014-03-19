@@ -1,6 +1,6 @@
 <backends>
  <backend name="b1">
-   <class>B1</class>
+   <class>B2</class>
    <instances>1</instances>
    <options>
      <dynamic>true</dynamic>

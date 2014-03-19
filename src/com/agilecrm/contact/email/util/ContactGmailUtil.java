@@ -40,7 +40,7 @@ public class ContactGmailUtil
 
 	if (gmailPrefs.expires_at > 0l && gmailPrefs.expires_at <= System.currentTimeMillis())
 	{
-	    gmailPrefs.token = GoogleServiceUtil.refreshTokenInGoogle(gmailPrefs.refresh_token);
+	    resetAccessToken(gmailPrefs);
 	}
 
 	return ContactGmailUtil.getGmailURLForPrefs(gmailPrefs, searchEmail, offset, count);
@@ -116,5 +116,4 @@ public class ContactGmailUtil
 		+ URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret) + "&oauth_key=" + URLEncoder.encode(oauth_key)
 		+ "&oauth_secret=" + URLEncoder.encode(oauth_secret);
     }
-
 }

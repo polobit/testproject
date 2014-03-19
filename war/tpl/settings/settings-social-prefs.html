@@ -5,11 +5,16 @@
     	<legend>Google Mail/Apps</legend>
     	{{#if picture}}
     		<i class="media-grid">
-    		<img class="thumbnail" src="{{picture}}" width="75px" height="75px" /> </a>
+			{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
+					<img class="thumbnail" src="{{emailGravatarurl 75 email}}" width="75px" height="75px" /> </a>
+				{{else}}
+    				<img class="thumbnail" src="{{picture}}" width="75px" height="75px" /> </a>
+			{{/if_equals}}
     		</i>
+		
     	{{else}}
     		<i class="media-grid">
-    		<img class="thumbnail" src="{{emailGravatarurl 50 email}}" width="50px" height="50px" /> </a>
+    		<img class="thumbnail" src="{{emailGravatarurl 50 email}}" width="75px" height="75px" /> </a>
     		</i>
     	{{/if}}
     	

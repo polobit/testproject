@@ -179,7 +179,7 @@ public class LoginServlet extends HttpServlet
 	if (!subdomain.equalsIgnoreCase(domainUser.domain))
 	    if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 		throw new Exception("User with same email address is registered in " + domainUser.domain + " domain. <a href=https://" + domainUser.domain
-			+ ".agilecrm.com> Click here</a> to login");
+			+ ".agilecrm.com> Click here</a> to login.");
 
 	// Set Cookie and forward to /home
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, domainUser.name);
