@@ -324,10 +324,15 @@ function validate_insertion(models, timelineViewMore){
 				var month_years = [];
 				$.each(models, function(index, model){
 					var month_year = entity_created_month_year(model);
-									
-					if (month_years.indexOf(month_year) < 0 && MONTH_YEARS.indexOf(month_year) < 0){
+									console.log(month_year);
+					//if(!MONTH_YEARS)
+						//MONTH_YEARS = [];
+					if (month_years.length == 0 || month_years.indexOf(month_year) < 0 && MONTH_YEARS.indexOf(month_year) < 0){
 						month_years[month_years.length] = month_year;
-						MONTH_YEARS[MONTH_YEARS.length] = month_year;
+						//if(MONTH_YEARS)
+						if(!MONTH_YEARS)
+							MONTH_YEARS = [];
+							MONTH_YEARS[MONTH_YEARS.length] = month_year;
 					}	
 					var newItem = $(getTemplate("timeline", model));
 					newItem.find('.inner').append('<a href="#" class="open-close"></a>');
@@ -384,6 +389,7 @@ function getTimestamp(month_index, year){
  * @returns {String}
  */
 function entity_created_month_year(model){
+	console.log(model);
 	if(model.created_time)
 		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
 	if(model.createdTime)
