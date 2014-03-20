@@ -233,7 +233,7 @@ function add_tag_our_domain(tag, callback)
 	{
 		if (callback && typeof (callback) === "function")
 		{
-			callback(data);
+			callback(Agile_Contact);
 		}
 		return;
 	}
