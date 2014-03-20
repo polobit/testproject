@@ -150,7 +150,7 @@ function our_domain_sync()
 		
 		// Sets different cookie if user logs into different domain
 		if(!domain || domain != CURRENT_DOMAIN_USER["domain"])
-			createCookie(DOMAIN_COOKIE_FOR_WEBSITE, CURRENT_DOMAIN_USER["domain"]);
+			createCookieInAllAgileSubdomains(DOMAIN_COOKIE_FOR_WEBSITE, CURRENT_DOMAIN_USER["domain"]);
 		
 		get_contact_from_our_domain(function(data){
 			// Shows noty
