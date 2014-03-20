@@ -13,7 +13,7 @@ $(function()
 
 		
 		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
+		var callbackURL = window.location.href + "/contacts";
 		console.log(callbackURL);
 
 		// For every request of import, it will ask to grant access
