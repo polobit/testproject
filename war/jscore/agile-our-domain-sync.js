@@ -8,7 +8,7 @@ var CODE_SETUP_TAG = "Code setup";
 var IMPORT_TAG = "Import";
 var SOCIAL_TAG = "Social";
 var WIDGET_TAG = "Widgets";
-var DOMAIN_COOKIE_FOR_WEBSITE = "_agile_domain"
+var DOMAIN_COOKIE_FOR_WEBSITE = "_agile_login_domain"
 	
 // Subject for account cancellation note
 var ACCOUNT_CANCELED_NOTE_SUBJECT = "Account Canceled";
