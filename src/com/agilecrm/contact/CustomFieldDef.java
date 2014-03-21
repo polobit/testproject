@@ -1,6 +1,10 @@
 package com.agilecrm.contact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -73,10 +77,10 @@ public class CustomFieldDef
      */
     public enum SCOPE
     {
-	PERSON_COMPANY, PERSON, COMPANY, DEAL
+	PERSON_COMPANY, PERSON, COMPANY, DEAL, CASE
     };
 
-    public SCOPE scope = SCOPE.PERSON;
+    public List<SCOPE> scopes = new ArrayList<>();
 
     // Dao
     public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
@@ -139,6 +143,13 @@ public class CustomFieldDef
     public void delete()
     {
 	dao.delete(this);
+    }
+
+    @PostLoad
+    private void postLoad()
+    {
+	if (scopes.isEmpty())
+	    scopes.add(SCOPE.PERSON);
     }
 
     @Override
