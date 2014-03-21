@@ -1,7 +1,7 @@
 /**
  * On i_new_call event of sip stack, New session is created and noty displyed.
  */
-function newCall(e)
+function newIncomingCall(e)
 {
 	// Session for call is already created.
 	if (Sip_Session_Call != null)
