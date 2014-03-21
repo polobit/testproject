@@ -36,9 +36,20 @@ function serializeForm(form_id) {
 			"value" : new Date(this.value).getTime() / 1000
 		};
 	}).get());
+	
+	arr = arr.concat($('#' + form_id + ' select.multi-select').map(function() {
+		console.log($(this).val());
+		return {
+			"name" : this.name,
+			"value" : $(this).val()
+		};
+	}).get());
+	console.log(arr);
+	
 
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
+
 
 	/*
 	 * Multiple select, If field is of type muti select then this returns set of

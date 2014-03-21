@@ -75,12 +75,13 @@
         <div class="data-block">
             <div class="data-container">
                 <table class="table table-bordered showCheckboxes agile-ellipsis-dynamic" url="core/api/custom-fields/bulk">
-				<colgroup><col width="30px"><col width="35%"><col width="35%"><col width="30%"></colgroup>
+				<colgroup><col width="30px"><col width="20%"><col width="20%"><col width="20%"><col width="35%"></colgroup>
                     <thead>
                         <tr>
                             <th>Field Label</th>
                             <th>Field Description</th>
                             <th>Field Type</th>
+							<th>Scope</th>
                         </tr>
                     </thead>
                     <tbody id="admin-settings-customfields-model-list">
@@ -118,5 +119,6 @@
     <td><div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">{{field_label}}</div> </td>
     <td><div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">{{field_description}}</div> </td>
     <td>{{field_type}}</td>
+	<td>{{scopes}}</td>
     <br/>
 </script>

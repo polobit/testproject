@@ -82,16 +82,17 @@ $(function()
 	 * When user clicks on add-widget, gets the widget-name which is set to add
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
-	 *//*
+	 */
 	$('.add-widget').live('click', function(e)
 	{
 
+		e.preventDefault();
 		console.log($(this));
 		
-		 * We make add button on a widget disabled on click of it. This is done
+		/* We make add button on a widget disabled on click of it. This is done
 		 * to avoid continuous click in a short time, like double click on add
 		 * button
-		 
+		 */
 		if ($(this).attr("disabled"))
 			return;
 
@@ -108,15 +109,15 @@ $(function()
 			return;
 
 		
-		 * Get widget model from collection based on the name attribute of the
+		 /* Get widget model from collection based on the name attribute of the
 		 * widget model
-		 
+		 */
 		var models = Catalog_Widgets_View.collection.where({ name : widget_name });
 
 		
-		 * Saves widget model and on success navigate back to contact detailed
+		 /* Saves widget model and on success navigate back to contact detailed
 		 * view
-		 
+		 */
 		var widgetModel = new Backbone.Model();
 
 		console.log(widgetModel);
@@ -136,7 +137,7 @@ $(function()
 
 		} });
 
-	});*/
+	});
 
 	// Deleting widget
 	/**
