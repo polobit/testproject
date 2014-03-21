@@ -4,8 +4,7 @@
  * Callback function for SIP Stack or Events Listener for sip stack
  */
 function sipStackEventsListener(e /* SIPml.Stack.Event */)
-{
-	console.log("In sipStack event Listner.");
+{	
 	console.log(e.type);
 	console.log(e.description);
 
@@ -43,7 +42,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
 	case 'i_new_call':
 	{
 		// Incoming call.
-		newCall(e);
+		newIncomingCall(e);
 		break;
 	}
 	case 'starting':
@@ -82,8 +81,7 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
  * Callback function for SIP sessions (INVITE, REGISTER, MESSAGE...)
  */
 function sipSessionEventsListener(e /* SIPml.Session.Event */)
-{
-	console.log("In sip Session event Listner.");
+{	
 	console.log(e.type);
 	console.log(e.description);
 
@@ -102,8 +100,6 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 	{
 		if (e.session == Sip_Register_Session)
 		{
-			message = "You can make and receive calls with SIP.";
-
 			// Play sound on sip register.
 			play_sound();
 
@@ -288,7 +284,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 	}
 	default:
 	{
-		console.log("In sip Session event Listner. " + e.type);
+		console.log("Sip Session event Listner. " + e.type);
 		break;
 	}
 	}

@@ -5,16 +5,14 @@
  * adding sip widget / updating sip widget / re-login user.
  */
 function sipStart()
-{
-	console.log("In sipStart.");
+{	
 	console.log(Sip_Start);
 	console.log(Sip_Stack);
 	console.log(Sip_Register_Session);
 
 	// After 15 sec procedure will start.
 	setTimeout(function()
-	{
-		console.log("hi farah.");
+	{		
 		// after DOM ready.
 		if (document.readyState === "complete")
 		{	

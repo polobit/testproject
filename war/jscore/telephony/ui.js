@@ -10,8 +10,6 @@ $(function()
 	{
 		e.preventDefault();
 
-		console.log($('.noty_message').find('.dialpad_btns').html());
-
 		// If noty do not have dialpad then add
 		if ($('.noty_message').find('.dialpad_btns').html() == null)
 		{
