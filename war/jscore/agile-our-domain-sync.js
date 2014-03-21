@@ -30,7 +30,7 @@ function add_custom_fields_to_our_domain()
 		// Add custom property to contact
 		_agile.add_property(create_contact_custom_field("Domain", CURRENT_DOMAIN_USER["domain"], "CUSTOM"), function(data)
 		{
-			add_tag_our_domain(SIGN_UP, function(){
+			add_tag_our_domain(SIGN_UP, function() {
 				add_current_loggedin_time();
 			})
 		
@@ -38,8 +38,9 @@ function add_custom_fields_to_our_domain()
 		return;
 	}
 
-	// Adds current loggedin time
-	add_current_loggedin_time();
+	add_tag_our_domain(SIGN_UP, function() {
+		add_current_loggedin_time();
+	})
 }
 
 /**
@@ -141,14 +142,16 @@ function our_domain_sync()
 
 		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
-		//initWebrules();
+		initWebrules();
 		
 		get_contact_from_our_domain(function(data){
 			// Shows noty
-			set_profile_noty();
+		//	set_profile_noty();
+			Agile_Contact = data;
 			
 			// Adds signup tag, if it is not added previously.
-			add_signup_tag();
+			//set_profile_noty();
+			add_custom_fields_to_our_domain();
 			
 		}, function(data){
 			var name = CURRENT_DOMAIN_USER['name'];
@@ -230,7 +233,7 @@ function add_tag_our_domain(tag, callback)
 	{
 		if (callback && typeof (callback) === "function")
 		{
-			callback(data);
+			callback(Agile_Contact);
 		}
 		return;
 	}
@@ -286,6 +289,6 @@ function checkTagAgile(tag)
 var GLOBAL_WEBRULE_FLAG;
 function initWebrules()
 {
-	//	_agile_execute_web_rules();
-		//GLOBAL_WEBRULE_FLAG = true;
+		_agile_execute_web_rules();
+		GLOBAL_WEBRULE_FLAG = true;
 }

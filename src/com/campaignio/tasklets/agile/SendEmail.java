@@ -222,8 +222,11 @@ public class SendEmail extends TaskletAdapter
 			+ " as it is Unsubscribed from All.");
 
 		// Add log
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-			"Email sending skipped for this contact as it is unsubscribed.", LogType.UNSUBSCRIBED.toString());
+		LogUtil.addLogToSQL(
+			AgileTaskletUtil.getId(campaignJSON),
+			AgileTaskletUtil.getId(subscriberJSON),
+			"Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT), LogType.UNSUBSCRIBED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);

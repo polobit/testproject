@@ -13,7 +13,7 @@ $(function()
 
 		
 		// URL to return, after fetching token and secret key from LinkedIn
-		var callbackURL = window.location.href;
+		var callbackURL = window.location.href + "/contacts";
 		console.log(callbackURL);
 
 		// For every request of import, it will ask to grant access
@@ -105,7 +105,7 @@ $(function()
 				
 		$(this).attr("disabled", "disabled");
 		
-	
+//	return;
 		
 		App_Widgets.setup_google_contacts.model.set(serializeForm("google-contacts-import-form"));
 		console.log(App_Widgets.setup_google_contacts.model.toJSON())
@@ -113,12 +113,29 @@ $(function()
 
 		$(this).after(LOADING_HTML);
 		App_Widgets.setup_google_contacts.model.url = url + "?sync=true"
-		App_Widgets.setup_google_contacts.model.save({success : function(data){
+		App_Widgets.setup_google_contacts.model.save({}, {success : function(data){
+		
 			App_Widgets.setup_google_contacts.render(true);
-			App_Widgets.setup_google_contacts.model.url = url;
-			showNotyPopUp("information", "Contacts sync started", "top", 1000);
+			App_Widgets.setup_google_contacts.model.url = url;	
+				show_success_message_after_save_button("Sync Initated", App_Widgets.setup_google_contacts.el);
+				showNotyPopUp("information", "Contacts sync initated", "top", 1000);
 			}});
 		
 	})
-
+	
 });
+
+function show_success_message_after_save_button(message, el)
+{
+	
+	/*
+	 * Appends success message to form
+	 * actions block in form, if window
+	 * option is not set for view
+	 *
+	 */
+	$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px" class="text-success"><i>'+message+'</i></p></small></div>');
+	$(".form-actions", el).append($save_info);
+	$save_info.show().delay(3000).hide(1);	
+		
+}

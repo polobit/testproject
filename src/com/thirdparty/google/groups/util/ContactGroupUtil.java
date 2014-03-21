@@ -216,10 +216,13 @@ public class ContactGroupUtil
 
 	    String url = GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full/" + URLEncoder.encode(atomId);
 	    URL groupUrl = new URL(atomId);
+
 	    ContactsService service = GoogleServiceUtil.getService(prefs.apiKey);
-	    System.out.println(groupUrl);
-	    service.delete(groupUrl);
-	    System.out.println("deleted");
+	    ContactGroupEntry group = service.getEntry(groupUrl, ContactGroupEntry.class);
+	    System.out.println(group);
+	    ContactGroupEntry group1 = service.getEntry(new URL(url), ContactGroupEntry.class);
+	    System.out.println(group1);
+	    group.delete();
 	}
 	catch (Exception e)
 	{

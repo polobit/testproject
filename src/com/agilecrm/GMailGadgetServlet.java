@@ -77,9 +77,10 @@ public class GMailGadgetServlet extends HttpServlet
 	result.put("email", domainUser.email);
 
 	// Setup API Key
+	System.out.println(result.toString());
 	resp.getWriter().println(result.toString());
 
-	return false;
+	return true;
     }
 
     /**

@@ -615,9 +615,9 @@ function agile_crm_add_event_to_timeline(name, title, body, time)
 	model["title"] = title;
 	
 	if (time && (time / 100000000000) > 1)
-		model["time"] = time;
+		model["created_time"] = time;
 	else
-		model["time"] = time;
+		model["created_time"] = time;
 	
 	model["entity_type"] = "custom";
 	

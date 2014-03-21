@@ -1,6 +1,10 @@
 package com.agilecrm.contact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -73,12 +77,13 @@ public class CustomFieldDef
      */
     public enum SCOPE
     {
-	PERSON_COMPANY, PERSON, COMPANY, DEAL
+	PERSON_COMPANY, PERSON, COMPANY, DEAL, CASE
     };
 
+    public List<SCOPE> scopes = new ArrayList<>();
+
     // Dao
-    public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
-	    CustomFieldDef.class);
+    public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
 
     /**
      * Default constructor
@@ -103,8 +108,7 @@ public class CustomFieldDef
      * @param is_required
      *            required status of the custom field
      */
-    public CustomFieldDef(Type fieldType, String fieldLabel, String fieldDescription, String fieldData,
-	    boolean is_required)
+    public CustomFieldDef(Type fieldType, String fieldLabel, String fieldDescription, String fieldData, boolean is_required)
     {
 	this.field_data = fieldData;
 	this.field_description = fieldDescription;
@@ -141,11 +145,17 @@ public class CustomFieldDef
 	dao.delete(this);
     }
 
+    @PostLoad
+    private void postLoad()
+    {
+	if (scopes.isEmpty())
+	    scopes.add(SCOPE.PERSON);
+    }
+
     @Override
     public String toString()
     {
-	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type + ", field_label: " + field_label
-		+ ", field_description: " + field_description + ", field_data: " + field_data + "is_required :"
-		+ is_required + "searchable" + searchable + "}";
+	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type + ", field_label: " + field_label + ", field_description: " + field_description
+		+ ", field_data: " + field_data + "is_required :" + is_required + "searchable" + searchable + "}";
     }
 }

@@ -30,18 +30,24 @@ function getTemplate(templateName, context, download)
 		Handlebars_Compiled_Templates = {};
 
 	// Check if source is available in body
-	var source = $('#' + templateName + "-template").html();
-	if (source)
+	if(HANDLEBARS_PRECOMPILATION)
 	{
-
-		var template = Handlebars.compile(source);
-
-		// Store it in template
-		Handlebars_Compiled_Templates[templateName] = template;
-
-		// de("template");
-		return template(context);
+		var template = Handlebars.templates[templateName + "-template"];
+		if (template) {
+			// console.log("Template " + templateName + " found");
+			return template(context);
+		}	
 	}
+	else
+		{
+			var source = $('#' + templateName + "-template").html();
+			if (source)
+			{
+				var template = Handlebars.compile(source);
+				Handlebars_Compiled_Templates[templateName] = template;
+				return template(context);
+			}
+		}
 
 	// Check if the download is explicitly set to no
 	if (download == 'no')
@@ -80,6 +86,8 @@ function getTemplate(templateName, context, download)
 	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/contact-detail.js");
+		if(HANDLEBARS_PRECOMPILATION)
+			downloadSynchronously("tpl/min/precompiled/contact-detail.html");
 	}
 	if (templateName.indexOf("contact-filter") == 0 || templateName.indexOf("filter-contacts") == 0)
 	{
@@ -124,15 +132,16 @@ function getTemplate(templateName, context, download)
 	if (templateName.indexOf("socialsuite") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/socialsuite.js");
-	}
-	if (templateHTML)
-	{
-		// console.log("Adding " + templateHTML);
-		$('body').append($(templateHTML));
+		if(HANDLEBARS_PRECOMPILATION)
+			downloadSynchronously("tpl/min/precompiled/socialsuite.html");
 	}
 
 	return getTemplate(templateName, context, 'no');
 }
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
 
 /**
  * Downloads the template synchronously (stops other browsing actions) from the
@@ -143,15 +152,27 @@ function getTemplate(templateName, context, download)
  * @returns down-loaded template content
  */
 function downloadSynchronously(url)
-{
-
-	var urlContent;
-	jQuery.ajax({ url : url, dataType : 'html', success : function(result)
-	{
-		urlContent = result;
+{	
+	var dataType = 'html';
+	
+	// If JS
+	if(url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
+		dataType = 'script';
+	
+	// If Precompiled is enabled, we change the directory to precompiled
+	if(HANDLEBARS_PRECOMPILATION && url.indexOf("precompiled") == -1)
+		url = url.replace("tpl/min", "tpl/min/precompiled");
+	
+	console.log(url + " " + dataType);
+	
+	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
+	{	
+		// If HTMl, add to body
+		if(dataType == 'html')
+			$('body').append((result));
 	}, async : false });
 
-	return urlContent;
+	return "";
 }
 
 /**

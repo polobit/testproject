@@ -15,12 +15,10 @@
 <head>
 <meta charset="utf-8">
 <title>Agile CRM Dashboard</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0 maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<meta name="globalsign-domain-verification"
-	content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
+<meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
 
 <%
     //Check if it is being access directly and not through servlet
@@ -101,16 +99,18 @@
 		<div class='notifications bottom-right'></div>
 
 		<div id='templates'></div>
-		<script type="text/javascript">
-			var tpl;	
-		
-			if (window.XMLHttpRequest)tpl=new XMLHttpRequest(); //for IE 6 & earlier
-			else tpl=new ActiveXObject("Microsoft.XMLHTTP");     //for chrome & newer IEs
-
-			tpl.open("GET","tpl/min/tpl.js",false);              //script load from browser
-			tpl.send();
-			document.getElementById('templates').innerHTML=tpl.responseText;   //insert in dummy div
-		</script>
+		<!-- <script type="text/javascript">
+			function loadTpl()
+			{
+				var tpl;	
+				if (window.XMLHttpRequest)tpl=new XMLHttpRequest(); //for IE 6 & earlier
+				else tpl=new ActiveXObject("Microsoft.XMLHTTP");     //for chrome & newer IEs
+	
+				tpl.open("GET","tpl/min/tpl.js",false);              //script load from browser
+				tpl.send();
+				document.getElementById('templates').innerHTML=tpl.responseText;   //insert in dummy div
+			}
+		</script>-->
 
 		<!-- Templates 
 	Use = [<]%@ include file="tpl/min/tpl.js" %[>]	-->
@@ -133,6 +133,7 @@
 	<script>
 	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	//var LIB_PATH = "/";
+	var HANDLEBARS_PRECOMPILATION = false;
 	
 	var CSS_PATH = "/";
 	//var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -159,10 +160,17 @@
 	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
 	
 	<!-- Handle bars -->
-	head.js(LIB_PATH + 'lib/handlebars-1.0.0.beta.6-min.js');
+	
+	if(HANDLEBARS_PRECOMPILATION)
+		head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/precompiled/tpl.js");
+	else
+		head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js");
+	
+	// head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
 	
 	<!-- Country Names from country codes -->
 	head.js(LIB_PATH + 'lib/country-from-code.js');
+	
 	
 	// Fetch/Create contact from our domain
 	var Agile_Contact = {};
@@ -174,7 +182,12 @@
 		$("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif"); 
 		
 		head.js('jscore/min/js-all-min.js', 'stats/min/agile-min.js', function() {
-
+			
+			if(HANDLEBARS_PRECOMPILATION)
+				downloadSynchronously("tpl/min/precompiled/tpl.html");
+			else
+				downloadSynchronously("tpl/min/tpl.js");
+			
 			// Load User voice then
 			setTimeout(function(){head.js('lib/user-voice.js');}, 20000);	
 		}); 
