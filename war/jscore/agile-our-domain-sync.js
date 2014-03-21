@@ -8,6 +8,7 @@ var CODE_SETUP_TAG = "Code setup";
 var IMPORT_TAG = "Import";
 var SOCIAL_TAG = "Social";
 var WIDGET_TAG = "Widgets";
+var DOMAIN_COOKIE_FOR_WEBSITE = "_agile_login_domain"
 	
 // Subject for account cancellation note
 var ACCOUNT_CANCELED_NOTE_SUBJECT = "Account Canceled";
@@ -143,6 +144,13 @@ function our_domain_sync()
 		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
 		initWebrules();
+		
+		
+		var domain = readCookie(DOMAIN_COOKIE_FOR_WEBSITE);
+		
+		// Sets different cookie if user logs into different domain
+		if(!domain || domain != CURRENT_DOMAIN_USER["domain"])
+			createCookieInAllAgileSubdomains(DOMAIN_COOKIE_FOR_WEBSITE, CURRENT_DOMAIN_USER["domain"]);
 		
 		get_contact_from_our_domain(function(data){
 			// Shows noty
