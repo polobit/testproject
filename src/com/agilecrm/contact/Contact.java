@@ -31,6 +31,7 @@ import com.agilecrm.social.linkedin.LinkedInUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
@@ -871,7 +872,7 @@ public class Contact extends Cursor
      * -- store only id of company, ignore name ( the company may be edited
      * somewhere else )
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({ "unused", "unchecked" })
     @PrePersist
     private void PrePersist()
     {
@@ -961,11 +962,28 @@ public class Contact extends Cursor
 
 	tags = getContactTags();
 
-	// Update Tags - Create a deferred task
-	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(getContactTags());
+	Set<String> cacheTags = null;
 
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	try
+	{
+	    cacheTags = (LinkedHashSet<String>) CacheUtil.getCache(NamespaceManager.get() + "-" + "tags");
+
+	    System.out.println("Cache tags obtained " + cacheTags);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting tags from cache... " + e.getMessage());
+	}
+
+	if (cacheTags == null || !cacheTags.containsAll(tags))
+	{
+	    // Update Tags - Create a deferred task
+	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
+
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	}
 
     }
 

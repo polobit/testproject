@@ -75,7 +75,7 @@ public class MandrillUtil
 	String subaccount = NamespaceManager.get();
 	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to, subject, replyTo, html, text);
 
-	PullQueueUtil.addToPullQueue("email-pull-queue", mandrillDeferredTask, fromEmail);
+	PullQueueUtil.addToPullQueue("sb-email-pull-queue", mandrillDeferredTask, fromEmail);
     }
 
     /**

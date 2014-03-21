@@ -43,16 +43,31 @@ public class TagUtil
      */
     public static void updateTags(Set<String> tags)
     {
+
+	try
+	{
+	    // Add tags to cache to compare
+	    CacheUtil.setCache(NamespaceManager.get() + "-" + "tags", tags);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while setting tags in cache... " + e.getMessage());
+	}
+
 	// Add to tags Library
 	for (String tagName : tags)
 	{
+
 	    // Checks for empty or null or whitespace(\s*) tag.
 	    if (StringUtils.isBlank(tagName))
 		continue;
 
 	    // Check if already present
 	    int count = getTagsCount(tagName);
-	    System.out.println("tags count :" + count);
+
+	    System.out.println("Tags count in TagUtil :" + count);
+
 	    if (count == 0)
 	    {
 		// Add tag to db
@@ -249,4 +264,5 @@ public class TagUtil
 	return result.toString();
 
     }
+
 }

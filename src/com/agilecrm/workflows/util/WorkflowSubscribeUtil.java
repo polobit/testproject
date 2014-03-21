@@ -85,7 +85,7 @@ public class WorkflowSubscribeUtil
 	{
 	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString(),
 		    namespace);
-	    PullQueueUtil.addToPullQueue("campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
+	    PullQueueUtil.addToPullQueue("sb-campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
 	}
 	catch (Exception e)
 	{
