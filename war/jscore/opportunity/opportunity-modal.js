@@ -19,6 +19,9 @@ $(function(){
     	var form_id = $(this).closest('.opportunity-modal').find('form').attr("id");
     	
        	var json = serializeForm(form_id);
+       	json["custom_data"] = serialize_custom_fields(form_id);
+       	
+       	console.log(json);
        	if(form_id == "opportunityForm")
        		saveDeal(form_id, modal_id, this, json, false);
        	else
@@ -32,7 +35,7 @@ $(function(){
 
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
-		
+
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
 	});
@@ -185,6 +188,13 @@ function updateDeal(ele) {
 		}
 		$("#milestone", dealForm).closest('div').find('.loading-img').hide();
 	});
+	
+	add_custom_fields_to_form(value, function(data){
+		var el = show_custom_fields_helper(data["custom_fields"], []);
+	//	if(!value["custom_data"])  value["custom_data"] = [];
+		$("#custom-field-deals", dealForm).html(fill_custom_fields_values_generic($(el), value["custom_data"]));
+		
+	}, "DEAL")
 }
 
 /**
@@ -195,6 +205,14 @@ function show_deal(){
 	var el = $("#opportunityForm");
 
 	$("#opportunityModal").modal('show');
+	
+	add_custom_fields_to_form({}, function(data){
+		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+		
+	}, "DEAL")
+	
+	
 	
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data){
@@ -211,6 +229,8 @@ function show_deal(){
 		$("#milestone", el).html(data);
 		$("#milestone", el).closest('div').find('.loading-img').hide();
 	});
+	
+	
 
 	// Enable the datepicker
 	$('#close_date', el).datepicker({

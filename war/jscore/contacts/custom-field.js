@@ -46,12 +46,14 @@ $(function() {
  *            function
  * 
  */
-function add_custom_fields_to_form(context, callback) {
+function add_custom_fields_to_form(context, callback, scope) {
 
 	
-	$("#content").html(LOADING_HTML);
+	if(scope == undefined || scope == "PERSON")
+		$("#content").html(LOADING_HTML);
+	var url = "core/api/custom-fields/scope?scope=" + (scope == undefined ? "PERSON" : scope);
 	var custom_fields = Backbone.Model.extend({
-		url : "core/api/custom-fields"
+		url : url
 	});
 
 	new custom_fields().fetch({
@@ -237,52 +239,87 @@ function show_custom_fields_helper(custom_fields, properties){
  */
 function fill_custom_field_values(form, content)
 {
+	console.log(content);
 	$.each(content, function(index , property){
 		if(property.type == "CUSTOM")
 			{
-
-				var element = $(form).find('*[name="' + property.name + '"]');
-				
-				// If custom field is deleted or not found with property name return
-				if(!element[0])
-					{
-						return;
-					}
-				console.log($(element[0]).hasClass("date_input"))
-					var tagName = element[0].tagName.toLowerCase();
-					var type = element.attr("type");
-
-				if(tagName == "input")
-					{
-						if(type == "checkbox" && property.value == "on")
-							{
-								element.attr("checked", "checked"); 
-								return;
-							}
-						else if($(element[0]).hasClass("date_input"))
-							{
-							try {
-								element.attr("value", new Date(property.value * 1000)
-										.format('mm/dd/yyyy'));
-								return;
-							} catch (err) {
-
-							}
-							}
-						
-						element.attr("value", property.value);							
-					}
-				if(tagName == "textarea")
-					{
-						element.html(property.value);							
-					}
-				if(tagName == "select")
-					{
-						if(property.value)
-						element.find('option[value="'+property.value.trim()+'"]').attr("selected", "selected");
-					}
+				fill_custom_data(property, form);
 			}
 			
 	});
 	return $('<div>').append(form).html();
+}
+
+function fill_custom_fields_values_generic(form, content)
+{
+	$.each(content, function(index , property){
+		fill_custom_data(property, form);
+	});
+	
+	return $('<div>').append(form).html();
+}
+
+function fill_custom_data(property, form)
+{
+	var element = $(form).find('*[name="' + property.name + '"]');
+	console.log(element);
+	// If custom field is deleted or not found with property name return
+	if(!element[0])
+		{
+			return;
+		}
+	console.log($(element[0]).hasClass("date_input"))
+		var tagName = element[0].tagName.toLowerCase();
+		var type = element.attr("type");
+		 console.log(property.value)
+		 console.log($(element[0]));
+	if(tagName == "input")
+		{
+			if(type == "checkbox" && property.value == "on")
+				{
+					element.attr("checked", "checked"); 
+					return;
+				}
+			else if($(element[0]).hasClass("date_input"))
+				{
+				try {
+					element.attr("value", new Date(property.value * 1000)
+							.format('mm/dd/yyyy'));
+					return;
+				} catch (err) {
+
+				}
+				}
+			
+			element.attr("value", property.value);
+			console.log(element.val());
+		}
+	if(tagName == "textarea")
+		{
+			element.html(property.value);							
+		}
+	if(tagName == "select")
+		{
+			if(property.value)
+			element.find('option[value="'+property.value.trim()+'"]').attr("selected", "selected");
+		}	
+}
+
+function serialize_custom_fields(form)
+{
+	var custom_field_elements =  $("#" + form).find('.custom_field');
+	
+	console.log(custom_field_elements.length);
+   var arr = [];
+    $.each(custom_field_elements, function(index, element){
+    	console.log($(element));
+    	name = $(element).attr('name');
+    	
+    	var json = {};
+    	json["name"] = name;
+        json["value"] = $(element).val();
+        console.log(json);
+        arr.push(json);
+    });
+   return arr;
 }

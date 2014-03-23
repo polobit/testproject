@@ -340,10 +340,10 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         	if (continueContact) {
                 
                 add_custom_fields_to_form(data.toJSON(), function(contact){
-                	
+                	console.log(contact);
                 deserialize_contact(contact, template);
                 	
-                });
+                }, "COMPANY");
                 
             } 
         	else {
@@ -405,8 +405,6 @@ function deserialize_contact(contact, template) {
     // Loads the form based on template value  
     var form = $("#content").html(getTemplate(template, contact));
     
-    console.log('CONTACT = ');
-    console.log(contact);
     
     // Add placeholder and date picker to date custom fields
     $('.date_input').attr("placeholder","MM/DD/YYYY");
