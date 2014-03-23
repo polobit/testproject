@@ -33,7 +33,8 @@ function fillStreamDetail()
 	$('#twitter_profile_img_url').attr("src", "");
 }
 
-// Calls from Profile image onload to fill account holder's name in Form.
+// Calls from Profile image onload on add contact form to fill account holder's
+// name in Form.
 function onloadProfileImg()
 {
 	// Add button for twitter is shown.
@@ -49,7 +50,7 @@ function onloadProfileImg()
 	document.getElementById('account_description_label').innerHTML = '<b>' + $('#twitter_account').val() + '</b>';
 }
 
-// Add website and select network on continue form in add contact flow.
+// Add website and select network on continue form in add contact form flow.
 function socialsuite_add_website()
 {
 	if (Tweet_Owner_For_Add_Contact != null)
@@ -65,7 +66,12 @@ function socialsuite_add_website()
 	}
 }
 
-// Change property of website and select network in add contact form.
+/*
+ * Change property of website and select network in add contact form. When email
+ * id is entered, pic is related to that. When email id is not there so twitter
+ * profile image is selected. There is some error already, so to adjust size of
+ * image and twitter handle text size as per that.
+ */
 function changeProperty()
 {
 	var display = $('#network_handle', $('#personModal')).css("display");
@@ -96,7 +102,7 @@ function changeProperty()
  * Register all streams on server
  */
 function registerAll(index)
-{	
+{
 	var streamsJSON = Streams_List_View.collection.toJSON();
 
 	// Streams not available OR streams already registered OR pubnub not

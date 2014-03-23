@@ -3,6 +3,7 @@ var Temp_Streams_List_View;
 var Scheduled_Updates_View;
 var Past_Tweets = [];
 var Pubnub = null;
+var Message_Model;
 
 /**
  * Creates backbone router to create and access streams of the user.
@@ -19,7 +20,12 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	"streams" : "streams",
 
 	// Scheduled updates on new page
-	"scheduledmessages" : "scheduledmessages", },
+	"scheduledmessages" : "scheduledmessages",
+
+	// Scheduled updates on new page
+	"scheduledmessages/:id" : "scheduledmessagesEdit",
+
+	},
 
 	/**
 	 * On click on social tab this function is called, to initialize social
@@ -160,6 +166,8 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	scheduledmessages : function()
 	{
 		console.log("In scheduledmessages.");
+		
+		$('#socialsuite_twitter_messageModal').remove();
 
 		// Makes tab active
 		$(".active").removeClass("active");
@@ -167,14 +175,13 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		// Gets template to display.
 		$('#content').html(getTemplate('socialsuite-scheduled-updates'), {});
 
-		Scheduled_Updates_View = new Base_Collection_View({ url : "/core/scheduledupdate/getscheduledupdates", restKey : "scheduledUpdate",
+		Scheduled_Updates_View = new Base_Collection_View({ url : "/core/scheduledupdate", restKey : "scheduledUpdate",
 			templateKey : "socialsuite-scheduled-updates", individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
-
 				// Creates normal time.
 				head.js('lib/jquery.timeago.js', function()
 				{
-					$(".time-ago", $(".edit-scheduled")).timeago();
+					$(".time-ago", $(".is-actionable")).timeago();
 				});
 			}, });
 
@@ -183,6 +190,60 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		$('#socialsuite-scheduled-updates-content').append(Scheduled_Updates_View.render(true).el);
 
 	}, // scheduledmessages end
+
+	/**
+	 * On click of scheduled update it will open message modal. And on click of
+	 * schedule it will save modified scheduled update.
+	 */
+	scheduledmessagesEdit : function(id)
+	{		
+		console.log("In scheduledmessages Edit." + id);
+
+		$('#socialsuite_twitter_messageModal').remove();
+		
+		// Navigates to list of scheduled updates, if it is not defined
+		if (!Scheduled_Updates_View || Scheduled_Updates_View.collection.length == 0)
+		{
+			console.log("hi");
+			this.navigate("scheduledmessages", { trigger : true });
+			return;
+		}
+
+		// Gets the template form its collection
+		var selectedUpdate = Scheduled_Updates_View.collection.get(id);
+		console.log(selectedUpdate);
+
+		Scheduled_Edit = true;
+
+		Message_Model = new Base_Model_View({ url : '/core/scheduledupdate', model : selectedUpdate, template : "socialsuite-twitter-message",
+			modal : '#socialsuite_twitter_messageModal', window : 'scheduledmessages', postRenderCallback : function(el)
+			{
+				$('.modal-backdrop').remove();
+
+				console.log("Schedule edit postrender");
+
+				$('#socialsuite_twitter_messageModal', el).modal('show');
+
+			}, saveCallback : function(data)
+			{
+				console.log('Message_Model save callback');
+				console.log(data);
+
+				// Hide message modal.
+				$('#socialsuite_twitter_messageModal').modal('hide');
+				$('#socialsuite_twitter_messageModal').remove();
+
+				Scheduled_Edit = false;
+			} });
+
+		var view = Message_Model.render();
+
+		$('#socialsuite-scheduled-updates-content').append(view.el);
+
+		$("#tweet_scheduling").click();
+		$('input.date', $('#schedule_controls')).val((new Date(selectedUpdate.toJSON().scheduled_date * 1000)).toLocaleDateString());
+		scheduledRangeCheck();
+	}, // scheduledmessagesEdit end
 });
 
 // Global variable to call function from Router.

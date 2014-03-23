@@ -191,6 +191,9 @@ public class SocialSuiteTwitterUtil
 	    // Send reply tweet to particular tweet based on tweet id.
 	    Status status = twitter.updateStatus(new StatusUpdate(message).inReplyToStatusId(tweetId));
 
+	    System.out.println("replyTweetInTwitter : ");
+	    System.out.println(JSONUtil.toJSONString(status));
+
 	    if (status.toString().contains(message))
 		result = "Successful";
 

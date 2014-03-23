@@ -22,7 +22,7 @@ function initToPubNub()
 		// Get compatibility with all browsers.
 		// Pubnub.ready();
 
-		// Subscribe to client channel.
+		// Subscribe to client channel. Receive tweet from social server.
 		subscribeClientChannel();
 	});
 }
@@ -88,8 +88,13 @@ function sendMessage(publishJSON)
 			console.log("in publish_message unsuccessfull to Sent Message!");
 			showNotyPopUp('information', "You are not connected with Twitter server or you have problem with connection!", "top", 5000);
 			displayErrorInStream(publishJSON.stream);
+			
+			// How many streams are register.			
 			Register_Counter++;
+			
+			// Register next stream.
 			registerAll(Register_Counter);
+			
 			// sendMessage(publishJSON);
 		}
 	} });
