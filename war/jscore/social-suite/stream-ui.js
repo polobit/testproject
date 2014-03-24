@@ -59,7 +59,7 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * After disply of add contact form,
+	 * After display of add contact form,
 	 * Fills name with twitter's owner in add-contact popup form.
 	 */
 	$(".add-twitter-contact").die().live("click", function(e)

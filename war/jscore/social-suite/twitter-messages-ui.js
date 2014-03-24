@@ -177,10 +177,8 @@ $(function()
 			$('.deleted').remove();
 
 			// Create normal time.
-			head.js('lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", $(".chirp-container")).timeago();
-			});
+			displayTimeAgo($(".chirp-container"));
+			
 		}).error(function(data)
 		{
 			// Error message is shown when error occurs

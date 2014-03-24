@@ -106,10 +106,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			$('#socialsuite-tabs-content').append(Streams_List_View.render(true).el);
 
 			// Creates normal time.
-			head.js('lib/jquery.timeago.js', function()
-			{
-				$(".time-ago", $(".chirp-container")).timeago();
-			});
+			displayTimeAgo($(".chirp-container"));			
 
 			// Check for new tweets and show notification.
 			checkNewTweets();
@@ -179,10 +176,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			templateKey : "socialsuite-scheduled-updates", individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				// Creates normal time.
-				head.js('lib/jquery.timeago.js', function()
-				{
-					$(".time-ago", $(".is-actionable")).timeago();
-				});
+				displayTimeAgo($(".is-actionable"));				
 			}, });
 
 		Scheduled_Updates_View.collection.fetch();
@@ -242,7 +236,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 		$("#tweet_scheduling").click();
 		$('input.date', $('#schedule_controls')).val((new Date(selectedUpdate.toJSON().scheduled_date * 1000)).toLocaleDateString());
-		scheduledRangeCheck();
+		isPastSchedule();
 	}, // scheduledmessagesEdit end
 });
 
