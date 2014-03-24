@@ -1,5 +1,6 @@
 package com.agilecrm.queues;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.SerializationUtils;
@@ -80,7 +81,7 @@ public class PullScheduler
      */
     public int getLeasePeriod(String queueName)
     {
-	if (StringUtils.equals(queueName, "campaign-pull-queue"))
+	if (StringUtils.equals(queueName, "campaign-pull-queue") || StringUtils.equals(queueName, "sb-campaign-pull-queue"))
 	    return 7200;
 
 	return DEFAULT_LEASE_PERIOD;
@@ -95,7 +96,7 @@ public class PullScheduler
      */
     public int getCountLimit(String queueName)
     {
-	if (StringUtils.equals(queueName, "campaign-pull-queue"))
+	if (StringUtils.equals(queueName, "campaign-pull-queue") || StringUtils.equals(queueName, "sb-campaign-pull-queue"))
 	    return 100;
 
 	return DEFAULT_COUNT_LIMIT;
@@ -116,9 +117,7 @@ public class PullScheduler
 	    if (tasks == null || tasks.isEmpty())
 		break;
 
-	    processTasks(tasks);
-
-	    PullQueueUtil.deleteTasks(queueName, tasks);
+	    processTasks(queueName, tasks);
 	}
     }
 
@@ -136,17 +135,24 @@ public class PullScheduler
 	{
 	    if ((System.currentTimeMillis() - startTime) <= (8 * 60 * 1000))
 		return true;
+	    else
+	    {
+		System.err.println("Deadline time exceeds for Cron...");
+		return false;
+	    }
 	}
 	else
 	{
 	    // Verify backend instance shut down
-	    if (!LifecycleManager.getInstance().isShuttingDown())
+	    if (LifecycleManager.getInstance().isShuttingDown())
+	    {
+		System.err.println("Backend instance is shutting down...");
+		return false;
+	    }
+	    else
 		return true;
 	}
 
-	System.err.println("Some deadline occured. IsCron value is " + isCron);
-
-	return false;
     }
 
     /**
@@ -155,26 +161,45 @@ public class PullScheduler
      * @param tasks
      *            leased tasks
      */
-    public void processTasks(List<TaskHandle> tasks)
+    public void processTasks(String queueName, List<TaskHandle> tasks)
     {
 
 	if (tasks == null || tasks.isEmpty())
 	    return;
 
+	// To delete completed tasks
+	List<TaskHandle> completedTasks = new ArrayList<TaskHandle>();
+
 	for (TaskHandle taskHandle : tasks)
 	{
-	    DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
-	    if (deferredTask instanceof MandrillDeferredTask)
+	    // Verifies backend shutdown or cron limit before processing each
+	    // one
+	    if (shouldContinue())
 	    {
-		System.out.println("Executing mandrill mail tasks...");
+		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
-		MandrillUtil.sendMandrillMails(tasks);
-		break;
+		if (deferredTask instanceof MandrillDeferredTask)
+		{
+		    // System.out.println("Executing mandrill mail tasks...");
+
+		    MandrillUtil.sendMandrillMails(tasks);
+		    PullQueueUtil.deleteTasks(queueName, tasks);
+		    return;
+		}
+		else
+		    deferredTask.run();
+
+		// Add to completed list
+		completedTasks.add(taskHandle);
 	    }
 	    else
-		deferredTask.run();
+		break;
 	}
 
+	// Delete completed tasks
+	PullQueueUtil.deleteTasks(queueName, completedTasks);
+
     }
+
 }
