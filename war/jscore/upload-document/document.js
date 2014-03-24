@@ -67,7 +67,7 @@ $(function(){
 		if(id && id == "GOOGLE")
 			var newwindow = window.open("upload-google-document.jsp?id="+ form_id, 'name','height=510,width=800');
 		else if(id && id == "S3")
-			var newwindow = window.open("upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template, 'name','height=310,width=500');
+			var newwindow = window.open("upload-custom-document.jsp?id="+ form_id +"&t=" + CURRENT_USER_PREFS.template +"&d=" + CURRENT_DOMAIN_USER.domain, 'name','height=310,width=500');
 		
 		if (window.focus)
 		{

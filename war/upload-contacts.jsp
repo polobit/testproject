@@ -87,20 +87,25 @@ $(function()
 		
 function isValid(){
     $("#form").validate({
-        rules: {
+        	rules: {
         		file:{required:true,accept:"csv"}
                },
-               submitHandler:function(form)
-               {   
-            	   if($('.submit', form).attr('disabled') != undefined)
-            		   return;
-            	   
-            	   $('.submit', form).attr('disabled', true);
-            	   $('.submit', form).after('<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>');
- 	              form.submit();
- 	          }
+       		messages: {
+  	    	  	file: {
+  	      			accept: "Please upload a CSV file",
+  	      		},
+               },
+             submitHandler:function(form)
+             {   
+          	   if($('.submit', form).attr('disabled') != undefined)
+          		   return;
+          	   
+          	   $('.submit', form).attr('disabled', true);
+          	   $('.submit', form).after('<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>');
+              form.submit();
+          	}
     
-   		});
+   	});
 	    return $("#form").valid();
     } 
 
