@@ -83,7 +83,7 @@ $(function()
 	 * anchor tag and gets the model from the collection with widget name and
 	 * add widget then navigates back to the contact-details page
 	 */
-	$('.add-widget').live('click', function(e)
+	$('.install-custom-widget').live('click', function(e)
 	{
 
 		e.preventDefault();
