@@ -1,10 +1,6 @@
 package com.agilecrm.contact;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Id;
-import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -75,12 +71,12 @@ public class CustomFieldDef
     /**
      * Specifies the scope of the custom field should be added
      */
-    public enum SCOPE
+    public static enum SCOPE
     {
 	PERSON_COMPANY, PERSON, COMPANY, DEAL, CASE
     };
 
-    public List<SCOPE> scopes = new ArrayList<>();
+    public SCOPE scope = SCOPE.PERSON;
 
     // Dao
     public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
@@ -130,8 +126,10 @@ public class CustomFieldDef
 	// Fetches all custom fields to check label duplicates
 	for (CustomFieldDef customField : dao.fetchAll())
 	{
-	    if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id)
+	    if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id && customField.scope == this.scope)
+	    {
 		throw new Exception();
+	    }
 	}
 
 	dao.put(this);
@@ -143,13 +141,6 @@ public class CustomFieldDef
     public void delete()
     {
 	dao.delete(this);
-    }
-
-    @PostLoad
-    private void postLoad()
-    {
-	if (scopes.isEmpty())
-	    scopes.add(SCOPE.PERSON);
     }
 
     @Override

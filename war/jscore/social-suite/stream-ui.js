@@ -6,7 +6,7 @@
 /** On load of social suites page. */
 $(function()
 {
-	// Default values	
+	// Default values
 	Stream_Type = null;
 	Network_Type = null;
 	Register_All_Done = false;
@@ -15,6 +15,15 @@ $(function()
 	Scheduled_Edit = false;
 	Register_Counter = null;
 	Add_Img_Done = false;
+
+	/*
+	 * When user click on clock icon to schedule update so need to save original
+	 * URL of model, in case of user de-select scheduling.
+	 */
+	Previous_URL = null;
+	
+	// If selected schedule is future time then it will be true.
+	Schedule_In_Future = false;
 
 	// Flag for Scroll down reached to end of stream.
 	Scroll_Down_Call = false;
@@ -50,6 +59,7 @@ function initializeSocialSuite()
 	});
 
 	/**
+	 * After disply of add contact form,
 	 * Fills name with twitter's owner in add-contact popup form.
 	 */
 	$(".add-twitter-contact").die().live("click", function(e)
@@ -105,6 +115,7 @@ function initializeSocialSuite()
 			});
 		}
 
+		// As per pic property need to change social suites element property.
 		changeProperty();
 	});
 
@@ -132,22 +143,11 @@ function initializeSocialSuite()
 		changeProperty();
 	});
 
-	// Makes Scheduled_Edit flag false to show normal update flow.
-	$('#socialsuite_twitter_messageModal').on('show.bs.modal', function()
-	{
-		Scheduled_Edit = false;
-		$('#socialsuite_twitter_RTModal').remove();
-	});
-
 	/**
 	 * Display popup form with stream details.
 	 */
 	$(".add-stream").die().live("click", function(e)
 	{
-		head.js('js/designer/ui.js', function()
-		{
-		});
-
 		// Reset all fields
 		$('#streamDetail').each(function()
 		{
@@ -244,7 +244,7 @@ function initializeSocialSuite()
 					});
 
 	/**
-	 * Get description of stream on mouse over and show at bottom of form.
+	 * Get description of stream on mouse over and show at bottom of add stream form.
 	 */
 	$(document)
 			.on(
@@ -267,39 +267,39 @@ function initializeSocialSuite()
 						}
 
 						switch (mouseoverStream) {
-						case "Search":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.';
-							break;
-						case "Home":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Tweets and retweets of user and followers.';
-							break;
-						case "Mentions":
-							document.getElementById('stream_description_label').innerHTML = '<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users\'s @screen_name).';
-							break;
-						case "Retweets":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-retweet"></i> User\'s tweets retweeted by others.';
-							break;
-						case "DM_Inbox":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-download-alt"></i> Direct messages sent to the user.';
-							break;
-						case "DM_Outbox":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-upload-alt"></i> Direct messages sent by the user.';
-							break;
-						case "Favorites":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-star"></i> User\'s favorite tweets.';
-							break;
-						case "Sent":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Tweets sent by the user.';
-							break;
-						case "Scheduled":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-time"></i> Tweets scheduled for sending later.';
-							break;
-						case "All_Updates":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';
-							break;
-						case "My_Updates":
-							document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Updates authored by the user.';
-							break;
+							case "Search":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.';
+								break;
+							case "Home":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Tweets and retweets of user and followers.';
+								break;
+							case "Mentions":
+								document.getElementById('stream_description_label').innerHTML = '<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users\'s @screen_name).';
+								break;
+							case "Retweets":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-retweet"></i> User\'s tweets retweeted by others.';
+								break;
+							case "DM_Inbox":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-download-alt"></i> Direct messages sent to the user.';
+								break;
+							case "DM_Outbox":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-upload-alt"></i> Direct messages sent by the user.';
+								break;
+							case "Favorites":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-star"></i> User\'s favorite tweets.';
+								break;
+							case "Sent":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Tweets sent by the user.';
+								break;
+							case "Scheduled":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-time"></i> Tweets scheduled for sending later.';
+								break;
+							case "All_Updates":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';
+								break;
+							case "My_Updates":
+								document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Updates authored by the user.';
+								break;
 						}// switch end
 					});
 
@@ -484,7 +484,7 @@ function initializeSocialSuite()
 		$('.deleted').remove();
 	});
 
-	// Add agile text to message text area.
+	// Add agile text to message text area in message modal.
 	$("#add_message").die().live("click", function(e)
 	{
 		var quote = "Sell & Market like Fortune 500 with @agilecrm";

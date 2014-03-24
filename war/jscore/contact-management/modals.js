@@ -44,6 +44,19 @@ $(function(){
 				$("#personForm input").val('');
 			}	
 		});
+		
+		
+		$("#companyModal").on('show', function(data) {
+			var target = data.target;
+			add_custom_fields_to_form({}, function(data){
+				var el = show_custom_fields_helper(data["custom_fields"], []);
+			//	if(!value["custom_data"])  value["custom_data"] = [];
+				
+				$("#custom-field-deals", $(target)).html(el);
+				
+			}, "COMPANY")
+
+		});
 	
 		/**
 		 * "Shown" event of person modal 

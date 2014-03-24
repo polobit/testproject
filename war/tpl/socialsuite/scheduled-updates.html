@@ -30,7 +30,7 @@
                 <col width="20%">
 				<thead>
 					<tr>
-						<th><input class="thead_check" type="checkbox"></input></th>
+						<th class="hide">Id</th>
 						<th>User</th>
 						<th>Message</th>
 						<th>Schedule</th>
@@ -39,7 +39,7 @@
 					</tr>
 				</thead>
 				<tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list"
-					style="overflow: scroll;overflow:hidden;">
+					style="overflow: scroll;overflow:hidden;" route="scheduledmessages/">
 				</tbody>
 			</table>
          </div>
@@ -47,7 +47,8 @@
 </script>
 
 <script id="socialsuite-scheduled-updates-model-template" type="text/html">	
-<td class="data" data="{{id}}">
+<td class='data hide' data='{{id}}'>{{id}}</td>
+<td>
    <div class="row-fluid">
       <a class="account-link link-complex block" href="https://twitter.com/{{screen_name}}" rel="user" target="_blank">    
     	<div style="display:inline;padding-right:5px;height:auto;">   
@@ -63,12 +64,12 @@
       </a>
    </div>
 </td>
-<td class="edit-scheduled is-actionable" data="{{id}}">{{message}}</td>
-<td class="edit-scheduled is-actionable" data="{{id}}">
+<td class="is-actionable">{{message}}</td>
+<td class="is-actionable">
     <time class="time-ago" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
 </td>
-<td class="edit-scheduled is-actionable" data="{{id}}">{{headline}}</td>
-<td class="edit-scheduled is-actionable" data="{{id}}">
+<td class="is-actionable">{{headline}}</td>
+<td class="is-actionable">
     {{#if_equals tweetOwner "/"}}
          <span style="display:none;"></span>
     {{else}}

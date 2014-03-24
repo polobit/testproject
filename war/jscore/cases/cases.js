@@ -85,13 +85,20 @@ $(function(){
 	/**
 	 * To avoid showing previous errors of the modal.
 	 */
-	$('#casesModal, #casesUpdateModal').on('show', function() {
+	$('#casesModal, #casesUpdateModal').on('show', function(data) {
 
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 		
 		// Removes error class of input fields
 		$('#' + this.id).find('.error').removeClass('error');
+		var taget = $(data.target);
+		add_custom_fields_to_form({}, function(data){
+			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+			$("#custom-field-case", taget).html($(el_custom_fields));
+		
+			}, "CASE");
+	
 	});
 	
     
@@ -143,8 +150,20 @@ function updatecases(ele)
 	
 	deserializeForm(value,$("#casesUpdateForm"));
 	
+	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("contacts-typeahead-input", casesForm, contacts_typeahead);
+	$("#casesUpdateModal").modal('show');
+	
+	add_custom_fields_to_form(value, function(data){
+		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+		console.log(value);
+		console.log(el_custom_fields);
+		console.log(value["custom_data"]);
+		fill_custom_fields_values_generic($(el_custom_fields), value["custom_data"])
+		$("#custom-field-case", casesForm).html(fill_custom_fields_values_generic($(el_custom_fields), value["custom_data"]));
+	
+		}, "CASE");
 	
 	// Fills owner select element
 	populateUsers("owners-list", casesForm, value, 'owner', function(data)
@@ -154,7 +173,7 @@ function updatecases(ele)
 		{
 			$("#owners-list", casesForm).find('option[value=' + value['owner'].id + ']').attr("selected", "selected");
 		}
-		$("#casesUpdateModal").modal('show');
+		
 	});
 }
 
@@ -162,6 +181,12 @@ function updatecases(ele)
 function showCases()
 {	
 	var el = $("#casesForm");
+	
+	add_custom_fields_to_form({}, function(data){
+		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+		$("#custom-field-case", $("#casesModal")).html($(el_custom_fields));
+	
+		}, "CASE");
 	
 	// Fills owner select element
 	populateUsers("owners-list", el, undefined, undefined, function(data){
@@ -171,6 +196,8 @@ function showCases()
 		// Contacts type-ahead
 		agile_type_ahead("contacts-typeahead-input", el, contacts_typeahead);
 	});
+	
+
 
 	// Enable the datepicker
 	$('#close_date', el).datepicker({
@@ -199,6 +226,8 @@ function savecases(formId, modalId, saveBtn, json)
 	
 	var newEntry=false; // test if this model is new, true => new model 
 	if(json.id===undefined)newEntry=true;
+	
+	json["custom_data"] = serialize_custom_fields(formId);
 	
 	var newcases = new Backbone.Model();
 	newcases.url = 'core/api/cases';

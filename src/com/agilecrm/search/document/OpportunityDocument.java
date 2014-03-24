@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
@@ -31,8 +32,13 @@ public class OpportunityDocument extends com.agilecrm.search.document.Document i
 	fields.add(opportunity.name);
 	fields.add(opportunity.description);
 
-	doc.addField(Field.newBuilder().setName("search_tokens")
-		.setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
+	// Add custom fields
+	fields.addAll(getCustomFieldValues(opportunity.custom_data));
+
+	// Add custom fields to index
+	addCustomFieldsToIndex(opportunity.custom_data, SCOPE.DEAL, doc);
+
+	doc.addField(Field.newBuilder().setName("search_tokens").setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.OPPORTUNITY.toString()));
 
