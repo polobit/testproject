@@ -2,7 +2,7 @@
  * Check valid scheduled. Selected schedule should be in future time. 
  * If it is past or current time then revert action and show alert.
  */
-function scheduledRangeCheck()
+function isPastSchedule()
 {
 	// Get selected date and time.
 	var scheduledDate = document.getElementById('scheduled_date').value;

@@ -293,10 +293,6 @@ $(function()
 		$('#RTuser_list').html(RTUserListView.render(true).el);
 
 		// Create normal time.
-		head.js('lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", $("#socialsuite_RT_userlistModal")).timeago();
-		});
+		displayTimeAgo($("#socialsuite_RT_userlistModal"));		
 	});
-
 });

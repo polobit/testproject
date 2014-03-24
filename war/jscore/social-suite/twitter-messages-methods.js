@@ -227,8 +227,5 @@ function showEffectOfRT(data)
 	modelStream.get('tweetListView').add(modelTweet);
 
 	// Create normal time.
-	head.js('lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", $(".chirp-container")).timeago();
-	});
+	displayTimeAgo($(".chirp-container"));
 }
