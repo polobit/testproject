@@ -123,10 +123,11 @@
                         "label": "of",
                         "required": "required",
                         "category": "Settings",
+                        "value": "",
                         "name": "variable_1",
-                        "title": "Select merge field.",
-                        "fieldType": "merge_fields",
-                        "type": "select"
+                        "title": "Variable name (eg: {{variable}}) or value (eg: 5).",
+                        "fieldType": "input",
+                        "type": "text"
                     },
                     {
                         "label": "compare this",
