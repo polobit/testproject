@@ -73,7 +73,6 @@ public class ScheduledUpdateAPI
 	 */
 
 	@GET
-	@Path("/getscheduledupdates")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public List<ScheduledUpdate> getAllScheduledUpdates()
 	{
