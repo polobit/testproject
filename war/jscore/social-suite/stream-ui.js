@@ -148,6 +148,9 @@ function initializeSocialSuite()
 	 */
 	$(".add-stream").die().live("click", function(e)
 	{
+		// Need to call openTwitter function in ui.js for Oauth.
+		head.js('js/designer/ui.js', function(){});
+		
 		// Reset all fields
 		$('#streamDetail').each(function()
 		{
