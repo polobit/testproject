@@ -1,4 +1,3 @@
-
 var existingDocumentsView;
 
 $(function(){
@@ -154,84 +153,6 @@ $(function(){
 		updateDocument(documentsView.collection.get(id));
 	});
 	
-	/**
-	 * For showing existing documents
-	 */
-	$(".document-exist").die().live('click', function(e){
-		e.preventDefault();
-	    
-		var el = $("#existinguploadDocumentForm");
-		$("#existingDocumentModal").modal('show');
-		$("#existingDocumentModal").find('.save-status').html("");
-		
-		if(! existingDocumentsView)
-		{
-			existingDocumentsView = new Base_Collection_View({ 
-				url : 'core/api/documents',
-				restKey : "documents",
-				templateKey : "contact-document",
-				descending : true,
-				sortKey :'uploaded_time',
-				individual_tag_name : 'tr',
-				postRenderCallback : function(el)
-					{
-						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-						{
-							$(".document-created-time", el).timeago();
-						});
-					}
-			});
-		}
-		existingDocumentsView.collection.fetch();
-		$("#document-list", this.el).html(existingDocumentsView.render().el);
-
-	});
-	
-	/**
-	 * When a existing document is selected changing background color
-	 */
-	$("#contact-document-model-list > tr").die().live('click', function(e){
-		$("#existingDocumentModal").find('.save-status').html("");
-		$("#contact-document-model-list").find("tr.documentSelected").removeClass("documentSelected");
-		$(this).closest("tr").addClass("documentSelected");
-	});
-	
-	/**
-	 * For adding existing document to current contact
-	 */
-	$("#existing_document_update").die().live('click', function(e){
-		e.preventDefault();
-	    var saveBtn = $(this);
-		
-	    var document_id = $("#contact-document-model-list").find(".documentSelected").find('.data').attr('data');
-	    
-	    // To check whether the document is selected or not
-	    if(document_id == undefined)
-	    {
-	    	$("#existingDocumentModal").find('.save-status').html('<span style="color:red;">Please select a document</span>');
-	    	enable_save_button($(saveBtn));
-	    	return;
-	    }
-	    	
-	    var json = existingDocumentsView.collection.get(document_id).toJSON();
-
-		// To get the contact id and converting into string
-		var contact_id = App_Contacts.contactDetailView.model.id + "";
-	    
-	    // Checks whether the selected document is already attached to that contact
-	    if((json.contact_ids).indexOf(contact_id) < 0)
-	    {
-	    	json.contact_ids.push(contact_id);
-	    	saveDocument(null, "existingDocumentModal", saveBtn, false, json);
-	    }
-	    else
-	    {
-	    	enable_save_button($(saveBtn));
-	    	$('#existingDocumentModal').modal('hide');
-	    	return;
-	    }
-	});
-	
 	// For unlinking document from contact-details
 	$(".document-unlink-contact-tab").die().live('click', function(e){
 		e.preventDefault();
@@ -254,5 +175,106 @@ $(function(){
 			}
 		});
 	});
+
+	/**
+	 * For showing new/existing documents
+	 */
+	$(".add-document-select").die().live('click', function(e){
+		e.preventDefault();
+		var el = $(this).closest("div");
+		$(this).css("display", "none");
+		el.find(".contact-document-select").css("display", "inline");
+		var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+        fillSelect('document-select','core/api/documents', 'documents',  function fillNew()
+		{
+			el.find("#document-select").append("<option value='new'>Add New Doc</option>");
+
+		}, optionsTemplate, false, el); 
+	});
+	
+	/**
+	 * To cancel the add documents request
+	 */
+	$(".add-document-cancel").die().live('click', function(e){
+		e.preventDefault();
+		var el = $(this).closest("div");
+		el.find(".contact-document-select").css("display", "none");
+		el.find(".add-document-select").css("display", "inline");
+	});
+	
+	/**
+	 * For adding existing document to current contact
+	 */
+	$(".add-document-confirm").die().live('click', function(e){
+		e.preventDefault();
+		
+	    var document_id = $(this).closest(".contact-document-select").find("#document-select").val();
+
+	    var saveBtn = $(this);
+		
+  		// To check whether the document is selected or not
+	    if(document_id == "")
+	    {
+	    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>This field is required.</span>");
+	    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+	    	return;
+	    }	    	
+	    else if(document_id == "new")
+	    {
+	    	var el = $("#uploadDocumentForm");
+			$("#uploadDocumentModal").modal('show');
+
+			// Contacts type-ahead
+			agile_type_ahead("document_relates_to_contacts", el, contacts_typeahead);
+
+	    	var json = App_Contacts.contactDetailView.model.toJSON();
+	    	var contact_name = getContactName(json);
+	    	$('.tags',el).append('<li class="tag"  style="display: inline-block; vertical-align: middle; margin-right:3px;" data="'+ json.id +'">'+contact_name+'</li>');
+	    }
+	    else if(document_id != undefined && document_id != null)
+	    {
+			if(!existingDocumentsView)
+			{
+				existingDocumentsView = new Base_Collection_View({ 
+					url : 'core/api/documents',
+					restKey : "documents",
+				});
+				existingDocumentsView.collection.fetch({
+				    success: function(data){
+				    		existing_document_attach(document_id, saveBtn);
+				    	}
+			        });
+			}
+			else
+				existing_document_attach(document_id, saveBtn);
+	    }
+
+	});
 	
 });
+
+/** 
+ * To attach the document to a contact
+ * @param document_id
+ * @param saveBtn
+ */
+function existing_document_attach(document_id, saveBtn)
+{
+    var json = existingDocumentsView.collection.get(document_id).toJSON();
+	
+	// To get the contact id and converting into string
+	var contact_id = App_Contacts.contactDetailView.model.id + "";
+    
+    // Checks whether the selected document is already attached to that contact
+    if((json.contact_ids).indexOf(contact_id) < 0)
+    {
+    	json.contact_ids.push(contact_id);
+    	saveDocument(null, null, saveBtn, false, json);
+    }
+    else
+    {
+    	saveBtn.closest("span").find(".save-status").html("<span style='color:red;margin-left:10px;'>Linked Already</span>");
+    	saveBtn.closest("span").find('span.save-status').find("span").fadeOut(5000);
+    	return;
+    }
+}

@@ -204,7 +204,8 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 			}
 			
 			//$('#' + modalId).find('span.save-status img').remove();
-			$('#' + modal_id).modal('hide');
+			if(form_id)
+				$('#' + modal_id).modal('hide');
 			
 			var document = data.toJSON();
 			add_recent_view(new BaseModel(document));
