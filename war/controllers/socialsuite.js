@@ -32,8 +32,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 * suite, it will include js files.
 	 */
 	socialsuite : function()
-	{
-		console.log("In SocialSuite router");
+	{		
 		initializeSocialSuite();
 
 		// Makes tab active
@@ -161,9 +160,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 * scheduled updates if user have any.
 	 */
 	scheduledmessages : function()
-	{
-		console.log("In scheduledmessages.");
-		
+	{		
 		$('#socialsuite_twitter_messageModal').remove();
 
 		// Makes tab active
@@ -191,14 +188,13 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 */
 	scheduledmessagesEdit : function(id)
 	{		
-		console.log("In scheduledmessages Edit." + id);
+		console.log("scheduledmessages Edit: " + id);
 
 		$('#socialsuite_twitter_messageModal').remove();
 		
 		// Navigates to list of scheduled updates, if it is not defined
 		if (!Scheduled_Updates_View || Scheduled_Updates_View.collection.length == 0)
-		{
-			console.log("hi");
+		{			
 			this.navigate("scheduledmessages", { trigger : true });
 			return;
 		}
