@@ -56,6 +56,8 @@ function isPastSchedule()
 	// Past Time
 	{
 		alert("Please select Date/Time in future.");
+		$("#send_tweet").attr("disabled", "disable");
+		Schedule_In_Future = false;
 	}
 }
 
@@ -80,3 +82,58 @@ function checkScheduledUpdates()
 		console.log("Error occured in scheduled updates search.");
 	});
 }
+
+/**
+ * On click of scheduled update it will open message modal. And on click of
+ * schedule it will save modified scheduled update.
+ */
+function scheduledmessagesEdit(id)
+{
+	console.log("scheduledmessages Edit: " + id);	
+
+	// Gets the update from its collection
+	var selectedUpdate = Scheduled_Updates_View.collection.get(id);
+	console.log(selectedUpdate);
+
+	Scheduled_Edit = true;
+
+	Message_Model = new Base_Model_View({ url : '/core/scheduledupdate', model : selectedUpdate, template : "socialsuite-twitter-message",
+		modal : '#socialsuite_twitter_messageModal', window : 'scheduledmessages', postRenderCallback : function(el)
+		{
+			$('.modal-backdrop').remove();
+			$('#socialsuite_twitter_messageModal', el).modal('show');
+		}, saveCallback : function(data)
+		{
+			console.log('Message_Model save callback');
+			console.log(data);
+			
+			// Hide message modal.
+			$('#socialsuite_twitter_messageModal').modal('hide');
+			$('#socialsuite_twitter_messageModal').remove();
+			$('.modal-backdrop').remove();
+			Scheduled_Edit = false;
+			
+			// Set new model in collection after edit. 
+			Scheduled_Updates_View.collection.get(data.id).set(new BaseModel(data));
+			
+			// Update UI.
+			$('#socialsuite-scheduled-updates-content').append(Scheduled_Updates_View.render(true).el);
+			
+		} });
+
+	// Add modal in this Div on same page.
+	$('#schedule-edit-modal').append(Message_Model.render().el);
+
+	/*
+	 * Shows scheduling clock icon on message modal with selected scheduled with
+	 * disabled click event, so user only can schedule message.
+	 */
+	$("#tweet_scheduling").click();
+
+	// Set already selected date in message modal.
+	$('input.date', $('#schedule_controls')).val((new Date(selectedUpdate.toJSON().scheduled_date * 1000)).toLocaleDateString());
+
+	// Enables schedule button if selected scheduled update having future schedule.
+	isPastSchedule();
+} // scheduledmessagesEdit end
+

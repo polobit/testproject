@@ -40,7 +40,7 @@
 					</tr>
 				</thead>
 				<tbody id="socialsuite-scheduled-updates-model-list" class="socialsuite-scheduled-updates-model-list"
-					style="overflow: scroll;overflow:hidden;" route="scheduledmessages/">
+					style="overflow: scroll;overflow:hidden;">
 				</tbody>
 			</table>
          </div>
@@ -65,12 +65,12 @@
       </a>
    </div>
 </td>
-<td class="is-actionable">{{message}}</td>
-<td class="is-actionable">
+<td class="is-actionable edit-scheduled-update">{{message}}</td>
+<td class="is-actionable edit-scheduled-update">
     <time class="time-ago" value="{{schedule}}" datetime="{{epochToHumanDate "" schedule}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" schedule}}</time>
 </td>
-<td class="is-actionable">{{headline}}</td>
-<td class="is-actionable">
+<td class="is-actionable edit-scheduled-update">{{headline}}</td>
+<td class="is-actionable edit-scheduled-update">
     {{#if_equals tweetOwner "/"}}
          <span style="display:none;"></span>
     {{else}}

@@ -198,6 +198,9 @@ $(function()
 	 */
 	$('#socialsuite_twitter_messageModal').die().live('hidden', function()
 	{
+		if(this.id != "#socialsuite_twitter_messageModal")
+			return;
+		
 		$('.modal-backdrop').remove();
 		Scheduled_Edit = false;		
 		$('#socialsuite_twitter_messageModal').remove();

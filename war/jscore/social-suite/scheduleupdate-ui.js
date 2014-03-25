@@ -83,5 +83,18 @@ $(function()
 	$('.bootstrap-timepicker').die().live('hide', function()
 	{
 		isPastSchedule();
-	});	
+	});
+
+	/**
+	 * Calls function to open Message modal with selected scheduled update
+	 * details and save into DB after modifications.
+	 */
+	$('.edit-scheduled-update').die().live('click', function()
+	{
+		var updateId = $(this).closest('tr').find('.data').attr('data');
+
+		// Opens Message Modal and save modifications in DB, makes changes in
+		// UI.
+		scheduledmessagesEdit(updateId);
+	});
 });

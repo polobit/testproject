@@ -15,7 +15,6 @@ var Message_Model;
 
 var Pubnub = null;
 
-
 /**
  * Creates backbone router to create and access streams of the user.
  */
@@ -31,11 +30,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	"streams" : "streams",
 
 	// Scheduled updates on new page
-	"scheduledmessages" : "scheduledmessages",
-
-	// Scheduled updates on new page
-	"scheduledmessages/:id" : "scheduledmessagesEdit",
-
+	"scheduledmessages" : "scheduledmessages"
 	},
 
 	/**
@@ -43,7 +38,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 * suite, it will include js files.
 	 */
 	socialsuite : function()
-	{		
+	{
 		initializeSocialSuite();
 
 		// Makes tab active
@@ -108,13 +103,13 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			console.log("Collection already defined.");
 
 			// New stream to add in collection.
-			if (stream)			
-				Streams_List_View.collection.add(stream);			
+			if (stream)
+				Streams_List_View.collection.add(stream);
 
 			$('#socialsuite-tabs-content').append(Streams_List_View.render(true).el);
 
 			// Creates normal time.
-			displayTimeAgo($(".chirp-container"));			
+			displayTimeAgo($(".chirp-container"));
 
 			// Check for new tweets and show notification.
 			checkNewTweets();
@@ -169,9 +164,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 * scheduled updates if user have any.
 	 */
 	scheduledmessages : function()
-	{		
-		$('#socialsuite_twitter_messageModal').remove();
-
+	{
 		// Makes tab active
 		$(".active").removeClass("active");
 
@@ -182,7 +175,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			templateKey : "socialsuite-scheduled-updates", individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				// Creates normal time.
-				displayTimeAgo($(".is-actionable"));				
+				displayTimeAgo($(".is-actionable"));
 			}, });
 
 		Scheduled_Updates_View.collection.fetch();
@@ -190,66 +183,6 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		$('#socialsuite-scheduled-updates-content').append(Scheduled_Updates_View.render(true).el);
 
 	}, // scheduledmessages end
-
-	/**
-	 * On click of scheduled update it will open message modal. And on click of
-	 * schedule it will save modified scheduled update.
-	 */
-	scheduledmessagesEdit : function(id)
-	{		
-		console.log("scheduledmessages Edit: " + id);
-
-		$('#socialsuite_twitter_messageModal').remove();
-		
-		// Navigates to list of scheduled updates, if it is not defined
-		if (!Scheduled_Updates_View || Scheduled_Updates_View.collection.length == 0)
-		{			
-			this.navigate("scheduledmessages", { trigger : true });
-			return;
-		}
-
-		// Gets the template form its collection
-		var selectedUpdate = Scheduled_Updates_View.collection.get(id);
-		console.log(selectedUpdate);
-
-		Scheduled_Edit = true;
-
-		Message_Model = new Base_Model_View({ url : '/core/scheduledupdate', model : selectedUpdate, template : "socialsuite-twitter-message",
-			modal : '#socialsuite_twitter_messageModal', window : 'scheduledmessages', postRenderCallback : function(el)
-			{
-				$('.modal-backdrop').remove();
-
-				console.log("Schedule edit postrender");
-
-				$('#socialsuite_twitter_messageModal', el).modal('show');
-
-			}, saveCallback : function(data)
-			{
-				console.log('Message_Model save callback');
-				console.log(data);
-
-				// Hide message modal.
-				$('#socialsuite_twitter_messageModal').modal('hide');
-				$('#socialsuite_twitter_messageModal').remove();
-				$('.modal-backdrop').remove();
-				Scheduled_Edit = false;
-			} });
-		
-		$('#schedule-edit-modal').append(Message_Model.render().el);
-
-		  /*
-		   * Shows scheduling clock icon on message modal with selected
-		   * scheduled with disabled click event, so user only can schedule
-		   * message.
-		   */
-		$("#tweet_scheduling").click();
-		
-		// Set already selected date in message modal.
-		$('input.date', $('#schedule_controls')).val((new Date(selectedUpdate.toJSON().scheduled_date * 1000)).toLocaleDateString());
-		
-		// Check scheduled is or not in future.
-		isPastSchedule();
-	}, // scheduledmessagesEdit end
 });
 
 // Global variable to call function from Router.
