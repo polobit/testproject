@@ -133,8 +133,7 @@ public class Subscription
     @NotSaved
     private JSONObject billing_data;
 
-    private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(
-	    Subscription.class);
+    private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(Subscription.class);
 
     public Subscription()
     {
@@ -211,13 +210,11 @@ public class Subscription
 
 	// If customer is already on same plan do not update(checks both on
 	// plan_id and quantity)
-	if (plan.plan_id.equals(subscription.plan.plan_id)
-		&& plan.quantity.equals(subscription.plan.quantity))
+	if (plan.plan_id.equals(subscription.plan.plan_id) && plan.quantity.equals(subscription.plan.quantity))
 	    return subscription;
 
 	// Updates the plan in related gateway
-	subscription.billing_data = subscription.getAgileBilling().updatePlan(
-		subscription.billing_data, plan);
+	subscription.billing_data = subscription.getAgileBilling().updatePlan(subscription.billing_data, plan);
 
 	// Updates plan of current domain subscription object
 	subscription.plan = plan;
@@ -238,16 +235,14 @@ public class Subscription
      * @return {@link Subscription}
      * @throws Exception
      */
-    public static Subscription updateCreditCard(CreditCard cardDetails)
-	    throws Exception
+    public static Subscription updateCreditCard(CreditCard cardDetails) throws Exception
     {
 
 	// Gets subscription of current domain
 	Subscription subscription = getSubscription();
 
 	// Updates credit card details in related gateway
-	subscription.billing_data = subscription.getAgileBilling()
-		.updateCreditCard(subscription.billing_data, cardDetails);
+	subscription.billing_data = subscription.getAgileBilling().updateCreditCard(subscription.billing_data, cardDetails);
 
 	// Assigns details which will be encrypted before saving
 	// subscription entity
@@ -274,8 +269,7 @@ public class Subscription
 	if (subscription == null)
 	    return null;
 
-	return subscription.getAgileBilling().getInvoices(
-		subscription.billing_data);
+	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
     }
 
     /**
@@ -362,10 +356,7 @@ public class Subscription
 	 * subscription, name of package should be name of gateway and
 	 * Implementations class should be named "gateway"+Impl
 	 */
-	return (AgileBilling) Class.forName(
-		"com.agilecrm.subscription."
-			+ this.gateway.toString().toLowerCase() + "."
-			+ this.gateway + "Impl").newInstance();
+	return (AgileBilling) Class.forName("com.agilecrm.subscription." + this.gateway.toString().toLowerCase() + "." + this.gateway + "Impl").newInstance();
 
     }
 
@@ -382,9 +373,7 @@ public class Subscription
 	try
 	{
 	    // Encrypt creditcard details before saving
-	    this.encrypted_card_details = ClickDeskEncryption
-		    .RSAEncrypt(new Gson().toJson(this.encrypted_card_details)
-			    .getBytes());
+	    this.encrypted_card_details = ClickDeskEncryption.RSAEncrypt(new Gson().toJson(this.encrypted_card_details).getBytes());
 	}
 	catch (Exception e)
 	{
@@ -395,12 +384,8 @@ public class Subscription
     @Override
     public String toString()
     {
-	return "Subscription: {id: " + id + ", plan: " + plan
-		+ ", card_details: " + card_details
-		+ ", enripted_card_details: " + encrypted_card_details
-		+ ", status: " + status + ", created_time: " + created_time
-		+ ", updated_time: " + updated_time + ", billing_data: "
-		+ billing_data + ", billing_data_json_string: "
-		+ billing_data_json_string + ", gateway: " + gateway + "}";
+	return "Subscription: {id: " + id + ", plan: " + plan + ", card_details: " + card_details + ", enripted_card_details: " + encrypted_card_details
+		+ ", status: " + status + ", created_time: " + created_time + ", updated_time: " + updated_time + ", billing_data: " + billing_data
+		+ ", billing_data_json_string: " + billing_data_json_string + ", gateway: " + gateway + "}";
     }
 }
