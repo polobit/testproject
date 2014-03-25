@@ -60,7 +60,8 @@ public class AgileAuthFilter implements Filter
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the domain
 	if (httpRequest.getRequestURI().contains("js/api") || httpRequest.getRequestURI().contains("php/api")
-		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions") || httpRequest.getRequestURI().contains("oauth"))
+		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions") || httpRequest.getRequestURI().contains("oauth")
+		|| httpRequest.getRequestURI().contains("gmail"))
 	{
 	    System.out.println("JS API - ignoring filter");
 	    chain.doFilter(request, response);
