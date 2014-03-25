@@ -33,7 +33,7 @@
             "category": "Settings",
             "value": "",
             "name": "variable_1",
-            "title": "Variable name (eg: {{variable}}) or value (eg: 5).",
+            "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
             "fieldType": "input",
             "type": "text" 
         },

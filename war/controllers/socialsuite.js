@@ -1,9 +1,20 @@
+// Social suites stream and tweets.
 var Streams_List_View;
+
+// When social tab is not active then stores tweets.
 var Temp_Streams_List_View;
+
+// Scheduled updates.
 var Scheduled_Updates_View;
+
+// Stores tweets on scroll down in stream.
 var Past_Tweets = [];
-var Pubnub = null;
+
+// Base-model to display data in Message modal and save in DB.
 var Message_Model;
+
+var Pubnub = null;
+
 
 /**
  * Creates backbone router to create and access streams of the user.
@@ -97,10 +108,8 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			console.log("Collection already defined.");
 
 			// New stream to add in collection.
-			if (stream)
-			{
-				Streams_List_View.collection.add(stream);
-			}
+			if (stream)			
+				Streams_List_View.collection.add(stream);			
 
 			$('#socialsuite-tabs-content').append(Streams_List_View.render(true).el);
 
@@ -114,7 +123,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 		// Remove deleted tweet element from ui
 		$('.deleted').remove();
 
-		// Remove waiting symbol.
+		// Remove waiting icon.
 		removeWaiting();
 	}, // streams end
 
@@ -222,16 +231,23 @@ var SocialSuiteRouter = Backbone.Router.extend({
 				// Hide message modal.
 				$('#socialsuite_twitter_messageModal').modal('hide');
 				$('#socialsuite_twitter_messageModal').remove();
-
+				$('.modal-backdrop').remove();
 				Scheduled_Edit = false;
 			} });
+		
+		$('#schedule-edit-modal').append(Message_Model.render().el);
 
-		var view = Message_Model.render();
-
-		$('#socialsuite-scheduled-updates-content').append(view.el);
-
+		  /*
+		   * Shows scheduling clock icon on message modal with selected
+		   * scheduled with disabled click event, so user only can schedule
+		   * message.
+		   */
 		$("#tweet_scheduling").click();
+		
+		// Set already selected date in message modal.
 		$('input.date', $('#schedule_controls')).val((new Date(selectedUpdate.toJSON().scheduled_date * 1000)).toLocaleDateString());
+		
+		// Check scheduled is or not in future.
 		isPastSchedule();
 	}, // scheduledmessagesEdit end
 });

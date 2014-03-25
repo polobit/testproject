@@ -85,8 +85,7 @@ function initializeSocialSuite()
 		// Separate full name.
 		var firstName = fullName.substr(0, fullName.indexOf(' '));
 		var lastName = fullName.substr(fullName.indexOf(' ') + 1);
-		;
-
+		
 		// Add values in add contact form.
 		$("#fname", $('#personModal')).attr("value", firstName);
 		$("#lname", $('#personModal')).attr("value", lastName);

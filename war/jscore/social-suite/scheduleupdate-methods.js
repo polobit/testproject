@@ -52,12 +52,10 @@ function isPastSchedule()
 		// To check text limit after button text change.
 		$('#twit-tweet').keypress();
 	}
-
 	else
 	// Past Time
 	{
 		alert("Please select Date/Time in future.");
-
 	}
 }
 
