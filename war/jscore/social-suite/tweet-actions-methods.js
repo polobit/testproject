@@ -91,10 +91,8 @@ function requestAction(urlForGet, actionType, modelStream, modelTweet, tweetOwne
 		reflectActionOnTweet(data, actionType, modelStream, modelTweet, tweetOwner);
 
 		// Create normal time.
-		head.js('lib/jquery.timeago.js', function()
-		{
-			$(".time-ago", $(".chirp-container")).timeago();
-		});
+		displayTimeAgo($(".chirp-container"));
+		
 	}).error(function(data)
 	{
 		// Error message is shown when error occurs

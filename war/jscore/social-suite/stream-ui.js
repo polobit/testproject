@@ -59,7 +59,7 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * After disply of add contact form,
+	 * After display of add contact form,
 	 * Fills name with twitter's owner in add-contact popup form.
 	 */
 	$(".add-twitter-contact").die().live("click", function(e)
@@ -148,6 +148,9 @@ function initializeSocialSuite()
 	 */
 	$(".add-stream").die().live("click", function(e)
 	{
+		// Need to call openTwitter function in ui.js for Oauth.
+		head.js('js/designer/ui.js', function(){});
+		
 		// Reset all fields
 		$('#streamDetail').each(function()
 		{

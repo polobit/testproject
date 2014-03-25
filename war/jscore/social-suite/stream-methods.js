@@ -203,3 +203,14 @@ function registerStreamAgain(streamId)
 	// Show waiting symbol.
 	$("#stream-spinner-modal-" + streamId).show();
 }
+
+/**
+ * Convert time in human readable format.
+ */
+function displayTimeAgo(elmnt)
+{
+	head.js('lib/jquery.timeago.js', function()
+	{
+		$(".time-ago", elmnt).timeago();
+	});
+}

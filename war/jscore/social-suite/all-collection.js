@@ -36,11 +36,8 @@ function mergeCollections(streamId)
 	tweetCollection.sort();
 
 	// Create normal time.
-	head.js('lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", $(".chirp-container")).timeago();
-	});
-
+	displayTimeAgo($(".chirp-container"));
+	
 	// Clear temp tweet collection.
 	tempStream.get("tweetListView").reset();
 
@@ -68,8 +65,5 @@ function updateCollection(tweet, modelStream)
 	modelStream.get('tweetListView').sort();
 
 	// Create normal time.
-	head.js('lib/jquery.timeago.js', function()
-	{
-		$(".time-ago", $(".chirp-container")).timeago();
-	});
+	displayTimeAgo($(".chirp-container"));
 }

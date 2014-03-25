@@ -10,25 +10,45 @@
                     <div class="text">
                         You can add a document related to a contact.
                     </div>
-         			<div class="btn-group" style="margin-top:12px;">
+					<div><a href="#" class="add-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
+						<span class="contact-document-select" style="display:none;">
+							<select id="document-select" style="margin-bottom: -1px;">
+								<option value="">Select...</option>
+							</select>
+                    		<a href="#" class="btn add-document-confirm">Add</a> 
+                   			<a href="#" class="btn add-document-cancel">Cancel</a>
+							<span class="save-status"></span>
+						</span>
+					</div>
+         			<!--<div class="btn-group" style="margin-top:12px;">
         				<a href="#" class="btn right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
         				<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 						<ul class="dropdown-menu" style="text-shadow:0px 0px;">
 							<li><a href="#" class="document-exist">Existing Document</a></li>
 						</ul>
-					</div>
+					</div>-->
                 </div>
             </div>
         </div>
         {{/unless}}
         {{#if this.length}}
 	<div class="page-header" style="margin-top: 0px !important">
-        <div class="btn-group right">
+        <!--<div class="btn-group right">
         	<a href="#" class="btn right contact-add-document"><i class="icon-plus-sign"></i> Add Document</a>
         	<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 			<ul class="dropdown-menu pull-right">
 				<li><a href="#" class="document-exist">Existing Document</a></li>
 			</ul>
+		</div>-->
+		<div class="right"><a href="#" class="add-document-select"><i class='icon-plus-sign'/></i> Add Document</a>
+			<span class="contact-document-select" style="display:none;">
+				<select id="document-select" style="margin-bottom: -1px;">
+					<option value="">Select...</option>
+				</select>
+                <a href="#" class="btn add-document-confirm">Add</a> 
+                <a href="#" class="btn add-document-cancel">Cancel</a>
+				<span class="save-status"></span>
+			</span>
 		</div>
 	</div>
 			<ul id="contact-documents-model-list" class="ativity-block-ul"></ul>
