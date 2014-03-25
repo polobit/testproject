@@ -15,8 +15,7 @@
  */
 function agile_generate_ui(Api_Key, Domain) {
 
-	//  ------ Set account. ------ 
-	_agile.set_account(Api_Key, Domain);
+	
 	//  ------ Build mail list UI and call callback. ------ 
 	agile_build_ui(function() {
 		
