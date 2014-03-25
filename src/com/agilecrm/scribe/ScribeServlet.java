@@ -287,5 +287,8 @@ public class ScribeServlet extends HttpServlet
 	    resp.sendRedirect("/");
 	else
 	    resp.sendRedirect(returnURL);
+
+	// Delete return url Attribute
+	req.getSession().removeAttribute("return_url");
     }
 }
