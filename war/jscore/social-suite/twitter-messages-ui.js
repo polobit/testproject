@@ -196,10 +196,10 @@ $(function()
 	 * On modal close,Makes Scheduled_Edit flag false to show normal update
 	 * flow, because scheduling div display is depend on that.
 	 */
-	$('#socialsuite_twitter_messageModal').on('hidden.bs.modal', function()
+	$('#socialsuite_twitter_messageModal').die().live('hidden', function()
 	{
+		$('.modal-backdrop').remove();
 		Scheduled_Edit = false;		
-	});
-	
-	
+		$('#socialsuite_twitter_messageModal').remove();
+	});	
 }); // init end
