@@ -21,7 +21,7 @@ $(function()
 	 * URL of model, in case of user de-select scheduling.
 	 */
 	Previous_URL = null;
-	
+
 	// If selected schedule is future time then it will be true.
 	Schedule_In_Future = false;
 
@@ -59,97 +59,15 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * After display of add contact form,
-	 * Fills name with twitter's owner in add-contact popup form.
-	 */
-	$(".add-twitter-contact").die().live("click", function(e)
-	{
-		var streamId = ($(this).closest('article').attr('stream-id'));
-		var tweetId = ($(this).closest('article').attr('id'));
-
-		// Get stream from collection.
-		var modelStream = Streams_List_View.collection.get(streamId);
-
-		// Get tweet from stream.
-		var tweet = modelStream.get('tweetListView').get(tweetId).toJSON();
-
-		// Tweet owner's full name.
-		var fullName = tweet.user.name;
-
-		// Tweet owner's description.
-		var description = tweet.user.description;
-
-		// Tweet owner's handle/Screen name.
-		Tweet_Owner_For_Add_Contact = tweet.user.screen_name;
-
-		// Separate full name.
-		var firstName = fullName.substr(0, fullName.indexOf(' '));
-		var lastName = fullName.substr(fullName.indexOf(' ') + 1);
-		
-		// Add values in add contact form.
-		$("#fname", $('#personModal')).attr("value", firstName);
-		$("#lname", $('#personModal')).attr("value", lastName);
-		$("#job_title", $('#personModal')).attr("value", description);
-
-		document.getElementById("network_handle").className = 'socialsuite-network-handle';
-		$("#handle", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
-
-		// Add website / handle of twitter of tweet owner.
-		$("#website", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
-		$("#image", $('#personModal')).attr("value", tweet.user.profile_image_url);
-
-		// Select network type.
-		$("div.website select").val("TWITTER");
-
-		// If picture is not null and undefined, display it by given width, else
-		// display none
-		var pic = tweet.user.profile_image_url;
-		if (pic != undefined && pic != null)
-		{
-			var el = $('<img class="imgholder thumbnail person-img" onload="changeProperty()" style="display: inline;"  src="' + pic + '"></img>');
-			$('#pic').html(el).show();
-			$("img").error(function()
-			{
-				$('#pic').css("display", "none");
-			});
-		}
-
-		// As per pic property need to change social suites element property.
-		changeProperty();
-	});
-
-	// Hide network handle from add contact form.
-	$('#personModal').on('hidden.bs.modal', function()
-	{
-		document.getElementById("network_handle").className = 'network-handle';
-		document.getElementById("handle").className = '';
-		$('#pic').css("display", "none");
-		$('#pic').empty();
-		changeProperty();
-	});
-
-	// If img is shown then reduce size of network handle on add contact form.
-	$('#personModal').on('shown.bs.modal', function()
-	{
-		changeProperty();
-	});
-	$('#personModal').on('show.bs.modal', function()
-	{
-		changeProperty();
-	});
-	$("#pic").change(function()
-	{
-		changeProperty();
-	});
-
-	/**
 	 * Display popup form with stream details.
 	 */
 	$(".add-stream").die().live("click", function(e)
 	{
 		// Need to call openTwitter function in ui.js for Oauth.
-		head.js('js/designer/ui.js', function(){});
-		
+		head.js('js/designer/ui.js', function()
+		{
+		});
+
 		// Reset all fields
 		$('#streamDetail').each(function()
 		{
@@ -246,7 +164,8 @@ function initializeSocialSuite()
 					});
 
 	/**
-	 * Get description of stream on mouse over and show at bottom of add stream form.
+	 * Get description of stream on mouse over and show at bottom of add stream
+	 * form.
 	 */
 	$(document)
 			.on(
@@ -269,39 +188,39 @@ function initializeSocialSuite()
 						}
 
 						switch (mouseoverStream) {
-							case "Search":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.';
-								break;
-							case "Home":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Tweets and retweets of user and followers.';
-								break;
-							case "Mentions":
-								document.getElementById('stream_description_label').innerHTML = '<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users\'s @screen_name).';
-								break;
-							case "Retweets":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-retweet"></i> User\'s tweets retweeted by others.';
-								break;
-							case "DM_Inbox":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-download-alt"></i> Direct messages sent to the user.';
-								break;
-							case "DM_Outbox":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-upload-alt"></i> Direct messages sent by the user.';
-								break;
-							case "Favorites":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-star"></i> User\'s favorite tweets.';
-								break;
-							case "Sent":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Tweets sent by the user.';
-								break;
-							case "Scheduled":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-time"></i> Tweets scheduled for sending later.';
-								break;
-							case "All_Updates":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';
-								break;
-							case "My_Updates":
-								document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Updates authored by the user.';
-								break;
+						case "Search":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-search"></i> Relevant Tweets matching a specified Search Keyword.';
+							break;
+						case "Home":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Tweets and retweets of user and followers.';
+							break;
+						case "Mentions":
+							document.getElementById('stream_description_label').innerHTML = '<img src="../img/socialsuite/mentions.png" style="width: 15px;height: 15px;"> Mentions (all tweets containing a users\'s @screen_name).';
+							break;
+						case "Retweets":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-retweet"></i> User\'s tweets retweeted by others.';
+							break;
+						case "DM_Inbox":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-download-alt"></i> Direct messages sent to the user.';
+							break;
+						case "DM_Outbox":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-upload-alt"></i> Direct messages sent by the user.';
+							break;
+						case "Favorites":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-star"></i> User\'s favorite tweets.';
+							break;
+						case "Sent":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Tweets sent by the user.';
+							break;
+						case "Scheduled":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-time"></i> Tweets scheduled for sending later.';
+							break;
+						case "All_Updates":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-home"></i> Updates and shares from user\'s connections and groups.';
+							break;
+						case "My_Updates":
+							document.getElementById('stream_description_label').innerHTML = '<i class="icon-share-alt"></i> Updates authored by the user.';
+							break;
 						}// switch end
 					});
 
@@ -461,7 +380,8 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * Get relation and perform action as per that.
+	 * In stream on click of notification, Gets relation and perform action as
+	 * per that.
 	 */
 	$(".action-notify").die().live("click", function(e)
 	{
@@ -485,20 +405,4 @@ function initializeSocialSuite()
 		// Remove deleted tweet element from ui
 		$('.deleted').remove();
 	});
-
-	// Add agile text to message text area in message modal.
-	$("#add_message").die().live("click", function(e)
-	{
-		var quote = "Sell & Market like Fortune 500 with @agilecrm";
-
-		document.getElementById("twit-tweet").value += quote;
-
-		$("#link-text").html("<b>Thank you.</b>");
-
-		setTimeout(function()
-		{
-			$("#link-text").hide();
-		}, 2000);
-	});
-
 }

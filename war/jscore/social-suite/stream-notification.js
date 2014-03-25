@@ -1,5 +1,7 @@
-// Remove no tweet notification. Search for that tweet in collection and makes
-// that tweets model hide.
+/**
+ * Remove no tweet notification. Search for that tweet in collection and makes
+ * that tweets model hide.
+ */
 function clearNoTweetNotification(modelStream)
 {
 	console.log("In clearNoTweetNotification.");
