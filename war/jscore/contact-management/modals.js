@@ -53,8 +53,16 @@ $(function(){
 			//	if(!value["custom_data"])  value["custom_data"] = [];
 				
 				$("#custom-field-deals", $(target)).html(el);
+				// Add placeholder and date picker to date custom fields
+				$('.date_input', $(target)).attr("placeholder","MM/DD/YYYY");
+		    
+				$('.date_input', $(target)).datepicker({
+					format: 'mm/dd/yyyy'
+				});
 				
 			}, "COMPANY")
+			
+			
 
 		});
 	
