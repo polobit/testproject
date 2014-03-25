@@ -43,7 +43,7 @@ public class CustomFieldDefUtil
 	if (scope == null)
 	    return getAllCustomFields();
 
-	if (scope == SCOPE.PERSON)
+	if (scope == SCOPE.PERSON || scope == SCOPE.CONTACT)
 	    return getAllContactCustomField();
 	System.out.println("scope : " + scope);
 	return dao.listByProperty("scope", scope);
@@ -54,7 +54,7 @@ public class CustomFieldDefUtil
 	List<CustomFieldDef> contactCustomFields = new ArrayList<CustomFieldDef>();
 	for (CustomFieldDef field : dao.fetchAll())
 	{
-	    if (field.scope == null || field.scope == SCOPE.PERSON)
+	    if (field.scope == null || field.scope == SCOPE.CONTACT || field.scope == SCOPE.PERSON)
 		contactCustomFields.add(field);
 	}
 

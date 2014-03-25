@@ -1,3 +1,80 @@
+<script id="custom-field-add-modal-template" type="text/html">
+<!-- New (Text) Modal views -->
+<div class="modal hide" id="custom-field-add-modal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>  Add Custom Field</h3>
+    </div>
+    <div class="modal-body">
+        <form id="textModalForm" name="textModalForm" method="post" class="form-horizontal">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">Label <span class="field_req">*</span></label> 
+                    <div class="controls">
+                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars" />
+                    </div>
+                </div>
+  				<div class="control-group">
+                    <label class="control-label">Type <span class="field_req">*</span></label>
+                    <div class="controls">
+						 <select name="field_type" id="custom-field-type">
+							<option value="TEXT">Text Field</option>
+							<option value="TEXTAREA">Text Area</option>
+							<option value="DATE">Date Field</option>
+							<option value="CHECKBOX">Checkbox</option>
+							<option value="LIST">List</option>
+						</select>
+                    </div>
+                </div>
+                <input class="hide" name="scope" type="text" placeholder="Label" value="{{scope}}" />
+                <div class="control-group">
+                    <label class="control-label">Description <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input name="field_description" type="text" id="field_description" placeholder="Description" class="required" />
+                    </div>
+                </div>
+				<div id="custom-field-custom-info"></div>
+				 <div class="control-group" id="custom-field-list-values" style="display:none">
+                    <label class="control-label">List Values <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_data" type="text" id="listvalues" placeholder="Enter values separated by semicolon" class="required" />
+                    </div>
+                </div>
+			    <div class="control-group" id="custom-field-data" style="display:none">
+                    <label class="control-label">Number of Lines <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="field_data" type="text" id="arearows" placeholder="Rows" class="required digits" max="10" min="2" />
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="control-group span4">
+                        <label class="control-label">Required </label>
+                        <div class="controls">
+                            <input name="is_required" type="checkbox" id="required" />
+                        </div>
+                    </div>
+                    <div class="control-group span4" style="margin-left:38px">
+                        <label class="control-label">Searchable </label>
+                        <div class="controls"> 
+                            <input name="searchable" type="checkbox" id="searchable" />
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label hide">Validation Rule <span class="field_req">*</span></label>
+                    <div class="controls"> 
+                        <input name="validationRule" type="hidden" id="validationRule" placeholder="Validation Rule" class="required" value="*" />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer form-actions">
+        <a href="#" type="submit" class="save btn btn-primary" id="customfield_validate">Save Changes</a>
+    </div>
+</div>
+</script>
+
 <script id="custom-field-text-modal-template" type="text/html">
 <!-- New (Text) Modal views -->
 <div class="modal hide" id="textModal">

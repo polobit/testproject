@@ -465,7 +465,7 @@ var ContactsRouter = Backbone.Router.extend({
 				deserialize_contact(contact, 'continue-company');
 			else
 				deserialize_contact(contact, 'continue-contact');
-		});
+		}, contact.type);
 	},
 
 	/**

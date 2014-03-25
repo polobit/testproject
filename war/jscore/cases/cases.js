@@ -101,6 +101,15 @@ $(function(){
 	
 	});
 	
+	$('#casesModal, #casesUpdateModal').on("shown", function(){
+		// Add placeholder and date picker to date custom fields
+		$('.date_input').attr("placeholder","MM/DD/YYYY");
+    
+		$('.date_input').datepicker({
+			format: 'mm/dd/yyyy'
+		});
+	})
+	
     
     /**
      * "Hide" event of note modal to remove contacts appended to related to field

@@ -14,24 +14,50 @@ $(function() {
 	 */
 	$(".fieldmodal").die().live('click', function(event) {
 		event.preventDefault();
-		var modal_id = $(this).attr('id');
+		var type = $(this).attr("type");
+		
 		// Creating model for bootstrap-modal
 		var modelView = new Base_Model_View({
 			url : '/core/api/custom-fields',
-			template : 'custom-field-' + modal_id + '-modal',
+			template : 'custom-field-add-modal',
 			window : 'custom-fields',
+			data : {"scope" : type},
 			reload : true,
-			modal : '#' + modal_id + 'Modal',
+			modal : "#custom-field-add-modal",
 			isNew : true,
 			postRenderCallback : function(el) {
-				$('.modal-backdrop').remove();
-
-				$('#' + modal_id + 'Modal', el).modal('show');
+				$('.modal-backdrop').remove();	
+				$("#custom-field-add-modal", el).modal('show');
 			}
 		});
 
 		$('#custom-field-modal').html(modelView.render().el);
 	});
+	
+	$("#custom-field-type").die().live("change", function(e){
+		e.preventDefault();
+		var value = $(this).val();
+		if(value == "LIST")
+		{
+			$("#custom-field-data").hide();
+			$("input",  $("#custom-field-data")).removeAttr("name");
+			$("#custom-field-list-values").show();
+			$("input",  $("#custom-field-list-values")).attr("name", "field_data");
+		}
+		else if(value == "TEXTAREA")
+		{
+			$("#custom-field-data").show();
+			$("input",  $("#custom-field-data")).attr("name", "field_data");
+			$("#custom-field-list-values").hide();
+			$("input",  $("#custom-field-list-values")).removeAttr("name");
+		}
+		else
+		{
+			$("#custom-field-data").hide();
+			$("#custom-field-list-values").hide();
+		}
+		
+	})
 });
 
 /**
@@ -49,9 +75,9 @@ $(function() {
 function add_custom_fields_to_form(context, callback, scope) {
 
 	
-	if(scope == undefined || scope == "PERSON")
+	if(scope == undefined || scope == "CONTACT")
 		$("#content").html(LOADING_HTML);
-	var url = "core/api/custom-fields/scope?scope=" + (scope == undefined ? "PERSON" : scope);
+	var url = "core/api/custom-fields/scope?scope=" + (scope == undefined ? "CONTACT" : scope);
 	var custom_fields = Backbone.Model.extend({
 		url : url
 	});

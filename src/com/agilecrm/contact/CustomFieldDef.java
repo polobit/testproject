@@ -73,10 +73,10 @@ public class CustomFieldDef
      */
     public static enum SCOPE
     {
-	PERSON_COMPANY, PERSON, COMPANY, DEAL, CASE
+	PERSON_COMPANY, PERSON, COMPANY, CONTACT, DEAL, CASE
     };
 
-    public SCOPE scope = SCOPE.PERSON;
+    public SCOPE scope = SCOPE.CONTACT;
 
     // Dao
     public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
