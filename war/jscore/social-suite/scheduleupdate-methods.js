@@ -140,7 +140,7 @@ function scheduledmessagesEdit(id)
 			$('.modal-backdrop').remove();
 			Scheduled_Edit = false;
 
-			// Default chck box is not added so need to add from handlebar so that willl check this condition.
+			// Default check box is not added so need to add from handlebar so that will check this condition.
 			data["checkbox"] = true;
 
 			// Update changes in UI.
@@ -150,7 +150,7 @@ function scheduledmessagesEdit(id)
 			displayTimeAgo($(".is-actionable"));
 		} });
 
-	// Add modal in this Div on same page, to display modal with details.
+	// Add modal in "#schedule-edit-modal" Div on same page, to display modal with details.
 	$('#schedule-edit-modal').html(Message_Model.render().el);
 
 } // scheduledmessagesEdit end

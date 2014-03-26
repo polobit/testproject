@@ -30,8 +30,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	"streams" : "streams",
 
 	// Scheduled updates on new page
-	"scheduledmessages" : "scheduledmessages"
-	},
+	"scheduledmessages" : "scheduledmessages" },
 
 	/**
 	 * On click on social tab this function is called, to initialize social
@@ -164,25 +163,21 @@ var SocialSuiteRouter = Backbone.Router.extend({
 	 * scheduled updates if user have any.
 	 */
 	scheduledmessages : function()
-	{
-		// Makes tab active
-		$(".active").removeClass("active");
-
-		// Gets template to display.
-		$('#content').html(getTemplate('socialsuite-scheduled-updates'), {});
-
+	{		
 		Scheduled_Updates_View = new Base_Collection_View({ url : "/core/scheduledupdate", restKey : "scheduledUpdate",
 			templateKey : "socialsuite-scheduled-updates", individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
 				// Creates normal time.
 				displayTimeAgo($(".is-actionable"));
-			}, });
+			}});
 
 		Scheduled_Updates_View.collection.fetch();
 
-		$('#socialsuite-scheduled-updates-content').append(Scheduled_Updates_View.render(true).el);
+		$('#content').html(Scheduled_Updates_View.render(true).el);
 
-	}, // scheduledmessages end
+		// Makes tab active
+		$(".active").removeClass("active");
+	} // scheduledmessages end
 });
 
 // Global variable to call function from Router.
