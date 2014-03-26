@@ -75,7 +75,7 @@ function initializeSocialSuite()
 		});
 
 		// Enable button of add stream on form of stream detail
-		$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
+		//$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 
 		// Fill elements on form related to stream.
 		fillStreamDetail();
