@@ -130,10 +130,7 @@ function scheduledmessagesEdit(id)
 				$('#socialsuite_twitter_messageModal', el).modal('show');
 			}
 		}, saveCallback : function(data)
-		{
-			console.log('Message_Model save callback');
-			console.log(data);
-
+		{			
 			// Hide message modal.
 			$('#socialsuite_twitter_messageModal').modal('hide');
 			$('#socialsuite_twitter_messageModal').remove();

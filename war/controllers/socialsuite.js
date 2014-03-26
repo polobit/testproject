@@ -1,9 +1,6 @@
 // Social suites stream and tweets.
 var Streams_List_View;
 
-// When social tab is not active then stores tweets.
-var Temp_Streams_List_View;
-
 // Scheduled updates.
 var Scheduled_Updates_View;
 
@@ -13,6 +10,7 @@ var Past_Tweets = [];
 // Base-model to display data in Message modal and save in DB.
 var Message_Model;
 
+// Object of pubnub.
 var Pubnub = null;
 
 /**
@@ -82,22 +80,13 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			// Creates new default function of collection
 			Streams_List_View.appendItem = this.socialSuiteAppendItem;
 
-			Streams_List_View.collection.fetch({ success : function(data)
-			{
-				if (stream)
-					Streams_List_View.collection.add(new BaseModel(stream));
-			} });
+			Streams_List_View.collection.fetch();
 
-			$('#socialsuite-tabs-content').append(Streams_List_View.render().el);
-
-			// Creates temporary collection to store tweets when user not in
-			// social tab.
-			createTempCollection();
+			$('#socialsuite-tabs-content').append(Streams_List_View.render().el);			
 
 			return;
 		}// if end
-		if (Streams_List_View != undefined) // Streams already collected in
-		// collection
+		if (Streams_List_View) // Streams already collected in collection
 		{
 			console.log("Collection already defined.");
 
@@ -111,7 +100,7 @@ var SocialSuiteRouter = Backbone.Router.extend({
 			displayTimeAgo($(".chirp-container"));
 
 			// Check for new tweets and show notification.
-			checkNewTweets();
+			showNotification(null);
 		}
 
 		// Remove deleted tweet element from ui

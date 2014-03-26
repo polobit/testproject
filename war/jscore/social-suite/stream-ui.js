@@ -75,7 +75,7 @@ function initializeSocialSuite()
 		});
 
 		// Enable button of add stream on form of stream detail
-		//$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
+		// $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 
 		// Fill elements on form related to stream.
 		fillStreamDetail();
@@ -88,7 +88,7 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * On click of social network icon, Calls Oauth for selected network type.
+	 * On click of twitter icon, Calls Oauth for selected network type.
 	 */
 	$(".network-type").die().live("click", function(e)
 	{
@@ -299,10 +299,6 @@ function initializeSocialSuite()
 						newStream.url = '/core/social';
 						newStream.save(json, { success : function(stream)
 						{
-
-							// Close form
-							// $('#addStreamModal').modal('hide');
-
 							// Append in collection,add new stream
 							socialsuitecall.streams(stream);
 
@@ -314,35 +310,20 @@ function initializeSocialSuite()
 							var publishJSON = { "message_type" : "register", "stream" : stream.toJSON() };
 							sendMessage(publishJSON);
 
-							// Get recent stream from database, suppose we add
-							// directly this stream so it will create reference
-							// and data replicated in both.
-							$.getJSON("/core/social/getstream/" + stream.id, function(data)
+							// Notification for stream added.
+							showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
+
+							setTimeout(function()
 							{
-								if (data != null)
-								{
-									Temp_Streams_List_View.collection.add(data);
-								} // client json if end
+								// Find selected stream id.
+								var idOfStreamType = $('#addStreamModal').find("div[value='" + Stream_Type + "']").attr('id');
+								$("#" + idOfStreamType).click();
 
-								// Notification for stream added.
-								showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
+								// Make send button enable
+								$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 
-								setTimeout(function()
-								{
-									// Find selected stream id.
-									var idOfStreamType = $('#addStreamModal').find("div[value='" + Stream_Type + "']").attr('id');
-									$("#" + idOfStreamType).click();
-
-									// Make send button enable
-									$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
-
-									Stream_Type = "";
-								}, 4000);
-
-							}).error(function(jqXHR, textStatus, errorThrown)
-							{
-								alert("error occurred!");
-							});
+								Stream_Type = "";
+							}, 4000);
 
 							// Adds tag in 'our' domain to track usage
 							addTagAgile(SOCIAL_TAG);
@@ -350,7 +331,7 @@ function initializeSocialSuite()
 						}, error : function(data)
 						{
 							console.log(data);
-						}, });
+						} });
 					});
 
 	/**
@@ -381,7 +362,8 @@ function initializeSocialSuite()
 
 	/**
 	 * In stream on click of notification, Gets relation and perform action as
-	 * per that.
+	 * per that. like Retry : re-register stream on server. Add-new -tweet : Add
+	 * new unread tweets on stream.
 	 */
 	$(".action-notify").die().live("click", function(e)
 	{
@@ -395,7 +377,7 @@ function initializeSocialSuite()
 		document.getElementById(this.id).innerHTML = '';
 
 		if (relation == "add-new-tweet")
-			mergeCollections(streamId);
+			mergeNewUnreadTweets(streamId);
 		else if (relation == "retry")
 			registerStreamAgain(streamId);
 

@@ -92,7 +92,11 @@
 <!-- models for tweets -->
 <script id="Column-model-template" type="text/html">
 {{#if_equals msg_type "Tweet"}}
+ {{#if isNew}}
+  <article id={{id}} tweet-id-str="{{id_str}}" stream-id={{stream_id}} class="stream-item is-actionable is-new {{deleted_msg}}" style="display:none;">
+ {{else}}
   <article id={{id}} tweet-id-str="{{id_str}}" stream-id={{stream_id}} class="stream-item is-actionable {{deleted_msg}}">
+ {{/if}}
     <div class="item-box">       
       <div class="tweet">
            <header class="tweet-header">        

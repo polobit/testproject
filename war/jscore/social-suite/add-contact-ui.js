@@ -1,7 +1,7 @@
 $(function()
 {
 	/**
-	 * After display of add contact form, Fills name with twitter's owner in
+	 * After display of add contact form, Fills name with tweet owner's name in
 	 * add-contact popup form.
 	 */
 	$(".add-twitter-contact").die().live("click", function(e)

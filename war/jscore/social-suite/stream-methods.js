@@ -35,14 +35,14 @@ function fillStreamDetail()
 
 
 /**
- * Register all streams on server
+ * Register all streams on social server.
  */
 function registerAll(index)
 {
 	var streamsJSON = Streams_List_View.collection.toJSON();
 
 	// Streams not available OR streams already registered OR pubnub not
-	// initialized OR (index 0 stream is done and RC is increased.)
+	// initialized OR (index 0 stream is done and Register_Counter is increased.)
 	if (streamsJSON == null || Register_All_Done == true || Pubnub == null || (Register_Counter != null && index == 0))
 	{
 		console.log("Register_All_Done : " + Register_All_Done);
@@ -61,6 +61,7 @@ function registerAll(index)
 	{
 		Register_Counter = 0;
 
+		// Add user's profile img from twitter to stream header.
 		if (Add_Img_Done == false)
 			addUserImgToColumn();
 	}
@@ -75,7 +76,7 @@ function registerAll(index)
 }
 
 /**
- * Unregister all streams on server
+ * On logout or browser/window clise, Unregister all streams on server.
  */
 function unregisterAll()
 {
@@ -99,7 +100,7 @@ function unregisterAll()
 }
 
 /**
- * Add relevant profile img to stream in column header.
+ * Add relevant profile img from twitter to stream in column header.
  */
 function addUserImgToColumn()
 {
@@ -125,7 +126,8 @@ function addUserImgToColumn()
 }
 
 /**
- * Send register message again to twitter server.
+ * On click of retry button in stream notification,
+ * Sends register message again to twitter server. 
  */
 function registerStreamAgain(streamId)
 {

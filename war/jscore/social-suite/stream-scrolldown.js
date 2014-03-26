@@ -188,7 +188,7 @@ function addPastTweetsToStream(modelStream)
 	console.log("In addPastTweetsToStream.");
 
 	// Update collection.
-	updateCollection(Past_Tweets, modelStream);
+	addTweetToStream(Past_Tweets, modelStream);
 
 	// Reset json array and counter.
 	Past_Tweets_Count = 0;

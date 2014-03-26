@@ -1,8 +1,10 @@
-// Calls from Profile image onload on add contact form to fill account holder's
-// name in Form.
+/**
+ * Calls from onload of Profile image on add contact form to fill account
+ * holder's name in Form.
+ */
 function onloadProfileImg()
 {
-	// Add button for twitter is shown.
+	// Save button for twitter on addStreamModal is shown.
 	$('#add_twitter_stream').show();
 
 	// Add twitter stream types template.
@@ -15,7 +17,7 @@ function onloadProfileImg()
 	document.getElementById('account_description_label').innerHTML = '<b>' + $('#twitter_account').val() + '</b>';
 }
 
-// Add website and select network on continue form in add contact form flow.
+// Add website and select network on continue form in add contact form flow for update page.
 function socialsuite_add_website()
 {
 	if (Tweet_Owner_For_Add_Contact != null)
