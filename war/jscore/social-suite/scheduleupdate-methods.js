@@ -89,7 +89,9 @@ function checkScheduledUpdates()
  */
 function scheduledmessagesEdit(id)
 {
-	console.log("scheduledmessages Edit: " + id);	
+	$('#socialsuite_twitter_messageModal').remove();
+
+	console.log("scheduledmessages Edit: " + id);
 
 	// Gets the update from its collection
 	var selectedUpdate = Scheduled_Updates_View.collection.get(id);
@@ -100,40 +102,56 @@ function scheduledmessagesEdit(id)
 	Message_Model = new Base_Model_View({ url : '/core/scheduledupdate', model : selectedUpdate, template : "socialsuite-twitter-message",
 		modal : '#socialsuite_twitter_messageModal', window : 'scheduledmessages', postRenderCallback : function(el)
 		{
+			// Remove back drop, It remains there so need to remove.
 			$('.modal-backdrop').remove();
-			$('#socialsuite_twitter_messageModal', el).modal('show');
+
+			// Only once it will execute for same scheduled update on one click.
+			if (!selectedUpdate.hasChanged())
+			{
+				// After displaying modal with details, need to show schedule from selected message.
+				$("#socialsuite_twitter_messageModal", el).on('shown', function()
+				{
+					/*
+					 * Shows scheduling clock icon on message modal with
+					 * selected scheduled with disabled click event, so user
+					 * only can schedule message.
+					 */
+					$("#tweet_scheduling", el).click();
+
+					// Display date from selected message in message modal.
+					$('input.date', $('#schedule_controls')).val((new Date(selectedUpdate.toJSON().scheduled_date * 1000)).toLocaleDateString());
+
+					// For Testing: Enables schedule button if selected
+					// scheduled update having future schedule.
+					isPastSchedule();
+				});
+
+				// Show modal with details.
+				$('#socialsuite_twitter_messageModal', el).modal('show');
+			}
 		}, saveCallback : function(data)
 		{
 			console.log('Message_Model save callback');
 			console.log(data);
-			
+
 			// Hide message modal.
 			$('#socialsuite_twitter_messageModal').modal('hide');
 			$('#socialsuite_twitter_messageModal').remove();
 			$('.modal-backdrop').remove();
 			Scheduled_Edit = false;
+
+			// Default check box is not added so need to add from handlebar so that will check this condition.
+			data["checkbox"] = true;
+
+			// Update changes in UI.
+			selectedUpdate.set(data);
 			
-			// Set new model in collection after edit. 
-			Scheduled_Updates_View.collection.get(data.id).set(new BaseModel(data));
-			
-			// Update UI.
-			$('#socialsuite-scheduled-updates-content').append(Scheduled_Updates_View.render(true).el);
-			
+			// Creates normal time.
+			displayTimeAgo($(".is-actionable"));
 		} });
 
-	// Add modal in this Div on same page.
-	$('#schedule-edit-modal').append(Message_Model.render().el);
+	// Add modal in "#schedule-edit-modal" Div on same page, to display modal with details.
+	$('#schedule-edit-modal').html(Message_Model.render().el);
 
-	/*
-	 * Shows scheduling clock icon on message modal with selected scheduled with
-	 * disabled click event, so user only can schedule message.
-	 */
-	$("#tweet_scheduling").click();
-
-	// Set already selected date in message modal.
-	$('input.date', $('#schedule_controls')).val((new Date(selectedUpdate.toJSON().scheduled_date * 1000)).toLocaleDateString());
-
-	// Enables schedule button if selected scheduled update having future schedule.
-	isPastSchedule();
 } // scheduledmessagesEdit end
 
