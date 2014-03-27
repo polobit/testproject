@@ -134,6 +134,18 @@ function saveDocumentURL(url, network, id)
 {
 	id = id.split("?id=")[1];
 	var form_id = id.split("&")[0];
+	
+	// Saving extension of document
+	var extension = url.split("?");
+	if(url.match("agilecrm/panel/uploaded-logo/"))
+	{
+		extension = extension[0];
+		extension = extension.substring(extension.lastIndexOf("/")+1);
+	}
+	else 
+		extension = "Google";
+	
+	$('#' + form_id).find("#extension").val(extension);
 	$('#' + form_id).find("#network_type").val(network);
 	$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
 	$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
@@ -197,6 +209,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 				$('#' + form_id).find('#network_type').closest(".controls").find(".icon-ok").css("display", "none");
 				$('#' + form_id).find('#network_type').closest(".controls").find("div.link").css("background-color", "#FFFFFF");
 				$('#' + form_id).find("#upload_url").val("");
+				$('#' + form_id).find("#extension").val("");
 				
 				$('#' + form_id).each(function() {
 					this.reset();

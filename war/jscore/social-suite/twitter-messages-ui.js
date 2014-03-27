@@ -12,7 +12,7 @@ $(function()
 	{
 		// Close all dropdowns of all tweets.
 		$('.more-options-list').toggle(false);
-		
+
 		$('#socialsuite_twitter_messageModal').remove();
 
 		var streamId = $(this).attr("stream-id");
@@ -31,7 +31,7 @@ $(function()
 		$('.more-options-list').toggle(false);
 
 		$('#socialsuite_twitter_messageModal').remove();
-		
+
 		var streamId = ($(this).closest('article').attr('stream-id'));
 		var tweetId = ($(this).closest('article').attr('id'));
 
@@ -47,7 +47,7 @@ $(function()
 	{
 		// Hide modal before showing message modal.
 		$("#socialsuite_RT_userlistModal").modal("hide");
-		
+
 		$('#socialsuite_twitter_messageModal').remove();
 
 		// Close all dropdowns of all tweets.
@@ -59,7 +59,7 @@ $(function()
 		// Display modal with JSON filled in that.
 		displayFilledModal(streamId, null, tweetOwner, "Reply Tweet");
 	});
-	
+
 	/**
 	 * Sends a direct message to the Twitter profile , who is tweet owner.
 	 */
@@ -67,7 +67,7 @@ $(function()
 	{
 		// Close all dropdowns of all tweets.
 		$('.more-options-list').toggle(false);
-		
+
 		$('#socialsuite_twitter_messageModal').remove();
 
 		var streamId = ($(this).closest('article').attr('stream-id'));
@@ -104,7 +104,7 @@ $(function()
 			 * of send, which is disabled.
 			 */
 			$('#send_retweet').remove();
-						
+
 			$('#edit_retweet').hide();
 			$('#twit-retweet').hide();
 			$('#send_tweet').show();
@@ -119,8 +119,8 @@ $(function()
 
 	/**
 	 * Get stream and perform undo-retweet action on selected tweet. If stream
-	 * is "Sent" then remove tweet from stream and if stream is "Home" then remove
-	 * RT icon only.
+	 * is "Sent" then remove tweet from stream and if stream is "Home" then
+	 * remove RT icon only.
 	 */
 	$(".undo-retweet-status").die().live("click", function(e)
 	{
@@ -178,28 +178,47 @@ $(function()
 
 			// Create normal time.
 			displayTimeAgo($(".chirp-container"));
-			
+
 		}).error(function(data)
 		{
 			// Error message is shown when error occurs
 			displayError(null, data);
 		});
 	});
-	
+
 	// On copy paste from mouse right click call key press to check cross limit.
 	$('#twit-tweet').die().live("mouseleave", function(e)
 	{
 		$('#twit-tweet').keypress();
-	});	
+	});
+
+	// On click of link in message modal, Add agile text to message text area in
+	// message modal.
+	$("#add_message").die().live("click", function(e)
+	{
+		var quote = "Sell & Market like Fortune 500 with @agilecrm";
+
+		document.getElementById("twit-tweet").value += quote;
+
+		$("#link-text").html("<b>Thank you.</b>");
+
+		setTimeout(function()
+		{
+			$("#link-text").hide();
+		}, 2000);
+	});
 
 	/*
 	 * On modal close,Makes Scheduled_Edit flag false to show normal update
 	 * flow, because scheduling div display is depend on that.
 	 */
-	$('#socialsuite_twitter_messageModal').on('hidden.bs.modal', function()
+	$('#socialsuite_twitter_messageModal').die().live('hidden', function()
 	{
-		Scheduled_Edit = false;		
+		if (this.id != "#socialsuite_twitter_messageModal")
+			return;
+
+		$('.modal-backdrop').remove();
+		Scheduled_Edit = false;
+		$('#socialsuite_twitter_messageModal').remove();
 	});
-	
-	
 }); // init end

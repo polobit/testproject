@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.webrules.util.WebRuleUtil;
 import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
@@ -17,75 +18,76 @@ import com.googlecode.objectify.condition.IfDefault;
 @XmlRootElement
 public class WebRule
 {
-	@Id
-	public Long id;
+    @Id
+    public Long id;
 
-	@NotSaved(IfDefault.class)
-	public String name = null;
+    @NotSaved(IfDefault.class)
+    public String name = null;
 
-	@NotSaved(IfDefault.class)
-	@Embedded
-	public List<SearchRule> rules = new ArrayList<SearchRule>();
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public List<SearchRule> rules = new ArrayList<SearchRule>();
 
-	@NotSaved(IfDefault.class)
-	@Embedded
-	@Unindexed
-	public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
+    @NotSaved(IfDefault.class)
+    @Embedded
+    @Unindexed
+    public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
 
-	public static ObjectifyGenericDao<WebRule> dao = new ObjectifyGenericDao<WebRule>(WebRule.class);
+    public static ObjectifyGenericDao<WebRule> dao = new ObjectifyGenericDao<WebRule>(WebRule.class);
 
-	public WebRule()
-	{
+    public WebRule()
+    {
 
-	}
+    }
 
-	/*
-	 * @PostLoad void postLoad() { System.out.println("post load");
-	 * System.out.println(actions); for (WebRuleAction action : actions) {
-	 * System.out.println(action.action); System.out.println(action.popup_text);
-	 * }
-	 * 
-	 * }
-	 */
+    /*
+     * @PostLoad void postLoad() { System.out.println("post load");
+     * System.out.println(actions); for (WebRuleAction action : actions) {
+     * System.out.println(action.action); System.out.println(action.popup_text);
+     * }
+     * 
+     * }
+     */
 
-	/**
-	 * Saves the report
-	 */
-	public void save()
-	{
-		dao.put(this);
+    /**
+     * Saves the report
+     */
+    public void save()
+    {
+	if (this.id == null && WebRuleUtil.isLimitReached())
+	    return;
 
-	}
+	dao.put(this);
+    }
 }
 
 @XmlRootElement
 class WebRuleAction
 {
-	@Override
-	public String toString()
-	{
-		return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern="
-				+ popup_pattern + ", title=" + title + ", popup_text=" + popup_text + ", delay=" + delay + ", timer="
-				+ timer + "]";
-	}
+    @Override
+    public String toString()
+    {
+	return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern=" + popup_pattern + ", title=" + title
+		+ ", popup_text=" + popup_text + ", delay=" + delay + ", timer=" + timer + "]";
+    }
 
-	public enum Action
-	{
-		POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT, RUN_JAVASCRIPT, FORM;
-	}
+    public enum Action
+    {
+	POPUP, ASSIGN_CAMPAIGN, UNSUBSCRIBE_CAMPAIGN, ADD_TAG, REMOVE_TAG, ADD_SCORE, SUBTRACT_SCORE, MODAL_POPUP, CORNER_NOTY, NOTY, JAVA_SCRIPT, RUN_JAVASCRIPT, FORM;
+    }
 
-	public Action action = null;
-	public String RHS = null;
+    public Action action = null;
+    public String RHS = null;
 
-	public String position = null;
+    public String position = null;
 
-	public String popup_pattern = null;
+    public String popup_pattern = null;
 
-	public String title = null;
+    public String title = null;
 
-	public Text popup_text = null;
+    public Text popup_text = null;
 
-	public String delay = null;
+    public String delay = null;
 
-	public Long timer = 0L;
+    public Long timer = 0L;
 }

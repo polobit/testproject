@@ -1,9 +1,36 @@
 /**
- * Add Tweet to relevant stream (in sub-collection) with some extra tags as per
- * requirement. We were not having pubnub channel capacity so this solution
+ * When social tab is not selected or user is in different tab, so add isNew
+ * field with value true in tweet. so that will usefull to count unread tweets
+ * and display that count in stream notification.
+ */
+function isNewUnreadTweet(tweet)
+{
+	var modelStream = null;
+
+	// Newly register stream tweet or first tweet. So need to take stream from
+	// original collection.
+	if (tweet.id == "000" || tweet.type == "ACK")
+	{
+		console.log("got 000");
+	}
+	else
+	{
+		tweet["isNew"] = "true";
+	}
+
+	// Get stream from collection.
+	modelStream = Streams_List_View.collection.get(tweet.stream_id);
+
+	// Add tweet to stream model.
+	rebuildTweet(modelStream, tweet);
+}
+
+/**
+ * Calls method to Add Tweet in relevant stream (in sub-collection) with some extra tags as per
+ * requirement are added. We were not having pubnub channel capacity so this solution
  * applied.
  */
-function addTweetToStream(modelStream, tweet)
+function rebuildTweet(modelStream, tweet)
 {
 	// Hide waiting symbol.
 	$("#stream-spinner-modal-" + tweet.stream_id).hide();
@@ -17,7 +44,8 @@ function addTweetToStream(modelStream, tweet)
 	}
 	else if (tweet.type == "ACK")
 	{
-		// This ACK is from our social server to indicate current stream is registered.
+		// This ACK is from our social server to indicate current stream is
+		// registered.
 		tweet["msg_type"] = "ACK";
 		tweet["text"] = "ACK";
 	}
@@ -35,7 +63,7 @@ function addTweetToStream(modelStream, tweet)
 		if (modelStream.get('tweetListView').length == 2)
 			clearNoTweetNotification(modelStream);
 
-		// If stream owner is tweet owner no need to show retweet icon.0
+		// If stream owner is tweet owner no need to show retweet icon.
 		if (modelStream.get('screen_name') != tweet.user.screen_name)
 			tweet["tweetowner_not_streamuser"] = true;
 
@@ -66,46 +94,67 @@ function addTweetToStream(modelStream, tweet)
 	// console.log("tweet : "+tweet.text);
 	// console.log("add at "+modelStream.get('tweetListView').length);
 
-	// On scroll down collect 5 tweets in JSON Array and then add to stream.
+	// On scroll down, To avoid freezing, collect 5 tweets in JSON Array and then add to stream.
 	if (Scroll_Down_Call == true)
 	{
 		checkPastTweetAdd(tweet, modelStream);
 		return;
 	}
 
-	// Ack from server that shows current streams registeration is done.
+	/*
+	 * Ack from server that shows current streams registration is done. So call
+	 * register all with new counter to register next stream
+	 */
 	if (tweet.type == "ACK")
 	{
 		Register_Counter++;
 		registerAll(Register_Counter);
 	}
 
-	// Update collection.
-	updateCollection(tweet, modelStream);
+	// Add tweet to relevant stream.
+	addTweetToStream(tweet, modelStream);
 }
 
 /**
- * When social is not selected or user is in different tab, so temporarily add
- * Tweet to temp collection.
+ * Add given tweets in given stream model which is sub-collection.
  */
-function addTweetToTempCollection(tweet)
+function addTweetToStream(tweet, modelStream)
 {
-	var modelStream = null;
-
-	// Newly register stream tweet or first tweet. So need to take stream from original collection.
-	if (tweet.id == "000" || tweet.type == "ACK")
+	// Sort stream on tweet id basis which is unique and recent tweet has highest value.
+	modelStream.get('tweetListView').comparator = function(model)
 	{
-		console.log("got 000");
-		
-		// Get stream from collection.
-		modelStream = Streams_List_View.collection.get(tweet.stream_id);
-	}
-	else
-	{
-		// Get stream from temp collection.
-		modelStream = Temp_Streams_List_View.collection.get(tweet.stream_id);
-	}
+		if (model.get('id'))
+			return -model.get('id');
+	};
 
-	// Add tweet to stream model.
-	addTweetToStream(modelStream, tweet);
+	// Add tweet to stream.
+	modelStream.get('tweetListView').add(tweet);
+
+	// Sort stream on id. so recent tweet comes on top.
+	modelStream.get('tweetListView').sort();
+
+	// Create normal time.
+	displayTimeAgo($(".chirp-container"));
+}
+
+/**
+ * Removes isNew field from tweet so new unread tweet can be visible in stream. 
+ */
+function mergeNewUnreadTweets(streamId)
+{
+	// Get stream from collections.
+	var stream = Streams_List_View.collection.get(streamId);
+
+	var newAddedTweets = stream.get('tweetListView').where({ isNew : "true" });
+
+	$.each(newAddedTweets, function(i, tweetModel)
+	{
+		tweetModel.unset("isNew");
+	});
+
+	// Create normal time.
+	displayTimeAgo($(".chirp-container"));
+
+	// Remove waiting symbol.
+	removeWaiting();
 }

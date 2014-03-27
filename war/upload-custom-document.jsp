@@ -1,7 +1,6 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<%@page import="java.util.Date"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -49,12 +48,10 @@ function returnBack()
 	 }
 	 return;
 }
-
 $(function()
 {
 	// Check if this was referred back again
 	var key = getUrlVars()["key"];
-	console.log("Key " + key);
 	if(key != undefined)
 	{
 		returnBack();
@@ -75,8 +72,21 @@ function isValid(){
 	        		  file:{required:true,accept:""}
 	               },
 	        submitHandler:function(form)
-                  {   
-      	              form.submit();
+                  {  
+	        		// Concating file extension to key
+		    	    var fileName = $("input:file").val();
+		    	    
+		    	    if(fileName.lastIndexOf(".") > 0)
+		    	    	fileName = fileName.substring(fileName.lastIndexOf(".")+1);
+		    	    else
+		    	    	fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
+		    	    
+		    	    var key = $("#key").val();
+		    	    key = key + "/" + fileName;
+		    	    $("#key").val(key);
+		    	    
+		    	    // Form submission
+      	            form.submit();
       	          }
 	   		});
 	    return $("#form").valid();
@@ -102,7 +112,7 @@ function isValid(){
 
 <form id="form" action="https://agilecrm.s3.amazonaws.com/" method="post" enctype="multipart/form-data" onsubmit="return isValid();"> 
 
-<input type="hidden" name="key" value="panel/uploaded-logo/<%=new Date().getTime()%>" /> 
+<input type="hidden" id="key" name="key" value="panel/uploaded-logo/<%=request.getParameter("d")%>" /> 
 
 <input type="hidden" name="acl" value="public-read" /> 
 <input type="hidden" name="content-type" value="image/*" />

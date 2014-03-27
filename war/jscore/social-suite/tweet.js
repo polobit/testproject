@@ -1,5 +1,10 @@
 /**
- * Add tweet in stream.
+ * AS per tweet data and type, It will perform actions like : display rate limit
+ * exceed error, add tweet, show notification if user is not in social
+ * tab/window.
+ * if tweet id is 001 : Rate limit exceeded.
+ * if tweet id is 000 : tweets not available for stream..
+ * if tweet type is ACK : tweet is register on server and all REST tweets are sent.
  */
 function handleMessage(tweet)
 {
@@ -10,8 +15,7 @@ function handleMessage(tweet)
 		return;
 	}
 
-	// Error message from server "Rate limit exceeded." or "server not
-	// connected."
+	// Error message from server "Rate limit exceeded." or "server not connected."
 	if (tweet.id == "001") // (tweet.delete != null)
 	{
 		displayErrorInStream(tweet);
@@ -21,53 +25,47 @@ function handleMessage(tweet)
 	// Get stream from collection.
 	var modelStream = Streams_List_View.collection.get(tweet.stream_id);
 
-	if (modelStream != null || modelStream != undefined)
+	if (modelStream != undefined)
 	{
-		// console.log("Current_Route: "+Current_Route+" Focused: "+Focused);
+		console.log("Current_Route: "+Current_Route+" Focused: "+Focused);
 
 		// User on #social as well as window is active.
 		if (Current_Route == "social" && Focused == true)
 		{
-
-			// New tweet notification not yet clicked.
+			// New tweet notification not yet clicked in stream.
 			if ($('#stream_notifications_' + tweet.stream_id).is(':empty') == false)
 			{
 				// console.log("not clicked");
 
-				// User did not click on notification so continue adding tweets
-				// in temp collection.
-				addTweetToTempCollection(tweet);
+				// User did not click on notification so mark tweet as new unread tweet.
+				isNewUnreadTweet(tweet);
 
 				// Change notification to show number of new tweets.
-				checkNewTweets();
+				showNotification(modelStream);
 			}
 			else
 			{
-				// console.log("no notification");
-
-				// Add tweet to model in normal way.
-				addTweetToStream(modelStream, tweet);
+				// User is in #social and there is no notification on stream.
+				// Rebuild tweet and Add tweet to model in normal way.
+				rebuildTweet(modelStream, tweet);
 			}
 		}
 		else
-		{
-			// console.log("not in social suite");
+		{			
+			// Add tweet as new unread, because user is on another tab or window is inactive.
+			isNewUnreadTweet(tweet);
 
-			// Add tweet to temp collection, user on another tab or window is
-			// inactive.
-			addTweetToTempCollection(tweet);
-
+			// User in #social but window is inactive.
 			if (Current_Route == "social")
 			{
 				// Change notification to show number of new tweets.
-				checkNewTweets();
+				showNotification(modelStream);
 			}
 		}
 	} // If End
 
 	// Remove deleted tweet element from ui
 	$('.deleted').remove();
-
 }
 
 /*
