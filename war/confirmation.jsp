@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.tasklets.agile.util.AgileTaskletUtil"%>
 <%@page import="com.agilecrm.util.email.SendMail"%>
 <%@page import="com.agilecrm.workflows.Workflow"%>
@@ -406,6 +407,8 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    
 					    if("current".equals(status))
 						map.put("campaign_name", campaign_name);
+					    
+					    map.put("domain", NamespaceManager.get());
 						 
 						if(map.size() != 0)
 						   SendMail.sendMail(email, SendMail.UNSUBSCRIBE_CONFIRMATION_SUBJECT,SendMail.UNSUBSCRIBE_CONFIRMATION , map, "noreply@agilecrm.com", company);
@@ -426,7 +429,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 	<br />
 	<div>
 		<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 85px;">Powered
-			by</span> <a href="https://www.agilecrm.com?src=unsubscribe-page" target="_blank"> <img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 120px;">
+			by</span> <a href="https://www.agilecrm.com?utm_source=powered-by&utm_medium=unsubscribe&utm_campaign=<%= NamespaceManager.get() %>" rel="nofollow" target="_blank"> <img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 120px;">
 		</a>
 	</div>
 </body>
