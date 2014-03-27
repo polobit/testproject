@@ -179,12 +179,14 @@ function displayError(modalToDisplay, data)
 		// shown
 		$('#' + modalToDisplay).modal("hide");
 	}
-
+	
 	var result = data.responseText;
 
 	// Error message is shown if error occurs
 	if (result.trim() == "Status is a duplicate.")
 		showNotyPopUp('information', "Whoops! You already tweeted that...", "top", 5000);
+	else if(result.trim() == "Sorry, that page does not exist")
+		showNotyPopUp('information', "Sorry, that tweet does not exist.", "top", 5000);
 	else
 		showNotyPopUp('information', "Retry after sometime.", "top", 5000);
 

@@ -281,14 +281,26 @@ $(function()
 		displayModal("socialsuite_RT_userlistModal", "socialsuite-RT-userlist", tweet, null, null, "/core/social/tweet/" + streamId);
 
 		$("#spinner-modal").show();
-
+		
 		// Collection for user's list.
 		var RTUserListView = new Base_Collection_View({ url : function()
 		{
 			return '/core/social/getrtusers/' + streamId + "/" + tweet.id_str;
 		}, restKey : "user", templateKey : "socialsuite-RT-userlist", individual_tag_name : 'li', });
 
-		RTUserListView.collection.fetch();
+		RTUserListView.collection.fetch({
+		    success : function(data) {		        
+		        $("#spinner-modal").hide();
+		    },
+		    error: function(response) {
+		        console.log("ON ERROR");
+		        console.log(response);
+		        
+		        var data = {}; data["responseText"] = "Sorry, that page does not exist";
+		        
+		        displayError("socialsuite_RT_userlistModal", data);
+		    }
+		});
 
 		$('#RTuser_list').html(RTUserListView.render(true).el);
 
