@@ -66,16 +66,16 @@ function isPastSchedule()
  * scheduled updates page.
  */
 function checkScheduledUpdates()
-{
+{	
 	// Get scheduled updates count
 	$.getJSON("/core/scheduledupdate/getscheduledupdatescount", function(data)
 	{
 		console.log("data after fetching scheduled updates from db");
 		console.log(data);
 
-		if (data != 0)
+		if (data > 0)
 			$("#show_scheduled_updates").show();
-
+		
 	}).error(function(jqXHR, textStatus, errorThrown)
 	{
 		$("#show_scheduled_updates").hide();
