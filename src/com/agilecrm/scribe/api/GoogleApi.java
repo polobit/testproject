@@ -4,6 +4,8 @@ import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.OAuthConfig;
 import org.scribe.utils.OAuthEncoder;
 
+import com.agilecrm.scribe.ScribeServlet;
+
 /**
  * <code>GoogleApi</code> class contains fields and methods required for OAuth
  * 2.0 specific authentication
@@ -17,6 +19,11 @@ public class GoogleApi extends DefaultApi20
      * Scoped authorize URL of Google for OAuth 2.0
      */
     private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=force";
+
+    /**
+     * Scoped authorize URL of Google for OAuth 2.0 with prompt set to auto
+     */
+    private static final String AUTHORIZE_URL_AUTO_PROMPT_TYPE = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=auto";
 
     /**
      * URL of Google to request for access token
@@ -50,11 +57,15 @@ public class GoogleApi extends DefaultApi20
     {
 
 	if (config.getCallback() != null)
-	    System.out.println("called api "
-		    + OAuthEncoder.encode(config.getCallback()));
-	return String.format(AUTHORIZE_URL, config.getApiKey(),
-		OAuthEncoder.encode(config.getScope()),
-		OAuthEncoder.encode(config.getCallback()),
+	    System.out.println("called api " + OAuthEncoder.encode(config.getCallback()));
+
+	// For OAuth2 Authorization for profile, we do not have offline every
+	// time
+	String url = AUTHORIZE_URL;
+	if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE))
+	    url = AUTHORIZE_URL_AUTO_PROMPT_TYPE;
+
+	return String.format(url, config.getApiKey(), OAuthEncoder.encode(config.getScope()), OAuthEncoder.encode(config.getCallback()),
 		OAuthEncoder.encode(REDIRECT_URL));
     }
 }
