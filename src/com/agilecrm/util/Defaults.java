@@ -37,17 +37,19 @@ public class Defaults
     private void saveDefaultContacts()
     {
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
-	tags.add("Business Owner");
-	tags.add("Frequent Buyer");
+	tags.add("Business guy");
+	tags.add("US");
+	tags.add("Donuts");
 	List<ContactField> contactFields = new ArrayList<ContactField>();
-	contactFields.add(new ContactField(Contact.FIRST_NAME, "Steve", null));
-	contactFields.add(new ContactField(Contact.LAST_NAME, "Jobs", null));
-	contactFields.add(new ContactField(Contact.EMAIL, "theboss@apple.com", "work"));
-	contactFields.add(new ContactField(Contact.COMPANY, "Apple", null));
-	contactFields.add(new ContactField(Contact.TITLE, "CEO", null));
-	contactFields.add(new ContactField("website", "@stevejobsceo", "TWITTER"));
-	contactFields.add(new ContactField("address", "{\"address\":\"1 Infinite Loop\",\"city\":\"Cupertino\",\"state\":\"CA\",\"zip\":\"95014\"}", "office"));
-	contactFields.add(new ContactField("image", "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348163437?id=contact-container", null));
+	contactFields.add(new ContactField(Contact.FIRST_NAME, "Homer", null));
+	contactFields.add(new ContactField(Contact.LAST_NAME, "Jay Simpson", null));
+	contactFields.add(new ContactField(Contact.EMAIL, "homer@simpson.com", "work"));
+	contactFields.add(new ContactField(Contact.COMPANY, "Springfield Nuclear Power Plant", null));
+	contactFields.add(new ContactField(Contact.TITLE, "Nuclear Safety Inspector", null));
+	contactFields.add(new ContactField("website", "http://www.thesimpsons.com/", "URL"));
+	contactFields.add(new ContactField("phone", "+1-214-124-8756", ""));
+	contactFields.add(new ContactField("address", "{\"address\":\"742 Evergreen Terrace\",\"city\":\"Springfield\",\"country\":\"US\"}", "home"));
+	contactFields.add(new ContactField("image", "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1395904537756?id=contact-container", null));
 
 	Contact contact = new Contact(Contact.Type.PERSON, tags, contactFields);
 	contact.lead_score = 50;
@@ -68,19 +70,6 @@ public class Defaults
 	contact1.star_value = 3;
 	contact1.lead_score = 10;
 	contact1.save();
-
-	LinkedHashSet<String> tags2 = new LinkedHashSet<String>();
-	tags2.add("Activist");
-	List<ContactField> contactFields2 = new ArrayList<ContactField>();
-	contactFields2.add(new ContactField(Contact.FIRST_NAME, "Mohandas", null));
-	contactFields2.add(new ContactField(Contact.LAST_NAME, "Gandhi", null));
-	contactFields2.add(new ContactField(Contact.EMAIL, "passiveaggressivemonk@pietermaritzburg.org", "work"));
-	contactFields2.add(new ContactField(Contact.TITLE, "Philanthropist", null));
-	contactFields2.add(new ContactField("image", "https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1370348006468?id=contact-container", null));
-	Contact contact2 = new Contact(Contact.Type.PERSON, tags2, contactFields2);
-	contact2.star_value = 5;
-	contact2.lead_score = 10;
-	contact2.save();
 
 	List<ContactField> contactFields3 = new ArrayList<ContactField>();
 	contactFields3.add(new ContactField(Contact.NAME, "Apple", null));
