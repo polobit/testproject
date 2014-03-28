@@ -6,6 +6,7 @@ import com.agilecrm.core.api.prefs.UserPrefsAPI;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.util.EmailUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
@@ -23,8 +24,7 @@ public class UserPrefsUtil
     /**
      * UserPrefs Dao.
      */
-    private static ObjectifyGenericDao<UserPrefs> dao = new ObjectifyGenericDao<UserPrefs>(
-	    UserPrefs.class);
+    private static ObjectifyGenericDao<UserPrefs> dao = new ObjectifyGenericDao<UserPrefs>(UserPrefs.class);
 
     /**
      * Returns UserPrefs with respect to current agile-user.
@@ -51,11 +51,9 @@ public class UserPrefsUtil
     public static UserPrefs getUserPrefs(AgileUser agileUser)
     {
 	Objectify ofy = ObjectifyService.begin();
-	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class,
-		agileUser.id);
+	Key<AgileUser> userKey = new Key<AgileUser>(AgileUser.class, agileUser.id);
 
-	UserPrefs userPrefs = ofy.query(UserPrefs.class).ancestor(userKey)
-		.get();
+	UserPrefs userPrefs = ofy.query(UserPrefs.class).ancestor(userKey).get();
 	if (userPrefs == null)
 	    return getDefaultPrefs(agileUser);
 
@@ -71,15 +69,7 @@ public class UserPrefsUtil
      */
     private static UserPrefs getDefaultPrefs(AgileUser agileUser)
     {
-	UserPrefs userPrefs = new UserPrefs(
-		agileUser.id,
-		null,
-		null,
-		"pink",
-		"",
-		"- Sent using <a href=\"https://www.agilecrm.com\" target=\"_blank\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\">AgileCRM</a>",
-		true,
-		false);
+	UserPrefs userPrefs = new UserPrefs(agileUser.id, null, null, "pink", "", EmailUtil.getPoweredByAgileLink("email-signature", "Sent using"), true, false);
 	userPrefs.save();
 	return userPrefs;
     }

@@ -11,6 +11,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
@@ -216,6 +217,8 @@ public class AgileTaskletUtil
 	    // Returns Created and Updated date in GMT with given format.
 	    subscriberJSON.put("created_date", DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
 	    subscriberJSON.put("modified_date", DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+
+	    subscriberJSON.put("powered_by", EmailUtil.getPoweredByAgileLink("campaign", "Powered by"));
 
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
 
