@@ -28,6 +28,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.social.linkedin.LinkedInUtil;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -338,6 +339,8 @@ public class Contact extends Cursor
     /**
      * Saves (new) or updates (existing) a contact and executes trigger,
      * notification and also adds to search document
+     * 
+     * @throws PlanRestrictedException
      */
     public void save(boolean... args)
     {
@@ -1058,7 +1061,6 @@ public class Contact extends Cursor
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type + " tags: " + tags + " properties: "
 		+ properties;
     }
-
 }
 
 /**

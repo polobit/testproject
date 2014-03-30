@@ -45,6 +45,10 @@ public class UserInfo implements Serializable
      */
     private Long domainId = 0L;
 
+    private Integer usersCount = 0;
+
+    private String plan;
+
     public UserInfo()
     {
     }
@@ -119,4 +123,25 @@ public class UserInfo implements Serializable
     {
 	return domainId;
     }
+
+    public Integer getUsersCount()
+    {
+	return usersCount;
+    }
+
+    public void setUsersCount(Integer usersCount)
+    {
+	this.usersCount = usersCount;
+    }
+
+    public String getPlan()
+    {
+	return plan;
+    }
+
+    public void setPlan(String plan)
+    {
+	this.plan = plan;
+    }
+
 }

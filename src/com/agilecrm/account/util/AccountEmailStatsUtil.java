@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
@@ -61,5 +62,12 @@ public class AccountEmailStatsUtil
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
+
+    public static void checkLimits() throws PlanRestrictedException
+    {
+	AccountEmailStats stats = getAccountEmailStats(NamespaceManager.get());
+	stats.checkLimits();
+
     }
 }

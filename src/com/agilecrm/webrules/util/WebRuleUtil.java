@@ -3,7 +3,7 @@ package com.agilecrm.webrules.util;
 import java.util.List;
 
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.limits.PlanLimitsEnum;
 import com.agilecrm.webrules.WebRule;
 
 public class WebRuleUtil
@@ -19,11 +19,11 @@ public class WebRuleUtil
 	int count = WebRule.dao.count();
 	if (subscrition == null)
 	{
-	    if (PlanLimits.FREE.getwebRulesLimit() * 2 <= WebRule.dao.count())
+	    if (PlanLimitsEnum.FREE.getWebRuleLimit() * 2 <= WebRule.dao.count())
 		return true;
 	    return false;
 	}
 
-	return subscrition.plan.getPlanLimitsUtil().getwebRulesLimit() <= count ? true : false;
+	return subscrition.plan.getPlanLimits().getWebRuleLimit() <= count ? true : false;
     }
 }

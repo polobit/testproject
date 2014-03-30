@@ -186,41 +186,41 @@ public class GoogleServiceUtil
 
     public static HashMap<String, Object> exchangeAuthTokenForAccessToken(String authToken, String scope)
     {
-        System.out.println("In google save token");
-    
-        /*
-         * Make a post request and retrieve tokens
-         */
-        OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
-    
-        oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
-        oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
-    
-        if (scope == null)
-            scope = "";
-    
-        oAuthRequest.addBodyParameter("scope", scope);
-        oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
-        oAuthRequest.addBodyParameter("code", authToken);
-        oAuthRequest.addBodyParameter("grant_type", "authorization_code");
-    
-        Response response = oAuthRequest.send();
-    
-        // Creates HashMap from response JSON string
-        HashMap<String, Object> properties;
-        try
-        {
-            properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, Object>>()
-            {
-            });
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            properties = new HashMap<>();
-        }
-    
-        return properties;
+	System.out.println("In google save token");
+
+	/*
+	 * Make a post request and retrieve tokens
+	 */
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, "https://accounts.google.com/o/oauth2/token");
+
+	oAuthRequest.addBodyParameter("client_id", Globals.GOOGLE_CLIENT_ID);
+	oAuthRequest.addBodyParameter("client_secret", Globals.GOOGLE_SECRET_KEY);
+
+	if (scope == null)
+	    scope = "";
+
+	oAuthRequest.addBodyParameter("scope", scope);
+	oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+	oAuthRequest.addBodyParameter("code", authToken);
+	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
+
+	Response response = oAuthRequest.send();
+
+	// Creates HashMap from response JSON string
+	HashMap<String, Object> properties;
+	try
+	{
+	    properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, Object>>()
+	    {
+	    });
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    properties = new HashMap<>();
+	}
+
+	return properties;
     }
 }

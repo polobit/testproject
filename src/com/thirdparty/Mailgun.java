@@ -5,6 +5,8 @@ import java.net.URLEncoder;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.Globals;
+import com.agilecrm.subscription.restrictions.BillingRestriction;
+import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.agilecrm.util.HTTPUtil;
 
 /**
@@ -88,6 +90,9 @@ public class Mailgun
     {
 	try
 	{
+	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
+	    restriction.check(restriction.emails, "Email");
+
 	    String data = MAILGUN_API_PARAM_FROM + "=" + URLEncoder.encode(getFromEmail(fromName, fromEmail), "UTF-8") + "&" + MAILGUN_API_PARAM_TO + "="
 		    + URLEncoder.encode(to, "UTF-8") + "&" + MAILGUN_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject, "UTF-8");
 

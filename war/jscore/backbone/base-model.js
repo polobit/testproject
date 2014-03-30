@@ -403,7 +403,8 @@ var Base_Model_View = Backbone.View
 
 										// Hides the error message after 3
 										// seconds
-										$save_info.show().delay(3000).hide(1);
+										if(response.status != 406)
+											$save_info.show().delay(3000).hide(1);
 									}
 								}, { silent : true });
 			},
