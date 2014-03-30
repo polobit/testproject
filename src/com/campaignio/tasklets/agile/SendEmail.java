@@ -456,10 +456,18 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
+	// Appends Agile label
+	text = StringUtils.replace(text, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+	text = EmailUtil.appendAgileToText(text, "Sent using");
+
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
 	    html = EmailUtil.appendTrackingImage(html, campaignId, subscriberId);
+
+	    // If no powered by merge field, append Agile label to html
+	    if (!StringUtils.contains(html, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
 
 	    // if cc present, send using Mailgun as it supports 'Cc'
 	    if (!StringUtils.isEmpty(cc))

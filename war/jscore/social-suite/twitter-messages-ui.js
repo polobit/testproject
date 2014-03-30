@@ -196,7 +196,7 @@ $(function()
 	// message modal.
 	$("#add_message").die().live("click", function(e)
 	{
-		var quote = "Sell & Market like Fortune 500 with @agilecrm";
+		var quote = " Sell & Market like Fortune 500 with @agilecrm";
 
 		document.getElementById("twit-tweet").value += quote;
 
