@@ -32,93 +32,34 @@ public class UnbounceWebhook extends HttpServlet
 	{
 		try
 		{
-			// Get API Key with tags
 			String tagString = req.getParameter("api-key");
+
+			tagString = tagString.trim();
+			tagString = tagString.replace("/, /g", ",");
+
+			String[] tagsWithKey = tagString.split(",");
+			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
+
+			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+
 			List<ContactField> properties = new ArrayList<ContactField>();
 
-			// Get JSON data
 			JSONObject obj = new JSONObject(req.getParameter("data.json"));
-			obj.remove("variant");
-			obj.remove("page_uuid");
-			obj.remove("page_url");
-			obj.remove("date_submitted");
-			obj.remove("time_submitted");
+			JSONObject finalJson = convertUnbounceJson(obj);
 
-			// Get email from JSON and format
-			String email = obj.getString("email");
-			String reg = "\\[|\\]";
-			email = email.replaceAll(reg, "");
-			email = email.replaceAll("\"", "");
+			Contact contact = null;
 
-			// Search contact based on email
-			Contact contact = ContactUtil.searchContactByEmail(email);
+			if (!StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
+				contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
+
 			if (contact == null)
 				contact = new Contact();
 
-			// Address JSON
-			JSONObject addJson = new JSONObject();
+			FormsUtil.jsonToAgile(finalJson, properties, null);
 
-			// Iterate over JSON data to get form fields
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				// Get name of form field
-				String key = (String) keys.next();
-
-				// Get value of form field and format
-				String value = obj.get(key).toString();
-				String regex = "\\[|\\]";
-				value = value.replaceAll(regex, "");
-				value = value.replaceAll("\"", "");
-
-				if (!StringUtils.isBlank(value))
-				{
-
-					// Build address JSON
-					if (key.equalsIgnoreCase("country"))
-						addJson.put("country", value);
-
-					else if (key.equalsIgnoreCase("state"))
-						addJson.put("state", value);
-
-					else if ((key.equalsIgnoreCase("province")) && !StringUtils.isBlank(value))
-						addJson.put("city", value);
-
-					else if ((key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code") || key
-							.equalsIgnoreCase("postal code")))
-						addJson.put("zip", value);
-
-					else if ((key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location") || key
-							.equalsIgnoreCase("street")))
-						addJson.put("address", value);
-
-					else if (key.equalsIgnoreCase("stateprovince"))
-						addJson.put("state", value);
-
-					else
-
-						// Add property to list of properties
-						properties.add(FormsUtil.unbounceBuildProperty(key, value));
-				}
-			}
-			if (addJson.length() != 0)
-				properties.add(FormsUtil.unbounceBuildProperty(Contact.ADDRESS, addJson.toString()));
-
-			// Format tagString and split into tagsWithKey array
-			tagString = tagString.trim();
-			tagString = tagString.replace("/, /g", ",");
-			String[] tagsWithKey = tagString.split(",");
-
-			// Get tags from tagsWithKey array
-			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
-
-			// Set contact owner
-			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 			if (owner != null)
 			{
 				contact.setContactOwner(owner);
-
-				// Add properties to contact and set contact owner
 				contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 				contact.addTags(tags);
 				contact.save();
@@ -127,7 +68,48 @@ public class UnbounceWebhook extends HttpServlet
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			System.out.println("Error is " + e.getMessage());
 			return;
+		}
+	}
+
+	public static JSONObject convertUnbounceJson(JSONObject json)
+	{
+		try
+		{
+			JSONObject finalJson = new JSONObject();
+
+			String name;
+			String value;
+
+			json.remove("variant");
+			json.remove("page_uuid");
+			json.remove("page_url");
+			json.remove("date_submitted");
+			json.remove("time_submitted");
+
+			Iterator<?> keys = json.keys();
+			while (keys.hasNext())
+			{
+				String regex = "\\[|\\]";
+				name = (String) keys.next();
+				value = json.getString(name);
+				value = value.replaceAll(regex, "");
+				value = value.replaceAll("\"", "");
+
+				if (!StringUtils.isBlank(value))
+				{
+					name = FormsUtil.getFieldName(name);
+					finalJson.put(name, value);
+				}
+			}
+			return finalJson;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Error is " + e.getMessage());
+			return null;
 		}
 	}
 }
