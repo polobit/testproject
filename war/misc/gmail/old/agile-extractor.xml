@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<OpenCOBData id="Agile">
+	<ExtractorSpec platform="gmail" language="en">
+   		<Response platform="gmail" format="cardgadget">
+     		<Output name="email_from">{@__FROM_ADDRESS__}</Output>
+     		<Output name="name_from">{@__FROM_PERSONAL__}</Output>
+     		<Output name="email_to">{@__TO_ADDRESS__}</Output>
+     		<Output name="name_to">{@__TO_PERSONAL__}</Output>
+     		<Output name="email_cc">{@__CC_EMAIL__}</Output>
+     		<Output name="name_cc">{@__CC_PERSONAL__}</Output>
+     	</Response>
+ 	</ExtractorSpec>
+</OpenCOBData>

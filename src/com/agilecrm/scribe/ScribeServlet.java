@@ -12,7 +12,6 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.scribe.util.ScribeUtil;
-import com.agilecrm.user.AgileUser;
 import com.thirdparty.google.ContactsImportUtil;
 
 /**
@@ -38,12 +37,16 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_GMAIL = "gmail";
     public static final String SERVICE_TYPE_GOOGLE = "google";
     public static final String SERVICE_TYPE_GOOGLE_CALENDAR = "google_calendar";
+    public static final String SERVICE_TYPE_GOOGLE_OAUTH2 = "google_oauth2";
     public static final String SERVICE_TYPE_STRIPE = "stripe";
     public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
+
+    // Scopes
     public static final String STRIPE_SCOPE = "read_only";
     public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
     public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
     public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+    public static final String GOOGLE_OAUTH2_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
 
     /**
      * Process the post request to servlet request, request can be sent either
@@ -139,6 +142,11 @@ public class ScribeServlet extends HttpServlet
 
 	// Get service name from request
 	String serviceName = req.getParameter("service");
+
+	// OAuth needn't send any service type
+	if (serviceName == null && req.getRequestURI().contains("oauth"))
+	    serviceName = SERVICE_TYPE_GOOGLE_OAUTH2;
+
 	if (serviceName != null)
 	    req.getSession().setAttribute("service_type", serviceName);
 
@@ -163,7 +171,8 @@ public class ScribeServlet extends HttpServlet
 
 	// OAuth 2.0
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2))
 	{
 	    // After building service, redirects to authorization page
 	    url = service.getAuthorizationUrl(null);
@@ -228,7 +237,8 @@ public class ScribeServlet extends HttpServlet
 
 	// OAuth 2.0 requires code parameter
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2))
 	    code = req.getParameter("code");
 
 	// OAuth 1.0 requires token and verifier
@@ -261,20 +271,12 @@ public class ScribeServlet extends HttpServlet
 	    System.out.println("Secret " + accessToken.getSecret());
 	}
 
-	// Get Agile User
-	AgileUser agileUser = AgileUser.getCurrentAgileUser();
-	if (agileUser == null)
-	{
-	    System.out.println("Cannot find Agile User");
-	    return;
-	}
-
 	// Get Service to retrive access token
 	service = ScribeUtil.getService(req, resp, serviceName);
 
 	System.out.println("service name in save token " + serviceName);
 
-	ScribeUtil.saveTokens(req, service, agileUser, serviceName, accessToken, code);
+	ScribeUtil.saveTokens(req, resp, service, serviceName, accessToken, code);
 
 	// return URL is retrieved from session
 	String returnURL = (String) req.getSession().getAttribute("return_url");
@@ -285,6 +287,8 @@ public class ScribeServlet extends HttpServlet
 	    resp.sendRedirect("/");
 	else
 	    resp.sendRedirect(returnURL);
-    }
 
+	// Delete return url Attribute
+	req.getSession().removeAttribute("return_url");
+    }
 }

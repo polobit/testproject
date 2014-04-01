@@ -1,14 +1,12 @@
 package com.agilecrm;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.account.APIKey;
@@ -16,8 +14,6 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.CacheUtil;
-import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -31,10 +27,9 @@ import com.google.appengine.api.NamespaceManager;
 @SuppressWarnings("serial")
 public class GMailGadgetServlet extends HttpServlet
 {
-    public static final String SESSION_KEY_NAME = "one_time_session_key";
-    public static final String SESSION_GADGET_NAME = "gadget_key";
     public static final String DISASSOCIATE_GADGET = "disassociate_gadget";
-    public static final String EMAIL = "email";
+
+    public static final String OPENSOCIAL_OWNER_ID = "opensocial_owner_id";
 
     /**
      * Validates the request to see if the user is present based on the
@@ -96,27 +91,11 @@ public class GMailGadgetServlet extends HttpServlet
      */
     public boolean save(HttpServletRequest req, HttpServletResponse resp) throws Exception
     {
-	// Get Current User
-	UserInfo user = (UserInfo) req.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-
 	// Get Gadget Id
-	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
-
-	// Get Cache Id
-	String ownerId = (String) CacheUtil.getCache(oneTimeSessionKey);
-	if (ownerId == null)
-	{
-	    resp.getWriter()
-		    .println(
-			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please close this popup and try again.");
-	    return false;
-	}
-
-	// Remove from Cache
-	CacheUtil.deleteCache(oneTimeSessionKey);
+	String ownerId = req.getParameter(OPENSOCIAL_OWNER_ID);
 
 	// Setup Authentication Key
-	DomainUser domainUser = DomainUserUtil.getDomainUserByEmailFromCurrentAccount(user.getEmail());
+	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 	System.out.println("domain user : " + domainUser);
 	if (domainUser == null)
 	{
@@ -125,59 +104,15 @@ public class GMailGadgetServlet extends HttpServlet
 			    + ".agilecrm.com. Please contact your Agile CRM administrator to get a User account.");
 	    return false;
 	}
-	resp.getWriter().println("Saving user " + user.getEmail());
 
 	// Save the gadget_id
 	domainUser.gadget_id = ownerId;
 	domainUser.save();
 
-	resp.getWriter().println("You have successfully associated your gadget with your AgileCRM account. Please close this popup to start using gadget.");
-
+	resp.getWriter()
+		.println(
+			"<img src='https://www.agilecrm.com/img/logo-black.png'><p>You have successfully associated your gadget with your Agile CRM account. Please close this popup to start using gadget.</p>");
 	return false;
-    }
-
-    /**
-     * Google recommends that we keep open social id secret. Agile generates a
-     * one time session key and sends this to oauth authentication
-     * 
-     * @param req
-     * @param resp
-     * @throws Exception
-     */
-    public void setup(HttpServletRequest req, HttpServletResponse resp) throws Exception
-    {
-	// Get One Time Key
-	String oneTimeSessionKey = req.getParameter(SESSION_KEY_NAME);
-
-	// Check in cache and add to session id
-	if (CacheUtil.getCache(oneTimeSessionKey) == null)
-	{
-	    resp.getWriter()
-		    .println(
-			    "We are unable to find any related session. Either you have waited too long to associate your new gadget. Please close this popup and try again.");
-	    return;
-	}
-
-	String domain = req.getParameter("domain");
-
-	// Check if the domain actually exists for the user
-	int numDomainUsers = DomainUserUtil.count();
-	if (numDomainUsers == 0)
-	{
-	    // Send domain exists as false to the client so that it can show
-	    // register message
-	    resp.getWriter().println(
-		    "Domain <b>" + domain + "</b> does not exist. You can register a new one &nbsp;<a href=\"https://"
-			    + "my.agilecrm.com/choose-domain\">here</a>.");
-
-	    return;
-	}
-
-	// Return back to this URL with param set to done
-	req.getSession().setAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME,
-		"/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey + "&openid=done&hd=" + req.getParameter("hd"));
-
-	resp.sendRedirect("/openid" + "?hd=" + req.getParameter("hd") + "&domain=" + req.getParameter("domain"));
     }
 
     /**
@@ -194,20 +129,12 @@ public class GMailGadgetServlet extends HttpServlet
 	// Get OpenSocial ID
 	String ownerId = req.getParameter("opensocial_owner_id");
 
-	// Generate One-time session
-	SecureRandom random = new SecureRandom();
-	String oneTimeSessionKey = new BigInteger(130, random).toString(32);
-
-	// Store in Cache so that when the popup is authenticated - we will
-	// get this value
-	// Basicaly - the popup does the openid authentcation and then maps
-	// this opensocialid using this one-time-session
-	CacheUtil.setCacheForNumberOfDays(oneTimeSessionKey, ownerId, 7);
-
 	JSONObject result = new JSONObject();
-	result.put("user_exists", false);
-	result.put("popup", "https://googleapps.agilecrm.com/gmail?" + SESSION_KEY_NAME + "=" + oneTimeSessionKey);
-	result.put("expires_at", new DateUtil().addDays(6).getTime().getTime());
+
+	String oauthURL = "https://" + req.getServerName() + "/oauth?return_url=";
+
+	String returnURL = "gmail?command=save&" + OPENSOCIAL_OWNER_ID + "=" + ownerId;
+	result.put("popup", oauthURL + URLEncoder.encode(returnURL));
 
 	resp.getWriter().println(result.toString());
     }
@@ -220,22 +147,29 @@ public class GMailGadgetServlet extends HttpServlet
      */
     public void disassociateGadget(HttpServletRequest req, HttpServletResponse resp) throws Exception
     {
-	// Reads email address of the user
-	String ownerId = req.getParameter("opensocial_owner_id");
-	if (StringUtils.isEmpty(ownerId))
-	    return;
 
 	// Gets user based on email address
-	DomainUser user = DomainUserUtil.getDomainUserFromGadgetId(ownerId);
+	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+
+	// If user is null, check if the client has sent this request. It sends
+	// open_social_id
+	if (user == null)
+	{
+	    String ownerId = req.getParameter("opensocial_owner_id");
+	    user = DomainUserUtil.getDomainUserFromGadgetId(ownerId);
+	}
+
+	if (user == null)
+	{
+	    resp.getWriter().println("You are not currently logged in to perform this operation");
+	    return;
+	}
 
 	// If user exists then gadget id is removed from it and saved
-	if (user != null)
-	{
-	    System.out.println("user : " + user);
-	    // Removes gadget id associated with the account and saves it
-	    user.gadget_id = null;
-	    user.save();
-	}
+	System.out.println("user : " + user);
+	// Removes gadget id associated with the account and saves it
+	user.gadget_id = null;
+	user.save();
 
 	System.out.println(user);
 
@@ -243,7 +177,7 @@ public class GMailGadgetServlet extends HttpServlet
 	// returns true even if user does not exist, considering user is already
 	// deleted)
 	JSONObject result = new JSONObject();
-	result.put("DISASSOCIATED", true);
+	result.put("deleted", true);
 	resp.getWriter().println(result.toString());
     }
 
@@ -272,28 +206,42 @@ public class GMailGadgetServlet extends HttpServlet
 	     * param));
 	     */
 
-	    // If Popup or after openid auth (one time session key will be sent)
-	    if (req.getParameter(SESSION_KEY_NAME) != null)
+	    // Add this in session manager
+	    try
 	    {
-		// Is it after openid
-		if (req.getParameter("openid") != null)
-		    save(req, resp);
-		else
-		    setup(req, resp); // Setup OpenId Authentication
+		SessionManager.set((HttpServletRequest) req);
+	    }
+	    catch (Exception e)
+	    {
+	    }
 
+	    String command = req.getParameter("command");
+	    System.out.println("Command " + command);
+
+	    // If Validate
+	    if (command.equalsIgnoreCase("validate"))
+	    {
+		if (!validate(req, resp))
+		    generateOneTimeSessionKey(req, resp);
 		return;
 	    }
 
-	    if (req.getParameter(DISASSOCIATE_GADGET) != null)
+	    // If Delete
+	    if (command.equalsIgnoreCase("delete"))
 	    {
 		disassociateGadget(req, resp);
 		return;
 	    }
 
-	    // See if there is a domain user with this open_social_id, other
-	    // setup
-	    if (!validate(req, resp))
-		generateOneTimeSessionKey(req, resp);
+	    // If Popup or after openid auth (one time session key will be sent)
+	    if (command.equalsIgnoreCase("save"))
+	    {
+		save(req, resp);
+		return;
+	    }
+
+	    System.out.println("Command not found");
+
 	}
 	catch (Exception e)
 	{

@@ -1,4 +1,5 @@
-
+$(function()
+{
 
 // ------------------------------------------------- agile-link-event.js --------------------------------------------- START --
 
@@ -31,7 +32,12 @@
 		}
 		else {
 			
-			Email = $(".agile-mail-dropdown").data("email");
+			Email = $(".agile-mail-dropdown option:selected").attr("data-content");
+			
+			console.log(Email);
+			console.log(Contacts_Json[Email]);
+			
+			
 			//  ------ Chaeck if requested mail already present in list. ------ 
 			if(Contacts_Json[Email].mail_exist == true){
 				//  ------ Show if contact is present otherwise do nothing. ------ 
@@ -162,7 +168,8 @@
 		agile_gadget_adjust_height();
 	});
 	
-
+});
+	
 /**
  * Calculates total width of mail list and adjusts max-width of e-mail and/or name.
  * 
@@ -198,7 +205,7 @@ function agile_create_contact_ui(el, That, Email, Val){
 	
 	//  ------ Set library path for campaign link, check for local host. ------ 
 	if(Is_Localhost)
-		Val.ac_path = Lib_Path;
+		Val.ac_path = LIB_PATH;
 	else
 		Val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
 	
@@ -211,6 +218,10 @@ function agile_create_contact_ui(el, That, Email, Val){
 		//  ------ Contact not found for requested mail, show add contact in mail list. ------ 
 		if (Val.id == null) {
 			agile_gadget_adjust_width(el, $(".contact-search-status", el), true);
+			
+			console.log(el);
+			console.log(el.html());
+			
 			$('.contact-search-status', el).show().delay(4000).hide(1,function(){
 				agile_gadget_adjust_width(el, $(".contact-search-status", el), false);
 			});
@@ -235,7 +246,7 @@ function agile_add_mail_to_list(Val, Email, el){
 
 	//  ------ Set library path for campaign link, check for local host. ------ 
 	if(Is_Localhost)
-		Val.ac_path = Lib_Path;
+		Val.ac_path = LIB_PATH;
 	else
 		Val.ac_path = "https://"+ agile_id.namespace +".agilecrm.com/";
 	
@@ -246,40 +257,38 @@ function agile_add_mail_to_list(Val, Email, el){
 	Contacts_Json[Email].mail_exist = true;
 	
 	//  ------ Compile template and generate UI. ------ 
-	var Individual_Template = getTemplate('gadget', Contact_Data, 'no');
+	var Individual_Template = getTemplate('search', Contact_Data, 'no');
 	//  ------ Append contact to container in HTML. ------ 
-	$("#agile_content").prepend($(Individual_Template));
+	$("#agile_content").append($(Individual_Template));
 	//  ------ Temporarily hide the list. ------ 
-	$("#agile_content").children().eq(0).find(".contact-list").hide();
+	$("#agile_content").find(".contact-list:last").hide();
 	
-	//  ------ Send request for template. ------ 
-	agile_get_gadget_template("gadget-contact-list-template", function(data) {
-
+	
 		//  ------ Take contact data from global object variable. ------ 
 		var Json = Contacts_Json[Email];
 		//  ------ Compile template and generate UI. ------ 
 		var Handlebars_Template = getTemplate("gadget-contact-list", Json, 'no');
 		//  ------ Insert template to container in HTML. ------ 
-		$("#agile_content").children().eq(0).find(".contact-list").html($(Handlebars_Template));
+		$("#agile_content").find(".contact-list:last").html($(Handlebars_Template));
 		//  ------ Show temporarily hidden list element. ------ 
-		$("#agile_content").children().eq(0).find(".contact-list").show();
+		$("#agile_content").find(".contact-list:last").show();
 		//  ------ Adjust gadget window height. ------ 
 		if (!Is_Localhost)
 			gadgets.window.adjustHeight();
 		
 		//  ------ Contact found, show contact summary. ------ 		
 		if (Json.id != null) {
-			$("#agile_content").children().eq(0).find('.gadget-show-contact').trigger('click');
+			$("#agile_content").find('.gadget-show-contact:last').trigger('click');
 		}	
 		else{
-			$("#agile_content").children().eq(0).find('.contact-search-status').hide();
-			$("#agile_content").children().eq(0).find(".contact-list-width").css("max-width", "95%");
+			$("#agile_content").find('.contact-search-status:last').hide();
+			$("#agile_content").find(".contact-list-width:last").css("max-width", "95%");
 		}
- 	});
-	
+ 	
 }
 
 
 
 //------------------------------------------------- agile-link-event.js ------------------------------------------------ END --
+
 
