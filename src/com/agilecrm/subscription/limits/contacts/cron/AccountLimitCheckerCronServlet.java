@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.subscription.limits.contacts.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.util.NamespaceUtil;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class ContactLimitCheckServlet extends HttpServlet
+public class AccountLimitCheckerCronServlet extends HttpServlet
 {
     public void doPost(HttpServletRequest req, HttpServletResponse res)
     {
@@ -23,7 +26,9 @@ public class ContactLimitCheckServlet extends HttpServlet
 	for (String namespace : namespaces)
 	{
 	    AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(namespace);
-
+	    // Add to queue
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder.withPayload(task));
 	}
     }
 }

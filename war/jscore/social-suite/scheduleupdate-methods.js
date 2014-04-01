@@ -123,7 +123,9 @@ function scheduledmessagesEdit(id)
 
 					// For Testing: Enables schedule button if selected
 					// scheduled update having future schedule.
-					isPastSchedule();
+					//isPastSchedule();
+					// Changes in UI.
+					$('#send_tweet').removeAttr("disabled");
 				});
 
 				// Show modal with details.

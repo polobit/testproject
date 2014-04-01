@@ -59,4 +59,10 @@ cron:
   url: /backend/contactsutilservlet?type=GOOGLE&cron=true&duration=MONTHLY
   schedule: 1st friday of month 23:55
 
+- description: Account Billing Restrictions
+  url: /backend/billing/restrictions
+  schedule: every day 23:30
+
+
+
 

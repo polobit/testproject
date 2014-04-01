@@ -10,15 +10,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONException;
 
 import org.json.JSONArray;
 
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
 
@@ -35,11 +34,8 @@ public class WebRuleAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void saveWebRule(WebRule webRule, @Context HttpServletResponse response)
+    public void saveWebRule(WebRule webRule, @Context HttpServletResponse response) throws PlanRestrictedException
     {
-	if (WebRuleUtil.isLimitReached())
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Limit reached.").build());
-
 	webRule.save();
     }
 

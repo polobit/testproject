@@ -221,6 +221,7 @@ public class Contact extends Cursor
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
     public static final String PHONE = "phone";
+    public static final String IMAGE = "image";
 
     /**
      * Unsubscribe status
@@ -413,17 +414,17 @@ public class Contact extends Cursor
 	    // Execute notification for contacts
 	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
 
-	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
-	    return;
-
 	// Updated time is updated only if particular fields are changed. It is
 	// updated only when search document is tobe updated
 	updated_time = System.currentTimeMillis() / 1000;
 	if (viewed_time != 0L)
 	{
 	    viewed.viewed_time = viewed_time;
-	    // viewed.viewer_id = SessionManager.get().getDomainId();
+	    viewed.viewer_id = SessionManager.get().getDomainId();
 	}
+
+	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
+	    return;
 
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);

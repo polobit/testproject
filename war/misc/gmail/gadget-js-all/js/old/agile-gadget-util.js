@@ -1,10 +1,4 @@
 /**
- * Utility functions common for few tasks.
- * 
- * @author Dheeraj
- * */
-
-/**
  * Build tags list from contact data object.
  * 
  * @method agile_build_tag_ui
@@ -122,34 +116,7 @@ function agile_load_datepicker(Calendar, callback) {
 	});
 }
 
-/**
- * Validate forms.
- * 
- * @method agile_is_valid_form
- * @param {Object}
- *            Form jQuery object of form.
- * @returns {Boolean} Specify that whether form is valid or not.
- */
-function agile_is_valid_form(Form) {
-	$(Form).validate();
-	return $(Form).valid();
-}
 
-/**
- * Serialize form data.
- * 
- * @method agile_serialize_form
- * @param {Object}
- *            Form jQuery object of form.
- * @returns {Object} json Serialized form data.
- */
-function agile_serialize_form(Form) {
-	if (!agile_is_valid_form(Form)) {
-		return;
-	}
-	var Json = Form.serializeArray();
-	return Json;
-}
 
 /**
  * Utility Event handlers.

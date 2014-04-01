@@ -73,7 +73,7 @@ public class WebRule implements BillingRestrictionManager
     @Override
     public void checkLimits() throws PlanRestrictedException
     {
-	BillingRestrictionUtil.getInstance().check(dao);
+	BillingRestrictionUtil.getInstance(true).check(dao);
     }
 
     @Override

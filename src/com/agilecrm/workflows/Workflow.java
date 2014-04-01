@@ -295,7 +295,7 @@ public class Workflow extends Cursor implements BillingRestrictionManager
     public void checkLimits() throws PlanRestrictedException
     {
 	// TODO Auto-generated method stub
-	BillingRestrictionUtil.getInstance().check(dao);
+	BillingRestrictionUtil.getInstance(true).check(dao);
     }
 
     @Override

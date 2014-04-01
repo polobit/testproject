@@ -20,6 +20,15 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>OAuth2</servlet-name>
+		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OAuth2</servlet-name>
+		<url-pattern>/oauth</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>OAuth2Servlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.OAuth2Servlet</servlet-class>
 	</servlet>
@@ -193,6 +202,16 @@
 	<servlet-mapping>
 		<servlet-name>TaskReminder</servlet-name>
 		<url-pattern> /backend/cron/tasks</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AccountLimitChecker</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.contacts.cron.AccountLimitCheckerCronServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AccountLimitChecker</servlet-name>
+		<url-pattern>/backend/billing/restrictions</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
