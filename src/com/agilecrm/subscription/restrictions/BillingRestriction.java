@@ -268,6 +268,7 @@ public class BillingRestriction
      */
     public void sendRemainder()
     {
+	System.out.println("tags to add" + tagsToAddInOurDomain);
 	if (tagsToAddInOurDomain.isEmpty())
 	    return;
 
@@ -295,6 +296,8 @@ public class BillingRestriction
 	    return className + "-85";
 	if (percentage >= 90 && percentage < 100)
 	    return className + "-90";
+	if (percentage >= 100)
+	    return className + "-100";
 
 	return null;
 
