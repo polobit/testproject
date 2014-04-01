@@ -79,7 +79,7 @@ public class TaskCore
 			subscriberJSON.toString(), namespace);
 
 		// Add deferred tasks to pull queue with namespace as tag
-		PullQueueUtil.addToPullQueue("sb-campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
+		PullQueueUtil.addToPullQueue("campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
 
 	    }
 	    catch (Exception e)
