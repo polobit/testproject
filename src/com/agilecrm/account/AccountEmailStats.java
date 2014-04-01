@@ -77,7 +77,7 @@ public class AccountEmailStats implements BillingRestrictionManager
     public void checkLimits() throws PlanRestrictedException
     {
 	// TODO Auto-generated method stub
-	BillingRestrictionUtil.getInstance().check(count, "Email");
+	BillingRestrictionUtil.getInstance(true).check(count, "Email");
     }
 
     @Override

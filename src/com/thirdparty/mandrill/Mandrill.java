@@ -8,8 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
-import com.agilecrm.account.util.AccountEmailStatsUtil;
-import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.Base64Encoder;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
@@ -171,14 +169,10 @@ public class Mandrill
 	    // Considering AgileCRM domain name as mandrill subaccount.
 	    String subaccount = NamespaceManager.get();
 
-	    try
-	    {
-		AccountEmailStatsUtil.checkLimits();
-	    }
-	    catch (PlanRestrictedException e)
-	    {
-		return e.getMessage();
-	    }
+	    /*
+	     * try { AccountEmailStatsUtil.checkLimits(); } catch
+	     * (PlanRestrictedException e) { return e.getMessage(); }
+	     */
 
 	    // Complete mail json to be sent
 	    JSONObject mailJSON = setMandrillAPIKey(subaccount);
