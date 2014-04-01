@@ -221,6 +221,7 @@ public class Contact extends Cursor
     public static final String WEBSITE = "website";
     public static final String ADDRESS = "address";
     public static final String PHONE = "phone";
+    public static final String IMAGE = "image";
 
     /**
      * Unsubscribe status
