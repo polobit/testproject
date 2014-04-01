@@ -52,8 +52,8 @@ function agile_init_gadget() {
 	//  ------ Production version, go for login. ------ 
 	else {
 		//  ------ Set library path. ------ 
-		Lib_Path = "https://googleapps.agilecrm.com/";
-//		Lib_Path = "https://googleapps-dot-sandbox-dot-agile-crm-cloud.appspot.com/";
+		//Lib_Path = "https://googleapps.agilecrm.com/";
+		Lib_Path = "https://googleapps-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/";
 
 		//  ------ Login ------ 
 		agile_login();
@@ -160,64 +160,6 @@ function agile_login() {
     }
 }
 
-/**
- * Sends Auth request.
- * 
- * @method agile_send_auth
- * 
- * */
-function agile_send_auth(Url, callback){
-	
-	//  ------ Increase counter and append to request, so that it will not be cached. ------ 
-	Timestamp += 1;
-	var Url = Url + '?Timestamp=' + Timestamp;
-	console.log("Osapi from: " + Url);
-	/* ------ 
-	 * Hit the server, passing in a signed request (and OpenSocial ID), to 
-	 * see if we know who the user is. ------ 
-	 */
-	osapi.http.get({
-		'href' : Url,
-		'format' : 'json',
-		'authz' : 'signed'
-	}).execute(callback);
-}
-
-/**
- * Handle login response either go to setup user for registration or load gadget
- * UI.
- * 
- * @method agile_handle_load_response
- * @param {Object}
- *            data Contains info whether user exists or not and session data.
- */
-function agile_handle_load_response(data) {
-
-	console.log("Auth response: ");
-	console.log(data);
-	
-	var Agile_Gadget_Prefs = new gadgets.Prefs();
-    
-	if(data.content != undefined){
-		
-		agile_gadget_erase_cookie("agile_cookie");
-		//  ------ Check user exists, OpenID must have occurred previously. ------ 
-		if (data.content.user_exists == true) {
-			data.content.user_exists = "true";
-			//  ------ Set cookie. ------
-			agile_gadget_create_cookie("agile_cookie", JSON.stringify(data.content), 0);
-			agile_login();
-		}
-		
-		//  ------ User not exist, go for one time domain registration. ------ 
-		else {
-			data.content.user_exists = "false";
-			//  ------ Set cookie. ------ 
-			agile_gadget_create_cookie("agile_cookie", JSON.stringify(data.content), 0);
-			agile_user_setup_load(data.content.popup);
-		}
-	}
-}
 
 /**
  * Download setup file and set user domain.
@@ -244,11 +186,11 @@ function agile_download_scripts() {
 	head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-lib.min.js');
 	if(!Is_Localhost){
 		//  ------ Gadget supporting JavaScript file minified. ------ 
-		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.min.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-email.min.js');
 	}
 	else{
 		//  ------ Gadget supporting JavaScript file. ------ 
-		head.js(Lib_Path + 'misc/gmail/gadget-js-all/js/agile-gadget-email.js');
+		head.js(Lib_Path + 'misc/gmail/gadget-js-all/min/agile-gadget-email.js');
 	}
 }
 

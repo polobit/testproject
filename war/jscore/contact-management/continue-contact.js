@@ -343,7 +343,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
                 	console.log(contact);
                 deserialize_contact(contact, template);
                 	
-                }, "COMPANY");
+                }, data.toJSON()["type"]);
                 
             } 
         	else {

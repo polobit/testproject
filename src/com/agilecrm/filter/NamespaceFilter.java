@@ -12,9 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.agilecrm.GMailGadgetServlet;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -106,12 +103,6 @@ public class NamespaceFilter implements Filter
 	    return false;
 	}
 
-	// Set Google Apps Namespace if googleapps
-	if (subdomain.equalsIgnoreCase(Globals.GOOGLE_APPS_DOMAIN))
-	{
-	    return setupGoogleAppsNameSpace(request, response);
-	}
-
 	// Set the subdomain as name space
 	System.out.println("Setting the domain " + subdomain + " " + ((HttpServletRequest) request).getRequestURL());
 	NamespaceManager.set(subdomain);
@@ -145,50 +136,7 @@ public class NamespaceFilter implements Filter
      */
     private boolean setupGoogleAppsNameSpace(ServletRequest request, ServletResponse response)
     {
-	try
-	{
-	    String owner_id = request.getParameter("opensocial_owner_id");
-	    System.out.println("open id in namespace filter : " + owner_id);
-
-	    // Using openid, we are not able to support wildcard realms
-	    String appsDomain = request.getParameter("domain");
-
-	    /*
-	     * If Gadget Level API which does not understand redirect, we just
-	     * set the namespace.
-	     * 
-	     * Request url should be changed if there is one time session key,
-	     * so session
-	     */
-	    if (!StringUtils.isEmpty(request.getParameter(GMailGadgetServlet.SESSION_KEY_NAME)) && !StringUtils.isEmpty(appsDomain))
-	    {
-		// Get Namespace
-		String namespace = NamespaceUtil.getNamespaceFromURL(appsDomain);
-		System.out.println("Setting Google Apps - Namespace " + appsDomain);
-
-		// Get Current URL and Redirect to xxx.agilecrm.com
-		String url = getFullUrl((HttpServletRequest) request);
-		System.out.println(url);
-		url = url.replace(Globals.GOOGLE_APPS_DOMAIN + ".", namespace + ".");
-
-		HttpServletResponse httpResponse = (HttpServletResponse) response;
-		System.out.println("Redirecting it to " + url);
-		httpResponse.sendRedirect(url);
-		return true;
-	    }
-
-	    if (!StringUtils.isEmpty(owner_id))
-	    {
-		return true;
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	redirectToChooseDomain(request, response);
-	return false;
+	return true;
     }
 
     /**

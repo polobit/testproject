@@ -48,7 +48,6 @@ import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 public class ScribeUtil
 {
 
-    // Get Service
     /**
      * Builds service using serviceBuilder based on type of service specified,
      * which can be accessed to get Token
@@ -97,6 +96,10 @@ public class ScribeUtil
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
 	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR, com.agilecrm.scribe.api.GoogleApi.class, callback,
 		    Globals.GOOGLE_CALENDAR_CLIENT_ID, Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_CALENDAR_SCOPE);
+
+	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_OAUTH2))
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_OAUTH2, com.agilecrm.scribe.api.GoogleApi.class, callback,
+		    Globals.GOOGLE_CALENDAR_CLIENT_ID, Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_OAUTH2_SCOPE);
 
 	// Creates a Service, specific to Gmail
 	else
@@ -166,9 +169,25 @@ public class ScribeUtil
      *            refresh token
      * @throws IOException
      */
-    public static void saveTokens(HttpServletRequest req, OAuthService service, AgileUser agileUser, String serviceName, Token accessToken, String code)
+    public static void saveTokens(HttpServletRequest req, HttpServletResponse resp, OAuthService service, String serviceName, Token accessToken, String code)
 	    throws IOException
     {
+	// We use Scribe for OAuth2 Authentication as well
+	if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_OAUTH2))
+	{
+	    System.out.println("OAUTH2 AUTHENTICATED ");
+	    OAuthUtil.login(req, resp, code, service);
+	    return;
+	}
+
+	// Get Agile User
+	AgileUser agileUser = AgileUser.getCurrentAgileUser();
+	if (agileUser == null)
+	{
+	    System.out.println("Cannot find Agile User");
+	    return;
+	}
+
 	/*
 	 * If service name is Twitter or LinkedIn, widget is fetched by
 	 * plugin_id in session and widget is updated with new token key and
@@ -201,6 +220,7 @@ public class ScribeUtil
 	{
 	    saveGoogleCalenderPrefs(code, null);
 	}
+
     }
 
     /**
