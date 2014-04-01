@@ -32,75 +32,34 @@ public class GravityForm extends HttpServlet
 	{
 		try
 		{
-			// Get API Key with tags
 			String tagString = req.getParameter("api-key");
+
+			tagString = tagString.trim();
+			tagString = tagString.replace("/, /g", ",");
+
+			String[] tagsWithKey = tagString.split(",");
+			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
+
+			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
+
 			List<ContactField> properties = new ArrayList<ContactField>();
 
-			// Get JSON data
-			JSONObject obj = new JSONObject(req.getParameter("data"));
+			JSONObject json = new JSONObject(req.getParameter("data"));
+			JSONObject finalJson = convertGravityJson(json);
 
-			// Get email from JSON and search for contact
-			String email = obj.getString("email");
-			Contact contact = ContactUtil.searchContactByEmail(email);
+			Contact contact = null;
+
+			if (!StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
+				contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
+
 			if (contact == null)
 				contact = new Contact();
 
-			// Address JSON
-			JSONObject addJson = new JSONObject();
+			FormsUtil.jsonToAgile(finalJson, properties, null);
 
-			// Iterate over JSON data to get form fields
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				// Get name of form field
-				String key = (String) keys.next();
-
-				// Get value of form field
-				String value = obj.get(key).toString();
-
-				if (!StringUtils.isBlank(value))
-				{
-
-					// Build Address JSON
-					if (key.equalsIgnoreCase("country"))
-						addJson.put("country", value);
-
-					else if (key.equalsIgnoreCase("state"))
-						addJson.put("state", value);
-
-					else if (key.equalsIgnoreCase("city"))
-						addJson.put("city", value);
-
-					else if (key.equalsIgnoreCase("zip") || key.equalsIgnoreCase("zip code")
-							|| key.equalsIgnoreCase("postal code"))
-						addJson.put("zip", value);
-
-					else if (key.equalsIgnoreCase("street address") || key.equalsIgnoreCase("location")
-							|| key.equalsIgnoreCase("street"))
-						addJson.put("address", value);
-
-					else
-
-						// Add property to list of properties
-						properties.add(FormsUtil.gravityBuildProperty(key, value));
-				}
-			}
-			if (addJson.length() != 0)
-				properties.add(FormsUtil.gravityBuildProperty(Contact.ADDRESS, addJson.toString()));
-
-			// Format tagString and split into tagsWithKey array
-			tagString = tagString.trim();
-			tagString = tagString.replace("/, /g", ",");
-			String[] tagsWithKey = tagString.split(",");
-
-			// Get tags from tagsWithKey array and set contact owner
-			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
-			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 			if (owner != null)
 			{
 				contact.setContactOwner(owner);
-
-				// Add properties to contact and set contact owner
 				contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 				contact.addTags(tags);
 				contact.save();
@@ -109,7 +68,39 @@ public class GravityForm extends HttpServlet
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			System.out.println("Error is " + e.getMessage());
 			return;
+		}
+	}
+
+	public static JSONObject convertGravityJson(JSONObject json)
+	{
+		try
+		{
+			JSONObject finalJson = new JSONObject();
+
+			String name;
+			String value;
+
+			Iterator<?> keys = json.keys();
+			while (keys.hasNext())
+			{
+				name = (String) keys.next();
+				value = json.getString(name);
+
+				if (!StringUtils.isBlank(value))
+				{
+					name = FormsUtil.getFieldName(name);
+					finalJson.put(name, value);
+				}
+			}
+			return finalJson;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Error is " + e.getMessage());
+			return null;
 		}
 	}
 }

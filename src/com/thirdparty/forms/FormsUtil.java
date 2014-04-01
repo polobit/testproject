@@ -1,37 +1,176 @@
 package com.thirdparty.forms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.ContactField.FieldType;
-import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.Note;
 
 public class FormsUtil
 {
+	public static String getFieldName(String fieldName)
+	{
+		String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First" };
+		String lastNameAlias[] = { Contact.LAST_NAME, "Last" };
+		String companyNameAlias[] = { Contact.COMPANY, "organisation, organization" };
+		String contactTitleAlias[] = { Contact.TITLE, "designation" };
+		String emailAlias[] = { Contact.EMAIL };
+		String mainPhoneAlias[] = { Contact.PHONE, "phone_number" };
+		String workPhoneAlias[] = { "work phone" };
+		String mobilePhoneAlias[] = { "mobile", "mobile phone" };
+		String websiteAlias[] = { "url" };
+		String skypeIdAlias[] = { "skype" };
+		String twitterAlias[] = { "twitter" };
+		String googlePlusAlias[] = { "google+" };
+		String linkedinAlias[] = { "linkedin" };
+		String facebookAlias[] = { "facebook" };
+		String xingAlias[] = { "xing" };
+		String flickrAlias[] = { "flickr" };
+		String githubAlias[] = { "github" };
+		String youtubeAlias[] = { "youtube" };
+		String feedAlias[] = { "feed" };
+		String addressAlias[] = { "Street Address", "Location", "Street", "street", "address", "location" };
+		String addressLineAlias[] = { "Address Line 2" };
+		String addressCityAlias[] = { "City", "province" };
+		String addressCountryAlias[] = { "Country", "country" };
+		String addressStateAlias[] = { "State / Province / Region", "State", "stateprovince", "state" };
+		String addressZipAlias[] = { "Zip", "Zip code", "Postal code", "Postal / Zip Code", "zip" };
+
+		HashMap<String, List<String>> firstName = new HashMap<String, List<String>>();
+		firstName.put(Contact.FIRST_NAME, Arrays.asList(firstNameAlias));
+
+		HashMap<String, List<String>> lastName = new HashMap<String, List<String>>();
+		lastName.put(Contact.LAST_NAME, Arrays.asList(lastNameAlias));
+
+		HashMap<String, List<String>> companyName = new HashMap<String, List<String>>();
+		companyName.put(Contact.COMPANY, Arrays.asList(companyNameAlias));
+
+		HashMap<String, List<String>> contactTitle = new HashMap<String, List<String>>();
+		contactTitle.put(Contact.TITLE, Arrays.asList(contactTitleAlias));
+
+		HashMap<String, List<String>> email = new HashMap<String, List<String>>();
+		email.put(Contact.EMAIL, Arrays.asList(emailAlias));
+
+		HashMap<String, List<String>> mainPhone = new HashMap<String, List<String>>();
+		mainPhone.put(Contact.PHONE, Arrays.asList(mainPhoneAlias));
+
+		HashMap<String, List<String>> workPhone = new HashMap<String, List<String>>();
+		workPhone.put(Contact.PHONE + " work", Arrays.asList(workPhoneAlias));
+
+		HashMap<String, List<String>> mobilePhone = new HashMap<String, List<String>>();
+		mobilePhone.put(Contact.PHONE + " mobile", Arrays.asList(mobilePhoneAlias));
+
+		HashMap<String, List<String>> website = new HashMap<String, List<String>>();
+		website.put(Contact.WEBSITE, Arrays.asList(websiteAlias));
+
+		HashMap<String, List<String>> skypeId = new HashMap<String, List<String>>();
+		skypeId.put(Contact.WEBSITE + " skype", Arrays.asList(skypeIdAlias));
+
+		HashMap<String, List<String>> twitter = new HashMap<String, List<String>>();
+		twitter.put(Contact.WEBSITE + " twitter", Arrays.asList(twitterAlias));
+
+		HashMap<String, List<String>> googlePlus = new HashMap<String, List<String>>();
+		googlePlus.put(Contact.WEBSITE + " googleplus", Arrays.asList(googlePlusAlias));
+
+		HashMap<String, List<String>> linkedin = new HashMap<String, List<String>>();
+		linkedin.put(Contact.WEBSITE + " linkedin", Arrays.asList(linkedinAlias));
+
+		HashMap<String, List<String>> facebook = new HashMap<String, List<String>>();
+		facebook.put(Contact.WEBSITE + " facebook", Arrays.asList(facebookAlias));
+
+		HashMap<String, List<String>> xing = new HashMap<String, List<String>>();
+		xing.put(Contact.WEBSITE + " xing", Arrays.asList(xingAlias));
+
+		HashMap<String, List<String>> flickr = new HashMap<String, List<String>>();
+		flickr.put(Contact.WEBSITE + " flickr", Arrays.asList(flickrAlias));
+
+		HashMap<String, List<String>> github = new HashMap<String, List<String>>();
+		github.put(Contact.WEBSITE + " github", Arrays.asList(githubAlias));
+
+		HashMap<String, List<String>> youtube = new HashMap<String, List<String>>();
+		youtube.put(Contact.WEBSITE + " youtube", Arrays.asList(youtubeAlias));
+
+		HashMap<String, List<String>> feed = new HashMap<String, List<String>>();
+		feed.put(Contact.WEBSITE + " feed", Arrays.asList(feedAlias));
+
+		HashMap<String, List<String>> address = new HashMap<String, List<String>>();
+		address.put(Contact.ADDRESS + " lineone", Arrays.asList(addressAlias));
+
+		HashMap<String, List<String>> addressLine = new HashMap<String, List<String>>();
+		addressLine.put(Contact.ADDRESS + " linetwo", Arrays.asList(addressLineAlias));
+
+		HashMap<String, List<String>> addressCity = new HashMap<String, List<String>>();
+		addressCity.put(Contact.ADDRESS + " city", Arrays.asList(addressCityAlias));
+
+		HashMap<String, List<String>> addressState = new HashMap<String, List<String>>();
+		addressState.put(Contact.ADDRESS + " state", Arrays.asList(addressStateAlias));
+
+		HashMap<String, List<String>> addressCountry = new HashMap<String, List<String>>();
+		addressCountry.put(Contact.ADDRESS + " country", Arrays.asList(addressCountryAlias));
+
+		HashMap<String, List<String>> addressZip = new HashMap<String, List<String>>();
+		addressZip.put(Contact.ADDRESS + " zip", Arrays.asList(addressZipAlias));
+
+		ArrayList<HashMap<String, List<String>>> allFields = new ArrayList<HashMap<String, List<String>>>();
+		allFields.add(firstName);
+		allFields.add(lastName);
+		allFields.add(companyName);
+		allFields.add(contactTitle);
+		allFields.add(email);
+		allFields.add(mainPhone);
+		allFields.add(workPhone);
+		allFields.add(mobilePhone);
+		allFields.add(website);
+		allFields.add(skypeId);
+		allFields.add(twitter);
+		allFields.add(googlePlus);
+		allFields.add(linkedin);
+		allFields.add(facebook);
+		allFields.add(xing);
+		allFields.add(flickr);
+		allFields.add(github);
+		allFields.add(youtube);
+		allFields.add(feed);
+		allFields.add(address);
+		allFields.add(addressLine);
+		allFields.add(addressCity);
+		allFields.add(addressCountry);
+		allFields.add(addressState);
+		allFields.add(addressZip);
+
+		for (HashMap<String, List<String>> map : allFields)
+		{
+			for (Map.Entry<String, List<String>> entry : map.entrySet())
+			{
+				if (entry.getValue().contains(fieldName))
+					return entry.getKey();
+			}
+		}
+		return fieldName;
+	}
+
 	public static List<ContactField> updateContactProperties(List<ContactField> newProperties,
 			List<ContactField> oldProperties)
 	{
-
 		List<ContactField> updatedProperties = new ArrayList<ContactField>();
 		List<ContactField> outdatedProperties = new ArrayList<ContactField>();
 
 		if (oldProperties.size() != 0)
 		{
 			for (ContactField oldProperty : oldProperties)
-			{
 				for (ContactField newProperty : newProperties)
-				{
 					if (StringUtils.equals(oldProperty.name, newProperty.name)
 							&& (StringUtils.equals(oldProperty.subtype, newProperty.subtype)))
 						outdatedProperties.add(oldProperty);
-				}
-			}
 			oldProperties.removeAll(outdatedProperties);
 			updatedProperties.addAll(oldProperties);
 		}
@@ -40,307 +179,86 @@ public class FormsUtil
 		return updatedProperties;
 	}
 
-	public static ContactField wufooBuildPropertyWithSubtype(String name, String value, String subtype)
-			throws JSONException
+	public static ContactField buildProperty(String name, String value, String subtype)
 	{
-		// Initialize ContactField
 		ContactField field = new ContactField();
-
-		// Set field type to SYSTEM for name, email, company, title, phone, all
-		// other fields save as CUSTOM.
 		field.name = name;
-		field.type = FieldType.SYSTEM;
+		field.type = FieldType.CUSTOM;
 		field.value = value;
 		field.subtype = subtype;
-
 		return field;
 	}
 
-	public static ContactField wufooBuildProperty(String name, String value) throws JSONException
+	public static String getCountry(String value)
 	{
-		// Initialize ContactField
-		ContactField field = new ContactField();
-
-		// Set field type to SYSTEM for name, email, company, title, phone, all
-		// other fields save as CUSTOM.
-		if (name.equalsIgnoreCase("name") || name.equalsIgnoreCase("first"))
-		{
-			field.name = Contact.FIRST_NAME;
-			field.type = FieldType.SYSTEM;
-			field.value = value;
-		}
-		else if (name.equalsIgnoreCase("last"))
-		{
-			field.name = Contact.LAST_NAME;
-			field.type = FieldType.SYSTEM;
-			field.value = value;
-		}
-		else if (name.toLowerCase().contains("organisation") || name.toLowerCase().contains("organization")
-				|| name.equalsIgnoreCase(Contact.COMPANY))
-		{
-			field.name = Contact.COMPANY;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("designation") || name.equalsIgnoreCase(Contact.TITLE))
-		{
-			field.name = Contact.TITLE;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("work phone"))
-		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "work";
-		}
-		else if (name.toLowerCase().contains("mobile"))
-		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "mobile";
-		}
-		else if (name.toLowerCase().contains("skype"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "SKYPE";
-		}
-		else if (name.toLowerCase().contains("twitter"))
-		{
-			field.name = Contact.WEBSITE;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "TWITTER";
-			field.value = value;
-		}
-		else if (name.toLowerCase().contains("google+"))
-		{
-			field.name = Contact.WEBSITE;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "GOOGLE-PLUS";
-			field.value = value;
-		}
-		else if (name.toLowerCase().contains("linkedin"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.subtype = "LINKEDIN";
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("facebook"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.subtype = "FACEBOOK";
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("xing"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.subtype = "XING";
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("flickr"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.subtype = "FLICKR";
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("github"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.subtype = "GITHUB";
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("youtube"))
-		{
-			field.name = Contact.WEBSITE;
-			field.subtype = "YOUTUBE";
-			field.type = FieldType.SYSTEM;
-			field.value = value;
-		}
-		else if (name.toLowerCase().contains("feed"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.subtype = "FEED";
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.equals("address"))
-		{
-			field.name = Contact.ADDRESS;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else
-		{
-			field.name = name;
-			field.value = value;
-			field.type = FieldType.CUSTOM;
-		}
-		return field;
+		String code = countrycodemap().get(value);
+		return (!StringUtils.isBlank(code)) ? code : value;
 	}
 
-	public static ContactField unbounceBuildProperty(String name, String value)
+	public static void jsonToAgile(JSONObject finalJson, List<ContactField> properties, List<Note> notes)
 	{
-		// Initialize ContactField
-		ContactField field = new ContactField();
+		try
+		{
+			JSONObject addressJson = new JSONObject();
+			String checkBox = new String();
+			String addString = new String();
 
-		// Set field type to SYSTEM for name, email, company, title, phone, all
-		// other fields save as CUSTOM.
-		if (name.equalsIgnoreCase("name") || name.equalsIgnoreCase(Contact.FIRST_NAME)
-				|| name.equalsIgnoreCase("first name") || name.equalsIgnoreCase("first"))
-		{
-			field.name = Contact.FIRST_NAME;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.equalsIgnoreCase(Contact.LAST_NAME) || name.equalsIgnoreCase("last name")
-				|| name.equalsIgnoreCase("last"))
-		{
-			field.name = Contact.LAST_NAME;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("organisation") || name.toLowerCase().contains("organization")
-				|| name.equalsIgnoreCase(Contact.COMPANY))
-		{
-			field.name = Contact.COMPANY;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("designation") || name.equalsIgnoreCase(Contact.TITLE))
-		{
-			field.name = Contact.TITLE;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("phone"))
-		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "work";
-		}
-		else if (name.toLowerCase().contains("mobile"))
-		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "home";
-		}
-		else if (name.toLowerCase().contains("email"))
-		{
-			if (ContactUtil.isValidEmail(value))
+			Iterator<?> keys = finalJson.keys();
+			while (keys.hasNext())
 			{
-				field.name = Contact.EMAIL;
-				field.value = value;
-				field.type = FieldType.SYSTEM;
+				String key = (String) keys.next();
+				String value = finalJson.getString(key);
+
+				if (key.contains(" "))
+				{
+					String[] keyArray = key.split(" ");
+					String tokenKey = keyArray[0];
+					String subType = keyArray[1];
+
+					if (key.contains("textarea"))
+					{
+						Note note = new Note(key.replace(" textarea", ""), value);
+						notes.add(note);
+					}
+					else if (key.contains("checkbox"))
+					{
+						checkBox = (!StringUtils.isBlank(checkBox)) ? checkBox + ", " + value : value;
+						buildProperty(key.replace(" checkbox", ""), checkBox, null);
+					}
+					else if (StringUtils.equals(subType, "lineone"))
+						addString = value;
+					else if (StringUtils.equals(subType, "linetwo"))
+						addString = addString + ", " + value;
+					else if (StringUtils.equals(subType, "city") || StringUtils.equals(subType, "state")
+							|| StringUtils.equals(subType, "zip"))
+						addressJson.put(subType, value);
+					else if (StringUtils.equals(subType, "country"))
+						addressJson.put(subType, getCountry(value));
+					else if (StringUtils.equals(tokenKey, Contact.WEBSITE)
+							|| StringUtils.equals(tokenKey, Contact.PHONE))
+						properties.add(new ContactField(tokenKey, value, subType));
+					else
+						properties.add(buildProperty(key, value, null));
+				}
+				else if (key.equals(Contact.FIRST_NAME) || key.equals(Contact.LAST_NAME) || key.equals(Contact.COMPANY)
+						|| key.equals(Contact.TITLE) || key.equals(Contact.WEBSITE) || key.equals(Contact.EMAIL)
+						|| key.equals(Contact.PHONE))
+					properties.add(new ContactField(key, value, null));
+				else
+					properties.add(buildProperty(key, value, null));
+			}
+			if (addressJson.length() != 0)
+			{
+				addressJson.put("address", addString);
+				properties.add(new ContactField(Contact.ADDRESS, addressJson.toString(), null));
 			}
 		}
-		else if (name.toLowerCase().contains("website"))
+		catch (Exception e)
 		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
+			e.printStackTrace();
+			System.out.println("Error is " + e.getMessage());
+			return;
 		}
-		else if (name.equals("address"))
-		{
-			field.name = Contact.ADDRESS;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else
-		{
-			field.name = name;
-			field.value = value;
-			field.type = FieldType.CUSTOM;
-		}
-		return field;
-	}
-
-	public static ContactField gravityBuildProperty(String name, String value)
-	{
-		// Initialize ContactField
-		ContactField field = new ContactField();
-
-		// Set field type to SYSTEM for name, email, company, title, phone, all
-		// other fields save as CUSTOM.
-		if (name.equalsIgnoreCase(Contact.FIRST_NAME) || name.equalsIgnoreCase("name")
-				|| name.equalsIgnoreCase("first name") || name.equalsIgnoreCase("first"))
-		{
-			field.name = Contact.FIRST_NAME;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.equalsIgnoreCase(Contact.LAST_NAME) || name.equalsIgnoreCase("last name")
-				|| name.equalsIgnoreCase("last"))
-		{
-			field.name = Contact.LAST_NAME;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("organisation") || name.toLowerCase().contains("organization")
-				|| name.toLowerCase().equals(Contact.COMPANY))
-		{
-			field.name = Contact.COMPANY;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.equalsIgnoreCase("designation") || name.equalsIgnoreCase(Contact.TITLE))
-		{
-			field.name = Contact.TITLE;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.toLowerCase().contains("phone"))
-		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "work";
-		}
-		else if (name.toLowerCase().contains("mobile"))
-		{
-			field.name = "phone";
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-			field.subtype = "home";
-		}
-		else if (name.toLowerCase().contains("email"))
-		{
-			if (ContactUtil.isValidEmail(value))
-			{
-				field.name = Contact.EMAIL;
-				field.value = value;
-				field.type = FieldType.SYSTEM;
-			}
-		}
-		else if (name.toLowerCase().contains("website"))
-		{
-			field.name = Contact.WEBSITE;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else if (name.equals("address"))
-		{
-			field.name = Contact.ADDRESS;
-			field.value = value;
-			field.type = FieldType.SYSTEM;
-		}
-		else
-		{
-			field.name = name;
-			field.value = value;
-			field.type = FieldType.CUSTOM;
-		}
-		return field;
 	}
 
 	public static HashMap<String, String> countrycodemap()
@@ -560,5 +478,4 @@ public class FormsUtil
 		countryCode.put("Zimbabwe", "ZW");
 		return countryCode;
 	}
-
 }
