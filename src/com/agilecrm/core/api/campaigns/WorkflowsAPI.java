@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
@@ -90,11 +91,12 @@ public class WorkflowsAPI
      * @param workflow
      *            Workflow object that is newly created.
      * @return Created workflow.
+     * @throws PlanRestrictedException
      */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Workflow createWorkflow(Workflow workflow)
+    public Workflow createWorkflow(Workflow workflow) throws PlanRestrictedException
     {
 	try
 	{

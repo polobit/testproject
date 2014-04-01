@@ -194,6 +194,16 @@
 		<servlet-name>TaskReminder</servlet-name>
 		<url-pattern> /backend/cron/tasks</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AccountLimitChecker</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.contacts.cron.AccountLimitCheckerCronServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AccountLimitChecker</servlet-name>
+		<url-pattern>/backend/billing/restrictions</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>
