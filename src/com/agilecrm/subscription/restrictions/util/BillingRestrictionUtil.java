@@ -176,8 +176,7 @@ public class BillingRestrictionUtil
 		if (percentage.equals(newPercentage))
 		    continue;
 
-		if (contact.tags.remove(entityName + "-" + percentage))
-		    break;
+		contact.tags.remove(entityName + "-" + percentage);
 	    }
 
 	    contact.tags.add(tag);

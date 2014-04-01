@@ -96,16 +96,10 @@ public class WorkflowsAPI
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Workflow createWorkflow(Workflow workflow) throws PlanRestrictedException
+    public Workflow createWorkflow(Workflow workflow) throws PlanRestrictedException, WebApplicationException
     {
-	try
-	{
-	    workflow.save();
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
+	workflow.save();
+
 	return workflow;
     }
 
