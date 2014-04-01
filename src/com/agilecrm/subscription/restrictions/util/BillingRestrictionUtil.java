@@ -97,6 +97,14 @@ public class BillingRestrictionUtil
 	return restriction;
     }
 
+    public static BillingRestriction getInstance(boolean sendRemainder)
+    {
+	BillingRestriction restriction = getInstance();
+	restriction.sendRemainder = sendRemainder;
+	return restriction;
+
+    }
+
     public static BillingRestriction getInstance()
     {
 	UserInfo info = SessionManager.get();
