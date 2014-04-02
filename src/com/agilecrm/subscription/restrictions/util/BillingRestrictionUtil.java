@@ -14,6 +14,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.BillingRestriction;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -134,6 +135,15 @@ public class BillingRestrictionUtil
 
 	}
 	return plan;
+    }
+
+    public static void setPlan(UserInfo info)
+    {
+	Subscription subscription = Subscription.getSubscription();
+	Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
+
+	info.setPlan(plan.plan_type.toString());
+	info.setUsersCount(plan.quantity);
     }
 
     public static void sendRemainder(int allowedEntites, int existingEntities, String className)
