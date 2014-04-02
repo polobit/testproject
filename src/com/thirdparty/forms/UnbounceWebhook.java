@@ -32,33 +32,44 @@ public class UnbounceWebhook extends HttpServlet
 	{
 		try
 		{
+			// Get API key
 			String tagString = req.getParameter("api-key");
 
+			// Format tagsString for spaces
 			tagString = tagString.trim();
 			tagString = tagString.replace("/, /g", ",");
 
+			// Split tagString and separate tags, API key
 			String[] tagsWithKey = tagString.split(",");
 			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 
+			// Get owner from API
 			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 
+			// Define properties list (ContactField)
 			List<ContactField> properties = new ArrayList<ContactField>();
 
+			// Get post data from unbounce and convert to json {"name": "value"}
 			JSONObject obj = new JSONObject(req.getParameter("data.json"));
 			JSONObject finalJson = convertUnbounceJson(obj);
 
+			// Define contact
 			Contact contact = null;
 
+			// Check if email exists in json, if yes search for contact
 			if (!StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
 				contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
 
+			// If contact is null create new contact
 			if (contact == null)
 				contact = new Contact();
 
+			// Build agile contact fields from finalJson
 			FormsUtil.jsonToAgile(finalJson, properties, null);
 
 			if (owner != null)
 			{
+				// Set contact owner, update properties and save contact
 				contact.setContactOwner(owner);
 				contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 				contact.addTags(tags);
@@ -77,17 +88,21 @@ public class UnbounceWebhook extends HttpServlet
 	{
 		try
 		{
+			// Define finalJson
 			JSONObject finalJson = new JSONObject();
 
+			// Define name, value
 			String name;
 			String value;
 
+			// Remove default keys from unbounce data
 			json.remove("variant");
 			json.remove("page_uuid");
 			json.remove("page_url");
 			json.remove("date_submitted");
 			json.remove("time_submitted");
 
+			// Iterate keys and replace with agile field names
 			Iterator<?> keys = json.keys();
 			while (keys.hasNext())
 			{
@@ -97,6 +112,7 @@ public class UnbounceWebhook extends HttpServlet
 				value = value.replaceAll(regex, "");
 				value = value.replaceAll("\"", "");
 
+				// If value is not null, put in finalJson
 				if (!StringUtils.isBlank(value))
 				{
 					name = FormsUtil.getFieldName(name);

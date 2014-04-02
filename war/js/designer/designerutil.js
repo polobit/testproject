@@ -76,6 +76,8 @@ function getMergeFields(type)
 		merged_json["Unsubscribe Link"] = "{{{unsubscribe_link}}}";
 	}
 	
+	merged_json["Powered by"]= "{{{powered_by}}}";
+	
 	return merged_json;
 }
 

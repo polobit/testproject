@@ -17,8 +17,16 @@ import com.agilecrm.contact.Note;
 
 public class FormsUtil
 {
+	/**
+	 * Get agile field from form field titles
+	 * 
+	 * @param fieldName
+	 * @return fieldName || agileFieldName
+	 */
 	public static String getFieldName(String fieldName)
 	{
+		// String arrays with all possible form field titles from (wufoo /
+		// unbounce / gravity)
 		String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First" };
 		String lastNameAlias[] = { Contact.LAST_NAME, "Last" };
 		String companyNameAlias[] = { Contact.COMPANY, "organisation, organization", "Organization", "Organisation",
@@ -45,6 +53,9 @@ public class FormsUtil
 		String addressCountryAlias[] = { "Country", "country" };
 		String addressStateAlias[] = { "State / Province / Region", "State", "stateprovince", "state" };
 		String addressZipAlias[] = { "Zip", "Zip code", "Postal code", "Postal / Zip Code", "zip" };
+
+		// Maps with key as agile contact property, value as list of aliases for
+		// that property with sub type
 
 		HashMap<String, List<String>> firstName = new HashMap<String, List<String>>();
 		firstName.put(Contact.FIRST_NAME, Arrays.asList(firstNameAlias));
@@ -121,6 +132,8 @@ public class FormsUtil
 		HashMap<String, List<String>> addressZip = new HashMap<String, List<String>>();
 		addressZip.put(Contact.ADDRESS + " zip", Arrays.asList(addressZipAlias));
 
+		// List of all maps (map with key: agile property name, value: list of
+		// all aliases for that property)
 		ArrayList<HashMap<String, List<String>>> allFields = new ArrayList<HashMap<String, List<String>>>();
 		allFields.add(firstName);
 		allFields.add(lastName);
@@ -148,27 +161,41 @@ public class FormsUtil
 		allFields.add(addressState);
 		allFields.add(addressZip);
 
+		// Iterate list of maps
 		for (HashMap<String, List<String>> map : allFields)
 		{
 			for (Map.Entry<String, List<String>> entry : map.entrySet())
 			{
+				// If fieldName matches with list of aliases return key of that
+				// list in map
 				if (entry.getValue().contains(fieldName))
 					return entry.getKey();
 			}
 		}
+		// Else return fieldName
 		return fieldName;
 	}
 
+	/**
+	 * Compare oldProperties with newProperties, and update Contact Properties
+	 * 
+	 * @param newProperties
+	 * @param oldProperties
+	 * @return updatedProperties
+	 */
 	public static List<ContactField> updateContactProperties(List<ContactField> newProperties,
 			List<ContactField> oldProperties)
 	{
 		List<ContactField> updatedProperties = new ArrayList<ContactField>();
 		List<ContactField> outdatedProperties = new ArrayList<ContactField>();
 
+		// If oldProperties exist
 		if (oldProperties.size() != 0)
 		{
 			for (ContactField oldProperty : oldProperties)
 				for (ContactField newProperty : newProperties)
+
+					// If oldProperty updated replace with newProperty
 					if (StringUtils.equals(oldProperty.name, newProperty.name)
 							&& (StringUtils.equals(oldProperty.subtype, newProperty.subtype)))
 						outdatedProperties.add(oldProperty);
@@ -180,6 +207,14 @@ public class FormsUtil
 		return updatedProperties;
 	}
 
+	/**
+	 * Build CUSTOM ContactField form name, value, and subtype of property
+	 * 
+	 * @param name
+	 * @param value
+	 * @param subtype
+	 * @return field
+	 */
 	public static ContactField buildProperty(String name, String value, String subtype)
 	{
 		ContactField field = new ContactField();
@@ -190,66 +225,106 @@ public class FormsUtil
 		return field;
 	}
 
+	/**
+	 * Get country code from country name if match, else return country name
+	 * 
+	 * @param value
+	 *            country name
+	 * @return country code || value
+	 */
 	public static String getCountry(String value)
 	{
 		String code = countrycodemap().get(value);
 		return (!StringUtils.isBlank(code)) ? code : value;
 	}
 
+	/**
+	 * Map finalJson to contact fields in agilecrm
+	 * 
+	 * @param finalJson
+	 * @param properties
+	 * @param notes
+	 * @return void
+	 */
 	public static void jsonToAgile(JSONObject finalJson, List<ContactField> properties, List<Note> notes)
 	{
 		try
 		{
+			// Define addressJson, checkBox, addString
 			JSONObject addressJson = new JSONObject();
 			String checkBox = new String();
 			String addString = new String();
 
+			// Iterate finalJson keys
 			Iterator<?> keys = finalJson.keys();
 			while (keys.hasNext())
 			{
 				String key = (String) keys.next();
 				String value = finalJson.getString(key);
 
+				// If key contains " "
 				if (key.contains(" "))
 				{
 					String[] keyArray = key.split(" ");
+
+					// Separate name and sub type from key by splitting at " "
 					String tokenKey = keyArray[0];
 					String subType = keyArray[1];
 
+					// If key contains "textarea" create new note and append to
+					// notes
 					if (key.contains("textarea"))
 					{
 						Note note = new Note(key.replace(" textarea", ""), value);
 						notes.add(note);
 					}
+
+					// If key contains "checkbox" append to checkBox string
 					else if (key.contains("checkbox"))
 					{
 						checkBox = (!StringUtils.isBlank(checkBox)) ? checkBox + ", " + value : value;
 						buildProperty(key.replace(" checkbox", ""), checkBox, null);
 					}
+
+					// If subtype is lineone or linetwo add to addString
 					else if (StringUtils.equals(subType, "lineone"))
 						addString = value;
 					else if (StringUtils.equals(subType, "linetwo"))
 						addString = addString + ", " + value;
+
+					// If subtype is city, state, zip add to addressJson
 					else if (StringUtils.equals(subType, "city") || StringUtils.equals(subType, "state")
 							|| StringUtils.equals(subType, "zip"))
 						addressJson.put(subType, value);
+
+					// If subtype is country, get country code and add to
+					// addressJson
 					else if (StringUtils.equals(subType, "country"))
 						addressJson.put(subType, getCountry(value));
+
+					// If split key is "website" or "phone"
 					else if (StringUtils.equals(tokenKey, Contact.WEBSITE)
 							|| StringUtils.equals(tokenKey, Contact.PHONE))
 						properties.add(new ContactField(tokenKey, value, subType));
 					else
+
+						// Add as custom contact field to contact
 						properties.add(buildProperty(key, value, null));
 				}
+
+				// If key doesnt contain " "
 				else if (key.equals(Contact.FIRST_NAME) || key.equals(Contact.LAST_NAME) || key.equals(Contact.COMPANY)
 						|| key.equals(Contact.TITLE) || key.equals(Contact.WEBSITE) || key.equals(Contact.EMAIL)
 						|| key.equals(Contact.PHONE))
 					properties.add(new ContactField(key, value, null));
 				else
+
+					// Add as custom contact field to contact
 					properties.add(buildProperty(key, value, null));
 			}
 			if (addressJson.length() != 0)
 			{
+				// Add addString to addressJson and add to properties
 				addressJson.put("address", addString);
 				properties.add(new ContactField(Contact.ADDRESS, addressJson.toString(), null));
 			}
@@ -262,6 +337,11 @@ public class FormsUtil
 		}
 	}
 
+	/**
+	 * Map with country names as key and codes as values
+	 * 
+	 * @return countryCode
+	 */
 	public static HashMap<String, String> countrycodemap()
 	{
 		HashMap<String, String> countryCode = new HashMap<String, String>();
