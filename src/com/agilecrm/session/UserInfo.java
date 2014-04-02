@@ -16,6 +16,7 @@ package com.agilecrm.session;
 
 import java.io.Serializable;
 
+import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 
@@ -67,6 +68,8 @@ public class UserInfo implements Serializable
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 	if (domainUser != null)
 	    setDomainId(domainUser.id);
+
+	BillingRestrictionUtil.setPlan(this);
     }
 
     /**

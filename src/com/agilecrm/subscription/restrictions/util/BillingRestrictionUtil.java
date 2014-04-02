@@ -115,6 +115,7 @@ public class BillingRestrictionUtil
     public static BillingRestriction getInstance()
     {
 	UserInfo info = SessionManager.get();
+	System.out.println(info.getPlan() + ", " + info.getUsersCount());
 	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
     }
 
@@ -128,6 +129,9 @@ public class BillingRestrictionUtil
 	    Subscription subscription = Subscription.getSubscription();
 	    plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
 	    UserInfo info = SessionManager.get();
+	    if (info == null)
+		return plan;
+
 	    info.setPlan(plan.plan_type.toString());
 	    info.setUsersCount(plan.quantity);
 	    SessionManager.set((UserInfo) null);

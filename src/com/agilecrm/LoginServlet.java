@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
@@ -86,6 +87,8 @@ public class LoginServlet extends HttpServlet
 		    System.out.println("agile form type");
 		    loginAgile(request, response);
 		}
+
+		BillingRestrictionUtil.getBillingRestriction(true).refresh(true);
 
 		return;
 	    }

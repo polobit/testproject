@@ -10,12 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.limits.PlanLimitsEmunWrapper;
 import com.agilecrm.subscription.limits.PlanLimitsEnum;
 import com.agilecrm.subscription.limits.contacts.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -205,13 +205,13 @@ public class BillingRestriction
      * at client side
      * 
      * @return
-     * @throws IOException 
-     * @throws JsonMappingException 
-     * @throws JsonGenerationException 
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      */
-    public String getCurrentLimits() throws JsonGenerationException, JsonMappingException, IOException
+    public PlanLimitsEmunWrapper getCurrentLimits()
     {
-	return new ObjectMapper().writeValueAsString(planLimitsEnum);
+	return new PlanLimitsEmunWrapper(planLimitsEnum);
     }
 
     /**
@@ -231,7 +231,7 @@ public class BillingRestriction
 	}
 	catch (PlanRestrictedException e)
 	{
-	    throw new PlanRestrictedException("Plan cannot be downgradded");
+	    throw new PlanRestrictedException("Plan cannot be downgraded");
 	}
     }
 
