@@ -1,22 +1,27 @@
 package com.agilecrm.subscription.restrictions;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Id;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.limits.PlanLimitsEmunWrapper;
 import com.agilecrm.subscription.limits.PlanLimitsEnum;
 import com.agilecrm.subscription.limits.contacts.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil.ErrorMessages;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.workflows.Workflow;
 import com.analytics.util.AnalyticsSQLUtil;
@@ -25,6 +30,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * <code>BillingRestriction</code> class represents number of entities in
@@ -52,6 +58,9 @@ public class BillingRestriction
     public Integer emails;
     public Integer one_time_emails;
 
+    @NotSaved(IfDefault.class)
+    public Plan Plan;
+
     @NotSaved
     @JsonIgnore
     public Set<String> tagsToAddInOurDomain = new HashSet<String>();
@@ -65,7 +74,6 @@ public class BillingRestriction
     public boolean getTags = false;
 
     @NotSaved
-    @JsonIgnore
     public PlanLimitsEnum planLimitsEnum;
 
     private static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(BillingRestriction.class);
@@ -197,10 +205,13 @@ public class BillingRestriction
      * at client side
      * 
      * @return
+     * @throws IOException
+     * @throws JsonMappingException
+     * @throws JsonGenerationException
      */
-    public PlanLimitsEnum getCurrentLimits()
+    public PlanLimitsEmunWrapper getCurrentLimits()
     {
-	return planLimitsEnum;
+	return new PlanLimitsEmunWrapper(planLimitsEnum);
     }
 
     /**
@@ -220,7 +231,7 @@ public class BillingRestriction
 	}
 	catch (PlanRestrictedException e)
 	{
-	    throw new PlanRestrictedException("Plan cannot be downgradded");
+	    throw new PlanRestrictedException("Plan cannot be downgraded");
 	}
     }
 

@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil"%>
+<%@page import="com.agilecrm.subscription.restrictions.BillingRestriction"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -47,6 +49,8 @@
 
 			String width = currentUserPrefs.width;
 			boolean is_fluid = !width.isEmpty();
+			
+			BillingRestriction restriction = BillingRestrictionUtil.getInstance();
 %>
 
 
@@ -133,7 +137,7 @@
 	<script>
 	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 	//var LIB_PATH = "/";
-	var HANDLEBARS_PRECOMPILATION = false;
+	var HANDLEBARS_PRECOMPILATION = true;
 	
 	var CSS_PATH = "/";
 	//var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -148,6 +152,10 @@
 	
 	// Get current domain user json
 	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
+	
+	
+	// Billing Restriction
+	var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 	
 	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';

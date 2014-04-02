@@ -1,6 +1,8 @@
 package com.agilecrm.util;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -16,6 +18,10 @@ import com.thirdparty.mandrill.Mandrill;
 
 public class EmailUtil
 {
+
+    // Agile emails - to avoid count when emails are sent to Agile support
+    public static String[] agileEmails = { "care@agilecrm.com", "sales@agilecrm.com" };
+    public static List<String> agileEmailsList = Arrays.asList(agileEmails);
 
     /**
      * Parses html body of an email using jsoup.
@@ -104,8 +110,8 @@ public class EmailUtil
     public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html, String text)
     {
 
+	// Agile label to outgoing emails
 	html = appendAgileToHTML(html, "email", "Sent using");
-
 	text = appendAgileToText(text, "Sent using");
 
 	// if cc or bcc present, send by Mailgun
@@ -120,8 +126,9 @@ public class EmailUtil
 	// if no cc or bcc, send by Mandrill
 	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
 
-	// Record Email Stats
-	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
+	// Record Email Stats. Avoids count for Contact Us emails
+	if (!isToAgileEmail(to))
+	    AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
 
     }
 
@@ -186,8 +193,9 @@ public class EmailUtil
      */
     public static String appendAgileToHTML(String html, String medium, String labelText)
     {
+
 	// Returns only html if Agile label exits
-	if (StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by")
+	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by")
 		|| StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com"))
 	    return html;
 
@@ -222,10 +230,22 @@ public class EmailUtil
      */
     public static String appendAgileToText(String text, String labelText)
     {
-	// If already exists return only text
-	if (StringUtils.contains(text, "Sent using Agile"))
+	// If already exists or null, return only text
+	if (StringUtils.isBlank(text) || StringUtils.contains(text, "Sent using Agile"))
 	    return text;
 
 	return text + "\n" + labelText + " Agile";
+    }
+
+    /**
+     * Verifies whether To email is Agile support email
+     * 
+     * @param to
+     *            - To email
+     * @return boolean
+     */
+    public static boolean isToAgileEmail(String to)
+    {
+	return agileEmailsList.contains(to);
     }
 }
