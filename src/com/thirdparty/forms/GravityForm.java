@@ -32,33 +32,45 @@ public class GravityForm extends HttpServlet
 	{
 		try
 		{
+			// Get API key and tags
 			String tagString = req.getParameter("api-key");
 
+			// Format tagString for spaces
 			tagString = tagString.trim();
 			tagString = tagString.replace("/, /g", ",");
 
+			// Split tagString and separate tags and API key
 			String[] tagsWithKey = tagString.split(",");
 			String[] tags = Arrays.copyOfRange(tagsWithKey, 1, tagsWithKey.length);
 
+			// Get owner from API key
 			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 
+			// Define properties list (ContactField)
 			List<ContactField> properties = new ArrayList<ContactField>();
 
+			// Get data from gravity plugin and convert to finalJson {"name":
+			// "value"}
 			JSONObject json = new JSONObject(req.getParameter("data"));
 			JSONObject finalJson = convertGravityJson(json);
 
+			// Define contact
 			Contact contact = null;
 
+			// Check if email exists in finalJson, if yes search for contact
 			if (!StringUtils.isBlank(finalJson.optString(Contact.EMAIL)))
 				contact = ContactUtil.searchContactByEmail(finalJson.getString(Contact.EMAIL));
 
+			// If contact is null create new contact
 			if (contact == null)
 				contact = new Contact();
 
+			// Build agile contactfield (SYSTEM / CUSTOM) from finalJson
 			FormsUtil.jsonToAgile(finalJson, properties, null);
 
 			if (owner != null)
 			{
+				// Set contact owner, update contact properties, save contact
 				contact.setContactOwner(owner);
 				contact.properties = FormsUtil.updateContactProperties(properties, contact.properties);
 				contact.addTags(tags);
@@ -77,17 +89,21 @@ public class GravityForm extends HttpServlet
 	{
 		try
 		{
+			// Define finalJson
 			JSONObject finalJson = new JSONObject();
 
+			// Define name, value
 			String name;
 			String value;
 
+			// Iterate keys and replace with agile field keys
 			Iterator<?> keys = json.keys();
 			while (keys.hasNext())
 			{
 				name = (String) keys.next();
 				value = json.getString(name);
 
+				// If value is not null, update finalJson
 				if (!StringUtils.isBlank(value))
 				{
 					name = FormsUtil.getFieldName(name);
