@@ -1,4 +1,4 @@
-package com.agilecrm.subscription.limits.contacts.cron;
+package com.agilecrm.subscription.limits.cron;
 
 import java.util.Set;
 
@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.subscription.limits.contacts.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;

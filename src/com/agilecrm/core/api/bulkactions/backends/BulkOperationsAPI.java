@@ -28,8 +28,8 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
-import com.agilecrm.subscription.restrictions.BillingRestriction1;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
@@ -328,7 +328,7 @@ public class BulkOperationsAPI
 
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
-	    BillingRestriction1 restrictions = BillingRestrictionUtil.getBillingRestriction(true);
+	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
 	    new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
 	}
 	catch (IOException e)

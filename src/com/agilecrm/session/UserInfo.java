@@ -16,7 +16,7 @@ package com.agilecrm.session;
 
 import java.io.Serializable;
 
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 

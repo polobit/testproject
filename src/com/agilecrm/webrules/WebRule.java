@@ -7,20 +7,16 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.subscription.restrictions.BillingRestrictionManager;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
-public class WebRule implements BillingRestrictionManager
+public class WebRule
 {
     @Id
     public Long id;
@@ -59,29 +55,6 @@ public class WebRule implements BillingRestrictionManager
     public void save() throws PlanRestrictedException
     {
 	dao.put(this);
-    }
-
-    @Override
-    public boolean isNew()
-    {
-	if (id == null)
-	    return true;
-	// TODO Auto-generated method stub
-	return false;
-    }
-
-    @Override
-    public void checkLimits() throws PlanRestrictedException
-    {
-	BillingRestrictionUtil.getInstance(true).check(dao);
-    }
-
-    @Override
-    @JsonIgnore
-    public ObjectifyGenericDao getDao() throws PlanRestrictedException
-    {
-	// TODO Auto-generated method stub
-	return dao;
     }
 }
 
