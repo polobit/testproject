@@ -18,7 +18,7 @@ public class GoogleApi extends DefaultApi20
     /**
      * Scoped authorize URL of Google for OAuth 2.0
      */
-    private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=online&response_type=code&approval_prompt=auto";
+    private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=auto";
 
     /**
      * Scoped authorize URL of Google for OAuth 2.0 with prompt set to auto

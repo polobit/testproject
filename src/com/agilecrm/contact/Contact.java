@@ -397,6 +397,17 @@ public class Contact extends Cursor
 	    }
 	}
 
+	// Updated time is updated only if particular fields are changed. It is
+	// updated only when search document is tobe updated
+	updated_time = System.currentTimeMillis() / 1000;
+	System.out.println("viewed time : " + viewed_time);
+	if (viewed_time != 0L)
+	{
+	    System.out.println(viewed_time);
+	    viewed.viewed_time = viewed_time;
+	    viewed.viewer_id = SessionManager.get().getDomainId();
+	}
+
 	dao.put(this);
 
 	// Execute trigger for contacts
@@ -413,15 +424,6 @@ public class Contact extends Cursor
 	if (notification_condition)
 	    // Execute notification for contacts
 	    ContactNotificationPrefsUtil.executeNotificationToContact(oldContact, this);
-
-	// Updated time is updated only if particular fields are changed. It is
-	// updated only when search document is tobe updated
-	updated_time = System.currentTimeMillis() / 1000;
-	if (viewed_time != 0L)
-	{
-	    viewed.viewed_time = viewed_time;
-	    viewed.viewer_id = SessionManager.get().getDomainId();
-	}
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;

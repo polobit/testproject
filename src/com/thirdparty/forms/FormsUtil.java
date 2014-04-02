@@ -21,23 +21,24 @@ public class FormsUtil
 	{
 		String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First" };
 		String lastNameAlias[] = { Contact.LAST_NAME, "Last" };
-		String companyNameAlias[] = { Contact.COMPANY, "organisation, organization" };
-		String contactTitleAlias[] = { Contact.TITLE, "designation" };
+		String companyNameAlias[] = { Contact.COMPANY, "organisation, organization", "Organization", "Organisation",
+				"Company" };
+		String contactTitleAlias[] = { Contact.TITLE, "designation", "Title", "Designation" };
 		String emailAlias[] = { Contact.EMAIL };
 		String mainPhoneAlias[] = { Contact.PHONE, "phone_number" };
 		String workPhoneAlias[] = { "work phone" };
-		String mobilePhoneAlias[] = { "mobile", "mobile phone" };
+		String mobilePhoneAlias[] = { "mobile", "mobile phone", "Mobile" };
 		String websiteAlias[] = { "url" };
-		String skypeIdAlias[] = { "skype" };
-		String twitterAlias[] = { "twitter" };
-		String googlePlusAlias[] = { "google+" };
-		String linkedinAlias[] = { "linkedin" };
-		String facebookAlias[] = { "facebook" };
-		String xingAlias[] = { "xing" };
-		String flickrAlias[] = { "flickr" };
-		String githubAlias[] = { "github" };
-		String youtubeAlias[] = { "youtube" };
-		String feedAlias[] = { "feed" };
+		String skypeIdAlias[] = { "skype", "Skype" };
+		String twitterAlias[] = { "twitter", "Twitter" };
+		String googlePlusAlias[] = { "google+", "Google+" };
+		String linkedinAlias[] = { "linkedin", "Linkedin" };
+		String facebookAlias[] = { "facebook", "Facebook" };
+		String xingAlias[] = { "xing", "Xing" };
+		String flickrAlias[] = { "flickr", "Flickr" };
+		String githubAlias[] = { "github", "Github" };
+		String youtubeAlias[] = { "youtube", "Youtube" };
+		String feedAlias[] = { "feed", "Feed" };
 		String addressAlias[] = { "Street Address", "Location", "Street", "street", "address", "location" };
 		String addressLineAlias[] = { "Address Line 2" };
 		String addressCityAlias[] = { "City", "province" };

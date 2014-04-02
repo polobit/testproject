@@ -98,7 +98,7 @@ public class WufooWebhook extends HttpServlet
 				String fieldType = json.getString("Type");
 
 				if (fieldType.equals("url"))
-					name = fieldType;
+					name = Contact.WEBSITE;
 				else if (fieldType.equals("email"))
 					name = fieldType;
 				else if (fieldType.equals("textarea"))
