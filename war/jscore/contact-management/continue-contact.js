@@ -148,6 +148,8 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
     	else obj.contact_company_id=null;
 
     	if (isValidField(form_id+' #email')) properties.push(property_JSON('email', form_id+' #email'));
+    	
+    	if (isValidField(form_id+' #phone')) properties.push(property_JSON('phone', form_id+' #phone'));
 
     	if (isValidField(form_id+' #job_title')) properties.push(property_JSON('title', form_id+' #job_title'));
     
