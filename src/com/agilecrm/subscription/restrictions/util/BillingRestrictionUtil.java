@@ -51,7 +51,7 @@ public class BillingRestrictionUtil
     /**
      * Percentages where tag has to be added
      */
-    private static Set<String> percentages = new HashSet<String>();
+    private static final Set<String> percentages = new HashSet<String>();
     static
     {
 	percentages.add("75");
