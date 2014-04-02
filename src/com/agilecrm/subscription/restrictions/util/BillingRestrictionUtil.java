@@ -12,7 +12,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.restrictions.BillingRestriction;
+import com.agilecrm.subscription.restrictions.BillingRestriction1;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.DomainUser;
@@ -68,13 +68,13 @@ public class BillingRestrictionUtil
      * @param users
      * @return
      */
-    public static BillingRestriction getBillingRestriction(String planName, Integer users)
+    public static BillingRestriction1 getBillingRestriction(String planName, Integer users)
     {
 	Objectify ofy = ObjectifyService.begin();
-	BillingRestriction restriction = ofy.query(BillingRestriction.class).get();
+	BillingRestriction1 restriction = ofy.query(BillingRestriction1.class).get();
 
 	if (restriction == null)
-	    restriction = BillingRestriction.getInstance(planName, users);
+	    restriction = BillingRestriction1.getInstance(planName, users);
 
 	restriction.planLimitsEnum = BillingRestrictionUtil.getPlan(planName, users).getPlanLimits();
 
@@ -89,34 +89,34 @@ public class BillingRestrictionUtil
      * @param sendRemainder
      * @return
      */
-    public static BillingRestriction getBillingRestriction(boolean sendRemainder)
+    public static BillingRestriction1 getBillingRestriction(boolean sendRemainder)
     {
 	UserInfo info = SessionManager.get();
 	if (info == null)
 	{
-	    BillingRestriction restriction = getBillingRestriction(null, null);
+	    BillingRestriction1 restriction = getBillingRestriction(null, null);
 	    restriction.sendRemainder = sendRemainder;
 	    return restriction;
 	}
 	System.out.println(info.getPlan() + ", " + info.getUsersCount());
-	BillingRestriction restriction = getBillingRestriction(info.getPlan(), info.getUsersCount());
+	BillingRestriction1 restriction = getBillingRestriction(info.getPlan(), info.getUsersCount());
 	restriction.sendRemainder = sendRemainder;
 	return restriction;
     }
 
-    public static BillingRestriction getInstance(boolean sendRemainder)
+    public static BillingRestriction1 getInstance(boolean sendRemainder)
     {
-	BillingRestriction restriction = getInstance();
+	BillingRestriction1 restriction = getInstance();
 	restriction.sendRemainder = sendRemainder;
 	return restriction;
 
     }
 
-    public static BillingRestriction getInstance()
+    public static BillingRestriction1 getInstance()
     {
 	UserInfo info = SessionManager.get();
 	System.out.println(info.getPlan() + ", " + info.getUsersCount());
-	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
+	return BillingRestriction1.getInstance(info.getPlan(), info.getUsersCount());
     }
 
     public static Plan getPlan(String planName, Integer users)

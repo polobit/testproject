@@ -28,7 +28,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
-import com.agilecrm.subscription.restrictions.BillingRestriction;
+import com.agilecrm.subscription.restrictions.BillingRestriction1;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -50,14 +50,14 @@ import com.googlecode.objectify.Key;
  */
 public class CSVUtil
 {
-    BillingRestriction billingRestriction;
+    BillingRestriction1 billingRestriction;
 
     private CSVUtil()
     {
 
     }
 
-    public CSVUtil(BillingRestriction billingRestriction)
+    public CSVUtil(BillingRestriction1 billingRestriction)
     {
 	this.billingRestriction = billingRestriction;
     }
