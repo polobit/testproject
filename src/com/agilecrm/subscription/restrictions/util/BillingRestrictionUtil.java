@@ -91,6 +91,12 @@ public class BillingRestrictionUtil
     public static BillingRestriction getBillingRestriction(boolean sendRemainder)
     {
 	UserInfo info = SessionManager.get();
+	if (info == null)
+	{
+	    BillingRestriction restriction = getBillingRestriction(null, null);
+	    restriction.sendRemainder = sendRemainder;
+	    return restriction;
+	}
 	System.out.println(info.getPlan() + ", " + info.getUsersCount());
 	BillingRestriction restriction = getBillingRestriction(info.getPlan(), info.getUsersCount());
 	restriction.sendRemainder = sendRemainder;
