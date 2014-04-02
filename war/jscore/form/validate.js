@@ -8,28 +8,25 @@
 function isValidForm(form) {
 
 	// Credit card validation to check card is valid for next 3 months
-	jQuery.validator
-			.addMethod(
-					"atleastThreeMonths",
-					function(value, element) {
+	jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
 
-						// Gets the exp_month field because expiry should be
-						// checked both on month and year
-						var month = $(element).siblings('select.exp_month')
-								.val(), year = value;
+			// Gets the exp_month field because expiry should be
+			// checked both on month and year
+			var month = $(element).siblings('select.exp_month')
+					.val(), year = value;
 
-						// date selected
-						var date = new Date().setFullYear(year, month - 1);
+			// date selected
+			var date = new Date().setFullYear(year, month - 1);
 
-						// Get number of milliseconds per day
-						var one_day = 1000 * 60 * 60 * 24;
+			// Get number of milliseconds per day
+			var one_day = 1000 * 60 * 60 * 24;
 
-						// Calculates number of days left from the current date,
-						// if number of days are greater than 90 then returns
-						// true
-						return this.optional(element)
-								|| (((date - new Date().getTime()) / one_day) > 90);
-					}, "Card should be atleast 3 months valid");
+			// Calculates number of days left from the current date,
+			// if number of days are greater than 90 then returns
+			// true
+			return this.optional(element)
+					|| (((date - new Date().getTime()) / one_day) > 90);
+		}, "Card should be atleast 3 months valid");
 	
 	// Validates multiple emails separated by comma entered in textbox
 	jQuery.validator.addMethod("multipleEmails", function(value, element) {
@@ -59,6 +56,16 @@ function isValidForm(form) {
 		return /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/i.test(value);
 	}," Please enter a valid email.");
 	
+	// Phone number validation
+	jQuery.validator.addMethod("phone", function(value, element){
+		
+		if(this.optional(element))
+			return true;
+		
+		//return /^(\()?(\d{3})([\)-\. ])?(\d{3})([-\. ])?(\d{4})$/.test(value);
+		return /^[^a-zA-Z]+$/.test(value);
+	}," Please enter a valid phone number.");
+	
 	jQuery.validator.addMethod("multi-tags", function(value, element){
 		
 		var	tag_input = $(element).val()
@@ -75,7 +82,8 @@ function isValidForm(form) {
 		rules : {
 			atleastThreeMonths : true,
 			multipleEmails: true,
-			email: true
+			email: true,
+			phone: true
 		},
 		debug : true,
 		errorElement : 'span',
