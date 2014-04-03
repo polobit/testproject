@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<%@page import="com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil"%>
-<%@page import="com.agilecrm.subscription.restrictions.BillingRestriction"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
