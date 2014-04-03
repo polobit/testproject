@@ -10,6 +10,7 @@ import com.agilecrm.activities.Task.PriorityType;
 import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.reports.Reports;
@@ -29,6 +30,7 @@ public class Defaults
 	saveDefaultEvents();
 	saveDefaultDeals();
 	saveDefaultReports();
+	saveDefaultNotes();
     }
 
     /**
@@ -42,7 +44,7 @@ public class Defaults
 	tags.add("Donuts");
 	List<ContactField> contactFields = new ArrayList<ContactField>();
 	contactFields.add(new ContactField(Contact.FIRST_NAME, "Homer", null));
-	contactFields.add(new ContactField(Contact.LAST_NAME, "Jay Simpson", null));
+	contactFields.add(new ContactField(Contact.LAST_NAME, "Simpson", null));
 	contactFields.add(new ContactField(Contact.EMAIL, "homer@simpson.com", "work"));
 	contactFields.add(new ContactField(Contact.COMPANY, "Springfield Nuclear Power Plant", null));
 	contactFields.add(new ContactField(Contact.TITLE, "Nuclear Safety Inspector", null));
@@ -126,6 +128,19 @@ public class Defaults
 	task3.due = date3.getTime().getTime() / 1000;
 	task3.owner_id = String.valueOf(SessionManager.get().getDomainId());
 	task3.save();
+
+	Task task4 = new Task();
+	task4.subject = "Meet Homer to finalize the Deal (Bring Donuts!)";
+	task4.is_complete = false;
+	task4.type = Type.MEETING;
+	task4.priority_type = PriorityType.HIGH;
+	DateUtil date4 = new DateUtil().addDays(5).toMidnight().addMinutes(16 * 60);
+	task4.due = date4.getTime().getTime() / 1000;
+	task4.owner_id = String.valueOf(SessionManager.get().getDomainId());
+	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
+	    return;
+	task4.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
+	task4.save();
     }
 
     /**
@@ -139,7 +154,10 @@ public class Defaults
 	event.allDay = false;
 	DateUtil date = new DateUtil().toMidnight().addDays(1).addMinutes(16 * 60);
 	event.start = date.getTime().getTime() / 1000;
-	event.end = date.getTime().getTime() / 1000 + 1800;
+	event.end = date.getTime().getTime() / 1000 + 3800;
+	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
+	    return;
+	event.addContacts(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
 	event.save();
 
 	Event event1 = new Event();
@@ -174,6 +192,19 @@ public class Defaults
 	    return;
 	deal.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("sixfeetsix@nba.com").id));
 	deal.save();
+
+	Opportunity deal1 = new Opportunity();
+	deal1.name = "Donuts!";
+	deal1.description = "Donut ingrediants for Homer's new shop he wants to setup. He is offering contracts for the raw products.";
+	deal1.expected_value = 10000d;
+	deal1.probability = 75;
+	deal1.milestone = "Won";
+	DateUtil date1 = new DateUtil().toMidnight().addDays(10);
+	deal1.close_date = date1.getTime().getTime() / 1000;
+	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
+	    return;
+	deal1.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
+	deal1.save();
     }
 
     /**
@@ -204,5 +235,29 @@ public class Defaults
 	report.rules = rulelist;
 
 	report.save();
+    }
+
+    /**
+     * Creates default Notes.
+     */
+    private void saveDefaultNotes()
+    {
+	Note note = new Note();
+	note.subject = "New Business Deal with Homer";
+	note.description = "Interested in offering a contract for atleast 200kg of imported chocolated from Ghana and 100kg of Kopi Luwak coffee seeds from Indonesia every month. If satisfied with products will offer a contract for all his raw product needs.";
+	note.entity_type = "note";
+	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
+	    return;
+	note.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
+	note.save();
+
+	Note note1 = new Note();
+	note1.subject = "Quotes on Raw Materials";
+	note1.description = "Sent three different quotes to Homer regarding the raw products. Each quote differ on the consignment sizes depending on the frequency of delivery.";
+	note1.entity_type = "note";
+	if (ContactUtil.searchContactByEmail("homer@simpson.com") == null)
+	    return;
+	note1.addContactIds(String.valueOf(ContactUtil.searchContactByEmail("homer@simpson.com").id));
+	note1.save();
     }
 }
