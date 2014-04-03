@@ -66,6 +66,7 @@ public class BillingRestriction
     public boolean sendReminder = false;
 
     @NotSaved
+    @JsonIgnore
     public Set<String> tagsToAddInOurDomain = new HashSet<String>();
 
     @NotSaved

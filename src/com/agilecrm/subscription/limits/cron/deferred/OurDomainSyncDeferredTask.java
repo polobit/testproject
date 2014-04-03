@@ -5,6 +5,13 @@ import java.util.Set;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
+/**
+ * Task to add tags to our domain. It is called if tag is being added from
+ * front-end instead of tasks.
+ * 
+ * @author Yaswanth
+ * 
+ */
 public class OurDomainSyncDeferredTask implements DeferredTask
 {
 
@@ -19,7 +26,7 @@ public class OurDomainSyncDeferredTask implements DeferredTask
     public void run()
     {
 
-	// TODO Auto-generated method stub
+	// Adds tags in out domain
 	BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(tags);
     }
 }

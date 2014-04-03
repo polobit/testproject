@@ -14,6 +14,10 @@ import com.agilecrm.subscription.limits.PlanLimits;
 @XmlRootElement
 public class FreePlanLimits extends PlanLimits
 {
+    /**
+     * As there fields are already defined in PlanLimits class these fields can
+     * be initialized in instance block
+     */
     {
 	contactLimit = 1000;
 	emailsLimit = 500;
