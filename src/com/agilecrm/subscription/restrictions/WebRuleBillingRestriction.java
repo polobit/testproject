@@ -23,7 +23,7 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
 	if (restriction == null)
 	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
 
-	MAX = restriction.planLimitsEnum.getWebRuleLimit();
+	MAX = restriction.planDetails.getWebRuleLimit();
     }
 
     /**

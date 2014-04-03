@@ -58,7 +58,12 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	try
 	{
 	    ClassEntities entity = ClassEntities.valueOf(className);
+	    if (entity == null)
+		return null;
+
 	    Class<? extends DaoBillingRestriction> clazz = entity.getClazz();
+
+	    System.out.println(clazz);
 
 	    DaoBillingRestriction dao = clazz.newInstance();
 
@@ -71,13 +76,12 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return null;
-
 	}
     }
 
     /**
      * Along with instance, this method takes reminder flag to choose whether to
-     * send remindar or not to.
+     * send reminder or not to.
      * 
      * @param className
      * @param sendReminder

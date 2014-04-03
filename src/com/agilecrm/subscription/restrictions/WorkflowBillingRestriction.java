@@ -52,7 +52,7 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 	if (restriction == null)
 	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
 
-	MAX = restriction.planLimitsEnum.getWorkflowLimit();
+	MAX = restriction.planDetails.getWorkflowLimit();
 
     }
 

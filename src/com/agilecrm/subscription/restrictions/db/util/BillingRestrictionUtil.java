@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -72,7 +73,7 @@ public class BillingRestrictionUtil
 	if (restriction == null)
 	    restriction = BillingRestriction.getInstance(planName, users);
 
-	restriction.planLimitsEnum = BillingRestrictionUtil.getPlan(planName, users).getPlanLimits();
+	restriction.planDetails = PlanLimits.getPlanDetails(BillingRestrictionUtil.getPlan(planName, users));
 
 	return restriction;
     }

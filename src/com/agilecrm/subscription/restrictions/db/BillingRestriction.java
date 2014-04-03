@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +16,7 @@ import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.subscription.limits.PlanLimitsEnum;
+import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -68,7 +69,9 @@ public class BillingRestriction
     public Set<String> tagsToAddInOurDomain = new HashSet<String>();
 
     @NotSaved
-    public PlanLimitsEnum planLimitsEnum;
+    @Embedded
+    @JsonIgnore
+    public PlanLimits planDetails = PlanLimits.getPlanDetails(new Plan("FREE", 2));
 
     private static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(BillingRestriction.class);
 
@@ -77,9 +80,9 @@ public class BillingRestriction
 
     }
 
-    private BillingRestriction(PlanLimitsEnum limits)
+    private BillingRestriction(PlanLimits limits)
     {
-	planLimitsEnum = limits;
+	planDetails = limits;
     }
 
     /**
@@ -92,7 +95,7 @@ public class BillingRestriction
      */
     public static BillingRestriction getInstance(String planName, Integer users)
     {
-	return new BillingRestriction(BillingRestrictionUtil.getPlan(planName, users).getPlanLimits());
+	return new BillingRestriction(BillingRestrictionUtil.getPlan(planName, users).getPlanDetails());
     }
 
     /**
@@ -119,7 +122,7 @@ public class BillingRestriction
 	if (pageviews_count == null && !StringUtils.isEmpty(NamespaceManager.get()))
 	    pageviews_count = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
 
-	if (pageviews_count >= planLimitsEnum.getLimit("webRule"))
+	if (pageviews_count >= planDetails.getWebRuleLimit())
 	    throw new PlanRestrictedException("pageviews limit exceeded");
     }
 
@@ -130,7 +133,7 @@ public class BillingRestriction
      */
     public boolean isWhiteLabelEnabled()
     {
-	return planLimitsEnum.isWhiteLabelEnabled();
+	return planDetails.isWhiteLabelEnabled();
     }
 
     /**
@@ -142,9 +145,9 @@ public class BillingRestriction
      * @throws JsonMappingException
      * @throws JsonGenerationException
      */
-    public PlanLimitsEmunWrapper getCurrentLimits()
+    public PlanLimits getCurrentLimits()
     {
-	return new PlanLimitsEmunWrapper(planLimitsEnum);
+	return planDetails;
     }
 
     /**
