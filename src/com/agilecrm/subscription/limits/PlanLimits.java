@@ -53,7 +53,9 @@ public class PlanLimits
      */
     public static enum PlanClasses
     {
-	FREE(FreePlanLimits.class), STARTER(StarterPlanLimits.class), REGULAR(RegularPlanLimits.class), PRO(ProPlanLimits.class);
+	FREE(FreePlanLimits.class), STARTER(StarterPlanLimits.class), REGULAR(RegularPlanLimits.class), PRO(ProPlanLimits.class),
+
+	BASIC(StarterPlanLimits.class), PROFESSIONAL(RegularPlanLimits.class), ENTERPRISE(ProPlanLimits.class), LITE(StarterPlanLimits.class);
 
 	Class<? extends PlanLimits> clazz;
 
@@ -133,6 +135,9 @@ public class PlanLimits
 
     public Integer getContactLimit()
     {
+	if (contactLimit == Integer.MAX_VALUE)
+	    return contactLimit;
+
 	return contactLimit * plan.quantity;
     }
 
@@ -143,6 +148,9 @@ public class PlanLimits
 
     public Integer getWorkflowLimit()
     {
+	if (workflowLimit == Integer.MAX_VALUE)
+	    return workflowLimit;
+
 	return workflowLimit * plan.quantity;
     }
 
