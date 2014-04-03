@@ -166,6 +166,14 @@ public class Note
 	return contacts_list;
     }
 
+    public void addContactIds(String id)
+    {
+	if (contact_ids == null)
+	    contact_ids = new ArrayList<String>();
+
+	contact_ids.add(id);
+    }
+
     /**
      * Returns contact ids related to note.
      * 

@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.activities.util.EventUtil;
-import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -92,18 +91,18 @@ public class Event
      */
     @NotSaved(IfDefault.class)
     public Key<Contact> contact = null;
-    
+
     /**
      * List of contact ids related to a task
      */
     @NotSaved(IfDefault.class)
     public List<String> contacts = null;
-    
+
     /**
      * List of contact keys related to a task
      */
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
-    
+
     /**
      * While saving an event it contains list of contact keys, but while
      * retrieving includes complete contact object.
@@ -128,7 +127,7 @@ public class Event
 	Event event = EventUtil.getEvent(id);
 	return event.getContacts();
     }
-    
+
     /**
      * Owner key of the event
      */
@@ -180,6 +179,14 @@ public class Event
 	    this.owner = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
 
+    public void addContacts(String id)
+    {
+	if (contacts == null)
+	    contacts = new ArrayList<String>();
+
+	contacts.add(id);
+    }
+
     /**
      * Deletes the event from database
      */
@@ -209,7 +216,7 @@ public class Event
 	// Store Created Time
 	if (created_time == 0L)
 	    created_time = System.currentTimeMillis() / 1000;
-	
+
 	if (this.contacts != null)
 	{
 	    // Create list of Contact keys
