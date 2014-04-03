@@ -114,6 +114,10 @@ public class EmailUtil
 	html = appendAgileToHTML(html, "email", "Sent using");
 	text = appendAgileToText(text, "Sent using");
 
+	// Record Email Stats. Avoids count for Contact Us emails
+	if (!isToAgileEmail(to))
+	    AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
+
 	// if cc or bcc present, send by Mailgun
 	if (!StringUtils.isEmpty(cc) || !StringUtils.isEmpty(bcc))
 	{

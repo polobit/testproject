@@ -34,8 +34,9 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.restrictions.BillingRestriction;
-import com.agilecrm.subscription.restrictions.BillingRestrictionManager;
+import com.agilecrm.subscription.restrictions.DaoBillingRestriction;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -186,12 +187,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public Key<T> put(T entity)
     {
-	if (entity instanceof BillingRestrictionManager && ((BillingRestrictionManager) entity).isNew())
-	{
-	    System.out.println("********************** test **************************");
-	    ((BillingRestrictionManager) entity).checkLimits();
-
-	}
+	System.out.println(clazz.getSimpleName());
+	DaoBillingRestriction daoRestriction = DaoBillingRestriction.getInstace(clazz.getSimpleName());
+	if (daoRestriction != null && !daoRestriction.can_create())
+	    BillingRestrictionUtil.throwLimitExceededException(clazz.getSimpleName());
 
 	return ofy().put(entity);
     }

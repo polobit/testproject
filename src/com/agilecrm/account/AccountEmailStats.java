@@ -3,19 +3,14 @@ package com.agilecrm.account;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.subscription.restrictions.BillingRestrictionManager;
-import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
 @Unindexed
-public class AccountEmailStats implements BillingRestrictionManager
+public class AccountEmailStats
 {
 
     @Id
@@ -63,29 +58,4 @@ public class AccountEmailStats implements BillingRestrictionManager
 	    updated_time = System.currentTimeMillis() / 1000;
 	}
     }
-
-    @Override
-    public boolean isNew()
-    {
-	if (id == null)
-	    // TODO Auto-generated method stub
-	    return true;
-	return false;
-    }
-
-    @Override
-    public void checkLimits() throws PlanRestrictedException
-    {
-	// TODO Auto-generated method stub
-	BillingRestrictionUtil.getInstance(true).check(count, "Email");
-    }
-
-    @Override
-    @JsonIgnore
-    public ObjectifyGenericDao getDao() throws PlanRestrictedException
-    {
-	// TODO Auto-generated method stub
-	return dao;
-    }
-
 }

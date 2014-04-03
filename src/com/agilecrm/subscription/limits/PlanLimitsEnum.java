@@ -29,25 +29,15 @@ public enum PlanLimitsEnum
 
     LITE(null, 0f, 0, 0, 0, 0, 0, 1000, "ALL", false);
 
-    @JsonProperty
     private final String planId;
-    @JsonProperty
     private final Float price;
-    @JsonProperty
     private final Integer contactLimit;
-    @JsonProperty
     private final Integer emailsLimit;
-    @JsonProperty
     private final Integer workflowLimit;
-    @JsonProperty
     private final Integer googleContactsLimit;
-    @JsonProperty
     private final Integer webRuleLimit;
-    @JsonProperty
     private final Integer pageViewsLimit;
-    @JsonProperty
     private final String reporting;
-    @JsonProperty
     private final boolean whiteLabelEnabled;
 
     /**

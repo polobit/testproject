@@ -2240,4 +2240,19 @@ $(function()
 			return "Removed";
 	});
 	
+	Handlebars.registerHelper("check_plan", function(plan, options)
+	{
+		console.log(plan);
+		
+		if(!_billing_restriction)
+			return options.fn(this);
+		
+		console.log(_billing_restriction.planLimitsEnum);
+		if(_billing_restriction.planLimitsEnum == plan)
+			return options.fn(this);
+		
+		return options.inverse(this);
+		
+	});
+	
 });

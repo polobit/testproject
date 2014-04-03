@@ -1,8 +1,10 @@
-package com.agilecrm.subscription.limits;
+package com.agilecrm.subscription.restrictions.db;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+
+import com.agilecrm.subscription.limits.PlanLimitsEnum;
 
 @XmlRootElement
 public class PlanLimitsEmunWrapper

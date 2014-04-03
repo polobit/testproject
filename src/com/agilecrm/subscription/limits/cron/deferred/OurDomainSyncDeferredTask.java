@@ -1,8 +1,8 @@
-package com.agilecrm.subscription.limits.contacts.cron.deferred;
+package com.agilecrm.subscription.limits.cron.deferred;
 
 import java.util.Set;
 
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 public class OurDomainSyncDeferredTask implements DeferredTask
@@ -20,6 +20,6 @@ public class OurDomainSyncDeferredTask implements DeferredTask
     {
 
 	// TODO Auto-generated method stub
-	BillingRestrictionUtil.addRestictionTagsInOurDomain(tags);
+	BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(tags);
     }
 }

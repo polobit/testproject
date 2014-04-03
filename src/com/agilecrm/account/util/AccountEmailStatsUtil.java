@@ -66,8 +66,6 @@ public class AccountEmailStatsUtil
 
     public static void checkLimits() throws PlanRestrictedException
     {
-	AccountEmailStats stats = getAccountEmailStats(NamespaceManager.get());
-	stats.checkLimits();
 
     }
 }
