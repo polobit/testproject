@@ -206,7 +206,7 @@
 	
 	<servlet>
 		<servlet-name>AccountLimitChecker</servlet-name>
-		<servlet-class>com.agilecrm.subscription.limits.contacts.cron.AccountLimitCheckerCronServlet</servlet-class>
+		<servlet-class>com.agilecrm.subscription.limits.cron.AccountLimitCheckerCronServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
