@@ -1,9 +1,6 @@
 package com.agilecrm.subscription.restrictions;
 
-import com.agilecrm.contact.util.ContactBillingRestriction;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
-import com.agilecrm.webrules.util.WebRuleBillingRestriction;
-import com.agilecrm.workflows.util.WorkflowBillingRestriction;
 
 /**
  * <code>DoaBillingRestriction</code> class is abstract class based on
