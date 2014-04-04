@@ -64,7 +64,7 @@ function showCouponDiscountAmount(selected_plan_json, el) {
 			// Get original cost
 			original_cost = original_cost - discountAmount;
 
-			discountPrice = "$" + (discountAmount.toFixed(2)) + "("
+			discountPrice = "$" + (discountAmount.toFixed(2)) + " ("
 					+ percentOff + "%)";
 		}
 
