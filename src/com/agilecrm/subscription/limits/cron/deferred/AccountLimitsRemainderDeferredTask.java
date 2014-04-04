@@ -45,6 +45,9 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 	    DaoBillingRestriction.getInstace("Workflow", restriction).getTag();
 	    AccountEmailStatsUtil.checkLimits();
 
+	    System.out.println("namespace : " + namespace);
+	    System.out.println("Contacts = " + restriction.contacts_count + ", webrules = " + restriction.webrules_count + ", workflow = "
+		    + restriction.campaigns_count);
 	    // Adds tags in out domain
 	    BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(restriction.tagsToAddInOurDomain);
 	}

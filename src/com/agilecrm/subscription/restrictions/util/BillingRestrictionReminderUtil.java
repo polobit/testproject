@@ -77,8 +77,11 @@ public class BillingRestrictionReminderUtil
 	// added or any existing tag is removed
 	boolean isUpdateRequired = false;
 
+	if (contact == null)
+	    return;
 	for (String tag : tags)
 	{
+	    System.out.println(tag);
 	    // If tag already exits it continues
 	    if (contact.tags.contains(tag))
 		continue;
@@ -114,6 +117,8 @@ public class BillingRestrictionReminderUtil
 
     public static Integer calculatePercentage(int allowedEntites, int existingEntities)
     {
+	if (allowedEntites == 0 || existingEntities == 0)
+	    return 0;
 	return existingEntities * 100 / allowedEntites;
     }
 
