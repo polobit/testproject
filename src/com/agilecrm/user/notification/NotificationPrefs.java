@@ -102,6 +102,9 @@ public class NotificationPrefs
     @NotSaved(IfDefault.class)
     public boolean contact_deleted = true;
 
+    @NotSaved(IfDefault.class)
+    public boolean call = true;
+
     /**
      * Notification types.
      * 
@@ -167,7 +170,7 @@ public class NotificationPrefs
      *            Tag deleted status.
      */
     public NotificationPrefs(Long userId, boolean control_notifications, String browsing, String email_opened, String link_clicked, boolean deal_created,
-	    boolean deal_closed, boolean contact_added, boolean contact_deleted, boolean tag_added, boolean tag_deleted, String notification_sound)
+	    boolean deal_closed, boolean contact_added, boolean contact_deleted, boolean tag_added, boolean tag_deleted, boolean call, String notification_sound)
     {
 	this.control_notifications = control_notifications;
 	this.browsing = browsing;
@@ -179,6 +182,7 @@ public class NotificationPrefs
 	this.contact_deleted = contact_deleted;
 	this.tag_added = tag_added;
 	this.tag_deleted = tag_deleted;
+	this.call = call;
 	this.notification_sound = notification_sound;
 
 	this.user = new Key<AgileUser>(AgileUser.class, userId);
