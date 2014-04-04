@@ -16,6 +16,13 @@
  */
 function showCallNotyPopup(state, type, message, duration)
 {
+	// return if call under notification prefs is disabled
+	if(state === "incoming" || state === "missedCall")
+	{
+		if(notification_prefs && notification_prefs["call"] === false)
+			return;
+	}
+	
 	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
 			LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
 			{

@@ -60,8 +60,7 @@ public class NotificationsAPI
 	try
 	{
 	    // Get Notifications of user who logged in
-	    NotificationPrefs notifications = NotificationPrefsUtil
-		    .getCurrentUserNotificationPrefs();
+	    NotificationPrefs notifications = NotificationPrefsUtil.getCurrentUserNotificationPrefs();
 
 	    notifications.control_notifications = notify.control_notifications;
 	    notifications.browsing = notify.browsing;
@@ -73,6 +72,8 @@ public class NotificationsAPI
 	    notifications.contact_deleted = notify.contact_deleted;
 	    notifications.tag_added = notify.tag_added;
 	    notifications.tag_deleted = notify.tag_deleted;
+	    notifications.call = notify.call;
+
 	    notifications.notification_sound = notify.notification_sound;
 
 	    notifications.save();
