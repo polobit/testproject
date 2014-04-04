@@ -188,8 +188,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public Key<T> put(T entity)
     {
 	System.out.println(clazz.getSimpleName());
-	DaoBillingRestriction daoRestriction = DaoBillingRestriction.getInstace(clazz.getSimpleName());
-	if (daoRestriction != null && !daoRestriction.can_create())
+	DaoBillingRestriction daoRestriction = DaoBillingRestriction.getInstace(clazz.getSimpleName(), entity);
+	if (daoRestriction != null && !daoRestriction.check())
 	    BillingRestrictionUtil.throwLimitExceededException(clazz.getSimpleName());
 
 	return ofy().put(entity);

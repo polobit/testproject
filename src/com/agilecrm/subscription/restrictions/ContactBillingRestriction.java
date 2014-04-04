@@ -1,5 +1,6 @@
 package com.agilecrm.subscription.restrictions;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
@@ -84,5 +85,15 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 
 	return tag;
 
+    }
+
+    @Override
+    public boolean check()
+    {
+	Contact contact = (Contact) entity;
+	if (contact.id == null)
+	    return can_create();
+
+	return can_update();
     }
 }
