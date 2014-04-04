@@ -133,6 +133,10 @@ public class BillingRestrictionUtil
     public static BillingRestriction getInstance()
     {
 	UserInfo info = SessionManager.get();
+
+	if (info == null)
+	    return BillingRestriction.getInstance(null, null);
+
 	System.out.println(info.getPlan() + ", " + info.getUsersCount());
 	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
     }

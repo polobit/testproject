@@ -6,7 +6,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.limits.cron.deferred.TestTask;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
@@ -30,6 +33,18 @@ public class AccountLimitCheckerCronServlet extends HttpServlet
 
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
+	String offline = req.getParameter("offline");
+
+	if (!StringUtils.isEmpty(offline))
+	{
+	    TestTask task = new TestTask();
+
+	    // Add to queue
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder.withPayload(task));
+	    return;
+	}
+
 	// Fetches all namespaces
 	Set<String> namespaces = NamespaceUtil.getAllNamespaces();
 
@@ -38,6 +53,7 @@ public class AccountLimitCheckerCronServlet extends HttpServlet
 	for (String namespace : namespaces)
 	{
 	    AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(namespace);
+
 	    // Add to queue
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(task));

@@ -65,7 +65,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
     public void setMax()
     {
 	if (restriction == null)
-	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
+	    restriction = BillingRestrictionUtil.getBillingRestriction(sendReminder);
 
 	// Gets maximum allowed contacts in current plan
 	MAX = BillingRestrictionUtil.getInstance().planDetails.getContactLimit();

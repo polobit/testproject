@@ -37,8 +37,10 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	}
     }
 
-    // Max allowed entities, it is set after initialization
-    protected Integer MAX = 0;
+    // Max allowed entities, it is set after initialization. Taken primitive
+    // type instead of wrapper, to avoid null pointer exception if limit is not
+    // set
+    protected int MAX = 0;
 
     // Restriction object used to get current limits
     protected BillingRestriction restriction;
