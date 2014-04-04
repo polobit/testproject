@@ -130,7 +130,18 @@
             <div class="body">
                 <div class="text" style="color: #333333">
                     <div class="ellipsis-multi-line" id="autoellipsis" style="height:70px;">
-                        <div><b>Pages Visted:</b></br> 
+                        <div>
+							<b>Pages Visited {{#stringToJSON this "urls_with_time_spent"}} ({{this.length}}){{/stringToJSON}}
+								<span style="float: right;">
+									{{#if user_agent}}
+										{{#stringToJSON this "parsedUserAgent"}}
+										<img src="img/web-stats/devices/{{device_type}}.png" width="18px" height="18px" title="{{device_type}}">
+										<img src="img/web-stats/os/{{os}}.png" width="18px" height="18px" title="{{os}}">
+                                        <img src="img/web-stats/browsers/{{browser_name}}.png" width="18px" height="18px" title="{{browser_name}}">
+                                        {{/stringToJSON}}
+									{{/if}}
+								</span>
+							</b><br> 
                         {{#stringToJSON this "urls_with_time_spent"}}{{/stringToJSON}}
 					    {{#each urls_with_time_spent}}{{url}} - {{convertSecondsToHour time_spent}}<br />{{/each}}
                         </div>
@@ -140,11 +151,6 @@
                      <div class="text" style="color: #333333"><b>Referred:</b></br> {{ref}}</div>
                 {{/if}}
 
-                {{#if user_agent}}
-                    {{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
-                    <div class="text" style="color: #333333"><b>Browser & OS:</b></br>{{parsedUserAgent.browser_name}}, {{titleFromEnums parsedUserAgent.os}}</div>
-                {{/if}}
-                
                 {{#if city}}
                    <div class="text" style="color: #333333"><b>ADDRESS:</b></br> {{ucfirst city}}, {{ucfirst region}}, {{getCountryName country}}</div>
                 {{/if}}

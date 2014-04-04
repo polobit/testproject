@@ -37,13 +37,21 @@
 <div style="display:block;" class="activity">
 	<div id="notes" class="activity-text-block">
 		<br>
-		<h4><b>Page View Analytics</b></h4></br>
-
+		<h4 style="display:inline;"><b>Page View Analytics</b></h4>
+        {{#stringToJSON this "parsedUserAgent"}}
+        <span style="float:right;">
+              	<img class="" src="/img/web-stats/devices/{{device_type}}.png" width="18px" height="18px" style="display: inline; margin-right: 2px;padding-left: 2px;" title="{{device_type}}">
+                <img class="" src="/img/web-stats/os/{{os}}.png" width="18px" height="18px" style="display: inline; margin-right: 2px;padding-left: 2px;" title="{{os}}">
+		      	<img class="" src="/img/web-stats/browsers/{{browser_name}}.png" width="18px" height="18px" style="display: inline; margin-right: 2px;" title="{{browser_name}}">
+        </span>
+       {{/stringToJSON}}
+        <br>
+        <br>
         <div style="margin-bottom:5px" id="truncated-webstats">
 		    <ul style="list-style: none;">
 			    <li class="row-fluid">	
 					{{#stringToJSON this "urls_with_time_spent"}}
-                    <div class="span2"><b>Pages Visited ({{this.length}})</b>
+                    <div class="span3"><b>Pages Visited ({{this.length}})</b>
 						<div class="pull-right">:</div>
 					</div>
 							
@@ -65,10 +73,12 @@
 		<ul style="list-style: none;">
 			<li class="row-fluid">	
 					{{#stringToJSON this "urls_with_time_spent"}}
-                    <div class="span2"><b>Pages Visited ({{this.length}})</b>
+                    <div class="span3">
+						<b>Pages Visited ({{this.length}}){{/stringToJSON}}</b>
 						<div class="pull-right">:</div>
 					</div>
-							
+
+					{{#stringToJSON this "urls_with_time_spent"}}	
 					<div class="span9" style="margin-left: 10px; word-break: break-all;">
 					{{#each this}}{{url}} - {{convertSecondsToHour time_spent}}<br/> {{/each}}
 					</div>
@@ -78,7 +88,7 @@
  
                 {{#if ref}}
                 <li class="row-fluid">	
-					<div class="span2"><b>Referred</b>
+					<div class="span3"><b>Referred</b>
 						<div class="pull-right">:</div>
 					</div>
 							
@@ -90,7 +100,7 @@
                
                {{#if ip}}
 				<li class="row-fluid">	
-					<div class="span2"><b>IP Address</b>
+					<div class="span3"><b>IP Address</b>
 						<div class="pull-right">:</div>
 					</div>		
 					<div class="span9" style="margin-left: 10px;">
@@ -99,33 +109,9 @@
 				</li>
                {{/if}}
 
-              {{#if user_agent}}
-				<li class="row-fluid">	
-					<div class="span2"><b>Browser & OS</b>
-						<div class="pull-right">:</div>
-					</div>		
-					{{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
-                    <div class="span9" style="margin-left: 10px;">
-						{{parsedUserAgent.browser_name}}, {{titleFromEnums parsedUserAgent.os}}
-					</div>
-				</li>
-               {{/if}}
-
-                {{#if user_agent}}
-				<li class="row-fluid">	
-					<div class="span2"><b>Device Type</b>
-						<div class="pull-right">:</div>
-					</div>		
-					{{#stringToJSON this "parsedUserAgent"}}{{/stringToJSON}}
-                    <div class="span9" style="margin-left: 10px;">
-						{{ucfirst parsedUserAgent.device_type}}
-					</div>
-				</li>
-               {{/if}}
-
-				{{#if city}}
+			   {{#if city}}
                 <li class="row-fluid">	
-					<div class="span2"><b>Location</b>
+					<div class="span3"><b>Location</b>
 						<div class="pull-right">:</div>
 					</div>		
 					<div class="span9" style="margin-left: 10px;">
