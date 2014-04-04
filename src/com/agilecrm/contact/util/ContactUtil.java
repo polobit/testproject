@@ -20,10 +20,7 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.limits.PlanLimitsEnum;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.webrules.WebRule;
 import com.googlecode.objectify.Key;
 
 /**
@@ -728,19 +725,5 @@ public class ContactUtil
 	    return null;
 
 	return contactOwner.id;
-    }
-
-    public static boolean isLimitReached()
-    {
-	Subscription subscrition = Subscription.getSubscription();
-	int count = dao.count();
-	if (subscrition == null)
-	{
-	    if (PlanLimitsEnum.FREE.getWorkflowLimit() * 2 <= WebRule.dao.count())
-		return true;
-	    return false;
-	}
-
-	return subscrition.plan.getPlanLimits().getContactLimit() <= count ? true : false;
     }
 }

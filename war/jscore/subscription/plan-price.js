@@ -319,7 +319,7 @@ $(function()
     				var couponId = $("#coupon_code").val();
     				if (!couponId) {
     					$("#coupon_code_container").find(".error").html(
-    							"test test test");
+    							"Invalid Coupon");
     					return false;
     				}
 

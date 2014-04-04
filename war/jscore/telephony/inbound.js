@@ -32,12 +32,16 @@ function newIncomingCall(e)
 // show details in noty popup for incoming call.
 function showIncomingCall()
 {
+	// return if call under notification prefs is disabled
+	if(notification_prefs && notification_prefs["call"] === false)
+		return;
+	
 	showCallNotyPopup("incoming", "confirm", '<i class="icon icon-phone"></i><b>Incoming call :</b><br> ' + User_Name + "   " + User_Number + "<br>", false);
 
 	// Incoming call sound play.
 	startRingTone("ringtone");
 
-    // notification display permission already asked when we registered	
+	// notification display permission already asked when we registered	
 	show_desktop_notification("../img/plugins/sipIcon.png", "Incoming Call :", User_Name + " " + User_Number, undefined, "SipCall");
 	
 	// Find contact for incoming call and update display.

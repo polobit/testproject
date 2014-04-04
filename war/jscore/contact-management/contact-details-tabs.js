@@ -437,9 +437,6 @@ $(function(){
 		$('#emailForm').find('.error').removeClass('error');
 		$('#emailForm').find('.help-inline').css('display','none');
 
-		// Removes previous body content
-		$("#emailForm").find( 'textarea[name="body"]' ).parent().find('iframe.wysihtml5-sandbox').contents().find('body').text("");
-		
 		var model_id = $('.emailSelect option:selected').attr('value');
 	
 		// When default option selected make subject and body empty
@@ -447,6 +444,9 @@ $(function(){
 			{
 			// Fill subject and body of send email form
 			$("#emailForm").find( 'input[name="subject"]' ).val("");
+			
+			set_tinymce_content('email-body', '');
+			
 			$("#emailForm").find( 'textarea[name="body"]' ).val("");
 			return;
 			}
@@ -484,27 +484,11 @@ $(function(){
 				text =  template(json);
 				}
 				
-				// Commented as we appended HTML editor to text body.						
-				//text = text.replace(/<br>/gi, "\n");
-				//text = text.replace(/<p.*>/gi, "\n");
-				//text = text.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
-				//text = text.replace(/<(?:.|\s)*?>/g, "");
-				//text = text.replace(/&nbsp;/g, " ");
-				
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
-				//var value = $("#emailForm").find( 'textarea[name="body"]' ).val(text);
-				//$("#emailForm").find( 'textarea[name="body"]' ).val("");
 				
-				
-				//Fill html editor with template body
-				var wysihtml5 = $('#body').data('wysihtml5');
-				
-				if(wysihtml5){
-					editor.focus();
-					wysihtml5.editor.composer.commands.exec("insertHTML",text);
-				}	
-				
+				// Insert content into tinymce
+				set_tinymce_content('email-body', text);
 			}});
 		    
 	});
@@ -525,6 +509,9 @@ $(function(){
 		// Disables send button and change text to Sending...
 		disable_send_button($(this));
 		
+		// Saves tinymce content to textarea
+		save_content_to_textarea('email-body');
+		
 		// serialize form.
 		var json = serializeForm("emailForm");
 		
@@ -544,10 +531,12 @@ $(function(){
 			            	App_Contacts.navigate("contact/" + App_Contacts.contactDetailView.model.id, {trigger:true});
 			            else
 			            	window.history.back();
+			            
 		                 },
 		        error: function()
 		               {
 		        	      enable_send_button($('#sendEmail'));
+		        	      
 		        	      console.log("Error occured while sending email");
 		               }
 		});
@@ -560,7 +549,7 @@ $(function(){
 	 */
 	$('#send-email-close').die().live('click',function(e){
 		e.preventDefault();
-		
+
 		Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
             trigger: true
         });

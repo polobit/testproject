@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -72,7 +73,8 @@ public class BillingRestrictionUtil
 	if (restriction == null)
 	    restriction = BillingRestriction.getInstance(planName, users);
 
-	restriction.planLimitsEnum = BillingRestrictionUtil.getPlan(planName, users).getPlanLimits();
+	// Gets respective PlanLimits class based on plan.
+	restriction.planDetails = PlanLimits.getPlanDetails(BillingRestrictionUtil.getPlan(planName, users));
 
 	return restriction;
     }
@@ -82,48 +84,86 @@ public class BillingRestrictionUtil
      * and users count from user info, it if is not defined then subscription
      * object is fetched
      * 
-     * @param sendRemainder
+     * @param sendReminder
      * @return
      */
-    public static BillingRestriction getBillingRestriction(boolean sendRemainder)
+    public static BillingRestriction getBillingRestriction(boolean sendReminder)
     {
+	// Fetches user info to check if plan and users count is set in it, to
+	// avoid fetching subscription object every time
 	UserInfo info = SessionManager.get();
+
+	// If user info is null then Billing restriction object is created using
+	// plan details in subscription object
 	if (info == null)
 	{
 	    BillingRestriction restriction = getBillingRestriction(null, null);
-	    restriction.sendReminder = sendRemainder;
+
+	    // Sets reminder
+	    restriction.sendReminder = sendReminder;
 	    return restriction;
 	}
 	System.out.println(info.getPlan() + ", " + info.getUsersCount());
+
+	// Fetches billing instance
 	BillingRestriction restriction = getBillingRestriction(info.getPlan(), info.getUsersCount());
-	restriction.sendReminder = sendRemainder;
+	restriction.sendReminder = sendReminder;
 	return restriction;
     }
 
-    public static BillingRestriction getInstance(boolean sendRemainder)
+    /**
+     * Creates new Billing restriction object without fetching form DB
+     * 
+     * @param sendReminder
+     * @return
+     */
+    public static BillingRestriction getInstance(boolean sendReminder)
     {
 	BillingRestriction restriction = getInstance();
-	restriction.sendReminder = sendRemainder;
+	restriction.sendReminder = sendReminder;
 	return restriction;
 
     }
 
+    /**
+     * Creates and returns new Billing Restriction instance
+     * 
+     * @return
+     */
     public static BillingRestriction getInstance()
     {
 	UserInfo info = SessionManager.get();
+
+	if (info == null)
+	    return BillingRestriction.getInstance(null, null);
+
 	System.out.println(info.getPlan() + ", " + info.getUsersCount());
 	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
     }
 
+    /**
+     * Returns plan object based on plan name and users count. If plan is not
+     * defined then it fetches from Subscription object and sets in user info
+     * 
+     * @param planName
+     * @param users
+     * @return
+     */
     public static Plan getPlan(String planName, Integer users)
     {
 	Plan plan = null;
+
 	if (!StringUtils.isEmpty(planName))
 	    plan = new Plan(planName, users);
 	else
 	{
+	    // Fetches account subscription
 	    Subscription subscription = Subscription.getSubscription();
+
+	    // If plan is null then it is considered free plan.
 	    plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
+
+	    // Gets user info and sets plan and sets back in session
 	    UserInfo info = SessionManager.get();
 	    if (info == null)
 		return plan;
@@ -137,6 +177,11 @@ public class BillingRestrictionUtil
 	return plan;
     }
 
+    /**
+     * Sets plan in user info
+     * 
+     * @param info
+     */
     public static void setPlan(UserInfo info)
     {
 	Subscription subscription = Subscription.getSubscription();

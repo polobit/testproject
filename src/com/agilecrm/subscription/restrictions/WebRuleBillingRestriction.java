@@ -23,7 +23,7 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
 	if (restriction == null)
 	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
 
-	MAX = restriction.planLimitsEnum.getWebRuleLimit();
+	MAX = restriction.planDetails.getWebRuleLimit();
     }
 
     /**
@@ -75,6 +75,16 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
 	    restriction.tagsToAddInOurDomain.add(tag);
 
 	return tag;
+    }
+
+    @Override
+    public boolean check()
+    {
+	WebRule webRule = (WebRule) entity;
+	if (webRule.id == null)
+	    return can_create();
+
+	return can_update();
     }
 
 }

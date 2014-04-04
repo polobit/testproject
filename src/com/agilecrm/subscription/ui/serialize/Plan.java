@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.agilecrm.subscription.limits.PlanLimitsEnum;
+import com.agilecrm.subscription.limits.PlanLimits;
 
 /**
  * <code>Plan</code> is used for serializing subscription form data. It include
@@ -38,17 +38,16 @@ public class Plan
     }
 
     @JsonIgnore
-    public PlanLimitsEnum getPlanLimits()
+    public PlanLimits getPlanDetails()
     {
-	String planName = getPlanName();
 
 	try
 	{
-	    return PlanLimitsEnum.valueOf(PlanLimitsEnum.class, planName);
+	    return PlanLimits.getPlanDetails(this);
 	}
 	catch (Exception e)
 	{
-	    return PlanLimitsEnum.FREE;
+	    return PlanLimits.getPlanDetails(this);
 	}
     }
 
