@@ -77,4 +77,14 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
 	return tag;
     }
 
+    @Override
+    public boolean check()
+    {
+	WebRule webRule = (WebRule) entity;
+	if (webRule.id == null)
+	    return can_create();
+
+	return can_update();
+    }
+
 }

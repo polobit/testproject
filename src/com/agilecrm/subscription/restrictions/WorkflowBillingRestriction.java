@@ -12,12 +12,12 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
     @Override
     public boolean can_create()
     {
-	restriction.webrules_count = Workflow.dao.count();
+	restriction.campaigns_count = Workflow.dao.count();
 
 	if (restriction.sendReminder)
 	    send_warning_message();
 
-	if (restriction.webrules_count < MAX)
+	if (restriction.campaigns_count < MAX)
 	    return true;
 
 	return false;
@@ -59,6 +59,9 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
     @Override
     public String getTag()
     {
+	System.out.println("count " + Workflow.dao.count());
+	System.out.println(MAX);
+	System.out.println(restriction.campaigns_count);
 	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, MAX, "Workflow");
 
 	System.out.println(restriction.campaigns_count + ", " + MAX);
@@ -68,5 +71,15 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 	    restriction.tagsToAddInOurDomain.add(tag);
 
 	return tag;
+    }
+
+    @Override
+    public boolean check()
+    {
+	Workflow workflow = (Workflow) entity;
+	if (workflow.id == null)
+	    return can_create();
+
+	return can_update();
     }
 }
