@@ -42,11 +42,9 @@ public class IMAPEmailPrefs
     @Id
     public Long id;
 
-    /**
-     * User email-id.
+    /*
+     * @NotSaved(IfDefault.class) public String email = null;
      */
-    @NotSaved(IfDefault.class)
-    public String email = null;
 
     /**
      * Host Server Name.
@@ -130,9 +128,9 @@ public class IMAPEmailPrefs
      * @param smtpPort
      *            - SMTP port.
      */
-    IMAPEmailPrefs(String email, String serverName, String userName, String password, boolean isSecure, String smtpHost, String smtpPort)
+    IMAPEmailPrefs(String serverName, String userName, String password, boolean isSecure, String smtpHost, String smtpPort)
     {
-	this.email = email;
+	// this.email = email;
 	this.server_name = serverName;
 	this.user_name = userName;
 	this.password = password;
@@ -238,6 +236,6 @@ public class IMAPEmailPrefs
      */
     public String toString()
     {
-	return "Email: " + email + " User name: " + user_name + " Server " + server_name;
+	return "User name: " + user_name + " Server " + server_name;
     }
 }
