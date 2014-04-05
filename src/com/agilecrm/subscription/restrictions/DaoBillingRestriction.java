@@ -47,6 +47,8 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 
     protected boolean sendReminder = true;
 
+    protected Object entity = null;
+
     /**
      * Initializes respective child class instance based on class name. After
      * getting instance max limit is set, which is set from BillingRestriction
@@ -80,6 +82,16 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	}
     }
 
+    public static DaoBillingRestriction getInstace(String className, Object entity)
+    {
+
+	DaoBillingRestriction dao = getInstace(className);
+	if (dao == null)
+	    return dao;
+	dao.entity = entity;
+	return dao;
+    }
+
     /**
      * Along with instance, this method takes reminder flag to choose whether to
      * send reminder or not to.
@@ -97,6 +109,8 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	dao.sendReminder = sendReminder;
 	return dao;
     }
+
+    public abstract boolean check();
 
     /**
      * This method is used to use same restriction object of different entity
