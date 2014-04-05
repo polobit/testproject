@@ -2129,6 +2129,18 @@ $(function()
 		
 	});
 	
+	/**
+	 * Returns first occurence string from string having underscores
+	 * E.g, mac_os_x to mac
+	 **/
+	Handlebars.registerHelper('normalize_os',function(data){
+		if(data === undefined || data.indexOf('_') === -1)
+			return data;
+		
+		// if '_' exists splits 
+		return data.split('_')[0];
+	});
+	
 	Handlebars.registerHelper('safe_tweet', function(data)
 			{			
 		        data = data.trim();
