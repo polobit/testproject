@@ -1,0 +1,13 @@
+<div>
+	{{#unless id}}
+  		<p class='text-center'>No contact found with {{email}}</p>
+	{{/unless}}
+	{{#if id}}
+		{{id}}
+		<div class="show-more display-block">
+   			<div id="show-more" class="show-more-container">
+  				<a class="load-chats div-hyperlinks">Show more</a>
+   			</div>
+	   </div>
+	 {{/if}}
+</div>
