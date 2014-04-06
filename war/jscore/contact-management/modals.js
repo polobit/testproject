@@ -44,6 +44,27 @@ $(function(){
 				$("#personForm input").val('');
 			}	
 		});
+		
+		
+		$("#companyModal").on('show', function(data) {
+			var target = data.target;
+			add_custom_fields_to_form({}, function(data){
+				var el = show_custom_fields_helper(data["custom_fields"], []);
+			//	if(!value["custom_data"])  value["custom_data"] = [];
+				
+				$("#custom-field-deals", $(target)).html(el);
+				// Add placeholder and date picker to date custom fields
+				$('.date_input', $(target)).attr("placeholder","MM/DD/YYYY");
+		    
+				$('.date_input', $(target)).datepicker({
+					format: 'mm/dd/yyyy'
+				});
+				
+			}, "COMPANY")
+			
+			
+
+		});
 	
 		/**
 		 * "Shown" event of person modal 

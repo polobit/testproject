@@ -1,4 +1,4 @@
-<!-- Indices written at Tue, 11 Mar 2014 18:51:47 IST -->
+<!-- Indices written at Wed, 26 Mar 2014 17:12:57 IST -->
 
 <datastore-indexes>
 
@@ -9,16 +9,43 @@
     </datastore-index>
 
     <!-- Used 1 time in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 5 times in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="is_complete" direction="asc"/>
         <property name="owner" direction="asc"/>
         <property name="due" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 12 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
+        <property name="milestone" direction="asc"/>
         <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 14 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="owner" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 16 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="type" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 6 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="owner" direction="asc"/>
+        <property name="type" direction="asc"/>
+        <property name="due" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

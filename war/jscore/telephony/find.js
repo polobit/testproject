@@ -3,9 +3,8 @@
  * same phone number.
  */
 function findContact()
-{
-	// var n = "+918564789652"; for testing
-	console.log("In findContact. " + Sip_Session_Call.getRemoteUri());
+{	
+	console.log("FindContact. " + Sip_Session_Call.getRemoteUri());
 
 	// Get contact details on phone number
 	$.getJSON("/core/api/contacts/search/phonenumber/" + Sip_Session_Call.getRemoteUri(), function(caller)
@@ -16,7 +15,7 @@ function findContact()
 		if (caller != null)
 		{
 			// Get details to update call noty.
-			if (caller.properties[0].name == 'first_name' && caller.properties[1].name == 'last_name')
+			if (caller.properties[0].name == 'first_name' || caller.properties[1].name == 'last_name')
 			{
 				User_Name = caller.properties[0].value + " " + caller.properties[1].value;
 				User_Number = Sip_Session_Call.getRemoteUri();
@@ -29,6 +28,6 @@ function findContact()
 		}
 	}).error(function(data)
 	{
-		console.log("In Find contact : " + data.responseText);
+		console.log("Find contact : " + data.responseText);
 	});
 }

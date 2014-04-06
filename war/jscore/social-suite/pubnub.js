@@ -22,7 +22,7 @@ function initToPubNub()
 		// Get compatibility with all browsers.
 		// Pubnub.ready();
 
-		// Subscribe to client channel.
+		// Subscribe to client channel. Receive tweet from social server.
 		subscribeClientChannel();
 	});
 }
@@ -70,7 +70,7 @@ function subscribeClientChannel()
  */
 function sendMessage(publishJSON)
 {
-	console.log("in publish_message publishJSON: ");
+	console.log("publish_message publishJSON: ");
 	console.log(publishJSON);
 
 	// Message to publish is empty.
@@ -81,15 +81,20 @@ function sendMessage(publishJSON)
 	Pubnub.publish({ channel : "agile_crm_Channel", message : publishJSON, callback : function(info)
 	{
 		if (info[0])
-			console.log("in publish_message Successfully Sent Message!");
+			console.log("publish_message Successfully Sent!");
 		else
 		// The internet is gone. // TRY SENDING AGAIN!
 		{
-			console.log("in publish_message unsuccessfull to Sent Message!");
+			console.log("publish_message unsuccessfull to Sent!");
 			showNotyPopUp('information', "You are not connected with Twitter server or you have problem with connection!", "top", 5000);
 			displayErrorInStream(publishJSON.stream);
+			
+			// How many streams are register.			
 			Register_Counter++;
+			
+			// Register next stream.
 			registerAll(Register_Counter);
+			
 			// sendMessage(publishJSON);
 		}
 	} });

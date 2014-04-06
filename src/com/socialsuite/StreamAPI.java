@@ -16,12 +16,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import net.sf.json.JSONObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import twitter4j.Status;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.socialsuite.cron.ScheduledUpdate;
 import com.socialsuite.util.SocialSuiteTwitterUtil;
 import com.socialsuite.util.StreamUtil;
 
@@ -152,8 +155,10 @@ public class StreamAPI
     }
 
     /**
-     * Connects to {@link SocialSuiteTwitterUtil} and sends the post or tweet in
-     * Twitter based on the parameter of stream.
+     * Connects to {@link SocialSuiteTwitterUtil} and 1. sends the post or tweet
+     * in Twitter based on the parameter of stream. 2. send reply to particular
+     * tweet from stream owner. 3. send direct message from stream owner to
+     * tweet owner.
      * 
      * @param streamId
      *            {@link Long} stream id, to get {@link Stream} object
@@ -163,115 +168,52 @@ public class StreamAPI
      */
     @Path("/tweet/{streamId}")
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public String sendTweet(@PathParam("streamId") Long streamId, @FormParam("message") String message)
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public JSONObject sendTweet(@PathParam("streamId") Long streamId, ScheduledUpdate forMessage)
     {
+	System.out.println(forMessage);
 	try
 	{
 	    Stream stream = StreamUtil.getStream(streamId);
 	    if (stream == null)
 		return null;
 
-	    // send tweet from particular account.
-	    return SocialSuiteTwitterUtil.tweetInTwitter(stream, message);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
+	    JSONObject result = new JSONObject();
 
-    /**
-     * Connects to {@link SocialSuiteTwitterUtil}, send reply to particular
-     * tweet from stream owner.
-     * 
-     * @param streamId
-     *            {@link Long} stream id, to get {@link Stream} object.
-     * @param tweetId
-     *            {@link String} Twitter id of the status/tweet.
-     * @param tweetOwner
-     *            {@link String} owner of tweet/status.
-     * @param message
-     *            {@link String} message to be sent.
-     * @return {@link String}
-     */
-    @Path("/replytweet/{streamId}")
-    @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public String sendReplyTweet(@PathParam("streamId") Long streamId, @FormParam("tweetId") Long tweetId,
-	    @FormParam("tweetOwner") String tweetOwner, @FormParam("message") String message)
-    {
-	try
-	{
-	    Stream stream = StreamUtil.getStream(streamId);
-	    if (stream == null)
-		return null;
+	    if (forMessage.headline.equalsIgnoreCase("Tweet") || forMessage.headline.equalsIgnoreCase("Retweet"))
+	    {
+		// send tweet from particular account.
+		result.accumulate("response", SocialSuiteTwitterUtil.tweetInTwitter(stream, forMessage.message));
+	    }
+	    else if (forMessage.headline.equalsIgnoreCase("Reply Tweet") && forMessage.tweetId != "")
+	    {
+		/*
+		 * Calls SocialSuiteTwitterUtil method to send reply message to
+		 * particular tweet.
+		 */
+		result.accumulate(
+			"response",
+			SocialSuiteTwitterUtil.replyTweetInTwitter(stream, forMessage.message,
+				Long.parseLong(forMessage.tweetId), forMessage.tweetOwner));
+	    }
+	    else if (forMessage.headline.equalsIgnoreCase("Reply Tweet") && forMessage.tweetId == "")
+	    {
+		// send tweet from particular account.
+		result.accumulate("response", SocialSuiteTwitterUtil.tweetInTwitter(stream, forMessage.message));
+	    }
+	    else if (forMessage.headline.equalsIgnoreCase("Direct Message"))
+	    {
+		/*
+		 * Calls SocialSuiteTwitterUtil method to send direct message to
+		 * particular tweet owner.
+		 */
+		result.accumulate("response", SocialSuiteTwitterUtil.directMessageInTwitter(stream, forMessage.message,
+			forMessage.tweetOwner));
+	    }
 
-	    /*
-	     * Calls SocialSuiteTwitterUtil method to send reply message to
-	     * particular tweet.
-	     */
-	    return SocialSuiteTwitterUtil.replyTweetInTwitter(stream, message, tweetId, tweetOwner);
-	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occured. Refresh and try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-    }
-
-    /**
-     * Connects to {@link SocialSuiteTwitterUtil}, send direct message from
-     * stream owner to tweet owner.
-     * 
-     * @param streamId
-     *            {@link Long} stream id, to get {@link Stream} object.
-     * @param tweetId
-     *            {@link String} Twitter id of the status/tweet.
-     * @param tweetOwner
-     *            {@link String} owner of tweet/status.
-     * @param message
-     *            {@link String} message to be sent.
-     * @return {@link String}
-     */
-    @Path("/directmessage/{streamId}")
-    @POST
-    @Produces(MediaType.TEXT_PLAIN)
-    public String sendDirectMessage(@PathParam("streamId") Long streamId, @FormParam("tweetOwner") String tweetOwner,
-	    @FormParam("message") String message)
-    {
-	try
-	{
-	    Stream stream = StreamUtil.getStream(streamId);
-	    if (stream == null)
-		return null;
-
-	    /*
-	     * Calls SocialSuiteTwitterUtil method to send direct message to
-	     * particular tweet owner.
-	     */
-	    return SocialSuiteTwitterUtil.directMessageInTwitter(stream, message, tweetOwner);
+	    System.out.println(result);
+	    return result;
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -301,9 +243,10 @@ public class StreamAPI
      * @return {@link String}
      */
     @Path("/retweet/{streamId}/{tweetId}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String retweetStatus(@PathParam("streamId") Long streamId, @PathParam("tweetId") Long tweetId)
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public JSONObject retweetStatus(@PathParam("streamId") Long streamId, @PathParam("tweetId") Long tweetId)
     {
 	try
 	{
@@ -311,8 +254,12 @@ public class StreamAPI
 	    if (stream == null)
 		return null;
 
+	    JSONObject result = new JSONObject();
+
 	    // Calls SocialSuiteTwitterUtil method to retweet given tweet.
-	    return SocialSuiteTwitterUtil.retweetStatus(stream, tweetId);
+	    result.accumulate("response", SocialSuiteTwitterUtil.retweetStatus(stream, tweetId));
+
+	    return result;
 	}
 	catch (SocketTimeoutException e)
 	{

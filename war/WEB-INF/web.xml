@@ -203,6 +203,16 @@
 		<servlet-name>TaskReminder</servlet-name>
 		<url-pattern> /backend/cron/tasks</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AccountLimitChecker</servlet-name>
+		<servlet-class>com.agilecrm.subscription.limits.contacts.cron.AccountLimitCheckerCronServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AccountLimitChecker</servlet-name>
+		<url-pattern>/backend/billing/restrictions</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Stripe Webhook</servlet-name>
@@ -405,7 +415,7 @@
 	
 	<servlet>
 	<servlet-name>UnbounceWebhook</servlet-name>
-	<servlet-class>com.thirdparty.UnbounceWebhook</servlet-class>
+	<servlet-class>com.thirdparty.forms.UnbounceWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UnbounceWebhook</servlet-name>
@@ -414,7 +424,7 @@
 	
 	<servlet>
 	<servlet-name>WufooWebhook</servlet-name>
-	<servlet-class>com.thirdparty.WufooWebhook</servlet-class>
+	<servlet-class>com.thirdparty.forms.WufooWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>WufooWebhook</servlet-name>
@@ -423,7 +433,7 @@
 	
 	<servlet>
 	<servlet-name>GravityForm</servlet-name>
-	<servlet-class>com.thirdparty.GravityForm</servlet-class>
+	<servlet-class>com.thirdparty.forms.GravityForm</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GravityForm</servlet-name>

@@ -1172,9 +1172,9 @@ $(function()
 	Handlebars.registerHelper('subscribers_count', function(){
 		
 		if(this[0] && this[0].count && (this[0].count != -1))
-			return this[0].count + " Total";
+			return this[0].count;
 		
-		return this.length + " Total";
+		return this.length;
 			
 	});
 

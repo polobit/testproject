@@ -154,9 +154,9 @@
      {{/if_entity}}
 
 {{#if_entity "custom"}}
-            <div class="timestamp">{{time}}</div>
+            <div class="timestamp">{{created_time}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-folder-open-alt" title="Email Opened"></i></a></span>{{title}}</h3></div>
-            <div class="date">{{epochToTaskDate time}}</div>
+            <div class="date">{{epochToTaskDate created_time}}</div>
             <div class="body">
                  <div class="text" style="color: #333333">{{name}}</div>
                 <div class="text" style="color: #999999">{{body}}</div>

@@ -1,8 +1,12 @@
 package com.agilecrm.contact.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.db.ObjectifyGenericDao;
 
 /**
@@ -21,8 +25,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 public class CustomFieldDefUtil
 {
     // Dao
-    private static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
-	    CustomFieldDef.class);
+    private static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
 
     /**
      * Fetches all the custom fields
@@ -30,9 +33,32 @@ public class CustomFieldDefUtil
      * @return List of custom fields
      * @throws Exception
      */
-    public static List<CustomFieldDef> getAllCustomFields() throws Exception
+    public static List<CustomFieldDef> getAllCustomFields()
     {
 	return dao.fetchAll();
+    }
+
+    public static List<CustomFieldDef> getAllCustomFields(SCOPE scope)
+    {
+	if (scope == null)
+	    return getAllCustomFields();
+
+	if (scope == SCOPE.PERSON || scope == SCOPE.CONTACT)
+	    return getAllContactCustomField();
+	System.out.println("scope : " + scope);
+	return dao.listByProperty("scope", scope);
+    }
+
+    public static List<CustomFieldDef> getAllContactCustomField()
+    {
+	List<CustomFieldDef> contactCustomFields = new ArrayList<CustomFieldDef>();
+	for (CustomFieldDef field : dao.fetchAll())
+	{
+	    if (field.scope == null || field.scope == SCOPE.CONTACT || field.scope == SCOPE.PERSON)
+		contactCustomFields.add(field);
+	}
+
+	return contactCustomFields;
     }
 
     public static List<CustomFieldDef> getCustomFields(boolean isSearchable)
@@ -74,6 +100,14 @@ public class CustomFieldDefUtil
     public static CustomFieldDef getFieldByName(String field_label)
     {
 	return dao.getByProperty("field_label", field_label);
+    }
+
+    public static CustomFieldDef getFieldByName(String field_label, SCOPE scope)
+    {
+	Map<String, Object> query = new HashMap<String, Object>();
+	query.put("field_label", field_label);
+	query.put("scope", scope);
+	return dao.getByProperty(query);
     }
 
     public static List<CustomFieldDef> getFieldByType(String type)

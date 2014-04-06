@@ -6,23 +6,17 @@
                     <a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown">
                     <i class="icon-plus-sign" /> Add Custom Field  <span class="caret"></span></a>
                     <ul class="dropdown-menu pull-right">
-                        <li>
-                            <a href="#textModal" class="fieldmodal" id="text">Text Field</a>
+						<li>
+                            <a href="#contactCustomFModal" class="fieldmodal"  type="COMPANY">To Company</a>
                         </li>
-                        <li>
-                            <a href="#dateModal" class="fieldmodal" id="date">Date Field</a>
+						<li>
+                            <a href="#contactCustomFModal" class="fieldmodal" type="CONTACT">To Contact</a>
                         </li>
-                        <li>
-                            <a href="#listModal" class="fieldmodal" id="list">List Field</a>
+						<li>	
+                            <a href="#contactCustomFModal" class="fieldmodal" type="DEAL">To Deals</a>
                         </li>
-                        <li>
-                            <a href="#checkboxModal" class="fieldmodal" id="checkbox">Check Box Field</a>
-                        </li>
-                        <li>
-                            <a href="#textareaModal" class="fieldmodal" id="textarea">Text Area Field</a>
-                        </li>
-                        <li class="hide">
-                            <a href="#linkModal" class="fieldmodal" id="link">Generated Link</a>
+						<li>	
+                            <a href="#contactCustomFModal" class="fieldmodal" type="CASE">To Case</a>
                         </li>
                     </ul>
                 </li>
@@ -46,23 +40,17 @@
                     	<a href="#custom-fields-add" class="dropdown-toggle btn right" data-toggle="dropdown">
                     		<i class="icon-plus-sign" /> Add Custom Field  <span class="caret"></span></a>
 						<ul class="dropdown-menu">
-                        <li>
-                            <a href="#textModal" class="fieldmodal" id="text">Text Field</a>
+              			<li>
+                            <a href="#contactCustomFModal" class="fieldmodal"  type="COMPANY">To Company</a>
                         </li>
-                        <li>
-                            <a href="#dateModal" class="fieldmodal" id="date">Date Field</a>
+						<li>
+                            <a href="#contactCustomFModal" class="fieldmodal" type="CONTACT">To Contact</a>
                         </li>
-                        <li>
-                            <a href="#listModal" class="fieldmodal" id="list">List Field</a>
+						<li>	
+                            <a href="#contactCustomFModal" class="fieldmodal" type="DEAL">To Deals</a>
                         </li>
-                        <li>
-                            <a href="#checkboxModal" class="fieldmodal" id="checkbox">Check Box Field</a>
-                        </li>
-                        <li>
-                            <a href="#textareaModal" class="fieldmodal" id="textarea">Text Area Field</a>
-                        </li>
-                        <li class="hide">
-                            <a href="#linkModal" class="fieldmodal" id="link">Generated Link</a>
+						<li>	
+                            <a href="#contactCustomFModal" class="fieldmodal" type="CASE">To Case</a>
                         </li>
                     </ul>
 					</div>
@@ -75,12 +63,13 @@
         <div class="data-block">
             <div class="data-container">
                 <table class="table table-bordered showCheckboxes agile-ellipsis-dynamic" url="core/api/custom-fields/bulk">
-				<colgroup><col width="30px"><col width="35%"><col width="35%"><col width="30%"></colgroup>
+				<colgroup><col width="30px"><col width="20%"><col width="20%"><col width="20%"><col width="35%"></colgroup>
                     <thead>
                         <tr>
                             <th>Field Label</th>
                             <th>Field Description</th>
                             <th>Field Type</th>
+							<th>Scope</th>
                         </tr>
                     </thead>
                     <tbody id="admin-settings-customfields-model-list">
@@ -118,5 +107,6 @@
     <td><div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">{{field_label}}</div> </td>
     <td><div style="display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;width:80%">{{field_description}}</div> </td>
     <td>{{field_type}}</td>
+	<td>{{scope}}</td>
     <br/>
 </script>

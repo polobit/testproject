@@ -128,14 +128,15 @@ body {
 				<li>Exit Intent to prevent visitors</li>
 			</ul>
 			<div id="popup-form">
-				<p><input type="text" class="popup-text" placeholder="Name" /></p>
-				<p><input type="text" class="popup-text" placeholder="Email" /></p>
-				<p><input type="submit" class="popup-button" value="Sign-Up!" /></p>
+				<p><input type="text" class="popup-text" agile-field="first_name" placeholder="Name" /></p>
+				<p><input type="text" class="popup-text" agile-field="email" placeholder="Email" /></p>
+				<p><input type="submit" onclick="window.parent._agile_save_form(true, function(){console.log('save');})" class="popup-button" value="Sign-Up!" /></p>
 				<p><small>Your personal email will never be shared</small></p>
 			</div>
 		</div>
 	</div>
 </div>
 
+<script>window.parent._agile_load_fields();</script>
 </body>
 </html>

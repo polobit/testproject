@@ -31,10 +31,11 @@
             "label": "of",
             "required": "required",
             "category": "Settings",
+            "value": "",
             "name": "variable_1",
-            "title": "Select merge field.",
-            "fieldType": "merge_fields",
-            "type": "select" 
+            "title": "E.g. {{score}}, {{company}}, <br>{{your custom field}}",
+            "fieldType": "input",
+            "type": "text" 
         },
         {
             "label": "compare this",

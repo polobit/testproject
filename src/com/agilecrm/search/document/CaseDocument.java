@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.agilecrm.cases.Case;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.util.SearchUtil;
@@ -31,8 +32,13 @@ public class CaseDocument extends com.agilecrm.search.document.Document implemen
 	fields.add(caseEntity.title);
 	fields.add(caseEntity.description);
 
-	doc.addField(Field.newBuilder().setName("search_tokens")
-		.setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
+	// Add custom fields
+	fields.addAll(getCustomFieldValues(caseEntity.custom_data));
+
+	// Add custom fields to index
+	addCustomFieldsToIndex(caseEntity.custom_data, SCOPE.CASE, doc);
+
+	doc.addField(Field.newBuilder().setName("search_tokens").setText(SearchUtil.normalizeSet(StringUtils2.getSearchTokens(fields))));
 
 	doc.addField(Field.newBuilder().setName("type").setText(Type.CASES.toString()));
 

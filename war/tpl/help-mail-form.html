@@ -1,42 +1,62 @@
 <script id="help-mail-form-template" type="text/html">
-<div class="span9">
-    <div class="well">
-        <form id="helpmailForm" name="helpmailForm" class="form-horizontal">
-            <fieldset>
-                <legend>Mail For Help</legend>
-                <div class="control-group">
-                    <label class="control-label">From <span class="field_req">*</span></label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge required email" placeholder="Your Email Id" id="from" name="from" value="{{email}}" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">To</label>
-                    <div class="controls">
-                        <select class="select-xlarge" name="to">
-                            <option value="care@agilecrm.com">Support</option>
-                            <option value="sales@agilecrm.com">Sales</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Subject <span class="field_req">*</span></label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge required" name="subject" id="subject" placeholder="About" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Message <span class="field_req">*</span></label>
-                    <div class="controls">
-                        <textarea class="input-xlarge required" rows="8" name="body" id="body" placeholder="Description"></textarea>
-                    </div>
-                </div>
-                <div class="form-actions">  
-                    <a href="#" id="helpMail" class="btn btn-primary">Send</a>        
-                    <a href="#contacts" class="btn">Close</a>&nbsp;&nbsp;<span id="msg"></span> 
-                </div>
-            </fieldset>
-        </form>
+<div class="row">
+	<div class="span9">
+    	<div class="well">
+        	<form id="helpmailForm" name="helpmailForm" class="form-horizontal">
+            	<fieldset>
+                	<legend>Mail For Help</legend>
+                	<div class="control-group">
+                    	<label class="control-label">From <span class="field_req">*</span></label>
+                    	<div class="controls">
+                        	<input type="text" class="input-xlarge required email" placeholder="Your Email Id" id="from" name="from" value="{{email}}" />
+                    	</div>
+                	</div>
+                	<div class="control-group">
+                    	<label class="control-label">To</label>
+                    	<div class="controls">
+                        	<select class="select-xlarge" name="to">
+                            	<option value="care@agilecrm.com">Support</option>
+                            	<option value="sales@agilecrm.com">Sales</option>
+                        	</select>
+                    	</div>
+                	</div>
+                	<div class="control-group">
+                    	<label class="control-label">Subject <span class="field_req">*</span></label>
+                    	<div class="controls">
+                        	<input type="text" class="input-xlarge required" name="subject" id="subject" placeholder="About" />
+                    	</div>
+                	</div>
+                	<div class="control-group">
+                    	<label class="control-label">Message <span class="field_req">*</span></label>
+                    	<div class="controls">
+                        	<textarea class="input-xlarge required" rows="8" name="body" id="body" placeholder="Description"></textarea>
+                    	</div>
+                	</div>
+                	<div class="form-actions">  
+                    	<a href="#" id="helpMail" class="btn btn-primary">Send</a>        
+                    	<a href="#contacts" class="btn">Close</a>&nbsp;&nbsp;<span id="msg"></span> 
+                	</div>
+            	</fieldset>
+        	</form>
+    	</div>
+	</div>
+    <div class="span3">
+        <div class="data-block">
+            <div class="well">
+				<h3>
+                    Need help?
+                </h3>
+                <br />
+				<ul>
+					<li><a href="#subscribe">Change plan or cancel account</a></li>
+					<li><a href="https://github.com/agilecrm/javascript-api" target="_blank">Web Tracking and JS API</a></li>
+					<li><a href="https://github.com/agilecrm/agile-popups" target="_blank">Web Rules</a></li>
+					<li><a href="#google-apps">Google Sync</a></li>
+					<li><a href="#workflows">Sending newsletters</a</li>
+					<li><a href="https://www.agilecrm.com/support.html" target="_blank">Getting started with Agile</a></li>
+				</ul>
+            </div>
+        </div>
     </div>
 </div>
 </script>

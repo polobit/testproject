@@ -3,6 +3,7 @@ package com.agilecrm.deals;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
@@ -75,6 +76,10 @@ public class Opportunity extends Cursor
      * Related contact objects fetched using contact ids.
      */
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
+
+    @NotSaved(IfDefault.class)
+    @Embedded
+    public List<CustomFieldData> custom_data = new ArrayList<CustomFieldData>();
 
     /**
      * Description of a deal.

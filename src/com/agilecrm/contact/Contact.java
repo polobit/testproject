@@ -28,9 +28,11 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.social.linkedin.LinkedInUtil;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
@@ -337,6 +339,8 @@ public class Contact extends Cursor
     /**
      * Saves (new) or updates (existing) a contact and executes trigger,
      * notification and also adds to search document
+     * 
+     * @throws PlanRestrictedException
      */
     public void save(boolean... args)
     {
@@ -392,6 +396,17 @@ public class Contact extends Cursor
 	    }
 	}
 
+	// Updated time is updated only if particular fields are changed. It is
+	// updated only when search document is tobe updated
+	updated_time = System.currentTimeMillis() / 1000;
+	System.out.println("viewed time : " + viewed_time);
+	if (viewed_time != 0L)
+	{
+	    System.out.println(viewed_time);
+	    viewed.viewed_time = viewed_time;
+	    viewed.viewer_id = SessionManager.get().getDomainId();
+	}
+
 	dao.put(this);
 
 	// Execute trigger for contacts
@@ -411,15 +426,6 @@ public class Contact extends Cursor
 
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
-
-	// Updated time is updated only if particular fields are changed. It is
-	// updated only when search document is tobe updated
-	updated_time = System.currentTimeMillis() / 1000;
-	if (viewed_time != 0L)
-	{
-	    viewed.viewed_time = viewed_time;
-	    // viewed.viewer_id = SessionManager.get().getDomainId();
-	}
 
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
@@ -871,7 +877,7 @@ public class Contact extends Cursor
      * -- store only id of company, ignore name ( the company may be edited
      * somewhere else )
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({ "unused", "unchecked" })
     @PrePersist
     private void PrePersist()
     {
@@ -961,11 +967,28 @@ public class Contact extends Cursor
 
 	tags = getContactTags();
 
-	// Update Tags - Create a deferred task
-	TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(getContactTags());
+	Set<String> cacheTags = null;
 
-	Queue queue = QueueFactory.getDefaultQueue();
-	queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	try
+	{
+	    cacheTags = (LinkedHashSet<String>) CacheUtil.getCache(NamespaceManager.get() + "-" + "tags");
+
+	    System.out.println("Cache tags obtained " + cacheTags);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting tags from cache... " + e.getMessage());
+	}
+
+	if (cacheTags == null || !cacheTags.containsAll(tags))
+	{
+	    // Update Tags - Create a deferred task
+	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
+
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	}
 
     }
 
@@ -1040,7 +1063,6 @@ public class Contact extends Cursor
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type + " tags: " + tags + " properties: "
 		+ properties;
     }
-
 }
 
 /**

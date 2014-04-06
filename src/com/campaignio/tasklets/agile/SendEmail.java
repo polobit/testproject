@@ -222,8 +222,11 @@ public class SendEmail extends TaskletAdapter
 			+ " as it is Unsubscribed from All.");
 
 		// Add log
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-			"Email sending skipped for this contact as it is unsubscribed.", LogType.UNSUBSCRIBED.toString());
+		LogUtil.addLogToSQL(
+			AgileTaskletUtil.getId(campaignJSON),
+			AgileTaskletUtil.getId(subscriberJSON),
+			"Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT), LogType.UNSUBSCRIBED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -453,10 +456,18 @@ public class SendEmail extends TaskletAdapter
 	    }
 	}
 
+	// Appends Agile label
+	text = StringUtils.replace(text, EmailUtil.getPoweredByAgileLink("campaign", "Powered by"), "Sent using Agile");
+	text = EmailUtil.appendAgileToText(text, "Sent using");
+
 	// Send Message
 	if (html != null && html.length() > 10)
 	{
 	    html = EmailUtil.appendTrackingImage(html, campaignId, subscriberId);
+
+	    // If no powered by merge field, append Agile label to html
+	    if (!StringUtils.contains(html, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
+		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
 
 	    // if cc present, send using Mailgun as it supports 'Cc'
 	    if (!StringUtils.isEmpty(cc))

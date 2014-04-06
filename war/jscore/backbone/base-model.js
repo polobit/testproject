@@ -274,7 +274,7 @@ var Base_Model_View = Backbone.View
 				if (isValid == false || !isValidForm($form)) {
 					
 					// Removes disabled attribute of save button
-					enable_save_button($form.find('.save'));
+					enable_save_button($(e.currentTarget));
 					
 					return;
 				}
@@ -329,7 +329,7 @@ var Base_Model_View = Backbone.View
 									success : function(model, response) 
 									{	
 										// Removes disabled attribute of save button
-										enable_save_button($form.find('.save'));
+										enable_save_button($(e.currentTarget));
 										
 										if (saveCallback && typeof (saveCallback) === "function") {
 											console.log(response)
@@ -403,7 +403,8 @@ var Base_Model_View = Backbone.View
 
 										// Hides the error message after 3
 										// seconds
-										$save_info.show().delay(3000).hide(1);
+										if(response.status != 406)
+											$save_info.show().delay(3000).hide(1);
 									}
 								}, { silent : true });
 			},

@@ -218,6 +218,7 @@ public class GoogleServiceUtil
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+
 	    properties = new HashMap<String, Object>();
 	}
 

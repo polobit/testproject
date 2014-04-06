@@ -169,6 +169,11 @@ public class Mandrill
 	    // Considering AgileCRM domain name as mandrill subaccount.
 	    String subaccount = NamespaceManager.get();
 
+	    /*
+	     * try { AccountEmailStatsUtil.checkLimits(); } catch
+	     * (PlanRestrictedException e) { return e.getMessage(); }
+	     */
+
 	    // Complete mail json to be sent
 	    JSONObject mailJSON = setMandrillAPIKey(subaccount);
 

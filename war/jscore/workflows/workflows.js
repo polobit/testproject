@@ -123,8 +123,22 @@ $(function(){
                     error: function(jqXHR, status, errorThrown){ 
                       enable_save_button($clicked_button); 
                       
-                      // shows exception message
-                      alert(status.responseText);
+                      // shows Exception message
+                      if(status.status != 406)
+                    	  alert(status.responseText);
+                      else
+                    	  {
+                    	  console.log(status);
+                    		// Show cause of error in saving
+        					$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+        							+ status.responseText
+        							+ '</i></p></small></div>');
+
+        					// Appends error info to form actions
+        					// block.
+        					$("#workflow-limit-reached-msg").html(
+        							$save_info).show();
+                    	  }
                         }
             });
         }

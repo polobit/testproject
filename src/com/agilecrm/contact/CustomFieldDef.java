@@ -71,14 +71,15 @@ public class CustomFieldDef
     /**
      * Specifies the scope of the custom field should be added
      */
-    public enum SCOPE
+    public static enum SCOPE
     {
-	PERSON_COMPANY, PERSON, COMPANY, DEAL
+	PERSON_COMPANY, PERSON, COMPANY, CONTACT, DEAL, CASE
     };
 
+    public SCOPE scope = SCOPE.CONTACT;
+
     // Dao
-    public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
-	    CustomFieldDef.class);
+    public static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
 
     /**
      * Default constructor
@@ -103,8 +104,7 @@ public class CustomFieldDef
      * @param is_required
      *            required status of the custom field
      */
-    public CustomFieldDef(Type fieldType, String fieldLabel, String fieldDescription, String fieldData,
-	    boolean is_required)
+    public CustomFieldDef(Type fieldType, String fieldLabel, String fieldDescription, String fieldData, boolean is_required)
     {
 	this.field_data = fieldData;
 	this.field_description = fieldDescription;
@@ -126,8 +126,10 @@ public class CustomFieldDef
 	// Fetches all custom fields to check label duplicates
 	for (CustomFieldDef customField : dao.fetchAll())
 	{
-	    if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id)
+	    if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id && customField.scope == this.scope)
+	    {
 		throw new Exception();
+	    }
 	}
 
 	dao.put(this);
@@ -144,8 +146,7 @@ public class CustomFieldDef
     @Override
     public String toString()
     {
-	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type + ", field_label: " + field_label
-		+ ", field_description: " + field_description + ", field_data: " + field_data + "is_required :"
-		+ is_required + "searchable" + searchable + "}";
+	return "CustomFieldDef: {id: " + id + ", field_type: " + field_type + ", field_label: " + field_label + ", field_description: " + field_description
+		+ ", field_data: " + field_data + "is_required :" + is_required + "searchable" + searchable + "}";
     }
 }

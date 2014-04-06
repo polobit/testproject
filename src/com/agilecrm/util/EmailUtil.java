@@ -1,6 +1,8 @@
 package com.agilecrm.util;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -16,6 +18,10 @@ import com.thirdparty.mandrill.Mandrill;
 
 public class EmailUtil
 {
+
+    // Agile emails - to avoid count when emails are sent to Agile support
+    public static String[] agileEmails = { "care@agilecrm.com", "sales@agilecrm.com" };
+    public static List<String> agileEmailsList = Arrays.asList(agileEmails);
 
     /**
      * Parses html body of an email using jsoup.
@@ -63,34 +69,6 @@ public class EmailUtil
     }
 
     /**
-     * Appends tracking image for html body
-     * 
-     * @param html
-     *            - html body.
-     * @param campaignId
-     *            - CampaignId.
-     * @param subsciberId
-     *            - SubscriberId.
-     * @return html string with appended image.
-     **/
-    public static String appendTrackingImage(String html, String campaignId, String subscriberId)
-    {
-	String namespace = NamespaceManager.get();
-	String queryParams = "";
-
-	// for campaign email
-	if (!StringUtils.isEmpty(campaignId) && !StringUtils.isEmpty(subscriberId))
-	{
-	    queryParams = "c=" + campaignId + "&s=" + subscriberId;
-	}
-
-	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + namespace + ".agilecrm.com/backend/open?" + queryParams
-		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
-
-	return html + trackingImage;
-    }
-
-    /**
      * Returns set collection with string tokens obtained from given string.
      * 
      * @param str
@@ -131,6 +109,11 @@ public class EmailUtil
      */
     public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html, String text)
     {
+
+	// Agile label to outgoing emails
+	html = appendAgileToHTML(html, "email", "Sent using");
+	text = appendAgileToText(text, "Sent using");
+
 	// if cc or bcc present, send by Mailgun
 	if (!StringUtils.isEmpty(cc) || !StringUtils.isEmpty(bcc))
 	{
@@ -143,8 +126,126 @@ public class EmailUtil
 	// if no cc or bcc, send by Mandrill
 	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
 
-	// Record Email Stats
-	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
+	// Record Email Stats. Avoids count for Contact Us emails
+	if (!isToAgileEmail(to))
+	    AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
 
+    }
+
+    /**
+     * Appends tracking image for html body
+     * 
+     * @param html
+     *            - html body.
+     * @param campaignId
+     *            - CampaignId.
+     * @param subsciberId
+     *            - SubscriberId.
+     * @return html string with appended image.
+     **/
+    public static String appendTrackingImage(String html, String campaignId, String subscriberId)
+    {
+	String queryParams = "";
+
+	// for campaign email
+	if (!StringUtils.isEmpty(campaignId) && !StringUtils.isEmpty(subscriberId))
+	{
+	    queryParams = "c=" + campaignId + "&s=" + subscriberId;
+	}
+
+	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get() + ".agilecrm.com/backend/open?" + queryParams
+		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+
+	return html + trackingImage;
+    }
+
+    /**
+     * Returns AgileCRM website url with utm parameters
+     * 
+     * @param medium
+     *            - utm medium type like campaign, personal
+     * @return String
+     */
+    public static String getPoweredByAgileURL(String medium)
+    {
+	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign=" + NamespaceManager.get();
+    }
+
+    /**
+     * @param labelText
+     * @param medium
+     * @return
+     */
+    public static String getPoweredByAgileLink(String medium, String labelText)
+    {
+	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
+		+ "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\"> Agile</a>";
+    }
+
+    /**
+     * Appends agilecrm link to html
+     * 
+     * @param html
+     *            - email html body
+     * @param medium
+     *            - utm medium type like campaign, personal
+     * @return String
+     */
+    public static String appendAgileToHTML(String html, String medium, String labelText)
+    {
+
+	// Returns only html if Agile label exits
+	if (StringUtils.isBlank(html) || StringUtils.contains(html, "https://www.agilecrm.com?utm_source=powered-by")
+		|| StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com"))
+	    return html;
+
+	// If body tag exists, add link before body tag ends
+	if (StringUtils.contains(html, "</body>"))
+	{
+	    // For Campaign HTML emails, Powered by should be right aligned
+	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
+		html = StringUtils.replace(html, "</body>", "<div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div></body>");
+	    else
+		html = StringUtils.replace(html, "</body>", getPoweredByAgileLink(medium, labelText) + "</body>");
+
+	}
+	else
+	{
+	    // For Campaign HTML emails, Powered by should be right aligned
+	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
+		html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+	    else
+		html = html + "<br><br>" + getPoweredByAgileLink(medium, labelText);
+	}
+
+	return html;
+    }
+
+    /**
+     * Appends Agile label to text email body
+     * 
+     * @param text
+     *            - text content of email
+     * @return String
+     */
+    public static String appendAgileToText(String text, String labelText)
+    {
+	// If already exists or null, return only text
+	if (StringUtils.isBlank(text) || StringUtils.contains(text, "Sent using Agile"))
+	    return text;
+
+	return text + "\n" + labelText + " Agile";
+    }
+
+    /**
+     * Verifies whether To email is Agile support email
+     * 
+     * @param to
+     *            - To email
+     * @return boolean
+     */
+    public static boolean isToAgileEmail(String to)
+    {
+	return agileEmailsList.contains(to);
     }
 }

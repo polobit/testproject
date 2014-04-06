@@ -6,7 +6,7 @@
 /** On load of social suites page. */
 $(function()
 {
-	// Default values	
+	// Default values
 	Stream_Type = null;
 	Network_Type = null;
 	Register_All_Done = false;
@@ -15,6 +15,15 @@ $(function()
 	Scheduled_Edit = false;
 	Register_Counter = null;
 	Add_Img_Done = false;
+
+	/*
+	 * When user click on clock icon to schedule update so need to save original
+	 * URL of model, in case of user de-select scheduling.
+	 */
+	Previous_URL = null;
+
+	// If selected schedule is future time then it will be true.
+	Schedule_In_Future = false;
 
 	// Flag for Scroll down reached to end of stream.
 	Scroll_Down_Call = false;
@@ -50,100 +59,11 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * Fills name with twitter's owner in add-contact popup form.
-	 */
-	$(".add-twitter-contact").die().live("click", function(e)
-	{
-		var streamId = ($(this).closest('article').attr('stream-id'));
-		var tweetId = ($(this).closest('article').attr('id'));
-
-		// Get stream from collection.
-		var modelStream = Streams_List_View.collection.get(streamId);
-
-		// Get tweet from stream.
-		var tweet = modelStream.get('tweetListView').get(tweetId).toJSON();
-
-		// Tweet owner's full name.
-		var fullName = tweet.user.name;
-
-		// Tweet owner's description.
-		var description = tweet.user.description;
-
-		// Tweet owner's handle/Screen name.
-		Tweet_Owner_For_Add_Contact = tweet.user.screen_name;
-
-		// Separate full name.
-		var firstName = fullName.substr(0, fullName.indexOf(' '));
-		var lastName = fullName.substr(fullName.indexOf(' ') + 1);
-		;
-
-		// Add values in add contact form.
-		$("#fname", $('#personModal')).attr("value", firstName);
-		$("#lname", $('#personModal')).attr("value", lastName);
-		$("#job_title", $('#personModal')).attr("value", description);
-
-		document.getElementById("network_handle").className = 'socialsuite-network-handle';
-		$("#handle", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
-
-		// Add website / handle of twitter of tweet owner.
-		$("#website", $('#personModal')).attr("value", Tweet_Owner_For_Add_Contact);
-		$("#image", $('#personModal')).attr("value", tweet.user.profile_image_url);
-
-		// Select network type.
-		$("div.website select").val("TWITTER");
-
-		// If picture is not null and undefined, display it by given width, else
-		// display none
-		var pic = tweet.user.profile_image_url;
-		if (pic != undefined && pic != null)
-		{
-			var el = $('<img class="imgholder thumbnail person-img" onload="changeProperty()" style="display: inline;"  src="' + pic + '"></img>');
-			$('#pic').html(el).show();
-			$("img").error(function()
-			{
-				$('#pic').css("display", "none");
-			});
-		}
-
-		changeProperty();
-	});
-
-	// Hide network handle from add contact form.
-	$('#personModal').on('hidden.bs.modal', function()
-	{
-		document.getElementById("network_handle").className = 'network-handle';
-		document.getElementById("handle").className = '';
-		$('#pic').css("display", "none");
-		$('#pic').empty();
-		changeProperty();
-	});
-
-	// If img is shown then reduce size of network handle on add contact form.
-	$('#personModal').on('shown.bs.modal', function()
-	{
-		changeProperty();
-	});
-	$('#personModal').on('show.bs.modal', function()
-	{
-		changeProperty();
-	});
-	$("#pic").change(function()
-	{
-		changeProperty();
-	});
-
-	// Makes Scheduled_Edit flag false to show normal update flow.
-	$('#socialsuite_twitter_messageModal').on('show.bs.modal', function()
-	{
-		Scheduled_Edit = false;
-		$('#socialsuite_twitter_RTModal').remove();
-	});
-
-	/**
 	 * Display popup form with stream details.
 	 */
 	$(".add-stream").die().live("click", function(e)
 	{
+		// Need to call openTwitter function in ui.js for Oauth.
 		head.js('js/designer/ui.js', function()
 		{
 		});
@@ -155,7 +75,7 @@ function initializeSocialSuite()
 		});
 
 		// Enable button of add stream on form of stream detail
-		$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
+		// $('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 
 		// Fill elements on form related to stream.
 		fillStreamDetail();
@@ -168,7 +88,7 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * On click of social network icon, Calls Oauth for selected network type.
+	 * On click of twitter icon, Calls Oauth for selected network type.
 	 */
 	$(".network-type").die().live("click", function(e)
 	{
@@ -244,7 +164,8 @@ function initializeSocialSuite()
 					});
 
 	/**
-	 * Get description of stream on mouse over and show at bottom of form.
+	 * Get description of stream on mouse over and show at bottom of add stream
+	 * form.
 	 */
 	$(document)
 			.on(
@@ -378,10 +299,6 @@ function initializeSocialSuite()
 						newStream.url = '/core/social';
 						newStream.save(json, { success : function(stream)
 						{
-
-							// Close form
-							// $('#addStreamModal').modal('hide');
-
 							// Append in collection,add new stream
 							socialsuitecall.streams(stream);
 
@@ -393,35 +310,20 @@ function initializeSocialSuite()
 							var publishJSON = { "message_type" : "register", "stream" : stream.toJSON() };
 							sendMessage(publishJSON);
 
-							// Get recent stream from database, suppose we add
-							// directly this stream so it will create reference
-							// and data replicated in both.
-							$.getJSON("/core/social/getstream/" + stream.id, function(data)
+							// Notification for stream added.
+							showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
+
+							setTimeout(function()
 							{
-								if (data != null)
-								{
-									Temp_Streams_List_View.collection.add(data);
-								} // client json if end
+								// Find selected stream id.
+								var idOfStreamType = $('#addStreamModal').find("div[value='" + Stream_Type + "']").attr('id');
+								$("#" + idOfStreamType).click();
 
-								// Notification for stream added.
-								showNotyPopUp('information', "Stream added. You can add another Stream now.", "top", 4000);
+								// Make send button enable
+								$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
 
-								setTimeout(function()
-								{
-									// Find selected stream id.
-									var idOfStreamType = $('#addStreamModal').find("div[value='" + Stream_Type + "']").attr('id');
-									$("#" + idOfStreamType).click();
-
-									// Make send button enable
-									$('#addStreamModal').find('#add_twitter_stream').removeAttr('disabled');
-
-									Stream_Type = "";
-								}, 4000);
-
-							}).error(function(jqXHR, textStatus, errorThrown)
-							{
-								alert("error occurred!");
-							});
+								Stream_Type = "";
+							}, 4000);
 
 							// Adds tag in 'our' domain to track usage
 							addTagAgile(SOCIAL_TAG);
@@ -429,7 +331,7 @@ function initializeSocialSuite()
 						}, error : function(data)
 						{
 							console.log(data);
-						}, });
+						} });
 					});
 
 	/**
@@ -459,7 +361,9 @@ function initializeSocialSuite()
 	});
 
 	/**
-	 * Get relation and perform action as per that.
+	 * In stream on click of notification, Gets relation and perform action as
+	 * per that. like Retry : re-register stream on server. Add-new -tweet : Add
+	 * new unread tweets on stream.
 	 */
 	$(".action-notify").die().live("click", function(e)
 	{
@@ -473,7 +377,7 @@ function initializeSocialSuite()
 		document.getElementById(this.id).innerHTML = '';
 
 		if (relation == "add-new-tweet")
-			mergeCollections(streamId);
+			mergeNewUnreadTweets(streamId);
 		else if (relation == "retry")
 			registerStreamAgain(streamId);
 
@@ -483,20 +387,4 @@ function initializeSocialSuite()
 		// Remove deleted tweet element from ui
 		$('.deleted').remove();
 	});
-
-	// Add agile text to message text area.
-	$("#add_message").die().live("click", function(e)
-	{
-		var quote = "Sell & Market like Fortune 500 with @agilecrm";
-
-		document.getElementById("twit-tweet").value += quote;
-
-		$("#link-text").html("<b>Thank you.</b>");
-
-		setTimeout(function()
-		{
-			$("#link-text").hide();
-		}, 2000);
-	});
-
 }

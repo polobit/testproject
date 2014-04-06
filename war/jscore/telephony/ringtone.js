@@ -2,14 +2,15 @@
 
 /**
  * Add audio tag in home.jsp after SIP registration is done successfully.
+ * It is required for Voice in Call. It is SIP API requirement.
  */
 function addAudio() {
 	var audioElmt = document.getElementById("audio_remote");
 
 	// Already added.
-	if (audioElmt != null)
+	if (audioElmt != undefined)
 		return;
-	else if (audioElmt == null) // not added.
+	else if (audioElmt == undefined) // not added.
 	{
 		// add audio
 		$('body')

@@ -6,7 +6,7 @@
  */
 function sipSendDTMF(digit)
 {
-	console.log("In sipSendDTMF: " + digit);
+	console.log("sipSendDTMF: " + digit);
 
 	// session for call is active and number is available.
 	if (Sip_Session_Call && digit)

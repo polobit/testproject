@@ -88,6 +88,10 @@ public class Mailgun
     {
 	try
 	{
+	    // BillingRestriction1 restriction =
+	    // BillingRestrictionUtil.getBillingRestriction(true);
+	    // restriction.check(restriction.emails, "Email");
+
 	    String data = MAILGUN_API_PARAM_FROM + "=" + URLEncoder.encode(getFromEmail(fromName, fromEmail), "UTF-8") + "&" + MAILGUN_API_PARAM_TO + "="
 		    + URLEncoder.encode(to, "UTF-8") + "&" + MAILGUN_API_PARAM_SUBJECT + "=" + URLEncoder.encode(subject, "UTF-8");
 
