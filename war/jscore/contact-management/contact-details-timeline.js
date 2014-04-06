@@ -29,6 +29,7 @@ function load_timeline_details(el, contactId, callback1)
 			templateKey: 'timeline',
 			individual_tag_name: 'li',
 		});
+	
 		
 		/**
 		 * Another empty collection is created to add other data (apart from first fetched)
@@ -86,7 +87,7 @@ function load_timeline_details(el, contactId, callback1)
 									|| model.log_type == 'EMAIL_SENDING_FAILED')
 							return true;
 						
-							timelineView.collection.add(model);							
+							timelineView.collection.add(model, {silent : true});							
 					});
 								
 					/*
@@ -119,7 +120,7 @@ function load_timeline_details(el, contactId, callback1)
 							return true;
 						
 						logs_array.push(model);			
-						timelineView.collection.add(model);	
+						timelineView.collection.add(model, {silent : true});	
 						//validate_insertion(JSON.parse(model.logs), timelineViewMore);
 					});
 					validate_insertion(logs_array, timelineViewMore);
@@ -265,7 +266,7 @@ function load_timeline_details(el, contactId, callback1)
 						if(arrayView.collection.length == 0)
 							return;
 						
-						timelineView.collection.add(arrayView.collection.models);
+						timelineView.collection.add(arrayView.collection.models , {silent : true});
 						
 						// If timeline is not defined yet, calls setup_timeline for the first time
 						if(timelineView.collection.length == 0){
@@ -320,26 +321,21 @@ function validate_insertion(models, timelineViewMore){
 	try{
 		head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
 		
+
 			if($('#timeline').isotope()){
 				var month_years = [];
 				$.each(models, function(index, model){
 					var month_year = entity_created_month_year(model);
-									console.log(month_year);
-					//if(!MONTH_YEARS)
-						//MONTH_YEARS = [];
-					if (month_years.length == 0 || month_years.indexOf(month_year) < 0 && MONTH_YEARS.indexOf(month_year) < 0){
+
+					if (month_years.indexOf(month_year) < 0 && MONTH_YEARS.indexOf(month_year) < 0){
 						month_years[month_years.length] = month_year;
-						//if(MONTH_YEARS)
-						if(!MONTH_YEARS)
-							MONTH_YEARS = [];
-							MONTH_YEARS[MONTH_YEARS.length] = month_year;
+						MONTH_YEARS[MONTH_YEARS.length] = month_year;
 					}	
 					var newItem = $(getTemplate("timeline", model));
 					newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 					$('#timeline').isotope( 'insert', newItem);
 				});
-				
-				console.log(month_years);
+
 				// add a month marker for each month that has a post
 				create_month_marker(month_years, true, App_Contacts.contactDetailView.el);
 			}
@@ -389,7 +385,6 @@ function getTimestamp(month_index, year){
  * @returns {String}
  */
 function entity_created_month_year(model){
-	console.log(model);
 	if(model.created_time)
 		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
 	if(model.createdTime)
@@ -427,13 +422,11 @@ function add_entity_to_timeline(model)
 	var list = [];
 	list.push(model.toJSON())
 
-	console.log(model);
 	// console.log(model.get('id'));
-	console.log(!timelineView.collection.get(model.get('id')));
 
 	if (!timelineView.collection.get(model.get('id')))
 	{
-		timelineView.collection.add(model)
+		timelineView.collection.add(model,  {silent : true})
 		validate_insertion(list);
 		return;
 	}
@@ -731,7 +724,7 @@ function remove_loading_img(el){
 				if(timelineView.collection.length == 0)
 				{					
 					$.each(data.toJSON(),function(index,model){					
-						timelineView.collection.add(model);
+						timelineView.collection.add(model,  {silent : true});
 					});					
 					
 					// No callback function is taken as the stats takes more time to fetch
@@ -769,13 +762,13 @@ function remove_loading_img(el){
  {
  	if (timelineView.collection.length == 0)
  	{
- 		timelineView.collection.add(contact);
+ 		timelineView.collection.add(contact, {silent : true});
 
  		// Add tags in timeline
  		$.each(contact.get('tagsWithTime'), function(index, tag)
  		{
  			// console.log(tag);
- 			timelineView.collection.add(tag);
+ 			timelineView.collection.add(tag, {silent : true});
  		})
  		setup_timeline(timelineView.collection.toJSON(), el);
 
@@ -800,7 +793,7 @@ function remove_loading_img(el){
  	{
  		$.each(tags, function(index, tag)
  		{
- 			timelineView.collection.add(tag);
+ 			timelineView.collection.add(tag, {silent : true});
  		});
 
  		setup_timeline(timelineView.collection.toJSON(), el);
@@ -813,7 +806,7 @@ function remove_loading_img(el){
  		if (!timelineView.collection.where(tag).length == 0)
  			return;
 
- 		timelineView.collection.add(tag);
+ 		timelineView.collection.add(tag, {silent : true});
  		tags_to_add.push(tag);
  	});
 
@@ -863,7 +856,7 @@ function remove_loading_img(el){
 					// To avoid merging with emails template having date entity
 					model.date = undefined;
 					
-				 	timelineView.collection.add(model);
+				 	timelineView.collection.add(model, {silent : true});
 			 	}
 			 });
 			 
