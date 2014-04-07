@@ -98,91 +98,31 @@ public class WufooWebhook extends HttpServlet
 		}
 	}
 
+	public static JSONObject finalJson = new JSONObject();
+
 	public static JSONObject convertWufooJson(JSONArray array, HttpServletRequest req)
 	{
 		try
 		{
-			// Define finalJson
-			JSONObject finalJson = new JSONObject();
-
-			// Iterate wufoo array
 			for (int i = 0; i < array.length(); i++)
 			{
-				// Define name, value
-				String name = null;
-				String value = null;
-
-				// Get json object from json array and get fieldType
 				JSONObject json = array.getJSONObject(i);
-				String fieldType = json.getString("Type");
+				String name = null;
 
-				// Set Agile Names for properties which are added based on type
-				// of fancy pants fields
-				if (fieldType.equals("url"))
-					name = Contact.WEBSITE;
-				else if (fieldType.equals("email"))
-					name = fieldType;
-				else if (fieldType.equals("textarea"))
-					name = json.getString("Title") + " " + fieldType;
-				else if (fieldType.equals("checkbox"))
-					name = json.getString("Title") + " " + fieldType;
+				if (!StringUtils.isBlank(json.optString("Type"))
+						&& StringUtils.equals("textarea", json.getString("Type")))
+					name = json.getString("Title") + " " + "agilenote";
 
-				// If subfields exist for field and name is not set
-				if (!StringUtils.isBlank(json.optString("SubFields")) && StringUtils.isBlank(name))
+				if (!StringUtils.isBlank(json.optString("SubFields")))
+					convertWufooJson(json.getJSONArray("SubFields"), req);
+
+				String value = req.getParameter(json.getString("ID"));
+				if (!StringUtils.isBlank(value))
 				{
-					JSONArray subarray = json.getJSONArray("SubFields");
-					for (int j = 0; j < subarray.length(); j++)
-					{
-						JSONObject subjson = subarray.getJSONObject(j);
-						value = req.getParameter(subjson.getString("ID"));
-
-						// Get agile name for field name
-						if (!StringUtils.isBlank(value))
-						{
-							name = FormsUtil.getFieldName(subjson.getString("Label"));
-							finalJson.put(name, value);
-						}
-					}
-				}
-
-				// If subfields exist for field and name is set, ignore subfield
-				// names
-				else if (!StringUtils.isBlank(json.optString("SubFields")) && !StringUtils.isBlank(name))
-				{
-					JSONArray subarray = json.getJSONArray("SubFields");
-					for (int j = 0; j < subarray.length(); j++)
-					{
-						JSONObject subjson = subarray.getJSONObject(j);
-						value = req.getParameter(subjson.getString("ID"));
-
-						// Set name directly
-						if (!StringUtils.isBlank(value))
-							finalJson.put(name, value);
-					}
-
-				}
-
-				// If subfields do not exist and name is empty
-				else if (StringUtils.isBlank(json.optString("SubFields")) && StringUtils.isBlank(name))
-				{
-					name = json.getString("Title");
-					value = req.getParameter(json.getString("ID"));
-					if (!StringUtils.isBlank(value))
-					{
-						// Get agile name for field name
-						name = FormsUtil.getFieldName(name);
-						finalJson.put(name, value);
-					}
-				}
-
-				// If subfields do not exist and name is set
-				else if (StringUtils.isBlank(json.optString("SubFields")) && !StringUtils.isBlank(name))
-				{
-					value = req.getParameter(json.getString("ID"));
-
-					// Set name from fancy pants type
-					if (!StringUtils.isBlank(value))
-						finalJson.put(name, value);
+					name = !StringUtils.isBlank(name) ? name : StringUtils.isBlank(json.optString("Label")) ? json
+							.getString("Title") : json.getString("Label");
+					name = FormsUtil.getFieldName(name);
+					finalJson.put(name, value);
 				}
 			}
 			return finalJson;
