@@ -130,10 +130,6 @@ public class EmailUtil
 	// if no cc or bcc, send by Mandrill
 	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
 
-	// Record Email Stats. Avoids count for Contact Us emails
-	if (!isToAgileEmail(to))
-	    AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
-
     }
 
     /**
