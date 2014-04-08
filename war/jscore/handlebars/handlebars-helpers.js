@@ -86,13 +86,13 @@ $(function()
                    
                     exclusive_fields.push( jQuery.extend(true, {}, fields[i]));
             }
-            
             if (exclusive_fields.length == 0)
                             return options.inverse(exclusive_fields);
             
             $.getJSON("core/api/custom-fields/type/DATE", function(data){
+            	
                     if(data.length == 0)
-                            return options.fn(exclusive_fields);
+                            return;
                     
                     for(var j =0; j < data.length ; j ++)
                     {
@@ -118,6 +118,8 @@ $(function()
                     }
                     updateCustomData(options.fn(exclusive_fields));
             });
+            
+            return options.fn(exclusive_fields)
 
     });
     
