@@ -229,13 +229,13 @@ function getMergeFields(type)
 	};
 	
 	// Get Custom Fields in template format
-	var custom_fields = get_custom_fields();
+	var custom_fields = get_webrules_custom_fields();
 	
 	console.log("Custom Fields are");
 	console.log(custom_fields);
 	
 	// Merges options json and custom fields json
-	var merged_json = merge_jsons({}, options, custom_fields);
+	var merged_json = merge_webrules_jsons({}, options, custom_fields);
 	return merged_json;
 }
 
@@ -243,7 +243,7 @@ function getMergeFields(type)
  * Returns custom fields in format required for merge fields. 
  * E.g., Nick Name:{{Nick Name}}
  */
-function get_custom_fields()
+function get_webrules_custom_fields()
 {
     var url = window.location.protocol + '//' + window.location.host;
 	
@@ -263,7 +263,7 @@ function get_custom_fields()
 						
 						// Needed only field labels for merge fields
 						if(key == 'field_label')
-							customfields[value] = "{{" + value+"}}"
+							customfields[value] = "{{[" + value+"]}}"
 					});
 			});	
 	
@@ -273,7 +273,7 @@ function get_custom_fields()
 /**
  * Returns merged json of two json objects
  **/
-function merge_jsons(target, object1, object2)
+function merge_webrules_jsons(target, object1, object2)
 {
 	return $.extend(target, object1, object2);
 }
