@@ -1,0 +1,31 @@
+{
+  "parameters":[
+  {
+    	"name": "domain",
+    	"type": "text",
+    	"required": true
+  	},
+  	{
+    	"name": "agile_email",
+    	"type": "text",
+    	"required": true
+  	},
+  	{
+    	"name": "apikey",
+    	"type": "text",
+    	"required": true
+  	}
+  ],
+  
+  "author": {
+    "name": "Sasi",
+    "email": "sasi@clickdesk.com"
+  },
+
+  "location": ["ticket_sidebar"],
+  "defaultLocale": "en",
+  "private": false,
+  "singleInstall": true,
+  "frameworkVersion": "1.0",
+  "version": "1.0"
+}
