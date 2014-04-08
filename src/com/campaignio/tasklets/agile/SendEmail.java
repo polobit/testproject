@@ -546,10 +546,11 @@ public class SendEmail extends TaskletAdapter
 	// Compares string token with the extensions
 	isContains = Arrays.asList(extensions).contains(str.substring(str.lastIndexOf('.')).toLowerCase());
 
-	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().startsWith("http://goo.gl")
-		&& (StringUtils.equals(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(".agilecrm.com"))
-		&& !str.toLowerCase().startsWith("http://agle.cc") && !str.toLowerCase().startsWith("http://unscr.be")
-		&& !str.toLowerCase().contains("unsubscribe"))
+	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().contains("unsubscribe")
+		&& !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
+		&& (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(".agilecrm.com"))
+		&& !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
+		&& !str.toLowerCase().startsWith("http://unscr.be"))
 	    return true;
 
 	return false;
