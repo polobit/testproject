@@ -20,6 +20,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.subscription.restrictions.DaoBillingRestriction;
+import com.agilecrm.subscription.restrictions.DaoBillingRestriction.ClassEntities;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -322,5 +327,25 @@ public class ReportsUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    public static void check(Long startTime, Long endTime) throws PlanRestrictedException
+    {
+	JSONObject object = new JSONObject();
+	try
+	{
+	    object.put("startTime", startTime);
+	    object.put("endTime", endTime);
+	}
+	catch (JSONException e)
+	{
+	    return;
+	}
+
+	DaoBillingRestriction restriction = DaoBillingRestriction.getInstace(ClassEntities.Report, object);
+	if (restriction.check())
+	    return;
+
+	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT);
     }
 }
