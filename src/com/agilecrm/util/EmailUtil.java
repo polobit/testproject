@@ -178,8 +178,7 @@ public class EmailUtil
      */
     public static String getPoweredByAgileLink(String medium, String labelText)
     {
-	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
-		+ "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\" title=\"Link: https://www.agilecrm.com\"> Agile</a>";
+	return labelText + " <a href=\"" + getPoweredByAgileURL(medium) + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
     /**

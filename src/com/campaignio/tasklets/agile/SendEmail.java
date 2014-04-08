@@ -4,9 +4,10 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -18,7 +19,6 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
 
@@ -33,6 +33,12 @@ import com.thirdparty.Mailgun;
  */
 public class SendEmail extends TaskletAdapter
 {
+
+    /**
+     * Regex to find http urls in a string
+     */
+    public static final String HTTP_URL_REGEX = "\\b(https|http|HTTP|HTTPS)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;(){}\"\']*[-a-zA-Z0-9+&@#/%=~_|]";
+
     /**
      * Sender name in email
      */
@@ -427,27 +433,8 @@ public class SendEmail extends TaskletAdapter
 		// clicks
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
-		// Get Keyword
-		text = convertLinks(text, " ", data, keyword, subscriberId, campaignId);
-		html = convertLinks(html, " ", data, keyword, subscriberId, campaignId);
-
-		text = convertLinks(text, "\n", data, keyword, subscriberId, campaignId);
-		html = convertLinks(html, "\n", data, keyword, subscriberId, campaignId);
-
-		text = convertLinks(text, "\r", data, keyword, subscriberId, campaignId);
-		html = convertLinks(html, "\r", data, keyword, subscriberId, campaignId);
-
-		text = convertLinks(text, "<", data, keyword, subscriberId, campaignId);
-		html = convertLinks(html, "<", data, keyword, subscriberId, campaignId);
-
-		text = convertLinks(text, "\"", data, keyword, subscriberId, campaignId);
-		html = convertLinks(html, "\"", data, keyword, subscriberId, campaignId);
-
-		text = convertLinks(text, "'", data, keyword, subscriberId, campaignId);
-		html = convertLinks(html, "'", data, keyword, subscriberId, campaignId);
-
-		text = convertLinks(text, "\"", data, keyword, subscriberId, campaignId);
-		html = convertLinks(html, "\"", data, keyword, subscriberId, campaignId);
+		text = convertLinksUsingRegex(text, subscriberId, campaignId);
+		html = convertLinksUsingRegex(html, subscriberId, campaignId);
 
 	    }
 	    catch (Exception e)
@@ -492,65 +479,51 @@ public class SendEmail extends TaskletAdapter
     }
 
     /**
-     * Converts links to short urls.
+     * Replaces http urls with agile tracking urls
      * 
      * @param input
-     *            text or html body
-     * @param delimiter
-     *            various delimiters such as \r,\n etc
-     * @param data
-     *            Data within the workflow
-     * @param keyword
-     *            Purl keyword given
+     *            - text or html
      * @param subscriberId
-     *            Contact Id that subscribes to campaign
-     * @return shortened url with purl keyword if given
-     * @throws Exception
+     *            - subscriber id
+     * @param campaignId
+     *            - campaign id
+     * @return String
      */
-    public String convertLinks(String input, String delimiter, JSONObject data, String keyword, String subscriberId, String campaignId) throws Exception
+    public String convertLinksUsingRegex(String input, String subscriberId, String campaignId)
     {
-	boolean converted = false;
+	Pattern p = Pattern.compile(HTTP_URL_REGEX);
+	Matcher m = p.matcher(input);
 
-	// Tokens
-	String[] tokens = input.split(delimiter);
-	for (int i = 0; i < tokens.length; i++)
+	StringBuffer stringBuffer = new StringBuffer();
+
+	try
 	{
-
-	    // Avoid image and shorten urls
-	    if (isSpecialLink(tokens[i]))
+	    // Iterate over matches
+	    while (m.find())
 	    {
-		// To track open and click when shorten url is clicked.
-		String url = URLShortenerUtil.getShortURL(tokens[i], keyword, subscriberId, data.getString(CLICK_TRACKING_ID), campaignId);
+		String url = m.group();
 
-		if (url == null)
-		    continue;
-
-		tokens[i] = url;
-
-		// Store Shorteners
-		JSONArray urls = new JSONArray();
-		if (data.has(URLS_SHORTENED))
+		// Replaces valid http urls with agile tracking links
+		if (isSpecialLink(url))
 		{
-		    urls = data.getJSONArray(URLS_SHORTENED);
+		    // Appends to StringBuffer
+		    m.appendReplacement(stringBuffer, "https://" + NamespaceManager.get() + ".agilecrm.com/backend/click?u=" + url + "&s=" + subscriberId
+			    + "&c=" + campaignId);
 		}
-
-		urls.put(tokens[i]);
-		data.put(URLS_SHORTENED, urls);
 	    }
-	}
 
-	String replacedString = "";
-	for (int i = 0; i < tokens.length; i++)
+	    // append last characters to the stringbuffer too
+	    m.appendTail(stringBuffer);
+
+	    input = stringBuffer.toString();
+	}
+	catch (Exception e)
 	{
-	    replacedString += (tokens[i]);
-	    if (i != tokens.length - 1 || input.endsWith(delimiter))
-		replacedString += delimiter;
+	    System.err.println("Exception occured while converting links..." + e.getMessage());
+	    e.printStackTrace();
 	}
 
-	if (converted)
-	    System.out.println("Replaced " + input + " with " + replacedString);
-
-	return replacedString.trim();
+	return input;
     }
 
     /**
@@ -573,9 +546,10 @@ public class SendEmail extends TaskletAdapter
 	// Compares string token with the extensions
 	isContains = Arrays.asList(extensions).contains(str.substring(str.lastIndexOf('.')).toLowerCase());
 
-	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !str.toLowerCase().startsWith("http://goo.gl")
-		&& !str.toLowerCase().contains(".agilecrm.com") && !str.toLowerCase().startsWith("http://agle.cc")
-		&& !str.toLowerCase().startsWith("http://unscr.be") && !str.toLowerCase().contains("unsubscribe") && !isContains)
+	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().startsWith("http://goo.gl")
+		&& (StringUtils.equals(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(".agilecrm.com"))
+		&& !str.toLowerCase().startsWith("http://agle.cc") && !str.toLowerCase().startsWith("http://unscr.be")
+		&& !str.toLowerCase().contains("unsubscribe"))
 	    return true;
 
 	return false;

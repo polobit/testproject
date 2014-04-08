@@ -1,5 +1,6 @@
 package com.campaignio.servlets.deferred;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.campaignio.cron.util.CronUtil;
@@ -44,8 +45,6 @@ public class EmailClickDeferredTask implements DeferredTask
     /**
      * Constructs a new {@link EmailClickDeferredTask}.
      * 
-     * @param clickTrackingId
-     *            - id to get respective clicked cron jobs
      * @param campaignId
      *            - Campaign id
      * @param subscriberId
@@ -70,12 +69,20 @@ public class EmailClickDeferredTask implements DeferredTask
 
 	try
 	{
-	    // Wakeup Clicked node. Clicked node consists of
-	    // tracking id when Track Clicks is set to Yes in SendEmail node.
-	    CronUtil.interrupt(clickTrackingId, null, null, new JSONObject(interruptedData));
+	    if (StringUtils.isBlank(clickTrackingId))
+	    {
+		// Wakeup Clicked node - campaignId and subscriberId as LAST two
+		// custom params
+		CronUtil.interrupt(null, campaignId, subscriberId, new JSONObject(interruptedData));
+	    }
+	    else
+	    {
+		// When requested from shorten url
+		CronUtil.interrupt(clickTrackingId, null, null, new JSONObject(interruptedData));
+	    }
 
-	    // Wakeup Opened node based on campaignId and
-	    // subscriberId.
+	    // Wakeup Opened node - campaignId and subscriberId as FIRST two
+	    // custom params
 	    CronUtil.interrupt(campaignId, subscriberId, null, new JSONObject(interruptedData));
 
 	}
