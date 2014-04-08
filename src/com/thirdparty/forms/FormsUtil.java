@@ -36,7 +36,7 @@ public class FormsUtil
 		String workPhoneAlias[] = { "work phone" };
 		String mobilePhoneAlias[] = { "mobile", "mobile phone" };
 		String websiteAlias[] = { Contact.URL, Contact.WEBSITE };
-		String skypeIdAlias[] = { "skype" };
+		String skypeIdAlias[] = { "skype", "skype id" };
 		String twitterAlias[] = { "twitter" };
 		String googlePlusAlias[] = { "google+" };
 		String linkedinAlias[] = { "linkedin" };
@@ -83,7 +83,7 @@ public class FormsUtil
 		mobilePhone.put(Contact.PHONE + " mobile", Arrays.asList(mobilePhoneAlias));
 
 		HashMap<String, List<String>> website = new HashMap<String, List<String>>();
-		website.put(Contact.WEBSITE + "URL", Arrays.asList(websiteAlias));
+		website.put(Contact.WEBSITE + " URL", Arrays.asList(websiteAlias));
 
 		HashMap<String, List<String>> skypeId = new HashMap<String, List<String>>();
 		skypeId.put(Contact.WEBSITE + " SKYPE", Arrays.asList(skypeIdAlias));
