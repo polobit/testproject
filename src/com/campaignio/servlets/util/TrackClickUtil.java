@@ -110,6 +110,9 @@ public class TrackClickUtil
 	if (contactJSON == null)
 	    return params;
 
+	// Remove unnecessary params like powered_by etc
+	contactJSON = removeAvoidableParams(contactJSON);
+
 	// Iterate through JSON and construct all params
 	Iterator<String> itr = contactJSON.keys();
 
@@ -160,5 +163,29 @@ public class TrackClickUtil
 	    System.out.println("Got Exception in RedirectServlet " + e.getMessage());
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Removes unnecessary params from contact json
+     * 
+     * @param contactJSON
+     *            - contact properties in json
+     * @return JSONObject
+     */
+    private static JSONObject removeAvoidableParams(JSONObject contactJSON)
+    {
+	try
+	{
+	    // Remove unwanted keys
+	    contactJSON.remove("isUnsubscribedAll");
+	    contactJSON.getJSONObject("data").remove("powered_by");
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception occured in appendContactPropertiesToParams " + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return contactJSON;
     }
 }
