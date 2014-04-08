@@ -30,8 +30,8 @@ public class BillingRestrictionUtil
      */
     public static enum ErrorMessages
     {
-	CONTACT("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached");
-
+	CONTACT("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
+		"This query is not allowed in current plan");
 	private String message;
 
 	ErrorMessages(String message)
@@ -199,6 +199,13 @@ public class BillingRestrictionUtil
     public static void throwLimitExceededException(String className) throws PlanRestrictedException
     {
 	ErrorMessages errorMessage = ErrorMessages.valueOf(className);
+	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
+
+	throw new PlanRestrictedException(reason);
+    }
+
+    public static void throwLimitExceededException(ErrorMessages errorMessage)
+    {
 	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
 
 	throw new PlanRestrictedException(reason);

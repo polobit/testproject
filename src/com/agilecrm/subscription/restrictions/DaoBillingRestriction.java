@@ -16,13 +16,15 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
      * Class information used to create instance according to name of the class
      * 
      */
-    enum ClassEntities
+    public static enum ClassEntities
     {
 	Contact(ContactBillingRestriction.class),
 
 	WebRule(WebRuleBillingRestriction.class),
 
-	Workflow(WorkflowBillingRestriction.class);
+	Workflow(WorkflowBillingRestriction.class),
+
+	Report(ReportBillingRestriction.class);
 
 	Class<? extends DaoBillingRestriction> clazz;
 
@@ -64,16 +66,7 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	    ClassEntities entity = ClassEntities.valueOf(className);
 	    if (entity == null)
 		return null;
-
-	    Class<? extends DaoBillingRestriction> clazz = entity.getClazz();
-
-	    System.out.println(clazz);
-
-	    DaoBillingRestriction dao = clazz.newInstance();
-
-	    // Sets max limits
-	    dao.setMax();
-	    return dao;
+	    return getInstace(entity);
 	}
 	catch (Exception e)
 	{
@@ -82,10 +75,48 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	}
     }
 
+    public static DaoBillingRestriction getInstace(ClassEntities entity)
+    {
+
+	Class<? extends DaoBillingRestriction> clazz = entity.getClazz();
+	DaoBillingRestriction dao;
+	try
+	{
+	    dao = clazz.newInstance();
+	}
+	catch (InstantiationException e)
+	{
+	    // TODO Auto-generated catch block
+
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (IllegalAccessException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
+
+	// Sets max limits
+	dao.setMax();
+	return dao;
+    }
+
     public static DaoBillingRestriction getInstace(String className, Object entity)
     {
 
 	DaoBillingRestriction dao = getInstace(className);
+	if (dao == null)
+	    return dao;
+	dao.entity = entity;
+	return dao;
+    }
+
+    public static DaoBillingRestriction getInstace(ClassEntities classEntity, Object entity)
+    {
+
+	DaoBillingRestriction dao = getInstace(classEntity);
 	if (dao == null)
 	    return dao;
 	dao.entity = entity;
