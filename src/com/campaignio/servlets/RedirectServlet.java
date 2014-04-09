@@ -14,6 +14,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.servlets.util.TrackClickUtil;
 import com.campaignio.urlshortener.URLShortener;
 import com.campaignio.urlshortener.util.URLShortenerUtil;
 import com.google.appengine.api.NamespaceManager;
