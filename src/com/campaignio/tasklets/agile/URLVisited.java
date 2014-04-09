@@ -2,11 +2,8 @@ package com.campaignio.tasklets.agile;
 
 import org.json.JSONObject;
 
-import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.util.ContactUtil;
 import com.analytics.util.AnalyticsSQLUtil;
 import com.campaignio.tasklets.TaskletAdapter;
-import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 
@@ -55,16 +52,15 @@ public class URLVisited extends TaskletAdapter
 	// Get URL value and type
 	String url = getStringValue(nodeJSON, subscriberJSON, data, URL_VALUE);
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
-	String domain = NamespaceManager.get();
 
-	String contactId = AgileTaskletUtil.getId(subscriberJSON);
-	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
-	String email = contact.getContactFieldValue(Contact.EMAIL);
+	String email = null;
+
+	// Gets email from subscriberJSON
+	if (subscriberJSON.getJSONObject("data").has("email"))
+	    email = subscriberJSON.getJSONObject("data").getString("email");
 
 	// Gets URL count from table.
-	int count = AnalyticsSQLUtil.getCountForGivenURL(url, domain, email, type);
-
-	System.out.println("Count obtained for url " + url + " of domain " + domain);
+	int count = AnalyticsSQLUtil.getCountForGivenURL(url, NamespaceManager.get(), email, type);
 
 	if (count == 0)
 	{

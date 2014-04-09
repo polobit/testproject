@@ -315,4 +315,28 @@ public class AgileTaskletUtil
 
 	return isAll;
     }
+
+    /**
+     * Returns subscriberJSON for given contact.
+     * 
+     * @param updatedContact
+     *            - contact object
+     * @param oldSubscriberJSON
+     *            - old subscriberJSON
+     * @return JSONObject
+     */
+    public static JSONObject getUpdatedSubscriberJSON(Contact updatedContact, JSONObject oldSubscriberJSON)
+    {
+	// Update subscriberJSON
+	JSONObject updatedSubscriberJSON = AgileTaskletUtil.getSubscriberJSON(updatedContact);
+
+	// If any exception occured return old
+	if (updatedSubscriberJSON == null)
+	{
+	    System.err.println("Updated subscriber json is null...");
+	    return oldSubscriberJSON;
+	}
+
+	return updatedSubscriberJSON;
+    }
 }
