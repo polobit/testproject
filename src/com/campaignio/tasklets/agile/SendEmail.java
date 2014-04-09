@@ -3,6 +3,7 @@ package com.campaignio.tasklets.agile;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,6 +39,12 @@ public class SendEmail extends TaskletAdapter
      * Regex to find http urls in a string
      */
     public static final String HTTP_URL_REGEX = "\\b(https|http|HTTP|HTTPS)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;(){}\"\']*[-a-zA-Z0-9+&@#/%=~_|]";
+
+    /**
+     * Extensions to avoid url shortening
+     */
+    public static String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp", ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
+    public static List<String> extensionsList = Arrays.asList(extensions);
 
     /**
      * Sender name in email
@@ -232,7 +239,7 @@ public class SendEmail extends TaskletAdapter
 			AgileTaskletUtil.getId(campaignJSON),
 			AgileTaskletUtil.getId(subscriberJSON),
 			"Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
-				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT), LogType.UNSUBSCRIBED.toString());
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT), LogType.EMAIL_SENDING_SKIPPED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -537,14 +544,13 @@ public class SendEmail extends TaskletAdapter
      */
     private boolean isSpecialLink(String str)
     {
-	String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp", ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
 	boolean isContains = false;
 
 	if (str.indexOf('.') == -1)
 	    return false;
 
 	// Compares string token with the extensions
-	isContains = Arrays.asList(extensions).contains(str.substring(str.lastIndexOf('.')).toLowerCase());
+	isContains = extensionsList.contains(str.substring(str.lastIndexOf('.')).toLowerCase());
 
 	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().contains("unsubscribe")
 		&& !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))

@@ -52,32 +52,42 @@ public class Score extends TaskletAdapter
 	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
 	String value = getStringValue(nodeJSON, subscriberJSON, data, VALUE);
 
-	System.out.println("Given Score Type " + type + " and Value " + value);
-
-	// Get Contact Id and Contact
-	String contactId = AgileTaskletUtil.getId(subscriberJSON);
-	Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
-
-	if (contact != null)
+	try
 	{
-	    // Add score based on contact
-	    if (type.equals(ADD))
+	    // Get Contact Id and Contact
+	    String contactId = AgileTaskletUtil.getId(subscriberJSON);
+	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
+
+	    if (contact != null)
 	    {
-		contact.addScore(Integer.parseInt(value));
 
-		// Creates log when score is added
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score increased by " + value,
-			LogType.SCORE.toString());
+		// Add score based on contact
+		if (type.equals(ADD))
+		{
+		    contact.addScore(Integer.parseInt(value));
+
+		    // Creates log when score is added
+		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score increased by " + value,
+			    LogType.SCORE.toString());
+		}
+		else
+		{
+		    contact.subtractScore(Integer.parseInt(value));
+
+		    // Creates log when score is subtracted
+		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score decreased by " + value,
+			    LogType.SCORE.toString());
+
+		}
+
+		// Update subscriberJSON
+		subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
 	    }
-	    else
-	    {
-		contact.subtractScore(Integer.parseInt(value));
-
-		// Creates log when score is subtracted
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Score decreased by " + value,
-			LogType.SCORE.toString());
-
-	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in Score tasklet..." + e.getMessage());
+	    e.printStackTrace();
 	}
 
 	// Execute Next One in Loop

@@ -78,6 +78,9 @@ public class SetOwner extends TaskletAdapter
 	contact.setContactOwner(newOwnerKey);
 	contact.save();
 
+	// Update subscriberJSON
+	subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
+
 	// to show in log
 	String newContactOwnerName = contact.getOwner().name;
 	return newContactOwnerName;
