@@ -239,7 +239,7 @@ public class SendEmail extends TaskletAdapter
 			AgileTaskletUtil.getId(campaignJSON),
 			AgileTaskletUtil.getId(subscriberJSON),
 			"Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
-				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT), LogType.UNSUBSCRIBED.toString());
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT), LogType.EMAIL_SENDING_SKIPPED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);

@@ -80,14 +80,14 @@ function load_timeline_details(el, contactId, callback1)
 				if(timelineView.collection.length == 0){
 					$.each(logsCollection.toJSON(), function(index, model){
 						
-						// avoid these log-types in timeline
-						if(model.log_type == 'WAIT' || model.log_type == 'CLICKED' || model.log_type == 'ADD_NOTE' 
-							|| model.log_type == 'TAGS' || model.log_type == 'ADD_TASK' 
-								|| model.log_type == 'JSONIO' || model.log_type == 'TRANSFER' 
-									|| model.log_type == 'EMAIL_SENDING_FAILED')
-							return true;
+						// Add these log-types in timeline
+						if(model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' 
+							 || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE'
+								|| model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET')
+						{
+							timelineView.collection.add(model, {silent : true});
+						}
 						
-							timelineView.collection.add(model, {silent : true});							
 					});
 								
 					/*
@@ -112,15 +112,15 @@ function load_timeline_details(el, contactId, callback1)
 					 */   
 					$.each(logsCollection.toJSON(), function(index, model) {						
 						
-						// avoid these log-types in timeline.
-						if(model.log_type == 'WAIT' || model.log_type == 'CLICKED' || model.log_type == 'ADD_NOTE' 
-							|| model.log_type == 'TAGS' || model.log_type == 'ADD_TASK' 
-								|| model.log_type == 'JSONIO' || model.log_type == 'TRANSFER' 
-									|| model.log_type == 'EMAIL_SENDING_FAILED' || model.log_type == 'UNSUBSCRIBED')
-							return true;
+						// Add these log-types in timeline.
+						if(model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' 
+							 || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE'
+									|| model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET')
+						{
+							logs_array.push(model);			
+						    timelineView.collection.add(model, {silent : true});
+						}
 						
-						logs_array.push(model);			
-						timelineView.collection.add(model, {silent : true});	
 						//validate_insertion(JSON.parse(model.logs), timelineViewMore);
 					});
 					validate_insertion(logs_array, timelineViewMore);
