@@ -28,37 +28,55 @@ function agile_propertyJSON(name, id, type)
 	return json;
 }
 
+/**
+ * Variable to maintain interval
+ */
+var agile_json_timer;
+
+/**
+ * Generates the callback
+ * 
+ * @param URL
+ *            callback url
+ * @param callback
+ *            callback function
+ * @param data
+ *            callback function parameter (used optionally depending on
+ *            callback)
+ * @returns element
+ */
 function agile_json(URL, callback)
 {
-	/**
-	 * Generates the callback
-	 * 
-	 * @param URL
-	 *            callback url
-	 * @param callback
-	 *            callback function
-	 * @param data
-	 *            callback function parameter (used optionally depending on callback)
-	 * @returns element
-	 */
+	if (!document.body)
+	{
+		clearInterval(agile_json_timer);
+		agile_json_timer = setInterval(function()
+		{
+			agile_json(URL, callback);
+		}, 100);
+		return;
+	}
+	clearInterval(agile_json_timer);
+
 	var ud = 'json' + (Math.random() * 100).toString().replace(/\./g, '');
 	window[ud] = function(data)
 	{
-		if(data['error'])
+		if (data['error'])
+		{
+			if (callback && typeof (callback['error']) == "function")
 			{
-				if(callback && typeof(callback['error']) == "function")
-				{
-					callback['error'](data);
-				}
-				return;
+				callback['error'](data);
 			}
-		
-		if(callback && typeof(callback['success']) == "function")
+			return;
+		}
+
+		if (callback && typeof (callback['success']) == "function")
 			callback['success'](data);
-		
-		if(callback && typeof(callback) == 'function')
+
+		if (callback && typeof (callback) == 'function')
 			callback(data);
 	};
+
 	document.getElementsByTagName('body')[0].appendChild((function()
 	{
 		var s = document.createElement('script');
