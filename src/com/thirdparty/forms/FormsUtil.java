@@ -27,8 +27,8 @@ public class FormsUtil
 	{
 		// String arrays with all possible form field titles from (wufoo /
 		// unbounce / gravity)
-		String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First", "name", "first" };
-		String lastNameAlias[] = { Contact.LAST_NAME, "Last", "last" };
+		String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First", "name", "first", "firstname" };
+		String lastNameAlias[] = { Contact.LAST_NAME, "Last", "last", "lastname" };
 		String companyNameAlias[] = { Contact.COMPANY, "organisation", "organization" };
 		String contactTitleAlias[] = { Contact.TITLE, "designation" };
 		String emailAlias[] = { Contact.EMAIL, "email id", "mail", "mail id", "email address" };
