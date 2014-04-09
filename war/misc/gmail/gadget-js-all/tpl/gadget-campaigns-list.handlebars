@@ -3,7 +3,7 @@
 {{#if this.response.length}}
 		{{#each this.response}}
 			{{#stringToJSON this ""}}
-<li>
+<li style="padding:5px;margin:5px;border:1px solid #ddd;">
 	<div style="display:block;">
 		<div id="campaigns" class="activity-text-block">
 			<span class="activity-block-owner pull-right">
@@ -14,28 +14,14 @@
 				{{/if}}
 			</span>
 			
-			{{#if_email_sent this "log_type"}}
-	
-				<h4><a style="text-decoration: none"><b>{{Subject}}</b></a></h4></br>
-				<div class="in collapse">
-					<ul style="list-style-type:none; border-bottom:1px solid #ddd; padding-bottom:12px; margin:0px;">
-    		    		<li><strong>From:</strong> {{From}}</li> 
-						<li><strong>To:</strong> {{To}}</li>
-					</ul>
-       				<p style="margin-top:10px">{{{Body}}}</p>
-	    		</div>
-				     
-			{{else}}			
 
-				<h4><a style="text-decoration: none"><b>{{titleFromEnums log_type}}</b></a></h4></br>
-				<p>{{{message}}}</p>
-			
-			{{/if_email_sent}}
+			<h4><b>{{titleFromEnums log_type}}</b></h4></br>
+
+ 			<p>{{#if_email_sent this "log_type"}} Subject: {{Subject}} {{else}} {{{message}}} {{/if_email_sent}}</p>
 
 			<small class="edit-hover" style="margin-right:10px; color:#b2b0b1;">
 				<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
-	        	<a target="_blank" class="pull-right" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a>
-				<p class="pull-right">Campaign - </p>
+				<p class="pull-right">Campaign - <a target="_blank" href="{{../../ac_path}}#workflow/{{campaign_id}}" title="Show Workflow in Agile"> {{campaign_name}}</a></p>
 			</small>	
 		</div>
 	</div>
