@@ -24,7 +24,7 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 
 	Workflow(WorkflowBillingRestriction.class),
 
-	Report(ReportBillingRestriction.class);
+	Report(ReportGraphBillingRestriction.class);
 
 	Class<? extends DaoBillingRestriction> clazz;
 

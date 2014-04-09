@@ -164,11 +164,12 @@ $(function()
 							console.log(select);
 							var name = $(select).val();
 							var type = $(select).find(":selected").attr('class') == 'CUSTOM' ? 'CUSTOM' : 'SYSTEM';
+							console.log("name :" + name +", type" + type);
 
 							if (name.indexOf("properties_") != -1)
 							{
 								name = name.split("properties_")[1];
-								
+								property["type"] = type;
 								if(name.indexOf('address-') != -1)
 								{
 									var splits = name.split("-");

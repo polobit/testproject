@@ -119,6 +119,7 @@ public class ReportsAPI
     {
 	try
 	{
+
 	    // Fetches report based on report id
 	    Reports report = ReportsUtil.getReport(Long.parseLong(id));
 
@@ -209,23 +210,24 @@ public class ReportsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getFunnelStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
- @QueryParam("time_zone") String timeZone,
-			@QueryParam("filter") String filterId)
+	    @QueryParam("time_zone") String timeZone, @QueryParam("filter") String filterId)
     {
+	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
+
 	JSONArray tagsJSONArray = new JSONArray();
 	try
 	{
 	    // Get tags with a comma or | tokenized
 	    String[] tags = tagsString.split(",");
 
-			ContactFilter filter = null;
-			if (filterId != null)
-				filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
+	    ContactFilter filter = null;
+	    if (filterId != null)
+		filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
 
 	    // For each tag, get the occurrences for this time frame
 	    for (String tag : tags)
 	    {
-				int count = TagSearchUtil.getTagCount(filter, tag, startTime, endTime);
+		int count = TagSearchUtil.getTagCount(filter, tag, startTime, endTime);
 		tagsJSONArray.put(new JSONObject().put(tag, count));
 	    }
 	}
@@ -257,20 +259,20 @@ public class ReportsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
- @QueryParam("time_zone") String timeZone,
-			@QueryParam("frequency") String frequency, @QueryParam("filter") String filterId) throws Exception
+	    @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency, @QueryParam("filter") String filterId) throws Exception
     {
+	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
+
 	// Get tags with a comma or | tokenized
 	String[] tags = tagsString.split(",");
 	int type = getType(frequency);
 
-		ContactFilter filter = null;
-		if (filterId != null)
-			filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
+	ContactFilter filter = null;
+	if (filterId != null)
+	    filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
 
-
-		// Get Tags Daily
-		return TagSearchUtil.getTagCount(filter, tags, startTime, endTime, type).toString();
+	// Get Tags Daily
+	return TagSearchUtil.getTagCount(filter, tags, startTime, endTime, type).toString();
     }
 
     /*
@@ -310,18 +312,18 @@ public class ReportsAPI
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getRatioStats(@PathParam("tag1") String tag1, @PathParam("tag2") String tag2, @QueryParam("start_time") String startTime,
- @QueryParam("end_time") String endTime,
-			@QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency,
-			@QueryParam("filter") String filterId) throws Exception
+	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency,
+	    @QueryParam("filter") String filterId) throws Exception
     {
+	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
+
 	int type = getType(frequency);
 
 	ContactFilter filter = null;
-		if (filterId != null)
-			filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
-
+	if (filterId != null)
+	    filter = ContactFilter.getContactFilter(Long.parseLong(filterId));
 
 	// Get Cohorts Monthly
-		return TagSearchUtil.getRatioTagCount(filter, tag1, tag2, startTime, endTime, type).toString();
+	return TagSearchUtil.getRatioTagCount(filter, tag1, tag2, startTime, endTime, type).toString();
     }
 }
