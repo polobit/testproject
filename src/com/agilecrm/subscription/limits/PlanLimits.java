@@ -9,6 +9,7 @@ import com.agilecrm.subscription.limits.plan.ProPlanLimits;
 import com.agilecrm.subscription.limits.plan.RegularPlanLimits;
 import com.agilecrm.subscription.limits.plan.StarterPlanLimits;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 
 /**
  * <code>PlanDetails</code> class is base class for plan limitations for each
@@ -29,6 +30,7 @@ public class PlanLimits
      * Limits
      */
     protected String planId;
+    protected String planName;
     protected Float price;
     protected Integer contactLimit;
     protected Integer emailsLimit;
@@ -120,7 +122,14 @@ public class PlanLimits
      */
     public String getPlanId()
     {
+	planId = plan.plan_id == null ? PlanType.FREE.toString() : plan.plan_id.toString();
+
 	return planId;
+    }
+
+    public String getPlanName()
+    {
+	return plan.getPlanName();
     }
 
     /**

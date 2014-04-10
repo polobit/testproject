@@ -2261,8 +2261,7 @@ $(function()
 		if(!_billing_restriction)
 			return options.fn(this);
 		
-		console.log(_billing_restriction.planLimitsEnum);
-		if(_billing_restriction.planLimitsEnum == plan)
+		if(_billing_restriction.currentLimits.planName == plan)
 			return options.fn(this);
 		
 		return options.inverse(this);
