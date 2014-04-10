@@ -50,8 +50,10 @@ public class WufooWebhook extends HttpServlet
 			JSONObject wufooJson = new JSONObject(req.getParameter("FieldStructure"));
 			JSONArray wufooArray = wufooJson.getJSONArray("Fields");
 
+			JSONObject json = new JSONObject();
+
 			// Convert wufoo post data as json {"name": "value"}
-			JSONObject finalJson = convertWufooJson(wufooArray, req);
+			JSONObject finalJson = convertWufooJson(wufooArray, req, json);
 
 			System.out.println("finalJson is: " + finalJson);
 
@@ -98,9 +100,7 @@ public class WufooWebhook extends HttpServlet
 		}
 	}
 
-	public static JSONObject finalJson = new JSONObject();
-
-	public static JSONObject convertWufooJson(JSONArray array, HttpServletRequest req)
+	public static JSONObject convertWufooJson(JSONArray array, HttpServletRequest req, JSONObject finalJson)
 	{
 		try
 		{
@@ -114,7 +114,7 @@ public class WufooWebhook extends HttpServlet
 					name = json.getString("Title") + " " + "agilenote";
 
 				if (!StringUtils.isBlank(json.optString("SubFields")))
-					convertWufooJson(json.getJSONArray("SubFields"), req);
+					convertWufooJson(json.getJSONArray("SubFields"), req, finalJson);
 
 				String value = req.getParameter(json.getString("ID"));
 				if (!StringUtils.isBlank(value))

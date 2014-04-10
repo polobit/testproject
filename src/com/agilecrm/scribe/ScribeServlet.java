@@ -40,11 +40,13 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_GOOGLE_OAUTH2 = "google_oauth2";
     public static final String SERVICE_TYPE_STRIPE = "stripe";
     public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
+    public static final String SERVICE_TYPE_GOOGLE_DRIVE = "google_drive";
 
     // Scopes
     public static final String STRIPE_SCOPE = "read_only";
     public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
     public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
+    public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
     public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
     public static final String GOOGLE_OAUTH2_SCOPE = "https://www.googleapis.com/auth/userinfo.email";
 
@@ -172,7 +174,7 @@ public class ScribeServlet extends HttpServlet
 	// OAuth 2.0
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE))
 	{
 	    // After building service, redirects to authorization page
 	    url = service.getAuthorizationUrl(null);
@@ -238,7 +240,7 @@ public class ScribeServlet extends HttpServlet
 	// OAuth 2.0 requires code parameter
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE))
 	    code = req.getParameter("code");
 
 	// OAuth 1.0 requires token and verifier

@@ -118,7 +118,7 @@ $(function()
 
 			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
-			$(".display-toggle i", el).addClass("icon-collapse-alt").removeClass("icon-expand-alt");
+			$(".display-toggle i", el).removeClass("icon-plus").addClass("icon-minus");
 			$(".display-toggle span", el).text("Hide Details");
 			$(".display-toggle", el).next().hide();
 			
@@ -155,7 +155,7 @@ $(function()
 
 		//  ------ Show list view of contact. ------ 
 		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
-		$(".display-toggle i", el).removeClass("icon-collapse-alt").addClass("icon-expand-alt");
+		$(".display-toggle i", el).removeClass("icon-minus").addClass("icon-plus");
 		$(".display-toggle span", el).text("Show");
 		$(".display-toggle", el).next().show();
 		
