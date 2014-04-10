@@ -59,7 +59,6 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
     @Override
     public String getTag()
     {
-	System.out.println("count " + Workflow.dao.count());
 	System.out.println(MAX);
 	System.out.println(restriction.campaigns_count);
 	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, MAX, "Workflow");
