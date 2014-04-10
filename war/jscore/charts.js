@@ -46,8 +46,7 @@ function pie(url, selector, name)
 		// Fetches data from to get tags informations
 		// i.e., {"tags1" :" number of contacts with 'tags1', "tags2" : "number
 		// of contacts with tags2"}
-		$
-				.getJSON(
+		fetchReportData(
 						url,
 						function(data)
 						{
@@ -181,7 +180,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 	{
 
 		// Loads statistics details from backend
-		$.getJSON(url, function(data)
+		fetchReportData(url, function(data)
 		{
 
 			// Names on X-axis
@@ -354,7 +353,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
-		$.getJSON(url, function(data)
+		fetchReportData(url, function(data)
 		{
 
 			// Categories are closed dates
@@ -491,7 +490,7 @@ function showFunnel(url, selector, name, show_loading)
 
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
-		$.getJSON(url, function(data)
+		fetchReportData(url, function(data)
 		{
 			
 			var funnel_data = [];
@@ -587,7 +586,7 @@ function showCohorts(url, selector, name, yaxis_name, show_loading)
 
 		// Loads statistics details from backend i.e.,[{closed
 		// date:{total:value, pipeline: value},...]
-		$.getJSON(url, function(data)
+		fetchReportData(url, function(data)
 		{
 
 			// Categories are closed dates
@@ -692,4 +691,39 @@ function pieTasks(params)
 function dealsLineChart()
 {
 	showLine('core/api/opportunity/stats/details?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
+}
+
+/**
+ * Generic function to fetch data for graphs and act accordingly on plan limit error
+ * @param url
+ * @param successCallback
+ */
+function fetchReportData(url, successCallback)
+{
+	// Hides error message
+	$("#plan-limit-error").hide();
+	
+	// Fetches data
+	$.getJSON(url, function(data)
+			{	
+				// Sends data to callback
+				if(successCallback && typeof (successCallback) === "function")
+					successCallback(data);
+			}).error(function(response){
+				
+				// If error is not billing exception then it is returned
+				if(response.status != 406)
+					return;
+				
+				// If it is billing exception, then empty set is sent so page will not be showing loading on error message
+				if(successCallback && typeof (successCallback) === "function")
+					successCallback([]);
+				
+				// Show cause of error in saving
+				$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+						+ response.responseText
+						+ '</i></p></small></div>');
+				
+				$("#plan-limit-error").html($save_info).show();
+			}); 
 }
