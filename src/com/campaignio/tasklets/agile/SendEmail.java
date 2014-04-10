@@ -15,6 +15,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.VersioningUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -503,6 +504,12 @@ public class SendEmail extends TaskletAdapter
 
 	StringBuffer stringBuffer = new StringBuffer();
 
+	// Domain URL
+	String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(), "sandbox");
+
+	// String domainURL =
+	// VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+
 	try
 	{
 	    // Iterate over matches
@@ -514,8 +521,7 @@ public class SendEmail extends TaskletAdapter
 		if (isSpecialLink(url))
 		{
 		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, "https://" + NamespaceManager.get() + ".agilecrm.com/backend/click?u=" + url + "&s=" + subscriberId
-			    + "&c=" + campaignId);
+		    m.appendReplacement(stringBuffer, domainURL + "/backend/click?u=" + url + "&s=" + subscriberId + "&c=" + campaignId);
 		}
 	    }
 
