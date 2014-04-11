@@ -5,10 +5,10 @@
  */
 function sipStackEventsListener(e /* SIPml.Stack.Event */)
 {	
-	console.log(e.type);
-	console.log(e.description);
+	//console.log(e.type);
+	//console.log(e.description);
 
-	tsk_utils_log_info('==agile stack event = ' + e.type);
+	//tsk_utils_log_info('==agile stack event = ' + e.type);
 
 	switch (e.type) {
 	case 'started':
@@ -82,10 +82,10 @@ function sipStackEventsListener(e /* SIPml.Stack.Event */)
  */
 function sipSessionEventsListener(e /* SIPml.Session.Event */)
 {	
-	console.log(e.type);
-	console.log(e.description);
+	//console.log(e.type);
+	//console.log(e.description);
 
-	tsk_utils_log_info('==agile session event = ' + e.type);
+	//tsk_utils_log_info('==agile session event = ' + e.type);
 
 	switch (e.type) {
 	case 'connecting':
@@ -209,7 +209,7 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			{
 				// On outgoing call.
 				startRingTone("ringbacktone");
-				console.log("Remote ringing....");
+				//console.log("Remote ringing....");
 			}
 		}
 

@@ -54,7 +54,8 @@ public class Plan
     @JsonIgnore
     public String getPlanName()
     {
-	String planName = plan_type.toString();
+	String planName = plan_type == null ? PlanType.FREE.toString() : plan_type.toString();
+
 	return planName.split("_")[0];
 
     }

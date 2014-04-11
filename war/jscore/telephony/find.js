@@ -4,12 +4,12 @@
  */
 function findContact()
 {	
-	console.log("FindContact. " + Sip_Session_Call.getRemoteUri());
+	//console.log("FindContact. " + Sip_Session_Call.getRemoteUri());
 
 	// Get contact details on phone number
 	$.getJSON("/core/api/contacts/search/phonenumber/" + Sip_Session_Call.getRemoteUri(), function(caller)
 	{
-		console.log(caller);
+		//console.log(caller);
 
 		// Contact added
 		if (caller != null)

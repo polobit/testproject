@@ -31,7 +31,7 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	CONTACT("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"This query is not allowed in current plan");
+		"This query is not allowed in Free plan");
 	private String message;
 
 	ErrorMessages(String message)

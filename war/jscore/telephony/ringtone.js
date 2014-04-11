@@ -30,7 +30,7 @@ function startRingTone(sound) {
 			Sip_Audio.loop = true;
 		} else {
 			var onEnded = function() {
-				console.log("play");
+				//console.log("play");
 				this.play();
 			};
 
@@ -39,7 +39,7 @@ function startRingTone(sound) {
 
 		Sip_Audio.play();
 	} catch (e) {
-		console.log("Error Sip_Audio play.");
+		console.log("Error Sip_Audio can not play.");
 	}
 }
 
@@ -52,6 +52,6 @@ function stopRingTone() {
 	try {
 		Sip_Audio.pause();
 	} catch (e) {
-		console.log("Error Sip_Audio stop.");
+		console.log("Error Sip_Audio can not stop.");
 	}
 }

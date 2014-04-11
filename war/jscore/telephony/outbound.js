@@ -46,7 +46,7 @@ function hangupCall()
 		// stop ringtone.
 		stopRingTone();
 		
-		console.log("Terminating the call...");
+		//console.log("Terminating the call...");
 		
 		// Hangup call
 		Sip_Session_Call.hangup({ events_listener : { events : '*', listener : sipSessionEventsListener } });
