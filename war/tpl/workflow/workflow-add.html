@@ -12,7 +12,17 @@
                             <span id="workflow-edit-msg" style="margin-left: 130px; display: none; color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>
 							<span id="workflow-limit-reached-msg" style="margin-left: 130px;"></span>
 							<a href="#workflows" class="btn right" style="position:relative">Cancel</a>
-                            <button class="btn btn-primary right" id="save-workflow-top" style="position:relative; margin-right:5px">Save Campaign</button>
+							{{#if is_new}}
+							<button class="btn btn-primary right" id="save-workflow-top" style="position:relative; margin-right:5px">Save Campaign</button>
+							{{else}}
+							<div class="btn-group right" style="position:relative; margin-right:5px">
+                            	<a href="#" class="btn" id="save-workflow-top"><i class="icon-plus-sign"></i> Save Campaign</a>
+            					<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+								<ul class="dropdown-menu pull-right">
+									<li><a href="#" id="duplicate-workflow-top"><i class="icon-copy"></i> Create a Copy</a></li>
+								</ul>
+                            </div>
+                            {{/if}}
                             <div style="display:inline-block;position:relative; margin-right:5px;margin-top:8px" class="save-workflow-img right"></div>
                         </div>
                     </div>
@@ -39,8 +49,6 @@
                                     <option value="UNSUBSCRIBE_FROM_THIS_CAMPAIGN">Current Campaign only</option>
 								</select>
 							</div>
-							<!--<br/>
-                            <small>Prompts the user with options to either unsubscribe from this campaign or all communication</small>-->
                     	</div>
                         <br/>
                         <small>Agile can add the tags automatically when your contact unsubscribes. You can run more campaigns against this tag in future.</small>
@@ -58,7 +66,17 @@
                    
                     <br />
                     <br />
-                    <button class="btn btn-primary" id="save-workflow-bottom">Save Campaign</button>
+                    {{#if is_new}}
+						<button class="btn btn-primary" id="save-workflow-bottom">Save Campaign</button>
+					{{else}}
+						<div class="btn-group" style="display: inline-block; margin-bottom: -10px;">
+                           	<a href="#" class="btn" id="save-workflow-bottom"><i class="icon-plus-sign"></i> Save Campaign</a>
+            				<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+							<ul class="dropdown-menu pull-right">
+								<li><a href="#" id="duplicate-workflow-bottom"><i class="icon-copy"></i> Create a Copy</a></li>
+							</ul>
+                         </div>
+                    {{/if}}
                     <a href="#workflows" class="btn">Cancel</a>
                     <div style="display:inline-block" class="save-workflow-img"></div>
                     <br />

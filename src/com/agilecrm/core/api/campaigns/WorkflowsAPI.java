@@ -14,8 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -114,16 +112,10 @@ public class WorkflowsAPI
     @PUT
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Workflow updateWorkflow(Workflow workflow)
+    public Workflow updateWorkflow(Workflow workflow) throws Exception
     {
-	try
-	{
-	    workflow.save();
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
+	workflow.save();
+
 	return workflow;
     }
 
