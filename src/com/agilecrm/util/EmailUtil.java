@@ -139,19 +139,25 @@ public class EmailUtil
      *            - html body.
      * @param campaignId
      *            - CampaignId.
-     * @param subsciberId
-     *            - SubscriberId.
+     * @param trackerId
+     *            - TrackerId or SubscriberId.
      * @return html string with appended image.
      **/
-    public static String appendTrackingImage(String html, String campaignId, String subscriberId)
+    public static String appendTrackingImage(String html, String campaignId, String trackerId)
     {
 	String queryParams = "";
 
-	// for campaign email
-	if (!StringUtils.isEmpty(campaignId) && !StringUtils.isEmpty(subscriberId))
-	{
-	    queryParams = "c=" + campaignId + "&s=" + subscriberId;
-	}
+	// Campaign-id
+	if (!StringUtils.isEmpty(campaignId))
+	    queryParams = "c=" + campaignId;
+
+	// If not emtpy add '&'
+	if (!StringUtils.isEmpty(queryParams))
+	    queryParams += "&";
+
+	// Contact id (for campaigns) or Tracker Id (for personal emails)
+	if (!StringUtils.isEmpty(trackerId))
+	    queryParams += "s=" + trackerId;
 
 	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get() + ".agilecrm.com/backend/open?" + queryParams
 		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";

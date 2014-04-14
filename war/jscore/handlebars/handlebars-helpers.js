@@ -745,7 +745,7 @@ $(function()
 		case "OPENED EMAIL":
 			var customJSON = JSON.parse(this.custom_value);
 			
-			if(customJSON.email_opened ===  "workflow")
+			if(customJSON.hasOwnProperty("workflow_name"))
 				return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
 			
 			return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";

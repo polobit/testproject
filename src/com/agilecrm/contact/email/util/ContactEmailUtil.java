@@ -73,15 +73,19 @@ public class ContactEmailUtil
      */
     public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, Contact contact)
     {
+
+	// Personal Email open tracking id
+	long openTrackerId = System.currentTimeMillis();
+
+	// Returns set of To Emails
+	Set<String> toEmailSet = getToEmailSet(to);
+
 	try
 	{
-	    // Returns set of To Emails
-	    Set<String> toEmailSet = getToEmailSet(to);
-
 	    // If contact is available, no need of fetching contact from
 	    // to-email again.
 	    if (contact != null)
-		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size());
+		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), openTrackerId);
 	    else
 	    {
 		// When multiple emails separated by comma are given
@@ -92,7 +96,7 @@ public class ContactEmailUtil
 
 		    // Saves email with contact-id
 		    if (contact != null)
-			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size());
+			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), openTrackerId);
 		}
 	    }
 
@@ -102,6 +106,12 @@ public class ContactEmailUtil
 	    e.printStackTrace();
 	    System.out.println("Got Exception while sending email " + e.getMessage());
 	}
+
+	// Appends tracking image to body if only one email. It is not
+	// possible to append image at the same time to show all given
+	// emails to the recipient.
+	if (toEmailSet.size() == 1)
+	    body = EmailUtil.appendTrackingImage(body, null, String.valueOf(openTrackerId));
 
 	// Sends email
 	EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null);
@@ -157,7 +167,7 @@ public class ContactEmailUtil
      *            - to identify number of To emails separated by comma
      */
     public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, Long contactId,
-	    int toEmailSize)
+	    int toEmailSize, long trackerId)
     {
 
 	// Remove trailing commas for to emails
@@ -167,6 +177,8 @@ public class ContactEmailUtil
 
 	contactEmail.cc = cc;
 	contactEmail.bcc = bcc;
+
+	contactEmail.trackerId = trackerId;
 
 	contactEmail.save();
     }

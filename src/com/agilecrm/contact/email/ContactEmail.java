@@ -77,7 +77,7 @@ public class ContactEmail
      * Epoch time
      */
     @NotSaved(IfDefault.class)
-    public Long date_secs = 0L;
+    public long date_secs = 0L;
 
     /**
      * date - It is used in timeline. Not saved as it need only to show in
@@ -97,19 +97,19 @@ public class ContactEmail
      * Tracker id to track email opens.
      */
     @NotSaved(IfDefault.class)
-    public Long trackerId = null;
+    public long trackerId = 0L;
 
     /**
      * To track contact personal emails open
      */
     @NotSaved(IfDefault.class)
-    public Boolean is_email_opened = false;
+    public boolean is_email_opened = false;
 
     /**
      * To store email opened time
      **/
     @NotSaved(IfDefault.class)
-    public Long email_opened_at = 0L;
+    public long email_opened_at = 0L;
 
     private static ObjectifyGenericDao<ContactEmail> dao = new ObjectifyGenericDao<ContactEmail>(ContactEmail.class);
 
