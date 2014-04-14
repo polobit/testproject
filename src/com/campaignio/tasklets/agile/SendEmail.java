@@ -505,10 +505,10 @@ public class SendEmail extends TaskletAdapter
 	StringBuffer stringBuffer = new StringBuffer();
 
 	// Domain URL
-	String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(), "sandbox");
+	// String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(),
+	// "sandbox");
 
-	// String domainURL =
-	// VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
 
 	try
 	{
