@@ -270,6 +270,8 @@ public class FormsUtil
 						Note note = new Note(key.replace(" agilenote agilecustomfield", ""), value);
 						notes.add(note);
 					}
+					else if (StringUtils.contains(key, "agilecheckbox"))
+						properties.add(buildProperty(key.replace(" agilecheckbox agilecutomfield", ""), value, null));
 					else
 						properties.add(buildProperty(key.replace(" agilecustomfield", ""), value, null));
 				}

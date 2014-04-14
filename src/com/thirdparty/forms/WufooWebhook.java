@@ -113,7 +113,15 @@ public class WufooWebhook extends HttpServlet
 						&& StringUtils.equals("textarea", json.getString("Type")))
 					name = json.getString("Title") + " " + "agilenote";
 
-				if (!StringUtils.isBlank(json.optString("SubFields")))
+				else if (!StringUtils.isBlank(json.optString("Type"))
+						&& StringUtils.equals("checkbox", json.getString("Type")))
+				{
+					finalJson.put(json.getString("Title") + " " + "agilecheckbox agilecustomfield",
+							checkboxValue(json.getJSONArray("SubFields"), req));
+					continue;
+				}
+
+				else if (!StringUtils.isBlank(json.optString("SubFields")))
 					convertWufooJson(json.getJSONArray("SubFields"), req, finalJson);
 
 				String value = req.getParameter(json.getString("ID"));
@@ -126,6 +134,33 @@ public class WufooWebhook extends HttpServlet
 				}
 			}
 			return finalJson;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("error is " + e.getMessage());
+			return null;
+		}
+	}
+
+	public static String checkboxValue(JSONArray subarray, HttpServletRequest req)
+	{
+		try
+		{
+			String checkboxValue = null;
+			for (int i = 0; i < subarray.length(); i++)
+			{
+				JSONObject subjson = subarray.getJSONObject(i);
+				String option = req.getParameter(subjson.getString("ID"));
+				if (!StringUtils.isBlank(option))
+				{
+					if (!StringUtils.isBlank(checkboxValue))
+						checkboxValue = checkboxValue + ", " + option;
+					else
+						checkboxValue = option;
+				}
+			}
+			return checkboxValue;
 		}
 		catch (Exception e)
 		{
