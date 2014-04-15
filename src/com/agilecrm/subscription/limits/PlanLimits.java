@@ -160,7 +160,7 @@ public class PlanLimits
 	if (workflowLimit == Integer.MAX_VALUE)
 	    return workflowLimit;
 
-	return workflowLimit * plan.quantity;
+	return workflowLimit;
     }
 
     public Integer getGoogleContactsLimit()
