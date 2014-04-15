@@ -11,6 +11,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -211,4 +212,12 @@ public class BillingRestrictionUtil
 	throw new PlanRestrictedException(reason);
     }
 
+    public static boolean isLowerPlan(Plan oldPlan, Plan newPlan)
+    {
+	PlanClasses oldPlanClass = PlanClasses.valueOf(oldPlan.getPlanName());
+	PlanClasses newPlanClass = PlanClasses.valueOf(newPlan.getPlanName());
+	if (oldPlanClass != null && newPlanClass != null && oldPlanClass.rank > newPlanClass.rank)
+	    return true;
+	return false;
+    }
 }
