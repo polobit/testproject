@@ -74,6 +74,23 @@ function serializeForm(form_id) {
 			"value" : fields_set
 		};
 	}).get());
+	
+	arr = arr.concat($('#' + form_id + ' .multiple-checkbox').map(function() {
+		var fields_set = [];
+
+		$('input:checkbox:checked', this).each(function(index, element_checkbox){
+			fields_set.push($(element_checkbox).val());
+		});
+		
+		console.log(fields_set);
+
+		// The array of selected values are mapped with the field name and
+		// returned as a key value pair
+		return {
+			"name" : $(this).attr('name'),
+			"value" : fields_set
+		};
+	}).get());
 
 	/*
 	 * Chained select, Chained select is used for filters, which uses logical
