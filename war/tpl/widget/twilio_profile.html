@@ -77,7 +77,7 @@
 		
 		<p>Please enter this code <b>{{NewOutgoingCallerId.ValidationCode}}</b> to verify your number after you receive a call from Twilio.</p>
 		{{#if settings}}
-			<a href="#Twilio/twilio1" class="btn" id="twilio_proceed_settings" style="font-size:13px;">Proceed</a>			
+			<a href="#Twilio/twilio{{id}}" class="btn" id="twilio_proceed_settings" style="font-size:13px;">Proceed</a>			
 		{{else}}
 			<a href="#proceed" class="btn" id="twilio_proceed" style="font-size:13px;">Proceed</a>	
 		{{/if}}	
