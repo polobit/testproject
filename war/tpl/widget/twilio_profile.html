@@ -45,7 +45,7 @@
 				<div class="span9">
 					<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unaswered{{else}}Call connected{{/if_equals}}</div>
 					<div class="pull-right">{{#is_string call.Duration}}{{call.Duration}} s{{else}}0 s{{/is_string}}</div><br>
-					<small><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{call.StartTime}}</time></small>
+					<small><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
 				</div>
 			</li>
 		{{/each}}
