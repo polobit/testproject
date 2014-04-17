@@ -55,14 +55,17 @@ public class PlanLimits
      */
     public static enum PlanClasses
     {
-	FREE(FreePlanLimits.class), STARTER(StarterPlanLimits.class), REGULAR(RegularPlanLimits.class), PRO(ProPlanLimits.class),
+	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(ProPlanLimits.class, 3),
 
-	BASIC(StarterPlanLimits.class), PROFESSIONAL(RegularPlanLimits.class), ENTERPRISE(ProPlanLimits.class), LITE(StarterPlanLimits.class);
+	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(ProPlanLimits.class, 3);
 
 	Class<? extends PlanLimits> clazz;
 
-	private PlanClasses(Class<? extends PlanLimits> clazz)
+	public int rank = 0;
+
+	private PlanClasses(Class<? extends PlanLimits> clazz, int rank)
 	{
+	    this.rank = rank;
 	    this.clazz = clazz;
 	}
 
@@ -160,7 +163,7 @@ public class PlanLimits
 	if (workflowLimit == Integer.MAX_VALUE)
 	    return workflowLimit;
 
-	return workflowLimit * plan.quantity;
+	return workflowLimit;
     }
 
     public Integer getGoogleContactsLimit()

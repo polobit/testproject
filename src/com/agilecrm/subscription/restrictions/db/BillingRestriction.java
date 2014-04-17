@@ -74,7 +74,7 @@ public class BillingRestriction
     @JsonIgnore
     public PlanLimits planDetails = PlanLimits.getPlanDetails(new Plan("FREE", 2));
 
-    private static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(BillingRestriction.class);
+    public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(BillingRestriction.class);
 
     BillingRestriction()
     {
@@ -191,7 +191,8 @@ public class BillingRestriction
 	    return;
 	}
 
-	save();
+	if (id != null)
+	    save();
 
 	// pageviews =
 	// AnalyticsSQLUtil.getPageViewsCountForGivenDomain(NamespaceManager.get());
@@ -203,7 +204,9 @@ public class BillingRestriction
     public void refreshContacts()
     {
 	contacts_count = Contact.dao.count();
-	save();
+
+	if (id != null)
+	    save();
     }
 
     public void save()

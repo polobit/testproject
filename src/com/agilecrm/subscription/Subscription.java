@@ -13,6 +13,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
@@ -203,12 +206,21 @@ public class Subscription
      * @return {@link Subscription}
      * @throws Exception
      */
-    public static Subscription updatePlan(Plan plan) throws Exception
+    public static Subscription updatePlan(Plan plan) throws PlanRestrictedException, Exception
     {
 	// Gets subscription object of current domain
 	Subscription subscription = getSubscription();
 
-	// If customer is already on same plan do not update(checks both on
+	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan) && !BillingRestrictionUtil.getBillingRestriction(false).isDowngradable())
+	{
+	    System.out.println("plan upgrade not possible");
+	    BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.NOT_DOWNGRADABLE);
+	    System.out.println("exception raised");
+	    return null;
+	}
+
+	// If customer is already on same plan do not update(checks both
+	// on
 	// plan_id and quantity)
 	if (plan.plan_id.equals(subscription.plan.plan_id) && plan.quantity.equals(subscription.plan.quantity))
 	    return subscription;

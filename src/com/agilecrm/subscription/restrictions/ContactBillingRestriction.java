@@ -27,7 +27,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 
 	// Returns true if count is less than maximum allowed contacts in
 	// current plan
-	if (restriction.contacts_count < MAX)
+	if (restriction.contacts_count == null || restriction.contacts_count < MAX)
 	    return true;
 
 	return false;
@@ -78,6 +78,9 @@ public class ContactBillingRestriction extends DaoBillingRestriction
      */
     public String getTag()
     {
+	if (restriction == null || restriction.contacts_count == null)
+	    return null;
+
 	String tag = BillingRestrictionReminderUtil.getTag(restriction.contacts_count, MAX, "Contact");
 
 	if (tag != null)

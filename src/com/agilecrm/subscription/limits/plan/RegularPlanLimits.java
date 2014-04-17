@@ -15,7 +15,7 @@ public class RegularPlanLimits extends PlanLimits
 	emailsLimit = 2500;
 	workflowLimit = 10;
 	googleContactsLimit = 1000;
-	webRuleLimit = 1;
+	webRuleLimit = 5;
 	pageViewsLimit = 10000;
 	reporting = "ALL";
 	whiteLabelEnabled = false;

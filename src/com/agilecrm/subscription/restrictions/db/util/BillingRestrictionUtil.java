@@ -11,6 +11,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -31,7 +32,7 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	CONTACT("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"This query is not allowed in Free plan");
+		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
 	private String message;
 
 	ErrorMessages(String message)
@@ -207,8 +208,33 @@ public class BillingRestrictionUtil
     public static void throwLimitExceededException(ErrorMessages errorMessage)
     {
 	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
-
+	System.out.println(reason);
 	throw new PlanRestrictedException(reason);
     }
 
+    /**
+     * Checks if new plan is lower than old plan. It checks on plan type, and
+     * quantity of users if it is same plan in both old and new
+     * 
+     * @param oldPlan
+     * @param newPlan
+     * @return
+     */
+    public static boolean isLowerPlan(Plan oldPlan, Plan newPlan)
+    {
+	// Gets respective plan classes
+	PlanClasses oldPlanClass = PlanClasses.valueOf(oldPlan.getPlanName());
+	PlanClasses newPlanClass = PlanClasses.valueOf(newPlan.getPlanName());
+
+	if (oldPlanClass != null && newPlanClass != null)
+	{
+	    // checks rank if plan is downgraded
+	    if (oldPlanClass.rank > newPlanClass.rank)
+		return true;
+	    // If plans are same it checks for number of users in plan
+	    else if (oldPlanClass.rank == newPlanClass.rank && oldPlan.quantity > newPlan.quantity)
+		return true;
+	}
+	return false;
+    }
 }
