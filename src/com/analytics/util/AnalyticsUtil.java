@@ -1,6 +1,6 @@
 package com.analytics.util;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -28,18 +28,20 @@ public class AnalyticsUtil
 	    return null;
 
 	// Merge pages based on sid.
-	Map<String, JSONObject> mergedPageViewsMap = new HashMap<String, JSONObject>();
+	Map<String, JSONObject> mergedPageViewsMap = new LinkedHashMap<String, JSONObject>();
 
 	// JSONArray with {url:'url', time_spent:'seconds'}
 	JSONArray urlsWithTimeSpent = new JSONArray();
 
 	// Groups urlsWithTimeSpent JSONArray with respect to sid.
-	Map<String, JSONArray> pageSpentWithSid = new HashMap<String, JSONArray>();
+	Map<String, JSONArray> pageSpentWithSid = new LinkedHashMap<String, JSONArray>();
+
+	JSONArray tempJSONArray = new JSONArray();
 
 	try
 	{
 	    // Iterates over pageViews
-	    for (int i = 0; i < pageViews.length(); i++)
+	    for (int i = 0, len = pageViews.length(); i < len; i++)
 	    {
 		JSONObject currentPageView = pageViews.getJSONObject(i);
 
@@ -47,18 +49,15 @@ public class AnalyticsUtil
 
 		// Retrieves timeSpent of url by subtracting time from next
 		// consecutive url.
-		if (i < (pageViews.length() - 1))
+		if (i < (len - 1))
 		{
 		    JSONObject nextPageView = pageViews.getJSONObject(i + 1);
 		    String nextSid = nextPageView.getString("sid");
 
-		    // to reset urlsWithTimeSpent after end of session
-		    JSONArray tempJSONArray = new JSONArray();
-
 		    // Need urls with timespent of same session.
 		    if (currentSid.equals(nextSid))
 		    {
-			Long timeSpent = Long.parseLong(nextPageView.getString("created_time")) - Long.parseLong(currentPageView.getString("created_time"));
+			long timeSpent = Long.parseLong(nextPageView.getString("created_time")) - Long.parseLong(currentPageView.getString("created_time"));
 
 			// [{url:'http://agilecrm.com',timeSpent:'total_secs'}]
 			urlsWithTimeSpent.put(new JSONObject().put("url", currentPageView.getString("url")).put("time_spent", timeSpent));
@@ -98,14 +97,11 @@ public class AnalyticsUtil
 		{
 		    JSONObject sessionJSON = mergedPageViewsMap.get(currentSid);
 
-		    // String url = sessionJSON.getString("url");
-		    // url += ", " + currentPageView.getString("url");
-		    //
-		    // sessionJSON.put("url", url);
-
 		    // Inserts last row's stats_time and created_time of that
 		    // session
 		    sessionJSON.put("stats_time", currentPageView.getString("stats_time"));
+
+		    // Stats epoch time
 		    sessionJSON.put("created_time", currentPageView.getString("created_time"));
 
 		    sessionJSON.put("urls_with_time_spent", pageSpentWithSid.get(currentSid).toString());
@@ -122,4 +118,5 @@ public class AnalyticsUtil
 	// Return JSONArray of merged map values
 	return new JSONArray(mergedPageViewsMap.values());
     }
+
 }
