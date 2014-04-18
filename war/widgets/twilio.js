@@ -185,8 +185,11 @@ function verifyNumberFromTwilio(from_number, callback)
 
 	}).error(function(data)
 	{
-		// Shows error if error occurs in Twilio widget panel
-		twilioError(Twilio_PLUGIN_NAME, data.responseText);
+		// Append the url with the random number in order to differentiate the same action performed more than once.
+		var flag = Math.floor((Math.random()*10)+1); 
+		// Show error message in widget panel, if error occur while verifying numbers.
+		setUpError(Twilio_PLUGIN_NAME, "widget-settings-error", data.responseText, window.location.protocol + "//" 
+				+ window.location.host + "/#Twilio/twilio"+flag);
 	});
 }
 
