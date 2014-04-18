@@ -413,7 +413,9 @@ function getTwilioLogs(to)
 		{
 			$(".time-ago", twilio_logs_template).timeago();
 		});
-
+		// Add the call logs to the timeline.
+		addLogsToTimeLine($.parseJSON(logs));
+			
 	}).error(function(data)
 	{
 		// Remove loading if error occcurs
@@ -723,4 +725,34 @@ function twilioError(id, message)
 	 * with given id
 	 */
 	$('#' + id).html(getTemplate('twilio-error', error_json));
+}
+
+/**
+ * Add the Call Logs to the time line.
+ * @param logs 
+ * 				the list of call made.
+ */
+function addLogsToTimeLine(logs)
+{	
+	var callInfo;
+	// Loop through all the calls and add each of them to the timeline.
+	for(var i=0; i< logs.length; i++){
+		if(logs[i].call.Status == 'no-answer'){
+			callInfo = 'Call unaswered - ' + logs[i].call.Duration + ' s';
+		} else {
+			callInfo = 'Duration ' + logs[i].call.Duration + ' s';
+		}
+		
+		var date = new Date(logs[i].call.StartTime);
+		// Prepare the model object with all the require information to add the call logs to timeline.
+		var model = {
+				id: 'twilio'+(logs.length-i),
+				name: callInfo,
+				body: date.toDateString() + ' ' + date.toLocaleTimeString(),
+				title: "Call",
+				created_time: Date.parse(logs[i].call.StartTime)/1000,
+				entity_type: "twilio"
+		}
+		add_entity_to_timeline(new BaseModel(model));
+	}
 }
