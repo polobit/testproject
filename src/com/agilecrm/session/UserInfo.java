@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.UserAccessScopes;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**

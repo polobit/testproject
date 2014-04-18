@@ -6,16 +6,21 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.util.DomainUserUtil;
 
-/**
- * <code>ContactAccess</code> class checks if current user can
- * update/create/import/export contacts. It checks based on the scopes saved in
- * user info/domain user class
- * 
- * @author yaswanth
- * 
- */
-public class ContactAccess
+public class UserAccessControl
 {
+    protected UserInfo info;
+
+    public static enum AccessControlClasses
+    {
+	CONTACT_ACCESS_CONTROL(ContactAccessControl.class);
+	Class<? extends UserAccessControl> clazz;
+
+	private AccessControlClasses(Class<? extends UserAccessControl> clazz)
+	{
+	    this.clazz = clazz;
+	}
+
+    }
 
     // Returns current user scopes
     public List<UserAccessScopes> getCurrentUserScopes()
@@ -45,24 +50,8 @@ public class ContactAccess
 	return getCurrentUserScopes().contains(scope);
     }
 
-    public boolean canCreate()
+    public UserAccessControl getAccessControl()
     {
 
-	return hasScope(UserAccessScopes.CREATE_CONTACT);
-    }
-
-    public boolean canUpdate()
-    {
-	return hasScope(UserAccessScopes.UPDATE_CONTACT);
-    }
-
-    public boolean canImport()
-    {
-	return hasScope(UserAccessScopes.IMPORT_CONTACTS);
-    }
-
-    public boolean canExport()
-    {
-	return hasScope(UserAccessScopes.EXPORT_CONTACTS);
     }
 }
