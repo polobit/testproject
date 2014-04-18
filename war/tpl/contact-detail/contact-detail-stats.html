@@ -38,13 +38,15 @@
 	<div id="notes" class="activity-text-block">
 		<br>
 		<h4 style="display:inline;"><b>Page View Analytics</b></h4>
-        {{#stringToJSON this "parsedUserAgent"}}
-        <span style="float:right;">
+        {{#if user_agent}}
+			{{#stringToJSON this "parsedUserAgent"}}
+        	<span style="float:right;">
               	<img class="" src="/img/web-stats/devices/{{device_type}}.png" width="18px" height="18px" style="display: inline; margin-right: 2px;padding-left: 2px;" title="{{device_type}}">
                 <img class="" src="/img/web-stats/os/{{normalize_os os}}.png" width="18px" height="18px" style="display: inline; margin-right: 2px;padding-left: 2px;" title="{{os}}">
 		      	<img class="" src="/img/web-stats/browsers/{{browser_name}}.png" width="18px" height="18px" style="display: inline; margin-right: 2px;" title="{{browser_name}}">
-        </span>
-       {{/stringToJSON}}
+        	</span>
+       		{{/stringToJSON}}
+        {{/if}}
         <br>
         <br>
         <div style="margin-bottom:5px" id="truncated-webstats">
