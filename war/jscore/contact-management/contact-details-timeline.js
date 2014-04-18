@@ -673,10 +673,29 @@ function remove_loading_img(el){
  *            backbone element.
  */function get_stats(email, contact, el)
 {
+	// If there are no web-stats - return
+	if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
+	{
+		is_mails_fetched = true;
+		is_logs_fetched = false;
+		is_array_urls_fetched = false;
+		show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
+		
+		// Remove loading image of mails
+		$('#time-line', el).find('.loading-img-stats').remove();
+		
+		return;
+	}
+	
+	// Made global variable false and set cookie
+	NO_WEB_STATS_SETUP = false;
+	createCookie('_agile_jsapi',true, 500);
+	
 	var StatsCollection = Backbone.Collection.extend({
 		                        url:'core/api/web-stats?e='+ encodeURIComponent(email)
 		                                             });
-	var statsCollection = new StatsCollection();
+	
+	this.statsCollection = new StatsCollection();
 	statsCollection.fetch({
 		success:function(data){
 			
