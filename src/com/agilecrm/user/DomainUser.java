@@ -1,5 +1,9 @@
 package com.agilecrm.user;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -14,6 +18,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
@@ -83,6 +88,12 @@ public class DomainUser extends Cursor implements Cloneable
      */
     @NotSaved
     public String email_template = null;
+
+    /**
+     * Stores user access scopes
+     */
+    @NotSaved(IfDefault.class)
+    public List<UserAccessScopes> scopes = new ArrayList<UserAccessScopes>();
 
     /**
      * Name of the domain user
@@ -209,14 +220,12 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If subscription is null, it indicates user is in free plan.
 	    // Limits users to global trail users count
 	    if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-			+ " users in the free plan");
+		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT + " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
 	    if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
-		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-			+ " users in the current plan");
+		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity + " users in the current plan");
 
 	    return false;
 	}
@@ -366,8 +375,7 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If domain user exists, not allowing to create new user
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
-		throw new Exception("User with this email address " + domainUser.email + " already exists in "
-			+ domainUser.domain + " domain.");
+		throw new Exception("User with this email address " + domainUser.email + " already exists in " + domainUser.domain + " domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -558,6 +566,10 @@ public class DomainUser extends Cursor implements Cloneable
 	{
 	    if (info_json != null)
 		info_json = new JSONObject(info_json_string);
+
+	    // If no scopes are set, then all scopes are added
+	    if (scopes.size() == 0)
+		scopes.addAll(Arrays.asList(UserAccessScopes.values()));
 	}
 	catch (Exception e)
 	{
@@ -568,7 +580,7 @@ public class DomainUser extends Cursor implements Cloneable
     @Override
     public String toString()
     {
-	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-		+ this.id + " Name: " + this.name + "\n " + info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id + " Name: " + this.name + "\n "
+		+ info_json;
     }
 }

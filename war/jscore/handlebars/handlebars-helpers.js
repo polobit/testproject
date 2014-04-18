@@ -498,6 +498,16 @@ $(function()
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
 		// 1000));
 	});
+	
+	/**
+	 * Helper function to return the date string converting to local timezone.
+	 */
+	Handlebars.registerHelper('toLocalTimezone', function(dateString)
+	{
+		var date = new Date(dateString);
+		
+		return date.toDateString() + ' ' + date.toLocaleTimeString();
+	});
 
 	/**
 	 * Helper function to return task date (MM dd, ex: Jan 10 ) from epoch time
