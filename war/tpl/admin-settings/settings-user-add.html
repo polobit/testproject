@@ -35,20 +35,20 @@
 					{{#unless id}}
  					<div class="control-group">
 					<div class="controls">
-						<div class="multiple-checkbox" style="width: 20%;" name="scopes">
-								<label class="checkbox">
+						<div class="multiple-checkbox" name="scopes">
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
                             	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked> 
                             		Create Contacts
                             	</label>
-								<label class="checkbox">
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
                         		    <input type="checkbox" name="temp" value="UPDATE_CONTACT" checked> 
                         	    	Update Contacts
                     	       </label>
-								<label class="checkbox">
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
             	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
         	                    	Import Contacts
     	                       </label>
-								<label class="checkbox">
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
                         	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked> 
                             		Export Contacts
                            		</label>
@@ -56,24 +56,41 @@
 						</div>
                     </div>
 						{{else}}
-						{{#unless is_account_owner}}
+						{{#unless is_admin}}
 						<div class="control-group">
 						<div class="controls">
-						<div class="multiple-checkbox" style="width: 20%;" name="scopes">
-								<label class="checkbox">
+						<div class="multiple-checkbox"  name="scopes">
+								<label class="checkbox" style="display:inline-block; margin-right:10px" >
                             	<input type="checkbox" name="temp"  value="CREATE_CONTACT"> 
                             		Create Contacts
-                            	</label>
-								<label class="checkbox">
+                            	</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
                         		    <input type="checkbox" name="temp" value="UPDATE_CONTACT"> 
                         	    	Update Contacts
-                    	       </label>
-								<label class="checkbox">
+                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
             	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"> 
         	                    	Import Contacts
-    	                       </label>
-								<label class="checkbox">
+    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
                         	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS"> 
+                            		Export Contacts
+                           		</label>
+							</div>
+						</div>
+                    </div>
+					{{else}}
+					<div class="control-group">
+						<div class="controls">
+						<div class="multiple-checkbox"  name="scopes">
+								<label class="checkbox" style="display:inline-block; margin-right:10px" >
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"  disabled checked> 
+                            		Create Contacts
+                            	</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        		    <input type="checkbox" name="temp" value="UPDATE_CONTACT" disabled checked> 
+                        	    	Update Contacts
+                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled checked> 
+        	                    	Import Contacts
+    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled checked> 
                             		Export Contacts
                            		</label>
 							</div>

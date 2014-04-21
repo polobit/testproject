@@ -121,6 +121,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				if (view.model.get("id"))
 					addTagAgile("User invited");
+				
+				// Binds action 
+				bindAdminChangeAction(el);
 			} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
@@ -156,7 +159,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		 * Creates a Model for users edit, navigates back to 'user' window on
 		 * save success
 		 */
-		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users' });
+		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users', postRenderCallback: function(el){
+			bindAdminChangeAction(el);
+		} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
