@@ -50,8 +50,9 @@ public class UserAccessControl
 	return getCurrentUserScopes().contains(scope);
     }
 
-    public UserAccessControl getAccessControl()
-    {
-
-    }
+    /*
+     * public UserAccessControl getAccessControl() {
+     * 
+     * }
+     */
 }
