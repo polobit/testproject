@@ -125,7 +125,7 @@ function getTemplate(templateName, context, download)
 	{
 		templateHTML = downloadSynchronously("tpl/min/billing.js");
 	}
-	if (templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("widget") == 0)
+	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("widget") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/widget.js");
 	}
