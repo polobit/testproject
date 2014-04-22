@@ -469,7 +469,7 @@ $(function(){
 				var text = model.text;
 				
 				// Apply handlebars template on send-email route 
-				if(Current_Route === 'send-email')
+				if(Current_Route !== 'bulk-email')
 				{
 				
 				// Get Current Contact

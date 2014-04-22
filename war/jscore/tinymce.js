@@ -152,7 +152,7 @@ function set_up_merge_fields(editor)
 	var contact_property_json;
 
 	// Compile templates immediately in Send email but not for bulk contacts
-	if (Current_Route === "send-email")
+	if (Current_Route !== "bulk-email")
 	{
 		// Get Current Contact
 		var contact_json = App_Contacts.contactDetailView.model.toJSON();
@@ -178,8 +178,7 @@ function set_up_merge_fields(editor)
 
 				editor.insertContent(value);
 			}
-
-			if (Current_Route === "send-email")
+			else
 			{
 				var template = Handlebars.compile(value);
 				editor.insertContent(template(contact_property_json));
