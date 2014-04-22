@@ -25,6 +25,8 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.access.UserAccessControlUtil;
+import com.agilecrm.user.access.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
@@ -79,7 +81,8 @@ public class UploadContactsAPI
 	    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 	    blobstoreService.delete(blobKey);
 
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
 	Map success = new HashMap();
@@ -112,6 +115,9 @@ public class UploadContactsAPI
     {
 	try
 	{
+	    // Checks User access control over current entity to be saved.
+	    UserAccessControlUtil.check(com.agilecrm.contact.Contact.class.getSimpleName(), null, CRUDOperation.IMPORT,
+		    true);
 
 	    // Reads the request body. It is included as payload to backends
 	    InputStream stream = request.getInputStream();
@@ -129,7 +135,8 @@ public class UploadContactsAPI
 	    CacheUtil.setCache(key, true);
 
 	    // Creates a backends url
-	    String postURL = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+	    String postURL = BackendServiceFactory.getBackendService().getBackendAddress(
+		    Globals.BULK_ACTION_BACKENDS_URL);
 
 	    // Backends should be initialized using a task queue
 	    Queue queue = QueueFactory.getQueue("bulk-actions-queue");
@@ -138,13 +145,20 @@ public class UploadContactsAPI
 	    // and blobkey, current domain user id as path parameters. current
 	    // owner id is required to set owner of uploaded contacts
 	    TaskOptions taskOptions = TaskOptions.Builder
-		    .withUrl("/core/api/bulk-actions/upload/" + String.valueOf(SessionManager.get().getDomainId() + "/" + request.getParameter("key")))
-		    .payload(bytes).header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
+		    .withUrl(
+			    "/core/api/bulk-actions/upload/"
+				    + String.valueOf(SessionManager.get().getDomainId() + "/"
+					    + request.getParameter("key"))).payload(bytes)
+		    .header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
 
 	    // Task is added into queue
 	    queue.addAsync(taskOptions);
 
 	    System.out.println("completed");
+	}
+	catch (WebApplicationException e)
+	{
+	    throw e;
 	}
 
 	catch (IOException e)
