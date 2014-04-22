@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
 import com.thirdparty.mandrill.Mandrill;
@@ -37,7 +38,8 @@ public class EmailUtil
 	    return emailBody;
 
 	// Comment script tags.
-	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)", "<script>-->");
+	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
+		"<script>-->");
 
 	// If emailBody is text, replace '\n' with <br> is enough
 	if (!(emailBody.contains("</")))
@@ -107,7 +109,8 @@ public class EmailUtil
      * @param text
      * @return response of the remote object
      */
-    public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html, String text)
+    public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
+	    String replyTo, String html, String text)
     {
 
 	// Agile label to outgoing emails
@@ -159,8 +162,8 @@ public class EmailUtil
 	if (!StringUtils.isEmpty(trackerId))
 	    queryParams += "s=" + trackerId;
 
-	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get() + ".agilecrm.com/backend/open?" + queryParams
-		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get()
+		+ ".agilecrm.com/backend/open?" + queryParams + "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }
@@ -174,7 +177,8 @@ public class EmailUtil
      */
     public static String getPoweredByAgileURL(String medium)
     {
-	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign=" + NamespaceManager.get();
+	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
+		+ NamespaceManager.get();
     }
 
     /**
@@ -184,7 +188,12 @@ public class EmailUtil
      */
     public static String getPoweredByAgileLink(String medium, String labelText)
     {
-	return labelText + " <a href=\"" + getPoweredByAgileURL(medium) + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
+
+	if (isWhiteLabelEnabled())
+	    return "";
+
+	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
+		+ "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
     /**
@@ -209,7 +218,8 @@ public class EmailUtil
 	{
 	    // For Campaign HTML emails, Powered by should be right aligned
 	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-		html = StringUtils.replace(html, "</body>", "<div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div></body>");
+		html = StringUtils.replace(html, "</body>",
+			"<div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div></body>");
 	    else
 		html = StringUtils.replace(html, "</body>", getPoweredByAgileLink(medium, labelText) + "</body>");
 
@@ -218,7 +228,8 @@ public class EmailUtil
 	{
 	    // For Campaign HTML emails, Powered by should be right aligned
 	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-		html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+		html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText)
+			+ "</div>";
 	    else
 		html = html + "<br><br>" + getPoweredByAgileLink(medium, labelText);
 	}
@@ -239,7 +250,7 @@ public class EmailUtil
 	if (StringUtils.isBlank(text) || StringUtils.contains(text, "Sent using Agile"))
 	    return text;
 
-	return text + "\n" + labelText + " Agile";
+	return isWhiteLabelEnabled() ? text : text + "\n" + labelText + " Agile";
     }
 
     /**
@@ -252,5 +263,15 @@ public class EmailUtil
     public static boolean isToAgileEmail(String to)
     {
 	return agileEmailsList.contains(to);
+    }
+
+    /**
+     * Checks if white label is enabled in current domain
+     * 
+     * @return
+     */
+    public static boolean isWhiteLabelEnabled()
+    {
+	return BillingRestrictionUtil.getInstance(true).getCurrentLimits().isWhiteLabelEnabled();
     }
 }
