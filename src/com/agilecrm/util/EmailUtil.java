@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
 import com.thirdparty.SendGrid;
@@ -177,6 +178,10 @@ public class EmailUtil
      */
     public static String getPoweredByAgileLink(String medium, String labelText)
     {
+
+	if (isWhiteLabelEnabled())
+	    return "";
+
 	return labelText + " <a href=\"" + getPoweredByAgileURL(medium) + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
@@ -232,7 +237,7 @@ public class EmailUtil
 	if (StringUtils.isBlank(text) || StringUtils.contains(text, "Sent using Agile"))
 	    return text;
 
-	return text + "\n" + labelText + " Agile";
+	return isWhiteLabelEnabled() ? text : text + "\n" + labelText + " Agile";
     }
 
     /**
@@ -292,4 +297,15 @@ public class EmailUtil
 	// if no cc or bcc, send by Mandrill
 	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
     }
+
+    /**
+     * Checks if white label is enabled in current domain
+     * 
+     * @return
+     */
+    public static boolean isWhiteLabelEnabled()
+    {
+	return BillingRestrictionUtil.getInstance(true).getCurrentLimits().isWhiteLabelEnabled();
+    }
+
 }
