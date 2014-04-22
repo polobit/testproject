@@ -15,6 +15,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
@@ -94,6 +95,12 @@ public class DomainUser extends Cursor implements Cloneable
      */
     @NotSaved(IfDefault.class)
     public List<UserAccessScopes> scopes = new ArrayList<UserAccessScopes>();
+
+    /**
+     * Stores user access scopes
+     */
+    @NotSaved(IfDefault.class)
+    public List<NavbarConstants> menu_items = new ArrayList<NavbarConstants>();
 
     /**
      * Name of the domain user
@@ -220,12 +227,14 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If subscription is null, it indicates user is in free plan.
 	    // Limits users to global trail users count
 	    if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT + " users in the free plan");
+		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
+			+ " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
 	    if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
-		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity + " users in the current plan");
+		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
+			+ " users in the current plan");
 
 	    return false;
 	}
@@ -375,7 +384,8 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If domain user exists, not allowing to create new user
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
-		throw new Exception("User with this email address " + domainUser.email + " already exists in " + domainUser.domain + " domain.");
+		throw new Exception("User with this email address " + domainUser.email + " already exists in "
+			+ domainUser.domain + " domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -570,6 +580,9 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If no scopes are set, then all scopes are added
 	    if (scopes.size() == 0)
 		scopes.addAll(Arrays.asList(UserAccessScopes.values()));
+
+	    if (menu_items.size() == 0)
+		menu_items.addAll(Arrays.asList(NavbarConstants.values()));
 	}
 	catch (Exception e)
 	{
@@ -580,7 +593,7 @@ public class DomainUser extends Cursor implements Cloneable
     @Override
     public String toString()
     {
-	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id + " Name: " + this.name + "\n "
-		+ info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
+		+ this.id + " Name: " + this.name + "\n " + info_json;
     }
 }

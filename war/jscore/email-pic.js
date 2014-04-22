@@ -26,10 +26,8 @@ $(function()
 		{
 			var el = $('<img class="imgholder thumbnail person-img" onload="changeProperty()" style="display: inline;"  src="' + pic + '"></img>');
 			$('#pic').html(el).show();
-			$("#personForm").find("#image").val(pic);
 			$("img").error(function()
 			{
-				$("#personForm").find("#image").val("");
 				$('#pic').css("display", "none");
 				changeProperty();
 				

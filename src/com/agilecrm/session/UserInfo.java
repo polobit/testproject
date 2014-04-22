@@ -82,7 +82,14 @@ public class UserInfo implements Serializable
 
 	}
 
-	BillingRestrictionUtil.setPlan(this);
+	try
+	{
+	    BillingRestrictionUtil.setPlan(this);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     /**

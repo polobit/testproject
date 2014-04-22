@@ -30,6 +30,15 @@ public class Globals
     // public static final String SENDGRID_API_KEY = "mantra123";
     public static final String SENDGRID_API_KEY = "send@agile1";
 
+    // For clickdeskengage domain
+    public static final String CLICKDESK_SENDGRID_API_USER_NAME = "venkat";
+
+    // For clickdeskengage domain
+    public static final String CLICKDESK_SENDGRID_API_KEY = "mantra123";
+
+    // Clickdesk domain to which emails are sent through SendGrid
+    public static final String CLICKDESK_ENGAGE_DOMAIN = "clickdeskengage";
+
     // GMAIL
     public static final String GMAIL_API_KEY = "anonymous";
     public static final String GMAIL_SECRET_KEY = "anonymous";

@@ -6,11 +6,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>SendGrid</code> is the core class that sends email using Send Grid API.
@@ -43,6 +43,11 @@ public class SendGrid
      * Post param to
      */
     public static final String SENDGRID_API_PARAM_TO = "to";
+
+    /**
+     * Post param to
+     */
+    public static final String SENDGRID_API_PARAM_BCC = "bcc";
 
     /**
      * Post param to[] - to add multiple to emails
@@ -82,8 +87,7 @@ public class SendGrid
     /**
      * Default query string
      */
-    public static String defaultQueryString = SENDGRID_API_PARAM_API_USER + "=" + Globals.SENDGRID_API_USER_NAME + "&" + SENDGRID_API_PARAM_API_KEY + "="
-	    + Globals.SENDGRID_API_KEY + "&";
+    public static String defaultQueryString = getSendGridAPIParams();
 
     /**
      * Sends email by adding required fields to Send Grid Api.
@@ -108,8 +112,12 @@ public class SendGrid
      *            - Workflow object in json.
      * @return String
      */
-    public static String sendMail(String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
+    public static String sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html, String text)
     {
+
+	// SendGrid doesn't support CC, so attaching with To
+	if (!StringUtils.isEmpty(cc))
+	    to += "," + cc;
 
 	// String tokens obtained by delimiter are added to set
 	Set<String> toEmailSet = EmailUtil.getStringTokenSet(to, ",");
@@ -125,6 +133,10 @@ public class SendGrid
 
 	    // Appends To emails
 	    queryString += "&" + addToEmailsToParams(toEmailSet);
+
+	    // Appends BCC
+	    if (!StringUtils.isEmpty(bcc))
+		queryString += "&" + SENDGRID_API_PARAM_BCC + "=" + URLEncoder.encode(bcc, "UTF-8");
 
 	    // Reply To
 	    if (!StringUtils.isEmpty(replyTo) && !fromEmail.equals(replyTo))
@@ -183,5 +195,25 @@ public class SendGrid
 	}
 
 	return multipleTo;
+    }
+
+    /**
+     * Returns api key and username as query params
+     * 
+     * @return String
+     */
+    private static String getSendGridAPIParams()
+    {
+	String userName = Globals.SENDGRID_API_USER_NAME;
+	String apiKey = Globals.SENDGRID_API_KEY;
+
+	// For clickdesk
+	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
+	{
+	    userName = Globals.CLICKDESK_SENDGRID_API_USER_NAME;
+	    apiKey = Globals.CLICKDESK_SENDGRID_API_KEY;
+	}
+
+	return SENDGRID_API_PARAM_API_USER + "=" + userName + "&" + SENDGRID_API_PARAM_API_KEY + "=" + apiKey + "&";
     }
 }

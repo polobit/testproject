@@ -36,6 +36,7 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 	    // Fetches existing restriction object and refreshes usage details
 	    // and saves back
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(false);
+
 	    restriction.refresh(true);
 
 	    // Get tag for each type. If usage exceeds 75 of allowed limit then
@@ -48,6 +49,9 @@ public class AccountLimitsRemainderDeferredTask implements DeferredTask
 	    System.out.println("namespace : " + namespace);
 	    System.out.println("Contacts = " + restriction.contacts_count + ", webrules = " + restriction.webrules_count + ", workflow = "
 		    + restriction.campaigns_count);
+
+	    if (restriction.id == null)
+		restriction.save();
 	    // Adds tags in out domain
 	    BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(restriction.tagsToAddInOurDomain);
 	}
