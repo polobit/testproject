@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
@@ -23,6 +24,7 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
+import com.thirdparty.SendGrid;
 
 /**
  * <code>SendEmail</code> represents SendEmail node in a workflow. Sends email
@@ -464,19 +466,13 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.contains(html, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
 		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
 
-	    // if cc present, send using Mailgun as it supports 'Cc'
-	    if (!StringUtils.isEmpty(cc))
-		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
-	    else
-		MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+	    // Send HTML Email
+	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, html, text);
 	}
 	else
 	{
-	    // if cc present, send using Mailgun as it supports 'Cc'
-	    if (!StringUtils.isEmpty(cc))
-		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, null, text);
-	    else
-		MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
+	    // Send Text Email
+	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, null, text);
 	}
 
 	// Creates log for sending email
@@ -517,11 +513,15 @@ public class SendEmail extends TaskletAdapter
 	    {
 		String url = m.group();
 
+		if (url.endsWith("\"/") || url.endsWith("\'/"))
+		    url = url.substring(0, url.length() - 2);
+
 		// Replaces valid http urls with agile tracking links
 		if (isSpecialLink(url))
 		{
 		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, domainURL + "/backend/click?u=" + url + "&s=" + subscriberId + "&c=" + campaignId);
+		    m.appendReplacement(stringBuffer, domainURL + "backend/click?u=" + url + "&s=" + URLEncoder.encode(subscriberId, "UTF-8") + "&c="
+			    + URLEncoder.encode(campaignId, "UTF-8"));
 		}
 	    }
 
@@ -561,8 +561,8 @@ public class SendEmail extends TaskletAdapter
 	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().contains("unsubscribe")
 		&& !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
 		&& (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(".agilecrm.com"))
-		&& !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
-		&& !str.toLowerCase().startsWith("http://unscr.be"))
+		&& !str.toLowerCase().contains("www.w3.org") && !str.toLowerCase().startsWith("http://goo.gl")
+		&& !str.toLowerCase().startsWith("http://agle.cc") && !str.toLowerCase().startsWith("http://unscr.be"))
 	    return true;
 
 	return false;
@@ -597,6 +597,42 @@ public class SendEmail extends TaskletAdapter
 	    e.printStackTrace();
 	}
 
+    }
+
+    /**
+     * Sends email using Email APIs
+     * 
+     * @param fromEmail
+     *            - from email
+     * @param fromName
+     *            - from name
+     * @param to
+     *            - to email
+     * @param cc
+     *            - cc email
+     * @param subject
+     *            - email subject
+     * @param replyTo
+     *            - replyTo email
+     * @param html
+     *            - HTML body
+     * @param text
+     *            - text body
+     */
+    private void sendEmail(String fromEmail, String fromName, String to, String cc, String subject, String replyTo, String html, String text)
+    {
+	// For domain "clickdeskengage" - use SendGrid API
+	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
+	{
+	    SendGrid.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
+	    return;
+	}
+
+	// if cc present, send using Mailgun as it supports 'Cc'
+	if (!StringUtils.isEmpty(cc))
+	    Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
+	else
+	    MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
     }
 
 }

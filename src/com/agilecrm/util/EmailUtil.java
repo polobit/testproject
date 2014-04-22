@@ -11,9 +11,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
+import com.thirdparty.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
 public class EmailUtil
@@ -118,17 +120,8 @@ public class EmailUtil
 	if (!isToAgileEmail(to))
 	    AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), 1);
 
-	// if cc or bcc present, send by Mailgun
-	if (!StringUtils.isEmpty(cc) || !StringUtils.isEmpty(bcc))
-	{
-	    System.out.println("Sending email using Mailgun.");
-
-	    Mailgun.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
-	    return;
-	}
-
-	// if no cc or bcc, send by Mandrill
-	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
+	// Send mail using API
+	sendEmailUsingAPI(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
 
     }
 
@@ -252,5 +245,51 @@ public class EmailUtil
     public static boolean isToAgileEmail(String to)
     {
 	return agileEmailsList.contains(to);
+    }
+
+    /**
+     * Sends email using Email APIs
+     * 
+     * @param fromEmail
+     *            - from email
+     * @param fromName
+     *            - from name
+     * @param to
+     *            - to email
+     * @param cc
+     *            - cc email
+     * @param bcc
+     *            - bcc email
+     * @param subject
+     *            - email subject
+     * @param replyTo
+     *            - replyTo email
+     * @param html
+     *            - html body
+     * @param text
+     *            - text body
+     */
+    public static void sendEmailUsingAPI(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html,
+	    String text)
+    {
+
+	// For domain "clickdeskengage" - use SendGrid API
+	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
+	{
+	    SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
+	    return;
+	}
+
+	// if cc or bcc present, send by Mailgun
+	if (!StringUtils.isEmpty(cc) || !StringUtils.isEmpty(bcc))
+	{
+	    System.out.println("Sending email using Mailgun.");
+
+	    Mailgun.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
+	    return;
+	}
+
+	// if no cc or bcc, send by Mandrill
+	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
     }
 }
