@@ -105,6 +105,12 @@ function showMailsInHelpScout(customerId)
 		// Get and fill the template with tickets
 		$('#all_tickets_panel').html(getTemplate('helpscout-conversation', data));
 
+		// Load jquery time ago function to show time ago in tickets
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		{
+			$(".time-ago").timeago();
+		});
+
 	}, function error(data)
 	{
 		// Error message is shown

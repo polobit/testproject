@@ -40,10 +40,6 @@
 </ul>
 <div class="clearfix" id="tickets-error-panel" style="display:none;">
 </div>
-<div class="widget_tab_footer" align="center" style="float:none">
-	<a href="#more" id="more_tickets" rel="tooltip" title="Click to see more tickets">Show More</a>
-	<img src="img/ajax-spinner.gif" id="spinner-tickets" style="display:none;"></img>
-</div>
 {{else}}
 <div class="widget_content" style="word-wrap:break-word;">
 {{message}}
@@ -59,16 +55,12 @@
 {{#isArray conversations}}
 	{{#each conversations}}
 		<li class="sub_header_li helpscout_ticket_hover"  id="{{id}}">
-			<div class="overflow-elipsis" title="{{subject}}"><a href="{{url}}" target="_blank" >{{subject}}</a>
+			<div class="overflow-elipsis" title="{{subject}}"><a href="https://secure.helpscout.net/conversation/{{id}}" target="_blank" >{{subject}}</a>
 			<div class="label right">{{mailbox.name}}</div>
 			</div>
 			<div style="margin-bottom:5px;">
 				<div class="label right">{{status}}</div>
 				<small><time class="time-ago" datetime="{{createdAt}}">{{createdAt}}</time></small>
-			</div>
-			<div class="sub_header_tab_link helpscout_tab_link" style="float:left;margin:0px;display:none;">
-				<div><a href="#show" ticket_status="{{status}}" ticket_id="{{id}}" id="ticket_show" rel="tooltip" title="Show more information of ticket" data-attr="{{bindData this}}">Show</a></div>
-				<div><a class="l_border" href="#update" update_id="{{id}}" id="ticket_update" rel="tooltip" title="Update ticket in zendesk">Comment</a></div>										
 			</div>
 			<div class="clearfix"></div>
 		</li>
