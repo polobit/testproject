@@ -1,9 +1,11 @@
 package com.agilecrm.contact;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -278,8 +280,10 @@ public class Contact extends Cursor
 
 	String fieldName = field == null ? contactField.name : field.name;
 	FieldType type = FieldType.CUSTOM;
-	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL) || fieldName.equals(TITLE) || fieldName.equals(WEBSITE)
-		|| fieldName.equals(COMPANY) || fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE) || fieldName.equals(NAME))
+	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
+		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
+		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
+		|| fieldName.equals(NAME))
 	    type = FieldType.SYSTEM;
 
 	// If field is null then new contact field is added to properties.
@@ -385,8 +389,13 @@ public class Contact extends Cursor
 	    // email-id
 
 	    if (myMail != null && !myMail.isEmpty())
-		countEmails = dao.getCountByProperty("properties.value = ", myMail);
+	    {
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		searchMap.put("properties.name = ", EMAIL);
+		searchMap.put("properties.value = ", myMail);
 
+		countEmails = dao.getCountByProperty(searchMap);
+	    }
 	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
 	    // otherwise if countEmails==1, make sure its not due to previous
 	    // value of this(current) Contact
@@ -468,8 +477,8 @@ public class Contact extends Cursor
 
 	// If tags and properties length differ, contact is considered to be
 	// changed
-	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size() || contact.star_value != star_value
-		|| contact.lead_score != lead_score)
+	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
+		|| contact.star_value != star_value || contact.lead_score != lead_score)
 	    return true;
 
 	// Checks if tags are changed
@@ -1025,7 +1034,8 @@ public class Contact extends Cursor
 		companyContact = dao.get(contact_company_key);
 		ContactField contactField = getContactField(COMPANY);
 		if (contactField == null)
-		    properties.add(new ContactField(Contact.COMPANY, companyContact.getContactFieldValue(Contact.NAME), null));
+		    properties.add(new ContactField(Contact.COMPANY, companyContact.getContactFieldValue(Contact.NAME),
+			    null));
 		else
 		    contactField.value = companyContact.getContactFieldValue(Contact.NAME);
 	    }
@@ -1061,8 +1071,8 @@ public class Contact extends Cursor
     @Override
     public String toString()
     {
-	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type + " tags: " + tags + " properties: "
-		+ properties;
+	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
+		+ " tags: " + tags + " properties: " + properties;
     }
 }
 
