@@ -128,6 +128,46 @@ function saveClickDeskWidgetPrefs()
 	});
 }
 
+function helpscout_save_widget_prefs()
+{
+	$('#save_api_key').unbind("click");
+	
+	// Saves the API key
+	$('#save_api_key').die().live('click', function(e)
+	{
+		e.preventDefault();
+
+		// Checks whether all input fields are given
+		if (!isValidForm($("#helpscout_login_form")))
+		{
+			return;
+		}
+
+		// Saves HelpScout preferences in HelpScout widget object
+		saveHelpScoutWidgetPrefs();
+	});
+			
+}
+
+/**
+ * Calls method in script API (agile_widget.js) to save HelpScout preferences in
+ * HelpScout widget object
+ */
+function saveHelpScoutWidgetPrefs()
+{
+	// Retrieve and store the HelpScout API key entered by the user
+	var HelpScout_prefs = {};
+	HelpScout_prefs["helpscout_api_key"] = $("#helpscout_api_key").val();
+	
+	// Saves the preferences into widget with Rapleaf widget name
+	save_widget_prefs("HelpScout", JSON.stringify(HelpScout_prefs), function(data)
+	{
+		console.log('In HelpScout save success');
+		console.log(data);
+	});
+}
+
+
 function freshbook_save_widget_prefs()
 {
 	$('#freshbooks_save_token').unbind("click");
@@ -387,6 +427,9 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 	else if (widget_name == "ClickDesk")
 		clickdesk_save_widget_prefs();
+	
+	else if (widget_name == "HelpScout")
+		helpscout_save_widget_prefs();
 
 	else if (widget_name == "FreshBooks")
 		freshbook_save_widget_prefs();
