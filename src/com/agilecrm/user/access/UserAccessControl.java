@@ -47,8 +47,7 @@ public class UserAccessControl
 	// user, set in user info, and returned.
 	if (info.getScopes() == null)
 	{
-	    List<UserAccessScopes> scopes = DomainUserUtil.getCurrentDomainUser().scopes;
-	    info.setScopes(scopes);
+	    info.setUser(DomainUserUtil.getCurrentDomainUser());
 	    SessionManager.set(info);
 	}
 

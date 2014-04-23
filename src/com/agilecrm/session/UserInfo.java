@@ -48,7 +48,8 @@ public class UserInfo implements Serializable
      */
     private Long domainId = 0L;
 
-    private List<UserAccessScopes> scopes;
+    private DomainUser user = null;
+
     /**
      * Number of users allowed in current plan
      */
@@ -77,9 +78,7 @@ public class UserInfo implements Serializable
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 	if (domainUser != null)
 	{
-	    setDomainId(domainUser.id);
-	    scopes = domainUser.scopes;
-
+	    user = domainUser;
 	}
 
 	try
@@ -169,11 +168,16 @@ public class UserInfo implements Serializable
 
     public List<UserAccessScopes> getScopes()
     {
-	return this.scopes;
+	return user.scopes;
     }
 
-    public void setScopes(List<UserAccessScopes> scopes)
+    public void setUser(DomainUser user)
     {
-	this.scopes = scopes;
+	this.user = user;
+    }
+
+    public DomainUser getUser()
+    {
+	return user;
     }
 }
