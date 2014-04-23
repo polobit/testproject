@@ -1,11 +1,19 @@
 package com.agilecrm.user.access;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.util.DomainUserUtil;
 
+/**
+ * <code>UserAccessControl</code> Checks if read, write access is allowed on
+ * type to current user
+ * 
+ * @author yaswanth
+ * 
+ */
 public class UserAccessControl
 {
     protected UserInfo info;
@@ -33,7 +41,7 @@ public class UserAccessControl
 	// If info is null then scopes are returned from domain user. It barely
 	// occurs
 	if (info == null)
-	    return DomainUserUtil.getCurrentDomainUser().scopes;
+	    return Arrays.asList(UserAccessScopes.values());
 
 	// If scopes in info is not set, scopes are fetched from current domain
 	// user, set in user info, and returned.

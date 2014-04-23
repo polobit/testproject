@@ -40,9 +40,9 @@ public class UserAccessControlUtil
 	else if (operation == CRUDOperation.EXPORT)
 	    isOperationAllowed = acccessControl.canExport();
 
-	if (throwException)
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(operation.errorMessage).build());
+	if (throwException && !isOperationAllowed)
+	    throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN).entity(operation.errorMessage)
+		    .build());
 
 	return isOperationAllowed;
     }
