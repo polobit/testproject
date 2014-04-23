@@ -73,4 +73,14 @@ public class Plan
 	return "Plan: {plan_id: " + plan_id + ", quantity: " + quantity + "}";
     }
 
+    @Override
+    public boolean equals(Object object)
+    {
+	Plan plan = (Plan) object;
+
+	if (this.plan_id.equals(plan.plan_id) && plan.quantity == this.quantity)
+	    return true;
+
+	return false;
+    }
 }

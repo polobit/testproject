@@ -242,4 +242,18 @@ public class BillingRestrictionUtil
 	}
 	return false;
     }
+
+    /**
+     * Checks if plan is upgraded and updates in user info
+     */
+    public static void setPlanInSession(Plan plan)
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return;
+
+	info.setPlan(plan.getPlanName());
+	info.setUsersCount(plan.quantity);
+
+    }
 }

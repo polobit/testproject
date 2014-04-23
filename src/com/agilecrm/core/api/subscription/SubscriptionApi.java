@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
@@ -86,6 +87,9 @@ public class SubscriptionApi
 	     */
 	    else if (subscribe.card_details != null && subscribe.plan != null)
 		subscribe = subscribe.createNewSubscription();
+
+	    // Sets plan in session
+	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
 
 	    return subscribe;
 	}
