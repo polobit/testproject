@@ -42,8 +42,6 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.access.UserAccessControlUtil;
-import com.agilecrm.user.access.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.webrules.WebRule;
@@ -194,9 +192,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	if (daoRestriction != null && !daoRestriction.check())
 	    BillingRestrictionUtil.throwLimitExceededException(clazz.getSimpleName());
 
-	// Checks User access control over current entity to be saved.
-	UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.CREATE, true);
-
 	return ofy().put(entity);
     }
 
@@ -219,9 +214,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public void delete(T entity)
     {
 
-	// Checks User access control over current entity to be saved.
-	UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.DELETE, true);
-
 	ofy().delete(entity);
     }
 
@@ -232,9 +224,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public void deleteAsync(T entity)
     {
-	// Checks User access control over current entity to be saved.
-	UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.DELETE, true);
-
 	ofy().async().delete(entity);
     }
 
@@ -245,9 +234,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public void deleteKey(Key<T> entityKey)
     {
-	// Checks User access control over current entity to be saved.
-	UserAccessControlUtil.check(clazz.getSimpleName(), null, CRUDOperation.DELETE, true);
-
 	ofy().delete(entityKey);
     }
 
@@ -258,9 +244,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public void deleteAll(Iterable<T> entities)
     {
-	// Checks User access control over current entity to be saved.
-	UserAccessControlUtil.check(clazz.getSimpleName(), null, CRUDOperation.DELETE, true);
-
 	ofy().delete(entities);
     }
 
@@ -271,9 +254,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public void deleteKeys(Iterable<Key<T>> keys)
     {
-	// Checks User access control over current entity to be saved.
-	UserAccessControlUtil.check(clazz.getSimpleName(), null, CRUDOperation.DELETE, true);
-
 	ofy().delete(keys);
     }
 
