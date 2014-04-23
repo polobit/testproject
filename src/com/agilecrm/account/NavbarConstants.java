@@ -10,32 +10,34 @@ package com.agilecrm.account;
 public enum NavbarConstants
 {
 
-    CONTACT("Contacts", "#contacts", "icon-user"),
+    CONTACT("Contacts", "#contacts", "icon-user", "contactsmenu"),
 
-    CALENDAR("Calendar", "#calendar", "icon-calendar"),
+    CALENDAR("Calendar", "#calendar", "icon-calendar", "calendarmenu"),
 
-    DEALS("Deals", "#deals", "icon-money"),
+    DEALS("Deals", "#deals", "icon-money", "dealsmenu"),
 
-    CAMPAIGN("Campaigns", "#workflows", "icon-sitemap"),
+    CAMPAIGN("Campaigns", "#workflows", "icon-sitemap", "workflowsmenu"),
 
-    CASES("Cases", "#cases", "icon-folder-close"),
+    CASES("Cases", "#cases", "icon-folder-close", "casesmenu"),
 
-    SOCIAL("Social", "#social", "icon-comments"),
+    SOCIAL("Social", "#social", "icon-comments", "socialsuitemenu"),
 
-    WEBRULE("Web Rules", "#web-rules", "icon-globe"),
+    WEBRULE("Web Rules", "#web-rules", "icon-globe", "web-rules-menu"),
 
-    DOCUMENT("Documents", "#documents", "icon-file"),
+    DOCUMENT("Documents", "#documents", "icon-file", "documentsmenu"),
 
-    REPORT("Reports", "#reports", "icon-bar-chart");
+    REPORT("Reports", "#reports", "icon-bar-chart", "reportsmenu");
 
     public String heading = null;
     public String href = null;
     public String icon = null;
+    public String id = null;
 
-    private NavbarConstants(String heading, String href, String icon)
+    private NavbarConstants(String heading, String href, String icon, String id)
     {
 	this.heading = heading;
 	this.href = href;
 	this.icon = icon;
+	this.id = id;
     }
 }

@@ -1,7 +1,9 @@
-package com.agilecrm.user.access;
+package com.agilecrm.user.access.util;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+
+import com.agilecrm.user.access.UserAccessControl;
 
 /**
  * <code>UserAccessControlUtil</code> class calls appropriate method to check if
@@ -40,9 +42,9 @@ public class UserAccessControlUtil
 	else if (operation == CRUDOperation.EXPORT)
 	    isOperationAllowed = acccessControl.canExport();
 
-	if (throwException)
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity(operation.errorMessage).build());
+	if (throwException && !isOperationAllowed)
+	    throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN).entity(operation.errorMessage)
+		    .build());
 
 	return isOperationAllowed;
     }

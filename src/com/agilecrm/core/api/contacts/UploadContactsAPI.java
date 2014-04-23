@@ -25,8 +25,8 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.access.UserAccessControlUtil;
-import com.agilecrm.user.access.UserAccessControlUtil.CRUDOperation;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;

@@ -32,6 +32,8 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.social.linkedin.LinkedInUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CacheUtil;
@@ -354,6 +356,9 @@ public class Contact extends Cursor
 	Long id = this.id;
 
 	Contact oldContact = null;
+
+	// Checks User access control over current entity to be saved.
+	UserAccessControlUtil.check(this.getClass().getSimpleName(), this, CRUDOperation.CREATE, true);
 
 	if (id != null)
 	{
@@ -740,6 +745,9 @@ public class Contact extends Cursor
      */
     public void delete(boolean... args)
     {
+	// Checks User access control over current entity to be saved.
+	UserAccessControlUtil.check(this.getClass().getSimpleName(), this, CRUDOperation.DELETE, true);
+
 	boolean execute_notification = true;
 
 	if (args != null && args.length > 0)

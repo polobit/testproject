@@ -79,7 +79,6 @@ public class UserInfo implements Serializable
 	{
 	    setDomainId(domainUser.id);
 	    scopes = domainUser.scopes;
-
 	}
 
 	try

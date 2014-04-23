@@ -13,7 +13,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
@@ -87,6 +89,11 @@ public class SubscriptionApi
 	    else if (subscribe.card_details != null && subscribe.plan != null)
 		subscribe = subscribe.createNewSubscription();
 
+	    // Sets plan in session
+	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
+
+	    System.out.println(SessionManager.get().getPlan());
+
 	    return subscribe;
 	}
 	catch (PlanRestrictedException e)
@@ -100,7 +107,8 @@ public class SubscriptionApi
 	     * If Exception is raised during subscription send the exception
 	     * message to client
 	     */
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -129,7 +137,9 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
     }
@@ -175,7 +185,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -198,7 +209,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -216,7 +228,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 }

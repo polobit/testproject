@@ -24,7 +24,9 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 
 	Workflow(WorkflowBillingRestriction.class),
 
-	Report(ReportGraphBillingRestriction.class);
+	Report(ReportGraphBillingRestriction.class),
+
+	DomainUser(DomainUserBillingRestriction.class);
 
 	Class<? extends DaoBillingRestriction> clazz;
 
@@ -161,6 +163,21 @@ public abstract class DaoBillingRestriction implements com.agilecrm.subscription
 	dao.restriction = restriction;
 	dao.sendReminder = dao.restriction.sendReminder;
 	return dao;
+    }
+
+    /**
+     * Gets tags and set in {@link BillingRestriction} tags set and reminder is
+     * sent
+     */
+    @Override
+    public void send_warning_message()
+    {
+	getTag();
+
+	if (restriction.tagsToAddInOurDomain.isEmpty())
+	    return;
+
+	restriction.sendReminder();
     }
 
     // Sets max value based on plan

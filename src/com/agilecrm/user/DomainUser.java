@@ -1,5 +1,6 @@
 package com.agilecrm.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +49,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class DomainUser extends Cursor implements Cloneable
+public class DomainUser extends Cursor implements Cloneable, Serializable
 {
 
     // Key
@@ -94,7 +95,7 @@ public class DomainUser extends Cursor implements Cloneable
      * Stores user access scopes
      */
     @NotSaved(IfDefault.class)
-    public List<UserAccessScopes> scopes = new ArrayList<UserAccessScopes>();
+    public List<UserAccessScopes> scopes = null;
 
     /**
      * Stores user access scopes
@@ -581,8 +582,10 @@ public class DomainUser extends Cursor implements Cloneable
 	    if (scopes.size() == 0)
 		scopes.addAll(Arrays.asList(UserAccessScopes.values()));
 
-	    if (menu_items.size() == 0)
-		menu_items.addAll(Arrays.asList(NavbarConstants.values()));
+	    if (menu_items == null)
+	    {
+		menu_items = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+	    }
 	}
 	catch (Exception e)
 	{

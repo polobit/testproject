@@ -52,7 +52,7 @@
 								for(NavbarConstants constant : domainUser.menu_items)
 								{
 							%>
-								    <li id=""><a href="<%=constant.href%>"><i
+								    <li id="<%=constant.id%>"><a href="<%=constant.href%>"><i
 										class="<%=constant.icon%> icon-white"></i> <%=constant.heading%></a></li>
 							<%
 								}
@@ -80,7 +80,6 @@
 							    css_classes = css_classes + " more-menu-show-low";
 							}
 							
-						
 							
 							    if (domainUser.menu_items.size() > 3) {
 							%>
@@ -92,7 +91,7 @@
 							    } else
 							    {
 								%>
-								<li id="more-menu" class="dropdown"><a
+								<li id="more-menu" class="dropdown <%=css_classes%>"><a
 									class="dropdown-toggle" data-toggle="dropdown" href=""> More
 										<i class='caret'></i>
 								</a>
@@ -104,9 +103,10 @@
 							
 								for(int i = 3; i< domainUser.menu_items.size(); i ++)
 								{
+								    NavbarConstants constant = domainUser.menu_items.get(i);
 							%>
-								    <li id=""><a href="<%=domainUser.menu_items.get(i).href%>"><i
-										class="<%=domainUser.menu_items.get(i).icon%> icon-white"></i> <%=domainUser.menu_items.get(i).heading%></a></li>
+								    <li  id="<%=constant.id%>"><a href="<%=constant.href%>"><i
+										class="<%=constant.icon%> icon-white"></i> <%=constant.heading%></a></li>
 							<%
 								}
 							%>

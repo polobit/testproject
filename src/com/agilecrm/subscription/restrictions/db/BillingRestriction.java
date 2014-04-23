@@ -19,6 +19,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.DaoBillingRestriction;
+import com.agilecrm.subscription.restrictions.DaoBillingRestriction.ClassEntities;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -56,10 +57,11 @@ public class BillingRestriction
     public Integer campaigns_count;
     public Integer pageviews_count;
     public Integer emails_count;
+    public Integer users_count;
     public Integer one_time_emails_count;
 
     @NotSaved(IfDefault.class)
-    public Plan Plan;
+    public Plan plan;
 
     @NotSaved
     @JsonIgnore
@@ -74,7 +76,8 @@ public class BillingRestriction
     @JsonIgnore
     public PlanLimits planDetails = PlanLimits.getPlanDetails(new Plan("FREE", 2));
 
-    public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(BillingRestriction.class);
+    public static ObjectifyGenericDao<BillingRestriction> dao = new ObjectifyGenericDao<BillingRestriction>(
+	    BillingRestriction.class);
 
     BillingRestriction()
     {
@@ -96,7 +99,10 @@ public class BillingRestriction
      */
     public static BillingRestriction getInstance(String planName, Integer users)
     {
-	return new BillingRestriction(BillingRestrictionUtil.getPlan(planName, users).getPlanDetails());
+	BillingRestriction res = new BillingRestriction(BillingRestrictionUtil.getPlan(planName, users)
+		.getPlanDetails());
+
+	return res;
     }
 
     /**
@@ -156,6 +162,7 @@ public class BillingRestriction
      * 
      * @throws PlanRestrictedException
      */
+    @JsonIgnore
     public boolean isDowngradable()
     {
 	refreshContacts();
@@ -165,6 +172,8 @@ public class BillingRestriction
 	if (!DaoBillingRestriction.getInstace("WebRule", this).can_create())
 	    return false;
 	if (!DaoBillingRestriction.getInstace("Workflow", this).can_create())
+	    return false;
+	if (!DaoBillingRestriction.getInstace(ClassEntities.DomainUser.toString(), this).can_create())
 	    return false;
 
 	return true;
