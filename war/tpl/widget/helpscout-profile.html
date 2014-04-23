@@ -16,7 +16,6 @@
 </script>
 
 <script id="helpscout-profile-template" type="text/html">
-{{#if_json user_info}}
 <div class="widget_content">
 <div class="row-fluid">
 	<div class="pull-left ml_5 span8">
@@ -28,7 +27,7 @@
 		{{/if}}
 	</div>
 </div>
-<div class="clearfix" style="margin-top:5px;"><a class="btn" id="add_ticket"><i class="icon-plus"></i>New Ticket</a></div>						
+<div class="clearfix" style="margin-top:5px;"><a class="btn" id="add_ticket"><i class="icon-plus"></i>New Conversation</a></div>						
 </div>
 <div class="clearfix" id="add-ticket-error-panel" style="display:none;">
 </div>
@@ -40,16 +39,11 @@
 </ul>
 <div class="clearfix" id="tickets-error-panel" style="display:none;">
 </div>
-{{else}}
-<div class="widget_content" style="word-wrap:break-word;">
-{{message}}
-</div>
-{{/if_json}}
 </script>
 
 <script id="helpscout-conversation-template" type="text/html">
 
-{{#isArray mailbox}}
+{{#if mailbox}}
 	{{#each mailbox}}
 
 {{#isArray conversations}}
@@ -68,11 +62,63 @@
 {{/isArray}}
 
 {{/each}}
-{{/isArray}}
-{{#if message}}
-		<p>{{message}}</p>
+{{else}}
+<div class="widget_content" style="word-wrap:break-word;">
+{{message}}
+</div>
 {{/if}}
 
+</script>
+
+<script id="helpscout-message-template" type="text/html">
+	<!-- New (Note) Modal views -->
+	<div class="modal hide fade message-modal" id="helpscout_messageModal" style="width:400px; left:55%">
+	    <div class="modal-header">
+	        <button class="close" data-dismiss="modal">x</button>
+			{{#if_equals headline "Add Ticket"}}
+	        	<h3><i class="icon-plus-sign"></i> {{headline}}</h3>
+			{{else}}
+				<h3><i class="icon-edit"></i> {{headline}}</h3>
+			{{/if_equals}}
+	    </div>
+	    <div class="modal-body agile-modal-body">
+	        <form id="helpscout_messageForm" name="helpscout_messageForm" method="post">
+	            <fieldset>
+					<div style="margin-bottom:10px;">{{info}}</div>
+					<input name="customerId" type="hidden" value="{{customerId}}" />
+	                <input name="email" type="hidden" value="{{email}}" />
+					<div class="control-group">	                    
+	                    <div class="controls">
+							<label class="control-label"><b>To: </b><span class="field_req">*</span></label>	
+							<select name="mailbox">
+							{{#isArray mailboxes}}
+								{{#each mailboxes}}
+									<option value="{{id}}">{{email}}</option>
+								{{/each}}
+							{{/isArray}}
+							</select>                        
+	                    </div>
+	                </div>
+	                <div class="control-group">	                    
+	                    <div class="controls">
+							<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	                        
+							<input type="text" placeholder="Subject" name="subject" id="subject" class="required span4" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
+	                    </div>
+	                </div>
+	                <div class="control-group">
+	                    <label class="control-label"><b>Message: </b><span class="field_req">*</span></label>
+	                    <div class="controls">
+							<textarea rows="4" class="required span4" placeholder="Detailed Message" name="message" id="message" style="max-width:500px;"></textarea>
+	                    </div>
+	                </div>
+	            </fieldset>
+	        </form>
+	    </div>
+	    <div class="modal-footer">
+	        <a class="btn btn-primary" id="send_request">Send</a>
+	        <span class="save-status"></span>
+	    </div>
+	</div>
 </script>
 
 <script id="helpscout-error-template" type="text/html">
