@@ -55,9 +55,11 @@ public class PlanLimits
      */
     public static enum PlanClasses
     {
-	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(ProPlanLimits.class, 3),
+	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
+		ProPlanLimits.class, 3),
 
-	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(ProPlanLimits.class, 3);
+	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(
+		ProPlanLimits.class, 3);
 
 	Class<? extends PlanLimits> clazz;
 
@@ -116,6 +118,11 @@ public class PlanLimits
 	    return null;
 	}
 
+    }
+
+    public Integer getPlanQuantity()
+    {
+	return plan.quantity;
     }
 
     /**

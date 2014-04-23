@@ -100,7 +100,8 @@ public class SubscriptionApi
 	     * If Exception is raised during subscription send the exception
 	     * message to client
 	     */
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -129,7 +130,9 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
     }
@@ -175,7 +178,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -198,7 +202,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -216,7 +221,8 @@ public class SubscriptionApi
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 }

@@ -211,11 +211,11 @@ public class Subscription
 	// Gets subscription object of current domain
 	Subscription subscription = getSubscription();
 
-	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan) && !BillingRestrictionUtil.getBillingRestriction(false).isDowngradable())
+	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
+		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
 	{
 	    System.out.println("plan upgrade not possible");
 	    BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.NOT_DOWNGRADABLE);
-	    System.out.println("exception raised");
 	    return null;
 	}
 
@@ -254,7 +254,8 @@ public class Subscription
 	Subscription subscription = getSubscription();
 
 	// Updates credit card details in related gateway
-	subscription.billing_data = subscription.getAgileBilling().updateCreditCard(subscription.billing_data, cardDetails);
+	subscription.billing_data = subscription.getAgileBilling().updateCreditCard(subscription.billing_data,
+		cardDetails);
 
 	// Assigns details which will be encrypted before saving
 	// subscription entity
@@ -368,7 +369,9 @@ public class Subscription
 	 * subscription, name of package should be name of gateway and
 	 * Implementations class should be named "gateway"+Impl
 	 */
-	return (AgileBilling) Class.forName("com.agilecrm.subscription." + this.gateway.toString().toLowerCase() + "." + this.gateway + "Impl").newInstance();
+	return (AgileBilling) Class.forName(
+		"com.agilecrm.subscription." + this.gateway.toString().toLowerCase() + "." + this.gateway + "Impl")
+		.newInstance();
 
     }
 
@@ -385,7 +388,8 @@ public class Subscription
 	try
 	{
 	    // Encrypt creditcard details before saving
-	    this.encrypted_card_details = ClickDeskEncryption.RSAEncrypt(new Gson().toJson(this.encrypted_card_details).getBytes());
+	    this.encrypted_card_details = ClickDeskEncryption.RSAEncrypt(new Gson().toJson(this.encrypted_card_details)
+		    .getBytes());
 	}
 	catch (Exception e)
 	{
@@ -396,8 +400,9 @@ public class Subscription
     @Override
     public String toString()
     {
-	return "Subscription: {id: " + id + ", plan: " + plan + ", card_details: " + card_details + ", enripted_card_details: " + encrypted_card_details
-		+ ", status: " + status + ", created_time: " + created_time + ", updated_time: " + updated_time + ", billing_data: " + billing_data
+	return "Subscription: {id: " + id + ", plan: " + plan + ", card_details: " + card_details
+		+ ", enripted_card_details: " + encrypted_card_details + ", status: " + status + ", created_time: "
+		+ created_time + ", updated_time: " + updated_time + ", billing_data: " + billing_data
 		+ ", billing_data_json_string: " + billing_data_json_string + ", gateway: " + gateway + "}";
     }
 }

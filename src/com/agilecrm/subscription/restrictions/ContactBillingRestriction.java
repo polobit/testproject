@@ -44,21 +44,6 @@ public class ContactBillingRestriction extends DaoBillingRestriction
     }
 
     /**
-     * Gets tags and set in {@link BillingRestriction} tags set and reminder is
-     * sent
-     */
-    @Override
-    public void send_warning_message()
-    {
-	getTag();
-
-	if (restriction.tagsToAddInOurDomain.isEmpty())
-	    return;
-
-	restriction.sendReminder();
-    }
-
-    /**
      * Gets {@link BillingRestriction} instance and sets maximum allowed limits
      * contacts in current plan
      */
