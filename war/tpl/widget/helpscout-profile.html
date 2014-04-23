@@ -49,8 +49,11 @@
 {{#isArray conversations}}
 	{{#each conversations}}
 		<li class="sub_header_li helpscout_ticket_hover"  id="{{id}}">
-			<div class="overflow-elipsis" title="{{subject}}"><a href="https://secure.helpscout.net/conversation/{{id}}" target="_blank" >{{subject}}</a>
-			<div class="label right">{{mailbox.name}}</div>
+			<div class="overflow-elipsis" title="{{subject}}">
+				<div style="float:left;overflow: hidden; width: 150px; text-overflow: ellipsis;">
+					<a href="https://secure.helpscout.net/conversation/{{id}}" target="_blank" >{{subject}}</a>
+				</div>
+			<div class="label right" style="width: 50px; overflow:hidden; text-overflow: ellipsis;">{{mailbox.name}}</div>
 			</div>
 			<div style="margin-bottom:5px;">
 				<div class="label right">{{status}}</div>
@@ -71,7 +74,6 @@
 </script>
 
 <script id="helpscout-message-template" type="text/html">
-	<!-- New (Note) Modal views -->
 	<div class="modal hide fade message-modal" id="helpscout_messageModal" style="width:400px; left:55%">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
@@ -89,11 +91,11 @@
 	                <input name="email" type="hidden" value="{{email}}" />
 					<div class="control-group">	                    
 	                    <div class="controls">
-							<label class="control-label"><b>To: </b><span class="field_req">*</span></label>	
+							<label class="control-label"><b>Mailbox: </b><span class="field_req">*</span></label>	
 							<select name="mailbox">
 							{{#isArray mailboxes}}
 								{{#each mailboxes}}
-									<option value="{{id}}">{{email}}</option>
+									<option value="{{id}}">{{name}}</option>
 								{{/each}}
 							{{/isArray}}
 							</select>                        
