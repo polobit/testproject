@@ -9,7 +9,7 @@ import com.agilecrm.user.util.DomainUserUtil;
 
 /**
  * <code>UserAccessControl</code> Checks if read, write access are allowed on to
- * current user on particular entity type
+ * current user on particuar entity type
  * 
  * @author yaswanth
  * 
@@ -47,8 +47,7 @@ public class UserAccessControl
 	// user, set in user info, and returned.
 	if (info.getScopes() == null)
 	{
-	    info.setUser(DomainUserUtil.getCurrentDomainUser());
-	    SessionManager.set(info);
+	    info.setScopes(DomainUserUtil.getCurrentDomainUser().scopes);
 	}
 
 	return info.getScopes();

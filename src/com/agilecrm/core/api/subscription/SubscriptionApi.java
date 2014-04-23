@@ -13,6 +13,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.agilecrm.session.SessionManager;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -90,6 +91,8 @@ public class SubscriptionApi
 
 	    // Sets plan in session
 	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
+
+	    System.out.println(SessionManager.get().getPlan());
 
 	    return subscribe;
 	}
