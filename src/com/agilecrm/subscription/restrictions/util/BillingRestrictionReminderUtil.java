@@ -86,28 +86,35 @@ public class BillingRestrictionReminderUtil
 	    if (contact.tags.contains(tag))
 		continue;
 
-	    isUpdateRequired = true;
-
 	    // Splits at "-" which returns fragments; entity name and percentage
 	    String tagFragments[] = tag.split("-");
 
 	    String entityName = tagFragments[0];
 	    String newPercentage = tagFragments[1];
 
+	    // Gets current percentage in tag
+	    int percentage = Integer.parseInt(newPercentage);
+
 	    // Checks for tag with same entity name and different percentage
 	    // (possibly added with different percentage)
-	    for (String percentage : BillingRestrictionUtil.percentages)
+	    for (String percentageString : BillingRestrictionUtil.percentages)
 	    {
-		if (percentage.equals(newPercentage))
+		if (percentageString.equals(newPercentage))
 		    continue;
 
-		// Removes if any tag exists with same class name and different
+		// Removes if any tag exists with same class name and
+		// different
 		// percentage
-		contact.tags.remove(entityName + "-" + percentage);
+		isUpdateRequired = contact.tags.remove(entityName + "-" + percentageString);
 	    }
 
+	    // If tag is less than 75% then existing tags are removed and tag is
+	    // not added
+	    if (percentage < 75)
+		continue;
+
 	    // Adds tag
-	    contact.tags.add(tag);
+	    isUpdateRequired = contact.tags.add(tag);
 	}
 
 	// If any tag is altered then contact is updated
@@ -136,7 +143,7 @@ public class BillingRestrictionReminderUtil
 	if (percentage >= 100)
 	    return className + "-100";
 
-	return null;
+	return className + "-" + percentage;
     }
 
 }
