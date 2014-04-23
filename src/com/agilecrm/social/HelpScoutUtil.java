@@ -1,7 +1,19 @@
 package com.agilecrm.social;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.helpscout.api.ApiClient;
 import net.helpscout.api.Page;
+import net.helpscout.api.cbo.PersonType;
+import net.helpscout.api.cbo.Status;
+import net.helpscout.api.cbo.ThreadType;
+import net.helpscout.api.model.Conversation;
+import net.helpscout.api.model.ref.CustomerRef;
+import net.helpscout.api.model.ref.MailboxRef;
+import net.helpscout.api.model.ref.PersonRef;
+import net.helpscout.api.model.thread.ConversationThread;
+import net.helpscout.api.model.thread.LineItem;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -126,7 +138,7 @@ public class HelpScoutUtil
 
 	}
 	// If there are no conversations, add a message.
-	if (customerConv.getJSONArray("mailbox").length() <= 0)
+	if (!customerConv.has("mailbox"))
 	    customerConv.put("message", "No Mails from this Customer.");
 
 	return customerConv.toString();
@@ -140,7 +152,7 @@ public class HelpScoutUtil
      *            the widget object contains the API Key of the HelpScout.
      * @return the List of mailbox object in JSON format.
      */
-    public static String getMailBoxes(Widget widget)
+    public static String getMailBoxes(Widget widget) throws Exception
     {
 	Gson gson = new Gson();
 	String mailboxes = null;
@@ -157,5 +169,89 @@ public class HelpScoutUtil
 	    e.printStackTrace();
 	}
 	return mailboxes;
+    }
+
+    /**
+     * Calls the HelpSout server to create the Conversation.
+     * 
+     * @param widget
+     *            the widget object contains the API Key of the HelpScout.
+     * @param customerId
+     *            the id of the customer.
+     * @param email
+     *            the email Id of the customer.
+     * @param mailboxId
+     *            the mailbox id in which the user is creating the conversation.
+     * @param subject
+     *            the subject of the conversation.
+     * @param description
+     *            the description (body) about the conversation.
+     * @return the id of the conversation newly created.
+     * @throws Exception
+     */
+    public static String addConversation(Widget widget, Long customerId, String email, Long mailboxId, String subject,
+	    String description) throws Exception
+    {
+	// The customer associated with the conversation
+	CustomerRef customer = new CustomerRef();
+	customer.setEmail(email);
+	customer.setId(customerId);
+
+	Conversation conversation = new Conversation();
+	conversation.setSubject(subject);
+	conversation.setCustomer(customer);
+	conversation.setStatus(Status.Active);
+
+	// Reference to the mailbox to which the conversation is created in to.
+	MailboxRef mailbox = new MailboxRef();
+	mailbox.setId(mailboxId);
+	conversation.setMailbox(mailbox);
+
+	// A conversation must have at least one thread
+	ConversationThread thread = new net.helpscout.api.model.thread.Customer();
+	thread.setType(ThreadType.Message);
+	thread.setBody(description);
+	thread.setStatus(Status.Active);
+
+	// Get the detail of the presently logged in in user using to define who
+	// is creating the conversation.
+	JSONObject me = new JSONObject(getMeFromHelpScout(widget));
+	// Reference of the person who is creating the conversation.
+	PersonRef createdBy = new CustomerRef();
+	createdBy.setId(me.getLong("id"));
+	createdBy.setType(PersonType.User);
+	thread.setCreatedBy(createdBy);
+
+	List<LineItem> threads = new ArrayList<LineItem>();
+	threads.add((LineItem) thread);
+	conversation.setThreads(threads);
+
+	// Get the HelpScout API Client with API_key.
+	ApiClient client = getHelpScoutApiClient(widget);
+	// Create the conversation. The Id of the conversation will be set to
+	// the Conversation object passed to it.
+	client.createConversation(conversation);
+
+	System.out.println("Conversation id: " + conversation.getId());
+
+	return String.valueOf(conversation.getId());
+    }
+
+    /**
+     * Get the detail of the User currently logged in. It will user the api_key
+     * to get the user details.
+     * 
+     * @param widget
+     *            the widget object contains the API Key of the HelpScout.
+     * @return the user object in the JSON String format.
+     * @throws Exception
+     */
+    public static String getMeFromHelpScout(Widget widget) throws Exception
+    {
+	// Get the HelpScout API Client with API_key.
+	ApiClient client = getHelpScoutApiClient(widget);
+	Gson gson = new Gson();
+
+	return gson.toJson(client.getUserMe());
     }
 }
