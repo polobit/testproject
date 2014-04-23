@@ -1,5 +1,6 @@
 package com.agilecrm.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +49,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class DomainUser extends Cursor implements Cloneable
+public class DomainUser extends Cursor implements Cloneable, Serializable
 {
 
     // Key
