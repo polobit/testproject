@@ -8,8 +8,8 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
- * <code>UserAccessControl</code> Checks if read, write access is allowed on
- * type to current user
+ * <code>UserAccessControl</code> Checks if read, write access are allowed on to
+ * current user on particular entity type
  * 
  * @author yaswanth
  * 
