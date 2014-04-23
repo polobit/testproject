@@ -50,15 +50,18 @@ var CalendarRouter = Backbone.Router.extend({
 	{
 
 		$('#content').html(getTemplate("tasks-list-header", {}));
-
+		
 		fillSelect("owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
 		{
 
 			$('#content').find("#owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
+			$('#content').find("#owner-tasks").append("<li><a href='all-pending-tasks'>All Pending Tasks</a></li>");
 			$('#content').find("#owner-tasks").append("<li><a href='my-pending-tasks'>My Pending Tasks</a></li>");
 
 			// To Updated task list based on user selection of type and owner
-			initOwnerslist();
+			//initOwnerslist();
+			
+			createNestedCollection();
 		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
 
 		$(".active").removeClass("active");

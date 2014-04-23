@@ -13,6 +13,8 @@ function includeTimeAgo(element){
  * To fill the tasklist ordered by default 
  */
 function initOwnerslist() {
+
+
 	
 	// Click events to agents dropdown and department
 	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e) {
@@ -101,6 +103,11 @@ function getParams() {
 		params += ("&pending=" + true);
 		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
 		return params;
+	}
+	if(owner == 'all-pending-tasks')
+	{
+		params += ("&pending=" + true);
+		owner = "";
 	}
 	if (owner)
 		params += ("&owner=" + owner);

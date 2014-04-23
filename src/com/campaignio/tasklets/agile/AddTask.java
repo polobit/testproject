@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.Task.PriorityType;
+import com.agilecrm.activities.Task.Status;
 import com.agilecrm.activities.Task.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.logger.Log.LogType;
@@ -69,7 +70,7 @@ public class AddTask extends TaskletAdapter
      * Tweet
      */
     public static String TWEET = "TWEET";
-    
+
     /**
      * Other
      */
@@ -105,13 +106,28 @@ public class AddTask extends TaskletAdapter
      */
     public static String OWNER_ID = "owner_id";
 
+    public static String PROGRESS = "progress";
+
+    public static String DESCRPTION = "descrption";
+
+    public static String STATUS = "status";
+
+    public static String NOT_STARTED = "NOT_STARTED";
+
+    public static String IN_PROGRESS = "IN_PROGRESS";
+
+    public static String COMPLETED = "COMPLETED";
+
+    public static String PAUSED = "PAUSED";
+
     /*
      * (non-Javadoc)
      * 
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// Get Task Values
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
@@ -119,6 +135,10 @@ public class AddTask extends TaskletAdapter
 	String priority = getStringValue(nodeJSON, subscriberJSON, data, PRIORITY);
 	String dueDays = getStringValue(nodeJSON, subscriberJSON, data, DUE_DAYS);
 	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
+
+	int progress = Integer.parseInt(getStringValue(nodeJSON, subscriberJSON, data, PROGRESS));
+	String descrption = getStringValue(nodeJSON, subscriberJSON, data, DESCRPTION);
+	String status = getStringValue(nodeJSON, subscriberJSON, data, STATUS);
 
 	// Gets due date in epoch from dueDays
 	Long epochTime = AgileTaskletUtil.getDateInEpoch(dueDays);
@@ -141,7 +161,8 @@ public class AddTask extends TaskletAdapter
 	    }
 
 	    // Adds task
-	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId.toString());
+	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId.toString(),
+		    progress, descrption, status);
 	}
 	catch (Exception e)
 	{
@@ -150,8 +171,9 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category
-		+ "<br/> Type: " + priority + " <br/> Date: " + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: "
+		+ subject + "<br/> Category: " + category + "<br/> Type: " + priority + " <br/> Date: "
+		+ new Date(epochTime * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -175,9 +197,10 @@ public class AddTask extends TaskletAdapter
      * @param contactOwnerId
      *            - Contact owner-id.
      */
-    private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId, String givenOwnerId, String contactOwnerId)
+    private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId,
+	    String givenOwnerId, String contactOwnerId, int progress, String descrption, String status)
     {
-	Task task = new Task(Type.valueOf(category), dueDateInEpoch);
+	Task task = new Task(Type.valueOf(category), dueDateInEpoch, progress, descrption, Status.valueOf(status));
 
 	// Intialize task contacts with contact id
 	task.contacts = new ArrayList<String>();

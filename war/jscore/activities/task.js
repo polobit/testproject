@@ -267,6 +267,8 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 			} else if (Current_Route == 'tasks') {
 				
+				updateTask(isUpdate, data, json);
+				
 				/*	To do without reloading the page should check the condition of (Owner and Category)*/
   				
   				var old_owner_id = $('#content').find('.type-task-button').find(".selected_name").text();
@@ -278,7 +280,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
   				if((old_owner_id == "All Categories" || old_owner_id.toUpperCase() == json.type) && (old_type == "All Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
   					App_Calendar.allTasksListView.collection.add(data);
   				
-				App_Calendar.allTasksListView.render(true);
+				//App_Calendar.allTasksListView.render(true);
 			}
 			// Updates data to temeline
 			else if (App_Contacts.contactDetailView

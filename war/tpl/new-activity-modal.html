@@ -144,13 +144,42 @@
                             </div>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label"><b> Owner </b><span class="field_req">*</span></label>
-                        <div class="controls" id="owners">			
-                            <select id="owners-list" class="required" name="owner_id"></select>
-                            <img class="loading-img" src="img/21-0.gif"></img>
+                    <div class="row">
+                        <div class="span3 control-group">
+                             <label class="control-label"><b> Owner </b><span class="field_req">*</span></label>
+                             <div class="controls" id="owners">			
+                                 <select id="owners-list" class="required" name="owner_id"></select>
+                                 <img class="loading-img" src="img/21-0.gif"></img>
+                             </div>
                         </div>
-                    </div>
+                        <div class="span2 control-group">
+                            <label for="status" class="control-label"><b>Status </b></label>
+                            <div class="controls">
+                                <span class="input ">
+                                    <select name="status" id="status" size="1" class="input-medium">
+                                        <option value="NOT_STARTED" selected="selected">Not Started</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="COMPLETED">Completed</option>
+                                        <option value="PAUSED">Paused</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                    </div>            
+                    <div class="row">
+                        <div class="span3 control-group">
+                             <label for="progress" class="control-label"><b>Progress (%) </b></label>
+                            <div class="controls">
+                                <input name="progress" id="progress" type="number" min="1" max="100" value="1">
+                            </div>
+                        </div>
+                        <div class="span2 control-group">
+                            <label for="descrption" class="control-label"><b>Descrption </b></label>
+                            <div class="controls">
+                               <input type="text" id="descrption" name="descrption" size="40" class="required" placeholder="Description of Task" data-mode="multiple"/>
+                            </div>
+                        </div>
+                    </div>                    
                     <div class="control-group">
                         <label class="control-label"><b>Related To</b></label>
                         <div class="controls">

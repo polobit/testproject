@@ -23,6 +23,10 @@
             </tbody>
         </table>
 		<a href="#" class="btn btn-primary"  style="margin-bottom: 15px;margin-left: 25px;display:none;" id="bulk-complete">Complete</a>
+    
+       <div id="new_ui"></div>
+       <button id="show_new_ui">show</button>
+
     </div>
 </div>
 {{/unless}}
@@ -73,23 +77,24 @@
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" id="owner-tasks"></ul>
+                <ul class="dropdown-menu" id="owner-tasks">
+                     <!--<li><a href=''>All Tasks</a></li>
+					 <li><a href='all-pending-tasks'>All Pending Tasks</a></li>
+                     <li><a href='my-tasks'>My Tasks</a></li>
+					 <li><a href='my-pending-tasks'>My Pending Tasks</a></li>		-->			 
+                </ul>
             </div>
             <div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name">All Categories</div>
+                <div class="btn selected_name">Categories</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" id="type-tasks">
-					 <li><a href="">All Categories</a></li>
-                     <li><a href="CALL">Call</a></li>
-                     <li><a href="EMAIL">Email</a></li>
-                     <li><a href="FOLLOW_UP">Follow-up</a></li>
-                     <li><a href="MEETING">Meeting</a></li>
-                     <li><a href="MILESTONE">Milestone</a></li>
-                     <li><a href="SEND">Send</a></li>
-                     <li><a href="TWEET">Tweet</a></li>
-					 <li><a href="OTHER">Other</a></li>
+					 <li><a href="">Categories</a></li>
+                     <li><a href="OWNER">Owner</a></li>
+                     <li><a href="DUE">Due</a></li>
+                     <li><a href="PRIORITY">Priority</a></li>
+                     <li><a href="STATUS">Status</a></li>                     
                 </ul>
             </div>
         </div>
