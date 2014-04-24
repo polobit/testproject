@@ -29,11 +29,11 @@ public class ContactGmailUtil
      * @return String
      */
     @SuppressWarnings("deprecation")
-    public static String getGmailURL(String searchEmail, String offset, String count)
+    public static String getGmailURL(AgileUser agileUser, String searchEmail, String offset, String count)
     {
 	// Get Gmail Social Prefs
 	Type socialPrefsTypeEnum = SocialPrefs.Type.GMAIL;
-	SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(AgileUser.getCurrentAgileUser(), socialPrefsTypeEnum);
+	SocialPrefs gmailPrefs = SocialPrefsUtil.getPrefs(agileUser, socialPrefsTypeEnum);
 
 	if (gmailPrefs == null)
 	    return null;
