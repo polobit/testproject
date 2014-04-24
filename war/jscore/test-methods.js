@@ -1,30 +1,37 @@
-function createNestedCollection()
+function findURL(criteria,owner)
+{
+	console.log(criteria+"  "+owner);
+	console.log(urlMap[criteria].type);
+	console.log(urlMap[criteria].searchKey);
+		
+	var initialURL = '/core/api/tasks/based' + getParams()+ "&type=";
+	
+	createNestedCollection(urlMap[criteria].type,initialURL,urlMap[criteria].searchKey);	
+}
+
+function createNestedCollection(criteriaArray,initialURL,searchKey)
 {
 	// Shows loading image untill data gets ready for displaying
-	$('#task-list-based-condition').html(LOADING_HTML);
-
-	var initialURL = getParams();
-
-	var categoryArray = ["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"	];
+	$('#task-list-based-condition').html(LOADING_HTML);	
 
 	initTaskListCollection();
 	
-	for ( var i in categoryArray)
+	for ( var i in criteriaArray)
 	{
-		var newTaskList = { "heading" : categoryArray[i] };
+		var newTaskList = { "heading" : criteriaArray[i] };
 
 		tasksListCollection.collection.add(newTaskList);// main-collection				
 	}
 	
 	$('#task-list-based-condition').html(tasksListCollection.render(true).el);
 
-	for ( var i in categoryArray)
+	for ( var i in criteriaArray)
 	{
 		console.log(i);
-		console.log(categoryArray[i]);
+		console.log(criteriaArray[i]);
 		console.log(initialURL);
 
-		var url = '/core/api/tasks/based' + initialURL + "&type=" + categoryArray[i];
+		var url =  initialURL + criteriaArray[i];
 		console.log(url);
 
 		queueGetRequest("task_queue", url, 'json', 
@@ -34,9 +41,9 @@ function createNestedCollection()
 			
 			if (tasks.length != 0)
 			{
-				console.log(tasks[0]);
+				console.log(tasks[0][searchKey]);
 								
-				var modelTaskList = tasksListCollection.collection.where({ heading : tasks[0].type });
+				var modelTaskList = tasksListCollection.collection.where({ heading : tasks[0][searchKey] });
 
 				console.log(modelTaskList[0]);
 
@@ -83,7 +90,6 @@ function taskAppend(base_model)
 	var el = tasksListModel.render().el;
 	$('#list-tasks', el).html(taskCollection.render(true).el);
 	$('#new-tasks-lists-model-list', this.el).append(el);
-
 }
 
 function deleteTask(taskId, taskListId)
@@ -91,6 +97,9 @@ function deleteTask(taskId, taskListId)
 	var modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
 
 	modelTaskList[0].get('taskCollection').get(taskId).destroy();
+	
+	// Creates normal time.
+	displayTimeAgo($(".list"));
 }
 
 function editTask(taskId, taskListId)
@@ -108,11 +117,7 @@ function editTask(taskId, taskListId)
 	$("#editTaskModal").modal('show');
 
 	// Fills owner select element
-	populateUsers(
-			"owners-list",
-			$("#editTaskForm"),
-			taskJson,
-			'taskOwner',
+	populateUsers("owners-list",$("#editTaskForm"),taskJson,'taskOwner',
 			function(data)
 			{
 				$("#editTaskForm").find("#owners-list").html(data);
@@ -147,6 +152,11 @@ function updateTask(isUpdate, data, json)
 	console.log("farah");
 
 	var modelTaskList = tasksListCollection.collection.where({ heading : json.type });
+	
+	console.log(data+"  "+ json);
+	console.log(modelTaskList);
+	console.log(modelTaskList[0]);
+	console.log(modelTaskList[0].get('taskCollection'));
 
 	if (isUpdate)
 	{

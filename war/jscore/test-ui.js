@@ -4,16 +4,26 @@ $(function()
 
 	// Main Collection
 	tasksListCollection = null;
-	/* Url Map After selection from filter
-	 * urlMap =[{"Priority":
-	 * [{"High":"highurl"},{"Low":"lowurl"},{"Normal":"normalurl"}]},
-	 * {"Category":
-	 * [{"Email":"emailurl"},{"Low":"lowurl"},{"Normal":"normalurl"}]},
-	 * {"Status":
-	 * [{"Email":"emailurl"},{"Low":"lowurl"},{"Normal":"normalurl"}]}, 
-	 * {"Due":
-	 * [{"Email":"emailurl"},{"Low":"lowurl"},{"Normal":"normalurl"}]} ];
-	 */
+
+	// Url Map After selection from filter
+	urlMap = { "PRIORITY" : {"type":["HIGH", "LOW", "NORMAL"], "searchKey":"priority_type"},
+			   "CATEGORY" : {"type":["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey":"type"}, 
+	           "STATUS" : {"type":["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"], "searchKey":"status"},
+	           "DUE" : {"type":["TODAY", "OVERDUE","THIS_WEEK", "LATER"], "searchKey":""},
+	           "OWNER" : [] 
+	         };
+
+	// Get user's name and add in urlMap
+	$.getJSON('/core/api/users', function(users)
+	{
+		console.log(users);		
+		for ( var i in users)		
+			urlMap.OWNER[i] = users[i].name;
+	}).error(function(data)
+	{
+		console.log("get user err");
+		console.log(data);
+	});
 
 	// Display task actions
 	$('.listed-task .task-footer').live('mouseenter', function()
@@ -31,22 +41,13 @@ $(function()
 	$('.task-body, .task-due-time').die().live('click', function(event)
 	{
 		var taskId;
-		var taskListId;
+		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
 		
-		if ($(this).hasClass('task-body'))
-		{
+		if ($(this).hasClass('task-body'))		
 			taskId = $(this).parent().attr('id');
-			taskListId = $(this).find('.task-type').html();
-		}
-		else
-		{
+		else		
 			taskId = $(this).attr('data');
-			taskListId = $(this).parent().parent().parent().find('.task-type').html();
-		}
-
-		console.log("task-body");
-		console.log(taskId);
-
+				
 		// Show Task View Modal
 		viewTask(taskId, taskListId);
 	});
@@ -65,14 +66,15 @@ $(function()
 	{
 		var taskId = $(this).attr('data');
 
-		var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		//var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
 
 		editTask(taskId, taskListId);
 	});
 
 	/*
-	 * Task Action: Delete task from UI as well as DB. Need to do this manually because
-	 * nested collection can not perform default functions.
+	 * Task Action: Delete task from UI as well as DB. Need to do this manually
+	 * because nested collection can not perform default functions.
 	 */
 	$('.delete-task').die().live('click', function(event)
 	{
@@ -81,18 +83,20 @@ $(function()
 
 		var taskId = $(this).attr('data');
 
-		var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		//var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
 
 		// Delete Task.
 		deleteTask(taskId, taskListId);
 	});
 
-	//Task Action: Mark task complete, make changes in DB.
+	// Task Action: Mark task complete, make changes in DB.
 	$('.is-task-complete').die().live('click', function(event)
 	{
 		var taskId = $(this).attr('data');
 
-		var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		//var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
 
 		// make task completed.
 		completeTask(taskId, taskListId);
@@ -102,7 +106,7 @@ $(function()
 	$('.display-due').die().live('click', function(event)
 	{
 		event.preventDefault();
-		
+
 		// show date picker
 		$('.date', $("#editTaskForm")).datepicker('show');
 	});
@@ -124,23 +128,27 @@ $(function()
 	 */
 	$('#editTaskModal').on('hidden', function()
 	{
-
 		$("#editTaskForm").find("li").remove();
 	});
-	
+
 	// Click events to agents dropdown and department
-	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e) {
-				e.preventDefault();
+	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e)
+	{
+		e.preventDefault();
 
-				// Show selected name
-				var name = $(this).html(), id = $(this).attr("href");
+		// Show selected name
+		var name = $(this).html(), id = $(this).attr("href");
 
-				$(this).closest("ul").data("selected_item", id);
-				$(this).closest(".btn-group").find(".selected_name")
-						.text(name);
-				var url = getParams();
-				//updateData(url);
-				console.log(url);
-	});	
-	
+		$(this).closest("ul").data("selected_item", id);
+		$(this).closest(".btn-group").find(".selected_name").text(name);
+
+		var criteria = $('#type-tasks').data("selected_item");
+		var owner = $('#owner-tasks').data("selected_item");
+
+		if(!criteria)
+			criteria="CATEGORY";
+		
+		findURL(criteria, owner)
+	});
+
 });

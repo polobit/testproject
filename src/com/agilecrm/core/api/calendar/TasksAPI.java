@@ -261,16 +261,17 @@ public class TasksAPI
     @Path("/based")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Task> getTasksBasedOnOwnerOfType(@QueryParam("type") String type, @QueryParam("owner") String owner,
-	    @QueryParam("pending") boolean pending, @QueryParam("cursor") String cursor,
-	    @QueryParam("page_size") String count) throws Exception
+    public List<Task> getTasksBasedOnOwnerOfType(@QueryParam("criteria") String criteria,
+	    @QueryParam("type") String type, @QueryParam("owner") String owner, @QueryParam("pending") boolean pending,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count) throws Exception
     {
 	if (count != null)
 	{
-	    return TaskUtil.getTasksRelatedToOwnerOfType(type, owner, pending, Integer.parseInt(count), cursor);
+	    return TaskUtil.getTasksRelatedToOwnerOfType(criteria, type, owner, pending, Integer.parseInt(count),
+		    cursor);
 	}
 
-	return TaskUtil.getTasksRelatedToOwnerOfType(type, owner, pending, null, null);
+	return TaskUtil.getTasksRelatedToOwnerOfType(criteria, type, owner, pending, null, null);
     }
 
     @Path("/stats")
