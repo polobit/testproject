@@ -14,4 +14,4 @@ $(function(){
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
 		$(this).parents("tbody").append(htmlContent);
 	});
-})
+});
