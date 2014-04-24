@@ -159,17 +159,20 @@ function addTicketToHelpScout()
 
 	queueGetRequest("widget_queue", "/core/api/widgets/helpscout/get/mailbox/" + HelpScout_Plugin_Id, "json", function success(data)
 	{
-		json["mailboxes"] = data;
+		if(data.length > 0)
+		{
+			json["mailboxes"] = data;
 
-		console.log(json);
-		// Populate the modal template with the above JSON details in the form
-		var message_form_modal = getTemplate("helpscout-message", json);
+			console.log(json);
+			// Populate the modal template with the above JSON details in the form
+			var message_form_modal = getTemplate("helpscout-message", json);
 
-		// Append the form into the content
-		$('#content').append(message_form_modal);
+			// Append the form into the content
+			$('#content').append(message_form_modal);
 
-		// Shows the modal after filling with details
-		$('#helpscout_messageModal').modal("show");
+			// Shows the modal after filling with details
+			$('#helpscout_messageModal').modal("show");
+		}
 
 	}, function error(data)
 	{
