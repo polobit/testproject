@@ -6,7 +6,10 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Settings */
-	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit" },
+	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit",
+	"shopify-rule-add" : "shopify_rule_add", "shopify-rule-edit/:id" : "shopify_rule_edit"
+		
+	},
 	webrules : function()
 	{
 		$(".active").removeClass("active");
@@ -51,8 +54,13 @@ var WebreportsRouter = Backbone.Router.extend({
 
 		// Gets a report to edit, from reports collection, based on id
 		var webrule = this.webrules.collection.get(id);
-
-		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : "webrules-add", window : "web-rules",
+		
+		// Default template is webrule-add. If rule is of type shopify template is changed accordingly
+		var template = "webrules-add";
+		if(webrule.get("rule_type") == "SHOPIFY_WEB_RULE")
+			template = "shopifyrules-add";
+		
+		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : template, window : "web-rules",
 			postRenderCallback : function(el)
 			{
 				if (count > 0)
@@ -71,4 +79,25 @@ var WebreportsRouter = Backbone.Router.extend({
 
 		$("#content").html(LOADING_HTML);
 		web_reports_add.render();
-	} });
+	}, 
+	shopify_rule_add : function()
+	{
+		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "shopifyrules-add", window : "web-rules", isNew : true,
+			postRenderCallback : function(el)
+			{
+				head.js('lib/agile.jquery.chained.min.js', function()
+				{
+
+					chainFilters(el, undefined, function()
+					{
+						chainWebRules(el, undefined, true);
+						$("#content").html(el);
+					});
+
+				})
+			} });
+
+		$("#content").html(LOADING_HTML);
+		web_reports_add.render();
+	}s
+});

@@ -24,6 +24,10 @@ public class WebRule
     @NotSaved(IfDefault.class)
     public String name = null;
 
+    // Store type of the rule whether it is plain web rule or shopify rule
+    @NotSaved(IfDefault.class)
+    public String rule_type = "WEBRULE";
+
     @NotSaved(IfDefault.class)
     @Embedded
     public List<SearchRule> rules = new ArrayList<SearchRule>();
@@ -64,8 +68,9 @@ class WebRuleAction
     @Override
     public String toString()
     {
-	return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern=" + popup_pattern + ", title=" + title
-		+ ", popup_text=" + popup_text + ", delay=" + delay + ", timer=" + timer + "]";
+	return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern="
+		+ popup_pattern + ", title=" + title + ", popup_text=" + popup_text + ", delay=" + delay + ", timer="
+		+ timer + "]";
     }
 
     public enum Action
