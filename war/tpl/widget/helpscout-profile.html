@@ -27,7 +27,11 @@
 		{{/if}}
 	</div>
 </div>
-<div class="clearfix" style="margin-top:5px;"><a class="btn" id="add_ticket"><i class="icon-plus"></i>New Conversation</a></div>						
+<div class="clearfix" style="margin-top:5px;">
+	<a class="btn" id="add_ticket"><i class="icon-plus"></i>New Conversation</a>
+	<p id="helpscout_loading" style="display:none;" >Please wait...</p>
+	<p id="helpscout_error" style="display:none;" >Please Try agian.</p>
+</div>						
 </div>
 <div class="clearfix" id="add-ticket-error-panel" style="display:none;">
 </div>
@@ -74,24 +78,24 @@
 </script>
 
 <script id="helpscout-message-template" type="text/html">
-	<div class="modal hide fade message-modal" id="helpscout_messageModal" style="width:400px; left:55%">
+	<div class="modal hide fade message-modal" id="helpscout_messageModal" style="width:600px; left:50%">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
-			{{#if_equals headline "Add Ticket"}}
+			{{#if_equals headline "Add Conversation"}}
 	        	<h3><i class="icon-plus-sign"></i> {{headline}}</h3>
 			{{else}}
 				<h3><i class="icon-edit"></i> {{headline}}</h3>
 			{{/if_equals}}
 	    </div>
 	    <div class="modal-body agile-modal-body">
-	        <form id="helpscout_messageForm" name="helpscout_messageForm" method="post">
+	        <form id="helpscout_messageForm" name="helpscout_messageForm" method="post" class="form-horizontal">
 	            <fieldset>
 					<div style="margin-bottom:10px;">{{info}}</div>
 					<input name="customerId" type="hidden" value="{{customerId}}" />
 	                <input name="email" type="hidden" value="{{email}}" />
-					<div class="control-group">	                    
+					<div class="control-group">	           
+						<label class="control-label"><b>Mailbox: </b><span class="field_req">*</span></label>         
 	                    <div class="controls">
-							<label class="control-label"><b>Mailbox: </b><span class="field_req">*</span></label>	
 							<select name="mailbox">
 							{{#isArray mailboxes}}
 								{{#each mailboxes}}
@@ -101,9 +105,54 @@
 							</select>                        
 	                    </div>
 	                </div>
-	                <div class="control-group">	                    
+					<div class="control-group">	      
+						<label class="control-label"><b>Type: </b><span class="field_req">*</span></label>	              
 	                    <div class="controls">
-							<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	                        
+							<div class="btn-group" data-toggle="buttons">
+  								<label class="btn btn-primary active">
+									<input type="radio" name="type" id="type_email" value="email" style="display:none;"> <i class="icon-envelope" />
+								</label>
+  								<label class="btn btn-primary">
+    								<input type="radio" name="type" id="type_ohone" value="phone" style="display:none;"> <i class="icon-phone" />
+  								</label>
+							</div>
+					   </div>
+	                </div>
+
+ 					<div class="control-group">	                    
+						<label class="control-label"><b>Assign to: </b><span class="field_req">*</span></label>	
+	                    <div class="controls">
+							<select name="assignTo">
+							{{#isArray assignees}}
+								{{#each assignees}}
+									<option value="{{id}}">{{firstName}} {{lastName}}</option>
+								{{/each}}
+							{{/isArray}}
+							</select> 
+	                    </div>
+	                </div>
+					<div class="control-group">	                    
+						<label class="control-label"><b>Status: </b><span class="field_req">*</span></label>	
+	                    <div class="controls">
+							<select name="status">
+								<option value="active">Active</option>
+								<option value="pending">Pending</option>
+								<option value="closed">Closed</option>
+								<option value="spam">Spam</option>
+							</select> 
+	                    </div>
+	                </div>
+				<div class="control-group" id="tags_source_continue_contact">
+                    <label class="control-label"><b>Tags: </b></label>
+                    <div class="controls">
+                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead" />
+                    </div>
+               	 </div>
+
+
+	                <div class="control-group">	                    
+						<label class="control-label"><b>Subject: </b><span class="field_req">*</span></label>	
+	                    <div class="controls">
 							<input type="text" placeholder="Subject" name="subject" id="subject" class="required span4" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"/>
 	                    </div>
 	                </div>
