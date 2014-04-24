@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -116,7 +117,7 @@ public class EmailsAPI
 	try
 	{
 	    // Gets gmailPrefs url if not null, otherwise imap url.
-	    String url = ContactEmailUtil.getEmailsFetchURL(searchEmail, offset, count);
+	    String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), searchEmail, offset, count);
 
 	    // If both are not set, return Contact emails.
 	    if (url == null)

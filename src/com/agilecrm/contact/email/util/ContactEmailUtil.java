@@ -1,5 +1,6 @@
 package com.agilecrm.contact.email.util;
 
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,7 @@ import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
 import com.agilecrm.util.EmailUtil;
+import com.agilecrm.util.HTTPUtil;
 
 /**
  * <code>ConactEmailUtil</code> is the utility class for {@link ContactEmail}.
@@ -273,16 +275,16 @@ public class ContactEmailUtil
      *            - count or limit to number of emails.
      * @return String
      */
-    public static String getEmailsFetchURL(String searchEmail, String offset, String count)
+    public static String getEmailsFetchURL(AgileUser agileUser, String searchEmail, String offset, String count)
     {
-	String gmailURL = ContactGmailUtil.getGmailURL(searchEmail, offset, count);
+	String gmailURL = ContactGmailUtil.getGmailURL(agileUser, searchEmail, offset, count);
 
 	// if not null return gmailURL
 	if (gmailURL != null)
 	    return gmailURL;
 
 	// return imapURL.
-	String imapURL = ContactImapUtil.getIMAPURL(searchEmail, offset, count);
+	String imapURL = ContactImapUtil.getIMAPURL(agileUser, searchEmail, offset, count);
 	return imapURL;
     }
 
@@ -350,5 +352,54 @@ public class ContactEmailUtil
 
 	return userName;
 
+    }
+
+    /**
+     * Returns emails fetched from IMAP server with respective given params
+     * 
+     * @param searchEmail
+     *            - search email to get emails
+     * @param searchEmailSubject
+     *            - search email subject to get emails
+     * @return String
+     */
+    public static JSONArray getIMAPEmails(AgileUser agileUser, String searchEmail, String searchEmailSubject)
+    {
+	try
+	{
+	    // If agileUser null return
+	    if (agileUser == null)
+		return null;
+
+	    String url = ContactEmailUtil.getEmailsFetchURL(agileUser, searchEmail, "0", "5");
+
+	    // When prefs not set
+	    if (StringUtils.isBlank(url))
+		return null;
+
+	    // Append subject to search, if not empty
+	    if (!StringUtils.isBlank(searchEmailSubject))
+		url += "&" + "search_email_subject=" + URLEncoder.encode(searchEmailSubject, "UTF-8");
+
+	    String jsonResult = HTTPUtil.accessURL(url);
+
+	    if (StringUtils.isBlank(jsonResult))
+		return null;
+
+	    JSONObject emailsJSON = new JSONObject(jsonResult);
+
+	    if (emailsJSON.has("emails"))
+	    {
+		JSONArray emails = emailsJSON.getJSONArray("emails");
+		return emails;
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while fetching imap emails..." + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return null;
     }
 }
