@@ -136,6 +136,8 @@ function showMailsInHelpScout(customerId)
 
 function addTicketToHelpScout()
 {
+	$('#add_ticket').toggle();
+	$('#helpscout_loading').toggle();
 	/*
 	 * Stores info as JSON, to send it to the modal when add ticket request is
 	 * made
@@ -143,7 +145,7 @@ function addTicketToHelpScout()
 	var json = {};
 
 	// Set headline of modal window as Add Ticket
-	json["headline"] = "Add Ticket";
+	json["headline"] = "Add Conversation";
 
 	// Information to be shown in the modal to the user
 	json["info"] = "Add Conversation in HelpScout";
@@ -157,27 +159,43 @@ function addTicketToHelpScout()
 	// Remove the modal if already exists
 	$('#helpscout_messageModal').remove();
 
-	queueGetRequest("widget_queue", "/core/api/widgets/helpscout/get/mailbox/" + HelpScout_Plugin_Id, "json", function success(data)
+	queueGetRequest("widget_queue", "/core/api/widgets/helpscout/get/createform/" + HelpScout_Plugin_Id, "json", function success(data)
 	{
-		if(data.length > 0)
+		if(data.hasOwnProperty("mailboxes"))
 		{
-			json["mailboxes"] = data;
-
+			json["mailboxes"] = data.mailboxes;
+			
+			json["assignees"] = data.assignees;
+			
 			console.log(json);
 			// Populate the modal template with the above JSON details in the form
 			var message_form_modal = getTemplate("helpscout-message", json);
 
 			// Append the form into the content
 			$('#content').append(message_form_modal);
-
+			
 			// Shows the modal after filling with details
 			$('#helpscout_messageModal').modal("show");
+
+			// To show the radio button (for type) as buttons with toggle state.
+			$("#helpscout_messageModal input[type='radio']").live("click",function()
+					{	
+						$('#helpscout_messageModal label.btn').toggleClass("active");
+					});
+			
+			$('#add_ticket').toggle();
+			$('#helpscout_loading').toggle();
 		}
 
 	}, function error(data)
 	{
-		// Error message is shown
-		helpscoutError(HELPSCOUT_PLUGIN_NAME, data.responseText);
+		$('#add_ticket').toggle();
+		$('#helpscout_loading').hide();
+		$('#helpscout_error').show();
+		setTimeout(function()
+		{
+			$('#helpscout_error').hide();
+		}, 2000);
 	});
 
 	/*
