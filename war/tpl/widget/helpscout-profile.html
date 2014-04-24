@@ -81,7 +81,7 @@
 	<div class="modal hide fade message-modal" id="helpscout_messageModal" style="width:600px; left:50%">
 	    <div class="modal-header">
 	        <button class="close" data-dismiss="modal">x</button>
-			{{#if_equals headline "Add Conversation"}}
+			{{#if_equals headline "Add Conversation to HelpScout"}}
 	        	<h3><i class="icon-plus-sign"></i> {{headline}}</h3>
 			{{else}}
 				<h3><i class="icon-edit"></i> {{headline}}</h3>
@@ -90,7 +90,7 @@
 	    <div class="modal-body agile-modal-body">
 	        <form id="helpscout_messageForm" name="helpscout_messageForm" method="post" class="form-horizontal">
 	            <fieldset>
-					<div style="margin-bottom:10px;">{{info}}</div>
+					<div style="margin-bottom:10px; display:none;">{{info}}</div>
 					<input name="customerId" type="hidden" value="{{customerId}}" />
 	                <input name="email" type="hidden" value="{{email}}" />
 					<div class="control-group">	           
@@ -128,17 +128,6 @@
 									<option value="{{id}}">{{firstName}} {{lastName}}</option>
 								{{/each}}
 							{{/isArray}}
-							</select> 
-	                    </div>
-	                </div>
-					<div class="control-group">	                    
-						<label class="control-label"><b>Status: </b><span class="field_req">*</span></label>	
-	                    <div class="controls">
-							<select name="status">
-								<option value="active">Active</option>
-								<option value="pending">Pending</option>
-								<option value="closed">Closed</option>
-								<option value="spam">Spam</option>
 							</select> 
 	                    </div>
 	                </div>

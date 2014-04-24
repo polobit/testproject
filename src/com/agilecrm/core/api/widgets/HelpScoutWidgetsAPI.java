@@ -197,6 +197,12 @@ public class HelpScoutWidgetsAPI
      *            Conversation
      * @param description
      *            {@link String} description of the Conversation to be added
+     * @param type
+     *            {@link String} type of the conversation.
+     * @param assignTo
+     *            {@link Long} the user id of the assignee.
+     * @param tags
+     *            {@link String} tags to be added to conversation.
      * @return {@link String} form of Conversation added
      */
     @Path("add/{widget-id}")
@@ -206,7 +212,7 @@ public class HelpScoutWidgetsAPI
 	    @FormParam("customerId") Long customerId, @FormParam("subject") String subject,
 	    @FormParam("email") String email, @FormParam("mailbox") Long mailbox,
 	    @FormParam("message") String description, @FormParam("type") String type,
-	    @FormParam("status") String status, @FormParam("assignTo") Long assignTo, @FormParam("tags") String tags)
+	    @FormParam("assignTo") Long assignTo, @FormParam("tags") String tags)
     {
 	try
 	{
@@ -218,7 +224,7 @@ public class HelpScoutWidgetsAPI
 	    System.out.println(customerId + " " + subject + " " + email + " " + mailbox + " " + description);
 	    // Calls HelpScoutUtil method to create a conversation in HelpScout.
 	    return HelpScoutUtil.addConversation(widget, customerId, email, mailbox, subject, description, type,
-		    status, assignTo, tags);
+		    assignTo, tags);
 	}
 	catch (SocketTimeoutException e)
 	{

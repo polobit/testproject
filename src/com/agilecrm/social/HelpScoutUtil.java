@@ -215,13 +215,16 @@ public class HelpScoutUtil
      * @param description
      *            the description (body) about the conversation.
      * @param assignTo
-     * @param status
+     *            user id of the assignee.
      * @param type
+     *            the type of the conversation.
+     * @param tags
+     *            tags to be added to the conversation.
      * @return the id of the conversation newly created.
      * @throws Exception
      */
     public static String addConversation(Widget widget, Long customerId, String email, Long mailboxId, String subject,
-	    String description, String type, String status, Long assignTo, String tags) throws Exception
+	    String description, String type, Long assignTo, String tags) throws Exception
     {
 	// The customer associated with the conversation
 	CustomerRef customer = new CustomerRef();
@@ -248,7 +251,7 @@ public class HelpScoutUtil
 	ConversationThread thread = new net.helpscout.api.model.thread.Customer();
 	thread.setType(ThreadType.Message);
 	thread.setBody(description);
-	thread.setStatus(Status.findByKey(status));
+	thread.setStatus(Status.Active);
 
 	// Set the assignee for the conversation.
 	UserRef assignedTo = new UserRef();

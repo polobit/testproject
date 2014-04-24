@@ -145,7 +145,7 @@ function addTicketToHelpScout()
 	var json = {};
 
 	// Set headline of modal window as Add Ticket
-	json["headline"] = "Add Conversation";
+	json["headline"] = "Add Conversation to HelpScout";
 
 	// Information to be shown in the modal to the user
 	json["info"] = "Add Conversation in HelpScout";
