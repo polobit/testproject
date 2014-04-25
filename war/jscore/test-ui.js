@@ -1,24 +1,21 @@
 $(function()
 {
-	console.log("In test.js");
-
 	// Main Collection
 	tasksListCollection = null;
 
 	// Url Map After selection from filter
-	urlMap = { "PRIORITY" : {"type":["HIGH", "LOW", "NORMAL"], "searchKey":"priority_type"},
-			   "CATEGORY" : {"type":["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey":"type"}, 
-	           "STATUS" : {"type":["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"], "searchKey":"status"},
-	           "DUE" : {"type":["TODAY", "OVERDUE","THIS_WEEK", "LATER"], "searchKey":""},
-	           "OWNER" : [] 
-	         };
-
-	// Get user's name and add in urlMap
+	urlMap = { "PRIORITY" : { "type" : ["HIGH", "LOW", "NORMAL"], "searchKey" : "priority_type" }, 
+			   "CATEGORY" : { "type" : ["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey" : "type" }, 
+			   "STATUS" : { "type" : ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"], "searchKey" : "status" }, 
+			   "DUE" : { "type" : ["TODAY","TOMORROW", "OVERDUE","LATER"], "searchKey" : "due" }, 
+			   "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } };
+	
+	// Get user's name and add in urlMap as owner of task
 	$.getJSON('/core/api/users', function(users)
 	{
-		console.log(users);		
-		for ( var i in users)		
-			urlMap.OWNER[i] = users[i].name;
+		console.log(users);
+		for ( var i in users)
+			urlMap.OWNER.type[i] = users[i].name;
 	}).error(function(data)
 	{
 		console.log("get user err");
@@ -42,12 +39,12 @@ $(function()
 	{
 		var taskId;
 		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
-		
-		if ($(this).hasClass('task-body'))		
+
+		if ($(this).hasClass('task-body'))
 			taskId = $(this).parent().attr('id');
-		else		
+		else
 			taskId = $(this).attr('data');
-				
+
 		// Show Task View Modal
 		viewTask(taskId, taskListId);
 	});
@@ -66,9 +63,11 @@ $(function()
 	{
 		var taskId = $(this).attr('data');
 
-		//var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		// var taskListId =
+		// $(this).parent().parent().parent().find('.task-type').html();
 		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
 
+		// Show and Fill details in Task Edit modal
 		editTask(taskId, taskListId);
 	});
 
@@ -81,9 +80,10 @@ $(function()
 		if (!confirm("Are you sure you want to delete?"))
 			return;
 
+		// Get Task id
 		var taskId = $(this).attr('data');
 
-		//var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		// Get heading of task list
 		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
 
 		// Delete Task.
@@ -93,16 +93,17 @@ $(function()
 	// Task Action: Mark task complete, make changes in DB.
 	$('.is-task-complete').die().live('click', function(event)
 	{
+		// Get Task id
 		var taskId = $(this).attr('data');
 
-		//var taskListId = $(this).parent().parent().parent().find('.task-type').html();
+		// Get heading of task list
 		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
 
 		// make task completed.
 		completeTask(taskId, taskListId);
 	});
 
-	// On click of Time icon in Task edit modal, displays clender.
+	// On click of Time icon in Task edit modal, displays calendar.
 	$('.display-due').die().live('click', function(event)
 	{
 		event.preventDefault();
@@ -112,7 +113,7 @@ $(function()
 	});
 
 	/**
-	 * Show event of update task modal Activates typeahead for task-update-modal
+	 * Show event of update task modal Activates typeahead for task-edit-modal
 	 */
 	$('#editTaskModal').on('shown', function()
 	{
@@ -131,7 +132,7 @@ $(function()
 		$("#editTaskForm").find("li").remove();
 	});
 
-	// Click events to agents dropdown and department
+	// Click events to agents dropdown of Owner's list and Criteria's list
 	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e)
 	{
 		e.preventDefault();
@@ -142,13 +143,22 @@ $(function()
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
 
+		// Get selection from both dropdown
 		var criteria = $('#type-tasks').data("selected_item");
 		var owner = $('#owner-tasks').data("selected_item");
 
-		if(!criteria)
-			criteria="CATEGORY";
-		
-		findURL(criteria, owner)
+		// If criteria is not selected then make it default one
+		if (!criteria)
+			criteria = "CATEGORY";
+
+		// Find array of type's related to criteria in Map
+		findDetails(criteria, owner)
 	});
 
+	$("ul#owner-tasks li a").die().live("click", function()
+	{
+		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');
+		
+		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
+	});
 });

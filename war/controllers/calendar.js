@@ -61,7 +61,7 @@ var CalendarRouter = Backbone.Router.extend({
 			// To Updated task list based on user selection of type and owner
 			//initOwnerslist();
 			
-			findURL("CATEGORY","my-pending-tasks");
+			findDetails("CATEGORY","my-pending-tasks");
 		}, "<li><a href='{{id}}'>My Tasks</a></li>", true);
 
 		$(".active").removeClass("active");

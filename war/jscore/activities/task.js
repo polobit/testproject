@@ -342,7 +342,7 @@ function get_due(due) {
 	date.setHours(0, 0, 0, 0);
 
 	date = date.getTime() / 1000;
-	// console.log("Today " + date + " Due " + due);
+	console.log("Today " + date + " Due " + due);
 	return Math.floor((due - date) / (24 * 3600));
 }
 
@@ -375,6 +375,7 @@ function append_tasks(base_model) {
 	
 	// add to the right box - overdue, today, tomorrow etc.
 	var due = get_due(base_model.get('due'));
+		
 	if (due < 0) {
 		
 		var heading = $('#overdue-heading', this.el);

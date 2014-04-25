@@ -12,10 +12,7 @@ function includeTimeAgo(element){
 /**
  * To fill the tasklist ordered by default 
  */
-function initOwnerslist() {
-
-
-	
+function initOwnerslist() {	
 	// Click events to agents dropdown and department
 	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e) {
 				e.preventDefault();
