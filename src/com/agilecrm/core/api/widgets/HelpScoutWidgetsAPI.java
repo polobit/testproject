@@ -86,17 +86,18 @@ public class HelpScoutWidgetsAPI
     }
 
     /**
-     * Retrieves the list of mailboxes the user has based on the API_Key in the
-     * {@link Widget}
+     * Retrieves the list of values to fill the create Conversation form based
+     * on the API_Key in the {@link Widget}
      * 
      * @param widgetId
      *            {@link Long} plugin-id/widget id, to get {@link Widget} object
-     * @return the list of mailboxes.
+     * @return the JSON String containing the value required to fill the create
+     *         Conversation form.
      */
-    @Path("get/mailbox/{widget-id}")
+    @Path("get/createform/{widget-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public static String getMailBoxes(@PathParam("widget-id") Long widgetId)
+    public static String getCreateFormData(@PathParam("widget-id") Long widgetId)
     {
 	try
 	{
@@ -107,7 +108,7 @@ public class HelpScoutWidgetsAPI
 		return null;
 
 	    // Calls Help Scout to retrieve tickets/Mails for contacts email
-	    return HelpScoutUtil.getMailBoxes(widget);
+	    return HelpScoutUtil.getCreateFormData(widget);
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -196,6 +197,12 @@ public class HelpScoutWidgetsAPI
      *            Conversation
      * @param description
      *            {@link String} description of the Conversation to be added
+     * @param type
+     *            {@link String} type of the conversation.
+     * @param assignTo
+     *            {@link Long} the user id of the assignee.
+     * @param tags
+     *            {@link String} tags to be added to conversation.
      * @return {@link String} form of Conversation added
      */
     @Path("add/{widget-id}")
@@ -204,7 +211,8 @@ public class HelpScoutWidgetsAPI
     public String addConversationInHelpScout(@PathParam("widget-id") Long widgetId,
 	    @FormParam("customerId") Long customerId, @FormParam("subject") String subject,
 	    @FormParam("email") String email, @FormParam("mailbox") Long mailbox,
-	    @FormParam("message") String description)
+	    @FormParam("message") String description, @FormParam("type") String type,
+	    @FormParam("assignTo") Long assignTo, @FormParam("tags") String tags)
     {
 	try
 	{
@@ -215,7 +223,8 @@ public class HelpScoutWidgetsAPI
 		return null;
 	    System.out.println(customerId + " " + subject + " " + email + " " + mailbox + " " + description);
 	    // Calls HelpScoutUtil method to create a conversation in HelpScout.
-	    return HelpScoutUtil.addConversation(widget, customerId, email, mailbox, subject, description);
+	    return HelpScoutUtil.addConversation(widget, customerId, email, mailbox, subject, description, type,
+		    assignTo, tags);
 	}
 	catch (SocketTimeoutException e)
 	{

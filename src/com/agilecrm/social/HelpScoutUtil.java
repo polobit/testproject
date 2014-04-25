@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.helpscout.api.ApiClient;
 import net.helpscout.api.Page;
+import net.helpscout.api.cbo.ConversationType;
 import net.helpscout.api.cbo.PersonType;
 import net.helpscout.api.cbo.Status;
 import net.helpscout.api.cbo.ThreadType;
@@ -12,6 +13,7 @@ import net.helpscout.api.model.Conversation;
 import net.helpscout.api.model.ref.CustomerRef;
 import net.helpscout.api.model.ref.MailboxRef;
 import net.helpscout.api.model.ref.PersonRef;
+import net.helpscout.api.model.ref.UserRef;
 import net.helpscout.api.model.thread.ConversationThread;
 import net.helpscout.api.model.thread.LineItem;
 
@@ -33,6 +35,9 @@ import com.google.gson.Gson;
  */
 public class HelpScoutUtil
 {
+
+    public static final String PERSON_USER = "User";
+    public static final String PERSON_CUSTOMER = "Customer";
 
     /**
      * Creates a {@link HelpScoutRestClient} instance and sets the account
@@ -119,6 +124,8 @@ public class HelpScoutUtil
 	// Get the list of mailboxes of the current User.
 	JSONArray mailboxes = new JSONArray(getMailBoxes(widget));
 
+	customerConv.put("mailboxList", mailboxes);
+
 	// Loop through the each mailbox and get the email sent by the Customer
 	// to that mailbox.
 	for (int i = 0; i < mailboxes.length(); i++)
@@ -142,6 +149,27 @@ public class HelpScoutUtil
 	    customerConv.put("message", "No Mails from this Customer.");
 
 	return customerConv.toString();
+    }
+
+    /**
+     * Returns the data required to fill the options in the Create Conversation
+     * Form.
+     * 
+     * @param widget
+     *            the widget object contains the API Key of the HelpScout.
+     * @return the JSON String containing the data used to fill the create
+     *         Conversations form.
+     * @throws Exception
+     */
+    public static String getCreateFormData(Widget widget) throws Exception
+    {
+	JSONObject formData = new JSONObject();
+	// Get list of user for assignees list.
+	formData.put("assignees", new JSONArray(getPersonsFromHelpScout(widget, PERSON_USER)));
+	// Get the list of Mailboxes.
+	formData.put("mailboxes", new JSONArray(getMailBoxes(widget)));
+	return formData.toString();
+
     }
 
     /**
@@ -186,11 +214,17 @@ public class HelpScoutUtil
      *            the subject of the conversation.
      * @param description
      *            the description (body) about the conversation.
+     * @param assignTo
+     *            user id of the assignee.
+     * @param type
+     *            the type of the conversation.
+     * @param tags
+     *            tags to be added to the conversation.
      * @return the id of the conversation newly created.
      * @throws Exception
      */
     public static String addConversation(Widget widget, Long customerId, String email, Long mailboxId, String subject,
-	    String description) throws Exception
+	    String description, String type, Long assignTo, String tags) throws Exception
     {
 	// The customer associated with the conversation
 	CustomerRef customer = new CustomerRef();
@@ -200,7 +234,13 @@ public class HelpScoutUtil
 	Conversation conversation = new Conversation();
 	conversation.setSubject(subject);
 	conversation.setCustomer(customer);
-	conversation.setStatus(Status.Active);
+	conversation.setType(ConversationType.findByLabel(type));
+
+	// Add tags to the conversation.
+	List<String> tagsList = new ArrayList<String>();
+	for (String tag : tags.split(","))
+	    tagsList.add(tag);
+	conversation.setTags(tagsList);
 
 	// Reference to the mailbox to which the conversation is created in to.
 	MailboxRef mailbox = new MailboxRef();
@@ -213,9 +253,14 @@ public class HelpScoutUtil
 	thread.setBody(description);
 	thread.setStatus(Status.Active);
 
+	// Set the assignee for the conversation.
+	UserRef assignedTo = new UserRef();
+	assignedTo.setId(assignTo);
+	thread.setAssignedTo(assignedTo);
+
 	// Get the detail of the presently logged in in user using to define who
 	// is creating the conversation.
-	JSONObject me = new JSONObject(getMeFromHelpScout(widget));
+	JSONObject me = new JSONObject(getUserFromHelpScout(widget));
 	// Reference of the person who is creating the conversation.
 	PersonRef createdBy = new CustomerRef();
 	createdBy.setId(me.getLong("id"));
@@ -246,12 +291,38 @@ public class HelpScoutUtil
      * @return the user object in the JSON String format.
      * @throws Exception
      */
-    public static String getMeFromHelpScout(Widget widget) throws Exception
+    public static String getUserFromHelpScout(Widget widget) throws Exception
     {
 	// Get the HelpScout API Client with API_key.
 	ApiClient client = getHelpScoutApiClient(widget);
 	Gson gson = new Gson();
-
 	return gson.toJson(client.getUserMe());
+    }
+
+    /**
+     * Call the HelpScout to get list of Persons of the specified type.
+     * 
+     * @param widget
+     *            the widget object contains the API Key of the HelpScout.
+     * @param type
+     *            the type persons. Presently 2 types, User and Customer.
+     * @return the list of persons in the JSON String format.
+     * @throws Exception
+     */
+    public static String getPersonsFromHelpScout(Widget widget, String type) throws Exception
+    {
+	// Get the HelpScout API Client with API_key.
+	ApiClient client = getHelpScoutApiClient(widget);
+	Gson gson = new Gson();
+	Page page = null;
+	if (type.equalsIgnoreCase(PERSON_USER))
+	    page = client.getUsers();
+	else if (type.equalsIgnoreCase(PERSON_CUSTOMER))
+	    page = client.getCustomers();
+
+	if (page != null && page.getCount() > 0)
+	    return gson.toJson(page.getItems());
+	else
+	    return "[]";
     }
 }

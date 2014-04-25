@@ -6,6 +6,7 @@ import java.util.Set;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.limits.cron.deferred.OurDomainSyncDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -50,11 +51,20 @@ public class BillingRestrictionReminderUtil
     {
 	String namespace = NamespaceManager.get();
 	DomainUser user = DomainUserUtil.getDomainOwner(namespace);
+
+	if (user == null)
+	{
+	    System.out.println("domain user null for domain : " + namespace);
+	    return;
+	}
 	NamespaceManager.set("our");
 	try
 	{
+
 	    // Fetches contact form our domain
 	    Contact contact = ContactUtil.searchContactByEmail(user.email);
+	    System.out.println(contact != null ? contact.id : "null");
+
 	    BillingRestrictionReminderUtil.addRestictionTagsInOurDomain(tags, contact);
 	}
 	finally
@@ -79,6 +89,9 @@ public class BillingRestrictionReminderUtil
 
 	if (contact == null)
 	    return;
+
+	contact.tags.clear();
+
 	for (String tag : tags)
 	{
 	    System.out.println(tag);
@@ -95,6 +108,8 @@ public class BillingRestrictionReminderUtil
 	    // Gets current percentage in tag
 	    int percentage = Integer.parseInt(newPercentage);
 
+	    System.out.println("entity : " + entityName + " ,Percentage = " + percentage);
+
 	    // Checks for tag with same entity name and different percentage
 	    // (possibly added with different percentage)
 	    for (String percentageString : BillingRestrictionUtil.percentages)
@@ -102,16 +117,24 @@ public class BillingRestrictionReminderUtil
 		if (percentageString.equals(newPercentage))
 		    continue;
 
+		Tag tagObject = new Tag(entityName + "-" + percentageString);
 		// Removes if any tag exists with same class name and
 		// different
 		// percentage
-		isUpdateRequired = contact.tags.remove(entityName + "-" + percentageString);
+		if (isUpdateRequired)
+		    contact.tagsWithTime.remove(tagObject);
+		else
+		    isUpdateRequired = contact.tagsWithTime.remove(tagObject);
 	    }
 
 	    // If tag is less than 75% then existing tags are removed and tag is
 	    // not added
 	    if (percentage < 75)
+	    {
+		System.out.println(contact.tags);
+		System.out.println(isUpdateRequired);
 		continue;
+	    }
 
 	    // Adds tag
 	    isUpdateRequired = contact.tags.add(tag);
@@ -119,7 +142,11 @@ public class BillingRestrictionReminderUtil
 
 	// If any tag is altered then contact is updated
 	if (isUpdateRequired)
+	{
+	    System.out.println("saving contact");
 	    contact.save(true);
+	    System.out.println(contact.tags);
+	}
     }
 
     public static Integer calculatePercentage(int allowedEntites, int existingEntities)
