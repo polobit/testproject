@@ -520,8 +520,9 @@ public class SendEmail extends TaskletAdapter
 		if (isSpecialLink(url))
 		{
 		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, domainURL + "backend/click?u=" + url + "&s=" + URLEncoder.encode(subscriberId, "UTF-8") + "&c="
-			    + URLEncoder.encode(campaignId, "UTF-8"));
+		    m.appendReplacement(stringBuffer,
+			    domainURL + "backend/click?u=" + URLEncoder.encode(url, "UTF-8") + "&s=" + URLEncoder.encode(subscriberId, "UTF-8") + "&c="
+				    + URLEncoder.encode(campaignId, "UTF-8"));
 		}
 	    }
 
