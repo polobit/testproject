@@ -58,6 +58,7 @@ public class PlanLimits
 	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
 		ProPlanLimits.class, 3),
 
+	// Legacy plans
 	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(
 		ProPlanLimits.class, 3);
 
