@@ -3,6 +3,7 @@ package com.analytics.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,6 +48,12 @@ public class AnalyticsUtil
 
 		String currentSid = currentPageView.getString("sid");
 
+		String currentUrl = currentPageView.getString("url");
+
+		// If not null or empty - remove query params from urls
+		if (!StringUtils.isEmpty(currentUrl))
+		    currentUrl = StringUtils.split(currentUrl, '?')[0];
+
 		// Retrieves timeSpent of url by subtracting time from next
 		// consecutive url.
 		if (i < (len - 1))
@@ -60,13 +67,13 @@ public class AnalyticsUtil
 			long timeSpent = Long.parseLong(nextPageView.getString("created_time")) - Long.parseLong(currentPageView.getString("created_time"));
 
 			// [{url:'http://agilecrm.com',timeSpent:'total_secs'}]
-			urlsWithTimeSpent.put(new JSONObject().put("url", currentPageView.getString("url")).put("time_spent", timeSpent));
+			urlsWithTimeSpent.put(new JSONObject().put("url", currentUrl).put("time_spent", timeSpent));
 		    }
 		    else
 		    {
 			// By Default we are assuming timespent of last url in a
 			// session to be 10secs
-			urlsWithTimeSpent.put(new JSONObject().put("url", currentPageView.getString("url")).put("time_spent", 10L));
+			urlsWithTimeSpent.put(new JSONObject().put("url", currentUrl).put("time_spent", 10L));
 			tempJSONArray = urlsWithTimeSpent;
 
 			// Reset JSONArray after end of session.
@@ -81,8 +88,7 @@ public class AnalyticsUtil
 		{
 		    // inserts last row of pageViews with default timespent
 		    // 10secs.
-		    pageSpentWithSid.put(currentSid,
-			    urlsWithTimeSpent.put(new JSONObject().put("url", currentPageView.getString("url")).put("time_spent", 10L)));
+		    pageSpentWithSid.put(currentSid, urlsWithTimeSpent.put(new JSONObject().put("url", currentUrl).put("time_spent", 10L)));
 		}
 
 		// Verify for sid and updates respective sid JSONObject
