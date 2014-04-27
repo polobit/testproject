@@ -44,7 +44,8 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canDelete()
     {
-	return hasScope(UserAccessScopes.DELETE_CONTACTS);
+	return true;
+	// return hasScope(UserAccessScopes.DELETE_CONTACTS);
     }
 
     public boolean canImport()
