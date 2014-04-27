@@ -120,7 +120,13 @@ public class PlanLimits
 
     }
 
-    public Integer getPlanQuantity()
+    /**
+     * Numer user that can be added in current domain. It is returned based on
+     * plan object used to initialize current PlanLimits object
+     * 
+     * @return
+     */
+    public Integer getAllowedUsers()
     {
 	return plan.quantity;
     }
@@ -154,10 +160,7 @@ public class PlanLimits
 
     public Integer getContactLimit()
     {
-	if (contactLimit == Integer.MAX_VALUE)
-	    return contactLimit;
-
-	return contactLimit * plan.quantity;
+	return contactLimit;
     }
 
     public Integer getEmailsLimit()

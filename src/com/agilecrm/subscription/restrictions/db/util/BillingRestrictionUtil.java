@@ -16,8 +16,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
+import com.google.appengine.api.NamespaceManager;
 
 @XmlRootElement
 public class BillingRestrictionUtil
@@ -68,8 +67,8 @@ public class BillingRestrictionUtil
      */
     public static BillingRestriction getBillingRestriction(String planName, Integer users)
     {
-	Objectify ofy = ObjectifyService.begin();
-	BillingRestriction restriction = ofy.query(BillingRestriction.class).get();
+	System.out.println(NamespaceManager.get());
+	BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
 
 	if (restriction == null)
 	    restriction = BillingRestriction.getInstance(planName, users);

@@ -101,7 +101,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * Stores user access scopes
      */
     @NotSaved(IfDefault.class)
-    public List<NavbarConstants> menu_items = new ArrayList<NavbarConstants>();
+    public List<NavbarConstants> menu_items = null;
 
     /**
      * Name of the domain user

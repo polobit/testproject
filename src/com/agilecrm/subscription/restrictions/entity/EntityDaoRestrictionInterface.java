@@ -1,6 +1,6 @@
-package com.agilecrm.subscription.restrictions;
+package com.agilecrm.subscription.restrictions.entity;
 
-public interface BillingRestriction
+public interface EntityDaoRestrictionInterface
 {
 
     /**
