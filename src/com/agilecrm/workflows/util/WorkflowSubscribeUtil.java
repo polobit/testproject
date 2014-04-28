@@ -5,6 +5,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -85,7 +86,7 @@ public class WorkflowSubscribeUtil
 	{
 	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString(),
 		    namespace);
-	    PullQueueUtil.addToPullQueue("campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
+	    PullQueueUtil.addToPullQueue(Globals.CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 	}
 	catch (Exception e)
 	{

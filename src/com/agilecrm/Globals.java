@@ -98,4 +98,8 @@ public class Globals
 
     // Appengine request time limit
     public static final long REQUEST_LIMIT_MILLIS = 1000 * 25;
+
+    // Campaign and Email pull queues
+    public static final String CAMPAIGN_PULL_QUEUE = "sb-campaign-pull-queue";
+    public static final String EMAIL_PULL_QUEUE = "sb-email-pull-queue";
 }
