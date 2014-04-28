@@ -55,6 +55,10 @@ public class PlanLimits
      */
     public static enum PlanClasses
     {
+	/**
+	 * Constructor takes respective class, rank (order of plan which is used
+	 * to determine whether plan is being downgraded)
+	 */
 	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
 		ProPlanLimits.class, 3),
 

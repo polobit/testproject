@@ -52,7 +52,6 @@ function organize_widgets(base_model)
 	 * as div id (div defined in widget_add.html)
 	 */
 	if (widget_type == "SOCIAL")
-		if(!(base_model.get('name')=="Linkedin" && base_model.get('is_added')!=true)) // Show linkedIn Widget for already added users to delete it.
 		$('#social', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "SUPPORT")
@@ -155,6 +154,8 @@ $(function()
 			return;
 		
 		delete_widget(widget_name);
+		if(widget_name == "Linkedin")
+			$('#Linkedin-container').hide();
 
 		});
 
@@ -203,7 +204,7 @@ function delete_widget(widget_name)
 
 		Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
 		update_collection(widget_name);
-
+		
 	}, dataType : 'json' });
 
 }

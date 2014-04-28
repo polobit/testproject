@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 
 import net.sf.json.JSONObject;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -98,23 +97,9 @@ public class DealsAPI
     @Path("/byMilestone/{milestone}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public JSONObject getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
+    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
     {
-	ObjectMapper mapper = new ObjectMapper();
-	JSONObject opportunity = new JSONObject();
-	String opportunitiesList = "[]";
-	try
-	{
-	    opportunitiesList = mapper.writeValueAsString(OpportunityUtil.getDealsWithMilestone(milestone));
-	    opportunitiesList = opportunitiesList.replace("null", "\"\"");
-	    opportunity.put(milestone, opportunitiesList);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	return opportunity;
+	return OpportunityUtil.getDealsWithMilestone(milestone);
     }
 
     /**
