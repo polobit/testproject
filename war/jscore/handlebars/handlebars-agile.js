@@ -117,6 +117,10 @@ function getTemplate(templateName, context, download)
 	{
 		templateHTML = downloadSynchronously("tpl/min/report.js");
 	}
+	if (templateName.indexOf("webrule") == 0)
+	{
+		templateHTML = downloadSynchronously("tpl/min/web-rules.js");
+	}
 	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0)
 	{
 		templateHTML = downloadSynchronously("tpl/min/workflow.js");

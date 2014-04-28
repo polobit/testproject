@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -22,6 +23,10 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -235,6 +240,17 @@ public class Subscription
 
 	// Saves updated subcription object
 	subscription.save();
+
+	// Sets plan in session
+	BillingRestrictionUtil.setPlanInSession(subscription.plan);
+
+	// Initializes task to clear tags
+	AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
+
+	task.run();
+	// Add to queue
+	Queue queue = QueueFactory.getDefaultQueue();
+	queue.add(TaskOptions.Builder.withPayload(task));
 
 	return subscription;
     }
