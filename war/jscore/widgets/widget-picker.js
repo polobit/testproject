@@ -52,6 +52,7 @@ function organize_widgets(base_model)
 	 * as div id (div defined in widget_add.html)
 	 */
 	if (widget_type == "SOCIAL")
+		if(!(base_model.get('name')=="Linkedin" && base_model.get('is_added')!=true)) // Show linkedIn Widget for already added users to delete it.
 		$('#social', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "SUPPORT")
