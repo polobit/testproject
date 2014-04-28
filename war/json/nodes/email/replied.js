@@ -2,8 +2,8 @@
     "name": "Replied?",
     "thumbnail": "json/nodes/images/email/replied.png",
     "icon": "json/nodes/icons/email/replied.png",
-    "info": "Check if a reply is given.",
-    "help": "Check if a reply is given.",
+    "info": "Check if an email has been replied",
+    "help": "Check if an email has been replied",
     "author": "Naresh",
     "company": "Agilecrm",
     "language": "en",
@@ -20,6 +20,7 @@
         	"url": "/core/api/users",
         	"dynamicName": "email",
         	"dynamicValue":"id",
+        	"appendToDynamicName": "name",
         	"fieldType": "dynamicselect",
         	"type": "select"
         },
@@ -40,6 +41,7 @@
             "name": "search_subject",
             "id": "search_subject",
             "title": "Enter partial or complete email subject to search.",
+            "placeholder":"Leave this empty if you want to match all emails",
             "fieldType": "input",
             "type": "text"
         },
