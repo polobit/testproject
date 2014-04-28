@@ -1,9 +1,10 @@
-package com.agilecrm.subscription.restrictions;
+package com.agilecrm.subscription.restrictions.entity.impl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 
 public class ReportGraphBillingRestriction extends DaoBillingRestriction
 {

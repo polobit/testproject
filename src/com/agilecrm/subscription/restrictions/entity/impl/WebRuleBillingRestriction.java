@@ -1,11 +1,13 @@
-package com.agilecrm.subscription.restrictions;
+package com.agilecrm.subscription.restrictions.entity.impl;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.EntityDaoRestrictionInterface;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.agilecrm.webrules.WebRule;
 
 /**
- * Implementation class of {@link BillingRestriction} which is called from
+ * Implementation class of {@link EntityDaoRestrictionInterface} which is called from
  * objectify to check whether entity can be created/updated
  * 
  * @author yaswanth
@@ -23,7 +25,7 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
 	if (restriction == null)
 	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
 
-	MAX = restriction.planDetails.getWebRuleLimit();
+	max_allowed = restriction.planDetails.getWebRuleLimit();
     }
 
     /**
@@ -38,7 +40,7 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
 	if (restriction.sendReminder)
 	    send_warning_message();
 
-	if (restriction.webrules_count < MAX)
+	if (restriction.webrules_count < max_allowed)
 	    return true;
 
 	return false;
@@ -69,7 +71,7 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
     @Override
     public String getTag()
     {
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.webrules_count, MAX, "WebRule");
+	String tag = BillingRestrictionReminderUtil.getTag(restriction.webrules_count, max_allowed, "WebRule");
 
 	if (tag != null)
 	    restriction.tagsToAddInOurDomain.add(tag);

@@ -58,6 +58,7 @@ public class PlanLimits
 	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
 		ProPlanLimits.class, 3),
 
+	// Legacy plans
 	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(
 		ProPlanLimits.class, 3);
 
@@ -120,7 +121,13 @@ public class PlanLimits
 
     }
 
-    public Integer getPlanQuantity()
+    /**
+     * Numer user that can be added in current domain. It is returned based on
+     * plan object used to initialize current PlanLimits object
+     * 
+     * @return
+     */
+    public Integer getAllowedUsers()
     {
 	return plan.quantity;
     }
@@ -154,10 +161,7 @@ public class PlanLimits
 
     public Integer getContactLimit()
     {
-	if (contactLimit == Integer.MAX_VALUE)
-	    return contactLimit;
-
-	return contactLimit * plan.quantity;
+	return contactLimit;
     }
 
     public Integer getEmailsLimit()

@@ -1,9 +1,9 @@
 package com.agilecrm.subscription.limits.cron.deferred;
 
 import com.agilecrm.account.util.AccountEmailStatsUtil;
-import com.agilecrm.subscription.restrictions.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;

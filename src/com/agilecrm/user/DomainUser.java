@@ -26,6 +26,7 @@ import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -49,6 +50,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
+@Cached
 public class DomainUser extends Cursor implements Cloneable, Serializable
 {
 
@@ -101,7 +103,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * Stores user access scopes
      */
     @NotSaved(IfDefault.class)
-    public List<NavbarConstants> menu_items = new ArrayList<NavbarConstants>();
+    public List<NavbarConstants> menu_items = null;
 
     /**
      * Name of the domain user

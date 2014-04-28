@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.googlecode.objectify.annotation.Cached;
 
 /**
  * <code>AgileUser</code> class stores agileUser entities with domain user id as
@@ -21,6 +22,7 @@ import com.agilecrm.user.util.DomainUserUtil;
  * 
  */
 @XmlRootElement
+@Cached
 public class AgileUser
 {
 

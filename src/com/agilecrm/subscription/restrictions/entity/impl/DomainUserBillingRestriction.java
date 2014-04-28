@@ -1,6 +1,7 @@
-package com.agilecrm.subscription.restrictions;
+package com.agilecrm.subscription.restrictions.entity.impl;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 
@@ -12,10 +13,10 @@ public class DomainUserBillingRestriction extends DaoBillingRestriction
     {
 	restriction.users_count = DomainUserUtil.count();
 
-	System.out.println("max allowed : " + MAX + ", available :" + DomainUserUtil.count());
+	System.out.println("max allowed : " + max_allowed + ", available :" + DomainUserUtil.count());
 	// Returns true if count is less than maximum allowed users in
 	// current plan
-	if (restriction.users_count == null || restriction.users_count < MAX)
+	if (restriction.users_count == null || restriction.users_count < max_allowed)
 	    return true;
 
 	// TODO Auto-generated method stub
@@ -55,8 +56,7 @@ public class DomainUserBillingRestriction extends DaoBillingRestriction
 
 	System.out.println(restriction.plan);
 	// Gets maximum allowed contacts in current plan
-	MAX = restriction.planDetails.getPlanQuantity();
+	max_allowed = restriction.planDetails.getAllowedUsers();
 
     }
-
 }
