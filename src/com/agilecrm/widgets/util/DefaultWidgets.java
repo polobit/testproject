@@ -30,11 +30,12 @@ public class DefaultWidgets
 	 * widget and images, logo's, description to be show in widgets panel
 	 */
 
-	widgets.add(new Widget(
-		"Linkedin",
-		" LinkedIn helps build professional relationships with contacts and helps keep tabs about their business interests.",
-		"/widgets/linkedin.js", "/img/plugins/linkedin.png", "/widgets/linkedin-logo-small.png", null,
-		WidgetType.SOCIAL));
+	/*
+	 * widgets.add(new Widget( "Linkedin",
+	 * " LinkedIn helps build professional relationships with contacts and helps keep tabs about their business interests."
+	 * , "/widgets/linkedin.js", "/img/plugins/linkedin.png",
+	 * "/widgets/linkedin-logo-small.png", null, WidgetType.SOCIAL));
+	 */
 
 	widgets.add(new Widget("Twitter",
 		" Twitter offers a great way of engaging with contacts in real time based on what they tweet.",
