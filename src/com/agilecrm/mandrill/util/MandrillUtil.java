@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
@@ -75,7 +76,7 @@ public class MandrillUtil
 	String subaccount = NamespaceManager.get();
 	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to, subject, replyTo, html, text);
 
-	PullQueueUtil.addToPullQueue("email-pull-queue", mandrillDeferredTask, fromEmail);
+	PullQueueUtil.addToPullQueue(Globals.EMAIL_PULL_QUEUE, mandrillDeferredTask, fromEmail);
     }
 
     /**
