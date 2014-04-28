@@ -1,0 +1,53 @@
+<script id="webrule-collection-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Web Rules<span class="label label-important" style="vertical-align:top;margin:10px">Beta</span></h1>
+            <a href="#webrules-add" class="btn right" id="addWebrule" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add Web Rule</a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span9">
+        {{#if this.length}}
+		{{add_tag "Web Rules"}}
+        <table class="table table-bordered table-striped showCheckboxes" url="core/api/webrule/bulk">
+            <thead>
+                <tr>
+                    <th>Name</th>
+					<th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="webrule-model-list" route="webrule-edit/">
+            </tbody>
+        </table>
+		{{else}}
+			<div id="slate"></div>
+		{{/if}}
+    </div>
+    <div class="span3">
+        <div class="well">
+            <h3>
+                What are web rules?
+            </h3>
+            <br />
+            <p>
+Web rules allow you to perform certain actions when people visit your website - like showing a popup or increase score. </br></br>
+For example, when visitors are about to leave your website, show them a sign-up popup. When contacts in Agile visit a specific product page, send them an email asking if they need a demo.</p>
+</p>
+<img src="/img/web-rules/web-grabbers-demo.png"></img>
+<div style="padding-top:10px"><center><a href="https://github.com/agilecrm/agile-popups" target="_blank">Get Started</a></center></div>
+        </div>
+    </div>
+</div>
+</script>
+<script id="webrule-model-template" type="text/html">
+<td  data="{{id}}" class="data" style="cursor:pointer">
+{{name}}
+</td>
+<td>
+{{#each actions}}
+	{{titleFromEnums action}}
+{{/each}}
+</td>
+</script>
