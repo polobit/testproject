@@ -280,8 +280,10 @@ var WidgetsRouter = Backbone.Router.extend({
 				}).error(
 				function(data)
 				{
+					// Append the url with the random number in order to differentiate the same action performed more than once.
+					var flag = Math.floor((Math.random()*10)+1); 
 					setUpError("Twilio", "widget-settings-error", data.responseText,
-							window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1");
+							window.location.protocol + "//" + window.location.host + "/#Twilio/twilio" + flag);
 				});
 
 				return;
@@ -304,8 +306,11 @@ var WidgetsRouter = Backbone.Router.extend({
 
 					}).error(function(data)
 					{
+						// Append the url with the random number in order to differentiate the same action performed more than once.
+						var flag = Math.floor((Math.random()*10)+1); 
+
 						setUpError("Twilio", "widget-settings-error", data.responseText,
-								window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1", data);
+								window.location.protocol + "//" + window.location.host + "/#Twilio/twilio" + flag, data);
 					});
 
 					return;
