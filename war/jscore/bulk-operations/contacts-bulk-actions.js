@@ -239,7 +239,7 @@ $(function()
 			populate_send_email_details();
 			
 			// Setup HTML Editor
-			setupHTMLEditor($('#body'));
+			setupTinyMCEEditor('textarea#email-body');
 			
 			// when SELECT_ALL is true i.e., all contacts are selected.
 			if(id_array.length === 0)
@@ -278,6 +278,9 @@ $(function()
 			// Disables send button and change text to Sending...
 			disable_send_button($(this));
 			
+			// Saves tinymce content to textarea
+			save_content_to_textarea('email-body');
+			
 			// serialize form.
 			var form_json = serializeForm("emailForm");
 			
@@ -287,9 +290,10 @@ $(function()
 			json.contact_ids = id_array;
 			json.data = JSON.stringify(form_json);
 			
-			postBulkOperationData(url, json, $form, null, function(){ enable_send_button($('#bulk-send-email'));}, "Emails have been queued for " + count +" contacts. They will be sent shortly.");
+			postBulkOperationData(url, json, $form, null, function(){ 
+				enable_send_button($('#bulk-send-email'));}, "Emails have been queued for " + count +" contacts. They will be sent shortly.");
 		});
-
+		
 	});
 
 	/**

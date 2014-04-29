@@ -86,13 +86,13 @@ $(function()
                    
                     exclusive_fields.push( jQuery.extend(true, {}, fields[i]));
             }
-            
             if (exclusive_fields.length == 0)
                             return options.inverse(exclusive_fields);
             
             $.getJSON("core/api/custom-fields/type/DATE", function(data){
+            	
                     if(data.length == 0)
-                            return options.fn(exclusive_fields);
+                            return;
                     
                     for(var j =0; j < data.length ; j ++)
                     {
@@ -118,6 +118,8 @@ $(function()
                     }
                     updateCustomData(options.fn(exclusive_fields));
             });
+            
+            return options.fn(exclusive_fields)
 
     });
     
@@ -496,6 +498,16 @@ $(function()
 		// return $.datepicker.formatDate(format , new Date( parseInt(date) *
 		// 1000));
 	});
+	
+	/**
+	 * Helper function to return the date string converting to local timezone.
+	 */
+	Handlebars.registerHelper('toLocalTimezone', function(dateString)
+	{
+		var date = new Date(dateString);
+		
+		return date.toDateString() + ' ' + date.toLocaleTimeString();
+	});
 
 	/**
 	 * Helper function to return task date (MM dd, ex: Jan 10 ) from epoch time
@@ -743,7 +755,7 @@ $(function()
 		case "OPENED EMAIL":
 			var customJSON = JSON.parse(this.custom_value);
 			
-			if(customJSON.email_opened ===  "workflow")
+			if(customJSON.hasOwnProperty("workflow_name"))
 				return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
 			
 			return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
@@ -2129,6 +2141,18 @@ $(function()
 		
 	});
 	
+	/**
+	 * Returns first occurence string from string having underscores
+	 * E.g, mac_os_x to mac
+	 **/
+	Handlebars.registerHelper('normalize_os',function(data){
+		if(data === undefined || data.indexOf('_') === -1)
+			return data;
+		
+		// if '_' exists splits 
+		return data.split('_')[0];
+	});
+	
 	Handlebars.registerHelper('safe_tweet', function(data)
 			{			
 		        data = data.trim();
@@ -2238,6 +2262,20 @@ $(function()
 		
 		if(hash.indexOf("removed") != -1)
 			return "Removed";
+	});
+	
+	Handlebars.registerHelper("check_plan", function(plan, options)
+	{
+		console.log(plan);
+		
+		if(!_billing_restriction)
+			return options.fn(this);
+		
+		if(_billing_restriction.currentLimits.planName == plan)
+			return options.fn(this);
+		
+		return options.inverse(this);
+		
 	});
 	
 });

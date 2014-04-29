@@ -185,7 +185,7 @@ function load_modal_templates()
 		}
 	
 	return false;
-}
+	Email}
 
 $("#tiny_mce_webrules_link").die().live("click", function(e){
 	e.preventDefault();
@@ -211,18 +211,69 @@ function getMergeFields(type)
 		"First Name": "{{first_name}}",
 		"Last Name": "{{last_name}}",
 		"Email": "{{email}}",
-		"Company":"{{company}}"
+		"Company":"{{company}}",
+		"Title": "{{title}}",
+		"Website": "{{website}}",
+		"Phone": "{{phone}}",
+		"City": "{{city}}",
+		"State": "{{state}}",
+		"Country": "{{country}}",
+		"Zip": "{{zip}}",
+		"Domain": "{{domain}}",
+		"Address": "{{address}}",
+		"Score": "{{score}}",
+		"Created Time": "{{created_time}}",
+		"Modified Time": "{{modified_time}}",
+		"Owner Name": "{{owner_name}}",
+		"Owner Email": "{{owner_email}}"
 	};
 	
-	return options;
+	// Get Custom Fields in template format
+	var custom_fields = get_webrules_custom_fields();
+	
+	console.log("Custom Fields are");
+	console.log(custom_fields);
+	
+	// Merges options json and custom fields json
+	var merged_json = merge_webrules_jsons({}, options, custom_fields);
+	return merged_json;
+}
+
+/**
+ * Returns custom fields in format required for merge fields. 
+ * E.g., Nick Name:{{Nick Name}}
+ */
+function get_webrules_custom_fields()
+{
+    var url = window.location.protocol + '//' + window.location.host;
+	
+	// Sends GET request for customfields.
+    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
+	
+	// Parse stringify json
+	var data = JSON.parse(msg);
+	
+	var customfields = {};
+	
+	// Iterate over data and get field labels of each custom field
+	$.each(data, function(index,obj)
+			{
+					// Iterate over single custom field to get field-label
+		            $.each(obj, function(key, value){
+						
+						// Needed only field labels for merge fields
+						if(key == 'field_label')
+							customfields[value] = "{{[" + value+"]}}"
+					});
+			});	
+	
+	return customfields;
 }
 
 /**
  * Returns merged json of two json objects
  **/
-function merge_jsons(target, object1, object2)
+function merge_webrules_jsons(target, object1, object2)
 {
 	return $.extend(target, object1, object2);
 }
-
-

@@ -12,14 +12,9 @@ import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.subscription.restrictions.BillingRestrictionManager;
-import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.Trigger;
@@ -53,7 +48,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
-public class Workflow extends Cursor implements BillingRestrictionManager
+public class Workflow extends Cursor
 {
     /**
      * Id of a workflow. Each workflow has its own and unique id.Id is system
@@ -280,29 +275,5 @@ public class Workflow extends Cursor implements BillingRestrictionManager
 	System.out.println(BigDecimal.valueOf(22.0).divide(BigDecimal.valueOf(7)));
 
 	System.out.println(22 / 7f);
-    }
-
-    @Override
-    public boolean isNew()
-    {
-	if (id == null)
-	    return true;
-	// TODO Auto-generated method stub
-	return false;
-    }
-
-    @Override
-    public void checkLimits() throws PlanRestrictedException
-    {
-	// TODO Auto-generated method stub
-	BillingRestrictionUtil.getInstance(true).check(dao);
-    }
-
-    @Override
-    @JsonIgnore
-    public ObjectifyGenericDao getDao() throws PlanRestrictedException
-    {
-	// TODO Auto-generated method stub
-	return dao;
     }
 }

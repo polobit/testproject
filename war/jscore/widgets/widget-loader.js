@@ -169,8 +169,6 @@ function set_up_widgets(el, widgets_el)
 		var id = model.get("id");
 		var url = model.get("url");
 
-		console.log(model.get('name'));
-
 		model.set('selector', model.get('name').replace( / +/g, ''));
 		
 		/*

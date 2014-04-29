@@ -7,26 +7,26 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.subscription.restrictions.BillingRestrictionManager;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
-import com.agilecrm.subscription.restrictions.util.BillingRestrictionUtil;
 import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
-public class WebRule implements BillingRestrictionManager
+public class WebRule
 {
     @Id
     public Long id;
 
     @NotSaved(IfDefault.class)
     public String name = null;
+
+    // Store type of the rule whether it is plain web rule or shopify rule
+    @NotSaved(IfDefault.class)
+    public String rule_type = "WEBRULE";
 
     @NotSaved(IfDefault.class)
     @Embedded
@@ -60,29 +60,6 @@ public class WebRule implements BillingRestrictionManager
     {
 	dao.put(this);
     }
-
-    @Override
-    public boolean isNew()
-    {
-	if (id == null)
-	    return true;
-	// TODO Auto-generated method stub
-	return false;
-    }
-
-    @Override
-    public void checkLimits() throws PlanRestrictedException
-    {
-	BillingRestrictionUtil.getInstance(true).check(dao);
-    }
-
-    @Override
-    @JsonIgnore
-    public ObjectifyGenericDao getDao() throws PlanRestrictedException
-    {
-	// TODO Auto-generated method stub
-	return dao;
-    }
 }
 
 @XmlRootElement
@@ -91,8 +68,9 @@ class WebRuleAction
     @Override
     public String toString()
     {
-	return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern=" + popup_pattern + ", title=" + title
-		+ ", popup_text=" + popup_text + ", delay=" + delay + ", timer=" + timer + "]";
+	return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern="
+		+ popup_pattern + ", title=" + title + ", popup_text=" + popup_text + ", delay=" + delay + ", timer="
+		+ timer + "]";
     }
 
     public enum Action

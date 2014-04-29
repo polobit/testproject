@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
+<%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
 <%@page import="com.agilecrm.user.DomainUser"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -47,6 +49,8 @@
 
 			String width = currentUserPrefs.width;
 			boolean is_fluid = !width.isEmpty();
+			
+			BillingRestriction restriction = BillingRestrictionUtil.getInstance();
 %>
 
 
@@ -148,6 +152,10 @@
 	
 	// Get current domain user json
 	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
+	
+	
+	// Billing Restriction
+	var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 	
 	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
 	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';

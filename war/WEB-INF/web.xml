@@ -206,7 +206,7 @@
 	
 	<servlet>
 		<servlet-name>AccountLimitChecker</servlet-name>
-		<servlet-class>com.agilecrm.subscription.limits.contacts.cron.AccountLimitCheckerCronServlet</servlet-class>
+		<servlet-class>com.agilecrm.subscription.limits.cron.AccountLimitCheckerCronServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -314,6 +314,7 @@
 		<url-pattern>/scribe</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
+		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
 	</filter-mapping>
 

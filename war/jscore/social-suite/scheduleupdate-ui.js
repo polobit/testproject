@@ -80,10 +80,11 @@ $(function()
 	/**
 	 * Calls function to check selected time after cloasing Time picker modal.
 	 */
-	$('.bootstrap-timepicker').die().live('hide', function()
+	/**$('.bootstrap-timepicker').die().live('hide', function()
 	{
 		isPastSchedule();
 	});
+	*/
 
 	/**
 	 * Calls function to open Message modal with selected scheduled update

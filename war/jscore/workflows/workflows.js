@@ -19,7 +19,7 @@ $(function(){
 	 * so ids are separated by comma in click event.
 	 * 
 	 **/
-	$('#save-workflow-top, #save-workflow-bottom').live('click', function (e) {
+	$('#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom').live('click', function (e) {
            e.preventDefault();
            
            // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
@@ -31,7 +31,7 @@ $(function(){
            
     	// Check if the form is valid
     	if (!isValidForm('#workflowform')) {
-    		$('#workflowform').find("input").focus();
+  		$('#workflowform').find("input.required").focus();
     		return false;
     	}
     	
@@ -65,8 +65,14 @@ $(function(){
 
         var workflowJSON = {};
 
-        // When workflow is updated,set workflow model with name and rules
-        if (App_Workflows.workflow_model != undefined) {
+        // New Workflow or Copy Workflow
+        if (App_Workflows.workflow_model === undefined || $(this).attr('id') === 'duplicate-workflow-top' || $(this).attr('id') === 'duplicate-workflow-bottom') 
+        {
+        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button)
+        }
+        // Update workflow
+        else
+        {
             workflowJSON = App_Workflows.workflow_model;
             App_Workflows.workflow_model.set("name", name);
             App_Workflows.workflow_model.set("rules", designerJSON);
@@ -96,52 +102,6 @@ $(function(){
             });        
             
         } 
-        // When workflow is created
-        else
-        {
-
-            workflowJSON.name = name;
-            workflowJSON.rules = designerJSON;
-            workflowJSON.unsubscribe = unsubscribe_json;
-            
-            var workflow = new Backbone.Model(workflowJSON);
-            App_Workflows.workflow_list_view.collection.create(workflow,{
-            	    success:function(){  
-
-            	    	// Removes disabled attribute of save button
-            	    	enable_save_button($clicked_button);
-            	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
-            	    	
-            	    	// $(".save-workflow-img").remove();
-            	    	            	    	
-            	    	Backbone.history.navigate("workflows", {
-                        trigger: true
-            	    	
-            	    	});
-            	    },
-                    
-                    error: function(jqXHR, status, errorThrown){ 
-                      enable_save_button($clicked_button); 
-                      
-                      // shows Exception message
-                      if(status.status != 406)
-                    	  alert(status.responseText);
-                      else
-                    	  {
-                    	  console.log(status);
-                    		// Show cause of error in saving
-        					$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
-        							+ status.responseText
-        							+ '</i></p></small></div>');
-
-        					// Appends error info to form actions
-        					// block.
-        					$("#workflow-limit-reached-msg").html(
-        							$save_info).show();
-                    	  }
-                        }
-            });
-        }
 
         /**/
         
@@ -150,7 +110,7 @@ $(function(){
 
         
     });
-
+	
     /**
      *  Deletes all logs of campaign
      *      
@@ -241,3 +201,70 @@ $(function(){
 	});
 
 });
+
+/**
+ * Creates a new workflow or Copy existing workflow and add to workflows collection
+ * 
+ * @param name - workflow name
+ * @param designerJSON - campaign workflow in json
+ * @param unsubscribe_json - unsubscribe data of workflow
+ * @param $clicked_button - jquery object to know clicked button
+ **/
+function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button)
+{
+	var workflowJSON = {};
+	
+	workflowJSON.name = name;
+    workflowJSON.rules = designerJSON;
+    workflowJSON.unsubscribe = unsubscribe_json;
+    
+    var workflow = new Backbone.Model(workflowJSON);
+    App_Workflows.workflow_list_view.collection.create(workflow,{
+    	    success:function(){  
+
+    	    	// Removes disabled attribute of save button
+    	    	enable_save_button($clicked_button);
+    	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
+    	    	
+    	    	// $(".save-workflow-img").remove();
+    	    	            	    	
+    	    	Backbone.history.navigate("workflows", {
+                trigger: true
+    	    	
+    	    	});
+    	    },
+            
+            error: function(jqXHR, status, errorThrown){ 
+              enable_save_button($clicked_button); 
+              
+              // shows Exception message
+              if(status.status != 406)
+              {
+            	  // Show different message for Copy
+            	  if($clicked_button.attr('id') === 'duplicate-workflow-bottom' || $clicked_button.attr('id') === 'duplicate-workflow-top')
+            	  {
+            		  if(status.responseText === "Please change the given name. Same kind of name already exists.")
+            		  {
+            			  alert("Please change the name and click on 'Create a Copy' again.");
+            			  return;
+            		  }
+            	  }
+            	  
+            	  alert(status.responseText);
+              }
+              else
+            	  {
+            	  console.log(status);
+            		// Show cause of error in saving
+					$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'
+							+ status.responseText
+							+ '</i></p></small></div>');
+
+					// Appends error info to form actions
+					// block.
+					$("#workflow-limit-reached-msg").html(
+							$save_info).show();
+            	  }
+                }
+    });
+}

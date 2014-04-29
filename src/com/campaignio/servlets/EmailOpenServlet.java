@@ -2,6 +2,7 @@ package com.campaignio.servlets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.ContactEmail;
+import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
@@ -55,8 +58,8 @@ public class EmailOpenServlet extends HttpServlet
 	// Redirect to image.
 	res.sendRedirect("/img/1X1.png");
 
-	// Contact Id
-	String subscriberId = request.getParameter("s");
+	// Contact Id (for campaigns) or tracker Id (for personal emails)
+	String trackerId = request.getParameter("s");
 
 	// CampaignId
 	String campaignId = request.getParameter("c");
@@ -74,7 +77,7 @@ public class EmailOpenServlet extends HttpServlet
 
 	try
 	{
-	    addLogAndShowNotification(subscriberId, campaignId);
+	    addLogAndShowNotification(trackerId, campaignId);
 	}
 	finally
 	{
@@ -82,32 +85,49 @@ public class EmailOpenServlet extends HttpServlet
 	}
 
 	// Interrupt Campaign cron tasks.
-	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(subscriberId))
-	    interruptCronTasksOfOpened(campaignId, subscriberId);
+	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
+	    interruptCronTasksOfOpened(campaignId, trackerId);
     }
 
     /**
      * Adds log and show notification of Email Opened.
      * 
-     * @param subscriberId
-     *            - Contact Id.
+     * @param trackerId
+     *            - Contact Id or Tracker Id
      * @param campaignId
      *            - Campaign Id.
      */
-    private void addLogAndShowNotification(String subscriberId, String campaignId)
+    private void addLogAndShowNotification(String trackerId, String campaignId)
     {
+
+	// Personal Emails
+	if (!StringUtils.isBlank(trackerId) && StringUtils.isBlank(campaignId))
+	{
+	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long.parseLong(trackerId));
+
+	    for (ContactEmail contactEmail : contactEmails)
+	    {
+		contactEmail.is_email_opened = true;
+		contactEmail.email_opened_at = System.currentTimeMillis() / 1000;
+		contactEmail.save();
+
+		// Shows notification for simple emails.
+		showEmailOpenedNotification(ContactUtil.getContact(contactEmail.contact_id), null, contactEmail.subject);
+	    }
+	}
+
 	// Campaign Emails
-	if (!StringUtils.isEmpty(campaignId) && !StringUtils.isEmpty(subscriberId))
+	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
 	{
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
 
 	    if (workflow != null)
 	    {
 		// Adds log
-		addEmailOpenedLog(campaignId, subscriberId, workflow.name);
+		addEmailOpenedLog(campaignId, trackerId, workflow.name);
 
 		// Shows notification for campaign-emails
-		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(subscriberId)), workflow.name, null);
+		showEmailOpenedNotification(ContactUtil.getContact(Long.parseLong(trackerId)), workflow.name, null);
 	    }
 
 	}
@@ -146,9 +166,12 @@ public class EmailOpenServlet extends HttpServlet
 	    if (!StringUtils.isEmpty(workflowName))
 	    {
 		NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
-			new JSONObject().put("custom_value", new JSONObject().put("email_opened", "workflow").put("workflow_name", workflowName)));
+			new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName)));
 		return;
 	    }
+
+	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
+		    new JSONObject().put("custom_value", new JSONObject().put("email_subject", emailSubject)));
 
 	}
 	catch (Exception e)

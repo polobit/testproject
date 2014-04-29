@@ -54,7 +54,6 @@ public class Tags extends TaskletAdapter
 
 	try
 	{
-
 	    // Get Contact Id and Contact
 	    String contactId = AgileTaskletUtil.getId(subscriberJSON);
 	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
@@ -84,6 +83,9 @@ public class Tags extends TaskletAdapter
 		    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Tags deleted - " + tags,
 			    LogType.TAGS.toString());
 		}
+
+		// Update subscriberJSON
+		subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
 	    }
 	}
 	catch (Exception e)
@@ -91,6 +93,7 @@ public class Tags extends TaskletAdapter
 	    e.printStackTrace();
 	    System.out.println("Got an exception in Tags tasklet " + e.getMessage());
 	}
+
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }

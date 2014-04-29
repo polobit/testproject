@@ -92,63 +92,10 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_json = undefined;
 				this.workflow_model = undefined;
 
-				$('#content').html(getTemplate('workflow-add', {}));
+				$('#content').html(getTemplate('workflow-add', {"is_new":true}));
 				initiate_tour("workflows-add", $('#content'));
 			},
-
-			/**
-			 * Fetches various default workflow template jsons such as
-			 * newsletter etc and build UI to show various templates to select
-			 * workflow template.
-			 * 
-			 */
-			workflowTemplates : function()
-			{
-				if (!this.workflow_list_view || !this.workflow_list_view.collection)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
-
-				$('#content').html(getTemplate('workflow-categories', {}));
-			},
-
-			/**
-			 * Shows constructed workflow that matches with the template_name.
-			 * 
-			 * @param template_name -
-			 *            template name.
-			 */
-			workflowAddTemplate : function(category, template_name)
-			{
-				if (!this.workflow_list_view || !this.workflow_list_view.collection)
-				{
-					this.navigate("workflows", { trigger : true });
-					return;
-				}
-
-				/* Reset the designer JSON */
-				this.workflow_json = undefined;
-				this.workflow_model = undefined;
-
-				// Get workflow template based on category and template name
-				var workflow_template_model = Backbone.Model.extend({
-
-				url : 'core/api/workflow-templates/' + category + '/' + template_name });
-
-				var model = new workflow_template_model();
-
-				var that = this;
-
-				model.fetch({ success : function(data)
-				{
-					that.workflow_json = data.toJSON()["rules"];
-				} });
-
-				$('#content').html(getTemplate('workflow-add', {}));
-
-			},
-
+			
 			/**
 			 * Updates existing workflow. After workflow updated, the page
 			 * navigates to workflows list
@@ -215,6 +162,59 @@ var WorkflowsRouter = Backbone.Router
 				$('#unsubscribe-tag').val(unsubscribe.tag);
 				$('#unsubscribe-action').val(unsubscribe.action);
 				$('#unsubscribe-action').trigger('change');
+			},
+
+			/**
+			 * Fetches various default workflow template jsons such as
+			 * newsletter etc and build UI to show various templates to select
+			 * workflow template.
+			 * 
+			 */
+			workflowTemplates : function()
+			{
+				if (!this.workflow_list_view || !this.workflow_list_view.collection)
+				{
+					this.navigate("workflows", { trigger : true });
+					return;
+				}
+
+				$('#content').html(getTemplate('workflow-categories', {}));
+			},
+
+			/**
+			 * Shows constructed workflow that matches with the template_name.
+			 * 
+			 * @param template_name -
+			 *            template name.
+			 */
+			workflowAddTemplate : function(category, template_name)
+			{
+				if (!this.workflow_list_view || !this.workflow_list_view.collection)
+				{
+					this.navigate("workflows", { trigger : true });
+					return;
+				}
+
+				/* Reset the designer JSON */
+				this.workflow_json = undefined;
+				this.workflow_model = undefined;
+
+				// Get workflow template based on category and template name
+				var workflow_template_model = Backbone.Model.extend({
+
+				url : 'core/api/workflow-templates/' + category + '/' + template_name });
+
+				var model = new workflow_template_model();
+
+				var that = this;
+
+				model.fetch({ success : function(data)
+				{
+					that.workflow_json = data.toJSON()["rules"];
+				} });
+
+				$('#content').html(getTemplate('workflow-add', {"is_new":true}));
+
 			},
 
 			/**

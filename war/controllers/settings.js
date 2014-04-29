@@ -182,8 +182,11 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#prefs-tabs-content').append(itemView.render().el);
 
 		// Gets IMAP Prefs
-		var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs" });
-
+		var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs", postRenderCallback : function(el){
+			itemView2.model.set("password","");
+		} });
+		
+		
 		// Appends IMAP
 		$('#prefs-tabs-content').append(itemView2.render().el);
 		$('#PrefsTab .active').removeClass('active');

@@ -118,16 +118,16 @@ public class Analytics
 	try
 	{
 	    // Browser Name
-	    userAgentJSON.put("browser_name", UserAgent.parseUserAgentString(user_agent).getBrowser().getName());
+	    userAgentJSON.put("browser_name", StringUtils.lowerCase(UserAgent.parseUserAgentString(user_agent).getBrowser().getGroup().toString()));
 
 	    // Browser version
 	    userAgentJSON.put("browser_version", UserAgent.parseUserAgentString(user_agent).getBrowser().getVersion(user_agent).getMajorVersion());
 
 	    // OS
-	    userAgentJSON.put("os", UserAgent.parseUserAgentString(user_agent).getOperatingSystem());
+	    userAgentJSON.put("os", StringUtils.lowerCase(UserAgent.parseUserAgentString(user_agent).getOperatingSystem().getGroup().toString()));
 
 	    // Device Type
-	    userAgentJSON.put("device_type", UserAgent.parseUserAgentString(user_agent).getOperatingSystem().getDeviceType());
+	    userAgentJSON.put("device_type", StringUtils.lowerCase(UserAgent.parseUserAgentString(user_agent).getOperatingSystem().getDeviceType().toString()));
 	}
 	catch (Exception e)
 	{
@@ -136,5 +136,4 @@ public class Analytics
 	}
 	return userAgentJSON.toString();
     }
-
 }

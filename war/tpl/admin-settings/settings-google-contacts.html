@@ -101,8 +101,14 @@
 		<label class="control-label" style="text-align:">Frequency</label> 
            <div class="controls">
 				<select class="required" name="duration">
-					<option value="ONCE">Only once</option>
+
+{{#check_plan "FREE"}}
+					<option value="" disabled>Only once (Paid plans)</option>
+					<option value="" disabled>Daily  (Paid plans)</option>
+{{else}}
+					s<option value="ONCE">Only once</option>
 					<option value="DAILY">Daily</option>
+{{/check_plan}}
 					<option value="WEEKLY">Weekly</option>
 					<option value="MONTHLY">Monthly</option>
 				</select>

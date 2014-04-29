@@ -17,18 +17,26 @@ import com.agilecrm.contact.Note;
 
 public class FormsUtil
 {
+	/**
+	 * Get agile field from form field titles
+	 * 
+	 * @param fieldName
+	 * @return fieldName || agileFieldName
+	 */
 	public static String getFieldName(String fieldName)
 	{
-		String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First" };
-		String lastNameAlias[] = { Contact.LAST_NAME, "Last" };
-		String companyNameAlias[] = { Contact.COMPANY, "organisation, organization" };
+		// String arrays with all possible form field titles from (wufoo /
+		// unbounce / gravity)
+		String firstNameAlias[] = { Contact.FIRST_NAME, "Name", "First", "name", "first", "firstname", "first name" };
+		String lastNameAlias[] = { Contact.LAST_NAME, "Last", "last", "lastname", "last name" };
+		String companyNameAlias[] = { Contact.COMPANY, "organisation", "organization" };
 		String contactTitleAlias[] = { Contact.TITLE, "designation" };
-		String emailAlias[] = { Contact.EMAIL };
-		String mainPhoneAlias[] = { Contact.PHONE, "phone_number" };
+		String emailAlias[] = { Contact.EMAIL, "email id", "mail", "mail id", "email address" };
+		String mainPhoneAlias[] = { Contact.PHONE, "phone_number", "phone number" };
 		String workPhoneAlias[] = { "work phone" };
 		String mobilePhoneAlias[] = { "mobile", "mobile phone" };
-		String websiteAlias[] = { "url" };
-		String skypeIdAlias[] = { "skype" };
+		String websiteAlias[] = { Contact.URL, Contact.WEBSITE };
+		String skypeIdAlias[] = { "skype", "skype id" };
 		String twitterAlias[] = { "twitter" };
 		String googlePlusAlias[] = { "google+" };
 		String linkedinAlias[] = { "linkedin" };
@@ -38,12 +46,17 @@ public class FormsUtil
 		String githubAlias[] = { "github" };
 		String youtubeAlias[] = { "youtube" };
 		String feedAlias[] = { "feed" };
-		String addressAlias[] = { "Street Address", "Location", "Street", "street", "address", "location" };
+		String addressAlias[] = { "Street Address", "Location", "Street", "street", "address", "location",
+				"street address" };
 		String addressLineAlias[] = { "Address Line 2" };
-		String addressCityAlias[] = { "City", "province" };
+		String addressCityAlias[] = { "City", "province", "city" };
 		String addressCountryAlias[] = { "Country", "country" };
 		String addressStateAlias[] = { "State / Province / Region", "State", "stateprovince", "state" };
-		String addressZipAlias[] = { "Zip", "Zip code", "Postal code", "Postal / Zip Code", "zip" };
+		String addressZipAlias[] = { "Zip", "Zip code", "Postal code", "Postal / Zip Code", "zip", "postal code",
+				"zip code", "pin code", "pin" };
+
+		// Maps with key as agile contact property, value as list of aliases for
+		// that property with sub type
 
 		HashMap<String, List<String>> firstName = new HashMap<String, List<String>>();
 		firstName.put(Contact.FIRST_NAME, Arrays.asList(firstNameAlias));
@@ -61,7 +74,7 @@ public class FormsUtil
 		email.put(Contact.EMAIL, Arrays.asList(emailAlias));
 
 		HashMap<String, List<String>> mainPhone = new HashMap<String, List<String>>();
-		mainPhone.put(Contact.PHONE, Arrays.asList(mainPhoneAlias));
+		mainPhone.put(Contact.PHONE + " main", Arrays.asList(mainPhoneAlias));
 
 		HashMap<String, List<String>> workPhone = new HashMap<String, List<String>>();
 		workPhone.put(Contact.PHONE + " work", Arrays.asList(workPhoneAlias));
@@ -70,37 +83,37 @@ public class FormsUtil
 		mobilePhone.put(Contact.PHONE + " mobile", Arrays.asList(mobilePhoneAlias));
 
 		HashMap<String, List<String>> website = new HashMap<String, List<String>>();
-		website.put(Contact.WEBSITE, Arrays.asList(websiteAlias));
+		website.put(Contact.WEBSITE + " URL", Arrays.asList(websiteAlias));
 
 		HashMap<String, List<String>> skypeId = new HashMap<String, List<String>>();
-		skypeId.put(Contact.WEBSITE + " skype", Arrays.asList(skypeIdAlias));
+		skypeId.put(Contact.WEBSITE + " SKYPE", Arrays.asList(skypeIdAlias));
 
 		HashMap<String, List<String>> twitter = new HashMap<String, List<String>>();
-		twitter.put(Contact.WEBSITE + " twitter", Arrays.asList(twitterAlias));
+		twitter.put(Contact.WEBSITE + " TWITTER", Arrays.asList(twitterAlias));
 
 		HashMap<String, List<String>> googlePlus = new HashMap<String, List<String>>();
-		googlePlus.put(Contact.WEBSITE + " googleplus", Arrays.asList(googlePlusAlias));
+		googlePlus.put(Contact.WEBSITE + " GOOGLE-PLUS", Arrays.asList(googlePlusAlias));
 
 		HashMap<String, List<String>> linkedin = new HashMap<String, List<String>>();
-		linkedin.put(Contact.WEBSITE + " linkedin", Arrays.asList(linkedinAlias));
+		linkedin.put(Contact.WEBSITE + " LINKEDIN", Arrays.asList(linkedinAlias));
 
 		HashMap<String, List<String>> facebook = new HashMap<String, List<String>>();
-		facebook.put(Contact.WEBSITE + " facebook", Arrays.asList(facebookAlias));
+		facebook.put(Contact.WEBSITE + " FACEBOOK", Arrays.asList(facebookAlias));
 
 		HashMap<String, List<String>> xing = new HashMap<String, List<String>>();
-		xing.put(Contact.WEBSITE + " xing", Arrays.asList(xingAlias));
+		xing.put(Contact.WEBSITE + " XING", Arrays.asList(xingAlias));
 
 		HashMap<String, List<String>> flickr = new HashMap<String, List<String>>();
-		flickr.put(Contact.WEBSITE + " flickr", Arrays.asList(flickrAlias));
+		flickr.put(Contact.WEBSITE + " FLICKR", Arrays.asList(flickrAlias));
 
 		HashMap<String, List<String>> github = new HashMap<String, List<String>>();
-		github.put(Contact.WEBSITE + " github", Arrays.asList(githubAlias));
+		github.put(Contact.WEBSITE + " GITHUB", Arrays.asList(githubAlias));
 
 		HashMap<String, List<String>> youtube = new HashMap<String, List<String>>();
-		youtube.put(Contact.WEBSITE + " youtube", Arrays.asList(youtubeAlias));
+		youtube.put(Contact.WEBSITE + " YOUTUBE", Arrays.asList(youtubeAlias));
 
 		HashMap<String, List<String>> feed = new HashMap<String, List<String>>();
-		feed.put(Contact.WEBSITE + " feed", Arrays.asList(feedAlias));
+		feed.put(Contact.WEBSITE + " FEED", Arrays.asList(feedAlias));
 
 		HashMap<String, List<String>> address = new HashMap<String, List<String>>();
 		address.put(Contact.ADDRESS + " lineone", Arrays.asList(addressAlias));
@@ -120,6 +133,8 @@ public class FormsUtil
 		HashMap<String, List<String>> addressZip = new HashMap<String, List<String>>();
 		addressZip.put(Contact.ADDRESS + " zip", Arrays.asList(addressZipAlias));
 
+		// List of all maps (map with key: agile property name, value: list of
+		// all aliases for that property)
 		ArrayList<HashMap<String, List<String>>> allFields = new ArrayList<HashMap<String, List<String>>>();
 		allFields.add(firstName);
 		allFields.add(lastName);
@@ -147,27 +162,41 @@ public class FormsUtil
 		allFields.add(addressState);
 		allFields.add(addressZip);
 
+		// Iterate list of maps
 		for (HashMap<String, List<String>> map : allFields)
 		{
 			for (Map.Entry<String, List<String>> entry : map.entrySet())
 			{
-				if (entry.getValue().contains(fieldName))
+				// If fieldName matches with list of aliases return key of that
+				// list in map
+				if (entry.getValue().contains(fieldName) || entry.getValue().contains(fieldName.toLowerCase()))
 					return entry.getKey();
 			}
 		}
-		return fieldName;
+		// Else return fieldName
+		return fieldName + " " + "agilecustomfield";
 	}
 
+	/**
+	 * Compare oldProperties with newProperties, and update Contact Properties
+	 * 
+	 * @param newProperties
+	 * @param oldProperties
+	 * @return updatedProperties
+	 */
 	public static List<ContactField> updateContactProperties(List<ContactField> newProperties,
 			List<ContactField> oldProperties)
 	{
 		List<ContactField> updatedProperties = new ArrayList<ContactField>();
 		List<ContactField> outdatedProperties = new ArrayList<ContactField>();
 
+		// If oldProperties exist
 		if (oldProperties.size() != 0)
 		{
 			for (ContactField oldProperty : oldProperties)
 				for (ContactField newProperty : newProperties)
+
+					// If oldProperty updated replace with newProperty
 					if (StringUtils.equals(oldProperty.name, newProperty.name)
 							&& (StringUtils.equals(oldProperty.subtype, newProperty.subtype)))
 						outdatedProperties.add(oldProperty);
@@ -179,6 +208,14 @@ public class FormsUtil
 		return updatedProperties;
 	}
 
+	/**
+	 * Build CUSTOM ContactField form name, value, and subtype of property
+	 * 
+	 * @param name
+	 * @param value
+	 * @param subtype
+	 * @return field
+	 */
 	public static ContactField buildProperty(String name, String value, String subtype)
 	{
 		ContactField field = new ContactField();
@@ -189,66 +226,94 @@ public class FormsUtil
 		return field;
 	}
 
+	/**
+	 * Get country code from country name if match, else return country name
+	 * 
+	 * @param value
+	 *            country name
+	 * @return country code || value
+	 */
 	public static String getCountry(String value)
 	{
 		String code = countrycodemap().get(value);
 		return (!StringUtils.isBlank(code)) ? code : value;
 	}
 
+	/**
+	 * Map finalJson to contact fields in agilecrm
+	 * 
+	 * @param finalJson
+	 * @param properties
+	 * @param notes
+	 * @return void
+	 */
 	public static void jsonToAgile(JSONObject finalJson, List<ContactField> properties, List<Note> notes)
 	{
 		try
 		{
+			// Define addressJson, checkBox, addString
 			JSONObject addressJson = new JSONObject();
-			String checkBox = new String();
 			String addString = new String();
 
+			// Iterate finalJson keys
 			Iterator<?> keys = finalJson.keys();
 			while (keys.hasNext())
 			{
 				String key = (String) keys.next();
 				String value = finalJson.getString(key);
 
-				if (key.contains(" "))
+				// If key contains " "
+				if (StringUtils.contains(key, "agilecustomfield"))
+				{
+					if (StringUtils.contains(key, "agilenote"))
+					{
+						Note note = new Note(key.replace(" agilenote agilecustomfield", ""), value);
+						notes.add(note);
+					}
+					else if (StringUtils.contains(key, "agilecheckbox"))
+						properties.add(buildProperty(key.replace(" agilecheckbox agilecutomfield", ""), value, null));
+					else
+						properties.add(buildProperty(key.replace(" agilecustomfield", ""), value, null));
+				}
+				else if (key.contains(" ") && !StringUtils.contains(key, Contact.ADDRESS))
 				{
 					String[] keyArray = key.split(" ");
+
+					// Separate name and sub type from key by splitting at " "
 					String tokenKey = keyArray[0];
 					String subType = keyArray[1];
 
-					if (key.contains("textarea"))
-					{
-						Note note = new Note(key.replace(" textarea", ""), value);
-						notes.add(note);
-					}
-					else if (key.contains("checkbox"))
-					{
-						checkBox = (!StringUtils.isBlank(checkBox)) ? checkBox + ", " + value : value;
-						buildProperty(key.replace(" checkbox", ""), checkBox, null);
-					}
-					else if (StringUtils.equals(subType, "lineone"))
+					properties.add(new ContactField(tokenKey, value, subType));
+				}
+				else if (key.contains(Contact.ADDRESS))
+				{
+
+					String[] keyArray = key.split(" ");
+
+					// Separate name and sub type from key by splitting at " "
+					String subType = keyArray[1];
+
+					if (StringUtils.equals(subType, "lineone"))
 						addString = value;
 					else if (StringUtils.equals(subType, "linetwo"))
 						addString = addString + ", " + value;
+
+					// If subtype is city, state, zip add to addressJson
 					else if (StringUtils.equals(subType, "city") || StringUtils.equals(subType, "state")
 							|| StringUtils.equals(subType, "zip"))
 						addressJson.put(subType, value);
+
+					// If subtype is country, get country code and add to
+					// addressJson
 					else if (StringUtils.equals(subType, "country"))
 						addressJson.put(subType, getCountry(value));
-					else if (StringUtils.equals(tokenKey, Contact.WEBSITE)
-							|| StringUtils.equals(tokenKey, Contact.PHONE))
-						properties.add(new ContactField(tokenKey, value, subType));
-					else
-						properties.add(buildProperty(key, value, null));
 				}
-				else if (key.equals(Contact.FIRST_NAME) || key.equals(Contact.LAST_NAME) || key.equals(Contact.COMPANY)
-						|| key.equals(Contact.TITLE) || key.equals(Contact.WEBSITE) || key.equals(Contact.EMAIL)
-						|| key.equals(Contact.PHONE))
-					properties.add(new ContactField(key, value, null));
 				else
-					properties.add(buildProperty(key, value, null));
+					properties.add(new ContactField(key, value, null));
 			}
 			if (addressJson.length() != 0)
 			{
+				// Add addString to addressJson and add to properties
 				addressJson.put("address", addString);
 				properties.add(new ContactField(Contact.ADDRESS, addressJson.toString(), null));
 			}
@@ -261,6 +326,11 @@ public class FormsUtil
 		}
 	}
 
+	/**
+	 * Map with country names as key and codes as values
+	 * 
+	 * @return countryCode
+	 */
 	public static HashMap<String, String> countrycodemap()
 	{
 		HashMap<String, String> countryCode = new HashMap<String, String>();

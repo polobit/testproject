@@ -28,7 +28,6 @@ function agile_send_auth(url) {
 	
 	params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
 	params[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.SIGNED;
-
 	gadgets.io.makeRequest(url, agile_handle_load_response, params);
 }
 
@@ -79,14 +78,6 @@ function agile_get_emails()
 
 		// emails = [{email:"devikatest@gmail.com"}];
 
-		return parse_emails(emails);
-	}
-	else if (Is_Zendesk)
-	{
-		emails = [
-		          {email: Zendesk._Email}
-		          ];
-		
 		return parse_emails(emails);
 	}
 
@@ -164,7 +155,6 @@ function agile_serialize_form(form) {
 	return form.serializeArray();
 }var _agile = _agile || [];
 var Is_Localhost = false;
-var Is_Zendesk = false;
 
 // Holds Contact Detail Object
 var Contacts_Json = {}; 
@@ -262,18 +252,15 @@ function agile_user_associated() {
 
 	// Get all emails
 	var emails = agile_get_emails();
-	
 	Contacts_Json = {};
 	$.each(emails, function(index, value)
 	{
 		Contacts_Json[value.email] = value;
 	});
-	
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', emails);
 	});
-	
 }
 // Prefs after association
 var PREFS_API_KEY = "agile_api_key";
@@ -286,13 +273,6 @@ var PREFS_POPUP_LINK = "agile_popup_link";
 // Save Prefs
 function agile_save_prefs(key, value)
 {
-	
-	if(Is_Zendesk)
-	{
-		Zendesk.store(key, value);
-		return;
-	}
-	
 	// Store it in Google Gadget Prefs
 	var prefs = new gadgets.Prefs();
 	prefs.set(key, value);
@@ -305,12 +285,6 @@ function agile_save_prefs(key, value)
 // Get Prefs
 function agile_get_prefs(key)
 {
-	
-	if(Is_Zendesk)
-	{
-		return Zendesk.store(key);
-	}
-	
 	// Get from Gadget Prefs
 	var gadget_prefs = new gadgets.Prefs();
 	var value = gadget_prefs.getString(key);
@@ -356,7 +330,7 @@ function agile_delete_all_prefs()
 
 	gadgets.io.makeRequest(LIB_PATH + 'gmail?command=delete', function()
 	{
-		agile_init_gadget();	
+		agile_init_gadget();
 	}, params);
 
 	
@@ -476,10 +450,11 @@ function agile_gadget_open_popup(url) {
 		 */
 		if (popup.closed) {
 			clearInterval(finished_interval);
-
+console.log("in setInterval");
 			// Reset the credentials
 			agile_delete_prefs(PREFS_POPUP_LINK);
 			agile_login();
+			console.log("after login in setInterval");
 		}
 	}, 100);
 }var TPL_PATH = "http://localhost:8888/misc/gmail/gadget-js-all/tpl/min/"
@@ -1155,7 +1130,7 @@ $(function()
 
 			//  ------ Hide list view of contact. ------ 
 			$(".display-toggle", el).addClass("hide-contact-summery").removeClass("gadget-show-contact");
-			$(".display-toggle i", el).addClass("icon-collapse-alt").removeClass("icon-expand-alt");
+			$(".display-toggle i", el).removeClass("icon-plus").addClass("icon-minus");
 			$(".display-toggle span", el).text("Hide Details");
 			$(".display-toggle", el).next().hide();
 			
@@ -1192,7 +1167,7 @@ $(function()
 
 		//  ------ Show list view of contact. ------ 
 		$(".display-toggle", el).removeClass("hide-contact-summery").addClass("gadget-show-contact");
-		$(".display-toggle i", el).removeClass("icon-collapse-alt").addClass("icon-expand-alt");
+		$(".display-toggle i", el).removeClass("icon-minus").addClass("icon-plus");
 		$(".display-toggle span", el).text("Show");
 		$(".display-toggle", el).next().show();
 		

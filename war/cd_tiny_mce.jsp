@@ -19,11 +19,14 @@ h2{font-size:24px;line-height:36px;}
 h3{font-size:18px;line-height:27px;}
 
 .page-header{padding-bottom:17px;margin:18px 0;border-bottom:1px solid #f5f5f5;}
+.well{width:100%; float:left;background-color: #f5f5f5;padding: 10px 10px;-webkit-box-shadow: inset 0 1px 1px;border: 1px solid rgba(0, 0, 0, 0.05);border-radius: 4px;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);}
 </style>
 
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
+
+var MERGE_FIELDS = {}
 
 //Read a page's GET URL variables and return them as an associative array.
 function getUrlVars() {
@@ -57,36 +60,40 @@ function showError(message)
 	$('#error').slideDown();
 }
 
-// Inserts selected merge-field into editor
-function insertSelectedMergeField(ele,target_id)
-{
-	var curValue = $(ele).find(':selected').val();
-	tinyMCE.execCommand('mceInsertContent', false, curValue);
-	return false;
-}
-
 // Gets MergeFields
 function getMergeFields()
 {
 	// get merge fields
-	var merge_fields = window.opener.getMergeFields('send_email');
-	
-	appendMergeFieldsToSelect(merge_fields);
-	
+    return window.opener.getMergeFields('send_email');
 }
 
-// Appends merge fields as options
-function appendMergeFieldsToSelect(merge_fields)
+/**
+ * Sets merge fields in Editor as menu button and adds click event
+ * to each option
+ * @param editor - html editor
+ **/
+function set_up_merge_fields(editor)
 {
-	$.each(merge_fields, function(key, value) {
-		   
-		// Append each option to select
-		$('#merge_fields').append($("<option/>", {
-	        value: value,
-	        text: key
-	    }));
+	var menu = [];
+	
+	$.each(MERGE_FIELDS, function(key, value){
+		
+		if(key === "Select Merge Field" || key === "Add Merge Field")
+			return;
+		
+		var menu_item = {}; 
+		menu_item["text"]=key;
+		menu_item["onclick"]=function(){
+			editor.insertContent(value);
+		};
+		
+		menu.push(menu_item);
+		
 	});
+	
+	return menu;
 }
+
 
 $(function()
 {	
@@ -139,12 +146,12 @@ try{
 	{
 		
 	// Gets MergeFields and append them to select option.
-	getMergeFields();
+	MERGE_FIELDS = getMergeFields();
 	
 	}
 	catch(err){
 		console.log(err);
-	}
+	} 
 
 	$('#save_html').live('click', function(e){
 		
@@ -202,282 +209,20 @@ function init_tinymce()
             "insertdatetime media nonbreaking save table contextmenu directionality",
             "paste textcolor"
         ],
-        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        toolbar2: "print preview media | forecolor backcolor",
+        toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image",
+		toolbar2 : "formatselect fontselect fontsizeselect | merge_fields | preview",
         valid_elements: "*[*]",
-        extended_valid_elements: "*[*]",
-        style_formats: [
-                        {
-                            title: "Headers",
-                            items: [
-                                {
-                                    title: "Header 1",
-                                    format: "h1"
-                                },
-                                {
-                                    title: "Header 2",
-                                    format: "h2"
-                                },
-                                {
-                                    title: "Header 3",
-                                    format: "h3"
-                                },
-                                {
-                                    title: "Header 4",
-                                    format: "h4"
-                                },
-                                {
-                                    title: "Header 5",
-                                    format: "h5"
-                                },
-                                {
-                                    title: "Header 6",
-                                    format: "h6"
-                                }
-                            ]
-                        },
-                        {
-                            title: "Inline",
-                            items: [
-                                {
-                                    title: "Bold",
-                                    icon: "bold",
-                                    format: "bold"
-                                },
-                                {
-                                    title: "Italic",
-                                    icon: "italic",
-                                    format: "italic"
-                                },
-                                {
-                                    title: "Underline",
-                                    icon: "underline",
-                                    format: "underline"
-                                },
-                                {
-                                    title: "Strikethrough",
-                                    icon: "strikethrough",
-                                    format: "strikethrough"
-                                },
-                                {
-                                    title: "Superscript",
-                                    icon: "superscript",
-                                    format: "superscript"
-                                },
-                                {
-                                    title: "Subscript",
-                                    icon: "subscript",
-                                    format: "subscript"
-                                },
-                                {
-                                    title: "Code",
-                                    icon: "code",
-                                    format: "code"
-                                }
-                            ]
-                        },
-                        {
-                            title: "Blocks",
-                            items: [
-                                {
-                                    title: "Paragraph",
-                                    format: "p"
-                                },
-                                {
-                                    title: "Blockquote",
-                                    format: "blockquote"
-                                },
-                                {
-                                    title: "Div",
-                                    format: "div"
-                                },
-                                {
-                                    title: "Pre",
-                                    format: "pre"
-                                }
-                            ]
-                        },
-                        {
-                            title: "Alignment",
-                            items: [
-                                {
-                                    title: "Left",
-                                    icon: "alignleft",
-                                    format: "alignleft"
-                                },
-                                {
-                                    title: "Center",
-                                    icon: "aligncenter",
-                                    format: "aligncenter"
-                                },
-                                {
-                                    title: "Right",
-                                    icon: "alignright",
-                                    format: "alignright"
-                                },
-                                {
-                                    title: "Justify",
-                                    icon: "alignjustify",
-                                    format: "alignjustify"
-                                }
-                            ]
-                        },
-                        {
-                            title: "Font Family",
-                            items: [
-                                {
-                                    title: 'Arial',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'arial'
-                                    }
-                                },
-                                {
-                                    title: 'BookAntiqua',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'bookantiqua'
-                                    }
-                                },
-                                {
-                                    title: 'Comic Sans MS',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'comic sans ms, sans-serif'
-                                    }
-                                },
-                                {
-                                    title: 'Courier New',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'courier new, monospace'
-                                    }
-                                },
-                                {
-                                    title: 'Garamond',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'garamond, serif'
-                                    }
-                                },
-                                {
-                                	title: 'Georgia',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'georgia, serif'
-                                    }
-                                }, 
-                                {
-                                    title: 'Helvetica',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'helvetica'
-                                    }
-                                },
-                                {
-                                    title: 'Impact',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'impact,chicago'
-                                    }
-                                },
-                                {
-                                    title: 'OpenSans',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'OpenSans'
-                                    }
-                                },
-                                {
-                                    title: 'Sans Serif',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'arial, helvetica, sans-serif'
-                                    }
-                                },
-                                {
-                                    title: 'Serif',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'times new roman, serif'
-                                    }
-                                },
-                                {
-                                	title: 'Tahoma',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'tahoma, sans-serif'
-                                    }
-                                },
-                                {
-                                    title: 'Terminal',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'terminal,monaco'
-                                    }
-                                },
-                                {
-                                    title: 'TimesNewRoman',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'timesnewroman,times'
-                                    }
-                                },
-                                {
-                                	title: 'Trebuchet MS',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'trebuchet ms, sans-serif'
-                                    }
-                                },
-                                {
-                                    title: 'Verdana',
-                                    inline: 'span',
-                                    styles: {
-                                        'font-family': 'Verdana'
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            title: "Font Size",
-                            items: [
-                                {
-                                    title: 'Small',
-                                    inline: 'span',
-                                    styles: {
-                                        fontSize: 'x-small',
-                                        'font-size': 'x-small'
-                                    }
-                                },
-                                {
-                                    title: 'Normal',
-                                    inline: 'span',
-                                    styles: {
-                                        fontSize: 'small',
-                                        'font-size': 'small'
-                                    }
-                                },
-                                {
-                                    title: 'Large',
-                                    inline: 'span',
-                                    styles: {
-                                        fontSize: 'large',
-                                        'font-size': 'large'
-                                    }
-                                },
-                                {
-                                    title: 'Huge',
-                                    inline: 'span',
-                                    styles: {
-                                        fontSize: 'xx-large',
-                                        'font-size': 'xx-large'
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-       
+        extended_valid_elements : "*[*]",
+        setup: function(editor) {
+            editor.addButton('merge_fields', {
+                type: 'menubutton',
+                text: 'Agile Contact Fields',
+                icon: false,
+                menu: set_up_merge_fields(editor)
+            });
+            
+        }
+        
     });
 }
 </script>
@@ -489,22 +234,19 @@ function init_tinymce()
 	<div class="wrapper" style='min-width:450px;'>
 
 	<!-- wrapper begins -->
-		<div class="block small" style="width:100%; float:left;background-color: #f5f5f5;padding: 10px 10px;-webkit-box-shadow: inset 0 1px 1px;border: 1px solid rgba(0, 0, 0, 0.05);border-radius: 4px;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);">
+		<div class="block small">
 			<div class="block_head">
 				<div class="bheadl"></div>
 				<div class="bheadr"></div>
-				<div class="page-header"><h2>HTML Editor</h2></div>
-
-				<!-- Merge Fields List -->
-				<div style="margin-bottom:10px; height: 25px;">
-
+				
+				<!-- Back button -->
+				<div style="height: 25px; display:none;" id="navigate-back">
+				
     				<!-- Back link to navigate to history back  -->
-					<a href="#" id="navigate-back" style="font-size: 18px; display:none;">Back </a>
-	
-					<select style="float:right;" onchange='insertSelectedMergeField(this,"content")' name='merge_fields' title='Select required merge field to insert into editor.' id="merge_fields">
-    				</select>
+					<a href="#"> < Back </a>
+					
 				</div>
-				<!-- End of Merge Fields list -->
+				
 			</div>
 			<!-- .block_head ends -->
 

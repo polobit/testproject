@@ -88,6 +88,21 @@ public class DealsAPI
     }
 
     /**
+     * Return opportunities with respect to Milestone.
+     * 
+     * @param milestone
+     *            - Milestone for the deals.
+     * @return Opportunities list having the given milestone.
+     */
+    @Path("/byMilestone/{milestone}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
+    {
+	return OpportunityUtil.getDealsWithMilestone(milestone);
+    }
+
+    /**
      * Saves new Opportunity.
      * 
      * @param opportunity

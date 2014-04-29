@@ -30,6 +30,7 @@ $(function()
 			{
 				$('#pic').css("display", "none");
 				changeProperty();
+				
 			});
 		}
 	});

@@ -16,6 +16,8 @@ var documentsView;
 
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
+var NO_WEB_STATS_SETUP = true;
+
 function fill_company_related_contacts(companyId, htmlId)
 {
 	$('#'+htmlId).html(LOADING_HTML);
@@ -358,16 +360,19 @@ $(function(){
 			return;	
 		}
 		
-		$.get('core/api/web-stats/JSAPI-status',function(data){
-			if(data == 0){
-				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
-				return;
-			}
-			addTagAgile(CODE_SETUP_TAG);
-		});
-		
-		var statsView = new Base_Collection_View({
-			url: 'core/api/web-stats?e=' + encodeURIComponent(email) ,
+		// To avoid unnecessary JSAPI count, first verify in cookie
+		if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
+		{
+			$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+			return;
+		}
+			
+		// Add tag if data is not 0
+        addTagAgile(CODE_SETUP_TAG);
+
+			var statsView = new Base_Collection_View({
+			url: 'core/api/web-stats?e=' + encodeURIComponent(email),
+			data: statsCollection.toJSON(),
 			templateKey: "stats",
             individual_tag_name: 'li',
             postRenderCallback: function(el)
@@ -391,6 +396,7 @@ $(function(){
         }
         
         $('#stats',this.el).html(statsView.el);
+        
 	});
 	
 	/**
@@ -437,9 +443,6 @@ $(function(){
 		$('#emailForm').find('.error').removeClass('error');
 		$('#emailForm').find('.help-inline').css('display','none');
 
-		// Removes previous body content
-		$("#emailForm").find( 'textarea[name="body"]' ).parent().find('iframe.wysihtml5-sandbox').contents().find('body').text("");
-		
 		var model_id = $('.emailSelect option:selected').attr('value');
 	
 		// When default option selected make subject and body empty
@@ -447,6 +450,9 @@ $(function(){
 			{
 			// Fill subject and body of send email form
 			$("#emailForm").find( 'input[name="subject"]' ).val("");
+			
+			set_tinymce_content('email-body', '');
+			
 			$("#emailForm").find( 'textarea[name="body"]' ).val("");
 			return;
 			}
@@ -463,7 +469,7 @@ $(function(){
 				var text = model.text;
 				
 				// Apply handlebars template on send-email route 
-				if(Current_Route === 'send-email')
+				if(Current_Route !== 'bulk-email')
 				{
 				
 				// Get Current Contact
@@ -484,27 +490,11 @@ $(function(){
 				text =  template(json);
 				}
 				
-				// Commented as we appended HTML editor to text body.						
-				//text = text.replace(/<br>/gi, "\n");
-				//text = text.replace(/<p.*>/gi, "\n");
-				//text = text.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 ");
-				//text = text.replace(/<(?:.|\s)*?>/g, "");
-				//text = text.replace(/&nbsp;/g, " ");
-				
 				// Fill subject and body of send email form
 				$("#emailForm").find( 'input[name="subject"]' ).val(subject);
-				//var value = $("#emailForm").find( 'textarea[name="body"]' ).val(text);
-				//$("#emailForm").find( 'textarea[name="body"]' ).val("");
 				
-				
-				//Fill html editor with template body
-				var wysihtml5 = $('#body').data('wysihtml5');
-				
-				if(wysihtml5){
-					editor.focus();
-					wysihtml5.editor.composer.commands.exec("insertHTML",text);
-				}	
-				
+				// Insert content into tinymce
+				set_tinymce_content('email-body', text);
 			}});
 		    
 	});
@@ -525,6 +515,9 @@ $(function(){
 		// Disables send button and change text to Sending...
 		disable_send_button($(this));
 		
+		// Saves tinymce content to textarea
+		save_content_to_textarea('email-body');
+		
 		// serialize form.
 		var json = serializeForm("emailForm");
 		
@@ -544,10 +537,12 @@ $(function(){
 			            	App_Contacts.navigate("contact/" + App_Contacts.contactDetailView.model.id, {trigger:true});
 			            else
 			            	window.history.back();
+			            
 		                 },
 		        error: function()
 		               {
 		        	      enable_send_button($('#sendEmail'));
+		        	      
 		        	      console.log("Error occured while sending email");
 		               }
 		});
@@ -560,7 +555,7 @@ $(function(){
 	 */
 	$('#send-email-close').die().live('click',function(e){
 		e.preventDefault();
-		
+
 		Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
             trigger: true
         });
@@ -730,3 +725,11 @@ function enable_send_button(elem)
 	elem.text(elem.attr('data-send-text')).removeAttr('disabled data-send-text');
 }
 
+/**
+ * Returns webstats count w.r.t domain
+ **/
+function get_web_stats_count_for_domain()
+{
+	// Returns web-stats count
+	return $.ajax({type: "GET", url: 'core/api/web-stats/JSAPI-status', async: false}).responseText;
+}

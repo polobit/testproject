@@ -34,8 +34,9 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.reports.Reports;
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.restrictions.BillingRestriction;
-import com.agilecrm.subscription.restrictions.BillingRestrictionManager;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -186,12 +187,10 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public Key<T> put(T entity)
     {
-	if (entity instanceof BillingRestrictionManager && ((BillingRestrictionManager) entity).isNew())
-	{
-	    System.out.println("********************** test **************************");
-	    ((BillingRestrictionManager) entity).checkLimits();
-
-	}
+	// Checks if entities are exceeding current plan limits
+	DaoBillingRestriction daoRestriction = DaoBillingRestriction.getInstace(clazz.getSimpleName(), entity);
+	if (daoRestriction != null && !daoRestriction.check())
+	    BillingRestrictionUtil.throwLimitExceededException(clazz.getSimpleName());
 
 	return ofy().put(entity);
     }
@@ -214,6 +213,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public void delete(T entity)
     {
+
 	ofy().delete(entity);
     }
 
@@ -451,7 +451,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	if (!forceLoad)
 	    return fetchAll(max, cursor, map);
 
-	System.out.println("cached result : " + CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count"));
+	System.out.println("cached result : "
+		+ CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count"));
 	CacheUtil.deleteCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count");
 	return fetchAll(max, cursor, map);
     }
@@ -488,7 +489,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
     }
 
-    public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache, String orderBy)
+    public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
+	    String orderBy)
     {
 	Query<T> query = ofy().query(clazz);
 	if (map != null)
@@ -528,7 +530,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		{
 
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count");
+		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
+			    + NamespaceManager.get() + "_count");
 
 		    if (object != null)
 			agileCursor.count = (Integer) object;
@@ -538,7 +541,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			agileCursor.count = query.count();
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 3 * 1000 && cache)
-			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count", agileCursor.count, 2 * 60 * 60 * 1000);
+			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
+				    agileCursor.count, 2 * 60 * 60 * 1000);
 		    }
 
 		}
@@ -697,8 +701,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	for (Field field : clazz.getDeclaredFields())
 	{
 	    // Ignore transient, embedded, array, and collection properties
-	    if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class)) || (field.getType().isArray())
-		    || (Collection.class.isAssignableFrom(field.getType())) || ((field.getModifiers() & BAD_MODIFIERS) != 0))
+	    if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class))
+		    || (field.getType().isArray()) || (Collection.class.isAssignableFrom(field.getType()))
+		    || ((field.getModifiers() & BAD_MODIFIERS) != 0))
 		continue;
 
 	    field.setAccessible(true);

@@ -102,6 +102,11 @@ public class ScribeUtil
 		    Globals.GOOGLE_CALENDAR_CLIENT_ID, Globals.GOOGLE_CALENDAR_SECRET_KEY, ScribeServlet.GOOGLE_OAUTH2_SCOPE);
 
 	// Creates a Service, specific to Gmail
+	else if (serviceType.equals(ScribeServlet.SERVICE_TYPE_GOOGLE_DRIVE))
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_DRIVE, com.agilecrm.scribe.api.GoogleApi.class, callback,
+		    Globals.GOOGLE_CLIENT_ID, Globals.GOOGLE_CLIENT_ID, ScribeServlet.GOOGLE_DRIVE_SCOPE);
+
+	// Creates a Service, specific to Gmail
 	else
 	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GMAIL, com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
 		    Globals.GOOGLE_CLIENT_ID, ScribeServlet.GMAIL_SCOPE);
@@ -219,6 +224,13 @@ public class ScribeUtil
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_CALENDAR))
 	{
 	    saveGoogleCalenderPrefs(code, null);
+	}
+	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_GOOGLE_DRIVE))
+	{
+	    String returnURL = (String) req.getSession().getAttribute("return_url");
+	    // Appends code in return url
+	    returnURL = returnURL + "&code=" + code;
+	    req.getSession().setAttribute("return_url", returnURL);
 	}
 
     }
@@ -449,5 +461,12 @@ public class ScribeUtil
 
 	// Saves widget
 	widget.save();
+    }
+
+    public static String getGoogileDrivePrefs(String code)
+    {
+	HashMap<String, Object> result = GoogleServiceUtil.exchangeAuthTokenForAccessToken(code, ScribeServlet.GOOGLE_DRIVE_SCOPE);
+	String token = String.valueOf(result.get("access_token"));
+	return token;
     }
 }

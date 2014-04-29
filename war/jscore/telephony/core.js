@@ -6,10 +6,6 @@
  */
 function sipStart()
 {	
-	console.log(Sip_Start);
-	console.log(Sip_Stack);
-	console.log(Sip_Register_Session);
-
 	// After 15 sec procedure will start.
 	setTimeout(function()
 	{		
@@ -33,6 +29,8 @@ function sipStart()
 				{
 					head.js(LIB_PATH + 'lib/telephony/SIPml-api.js', function()
 					{
+						SIPml.setDebugLevel("error");
+						
 						// initialize SIPML5
 						if (SIPml.isInitialized()) // If already done.
 							sipRegister();
@@ -42,7 +40,7 @@ function sipStart()
 				}
 			}).error(function(data)
 			{
-				console.log("In sip error");
+				console.log("Sip error");
 				console.log(data);
 			});
 

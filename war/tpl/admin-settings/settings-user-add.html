@@ -32,14 +32,8 @@
     						<input type="password" class="required" id="password" value="{{password}}" name='password' maxlength="20" minlength="4" placeholder="Password" autocapitalize="off"/> 
     					</div>
     				</div>
-                       <div class="control-group">
-                       	<label class="control-label" for="user_add_note">Note</label>
-    					<div class="controls">
-    						<textarea rows="3" placeholder="Note" name="user_add_note" id="user_add_note" style="max-width:500px"></textarea> 
-    					</div>
-    				</div>
-    			
-    				<div class="control-group">
+
+				<div class="control-group">
     					<div class="controls">
     						<label class="checkbox">
     							<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
@@ -47,6 +41,7 @@
     						</label>
     					</div>
     				</div>
+	
     
     				<div class="control-group">
     					<div class="controls">
@@ -56,7 +51,130 @@
     						</label>
     					</div>
     				</div>
-    
+    <!--
+					<div id="accordion">
+					  <div class="panel-heading controls">
+     					 <h4 class="panel-title">
+        					<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          						<span class="icon-plus"> Privileges</span></a>
+					        </a>
+      					</h4>
+    				</div>
+					<div id="collapseOne" class="panel-collapse collapse" >
+      					<div class="panel-body" style="margin-top:20px!important;margin-left:20px" >
+							
+						
+					{{#unless id}}
+ 					<div class="control-group">
+						
+					<div class="controls">
+						<div class="multiple-checkbox" name="scopes">
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked> 
+                            		Create Contacts
+                            	</label>
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked> 
+                        	    	Update Contacts
+                    	       </label>
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
+        	                    	Import Contacts
+    	                       </label>
+								<label class="checkbox" style="display:inline-block; margin-right:10px">
+                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked> 
+                            		Export Contacts
+                           		</label>
+							</div>
+						</div>
+                    </div>
+						{{else}}
+						{{#unless is_admin}}
+						<div class="control-group">
+						<div class="controls">
+						<div class="multiple-checkbox"  name="scopes">
+								<label class="checkbox" style="display:inline-block; margin-right:10px" >
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"> 
+                            		Create Contacts
+                            	</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        		    <input type="checkbox" name="temp" value="UPDATE_CONTACT"> 
+                        	    	Update Contacts
+                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"> 
+        	                    	Import Contacts
+    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS"> 
+                            		Export Contacts
+                           		</label>
+							</div>
+						</div>
+                    </div>
+					{{else}}
+					<div class="control-group">
+						<div class="controls">
+						<div class="multiple-checkbox"  name="scopes">
+								<label class="checkbox" style="display:inline-block; margin-right:10px" >
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"  disabled checked> 
+                            		Create Contacts
+                            	</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        		    <input type="checkbox" name="temp" value="UPDATE_CONTACT" disabled checked> 
+                        	    	Update Contacts
+                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled checked> 
+        	                    	Import Contacts
+    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled checked> 
+                            		Export Contacts
+                           		</label>
+							</div>
+						</div>
+                    </div>
+					{{/unless}}
+					{{/unless}}
+					
+					<div class="control-group" style="margin-top:-20px">
+						<div class="controls">
+						<div class="multiple-checkbox"  name="menu_items" style="padding-top:5px">
+								<label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        		    <input type="checkbox" name="temp" value="CALENDAR"> 
+                        	    	Calendar
+                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+            	            	    <input type="checkbox" name="temp"  value="DEALS"> 
+        	                    	Deals
+    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="CAMPAIGN"> 
+                            		Campaign
+                           		</label>
+						
+								 </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="CASES"> 
+                            		Cases
+                           		</label>
+	</br>
+ 								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="SOCIAL" > 
+                            		Social
+                           		</label>
+								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="WEBRULE" > 
+                            		Web rule
+                           		</label>
+								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="DOCUMENT" > 
+                            		Documents
+                           		</label>
+								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	<input type="checkbox" name="temp"  value="REPORT" > 
+                            		Reports
+                           		</label>
+
+							</div>
+						</div>
+                    </div>
+    			</div>
+					</div>
+					</div>
+    		-->
     				<div class="form-actions">
                			<button type="submit" class="save btn btn-primary">Save Changes</button>
                			<a type="reset" href='#users' class="btn">Cancel</a>

@@ -113,14 +113,37 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 	var url = uiFieldDefinition.url;
 	var keyField = uiFieldDefinition.dynamicName;
 	var valField = uiFieldDefinition.dynamicValue;
+	var appendNameField = uiFieldDefinition.appendToDynamicName;
 		
 	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
-    
+	var options = uiFieldDefinition.options;
+	var selectOptionAttributes ="";
+	
+	// Populate Options - Naresh 23/04/2014
+	if(options !== undefined)
+	{
+		$.each(
+				options, function (key, value) {
+					if(key.indexOf("*") == 0)
+					{
+						key  = key.substr(1);
+						selectOptionAttributes += "<option selected value='" + value + "'>" + key + "</option>";
+					}
+					else
+						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
+				});
+	 }
+	
 	$.ajax({
 		  url: url,
 		  async: false,
+		  dataType: "json",
 		  success: function(data)
 		  {	    			
+	    
+			// Append given options
+			if(selectOptionAttributes !== undefined)
+	    	$(selectOptionAttributes).appendTo(selectContainer);
 	    
 		var array = eval (data);	      
 		$.each(array, function( index, json )
@@ -128,16 +151,23 @@ function generateDynamicSelectUI(uiFieldDefinition, url, keyField, valField)
 				var key = eval("json." + keyField);			
 				var value = eval("json." + valField);
 				
+				var appendName = eval("json."+ appendNameField);
+				
+				// Append name to email like Naresh <naresh@agilecrm.com>
+				if(key!= undefined && appendName != undefined)
+					key = appendName + " &lt;"+key+"&gt;";
+				
 				if(key != undefined && value != undefined)
 				{
-					var option;
+					
 					if(key.indexOf("*") == 0)
 					{
 						key  = key.substr(1);
-    					option = "<option selected value='" + value + "'>" + key + "</option>";
+						
+						option = "<option selected value='" + value + "'>" + key + "</option>";
     				}
     				else
-        				option = "<option value='" + value + "'>" + key + "</option>";
+    				    option = "<option value='" + value + "'>" + key + "</option>";
         				
         			// Append to container	
         			$(option).appendTo(selectContainer);	        				        								

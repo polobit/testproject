@@ -204,6 +204,14 @@ public class Task extends Cursor
 	return Contact.dao.fetchAllByKeys(this.related_contacts);
     }
 
+    public void addContacts(String id)
+    {
+	if (contacts == null)
+	    contacts = new ArrayList<String>();
+
+	contacts.add(id);
+    }
+
     /**
      * Returns list of contacts related to task.
      * 

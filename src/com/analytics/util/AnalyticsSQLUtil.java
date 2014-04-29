@@ -3,6 +3,7 @@ package com.analytics.util;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
 import com.agilecrm.db.GoogleSQL;
@@ -66,7 +67,7 @@ public class AnalyticsSQLUtil
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(ip)
 		+ ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(isNew)
+		+ isNew
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(ref)
 		+ ","
@@ -76,9 +77,7 @@ public class AnalyticsSQLUtil
 		+ ","
 		+ GoogleSQLUtil.encodeSQLColumnValue(region)
 		+ ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(city)
-		+ ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
+		+ GoogleSQLUtil.encodeSQLColumnValue(city) + "," + GoogleSQLUtil.encodeSQLColumnValue(cityLatLong) + ", NOW()" + ")";
 
 	System.out.println("Insert Query to PageViews: " + insertToPageViews);
 
@@ -104,13 +103,13 @@ public class AnalyticsSQLUtil
 
 	String q1 = "SELECT p1.*, UNIX_TIMESTAMP(stats_time) AS created_time FROM page_views p1";
 
-	// Gets sessions based on Email from database
-	String sessions = "(SELECT sid FROM page_views WHERE email =" + GoogleSQLUtil.encodeSQLColumnValue(email) + " AND domain = "
+	// Gets UNIQUE session ids based on Email from database
+	String sessions = "(SELECT DISTINCT sid FROM page_views WHERE email =" + GoogleSQLUtil.encodeSQLColumnValue(email) + " AND domain = "
 		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + ") p2";
 
 	String joinQuery = q1 + " INNER JOIN " + sessions + " ON p1.sid=p2.sid";
 
-	String pageViews = "SELECT DISTINCT * FROM (" + joinQuery + ") pg";
+	String pageViews = "SELECT * FROM (" + joinQuery + ") pg";
 
 	System.out.println("sids query is: " + sessions);
 
@@ -162,6 +161,10 @@ public class AnalyticsSQLUtil
      */
     public static int getCountForGivenURL(String url, String domain, String email, String type)
     {
+	// If domain or email empty return
+	if (StringUtils.isBlank(domain) || StringUtils.isBlank(email))
+	    return 0;
+
 	String urlCountQuery = "SELECT COUNT(*) FROM page_views WHERE domain = " + GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND email = "
 		+ GoogleSQLUtil.encodeSQLColumnValue(email) + " AND url LIKE ";
 

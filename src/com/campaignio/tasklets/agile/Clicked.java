@@ -93,7 +93,8 @@ public class Clicked extends TaskletAdapter
 	// Get Tracker Id
 	if (data.has(SendEmail.CLICK_TRACKING_ID))
 	{
-	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, data.getString(SendEmail.CLICK_TRACKING_ID), null, null);
+	    CronUtil.enqueueTask(campaignJSON, subscriberJSON, data, nodeJSON, timeout, null, AgileTaskletUtil.getId(campaignJSON),
+		    AgileTaskletUtil.getId(subscriberJSON));
 	}
 	else
 	{

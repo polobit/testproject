@@ -143,7 +143,6 @@ function our_domain_sync()
 
 		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 
-		initWebrules();
 		
 		
 		var domain = readCookie(DOMAIN_COOKIE_FOR_WEBSITE);
@@ -160,6 +159,7 @@ function our_domain_sync()
 			// Adds signup tag, if it is not added previously.
 			//set_profile_noty();
 			add_custom_fields_to_our_domain();
+			initWebrules();
 			
 		}, function(data){
 			var name = CURRENT_DOMAIN_USER['name'];
@@ -172,7 +172,9 @@ function our_domain_sync()
 						// Shows noty
 						//set_profile_noty();
 						add_custom_fields_to_our_domain();
+						initWebrules();
 					});
+			
 		})
 		// Gets contact based on the the email of the user logged in
 	

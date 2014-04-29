@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
@@ -75,7 +76,7 @@ public class MandrillUtil
 	String subaccount = NamespaceManager.get();
 	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to, subject, replyTo, html, text);
 
-	PullQueueUtil.addToPullQueue("email-pull-queue", mandrillDeferredTask, fromEmail);
+	PullQueueUtil.addToPullQueue(Globals.EMAIL_PULL_QUEUE, mandrillDeferredTask, fromEmail);
     }
 
     /**
@@ -103,6 +104,13 @@ public class MandrillUtil
 	    for (TaskHandle task : tasks)
 	    {
 		MandrillDeferredTask mandrillDeferredTask = (MandrillDeferredTask) SerializationUtils.deserialize(task.getPayload());
+
+		// If same To email exists, send email without merging
+		if (isToExists(toArray, mandrillDeferredTask.to))
+		{
+		    sendWithoutMerging(mandrillDeferredTask);
+		    continue;
+		}
 
 		// MergeVars
 		mergeVarsArray
@@ -315,6 +323,61 @@ public class MandrillUtil
 	    return text;
 
 	return text.replaceAll("(\r\n|\n)", "<br>").replaceAll("((?<= ) | (?= ))", "&nbsp;");
+
+    }
+
+    /**
+     * Verifies whether To email exists in array
+     * 
+     * @param toArray
+     *            - To emails array
+     * @param toEmail
+     *            - email to compare
+     * @return boolean
+     */
+    public static boolean isToExists(JSONArray toArray, String toEmail)
+    {
+	try
+	{
+	    for (int i = 0; i < toArray.length(); i++)
+	    {
+		if (StringUtils.equals(toEmail, toArray.getJSONObject(i).getString("email")))
+		    return true;
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while comparing To..." + e.getMessage());
+	}
+
+	return false;
+    }
+
+    /**
+     * Sends mail through without using any merge tags.
+     * 
+     * @param mandrillDeferredTask
+     *            - MandrillDeferredTask
+     */
+    public static void sendWithoutMerging(MandrillDeferredTask mandrillDeferredTask)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(mandrillDeferredTask.subaccount);
+
+	    Mandrill.sendMail(true, mandrillDeferredTask.fromEmail, mandrillDeferredTask.fromName, mandrillDeferredTask.to, mandrillDeferredTask.subject,
+		    mandrillDeferredTask.replyTo, mandrillDeferredTask.html, mandrillDeferredTask.text);
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while sending email without merging..." + e.getMessage());
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
 
     }
 }

@@ -37,8 +37,7 @@ var Sip_Audio;
 
 // If user get disconnect from internet.
 window.addEventListener("offline", function(e)
-{
-	console.log("offline");
+{	
 	No_Internet = true;
 
 	// Unregister all sessions and stop sip stack.
@@ -48,7 +47,6 @@ window.addEventListener("offline", function(e)
 // If user get reconnect with internet.
 window.addEventListener("online", function(e)
 {
-	console.log("online");
 	No_Internet = false;
 
 	// Re-register on sip.

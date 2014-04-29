@@ -538,7 +538,7 @@ function disable_save_button(elem)
 {
 	elem.css('min-width',elem.width()+'px')
 		.attr('disabled', 'disabled')
-		.attr('data-save-text',elem.text())
+		.attr('data-save-text',elem.html())
 		.text('Saving...');
 }
 
@@ -548,5 +548,5 @@ function disable_save_button(elem)
  */
 function enable_save_button(elem)
 {
-	elem.text(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
+	elem.html(elem.attr('data-save-text')).removeAttr('disabled data-save-text');
 }

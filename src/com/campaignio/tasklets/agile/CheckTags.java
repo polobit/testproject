@@ -47,6 +47,9 @@ public class CheckTags extends TaskletAdapter
 	if (contact == null)
 	    return;
 
+	// Update campaign subscriberJSON
+	subscriberJSON = AgileTaskletUtil.getUpdatedSubscriberJSON(contact, subscriberJSON);
+
 	// Normalises the given string.
 	String tags = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tagValue);
 

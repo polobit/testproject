@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.agilecrm.subscription.limits.PlanLimitsEnum;
+import com.agilecrm.subscription.limits.PlanLimits;
 
 /**
  * <code>Plan</code> is used for serializing subscription form data. It include
@@ -18,7 +18,7 @@ public class Plan
 {
     public static enum PlanType
     {
-	FREE, BASIC_MONTHLY, PROFESSIONAL_MONTHLY, ENTERPRISE_MONTHLY, ENTERPRISE_YEARLY, BASIC_YEARLY, PROFESSIONAL_YEARLY, LITE_MONTHLY, LITE_YEARLY, PRO_MONTHLY, PRO_YEARLY, PRO_BIENNIAL, STARTER_MONTHLY, STARTER_YEARLY, STARTER_BIENNIAL, REGULAR_MONTHLY, REGULAR_YEARLY, REGULAR_BIENNIAL;
+	FREE, BASIC_MONTHLY, PROFESSIONAL_MONTHLY, ENTERPRISE_MONTHLY, ENTERPRISE_YEARLY, BASIC_YEARLY, PROFESSIONAL_YEARLY, LITE_MONTHLY, LITE_YEARLY, PRO_MONTHLY, PRO_YEARLY, PRO_BIENNIAL, STARTER_MONTHLY, STARTER_YEARLY, STARTER_BIENNIAL, REGULAR_MONTHLY, REGULAR_YEARLY, REGULAR_BIENNIAL, STARTER, REGULAR, PRO;
     }
 
     public PlanType plan_type = null;
@@ -38,24 +38,24 @@ public class Plan
     }
 
     @JsonIgnore
-    public PlanLimitsEnum getPlanLimits()
+    public PlanLimits getPlanDetails()
     {
-	String planName = getPlanName();
 
 	try
 	{
-	    return PlanLimitsEnum.valueOf(PlanLimitsEnum.class, planName);
+	    return PlanLimits.getPlanDetails(this);
 	}
 	catch (Exception e)
 	{
-	    return PlanLimitsEnum.FREE;
+	    return PlanLimits.getPlanDetails(this);
 	}
     }
 
     @JsonIgnore
     public String getPlanName()
     {
-	String planName = plan_type.toString();
+	String planName = plan_type == null ? PlanType.FREE.toString() : plan_type.toString();
+
 	return planName.split("_")[0];
 
     }
@@ -73,4 +73,14 @@ public class Plan
 	return "Plan: {plan_id: " + plan_id + ", quantity: " + quantity + "}";
     }
 
+    @Override
+    public boolean equals(Object object)
+    {
+	Plan plan = (Plan) object;
+
+	if (this.plan_id.equals(plan.plan_id) && plan.quantity == this.quantity)
+	    return true;
+
+	return false;
+    }
 }

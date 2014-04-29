@@ -28,7 +28,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
-import com.agilecrm.subscription.restrictions.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -262,10 +262,10 @@ public class CSVUtil
 	    {
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
-		++billingRestriction.contacts;
+		++billingRestriction.contacts_count;
 		try
 		{
-		    billingRestriction.check(Contact.dao);
+		    billingRestriction.check("Contact");
 		}
 		catch (PlanRestrictedException e)
 		{

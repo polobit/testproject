@@ -20,6 +20,11 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction.ClassEntities;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -108,7 +113,8 @@ public class ReportsUtil
 	    results.put("duration", WordUtils.capitalizeFully((report.duration.toString())));
 
 	    // Send reports email
-	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS, new Object[] { results, fieldsList });
+	    SendMail.sendMail(report.sendTo, report.name + " - " + SendMail.REPORTS_SUBJECT, SendMail.REPORTS,
+		    new Object[] { results, fieldsList });
 	}
     }
 
@@ -195,9 +201,10 @@ public class ReportsUtil
 
 			customFieldJSON = new ObjectMapper().writeValueAsString(contactField);
 
-			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON, new TypeReference<HashMap<String, Object>>()
-			{
-			});
+			Map<String, Object> customField = new ObjectMapper().readValue(customFieldJSON,
+				new TypeReference<HashMap<String, Object>>()
+				{
+				});
 
 			customProperties.add(customField);
 		    }
@@ -322,5 +329,25 @@ public class ReportsUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    public static void check(Long startTime, Long endTime) throws PlanRestrictedException
+    {
+	JSONObject object = new JSONObject();
+	try
+	{
+	    object.put("startTime", startTime);
+	    object.put("endTime", endTime);
+	}
+	catch (JSONException e)
+	{
+	    return;
+	}
+
+	DaoBillingRestriction restriction = DaoBillingRestriction.getInstace(ClassEntities.Report.toString(), object);
+	if (restriction.check())
+	    return;
+
+	BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.REPORT);
     }
 }

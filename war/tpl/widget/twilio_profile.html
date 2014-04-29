@@ -1,7 +1,7 @@
 <script id="twilio-profile-template" type="text/html">
 	<div class="widget_content">
 		<div class="row-fluid">
-			{{#if_equals to.length "1"}}<div><input type="hidden" id="contact_number" value={{to.0.value}}/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}}</div>
+			{{#if_equals to.length "1"}}<div><input type="hidden" id="contact_number" value="{{to.0.value}}"/>Call {{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}} on {{to.0.value}}</div>
 			{{else}}
 			<div class="span2" valign="middle" style="padding:4px"><h4>To&nbsp;:</h4></div>
 			<div class="span10">
@@ -39,13 +39,13 @@
 					{{#if_equals recording.total "0"}}
 						<i class="icon-phone" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;border-radius: 2px;"></i>
 					{{else}}
-						<i class="icon-play" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;border-radius: 2px;"></i>
+						<i class="icon-play" id="record_sound_play" sound_url="{{recording.Recording.Uri}}" style="color: white;background: rgba(130, 130, 130, 1);padding:1px;border-radius: 2px;cursor:pointer;"></i>
 					{{/if_equals}}						
 				</div>
 				<div class="span9">
 					<div class="pull-left">{{#if_equals call.Status "no-answer"}}Call unaswered{{else}}Call connected{{/if_equals}}</div>
 					<div class="pull-right">{{#is_string call.Duration}}{{call.Duration}} s{{else}}0 s{{/is_string}}</div><br>
-					<small><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{call.StartTime}}</time></small>
+					<small><time class="time-ago pull-left" datetime="{{call.StartTime}}">{{toLocalTimezone call.StartTime}}</time></small>
 				</div>
 			</li>
 		{{/each}}
@@ -75,9 +75,9 @@
 <script id="twilio-verify-template" type="text/html" >
 	<div class="widget_content" style='border-bottom:none;line-height: 160%;' >
 		
-		<p>Please enter this code <b>{{ValidationRequest.ValidationCode}}</b> to verify your number after you receive a call from Twilio.</p>
+		<p>Please enter this code <b>{{NewOutgoingCallerId.ValidationCode}}</b> to verify your number after you receive a call from Twilio.</p>
 		{{#if settings}}
-			<a href="#Twilio/twilio1" class="btn" id="twilio_proceed_settings" style="font-size:13px;">Proceed</a>			
+			<a href="#Twilio/twilio{{id}}" class="btn" id="twilio_proceed_settings" style="font-size:13px;">Proceed</a>			
 		{{else}}
 			<a href="#proceed" class="btn" id="twilio_proceed" style="font-size:13px;">Proceed</a>	
 		{{/if}}	

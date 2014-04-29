@@ -1,5 +1,10 @@
 package com.agilecrm.user;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -11,14 +16,17 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -42,7 +50,8 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class DomainUser extends Cursor implements Cloneable
+@Cached
+public class DomainUser extends Cursor implements Cloneable, Serializable
 {
 
     // Key
@@ -83,6 +92,18 @@ public class DomainUser extends Cursor implements Cloneable
      */
     @NotSaved
     public String email_template = null;
+
+    /**
+     * Stores user access scopes
+     */
+    @NotSaved(IfDefault.class)
+    public List<UserAccessScopes> scopes = null;
+
+    /**
+     * Stores user access scopes
+     */
+    @NotSaved(IfDefault.class)
+    public List<NavbarConstants> menu_items = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 
     /**
      * Name of the domain user
@@ -552,12 +573,23 @@ public class DomainUser extends Cursor implements Cloneable
      * @throws DecoderException
      */
     @PostLoad
-    private void PostLoad() throws DecoderException
+    public void PostLoad() throws DecoderException
     {
 	try
 	{
+	    System.out.println("post load");
 	    if (info_json != null)
 		info_json = new JSONObject(info_json_string);
+
+	    // If no scopes are set, then all scopes are added
+	    if (scopes.size() == 0)
+		scopes.addAll(Arrays.asList(UserAccessScopes.values()));
+
+	    if (menu_items == null)
+	    {
+		System.out.println("*********************************************");
+		menu_items = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+	    }
 	}
 	catch (Exception e)
 	{
