@@ -162,6 +162,36 @@ public class TaskUtil
 	}
     }
 
+    // Gets the current user pending tasks
+    public static List<Task> getPendingTasksForCurrentUser()
+    {
+	try
+	{
+	    return dao.ofy().query(Task.class)
+		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		    .order("due").filter("is_complete", false).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    // Gets the all user pending tasks
+    public static List<Task> getPendingTasksForAllUser()
+    {
+	try
+	{
+	    return dao.ofy().query(Task.class).order("due").filter("is_complete", false).list();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     /**
      * Gets the list of tasks which have been pending for particular number of
      * days to till date (mid night time), but due date is not approached. (For
@@ -233,7 +263,7 @@ public class TaskUtil
     {
 	return dao.ofy().query(Task.class)
 		.filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
-		.order("-created_time").limit(10).list();
+		.order("-created_time").list();
     }
 
     /**
@@ -255,10 +285,6 @@ public class TaskUtil
 		    searchMap.put("priority_type", type);
 		if (criteria.equalsIgnoreCase("STATUS"))
 		    searchMap.put("status", type);
-		// if (criteria.equalsIgnoreCase("DUE"))
-		// searchMap.put("type", type);
-		// if (criteria.equalsIgnoreCase("OWNER"))
-		// searchMap.put("type", type);
 		if (criteria.equalsIgnoreCase("CATEGORY"))
 		    searchMap.put("type", type);
 	    }

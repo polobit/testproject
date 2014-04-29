@@ -611,7 +611,7 @@ small {
 	height: 700px;
 } /*if height:500px then only scroll bar is shown  */
 .scroll-v {
-	overflow-y: scroll;
+	overflow-y: auto;
 	height: 452px;
 }
 
@@ -1237,15 +1237,15 @@ small {
 
 /* ************* Task UI (Trello) CSS ***************** */
 .list-area-wrapper{width: 100%;}
-.list-area{overflow-x: scroll;height: 540px;white-space: nowrap;}
-.list{height: 520px;width: 31.8% !important;vertical-align: top;display: inline-block;margin: 0px 5px 8px !important;
+.list-area{overflow: auto;height: 540px;white-space: nowrap;}
+.list{max-height: 520px;width: 31.8% !important;vertical-align: top;display: inline-block;margin: 0px 5px 8px !important;
       background-color: #fcfcfc;white-space: normal;position: relative;
       border: 1px solid #a1a1a1;border-radius: 4px;background: #eee;}
 .list-header{position: relative;padding: 3px 26px 2px 6px;min-height: 19px;}
 .list-header-name{display: inline;line-height: 18px;margin: 0;min-height: 19px;
                   min-width: 30px;overflow: hidden;text-overflow: ellipsis;word-wrap: break-word;}
-.list-tasks{height: 490px;overflow-y:scroll;clear: both;margin-bottom: 0;
-            min-height: 20px;padding: 4px 4px 1px;z-index: 1;}
+.list-tasks{max-height: 490px;overflow:auto;clear: both;margin-bottom: 0;
+            min-height: 100px;padding: 4px 4px 1px;z-index: 1;}
 .listed-task {background-color: #fff;border-bottom: 1px solid #bdbdbd;border-radius: 3px;cursor: pointer;margin-bottom: 5px;
               max-width: 300px;min-height: 20px;position: relative;padding: 4px 4px 4px 4px;z-index: 0;
               overflow-y: overlay;}
@@ -1256,6 +1256,7 @@ small {
 .task-footer{padding-top:3px;min-height:20px !important;width:99%!important;}
 .task-actions{color:#888;display : none;padding-right:4px;}
 .task-actions:hover, .task-actions:focus{display : block;}
+.task-model-list{min-height: 100px;}
 
 /* For scroll in task's new view */
 /* Vertical scroll */
@@ -1284,6 +1285,12 @@ small {
 #taskForm{margin: 0px 0px 0px 0px;}
 #activityModal > .modal-body{max-height:432px;}
 #update-task-date-1{width: 120px;border: none;box-shadow: none;}
+
+.ui-sortable-placeholder {  
+    border: 3px dashed #aaa;  
+    min-height: 50px;     
+    background: #ccc;  
+}
 /* ********************************************************* */
 /**************** Plan and upgrade css *************for plan css strip********************************************/
 .pagination li:last-child a {

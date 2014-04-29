@@ -1,5 +1,5 @@
 <script id="new-tasks-lists-collection-template" type="text/html"> 
- <div id="new-tasks-lists-model-list" class="list-area row-fluid ui-sortable">
+ <div id="new-tasks-lists-model-list" class="list-area row-fluid">
 
  </div>
 </script>
@@ -8,19 +8,19 @@
      <div class="list-header" attr="{{heading}}"> 
          <h4 class="list-header-name">{{heading}}</h4>                 
      </div> 
-     <div id="list-tasks" class="list-tasks ui-sortable">
+     <div id="list-tasks" class="list-tasks">
 
      </div>        
 </script>
 
 <script id="task-collection-template" type="text/html">
-<div id="task-model-list">
+<div id="task-model-list" class="task-model-list">
    
 </div>
 </script>
 
 <script id="task-model-template" type="text/html">
-<div class="listed-task" id={{id}}>
+<div class="listed-task ui-state-default" id="{{id}}">
   <div class="task-body">   
       <label class="label task-type pull-right" title="Category">{{type}}</label>
       {{#if_equals type "FOLLOW_UP"}}

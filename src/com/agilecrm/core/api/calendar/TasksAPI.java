@@ -80,6 +80,27 @@ public class TasksAPI
     }
 
     /**
+     * Gets all tasks of ANY priority, category, related to and status.
+     * 
+     * @return List of all tasks
+     */
+    @Path("/allpending")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getAllPendingTasks()
+    {
+	try
+	{
+	    return TaskUtil.getPendingTasksForAllUser();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
      * Gets the tasks which have been pending for particular no.of days
      * 
      * @param numdays
@@ -222,6 +243,20 @@ public class TasksAPI
 	System.out.println("current user pending tasks api called");
 	// return TaskUtil.getAllPendingTasks();
 	return TaskUtil.getAllPendingTasksForCurrentUser();
+    }
+
+    /**
+     * To list pending Tasks on task list
+     * 
+     * @return Task list
+     */
+    @Path("/my/pendingtasks")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getPendingTasksForCurrentUser()
+    {
+	System.out.println("current user pending tasks api called");
+	return TaskUtil.getPendingTasksForCurrentUser();
     }
 
     /**

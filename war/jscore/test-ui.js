@@ -2,7 +2,7 @@ $(function()
 {
 	// Main Collection
 	tasksListCollection = null;
-
+	
 	// Url Map After selection from filter
 	urlMap = { "PRIORITY" : { "type" : ["HIGH", "LOW", "NORMAL"], "searchKey" : "priority_type" }, 
 			   "CATEGORY" : { "type" : ["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey" : "type" }, 
@@ -38,7 +38,7 @@ $(function()
 	$('.task-body, .task-due-time').die().live('click', function(event)
 	{
 		var taskId;
-		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
+		var taskListId = $(this).closest('.list').attr('id');
 
 		if ($(this).hasClass('task-body'))
 			taskId = $(this).parent().attr('id');
@@ -65,7 +65,7 @@ $(function()
 
 		// var taskListId =
 		// $(this).parent().parent().parent().find('.task-type').html();
-		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
+		var taskListId = $(this).closest('.list').attr('id');
 
 		// Show and Fill details in Task Edit modal
 		editTask(taskId, taskListId);
@@ -84,7 +84,7 @@ $(function()
 		var taskId = $(this).attr('data');
 
 		// Get heading of task list
-		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
+		var taskListId = $(this).closest('.list').attr('id');
 
 		// Delete Task.
 		deleteTask(taskId, taskListId);
@@ -97,7 +97,7 @@ $(function()
 		var taskId = $(this).attr('data');
 
 		// Get heading of task list
-		var taskListId = $(this).closest('.list').find('.list-header').attr('attr');
+		var taskListId = $(this).closest('.list').attr('id');
 
 		// make task completed.
 		completeTask(taskId, taskListId);
@@ -160,5 +160,5 @@ $(function()
 		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');
 		
 		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
-	});
+	});	
 });

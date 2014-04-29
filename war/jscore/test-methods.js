@@ -5,24 +5,30 @@ function findDetails(criteria, owner)
 	console.log(urlMap[criteria].type);
 	console.log(urlMap[criteria].searchKey);
 
-	// Creates nested collection
-	createNestedCollection(urlMap[criteria].type, initialURL, urlMap[criteria].searchKey);
+	/*Creates nested collection
+	1. If my task or my pending task with owner criteria is selected so add only one column of current user.
+	2. If selected criteria is not owner so follow normal procedure*/
+	if (criteria == "OWNER" && ($(".selected_name").html() == "My Tasks" || $(".selected_name").html() == "My Pending Tasks") )
+		createNestedCollection([CURRENT_DOMAIN_USER.name]); // only current
+	else
+		createNestedCollection(urlMap[criteria].type); // all
 
-	if (criteria == "DUE")
+	if (criteria == "DUE" || criteria == "OWNER")
 	{
 		// Url to call DB
 		var initialURL = null;
 
-		if (owner == "") //all task
+		if (owner == "") // all task
 			initialURL = '/core/api/tasks/all';
 		else if (owner == "all-pending-tasks")
-			initialURL = '/core/api/tasks/all';
+			initialURL = '/core/api/tasks/allpending';
 		else if (owner == "my-pending-tasks")
-			initialURL = '/core/api/tasks/my/tasks';
-		else //my task
+			initialURL = '/core/api/tasks/my/pendingtasks';
+		else
+			// my task
 			initialURL = '/core/api/tasks/my/tasks';
 
-		createSubCollectionForDue(urlMap[criteria].type, initialURL, urlMap[criteria].searchKey);
+		createSubCollectionForDueAndOwner(urlMap[criteria].type, initialURL, urlMap[criteria].searchKey);
 	}
 	else
 	{
@@ -30,10 +36,12 @@ function findDetails(criteria, owner)
 		var initialURL = '/core/api/tasks/based' + getParams() + "&type=";
 		createSubCollection(urlMap[criteria].type, initialURL, urlMap[criteria].searchKey);
 	}
+	
+	setup_sortable_tasks();
 }
 
 // Creates nested collection
-function createNestedCollection(criteriaArray, initialURL, searchKey)
+function createNestedCollection(criteriaArray)
 {
 	// Shows loading image untill data gets ready for displaying
 	$('#task-list-based-condition').html(LOADING_HTML);
@@ -56,7 +64,7 @@ function createNestedCollection(criteriaArray, initialURL, searchKey)
 }
 
 // Creates sub collection
-function createSubCollectionForDue(criteriaArray, initialURL, searchKey)
+function createSubCollectionForDueAndOwner(criteriaArray, initialURL, searchKey)
 {
 	console.log(criteriaArray);
 	console.log(initialURL);
@@ -71,26 +79,27 @@ function createSubCollectionForDue(criteriaArray, initialURL, searchKey)
 		{
 			for ( var i in tasks)
 			{
-				var headingToSearch = getHeadingForDueTask(tasks[i]);
+				if (searchKey == "due") // Due
+				{
+					var headingToSearch = getHeadingForDueTask(tasks[i]);
 
-				// Add task to relevant task list (sub collection)
-				if (headingToSearch != null)
-					addTaskToTaskList(headingToSearch, tasks[i])
+					// Add task to relevant task list (sub collection)
+					if (headingToSearch != null)
+						addTaskToTaskList(headingToSearch, tasks[i], null);
+				}
+				else
+					// Owner
+					addTaskToTaskList(tasks[i].taskOwner.name, tasks[i], null);
 			}
-
-			console.log("tasksListCollection");
-			console.log(tasksListCollection);
-
+			
 			// Creates normal time.
 			displayTimeAgo($(".list"));
 		}
-		;
 	}, function error(data)
 	{
 		console.log("In tasksList error");
 		console.log(data);
 	});
-
 }
 
 // Creates sub collection
@@ -117,10 +126,7 @@ function createSubCollection(criteriaArray, initialURL, searchKey)
 				console.log(tasks[0][searchKey]);
 
 				// Add task to relevant task list (sub collection)
-				addTaskToTaskList(tasks[0][searchKey], tasks)
-
-				console.log("tasksListCollection");
-				console.log(tasksListCollection);
+				addTaskToTaskList(tasks[0][searchKey], tasks, null)
 			}
 			;
 		}, function error(data)
@@ -160,6 +166,7 @@ function taskAppend(base_model)
 	base_model.set('taskCollection', taskCollection.collection);
 
 	var el = tasksListModel.render().el;
+	
 	$('#list-tasks', el).html(taskCollection.render(true).el);
 	$('#new-tasks-lists-model-list', this.el).append(el);
 }
