@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "Agile CRM",
+  "version": "1.0",
+  "description": "Agile CRM offers contact management, marketing automation, telephony, analytics, web engagement, real-time alerts and social suite",
+  "icons": {
+    "128": "agile-128.png",
+    "16": "agilecrm-app-icon-16x16.png"
+  },
+  "container": ["DOMAIN_INSTALLABLE"],
+  "api_console_project_id": "661717543880"
+}
