@@ -85,7 +85,9 @@ public class OAuthUtil
 	    // ".agilecrm.com/scribe?service=" +
 	    // ScribeServlet.SERVICE_TYPE_GOOGLE_OAUTH2;
 
-	    String path = "https://" + domainUser.domain + "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/oauth";
+	    // String path = "https://" + domainUser.domain +
+	    // "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/oauth";
+	    String path = "https://" + domainUser.domain + ".agilecrm.com/oauth";
 	    if (returnURL != null)
 		path += "?return_url=" + URLEncoder.encode(returnURL);
 
