@@ -48,7 +48,7 @@ public class ScribeServlet extends HttpServlet
     public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
     public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
     public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
-    public static final String GOOGLE_OAUTH2_SCOPE = "https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email";
+    public static final String GOOGLE_OAUTH2_SCOPE = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
 
     /**
      * Process the post request to servlet request, request can be sent either
