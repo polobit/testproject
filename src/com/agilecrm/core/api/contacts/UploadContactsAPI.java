@@ -116,7 +116,7 @@ public class UploadContactsAPI
 	try
 	{
 	    // Checks User access control over current entity to be saved.
-	    UserAccessControlUtil.check(com.agilecrm.contact.Contact.class.getSimpleName(), null, CRUDOperation.IMPORT,
+	   // UserAccessControlUtil.check(com.agilecrm.contact.Contact.class.getSimpleName(), null, CRUDOperation.IMPORT,
 		    true);
 
 	    // Reads the request body. It is included as payload to backends

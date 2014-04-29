@@ -103,7 +103,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * Stores user access scopes
      */
     @NotSaved(IfDefault.class)
-    public List<NavbarConstants> menu_items = null;
+    public List<NavbarConstants> menu_items = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 
     /**
      * Name of the domain user
@@ -573,10 +573,11 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * @throws DecoderException
      */
     @PostLoad
-    private void PostLoad() throws DecoderException
+    public void PostLoad() throws DecoderException
     {
 	try
 	{
+	    System.out.println("post load");
 	    if (info_json != null)
 		info_json = new JSONObject(info_json_string);
 
@@ -586,6 +587,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	    if (menu_items == null)
 	    {
+		System.out.println("*********************************************");
 		menu_items = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
 	}
