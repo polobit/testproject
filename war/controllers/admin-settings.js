@@ -116,7 +116,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload: true,
+		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users',
 			postRenderCallback : function(el)
 			{
 				if (view.model.get("id"))
@@ -159,7 +159,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		 * Creates a Model for users edit, navigates back to 'user' window on
 		 * save success
 		 */
-		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users',reload: true, postRenderCallback: function(el){
+		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users', postRenderCallback: function(el){
 			bindAdminChangeAction(el);
 		} });
 
