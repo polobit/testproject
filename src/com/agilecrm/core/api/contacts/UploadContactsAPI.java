@@ -25,8 +25,6 @@ import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
-import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
@@ -116,8 +114,9 @@ public class UploadContactsAPI
 	try
 	{
 	    // Checks User access control over current entity to be saved.
-	   // UserAccessControlUtil.check(com.agilecrm.contact.Contact.class.getSimpleName(), null, CRUDOperation.IMPORT,
-		    true);
+	    // UserAccessControlUtil.check(com.agilecrm.contact.Contact.class.getSimpleName(),
+	    // null, CRUDOperation.IMPORT,
+	    // true);
 
 	    // Reads the request body. It is included as payload to backends
 	    InputStream stream = request.getInputStream();

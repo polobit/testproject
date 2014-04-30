@@ -1,9 +1,10 @@
 package com.agilecrm.user;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -99,11 +100,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     @NotSaved(IfDefault.class)
     public List<UserAccessScopes> scopes = null;
 
-    /**
-     * Stores user access scopes
-     */
-    @NotSaved(IfDefault.class)
-    public List<NavbarConstants> menu_items = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+    @NotSaved
+    public Set<NavbarConstants> menu_scopes = null;
 
     /**
      * Name of the domain user
@@ -573,26 +571,25 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * @throws DecoderException
      */
     @PostLoad
-    public void PostLoad() throws DecoderException
+    public void postLoad() throws DecoderException
     {
 	try
 	{
-	    System.out.println("post load");
 	    if (info_json != null)
 		info_json = new JSONObject(info_json_string);
 
 	    // If no scopes are set, then all scopes are added
-	    if (scopes.size() == 0)
-		scopes.addAll(Arrays.asList(UserAccessScopes.values()));
+	    if (scopes == null)
+		scopes = Arrays.asList(UserAccessScopes.values());
 
-	    if (menu_items == null)
+	    if (menu_scopes == null)
 	    {
-		System.out.println("*********************************************");
-		menu_items = new ArrayList<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	}
     }
 
