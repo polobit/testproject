@@ -55,7 +55,8 @@ function setup_sortable_tasks()
 							if (!criteria)
 								criteria = "CATEGORY";
 
-							// Gets search key from map so we can change that field in task as per new task list.
+							// Gets search key from map so we can change that
+							// field in task as per new task list.
 							var fieldToChange = urlMap[criteria].searchKey;
 							console.log(fieldToChange);
 
@@ -63,25 +64,36 @@ function setup_sortable_tasks()
 							var taskId = $(item).find('.listed-task').attr('id');
 							console.log(taskId);
 
-							console.log($("#" + taskId).index());
-
 							// Get old task list
 							var modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId });
 							console.log(modelOldTaskList);
 
-							// Gets task from old sub collection (task list) to var type json
+							// Gets task from old sub collection (task list) to
+							// var type json
 							var oldTask = modelOldTaskList[0].get('taskCollection').get(taskId).toJSON();
 							console.log(oldTask);
 
 							// Changes field of task
 							if (fieldToChange == "due")
+							{
+								oldTask.owner_id = oldTask.taskOwner.id;
 								oldTask["due"] = assignNewDue(newTaskListId);
-							else if (fieldToChange == "taskOwner.name")
-								oldTask.taskOwner = assignNewOwner(newTaskListId);
-							else
-								oldTask[fieldToChange] = newTaskListId;
+							}
 
-							// To change task list in collection we need old task list id.
+							else if (fieldToChange == "taskOwner.name")
+							{
+								var newTaskListOwnerId = $(item).closest('.list').find('.list-header').attr('ownerID');
+								console.log("newTaskListOwnerId: " + newTaskListOwnerId);
+								oldTask.owner_id = newTaskListOwnerId;
+							}
+							else
+							{
+								oldTask.owner_id = oldTask.taskOwner.id;
+								oldTask[fieldToChange] = newTaskListId;
+							}
+
+							// To change task list in collection we need old
+							// task list id.
 							oldTask["taskListId"] = oldTaskListId;
 
 							console.log(oldTask);
@@ -95,7 +107,6 @@ function setup_sortable_tasks()
 
 							oldTask.contacts = contacts;
 							oldTask.due = new Date(oldTask.due).getTime();
-							oldTask.owner_id = oldTask.taskOwner.id;
 
 							// Save task in DB
 							var newTask = new Backbone.Model();
@@ -106,7 +117,7 @@ function setup_sortable_tasks()
 								updateTask("dragged", data, oldTask);
 
 								// Update task in UI
-								$("#" + newTaskListId).find("#" + taskId).parent().html(getTemplate('task-model', oldTask));
+								$("#" + newTaskListId).find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
 
 								// Creates normal time.
 								displayTimeAgo($(".list"));
@@ -118,10 +129,43 @@ function setup_sortable_tasks()
 
 function assignNewDue(newTaskListId)
 {
-  console.log(newTaskListId);	
+	var d = new Date();
+	console.log(d);
+	console.log(newTaskListId);
+
+	// OVERDUE (yesterday)
+	if (newTaskListId == "OVERDUE")
+	{
+		d.setDate(d.getDate() - 1);
+		console.log(d);
+		console.log(getGMTTimeFromDate(d) / 1000);
+	}
+	// Today
+	if (newTaskListId == "TODAY")
+	{
+		console.log(getGMTTimeFromDate(d) / 1000);
+	}
+	// Tomorrow
+	if (newTaskListId == "TOMORROW")
+	{
+		d.setDate(d.getDate() + 1);
+		console.log(d);
+		console.log(getGMTTimeFromDate(d) / 1000);
+	}
+	// Later Day after tomorrow
+	if (newTaskListId == "LATER")
+	{
+		d.setDate(d.getDate() + 2);
+		console.log(d);
+		console.log(getGMTTimeFromDate(d) / 1000);
+	}
+
+	return (getGMTTimeFromDate(d) / 1000);
 }
 
 function assignNewOwner(newTaskListId)
 {
-  console.log(newTaskListId);	
+	console.log(newTaskListId);
+
+	console.log(tasksListCollection.collection.where({ heading : newTaskListId }));
 }

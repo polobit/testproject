@@ -15,7 +15,9 @@ $(function()
 	{
 		console.log(users);
 		for ( var i in users)
-			urlMap.OWNER.type[i] = users[i].name;
+			{
+			  urlMap.OWNER.type[i] = {"name":users[i].name,"id":users[i].id};
+			}			
 	}).error(function(data)
 	{
 		console.log("get user err");
@@ -109,7 +111,7 @@ $(function()
 		event.preventDefault();
 
 		// show date picker
-		$('.date', $("#editTaskForm")).datepicker('show');
+		//$('.date', $("#editTaskForm")).datepicker('show');
 	});
 
 	/**
@@ -130,6 +132,7 @@ $(function()
 	$('#editTaskModal').on('hidden', function()
 	{
 		$("#editTaskForm").find("li").remove();
+		//$('.date', $("#editTaskForm")).datepicker('hide');
 	});
 
 	// Click events to agents dropdown of Owner's list and Criteria's list
@@ -159,6 +162,6 @@ $(function()
 	{
 		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');
 		
-		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
+		//pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
 	});	
 });

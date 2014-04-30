@@ -76,7 +76,7 @@ function updateTask(isUpdate, data, json)
 		if (headingToSearch != json.taskListId)
 		{
 			// Change task's list
-			changeTaskList(data, json, criteria, headingToSearch,isUpdate);
+			changeTaskList(data, json, criteria, headingToSearch, isUpdate);
 			return;
 		}
 
@@ -99,8 +99,18 @@ function updateTask(isUpdate, data, json)
 // Removes task from old task list and add to new task list.
 function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 {
+	console.log(data);
+	console.log(json);	
+	console.log(isUpdate+"  "+criteria+"  "+headingToSearch);	
+	
 	// Get old task list
-	var modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId });
+	if (criteria == "OWNER")
+	  {
+		var modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId, owner_id:json.taskOwner.id });
+		headingToSearch = "taskOwner.name";
+	  }		
+	else
+		var modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId });
 
 	console.log(modelOldTaskList);
 

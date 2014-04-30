@@ -235,9 +235,11 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 	//$('#' + modalId).find('span.save-status').html(LOADING_HTML);
 
 	var json = serializeForm(formId);
+	console.log(json.due);
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
 
+	console.log(json.due);
 	console.log(json);
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';

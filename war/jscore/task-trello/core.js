@@ -1,4 +1,7 @@
-/*Creates url to fetch data and finds details from map, calls function to create nested collection*/
+/** Caller : Task controller (route) , event on drop down
+ *  Details: Creates url to fetch data and finds details from map, calls function to create nested collection
+ *  Input : criteria, owner
+ */
 function findDetails(criteria, owner)
 {
 	console.log(criteria + "  " + owner);
@@ -9,9 +12,9 @@ function findDetails(criteria, owner)
 	1. If my task or my pending task with owner criteria is selected so add only one column of current user.
 	2. If selected criteria is not owner so follow normal procedure*/
 	if (criteria == "OWNER" && ($(".selected_name").html() == "My Tasks" || $(".selected_name").html() == "My Pending Tasks") )
-		createNestedCollection([CURRENT_DOMAIN_USER.name]); // only current
+		createNestedCollection(criteria, [{"name":CURRENT_DOMAIN_USER.name, "id":CURRENT_DOMAIN_USER.id}]); // only current
 	else
-		createNestedCollection(urlMap[criteria].type); // all
+		createNestedCollection(criteria, urlMap[criteria].type); // all
 
 	if (criteria == "DUE" || criteria == "OWNER")
 	{
@@ -37,12 +40,15 @@ function findDetails(criteria, owner)
 		createSubCollection(urlMap[criteria].type, initialURL, urlMap[criteria].searchKey);
 	}
 	
+	// Gives ability of dragging and dropping to tasks in task list.
 	setup_sortable_tasks();
 }
 
 // Creates nested collection
-function createNestedCollection(criteriaArray)
+function createNestedCollection(criteria, criteriaArray)
 {
+	console.log(criteriaArray);
+	
 	// Shows loading image untill data gets ready for displaying
 	$('#task-list-based-condition').html(LOADING_HTML);
 
@@ -53,7 +59,10 @@ function createNestedCollection(criteriaArray)
 	for ( var i in criteriaArray)
 	{
 		// Add heading to task list in main collection
-		var newTaskList = { "heading" : criteriaArray[i] };
+		if(criteria == "OWNER")
+			var newTaskList = { "heading" : criteriaArray[i].name, "owner_id":criteriaArray[i].id };
+		else
+		  var newTaskList = { "heading" : criteriaArray[i] };
 
 		// Add task list in main collection
 		tasksListCollection.collection.add(newTaskList);// main-collection
@@ -79,6 +88,9 @@ function createSubCollectionForDueAndOwner(criteriaArray, initialURL, searchKey)
 		{
 			for ( var i in tasks)
 			{
+				
+				console.log(tasks[i]);
+				
 				if (searchKey == "due") // Due
 				{
 					var headingToSearch = getHeadingForDueTask(tasks[i]);
@@ -89,7 +101,7 @@ function createSubCollectionForDueAndOwner(criteriaArray, initialURL, searchKey)
 				}
 				else
 					// Owner
-					addTaskToTaskList(tasks[i].taskOwner.name, tasks[i], null);
+					addTaskToTaskList(tasks[i].taskOwner.name, tasks[i], "OWNER");
 			}
 			
 			// Creates normal time.
