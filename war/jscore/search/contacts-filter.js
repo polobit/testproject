@@ -255,7 +255,6 @@ function chainFilters(el, data, callback)
 				// execute the callback, passing parameters as necessary
 				callback();
 			}
-			
 		})
 		return;
 	}
@@ -289,33 +288,19 @@ function show_chained_fields(el, data, forceShow)
 	
 	// Chaining dependencies of input fields with jquery.chained.js
 	RHS.chained(condition, function(chained_el, self){
-		console.log(chained_el);
-		console.log(self);
 		var selected_field = $(chained_el).find('option:selected');
 		var placeholder = $(selected_field).attr("placeholder");
 		var is_custom_field = $(selected_field).hasClass("custom_field");
-		console.log($(selected_field).attr('class'));
-		console.log( $(chained_el).find('option:selected'));
-		
 		
 		var field_type = $(selected_field).attr("field_type");
-		console.log("field_type = " + field_type)
 		if(placeholder)
 		{
-			console.log(placeholder.indexOf("Tag"))
-			console.log(placeholder +" " + placeholder.indexOf("Tag") < 0 +", " +placeholder.indexOf("Tag"))
 			$("input", self).attr("placeholder", placeholder);
 		}
-		console.log(is_custom_field);
 		if(field_type && field_type == 'LIST')
 		{
-			console.log($("input", self));
-			$("input", self).hide();
+			$("input", self).remove();
 			$("select", self).show();
-		}
-		if(!is_custom_field)
-		{
-			
 		}
 	});
 	condition.chained(LHS);
@@ -434,7 +419,6 @@ function fillCustomFields(fields, el, callback)
 			
 		if(field.field_type == "LIST")
 		{
-			console.log(field.field_data);
 			var custom_list_values = field.field_data.split(";");
 			el = "<select style='display:none' name='"+field.field_label+"'>"
 			for(var i = 0; i < custom_list_values.length; i++)
@@ -444,7 +428,6 @@ function fillCustomFields(fields, el, callback)
 			}
 			el = el +"</select>";
 			rhs_element.append(el);
-			console.log(rhs_element);
 		}
 		if(field.field_data)
 			rhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
