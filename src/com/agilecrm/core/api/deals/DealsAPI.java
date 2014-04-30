@@ -19,6 +19,8 @@ import net.sf.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
@@ -257,4 +259,34 @@ public class DealsAPI
 
 	return OpportunityUtil.getUpcomingDealsRelatedToCurrentUser("10");
     }
+
+    /**
+     * Saves new Opportunity.
+     * 
+     * @param opportunity
+     *            - Opportunity object that is newly created.
+     * @param email
+     *            email of contact to be added in deal.
+     * @return created opportunity.
+     */
+    @Path("/email/{email}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Opportunity createOpportunityByEmail(Opportunity opportunity, @PathParam("email") String email)
+    {
+	// Get the Contact based on the Email and add it to the Deal.
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	if (contact == null)
+	{
+	    System.out.println("Null contact");
+	    return null;
+	}
+
+	opportunity.addContactIds(contact.id.toString());
+
+	opportunity.save();
+	return opportunity;
+    }
+
 }

@@ -92,7 +92,8 @@ public class CampaignsAPI
     @Path("logs/contact/{contact-id}/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Log> getCampaignContactLogs(@PathParam("contact-id") String contactId, @PathParam("campaign-id") String campaignId)
+    public List<Log> getCampaignContactLogs(@PathParam("contact-id") String contactId,
+	    @PathParam("campaign-id") String campaignId)
     {
 	return LogUtil.getSQLLogs(campaignId, contactId, null);
     }
@@ -140,6 +141,38 @@ public class CampaignsAPI
     public void deleteCampaignLogs(@PathParam("campaign-id") String id)
     {
 	LogUtil.deleteSQLLogs(id, null);
+    }
+
+    /**
+     * Subscribes single contact with the campaign.
+     * 
+     * @param email
+     *            email of a contact that is subscribed.
+     * @param workflowId
+     *            Id of a workflow.
+     */
+    @Path("enroll/email/{workflow-id}/{email}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void subscribeContactByEmail(@PathParam("email") String email, @PathParam("workflow-id") Long workflowId)
+    {
+	// Get the contact based on the Email and subscribe it to the Campaign.
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	if (contact == null)
+	{
+	    System.out.println("Null contact");
+	    return;
+	}
+
+	/*
+	 * Contact is converted to list so that WorkflowUtil uses
+	 * TaskletManager's executeCampaign method having deferredTask
+	 */
+	List<Contact> contactList = new ArrayList<Contact>();
+	contactList.add(contact);
+
+	WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
+	// return "true";
     }
 
 }
