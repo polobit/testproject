@@ -2,22 +2,27 @@ $(function()
 {
 	// Main Collection
 	tasksListCollection = null;
-	
+
 	// Url Map After selection from filter
-	urlMap = { "PRIORITY" : { "type" : ["HIGH", "LOW", "NORMAL"], "searchKey" : "priority_type" }, 
-			   "CATEGORY" : { "type" : ["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey" : "type" }, 
-			   "STATUS" : { "type" : ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"], "searchKey" : "status" }, 
-			   "DUE" : { "type" : ["TODAY","TOMORROW", "OVERDUE","LATER"], "searchKey" : "due" }, 
-			   "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } };
-	
-	// Get user's name and id to add in urlMap for owner of task, user name can be redundant so we need user's id too.
+	urlMap = { "PRIORITY" : { "type" : [
+			"HIGH", "LOW", "NORMAL"
+	], "searchKey" : "priority_type" }, "CATEGORY" : { "type" : [
+			"EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"
+	], "searchKey" : "type" }, "STATUS" : { "type" : [
+			"NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"
+	], "searchKey" : "status" }, "DUE" : { "type" : [
+			"TODAY", "TOMORROW", "OVERDUE", "LATER"
+	], "searchKey" : "due" }, "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } };
+
+	// Get user's name and id to add in urlMap for owner of task, user name can
+	// be redundant so we need user's id too.
 	$.getJSON('/core/api/users', function(users)
 	{
 		console.log(users);
 		for ( var i in users)
-			{
-			  urlMap.OWNER.type[i] = {"name":users[i].name,"id":users[i].id};
-			}			
+		{
+			urlMap.OWNER.type[i] = { "name" : users[i].name, "id" : users[i].id };
+		}
 	}).error(function(data)
 	{
 		console.log("get user err");
@@ -64,7 +69,7 @@ $(function()
 	// Task Action: Open Task Edit Modal and display details in it.
 	$('.edit-task').die().live('click', function(event)
 	{
-		var taskId = $(this).attr('data');		
+		var taskId = $(this).attr('data');
 		var taskListId = $(this).closest('.list').attr('id');
 		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
 
@@ -89,7 +94,7 @@ $(function()
 		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
 
 		// Delete Task.
-		deleteTask(taskId, taskListId,taskListOwnerId);
+		deleteTask(taskId, taskListId, taskListOwnerId);
 	});
 
 	// Task Action: Mark task complete, make changes in DB.
@@ -103,7 +108,7 @@ $(function()
 		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
 
 		// make task completed.
-		completeTask(taskId, taskListId,taskListOwnerId);
+		completeTask(taskId, taskListId, taskListOwnerId);
 	});
 
 	// On click of Time icon in Task edit modal, displays calendar.
@@ -112,7 +117,7 @@ $(function()
 		event.preventDefault();
 
 		// show date picker
-		//$('.date', $("#editTaskForm")).datepicker('show');
+		// $('.date', $("#editTaskForm")).datepicker('show');
 	});
 
 	/**
@@ -133,7 +138,7 @@ $(function()
 	$('#editTaskModal').on('hidden', function()
 	{
 		$("#editTaskForm").find("li").remove();
-		//$('.date', $("#editTaskForm")).datepicker('hide');
+		// $('.date', $("#editTaskForm")).datepicker('hide');
 	});
 
 	// Click events to agents dropdown of Owner's list and Criteria's list
@@ -162,7 +167,8 @@ $(function()
 	$("ul#owner-tasks li a").die().live("click", function()
 	{
 		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');
-		
-		//pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
-	});	
+
+		// pieTasks(getParams()); // Show tasks only when user changes My Tasks
+		// vs All Tasks
+	});
 });

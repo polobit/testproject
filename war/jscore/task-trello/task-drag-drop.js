@@ -6,7 +6,11 @@ function setup_sortable_tasks()
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function()
 	{
 		$(".task-model-list").sortable(
-				{ connectWith : '.task-model-list', placeholder : "ui-sortable-placeholder", cursor : "move", containment : ".list-area-wrapper",
+				{
+					connectWith : '.task-model-list',
+					placeholder : "ui-sortable-placeholder",
+					cursor : "move",
+					containment : ".list-area-wrapper",
 					scroll : false,
 					// When task is dragged to adjust the horizontal scroll
 					change : function(event, ui)
@@ -43,34 +47,34 @@ function setup_sortable_tasks()
 						var oldTaskListId = $(sender).closest('.list').attr('id');
 						var newTaskListId = $(item).closest('.list').attr('id');
 						console.log(oldTaskListId + " " + newTaskListId);
-						
+
 						var oldTaskListOwnerId = $(sender).closest('.list').find('.list-header').attr('ownerID');
 						var newTaskListOwnerId = $(item).closest('.list').find('.list-header').attr('ownerID');
-						console.log(oldTaskListOwnerId+" " + newTaskListOwnerId);
-						
+						console.log(oldTaskListOwnerId + " " + newTaskListOwnerId);
+
 						var criteria = $('#type-tasks').data("selected_item");
 
 						// If criteria is not selected then make it default
 						// one
 						if (!criteria)
 							criteria = "CATEGORY";
-						
+
 						console.log(criteria);
-						
+
 						var getUpdatedUI = false;
-						
+
 						// If criteria is owner and task is dragged to other
 						// task list
-						if(criteria == "OWNER" && oldTaskListOwnerId != newTaskListOwnerId)
+						if (criteria == "OWNER" && oldTaskListOwnerId != newTaskListOwnerId)
 							getUpdatedUI = true;
-						else if(oldTaskListId != newTaskListId)	// Checks
-																// current task
-																// list is
-																// different
-																// from previous
-							getUpdatedUI = true;						
-						
-						if(getUpdatedUI)
+						else if (oldTaskListId != newTaskListId) // Checks
+							// current task
+							// list is
+							// different
+							// from previous
+							getUpdatedUI = true;
+
+						if (getUpdatedUI)
 						{
 							// Gets search key from map so we can change that
 							// field in task as per new task list.
@@ -82,10 +86,11 @@ function setup_sortable_tasks()
 							console.log(taskId);
 
 							// Get old task list
-							if(criteria == "OWNER")
-								var modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId, owner_id : parseInt(oldTaskListOwnerId) });
+							if (criteria == "OWNER")
+								var modelOldTaskList = tasksListCollection.collection
+										.where({ heading : oldTaskListId, owner_id : parseInt(oldTaskListOwnerId) });
 							else
-							    var modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId });
+								var modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId });
 							console.log(modelOldTaskList);
 
 							// Gets task from old sub collection (task list) to
@@ -101,7 +106,7 @@ function setup_sortable_tasks()
 							}
 
 							else if (fieldToChange == "taskOwner.name")
-							{								
+							{
 								oldTask.owner_id = newTaskListOwnerId;
 								oldTask["taskListOwnerId"] = oldTaskListOwnerId;
 							}
@@ -136,11 +141,12 @@ function setup_sortable_tasks()
 								updateTask("dragged", data, oldTask);
 
 								// Update task in UI
-								if(criteria == "OWNER")									
-								  $(".list-header[ownerID=" + newTaskListOwnerId + "]").parent().find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
+								if (criteria == "OWNER")
+									$(".list-header[ownerID=" + newTaskListOwnerId + "]").parent().find("#" + taskId).parent().html(
+											getTemplate('task-model', data.toJSON()));
 								else
-								  $("#" + newTaskListId).find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
-									
+									$("#" + newTaskListId).find("#" + taskId).parent().html(getTemplate('task-model', data.toJSON()));
+
 								// Creates normal time.
 								displayTimeAgo($(".list"));
 							} });

@@ -12,7 +12,8 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 		console.log("conditionToCheck == OWNER");
 		var modelTaskList = tasksListCollection.collection.where({ heading : tasksToAdd.taskOwner.name, owner_id : tasksToAdd.taskOwner.id });
 	}
-	else if ((conditionToCheck == "dragged" || conditionToCheck == true) && headingToSearch == "taskOwner.name") // dragged/edited task
+	else if ((conditionToCheck == "dragged" || conditionToCheck == true) && headingToSearch == "taskOwner.name") // dragged/edited
+																													// task
 	{
 		console.log("conditionToCheck == dreagged and headingToSearch == taskOwner.name");
 		var modelTaskList = tasksListCollection.collection.where({ heading : tasksToAdd.get("taskOwner").name, owner_id : tasksToAdd.get("taskOwner").id });

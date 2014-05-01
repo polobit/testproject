@@ -186,13 +186,13 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	taskJson.is_complete = true;
 	taskJson.due = new Date(taskJson.due).getTime();
 	taskJson.owner_id = taskJson.taskOwner.id;
-	
+
 	if (taskListOwnerId)
 	{
 		taskJson.taskListId = taskListId;
-		taskJson.taskListOwnerId = taskListOwnerId;	
+		taskJson.taskListOwnerId = taskListOwnerId;
 	}
-	
+
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask.save(taskJson, { success : function(data)
