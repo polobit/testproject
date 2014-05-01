@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
@@ -8,6 +9,13 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 
+/**
+ * <code>HasDeal</code> represents has_deal node in campaigns. It verifies
+ * whether deal exists with given milestone and deal owner
+ * 
+ * @author Naresh
+ * 
+ */
 public class HasDeal extends TaskletAdapter
 {
     /**
@@ -30,6 +38,11 @@ public class HasDeal extends TaskletAdapter
      */
     public static String BRANCH_NO = "no";
 
+    /**
+     * Any milestone
+     */
+    public static String ANY_MILESTONE = "any_milestone";
+
     public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
     {
 	String milestone = getStringValue(nodeJSON, subscriberJSON, data, MILESTONE);
@@ -50,6 +63,11 @@ public class HasDeal extends TaskletAdapter
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
 		return;
 	    }
+
+	    // If milestone is any, then make it null
+	    if (StringUtils.equals(milestone, ANY_MILESTONE))
+		milestone = null;
+
 	    int count = OpportunityUtil.getDealsCount(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)), milestone,
 		    AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
 

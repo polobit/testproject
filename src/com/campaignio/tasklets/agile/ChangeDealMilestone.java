@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.campaignio.logger.Log;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
@@ -55,6 +57,10 @@ public class ChangeDealMilestone extends TaskletAdapter
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 		return;
 	    }
+
+	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		    "Changed Deal's milestone from " + (fromMilestone.equals(ANY_MILESTONE) ? "Any" : fromMilestone) + " to " + toMilestone,
+		    Log.LogType.CHANGED_DEAL_MILESTONE.toString());
 
 	    // Change milestone with given values
 	    changeMilestoneToRelatedDeals(contactId, fromMilestone, toMilestone, AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
