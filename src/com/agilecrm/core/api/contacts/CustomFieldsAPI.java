@@ -36,158 +36,203 @@ import com.agilecrm.contact.util.CustomFieldDefUtil;
  * 
  */
 @Path("/api/custom-fields")
-public class CustomFieldsAPI {
+public class CustomFieldsAPI
+{
 
-	/**
-	 * Gets all custom fields
-	 * 
-	 * @return List of custom fields
-	 */
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<CustomFieldDef> getCustomFields() {
-		try {
-			return CustomFieldDefUtil.getAllCustomFields();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+    /**
+     * Gets all custom fields
+     * 
+     * @return List of custom fields
+     */
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFields()
+    {
+	try
+	{
+	    return CustomFieldDefUtil.getAllCustomFields();
 	}
-
-	/**
-	 * Gets all custom fields
-	 * 
-	 * @return List of custom fields
-	 */
-	@Path("/scope")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<CustomFieldDef> getCustomFieldsByScopeType(
-			@QueryParam("scope") String scope) {
-		try {
-			if (scope == null)
-				CustomFieldDefUtil.getAllCustomFields();
-
-			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" + scope);
-			return CustomFieldDefUtil.getAllCustomFields(SCOPE.valueOf(scope));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	/**
-	 * Gets all custom fields
-	 * 
-	 * @return List of custom fields
-	 */
-	@Path("/searchable")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<CustomFieldDef> getSearchableCustomFields() {
-		try {
-			return CustomFieldDefUtil.getSearchableCustomFields();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+    /**
+     * Gets all custom fields
+     * 
+     * @return List of custom fields
+     */
+    @Path("/scope")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFieldsByScopeType(@QueryParam("scope") String scope)
+    {
+	try
+	{
+	    if (scope == null)
+		CustomFieldDefUtil.getAllCustomFields();
 
-	/**
-	 * Gets all custom fields by type
-	 * 
-	 * @return List of custom fields
-	 */
-	@Path("/type/{field_type}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<CustomFieldDef> getCustomFieldsByType(
-			@PathParam("field_type") String type) {
-		try {
-			return CustomFieldDefUtil.getFieldByType(type);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	    return CustomFieldDefUtil.getAllCustomFields(SCOPE.valueOf(scope));
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
-	/**
-	 * Deletes the custom field based on 'id' from the database
-	 * 
-	 * @param id
-	 *            unique id of the custom field
-	 */
-	@Path("/{id}")
-	@DELETE
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void deleteCustomField(@PathParam("id") Long id) {
-		try {
-			CustomFieldDef customFieldDef = CustomFieldDefUtil
-					.getCustomField(id);
-			if (customFieldDef != null)
-				customFieldDef.delete();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * Gets all custom fields
+     * 
+     * @return List of custom fields
+     */
+    @Path("/searchable/scope")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getSearchableCustomFieldsByScope(@QueryParam("scope") String scope)
+    {
+	try
+	{
+	    if (scope == null)
+		CustomFieldDefUtil.getSearchableCustomFields();
 
-	/**
-	 * Saves new custom field by validating its label name. Exception will be
-	 * thrown if a duplicate field with same label exists
-	 * 
-	 * @param customField
-	 * @return
-	 */
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public CustomFieldDef createCustomField(CustomFieldDef customField) {
-		try {
-			customField.save();
-		} catch (Exception e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST)
-							.entity("Sorry, a custom field with that name is already present.")
-							.build());
-		}
-		return customField;
+	    return CustomFieldDefUtil.getSearchableCustomFieldsByScope(SCOPE.valueOf(scope));
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
-	/**
-	 * Updates the existing field by validating its label name
-	 * 
-	 * @param customField
-	 *            custom field which is going to be updated
-	 * @return updated custom field data
-	 */
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public CustomFieldDef updateCustomField(CustomFieldDef customField) {
-		try {
-			customField.save();
-		} catch (Exception e) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST)
-							.entity("Sorry, a custom field with that name is already present.")
-							.build());
-		}
-		return customField;
+    /**
+     * Gets all custom fields
+     * 
+     * @return List of custom fields
+     */
+    @Path("/searchable")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getSearchableCustomFields()
+    {
+	try
+	{
+	    return CustomFieldDefUtil.getSearchableCustomFields();
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
-	/**
-	 * Deletes all selected custom fields using array of corresponding ids
-	 * 
-	 * @param model_ids
-	 *            array of custom field ids as String
-	 * @throws JSONException
-	 */
-	@Path("bulk")
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteCustomFields(@FormParam("ids") String model_ids)
-			throws JSONException {
-		JSONArray CustomFieldsJSONArray = new JSONArray(model_ids);
-		CustomFieldDef.dao.deleteBulkByIds(CustomFieldsJSONArray);
+    /**
+     * Gets all custom fields by type
+     * 
+     * @return List of custom fields
+     */
+    @Path("/type/{field_type}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFieldsByType(@PathParam("field_type") String type)
+    {
+	try
+	{
+	    return CustomFieldDefUtil.getFieldByType(type);
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Deletes the custom field based on 'id' from the database
+     * 
+     * @param id
+     *            unique id of the custom field
+     */
+    @Path("/{id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteCustomField(@PathParam("id") Long id)
+    {
+	try
+	{
+	    CustomFieldDef customFieldDef = CustomFieldDefUtil.getCustomField(id);
+	    if (customFieldDef != null)
+		customFieldDef.delete();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Saves new custom field by validating its label name. Exception will be
+     * thrown if a duplicate field with same label exists
+     * 
+     * @param customField
+     * @return
+     */
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CustomFieldDef createCustomField(CustomFieldDef customField)
+    {
+	try
+	{
+	    customField.save();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, a custom field with that name is already present.").build());
+	}
+	return customField;
+    }
+
+    /**
+     * Updates the existing field by validating its label name
+     * 
+     * @param customField
+     *            custom field which is going to be updated
+     * @return updated custom field data
+     */
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public CustomFieldDef updateCustomField(CustomFieldDef customField)
+    {
+	try
+	{
+	    customField.save();
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry, a custom field with that name is already present.").build());
+	}
+	return customField;
+    }
+
+    /**
+     * Deletes all selected custom fields using array of corresponding ids
+     * 
+     * @param model_ids
+     *            array of custom field ids as String
+     * @throws JSONException
+     */
+    @Path("bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteCustomFields(@FormParam("ids") String model_ids) throws JSONException
+    {
+	JSONArray CustomFieldsJSONArray = new JSONArray(model_ids);
+	CustomFieldDef.dao.deleteBulkByIds(CustomFieldsJSONArray);
+    }
 }
