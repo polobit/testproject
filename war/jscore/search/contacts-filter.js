@@ -384,8 +384,7 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 function fillCustomFieldsInFilters(el, callback)
 {
 
-	$.getJSON("core/api/custom-fields/searchable", function(fields){
-			CUSTOM_FIELDS = fields;
+	$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
 		
 		fillCustomFields(fields, el, callback)
 	})
