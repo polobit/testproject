@@ -1244,11 +1244,12 @@ small {
 .list-header{position: relative;padding: 3px 26px 2px 6px;min-height: 19px;}
 .list-header-name{display: inline;line-height: 18px;margin: 0;min-height: 19px;
                   min-width: 30px;overflow: hidden;text-overflow: ellipsis;word-wrap: break-word;}
-.list-tasks{max-height: 490px;overflow:auto;clear: both;margin-bottom: 0;
+.list-tasks{max-height: 465px;overflow:auto;clear: both;margin-bottom: 0;
             min-height: 100px;padding: 4px 4px 1px;z-index: 1;}
 .listed-task {background-color: #fff;border-bottom: 1px solid #bdbdbd;border-radius: 3px;cursor: pointer;margin-bottom: 5px;
               max-width: 300px;min-height: 20px;position: relative;padding: 4px 4px 4px 4px;z-index: 0;
               overflow-y: overlay;}
+.list-add-task{padding: 5px 5px 5px 5px;}
 .task-body{overflow-y: overlay;}
 .task-owner{margin-top: 2px;}
 .task-priority-lable{height: 4px;width: 40px;float: left;margin-bottom: 3px;margin-right: 206px;}

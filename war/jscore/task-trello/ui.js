@@ -10,7 +10,7 @@ $(function()
 			   "DUE" : { "type" : ["TODAY","TOMORROW", "OVERDUE","LATER"], "searchKey" : "due" }, 
 			   "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } };
 	
-	// Get user's name and add in urlMap as owner of task
+	// Get user's name and id to add in urlMap for owner of task, user name can be redundant so we need user's id too.
 	$.getJSON('/core/api/users', function(users)
 	{
 		console.log(users);
@@ -41,6 +41,7 @@ $(function()
 	{
 		var taskId;
 		var taskListId = $(this).closest('.list').attr('id');
+		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
 
 		if ($(this).hasClass('task-body'))
 			taskId = $(this).parent().attr('id');
@@ -48,7 +49,7 @@ $(function()
 			taskId = $(this).attr('data');
 
 		// Show Task View Modal
-		viewTask(taskId, taskListId);
+		viewTask(taskId, taskListId, taskListOwnerId);
 	});
 
 	// Save edited task
@@ -63,14 +64,12 @@ $(function()
 	// Task Action: Open Task Edit Modal and display details in it.
 	$('.edit-task').die().live('click', function(event)
 	{
-		var taskId = $(this).attr('data');
-
-		// var taskListId =
-		// $(this).parent().parent().parent().find('.task-type').html();
+		var taskId = $(this).attr('data');		
 		var taskListId = $(this).closest('.list').attr('id');
+		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
 
 		// Show and Fill details in Task Edit modal
-		editTask(taskId, taskListId);
+		editTask(taskId, taskListId, parseInt(taskListOwnerId));
 	});
 
 	/*
@@ -87,9 +86,10 @@ $(function()
 
 		// Get heading of task list
 		var taskListId = $(this).closest('.list').attr('id');
+		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
 
 		// Delete Task.
-		deleteTask(taskId, taskListId);
+		deleteTask(taskId, taskListId,taskListOwnerId);
 	});
 
 	// Task Action: Mark task complete, make changes in DB.
@@ -100,9 +100,10 @@ $(function()
 
 		// Get heading of task list
 		var taskListId = $(this).closest('.list').attr('id');
+		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
 
 		// make task completed.
-		completeTask(taskId, taskListId);
+		completeTask(taskId, taskListId,taskListOwnerId);
 	});
 
 	// On click of Time icon in Task edit modal, displays calendar.

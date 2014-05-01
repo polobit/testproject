@@ -5,12 +5,13 @@
 </script>
 
 <script id="new-tasks-lists-model-template" type="text/html">
-     <div class="list-header" attr="{{heading}}" ownerID="{{owner_id}}"> 
+     <div class="list-header" attr="{{heading}}" ownerID={{owner_id}}> 
          <h4 class="list-header-name">{{heading}}</h4>                 
      </div> 
      <div id="list-tasks" class="list-tasks">
 
-     </div>        
+     </div>   
+     <div class="list-add-task left add-task"><a href="#"><i class="icon-plus" /> Add a task...</a></div>     
 </script>
 
 <script id="task-collection-template" type="text/html">
@@ -175,6 +176,8 @@
 				<fieldset>
 					<input name="id" type="hidden" value="{{id}}" />
 					<input name="taskListId" type="hidden" value="{{taskListId}}" />
+					<input name="taskListOwnerId" type="hidden" value="{{taskListOwnerId}}" />
+					
 					<div class="row">
 						<div id="updateTask" class="span3 control-group">
 							<div class="controls">

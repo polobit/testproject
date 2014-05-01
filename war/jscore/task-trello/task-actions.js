@@ -1,17 +1,28 @@
 // Adds task to task list
 function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 {
+	console.log("In addTaskToTaskList");
 	console.log(tasksToAdd);
 	console.log(conditionToCheck);
 	console.log(headingToSearch);
 
 	// Get task list on basis of heading and id in case of owner criteria
-	if (conditionToCheck == "OWNER")
+	if (conditionToCheck == "OWNER") // new task
+	{
+		console.log("conditionToCheck == OWNER");
 		var modelTaskList = tasksListCollection.collection.where({ heading : tasksToAdd.taskOwner.name, owner_id : tasksToAdd.taskOwner.id });
-	else if (conditionToCheck == "dragged" && headingToSearch == "taskOwner.name")
+	}
+	else if ((conditionToCheck == "dragged" || conditionToCheck == true) && headingToSearch == "taskOwner.name") // dragged/edited task
+	{
+		console.log("conditionToCheck == dreagged and headingToSearch == taskOwner.name");
 		var modelTaskList = tasksListCollection.collection.where({ heading : tasksToAdd.get("taskOwner").name, owner_id : tasksToAdd.get("taskOwner").id });
+	}
 	else
+	// task other than owner criteria
+	{
+		console.log("heading : headingToSearch");
 		var modelTaskList = tasksListCollection.collection.where({ heading : headingToSearch });
+	}
 
 	console.log(modelTaskList[0]);
 
@@ -26,15 +37,20 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 }
 
 // Show Task View Modal with task details.
-function viewTask(taskId, taskListId)
+function viewTask(taskId, taskListId, taskListOwnerId)
 {
-	console.log(taskId, taskListId);
+	console.log(taskId, taskListId, taskListOwnerId);
 
-	var modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
+	// Get task list
+	if (taskListOwnerId)
+		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : parseInt(taskListOwnerId) });
+	else
+		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
 
-	var modelTsk = modelTaskList[0].get('taskCollection').get(taskId);
+	// Get task
+	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
 
-	var taskJson = modelTsk.toJSON();
+	var taskJson = modelTask.toJSON();
 
 	console.log(taskJson);
 
@@ -52,10 +68,13 @@ function viewTask(taskId, taskListId)
 }
 
 // Delete Task
-function deleteTask(taskId, taskListId)
+function deleteTask(taskId, taskListId, taskListOwnerId)
 {
 	// Get Task list
-	var modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
+	if (taskListOwnerId)
+		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : parseInt(taskListOwnerId) });
+	else
+		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
 
 	// Destroy task
 	modelTaskList[0].get('taskCollection').get(taskId).destroy();
