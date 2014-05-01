@@ -88,6 +88,34 @@ public class CustomFieldsAPI
      * 
      * @return List of custom fields
      */
+    @Path("/type/scope")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFieldsByScopeAndType(@QueryParam("scope") String scope,
+	    @QueryParam("type") String type)
+    {
+	try
+	{
+	    if (scope == null)
+		return CustomFieldDefUtil.getFieldByType(type);
+
+	    if (type == null)
+		return CustomFieldDefUtil.getAllCustomFields(SCOPE.valueOf(scope));
+
+	    return CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.valueOf(scope), type);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Gets all custom fields
+     * 
+     * @return List of custom fields
+     */
     @Path("/searchable/scope")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

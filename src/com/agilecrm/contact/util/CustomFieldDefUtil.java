@@ -80,6 +80,14 @@ public class CustomFieldDefUtil
 	return dao.listByProperty(map);
     }
 
+    public static List<CustomFieldDef> getCustomFieldsByScopeAndType(SCOPE scope, String type)
+    {
+	Map<String, Object> map = new HashMap<String, Object>();
+	map.put("field_type", CustomFieldDef.Type.valueOf(type.toUpperCase()));
+	map.put("scope", scope);
+	return dao.listByProperty(map);
+    }
+
     /**
      * Fetches a custom field based on the id
      * 
