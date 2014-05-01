@@ -442,6 +442,15 @@
 	</servlet-mapping>
 	
 	<servlet>
+	<servlet-name>ShopifyCustomerWebhook</servlet-name>
+	<servlet-class>com.thirdparty.forms.ShopifyCustomerWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyCustomerWebhook</servlet-name>
+		<url-pattern>/shopifycustomer</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>CallNotification</servlet-name>
 		<servlet-class>com.call.notification.CallNotification</servlet-class>
 	</servlet>

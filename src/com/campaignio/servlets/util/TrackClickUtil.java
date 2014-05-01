@@ -178,6 +178,7 @@ public class TrackClickUtil
 	{
 	    // Remove unwanted keys
 	    contactJSON.remove("isUnsubscribedAll");
+	    contactJSON.remove("id");
 	    contactJSON.getJSONObject("data").remove("powered_by");
 	}
 	catch (Exception e)
@@ -188,4 +189,5 @@ public class TrackClickUtil
 
 	return contactJSON;
     }
+
 }
