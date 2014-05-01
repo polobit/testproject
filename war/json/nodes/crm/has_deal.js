@@ -1,7 +1,7 @@
 {
     "name": "Has Deal?",
-    "thumbnail": "json/nodes/images/crm/adddeal.png",
-    "icon": "json/nodes/icons/crm/adddeal.png",
+    "thumbnail": "json/nodes/images/crm/has_deal.png",
+    "icon": "json/nodes/icons/crm/has_deal.png",
     "info": "Check whether a Deal exists for this contact.",
     "help": "Check whether a Deal exists for this contact.",
     "author": "Naresh",
