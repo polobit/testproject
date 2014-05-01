@@ -69,6 +69,18 @@ public class ChangeDealMilestone extends TaskletAdapter
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
     }
 
+    /**
+     * Changes contact deal milestone based on given parameters
+     * 
+     * @param contactId
+     *            - campaign subscriber id
+     * @param currentMilestone
+     *            - current milestone
+     * @param newMilestone
+     *            - new milestone
+     * @param ownerId
+     *            - Owner id
+     */
     private void changeMilestoneToRelatedDeals(String contactId, String currentMilestone, String newMilestone, Long ownerId)
     {
 

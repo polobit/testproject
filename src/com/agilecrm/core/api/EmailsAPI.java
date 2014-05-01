@@ -77,11 +77,8 @@ public class EmailsAPI
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
     public void sendEmail(@Context HttpServletRequest request, @FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail,
 	    @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc, @FormParam("subject") String subject,
-	    @FormParam("body") String body, @FormParam("signature") String signature)
+	    @FormParam("body") String body, @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks)
     {
-	// combine body and signature.
-	body = body + "<br/><div><br/><br/>" + signature + "</div>";
-
 	// Removes traling commas if any
 	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
 
@@ -92,7 +89,7 @@ public class EmailsAPI
 	    bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
 
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, null);
+	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null, trackClicks);
 
     }
 

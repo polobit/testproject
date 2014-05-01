@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
@@ -15,8 +13,8 @@ import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
-import com.agilecrm.util.VersioningUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -443,8 +441,8 @@ public class SendEmail extends TaskletAdapter
 		// clicks
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
-		text = convertLinksUsingRegex(text, subscriberId, campaignId);
-		html = convertLinksUsingRegex(html, subscriberId, campaignId);
+		text = EmailLinksConversion.convertLinksUsingRegex(text, subscriberId, campaignId);
+		html = EmailLinksConversion.convertLinksUsingRegex(html, subscriberId, campaignId);
 
 	    }
 	    catch (Exception e)
@@ -480,93 +478,6 @@ public class SendEmail extends TaskletAdapter
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-    }
-
-    /**
-     * Replaces http urls with agile tracking urls
-     * 
-     * @param input
-     *            - text or html
-     * @param subscriberId
-     *            - subscriber id
-     * @param campaignId
-     *            - campaign id
-     * @return String
-     */
-    public String convertLinksUsingRegex(String input, String subscriberId, String campaignId)
-    {
-	Pattern p = Pattern.compile(HTTP_URL_REGEX);
-	Matcher m = p.matcher(input);
-
-	StringBuffer stringBuffer = new StringBuffer();
-
-	// Domain URL
-	// String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(),
-	// "sandbox");
-
-	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
-
-	try
-	{
-	    // Iterate over matches
-	    while (m.find())
-	    {
-		String url = m.group();
-
-		if (url.endsWith("\"/") || url.endsWith("\'/"))
-		    url = url.substring(0, url.length() - 2);
-
-		// Replaces valid http urls with agile tracking links
-		if (isSpecialLink(url))
-		{
-		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer,
-			    domainURL + "backend/click?u=" + URLEncoder.encode(url, "UTF-8") + "&s=" + URLEncoder.encode(subscriberId, "UTF-8") + "&c="
-				    + URLEncoder.encode(campaignId, "UTF-8"));
-		}
-	    }
-
-	    // append last characters to the stringbuffer too
-	    m.appendTail(stringBuffer);
-
-	    input = stringBuffer.toString();
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while converting links..." + e.getMessage());
-	    e.printStackTrace();
-	}
-
-	return input;
-    }
-
-    /**
-     * Validates links present in the email body (either in text or html)
-     * inorder which urls need to be shortened. It omits the links ended with
-     * image extensions and links like http://agle.cc
-     * 
-     * @param str
-     *            - String token obtained based on delimiters
-     * @return Boolean
-     */
-    private boolean isSpecialLink(String str)
-    {
-	boolean isContains = false;
-
-	if (str.indexOf('.') == -1)
-	    return false;
-
-	// Compares string token with the extensions
-	isContains = extensionsList.contains(str.substring(str.lastIndexOf('.')).toLowerCase());
-
-	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().contains("unsubscribe")
-		&& !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
-		&& (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(".agilecrm.com"))
-		&& !str.toLowerCase().contains("www.w3.org") && !str.toLowerCase().startsWith("http://goo.gl")
-		&& !str.toLowerCase().startsWith("http://agle.cc") && !str.toLowerCase().startsWith("http://unscr.be"))
-	    return true;
-
-	return false;
     }
 
     /**
