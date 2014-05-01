@@ -4,20 +4,17 @@
 <%@page import="java.io.File"%>
 <%@page import="org.json.JSONObject"%> 
 <%@page import="org.json.JSONArray"%>
+<%@page import="com.agilecrm.util.HTTPUtil"%>
+
 <%
     // Get Catalog
-    String[] EMAIL_CATALOG = { "json/nodes/email/send_email.jsp",
-		    "json/nodes/email/ab.js", "json/nodes/email/clicked.js"};
-    String[] UTILITIES_CATALOG = { "json/nodes/common/wait.js",
-		    "json/nodes/common/score.js", "json/nodes/common/tags.js",
-		    "json/nodes/crm/transfer.jsp",
-		    "json/nodes/social/tweet.js" };
+    String[] EMAIL_CATALOG = {"json/nodes/email/send_email.jsp","json/nodes/email/ab.js", "json/nodes/common/wait.js", "json/nodes/email/clicked.js","json/nodes/email/opened.js","json/nodes/email/replied.js"};
+    String[] UTILITIES_CATALOG = {"json/nodes/common/close_case.js","json/nodes/crm/has_deal.js","json/nodes/common/change_deal_milestone.js","json/nodes/common/check_tags.js","json/nodes/crm/set_owner.jsp","json/nodes/crm/transfer.jsp"};
     /* String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js",
 		    "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
-    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js",
-		    "json/nodes/developers/condition.js" };
-    String[] CRM_CATALOG = { "json/nodes/crm/addnote.js",
-		    "json/nodes/crm/addtask.jsp","json/nodes/common/check_tags.js" };
+    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js","json/nodes/common/url.js"};
+    String[] CRM_CATALOG = {"json/nodes/crm/adddeal.jsp","json/nodes/crm/addnote.js","json/nodes/crm/addtask.jsp","json/nodes/common/add_case.js","json/nodes/crm/tags.js", "json/nodes/common/score.js"};
+    String[] SOCIAL_CATALOG = {"json/nodes/social/tweet.js"};
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();
@@ -41,23 +38,39 @@
 		target = DEVELOPERS_CATALOG;
     else if (type.equalsIgnoreCase("crm"))
 		target = CRM_CATALOG;
+    else if (type.equalsIgnoreCase("social"))
+	    target = SOCIAL_CATALOG;
 
+    String contents = "";
+    InputStream is = null;
+    
+    // Request URL and URI
+    String URL = request.getRequestURL().toString();
+    String URI = request.getRequestURI();
+    
     for (String path : target)
     {
-		// Read each path locally from context
-		// System.out.println(path);
-		File f = new File(path);
-		InputStream is = new FileInputStream(f);
-
+		// If jsp file, get executed contents
+        if(path.contains(".jsp"))
+        {
+            contents = HTTPUtil.accessURL(URL.replace(URI, "/") + path);
+            //System.out.println(contents);
+        }
+        else
+        {
+            // Read each path locally from context
+            File f = new File(path);
+		    is = new FileInputStream(f);
+		    
+		    contents = IOUtils.toString(is, "UTF-8");
+        }
+        
 		try
 		{
-		    String contents = IOUtils.toString(is, "UTF-8");
-		    // System.out.println(contents);
-
-		    JSONObject nodeData = new JSONObject(contents);
+		    //JSONObject nodeData = new JSONObject(contents);
 
 		    jsonArray.put(new JSONObject().put("jsonsrc", "/" + path).put(
-			    "json", nodeData));
+			    "json", contents));
 		}
 		catch(Exception e)
 		{
@@ -65,7 +78,8 @@
 		}
 		finally
 		{
-		    IOUtils.closeQuietly(is);
+		    if(is != null)
+			IOUtils.closeQuietly(is);
 		}
 		
     }

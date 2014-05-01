@@ -1,15 +1,16 @@
 package com.agilecrm.cases.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * Provides additional functions for interacting with {@link Case}
@@ -53,28 +54,31 @@ public class CaseUtil
     }
 
     /**
-     * Saves the entity
+     * Returns cases based on contactId or case status or owner-id or by all
+     * conditions
      * 
-     * @param newCase
-     *            - entity to save
-     * @return - null if save fails
+     * @param contactId
+     *            - related contact of a case.
+     * @param status
+     *            - Case status(OPEN/CLOSE)
+     * @param ownerId
+     *            - Case owner
+     * @return List
      */
-
-    /**
-     * Gets all cases related to a contact, i.e. all cases which have this
-     * contact in 'Relate to' field. Necessary for showing in Contact/Company
-     * details page
-     * 
-     * @param id
-     *            - id of contact
-     * @return list of contacts
-     */
-    public static List<Case> getCasesByContact(Long id)
+    public static List<Case> getCases(Long contactId, Case.Status status, Long ownerId)
     {
-	Objectify ofy = ObjectifyService.begin();
-	List<Case> casesList = ofy.query(Case.class)
-		.filter("related_contacts_key = ", new Key<Contact>(Contact.class, id)).list();
-	return casesList;
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	if (contactId != null)
+	    conditionsMap.put("related_contacts_key", new Key<Contact>(Contact.class, contactId));
+
+	if (status != null)
+	    conditionsMap.put("status", status);
+
+	if (ownerId != null)
+	    conditionsMap.put("owner_key", new Key<DomainUser>(DomainUser.class, ownerId));
+
+	return dao.listByProperty(conditionsMap);
     }
 
     /**

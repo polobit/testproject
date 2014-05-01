@@ -241,7 +241,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getCurrentContactOpportunity(@PathParam("contact-id") Long id)
     {
-	return OpportunityUtil.getCurrentContactDeals(id);
+	return OpportunityUtil.getDeals(id, null, null);
     }
 
     /**
@@ -302,7 +302,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Case> getCurrentContactCases(@PathParam("contact-id") Long id)
     {
-	return CaseUtil.getCasesByContact(id);
+	return CaseUtil.getCases(id, null, null);
     }
 
     /**

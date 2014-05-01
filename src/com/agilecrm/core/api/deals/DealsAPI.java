@@ -101,7 +101,7 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON })
     public List<Opportunity> getOpportunitiesWithMilestone(@PathParam("milestone") String milestone)
     {
-	return OpportunityUtil.getDealsWithMilestone(milestone);
+	return OpportunityUtil.getDeals(null, milestone, null);
     }
 
     /**

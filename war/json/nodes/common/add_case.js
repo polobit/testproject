@@ -44,6 +44,7 @@
             "url": "/core/api/users",
             "dynamicName": "email",
             "dynamicValue": "id",
+            "appendToDynamicName": "name",
             "options": {
             	"Contact's Owner": "contact_owner"
             },
@@ -52,7 +53,7 @@
         },
         {
             "label": "Description",
-            "category": "More details",
+            "category": "Info",
             "name": "description",
             "id": "description",
             "title": "Enter description for the case.",
@@ -62,7 +63,7 @@
             "type": "textarea"
         },
         {
-            "label": "Add a case to a contact in CRM. <br/><br/>For example, if a contact opens and clicks a link in your email, then you might want to add a case about it.<br/><br/>Cases related to a contact can be viewed in the Cases tab in Contact details page.",
+            "label": "Add a case to a contact in CRM. Cases related to a contact can be viewed in the Cases tab in Contact details page.",
             "category": "Help",
             "fieldType": "label",
             "type": "label"
