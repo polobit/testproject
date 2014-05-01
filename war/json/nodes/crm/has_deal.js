@@ -2,8 +2,8 @@
     "name": "Has Deal?",
     "thumbnail": "json/nodes/images/crm/has_deal.png",
     "icon": "json/nodes/icons/crm/has_deal.png",
-    "info": "Check whether a Deal exists for this contact.",
-    "help": "Check whether a Deal exists for this contact.",
+    "info": "Checks whether a Deal exists for this contact.",
+    "help": "Checks whether a Deal exists for this contact.",
     "author": "Naresh",
     "company": "AgileCRM",
     "language": "en",
@@ -42,7 +42,7 @@
             "type": "select"
         },
 		{
-            "label": "Check whether a Deal exists for this contact. You check for a specific milestone or owner.",
+            "label": "Checks whether a Deal exists for this contact. You can check for a specific milestone or owner.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

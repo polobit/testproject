@@ -29,7 +29,7 @@
             "type": "select"
         },
         {
-            "label": "Close the cases that are in 'Open' state for the campaign subscriber. You choose to close cases based on a specific owner.",
+            "label": "Close cases that are in 'Open' state for the campaign subscriber. You can choose to close cases based on a specific owner.",
             "category": "Help",
             "fieldType": "label",
             "type": "label"
