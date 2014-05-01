@@ -154,14 +154,14 @@ public class CampaignsAPI
     @Path("enroll/email/{workflow-id}/{email}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void subscribeContactByEmail(@PathParam("email") String email, @PathParam("workflow-id") Long workflowId)
+    public String subscribeContactByEmail(@PathParam("email") String email, @PathParam("workflow-id") Long workflowId)
     {
 	// Get the contact based on the Email and subscribe it to the Campaign.
 	Contact contact = ContactUtil.searchContactByEmail(email);
 	if (contact == null)
 	{
 	    System.out.println("Null contact");
-	    return;
+	    return "No Contact.";
 	}
 
 	/*
@@ -172,7 +172,7 @@ public class CampaignsAPI
 	contactList.add(contact);
 
 	WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
-	// return "true";
+	return "Sucesses";
     }
 
 }

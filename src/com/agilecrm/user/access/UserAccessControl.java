@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -47,6 +48,10 @@ public class UserAccessControl
 	// user, set in user info, and returned.
 	if (info.getScopes() == null)
 	{
+	    DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	    if (user == null)
+		Arrays.asList(UserAccessScopes.values());
+
 	    info.setScopes(DomainUserUtil.getCurrentDomainUser().scopes);
 	}
 

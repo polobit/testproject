@@ -152,8 +152,16 @@ public class DomainUserUtil
 	UserInfo userInfo = SessionManager.get();
 	if (userInfo == null)
 	    return null;
+	DomainUser user = getDomainUserFromEmail(userInfo.getEmail());
 
-	return getDomainUserFromEmail(userInfo.getEmail());
+	/*
+	 * try { user.postLoad(); } catch (DecoderException e) {
+	 * System.out.println("exception exception **************************");
+	 * // TODO Auto-generated catch block e.printStackTrace(); }
+	 * 
+	 * System.out.println("**************************" + user.menu_scopes);
+	 */
+	return user;
     }
 
     /**

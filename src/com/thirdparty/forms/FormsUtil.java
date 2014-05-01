@@ -47,11 +47,11 @@ public class FormsUtil
 		String youtubeAlias[] = { "youtube" };
 		String feedAlias[] = { "feed" };
 		String addressAlias[] = { "Street Address", "Location", "Street", "street", "address", "location",
-				"street address" };
-		String addressLineAlias[] = { "Address Line 2" };
+				"street address", "address1" };
+		String addressLineAlias[] = { "Address Line 2", "address2" };
 		String addressCityAlias[] = { "City", "province", "city" };
-		String addressCountryAlias[] = { "Country", "country" };
-		String addressStateAlias[] = { "State / Province / Region", "State", "stateprovince", "state" };
+		String addressCountryAlias[] = { "Country", "country", "country_code" };
+		String addressStateAlias[] = { "State / Province / Region", "State", "stateprovince", "state", "province_code" };
 		String addressZipAlias[] = { "Zip", "Zip code", "Postal code", "Postal / Zip Code", "zip", "postal code",
 				"zip code", "pin code", "pin" };
 
@@ -287,7 +287,6 @@ public class FormsUtil
 				}
 				else if (key.contains(Contact.ADDRESS))
 				{
-
 					String[] keyArray = key.split(" ");
 
 					// Separate name and sub type from key by splitting at " "
