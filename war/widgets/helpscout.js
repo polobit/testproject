@@ -26,7 +26,7 @@ $(function()
 	showHelpScoutMails();
 
 	// On click of add ticket, add ticket method is called
-	$('#add_ticket').die().live('click', function(e)
+	$('#add_conv').die().live('click', function(e)
 	{
 		e.preventDefault();
 		addTicketToHelpScout();
@@ -136,7 +136,7 @@ function showMailsInHelpScout(customerId)
 
 function addTicketToHelpScout()
 {
-	$('#add_ticket').toggle();
+	$('#add_conv').toggle();
 	$('#helpscout_loading').toggle();
 	/*
 	 * Stores info as JSON, to send it to the modal when add ticket request is
@@ -183,13 +183,13 @@ function addTicketToHelpScout()
 						$('#helpscout_messageModal label.btn').toggleClass("active");
 					});
 			
-			$('#add_ticket').toggle();
+			$('#add_conv').toggle();
 			$('#helpscout_loading').toggle();
 		}
 
 	}, function error(data)
 	{
-		$('#add_ticket').toggle();
+		$('#add_conv').toggle();
 		$('#helpscout_loading').hide();
 		$('#helpscout_error').show();
 		setTimeout(function()
