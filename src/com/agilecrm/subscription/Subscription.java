@@ -247,7 +247,6 @@ public class Subscription
 	// Initializes task to clear tags
 	AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
 
-	task.run();
 	// Add to queue
 	Queue queue = QueueFactory.getDefaultQueue();
 	queue.add(TaskOptions.Builder.withPayload(task));

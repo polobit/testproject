@@ -1,6 +1,8 @@
 package com.agilecrm.user.access;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 
 /**
  * <code>ContactAccess</code> class checks if current user can
@@ -36,8 +38,16 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canCreate()
     {
+	// If contact is defined it checks for update operation if owner in the
+	// contact and current owner is different
 	if (contact.id != null)
-	    return hasScope(UserAccessScopes.UPDATE_CONTACT);
+	{
+	    // Gets current user id and contact owner id and checks for equity
+	    Long currentContactOwnerId = contact.getContactOwnerKey().getId();
+	    UserInfo info = SessionManager.get();
+	    if (info != null && info.getDomainId() != currentContactOwnerId)
+		return hasScope(UserAccessScopes.UPDATE_CONTACT);
+	}
 
 	return hasScope(UserAccessScopes.CREATE_CONTACT);
     }

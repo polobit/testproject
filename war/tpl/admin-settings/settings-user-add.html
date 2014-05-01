@@ -33,15 +33,6 @@
     					</div>
     				</div>
 
-				<div class="control-group">
-    					<div class="controls">
-    						<label class="checkbox">
-    							<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
-                           		Admin privilege (configure the account and add or remove users)
-    						</label>
-    					</div>
-    				</div>
-	
     
     				<div class="control-group">
     					<div class="controls">
@@ -52,6 +43,17 @@
     					</div>
     				</div>
     
+
+				<div class="control-group">
+    					<div class="controls">
+    						<label class="checkbox">
+    							<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
+                           		Admin privilege (configure the account and add or remove users)
+    						</label>
+    					</div>
+    				</div>
+	
+
 					<div id="accordion">
 					  <div class="panel-heading controls">
      					 <h4 class="panel-title">
@@ -69,21 +71,25 @@
 						
 					<div class="controls">
 						<div class="multiple-checkbox" name="scopes">
-								<label class="checkbox" style="display:inline-block; margin-right:10px">
+								<label class="checkbox" >
                             	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked> 
-                            		Create Contacts
-                            	</label>
-								<label class="checkbox" style="display:inline-block; margin-right:10px">
+                            		Create Contacts <br/>
+									<small> Add contacts</small>
+								</label>
+								<label class="checkbox" >
                         		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked> 
-                        	    	Update Contacts
+                        	    	Update Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
                     	       </label>
-								<label class="checkbox" style="display:inline-block; margin-right:10px">
+								<label class="checkbox" >
             	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
-        	                    	Import Contacts
+        	                    	Import Contacts  <br/>
+									<small> Import from CSV file, Sync from Google Apps, or other CRMs </small>
     	                       </label>
-								<label class="checkbox" style="display:inline-block; margin-right:10px">
+								<label class="checkbox" >
                         	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked> 
-                            		Export Contacts
+                            		Export Contacts  <br/>
+									<small> Export contacts as CSV </small>
                            		</label>
 							</div>
 						</div>
@@ -93,18 +99,25 @@
 						<div class="control-group">
 						<div class="controls">
 						<div class="multiple-checkbox"  name="scopes">
-								<label class="checkbox" style="display:inline-block; margin-right:10px" >
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"> 
-                            		Create Contacts
-                            	</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
-                        		    <input type="checkbox" name="temp" value="UPDATE_CONTACT"> 
-                        	    	Update Contacts
-                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS"> 
-        	                    	Import Contacts
-    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
-                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS"> 
-                            		Export Contacts
+								<label class="checkbox" >
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked> 
+                            		Create Contacts <br/>
+									<small> Add contacts</small>
+								</label>
+								<label class="checkbox" >
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked> 
+                        	    	Update Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
+                    	       </label>
+								<label class="checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
+        	                    	Import Contacts  <br/>
+									<small> Import from CSV file, Sync from Google Apps, or other CRMs </small>
+    	                       </label>
+								<label class="checkbox" >
+                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked> 
+                            		Export Contacts  <br/>
+									<small> Export contacts as CSV </small>
                            		</label>
 							</div>
 						</div>
@@ -113,18 +126,25 @@
 					<div class="control-group">
 						<div class="controls">
 						<div class="multiple-checkbox"  name="scopes">
-								<label class="checkbox" style="display:inline-block; margin-right:10px" >
-                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT"  disabled checked> 
-                            		Create Contacts
-                            	</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
-                        		    <input type="checkbox" name="temp" value="UPDATE_CONTACT" disabled checked> 
-                        	    	Update Contacts
-                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
-            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" disabled checked> 
-        	                    	Import Contacts
-    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
-                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled checked> 
-                            		Export Contacts
+									<label class="checkbox" >
+                            	<input type="checkbox" name="temp"  value="CREATE_CONTACT" checked> 
+                            		Create Contacts <br/>
+									<small> Add contacts</small>
+								</label>
+								<label class="checkbox" >
+                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" checked> 
+                        	    	Update Contacts  <br/>
+									<small>  Edit and delete contacts owned by other users</small>
+                    	       </label>
+								<label class="checkbox" >
+            	            	    <input type="checkbox" name="temp"  value="IMPORT_CONTACTS" checked> 
+        	                    	Import Contacts  <br/>
+									<small> Import from CSV file, Sync from Google Apps, or other CRMs </small>
+    	                       </label>
+								<label class="checkbox" >
+                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked> 
+                            		Export Contacts  <br/>
+									<small> Export contacts as CSV </small>
                            		</label>
 							</div>
 						</div>
@@ -135,37 +155,43 @@
 					<div class="control-group" style="margin-top:-20px">
 						<div class="controls">
 						<div class="multiple-checkbox"  name="menu_items" style="padding-top:5px">
-								<label class="checkbox" style="display:inline-block; margin-right:10px" >
+								<label class="checkbox"  >
                         		    <input type="checkbox" name="temp" value="CALENDAR"> 
-                        	    	Calendar
-                    	       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+                        	    	Calendar<br/><small>Manage your tasks and events</small></label> 
+								<label class="checkbox"  >
             	            	    <input type="checkbox" name="temp"  value="DEALS"> 
-        	                    	Deals
-    	                       </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+        	                    	Deals<br/>
+									<small> Track sales opportunities</small>
+    	                       </label><label class="checkbox"  >
                         	    	<input type="checkbox" name="temp"  value="CAMPAIGN"> 
-                            		Campaign
+                            		Campaigns<br/>
+										<small> Automate marketing</small>
                            		</label>
 						
-								 </label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+								 </label><label class="checkbox"  >
                         	    	<input type="checkbox" name="temp"  value="CASES"> 
-                            		Cases
+                            		Cases<br/>
+									<small>Log and address customer issues</small>
                            		</label>
-	</br>
- 								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+ 								</label><label class="checkbox"  >
                         	    	<input type="checkbox" name="temp"  value="SOCIAL" > 
-                            		Social
+                            		Social Suite<br/>
+									<small> Monitor your brand on social media</small>
                            		</label>
-								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+								</label><label class="checkbox"  >
                         	    	<input type="checkbox" name="temp"  value="WEBRULE" > 
-                            		Web rule
+                            		Web Rule<br/>
+									<small> Log and address customer issues</small>
                            		</label>
-								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+								</label><label class="checkbox"  >
                         	    	<input type="checkbox" name="temp"  value="DOCUMENT" > 
-                            		Documents
+                            		Documents<br/>
+								<small> Upload and attach documents to contacts, deals or cases</small>
                            		</label>
-								</label><label class="checkbox" style="display:inline-block; margin-right:10px" >
+								</label><label class="checkbox"  >
                         	    	<input type="checkbox" name="temp"  value="REPORT" > 
-                            		Reports
+                            		Reports<br/>
+									<small> Stay on top of your data</small>
                            		</label>
 
 							</div>
