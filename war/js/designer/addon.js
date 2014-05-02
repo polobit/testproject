@@ -29,7 +29,7 @@ function showAddonsTab(){
 			});
 	
 	//show basic addon default
-	showAddonNodes('emailAddons');
+	showAddonNodes('crmAddons');
 }
 
 

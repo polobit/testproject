@@ -12,9 +12,10 @@
     String[] UTILITIES_CATALOG = {"json/nodes/common/close_case.js","json/nodes/crm/has_deal.js","json/nodes/common/change_deal_milestone.js","json/nodes/common/check_tags.js","json/nodes/crm/set_owner.jsp","json/nodes/crm/transfer.jsp"};
     /* String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js",
 		    "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
-    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js","json/nodes/common/url.js"};
+    String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js"};
     String[] CRM_CATALOG = {"json/nodes/crm/adddeal.jsp","json/nodes/crm/addnote.js","json/nodes/crm/addtask.jsp","json/nodes/common/add_case.js","json/nodes/crm/tags.js", "json/nodes/common/score.js"};
     String[] SOCIAL_CATALOG = {"json/nodes/social/tweet.js"};
+    String [] WEB_CATALOG = {"json/nodes/common/url.js"};
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();
@@ -28,18 +29,20 @@
 
     System.out.println("Type  " + type);
 
-    if (type.equalsIgnoreCase("email"))
-		target = EMAIL_CATALOG;
+    if (type.equalsIgnoreCase("crm"))
+		target = CRM_CATALOG;
    /*  else if (type.equalsIgnoreCase("mobile"))
 		target = MOBILE_CATALOG; */
-    else if (type.equalsIgnoreCase("utilities"))
-		target = UTILITIES_CATALOG;
-    else if (type.equalsIgnoreCase("developers"))
-		target = DEVELOPERS_CATALOG;
-    else if (type.equalsIgnoreCase("crm"))
-		target = CRM_CATALOG;
+    else if (type.equalsIgnoreCase("email"))
+		target = EMAIL_CATALOG;
+    else if (type.equalsIgnoreCase("web"))
+		target = WEB_CATALOG;
     else if (type.equalsIgnoreCase("social"))
-	    target = SOCIAL_CATALOG;
+		target = SOCIAL_CATALOG;
+    else if (type.equalsIgnoreCase("utilities"))
+	    target = UTILITIES_CATALOG;
+    else if (type.equalsIgnoreCase("developers"))
+	    target = DEVELOPERS_CATALOG;
 
     String contents = "";
     InputStream is = null;
