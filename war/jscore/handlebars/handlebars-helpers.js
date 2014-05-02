@@ -2282,4 +2282,16 @@ $(function()
 		
 	});
 	
+	/**
+	 * Safari browser doesn't supporting few CSS properties like margin-top, margin-bottom etc.
+	 * So this helper is used to add compatible CSS properties to Safari
+	 **/
+	Handlebars.registerHelper("isSafariBrowser", function(options){
+		
+		if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
+			return options.fn(this);
+		
+		return options.inverse(this);
+	});
+	
 });

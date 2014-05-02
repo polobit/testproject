@@ -1,6 +1,5 @@
 package com.agilecrm.workflows.status.util;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -80,17 +79,22 @@ public class CampaignStatusUtil
     {
 	boolean isNew = true;
 
-	Long statusTime = System.currentTimeMillis() / 1000;
+	long statusTime = System.currentTimeMillis() / 1000;
 
 	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
 
 	// if subscribed once again, update campaign status.
 	for (CampaignStatus campaignStatus : campaignStatusList)
 	{
-	    if (campaignStatus.campaign_id.equals(campaignId))
+
+	    // if null
+	    if (campaignStatus == null)
+		continue;
+
+	    if (campaignId.equals(campaignStatus.campaign_id))
 	    {
 		campaignStatus.start_time = statusTime;
-		campaignStatus.end_time = null;
+		campaignStatus.end_time = 0;
 		campaignStatus.status = campaignId + "-" + Status.ACTIVE;
 		campaignStatus.campaign_name = WorkflowUtil.getCampaignName(campaignId);
 
@@ -103,7 +107,7 @@ public class CampaignStatusUtil
 	// if subscribed first-time, add campaignStatus to the list.
 	if (isNew)
 	{
-	    CampaignStatus campaignStatus = new CampaignStatus(statusTime, null, campaignId, WorkflowUtil.getCampaignName(campaignId),
+	    CampaignStatus campaignStatus = new CampaignStatus(statusTime, 0, campaignId, WorkflowUtil.getCampaignName(campaignId),
 		    (campaignId + "-" + Status.ACTIVE));
 	    contact.campaignStatus.add(campaignStatus);
 	}
@@ -125,14 +129,17 @@ public class CampaignStatusUtil
      */
     private static void setEndCampaignStatus(Contact contact, String campaignId, Status status)
     {
-	Long statusTime = System.currentTimeMillis() / 1000;
+	long statusTime = System.currentTimeMillis() / 1000;
 
 	List<CampaignStatus> campaignStatusList = contact.campaignStatus;
 
 	// Sets end-time and updates status from ACTIVE to given status
 	for (CampaignStatus campaignStatus : campaignStatusList)
 	{
-	    if (campaignStatus.campaign_id.equals(campaignId))
+	    if (campaignStatus == null)
+		continue;
+
+	    if (campaignId.equals(campaignStatus.campaign_id))
 	    {
 		campaignStatus.end_time = statusTime;
 		campaignStatus.status = (campaignStatus.campaign_id) + "-" + status;
