@@ -6,12 +6,12 @@
 
 <script id="new-tasks-lists-model-template" type="text/html">
      <div class="list-header" attr="{{heading}}" ownerID={{owner_id}}> 
-         <h4 class="list-header-name">{{heading}}</h4>                 
+         {{get_normal_name heading}}                 
      </div> 
      <div id="list-tasks" class="list-tasks">
 
      </div>   
-     <div class="list-add-task left add-task"><a href="#"><i class="icon-plus" /> Add a task...</a></div>     
+     <div class="list-bottom left add-task"><a href="#"><i class="icon-plus" /> Add a task...</a></div>     
 </script>
 
 <script id="task-collection-template" type="text/html">
@@ -21,41 +21,22 @@
 </script>
 
 <script id="task-model-template" type="text/html">
-<div class="listed-task ui-state-default" id="{{id}}">
-  <div class="task-body">   
-      <label class="label task-type pull-right" title="Category">{{type}}</label>
-      {{#if_equals type "FOLLOW_UP"}}
-       <div class="task-title span7">
-      {{else}}
-        {{#if_equals type "MILESTONE"}}
-          <div class="task-title span7">
-        {{else}}
-          <div class="task-title span8">
-        {{/if_equals}}
-      {{/if_equals}}
+{{#if_equals priority_type "HIGH"}}
+ <div class="listed-task red ui-state-default" id="{{id}}">
+{{else}}
+  {{#if_equals priority_type "LOW"}}
+    <div class="listed-task yellow ui-state-default" id="{{id}}">
+  {{else}}
+    <div class="listed-task ui-state-default" id="{{id}}">
+  {{/if_equals}}
+{{/if_equals}}
 
-          <div class="task-priority" title="{{priority_type}} Priority">
-            {{#if_equals priority_type "HIGH"}}
-               <span class="task-priority-lable" style="background-color: red;">  &nbsp; </span>
-            {{else}}
-               {{#if_equals priority_type "LOW"}}
-                  <span class="task-priority-lable" style="background-color: #dbdb57;">  &nbsp; </span>
-               {{/if_equals}}
-            {{/if_equals}}
-          </div>
-      
-          {{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span>
-      </div> <!-- task title -->     
-      <div class="task-owner pull-right">     
-         {{#if ownerPic}}
-        	<img class="thumbnail" src="{{ownerPic}}" width="30px" height="30px" title="{{taskOwner.name}}"/>
-	     {{else}}
-			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="30px" height="30px" title="{{taskOwner.name}}"/>
-	     {{/if}}
-      </div>
-       
+  <div class="task-body">    
+    <div class="task-left">  
+      {{#is_link subject}}<span class="task-subject activate-link">{{else}}<span class="task-subject">{{/is_link}}{{safe_string subject}}</span>
+
       {{#if contacts}}  
-         <div class="task-related-to pull-left span8" title="Related To">
+         <div class="task-related-to" title="Related To">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
         			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
@@ -66,17 +47,27 @@
         	{{/each}}
 		 </div>
       {{/if}}
-   
-  </div><!-- task-body -->
-  <div class="task-footer span12">        
-       <time class="task-due-time time-ago txt-mute txt-small pull-left" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time>
-     
-       <div class="task-actions pull-right">           
+    </div>
+
+    <div class="task-right">
+      <label class="task-type label" title="Category">{{get_normal_name type}}</label>
+      <div class="task-owner">     
+         {{#if ownerPic}}
+        	<img src="{{ownerPic}}" width="32" height="32" title="{{taskOwner.name}}"/>
+	     {{else}}
+			<img src="{{defaultGravatarurl 50}}" width="32" height="32" title="{{taskOwner.name}}"/>
+	     {{/if}}
+      </div> 
+    </div>
+   </div> <!--task-body-->  
+   <div class="task-footer">
+      <time class="task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time>
+      <div class="task-actions">           
            <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>
            <i class="task-action icon icon-check is-task-complete" data="{{id}}" title="Is Task Complete?"></i>
            <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
-       </div>
-  </div> <!-- task-footer -->
+      </div>
+   </div> <!--task-footer-->
 </div>
 </script>
 
@@ -227,18 +218,15 @@
 									id="update-task-date-1" class="required date" /></b>
 							</div>
 						</div>
-						<div class="span2 control-group">
+						<div class="span2">
 							<label for="priority_type" class="control-label"><b>Priority
-							</b></label>
-							<div class="controls">
-								<span class="input "> <select name="priority_type"
-									id="priority_type" size="1" class="input-medium">
-										<option value="HIGH">High</option>
-										<option value="NORMAL" selected="selected">Normal</option>
-										<option value="LOW">Low</option>
-								</select>
-								</span>
-							</div>
+							</b></label> <span class="input "> <select name="priority_type"
+								id="priority_type" size="1" class="input-medium">
+									<option value="HIGH">High</option>
+									<option value="NORMAL" selected="selected">Normal</option>
+									<option value="LOW">Low</option>
+							</select>
+							</span>
 						</div>
 					</div>
 					<div class="row">
@@ -266,27 +254,22 @@
 					</div>
 
 					<div class="row">
-						<div class="span3 control-group">
+						<div class="span3">
 							<label for="status" class="control-label"><b>Status </b></label>
-							<div class="controls">
-								<span class="input "> <select name="status" id="status"
-									size="1" class="input-medium">
-										<option value="NOT_STARTED" selected="selected">Not
-											Started</option>
-										<option value="IN_PROGRESS">In Progress</option>
-										<option value="COMPLETED">Completed</option>
-										<option value="PAUSED">Paused</option>
-								</select>
-								</span>
-							</div>
+							<span class="input "> <select name="status" id="status"
+								size="1" class="input-medium">
+									<option value="NOT_STARTED" selected="selected">Not
+										Started</option>
+									<option value="IN_PROGRESS">In Progress</option>
+									<option value="COMPLETED">Completed</option>
+									<option value="PAUSED">Paused</option>
+							</select>
+							</span>
 						</div>
-						<div class="span2 control-group">
+						<div class="span2">
 							<label for="progress" class="control-label"><b>Progress
-									(%) </b></label>
-							<div class="controls">
-								<input name="progress" id="progress" type="number" min="1"
-									max="100" value="">
-							</div>
+									(%) </b></label> <input name="progress" id="progress" type="number" min="1"
+								max="100" value="">
 						</div>
 					</div>
 					<div class="row">

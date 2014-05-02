@@ -1236,139 +1236,6 @@ small {
 /* ********************************************************* */
 
 /* ************* Task UI (Trello) CSS ***************** */
-.list-area-wrapper {
-	width: 100%;
-}
-
-.list-area {
-	overflow: auto;
-	height: 540px;
-	white-space: nowrap;
-}
-
-.list {
-	max-height: 520px;
-	width: 31.8% !important;
-	vertical-align: top;
-	display: inline-block;
-	margin: 0px 5px 8px !important;
-	background-color: #fcfcfc;
-	white-space: normal;
-	position: relative;
-	border: 1px solid #a1a1a1;
-	border-radius: 4px;
-	background: #eee;
-}
-
-.list-header {
-	position: relative;
-	padding: 3px 26px 2px 6px;
-	min-height: 19px;
-}
-
-.list-header-name {
-	display: inline;
-	line-height: 18px;
-	margin: 0;
-	min-height: 19px;
-	min-width: 30px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	word-wrap: break-word;
-}
-
-.list-tasks {
-	max-height: 465px;
-	overflow: auto;
-	clear: both;
-	margin-bottom: 0;
-	min-height: 100px;
-	padding: 4px 4px 1px;
-	z-index: 1;
-}
-
-.listed-task {
-	background-color: #fff;
-	border-bottom: 1px solid #bdbdbd;
-	border-radius: 3px;
-	cursor: pointer;
-	margin-bottom: 5px;
-	max-width: 300px;
-	min-height: 20px;
-	position: relative;
-	padding: 4px 4px 4px 4px;
-	z-index: 0;
-	overflow-y: overlay;
-}
-
-.list-add-task {
-	padding: 5px 5px 5px 5px;
-}
-
-.task-body {
-	overflow-y: overlay;
-}
-
-.task-owner {
-	margin-top: 2px;
-}
-
-.task-priority-lable {
-	height: 4px;
-	width: 40px;
-	float: left;
-	margin-bottom: 3px;
-	margin-right: 206px;
-}
-
-.task-type {
-	margin-top: 3px;
-}
-
-.task-footer {
-	padding-top: 3px;
-	min-height: 20px !important;
-	width: 99% !important;
-}
-
-.task-actions {
-	color: #888;
-	display: none;
-	padding-right: 4px;
-}
-
-.task-actions:hover,.task-actions:focus {
-	display: block;
-}
-
-.task-model-list {
-	min-height: 100px;
-}
-
-/* For scroll in task's new view */
-/* Vertical scroll */
-.fancy-scrollbar ::-webkit-scrollbar {
-	width: 5px;
-	margin-right: 4px !important;
-}
-/* Horizontal scroll */
-.fancy-scrollbar ::-webkit-scrollbar:horizontal {
-	height: 10px;
-}
-/* Track */
-.fancy-scrollbar ::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-}
-/* Handle */
-.fancy-scrollbar ::-webkit-scrollbar-thumb {
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-	background: rgba(185, 182, 182, 0.8);
-	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-
 #taskForm {
 	margin: 0px 0px 0px 0px;
 }
@@ -1388,6 +1255,227 @@ small {
 	min-height: 50px;
 	background: #ccc;
 }
+
+.list-area-wrapper {
+	font: 14px/18px "Helvetica Neue", Arial, Helvetica, sans-serif;
+	padding: 12px;
+}
+
+.list-area {
+	box-sizing: border-box;
+	font-size: 0;
+	line-height: 0;
+	overflow: auto;
+	padding-bottom: 10px;
+	white-space: nowrap;
+	width: 100%;
+}
+
+.list-area::-webkit-scrollbar {
+	height: 12px;
+}
+
+.list-area::-webkit-scrollbar-track {
+	background: #d0d0d0;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.list-area::-webkit-scrollbar-thumb {
+	background: #999;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.list {
+	background: #dbdbdb;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	box-sizing: border-box;
+	display: inline-block;
+	font-size: 14px;
+	line-height: 18px;
+	margin-left: 10px;
+	padding: 32px 7px 40px;
+	position: relative;
+	width: 240px;
+	vertical-align: top;
+	white-space: normal;
+}
+
+.list:first-child {
+	margin-left: 0;
+}
+
+.list-header {
+	font-size: 15px;
+	font-weight: bold;
+	padding: 7px 9px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
+.list-tasks {
+	box-sizing: border-box;
+	overflow: auto;
+	margin-right: -4px;
+	max-height: 400px;
+}
+
+.list-tasks::-webkit-scrollbar {
+	width: 9px;
+}
+
+.list-tasks::-webkit-scrollbar-track {
+	background: #d0d0d0;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.list-tasks::-webkit-scrollbar-thumb {
+	background: #999;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.list-bottom {
+	-webkit-border-radius: 0 0 3px 3px;
+	-moz-border-radius: 0 0 3px 3px;
+	border-radius: 0 0 3px 3px;
+	color: #939393;
+	cursor: pointer;
+	padding: 7px 10px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.list-bottom:hover {
+	background: #c3c3c3;
+	color: #000;
+	text-decoration: underline;
+}
+
+.listed-task {
+	background: #fff;
+	border-bottom: 1px solid #bdbdbd;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	cursor: pointer;
+	min-height: 68px;
+	padding: 8px 50px 4px 8px;
+	position: relative;
+	margin: 5px 4px 0 0;
+}
+
+.listed-task:after {
+	/* background: yellow; */
+	content: ' ';
+	display: block;
+	height: 3px;
+	position: absolute;
+	left: 8px;
+	top: 0;
+	width: 50px;
+}
+
+.listed-task.yellow:after {
+	background: yellow;
+}
+
+.listed-task.red:after {
+	background: red;
+}
+
+.listed-task:first-child {
+	margin-top: 0;
+}
+
+.listed-task:hover {
+	background: #f2f2f2;
+}
+
+.task-subject {
+	font-size: 15px;
+	font-weight: bold;
+	margin-bottom: 2px;
+}
+
+.task-related-to {
+	color: #1f1f8e;
+}
+
+.task-due-time {
+	color: #891414;
+	font-size: 12px;
+	line-height: 16px;
+	float: left;
+}
+
+.task-type {
+	background: #800080;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #fff;
+	padding: 2px 4px 2px 4px;
+	position: absolute;
+	right: 5px;
+	top: 4px;
+	text-align: center;
+}
+
+.task-owner {
+	border: 1px solid #e6e6e6;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	padding: 1px;
+	position: absolute;
+	right: 5px;
+	top: 25px;
+}
+
+.task-body {
+	padding-bottom: 15px;
+}
+
+.task-footer {
+	min-height: 10px;
+	position: absolute;
+	bottom: 0;
+	width: 97%;
+}
+
+.task-actions {
+	float: right;
+}
+
+.task-model-list {
+	min-height: 50px;
+}
+
+.task-left {
+	width: 70%;
+}
+
+.task-actions {
+	color: #888;
+	display: none;
+	padding-right: 4px;
+}
+/* .task-actions:hover,.task-actions:focus {
+	display: block;
+} */
 /* ********************************************************* */
 /**************** Plan and upgrade css *************for plan css strip********************************************/
 .pagination li:last-child a {
@@ -1793,7 +1881,8 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 		endColorstr='#0044cc', GradientType=0);
 	border-color: #0044cc #0044cc #002a80;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled=   false);
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=    
+		             false);
 	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }

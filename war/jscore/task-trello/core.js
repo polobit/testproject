@@ -158,7 +158,7 @@ function createSubCollection(criteriaArray, initialURL, searchKey)
 function initTaskListCollection()
 {
 	tasksListCollection = new Base_Collection_View({ restKey : "task", templateKey : "new-tasks-lists", individual_tag_name : 'div',
-		className : "list-area-wrapper fancy-scrollbar container ", sortKey : 'heading', sort_collection : true, descending : false,
+		className : "list-area-wrapper", sortKey : 'heading', sort_collection : true, descending : false,
 		postRenderCallback : function(el)
 		{
 			// Creates normal time.
@@ -185,5 +185,5 @@ function taskAppend(base_model)
 	var el = tasksListModel.render().el;
 
 	$('#list-tasks', el).html(taskCollection.render(true).el);
-	$('#new-tasks-lists-model-list', this.el).append(el);
+	$('#new-tasks-lists-model-list', this.el).append(el);		
 }

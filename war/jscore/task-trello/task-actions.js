@@ -35,6 +35,8 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 
 	// Creates normal time.
 	displayTimeAgo($(".list"));
+	
+	$(".listed-task").parent().css('padding-bottom', '5px');
 }
 
 // Show Task View Modal with task details.
