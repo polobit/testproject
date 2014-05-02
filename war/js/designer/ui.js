@@ -224,6 +224,56 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
            
 }
 
+function generateMilestonesSelectUI(uiFieldDefinition)
+{
+	var selectContainer = $("<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + "</select>");
+	var options = uiFieldDefinition.options;
+	var selectOptionAttributes ="";
+	
+	// Populate Options - Naresh 29/04/2014
+	if(options !== undefined)
+	{
+		$.each(
+				options, function (key, value) {
+					if(key.indexOf("*") == 0)
+					{
+						key  = key.substr(1);
+						selectOptionAttributes += "<option selected value='" + value + "'>" + key + "</option>";
+					}
+					else
+						selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
+				});
+	 }
+	
+	$.ajax({
+		  url: 'core/api/milestone',
+		  async: false,
+		  dataType: "json",
+		  success: function(data)
+		  {	    			
+			
+			  // Append given options
+			if(selectOptionAttributes !== undefined)
+				$(selectOptionAttributes).appendTo(selectContainer);
+			
+	      var array = data["milestones"].split(',');
+	      
+		$.each(array, function( index, milestone )
+		{				
+				
+				if(milestone != undefined || milestone != "")
+				{
+    				option = "<option value='" + milestone + "'>" + milestone + "</option>";
+        				
+        			// Append to container	
+        			$(option).appendTo(selectContainer);	        				        								
+				}											   	   	   	  	   	  				
+		});
+		  }
+	});
+	
+	return selectContainer;
+}
 
 // Generate Default UI - input, textarea and other elements
 function generateDefaultUI(uiFieldDefinition) {
@@ -497,6 +547,16 @@ function _generateUIFields(selector, ui) {
            
            $(uiField).appendTo(container);
            continue;
+        }
+        
+        if(uiFieldType == "milestones")
+        {
+        	addLabel(uiFieldDefinition.label, container);
+        	
+        	uiField = generateMilestonesSelectUI(uiFieldDefinition);
+        	$(uiField).appendTo(container);
+        	
+        	continue;
         }
         
         // Checkbox

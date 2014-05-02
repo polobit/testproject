@@ -65,7 +65,7 @@ public class AddCase extends TaskletAdapter
 	    }
 
 	    // Add Case with given values
-	    addCase(title, status, description, contactId, getOwnerId(givenOwnerId, contactOwnerId.toString()));
+	    addCase(title, status, description, contactId, AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
 	}
 	catch (Exception e)
 	{
@@ -82,24 +82,6 @@ public class AddCase extends TaskletAdapter
     }
 
     /**
-     * Returns contactOwner id if selected owner option is Contact's owner
-     * 
-     * @param givenOwnerId
-     *            - selected owner id from UI.
-     * @param contactOwnerId
-     *            - contact owner id from subscriberJSON
-     * @return String
-     */
-    private String getOwnerId(String givenOwnerId, String contactOwnerId)
-    {
-	// If contact_owner, then owner is contact owner
-	if (givenOwnerId.equals("contact_owner"))
-	    return contactOwnerId;
-
-	return givenOwnerId;
-    }
-
-    /**
      * Saves case with the given parameters
      * 
      * @param title
@@ -113,16 +95,15 @@ public class AddCase extends TaskletAdapter
      * @param ownerId
      *            - Selected owner id
      */
-    private void addCase(String title, String status, String description, String contactId, String ownerId)
+    private void addCase(String title, String status, String description, String contactId, Long ownerId)
     {
 	Case agileCase = new Case();
 	agileCase.title = title;
 	agileCase.status = Case.Status.valueOf(status);
 	agileCase.description = description;
 	agileCase.addContactToCase(contactId);
-	agileCase.owner_id = ownerId;
+	agileCase.owner_id = ownerId.toString();
 
 	agileCase.save();
     }
-
 }

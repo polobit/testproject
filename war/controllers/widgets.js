@@ -352,7 +352,7 @@ var WidgetsRouter = Backbone.Router.extend({
 		else
 		{
 			{
-				$.getJSON("core/api/custom-fields", function(data)
+				$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data)
 				{
 					set_up_access(
 							"Stripe",
@@ -370,7 +370,7 @@ var WidgetsRouter = Backbone.Router.extend({
 
 				if (data1)
 				{
-					$.getJSON("core/api/custom-fields", function(data)
+					$.getJSON("core/api/custom-fields/scope?scope=CONTACT&type=TEXT", function(data)
 					{
 						set_up_access(
 								"stripe",

@@ -98,6 +98,13 @@ public class RedirectServlet extends HttpServlet
 	    // Remove spaces, \n and \r
 	    String normalisedLongURL = TrackClickUtil.normaliseLongURL(originalURL);
 
+	    // When personal email is sent to contact that doesn't exist
+	    if (StringUtils.isBlank(subscriberId))
+	    {
+		resp.sendRedirect(normalisedLongURL);
+		return;
+	    }
+
 	    // Add CD Params - IMPORTANT: agile js-api is dependent on these
 	    // params
 	    String params = "?fwd=cd";
@@ -119,6 +126,13 @@ public class RedirectServlet extends HttpServlet
 	    System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
 
 	    resp.sendRedirect(normalisedLongURL + params);
+
+	    // For personal emails campaign-id is blank
+	    if (StringUtils.isBlank(campaignId) && contact != null)
+	    {
+		TrackClickUtil.showEmailClickedNotification(contact, null, originalURL);
+		return;
+	    }
 
 	    // Get Workflow to add to log (campaign name) and show notification
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));

@@ -750,8 +750,12 @@ $(function()
 
 		case "CLICKED LINK":
 			var customJSON = JSON.parse(this.custom_value);
-			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
-
+			
+			if(customJSON["workflow_name"] == undefined)
+				return str.toLowerCase() + " " + customJSON.url_clicked;
+			
+			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
+			
 		case "OPENED EMAIL":
 			var customJSON = JSON.parse(this.custom_value);
 			
