@@ -22,7 +22,7 @@ import com.thirdparty.google.GoogleServiceUtil;
 public class ContactsSyncToAgile
 {
     // Max results to be fetched from google
-    public static Integer MAX_FETCH_SIZE = 200;
+    public static Integer MAX_FETCH_SIZE = 1000;
 
     /**
      * Fetches contacts from google based on access token in contact prefs.
@@ -99,7 +99,8 @@ public class ContactsSyncToAgile
 	try
 	{
 	    // Sets feed url
-	    feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?access_token=" + accessToken);
+	    feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?access_token="
+		    + accessToken);
 	}
 	catch (MalformedURLException e)
 	{
@@ -199,7 +200,8 @@ public class ContactsSyncToAgile
 
 	    Long created_at = entry.getUpdated().getValue();
 
-	    prefs.last_synced_from_client = created_at > prefs.last_synced_from_client ? created_at : prefs.last_synced_from_client;
+	    prefs.last_synced_from_client = created_at > prefs.last_synced_from_client ? created_at
+		    : prefs.last_synced_from_client;
 
 	    System.out.println("Contact's ETag: " + entry.getEtag());
 	    System.out.println("----------------------------------------");

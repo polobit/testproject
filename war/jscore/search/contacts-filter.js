@@ -36,7 +36,10 @@ $(function()
 		
 		scramble_input_names($(htmlContent));
 
-		chainFilters(htmlContent);
+		// boolean parameter to avoid contacts/not-contacts fields in form
+		chainFilters(htmlContent, function(){
+			
+		}, false);
 
 //		$(this).hide();
 		// var htmlContent = $(this).closest("tr").clone();
@@ -243,7 +246,7 @@ function revertToDefaultContacts()
  * 
  * @param el
  */
-function chainFilters(el, data, callback)
+function chainFilters(el, data, callback, is_webrules)
 {
 	if(!CUSTOM_FIELDS)
 	{
@@ -255,7 +258,7 @@ function chainFilters(el, data, callback)
 				// execute the callback, passing parameters as necessary
 				callback();
 			}
-		})
+		}, is_webrules)
 		return;
 	}
 	
@@ -293,14 +296,17 @@ function show_chained_fields(el, data, forceShow)
 		var is_custom_field = $(selected_field).hasClass("custom_field");
 		
 		var field_type = $(selected_field).attr("field_type");
+		
 		if(placeholder)
 		{
 			$("input", self).attr("placeholder", placeholder);
 		}
 		if(field_type && field_type == 'LIST')
 		{
+			var field_name = $(selected_field).attr("field_name");
+			
 			$("input", self).remove();
-			$("select", self).show();
+			$($('select[name="'+field_name+'"]', self)[0]).show();
 		}
 	});
 	condition.chained(LHS);
@@ -381,55 +387,60 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 }
 
 
-function fillCustomFieldsInFilters(el, callback)
+function fillCustomFieldsInFilters(el, callback, is_webrules)
 {
 
 	$.getJSON("core/api/custom-fields/searchable/scope?scope=CONTACT", function(fields){
-		
-		fillCustomFields(fields, el, callback)
+		console.log(fields);
+		CUSTOM_FIELDS = fields;
+		fillCustomFields(fields, el, callback, is_webrules)
 	})
 }
 
-function fillCustomFields(fields, el, callback)
+function fillCustomFields(fields, el, callback, is_webrules)
 {
-	
 	var lhs_element = $("#LHS > select > #custom-fields", el);
 	var rhs_element = $("#RHS", el);
 	var condition = $("#condition > select", el);
+
 	for(var i = 0; i < fields.length ; i++)
 	{
 		if(i == 0)
 			lhs_element.show();
-		
 		var field = fields[i];
-		
-		
+
 		if(field.field_type == "DATE")
 		{
 			lhs_element.append('<option value="'+field.field_label+'_time" field_type="'+field.field_type+'">'+field.field_label+'</option>');
 			condition.find("option.created_time").addClass(field.field_label+'_time');
 		}
 		else
-			lhs_element.append('<option value="'+field.field_label+' custom_field" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
-		condition.append('<option value="EQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'">is</option>');
-		condition.append('<option value="NOTEQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'">isn\'t</option>');
-		condition.append('<option value="MATCHES" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'">contains</option>');
-		condition.append('<option value="NOT_CONTAINS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'">doesn\'t contain</option>');
-			
+		{
+			lhs_element.append('<option value="'+field.field_label+'" field_type="'+field.field_type+'" >'+field.field_label+'</option>');
+		}
+		condition.append('<option value="EQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">is</option>');
+		condition.append('<option value="NOTEQUALS" class="'+field.field_label+' custom_field" field_type="'+field.field_type+'" field_name="'+field.field_label+'">isn\'t</option>');
+		
+		// Contacts and not contains should only be in webrules form
+		if(is_webrules)
+		{
+			condition.append('<option value="MATCHES" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">contains</option>');
+			condition.append('<option value="NOT_CONTAINS" class="'+field.field_label+' custom_field" field_name="'+field.field_label+'">doesn\'t contain</option>');
+		}
+		
 		if(field.field_type == "LIST")
 		{
 			var custom_list_values = field.field_data.split(";");
 			el = "<select style='display:none' name='"+field.field_label+"'>"
-			for(var i = 0; i < custom_list_values.length; i++)
+			for(var j = 0; j < custom_list_values.length; j++)
 			{
 				
-				el = el + '<option value="'+custom_list_values[i]+'" class="EQUALS NOTEQUALS MATCHES NOT_CONTAINS" field_type="'+field.field_type+'">'+custom_list_values[i]+'</option>';
+				el = el + '<option value="'+custom_list_values[j]+'" class="EQUALS NOTEQUALS MATCHES NOT_CONTAINS" field_type="'+field.field_type+'">'+custom_list_values[j]+'</option>';
 			}
 			el = el +"</select>";
 			rhs_element.append(el);
 		}
-		if(field.field_data)
-			rhs_element.append('<option value="'+field.field_label+'">'+field.field_label+'</option>');
+		console.log(rhs_element[0]);
 	}
 	
 	if (callback && typeof (callback) === "function")

@@ -53,7 +53,7 @@ var ReportsRouter = Backbone.Router.extend({
 				// page
 				if (count != 0)
 					return;
-				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
+				fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
 				{
 
 					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
@@ -113,12 +113,13 @@ var ReportsRouter = Backbone.Router.extend({
 			{
 				if (count != 0)
 					return;
-				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function()
+				fillSelect("custom-fields-optgroup", "core/api/custom-fields/scope?scope=CONTACT", undefined, function()
 				{
 
 					head.js(LIB_PATH + 'lib/jquery.multi-select.js', function()
 					{
-
+						console.log(el);
+						console.log(report.toJSON());
 						$('#multipleSelect', el).multiSelect({ selectableOptgroup : true });
 						++count;
 						if (count > 1)
