@@ -66,15 +66,18 @@ public class ZendeskWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
     }
@@ -100,8 +103,9 @@ public class ZendeskWidgetsAPI
     @Path("add/{widget-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String addTicketInZendesk(@PathParam("widget-id") Long widgetId, @FormParam("name") String name, @FormParam("subject") String subject,
-	    @FormParam("email") String email, @FormParam("message") String description)
+    public String addTicketInZendesk(@PathParam("widget-id") Long widgetId, @FormParam("name") String name,
+	    @FormParam("subject") String subject, @FormParam("email") String email,
+	    @FormParam("message") String description)
     {
 	try
 	{
@@ -111,20 +115,35 @@ public class ZendeskWidgetsAPI
 	    if (widget == null)
 		return null;
 
+	    String response = ZendeskUtil.addTicket(widget, name, email, subject, description);
+
+	    /*
+	     * Since response in coming in the form of String, check for message
+	     * 'Authentication Exception' in the response and throw the error
+	     * Manually with suitable message.
+	     */
+	    if (response.contains("Authentication exception"))
+	    {
+		throw new Exception("Unable to add Ticket. Permission Denied.");
+	    }
+
 	    // Calls ZendeskUtil method to add a ticket in Zendesk
-	    return ZendeskUtil.addTicket(widget, name, email, subject, description);
+	    return response;
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
     }
@@ -145,8 +164,8 @@ public class ZendeskWidgetsAPI
     @Path("update/{widget-id}")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateTicketinZendesk(@PathParam("widget-id") Long widgetId, @FormParam("ticketNumber") String ticketNumber,
-	    @FormParam("message") String description)
+    public String updateTicketinZendesk(@PathParam("widget-id") Long widgetId,
+	    @FormParam("ticketNumber") String ticketNumber, @FormParam("message") String description)
     {
 	try
 	{
@@ -161,15 +180,18 @@ public class ZendeskWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
     }
@@ -199,15 +221,18 @@ public class ZendeskWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
     }
@@ -227,7 +252,8 @@ public class ZendeskWidgetsAPI
     @Path("ticket/status/{widget-id}/{email}/{status}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getTicketsOnstatus(@PathParam("widget-id") Long widgetId, @PathParam("email") String email, @PathParam("status") String status)
+    public String getTicketsOnstatus(@PathParam("widget-id") Long widgetId, @PathParam("email") String email,
+	    @PathParam("status") String status)
     {
 	try
 	{
@@ -242,15 +268,18 @@ public class ZendeskWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -285,15 +314,18 @@ public class ZendeskWidgetsAPI
 	}
 	catch (SocketTimeoutException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Request timed out. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Request timed out. Refresh and Please try again.").build());
 	}
 	catch (IOException e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("An error occurred. Refresh and Please try again.").build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("An error occurred. Refresh and Please try again.").build());
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 }
