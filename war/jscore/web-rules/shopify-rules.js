@@ -8,7 +8,7 @@ $(function(){
 
 		$(this).hide();
 		
-		chainFilters(htmlContent);
+		chainFilters(htmlContent, undefined, undefined, true);
 
 		// var htmlContent = $(this).closest("tr").clone();
 		$(htmlContent).find("i.filter-contacts-multiple-remove").css("display", "inline-block");

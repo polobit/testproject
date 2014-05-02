@@ -302,3 +302,19 @@ function initWebrules()
 		_agile_execute_web_rules();
 		GLOBAL_WEBRULE_FLAG = true;
 }
+
+function add_properties_from_popup(phone_number, company_size)
+{
+	_agile.add_property(create_contact_custom_field("Company Size", company_size, "CUSTOM"), function(data)
+			{
+			_agile.add_property(create_contact_custom_field("phone", phone_number, "SYSTEM", "home"), function(data)
+				{
+					
+					console.log(data);
+					_agile_contact = data;
+					console.log(_agile_contact);
+					window.setTimeout(initWebrules, 4000)
+							
+				});
+			});
+}

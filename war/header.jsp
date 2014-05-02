@@ -1,3 +1,4 @@
+<%@page import="java.util.Iterator"%>
 <%@page import="com.agilecrm.account.NavbarConstants"%>
 <%@page import="com.agilecrm.account.MenuSetting"%>
 <%@page import="com.agilecrm.account.util.MenuSettingUtil"%>
@@ -49,7 +50,7 @@
 
 							<%
 							
-								for(NavbarConstants constant : domainUser.menu_items)
+								for(NavbarConstants constant : domainUser.menu_scopes)
 								{
 							%>
 								    <li id="<%=constant.id%>"><a href="<%=constant.href%>"><i
@@ -61,7 +62,7 @@
 							
 							<%
 							String css_classes = "";
-							int size = domainUser.menu_items.size();
+							int size = domainUser.menu_scopes.size();
 							if(size <=7)
 							{
 							    
@@ -81,7 +82,7 @@
 							}
 							
 							
-							    if (domainUser.menu_items.size() > 3) {
+							    if (domainUser.menu_scopes.size() > 3) {
 							%>
 								<li id="more-menu" class="dropdown <%=css_classes%>"><a
 									class="dropdown-toggle" data-toggle="dropdown" href=""> More
@@ -100,10 +101,17 @@
 							%>
 								<ul class="dropdown-menu drop-drop">
 									<%
-							
-								for(int i = 3; i< domainUser.menu_items.size(); i ++)
+								Iterator<NavbarConstants> iterator = domainUser.menu_scopes.iterator();
+								int index = 0;
+								for(NavbarConstants constant : domainUser.menu_scopes)
 								{
-								    NavbarConstants constant = domainUser.menu_items.get(i);
+								    
+								    if(index < 3)
+								    {
+										++index;
+										continue;
+								    }
+								    
 							%>
 								    <li  id="<%=constant.id%>"><a href="<%=constant.href%>"><i
 										class="<%=constant.icon%> icon-white"></i> <%=constant.heading%></a></li>

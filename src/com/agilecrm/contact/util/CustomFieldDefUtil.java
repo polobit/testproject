@@ -25,7 +25,8 @@ import com.agilecrm.db.ObjectifyGenericDao;
 public class CustomFieldDefUtil
 {
     // Dao
-    private static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(CustomFieldDef.class);
+    private static ObjectifyGenericDao<CustomFieldDef> dao = new ObjectifyGenericDao<CustomFieldDef>(
+	    CustomFieldDef.class);
 
     /**
      * Fetches all the custom fields
@@ -69,6 +70,14 @@ public class CustomFieldDefUtil
     public static List<CustomFieldDef> getSearchableCustomFields()
     {
 	return getCustomFields(true);
+    }
+
+    public static List<CustomFieldDef> getSearchableCustomFieldsByScope(SCOPE scope)
+    {
+	Map<String, Object> map = new HashMap<String, Object>();
+	map.put("searchable", true);
+	map.put("scope", scope);
+	return dao.listByProperty(map);
     }
 
     /**

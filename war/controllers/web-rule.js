@@ -31,7 +31,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
-					});
+					}, true);
 
 				})
 			} });
@@ -71,7 +71,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, webrule.toJSON(), false, webrule.toJSON()["actions"]);
 						$("#content").html(el);
-					});
+					}, true);
 
 				})
 				count++;
@@ -92,7 +92,7 @@ var WebreportsRouter = Backbone.Router.extend({
 					{
 						chainWebRules(el, undefined, true);
 						$("#content").html(el);
-					});
+					}, true);
 
 				})
 			} });
