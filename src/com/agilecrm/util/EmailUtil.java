@@ -153,7 +153,7 @@ public class EmailUtil
 	if (!StringUtils.isEmpty(trackerId))
 	    queryParams += "s=" + trackerId;
 
-	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get() + ".agilecrm.com/backend/open?" + queryParams
+	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get() + ".agilecrm.com/open?" + queryParams
 		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;

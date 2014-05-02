@@ -54,7 +54,7 @@ function set_url_domain(apiKey)
  */
 function set_url(apiKey, domain)
 {
-	var url = "webcal://" + domain + ".agilecrm.com/backend/ical/" + apiKey;
+	var url = "webcal://" + domain + ".agilecrm.com/ical/" + apiKey;
 	$('#ical-feed').attr('href', url);
 	$('#ical-feed').text(url);
 	console.log(url);

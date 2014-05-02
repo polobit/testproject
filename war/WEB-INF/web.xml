@@ -385,6 +385,7 @@
 	<servlet-mapping>
 		<servlet-name>RedirectServlet</servlet-name>
 		<url-pattern>/backend/click/*</url-pattern>
+		<url-pattern>/click/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -394,6 +395,7 @@
 	<servlet-mapping>
 		<servlet-name>EmailOpenServlet</servlet-name>
 		<url-pattern>/backend/open/*</url-pattern>
+		<url-pattern>/open/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -403,6 +405,7 @@
 	<servlet-mapping>
 		<servlet-name>ICalendarServlet</servlet-name>
 		<url-pattern>/backend/ical/*</url-pattern>
+		<url-pattern>/ical/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

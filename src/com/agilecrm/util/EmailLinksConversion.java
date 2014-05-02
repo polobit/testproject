@@ -76,6 +76,12 @@ public class EmailLinksConversion
 
 	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
 
+	// Remove all /
+	while (domainURL.endsWith("/"))
+	{
+	    domainURL = domainURL.substring(0, domainURL.length() - 1);
+	}
+
 	String sid = "";
 	String cid = "";
 
@@ -101,7 +107,7 @@ public class EmailLinksConversion
 		if (isSpecialLink(url))
 		{
 		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, domainURL + "backend/click?u=" + URLEncoder.encode(url, "UTF-8") + cid + sid);
+		    m.appendReplacement(stringBuffer, domainURL + "/click?u=" + URLEncoder.encode(url, "UTF-8") + cid + sid);
 		}
 	    }
 
