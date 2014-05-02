@@ -84,7 +84,12 @@ public class CustomFieldsAPI
     }
 
     /**
-     * Gets all custom fields
+     * Gets all custom fields matching the Scope and the Type.
+     * 
+     * @param scope
+     *            scope of the custom field like CONTACT.
+     * @param type
+     *            type of the custom field like TEXT.
      * 
      * @return List of custom fields
      */

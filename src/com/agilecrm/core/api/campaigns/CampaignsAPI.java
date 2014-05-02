@@ -3,8 +3,11 @@ package com.agilecrm.core.api.campaigns;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -149,12 +152,13 @@ public class CampaignsAPI
      * @param email
      *            email of a contact that is subscribed.
      * @param workflowId
-     *            Id of a workflow.
+     *            Id of a work flow / Campaign.
      */
-    @Path("enroll/email/{workflow-id}/{email}")
-    @GET
+    @Path("enroll/email")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String subscribeContactByEmail(@PathParam("email") String email, @PathParam("workflow-id") Long workflowId)
+    public String subscribeContactByEmail(@FormParam("email") String email, @FormParam("workflow-id") Long workflowId)
     {
 	// Get the contact based on the Email and subscribe it to the Campaign.
 	Contact contact = ContactUtil.searchContactByEmail(email);
