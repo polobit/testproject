@@ -8,7 +8,7 @@ $(function()
 	HELPSCOUT_PLUGIN_NAME = "HelpScout";
 
 	// HelpScout update loading image declared as global
-	HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="tickets_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
+	HELPSCOUT_UPDATE_LOAD_IMAGE = '<center><img id="conv_load" src=' + '\"img/ajax-loader-cursor.gif\" style="margin-top: 10px;margin-bottom: 14px;"></img></center>';
 
 	// Retrieves widget which is fetched using script API
 	var helpscout_widget = agile_crm_get_widget(HELPSCOUT_PLUGIN_NAME);
@@ -110,7 +110,7 @@ function getMailsFromHelpScout(callback)
 function showMailsInHelpScout(customerId)
 {
 	// show loading until tickets are retrieved
-	$('#all_tickets_panel').html(HELPSCOUT_UPDATE_LOAD_IMAGE);
+	$('#all_conv_panel').html(HELPSCOUT_UPDATE_LOAD_IMAGE);
 	/*
 	 * Calls queueGetRequest method in widget_loader.js, with queue name as
 	 * "widget_queue" to retrieve tickets
@@ -118,7 +118,7 @@ function showMailsInHelpScout(customerId)
 	queueGetRequest("widget_queue", "/core/api/widgets/helpscout/get/" + HelpScout_Plugin_Id + "/customer/" + customerId, "json", function success(data)
 	{
 		// Get and fill the template with tickets
-		$('#all_tickets_panel').html(getTemplate('helpscout-conversation', data));
+		$('#all_conv_panel').html(getTemplate('helpscout-conversation', data));
 
 		// Load jquery time ago function to show time ago in tickets
 		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -202,7 +202,7 @@ function addTicketToHelpScout()
 	 * On click of send button in the modal, calls send request method to add a
 	 * Conversation in HelpScout.
 	 */
-	$('#send_request').die().live(
+	$('#helpscout_send_request').die().live(
 			"click",
 			function(e)
 			{
@@ -216,7 +216,7 @@ function addTicketToHelpScout()
 
 				// Sends request to HelpScout to create conversation
 				sendRequestToHelpScout("/core/api/widgets/helpscout/add/" + HelpScout_Plugin_Id, "helpscout_messageForm", "helpscout_messageModal",
-						"add-ticket-error-panel");
+						"add-conv-error-panel");
 			});
 }
 
