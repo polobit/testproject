@@ -67,7 +67,7 @@ function editGrid(e, selector, rowIndex)
     // n-th child index starts from 1
     rowIndex++;
     
-    alert($('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').html());
+   // alert($('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').html());
     
     $('#' + tableId + ' tbody tr:nth-child(' + rowIndex + ')').empty().append($(td));
         
