@@ -16,12 +16,12 @@ public class CampaignStatus
     /**
      * Time when Start node of workflow started.
      */
-    public long start_time = 0L;
+    public Long start_time = 0L;
 
     /**
      * Time when last node of workflow ended.
      */
-    public long end_time = 0L;
+    public Long end_time = 0L;
 
     /**
      * CampaignId.

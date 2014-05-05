@@ -94,7 +94,7 @@ public class CampaignStatusUtil
 	    if (campaignId.equals(campaignStatus.campaign_id))
 	    {
 		campaignStatus.start_time = statusTime;
-		campaignStatus.end_time = 0;
+		campaignStatus.end_time = 0L;
 		campaignStatus.status = campaignId + "-" + Status.ACTIVE;
 		campaignStatus.campaign_name = WorkflowUtil.getCampaignName(campaignId);
 
