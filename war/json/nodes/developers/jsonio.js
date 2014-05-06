@@ -27,9 +27,7 @@
             "title": "Select the appropriate type for accessing the URL, POST or GET.",
             "options": {
                 "*Get": "get",
-                "Post": "post",
-                "Delete": "delete",
-                "Put": "put" 
+                "Post": "post"
             },
             "fieldType": "select",
             "type": "select" 
