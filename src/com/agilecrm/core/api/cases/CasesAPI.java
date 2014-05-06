@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.json.JSONArray;
@@ -44,8 +45,12 @@ public class CasesAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Case> getAllCases()
+    public List<Case> getAllCases(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+	if (count != null)
+	{
+	    return CaseUtil.getCases((Integer.parseInt(count)), cursor);
+	}
 	return CaseUtil.getCases();
     }
 

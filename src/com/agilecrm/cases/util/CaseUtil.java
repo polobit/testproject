@@ -50,7 +50,22 @@ public class CaseUtil
      */
     public static List<Case> getCases()
     {
-	return dao.fetchAll();
+	try
+	{
+	    return dao.fetchAll();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    public static List<Case> getCases(int max, String cursor)
+    {
+	if (max != 0)
+	    return dao.fetchAll(max, cursor);
+	return getCases();
     }
 
     /**
