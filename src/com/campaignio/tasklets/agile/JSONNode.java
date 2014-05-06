@@ -103,6 +103,8 @@ public class JSONNode extends TaskletAdapter
 
 	    String output;
 
+	    String logMessage = "";
+
 	    if (methodType.equalsIgnoreCase(METHOD_TYPE_GET))
 	    {
 		if (url.contains("?"))
@@ -112,18 +114,13 @@ public class JSONNode extends TaskletAdapter
 
 		output = HTTPUtil.accessURL(url);
 
-		// Creates log for JSONNode for method Get type
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "GET: " + url + "<br>Status: SUCCESS",
-			LogType.JSONIO.toString());
+		logMessage = "GET: " + url + "<br>Status: SUCCESS";
 
 	    }
 	    else
 	    {
 		output = HTTPUtil.accessURLUsingPost(url, httpParams);
-
-		// Creates log for JSONNode for method Post type
-		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "POST: " + url + " " + httpParams
-			+ "<br>Status: SUCCESS", LogType.JSONIO.toString());
+		logMessage = "POST: " + url + " " + httpParams + "<br>Status: SUCCESS";
 	    }
 
 	    JSONObject returnJSON = new JSONObject(output);
@@ -137,6 +134,9 @@ public class JSONNode extends TaskletAdapter
 	    }
 
 	    System.out.println(returnJSON + " " + data);
+
+	    // Creates log for JSONNode for method Post type
+	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), logMessage, LogType.JSONIO.toString());
 
 	    // Execute Next One in Loop
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_SUCCESS);
