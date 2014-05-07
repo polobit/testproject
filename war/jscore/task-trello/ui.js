@@ -49,7 +49,7 @@ $(function()
 		// Save task
 		save_task('editTaskForm', 'editTaskModal', true, this);
 	});
-	
+
 	/*
 	 * Task Action: Delete task from UI as well as DB. Need to do this manually
 	 * because nested collection can not perform default functions.
@@ -67,7 +67,7 @@ $(function()
 	$('.is-task-complete').die().live('click', function(event)
 	{
 		event.preventDefault();
-		
+
 		// make task completed.
 		completeTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
 	});
@@ -76,11 +76,11 @@ $(function()
 	$('.edit-task, .task-body, .task-due-time').die().live('click', function(event)
 	{
 		event.preventDefault();
-		
+
 		// Show and Fill details in Task Edit modal
 		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
-	
+
 	/**
 	 * Show event of update task modal Activates typeahead for task-edit-modal
 	 */
@@ -128,8 +128,8 @@ $(function()
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
 
-		// Get selection from owner's dropdown		
-		var owner = $('#owner-tasks').data("selected_item");		
+		// Get selection from owner's dropdown
+		var owner = $('#owner-tasks').data("selected_item");
 
 		// Find array of type's related to criteria in Map
 		findDetails(getCriteria(), owner);
@@ -139,7 +139,7 @@ $(function()
 	$("ul#owner-tasks li a").die().live("click", function()
 	{
 		// Change page heading
-		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');		
+		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');
 	});
 
 	/*
@@ -166,21 +166,20 @@ $(function()
 	{
 		console.log($(this).attr("value"));
 
-		// Remove btn class from all other priority
-		$(".status-btn").removeClass("btn");
-
-		// Add btn class to selected priority
-		$(this).addClass("btn status-btn txt-mute");
-
-		// Add priority to input field
-		$("#editTaskForm #status").val($(this).attr("value"));
+		// Change status UI and input field
+		changeStatus($(this).attr("value"), true);
 	});
 
-	/*	 
+	/*
+	 * If is complete true so make status and progress UI and input field
+	 * changes.
 	 */
 	$("#is_complete").die().live("click", function()
 	{
-		console.log($(this).attr("value"));		
+		console.log($(this).is(':checked'));
+
+		// Change UI and input field
+		changeStatusProgress($(this).is(':checked'));
 	});
-	
+
 });

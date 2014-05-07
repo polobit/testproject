@@ -78,7 +78,7 @@ function getTaskListOwnerId(element)
 	return $(element).closest('.list').find('.list-header').attr('ownerID');	
 }
 
-//
+// Get Criteria from dropdown
 function getCriteria()
 {
 	// Get selection from criteria dropdown
