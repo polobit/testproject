@@ -52,6 +52,11 @@
 													<optgroup label="Custom Fields" id="custom-fields"
 														class="hide">
 													</optgroup>
+													<optgroup label="Shopping cart conditions" id="cart-conditions">
+														<option value="cart">Cart</option>
+														<option value="shopify_customer">Customer</option>
+													</optgroup>									
+
 												</select>
 											</div>
 										</td>
@@ -94,6 +99,16 @@
 													<option value="ONCE_PER_SESSION" class="visit">Once per session</option>	
 													<option value="ONLY_ONCE" class="visit">Only once</option>
 													
+
+													<option value="NEW_CUSTOMER" class="shopify_customer">new customer</option>	
+													<option value="RECURRING_CUSTOMER" class="shopify_customer">recurring customer</option>
+
+														<!-- shopify cart -->
+													<option value="IS_EMPTY" class="cart">is empty</option>
+													<option value="IS_NOT_EMPTY" class="cart">is not empty</option>
+													<option value="CONTAINS" class="cart" placeholder="Item name">contains</option>
+													<option value="IS_LESS_THAN" class="cart" placeholder="Cart value">value less than</option>	
+													<option value="IS_GREATER_THAN" class="cart" placeholder="Cart value">value greater than</option>
 												</select>
 											</div>
 										</td>
@@ -101,7 +116,7 @@
 											style="vertical-align: top;">
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp" 
-													class="EQUALS NOTEQUALS ANYOF required MATCHES NOT_CONTAINS" /> <input
+													class="EQUALS NOTEQUALS ANYOF required MATCHES CONTAINS NOT_CONTAINS" /> <input
 													type="text" name="temp" 
 													class="LAST NEXT required" placeholder="Number of days" />
 												<input type="text" name="tag"
