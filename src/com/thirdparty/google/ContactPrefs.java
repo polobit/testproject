@@ -182,6 +182,7 @@ public class ContactPrefs implements Serializable
     @PrePersist
     public void prePersist()
     {
+	System.out.println("saving prefs " + this.last_synced_to_client);
 	if (domainUser == null)
 	    domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
     }
@@ -325,7 +326,7 @@ public class ContactPrefs implements Serializable
      */
     public String toString()
     {
-	return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token + " secret: " + secret + "refreshToken: "
-		+ refreshToken + " expires: " + expires;
+	return "username: " + userName + "password: " + password + "apikey: " + apiKey + "token: " + token
+		+ " secret: " + secret + "refreshToken: " + refreshToken + " expires: " + expires;
     }
 }
