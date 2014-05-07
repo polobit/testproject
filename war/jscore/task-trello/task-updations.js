@@ -67,11 +67,9 @@ function editTask(taskId, taskListId, taskListOwnerId)
 function updateTask(isUpdate, data, json)
 {
 	console.log("In updateTask");
-	var criteria = $('#type-tasks').data("selected_item");
-
-	// If criteria is not selected then make it default one
-	if (!criteria)
-		criteria = "CATEGORY";
+	
+	// Get selected criteria
+	var criteria = getCriteria();
 
 	var headingToSearch = json[urlMap[criteria].searchKey];
 
@@ -110,6 +108,9 @@ function updateTask(isUpdate, data, json)
 
 		// Set new details in Task
 		modelTaskList[0].get('taskCollection').get(json.id).set(data);
+		
+		// Maintain changes in UI
+		displaySettings();
 
 		return;
 	}
@@ -158,7 +159,7 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 	modelOldTaskList[0].get('taskCollection').remove(modelOldTaskList[0].get('taskCollection').get(json.id));
 
 	// Add in task in new task list
-	addTaskToTaskList(headingToSearch, data, isUpdate);
+	addTaskToTaskList(headingToSearch, data, isUpdate);	
 }
 
 // On click of task action , makes task completed
@@ -186,6 +187,8 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	taskJson.is_complete = true;
 	taskJson.due = new Date(taskJson.due).getTime();
 	taskJson.owner_id = taskJson.taskOwner.id;
+	taskJson.status = "COMPLETED";
+	taskJson.progress = 100;
 
 	if (taskListOwnerId)
 	{
@@ -198,8 +201,8 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	newTask.save(taskJson, { success : function(data)
 	{
 		updateTask(true, data, taskJson);
-
-		// Creates normal time.
-		displayTimeAgo($(".list"));
+		
+		// Maintain changes in UI
+		displaySettings();
 	} });
 }

@@ -10,9 +10,10 @@ function findDetails(criteria, owner)
 	console.log(urlMap[criteria].searchKey);
 
 	/*
-	 * Creates nested collection 1. If my task or my pending task with owner
-	 * criteria is selected so add only one column of current user. 2. If
-	 * selected criteria is not owner so follow normal procedure
+	 * Creates nested collection 
+	 * 1. If my task or my pending task with owner
+	 * criteria is selected so add only one column of current user. 
+	 * 2. If selected criteria is not owner so follow normal procedure
 	 */
 	if (criteria == "OWNER" && ($(".selected_name").html() == "My Tasks" || $(".selected_name").html() == "My Pending Tasks"))
 		createNestedCollection(criteria, [

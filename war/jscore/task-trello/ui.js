@@ -41,22 +41,6 @@ $(function()
 		$(this).find(".task-actions").css("display", "none");
 	});
 
-	// Open Task View modal on click of Task and Due time
-	$('.task-body, .task-due-time').die().live('click', function(event)
-	{
-		var taskId;
-		var taskListId = $(this).closest('.list').attr('id');
-		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
-
-		if ($(this).hasClass('task-body'))
-			taskId = $(this).parent().attr('id');
-		else
-			taskId = $(this).attr('data');
-
-		// Show Task View Modal
-		viewTask(taskId, taskListId, taskListOwnerId);
-	});
-
 	// Save edited task
 	$('#edit_task_validate').click(function(e)
 	{
@@ -65,18 +49,7 @@ $(function()
 		// Save task
 		save_task('editTaskForm', 'editTaskModal', true, this);
 	});
-
-	// Task Action: Open Task Edit Modal and display details in it.
-	$('.edit-task').die().live('click', function(event)
-	{
-		var taskId = $(this).attr('data');
-		var taskListId = $(this).closest('.list').attr('id');
-		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
-
-		// Show and Fill details in Task Edit modal
-		editTask(taskId, taskListId, parseInt(taskListOwnerId));
-	});
-
+	
 	/*
 	 * Task Action: Delete task from UI as well as DB. Need to do this manually
 	 * because nested collection can not perform default functions.
@@ -86,40 +59,28 @@ $(function()
 		if (!confirm("Are you sure you want to delete?"))
 			return;
 
-		// Get Task id
-		var taskId = $(this).attr('data');
-
-		// Get heading of task list
-		var taskListId = $(this).closest('.list').attr('id');
-		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
-
 		// Delete Task.
-		deleteTask(taskId, taskListId, taskListOwnerId);
+		deleteTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
 	});
 
 	// Task Action: Mark task complete, make changes in DB.
 	$('.is-task-complete').die().live('click', function(event)
 	{
-		// Get Task id
-		var taskId = $(this).attr('data');
-
-		// Get heading of task list
-		var taskListId = $(this).closest('.list').attr('id');
-		var taskListOwnerId = $(this).closest('.list').find('.list-header').attr('ownerID');
-
+		event.preventDefault();
+		
 		// make task completed.
-		completeTask(taskId, taskListId, taskListOwnerId);
+		completeTask(getTaskId(this), getTaskListId(this), getTaskListOwnerId(this));
 	});
 
-	// On click of Time icon in Task edit modal, displays calendar.
-	$('.display-due').die().live('click', function(event)
+	// Task Action: Open Task Edit Modal and display details in it.
+	$('.edit-task, .task-body, .task-due-time').die().live('click', function(event)
 	{
 		event.preventDefault();
-
-		// show date picker
-		// $('.date', $("#editTaskForm")).datepicker('show');
+		
+		// Show and Fill details in Task Edit modal
+		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
 	});
-
+	
 	/**
 	 * Show event of update task modal Activates typeahead for task-edit-modal
 	 */
@@ -127,6 +88,15 @@ $(function()
 	{
 		var el = $("#editTaskForm");
 		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
+
+		// Make btn selected as per previous priority
+		$("span.[value=" + $("#editTaskForm #priority_type").val() + "]").addClass("btn");
+
+		// Make btn selected as per previous status
+		$("span.[value=" + $("#editTaskForm #status").val() + "]").addClass("btn");
+
+		// Loads progress slider in task sedit modal.
+		loadProgressSlider(el);
 	});
 
 	/**
@@ -137,8 +107,14 @@ $(function()
 	 */
 	$('#editTaskModal').on('hidden', function()
 	{
+		// Empty contact list and owner list
 		$("#editTaskForm").find("li").remove();
-		// $('.date', $("#editTaskForm")).datepicker('hide');
+
+		// Remove btn class from all other priority
+		$(".priority-btn").removeClass("btn");
+
+		// Remove btn class from all other status
+		$(".status-btn").removeClass("btn");
 	});
 
 	// Click events to agents dropdown of Owner's list and Criteria's list
@@ -152,23 +128,59 @@ $(function()
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
 
-		// Get selection from both dropdown
-		var criteria = $('#type-tasks').data("selected_item");
-		var owner = $('#owner-tasks').data("selected_item");
-
-		// If criteria is not selected then make it default one
-		if (!criteria)
-			criteria = "CATEGORY";
+		// Get selection from owner's dropdown		
+		var owner = $('#owner-tasks').data("selected_item");		
 
 		// Find array of type's related to criteria in Map
-		findDetails(criteria, owner)
+		findDetails(getCriteria(), owner);
 	});
 
+	// Change page heading as per owner selection
 	$("ul#owner-tasks li a").die().live("click", function()
 	{
-		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');
-
-		// pieTasks(getParams()); // Show tasks only when user changes My Tasks
-		// vs All Tasks
+		// Change page heading
+		$('.task-heading').html($(this).html() + '&nbsp<small class="tasks-count"></small>');		
 	});
+
+	/*
+	 * In edit task modal, on selection of priority change input field as well
+	 * as change btn
+	 */
+	$(".priority-btn").die().live("click", function()
+	{
+		// Remove btn class from all other priority
+		$(".priority-btn").removeClass("btn");
+
+		// Add btn class to selected priority
+		$(this).addClass("btn priority-btn");
+
+		// Add priority to input field
+		$("#editTaskForm #priority_type").val($(this).attr("value"));
+	});
+
+	/*
+	 * In edit task modal, on selection of status change input field as well as
+	 * change btn
+	 */
+	$(".status-btn").die().live("click", function()
+	{
+		console.log($(this).attr("value"));
+
+		// Remove btn class from all other priority
+		$(".status-btn").removeClass("btn");
+
+		// Add btn class to selected priority
+		$(this).addClass("btn status-btn txt-mute");
+
+		// Add priority to input field
+		$("#editTaskForm #status").val($(this).attr("value"));
+	});
+
+	/*	 
+	 */
+	$("#is_complete").die().live("click", function()
+	{
+		console.log($(this).attr("value"));		
+	});
+	
 });

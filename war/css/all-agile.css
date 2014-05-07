@@ -1371,7 +1371,7 @@ small {
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	cursor: pointer;
-	min-height: 68px;
+	min-height: 30px;
 	padding: 8px 50px 4px 8px;
 	position: relative;
 	margin: 5px 4px 0 0;
@@ -1415,10 +1415,11 @@ small {
 }
 
 .task-due-time {
-	color: #891414;
+	color: #888;
 	font-size: 12px;
 	line-height: 16px;
 	float: left;
+	padding-bottom: 2px;
 }
 
 .task-type {
@@ -1445,8 +1446,21 @@ small {
 	top: 25px;
 }
 
+.shift-up {
+	top: 3px;
+}
+
 .task-body {
 	padding-bottom: 15px;
+	min-height: 52px;
+}
+
+.task-body-category {
+	min-height: 30px;
+}
+
+.task-body-owner {
+	min-height: 20px;
 }
 
 .task-footer {
@@ -1473,9 +1487,22 @@ small {
 	display: none;
 	padding-right: 4px;
 }
-/* .task-actions:hover,.task-actions:focus {
-	display: block;
-} */
+
+.priority-btn {
+	padding: 4px;
+	width: 14px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.status-btn {
+	padding: 8px;
+	width: 14px;
+	text-align: center;
+	cursor: pointer;
+}
+
+/* .task-actions:hover,.task-actions:focus {display: block;} */
 /* ********************************************************* */
 /**************** Plan and upgrade css *************for plan css strip********************************************/
 .pagination li:last-child a {
@@ -1881,7 +1908,7 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 		endColorstr='#0044cc', GradientType=0);
 	border-color: #0044cc #0044cc #002a80;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled=    
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=         
 		             false);
 	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);

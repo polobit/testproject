@@ -72,89 +72,6 @@
 </script>
 
 
-<script id="viewTask-template" type="text/html">
-<div class="modal hide fade" id="viewTaskModal">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal">x</button>
-		<h3>Task</h3>
-	</div>
-	<div class="modal-body">
-      <div style="display:flex;">
-        <div style="width: 64%;">
-		   {{#is_link subject}}
-               <span class="activate-link" style="font-size:large;" title="Name of Task">
-           {{else}}
-               <span style="font-size:large;" title="Name of Task">
-           {{/is_link}}
-                {{safe_string subject}}
-              </span>
-
-		   {{#if contacts}}  
-              <div title="Related To">
-        	    {{#each contacts}}
-        		   {{#if_contact_type "PERSON"}}
-        			  <a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
-        		   {{/if_contact_type}}
-				   {{#if_contact_type "COMPANY"}}
-        			  <a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "name"}}</a>
-        		   {{/if_contact_type}}
-        	    {{/each}}
-		      </div>
-           {{/if}}
-       </div>  
- 
-       <div style="width: 34%;display:flex;">
-         <div style="width: 55%;" title="Priority"> 
-           {{#if_equals priority_type "HIGH"}}<label style="color:red;"><b>!!!</b></label>{{/if_equals}}       
-           {{#if_equals priority_type "LOW"}}<label style="color:#dbdb57;"><b>!!</b></label>{{/if_equals}}
-           {{#if_equals priority_type "NORMAL"}}<label style="color:blue;"><b>!</b></label>{{/if_equals}}
-           
-           <label class="label" style="display: -webkit-inline-box;" title="Category">{{type}}</label>
-         </div>
-         <div style="width: 33.33%;">
-         <label class="txt-mute">Owner</label>
-         <label title="Owner"><b>{{taskOwner.name}}</b></label>
-         </div>
-         <div style="width: 33.33%;">
-         {{#if ownerPic}}
-        	<img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{taskOwner.name}}"/>
-	     {{else}}
-			<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{taskOwner.name}}"/>
-	     {{/if}}
-         </div>
-        </div>
-     </div><!-- row end -->						
-
-     <div class="row-fluid" style="padding-top: 15px;">
-        <i class="icon-time icon-2x pull-left"></i>
-        <div class="span4" title="Due Date">
-          <b><time data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></b>
-          <br>
-          <p class="txt-mute">(<time class="time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time>)</p>
-        </div>
-        <div class="span4">
-		  <label title="Status (Progress%)"> <b>
-             {{#if_equals status "NOT_STARTED"}}Not Started{{/if_equals}}
-             {{#if_equals status "IN_PROGRESS"}}In Progress{{/if_equals}}
-             {{#if_equals status "COMPLETED"}}Completed{{/if_equals}}
-             {{#if_equals status "PAUSED"}}Paused{{/if_equals}}               
-             ({{progress}}%)</b> 
-          </label>
-        </div>
-     </div>
-     
-     {{#if descrption}}
-     <div style="width:80%;padding-top: 15px;" title="Description">	
-        <label> <b>Details</b> </label>         
-		<label class="txt-mute">{{descrption}}</label>
-     </div> 
-     {{/if}}
-	</div>	
-</div>
-</script>
-
-
-
 <div class="modal hide fade" id="editTaskModal">
 	<div class="modal-header">
 		<button class="close" data-dismiss="modal">x</button>
@@ -165,33 +82,36 @@
 			<!--Task form -->
 			<form id="editTaskForm" name="editTaskForm" method="post">
 				<fieldset>
-					<input name="id" type="hidden" value="{{id}}" /> <input
-						name="taskListId" type="hidden" value="{{taskListId}}" /> <input
-						name="taskListOwnerId" type="hidden" value="{{taskListOwnerId}}" />
+					<input name="id" type="hidden" value="{{id}}" /> 
+					<input name="taskListId" type="hidden" value="{{taskListId}}" /> 
+					<input name="taskListOwnerId" type="hidden" value="{{taskListOwnerId}}" />
+					<input name="priority_type" id="priority_type" type="hidden" value="" />
+					<input name="progress" id="progress" type="hidden" value="">
+					<input name="status" id="status" type="hidden" value="">
 
 					<div class="row">
 						<div id="updateTask" class="span3 control-group">
 							<div class="controls">
-								<span class="input "><input id="subject" type="text"
-									name="subject" size="40" class="required"
-									style="font-size: large;" /> </span>
+								<span class="input ">
+								  <input id="subject" type="text" name="subject" size="40" class="required" style="font-size: large;" /> 
+								</span>
 							</div>
 						</div>
 						<div id="task-category" class="span2 control-group"
 							style="width: 96px;">
 							<div class="controls">
-								<span class="input"> <select name="type" id="type"
-									size="1" class="required label" style="width: 95px;">
+								<span class="input"> 
+								   <select name="type" id="type" size="1" class="required label" style="width: 95px; background: #800080;">
 										<option></option>
 										<option value="CALL">Call</option>
 										<option value="EMAIL">Email</option>
-										<option value="FOLLOW_UP">Follow-up</option>
+										<option value="FOLLOW_UP">Follow Up</option>
 										<option value="MEETING">Meeting</option>
 										<option value="MILESTONE">Milestone</option>
 										<option value="SEND">Send</option>
 										<option value="TWEET">Tweet</option>
 										<option value="OTHER">Other</option>
-								</select>
+								   </select>
 								</span>
 							</div>
 						</div>
@@ -199,38 +119,32 @@
 						<div class="span2 control-group">
 							<label class="control-label txt-mute">Owner</label>
 							<div class="controls" id="owners">
-								<select id="owners-list" class="required" name="owner_id"
-									style="width: 80px;"></select> <img class="loading-img"
-									src="img/21-0.gif"></img>
+								<select id="owners-list" class="required" name="owner_id" style="width: 80px;"></select> 
+								<img class="loading-img" src="img/21-0.gif"></img>
 							</div>
 							<div id="owner-pic"></div>
 						</div>
-
 					</div>
+					
 					<div class="row">
 						<div class="span3 control-group">
 							<div class="controls" style="display: inline-flex;">
-								<label for="due" class="control-label"><b>Due </b> </label> <span
-									class="display-due" style="margin-left: 10px;"> <i
-									class="icon-time icon-2x"
-									style="border: 1px solid; padding: 4px 4px 4px 4px; display: block;"></i>
-								</span> <b><input type="text" name="due" placeholder="mm/dd/yyyy"
-									id="update-task-date-1" class="required date" /></b>
+								<label for="due" class="control-label" style="align-self: center;"><b>Due </b> </label> 
+								<span class="display-due" style="margin-left: 10px;"> 
+								  <i class="icon-time icon-2x" style="border: 1px solid; padding: 4px 4px 4px 4px; display: block;"></i>
+								</span> 
+								<b><input type="text" name="due" placeholder="mm/dd/yyyy" id="update-task-date-1" class="required date" /></b>
 							</div>
 						</div>
-						<div class="span2">
-							<label for="priority_type" class="control-label"><b>Priority
-							</b></label> <span class="input "> <select name="priority_type"
-								id="priority_type" size="1" class="input-medium">
-									<option value="HIGH">High</option>
-									<option value="NORMAL" selected="selected">Normal</option>
-									<option value="LOW">Low</option>
-							</select>
-							</span>
+						<div class="span3" style="display: inline-flex;align-items: baseline;">						   
+							<label for="priority_type" class="control-label" style="margin-right: 10px;"><b>Priority</b></label>							
+							<span class="priority-btn" value="HIGH" style="color: red;" title="High Priority">!!!</span> 
+							<span class="priority-btn" value="LOW" style="color: yellow;" title="Low Priority">!!</span>
+							<span class="priority-btn" value="NORMAL" style="color: blue;" title="Normal Priority">!</span>														
 						</div>
 					</div>
 					<div class="row">
-						<div class="control-group span6">
+						<div class="control-group span7">
 							<div class="controls">
 								<div>
 									<div class="pull-left">
@@ -245,46 +159,37 @@
 						</div>
 					</div>
 					<div class="row">
+						<div class="span4" style="display: inline-flex;"">
+							<label for="status" class="control-label" style="margin-right: 20px;margin-top: 7px;"><b>Status </b></label>
+							<div style="width: 100%;">
+							  <div style="margin-bottom: 15px;">
+							    <span class="status-btn txt-mute" value="NOT_STARTED" title="Not Started"><i class="icon-stop"></i></span> 
+							    <span class="status-btn txt-mute" value="IN_PROGRESS" title="In Progress"><i class="icon-play"></i></span>
+							    <span class="status-btn txt-mute" value="COMPLETED" title="Completed"><i class="icon-ok"></i></span>
+							    <span class="status-btn txt-mute" value="PAUSED" title="Paused"><i class="icon-pause"></i></span>
+							  </div>
+							  <div style="margin-left: 10px;" title="Progress">
+							    <input id="progress_slider" type="slider" class="progress_slider" value="1" />
+							  </div>							  
+							</div>							
+						</div>
 						<div class="span2 control-group">
 							<div class="controls">
-								<label class="checkbox"><b>Is Complete </b><input
-									type="checkbox" name="is_complete"> </label>
+								<label class="checkbox"><b>Is Complete </b>
+								<input type="checkbox" id="is_complete" name="is_complete"> </label>
 							</div>
 						</div>
 					</div>
-
-					<div class="row">
-						<div class="span3">
-							<label for="status" class="control-label"><b>Status </b></label>
-							<span class="input "> <select name="status" id="status"
-								size="1" class="input-medium">
-									<option value="NOT_STARTED" selected="selected">Not
-										Started</option>
-									<option value="IN_PROGRESS">In Progress</option>
-									<option value="COMPLETED">Completed</option>
-									<option value="PAUSED">Paused</option>
-							</select>
-							</span>
-						</div>
-						<div class="span2">
-							<label for="progress" class="control-label"><b>Progress
-									(%) </b></label> <input name="progress" id="progress" type="number" min="1"
-								max="100" value="">
-						</div>
-					</div>
-					<div class="row">
+					<div class="row" style="margin-top: 20px;">
 						<div class="control-group span6">
 							<div class="controls">
 								<label for="descrption" class="control-label"><b>Details</b></label>
-								<textarea type="text" id="descrption" name="descrption"
+								<textarea class="txt-mute" type="text" id="descrption" name="descrption"
 									size="40" placeholder="Description of Task"
 									data-mode="multiple" style="width: 100%;"></textarea>
 							</div>
 						</div>
 					</div>
-
-
-
 				</fieldset>
 			</form>
 		</div>
