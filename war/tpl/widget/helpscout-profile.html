@@ -61,7 +61,7 @@
 			</div>
 			<div style="margin-bottom:5px;">
 				<div class="label right">{{status}}</div>
-				<small><time class="time-ago" datetime="{{createdAt}}">{{createdAt}}</time></small>
+				<small><time class="time-ago" datetime="{{toLocalTimezoneFromUtc createdAt}}">{{toLocalTimezoneFromUtc createdAt}}</time></small>
 			</div>
 			<div class="clearfix"></div>
 		</li>
