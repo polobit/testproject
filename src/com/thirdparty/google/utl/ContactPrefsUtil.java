@@ -88,6 +88,8 @@ public class ContactPrefsUtil
 	updatedPrefs.token = currentPrefs.token;
 	updatedPrefs.secret = currentPrefs.secret;
 	updatedPrefs.refreshToken = currentPrefs.refreshToken;
+	updatedPrefs.last_synced_to_client = currentPrefs.last_synced_to_client;
+	updatedPrefs.last_synced_from_client = currentPrefs.last_synced_from_client;
 	return updatedPrefs;
     }
 

@@ -60,6 +60,13 @@ public class ContactUtilServlet extends HttpServlet
 	    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
 	    {
 		String duration = req.getParameter("duration");
+		String offline = req.getParameter("offline");
+		String namespace = req.getParameter("domain");
+		if (StringUtils.isNotEmpty(offline) && StringUtils.isNotEmpty(namespace))
+		{
+		    syncGoogleContacts(namespace, duration);
+		    return;
+		}
 		syncGoogleContacts(duration);
 		return;
 	    }
@@ -87,7 +94,7 @@ public class ContactUtilServlet extends HttpServlet
     }
 
     /**
-     * Fetches all namesapces and initializes deferred task which fetches
+     * Fetches all namespaces and initializes deferred task which fetches
      * contact prefs based on sync duration set.
      * 
      * @param duration
@@ -107,6 +114,20 @@ public class ContactUtilServlet extends HttpServlet
 	    // Add to queue
 	    queue.add(TaskOptions.Builder.withPayload(task));
 	}
+    }
+
+    public void syncGoogleContacts(String namespace, String duration)
+    {
+	System.out.println("duration" + duration);
+
+	// Create Task and push it into Task Queue
+	Queue queue = QueueFactory.getQueue("contact-sync-queue");
+
+	// Add to queue
+	GoogleContactsDeferredTask task = new GoogleContactsDeferredTask(namespace, duration);
+
+	// Add to queue
+	queue.add(TaskOptions.Builder.withPayload(task));
     }
 
     /**
@@ -151,13 +172,15 @@ public class ContactUtilServlet extends HttpServlet
 		if (contactPrefs.salesforceFields.contains("cases"))
 		    SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
 
-		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Imported successfully from Salesforce");
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+			"Imported successfully from Salesforce");
 	    }
 
 	}
 	catch (Exception e)
 	{
-	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Problem occured while importing. Please try again");
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+		    "Problem occured while importing. Please try again");
 	}
 	finally
 	{
