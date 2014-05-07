@@ -39,7 +39,8 @@ function loadProgressSlider(el)
 	{
 		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "plastic", onstatechange : function(value)
 		{
-			$("#progress", el).val(value);
+			//$("#progress", el).val(value);
+			 changeProgress(value,true);
 		} });
 
 		$(".progress_slider").slider("value", $("#editTaskForm #progress").val());
@@ -80,9 +81,19 @@ function changeProgress(value,checkStatus)
 {
 	// Add progress 100 to input field
 	$("#editTaskForm #progress").val(value);
-
-	// Make changes in progress slider
-	$(".progress_slider").slider("value", value);
+	
+	// Make changes in status buttons
+	if(checkStatus) 
+	 {
+		if(value == 0)
+			changeStatus("NOT_STARTED",false);
+		else if(value == 100)
+			changeStatus("COMPLETED",false);
+		else if(value >= 1)
+			changeStatus("IN_PROGRESS",false);
+	 }	
+	else // Make changes in progress slider
+		$(".progress_slider").slider("value", value);
 }
 
 /*
