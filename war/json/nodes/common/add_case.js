@@ -30,7 +30,7 @@
             "title": "Select status",
             "options": {
                 "Open": "OPEN",
-                "Closed": "CLOSED"
+                "Closed": "CLOSE"
             },
             "fieldType": "select",
             "type": "select"

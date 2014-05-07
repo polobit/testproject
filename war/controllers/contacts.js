@@ -577,11 +577,12 @@ var ContactsRouter = Backbone.Router.extend({
 				// Populate from address and templates
 				populate_send_email_details(el);
 
-				// Setup HTML Editor
-				setupTinyMCEEditor('textarea#email-body');
 			}
 		});
 		$("#content").html(sendEmailView.render().el);
+		
+		// Setup HTML Editor
+		setupTinyMCEEditor('textarea#email-body');
 	},
 	
 	/**
