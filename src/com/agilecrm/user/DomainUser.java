@@ -228,14 +228,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If subscription is null, it indicates user is in free plan.
 	    // Limits users to global trail users count
 	    if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-			+ " users in the free plan");
+		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT + " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
 	    if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
-		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-			+ " users in the current plan");
+		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity + " users in the current plan");
 
 	    return false;
 	}
@@ -353,6 +351,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      */
     private void sendEmail(String subject, String template)
     {
+	System.out.println("Domain in email template : " + this.domain + " ,namespace : " + NamespaceManager.get());
 	SendMail.sendMail(this.email, subject, template, this);
     }
 
@@ -385,8 +384,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // If domain user exists, not allowing to create new user
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
-		throw new Exception("User with this email address " + domainUser.email + " already exists in "
-			+ domainUser.domain + " domain.");
+		throw new Exception("User with this email address " + domainUser.email + " already exists in " + domainUser.domain + " domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -597,7 +595,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     @Override
     public String toString()
     {
-	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-		+ this.id + " Name: " + this.name + "\n " + info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id + " Name: " + this.name + "\n "
+		+ info_json;
     }
 }
