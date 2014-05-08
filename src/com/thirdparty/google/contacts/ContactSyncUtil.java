@@ -109,8 +109,9 @@ public class ContactSyncUtil
 	}
 
 	// Retrieves contact based on contact emails
-	List<ContactEntry> entries = retrieveContactBasedOnEmailFromGoogle(contact, prefs);
-	// List<ContactEntry> entries = new ArrayList<ContactEntry>();
+	// List<ContactEntry> entries =
+	// retrieveContactBasedOnEmailFromGoogle(contact, prefs);
+	List<ContactEntry> entries = new ArrayList<ContactEntry>();
 
 	ContactEntry createContact = null;
 
@@ -348,7 +349,7 @@ public class ContactSyncUtil
 	    page = 500;
 	}
 
-	Long time = pref.last_synced_to_client;
+	Long time = pref.last_synced_updated_contacts_to_client;
 	Map<String, Object> queryMap = new HashMap<String, Object>();
 	queryMap.put("updated_time > ", time);
 
@@ -357,7 +358,7 @@ public class ContactSyncUtil
 
 	queryMap.put("type", Type.PERSON);
 
-	return Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-updated_time");
+	return Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "updated_time");
     }
 
     /**
@@ -383,7 +384,7 @@ public class ContactSyncUtil
 
 	queryMap.put("type", Type.PERSON);
 
-	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
+	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "created_time");
 
 	return contacts;
     }

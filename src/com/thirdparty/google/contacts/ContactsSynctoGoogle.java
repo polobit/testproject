@@ -138,12 +138,18 @@ public class ContactsSynctoGoogle
     {
 	int MAX_FETCH_SIZE = 1000;
 	int fetched = 0;
+
+	System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+	System.out.println("sync time updated : " + prefs.last_synced_updated_contacts_to_client);
 	List<Contact> contacts_list = ContactSyncUtil.fetchUpdatedContactsToSync(prefs, page, cursor);
 
 	if (contacts_list.isEmpty())
 	    return;
 
-	System.out.println(prefs.last_synced_to_client);
+	Long sync_started_at = prefs.last_synced_updated_contacts_to_client;
+	Long last_synced = 0l;
+
+	System.out.println(prefs.last_synced_updated_contacts_to_client);
 	String currentCursor = null;
 	String previousCursor = null;
 	do
@@ -157,6 +163,10 @@ public class ContactsSynctoGoogle
 	    try
 	    {
 		updateContacts(contacts_list, prefs);
+
+		last_synced = prefs.last_synced_updated_contacts_to_client;
+
+		prefs.last_synced_updated_contacts_to_client = sync_started_at;
 	    }
 	    catch (Exception e)
 	    {
@@ -175,6 +185,9 @@ public class ContactsSynctoGoogle
 	    break;
 	} while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor)
 		&& fetched <= MAX_FETCH_SIZE);
+
+	prefs.last_synced_updated_contacts_to_client = last_synced;
+	System.out.println("sync time updated : " + prefs.last_synced_updated_contacts_to_client);
     }
 
     /**
@@ -218,7 +231,9 @@ public class ContactsSynctoGoogle
 	 */
 	for (int i = 0; i < contacts_list_size; i++)
 	{
+
 	    Contact contact = contacts.get(i);
+	    System.out.println(contact.created_time);
 
 	    // Create google supported contact entry based on current contact
 	    // data
@@ -297,7 +312,7 @@ public class ContactsSynctoGoogle
 
 		System.out.println("end time :update " + System.currentTimeMillis());
 
-		prefs.last_synced_to_client = (contact.updated_time != 0 && contact.updated_time > prefs.last_synced_to_client) ? contact.updated_time
+		prefs.last_synced_updated_contacts_to_client = (contact.updated_time != 0 && contact.updated_time > prefs.last_synced_updated_contacts_to_client) ? contact.updated_time
 			: prefs.last_synced_to_client;
 
 		updateRequestCount = 0;
