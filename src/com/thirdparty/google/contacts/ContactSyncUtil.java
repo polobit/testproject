@@ -383,7 +383,11 @@ public class ContactSyncUtil
 
 	queryMap.put("type", Type.PERSON);
 
+	System.out.println(queryMap);
+	System.out.println("contacts count :" + Contact.dao.getCountByProperty(queryMap));
 	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "created_time");
+
+	System.out.println("contacts available" + contacts.size());
 
 	return contacts;
     }

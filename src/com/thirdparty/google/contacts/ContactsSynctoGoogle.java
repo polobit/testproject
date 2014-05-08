@@ -71,11 +71,6 @@ public class ContactsSynctoGoogle
 	// Fetches first set of contacts up to page size
 	List<Contact> contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
 
-	List<ContactEntry> googleContactEntries = ContactSyncUtil.convertToGoogleContactsFormat(contacts_list, prefs);
-
-	System.out.println("********************************* size available *********************");
-	System.out.println(googleContactEntries.size());
-
 	if (contacts_list.isEmpty())
 	    return;
 
@@ -238,7 +233,6 @@ public class ContactsSynctoGoogle
 	{
 
 	    Contact contact = contacts.get(i);
-	    System.out.println(contact.created_time);
 
 	    // Create google supported contact entry based on current contact
 	    // data
