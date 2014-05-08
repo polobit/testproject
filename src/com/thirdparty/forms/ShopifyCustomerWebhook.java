@@ -1,12 +1,10 @@
 package com.thirdparty.forms;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,25 +29,24 @@ public class ShopifyCustomerWebhook extends HttpServlet
 	{
 		try
 		{
-			// Get API key and owner
-			String apiKey = req.getParameter("apikey");
+			String dataKey = null;
+			
+			// Get API key
+			Map<String, String[]> requestParams  = req.getParameterMap();
+			String apiKey = requestParams.get("apikey")[0];
+			
+			// Get data
+			for (Map.Entry<String, String[]> entry : requestParams.entrySet()){
+				if(!StringUtils.equals("apikey", entry.getKey()))
+					dataKey = entry.getKey();
+			}
+			JSONObject data = new JSONObject(dataKey);
+			
+			// Get owner
 			Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 
 			if (owner == null)
 				return;
-
-			// Read input stream
-			ServletInputStream input = req.getInputStream();
-			BufferedReader buffer = new BufferedReader(new InputStreamReader(input));
-			String dataString = "";
-			String line = "";
-			while ((line = buffer.readLine()) != null)
-			{
-				dataString += line;
-			}
-
-			// Convert to JSON Object
-			JSONObject data = new JSONObject(dataString);
 
 			// List of contact fields
 			List<ContactField> properties = new ArrayList<ContactField>();
