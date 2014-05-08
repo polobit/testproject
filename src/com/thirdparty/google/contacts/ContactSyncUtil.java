@@ -104,10 +104,13 @@ public class ContactSyncUtil
 
 	// Does not create contact if it is already imported form google
 	if (googleContactfield != null && "Google".equals(googleContactfield.value))
+	{
 	    return null;
+	}
 
 	// Retrieves contact based on contact emails
 	List<ContactEntry> entries = retrieveContactBasedOnEmailFromGoogle(contact, prefs);
+	// List<ContactEntry> entries = new ArrayList<ContactEntry>();
 
 	ContactEntry createContact = null;
 
@@ -145,44 +148,12 @@ public class ContactSyncUtil
 	if (contactName.hasGivenName())
 	    createContact.setName(contactName);
 
-	List<ContactField> emailFields = contact.getContactPropertiesList(Contact.EMAIL);
-	List<Email> emails = createContact.getEmailAddresses();
-	List<ContactField> newEmails = new ArrayList<ContactField>();
-
-	// Sets Emails to contact
-	for (ContactField field : emailFields)
-	{
-	    boolean isNew = true;
-	    for (Email email : emails)
-	    {
-		if (StringUtils.equals(email.getAddress(), field.value))
-		{
-		    isNew = false;
-		    break;
-		}
-	    }
-	    if (isNew)
-	    {
-		newEmails.add(field);
-	    }
-	}
-
-	for (ContactField field : newEmails)
-	{
-	    Email primaryMail = new Email();
-	    primaryMail.setAddress(field.value);
-	    if (!StringUtils.isEmpty(field.subtype))
-		primaryMail.setRel("http://schemas.google.com/g/2005#"
-			+ StringUtils.lowerCase(field.subtype.toLowerCase()));
-	    else
-		primaryMail.setRel("http://schemas.google.com/g/2005#work");
-
-	    createContact.addEmailAddress(primaryMail);
-	}
+	addEmailsToGoogleContact(contact, createContact);
+	addPhoneNumbersToGoogleContact(contact, createContact);
 
 	// Adds Company to contact
 	ContactField companyField = contact.getContactField(Contact.COMPANY);
-	if (companyField != null && StringUtils.isEmpty(companyField.value))
+	if (companyField != null && !StringUtils.isEmpty(companyField.value))
 	{
 	    Organization company = new Organization(null, false, "http://schemas.google.com/g/2005#work");
 	    com.google.gdata.data.extensions.OrgName name = new com.google.gdata.data.extensions.OrgName(
@@ -199,6 +170,98 @@ public class ContactSyncUtil
 	}
 
 	return createContact;
+    }
+
+    public static void addEmailsToGoogleContact(Contact contact, ContactEntry googleContactEntry)
+    {
+	List<ContactField> emailFields = contact.getContactPropertiesList(Contact.EMAIL);
+	List<ContactField> newEmails = new ArrayList<ContactField>();
+
+	boolean isNewContact = StringUtils.isEmpty(googleContactEntry.getId());
+
+	if (!isNewContact)
+	{
+	    // Sets Emails to contact
+	    for (ContactField field : emailFields)
+	    {
+		boolean isNew = true;
+		for (Email email : googleContactEntry.getEmailAddresses())
+		{
+		    if (StringUtils.equals(email.getAddress(), field.value))
+		    {
+			isNew = false;
+			break;
+		    }
+		}
+		if (isNew)
+		{
+		    newEmails.add(field);
+		}
+	    }
+	}
+	else
+	{
+	    newEmails = emailFields;
+	}
+
+	for (ContactField field : newEmails)
+	{
+	    Email primaryMail = new Email();
+	    primaryMail.setAddress(field.value);
+	    if (!StringUtils.isEmpty(field.subtype))
+		primaryMail.setRel("http://schemas.google.com/g/2005#"
+			+ StringUtils.lowerCase(field.subtype.toLowerCase()));
+	    else
+		primaryMail.setRel("http://schemas.google.com/g/2005#work");
+
+	    googleContactEntry.addEmailAddress(primaryMail);
+	}
+    }
+
+    public static void addPhoneNumbersToGoogleContact(Contact contact, ContactEntry googleContactEntry)
+    {
+	List<ContactField> phoneNumberList = contact.getContactPropertiesList(Contact.PHONE);
+	List<ContactField> newPhoneNumbersToAdd = new ArrayList<ContactField>();
+
+	boolean isNewContact = StringUtils.isEmpty(googleContactEntry.getId());
+
+	if (!isNewContact)
+	{
+	    // Sets Emails to contact
+	    for (ContactField field : phoneNumberList)
+	    {
+		boolean isNew = true;
+		for (PhoneNumber phoneNumber : googleContactEntry.getPhoneNumbers())
+		{
+		    if (StringUtils.equals(phoneNumber.getPhoneNumber(), field.value))
+		    {
+			isNew = false;
+			break;
+		    }
+		}
+		if (isNew)
+		{
+		    newPhoneNumbersToAdd.add(field);
+		}
+	    }
+	}
+	else
+	{
+	    newPhoneNumbersToAdd = phoneNumberList;
+	}
+
+	for (ContactField field : newPhoneNumbersToAdd)
+	{
+	    PhoneNumber primaryPhone = new PhoneNumber();
+	    primaryPhone.setPhoneNumber(field.value);
+	    if (!StringUtils.isEmpty(field.subtype))
+		primaryPhone.setRel("http://schemas.google.com/g/2005#"
+			+ StringUtils.lowerCase(field.subtype.toLowerCase()));
+	    else
+		primaryPhone.setRel("http://schemas.google.com/g/2005#work");
+
+	    googleContactEntry.addPhoneNumber(primaryPhone);
+	}
     }
 
     /**
@@ -322,7 +385,6 @@ public class ContactSyncUtil
 
 	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
 
-	System.out.println("contacts found : " + contacts.size());
 	return contacts;
     }
 
@@ -359,7 +421,9 @@ public class ContactSyncUtil
 		    isDuplicateContact = true;
 		}
 
-		fields.add(new ContactField(Contact.EMAIL, email.getAddress(), null));
+		String subType = getSubtypeFromGoogleContactsRel(email.getRel());
+
+		fields.add(new ContactField(Contact.EMAIL, email.getAddress(), subType));
 	    }
 
 	if (googleContactEntry.hasName())
@@ -388,8 +452,11 @@ public class ContactSyncUtil
 	if (googleContactEntry.hasPhoneNumbers())
 	    for (PhoneNumber phone : googleContactEntry.getPhoneNumbers())
 		if (phone.getPhoneNumber() != null)
+		{
+		    String subType = getSubtypeFromGoogleContactsRel(phone.getRel());
 		    fields.add(new ContactField("phone", googleContactEntry.getPhoneNumbers().get(0).getPhoneNumber(),
-			    null));
+			    subType));
+		}
 
 	if (googleContactEntry.hasStructuredPostalAddresses())
 	    for (StructuredPostalAddress address : googleContactEntry.getStructuredPostalAddresses())
@@ -482,6 +549,38 @@ public class ContactSyncUtil
 	}
 
 	return agileContact;
+    }
+
+    public static String getSubtypeFromGoogleContactsRel(String rel)
+    {
+	if (StringUtils.isEmpty(rel))
+	    return "work";
+
+	String type = rel.split("#")[1];
+
+	if (StringUtils.isEmpty(type))
+	    return "work";
+
+	if (type.equalsIgnoreCase("work"))
+	    return "work";
+
+	if (type.equalsIgnoreCase("home"))
+	    return "home";
+
+	if (type.equalsIgnoreCase("mobile"))
+	    return type;
+
+	if (type.equalsIgnoreCase("main"))
+	    return type;
+
+	if (type.equalsIgnoreCase("work_fax"))
+	    return "work fax";
+
+	if (type.equalsIgnoreCase("home_fax"))
+	    return "home fax";
+
+	return "work";
+
     }
 
     public static Contact mergeContacts(Contact newContact, Contact oldContact, ContactPrefs prefs)
