@@ -20,6 +20,8 @@ public class GoogleApi extends DefaultApi20
      */
     private static final String AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=auto";
 
+    private static final String AUTHORIZE_URL_GOOGLE_APPS = "https://accounts.google.com/o/oauth2/auth?client_id=%s&scope=%s&state=%s&redirect_uri=%s&access_type=offline&response_type=code&approval_prompt=force";
+
     /**
      * Scoped authorize URL of Google for OAuth 2.0 with prompt set to auto
      */
@@ -65,7 +67,11 @@ public class GoogleApi extends DefaultApi20
 	if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE))
 	    url = AUTHORIZE_URL_AUTO_PROMPT_TYPE;
 
-	return String.format(url, config.getApiKey(), OAuthEncoder.encode(config.getScope()), OAuthEncoder.encode(config.getCallback()),
-		OAuthEncoder.encode(REDIRECT_URL));
+	if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CONTACTS_SCOPE)
+		|| config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CALENDAR_SCOPE))
+	    url = AUTHORIZE_URL_GOOGLE_APPS;
+
+	return String.format(url, config.getApiKey(), OAuthEncoder.encode(config.getScope()),
+		OAuthEncoder.encode(config.getCallback()), OAuthEncoder.encode(REDIRECT_URL));
     }
 }

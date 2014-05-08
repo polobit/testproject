@@ -101,7 +101,8 @@ public class AddDeal extends TaskletAdapter
 	    }
 
 	    // Add Deal with given values
-	    addDeal(dealName, expectedValue, probability, description, milestone, epochTime, contactId, getOwnerId(givenOwnerId, contactOwnerId.toString()));
+	    addDeal(dealName, expectedValue, probability, description, milestone, epochTime, contactId,
+		    AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
 
 	    // Add log
 	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Deal Title: " + dealName + "<br/> Value: "
@@ -116,24 +117,6 @@ public class AddDeal extends TaskletAdapter
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 
-    }
-
-    /**
-     * Returns contactOwner id if selected owner option is Contact's owner
-     * 
-     * @param givenOwnerId
-     *            - selected owner id from UI.
-     * @param contactOwnerId
-     *            - contact owner id from subscriberJSON
-     * @return String
-     */
-    private String getOwnerId(String givenOwnerId, String contactOwnerId)
-    {
-	// If contact_owner, then owner is contact owner
-	if (givenOwnerId.equals("contact_owner"))
-	    return contactOwnerId;
-
-	return givenOwnerId;
     }
 
     /**
@@ -155,11 +138,12 @@ public class AddDeal extends TaskletAdapter
      *            - Selected owner id
      */
     private void addDeal(String name, String value, String probability, String description, String milestone, Long closedEpochTime, String contactId,
-	    String ownerId)
+	    Long ownerId)
     {
-	Opportunity opportunity = new Opportunity(name, description, Double.parseDouble(value), milestone, Integer.parseInt(probability), null, ownerId);
+	Opportunity opportunity = new Opportunity(name, description, Double.parseDouble(value), milestone, Integer.parseInt(probability), null,
+		ownerId.toString());
 	opportunity.addContactIds(contactId);
-	opportunity.owner_id = ownerId;
+	opportunity.owner_id = ownerId.toString();
 	opportunity.close_date = closedEpochTime;
 	opportunity.save();
     }

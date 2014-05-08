@@ -49,7 +49,7 @@ public class SendMail
     public static final String REPORTS_SUBJECT = "Agile CRM Report";
 
     public static final String WELCOME = "welcome";
-    public static final String WELCOME_SUBJECT = "Welcome to AgileCRM";
+    public static final String WELCOME_SUBJECT = "Welcome to Agile CRM";
 
     public static final String VERIFICATION_EMAIL = "verification_email";
     public static final String VERIFICATION_EMAIL_SUBJECT = "Verify your Agile CRM Account";

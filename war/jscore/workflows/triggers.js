@@ -31,6 +31,14 @@ $(function()
 		}
 
 	});
+	
+	// When cancel clicked, take to Back page
+	$('#trigger-cancel').die().live('click', function(e){
+		e.preventDefault();
+		
+		if(history !== undefined)
+			history.back(-1);
+	});
 });
 
 /**

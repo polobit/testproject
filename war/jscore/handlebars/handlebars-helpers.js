@@ -508,6 +508,16 @@ $(function()
 		
 		return date.toDateString() + ' ' + date.toLocaleTimeString();
 	});
+	
+	/**
+	 * Helper function to return the date string converting to local timezone from UTC.
+	 */
+	Handlebars.registerHelper('toLocalTimezoneFromUtc', function(dateString)
+	{
+		var date = new Date(dateString + ' GMT+0000');
+		
+		return date.toDateString() + ' ' + date.toLocaleTimeString();
+	});
 
 	/**
 	 * Helper function to return task date (MM dd, ex: Jan 10 ) from epoch time
@@ -750,8 +760,12 @@ $(function()
 
 		case "CLICKED LINK":
 			var customJSON = JSON.parse(this.custom_value);
-			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
-
+			
+			if(customJSON["workflow_name"] == undefined)
+				return str.toLowerCase() + " " + customJSON.url_clicked;
+			
+			return str.toLowerCase() + " " + customJSON.url_clicked + " " + " of campaign " + "\"" + customJSON.workflow_name + "\""
+			
 		case "OPENED EMAIL":
 			var customJSON = JSON.parse(this.custom_value);
 			
@@ -2276,6 +2290,18 @@ $(function()
 		
 		return options.inverse(this);
 		
+	});
+	
+	/**
+	 * Safari browser doesn't supporting few CSS properties like margin-top, margin-bottom etc.
+	 * So this helper is used to add compatible CSS properties to Safari
+	 **/
+	Handlebars.registerHelper("isSafariBrowser", function(options){
+		
+		if (navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1)
+			return options.fn(this);
+		
+		return options.inverse(this);
 	});
 	
 });

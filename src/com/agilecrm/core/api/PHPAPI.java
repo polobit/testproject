@@ -36,710 +36,697 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 @Path("php/api")
 public class PHPAPI
 {
-	/**
-	 * Used to create contact based on data given
-	 * 
-	 * @param data
-	 * 				Contact data JSON
-	 * @param apiKey
-	 * 				Agile API key
-	 * @return
-	 * 				Contact as String
-	 */
-	@POST
-	@Path("contact")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String createContact(String data, @QueryParam("id") String apiKey)
+    /**
+     * Used to create contact based on data given
+     * 
+     * @param data
+     *            Contact data JSON
+     * @param apiKey
+     *            Agile API key
+     * @return Contact as String
+     */
+    @POST
+    @Path("contact")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String createContact(String data, @QueryParam("id") String apiKey)
+    {
+	try
 	{
-		try
-		{
-			Contact contact = new Contact();
-			List<ContactField> properties = new ArrayList<ContactField>();
-			String[] tags = new String[0];
-			
-			// Get data and iterate over keys
-			JSONObject obj = new JSONObject(data);
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				String key = (String) keys.next();
-				
-				// If key equals to tags, format tags String and prepare tags array
-				if (key.equals("tags"))
-				{
-					String tagString = obj.getString(key);
-					tagString = tagString.trim();
-					tagString = tagString.replace("/ /g", " ");
-					tagString = tagString.replace("/, /g", ",");
-					tags = tagString.split(",");
-				}
-				// Prepare Contact Field and add to properties list
-				else
-				{
-					ContactField field = new ContactField();
-					String value = obj.getString(key);
-					field.name = key;
-					field.value = value;
-					field.type = FieldType.SYSTEM;
-					properties.add(field);
-				}
+	    Contact contact = new Contact();
+	    List<ContactField> properties = new ArrayList<ContactField>();
+	    String[] tags = new String[0];
 
-			}
-			// Add properties list to contact properties
-			contact.properties = properties;
-			contact.addTags(tags);
-			
-			// Check if contact with email already exists
-			int count = ContactUtil.searchContactCountByEmail(Contact.EMAIL);
-			if (count != 0)
-			{
-				return null;
-			}
-			// Set contact owner from API key and save contact
-			contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
-			contact.save();
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact);
-		}
-		catch (Exception e)
+	    // Get data and iterate over keys
+	    JSONObject obj = new JSONObject(data);
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+
+		// If key equals to tags, format tags String and prepare tags
+		// array
+		if (key.equals("tags"))
 		{
-			e.printStackTrace();
+		    String tagString = obj.getString(key);
+		    tagString = tagString.trim();
+		    tagString = tagString.replace("/ /g", " ");
+		    tagString = tagString.replace("/, /g", ",");
+		    tags = tagString.split(",");
+		}
+		// Prepare Contact Field and add to properties list
+		else
+		{
+		    ContactField field = new ContactField();
+		    String value = obj.getString(key);
+		    field.name = key;
+		    field.value = value;
+		    field.type = FieldType.SYSTEM;
+		    properties.add(field);
+		}
+
+	    }
+	    // Add properties list to contact properties
+	    contact.properties = properties;
+	    contact.addTags(tags);
+
+	    // Check if contact with email already exists
+	    int count = ContactUtil.searchContactCountByEmail(Contact.EMAIL);
+	    if (count != 0)
+	    {
+		return null;
+	    }
+	    // Set contact owner from API key and save contact
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.save();
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Used to delete contact based on contact email
+     * 
+     * @param email
+     *            email of contact
+     * @return String "contact deleted"
+     */
+    @DELETE
+    @Path("contact")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteContact(@QueryParam("email") String email)
+    {
+	try
+	{
+	    // Search contact by email
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    // Delete Contact
+	    contact.delete();
+	    JSONObject json = new JSONObject();
+	    json.put("contact", "deleted");
+	    return json.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Used to add note to contact
+     * 
+     * @param data
+     *            Note data
+     * @return Note object as string
+     */
+    @POST
+    @Path("note")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addNote(String data)
+    {
+	try
+	{
+	    Note note = new Note();
+
+	    // Get note data and iterate over keys
+	    JSONObject obj = new JSONObject(data);
+	    ObjectMapper mapper = new ObjectMapper();
+	    Contact contact = new Contact();
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+
+		// If key equals email search contact with email
+		String key = (String) keys.next();
+		if (key.equals("email"))
+		{
+		    contact = ContactUtil.searchContactByEmail(obj.getString(key));
+		    if (contact == null)
 			return null;
 		}
-	}
+	    }
+	    // Remove email key value pair from note JSON
+	    obj.remove("email");
 
-	/**
-	 * Used to delete contact based on contact email
-	 * 
-	 * @param email
-	 * 				email of contact
-	 * @return
-	 * 				String  "contact deleted"
-	 */
-	@DELETE
-	@Path("contact")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String deleteContact(@QueryParam("email") String email)
+	    // Save note to related contact
+	    note = mapper.readValue(obj.toString(), Note.class);
+	    note.addRelatedContacts(contact.id.toString());
+	    note.save();
+	    return mapper.writeValueAsString(note);
+	}
+	catch (Exception e)
 	{
-		try
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Create task
+     * 
+     * @param data
+     *            task data
+     * @param apikey
+     *            Agile API key
+     * @return task object as String
+     */
+    @POST
+    @Path("task")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addTask(String data, @QueryParam("id") String apikey)
+    {
+	try
+	{
+	    Contact contact = new Contact();
+	    Task task = new Task();
+
+	    // Get data and iterate over keys
+	    JSONObject obj = new JSONObject(data);
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+
+		// Get email from JSON and search for contact
+		String key = (String) keys.next();
+		if (key.equals("email"))
 		{
-			// Search contact by email
-			Contact contact = ContactUtil.searchContactByEmail(email);
-			if (contact == null)
-				return null;
-			
-			// Delete Contact
-			contact.delete();
-			JSONObject json = new JSONObject();
-			json.put("contact", "deleted");
-			return json.toString();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+		    contact = ContactUtil.searchContactByEmail(obj.getString(key));
+		    if (contact == null)
 			return null;
 		}
-	}
+	    }
+	    // Remove email key value pair from JSON
+	    obj.remove("email");
+	    ObjectMapper mapper = new ObjectMapper();
+	    task = mapper.readValue(obj.toString(), Task.class);
 
-	/**
-	 * Used to add note to contact
-	 * 
-	 * @param data
-	 * 				Note data
-	 * @return
-	 * 				Note object as string
-	 */
-	@POST
-	@Path("note")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String addNote(String data)
+	    // Set task owner
+	    task.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apikey));
+	    task.contacts = new ArrayList<String>();
+
+	    // Save task to related contact
+	    task.contacts.add(contact.id.toString());
+	    task.save();
+	    return mapper.writeValueAsString(task);
+	}
+	catch (Exception e)
 	{
-		try
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Used to add deal to contact
+     * 
+     * @param data
+     *            deal data
+     * @param apikey
+     *            Agile API key
+     * @return deal object as string
+     */
+    @POST
+    @Path("deal")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addDeal(String data, @QueryParam("id") String apikey)
+    {
+	try
+	{
+	    Contact contact = new Contact();
+
+	    // Get data object and iterate
+	    JSONObject obj = new JSONObject(data);
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+
+		// If key equals email, search contact based on email
+		if (key.equals("email"))
 		{
-			Note note = new Note();
-			
-			// Get note data and iterate over keys
-			JSONObject obj = new JSONObject(data);
-			ObjectMapper mapper = new ObjectMapper();
-			Contact contact = new Contact();
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				
-				// If key equals email search contact with email
-				String key = (String) keys.next();
-				if (key.equals("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(obj.getString(key));
-					if (contact == null)
-						return null;
-				}
-			}
-			// Remove email key value pair from note JSON
-			obj.remove("email");
-			
-			// Save note to related contact
-			note = mapper.readValue(obj.toString(), Note.class);
-			note.addRelatedContacts(contact.id.toString());
-			note.save();
-			return mapper.writeValueAsString(note);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+		    contact = ContactUtil.searchContactByEmail(obj.getString(key));
+
+		    // If contact not found return null
+		    if (contact == null)
 			return null;
 		}
-	}
+	    }
+	    // Remove email key value pair from JSON
+	    obj.remove("email");
+	    ObjectMapper mapper = new ObjectMapper();
 
-	/**
-	 * Create task
-	 *
-	 * @param data
-	 * 					task data
-	 * @param apikey
-	 * 					Agile API key
-	 * @return
-	 * 					task object as String
-	 */
-	@POST
-	@Path("task")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String addTask(String data, @QueryParam("id") String apikey)
+	    // Read deal data and assign deal to contact
+	    Opportunity opportunity = mapper.readValue(obj.toString(), Opportunity.class);
+	    opportunity.addContactIds(contact.id.toString());
+
+	    // Set deal owner based on API key, save and return deal as String
+	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToAPIKey(apikey).getId());
+	    opportunity.save();
+	    return mapper.writeValueAsString(opportunity);
+	}
+	catch (Exception e)
 	{
-		try
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Used to add tags to contact
+     * 
+     * @param data
+     *            data with tags and email
+     * @return Contact object with added tags as string
+     */
+    @POST
+    @Path("tags")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String addTags(String data)
+    {
+	try
+	{
+	    Contact contact = new Contact();
+	    String[] tagsArray = new String[0];
+
+	    // Get data and iterate
+	    JSONObject obj = new JSONObject(data);
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+		// Get email and search for contact
+		String key = (String) keys.next();
+		if (key.equals("email"))
 		{
-			Contact contact = new Contact();
-			Task task = new Task();
-			
-			// Get data and iterate over keys
-			JSONObject obj = new JSONObject(data);
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				
-				// Get email from JSON and search for contact
-				String key = (String) keys.next();
-				if (key.equals("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(obj.getString(key));
-					if (contact == null)
-						return null;
-				}
-			}
-			// Remove email key value pair from JSON
-			obj.remove("email");
-			ObjectMapper mapper = new ObjectMapper();
-			task = mapper.readValue(obj.toString(), Task.class);
-			
-			// Set task owner
-			task.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apikey));
-			task.contacts = new ArrayList<String>();
-			
-			// Save task to related contact
-			task.contacts.add(contact.id.toString());
-			task.save();
-			return mapper.writeValueAsString(task);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+		    contact = ContactUtil.searchContactByEmail(obj.getString(key));
+
+		    // If contact not found return null
+		    if (contact == null)
 			return null;
 		}
-	}
-
-	/**
-	 * Used to add deal to contact
-	 * 
-	 * @param data
-	 * 					deal data
-	 * @param apikey
-	 * 					Agile API key
-	 * @return
-	 * 					deal object as string
-	 */
-	@POST
-	@Path("deal")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String addDeal(String data, @QueryParam("id") String apikey)
-	{
-		try
+		if (key.equals("tags"))
 		{
-			Contact contact = new Contact();
-			
-			// Get data object and iterate
-			JSONObject obj = new JSONObject(data);
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				String key = (String) keys.next();
-				
-				// If key equals email, search contact based on email
-				if (key.equals("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(obj.getString(key));
-					
-					// If contact not found return null
-					if (contact == null)
-						return null;
-				}
-			}
-			// Remove email key value pair from JSON
-			obj.remove("email");
-			ObjectMapper mapper = new ObjectMapper();
-			
-			// Read deal data and assign deal to contact
-			Opportunity opportunity = mapper.readValue(obj.toString(), Opportunity.class);
-			opportunity.addContactIds(contact.id.toString());
-			
-			// Set deal owner based on API key, save and return deal as String
-			opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToAPIKey(apikey).getId());
-			opportunity.save();
-			return mapper.writeValueAsString(opportunity);
+		    // Search for tags, format tags String, convert to tags
+		    // array
+		    String value = obj.getString(key);
+		    String tags = value;
+		    tags = tags.trim().replaceAll(" +", " ");
+		    tags = tags.replaceAll(", ", ",");
+		    tagsArray = tags.split(",");
 		}
-		catch (Exception e)
+	    }
+	    // Add tags to contact, return contact as String
+	    contact.addTags(tagsArray);
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Used to remove tags from contact
+     * 
+     * @param data
+     *            data with tags and contact email
+     * @return Contact object as string after removing tags
+     */
+    @PUT
+    @Path("tags")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String removeTags(String data)
+    {
+	try
+	{
+	    Contact contact = new Contact();
+
+	    // Get data and iterate over data
+	    String[] tagsArray = new String[0];
+	    JSONObject obj = new JSONObject(data);
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+		// Search contact by email
+		String key = (String) keys.next();
+		if (key.equals("email"))
 		{
-			e.printStackTrace();
+		    contact = ContactUtil.searchContactByEmail(obj.getString(key));
+		    if (contact == null)
 			return null;
 		}
-	}
-
-	/**
-	 * Used to add tags to contact
-	 * 
-	 * @param data
-	 * 				data with tags and email
-	 * @return
-	 * 				Contact object with added tags as string
-	 */
-	@POST
-	@Path("tags")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String addTags(String data)
-	{
-		try
+		// Format tags string and convert to tags array
+		if (key.equals("tags"))
 		{
-			Contact contact = new Contact();
-			String[] tagsArray = new String[0];
-			
-			// Get data and iterate
-			JSONObject obj = new JSONObject(data);
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				// Get email and search for contact
-				String key = (String) keys.next();
-				if (key.equals("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(obj.getString(key));
-					
-					// If contact not found return null
-					if (contact == null)
-						return null;
-				}
-				if (key.equals("tags"))
-				{
-					// Search for tags, format tags String, convert to tags array
-					String value = obj.getString(key);
-					String tags = value;
-					tags = tags.trim().replaceAll(" +", " ");
-					tags = tags.replaceAll(", ", ",");
-					tagsArray = tags.split(",");
-				}
-			}
-			// Add tags to contact, return contact as String
-			contact.addTags(tagsArray);
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact);
+		    String tags = obj.getString(key);
+		    tags = tags.trim().replaceAll(" +", " ");
+		    tags = tags.replaceAll(", ", ",");
+		    tagsArray = tags.split(",");
 		}
-		catch (Exception e)
+	    }
+	    // Remove tags from contact and return as string
+	    contact.removeTags(tagsArray);
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Add / Subtract score to contact
+     * 
+     * @param data
+     *            contact data with score and email
+     * @return Contact object as String after updating contact
+     */
+    @PUT
+    @Path("score")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String updateScore(String data)
+    {
+	try
+	{
+	    // Get data and iterate
+	    Contact contact = new Contact();
+	    JSONObject obj = new JSONObject(data);
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+
+		// Search contact by email
+		if (key.equals("email"))
 		{
-			e.printStackTrace();
+		    contact = ContactUtil.searchContactByEmail(obj.getString(key));
+		    if (contact == null)
 			return null;
 		}
-	}
 
-	/**
-	 * Used to remove tags from contact
-	 * 
-	 * @param data
-	 * 					data with tags and contact email
-	 * @return
-	 * 					Contact object as string after removing tags
-	 */
-	@PUT
-	@Path("tags")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String removeTags(String data)
+		// Get score from data and add to contact
+		if (key.equals("score"))
+		{
+		    Integer value = obj.getInt(key);
+		    contact.addScore(value);
+		}
+	    }
+
+	    // Return contact as String
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
 	{
-		try
-		{
-			Contact contact = new Contact();
-			
-			// Get data and iterate over data
-			String[] tagsArray = new String[0];
-			JSONObject obj = new JSONObject(data);
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				// Search contact by email
-				String key = (String) keys.next();
-				if (key.equals("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(obj.getString(key));
-					if (contact == null)
-						return null;
-				}
-				// Format tags string and convert to tags array
-				if (key.equals("tags"))
-				{
-					String tags = obj.getString(key);
-					tags = tags.trim().replaceAll(" +", " ");
-					tags = tags.replaceAll(", ", ",");
-					tagsArray = tags.split(",");
-				}
-			}
-			// Remove tags from contact and return as string
-			contact.removeTags(tagsArray);
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    e.printStackTrace();
+	    return null;
 	}
+    }
 
-	/**
-	 * Add / Subtract score to contact
-	 * 
-	 * @param data
-	 * 					contact data with score and email
-	 * @return
-	 * 					Contact object as String after updating contact
-	 */
-	@PUT
-	@Path("score")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String updateScore(String data)
+    /**
+     * Used to get tags related to contact based on email of contact
+     * 
+     * @param email
+     *            email of the contact
+     * @return tags as String
+     */
+    @GET
+    @Path("tags")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getTags(@QueryParam("email") String email)
+    {
+	try
 	{
-		try
-		{
-			// Get data and iterate
-			Contact contact = new Contact();
-			JSONObject obj = new JSONObject(data);
-			Iterator<?> keys = obj.keys();
-			while (keys.hasNext())
-			{
-				String key = (String) keys.next();
+	    // Search contact by email
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
 
-				// Search contact by email
-				if (key.equals("email"))
-				{
-					contact = ContactUtil.searchContactByEmail(obj.getString(key));
-					if (contact == null)
-						return null;
-				}
-				
-				// Get score from data and add to contact
-				if (key.equals("score"))
-				{
-					Integer value = obj.getInt(key);
-					contact.addScore(value);
-				}
-			}
-			
-			// Return contact as String
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    // Return tags as string
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact.tags);
 	}
-
-	/**
-	 * Used to get tags related to contact based on email of contact
-	 * 
-	 * @param email
-	 * 					email of the contact
-	 * @return
-	 * 					tags as String
-	 */
-	@GET
-	@Path("tags")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getTags(@QueryParam("email") String email)
+	catch (Exception e)
 	{
-		try
-		{
-			// Search contact by email
-			Contact contact = ContactUtil.searchContactByEmail(email);
-			if (contact == null)
-				return null;
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
-			// Return tags as string
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact.tags);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
+    /**
+     * Get current score of contact based on email
+     * 
+     * @param email
+     *            email of the contact
+     * @return score of contact as string
+     */
+    @GET
+    @Path("score")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getScore(@QueryParam("email") String email)
+    {
+	try
+	{
+	    // Search contact by email
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
 
-	/**
-	 * Get current score of contact based on email
-	 * 
-	 * @param email
-	 * 					email of the contact
-	 * @return
-	 * 					score of contact as string
-	 */
-	@GET
-	@Path("score")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getScore(@QueryParam("email") String email)
-	{
-		try
-		{
-			// Search contact by email
-			Contact contact = ContactUtil.searchContactByEmail(email);
-			if (contact == null)
-				return null;
-			
-			// Return contact as string
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact.lead_score);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    // Return contact as string
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact.lead_score);
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
-	/**
-	 * Get notes associated with contact
-	 * 
-	 * @param email
-	 * 					email of the contact
-	 * @return
-	 * 					notes as String
-	 */
-	@GET
-	@Path("note")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getNotes(@QueryParam("email") String email)
+    /**
+     * Get notes associated with contact
+     * 
+     * @param email
+     *            email of the contact
+     * @return notes as String
+     */
+    @GET
+    @Path("note")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getNotes(@QueryParam("email") String email)
+    {
+	try
 	{
-		try
-		{
-			// Search contact by email
-			Contact contact = ContactUtil.searchContactByEmail(email);
-			if (contact == null)
-				return null;
-			
-			// Get notes related to contact as a list
-			List<Note> Notes = new ArrayList<Note>();
-			Notes = NoteUtil.getNotes(contact.id);
-			
-			// Convert list to array
-			ObjectMapper mapper = new ObjectMapper();
-			JSONArray arr = new JSONArray();
-			for (Note note : Notes)
-			{
-				arr.put(mapper.writeValueAsString(note));
-			}
-			//  Return notes array as string
-			return arr.toString();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
+	    // Search contact by email
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
 
-	/**
-	 * Used to get deal data of the contact based on email
-	 * 
-	 * @param email
-	 * 					email of the contact
-	 * @return
-	 * 					Deal data as String
-	 */
-	@GET
-	@Path("deal")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getDeals(@QueryParam("email") String email)
-	{
-		try
-		{
-			// Search contact by email of the contact
-			Contact contact = ContactUtil.searchContactByEmail(email);
-			if (contact == null)
-				return null;
-			
-			// Get deals related to contact as a list
-			List<Opportunity> deals = new ArrayList<Opportunity>();
-			deals = OpportunityUtil.getCurrentContactDeals(contact.id);
-			
-			// Convert deals list into array and return as String
-			ObjectMapper mapper = new ObjectMapper();
-			JSONArray arr = new JSONArray();
-			for (Opportunity deal : deals)
-			{
-				arr.put(mapper.writeValueAsString(deal));
-			}
-			return arr.toString();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
+	    // Get notes related to contact as a list
+	    List<Note> Notes = new ArrayList<Note>();
+	    Notes = NoteUtil.getNotes(contact.id);
 
-	/**
-	 * Get tasks based in email of contact
-	 * 
-	 * @param email
-	 * 					email of the contact
-	 * @return
-	 * 					task data as String
-	 */
-	@GET
-	@Path("task")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getTasks(@QueryParam("email") String email)
-	{
-		try
-		{
-			// Search contact by email
-			Contact contact = ContactUtil.searchContactByEmail(email);
-			if (contact == null)
-				return null;
-			
-			// Get tasks related to contact as a list
-			List<Task> tasks = new ArrayList<Task>();
-			tasks = TaskUtil.getContactTasks(contact.id);
-			
-			// Convert tasks list to array 
-			JSONArray arr = new JSONArray();
-			ObjectMapper mapper = new ObjectMapper();
-			for (Task task : tasks)
-			{
-				arr.put(mapper.writeValueAsString(task));
-			}
-			// Return array as String
-			return arr.toString();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    // Convert list to array
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONArray arr = new JSONArray();
+	    for (Note note : Notes)
+	    {
+		arr.put(mapper.writeValueAsString(note));
+	    }
+	    // Return notes array as string
+	    return arr.toString();
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
-	/**
-	 * Used to get contact data by email of contact
-	 * 
-	 * @param email
-	 * 					email of the contact
-	 * @return	
-	 * 					Contact as String
-	 */				
-	@GET
-	@Path("contact")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String getContact(@QueryParam("email") String email)
+    /**
+     * Used to get deal data of the contact based on email
+     * 
+     * @param email
+     *            email of the contact
+     * @return Deal data as String
+     */
+    @GET
+    @Path("deal")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getDeals(@QueryParam("email") String email)
+    {
+	try
 	{
-		try
-		{
-			// Search contact by email
-			Contact contact = ContactUtil.searchContactByEmail(email);
-			if (contact == null)
-				return null;
-			
-			// Return contact as String
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(contact);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    // Search contact by email of the contact
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    // Get deals related to contact as a list
+	    List<Opportunity> deals = new ArrayList<Opportunity>();
+	    deals = OpportunityUtil.getDeals(contact.id, null, null);
+
+	    // Convert deals list into array and return as String
+	    ObjectMapper mapper = new ObjectMapper();
+	    JSONArray arr = new JSONArray();
+	    for (Opportunity deal : deals)
+	    {
+		arr.put(mapper.writeValueAsString(deal));
+	    }
+	    return arr.toString();
 	}
-	
-	/**
-	 * Used to update contact
-	 * 
-	 * @param data
-	 * 					Contact data	
-	 * @param apiKey
-	 * 					Agile API key
-	 * @return
-	 * 					returns contact object as String
-	 */
-	@PUT
-	@Path("contact")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String updateContact(String data, @QueryParam("id") String apiKey)
+	catch (Exception e)
 	{
-		try
-		{	
-			// Get data and check if email is present
-			JSONObject obj = new JSONObject(data);
-			ObjectMapper mapper = new ObjectMapper();
-			if (!obj.has("email"))
-				return null;
-			
-			// Search contact if email is present else return null
-			Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
-			if (contact==null)
-				return null;
-			
-			// Iterate data by keys ignore email key value pair
-			Iterator<?> keys = obj.keys();
-			while(keys.hasNext())
-			{
-				String key = (String) keys.next();
-				if(key.equals("email"))
-					continue;
-				
-					// Create and add contact field to contact
-					JSONObject json = new JSONObject();
-					json.put("name", key);
-					json.put("value",obj.getString(key));
-					ContactField field = mapper.readValue(json.toString(), ContactField.class);
-					contact.addProperty(field);
-			}
-			// Return contact object as String
-			return mapper.writeValueAsString(contact);
-		}		
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	    e.printStackTrace();
+	    return null;
 	}
+    }
+
+    /**
+     * Get tasks based in email of contact
+     * 
+     * @param email
+     *            email of the contact
+     * @return task data as String
+     */
+    @GET
+    @Path("task")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getTasks(@QueryParam("email") String email)
+    {
+	try
+	{
+	    // Search contact by email
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    // Get tasks related to contact as a list
+	    List<Task> tasks = new ArrayList<Task>();
+	    tasks = TaskUtil.getContactTasks(contact.id);
+
+	    // Convert tasks list to array
+	    JSONArray arr = new JSONArray();
+	    ObjectMapper mapper = new ObjectMapper();
+	    for (Task task : tasks)
+	    {
+		arr.put(mapper.writeValueAsString(task));
+	    }
+	    // Return array as String
+	    return arr.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Used to get contact data by email of contact
+     * 
+     * @param email
+     *            email of the contact
+     * @return Contact as String
+     */
+    @GET
+    @Path("contact")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getContact(@QueryParam("email") String email)
+    {
+	try
+	{
+	    // Search contact by email
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return null;
+
+	    // Return contact as String
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Used to update contact
+     * 
+     * @param data
+     *            Contact data
+     * @param apiKey
+     *            Agile API key
+     * @return returns contact object as String
+     */
+    @PUT
+    @Path("contact")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String updateContact(String data, @QueryParam("id") String apiKey)
+    {
+	try
+	{
+	    // Get data and check if email is present
+	    JSONObject obj = new JSONObject(data);
+	    ObjectMapper mapper = new ObjectMapper();
+	    if (!obj.has("email"))
+		return null;
+
+	    // Search contact if email is present else return null
+	    Contact contact = ContactUtil.searchContactByEmail(obj.getString("email"));
+	    if (contact == null)
+		return null;
+
+	    // Iterate data by keys ignore email key value pair
+	    Iterator<?> keys = obj.keys();
+	    while (keys.hasNext())
+	    {
+		String key = (String) keys.next();
+		if (key.equals("email"))
+		    continue;
+
+		// Create and add contact field to contact
+		JSONObject json = new JSONObject();
+		json.put("name", key);
+		json.put("value", obj.getString(key));
+		ContactField field = mapper.readValue(json.toString(), ContactField.class);
+		contact.addProperty(field);
+	    }
+	    // Return contact object as String
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 }

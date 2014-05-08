@@ -64,6 +64,14 @@ public class EmailOpenServlet extends HttpServlet
 	// CampaignId
 	String campaignId = request.getParameter("c");
 
+	// Contact emailId
+	String emailId = request.getParameter("e");
+
+	// Contact subject
+	String subject = request.getParameter("d");
+
+	System.out.println("subject...." + subject);
+
 	// Fetches domain name from url. E.g. From admin.agilecrm.com, returns
 	// admin
 	URL url = new URL(request.getRequestURL().toString());
@@ -77,7 +85,13 @@ public class EmailOpenServlet extends HttpServlet
 
 	try
 	{
-	    addLogAndShowNotification(trackerId, campaignId);
+	    if (!StringUtils.isBlank(emailId))
+	    {
+		chromeExtensionShowNotification(emailId, subject);
+	    }
+	    else
+		addLogAndShowNotification(trackerId, campaignId);
+
 	}
 	finally
 	{
@@ -87,6 +101,25 @@ public class EmailOpenServlet extends HttpServlet
 	// Interrupt Campaign cron tasks.
 	if (!StringUtils.isBlank(campaignId) && !StringUtils.isBlank(trackerId))
 	    interruptCronTasksOfOpened(campaignId, trackerId);
+    }
+
+    /**
+     * Adds log and show notification of Email Opened.
+     * 
+     * @param trackerId
+     *            - Contact Id or Tracker Id
+     * @param campaignId
+     *            - Campaign Id.
+     */
+    private void chromeExtensionShowNotification(String emailId, String subject)
+    {
+	// Personal Emails
+	if (!StringUtils.isBlank(emailId))
+	{
+	    // Shows notification for simple emails.
+	    showEmailOpenedNotification(ContactUtil.searchContactByEmail(emailId), null, subject);
+
+	}
     }
 
     /**

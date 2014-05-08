@@ -28,7 +28,7 @@
         {{#if this.length}}
         <div class="data-block">
             <div class="data-container">
-                <table class="table table-striped showCheckboxes" url="core/api/documents/bulk" id="document-list">
+                <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/documents/bulk" id="document-list">
 				 <col width="30px"><col width="35%"><col width="35%"><col width="20%"><col width="10%">
                     <thead>
                         <tr>
@@ -62,9 +62,9 @@
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
-	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:20em; overflow:hidden;display:inline-block;">{{name}}</b>
+	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:15em; overflow:hidden;display:inline-block;">{{name}}</b>
 	<div>
-		{{network network_type}}&nbsp;&nbsp;<b class="activate-link"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
+		<span style="vertical-align:top;">{{network network_type}}&nbsp;&nbsp;</span><b class="activate-link"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
 	</div>
 </td>
 <td>
@@ -84,11 +84,11 @@
 		<time class="document-created-time" value="{{uploaded_time}}" datetime="{{epochToHumanDate "" uploaded_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" uploaded_time}}</time>
 	</div>
 </td><td>
-    <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">
+    <div style="white-space:nowrap;width:4em;">
        {{#if ownerPic}}
-        <img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" title="{{owner.name}}" />
+        <img class="thumbnail" src="{{ownerPic}}" width="40px" height="40px" style="height:40px;"  title="{{owner.name}}" />
 	   {{else}}
-		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" height="40px" title="{{owner.name}}" />
+		<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="40px" style="height:40px;" height="40px" title="{{owner.name}}" />
        {{/if}}
     </div>
 </td>

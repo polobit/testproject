@@ -3,6 +3,7 @@ package com.campaignio.servlets.util;
 import java.net.URLEncoder;
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -50,8 +51,15 @@ public class TrackClickUtil
     {
 	try
 	{
-	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK, contact,
-		    new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName).put("url_clicked", longURL)));
+	    JSONObject customJSON = new JSONObject();
+
+	    // For personal emails, no workflow name
+	    if (!StringUtils.isBlank(workflowName))
+		customJSON.put("workflow_name", workflowName);
+
+	    customJSON.put("url_clicked", longURL);
+
+	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK, contact, new JSONObject().put("custom_value", customJSON));
 	}
 	catch (Exception e)
 	{
@@ -178,6 +186,7 @@ public class TrackClickUtil
 	{
 	    // Remove unwanted keys
 	    contactJSON.remove("isUnsubscribedAll");
+	    contactJSON.remove("id");
 	    contactJSON.getJSONObject("data").remove("powered_by");
 	}
 	catch (Exception e)
@@ -188,4 +197,5 @@ public class TrackClickUtil
 
 	return contactJSON;
     }
+
 }

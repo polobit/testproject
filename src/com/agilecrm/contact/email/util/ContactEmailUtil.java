@@ -20,6 +20,7 @@ import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.SocialPrefs.Type;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.user.util.SocialPrefsUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 
@@ -73,11 +74,15 @@ public class ContactEmailUtil
      * @param body
      *            - body
      */
-    public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, Contact contact)
+    public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body,
+	    String signature, Contact contact, boolean trackClicks)
     {
 
 	// Personal Email open tracking id
 	long openTrackerId = System.currentTimeMillis();
+
+	// ContactId
+	String contactId = null;
 
 	// Returns set of To Emails
 	Set<String> toEmailSet = getToEmailSet(to);
@@ -87,7 +92,10 @@ public class ContactEmailUtil
 	    // If contact is available, no need of fetching contact from
 	    // to-email again.
 	    if (contact != null)
-		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), openTrackerId);
+	    {
+		contactId = contact.id.toString();
+		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, Long.parseLong(contactId), toEmailSet.size(), openTrackerId);
+	    }
 	    else
 	    {
 		// When multiple emails separated by comma are given
@@ -98,7 +106,10 @@ public class ContactEmailUtil
 
 		    // Saves email with contact-id
 		    if (contact != null)
-			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, contact.id, toEmailSet.size(), openTrackerId);
+		    {
+			contactId = contact.id.toString();
+			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id, toEmailSet.size(), openTrackerId);
+		    }
 		}
 	    }
 
@@ -113,7 +124,15 @@ public class ContactEmailUtil
 	// possible to append image at the same time to show all given
 	// emails to the recipient.
 	if (toEmailSet.size() == 1)
+	{
 	    body = EmailUtil.appendTrackingImage(body, null, String.valueOf(openTrackerId));
+
+	    if (trackClicks)
+		body = EmailLinksConversion.convertLinksUsingRegex(body, contactId, null);
+	}
+
+	// combine body and signature.
+	body = body + "<div><br/>" + signature + "</div>";
 
 	// Sends email
 	EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null);
@@ -168,9 +187,12 @@ public class ContactEmailUtil
      * @param toEmailSize
      *            - to identify number of To emails separated by comma
      */
-    public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, Long contactId,
-	    int toEmailSize, long trackerId)
+    public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, String signature,
+	    Long contactId, int toEmailSize, long trackerId)
     {
+
+	// combine body and signature.
+	body = body + "<div><br/>" + signature + "</div>";
 
 	// Remove trailing commas for to emails
 	ContactEmail contactEmail = new ContactEmail(contactId, fromEmail, to, subject, body);

@@ -27,11 +27,25 @@ function setupTinyMCEEditor(selector)
 	{
 		head.js('/js/designer/tinymce/tinymce.min.js', function()
 		{
+			
+			// If loading src script fails
+			if(typeof (tinymce) === "undefined")
+			{
+				console.log("Reloading script...");
+				
+				// Show confirmation for reload
+				if(confirm("Unable to load editor. Click OK to Reload."))
+				  location.reload();
+				
+				return;
+			}
+			
 			tinymce.init({ mode : "textareas", selector : selector, plugins : [
 				"textcolor link image"
 			], menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect fontselect fontsizeselect",
 				toolbar2 : "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields", valid_elements : "*[*]",
+				toolbar_items_size: 'small',
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });

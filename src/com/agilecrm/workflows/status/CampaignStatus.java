@@ -16,12 +16,12 @@ public class CampaignStatus
     /**
      * Time when Start node of workflow started.
      */
-    public Long start_time = null;
+    public Long start_time = 0L;
 
     /**
      * Time when last node of workflow ended.
      */
-    public Long end_time = null;
+    public Long end_time = 0L;
 
     /**
      * CampaignId.
@@ -69,7 +69,7 @@ public class CampaignStatus
      * @param status
      *            - Active or Done.
      */
-    public CampaignStatus(Long startTime, Long endTime, String campaignId, String campaignName, String status)
+    public CampaignStatus(long startTime, long endTime, String campaignId, String campaignName, String status)
     {
 	this.start_time = startTime;
 	this.end_time = endTime;
