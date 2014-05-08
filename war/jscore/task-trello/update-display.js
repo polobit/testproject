@@ -32,18 +32,19 @@ function displaySettings()
 	}
 }
 
-// Load and display slider in edit modal of task for progress.
+// Load and display slider in update task modal of task for progress.
 function loadProgressSlider(el)
 {
+	console.log("in loadProgressSlider");
 	head.load(CSS_PATH + 'css/jslider.css', LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
-		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "plastic", onstatechange : function(value)
+		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "plastic",
+			onstatechange : function(value)
 		{
-			//$("#progress", el).val(value);
-			 changeProgress(value,true);
+			changeProgress(value, true, el);
 		} });
 
-		$(".progress_slider").slider("value", $("#editTaskForm #progress").val());
+		$(".progress_slider", el).slider("value", $("#progress", el).val());
 	});
 }
 
@@ -51,60 +52,65 @@ function loadProgressSlider(el)
  * Make changes in UI on status button and add new value to input field of
  * status in task edit modal.
  */
-function changeStatus(status,checkProgress)
+function changeStatus(status, checkProgress, parentForm)
 {
 	// Remove btn class from all other status buttons
-	$(".status-btn").removeClass("btn");
+	$(".status-btn", parentForm).removeClass("btn");
 
 	// Add btn class to selected status
-	$(".status-btn.[value="+status+"]").addClass("btn status-btn txt-mute");
+	$(".status-btn.[value=" + status + "]", parentForm).addClass("btn status-btn txt-mute");
 
 	// Add status to input field
-	$("#editTaskForm #status").val(status);
-	
-	if(checkProgress)
-	 {
-		if(status == "NOT_STARTED")
-			changeProgress(0,false);
-		else if(status == "COMPLETED")
-			changeProgress(100,false);
-		else if(status == "IN_PROGRESS")
-			changeProgress(1,false);
-	 }	
+	$("#status", parentForm).val(status);
+
+	if (checkProgress)
+	{
+		if (status == "NOT_STARTED")
+			changeProgress(0, false, parentForm);
+		else if (status == "COMPLETED")
+			changeProgress(100, false, parentForm);
+		else if (status == "IN_PROGRESS")
+			changeProgress(1, false, parentForm);
+	}
 }
 
 /*
  * Make changes in UI in progress slider and add new value to input field of
  * progress in task edit modal.
  */
-function changeProgress(value,checkStatus)
+function changeProgress(value, checkStatus, parentForm)
 {
 	// Add progress 100 to input field
-	$("#editTaskForm #progress").val(value);
-	
+	$("#progress", parentForm).val(value);
+
 	// Make changes in status buttons
-	if(checkStatus) 
-	 {
-		if(value == 0)
-			changeStatus("NOT_STARTED",false);
-		else if(value == 100)
-			changeStatus("COMPLETED",false);
-		else if(value >= 1)
-			changeStatus("IN_PROGRESS",false);
-	 }	
-	else // Make changes in progress slider
-		$(".progress_slider").slider("value", value);
+	if (checkStatus)
+	{
+		if (value == 0)
+			changeStatus("NOT_STARTED", false, parentForm);
+		else if (value == 100)
+			changeStatus("COMPLETED", false, parentForm);
+		else if (value >= 1 && value < 100)
+			changeStatus("IN_PROGRESS", false, parentForm);
+	}
+	else
+		// Make changes in progress slider
+		$(".progress_slider", parentForm).slider("value", value);
 }
 
 /*
- * After click on is_completed task in task edit modal, make status completed
- * and progress 100%.
+ * After loading update task modal check is_completed is true or false, is it is
+ * true so change status and progress, make status completed and progress 100%
+ * as well as is_complete false. so in future we can remove is_complete.
  */
-function changeStatusProgress(isChecked)
+function checkIsComplete(el)
 {
-	if (isChecked)
+	var isComplete = $("#is_complete", el).val();
+
+	if (isComplete == "true")
 	{
-		changeStatus("COMPLETED",false);
-		changeProgress(100,false);		
+		console.log("complete is true");
+		changeStatus("COMPLETED", true, el);
+		$("#is_complete", el).val(false);
 	}
 }

@@ -4,21 +4,18 @@ $(function()
 	tasksListCollection = null;
 
 	// Url Map After selection from filter
-	urlMap = { "PRIORITY" : { "type" : [
-			"HIGH", "LOW", "NORMAL"
-	], "searchKey" : "priority_type" }, "CATEGORY" : { "type" : [
-			"EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"
-	], "searchKey" : "type" }, "STATUS" : { "type" : [
-			"NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"
-	], "searchKey" : "status" }, "DUE" : { "type" : [
-			"TODAY", "TOMORROW", "OVERDUE", "LATER"
-	], "searchKey" : "due" }, "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } };
+	urlMap = { 
+			"PRIORITY" : { "type" : ["HIGH", "LOW", "NORMAL"], "searchKey" : "priority_type" }, 
+			"CATEGORY" : { "type" : ["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey" : "type" }, 
+			"STATUS" : { "type" : ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"], "searchKey" : "status" }, 
+	        "DUE" : { "type" : ["TODAY", "TOMORROW", "OVERDUE", "LATER"], "searchKey" : "due" }, 
+	        "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } 
+	        };
 
 	// Get user's name and id to add in urlMap for owner of task, user name can
 	// be redundant so we need user's id too.
 	$.getJSON('/core/api/users', function(users)
-	{
-		console.log(users);
+	{		
 		for ( var i in users)
 		{
 			urlMap.OWNER.type[i] = { "name" : users[i].name, "id" : users[i].id };
@@ -39,15 +36,6 @@ $(function()
 	$('.listed-task .task-footer').live('mouseleave', function()
 	{
 		$(this).find(".task-actions").css("display", "none");
-	});
-
-	// Save edited task
-	$('#edit_task_validate').click(function(e)
-	{
-		e.preventDefault();
-
-		// Save task
-		save_task('editTaskForm', 'editTaskModal', true, this);
 	});
 
 	/*
@@ -79,42 +67,6 @@ $(function()
 
 		// Show and Fill details in Task Edit modal
 		editTask(getTaskId(this), getTaskListId(this), parseInt(getTaskListOwnerId(this)));
-	});
-
-	/**
-	 * Show event of update task modal Activates typeahead for task-edit-modal
-	 */
-	$('#editTaskModal').on('shown', function()
-	{
-		var el = $("#editTaskForm");
-		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
-
-		// Make btn selected as per previous priority
-		$("span.[value=" + $("#editTaskForm #priority_type").val() + "]").addClass("btn");
-
-		// Make btn selected as per previous status
-		$("span.[value=" + $("#editTaskForm #status").val() + "]").addClass("btn");
-
-		// Loads progress slider in task sedit modal.
-		loadProgressSlider(el);
-	});
-
-	/**
-	 * Hide event of update task modal. Removes the relatedTo field elements if
-	 * any, when the modal is hidden in order to not to show them again when the
-	 * modal is shown next
-	 * 
-	 */
-	$('#editTaskModal').on('hidden', function()
-	{
-		// Empty contact list and owner list
-		$("#editTaskForm").find("li").remove();
-
-		// Remove btn class from all other priority
-		$(".priority-btn").removeClass("btn");
-
-		// Remove btn class from all other status
-		$(".status-btn").removeClass("btn");
 	});
 
 	// Click events to agents dropdown of Owner's list and Criteria's list
@@ -155,7 +107,7 @@ $(function()
 		$(this).addClass("btn priority-btn");
 
 		// Add priority to input field
-		$("#editTaskForm #priority_type").val($(this).attr("value"));
+		$("#priority_type").val($(this).attr("value"));
 	});
 
 	/*
@@ -167,19 +119,6 @@ $(function()
 		console.log($(this).attr("value"));
 
 		// Change status UI and input field
-		changeStatus($(this).attr("value"), true);
+		changeStatus($(this).attr("value"), true, $(this).closest("form"));
 	});
-
-	/*
-	 * If is complete true so make status and progress UI and input field
-	 * changes.
-	 */
-	$("#is_complete").die().live("click", function()
-	{
-		console.log($(this).is(':checked'));
-
-		// Change UI and input field
-		changeStatusProgress($(this).is(':checked'));
-	});
-
 });

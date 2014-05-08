@@ -68,11 +68,13 @@ function changeAfterDrop(event, ui)
 		// Get task id
 		var taskId = $(item).find('.listed-task').attr('id');
 
+		var modelOldTaskList;
+		
 		// Get old task list
 		if (criteria == "OWNER")
-			var modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId, owner_id : parseInt(oldTaskListOwnerId) });
+			modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId, owner_id : parseInt(oldTaskListOwnerId) });
 		else
-			var modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId });
+			modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId });
 
 		// Gets task from old sub collection (task list) to var type json
 		var oldTask = modelOldTaskList[0].get('taskCollection').get(taskId).toJSON();
@@ -87,11 +89,14 @@ function changeAfterDrop(event, ui)
 		{
 			oldTask.owner_id = newTaskListOwnerId;
 			oldTask["taskListOwnerId"] = oldTaskListOwnerId;
-		}
+		}		
 		else
 		{
 			oldTask.owner_id = oldTask.taskOwner.id;
 			oldTask[fieldToChange] = newTaskListId;
+			
+			 if (fieldToChange == "status") 
+			   oldTask.progress = getProgressValue(newTaskListId); // send new status 
 		}
 
 		// To change task list in collection we need old task list id.

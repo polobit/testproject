@@ -1,19 +1,20 @@
 // Shows and Fill Task Edit Modal
 function editTask(taskId, taskListId, taskListOwnerId)
 {
-	console.log(taskId + " " + taskListId);
-	console.log(taskListOwnerId);
+	var modelTaskList;
 
 	if (taskListOwnerId)
-		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : taskListOwnerId });
+		modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : taskListOwnerId });
 	else
-		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
+		modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
 
-	console.log(modelTaskList);
+	if (!modelTaskList)
+		return;
 
 	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
 
-	console.log(modelTask);
+	if (!modelTask)
+		return;
 
 	var taskJson = modelTask.toJSON();
 
@@ -23,41 +24,22 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	taskJson["taskListOwnerId"] = taskListOwnerId;
 
 	// Fill form
-	deserializeForm(taskJson, $("#editTaskForm"));
+	deserializeForm(taskJson, $("#updateTaskForm"));
 
 	// Show modal
-	$("#editTaskModal").modal('show');
+	$("#updateTaskModal").modal('show');
 
 	// Fills owner select element
-	populateUsers(
-			"owners-list",
-			$("#editTaskForm"),
-			taskJson,
-			'taskOwner',
-			function(data)
-			{
-				$("#editTaskForm").find("#owners-list").html(data);
-				if (taskJson.taskOwner)
-				{
-					$("#owners-list", $("#editTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
-				}
+	populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
+	{
+		$("#updateTaskForm").find("#owners-list").html(data);
+		if (taskJson.taskOwner)
+		{
+			$("#owners-list", $("#updateTaskForm")).find('option[value=' + taskJson['taskOwner'].id + ']').attr("selected", "selected");
+		}
 
-				if (taskJson.ownerPic)
-				{
-					$("#owner-pic", $("#editTaskForm"))
-							.html(
-									'<img class="thumbnail" src="' + taskJson.ownerPic + '" width="40px" height="40px" style="float: right;margin-right: -23px;margin-top: -59px;" />');
-				}
-				else
-				{
-					var imgSrc = 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=50&d=' + escape(DEFAULT_GRAVATAR_url);
-					$("#owner-pic", $("#editTaskForm"))
-							.html(
-									'<img class="thumbnail" src="' + imgSrc + '" width="40px" height="40px" style="float: right;margin-right: -23px;margin-top: -59px;"/>');
-				}
-
-				$("#owners-list", $("#editTaskForm")).closest('div').find('.loading-img').hide();
-			});
+		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
+	});
 
 	// Creates normal time.
 	displayTimeAgo($(".list"));
@@ -66,17 +48,10 @@ function editTask(taskId, taskListId, taskListOwnerId)
 // Update edited task
 function updateTask(isUpdate, data, json)
 {
-	console.log("In updateTask");
-	
 	// Get selected criteria
 	var criteria = getCriteria();
 
 	var headingToSearch = json[urlMap[criteria].searchKey];
-
-	console.log(data);
-	console.log(json);
-	console.log(criteria);
-	console.log(headingToSearch);
 
 	if (criteria == "DUE")
 		headingToSearch = getHeadingForDueTask(json);
@@ -98,17 +73,20 @@ function updateTask(isUpdate, data, json)
 	// Task update(edit)
 	if (isUpdate == true)
 	{
+		var modelTaskList;
+
 		// Get Task List
 		if (criteria == "OWNER")
-			var modelTaskList = tasksListCollection.collection.where({ heading : json.taskListId, owner_id : parseInt(json.taskListOwnerId) });
+			modelTaskList = tasksListCollection.collection.where({ heading : json.taskListId, owner_id : parseInt(json.taskListOwnerId) });
 		else
-			var modelTaskList = tasksListCollection.collection.where({ heading : headingToSearch });
+			modelTaskList = tasksListCollection.collection.where({ heading : headingToSearch });
 
-		console.log(modelTaskList);
+		if (!modelTaskList)
+			return;
 
 		// Set new details in Task
 		modelTaskList[0].get('taskCollection').get(json.id).set(data);
-		
+
 		// Maintain changes in UI
 		displaySettings();
 
@@ -125,20 +103,22 @@ function updateTask(isUpdate, data, json)
 // Removes task from old task list and add to new task list.
 function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 {
-	console.log("In changeTaskList");
-	console.log(data);
-	console.log(json);
-	console.log(isUpdate + "  " + criteria + "  " + headingToSearch);
-
+	var modelOldTaskList;
+	
 	// Get old task list
 	if (criteria == "OWNER")
 	{
-		if (json.taskListOwnerId)
-			var ownerId = parseInt(json.taskListOwnerId);
-		else
-			var ownerId = json.taskOwner.id;
+		var ownerId;
 
-		var modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId, owner_id : ownerId });
+		if (json.taskListOwnerId)
+			ownerId = parseInt(json.taskListOwnerId);
+		else
+			ownerId = json.taskOwner.id;
+
+		if (!ownerId)
+			return;
+			
+		modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId, owner_id : ownerId });
 
 		headingToSearch = "taskOwner.name";
 
@@ -147,30 +127,36 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 	}
 	else
 	{
-		var modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId });
+	    modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId });
 
 		// Remove task from UI
 		$("#" + json.taskListId).find("#" + json.id).remove();
 	}
 
-	console.log(modelOldTaskList);
+	if(!modelOldTaskList)
+		return;
 
 	// Remove from task from old task list
 	modelOldTaskList[0].get('taskCollection').remove(modelOldTaskList[0].get('taskCollection').get(json.id));
 
 	// Add in task in new task list
-	addTaskToTaskList(headingToSearch, data, isUpdate);	
+	addTaskToTaskList(headingToSearch, data, isUpdate);
 }
 
 // On click of task action , makes task completed
 function completeTask(taskId, taskListId, taskListOwnerId)
 {
+	var modelTaskList;
+	
 	// Get task list
 	if (taskListOwnerId)
-		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : parseInt(taskListOwnerId) });
+		modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : parseInt(taskListOwnerId) });
 	else
-		var modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
+		modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
 
+	if(!modelTaskList)
+		return;
+	
 	// Get task
 	var modelTsk = modelTaskList[0].get('taskCollection').get(taskId);
 
@@ -184,7 +170,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	});
 
 	taskJson.contacts = contacts;
-	taskJson.is_complete = true;
+	// taskJson.is_complete = true; field will b removed.
 	taskJson.due = new Date(taskJson.due).getTime();
 	taskJson.owner_id = taskJson.taskOwner.id;
 	taskJson.status = "COMPLETED";
@@ -201,7 +187,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	newTask.save(taskJson, { success : function(data)
 	{
 		updateTask(true, data, taskJson);
-		
+
 		// Maintain changes in UI
 		displaySettings();
 	} });

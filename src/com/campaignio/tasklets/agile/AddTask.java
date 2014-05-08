@@ -108,7 +108,7 @@ public class AddTask extends TaskletAdapter
 
     public static String PROGRESS = "progress";
 
-    public static String DESCRPTION = "descrption";
+    public static String DESCRIPTION = "description";
 
     public static String STATUS = "status";
 
@@ -137,7 +137,7 @@ public class AddTask extends TaskletAdapter
 	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 
 	int progress = Integer.parseInt(getStringValue(nodeJSON, subscriberJSON, data, PROGRESS));
-	String descrption = getStringValue(nodeJSON, subscriberJSON, data, DESCRPTION);
+	String description = getStringValue(nodeJSON, subscriberJSON, data, DESCRIPTION);
 	String status = getStringValue(nodeJSON, subscriberJSON, data, STATUS);
 
 	// Gets due date in epoch from dueDays
@@ -162,7 +162,7 @@ public class AddTask extends TaskletAdapter
 
 	    // Adds task
 	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId.toString(),
-		    progress, descrption, status);
+		    progress, description, status);
 	}
 	catch (Exception e)
 	{
@@ -198,9 +198,9 @@ public class AddTask extends TaskletAdapter
      *            - Contact owner-id.
      */
     private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId,
-	    String givenOwnerId, String contactOwnerId, int progress, String descrption, String status)
+	    String givenOwnerId, String contactOwnerId, int progress, String description, String status)
     {
-	Task task = new Task(Type.valueOf(category), dueDateInEpoch, progress, descrption, Status.valueOf(status));
+	Task task = new Task(Type.valueOf(category), dueDateInEpoch, progress, description, Status.valueOf(status));
 
 	// Intialize task contacts with contact id
 	task.contacts = new ArrayList<String>();

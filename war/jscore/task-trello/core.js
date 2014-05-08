@@ -5,15 +5,10 @@
  */
 function findDetails(criteria, owner)
 {
-	console.log(criteria + "  " + owner);
-	console.log(urlMap[criteria].type);
-	console.log(urlMap[criteria].searchKey);
-
 	/*
-	 * Creates nested collection 
-	 * 1. If my task or my pending task with owner
-	 * criteria is selected so add only one column of current user. 
-	 * 2. If selected criteria is not owner so follow normal procedure
+	 * Creates nested collection 1. If my task or my pending task with owner
+	 * criteria is selected so add only one column of current user. 2. If
+	 * selected criteria is not owner so follow normal procedure
 	 */
 	if (criteria == "OWNER" && ($(".selected_name").html() == "My Tasks" || $(".selected_name").html() == "My Pending Tasks"))
 		createNestedCollection(criteria, [
@@ -53,8 +48,6 @@ function findDetails(criteria, owner)
 // Creates nested collection
 function createNestedCollection(criteria, criteriaArray)
 {
-	console.log(criteriaArray);
-
 	// Shows loading image untill data gets ready for displaying
 	$('#task-list-based-condition').html(LOADING_HTML);
 
@@ -64,11 +57,16 @@ function createNestedCollection(criteria, criteriaArray)
 	// Creates main collection with Task lists
 	for ( var i in criteriaArray)
 	{
+		var newTaskList;
+
 		// Add heading to task list in main collection
 		if (criteria == "OWNER")
-			var newTaskList = { "heading" : criteriaArray[i].name, "owner_id" : criteriaArray[i].id };
+			newTaskList = { "heading" : criteriaArray[i].name, "owner_id" : criteriaArray[i].id };
 		else
-			var newTaskList = { "heading" : criteriaArray[i] };
+			newTaskList = { "heading" : criteriaArray[i] };
+
+		if (!newTaskList)
+			return;
 
 		// Add task list in main collection
 		tasksListCollection.collection.add(newTaskList);// main-collection
@@ -81,22 +79,13 @@ function createNestedCollection(criteria, criteriaArray)
 // Creates sub collection
 function createSubCollectionForDueAndOwner(criteriaArray, initialURL, searchKey)
 {
-	console.log(criteriaArray);
-	console.log(initialURL);
-	console.log(searchKey);
-
 	// Add get requests in queue
 	queueGetRequest("task_queue", initialURL, 'json', function success(tasks)
 	{
-		console.log(tasks);
-
 		if (tasks.length != 0)
 		{
 			for ( var i in tasks)
 			{
-
-				console.log(tasks[i]);
-
 				if (searchKey == "due") // Due
 				{
 					var headingToSearch = getHeadingForDueTask(tasks[i]);
@@ -126,23 +115,14 @@ function createSubCollection(criteriaArray, initialURL, searchKey)
 	// Creates sub collection with Tasks
 	for ( var i in criteriaArray)
 	{
-		console.log(i);
-		console.log(criteriaArray[i]);
-		console.log(initialURL);
-
 		// Url to call DB
 		var url = initialURL + criteriaArray[i];
-		console.log(url);
 
 		// Add get requests in queue
 		queueGetRequest("task_queue", url, 'json', function success(tasks)
 		{
-			console.log(tasks);
-
-			if (tasks.length != 0)
+		  if (tasks.length != 0)
 			{
-				console.log(tasks[0][searchKey]);
-
 				// Add task to relevant task list (sub collection)
 				addTaskToTaskList(tasks[0][searchKey], tasks, null)
 			}
@@ -159,8 +139,7 @@ function createSubCollection(criteriaArray, initialURL, searchKey)
 function initTaskListCollection()
 {
 	tasksListCollection = new Base_Collection_View({ restKey : "task", templateKey : "new-tasks-lists", individual_tag_name : 'div',
-		className : "list-area-wrapper", sortKey : 'heading', sort_collection : true, descending : false,
-		postRenderCallback : function(el)
+		className : "list-area-wrapper", sortKey : 'heading', sort_collection : true, descending : false, postRenderCallback : function(el)
 		{
 			// Creates normal time.
 			displayTimeAgo($(".list"));
@@ -186,5 +165,5 @@ function taskAppend(base_model)
 	var el = tasksListModel.render().el;
 
 	$('#list-tasks', el).html(taskCollection.render(true).el);
-	$('#new-tasks-lists-model-list', this.el).append(el);		
+	$('#new-tasks-lists-model-list', this.el).append(el);
 }

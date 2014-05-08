@@ -1244,12 +1244,6 @@ small {
 	max-height: 432px;
 }
 
-#update-task-date-1 {
-	width: 120px;
-	border: none;
-	box-shadow: none;
-}
-
 .ui-sortable-placeholder {
 	border: 3px dashed #aaa;
 	min-height: 50px;
@@ -1489,17 +1483,20 @@ small {
 }
 
 .priority-btn {
-	padding: 4px;
+	padding: 2px 5px 2px 5px;
 	width: 14px;
 	text-align: center;
 	cursor: pointer;
+	margin-right: 24px;
 }
 
 .status-btn {
-	padding: 8px;
+	padding: 2px 5px 2px 5px;
 	width: 14px;
 	text-align: center;
 	cursor: pointer;
+	margin-left: 4px;
+	margin-right: 18px;
 }
 
 /* .task-actions:hover,.task-actions:focus {display: block;} */
@@ -1908,7 +1905,7 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 		endColorstr='#0044cc', GradientType=0);
 	border-color: #0044cc #0044cc #002a80;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled=         
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=           
 		             false);
 	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);

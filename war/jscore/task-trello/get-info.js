@@ -5,8 +5,6 @@ function getHeadingForDueTask(task)
 
 	// add to the right task list - overdue, today, tomorrow etc.
 	var due = get_due(task.due);
-	console.log(task.due);
-	console.log(due);
 
 	// OVERDUE
 	if (due < 0)
@@ -32,26 +30,32 @@ function getNewDueDate(newTaskListId)
 
 	// OVERDUE (yesterday)
 	if (newTaskListId == "OVERDUE")
-	{
-		d.setDate(d.getDate() - 1);
-	}
+	   d.setDate(d.getDate() - 1);
+	
 	// Today
 	if (newTaskListId == "TODAY")
-	{
-		console.log(getGMTTimeFromDate(d) / 1000);
-	}
+	   console.log(getGMTTimeFromDate(d) / 1000);
+	
 	// Tomorrow
 	if (newTaskListId == "TOMORROW")
-	{
-		d.setDate(d.getDate() + 1);
-	}
+	   d.setDate(d.getDate() + 1);
+	
 	// Later Day after tomorrow
 	if (newTaskListId == "LATER")
-	{
-		d.setDate(d.getDate() + 2);
-	}
-
+	   d.setDate(d.getDate() + 2);
+	
 	return (getGMTTimeFromDate(d) / 1000);
+}
+
+// On basis of status return progress value, when criteria is status and task is dragged in task lists.
+function getProgressValue(status)
+{
+	if (status == "NOT_STARTED")
+		return 0;
+	else if (status == "COMPLETED")
+		return  100;
+	else if (status == "IN_PROGRESS")
+		return 1;
 }
 
 // Get Task id from UI
