@@ -14,10 +14,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.status.CampaignStatus.Status;
+import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log;
 import com.campaignio.logger.util.LogUtil;
 
@@ -177,6 +182,46 @@ public class CampaignsAPI
 
 	WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
 	return "Sucesses";
+    }
+
+    /**
+     * Unsubscribe contact from campaign based on email of contact
+     * 
+     * @param email
+     *            email of the contact
+     * @param workflowId
+     *            the iId of the workflow/campaign to Unsubscribe.
+     * @return
+     */
+    @Path("unsubscribe")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String unsubscribeCampaign(@FormParam("email") String email, @FormParam("workflow-id") Long workflowId)
+    {
+	try
+	{
+	    // Get the contact based on the Email and Unsubscribe it from the
+	    // Campaign.
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return "No Contact.";
+
+	    ObjectMapper mapper = new ObjectMapper();
+
+	    // Remove the task related the contact for this campaign from
+	    // CronJobs.
+	    CronUtil.removeTask(workflowId.toString(), contact.id.toString());
+	    // Set the status as removed for the campaign in the Contact.
+	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflowId.toString(), Status.REMOVED);
+
+	    return mapper.writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 
 }
