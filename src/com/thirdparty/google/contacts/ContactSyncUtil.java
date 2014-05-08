@@ -109,9 +109,8 @@ public class ContactSyncUtil
 	}
 
 	// Retrieves contact based on contact emails
-	// List<ContactEntry> entries =
-	// retrieveContactBasedOnEmailFromGoogle(contact, prefs);
-	List<ContactEntry> entries = new ArrayList<ContactEntry>();
+	List<ContactEntry> entries = retrieveContactBasedOnEmailFromGoogle(contact, prefs);
+	// List<ContactEntry> entries = new ArrayList<ContactEntry>();
 
 	ContactEntry createContact = null;
 
@@ -601,4 +600,37 @@ public class ContactSyncUtil
 	return null;
     }
 
+    public static List<ContactEntry> convertToGoogleContactsFormat(List<Contact> contacts, ContactPrefs prefs)
+    {
+
+	if (contacts == null)
+	    return new ArrayList<ContactEntry>();
+
+	try
+	{
+	    return retrieveContactBasedOnQuery(constructEmailsQueryForGoogle(contacts), prefs);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return new ArrayList<ContactEntry>();
+	}
+    }
+
+    public static String constructEmailsQueryForGoogle(List<Contact> contacts)
+    {
+	String email = "";
+	for (Contact contact : contacts.subList(0, 40))
+	{
+	    List<ContactField> emailsFields = contact.getContactPropertiesList(Contact.EMAIL);
+
+	    for (ContactField field : emailsFields)
+	    {
+		email = email + " " + field.value;
+	    }
+	}
+	System.out.println(email);
+	return email;
+    }
 }

@@ -47,7 +47,7 @@ public class ContactsSynctoGoogle
 	    // Fetches updated contacts up to max size set in subsets of 200 as
 	    // max size
 	    // for batch request
-	    synUpdatedContacts(prefs, 200, null);
+	    // synUpdatedContacts(prefs, 200, null);
 	}
 	catch (Exception e)
 	{
@@ -70,6 +70,11 @@ public class ContactsSynctoGoogle
 
 	// Fetches first set of contacts up to page size
 	List<Contact> contacts_list = ContactSyncUtil.fetchNewContactsToSync(prefs, page, cursor);
+
+	List<ContactEntry> googleContactEntries = ContactSyncUtil.convertToGoogleContactsFormat(contacts_list, prefs);
+
+	System.out.println("********************************* size available *********************");
+	System.out.println(googleContactEntries.size());
 
 	if (contacts_list.isEmpty())
 	    return;
