@@ -174,6 +174,10 @@ var Base_Model_View = Backbone.View
 			 */
 			save : function(e) {
 				e.preventDefault();
+				
+				// Saves tinymce content back to 
+				// textarea before form serialization
+				trigger_tinymce_save();
 
 				/*
 				 * Gets the form id from the view, this.el represents html

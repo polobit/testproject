@@ -216,14 +216,18 @@ var SettingsRouter = Backbone.Router.extend({
 	emailTemplateAdd : function()
 	{
 		$("#content").html(getTemplate("settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/email/templates', template : "settings-email-template-add", window : 'email-templates',
-			postRenderCallback : function(el)
-			{
-
-				// Setup HTML Editor
-				setupHTMLEditor($('#email-template-html', el));
-			} });
+		var view = new Base_Model_View({
+		    url: '/core/api/email/templates',
+		    isNew: true,
+		    template: "settings-email-template-add",
+		    window: 'email-templates',
+		});
+		
 		$('#prefs-tabs-content').html(view.render().el);
+		
+		// setup TinyMCE
+		setupTinyMCEEditor('textarea#email-template-html');
+		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $('#content').html(view.render().el);
@@ -249,15 +253,26 @@ var SettingsRouter = Backbone.Router.extend({
 		// Gets the template form its collection
 		var currentTemplate = this.emailTemplatesListView.collection.get(id);
 
-		var view = new Base_Model_View({ url : '/core/api/email/templates', model : currentTemplate, template : "settings-email-template-add",
-			window : 'email-templates', postRenderCallback : function(el)
-			{
-				// Setup HTML Editor
-				setupHTMLEditor($('#email-template-html', el));
-			} });
+		var view = new Base_Model_View({
+		    url: '/core/api/email/templates',
+		    model: currentTemplate,
+		    template: "settings-email-template-add",
+		    window: 'email-templates'
+		});
 
 		var view = view.render();
 		$('#prefs-tabs-content').html(view.el);
+		
+		/** TinyMCE **/
+		
+		// set up TinyMCE Editor
+		setupTinyMCEEditor('textarea#email-template-html');
+		
+		// Insert content into tinymce
+		set_tinymce_content('email-template-html', currentTemplate.toJSON().text);
+		
+		/**End of TinyMCE**/
+		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
 		// $("#content").html(view.el);

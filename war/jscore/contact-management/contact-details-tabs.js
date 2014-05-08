@@ -480,14 +480,35 @@ $(function(){
 				 * Get Contact properties json to fill the templates
 				 * using handlebars
 				 */  
-				var json = get_property_JSON(json);
-				
-				// Templatize it
-				var template = Handlebars.compile(model.subject);
-				subject =  template(json);
-				
-				template = Handlebars.compile(model.text);
-				text =  template(json);
+				var json = get_contact_json_for_merge_fields();
+				var template;
+					
+					// Templatize it
+					try
+					{
+						template = Handlebars.compile(subject);
+						subject =  template(json);
+					}
+					catch(err)
+					{
+						subject = add_square_brackets_to_merge_fields(subject);
+						
+						template = Handlebars.compile(subject);
+						subject =  template(json);
+					}
+				    
+					try
+					{
+						template = Handlebars.compile(text);
+						text =  template(json);
+					}
+					catch(err)
+					{
+						text = add_square_brackets_to_merge_fields(text);
+						
+						template = Handlebars.compile(text);
+						text =  template(json);
+					}
 				}
 				
 				// Fill subject and body of send email form
