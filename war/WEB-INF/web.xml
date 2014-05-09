@@ -516,6 +516,15 @@
    		<url-pattern>/confirmation</url-pattern>
    </servlet-mapping>
 
+   <servlet>
+   		<servlet-name>Resubscribe</servlet-name>
+   		<jsp-file>/resubscribe.jsp</jsp-file>
+   </servlet>
+   <servlet-mapping>
+   		<servlet-name>Resubscribe</servlet-name>
+   		<url-pattern>/resubscribe</url-pattern>
+   </servlet-mapping>
+   
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
