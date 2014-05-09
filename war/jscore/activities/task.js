@@ -35,6 +35,13 @@ $(function()
 			$("#taskForm").find("#owners-list").html(data);
 			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
+			
+			loadProgressSlider(el,function(data)
+					{		
+						changeStatus("NOT_STARTED", true, el);
+						
+						$("#priority_type", el).val("NORMAL");
+			        });
 		});
 	});
 
@@ -57,6 +64,13 @@ $(function()
 			$("#taskForm").find("#owners-list").html(data);
 			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
+			
+			loadProgressSlider(el,function(data)
+			{		
+				changeStatus("NOT_STARTED", true, el);
+				
+				$("#priority_type", el).val("NORMAL");
+	        });
 		});
 
 	});
@@ -125,15 +139,9 @@ $(function()
 	{
 		// Empty contact list and owner list
 		$("#updateTaskForm").find("li").remove();
-
-		// Remove btn class from all other priority
-		$(".priority-btn").removeClass("btn");
-
+	
 		// Remove btn class from all other status
-		$(".status-btn").removeClass("btn");
-		
-		// Destroy slider
-		//$(".progress_slider").slider("destroy");
+		$(".status-btn").removeClass("btn");		
 	});
 
 	/**
@@ -144,17 +152,21 @@ $(function()
 		var el = $("#updateTaskForm");
 		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
 
-		// Make btn selected as per previous priority
-		$("span.[value=" + $("#updateTaskForm #priority_type").val() + "]").addClass("btn");
-
-		// Make btn selected as per previous status
-		$("span.[value=" + $("#updateTaskForm #status").val() + "]").addClass("btn");
-
+		console.log(el);
+	
 		// Loads progress slider in task update modal.
-		loadProgressSlider(el);
-
-		// Check if is_complete is true
-		checkIsComplete(el);
+		loadProgressSlider(el,function(data)
+		{
+			console.log("in callback");
+			
+			$(".progress_slider", el).slider("value", $("#progress", el).val());
+			
+			// Make btn selected as per previous status
+			$("span.[value=" + $("#status", el).val() + "]").addClass("btn");
+					
+			// Check if is_complete is true
+			checkIsComplete(el);
+        });
 	});
 
 	/**
@@ -201,20 +213,6 @@ $(function()
 			complete_task(taskId, App_Calendar.tasksListView.collection, $(this).closest('tr'))
 		}
 	});
-
-	/**
-	 * All completed and pending tasks will be shown in separate section
-	 */
-	/*
-	 * $('#tasks-list').live('click', function(e) { this.tasksListView = new
-	 * Base_Collection_View({ url : '/core/api/tasks/all', restKey : "task",
-	 * templateKey : "tasks-list", individual_tag_name : 'tr' });
-	 * this.tasksListView.collection.fetch();
-	 * 
-	 * $('#content').html(this.tasksListView.el);
-	 * 
-	 * });
-	 */
 });
 
 /**
@@ -309,28 +307,6 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 		{
 
 			updateTask(isUpdate, data, json);
-
-			/*
-			 * To do without reloading the page should check the condition of
-			 * (Owner and Category)
-			 */
-
-			/*
-			 * var old_owner_id =
-			 * $('#content').find('.type-task-button').find(".selected_name").text();
-			 * var old_type =
-			 * $('#content').find('.owner-task-button').find(".selected_name").text();
-			 * 
-			 * if (isUpdate)
-			 * App_Calendar.allTasksListView.collection.remove(json);
-			 * 
-			 * if((old_owner_id == "All Categories" ||
-			 * old_owner_id.toUpperCase() == json.type) && (old_type == "All
-			 * Tasks" || json.owner_id == CURRENT_DOMAIN_USER.id))
-			 * App_Calendar.allTasksListView.collection.add(data);
-			 */
-
-			// App_Calendar.allTasksListView.render(true);
 		}
 		// Updates data to temeline
 		else if (App_Contacts.contactDetailView && Current_Route == "contact/" + App_Contacts.contactDetailView.model.get('id'))
@@ -561,17 +537,4 @@ function complete_task(taskId, collection, ui, callback)
 			callback(model);
 		}
 	} });
-
-	// Set is complete flag to be true
-	/*
-	 * model.url = '/core/api/tasks'; model.set({'is_complete': true}, {silent:
-	 * true}); // Destroy and hide the task model.save([],{success:
-	 * function(model, response) { // Remove model from the collection
-	 * App_Calendar.tasksListView.collection.remove(model);
-	 * 
-	 * //ui.closest('tr').slideUp('slow');
-	 * 
-	 * ui.fadeOut(2000); }} );
-	 */
-
 }

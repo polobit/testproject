@@ -29,6 +29,13 @@ $(function(){
 					$("#taskForm").find("#owners-list").html(data);
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
 					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
+					
+					loadProgressSlider(el,function(data)
+							{		
+								changeStatus("NOT_STARTED", true, el);
+								
+								$("#priority_type", el).val("NORMAL");
+					        });
 		});
     });
 	

@@ -1,3 +1,21 @@
+// Get user's name and id to add in urlMap for owner of task, user name can
+// be redundant so we need user's id too.
+function getUserDetails()
+{
+	$.getJSON('/core/api/users', function(users)
+	{
+		for ( var i in users)
+		{
+			urlMap.OWNER.type[i] = { "name" : users[i].name, "id" : users[i].id };
+		}
+	}).error(function(data)
+	{
+		console.log("get user err");
+		console.log(data);
+	});
+
+}
+
 // Gives heading of task list from due of task
 function getHeadingForDueTask(task)
 {
@@ -30,30 +48,31 @@ function getNewDueDate(newTaskListId)
 
 	// OVERDUE (yesterday)
 	if (newTaskListId == "OVERDUE")
-	   d.setDate(d.getDate() - 1);
-	
+		d.setDate(d.getDate() - 1);
+
 	// Today
 	if (newTaskListId == "TODAY")
-	   console.log(getGMTTimeFromDate(d) / 1000);
-	
+		console.log(getGMTTimeFromDate(d) / 1000);
+
 	// Tomorrow
 	if (newTaskListId == "TOMORROW")
-	   d.setDate(d.getDate() + 1);
-	
+		d.setDate(d.getDate() + 1);
+
 	// Later Day after tomorrow
 	if (newTaskListId == "LATER")
-	   d.setDate(d.getDate() + 2);
-	
+		d.setDate(d.getDate() + 2);
+
 	return (getGMTTimeFromDate(d) / 1000);
 }
 
-// On basis of status return progress value, when criteria is status and task is dragged in task lists.
+// On basis of status return progress value, when criteria is status and task is
+// dragged in task lists.
 function getProgressValue(status)
 {
 	if (status == "NOT_STARTED")
 		return 0;
 	else if (status == "COMPLETED")
-		return  100;
+		return 100;
 	else if (status == "IN_PROGRESS")
 		return 1;
 }
@@ -70,7 +89,7 @@ function getTaskId(element)
 // Get heading of task list
 function getTaskListId(element)
 {
-	return $(element).closest('.list').attr('id');	
+	return $(element).closest('.list').attr('id');
 }
 
 /*
@@ -79,7 +98,7 @@ function getTaskListId(element)
  */
 function getTaskListOwnerId(element)
 {
-	return $(element).closest('.list').find('.list-header').attr('ownerID');	
+	return $(element).closest('.list').find('.list-header').attr('ownerID');
 }
 
 // Get Criteria from dropdown
@@ -87,10 +106,10 @@ function getCriteria()
 {
 	// Get selection from criteria dropdown
 	var criteria = $('#type-tasks').data("selected_item");
-	
+
 	// If criteria is not selected then make it default one
 	if (!criteria)
 		criteria = "CATEGORY";
-	
+
 	return criteria;
 }

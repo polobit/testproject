@@ -33,18 +33,21 @@ function displaySettings()
 }
 
 // Load and display slider in update task modal of task for progress.
-function loadProgressSlider(el)
+function loadProgressSlider(el, callback)
 {
 	console.log("in loadProgressSlider");
 	head.load(CSS_PATH + 'css/jslider.css', LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
-		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "plastic",
-			onstatechange : function(value)
+		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "plastic", onstatechange : function(value)
 		{
 			changeProgress(value, true, el);
 		} });
 
-		$(".progress_slider", el).slider("value", $("#progress", el).val());
+		if (callback && typeof (callback) === "function")
+		{
+			// execute the callback
+			callback();
+		}
 	});
 }
 
@@ -54,6 +57,8 @@ function loadProgressSlider(el)
  */
 function changeStatus(status, checkProgress, parentForm)
 {
+	var value = $("#progress", parentForm).val();
+
 	// Remove btn class from all other status buttons
 	$(".status-btn", parentForm).removeClass("btn");
 
@@ -66,11 +71,19 @@ function changeStatus(status, checkProgress, parentForm)
 	if (checkProgress)
 	{
 		if (status == "NOT_STARTED")
-			changeProgress(0, false, parentForm);
+			value = 0;
 		else if (status == "COMPLETED")
-			changeProgress(100, false, parentForm);
+			value = 100;
 		else if (status == "IN_PROGRESS")
-			changeProgress(1, false, parentForm);
+		{
+			// if progress has some % already then do not need to set 1%.
+			if (value >= 1 && value < 100)
+				return;
+			
+			// if progress has 0%/100% then need to set 1%.
+			value = 1;
+		}
+		changeProgress(value, false, parentForm);
 	}
 }
 
@@ -86,6 +99,10 @@ function changeProgress(value, checkStatus, parentForm)
 	// Make changes in status buttons
 	if (checkStatus)
 	{
+		// if status is paused then do not make changes in status buttons.
+		if ($("#status", parentForm).val() == "PAUSED")
+			return;
+
 		if (value == 0)
 			changeStatus("NOT_STARTED", false, parentForm);
 		else if (value == 100)

@@ -1241,7 +1241,14 @@ small {
 }
 
 #activityModal>.modal-body {
-	max-height: 432px;
+	max-height: 453px;
+	padding-bottom: 0 !important;
+	margin-bottom: 0 !important;
+}
+
+#activityModal>.for-description {	
+	padding-bottom: 0 !important;
+	margin-bottom: 0 !important;
 }
 
 .ui-sortable-placeholder {
@@ -1483,11 +1490,7 @@ small {
 }
 
 .priority-btn {
-	padding: 2px 5px 2px 5px;
 	width: 14px;
-	text-align: center;
-	cursor: pointer;
-	margin-right: 24px;
 }
 
 .status-btn {
@@ -1905,7 +1908,7 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 		endColorstr='#0044cc', GradientType=0);
 	border-color: #0044cc #0044cc #002a80;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled=           
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=            
 		             false);
 	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);

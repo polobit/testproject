@@ -12,23 +12,21 @@ function editTask(taskId, taskListId, taskListOwnerId)
 		return;
 
 	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
-
+	
 	if (!modelTask)
 		return;
 
 	var taskJson = modelTask.toJSON();
-
-	console.log(taskJson);
-
+	
 	taskJson["taskListId"] = taskListId;
 	taskJson["taskListOwnerId"] = taskListOwnerId;
 
 	// Fill form
 	deserializeForm(taskJson, $("#updateTaskForm"));
-
+	
 	// Show modal
 	$("#updateTaskModal").modal('show');
-
+		
 	// Fills owner select element
 	populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
 	{
@@ -39,7 +37,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 		}
 
 		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
-	});
+	});	
 
 	// Creates normal time.
 	displayTimeAgo($(".list"));

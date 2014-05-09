@@ -12,19 +12,8 @@ $(function()
 	        "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } 
 	        };
 
-	// Get user's name and id to add in urlMap for owner of task, user name can
-	// be redundant so we need user's id too.
-	$.getJSON('/core/api/users', function(users)
-	{		
-		for ( var i in users)
-		{
-			urlMap.OWNER.type[i] = { "name" : users[i].name, "id" : users[i].id };
-		}
-	}).error(function(data)
-	{
-		console.log("get user err");
-		console.log(data);
-	});
+	// Get user details and add into urlMap's owner array.
+	getUserDetails();
 
 	// Display task actions
 	$('.listed-task .task-footer').live('mouseenter', function()
@@ -99,15 +88,9 @@ $(function()
 	 * as change btn
 	 */
 	$(".priority-btn").die().live("click", function()
-	{
-		// Remove btn class from all other priority
-		$(".priority-btn").removeClass("btn");
-
-		// Add btn class to selected priority
-		$(this).addClass("btn priority-btn");
-
+	{	
 		// Add priority to input field
-		$("#priority_type").val($(this).attr("value"));
+		$("#priority_type", $(this).closest("form")).val($(this).attr("value"));
 	});
 
 	/*
@@ -116,8 +99,6 @@ $(function()
 	 */
 	$(".status-btn").die().live("click", function()
 	{
-		console.log($(this).attr("value"));
-
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), true, $(this).closest("form"));
 	});
