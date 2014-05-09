@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.tasklets.agile.util.AgileTaskletUtil"%>
-<%@page import="com.agilecrm.util.email.SendMail"%>
 <%@page import="com.agilecrm.workflows.Workflow"%>
-<%@page import="java.util.HashMap"%>
+<%@page import="com.agilecrm.workflows.util.WorkflowUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="com.agilecrm.contact.Contact"%>
 <%@page import="com.agilecrm.contact.util.ContactUtil"%>
-<%@page
-	import="com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType"%>
-<%@page import="com.agilecrm.workflows.unsubscribe.UnsubscribeStatus"%>
-<%@page import="com.agilecrm.workflows.status.CampaignStatus.Status"%>
-<%@page import="com.agilecrm.workflows.status.util.CampaignStatusUtil"%>
-<%@page import="com.campaignio.cron.util.CronUtil"%>
-<%@page import="com.thirdparty.mandrill.Mandrill" %>
+<%@page import="com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil"%>
 
 <html>
 <head>
@@ -323,20 +316,21 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 	<div class="wrapper rounded6" id="templateContainer">
 		<div id="templateBody" class="bodyContent rounded6">
 			<%
+			    String email = request.getParameter("e");
+			
+				// When & is converted to amp; in url
+		    	if(StringUtils.isBlank(email))
+		        	email = request.getParameter("amp;e");
+			
 			    String campaignId = request.getParameter("cid");
-			    String status = request.getParameter("status");
-			    String tag = request.getParameter("t");
-			    String email = request.getParameter("email");
-			    String campaign_name = request.getParameter("c_name");
 			    
-			    // Used to send as from name in confirmation email
-			    String company = request.getParameter("company");
-
-			    System.out.println(campaignId + ":" + status + ":" + tag + ":" + email);
-
+			 	// When & is converted to amp; in url
+		        if(StringUtils.isBlank(campaignId))
+		        	campaignId = request.getParameter("amp;cid");
+			    
 			    Contact contact = ContactUtil.searchContactByEmail(email);
 
-			    String msg = "You are successfully unsubscribed. Thank you.";
+			    String msg = "You are successfully resubscribed. Thank you.";
 
 			    if (contact == null)
 			    {
@@ -349,84 +343,38 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 			    else
 			    {
 			%>
-			<h2>Confirmation</h2>
+			<h2>Re-subscription</h2>
 			<p><%=msg%></p>
 			<%
 			    try
 					{
-					    String contactId = contact.id.toString();
-
-					    // By default CURRENT
-					    UnsubscribeType type = UnsubscribeType.CURRENT;
-
-					    // If all
-					    if ("all".equals(status))
-						type = UnsubscribeType.ALL;
-
-					    boolean isNew = true;
-					    
-					    // Update older one having same campaign id
-						for (UnsubscribeStatus uns : contact.unsubscribeStatus)
-						{
-						    if (uns == null)
-							continue;
-
-						    if (campaignId.equals(uns.campaign_id))
-						    {
-							uns.unsubscribeType = type;
-							isNew = false;
-							break;
-						    }
-						}
-					 
-					    // First time unsubscribe
-					    if (isNew)
-					    {
-						UnsubscribeStatus unsubscribeStatus = new UnsubscribeStatus(campaignId, type);
-						contact.unsubscribeStatus.add(unsubscribeStatus);
-					    }
-
-					    contact.save();
-
-					    System.out.println("Tag is " + tag);
-
-					    // Add unsubscribe tag
-					    if (!StringUtils.isBlank(tag))
-						contact.addTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
-
-					    // Add Removed status to contact
-					    CampaignStatusUtil.setStatusOfCampaign(contactId, campaignId, Status.REMOVED);
-
-					    // Delete Related Crons.
-					    CronUtil.removeTask(campaignId, contactId);
-					    
-					    HashMap<String, String> map = new HashMap<String, String>();
-						String subjectMessage = "Unsubscribe";
-						
-					    if ("all".equals(status))
-						{
-							map.put("company", company);
-							subjectMessage = "Unsubscribed successfully from "+company+" company";
-						}
-					    
-					    if("current".equals(status))
-						{
-							map.put("campaign_name", campaign_name);
-							subjectMessage = "Unsubscribed successfully from Campaign";
-						}
-					    
-					    map.put("domain", NamespaceManager.get());
-					    
-					    map.put("campaign_id", campaignId);
-					    map.put("email", email);
-						 
-						if(map.size() != 0)
-						   SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, "noreply@agilecrm.com", company);
+				        if(StringUtils.isBlank(campaignId))
+				            return;
+				        
+				        Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));
+				            
+				        if(workflow == null)
+				        {
+				            System.err.println("Workflow is null...");
+				            return;
+				        }
+				        	
+				        String tag =  workflow.unsubscribe.tag;
+				        
+				        System.out.println("Workflow unsubscribe tags to be removed - " + tag);
+				        	
+				        // Remove unsubscribe tag
+				        if (!StringUtils.isBlank(tag))
+							contact.removeTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
+				        	
+				        // Remove unsubscribe status
+				        UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
+				        
 					}
 					catch (Exception e)
 					{
 					    e.printStackTrace();
-					    System.err.println("Exception occured while confirmation " + e.getMessage());
+					    System.err.println("Exception occured while resubscription " + e.getMessage());
 					}
 			
 			%>

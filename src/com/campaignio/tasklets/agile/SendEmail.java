@@ -177,6 +177,8 @@ public class SendEmail extends TaskletAdapter
      */
     public static String TRACK_CLICKS_NO = "no";
 
+    public static String TRACK_CLICKS_YES_AND_PUSH = "yes_and_push";
+
     /**
      * Keyword that is added to url when Track Clicks yes is selected
      */
@@ -433,7 +435,7 @@ public class SendEmail extends TaskletAdapter
 	String campaignId = AgileTaskletUtil.getId(campaignJSON);
 
 	// Check if we need to convert links
-	if (trackClicks != null && trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
+	if (trackClicks != null && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
 	{
 	    try
 	    {
@@ -441,8 +443,8 @@ public class SendEmail extends TaskletAdapter
 		// clicks
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
-		text = EmailLinksConversion.convertLinksUsingRegex(text, subscriberId, campaignId);
-		html = EmailLinksConversion.convertLinksUsingRegex(html, subscriberId, campaignId);
+		text = EmailLinksConversion.convertLinksUsingRegex(text, subscriberId, campaignId, trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+		html = EmailLinksConversion.convertLinksUsingRegex(html, subscriberId, campaignId, trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
 
 	    }
 	    catch (Exception e)
