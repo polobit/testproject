@@ -446,11 +446,20 @@
 	
 	<servlet>
 	<servlet-name>ShopifyCustomerWebhook</servlet-name>
-	<servlet-class>com.thirdparty.forms.ShopifyCustomerWebhook</servlet-class>
+	<servlet-class>com.thirdparty.shopify.ShopifyCustomerWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ShopifyCustomerWebhook</servlet-name>
 		<url-pattern>/shopifycustomer</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>ShopifyOrderWebhook</servlet-name>
+	<servlet-class>com.thirdparty.shopify.ShopifyOrderWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyOrderWebhook</servlet-name>
+		<url-pattern>/shopifyorder</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

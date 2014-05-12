@@ -351,7 +351,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      */
     private void sendEmail(String subject, String template)
     {
-	System.out.println("Domain in email template : " + this.domain + " ,namespace : " + NamespaceManager.get());
 	SendMail.sendMail(this.email, subject, template, this);
     }
 
@@ -375,6 +374,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public void save() throws Exception
     {
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+
+	// Set to current namespace if it is empty
+	if (StringUtils.isEmpty(this.domain))
+	{
+	    this.domain = NamespaceManager.get();
+	    System.out.println("Domain empty - setting it to " + this.domain);
+	}
+
 	System.out.println("Creating or updating new user " + this);
 
 	// Check if user exists with this email
@@ -401,13 +408,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
-	}
-
-	// Set to current namespace if it is empty
-	if (StringUtils.isEmpty(this.domain))
-	{
-	    this.domain = NamespaceManager.get();
-	    System.out.println("Domain empty - setting it to " + this.domain);
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
