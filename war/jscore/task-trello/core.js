@@ -121,7 +121,10 @@ function createSubCollection(criteriaArray, initialURL, searchKey)
 		// Add get requests in queue
 		queueGetRequest("task_queue", url, 'json', function success(tasks)
 		{
-		  if (tasks.length != 0)
+			if (!tasks)
+				return;
+
+			if (tasks.length != 0)
 			{
 				// Add task to relevant task list (sub collection)
 				addTaskToTaskList(tasks[0][searchKey], tasks, null)

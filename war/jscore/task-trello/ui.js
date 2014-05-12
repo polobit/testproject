@@ -4,13 +4,15 @@ $(function()
 	tasksListCollection = null;
 
 	// Url Map After selection from filter
-	urlMap = { 
-			"PRIORITY" : { "type" : ["HIGH", "LOW", "NORMAL"], "searchKey" : "priority_type" }, 
-			"CATEGORY" : { "type" : ["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey" : "type" }, 
-			"STATUS" : { "type" : ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "PAUSED"], "searchKey" : "status" }, 
-	        "DUE" : { "type" : ["TODAY", "TOMORROW", "OVERDUE", "LATER"], "searchKey" : "due" }, 
-	        "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } 
-	        };
+	urlMap = { "PRIORITY" : { "type" : [
+			"HIGH", "LOW", "NORMAL"
+	], "searchKey" : "priority_type" }, "CATEGORY" : { "type" : [
+			"EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"
+	], "searchKey" : "type" }, "STATUS" : { "type" : [
+			"YET_TO_START", "IN_PROGRESS", "COMPLETED"
+	], "searchKey" : "status" }, "DUE" : { "type" : [
+			"TODAY", "TOMORROW", "OVERDUE", "LATER"
+	], "searchKey" : "due" }, "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } };
 
 	// Get user details and add into urlMap's owner array.
 	getUserDetails();
@@ -84,22 +86,13 @@ $(function()
 	});
 
 	/*
-	 * In edit task modal, on selection of priority change input field as well
-	 * as change btn
+	 * In new/update task modal, on selection of status, show progress slider and change %
 	 */
-	$(".priority-btn").die().live("click", function()
-	{	
-		// Add priority to input field
-		$("#priority_type", $(this).closest("form")).val($(this).attr("value"));
-	});
-
-	/*
-	 * In edit task modal, on selection of status change input field as well as
-	 * change btn
-	 */
-	$(".status-btn").die().live("click", function()
+	$(".status").change(function()
 	{
+		console.log($(this).attr("value"));
+		
 		// Change status UI and input field
-		changeStatus($(this).attr("value"), true, $(this).closest("form"));
-	});
+		changeStatus($(this).attr("value"), $(this).closest("form"));	
+	});	
 });

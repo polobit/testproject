@@ -136,7 +136,7 @@ public class Task extends Cursor
 
     public enum Status
     {
-	NOT_STARTED, IN_PROGRESS, COMPLETED, PAUSED
+	YET_TO_START, IN_PROGRESS, COMPLETED
     };
 
     public Status status;

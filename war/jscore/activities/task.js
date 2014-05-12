@@ -36,12 +36,7 @@ $(function()
 			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
 			
-			loadProgressSlider(el,function(data)
-					{		
-						changeStatus("NOT_STARTED", true, el);
-						
-						$("#priority_type", el).val("NORMAL");
-			        });
+			loadProgressSlider(el,function(data){});
 		});
 	});
 
@@ -65,12 +60,7 @@ $(function()
 			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
 			
-			loadProgressSlider(el,function(data)
-			{		
-				changeStatus("NOT_STARTED", true, el);
-				
-				$("#priority_type", el).val("NORMAL");
-	        });
+			loadProgressSlider(el,function(data){});
 		});
 
 	});
@@ -138,10 +128,9 @@ $(function()
 	$('#updateTaskModal').on('hidden', function()
 	{
 		// Empty contact list and owner list
-		$("#updateTaskForm").find("li").remove();
-	
-		// Remove btn class from all other status
-		$(".status-btn").removeClass("btn");		
+		$("#updateTaskForm").find("li").remove();		
+		
+		resetForm($("#updateTaskForm"));
 	});
 
 	/**
@@ -152,21 +141,11 @@ $(function()
 		var el = $("#updateTaskForm");
 		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
 
-		console.log(el);
-	
 		// Loads progress slider in task update modal.
-		loadProgressSlider(el,function(data)
-		{
-			console.log("in callback");
-			
-			$(".progress_slider", el).slider("value", $("#progress", el).val());
-			
-			// Make btn selected as per previous status
-			$("span.[value=" + $("#status", el).val() + "]").addClass("btn");
-					
-			// Check if is_complete is true
-			checkIsComplete(el);
-        });
+		loadProgressSlider(el,function(data){});
+		
+		// Fill details in form
+		setForm(el);
 	});
 
 	/**
@@ -520,6 +499,8 @@ function complete_task(taskId, collection, ui, callback)
 
 	taskJSON.contacts = contacts;
 	taskJSON.is_complete = true;
+	taskJSON.status = "COMPLETED";
+	taskJSON.progress = 100;
 	taskJSON.owner_id = taskJSON.taskOwner.id;
 	
 	var new_task = new Backbone.Model();

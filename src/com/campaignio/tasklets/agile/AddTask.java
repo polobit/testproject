@@ -112,13 +112,11 @@ public class AddTask extends TaskletAdapter
 
     public static String STATUS = "status";
 
-    public static String NOT_STARTED = "NOT_STARTED";
+    public static String YET_TO_START = "YET_TO_START";
 
     public static String IN_PROGRESS = "IN_PROGRESS";
 
     public static String COMPLETED = "COMPLETED";
-
-    public static String PAUSED = "PAUSED";
 
     /*
      * (non-Javadoc)

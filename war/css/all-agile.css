@@ -1246,7 +1246,7 @@ small {
 	margin-bottom: 0 !important;
 }
 
-#activityModal>.for-description {	
+#activityModal>.for-description {
 	padding-bottom: 0 !important;
 	margin-bottom: 0 !important;
 }
@@ -1502,6 +1502,13 @@ small {
 	margin-right: 18px;
 }
 
+.progress-slider {
+	margin-left: 1 px;
+	cursor: pointer;
+	width: 103%;
+	margin-top: 6 px;
+	display: none;
+}
 /* .task-actions:hover,.task-actions:focus {display: block;} */
 /* ********************************************************* */
 /**************** Plan and upgrade css *************for plan css strip********************************************/
@@ -1908,7 +1915,8 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 		endColorstr='#0044cc', GradientType=0);
 	border-color: #0044cc #0044cc #002a80;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled=            
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=
+		             
 		             false);
 	color: #fff;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);

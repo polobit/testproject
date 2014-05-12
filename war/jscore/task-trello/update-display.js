@@ -40,7 +40,8 @@ function loadProgressSlider(el, callback)
 	{
 		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "plastic", onstatechange : function(value)
 		{
-			changeProgress(value, true, el);
+			console.log("In onstatechange");
+			changeProgress(value, $(".status", el).attr("value"), el);
 		} });
 
 		if (callback && typeof (callback) === "function")
@@ -55,79 +56,102 @@ function loadProgressSlider(el, callback)
  * Make changes in UI on status button and add new value to input field of
  * status in task edit modal.
  */
-function changeStatus(status, checkProgress, parentForm)
+function changeStatus(status, parentForm)
 {
-	var value = $("#progress", parentForm).val();
+	console.log("In changeStatus");
+	console.log(status);
+	var value;
 
-	// Remove btn class from all other status buttons
-	$(".status-btn", parentForm).removeClass("btn");
+	if (status == "YET_TO_START")
+		value = 0;
+	else if (status == "COMPLETED")
+		value = 100;
+	else if (status == "IN_PROGRESS")
+		value = 1;
 
-	// Add btn class to selected status
-	$(".status-btn.[value=" + status + "]", parentForm).addClass("btn status-btn txt-mute");
-
-	// Add status to input field
-	$("#status", parentForm).val(status);
-
-	if (checkProgress)
-	{
-		if (status == "NOT_STARTED")
-			value = 0;
-		else if (status == "COMPLETED")
-			value = 100;
-		else if (status == "IN_PROGRESS")
-		{
-			// if progress has some % already then do not need to set 1%.
-			if (value >= 1 && value < 100)
-				return;
-			
-			// if progress has 0%/100% then need to set 1%.
-			value = 1;
-		}
-		changeProgress(value, false, parentForm);
-	}
+	changeProgress(value, status, parentForm);
 }
 
 /*
  * Make changes in UI in progress slider and add new value to input field of
  * progress in task edit modal.
  */
-function changeProgress(value, checkStatus, parentForm)
+function changeProgress(value, status, parentForm)
 {
-	// Add progress 100 to input field
+	console.log("In changeProgress");
+	
+	// Add progress % to input field
 	$("#progress", parentForm).val(value);
 
-	// Make changes in status buttons
-	if (checkStatus)
-	{
-		// if status is paused then do not make changes in status buttons.
-		if ($("#status", parentForm).val() == "PAUSED")
-			return;
+	// Show slider for progress
+	showProgressSlider(value, status, parentForm);
+}
 
-		if (value == 0)
-			changeStatus("NOT_STARTED", false, parentForm);
-		else if (value == 100)
-			changeStatus("COMPLETED", false, parentForm);
-		else if (value >= 1 && value < 100)
-			changeStatus("IN_PROGRESS", false, parentForm);
+/*
+ * Make changes in UI on status selection and display progress slider in task
+ * update modal.
+ */
+function showProgressSlider(value, status, parentForm)
+{
+
+	console.log(status + " " + value);
+
+	if (value == 100)
+	{
+		status = "COMPLETED";
+		$(".status", parentForm).val("COMPLETED");
+		$("#is_complete", parentForm).val(true);
 	}
 	else
-		// Make changes in progress slider
-		$(".progress_slider", parentForm).slider("value", value);
+		$("#is_complete", parentForm).val(false);
+
+	if (status == "IN_PROGRESS")
+	{
+		$(parentForm).find(".progress-slider").css("display", "block");
+	}
+	else
+		$(parentForm).find(".progress-slider").css("display", "none");
+
+}
+
+function resetForm(formToReset)
+{
+	console.log("In resetForm");
+	
+	$('#progress', formToReset).val(0);
+	$('#is_complete', formToReset).val(false);
+	$('#priority_type', formToReset).val("NORMAL");
+	$('#status', formToReset).val("YET_TO_START");
+	$(".progress_slider", formToReset).slider("value", 0);
 }
 
 /*
  * After loading update task modal check is_completed is true or false, is it is
- * true so change status and progress, make status completed and progress 100%
- * as well as is_complete false. so in future we can remove is_complete.
+ * true so change status and progress, make status completed and progress 100%.
  */
-function checkIsComplete(el)
+function setForm(formToSet)
 {
-	var isComplete = $("#is_complete", el).val();
+	/*
+	 * $('#progress', formToSet).val() $('#is_complete', formToSet).val();
+	 * $('#priority_type', formToSet).val(); $('#status', formToSet).val();
+	 */
+    console.log("In setForm");
+	
+	var isComplete = $("#is_complete", formToSet).val();
 
 	if (isComplete == "true")
 	{
 		console.log("complete is true");
-		changeStatus("COMPLETED", true, el);
-		$("#is_complete", el).val(false);
+
+		// Show slider for progress
+		showProgressSlider(100, "COMPLETED", formToSet);
 	}
+	else
+	{
+		// Show slider for progress
+		showProgressSlider($('#progress', formToSet).val(), $('#status', formToSet).val(), formToSet);
+
+		$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
+	}
+
 }

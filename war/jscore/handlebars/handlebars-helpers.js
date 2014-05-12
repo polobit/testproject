@@ -2211,8 +2211,8 @@ $(function()
 		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", 
 				          "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
 			              "FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", 
-			              "OTHER" : "Other", "NOT_STARTED" : "Not Started",
-			              "IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", "PAUSED" : "Paused", 
+			              "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
+			              "IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", 
 			              "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue","LATER" : "Later" };
 
 		name = name.trim();

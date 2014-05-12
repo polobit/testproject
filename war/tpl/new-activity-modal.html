@@ -119,11 +119,10 @@
 			</div>
 			<!--Task form -->
 			<form id="taskForm" name="taskForm" method="post">
-				<fieldset>
-				    <input name="priority_type" id="priority_type" type="hidden" value="NORMAL" />
-					<input name="progress" id="progress" type="hidden" value="0">
-					<input name="status" id="status" type="hidden" value="NOT_STARTED">
-										
+				<fieldset>				    
+					<input name="progress" id="progress" type="hidden" value="">
+					<input name="is_complete" id="is_complete" type="hidden" value="">
+															
 					<div class="row">
 						<div id="addTask" class="span3 control-group">
 							<label for="subject" class="control-label"> <b>Task</b> <span
@@ -163,17 +162,18 @@
 									id="task-date-1" class="required date" />
 							</div>
 						</div>
-						<div class="span2 control-group">
-							<label for="priority_type" class="control-label"><b>Priority</b></label>
-							<div class="controls btn-group"
-								style="display: inline-flex; align-items: baseline;">
-								<span class="priority-btn btn" value="HIGH" style="color: red;"
-									title="High">!!!</span> <span class="priority-btn btn"
-									value="LOW" style="color: yellow;" title="Low">!!</span> <span
-									class="priority-btn btn" value="NORMAL" style="color: blue;"
-									title="Normal">!</span>
-							</div>
-						</div>
+						 <div class="span2 control-group">
+                            <label for="priority_type" class="control-label"><b>Priority </b></label>
+                            <div class="controls">
+                                <span class="input ">
+                                    <select name="priority_type" id="priority_type" size="1" class="input-medium">
+                                        <option value="HIGH">High</option>
+                                        <option value="NORMAL" selected="selected">Normal</option>
+                                        <option value="LOW">Low</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
 					</div>
 					<div class="row">
 						<div class="span3 control-group">
@@ -184,25 +184,20 @@
 								<img class="loading-img" src="img/21-0.gif"></img>
 							</div>
 						</div>
-						<div class="span3">
+						<div class="span2">
 							<label for="status" class="control-label"><b>Status </b></label>
-							<div style="width: 100%;">
-								<div style="margin-bottom: 15px;">
-									<span class="status-btn txt-mute btn" value="NOT_STARTED"
-										title="Not Started"><i class="icon-stop"></i></span> <span
-										class="status-btn txt-mute" value="IN_PROGRESS"
-										title="In Progress"><i class="icon-play"></i></span> <span
-										class="status-btn txt-mute" value="COMPLETED"
-										title="Completed"><i class="icon-ok"></i></span> <span
-										class="status-btn txt-mute" value="PAUSED" title="Paused"><i
-										class="icon-pause"></i></span>
-								</div>
-								<div style="margin-left: 10px; cursor: pointer; width: 70%"
-									title="Progress">
-									<input id="progress_slider" type="slider"
-										class="progress_slider" value="0" />
-								</div>
-							</div>
+                            <div class="controls" style="margin-bottom: 6px;">
+                                <span class="input ">
+                                    <select name="status" id="status" size="1" class="input-medium status">
+                                        <option value="YET_TO_START" selected="selected">Yet to Start</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="COMPLETED">Completed</option>                                        
+                                    </select>
+                                </span>
+                            </div>
+							<div class="progress-slider" title="Progress">
+							    <input id="progress_slider" type="slider" class="progress_slider" value="0" />
+							</div>											
 						</div>
 					</div>
 					<div class="row">

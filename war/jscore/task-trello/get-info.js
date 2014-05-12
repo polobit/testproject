@@ -69,7 +69,7 @@ function getNewDueDate(newTaskListId)
 // dragged in task lists.
 function getProgressValue(status)
 {
-	if (status == "NOT_STARTED")
+	if (status == "YET_TO_START")
 		return 0;
 	else if (status == "COMPLETED")
 		return 100;
