@@ -2,6 +2,7 @@ package com.thirdparty.google.deferred;
 
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 public class GoogleContactsSyncDeferredTask implements DeferredTask
@@ -30,7 +31,7 @@ public class GoogleContactsSyncDeferredTask implements DeferredTask
 	{
 	    ContactPrefs contactPrefs = ContactPrefsUtil.get(id);
 
-	    // ContactSyncUtil.syncContacts(contactPrefs);
+	    ContactSyncUtil.syncContacts(contactPrefs);
 	}
 	catch (Exception e)
 	{

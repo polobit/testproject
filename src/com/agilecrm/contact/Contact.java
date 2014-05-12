@@ -111,6 +111,7 @@ public class Contact extends Cursor
     /**
      * Updated time of the contact
      */
+    @Indexed
     @NotSaved(IfDefault.class)
     public Long updated_time = 0L;
 
