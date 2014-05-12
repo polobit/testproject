@@ -24,6 +24,11 @@ public class EmailLinksConversion
     public static List<String> extensionsList = Arrays.asList(extensions);
 
     /**
+     * Flag whether to append contact data to clicked url or not
+     */
+    public static String AGILE_EMAIL_PUSH = "1";
+
+    /**
      * Validates links present in the email body (either in text or html)
      * inorder which urls need to be shortened. It omits the links ended with
      * image extensions and links like http://agle.cc
@@ -63,7 +68,7 @@ public class EmailLinksConversion
      *            - campaign id
      * @return String
      */
-    public static String convertLinksUsingRegex(String input, String subscriberId, String campaignId)
+    public static String convertLinksUsingRegex(String input, String subscriberId, String campaignId, boolean doPush)
     {
 	Pattern p = Pattern.compile(HTTP_URL_REGEX);
 	Matcher m = p.matcher(input);
@@ -71,10 +76,10 @@ public class EmailLinksConversion
 	StringBuffer stringBuffer = new StringBuffer();
 
 	// Domain URL
-	// String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(),
-	// "sandbox");
+	String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(), "sandbox");
 
-	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+	// String domainURL =
+	// VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
 
 	// Remove all /
 	while (domainURL.endsWith("/"))
@@ -82,8 +87,7 @@ public class EmailLinksConversion
 	    domainURL = domainURL.substring(0, domainURL.length() - 1);
 	}
 
-	String sid = "";
-	String cid = "";
+	String sid = "", cid = "", push = "";
 
 	try
 	{
@@ -95,11 +99,15 @@ public class EmailLinksConversion
 	    if (!StringUtils.isBlank(campaignId))
 		cid = "&c=" + URLEncoder.encode(campaignId, "UTF-8");
 
+	    if (doPush)
+		push = "&p=" + URLEncoder.encode(AGILE_EMAIL_PUSH, "UTF-8");
+
 	    // Iterate over matches
 	    while (m.find())
 	    {
 		String url = m.group();
 
+		// Remove "/ or '/ that appends to url, if any
 		if (url.endsWith("\"/") || url.endsWith("\'/"))
 		    url = url.substring(0, url.length() - 2);
 
@@ -107,7 +115,7 @@ public class EmailLinksConversion
 		if (isSpecialLink(url))
 		{
 		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, domainURL + "/click?u=" + URLEncoder.encode(url, "UTF-8") + cid + sid);
+		    m.appendReplacement(stringBuffer, domainURL + "/click?u=" + URLEncoder.encode(url, "UTF-8") + cid + sid + push);
 		}
 	    }
 

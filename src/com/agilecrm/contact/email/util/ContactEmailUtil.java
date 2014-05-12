@@ -128,7 +128,7 @@ public class ContactEmailUtil
 	    body = EmailUtil.appendTrackingImage(body, null, String.valueOf(openTrackerId));
 
 	    if (trackClicks)
-		body = EmailLinksConversion.convertLinksUsingRegex(body, contactId, null);
+		body = EmailLinksConversion.convertLinksUsingRegex(body, contactId, null, false);
 	}
 
 	// combine body and signature.
