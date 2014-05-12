@@ -49,8 +49,12 @@ public class DealsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Opportunity> getOpportunities()
+    public List<Opportunity> getOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+	if (count != null)
+	{
+	    return OpportunityUtil.getOpportunities((Integer.parseInt(count)), cursor);
+	}
 	return OpportunityUtil.getOpportunities();
     }
 
