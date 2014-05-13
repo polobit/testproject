@@ -70,6 +70,18 @@ public class OpportunityUtil
     }
 
     /**
+     * Gets list of all opportunities.
+     * 
+     * @return list of all opportunities.
+     */
+    public static List<Opportunity> getOpportunities(int max, String cursor)
+    {
+	if (max != 0)
+	    return dao.fetchAll(max, cursor);
+	return getOpportunities();
+    }
+
+    /**
      * Gets list of all opportunities by milestones.
      * 
      * @return DealsByMilestones JSONObjects with respect to given
