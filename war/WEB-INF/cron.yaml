@@ -11,22 +11,6 @@ cron:
   url: /backend/cron/cron-pull?q=campaign-pull-queue
   schedule: every 1 mins
   
-  - description: Bulk Campaigns or Emails Execution
-  url: /backend/cron/cron-pull?q=bulk-campaign-pull-queue
-  schedule: every 1 mins
-  
-  - description: Normal Campaigns or Emails Execution
-  url: /backend/cron/cron-pull?q=normal-campaign-pull-queue
-  schedule: every 1 mins
-  
-   description: Bulk Emails Execution
-  url: /backend/cron/cron-pull?q=bulk-email-pull-queue
-  schedule: every 1 mins
-  
-  - description: Normal Emails Execution
-  url: /backend/cron/cron-pull?q=normal-email-pull-queue
-  schedule: every 1 mins
-  
 - description: daily reports
   url: /backend/cron/reports?duration=DAILY
   schedule: every day 23:30
