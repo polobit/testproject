@@ -10,6 +10,10 @@
 $(function()
 {
 
+	// Loads progress slider in add task / update modal.
+	loadProgressSlider($("#taskForm"));
+	loadProgressSlider($("#updateTaskForm"));
+	
 	/**
 	 * To stop propagation to edit page
 	 */
@@ -34,9 +38,7 @@ $(function()
 		{
 			$("#taskForm").find("#owners-list").html(data);
 			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
-			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-			
-			loadProgressSlider(el,function(data){});
+			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();		
 		});
 	});
 
@@ -59,8 +61,6 @@ $(function()
 			$("#taskForm").find("#owners-list").html(data);
 			$("#owners-list", el).find('option[value=' + CURRENT_DOMAIN_USER.id + ']').attr("selected", "selected");
 			$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
-			
-			loadProgressSlider(el,function(data){});
 		});
 
 	});
@@ -128,8 +128,8 @@ $(function()
 	$('#updateTaskModal').on('hidden', function()
 	{
 		// Empty contact list and owner list
-		$("#updateTaskForm").find("li").remove();		
-		
+		$("#updateTaskForm").find("li").remove();
+
 		resetForm($("#updateTaskForm"));
 	});
 
@@ -139,10 +139,7 @@ $(function()
 	$('#updateTaskModal').on('shown', function()
 	{
 		var el = $("#updateTaskForm");
-		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
-
-		// Loads progress slider in task update modal.
-		loadProgressSlider(el,function(data){});
+		agile_type_ahead("update_task_related_to", el, contacts_typeahead);	
 		
 		// Fill details in form
 		setForm(el);
@@ -242,10 +239,7 @@ function save_task(formId, modalId, isUpdate, saveBtn)
 		enable_save_button($(saveBtn));// $(saveBtn).removeAttr('disabled');
 		return false;
 	}
-
-	// Show loading symbol until model get saved
-	// $('#' + modalId).find('span.save-status').html(LOADING_HTML);
-
+	
 	var json = serializeForm(formId);
 	console.log(json.due);
 	if (!isUpdate)
@@ -348,7 +342,7 @@ function get_due(due)
 	var date = new Date();
 	date.setHours(0, 0, 0, 0);
 
-	date = date.getTime() / 1000;	
+	date = date.getTime() / 1000;
 	return Math.floor((due - date) / (24 * 3600));
 }
 
@@ -502,7 +496,7 @@ function complete_task(taskId, collection, ui, callback)
 	taskJSON.status = "COMPLETED";
 	taskJSON.progress = 100;
 	taskJSON.owner_id = taskJSON.taskOwner.id;
-	
+
 	var new_task = new Backbone.Model();
 	new_task.url = '/core/api/tasks';
 	new_task.save(taskJSON, { success : function(model, response)

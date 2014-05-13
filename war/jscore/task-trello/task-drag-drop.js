@@ -41,11 +41,11 @@ function changeAfterDrop(event, ui)
 	var sender = ui.sender[0];
 
 	// Get heading of task list
-	var oldTaskListId = $(sender).closest('.list').attr('id');
-	var newTaskListId = $(item).closest('.list').attr('id');
+	var oldTaskListId = getTaskListId(sender);
+	var newTaskListId = getTaskListId(item);
 
-	var oldTaskListOwnerId = $(sender).closest('.list').find('.list-header').attr('ownerID');
-	var newTaskListOwnerId = $(item).closest('.list').find('.list-header').attr('ownerID');
+	var oldTaskListOwnerId = getTaskListOwnerId(sender);
+	var newTaskListOwnerId = getTaskListOwnerId(item);
 
 	// Get selected criteria
 	var criteria = getCriteria();
@@ -63,58 +63,64 @@ function changeAfterDrop(event, ui)
 	{
 		// Gets search key from map so we can change that field in task as per
 		// new task list.
-		var fieldToChange = urlMap[criteria].searchKey;
+		var fieldToChange = GroupingMap[criteria].searchKey;
 
 		// Get task id
 		var taskId = $(item).find('.listed-task').attr('id');
 
-		var modelOldTaskList;
-		
 		// Get old task list
-		if (criteria == "OWNER")
-			modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId, owner_id : parseInt(oldTaskListOwnerId) });
-		else
-			modelOldTaskList = tasksListCollection.collection.where({ heading : oldTaskListId });
+		var modelOldTaskList = getTaskList(criteria, oldTaskListId, oldTaskListOwnerId);
 
 		// Gets task from old sub collection (task list) to var type json
 		var oldTask = modelOldTaskList[0].get('taskCollection').get(taskId).toJSON();
 
-		// Changes field of task
-		if (fieldToChange == "due")
-		{
-			oldTask.owner_id = oldTask.taskOwner.id;
-			oldTask["due"] = getNewDueDate(newTaskListId);
-		}
-		else if (fieldToChange == "taskOwner.name")
-		{
-			oldTask.owner_id = newTaskListOwnerId;
-			oldTask["taskListOwnerId"] = oldTaskListOwnerId;
-		}		
-		else
-		{
-			oldTask.owner_id = oldTask.taskOwner.id;
-			oldTask[fieldToChange] = newTaskListId;
-			
-			 if (fieldToChange == "status") 
-			   oldTask.progress = getProgressValue(newTaskListId); // send new status 
-		}
-
-		// To change task list in collection we need old task list id.
-		oldTask["taskListId"] = oldTaskListId;
-
-		// Replace contacts object with contact ids
-		var contacts = [];
-		$.each(oldTask.contacts, function(index, contact)
-		{
-			contacts.push(contact.id);
-		});
-
-		oldTask.contacts = contacts;
-		oldTask.due = new Date(oldTask.due).getTime();
-
-		// Save task after dropped to new task list
-		saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, taskId);
+		// Make updation in task and save in DB as well as collection
+		updateDraggedTask(oldTask, criteria, oldTaskListOwnerId, oldTaskListId, newTaskListId, newTaskListOwnerId, taskId, fieldToChange);
 	}
+}
+
+// Make updation in task and save in DB as well as collection
+function updateDraggedTask(oldTask, criteria, oldTaskListOwnerId, oldTaskListId, newTaskListId, newTaskListOwnerId, taskId, fieldToChange)
+{
+	// Changes field of task
+	if (fieldToChange == "due")
+	{
+		// Criteria is due
+		oldTask.owner_id = oldTask.taskOwner.id;
+		oldTask["due"] = getNewDueDate(newTaskListId);
+	}
+	else if (fieldToChange == "taskOwner.name")
+	{
+		// Criteria is owner
+		oldTask.owner_id = newTaskListOwnerId;
+		oldTask["taskListOwnerId"] = oldTaskListOwnerId;
+	}
+	else
+	{
+		oldTask.owner_id = oldTask.taskOwner.id;
+		oldTask[fieldToChange] = newTaskListId;
+
+		// Criteria is status
+		if (fieldToChange == "status")
+			oldTask.progress = getProgressValue(newTaskListId); // send new
+																// status
+	}
+
+	// To change task list in collection we need old task list id.
+	oldTask["taskListId"] = oldTaskListId;
+
+	// Replace contacts object with contact ids
+	var contacts = [];
+	$.each(oldTask.contacts, function(index, contact)
+	{
+		contacts.push(contact.id);
+	});
+
+	oldTask.contacts = contacts;
+	oldTask.due = new Date(oldTask.due).getTime();
+
+	// Save task after dropped to new task list
+	saveAfterDrop(oldTask, criteria, newTaskListId, newTaskListOwnerId, taskId);
 }
 
 // Save task after dropped to new task list

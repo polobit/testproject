@@ -1,20 +1,23 @@
+// Main Collection
+var	TasksListCollection = null;
+
+// Grouping Map After selection from filter/ drop down
+var	GroupingMap = { 
+		"PRIORITY" : { "type" : ["HIGH", "LOW", "NORMAL"], "searchKey" : "priority_type" }, 
+		"CATEGORY" : { "type" : ["EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"], "searchKey" : "type" }, 
+		"STATUS" : { "type" : ["YET_TO_START", "IN_PROGRESS", "COMPLETED"], "searchKey" : "status" }, 
+		"DUE" : { "type" : ["TODAY", "TOMORROW", "OVERDUE", "LATER"], "searchKey" : "due" }, 
+		"OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } 
+		};
+
+// Status of Task
+var YET_TO_START = "YET_TO_START";
+var IN_PROGRESS = "IN_PROGRESS";
+var COMPLETED = "COMPLETED";
+
 $(function()
-{
-	// Main Collection
-	tasksListCollection = null;
-
-	// Url Map After selection from filter
-	urlMap = { "PRIORITY" : { "type" : [
-			"HIGH", "LOW", "NORMAL"
-	], "searchKey" : "priority_type" }, "CATEGORY" : { "type" : [
-			"EMAIL", "CALL", "SEND", "TWEET", "FOLLOW_UP", "MEETING", "MILESTONE", "OTHER"
-	], "searchKey" : "type" }, "STATUS" : { "type" : [
-			"YET_TO_START", "IN_PROGRESS", "COMPLETED"
-	], "searchKey" : "status" }, "DUE" : { "type" : [
-			"TODAY", "TOMORROW", "OVERDUE", "LATER"
-	], "searchKey" : "due" }, "OWNER" : { "type" : [], "searchKey" : "taskOwner.name" } };
-
-	// Get user details and add into urlMap's owner array.
+{	
+	// Get user details and add into GroupingMap's owner array.
 	getUserDetails();
 
 	// Display task actions
@@ -89,9 +92,7 @@ $(function()
 	 * In new/update task modal, on selection of status, show progress slider and change %
 	 */
 	$(".status").change(function()
-	{
-		console.log($(this).attr("value"));
-		
+	{		
 		// Change status UI and input field
 		changeStatus($(this).attr("value"), $(this).closest("form"));	
 	});	

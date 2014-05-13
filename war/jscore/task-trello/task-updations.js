@@ -4,29 +4,29 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	var modelTaskList;
 
 	if (taskListOwnerId)
-		modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : taskListOwnerId });
+		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
-		modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
+		modelTaskList = getTaskList(null, taskListId, null);
 
 	if (!modelTaskList)
 		return;
 
 	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
-	
+
 	if (!modelTask)
 		return;
 
 	var taskJson = modelTask.toJSON();
-	
+
 	taskJson["taskListId"] = taskListId;
 	taskJson["taskListOwnerId"] = taskListOwnerId;
 
 	// Fill form
 	deserializeForm(taskJson, $("#updateTaskForm"));
-	
+
 	// Show modal
 	$("#updateTaskModal").modal('show');
-		
+
 	// Fills owner select element
 	populateUsers("owners-list", $("#updateTaskForm"), taskJson, 'taskOwner', function(data)
 	{
@@ -37,7 +37,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 		}
 
 		$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
-	});	
+	});
 
 	// Creates normal time.
 	displayTimeAgo($(".list"));
@@ -49,7 +49,7 @@ function updateTask(isUpdate, data, json)
 	// Get selected criteria
 	var criteria = getCriteria();
 
-	var headingToSearch = json[urlMap[criteria].searchKey];
+	var headingToSearch = json[GroupingMap[criteria].searchKey];
 
 	if (criteria == "DUE")
 		headingToSearch = getHeadingForDueTask(json);
@@ -75,9 +75,9 @@ function updateTask(isUpdate, data, json)
 
 		// Get Task List
 		if (criteria == "OWNER")
-			modelTaskList = tasksListCollection.collection.where({ heading : json.taskListId, owner_id : parseInt(json.taskListOwnerId) });
+			modelTaskList = getTaskList(criteria, json.taskListId, json.taskListOwnerId);
 		else
-			modelTaskList = tasksListCollection.collection.where({ heading : headingToSearch });
+			modelTaskList = getTaskList(null, headingToSearch, null);
 
 		if (!modelTaskList)
 			return;
@@ -102,7 +102,7 @@ function updateTask(isUpdate, data, json)
 function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 {
 	var modelOldTaskList;
-	
+
 	// Get old task list
 	if (criteria == "OWNER")
 	{
@@ -115,8 +115,8 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 
 		if (!ownerId)
 			return;
-			
-		modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId, owner_id : ownerId });
+
+		modelOldTaskList = getTaskList(criteria, json.taskListId, ownerId);
 
 		headingToSearch = "taskOwner.name";
 
@@ -125,13 +125,13 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 	}
 	else
 	{
-	    modelOldTaskList = tasksListCollection.collection.where({ heading : json.taskListId });
+		modelOldTaskList = getTaskList(null, json.taskListId, null);
 
 		// Remove task from UI
 		$("#" + json.taskListId).find("#" + json.id).remove();
 	}
 
-	if(!modelOldTaskList)
+	if (!modelOldTaskList)
 		return;
 
 	// Remove from task from old task list
@@ -145,16 +145,16 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 function completeTask(taskId, taskListId, taskListOwnerId)
 {
 	var modelTaskList;
-	
+
 	// Get task list
 	if (taskListOwnerId)
-		modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : parseInt(taskListOwnerId) });
+		modelTaskList = getTaskList("OWNER",taskListId, taskListOwnerId);
 	else
-		modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
+		modelTaskList = getTaskList(null, taskListId, null);
 
-	if(!modelTaskList)
+	if (!modelTaskList)
 		return;
-	
+
 	// Get task
 	var modelTsk = modelTaskList[0].get('taskCollection').get(taskId);
 
@@ -171,7 +171,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	// taskJson.is_complete = true; field will b removed.
 	taskJson.due = new Date(taskJson.due).getTime();
 	taskJson.owner_id = taskJson.taskOwner.id;
-	taskJson.status = "COMPLETED";
+	taskJson.status = COMPLETED;
 	taskJson.progress = 100;
 
 	if (taskListOwnerId)

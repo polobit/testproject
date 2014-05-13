@@ -2,26 +2,26 @@
 function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 {
 	var modelTaskList;
-	
+
 	// Get task list on basis of heading and id in case of owner criteria
 	if (conditionToCheck == "OWNER") // new task
 	{
-		modelTaskList = tasksListCollection.collection.where({ heading : tasksToAdd.taskOwner.name, owner_id : tasksToAdd.taskOwner.id });
+		modelTaskList = getTaskList("OWNER", tasksToAdd.taskOwner.name, tasksToAdd.taskOwner.id);
 	}
-	else if ((conditionToCheck == "dragged" || conditionToCheck == true) && headingToSearch == "taskOwner.name") // dragged/edited
-	// task
+	else if ((conditionToCheck == "dragged" || conditionToCheck == true) && headingToSearch == "taskOwner.name")
+	// dragged/edited task
 	{
-		modelTaskList = tasksListCollection.collection.where({ heading : tasksToAdd.get("taskOwner").name, owner_id : tasksToAdd.get("taskOwner").id });
+		modelTaskList = getTaskList("OWNER", tasksToAdd.get("taskOwner").name, tasksToAdd.get("taskOwner").id);
 	}
 	else
 	// task other than owner criteria
 	{
-		modelTaskList = tasksListCollection.collection.where({ heading : headingToSearch });
+		modelTaskList = getTaskList(null, headingToSearch,null);
 	}
-	
-	if(!modelTaskList)
+
+	if (!modelTaskList)
 		return;
-	
+
 	// Add task in sub collection means in Task List
 	if (conditionToCheck == "dragged") // if dragged task then do not update UI
 		modelTaskList[0].get('taskCollection').add(tasksToAdd, { silent : true });// sub-collection
@@ -36,16 +36,16 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 function deleteTask(taskId, taskListId, taskListOwnerId)
 {
 	var modelTaskList;
-	
+
 	// Get Task list
 	if (taskListOwnerId)
-		modelTaskList = tasksListCollection.collection.where({ heading : taskListId, owner_id : parseInt(taskListOwnerId) });
+		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
-		modelTaskList = tasksListCollection.collection.where({ heading : taskListId });
+		modelTaskList = getTaskList(null, taskListId, null);
 
-	if(!modelTaskList)
+	if (!modelTaskList)
 		return;
-	
+
 	// Destroy task
 	modelTaskList[0].get('taskCollection').get(taskId).destroy();
 

@@ -33,22 +33,14 @@ function displaySettings()
 }
 
 // Load and display slider in update task modal of task for progress.
-function loadProgressSlider(el, callback)
-{
-	console.log("in loadProgressSlider");
+function loadProgressSlider(el)
+{	
 	head.load(CSS_PATH + 'css/jslider.css', LIB_PATH + 'lib/jquery.slider.min.js', function()
 	{
-		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "plastic", onstatechange : function(value)
-		{
-			console.log("In onstatechange");
+		$(".progress_slider", el).slider({ from : 0, to : 100, step : 1, skin : "round", onstatechange : function(value)
+		{		
 			changeProgress(value, $(".status", el).attr("value"), el);
 		} });
-
-		if (callback && typeof (callback) === "function")
-		{
-			// execute the callback
-			callback();
-		}
 	});
 }
 
@@ -58,15 +50,13 @@ function loadProgressSlider(el, callback)
  */
 function changeStatus(status, parentForm)
 {
-	console.log("In changeStatus");
-	console.log(status);
 	var value;
 
-	if (status == "YET_TO_START")
+	if (status == YET_TO_START)
 		value = 0;
-	else if (status == "COMPLETED")
+	else if (status == COMPLETED)
 		value = 100;
-	else if (status == "IN_PROGRESS")
+	else if (status == IN_PROGRESS)
 		value = 1;
 
 	changeProgress(value, status, parentForm);
@@ -78,8 +68,6 @@ function changeStatus(status, parentForm)
  */
 function changeProgress(value, status, parentForm)
 {
-	console.log("In changeProgress");
-	
 	// Add progress % to input field
 	$("#progress", parentForm).val(value);
 
@@ -93,35 +81,27 @@ function changeProgress(value, status, parentForm)
  */
 function showProgressSlider(value, status, parentForm)
 {
-
-	console.log(status + " " + value);
-
-	if (value == 100)
-	{
-		status = "COMPLETED";
-		$(".status", parentForm).val("COMPLETED");
+	if (value == 100 || status == COMPLETED)
+	{		
+		$(".status", parentForm).val(COMPLETED);
+		$("#progress", parentForm).val(100);
 		$("#is_complete", parentForm).val(true);
 	}
 	else
 		$("#is_complete", parentForm).val(false);
 
 	if (status == "IN_PROGRESS")
-	{
-		$(parentForm).find(".progress-slider").css("display", "block");
-	}
+		$(parentForm).find(".progress-slider").css("display", "block");	
 	else
 		$(parentForm).find(".progress-slider").css("display", "none");
-
 }
 
 function resetForm(formToReset)
 {
-	console.log("In resetForm");
-	
 	$('#progress', formToReset).val(0);
 	$('#is_complete', formToReset).val(false);
 	$('#priority_type', formToReset).val("NORMAL");
-	$('#status', formToReset).val("YET_TO_START");
+	$('#status', formToReset).val(YET_TO_START);
 	$(".progress_slider", formToReset).slider("value", 0);
 }
 
@@ -131,20 +111,12 @@ function resetForm(formToReset)
  */
 function setForm(formToSet)
 {
-	/*
-	 * $('#progress', formToSet).val() $('#is_complete', formToSet).val();
-	 * $('#priority_type', formToSet).val(); $('#status', formToSet).val();
-	 */
-    console.log("In setForm");
-	
 	var isComplete = $("#is_complete", formToSet).val();
 
 	if (isComplete == "true")
 	{
-		console.log("complete is true");
-
 		// Show slider for progress
-		showProgressSlider(100, "COMPLETED", formToSet);
+		showProgressSlider(100, COMPLETED, formToSet);
 	}
 	else
 	{
@@ -153,5 +125,4 @@ function setForm(formToSet)
 
 		$(".progress_slider", formToSet).slider("value", $('#progress', formToSet).val());
 	}
-
 }

@@ -1,4 +1,4 @@
-// Get user's name and id to add in urlMap for owner of task, user name can
+// Get user's name and id to add in GroupingMap for owner of task, user name can
 // be redundant so we need user's id too.
 function getUserDetails()
 {
@@ -6,7 +6,7 @@ function getUserDetails()
 	{
 		for ( var i in users)
 		{
-			urlMap.OWNER.type[i] = { "name" : users[i].name, "id" : users[i].id };
+			GroupingMap.OWNER.type[i] = { "name" : users[i].name, "id" : users[i].id };
 		}
 	}).error(function(data)
 	{
@@ -69,11 +69,11 @@ function getNewDueDate(newTaskListId)
 // dragged in task lists.
 function getProgressValue(status)
 {
-	if (status == "YET_TO_START")
+	if (status == YET_TO_START)
 		return 0;
-	else if (status == "COMPLETED")
+	else if (status == COMPLETED)
 		return 100;
-	else if (status == "IN_PROGRESS")
+	else if (status == IN_PROGRESS)
 		return 1;
 }
 
@@ -112,4 +112,14 @@ function getCriteria()
 		criteria = "CATEGORY";
 
 	return criteria;
+}
+
+// Get task list from main-collection by ID
+function getTaskList(criteria, taskListId, owner_id)
+{
+	// Get task list
+	if (criteria == "OWNER")
+		return TasksListCollection.collection.where({ heading : taskListId, owner_id : parseInt(owner_id) });
+	else
+		return TasksListCollection.collection.where({ heading : taskListId });
 }

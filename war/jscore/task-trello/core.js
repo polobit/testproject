@@ -15,7 +15,7 @@ function findDetails(criteria, owner)
 			{ "name" : CURRENT_DOMAIN_USER.name, "id" : CURRENT_DOMAIN_USER.id }
 		]); // only current
 	else
-		createNestedCollection(criteria, urlMap[criteria].type); // all
+		createNestedCollection(criteria, GroupingMap[criteria].type); // all
 
 	if (criteria == "DUE" || criteria == "OWNER")
 	{
@@ -32,13 +32,13 @@ function findDetails(criteria, owner)
 			// my task
 			initialURL = '/core/api/tasks/my/tasks';
 
-		createSubCollectionForDueAndOwner(urlMap[criteria].type, initialURL, urlMap[criteria].searchKey);
+		createSubCollectionForDueAndOwner(GroupingMap[criteria].type, initialURL, GroupingMap[criteria].searchKey);
 	}
 	else
 	{
 		// Url to call DB
 		var initialURL = '/core/api/tasks/based' + getParams() + "&type=";
-		createSubCollection(urlMap[criteria].type, initialURL, urlMap[criteria].searchKey);
+		createSubCollection(GroupingMap[criteria].type, initialURL, GroupingMap[criteria].searchKey);
 	}
 
 	// Gives ability of dragging and dropping to tasks in task list.
@@ -69,11 +69,11 @@ function createNestedCollection(criteria, criteriaArray)
 			return;
 
 		// Add task list in main collection
-		tasksListCollection.collection.add(newTaskList);// main-collection
+		TasksListCollection.collection.add(newTaskList);// main-collection
 	}
 
 	// Render it
-	$('#task-list-based-condition').html(tasksListCollection.render(true).el);
+	$('#task-list-based-condition').html(TasksListCollection.render(true).el);
 }
 
 // Creates sub collection
@@ -141,7 +141,7 @@ function createSubCollection(criteriaArray, initialURL, searchKey)
 // Initialize nested collection
 function initTaskListCollection()
 {
-	tasksListCollection = new Base_Collection_View({ restKey : "task", templateKey : "new-tasks-lists", individual_tag_name : 'div',
+	TasksListCollection = new Base_Collection_View({ restKey : "task", templateKey : "new-tasks-lists", individual_tag_name : 'div',
 		className : "list-area-wrapper", sortKey : 'heading', sort_collection : true, descending : false, postRenderCallback : function(el)
 		{
 			// Creates normal time.
@@ -149,9 +149,9 @@ function initTaskListCollection()
 		} });
 
 	// Over write append function
-	tasksListCollection.appendItem = taskAppend;
+	TasksListCollection.appendItem = taskAppend;
 
-	$('#task-list-based-condition').html(tasksListCollection.render().el);
+	$('#task-list-based-condition').html(TasksListCollection.render().el);
 }
 
 // Append sub collection and model
