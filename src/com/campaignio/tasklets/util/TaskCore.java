@@ -77,7 +77,7 @@ public class TaskCore
 				String namespace = NamespaceManager.get();
 
 				TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-				        AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace, len);
+				        AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
 
 				// Add deferred tasks to pull queue with namespace as tag
 				PullQueueUtil.addToPullQueue(len >= 500 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE

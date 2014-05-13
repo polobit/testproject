@@ -86,7 +86,7 @@ public class WorkflowSubscribeUtil
 		try
 		{
 			TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-					workflowId.toString(), subscriberJSON.toString(), namespace, 1);
+					workflowId.toString(), subscriberJSON.toString(), namespace);
 
 			PullQueueUtil
 					.addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
