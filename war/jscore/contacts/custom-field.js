@@ -148,7 +148,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				// Create select drop down by checking it's required nature
 				if(field.is_required)
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-									+ucfirst(field.field_label)
+									+field.field_label
 									+' <span class="field_req">*</span></label><div class="controls"><select class="'
 									+field.field_type.toLowerCase()
 									+' custom_field required" id='
@@ -160,7 +160,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'</select></div></div>');
 				else
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-									+ucfirst(field.field_label)
+									+field.field_label
 									+'</label><div class="controls"><select class="'
 									+field.field_type.toLowerCase()
 									+' custom_field" id='
@@ -176,7 +176,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				field_type = "checkbox";
 				if(field.is_required)
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-								+ucfirst(field.field_label)
+								+field.field_label
 								+' <span class="field_req">*</span></label><div class="controls"><input type="'
 								+field_type
 								+'" class="'
@@ -187,7 +187,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'"></div></div>');
 				else
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-								+ucfirst(field.field_label)
+								+field.field_label
 								+'</label><div class="controls"><input type="'
 								+field_type
 								+'" class="'
@@ -208,7 +208,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 			if(field.is_required)
 				el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls"><textarea style="max-width:420px;" rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
@@ -218,7 +218,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'"></textarea></div></div>');
 			else
 				el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+'</label><div class="controls"><textarea style="max-width:420px;" rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
@@ -232,7 +232,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required)
 			el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required" id='
@@ -240,7 +240,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'"></div></div>');
 		else
 			el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+'</label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field" id='
