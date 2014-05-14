@@ -66,6 +66,38 @@
   </retry-parameters>
   </queue>
   
+  <queue>
+  <name>normal-campaign-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+  		<task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+  <queue>
+  <name>bulk-campaign-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+  		<task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+  <queue>
+  <name>normal-email-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+  		<task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+  <queue>
+  <name>bulk-email-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+  		<task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
    <queue>
   <name>sb-email-pull-queue</name>
   <mode>pull</mode>

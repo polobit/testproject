@@ -5,6 +5,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -21,75 +22,78 @@ import com.google.appengine.api.NamespaceManager;
  */
 public class WorkflowSubscribeUtil
 {
-    /**
-     * Subscribes list of contacts into a campaign and runs workflow in
-     * {@link TaskletUtil} executeCampaign method which runs using DeferredTask
-     * to execute workflow.
-     * 
-     * @param contacts
-     *            List of contact objects subscribe to campaign.
-     * @param workflowId
-     *            Id of a workflow.
-     */
-    public static void subscribeDeferred(List<Contact> contacts, Long workflowId)
-    {
-	// Convert Contacts into JSON Array
-	JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts);
 
-	// Get Campaign JSON
-	JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(workflowId);
-	if (campaignJSON == null)
-	    return;
-
-	TaskCore.executeCampaign(campaignJSON, subscriberJSONArray);
-
-    }
-
-    /**
-     * Subscribes a single contact into a campaign and runs deferred task to
-     * execute workflow.
-     * 
-     * @param contact
-     *            Contact object subscribed to workflow.
-     * @param workflowId
-     *            Id of a workflow.
-     */
-    public static void subscribe(Contact contact, Long workflowId)
-    {
-	try
+	/**
+	 * Subscribes list of contacts into a campaign and runs workflow in
+	 * {@link TaskletUtil} executeCampaign method which runs using DeferredTask
+	 * to execute workflow.
+	 * 
+	 * @param contacts
+	 *            List of contact objects subscribe to campaign.
+	 * @param workflowId
+	 *            Id of a workflow.
+	 */
+	public static void subscribeDeferred(List<Contact> contacts, Long workflowId)
 	{
-	    // Convert Contacts into JSON Array
-	    JSONObject subscriberJSONObject = AgileTaskletUtil.getSubscriberJSON(contact);
-	    subscribeWithSubscriberJSON(subscriberJSONObject, workflowId);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
+		// Convert Contacts into JSON Array
+		JSONArray subscriberJSONArray = AgileTaskletUtil.getSubscriberJSONArray(contacts);
 
-    /**
-     * Subscribes subscriberJSON to the campaign of given workflow-id in
-     * deferredtask.
-     * 
-     * @param subscriberJSON
-     *            - SubscriberJSON.
-     * @param workflowId
-     *            - workflow-id.
-     */
-    public static void subscribeWithSubscriberJSON(JSONObject subscriberJSON, Long workflowId)
-    {
-	String namespace = NamespaceManager.get();
+		// Get Campaign JSON
+		JSONObject campaignJSON = WorkflowUtil.getWorkflowJSON(workflowId);
+		if (campaignJSON == null)
+			return;
 
-	try
-	{
-	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString(),
-		    namespace);
-	    PullQueueUtil.addToPullQueue("campaign-pull-queue", taskletWorkflowDeferredTask, namespace);
+		TaskCore.executeCampaign(campaignJSON, subscriberJSONArray);
+
 	}
-	catch (Exception e)
+
+	/**
+	 * Subscribes a single contact into a campaign and runs deferred task to
+	 * execute workflow.
+	 * 
+	 * @param contact
+	 *            Contact object subscribed to workflow.
+	 * @param workflowId
+	 *            Id of a workflow.
+	 */
+	public static void subscribe(Contact contact, Long workflowId)
 	{
-	    e.printStackTrace();
+		try
+		{
+			// Convert Contacts into JSON Array
+			JSONObject subscriberJSONObject = AgileTaskletUtil.getSubscriberJSON(contact);
+			subscribeWithSubscriberJSON(subscriberJSONObject, workflowId);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-    }
+
+	/**
+	 * Subscribes subscriberJSON to the campaign of given workflow-id in
+	 * deferredtask.
+	 * 
+	 * @param subscriberJSON
+	 *            - SubscriberJSON.
+	 * @param workflowId
+	 *            - workflow-id.
+	 */
+	public static void subscribeWithSubscriberJSON(JSONObject subscriberJSON, Long workflowId)
+	{
+		String namespace = NamespaceManager.get();
+
+		try
+		{
+			TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
+					workflowId.toString(), subscriberJSON.toString(), namespace);
+
+			PullQueueUtil
+					.addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 }

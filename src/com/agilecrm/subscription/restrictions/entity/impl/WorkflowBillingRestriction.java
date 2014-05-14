@@ -1,6 +1,7 @@
-package com.agilecrm.subscription.restrictions;
+package com.agilecrm.subscription.restrictions.entity.impl;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 import com.agilecrm.workflows.Workflow;
 
@@ -17,7 +18,7 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 	if (restriction.sendReminder)
 	    send_warning_message();
 
-	if (restriction.campaigns_count < MAX)
+	if (restriction.campaigns_count < max_allowed)
 	    return true;
 
 	return false;
@@ -52,18 +53,18 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
 	if (restriction == null)
 	    restriction = BillingRestrictionUtil.getInstance(sendReminder);
 
-	MAX = restriction.planDetails.getWorkflowLimit();
+	max_allowed = restriction.planDetails.getWorkflowLimit();
 
     }
 
     @Override
     public String getTag()
     {
-	System.out.println(MAX);
+	System.out.println(max_allowed);
 	System.out.println(restriction.campaigns_count);
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, MAX, "Workflow");
+	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, max_allowed, "Workflow");
 
-	System.out.println(restriction.campaigns_count + ", " + MAX);
+	System.out.println(restriction.campaigns_count + ", " + max_allowed);
 	System.out.println("system tag");
 	System.out.println(tag);
 	if (tag != null)

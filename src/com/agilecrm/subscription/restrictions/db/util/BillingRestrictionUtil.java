@@ -16,8 +16,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
+import com.google.appengine.api.NamespaceManager;
 
 @XmlRootElement
 public class BillingRestrictionUtil
@@ -31,8 +30,8 @@ public class BillingRestrictionUtil
      */
     public static enum ErrorMessages
     {
-	CONTACT("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"This query is not allowed in Free plan");
+	Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
+		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
 	private String message;
 
 	ErrorMessages(String message)
@@ -68,8 +67,8 @@ public class BillingRestrictionUtil
      */
     public static BillingRestriction getBillingRestriction(String planName, Integer users)
     {
-	Objectify ofy = ObjectifyService.begin();
-	BillingRestriction restriction = ofy.query(BillingRestriction.class).get();
+	System.out.println(NamespaceManager.get());
+	BillingRestriction restriction = BillingRestriction.dao.ofy().query(BillingRestriction.class).get();
 
 	if (restriction == null)
 	    restriction = BillingRestriction.getInstance(planName, users);
@@ -104,7 +103,6 @@ public class BillingRestrictionUtil
 	    restriction.sendReminder = sendReminder;
 	    return restriction;
 	}
-	System.out.println(info.getPlan() + ", " + info.getUsersCount());
 
 	// Fetches billing instance
 	BillingRestriction restriction = getBillingRestriction(info.getPlan(), info.getUsersCount());
@@ -138,8 +136,17 @@ public class BillingRestrictionUtil
 	if (info == null)
 	    return BillingRestriction.getInstance(null, null);
 
-	System.out.println(info.getPlan() + ", " + info.getUsersCount());
 	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
+    }
+
+    /**
+     * Creates and returns new Billing Restriction instance
+     * 
+     * @return
+     */
+    public static BillingRestriction getInstanceTemporary(Plan plan)
+    {
+	return BillingRestriction.getInstance(plan.plan_type.toString(), plan.quantity);
     }
 
     /**
@@ -155,26 +162,24 @@ public class BillingRestrictionUtil
 	Plan plan = null;
 
 	if (!StringUtils.isEmpty(planName))
-	    plan = new Plan(planName, users);
-	else
-	{
-	    // Fetches account subscription
-	    Subscription subscription = Subscription.getSubscription();
+	    return new Plan(planName, users);
 
-	    // If plan is null then it is considered free plan.
-	    plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
+	// Fetches account subscription
+	Subscription subscription = Subscription.getSubscription();
 
-	    // Gets user info and sets plan and sets back in session
-	    UserInfo info = SessionManager.get();
-	    if (info == null)
-		return plan;
+	// If plan is null then it is considered free plan.
+	plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
 
-	    info.setPlan(plan.plan_type.toString());
-	    info.setUsersCount(plan.quantity);
-	    SessionManager.set((UserInfo) null);
-	    SessionManager.set(info);
+	// Gets user info and sets plan and sets back in session
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return plan;
 
-	}
+	info.setPlan(plan.plan_type.toString());
+	info.setUsersCount(plan.quantity);
+	SessionManager.set((UserInfo) null);
+	SessionManager.set(info);
+
 	return plan;
     }
 
@@ -208,16 +213,46 @@ public class BillingRestrictionUtil
     public static void throwLimitExceededException(ErrorMessages errorMessage)
     {
 	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
-
 	throw new PlanRestrictedException(reason);
     }
 
+    /**
+     * Checks if new plan is lower than old plan. It checks on plan type, and
+     * quantity of users if it is same plan in both old and new
+     * 
+     * @param oldPlan
+     * @param newPlan
+     * @return
+     */
     public static boolean isLowerPlan(Plan oldPlan, Plan newPlan)
     {
+	// Gets respective plan classes
 	PlanClasses oldPlanClass = PlanClasses.valueOf(oldPlan.getPlanName());
 	PlanClasses newPlanClass = PlanClasses.valueOf(newPlan.getPlanName());
-	if (oldPlanClass != null && newPlanClass != null && oldPlanClass.rank > newPlanClass.rank)
-	    return true;
+
+	if (oldPlanClass != null && newPlanClass != null)
+	{
+	    // checks rank if plan is downgraded
+	    if ((oldPlanClass.rank > newPlanClass.rank) || oldPlan.quantity > newPlan.quantity)
+		return true;
+	    // If plans are same it checks for number of users in plan
+	    else if (oldPlanClass.rank == newPlanClass.rank && oldPlan.quantity > newPlan.quantity)
+		return true;
+	}
 	return false;
+    }
+
+    /**
+     * Checks if plan is upgraded and updates in user info
+     */
+    public static void setPlanInSession(Plan plan)
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return;
+
+	info.setPlan(plan.getPlanName());
+	info.setUsersCount(plan.quantity);
+
     }
 }

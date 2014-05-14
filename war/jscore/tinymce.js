@@ -27,11 +27,25 @@ function setupTinyMCEEditor(selector)
 	{
 		head.js('/js/designer/tinymce/tinymce.min.js', function()
 		{
-			tinymce.init({ mode : "textareas", selector : selector, plugins : [
+			
+			// If loading src script fails
+			if(typeof (tinymce) === "undefined")
+			{
+				console.log("Reloading script...");
+				
+				// Show confirmation for reload
+				if(confirm("Unable to load editor. Click OK to Reload."))
+				  location.reload();
+				
+				return;
+			}
+			
+			tinymce.init({ mode : "exact", selector : selector, plugins : [
 				"textcolor link image"
 			], menubar : false,
-				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect fontselect fontsizeselect",
+				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields", valid_elements : "*[*]",
+				toolbar_items_size: 'small',
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
@@ -41,17 +55,15 @@ function setupTinyMCEEditor(selector)
 	}
 
 	// if tinymce instance exists, reinitialize tinymce on given selector
-	setTimeout(function()
-	{
-		if (selector.indexOf('#') !== -1)
-			selector = selector.split('#')[1];
+	if (selector.indexOf('#') !== -1)
+		selector = selector.split('#')[1];
 
-		// reset previous content
-		set_tinymce_content(selector, '');
-
-		// reinitialize tinymce
-		reinitialize_tinymce_editor_instance(selector);
-	}, 10);
+	// reinitialize tinymce
+	reinitialize_tinymce_editor_instance(selector);
+		
+	// reset previous content
+    set_tinymce_content(selector, '');
+		
 }
 
 /**
@@ -67,7 +79,8 @@ function set_tinymce_content(selector, content)
 {
 	try
 	{
-		tinymce.get(selector).setContent(content);
+		if(typeof (tinymce) !== "undefined")
+			tinymce.get(selector).setContent(content);
 	}
 	catch (err)
 	{
@@ -86,7 +99,8 @@ function save_content_to_textarea(selector)
 {
 	try
 	{
-		tinymce.get(selector).save();
+		if(typeof (tinymce) !== "undefined")
+			tinymce.get(selector).save();
 	}
 	catch (err)
 	{
@@ -95,6 +109,25 @@ function save_content_to_textarea(selector)
 	}
 }
 
+/**
+ * 
+ * Triggers all tinymce editors save. It is used in base-modal to save
+ * content back to textarea before form serialization.
+ * 
+ **/
+function trigger_tinymce_save()
+{
+	try
+	{
+		if(typeof (tinymce) !== "undefined")
+			tinymce.triggerSave();
+	}
+	catch(err)
+	{
+		console.log("error occured while triggering tiny save...");
+		console.log(err);
+	}
+}
 /**
  * Re-initialize HTML Editor on given selector using existing tinymce.
  * 
@@ -110,7 +143,8 @@ function reinitialize_tinymce_editor_instance(selector)
 		remove_tinymce_editor_instance(selector);
 
 		// Adds tinymce
-		tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
+	    tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
+	
 	}
 	catch (err)
 	{
@@ -129,7 +163,7 @@ function remove_tinymce_editor_instance(selector)
 {
 	try
 	{
-		tinymce.EditorManager.execCommand("mceRemoveEditor", true, selector);
+		tinymce.EditorManager.execCommand("mceRemoveEditor", false, selector);
 	}
 	catch (err)
 	{
@@ -149,15 +183,11 @@ function set_up_merge_fields(editor)
 {
 	var menu = [];
 
-	var contact_property_json;
+	var contact_json;
 
-	// Compile templates immediately in Send email but not for bulk contacts
-	if (Current_Route === "send-email")
-	{
-		// Get Current Contact
-		var contact_json = App_Contacts.contactDetailView.model.toJSON();
-		contact_property_json = get_property_JSON(contact_json)
-	}
+	// Get Current Contact json for merge fields
+	if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
+		contact_json = get_contact_json_for_merge_fields();
 
 	// Iterates over merge fields and builds merge fields menu
 	$.each(get_merge_fields(), function(key, value)
@@ -169,20 +199,32 @@ function set_up_merge_fields(editor)
 		menu_item["onclick"] = function()
 		{
 
-			if (Current_Route === "bulk-email")
+			// Insert value without compiling
+			if (Current_Route === "bulk-email" || Current_Route.indexOf('email-template') != -1)
 			{
-				// Remove square brackets from templates to compile in mustache
-				// java
-				value = value.replace(/\[/g, '');
-				value = value.replace(/\]/g, '');
-
 				editor.insertContent(value);
 			}
-
-			if (Current_Route === "send-email")
+			else
 			{
 				var template = Handlebars.compile(value);
-				editor.insertContent(template(contact_property_json));
+				var compiled_template;
+
+				try
+				{
+					compiled_template = template(contact_json);
+				}
+				catch(err)
+				{
+					console.log("error.....");
+					
+					// Handlebars need [] if json keys have spaces
+					value = '{{['+key+']}}';
+					
+					template = Handlebars.compile(value);
+					compiled_template = template(contact_json);
+				}
+				
+				editor.insertContent(compiled_template + '');
 			}
 		};
 
@@ -199,7 +241,20 @@ function set_up_merge_fields(editor)
  */
 function get_merge_fields()
 {
-	var options = { "First Name" : "{{first_name}}", "Last Name" : "{{last_name}}", "Email" : "{{email}}", "Company" : "{{company}}" };
+	var options = {
+	"First Name": "{{first_name}}",
+	"Last Name": "{{last_name}}",
+	"Score": "{{score}}",
+	"Email": "{{email}}",
+	"Company": "{{company}}",
+	"Title": "{{title}}",
+	"Address": "{{location.address}}",
+	"City": "{{location.city}}",
+	"State":"{{location.state}}",
+	"Country":"{{location.country}}",
+	"Owner Name":"{{owner.name}}",
+	"Owner Email":"{{owner.email}}"
+	}
 
 	// Get Custom Fields in template format
 	var custom_fields = get_custom_merge_fields();
@@ -242,7 +297,7 @@ function get_custom_merge_fields()
 
 			// Needed only field labels for merge fields
 			if (key == 'field_label')
-				customfields[value] = "{{[" + value + "]}}"
+				customfields[value] = "{{" + value + "}}"
 		});
 	});
 
@@ -254,4 +309,51 @@ function get_custom_merge_fields()
 function merge_jsons(target, object1, object2)
 {
 	return $.extend(target, object1, object2);
+}
+
+
+/**
+ * Returns json required for merge fields in Editor
+ */
+function get_contact_json_for_merge_fields()
+{
+	// Compile templates immediately in Send email but not for bulk contacts
+	if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
+	{
+		// Get Current Contact
+		var contact_json = App_Contacts.contactDetailView.model.toJSON();
+		contact_property_json = get_property_JSON(contact_json);
+		
+		try
+		{
+			contact_property_json["score"]= contact_json["lead_score"];
+			contact_property_json["location"] = JSON.parse(contact_property_json["address"]);
+		}
+		catch(err)
+		{
+			
+		}
+		
+		return merge_jsons({}, {"owner":contact_json.owner}, contact_property_json);
+		
+	}  
+}
+
+function add_square_brackets_to_merge_fields(text)
+{
+	// Matches all strings within {{}}. e.g., {{first_name}}, {{New Note}}
+	var t = text.match(/{{[a-zA-Z0-9 ]*[a-zA-Z0-9 ]}}/g);
+	
+	if(t)
+	{
+		// Change {{New Note}}  to {{[New Note]}}. 
+		// Handlebars allow keys having spaces, 
+		// within square brackets
+		for(var i=0; i < t.length;i++)
+		{
+			text = text.replace(t[i], '{{['+t[i].match(/{{(.*?)}}/)[1]+']}}');
+		}
+	};
+	
+	return text;
 }

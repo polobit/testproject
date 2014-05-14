@@ -18,7 +18,7 @@ public class Plan
 {
     public static enum PlanType
     {
-	FREE, BASIC_MONTHLY, PROFESSIONAL_MONTHLY, ENTERPRISE_MONTHLY, ENTERPRISE_YEARLY, BASIC_YEARLY, PROFESSIONAL_YEARLY, LITE_MONTHLY, LITE_YEARLY, PRO_MONTHLY, PRO_YEARLY, PRO_BIENNIAL, STARTER_MONTHLY, STARTER_YEARLY, STARTER_BIENNIAL, REGULAR_MONTHLY, REGULAR_YEARLY, REGULAR_BIENNIAL;
+	FREE, BASIC_MONTHLY, PROFESSIONAL_MONTHLY, ENTERPRISE_MONTHLY, ENTERPRISE_YEARLY, BASIC_YEARLY, PROFESSIONAL_YEARLY, LITE_MONTHLY, LITE_YEARLY, PRO_MONTHLY, PRO_YEARLY, PRO_BIENNIAL, STARTER_MONTHLY, STARTER_YEARLY, STARTER_BIENNIAL, REGULAR_MONTHLY, REGULAR_YEARLY, REGULAR_BIENNIAL, STARTER, REGULAR, PRO;
     }
 
     public PlanType plan_type = null;
@@ -73,4 +73,14 @@ public class Plan
 	return "Plan: {plan_id: " + plan_id + ", quantity: " + quantity + "}";
     }
 
+    @Override
+    public boolean equals(Object object)
+    {
+	Plan plan = (Plan) object;
+
+	if (this.plan_id.equals(plan.plan_id) && plan.quantity == this.quantity)
+	    return true;
+
+	return false;
+    }
 }

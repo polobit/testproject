@@ -39,40 +39,41 @@
             <p>
 			   <b>Sorry to see you go. Please tell us why?</b>
             </p>
-<form id="cancelation-feedback-form">
-        <ul style="list-style-type:none;">
-            <li style="padding-bottom:4px">
+		<form id="cancelation-feedback-form">
+       		<ul style="list-style-type:none;">
+            	<li style="padding-bottom:4px">
 					<label for="Did not like it" style="display:inline">
 						<input type="radio" name="cancellation_reason" value="No need"  style="display:inline"/>
 				        Was just checking it out. Don't need it.</label>
-            </li>
-			<li style="padding-bottom:4px">
+           		</li>
+				<li style="padding-bottom:4px">
 						<input type="radio" name="cancellation_reason" value="Overkill" style="display:inline"/>
 				        <label for="Overwhelming" style="display:inline">Overwhelming for me</label>
-            </li>
-			<li style="padding-bottom:4px">
+            	</li>
+				<li style="padding-bottom:4px">
 						<input type="radio" name="cancellation_reason" value="Hard to use"  style="display:inline"/>
 				        <label for="Hard to use" style="display:inline">Hard to use</label>
-            </li>
-			<li style="padding-bottom:4px">
+            	</li>
+				<li style="padding-bottom:4px">
 						<input type="radio" name="cancellation_reason" value="Costly" style="display:inline"/>
 				        <label for="Expensive for me" style="display:inline">Expensive for me</label>
-            </li>
-			<li style="padding-bottom:4px">
+            	</li>
+				<li style="padding-bottom:4px">
 						<input type="radio" name="cancellation_reason" class="extra_info" value="No fit" style="display:inline"/>
 				        <label for="No fit" style="display:inline">Doesn't meet my requirements</label>
-            </li>
-			<li style="padding-bottom:4px">
+            	</li>
+				<li style="padding-bottom:4px">
 						<input type="radio" name="cancellation_reason" value="Other"  checked="checked" class="extra_info" style="display:inline"/>
 				        <label for="Other" style="display:inline">Other</label>
-            </li>
-        </ul>
-<div style="padding-left:10%" class="controls"><textarea  cols="35" name="account_delete_reason"  class="required" id="account_delete_reason" span4 required" rows="6"></textarea></div>
-    </div>
-</form>
-	
+            	</li>
+        	</ul>
+			<div style="padding-left:5%" class="controls">
+				<textarea name="account_delete_reason" class="required span4" id="account_delete_reason" rows="6" placeholder="Please gives us more details. This will help us a lot."></textarea>
+    		</div>
+		</form>
+	</div>
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
         <a href="#" id="warning-feedback-save" class="btn btn-danger ">Delete Account</a>
     </div>
 </div>

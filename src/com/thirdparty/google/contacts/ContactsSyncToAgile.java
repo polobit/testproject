@@ -22,7 +22,9 @@ import com.thirdparty.google.GoogleServiceUtil;
 public class ContactsSyncToAgile
 {
     // Max results to be fetched from google
-    public static Integer MAX_FETCH_SIZE = 200;
+    public static Integer MAX_FETCH_SIZE = 1000;
+
+    public static Integer MAX_FETCH_SIZE_FROM_GOOGLE = 1000;
 
     /**
      * Fetches contacts from google based on access token in contact prefs.
@@ -34,17 +36,15 @@ public class ContactsSyncToAgile
      */
     public static void importGoogleContacts(ContactPrefs contactPrefs) throws Exception
     {
-	// Checks if token is expired and refreshes it based on expiry time
-	// saved.
-	if ((contactPrefs.expires - 60000) <= System.currentTimeMillis())
-	    GoogleServiceUtil.refreshGoogleContactPrefsandSave(contactPrefs);
 
 	int i = 0;
+	int page = 1;
 	while (i <= MAX_FETCH_SIZE)
 	{
-	    // Retrieves contacts from google.
-	    List<ContactEntry> entries = ContactsSyncToAgile.retrieveContacts(contactPrefs);
 
+	    // Retrieves contacts from google.
+	    List<ContactEntry> entries = ContactsSyncToAgile.retrieveContacts(contactPrefs, page);
+	    page++;
 	    /*
 	     * If entires are null then method should either return or break
 	     * loop. If it is first set of results then saving contact prefs is
@@ -68,10 +68,10 @@ public class ContactsSyncToAgile
 
 	    // If fetched contacts size is less than 200, next request is not
 	    // sent to fetch next set of results
-	    if (entries.size() < 200)
+	    if (entries.size() < MAX_FETCH_SIZE_FROM_GOOGLE)
 		break;
 
-	    i += 200;
+	    i += entries.size();
 	}
 
 	// Saves contact preferences to save last synced time
@@ -86,7 +86,7 @@ public class ContactsSyncToAgile
      * @return {@link List} of {@link ContactEntry}
      * @throws Exception
      */
-    public static List<ContactEntry> retrieveContacts(ContactPrefs prefs) throws Exception
+    public static List<ContactEntry> retrieveContacts(ContactPrefs prefs, int page) throws Exception
     {
 
 	String accessToken = prefs.token;
@@ -98,8 +98,15 @@ public class ContactsSyncToAgile
 
 	try
 	{
-	    // Sets feed url
-	    feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full?access_token=" + accessToken);
+
+	    // myQuery.setUpdatedMin(dateTime);
+	    feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "contacts/default/full");
+
+	    /*
+	     * // Sets feed url feedUrl = new
+	     * URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL +
+	     * "contacts/default/full");
+	     */
 	}
 	catch (MalformedURLException e)
 	{
@@ -107,8 +114,18 @@ public class ContactsSyncToAgile
 	    e.printStackTrace();
 	}
 
+	DateTime dateTime = new DateTime(prefs.last_synced_from_client);
 	// Build query with URL
 	myQuery = new Query(feedUrl);
+	myQuery.setMaxResults(MAX_FETCH_SIZE_FROM_GOOGLE);
+
+	System.out
+		.println("*******************************************************************************$$$$$$$$$$$$$$$");
+	System.out.println(dateTime);
+	myQuery.setUpdatedMin(dateTime);
+	myQuery.setStringCustomParameter("access_token", prefs.token);
+
+	System.out.println(myQuery.getQueryUri());
 
 	/*
 	 * If sync from group is not null then considering user chose a group to
@@ -118,22 +135,16 @@ public class ContactsSyncToAgile
 	if (prefs.sync_from_group != null)
 	{
 	    prefs.sync_from_group = URLDecoder.decode(prefs.sync_from_group);
-	    System.out.println(prefs.sync_from_group);
 
 	    // Setting group query
 	    myQuery.setStringCustomParameter("group", prefs.sync_from_group);
 	}
-
-	// Fetches only max 200 contacts from goole
-	myQuery.setMaxResults(MAX_FETCH_SIZE);
 
 	/*
 	 * To avoid fetching contacts that are already synced, query is set to
 	 * fetch contacts that are created/updated after last syced time (which
 	 * is created time of last contact fetched from google)
 	 */
-	DateTime dateTime = new DateTime(prefs.last_synced_from_client);
-	myQuery.setUpdatedMin(dateTime);
 
 	/*
 	 * Query set to fetch contacts ordered by last modified time, so saving
@@ -153,8 +164,6 @@ public class ContactsSyncToAgile
 	    e.printStackTrace();
 	}
 
-	System.out.println(resultFeed.getEntries());
-
 	System.out.println("total results from google " + resultFeed.getEntries().size());
 	return resultFeed.getEntries();
     }
@@ -172,9 +181,13 @@ public class ContactsSyncToAgile
 	Key<DomainUser> ownerKey = prefs.getDomainUser();
 
 	int counter = 0;
+	Long created_at = 0l;
+	System.out.println("SAVING CONTACTS FETCHED FROM GOOGLE : " + entries.size());
 	for (ContactEntry entry : entries)
 	{
-	    System.out.println("new contact");
+
+	    created_at = entry.getUpdated().getValue();
+
 	    System.out.println(entry.getId());
 	    /*
 	     * if (!hasGroup(entry, prefs.sync_from_group)) continue;
@@ -184,7 +197,6 @@ public class ContactsSyncToAgile
 	    if (agileContact == null)
 		continue;
 	    agileContact.setContactOwner(prefs.getDomainUser());
-	    System.out.println(entry.getId());
 
 	    try
 	    {
@@ -197,13 +209,11 @@ public class ContactsSyncToAgile
 	    }
 	    counter++;
 
-	    Long created_at = entry.getUpdated().getValue();
-
-	    prefs.last_synced_from_client = created_at > prefs.last_synced_from_client ? created_at : prefs.last_synced_from_client;
-
-	    System.out.println("Contact's ETag: " + entry.getEtag());
-	    System.out.println("----------------------------------------");
 	}
+
+	System.out.println("TIME UPDATED" + created_at + ", " + prefs.last_synced_from_client);
+	prefs.last_synced_from_client = created_at > prefs.last_synced_from_client ? created_at
+		: prefs.last_synced_from_client;
 
 	// notifies user after adding contacts
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT, String.valueOf(counter));

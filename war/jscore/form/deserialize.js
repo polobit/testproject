@@ -202,6 +202,22 @@ function deserializeForm(data, form)
 									$('#multipleSelect', form).multiSelect('select', option);
 								});
 							}
+							
+							/**
+							 * Deserialize multiple checkboxes. 
+							 */
+							else if (fel.hasClass('multiple-checkbox')) {
+
+								/*
+								 * Iterates through options of the select and
+								 * call multiSelect function to select the
+								 * option
+								 */
+								for(var i=0 ; i < el.length; i++)
+								{
+									$('input:checkbox[value="'+el[i]+'"]', fel).attr("checked", "checked");
+								}
+							}
 
 							/*
 							 * Deserialize chained select, chained select is

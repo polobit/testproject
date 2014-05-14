@@ -55,9 +55,16 @@ public class PlanLimits
      */
     public static enum PlanClasses
     {
-	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(ProPlanLimits.class, 3),
+	/**
+	 * Constructor takes respective class, rank (order of plan which is used
+	 * to determine whether plan is being downgraded)
+	 */
+	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
+		ProPlanLimits.class, 3),
 
-	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(ProPlanLimits.class, 3);
+	// Legacy plans
+	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(
+		ProPlanLimits.class, 3);
 
 	Class<? extends PlanLimits> clazz;
 
@@ -119,6 +126,17 @@ public class PlanLimits
     }
 
     /**
+     * Numer user that can be added in current domain. It is returned based on
+     * plan object used to initialize current PlanLimits object
+     * 
+     * @return
+     */
+    public Integer getAllowedUsers()
+    {
+	return plan.quantity;
+    }
+
+    /**
      * Returns plan ID
      * 
      * @return
@@ -147,10 +165,7 @@ public class PlanLimits
 
     public Integer getContactLimit()
     {
-	if (contactLimit == Integer.MAX_VALUE)
-	    return contactLimit;
-
-	return contactLimit * plan.quantity;
+	return contactLimit;
     }
 
     public Integer getEmailsLimit()

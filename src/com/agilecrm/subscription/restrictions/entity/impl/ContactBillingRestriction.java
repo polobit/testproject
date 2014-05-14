@@ -1,8 +1,9 @@
-package com.agilecrm.subscription.restrictions;
+package com.agilecrm.subscription.restrictions.entity.impl;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUtil;
 
 /**
@@ -27,7 +28,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 
 	// Returns true if count is less than maximum allowed contacts in
 	// current plan
-	if (restriction.contacts_count == null || restriction.contacts_count < MAX)
+	if (restriction.contacts_count == null || restriction.contacts_count < max_allowed)
 	    return true;
 
 	return false;
@@ -44,21 +45,6 @@ public class ContactBillingRestriction extends DaoBillingRestriction
     }
 
     /**
-     * Gets tags and set in {@link BillingRestriction} tags set and reminder is
-     * sent
-     */
-    @Override
-    public void send_warning_message()
-    {
-	getTag();
-
-	if (restriction.tagsToAddInOurDomain.isEmpty())
-	    return;
-
-	restriction.sendReminder();
-    }
-
-    /**
      * Gets {@link BillingRestriction} instance and sets maximum allowed limits
      * contacts in current plan
      */
@@ -69,7 +55,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 	    restriction = BillingRestrictionUtil.getBillingRestriction(sendReminder);
 
 	// Gets maximum allowed contacts in current plan
-	MAX = BillingRestrictionUtil.getInstance().planDetails.getContactLimit();
+	max_allowed = BillingRestrictionUtil.getInstance().planDetails.getContactLimit();
     }
 
     /**
@@ -81,7 +67,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 	if (restriction == null || restriction.contacts_count == null)
 	    return null;
 
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.contacts_count, MAX, "Contact");
+	String tag = BillingRestrictionReminderUtil.getTag(restriction.contacts_count, max_allowed, "Contact");
 
 	if (tag != null)
 	    restriction.tagsToAddInOurDomain.add(tag);

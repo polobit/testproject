@@ -339,4 +339,25 @@ public class AgileTaskletUtil
 
 	return updatedSubscriberJSON;
     }
+
+    /**
+     * Returns contactOwner id if selected owner option is Contact's owner
+     * 
+     * @param givenOwnerId
+     *            - selected owner id from UI.
+     * @param contactOwnerId
+     *            - contact owner id from subscriberJSON
+     * @return String
+     */
+    public static Long getOwnerId(String givenOwnerId, Long contactOwnerId)
+    {
+	// If contact_owner, then owner is contact owner
+	if (givenOwnerId.equals("contact_owner"))
+	    return contactOwnerId;
+
+	if (givenOwnerId.equals("any_owner"))
+	    return null;
+
+	return Long.parseLong(givenOwnerId);
+    }
 }

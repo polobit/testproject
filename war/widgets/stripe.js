@@ -98,7 +98,7 @@ function setupStripeOAuth()
 function setUpStripeCustomField(stripe_widget_prefs)
 {
 	// Retrieve all custom from Agile account
-	$.get("/core/api/custom-fields/type/text", function(data)
+	$.get("/core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data)
 	{
 		// Include 'stripe_field_name' to stripe_widget_prefs and save
 		stripe_widget_prefs['custom_fields'] = data;

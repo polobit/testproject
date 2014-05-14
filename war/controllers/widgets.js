@@ -19,6 +19,9 @@ var WidgetsRouter = Backbone.Router.extend({
 			"ClickDesk" : "ClickDesk",
 			"ClickDesk/:id" : "ClickDesk", 
 			
+			"HelpScout" : "HelpScout",
+			"HelpScout/:id" : "HelpScout",
+			
 			"Zendesk" : "Zendesk", 
 			"Zendesk/:id" : "Zendesk",
 			
@@ -213,6 +216,17 @@ var WidgetsRouter = Backbone.Router.extend({
 			fill_form(id, "ClickDesk", 'clickdesk-login');
 
 	},
+	
+	/**
+	 * Manage HelpScout Widget.
+	 */
+	HelpScout : function(id)
+	{
+		if(!id)
+			show_set_up_widget("HelpScout", "helpscout-login");
+		else
+			fill_form(id, "HelpScout", 'helpscout-login')
+	},
 
 	/**
 	 * Manages Zendesk widget
@@ -266,8 +280,10 @@ var WidgetsRouter = Backbone.Router.extend({
 				}).error(
 				function(data)
 				{
+					// Append the url with the random number in order to differentiate the same action performed more than once.
+					var flag = Math.floor((Math.random()*10)+1); 
 					setUpError("Twilio", "widget-settings-error", data.responseText,
-							window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1");
+							window.location.protocol + "//" + window.location.host + "/#Twilio/twilio" + flag);
 				});
 
 				return;
@@ -290,8 +306,11 @@ var WidgetsRouter = Backbone.Router.extend({
 
 					}).error(function(data)
 					{
+						// Append the url with the random number in order to differentiate the same action performed more than once.
+						var flag = Math.floor((Math.random()*10)+1); 
+
 						setUpError("Twilio", "widget-settings-error", data.responseText,
-								window.location.protocol + "//" + window.location.host + "/#Twilio/twilio1", data);
+								window.location.protocol + "//" + window.location.host + "/#Twilio/twilio" + flag, data);
 					});
 
 					return;
@@ -333,7 +352,7 @@ var WidgetsRouter = Backbone.Router.extend({
 		else
 		{
 			{
-				$.getJSON("core/api/custom-fields", function(data)
+				$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT", function(data)
 				{
 					set_up_access(
 							"Stripe",
@@ -351,7 +370,7 @@ var WidgetsRouter = Backbone.Router.extend({
 
 				if (data1)
 				{
-					$.getJSON("core/api/custom-fields", function(data)
+					$.getJSON("core/api/custom-fields/scope?scope=CONTACT&type=TEXT", function(data)
 					{
 						set_up_access(
 								"stripe",

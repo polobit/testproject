@@ -5,17 +5,16 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
-import com.agilecrm.util.VersioningUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -23,6 +22,7 @@ import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
+import com.thirdparty.SendGrid;
 
 /**
  * <code>SendEmail</code> represents SendEmail node in a workflow. Sends email
@@ -176,6 +176,8 @@ public class SendEmail extends TaskletAdapter
      * No to not track clicks for the links in the email
      */
     public static String TRACK_CLICKS_NO = "no";
+
+    public static String TRACK_CLICKS_YES_AND_PUSH = "yes_and_push";
 
     /**
      * Keyword that is added to url when Track Clicks yes is selected
@@ -433,7 +435,7 @@ public class SendEmail extends TaskletAdapter
 	String campaignId = AgileTaskletUtil.getId(campaignJSON);
 
 	// Check if we need to convert links
-	if (trackClicks != null && trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES))
+	if (trackClicks != null && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
 	{
 	    try
 	    {
@@ -441,8 +443,8 @@ public class SendEmail extends TaskletAdapter
 		// clicks
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
-		text = convertLinksUsingRegex(text, subscriberId, campaignId);
-		html = convertLinksUsingRegex(html, subscriberId, campaignId);
+		text = EmailLinksConversion.convertLinksUsingRegex(text, subscriberId, campaignId, trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+		html = EmailLinksConversion.convertLinksUsingRegex(html, subscriberId, campaignId, trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
 
 	    }
 	    catch (Exception e)
@@ -464,19 +466,13 @@ public class SendEmail extends TaskletAdapter
 	    if (!StringUtils.contains(html, EmailUtil.getPoweredByAgileLink("campaign", "Powered by")))
 		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
 
-	    // if cc present, send using Mailgun as it supports 'Cc'
-	    if (!StringUtils.isEmpty(cc))
-		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
-	    else
-		MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+	    // Send HTML Email
+	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, html, text);
 	}
 	else
 	{
-	    // if cc present, send using Mailgun as it supports 'Cc'
-	    if (!StringUtils.isEmpty(cc))
-		Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, null, text);
-	    else
-		MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, null, text);
+	    // Send Text Email
+	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, null, text);
 	}
 
 	// Creates log for sending email
@@ -484,88 +480,6 @@ public class SendEmail extends TaskletAdapter
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-    }
-
-    /**
-     * Replaces http urls with agile tracking urls
-     * 
-     * @param input
-     *            - text or html
-     * @param subscriberId
-     *            - subscriber id
-     * @param campaignId
-     *            - campaign id
-     * @return String
-     */
-    public String convertLinksUsingRegex(String input, String subscriberId, String campaignId)
-    {
-	Pattern p = Pattern.compile(HTTP_URL_REGEX);
-	Matcher m = p.matcher(input);
-
-	StringBuffer stringBuffer = new StringBuffer();
-
-	// Domain URL
-	// String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(),
-	// "sandbox");
-
-	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
-
-	try
-	{
-	    // Iterate over matches
-	    while (m.find())
-	    {
-		String url = m.group();
-
-		// Replaces valid http urls with agile tracking links
-		if (isSpecialLink(url))
-		{
-		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, domainURL + "/backend/click?u=" + url + "&s=" + subscriberId + "&c=" + campaignId);
-		}
-	    }
-
-	    // append last characters to the stringbuffer too
-	    m.appendTail(stringBuffer);
-
-	    input = stringBuffer.toString();
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while converting links..." + e.getMessage());
-	    e.printStackTrace();
-	}
-
-	return input;
-    }
-
-    /**
-     * Validates links present in the email body (either in text or html)
-     * inorder which urls need to be shortened. It omits the links ended with
-     * image extensions and links like http://agle.cc
-     * 
-     * @param str
-     *            - String token obtained based on delimiters
-     * @return Boolean
-     */
-    private boolean isSpecialLink(String str)
-    {
-	boolean isContains = false;
-
-	if (str.indexOf('.') == -1)
-	    return false;
-
-	// Compares string token with the extensions
-	isContains = extensionsList.contains(str.substring(str.lastIndexOf('.')).toLowerCase());
-
-	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().contains("unsubscribe")
-		&& !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
-		&& (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(".agilecrm.com"))
-		&& !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
-		&& !str.toLowerCase().startsWith("http://unscr.be"))
-	    return true;
-
-	return false;
     }
 
     /**
@@ -597,6 +511,42 @@ public class SendEmail extends TaskletAdapter
 	    e.printStackTrace();
 	}
 
+    }
+
+    /**
+     * Sends email using Email APIs
+     * 
+     * @param fromEmail
+     *            - from email
+     * @param fromName
+     *            - from name
+     * @param to
+     *            - to email
+     * @param cc
+     *            - cc email
+     * @param subject
+     *            - email subject
+     * @param replyTo
+     *            - replyTo email
+     * @param html
+     *            - HTML body
+     * @param text
+     *            - text body
+     */
+    private void sendEmail(String fromEmail, String fromName, String to, String cc, String subject, String replyTo, String html, String text)
+    {
+	// For domain "clickdeskengage" - use SendGrid API
+	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
+	{
+	    SendGrid.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
+	    return;
+	}
+
+	// if cc present, send using Mailgun as it supports 'Cc'
+	if (!StringUtils.isEmpty(cc))
+	    Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
+	else
+	    MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
     }
 
 }

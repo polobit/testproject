@@ -16,6 +16,8 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 
+import com.thirdparty.mandrill.Mandrill;
+
 /**
  * <code>HttpClientUtil</code> is the utility class that handles URL requests
  * through HttpClient.
@@ -78,8 +80,22 @@ public class HttpClientUtil
 	}
 	catch (Exception e)
 	{
-	    System.err.println("Exception occured in HttpClientUtil... " + e.getMessage());
+	    System.err.println("Exception occured in HttpClientUtil..." + e.getMessage());
 	    e.printStackTrace();
+
+	    System.err.println("Sending again normally...");
+
+	    try
+	    {
+		String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL, postData);
+
+		System.out.println("Mandrill response in HttpClientUtil..." + response);
+	    }
+	    catch (Exception e1)
+	    {
+		e1.printStackTrace();
+		System.err.println("Exception occured in HttpClientUtil while sending again..." + e1.getMessage());
+	    }
 	}
     }
 }

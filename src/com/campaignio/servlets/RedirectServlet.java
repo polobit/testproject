@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -49,6 +50,7 @@ public class RedirectServlet extends HttpServlet
 	String subscriberId = req.getParameter("s");
 	String campaignId = req.getParameter("c");
 	String originalURL = req.getParameter("u");
+	String push = req.getParameter("p");
 
 	// To get namespace
 	String url = req.getRequestURL().toString();
@@ -98,6 +100,13 @@ public class RedirectServlet extends HttpServlet
 	    // Remove spaces, \n and \r
 	    String normalisedLongURL = TrackClickUtil.normaliseLongURL(originalURL);
 
+	    // When personal email is sent to contact that doesn't exist
+	    if (StringUtils.isBlank(subscriberId))
+	    {
+		resp.sendRedirect(normalisedLongURL);
+		return;
+	    }
+
 	    // Add CD Params - IMPORTANT: agile js-api is dependent on these
 	    // params
 	    String params = "?fwd=cd";
@@ -113,12 +122,29 @@ public class RedirectServlet extends HttpServlet
 		return;
 	    }
 
-	    // Append Contact properties to params
-	    params += TrackClickUtil.appendContactPropertiesToParams(contact);
+	    System.out.println("Push parameter is ............" + push);
 
-	    System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
+	    // Redirect url with push data
+	    if (!StringUtils.isBlank(push) && push.equals(EmailLinksConversion.AGILE_EMAIL_PUSH))
+	    {
+		// Append Contact properties to params
+		params += TrackClickUtil.appendContactPropertiesToParams(contact);
 
-	    resp.sendRedirect(normalisedLongURL + params);
+		System.out.println("Forwarding it to " + normalisedLongURL + " " + params);
+
+		resp.sendRedirect(normalisedLongURL + params);
+	    }
+	    else
+	    {
+		resp.sendRedirect(normalisedLongURL);
+	    }
+
+	    // For personal emails campaign-id is blank
+	    if (StringUtils.isBlank(campaignId) && contact != null)
+	    {
+		TrackClickUtil.showEmailClickedNotification(contact, null, originalURL);
+		return;
+	    }
 
 	    // Get Workflow to add to log (campaign name) and show notification
 	    Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(campaignId));

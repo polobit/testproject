@@ -1,5 +1,11 @@
 package com.agilecrm.user;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -11,14 +17,17 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -42,7 +51,8 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-public class DomainUser extends Cursor implements Cloneable
+@Cached
+public class DomainUser extends Cursor implements Cloneable, Serializable
 {
 
     // Key
@@ -83,6 +93,15 @@ public class DomainUser extends Cursor implements Cloneable
      */
     @NotSaved
     public String email_template = null;
+
+    /**
+     * Stores user access scopes
+     */
+    @NotSaved(IfDefault.class)
+    public List<UserAccessScopes> scopes = null;
+
+    @NotSaved
+    public Set<NavbarConstants> menu_scopes = null;
 
     /**
      * Name of the domain user
@@ -209,14 +228,12 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If subscription is null, it indicates user is in free plan.
 	    // Limits users to global trail users count
 	    if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-			+ " users in the free plan");
+		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT + " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
 	    if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
-		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-			+ " users in the current plan");
+		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity + " users in the current plan");
 
 	    return false;
 	}
@@ -357,6 +374,14 @@ public class DomainUser extends Cursor implements Cloneable
     public void save() throws Exception
     {
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+
+	// Set to current namespace if it is empty
+	if (StringUtils.isEmpty(this.domain))
+	{
+	    this.domain = NamespaceManager.get();
+	    System.out.println("Domain empty - setting it to " + this.domain);
+	}
+
 	System.out.println("Creating or updating new user " + this);
 
 	// Check if user exists with this email
@@ -366,8 +391,7 @@ public class DomainUser extends Cursor implements Cloneable
 	    // If domain user exists, not allowing to create new user
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
-		throw new Exception("User with this email address " + domainUser.email + " already exists in "
-			+ domainUser.domain + " domain.");
+		throw new Exception("User with this email address " + domainUser.email + " already exists in " + domainUser.domain + " domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -384,13 +408,6 @@ public class DomainUser extends Cursor implements Cloneable
 	    }
 
 	    sendPasswordChangedNotification(domainUser.encrypted_password);
-	}
-
-	// Set to current namespace if it is empty
-	if (StringUtils.isEmpty(this.domain))
-	{
-	    this.domain = NamespaceManager.get();
-	    System.out.println("Domain empty - setting it to " + this.domain);
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
@@ -552,15 +569,25 @@ public class DomainUser extends Cursor implements Cloneable
      * @throws DecoderException
      */
     @PostLoad
-    private void PostLoad() throws DecoderException
+    public void postLoad() throws DecoderException
     {
 	try
 	{
 	    if (info_json != null)
 		info_json = new JSONObject(info_json_string);
+
+	    // If no scopes are set, then all scopes are added
+	    if (scopes == null)
+		scopes = Arrays.asList(UserAccessScopes.values());
+
+	    if (menu_scopes == null)
+	    {
+		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+	    }
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	}
     }
 
@@ -568,7 +595,7 @@ public class DomainUser extends Cursor implements Cloneable
     @Override
     public String toString()
     {
-	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-		+ this.id + " Name: " + this.name + "\n " + info_json;
+	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: " + this.id + " Name: " + this.name + "\n "
+		+ info_json;
     }
 }

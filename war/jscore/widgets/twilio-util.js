@@ -39,6 +39,9 @@ $(function(){
 							verifyNumberFromTwilio(from_number, data.id, function(verified_data)
 							{
 								verified_data["settings"] = true;
+								// Append the url with the random number in order to differentiate the same action performed more than once.
+								verified_data["id"] = Math.floor((Math.random()*10)+1);
+								
 								console.log(verified_data);
 								console.log(getTemplate('twilio-verify', verified_data));
 								$('#widget-settings').html(getTemplate('twilio-verify', verified_data));
@@ -81,8 +84,11 @@ function verifyNumberFromTwilio(from_number, id, callback)
 			callback(verified_data);
 
 	}).error(function(data)
-	{
-		setUpError("Twilio", "widget-settings-error", data.responseText, window.location.protocol + "//" + window.location.host + "/#Twilio/twilio2");
+	{	
+		// Append the url with the random number in order to differentiate the same action performed more than once.
+		var flag = Math.floor((Math.random()*10)+1); 
+		setUpError("Twilio", "widget-settings-error", data.responseText, window.location.protocol + "//" 
+				+ window.location.host + "/#Twilio/twilio"+flag);
 	});
 	
 	return;

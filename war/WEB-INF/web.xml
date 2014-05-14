@@ -385,6 +385,7 @@
 	<servlet-mapping>
 		<servlet-name>RedirectServlet</servlet-name>
 		<url-pattern>/backend/click/*</url-pattern>
+		<url-pattern>/click/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -394,6 +395,7 @@
 	<servlet-mapping>
 		<servlet-name>EmailOpenServlet</servlet-name>
 		<url-pattern>/backend/open/*</url-pattern>
+		<url-pattern>/open/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -403,6 +405,7 @@
 	<servlet-mapping>
 		<servlet-name>ICalendarServlet</servlet-name>
 		<url-pattern>/backend/ical/*</url-pattern>
+		<url-pattern>/ical/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -439,6 +442,24 @@
 	<servlet-mapping>
 		<servlet-name>GravityForm</servlet-name>
 		<url-pattern>/gform</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>ShopifyCustomerWebhook</servlet-name>
+	<servlet-class>com.thirdparty.shopify.ShopifyCustomerWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyCustomerWebhook</servlet-name>
+		<url-pattern>/shopifycustomer</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>ShopifyOrderWebhook</servlet-name>
+	<servlet-class>com.thirdparty.shopify.ShopifyOrderWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyOrderWebhook</servlet-name>
+		<url-pattern>/shopifyorder</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -504,6 +525,15 @@
    		<url-pattern>/confirmation</url-pattern>
    </servlet-mapping>
 
+   <servlet>
+   		<servlet-name>Resubscribe</servlet-name>
+   		<jsp-file>/resubscribe.jsp</jsp-file>
+   </servlet>
+   <servlet-mapping>
+   		<servlet-name>Resubscribe</servlet-name>
+   		<url-pattern>/resubscribe</url-pattern>
+   </servlet-mapping>
+   
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>

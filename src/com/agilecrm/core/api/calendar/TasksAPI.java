@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.calendar;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -21,6 +22,8 @@ import org.json.JSONException;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
@@ -315,5 +318,35 @@ public class TasksAPI
     public String getTaskStatOfOwner(@QueryParam("owner") String owner)
     {
 	return TaskUtil.getStats(owner).toString();
+    }
+
+    /**
+     * Saves new task using the Contacts Email.
+     * 
+     * @param task
+     *            {@link Task}
+     * @param email
+     *            email of contact to be added to Task.
+     * @return {@link Task}
+     */
+    @Path("/email/{email}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Task createTaskByEmail(Task task, @PathParam("email") String email)
+    {
+	// Get the Contact based on the Email and assign the task to it.
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	if (contact == null)
+	{
+	    System.out.println("Null contact");
+	    return null;
+	}
+
+	task.contacts = new ArrayList<String>();
+	task.contacts.add(contact.id.toString());
+
+	task.save();
+	return task;
     }
 }

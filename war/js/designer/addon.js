@@ -29,14 +29,14 @@ function showAddonsTab(){
 			});
 	
 	//show basic addon default
-	showAddonNodes('emailAddons');
+	showAddonNodes('crmAddons');
 }
 
 
 //Download nodes based on id and construct catalog (Ramesh 12/10/2010)
 function showAddonNodes(id) {
 
-    $('#'+id).html('Loading');
+    $('#'+id).html('Loading...');
      
     //Get Nodes based on id 
     var nodesPath = "/json/nodes/addons-catalog.jsp?type=" + id;
@@ -44,12 +44,24 @@ function showAddonNodes(id) {
      // Download all items
     $.getJSON(nodesPath, function (catalogdata) {
 
+    	$('#'+id).html('');
+    	
         $.each(catalogdata, function (index, jsondata) {
         
                 var data = jsondata.json;
                 var url = jsondata.jsonsrc;
-                console.log("data "+data);
-                console.log("url "+url);
+                // console.log("data "+data);
+                // console.log("url "+url);
+                
+                try
+                {
+                	data = JSON.parse(data);
+                }
+                catch(err)
+                {
+                	console.log("Errorr...");
+                }
+                
                 addAddonTabTemplate(data,url,constructNodeFromDefinition,'#'+id);
         
         });

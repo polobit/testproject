@@ -41,6 +41,7 @@ import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.util.HTTPUtil;
+import com.agilecrm.util.JSAPIUtil;
 
 /**
  * <code>ContactsAPI</code> includes REST calls to interact with {@link Contact}
@@ -73,7 +74,8 @@ public class ContactsAPI
      */
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContacts(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count, @QueryParam("reload") boolean force_reload)
+    public List<Contact> getContacts(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("reload") boolean force_reload)
     {
 	if (count != null)
 	{
@@ -88,7 +90,8 @@ public class ContactsAPI
     @Path("/related/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Contact> getContactsOfCompany(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count, @PathParam("id") String id)
+    public List<Contact> getContactsOfCompany(@QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @PathParam("id") String id)
     {
 	if (count != null)
 	{
@@ -241,7 +244,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Opportunity> getCurrentContactOpportunity(@PathParam("contact-id") Long id)
     {
-	return OpportunityUtil.getCurrentContactDeals(id);
+	return OpportunityUtil.getDeals(id, null, null);
     }
 
     /**
@@ -302,7 +305,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public List<Case> getCurrentContactCases(@PathParam("contact-id") Long id)
     {
-	return CaseUtil.getCasesByContact(id);
+	return CaseUtil.getCases(id, null, null);
     }
 
     /**
@@ -355,8 +358,8 @@ public class ContactsAPI
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Contact changeOwnerToContacts(Contact contact, @PathParam("new_owner") String new_owner, @PathParam("contact_id") Long contact_id)
-	    throws JSONException
+    public Contact changeOwnerToContacts(Contact contact, @PathParam("new_owner") String new_owner,
+	    @PathParam("contact_id") Long contact_id) throws JSONException
     {
 	List<Contact> contacts = new ArrayList<Contact>();
 	contacts.add(contact);
@@ -424,8 +427,8 @@ public class ContactsAPI
     @Path("/email/tags/add")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString, @Context HttpServletResponse response)
-	    throws JSONException
+    public void addTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString,
+	    @Context HttpServletResponse response) throws JSONException
     {
 
 	System.out.println("email to search on" + email);
@@ -464,6 +467,7 @@ public class ContactsAPI
 	System.out.println("Tags to add : " + tagsArray);
 	contact.addTags(tagsArray);
 	System.out.println("Tags after added : " + contact.tagsWithTime);
+
     }
 
     /**
@@ -478,8 +482,8 @@ public class ContactsAPI
     @Path("/email/note/add")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addNoteToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("note") String note, @Context HttpServletResponse response)
-	    throws JSONException
+    public void addNoteToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("note") String note,
+	    @Context HttpServletResponse response) throws JSONException
     {
 
 	System.out.println("email to search on" + email);
@@ -529,8 +533,8 @@ public class ContactsAPI
     @Path("/email/tags/delete")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteTagsToContactsBasedOnEmail(@FormParam("email") String email, @FormParam("tags") String tagsString, @Context HttpServletResponse response)
-	    throws JSONException
+    public void deleteTagsToContactsBasedOnEmail(@FormParam("email") String email,
+	    @FormParam("tags") String tagsString, @Context HttpServletResponse response) throws JSONException
     {
 
 	System.out.println("email to search on" + email);
@@ -583,8 +587,8 @@ public class ContactsAPI
     @Path("/email/tags/delete/sandbox")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteTagsToContactsBasedOnEmail1(@FormParam("email") String email, @FormParam("tags") String tagsString, @Context HttpServletResponse response)
-	    throws JSONException
+    public void deleteTagsToContactsBasedOnEmail1(@FormParam("email") String email,
+	    @FormParam("tags") String tagsString, @Context HttpServletResponse response) throws JSONException
     {
 
 	System.out.println("email to search on" + email);
@@ -751,5 +755,38 @@ public class ContactsAPI
 	System.out.println("In searchContactByPhoneNumber : " + phoneNumber);
 
 	return ContactUtil.searchContactByPhoneNumber(phoneNumber);
+    }
+
+    /**
+     * Add score to the contact. Searches contact based on the email sent and
+     * adds score to the existing score of the contact
+     * 
+     * @param email
+     *            email of the contact
+     * @param score
+     *            score to be added to the contact
+     * @return
+     */
+    @Path("/add-score")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces("application/x-javascript")
+    public String addScore(@FormParam("email") String email, @FormParam("score") Integer score)
+    {
+	try
+	{
+	    Contact contact = ContactUtil.searchContactByEmail(email);
+	    if (contact == null)
+		return JSAPIUtil.generateContactMissingError();
+
+	    contact.addScore(score);
+	    return new ObjectMapper().writeValueAsString(contact);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+
     }
 }

@@ -16,6 +16,8 @@ var documentsView;
 
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
+var NO_WEB_STATS_SETUP = true;
+
 function fill_company_related_contacts(companyId, htmlId)
 {
 	$('#'+htmlId).html(LOADING_HTML);
@@ -358,16 +360,19 @@ $(function(){
 			return;	
 		}
 		
-		$.get('core/api/web-stats/JSAPI-status',function(data){
-			if(data == 0){
-				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
-				return;
-			}
-			addTagAgile(CODE_SETUP_TAG);
-		});
-		
-		var statsView = new Base_Collection_View({
-			url: 'core/api/web-stats?e=' + encodeURIComponent(email) ,
+		// To avoid unnecessary JSAPI count, first verify in cookie
+		if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
+		{
+			$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+			return;
+		}
+			
+		// Add tag if data is not 0
+        addTagAgile(CODE_SETUP_TAG);
+
+			var statsView = new Base_Collection_View({
+			url: 'core/api/web-stats?e=' + encodeURIComponent(email),
+			data: statsCollection.toJSON(),
 			templateKey: "stats",
             individual_tag_name: 'li',
             postRenderCallback: function(el)
@@ -391,6 +396,7 @@ $(function(){
         }
         
         $('#stats',this.el).html(statsView.el);
+        
 	});
 	
 	/**
@@ -463,7 +469,7 @@ $(function(){
 				var text = model.text;
 				
 				// Apply handlebars template on send-email route 
-				if(Current_Route === 'send-email')
+				if(Current_Route !== 'bulk-email')
 				{
 				
 				// Get Current Contact
@@ -474,14 +480,35 @@ $(function(){
 				 * Get Contact properties json to fill the templates
 				 * using handlebars
 				 */  
-				var json = get_property_JSON(json);
-				
-				// Templatize it
-				var template = Handlebars.compile(model.subject);
-				subject =  template(json);
-				
-				template = Handlebars.compile(model.text);
-				text =  template(json);
+				var json = get_contact_json_for_merge_fields();
+				var template;
+					
+					// Templatize it
+					try
+					{
+						template = Handlebars.compile(subject);
+						subject =  template(json);
+					}
+					catch(err)
+					{
+						subject = add_square_brackets_to_merge_fields(subject);
+						
+						template = Handlebars.compile(subject);
+						subject =  template(json);
+					}
+				    
+					try
+					{
+						template = Handlebars.compile(text);
+						text =  template(json);
+					}
+					catch(err)
+					{
+						text = add_square_brackets_to_merge_fields(text);
+						
+						template = Handlebars.compile(text);
+						text =  template(json);
+					}
 				}
 				
 				// Fill subject and body of send email form
@@ -719,3 +746,11 @@ function enable_send_button(elem)
 	elem.text(elem.attr('data-send-text')).removeAttr('disabled data-send-text');
 }
 
+/**
+ * Returns webstats count w.r.t domain
+ **/
+function get_web_stats_count_for_domain()
+{
+	// Returns web-stats count
+	return $.ajax({type: "GET", url: 'core/api/web-stats/JSAPI-status', async: false}).responseText;
+}

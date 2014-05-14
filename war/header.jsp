@@ -1,3 +1,5 @@
+<%@page import="java.util.Iterator"%>
+<%@page import="com.agilecrm.account.NavbarConstants"%>
 <%@page import="com.agilecrm.account.MenuSetting"%>
 <%@page import="com.agilecrm.account.util.MenuSettingUtil"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
@@ -47,133 +49,82 @@
 
 
 							<%
-							    //Styling enable/disable navbar tabs(add display:none to diable)
-									Integer count = 0;
-									MenuSetting menuSetting = MenuSettingUtil.getMenuSetting();
-
-									if (menuSetting.calendar)
-										++count;
-									if (menuSetting.cases)
-										++count;
-									if (menuSetting.deals)
-										++count;
-									if (menuSetting.campaign)
-										++count;
-									if (menuSetting.social)
-										++count;
-									if (menuSetting.reports)
-										++count;
-									if (menuSetting.documents)
-										++count;
+							
+								for(NavbarConstants constant : domainUser.menu_scopes)
+								{
 							%>
-							<li id="contactsmenu"><a href="#contacts"><i
-									class="icon-user icon-white"></i> Contacts</a></li>
+								    <li id="<%=constant.id%>"><a href="<%=constant.href%>"><i
+										class="<%=constant.icon%> icon-white"></i> <%=constant.heading%></a></li>
 							<%
-							    if (menuSetting.calendar || true) {
-							%>
-									<li id="calendarmenu"><a href="#calendar"> <i
-											class="icon-calendar icon-white"></i> Calendar
-									</a></li>
-							<%
-							    }
-							if (menuSetting.deals || true) {
-							    %>
-							    <li id="dealsmenu"><a href="#deals"><i
-										class="icon-money icon-white"></i> Deals</a></li>
-							<% 
 								}
-							if (menuSetting.campaign || true) {
+							%>
+							
+							
+							<%
+							String css_classes = "";
+							int size = domainUser.menu_scopes.size();
+							if(size <=7)
+							{
+							    
+							    css_classes = css_classes + " more-menu-hide-medium";
+							}
+							else
+							{
+							    css_classes = css_classes + " more-menu-show-medium";
+							}
+							if(size <= 4)
+							{
+							    css_classes = css_classes + " more-menu-hide-low";
+							}
+							else
+							{
+							    css_classes = css_classes + " more-menu-show-low";
+							}
+							
+							
+							    if (domainUser.menu_scopes.size() > 3) {
+							%>
+								<li id="more-menu" class="dropdown <%=css_classes%>"><a
+									class="dropdown-toggle" data-toggle="dropdown" href=""> More
+										<i class='caret'></i>
+								</a>
+								<%
+							    } else
+							    {
 								%>
-									<li id="workflowsmenu"><a href="#workflows"><i
-										class="icon-sitemap icon-white"></i> Campaigns</a></li>
-							<%
-								}
-								if (menuSetting.cases || true) {
-							%>
-									<li id="casesmenu"><a href="#cases"><i
-									class="icon-folder-close icon-white"></i> Cases</a></li>
-							<%
-								 }
-								if (menuSetting.social || true) {
-							%>
-									<li id="socialsuitemenu"><a href="#social"> <i
-										class="icon-comments icon-white"></i> Social
-									</a></li>
-							<%
-								}
-								if (menuSetting.web_rules || true) {
-							%>
-									<li id="web-rules-menu"><a href="#web-rules"><i
-											class="icon-folder-close icon-globe"></i> Web Rules</a></li>
-							<%
-						    }
-								if (menuSetting.documents || true) {
-							%>
-							<li id="documentsmenu"><a href="#documents"><i
-									class="icon-file icon-white"></i> Documents</a></li>
-							<%
-							    }
-											if (menuSetting.reports || true) {
-							%>
-							<li id="reportsmenu"><a href="#reports"><i
-									class="icon-bar-chart icon-white"></i> Reports</a></li>
+								<li id="more-menu" class="dropdown <%=css_classes%>"><a
+									class="dropdown-toggle" data-toggle="dropdown" href=""> More
+										<i class='caret'></i>
+								</a>
 							<%
 							    }
 							%>
-
-							<%
-							    if (count > 0) {
-							%>
-
-							<li id="more-menu" class="dropdown"><a
-								class="dropdown-toggle" data-toggle="dropdown" href=""> More
-									<i class='caret'></i>
-							</a>
 								<ul class="dropdown-menu drop-drop">
 									<%
-									    if (menuSetting.campaign || true) {
-									%>
-									<li id="workflowsmenu"><a href="#workflows"><i
-											class="icon-sitemap icon-white"></i> Campaigns</a></li>
-									<%
-									    }
-														if (menuSetting.cases || true) {
-									%>
-									<li id="casesmenu"><a href="#cases"><i
-											class="icon-folder-close icon-white"></i> Cases</a></li>
-									<%
-									    }
-														if (menuSetting.social || true) {
-									%>
-									<li id="socialsuitemenu"><a href="#social"> <i
-											class="icon-comments icon-white"></i> Social
-									</a></li>
-									<%
-									    }
-														if (menuSetting.web_rules || true) {
-									%>
-										<li id="web-rules-menu"><a href="#web-rules"><i
-											class="icon-folder-close icon-globe"></i> Web Rules</a></li>
-									
-									<%
-									    }
-														if (menuSetting.documents || true) {
-									%>
-									<li id="documentsmenu"><a href="#documents"><i
-											class="icon-file icon-white"></i> Documents</a></li>
-									<%
-									    }
-													if (menuSetting.reports || true) {
-									%>
-								<li id="reportsmenu"><a href="#reports"><i
-											class="icon-bar-chart icon-white"></i> Reports</a></li>
-									<%
-									    }
-									%>
-								</ul></li>
+								Iterator<NavbarConstants> iterator = domainUser.menu_scopes.iterator();
+								int index = 0;
+								for(NavbarConstants constant : domainUser.menu_scopes)
+								{
+								    
+								    if(index < 3)
+								    {
+										++index;
+										continue;
+								    }
+								    
+							%>
+								    <li  id="<%=constant.id%>"><a href="<%=constant.href%>"><i
+										class="<%=constant.icon%> icon-white"></i> <%=constant.heading%></a></li>
+							<%
+								}
+							%>
+								</ul>
+							</li>
 							<%
 							    }
 							%>
+							
+						
 							<li class="nav-bar-search">
 								<form id="searchForm" class=" navbar-search"
 									style="margin: 5px;">
@@ -245,9 +196,7 @@
 											Logout</a></li>
 
 								</ul></li>
-							<%
-							    }
-							%>
+							
 						</ul>
 					</div>
 					<!--/.nav-collapse -->

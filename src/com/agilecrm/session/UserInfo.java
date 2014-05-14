@@ -15,9 +15,11 @@
 package com.agilecrm.session;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 
 /**
@@ -46,8 +48,15 @@ public class UserInfo implements Serializable
      */
     private Long domainId = 0L;
 
+    private List<UserAccessScopes> scopes;
+    /**
+     * Number of users allowed in current plan
+     */
     private Integer usersCount = 0;
 
+    /**
+     * Plan name
+     */
     private String plan;
 
     public UserInfo()
@@ -67,9 +76,18 @@ public class UserInfo implements Serializable
 	// Get Domain User for this email and store the id
 	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
 	if (domainUser != null)
+	{
 	    setDomainId(domainUser.id);
+	}
 
-	BillingRestrictionUtil.setPlan(this);
+	try
+	{
+	    BillingRestrictionUtil.setPlan(this);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -147,4 +165,13 @@ public class UserInfo implements Serializable
 	this.plan = plan;
     }
 
+    public List<UserAccessScopes> getScopes()
+    {
+	return this.scopes;
+    }
+
+    public void setScopes(List<UserAccessScopes> scopes)
+    {
+	this.scopes = scopes;
+    }
 }

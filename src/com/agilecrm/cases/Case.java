@@ -16,6 +16,8 @@ import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
@@ -258,6 +260,15 @@ public class Case extends Cursor
 	if (related_contacts_id != null)
 	    for (String contactId : related_contacts_id)
 		related_contacts_key.add(new Key<Contact>(Contact.class, Long.parseLong(contactId)));
+
+	// If owner_id is null
+	if (owner_id == null)
+	{
+	    UserInfo userInfo = SessionManager.get();
+	    if (userInfo == null)
+		return;
+	    owner_id = SessionManager.get().getDomainId().toString();
+	}
 
 	if (owner_key == null)
 	    owner_key = new Key<DomainUser>(DomainUser.class, Long.parseLong(this.owner_id));

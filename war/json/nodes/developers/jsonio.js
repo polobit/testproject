@@ -27,9 +27,7 @@
             "title": "Select the appropriate type for accessing the URL, POST or GET.",
             "options": {
                 "*Get": "get",
-                "Post": "post",
-                "Delete": "delete",
-                "Put": "put" 
+                "Post": "post"
             },
             "fieldType": "select",
             "type": "select" 
@@ -65,7 +63,7 @@
 					 ]
 		},
         {
-            "label": "Integrate your workflow with your web infrastructure using JSON IO. You can retrive or post information with a JSON Http call to a given URL and defined URL parameters. <br/><br/>The returned JSON value is stored in variables ($retVal1 etc) and this can be used in the rest of the workflow.",
+            "label": "Integrate your workflow with your web infrastructure using JSON IO. You can retrive or post information with a JSON Http call to a given URL and defined URL parameters. <br/><br/>The returned JSON will be merged and this can be used in the rest of the workflow. <br/><br/>You can find more documentation with an example <a href='https://github.com/agilecrm/agile-crm-json-io-node' target='_blank'>here</a>",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.email.util.ContactEmailUtil;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -76,11 +77,8 @@ public class EmailsAPI
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
     public void sendEmail(@Context HttpServletRequest request, @FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail,
 	    @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc, @FormParam("subject") String subject,
-	    @FormParam("body") String body, @FormParam("signature") String signature)
+	    @FormParam("body") String body, @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks)
     {
-	// combine body and signature.
-	body = body + "<br/><div><br/><br/>" + signature + "</div>";
-
 	// Removes traling commas if any
 	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
 
@@ -91,7 +89,7 @@ public class EmailsAPI
 	    bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
 
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, null);
+	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null, trackClicks);
 
     }
 
@@ -116,7 +114,7 @@ public class EmailsAPI
 	try
 	{
 	    // Gets gmailPrefs url if not null, otherwise imap url.
-	    String url = ContactEmailUtil.getEmailsFetchURL(searchEmail, offset, count);
+	    String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), searchEmail, offset, count);
 
 	    // If both are not set, return Contact emails.
 	    if (url == null)

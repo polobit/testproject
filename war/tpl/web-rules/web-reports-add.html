@@ -39,6 +39,7 @@
 														<option value="page" selected="selected">Page URL</option>
 														<option value="referrer">Referrer URL</option>
 														<option value="visit">Frequency</option>
+														<option value="device">Device</option>
 													</optgroup>
 													<optgroup label="Contact Data" id="page-conditions">
 														<option value="tags">Tag</option>
@@ -52,6 +53,10 @@
 													<optgroup label="Custom Fields" id="custom-fields"
 														class="hide">
 													</optgroup>
+													<optgroup label="Shopping cart conditions" id="cart-conditions">
+														<option value="cart">Cart</option>
+														<option value="shopify_customer">Customer</option>
+													</optgroup>									
 												</select>
 											</div>
 										</td>
@@ -76,7 +81,6 @@
 													<option value="IS_GREATER_THAN" class="lead_score">greater than</option>
 													<option value="IS_LESS_THAN" class="lead_score">less than</option>
 	
-																
 													<option value="EQUALS" class="tags tags_time">is</option>
 													<option value="NOTEQUALS" class="tags">isn't</option>													
 													<option value="ON" class="updated_time created_time">on</option>
@@ -86,8 +90,6 @@
 														before</option>
 													<option value="BETWEEN" class="created_time updated_time">is
 														between</option>
-													<option value="NEXT" class="created_time updated_time">is
-														within next</option>
 													<option value="LAST" class="created_time updated_time">in
 														last</option>
 													<option value="EQUALS" class="tag org_tag">is</option>
@@ -95,7 +97,20 @@
 													<option value="EVERYTIME" class="visit">Everytime</option>
 													<option value="ONCE_PER_SESSION" class="visit">Once per session</option>	
 													<option value="ONLY_ONCE" class="visit">Only once</option>
-													
+
+													<option value="NEW_CUSTOMER" class="shopify_customer">new customer</option>	
+													<option value="RETURNING_CUSTOMER" class="shopify_customer">Returning customer</option>
+
+													<!-- device -->
+													<option value="IS" class="device">is</option>
+													<option value="IS_NOT" class="device">isn't</option>				
+									
+													<!-- shopify cart -->
+													<option value="IS_EMPTY" class="cart">is empty</option>
+													<option value="IS_NOT_EMPTY" class="cart">is not empty</option>
+													<option value="CONTAINS" class="cart" placeholder="Item name">contains</option>
+													<option value="IS_LESS_THAN" class="cart" placeholder="Cart value">value less than</option>	
+													<option value="IS_GREATER_THAN" class="cart" placeholder="Cart value">value greater than</option>
 												</select>
 											</div>
 										</td>
@@ -103,7 +118,7 @@
 											style="vertical-align: top;">
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp" 
-													class="EQUALS NOTEQUALS ANYOF required MATCHES NOT_CONTAINS" /> <input
+													class="EQUALS NOTEQUALS ANYOF required MATCHES CONTAINS NOT_CONTAINS" /> <input
 													type="text" name="temp" 
 													class="LAST NEXT required" placeholder="Number of days" />
 												<input type="text" name="tag"
@@ -115,8 +130,10 @@
 													class="ON AFTER BEFORE BETWEEN input required date"
 													placeholder="MM/DD/YY" />
 													<input type="text" name="temp" style="width:92%"
-													class="IS_GREATER_THAN IS_LESS_THAN number required" placeholder="Enter Score"/> 
-											
+													class="IS_GREATER_THAN IS_LESS_THAN number required" placeholder="Enter Score"/>
+													<select>
+														<option value="MOBILE" class="IS IS_NOT">Mobile</option>
+													</select> 
 											</div>
 										</td>
 										<td class="controls span2"

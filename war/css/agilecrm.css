@@ -1128,6 +1128,16 @@ tbody a.no-style-a {
 	#more-menu li:not(:nth-child(n+2)) {
 		display:none;
 	}
+	
+	.more-menu-hide-low
+	{
+		display:none !important;
+	}
+	.more-menu-show-low
+	{
+		display:block !important;
+	}
+	
 }
 
 
@@ -1135,7 +1145,17 @@ tbody a.no-style-a {
 	.agile-menu  > li:nth-child(n + 9):not(.nav-bar-search):not(#more-menu)   {     display:none }	
 	#more-menu li:not(:nth-child(n+5)) {
 		display:none;
+	} 
+	
+	.more-menu-hide-medium
+	{
+		display:none !important;
 	}
+	.more-menu-show-medium
+	{
+		display:block !important;
+	}
+	
 
 }
 

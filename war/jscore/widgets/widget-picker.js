@@ -154,6 +154,8 @@ $(function()
 			return;
 		
 		delete_widget(widget_name);
+		if(widget_name == "Linkedin")
+			$('#Linkedin-container').hide();
 
 		});
 
@@ -202,7 +204,7 @@ function delete_widget(widget_name)
 
 		Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
 		update_collection(widget_name);
-
+		
 	}, dataType : 'json' });
 
 }

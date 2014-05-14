@@ -2,7 +2,9 @@ package com.agilecrm.deals.util;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -14,8 +16,6 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 
 /**
  * <code>OpportunityUtil</code> is the utility class to fetch opportunities with
@@ -70,6 +70,18 @@ public class OpportunityUtil
     }
 
     /**
+     * Gets list of all opportunities.
+     * 
+     * @return list of all opportunities.
+     */
+    public static List<Opportunity> getOpportunities(int max, String cursor)
+    {
+	if (max != 0)
+	    return dao.fetchAll(max, cursor);
+	return getOpportunities();
+    }
+
+    /**
      * Gets list of all opportunities by milestones.
      * 
      * @return DealsByMilestones JSONObjects with respect to given
@@ -88,7 +100,7 @@ public class OpportunityUtil
 	for (String milestone : Opportunity.MILESTONES)
 	{
 	    String json = "";
-	    List<Opportunity> dealslist = getDealsWithMilestone(milestone);
+	    List<Opportunity> dealslist = getDeals(null, milestone, null);
 	    try
 	    {
 		json = mapper.writeValueAsString(dealslist);
@@ -101,16 +113,6 @@ public class OpportunityUtil
 	    }
 	}
 	return milestonesObject;
-    }
-
-    /**
-     * Gets list of all opportunities with milestones.
-     * 
-     * @return DealsByMilestones List with respect to given milestone
-     */
-    public static List<Opportunity> getDealsWithMilestone(String milestone)
-    {
-	return dao.ofy().query(Opportunity.class).filter("milestone = ", milestone.trim()).list();
     }
 
     /**
@@ -130,18 +132,61 @@ public class OpportunityUtil
     }
 
     /**
-     * Gets deals with respect to contact.
+     * Returns deals count with given contact-id and milestone
      * 
-     * @param id
-     *            - Contact Id.
-     * @return list of opportunities with respect to contact.
+     * @param contactId
+     *            - Contact Id
+     * @param milestone
+     *            - milestone
+     * @return int
      */
-    public static List<Opportunity> getCurrentContactDeals(Long id)
+    public static int getDealsCount(Long contactId, String milestone, Long ownerId)
     {
-	Objectify ofy = ObjectifyService.begin();
-	Key<Contact> contact_key = new Key<Contact>(Contact.class, id);
+	if (contactId == null && milestone == null && ownerId == null)
+	    return 0;
 
-	return ofy.query(Opportunity.class).filter("related_contacts = ", contact_key).list();
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	if (contactId != null)
+	    conditionsMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+
+	if (milestone != null)
+	    conditionsMap.put("milestone", milestone.trim());
+
+	if (ownerId != null)
+	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+
+	return dao.getCountByProperty(conditionsMap);
+    }
+
+    /**
+     * Returns deals based on contact Id or milestone or ownerId or all at once
+     * 
+     * @param contactId
+     *            - Contact Id
+     * @param milestone
+     *            - milestone
+     * @param ownerId
+     *            - deal owner id
+     * @return List
+     */
+    public static List<Opportunity> getDeals(Long contactId, String milestone, Long ownerId)
+    {
+	if (contactId == null && milestone == null && ownerId == null)
+	    return null;
+
+	Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	if (contactId != null)
+	    conditionsMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+
+	if (milestone != null)
+	    conditionsMap.put("milestone", milestone.trim());
+
+	if (ownerId != null)
+	    conditionsMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, ownerId));
+
+	return dao.listByProperty(conditionsMap);
     }
 
     /**

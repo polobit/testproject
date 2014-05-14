@@ -169,9 +169,6 @@ function set_up_widgets(el, widgets_el)
 		var id = model.get("id");
 		var url = model.get("url");
 
-		if(model.get('name') == "Linkedin")
-			return;
-
 		model.set('selector', model.get('name').replace( / +/g, ''));
 		
 		/*

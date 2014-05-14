@@ -296,7 +296,8 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("properties.value = ", email).count();
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		.filter("properties.value = ", email).count();
     }
 
     /**
@@ -399,7 +400,8 @@ public class ContactUtil
 	if (contact == null)
 	    return "?";
 
-	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " " + contact.getContactFieldValue(Contact.LAST_NAME);
+	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " "
+		+ contact.getContactFieldValue(Contact.LAST_NAME);
 
 	return contactName;
     }
@@ -409,9 +411,10 @@ public class ContactUtil
 	try
 	{
 	    Map<String, Object> mp = new HashMap<String, Object>();
-	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact), new TypeReference<HashMap<String, Object>>()
-	    {
-	    });
+	    mp = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(contact),
+		    new TypeReference<HashMap<String, Object>>()
+		    {
+		    });
 	    return mp;
 	}
 	catch (Exception e)
@@ -422,8 +425,8 @@ public class ContactUtil
 
     public static List<Contact> getRecentContacts(String page_size)
     {
-	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId()).order("-viewed.viewed_time")
-		.limit(Integer.parseInt(page_size)).list();
+	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId())
+		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
     }
 
     public static void deleteContactsbyList(List<Contact> contacts)
@@ -447,7 +450,8 @@ public class ContactUtil
      */
     public static Key<Contact> getCompanyByName(String companyName)
     {
-	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name").filter("properties.value", companyName).getKey();
+	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name")
+		.filter("properties.value", companyName).getKey();
 
     }
 
@@ -541,10 +545,6 @@ public class ContactUtil
     public static Contact mergeContactFeilds(Contact newContact, Contact oldContact)
     {
 
-	System.out.println("properties ***********************************");
-
-	System.out.println(newContact.properties);
-	System.out.println(oldContact.properties);
 	/**
 	 * Iterates through new properties in new contacts
 	 */
@@ -556,13 +556,11 @@ public class ContactUtil
 
 	    // If email, website, phone, url, if value is not duplicate then new
 	    // field is added.
-	    if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name) || Contact.PHONE.equals(field.name) || Contact.URL.equals(field.name))
+	    if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name)
+		    || Contact.PHONE.equals(field.name) || Contact.URL.equals(field.name))
 	    {
 		if (Contact.WEBSITE.equals(field.name))
 		{
-		    System.out.println("*************");
-		    System.out.println("name : " + field.name + ", " + "value" + field.value);
-		    System.out.println("***********************");
 		}
 
 		// Fetches all contact fields by property name
@@ -582,14 +580,9 @@ public class ContactUtil
 			continue;
 		    }
 		}
-		System.out.println("new field" + newField);
 		if (newField)
 		{
-		    System.out.println(field);
-		    System.out.println(oldContact.getContactPropertiesList(Contact.EMAIL));
-		    System.out.println("adding new");
 		    oldContact.properties.add(field);
-		    System.out.println(oldContact.getContactPropertiesList(Contact.EMAIL));
 		}
 		continue;
 	    }
@@ -647,7 +640,8 @@ public class ContactUtil
 
     public static boolean isValidFields(Contact contact)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME)) && StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
 	{
 	    return false;
 	}
@@ -679,7 +673,8 @@ public class ContactUtil
     public static boolean isValidEmail(final String hex)
     {
 
-	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 

@@ -68,6 +68,7 @@
 						
 		</ul>
 	</div>
+	
 </div>
 </script>
 
@@ -243,7 +244,13 @@
 		</div>
 	{{else}}
 		<div style="line-height:160%;word-wrap: break-word;padding:10px">
-			{{{message}}}
+			<!-- Commented the code to show the LinkedIn discontinue message due to change in API.
+				{{{message}}}
+			-->
+			We are forced to discontinue LinkedIn widget because of API restrictions from LinkedIn.
+			You can read more on this from our 
+			<a href="https://www.agilecrm.com/blog/linkedout-agile-crm-forced-to-discontinue-linkedin-intergation/">blog</a>.<br/>
+			<a class="btn btn-danger" id="delete-widget" widget-name="Linkedin" style="margin-top:5px;">Delete Widget</a>
 		</div>
 	{{/check_length}}	
 {{/if}}

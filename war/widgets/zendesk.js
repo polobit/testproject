@@ -489,7 +489,8 @@ function sendRequestToZendesk(url, formId, modalId, errorPanelId)
 		 * If error occurs modal is removed and error message is shown in
 		 * Zendesk panel
 		 */
-		$('#' + modalId).remove();
+		$('#' + modalId).modal("hide");
+		//$('#' + modalId).remove();
 		zendeskStreamError(errorPanelId, data.responseText);
 	});
 }

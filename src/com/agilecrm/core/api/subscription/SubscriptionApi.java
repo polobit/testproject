@@ -14,9 +14,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.stripe.exception.StripeException;
 
 /**
@@ -60,7 +67,7 @@ public class SubscriptionApi
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Subscription subscribe(Subscription subscribe)
+    public Subscription subscribe(Subscription subscribe) throws PlanRestrictedException, WebApplicationException
     {
 
 	try
@@ -86,12 +93,25 @@ public class SubscriptionApi
 	    else if (subscribe.card_details != null && subscribe.plan != null)
 		subscribe = subscribe.createNewSubscription();
 
+	    // Sets plan in session
+	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
+
+	    // Initializes task to clear tags
+	    AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
+
+	    // Add to queue
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.add(TaskOptions.Builder.withPayload(task));
+
 	    return subscribe;
+	}
+	catch (PlanRestrictedException e)
+	{
+	    throw e;
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-
 	    /*
 	     * If Exception is raised during subscription send the exception
 	     * message to client
@@ -119,8 +139,14 @@ public class SubscriptionApi
 	    // Return updated subscription object
 	    return Subscription.updatePlan(plan);
 	}
+	catch (PlanRestrictedException e)
+	{
+	    System.out.println("excpetion plan exception");
+	    throw e;
+	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}

@@ -35,9 +35,10 @@ public class GoogleContactsDeferredTask implements DeferredTask
     {
 	// TODO Auto-generated method stub
 
-	// Returns If Namespace is empty
-	if (StringUtils.isEmpty(namespace))
-	    return;
+	/*
+	 * // Returns If Namespace is empty if (StringUtils.isEmpty(namespace))
+	 * return;
+	 */
 
 	syncGooglecontacts(namespace, duration);
     }
@@ -73,7 +74,8 @@ public class GoogleContactsDeferredTask implements DeferredTask
 
 	    if (contactPrefsId != null)
 	    {
-		taskOptions = TaskOptions.Builder.withUrl(URI + "duration/" + String.valueOf(contactPrefsId)).header("Host", url).method(Method.POST);
+		taskOptions = TaskOptions.Builder.withUrl(URI + "duration/" + String.valueOf(contactPrefsId))
+			.header("Host", url).method(Method.POST);
 	    }
 	    else
 	    {

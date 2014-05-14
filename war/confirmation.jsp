@@ -401,17 +401,27 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 					    CronUtil.removeTask(campaignId, contactId);
 					    
 					    HashMap<String, String> map = new HashMap<String, String>();
+						String subjectMessage = "Unsubscribe";
 						
 					    if ("all".equals(status))
-						map.put("company", company);
+						{
+							map.put("company", company);
+							subjectMessage = "Unsubscribed successfully from "+company+" company";
+						}
 					    
 					    if("current".equals(status))
-						map.put("campaign_name", campaign_name);
+						{
+							map.put("campaign_name", campaign_name);
+							subjectMessage = "Unsubscribed successfully from Campaign";
+						}
 					    
 					    map.put("domain", NamespaceManager.get());
+					    
+					    map.put("campaign_id", campaignId);
+					    map.put("email", email);
 						 
 						if(map.size() != 0)
-						   SendMail.sendMail(email, SendMail.UNSUBSCRIBE_CONFIRMATION_SUBJECT,SendMail.UNSUBSCRIBE_CONFIRMATION , map, "noreply@agilecrm.com", company);
+						   SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, "noreply@agilecrm.com", company);
 					}
 					catch (Exception e)
 					{

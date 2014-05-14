@@ -20,10 +20,10 @@ public class ContactImapUtil
      *            - count or limit to number of emails.
      * @return String
      */
-    public static String getIMAPURL(String searchEmail, String offset, String count)
+    public static String getIMAPURL(AgileUser agileUser, String searchEmail, String offset, String count)
     {
 	// Get Imap Prefs
-	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(AgileUser.getCurrentAgileUser());
+	IMAPEmailPrefs imapPrefs = IMAPEmailPrefsUtil.getIMAPPrefs(agileUser);
 
 	if (imapPrefs == null)
 	    return null;
