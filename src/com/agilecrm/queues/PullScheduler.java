@@ -111,14 +111,22 @@ public class PullScheduler
      */
     public void run()
     {
-	while (shouldContinue())
+	try
 	{
-	    List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
+	    while (shouldContinue())
+	    {
+		List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
 
-	    if (tasks == null || tasks.isEmpty())
-		break;
+		if (tasks == null || tasks.isEmpty())
+		    break;
 
-	    processTasks(queueName, tasks);
+		processTasks(queueName, tasks);
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in PullScheduler run method..." + e.getMessage());
+	    e.printStackTrace();
 	}
     }
 
