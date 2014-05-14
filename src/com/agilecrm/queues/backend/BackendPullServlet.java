@@ -18,31 +18,31 @@ import com.agilecrm.queues.PullScheduler;
 @SuppressWarnings("serial")
 public class BackendPullServlet extends HttpServlet
 {
-	public void doGet(HttpServletRequest req, HttpServletResponse res)
+    public void doGet(HttpServletRequest req, HttpServletResponse res)
+    {
+	doPost(req, res);
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse res)
+    {
+
+	// Pull queue name
+	String queueName = req.getParameter("queue_name");
+
+	if (StringUtils.isBlank(queueName))
+	    return;
+
+	try
 	{
-		doPost(req, res);
+	    // Process pull queue tasks
+	    PullScheduler pullScheduler = new PullScheduler(queueName, false);
+	    pullScheduler.run();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in BackendPullServlet PullScheduler " + e.getMessage());
 	}
 
-	public void doPost(HttpServletRequest req, HttpServletResponse res)
-	{
-
-		// Pull queue name
-		String queueName = req.getParameter("queue_name");
-
-		if (StringUtils.isBlank(queueName))
-			return;
-
-		try
-		{
-			// Process pull queue tasks
-			PullScheduler pullScheduler = new PullScheduler(queueName, false);
-			pullScheduler.run();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.err.println("Exception occured in BackendPullServlet PullScheduler " + e.getMessage());
-		}
-
-	}
+    }
 }
