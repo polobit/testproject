@@ -122,6 +122,7 @@
 				<fieldset>				    
 					<input name="progress" id="progress" type="hidden" value="">
 					<input name="is_complete" id="is_complete" type="hidden" value="">
+					<input name="notes" id="notes" type="hidden" value="" />
 															
 					<div class="row">
 						<div id="addTask" class="span3 control-group">
@@ -216,12 +217,20 @@
 					  </div>	
 					</div>
 					<div class="row for-description">
-						<div class="span6 control-group for-description">
+						<div class="span5 control-group for-description">
 							<label for="description" class="control-label"><b>Description</b></label>
 							<div class="controls">
 								<textarea type="text" id="description" name="description"
 									size="40" placeholder="Description of Task"
-									data-mode="multiple" style="width: 87%;"></textarea>
+									data-mode="multiple" style="width: 100%;"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+					    <div class="span5 control-group">
+							<label for="notes" class="control-label"><b>Notes</b></label>
+							<div class="controls pull-right task-add-note">
+								<i class="icon-plus" /> Add Note
 							</div>
 						</div>
 					</div>

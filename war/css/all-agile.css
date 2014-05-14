@@ -1509,6 +1509,13 @@ small {
 	margin-top: 6 px;
 	display: none;
 }
+
+.task-add-note {
+	color: navy;
+	margin-top: -21px;
+	margin-right: -10px;
+	cursor: pointer;
+}
 /* .task-actions:hover,.task-actions:focus {display: block;} */
 /* ********************************************************* */
 /**************** Plan and upgrade css *************for plan css strip********************************************/
@@ -1915,7 +1922,7 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 		endColorstr='#0044cc', GradientType=0);
 	border-color: #0044cc #0044cc #002a80;
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-	filter: progid:DXImageTransform.Microsoft.gradient(enabled=
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled= 
 		             
 		             false);
 	color: #fff;

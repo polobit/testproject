@@ -163,6 +163,7 @@ $(function()
 		var value = $(ele).data().toJSON();
 		deserializeForm(value, $("#updateTaskForm"));
 		$("#updateTaskModal").modal('show');
+		
 		// Fills owner select element
 		populateUsers("owners-list", $("#updateTaskForm"), value, 'taskOwner', function(data)
 		{
