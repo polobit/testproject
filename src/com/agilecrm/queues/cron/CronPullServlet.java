@@ -24,51 +24,51 @@ import com.google.appengine.api.taskqueue.QueueStatistics;
 public class CronPullServlet extends HttpServlet
 {
 
-	/**
-	 * Tasks limit
-	 */
-	public static final int FETCH_LIMIT = 100;
+    /**
+     * Tasks limit
+     */
+    public static final int FETCH_LIMIT = 100;
 
-	public void doGet(HttpServletRequest req, HttpServletResponse res)
+    public void doGet(HttpServletRequest req, HttpServletResponse res)
+    {
+	doPost(req, res);
+    }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse res)
+    {
+
+	// Get queue name
+	String queueName = req.getParameter("q");
+
+	if (StringUtils.isBlank(queueName))
+	    return;
+
+	Queue queue = QueueFactory.getQueue(queueName);
+
+	// Get statistics
+	QueueStatistics qs = queue.fetchStatistics();
+	int tasksCount = qs.getNumTasks();
+
+	// Process tasks in backend
+	if (tasksCount > FETCH_LIMIT)
 	{
-		doPost(req, res);
-	}
+	    System.out.println("Running " + queueName + " tasks in backend...");
 
-	public void doPost(HttpServletRequest req, HttpServletResponse res)
+	    PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
+	}
+	else
 	{
-
-		// Get queue name
-		String queueName = req.getParameter("q");
-
-		if (StringUtils.isBlank(queueName))
-			return;
-
-		Queue queue = QueueFactory.getQueue(queueName);
-
-		// Get statistics
-		QueueStatistics qs = queue.fetchStatistics();
-		int tasksCount = qs.getNumTasks();
-
-		// Process tasks in backend
-		if (tasksCount > FETCH_LIMIT)
-		{
-			System.out.println("Running " + queueName + " tasks in backend...");
-
-			PullQueueUtil.processTasksInBackend("/backend-pull", queueName);
-		}
-		else
-		{
-			try
-			{
-				// Process tasks in frontend
-				PullScheduler pullScheduler = new PullScheduler(queueName, true);
-				pullScheduler.run();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				System.err.println("Exception occured in CronPullServlet PullScheduler " + e.getMessage());
-			}
-		}
+	    try
+	    {
+		// Process tasks in frontend
+		PullScheduler pullScheduler = new PullScheduler(queueName, true);
+		pullScheduler.run();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+		System.err.println("Exception occured in CronPullServlet PullScheduler " + e.getMessage());
+	    }
 	}
+    }
 }
