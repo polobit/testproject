@@ -131,6 +131,16 @@ public class Task extends Cursor
     @NotSaved
     public String entity_type = "task";
 
+    public int progress;
+    public String descrption = null;
+
+    public enum Status
+    {
+	YET_TO_START, IN_PROGRESS, COMPLETED
+    };
+
+    public Status status;
+
     // Dao
     public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
 
@@ -152,11 +162,14 @@ public class Task extends Cursor
      * @param agileUserId
      *            Agile user id to create owner
      */
-    public Task(Type type, Long due)
+    public Task(Type type, Long due, int progress, String descrption, Status status)
     {
 	this.type = type;
 	this.due = due;
 
+	this.progress = progress;
+	this.descrption = descrption;
+	this.status = status;
 	// if (agileUserId != 0)
 	// this.agileUser = new Key<AgileUser>(AgileUser.class, agileUserId);
     }

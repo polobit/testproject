@@ -63,66 +63,71 @@ $(function()
 		return options.fn(fields);
 
 	});
-	
-	
-	   /**
-     * Returns custom fields without few fields like LINKEDIN or TWITTER or title fields
-     */
-    Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
-    {
 
-            var exclude_by_subtype = ["LINKEDIN", "TWITTER"];
-            var exclude_by_name = ["title"];
-            
-            var fields = getContactCustomProperties(items);
-            
-            var exclusive_fields = [];
-            for(var i =0 ; i < fields.length ; i++)
-            {
-                    if(jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
-                    {
-                            continue;
-                    }
-                   
-                    exclusive_fields.push( jQuery.extend(true, {}, fields[i]));
-            }
-            if (exclusive_fields.length == 0)
-                            return options.inverse(exclusive_fields);
-            
-            $.getJSON("core/api/custom-fields/type/DATE", function(data){
-            	
-                    if(data.length == 0)
-                            return;
-                    
-                    for(var j =0; j < data.length ; j ++)
-                    {
-                            for(var i = 0; i< exclusive_fields.length ; i++)
-                            {
-                                    if(exclusive_fields[i].name == data[j].field_label)
-                                            try
-                                            {
-                                            	var value = exclusive_fields[i].value * 1000;
-                                            		
-                                            		if(!isNaN(value))
-                                            		{
-                                            			exclusive_fields[i].value = value;
-                                                 	  exclusive_fields[i]["subtype"] = data[j].field_type;
-                                            		}
-                                                    
-                                            }
-                                    catch(err)
-                                    {
-                                            exclusive_fields[i].value = exclusive_fields[i].value;
-                                    }
-                            }
-                    }
-                    updateCustomData(options.fn(exclusive_fields));
-            });
-            
-            return options.fn(exclusive_fields)
+	/**
+	 * Returns custom fields without few fields like LINKEDIN or TWITTER or
+	 * title fields
+	 */
+	Handlebars.registerHelper('getContactCustomPropertiesExclusively', function(items, options)
+	{
 
-    });
-    
+		var exclude_by_subtype = [
+				"LINKEDIN", "TWITTER"
+		];
+		var exclude_by_name = [
+			"title"
+		];
+
+		var fields = getContactCustomProperties(items);
+
+		var exclusive_fields = [];
+		for ( var i = 0; i < fields.length; i++)
+		{
+			if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
+			{
+				continue;
+			}
+
+			exclusive_fields.push(jQuery.extend(true, {}, fields[i]));
+		}
+		if (exclusive_fields.length == 0)
+			return options.inverse(exclusive_fields);
+
+		$.getJSON("core/api/custom-fields/type/DATE", function(data)
+		{
+
+			if (data.length == 0)
+				return;
+
+			for ( var j = 0; j < data.length; j++)
+			{
+				for ( var i = 0; i < exclusive_fields.length; i++)
+				{
+					if (exclusive_fields[i].name == data[j].field_label)
+						try
+						{
+							var value = exclusive_fields[i].value * 1000;
+
+							if (!isNaN(value))
+							{
+								exclusive_fields[i].value = value;
+								exclusive_fields[i]["subtype"] = data[j].field_type;
+							}
+
+						}
+						catch (err)
+						{
+							exclusive_fields[i].value = exclusive_fields[i].value;
+						}
+				}
+			}
+			updateCustomData(options.fn(exclusive_fields));
+		});
+
+		return options.fn(exclusive_fields)
+
+	});
+
 	Handlebars.registerHelper('urlEncode', function(url, key, data)
 	{
 
@@ -134,11 +139,11 @@ $(function()
 		// console.log(encodedUrl.length + " " + encodedUrl);
 		return encodedUrl;
 	});
-	
+
 	Handlebars.registerHelper('encodeString', function(url)
-			{
-				return encodeURIComponent(url);
-			});
+	{
+		return encodeURIComponent(url);
+	});
 
 	/**
 	 * Helper function to return image for an entity (contact). Checks for
@@ -404,73 +409,87 @@ $(function()
 
 		return html;
 	});
-	
-	Handlebars.registerHelper('setupTags', function(tags) {
-		
-		console.log(tags);
-		var json = {};
 
-		var keys = [];
-		// Store tags in a json, starting letter as key
-		for ( var i = 0; i < tags.length; i++)
-		{
-			var tag = tags[i].tag;
-			var key = tag.charAt(0).toUpperCase();
-			// console.log(tag);
-			if(jQuery.inArray( key, keys ) == -1)
-				keys.push(key);
-		}
+	Handlebars
+			.registerHelper(
+					'setupTags',
+					function(tags)
+					{
 
-		// To sort tags in case-insensitive order i.e. keys in json object
-		keys.sort();
-		console.log(keys);
-		var html = "";
-		for ( var i =0 ;i < keys.length ; i ++)
-		{
-			html += "<div class='tag-element' style='margin-right:10px'><div class='tag-key'>"+keys[i]+"</div><div class='tag-values' tag-alphabet=\""+keys[i]+"\"></div></div>";
-		}
-		return new Handlebars.SafeString(html);
-	});
+						console.log(tags);
+						var json = {};
+
+						var keys = [];
+						// Store tags in a json, starting letter as key
+						for ( var i = 0; i < tags.length; i++)
+						{
+							var tag = tags[i].tag;
+							var key = tag.charAt(0).toUpperCase();
+							// console.log(tag);
+							if (jQuery.inArray(key, keys) == -1)
+								keys.push(key);
+						}
+
+						// To sort tags in case-insensitive order i.e. keys in
+						// json object
+						keys.sort();
+						console.log(keys);
+						var html = "";
+						for ( var i = 0; i < keys.length; i++)
+						{
+							html += "<div class='tag-element' style='margin-right:10px'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + keys[i] + "\"></div></div>";
+						}
+						return new Handlebars.SafeString(html);
+					});
 
 	// To show milestones as columns in deals
-	Handlebars.registerHelper('deals_by_milestones', function(data)
-	{
-		var html = "";
-		var count = Object.keys(data).length;
-		$.each(data, function(key, value)
-		{
-			if(count == 1 && key == "")
-			{
-				html += '<div class="slate" style="padding:5px 2px;"><div class="slate-content" style="text-align:center;"><h3>You have no milestones defined</h3></div></div>';
-			}
-			else
-			{
-				html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
-				for ( var i in value)
-				{
-					html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
-				}
-				html += "</ul></div>";
-			}
-		});
-		return html;
-	});
-	
+	Handlebars
+			.registerHelper(
+					'deals_by_milestones',
+					function(data)
+					{
+						var html = "";
+						var count = Object.keys(data).length;
+						$
+								.each(
+										data,
+										function(key, value)
+										{
+											if (count == 1 && key == "")
+											{
+												html += '<div class="slate" style="padding:5px 2px;"><div class="slate-content" style="text-align:center;"><h3>You have no milestones defined</h3></div></div>';
+											}
+											else
+											{
+												html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
+												for ( var i in value)
+												{
+													html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+												}
+												html += "</ul></div>";
+											}
+										});
+						return html;
+					});
+
 	// To show milestones as sortable list
-	Handlebars.registerHelper('milestone_ul', function(data)
-	{
-		var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
-		if(data)
-		{
-			var milestones = data.split(",");
-			for (var i in milestones)
-			{
-				html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
-			}
-		}
-		html += "</ul>";
-		return html;
-	});
+	Handlebars
+			.registerHelper(
+					'milestone_ul',
+					function(data)
+					{
+						var html = "<ul class='milestone-value-list tagsinput' style='padding:1px;list-style:none;'>";
+						if (data)
+						{
+							var milestones = data.split(",");
+							for ( var i in milestones)
+							{
+								html += "<li data='" + milestones[i] + "'><div><span>" + milestones[i] + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>";
+							}
+						}
+						html += "</ul>";
+						return html;
+					});
 
 	/**
 	 * Helper function to return date string from epoch time
@@ -484,7 +503,6 @@ $(function()
 		if (!date)
 			return;
 
-		
 		if ((date / 100000000000) > 1)
 		{
 			console.log(new Date(parseInt(date)).format(format));
@@ -546,7 +564,6 @@ $(function()
 		return (monthArray[intMonth] + " " + intDay);
 	});
 
-
 	/**
 	 * Helper function to return task color based on it's priority
 	 */
@@ -572,7 +589,7 @@ $(function()
 		if (priority == 'green')
 			return 'Low';
 	});
-	
+
 	/**
 	 * Helper function to return type based on it's network type
 	 */
@@ -683,7 +700,7 @@ $(function()
 
 			if (element.indexOf("properties_") != -1)
 				element = element.split("properties_")[1];
-			if(element.indexOf("custom_") == 0)
+			if (element.indexOf("custom_") == 0)
 				element = element.split("custom_")[1];
 
 			element = element.replace("_", " ")
@@ -768,10 +785,10 @@ $(function()
 			
 		case "OPENED EMAIL":
 			var customJSON = JSON.parse(this.custom_value);
-			
-			if(customJSON.hasOwnProperty("workflow_name"))
+
+			if (customJSON.hasOwnProperty("workflow_name"))
 				return str.toLowerCase() + " " + " of campaign " + "\"" + customJSON.workflow_name + "\"";
-			
+
 			return str.toLowerCase() + " with subject " + "\"" + customJSON.email_subject + "\"";
 
 		case "CONTACT ADDED":
@@ -903,33 +920,33 @@ $(function()
 						console.log("_____________________________________________________________");
 						for ( var i = 0, l = properties.length; i < l; i++)
 						{
-							
+
 							if (properties[i].name == "address")
 							{
 								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
-								
+
 								var address = {};
 								try
 								{
 									address = JSON.parse(properties[i].value);
 								}
-								catch(err)
+								catch (err)
 								{
-									address['address'] = properties[i].value;									
+									address['address'] = properties[i].value;
 								}
 
 								// Gets properties (keys) count of given json
 								// object
 								var count = countJsonProperties(address);
 
-								if(properties_count != 0)
-							
-									 el = el
-                                     .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+								if (properties_count != 0)
+
+									el = el
+											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
 								else
-								el = el
-                                .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div><span>');
-								
+									el = el
+											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div><span>');
+
 								$.each(address, function(key, val)
 								{
 									if (--count == 0)
@@ -945,7 +962,7 @@ $(function()
 								el = el.concat('</span></div></div>');
 								return new Handlebars.SafeString(el);
 							}
-							else if(properties[i].name == "phone" || properties[i].name == "email")
+							else if (properties[i].name == "phone" || properties[i].name == "email")
 							{
 								++properties_count;
 							}
@@ -1051,7 +1068,7 @@ $(function()
 		{
 			try
 			{
-				
+
 				object[key] = JSON.parse(object[key]);
 			}
 			finally
@@ -1177,33 +1194,34 @@ $(function()
 	{
 		return getCount(this);
 	});
-	
-	Handlebars.registerHelper('contacts_count', function(){
+
+	Handlebars.registerHelper('contacts_count', function()
+	{
 		if (this[0] && this[0].count && (this[0].count != -1))
 		{
-			if(this[0].count > 9999 && readCookie('contact_filter'))
+			if (this[0].count > 9999 && readCookie('contact_filter'))
 				return "(" + this[0].count + "+ Total)";
-			
+
 			return "(" + this[0].count + " Total)";
 		}
 		else
 			return "(" + this.length + " Total)";
 	});
-	
+
 	/**
 	 * 
 	 * Returns subscribers count without parenthesis
 	 * 
-	 **/
-	Handlebars.registerHelper('subscribers_count', function(){
-		
-		if(this[0] && this[0].count && (this[0].count != -1))
-			return this[0].count;
-		
-		return this.length;
-			
-	});
+	 */
+	Handlebars.registerHelper('subscribers_count', function()
+	{
 
+		if (this[0] && this[0].count && (this[0].count != -1))
+			return this[0].count;
+
+		return this.length;
+
+	});
 
 	/**
 	 * Convert string to lower case
@@ -1235,14 +1253,14 @@ $(function()
 			return options.fn(this);
 		}
 	});
-	
-	Handlebars.registerHelper('wrap_entity', function(item, options)
-			 {
 
-			  if ( item)
-			   return options.fn(item);
-			});
-	
+	Handlebars.registerHelper('wrap_entity', function(item, options)
+	{
+
+		if (item)
+			return options.fn(item);
+	});
+
 	/**
 	 * Returns modified message for timeline logs
 	 */
@@ -1284,8 +1302,11 @@ $(function()
 	Handlebars.registerHelper('if_equals', function(value, target, options)
 	{
 
-		/*console.log("typeof target: " + typeof target + " target: " + target);
-		console.log("typeof value: " + typeof value + " value: " + value);*/
+		/*
+		 * console.log("typeof target: " + typeof target + " target: " +
+		 * target); console.log("typeof value: " + typeof value + " value: " +
+		 * value);
+		 */
 		/*
 		 * typeof is used beacuse !target returns true if it is empty string,
 		 * when string is empty it should not go undefined
@@ -1310,7 +1331,6 @@ $(function()
 		else
 			return options.fn(this);
 	});
-	
 
 	/**
 	 * Compares the arguments (value and target) and executes the template based
@@ -1541,18 +1561,18 @@ $(function()
 		{
 			json_length++;
 		}
-		
+
 		if (json_length == parseInt(length))
 		{
 			for ( var prop in content)
 			{
-				return options.fn({ property : prop, value : content[prop], last : true});
+				return options.fn({ property : prop, value : content[prop], last : true });
 			}
 		}
 
 		return options.inverse(content);
 	});
-	
+
 	Handlebars.registerHelper('iterate_json', function(context, options)
 	{
 		var result = "";
@@ -1650,7 +1670,7 @@ $(function()
 	{
 		return value.replace(/[\[\]]+/, '');
 	});
-	
+
 	/**
 	 * Shows list of triggers separated by comma
 	 */
@@ -1782,7 +1802,7 @@ $(function()
 		if (hours == 0)
 			return (minutes + "m ") + (seconds + "s");
 
-		var result = (hours + "h ") + (minutes + "m ") + (seconds +"s");
+		var result = (hours + "h ") + (minutes + "m ") + (seconds + "s");
 		return result;
 	});
 
@@ -1795,7 +1815,7 @@ $(function()
 			return "unknown";
 
 		var url = getCurrentContactProperty(original_ref);
-		
+
 		url = url.split('/');
 		url = (url[0] + '//' + url[2]);
 		return new Handlebars.SafeString(
@@ -1810,10 +1830,11 @@ $(function()
 		// Check if original referrer exists
 		if (getCurrentContactProperty(original_ref))
 		{
-			// Get input url from contact properties and initialize reference url
+			// Get input url from contact properties and initialize reference
+			// url
 			var inputUrl = getCurrentContactProperty(original_ref);
 			var referenceUrl = 'www.google.';
-			
+
 			// Get host from input url and compare with reference url if equal
 			var tempUrl = inputUrl.split('/');
 			tempUrl = tempUrl[2].slice(0, 11);
@@ -1823,8 +1844,9 @@ $(function()
 				var parser = document.createElement('a');
 				parser.href = inputUrl;
 				var search = parser.search;
-				
-				// If search term exists, check if 'q' parameter exists, and return its value
+
+				// If search term exists, check if 'q' parameter exists, and
+				// return its value
 				if (search.length > 1)
 				{
 					search = search.split('&');
@@ -1876,420 +1898,462 @@ $(function()
 		}
 		return "Company";
 	});
-	
+
 	/**
-	 * Returns full name of contact. Use this when empty value is not acceptable.
-	 * Takes care that, even when no names are defined, returns email(necessary for PERSON) or Company <id>.
-	 * Calls function getContactName defined in agile-typeahead.js. Also typeahead uses this fxn to append values as tags.
+	 * Returns full name of contact. Use this when empty value is not
+	 * acceptable. Takes care that, even when no names are defined, returns
+	 * email(necessary for PERSON) or Company <id>. Calls function
+	 * getContactName defined in agile-typeahead.js. Also typeahead uses this
+	 * fxn to append values as tags.
 	 */
-	Handlebars.registerHelper('contact_name_necessary',function(contact)
+	Handlebars.registerHelper('contact_name_necessary', function(contact)
 	{
 		return getContactName(contact);
 	});
-	
+
 	/**
 	 * To check if string is blank
 	 */
-	Handlebars.registerHelper('is_blank', function(value, options){
+	Handlebars.registerHelper('is_blank', function(value, options)
+	{
 		value = value.trim();
 
-		if(value == "")
+		if (value == "")
 			return options.fn(value);
 		else
 			return options.inverse(value);
 	})
-	
+
 	/**
 	 * Iterate through list of values (not json)
 	 */
 	Handlebars.registerHelper("each_with_index1", function(array, options)
-			{
-				console.log(array);
-				var buffer = "";
-				for ( var i = 0, j = array.length; i < j; i++)
-				{
-					var item = {};
-					item["value"] = array[i];
+	{
+		console.log(array);
+		var buffer = "";
+		for ( var i = 0, j = array.length; i < j; i++)
+		{
+			var item = {};
+			item["value"] = array[i];
 
-					console.log(item);
-					// stick an index property onto the item, starting with 1, may make
-					// configurable later
-					item["index"] = i + 1;
+			console.log(item);
+			// stick an index property onto the item, starting with 1, may make
+			// configurable later
+			item["index"] = i + 1;
 
-					console.log(item);
-					// show the inside of the block
-					buffer += options.fn(item);
-				}
+			console.log(item);
+			// show the inside of the block
+			buffer += options.fn(item);
+		}
 
-				// return the finished buffer
-				return buffer;
+		// return the finished buffer
+		return buffer;
 
-			});
-	
+	});
+
 	/**
-	 *  Identifies EMAIL_SENT campaign-log string and splits the log string based on 
-	 * '_aGiLeCrM' delimiter into To, From, Subject and Body.
+	 * Identifies EMAIL_SENT campaign-log string and splits the log string based
+	 * on '_aGiLeCrM' delimiter into To, From, Subject and Body.
 	 * 
-	 **/
-	  Handlebars.registerHelper("if_email_sent",function(object,key,options){
-	    
-	     // delimiter for campaign send-email log
-	    var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
-	     
-	     // if log_type is EMAIL_SENT
-	    if(object[key] === "EMAIL_SENT")
-	     {
-	       // Splits logs message
-	       var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
-	       
-	       // Json to apply for handlebar template
-	       var json = {};
-	       
-	       if(email_fields === undefined)
-	         return options.inverse(object);
-	       
-	       // Iterates inorder to insert each field into json
-	       for(var i=0;i<email_fields.length;i++)
-	       {
-	         // Splits based on colon. E.g "To: naresh@agilecrm.com"
-	         var arrcolon = email_fields[i].split(":");
-	         
-	         // Inserts LHS of colon as key. E.g., To
-	         var key = arrcolon[0];
-	         key=key.trim(); // if key starts with space, it can't accessible
-	         
-	         // Inserts RHS of colon as value. E.g., naresh@agilecrm.com
-	         var value = arrcolon.slice(1).join(":"); // join the remaining string based on colon, 
-	                                                 //only first occurence of colon is needed
-	         value = value.trim();
-	         
-	         json[key] = value;
-	       }
-	       
-	       // inserts time into json
-	       json.time = object["time"];
-	 
-	       // apply customized json to template.
-	       return options.fn(json);
-	     }  
-	     
-	     // if not EMAIL_SENT log, goto else in the template
-	     return options.inverse(object);
-	     
-	   });
-	 
-	Handlebars.registerHelper('remove_spaces', function(value) {
-		  return value.replace( / +/g, '');
-		  
-		 });
-	
-	
-	/**
-	 * Returns campaignStatus object from contact campaignStatus array having 
+	 */
+	Handlebars.registerHelper("if_email_sent", function(object, key, options)
+	{
+
+		// delimiter for campaign send-email log
+		var _AGILE_CRM_DELIMITER = "_aGiLeCrM";
+
+		// if log_type is EMAIL_SENT
+		if (object[key] === "EMAIL_SENT")
+		{
+			// Splits logs message
+			var email_fields = object["message"].split(_AGILE_CRM_DELIMITER, 4);
+
+			// Json to apply for handlebar template
+			var json = {};
+
+			if (email_fields === undefined)
+				return options.inverse(object);
+
+			// Iterates inorder to insert each field into json
+			for ( var i = 0; i < email_fields.length; i++)
+			{
+				// Splits based on colon. E.g "To: naresh@agilecrm.com"
+				var arrcolon = email_fields[i].split(":");
+
+				// Inserts LHS of colon as key. E.g., To
+				var key = arrcolon[0];
+				key = key.trim(); // if key starts with space, it can't
+				// accessible
+
+				// Inserts RHS of colon as value. E.g., naresh@agilecrm.com
+				var value = arrcolon.slice(1).join(":"); // join the
+				// remaining string
+				// based on colon,
+				// only first occurence of colon is needed
+				value = value.trim();
+
+				json[key] = value;
+			}
+
+			// inserts time into json
+			json.time = object["time"];
+
+			// apply customized json to template.
+			return options.fn(json);
+		}
+
+		// if not EMAIL_SENT log, goto else in the template
+		return options.inverse(object);
+
+	});
+
+	Handlebars.registerHelper('remove_spaces', function(value)
+	{
+		return value.replace(/ +/g, '');
+
+	});
+
+	/***************************************************************************
+	 * Returns campaignStatus object from contact campaignStatus array having
 	 * same campaign-id. It is used to get start and completed time from array.
-	 ***/
-	Handlebars.registerHelper('if_same_campaign',function(object,data,options){
-		
+	 **************************************************************************/
+	Handlebars.registerHelper('if_same_campaign', function(object, data, options)
+	{
+
 		var campaignStatusArray = object[data];
-		
+
 		// if campaignStatus key doesn't exist return.
 		if (data === undefined || campaignStatusArray === undefined)
 			return;
-		
+
 		// Get campaign-id from hash
 		var current_campaign_id = getIdFromHash();
-		
-		for (var i=0, len = campaignStatusArray.length; i < len; i++)
-			{
 
-			   // compares campaign-id of each element of array with 
-			   // current campaign-id
-			   if (campaignStatusArray[i].campaign_id === current_campaign_id)
-			   {
-				   // if equal, execute template current json
-				   return options.fn(campaignStatusArray[i]);
-			   }
+		for ( var i = 0, len = campaignStatusArray.length; i < len; i++)
+		{
+
+			// compares campaign-id of each element of array with
+			// current campaign-id
+			if (campaignStatusArray[i].campaign_id === current_campaign_id)
+			{
+				// if equal, execute template current json
+				return options.fn(campaignStatusArray[i]);
 			}
-			
+		}
+
 	});
-	
+
 	/**
 	 * Returns other active campaigns in campaign-active subscribers.
-	 **/
-	Handlebars.registerHelper('if_other_active_campaigns',function(object,data,options){
+	 */
+	Handlebars.registerHelper('if_other_active_campaigns', function(object, data, options)
+	{
 
 		if (object === undefined || object[data] === undefined)
 			return;
-		
+
 		var other_campaigns = {};
 		var other_active_campaigns = [];
-		var other_completed_campaigns=[];
+		var other_completed_campaigns = [];
 		var campaignStatusArray = object[data];
-		
+
 		var current_campaign_id = getIdFromHash();
-		
-		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+
+		for ( var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
 			// neglect same campaign
 			if (current_campaign_id === campaignStatusArray[i].campaign_id)
 				continue;
-			
+
 			// push all other active campaigns
 			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
 				other_active_campaigns.push(campaignStatusArray[i])
-				
-			// push all done campaigns
+
+				// push all done campaigns
 			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
 				other_completed_campaigns.push(campaignStatusArray[i]);
 		}
-		
+
 		other_campaigns["active"] = other_active_campaigns;
 		other_campaigns["done"] = other_completed_campaigns;
-		
+
 		return options.fn(other_campaigns);
-		
+
 	});
-	
-     /**
-      * Returns Contact Model from contactDetailView collection.
-      * 
-      **/
-	Handlebars.registerHelper('contact_model',function(options){
-		
+
+	/**
+	 * Returns Contact Model from contactDetailView collection.
+	 * 
+	 */
+	Handlebars.registerHelper('contact_model', function(options)
+	{
+
 		if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 		{
-			
-			// To show Active Campaigns list immediately after campaign assigned.
-			if(CONTACT_ASSIGNED_TO_CAMPAIGN)
-			{	
+
+			// To show Active Campaigns list immediately after campaign
+			// assigned.
+			if (CONTACT_ASSIGNED_TO_CAMPAIGN)
+			{
 				CONTACT_ASSIGNED_TO_CAMPAIGN = false;
-			
+
 				// fetches updated contact json
-				var contact_json = $.ajax(
-					 {
-					 type: 'GET',
-					 url: '/core/api/contacts/'+ App_Contacts.contactDetailView.model.get('id'),
-					 async:	false, 
-					 dataType: 'json'
-					 }).responseText;
-			
+				var contact_json = $.ajax({ type : 'GET', url : '/core/api/contacts/' + App_Contacts.contactDetailView.model.get('id'), async : false,
+					dataType : 'json' }).responseText;
+
 				// Updates Contact Detail model
 				App_Contacts.contactDetailView.model.set(JSON.parse(contact_json));
-            
+
 				return options.fn(JSON.parse(contact_json));
 			}
-			
+
 			// if simply Campaigns tab clicked, use current collection
 			return options.fn(App_Contacts.contactDetailView.model.toJSON());
 		}
 	});
-	
+
 	/**
 	 * Returns json object of active and done subscribers from contact object's
 	 * campaignStatus.
-	 **/
-	Handlebars.registerHelper('contact_campaigns',function(object, data,options){
-		
+	 */
+	Handlebars.registerHelper('contact_campaigns', function(object, data, options)
+	{
+
 		// if campaignStatus is not defined, return
 		if (object === undefined || object[data] === undefined)
 			return;
 
 		// Temporary json to insert active and completed campaigns
 		var campaigns = {};
-		
+
 		var active_campaigns = [];
-		var completed_campaigns=[];
-		
+		var completed_campaigns = [];
+
 		// campaignStatus object of contact
 		var campaignStatusArray = object[data];
-		
-		for (var i=0, len = campaignStatusArray.length; i < len; i++)
+
+		for ( var i = 0, len = campaignStatusArray.length; i < len; i++)
 		{
 			// push all active campaigns
 			if (campaignStatusArray[i].status.indexOf('ACTIVE') !== -1)
 				active_campaigns.push(campaignStatusArray[i])
-				
-			// push all done campaigns
+
+				// push all done campaigns
 			if (campaignStatusArray[i].status.indexOf('DONE') !== -1)
 				completed_campaigns.push(campaignStatusArray[i]);
 		}
-		
+
 		campaigns["active"] = active_campaigns;
-		campaigns["done"] =  completed_campaigns;
-		
-		// apply obtained campaigns context within 
-	    //contact_campaigns block
+		campaigns["done"] = completed_campaigns;
+
+		// apply obtained campaigns context within
+		// contact_campaigns block
 		return options.fn(campaigns);
 	});
-	
+
 	/**
-	 * Verifies given urls length and returns options hash based on 
-	 * restricted count value.
+	 * Verifies given urls length and returns options hash based on restricted
+	 * count value.
 	 * 
-	 **/
-	Handlebars.registerHelper("if_more_urls",function(url_json, url_json_length,options){
+	 */
+	Handlebars.registerHelper("if_more_urls", function(url_json, url_json_length, options)
+	{
 		var RESTRICT_URLS_COUNT = 3;
 		var temp_urls_array = [];
-		var context_json={};
-	
-		// If length is less than restricted, compile 
+		var context_json = {};
+
+		// If length is less than restricted, compile
 		// else block with given url_json
-		if(url_json_length < RESTRICT_URLS_COUNT)
+		if (url_json_length < RESTRICT_URLS_COUNT)
 			return options.inverse(url_json);
-		
+
 		// Insert urls until restricted count reached
-		for(var i=0; i< url_json.length; i++)
-			{
-				if(i === RESTRICT_URLS_COUNT)
-					break;
-				
-				temp_urls_array.push(url_json[i]);
-			}
-			
+		for ( var i = 0; i < url_json.length; i++)
+		{
+			if (i === RESTRICT_URLS_COUNT)
+				break;
+
+			temp_urls_array.push(url_json[i]);
+		}
+
 		context_json.urls = temp_urls_array;
-		
+
 		// More remained
 		context_json.more = url_json_length - RESTRICT_URLS_COUNT;
-		
+
 		return options.fn(context_json);
-		
+
 	});
-	
+
 	/**
-	 * Returns first occurence string from string having underscores
-	 * E.g, mac_os_x to mac
-	 **/
-	Handlebars.registerHelper('normalize_os',function(data){
-		if(data === undefined || data.indexOf('_') === -1)
+	 * Returns first occurence string from string having underscores E.g,
+	 * mac_os_x to mac
+	 */
+	Handlebars.registerHelper('normalize_os', function(data)
+	{
+		if (data === undefined || data.indexOf('_') === -1)
 			return data;
-		
-		// if '_' exists splits 
+
+		// if '_' exists splits
 		return data.split('_')[0];
 	});
-	
+
 	Handlebars.registerHelper('safe_tweet', function(data)
-			{			
-		        data = data.trim();
-				return new Handlebars.SafeString(data);
-			});
-	
-	Handlebars.registerHelper('get_stream_icon', function(name)
-			{
-				if (!name)
-					return;
-
-				var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
-						"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
-						"My_Updates" : "icon-share-alt" };
-
-				name = name.trim();
-
-				if (icon_json[name])
-					return icon_json[name];
-
-				return "icon-globe";
-
-			});
-	
+	{
+		data = data.trim();
+		return new Handlebars.SafeString(data);
+	});
 	/**
-	 * put user address location togather separated by comma. 
-	 * */
-	Handlebars.registerHelper('user_location', function(){
-		
+	 * Get stream icon for social suite streams.
+	 */
+	Handlebars.registerHelper('get_stream_icon', function(name)
+	{
+		if (!name)
+			return;
+
+		var icon_json = { "Home" : "icon-home", "Retweets" : "icon-retweet", "DM_Inbox" : "icon-download-alt", "DM_Outbox" : "icon-upload-alt",
+			"Favorites" : "icon-star", "Sent" : "icon-share-alt", "Search" : "icon-search", "Scheduled" : "icon-time", "All_Updates" : "icon-home",
+			"My_Updates" : "icon-share-alt" };
+
+		name = name.trim();
+
+		if (icon_json[name])
+			return icon_json[name];
+
+		return "icon-globe";
+
+	});
+
+	/**
+	 * Get task list name without underscore and caps, for new task UI.
+	 */
+	Handlebars.registerHelper('get_normal_name', function(name)
+	{
+		if (!name)
+			return;
+
+		var name_json = { "HIGH" : "High", "LOW" : "Low", "NORMAL" : "Normal", 
+				          "EMAIL" : "Email", "CALL" : "Call", "SEND" : "Send", "TWEET" : "Tweet",
+			              "FOLLOW_UP" : "Follow Up", "MEETING" : "Meeting", "MILESTONE" : "Milestone", 
+			              "OTHER" : "Other", "YET_TO_START" : "Yet To Start",
+			              "IN_PROGRESS" : "In Progress", "COMPLETED" : "Completed", 
+			              "TODAY" : "Today", "TOMORROW" : "Tomorrow", "OVERDUE" : "Overdue","LATER" : "Later" };
+
+		name = name.trim();
+
+		if (name_json[name])
+			return name_json[name];
+
+		return name;
+
+	});
+
+	/**
+	 * put user address location togather separated by comma.
+	 */
+	Handlebars.registerHelper('user_location', function()
+	{
+
 		var City = this.city == "?" ? "" : (this.city + ", ");
 		var Region = this.region == "?" ? "" : (this.region + ", ");
 		var Country = this.country;
-		if( this.city == "?" && this.region == "?" )
-			Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " +this.country + " )");
-		
+		if (this.city == "?" && this.region == "?")
+			Country = this.country == "?" ? this.city_lat_long : (this.city_lat_long + " ( " + this.country + " )");
+
 		return (City + Region + Country).trim();
 	});
-	
+
 	/**
 	 * Trims trailing spaces
-	 **/
-	Handlebars.registerHelper('trim_space', function(value){
-		
-		if(value === undefined)
+	 */
+	Handlebars.registerHelper('trim_space', function(value)
+	{
+
+		if (value === undefined)
 			return value;
-		
+
 		return value.trim();
 	});
-	
+
 	/**
 	 * Returns reputation name based on value
 	 * 
-	 **/
-	Handlebars.registerHelper('get_subaccount_reputation', function(value){
-		var type = "";
-		var reputation="Unknown";
+	 */
+	Handlebars
+			.registerHelper(
+					'get_subaccount_reputation',
+					function(value)
+					{
+						var type = "";
+						var reputation = "Unknown";
 
-		if(value > 1 && value < 40)
-		{
-			type = "important";
-			reputation="Poor";
-		}
-		else if(value >= 40 && value < 75)
-		{
-           type="";
-           reputation="Ok";
-		}
-		else if(value >= 75 && value < 90)
-		{
-			type="success";
-			reputation="Good";
-		}
-		else if(value >=90)
-		{
-			type="success";
-			reputation="Excellent";
-		}
-		    
-	    return "<span style='font-size:13px;' class='label label-"+type+"'>"+reputation+"</span> <!--<span class='badge badge-"+type+"'>"+value+"</span>-->";
-		
-	});
-	
+						if (value > 1 && value < 40)
+						{
+							type = "important";
+							reputation = "Poor";
+						}
+						else if (value >= 40 && value < 75)
+						{
+							type = "";
+							reputation = "Ok";
+						}
+						else if (value >= 75 && value < 90)
+						{
+							type = "success";
+							reputation = "Good";
+						}
+						else if (value >= 90)
+						{
+							type = "success";
+							reputation = "Excellent";
+						}
+
+						return "<span style='font-size:13px;' class='label label-" + type + "'>" + reputation + "</span> <!--<span class='badge badge-" + type + "'>" + value + "</span>-->";
+
+					});
+
 	/**
-	 * Returns id from hash. It returns id from hash iff
-	 * id exists at last.
+	 * Returns id from hash. It returns id from hash iff id exists at last.
 	 * 
-	 **/
-	Handlebars.registerHelper('get_id_from_hash', function(){
-		
+	 */
+	Handlebars.registerHelper('get_id_from_hash', function()
+	{
+
 		return getIdFromHash();
-	
+
 	});
-	
-	Handlebars.registerHelper('get_subscribers_type_from_hash', function(){
-		
+
+	Handlebars.registerHelper('get_subscribers_type_from_hash', function()
+	{
+
 		// Returns "workflows" from "#workflows"
 		var hash = window.location.hash.substr(1);
-		
-		if(hash.indexOf("all") != -1)
+
+		if (hash.indexOf("all") != -1)
 			return "All";
-		
-		if(hash.indexOf("active") != -1)
+
+		if (hash.indexOf("active") != -1)
 			return "Active";
-		
-		if(hash.indexOf("completed") != -1)
+
+		if (hash.indexOf("completed") != -1)
 			return "Completed";
-		
-		if(hash.indexOf("removed") != -1)
+
+		if (hash.indexOf("removed") != -1)
 			return "Removed";
 	});
-	
+
 	Handlebars.registerHelper("check_plan", function(plan, options)
 	{
 		console.log(plan);
-		
-		if(!_billing_restriction)
+
+		if (!_billing_restriction)
 			return options.fn(this);
-		
-		if(_billing_restriction.currentLimits.planName == plan)
+
+		if (_billing_restriction.currentLimits.planName == plan)
 			return options.fn(this);
-		
+
 		return options.inverse(this);
-		
+
 	});
 	
 	/**
@@ -2303,5 +2367,4 @@ $(function()
 		
 		return options.inverse(this);
 	});
-	
 });
