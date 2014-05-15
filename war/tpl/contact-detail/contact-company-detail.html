@@ -202,16 +202,13 @@
 								{{/property_is_exists}} {{#getContactCustomProperties
 								properties}}
 								<div class="pull-left row-fluid">
-									<h3
-										style="margin-left: 10px; margin-bottom: 10px; border-bottom: 1px solid #f5f5f5">Custom
-										Fields</h3>
+
 									{{#each_with_index this}}
 									<div class="pull-left row-fluid" style="margin-bottom: 5px">
 										<div
 											style="display: inline-block; vertical-align: top; text-align: right"
 											class="span3">
-											<span><strong style="color: gray">{{ucfirst
-													name}}</strong><span>
+											<span><strong style="color: gray">{{name}}</strong><span>
 										</div>
 										{{#if_equals index ../this.length}}
 										<div class="span9"
