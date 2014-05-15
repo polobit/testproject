@@ -156,8 +156,18 @@ public class BillingRestrictionReminderUtil
 	return existingEntities * 100 / allowedEntites;
     }
 
+    /**
+     * Hardload to send request to update tags even if percentage is less that
+     * 75%. It is required to remove tags if user falls back into limits
+     * 
+     * @param count
+     * @param allowedCount
+     * @param className
+     * @param hardLoad
+     * @return
+     */
     @JsonIgnore
-    public static String getTag(int count, int allowedCount, String className)
+    public static String getTag(int count, int allowedCount, String className, boolean hardLoad)
     {
 
 	Integer percentage = calculatePercentage(allowedCount, count);
@@ -169,6 +179,9 @@ public class BillingRestrictionReminderUtil
 	    return className + "-90";
 	if (percentage >= 100)
 	    return className + "-100";
+
+	if (!hardLoad)
+	    return null;
 
 	return className + "-" + percentage;
     }
