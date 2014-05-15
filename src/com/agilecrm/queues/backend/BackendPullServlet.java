@@ -44,6 +44,8 @@ public class BackendPullServlet extends HttpServlet
 	    {
 		public void run()
 		{
+		    System.out.println("Calling again run method from thread...");
+
 		    PullScheduler pullScheduler = new PullScheduler(queueName, false);
 		    pullScheduler.run();
 		}
