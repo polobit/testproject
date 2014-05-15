@@ -96,7 +96,7 @@ var USER_DETAILS = {
 }
 
 
-function load_slider(el)
+function load_slider(el) 
 {
 		  	$("#users_select_slider", el).slider({ 
 			     	  from: 1,

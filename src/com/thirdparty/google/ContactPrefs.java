@@ -96,6 +96,9 @@ public class ContactPrefs implements Serializable
     public Long last_synced_to_client = 0L;
 
     @NotSaved(IfDefault.class)
+    public Long last_synced_updated_contacts_to_client = 0L;
+
+    @NotSaved(IfDefault.class)
     public Long last_synced_from_client = 0L;
 
     @NotSaved

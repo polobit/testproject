@@ -348,7 +348,7 @@ public class ContactSyncUtil
 	    page = 500;
 	}
 
-	Long time = pref.last_synced_to_client;
+	Long time = pref.last_synced_updated_contacts_to_client;
 	Map<String, Object> queryMap = new HashMap<String, Object>();
 	queryMap.put("updated_time > ", time);
 
@@ -357,7 +357,7 @@ public class ContactSyncUtil
 
 	queryMap.put("type", Type.PERSON);
 
-	return Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-updated_time");
+	return Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "updated_time");
     }
 
     /**
@@ -383,7 +383,11 @@ public class ContactSyncUtil
 
 	queryMap.put("type", Type.PERSON);
 
-	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "-created_time");
+	System.out.println(queryMap);
+	System.out.println("contacts count :" + Contact.dao.getCountByProperty(queryMap));
+	List<Contact> contacts = Contact.dao.fetchAllByOrder(page, cursor, queryMap, true, false, "created_time");
+
+	System.out.println("contacts available" + contacts.size());
 
 	return contacts;
     }
@@ -600,4 +604,37 @@ public class ContactSyncUtil
 	return null;
     }
 
+    public static List<ContactEntry> convertToGoogleContactsFormat(List<Contact> contacts, ContactPrefs prefs)
+    {
+
+	if (contacts == null)
+	    return new ArrayList<ContactEntry>();
+
+	try
+	{
+	    return retrieveContactBasedOnQuery(constructEmailsQueryForGoogle(contacts), prefs);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return new ArrayList<ContactEntry>();
+	}
+    }
+
+    public static String constructEmailsQueryForGoogle(List<Contact> contacts)
+    {
+	String email = "";
+	for (Contact contact : contacts.subList(0, 40))
+	{
+	    List<ContactField> emailsFields = contact.getContactPropertiesList(Contact.EMAIL);
+
+	    for (ContactField field : emailsFields)
+	    {
+		email = email + " " + field.value;
+	    }
+	}
+	System.out.println(email);
+	return email;
+    }
 }
