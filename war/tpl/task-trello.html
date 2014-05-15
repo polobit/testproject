@@ -1,0 +1,72 @@
+<script id="new-tasks-lists-collection-template" type="text/html"> 
+ <div id="new-tasks-lists-model-list" class="list-area row-fluid">
+
+ </div>
+</script>
+
+<script id="new-tasks-lists-model-template" type="text/html">
+     <div class="list-header" attr="{{heading}}" ownerID={{owner_id}}> 
+         {{get_normal_name heading}}                 
+     </div> 
+     <div id="list-tasks" class="list-tasks">
+
+     </div>   
+     <div class="list-bottom left add-task"><a href="#"><i class="icon-plus" /> Add a task...</a></div>     
+</script>
+
+<script id="task-collection-template" type="text/html">
+<div id="task-model-list" class="task-model-list">
+   
+</div>
+</script>
+
+<script id="task-model-template" type="text/html">
+{{#if_equals priority_type "HIGH"}}
+ <div class="listed-task red ui-state-default" id="{{id}}">
+{{else}}
+  {{#if_equals priority_type "LOW"}}
+    <div class="listed-task yellow ui-state-default" id="{{id}}">
+  {{else}}
+    <div class="listed-task ui-state-default" id="{{id}}">
+  {{/if_equals}}
+{{/if_equals}}
+
+  <div class="task-body">    
+    <div class="task-left">  
+      {{#is_link subject}}<span class="task-subject activate-link">{{else}}<span class="task-subject">{{/is_link}}{{safe_string subject}}</span>
+
+      {{#if contacts}}  
+         <div class="task-related-to" title="Related To">
+        	{{#each contacts}}
+        		{{#if_contact_type "PERSON"}}
+        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+        		{{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "name"}}</a>
+        		{{/if_contact_type}}
+        	{{/each}}
+		 </div>
+      {{/if}}
+    </div>
+
+    <div class="task-right">
+      <label class="task-type label" title="Category">{{get_normal_name type}}</label>
+      <div class="task-owner">     
+         {{#if ownerPic}}
+        	<img src="{{ownerPic}}" width="32" height="32" title="{{taskOwner.name}}"/>
+	     {{else}}
+			<img src="{{defaultGravatarurl 50}}" width="32" height="32" title="{{taskOwner.name}}"/>
+	     {{/if}}
+      </div> 
+    </div>
+   </div> <!--task-body-->  
+   <div class="task-footer">
+      <time class="task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time>
+      <div class="task-actions">           
+           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>
+           <i class="task-action icon icon-check is-task-complete" data="{{id}}" title="Is Task Complete?"></i>
+           <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+      </div>
+   </div> <!--task-footer-->
+</div>
+</script>
