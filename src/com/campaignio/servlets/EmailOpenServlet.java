@@ -2,6 +2,7 @@ package com.campaignio.servlets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -12,9 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -29,6 +32,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>EmailOpenServlet</code> is the servlet that track emails opened. The
@@ -126,6 +130,23 @@ public class EmailOpenServlet extends HttpServlet
 	    if (!StringUtils.isBlank(trackerId))
 	    {
 		Contact contact = ContactUtil.searchContactByEmail(toEmailId);
+		if (contact == null)
+		{
+		    // If there is no contact with the toEmail, create a contact
+		    // with that email.
+		    DomainUser owner = DomainUserUtil.getDomainUserFromEmail(fromEmailId);
+		    ContactField email = new ContactField(Contact.EMAIL, toEmailId, "SYSTEM");
+		    ContactField name = new ContactField(Contact.FIRST_NAME, toEmailId.substring(0,
+			    toEmailId.indexOf("@")), "SYSTEM");
+		    List<ContactField> properties = new ArrayList<ContactField>();
+		    properties.add(email);
+		    properties.add(name);
+		    contact = new Contact();
+		    contact.properties = properties;
+		    contact.setContactOwner(new Key<DomainUser>(DomainUser.class, owner.id));
+		    contact.save();
+		}
+
 		List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long
 			.parseLong(trackerId));
 		// If there is a Contact Email with the tracker Id, send the
