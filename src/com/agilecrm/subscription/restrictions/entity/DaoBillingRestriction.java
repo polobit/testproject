@@ -52,6 +52,8 @@ public abstract class DaoBillingRestriction implements
     // set
     protected int max_allowed = 0;
 
+    public boolean hardUpdateTags = false;
+
     // Restriction object used to get current limits
     protected BillingRestriction restriction;
 

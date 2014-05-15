@@ -73,6 +73,10 @@ public class BillingRestriction
     @JsonIgnore
     public Set<String> tagsToAddInOurDomain = new HashSet<String>();
 
+    @NotSaved(IfDefault.class)
+    @JsonIgnore
+    public Set<String> tags_in_our_domain = new HashSet<String>();
+
     @NotSaved
     @Embedded
     @JsonIgnore
