@@ -99,7 +99,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     @NotSaved(IfDefault.class)
     public List<UserAccessScopes> scopes = null;
 
-    @NotSaved
+    @NotSaved(IfDefault.class)
     public LinkedHashSet<NavbarConstants> menu_scopes = null;
 
     /**
