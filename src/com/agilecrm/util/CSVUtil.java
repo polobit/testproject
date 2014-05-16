@@ -118,10 +118,16 @@ public class CSVUtil
      * @param ownerId
      * @throws IOException
      */
-    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId) throws PlanRestrictedException, IOException
+    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
+	    throws PlanRestrictedException, IOException
     {
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
+	billingRestriction.save();
+
+	int availableContacts = billingRestriction.contacts_count;
+	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
+	boolean limitCrossed = false;
 
 	// Reads blob data line by line upto first 10 line of file
 	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
@@ -220,7 +226,8 @@ public class CSVUtil
 			else
 			{
 			    addressJSON.put(field.value, csvValues[j]);
-			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(), field.type.toString()));
+			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+				    field.type.toString()));
 			}
 
 		    }
@@ -260,12 +267,27 @@ public class CSVUtil
 	    }
 	    else
 	    {
+
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
+
 		++billingRestriction.contacts_count;
 		try
 		{
-		    billingRestriction.check("Contact");
+		    if (limitCrossed)
+			continue;
+
+		    if (billingRestriction.tagsToAddInOurDomain != null
+			    && !billingRestriction.tagsToAddInOurDomain.isEmpty())
+			billingRestriction.tagsToAddInOurDomain.clear();
+
+		    billingRestriction.check(Contact.class.getSimpleName());
+
+		    if (billingRestriction.contacts_count >= allowedContacts)
+		    {
+			limitCrossed = true;
+		    }
+
 		}
 		catch (PlanRestrictedException e)
 		{
@@ -279,7 +301,8 @@ public class CSVUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception raised while saving contact " + tempContact.getContactFieldValue(Contact.EMAIL));
+		System.out.println("exception raised while saving contact "
+			+ tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
 
 	    }
@@ -332,7 +355,8 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 	}
 
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION, new Object[] { domainUser, status });
+	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
+		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
@@ -366,7 +390,8 @@ public class CSVUtil
 
     public boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME)) && StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    return false;

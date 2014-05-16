@@ -63,7 +63,7 @@
 					<div id="collapseOne" class="panel-collapse collapse" >
       					<div class="panel-body" style="margin-top:20px!important;margin-left:20px" >
 							
-						
+					<!--	
 					{{#unless id}}
  					<div class="control-group">
 						
@@ -149,52 +149,100 @@
                     </div>
 					{{/unless}}
 					{{/unless}}
-					
+					-->
 					<div class="control-group" style="margin-top:-20px">
 						<div class="controls">
-						<div class="multiple-checkbox"  name="menu_items" style="padding-top:5px">
+						<div class="multiple-checkbox"  name="menu_scopes" style="padding-top:5px">
+					{{#if id}}
+						<label class="checkbox hide"  >
+                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked> 
+                        	    	Contacts<br/><small>Manage contacts</small></label> 
 								<label class="checkbox"  >
-                        		    <input type="checkbox" name="temp" value="CALENDAR"> 
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" > 
                         	    	Calendar<br/><small>Manage your tasks and events</small></label> 
 								<label class="checkbox"  >
-            	            	    <input type="checkbox" name="temp"  value="DEALS"> 
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS"> 
         	                    	Deals<br/>
 									<small> Track sales opportunities</small>
     	                       </label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="temp"  value="CAMPAIGN"> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN"> 
                             		Campaigns<br/>
 										<small> Automate marketing</small>
                            		</label>
 						
 								 </label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="temp"  value="CASES"> 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES"> 
                             		Cases<br/>
 									<small>Log and address customer issues</small>
                            		</label>
  								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="temp"  value="SOCIAL" > 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" > 
                             		Social Suite<br/>
 									<small> Monitor your brand on social media</small>
                            		</label>
 								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="temp"  value="WEBRULE" > 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" > 
                             		Web Rule<br/>
 									<small> Log and address customer issues</small>
                            		</label>
 								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="temp"  value="DOCUMENT" > 
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" > 
                             		Documents<br/>
 								<small> Upload and attach documents to contacts, deals or cases</small>
                            		</label>
 								</label><label class="checkbox"  >
-                        	    	<input type="checkbox" name="temp"  value="REPORT" > 
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" > 
                             		Reports<br/>
 									<small> Stay on top of your data</small>
                            		</label>
 
-							</div>
-						</div>
-                    </div>
+						{{else}}
+								<label class="checkbox hide"  >
+                        		    <input type="checkbox" name="scopes-temp" class="required hide" value="CONTACT" checked> 
+                        	    	Contacts<br/><small>Manage contacts</small></label> 
+								<label class="checkbox"  >
+                        		    <input type="checkbox" name="scopes-temp" class="required" value="CALENDAR" checked> 
+                        	    	Calendar<br/><small>Manage your tasks and events</small></label> 
+								<label class="checkbox"  >
+            	            	    <input type="checkbox" name="scopes-temp" class="required" value="DEALS" checked> 
+        	                    	Deals<br/>
+									<small> Track sales opportunities</small>
+    	                       </label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CAMPAIGN" checked> 
+                            		Campaigns<br/>
+										<small> Automate marketing</small>
+                           		</label>
+						
+								 </label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="CASES" checked> 
+                            		Cases<br/>
+									<small>Log and address customer issues</small>
+                           		</label>
+ 								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="SOCIAL" checked> 
+                            		Social Suite<br/>
+									<small> Monitor your brand on social media</small>
+                           		</label>
+								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="WEBRULE" checked> 
+                            		Web Rule<br/>
+									<small> Log and address customer issues</small>
+                           		</label>
+								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp" class="required" value="DOCUMENT" checked> 
+                            		Documents<br/>
+								<small> Upload and attach documents to contacts, deals or cases</small>
+                           		</label>
+								</label><label class="checkbox"  >
+                        	    	<input type="checkbox" name="scopes-temp"  class="required" value="REPORT" checked> 
+                            		Reports<br/>
+									<small> Stay on top of your data</small>
+                           		</label>
+
+					{{/if}}
+				</div>
+				</div>	
+				</div>
     			</div>
 					</div>
 					</div>
