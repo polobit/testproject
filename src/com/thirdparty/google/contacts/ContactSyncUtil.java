@@ -458,8 +458,7 @@ public class ContactSyncUtil
 		if (phone.getPhoneNumber() != null)
 		{
 		    String subType = getSubtypeFromGoogleContactsRel(phone.getRel());
-		    fields.add(new ContactField("phone", googleContactEntry.getPhoneNumbers().get(0).getPhoneNumber(),
-			    subType));
+		    fields.add(new ContactField("phone", phone.getPhoneNumber(), subType));
 		}
 
 	if (googleContactEntry.hasStructuredPostalAddresses())
