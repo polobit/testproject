@@ -83,7 +83,7 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
 
     // PUBNUB Credentials
     public static final String PUBNUB_PUBLISH_KEY = "pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274";
@@ -100,6 +100,6 @@ public class Globals
     public static final long REQUEST_LIMIT_MILLIS = 1000 * 25;
 
     // Campaign and Email pull queues
-    public static final String CAMPAIGN_PULL_QUEUE = "sb-campaign-pull-queue";
-    public static final String EMAIL_PULL_QUEUE = "sb-email-pull-queue";
+    public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
+    public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
 }
