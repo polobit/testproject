@@ -39,8 +39,7 @@ $(function() {
 		$("#taskForm").find("li").remove();
 
 		// Remove validation error messages
-		remove_validation_errors('activityModal');
-		
+		remove_validation_errors('activityModal');		
 		
 		if(e.target.id=='activityModal')
 		{
@@ -49,6 +48,7 @@ $(function() {
 			$('#activityForm #event-date-2').closest('.row').show(); // only of modal, no inside modal
 		}
 		
+		resetForm($("#taskForm"));
 	});
 	
 	/**

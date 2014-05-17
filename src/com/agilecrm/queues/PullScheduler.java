@@ -111,6 +111,8 @@ public class PullScheduler
      */
     public void run()
     {
+	System.out.println("Executing in pull scheduler run method...");
+
 	try
 	{
 	    while (shouldContinue())

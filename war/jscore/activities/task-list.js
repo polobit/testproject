@@ -12,8 +12,7 @@ function includeTimeAgo(element){
 /**
  * To fill the tasklist ordered by default 
  */
-function initOwnerslist() {
-	
+function initOwnerslist() {	
 	// Click events to agents dropdown and department
 	$("ul#owner-tasks li a, ul#type-tasks li a").die().live("click", function(e) {
 				e.preventDefault();
@@ -49,6 +48,7 @@ var allTasksListView;
  */
 function updateData(params) {
 	
+	console.log(params);
 	// Shows loading image untill data gets ready for displaying
 	$('#task-list-based-condition').html(LOADING_HTML);
 	
@@ -91,9 +91,9 @@ function getParams() {
 	var params = "?";
 
 	// Get task type and append it to params
-	var type = $('#type-tasks').data("selected_item");
-	if (type)
-		params += ("&type=" + type);
+	var criteria = $('#type-tasks').data("selected_item");
+	if (criteria)
+		params += ("&criteria=" + criteria);
 	// Get owner name and append it to params
 	var owner = $('#owner-tasks').data("selected_item");
 	if(owner == 'my-pending-tasks')
@@ -101,6 +101,11 @@ function getParams() {
 		params += ("&pending=" + true);
 		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
 		return params;
+	}
+	if(owner == 'all-pending-tasks')
+	{
+		params += ("&pending=" + true);
+		owner = "";
 	}
 	if (owner)
 		params += ("&owner=" + owner);

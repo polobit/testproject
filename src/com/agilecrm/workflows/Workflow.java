@@ -1,7 +1,6 @@
 package com.agilecrm.workflows;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -17,8 +16,6 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.workflows.triggers.Trigger;
-import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.unsubscribe.Unsubscribe;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.Key;
@@ -168,19 +165,6 @@ public class Workflow extends Cursor
     }
 
     /**
-     * Returns list of triggers with respect to campaign, so that user can know
-     * triggers with respect to workflow.
-     * 
-     * @return - List
-     */
-    @XmlElement
-    public List<Trigger> getTriggers()
-    {
-	List<Trigger> triggers = TriggerUtil.getTriggersByCampaignId(id);
-	return triggers;
-    }
-
-    /**
      * Saves the workflow object. But before saving, verifies for duplicate
      * names. If given name already exists, it throws exception. Same name
      * causes confusion while assigning campaign.
@@ -218,8 +202,8 @@ public class Workflow extends Cursor
 	if (id == null)
 	{
 	    if (WorkflowUtil.getCampaignNameCount(name) > 0)
-		throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("Please change the given name. Same kind of name already exists.")
-			.build());
+		throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
+			.entity("Please change the given name. Same kind of name already exists.").build());
 	}
 
 	// Old workflow

@@ -3,17 +3,13 @@ package com.agilecrm.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -35,23 +31,14 @@ public class HttpClientUtil
 
     static
     {
-    	HttpParams httpParams = new BasicHttpParams();
+	HttpParams httpParams = new BasicHttpParams();
 
-    	SchemeRegistry registry = new SchemeRegistry();
-    	
-    	HostnameVerifier hostnameVerifier = SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-    	
-    	SSLSocketFactory sslSocketFactory = SSLSocketFactory.getSocketFactory();
-    	sslSocketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
-    	
-    	registry.register(new Scheme("https", sslSocketFactory, 443));
+	SchemeRegistry schemeRegistry = new SchemeRegistry();
+	schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 
-    	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, registry);
+	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
 
-    	httpClient = new DefaultHttpClient(connManager, httpParams);
-    	
-    	// Set verifier     
-    	HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+	httpClient = new DefaultHttpClient(connManager, httpParams);
     }
 
     /**
@@ -97,7 +84,8 @@ public class HttpClientUtil
 
 	    try
 	    {
-		String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL, postData);
+		String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
+			+ Mandrill.MANDRILL_API_MESSAGE_CALL, postData);
 
 		System.out.println("Mandrill response in HttpClientUtil..." + response);
 	    }

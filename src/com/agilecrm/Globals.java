@@ -83,7 +83,7 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
 
     public static final String BULK_BACKENDS = "bulk";
     public static final String NORMAL_BACKENDS = "normal";
@@ -102,4 +102,7 @@ public class Globals
     // Appengine request time limit
     public static final long REQUEST_LIMIT_MILLIS = 1000 * 25;
 
+    // Campaign and Email pull queues
+    public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
+    public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
 }

@@ -20,7 +20,8 @@ public class EmailLinksConversion
     /**
      * Extensions to avoid url shortening
      */
-    public static String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp", ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
+    public static String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp",
+	    ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
     public static List<String> extensionsList = Arrays.asList(extensions);
 
     /**
@@ -47,11 +48,14 @@ public class EmailLinksConversion
 	// Compares string token with the extensions
 	isContains = extensionsList.contains(str.substring(str.lastIndexOf('.')).toLowerCase());
 
-	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https")) && !isContains && !str.toLowerCase().contains("unsubscribe")
+	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https"))
+		&& !isContains
+		&& !str.toLowerCase().contains("unsubscribe")
 		&& !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
-		&& (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(".agilecrm.com"))
-		&& !str.toLowerCase().contains("www.w3.org") && !str.toLowerCase().startsWith("http://goo.gl")
-		&& !str.toLowerCase().startsWith("http://agle.cc") && !str.toLowerCase().startsWith("http://unscr.be"))
+		&& (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
+			".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
+		&& !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
+		&& !str.toLowerCase().startsWith("http://unscr.be"))
 	    return true;
 
 	return false;
@@ -76,10 +80,10 @@ public class EmailLinksConversion
 	StringBuffer stringBuffer = new StringBuffer();
 
 	// Domain URL
-	String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(), "sandbox");
+	// String domainURL = VersioningUtil.getLoginURL(NamespaceManager.get(),
+	// "sandbox");
 
-	// String domainURL =
-	// VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+	String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
 
 	// Remove all /
 	while (domainURL.endsWith("/"))
@@ -115,7 +119,8 @@ public class EmailLinksConversion
 		if (isSpecialLink(url))
 		{
 		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, domainURL + "/click?u=" + URLEncoder.encode(url, "UTF-8") + cid + sid + push);
+		    m.appendReplacement(stringBuffer, domainURL + "/click?u=" + URLEncoder.encode(url, "UTF-8") + cid
+			    + sid + push);
 		}
 	    }
 

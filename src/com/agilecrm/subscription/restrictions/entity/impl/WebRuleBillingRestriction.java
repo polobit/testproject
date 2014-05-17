@@ -7,14 +7,16 @@ import com.agilecrm.subscription.restrictions.util.BillingRestrictionReminderUti
 import com.agilecrm.webrules.WebRule;
 
 /**
- * Implementation class of {@link EntityDaoRestrictionInterface} which is called from
- * objectify to check whether entity can be created/updated
+ * Implementation class of {@link EntityDaoRestrictionInterface} which is called
+ * from objectify to check whether entity can be created/updated
  * 
  * @author yaswanth
  * 
  */
 public class WebRuleBillingRestriction extends DaoBillingRestriction
 {
+    boolean hardUpdateTags = true;
+
     /**
      * Sets Max entities allowed to compare with existing count. Gets plan
      * limits based on billing restriction class.
@@ -71,7 +73,8 @@ public class WebRuleBillingRestriction extends DaoBillingRestriction
     @Override
     public String getTag()
     {
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.webrules_count, max_allowed, "WebRule");
+	String tag = BillingRestrictionReminderUtil.getTag(restriction.webrules_count, max_allowed, "WebRule",
+		hardUpdateTags);
 
 	if (tag != null)
 	    restriction.tagsToAddInOurDomain.add(tag);

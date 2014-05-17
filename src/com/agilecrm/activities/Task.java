@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -86,6 +87,11 @@ public class Task extends Cursor
     private List<Key<Contact>> related_contacts = new ArrayList<Key<Contact>>();
 
     /**
+     * List of note keys related to a task
+     */
+    private List<Key<Note>> related_notes = new ArrayList<Key<Note>>();
+
+    /**
      * Due date of the task
      */
     public Long due = 0L;
@@ -105,6 +111,12 @@ public class Task extends Cursor
      */
     @NotSaved(IfDefault.class)
     public List<String> contacts = null;
+
+    /**
+     * List of note ids related to a task
+     */
+    @NotSaved(IfDefault.class)
+    public List<String> notes = null;
 
     /**
      * DomainUser Id who created Deal.
@@ -131,6 +143,16 @@ public class Task extends Cursor
     @NotSaved
     public String entity_type = "task";
 
+    public int progress;
+    public String descrption = null;
+
+    public enum Status
+    {
+	YET_TO_START, IN_PROGRESS, COMPLETED
+    };
+
+    public Status status;
+
     // Dao
     public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
 
@@ -152,11 +174,14 @@ public class Task extends Cursor
      * @param agileUserId
      *            Agile user id to create owner
      */
-    public Task(Type type, Long due)
+    public Task(Type type, Long due, int progress, String descrption, Status status)
     {
 	this.type = type;
 	this.due = due;
 
+	this.progress = progress;
+	this.descrption = descrption;
+	this.status = status;
 	// if (agileUserId != 0)
 	// this.agileUser = new Key<AgileUser>(AgileUser.class, agileUserId);
     }
@@ -223,6 +248,39 @@ public class Task extends Cursor
     {
 	Task task = TaskUtil.getTask(id);
 	return task.getContacts();
+    }
+
+    /**
+     * While saving a task it contains list of notes keys, but while retrieving
+     * includes complete note object.
+     * 
+     * @return List of note objects
+     */
+    @XmlElement
+    public List<Note> getNotes()
+    {
+	return Note.dao.fetchAllByKeys(this.related_notes);
+    }
+
+    public void addNotes(String id)
+    {
+	if (notes == null)
+	    notes = new ArrayList<String>();
+
+	notes.add(id);
+    }
+
+    /**
+     * Returns list of notes related to task.
+     * 
+     * @param id
+     *            - Task Id.
+     * @return list of Notes
+     */
+    public List<Note> getNotes(Long id)
+    {
+	Task task = TaskUtil.getTask(id);
+	return task.getNotes();
     }
 
     /**
@@ -303,6 +361,17 @@ public class Task extends Cursor
 	    }
 
 	    this.contacts = null;
+	}
+
+	if (this.notes != null)
+	{
+	    // Create list of Note keys
+	    for (String note_id : this.notes)
+	    {
+		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    }
+
+	    this.notes = null;
 	}
 	System.out.println("Owner_id : " + this.owner_id);
 

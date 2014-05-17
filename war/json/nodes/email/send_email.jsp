@@ -114,7 +114,7 @@
 		            "required": "No",
 		            "category": "Settings",
 		            "name": "track_clicks",
-		            "title": "AgileCRM will track your Clicks.",
+		            "title": "Agile will track your clicks and can also push the contact info to the link.",
 		            "options": {
 		                "*No": "no",
 		                "Yes": "yes",
