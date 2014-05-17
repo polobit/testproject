@@ -7,9 +7,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -33,13 +33,10 @@ public class HttpClientUtil
     {
 	HttpParams httpParams = new BasicHttpParams();
 
-	SchemeRegistry registry = new SchemeRegistry();
+	SchemeRegistry schemeRegistry = new SchemeRegistry();
+	schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 
-	SSLSocketFactory sslSocketFactory = SSLSocketFactory.getSocketFactory();
-
-	registry.register(new Scheme("https", sslSocketFactory, 443));
-
-	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, registry);
+	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
 
 	httpClient = new DefaultHttpClient(connManager, httpParams);
     }

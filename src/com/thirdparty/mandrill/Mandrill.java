@@ -29,7 +29,7 @@ public class Mandrill
     /**
      * Mandrill core REST API URL
      */
-    public static final String MANDRILL_API_POST_URL = "https://mandrillapp.com/api/1.0/";
+    public static final String MANDRILL_API_POST_URL = "http://mandrillapp.com/api/1.0/";
 
     /**
      * Mandrill Message Call URL to send mail
@@ -161,8 +161,8 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(boolean async, String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text,
-	    String... attachments)
+    public static String sendMail(boolean async, String fromEmail, String fromName, String to, String subject,
+	    String replyTo, String html, String text, String... attachments)
     {
 	try
 	{
@@ -178,7 +178,8 @@ public class Mandrill
 	    JSONObject mailJSON = setMandrillAPIKey(subaccount);
 
 	    // All email params are inserted into Message json
-	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, replyTo, subject, html, text, attachments);
+	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, replyTo, subject, html, text,
+		    attachments);
 
 	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
@@ -191,7 +192,8 @@ public class Mandrill
 	    {
 		long start_time = System.currentTimeMillis();
 
-		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
+		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL,
+			mailJSON.toString());
 
 		long process_time = System.currentTimeMillis() - start_time;
 
@@ -215,7 +217,8 @@ public class Mandrill
 		System.out.println("Resending email with subaccount " + subaccount + "...");
 
 		// Send email again.
-		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
+		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL,
+			mailJSON.toString());
 
 		System.out.println("Response for second attempt " + response);
 	    }
@@ -252,8 +255,8 @@ public class Mandrill
      * 
      * @return JSONObject
      */
-    private static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String to, String replyTo, String subject, String html,
-	    String text, String... attachments)
+    private static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String to,
+	    String replyTo, String subject, String html, String text, String... attachments)
     {
 	JSONObject messageJSON = new JSONObject();
 
