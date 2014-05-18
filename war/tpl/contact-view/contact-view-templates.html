@@ -44,13 +44,11 @@
 
 <script id = "contacts-custom-view-tags-template" type="text/html">
 	<td class="data" data="{{id}}">
-    <div style="text-overflow:clip;width:10em;white-space:nowrap;overflow:hidden;">
-    	{{#each tags}}
-    	<b>
-    	<span class="label">{{this}}</span>
-    	</b>
-    	{{/each}}
-    </div>
+	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	</div>
 	</td>
 </script>
 
