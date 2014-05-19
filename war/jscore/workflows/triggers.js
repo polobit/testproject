@@ -124,10 +124,6 @@ function show_triggers_of_each_workflow(el)
 function append_triggers_to_workflow(el)
 {
 
-	// Triggers template
-	var triggers_template = '{{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a> {{/toLinkTrigger}}';
-	var template = Handlebars.compile(triggers_template);
-
 	// Appends triggers to respective workflow
 	$('.workflow-triggers', el).each(function(index, td)
 	{
@@ -136,8 +132,9 @@ function append_triggers_to_workflow(el)
 		var trigger_models = App_Workflows.triggersCollectionView.collection.where({ campaign_id : parseInt($(td).attr('workflow-id')) });
 		var trigger_collection = new BaseCollection(trigger_models, {});
 
+		// show triggers if exists for a workflow
 		if (trigger_collection.length !== 0)
-			$(td).html(template({ "triggers" : trigger_collection.toJSON() }));
+			$(td).html(getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }));
 
 	});
 }
