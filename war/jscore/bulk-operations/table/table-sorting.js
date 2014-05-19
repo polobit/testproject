@@ -87,6 +87,11 @@ function sort_tables(table) {
     		sort_documents(table);
     		return;
     	}
+	    if(table_id == "case-list")
+    	{
+    		sort_cases (table);
+    		return;
+    	}
 	    if(table_id == "schedule-updates")
     	{
     		sort_schedule_updates(table);
@@ -153,6 +158,20 @@ function sort_documents(table)
         	2 : {sorter : false},
 			3 : {sorter : 'time-ago'},
 			4 : {sorter : false	}
+        }
+    });
+}
+
+function sort_cases(table)
+{
+	$(table).tablesorter({ 
+        headers: { 
+        	0 : {sorter : false	},
+        	1 : {sorter : false},
+        	2 : {sorter : 'text'},
+			3 : {sorter : 'time-ago'},
+			4 : {sorter : false	},
+			5 : {sorter : 'text'}
         }
     });
 }

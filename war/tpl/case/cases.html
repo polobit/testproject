@@ -28,14 +28,15 @@
         {{#if this.length}}
         <div class="data-block">
             <div class="data-container">
-                <table class="table table-striped showCheckboxes" url="core/api/cases/bulk" id="sort-table">
-				 <col width="30px"><col width="25%"><col width="35%"><col width="25%"><col width="10%">
+                <table class="table table-striped showCheckboxes" url="core/api/cases/bulk" id="case-list">
+				 <col width="30px"><col width="10%"><col width="30%"><col width="20%"><col width="30%"><col width="10%">
                     <thead>
                         <tr>
                             <th>Owner</th>
 							<th>Title</th>
-                            <th>Contacts</th>
-                            <th></th>
+							<th>Updated Time</th>
+                            <th>Related To</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody id="cases-model-list" style="cursor:pointer;"><!--route="cases/"-->
@@ -76,6 +77,7 @@
 		{{description}}
 	</div>
 </td>
+<td><time class="deal-created-time" value="{{created_time}}" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time></td>
 <td>
 	<div style="height:auto;white-space:nowrap;width:157px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
