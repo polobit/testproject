@@ -917,13 +917,12 @@ $(function()
 					function(properties)
 					{
 						var properties_count = 0;
-						console.log("_____________________________________________________________");
 						for ( var i = 0, l = properties.length; i < l; i++)
 						{
 
 							if (properties[i].name == "address")
 							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span3"><span><strong style="color:gray">Address</strong></span></div>';
+								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
 
 								var address = {};
 								try
@@ -942,10 +941,10 @@ $(function()
 								if (properties_count != 0)
 
 									el = el
-											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
 								else
 									el = el
-											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span9"><div><span>');
+											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
 
 								$.each(address, function(key, val)
 								{
