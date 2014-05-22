@@ -83,6 +83,8 @@ public class HttpClientUtil
 
 	    System.err.println("Sending again normally...");
 
+	    System.out.println("Size of postData in exception is..." + postData.length());
+
 	    try
 	    {
 		String response = HTTPUtil.accessURLUsingPost(url, postData);
