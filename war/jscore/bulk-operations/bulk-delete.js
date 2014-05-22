@@ -13,7 +13,7 @@ $(function(){
     * Customizes the delete operation
     * Deletes the entities
     */	
-	$('#delete-checked, .delete-checked-contacts').live('click', function(event){
+	$('#delete-checked, .delete-checked-contacts').die().live('click', function(event){
 		event.preventDefault();
 		var id_array = [];
 		var index_array = [];

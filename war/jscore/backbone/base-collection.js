@@ -108,14 +108,28 @@ var Base_List_View = Backbone.View.extend({
 		 * editView.render().el; $('#content').html(el); }
 		 */
 	},
-	render : function()
+	render : function(callback)
 	{
-		// console.log(this.model.toJSON());
-		$(this.el)
-				.html(getTemplate(this.options.template, this.model.toJSON()));
+		var async = false;
+		//if(callback && typeof (callback) == "function")
+			//async = true;
+		if(async)
+		{
+			var that = this
+			// console.log(this.model.toJSON());
+			getTemplate(that.options.template, that.model.toJSON(), undefined, function(el){
+				$(that.el).html(el);
+				$(that.el).data(that.model);
+				console.log($(that.el));
+				callback(that.el);
+			});
+			return this;
+		}
 		
-		// Add model as data to it's corresponding row
+		$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
 		$(this.el).data(this.model);
+		// Add model as data to it's corresponding row
+		
 		
 		return this;
 	}
@@ -340,6 +354,10 @@ var Base_Collection_View = Backbone.View
 			appendItem : function(base_model)
 			{
 
+				this.model_list_element_fragment.appendChild(this.createListView(base_model).render().el);
+			},
+			createListView : function(base_model)
+			{
 				// If modelData is set in options of the view then custom data
 				// is added to model.
 				if (this.options.modelData)
@@ -358,14 +376,12 @@ var Base_Collection_View = Backbone.View
 					tagName : this.options.individual_tag_name
 				});
 				
-				
-				$(this.model_list_element).append(itemView.render().el);				
-			},
-			
+				return itemView
+			},			
 			appendItemOnAddEvent : function(base_model)
 			{
-				this.appendItem(base_model);
 				
+				$(this.model_list_element).append(this.createListView(base_model).render().el);
 			/*	if(this.collection && this.collection.length)
 				{
 					if(this.collection.at(0).attributes.count)
@@ -430,72 +446,86 @@ var Base_Collection_View = Backbone.View
 					return;
 				}
 
-				
+				var that = this;
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
-				$(this.el).html(
 						getTemplate((this.options.templateKey + '-collection'),
-								this.collection.toJSON()));
-				
-
-				// If collection is Empty show some help slate
-				if (this.collection.models.length == 0)
-				{
-					// Add element slate element in collection template send
-					// collection template to show slate pad
-					fill_slate("slate", this.el);
-				}
-
-				// Add row-fluid if user prefs are set to fluid
-				if (IS_FLUID)
-				{
-					$(this.el).find('div.row').removeClass('row').addClass(
-							'row-fluid');
-				}
-
-			
-				this.model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
-				
-				/*
-				 * Iterates through each model in the collection and creates a
-				 * view for each model and adds it to model-list
-				 */
-				_(this.collection.models).each(function(item)
-				{ // in case collection is not empty
-					this.appendItem(item);
-				}, this);
-
-				/*
-				 * Few operations on the view after rendering the view,
-				 * operations like adding some alerts, graphs etc after the view
-				 * is rendered, so to perform these operations callback is
-				 * provided as option when creating an model.
-				 */
-				var callback = this.options.postRenderCallback;
-
-				/*
-				 * If callback is available for the view, callback functions is
-				 * called by sending el(current view html element) as parameters
-				 */
-				if (callback && typeof (callback) === "function")
-				{
-					// execute the callback, passing parameters as necessary
-					callback($(this.el));
-				}
-
-				// Add checkboxes to specified tables by triggering this event
-				$('body').trigger('agile_collection_loaded', [this.el]);
-				
-			//	$(this.el).trigger('agile_collection_loaded', [this.el]);
-
-				// For the first time fetch, disable Scroll bar if results are
-				// lesser
-				if (this.page_size && (this.collection.length < this.page_size))
-				{
-					console.log("Disabling infini scroll");
-					this.infiniScroll.destroy();
-				}
+								this.collection.toJSON(), undefined, function(result){
+							getTemplateCallbackForCollection(that, result);
+						});
 
 				return this;
 			},
+			
 		});
+
+function getTemplateCallbackForCollection(view, result)
+{
+	$(view.el).html(result);
+	// If collection is Empty show some help slate
+	if (view.collection.models.length == 0)
+	{
+		// Add element slate element in collection template send
+		// collection template to show slate pad
+		fill_slate("slate", view.el);
+	}
+
+	// Add row-fluid if user prefs are set to fluid
+	if (IS_FLUID)
+	{
+		$(view.el).find('div.row').removeClass('row').addClass(
+				'row-fluid');
+	}
+
+
+	view.model_list_element_fragment = document.createDocumentFragment();
+	
+	view.model_list_element = $('#' + view.options.templateKey + '-model-list', $(view.el));
+	
+	var fragment = document.createDocumentFragment();
+	
+	
+	
+	/*
+	 * Iterates through each model in the collection and creates a
+	 * view for each model and adds it to model-list
+	 */
+	_(view.collection.models).each(function(item)
+	{ // in case collection is not empty
+		
+		view.appendItem(item);
+	}, view);
+	
+	$(view.model_list_element).append(view.model_list_element_fragment);
+
+	/*
+	 * Few operations on the view after rendering the view,
+	 * operations like adding some alerts, graphs etc after the view
+	 * is rendered, so to perform these operations callback is
+	 * provided as option when creating an model.
+	 */
+	var callback = view.options.postRenderCallback;
+
+	/*
+	 * If callback is available for the view, callback functions is
+	 * called by sending el(current view html element) as parameters
+	 */
+	if (callback && typeof (callback) === "function")
+	{
+		// execute the callback, passing parameters as necessary
+		callback($(view.el));
+	}
+
+	// Add checkboxes to specified tables by triggering view event
+	$('body').trigger('agile_collection_loaded', [view.el]);
+	
+//	$(this.el).trigger('agile_collection_loaded', [this.el]);
+
+	// For the first time fetch, disable Scroll bar if results are
+	// lesser
+	if (view.page_size && (view.collection.length < view.page_size))
+	{
+		console.log("Disabling infini scroll");
+		view.infiniScroll.destroy();
+	}
+}
