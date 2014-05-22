@@ -192,9 +192,9 @@
 		head.js('jscore/min/js-all-min.js', 'stats/min/agile-min.js', function() {
 			
 			if(HANDLEBARS_PRECOMPILATION)
-				downloadSynchronously("tpl/min/precompiled/tpl.html");
+				downloadSynchronously("tpl.html");
 			else
-				downloadSynchronously("tpl/min/tpl.js");
+				downloadSynchronously("tpl.js");
 			
 			// Load User voice then
 			setTimeout(function(){head.js('lib/user-voice.js');}, 20000);	
