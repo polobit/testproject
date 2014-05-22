@@ -11,11 +11,13 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
+@Cached
 public class WebRule
 {
     @Id

@@ -19,6 +19,7 @@ import com.campaignio.cron.util.CronUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 
@@ -31,6 +32,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  * 
  */
 @SuppressWarnings("serial")
+@Cached
 public class Cron extends HttpServlet
 {
     /**
@@ -153,8 +155,8 @@ public class Cron extends HttpServlet
      * @param custom3
      *            Custom value3.
      */
-    public Cron(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, long timeOut, String custom1, String custom2,
-	    String custom3)
+    public Cron(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, long timeOut,
+	    String custom1, String custom2, String custom3)
     {
 	this.campaign_json = campaignJSON;
 	this.subscriber_json = subscriberJSON;

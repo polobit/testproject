@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -20,6 +21,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
+@Cached
 public class AccountPrefs
 {
     /**
@@ -43,8 +45,7 @@ public class AccountPrefs
     /**
      * AccountPrefs Dao.
      */
-    private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(
-	    AccountPrefs.class);
+    private static ObjectifyGenericDao<AccountPrefs> dao = new ObjectifyGenericDao<AccountPrefs>(AccountPrefs.class);
 
     /**
      * Default AccountPrefs.

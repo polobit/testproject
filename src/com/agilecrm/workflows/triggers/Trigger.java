@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -33,6 +34,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 
 @XmlRootElement
+@Cached
 public class Trigger
 {
     /**

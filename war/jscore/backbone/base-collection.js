@@ -489,6 +489,7 @@ var Base_Collection_View = Backbone.View
 				// For the first time fetch, disable Scroll bar if results are
 				// lesser
 
-			}
 
+				return this;
+			},
 		});

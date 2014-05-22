@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 
 /**
@@ -22,6 +23,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  */
 @XmlRootElement
 @JsonAutoDetect
+@Cached
 public class Log
 {
     /**

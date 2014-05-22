@@ -22,6 +22,7 @@ import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.unsubscribe.Unsubscribe;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
@@ -48,6 +49,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
+@Cached
 public class Workflow extends Cursor
 {
     /**
