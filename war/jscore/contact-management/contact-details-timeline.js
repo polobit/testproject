@@ -319,12 +319,11 @@ function validate_insertion(models, timelineViewMore){
 	 * it goes to catch block and adds the data to the collection
 	 */
 	try{
-		head.js("/lib/isotope.pkgd.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
+		head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
 		
 
 			if($('#timeline').isotope()){
 				var month_years = [];
-				var elements = [];
 				$.each(models, function(index, model){
 					var month_year = entity_created_month_year(model);
 
@@ -334,11 +333,9 @@ function validate_insertion(models, timelineViewMore){
 					}	
 					var newItem = $(getTemplate("timeline", model));
 					newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-					elements.push($(newItem));
-					
+					$('#timeline').isotope( 'insert', newItem);
 				});
 
-				$('#timeline').isotope( 'addItems', elements);
 				// add a month marker for each month that has a post
 				create_month_marker(month_years, true, App_Contacts.contactDetailView.el);
 			}
@@ -466,7 +463,7 @@ function setup_timeline(models, el, callback) {
 	 MONTH_YEARS = [];
 	
 	// Load plugins for timeline	
-	head.js("lib/isotope.pkgd.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
+	head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
 		
 		/*
 		 * Defines the layout and its dimensions, container size and
@@ -501,7 +498,7 @@ function setup_timeline(models, el, callback) {
 		// Initializes isotope with options (sorts the data based on created time)
 		$('#timeline').imagesLoaded(function(){
 			$container.isotope({
-				itemSelector : ".item",
+				itemSelector : '.item',
 				transformsEnabled: true,
 				layoutMode: 'spineAlign',
 				spineAlign:{
