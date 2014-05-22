@@ -175,7 +175,7 @@ var Base_Collection_View = Backbone.View
 			initialize : function()
 			{
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
 			
 				
 				if(this.options.data)
@@ -446,86 +446,88 @@ var Base_Collection_View = Backbone.View
 					return;
 				}
 
-				var that = this;
+				var _this = this;
+				var ui_function = this.buildCollectionUI;
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
 						getTemplate((this.options.templateKey + '-collection'),
-								this.collection.toJSON(), undefined, function(result){
-							getTemplateCallbackForCollection(that, result);
-						});
+								this.collection.toJSON(), undefined, ui_function);
+						
+				if (this.page_size && (this.collection.length < this.page_size))
+				{
+					console.log("Disabling infini scroll");
+					this.infiniScroll.destroy();
+				}
 
 				return this;
 			},
+			buildCollectionUI : function(result)
+			{
+				console.log(this);
+				$(this.el).html(result);
+				// If collection is Empty show some help slate
+				if (this.collection.models.length == 0)
+				{
+					// Add element slate element in collection template send
+					// collection template to show slate pad
+					fill_slate("slate", this.el);
+				}
+
+				// Add row-fluid if user prefs are set to fluid
+				if (IS_FLUID)
+				{
+					$(this.el).find('div.row').removeClass('row').addClass(
+							'row-fluid');
+				}
+
+
+				// Used to store all elements as document fragment
+				this.model_list_element_fragment = document.createDocumentFragment();
+				
+				this.model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
+				
+				var fragment = document.createDocumentFragment();
+				
+				
+				
+				/*
+				 * Iterates through each model in the collection and creates a
+				 * view for each model and adds it to model-list
+				 */
+				_(this.collection.models).each(function(item)
+				{ // in case collection is not empty
+					
+					this.appendItem(item);
+				}, this);
+				
+				$(this.model_list_element).append(this.model_list_element_fragment);
+
+				/*
+				 * Few operations on the view after rendering the view,
+				 * operations like adding some alerts, graphs etc after the view
+				 * is rendered, so to perform these operations callback is
+				 * provided as option when creating an model.
+				 */
+				var callback = this.options.postRenderCallback;
+
+				/*
+				 * If callback is available for the view, callback functions is
+				 * called by sending el(current view html element) as parameters
+				 */
+				if (callback && typeof (callback) === "function")
+				{
+					// execute the callback, passing parameters as necessary
+					callback($(this.el));
+				}
+
+				// Add checkboxes to specified tables by triggering view event
+				$('body').trigger('agile_collection_loaded', [this.el]);
+				
+//				$(this.el).trigger('agile_collection_loaded', [this.el]);
+
+				// For the first time fetch, disable Scroll bar if results are
+				// lesser
+			
+			}
 			
 		});
-
-function getTemplateCallbackForCollection(view, result)
-{
-	$(view.el).html(result);
-	// If collection is Empty show some help slate
-	if (view.collection.models.length == 0)
-	{
-		// Add element slate element in collection template send
-		// collection template to show slate pad
-		fill_slate("slate", view.el);
-	}
-
-	// Add row-fluid if user prefs are set to fluid
-	if (IS_FLUID)
-	{
-		$(view.el).find('div.row').removeClass('row').addClass(
-				'row-fluid');
-	}
-
-
-	view.model_list_element_fragment = document.createDocumentFragment();
-	
-	view.model_list_element = $('#' + view.options.templateKey + '-model-list', $(view.el));
-	
-	var fragment = document.createDocumentFragment();
-	
-	
-	
-	/*
-	 * Iterates through each model in the collection and creates a
-	 * view for each model and adds it to model-list
-	 */
-	_(view.collection.models).each(function(item)
-	{ // in case collection is not empty
-		
-		view.appendItem(item);
-	}, view);
-	
-	$(view.model_list_element).append(view.model_list_element_fragment);
-
-	/*
-	 * Few operations on the view after rendering the view,
-	 * operations like adding some alerts, graphs etc after the view
-	 * is rendered, so to perform these operations callback is
-	 * provided as option when creating an model.
-	 */
-	var callback = view.options.postRenderCallback;
-
-	/*
-	 * If callback is available for the view, callback functions is
-	 * called by sending el(current view html element) as parameters
-	 */
-	if (callback && typeof (callback) === "function")
-	{
-		// execute the callback, passing parameters as necessary
-		callback($(view.el));
-	}
-
-	// Add checkboxes to specified tables by triggering view event
-	$('body').trigger('agile_collection_loaded', [view.el]);
-	
-//	$(this.el).trigger('agile_collection_loaded', [this.el]);
-
-	// For the first time fetch, disable Scroll bar if results are
-	// lesser
-	if (view.page_size && (view.collection.length < view.page_size))
-	{
-		console.log("Disabling infini scroll");
-		view.infiniScroll.destroy();
-	}
-}
