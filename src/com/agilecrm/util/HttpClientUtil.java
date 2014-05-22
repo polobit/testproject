@@ -16,8 +16,6 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 
-import com.thirdparty.mandrill.Mandrill;
-
 /**
  * <code>HttpClientUtil</code> is the utility class that handles URL requests
  * through HttpClient.
@@ -78,14 +76,16 @@ public class HttpClientUtil
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured in HttpClientUtil..." + e.getMessage());
+
 	    e.printStackTrace();
+
+	    System.out.println("Size of postData is..." + postData.length());
 
 	    System.err.println("Sending again normally...");
 
 	    try
 	    {
-		String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
-			+ Mandrill.MANDRILL_API_MESSAGE_CALL, postData);
+		String response = HTTPUtil.accessURLUsingPost(url, postData);
 
 		System.out.println("Mandrill response in HttpClientUtil..." + response);
 	    }
