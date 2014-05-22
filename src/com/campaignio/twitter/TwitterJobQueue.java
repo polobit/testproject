@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 
 /**
@@ -17,6 +18,7 @@ import com.googlecode.objectify.annotation.Indexed;
  * @author Manohar
  * 
  */
+@Cached
 public class TwitterJobQueue
 {
     /**
@@ -63,7 +65,8 @@ public class TwitterJobQueue
     /**
      * Dao for TwitterJobQueue class
      */
-    private static ObjectifyGenericDao<TwitterJobQueue> dao = new ObjectifyGenericDao<TwitterJobQueue>(TwitterJobQueue.class);
+    private static ObjectifyGenericDao<TwitterJobQueue> dao = new ObjectifyGenericDao<TwitterJobQueue>(
+	    TwitterJobQueue.class);
 
     /**
      * Default TwitterJobQueue

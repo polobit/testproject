@@ -5,6 +5,7 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Cached;
 
 /**
  * <code>Stream</code> class stores the details of a Stream (of social suite
@@ -21,6 +22,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
  * 
  */
 @XmlRootElement
+@Cached
 public class Stream
 {
     // Unique id of Stream.

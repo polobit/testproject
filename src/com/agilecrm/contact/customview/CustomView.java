@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
@@ -21,6 +22,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @Unindexed
+@Cached
 public class CustomView
 {
 
@@ -37,8 +39,7 @@ public class CustomView
     public LinkedHashSet<String> fields_set = new LinkedHashSet<String>();
 
     // Dao
-    public static ObjectifyGenericDao<CustomView> dao = new ObjectifyGenericDao<CustomView>(
-	    CustomView.class);
+    public static ObjectifyGenericDao<CustomView> dao = new ObjectifyGenericDao<CustomView>(CustomView.class);
 
     public CustomView()
     {

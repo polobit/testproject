@@ -18,11 +18,13 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 import com.thirdparty.google.GoogleServiceUtil;
 
 @XmlRootElement
+@Cached
 public class GoogleCalenderPrefs
 {
     @Id
@@ -53,7 +55,8 @@ public class GoogleCalenderPrefs
     @JsonIgnore
     private Key<DomainUser> domainUserKey = null;
 
-    public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(GoogleCalenderPrefs.class);
+    public static ObjectifyGenericDao<GoogleCalenderPrefs> dao = new ObjectifyGenericDao<GoogleCalenderPrefs>(
+	    GoogleCalenderPrefs.class);
 
     public GoogleCalenderPrefs()
     {
@@ -97,9 +100,10 @@ public class GoogleCalenderPrefs
 	String response = GoogleServiceUtil.refreshTokenInGoogle(refresh_token);
 
 	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(response, new TypeReference<HashMap<String, Object>>()
-	{
-	});
+	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
+		new TypeReference<HashMap<String, Object>>()
+		{
+		});
 	System.out.println(properties.toString());
 
 	if (properties.containsKey("access_token"))

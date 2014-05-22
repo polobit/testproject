@@ -18,11 +18,16 @@ var Handlebars_Compiled_Templates = {};
  *            context json object to call with the compiled template
  * @param {String}
  *            download verifies whether the template is found or not
+ *            
+ * @param {callback} 
+ * 			 To decide whether templates should be downloaded synchronously or asynchronously.
+ * 
  * @returns compiled html with the context
  */
 function getTemplate(templateName, context, download)
 {
-
+	var is_async = callback && typeof(callback) == "function";
+	
 	// Check if it is (compiled template) present in templates
 	if (Handlebars_Compiled_Templates[templateName])
 		return Handlebars_Compiled_Templates[templateName](context);
@@ -33,18 +38,36 @@ function getTemplate(templateName, context, download)
 	if(HANDLEBARS_PRECOMPILATION)
 	{
 		var template = Handlebars.templates[templateName + "-template"];
+		
+		// If teplate is found
 		if (template) {
+			
+			// If callback is sent then template is downloaded asynchronously and content is sent 
+			if(is_async)
+			{
+				callback(template(context));
+				return;
+			}
+			
 			// console.log("Template " + templateName + " found");
 			return template(context);
-		}	
+		}
 	}
 	else
 		{
 			var source = $('#' + templateName + "-template").html();
+			console.log(source);
 			if (source)
 			{
 				var template = Handlebars.compile(source);
 				Handlebars_Compiled_Templates[templateName] = template;
+				
+				// If callback is sent then template is downloaded asynchronously and content is sent 
+				if(is_async)
+				{
+					callback(template(context));
+					return;
+				}
 				return template(context);
 			}
 		}
@@ -59,6 +82,10 @@ function getTemplate(templateName, context, download)
 	// Download
 	var templateHTML = '';
 
+
+	// Stores urls of templates to be downloaded.
+	var template_relative_urls = [];
+	
 	// If starts with settings
 	/**
 	 * If the template is not found in document body, then download the template
@@ -69,83 +96,123 @@ function getTemplate(templateName, context, download)
 	 */
 	if (templateName.indexOf("settings") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/settings.js");
+		template_relative_urls.push("settings.js");
 	}
 	if (templateName.indexOf("admin-settings") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/admin-settings.js");
+		template_relative_urls.push("admin-settings.js");
 	}
 	if (templateName.indexOf("continue") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/continue.js");
+		template_relative_urls.push("continue.js");
 	}
 	if (templateName.indexOf("all-domain") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/admin.js");
+		template_relative_urls.push("admin.js");
 	}
 	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/contact-detail.js");
+		template_relative_urls.push("contact-detail.js");
 		if(HANDLEBARS_PRECOMPILATION)
-			downloadSynchronously("tpl/min/precompiled/contact-detail.html");
+			template_relative_urls.push("contact-detail.html");
 	}
 	if (templateName.indexOf("contact-filter") == 0 || templateName.indexOf("filter-contacts") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/contact-filter.js");
+		template_relative_urls.push("contact-filter.js");
 	}
 	if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0  || templateName.indexOf("contacts-custom") == 0 || templateName.indexOf("contacts-grid") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/contact-view.js");
+		template_relative_urls.push("contact-view.js");
 	}
 	if (templateName.indexOf("bulk-actions") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/bulk-actions.js");
+		template_relative_urls.push("bulk-actions.js");
 	}
 	if (templateName.indexOf("case") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/case.js");
+		template_relative_urls.push("case.js");
 	}
 	if (templateName.indexOf("document") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/document.js");
+		template_relative_urls.push("document.js");
 	}
 	if (templateName.indexOf("gmap") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/gmap.js");
+		template_relative_urls.push("gmap.js");
 	}
 	if (templateName.indexOf("report") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/report.js");
+		template_relative_urls.push("report.js");
 	}
 	if (templateName.indexOf("webrule") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/web-rules.js");
+		template_relative_urls.push("web-rules.js");
 	}
 	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/workflow.js");
+		template_relative_urls.push("workflow.js");
 	}
 	if (templateName.indexOf("purchase") == 0 || templateName.indexOf("subscription") == 0 || templateName.indexOf("subscribe") == 0 || templateName.indexOf("invoice") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/billing.js");
+		template_relative_urls.push("billing.js");
 	}
 	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("widget") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/widget.js");
+		template_relative_urls.push("widget.js");
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
-		templateHTML = downloadSynchronously("tpl/min/socialsuite.js");
+		template_relative_urls.push("socialsuite.js");
+	
 		if(HANDLEBARS_PRECOMPILATION)
-			downloadSynchronously("tpl/min/precompiled/socialsuite.html");
+			template_relative_urls.push("socialsuite.html");
 	}
 
+	
+	if(is_async)
+	{
+		load_templates_async(templateName, context, template_relative_urls, callback);
+		return;
+	}
+	
+	load_templates_sync(template_relative_urls);
+	
 	return getTemplate(templateName, context, 'no');
 }
 
-String.prototype.endsWith = function(suffix) {
-    return this.indexOf(suffix, this.length - suffix.length) !== -1;
-};
+function load_templates_async(templateName, context, template_relative_urls, callback)
+{
+	console.log(template_relative_urls);
+	console.log(context);
+	var url = template_relative_urls.pop();
+	if(!url)
+	{
+		getTemplate(templateName, context, 'no', callback);
+		return;
+	}
+	//else
+		//getTemplate(templateName, context, 'no', callback);
+
+	downloadSynchronously(url, function(){
+		{
+				load_templates_async(templateName, context, template_relative_urls, callback);
+
+		}
+			
+	});
+}
+
+function load_templates_sync(template_relative_urls)
+{
+	for(var index in template_relative_urls)
+		downloadSynchronously(template_relative_urls[index]);
+}
+
+
+function loadContent()
+{
+	getTemplate(templateName, context, 'no');
+}
 
 /**
  * Downloads the template synchronously (stops other browsing actions) from the
@@ -168,6 +235,11 @@ function downloadSynchronously(url)
 		url = url.replace("tpl/min", "tpl/min/precompiled");
 	
 	console.log(url + " " + dataType);
+	
+
+	var is_async = false;
+	if(callback && typeof (callback) === "function")
+		is_async = true;
 	
 	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
 	{	
@@ -397,4 +469,3 @@ function updateCustomData(el)
 {
 	$(".custom-data", App_Contacts.contactDetailView.el).html(el)
 }
-

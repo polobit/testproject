@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Cached;
 
 /**
  * <code>Milestone</code> is the base class for milestones set for any deal.
@@ -19,6 +20,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
  * 
  */
 @XmlRootElement
+@Cached
 public class Milestone
 {
     /**
