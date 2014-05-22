@@ -24,7 +24,7 @@ var Handlebars_Compiled_Templates = {};
  * 
  * @returns compiled html with the context
  */
-function getTemplate(templateName, context, download)
+function getTemplate(templateName, context, download, callback)
 {
 	var is_async = callback && typeof(callback) == "function";
 	
@@ -56,7 +56,6 @@ function getTemplate(templateName, context, download)
 	else
 		{
 			var source = $('#' + templateName + "-template").html();
-			console.log(source);
 			if (source)
 			{
 				var template = Handlebars.compile(source);
@@ -81,7 +80,6 @@ function getTemplate(templateName, context, download)
 
 	// Download
 	var templateHTML = '';
-
 
 	// Stores urls of templates to be downloaded.
 	var template_relative_urls = [];
@@ -182,7 +180,6 @@ function getTemplate(templateName, context, download)
 
 function load_templates_async(templateName, context, template_relative_urls, callback)
 {
-	console.log(template_relative_urls);
 	console.log(context);
 	var url = template_relative_urls.pop();
 	if(!url)
@@ -214,6 +211,10 @@ function loadContent()
 	getTemplate(templateName, context, 'no');
 }
 
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
 /**
  * Downloads the template synchronously (stops other browsing actions) from the
  * given url and returns it
@@ -222,21 +223,24 @@ function loadContent()
  *            url location to download the template
  * @returns down-loaded template content
  */
-function downloadSynchronously(url)
+function downloadSynchronously(url, callback)
 {	
-	var dataType = 'html';
 	
+	var dataType = 'html';
 	// If JS
 	if(url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
 		dataType = 'script';
 	
 	// If Precompiled is enabled, we change the directory to precompiled
-	if(HANDLEBARS_PRECOMPILATION && url.indexOf("precompiled") == -1)
-		url = url.replace("tpl/min", "tpl/min/precompiled");
+	if(HANDLEBARS_PRECOMPILATION)
+	{
+			url = "tpl/min/precompiled/" + url;
+	}
+	else
+		url = "tpl/min/" + url;
 	
 	console.log(url + " " + dataType);
 	
-
 	var is_async = false;
 	if(callback && typeof (callback) === "function")
 		is_async = true;
@@ -246,7 +250,10 @@ function downloadSynchronously(url)
 		// If HTMl, add to body
 		if(dataType == 'html')
 			$('body').append((result));
-	}, async : false });
+		
+		if(is_async)
+			callback(result);
+	}, async : is_async });
 
 	return "";
 }
