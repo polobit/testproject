@@ -71,6 +71,8 @@ public class HttpClientUtil
 
 	    br.close();
 
+	    System.out.println("Size of postData is..." + postData.length());
+
 	    System.out.println("Response:  " + sb.toString());
 	}
 	catch (Exception e)
@@ -79,9 +81,9 @@ public class HttpClientUtil
 
 	    e.printStackTrace();
 
-	    System.out.println("Size of postData is..." + postData.length());
-
 	    System.err.println("Sending again normally...");
+
+	    System.out.println("Size of postData in exception is..." + postData.length());
 
 	    try
 	    {
