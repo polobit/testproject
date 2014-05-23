@@ -938,10 +938,10 @@ $(function()
 				if (properties_count != 0)
 
 					el = el
-							.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+							.concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
 				else
 					el = el
-							.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+							.concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
 
 				$.each(address, function(key, val)
 				{
