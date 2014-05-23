@@ -455,6 +455,7 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
+					$(this.el).html(LOADING_HTML);
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
