@@ -2406,4 +2406,27 @@ $(function()
 		
 		return options.inverse(this);
 	});
+	
+	/**
+	 * give custome status base on xerotype
+	 **/
+	
+	Handlebars.registerHelper('xeroType', function(type) {
+		  return (type=="ACCPAY")?"Pay":"Rec";
+		});
+	
+	/**
+	 * give custom type to xero type
+	 **/
+	Handlebars.registerHelper('xeroTypeToolTip', function(type) {
+		  return (type=="ACCPAY")?"Payable":"Receivable";
+		});
+	
+	/**
+	 * gives first latter capital for given input
+	 **/
+	Handlebars.registerHelper('capFirstLetter', function(data) {
+		var temp =  data.toLowerCase(); 
+			return temp.charAt(0).toUpperCase()+temp.slice(1);
+		});
 });
