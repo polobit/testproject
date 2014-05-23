@@ -20,6 +20,11 @@ public class ContactFullDetails
     // Takes contact id
     Long contact_id;
 
+    public ContactFullDetails()
+    {
+
+    }
+
     public ContactFullDetails(Long id)
     {
 	contact_id = id;
@@ -54,8 +59,7 @@ public class ContactFullDetails
 	    return TaskUtil.getContactTasks(contact_id);
 	}
 	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
+	{ // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return new ArrayList<Task>();
 	}
@@ -64,6 +68,6 @@ public class ContactFullDetails
     @XmlElement
     public List<Case> getCases()
     {
-	return CaseUtil.getCases();
+	return CaseUtil.getCases(contact_id, null, null);
     }
 }

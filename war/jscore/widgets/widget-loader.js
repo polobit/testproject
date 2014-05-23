@@ -12,7 +12,6 @@ var Widgets_View;
 function loadWidgets(el, contact)
 {
 
-	console.log(Widgets_View);
 	// Create Data JSON
 	var data = { contact : contact };
 
@@ -35,7 +34,6 @@ function loadWidgets(el, contact)
 
 		// show widgets
 		var newEl = Widgets_View.render().el;
-		console.log($('#widgets', el));
 		$('#widgets', el).html(newEl);
 
 	}
@@ -155,10 +153,6 @@ function loadWidgets(el, contact)
  */
 function set_up_widgets(el, widgets_el)
 {
-	console.log("widgets el");
-	console.log(el);
-	console.log("widgets el");
-	console.log(widgets_el);
 	/*
 	 * Iterates through all the models (widgets) in the collection, and scripts
 	 * are loaded from the URL in the widget
@@ -190,10 +184,6 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (model.get("widget_type") == "CUSTOM")
 		{
-			console.log('in widget type custom');
-			console.log(model.get('name'));
-			console.log(model.get('script'));
-			console.log($('#' + model.get('selector'), widgets_el));
 
 			if($('#' + model.get('selector') + '-container').length)
 			{
@@ -228,18 +218,14 @@ function getScript(model, callback)
 	// Gets contact id, to save social results of a particular id
 	var contact_id = agile_crm_get_contact()['id'];
 
-	console.log("in get script");
-
 	$.post("core/api/widgets/script/" + contact_id + "/" + model.get("name"), function(data)
 	{
-		console.log("script post");
 
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
 			callback(data);
 	}).error(function(data)
 	{
-		console.log('in error');
 		console.log(data);
 		console.log(data.responseText);
 	});

@@ -463,7 +463,6 @@ var Base_Collection_View = Backbone.View
 			},
 			buildCollectionUI : function(result)
 			{
-				console.log(this);
 				$(this.el).html(result);
 				// If collection is Empty show some help slate
 				if (this.collection.models.length == 0)

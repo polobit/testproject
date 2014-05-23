@@ -61,6 +61,8 @@ function load_timeline_details(el, contactId, callback1)
 		
 		var contact = App_Contacts.contactDetailView.model.toJSON();
 		
+		addTagsToTimeline(App_Contacts.contactDetailView.model, el);
+		
 		// Fetches logs related to the contact
 		var LogsCollection = Backbone.Collection.extend({
 			url: '/core/api/campaigns/logs/contact/' + contactId,
@@ -222,81 +224,49 @@ function load_timeline_details(el, contactId, callback1)
 		 * Defines a collection to store the response of all the request urls (notes, deals 
 		 * and tasks) in the array (fetchContactDetails).
 		 */ 
-		var arrayView =  new Base_Collection_View({
-			templateKey: 'timeline',
-			individual_tag_name: 'li',
-		});
 		
-		/*
-		 * Stores all urls (notes, deals and tasks) in an array to fetch data using
-		 * same collection by changing its url.
-		 */ 
-		var fetchContactDetails = ['core/api/contacts/' + contactId + '/notes', 
-		                           'core/api/contacts/'+ contactId + '/deals',
-		                           'core/api/contacts/'+ contactId + '/cases', //Added to also fetch cases
-		                           'core/api/contacts/'+ contactId + '/tasks'];
-		var loading_count = 0;
+		var entity_types = ["deals", "notes", "cases", "tasks"]
+		$.getJSON('core/api/contacts/related-entities/' + contactId, function(data){
+			var entities = [];
+			
+			for(var index in entity_types)
+			{
+				entities = entities.concat(data[entity_types[index]]);
+				
+			}
+			
+			remove_loading_img(el);
+			
+			
+			timelineView.collection.add(entities , {silent : true});
+			
 		
-		$.each(fetchContactDetails, function(index, url){
-			
-			// Verifies completion of all urls
-			var is_timeline_available = false;
-			
-			var View =  Backbone.Collection.extend({
-				url: url,
-			});
-			var view = new View();
-			view.fetch({
-				success: function(){
-					if(view.length > 0)
-						arrayView.collection.add(view.models);
+				// If timeline is not defined yet, calls setup_timeline for the first time
+				if(timelineView.collection.length == 0){
+
+					/*
+					 * Calls setup_timeline with a callback function to insert other models 
+					 * (fetched while initializing the isotope) if available.
+					 */
+					setup_timeline(timelineView.collection.toJSON(), el, function(el) {
+						
+						$.each(timelineViewMore.collection.toJSON(), function(index,data){
+							var newItem = $(getTemplate("timeline", data));
+							newItem.find('.inner').append('<a href="#" class="open-close"></a>');
+							$('#timeline', el).isotope( 'insert', newItem);
+						});
+					})
+				}else{
 					
-					if(loading_count  == 0)
-					{
-						addTagsToTimeline(contact, el);
-					}
-					
-					// If all the urls got their responses, goes for timeline
-					if(++loading_count == fetchContactDetails.length){
-						remove_loading_img(el);
-						
-						is_array_urls_fetched = true;
-						show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
-						
-						if(arrayView.collection.length == 0)
-							return;
-						
-						timelineView.collection.add(arrayView.collection.models , {silent : true});
-						
-						// If timeline is not defined yet, calls setup_timeline for the first time
-						if(timelineView.collection.length == 0){
-	
-							/*
-							 * Calls setup_timeline with a callback function to insert other models 
-							 * (fetched while initializing the isotope) if available.
-							 */
-							setup_timeline(timelineView.collection.toJSON(), el, function(el) {
-								
-								$.each(timelineViewMore.collection.toJSON(), function(index,data){
-									var newItem = $(getTemplate("timeline", data));
-									newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-									$('#timeline', el).isotope( 'insert', newItem);
-								});
-							})
-						}else{
-							
-							/*
-							 * Already setup_timeline is called with the first fetched data.
-							 * 
-							 * Inserts the data into timeline or adds to other collection (timelineViewMore) 
-							 * by validating the status of isotope initialization.
-							 */							
-							validate_insertion(arrayView.collection.toJSON(), timelineViewMore);
-						}
-					}
+					/*
+					 * Already setup_timeline is called with the first fetched data.
+					 * 
+					 * Inserts the data into timeline or adds to other collection (timelineViewMore) 
+					 * by validating the status of isotope initialization.
+					 */							
+					validate_insertion(entities, timelineViewMore);
 				}
-			});
-		});	
+		})
 }	
 
 /**
@@ -322,7 +292,7 @@ function validate_insertion(models, timelineViewMore){
 		head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
 		
 
-			if($('#timeline').isotope()){
+			if($('#timeline').isotope()) {
 				var month_years = [];
 				$.each(models, function(index, model){
 					var month_year = entity_created_month_year(model);
@@ -463,9 +433,11 @@ function setup_timeline(models, el, callback) {
 	 MONTH_YEARS = [];
 	
 	// Load plugins for timeline	
-	head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
+	
 		
-		/*
+	 head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
+		
+		 /*
 		 * Defines the layout and its dimensions, container size and
 		 * arrangement of data position added to timeline etc..
 		 */ 
@@ -487,16 +459,16 @@ function setup_timeline(models, el, callback) {
 			//console.log(MONTH_YEARS);
 			
 			// combine data & template
-			$('#timeline').append(getTemplate("timeline", model));
+			$('#timeline', el).append(getTemplate("timeline", model));
 		}); //each
 
 		// add a month marker for each month that has a post
 		create_month_marker(MONTH_YEARS, false, el);
 
-		var $container = $("#timeline");
+		var $container = $("#timeline", el);
 		
 		// Initializes isotope with options (sorts the data based on created time)
-		$('#timeline').imagesLoaded(function(){
+		$('#timeline', el).imagesLoaded(function(){
 			$container.isotope({
 				itemSelector : '.item',
 				transformsEnabled: true,
@@ -532,7 +504,7 @@ function setup_timeline(models, el, callback) {
 			$(this).find('.inner').append('<a href="#" class="open-close"></a>');
 		});
 		// Resizes the line height based on entities overall height
-		$('#timeline').resize(function(){
+		$('#timeline', el).resize(function(){
 			adjust_line();
 		});
 		

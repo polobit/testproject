@@ -180,7 +180,6 @@ function getTemplate(templateName, context, download, callback)
 
 function load_templates_async(templateName, context, template_relative_urls, callback)
 {
-	console.log(context);
 	var url = template_relative_urls.pop();
 	if(!url)
 	{
@@ -239,7 +238,6 @@ function downloadSynchronously(url, callback)
 	else
 		url = "tpl/min/" + url;
 	
-	console.log(url + " " + dataType);
 	
 	var is_async = false;
 	if(callback && typeof (callback) === "function")
@@ -438,14 +436,12 @@ function getCurrentContactProperty(value)
 	if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 	{
 		var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-		console.log(App_Contacts.contactDetailView.model.toJSON());
 		return getPropertyValue(contact_properties, value);
 	}
 }
 
 function getCount(collection)
 {
-	console.log(collection);
 	if (collection[0] && collection[0].count && (collection[0].count != -1))
 		return "(" + collection[0].count + " Total)";
 	else
