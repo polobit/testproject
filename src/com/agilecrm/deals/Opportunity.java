@@ -28,6 +28,7 @@ import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -52,6 +53,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
+@Cached
 public class Opportunity extends Cursor
 {
     /**
@@ -180,7 +182,8 @@ public class Opportunity extends Cursor
      * @param ownerId
      *            - Owner id.
      */
-    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability, String track, String ownerId)
+    public Opportunity(String name, String description, Double expectedValue, String milestone, int probability,
+	    String track, String ownerId)
     {
 	this.name = name;
 	this.description = description;
@@ -420,7 +423,8 @@ public class Opportunity extends Cursor
      */
     public String toString()
     {
-	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name + " description:" + description + " expectedValue: "
-		+ expected_value + " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
+		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
+		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }

@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Cached;
 
 /**
  * <code>URLShortener</code> considers Id, long url, contact id and tracking id
@@ -13,6 +14,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
  * 
  */
 @XmlRootElement
+@Cached
 public class URLShortener
 {
     /**
@@ -86,7 +88,8 @@ public class URLShortener
 
     public String toString()
     {
-	return "Long URL: " + long_url + " Subscriber ID: " + subscriber_id + " Tracker ID: " + tracker_id + " Campaign ID: " + campaign_id;
+	return "Long URL: " + long_url + " Subscriber ID: " + subscriber_id + " Tracker ID: " + tracker_id
+		+ " Campaign ID: " + campaign_id;
 
     }
 }

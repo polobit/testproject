@@ -119,8 +119,6 @@ public class ContactsSyncToAgile
 	myQuery = new Query(feedUrl);
 	myQuery.setMaxResults(MAX_FETCH_SIZE_FROM_GOOGLE);
 
-	System.out
-		.println("*******************************************************************************$$$$$$$$$$$$$$$");
 	System.out.println(dateTime);
 	myQuery.setUpdatedMin(dateTime);
 	myQuery.setStringCustomParameter("access_token", prefs.token);

@@ -22,6 +22,7 @@ import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -38,6 +39,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 
 @XmlRootElement
+@Cached
 public class Document extends Cursor
 {
     /**
