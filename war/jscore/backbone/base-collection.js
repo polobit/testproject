@@ -529,5 +529,5 @@ var Base_Collection_View = Backbone.View
 				// lesser
 			
 			}
-			
+
 		});
