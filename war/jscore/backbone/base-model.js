@@ -460,7 +460,7 @@ var Base_Model_View = Backbone.View
 					 * Uses handlebars js to fill the model data in the template
 					 */
 					getTemplate(this.options.template, this.model
-							.toJSON(), undefined, this.buildModelViewUI);
+							.toJSON(), "yes", this.buildModelViewUI);
 
 					
 				}

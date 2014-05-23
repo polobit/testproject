@@ -83,7 +83,7 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1";
 
     // PUBNUB Credentials
     public static final String PUBNUB_PUBLISH_KEY = "pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274";
