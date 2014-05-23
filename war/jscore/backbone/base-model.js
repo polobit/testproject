@@ -58,7 +58,7 @@ var Base_Model_View = Backbone.View
 				 * uses current view "this" should be bind to view
 				 * object("this").
 				 */
-				_.bindAll(this, 'render', 'save', 'deleteItem');
+				_.bindAll(this, 'render', 'save', 'deleteItem', 'buildModelViewUI');
 
 				/*
 				 * If data is passed as an option to create a view, then
@@ -455,59 +455,14 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
+					$(this.el).html(LOADING_HTML);
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
-					$(this.el).html(
-							getTemplate(this.options.template, this.model
-									.toJSON()));
+					getTemplate(this.options.template, this.model
+							.toJSON(), undefined, this.buildModelViewUI);
 
-					$(this.el).on('DOMNodeInserted', function(e) {
-						//$('form', this).focus_first();
-						$(this).trigger('view_loaded');
-					 });
 					
-					/*
-					 * Few operations on the view after rendering the view,
-					 * operations like adding some alerts, graphs etc after the
-					 * view is rendered, so to perform these operations callback
-					 * is provided as option when creating an model.
-					 */
-					var callback = this.options.postRenderCallback;
-					
-					/*
-					 * If callback is available for the view, callback functions
-					 * is called by sending el(current view html element) as
-					 * parameters
-					 */
-					if (callback && typeof (callback) === "function") {
-						// execute the callback, passing parameters as necessary
-						callback($(this.el));
-					}
-
-					// If isNew is not true, then serialize the form data
-					if (this.options.isNew != true) {
-						// If el have more than 1 form de serialize all forms
-						if ($(this.el).find('form').length > 1)
-							deserializeMultipleForms(this.model.toJSON(), $(
-									this.el).find('form'));
-
-						// If el have one form
-						else if ($(this.el).find('form').length == 1)
-							deserializeForm(this.model.toJSON(), $(this.el)
-									.find('form'));
-					}
-					
-					
-					
-					// Add row-fluid if user prefs are set to fluid
-					if (IS_FLUID)
-					{
-						$(this.el).find('div.row').removeClass('row').addClass(
-								'row-fluid');
-					}
-					
-					$(this.el).trigger('agile_model_loaded');
 				}
 				// Shows loading in the view, if render conditions are
 				// satisfied
@@ -525,6 +480,58 @@ var Base_Model_View = Backbone.View
 				
 
 				this.render(true);
+			}, 
+			buildModelViewUI : function(content)
+			{
+				$(this.el).on('DOMNodeInserted', function(e) {
+					//alert("triggered");
+					//$('form', this).focus_first();
+					$(this).trigger('view_loaded');
+				 });
+			
+				$(this.el).html(content);
+				
+				/*
+				 * Few operations on the view after rendering the view,
+				 * operations like adding some alerts, graphs etc after the
+				 * view is rendered, so to perform these operations callback
+				 * is provided as option when creating an model.
+				 */
+				var callback = this.options.postRenderCallback;
+				
+				/*
+				 * If callback is available for the view, callback functions
+				 * is called by sending el(current view html element) as
+				 * parameters
+				 */
+				if (callback && typeof (callback) === "function") {
+					// execute the callback, passing parameters as necessary
+					callback($(this.el));
+				}
+
+				// If isNew is not true, then serialize the form data
+				if (this.options.isNew != true) {
+					// If el have more than 1 form de serialize all forms
+					if ($(this.el).find('form').length > 1)
+						deserializeMultipleForms(this.model.toJSON(), $(
+								this.el).find('form'));
+
+					// If el have one form
+					else if ($(this.el).find('form').length == 1)
+						deserializeForm(this.model.toJSON(), $(this.el)
+								.find('form'));
+				}
+				
+				
+				
+				// Add row-fluid if user prefs are set to fluid
+				if (IS_FLUID)
+				{
+					$(this.el).find('div.row').removeClass('row').addClass(
+							'row-fluid');
+				}
+				
+				$(this.el).trigger('agile_model_loaded');
 			}
 		});
 

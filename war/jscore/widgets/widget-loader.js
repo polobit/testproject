@@ -12,6 +12,7 @@ var Widgets_View;
 function loadWidgets(el, contact)
 {
 
+	console.log(Widgets_View);
 	// Create Data JSON
 	var data = { contact : contact };
 
@@ -24,19 +25,17 @@ function loadWidgets(el, contact)
 		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
-
+				set_up_widgets(el, widgets_el);
 			} });
 
 		/*
 		 * Fetch widgets from collection and set_up_widgets (load their scripts)
 		 */
-		Widgets_View.collection.fetch({ success : function(data)
-		{
-			set_up_widgets(el, Widgets_View.el);
-		} });
+		Widgets_View.collection.fetch();
 
 		// show widgets
 		var newEl = Widgets_View.render().el;
+		console.log($('#widgets', el));
 		$('#widgets', el).html(newEl);
 
 	}
@@ -50,6 +49,7 @@ function loadWidgets(el, contact)
 
 		$(el).live('view_loaded', function(e)
 		{
+			//alert("loaded");
 			if (flag == false)
 			{
 				flag = true;
