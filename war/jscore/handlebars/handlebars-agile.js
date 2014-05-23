@@ -170,13 +170,9 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("billing.js");
 	}
-<<<<<<< HEAD
-	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("xero")==0 || templateName.indexOf("widget") == 0 )
-=======
 	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName
 			.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName
-			.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("widget") == 0)
->>>>>>> master
+			.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("xero") == 0 || templateName.indexOf("widget") == 0)
 	{
 		template_relative_urls.push("widget.js");
 	}
@@ -204,10 +200,7 @@ function getTemplateUrls(templateName)
  */
 function load_templates_async(templateName, context, template_relative_urls, callback)
 {
-<<<<<<< HEAD
-=======
 	// Removes last url from the list to fetch template.
->>>>>>> master
 	var url = template_relative_urls.pop();
 
 	// URL is undefined when list is empty which means all templates specified
@@ -271,15 +264,9 @@ function downloadTemplate(url, callback)
 	}
 	else
 		url = "tpl/min/" + url;
-<<<<<<< HEAD
-	
-	
-=======
-
 	console.log(url + " " + dataType);
 
 	// If callback is sent to this method then template is fetched synchronously
->>>>>>> master
 	var is_async = false;
 	if (callback && typeof (callback) === "function")
 		is_async = true;
