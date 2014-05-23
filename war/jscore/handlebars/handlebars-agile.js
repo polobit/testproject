@@ -475,5 +475,4 @@ function getIdFromHash(){
 function updateCustomData(el)
 {
 	$(".custom-data", App_Contacts.contactDetailView.el).html(el)
-
 }
