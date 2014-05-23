@@ -455,18 +455,13 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
+					$(this.el).html(LOADING_HTML);
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
 					getTemplate(this.options.template, this.model
 							.toJSON(), undefined, this.buildModelViewUI);
 
-					/*$(this.el).on('DOMNodeInserted', function(e) {
-						alert("test");
-						//$('form', this).focus_first();
-						$(this).trigger('view_loaded');
-					 });
-					*/
 					
 				}
 				// Shows loading in the view, if render conditions are
@@ -488,7 +483,14 @@ var Base_Model_View = Backbone.View
 			}, 
 			buildModelViewUI : function(content)
 			{
+				$(this.el).on('DOMNodeInserted', function(e) {
+					//alert("triggered");
+					//$('form', this).focus_first();
+					$(this).trigger('view_loaded');
+				 });
+			
 				$(this.el).html(content);
+				
 				/*
 				 * Few operations on the view after rendering the view,
 				 * operations like adding some alerts, graphs etc after the

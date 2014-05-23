@@ -75,7 +75,7 @@
 <script id="twilio-verify-template" type="text/html" >
 	<div class="widget_content" style='border-bottom:none;line-height: 160%;' >
 		
-		<p>Please enter this code <b>{{NewOutgoingCallerId.ValidationCode}}</b> to verify your number after you receive a call from Twilio.</p>
+		<p>Please enter this code <b>{{ValidationRequest.ValidationCode}}</b> to verify your number after you receive a call from Twilio.</p>
 		{{#if settings}}
 			<a href="#Twilio/twilio{{id}}" class="btn" id="twilio_proceed_settings" style="font-size:13px;">Proceed</a>			
 		{{else}}
