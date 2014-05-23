@@ -14,6 +14,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
@@ -26,6 +27,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @SuppressWarnings("serial")
 @XmlRootElement
+@Cached
 public class Reports implements Serializable
 {
 

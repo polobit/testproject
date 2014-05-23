@@ -108,14 +108,28 @@ var Base_List_View = Backbone.View.extend({
 		 * editView.render().el; $('#content').html(el); }
 		 */
 	},
-	render : function()
+	render : function(callback)
 	{
-		// console.log(this.model.toJSON());
-		$(this.el)
-				.html(getTemplate(this.options.template, this.model.toJSON()));
+		var async = false;
+		//if(callback && typeof (callback) == "function")
+			//async = true;
+		if(async)
+		{
+			var that = this
+			// console.log(this.model.toJSON());
+			getTemplate(that.options.template, that.model.toJSON(), undefined, function(el){
+				$(that.el).html(el);
+				$(that.el).data(that.model);
+				console.log($(that.el));
+				callback(that.el);
+			});
+			return this;
+		}
 		
-		// Add model as data to it's corresponding row
+		$(this.el).html(getTemplate(this.options.template, this.model.toJSON()));
 		$(this.el).data(this.model);
+		// Add model as data to it's corresponding row
+		
 		
 		return this;
 	}
@@ -161,7 +175,7 @@ var Base_Collection_View = Backbone.View
 			initialize : function()
 			{
 				// Binds functions to view
-				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent');
+				_.bindAll(this, 'render', 'appendItem', 'appendItemOnAddEvent', 'buildCollectionUI');
 			
 				
 				if(this.options.data)
@@ -340,6 +354,10 @@ var Base_Collection_View = Backbone.View
 			appendItem : function(base_model)
 			{
 
+				this.model_list_element_fragment.appendChild(this.createListView(base_model).render().el);
+			},
+			createListView : function(base_model)
+			{
 				// If modelData is set in options of the view then custom data
 				// is added to model.
 				if (this.options.modelData)
@@ -358,14 +376,12 @@ var Base_Collection_View = Backbone.View
 					tagName : this.options.individual_tag_name
 				});
 				
-				
-				$(this.model_list_element).append(itemView.render().el);				
-			},
-			
+				return itemView
+			},			
 			appendItemOnAddEvent : function(base_model)
 			{
-				this.appendItem(base_model);
 				
+				$(this.model_list_element).append(this.createListView(base_model).render().el);
 			/*	if(this.collection && this.collection.length)
 				{
 					if(this.collection.at(0).attributes.count)
@@ -430,14 +446,25 @@ var Base_Collection_View = Backbone.View
 					return;
 				}
 
-				
+				var _this = this;
+				var ui_function = this.buildCollectionUI;
 				// Populate template with collection and view element is created
 				// with content, is used to fill heading of the table
-				$(this.el).html(
 						getTemplate((this.options.templateKey + '-collection'),
-								this.collection.toJSON()));
-				
+								this.collection.toJSON(), undefined, ui_function);
+						
+				if (this.page_size && (this.collection.length < this.page_size))
+				{
+					console.log("Disabling infini scroll");
+					this.infiniScroll.destroy();
+				}
 
+				return this;
+			},
+			buildCollectionUI : function(result)
+			{
+				console.log(this);
+				$(this.el).html(result);
 				// If collection is Empty show some help slate
 				if (this.collection.models.length == 0)
 				{
@@ -453,8 +480,15 @@ var Base_Collection_View = Backbone.View
 							'row-fluid');
 				}
 
-			
+
+				// Used to store all elements as document fragment
+				this.model_list_element_fragment = document.createDocumentFragment();
+				
 				this.model_list_element = $('#' + this.options.templateKey + '-model-list', $(this.el));
+				
+				var fragment = document.createDocumentFragment();
+				
+				
 				
 				/*
 				 * Iterates through each model in the collection and creates a
@@ -462,8 +496,11 @@ var Base_Collection_View = Backbone.View
 				 */
 				_(this.collection.models).each(function(item)
 				{ // in case collection is not empty
+					
 					this.appendItem(item);
 				}, this);
+				
+				$(this.model_list_element).append(this.model_list_element_fragment);
 
 				/*
 				 * Few operations on the view after rendering the view,
@@ -483,19 +520,14 @@ var Base_Collection_View = Backbone.View
 					callback($(this.el));
 				}
 
-				// Add checkboxes to specified tables by triggering this event
+				// Add checkboxes to specified tables by triggering view event
 				$('body').trigger('agile_collection_loaded', [this.el]);
 				
-			//	$(this.el).trigger('agile_collection_loaded', [this.el]);
+//				$(this.el).trigger('agile_collection_loaded', [this.el]);
 
 				// For the first time fetch, disable Scroll bar if results are
 				// lesser
-				if (this.page_size && (this.collection.length < this.page_size))
-				{
-					console.log("Disabling infini scroll");
-					this.infiniScroll.destroy();
-				}
-
-				return this;
-			},
+			
+			}
+			
 		});

@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 
 /**
@@ -16,6 +17,7 @@ import com.googlecode.objectify.annotation.Indexed;
  * 
  */
 @XmlRootElement
+@Cached
 public class ScheduledUpdate
 {
     // Unique id of Stream.

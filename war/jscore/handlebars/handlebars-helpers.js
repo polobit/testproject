@@ -911,62 +911,102 @@ $(function()
 	 * Converts address as comma seprated values and returns as handlebars safe
 	 * string.
 	 */
-	Handlebars
-			.registerHelper(
-					'address_Element',
-					function(properties)
+	Handlebars.registerHelper('address_Element', function(properties)
+	{
+		var properties_count = 0;
+		for ( var i = 0, l = properties.length; i < l; i++)
+		{
+
+			if (properties[i].name == "address")
+			{
+				var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
+
+				var address = {};
+				try
+				{
+					address = JSON.parse(properties[i].value);
+				}
+				catch (err)
+				{
+					address['address'] = properties[i].value;
+				}
+
+				// Gets properties (keys) count of given json
+				// object
+				var count = countJsonProperties(address);
+
+				if (properties_count != 0)
+
+					el = el
+							.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+				else
+					el = el
+							.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+
+				$.each(address, function(key, val)
+				{
+					if (--count == 0)
 					{
-						var properties_count = 0;
-						for ( var i = 0, l = properties.length; i < l; i++)
-						{
+						el = el.concat(val + ".");
+						return;
+					}
+					el = el.concat(val + ", ");
+				});
 
-							if (properties[i].name == "address")
-							{
-								var el = '<div style="display: inline-block; vertical-align: top;text-align:right;margin-top:0px" class="span4"><span><strong style="color:gray">Address</strong></span></div>';
+				if (properties[i].subtype)
+					el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
+				el = el.concat('</span></div></div>');
+				return new Handlebars.SafeString(el);
+			}
+			else if (properties[i].name == "phone" || properties[i].name == "email")
+			{
+				++properties_count;
+			}
+		}
+	});
+	
+	Handlebars.registerHelper('address_Template', function(properties)
+	{
 
-								var address = {};
-								try
-								{
-									address = JSON.parse(properties[i].value);
-								}
-								catch (err)
-								{
-									address['address'] = properties[i].value;
-								}
+		for ( var i = 0, l = properties.length; i < l; i++)
+		{
 
-								// Gets properties (keys) count of given json
-								// object
-								var count = countJsonProperties(address);
+			if (properties[i].name == "address")
+			{
+				var el = '';
 
-								if (properties_count != 0)
+				var address = {};
+				try
+				{
+					address = JSON.parse(properties[i].value);
+				}
+				catch (err)
+				{
+					address['address'] = properties[i].value;
+				}
 
-									el = el
-											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
-								else
-									el = el
-											.concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+				// Gets properties (keys) count of given json
+				// object
+				var count = countJsonProperties(address);
 
-								$.each(address, function(key, val)
-								{
-									if (--count == 0)
-									{
-										el = el.concat(val + ".");
-										return;
-									}
-									el = el.concat(val + ", ");
-								});
+				$.each(address, function(key, val)
+				{
+					if (--count == 0)
+					{
+						el = el.concat(val + ".");
+						return;
+					}
+					el = el.concat(val + ", ");
+				});
+/*
+				if (properties[i].subtype)
+					el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");*/
 
-								if (properties[i].subtype)
-									el = el.concat(" <span class='label'>" + properties[i].subtype + "</span>");
-								el = el.concat('</span></div></div>');
-								return new Handlebars.SafeString(el);
-							}
-							else if (properties[i].name == "phone" || properties[i].name == "email")
-							{
-								++properties_count;
-							}
-						}
-					});
+				return new Handlebars.SafeString(el);
+			}
+		}
+	});
+	
 
 	// To show related to contacts for contacts as well as companies
 	Handlebars.registerHelper('related_to_contacts', function(data, options)

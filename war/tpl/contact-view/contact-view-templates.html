@@ -26,6 +26,30 @@
 	</td>
 </script>
 
+<script id = "contacts-custom-view-phone-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+    	{{getPropertyValue properties "phone"}}
+        </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-address-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+    	{{#address_Template properties}}{{/address_Template}}
+        </div>
+	</td>
+</script>
+
+<script id = "contacts-custom-view-website-template" type="text/html">
+	<td class="data" data="{{id}}">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+    	{{getPropertyValue properties "website"}}
+        </div>
+	</td>
+</script>
+
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
         <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">

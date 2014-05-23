@@ -4,12 +4,14 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
 @Unindexed
+@Cached
 public class AccountEmailStats
 {
 
@@ -29,7 +31,8 @@ public class AccountEmailStats
     @NotSaved(IfDefault.class)
     public long updated_time = 0L;
 
-    private static ObjectifyGenericDao<AccountEmailStats> dao = new ObjectifyGenericDao<AccountEmailStats>(AccountEmailStats.class);
+    private static ObjectifyGenericDao<AccountEmailStats> dao = new ObjectifyGenericDao<AccountEmailStats>(
+	    AccountEmailStats.class);
 
     AccountEmailStats()
     {

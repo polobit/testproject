@@ -14,6 +14,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
 import com.agilecrm.util.EncryptDecryptUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
@@ -34,6 +35,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
+@Cached
 public class IMAPEmailPrefs
 {
     /**
@@ -100,7 +102,8 @@ public class IMAPEmailPrefs
     /**
      * IMAPEmailPrefs Dao.
      */
-    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(IMAPEmailPrefs.class);
+    private static ObjectifyGenericDao<IMAPEmailPrefs> dao = new ObjectifyGenericDao<IMAPEmailPrefs>(
+	    IMAPEmailPrefs.class);
 
     /**
      * Default IMAPEmailPrefs.
@@ -128,7 +131,8 @@ public class IMAPEmailPrefs
      * @param smtpPort
      *            - SMTP port.
      */
-    IMAPEmailPrefs(String serverName, String userName, String password, boolean isSecure, String smtpHost, String smtpPort)
+    IMAPEmailPrefs(String serverName, String userName, String password, boolean isSecure, String smtpHost,
+	    String smtpPort)
     {
 	// this.email = email;
 	this.server_name = serverName;
@@ -175,7 +179,8 @@ public class IMAPEmailPrefs
 	}
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
 	}
 
 	dao.put(this);
