@@ -135,8 +135,11 @@ function showSipProfile()
 		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
 		{
 			data["msg"] = "You can make and receive calls with SIP.";
-			$(".contact-make-call").show();
+			$(".contact-make-sip-call").show();
 			$(".make-call").show();
+			
+			// Contact with tel: is hidden
+			$(".contact-make-call").hide();			
 		}
 		else
 		{
@@ -144,8 +147,11 @@ function showSipProfile()
 			sipStart();
 
 			data["msg"] = "Need to register on SIP.";
-			$(".contact-make-call").hide();
+			$(".contact-make-sip-call").hide();
 			$(".make-call").hide();
+			
+			// Contact with tel: is shown
+			$(".contact-make-call").show();			
 		}
 		console.log(data);
 
