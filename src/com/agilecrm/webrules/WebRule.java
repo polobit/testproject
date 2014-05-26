@@ -30,6 +30,10 @@ public class WebRule
     @NotSaved(IfDefault.class)
     public String rule_type = "WEBRULE";
 
+    // Store country
+    @NotSaved(IfDefault.class)
+    public String country = null;
+
     @NotSaved(IfDefault.class)
     @Embedded
     public List<SearchRule> rules = new ArrayList<SearchRule>();

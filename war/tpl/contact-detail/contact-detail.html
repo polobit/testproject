@@ -292,14 +292,14 @@
 							</div>
 							{{/property_is_exists}}
  							{{#property_is_exists "email" properties}}
-							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+							<div class="pull-left row-fluid" style="margin-bottom: 3px;">
 								{{#multiple_Property_Element "email" properties}}
 								<div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Email</strong></span>
 								</div>
 								{{#property_is_exists "phone" ../properties}}
 								<div
-									class="span8 contact-detail-entity-list">
+									class="span8 contact-detail-entity-list" style="padding-right:0px!important;">
 									{{else}}
 									<div style="padding:0px 10px 2px 0px; display: inline-block;" class="span8">
 										{{/property_is_exists}} 
@@ -315,14 +315,20 @@
 								properties}}
 								<div class="pull-left row-fluid">
 									{{#each_with_index this}}
-											<div class="pull-left row-fluid" style="">
-												<div class="span4" style="padding: 4px 0px 5px 2px;text-align:right;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
-													<strong style="color: gray" title="{{name}}">{{name}}</strong>
-												</div>
-												<div class="span8"
-													style="padding:4px 10px 5px 2px; display: inline-block; border-top: 1px solid whitesmoke;">
-												{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
-												</div>
+										<div class="pull-left row-fluid" style="">
+											<div class="span4" style="padding: 4px 0px 5px 2px;text-align:right;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
+												<strong style="color: gray" title="{{name}}">{{name}}</strong>
+											</div>
+										{{#if_equals index ../this.length}}
+											<div class="span8"
+												style="padding:4px 10px 5px 2px; display: inline-block;margin-bottom:5px; border-top: 1px solid whitesmoke;">
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+										{{else}}
+											<div class="span8"
+												style="padding:4px 10px 5px 2px; display: inline-block; border-top: 1px solid whitesmoke;">
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+										{{/if_equals}}
+										</div>
 									{{/each_with_index}}
 									</div>
 									{{/getContactCustomPropertiesExclusively}}

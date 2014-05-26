@@ -386,6 +386,23 @@ public class ContactUtil
 	dao.putAll(contacts_list);
     }
 
+    public static void removeTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
+    {
+	if (contacts_list.size() == 0)
+	{
+	    System.out.println("Null contact");
+	    return;
+	}
+
+	for (Contact contact : contacts_list)
+	{
+
+	    contact.removeTags(tags_array);
+	}
+
+	dao.putAll(contacts_list);
+    }
+
     /**
      * Returns contact firstname and lastname from contact-id.
      * 
