@@ -280,10 +280,14 @@
 								<div style="padding:0px 10px 2px 0px; display: inline-block;line-height: 20px" class="span8">
 									{{#each this}}
 									<div>
-                                        <a href='#' class="contact-make-call" style="display:none;" fname="{{getCurrentContactProperty "first_name"}}" 
-                                         lname="{{getCurrentContactProperty "last_name"}}" image="{{getCurrentContactProperty "image"}}" 
-                                         phone="{{value}}"><i class="icon-phone"></i></a>                                       
-										<a href="tel:{{value}}">{{value}}</a> 
+                                        <a href='#' class="contact-make-sip-call" style="display:none;" 
+                                           fname="{{getCurrentContactProperty "first_name"}}" 
+                                           lname="{{getCurrentContactProperty "last_name"}}" 
+                                           image="{{getCurrentContactProperty "image"}}" 
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>                                       
+										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
                                         {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
 									</div>
 									{{/each}}
