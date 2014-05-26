@@ -324,8 +324,20 @@ var Base_Collection_View = Backbone.View
 			 * @param base_model
 			 *            backbone model object
 			 */
-			appendItem : function(base_model)
+			appendItem : function(base_model, append)
 			{
+
+				// This is required when add event is raised, in that case
+				// updating document fragment does not update view. And on the
+				// other hand, append item should definitely be called from
+				// appendItemOnAddEvent because there are many places where
+				// appenditem is overridden and that needs to be called on newly
+				// added model
+				if (append)
+				{
+					$(this.model_list_element).append(this.createListView(base_model).render().el);
+					return;
+				}
 
 				this.model_list_element_fragment.appendChild(this.createListView(base_model).render().el);
 			},
@@ -349,8 +361,7 @@ var Base_Collection_View = Backbone.View
 				return itemView
 			}, appendItemOnAddEvent : function(base_model)
 			{
-
-				$(this.model_list_element).append(this.createListView(base_model).render().el);
+				this.appendItem(base_model, true);
 				/*
 				 * if(this.collection && this.collection.length) {
 				 * if(this.collection.at(0).attributes.count)
@@ -489,7 +500,5 @@ var Base_Collection_View = Backbone.View
 				// For the first time fetch, disable Scroll bar if results are
 				// lesser
 
-
 				return this;
-			},
-		});
+			}, });
