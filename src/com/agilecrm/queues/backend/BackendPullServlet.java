@@ -28,7 +28,7 @@ public class BackendPullServlet extends HttpServlet
     {
 
 	// Pull queue name
-	final String queueName = req.getParameter("queue_name");
+	String queueName = req.getParameter("queue_name");
 
 	if (StringUtils.isBlank(queueName))
 	    return;
@@ -39,18 +39,11 @@ public class BackendPullServlet extends HttpServlet
 	    PullScheduler pullScheduler = new PullScheduler(queueName, false);
 	    pullScheduler.run();
 
-	    // To run again in same request as separate thread
-	    Thread thread = ThreadManager.createBackgroundThread(new Runnable()
-	    {
-		public void run()
-		{
-		    System.out.println("Calling again run method from thread...");
+	    // Runs background threads
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
 
-		    PullScheduler pullScheduler = new PullScheduler(queueName, false);
-		    pullScheduler.run();
-		}
-	    });
-	    thread.start();
 	}
 	catch (Exception e)
 	{
@@ -59,4 +52,26 @@ public class BackendPullServlet extends HttpServlet
 	}
 
     }
+
+    /**
+     * Runs background thread which can outlive the request
+     * 
+     * @param queueName
+     */
+    public void runBackgroudnThread(final String queueName)
+    {
+	// To run again in same request as separate thread
+	Thread thread = ThreadManager.createBackgroundThread(new Runnable()
+	{
+	    public void run()
+	    {
+		System.out.println("Calling again run method from thread...");
+
+		PullScheduler pullScheduler = new PullScheduler(queueName, false);
+		pullScheduler.run();
+	    }
+	});
+	thread.start();
+    }
+
 }
