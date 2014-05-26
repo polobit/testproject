@@ -22,6 +22,7 @@ public class UnsubscribeStatusUtil
 	    if (!StringUtils.isBlank(campaignId) && campaignId.equals(itr.next().campaign_id))
 	    {
 		itr.remove();
+		break;
 	    }
 	}
 
