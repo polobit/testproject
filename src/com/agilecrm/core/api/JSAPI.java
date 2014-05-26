@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -1106,9 +1108,13 @@ public class JSAPI
     @Path("web-rules")
     @GET
     @Produces("application / x-javascript")
-    public String getWebRules()
+    public String getWebRules(@Context HttpServletRequest request)
     {
 	List<WebRule> webRules = WebRuleUtil.getAllWebRules();
+
+	// Fill Countries
+	webRules = WebRuleUtil.fillCountry(webRules, request);
+
 	ObjectMapper mapper = new ObjectMapper();
 	try
 	{
