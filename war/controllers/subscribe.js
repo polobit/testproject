@@ -124,7 +124,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			saveCallback : function(){
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top", "6000");
+				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}  
 			
 		});
@@ -206,7 +206,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			saveCallback : function(data)
 			{
 				window.navigate("subscribe", { trigger : true });
-				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top", "6000");
+				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 			
 		});
