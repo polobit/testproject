@@ -24,7 +24,10 @@ function loadWidgets(el, contact)
 		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
-				set_up_widgets(el, widgets_el);
+				head.load("css/misc/agile-widgets.css", function(){
+					set_up_widgets(el, widgets_el);
+				})
+				
 			} });
 
 		/*
@@ -171,11 +174,14 @@ function set_up_widgets(el, widgets_el)
 		 */
 		$('#' + model.get('selector'), widgets_el).data('model', model);
 
+		var contact_id = App_Contacts.contactDetailView.model.get("id");
 		/*
 		 * Checks if widget is minimized, if minimized script is not loaded
 		 */
 		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
-			$.get(url, "script");
+		{
+			queueGetRequest("_widgets_"+contact_id , url, "script");
+		}
 
 		/*
 		 * For custom widgets we load the scripts using HTTP connections and
