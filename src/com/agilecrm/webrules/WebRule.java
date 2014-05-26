@@ -30,10 +30,6 @@ public class WebRule
     @NotSaved(IfDefault.class)
     public String rule_type = "WEBRULE";
 
-    // Store country
-    @NotSaved(IfDefault.class)
-    public String country = null;
-
     @NotSaved(IfDefault.class)
     @Embedded
     public List<SearchRule> rules = new ArrayList<SearchRule>();
@@ -42,6 +38,10 @@ public class WebRule
     @Embedded
     @Unindexed
     public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
+
+    // Added to send the country to the client - this is not saved
+    @NotSaved
+    public String country = "";
 
     public static ObjectifyGenericDao<WebRule> dao = new ObjectifyGenericDao<WebRule>(WebRule.class);
 

@@ -120,7 +120,14 @@ var SubscribeRouter = Backbone.Router.extend({
 	 */
 	updatePlan : function()
 	{
-		var update_plan = new Base_Model_View({ url : "core/api/subscription", template : "update-plan", window : 'subscribe' });
+		var update_plan = new Base_Model_View({ url : "core/api/subscription", template : "update-plan",  
+			
+			saveCallback : function(){
+				window.navigate("subscribe", { trigger : true });
+				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top", "6000");
+			}  
+			
+		});
 
 		$('#content').html(update_plan.render().el);
 	},
@@ -180,10 +187,11 @@ var SubscribeRouter = Backbone.Router.extend({
 			return;
 		}
 
+		var window = this;
 		// Plan json is posted along with credit card details
 		var plan = plan_json
 
-		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", window : 'subscribe', isNew : true, data : plan,
+		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", isNew : true, data : plan,
 			postRenderCallback : function(el)
 			{
 				// Discount
@@ -194,7 +202,14 @@ var SubscribeRouter = Backbone.Router.extend({
 				{
 					print_country($("#country", el));
 				});
-			} });
+			},
+			saveCallback : function(data)
+			{
+				window.navigate("subscribe", { trigger : true });
+				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top", "6000");
+			}
+			
+		});
 
 		// Prepend Loading
 		$('#content').html(upgrade_plan.render().el);
