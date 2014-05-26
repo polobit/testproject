@@ -1112,21 +1112,17 @@ public class JSAPI
     @Path("web-rules")
     @GET
     @Produces("application / x-javascript")
-    public String getWebRules(@Context HttpServletRequest req)
+    public String getWebRules(@Context HttpServletRequest request)
     {
-	String countryHeader = req.getHeader("X-AppEngine-Country");
 	List<WebRule> webRules = WebRuleUtil.getAllWebRules();
-	List<WebRule> webRulesWithCountry = new ArrayList<WebRule>();
-	for (int i = 0; i < webRules.size(); i++)
-	{
-	    WebRule webRule = webRules.get(i);
-	    webRule.country = countryHeader;
-	    webRulesWithCountry.add(webRule);
-	}
+
+	// Fill Countries
+	webRules = WebRuleUtil.fillCountry(webRules, request);
+
 	ObjectMapper mapper = new ObjectMapper();
 	try
 	{
-	    return mapper.writeValueAsString(webRulesWithCountry);
+	    return mapper.writeValueAsString(webRules);
 	}
 	catch (Exception e)
 	{

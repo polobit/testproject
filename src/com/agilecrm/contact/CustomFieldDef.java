@@ -131,6 +131,7 @@ public class CustomFieldDef
 	    // Fetches all custom fields to check label duplicates
 	    for (CustomFieldDef customField : dao.fetchAll())
 	    {
+
 		if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id
 			&& customField.scope == this.scope)
 		{
