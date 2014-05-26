@@ -64,8 +64,8 @@ public class BulkOperationsAPI
     @Path("delete/contacts/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter, @PathParam("current_user") Long current_user_id)
-	    throws JSONException
+    public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user_id) throws JSONException
     {
 
 	Integer count = 0;
@@ -86,13 +86,13 @@ public class BulkOperationsAPI
 		if (!StringUtils.isEmpty(previousCursor))
 		{
 		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user_id);
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
 		    continue;
 		}
 
 		break;
-	    }
-	    while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	}
 	else if (!StringUtils.isEmpty(model_ids))
@@ -119,8 +119,9 @@ public class BulkOperationsAPI
     @Path("/change-owner/{new_owner}/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids, @PathParam("new_owner") String new_owner,
-	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
+    public void changeOwnerToContacts(@FormParam("contact_ids") String contact_ids,
+	    @PathParam("new_owner") String new_owner, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
     {
 
 	Integer count = 0;
@@ -142,13 +143,13 @@ public class BulkOperationsAPI
 		{
 		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user);
 
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
 		    continue;
 		}
 
 		break;
-	    }
-	    while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	}
 	else if (!StringUtils.isEmpty(contact_ids))
@@ -175,8 +176,9 @@ public class BulkOperationsAPI
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids, @PathParam("workflow-id") Long workflowId,
-	    @FormParam("filter") String filter, @PathParam("current_user_id") Long current_user_id) throws JSONException
+    public void subscribeContactsBulk(@FormParam("contact_ids") String contact_ids,
+	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
+	    @PathParam("current_user_id") Long current_user_id) throws JSONException
     {
 	List<Contact> contact_list = null;
 	int count = 0;
@@ -200,8 +202,7 @@ public class BulkOperationsAPI
 		    continue;
 		}
 		break;
-	    }
-	    while (contact_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	    } while (contact_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	}
 
@@ -231,8 +232,8 @@ public class BulkOperationsAPI
     @Path("contact/tags/{current_user}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString, @FormParam("filter") String filter,
-	    @PathParam("current_user") Long current_user) throws JSONException
+    public void addTagsToContacts(@FormParam("contact_ids") String contact_ids, @FormParam("data") String tagsString,
+	    @FormParam("filter") String filter, @PathParam("current_user") Long current_user) throws JSONException
     {
 	System.out.println(filter);
 	System.out.println("current user : " + current_user);
@@ -282,8 +283,7 @@ public class BulkOperationsAPI
 		    continue;
 		}
 		break;
-	    }
-	    while (contacts.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	    } while (contacts.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	}
 
@@ -295,7 +295,80 @@ public class BulkOperationsAPI
 	    count += contacts.size();
 	}
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray).toString(), String.valueOf(count));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
+		.toString(), String.valueOf(count));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Path("contact/remove-tags/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void removeTagsFromContacts(@FormParam("contact_ids") String contact_ids,
+	    @FormParam("data") String tagsString, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
+    {
+	System.out.println(filter);
+	System.out.println("current user : " + current_user);
+	System.out.println("domain : " + NamespaceManager.get());
+	System.out.println(contact_ids);
+	System.out.println(tagsString);
+
+	if (StringUtils.isEmpty(tagsString))
+	    return;
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+
+	String[] tagsArray = null;
+	try
+	{
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), String[].class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (tagsArray == null)
+	    return;
+
+	List<Contact> contacts = null;
+	int count = 0;
+
+	if (!StringUtils.isEmpty(filter))
+	{
+	    contacts = BulkActionUtil.getFilterContacts(filter, null, current_user);
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    do
+	    {
+		count += contacts.size();
+		previousCursor = contacts.get(contacts.size() - 1).cursor;
+
+		ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+		    contacts = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user);
+		    currentCursor = contacts.size() > 0 ? contacts.get(contacts.size() - 1).cursor : null;
+		    continue;
+		}
+		break;
+	    } while (contacts.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+
+	}
+
+	else if (!StringUtils.isEmpty(contact_ids))
+	{
+	    contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+
+	    ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
+	    count += contacts.size();
+	}
+
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
+		.toString(), String.valueOf(count));
     }
 
     /**
@@ -360,8 +433,9 @@ public class BulkOperationsAPI
     @Path("/remove-active-subscribers/{campaign_id}/{current_user_id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void removeActiveSubscribersOfCampaign(@FormParam("ids") String contactIds, @PathParam("campaign_id") String campaign_id,
-	    @FormParam("filter") String allActiveSubscribers) throws JSONException
+    public void removeActiveSubscribersOfCampaign(@FormParam("ids") String contactIds,
+	    @PathParam("campaign_id") String campaign_id, @FormParam("filter") String allActiveSubscribers)
+	    throws JSONException
     {
 
 	// to show in notification
@@ -370,7 +444,8 @@ public class BulkOperationsAPI
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
 	{
-	    List<Contact> activeContacts = CampaignSubscribersUtil.getAllCampaignSubscribers(campaign_id + "-" + CampaignStatus.Status.ACTIVE);
+	    List<Contact> activeContacts = CampaignSubscribersUtil.getAllCampaignSubscribers(campaign_id + "-"
+		    + CampaignStatus.Status.ACTIVE);
 
 	    contactSize = activeContacts.size();
 
@@ -383,7 +458,8 @@ public class BulkOperationsAPI
 		CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), campaign_id, Status.REMOVED);
 	    }
 
-	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS, String.valueOf(contactSize));
+	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
+		    String.valueOf(contactSize));
 	    return;
 	}
 
@@ -419,7 +495,8 @@ public class BulkOperationsAPI
     @Path("/contacts/send-email/{current_user_id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void sendEmail(@PathParam("current_user_id") Long currentUserId, @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
+    public void sendEmail(@PathParam("current_user_id") Long currentUserId,
+	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
 	    @FormParam("data") String data) throws JSONException
     {
 	int count = 0;
@@ -446,13 +523,13 @@ public class BulkOperationsAPI
 		{
 		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, currentUserId);
 
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
 		    continue;
 		}
 
 		break;
-	    }
-	    while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	}
 	else if (!StringUtils.isEmpty(contact_ids))
@@ -485,8 +562,9 @@ public class BulkOperationsAPI
     @Path("/contacts/export-contacts-csv/{current_user_id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void exportContactsCSV(@PathParam("current_user_id") Long currentUserId, @FormParam("contact_ids") String contact_ids,
-	    @FormParam("filter") String filter, @FormParam("data") String data) throws JSONException
+    public void exportContactsCSV(@PathParam("current_user_id") Long currentUserId,
+	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
+	    @FormParam("data") String data) throws JSONException
     {
 	int count = 0;
 
@@ -530,13 +608,13 @@ public class BulkOperationsAPI
 		{
 		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, currentUserId);
 
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor : null;
+		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
+			    : null;
 		    continue;
 		}
 
 		break;
-	    }
-	    while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
 
 	    // Close channel after contacts completed
 	    ContactExportBlobUtil.editExistingBlobFile(path, null, true);
