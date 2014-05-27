@@ -289,7 +289,7 @@ function validate_insertion(models, timelineViewMore){
 	 * it goes to catch block and adds the data to the collection
 	 */
 	try{
-		head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
+		head.load(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", "css/misc/agile-timline.css", function(){
 		
 
 			if($('#timeline').isotope()) {
@@ -435,7 +435,7 @@ function setup_timeline(models, el, callback) {
 	// Load plugins for timeline	
 	
 		
-	 head.js(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", function(){
+	 head.load(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", "css/misc/agile-timline.css", function(){
 		
 		 /*
 		 * Defines the layout and its dimensions, container size and
