@@ -60,7 +60,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			id = (id && id == "coupon") ? id : "";
 			showCouponCodeContainer(id);
 
-			head.load(CSS_PATH + 'css/jslider.css', LIB_PATH + 'lib/jquery.slider.min.js', function()
+			head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
 			{
 				if ($.isEmptyObject(data))
 					setPlan("free");
