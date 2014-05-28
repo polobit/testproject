@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 
 public class UnsubscribeStatusUtil
 {
@@ -27,5 +29,11 @@ public class UnsubscribeStatusUtil
 	}
 
 	contact.save();
+    }
+
+    public static void addUnsubscribeLog(String campaignId, String contactId, String message)
+    {
+	// Add log
+	LogUtil.addLogToSQL(campaignId, contactId, message, LogType.UNSUBSCRIBED.toString());
     }
 }
