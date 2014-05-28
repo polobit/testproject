@@ -11,7 +11,12 @@
                 <div class="control-group">
                     <label class="control-label">Label <span class="field_req">*</span></label> 
                     <div class="controls">
-                        <input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars" />
+					{{#if id}}
+                        <input type="text" id="label" placeholder="Label" class="required noSpecialChars" value="{{../field_label}}" disabled / >
+						<input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars hide" value="{{../field_label}}" / >
+						{{else}}
+							<input name="field_label" type="text" id="label" placeholder="Label" class="required noSpecialChars" value="{{field_label}}"/>
+					{{/if}}
                     </div>
                 </div>
   				<div class="control-group">
@@ -66,6 +71,9 @@
                         <input name="validationRule" type="hidden" id="validationRule" placeholder="Validation Rule" class="required" value="*" />
                     </div>
                 </div>
+				{{#if id}}
+					<input name="id" value="{{id}}" class="hide"></input>
+				{{/if}}
             </fieldset>
         </form>
     </div>
@@ -129,6 +137,7 @@
                         <input name="validationRule" type="hidden" id="validationRule" placeholder="Validation Rule" class="required" value="*" />
                     </div>
                 </div>
+			
             </fieldset>
         </form>
     </div>

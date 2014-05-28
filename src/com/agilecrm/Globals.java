@@ -77,13 +77,16 @@ public class Globals
     // public static final String STRIPE_CLIENT_ID =
     // "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
+    // Xero live keys
+    public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
+    public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1";
 
     public static final String BULK_BACKENDS = "bulk";
     public static final String NORMAL_BACKENDS = "normal";

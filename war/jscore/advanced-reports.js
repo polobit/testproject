@@ -9,7 +9,7 @@
  */
 function initFunnelCharts(callback)
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 	{
 
 		// Bootstrap date range picker.

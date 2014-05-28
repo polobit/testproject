@@ -53,7 +53,7 @@ $(function()
 	 * On click of telephone icon on contact page before phone number at top
 	 * right panel, will make SIP call to same number.
 	 */
-	$(".contact-make-call").die().live("click", function(e)
+	$(".contact-make-sip-call").die().live("click", function(e)
 	{
 		e.preventDefault();
 

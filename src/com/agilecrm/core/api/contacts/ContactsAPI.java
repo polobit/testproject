@@ -34,6 +34,7 @@ import com.agilecrm.cases.Case;
 import com.agilecrm.cases.util.CaseUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactFullDetails;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.util.ContactUtil;
@@ -230,6 +231,14 @@ public class ContactsAPI
     {
 	Contact contact = ContactUtil.getContact(id);
 	return contact;
+    }
+
+    @Path("related-entities/{contact-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ContactFullDetails getContactRelatedEnties(@PathParam("contact-id") Long id)
+    {
+	return new ContactFullDetails(id);
     }
 
     /**

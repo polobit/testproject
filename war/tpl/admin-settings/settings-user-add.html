@@ -42,16 +42,7 @@
     						</label>
     					</div>
     				</div>
-    
 
-				<div class="control-group">
-    					<div class="controls">
-    						<label class="checkbox">
-    							<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
-                           		Admin privilege (configure the account and add or remove users)
-    						</label>
-    					</div>
-    				</div>
 					<div id="accordion">
 					  <div class="panel-heading controls">
      					 <h4 class="panel-title">
@@ -150,6 +141,15 @@
 					{{/unless}}
 					{{/unless}}
 					-->
+					<div class="control-group">
+    					<div class="controls">
+    						<label class="checkbox">
+    							<input type="checkbox" id="Admin" name='is_admin' value='true'/> 
+                           		Administrator<br/><small>Allow access to admin settings (configuration and manage users)</small>
+    						</label>
+    					</div>
+    				</div>
+
 					<div class="control-group" style="margin-top:-20px">
 						<div class="controls">
 						<div class="multiple-checkbox"  name="menu_scopes" style="padding-top:5px">

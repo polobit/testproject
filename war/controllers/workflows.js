@@ -283,7 +283,7 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = this.workflow_list_view.collection.get(id);
 				var workflowName = this.workflow_model.get("name");
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
 
 					// Load Reports Template

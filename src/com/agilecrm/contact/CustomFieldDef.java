@@ -127,15 +127,17 @@ public class CustomFieldDef
     public void save() throws Exception
     {
 
-	// Fetches all custom fields to check label duplicates
-	for (CustomFieldDef customField : dao.fetchAll())
-	{
-	    if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id
-		    && customField.scope == this.scope)
+	if (id == null)
+	    // Fetches all custom fields to check label duplicates
+	    for (CustomFieldDef customField : dao.fetchAll())
 	    {
-		throw new Exception();
+
+		if (customField.field_label.equalsIgnoreCase(this.field_label) && customField.id != id
+			&& customField.scope == this.scope)
+		{
+		    throw new Exception();
+		}
 	    }
-	}
 
 	dao.put(this);
     }

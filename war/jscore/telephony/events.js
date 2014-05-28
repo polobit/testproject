@@ -107,7 +107,11 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			showCallNotyPopup("register", 'information', "SIP: You are now registered to make and receive calls successfully.", 5000);
 
 			// call action and telephone icon, Make visible.
-			$(".contact-make-call").show();
+			$(".contact-make-sip-call").show();
+			
+			// Contact with tel: is hidden
+			$(".contact-make-call").hide();
+			
 			$(".make-call").show();
 
 			// enable notifications if not already done
