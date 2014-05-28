@@ -223,6 +223,16 @@
 		<servlet-name>Stripe Webhook</servlet-name>
 		<url-pattern>/backend/stripewebhook/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Mandrill Webhook</servlet-name>
+		<servlet-class>com.thirdparty.mandrill.webhook.MandrillWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Mandrill Webhook</servlet-name>
+		<url-pattern>/backend/mandrillwebhook/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>

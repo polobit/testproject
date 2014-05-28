@@ -22,6 +22,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.deferred.TagsDeferredTask;
+import com.agilecrm.contact.email.EmailBounceStatus;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
@@ -231,7 +232,13 @@ public class Contact extends Cursor
      */
     @NotSaved(IfDefault.class)
     @Embedded
+    @Indexed
     public List<UnsubscribeStatus> unsubscribeStatus = new ArrayList<UnsubscribeStatus>();// Dao
+
+    @NotSaved(IfDefault.class)
+    @Embedded
+    @Indexed
+    public List<EmailBounceStatus> emailBounceStatus = new ArrayList<EmailBounceStatus>();
 
     public static ObjectifyGenericDao<Contact> dao = new ObjectifyGenericDao<Contact>(Contact.class);
 
