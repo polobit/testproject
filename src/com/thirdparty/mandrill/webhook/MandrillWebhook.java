@@ -1,5 +1,7 @@
 package com.thirdparty.mandrill.webhook;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -128,6 +130,8 @@ public class MandrillWebhook extends HttpServlet
 	try
 	{
 
+	    boolean isNew = true;
+
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
 	    if (contact == null)
@@ -136,8 +140,25 @@ public class MandrillWebhook extends HttpServlet
 		return;
 	    }
 
-	    EmailBounceStatus emailBounceStatus = new EmailBounceStatus(email, emailBounceType);
-	    contact.emailBounceStatus.add(emailBounceStatus);
+	    List<EmailBounceStatus> emailBounceList = contact.emailBounceStatus;
+
+	    for (EmailBounceStatus emailBounceStatus : emailBounceList)
+	    {
+		if (email.equals(emailBounceStatus.email))
+		{
+		    emailBounceStatus.emailBounceType = emailBounceType;
+		    emailBounceStatus.time = System.currentTimeMillis() / 1000;
+		    isNew = false;
+		    break;
+		}
+	    }
+
+	    if (isNew)
+	    {
+		EmailBounceStatus emailBounceStatus = new EmailBounceStatus(email, emailBounceType);
+		contact.emailBounceStatus.add(emailBounceStatus);
+	    }
+
 	    contact.save();
 	}
 	catch (Exception e)
