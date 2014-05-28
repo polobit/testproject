@@ -142,8 +142,15 @@ function our_domain_sync()
 			_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
 
 		_agile.set_email(CURRENT_DOMAIN_USER['email']);
-
 		
+		// Track page view code
+		_agile.track_page_view();
+
+		// Clicky code
+		head.js('//static.getclicky.com/js', function() {
+			
+			try{ clicky.init(100729733); }catch(e){};
+		});
 		
 		var domain = readCookie(DOMAIN_COOKIE_FOR_WEBSITE);
 		
