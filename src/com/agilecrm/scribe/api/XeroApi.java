@@ -13,18 +13,31 @@ import org.scribe.model.Verb;
 public class XeroApi extends DefaultApi10a
 {
 
+	/**
+	 * Authorize URL of Stripe for OAuth 1.0
+	 */
 	private static final String AUTHORIZATION_URL = "https://api.xero.com/oauth/Authorize?oauth_token=%s";
+
+	/**
+	 * URL of Xero to request for access token
+	 */
+	private static final String ACCESSTOKEN_ENDPOINT_URL = "https://api.xero.com/oauth/AccessToken";
+
+	/**
+	 * URL of Xero to request for request token
+	 */
+	private static final String REQUESTTOKEN_ENDPOINT_URL = "https://api.xero.com/oauth/RequestToken";
 
 	@Override
 	public String getAccessTokenEndpoint()
 	{
-		return "https://api.xero.com/oauth/AccessToken";
+		return ACCESSTOKEN_ENDPOINT_URL;
 	}
 
 	@Override
 	public String getRequestTokenEndpoint()
 	{
-		return "https://api.xero.com/oauth/RequestToken";
+		return REQUESTTOKEN_ENDPOINT_URL;
 	}
 
 	@Override

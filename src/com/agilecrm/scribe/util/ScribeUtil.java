@@ -151,7 +151,7 @@ public class ScribeUtil
 
 		// Gets session and sets attribute "oauth.service" to service type
 		req.getSession().setAttribute("oauth.service", serviceType);
-
+		
 		// if scope is null return service without scope
 		if (scope == null)
 			// Creates a Service, by configuring API key, Secret key

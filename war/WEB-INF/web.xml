@@ -546,4 +546,12 @@
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<url-pattern>/_ah/spi/*</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>OAuthServlet</servlet-name>
+		<servlet-class>com.agilecrm.oauth.OAuthServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OAuthServlet</servlet-name>
+		<url-pattern>/OAuthServlet</url-pattern>
+	</servlet-mapping>
 </web-app>

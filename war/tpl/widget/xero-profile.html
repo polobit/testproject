@@ -3,7 +3,7 @@
 <div class="widget_content">
 	<div  style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
-			<a href="ttps://go.xero.com/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
+			<a href="https://go.xero.com/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
 				{{Contact.FirstName}} {{Contact.LastName}}
 			</b></h4></a>
 		</div>
@@ -38,7 +38,7 @@
 	<div>
 		{{#if Contact.Phones}}
 		{{#each Contact.Phones}}
-			{{#if PhoneNumber}}<i class="icon-phone"></i><a href="tel:{{PhoneCountryCode}}-{{PhoneAreaCode}}-{{PhoneNumber}}" > {{PhoneCountryCode}}-{{PhoneAreaCode}}-{{PhoneNumber}} ({{capFirstLetter PhoneType}})<br> </a>{{/if}}
+			{{#if PhoneNumber}}<i class="icon-phone"></i> {{PhoneCountryCode}}-{{PhoneAreaCode}}-{{PhoneNumber}} ({{capFirstLetter PhoneType}})<br> {{/if}}
 		{{/each}}
 		{{/if}}
 	</div>

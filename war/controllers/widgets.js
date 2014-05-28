@@ -32,6 +32,8 @@ var WidgetsRouter = Backbone.Router
 
 	    "Xero" : "Xero", "Xero/:id" : "Xero",
 
+	    "QuickBooks" : "QuickBooks/:id", "QuickBooks" : "QuickBooks",
+
 	    "google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar" },
 
 	    /**
@@ -419,7 +421,7 @@ var WidgetsRouter = Backbone.Router
 	    },
 
 	    /**
-	     * Manages widget added by user
+	     * Manages Xero widget
 	     */
 
 	    Xero : function(id)
@@ -477,6 +479,20 @@ var WidgetsRouter = Backbone.Router
 
 		    // fill_form(id, "Xero", 'xero-login');
 
+		}
+
+	    },
+
+	    /**
+	     * Manages QuickBooks widget
+	     */
+	    QuickBooks : function(id)
+	    {
+		if (!id)
+		    show_set_up_widget("QuickBooks", 'quickbooks-login',
+			    '/OAuthServlet?service=quickbooks&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks");
+		else
+		{
 		}
 
 	    },
