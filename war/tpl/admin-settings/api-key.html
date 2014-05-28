@@ -22,8 +22,8 @@
 Here is your API key you can use to access through various clients<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-        				<pre class="prettyprint linenums">
-'{{api_key}}'
+        				<pre class="prettyprint">
+{{api_key}}
 </pre>
     				</div>
 				</div>
@@ -37,7 +37,7 @@ Here is your API key you can use to access through various clients<div class="cl
     				<div class="span11"><p>
 You can use javascript API to track page views on your site, add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the <b>&lt;/BODY&gt;</b> tag to enable tracking / API methods.
   </p><div class="clearfix"></div><br/>
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
@@ -51,7 +51,7 @@ You can use javascript API to track page views on your site, add / delete contac
 Set Email (Mandatory)<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
  _agile.set_email('jim@example.com');
 </pre>
 	</div>
@@ -60,7 +60,7 @@ Set Email (Mandatory)<div class="clearfix"></div><br/>
 Track Page View<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
  _agile.track_page_view({
    success: function(data) {
      console.log("success");
@@ -75,7 +75,7 @@ Track Page View<div class="clearfix"></div><br/>
 Create Contact<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
  _agile.create_contact({
   "email": "jim@example.com",
   "first_name": "Jim",
@@ -101,7 +101,7 @@ Create Contact<div class="clearfix"></div><br/>
 Delete Contact<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
  _agile.delete_contact('jim@example.com', {
    success: function(data) {
      console.log("success");
@@ -116,7 +116,7 @@ Delete Contact<div class="clearfix"></div><br/>
 Add Property<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
 _agile.set_property({
   "name": "phone",
   "value": "+1-541-754-3010",
@@ -135,7 +135,7 @@ _agile.set_property({
 Add Tag<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
  _agile.add_tag('tags2, tag3, tag4', {
    success: function(data) {
      console.log("success");
@@ -150,7 +150,7 @@ Add Tag<div class="clearfix"></div><br/>
 Remove Tag<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
  _agile.remove_tag('tag4, tag5, tag6', {
    success: function(data) {
      console.log("success");
@@ -165,7 +165,7 @@ Remove Tag<div class="clearfix"></div><br/>
 Add Score<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
-<pre class="prettyprint linenums">
+<pre class="prettyprint">
 _agile.add_score(10, {
   success: function(data) {
     console.log("success");

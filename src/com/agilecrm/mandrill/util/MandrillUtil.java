@@ -41,6 +41,16 @@ public class MandrillUtil
     public static final int COUNT_LIMIT = 500;
 
     /**
+     * Allowed maximum mail json content length
+     */
+    public static final int MAX_CONTENT_SIZE = 8 * 1024 * 1024;
+
+    /**
+     * Minimum To emails content expected to not exceed Max content size
+     */
+    public static final int MIN_TO_EMAILS = 250;
+
+    /**
      * Mandrill merge vars surrounded by *| |*. Merge vars are case-insensitive.
      * 
      */
@@ -98,6 +108,7 @@ public class MandrillUtil
 	MandrillDeferredTask firstMandrillDefferedTask = (MandrillDeferredTask) SerializationUtils
 		.deserialize(firstTaskHandle.getPayload());
 
+	// Initialize mailJSON with common fields
 	JSONObject mailJSON = getMandrillMailJSON(firstMandrillDefferedTask.subaccount,
 		firstMandrillDefferedTask.fromEmail, firstMandrillDefferedTask.fromName,
 		firstMandrillDefferedTask.replyTo);
@@ -105,11 +116,17 @@ public class MandrillUtil
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();
 
+	// To split json array
+	JSONArray tempArray = new JSONArray();
+	boolean flag = false;
+
 	try
 	{
 	    //
 	    for (TaskHandle task : tasks)
 	    {
+		flag = false;
+
 		MandrillDeferredTask mandrillDeferredTask = (MandrillDeferredTask) SerializationUtils.deserialize(task
 			.getPayload());
 
@@ -126,20 +143,43 @@ public class MandrillUtil
 
 		// To array
 		toArray.put(new JSONObject().put(Mandrill.MANDRILL_RECIPIENT_EMAIL, mandrillDeferredTask.to));
+
+		// If exceeds Content Size limit, split mailJSON
+		if (toArray.length() > MIN_TO_EMAILS && mergeVarsArray.toString().length() >= MAX_CONTENT_SIZE)
+		{
+		    System.err.println("Length Exceeded. Splitting tasks...");
+
+		    tempArray.put(new JSONObject().put("mergeVarsArray", mergeVarsArray).put("toArray", toArray));
+
+		    mergeVarsArray = new JSONArray();
+		    toArray = new JSONArray();
+
+		    flag = true;
+		}
+
 	    }
 
-	    mailJSON.getJSONObject(Mandrill.MANDRILL_MESSAGE).put(Mandrill.MANDRILL_TO, toArray)
-		    .put(Mandrill.MANDRILL_MERGE_VARS, mergeVarsArray).put(Mandrill.MANDRILL_MERGE, true)
-		    .put(Mandrill.MANDRILL_PRESERVE_RECIPIENTS, false);
+	    // Append mergeVars which not exceeded limit
+	    if (!flag)
+		tempArray.put(new JSONObject().put("mergeVarsArray", mergeVarsArray).put("toArray", toArray));
+
+	    // Iterates over splitted json array and send batch of emails
+	    for (int i = 0, len = tempArray.length(); i < len; i++)
+	    {
+		mailJSON.getJSONObject(Mandrill.MANDRILL_MESSAGE)
+			.put(Mandrill.MANDRILL_TO, tempArray.getJSONObject(i).getJSONArray("toArray"))
+			.put(Mandrill.MANDRILL_MERGE_VARS, tempArray.getJSONObject(i).getJSONArray("mergeVarsArray"))
+			.put(Mandrill.MANDRILL_MERGE, true).put(Mandrill.MANDRILL_PRESERVE_RECIPIENTS, false);
+
+		HttpClientUtil.accessPostURLUsingHttpClient(Mandrill.MANDRILL_API_POST_URL
+			+ Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
+	    }
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Got exception in createJSONandSend " + e.getMessage());
 	    e.printStackTrace();
 	}
-
-	HttpClientUtil.accessPostURLUsingHttpClient(
-		Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 
 	// Records email sent count
 	AccountEmailStatsUtil.recordAccountEmailStats(firstMandrillDefferedTask.subaccount, tasks.size());
@@ -349,7 +389,7 @@ public class MandrillUtil
     {
 	try
 	{
-	    for (int i = 0; i < toArray.length(); i++)
+	    for (int i = toArray.length() - 1; i >= 0; i--)
 	    {
 		if (StringUtils.equals(toEmail, toArray.getJSONObject(i).getString("email")))
 		    return true;
@@ -358,6 +398,7 @@ public class MandrillUtil
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured while comparing To..." + e.getMessage());
+	    e.printStackTrace();
 	}
 
 	return false;

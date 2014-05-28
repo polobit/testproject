@@ -14,17 +14,40 @@ import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 
+/**
+ * <ContactFullDetails> loads deals, tasks, notes and cases of a particular
+ * contact. It should be initiated with contact id for which related entites
+ * should be returned. Designed to use for timeline in contact details page
+ * 
+ * @author yaswanth
+ * 
+ */
 @XmlRootElement
 public class ContactFullDetails
 {
     // Takes contact id
     Long contact_id;
 
+    public ContactFullDetails()
+    {
+
+    }
+
+    /**
+     * Takes contact id based on which all related entities are fetched
+     * 
+     * @param id
+     */
     public ContactFullDetails(Long id)
     {
 	contact_id = id;
     }
 
+    /**
+     * Fetches notes related to contact
+     * 
+     * @return
+     */
     @XmlElement
     public List<Note> getNotes()
     {
@@ -40,12 +63,22 @@ public class ContactFullDetails
 	}
     }
 
+    /**
+     * Fetches deals
+     * 
+     * @return
+     */
     @XmlElement
     public List<Opportunity> getDeals()
     {
 	return OpportunityUtil.getDeals(contact_id, null, null);
     }
 
+    /**
+     * Fetches taks
+     * 
+     * @return
+     */
     @XmlElement
     public List<Task> getTasks()
     {
@@ -54,8 +87,7 @@ public class ContactFullDetails
 	    return TaskUtil.getContactTasks(contact_id);
 	}
 	catch (Exception e)
-	{
-	    // TODO Auto-generated catch block
+	{ // TODO Auto-generated catch block
 	    e.printStackTrace();
 	    return new ArrayList<Task>();
 	}
@@ -64,6 +96,6 @@ public class ContactFullDetails
     @XmlElement
     public List<Case> getCases()
     {
-	return CaseUtil.getCases();
+	return CaseUtil.getCases(contact_id, null, null);
     }
 }

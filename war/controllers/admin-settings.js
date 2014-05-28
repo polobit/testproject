@@ -34,7 +34,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"email-stats" : "emailStats",
 
 	/* Web to Lead */
-	"web-to-lead" : "webToLead"
+	"integrations" : "integrations"
 
 	},
 
@@ -291,7 +291,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/**
 	 * Web to lead links to website pages
 	 */
-	webToLead : function()
+	integrations : function()
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
@@ -301,7 +301,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$("#content").html(getTemplate("admin-settings"), {});
 		$('#content').find('#admin-prefs-tabs-content').html(getTemplate("admin-settings-web-to-lead"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
-		$('#content').find('.web-to-lead-tab').addClass('active');
+		$('#content').find('.integrations-tab').addClass('active');
 	},
 
 

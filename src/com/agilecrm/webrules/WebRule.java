@@ -39,6 +39,10 @@ public class WebRule
     @Unindexed
     public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
 
+    // Added to send the country to the client - this is not saved
+    @NotSaved
+    public String country = "";
+
     public static ObjectifyGenericDao<WebRule> dao = new ObjectifyGenericDao<WebRule>(WebRule.class);
 
     public WebRule()

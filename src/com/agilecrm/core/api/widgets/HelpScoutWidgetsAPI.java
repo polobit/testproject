@@ -75,6 +75,12 @@ public class HelpScoutWidgetsAPI
 	}
 	catch (RuntimeException e)
 	{
+	    // InvalidApiKeyException is added to the message of runtime
+	    // exception by in helpScout-api.jar instead of raising it as a
+	    // exception.
+	    if (e.getMessage().indexOf("InvalidApiKeyException") > 0)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			.entity("Invalid API Key.").build());
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 		    .entity("Request timed out. Refresh and Please try again.").build());
 	}

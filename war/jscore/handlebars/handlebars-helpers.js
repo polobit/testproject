@@ -942,10 +942,10 @@ $(function()
 				if (properties_count != 0)
 
 				    el = el
-					    .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
+					    .concat('<div style="display:inline;padding-right: 0px!important;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8 contact-detail-entity-list"><div style="padding-top:3px;"><span>');
 				else
 				    el = el
-					    .concat('<div style="display:inline;padding-right: 10px;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
+					    .concat('<div style="display:inline;display: inline-block;padding-bottom: 2px; line-height: 20px;" class="span8"><div><span>');
 
 				$.each(address, function(key, val)
 				{
@@ -2397,9 +2397,10 @@ $(function()
     });
 
     /**
-     * Safari browser doesn't supporting few CSS properties like margin-top, margin-bottom etc.
-     * So this helper is used to add compatible CSS properties to Safari
-     **/
+     * Safari browser doesn't supporting few CSS properties like margin-top,
+     * margin-bottom etc. So this helper is used to add compatible CSS
+     * properties to Safari
+     */
     Handlebars.registerHelper("isSafariBrowser", function(options)
     {
 
@@ -2411,7 +2412,7 @@ $(function()
 
     /**
      * give custome status base on xerotype
-     **/
+     */
 
     Handlebars.registerHelper('xeroType', function(type)
     {
@@ -2420,7 +2421,7 @@ $(function()
 
     /**
      * give custom type to xero type
-     **/
+     */
     Handlebars.registerHelper('xeroTypeToolTip', function(type)
     {
 	return (type == "ACCPAY") ? "Payable" : "Receivable";
@@ -2428,7 +2429,7 @@ $(function()
 
     /**
      * gives first latter capital for given input
-     **/
+     */
     Handlebars.registerHelper('capFirstLetter', function(data)
     {
 	var temp = data.toLowerCase();
@@ -2452,6 +2453,6 @@ $(function()
     {
 
 	return Number(data).toLocaleString('en');
-	//data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); 
+	// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     });
 });

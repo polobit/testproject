@@ -214,6 +214,93 @@ $(function()
 			}
 		});
 	});
+	
+	
+	/**
+	 * Bulk operations - Adds tags' Shows the existing tags with help of
+	 * typeahead to add tags to the selected contacts. Also we can add new tags.
+	 */
+	$("#bulk-tags-remove").live('click', function(e)
+	{
+		e.preventDefault();
+
+		var id_array = get_contacts_bulk_ids();
+
+		// var tags = get_tags('tagsBulkForm');
+
+		Backbone.history.navigate("bulk-tags-remove", { trigger : true });
+
+		setup_tags_typeahead();
+		
+		$('#removeBulkTags').on( "focusout", function(e){
+			e.preventDefault();
+			var tag_input = $(this).val().trim();
+			$(this).val("");
+			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+			{
+				$(this).closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			}
+			
+		});
+		/**
+		 * Add the tags to the selected contacts by sending the contact ids and
+		 * tags through post request to the appropriate url
+		 */
+		$('#removeTagsToContactsBulk').die().live('click', function(e)
+		{
+			e.preventDefault();
+
+			var tags = get_tags('tagsRemoveBulkForm');
+
+			// To add input field value as tags
+			var tag_input = $('#removeBulkTags').val().trim();
+			$('#removeBulkTags').val("");
+			
+			if(tag_input && tag_input.length>=0 && !(/^\s*$/).test(tag_input))
+			{
+				$('#removeBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			}
+			
+		//	$('#addBulkTags').closest(".control-group").find('ul.tags').append('<li class="tag" style="display: inline-block;" data="'+tag_input+'">'+tag_input+'<a class="close" id="remove_tag" tag="'+tag_input+'">&times</a></li>');
+			
+			
+			
+			if(tag_input != "")
+				tags[0].value.push(tag_input);
+
+			if (tags[0].value.length > 0)
+			{
+				// Show loading symbol until model get saved
+				var saveButton=$(this);
+
+				disable_save_button(saveButton);
+				
+				//$('#tagsBulkForm').find('span.save-status').html(LOADING_HTML);
+
+				var url = '/core/api/bulk/update?action_type=REMOVE_TAG';
+				var json = {};
+				json.data = JSON.stringify(tags[0].value);
+				json.contact_ids = id_array;
+
+				postBulkOperationData(url, json, $('#tagsRemoveBulkForm'), undefined, function(data)
+				{
+					enable_save_button(saveButton);
+					// Add the added tags to the collection of tags
+					$.each(tags[0].value, function(index, tag)
+					{
+						tagsCollection.add({ "tag" : tag });
+					});
+				}, 'Tags delete scheduled');
+			}
+			else 
+			{
+				$('#removeBulkTags').focus();
+				$('.error-tags').show().delay(3000).hide(1);
+				return;
+			}
+		});
+	});
+
 
 
 	/**

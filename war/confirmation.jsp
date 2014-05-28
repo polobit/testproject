@@ -10,6 +10,7 @@
 <%@page
 	import="com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType"%>
 <%@page import="com.agilecrm.workflows.unsubscribe.UnsubscribeStatus"%>
+<%@page import="com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil"%>
 <%@page import="com.agilecrm.workflows.status.CampaignStatus.Status"%>
 <%@page import="com.agilecrm.workflows.status.util.CampaignStatusUtil"%>
 <%@page import="com.campaignio.cron.util.CronUtil"%>
@@ -396,10 +397,11 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 
 					    // Add Removed status to contact
 					    CampaignStatusUtil.setStatusOfCampaign(contactId, campaignId, Status.REMOVED);
-
+					    
 					    // Delete Related Crons.
 					    CronUtil.removeTask(campaignId, contactId);
 					    
+					    // Send Confirmation email
 					    HashMap<String, String> map = new HashMap<String, String>();
 						String subjectMessage = "Unsubscribe";
 						
@@ -407,12 +409,18 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						{
 							map.put("company", company);
 							subjectMessage = "Unsubscribed successfully from "+company+" company";
+							
+							// Add unsubscribe log
+							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from all campaigns");
 						}
 					    
 					    if("current".equals(status))
 						{
 							map.put("campaign_name", campaign_name);
 							subjectMessage = "Unsubscribed successfully from Campaign";
+							
+							// Add unsubscribe log
+							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						}
 					    
 					    map.put("domain", NamespaceManager.get());

@@ -7,7 +7,7 @@ var WebreportsRouter = Backbone.Router.extend({
 	routes : {
 	/* Settings */
 	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit",
-	"shopify-rule-add" : "shopify_rule_add", "shopify-rule-edit/:id" : "shopify_rule_edit", "shopify/:url" : "shopify"
+	"shopify-rule-add" : "shopify_rule_add", "shopify-rule-edit/:id" : "shopify_rule_edit", "shopify/:url" : "shopify", "shopify" : "shopify"
 		
 	},
 	webrules : function()

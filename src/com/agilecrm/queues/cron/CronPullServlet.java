@@ -8,9 +8,11 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.queues.PullScheduler;
 import com.agilecrm.queues.util.PullQueueUtil;
+import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.QueueStatistics;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>CronPullServlet</code> is the cron servlet to lease and process
@@ -39,6 +41,7 @@ public class CronPullServlet extends HttpServlet
 
 	// Get queue name
 	String queueName = req.getParameter("q");
+	String isSandbox = req.getParameter("is_sb");
 
 	if (StringUtils.isBlank(queueName))
 	    return;
@@ -49,6 +52,12 @@ public class CronPullServlet extends HttpServlet
 	QueueStatistics qs = queue.fetchStatistics();
 	int tasksCount = qs.getNumTasks();
 
+	if (tasksCount == 0)
+	{
+	    System.out.println("Tasks count is zero...");
+	    return;
+	}
+
 	// Process tasks in backend
 	if (tasksCount > FETCH_LIMIT)
 	{
@@ -58,17 +67,52 @@ public class CronPullServlet extends HttpServlet
 	}
 	else
 	{
-	    try
+
+	    // If from cron
+	    if (StringUtils.isBlank(isSandbox))
 	    {
 		// Process tasks in frontend
 		PullScheduler pullScheduler = new PullScheduler(queueName, true);
 		pullScheduler.run();
 	    }
-	    catch (Exception e)
+	    else
 	    {
-		e.printStackTrace();
-		System.err.println("Exception occured in CronPullServlet PullScheduler " + e.getMessage());
+		// Test purpose in SB
+		try
+		{
+		    // Created a deferred task for report generation
+		    CronPullDeferredTask cronpullDeferredTask = new CronPullDeferredTask(queueName);
+
+		    // Add to queue
+		    Queue q = QueueFactory.getQueue("campaign-queue");
+		    q.add(TaskOptions.Builder.withPayload(cronpullDeferredTask));
+
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		    System.err.println("Exception occured in CronPullServlet PullScheduler " + e.getMessage());
+		}
 	    }
 	}
     }
+}
+
+@SuppressWarnings("serial")
+class CronPullDeferredTask implements DeferredTask
+{
+    String queueName;
+
+    public CronPullDeferredTask(String queueName)
+    {
+	this.queueName = queueName;
+    }
+
+    public void run()
+    {
+	// Process tasks in frontend
+	PullScheduler pullScheduler = new PullScheduler(queueName, true);
+	pullScheduler.run();
+    }
+
 }

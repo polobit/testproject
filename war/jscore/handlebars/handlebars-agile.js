@@ -18,16 +18,17 @@ var Handlebars_Compiled_Templates = {};
  *            context json object to call with the compiled template
  * @param {String}
  *            download verifies whether the template is found or not
- *            
- * @param {callback} 
- * 			 To decide whether templates should be downloaded synchronously or asynchronously.
+ * 
+ * @param {callback}
+ *            To decide whether templates should be downloaded synchronously or
+ *            asynchronously.
  * 
  * @returns compiled html with the context
  */
 function getTemplate(templateName, context, download, callback)
 {
-	var is_async = callback && typeof(callback) == "function";
-	
+	var is_async = callback && typeof (callback) == "function";
+
 	// Check if it is (compiled template) present in templates
 	if (Handlebars_Compiled_Templates[templateName])
 		return Handlebars_Compiled_Templates[templateName](context);
@@ -35,41 +36,43 @@ function getTemplate(templateName, context, download, callback)
 		Handlebars_Compiled_Templates = {};
 
 	// Check if source is available in body
-	if(HANDLEBARS_PRECOMPILATION)
+	if (HANDLEBARS_PRECOMPILATION)
 	{
 		var template = Handlebars.templates[templateName + "-template"];
-		
+
 		// If teplate is found
-		if (template) {
-			
-			// If callback is sent then template is downloaded asynchronously and content is sent 
-			if(is_async)
+		if (template)
+		{
+			// If callback is sent then template is downloaded asynchronously
+			// and content is sent in callback
+			if (is_async)
 			{
 				callback(template(context));
 				return;
 			}
-			
+
 			// console.log("Template " + templateName + " found");
 			return template(context);
 		}
 	}
 	else
+	{
+		var source = $('#' + templateName + "-template").html();
+		if (source)
 		{
-			var source = $('#' + templateName + "-template").html();
-			if (source)
+			var template = Handlebars.compile(source);
+			Handlebars_Compiled_Templates[templateName] = template;
+
+			// If callback is sent then template is downloaded asynchronously
+			// and content is sent
+			if (is_async)
 			{
-				var template = Handlebars.compile(source);
-				Handlebars_Compiled_Templates[templateName] = template;
-				
-				// If callback is sent then template is downloaded asynchronously and content is sent 
-				if(is_async)
-				{
-					callback(template(context));
-					return;
-				}
-				return template(context);
+				callback(template(context));
+				return;
 			}
+			return template(context);
 		}
+	}
 
 	// Check if the download is explicitly set to no
 	if (download == 'no')
@@ -78,20 +81,31 @@ function getTemplate(templateName, context, download, callback)
 		return;
 	}
 
-	// Download
-	var templateHTML = '';
-
 	// Stores urls of templates to be downloaded.
+	var template_relative_urls = getTemplateUrls(templateName);
+
+	if (is_async)
+	{
+		load_templates_async(templateName, context, template_relative_urls, callback);
+		return;
+	}
+
+	load_templates_sync(template_relative_urls);
+
+	return getTemplate(templateName, context, 'no');
+}
+
+/**
+ * If the template is not found in document body, then template paths are built
+ * based on template name and download requests are sent. if it is down-loaded
+ * append it to the document body. And call the function (getTemplate) again by
+ * setting the download parameter to "no"
+ */
+function getTemplateUrls(templateName)
+{
+	// Stores template URLS
 	var template_relative_urls = [];
-	
-	// If starts with settings
-	/**
-	 * If the template is not found in document body, then download the template
-	 * synchronously (stops other browser actions) by verifying the starting
-	 * name of the given templateName, if it is down-loaded append it to the
-	 * document body. And call the function (getTemplate) again by setting the
-	 * download parameter to "no"
-	 */
+
 	if (templateName.indexOf("settings") == 0)
 	{
 		template_relative_urls.push("settings.js");
@@ -111,14 +125,15 @@ function getTemplate(templateName, context, download, callback)
 	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
 	{
 		template_relative_urls.push("contact-detail.js");
-		if(HANDLEBARS_PRECOMPILATION)
+		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("contact-detail.html");
 	}
 	if (templateName.indexOf("contact-filter") == 0 || templateName.indexOf("filter-contacts") == 0)
 	{
 		template_relative_urls.push("contact-filter.js");
 	}
-	if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0  || templateName.indexOf("contacts-custom") == 0 || templateName.indexOf("contacts-grid") == 0)
+	if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0 || templateName.indexOf("contacts-custom") == 0 || templateName
+			.indexOf("contacts-grid") == 0)
 	{
 		template_relative_urls.push("contact-view.js");
 	}
@@ -150,69 +165,79 @@ function getTemplate(templateName, context, download, callback)
 	{
 		template_relative_urls.push("workflow.js");
 	}
-	if (templateName.indexOf("purchase") == 0 || templateName.indexOf("subscription") == 0 || templateName.indexOf("subscribe") == 0 || templateName.indexOf("invoice") == 0)
+	if (templateName.indexOf("purchase") == 0 || templateName.indexOf("subscription") == 0 || templateName.indexOf("subscribe") == 0 || templateName
+			.indexOf("invoice") == 0)
 	{
 		template_relative_urls.push("billing.js");
 	}
-	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("xero")==0 || templateName.indexOf("quickbooks")==0 || templateName.indexOf("widget") == 0 )
+
+	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName
+			.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName
+			.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("xero") == 0 || templateName.indexOf("quickbooks")==0 || templateName.indexOf("widget") == 0)
 	{
 		template_relative_urls.push("widget.js");
 	}
 	if (templateName.indexOf("socialsuite") == 0)
 	{
 		template_relative_urls.push("socialsuite.js");
-	
-		if(HANDLEBARS_PRECOMPILATION)
+
+		if (HANDLEBARS_PRECOMPILATION)
 			template_relative_urls.push("socialsuite.html");
 	}
-
-	
-	if(is_async)
-	{
-		load_templates_async(templateName, context, template_relative_urls, callback);
-		return;
-	}
-	
-	load_templates_sync(template_relative_urls);
-	
-	return getTemplate(templateName, context, 'no');
+	return template_relative_urls;
 }
 
+/**
+ * Takes list of templates to downloaded and pops URL from list and sends
+ * request to download asynchronously. After last URL in list is removed and
+ * download request is sent, on callback of downloaded URL, new request is sent
+ * to fetch next template URL in the list. Continues sending requests till list
+ * is empty.
+ * 
+ * @param templateName
+ * @param context
+ * @param template_relative_urls
+ * @param callback
+ */
 function load_templates_async(templateName, context, template_relative_urls, callback)
 {
-	console.log(context);
+	// Removes last url from the list to fetch template.
 	var url = template_relative_urls.pop();
-	if(!url)
+
+	// URL is undefined when list is empty which means all templates specified
+	// in array are downloaded. As list is empty get template is called with
+	// download parameter 'no' which fills and sends template in callback
+	if (!url)
 	{
 		getTemplate(templateName, context, 'no', callback);
 		return;
 	}
-	//else
-		//getTemplate(templateName, context, 'no', callback);
 
-	downloadSynchronously(url, function(){
+	// Fetches template and call current method in recursion to download other
+	// templates in list
+	downloadTemplate(url, function()
+	{
 		{
-				load_templates_async(templateName, context, template_relative_urls, callback);
-
+			// Recursion call to download other templates
+			load_templates_async(templateName, context, template_relative_urls, callback);
 		}
-			
 	});
 }
 
+/**
+ * Sends request to download template synchronously
+ * 
+ * @param template_relative_urls
+ */
 function load_templates_sync(template_relative_urls)
 {
-	for(var index in template_relative_urls)
-		downloadSynchronously(template_relative_urls[index]);
+	for ( var index in template_relative_urls)
+		downloadTemplate(template_relative_urls[index]);
 }
 
-
-function loadContent()
+String.prototype.endsWith = function(suffix)
 {
-	getTemplate(templateName, context, 'no');
-}
-
-String.prototype.endsWith = function(suffix) {
-    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
 /**
@@ -223,35 +248,37 @@ String.prototype.endsWith = function(suffix) {
  *            url location to download the template
  * @returns down-loaded template content
  */
-function downloadSynchronously(url, callback)
-{	
-	
+function downloadTemplate(url, callback)
+{
+
 	var dataType = 'html';
+
 	// If JS
-	if(url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
+	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
 		dataType = 'script';
-	
-	// If Precompiled is enabled, we change the directory to precompiled
-	if(HANDLEBARS_PRECOMPILATION)
+
+	// If Precompiled is enabled, we change the directory to precompiled. If
+	// pre-compiled flat is set true then template path is sent accordingly
+	if (HANDLEBARS_PRECOMPILATION)
 	{
-			url = "tpl/min/precompiled/" + url;
+		url = "tpl/min/precompiled/" + url;
 	}
 	else
 		url = "tpl/min/" + url;
-	
 	console.log(url + " " + dataType);
-	
+
+	// If callback is sent to this method then template is fetched synchronously
 	var is_async = false;
-	if(callback && typeof (callback) === "function")
+	if (callback && typeof (callback) === "function")
 		is_async = true;
-	
+
 	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
-	{	
+	{
 		// If HTMl, add to body
-		if(dataType == 'html')
+		if (dataType == 'html')
 			$('body').append((result));
-		
-		if(is_async)
+
+		if (is_async)
 			callback(result);
 	}, async : is_async });
 
@@ -438,37 +465,36 @@ function getCurrentContactProperty(value)
 	if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
 	{
 		var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-		console.log(App_Contacts.contactDetailView.model.toJSON());
 		return getPropertyValue(contact_properties, value);
 	}
 }
 
 function getCount(collection)
 {
-	console.log(collection);
 	if (collection[0] && collection[0].count && (collection[0].count != -1))
 		return "(" + collection[0].count + " Total)";
 	else
-		return "(" + collection.length + " Total)";	
+		return "(" + collection.length + " Total)";
 }
 
 /**
  * Returns id from hash. Id must be last in hash.
- **/
-function getIdFromHash(){
-	
+ */
+function getIdFromHash()
+{
+
 	// Returns "workflows" from "#workflows"
 	var hash = window.location.hash.substr(1);
-	
+
 	// remove trailing slash '/'
-	if(hash.substr(-1) === "/")
+	if (hash.substr(-1) === "/")
 	{
 		hash = hash.replace(/\/$/, "");
 	}
-	
+
 	// Returns campaign_id from "workflow/all-contacts/campaign_id".
 	var id = hash.split('/').pop();
-	
+
 	return id;
 }
 
