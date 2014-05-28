@@ -33,7 +33,7 @@
 				<img src="{{mini_logo_url}}" class="pull-left" width="24" height="24" alt=""/>
 			</div>
 			<div class="widget_header_name overflow-elipsis" style="width:80%">
-				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{name}}{{/if_equals}}</strong>
+				<strong>{{#if_equals name "Linkedin"}}LinkedIn{{else}}{{#if_equals name "HelpScout"}}Help Scout{{else}}{{name}}{{/if_equals}}{{/if_equals}}</strong>
 			</div>
 		</div>
 		<div class="widgets" id="{{remove_spaces name}}">
