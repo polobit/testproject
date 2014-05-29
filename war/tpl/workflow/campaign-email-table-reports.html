@@ -1,0 +1,24 @@
+<script id="campaign-email-table-reports-template" type="text/html">
+<div class="span6 offset3">  
+	<table class="table table-bordered">
+		<tbody>
+			<tr>
+				<th>Emails Sent</th>
+				<th>Emails Opened</th>
+				<th>Clicked</th>
+				<th>Unsubscribed</th>
+				<th>Hard Bounce</th>
+				<th>Soft Bounce</th>
+			</tr>
+            <tr>
+				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>
+				<td>{{#if opened}}{{opened}} {{else}} - {{/if}}</td>
+				<td>{{#if unique_clicks}}{{unique_clicks}} ({{total_clicks}}) {{else}} - {{/if}}</td>
+				<td>{{#if unsubscribed}}{{unsubscribed}} {{else}} - {{/if}}</td>
+				<td>{{#if hard_bounce}}{{hard_bounce}} {{else}} - {{/if}}</td>
+				<td>{{#if soft_bounce}}{{soft_bounce}} {{else}} - {{/if}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</script>
