@@ -222,7 +222,7 @@ var WorkflowsRouter = Backbone.Router
 			 * @param id
 			 *            Workflow Id
 			 */
-			logsToCampaign : function(id)
+			logsToCampaign : function(id, log_type)
 			{
 
 				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
@@ -234,8 +234,13 @@ var WorkflowsRouter = Backbone.Router
 				/* Set the designer JSON. This will be deserialized */
 				this.workflow_model = this.workflow_list_view.collection.get(id);
 				var workflowName = this.workflow_model.get("name");
+				
+				if(log_type == undefined || log_type == "ALL")
+					log_type = "";
+				else
+					log_type='?log-type='+log_type;
 
-				var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id, templateKey : "campaign-logs",
+				var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
 					individual_tag_name : 'tr', sortKey : 'time', descending : true, postRenderCallback : function(el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -292,17 +297,6 @@ var WorkflowsRouter = Backbone.Router
 					$('#reports-campaign-name').text(workflowName);
 
 					initChartsUI(id);
-					
-					$("#email-table-reports").html(LOADING_HTML);
-					
-					$.getJSON('core/api/campaign-stats/email/table-reports/'+ id + getOptions(), function(data){
-					
-						console.log(data);
-						
-						// Load Reports Template
-						$("#email-table-reports").html(getTemplate("campaign-email-table-reports", data));
-			
-					});
 					
 				});
 				

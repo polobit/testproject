@@ -15,6 +15,7 @@ import com.agilecrm.db.util.GoogleSQLUtil;
  */
 public class CampaignLogsSQLUtil
 {
+
     /**
      * Inserts obtained fields into campaign logs table.
      * 
@@ -31,12 +32,20 @@ public class CampaignLogsSQLUtil
      * @param type
      *            - Log Type.
      */
-    public static void addToCampaignLogs(String domain, String campaignId, String campaignName, String subscriberId, String message, String type)
+    public static void addToCampaignLogs(String domain, String campaignId, String campaignName, String subscriberId,
+	    String message, String type)
     {
 	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES("
-		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + "," + GoogleSQLUtil.encodeSQLColumnValue(campaignId) + "," + GoogleSQLUtil.encodeSQLColumnValue(campaignName)
-		+ "," + GoogleSQLUtil.encodeSQLColumnValue(subscriberId) + ",NOW()" + "," + GoogleSQLUtil.encodeSQLColumnValue(message) + ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
+		+ GoogleSQLUtil.encodeSQLColumnValue(domain)
+		+ ","
+		+ GoogleSQLUtil.encodeSQLColumnValue(campaignId)
+		+ ","
+		+ GoogleSQLUtil.encodeSQLColumnValue(campaignName)
+		+ ","
+		+ GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
+		+ ",NOW()"
+		+ ","
+		+ GoogleSQLUtil.encodeSQLColumnValue(message) + "," + GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
 
 	System.out.println("Insert Query to CampaignLogs: " + insertToLogs);
 
@@ -61,10 +70,13 @@ public class CampaignLogsSQLUtil
      *            - Domain
      * @return JSONArray of logs.
      */
-    public static JSONArray getLogs(String campaignId, String subscriberId, String domain, String limit)
+    public static JSONArray getLogs(String campaignId, String subscriberId, String domain, String limit,
+	    String filterType)
     {
 	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE log_type <> 'EMAIL_SLEEP' AND "
-		+ getWhereConditionOfLogs(campaignId, subscriberId, domain) + " ORDER BY log_time DESC" + GoogleSQLUtil.appendLimitToQuery(limit);
+		+ getWhereConditionOfLogs(campaignId, subscriberId, domain)
+		+ getFilterType(filterType)
+		+ " ORDER BY log_time DESC" + GoogleSQLUtil.appendLimitToQuery(limit);
 	try
 	{
 	    return GoogleSQL.getJSONQuery(logs);
@@ -86,7 +98,8 @@ public class CampaignLogsSQLUtil
      */
     public static void deleteLogsFromSQL(String campaignId, String subscriberId, String domain)
     {
-	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE" + getWhereConditionOfLogs(campaignId, subscriberId, domain);
+	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE"
+		+ getWhereConditionOfLogs(campaignId, subscriberId, domain);
 	try
 	{
 	    GoogleSQL.executeNonQuery(deleteCampaignLogs);
@@ -118,7 +131,8 @@ public class CampaignLogsSQLUtil
 
 	    // If both are not null
 	    if (!StringUtils.isEmpty(subscriberId))
-		return condition += " AND " + " subscriber_id = " + GoogleSQLUtil.encodeSQLColumnValue(subscriberId) + " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
+		return condition += " AND " + " subscriber_id = " + GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
+			+ " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
 	}
 
 	if (!StringUtils.isEmpty(subscriberId))
@@ -151,5 +165,21 @@ public class CampaignLogsSQLUtil
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    /**
+     * Appends filter type to logs query
+     * 
+     * @param logFilterType
+     *            - logFilterType like EMAIL_SENT
+     * @return String
+     */
+    public static String getFilterType(String logFilterType)
+    {
+	// If logFilterType is empty
+	if (StringUtils.isBlank(logFilterType))
+	    return "";
+
+	return " AND log_type=" + GoogleSQLUtil.encodeSQLColumnValue(logFilterType);
     }
 }
