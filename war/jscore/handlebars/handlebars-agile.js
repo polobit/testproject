@@ -170,9 +170,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("billing.js");
 	}
+
 	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName
 			.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName
-			.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("xero") == 0 || templateName.indexOf("widget") == 0)
+			.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("xero") == 0 || templateName.indexOf("quickbooks")==0 || templateName.indexOf("widget") == 0)
 	{
 		template_relative_urls.push("widget.js");
 	}

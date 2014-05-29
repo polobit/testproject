@@ -440,7 +440,10 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
     else if (widget_name == "Sip")
 	sip_save_widget_prefs();
-
+    
+   /* else if(widget_name =="QuickBooks")
+	quickBooks_save_widget_prefs();*/
+    
     // Shows available widgets in the content
     if (url)
     {
@@ -645,4 +648,14 @@ function xero_save_widget_prefs()
 	});
     });
 
+    function quickBooks_save_widget_prefs(template_id,url)
+    {
+	  head.js('https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js', function()
+		    {
+	      $('#widget-settings', el).html(getTemplate(template_id, { "url" : url }));
+		console.log(el);
+	      intuit.ipp.anywhere.setup({    menuProxy: 'http://example.com/myapp/BlueDotMenu',    grantUrl: url});	
+		    });
+	
+    }
 }
