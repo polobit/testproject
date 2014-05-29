@@ -17,6 +17,7 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
@@ -737,5 +738,26 @@ public class ContactUtil
 	    return null;
 
 	return contactOwner.id;
+    }
+
+    /**
+     * Returns contacts count based on bounce type
+     * 
+     * @param emailBounceType
+     *            - Hard or Soft
+     * @param startTime
+     *            - start time
+     * @param endTime
+     *            - end time
+     * @return int value
+     */
+    public static int getEmailBouncedContactsCount(EmailBounceType emailBounceType, long startTime, long endTime)
+    {
+	HashMap<String, Object> properties = new HashMap<String, Object>();
+	properties.put("emailBounceStatus.emailBounceType", emailBounceType);
+	properties.put("emailBounceStatus.emailBounceType > ", startTime);
+	properties.put("emailBounceStatus.emailBounceType < ", endTime);
+
+	return dao.getCountByProperty(properties);
     }
 }

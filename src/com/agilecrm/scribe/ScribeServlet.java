@@ -167,9 +167,8 @@ public class ScribeServlet extends HttpServlet
 			return;
 		}
 
-		// Build the scribe service, based on service name
-		OAuthService service = ScribeUtil.getService(req, resp, serviceName);
-
+		OAuthService service = null;
+		service = ScribeUtil.getService(req, resp, serviceName);
 		String url;
 		Token token = null;
 
@@ -189,6 +188,7 @@ public class ScribeServlet extends HttpServlet
 
 			System.out.println("Redirect URL OAuth2: " + url);
 		}
+
 		// OAuth 1.0
 		else
 		{
