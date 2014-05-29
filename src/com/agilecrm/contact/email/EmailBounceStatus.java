@@ -19,6 +19,11 @@ public class EmailBounceStatus
     public EmailBounceType emailBounceType = null;
 
     /**
+     * Bounce time
+     */
+    public long time = 0L;
+
+    /**
      * Default EmailBounceStatus
      */
     EmailBounceStatus()
@@ -39,5 +44,7 @@ public class EmailBounceStatus
     {
 	this.email = email;
 	this.emailBounceType = emailBounceType;
+
+	this.time = System.currentTimeMillis() / 1000;
     }
 }

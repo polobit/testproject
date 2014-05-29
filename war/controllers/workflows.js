@@ -285,16 +285,27 @@ var WorkflowsRouter = Backbone.Router
 
 				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
-
 					// Load Reports Template
 					$("#content").html(getTemplate("campaign-email-reports", {}));
-
+					
 					// Set the name
 					$('#reports-campaign-name').text(workflowName);
 
 					initChartsUI(id);
+					
+					$("#email-table-reports").html(LOADING_HTML);
+					
+					$.getJSON('core/api/campaign-stats/email/table-reports/'+ id + getOptions(), function(data){
+					
+						console.log(data);
+						
+						// Load Reports Template
+						$("#email-table-reports").html(getTemplate("campaign-email-table-reports", data));
+			
+					});
+					
 				});
-
+				
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
 			},

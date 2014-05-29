@@ -12,7 +12,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
 
@@ -48,15 +51,16 @@ public class CampaignReportsAPI
 		return null;
 
 	    // Modified data required for graph of Campaigns Comparison
-	    LinkedHashMap<String, LinkedHashMap<String, Integer>> campaignStatsData = CampaignReportsUtil.getCampaignStatsData(null, null, null, null,
-		    campaignStatsArray);
+	    LinkedHashMap<String, LinkedHashMap<String, Integer>> campaignStatsData = CampaignReportsUtil
+		    .getCampaignStatsData(null, null, null, null, campaignStatsArray);
 
 	    return CampaignReportsUtil.replaceNamesInStats(campaignStatsData);
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured in campaigns comparison " + e.getMessage());
-	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
 	}
     }
 
@@ -79,8 +83,9 @@ public class CampaignReportsAPI
     @Path("/email/reports/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getEachCampaignStats(@PathParam("id") String campaignId, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
-	    @QueryParam("type") String type, @QueryParam("time_zone") String timeZone)
+    public String getEachCampaignStats(@PathParam("id") String campaignId, @QueryParam("start_time") String startTime,
+	    @QueryParam("end_time") String endTime, @QueryParam("type") String type,
+	    @QueryParam("time_zone") String timeZone)
     {
 	try
 	{
@@ -91,22 +96,89 @@ public class CampaignReportsAPI
 	    String endDate = CampaignReportsUtil.getEndDate(endTime, timeZone);
 
 	    // SQL data for campaign stats for given duration.
-	    JSONArray emailLogs = CampaignReportsSQLUtil.getEachEmailCampaignStats(campaignId, startDate, endDate, timeZone, type);
+	    JSONArray emailLogs = CampaignReportsSQLUtil.getEachEmailCampaignStats(campaignId, startDate, endDate,
+		    timeZone, type);
 
 	    if (emailLogs == null)
 		return null;
 
 	    // Modified data required for graph of each campaign-stats.
-	    LinkedHashMap<String, LinkedHashMap<String, Integer>> campaignStatsData = CampaignReportsUtil.getCampaignStatsData(startTime, endTime, type,
-		    timeZone, emailLogs);
+	    LinkedHashMap<String, LinkedHashMap<String, Integer>> campaignStatsData = CampaignReportsUtil
+		    .getCampaignStatsData(startTime, endTime, type, timeZone, emailLogs);
 
 	    return CampaignReportsUtil.replaceNamesInStats(campaignStatsData);
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured in each CampaignStats " + e.getMessage());
-	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
 	}
 
+    }
+
+    @Path("/email/table-reports/{campaign-id}")
+    @GET
+    public String getEachCampaignStatsForTable(@PathParam("campaign-id") String campaignId,
+	    @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+	    @QueryParam("time_zone") String timeZone)
+    {
+	try
+	{
+	    // start date in mysql date format.
+	    String startDate = CampaignReportsUtil.getStartDate(startTime, endTime, null, timeZone);
+
+	    // end date in mysql date format.
+	    String endDate = CampaignReportsUtil.getEndDate(endTime, timeZone);
+
+	    JSONArray stats = CampaignReportsSQLUtil.getEachCampaignStatsForTable(campaignId, startDate, endDate,
+		    timeZone, null);
+
+	    try
+	    {
+		// Hard Bounce data
+		stats.put(new JSONObject().put("log_type", "HARD_BOUNCE").put(
+			"count",
+			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.HARD_BOUNCE,
+				Long.parseLong(startTime), Long.parseLong(endTime))));
+
+		// Soft Bounce Data
+		stats.put(new JSONObject().put("log_type", "SOFT_BOUNCE").put(
+			"count",
+			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.SOFT_BOUNCE,
+				Long.parseLong(startTime), Long.parseLong(endTime))));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+		System.err.println("Exception occured while retrieving bounced stats from datastore..."
+			+ e.getMessage());
+	    }
+
+	    JSONObject statsJSON = new JSONObject();
+
+	    // Add log_type as key and its count as value
+	    for (int i = 0, len = stats.length(); i < len; i++)
+	    {
+		JSONObject json = stats.getJSONObject(i);
+
+		if (json.getString("log_type").equals("EMAIL_CLICKED"))
+		    statsJSON.put("unique_clicks", json.getString("unique_clicks"));
+
+		statsJSON.put(stats.getJSONObject(i).getString("log_type"), stats.getJSONObject(i).getInt("count"));
+	    }
+
+	    System.out.println("stats JSON is " + statsJSON);
+
+	    return statsJSON.toString().replace("EMAIL_SENT", "sent").replace("EMAIL_OPENED", "opened")
+		    .replace("EMAIL_CLICKED", "total_clicks").replace("UNSUBSCRIBED", "unsubscribed")
+		    .replace("HARD_BOUNCE", "hard_bounce").replace("SOFT_BOUNCE", "soft_bounce");
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occurred while getting campaign stats... " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
     }
 }
