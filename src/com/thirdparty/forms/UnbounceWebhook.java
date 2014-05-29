@@ -35,6 +35,7 @@ public class UnbounceWebhook extends HttpServlet
 	    // Get API key
 	    String tagString = req.getParameter("api-key");
 
+	    // Send Error if API Key is missing
 	    if (StringUtils.isEmpty(tagString))
 	    {
 		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: API Key is missing");
@@ -52,9 +53,10 @@ public class UnbounceWebhook extends HttpServlet
 	    // Get owner from API
 	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(tagsWithKey[0]);
 
+	    // Send Error if owner is not found
 	    if (owner == null)
 	    {
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: No owner exits with this API Key - " + tagsWithKey[0]);
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: No owner exists with this API Key - " + tagsWithKey[0]);
 		return;
 	    }
 
@@ -102,6 +104,9 @@ public class UnbounceWebhook extends HttpServlet
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+
+	    // Send error back to the client
+	    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error: " + e.getMessage());
 	    System.out.println("Error is " + e.getMessage());
 	    return;
 	}
