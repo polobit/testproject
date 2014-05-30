@@ -58,8 +58,8 @@
 	content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
-    String CSS_PATH = "/";
-			//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+  //  String CSS_PATH = "/";
+	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
 %>
 
 <link rel="stylesheet" type="text/css"
@@ -70,7 +70,7 @@
 	href="/css/agilecrm.css" />
 	
  <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
-<script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script> 
+<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script> 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -207,8 +207,8 @@
 		<!-- Unified CSS for All Lib -->
 
 	
-	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-tasks.css"></link>
-	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-social-suite.css"></link>
+	<link rel="stylesheet" type="text/css" href="css/misc/agile-tasks.css"></link>
+	<link rel="stylesheet" type="text/css" href="css/misc/agile-social-suite.css"></link>
 	<!--   <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>-->
 	<!--  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link> -->
 	<!--  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->

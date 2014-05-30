@@ -180,9 +180,9 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
 		{
-			downloadTemplate(model.get('name').toLowerCase() +".js", function(){
+			getTemplate(model.get('name').toLowerCase(),{}, "yes", function(){
 				queueGetRequest("_widgets_"+contact_id , url, "script");
-			})
+			});
 		}
 
 		/*

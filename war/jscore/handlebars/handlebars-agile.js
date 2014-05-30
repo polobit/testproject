@@ -170,13 +170,52 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("billing.js");
 	}
-
-	if (templateName.indexOf("helpscout") == 0 || templateName.indexOf("clickdesk") == 0 || templateName.indexOf("zendesk") == 0 || templateName
-			.indexOf("freshbooks") == 0 || templateName.indexOf("linkedin") == 0 || templateName.indexOf("rapleaf") == 0 || templateName.indexOf("stripe") == 0 || templateName
-			.indexOf("twilio") == 0 || templateName.indexOf("twitter") == 0 || templateName.indexOf("xero") == 0 || templateName.indexOf("quickbooks")==0 || templateName.indexOf("widget") == 0)
+	
+	if (templateName.indexOf("widget") == 0)
 	{
 		template_relative_urls.push("widget.js");
 	}
+	if(templateName.indexOf("helpscout") == 0)
+	{
+		template_relative_urls.push("helpscout.js");
+	}
+	else if(templateName.indexOf("clickdesk") == 0)
+	{
+		template_relative_urls.push("clickdesk.js");
+	}
+	else if(templateName.indexOf("zendesk") == 0)
+	{
+		template_relative_urls.push("zendesk.js");
+	}
+	else if(templateName.indexOf("freshbooks") == 0)
+	{
+		template_relative_urls.push("freshbooks.js");
+	}
+	else if(templateName.indexOf("linkedin") == 0)
+	{
+		template_relative_urls.push("linkedin.js");
+	}
+	else if(templateName.indexOf("rapleaf") == 0)
+	{
+		template_relative_urls.push("rapleaf.js");
+	}
+	else if(templateName.indexOf("stripe") == 0)
+	{
+		template_relative_urls.push("stripe.js");
+	}
+	else if(templateName.indexOf("twilio") == 0)
+	{
+		template_relative_urls.push("twilio.js");
+	}
+	else if(templateName.indexOf("twitter") == 0)
+	{
+		template_relative_urls.push("twitter.js");
+	}
+	else if(templateName.indexOf("xero") == 0)
+	{
+		template_relative_urls.push("xero.js");
+	}
+
 	if (templateName.indexOf("socialsuite") == 0)
 	{
 		template_relative_urls.push("socialsuite.js");
