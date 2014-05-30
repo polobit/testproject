@@ -72,7 +72,7 @@ public class DefaultWidgets
 	widgets.add(new Widget(
 		"HelpScout",
 		"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
-		"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png", "/widgets/helpscout-logo-small.png", null,
+		"/widgets/helpscout.js", "/img/plugins/help-scout-logo.png", "/widgets/helpscout-logo-small.png", null,
 		WidgetType.SUPPORT));
 
 	System.out.println("Default widgets ");
