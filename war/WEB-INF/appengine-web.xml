@@ -64,7 +64,7 @@
 
 	<pagespeed>
 		<disabled-rewriter>FlushSubresources</disabled-rewriter>
-		<domain-to-rewrite>cdnapp.agilecrm.net</domain-to-rewrite>
+		<domain-to-rewrite>cdnapp.agilecrm.com</domain-to-rewrite>
 		<enabled-rewriter>CollapseWhitespace</enabled-rewriter>
 		<url-blacklist>https://*.*.*/war/tpl/min/*.js</url-blacklist>
 		<url-blacklist>https://*.*.*/war/tpl/min/precompiled/*.js</url-blacklist>
