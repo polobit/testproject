@@ -22,7 +22,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.deferred.TagsDeferredTask;
-import com.agilecrm.contact.email.EmailBounceStatus;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus;
+import com.agilecrm.contact.email.bounce.util.EmailBounceStatusUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.contact.util.TagUtil;
@@ -416,6 +417,7 @@ public class Contact extends Cursor
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			.entity("Sorry, a contact with this email already exists " + myMail).build());
 	    }
+
 	}
 
 	// Updated time is updated only if particular fields are changed. It is
@@ -433,6 +435,9 @@ public class Contact extends Cursor
 
 	// Execute trigger for contacts
 	ContactTriggerUtil.executeTriggerToContact(oldContact, this);
+
+	// Update Email Bounce status
+	EmailBounceStatusUtil.updateEmailBounceStatus(oldContact, this);
 
 	// Boolean value to check whether to avoid notification on each contact.
 	boolean notification_condition = true;
