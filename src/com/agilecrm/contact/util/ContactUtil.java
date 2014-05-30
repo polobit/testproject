@@ -751,12 +751,12 @@ public class ContactUtil
      *            - end time
      * @return int value
      */
-    public static int getEmailBouncedContactsCount(EmailBounceType emailBounceType, long startTime, long endTime)
+    public static int getEmailBouncedContactsCount(EmailBounceType emailBounceType, Long startTime, Long endTime)
     {
 	HashMap<String, Object> properties = new HashMap<String, Object>();
 	properties.put("emailBounceStatus.emailBounceType", emailBounceType);
-	properties.put("emailBounceStatus.emailBounceType > ", startTime);
-	properties.put("emailBounceStatus.emailBounceType < ", endTime);
+	properties.put("emailBounceStatus.time >=", startTime);
+	properties.put("emailBounceStatus.time <", endTime);
 
 	return dao.getCountByProperty(properties);
     }

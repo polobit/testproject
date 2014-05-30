@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
 import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.utils.SystemProperty;
 
 /**
  * <code>LogUtil</code> class adds logs with respect to campaigns and
@@ -38,6 +39,10 @@ public class LogUtil
     {
 	String domain = NamespaceManager.get();
 
+	// For localhost
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+	    domain = "localhost";
+
 	if (StringUtils.isEmpty(domain) || StringUtils.isEmpty(campaignId) || StringUtils.isEmpty(subscriberId))
 	    return;
 
@@ -45,7 +50,8 @@ public class LogUtil
 	long startTime = System.currentTimeMillis();
 
 	// Insert to SQL
-	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId), subscriberId, message, logType);
+	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
+		subscriberId, message, logType);
 
 	long processTime = System.currentTimeMillis() - startTime;
 	System.out.println("Process time for adding log is " + processTime + "ms");
@@ -62,9 +68,13 @@ public class LogUtil
      *            - limit to get number of logs.
      * @return logs array string.
      */
-    public static List<Log> getSQLLogs(String campaignId, String subscriberId, String limit)
+    public static List<Log> getSQLLogs(String campaignId, String subscriberId, String limit, String logType)
     {
 	String domain = NamespaceManager.get();
+
+	// For localhost
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+	    domain = "localhost";
 
 	if (StringUtils.isEmpty(domain))
 	    return null;
@@ -73,7 +83,7 @@ public class LogUtil
 	long startTime = System.currentTimeMillis();
 
 	// get SQL logs
-	JSONArray logs = CampaignLogsSQLUtil.getLogs(campaignId, subscriberId, domain, limit);
+	JSONArray logs = CampaignLogsSQLUtil.getLogs(campaignId, subscriberId, domain, limit, logType);
 
 	long processTime = System.currentTimeMillis() - startTime;
 	System.out.println("Process time for getting logs is " + processTime + "ms");
@@ -104,6 +114,10 @@ public class LogUtil
     public static void deleteSQLLogs(String campaignId, String subscriberId)
     {
 	String domain = NamespaceManager.get();
+
+	// For localhost
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+	    domain = "localhost";
 
 	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
 	    return;

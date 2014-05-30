@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.status.CampaignStatus;
 
@@ -143,6 +144,26 @@ public class CampaignSubscribersUtil
     public static List<Contact> getAllCampaignSubscribers(String status)
     {
 	return dao.ofy().query(Contact.class).filter("campaignStatus.status", status).list();
+    }
+
+    /**
+     * Returns bounced contacts list
+     * 
+     * 
+     * @param max
+     *            - count
+     * @param cursor
+     *            - cursor offset.
+     * @param emailBounceType
+     *            - HardBounce or SoftBounce
+     * @return List
+     */
+    public static List<Contact> getBoucedContacts(int max, String cursor, EmailBounceType emailBounceType)
+    {
+	Map<String, Object> subscribers = new HashMap<String, Object>();
+	subscribers.put("emailBounceStatus.emailBounceType", emailBounceType);
+
+	return dao.fetchAll(max, cursor, subscribers, true, false);
     }
 
 }

@@ -20,11 +20,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
+import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
@@ -171,9 +173,11 @@ public class WorkflowsAPI
     @Path("active-subscribers/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
-    public List<Contact> getActiveContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public List<Contact> getActiveContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor)
     {
-	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.ACTIVE);
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-"
+		+ CampaignStatus.Status.ACTIVE);
     }
 
     /**
@@ -191,9 +195,11 @@ public class WorkflowsAPI
     @Path("completed-subscribers/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
-    public List<Contact> getCompletedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public List<Contact> getCompletedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
-	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.DONE);
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-"
+		+ CampaignStatus.Status.DONE);
     }
 
     /**
@@ -210,9 +216,11 @@ public class WorkflowsAPI
     @Path("removed-subscribers/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Contact> getRemovedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public List<Contact> getRemovedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor)
     {
-	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-" + CampaignStatus.Status.REMOVED);
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-"
+		+ CampaignStatus.Status.REMOVED);
     }
 
     /**
@@ -225,7 +233,8 @@ public class WorkflowsAPI
      */
     @Path("remove-active-subscriber/{campaign-id}/{contact-id}")
     @DELETE
-    public void removeActiveSubscriber(@PathParam("campaign-id") String workflowId, @PathParam("contact-id") String contactId)
+    public void removeActiveSubscriber(@PathParam("campaign-id") String workflowId,
+	    @PathParam("contact-id") String contactId)
     {
 	// if any one of the path params is empty
 	if (StringUtils.isEmpty(contactId) || StringUtils.isEmpty(contactId))
@@ -239,7 +248,7 @@ public class WorkflowsAPI
     }
 
     /**
-     * Returns all subscribers including acive, completed and removed
+     * Returns all subscribers including active, completed and removed
      * subscribers of given campaign.
      * 
      * @param workflow_id
@@ -253,8 +262,48 @@ public class WorkflowsAPI
     @Path("all-subscribers/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
-    public List<Contact> getAllWorkflowContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public List<Contact> getAllWorkflowContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 	return CampaignSubscribersUtil.getContactsByCampaignId(Integer.parseInt(count), cursor, workflow_id);
     }
+
+    /**
+     * Returns Unsubscribed subscribers
+     * 
+     * @param workflow_id
+     *            - campaign-id
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("unsubscribed-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getUnsubscribedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return UnsubscribeStatusUtil.getUnsubscribeContactsByCampaignId(Integer.parseInt(count), cursor, workflow_id);
+    }
+
+    /**
+     * Returns HardBounced contacts
+     * 
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("hardbounced-subscribers")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getHardBouncedContacts(@QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getBoucedContacts(Integer.parseInt(count), cursor, EmailBounceType.HARD_BOUNCE);
+    }
+
 }

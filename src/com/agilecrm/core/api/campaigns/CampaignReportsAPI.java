@@ -140,13 +140,13 @@ public class CampaignReportsAPI
 		stats.put(new JSONObject().put("log_type", "HARD_BOUNCE").put(
 			"count",
 			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.HARD_BOUNCE,
-				Long.parseLong(startTime), Long.parseLong(endTime))));
+				Long.parseLong(startTime) / 1000, Long.parseLong(endTime) / 1000)));
 
 		// Soft Bounce Data
 		stats.put(new JSONObject().put("log_type", "SOFT_BOUNCE").put(
 			"count",
 			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.SOFT_BOUNCE,
-				Long.parseLong(startTime), Long.parseLong(endTime))));
+				Long.parseLong(startTime) / 1000, Long.parseLong(endTime) / 1000)));
 	    }
 	    catch (Exception e)
 	    {

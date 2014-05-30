@@ -31,8 +31,14 @@ var WorkflowsRouter = Backbone.Router
 			"trigger-add" : "triggerAdd", "trigger/:id" : "triggerEdit",
 
 			/* Subscribers */
-			"workflow/all-subscribers/:id" : "allSubscribers", "workflow/active-subscribers/:id" : "activeSubscribers",
-				"workflow/completed-subscribers/:id" : "completedSubscribers", "workflow/removed-subscribers/:id" : "removedSubscribers" },
+			"workflow/all-subscribers/:id" : "allSubscribers", 
+			"workflow/active-subscribers/:id" : "activeSubscribers",
+			"workflow/completed-subscribers/:id" : "completedSubscribers",
+			"workflow/removed-subscribers/:id" : "removedSubscribers",
+			
+			"workflow/unsubscribed-subscribers/:id": "unsubscribedSubscribers",
+			"workflow/hardbounced-subscribers/:id": "hardBouncedSubscribers"
+			},
 
 			/**
 			 * Gets workflows list.Sets page-size to 10, so that initially
@@ -617,4 +623,52 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#content").html(removed_subscribers_collection.el);
-			} });
+			},
+			unsubscribedSubscribers : function(id)
+			{
+				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+				{
+					this.navigate("workflows", { trigger : true });
+					return;
+				}
+
+				var unsubscribed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/unsubscribed-subscribers/' + id,
+						'workflow-other-subscribers');
+
+				unsubscribed_subscribers_collection.collection.fetch({ success : function(collection)
+				{
+
+					// show pad content
+					if (collection.length === 0)
+						fill_subscribers_slate('subscribers-slate', "unsubscribe-subscribers");
+				} });
+
+				$("#content").html(unsubscribed_subscribers_collection.el);
+			},
+			
+			hardBouncedSubscribers : function(id)
+			{
+				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+				{
+					this.navigate("workflows", { trigger : true });
+					return;
+				}
+
+				var hardbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/hardbounced-subscribers/',
+						'workflow-other-subscribers');
+
+				hardbounced_subscribers_collection.collection.fetch({ success : function(collection)
+				{
+
+					// show pad content
+					if (collection.length === 0)
+						fill_subscribers_slate('subscribers-slate', "hardbounced-subscribers");
+				} });
+
+				$("#content").html(hardbounced_subscribers_collection.el);
+			},
+		
+		
+		
+		
+		});

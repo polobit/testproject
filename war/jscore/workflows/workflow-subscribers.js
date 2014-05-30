@@ -198,6 +198,16 @@ function fill_subscribers_slate(id, type)
 		        "button_text" : "Add subscribers",
 				"route" : "#contacts",
 				"image": "/img/clipboard.png"
+		    },
+		    "unsubscribe-subscribers": {
+		    	"title": "No unsubscribed subscribers for this campaign",
+		        "description": "Great! No one unsubscribed from this campaign.",
+				"image": "/img/clipboard.png"
+		    },
+		    "hardbounced-subscribers": {
+		    	"title": "No hardbounced subscribers for this campaign",
+		        "description": "Great! No email get hardbounced.",
+				"image": "/img/clipboard.png"
 		    }
 		}
 
