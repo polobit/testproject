@@ -21,7 +21,7 @@ public class EmailBounceStatus
     /**
      * Bounce time
      */
-    public long time = 0L;
+    public Long time = 0L;
 
     /**
      * Default EmailBounceStatus

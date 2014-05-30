@@ -4,6 +4,22 @@
         <div class="page-header">
             <h1>Logs <small>for <span id="logs-campaign-name"></span></small></h1>
             <a href="#" class="btn btn-danger right" id="delete_campaign_logs" style='top:-29px;position:relative;padding-right:20px'>Delete All Logs</a>
+			<div class="pull-right" style="top: -29px; position: relative; padding-right: 5px;">
+				<div class="btn-group">
+  				<button class="btn"><span><i class="icon-filter"></i></span></button>
+  				<button class="btn dropdown-toggle" data-toggle="dropdown">
+    				<span class="caret"></span>
+  				</button>
+  				<ul class="dropdown-menu">
+                    <li><a href="#workflows/logs/{{get_id_from_hash}}" data-log-type="ALL" data-campaign-id="{{get_id_from_hash}}" class="log-filters">All</a></li> 
+    				<li><a href="#workflows/logs/{{get_id_from_hash}}" data-log-type="EMAIL_SENT" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Sent</a></li>
+					<li><a href="#workflows/logs/{{get_id_from_hash}}" data-log-type="EMAIL_OPENED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Opened</a></li>
+					<li><a href="#workflows/logs/{{get_id_from_hash}}" data-log-type="EMAIL_CLICKED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Clicked</a></li>
+					<li><a href="#workflows/logs/{{get_id_from_hash}}" data-log-type="UNSUBSCRIBED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Unsubscribed</a></li>
+                    <li><a href="#workflows/logs/{{get_id_from_hash}}" data-log-type="EMAIL_HARD_BOUNCED" data-campaign-id="{{get_id_from_hash}}" class="log-filters">Hard Bounced</a></li>
+  				</ul>
+			</div>
+        </div>
         </div>
     </div>
 </div>

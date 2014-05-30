@@ -2380,6 +2380,12 @@ $(function()
 
 	if (hash.indexOf("removed") != -1)
 	    return "Removed";
+	
+	if (hash.indexOf("unsubscribed") != -1)
+	    return "Unsubscribed";
+	
+	if (hash.indexOf("hardbounced") != -1)
+	    return "HardBounced";
     });
 
     Handlebars.registerHelper("check_plan", function(plan, options)
