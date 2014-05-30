@@ -258,14 +258,15 @@ public class SendEmail extends TaskletAdapter
 	// Verify Unsubscribed status
 	if (subscriberJSON.has("isBounce"))
 	{
-	    if (subscriberJSON.get("isBounce").equals(EmailBounceStatus.EmailBounceType.HARD_BOUNCE))
+	    if (subscriberJSON.get("isBounce").equals(EmailBounceStatus.EmailBounceType.HARD_BOUNCE.toString()))
 	    {
 		// Add log
 		LogUtil.addLogToSQL(
 			AgileTaskletUtil.getId(campaignJSON),
 			AgileTaskletUtil.getId(subscriberJSON),
-			"Email " + subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
-				+ " got Hard Bounced <br><br> Email subject: "
+			"There was a hard bounce on email \'"
+				+ subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
+				+ "\' <br><br> Email subject: "
 				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
 			LogType.EMAIL_HARD_BOUNCED.toString());
 
