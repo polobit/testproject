@@ -16,6 +16,49 @@
 		/> <handler file="error/timeout.html" error-code="timeout" /> </static-error-handlers> 
 		End of error pages configuration -->
 
+<!-- Configure static files -->
+ <static-files>
+ 
+	  <!-- Images -->
+	  <include path="/**.png" expiration="7d" />
+	  <include path="/**.gif" expiration="7d" />
+	  <include path="/**.jpg" expiration="7d" />
+	  <include path="/**.ico" expiration="7d" />
+	  <!-- End of images -->
+
+	  <!--  Fonts -->
+	  <include path="/**.woff" expiration="7d" />
+	  <!-- End of Fonts -->
+
+
+	  <!-- Sounds -->
+	  <include path="/**.mp3" expiration="7d" />
+	  <!-- End of Sounds -->
+
+	  <!-- CSS -->
+	  <include path="/**.css" expiration="7d"/>
+
+
+	  <!-- CSS -->
+
+	  <!-- JS -->
+	  <include path="/**.js" expiration="7d"/>
+
+	  <!-- End of JS -->
+
+	  <!-- Error handlers -->
+	  <include path="error/**.html" />
+
+	  <!-- End of Error handlers -->
+
+      <exclude path="/css/agilecrm.css" />
+	  <exclude path="/css/all.css" />
+	  <exclude path="/jscore/min/**.js" />
+	  <exclude path="/tpl/min/**.js" />
+	   <exclude path="/tpl/min/**.js" />
+	   <exclude path="/stats/min/**.js" />
+
+	 </static-files>
 
 	<!-- End of static files configuration -->
 
@@ -27,8 +70,12 @@
 		<url-blacklist>https://*.*.*/war/tpl/min/precompiled/*.js</url-blacklist>
 		<url-blacklist>https://*.*.*/war/tpl/min/precompiled/*.html</url-blacklist>
 		<url-blacklist>https://*.*.*/war/widgets/*.js</url-blacklist>
-		<enabled-rewriter>MinifyCss</enabled-rewriter>
+		<enabled-rewriter>MoveCssToHead</enabled-rewriter>
 		<enabled-rewriter>CombineCss</enabled-rewriter>
+		<enabled-rewriter>MinifyCss</enabled-rewriter>
+		<enabled-rewriter>ImageResize</enabled-rewriter>
+		<enabled-rewriter>ImageAddDimensions</enabled-rewriter>
+		
 	</pagespeed>
 
 

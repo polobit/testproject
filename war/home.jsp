@@ -58,8 +58,8 @@
 	content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
-  //  String CSS_PATH = "/";
-	String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+    //String CSS_PATH = "/";
+	String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
 <link rel="stylesheet" type="text/css"
@@ -137,8 +137,9 @@
 
 
 	<script>
-	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	//var LIB_PATH = "/";
+	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	//var LIB_PATH = "//cdnapp.agilecrm.com/";
+	var LIB_PATH = "/";
 	var HANDLEBARS_PRECOMPILATION = true;
 	
 	var CSS_PATH = "/";
@@ -168,7 +169,7 @@
 	head.load(JQUERY_LIB_PATH, LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js',LIB_PATH + 'lib/date-formatter.js',  LIB_PATH + 'lib/bootstrap-timepicker-min.js');
 	
 	<!-- Backbone -->
-	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
+	head.js(LIB_PATH + 'lib/js-core-frameworks.js');
 	
 	<!-- Handle bars -->
 	

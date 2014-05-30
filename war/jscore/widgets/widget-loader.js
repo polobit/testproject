@@ -180,7 +180,7 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
 		{
-			getTemplate(model.get('name').toLowerCase(),{}, "yes", function(){
+			downloadTemplate(model.get('name').toLowerCase() +".js", function(){
 				queueGetRequest("_widgets_"+contact_id , url, "script");
 			});
 		}
