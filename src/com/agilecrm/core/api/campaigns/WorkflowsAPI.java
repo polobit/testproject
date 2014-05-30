@@ -20,7 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;

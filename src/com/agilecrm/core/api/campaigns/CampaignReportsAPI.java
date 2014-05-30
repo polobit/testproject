@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;

@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.email.EmailBounceStatus;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;

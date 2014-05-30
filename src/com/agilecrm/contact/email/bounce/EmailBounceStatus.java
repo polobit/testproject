@@ -1,4 +1,4 @@
-package com.agilecrm.contact.email;
+package com.agilecrm.contact.email.bounce;
 
 public class EmailBounceStatus
 {
