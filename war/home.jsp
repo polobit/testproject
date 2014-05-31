@@ -62,8 +62,8 @@
 	String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
-<link rel="stylesheet" type="text/css"
-	href="css/google-fonts.css" />
+<link rel=stylesheet" type="text/css"
+	href="="<%=CSS_PATH%>css/google-fonts.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
@@ -138,8 +138,8 @@
 
 	<script>
 	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	//var LIB_PATH = "//cdnapp.agilecrm.com/";
-	var LIB_PATH = "/";
+	var LIB_PATH = "//cdnapp.agilecrm.com/";
+	//var LIB_PATH = "/";
 	var HANDLEBARS_PRECOMPILATION = true;
 	
 	var CSS_PATH = "/";
@@ -161,8 +161,8 @@
 	// Billing Restriction
 	var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 	
-	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
+	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	//var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
