@@ -141,21 +141,21 @@ public class CampaignReportsSQLUtil
 	String subQuery = "(SELECT log_type, MIN(" + GoogleSQLUtil.addConvertTZ(timeZoneOffset)
 		+ ") AS minTime FROM campaign_logs WHERE " + GoogleSQLUtil.appendDomainToQuery(domain)
 		+ " AND campaign_id=" + GoogleSQLUtil.encodeSQLColumnValue(campaignId)
-		+ " AND log_type IN ('EMAIL_CLICKED') AND DATE(" + GoogleSQLUtil.addConvertTZ(timeZoneOffset)
-		+ ") BETWEEN " + "DATE(" + GoogleSQLUtil.encodeSQLColumnValue(startDate) + ") AND DATE("
+		+ " AND log_type IN ('EMAIL_SENT', 'EMAIL_CLICKED', 'EMAIL_OPENED', 'UNSUBSCRIBED') AND DATE("
+		+ GoogleSQLUtil.addConvertTZ(timeZoneOffset) + ") BETWEEN " + "DATE("
+		+ GoogleSQLUtil.encodeSQLColumnValue(startDate) + ") AND DATE("
 		+ GoogleSQLUtil.encodeSQLColumnValue(endDate) + ") GROUP BY subscriber_id,log_type) subQuery";
 
-	String uniqueClicks = "(SELECT log_type, COUNT(*) AS unique_clicks FROM " + subQuery + " GROUP BY log_type)";
+	String uniqueClicks = "(SELECT log_type, COUNT(*) AS count FROM " + subQuery + " GROUP BY log_type)";
 
-	String totalClicks = "(SELECT log_type, COUNT(*) AS count FROM campaign_logs WHERE domain="
+	String totalClicks = "(SELECT log_type, COUNT(*) AS total_clicks FROM campaign_logs WHERE domain="
 		+ GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND campaign_id="
-		+ GoogleSQLUtil.encodeSQLColumnValue(campaignId)
-		+ "  AND log_type IN ('EMAIL_CLICKED', 'EMAIL_SENT', 'EMAIL_OPENED', 'UNSUBSCRIBED') AND DATE("
+		+ GoogleSQLUtil.encodeSQLColumnValue(campaignId) + "  AND log_type IN ('EMAIL_CLICKED') AND DATE("
 		+ GoogleSQLUtil.addConvertTZ(timeZoneOffset) + ") BETWEEN DATE("
 		+ GoogleSQLUtil.encodeSQLColumnValue(startDate) + ")  AND DATE("
 		+ GoogleSQLUtil.encodeSQLColumnValue(endDate) + ") GROUP BY log_type)";
 
-	String query = "SELECT A.unique_clicks,B.log_type, B.count FROM " + uniqueClicks + " A RIGHT OUTER JOIN  "
+	String query = "SELECT A.log_type,B.total_clicks, A.count FROM " + uniqueClicks + " A LEFT OUTER JOIN  "
 		+ totalClicks + " B ON A.log_type = B.log_type";
 
 	try

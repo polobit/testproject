@@ -11,8 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.email.EmailBounceStatus;
-import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.ContactUtil;
 import com.google.appengine.api.NamespaceManager;
 

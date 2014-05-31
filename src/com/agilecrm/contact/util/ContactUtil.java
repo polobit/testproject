@@ -17,7 +17,7 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;

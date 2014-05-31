@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
-import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.status.CampaignStatus;
 
