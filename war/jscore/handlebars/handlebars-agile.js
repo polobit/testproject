@@ -170,48 +170,48 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("billing.js");
 	}
-	
+
 	if (templateName.indexOf("widget") == 0)
 	{
 		template_relative_urls.push("widget.js");
 	}
-	if(templateName.indexOf("helpscout") == 0)
+	if (templateName.indexOf("helpscout") == 0)
 	{
 		template_relative_urls.push("helpscout.js");
 	}
-	else if(templateName.indexOf("clickdesk") == 0)
+	else if (templateName.indexOf("clickdesk") == 0)
 	{
 		template_relative_urls.push("clickdesk.js");
 	}
-	else if(templateName.indexOf("zendesk") == 0)
+	else if (templateName.indexOf("zendesk") == 0)
 	{
 		template_relative_urls.push("zendesk.js");
 	}
-	else if(templateName.indexOf("freshbooks") == 0)
+	else if (templateName.indexOf("freshbooks") == 0)
 	{
 		template_relative_urls.push("freshbooks.js");
 	}
-	else if(templateName.indexOf("linkedin") == 0)
+	else if (templateName.indexOf("linkedin") == 0)
 	{
 		template_relative_urls.push("linkedin.js");
 	}
-	else if(templateName.indexOf("rapleaf") == 0)
+	else if (templateName.indexOf("rapleaf") == 0)
 	{
 		template_relative_urls.push("rapleaf.js");
 	}
-	else if(templateName.indexOf("stripe") == 0)
+	else if (templateName.indexOf("stripe") == 0)
 	{
 		template_relative_urls.push("stripe.js");
 	}
-	else if(templateName.indexOf("twilio") == 0)
+	else if (templateName.indexOf("twilio") == 0)
 	{
 		template_relative_urls.push("twilio.js");
 	}
-	else if(templateName.indexOf("twitter") == 0)
+	else if (templateName.indexOf("twitter") == 0)
 	{
 		template_relative_urls.push("twitter.js");
 	}
-	else if(templateName.indexOf("xero") == 0)
+	else if (templateName.indexOf("xero") == 0)
 	{
 		template_relative_urls.push("xero.js");
 	}
@@ -279,6 +279,8 @@ String.prototype.endsWith = function(suffix)
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
+var TEMPLATE_LIB_PATH = LIB_PATH;
+
 /**
  * Downloads the template synchronously (stops other browsing actions) from the
  * given url and returns it
@@ -292,10 +294,6 @@ function downloadTemplate(url, callback)
 
 	var dataType = 'html';
 
-	// If JS
-	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
-		dataType = 'script';
-
 	// If Precompiled is enabled, we change the directory to precompiled. If
 	// pre-compiled flat is set true then template path is sent accordingly
 	if (HANDLEBARS_PRECOMPILATION)
@@ -304,6 +302,14 @@ function downloadTemplate(url, callback)
 	}
 	else
 		url = "tpl/min/" + url;
+
+	// If JS
+	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
+	{
+		dataType = 'script';
+		url = TEMPLATE_LIB_PATH + url;
+	}
+
 	console.log(url + " " + dataType);
 
 	// If callback is sent to this method then template is fetched synchronously
