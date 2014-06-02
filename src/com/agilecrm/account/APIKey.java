@@ -149,7 +149,12 @@ public class APIKey
      */
     public static Key<DomainUser> getDomainUserKeyRelatedToAPIKey(String apiKey)
     {
-	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
+	// Get API Object
+	APIKey apiKeyObject = dao.ofy().query(APIKey.class).filter("api_key", apiKey).get();
+	if (apiKeyObject == null)
+	    return null;
+
+	return apiKeyObject.owner;
     }
 
     /**
