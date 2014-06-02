@@ -275,8 +275,8 @@ $(function(){
 				{
 				
 				// Get Current Contact
-				var contact = App_Contacts.contactDetailView.model;
-				var json = contact.toJSON();
+/*				var contact = App_Contacts.contactDetailView.model;
+				var json = contact.toJSON();*/
 				
 				/*
 				 * Get Contact properties json to fill the templates
@@ -356,7 +356,7 @@ $(function(){
 					    
 					    var route = Current_Route + "";
 					   
-			            if(route.match("send-email") != null)
+			            if(route.match("send-email") != null && App_Contacts.contactDetailView)
 			            	App_Contacts.navigate("contact/" + App_Contacts.contactDetailView.model.id, {trigger:true});
 			            else
 			            	window.history.back();
@@ -378,10 +378,13 @@ $(function(){
 	 */
 	$('#send-email-close').die().live('click',function(e){
 		e.preventDefault();
-
-		Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
-            trigger: true
-        });
+		
+		if(App_Contacts.contactDetailView)
+			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
+				trigger: true
+			});
+		else
+			window.history.back();
 	});	
 
 	/**

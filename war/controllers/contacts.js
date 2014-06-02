@@ -546,18 +546,25 @@ var ContactsRouter = Backbone.Router.extend({
 	sendEmail : function(id)
 	{
 		
+		var model;
+		var is_new = true;
 		// Takes back to contacts if contacts detail view is not defined
-		if (!this.contactDetailView || !this.contactDetailView.model.id)
+		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
-			this.navigate("contacts", { trigger : true });
-			return;
+			// Show the email form with the email prefilled from the curtrent contact
+			model = this.contactDetailView.model.toJSON();
+			is_new = false;
+			//this.navigate("contacts", { trigger : true });
+			//return;
 		}
+		else
+			model = {};
 		
-		// Show the email form with the email prefilled from the curtrent contact
-		var model = this.contactDetailView.model;
 		var sendEmailView = new Base_Model_View(
 		{
-			model : model,
+			data : model, 
+			url : !is_new ? this.contactDetailView.model.get('url') : "test",
+			is_new : is_new,
 			template : "send-email",
 			postRenderCallback : function(el)
 			{
@@ -580,7 +587,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 			}
 		});
-		$("#content").html(sendEmailView.render().el);
+		$("#content").html(sendEmailView.render(true).el);
 		
 		// Setup HTML Editor
 		setupTinyMCEEditor('textarea#email-body');

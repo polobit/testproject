@@ -29,6 +29,34 @@ $(function(){
 		App_Deals.deals();
 
 	});
+	
+	/**
+	 * Full screen view
+	 */
+	$('#deals-full-screen').live('click', function(e){
+		e.preventDefault();
+		
+		// Creates the cookie
+		createCookie("agile_full_view", "full_view");
+		
+		// Loads the deals
+		App_Deals.deals();
+
+    });
+	
+	/**
+	 * Small screen view
+	 */
+	$('#deals-small-screen').die().live('click', function(e) {
+		e.preventDefault();
+
+		// Erases the cookie
+		eraseCookie("agile_full_view");
+
+		// Loads the deals
+		App_Deals.deals();
+
+	});
 
 	// Admin Settings milestone list
 	/**
@@ -101,21 +129,21 @@ $(function(){
  * To perform actions on deals arranged in milestones 
  * using sortable.js when it is dropped in middle or dragged over.
  */
-function setup_deals_in_milestones(){
+function setup_deals_in_milestones(id){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
 		      connectWith : "ul",
 		      cursor : "move",
-		      containment : "#opportunities-by-milestones-model-list",
+		      containment : "#" + id ,
 		      scroll : false,
 		      // When deal is dragged to adjust the horizontal scroll
 		      change : function(event, ui){
-		    	  var width = $('#opportunities-by-milestones-model-list > div').width();
-		    	  var scrollX = $('#opportunities-by-milestones-model-list > div').scrollLeft();
+		    	  var width = $('#' + id + ' > div').width();
+		    	  var scrollX = $('#' + id + ' > div').scrollLeft();
 		    	  if(event.pageX > (width * 0.9))
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX + 10);
+		    		  $('#' + id + ' > div').scrollLeft(scrollX + 10);
 		    	  else if(event.pageX < (width * 0.1))
-		    		  $('#opportunities-by-milestones-model-list > div').scrollLeft(scrollX - 15);
+		    		  $('#' + id + ' > div').scrollLeft(scrollX - 15);
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
