@@ -35,7 +35,7 @@ var contact_details_tab = {
 	            }
 	        });
 	        notesView.collection.fetch();
-	        $('#notes', App_Contacts.contactDetailView.model.el).html(notesView.el);
+	        $('#notes', App_Contacts.contactDetailView.el).html(notesView.el);
 		},
 		load_events : function()
 		{
@@ -180,7 +180,7 @@ var contact_details_tab = {
 	            }
 			});
 	        mailsView.collection.fetch();
-	        $('#mail', App_Contacts.contactDetailView.model.el).html(mailsView.el);
+	        $('#mail', App_Contacts.contactDetailView.el).html(mailsView.el);
 		},
 		load_stats : function()
 		{

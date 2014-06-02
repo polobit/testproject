@@ -576,6 +576,7 @@ function load_contact_tab(el, contactJSON)
 	
 	if(!position || position == "timeline")
 	{
+		activate_timeline_tab()
 		contact_details_tab.load_timeline();
 		return;
 	}
