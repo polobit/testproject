@@ -1,7 +1,7 @@
 /**
  * Loading spinner shown while loading
  */
-var LOADING_HTML = '<img class="loading" style="padding-right:5px" src= "img/21-0.gif"></img>';
+var LOADING_HTML = '<img class="loading" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>';
 
 /**
  * Loading images shown which contacts are being fetched on page scroll

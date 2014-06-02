@@ -356,10 +356,11 @@ var ContactsRouter = Backbone.Router.extend({
 			if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
 				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
 
+
+			load_contact_tab(el, contact.toJSON());
+
 			loadWidgets(el, contact.toJSON());
-
-			load_timeline_details(el, id);
-
+			
 			/*
 			 * // To get QR code and download Vcard
 			 * $.get('/core/api/VCard/' + contact.toJSON().id,
