@@ -19,31 +19,31 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class MilestoneUtil
 {
-	/**
-	 * Returns milestone object saved in datastore, otherwise returns default
-	 * milestone
-	 * 
-	 * @return milestone object
-	 */
-	public static Milestone getMilestones()
-	{
-		Objectify ofy = ObjectifyService.begin();
-		Milestone milestone = ofy.query(Milestone.class).get();
-		if (milestone == null)
-			return getDefaultMilestones();
+    /**
+     * Returns milestone object saved in datastore, otherwise returns default
+     * milestone
+     * 
+     * @return milestone object
+     */
+    public static Milestone getMilestones()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Milestone milestone = ofy.query(Milestone.class).get();
+	if (milestone == null)
+	    return getDefaultMilestones();
 
-		return milestone;
-	}
+	return milestone;
+    }
 
-	/**
-	 * Returns default milestone
-	 * 
-	 * @return milestone object
-	 */
-	public static Milestone getDefaultMilestones()
-	{
-		Milestone milestone = new Milestone("Lost,Open,Won,Stage 1");
-		milestone.save();
-		return milestone;
-	}
+    /**
+     * Returns default milestone
+     * 
+     * @return milestone object
+     */
+    public static Milestone getDefaultMilestones()
+    {
+	Milestone milestone = new Milestone("New,Prospect,Proposal,Won,Lost");
+	milestone.save();
+	return milestone;
+    }
 }

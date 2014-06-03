@@ -180,7 +180,7 @@ public class Defaults
 	deal.description = "Advertisements and apparel for Nike";
 	deal.expected_value = 2000000d;
 	deal.probability = 98;
-	deal.milestone = "Open";
+	deal.milestone = "Proposal";
 	DateUtil date = new DateUtil().toMidnight().addDays(20);
 	deal.close_date = date.getTime().getTime() / 1000;
 	/*
