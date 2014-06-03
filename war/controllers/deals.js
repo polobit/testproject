@@ -46,6 +46,9 @@ var DealsRouter = Backbone.Router.extend({
 					var id = $(element).attr('id');
 					$("#" + id + "> div").addClass("milestone-main");
 					
+					if(readCookie("agile_full_view"))
+						$('#opportunities-full-screen-model-list').find('.milestone-column').width("20%");
+					
 					// $('.milestone-main
 					// :last-child').find("ul").closest('div').css({"border-right":"none"});
 
