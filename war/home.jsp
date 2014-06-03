@@ -58,10 +58,12 @@
 	content="<%=domainUser.getInfo(DomainUser.LAST_LOGGED_IN_TIME)%>" />
 
 <%
-    String CSS_PATH = "/";
-			//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+    //String CSS_PATH = "/";
+	String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
+<link rel=stylesheet" type="text/css"
+	href="="<%=CSS_PATH%>css/google-fonts.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
@@ -70,7 +72,7 @@
 	href="/css/agilecrm.css" />
 	
  <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
-<script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script> 
+<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script> 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -135,7 +137,8 @@
 
 
 	<script>
-	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	var LIB_PATH = "//cdnapp.agilecrm.com/";
 	//var LIB_PATH = "/";
 	var HANDLEBARS_PRECOMPILATION = true;
 	
@@ -158,15 +161,15 @@
 	// Billing Restriction
 	var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 	
-	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
+	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	//var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
 	head.load(JQUERY_LIB_PATH, LIB_PATH +  'lib/bootstrap.min.js', LIB_PATH + 'lib/jquery.validate.min.js', LIB_PATH + 'lib/bootstrap-datepicker-min.js',LIB_PATH + 'lib/date-formatter.js',  LIB_PATH + 'lib/bootstrap-timepicker-min.js');
 	
 	<!-- Backbone -->
-	head.js(LIB_PATH + 'lib/underscore-min.js', LIB_PATH + 'lib/backbone-min.js', LIB_PATH + 'lib/infiniscroll.js');
+	head.js(LIB_PATH + 'lib/js-core-frameworks.js');
 	
 	<!-- Handle bars -->
 	
@@ -207,8 +210,8 @@
 		<!-- Unified CSS for All Lib -->
 
 	
-	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-tasks.css"></link>
-	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-social-suite.css"></link>
+	<link rel="stylesheet" type="text/css" href="css/misc/agile-tasks.css"></link>
+	<link rel="stylesheet" type="text/css" href="css/misc/agile-social-suite.css"></link>
 	<!--   <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>-->
 	<!--  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link> -->
 	<!--  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->

@@ -180,7 +180,9 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
 		{
-			queueGetRequest("_widgets_"+contact_id , url, "script");
+			downloadTemplate(model.get('name').toLowerCase() +".js", function(){
+				queueGetRequest("_widgets_"+contact_id , url, "script");
+			});
 		}
 
 		/*
@@ -190,7 +192,7 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (model.get("widget_type") == "CUSTOM")
 		{
-
+			
 			if($('#' + model.get('selector') + '-container').length)
 			{
 				setup_custom_widget(model, widgets_el)

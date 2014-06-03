@@ -158,6 +158,7 @@
 
 									<li><a href="#" class="deals-add"> Deal</a></li>
 									<li><a href="#" id="show-note"> Note</a></li>
+									<li><a href="#send-email"> Email</a></li>
 								</ul> <!-- 
 							<img style='display:hidden' id='ajax'
 								src='img/ajax-loader.gif' />

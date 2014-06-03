@@ -9,8 +9,6 @@
 
 	<div class="footer-left">
 		Like AgileCRM?<b> Share it -</b>
-		<script src="https://platform.twitter.com/widgets.js"
-			type="text/javascript"></script>
 		<span style="margin: 0 10px;"><a data="Twitter"
 			class="email-share"
 			href="https://twitter.com/share?url=https%3A%2F%2Fwww.agilecrm.com&text=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20"

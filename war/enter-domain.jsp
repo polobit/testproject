@@ -178,6 +178,9 @@ padding-left:10px!important;
 		  return true;
 		}
 	</script>
-
+	
+	<!-- Clicky code -->
+ 	<script src="//static.getclicky.com/js" type="text/javascript"></script>
+	<script type="text/javascript">try{ clicky.init(100729733); }catch(e){}</script>
 </body>
 </html>
