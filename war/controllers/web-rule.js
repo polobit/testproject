@@ -36,7 +36,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				})
 			} });
 
-		$("#content").html(getRandomLoadingImg();
+		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
 	},
 
@@ -77,7 +77,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				count++;
 			} });
 
-		$("#content").html(getRandomLoadingImg();
+		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
 	}, 
 	shopify_rule_add : function()
@@ -97,7 +97,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				})
 			} });
 
-		$("#content").html(getRandomLoadingImg();
+		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
 	},
 	shopify : function(url)

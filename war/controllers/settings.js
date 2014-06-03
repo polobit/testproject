@@ -111,7 +111,7 @@ var SettingsRouter = Backbone.Router.extend({
 					}
 
 					// Show loading symbol until model get saved
-					$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg();
+					$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
 
 					var json = serializeForm(form_id);
 

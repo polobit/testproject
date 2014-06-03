@@ -74,8 +74,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	});
 
 	// Prepend Loading
-	$loading = $(getRandomLoadingImg();
-	$("#" + selectId).after(getRandomLoadingImg();
+	$loading = $(getRandomLoadingImg());
+	$("#" + selectId).after(getRandomLoadingImg());
 
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();

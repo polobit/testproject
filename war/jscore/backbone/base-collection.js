@@ -407,12 +407,12 @@ var Base_Collection_View = Backbone.View
 				// view gets populated with fetched collection.
 				if (force_render == undefined)
 				{
-					$(this.el).html(getRandomLoadingImg();
+					$(this.el).html(getRandomLoadingImg());
 					return this;
 				}
 
 				// Remove loading
-				if ($(this.el).html() == getRandomLoadingImg()
+				if ($(this.el).html() == getRandomLoadingImg())
 					$(this.el).empty();
 
 				// If error message is defined the append error message to el

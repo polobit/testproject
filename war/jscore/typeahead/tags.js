@@ -332,7 +332,7 @@ $(function(){
 	
 	$("#refresh-tags").die().live('click', function(e){
 		e.preventDefault();
-		$('#tagslist', App_Contacts.contactsListView.el).html(getRandomLoadingImg();
+		$('#tagslist', App_Contacts.contactsListView.el).html(getRandomLoadingImg());
 		init_tags_collection(App_Contacts.contactsListView.el, function(tags){
 			setup_tags(App_Contacts.contactsListView.el);
 			pieTags(App_Contacts.contactsListView.el, true);

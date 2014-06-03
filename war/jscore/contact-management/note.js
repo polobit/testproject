@@ -53,7 +53,7 @@ $(function()
 		}
 
 		// Shows loading symbol until model get saved
-		//$('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg();
+		//$('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
 
 		var json = serializeForm("noteUpdateForm");
 		
@@ -88,7 +88,7 @@ $(function()
 		disable_save_button($(this));
 		
 		// Shows loading symbol until model get saved
-		//$('#noteModal').find('span.save-status').html(getRandomLoadingImg();
+		//$('#noteModal').find('span.save-status').html(getRandomLoadingImg());
 
 		var json = serializeForm("noteForm");
 

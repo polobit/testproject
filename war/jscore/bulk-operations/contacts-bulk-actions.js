@@ -56,7 +56,7 @@ $(function()
 			
 			disable_save_button(saveButton);
 			// Show loading symbol until model get saved
-			//$('#ownerBulkForm').find('span.save-status').html(getRandomLoadingImg();
+			//$('#ownerBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 			var url;
 
@@ -116,7 +116,7 @@ $(function()
 
 			disable_save_button(saveButton);
 			// Show loading symbol until model get saved
-			//$('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg();
+			//$('#campaignsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 			var workflow_id = $('#campaignBulkSelect option:selected').attr('value');
 			var url = '/core/api/bulk/update?workflow_id=' + workflow_id + "&action_type=ASIGN_WORKFLOW";
@@ -189,7 +189,7 @@ $(function()
 
 				disable_save_button(saveButton);
 				
-				//$('#tagsBulkForm').find('span.save-status').html(getRandomLoadingImg();
+				//$('#tagsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 				var url = '/core/api/bulk/update?action_type=ADD_TAG';
 				var json = {};
@@ -275,7 +275,7 @@ $(function()
 
 				disable_save_button(saveButton);
 				
-				//$('#tagsBulkForm').find('span.save-status').html(getRandomLoadingImg();
+				//$('#tagsBulkForm').find('span.save-status').html(getRandomLoadingImg());
 
 				var url = '/core/api/bulk/update?action_type=REMOVE_TAG';
 				var json = {};

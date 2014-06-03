@@ -231,7 +231,7 @@ function savecases(formId, modalId, saveBtn, json)
 	}
 	
 	// Shows loading symbol until model get saved
-    //$('#' + modalId).find('span.save-status').html(getRandomLoadingImg();
+    //$('#' + modalId).find('span.save-status').html(getRandomLoadingImg());
 	
 	var newEntry=false; // test if this model is new, true => new model 
 	if(json.id===undefined)newEntry=true;

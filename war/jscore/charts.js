@@ -38,7 +38,7 @@ function pie(url, selector, name)
 {
 
 	// Show loading
-	// $('#' + selector).html(getRandomLoadingImg();
+	// $('#' + selector).html(getRandomLoadingImg());
 
 	var chart;
 	setupCharts(function()
@@ -173,7 +173,7 @@ function showBar(url, selector, name, yaxis_name, stacked)
 	var chart;
 
 	// Shows loading image
-	$('#' + selector).html(getRandomLoadingImg();
+	$('#' + selector).html(getRandomLoadingImg());
 
 	// Builds graph with the obtained json data.
 	setupCharts(function()
@@ -341,7 +341,7 @@ function showLine(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg();
+		$('#' + selector).html(getRandomLoadingImg());
 	
 	
 	var chart;
@@ -479,7 +479,7 @@ function showFunnel(url, selector, name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg();
+		$('#' + selector).html(getRandomLoadingImg());
 
 	var chart;
 
@@ -574,7 +574,7 @@ function showCohorts(url, selector, name, yaxis_name, show_loading)
 		// Old calls were not showing loading image..
 	}
 	else
-		$('#' + selector).html(getRandomLoadingImg();
+		$('#' + selector).html(getRandomLoadingImg());
 	
 	
 	var chart;
@@ -661,7 +661,7 @@ function pieTags(el, force_reload)
 	if(force_reload)
 		url = url + '?reload=true';
 	
-	$("#pie-tags-chart", el).html(getRandomLoadingImg();
+	$("#pie-tags-chart", el).html(getRandomLoadingImg());
 	
 	pie(url, 'pie-tags-chart', '');
 }
