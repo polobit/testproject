@@ -22,7 +22,7 @@ $(function()
 								return;
 							
 							// Show loading in content
-							$("#content").html(LOADING_HTML);
+							$("#content").html(getRandomLoadingImg();
 							/**
 							 * Sends delete request to delete namespace 
 							 */

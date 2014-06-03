@@ -455,7 +455,7 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					$(this.el).html(LOADING_HTML);
+					$(this.el).html(getRandomLoadingImg();
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
@@ -467,7 +467,7 @@ var Base_Model_View = Backbone.View
 				// Shows loading in the view, if render conditions are
 				// satisfied
 				else {
-					$(this.el).html(LOADING_HTML);
+					$(this.el).html(getRandomLoadingImg();
 				}
 
 				// Returns view object

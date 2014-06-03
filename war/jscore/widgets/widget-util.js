@@ -403,7 +403,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
     var el;
     var models;
-    $('#prefs-tabs-content').html(LOADING_HTML);
+    $('#prefs-tabs-content').html(getRandomLoadingImg();
     if (model)
 	el = $(getTemplate("widget-settings", model));
     else
@@ -471,7 +471,7 @@ function set_up_access(widget_name, template_id, data, url, model)
     var json;
     var models;
 
-    $('#prefs-tabs-content').html(LOADING_HTML);
+    $('#prefs-tabs-content').html(getRandomLoadingImg();
     $('#PrefsTab .active').removeClass('active');
     $('.add-widget-prefs-tab').addClass('active');
 
@@ -586,7 +586,7 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
     var models;
     var json;
 
-    $('#prefs-tabs-content').html(LOADING_HTML);
+    $('#prefs-tabs-content').html(getRandomLoadingImg();
     $('#PrefsTab .active').removeClass('active');
     $('.add-widget-prefs-tab').addClass('active');
 

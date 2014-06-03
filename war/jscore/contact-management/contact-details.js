@@ -109,7 +109,7 @@ $(function(){
 		
 		var tag = $(this).attr("tag");
 		removeItemFromTimeline($("#" + tag+ '-tag-timeline-element', $('#timeline')).parent('.inner'))
-		console.log($(this).closest("li").parent('ul').append(LOADING_HTML));
+		console.log($(this).closest("li").parent('ul').append(getRandomLoadingImg());
 		
      	var json = App_Contacts.contactDetailView.model.toJSON();
      	

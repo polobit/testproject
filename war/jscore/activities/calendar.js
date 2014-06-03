@@ -276,7 +276,7 @@ $(function(){
 		
 		$(this).attr("disabled", "disabled");
 		
-		$(this).after(LOADING_HTML);
+		$(this).after(getRandomLoadingImg();
 		App_Widgets.calendar_sync_google.model.url = "/core/api/calendar-prefs"
 		console.log(App_Widgets.calendar_sync_google.model.destroy({success : function(){
 			

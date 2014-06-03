@@ -265,7 +265,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 	}
 	
 	// Shows loading symbol until model get saved
-    // $('#' + modalId).find('span.save-status').html(LOADING_HTML);
+    // $('#' + modalId).find('span.save-status').html(getRandomLoadingImg();
 
 	var newDeal = new Backbone.Model();
 	newDeal.url = 'core/api/opportunity';

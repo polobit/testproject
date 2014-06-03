@@ -60,7 +60,7 @@ $(function()
 		
 		$(this).attr("disabled", "disabled");
 		
-		$(this).after(LOADING_HTML);
+		$(this).after(getRandomLoadingImg();
 		
 		console.log(App_Widgets.contact_sync_google.model.destroy({success : function(){
 			App_Widgets.contact_sync_google.model.clear();
@@ -111,7 +111,7 @@ $(function()
 		console.log(App_Widgets.setup_google_contacts.model.toJSON())
 		var url = App_Widgets.setup_google_contacts.model.url;
 
-		$(this).after(LOADING_HTML);
+		$(this).after(getRandomLoadingImg();
 		App_Widgets.setup_google_contacts.model.url = url + "?sync=true"
 		App_Widgets.setup_google_contacts.model.save({}, {success : function(data){
 		

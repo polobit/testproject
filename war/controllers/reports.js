@@ -44,7 +44,7 @@ var ReportsRouter = Backbone.Router.extend({
 	reportAdd : function()
 	{
 		var count = 0;
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg();
 		CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "email-reports", isNew : true,
 			postRenderCallback : function(el)
@@ -82,7 +82,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 			} });
 
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg();
 		report_add.render();
 
 	},
@@ -95,7 +95,7 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportEdit : function(id)
 	{
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg();
 		// Counter to set when script is loaded. Used to avoid flash in page
 		var count = 0;
 
@@ -142,7 +142,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 			} });
 
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg();
 		report_model.render();
 
 	},
@@ -161,7 +161,7 @@ var ReportsRouter = Backbone.Router.extend({
 			{
 
 				// Shows loading while report is being fetched
-				$("#content").html(LOADING_HTML);
+				$("#content").html(getRandomLoadingImg();
 				var reportModel = new Backbone.Model();
 				reportModel.url = "core/api/reports/" + id;
 				reportModel.fetch({ success : function(data)

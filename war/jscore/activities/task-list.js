@@ -50,7 +50,7 @@ function updateData(params) {
 	
 	console.log(params);
 	// Shows loading image untill data gets ready for displaying
-	$('#task-list-based-condition').html(LOADING_HTML);
+	$('#task-list-based-condition').html(getRandomLoadingImg();
 	
 	// Creates backbone collection view
 		this.App_Calendar.allTasksListView = new Base_Collection_View({

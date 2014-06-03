@@ -60,7 +60,7 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 	trigger_form.find('select#' + milestones_select_id).closest('div.control-group').css('display', '');
 
 	// Show loading image.
-	$('select#' + milestones_select_id).after(LOADING_HTML);
+	$('select#' + milestones_select_id).after(getRandomLoadingImg();
 
 	// Fills milestone select element
 	populateMilestones(trigger_form, undefined, undefined, function(data)

@@ -49,7 +49,7 @@ function findDetails(criteria, owner)
 function createNestedCollection(criteria, criteriaArray)
 {
 	// Shows loading image untill data gets ready for displaying
-	$('#task-list-based-condition').html(LOADING_HTML);
+	$('#task-list-based-condition').html(getRandomLoadingImg();
 
 	// Initialize nested collection
 	initTaskListCollection();

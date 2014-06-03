@@ -123,7 +123,7 @@ function getOptions()
  **/
 function get_email_table_reports(campaign_id)
 {
-	$("#email-table-reports").html(LOADING_HTML);
+	$("#email-table-reports").html(getRandomLoadingImg();
 	
 	$.getJSON('core/api/campaign-stats/email/table-reports/'+ campaign_id + getOptions(), function(data){
 	
