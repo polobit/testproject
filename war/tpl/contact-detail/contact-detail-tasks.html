@@ -40,9 +40,13 @@
 		<span class="owner-name">{{taskOwner.name}}</span>
 	</span>
 	{{#if is_complete}}
-			<div style="margin-bottom: 9px;"><span>&#10004;</span><h4 class="task-subject" style="text-decoration:line-through;display:inline;"><b style="margin:0px 20px 0px 10px;">{{subject}}</b><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div>
+			<div style="margin-bottom: 9px;"><span>&#10004;</span><h4 class="task-subject" style="text-decoration:line-through;display:inline;"><b style="margin:0px 20px 0px 10px;">{{subject}}</b>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if_equals}}</h4></div>
 		{{else}}
-			<div style="margin-bottom: 9px;"><input data="{{id}}" class="complete-task" type="checkbox"/><h4 class="task-subject" style="display:inline;"><b style="margin:0px 20px 0px 10px;">{{subject}}</b><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></h4></div>
+			<div style="margin-bottom: 9px;"><input data="{{id}}" class="complete-task" type="checkbox"/><h4 class="task-subject" style="display:inline;"><b style="margin:0px 20px 0px 10px;">{{subject}}</b>{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if_equals}}</h4></div>
 	{{/if}}
   <div style="margin-left:22px;">
 	<p><i class="{{icons type}}"></i>&nbsp;{{ucfirst type}}<span style="margin-left:20px;">Due : <time class="task-created-time" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" due}}</span></p>
