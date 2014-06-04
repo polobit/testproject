@@ -76,7 +76,7 @@ public class DefaultWidgets
 		WidgetType.SUPPORT));
 	/*
 	 * widgets.add(new Widget( "Xero",
-	 * "Xero is an online accounting software for small business � Explore invoicing, reconciliation anytime, anywhere."
+	 * "Xero is an online accounting software for small business – Explore invoicing, reconciliation anytime, anywhere."
 	 * , "/widgets/xero.js", "/widgets/xero-logo-lowres-RGB.gif",
 	 * "/widgets/xero24x24.png", null, WidgetType.BILLING)); widgets.add(new
 	 * Widget( "QuickBooks",
@@ -84,8 +84,6 @@ public class DefaultWidgets
 	 * , "/widgets/quickBooks.js", "/widgets/QuickBooks210x70.png",
 	 * "/widgets/QuickBooks210x70.png", null, WidgetType.BILLING));
 	 */
-	System.out.println("Default widgets ");
-	System.out.println(widgets);
 
 	return widgets;
     }
