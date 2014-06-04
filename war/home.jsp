@@ -63,8 +63,6 @@
 %>
 
 <link rel="stylesheet" type="text/css"
-	href="<%=CSS_PATH%>css/google-fonts.css" />
-<link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
