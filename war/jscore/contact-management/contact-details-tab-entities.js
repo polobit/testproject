@@ -254,4 +254,4 @@ var contact_details_tab = {
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 		}
 
-}
+};
