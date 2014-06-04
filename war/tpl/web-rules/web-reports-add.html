@@ -31,7 +31,7 @@
 													value="Contact" />
 											</div>
 										</td>
-										<td class="lhs-block span2" style="vertical-align: top;">
+										<td class="lhs-block" style="vertical-align: top;">
 											<div id="LHS" name="LHS">
 												<select name="temp" class="lhs" id="LHS"
 													style="width: 125px;">
@@ -63,7 +63,7 @@
 												</select>
 											</div>
 										</td>
-										<td class="codition-block span2" style="vertical-align:top">
+										<td class="codition-block" style="vertical-align:top">
 											<div id="condition" name="CONDITION">
 												<select name="temp" style="width: 100%;">
 													<option value="MATCHES" class="page referrer" placeholder="Enter URL">contains</option>
@@ -124,7 +124,7 @@
 												</select>
 											</div>
 										</td>
-										<td class="rhs-block controls span2"
+										<td class="rhs-block controls"
 											style="vertical-align: top;">
 											<div id="RHS" class="rhs" name="RHS">
 												<input type="text" name="temp" 
@@ -396,7 +396,7 @@
 													</select> 
 											</div>
 										</td>
-										<td class="controls span2"
+										<td class="controls"
 											style="vertical-align: top; max-width: 120px;">
 											<div id="RHS-NEW" name="RHS_NEW">
 												<input id="date_between" type="text" name="temp"
@@ -404,7 +404,7 @@
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
-										<td class="span2" style="vertical-align: top;">
+										<td style="vertical-align: top;">
 											<div id="nested_condition" name="nested_condition">
 												<select name="temp" style="width: 100%;">
 													<option value="EQUALS" class="tags_time">on</option>
@@ -418,7 +418,7 @@
 												</select>
 											</div>
 										</td>
-										<td class="controls span2" style="vertical-align: top;">
+										<td class="controls" style="vertical-align: top;">
 											<div id="nested_lhs" name="nested_lhs">
 												<input type="text" name="temp" class="LAST NEXT required"
 													style="width: 92%" placeholder="Number of days" /> <input
@@ -428,7 +428,7 @@
 													placeholder="MM/DD/YY" />
 											</div>
 										</td>
-										<td class="controls span2" style="vertical-align: top;">
+										<td class="controls " style="vertical-align: top;">
 											<div id="nested_rhs" name="nested_rhs">
 												<input id="date_between" type="text" name="temp"
 													style="width: 92%" class="BETWEEN input date required"
@@ -453,8 +453,8 @@
 						<label class="control-label">Action</label>
 						<div class="controls">
 								<div class="webrule-actions chained-table"> 
-							<div class="alert" style="width:65%;margin-bottom: 5%;border-color:#DDD; background-color:#E5E5E5">
-							<table style="background-color: transparent"
+							<div class="alert" style="margin-bottom: 5%;border-color:#DDD; background-color:#E5E5E5">
+							<table style="background-color: transparent; width:100%"
 								class="reports-condition-table actions" >
 								<tbody class="chained"  name="actions">
 									<tr>
@@ -530,7 +530,7 @@
 												<div id="noty-message" name="popup_text"  style="padding-top:10px">
  													<a href='#' id="tiny_mce_webrules_link" style="float:right;display:none">(Select a template / Edit in HTML editor)</a>
 													<textarea  cols="50" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required" rows="10" placeholder="Paste HTML context"></textarea>
-													<textarea  cols="50" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html span5 required MODAL_POPUP" rows="10" placeholder="Paste HTML context"></textarea>
+													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP" rows="10" placeholder="Paste HTML context" style="width:100%"></textarea>
 <textarea  cols="60" name="webrule-javascript" class="code  JAVA_SCRIPT span5 required" rows="10" placeholder="">function agile_js_code_exec() {
     // Copy your code here
 
@@ -578,7 +578,7 @@
 
 </div>
 
-<div class="pull-right" style="width: 37%;margin-top:-4%"><a href="#" class="web-rule-multiple-add">Add Action</a></div>
+<div class="pull-right" style="margin-top:-4%"><a href="#" class="web-rule-multiple-add" width="12%">Add Action</a></div>
 							</div>
 						<div style="width:80%; margin: 0 auto;">
    								<input name="disabled" type="checkbox" style="vertical-align:top;">&nbsp;<span>Disable</span>

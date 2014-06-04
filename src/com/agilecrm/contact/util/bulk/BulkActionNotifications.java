@@ -15,7 +15,8 @@ public class BulkActionNotifications
 		"%s contacts uploaded"), CONTACTS_IMPORT_MESSAGE("%s"), CONTACTS_CSV_IMPORT("%s contacts imported"), REMOVE_ACTIVE_SUBSCRIBERS(
 		"%s subscribers successfully removed from campaign"), SEND_EMAIL(
 		"Email successfully sent to %s contact(s)"), EXPORT_CONTACTS_CSV(
-		"Contact export operation is complete. Email is sent to you with the CSV file.");
+		"Contact export operation is complete. Email is sent to you with the CSV file."), REMOVE_TAGS(
+		"Tag(s) %s removed from %s contacts");
 
 	String message;
 

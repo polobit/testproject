@@ -50,7 +50,7 @@ var ContactViewsRouter = Backbone.Router.extend({
 				}, '<option value="CUSTOM_{{field_label}}">{{field_label}}</option>', true, el);
 
 			} });
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		view.render();
 	},
 	

@@ -250,7 +250,7 @@ function chainFilters(el, data, callback, is_webrules)
 {
 	if(!CUSTOM_FIELDS)
 	{
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		fillCustomFieldsInFilters(el, function(){
 			show_chained_fields(el, data, true);
 			if (callback && typeof (callback) === "function")

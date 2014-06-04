@@ -4,6 +4,11 @@
 var LOADING_HTML = '<img class="loading" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>';
 
 /**
+ * Set of loading images
+ */
+LOADING_HTML_IMAGES = [LOADING_HTML]
+
+/**
  * Loading images shown which contacts are being fetched on page scroll
  */
 var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "img/ajax-loader-cursor.gif"></img>';
@@ -12,6 +17,16 @@ var LOADING_ON_CURSOR = '<img class="loading" style="padding-right:5px" src= "im
  * Default image shown for contacts if image is not available
  */
 var DEFAULT_GRAVATAR_url = "https://dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png";
+
+/**
+ * Returns random loading images
+ * @returns
+ */
+function getRandomLoadingImg()
+{
+	var length = LOADING_HTML_IMAGES.length;
+	return LOADING_HTML_IMAGES[Math.round(Math.random() * (LOADING_HTML_IMAGES.length - 1))]
+}
 
 // Read a page's GET URL variables and return them as an associative array.
 function getUrlVars()
@@ -59,8 +74,8 @@ function fillSelect(selectId, url, parseKey, callback, template, isUlDropdown, e
 	});
 
 	// Prepend Loading
-	$loading = $(LOADING_HTML);
-	$("#" + selectId).after(LOADING_HTML);
+	$loading = $(getRandomLoadingImg());
+	$("#" + selectId).after(getRandomLoadingImg());
 
 	// Creates a collection and fetches the data from the url set in collection
 	var collection = new collection_def();

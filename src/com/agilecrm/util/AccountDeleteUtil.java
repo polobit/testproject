@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
@@ -200,6 +201,9 @@ public class AccountDeleteUtil
 
 	    try
 	    {
+		// Cancel subscription before starting delete
+		Subscription.deleteSubscriptionOfParticularDomain(namespace);
+
 		// Gets all entities of the given name-space
 		List<String> kinds = getKinds(namespace);
 
@@ -247,7 +251,8 @@ public class AccountDeleteUtil
 	NamespaceManager.set("");
 
 	// Get keys of domain users in respective domain
-	List<com.googlecode.objectify.Key<DomainUser>> domainUserKeys = DomainUserUtil.dao.listKeysByProperty("domain", namespace);
+	List<com.googlecode.objectify.Key<DomainUser>> domainUserKeys = DomainUserUtil.dao.listKeysByProperty("domain",
+		namespace);
 
 	// Delete domain users in domain
 	DomainUserUtil.dao.deleteKeys(domainUserKeys);
@@ -336,7 +341,8 @@ public class AccountDeleteUtil
 
 		// Return a set of document IDs.
 		if (!StringUtils.isEmpty(startId))
-		    request = GetRequest.newBuilder().setReturningIdsOnly(true).setStartId(startId).setIncludeStart(false).setLimit(900).build();
+		    request = GetRequest.newBuilder().setReturningIdsOnly(true).setStartId(startId)
+			    .setIncludeStart(false).setLimit(900).build();
 		else
 		    request = GetRequest.newBuilder().setReturningIdsOnly(true).setLimit(900).build();
 
