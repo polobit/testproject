@@ -46,7 +46,7 @@ var WebreportsRouter = Backbone.Router.extend({
 		// If reports view is not defined, navigates to reports
 		if (!this.webrules || !this.webrules.collection || this.webrules.collection.length == 0 || this.webrules.collection.get(id) == null)
 		{
-			this.navigate("webrules", { trigger : true });
+			this.navigate("web-rules", { trigger : true });
 			return;
 		}
 
