@@ -373,4 +373,47 @@ public class TaskUtil
 	    return null;
 	}
     }
+
+    /**
+     * * Returns Count of tasks related to a contact and of a particular type.
+     * 
+     * @param taskType
+     *            - type of task
+     * @param contactId
+     *            - Id of the contact related to task.
+     * @return Count of tasks related to a contact
+     * @throws Exception
+     */
+    public static int getTaskCountForContact(String taskType, Long contactId) throws Exception
+    {
+	Query<Task> query = dao.ofy().query(Task.class)
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+
+	if (!StringUtils.isEmpty(taskType))
+	    query.filter("type =", taskType);
+
+	return query.count();
+    }
+
+    /**
+     * * Returns tasks related to a contact and of a particular type, if not
+     * type gives all.
+     * 
+     * @param taskType
+     *            - type of task
+     * @param contactId
+     *            - Id of the contact related to task.
+     * @return List of tasks related to a contact
+     * @throws Exception
+     */
+    public static List<Task> getContactSortedTasks(String taskType, Long contactId) throws Exception
+    {
+	Query<Task> query = dao.ofy().query(Task.class)
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("due");
+
+	if (!StringUtils.isEmpty(taskType))
+	    query.filter("type =", taskType);
+
+	return query.list();
+    }
 }

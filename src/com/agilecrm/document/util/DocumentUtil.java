@@ -8,6 +8,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>DocumentUtil</code> is utility class used to process data of
@@ -67,7 +68,7 @@ public class DocumentUtil
     public static List<Document> getDocuments(int max, String cursor)
     {
 	if (max != 0)
-		return dao.fetchAll(max, cursor);
+	    return dao.fetchAll(max, cursor);
 	return getDocuments();
     }
 
@@ -109,6 +110,7 @@ public class DocumentUtil
 	Document document = getDocument(id);
 	return document.getCases();
     }
+
     /**
      * Gets documents related to a particular contact
      * 
@@ -149,5 +151,21 @@ public class DocumentUtil
     {
 	Key<Opportunity> dealKey = new Key<Opportunity>(Opportunity.class, dealId);
 	return dao.listByProperty("related_deals = ", dealKey);
+    }
+
+    /**
+     * Gets documents count related to a particular contact
+     * 
+     * @param contactId
+     *            contact id to get the events related to a contact
+     * @return Count of documents related to a contact
+     * @throws Exception
+     */
+    public static int getContactDocumentsCount(Long contactId) throws Exception
+    {
+	Query<Document> query = dao.ofy().query(Document.class)
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+
+	return query.count();
     }
 }
