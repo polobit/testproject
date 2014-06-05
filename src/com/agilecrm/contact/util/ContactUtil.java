@@ -755,7 +755,7 @@ public class ContactUtil
 	    Long endTime)
     {
 	HashMap<String, Object> properties = new HashMap<String, Object>();
-	properties.put("campaignStatus.campaign_id", campaignId);
+	properties.put("emailBounceStatus.campaign_id", campaignId);
 	properties.put("emailBounceStatus.emailBounceType", emailBounceType);
 	properties.put("emailBounceStatus.time >=", startTime);
 	properties.put("emailBounceStatus.time <", endTime);

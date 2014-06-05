@@ -43,20 +43,31 @@ public class EmailBounceStatusUtil
 	    // Update EmailBounceStatus when HardBounceEmail is removed
 	    while (emailBounceStatusIterator.hasNext())
 	    {
-		// Compare old hardbounced emails
-		for (String email : oldEmails)
+		try
 		{
-		    // If any hardbounced email not removed
-		    if (newEmails.contains(email))
-			continue;
-
-		    // Remove email if not equal
-		    if ((emailBounceStatusIterator.next().email.equals(email)))
+		    // Compare old hardbounced emails
+		    for (String email : oldEmails)
 		    {
-			isBounceEmailRemoved = true;
-			emailBounceStatusIterator.remove();
-		    }
+			// If any hardbounced email not removed
+			if (newEmails.contains(email))
+			    continue;
 
+			// Remove email if equal
+			if ((emailBounceStatusIterator.next().email.equals(email)))
+			{
+			    isBounceEmailRemoved = true;
+			    emailBounceStatusIterator.remove();
+			}
+
+		    }
+		}
+		catch (Exception e)
+		{
+
+		    System.err.println("Exception occured in loop while updating email bounce status..."
+			    + e.getMessage());
+		    e.printStackTrace();
+		    continue;
 		}
 	    }
 
