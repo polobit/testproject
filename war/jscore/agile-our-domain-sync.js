@@ -58,11 +58,10 @@ function add_current_loggedin_time()
 	
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
-	
 	var existing_date_string = "";
 	if(loggedin_time_property)
 		{
-		var existing_date_object = new Date(loggedin_time_property.value);
+		var existing_date_object = new Date(parseFloat(loggedin_time_property.value) * 1000);
 		existing_date_string = existing_date_object.getUTCMonth() + 1 + "/" + existing_date_object.getUTCDate() + "/" + existing_date_object.getUTCFullYear();
 		}
 	
@@ -127,24 +126,28 @@ function add_account_canceled_info(info, callback)
 		});
 }
 
+function our_domain_set_account()
+{
+	// If it is local server then add contacts to local domain instead of
+	// our domain
+	if (LOCAL_SERVER)
+		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
+
+	else
+		_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+
+	_agile.set_email(CURRENT_DOMAIN_USER['email']);
+	
+	// Track page view code
+	_agile.track_page_view();
+}
 function our_domain_sync()
 {
 
 	try
 	{
-
-		// If it is local server then add contacts to local domain instead of
-		// our domain
-		if (LOCAL_SERVER)
-			_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
-
-		else
-			_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
-
-		_agile.set_email(CURRENT_DOMAIN_USER['email']);
 		
-		// Track page view code
-		_agile.track_page_view();
+		our_domain_set_account();
 
 		// Clicky code
 		head.js('//static.getclicky.com/js', function() {
@@ -323,5 +326,25 @@ function add_properties_from_popup(phone_number, company_size)
 					window.setTimeout(initWebrules, 4000)
 							
 				});
+			});
+}
+
+function add_property(name, value, type, callback)
+{
+	//alert(Agile_Contact.properties);
+	var property = getProperty(Agile_Contact.properties, name);
+	if(property && property.value == value && type == property.type)
+	{
+		callback(Agile_Contact);
+		return false;
+		
+	}
+	 _agile.add_property(create_contact_custom_field(name, value, type), function(data)
+			{
+				Agile_Contact = data;
+				_agile_contact = data;
+				
+				if(callback && typeof callback == "function")
+					callback(data);
 			});
 }
