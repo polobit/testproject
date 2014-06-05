@@ -26,6 +26,8 @@ public class WebRule
     @NotSaved(IfDefault.class)
     public String name = null;
 
+    public Boolean disabled;
+
     // Store type of the rule whether it is plain web rule or shopify rule
     @NotSaved(IfDefault.class)
     public String rule_type = "WEBRULE";

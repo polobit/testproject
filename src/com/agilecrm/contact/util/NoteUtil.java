@@ -8,6 +8,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>NoteUtil</code> is utility class used to process data of {@link Note}
@@ -23,8 +24,7 @@ import com.googlecode.objectify.Key;
 public class NoteUtil
 {
     // Dao
-    private static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(
-	    Note.class);
+    private static ObjectifyGenericDao<Note> dao = new ObjectifyGenericDao<Note>(Note.class);
 
     /**
      * Gets all the notes related to a contact
@@ -76,8 +76,7 @@ public class NoteUtil
     {
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 
-	Iterable<Key<Note>> keys = dao.ofy().query(Note.class)
-		.ancestor(contactKey).fetchKeys();
+	Iterable<Key<Note>> keys = dao.ofy().query(Note.class).ancestor(contactKey).fetchKeys();
 	dao.deleteKeys(keys);
     }
 
@@ -98,12 +97,24 @@ public class NoteUtil
 
     public static List<Note> getNotesRelatedToCurrentUser()
     {
-	return dao
-		.ofy()
-		.query(Note.class)
-		.filter("owner",
-			new Key<AgileUser>(AgileUser.class, AgileUser
-				.getCurrentAgileUser().id))
+	return dao.ofy().query(Note.class)
+		.filter("owner", new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id))
 		.order("-created_time").limit(10).list();
+    }
+
+    /**
+     * Gets count of the notes related to a contact
+     * 
+     * @param contactId
+     *            contact id to get its notes
+     * @return list of notes related to a contact
+     * @throws Exception
+     */
+    public static int getNotesCount(Long contactId) throws Exception
+    {
+	Query<Note> query = dao.ofy().query(Note.class)
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+
+	return query.count();
     }
 }

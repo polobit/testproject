@@ -77,16 +77,15 @@ public class Globals
     // public static final String STRIPE_CLIENT_ID =
     // "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
-	// Xero live keys
-	public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
-	public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
+    // Xero live keys
+    public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
+    public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
 
-	public static final String QUICKBOOKS_APP_KEY = "3cbd2a41bdc1bb41cdb8121b032d37bb78d7";
-	public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdPRUUGiDZ0Ik0P2p3NdGA0fc7E";
-	public static final String QUICKBOOKS_CONSUMER_SECRET = "u1E4PJ87d5jHO9bJodbRPo9MQIWTnXZu37fqzGQD";
-	// Max Plan Users
-	public static final int TRIAL_USERS_COUNT = 2;
-
+    public static final String QUICKBOOKS_APP_KEY = "3cbd2a41bdc1bb41cdb8121b032d37bb78d7";
+    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdPRUUGiDZ0Ik0P2p3NdGA0fc7E";
+    public static final String QUICKBOOKS_CONSUMER_SECRET = "u1E4PJ87d5jHO9bJodbRPo9MQIWTnXZu37fqzGQD";
+    // Max Plan Users
+    public static final int TRIAL_USERS_COUNT = 2;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";

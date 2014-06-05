@@ -574,8 +574,10 @@ $(function()
 	    return 'important';
 	if (priority == 'NORMAL' || priority == '#36C')
 	    return 'info';
-	if (priority == 'LOW' || priority == 'green')
-	    return 'success';
+	if (priority == 'LOW')
+	    return '';
+	if(priority == 'green')
+		return 'success';
     });
 
     /**

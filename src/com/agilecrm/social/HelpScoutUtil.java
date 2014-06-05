@@ -86,7 +86,7 @@ public class HelpScoutUtil
 	// message.
 	if (page.getCount() <= 0)
 	{
-	    customerMails.put("message", "No Customers with this Email.");
+	    customerMails.put("message", "No customer found.");
 	    return customerMails.toString();
 	}
 

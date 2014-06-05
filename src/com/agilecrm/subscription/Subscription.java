@@ -22,6 +22,7 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -154,6 +155,32 @@ public class Subscription
     {
 	Objectify ofy = ObjectifyService.begin();
 	return ofy.query(Subscription.class).get();
+    }
+
+    /**
+     * Returns {@link Subscription} object of particular domain domain
+     * 
+     * @return {@link Subscription}
+     * */
+    public static void deleteSubscriptionOfParticularDomain(String namespace)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+	    Subscription subscription = getSubscription();
+	    if (subscription != null)
+		subscription.cancelSubscription();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     public void save()

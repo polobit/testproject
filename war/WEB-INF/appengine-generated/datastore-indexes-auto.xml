@@ -1,11 +1,12 @@
-<!-- Indices written at Fri, 30 May 2014 17:14:12 IST -->
+<!-- Indices written at Wed, 4 Jun 2014 15:27:17 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="emailBounceStatus.emailBounceType" direction="asc"/>
-        <property name="emailBounceStatus.time" direction="asc"/>
+    <!-- Used 5 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="owner" direction="asc"/>
+        <property name="due" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
