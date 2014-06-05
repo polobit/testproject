@@ -188,7 +188,7 @@
 									    if (domainUser != null && domainUser.is_admin)
 														out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li><li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
 									%>
-									<li><a onclick="window.open('https://www.agilecrm.com/support.html' ,'videos' ,'width=750 ,height=550, left=200%,top=100%');return false;"><i class="icon-facetime-video"></i> Help
+									<li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
 									<li><a href="#contact-us"><i class="icon-pencil"></i>
 											Contact Us</a></li>
