@@ -215,6 +215,10 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("xero.js");
 	}
+	else if (templateName.indexOf("quickbooks") == 0)
+	{
+		template_relative_urls.push("quickbooks.js");
+	}
 
 	if (templateName.indexOf("socialsuite") == 0)
 	{
