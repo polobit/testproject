@@ -199,7 +199,7 @@
 				downloadTemplate("tpl.js");
 			
 			// Load User voice then
-			setTimeout(function(){head.js('lib/user-voice.js');}, 20000);	
+			setTimeout(loadMiscScripts, 10000);	
 		}); 
 	});
 	
