@@ -83,11 +83,11 @@ public class MandrillUtil
      *            - text content
      */
     public static void sendMail(String fromEmail, String fromName, String to, String subject, String replyTo,
-	    String html, String text)
+	    String html, String text, String metadata)
     {
 	String subaccount = NamespaceManager.get();
 	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to,
-		subject, replyTo, html, text);
+		subject, replyTo, html, text, metadata);
 
 	PullQueueUtil.addToPullQueue(
 		"bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
@@ -111,7 +111,7 @@ public class MandrillUtil
 	// Initialize mailJSON with common fields
 	JSONObject mailJSON = getMandrillMailJSON(firstMandrillDefferedTask.subaccount,
 		firstMandrillDefferedTask.fromEmail, firstMandrillDefferedTask.fromName,
-		firstMandrillDefferedTask.replyTo);
+		firstMandrillDefferedTask.replyTo, firstMandrillDefferedTask.metadata);
 
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();
@@ -197,14 +197,15 @@ public class MandrillUtil
      *            - from name
      * @return JSONObject
      */
-    public static JSONObject getMandrillMailJSON(String subaccount, String fromEmail, String fromName, String replyTo)
+    public static JSONObject getMandrillMailJSON(String subaccount, String fromEmail, String fromName, String replyTo,
+	    String metadata)
     {
 	try
 	{
 	    // Complete mail json to be sent
 	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(subaccount);
 
-	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, replyTo);
+	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, replyTo, metadata);
 	    mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
 	    mailJSON.put(Mandrill.MANDRILL_ASYNC, true);
 
@@ -227,7 +228,8 @@ public class MandrillUtil
      *            - from name
      * @return messageJSON
      */
-    public static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String replyTo)
+    public static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String replyTo,
+	    String metadata)
     {
 	JSONObject messageJSON = new JSONObject();
 
@@ -247,6 +249,8 @@ public class MandrillUtil
 	    messageJSON.put(Mandrill.MANDRILL_FROM_EMAIL, fromEmail);
 
 	    messageJSON.put(Mandrill.MANDRILL_FROM_NAME, fromName);
+
+	    messageJSON.put(Mandrill.MANDRILL_METADATA, metadata);
 
 	}
 	catch (JSONException e)
@@ -419,7 +423,7 @@ public class MandrillUtil
 
 	    Mandrill.sendMail(true, mandrillDeferredTask.fromEmail, mandrillDeferredTask.fromName,
 		    mandrillDeferredTask.to, mandrillDeferredTask.subject, mandrillDeferredTask.replyTo,
-		    mandrillDeferredTask.html, mandrillDeferredTask.text);
+		    mandrillDeferredTask.html, mandrillDeferredTask.text, mandrillDeferredTask.metadata);
 	}
 	catch (Exception e)
 	{
