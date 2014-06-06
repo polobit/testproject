@@ -220,6 +220,11 @@ public class MandrillWebhook extends HttpServlet
     public static void setCampaignLog(String campaignId, String subscriberId, String email, String emailSubject,
 	    EmailBounceType emailBounceType)
     {
+
+	// if campaign-id empty
+	if (StringUtils.isBlank(campaignId))
+	    return;
+
 	try
 	{
 	    String logType = LogType.EMAIL_HARD_BOUNCED.toString();
