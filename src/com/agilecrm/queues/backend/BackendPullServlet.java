@@ -44,6 +44,10 @@ public class BackendPullServlet extends HttpServlet
 	    runBackgroudnThread(queueName);
 	    runBackgroudnThread(queueName);
 
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
+
 	}
 	catch (Exception e)
 	{

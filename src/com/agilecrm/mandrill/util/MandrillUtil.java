@@ -48,7 +48,7 @@ public class MandrillUtil
     /**
      * Minimum To emails content expected to not exceed Max content size
      */
-    public static final int MIN_TO_EMAILS = 250;
+    public static final int MIN_TO_EMAILS = 50;
 
     /**
      * Mandrill merge vars surrounded by *| |*. Merge vars are case-insensitive.
@@ -147,6 +147,7 @@ public class MandrillUtil
 		// If exceeds Content Size limit, split mailJSON
 		if (toArray.length() > MIN_TO_EMAILS && mergeVarsArray.toString().length() >= MAX_CONTENT_SIZE)
 		{
+
 		    System.err.println("Length Exceeded. Splitting tasks...");
 
 		    tempArray.put(new JSONObject().put("mergeVarsArray", mergeVarsArray).put("toArray", toArray));
@@ -174,11 +175,27 @@ public class MandrillUtil
 		HttpClientUtil.accessPostURLUsingHttpClient(Mandrill.MANDRILL_API_POST_URL
 			+ Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 	    }
+
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Got exception in createJSONandSend " + e.getMessage());
 	    e.printStackTrace();
+	}
+
+	try
+	{
+	    Runtime r = Runtime.getRuntime();
+
+	    System.out.println("Free memory in MandrillUtil " + r.freeMemory());
+
+	    System.out.println("Total Memory in MandrillUtil " + r.totalMemory());
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while getting Runtime..." + e.getMessage());
+
 	}
 
 	// Records email sent count
