@@ -29,10 +29,18 @@ public class WebRuleUtil
     public static List<WebRule> getActiveWebrules(List<WebRule> webRules)
     {
 	List<WebRule> activeWebRules = new ArrayList<WebRule>();
+
 	for (WebRule webRule : webRules)
 	{
-	    if (webRule.disabled == false)
+	    try
+	    {
+		if (webRule.disabled == false)
+		    activeWebRules.add(webRule);
+	    }
+	    catch (Exception e)
+	    {
 		activeWebRules.add(webRule);
+	    }
 	}
 	return activeWebRules;
     }
