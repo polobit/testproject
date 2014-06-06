@@ -68,14 +68,14 @@ public class Globals
     public static final String PAYPAL = "Paypal";
 
     // Stripe live keys
-    public static final String STRIPE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
-    public static final String STRIPE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
+    // public static final String STRIPE_API_KEY =
+    // "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    // public static final String STRIPE_CLIENT_ID =
+    // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     // development keys
-    // public static final String STRIPE_API_KEY =
-    // "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
-    // public static final String STRIPE_CLIENT_ID =
-    // "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
+    public static final String STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
+    public static final String STRIPE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
     // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
@@ -90,7 +90,7 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
 
     public static final String BULK_BACKENDS = "bulk";
     public static final String NORMAL_BACKENDS = "normal";

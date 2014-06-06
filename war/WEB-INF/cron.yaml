@@ -71,11 +71,11 @@ cron:
   url: /backend/cron/cron-pull?q=normal-email-pull-queue
   schedule: every 1 mins
 
-- description: Account Billing Restrictions
+- description: Bulk Normal Campaign Cron
   url: /backend/cron/cron-pull?q=normal-campaign-pull-queue
   schedule: every 1 mins
 
-- description: Account Billing Restrictions
+- description: Bulk Campaign Cron
   url: /backend/cron/cron-pull?q=bulk-campaign-pull-queue
   schedule: every 1 mins
 

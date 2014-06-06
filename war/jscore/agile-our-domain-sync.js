@@ -9,7 +9,7 @@ var IMPORT_TAG = "Import";
 var SOCIAL_TAG = "Social";
 var WIDGET_TAG = "Widgets";
 var DOMAIN_COOKIE_FOR_WEBSITE = "_agile_login_domain"
-	
+
 // Subject for account cancellation note
 var ACCOUNT_CANCELED_NOTE_SUBJECT = "Account Canceled";
 
@@ -31,15 +31,17 @@ function add_custom_fields_to_our_domain()
 		// Add custom property to contact
 		_agile.add_property(create_contact_custom_field("Domain", CURRENT_DOMAIN_USER["domain"], "CUSTOM"), function(data)
 		{
-			add_tag_our_domain(SIGN_UP, function() {
+			add_tag_our_domain(SIGN_UP, function()
+			{
 				add_current_loggedin_time();
 			})
-		
+
 		});
 		return;
 	}
 
-	add_tag_our_domain(SIGN_UP, function() {
+	add_tag_our_domain(SIGN_UP, function()
+	{
 		add_current_loggedin_time();
 	})
 }
@@ -54,25 +56,23 @@ function add_current_loggedin_time()
 	var current_date_object = new Date();
 	var current_date_string = current_date_object.getUTCMonth() + 1 + "/" + current_date_object.getUTCDate() + "/" + current_date_object.getUTCFullYear();
 
-	console.log(parseInt(current_date_object.getTime()/1000));
-	
+	console.log(parseInt(current_date_object.getTime() / 1000));
+
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
-	
 	var existing_date_string = "";
-	if(loggedin_time_property)
-		{
-		var existing_date_object = new Date(loggedin_time_property.value);
+	if (loggedin_time_property)
+	{
+		var existing_date_object = new Date(parseFloat(loggedin_time_property.value) * 1000);
 		existing_date_string = existing_date_object.getUTCMonth() + 1 + "/" + existing_date_object.getUTCDate() + "/" + existing_date_object.getUTCFullYear();
-		}
-	
+	}
 
 	// If loggedin time is defined and it is not equal to current date then it
 	// is updated
 	if (existing_date_string && existing_date_string == current_date_string)
 		return;
 
-	loggedin_time_property = create_contact_custom_field("Last login", parseInt(current_date_object.getTime()/1000), 'CUSTOM');
+	loggedin_time_property = create_contact_custom_field("Last login", parseInt(current_date_object.getTime() / 1000), 'CUSTOM');
 
 	_agile.add_property(loggedin_time_property);
 }
@@ -96,95 +96,97 @@ function create_contact_custom_field(name, value, type, subtype)
 function add_account_canceled_info(info, callback)
 {
 	var custom_field = create_contact_custom_field(ACCOUNT_CANCELED_CUSTOM_FIELD_NAME, info["reason"], 'CUSTOM');
-	_agile.add_property(custom_field, function(data) {
-		add_tag_our_domain(CANCELED, function(data){
+	_agile.add_property(custom_field, function(data)
+	{
+		add_tag_our_domain(CANCELED, function(data)
+		{
 
-			if(info["reason_info"])
-				{
+			if (info["reason_info"])
+			{
 				var note = {};
 				note.subject = ACCOUNT_CANCELED_NOTE_SUBJECT;
 				note.description = info["reason_info"];
-				
-				_agile.add_note(note, function (data) {
-						console.log(data);
-						Agile_Contact = data;
-						
-						if (callback && typeof (callback) === "function")
-						{
-							callback();
-						}
-						
-			    });
+
+				_agile.add_note(note, function(data)
+				{
+					console.log(data);
+					Agile_Contact = data;
+
+					if (callback && typeof (callback) === "function")
+					{
+						callback();
+					}
+
+				});
 				return;
-				}
-			
+			}
+
 			if (callback && typeof (callback) === "function")
 			{
 				callback();
 			}
-			
-			});
+
 		});
+	});
 }
 
+function our_domain_set_account()
+{
+	// If it is local server then add contacts to local domain instead of
+	// our domain
+	if (LOCAL_SERVER)
+		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
+
+	else
+		_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
+
+	_agile.set_email(CURRENT_DOMAIN_USER['email']);
+
+	// Track page view code
+	_agile.track_page_view();
+}
 function our_domain_sync()
 {
 
 	try
 	{
 
-		// If it is local server then add contacts to local domain instead of
-		// our domain
-		if (LOCAL_SERVER)
-			_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
+		our_domain_set_account();
 
-		else
-			_agile.set_account('td2h2iv4njd4mbalruce18q7n4', 'our');
-
-		_agile.set_email(CURRENT_DOMAIN_USER['email']);
-		
-		// Track page view code
-		_agile.track_page_view();
-
-		// Clicky code
-		head.js('//static.getclicky.com/js', function() {
-			
-			try{ clicky.init(100729733); }catch(e){};
-		});
-		
 		var domain = readCookie(DOMAIN_COOKIE_FOR_WEBSITE);
-		
+
 		// Sets different cookie if user logs into different domain
-		if(!domain || domain != CURRENT_DOMAIN_USER["domain"])
+		if (!domain || domain != CURRENT_DOMAIN_USER["domain"])
 			createCookieInAllAgileSubdomains(DOMAIN_COOKIE_FOR_WEBSITE, CURRENT_DOMAIN_USER["domain"]);
-		
-		get_contact_from_our_domain(function(data){
+
+		get_contact_from_our_domain(function(data)
+		{
 			// Shows noty
-		//	set_profile_noty();
+			// set_profile_noty();
 			Agile_Contact = data;
-			
+
 			// Adds signup tag, if it is not added previously.
-			//set_profile_noty();
+			// set_profile_noty();
 			add_custom_fields_to_our_domain();
 			initWebrules();
-			
-		}, function(data){
+
+		}, function(data)
+		{
 			var name = CURRENT_DOMAIN_USER['name'];
 			var first_name = name, last_name = name;
 			// Creates a new contact and assigns it to global value
-			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name },
-					function(data)
-					{
-						Agile_Contact = data;
-						// Shows noty
-						//set_profile_noty();
-						add_custom_fields_to_our_domain();
-						initWebrules();
-					});
-			
+			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name }, function(data)
+			{
+				Agile_Contact = data;
+				// Shows noty
+				// set_profile_noty();
+				add_custom_fields_to_our_domain();
+				initWebrules();
+			});
+
 		})
 		// Gets contact based on the the email of the user logged in
-	
+
 	}
 	catch (err)
 	{
@@ -196,18 +198,17 @@ function get_contact_from_our_domain(successCallback, errorCallback)
 {
 
 	// Gets contact based on the the email of the user logged in
-	agile_getContact(CURRENT_DOMAIN_USER['email'], {
-		success: function(data){
-			Agile_Contact = data;
-			if(successCallback && typeof (successCallback) === "function")
-				successCallback(data);
-		},
-		error : function(data) {
-			if(errorCallback && typeof (errorCallback) === "function")
-				errorCallback(data);
-		}
-	})
-	
+	agile_getContact(CURRENT_DOMAIN_USER['email'], { success : function(data)
+	{
+		Agile_Contact = data;
+		if (successCallback && typeof (successCallback) === "function")
+			successCallback(data);
+	}, error : function(data)
+	{
+		if (errorCallback && typeof (errorCallback) === "function")
+			errorCallback(data);
+	} })
+
 }
 
 function add_signup_tag(callback)
@@ -216,17 +217,17 @@ function add_signup_tag(callback)
 	{
 		console.log("adding tags");
 		add_tag_our_domain(SIGN_UP, function(data)
-				{
-						// Calling to add custom fields here so avoid data loss
-						// due to asyn
-						// requests
-						add_custom_fields_to_our_domain();
-						
-						if (callback && typeof (callback) === "function")
-						{
-							callback();
-						}
-				})
+		{
+			// Calling to add custom fields here so avoid data loss
+			// due to asyn
+			// requests
+			add_custom_fields_to_our_domain();
+
+			if (callback && typeof (callback) === "function")
+			{
+				callback();
+			}
+		})
 		return;
 	}
 
@@ -235,18 +236,18 @@ function add_signup_tag(callback)
 }
 function hasTagInContact(tag)
 {
-	if(!tag)
+	if (!tag)
 		return false;
-	
+
 	if (Agile_Contact && (!Agile_Contact.tags || Agile_Contact.tags.indexOf(tag) < 0))
 		return false;
-	
+
 	return true;
-	
+
 }
 function add_tag_our_domain(tag, callback)
 {
-	if(hasTagInContact(tag))
+	if (hasTagInContact(tag))
 	{
 		if (callback && typeof (callback) === "function")
 		{
@@ -254,16 +255,16 @@ function add_tag_our_domain(tag, callback)
 		}
 		return;
 	}
-	
-	_agile.add_tag(tag, function(data)
-			{
-				Agile_Contact = data;
 
-				if (callback && typeof (callback) === "function")
-				{
-					callback(data);
-				}
-			});
+	_agile.add_tag(tag, function(data)
+	{
+		Agile_Contact = data;
+
+		if (callback && typeof (callback) === "function")
+		{
+			callback(data);
+		}
+	});
 }
 
 function setup_our_domain_sync()
@@ -288,7 +289,7 @@ function addTagAgile(tag)
 		Agile_Contact = data;
 		if (!checkTagAgile(tag))
 			Agile_Contact.tags.push(tag)
-		//set_profile_noty();
+			// set_profile_noty();
 	});
 }
 
@@ -306,22 +307,42 @@ function checkTagAgile(tag)
 var GLOBAL_WEBRULE_FLAG;
 function initWebrules()
 {
-		_agile_execute_web_rules();
-		GLOBAL_WEBRULE_FLAG = true;
+	_agile_execute_web_rules();
+	GLOBAL_WEBRULE_FLAG = true;
 }
 
 function add_properties_from_popup(phone_number, company_size)
 {
 	_agile.add_property(create_contact_custom_field("Company Size", company_size, "CUSTOM"), function(data)
-			{
-			_agile.add_property(create_contact_custom_field("phone", phone_number, "SYSTEM", "home"), function(data)
-				{
-					
-					console.log(data);
-					_agile_contact = data;
-					console.log(_agile_contact);
-					window.setTimeout(initWebrules, 4000)
-							
-				});
-			});
+	{
+		_agile.add_property(create_contact_custom_field("phone", phone_number, "SYSTEM", "home"), function(data)
+		{
+
+			console.log(data);
+			_agile_contact = data;
+			console.log(_agile_contact);
+			window.setTimeout(initWebrules, 4000);
+
+		});
+	});
+}
+
+function add_property(name, value, type, callback)
+{
+	// alert(Agile_Contact.properties);
+	var property = getProperty(Agile_Contact.properties, name);
+	if (property && property.value == value && type == property.type)
+	{
+		callback(Agile_Contact);
+		return false;
+
+	}
+	_agile.add_property(create_contact_custom_field(name, value, type), function(data)
+	{
+		Agile_Contact = data;
+		_agile_contact = data;
+
+		if (callback && typeof callback == "function")
+			callback(data);
+	});
 }
