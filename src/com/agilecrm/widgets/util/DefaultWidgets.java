@@ -82,8 +82,9 @@ public class DefaultWidgets
 		widgets.add(new Widget(
 				"QuickBooks",
 				"Run your whole business better with QuickBooks wherever you are. Automate your invoicing, billing and reporting and simplify your business for life!",
-				"/widgets/quickBooks.js", "/widgets/QuickBooks210x70.png", "/widgets/QuickBooks210x70.png", null,
+				"/widgets/quickBooks.js", "/widgets/QuickBooks210x70.png", "/widgets/quickbooks_small.jpg", null,
 				WidgetType.BILLING));
+		
 		System.out.println("Default widgets ");
 		System.out.println(widgets);
 

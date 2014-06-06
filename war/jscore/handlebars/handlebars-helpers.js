@@ -2455,4 +2455,15 @@ $(function()
 	return Number(data).toLocaleString('en');
 	// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     });
+    
+
+    Handlebars.registerHelper('QbDateFormat', function(data)
+    {
+
+	var i =[];
+	i = data.split("-");
+	return i[0]+"-"+i[2]+"-"+i[1];
+    });
+    
+    
 });
