@@ -16,6 +16,7 @@
                 <tr>
                     <th>Name</th>
 					<th>Action</th>
+					<th>Status</th>
                 </tr>
             </thead>
             <tbody id="webrule-model-list" route="webrule-edit/">
@@ -50,4 +51,10 @@ For example, when visitors are about to leave your website, show them a sign-up 
 	{{titleFromEnums action}}
 {{/each}}
 </td>
+<td>
+{{#if disabled}} Disabled
+{{else}} Enabled
+{{/if}}
+</td>
+
 </script>

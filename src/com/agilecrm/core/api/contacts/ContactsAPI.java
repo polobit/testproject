@@ -853,6 +853,7 @@ public class ContactsAPI
 	}
 	catch (Exception e)
 	{
+	    System.out.println("Exception in Sorting Tasks on Due date : " + e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}
@@ -876,6 +877,7 @@ public class ContactsAPI
 	}
 	catch (Exception e)
 	{
+	    System.out.println("Exception in Sorting Events on Start date : " + e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}
