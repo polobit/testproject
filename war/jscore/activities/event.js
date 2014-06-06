@@ -77,7 +77,7 @@ $(function()
 		/**
 		 * Shows loading symbol until model get saved
 		 */
-		//$('#updateActivityModal').find('span.save-status').html(LOADING_HTML);
+		//$('#updateActivityModal').find('span.save-status').html(getRandomLoadingImg());
 		$.ajax({ url : 'core/api/events/' + event_id, type : 'DELETE', success : function()
 		{
 
@@ -338,7 +338,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 	}
 
 	// Show loading symbol until model get saved
-	//$('#' + modalName).find('span.save-status').html(LOADING_HTML);
+	//$('#' + modalName).find('span.save-status').html(getRandomLoadingImg());
 
 	// Appending start time to start date
 	var startarray = (json.start_time).split(":");

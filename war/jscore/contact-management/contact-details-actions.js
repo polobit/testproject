@@ -144,7 +144,7 @@ $(function(){
     		    var $add_to_campaign = $(this).attr('id');
     		    
     			// Show loading symbol until model get saved
-    		    //$('#contactCampaignForm').find('span.save-status').html(LOADING_HTML);
+    		    //$('#contactCampaignForm').find('span.save-status').html(getRandomLoadingImg());
     		    
     			var workflow_id = $('#campaign-select option:selected').attr('value');
     						

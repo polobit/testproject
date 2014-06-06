@@ -1,4 +1,4 @@
-package com.agilecrm.contact.email;
+package com.agilecrm.contact.email.bounce;
 
 public class EmailBounceStatus
 {
@@ -21,7 +21,12 @@ public class EmailBounceStatus
     /**
      * Bounce time
      */
-    public long time = 0L;
+    public Long time = 0L;
+
+    /**
+     * Campaign id of which campaign bounced
+     */
+    public String campaign_id = null;
 
     /**
      * Default EmailBounceStatus

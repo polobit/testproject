@@ -3,12 +3,15 @@ package com.campaignio.tasklets.agile.util;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.EmailUtil;
@@ -185,7 +188,8 @@ public class AgileTaskletUtil
 			catch (JSONException e)
 			{
 			    e.printStackTrace();
-			    System.err.println("Exception occured while converting address string to json " + e.getMessage());
+			    System.err.println("Exception occured while converting address string to json "
+				    + e.getMessage());
 			}
 
 			// Already inserted address as location, so continue
@@ -215,15 +219,26 @@ public class AgileTaskletUtil
 	    subscriberJSON.put("score", contact.lead_score);
 
 	    // Returns Created and Updated date in GMT with given format.
-	    subscriberJSON.put("created_date", DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
-	    subscriberJSON.put("modified_date", DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+	    subscriberJSON.put("created_date",
+		    DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
+	    subscriberJSON.put("modified_date",
+		    DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
 
 	    subscriberJSON.put("powered_by", EmailUtil.getPoweredByAgileLink("campaign", "Powered by"));
 
 	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
 
 	    // Add Id and data
-	    return new JSONObject().put("data", subscriberJSON).put("id", contact.id).put("isUnsubscribedAll", isUnsubscribedAll(contact));
+	    JSONObject subscriberJSONWithAddedParams = new JSONObject();
+
+	    subscriberJSONWithAddedParams.put("data", subscriberJSON).put("id", contact.id)
+		    .put("isUnsubscribedAll", isUnsubscribedAll(contact));
+
+	    // If isBounce not null
+	    if (isBounce(contact, subscriberJSON) != null)
+		subscriberJSONWithAddedParams.put("isBounce", isBounce(contact, subscriberJSON));
+
+	    return subscriberJSONWithAddedParams;
 	}
 	catch (Exception e)
 	{
@@ -314,6 +329,43 @@ public class AgileTaskletUtil
 	}
 
 	return isAll;
+    }
+
+    /**
+     * Checks whether contact's email is hard bounced
+     * 
+     * @param contact
+     *            - Contact object
+     * @return boolean value
+     */
+    public static EmailBounceType isBounce(Contact contact, JSONObject subscriberJSON)
+    {
+
+	if (!subscriberJSON.has(Contact.EMAIL))
+	    return null;
+
+	try
+	{
+
+	    for (EmailBounceStatus emailBounceStatus : contact.emailBounceStatus)
+	    {
+		if (StringUtils.equals(emailBounceStatus.email, subscriberJSON.getString(Contact.EMAIL)))
+		{
+		    if (emailBounceStatus.emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
+			return EmailBounceType.HARD_BOUNCE;
+
+		    return EmailBounceType.SOFT_BOUNCE;
+		}
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    System.err.print("Exception occured while iterating emailBounceStatus " + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return null;
     }
 
     /**

@@ -853,7 +853,7 @@ public class JSAPI
 	    JSONArray arr = new JSONArray();
 	    ObjectMapper mapper = new ObjectMapper();
 	    List<Log> logs = new ArrayList<Log>();
-	    logs = LogUtil.getSQLLogs(null, contact.id.toString(), "50");
+	    logs = LogUtil.getSQLLogs(null, contact.id.toString(), "50", null);
 	    for (Log log : logs)
 	    {
 		arr.put(mapper.writeValueAsString(log));
@@ -1118,6 +1118,8 @@ public class JSAPI
 
 	// Fill Countries
 	webRules = WebRuleUtil.fillCountry(webRules, request);
+
+	webRules = WebRuleUtil.getActiveWebrules(webRules);
 
 	ObjectMapper mapper = new ObjectMapper();
 	try

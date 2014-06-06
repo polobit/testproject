@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.ContactUtil;
 import com.campaignio.reports.CampaignReportsSQLUtil;
 import com.campaignio.reports.CampaignReportsUtil;
@@ -134,19 +134,26 @@ public class CampaignReportsAPI
 	    JSONArray stats = CampaignReportsSQLUtil.getEachCampaignStatsForTable(campaignId, startDate, endDate,
 		    timeZone, null);
 
+	    System.out.println("SQL Stats are..." + stats.toString());
+
+	    // To show hardbounce and softbounce only for email sent campaigns
+	    int statsLength = stats.length();
+
 	    try
 	    {
 		// Hard Bounce data
 		stats.put(new JSONObject().put("log_type", "HARD_BOUNCE").put(
 			"count",
-			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.HARD_BOUNCE,
-				Long.parseLong(startTime), Long.parseLong(endTime))));
+			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
+				EmailBounceType.HARD_BOUNCE, Long.parseLong(startTime) / 1000,
+				Long.parseLong(endTime) / 1000) : 0));
 
 		// Soft Bounce Data
 		stats.put(new JSONObject().put("log_type", "SOFT_BOUNCE").put(
 			"count",
-			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.SOFT_BOUNCE,
-				Long.parseLong(startTime), Long.parseLong(endTime))));
+			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
+				EmailBounceType.SOFT_BOUNCE, Long.parseLong(startTime) / 1000,
+				Long.parseLong(endTime) / 1000) : 0));
 	    }
 	    catch (Exception e)
 	    {
@@ -163,7 +170,7 @@ public class CampaignReportsAPI
 		JSONObject json = stats.getJSONObject(i);
 
 		if (json.getString("log_type").equals("EMAIL_CLICKED"))
-		    statsJSON.put("unique_clicks", json.getString("unique_clicks"));
+		    statsJSON.put("total_clicks", json.getString("total_clicks"));
 
 		statsJSON.put(stats.getJSONObject(i).getString("log_type"), stats.getJSONObject(i).getInt("count"));
 	    }
@@ -171,7 +178,7 @@ public class CampaignReportsAPI
 	    System.out.println("stats JSON is " + statsJSON);
 
 	    return statsJSON.toString().replace("EMAIL_SENT", "sent").replace("EMAIL_OPENED", "opened")
-		    .replace("EMAIL_CLICKED", "total_clicks").replace("UNSUBSCRIBED", "unsubscribed")
+		    .replace("EMAIL_CLICKED", "unique_clicks").replace("UNSUBSCRIBED", "unsubscribed")
 		    .replace("HARD_BOUNCE", "hard_bounce").replace("SOFT_BOUNCE", "soft_bounce");
 	}
 	catch (Exception e)

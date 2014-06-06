@@ -2,6 +2,7 @@
  * Loads widgets on a contact, creates a collection view
  */
 var Widgets_View;
+var widget_template_loaded_map = {};
 
 /**
  * Loads all the widgets for the current agile user
@@ -15,19 +16,30 @@ function loadWidgets(el, contact)
 	// Create Data JSON
 	var data = { contact : contact };
 
+	var is_widget_view_new = false;
 	/*
 	 * If Widgets_View is not defined , creates collection view, collection is
 	 * sorted based on position i.e., set when sorted using jquery ui sortable
 	 */
 	if (!Widgets_View)
 	{
+		// This flag is used to ensure widget script are loaded only once in
+		// postrender. It is set to false after widget setup is initialized
+		is_widget_view_new = true;
 		Widgets_View = new Base_Collection_View({ url : '/core/api/widgets', restKey : "widget", templateKey : "widgets", individual_tag_name : 'li',
 			sortKey : 'position', modelData : data, postRenderCallback : function(widgets_el)
 			{
-				head.load("css/misc/agile-widgets.css", function(){
-					set_up_widgets(el, widgets_el);
+
+				head.load("css/misc/agile-widgets.css", function()
+				{
+					// If scripts aren't loaded earlier, setup is initialized
+					if (is_widget_view_new)
+					{
+						set_up_widgets(el, widgets_el);
+					}
+					is_widget_view_new = false;
 				})
-				
+
 			} });
 
 		/*
@@ -50,7 +62,7 @@ function loadWidgets(el, contact)
 
 		$(el).live('view_loaded', function(e)
 		{
-			//alert("loaded");
+
 			if (flag == false)
 			{
 				flag = true;
@@ -59,7 +71,6 @@ function loadWidgets(el, contact)
 				Widgets_View.collection.sort();
 
 				$('#widgets', el).html(Widgets_View.render(true).el);
-
 				// Sets up widget
 				set_up_widgets(el, Widgets_View.el);
 
@@ -166,8 +177,8 @@ function set_up_widgets(el, widgets_el)
 		var id = model.get("id");
 		var url = model.get("url");
 
-		model.set('selector', model.get('name').replace( / +/g, ''));
-		
+		model.set('selector', model.get('name').replace(/ +/g, ''));
+
 		/*
 		 * Set the data element in the div so that we can retrieve this in get
 		 * plugin preferences
@@ -180,7 +191,16 @@ function set_up_widgets(el, widgets_el)
 		 */
 		if (!model.get("is_minimized") && model.get("widget_type") != "CUSTOM")
 		{
-			queueGetRequest("_widgets_"+contact_id , url, "script");
+			if (widget_template_loaded_map[model.get('name').toLowerCase()])
+			{
+				queueGetRequest("_widgets_" + contact_id, url, "script");
+			}
+			else
+				downloadTemplate(model.get('name').toLowerCase() + ".js", function()
+				{
+					widget_template_loaded_map[model.get('name').toLowerCase()] = true;
+					queueGetRequest("_widgets_" + contact_id, url, "script");
+				});
 		}
 
 		/*
@@ -191,14 +211,15 @@ function set_up_widgets(el, widgets_el)
 		if (model.get("widget_type") == "CUSTOM")
 		{
 
-			if($('#' + model.get('selector') + '-container').length)
+			if ($('#' + model.get('selector') + '-container').length)
 			{
 				setup_custom_widget(model, widgets_el)
 			}
 			else
-			$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e) {
-				setup_custom_widget(model, widgets_el)
-			 });
+				$('#' + model.get('selector') + '-container', widgets_el).show('0', function(e)
+				{
+					setup_custom_widget(model, widgets_el)
+				});
 		}
 	}, this);
 
@@ -208,7 +229,7 @@ function set_up_widgets(el, widgets_el)
 
 function setup_custom_widget(model, widgets_el)
 {
-	//$('form', this).focus_first();
+	// $('form', this).focus_first();
 	if (model.get('script'))
 		$('#' + model.get('selector'), widgets_el).html(model.get('script'));
 	else

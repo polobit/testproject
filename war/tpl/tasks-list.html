@@ -23,10 +23,6 @@
             </tbody>
         </table>
 		<a href="#" class="btn btn-primary"  style="margin-bottom: 15px;margin-left: 25px;display:none;" id="bulk-complete">Complete</a>
-    
-       <div id="new_ui"></div>
-       <button id="show_new_ui">show</button>
-
     </div>
 </div>
 {{/unless}}
@@ -50,7 +46,9 @@
 {{else}}
 	<td><div style="overflow:hidden;text-overflow:ellipsis;text-align:justify;white-space:nowrap;max-width:15em;">{{#is_link subject}}<span class="activate-link">{{else}}<span>{{/is_link}}{{safe_string subject}}</span></div></td>
     <td><div><!--<i class="{{icons type}}"></i>&nbsp;--><span class="label">{{task_property type}}</span></div></td>
-    <td><span class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span></td>
+    <td>				{{#if_equals priority_type "NORMAL"}}{{else}}
+					<span style="margin-left:5px;" class="label label-{{task_label_color priority_type}}">{{ucfirst priority_type}}</span>
+				{{/if_equals}}</td>
 	<td><div><time class="task-due-time" value="{{due}}" datetime="{{epochToHumanDate "" due}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time></div></td>
 {{/if}}
 	<td>
@@ -77,32 +75,31 @@
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" id="owner-tasks">
-                     <!--<li><a href=''>All Tasks</a></li>
-					 <li><a href='all-pending-tasks'>All Pending Tasks</a></li>
-                     <li><a href='my-tasks'>My Tasks</a></li>
-					 <li><a href='my-pending-tasks'>My Pending Tasks</a></li>		-->			 
-                </ul>
+                <ul class="dropdown-menu" id="owner-tasks"></ul>
             </div>
             <div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name">Category</div>
+                <div class="btn selected_name">All Categories</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" id="type-tasks">
-					 <li><a href="CATEGORY">Category</a></li>
-                     <li><a href="OWNER">Owner</a></li>
-                     <li><a href="DUE">Due</a></li>
-                     <li><a href="PRIORITY">Priority</a></li>
-                     <li><a href="STATUS">Status</a></li>                     
+					 <li><a href="">All Categories</a></li>
+                     <li><a href="CALL">Call</a></li>
+                     <li><a href="EMAIL">Email</a></li>
+                     <li><a href="FOLLOW_UP">Follow-up</a></li>
+                     <li><a href="MEETING">Meeting</a></li>
+                     <li><a href="MILESTONE">Milestone</a></li>
+                     <li><a href="SEND">Send</a></li>
+                     <li><a href="TWEET">Tweet</a></li>
+					 <li><a href="OTHER">Other</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 <div class="row-fluid span12" style="margin-left:0px; ">
-	<div id="task-list-based-condition"></div>
-	<!-- <div class="span3">
+	<div id="task-list-based-condition" class="span9" ></div>
+	<div class="span3">
         <div class="data-block">
             <div class="well">
                 <header>
@@ -118,6 +115,6 @@
                 </p>
             </div>
         </div>
-	</div> -->
+	</div>
 </div>
 </script>

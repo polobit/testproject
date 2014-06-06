@@ -22,11 +22,11 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 import com.stripe.model.Customer;
@@ -95,12 +95,10 @@ public class Subscription
 
     /** The created_time variable represents when subscription object is created */
     @NotSaved(IfDefault.class)
-    @Indexed
     public Long created_time = 0L;
 
     /** The updated_time variable represents when subscription object is updated */
     @NotSaved(IfDefault.class)
-    @Indexed
     public Long updated_time = 0L;
 
     /**
@@ -154,6 +152,32 @@ public class Subscription
     {
 	Objectify ofy = ObjectifyService.begin();
 	return ofy.query(Subscription.class).get();
+    }
+
+    /**
+     * Returns {@link Subscription} object of particular domain domain
+     * 
+     * @return {@link Subscription}
+     * */
+    public static void deleteSubscriptionOfParticularDomain(String namespace)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+	    Subscription subscription = getSubscription();
+	    if (subscription != null)
+		subscription.cancelSubscription();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     public void save()

@@ -17,7 +17,7 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.email.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
@@ -751,12 +751,14 @@ public class ContactUtil
      *            - end time
      * @return int value
      */
-    public static int getEmailBouncedContactsCount(EmailBounceType emailBounceType, long startTime, long endTime)
+    public static int getEmailBouncedContactsCount(String campaignId, EmailBounceType emailBounceType, Long startTime,
+	    Long endTime)
     {
 	HashMap<String, Object> properties = new HashMap<String, Object>();
+	properties.put("emailBounceStatus.campaign_id", campaignId);
 	properties.put("emailBounceStatus.emailBounceType", emailBounceType);
-	properties.put("emailBounceStatus.emailBounceType > ", startTime);
-	properties.put("emailBounceStatus.emailBounceType < ", endTime);
+	properties.put("emailBounceStatus.time >=", startTime);
+	properties.put("emailBounceStatus.time <", endTime);
 
 	return dao.getCountByProperty(properties);
     }

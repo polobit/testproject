@@ -3,6 +3,7 @@ package com.agilecrm.core.api.bulkactions.backends;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -47,8 +48,6 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
@@ -367,7 +366,7 @@ public class BulkOperationsAPI
 	    count += contacts.size();
 	}
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
 		.toString(), String.valueOf(count));
     }
 

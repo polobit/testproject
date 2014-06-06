@@ -141,6 +141,11 @@ public class Mandrill
     public static final String MANDRILL_PRESERVE_RECIPIENTS = "preserve_recipients";
 
     /**
+     * Mandrill metadata
+     */
+    public static final String MANDRILL_METADATA = "metadata";
+
+    /**
      * Sends email using Mandrill API with the given parameters.
      * 
      * @param subaccount

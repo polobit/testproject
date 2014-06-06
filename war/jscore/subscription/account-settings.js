@@ -61,7 +61,7 @@ $(function()
 				e.preventDefault();
 
 				// Hides modal
-				$(".modal-body").html(LOADING_HTML);
+				$(".modal-body").html(getRandomLoadingImg());
 
 				
 
@@ -79,7 +79,7 @@ $(function()
 							
 							$("#warning-deletion-feedback").modal('hide');	
 							// Show loading in content
-							$("#content").html(LOADING_HTML);
+							$("#content").html(getRandomLoadingImg());
 							// Navigate to login page after delete
 							window.location.href = window.location.href
 									.split('#')[0]
@@ -136,7 +136,7 @@ $(function()
 					ACCOUNT_DELETE_REASON_JSON = {};
 					ACCOUNT_DELETE_REASON_JSON["reason"] = $(input).val();
 					ACCOUNT_DELETE_REASON_JSON["reason_info"] = $("#account_delete_reason").val();
-					$(".modal-body").html(LOADING_HTML);
+					$(".modal-body").html(getRandomLoadingImg());
 					var delete_step1_el = "";
 					if(ACCOUNT_STATS)
 						delete_step1_el = $(getTemplate('warning', ACCOUNT_STATS));
