@@ -155,6 +155,8 @@ public class ContactPrefs implements Serializable
 
     @NotSaved
     public List<String> salesforceFields;
+    @NotSaved
+    public List<String> zohoFields;
 
     public static String AGILE = "Agile";
     public static String CLIENT = "Client";

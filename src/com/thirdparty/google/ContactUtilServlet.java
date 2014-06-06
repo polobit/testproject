@@ -24,6 +24,10 @@ import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
 import com.thirdparty.salesforce.SalesforceImportUtil;
+import com.thirdparty.zoho.ZohoDataImportAPI;
+import com.thirdparty.zoho.ZohoImport;
+import com.thirdparty.zoho.ZohoImportAPI;
+import com.thirdparty.zoho.ZohoImportUtil;
 
 /**
  * <code>ContactUtilServlet</code> contains method to get and import contacts.
@@ -50,14 +54,14 @@ public class ContactUtilServlet extends HttpServlet
 	{
 
 	    System.out.println("in contact util servlet");
-	    String type = req.getParameter("type");
-	    String cron = req.getParameter("cron");
+	   // String type = req.getParameter("type");
+	    //String cron = req.getParameter("cron");
 
 	    /**
 	     * If sync type is google the contact sync based on duration is
 	     * initialized
 	     */
-	    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
+	/*    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
 	    {
 		String duration = req.getParameter("duration");
 		String offline = req.getParameter("offline");
@@ -69,7 +73,7 @@ public class ContactUtilServlet extends HttpServlet
 		}
 		syncGoogleContacts(duration);
 		return;
-	    }
+	    }*/
 
 	    InputStream stream = req.getInputStream();
 	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
@@ -174,6 +178,17 @@ public class ContactUtilServlet extends HttpServlet
 
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
 			"Imported successfully from Salesforce");
+	    }else if(contactPrefs.type == Type.ZOHO){
+	    	assert contactPrefs!=null:"contact cant be empty";
+	    	
+	    	if(contactPrefs.zohoFields.contains("leads"))
+	    		ZohoImportUtil.importZohoLeads(contactPrefs, key);
+	    	
+	    	if(contactPrefs.zohoFields.contains("accounts"))
+	    		ZohoImportUtil.importAccounts(contactPrefs, key);
+	    	
+	    	if(contactPrefs.zohoFields.contains("contacts"))
+	    		ZohoImportUtil.importContacts(contactPrefs, key);
 	    }
 
 	}

@@ -35,7 +35,7 @@ label.error {
 <div class="control-group">
 <label class="control-label" for="id_user">Username:</label>
 <div class="controls">
-<input type="text" name="username" id="id_user" placeholder="username" class="input-large" required="required">
+<input type="text" name="username" id="id_user" placeholder="username" class="input-large" required="required" style="height: 30px;">
 </div>
 </div>
 
@@ -43,14 +43,14 @@ label.error {
 <div class="control-group">
 <label class="control-label" for="pass">Password:</label>
 <div class="controls">
-<input type="password" id ="pass" name="password" placeholder="password" class="input-large" required="required">
+<input type="password" id ="pass" name="password" placeholder="password" class="input-large" required="required" style="height: 30px;">
 </div>
 </div>
 
 <div class="control-group">
 <label class="control-label" for="auth_token">Authtoken:</label>
 <div class="controls">
-<input type="text" id="auth_token" name="authtoken" placeholder="Auth-token" class="input-large" required="required">
+<input type="text" id="auth_token" name="authtoken" placeholder="Auth-token" class="input-large" required="required" style="height: 30px;">
 </div>
 </div>
 
@@ -165,7 +165,7 @@ $('#zoho_import_options').die().live('click', function(data){
 	}
 	$("#zoho_options_error").hide();
 	
-	$.post("/api/zoho/import", $(form).serialize(), function(data)
+	$.post("/core/api/zoho/import", $(form).serialize(), function(data)
 	{
 		
 		$("#zoho_options_error").html("Import scheduled");
