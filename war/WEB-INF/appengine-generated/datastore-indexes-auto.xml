@@ -8,5 +8,18 @@
         <property name="owner" direction="asc"/>
         <property name="due" direction="asc"/>
     </datastore-index>
+    
+        <!-- Used 2 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Event" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="start" direction="asc"/>
+    </datastore-index>
+    
 
 </datastore-indexes>
