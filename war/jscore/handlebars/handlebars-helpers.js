@@ -202,6 +202,51 @@ $(function()
 
 	return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
     });
+    
+    /**
+     * CSS text avatars
+     */
+    Handlebars.registerHelper('nameAvatar', function(items, width)
+	{
+
+			if (items == undefined)
+			    return;
+
+			// Checks if properties already has an image, to return it
+			var agent_image = getPropertyValue(items, "image");
+			if (agent_image)
+			    return agent_image;
+		
+			var email = getPropertyValue(items, "email");
+			if (email)
+			{
+			    return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
+			}
+		
+			return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
+
+	 });
+    
+    /**
+     * To add data-name attribute to image tags
+     */	  
+	Handlebars.registerHelper('dataNameAvatar', function(items)
+	{
+
+			if (items == undefined)
+			    return;
+			
+			var name = "";
+			
+			if(getPropertyValue(items, "first_name"))
+			name = name + "" + getPropertyValue(items, "first_name").substr(0,1);
+			
+			if(getPropertyValue(items, "last_name"))
+			name = name + "" + getPropertyValue(items, "last_name").substr(0,1);
+			
+			return name;
+
+	  });
 
     /**
      * Helper function to return icons based on given name
@@ -621,7 +666,18 @@ $(function()
 	var obj = JSON.parse(info_json);
 
 	if (!obj[date_type])
-	    return "-"
+	    return "-";
+	if(date_type != "created_time")
+	{
+		if ((obj[date_type] / 100000000000) > 1)
+		{
+		    return new Date(parseInt(obj[date_type])).format("mmm dd yyyy HH:MM:ss",0);
+		}
+		// date form milliseconds
+		return new Date(parseInt(obj[date_type]) * 1000).format("mmm dd yyyy HH:MM:ss",0);
+	}
+	else
+	{
 	var intMonth = new Date(parseInt(obj[date_type]) * 1000).getMonth();
 	var intDay = new Date(parseInt(obj[date_type]) * 1000).getDate();
 	var intYear = new Date(parseInt(obj[date_type]) * 1000).getFullYear();
@@ -631,13 +687,15 @@ $(function()
 	];
 
 	return (monthArray[intMonth] + " " + intDay + ", " + intYear);
+    }
     });
 
     /**
      * Returns currency symbol based on the currency value (deals)
      */
-    Handlebars.registerHelper('currencySymbol', function(value)
+    Handlebars.registerHelper('currencySymbol', function()
     {
+    var value =  ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
     });
@@ -746,6 +804,30 @@ $(function()
 	var str = value.replace(/_/g, ' ');
 	return ucfirst(str.toLowerCase());
 
+    });
+    
+    Handlebars.registerHelper('actionTemplate', function(actions)
+    {
+		if (!actions)
+		    return;
+		 
+		var actions_count = actions.length;
+
+		var el = '<div style="white-space: normal!important;word-break: break-word;">';
+
+		$.each(actions, function(key, val)
+		{
+		    if (--actions_count == 0)
+		    {
+		    	el = el.concat(titleFromEnums(val.action));
+		    	return;
+		    }
+		    el = el.concat(titleFromEnums(val.action) + ", ");
+		});
+
+		el = el.concat('</div>');
+		return new Handlebars.SafeString(el);
+		
     });
 
     Handlebars.registerHelper('triggerType', function(value)
@@ -1231,6 +1313,13 @@ $(function()
     	if (url.match(/((http|http[s]|ftp|file):\/\/)/) != null)
     	    return url;
     	return 'http://' + url;
+    });
+    
+    Handlebars.registerHelper('getSkypeURL', function(url)
+    {
+    	if (url.match("skype:") != null)
+    	    return url;
+    	return 'skype:' + url;
     });
 
     // Get Count
@@ -1802,8 +1891,53 @@ $(function()
 	key = key.replace("_", " ");
 
 	var isFound = false;
+	
+	var match_weight = 0;
 
-	// Iterates to create various combinations and check with the header
+	var key_length = key.length;
+	var key = key.toLowerCase();
+	var matched_value;
+	
+	var selected_element;
+	template.find('option').each(function(index, element)
+		    {
+				if ($(element).text().toLowerCase().indexOf(key) != -1)
+				{
+					
+					var current_match_weight = key_length / $(element).text().length;
+					if(match_weight >= current_match_weight)
+						return;
+					
+					selected_element = $(element);
+					matched_value = $(element).text();
+					match_weight = current_match_weight; 
+				}
+		    })
+	
+	console.log(matched_value + ", " + key +" : " + match_weight);
+	
+	
+	for ( var i = 0; i < key.length - 3; i++)
+	{
+		template.find('option').each(function(index, element)
+			    {
+					if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
+					{
+						console.log(key.substr(0, key.length - i) +" , " + $(element).text());
+						var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
+						console.log(current_match_weight);
+						if(match_weight >= current_match_weight)
+							return;
+						selected_element = $(element);
+						matched_value = $(element).text();
+						match_weight = current_match_weight; 
+					}
+			    })
+	}
+	
+	$(selected_element).attr("selected", true);
+	
+/*	// Iterates to create various combinations and check with the header
 	for ( var i = 0; i < key.length - 3; i++)
 	{
 	    template.find('option').each(function(index, element)
@@ -1825,7 +1959,7 @@ $(function()
 	    if (isFound)
 		break;
 	}
-
+*/
 	return new Handlebars.SafeString($('<div>').html(template).html());
     });
 
@@ -1994,6 +2128,18 @@ $(function()
 	// return the finished buffer
 	return buffer;
 
+    });
+    
+   /**
+    * If log_type equals true otherwise false
+    **/
+    Handlebars.registerHelper("if_log_type_equals", function(object, key, log_type, options){
+    	
+    	if(object[key] == log_type)
+    		return options.fn(object);
+    	
+    	return options.inverse(object);
+    	
     });
 
     /**
@@ -2388,6 +2534,12 @@ $(function()
 	
 	if (hash.indexOf("hardbounced") != -1)
 	    return "Hard Bounced";
+	
+	if (hash.indexOf("softbounced") != -1)
+	    return "Soft Bounced";
+	
+	if (hash.indexOf("spam-reported") != -1)
+	    return "Spam Reported";
     });
 
     Handlebars.registerHelper("check_plan", function(plan, options)
