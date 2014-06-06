@@ -39,6 +39,7 @@ $(function()
     $('#xero_add_contact').die().live('click', function(e)
     {
 	e.preventDefault();
+
 	addContactToXero(first_name, last_name, Email);
     });
 
@@ -155,6 +156,7 @@ function addContactToXero(first_name, last_name)
      */
 
     console.log("in xero ad contact")
+    $("#xero_add_contact").attr("disabled", true);
     $.get("/core/api/widgets/xero/add/contact/" + Xero_PLUGIN_ID + "/" + first_name + "/" + last_name + "/" + Email, function(data)
     {
 	console.log('In Xero add contact ');
@@ -172,6 +174,7 @@ function addContactToXero(first_name, last_name)
 	{
 	    xeroError(Xero_PLUGIN_NAME, data)
 	}
+	$("#xero_add_contact").removeAttr("disabled");
     });
 
 }
