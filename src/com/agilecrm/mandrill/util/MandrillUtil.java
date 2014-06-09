@@ -82,11 +82,11 @@ public class MandrillUtil
      * @param text
      *            - text content
      */
-    public static void sendMail(String fromEmail, String fromName, String to, String subject, String replyTo,
-	    String html, String text, String metadata)
+    public static void sendMail(String fromEmail, String fromName, String to, String cc, String subject,
+	    String replyTo, String html, String text, String metadata)
     {
 	String subaccount = NamespaceManager.get();
-	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to,
+	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to, cc,
 		subject, replyTo, html, text, metadata);
 
 	PullQueueUtil.addToPullQueue(
@@ -130,8 +130,8 @@ public class MandrillUtil
 		MandrillDeferredTask mandrillDeferredTask = (MandrillDeferredTask) SerializationUtils.deserialize(task
 			.getPayload());
 
-		// If same To email exists, send email without merging
-		if (isToExists(toArray, mandrillDeferredTask.to))
+		// If same To email or cc exists, send email without merging
+		if (!StringUtils.isBlank(mandrillDeferredTask.cc) || isToExists(toArray, mandrillDeferredTask.to))
 		{
 		    sendWithoutMerging(mandrillDeferredTask);
 		    continue;
@@ -161,7 +161,7 @@ public class MandrillUtil
 	    }
 
 	    // Append mergeVars which not exceeded limit
-	    if (!flag)
+	    if (!flag && toArray.length() != 0)
 		tempArray.put(new JSONObject().put("mergeVarsArray", mergeVarsArray).put("toArray", toArray));
 
 	    // Iterates over splitted json array and send batch of emails
@@ -267,7 +267,8 @@ public class MandrillUtil
 
 	    messageJSON.put(Mandrill.MANDRILL_FROM_NAME, fromName);
 
-	    messageJSON.put(Mandrill.MANDRILL_METADATA, metadata);
+	    if (!StringUtils.isBlank(metadata))
+		messageJSON.put(Mandrill.MANDRILL_METADATA, new JSONObject(metadata));
 
 	}
 	catch (JSONException e)
@@ -439,8 +440,9 @@ public class MandrillUtil
 	    NamespaceManager.set(mandrillDeferredTask.subaccount);
 
 	    Mandrill.sendMail(true, mandrillDeferredTask.fromEmail, mandrillDeferredTask.fromName,
-		    mandrillDeferredTask.to, mandrillDeferredTask.subject, mandrillDeferredTask.replyTo,
-		    mandrillDeferredTask.html, mandrillDeferredTask.text, mandrillDeferredTask.metadata);
+		    mandrillDeferredTask.to, mandrillDeferredTask.cc, null, mandrillDeferredTask.subject,
+		    mandrillDeferredTask.replyTo, mandrillDeferredTask.html, mandrillDeferredTask.text,
+		    mandrillDeferredTask.metadata);
 	}
 	catch (Exception e)
 	{

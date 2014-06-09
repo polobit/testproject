@@ -22,7 +22,6 @@ import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.Mailgun;
 import com.thirdparty.SendGrid;
 import com.thirdparty.mandrill.webhook.MandrillWebhook;
 
@@ -576,11 +575,7 @@ public class SendEmail extends TaskletAdapter
 	    return;
 	}
 
-	// if cc present, send using Mailgun as it supports 'Cc'
-	if (!StringUtils.isEmpty(cc))
-	    Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
-	else
-	    MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, mandrillMetadata);
+	MandrillUtil.sendMail(fromEmail, fromName, to, cc, subject, replyTo, html, text, mandrillMetadata);
     }
 
 }
