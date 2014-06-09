@@ -27,7 +27,7 @@
 								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 								<b> <font size="5">{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}</font>
-								</b>{{#if_propertyName "email"}}</br> <a href='#send-email'>{{value}}</a>{{/if_propertyName}}
+								</b>{{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}}
 
 								</br>{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
 								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
@@ -75,7 +75,7 @@
 									<li><a href='#bulk-campaigns' class="contact-add-campaign"
 										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
 											to Campaign</a></li>
-									<li><a href='#send-email' id="contact-send-email"><i
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
 
 									<li class='divider'></li>
