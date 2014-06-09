@@ -38,7 +38,12 @@
 	<div>
 		{{#if Contact.Phones}}
 		{{#each Contact.Phones}}
-			{{#if PhoneNumber}}<i class="icon-phone"></i> {{PhoneCountryCode}}-{{PhoneAreaCode}}-{{PhoneNumber}} ({{capFirstLetter PhoneType}})<br> {{/if}}
+			{{#if PhoneNumber}}<i class="icon-phone"></i> 
+				{{#if PhoneCountryCode}}+{{PhoneCountryCode}}-{{/if}}
+				{{#if PhoneAreaCode}}{{PhoneAreaCode}}-{{/if}}
+				{{PhoneNumber}} 
+				{{capFirstLetter PhoneType}}<br> 
+			{{/if}}
 		{{/each}}
 		{{/if}}
 	</div>
@@ -55,7 +60,7 @@
 		{{#each Invoices}}
 			<li class="row-fluid sub_header_li">
 				<a class="pull-left"  href="https://go.xero.com/AccountsReceivable/Edit.aspx?InvoiceID={{InvoiceID}}" target="_blank" data-toggle="tooltip" data-placement="top" title={{xeroTypeToolTip Type}} >{{InvoiceNumber}} ({{xeroType Type}})</a>
-				<div class="pull-right">{{Total}}</div><br>
+				<div class="pull-right">{{Total}}({{CurrencyCode}})</div><br>
 				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{DueDateString}}">{{DueDateString}}</time></small></div>					
 				<div class="pull-right"><span class="badge">{{capFirstLetter Status}}</span></div><br>			
 			</li>

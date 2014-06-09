@@ -2424,7 +2424,7 @@ $(function()
 
     Handlebars.registerHelper('xeroType', function(type)
     {
-	return (type == "ACCPAY") ? "Pay" : "Rec";
+	return (type == "ACCPAY") ? "Payable" : "Receivable";
     });
 
     /**
@@ -2440,8 +2440,16 @@ $(function()
      */
     Handlebars.registerHelper('capFirstLetter', function(data)
     {
+	if(data === "DEFAULT")
+	{
+	   // console.log("return empty");
+	    return "";
+	}
+	else
+	{    
 	var temp = data.toLowerCase();
-	return temp.charAt(0).toUpperCase() + temp.slice(1);
+	return "("+temp.charAt(0).toUpperCase() + temp.slice(1)+")";
+	}
     });
 
     Handlebars.registerHelper('qbStatus', function(Balance)

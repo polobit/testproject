@@ -14,10 +14,16 @@ var WebreportsRouter = Backbone.Router.extend({
 	{
 		$(".active").removeClass("active");
 		$("#web-rules-menu").addClass("active");
-		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr' });
+		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr',
+			sortKey : 'position', postRenderCallback : function(el)
+			{
+				enableWebruletSoring(el);
+			}	
+		});
 
 		this.webrules.collection.fetch();
 		$("#content").html(this.webrules.render().el);
+		
 	},
 	web_reports_add : function()
 	{
