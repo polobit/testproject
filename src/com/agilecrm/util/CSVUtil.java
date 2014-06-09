@@ -25,6 +25,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
@@ -32,6 +33,8 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -64,7 +67,10 @@ public class CSVUtil
 
     public static enum ImportStatus
     {
-	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED
+	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
+
+	ACCESS_DENIED;
+
     }
 
     /**
@@ -118,7 +124,8 @@ public class CSVUtil
      * @param ownerId
      * @throws IOException
      */
-    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId) throws PlanRestrictedException, IOException
+    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
+	    throws PlanRestrictedException, IOException
     {
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
@@ -147,14 +154,17 @@ public class CSVUtil
 	// Creates domain user key, which is set as a contact owner
 	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
 
-	AgileUser user = AgileUser.getCurrentAgileUserFromDomainUser(ownerKey.getId());
 	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+	BulkActionUtil.setSessionManager(domainUser);
 
 	System.out.println(contacts.size());
 
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	int mergedContacts = 0;
+	int limitExceeded = 0;
+	int accessDeniedToUpdate = 0;
 	List<String> emails = new ArrayList<String>();
 	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
 
@@ -220,7 +230,8 @@ public class CSVUtil
 			else
 			{
 			    addressJSON.put(field.value, csvValues[j]);
-			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(), field.type.toString()));
+			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+				    field.type.toString()));
 			}
 
 		    }
@@ -255,6 +266,13 @@ public class CSVUtil
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
+		// Checks if user can update the contact
+		if (UserAccessControlUtil
+			.check(Contact.class.getSimpleName(), tempContact, CRUDOperation.UPDATE, false))
+		{
+		    ++accessDeniedToUpdate;
+		    continue;
+		}
 		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
 	    }
@@ -269,6 +287,7 @@ public class CSVUtil
 		}
 		catch (PlanRestrictedException e)
 		{
+		    ++limitExceeded;
 		    continue;
 		}
 	    }
@@ -279,7 +298,8 @@ public class CSVUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception raised while saving contact " + tempContact.getContactFieldValue(Contact.EMAIL));
+		System.out.println("exception raised while saving contact "
+			+ tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
 
 	    }
@@ -326,13 +346,17 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts + mergedContacts);
 	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
+	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
+	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+
 	}
 	else
 	{
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 	}
 
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION, new Object[] { domainUser, status });
+	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
+		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
@@ -366,7 +390,8 @@ public class CSVUtil
 
     public boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME)) && StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    return false;
