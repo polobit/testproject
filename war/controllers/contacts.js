@@ -559,6 +559,8 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		if (id)
 			$("#emailForm", el).find('input[name="to"]').val(id);
+		else
+			$("#emailForm", el).find('input[name="to"]').val('');
 
 		// Checks Zoomifier tag for contact
 		if (checkTagAgile("Zoomifier") && this.contactDetailView)
