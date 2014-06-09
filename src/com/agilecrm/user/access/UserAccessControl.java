@@ -1,6 +1,7 @@
 package com.agilecrm.user.access;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -36,17 +37,17 @@ public abstract class UserAccessControl
     }
 
     // Returns current user scopes
-    public List<UserAccessScopes> getCurrentUserScopes()
+    public HashSet<UserAccessScopes> getCurrentUserScopes()
     {
 	// Gets user info from session manager
 	UserInfo info = SessionManager.get();
 
-	System.out.println("***********************" + info + "*****************");
-
 	// If info is null then scopes are returned from domain user. It barely
 	// occurs
 	if (info == null)
-	    return Arrays.asList(UserAccessScopes.values());
+	{
+	    return new HashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	}
 
 	// If scopes in info is not set, scopes are fetched from current domain
 	// user, set in user info, and returned.
