@@ -297,13 +297,14 @@ public class WorkflowsAPI
      *            - cursor object
      * @return
      */
-    @Path("hardbounced-subscribers")
+    @Path("hardbounced-subscribers/{id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
-    public List<Contact> getHardBouncedContacts(@QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor)
+    public List<Contact> getHardBouncedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
-	return CampaignSubscribersUtil.getBoucedContacts(Integer.parseInt(count), cursor, EmailBounceType.HARD_BOUNCE);
+	return CampaignSubscribersUtil.getBoucedContactsByCampaignId(Integer.parseInt(count), cursor,
+		EmailBounceType.HARD_BOUNCE, workflow_id);
     }
 
 }

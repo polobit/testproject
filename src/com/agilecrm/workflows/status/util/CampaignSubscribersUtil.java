@@ -158,10 +158,12 @@ public class CampaignSubscribersUtil
      *            - HardBounce or SoftBounce
      * @return List
      */
-    public static List<Contact> getBoucedContacts(int max, String cursor, EmailBounceType emailBounceType)
+    public static List<Contact> getBoucedContactsByCampaignId(int max, String cursor, EmailBounceType emailBounceType,
+	    String campaignId)
     {
 	Map<String, Object> subscribers = new HashMap<String, Object>();
 	subscribers.put("emailBounceStatus.emailBounceType", emailBounceType);
+	subscribers.put("emailBounceStatus.campaign_id", campaignId);
 
 	return dao.fetchAll(max, cursor, subscribers, true, false);
     }

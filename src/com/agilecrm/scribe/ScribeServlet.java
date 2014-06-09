@@ -43,7 +43,8 @@ public class ScribeServlet extends HttpServlet
 	public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
 	public static final String SERVICE_TYPE_GOOGLE_DRIVE = "google_drive";
 	public static final String SERVICE_TYPE_XERO = "xero";
-
+	public static final String SERVICE_TYPE_FACEBOOK = "facebook";
+	
 	// Scopes
 	public static final String STRIPE_SCOPE = "read_only";
 	public static final String GOOGLE_CONTACTS_SCOPE = "https://www.google.com/m8/feeds/";
@@ -177,7 +178,9 @@ public class ScribeServlet extends HttpServlet
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2)
-				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE))
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
+				)
 		{
 			// After building service, redirects to authorization page
 			url = service.getAuthorizationUrl(null);
@@ -246,7 +249,8 @@ public class ScribeServlet extends HttpServlet
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2)
-				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE))
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
+				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK))
 			code = req.getParameter("code");
 
 		// OAuth 1.0 requires token and verifier
@@ -291,6 +295,7 @@ public class ScribeServlet extends HttpServlet
 		System.out.println("return url " + returnURL);
 
 		// If return URL is null, redirect to dashboard
+		System.out.println(returnURL);
 		if (returnURL == null)
 			resp.sendRedirect("/");
 		else

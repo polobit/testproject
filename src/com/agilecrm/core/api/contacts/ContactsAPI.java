@@ -2,7 +2,9 @@ package com.agilecrm.core.api.contacts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -41,6 +43,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.JSAPIUtil;
 
@@ -797,5 +800,86 @@ public class ContactsAPI
 	    return null;
 	}
 
+    }
+
+    /**
+     * Count of tasks, notes, events and documents of a contact.
+     * 
+     * @param id
+     *            contact id to get its related entities (tasks)
+     * @param taskType
+     *            - type of task
+     * @return Map containing the count of all the above items.
+     */
+    @Path("/{contact-id}/items/count")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Map<String, Integer> getContactItemsCount(@PathParam("contact-id") Long id,
+	    @QueryParam("task-type") String taskType)
+    {
+	try
+	{
+	    Map<String, Integer> itemsCount = new HashMap<String, Integer>();
+	    itemsCount.put("Tasks", TaskUtil.getTaskCountForContact(taskType, id));
+	    itemsCount.put("Notes", NoteUtil.getNotesCount(id));
+	    itemsCount.put("Events", EventUtil.getContactEventsCount(id));
+	    itemsCount.put("Documents", DocumentUtil.getContactDocumentsCount(id));
+	    return itemsCount;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Tasks of a contact sorted on due date.
+     * 
+     * @param id
+     *            contact id to get its related entities (tasks)
+     * @param taskType
+     *            - type of task
+     * @return list of tasks related to a contact
+     */
+    @Path("/{contact-id}/tasks/sort")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Task> getSortedTasks(@PathParam("contact-id") Long id, @QueryParam("task-type") String taskType)
+    {
+	try
+	{
+	    return TaskUtil.getContactSortedTasks(taskType, id);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception in Sorting Tasks on Due date : " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Events of a contact sorted on start date.
+     * 
+     * @param id
+     *            contact id to get its related entities (tasks)
+     * @return list of tasks related to a contact
+     */
+    @Path("/{contact-id}/events/sort")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Event> getSortedEvents(@PathParam("contact-id") Long id)
+    {
+	try
+	{
+	    return EventUtil.getContactSortedEvents(id);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception in Sorting Events on Start date : " + e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
     }
 }

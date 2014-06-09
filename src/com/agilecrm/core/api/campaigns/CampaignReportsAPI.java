@@ -136,19 +136,24 @@ public class CampaignReportsAPI
 
 	    System.out.println("SQL Stats are..." + stats.toString());
 
+	    // To show hardbounce and softbounce only for email sent campaigns
+	    int statsLength = stats.length();
+
 	    try
 	    {
 		// Hard Bounce data
 		stats.put(new JSONObject().put("log_type", "HARD_BOUNCE").put(
 			"count",
-			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.HARD_BOUNCE,
-				Long.parseLong(startTime) / 1000, Long.parseLong(endTime) / 1000)));
+			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
+				EmailBounceType.HARD_BOUNCE, Long.parseLong(startTime) / 1000,
+				Long.parseLong(endTime) / 1000) : 0));
 
 		// Soft Bounce Data
 		stats.put(new JSONObject().put("log_type", "SOFT_BOUNCE").put(
 			"count",
-			ContactUtil.getEmailBouncedContactsCount(EmailBounceType.SOFT_BOUNCE,
-				Long.parseLong(startTime) / 1000, Long.parseLong(endTime) / 1000)));
+			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
+				EmailBounceType.SOFT_BOUNCE, Long.parseLong(startTime) / 1000,
+				Long.parseLong(endTime) / 1000) : 0));
 	    }
 	    catch (Exception e)
 	    {

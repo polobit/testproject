@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
@@ -20,6 +21,7 @@ import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
+import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.Globals;
@@ -36,6 +38,7 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+//import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * <code>ScribeUtil</code> class contains methods to be used by
@@ -114,6 +117,12 @@ public class ScribeUtil
 		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_XERO))
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_XERO, com.agilecrm.scribe.api.XeroApi.class,
 					callback, Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, null);
+		
+		// Create a Service specific to facebook
+		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
+			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_FACEBOOK, com.agilecrm.scribe.api.FacebookApi.class,
+					callback, Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET, null);
+		
 		// Creates a Service, specific to Gmail
 		else
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GMAIL,
@@ -152,15 +161,19 @@ public class ScribeUtil
 		// Gets session and sets attribute "oauth.service" to service type
 		req.getSession().setAttribute("oauth.service", serviceType);
 		
+		//scope="read_friendlists,read_stream";
+		
 		// if scope is null return service without scope
 		if (scope == null)
 			// Creates a Service, by configuring API key, Secret key
 			return new ServiceBuilder().provider(apiClass).callback(callback).apiKey(apiKey).apiSecret(apiSecret)
 					.build();
+		else
+			return new ServiceBuilder().provider(apiClass).callback(callback).apiKey(apiKey).apiSecret(apiSecret).scope(scope)
+					.build();
 
 		// if scope is needed in the service
-		return new ServiceBuilder().provider(apiClass).callback(callback).apiKey(apiKey).apiSecret(apiSecret)
-				.scope(scope).build();
+		
 	}
 
 	/**
@@ -248,6 +261,9 @@ public class ScribeUtil
 		{
 			saveXeroPrefs(req, accessToken);
 		}
+		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
+			saveFacebookPrefs(req, code,service);
+
 	}
 
 	/**
@@ -510,25 +526,21 @@ public class ScribeUtil
 		/*
 		 * Make a post request and retrieve tokens
 		 */
-		/*
-		 * OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST,
-		 * "https://api.xero.com/api.xro/2.0/Accounts");
-		 * 
-		 * oAuthRequest.addHeader("Authorization", "Bearer " +
-		 * Globals.STRIPE_API_KEY);
-		 * 
-		 * Response response = oAuthRequest.send(); HashMap<String, String>
-		 * properties = new ObjectMapper().readValue(response.getBody(), new
-		 * TypeReference<HashMap<String, String>>() { });
-		 * 
-		 * }
-		 */
-
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("token", accessToken.getToken());
 		properties.put("secret", accessToken.getSecret());
 		properties.put("time", String.valueOf(System.currentTimeMillis()));
-
+		try
+		{
+		String res = SignpostUtil.accessURLWithOauth(Globals.XERO_API_KEY,Globals.XERO_CLIENT_ID, accessToken.getToken(),accessToken.getSecret(),"https://api.xero.com/api.xro/2.0/users","GET","","XERO");
+		JSONObject xeroProfile = new JSONObject(res);				
+		properties.put("xeroId",xeroProfile.getString("UserID"));
+		properties.put("xeroemail",xeroProfile.getString("EmailAddress"));
+		}
+		catch(JSONException e)
+		{
+			e.printStackTrace();
+		}
 		// Gets widget name from the session
 		String serviceType = (String) req.getSession().getAttribute("service_type");
 
@@ -536,6 +548,30 @@ public class ScribeUtil
 
 		// update widget with tokens
 
+		saveWidgetPrefsByName(serviceType, properties);
+
+	}
+	public static void saveFacebookPrefs(HttpServletRequest req, String code ,OAuthService service) throws IOException
+	{
+		System.out.println("In Facebook save");
+
+		Verifier verifier = new Verifier(code);
+		Token accessToken = service.getAccessToken(null, verifier);  
+	    
+	    Map<String, String> properties = new HashMap<String, String>();
+		properties.put("token", accessToken.getToken());
+		properties.put("verifier", verifier.getValue());
+		properties.put("code", code);
+		properties.put("time", String.valueOf(System.currentTimeMillis()));
+
+		// Gets widget name from the session
+		String serviceType = (String) req.getSession().getAttribute("service_type");
+
+		System.out.println("serviceName " + serviceType);
+		
+		System.out.println(properties);
+
+		// update widget with tokens
 		saveWidgetPrefsByName(serviceType, properties);
 
 	}

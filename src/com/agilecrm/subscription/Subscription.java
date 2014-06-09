@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 import com.stripe.model.Customer;
@@ -96,12 +95,10 @@ public class Subscription
 
     /** The created_time variable represents when subscription object is created */
     @NotSaved(IfDefault.class)
-    @Indexed
     public Long created_time = 0L;
 
     /** The updated_time variable represents when subscription object is updated */
     @NotSaved(IfDefault.class)
-    @Indexed
     public Long updated_time = 0L;
 
     /**
