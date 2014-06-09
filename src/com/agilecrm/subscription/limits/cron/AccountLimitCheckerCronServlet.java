@@ -35,9 +35,14 @@ public class AccountLimitCheckerCronServlet extends HttpServlet
     {
 	String offline = req.getParameter("offline");
 
+	String domain = req.getParameter("domain");
+
 	if (!StringUtils.isEmpty(offline))
 	{
 	    TestTask task = new TestTask();
+
+	    if (!StringUtils.isEmpty(domain))
+		task.domain = domain;
 
 	    // Add to queue
 	    Queue queue = QueueFactory.getDefaultQueue();

@@ -3,6 +3,7 @@ package com.agilecrm.core.api.bulkactions.backends;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -47,8 +48,6 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 @Path("/api/bulk-actions")
 public class BulkOperationsAPI
@@ -181,6 +180,7 @@ public class BulkOperationsAPI
 	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
 	    @PathParam("current_user_id") Long current_user_id) throws JSONException
     {
+
 	BulkActionUtil.setSessionManager(current_user_id);
 
 	List<Contact> contact_list = null;
@@ -211,7 +211,6 @@ public class BulkOperationsAPI
 
 	else if (!StringUtils.isEmpty(contact_ids))
 	{
-
 	    contact_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
 
 	    WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
@@ -305,6 +304,78 @@ public class BulkOperationsAPI
 		.toString(), String.valueOf(count));
     }
 
+    @SuppressWarnings("unchecked")
+    @Path("contact/remove-tags/{current_user}")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void removeTagsFromContacts(@FormParam("contact_ids") String contact_ids,
+	    @FormParam("data") String tagsString, @FormParam("filter") String filter,
+	    @PathParam("current_user") Long current_user) throws JSONException
+    {
+	System.out.println(filter);
+	System.out.println("current user : " + current_user);
+	System.out.println("domain : " + NamespaceManager.get());
+	System.out.println(contact_ids);
+	System.out.println(tagsString);
+
+	if (StringUtils.isEmpty(tagsString))
+	    return;
+
+	JSONArray tagsJSONArray = new JSONArray(tagsString);
+
+	String[] tagsArray = null;
+	try
+	{
+	    tagsArray = new ObjectMapper().readValue(tagsJSONArray.toString(), String[].class);
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (tagsArray == null)
+	    return;
+
+	List<Contact> contacts = null;
+	int count = 0;
+
+	if (!StringUtils.isEmpty(filter))
+	{
+	    contacts = BulkActionUtil.getFilterContacts(filter, null, current_user);
+
+	    String currentCursor = null;
+	    String previousCursor = null;
+	    do
+	    {
+		count += contacts.size();
+		previousCursor = contacts.get(contacts.size() - 1).cursor;
+
+		ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
+
+		if (!StringUtils.isEmpty(previousCursor))
+		{
+		    contacts = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user);
+		    currentCursor = contacts.size() > 0 ? contacts.get(contacts.size() - 1).cursor : null;
+		    continue;
+		}
+		break;
+	    } while (contacts.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
+
+	}
+
+	else if (!StringUtils.isEmpty(contact_ids))
+	{
+	    contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+
+	    ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
+	    count += contacts.size();
+	}
+
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
+		.toString(), String.valueOf(count));
+    }
+
     /**
      * It runs in backends. Fetches blob data based on the blob key sent and
      * call CSV utility function is called to create contacts, based on the
@@ -367,13 +438,15 @@ public class BulkOperationsAPI
     @Path("/remove-active-subscribers/{campaign_id}/{current_user_id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void removeActiveSubscribersOfCampaign(@FormParam("ids") String contactIds,
-	    @PathParam("campaign_id") String campaign_id, @FormParam("filter") String allActiveSubscribers)
-	    throws JSONException
+    public void removeActiveSubscribersOfCampaign(@PathParam("current_user_id") Long currentUserId,
+	    @FormParam("ids") String contactIds, @PathParam("campaign_id") String campaign_id,
+	    @FormParam("filter") String allActiveSubscribers) throws JSONException
     {
 
 	// to show in notification
 	int contactSize = 0;
+
+	BulkActionUtil.setSessionManager(currentUserId);
 
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
@@ -436,8 +509,6 @@ public class BulkOperationsAPI
 	int count = 0;
 
 	JSONObject emailData = new JSONObject(data);
-
-	BulkActionUtil.setSessionManager(currentUserId);
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
 

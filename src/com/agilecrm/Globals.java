@@ -68,22 +68,32 @@ public class Globals
     public static final String PAYPAL = "Paypal";
 
     // Stripe live keys
-    public static final String STRIPE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
-    public static final String STRIPE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
+    // public static final String STRIPE_API_KEY =
+    // "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    // public static final String STRIPE_CLIENT_ID =
+    // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     // development keys
-    // public static final String STRIPE_API_KEY =
-    // "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
-    // public static final String STRIPE_CLIENT_ID =
-    // "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
+    public static final String STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
+    public static final String STRIPE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
+    // Xero live keys
+    public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
+    public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
+
+    public static final String QUICKBOOKS_APP_KEY = "3cbd2a41bdc1bb41cdb8121b032d37bb78d7";
+    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdPRUUGiDZ0Ik0P2p3NdGA0fc7E";
+    public static final String QUICKBOOKS_CONSUMER_SECRET = "u1E4PJ87d5jHO9bJodbRPo9MQIWTnXZu37fqzGQD";
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
+
+    public static final String BULK_BACKENDS = "bulk";
+    public static final String NORMAL_BACKENDS = "normal";
 
     // PUBNUB Credentials
     public static final String PUBNUB_PUBLISH_KEY = "pub-c-e4c8fdc2-40b1-443d-8bb0-2a9c8facd274";
@@ -100,6 +110,6 @@ public class Globals
     public static final long REQUEST_LIMIT_MILLIS = 1000 * 25;
 
     // Campaign and Email pull queues
-    public static final String CAMPAIGN_PULL_QUEUE = "sb-campaign-pull-queue";
-    public static final String EMAIL_PULL_QUEUE = "sb-email-pull-queue";
+    public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
+    public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
 }

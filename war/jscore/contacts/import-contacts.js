@@ -217,7 +217,7 @@ $(function()
 						model.type = "PERSON";
 
 						// Shows Updating
-						$waiting.find('#status-message').html(LOADING_HTML);
+						$waiting.find('#status-message').html(getRandomLoadingImg());
 
 						// Represents prototype of contact, which specifies the
 						// order of properties
@@ -257,7 +257,7 @@ function parseCSV(key)
 {
 
 	BLOB_KEY = key;
-	$("#upload_contacts").after(LOADING_HTML);
+	$("#upload_contacts").after(getRandomLoadingImg());
 	$.getJSON('core/api/upload/process?blob-key=' + key, function(data)
 	{
 		console.log(data);

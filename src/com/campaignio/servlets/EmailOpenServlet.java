@@ -2,6 +2,7 @@ package com.campaignio.servlets;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -12,11 +13,14 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.ContactEmail;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -28,6 +32,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.googlecode.objectify.Key;
 
 /**
  * <code>EmailOpenServlet</code> is the servlet that track emails opened. The
@@ -67,6 +72,9 @@ public class EmailOpenServlet extends HttpServlet
 	// Contact emailId
 	String emailId = request.getParameter("e");
 
+	// Sender Email Id used in case of chrome extension notifications.
+	String fromEmailId = request.getParameter("fr");
+
 	// Contact subject
 	String subject = request.getParameter("d");
 
@@ -87,7 +95,7 @@ public class EmailOpenServlet extends HttpServlet
 	{
 	    if (!StringUtils.isBlank(emailId))
 	    {
-		chromeExtensionShowNotification(emailId, subject);
+		chromeExtensionShowNotification(emailId, fromEmailId, subject, trackerId);
 	    }
 	    else
 		addLogAndShowNotification(trackerId, campaignId);
@@ -106,19 +114,75 @@ public class EmailOpenServlet extends HttpServlet
     /**
      * Adds log and show notification of Email Opened.
      * 
+     * @param toEmailId
+     *            - to address of Email.
+     * @param fromEmailId
+     *            - from address of Email.
+     * @param subject
+     *            - subject of the email.
      * @param trackerId
      *            - Contact Id or Tracker Id
-     * @param campaignId
-     *            - Campaign Id.
      */
-    private void chromeExtensionShowNotification(String emailId, String subject)
+    private void chromeExtensionShowNotification(String toEmailId, String fromEmailId, String subject, String trackerId)
     {
-	// Personal Emails
-	if (!StringUtils.isBlank(emailId))
+	try
 	{
-	    // Shows notification for simple emails.
-	    showEmailOpenedNotification(ContactUtil.searchContactByEmail(emailId), null, subject);
+	    if (!StringUtils.isBlank(trackerId))
+	    {
+		Contact contact = ContactUtil.searchContactByEmail(toEmailId);
+		if (contact == null)
+		{
+		    // If there is no contact with the toEmail, create a contact
+		    // with that email.
+		    DomainUser owner = DomainUserUtil.getDomainUserFromEmail(fromEmailId);
+		    ContactField email = new ContactField(Contact.EMAIL, toEmailId, "SYSTEM");
+		    ContactField name = new ContactField(Contact.FIRST_NAME, toEmailId.substring(0,
+			    toEmailId.indexOf("@")), "SYSTEM");
+		    List<ContactField> properties = new ArrayList<ContactField>();
+		    properties.add(email);
+		    properties.add(name);
+		    contact = new Contact();
+		    contact.properties = properties;
+		    contact.setContactOwner(new Key<DomainUser>(DomainUser.class, owner.id));
+		    contact.save();
+		}
 
+		List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long
+			.parseLong(trackerId));
+		// If there is a Contact Email with the tracker Id, send the
+		// notification. If not, save the contact email.
+		if (contactEmails.size() > 0)
+		{
+		    for (ContactEmail contactEmail : contactEmails)
+		    {
+			contactEmail.is_email_opened = true;
+			contactEmail.email_opened_at = System.currentTimeMillis() / 1000;
+			contactEmail.save();
+		    }
+		    // Need the sent time and opened time in the payload, to
+		    // show in the Chrome Extensions.
+		    JSONObject mailInfo = new JSONObject().put("email_subject", subject);
+		    mailInfo.put("time_sent", trackerId);
+		    mailInfo.put("time_opened", System.currentTimeMillis() / 1000);
+		    // Shows notification for simple emails.
+		    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
+			    new JSONObject().put("custom_value", mailInfo));
+		}
+		else
+		{
+		    // Track URL calls first time when Email sent through Gmail,
+		    // at that time save the Email and do not send the
+		    // Notifications
+		    ContactEmail contactEmail = new ContactEmail(contact.id, fromEmailId, toEmailId, subject, "");
+		    contactEmail.trackerId = Long.parseLong(trackerId);
+		    contactEmail.from_name = DomainUserUtil.getDomainUserFromEmail(fromEmailId).name;
+		    contactEmail.save();
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
     }
 
@@ -136,7 +200,8 @@ public class EmailOpenServlet extends HttpServlet
 	// Personal Emails
 	if (!StringUtils.isBlank(trackerId) && StringUtils.isBlank(campaignId))
 	{
-	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long.parseLong(trackerId));
+	    List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long
+		    .parseLong(trackerId));
 
 	    for (ContactEmail contactEmail : contactEmails)
 	    {
@@ -179,7 +244,8 @@ public class EmailOpenServlet extends HttpServlet
      */
     private void addEmailOpenedLog(String campaignId, String subscriberId, String workflowName)
     {
-	LogUtil.addLogToSQL(campaignId, subscriberId, "Email Opened of campaign " + workflowName, LogType.EMAIL_OPENED.toString());
+	LogUtil.addLogToSQL(campaignId, subscriberId, "Email Opened of campaign " + workflowName,
+		LogType.EMAIL_OPENED.toString());
     }
 
     /**
@@ -202,7 +268,6 @@ public class EmailOpenServlet extends HttpServlet
 			new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName)));
 		return;
 	    }
-
 	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
 		    new JSONObject().put("custom_value", new JSONObject().put("email_subject", emailSubject)));
 
@@ -228,7 +293,8 @@ public class EmailOpenServlet extends HttpServlet
 	    customData.put(SendEmail.EMAIL_OPEN, true);
 
 	    // Interrupt opened in DeferredTask
-	    EmailOpenDeferredTask emailOpenDeferredTask = new EmailOpenDeferredTask(campaignId, subscriberId, customData.toString());
+	    EmailOpenDeferredTask emailOpenDeferredTask = new EmailOpenDeferredTask(campaignId, subscriberId,
+		    customData.toString());
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.addAsync(TaskOptions.Builder.withPayload(emailOpenDeferredTask));
 	}

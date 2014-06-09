@@ -64,7 +64,15 @@
 								{{last_name.value}}</td> {{/last_name}} {{#created_time}}
 							<td align="left" valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
-								{{created_time}}</td> {{/created_time}} {{#image}} {{#image.value}}
+								{{created_time}}</td> {{/created_time}} 
+								 {{#phone}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								{{phone.value}}</td> {{/phone}} 
+								 {{#website}}
+							<td align="left" valign="top"
+								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
+								{{website.value}}</td> {{/website}} {{#image}} {{#image.value}}
 							<td align="left" valign="top"
 								style="border-bottom: 1px solid #f3f3f3; font-size: 12px">
 								<img class="thumbnail" src="{{image.value}}" width="40px"

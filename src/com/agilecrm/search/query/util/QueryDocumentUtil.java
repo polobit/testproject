@@ -80,8 +80,6 @@ public class QueryDocumentUtil
 
 	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), rules);
 
-	System.out.println(rules);
-
 	// Iterates though each rule object, and constructs query based on type
 	// (Date, Number, Text fields) and conditions (Equals, OR, AND, ON)
 	for (SearchRule rule : rules)
@@ -119,6 +117,7 @@ public class QueryDocumentUtil
 		 * Create new query with LHS and RHS conditions to be processed
 		 * further for necessary queries
 		 */
+		lhs = lhs.replaceAll("[^a-zA-Z0-9_]", "_");
 		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
 
 		// For equals condition
@@ -178,6 +177,7 @@ public class QueryDocumentUtil
 	    rules.remove(rules.size() - 1);
 
 	System.out.println("query " + query);
+
 	return query;
     }
 

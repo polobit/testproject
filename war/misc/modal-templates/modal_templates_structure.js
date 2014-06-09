@@ -167,6 +167,21 @@
                     ]
                 },
                 {
+                    "label": "Mouseflow",
+                    "title": "mouseflow-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/mouseflow/images/mouseflow.png",
+                        "theme_big": "/misc/modal-templates/form/mouseflow/images/mouseflow.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "mouseflow-form",
+                            "href": "/misc/modal-templates/form/mouseflow/images/mouseflow.png",
+                            "link": "/misc/modal-templates/form/mouseflow/mouseflow.html"
+                        }
+                    ]
+                },
+                {
                     "label": "Peep Out",
                     "title": "peep-out-form",
                     "theme_preview": {

@@ -28,7 +28,7 @@ $(function(){
 				function(data) {
 					$("#taskForm").find("#owners-list").html(data);
 					$("#owners-list", el).find('option[value='+ CURRENT_DOMAIN_USER.id +']').attr("selected", "selected");
-					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();
+					$("#owners-list", $("#taskForm")).closest('div').find('.loading-img').hide();					
 		});
     });
 	
@@ -144,7 +144,7 @@ $(function(){
     		    var $add_to_campaign = $(this).attr('id');
     		    
     			// Show loading symbol until model get saved
-    		    //$('#contactCampaignForm').find('span.save-status').html(LOADING_HTML);
+    		    //$('#contactCampaignForm').find('span.save-status').html(getRandomLoadingImg());
     		    
     			var workflow_id = $('#campaign-select option:selected').attr('value');
     						

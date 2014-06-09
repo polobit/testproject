@@ -9,14 +9,13 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterator;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -57,8 +56,8 @@ public class CronUtil
      *            Custom value.
      * @throws Exception
      */
-    public static void enqueueTask(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON, long timeOut, String custom1,
-	    String custom2, String custom3) throws Exception
+    public static void enqueueTask(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data,
+	    JSONObject nodeJSON, long timeOut, String custom1, String custom2, String custom3) throws Exception
     {
 	Cron cron = new Cron(campaignJSON, subscriberJSON, data, nodeJSON, timeOut, custom1, custom2, custom3);
 	cron.save();
@@ -296,16 +295,20 @@ public class CronUtil
     {
 	System.out.println("Jobs dequeued - " + wakeupOrInterrupt + " [" + cronJobs.size() + "]" + cronJobs);
 
+	int size = cronJobs.size();
+
 	// Iterate through all tasks
 	for (Cron cron : cronJobs)
 	{
 	    if (customData == null)
 		customData = new JSONObject();
 
-	    CronDeferredTask cronDeferredTask = new CronDeferredTask(cron.namespace, cron.campaign_id, cron.data_string, cron.subscriber_json_string,
-		    cron.node_json_string, wakeupOrInterrupt, customData.toString());
-	    Queue queue = QueueFactory.getQueue("cron-queue");
-	    queue.addAsync(TaskOptions.Builder.withPayload(cronDeferredTask));
+	    CronDeferredTask cronDeferredTask = new CronDeferredTask(cron.namespace, cron.campaign_id,
+		    cron.data_string, cron.subscriber_json_string, cron.node_json_string, wakeupOrInterrupt,
+		    customData.toString());
+
+	    PullQueueUtil.addToPullQueue(size >= 500 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		    : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
 	}
     }
 

@@ -44,7 +44,7 @@ var ReportsRouter = Backbone.Router.extend({
 	reportAdd : function()
 	{
 		var count = 0;
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		CUSTOM_FIELDS = undefined;
 		var report_add = new Base_Model_View({ url : 'core/api/reports', template : "reports-add", window : "email-reports", isNew : true,
 			postRenderCallback : function(el)
@@ -82,7 +82,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 			} });
 
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		report_add.render();
 
 	},
@@ -95,7 +95,7 @@ var ReportsRouter = Backbone.Router.extend({
 	 */
 	reportEdit : function(id)
 	{
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		// Counter to set when script is loaded. Used to avoid flash in page
 		var count = 0;
 
@@ -142,7 +142,7 @@ var ReportsRouter = Backbone.Router.extend({
 
 			} });
 
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		report_model.render();
 
 	},
@@ -161,7 +161,7 @@ var ReportsRouter = Backbone.Router.extend({
 			{
 
 				// Shows loading while report is being fetched
-				$("#content").html(LOADING_HTML);
+				$("#content").html(getRandomLoadingImg());
 				var reportModel = new Backbone.Model();
 				reportModel.url = "core/api/reports/" + id;
 				reportModel.fetch({ success : function(data)
@@ -202,7 +202,7 @@ var ReportsRouter = Backbone.Router.extend({
 	showFunnelReport : function(tags)
 	{
 
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+		head.load(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css",  function()
 		{
 			// Load Reports Template
 			$("#content").html(getTemplate("report-funnel", {}));
@@ -229,7 +229,7 @@ var ReportsRouter = Backbone.Router.extend({
 	showGrowthReport : function(tags)
 	{
 
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js',  CSS_PATH + "css/misc/date-picker.css", function()
 		{
 
 			// Load Reports Template
@@ -257,7 +257,7 @@ var ReportsRouter = Backbone.Router.extend({
 	showCohortsReport : function(tag1, tag2)
 	{
 
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 		{
 
 			// Load Reports Template
@@ -284,7 +284,7 @@ var ReportsRouter = Backbone.Router.extend({
 	showRatioReport : function(tag1, tag2)
 	{
 
-		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+		head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 		{
 
 			// Load Reports Template

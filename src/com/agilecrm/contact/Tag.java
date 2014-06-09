@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 
 /**
@@ -21,81 +22,82 @@ import com.googlecode.objectify.annotation.NotSaved;
  * 
  */
 @XmlRootElement
+@Cached
 public class Tag extends Cursor implements Serializable
 {
 
-	/**
-	 * Tag name is taken as id
-	 */
-	@Id
-	public String tag;
+    /**
+     * Tag name is taken as id
+     */
+    @Id
+    public String tag;
 
-	public Long createdTime = 0L;
+    public Long createdTime = 0L;
 
-	// Dao
-	private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
+    // Dao
+    private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
 
-	@NotSaved
-	public String entity_type = "tag";
+    @NotSaved
+    public String entity_type = "tag";
 
-	/**
-	 * Default constructor
-	 */
-	public Tag()
-	{
+    /**
+     * Default constructor
+     */
+    public Tag()
+    {
 
-	}
+    }
 
-	/**
-	 * Creates a tag with its name assigning to id
-	 * 
-	 * @param tag
-	 */
-	public Tag(String tag)
-	{
-		this.tag = tag;
-	}
+    /**
+     * Creates a tag with its name assigning to id
+     * 
+     * @param tag
+     */
+    public Tag(String tag)
+    {
+	this.tag = tag;
+    }
 
-	public Tag(String tag, Long createdTime)
-	{
-		this.tag = tag;
-		this.createdTime = createdTime;
-	}
+    public Tag(String tag, Long createdTime)
+    {
+	this.tag = tag;
+	this.createdTime = createdTime;
+    }
 
-	/**
-	 * Adds a tag entity to database, by creating it with its constructor
-	 * 
-	 * @param tagName
-	 * @return
-	 */
-	public static Tag addTag(String tagName)
-	{
-		Tag tag = new Tag(tagName);
-		dao.put(tag);
-		return tag;
-	}
+    /**
+     * Adds a tag entity to database, by creating it with its constructor
+     * 
+     * @param tagName
+     * @return
+     */
+    public static Tag addTag(String tagName)
+    {
+	Tag tag = new Tag(tagName);
+	dao.put(tag);
+	return tag;
+    }
 
-	/**
-	 * Equals method to compare to tags. It compares based on the 'tag' String
-	 * field
-	 */
-	@Override
-	public boolean equals(Object o)
-	{
-		Tag tag = (Tag) o;
+    /**
+     * Equals method to compare to tags. It compares based on the 'tag' String
+     * field
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+	Tag tag = (Tag) o;
 
-		if (this.tag == null || tag.tag == null)
-			return false;
+	if (this.tag == null || tag.tag == null)
+	    return false;
 
-		String tagTrimmed = this.tag.trim();
+	String tagTrimmed = this.tag.trim();
 
-		return tagTrimmed.equalsIgnoreCase(tag.tag.trim());
-	}
+	return tagTrimmed.equalsIgnoreCase(tag.tag.trim());
+    }
 
-	@Override
-	public String toString()
-	{
-		return "Tag [tag=" + tag + ", createdTime=" + createdTime + "]";
-	}
+    @Override
+    public String toString()
+    {
+	return "Tag [tag=" + tag + ", createdTime=" + createdTime + "]";
+    }
 
 }

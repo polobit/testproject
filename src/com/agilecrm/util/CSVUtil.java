@@ -129,6 +129,11 @@ public class CSVUtil
     {
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
+	billingRestriction.save();
+
+	int availableContacts = billingRestriction.contacts_count;
+	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
+	boolean limitCrossed = false;
 
 	// Reads blob data line by line upto first 10 line of file
 	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
@@ -278,12 +283,27 @@ public class CSVUtil
 	    }
 	    else
 	    {
+
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
+
 		++billingRestriction.contacts_count;
 		try
 		{
-		    billingRestriction.check("Contact");
+		    if (limitCrossed)
+			continue;
+
+		    if (billingRestriction.tagsToAddInOurDomain != null
+			    && !billingRestriction.tagsToAddInOurDomain.isEmpty())
+			billingRestriction.tagsToAddInOurDomain.clear();
+
+		    billingRestriction.check(Contact.class.getSimpleName());
+
+		    if (billingRestriction.contacts_count >= allowedContacts)
+		    {
+			limitCrossed = true;
+		    }
+
 		}
 		catch (PlanRestrictedException e)
 		{

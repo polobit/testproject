@@ -10,6 +10,7 @@ import com.agilecrm.user.UserPrefs;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
@@ -23,6 +24,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
+@Cached
 public class NotificationPrefs
 {
     /**
@@ -123,7 +125,8 @@ public class NotificationPrefs
     /**
      * ObjectifyGenericDao for Notifications.
      */
-    private static ObjectifyGenericDao<NotificationPrefs> dao = new ObjectifyGenericDao<NotificationPrefs>(NotificationPrefs.class);
+    private static ObjectifyGenericDao<NotificationPrefs> dao = new ObjectifyGenericDao<NotificationPrefs>(
+	    NotificationPrefs.class);
 
     /**
      * Default NotificationPrefs.
@@ -169,8 +172,9 @@ public class NotificationPrefs
      * @param tag_deleted
      *            Tag deleted status.
      */
-    public NotificationPrefs(Long userId, boolean control_notifications, String browsing, String email_opened, String link_clicked, boolean deal_created,
-	    boolean deal_closed, boolean contact_added, boolean contact_deleted, boolean tag_added, boolean tag_deleted, boolean call, String notification_sound)
+    public NotificationPrefs(Long userId, boolean control_notifications, String browsing, String email_opened,
+	    String link_clicked, boolean deal_created, boolean deal_closed, boolean contact_added,
+	    boolean contact_deleted, boolean tag_added, boolean tag_deleted, boolean call, String notification_sound)
     {
 	this.control_notifications = control_notifications;
 	this.browsing = browsing;

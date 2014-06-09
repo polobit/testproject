@@ -7,6 +7,8 @@ import com.agilecrm.workflows.Workflow;
 
 public class WorkflowBillingRestriction extends DaoBillingRestriction
 {
+    boolean hardUpdateTags = true;
+
     /**
      * Checks if new workflow does not exceed limits in current plan
      */
@@ -62,7 +64,8 @@ public class WorkflowBillingRestriction extends DaoBillingRestriction
     {
 	System.out.println(max_allowed);
 	System.out.println(restriction.campaigns_count);
-	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, max_allowed, "Workflow");
+	String tag = BillingRestrictionReminderUtil.getTag(restriction.campaigns_count, max_allowed, "Workflow",
+		hardUpdateTags);
 
 	System.out.println(restriction.campaigns_count + ", " + max_allowed);
 	System.out.println("system tag");

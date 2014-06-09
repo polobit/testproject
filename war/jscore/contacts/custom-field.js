@@ -16,22 +16,8 @@ $(function() {
 		event.preventDefault();
 		var type = $(this).attr("type");
 		
-		// Creating model for bootstrap-modal
-		var modelView = new Base_Model_View({
-			url : '/core/api/custom-fields',
-			template : 'custom-field-add-modal',
-			window : 'custom-fields',
-			data : {"scope" : type},
-			reload : true,
-			modal : "#custom-field-add-modal",
-			isNew : true,
-			postRenderCallback : function(el) {
-				$('.modal-backdrop').remove();	
-				$("#custom-field-add-modal", el).modal('show');
-			}
-		});
-
-		$('#custom-field-modal').html(modelView.render().el);
+		showCustomFieldModel({"scope" : type});
+		
 	});
 	
 	$("#custom-field-type").die().live("change", function(e){
@@ -58,7 +44,62 @@ $(function() {
 		}
 		
 	})
+	
+	$('#admin-settings-customfields-model-list > tr > td:not(":first-child")').live('click', function(e) {
+		e.preventDefault();
+		var custom_field = $(this).closest('tr').data();
+		console.log(custom_field);
+		showCustomFieldModel(custom_field.toJSON());
+	});
 });
+
+function showCustomFieldModel(data)
+{
+	var isNew = false;
+	isNew = !data.id;
+	// Creating model for bootstrap-modal
+	var modelView = new Base_Model_View({
+		url : '/core/api/custom-fields',
+		template : 'custom-field-add-modal',
+	//	window : 'custom-fields',
+		data : data,
+		//reload : true,
+		modal : "#custom-field-add-modal",
+		isNew : isNew,
+		postRenderCallback : function(el) {
+			$('.modal-backdrop').remove();	
+			console.log($("#custom-field-add-modal", el));
+			
+			$("#custom-field-add-modal", el).modal('show');
+		},
+		saveCallback : function(model)
+		{
+			console.log(model);
+			var custom_field_model_json = App_Admin_Settings.customFieldsListView.collection.get(model.id);
+			
+			if(custom_field_model_json)
+			{
+				//App_Admin_Settings.customFieldsListView.collection.remove(custom_field_model_json);
+				custom_field_model_json.set(new BaseModel(model),{silent:true});
+				App_Admin_Settings.customFieldsListView.render(true);
+			}
+			
+			else
+			{
+				
+				App_Admin_Settings.customFieldsListView.collection.add(model);
+				if(App_Admin_Settings.customFieldsListView.collection.length == 1)
+					App_Admin_Settings.customFieldsListView.render(true);
+			}
+			$('.modal-backdrop').remove();	
+			$("#custom-field-add-modal").modal('hide');
+			$("#custom-field-add-modal").modal('hide');
+		}
+	});
+
+	$('#custom-field-modal').html(modelView.render(true).el);
+	$("#custom-field-type").trigger("change");
+}
 
 /**
  * Adds custom fields to the the desired entity and then calls the callback to
@@ -148,7 +189,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				// Create select drop down by checking it's required nature
 				if(field.is_required)
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-									+ucfirst(field.field_label)
+									+field.field_label
 									+' <span class="field_req">*</span></label><div class="controls"><select class="'
 									+field.field_type.toLowerCase()
 									+' custom_field required" id='
@@ -160,7 +201,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'</select></div></div>');
 				else
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-									+ucfirst(field.field_label)
+									+field.field_label
 									+'</label><div class="controls"><select class="'
 									+field.field_type.toLowerCase()
 									+' custom_field" id='
@@ -176,7 +217,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				field_type = "checkbox";
 				if(field.is_required)
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-								+ucfirst(field.field_label)
+								+field.field_label
 								+' <span class="field_req">*</span></label><div class="controls"><input type="'
 								+field_type
 								+'" class="'
@@ -187,7 +228,7 @@ function show_custom_fields_helper(custom_fields, properties){
 								+'"></div></div>');
 				else
 					el = el.concat('<div class="control-group">	<label class="control-label">'
-								+ucfirst(field.field_label)
+								+field.field_label
 								+'</label><div class="controls"><input type="'
 								+field_type
 								+'" class="'
@@ -208,7 +249,7 @@ function show_custom_fields_helper(custom_fields, properties){
 				
 			if(field.is_required)
 				el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls"><textarea style="max-width:420px;" rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
@@ -218,7 +259,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'"></textarea></div></div>');
 			else
 				el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+'</label><div class="controls"><textarea style="max-width:420px;" rows="'
 							+rows+'" class="'
 							+field.field_type.toLowerCase()
@@ -232,7 +273,7 @@ function show_custom_fields_helper(custom_fields, properties){
 		// If the field is not of type list or checkbox, create text field (plain text field or date field)
 		if(field.is_required)
 			el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+' <span class="field_req">*</span></label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field required" id='
@@ -240,7 +281,7 @@ function show_custom_fields_helper(custom_fields, properties){
 							+'"></div></div>');
 		else
 			el = el.concat('<div class="control-group">	<label class="control-label">'
-							+ucfirst(field.field_label)
+							+field.field_label
 							+'</label><div class="controls"><input type="text" class="'
 							+field.field_type.toLowerCase()
 							+'_input custom_field" id='

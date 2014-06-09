@@ -250,7 +250,7 @@ function chainFilters(el, data, callback, is_webrules)
 {
 	if(!CUSTOM_FIELDS)
 	{
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		fillCustomFieldsInFilters(el, function(){
 			show_chained_fields(el, data, true);
 			if (callback && typeof (callback) === "function")
@@ -297,6 +297,12 @@ function show_chained_fields(el, data, forceShow)
 		
 		var field_type = $(selected_field).attr("field_type");
 		
+		// If there are any select fields without option elements they should be removed
+		$("select", self).each(function(index, value){
+			if($("option", value).length == 0)
+				$(this).remove();
+		})
+		
 		if(placeholder)
 		{
 			$("input", self).attr("placeholder", placeholder);
@@ -308,6 +314,8 @@ function show_chained_fields(el, data, forceShow)
 			$("input", self).remove();
 			$($('select[name="'+field_name+'"]', self)[0]).show();
 		}
+		
+		
 	});
 	condition.chained(LHS);
 	

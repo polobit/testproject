@@ -7,16 +7,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
-
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>HttpClientUtil</code> is the utility class that handles URL requests
@@ -33,13 +31,10 @@ public class HttpClientUtil
     {
 	HttpParams httpParams = new BasicHttpParams();
 
-	SchemeRegistry registry = new SchemeRegistry();
+	SchemeRegistry schemeRegistry = new SchemeRegistry();
+	schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 
-	SSLSocketFactory sslSocketFactory = SSLSocketFactory.getSocketFactory();
-
-	registry.register(new Scheme("https", sslSocketFactory, 443));
-
-	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, registry);
+	ClientConnectionManager connManager = new ThreadSafeClientConnManager(httpParams, schemeRegistry);
 
 	httpClient = new DefaultHttpClient(connManager, httpParams);
     }
@@ -76,18 +71,23 @@ public class HttpClientUtil
 
 	    br.close();
 
+	    System.out.println("Size of postData is..." + postData.length());
+
 	    System.out.println("Response:  " + sb.toString());
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Exception occured in HttpClientUtil..." + e.getMessage());
+
 	    e.printStackTrace();
 
 	    System.err.println("Sending again normally...");
 
+	    System.out.println("Size of postData in exception is..." + postData.length());
+
 	    try
 	    {
-		String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + Mandrill.MANDRILL_API_MESSAGE_CALL, postData);
+		String response = HTTPUtil.accessURLUsingPost(url, postData);
 
 		System.out.println("Mandrill response in HttpClientUtil..." + response);
 	    }

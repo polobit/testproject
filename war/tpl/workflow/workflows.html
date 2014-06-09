@@ -16,9 +16,9 @@
             <a href="#workflow/completed-contacts/{{id}}" id="done-contacts" class="stop-propagation">completed</a>
         </div>
     </td>-->
-    <td>{{#if triggers}} {{#toLinkTrigger triggers}} <a href="#trigger/{{id}}" class="stop-propagation">{{name}}</a> {{/toLinkTrigger}} {{else}} <a href="#trigger-add/{{id}}" class="stop-propagation"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a> {{/if}}</td>
+    <td class="workflow-triggers" workflow-id={{id}}><a href="#trigger-add/{{id}}" class="stop-propagation"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a></td>
 	<td><a href="#workflow/all-subscribers/{{id}}" class="workflow-subscribers stop-propagation">Subscribers</a></td>
-	<td><a href="#workflows/logs/{{id}}" class="stop-propagation">Logs</a></td>
+	<td><a href="#workflows/logs/{{id}}"  class="stop-propagation ">Logs</a></td>
     <td><a href="#email-reports/{{id}}" class="stop-propagation">Stats</a></td>
     <td> 
         {{#if updated_time}}

@@ -11,11 +11,13 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
+@Cached
 public class WebRule
 {
     @Id
@@ -23,6 +25,8 @@ public class WebRule
 
     @NotSaved(IfDefault.class)
     public String name = null;
+
+    public Boolean disabled;
 
     // Store type of the rule whether it is plain web rule or shopify rule
     @NotSaved(IfDefault.class)
@@ -36,6 +40,10 @@ public class WebRule
     @Embedded
     @Unindexed
     public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
+
+    // Added to send the country to the client - this is not saved
+    @NotSaved
+    public String country = "";
 
     public static ObjectifyGenericDao<WebRule> dao = new ObjectifyGenericDao<WebRule>(WebRule.class);
 

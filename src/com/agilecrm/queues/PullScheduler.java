@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.AgileQueues;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
@@ -81,8 +82,11 @@ public class PullScheduler
      */
     public int getLeasePeriod(String queueName)
     {
-	if (StringUtils.equals(queueName, "campaign-pull-queue") || StringUtils.equals(queueName, "sb-campaign-pull-queue"))
-	    return 7200;
+	// Campaigns need more lease period (in secs)
+	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE))
+	    return 3600;
 
 	return DEFAULT_LEASE_PERIOD;
     }
@@ -96,9 +100,6 @@ public class PullScheduler
      */
     public int getCountLimit(String queueName)
     {
-	if (StringUtils.equals(queueName, "campaign-pull-queue") || StringUtils.equals(queueName, "sb-campaign-pull-queue"))
-	    return 100;
-
 	return DEFAULT_COUNT_LIMIT;
     }
 
@@ -110,14 +111,24 @@ public class PullScheduler
      */
     public void run()
     {
-	while (shouldContinue())
+	System.out.println("Executing in pull scheduler run method...");
+
+	try
 	{
-	    List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
+	    while (shouldContinue())
+	    {
+		List<TaskHandle> tasks = PullQueueUtil.leaseTasksFromQueue(queueName, leasePeriod, countLimit);
 
-	    if (tasks == null || tasks.isEmpty())
-		break;
+		if (tasks == null || tasks.isEmpty())
+		    break;
 
-	    processTasks(queueName, tasks);
+		processTasks(queueName, tasks);
+	    }
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in PullScheduler run method..." + e.getMessage());
+	    e.printStackTrace();
 	}
     }
 

@@ -3,7 +3,11 @@ package com.agilecrm.queues.util;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.agilecrm.AgileQueues;
 import com.agilecrm.Globals;
+import com.google.appengine.api.backends.BackendService;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.LeaseOptions;
@@ -53,18 +57,21 @@ public class PullQueueUtil
 	    // Get tasks
 	    Queue q = QueueFactory.getQueue(queueName);
 
-	    return q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS).countLimit(countLimit).groupByTag());
+	    return q.leaseTasks(LeaseOptions.Builder.withLeasePeriod(leasePeriod, TimeUnit.SECONDS)
+		    .countLimit(countLimit).groupByTag());
 
 	}
 	catch (TransientFailureException e)
 	{
 	    e.printStackTrace();
-	    System.err.println("TransientFailureException occured when leasing tasks from " + queueName + " and exception message is " + e.getMessage());
+	    System.err.println("TransientFailureException occured when leasing tasks from " + queueName
+		    + " and exception message is " + e.getMessage());
 	}
 	catch (ApiDeadlineExceededException e)
 	{
 	    e.printStackTrace();
-	    System.err.println("ApiDeadlineExceededException occured when leasing tasks from " + queueName + " and exception message is " + e.getMessage());
+	    System.err.println("ApiDeadlineExceededException occured when leasing tasks from " + queueName
+		    + " and exception message is " + e.getMessage());
 	}
 
 	return null;
@@ -81,11 +88,10 @@ public class PullQueueUtil
      */
     public static void processTasksInBackend(String backendUrl, String queueName)
     {
-	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
-
 	// Create Task and push it into Task Queue
-	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
-	TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName).header("Host", url).method(Method.POST);
+	Queue queue = QueueFactory.getQueue(AgileQueues.CAMPAIGN_QUEUE);
+	TaskOptions taskOptions = TaskOptions.Builder.withUrl(backendUrl).param("queue_name", queueName)
+		.header("Host", getCampaignBackendURL(queueName)).method(Method.POST);
 	queue.addAsync(taskOptions);
     }
 
@@ -105,6 +111,30 @@ public class PullQueueUtil
 	// Delete Tasks
 	Queue q = QueueFactory.getQueue(queue);
 	q.deleteTask(tasks);
+    }
+
+    /**
+     * Returns campaign backend instance
+     * 
+     * @param queueName
+     * @return
+     */
+    public static String getCampaignBackendURL(String queueName)
+    {
+	BackendService backendService = BackendServiceFactory.getBackendService();
+
+	// Runs BULK_PULL_QUEUE tasks in bulk backend
+	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE))
+	    return backendService.getBackendAddress(Globals.BULK_BACKENDS);
+
+	// Runs NORMAL_PULL_QUEUE tasks in normal backend
+	if (StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.NORMAL_EMAIL_PULL_QUEUE))
+	    return backendService.getBackendAddress(Globals.NORMAL_BACKENDS);
+
+	return backendService.getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+
     }
 
 }

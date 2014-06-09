@@ -3,7 +3,7 @@ package com.campaignio.tasklets.util;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.Globals;
+import com.agilecrm.AgileQueues;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.deferred.TaskletWorkflowDeferredTask;
@@ -38,7 +38,7 @@ public class TaskCore
     public static void executeCampaign(JSONObject campaignJSON, JSONArray subscriberJSONArray)
     {
 	// Iterate through JSONArray
-	for (int i = 0; i < subscriberJSONArray.length(); i++)
+	for (int i = 0, len = subscriberJSONArray.length(); i < len; i++)
 	{
 	    JSONObject subscriberJSON;
 	    try
@@ -76,11 +76,12 @@ public class TaskCore
 
 		String namespace = NamespaceManager.get();
 
-		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(AgileTaskletUtil.getId(campaignJSON),
-			subscriberJSON.toString(), namespace);
+		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
+			AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
 
 		// Add deferred tasks to pull queue with namespace as tag
-		PullQueueUtil.addToPullQueue(Globals.CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+		PullQueueUtil.addToPullQueue(len >= 500 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+			: AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 
 	    }
 	    catch (Exception e)
@@ -88,9 +89,10 @@ public class TaskCore
 		System.err.println("Exception " + e);
 	    }
 
-	    System.out.println("Done Executing " + subscriberJSON);
+	    System.out.println("Done Executing ");
 	}
 
 	System.out.println("Campaign Completed ");
     }
+
 }

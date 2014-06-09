@@ -85,7 +85,7 @@ public class CampaignsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Log> getContactLogs(@PathParam("contact-id") String contactId)
     {
-	return LogUtil.getSQLLogs(null, contactId, "100");
+	return LogUtil.getSQLLogs(null, contactId, "100", null);
     }
 
     /**
@@ -103,7 +103,7 @@ public class CampaignsAPI
     public List<Log> getCampaignContactLogs(@PathParam("contact-id") String contactId,
 	    @PathParam("campaign-id") String campaignId)
     {
-	return LogUtil.getSQLLogs(campaignId, contactId, null);
+	return LogUtil.getSQLLogs(campaignId, contactId, null, null);
     }
 
     /**
@@ -116,10 +116,11 @@ public class CampaignsAPI
     @Path("logs/{campaign-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId)
+    public List<Log> getCampaignLogs(@PathParam("campaign-id") String campaignId, @QueryParam("log-type") String logType)
     {
+
 	// limited logs to 100
-	return LogUtil.getSQLLogs(campaignId, null, "100");
+	return LogUtil.getSQLLogs(campaignId, null, "100", logType);
     }
 
     /**
@@ -135,7 +136,7 @@ public class CampaignsAPI
     public List<Log> getRecentCampaignLogs(@QueryParam("page_size") String limit)
     {
 	// System.out.println("limit : " + limit);
-	return LogUtil.getSQLLogs(null, null, limit);
+	return LogUtil.getSQLLogs(null, null, limit, null);
     }
 
     /**

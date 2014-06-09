@@ -7,7 +7,7 @@ var WebreportsRouter = Backbone.Router.extend({
 	routes : {
 	/* Settings */
 	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit",
-	"shopify-rule-add" : "shopify_rule_add", "shopify-rule-edit/:id" : "shopify_rule_edit"
+	"shopify-rule-add" : "shopify_rule_add", "shopify-rule-edit/:id" : "shopify_rule_edit", "shopify/:url" : "shopify", "shopify" : "shopify"
 		
 	},
 	webrules : function()
@@ -36,7 +36,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				})
 			} });
 
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
 	},
 
@@ -46,7 +46,7 @@ var WebreportsRouter = Backbone.Router.extend({
 		// If reports view is not defined, navigates to reports
 		if (!this.webrules || !this.webrules.collection || this.webrules.collection.length == 0 || this.webrules.collection.get(id) == null)
 		{
-			this.navigate("webrules", { trigger : true });
+			this.navigate("web-rules", { trigger : true });
 			return;
 		}
 
@@ -77,7 +77,7 @@ var WebreportsRouter = Backbone.Router.extend({
 				count++;
 			} });
 
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
 	}, 
 	shopify_rule_add : function()
@@ -97,7 +97,16 @@ var WebreportsRouter = Backbone.Router.extend({
 				})
 			} });
 
-		$("#content").html(LOADING_HTML);
+		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
+	},
+	shopify : function(url)
+	{
+		_agile.add_property(create_contact_custom_field("Shopify shop", url, "CUSTOM"), function(data)
+				{
+					addTagAgile("Shopify");
+				});
+		
+		$("#content").html(getTemplate("shopify"), {});
 	}
 });

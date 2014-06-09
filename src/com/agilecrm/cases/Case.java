@@ -26,6 +26,7 @@ import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -38,6 +39,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * @author Chandan
  */
 @XmlRootElement
+@Cached
 public class Case extends Cursor
 {
     /**

@@ -5,7 +5,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.agilecrm.Globals;
+import com.agilecrm.AgileQueues;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -22,6 +22,7 @@ import com.google.appengine.api.NamespaceManager;
  */
 public class WorkflowSubscribeUtil
 {
+
     /**
      * Subscribes list of contacts into a campaign and runs workflow in
      * {@link TaskletUtil} executeCampaign method which runs using DeferredTask
@@ -84,9 +85,11 @@ public class WorkflowSubscribeUtil
 
 	try
 	{
-	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(workflowId.toString(), subscriberJSON.toString(),
-		    namespace);
-	    PullQueueUtil.addToPullQueue(Globals.CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+	    TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
+		    workflowId.toString(), subscriberJSON.toString(), namespace);
+
+	    PullQueueUtil
+		    .addToPullQueue(AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 	}
 	catch (Exception e)
 	{

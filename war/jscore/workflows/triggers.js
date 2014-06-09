@@ -31,12 +31,13 @@ $(function()
 		}
 
 	});
-	
+
 	// When cancel clicked, take to Back page
-	$('#trigger-cancel').die().live('click', function(e){
+	$('#trigger-cancel').die().live('click', function(e)
+	{
 		e.preventDefault();
-		
-		if(history !== undefined)
+
+		if (history !== undefined)
 			history.back(-1);
 	});
 });
@@ -59,7 +60,7 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 	trigger_form.find('select#' + milestones_select_id).closest('div.control-group').css('display', '');
 
 	// Show loading image.
-	$('select#' + milestones_select_id).after(LOADING_HTML);
+	$('select#' + milestones_select_id).after(getRandomLoadingImg());
 
 	// Fills milestone select element
 	populateMilestones(trigger_form, undefined, undefined, function(data)
@@ -76,4 +77,64 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 		}
 	}, "Select new milestone...");
 
+}
+
+/**
+ * Shows triggers for each td in workflows list
+ * 
+ * @param el -
+ *            Backbone el
+ * 
+ */
+function show_triggers_of_each_workflow(el)
+{
+	// Fetches triggers from collection and appends
+	if (App_Workflows.triggersCollectionView != undefined && App_Workflows.triggersCollectionView.collection.length != 0)
+	{
+		append_triggers_to_workflow(el);
+		return;
+	}
+
+	App_Workflows.triggersCollectionView = new Base_Collection_View({ url : '/core/api/triggers', restKey : "triggers", templateKey : "triggers",
+		individual_tag_name : 'tr' });
+
+	App_Workflows.triggersCollectionView.collection.fetch({ success : function(data)
+	{
+		// Shows pending triggers content
+		if (App_Workflows.triggersCollectionView == undefined || App_Workflows.triggersCollectionView.collection.length == 0)
+		{
+			$('#triggers-verification', el).css('display', 'block');
+			return;
+		}
+
+		// Append triggers to workflow
+		append_triggers_to_workflow(el);
+
+	} });
+
+}
+
+/**
+ * Appends triggers to each workflow in UI
+ * 
+ * @param el -
+ *            Backbone el
+ * 
+ */
+function append_triggers_to_workflow(el)
+{
+
+	// Appends triggers to respective workflow
+	$('.workflow-triggers', el).each(function(index, td)
+	{
+
+		// Returns filtered array of models
+		var trigger_models = App_Workflows.triggersCollectionView.collection.where({ campaign_id : parseInt($(td).attr('workflow-id')) });
+		var trigger_collection = new BaseCollection(trigger_models, {});
+
+		// show triggers if exists for a workflow
+		if (trigger_collection.length !== 0)
+			$(td).html(getTemplate('workflow-triggers', { "triggers" : trigger_collection.toJSON() }));
+
+	});
 }

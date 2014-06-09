@@ -356,10 +356,11 @@ var ContactsRouter = Backbone.Router.extend({
 			if (App_Contacts.contactsListView && App_Contacts.contactsListView.collection && App_Contacts.contactsListView.collection.get(id))
 				App_Contacts.contactsListView.collection.get(id).attributes = contact.attributes;
 
+
+			load_contact_tab(el, contact.toJSON());
+
 			loadWidgets(el, contact.toJSON());
-
-			load_timeline_details(el, id);
-
+			
 			/*
 			 * // To get QR code and download Vcard
 			 * $.get('/core/api/VCard/' + contact.toJSON().id,
@@ -545,44 +546,37 @@ var ContactsRouter = Backbone.Router.extend({
 	sendEmail : function(id)
 	{
 		
+		var model = {};
+		
 		// Takes back to contacts if contacts detail view is not defined
-		if (!this.contactDetailView || !this.contactDetailView.model.id)
+		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
-			this.navigate("contacts", { trigger : true });
-			return;
+			// Show the email form with the email prefilled from the curtrent contact
+			model = this.contactDetailView.model.toJSON();
 		}
 		
-		// Show the email form with the email prefilled from the curtrent contact
-		var model = this.contactDetailView.model;
-		var sendEmailView = new Base_Model_View(
+		var el = $("#content").html(getTemplate("send-email", model));
+		
+		if (id)
+			$("#emailForm", el).find('input[name="to"]').val(id);
+
+		// Checks Zoomifier tag for contact
+		if (checkTagAgile("Zoomifier") && this.contactDetailView)
 		{
-			model : model,
-			template : "send-email",
-			postRenderCallback : function(el)
+			// Appends zoomifier link to attach their documents.
+			head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
 			{
-				if (id)
-					$("#emailForm", el).find('input[name="to"]').val(id);
+				$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
+						.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
+			});
+		}
 
-				// Checks Zoomifier tag for contact
-				if (checkTagAgile("Zoomifier"))
-				{
-					// Appends zoomifier link to attach their documents.
-					head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
-					{
-						$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
-								.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
-					});
-				}
-
-				// Populate from address and templates
-				populate_send_email_details(el);
-
-			}
-		});
-		$("#content").html(sendEmailView.render().el);
+		// Populate from address and templates
+		populate_send_email_details(el);
 		
 		// Setup HTML Editor
 		setupTinyMCEEditor('textarea#email-body');
+		
 	},
 	
 	/**

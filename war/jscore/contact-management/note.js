@@ -53,7 +53,7 @@ $(function()
 		}
 
 		// Shows loading symbol until model get saved
-		//$('#noteUpdateModal').find('span.save-status').html(LOADING_HTML);
+		//$('#noteUpdateModal').find('span.save-status').html(getRandomLoadingImg());
 
 		var json = serializeForm("noteUpdateForm");
 		
@@ -88,11 +88,16 @@ $(function()
 		disable_save_button($(this));
 		
 		// Shows loading symbol until model get saved
-		//$('#noteModal').find('span.save-status').html(LOADING_HTML);
+		//$('#noteModal').find('span.save-status').html(getRandomLoadingImg());
 
 		var json = serializeForm("noteForm");
 
-		saveNote($("#noteForm"), $("#noteModal"), this, json);
+		console.log(json.from_task);
+		
+		if(json.from_task == "true")
+			saveNoteOfTask($("#noteForm"), $("#noteModal"), this, json);
+		else		
+		    saveNote($("#noteForm"), $("#noteModal"), this, json);
 	});
 
 	/**
@@ -113,10 +118,13 @@ $(function()
 	 */
 	$('#noteModal').on('hidden', function()
 	{
-
 		// Removes appended contacts from related-to field
 		$("#noteForm").find("li").remove();
 
+		// Remove value of input field
+		$("#from_task", "#noteForm").val("");
+		$("#task_form", "#noteForm").val("");
+		
 		// Removes validation error messages
 		remove_validation_errors('noteModal');
 	});

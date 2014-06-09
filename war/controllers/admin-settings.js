@@ -34,7 +34,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"email-stats" : "emailStats",
 
 	/* Web to Lead */
-	"web-to-lead" : "webToLead"
+	"integrations" : "integrations"
 
 	},
 
@@ -116,7 +116,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users',
+		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : true,
 			postRenderCallback : function(el)
 			{
 				if (view.model.get("id"))
@@ -159,7 +159,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		 * Creates a Model for users edit, navigates back to 'user' window on
 		 * save success
 		 */
-		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users', postRenderCallback: function(el){
+		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users', reload : true, postRenderCallback: function(el){
 			bindAdminChangeAction(el);
 		} });
 
@@ -291,7 +291,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/**
 	 * Web to lead links to website pages
 	 */
-	webToLead : function()
+	integrations : function()
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
@@ -301,7 +301,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$("#content").html(getTemplate("admin-settings"), {});
 		$('#content').find('#admin-prefs-tabs-content').html(getTemplate("admin-settings-web-to-lead"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
-		$('#content').find('.web-to-lead-tab').addClass('active');
+		$('#content').find('.integrations-tab').addClass('active');
 	},
 
 

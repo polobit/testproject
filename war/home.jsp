@@ -59,7 +59,7 @@
 
 <%
     String CSS_PATH = "/";
-			//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+	//String CSS_PATH = "//cdnapp.agilecrm.com/";
 %>
 
 <link rel="stylesheet" type="text/css"
@@ -70,7 +70,7 @@
 	href="/css/agilecrm.css" />
 	
  <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
-<script src='/lib/head.load.min.js'></script> 
+<script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script> 
 
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -135,9 +135,10 @@
 
 
 	<script>
-	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-	//var LIB_PATH = "/";
-	var HANDLEBARS_PRECOMPILATION = false;
+	//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	//var LIB_PATH = "//cdnapp.agilecrm.com/";
+	var LIB_PATH = "/";
+	var HANDLEBARS_PRECOMPILATION = true;
 	
 	var CSS_PATH = "/";
 	//var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -153,12 +154,13 @@
 	// Get current domain user json
 	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 	
+	var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 	
 	// Billing Restriction
 	var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
 	
-	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
-	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
+	var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	//var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 	<!-- JQUery Core and UI CDN -->	
 	<!-- The same ajax libraries are used by designer - if you are changing the version here, change in designer too -->
@@ -170,9 +172,9 @@
 	<!-- Handle bars -->
 	
 	if(HANDLEBARS_PRECOMPILATION)
-		head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/precompiled/tpl.js");
+		head.js(HANDLEBARS_LIB, "tpl/min/precompiled/tpl.js");
 	else
-		head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js");
+		head.js(HANDLEBARS_LIB);
 	
 	// head.js("//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js", "tpl/min/tpl.js");
 	
@@ -192,12 +194,12 @@
 		head.js('jscore/min/js-all-min.js', 'stats/min/agile-min.js', function() {
 			
 			if(HANDLEBARS_PRECOMPILATION)
-				downloadSynchronously("tpl/min/precompiled/tpl.html");
+				downloadTemplate("tpl.html");
 			else
-				downloadSynchronously("tpl/min/tpl.js");
+				downloadTemplate("tpl.js");
 			
 			// Load User voice then
-			setTimeout(function(){head.js('lib/user-voice.js');}, 20000);	
+			setTimeout(loadMiscScripts, 10000);	
 		}); 
 	});
 	
@@ -205,7 +207,13 @@
 	
 		<!-- Unified CSS for All Lib -->
 
-	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/all-agile.css"></link>
+	
+<!--  <link rel="stylesheet" type="text/css" href="css/misc/agile-tasks.css"></link> -->
+	<link rel="stylesheet" type="text/css" href="css/misc/agile-social-suite.css"></link>
+	<!--   <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>-->
+	<!--  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link> -->
+	<!--  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
+	
 
 	<link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
 

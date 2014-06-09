@@ -13,6 +13,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -22,6 +23,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
+@Cached
 public class APIKey
 {
 
@@ -147,7 +149,12 @@ public class APIKey
      */
     public static Key<DomainUser> getDomainUserKeyRelatedToAPIKey(String apiKey)
     {
-	return dao.ofy().query(APIKey.class).filter("api_key", apiKey).get().owner;
+	// Get API Object
+	APIKey apiKeyObject = dao.ofy().query(APIKey.class).filter("api_key", apiKey).get();
+	if (apiKeyObject == null)
+	    return null;
+
+	return apiKeyObject.owner;
     }
 
     /**

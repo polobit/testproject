@@ -31,8 +31,14 @@ var WorkflowsRouter = Backbone.Router
 			"trigger-add" : "triggerAdd", "trigger/:id" : "triggerEdit",
 
 			/* Subscribers */
-			"workflow/all-subscribers/:id" : "allSubscribers", "workflow/active-subscribers/:id" : "activeSubscribers",
-				"workflow/completed-subscribers/:id" : "completedSubscribers", "workflow/removed-subscribers/:id" : "removedSubscribers" },
+			"workflow/all-subscribers/:id" : "allSubscribers", 
+			"workflow/active-subscribers/:id" : "activeSubscribers",
+			"workflow/completed-subscribers/:id" : "completedSubscribers",
+			"workflow/removed-subscribers/:id" : "removedSubscribers",
+			
+			"workflow/unsubscribed-subscribers/:id": "unsubscribedSubscribers",
+			"workflow/hardbounced-subscribers/:id": "hardBouncedSubscribers"
+			},
 
 			/**
 			 * Gets workflows list.Sets page-size to 10, so that initially
@@ -41,35 +47,34 @@ var WorkflowsRouter = Backbone.Router
 			 */
 			workflows : function()
 			{
+
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", templateKey : "workflows",
 					individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
+
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.campaign-created-time", el).timeago();
 
 						});
+
 						start_tour(undefined, el);
 
-						// Shows pending triggers content when there are no
-						// triggers.
+						// If workflows not empty, show triggers
 						if (App_Workflows.workflow_list_view && !(App_Workflows.workflow_list_view.collection.length === 0))
-						{
-							$.get('/core/api/triggers', function(data)
-							{
-
-								if (data.length === 0)
-									$('#triggers-verification', el).css('display', 'block');
-
-							});
-						}
+							show_triggers_of_each_workflow(el);
 
 					}, appendItemCallback : function(el)
 					{
 						$("time.campaign-created-time", el).timeago();
+
+						// Shows triggers to workflows appended on scroll
+						show_triggers_of_each_workflow(el);
+
 					} });
 
 				this.workflow_list_view.collection.fetch();
+
 				$('#content').html(this.workflow_list_view.el);
 
 				$(".active").removeClass("active");
@@ -92,10 +97,10 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_json = undefined;
 				this.workflow_model = undefined;
 
-				$('#content').html(getTemplate('workflow-add', {"is_new":true}));
+				$('#content').html(getTemplate('workflow-add', { "is_new" : true }));
 				initiate_tour("workflows-add", $('#content'));
 			},
-			
+
 			/**
 			 * Updates existing workflow. After workflow updated, the page
 			 * navigates to workflows list
@@ -213,7 +218,7 @@ var WorkflowsRouter = Backbone.Router
 					that.workflow_json = data.toJSON()["rules"];
 				} });
 
-				$('#content').html(getTemplate('workflow-add', {"is_new":true}));
+				$('#content').html(getTemplate('workflow-add', { "is_new" : true }));
 
 			},
 
@@ -223,7 +228,7 @@ var WorkflowsRouter = Backbone.Router
 			 * @param id
 			 *            Workflow Id
 			 */
-			logsToCampaign : function(id)
+			logsToCampaign : function(id, log_type)
 			{
 
 				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
@@ -235,8 +240,13 @@ var WorkflowsRouter = Backbone.Router
 				/* Set the designer JSON. This will be deserialized */
 				this.workflow_model = this.workflow_list_view.collection.get(id);
 				var workflowName = this.workflow_model.get("name");
+				
+				if(log_type == undefined || log_type == "ALL")
+					log_type = "";
+				else
+					log_type='?log-type='+log_type;
 
-				var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id, templateKey : "campaign-logs",
+				var logsListView = new Base_Collection_View({ url : '/core/api/campaigns/logs/' + id + log_type, templateKey : "campaign-logs",
 					individual_tag_name : 'tr', sortKey : 'time', descending : true, postRenderCallback : function(el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
@@ -284,18 +294,18 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_model = this.workflow_list_view.collection.get(id);
 				var workflowName = this.workflow_model.get("name");
 
-				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+				head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 				{
-
 					// Load Reports Template
 					$("#content").html(getTemplate("campaign-email-reports", {}));
-
+					
 					// Set the name
 					$('#reports-campaign-name').text(workflowName);
 
 					initChartsUI(id);
+					
 				});
-
+				
 				$(".active").removeClass("active");
 				$("#workflowsmenu").addClass("active");
 			},
@@ -305,9 +315,10 @@ var WorkflowsRouter = Backbone.Router
 			{
 				this.triggersCollectionView = new Base_Collection_View({
 
-				url : '/core/api/triggers', restKey : "triggers", templateKey : "triggers", individual_tag_name : 'tr', });
+				url : '/core/api/triggers', restKey : "triggers", templateKey : "triggers", individual_tag_name : 'tr' });
 
 				this.triggersCollectionView.collection.fetch();
+
 				$('#content').html(this.triggersCollectionView.el);
 
 				$(".active").removeClass("active");
@@ -379,9 +390,19 @@ var WorkflowsRouter = Backbone.Router
 						 */
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
 					}
-				} });
+				},
+
+				saveCallback : function()
+				{
+
+					// To get newly added trigger in triggers list
+					App_Workflows.triggersCollectionView = undefined;
+				}
+
+				});
 
 				var view = this.triggerModelview.render();
+
 				$('#content').html(view.el);
 			},
 
@@ -476,9 +497,19 @@ var WorkflowsRouter = Backbone.Router
 								$('#campaign-select', el).find('option[value=' + value.campaign_id + ']').attr('selected', 'selected');
 							}
 						}, optionsTemplate);
-					}, });
+					},
+
+					saveCallback : function()
+					{
+
+						// To get newly added trigger in triggers list
+						App_Workflows.triggersCollectionView = undefined;
+					}
+
+				});
 
 				var view = view.render();
+
 				$("#content").html(view.el);
 			},
 
@@ -592,4 +623,52 @@ var WorkflowsRouter = Backbone.Router
 				} });
 
 				$("#content").html(removed_subscribers_collection.el);
-			} });
+			},
+			unsubscribedSubscribers : function(id)
+			{
+				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+				{
+					this.navigate("workflows", { trigger : true });
+					return;
+				}
+
+				var unsubscribed_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/unsubscribed-subscribers/' + id,
+						'workflow-other-subscribers');
+
+				unsubscribed_subscribers_collection.collection.fetch({ success : function(collection)
+				{
+
+					// show pad content
+					if (collection.length === 0)
+						fill_subscribers_slate('subscribers-slate', "unsubscribe-subscribers");
+				} });
+
+				$("#content").html(unsubscribed_subscribers_collection.el);
+			},
+			
+			hardBouncedSubscribers : function(id)
+			{
+				if (!this.workflow_list_view || this.workflow_list_view.collection.length == 0)
+				{
+					this.navigate("workflows", { trigger : true });
+					return;
+				}
+
+				var hardbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/hardbounced-subscribers/' + id,
+						'workflow-other-subscribers');
+
+				hardbounced_subscribers_collection.collection.fetch({ success : function(collection)
+				{
+
+					// show pad content
+					if (collection.length === 0)
+						fill_subscribers_slate('subscribers-slate', "hardbounced-subscribers");
+				} });
+
+				$("#content").html(hardbounced_subscribers_collection.el);
+			},
+		
+		
+		
+		
+		});

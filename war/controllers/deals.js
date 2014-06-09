@@ -7,7 +7,8 @@ var DealsRouter = Backbone.Router.extend({
 	routes : {
 
 	/* Deals/Opportunity */
-	"deals" : "deals", },
+	"deals" : "deals",
+	},
 
 	/**
 	 * Fetches all the opportunities as list and also as milestone lists.
@@ -20,7 +21,11 @@ var DealsRouter = Backbone.Router.extend({
 		// Depending on cookie shows list or milestone view
 		if (!readCookie("agile_deal_view"))
 		{
-			template_key = "opportunities-by-milestones";
+			if(!readCookie("agile_full_view"))
+				template_key = "opportunities-by-milestones";
+			else
+				template_key = "opportunities-full-screen";
+			
 			individual_tag_name = "div";
 			url = 'core/api/opportunity/byMilestone';
 
@@ -30,18 +35,59 @@ var DealsRouter = Backbone.Router.extend({
 				{
 					// To show timeago for close date
 					includeTimeAgo(el);
+					
+					var element;
+					
+					if(!readCookie("agile_full_view"))
+						element = $('#opportunities-by-milestones-model-list');
+					else
+						element = $('#opportunities-full-screen-model-list');
 
-					$('#opportunities-by-milestones-model-list > div').addClass("milestone-main");
+					var id = $(element).attr('id');
+					$("#" + id + "> div").addClass("milestone-main");
+					
+					// For adding dynamic width to milestone columns
+					var count;
+					$.ajax({
+						url: '/core/api/milestone',
+						type: 'GET',
+						success: function(data) {
+							var milestones = data.milestones;
+							milestones = milestones.split(",");
+							count = milestones.length;
+							
+							var width;
+							if(readCookie("agile_full_view"))
+							{
+								width = 20;
+								if(count < 5)
+									width = (100/count) - 0.12;
+								$('#opportunities-full-screen-model-list').find('.milestone-column').width(width +"%");
+							}
+							else
+							{
+								width = 24.84;
+								if(count < 4)
+									width = (100/count) - 0.12;
+								$('#opportunities-by-milestones-model-list').find('.milestone-column').width(width +"%");
+							}
+						}
+					});
+					
 					// $('.milestone-main
 					// :last-child').find("ul").closest('div').css({"border-right":"none"});
 
-					setup_deals_in_milestones();
+					setup_deals_in_milestones(id);
+					
+					if(!readCookie("agile_full_view"))
+					{
+						// Shows Milestones Pie
+						pieMilestones();
 
-					// Shows Milestones Pie
-					pieMilestones();
+						// Shows deals chart
+						dealsLineChart();
+					}
 
-					// Shows deals chart
-					dealsLineChart();
 				} });
 			this.opportunityMilestoneCollectionView.collection.fetch();
 
@@ -49,7 +95,7 @@ var DealsRouter = Backbone.Router.extend({
 			$('#content').html(this.opportunityMilestoneCollectionView.render().el);
 		}
 		// Fetches deals as list
-		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',
+		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',// cursor : true, page_size : 25,
 			postRenderCallback : function(el)
 			{
 				// Showing time ago plugin for close date
@@ -74,6 +120,6 @@ var DealsRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
-	}
+	},
 
 });

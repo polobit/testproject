@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 
 /**
@@ -22,6 +23,7 @@ import com.googlecode.objectify.annotation.NotSaved;
  */
 @XmlRootElement
 @JsonAutoDetect
+@Cached
 public class Log
 {
     /**
@@ -89,7 +91,7 @@ public class Log
      */
     public enum LogType
     {
-	EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED
+	EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_HARD_BOUNCED, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED
     };
 
     /**

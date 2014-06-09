@@ -12,7 +12,8 @@
  * @param form
  *            html form element
  */
-function deserializeForm(data, form) {
+function deserializeForm(data, form)
+{
 
 	// Iterates through the data(which is to be populated in the form) and finds
 	// field elements in the form based on the name of the field and populates
@@ -21,7 +22,8 @@ function deserializeForm(data, form) {
 			.each(
 					data,
 
-					function(i, el) {
+					function(i, el)
+					{
 
 						// Finds the element with name attribute same as the key
 						// in the JSON data
@@ -29,14 +31,16 @@ function deserializeForm(data, form) {
 
 						// If Fields exist with the field name, process the
 						// fields to fill the data in the form
-						if (fel.length > 0) {
+						if (fel.length > 0)
+						{
 
 							// Reads the tag name of the field
 							tag = fel[0].tagName.toLowerCase();
 
 							// If tag of the element is of type select of
 							// textarea fills the data
-							if (tag == "select" || tag == "textarea") { // ...
+							if (tag == "select" || tag == "textarea")
+							{ // ...
 								$(fel).val(el);
 							}
 
@@ -47,7 +51,8 @@ function deserializeForm(data, form) {
 							 * field(date fields uses bootstrap datepicker in
 							 * the fileds)
 							 */
-							else if (tag == "input") {
+							else if (tag == "input")
+							{
 								type = $(fel[0]).attr("type");
 
 								/*
@@ -55,36 +60,43 @@ function deserializeForm(data, form) {
 								 * and fills in the input field, formats with
 								 * datepicker
 								 */
-								if (fel.hasClass('date')) {
-									try {
-										fel.val(new Date(el * 1000)
-												.format('mm/dd/yyyy'));
-									} catch (err) {
+								if (fel.hasClass('date'))
+								{
+									try
+									{
+										fel.val(new Date(el * 1000).format('mm/dd/yyyy'));
+									}
+									catch (err)
+									{
 
 									}
-									fel.datepicker({
-										format : 'mm/dd/yyyy',
-									});
+									fel.datepicker({ format : 'mm/dd/yyyy', });
 								}
 
 								/*
 								 * If type of the field is text of password or
 								 * hidden fills the data
 								 */
-								else if (type == "text" || type == "password"
-										|| type == "hidden") {
+								else if (type == "text" || type == "password" || type == "hidden" || type == "number")
+								{
 									fel.val(el);
-								} else if (tag == "select") {
+								}
+								else if (tag == "select")
+								{
 									fel.val(el).trigger('change');
 								}
 
 								// Checks the checkbox if value of the filed is
 								// true
-								else if (type == "checkbox") {
-									if (el) {
+								else if (type == "checkbox")
+								{
+									if (el)
+									{
 										if (el == true)
 											fel.attr("checked", "checked");
-									} else {
+									}
+									else
+									{
 										fel.removeAttr("checked");
 									}
 								}
@@ -94,9 +106,9 @@ function deserializeForm(data, form) {
 								 * the field based on the value and checks it
 								 * accordingly
 								 */
-								else if (type == "radio") {
-									fel.filter('[value="' + el + '"]').attr(
-											"checked", "checked");
+								else if (type == "radio")
+								{
+									fel.filter('[value="' + el + '"]').attr("checked", "checked");
 								}
 							}
 
@@ -107,16 +119,17 @@ function deserializeForm(data, form) {
 							 * jquery.multi-select.js, it provides multiSelect()
 							 * function to fill the select
 							 */
-							else if (fel.hasClass('multiSelect') && tag == 'ul') {
+							else if (fel.hasClass('multiSelect') && tag == 'ul')
+							{
 
 								/*
 								 * Iterates through options of the select and
 								 * call multiSelect function to select the
 								 * option
 								 */
-								$.each(el, function(index, option) {
-									$('#multipleSelect', form).multiSelect(
-											'select', option);
+								$.each(el, function(index, option)
+								{
+									$('#multipleSelect', form).multiSelect('select', option);
 								});
 							}
 
@@ -128,15 +141,16 @@ function deserializeForm(data, form) {
 							 * is considered as the tags field, it de-serializes
 							 * the contact tags
 							 */
-							else if (fel.hasClass('tagsinput') && tag == "ul"
-									&& fel.hasClass('contacts')) {
+							else if (fel.hasClass('tagsinput') && tag == "ul" && fel.hasClass('contacts'))
+							{
 								// Iterates through contacts to create a tag
 								// element for each contact
 								$
 										.each(
 												data.contacts,
 
-												function(index, contact) {
+												function(index, contact)
+												{
 													var tag_name;
 
 													/*
@@ -164,13 +178,7 @@ function deserializeForm(data, form) {
 													 */
 													$('.tagsinput', form)
 															.append(
-																	'<li class="tag" data="'
-																			+ tag_id
-																			+ '" class="tag"  style="display: inline-block; "><a href="#contact/'
-																			+ contact.id
-																			+ '">'
-																			+ tag_name
-																			+ '</a><a class="close" id="remove_tag">&times</a></li>');
+																	'<li class="tag" data="' + tag_id + '" class="tag"  style="display: inline-block; "><a href="#contact/' + contact.id + '">' + tag_name + '</a><a class="close" id="remove_tag">&times</a></li>');
 												});
 							}
 
@@ -181,16 +189,17 @@ function deserializeForm(data, form) {
 							 * jquery.multi-select.js, it provides multiSelect()
 							 * function to fill the select
 							 */
-							else if (fel.hasClass('multiSelect') && tag == 'ul') {
+							else if (fel.hasClass('multiSelect') && tag == 'ul')
+							{
 
 								/*
 								 * Iterates through options of the select and
 								 * call multiSelect function to select the
 								 * option
 								 */
-								$.each(el, function(index, option) {
-									$('#multipleSelect', form).multiSelect(
-											'select', option);
+								$.each(el, function(index, option)
+								{
+									$('#multipleSelect', form).multiSelect('select', option);
 								});
 							}
 							
@@ -220,7 +229,8 @@ function deserializeForm(data, form) {
 							 * chained select field should is added to the form
 							 * and populates with the value
 							 */
-							else if (fel.hasClass('chainedSelect')) {
+							else if (fel.hasClass('chainedSelect'))
+							{
 
 								// deserializeChainedSelect(form, el);
 							}
@@ -240,16 +250,19 @@ function deserializeForm(data, form) {
  * @param form
  *            html element with multiple forms
  */
-function deserializeMultipleForms(data, form) {
+function deserializeMultipleForms(data, form)
+{
 	// Iterates through each form element in the form and calls
 	// deseriazlie of each form with respective data element
 	// based on key(i.e., name of the form)
-	$.each(form, function(index, form_element) {
+	$.each(form, function(index, form_element)
+	{
 		// Reads the name of the form element
 		var key = $(form_element).attr('name');
 
 		// If form have attribute name deserializes with particular object
-		if (key && data[key]) {
+		if (key && data[key])
+		{
 			deserializeForm(data[key], $(form_element));
 		}
 
@@ -261,11 +274,13 @@ function deserializeMultipleForms(data, form) {
 	});
 }
 
-function deserializeChainedSelect(form, el, el_self) {
+function deserializeChainedSelect(form, el, el_self)
+{
 
 	// Iterates through JSON array of rules, to fill
 	// a chained select
-	$.each(el, function(index, data) {
+	$.each(el, function(index, data)
+	{
 
 		// Finds the rule html element
 		var rule_element = ($(form).find('.chained'))[0];
@@ -274,7 +289,8 @@ function deserializeChainedSelect(form, el, el_self) {
 		 * If more than one rule clones the fields and relate with
 		 * jquery.chained.js
 		 */
-		if (index > 0) {
+		if (index > 0)
+		{
 			var parent_element = $(rule_element).parent();
 
 			/*
@@ -283,12 +299,10 @@ function deserializeChainedSelect(form, el, el_self) {
 			rule_element = $($(el_self).clone().find('.chained'))[0];
 
 			// Add remove icon for rule
-			$(rule_element).find("i.filter-contacts-multiple-remove").css(
-					"display", "inline-block");
-			
-			var remove_icon = $(rule_element).find("i.filter-contacts-multiple-remove").css(
-					"display", "inline-block");
-			
+			$(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+
+			var remove_icon = $(rule_element).find("i.filter-contacts-multiple-remove").css("display", "inline-block");
+
 			// Loads jquery chained plugin for chaining
 			// the input fields
 			// head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js',
@@ -314,28 +328,28 @@ function deserializeChainedSelect(form, el, el_self) {
 	})
 }
 
-function deserializeChainedElement(data, rule_element) {
-	$.each(data, function(i, value) {
-		var input_element = ($(rule_element).find('*[name="' + i + '"]')
-				.children())[0];
+function deserializeChainedElement(data, rule_element)
+{
+	$.each(data, function(i, value)
+	{
+		var input_element = ($(rule_element).find('*[name="' + i + '"]').children())[0];
 		if (!input_element)
 			return;
 
 		// If input field set is value for input field, checks it chained select
 		// elements
 		// date fields should be filled with date
-		if (input_element.tagName.toLowerCase() == "input") {
+		if (input_element.tagName.toLowerCase() == "input")
+		{
 
 			// Fills date in to fields and initialize datepicker on the field
-			if ($(input_element).hasClass('date')) {
+			if ($(input_element).hasClass('date'))
+			{
 				value = getLocalTimeFromGMTMilliseconds(value);
 
-				$(input_element).val(
-						new Date(parseInt(value)).format('mm/dd/yyyy'));
+				$(input_element).val(new Date(parseInt(value)).format('mm/dd/yyyy'));
 
-				$(input_element).datepicker({
-					format : 'mm/dd/yyyy',
-				});
+				$(input_element).datepicker({ format : 'mm/dd/yyyy', });
 
 				$(input_element).datepicker('update');
 
@@ -349,16 +363,18 @@ function deserializeChainedElement(data, rule_element) {
 		var option_element = $("option", input_element);
 
 		// Iterates through options in select field
-		$.each(option_element, function(index, element) {
+		$.each(option_element, function(index, element)
+		{
 			// Selects the option
-			if ($(element).attr('value') == value) {
+			if ($(element).attr('value') == value)
+			{
 				$(element).attr("selected", "selected");
 				var url = $(element).attr("url");
-				if(url)
-					{
+				if (url)
+				{
 					$(element).attr("data", data.RHS);
 					console.log($(element));
-					}
+				}
 				$(input_element).trigger("change");
 				return;
 			}
@@ -367,52 +383,53 @@ function deserializeChainedElement(data, rule_element) {
 
 }
 
-function deserializeChainedElementWebrule(data, rule_element) {
-	$.each(data, function(i, value) {
-		if(value.value)
+function deserializeChainedElementWebrule(data, rule_element)
+{
+	$.each(data, function(i, value)
+	{
+		if (value.value)
 			value = value.value;
-		var input_element_set = $(rule_element).find('*[name="' + i + '"]')
-				.children();
-		
-		var input_element = input_element_set[0];  
-		if(!input_element)
+		var input_element_set = $(rule_element).find('*[name="' + i + '"]').children();
+
+		var input_element = input_element_set[0];
+		if (!input_element)
 			return;
-		
+
 		var tag_name = input_element.tagName.toLowerCase();
-		if(tag_name != "input"
-				&& tag_name != "textarea" && tag_name != "select" && input_element_set.length > 1)
-			$.each(input_element_set, function(index, input){
-				if(index == 0)
+		if (tag_name != "input" && tag_name != "textarea" && tag_name != "select" && input_element_set.length > 1)
+			$.each(input_element_set, function(index, input)
+			{
+				if (index == 0)
 					return;
 				tag_name = input.tagName.toLowerCase();
-				if(tag_name == "input"
-					|| tag_name == "textarea" || tag_name == "select")
-					{
-						input_element = input;
-						return false;
-					}
-					
+				if (tag_name == "input" || tag_name == "textarea" || tag_name == "select")
+				{
+					input_element = input;
+					return false;
+				}
+
 			})
-		
-		if(!input_element)
+
+		if (!input_element)
 			return;
-		
+
 		// If input field set is value for input field, checks it chained select
 		// elements
 		// date fields should be filled with date
-		if (input_element.tagName.toLowerCase() == "input"
-				|| input_element.tagName.toLowerCase() == "textarea") {
+		if (input_element.tagName.toLowerCase() == "input" || input_element.tagName.toLowerCase() == "textarea")
+		{
 			$(input_element).val(value);
-			if ($(input_element).hasClass('custom_html')) {
-				
-				if(value.value)
+			if ($(input_element).hasClass('custom_html'))
+			{
+
+				if (value.value)
 				{
 					$(input_element).val(value.value);
 				}
-				//	setupHTMLEditor($(input_element), value.value);
-				//}
-				//else
-					//setupHTMLEditor($(input_element), value);
+				// setupHTMLEditor($(input_element), value.value);
+				// }
+				// else
+				// setupHTMLEditor($(input_element), value);
 			}
 
 			return;
@@ -422,9 +439,11 @@ function deserializeChainedElementWebrule(data, rule_element) {
 		var option_element = $("option", input_element);
 
 		// Iterates through options in select field
-		$.each(option_element, function(index, element) {
+		$.each(option_element, function(index, element)
+		{
 			// Selects the option
-			if ($(element).attr('value') == value) {
+			if ($(element).attr('value') == value)
+			{
 				$(element).attr("selected", "selected");
 				$(input_element).trigger("change");
 				return;
@@ -433,63 +452,59 @@ function deserializeChainedElementWebrule(data, rule_element) {
 	});
 }
 
-function deserializeChainedSelect1(form, el, element) {
+function deserializeChainedSelect1(form, el, element)
+{
 
 	var self = $(element).find('.webrule-actions')[0];
 
 	var rule_element_default = $(self).html();
-	
+
 	// Finds the rule html element
 	var rule_element = ($(form).find('.webrule-actions'))[0];
-	
+
 	// Iterates through JSON array of rules, to fill
 	// a chained select
-	$
-			.each(
-					el,
-					function(index, data) {
-						
+	$.each(el, function(index, data)
+	{
 
-						/*
-						 * If more than one rule clones the fields and relate
-						 * with jquery.chained.js
-						 */
-						if (index > 0) {
+		/*
+		 * If more than one rule clones the fields and relate with
+		 * jquery.chained.js
+		 */
+		if (index > 0)
+		{
 
-							/*
-							 * Gets the Template for input and select fields
-							 */
+			/*
+			 * Gets the Template for input and select fields
+			 */
 
-							// Loads jquery chained plugin for chaining
-							// the input fields
-							// head.js('lib/agile.jquery.chained.min.js',
-							// function ()
-							// {
-							var new_rule_element = $(rule_element_default).clone();
+			// Loads jquery chained plugin for chaining
+			// the input fields
+			// head.js('lib/agile.jquery.chained.min.js',
+			// function ()
+			// {
+			var new_rule_element = $(rule_element_default).clone();
 
-							// Add remove icon for rule
-							$(new_rule_element).find("i.webrule-multiple-remove")
-									.css("display", "inline-block");
+			// Add remove icon for rule
+			$(new_rule_element).find("i.webrule-multiple-remove").css("display", "inline-block");
 
-							var actions = [];
-							actions.push(data);
-							/*
-							 * Chains dependencies of input fields with
-							 * jquery.chained.js based on the rule element
-							 */
-							chainWebRules(new_rule_element, el, false,
-									actions);
+			var actions = [];
+			actions.push(data);
+			/*
+			 * Chains dependencies of input fields with jquery.chained.js based
+			 * on the rule element
+			 */
+			chainWebRules(new_rule_element, el, false, actions);
 
-							deserializeChainedElementWebrule(data,
-									new_rule_element);
+			deserializeChainedElementWebrule(data, new_rule_element);
 
-							$(rule_element).append(new_rule_element);
+			$(rule_element).append(new_rule_element);
 
-							// });
-							// return;
-							return;
-						}
+			// });
+			// return;
+			return;
+		}
 
-						deserializeChainedElementWebrule(data, rule_element);
-					})
+		deserializeChainedElementWebrule(data, rule_element);
+	})
 }

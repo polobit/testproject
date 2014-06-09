@@ -17,6 +17,7 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
@@ -386,6 +387,23 @@ public class ContactUtil
 	dao.putAll(contacts_list);
     }
 
+    public static void removeTagsToContactsBulk(List<Contact> contacts_list, String[] tags_array)
+    {
+	if (contacts_list.size() == 0)
+	{
+	    System.out.println("Null contact");
+	    return;
+	}
+
+	for (Contact contact : contacts_list)
+	{
+
+	    contact.removeTags(tags_array);
+	}
+
+	dao.putAll(contacts_list);
+    }
+
     /**
      * Returns contact firstname and lastname from contact-id.
      * 
@@ -720,5 +738,28 @@ public class ContactUtil
 	    return null;
 
 	return contactOwner.id;
+    }
+
+    /**
+     * Returns contacts count based on bounce type
+     * 
+     * @param emailBounceType
+     *            - Hard or Soft
+     * @param startTime
+     *            - start time
+     * @param endTime
+     *            - end time
+     * @return int value
+     */
+    public static int getEmailBouncedContactsCount(String campaignId, EmailBounceType emailBounceType, Long startTime,
+	    Long endTime)
+    {
+	HashMap<String, Object> properties = new HashMap<String, Object>();
+	properties.put("emailBounceStatus.campaign_id", campaignId);
+	properties.put("emailBounceStatus.emailBounceType", emailBounceType);
+	properties.put("emailBounceStatus.time >=", startTime);
+	properties.put("emailBounceStatus.time <", endTime);
+
+	return dao.getCountByProperty(properties);
     }
 }

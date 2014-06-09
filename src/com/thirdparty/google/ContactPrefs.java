@@ -19,6 +19,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.google.gdata.util.common.base.StringUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
@@ -35,6 +36,7 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
  * 
  */
 @XmlRootElement
+@Cached
 public class ContactPrefs implements Serializable
 {
     // Key
@@ -94,6 +96,9 @@ public class ContactPrefs implements Serializable
 
     @NotSaved(IfDefault.class)
     public Long last_synced_to_client = 0L;
+
+    @NotSaved(IfDefault.class)
+    public Long last_synced_updated_contacts_to_client = 0L;
 
     @NotSaved(IfDefault.class)
     public Long last_synced_from_client = 0L;

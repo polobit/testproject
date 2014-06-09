@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.condition.IfDefault;
@@ -32,6 +33,7 @@ import com.googlecode.objectify.condition.IfDefault;
  */
 @XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Cached
 public class UserPrefs
 {
     /**
@@ -99,7 +101,7 @@ public class UserPrefs
      */
     @NotSaved(IfDefault.class)
     public boolean task_reminder = true;
-    
+
     /**
      * Enable or disable keyboard shortcuts.
      */
@@ -139,7 +141,8 @@ public class UserPrefs
      * @param keyboard_shotcuts
      *            - Boolean value whether enable or not.
      */
-    public UserPrefs(Long userId, String name, String image, String template, String width, String signature, boolean task_reminder, boolean keyboard_shotcuts)
+    public UserPrefs(Long userId, String name, String image, String template, String width, String signature,
+	    boolean task_reminder, boolean keyboard_shotcuts)
     {
 	this.name = name;
 	this.pic = image;
@@ -178,7 +181,8 @@ public class UserPrefs
 
 	try
 	{
-	    if ((currentDomainUser != null) && (currentDomainUser.name == null || !currentDomainUser.name.equals(this.name)))
+	    if ((currentDomainUser != null)
+		    && (currentDomainUser.name == null || !currentDomainUser.name.equals(this.name)))
 	    {
 		currentDomainUser.name = this.name;
 		currentDomainUser.save();

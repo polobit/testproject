@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
@@ -23,6 +24,7 @@ import com.campaignio.tasklets.util.TaskletUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.Mailgun;
 import com.thirdparty.SendGrid;
+import com.thirdparty.mandrill.webhook.MandrillWebhook;
 
 /**
  * <code>SendEmail</code> represents SendEmail node in a workflow. Sends email
@@ -44,7 +46,8 @@ public class SendEmail extends TaskletAdapter
     /**
      * Extensions to avoid url shortening
      */
-    public static String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp", ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
+    public static String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp",
+	    ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
     public static List<String> extensionsList = Arrays.asList(extensions);
 
     /**
@@ -215,13 +218,15 @@ public class SendEmail extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// No email
 	if (!subscriberJSON.getJSONObject("data").has("email"))
 	{
 	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "Email cannot be sent as there is no email-id for this contact.", LogType.EMAIL_SENDING_FAILED.toString());
+		    "Email cannot be sent as there is no email-id for this contact.",
+		    LogType.EMAIL_SENDING_FAILED.toString());
 
 	    // Execute Next One in Loop
 	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -234,21 +239,41 @@ public class SendEmail extends TaskletAdapter
 	{
 	    if (subscriberJSON.getBoolean("isUnsubscribedAll"))
 	    {
-		System.err.println("Skipping SendEmail node for " + subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
+		System.err.println("Skipping SendEmail node for "
+			+ subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
 			+ " as it is Unsubscribed from All.");
 
 		// Add log
-		LogUtil.addLogToSQL(
-			AgileTaskletUtil.getId(campaignJSON),
-			AgileTaskletUtil.getId(subscriberJSON),
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 			"Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
-				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT), LogType.EMAIL_SENDING_SKIPPED.toString());
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+			LogType.EMAIL_SENDING_SKIPPED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
 
 		return;
 	    }
+	}
+
+	// Verify HardBounce status
+	if (subscriberJSON.has("isBounce"))
+	{
+	    if (subscriberJSON.get("isBounce").equals(EmailBounceStatus.EmailBounceType.HARD_BOUNCE.toString()))
+	    {
+		// Add log
+		LogUtil.addLogToSQL(
+			AgileTaskletUtil.getId(campaignJSON),
+			AgileTaskletUtil.getId(subscriberJSON),
+			"Campaign email was not sent due to hard bounce <br><br> Email subject: "
+				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+			LogType.EMAIL_SENDING_SKIPPED.toString());
+
+		// Execute Next One in Loop
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
+		return;
+	    }
+
 	}
 
 	// Get Scheduled Time and Day
@@ -316,7 +341,8 @@ public class SendEmail extends TaskletAdapter
      * com.campaignio.tasklets.TaskletAdapter#timeOutComplete(org.json.JSONObject
      * , org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void timeOutComplete(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// TimeOut - Cron Job Wakes it up
 	System.out.println("Wake up from wait. Executing next one.");
@@ -406,7 +432,8 @@ public class SendEmail extends TaskletAdapter
      *            Current Node data
      * @throws Exception
      */
-    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void sendEmail(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// Add Unsubscription Link
 	addUnsubscribeLink(subscriberJSON, campaignJSON);
@@ -435,7 +462,9 @@ public class SendEmail extends TaskletAdapter
 	String campaignId = AgileTaskletUtil.getId(campaignJSON);
 
 	// Check if we need to convert links
-	if (trackClicks != null && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
+	if (trackClicks != null
+		&& (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
+			.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
 	{
 	    try
 	    {
@@ -443,8 +472,10 @@ public class SendEmail extends TaskletAdapter
 		// clicks
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
-		text = EmailLinksConversion.convertLinksUsingRegex(text, subscriberId, campaignId, trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
-		html = EmailLinksConversion.convertLinksUsingRegex(html, subscriberId, campaignId, trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+		text = EmailLinksConversion.convertLinksUsingRegex(text, subscriberId, campaignId,
+			trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+		html = EmailLinksConversion.convertLinksUsingRegex(html, subscriberId, campaignId,
+			trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
 
 	    }
 	    catch (Exception e)
@@ -467,12 +498,14 @@ public class SendEmail extends TaskletAdapter
 		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
 
 	    // Send HTML Email
-	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, html, text);
+	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, html, text,
+		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
 	}
 	else
 	{
 	    // Send Text Email
-	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, null, text);
+	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, null, text,
+		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
 	}
 
 	// Creates log for sending email
@@ -533,7 +566,8 @@ public class SendEmail extends TaskletAdapter
      * @param text
      *            - text body
      */
-    private void sendEmail(String fromEmail, String fromName, String to, String cc, String subject, String replyTo, String html, String text)
+    private void sendEmail(String fromEmail, String fromName, String to, String cc, String subject, String replyTo,
+	    String html, String text, String mandrillMetadata)
     {
 	// For domain "clickdeskengage" - use SendGrid API
 	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
@@ -546,7 +580,7 @@ public class SendEmail extends TaskletAdapter
 	if (!StringUtils.isEmpty(cc))
 	    Mailgun.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
 	else
-	    MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text);
+	    MandrillUtil.sendMail(fromEmail, fromName, to, subject, replyTo, html, text, mandrillMetadata);
     }
 
 }

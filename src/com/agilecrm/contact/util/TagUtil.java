@@ -55,6 +55,12 @@ public class TagUtil
 	    System.err.println("Exception occured while setting tags in cache... " + e.getMessage());
 	}
 
+	List<Key<Tag>> tagKeys = null;
+
+	// If tags exist, fetch tagKeys
+	if (tags.size() != 0)
+	    tagKeys = dao.listAllKeys();
+
 	// Add to tags Library
 	for (String tagName : tags)
 	{
@@ -63,16 +69,14 @@ public class TagUtil
 	    if (StringUtils.isBlank(tagName))
 		continue;
 
-	    // Check if already present
-	    int count = getTagsCount(tagName);
-
-	    System.out.println("Tags count in TagUtil :" + count);
-
-	    if (count == 0)
+	    if (tagKeys.indexOf(new Key<Tag>(Tag.class, tagName)) == -1)
 	    {
+		System.out.println("New Tag added is " + tagName);
+
 		// Add tag to db
 		Tag.addTag(tagName);
 	    }
+
 	}
     }
 
@@ -237,15 +241,15 @@ public class TagUtil
 
 	    cursor = (Cursor) tags.get(tags.size() - 1);
 
-	    if (cursor == null || StringUtils.isEmpty(cursor.cursor) || availableTags <= tags.size() || cursor.cursor == null
+	    if (cursor == null || StringUtils.isEmpty(cursor.cursor) || availableTags <= tags.size()
+		    || cursor.cursor == null
 		    || System.currentTimeMillis() - startTime > Globals.REQUEST_LIMIT_MILLIS - 5000 || abort)
 		break;
 
 	    previousSize = tags.size();
 	    tags.addAll(TagUtil.getTags(100, cursor.cursor));
 
-	}
-	while (true);
+	} while (true);
 
 	System.out.println("total tags fetched : " + tags.size() + "total found : " + availableTags);
 

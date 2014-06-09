@@ -15,7 +15,7 @@
  */
 function initChartsUI(campaign_id, callback)
 {
-	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', function()
+	head.js(LIB_PATH + 'lib/date-charts.js', LIB_PATH + 'lib/date-range-picker.js', CSS_PATH + "css/misc/date-picker.css", function()
 	{
 
 		// Bootstrap date range picker.
@@ -37,11 +37,18 @@ function initChartsUI(campaign_id, callback)
 			$('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
 			$("#week-range").html(end.add({ days : -6 }).toString('MMMM d, yyyy') + ' - ' + end.add({ days : 6 }).toString('MMMM d, yyyy'));
 
+			//Updates table data
+			get_email_table_reports(campaign_id);
+			
 			// Updates bar graphs on date change.
 			showEmailGraphs(campaign_id);
+			
 		});
 	});
 
+	//Updates table data
+	get_email_table_reports(campaign_id);
+	
 	// shows graphs by default week date range.
 	showEmailGraphs(campaign_id);
 }
@@ -109,4 +116,21 @@ function getOptions()
 	
 	// console.log("options " + options);
 	return options;
+}
+
+/**
+ * Returns data required for table
+ **/
+function get_email_table_reports(campaign_id)
+{
+	$("#email-table-reports").html(getRandomLoadingImg());
+	
+	$.getJSON('core/api/campaign-stats/email/table-reports/'+ campaign_id + getOptions(), function(data){
+	
+		console.log(data);
+		
+		// Load Reports Template
+		$("#email-table-reports").html(getTemplate("campaign-email-table-reports", data));
+
+	});
 }

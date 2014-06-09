@@ -223,6 +223,16 @@
 		<servlet-name>Stripe Webhook</servlet-name>
 		<url-pattern>/backend/stripewebhook/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Mandrill Webhook</servlet-name>
+		<servlet-class>com.thirdparty.mandrill.webhook.MandrillWebhook</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Mandrill Webhook</servlet-name>
+		<url-pattern>/backend/mandrillwebhook/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>TwilioServlet</servlet-name>
@@ -355,6 +365,29 @@
 		<filter-name>PHPAPIFilter</filter-name>
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
+
+	<filter> 
+	  <filter-name>trimFilter</filter-name> 
+  	  <filter-class>com.cj.trim.trimFilter</filter-class> 
+ 	  <init-param> 
+    	<param-name>removeComments</param-name> 
+    	<param-value>true</param-value> 
+  	  </init-param>
+  	  <init-param> 
+    	<param-name>trimSpaces</param-name> 
+    	<param-value>true</param-value> 
+  	  </init-param> 
+	</filter>
+	
+	<filter-mapping> 
+  		<filter-name>trimFilter</filter-name> 
+  		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>PHPAPIFilter</filter-name>
+		<url-pattern>/core/php/*</url-pattern>
+	</filter-mapping>
 	
 	<welcome-file-list>
 		<welcome-file>home</welcome-file>
@@ -446,11 +479,20 @@
 	
 	<servlet>
 	<servlet-name>ShopifyCustomerWebhook</servlet-name>
-	<servlet-class>com.thirdparty.forms.ShopifyCustomerWebhook</servlet-class>
+	<servlet-class>com.thirdparty.shopify.ShopifyCustomerWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ShopifyCustomerWebhook</servlet-name>
 		<url-pattern>/shopifycustomer</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>ShopifyOrderWebhook</servlet-name>
+	<servlet-class>com.thirdparty.shopify.ShopifyOrderWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyOrderWebhook</servlet-name>
+		<url-pattern>/shopifyorder</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -536,5 +578,13 @@
 	<servlet-mapping>
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>OAuthServlet</servlet-name>
+		<servlet-class>com.agilecrm.oauth.OAuthServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OAuthServlet</servlet-name>
+		<url-pattern>/OAuthServlet</url-pattern>
 	</servlet-mapping>
 </web-app>

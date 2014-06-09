@@ -1,8 +1,5 @@
 package com.agilecrm.queues.backend;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.queues.PullScheduler;
+import com.google.appengine.api.ThreadManager;
 
 /**
  * <code>BackendPullServlet</code> is the backend servlet to process pull queue
@@ -21,8 +19,6 @@ import com.agilecrm.queues.PullScheduler;
 @SuppressWarnings("serial")
 public class BackendPullServlet extends HttpServlet
 {
-    public static Set<String> processedQueue = new HashSet<String>();
-
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
 	doPost(req, res);
@@ -37,21 +33,21 @@ public class BackendPullServlet extends HttpServlet
 	if (StringUtils.isBlank(queueName))
 	    return;
 
-	System.out.println("ProcessedQueue set size is " + processedQueue.size());
-
-	if (processedQueue.contains(queueName))
-	{
-	    System.err.println("Queue - " + queueName + " already exists in Set");
-	    return;
-	}
-
-	processedQueue.add(queueName);
-
 	try
 	{
 	    // Process pull queue tasks
 	    PullScheduler pullScheduler = new PullScheduler(queueName, false);
 	    pullScheduler.run();
+
+	    // Runs background threads
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
+
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
+	    runBackgroudnThread(queueName);
+
 	}
 	catch (Exception e)
 	{
@@ -59,7 +55,27 @@ public class BackendPullServlet extends HttpServlet
 	    System.err.println("Exception occured in BackendPullServlet PullScheduler " + e.getMessage());
 	}
 
-	processedQueue.remove(queueName);
-
     }
+
+    /**
+     * Runs background thread which can outlive the request
+     * 
+     * @param queueName
+     */
+    public void runBackgroudnThread(final String queueName)
+    {
+	// To run again in same request as separate thread
+	Thread thread = ThreadManager.createBackgroundThread(new Runnable()
+	{
+	    public void run()
+	    {
+		System.out.println("Calling again run method from thread...");
+
+		PullScheduler pullScheduler = new PullScheduler(queueName, false);
+		pullScheduler.run();
+	    }
+	});
+	thread.start();
+    }
+
 }

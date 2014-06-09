@@ -4,6 +4,7 @@ import javax.persistence.Id;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.google.appengine.api.NamespaceManager;
+import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
@@ -18,6 +19,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @Unindexed
+@Cached
 public class WorkflowTemplate
 {
     /**
@@ -42,7 +44,8 @@ public class WorkflowTemplate
     /**
      * DAO
      */
-    public static ObjectifyGenericDao<WorkflowTemplate> dao = new ObjectifyGenericDao<WorkflowTemplate>(WorkflowTemplate.class);
+    public static ObjectifyGenericDao<WorkflowTemplate> dao = new ObjectifyGenericDao<WorkflowTemplate>(
+	    WorkflowTemplate.class);
 
     /**
      * Default WorkflowTemplate

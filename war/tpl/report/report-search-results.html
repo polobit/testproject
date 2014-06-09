@@ -15,8 +15,12 @@
 	<td>{{getPropertyValue properties "title"}}<br />
     	{{getPropertyValue properties "company"}}
 	</td>
-	<td>{{#each tags}} <b><span class="label">{{this}}</span></b>
-    	{{/each}}
+	<td>
+	  <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+		{{#each tags}}
+	    	<span class="label">{{this}}</span>	
+		{{/each}}
+	  </div>
 	</td>
 	<td>{{lead_score}}</td>
 </script>
@@ -36,7 +40,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="span9">
+    <div class="span12">
         {{#if this.length}}
         <div class="data">
             <div class="data-container">
@@ -75,8 +79,6 @@
         		</div>
     		</div>
 		{{/if}}
-    </div>
-    <div class="span3">
     </div>
 </div>
 </script>

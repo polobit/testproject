@@ -27,7 +27,7 @@
 								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 								<b> <font size="5">{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}</font>
-								</b>{{#if_propertyName "email"}}</br> <a href='#send-email'>{{value}}</a>{{/if_propertyName}}
+								</b>{{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}}
 
 								</br>{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
 								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
@@ -63,9 +63,7 @@
 								<a class="btn" style="border-radius: 4px 0px 0px 4px!important;" href='#contact-edit'><i class="icon-edit"></i> Edit</a>
 								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href='#' id='contact-actions-delete'><i
-											class="icon-trash"></i> Delete</a></li>
-									<li class='divider'></li>
+
 									<li><a href='#' class="contact-add-note"><i
 											class="icon-file"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
@@ -73,14 +71,19 @@
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
 											Add Deal</a></li>
 									<li class='divider'></li>
-									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
-											Duplicate</a></li>
-									<li class='divider'></li>
+
 									<li><a href='#bulk-campaigns' class="contact-add-campaign"
 										id="contact-add-campaign"><i class="icon-sitemap"></i> Add
 											to Campaign</a></li>
-									<li><a href='#send-email' id="contact-send-email"><i
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
+
+									<li class='divider'></li>
+									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
+											Duplicate</a></li>
+
+									<li><a href='#' id='contact-actions-delete'><i
+											class="icon-trash"></i> Delete</a></li>
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -125,7 +128,7 @@
 					</div>
 					<!-- Owner block -->
 					<br />
-					<div style="float: right; margin-top: -7px;">
+					<div style="float: right; margin-top: -15px;">
 						<div class="change-owner-succes"></div>
 						<span title="Owner"><strong style="color: gray">Owner:</strong>&nbsp;&nbsp;<span
 							id="contact-owner" data={{owner.id}}
@@ -179,7 +182,7 @@
 		</div>
 		<div class="">
 			<ul class="nav nav-tabs" id="contactDetailsTab">
-				<li class="active"><a data-toggle="tab" href="#timeline">Timeline</a></li>
+				<li class=""><a data-toggle="tab" href="#timeline">Timeline</a></li>
 				<li class=""><a data-toggle="tab" href="#notes">Notes</a></li>
 				<li class=""><a data-toggle="tab" href="#events">Events</a></li>
 				<li class=""><a data-toggle="tab" href="#tasks">Tasks</a></li>
@@ -191,12 +194,13 @@
 				<li class=""><a data-toggle="tab" href="#documents">Documents</a></li>
 			</ul>
 			<div class="tab-content well" id="contact-tab-content">
-				<div class="tab-pane active" id="time-line">
+				<div class="tab-pane" id="time-line">
 					<div class="timeline-loading-img" style="width:35px;max-height:30px;overflow:hidden;">
-						<img class="loading-img-log" src="img/21-0.gif"></img>
+						<img class="loading-img" src="img/21-0.gif"></img>
+						<!-- <img class="loading-img-log" src="img/21-0.gif"></img>
 						<img class="loading-img-email" src="img/21-0.gif"></img>
 						<img class="loading-img" src="img/21-0.gif"></img>
-						<img class="loading-img-stats" src="img/21-0.gif"></img>
+						<img class="loading-img-stats" src="img/21-0.gif"></img> -->
 					</div>
 
 					<div class="slate" id="timeline-slate"
@@ -225,15 +229,15 @@
 						</div>
 					</div>
 				</div>
-				<div class="tab-pane" id="notes">...</div>
-				<div class="tab-pane" id="events">...</div>
-				<div class="tab-pane" id="tasks">...</div>
-				<div class="tab-pane" id="deals">...</div>
-				<div class="tab-pane" id="cases">...</div>
-				<div class="tab-pane" id="campaigns">...</div>
-				<div class="tab-pane" id="stats">...</div>
-				<div class="tab-pane" id="mail">...</div>
-				<div class="tab-pane" id="documents">...</div>
+				<div class="tab-pane" id="notes"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="events"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="tasks"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="deals"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="cases"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="campaigns"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="stats"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="mail"><img src="img/21-0.gif"></img></div>
+				<div class="tab-pane" id="documents"><img src="img/21-0.gif"></img></div>
 			</div>
 		</div>
 	</div>
@@ -271,16 +275,20 @@
 							{{#property_is_exists "phone" properties}}
 							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
 								{{#multiple_Property_Element "phone" properties}}
-								<div style="display: inline-block; text-align: right" class="span3">
+								<div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Phone</strong><span>
 								</div>
-								<div style="padding:0px 10px 2px 0px; display: inline-block;line-height: 20px" class="span9">
+								<div style="padding:0px 10px 2px 0px; display: inline-block;line-height: 20px" class="span8">
 									{{#each this}}
 									<div>
-                                        <a href='#' class="contact-make-call" style="display:none;" fname="{{getCurrentContactProperty "first_name"}}" 
-                                         lname="{{getCurrentContactProperty "last_name"}}" image="{{getCurrentContactProperty "image"}}" 
-                                         phone="{{value}}"><i class="icon-phone"></i></a>                                       
-										<a href="tel:{{value}}">{{value}}</a> 
+                                        <a href='#' class="contact-make-sip-call" style="display:none;" 
+                                           fname="{{getCurrentContactProperty "first_name"}}" 
+                                           lname="{{getCurrentContactProperty "last_name"}}" 
+                                           image="{{getCurrentContactProperty "image"}}" 
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>                                       
+										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
                                         {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
 									</div>
 									{{/each}}
@@ -289,16 +297,16 @@
 							</div>
 							{{/property_is_exists}}
  							{{#property_is_exists "email" properties}}
-							<div class="pull-left row-fluid" style="padding-bottom: 5px;">
+							<div class="pull-left row-fluid" style="margin-bottom: 3px;">
 								{{#multiple_Property_Element "email" properties}}
-								<div style="display: inline-block; text-align: right" class="span3">
+								<div style="display: inline-block; text-align: right" class="span4">
 									<span><strong style="color: gray">Email</strong></span>
 								</div>
 								{{#property_is_exists "phone" ../properties}}
 								<div
-									class="span9 contact-detail-entity-list">
+									class="span8 contact-detail-entity-list" style="padding-right:0px!important;">
 									{{else}}
-									<div style="padding:0px 10px 2px 0px; display: inline-block;" class="span9">
+									<div style="padding:0px 10px 2px 0px; display: inline-block;" class="span8">
 										{{/property_is_exists}} 
 									{{#each this}}
 										<div>
@@ -308,38 +316,37 @@
 									</div>
 									{{/multiple_Property_Element}}
 								</div>
-								{{/property_is_exists}} {{#property_is_exists "address"
-								properties}}
-								<div class="pull-left row-fluid " style="padding-bottom: 5px;">
-									{{#address_Element properties}}{{/address_Element}}</div>
-
-								<div class="pull-left row-fluid">
-									<div id="map"
-										style="width: auto; height: 200px; display: none; margin: 10px 10px 15px;">
-									</div>
-								</div>
 								{{/property_is_exists}}<div class="custom-data"> {{#getContactCustomPropertiesExclusively
 								properties}}
 								<div class="pull-left row-fluid">
-									<h4 style="margin-left: 10px;border-bottom: 1px solid #f5f5f5"><!-- Custom Fields --></h4>								
 									{{#each_with_index this}}
-											<div class="pull-left row-fluid" style="">
-												<div class="span3" style="padding: 4px 0px 0px 2px;text-align:right;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
-													<strong style="color: gray" title="{{ucfirst name}}">{{ucfirst name}}</strong>
-												</div>
-												{{#if_equals index ../this.length}}
-													<div class="span9"
-														style="padding:4px 10px 0px 0px;">
-												{{else}}
-												<div class="span9"
-													style="padding:4px 10px 0px 0px; display: inline-block; border-bottom: 1px solid whitesmoke;">
-														{{/if_equals}} {{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
-												</div>
+										<div class="pull-left row-fluid" style="">
+											<div class="span4" style="padding: 4px 0px 5px 2px;text-align:right;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">
+												<strong style="color: gray" title="{{name}}">{{name}}</strong>
+											</div>
+										{{#if_equals index ../this.length}}
+											<div class="span8"
+												style="padding:4px 10px 5px 2px; display: inline-block;margin-bottom:5px; border-top: 1px solid whitesmoke;">
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+										{{else}}
+											<div class="span8"
+												style="padding:4px 10px 5px 2px; display: inline-block; border-top: 1px solid whitesmoke;">
+											{{#if_equals subtype "DATE"}} <time class="note-created-time" datetime="{{epochToHumanDate "" value}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "dd mmm yyyy" value}}</time>{{else}}{{value}} {{/if_equals}}</div>
+										{{/if_equals}}
+										</div>
 									{{/each_with_index}}
 									</div>
 									{{/getContactCustomPropertiesExclusively}}
 									</div>
+ 									{{#property_is_exists "address" properties}}
+										<div class="pull-left row-fluid " style="padding-bottom: 5px;">
+											{{#address_Element properties}}{{/address_Element}}</div>
 
+										<div class="pull-left row-fluid">
+											<div id="map" style="width: auto; height: 200px; display: none; margin: 10px 10px 15px;">
+											</div>
+										</div>
+									{{/property_is_exists}}
 
 								</div>
 								<div class="clearfix"></div>

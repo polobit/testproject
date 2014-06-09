@@ -69,7 +69,7 @@ public class AddTask extends TaskletAdapter
      * Tweet
      */
     public static String TWEET = "TWEET";
-    
+
     /**
      * Other
      */
@@ -111,7 +111,8 @@ public class AddTask extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// Get Task Values
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
@@ -150,8 +151,9 @@ public class AddTask extends TaskletAdapter
 	}
 
 	// Creates log for AddTask
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: " + subject + "<br/> Category: " + category
-		+ "<br/> Type: " + priority + " <br/> Date: " + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: "
+		+ subject + "<br/> Category: " + category + "<br/> Type: " + priority + " <br/> Date: "
+		+ new Date(epochTime * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -175,7 +177,8 @@ public class AddTask extends TaskletAdapter
      * @param contactOwnerId
      *            - Contact owner-id.
      */
-    private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId, String givenOwnerId, String contactOwnerId)
+    private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId,
+	    String givenOwnerId, String contactOwnerId)
     {
 	Task task = new Task(Type.valueOf(category), dueDateInEpoch);
 

@@ -13,6 +13,8 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 		
 		"bulk-tags" : "tagsBulk",
 		
+		"bulk-tags-remove" : "tagsRemoveBulk",
+		
 		"bulk-email" : "emailBulk", 
 		
 	},
@@ -65,6 +67,17 @@ var ContactBulkActionRouter = Backbone.Router.extend({
 			Backbone.history.navigate("contacts", { trigger : true });
 		else
 			$("#content").html(getTemplate("bulk-actions-tags", {}));
+	},
+	/**
+	 * Loads the tags template to add tags to the selected contacts
+	 */
+	tagsRemoveBulk : function()
+	{
+		// On reloading redirecting to contacts list
+		if (!App_Contacts.contactsListView)
+			Backbone.history.navigate("contacts", { trigger : true });
+		else
+			$("#content").html(getTemplate("bulk-actions-tags-remove", {}));
 	},
 
 	/**

@@ -1,7 +1,8 @@
 <script type="text/html" id="admin-settings-email-stats-template">
-{{!--If no subaccount created or no info show pad-content.--}}
-{{#unless this.id}}
-    <div class="slate span9">
+<div class="row">
+	{{!--If no subaccount created or no info show pad-content.--}}
+	{{#unless this.id}}
+    	<div class="slate span9">
             <div class="slate-content">
                 <div class="box-left">
                     <img alt="Clipboard" src="/img/clipboard.png" />
@@ -14,42 +15,43 @@
                 </div>
             </div>
         </div>
-{{/unless}}
+	{{/unless}}
 
-{{!-- Mandrill Subaccount info contains id--}}
-{{#if this.id}}
-<div class="span8 well">
-    <div class="row">
-        <div class="span4">
-			<h3 style="display: inline;">Reputation </h3>
-			<span style="display: inline;">{{{get_subaccount_reputation reputation}}}</span>
-		</div>
-    </div>
-    <br/><br/>
-	<div class="row-fluid">
-        <div class="span6">
-            <h3 style="text-align: center;">Emails Sent</h3>
-			<table class="table table-bordered">
-				<tbody>
-					<tr><th>This Hour</th><td>{{numberWithCommas sent_hourly}}</td></tr>
-					<tr><th>This Week</th><td>{{numberWithCommas sent_weekly}}</td></tr>
-					<tr><th>This Month</th><td>{{numberWithCommas sent_monthly}}</td></tr>
-					<tr><th>Overall</th><td>{{numberWithCommas sent_total}}</td></tr>
-				</tbody>
-			</table>
-        </div>
-        <div class="span6">
-            <h3 style="text-align: center;">Bounces ( Last 30 Days )</h3>
-			<table class="table table-bordered">
-				<tbody>
-					<tr><th>Hard Bounce</th><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
-					<tr><th>Soft Bounce</th><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
-					<tr><th>Rejects</th><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
-					<tr><th>Spam Complaints</th><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
-				</tbody>
-			</table>
-        </div>
-    </div>
+	{{!-- Mandrill Subaccount info contains id--}}
+	{{#if this.id}}
+	<div class="span8 well">
+    	<div class="row">
+        	<div class="span4">
+				<h3 style="display: inline;">Reputation </h3>
+				<span style="display: inline;vertical-align: 1px;">{{{get_subaccount_reputation reputation}}}</span>
+			</div>
+   		</div>
+   		<br/><br/>
+		<div class="row-fluid">
+        	<div class="span6">
+            	<h3 style="text-align: center;">Emails Sent</h3>
+				<table class="table table-bordered">
+					<tbody>
+						<tr><th>This Hour</th><td>{{numberWithCommas sent_hourly}}</td></tr>
+						<tr><th>This Week</th><td>{{numberWithCommas sent_weekly}}</td></tr>
+						<tr><th>This Month</th><td>{{numberWithCommas sent_monthly}}</td></tr>
+						<tr><th>Overall</th><td>{{numberWithCommas sent_total}}</td></tr>
+					</tbody>
+				</table>
+        	</div>
+        	<div class="span6">
+            	<h3 style="text-align: center;">Bounces ( Last 30 Days )</h3>
+				<table class="table table-bordered">
+					<tbody>
+						<tr><th>Hard Bounce</th><td>{{numberWithCommas last_30_days.hard_bounces}}</td></tr>
+						<tr><th>Soft Bounce</th><td>{{numberWithCommas last_30_days.soft_bounces}}</td></tr>
+						<tr><th>Rejects</th><td>{{numberWithCommas last_30_days.rejects}}</td></tr>
+						<tr><th>Spam Complaints</th><td>{{numberWithCommas last_30_days.complaints}}</td></tr>
+					</tbody>
+				</table>
+        	</div>
+    	</div>
+	</div>
+	{{/if}}
 </div>
-{{/if}}
 </script>

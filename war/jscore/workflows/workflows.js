@@ -12,6 +12,15 @@ $(function(){
 	$(".stop-propagation").die().live('click', function(e){
 		e.stopPropagation();
 	});
+	
+	$(".log-filters").die().live('click', function(e){
+		e.preventDefault();
+		
+		var log_type = $(this).data('log-type');
+		var id = $(this).data('campaign-id');
+		
+		App_Workflows.logsToCampaign(id, log_type);
+	});
 
 	/**
 	 * Saves the content of workflow if the form is valid. Verifies for duplicate workflow names.

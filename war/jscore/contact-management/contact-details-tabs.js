@@ -7,12 +7,8 @@
  * @module Contact management
  * @author Rammohan
  */
-var notesView;
-var dealsView; 
-var eventsView;
-var tasksView;
-var casesView;
-var documentsView;
+
+var contact_tab_position_cookie_name = "contact_tab_position_" + CURRENT_DOMAIN_USER.id;
 
 var CONTACT_ASSIGNED_TO_CAMPAIGN = false;
 
@@ -50,11 +46,10 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#timeline"]').live('click', function (e){
 		e.preventDefault();
-		$('div.tab-content').find('div.active').removeClass('active');
 		
-		$('#time-line').addClass('active');
-		$("#timeline").isotope( 'reLayout', function(){
-		} )
+		save_contact_tab_position_in_cookie("timeline");
+		
+		contact_details_tab.load_timeline();
 	});
 	
 	$('.email-subject').die().live('click', function(e) {
@@ -144,22 +139,8 @@ $(function(){
 	 */ 
 	$('#contactDetailsTab a[href="#notes"]').live('click', function (e){
 		e.preventDefault();
-	    id = App_Contacts.contactDetailView.model.id;
-	    notesView = new Base_Collection_View({
-            url: '/core/api/contacts/' + id + "/notes",
-            restKey: "note",
-            templateKey: "notes",
-            individual_tag_name: 'li',
-            sortKey:"created_time",
-            descending: true,
-            postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".note-created-time", el).timeago();
-              	})
-            }
-        });
-        notesView.collection.fetch();
-        $('#notes', App_Contacts.contactDetailView.model.el).html(notesView.el);
+		save_contact_tab_position_in_cookie("notes");
+		contact_details_tab.load_notes();
 	});
 	
 	/**
@@ -168,22 +149,8 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#events"]').live('click', function (e){
 		e.preventDefault();
-	    id = App_Contacts.contactDetailView.model.id;
-		eventsView = new Base_Collection_View({
-            url: '/core/api/contacts/' + id + "/events",
-            restKey: "event",
-            templateKey: "contact-events",
-            individual_tag_name: 'li',
-            sortKey:"created_time",
-            descending: true,
-            postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".event-created-time", el).timeago();
-              	})
-            }
-        });
-		eventsView.collection.fetch();
-        $('#events', this.el).html(eventsView.el);
+		save_contact_tab_position_in_cookie("events");
+		contact_details_tab.load_events();
 	});
 	
 	/**
@@ -192,22 +159,8 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#documents"]').live('click', function (e){
 		e.preventDefault();
-	    id = App_Contacts.contactDetailView.model.id;
-	    documentsView = new Base_Collection_View({
-            url: '/core/api/documents/' + id + "/docs",
-            restKey: "document",
-            templateKey: "contact-documents",
-            individual_tag_name: 'li',
-            sortKey:"uploaded_time",
-            descending: true,
-            postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".document-created-time", el).timeago();
-              	})
-            }
-        });
-	    documentsView.collection.fetch();
-        $('#documents', this.el).html(documentsView.el);
+		save_contact_tab_position_in_cookie("documents");
+		contact_details_tab.load_documents();
 	});
 	
 	/**
@@ -216,22 +169,8 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#tasks"]').live('click', function (e){
 		e.preventDefault();
-	    id = App_Contacts.contactDetailView.model.id;
-		tasksView = new Base_Collection_View({
-            url: '/core/api/contacts/' + id + "/tasks",
-            restKey: "task",
-            templateKey: "contact-tasks",
-            individual_tag_name: 'li',
-            sortKey:"created_time",
-            descending: true,
-            postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".task-created-time", el).timeago();
-              	})
-            }
-        });
-		tasksView.collection.fetch();
-        $('#tasks', this.el).html(tasksView.el);
+		save_contact_tab_position_in_cookie("tasks");
+		contact_details_tab.load_tasks();
 	});
 	
 	/**
@@ -240,23 +179,8 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#deals"]').live('click', function (e){
 		e.preventDefault();
-		id = App_Contacts.contactDetailView.model.id;
-		dealsView = new Base_Collection_View({
-			url: 'core/api/contacts/'+ id + "/deals" ,
-            restKey: "opportunity",
-            templateKey: "deals",
-            individual_tag_name: 'li',
-            sortKey:"created_time",
-            descending: true,
-            postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".deal-created-time", el).timeago();
-            	})
-            }
-        });
-        dealsView.collection.fetch();
-        $('#deals').html(dealsView.el);
-		
+		save_contact_tab_position_in_cookie("deals");
+		contact_details_tab.load_deals();
 	});
 
 	/**
@@ -264,23 +188,9 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#cases"]').live('click', function (e){
 		e.preventDefault();
-		id = App_Contacts.contactDetailView.model.id;
-		casesView = new Base_Collection_View({
-			url: 'core/api/contacts/'+ id + "/cases" ,
-            restKey: "cases",
-            templateKey: "cases-contact",
-            individual_tag_name: 'li',
-            sortKey:"created_time",
-            descending: true,
-            postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-            		 $(".deal-created-time", el).timeago();
-            	})
-            }
-        });
-		casesView.collection.fetch();
-        $('#cases').html(casesView.el);
+		save_contact_tab_position_in_cookie("cases");
 		
+		contact_details_tab.load_cases();
 	});
 	
 	/**
@@ -290,54 +200,8 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#mail"]').live('click', function (e){
 		e.preventDefault();
-		
-		var contact = App_Contacts.contactDetailView.model;
-		var json = contact.toJSON();
-		 
-		// Get email of the contact in contact detail
-		var email = getPropertyValue(json.properties, "email");
-		
-		// Shows an error alert, when there is no email to the contact 
-		if(!email){
-			$('#mail', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>').show();
-			return;	
-		}	
-		
-		// Fetches mails collection
-		var mailsView = new Base_Collection_View({
-			url: 'core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0',
-            templateKey: "email-social",
-            restKey: "emails",
-            sortKey:"date_secs",
-            descending: true,
-            individual_tag_name: 'li',
-            postRenderCallback: function(el) {
-        	
-          	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
-    			$(".email-sent-time", el).each(function(index, element) {
-    				
-    				//console.log("before :" + $(element).html())
-    				//console.log("converted manually" + jQuery.timeago($(element).html()));
-    				$(element).timeago();
-    				//console.log($(element).html())
-    			});
-			});
-          	
-          	 var imap;
-          	 queueGetRequest('email_prefs_queue','/core/api/imap','json', 
-          			 function(data){
-          		     imap = data;
-          	 });
-
-          	 queueGetRequest('email_prefs_queue','/core/api/social-prefs/GMAIL', 'json',
-          			 function(gmail){
-          		 if(!imap && !gmail)
-              		 $('#email-prefs-verification',el).css('display','block');
-             });
-            }
-		});
-        mailsView.collection.fetch();
-        $('#mail', App_Contacts.contactDetailView.model.el).html(mailsView.el);
+		save_contact_tab_position_in_cookie("mail");
+		contact_details_tab.load_mail();
 	});
 	
 	/**
@@ -347,55 +211,8 @@ $(function(){
 	 */ 
 	$('#contactDetailsTab a[href="#stats"]').live('click', function (e){
 		e.preventDefault();
-		
-		var contact = App_Contacts.contactDetailView.model;
-		var json = contact.toJSON();
-		 
-		// Get email of the contact in contact detail
-		var email = getPropertyValue(json.properties, "email");
-		
-		// Shows an error alert, when there is no email to the contact 
-		if(!email){
-			$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>').show();
-			return;	
-		}
-		
-		// To avoid unnecessary JSAPI count, first verify in cookie
-		if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
-		{
-			$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
-			return;
-		}
-			
-		// Add tag if data is not 0
-        addTagAgile(CODE_SETUP_TAG);
-
-			var statsView = new Base_Collection_View({
-			url: 'core/api/web-stats?e=' + encodeURIComponent(email),
-			data: statsCollection.toJSON(),
-			templateKey: "stats",
-            individual_tag_name: 'li',
-            postRenderCallback: function(el)
-            {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function() { 
-        			$(".stats-created-time", el).each(function(index, element) {
-        				$(element).timeago();
-        			});
-    			});
-            }
-        });
-		
-        statsView.collection.fetch();
-        
-        // Organises collection based on created_time in decreasing order
-        statsView.collection.comparator = function(model)
-        {
-        	if (model.get('created_time'))
-	            return -model.get('created_time');
-	                                      
-        }
-        
-        $('#stats',this.el).html(statsView.el);
+		save_contact_tab_position_in_cookie("stats");
+		contact_details_tab.load_stats();
         
 	});
 	
@@ -406,23 +223,8 @@ $(function(){
 	 */
 	$('#contactDetailsTab a[href="#campaigns"]').live('click', function (e){
 		e.preventDefault();
-		var campaignsView = new Base_Collection_View({
-			url: '/core/api/campaigns/logs/contact/' + App_Contacts.contactDetailView.model.id,
-            restKey: "logs",
-            templateKey: "campaigns",
-            individual_tag_name: 'li',
-            sortKey:'time',
-			descending:true,
-            postRenderCallback: function(el) {
-            	head.js(LIB_PATH + 'lib/jquery.timeago.js', function(){
-              		 $("time.log-created-time", el).timeago();
-              	});
-              // var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
-             // fillSelect('campaignSelect','/core/api/workflows', 'workflow', 'no-callback ', optionsTemplate);
-            }
-        });
-		campaignsView.collection.fetch();	
-        $('#campaigns', this.el).html(campaignsView.el);
+		save_contact_tab_position_in_cookie("campaigns");
+		contact_details_tab.load_campaigns();
 	});
 	
 	$('#contactDetailsTab a[href="#company-contacts"]').live('click',function(e)
@@ -469,12 +271,12 @@ $(function(){
 				var text = model.text;
 				
 				// Apply handlebars template on send-email route 
-				if(Current_Route !== 'bulk-email')
+				if(Current_Route !== 'bulk-email' && Current_Route !== 'send-email')
 				{
 				
 				// Get Current Contact
-				var contact = App_Contacts.contactDetailView.model;
-				var json = contact.toJSON();
+/*				var contact = App_Contacts.contactDetailView.model;
+				var json = contact.toJSON();*/
 				
 				/*
 				 * Get Contact properties json to fill the templates
@@ -552,12 +354,7 @@ $(function(){
 					    // Enables Send Email button.
 					    enable_send_button($('#sendEmail'));
 					    
-					    var route = Current_Route + "";
-					   
-			            if(route.match("send-email") != null)
-			            	App_Contacts.navigate("contact/" + App_Contacts.contactDetailView.model.id, {trigger:true});
-			            else
-			            	window.history.back();
+			            window.history.back();
 			            
 		                 },
 		        error: function()
@@ -576,10 +373,8 @@ $(function(){
 	 */
 	$('#send-email-close').die().live('click',function(e){
 		e.preventDefault();
-
-		Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
-            trigger: true
-        });
+		
+		window.history.back();
 	});	
 
 	/**
@@ -754,3 +549,39 @@ function get_web_stats_count_for_domain()
 	// Returns web-stats count
 	return $.ajax({type: "GET", url: 'core/api/web-stats/JSAPI-status', async: false}).responseText;
 }
+
+function save_contact_tab_position_in_cookie(tab_href)
+{
+	
+	var position = readCookie(contact_tab_position_cookie_name);
+	
+	if(position == tab_href)
+		return;
+	
+	createCookie(contact_tab_position_cookie_name, tab_href);
+}
+
+function load_contact_tab(el, contactJSON)
+{
+	var position = readCookie(contact_tab_position_cookie_name);
+	
+	$('#contactDetailsTab a[href="#'+position+'"]', el).tab('show');
+	
+	if(!position || position == "timeline")
+	{
+		activate_timeline_tab()
+		contact_details_tab.load_timeline();
+		return;
+	}
+	
+	if(contact_details_tab["load_" + position])
+	{
+		
+		
+		// Should add active class, tab is not enough as content might not be shown in view.
+		$(".tab-content", el).find("#" + position).addClass("active");
+		contact_details_tab["load_" + position]();
+	}
+		
+}
+

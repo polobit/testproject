@@ -34,7 +34,8 @@ public class TrackClickUtil
      */
     public static void addEmailClickedLog(String campaignId, String subscriberId, String longURL, String workflowName)
     {
-	LogUtil.addLogToSQL(campaignId, subscriberId, "Email link clicked " + longURL + " of campaign " + workflowName, LogType.EMAIL_CLICKED.toString());
+	LogUtil.addLogToSQL(campaignId, subscriberId, "Email link clicked " + longURL + " of campaign " + workflowName,
+		LogType.EMAIL_CLICKED.toString());
     }
 
     /**
@@ -59,7 +60,8 @@ public class TrackClickUtil
 
 	    customJSON.put("url_clicked", longURL);
 
-	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK, contact, new JSONObject().put("custom_value", customJSON));
+	    NotificationPrefsUtil.executeNotification(Type.CLICKED_LINK, contact,
+		    new JSONObject().put("custom_value", customJSON));
 	}
 	catch (Exception e)
 	{
@@ -162,7 +164,8 @@ public class TrackClickUtil
 	    interruptedData.put(SendEmail.EMAIL_OPEN, true);
 
 	    // Interrupt clicked in DeferredTask
-	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId, subscriberId, interruptedData.toString());
+	    EmailClickDeferredTask emailClickDeferredTask = new EmailClickDeferredTask(clickTrackingId, campaignId,
+		    subscriberId, interruptedData.toString());
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.addAsync(TaskOptions.Builder.withPayload(emailClickDeferredTask));
 	}
@@ -186,6 +189,7 @@ public class TrackClickUtil
 	{
 	    // Remove unwanted keys
 	    contactJSON.remove("isUnsubscribedAll");
+	    contactJSON.remove("isBounce");
 	    contactJSON.remove("id");
 	    contactJSON.getJSONObject("data").remove("powered_by");
 	}
