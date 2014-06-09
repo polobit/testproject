@@ -32,7 +32,9 @@ var WidgetsRouter = Backbone.Router
 
 	    "Xero" : "Xero", "Xero/:id" : "Xero",
 
-	    "QuickBooks" : "QuickBooks/:id", "QuickBooks" : "QuickBooks",
+	    "QuickBooks" : "QuickBooks", "QuickBooks/:id" : "QuickBooks",
+	    
+	    "Facebook" : "Facebook", "Facebook/:id" : "Facebook",
 
 	    "google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar" },
 
@@ -493,8 +495,46 @@ var WidgetsRouter = Backbone.Router
 			    '/OAuthServlet?service=quickbooks&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks");
 		else
 		{
-		}
+		    $.getJSON(
+			    "core/api/widgets/QuickBooks",
+			    function(data1)
+			    {
+				console.log(data1);
 
+				if (data1)
+				{
+				    $
+					    .getJSON(
+						    "core/api/custom-fields",
+						    function(data)
+						    {
+							set_up_access(
+								"QuickBooks",
+								'quickbooks-login',
+								data,
+								'/OAuthServlet?service=quickbooks&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks",
+								data1);
+						    });
+				    return;
+
+				}
+				else
+				{
+				    show_set_up_widget("QuickBooks", 'quickbooks-login',
+					    '/OAuthServlet?service=quickbooks&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks");
+				}
+			    }); 
+		
+		}
+	    },
+	    
+	    Facebook : function(id)
+	    {
+		if (!id)
+		    show_set_up_widget("Facebook", 'facebook-login', '/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.href) + "/facebook");
+		else
+		// return;
+		{}
 	    },
 
 	    /**

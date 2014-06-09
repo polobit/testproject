@@ -109,6 +109,7 @@ function addContactToQuickbooks(first_name, last_name)
      */
 
     console.log("in quickbooks add contact")
+      $("#quickbooks_add_contact").attr("disabled", true);
     $.get("/core/api/widgets/quickbooks/add/contact/" + QUICKBOOKS_PLUGIN_ID + "/" + first_name + "/" + last_name + "/" + Email, function(data)
     {
 	console.log('In Quickbooks add contact ');
@@ -126,5 +127,6 @@ function addContactToQuickbooks(first_name, last_name)
 	{
 	    quickBooksError(data)
 	}
+	$("#quickbooks_add_contact").removeAttr("disabled");
     });
 }
