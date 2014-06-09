@@ -271,7 +271,7 @@ $(function(){
 				var text = model.text;
 				
 				// Apply handlebars template on send-email route 
-				if(Current_Route !== 'bulk-email')
+				if(Current_Route !== 'bulk-email' && Current_Route !== 'send-email')
 				{
 				
 				// Get Current Contact
@@ -354,12 +354,7 @@ $(function(){
 					    // Enables Send Email button.
 					    enable_send_button($('#sendEmail'));
 					    
-					    var route = Current_Route + "";
-					   
-			            if(route.match("send-email") != null && App_Contacts.contactDetailView)
-			            	App_Contacts.navigate("contact/" + App_Contacts.contactDetailView.model.id, {trigger:true});
-			            else
-			            	window.history.back();
+			            window.history.back();
 			            
 		                 },
 		        error: function()
@@ -379,12 +374,7 @@ $(function(){
 	$('#send-email-close').die().live('click',function(e){
 		e.preventDefault();
 		
-		if(App_Contacts.contactDetailView)
-			Backbone.history.navigate("contact/" + App_Contacts.contactDetailView.model.id, {
-				trigger: true
-			});
-		else
-			window.history.back();
+		window.history.back();
 	});	
 
 	/**
