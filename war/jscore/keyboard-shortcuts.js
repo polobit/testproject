@@ -65,7 +65,7 @@ function enableKeyboardShotcuts()
 		// Send mail to current contact
 		Mousetrap.bind('shift+m',function(){
 			if(isRoute("contact/") && !isModalVisible())
-				App_Contacts.navigate("send-email",{trigger:true});
+				App_Contacts.navigate("send-email/"+ getCurrentContactProperty("email"),{trigger:true});
 		});
 		
 		// Focus on search box in main menu
