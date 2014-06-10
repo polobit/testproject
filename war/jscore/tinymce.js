@@ -41,10 +41,10 @@ function setupTinyMCEEditor(selector)
 			}
 			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
-				"textcolor link image"
+				"textcolor link image preview"
 			], menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
-				toolbar2 : "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields", valid_elements : "*[*]",
+				toolbar2 : "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview", valid_elements : "*[*]",
 				toolbar_items_size: 'small',
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
