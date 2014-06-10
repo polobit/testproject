@@ -70,6 +70,8 @@ $('#save_zoho_info').die().live('click',function(data){
 	
 	if(!isValid('#zoho_form'))
 		return;
+	$('#spinner-sales').show();
+	
 	$.post("/core/api/zoho/save",$('#zoho_form').serialize(),function(data){
 		$('#zoho-import').html('<br /><div class="well" style="margin-left:10px">' +
 				
@@ -80,30 +82,21 @@ $('#save_zoho_info').die().live('click',function(data){
 				'<div id="zoho_options_error" style="display:none;color:red;margin-bottom:20px"></div>' +
 				
 				
-							'<div style="margin-left: 50px;"> ' + 
-		                        '<input name="accounts" id="zoho_accounts" type="checkbox" style="vertical-align:top; " value="true" checked="checked"/>' + 
-								'<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Accounts<br/><small> Accounts will be saved as Companies </small></label>' + 
+							'<div style="margin-left: 50px;"><label  class="checkbox"> ' + 
+		                        '<input name="accounts" id="zoho_accounts" type="checkbox"  value="true" checked="checked"/>Accounts<br/>Account will be saved as Company</label>' + 
 		                    '</div>' + 
 		                    
-		                    '<div style="margin-left: 50px;">' + 
-		                        '<input name="leads" id="zoho_leads" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-								'<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Leads<br/><small> Leads will be saved as Contacts </small></label>' + 
+		                    '<div style="margin-left: 50px;"><label class="checkbox">' + 
+		                        '<input name="leads" id="zoho_leads" type="checkbox" value="true"  checked="checked"/> Leads<br/> <small>Leads will be saved as Contacts</small></label>' + 
 		                    '</div>' +
 		                    
-		                    '<div style="margin-left: 50px;">' + 
-		                         '<input name="contacts" id="zoho_contacts" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-								 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Contacts<br/><small> Contacts will be saved as Contacts </small></label>' + 
-		                    '</div>' +
+		                    '<div style="margin-left: 50px;"><label class="checkbox">' + 
+		                         '<input name="contacts" id="zoho_contacts" type="checkbox"  value="true"  checked="checked"/> Contacts<br/> Contacts will be saved as Contacts</label>' + 
+		                    '</div>'+ 
 		                    
-		                    '<div style="margin-left: 50px;">' + 
-		                         '<input name="deals" id="zoho_deals" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-								 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Deals<br/><small> Deals will be saved as Deals in Agile CRM. <br/> Salesforce milestones will also be imported.</small></label>' + 
-		                    '</div>' + 
-		                    
-		                    '<div style="margin-left: 50px;">' + 
-		                         '<input name="cases" id="zoho_cases" type="checkbox" style="vertical-align:top; " value="true"  checked="checked"/>' + 
-								 '<label style="display: inline-block;padding-left: 14px;vertical-align: -3px;">Cases<br/><small> Cases will be saved as Cases in Agile CRM.</small></label>' + 
-		                    '</div>' + 
+		                    /* 
+		                    '<div style="margin-left: 50px;"> <label class="checkbox"><input type="checkbox" name="event" checked="checked" id="zoho_event">Events</label></div>'+
+		                    '<div style="margin-left: 50px;"> <label class="checkbox"><input type="checkbox" name ="task" checked="checked" id="zoho_task">Tasks</label></div>'+ */
 		                    
 		                    '<div class="clearfix"><a id="zoho_import_options" class="btn pull-right" style="text-decoration: none; margin-right: 30px;">Import</a></div>' +
 		                    
@@ -155,6 +148,16 @@ $('#zoho_import_options').die().live('click', function(data){
 	{
 		flag = true;
 		$("#zoho_cases").val("true");
+	}
+	
+	if($('#zoho_task').is(':checked')){
+		flag = true;
+		$('#zoho_task').val("true");
+	}
+	
+	if($('#zoho_event').is(':checked')){
+		flag = true;
+		$('#zoho_event').val('true');
 	}
 	
 	if(!flag)

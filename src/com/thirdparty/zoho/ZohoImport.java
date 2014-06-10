@@ -42,8 +42,11 @@ public class ZohoImport
 	       ctx.type     = Type.ZOHO;
 	       try{
 	       
-	           //if(ZohoUtils.isValidContactPrefs(ctx))
+	           if(ZohoUtils.isValidContactPrefs(ctx))
 	        	   ctx.save();
+	           else{
+	        		throw new Exception("Invalid login. Please try again");
+	           }
 	           
 	       }catch (Exception e)
 			{
@@ -59,8 +62,7 @@ public class ZohoImport
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
 	@Produces({MediaType.APPLICATION_JSON})
 	public ContactPrefs importFromZoho(@FormParam("accounts") boolean accounts,
-			@FormParam("leads") boolean leads, @FormParam("contacts") boolean contacts,
-			@FormParam("deals") boolean deals, @FormParam("cases") boolean cases){
+			@FormParam("leads") boolean leads, @FormParam("contacts") boolean contacts){
 		
 		ContactPrefs ctxPrefs = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
 		List<String> list = new ArrayList<String>();
@@ -74,11 +76,7 @@ public class ZohoImport
 		if (contacts)
 			list.add("contacts");
 
-		if (deals)
-			list.add("deals");
-
-		if (cases)
-			list.add("cases");
+	
 		ctxPrefs.zohoFields = list;
 		try{
 		ContactsImportUtil.initilaizeImportBackend(ctxPrefs);

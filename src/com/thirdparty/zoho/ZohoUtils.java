@@ -1,4 +1,5 @@
 package com.thirdparty.zoho;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,13 +10,12 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.thirdparty.google.ContactPrefs;
 
+public class ZohoUtils {
 
-public class ZohoUtils
-{
-	
 	/**
 	 * Holds authentication token of agent's zoho account
 	 */
@@ -39,245 +39,251 @@ public class ZohoUtils
 	 * @throws Exception
 	 *             if authentication token is null
 	 */
-	
-	public static void main(String args[]){
-		String token ="fde7ef1e59431f837d73788056f18329".trim();
-		String uri ="https://crm.zoho.com/crm/private/json/Contacts/getMyRecords?authtoken="+token+"&scope=crmapi&selectColumns=Contacts(Email)";
-		try{
-		URL url = new URL(uri);
-		URLConnection con = url.openConnection();
-		con.connect();
-		con.getContentType();
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		JSONArray data = new JSONArray();
+	private static int MAX_INDEX = 10000;
 
-		
-		 String inputLine;
-	        while ((inputLine = br.readLine()) != null) 
-	        	data.put(inputLine);
-	        br.close();
-	        JSONObject jsonGeneralData = new JSONObject(data.get(0).toString());
-	        JSONObject res = jsonGeneralData.getJSONObject("response").getJSONObject("result").getJSONObject("Contacts")
-	        		         .getJSONObject("row");
-	        System.out.println(res.toString());
-	        
-	        
-	        JSONArray arr = new JSONArray();
-	        arr.put(new JSONObject(new JSONObject(
-	        		           new JSONObject(res.get("result").toString())
-	          		           .get("Contacts").toString()).get("row").toString()));
-		 JSONObject obj = arr.getJSONObject(0);
-		 JSONArray a = obj.getJSONArray("FL");
-		 System.out.println(new JSONObject(a.get(1).toString()).get("content").toString());
-	        
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public static URLConnection getConnection(String url){
-		URLConnection con = null;
-		try
-		{
-			URL uri = new URL(url);
-			 con = uri.openConnection();
+	public static void main(String args[]) {
+		String token = "fde7ef1e59431f837d73788056f18329".trim();
+		String uri = "https://crm.zoho.com/crm/private/json/Contacts/getMyRecords?authtoken="
+				+ token + "&scope=crmapi&selectColumns=Contacts(Email)";
+		try {
+			URL url = new URL(uri);
+			URLConnection con = url.openConnection();
 			con.connect();
-			
-		}
-		catch (Exception e)
-		{
+			con.getContentType();
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					con.getInputStream()));
+			JSONArray data = new JSONArray();
+
+			String inputLine;
+			while ((inputLine = br.readLine()) != null)
+				data.put(inputLine);
+			br.close();
+			JSONObject jsonGeneralData = new JSONObject(data.get(0).toString());
+			JSONObject res = jsonGeneralData.getJSONObject("response")
+					.getJSONObject("result").getJSONObject("Contacts")
+					.getJSONObject("row");
+			System.out.println(res.toString());
+
+			JSONArray arr = new JSONArray();
+			arr.put(new JSONObject(new JSONObject(new JSONObject(res.get(
+					"result").toString()).get("Contacts").toString())
+					.get("row").toString()));
+			JSONObject obj = arr.getJSONObject(0);
+			JSONArray a = obj.getJSONArray("FL");
+			System.out.println(new JSONObject(a.get(1).toString()).get(
+					"content").toString());
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-         return con;
+
 	}
-	
-	public boolean isAuthenticated(String username,String password){
+
+	public static URLConnection getConnection(String url) {
+		URLConnection con = null;
+		try {
+			URL uri = new URL(url);
+			con = uri.openConnection();
+			con.connect();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return con;
+	}
+
+	public boolean isAuthenticated(String username, String password) {
 		return false;
 	}
-	
-/*	public JSONArray getContacts(String token){
-		JSONArray data = new JSONArray();
-		String inputLine ;
-		try
-		{
-			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			while((inputLine = br.readLine())!=null){
-				data.put(inputLine);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return data;
-	}*/
-	
-	public static boolean isValidContactPrefs(ContactPrefs prefs){
+
+
+
+	public static boolean isValidContactPrefs(ContactPrefs prefs)
+			throws Exception {
 		boolean flag = false;
-		String token	= prefs.token;
-		StringBuilder sb = new StringBuilder(SERVER_URL).append("Contacts/getMyRecords?")
-							.append("authtoken=")
-							.append(token)
-							.append("&scope=crmapi&selectColumns=Contacts(Email)");
+		String token = prefs.token;
+		StringBuilder sb = new StringBuilder(SERVER_URL)
+				.append("Users/getUsers?").append("authtoken=")
+				.append(token).append("&type=AdminUsers")
+				.append("&scope=crmapi&selectColumns=Contacts(Email)");
 		URLConnection con = getConnection(sb.toString());
-		try
-		{
+		try {
 			JSONArray data = new JSONArray();
-			String inputLine ;
-			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			while((inputLine = br.readLine())!=null)
-				 data.put(inputLine);
-			try
-			{
-			
-	        JSONObject jsonGeneralData = new JSONObject(data.get(0).toString());
-	        
-	        JSONObject res = new JSONObject(jsonGeneralData.getString("response"));
-	        JSONArray arr = new JSONArray();
-	        arr.put(new JSONObject(new JSONObject(
-	        		           new JSONObject(res.get("result").toString())
-	          		           .get("Contacts").toString()).get("row").toString()));
-		     JSONObject obj = arr.getJSONObject(0);
-		     JSONArray a = obj.getJSONArray("FL");
-		 	String email = new JSONObject(a.get(1).toString()).get("content").toString();
-		 	if(email.equalsIgnoreCase(prefs.userName))
-		 		flag = true;
-		}
-		catch (JSONException e)
-		{
+			String inputLine;
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					con.getInputStream()));
+			while ((inputLine = br.readLine()) != null)
+				data.put(inputLine);
+			try {
+
+				JSONObject jsonGeneralData = new JSONObject(data.get(0)
+						.toString());
+
+				JSONObject res = new JSONObject(jsonGeneralData.getString("users").toString());
+				JSONArray arr = new JSONArray(res.get("user").toString());
+				JSONObject obj = arr.getJSONObject(0);
+				if(obj.has("email"))
+				if (obj.getString("email").equalsIgnoreCase(prefs.userName))
+					flag = true;
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-			  
-		}catch (IOException e)
-		{
-			e.printStackTrace();
-		}	
 		return flag;
 	}
-	
-	public static String getZohoLeads(ContactPrefs ctx){
-		String url = buildUrl("Leads", ctx);
-		System.out.println(url);
-		URLConnection con = getConnection(url);
+
+	public static String getZohoLeads(ContactPrefs ctx,int i) {
+
 		JSONArray data = new JSONArray();
-		try{
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line;
-		while((line = br.readLine())!= null){
-			data.put(new JSONParser().parse(line));
+			try {
+				String url = buildUrl("Leads", ctx, i, i+200);
+				System.out.println(url);
+					URLConnection con = getConnection(url);
+					BufferedReader result = new BufferedReader(
+							new InputStreamReader(con.getInputStream()));
+					String line;
+					while ((line = result.readLine()) != null) {
+						data.put(new JSONParser().parse(line));
+					}
+
+			} catch (Exception e) {
+				e.printStackTrace();
 		}
-		}catch(Exception  e){
-			e.printStackTrace();
-		}
-		System.out.println(data);
 		return data.toString();
 	}
-	
-	public static String getAccounts(ContactPrefs ctx){
-		String url = buildUrl("Accounts", ctx);
-		System.out.println(url);
-		URLConnection con = getConnection(url);
+
+	public static String getAccounts(ContactPrefs ctx,int index) {
 		JSONArray data = new JSONArray();
-		try{
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line;
-		while((line = br.readLine())!= null){
-			data.put(new JSONParser().parse(line));
-		}
-		}catch(Exception  e){
-			e.printStackTrace();
-		}
-		System.out.println(data);
+
+			String url = buildUrl("Accounts", ctx, index, index+200);
+			System.out.println(url);
+			try {
+					URLConnection con = getConnection(url);
+					BufferedReader br = new BufferedReader(
+							new InputStreamReader(con.getInputStream()));
+					String line;
+					while ((line = br.readLine()) != null) {
+						data.put(new JSONParser().parse(line));
+					}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		return data.toString();
 	}
-	
-	
-	public static String getCases(ContactPrefs ctx){
-		String url = buildUrl("Cases", ctx);
-		System.out.println(url);
-		URLConnection con = getConnection(url);
+
+	public static String getCases(ContactPrefs ctx) {
 		JSONArray data = new JSONArray();
-		try{
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line;
-		while((line = br.readLine())!= null){
-			data.put(new JSONParser().parse(line));
-		}
-		}catch(Exception  e){
-			e.printStackTrace();
-		}
-		System.out.println(data);
+		/*
+		 * String url = buildUrl("Cases", ctx); System.out.println(url);
+		 * URLConnection con = getConnection(url); try{ BufferedReader br = new
+		 * BufferedReader(new InputStreamReader(con.getInputStream())); String
+		 * line; while((line = br.readLine())!= null){ data.put(new
+		 * JSONParser().parse(line)); } }catch(Exception e){
+		 * e.printStackTrace(); } System.out.println(data);
+		 */
 		return data.toString();
 	}
-	
-	public static String getEvents(ContactPrefs ctx){
-		String url = buildUrl("Events", ctx);
-		System.out.println(url);
-		URLConnection con = getConnection(url);
+
+	public static String getEvents(ContactPrefs ctx) {
+
 		JSONArray data = new JSONArray();
-		try{
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line;
-		while((line = br.readLine())!= null){
-			data.put(new JSONParser().parse(line));
+		for (int index = 1; index < MAX_INDEX;) {
+
+			String url = buildUrl("Events", ctx, index, index+200);
+			System.out.println(url);
+			URLConnection con = getConnection(url);
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						con.getInputStream()));
+				String line;
+				while ((line = br.readLine()) != null) {
+					data.put(new JSONParser().parse(line));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			index = index + 200;
 		}
-		}catch(Exception  e){
-			e.printStackTrace();
-		}
-		System.out.println(data);
 		return data.toString();
 	}
-	
-	public static String getTask(ContactPrefs ctx){
-		String url = buildUrl("Task", ctx);
-		System.out.println(url);
-		URLConnection con = getConnection(url);
+
+	public static String getTask(ContactPrefs ctx) {
+
+		/*
+		 * JSONArray data = new JSONArray(); for(int fromIndex=1;fromIndex <
+		 * MAX_INDEX;) String url = buildUrl("Task", ctx,fromIndex,200);
+		 * URLConnection con = getConnection(url); try{ BufferedReader br = new
+		 * BufferedReader(new InputStreamReader(con.getInputStream())); String
+		 * line; while((line = br.readLine())!= null){ data.put(new
+		 * JSONParser().parse(line)); } }catch(Exception e){
+		 * e.printStackTrace(); } fromIndex = fromIndex+200; } return
+		 * data.toString();
+		 */
+		return null;
+	}
+
+	public static String getContacts(ContactPrefs ctx,int index) {
+
 		JSONArray data = new JSONArray();
-		try{
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line;
-		while((line = br.readLine())!= null){
-			data.put(new JSONParser().parse(line));
+		
+			String url = buildUrl("Contacts", ctx, index, index+200);
+			try {
+					URLConnection con = getConnection(url);
+					BufferedReader br = new BufferedReader(
+							new InputStreamReader(con.getInputStream()));
+					String line;
+					while ((line = br.readLine()) != null) {
+						data.put(new JSONParser().parse(line));
+					}
+			} catch (Exception e) {
+				e.printStackTrace();
 		}
-		}catch(Exception  e){
-			e.printStackTrace();
-		}
-		System.out.println(data);
 		return data.toString();
 	}
-	
-	public static String getContacts(ContactPrefs ctx){
-		String url = buildUrl("Contacts", ctx);
-		System.out.println(url);
-		URLConnection con = getConnection(url);
-		JSONArray data = new JSONArray();
-		try{
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line;
-		while((line = br.readLine())!= null){
-			data.put(new JSONParser().parse(line));
-		}
-		}catch(Exception  e){
-			e.printStackTrace();
-		}
-		System.out.println(data);
-		return data.toString();
-	}
-	
-	
-	
-	
-	
-	private static String buildUrl(String module,ContactPrefs ctx){
+
+	public static String buildUrl(String module, ContactPrefs ctx,
+			int fromIndex, int toIndex) {
 		StringBuilder url = new StringBuilder(SERVER_URL)
-		                    .append(module+"/getRecords?")
-		                    .append("authtoken="+ctx.token)
-		                    .append("&scope=crmapi");
+				.append(module + "/getRecords?")
+				.append("authtoken=" + ctx.token)
+				.append("&fromIndex=" + fromIndex + "&toIndex=" + toIndex)
+				.append("&scope=crmapi");
+
 		return url.toString();
 	}
-	
-	
-	
+
+	public static boolean hasMore(String url) throws JSONException {
+
+		String record;
+		JSONArray response = new JSONArray();
+		try {
+			URLConnection con = getConnection(url);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					con.getInputStream()));
+			while ((record = reader.readLine()) != null) {
+				try {
+					response.put(new JSONParser().parse(record));
+					String res = response.get(0).toString();
+					JSONObject result = new JSONObject(new JSONObject(res).get(
+							"response").toString());
+					if (result.has("result"))
+						return true;
+					if (result.has("error") || result.has("nodata"))
+						return false;
+
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+
+	}
 
 }

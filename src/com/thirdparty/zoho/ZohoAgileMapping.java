@@ -1,13 +1,9 @@
 package com.thirdparty.zoho;
 
-import java.util.Map;
+import org.codehaus.jettison.json.JSONArray;
 
-import org.json.JSONArray;
-
-import com.agilecrm.contact.Contact;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
-import com.thirdparty.google.ContactPrefs;
 
 /*
  * @author jitendra
@@ -15,7 +11,6 @@ import com.thirdparty.google.ContactPrefs;
 public interface ZohoAgileMapping
 {
 	
-	public Contact saveContact(Map<String,String> contactDataMap, Key<DomainUser> key);
 	public void saveLeads(JSONArray zohoData, Key<DomainUser> ownerKey);
 	public void saveAccounts(JSONArray zohoData, Key<DomainUser> key);
 	public void saveCases(JSONArray zohoData, Key<DomainUser> key);

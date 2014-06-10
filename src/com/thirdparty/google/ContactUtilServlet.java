@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -24,9 +23,6 @@ import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
 import com.thirdparty.salesforce.SalesforceImportUtil;
-import com.thirdparty.zoho.ZohoDataImportAPI;
-import com.thirdparty.zoho.ZohoImport;
-import com.thirdparty.zoho.ZohoImportAPI;
 import com.thirdparty.zoho.ZohoImportUtil;
 
 /**
@@ -189,6 +185,15 @@ public class ContactUtilServlet extends HttpServlet
 	    	
 	    	if(contactPrefs.zohoFields.contains("contacts"))
 	    		ZohoImportUtil.importContacts(contactPrefs, key);
+	    	 
+	    	if(contactPrefs.zohoFields.contains("event"))
+	    		ZohoImportUtil.importEvent(contactPrefs, key);
+	    	
+	    	if(contactPrefs.zohoFields.contains("task"))
+	    		ZohoImportUtil.importTask(contactPrefs, key);
+	    	
+	    	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+	    			"Imported successfully from Zoho");
 	    }
 
 	}
