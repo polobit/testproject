@@ -19,7 +19,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode",
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
 
 	/* Milestones */
 	"milestones" : "milestones",
@@ -202,7 +202,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 * site, add/delete contacts from users website or blog directly. Loads
 	 * minified prettify.js to prettify analytics code.
 	 */
-	analyticsCode : function()
+	analyticsCode : function(id)
 	{
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
@@ -214,6 +214,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
 				prettyPrint();
+				if(id)
+				{
+					$(el).find('#APITab a[href="#'+ id +'"]').trigger('click');
+				}
 			} });
 			$("#content").html(getTemplate("admin-settings"), {});
 			$('#content').find('#admin-prefs-tabs-content').html(view.el);

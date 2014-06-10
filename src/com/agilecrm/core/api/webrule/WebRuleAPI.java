@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
-import com.agilecrm.widgets.Widget;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 
 @Path("/api/webrule")
@@ -50,11 +49,11 @@ public class WebRuleAPI
     }
 
     /**
-     * Saves position of widget, used to show widgets in order according to
+     * Saves position of webrule, used to show webrule in order according to
      * position ascending order
      * 
-     * @param widgets
-     *            {@link List} of {@link Widget}
+     * @param webrules
+     *            {@link List} of {@link WebRule}
      */
     @Path("/positions")
     @POST

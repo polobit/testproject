@@ -1,13 +1,21 @@
 $(function()
 {
-	$('#webrule-model-list > tr').die().live('mouseenter', function()
-	{
-		$(this).find("td:last > div").css("visibility", "visible");
-	});
+	/**
+	 * On mouseleave hides the icon
+	 */
 	$('#webrule-model-list > tr').die().live('mouseleave', function()
 	{
 		$(this).find("td:last > div").css("visibility", "hidden");
 	});
+	
+	/**
+	 * On mouseleave shows the icon
+	 */
+	$('#webrule-model-list > tr').die().live('mouseenter', function()
+	{
+		$(this).find("td:last > div").css("visibility", "visible");
+	});
+
 
 });
 
@@ -48,27 +56,27 @@ function enableWebruletSoring(el)
 		 */
 		$('.webrule-sortable', el).on("sortstop", function(event, ui) {
 			
-					var models = [];
+			var models = [];
 
-					/*
-					 * Iterate through each all the widgets and set each widget
-					 * position and store it in array
-					 */
-					$('.webrule-sortable > tr', el).each(function(index, element)
-					{
-						var model_id = $(element).find('.data').attr('data');
+			/*
+			 * Iterate through each all the widgets and set each widget
+			 * position and store it in array
+			 */
+			$('.webrule-sortable > tr', el).each(function(index, element)
+			{
+				var model_id = $(element).find('.data').attr('data');
 
-						// Get Model, model is set as data to widget element
-						var model = App_WebReports.webrules.collection.get(model_id);
+				// Get Model, model is set as data to widget element
+				var model = App_WebReports.webrules.collection.get(model_id);
 
-						model.set({ 'position' : index }, { silent : true });
+				model.set({ 'position' : index }, { silent : true });
 
-						models.push({ id : model.get("id"), position : index });
+				models.push({ id : model.get("id"), position : index });
 
-					});
-					// Saves new positions in server
-					$.ajax({ type : 'POST', url : '/core/api/webrule/positions', data : JSON.stringify(models),
-						contentType : "application/json; charset=utf-8", dataType : 'json' });
-				});
+			});
+			// Saves new positions in server
+			$.ajax({ type : 'POST', url : '/core/api/webrule/positions', data : JSON.stringify(models),
+				contentType : "application/json; charset=utf-8", dataType : 'json' });
+		});
 	});
 }
