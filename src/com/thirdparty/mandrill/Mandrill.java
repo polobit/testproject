@@ -77,6 +77,8 @@ public class Mandrill
      * information. Each recipient is a JSONObject of email and name.
      */
     public static final String MANDRILL_TO = "to";
+    public static final String MANDRILL_CC = "cc";
+    public static final String MANDRILL_BCC = "bcc";
 
     /**
      * Mandrill recipient email param
@@ -166,8 +168,8 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(boolean async, String fromEmail, String fromName, String to, String subject,
-	    String replyTo, String html, String text, String... attachments)
+    public static String sendMail(boolean async, String fromEmail, String fromName, String to, String cc, String bcc,
+	    String subject, String replyTo, String html, String text, String metadata, String... attachments)
     {
 	try
 	{
@@ -183,8 +185,8 @@ public class Mandrill
 	    JSONObject mailJSON = setMandrillAPIKey(subaccount);
 
 	    // All email params are inserted into Message json
-	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, replyTo, subject, html, text,
-		    attachments);
+	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, cc, bcc, replyTo, subject,
+		    html, text, metadata, attachments);
 
 	    mailJSON.put(MANDRILL_MESSAGE, messageJSON);
 
@@ -261,7 +263,8 @@ public class Mandrill
      * @return JSONObject
      */
     private static JSONObject getMessageJSON(String subaccount, String fromEmail, String fromName, String to,
-	    String replyTo, String subject, String html, String text, String... attachments)
+	    String cc, String bcc, String replyTo, String subject, String html, String text, String metadata,
+	    String... attachments)
     {
 	JSONObject messageJSON = new JSONObject();
 
@@ -271,7 +274,7 @@ public class Mandrill
 	    messageJSON.put(MANDRILL_FROM_NAME, fromName);
 
 	    // returns To JSONArray of recipient json objects
-	    messageJSON.put(MANDRILL_TO, getRecipientsJSON(to));
+	    messageJSON.put(MANDRILL_TO, getRecipientsJSON(to, cc, bcc));
 
 	    // returns ReplyTo Header JSON
 	    messageJSON.put(MANDRILL_HEADERS, getHeadersJSON(fromEmail, replyTo));
@@ -283,6 +286,9 @@ public class Mandrill
 	    messageJSON.put(MANDRILL_HTML, html);
 
 	    messageJSON.put(MANDRILL_TEXT, text);
+
+	    if (StringUtils.isBlank(metadata))
+		messageJSON.put(Mandrill.MANDRILL_METADATA, new JSONObject(metadata));
 
 	    messageJSON.put(MANDRILL_ATTACHMENTS, getAttachmentsJSON(attachments));
 
@@ -299,31 +305,34 @@ public class Mandrill
     }
 
     /**
-     * Returns json array of recipients json. Recipient json consists of email
-     * and name.
+     * Returns json array of recipients json. Recipient json consists of to, cc
+     * and bcc emails.
      * 
      * @param to
      *            - to email (or) to email string separated by commas
+     * @param cc
+     *            - cc email(s) separated by commas
+     * @param bcc
+     *            - bcc email(s) separated by commas
+     * 
      * @return JSONArray
      */
-    private static JSONArray getRecipientsJSON(String to)
+    private static JSONArray getRecipientsJSON(String to, String cc, String bcc)
     {
-	JSONArray toJSONArray = new JSONArray();
+	JSONArray recipientsArray = new JSONArray();
+
 	try
 	{
 	    // String tokens obtained by delimiter are added to java.util.Set
 	    // collection
-	    Set<String> toEmails = EmailUtil.getStringTokenSet(to, ",");
+	    recipientsArray = buildRecipientJSON(recipientsArray, EmailUtil.getStringTokenSet(to, ","), MANDRILL_TO);
 
-	    Iterator<String> itr = toEmails.iterator();
+	    if (!StringUtils.isBlank(cc))
+		recipientsArray = buildRecipientJSON(recipientsArray, EmailUtil.getStringTokenSet(cc, ","), MANDRILL_CC);
 
-	    // Inserts each to email into JSONObject and then that JSON to
-	    // JSONArray
-	    while (itr.hasNext())
-	    {
-		JSONObject eachToEmail = new JSONObject();
-		toJSONArray.put(eachToEmail.put(MANDRILL_RECIPIENT_EMAIL, itr.next()));
-	    }
+	    if (!StringUtils.isBlank(bcc))
+		recipientsArray = buildRecipientJSON(recipientsArray, EmailUtil.getStringTokenSet(bcc, ","),
+			MANDRILL_BCC);
 
 	}
 	catch (Exception e)
@@ -332,7 +341,38 @@ public class Mandrill
 	    System.out.println(e.getMessage());
 	}
 
-	return toJSONArray;
+	return recipientsArray;
+    }
+
+    /**
+     * Returns mandrill recipient json with email and its type in json
+     * 
+     * @param recipientArray
+     *            - JSONArray that holds to, cc and bcc emails
+     * @param emails
+     *            - emails set
+     * @param type
+     *            - to or cc or bcc
+     * @return JSONArray
+     * 
+     * @throws Exception
+     * 
+     */
+    private static JSONArray buildRecipientJSON(JSONArray recipientArray, Set<String> emails, String type)
+	    throws Exception
+    {
+	Iterator<String> itr = emails.iterator();
+
+	// Inserts each to email into JSONObject and then that JSON to
+	// JSONArray
+	while (itr.hasNext())
+	{
+	    JSONObject eachToEmail = new JSONObject();
+	    recipientArray.put(eachToEmail.put(MANDRILL_RECIPIENT_EMAIL, itr.next()).put(
+		    MANDRILL_RECIPIENT_HEADER_TYPE, type));
+	}
+
+	return recipientArray;
     }
 
     /**

@@ -15,7 +15,6 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.Mailgun;
 import com.thirdparty.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -40,7 +39,8 @@ public class EmailUtil
 	    return emailBody;
 
 	// Comment script tags.
-	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)", "<script>-->");
+	emailBody = emailBody.replaceAll("(<script|<SCRIPT)", "<!--<script").replaceAll("(</script>|</SCRIPT>)",
+		"<script>-->");
 
 	// If emailBody is text, replace '\n' with <br> is enough
 	if (!(emailBody.contains("</")))
@@ -110,7 +110,8 @@ public class EmailUtil
      * @param text
      * @return response of the remote object
      */
-    public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html, String text)
+    public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
+	    String replyTo, String html, String text)
     {
 
 	// Agile label to outgoing emails
@@ -153,8 +154,8 @@ public class EmailUtil
 	if (!StringUtils.isEmpty(trackerId))
 	    queryParams += "s=" + trackerId;
 
-	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get() + ".agilecrm.com/open?" + queryParams
-		+ "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
+	String trackingImage = "<div class=\"ag-img\"><img src=\"https://" + NamespaceManager.get()
+		+ ".agilecrm.com/open?" + queryParams + "\" nosend=\"1\" width=\"1\" height=\"1\"></img></div>";
 
 	return html + trackingImage;
     }
@@ -168,7 +169,8 @@ public class EmailUtil
      */
     public static String getPoweredByAgileURL(String medium)
     {
-	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign=" + NamespaceManager.get();
+	return "https://www.agilecrm.com?utm_source=powered-by&utm_medium=" + medium + "&utm_campaign="
+		+ NamespaceManager.get();
     }
 
     /**
@@ -182,7 +184,8 @@ public class EmailUtil
 	if (isWhiteLabelEnabled())
 	    return "";
 
-	return labelText + " <a href=\"" + getPoweredByAgileURL(medium) + "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
+	return labelText + " <a href=\"" + getPoweredByAgileURL(medium)
+		+ "\" target=\"_blank\" style=\"text-decoration:none;\" rel=\"nofollow\"> Agile</a>";
     }
 
     /**
@@ -207,7 +210,8 @@ public class EmailUtil
 	{
 	    // For Campaign HTML emails, Powered by should be right aligned
 	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-		html = StringUtils.replace(html, "</body>", "<div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div></body>");
+		html = StringUtils.replace(html, "</body>",
+			"<div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div></body>");
 	    else
 		html = StringUtils.replace(html, "</body>", getPoweredByAgileLink(medium, labelText) + "</body>");
 
@@ -216,7 +220,8 @@ public class EmailUtil
 	{
 	    // For Campaign HTML emails, Powered by should be right aligned
 	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-		html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
+		html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText)
+			+ "</div>";
 	    else
 		html = html + "<br><br>" + getPoweredByAgileLink(medium, labelText);
 	}
@@ -274,8 +279,8 @@ public class EmailUtil
      * @param text
      *            - text body
      */
-    public static void sendEmailUsingAPI(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String replyTo, String html,
-	    String text)
+    public static void sendEmailUsingAPI(String fromEmail, String fromName, String to, String cc, String bcc,
+	    String subject, String replyTo, String html, String text)
     {
 
 	// For domain "clickdeskengage" - use SendGrid API
@@ -285,17 +290,8 @@ public class EmailUtil
 	    return;
 	}
 
-	// if cc or bcc present, send by Mailgun
-	if (!StringUtils.isEmpty(cc) || !StringUtils.isEmpty(bcc))
-	{
-	    System.out.println("Sending email using Mailgun.");
-
-	    Mailgun.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
-	    return;
-	}
-
 	// if no cc or bcc, send by Mandrill
-	Mandrill.sendMail(true, fromEmail, fromName, to, subject, replyTo, html, text);
+	Mandrill.sendMail(true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
     }
 
     /**
