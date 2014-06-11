@@ -2,8 +2,8 @@ package com.agilecrm.user;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -97,7 +97,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * Stores user access scopes
      */
     @NotSaved(IfDefault.class)
-    public List<UserAccessScopes> scopes = null;
+    public HashSet<UserAccessScopes> scopes = null;
 
     @NotSaved(IfDefault.class)
     public LinkedHashSet<NavbarConstants> menu_scopes = null;
@@ -557,6 +557,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 	}
 
+	if (scopes == null || scopes.size() == 0)
+	{
+	    scopes = new LinkedHashSet<UserAccessScopes>();
+	    scopes.add(UserAccessScopes.RESTRICTED);
+	}
+
 	info_json_string = info_json.toString();
 
 	// Lowercase
@@ -580,7 +586,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	    // If no scopes are set, then all scopes are added
 	    if (scopes == null)
-		scopes = Arrays.asList(UserAccessScopes.values());
+		scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
 
 	    if (menu_scopes == null)
 	    {

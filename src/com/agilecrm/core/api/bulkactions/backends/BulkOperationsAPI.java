@@ -66,6 +66,7 @@ public class BulkOperationsAPI
     public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user_id) throws JSONException
     {
+	BulkActionUtil.setSessionManager(current_user_id);
 
 	Integer count = 0;
 	List<Contact> contacts_list = new ArrayList<Contact>();
@@ -179,6 +180,9 @@ public class BulkOperationsAPI
 	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
 	    @PathParam("current_user_id") Long current_user_id) throws JSONException
     {
+
+	BulkActionUtil.setSessionManager(current_user_id);
+
 	List<Contact> contact_list = null;
 	int count = 0;
 	if (!StringUtils.isEmpty(filter))
@@ -239,6 +243,8 @@ public class BulkOperationsAPI
 	System.out.println("domain : " + NamespaceManager.get());
 	System.out.println(contact_ids);
 	System.out.println(tagsString);
+
+	BulkActionUtil.setSessionManager(current_user);
 
 	if (StringUtils.isEmpty(tagsString))
 	    return;
@@ -432,13 +438,15 @@ public class BulkOperationsAPI
     @Path("/remove-active-subscribers/{campaign_id}/{current_user_id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void removeActiveSubscribersOfCampaign(@FormParam("ids") String contactIds,
-	    @PathParam("campaign_id") String campaign_id, @FormParam("filter") String allActiveSubscribers)
-	    throws JSONException
+    public void removeActiveSubscribersOfCampaign(@PathParam("current_user_id") Long currentUserId,
+	    @FormParam("ids") String contactIds, @PathParam("campaign_id") String campaign_id,
+	    @FormParam("filter") String allActiveSubscribers) throws JSONException
     {
 
 	// to show in notification
 	int contactSize = 0;
+
+	BulkActionUtil.setSessionManager(currentUserId);
 
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
@@ -572,6 +580,8 @@ public class BulkOperationsAPI
 	    System.out.println("Not proceeding further as data is null.");
 	    return;
 	}
+
+	BulkActionUtil.setSessionManager(currentUserId);
 
 	System.out.println("Email obtained is " + data);
 	System.out.println("Namespace is in exportContactsCSV " + NamespaceManager.get());

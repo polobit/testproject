@@ -108,10 +108,23 @@ var WebreportsRouter = Backbone.Router.extend({
 	},
 	shopify : function(url)
 	{
-		_agile.add_property(create_contact_custom_field("Shopify shop", url, "CUSTOM"), function(data)
-				{
-					addTagAgile("Shopify");
-				});
+		our_domain_set_account();
+		
+		if(!Agile_Contact["id"])
+			{
+				agile_getContact(CURRENT_DOMAIN_USER['email'], {success : function(data){
+					Agile_Contact = data;
+					add_property("Shopify shop", url, "CUSTOM", function(data){
+						addTagAgile("Shopify");
+					});
+				}});
+			}
+		else
+		add_property("Shopify shop", url, "CUSTOM", function(data){
+			addTagAgile("Shopify");
+		})
+		
+		
 		
 		$("#content").html(getTemplate("shopify"), {});
 	}

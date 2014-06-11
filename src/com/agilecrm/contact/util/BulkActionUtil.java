@@ -400,8 +400,13 @@ public class BulkActionUtil
 	    return;
 	}
 	DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
+	setSessionManager(user);
+    }
+
+    public static void setSessionManager(DomainUser user)
+    {
 	SessionManager.set(new UserInfo(null, user.email, user.name));
-	SessionManager.get().setDomainId(domainUserId);
+	SessionManager.get().setDomainId(user.id);
     }
 
 }
