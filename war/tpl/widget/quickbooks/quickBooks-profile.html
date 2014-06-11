@@ -22,10 +22,10 @@
 	<div  style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
 			<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>	
-				{{#if_equals Customer.FullyQualifiedName ""}}{{#if_equals Customer.DisplayName ""}}
-					{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
+				{{#if_equals Customer.FullyQualifiedName ""}}
+					{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}
 				{{else}}
-					{{Customer.FullyQualifiedName}} {{Customer.DisplayName}}
+					{{Customer.FullyQualifiedName}}
 				{{/if_equals}}
 			</b></h4></a>
 		</div>
@@ -88,7 +88,7 @@
 					{{/if}}
 					{{/if}}
 					{{currencyFormat TotalAmt}}</div><br>
-				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
+				<div class="pull-left"><small><time class="time-ago pull-left" datetime={{QbDateFormat DueDate}}>{{QbDateFormat DueDate}}</time></small></div>					
 				
 				<div class="pull-right"><span class="badge">{{qbStatus  Balance}}</span></div><br>
 					
@@ -108,4 +108,21 @@
 		<div>No customer found.</div>
 		<a class="btn" id="quickbooks_add_contact" style="margin-top:10px;cursor:pointer;"><i class="icon-plus"></i>Add Contact</a>
 	</div>
+</script>
+<script id="quickbooks-revoke-access-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+	<div class="row-fluid">
+		<div class="span7">
+			<p class="title_txt"><a href="{{profile.url}}" target="_blank" >{{profile.name}}</a></p>
+			<p style="margin:0px;">{{profile.location}}</p>
+			<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement profile.summary}}</p>
+		</div>
+	</div>
+	<div>
+		<p style='margin: 10px 0px 5px 0px;' >
+			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Xero">Revoke Access</a>
+			<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Xero">Cancel</a>
+		</p>
+	</div>
+</div>
 </script>

@@ -1119,6 +1119,8 @@ public class JSAPI
 	// Fill Countries
 	webRules = WebRuleUtil.fillCountry(webRules, request);
 
+	webRules = WebRuleUtil.getActiveWebrules(webRules);
+
 	ObjectMapper mapper = new ObjectMapper();
 	try
 	{

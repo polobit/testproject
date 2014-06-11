@@ -16,10 +16,12 @@ public class MandrillDeferredTask implements DeferredTask
     public String fromEmail = null;
     public String fromName = null;
     public String to = null;
+    public String cc = null;
     public String subject = null;
     public String replyTo = null;
     public String html = null;
     public String text = null;
+    public String metadata = null;
 
     /**
      * Constructs a new {@link MandrillDeferredTask}
@@ -41,16 +43,19 @@ public class MandrillDeferredTask implements DeferredTask
      * @param text
      *            - text content
      */
-    public MandrillDeferredTask(String subaccount, String fromEmail, String fromName, String to, String subject, String replyTo, String html, String text)
+    public MandrillDeferredTask(String subaccount, String fromEmail, String fromName, String to, String cc,
+	    String subject, String replyTo, String html, String text, String metadata)
     {
 	this.subaccount = subaccount;
 	this.fromEmail = fromEmail;
 	this.fromName = fromName;
 	this.to = to;
+	this.cc = cc;
 	this.subject = subject;
 	this.replyTo = replyTo;
 	this.html = html;
 	this.text = text;
+	this.metadata = metadata;
     }
 
     public void run()

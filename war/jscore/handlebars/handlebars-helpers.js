@@ -574,8 +574,10 @@ $(function()
 	    return 'important';
 	if (priority == 'NORMAL' || priority == '#36C')
 	    return 'info';
-	if (priority == 'LOW' || priority == 'green')
-	    return 'success';
+	if (priority == 'LOW')
+	    return '';
+	if(priority == 'green')
+		return 'success';
     });
 
     /**
@@ -2422,7 +2424,7 @@ $(function()
 
     Handlebars.registerHelper('xeroType', function(type)
     {
-	return (type == "ACCPAY") ? "Pay" : "Rec";
+	return (type == "ACCPAY") ? "Payable" : "Receivable";
     });
 
     /**
@@ -2438,8 +2440,16 @@ $(function()
      */
     Handlebars.registerHelper('capFirstLetter', function(data)
     {
+	if(data === "DEFAULT")
+	{
+	   // console.log("return empty");
+	    return "";
+	}
+	else
+	{    
 	var temp = data.toLowerCase();
-	return temp.charAt(0).toUpperCase() + temp.slice(1);
+	return "("+temp.charAt(0).toUpperCase() + temp.slice(1)+")";
+	}
     });
 
     Handlebars.registerHelper('qbStatus', function(Balance)
@@ -2461,4 +2471,15 @@ $(function()
 	return Number(data).toLocaleString('en');
 	// data.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     });
+    
+
+    Handlebars.registerHelper('QbDateFormat', function(data)
+    {
+
+	var i =[];
+	i = data.split("-");
+	return i[0]+"-"+i[2]+"-"+i[1];
+    });
+    
+    
 });

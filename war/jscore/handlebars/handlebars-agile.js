@@ -2,548 +2,552 @@
 var Handlebars_Compiled_Templates = {};
 
 /**
- * Loads the template (script element with its id attribute as templateName
- * appended with "-template". For example if the templateName is "tasks", then
- * the script element id should be as "tasks-template") from html document body.
- * 
- * Compiles the loaded template using handlebars and replaces the context
- * related property names (which are under mustache like {{name}}) in the
- * template, with their associated values, on calling the context with the
- * compiled template.
- * 
- * @method getTemplate
- * @param {String}
- *            templateName name of the tempate to be loaded
- * @param {Object}
- *            context json object to call with the compiled template
- * @param {String}
- *            download verifies whether the template is found or not
- * 
- * @param {callback}
- *            To decide whether templates should be downloaded synchronously or
- *            asynchronously.
- * 
- * @returns compiled html with the context
- */
+* Loads the template (script element with its id attribute as templateName
+* appended with "-template". For example if the templateName is "tasks", then
+* the script element id should be as "tasks-template") from html document body.
+*
+* Compiles the loaded template using handlebars and replaces the context
+* related property names (which are under mustache like {{name}}) in the
+* template, with their associated values, on calling the context with the
+* compiled template.
+*
+* @method getTemplate
+* @param {String}
+* templateName name of the tempate to be loaded
+* @param {Object}
+* context json object to call with the compiled template
+* @param {String}
+* download verifies whether the template is found or not
+*
+* @param {callback}
+* To decide whether templates should be downloaded synchronously or
+* asynchronously.
+*
+* @returns compiled html with the context
+*/
 function getTemplate(templateName, context, download, callback)
 {
-	var is_async = callback && typeof (callback) == "function";
+var is_async = callback && typeof (callback) == "function";
 
-	// Check if it is (compiled template) present in templates
-	if (Handlebars_Compiled_Templates[templateName])
-		return Handlebars_Compiled_Templates[templateName](context);
-	else
-		Handlebars_Compiled_Templates = {};
+// Check if it is (compiled template) present in templates
+if (Handlebars_Compiled_Templates[templateName])
+return Handlebars_Compiled_Templates[templateName](context);
+else
+Handlebars_Compiled_Templates = {};
 
-	// Check if source is available in body
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		var template = Handlebars.templates[templateName + "-template"];
+// Check if source is available in body
+if (HANDLEBARS_PRECOMPILATION)
+{
+var template = Handlebars.templates[templateName + "-template"];
 
-		// If teplate is found
-		if (template)
-		{
-			// If callback is sent then template is downloaded asynchronously
-			// and content is sent in callback
-			if (is_async)
-			{
-				callback(template(context));
-				return;
-			}
+// If teplate is found
+if (template)
+{
+// If callback is sent then template is downloaded asynchronously
+// and content is sent in callback
+if (is_async)
+{
+callback(template(context));
+return;
+}
 
-			// console.log("Template " + templateName + " found");
-			return template(context);
-		}
-	}
-	else
-	{
-		var source = $('#' + templateName + "-template").html();
-		if (source)
-		{
-			var template = Handlebars.compile(source);
-			Handlebars_Compiled_Templates[templateName] = template;
+// console.log("Template " + templateName + " found");
+return template(context);
+}
+}
+else
+{
+var source = $('#' + templateName + "-template").html();
+if (source)
+{
+var template = Handlebars.compile(source);
+Handlebars_Compiled_Templates[templateName] = template;
 
-			// If callback is sent then template is downloaded asynchronously
-			// and content is sent
-			if (is_async)
-			{
-				callback(template(context));
-				return;
-			}
-			return template(context);
-		}
-	}
+// If callback is sent then template is downloaded asynchronously
+// and content is sent
+if (is_async)
+{
+callback(template(context));
+return;
+}
+return template(context);
+}
+}
 
-	// Check if the download is explicitly set to no
-	if (download == 'no')
-	{
-		console.log("Not found " + templateName);
-		return;
-	}
+// Check if the download is explicitly set to no
+if (download == 'no')
+{
+console.log("Not found " + templateName);
+return;
+}
 
-	// Stores urls of templates to be downloaded.
-	var template_relative_urls = getTemplateUrls(templateName);
+// Stores urls of templates to be downloaded.
+var template_relative_urls = getTemplateUrls(templateName);
 
-	if (is_async)
-	{
-		load_templates_async(templateName, context, template_relative_urls, callback);
-		return;
-	}
+if (is_async)
+{
+load_templates_async(templateName, context, template_relative_urls, callback);
+return;
+}
 
-	load_templates_sync(template_relative_urls);
+load_templates_sync(template_relative_urls);
 
-	return getTemplate(templateName, context, 'no');
+return getTemplate(templateName, context, 'no');
 }
 
 /**
- * If the template is not found in document body, then template paths are built
- * based on template name and download requests are sent. if it is down-loaded
- * append it to the document body. And call the function (getTemplate) again by
- * setting the download parameter to "no"
- */
+* If the template is not found in document body, then template paths are built
+* based on template name and download requests are sent. if it is down-loaded
+* append it to the document body. And call the function (getTemplate) again by
+* setting the download parameter to "no"
+*/
 function getTemplateUrls(templateName)
 {
-	// Stores template URLS
-	var template_relative_urls = [];
+// Stores template URLS
+var template_relative_urls = [];
 
-	if (templateName.indexOf("settings") == 0)
-	{
-		template_relative_urls.push("settings.js");
-	}
-	if (templateName.indexOf("admin-settings") == 0)
-	{
-		template_relative_urls.push("admin-settings.js");
-	}
-	if (templateName.indexOf("continue") == 0)
-	{
-		template_relative_urls.push("continue.js");
-	}
-	if (templateName.indexOf("all-domain") == 0)
-	{
-		template_relative_urls.push("admin.js");
-	}
-	if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
-	{
-		template_relative_urls.push("contact-detail.js");
-		if (HANDLEBARS_PRECOMPILATION)
-			template_relative_urls.push("contact-detail.html");
-	}
-	if (templateName.indexOf("contact-filter") == 0 || templateName.indexOf("filter-contacts") == 0)
-	{
-		template_relative_urls.push("contact-filter.js");
-	}
-	if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0 || templateName.indexOf("contacts-custom") == 0 || templateName
-			.indexOf("contacts-grid") == 0)
-	{
-		template_relative_urls.push("contact-view.js");
-	}
-	if (templateName.indexOf("bulk-actions") == 0)
-	{
-		template_relative_urls.push("bulk-actions.js");
-	}
-	if (templateName.indexOf("case") == 0)
-	{
-		template_relative_urls.push("case.js");
-	}
-	if (templateName.indexOf("document") == 0)
-	{
-		template_relative_urls.push("document.js");
-	}
-	if (templateName.indexOf("gmap") == 0)
-	{
-		template_relative_urls.push("gmap.js");
-	}
-	if (templateName.indexOf("report") == 0)
-	{
-		template_relative_urls.push("report.js");
-	}
-	if (templateName.indexOf("webrule") == 0)
-	{
-		template_relative_urls.push("web-rules.js");
-	}
-	if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0)
-	{
-		template_relative_urls.push("workflow.js");
-	}
-	if (templateName.indexOf("purchase") == 0 || templateName.indexOf("subscription") == 0 || templateName.indexOf("subscribe") == 0 || templateName
-			.indexOf("invoice") == 0)
-	{
-		template_relative_urls.push("billing.js");
-	}
+if (templateName.indexOf("settings") == 0)
+{
+template_relative_urls.push("settings.js");
+}
+if (templateName.indexOf("admin-settings") == 0)
+{
+template_relative_urls.push("admin-settings.js");
+}
+if (templateName.indexOf("continue") == 0)
+{
+template_relative_urls.push("continue.js");
+}
+if (templateName.indexOf("all-domain") == 0)
+{
+template_relative_urls.push("admin.js");
+}
+if (templateName.indexOf("contact-detail") == 0 || templateName.indexOf("timeline") == 0 || templateName.indexOf("company-detail") == 0)
+{
+template_relative_urls.push("contact-detail.js");
+if (HANDLEBARS_PRECOMPILATION)
+template_relative_urls.push("contact-detail.html");
+}
+if (templateName.indexOf("contact-filter") == 0 || templateName.indexOf("filter-contacts") == 0)
+{
+template_relative_urls.push("contact-filter.js");
+}
+if (templateName.indexOf("contact-view") == 0 || templateName.indexOf("contact-custom") == 0 || templateName.indexOf("contacts-custom") == 0 || templateName
+.indexOf("contacts-grid") == 0)
+{
+template_relative_urls.push("contact-view.js");
+}
+if (templateName.indexOf("bulk-actions") == 0)
+{
+template_relative_urls.push("bulk-actions.js");
+}
+if (templateName.indexOf("case") == 0)
+{
+template_relative_urls.push("case.js");
+}
+if (templateName.indexOf("document") == 0)
+{
+template_relative_urls.push("document.js");
+}
+if (templateName.indexOf("gmap") == 0)
+{
+template_relative_urls.push("gmap.js");
+}
+if (templateName.indexOf("report") == 0)
+{
+template_relative_urls.push("report.js");
+}
+if (templateName.indexOf("webrule") == 0)
+{
+template_relative_urls.push("web-rules.js");
+}
+if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0)
+{
+template_relative_urls.push("workflow.js");
+}
+if (templateName.indexOf("purchase") == 0 || templateName.indexOf("subscription") == 0 || templateName.indexOf("subscribe") == 0 || templateName
+.indexOf("invoice") == 0)
+{
+template_relative_urls.push("billing.js");
+}
 
-	if (templateName.indexOf("widget") == 0)
-	{
-		template_relative_urls.push("widget.js");
-	}
-	if (templateName.indexOf("helpscout") == 0)
-	{
-		template_relative_urls.push("helpscout.js");
-	}
-	else if (templateName.indexOf("clickdesk") == 0)
-	{
-		template_relative_urls.push("clickdesk.js");
-	}
-	else if (templateName.indexOf("zendesk") == 0)
-	{
-		template_relative_urls.push("zendesk.js");
-	}
-	else if (templateName.indexOf("freshbooks") == 0)
-	{
-		template_relative_urls.push("freshbooks.js");
-	}
-	else if (templateName.indexOf("linkedin") == 0)
-	{
-		template_relative_urls.push("linkedin.js");
-	}
-	else if (templateName.indexOf("rapleaf") == 0)
-	{
-		template_relative_urls.push("rapleaf.js");
-	}
-	else if (templateName.indexOf("stripe") == 0)
-	{
-		template_relative_urls.push("stripe.js");
-	}
-	else if (templateName.indexOf("twilio") == 0)
-	{
-		template_relative_urls.push("twilio.js");
-	}
-	else if (templateName.indexOf("twitter") == 0)
-	{
-		template_relative_urls.push("twitter.js");
-	}
-	else if (templateName.indexOf("xero") == 0)
-	{
-		template_relative_urls.push("xero.js");
-	}
+if (templateName.indexOf("widget") == 0)
+{
+template_relative_urls.push("widget.js");
+}
+if (templateName.indexOf("helpscout") == 0)
+{
+template_relative_urls.push("helpscout.js");
+}
+else if (templateName.indexOf("clickdesk") == 0)
+{
+template_relative_urls.push("clickdesk.js");
+}
+else if (templateName.indexOf("zendesk") == 0)
+{
+template_relative_urls.push("zendesk.js");
+}
+else if (templateName.indexOf("freshbooks") == 0)
+{
+template_relative_urls.push("freshbooks.js");
+}
+else if (templateName.indexOf("linkedin") == 0)
+{
+template_relative_urls.push("linkedin.js");
+}
+else if (templateName.indexOf("rapleaf") == 0)
+{
+template_relative_urls.push("rapleaf.js");
+}
+else if (templateName.indexOf("stripe") == 0)
+{
+template_relative_urls.push("stripe.js");
+}
+else if (templateName.indexOf("twilio") == 0)
+{
+template_relative_urls.push("twilio.js");
+}
+else if (templateName.indexOf("twitter") == 0)
+{
+template_relative_urls.push("twitter.js");
+}
+else if (templateName.indexOf("xero") == 0)
+{
+template_relative_urls.push("xero.js");
+}
+else if (templateName.indexOf("quickbooks") == 0)
+{
+template_relative_urls.push("quickbooks.js");
+}
 
-	if (templateName.indexOf("socialsuite") == 0)
-	{
-		template_relative_urls.push("socialsuite.js");
+if (templateName.indexOf("socialsuite") == 0)
+{
+template_relative_urls.push("socialsuite.js");
 
-		if (HANDLEBARS_PRECOMPILATION)
-			template_relative_urls.push("socialsuite.html");
-	}
-	return template_relative_urls;
+if (HANDLEBARS_PRECOMPILATION)
+template_relative_urls.push("socialsuite.html");
+}
+return template_relative_urls;
 }
 
 /**
- * Takes list of templates to downloaded and pops URL from list and sends
- * request to download asynchronously. After last URL in list is removed and
- * download request is sent, on callback of downloaded URL, new request is sent
- * to fetch next template URL in the list. Continues sending requests till list
- * is empty.
- * 
- * @param templateName
- * @param context
- * @param template_relative_urls
- * @param callback
- */
+* Takes list of templates to downloaded and pops URL from list and sends
+* request to download asynchronously. After last URL in list is removed and
+* download request is sent, on callback of downloaded URL, new request is sent
+* to fetch next template URL in the list. Continues sending requests till list
+* is empty.
+*
+* @param templateName
+* @param context
+* @param template_relative_urls
+* @param callback
+*/
 function load_templates_async(templateName, context, template_relative_urls, callback)
 {
-	// Removes last url from the list to fetch template.
-	var url = template_relative_urls.pop();
+// Removes last url from the list to fetch template.
+var url = template_relative_urls.pop();
 
-	// URL is undefined when list is empty which means all templates specified
-	// in array are downloaded. As list is empty get template is called with
-	// download parameter 'no' which fills and sends template in callback
-	if (!url)
-	{
-		getTemplate(templateName, context, 'no', callback);
-		return;
-	}
+// URL is undefined when list is empty which means all templates specified
+// in array are downloaded. As list is empty get template is called with
+// download parameter 'no' which fills and sends template in callback
+if (!url)
+{
+getTemplate(templateName, context, 'no', callback);
+return;
+}
 
-	// Fetches template and call current method in recursion to download other
-	// templates in list
-	downloadTemplate(url, function()
-	{
-		{
-			// Recursion call to download other templates
-			load_templates_async(templateName, context, template_relative_urls, callback);
-		}
-	});
+// Fetches template and call current method in recursion to download other
+// templates in list
+downloadTemplate(url, function()
+{
+{
+// Recursion call to download other templates
+load_templates_async(templateName, context, template_relative_urls, callback);
+}
+});
 }
 
 /**
- * Sends request to download template synchronously
- * 
- * @param template_relative_urls
- */
+* Sends request to download template synchronously
+*
+* @param template_relative_urls
+*/
 function load_templates_sync(template_relative_urls)
 {
-	for ( var index in template_relative_urls)
-		downloadTemplate(template_relative_urls[index]);
+for ( var index in template_relative_urls)
+downloadTemplate(template_relative_urls[index]);
 }
 
 String.prototype.endsWith = function(suffix)
 {
-	return this.indexOf(suffix, this.length - suffix.length) !== -1;
+return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
 var TEMPLATE_LIB_PATH = LIB_PATH;
 
 /**
- * Downloads the template synchronously (stops other browsing actions) from the
- * given url and returns it
- * 
- * @param {String}
- *            url location to download the template
- * @returns down-loaded template content
- */
+* Downloads the template synchronously (stops other browsing actions) from the
+* given url and returns it
+*
+* @param {String}
+* url location to download the template
+* @returns down-loaded template content
+*/
 function downloadTemplate(url, callback)
 {
 
-	var dataType = 'html';
+var dataType = 'html';
 
-	// If Precompiled is enabled, we change the directory to precompiled. If
-	// pre-compiled flat is set true then template path is sent accordingly
-	if (HANDLEBARS_PRECOMPILATION)
-	{
-		url = "tpl/min/precompiled/" + url;
-	}
-	else
-		url = "tpl/min/" + url;
+// If Precompiled is enabled, we change the directory to precompiled. If
+// pre-compiled flat is set true then template path is sent accordingly
+if (HANDLEBARS_PRECOMPILATION)
+{
+url = "tpl/min/precompiled/" + url;
+}
+else
+url = "tpl/min/" + url;
 
-	// If JS
-	if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
-	{
-		dataType = 'script';
-		url = TEMPLATE_LIB_PATH + url;
-	}
+// If JS
+if (url.endsWith("js") && HANDLEBARS_PRECOMPILATION)
+{
+dataType = 'script';
+url = TEMPLATE_LIB_PATH + url;
+}
 
-	console.log(url + " " + dataType);
+console.log(url + " " + dataType);
 
-	// If callback is sent to this method then template is fetched synchronously
-	var is_async = false;
-	if (callback && typeof (callback) === "function")
-		is_async = true;
+// If callback is sent to this method then template is fetched synchronously
+var is_async = false;
+if (callback && typeof (callback) === "function")
+is_async = true;
 
-	jQuery.ajax({ url : url, dataType : dataType, success : function(result)
-	{
-		// If HTMl, add to body
-		if (dataType == 'html')
-			$('body').append((result));
+jQuery.ajax({ url : url, dataType : dataType, success : function(result)
+{
+// If HTMl, add to body
+if (dataType == 'html')
+$('body').append((result));
 
-		if (is_async)
-			callback(result);
-	}, async : is_async });
+if (is_async)
+callback(result);
+}, async : is_async });
 
-	return "";
+return "";
 }
 
 /**
- * Iterates the given "items", to find a match with the given "name", if found
- * returns the value of its value attribute
- * 
- * @param {Object}
- *            items array of json objects
- * @param {String}
- *            name to get the value (of value atribute)
- * @returns value of the matched object
- */
+* Iterates the given "items", to find a match with the given "name", if found
+* returns the value of its value attribute
+*
+* @param {Object}
+* items array of json objects
+* @param {String}
+* name to get the value (of value atribute)
+* @returns value of the matched object
+*/
 function getPropertyValue(items, name)
 {
-	if (items == undefined)
-		return;
+if (items == undefined)
+return;
 
-	for ( var i = 0, l = items.length; i < l; i++)
-	{
-		if (items[i].name == name)
-			return items[i].value;
-	}
+for ( var i = 0, l = items.length; i < l; i++)
+{
+if (items[i].name == name)
+return items[i].value;
+}
 }
 
 /**
- * Returns contact property based on the name of the property
- * 
- * @param items :
- *            porperties in contact object
- * @param name :
- *            name of the property
- * @returns
- */
+* Returns contact property based on the name of the property
+*
+* @param items :
+* porperties in contact object
+* @param name :
+* name of the property
+* @returns
+*/
 function getProperty(items, name)
 {
-	if (items == undefined)
-		return;
+if (items == undefined)
+return;
 
-	for ( var i = 0, l = items.length; i < l; i++)
-	{
-		if (items[i].name == name)
-			return items[i];
-	}
+for ( var i = 0, l = items.length; i < l; i++)
+{
+if (items[i].name == name)
+return items[i];
+}
 }
 
 /**
- * Returns contact property based on its property name and subtype
- */
+* Returns contact property based on its property name and subtype
+*/
 function getPropertyValueBySubtype(items, name, subtype)
 {
-	if (items == undefined)
-		return;
+if (items == undefined)
+return;
 
-	for ( var i = 0, l = items.length; i < l; i++)
-	{
-		if (items[i].name == name && items[i].subtype == subtype)
-			return items[i].value;
-	}
+for ( var i = 0, l = items.length; i < l; i++)
+{
+if (items[i].name == name && items[i].subtype == subtype)
+return items[i].value;
+}
 }
 
 /**
- * Returns contact property based on the sub type (LINKEDIN, TWITTER, URL, SKYPE
- * etc..) of the property
- * 
- * @param items :
- *            properties list
- * @param name :
- *            name of the property
- * @param type :
- *            type of the property
- * @param subtype :
- *            subtype of property
- * @returns
- */
+* Returns contact property based on the sub type (LINKEDIN, TWITTER, URL, SKYPE
+* etc..) of the property
+*
+* @param items :
+* properties list
+* @param name :
+* name of the property
+* @param type :
+* type of the property
+* @param subtype :
+* subtype of property
+* @returns
+*/
 function getPropertyValueBytype(items, name, type, subtype)
 {
-	if (items == undefined)
-		return;
+if (items == undefined)
+return;
 
-	// Iterates though each property object and compares each property by name
-	// and its type
-	for ( var i = 0, l = items.length; i < l; i++)
-	{
-		if (items[i].name == name)
-		{
-			if (type && type == items[i].type)
-			{
-				if (subtype && subtype == items[i].subtype)
-					return items[i].value;
-			}
+// Iterates though each property object and compares each property by name
+// and its type
+for ( var i = 0, l = items.length; i < l; i++)
+{
+if (items[i].name == name)
+{
+if (type && type == items[i].type)
+{
+if (subtype && subtype == items[i].subtype)
+return items[i].value;
+}
 
-			if (subtype && subtype == items[i].subtype)
-			{
-				return items[i].value;
-			}
-		}
-	}
+if (subtype && subtype == items[i].subtype)
+{
+return items[i].value;
+}
+}
+}
 }
 
 /**
- * Returns list of custom properties. used to fill custom data in fields in
- * continue contact
- * 
- * @param items
- * @returns
- */
+* Returns list of custom properties. used to fill custom data in fields in
+* continue contact
+*
+* @param items
+* @returns
+*/
 function getContactCustomProperties(items)
 {
-	if (items == undefined)
-		return items;
+if (items == undefined)
+return items;
 
-	var fields = [];
-	for ( var i = 0; i < items.length; i++)
-	{
-		if (items[i].type == "CUSTOM" && items[i].name != "image")
-		{
-			fields.push(items[i]);
-		}
-	}
-	return fields;
+var fields = [];
+for ( var i = 0; i < items.length; i++)
+{
+if (items[i].type == "CUSTOM" && items[i].name != "image")
+{
+fields.push(items[i]);
+}
+}
+return fields;
 }
 
 /**
- * Turns the first letter of the given string to upper-case and the remaining to
- * lower-case (EMaiL to Email).
- * 
- * @param {String}
- *            value to convert as ucfirst
- * @returns converted string
- */
+* Turns the first letter of the given string to upper-case and the remaining to
+* lower-case (EMaiL to Email).
+*
+* @param {String}
+* value to convert as ucfirst
+* @returns converted string
+*/
 function ucfirst(value)
 {
-	return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
+return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
 
 }
 
 /**
- * Creates titles from strings. Replaces underscore with spaces and capitalize
- * first word of string.
- * 
- * @param value
- * @returns
- */
+* Creates titles from strings. Replaces underscore with spaces and capitalize
+* first word of string.
+*
+* @param value
+* @returns
+*/
 function titleFromEnums(value)
 {
-	if (!value)
-		return;
+if (!value)
+return;
 
-	var str = value.replace(/_/g, ' ');
+var str = value.replace(/_/g, ' ');
 
-	return ucfirst(str.toLowerCase());
+return ucfirst(str.toLowerCase());
 }
 
 /**
- * Counts total number of attributes in a json object
- * 
- * @param obj
- * @returns {Number}
- */
+* Counts total number of attributes in a json object
+*
+* @param obj
+* @returns {Number}
+*/
 function countJsonProperties(obj)
 {
-	var prop;
-	var propCount = 0;
+var prop;
+var propCount = 0;
 
-	for (prop in obj)
-	{
-		propCount++;
-	}
-	return propCount;
+for (prop in obj)
+{
+propCount++;
+}
+return propCount;
 }
 
 /**
- * Get the current contact property
- * 
- * @param value
- * @returns {String}
- */
+* Get the current contact property
+*
+* @param value
+* @returns {String}
+*/
 function getCurrentContactProperty(value)
 {
-	if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
-	{
-		var contact_properties = App_Contacts.contactDetailView.model.get('properties')
-		return getPropertyValue(contact_properties, value);
-	}
+if (App_Contacts.contactDetailView && App_Contacts.contactDetailView.model)
+{
+var contact_properties = App_Contacts.contactDetailView.model.get('properties')
+return getPropertyValue(contact_properties, value);
+}
 }
 
 function getCount(collection)
 {
-	if (collection[0] && collection[0].count && (collection[0].count != -1))
-		return "(" + collection[0].count + " Total)";
-	else
-		return "(" + collection.length + " Total)";
+if (collection[0] && collection[0].count && (collection[0].count != -1))
+return "(" + collection[0].count + " Total)";
+else
+return "(" + collection.length + " Total)";
 }
 
 /**
- * Returns id from hash. Id must be last in hash.
- */
+* Returns id from hash. Id must be last in hash.
+*/
 function getIdFromHash()
 {
 
-	// Returns "workflows" from "#workflows"
-	var hash = window.location.hash.substr(1);
+// Returns "workflows" from "#workflows"
+var hash = window.location.hash.substr(1);
 
-	// remove trailing slash '/'
-	if (hash.substr(-1) === "/")
-	{
-		hash = hash.replace(/\/$/, "");
-	}
+// remove trailing slash '/'
+if (hash.substr(-1) === "/")
+{
+hash = hash.replace(/\/$/, "");
+}
 
-	// Returns campaign_id from "workflow/all-contacts/campaign_id".
-	var id = hash.split('/').pop();
+// Returns campaign_id from "workflow/all-contacts/campaign_id".
+var id = hash.split('/').pop();
 
-	return id;
+return id;
 }
 
 function updateCustomData(el)
 {
-	$(".custom-data", App_Contacts.contactDetailView.el).html(el)
+$(".custom-data", App_Contacts.contactDetailView.el).html(el)
 }

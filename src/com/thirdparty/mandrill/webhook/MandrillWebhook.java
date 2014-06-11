@@ -14,6 +14,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
 
 /**
@@ -36,6 +38,10 @@ public class MandrillWebhook extends HttpServlet
     public static final String MSG = "msg";
     public static final String EMAIL = "email";
     public static final String SUBACCOUNT = "subaccount";
+    public static final String SUBJECT = "subject";
+
+    public static final String METADATA = "metadata";
+    public static final String METADATA_CAMPAIGN_ID = "campaign_id";
 
     public void service(HttpServletRequest req, HttpServletResponse res)
     {
@@ -80,6 +86,8 @@ public class MandrillWebhook extends HttpServlet
     private void setBounceStatusToContact(JSONObject eventJSON)
     {
 	String oldNamespace = NamespaceManager.get();
+	JSONObject metadata = null;
+	String subject = null;
 
 	try
 	{
@@ -88,6 +96,7 @@ public class MandrillWebhook extends HttpServlet
 
 	    JSONObject msgJSON = eventJSON.getJSONObject(MSG);
 
+	    // If no subaccount or email, return
 	    if (!msgJSON.has(SUBACCOUNT) || !msgJSON.has(EMAIL))
 		return;
 
@@ -97,13 +106,22 @@ public class MandrillWebhook extends HttpServlet
 
 	    NamespaceManager.set(msgJSON.getString(SUBACCOUNT));
 
+	    // Get mandrill metadata
+	    if (msgJSON.has(METADATA))
+		metadata = msgJSON.getJSONObject(METADATA);
+
+	    // Get email subject
+	    if (msgJSON.has(SUBJECT))
+		subject = msgJSON.getString(SUBJECT);
+
 	    // By default SOFT_BOUNCE
 	    EmailBounceType type = EmailBounceType.SOFT_BOUNCE;
 
 	    if (HARD_BOUNCE.equals(eventJSON.getString(EVENT)))
 		type = EmailBounceType.HARD_BOUNCE;
 
-	    setContactEmailBounceStatus(msgJSON.getString(EMAIL), type);
+	    // Set status to Agile Contact
+	    setContactEmailBounceStatus(msgJSON.getString(EMAIL), subject, type, metadata);
 	}
 	catch (Exception e)
 	{
@@ -125,10 +143,16 @@ public class MandrillWebhook extends HttpServlet
      * @param emailBounceType
      *            - Hard Bounce or SoftBounce
      */
-    private void setContactEmailBounceStatus(String email, EmailBounceType emailBounceType)
+    private void setContactEmailBounceStatus(String email, String emailSubject, EmailBounceType emailBounceType,
+	    JSONObject metadata)
     {
+	String campaignId = null;
+
 	try
 	{
+
+	    if (metadata != null && metadata.has(METADATA_CAMPAIGN_ID))
+		campaignId = metadata.getString(METADATA_CAMPAIGN_ID);
 
 	    boolean isNew = true;
 
@@ -140,6 +164,9 @@ public class MandrillWebhook extends HttpServlet
 		return;
 	    }
 
+	    // Set log
+	    setCampaignLog(campaignId, contact.id.toString(), email, emailSubject, emailBounceType);
+
 	    List<EmailBounceStatus> emailBounceList = contact.emailBounceStatus;
 
 	    for (EmailBounceStatus emailBounceStatus : emailBounceList)
@@ -148,6 +175,10 @@ public class MandrillWebhook extends HttpServlet
 		{
 		    emailBounceStatus.emailBounceType = emailBounceType;
 		    emailBounceStatus.time = System.currentTimeMillis() / 1000;
+
+		    if (campaignId != null)
+			emailBounceStatus.campaign_id = campaignId;
+
 		    isNew = false;
 		    break;
 		}
@@ -156,6 +187,10 @@ public class MandrillWebhook extends HttpServlet
 	    if (isNew)
 	    {
 		EmailBounceStatus emailBounceStatus = new EmailBounceStatus(email, emailBounceType);
+
+		if (campaignId != null)
+		    emailBounceStatus.campaign_id = campaignId;
+
 		contact.emailBounceStatus.add(emailBounceStatus);
 	    }
 
@@ -165,6 +200,49 @@ public class MandrillWebhook extends HttpServlet
 	{
 	    System.err.println("Exception occured while saving contact..." + e.getMessage());
 	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Sets bounce log
+     * 
+     * @param campaignId
+     *            - campaign-id
+     * @param subscriberId
+     *            - contact id
+     * @param email
+     *            - contact email bounced
+     * @param emailSubject
+     *            - email subject
+     * @param emailBounceType
+     *            - Hard or Soft
+     */
+    public static void setCampaignLog(String campaignId, String subscriberId, String email, String emailSubject,
+	    EmailBounceType emailBounceType)
+    {
+
+	// if campaign-id empty
+	if (StringUtils.isBlank(campaignId))
+	    return;
+
+	try
+	{
+	    String logType = LogType.EMAIL_HARD_BOUNCED.toString();
+	    String type = "hard";
+
+	    if (emailBounceType.equals(EmailBounceType.SOFT_BOUNCE))
+	    {
+		type = "soft";
+		logType = LogType.EMAIL_SOFT_BOUNCED.toString();
+	    }
+
+	    LogUtil.addLogToSQL(campaignId, subscriberId, "There was a " + type + " bounce on email \'" + email
+		    + "\' <br><br> Email subject: " + emailSubject, logType);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while setting bounce log..." + e.getMessage());
 	}
     }
 }

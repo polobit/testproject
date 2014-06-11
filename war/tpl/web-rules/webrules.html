@@ -11,14 +11,17 @@
     <div class="span9">
         {{#if this.length}}
 		{{add_tag "Web Rules"}}
-        <table class="table table-bordered table-striped showCheckboxes" url="core/api/webrule/bulk">
+        <table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic no-sorting" url="core/api/webrule/bulk">
+			<col width="30px"><col width="65%"><col width="20%"><col width="10%"><col width="5%">
             <thead>
                 <tr>
                     <th>Name</th>
 					<th>Action</th>
+					<th></th>
+					<th></th>
                 </tr>
             </thead>
-            <tbody id="webrule-model-list" route="webrule-edit/">
+            <tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
             </tbody>
         </table>
 		{{else}}
@@ -27,6 +30,11 @@
     </div>
     <div class="span3">
         <div class="well">
+            <h3>
+                Setup Tracking Code
+            </h3><br />
+			<div>To start using Web Rules, please setup our <a href="#analytics-code/analytics">tracking code</a>.</div>
+            <br />
             <h3>
                 What are Web Rules?
             </h3>
@@ -43,11 +51,24 @@ For example, when visitors are about to leave your website, show them a sign-up 
 </script>
 <script id="webrule-model-template" type="text/html">
 <td  data="{{id}}" class="data" style="cursor:pointer">
-{{name}}
+<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;max-width:95%;overflow:hidden;">
+	{{name}}
+</div>
 </td>
 <td>
 {{#each actions}}
-	{{titleFromEnums action}}
+	{{titleFromEnums action}} 
 {{/each}}
 </td>
+<td>
+<div style="width: 60px;text-align: center;">
+{{#if disabled}} 
+	<label class="label label-important">Disabled</label>
+{{/if}}
+</div>
+</td>
+<td>
+<div style="visibility:visible;"><i class="icon-move"></i></div>
+</td>
+
 </script>

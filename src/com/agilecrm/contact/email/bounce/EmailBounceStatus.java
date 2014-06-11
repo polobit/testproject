@@ -24,6 +24,11 @@ public class EmailBounceStatus
     public Long time = 0L;
 
     /**
+     * Campaign id of which campaign bounced
+     */
+    public String campaign_id = null;
+
+    /**
      * Default EmailBounceStatus
      */
     EmailBounceStatus()

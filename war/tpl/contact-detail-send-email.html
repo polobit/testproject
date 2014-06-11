@@ -18,7 +18,7 @@
                 <div class="control-group">
                     <label class="control-label">To <span class="field_req">*</span></label>
                     <div class="controls">
-					{{#if email}}
+					{{#if properties}}
                         	<input type="text" class="span4 multipleEmails required" name="to" id="to" value="{{getPropertyValue properties "email"}}" />
 						{{else}}
 							<input type="text" class="span4 multipleEmails required" name="to" id="to" value="" /> 

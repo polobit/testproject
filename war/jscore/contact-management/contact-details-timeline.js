@@ -9,34 +9,34 @@
  * 				html object of contact detail view
  * @param contactId
  * 				id of a contact in contact detail view
- */
+ *//*
 
-/*
+
  * Taken as global to verify whether timeline is defined or not while adding
  * entities (notes, tasks and etc..) related to a contact.
- */  
+   
 var timelineView;
-function load_timeline_details(el, contactId, callback1)
+function load_timeline_details1(el, contactId, callback1)
 {
 	// Sets to true, if the associated entity is fetched 
 	var is_logs_fetched = false, is_mails_fetched = false, is_array_urls_fetched = false;
 	
-		/**
+		*//**
 		 * An empty collection (length zero) is created to add first fetched 
 		 * details and then initializes isotope with this data 
-		 */ 
+		 *//* 
 		timelineView =  new Base_Collection_View({
 			templateKey: 'timeline',
 			individual_tag_name: 'li',
 		});
 	
 		
-		/**
+		*//**
 		 * Another empty collection is created to add other data (apart from first fetched)
 		 * which is fetched while the isotope is getting initialized with the first fetched 
 		 * data, because it can not be inserted with out complete initialization of isotope.  
 		 * 
-		 */
+		 *//*
 		var timelineViewMore =  new Base_Collection_View({
 			templateKey: 'timeline',
 			individual_tag_name: 'li',
@@ -92,10 +92,10 @@ function load_timeline_details(el, contactId, callback1)
 						
 					});
 								
-					/*
+					
 					 * Calls setup_timeline with a callback function to insert other models 
 					 * (fetched while initializing the isotope) if available.
-					 */
+					 
 					setup_timeline(timelineView.collection.toJSON(), el, function(el){
 						$.each(timelineViewMore.collection.toJSON(), function(index,data){
 							var newItem = $(getTemplate("timeline", data));
@@ -105,13 +105,13 @@ function load_timeline_details(el, contactId, callback1)
 					});
 				}else{
 					var logs_array = [];	
-					/*
+					
 					 * Already setup_timeline is called with the first fetched data. Adds all the
 					 * logs of each campaign to an array and then inserts the array values 
 					 * (avoids calling insertion and month marker multiple times).
 					 * Inserts the data into timeline or adds to other collection (timelineViewMore) 
 					 * by validating the status of isotope initialization.
-					 */   
+					    
 					$.each(logsCollection.toJSON(), function(index, model) {						
 						
 						// Add these log-types in timeline.
@@ -131,7 +131,7 @@ function load_timeline_details(el, contactId, callback1)
 			}
 		});
 		
-		/** Emails Collection Starts**/
+		*//** Emails Collection Starts**//*
 		var contact = App_Contacts.contactDetailView.model;
 		var json = contact.toJSON();
 		 
@@ -218,12 +218,12 @@ function load_timeline_details(el, contactId, callback1)
 			$('#time-line', el).find('.loading-img-email').remove();
 			$('#time-line',el).find('.loading-img-stats').remove();
 		}
-		/**End of Emails Collection**/
+		*//**End of Emails Collection**//*
 		
-		/**
+		*//**
 		 * Defines a collection to store the response of all the request urls (notes, deals 
 		 * and tasks) in the array (fetchContactDetails).
-		 */ 
+		 *//* 
 		
 		var entity_types = ["deals", "notes", "cases", "tasks"]
 		$.getJSON('core/api/contacts/related-entities/' + contactId, function(data){
@@ -244,10 +244,10 @@ function load_timeline_details(el, contactId, callback1)
 				// If timeline is not defined yet, calls setup_timeline for the first time
 				if(timelineView.collection.length == 0){
 
-					/*
+					
 					 * Calls setup_timeline with a callback function to insert other models 
 					 * (fetched while initializing the isotope) if available.
-					 */
+					 
 					setup_timeline(timelineView.collection.toJSON(), el, function(el) {
 						
 						$.each(timelineViewMore.collection.toJSON(), function(index,data){
@@ -258,18 +258,18 @@ function load_timeline_details(el, contactId, callback1)
 					})
 				}else{
 					
-					/*
+					
 					 * Already setup_timeline is called with the first fetched data.
 					 * 
 					 * Inserts the data into timeline or adds to other collection (timelineViewMore) 
 					 * by validating the status of isotope initialization.
-					 */							
+					 							
 					validate_insertion(entities, timelineViewMore);
 				}
 		})
 }	
 
-/**
+*//**
  * Inserts the models into timeline, if isotope is defined (initialized 
  * completely) otherwise adds to a collection (timelineViewMore) to insert
  * them on complete initialization of isotope from setupTimelin callback
@@ -281,19 +281,20 @@ function load_timeline_details(el, contactId, callback1)
  * @param timelineViewMore
  * 			collection to add models
  * 			
- */
+ *//*
 function validate_insertion(models, timelineViewMore){
 	
-	/*
+	
 	 * If isotope is not defined an exception will be raised, then
 	 * it goes to catch block and adds the data to the collection
-	 */
+	 
 	try{
 		head.load(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", "css/misc/agile-timline.css", function(){
 		
 
 			if($('#timeline').isotope()) {
 				var month_years = [];
+				var elements = [];
 				$.each(models, function(index, model){
 					var month_year = entity_created_month_year(model);
 
@@ -303,9 +304,11 @@ function validate_insertion(models, timelineViewMore){
 					}	
 					var newItem = $(getTemplate("timeline", model));
 					newItem.find('.inner').append('<a href="#" class="open-close"></a>');
-					$('#timeline').isotope( 'insert', newItem);
+					elements.push($(newItem));
+					
 				});
 
+				$('#timeline').isotope( 'addItems', elements);
 				// add a month marker for each month that has a post
 				create_month_marker(month_years, true, App_Contacts.contactDetailView.el);
 			}
@@ -317,14 +320,14 @@ function validate_insertion(models, timelineViewMore){
 	}
 }
 
-/**
+*//**
  * Shows "no entities present" pad content for timeline by verifying
  * whether all the entities are fetched or not.
  *  
  * @param is_logs_fetched
  * @param is_mails_fetched
  * @param is_array_urls_fetched
- */
+ *//*
 function show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched){
 	if(!is_logs_fetched || !is_mails_fetched || !is_array_urls_fetched )
 		return;
@@ -340,20 +343,20 @@ var monthArray = ['January 31', 'February 28', 'March 31', 'April 30', 'May 31',
 // Stores "monthIndex-year" of timeline initiating entities
 var MONTH_YEARS;
 
-/**
+*//**
  * Get the timestamp (milliseconds) given month of the year.
- */
+ *//*
 function getTimestamp(month_index, year){
 	if((year % 4) == 0)
 		monthArray[1] = 'February 29';
 	return Date.parse(monthArray[month_index] + ', ' + year) + 86400000 - 1; 
 }
 
-/**
+*//**
  * Returns month index and full year of the given entity as "-" separated.
  * @param model
  * @returns {String}
- */
+ *//*
 function entity_created_month_year(model){
 	if(model.created_time)
 		return month_year = new Date(model.created_time * 1000).getMonth() + '-' + new Date(model.created_time * 1000).getFullYear();
@@ -365,11 +368,11 @@ function entity_created_month_year(model){
 		return month_year = new Date(model.date_secs).getMonth() + '-' + new Date(model.date_secs).getFullYear();
 }
 
-/**
+*//**
  * Inserts or appends month marker to the timeline
  * @param month_years
  * @param is_insert
- */
+ *//*
 function create_month_marker(month_years, is_insert, el){
 	// add a year marker for each year that has a post
 	$.each(month_years, function(i, val){
@@ -412,7 +415,8 @@ function update_entity_template(model)
 }
 
 
-/**
+
+*//**
  * Loads minified jquery.isotope plug-in and jquery.event.resize plug-in to 
  * initialize the isotope and appends the given models to the timeline, by 
  * loading their corresponding templates using handlebars
@@ -424,7 +428,7 @@ function update_entity_template(model)
  * 			html object of the contact detail view
  * @param callback
  * 			function to insert models into timeline on its initialization
- */
+ *//*
 function setup_timeline(models, el, callback) {
 	
 	// Removes pad content of no data presents
@@ -433,20 +437,18 @@ function setup_timeline(models, el, callback) {
 	 MONTH_YEARS = [];
 	
 	// Load plugins for timeline	
-	
-		
 	 head.load(LIB_PATH + "lib/jquery.isotope.min.js", LIB_PATH + "lib/jquery.event.resize.js", "css/misc/agile-timline.css", function(){
 		
-		 /*
+		 
 		 * Defines the layout and its dimensions, container size and
 		 * arrangement of data position added to timeline etc..
-		 */ 
+		  
 		customize_isotope();
 		
-		/*
+		
 		 * Appends each model to timeline, by loading their corresponding
 		 * templates using handlebars
-		 */
+		 
 		$.each(models, function(index, model) {
 			
 			// saves the month and years so we can create month markers
@@ -470,7 +472,7 @@ function setup_timeline(models, el, callback) {
 		// Initializes isotope with options (sorts the data based on created time)
 		$('#timeline', el).imagesLoaded(function(){
 			$container.isotope({
-				itemSelector : '.item',
+				itemSelector : ".item",
 				transformsEnabled: true,
 				layoutMode: 'spineAlign',
 				spineAlign:{
@@ -493,12 +495,12 @@ function setup_timeline(models, el, callback) {
 			});
 		});
 		
-	/*	// Using autoellipsis for showing 3 lines of message
+		// Using autoellipsis for showing 3 lines of message
 		head.js(LIB_PATH + 'lib/jquery.autoellipsis.min.js', function(){
 			$('#timeline', el).find("#autoellipsis").ellipsis();
 			$('#timeline', el).isotope('reLayout');
 		});
-		*/
+		
 		// add open/close buttons to each post
 		$('#timeline .item.post', el).each(function(){
 			$(this).find('.inner').append('<a href="#" class="open-close"></a>');
@@ -508,10 +510,10 @@ function setup_timeline(models, el, callback) {
 			adjust_line();
 		});
 		
-		/*
+		
 		 * Calls the callback function to insert the data into timeline, which
 		 * is not inserted due to initialization issues. 
-		 */ 
+		  
 		if(callback && typeof(callback) === "function"){
 			callback(el);
 		}
@@ -520,9 +522,9 @@ function setup_timeline(models, el, callback) {
 	
 }
 
-/*
+
  * Keep the actual line from extending beyond the last item's date tab
- */
+ 
 function adjust_line(){
 	var $lastItem = $('.item.last');
 	var itemPosition = $lastItem.data('isotope-item-position');
@@ -533,12 +535,12 @@ function adjust_line(){
 	$('#line').height(lineHeight);
 }
 
-/**
+*//**
  * Defines the layout and its dimensions, container size and
  * arrangement of data position added to timeline etc..
  * 
  * @method customize_isotope
- */
+ *//*
 function customize_isotope()
 {
 	// Resets the layout based on items 
@@ -550,10 +552,10 @@ function customize_isotope()
 		};
 	};
 
-	/*
+	
 	 * Defines the dimentions of layout, and alters the position of data.
 	 * It executes every tiem, when a modal is added or deleted from timeline.
-	 */ 
+	  
 	$.Isotope.prototype._spineAlignLayout = function( $elems ) {
 		var	instance = this,
 			props = this.spineAlign,
@@ -619,17 +621,17 @@ function customize_isotope()
 	};
 }	
 
-/**
+*//**
  * Removes loading image from timeline view
  * 
  * @param el
  * 			html object of contact detail view
- */
+ *//*
 function remove_loading_img(el){
 	$('#time-line', el).find('.loading-img').remove();
 }
 
-/**
+*//**
  * When contact has no address, based on its email, traces address from its
  * browsing history and stores as address property of the contact.
  * 
@@ -643,7 +645,7 @@ function remove_loading_img(el){
  *            contact present in contact detail view
  * @param {Object}
  *            backbone element.
- */function get_stats(email, contact, el)
+ *//*function get_stats(email, contact, el)
 {
 	// If there are no web-stats - return
 	if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
@@ -727,10 +729,10 @@ function remove_loading_img(el){
 						var newItem = $(getTemplate("timeline", model));
 						newItem.find('.inner').append('<a href="#" class="open-close"></a>');
 						
-						/*
+						
 						 * Inserts mails to timeline with out validating the isotope status,
 						 * as it takes more time to fetch.
-						 */  
+						   
 						$('#timeline', el).isotope( 'insert', newItem);
 						});
 				}
@@ -770,59 +772,23 @@ function remove_loading_img(el){
  		var newItem = $(getTemplate("timeline", contact));
 
  		newItem.find('.inner').append('<a href="#" class="open-close"></a>');
- 		/*
+ 		
  		 * Inserts mails to timeline with out validating the isotope status, as
  		 * it takes more time to fetch.
- 		 */
+ 		 
  		$('#timeline', el).isotope('insert', newItem);
  	}
  }
 
- function addTagToTimelineDynamically(tags)
- {
- 	if (timelineView.collection.length == 0)
- 	{
- 		$.each(tags, function(index, tag)
- 		{
- 			timelineView.collection.add(tag, {silent : true});
- 		});
-
- 		setup_timeline(timelineView.collection.toJSON(), el);
- 		return;
- 	}
-
- 	var tags_to_add = [];
- 	$.each(tags, function(index, tag)
- 	{
- 		if (!timelineView.collection.where(tag).length == 0)
- 			return;
-
- 		timelineView.collection.add(tag, {silent : true});
- 		tags_to_add.push(tag);
- 	});
-
- 	validate_insertion(tags_to_add);
-
- 	/*
- 	 * var newItem = $(getTemplate("timeline", tag));
- 	 * 
- 	 * newItem.find('.inner').append('<a href="#" class="open-close"></a>');
- 	 * 
- 	 * Inserts mails to timeline with out validating the isotope status, as it
- 	 * takes more time to fetch.
- 	 * 
- 	 * $('#timeline', el).isotope( 'insert', newItem);
- 	 */
-
- }
  
- /**
+ 
+ *//**
   * Adds Email Opened data having email opened time to timeline.
   * 
   * @param emails - Emails JSON.
   * 
   * @param el - Backbone el.
-  **/
+  **//*
  function add_personal_email_opened_to_timeline(emails,el)
  {
 	// Temporary array to clone emails
@@ -875,29 +841,16 @@ function remove_loading_img(el){
 		 }
  }
 
- /**
-  * Removes an element from timeline
-  * 
-  * @param element
-  */
- function removeItemFromTimeline(element)
- {
- 	console.log(element);
- 	$('#timeline').isotope('remove', element, function()
- 	{
- 		$("#timeline").isotope( 'reLayout')
- 	});
- }
 
-/**
+*//**
  * Handles the events (click and mouseenter) of mail and log entities of 
  * tiemline 
- */
+ *//*
 $(function () {
-	/*
+	
 	 * Shows the mail details in detail on a popup modal, when '+'
 	 * symbol is clicked 
-	 */  
+	   
 	$("#tl-mail-popover").live('click',function(e){
 		e.preventDefault();
 		
@@ -911,9 +864,9 @@ $(function () {
         
     });
 	
-	/*
+	
 	 * Shows the campaign log details on a popup modal
-	 */ 
+	  
 	$("#tl-log-popover").live('click',function(e){
 		e.preventDefault();
 		
@@ -925,9 +878,9 @@ $(function () {
 		$("#timelineLogModal").modal("show");
     });
 	
-	/**
+	*//**
 	 * Shows analytics popup modal with full details.
-	 **/
+	 **//*
 	$("#tl-analytics-popover").live('click',function(e){
 		e.preventDefault();
 		
@@ -939,10 +892,10 @@ $(function () {
 		$("#timelineAnalyticsModal").modal("show");
 	});
 	
-	/*
+	
 	 * Shows the list of mails(mail sent to) as popover, when mouse is entered on
 	 * to address of the email
-	 */  
+	   
 	$("#tl-mail-to-popover").live('mouseenter',function(e){
 		
 		$(this).popover({
@@ -966,3 +919,4 @@ $(function () {
 	});
 	
 });
+*/

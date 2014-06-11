@@ -3,7 +3,7 @@
 <div class="widget_content">
 	<div  style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
-			<a href="ttps://go.xero.com/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
+			<a href="https://go.xero.com/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
 				{{Contact.FirstName}} {{Contact.LastName}}
 			</b></h4></a>
 		</div>
@@ -38,7 +38,12 @@
 	<div>
 		{{#if Contact.Phones}}
 		{{#each Contact.Phones}}
-			{{#if PhoneNumber}}<i class="icon-phone"></i><a href="tel:{{PhoneCountryCode}}-{{PhoneAreaCode}}-{{PhoneNumber}}" > {{PhoneCountryCode}}-{{PhoneAreaCode}}-{{PhoneNumber}} ({{capFirstLetter PhoneType}})<br> </a>{{/if}}
+			{{#if PhoneNumber}}<i class="icon-phone"></i> 
+				{{#if PhoneCountryCode}}+{{PhoneCountryCode}}-{{/if}}
+				{{#if PhoneAreaCode}}{{PhoneAreaCode}}-{{/if}}
+				{{PhoneNumber}} 
+				{{capFirstLetter PhoneType}}<br> 
+			{{/if}}
 		{{/each}}
 		{{/if}}
 	</div>
@@ -55,7 +60,7 @@
 		{{#each Invoices}}
 			<li class="row-fluid sub_header_li">
 				<a class="pull-left"  href="https://go.xero.com/AccountsReceivable/Edit.aspx?InvoiceID={{InvoiceID}}" target="_blank" data-toggle="tooltip" data-placement="top" title={{xeroTypeToolTip Type}} >{{InvoiceNumber}} ({{xeroType Type}})</a>
-				<div class="pull-right">{{Total}}</div><br>
+				<div class="pull-right">{{Total}}({{CurrencyCode}})</div><br>
 				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{DueDateString}}">{{DueDateString}}</time></small></div>					
 				<div class="pull-right"><span class="badge">{{capFirstLetter Status}}</span></div><br>			
 			</li>
@@ -102,4 +107,22 @@
 		<div>No invoices Exist for this contact </div>
 		<a class="btn" id="xero_add_invoice" style="margin-top:10px;cursor:pointer;" href="https://go.xero.com/AccountsReceivable/Edit.aspx?fromContactID={{ContactID}}" target="_blank"><i class="icon-plus"></i>Add Invoice</a>
 	</div>
+</script>
+
+<script id="xero-revoke-access-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+	<div class="row-fluid">
+		<div class="span7">
+			<p class="title_txt"><a href="{{profile.url}}" target="_blank" >{{profile.name}}</a></p>
+			<p style="margin:0px;">{{profile.location}}</p>
+			<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement profile.summary}}</p>
+		</div>
+	</div>
+	<div>
+		<p style='margin: 10px 0px 5px 0px;' >
+			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Xero">Revoke Access</a>
+			<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Xero">Cancel</a>
+		</p>
+	</div>
+</div>
 </script>

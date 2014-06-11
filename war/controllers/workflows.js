@@ -654,7 +654,7 @@ var WorkflowsRouter = Backbone.Router
 					return;
 				}
 
-				var hardbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/hardbounced-subscribers/',
+				var hardbounced_subscribers_collection = get_campaign_subscribers_collection(id, 'core/api/workflows/hardbounced-subscribers/' + id,
 						'workflow-other-subscribers');
 
 				hardbounced_subscribers_collection.collection.fetch({ success : function(collection)

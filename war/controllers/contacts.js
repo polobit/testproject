@@ -546,51 +546,39 @@ var ContactsRouter = Backbone.Router.extend({
 	sendEmail : function(id)
 	{
 		
-		var model;
-		var is_new = true;
+		var model = {};
+		
 		// Takes back to contacts if contacts detail view is not defined
 		if (this.contactDetailView && !this.contactDetailView.model.get(id))
 		{
 			// Show the email form with the email prefilled from the curtrent contact
 			model = this.contactDetailView.model.toJSON();
-			is_new = false;
-			//this.navigate("contacts", { trigger : true });
-			//return;
 		}
-		else
-			model = {};
 		
-		var sendEmailView = new Base_Model_View(
+		var el = $("#content").html(getTemplate("send-email", model));
+		
+		if (id)
+			$("#emailForm", el).find('input[name="to"]').val(id);
+		else
+			$("#emailForm", el).find('input[name="to"]').val('');
+
+		// Checks Zoomifier tag for contact
+		if (checkTagAgile("Zoomifier") && this.contactDetailView)
 		{
-			data : model, 
-			url : !is_new ? this.contactDetailView.model.get('url') : "test",
-			is_new : is_new,
-			template : "send-email",
-			postRenderCallback : function(el)
+			// Appends zoomifier link to attach their documents.
+			head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
 			{
-				if (id)
-					$("#emailForm", el).find('input[name="to"]').val(id);
+				$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
+						.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
+			});
+		}
 
-				// Checks Zoomifier tag for contact
-				if (checkTagAgile("Zoomifier"))
-				{
-					// Appends zoomifier link to attach their documents.
-					head.js(LIB_PATH + 'lib/zoomifier.contentpicker.min.js', function()
-					{
-						$("#emailForm", el).find('textarea[name="body"]').closest(".controls")
-								.append('<div><a style="cursor:pointer;" onclick="Javascript:loadZoomifierDocSelector();"><i class="icon-plus-sign"></i> Attach Zoomifier Doc</a></div>');
-					});
-				}
-
-				// Populate from address and templates
-				populate_send_email_details(el);
-
-			}
-		});
-		$("#content").html(sendEmailView.render(true).el);
+		// Populate from address and templates
+		populate_send_email_details(el);
 		
 		// Setup HTML Editor
 		setupTinyMCEEditor('textarea#email-body');
+		
 	},
 	
 	/**

@@ -751,9 +751,11 @@ public class ContactUtil
      *            - end time
      * @return int value
      */
-    public static int getEmailBouncedContactsCount(EmailBounceType emailBounceType, Long startTime, Long endTime)
+    public static int getEmailBouncedContactsCount(String campaignId, EmailBounceType emailBounceType, Long startTime,
+	    Long endTime)
     {
 	HashMap<String, Object> properties = new HashMap<String, Object>();
+	properties.put("emailBounceStatus.campaign_id", campaignId);
 	properties.put("emailBounceStatus.emailBounceType", emailBounceType);
 	properties.put("emailBounceStatus.time >=", startTime);
 	properties.put("emailBounceStatus.time <", endTime);

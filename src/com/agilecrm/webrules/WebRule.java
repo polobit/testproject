@@ -26,6 +26,8 @@ public class WebRule
     @NotSaved(IfDefault.class)
     public String name = null;
 
+    public Boolean disabled;
+
     // Store type of the rule whether it is plain web rule or shopify rule
     @NotSaved(IfDefault.class)
     public String rule_type = "WEBRULE";
@@ -38,6 +40,9 @@ public class WebRule
     @Embedded
     @Unindexed
     public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
+
+    @NotSaved(IfDefault.class)
+    public int position = 0;
 
     // Added to send the country to the client - this is not saved
     @NotSaved
@@ -74,9 +79,8 @@ class WebRuleAction
     @Override
     public String toString()
     {
-	return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern="
-		+ popup_pattern + ", title=" + title + ", popup_text=" + popup_text + ", delay=" + delay + ", timer="
-		+ timer + "]";
+	return "WebRuleAction [action=" + action + ", RHS=" + RHS + ", position=" + position + ", popup_pattern=" + popup_pattern + ", title=" + title
+		+ ", popup_text=" + popup_text + ", delay=" + delay + ", timer=" + timer + "]";
     }
 
     public enum Action
