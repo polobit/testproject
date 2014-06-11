@@ -2448,7 +2448,7 @@ $(function()
 	else
 	{    
 	var temp = data.toLowerCase();
-	return "("+temp.charAt(0).toUpperCase() + temp.slice(1)+")";
+	return temp.charAt(0).toUpperCase() + temp.slice(1);
 	}
     });
 

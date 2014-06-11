@@ -48,7 +48,7 @@ var WorkflowsRouter = Backbone.Router
 			workflows : function()
 			{
 
-				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", templateKey : "workflows",
+				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection: false, templateKey : "workflows",
 					individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
 

@@ -53,7 +53,7 @@ var SettingsRouter = Backbone.Router.extend({
 			/** TinyMCE **/
 
 			// set up TinyMCE Editor
-			setupTinyMCEEditor('textarea#WYSItextarea');
+			setupTinyMCEEditor('textarea#WYSItextarea', true);
 			
 			// Insert content into tinymce
 			set_tinymce_content('WYSItextarea', view.model.toJSON().signature);
