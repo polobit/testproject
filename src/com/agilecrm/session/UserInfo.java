@@ -78,6 +78,7 @@ public class UserInfo implements Serializable
 	if (domainUser != null)
 	{
 	    setDomainId(domainUser.id);
+	    setScopes(domainUser.scopes);
 	}
 
 	try

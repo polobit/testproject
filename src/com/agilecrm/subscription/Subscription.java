@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -20,6 +21,7 @@ import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.appengine.api.NamespaceManager;
@@ -204,6 +206,10 @@ public class Subscription
      */
     public Subscription createNewSubscription() throws Exception
     {
+	Plan oldPlan = new Plan(PlanType.FREE.toString(), DomainUserUtil.count());
+
+	checkUpgrade(oldPlan, plan);
+
 	// Creates customer and adds subscription
 	billing_data = getAgileBilling().createCustomer(card_details, plan);
 
@@ -237,13 +243,7 @@ public class Subscription
 	// Gets subscription object of current domain
 	Subscription subscription = getSubscription();
 
-	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
-		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
-	{
-	    System.out.println("plan upgrade not possible");
-	    BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.NOT_DOWNGRADABLE);
-	    return null;
-	}
+	subscription.checkUpgrade(subscription.plan, plan);
 
 	// If customer is already on same plan do not update(checks both
 	// on
@@ -261,6 +261,21 @@ public class Subscription
 	subscription.save();
 
 	return subscription;
+    }
+
+    public void checkUpgrade(Plan oldPlan, Plan newPlan)
+    {
+	BillingRestriction restriction = null;
+	System.out.println("old plan" + oldPlan.plan_type + ", " + oldPlan.quantity);
+	System.out.println("old plan" + newPlan.plan_type + ", " + newPlan.quantity);
+	if (BillingRestrictionUtil.isLowerPlan(plan, newPlan)
+		&& !(restriction = BillingRestrictionUtil.getInstanceTemporary(newPlan)).isDowngradable())
+	{
+	    BillingRestrictionUtil.throwLimitExceededExceptionBasedOnString((ErrorMessages.NOT_DOWNGRADABLE
+		    .getMessage())
+		    + "\n"
+		    + BillingRestrictionUtil.buildDetailedErrorMessage(restriction.getDowngradeErrorMessage()));
+	}
     }
 
     /**
