@@ -13,15 +13,25 @@
  *            id of HTML element e.g., textarea#email-body
  * 
  */
-function setupTinyMCEEditor(selector)
+function setupTinyMCEEditor(selector, noAgileContactFields)
 {
+	
 	// Id undefined
 	if (selector === undefined)
 	{
 		console.log("selector is undefined...");
 		return;
 	}
-
+	
+	// Show loading image instead of textarea
+	$('#loading-editor').html(getRandomLoadingImg());
+	
+	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview";
+	
+	// Remove Agile Contact fields button
+	if(noAgileContactFields)
+		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview";
+	
 	// Init tinymce first time
 	if (typeof (tinymce) === "undefined")
 	{
@@ -40,11 +50,15 @@ function setupTinyMCEEditor(selector)
 				return;
 			}
 			
+			// Show textarea and remove loading img
+			$(selector).css('display', '');
+			$('#loading-editor').html("");
+			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
-				"textcolor link image"
+				"textcolor link image preview"
 			], menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
-				toolbar2 : "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields", valid_elements : "*[*]",
+				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
@@ -54,10 +68,17 @@ function setupTinyMCEEditor(selector)
 		return;
 	}
 
+	// Show textarea and remove loading img
+	$(selector).css('display', '');
+	$('#loading-editor').html("");
+	
 	// if tinymce instance exists, reinitialize tinymce on given selector
 	if (selector.indexOf('#') !== -1)
 		selector = selector.split('#')[1];
 
+	// Add custom toolbar
+	tinymce.settings.toolbar2 = toolbar_2;
+	
 	// reinitialize tinymce
 	reinitialize_tinymce_editor_instance(selector);
 		
