@@ -49,14 +49,14 @@ Tracking Code<div class="clearfix"></div><br/>
 </div>
 				<div class="row-fluid">
     				<div class="span11">
-Tracking Code with WebRules<div class="clearfix"></div><br/>
+Tracking code with Web Rules enabled<div class="clearfix"></div><br/>
 <pre class="prettyprint">
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
  _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
  _agile.track_page_view();
- _agile_execute_web_rules()
+ _agile_execute_web_rules();
 &lt;/script&gt;
 </pre>
 	</div>
