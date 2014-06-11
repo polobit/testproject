@@ -99,7 +99,7 @@ public class SalesforceImportAPI
 			if (cases)
 				list.add("cases");
 
-			contactPrefs.salesforceFields = list;
+			contactPrefs.dataOptions = list;
 			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 
 			return contactPrefs;

@@ -20,11 +20,11 @@ public class ZohoImportUtil {
 			
 			for (int index = 1; index < MAX_INDEX;) {
 				if (ZohoUtils.hasMore(ZohoUtils.buildUrl(ZohoModule.LEADS.getValue(), contactPrefs, index,
-						index + 200))) {
+						index + 50))) {
 				JSONArray json = new JSONArray(ZohoUtils.getZohoLeads(contactPrefs, index));
 				if (json != null && json.length() > 0)
 					zohoAgileMapper.saveLeads(json, key);
-					index = index + 200;
+					index = index + 50;
 				} else {
 					break;
 				}
@@ -45,8 +45,8 @@ public class ZohoImportUtil {
 				if (json != null && json.length() > 0)
 					zohoAgileMapper.saveAccounts(json, key);
 				if (ZohoUtils.hasMore(ZohoUtils.buildUrl(ZohoModule.ACCOUNTS.getValue(), contactPrefs, index,
-						index + 200))) {
-					index = index + 200;
+						index + 50))) {
+					index = index + 50;
 				} else {
 					break;
 				}
@@ -67,8 +67,8 @@ public class ZohoImportUtil {
 				if (json != null && json.length() > 0)
 					zohoAgileMapper.saveContact(json, key);
 				if (ZohoUtils.hasMore(ZohoUtils.buildUrl(ZohoModule.CONTACTS.getValue(), contactPrefs, index,
-						index + 200))) {
-					index = index + 200;
+						index + 50))) {
+					index = index + 50;
 				} else {
 					break;
 				}

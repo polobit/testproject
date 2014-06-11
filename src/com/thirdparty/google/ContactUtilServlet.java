@@ -23,6 +23,7 @@ import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
 import com.thirdparty.salesforce.SalesforceImportUtil;
+import com.thirdparty.stripe.StripeUtil;
 import com.thirdparty.zoho.ZohoImportUtil;
 
 /**
@@ -157,19 +158,19 @@ public class ContactUtilServlet extends HttpServlet
 
 	    if (contactPrefs.type == Type.SALESFORCE)
 	    {
-		if (contactPrefs.salesforceFields.contains("accounts"))
+		if (contactPrefs.dataOptions.contains("accounts"))
 		    SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("leads"))
+		if (contactPrefs.dataOptions.contains("leads"))
 		    SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("contacts"))
+		if (contactPrefs.dataOptions.contains("contacts"))
 		    SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("deals"))
+		if (contactPrefs.dataOptions.contains("deals"))
 		    SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("cases"))
+		if (contactPrefs.dataOptions.contains("cases"))
 		    SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
 
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
@@ -177,23 +178,29 @@ public class ContactUtilServlet extends HttpServlet
 	    }else if(contactPrefs.type == Type.ZOHO){
 	    	assert contactPrefs!=null:"contact cant be empty";
 	    	
-	    	if(contactPrefs.zohoFields.contains("leads"))
+	    	if(contactPrefs.dataOptions.contains("leads"))
 	    		ZohoImportUtil.importZohoLeads(contactPrefs, key);
 	    	
-	    	if(contactPrefs.zohoFields.contains("accounts"))
+	    	if(contactPrefs.dataOptions.contains("accounts"))
 	    		ZohoImportUtil.importAccounts(contactPrefs, key);
 	    	
-	    	if(contactPrefs.zohoFields.contains("contacts"))
+	    	if(contactPrefs.dataOptions.contains("contacts"))
 	    		ZohoImportUtil.importContacts(contactPrefs, key);
 	    	 
-	    	if(contactPrefs.zohoFields.contains("event"))
+	    	if(contactPrefs.dataOptions.contains("event"))
 	    		ZohoImportUtil.importEvent(contactPrefs, key);
 	    	
-	    	if(contactPrefs.zohoFields.contains("task"))
+	    	if(contactPrefs.dataOptions.contains("task"))
 	    		ZohoImportUtil.importTask(contactPrefs, key);
 	    	
 	    	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
 	    			"Imported successfully from Zoho");
+	    }else if(contactPrefs.type == Type.STRIPE){
+	    	  StripeUtil.importCustomer(contactPrefs, key);
+	    	  
+	    		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+		    			"Imported successfully from Stripe");
+	    	
 	    }
 
 	}

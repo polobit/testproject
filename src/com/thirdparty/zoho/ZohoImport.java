@@ -75,9 +75,8 @@ public class ZohoImport
 
 		if (contacts)
 			list.add("contacts");
-
 	
-		ctxPrefs.zohoFields = list;
+		ctxPrefs.dataOptions = list;
 		try{
 		ContactsImportUtil.initilaizeImportBackend(ctxPrefs);
 		}catch(Exception e){
