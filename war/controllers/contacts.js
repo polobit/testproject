@@ -577,7 +577,10 @@ var ContactsRouter = Backbone.Router.extend({
 		populate_send_email_details(el);
 		
 		// Setup HTML Editor
-		setupTinyMCEEditor('textarea#email-body');
+		if(id)
+			setupTinyMCEEditor('textarea#email-body');
+		else
+			setupTinyMCEEditor('textarea#email-body', true);
 		
 	},
 	
