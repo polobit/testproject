@@ -50,10 +50,13 @@ public class ContactAccessControl extends UserAccessControl
 	if (!isNewContact() && !checkOwner())
 	{
 	    System.out.println(this.getCurrentUserScopes());
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
+	    return hasScope(UserAccessScopes.UPDATE_CONTACT);
 	}
 
-	return hasScope(UserAccessScopes.CREATE_CONTACT);
+	if (isNewContact())
+	    return hasScope(UserAccessScopes.CREATE_CONTACT);
+
+	return true;
     }
 
     public boolean canDelete()

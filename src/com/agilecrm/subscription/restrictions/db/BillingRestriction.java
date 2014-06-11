@@ -2,6 +2,8 @@ package com.agilecrm.subscription.restrictions.db;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -183,6 +185,24 @@ public class BillingRestriction
 	    return false;
 
 	return true;
+    }
+
+    public Map<String, Integer> getDowngradeErrorMessage()
+    {
+	Map<String, Integer> map = new LinkedHashMap<String, Integer>();
+	if (!DaoBillingRestriction.getInstace(ClassEntities.DomainUser.toString(), this).can_create())
+	{
+	    map.put("Users", this.users_count - this.planDetails.getAllowedUsers());
+	}
+
+	if (!DaoBillingRestriction.getInstace("Contact", this).can_create())
+	    map.put("Contact", this.contacts_count - this.planDetails.getContactLimit());
+	if (!DaoBillingRestriction.getInstace("WebRule", this).can_create())
+	    map.put("Web Rules", this.webrules_count - this.planDetails.getWebRuleLimit());
+	if (!DaoBillingRestriction.getInstace("Workflow", this).can_create())
+	    map.put("campaigns", this.webrules_count - this.planDetails.getWorkflowLimit());
+
+	return map;
     }
 
     /**

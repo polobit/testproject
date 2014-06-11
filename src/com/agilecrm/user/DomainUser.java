@@ -19,6 +19,8 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -435,6 +437,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	try
 	{
 	    dao.put(this);
+
+	    // Sets scopes when domain user is updated
+	    UserInfo info = SessionManager.get();
+	    if (info != null)
+		info.setScopes(this.scopes);
+
+	    System.out.println("savined user info scopes : " + info.getScopes());
+
 	}
 	finally
 	{
@@ -557,10 +567,23 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    }
 	}
 
+	System.out.println(" id in domain user before :" + id);
+
 	if (scopes == null || scopes.size() == 0)
 	{
-	    scopes = new LinkedHashSet<UserAccessScopes>();
-	    scopes.add(UserAccessScopes.RESTRICTED);
+
+	    System.out.println(" id in domain user :" + id);
+	    if (id == null)
+	    {
+
+		scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+
+	    }
+	    else
+	    {
+		scopes = new LinkedHashSet<UserAccessScopes>();
+		scopes.add(UserAccessScopes.RESTRICTED);
+	    }
 	}
 
 	info_json_string = info_json.toString();
