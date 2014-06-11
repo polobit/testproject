@@ -15,6 +15,10 @@
  */
 function setupTinyMCEEditor(selector)
 {
+	
+	// Show loading image instead of textarea
+	$('#loading-editor').html(getRandomLoadingImg());
+	
 	// Id undefined
 	if (selector === undefined)
 	{
@@ -40,6 +44,10 @@ function setupTinyMCEEditor(selector)
 				return;
 			}
 			
+			// Show textarea and remove loading img
+			$(selector).css('display', '');
+			$('#loading-editor').html("");
+			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
 				"textcolor link image preview"
 			], menubar : false,
@@ -54,6 +62,10 @@ function setupTinyMCEEditor(selector)
 		return;
 	}
 
+	// Show textarea and remove loading img
+	$(selector).css('display', '');
+	$('#loading-editor').html("");
+	
 	// if tinymce instance exists, reinitialize tinymce on given selector
 	if (selector.indexOf('#') !== -1)
 		selector = selector.split('#')[1];
