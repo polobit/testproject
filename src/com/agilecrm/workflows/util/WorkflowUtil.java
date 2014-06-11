@@ -60,7 +60,7 @@ public class WorkflowUtil
      */
     public static List<Workflow> getAllWorkflows()
     {
-	return dao.fetchAll();
+	return dao.ofy().query(Workflow.class).order("-created_time").list();
     }
 
     /**
@@ -76,7 +76,7 @@ public class WorkflowUtil
      */
     public static List<Workflow> getAllWorkflows(int max, String cursor)
     {
-	return dao.fetchAll(max, cursor);
+	return dao.fetchAllByOrder(max, cursor, null, true, false, "-created_time");
     }
 
     /**
@@ -129,7 +129,8 @@ public class WorkflowUtil
      */
     public static List<Workflow> getWorkflowsOfCurrentUser(String page_size)
     {
-	return dao.ofy().query(Workflow.class).filter("creator_key", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	return dao.ofy().query(Workflow.class)
+		.filter("creator_key", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
 		.order("-created_time").limit(Integer.parseInt(page_size)).list();
     }
 
