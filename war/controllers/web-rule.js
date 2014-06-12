@@ -17,7 +17,7 @@ var WebreportsRouter = Backbone.Router.extend({
 		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr',
 			sortKey : 'position', postRenderCallback : function(el)
 			{
-				enableWebruletSoring(el);
+				//enableWebruletSoring(el);
 			}	
 		});
 
