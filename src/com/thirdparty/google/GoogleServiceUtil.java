@@ -41,9 +41,10 @@ public class GoogleServiceUtil
 	String response = GoogleServiceUtil.refreshTokenInGoogle(contactPrefs.refreshToken);
 
 	// Creates HashMap from response JSON string
-	HashMap<String, Object> properties = new ObjectMapper().readValue(response, new TypeReference<HashMap<String, Object>>()
-	{
-	});
+	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
+		new TypeReference<HashMap<String, Object>>()
+		{
+		});
 	System.out.println(properties.toString());
 
 	if (properties.containsKey("error"))
@@ -94,13 +95,14 @@ public class GoogleServiceUtil
     public static String refreshTokenInGoogle(String refreshToken)
     {
 	// Build data to post with all tokens
-	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_SECRET_KEY + "&grant_type=refresh_token&refresh_token="
-		+ refreshToken;
+	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_SECRET_KEY
+		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
 	// send request and return response
 	try
 	{
-	    return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST", data, true, "", "");
+	    return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
+		    data, true, "", "");
 	}
 	catch (Exception e)
 	{
@@ -123,13 +125,14 @@ public class GoogleServiceUtil
     public static String refreshTokenInGoogleForCalendar(String refreshToken)
     {
 	// Build data to post with all tokens
-	String data = "client_id=" + Globals.GOOGLE_CALENDAR_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_CALENDAR_SECRET_KEY
-		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	String data = "client_id=" + Globals.GOOGLE_CALENDAR_CLIENT_ID + "&client_secret="
+		+ Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
 	// send request and return response
 	try
 	{
-	    return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST", data, true, "", "");
+	    return HTTPUtil.accessURLUsingAuthentication(new GoogleApi().getAccessTokenEndpoint(), "", "", "POST",
+		    data, true, "", "");
 	}
 	catch (Exception e)
 	{
@@ -163,7 +166,7 @@ public class GoogleServiceUtil
 
 	    oAuthRequest.addBodyParameter("scope", ScribeServlet.GOOGLE_CALENDAR_SCOPE);
 	    // oAuthRequest.addBodyParameter("access_type", "offline");
-	    oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+	    oAuthRequest.addBodyParameter("redirect_uri", GoogleApi.getRedirectURL());
 	    oAuthRequest.addBodyParameter("code", code);
 	    oAuthRequest.addBodyParameter("grant_type", "authorization_code");
 	    System.out.println(oAuthRequest.getCompleteUrl());
@@ -171,9 +174,10 @@ public class GoogleServiceUtil
 	    Response response = oAuthRequest.send();
 
 	    // Creates HashMap from response JSON string
-	    HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, Object>>()
-	    {
-	    });
+	    HashMap<String, Object> properties = new ObjectMapper().readValue(response.getBody(),
+		    new TypeReference<HashMap<String, Object>>()
+		    {
+		    });
 
 	    System.out.println(properties.toString());
 	    return properties;
@@ -200,7 +204,7 @@ public class GoogleServiceUtil
 	    scope = "";
 
 	oAuthRequest.addBodyParameter("scope", scope);
-	oAuthRequest.addBodyParameter("redirect_uri", "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet");
+	oAuthRequest.addBodyParameter("redirect_uri", GoogleApi);
 	oAuthRequest.addBodyParameter("code", authToken);
 	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
 
