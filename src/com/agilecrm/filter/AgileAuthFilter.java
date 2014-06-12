@@ -60,8 +60,8 @@ public class AgileAuthFilter implements Filter
 
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the domain
-	//if(!(httpRequest.getRequestURI().contains("xero")||httpRequest.getRequestURI().contains("freshbooks")))
-//	{
+	// if(!(httpRequest.getRequestURI().contains("xero")||httpRequest.getRequestURI().contains("freshbooks")))
+	// {
 	if (httpRequest.getRequestURI().contains("js/api") || httpRequest.getRequestURI().contains("php/api")
 		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions")
 		|| httpRequest.getRequestURI().contains("oauth") || httpRequest.getRequestURI().contains("/gmail"))
@@ -70,7 +70,7 @@ public class AgileAuthFilter implements Filter
 	    chain.doFilter(request, response);
 	    return;
 	}
-//	}
+	// }
 
 	// If no sessions are there, redirect to login page
 	if (httpRequest.getSession(false) == null)
@@ -96,6 +96,8 @@ public class AgileAuthFilter implements Filter
 
 	// Check if userinfo is valid for this namespace
 	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
+
+	setAccessScopes(request, domainUser);
 
 	// Get Namespace
 	String domain = NamespaceManager.get();
@@ -171,5 +173,24 @@ public class AgileAuthFilter implements Filter
 	request.getSession().setAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME, uri);
 
 	response.sendRedirect("/login");
+    }
+
+    /**
+     * Sets scopes in session if scopes are changed
+     * 
+     * @param request
+     * @param user
+     */
+    public void setAccessScopes(ServletRequest request, DomainUser user)
+    {
+	UserInfo info = SessionManager.get();
+	if (!info.getScopes().containsAll(user.scopes) && user.scopes.size() != info.getScopes().size())
+	{
+	    System.out.println("doesnot contain all scopes");
+	    System.out.println(info.getScopes());
+	    System.out.println(user.scopes);
+	    info.setScopes(user.scopes);
+	    ((HttpServletRequest) request).getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, info);
+	}
     }
 }

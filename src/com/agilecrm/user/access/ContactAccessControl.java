@@ -36,6 +36,8 @@ public class ContactAccessControl extends UserAccessControl
 		contact = (Contact) entityObject;
 	    else
 		contact = new Contact();
+	    System.out.println("scopes in contact checking");
+	    System.out.println(getCurrentUserScopes());
 	}
 	catch (ClassCastException e)
 	{
