@@ -49,8 +49,7 @@ public class ContactAccessControl extends UserAccessControl
 	// contact and current owner is different
 	if (!isNewContact() && !checkOwner())
 	{
-	    System.out.println(this.getCurrentUserScopes());
-	    return hasScope(UserAccessScopes.UPDATE_CONTACT);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
 
 	if (isNewContact())
@@ -78,7 +77,6 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	System.out.println("view contacts view contants view contacts");
 	return hasScope(UserAccessScopes.VIEW_CONTACTS);
 
     }
@@ -94,11 +92,15 @@ public class ContactAccessControl extends UserAccessControl
 	Long currentContactOwnerId = contact.getContactOwnerKey().getId();
 	UserInfo info = SessionManager.get();
 
-	System.out.println("infor-----------" + info.getScopes());
-	if (info != null && info.getDomainId() != currentContactOwnerId)
-	    return false;
+	if (info == null)
+	    return true;
 
-	return true;
+	System.out.println("id" + info.getDomainId() + ", " + currentContactOwnerId);
+
+	if (info.getDomainId().equals(currentContactOwnerId))
+	    return true;
+
+	return false;
     }
 
     /**
