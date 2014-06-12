@@ -11,14 +11,14 @@
     <div class="span9">
         {{#if this.length}}
 		{{add_tag "Web Rules"}}
-        <table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic no-sorting" url="core/api/webrule/bulk">
-			<col width="30px"><col width="65%"><col width="20%"><col width="10%"><col width="5%">
+        <table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/webrule/bulk">
+			<col width="30px"><col width="65%"><col width="20%"><col width="10%"><!--<col width="5%">-->
             <thead>
                 <tr>
                     <th>Name</th>
 					<th>Action</th>
 					<th></th>
-					<th></th>
+					<!--<th></th>-->
                 </tr>
             </thead>
             <tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
@@ -67,8 +67,8 @@ For example, when visitors are about to leave your website, show them a sign-up 
 {{/if}}
 </div>
 </td>
-<td>
+<!--<td>
 <div style="visibility:hidden;"><i class="icon-move"></i></div>
-</td>
+</td>-->
 
 </script>
