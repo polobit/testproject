@@ -24,7 +24,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	}
 	
 	// Show loading image instead of textarea
-	$('#loading-editor').html(getRandomLoadingImg());
+//	$('#loading-editor').html(getRandomLoadingImg());
 	
 	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview";
 	
@@ -51,8 +51,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 			}
 			
 			// Show textarea and remove loading img
-			$(selector).css('display', '');
-			$('#loading-editor').html("");
+//			$(selector).css('display', '');
+//			$('#loading-editor').html("");
 			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
 				"textcolor link image preview"
@@ -71,8 +71,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	}
 
 	// Show textarea and remove loading img
-	$(selector).css('display', '');
-	$('#loading-editor').html("");
+//	$(selector).css('display', '');
+//	$('#loading-editor').html("");
 	
 	// if tinymce instance exists, reinitialize tinymce on given selector
 	if (selector.indexOf('#') !== -1)
