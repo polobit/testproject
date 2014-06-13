@@ -1,7 +1,6 @@
 package com.agilecrm.subscription.restrictions.db.util;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,11 +42,6 @@ public class BillingRestrictionUtil
 	public String getMessage()
 	{
 	    return message;
-	}
-
-	public void setMessage(String message)
-	{
-	    this.message = message;
 	}
     }
 
@@ -212,18 +206,14 @@ public class BillingRestrictionUtil
     {
 	ErrorMessages errorMessage = ErrorMessages.valueOf(className);
 	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
-	throwLimitExceededExceptionBasedOnString(reason);
-    }
 
-    public static void throwLimitExceededExceptionBasedOnString(String reason)
-    {
 	throw new PlanRestrictedException(reason);
     }
 
     public static void throwLimitExceededException(ErrorMessages errorMessage)
     {
 	String reason = errorMessage == null ? "Limit Reached" : errorMessage.getMessage();
-	throwLimitExceededExceptionBasedOnString(reason);
+	throw new PlanRestrictedException(reason);
     }
 
     /**
@@ -264,16 +254,5 @@ public class BillingRestrictionUtil
 	info.setPlan(plan.getPlanName());
 	info.setUsersCount(plan.quantity);
 
-    }
-
-    public static String buildDetailedErrorMessage(Map<String, Integer> limits)
-    {
-	String errorMessage = "";
-	for (Map.Entry<String, Integer> map : limits.entrySet())
-	{
-	    errorMessage += map.getKey() + " : " + map.getValue() + "\n";
-	}
-
-	return errorMessage;
     }
 }

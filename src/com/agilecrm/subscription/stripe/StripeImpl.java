@@ -287,8 +287,6 @@ public class StripeImpl implements AgileBilling
     {
 	Customer customer = StripeUtil.getCustomerFromJson(stripeCustomer);
 
-	System.out.println(customer);
-
 	// Cancels subscription in stripe
 	customer.cancelSubscription();
     }
