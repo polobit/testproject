@@ -20,7 +20,6 @@ import org.json.JSONArray;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
-import com.google.appengine.api.datastore.EntityNotFoundException;
 
 @Path("/api/webrule")
 public class WebRuleAPI
@@ -48,40 +47,32 @@ public class WebRuleAPI
 	webRule.save();
     }
 
-    /**
-     * Saves position of webrule, used to show webrule in order according to
-     * position ascending order
+    /*    *//**
+     * Saves position of webrule, used to show webrule in order according
+     * to position ascending order
      * 
      * @param webrules
      *            {@link List} of {@link WebRule}
      */
-    @Path("/positions")
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void savePositions(List<WebRule> webrules)
-    {
-	if (webrules == null)
-	    return;
-
-	// UI sends only ID and Position
-	for (WebRule webrule : webrules)
-	{
-	    WebRule fullWebrule;
-	    try
-	    {
-		fullWebrule = WebRule.dao.get(webrule.id);
-		System.out.println(fullWebrule);
-		fullWebrule.position = webrule.position;
-		fullWebrule.save();
-	    }
-	    catch (EntityNotFoundException e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
-    }
+    /*
+     * @Path("/positions")
+     * 
+     * @POST
+     * 
+     * @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+     * 
+     * @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+     * public void savePositions(List<WebRule> webrules) { if (webrules == null)
+     * return;
+     * 
+     * // UI sends only ID and Position for (WebRule webrule : webrules) {
+     * WebRule fullWebrule; try { fullWebrule = WebRule.dao.get(webrule.id);
+     * System.out.println(fullWebrule); fullWebrule.position = webrule.position;
+     * fullWebrule.save(); } catch (EntityNotFoundException e) {
+     * e.printStackTrace(); }
+     * 
+     * } }
+     */
 
     /**
      * Webrule delete functionality
