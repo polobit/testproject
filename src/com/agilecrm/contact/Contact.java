@@ -916,7 +916,6 @@ public class Contact extends Cursor
 	// Set owner, when only the owner_key is null
 	if (owner_key == null)
 	{
-	    System.out.println("prepersist ___________________++++++++++++++++++++++__________________");
 	    // Set lead owner(current domain user)
 	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}
