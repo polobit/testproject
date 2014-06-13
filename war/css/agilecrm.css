@@ -1,11 +1,13 @@
+/* register.jsp,openid-min.css   */
 .login-page .openid_large_btn:hover {
-	margin: 4px 0 0 6px;
+	margin: 4px 0px 0px 6px;
 	border: 2px solid #999;
 	box-shadow: none;
 	-moz-box-shadow: none;
-	-webkit-box-shadow: none
+	-webkit-box-shadow: none;
 }
 
+/* register.jsp,openid-min.css   */
 .login-page .openid_large_btn {
 	width: 100px;
 	height: 60px;
@@ -19,17 +21,19 @@
 	-webkit-border-radius: 5px;
 	box-shadow: 2px 2px 4px #ddd;
 	-moz-box-shadow: 2px 2px 4px #ddd;
-	-webkit-box-shadow: 2px 2px 4px #ddd
+	-webkit-box-shadow: 2px 2px 4px #ddd;
 }
 
+/* openid-min.css   */
 .login-page .openid_small_btn:hover {
-	margin: 4px 0 0 6px;
+	margin: 4px 0px 0px 6px;
 	border: 2px solid #999;
 	box-shadow: none;
 	-moz-box-shadow: none;
-	-webkit-box-shadow: none
+	-webkit-box-shadow: none;
 }
 
+/* openid-min.css   */
 .login-page .openid_small_btn {
 	width: 24px;
 	height: 24px;
@@ -43,22 +47,22 @@
 	-webkit-border-radius: 5px;
 	box-shadow: 2px 2px 4px #ddd;
 	-moz-box-shadow: 2px 2px 4px #ddd;
-	-webkit-box-shadow: 2px 2px 4px #ddd
+	-webkit-box-shadow: 2px 2px 4px #ddd;
 }
 
-@media ( min-width :900px) {
+@media ( min-width : 900px) {
 	div#agilecrm-container {
 		padding-top: 60px; //
-		background-color: whitesmoke
+		background-color: whitesmoke;
 	}
 }
-
+/*dropdown*/
 .agilecrm-profile-dropdown:hover {
 	background: url(../img/menu-sprite.png) no-repeat top left;
 	background-position: 0 0;
 	width: 34px;
 	height: 20px;
-	display: block
+	display: block;
 }
 
 .agilecrm-profile-dropdown {
@@ -66,99 +70,113 @@
 	background-position: 0 -70px;
 	width: 34px;
 	height: 20px;
-	display: block
+	display: block;
 }
 
 table {
-	background-color: white
+	background-color: white;
 }
 
+/* contact.js,contact-details-actions,contact-details.html,contacts-filter.html,new-activity-modal.html,tags.html.. */
 #tags>h3 {
 	padding-bottom: 9px;
-	border-bottom: 4px solid whiteSmoke
+	border-bottom: 4px solid whiteSmoke;
 }
 
+/* handlebars-agile.js,js-all-min.js*/
 .tag-element {
-	padding: 13px 0;
-	border-bottom: 2px solid whiteSmoke
+	padding: 13px 0px;
+	border-bottom: 2px solid whiteSmoke;
 }
 
 #tags .tag-element.last {
-	padding: 13px 0;
-	border-bottom: 0
+	padding: 13px 0px;
+	border-bottom: none;
 }
 
+/* handlebars-agile.js,js-all-min.js*/
 .tag-key {
 	display: inline;
 	font-weight: bold;
 	font-size: 11px;
 	padding-right: 5px;
-	color: gray
+	color: gray;
 }
 
+/* handlebars-agile.js,js-all-min.js*/
 .tag-values {
 	display: inline;
-	font-size: 11px
+	font-size: 11px;
+	/*float:right;*/
 }
 
+/* core.css,tooltip.css,bootstrap-min.css*/
 .underline {
 	border-bottom: 1px solid whiteSmoke;
-	padding-bottom: 4px
+	padding-bottom: 4px;
 }
 
+/* calender.html,settings-email-templates.html,contact-details.html......*/
 .right {
-	float: right
+	float: right;
 }
 
+/* Rating stars in contact details */
 .rating {
 	unicode-bidi: bidi-override;
-	direction: rtl
+	direction: rtl;
 }
 
 .rating span.star {
 	font-weight: normal;
 	font-style: normal;
-	display: inline-block
+	display: inline-block;
 }
 
 .rating span.star:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
 .rating span.star:before {
 	content: "\2606";
 	padding-right: 5px;
-	color: #999
+	color: #999999;
 }
 
 .rating span.star:hover:before,.rating span.rating-value,.rating span.star:hover 
-	~ span.star:before {
+	    ~ span.star:before {
 	content: "\2605";
-	color: #e3cf7a
+	color: #e3cf7a;
 }
 
+/* Subnav in contact-detail.html */
 .subnav {
 	width: 100%;
 	height: 36px;
-	background-color: #eee;
-	background-repeat: repeat-x;
-	background-image: -moz-linear-gradient(top, #f5f5f5 0, #eee 100%);
+	background-color: #eeeeee; /* Old browsers */
+	background-repeat: repeat-x; /* Repeat the gradient */
+	background-image: -moz-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+	/* FF3.6+ */
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f5f5),
-		color-stop(100%, #eee));
-	background-image: -webkit-linear-gradient(top, #f5f5f5 0, #eee 100%);
-	background-image: -ms-linear-gradient(top, #f5f5f5 0, #eee 100%);
-	background-image: -o-linear-gradient(top, #f5f5f5 0, #eee 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5',
-		endColorstr='#eeeeee', GradientType=0);
-	background-image: linear-gradient(top, #f5f5f5 0, #eee 100%);
+		color-stop(100%, #eeeeee)); /* Chrome,Safari4+ */
+	background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+	/* Chrome 10+,Safari 5.1+ */
+	background-image: -ms-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+	/* IE10+ */
+	background-image: -o-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+	/* Opera 11.10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient(      startColorstr='#f5f5f5',
+		endColorstr='#eeeeee', GradientType=0); /* IE6-9 */
+	background-image: linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+	/* W3C */
 	border: 1px solid #e5e5e5;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
-	border-radius: 4px
+	border-radius: 4px;
 }
 
 .subnav .nav {
-	margin-bottom: 0
+	margin-bottom: 0;
 }
 
 .subnav .nav>li>a {
@@ -169,7 +187,7 @@ table {
 	border-right: 1px solid #e5e5e5;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
-	border-radius: 0
+	border-radius: 0;
 }
 
 .subnav .nav>.active>a,.subnav .nav>.active>a:hover {
@@ -180,11 +198,11 @@ table {
 	border-left: 0;
 	-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .05);
 	-moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, .05);
-	box-shadow: inset 0 3px 5px rgba(0, 0, 0, .05)
+	box-shadow: inset 0 3px 5px rgba(0, 0, 0, .05);
 }
 
 .subnav .nav>.active>a .caret,.subnav .nav>.active>a:hover .caret {
-	border-top-color: #777
+	border-top-color: #777;
 }
 
 .subnav .nav>li:first-child>a,.subnav .nav>li:first-child>a:hover {
@@ -192,17 +210,19 @@ table {
 	padding-left: 12px;
 	-webkit-border-radius: 4px 0 0 4px;
 	-moz-border-radius: 4px 0 0 4px;
-	border-radius: 4px 0 0 4px
+	border-radius: 4px 0 0 4px;
 }
 
 .subnav .nav>li:last-child>a {
-	border-right: 0
+	border-right: 0;
 }
 
+/* Red compulsory fields star */
 .field_req {
-	color: red
+	color: red;
 }
 
+/* Notification alert in home.jsp */
 .notifications>.alert .close {
 	top: 13px;
 	right: 12px;
@@ -210,117 +230,134 @@ table {
 }
 
 .notifications>.alert {
-	padding: 0;
-	margin: 0
+	padding: 0px;
+	margin: 0px
 }
 
+/* Widget */
 .widget {
-	padding: 10px
+	padding: 10px;
 }
 
+/* Settings Content in admin-settings.html*/
 .settings-content {
 	height: 100px;
-	margin-bottom: 50px
+	margin-bottom: 50px;
 }
 
+/* Clip Board Application CSS -- Beginning */
+/* contacts.html,opportunities.html,workflows.html */
 .slate {
 	text-shadow: 0 1px white;
 	padding: 20px;
-	background: #ebf3fb;
+	background: #EBF3FB;
 	-webkit-border-radius: 3px 3px;
 	-moz-border-radius: 3px/3px;
 	border-radius: 3px/3px;
 	-webkit-box-shadow: 0 0 1px white inset, 0 1px 1px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 0 0 1px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
 	box-shadow: 0 0 1px white inset, 0 1px 1px rgba(0, 0, 0, 0.1);
-	border: 1px solid #cde1f5;
-	margin-bottom: 10px
+	border: 1px solid #CDE1F5;
+	margin-bottom: 10px;
 }
 
+/* contacts.html,opportunities.html,workflows.html */
 .slate .slate-content::before,.slate .slate-content::after {
 	display: table;
-	content: ""
+	content: "";
 }
 
+/* contacts.html,opportunities.html,workflows.html */
 .slate .slate-content::after {
-	clear: both
+	clear: both;
 }
 
+/* contacts.html,opportunities.html,workflows.html */
 .slate .slate-content::before,.slate .slate-content::after {
 	display: table;
-	content: ""
+	content: "";
 }
 
+/* contacts.html,opportunities.html,workflows.html */
 .slate .slate-content .box-left {
 	display: block;
-	float: left
+	float: left;
 }
 
+/* contacts.html,opportunities.html,workflows.html */
 .slate .slate-content .box-right {
 	padding-top: 4px;
-	margin-left: 87px
+	margin-left: 87px;
 }
 
+/* contacts.html,opportunities.html,workflows.html */
 .slate .btn-slate-action {
-	margin-top: 10px
+	margin-top: 10px;
 }
 
 a.no-line:hover {
-	text-decoration: none
+	text-decoration: none;
 }
+/* Clip Board Application CSS -- Ending */
 
+/* Mouse over on Tables (with class agile-edit-row) -- cursor change*/
 .agile-edit-row>tr:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
+/* Cursor change in calendar tasks */
 #overdue>tr:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
 #today>tr:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
 #tomorrow>tr:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
 #next-week>tr:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
+/* cursor change for .modal-list-cursor tables */
 .model-list-cursor>tr:hover {
-	cursor: pointer
+	cursor: pointer;
 }
 
+/* To solve modal header and footer distortion */
 .agile-modal-body {
-	overflow-y: hidden
+	overflow-y: hidden;
 }
 
 .navbar .navbar-search .typeahead {
-	margin-top: 0
+	margin-top: 0px;
 }
 
+/* Table sorting css */
 th.header {
-	cursor: pointer
+	cursor: pointer;
 }
 
 table .header:hover::after {
-	visibility: visible
+	visibility: visible;
 }
 
 table .header::after {
 	content: "";
 	float: right;
 	margin-top: 5px;
+	/* margin-right:50%; */
 	border-width: 0 4px 4px;
 	border-style: solid;
 	border-color: black transparent;
-	visibility: hidden
+	visibility: hidden;
 }
 
 table .headerSortUp::after {
-	border-bottom: 0;
+	border-bottom: none;
 	border-left: 4px solid transparent;
 	border-right: 4px solid transparent;
 	border-top: 4px solid black;
@@ -328,66 +365,71 @@ table .headerSortUp::after {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
-	filter: alpha(opacity =   60);
-	-khtml-opacity: .6;
-	-moz-opacity: .6;
-	opacity: .6
+	filter: alpha(opacity =         60);
+	-khtml-opacity: 0.6;
+	-moz-opacity: 0.6;
+	opacity: 0.6;
 }
 
 table .headerSortDown::after,table .headerSortDown:hover::after {
 	visibility: visible;
-	filter: alpha(opacity =   60);
-	-khtml-opacity: .6;
-	-moz-opacity: .6;
-	opacity: .6
+	filter: alpha(opacity =         60);
+	-khtml-opacity: 0.6;
+	-moz-opacity: 0.6;
+	opacity: 0.6;
 }
 
+/* Footer */
 html,body {
-	height: 100%
+	height: 100%;
+	/* The html and body elements cannot have any padding or margin. */
 }
 
+/* Wrapper for page content to push down footer */
 #wrap {
 	min-height: 97%;
 	height: auto !important;
-	margin: 0 auto -45px
+	/* Negative indent footer by it's height */
+	margin: 0 auto -45px;
 }
 
+/* Set the fixed height of the footer here */
 #push {
-	height: 45px
+	height: 45px;
 }
 
 #footer {
 	height: 45px;
-	padding: 0 !important;
+	padding: 0px !important;
 	overflow-x: hidden;
 	overflow-y: hidden;
-	margin-top: 15px
+	margin-top: 15px;
 }
 
 .footer-right {
 	display: inline;
-	float: right
+	float: right;
 }
 
 .footer-left {
 	width: 290px;
 	display: inline-block;
-	margin-top: 15px
+	margin-top: 15px;
 }
 
 .footer-right-icon {
 	font-weight: bold;
 	cursor: pointer;
 	vertical-align: -17px;
-	margin-right: 30px
+	margin-right: 30px;
 }
-
-@media ( max-width :767px) {
+/* Lastly, apply responsive CSS fixes as necessary */
+@media ( max-width : 767px) {
 	#footer {
 		margin-left: -20px;
 		margin-right: -20px;
 		padding-left: 20px;
-		padding-right: 20px
+		padding-right: 20px;
 	}
 }
 
@@ -395,127 +437,141 @@ footer #scroll-top {
 	position: fixed;
 	right: 10px;
 	bottom: 10px;
-	margin: 0;
+	margin: 0px;
 	z-index: 99;
-	display: none
+	display: none;
 }
 
+/*Disable selection using css */
 .unselectable {
 	-moz-user-select: -moz-none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
+	/*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
 	-ms-user-select: none;
-	user-select: none
+	user-select: none;
 }
 
+/* Stripe invoice */
 .invoice-head td {
-	padding: 0 4px
+	padding: 0 4px;
 }
 
 .invoice-body {
-	background-color: transparent
+	background-color: transparent;
 }
 
 .invoice-thank {
 	margin-top: 120px;
-	padding: 5px
+	padding: 5px;
 }
 
 address {
-	margin-top: 15px
+	margin-top: 15px;
 }
 
+/* validation plugin */
 span.valid {
 	width: 24px;
 	height: 24px;
 	background: url(../img/valid.png) center center no-repeat;
 	display: inline-block;
-	text-indent: -9999px
+	text-indent: -9999px;
 }
 
 .warning-dangerzone {
-	padding: 5px 10px; margin-top; margin-left; font-weight; color;
-	background: url("../img/warning.png") 10px 50% no-repeat #fffbc9;
-	border-bottom: 1px solid #ede7a3
+	padding: 5px 10px; margin-top; margin-left;; font-weight; color;
+	background: url("../img/warning.png") 10px 50% no-repeat #FFFBC9;
+	border-bottom: 1px solid #EDE7A3;
 }
 
 .warning-dangerzone p {
 	margin-left: 45px;
-	margin-top: 10px
+	margin-top: 10px;
 }
 
 .warning-header {
 	font: 13px Helvetica, arial, freesans, clean, sans-serif;
-	line-height: 1.4
+	line-height: 1.4;
 }
 
+/* Data todo block for tasks view */
 .data-block.todo-block table tr p {
 	margin: 0;
-	line-height: normal
+	line-height: normal;
 }
 
 .data-block.todo-block table tr p+span {
 	font-size: 11px;
-	color: #a4a5aa
+	color: #a4a5aa;
 }
 
+/* Border-radius in calender */
 .data-block.todo-block {
-	border-radius: 0 !important
+	border-radius: 0px !important;
 }
 
+/* Border-radius in contacts and deals */
 .data-block {
-	border-radius: 5px
+	border-radius: 5px;
 }
 
+/* To overcome page shifts due loading pages of different lengths, adds scroll bar default for all pages */
 html {
-	overflow-y: scroll
+	overflow-y: scroll;
 }
 
 .search-query {
-	border: 0;
-	background-color: transparent;
-	position: absolute
+	border: 0px; /*important*/
+	background-color: transparent; /*important*/
+	position: absolute; /*important*/
 }
 
 .searchbox {
-	border: 0;
-	background-color: transparent;
-	position: absolute;
+	border: 0px; /*important*/
+	background-color: transparent; /*important*/
+	position: absolute; /*important*/
 	top: 5px;
 	left: 210px;
 	width: 16px;
-	height: 16px
+	height: 16px;
 }
-
+/* Not to overide z-index of datepicker due to timepicker modal */
 .datepicker {
-	z-index: 2050 !important
+	z-index: 2050 !important;
 }
 
+/*for information block */
 .info-block {
-	border: 1px solid #dddaa6;
+	/*background: url(../img/tip-icon.jpg) no-repeat top left;
+ background: url("../img/tip-icon.jpg") no-repeat scroll 12px 12px #ECF9FF;*/
+	border: 1px solid #DDDAA6;
 	background: lightYellow;
 	padding: 10px 15px 10px 20px;
 	margin: 10px 0;
 	border-radius: 5px;
-	color: #736b4d
+	color: #736B4D;
 }
 
 .info-block strong {
 	text-decoration: underline;
-	padding-left: 5px
+	padding-left: 5px;
 }
 
 .info-block p {
-	margin: 10px 0 5px
+	margin: 10px 0px 5px;
 }
 
 .info-block i {
 	font-size: 18px;
-	vertical-align: middle
+	vertical-align: middle;
 }
 
 .highcharts-container {
-	overflow: visible !important
+	overflow: visible !important;
 }
 
 .tooltip-title {
@@ -526,7 +582,7 @@ html {
 	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Arial,
 		Helvetica, sans-serif;
 	font-size: 12px;
-	display: block
+	display: block;
 }
 
 .highcharts-tool-tip {
@@ -535,22 +591,24 @@ html {
 	position: absolute;
 	white-space: nowrap;
 	font-family: Georgia, serif;
-	font-size: 12px
+	font-size: 12px;
 }
 
 .tooltip-default-message {
 	font-family: Georgia, serif;
 	display: block;
-	font-size: 12px !important
+	font-size: 12px !important;
 }
 
+/* To show the loading image in the beginning */
 body {
-	background: #fff url("/img/initializing.png") 50% 50% no-repeat
+	background: #ffffff url("/img/initializing.png") 50% 50% no-repeat;
 }
 
+/* To increase font-size in help modal */
 .help-text h3 {
 	font-weight: bold;
-	margin-top: 10px
+	margin-top: 10px;
 }
 
 .activity-text-block {
@@ -559,56 +617,56 @@ body {
 	padding-left: 30px;
 	background: #fff;
 	border: solid 1px #ddd;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05)
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .activity-delete {
-	display: inline
+	display: inline;
 }
 
 .ativity-block-ul {
-	list-style-type: none
+	list-style-type: none;
 }
 
 .activity-block-owner {
-	margin: 0;
+	margin: 0px;
 	float: right
 }
 
 .activity-block-owner>img {
-	float: right
+	float: right;
 }
 
 .activity-block-owner>.owner-name {
 	color: #acacac;
 	text-align: right;
 	margin-right: 10px;
-	line-height: 41px
+	line-height: 41px;
 }
 
 .email-headers {margin 0 0 12px 0;
 	list-style-type: none;
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 12px;
-	margin: 0
+	margin: 0px
 }
 
 .ellipsis-multi-line {
 	overflow: hidden;
-	height: 70px
+	height: 70px;
 }
 
 .ellipsis-multi-line:before {
 	content: "";
 	float: left;
 	width: 5px;
-	height: 70px
+	height: 70px;
 }
 
 .ellipsis-multi-line>*:first-child {
 	float: right;
 	width: 100%;
-	margin-left: -5px
+	margin-left: -5px;
 }
 
 .ellipsis-multi-line:after {
@@ -634,15 +692,17 @@ body {
 		white)
 }
 
+/* welcome modal */
 #agileWelcomeModal img {
 	width: 500px;
-	height: 400px
+	height: 400px;
 }
 
+/* dashboard  css */
 .dashboard-list {
 	margin: 10px 0 0;
 	padding: 3px;
-	overflow: hidden
+	overflow: hidden;
 }
 
 .dashboard-list li {
@@ -670,25 +730,25 @@ body {
 	background-image: linear-gradient(to bottom, #f2f2f2, #d9d9d9);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2f2f2',
-		endColorstr='#ffd9d9d9', GradientType=0)
+		endColorstr='#ffd9d9d9', GradientType=0);
 }
 
 .dashboard-list li:last-child {
-	margin-right: 0
+	margin-right: 0;
 }
 
 .dashboard-list li:hover {
 	background-color: #f2f2f2;
 	background-color: #f5f5f5;
-	background-image: -moz-linear-gradient(top, #fff, #e5e5e5);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff),
+	background-image: -moz-linear-gradient(top, #ffffff, #e5e5e5);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff),
 		to(#e5e5e5));
-	background-image: -webkit-linear-gradient(top, #fff, #e5e5e5);
-	background-image: -o-linear-gradient(top, #fff, #e5e5e5);
-	background-image: linear-gradient(to bottom, #fff, #e5e5e5);
+	background-image: -webkit-linear-gradient(top, #ffffff, #e5e5e5);
+	background-image: -o-linear-gradient(top, #ffffff, #e5e5e5);
+	background-image: linear-gradient(to bottom, #ffffff, #e5e5e5);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',
-		endColorstr='#ffe5e5e5', GradientType=0)
+		endColorstr='#ffe5e5e5', GradientType=0);
 }
 
 .dashboard-list li>a {
@@ -699,48 +759,48 @@ body {
 	font-weight: bold;
 	text-align: center;
 	text-decoration: none;
-	text-shadow: 0 1px 1px #fff
+	text-shadow: 0 1px 1px #fff;
 }
 
 .dashboard-list li>a>span {
 	margin: 15px auto 0;
 	display: block;
 	height: 50px;
-	background-image: url('../img/icons/dashboard-icons-dark.png')
+	background-image: url('../img/icons/dashboard-icons-dark.png');
 }
 
 .dashboard-list li>a>span.contact {
 	width: 50px;
-	background-position: -6px -6px
+	background-position: -6px -6px;
 }
 
 .dashboard-list li>a>span.sales {
 	width: 45px;
-	background-position: -97px -6px
+	background-position: -97px -6px;
 }
 
 .dashboard-list li>a>span.tickets {
 	width: 37px;
-	background-position: -57px -6px
+	background-position: -57px -6px;
 }
 
 .dashboard-list li>a>span.articles {
 	width: 49px;
-	background-position: -193px -6px
+	background-position: -193px -6px;
 }
 
 .dashboard-list li>a>span.looong {
 	width: 46px;
-	background-position: -145px -6px
+	background-position: -145px -6px;
 }
 
 .dashboard-list li>a>span.settings {
 	width: 48px;
-	background-position: -6px -6px
+	background-position: -6px -6px;
 }
 
 .user-info-settings {
-	padding: 2px 4px 0 9px
+	padding: 2px 4px 0px 9px;
 }
 
 .icon-2x {
@@ -781,26 +841,26 @@ body {
 }
 
 #show-help p {
-	margin-left: 25px
+	margin-left: 25px;
 }
 
 .typeahead-border {
-	border-bottom: 1px solid whitesmoke
+	border-bottom: 1px solid whitesmoke;
 }
 
 .typeahead-border:last-child {
-	border-bottom: none !important
+	border-bottom: none !important;
 }
 
 .contact-details-widget:before {
 	content: "" !important;
 	float: left !important;
 	width: 5px !important;
-	height: 120px !important
+	height: 120px !important;
 }
 
 .contact-details-widget:after {
-	left: 86%
+	left: 86%;
 }
 
 .contact-details-property {
@@ -808,20 +868,21 @@ body {
 	width: 17em;
 	word-wrap: normal;
 	text-overflow: ellipsis;
-	white-space: nowrap
+	white-space: nowrap;
 }
 
+/* Contact details widget*/
 .contact-detail-entity-list {
 	padding-right: 10px;
 	display: inline-block;
 	padding-bottom: 2px;
-	line-height: 20px
+	line-height: 20px;
 }
 
 .contact-detail-entity-list div:first-child {
 	border-top: 1px solid #f5f5f5;
 	margin-top: -5px;
-	padding-top: 3px
+	padding-top: 3px;
 }
 
 #notify-container {
@@ -834,17 +895,17 @@ body {
 	height: 0;
 	z-index: 10000;
 	color: white;
-	font-size: 14px
+	font-size: 14px;
 }
 
 #notify-container div {
 	background-color: #222;
 	padding: 7px 0;
-	height: 20px
+	height: 20px;
 }
 
 #notify-container span#resend_verification_mail:hover {
-	text-decoration: underline
+	text-decoration: underline;
 }
 
 #notify-container span.notify-close {
@@ -858,92 +919,96 @@ body {
 	text-decoration: none;
 	display: block;
 	cursor: pointer;
-	margin-top: -3px
+	margin-top: -3px;
 }
 
 tbody a.no-style-a {
 	color: black;
-	text-decoration: none
+	text-decoration: none;
 }
 
+/* For scroll in deals milestones */
+/* Vertical scroll */
 #opportunities-full-screen-model-list ::-webkit-scrollbar, #opportunities-by-milestones-model-list ::-webkit-scrollbar {
 	width: 5px;
-	margin-right: 4px !important
+	margin-right: 4px !important;
 }
-
+/* Horizontal scroll */
 #opportunities-full-screen-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-milestones-model-list ::-webkit-scrollbar:horizontal {
-	height: 10px
+	height: 10px;
 }
-
+/* Track */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-track, #opportunities-by-milestones-model-list ::-webkit-scrollbar-track {
 	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 	-webkit-border-radius: 10px;
-	border-radius: 10px
+	border-radius: 10px;
 }
-
+/* Handle */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb {
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 	background: rgba(185, 182, 182, 0.8);
-	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5)
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
 #tags ::-webkit-scrollbar {
 	width: 10px;
-	margin-right: 4px !important
+	margin-right: 4px !important;
 }
 
+/* Horizontal scroll */
 #tags ::-webkit-scrollbar:horizontal {
-	height: 10px
+	height: 10px;
 }
-
+/* Track */
 #tags ::-webkit-scrollbar-track {
 	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 	-webkit-border-radius: 10px;
-	border-radius: 10px
+	border-radius: 10px;
 }
-
+/* Handle */
 #tags ::-webkit-scrollbar-thumb {
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 	background: rgba(185, 182, 182, 0.8);
-	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3)
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
+/* For UI in deals milestones */
 .milestone-main {
 	white-space: nowrap;
 	overflow: auto;
 	width: 100%;
 	height: 517px;
 	border: 1px solid #d5d5d5;
-	border-radius: 5px
+	border-radius: 5px;
 }
 
 .milestone-column {
 	width: 24.87%;
 	vertical-align: top;
 	border-right: 1px solid #bbb;
-	display: inline-block
+	display: inline-block;
 }
 
 .milestone-heading {
-	padding: 7px 0;
+	padding: 7px 0px;
 	text-align: center;
 	font-size: 17px;
 	background-color: lightgrey;
-	margin-bottom: 0;
+	margin-bottom: 0px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	text-transform: capitalize
+	text-transform: capitalize;
 }
 
 .milestone-column>ul {
 	height: 468px;
 	overflow-y: auto !important;
 	list-style: none;
-	margin-left: 0;
-	margin-bottom: 0
+	margin-left: 0px;
+	margin-bottom: 0px;
 }
 
 .milestone-column>ul>li {
@@ -953,22 +1018,23 @@ tbody a.no-style-a {
 	border: 1px solid #DDD;
 	border-radius: 4px;
 	padding: 10px;
-	background-color: #f5f5dc
+	background-color: #f5f5dc;
 }
 
+/* Displaying milestone list values in Admin settings */
 .milestone-value-list>li {
-	margin-right: 0 !important;
+	margin-right: 0px !important;
 	margin-bottom: 5px !important;
 	cursor: move;
 	background-color: #f8f8b9 !important;
 	border: 1px solid #DDD !important;
 	color: black !important;
 	padding: 5px;
-	border-radius: 5px
+	border-radius: 5px;
 }
 
 .milestone-value-list>li>div {
-	margin: 0 0 -6px 3px
+	margin: 0px 0px -6px 3px;
 }
 
 .milestone-value-list>li>div>span {
@@ -976,12 +1042,12 @@ tbody a.no-style-a {
 	text-overflow: ellipsis;
 	overflow: hidden;
 	width: 12em;
-	display: inline-block
+	display: inline-block;
 }
 
 .milestone-value-list>li>div>a {
 	color: black !important;
-	display: inline-block
+	display: inline-block;
 }
 
 .agile-overflow-ellipsis {
@@ -989,7 +1055,7 @@ tbody a.no-style-a {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	width: 100%;
-	overflow: hidden
+	overflow: hidden;
 }
 
 .agile-ellipsis-dynamic {
@@ -999,61 +1065,111 @@ tbody a.no-style-a {
 	table-layout: fixed
 }
 
-.agile-ellipsis-dynamic>tbody>tr>td *:not (.ellipsis-multiline ){
-	max-width: 100%;
-	height: auto;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden
+.agile-ellipsis-dynamic > tbody> tr > td *:not(.ellipsis-multiline){	
+	max-width:100%;
+	height:auto;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+
 }
 
 .ellipsis-multiline {
 	width: 100% !important;
 	height: 60px !important;
-	display: block;
+	display: block; /* Fallback for non-webkit */
 	display: -webkit-box;
 	margin: 0 auto;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-	text-overflow: ellipsis
+	text-overflow: ellipsis;
 }
-
-@media ( min-width :980px) and (max-width:1199px) {
-	.agile-menu>li:nth-child(n+6):not (.nav-bar-search ):not (#more-menu ){
-		display: none
-	}
-	#more-menu li:not (:nth-child(n+2) ){
-		display: none
-	}
-	.more-menu-hide-low {
-		display: none !important
-	}
-	.more-menu-show-low {
-		display: block !important
+/**
+@media (min-width: 980px) and (max-width: 1201px)  {
+	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu li:not(:nth-child(n+3)) {
+		display:none;
 	}
 }
 
-@media ( min-width :1200px) {
-	.agile-menu>li:nth-child(n+9):not (.nav-bar-search ):not (#more-menu ){
-		display: none
+@media (min-width: 1200px) and (max-width: 1250px)  {
+	.agile-menu  > li:nth-child(n + 10):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
+		display:none;
 	}
-	#more-menu li:not (:nth-child(n+5) ){
-		display: none
-	}
-	.more-menu-hide-medium {
-		display: none !important
-	}
-	.more-menu-show-medium {
-		display: block !important
+
+}
+
+@media (min-width: 1251px) and (max-width: 1300px) {
+
+	.agile-menu  > li:nth-child(n + 10):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
+		display:none;
 	}
 }
 
+@media (min-width: 1300px) {
+
+	.agile-menu  > li:nth-child(n + 12):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu  {
+		display:none;
+	}
+}
+
+@media (max-width: 979px) {
+	#more-menu {
+		display:none;
+	}
+}
+*/
+@media (min-width: 980px) and (max-width: 1199px)  {
+	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu li:not(:nth-child(n+2)) {
+		display:none;
+	}
+	
+	.more-menu-hide-low
+	{
+		display:none !important;
+	}
+	.more-menu-show-low
+	{
+		display:block !important;
+	}
+	
+}
+
+
+@media (min-width: 1200px)  {
+	.agile-menu  > li:nth-child(n + 9):not(.nav-bar-search):not(#more-menu)   {     display:none }	
+	#more-menu li:not(:nth-child(n+5)) {
+		display:none;
+	} 
+	
+	.more-menu-hide-medium
+	{
+		display:none !important;
+	}
+	.more-menu-show-medium
+	{
+		display:block !important;
+	}
+	
+
+}
+
+
+
+
+/* Disable drop-down menu item, add class="disabled" to <a>
+Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
+*/
 .dropdown-menu a.disabled,.dropdown-menu a.disabled:hover {
-	background-color: #fff;
-	color: #000
+	background-color: #ffffff;
+	color: #000000;
 }
 
 .rhs>.dynamic-option {
-	max-width: 125px
+	max-width: 125px;
 }
