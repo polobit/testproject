@@ -35,7 +35,7 @@ public class GoogleApi extends DefaultApi20
     /**
      * Redirect URL to which the code the returned after OAuth 2.0
      */
-    private static final String REDIRECT_URL = "https://null-dot-sandbox-dot-agile-crm-cloud.appspot.com/backend/googleservlet";
+    private static final String REDIRECT_URL = "https://my.agilecrm.com/backend/googleservlet";
 
     /**
      * Returns access token URL of Google
@@ -45,6 +45,11 @@ public class GoogleApi extends DefaultApi20
     {
 
 	return ACCESS_TOKEN_URL;
+    }
+
+    public static String getRedirectURL()
+    {
+	return REDIRECT_URL;
     }
 
     /**
