@@ -11,7 +11,7 @@ var AgileConfigRouter = Backbone.Router.extend({
 	
 	onBoarding : function(link)
 	{
-		$("#content").html(getTemplate("onboarding-saas"), {});
+		$("#content").html(getTemplate("onboarding-"+ link), {});
 	},
 	
 });
