@@ -7,14 +7,14 @@ var timeline_entity_loader = {
 		// Load plugins for timeline
 		head.load("/lib/isotope.pkgd.js", LIB_PATH + "lib/jquery.event.resize.js", "css/misc/agile-timline.css", function()
 		{
-			//customize_isotope()
+			// customize_isotope()
 			configure_timeline();
 			timeline_collection_view = new timeline_view();
 			console.log(_this);
 			_this.load_other_timline_entities(contact);
 			timeline_collection_view.render();
-			//timeline_collection_view.render();
-			
+			// timeline_collection_view.render();
+
 		});
 	},
 	load_other_timline_entities : function(contact)
@@ -28,31 +28,31 @@ var timeline_entity_loader = {
 	load_related_entites : function(contactId)
 	{
 		var entity_types = [
-		        			"deals", "notes", "cases", "tasks"
-		        	];
+				"deals", "notes", "cases", "tasks"
+		];
 
-		        	var url = 'core/api/contacts/related-entities/' + contactId;
-		        	this.timline_fetch_data(url, function(data)
-		        	{
-		        		var entities = [];
+		var url = 'core/api/contacts/related-entities/' + contactId;
+		this.timline_fetch_data(url, function(data)
+		{
+			var entities = [];
 
-		        		for ( var index in entity_types)
-		        		{
-		        			if (data[entity_types[index]].length == 0)
-		        				continue;
+			for ( var index in entity_types)
+			{
+				if (data[entity_types[index]].length == 0)
+					continue;
 
-		        			entities = entities.concat(data[entity_types[index]]);
+				entities = entities.concat(data[entity_types[index]]);
 
-		        		}
+			}
 
-		        		timeline_collection_view.addItems(entities);
-		        	});
+			timeline_collection_view.addItems(entities);
+		});
 	},
 	load_stats : function(contact)
 	{
 		/*
-		 * Stores all urls (notes, deals and tasks) in an array to fetch data using
-		 * same collection by changing its url.
+		 * Stores all urls (notes, deals and tasks) in an array to fetch data
+		 * using same collection by changing its url.
 		 */
 
 		var email = getPropertyValue(contact.properties, "email");
@@ -60,61 +60,65 @@ var timeline_entity_loader = {
 		// Go for mails when only the contact has an email
 		if (email)
 		{
-			this.get_stats('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', contact, App_Contacts.contactDetailView.el, function(stats)
-			{
-				// Clone emails Array to not affect original emails
-
-				var stats_processed = [];
-				if (stats && stats.length > 0)
-				{
-					for ( var i = 0; i < stats.length; i++)
+			this.get_stats('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', contact, App_Contacts.contactDetailView.el,
+					function(stats)
 					{
-						// if error occurs in imap (model is obtained with the error
-						// msg along with contact-email models),
-						// ignore that model
-						if (('errormssg' in stats[i]) || stats[i].status === "error")
-							continue;
+						// Clone emails Array to not affect original emails
 
-						stats_processed.push(stats[i]);
-					}
+						var stats_processed = [];
+						if (stats && stats.length > 0)
+						{
+							for ( var i = 0; i < stats.length; i++)
+							{
+								// if error occurs in imap (model is obtained
+								// with the error
+								// msg along with contact-email models),
+								// ignore that model
+								if (('errormssg' in stats[i]) || stats[i].status === "error")
+									continue;
 
-					// Addes opened emails into timeline
-					var opened_emails = this.getOpenedEmailsFromEmails(stats_processed);
-					if (opened_emails.length > 0)
-						stats_processed.push(opened_emails);
+								stats_processed.push(stats[i]);
+							}
 
-					timeline_collection_view.addItems(stats_processed);
-				}
-			})
+							// Addes opened emails into timeline
+							var opened_emails = this.getOpenedEmailsFromEmails(stats_processed);
+							if (opened_emails.length > 0)
+								stats_processed.push(opened_emails);
+
+							timeline_collection_view.addItems(stats_processed);
+						}
+					})
 		}
 	},
 	load_campaign_logs : function(contactId)
 	{
 		var url = '/core/api/campaigns/logs/contact/' + contactId;
-		this.timline_fetch_data(
-				url,
-				function(data)
-				{
-					if (!data || data.length == 0)
-						return;
-					var log_models = [];
+		this
+				.timline_fetch_data(
+						url,
+						function(data)
+						{
+							if (!data || data.length == 0)
+								return;
+							var log_models = [];
 
-					$
-							.each(
-									data,
-									function(index, model)
-									{
+							$
+									.each(
+											data,
+											function(index, model)
+											{
 
-										// Add these log-types in timeline
-										if (model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE' || model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET')
-										{
-											log_models.push(model);
-										}
+												// Add these log-types in
+												// timeline
+												if (model.log_type == 'EMAIL_SENT' || model.log_type == 'EMAIL_OPENED' || model.log_type == 'EMAIL_CLICKED' || model.log_type == 'SET_OWNER' || model.log_type == 'SCORE' || model.log_type == 'ADD_DEAL' || model.log_type == 'TWEET')
+												{
+													log_models.push(model);
+												}
 
-									});
+											});
 
-					timeline_collection_view.addItems(log_models);
-				})
+							timeline_collection_view.addItems(log_models);
+						})
 	}, timline_fetch_data : function(url, callback)
 	{
 		$("#timeline-loading-img", App_Contacts.contactDetailView.el).show();
@@ -129,8 +133,7 @@ var timeline_entity_loader = {
 		{
 			$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
 		});
-	},
-	getOpenedEmailsFromEmails : function(emails)
+	}, getOpenedEmailsFromEmails : function(emails)
 	{
 		var opened_emails = [];
 		$.each(emails, function(index, model)
@@ -153,7 +156,7 @@ var timeline_entity_loader = {
 
 		return opened_emails;
 	},
-	
+
 	get_stats : function(email, contact, el)
 	{
 		// If there are no web-stats - return
@@ -171,12 +174,11 @@ var timeline_entity_loader = {
 
 		var StatsCollection = Backbone.Collection.extend({});
 
-		this.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data){
-			
-		
-		this.statsCollection = new StatsCollection(data);
-		data = statsCollection; 
-		
+		this.timline_fetch_data('core/api/web-stats?e=' + encodeURIComponent(email), function(data)
+		{
+
+			this.statsCollection = new StatsCollection(data);
+			data = statsCollection;
 
 			is_mails_fetched = true;
 			is_logs_fetched = false;
