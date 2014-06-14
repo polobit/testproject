@@ -24,7 +24,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	}
 	
 	// Show loading image instead of textarea
-	$('#loading-editor').html(getRandomLoadingImg());
+//	$('#loading-editor').html(getRandomLoadingImg());
 	
 	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview";
 	
@@ -51,8 +51,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 			}
 			
 			// Show textarea and remove loading img
-			$(selector).css('display', '');
-			$('#loading-editor').html("");
+//			$(selector).css('display', '');
+//			$('#loading-editor').html("");
 			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
 				"textcolor link image preview"
@@ -60,6 +60,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
+				browser_spellcheck : true,
+		        gecko_spellcheck: true,
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
@@ -69,8 +71,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	}
 
 	// Show textarea and remove loading img
-	$(selector).css('display', '');
-	$('#loading-editor').html("");
+//	$(selector).css('display', '');
+//	$('#loading-editor').html("");
 	
 	// if tinymce instance exists, reinitialize tinymce on given selector
 	if (selector.indexOf('#') !== -1)

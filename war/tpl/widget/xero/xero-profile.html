@@ -4,7 +4,7 @@
 	<div  style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
 			<a href="https://go.xero.com/Contacts/View.aspx?contactID={{Contact.ContactID}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
-				{{Contact.FirstName}} {{Contact.LastName}}
+				{{Contact.Name}}
 			</b></h4></a>
 		</div>
 	</div>
@@ -59,8 +59,8 @@
 	<ul style="margin:0px;">
 		{{#each Invoices}}
 			<li class="row-fluid sub_header_li">
-				<a class="pull-left"  href="https://go.xero.com/AccountsReceivable/Edit.aspx?InvoiceID={{InvoiceID}}" target="_blank" data-toggle="tooltip" data-placement="top" title={{xeroTypeToolTip Type}} >{{InvoiceNumber}} ({{xeroType Type}})</a>
-				<div class="pull-right">{{Total}}({{CurrencyCode}})</div><br>
+				<a class="pull-left"  href="https://go.xero.com/AccountsReceivable/Edit.aspx?InvoiceID={{InvoiceID}}" target="_blank" data-toggle="tooltip" data-placement="top" title={{xeroTypeToolTip Type}} >{{InvoiceNumber}} {{xeroType Type}}</a>
+				<div class="pull-right">{{CurrencyCode}} {{Total}}</div><br>
 				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{DueDateString}}">{{DueDateString}}</time></small></div>					
 				<div class="pull-right"><span class="badge">{{capFirstLetter Status}}</span></div><br>			
 			</li>

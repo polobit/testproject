@@ -18,7 +18,6 @@
 							<input type="text" name="name" class="required" />
 						</div>
 					</div>
-					{{#if id}}<input type="hidden" name="position" />{{/if}}
 					<div class="control-group" id="report-settings">
 						<label class="control-label">Condition</label>
 						<div class="controls" >
@@ -41,6 +40,7 @@
 														<option value="referrer">Referrer URL</option>
 														<option value="visit">Frequency</option>
 														<option value="device">Device</option>
+														<option value="user_agent">User Agent</option>
 													</optgroup>
 													<optgroup label="Contact Data" id="page-conditions">
 														<option value="tags">Tag</option>
@@ -114,7 +114,13 @@
 
 													<!--country-->
 													<option value="COUNTRY_IS" class="country">is</option>
-													<option value="COUNTRY_IS_NOT" class="country">isn't</option>		
+													<option value="COUNTRY_IS_NOT" class="country">isn't</option>	
+													
+													<!--user agent-->
+													<option class="user_agent" value="UA_IS">is</option>
+													<option class="user_agent" value="UA_IS_NOT">isn't</option>
+													<option class="user_agent" value="UA_CONTAINS">contains</option>
+													<option class="user_agent" value="UA_NOT_CONTAINS">doesn't contain</option>
 									
 													<!-- shopify cart -->
 													<option value="IS_EMPTY" class="cart">Cart is empty</option>
@@ -394,7 +400,8 @@
                                 						<option value="ZM" class="COUNTRY_IS COUNTRY_IS_NOT">Zambia</option>
                                							<option value="ZW" class="COUNTRY_IS COUNTRY_IS_NOT">Zimbabwe</option>
                                 						<option value="AX" class="COUNTRY_IS COUNTRY_IS_NOT">&#197;land Islands</option>
-													</select> 
+													</select>
+													<input type="text" class="UA_IS UA_IS_NOT UA_CONTAINS UA_NOT_CONTAINS" placeholder="Enter User Agent"></input>
 											</div>
 										</td>
 										<td class="controls"

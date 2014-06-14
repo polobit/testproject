@@ -22,9 +22,10 @@
 Here is your API key you can use to access through various clients<div class="clearfix"></div><br/>
 				<div class="row-fluid">
     				<div class="span11">
+<div><a class="right copy-code" style="margin:5px 10px 0px 0px;cursor:pointer;"></a>
         				<pre class="prettyprint">
 {{api_key}}
-</pre>
+</pre></div>
     				</div>
 				</div>
 
@@ -36,7 +37,8 @@ Here is your API key you can use to access through various clients<div class="cl
 				<div class="row-fluid">
     				<div class="span11">
 <p>You can use javascript API to track page views on your site, add / delete contacts from your website or blog directly. Copy and paste the below code in your webpage's HTML just before the <b>&lt;/BODY&gt;</b> tag to enable tracking / API methods.</p>
-Tracking Code<div class="clearfix"></div><br/>
+<b>Tracking code</b><div class="clearfix"></div>
+<div><a class="right copy-code" style="margin:5px 10px 0px 0px;cursor:pointer;"></a>
 <pre class="prettyprint">
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 &lt;/script&gt;
@@ -44,24 +46,26 @@ Tracking Code<div class="clearfix"></div><br/>
  _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
  _agile.track_page_view();
 &lt;/script&gt;
-</pre>
+</pre></div>
 	</div>
 </div>
 				<div class="row-fluid">
     				<div class="span11">
-Tracking Code with WebRules<div class="clearfix"></div><br/>
+<b>Tracking code with Web Rules enabled</b><div class="clearfix"></div>
+<div><a class="right copy-code" style="margin:5px 10px 0px 0px;cursor:pointer;"></a>
 <pre class="prettyprint">
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
  _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
  _agile.track_page_view();
- _agile_execute_web_rules()
+ _agile_execute_web_rules();
 &lt;/script&gt;
-</pre>
+</pre></div>
 	</div>
 </div>
-
+<br/>
+<p><b>API Reference</b></p>
 
 Set Email (Mandatory)<div class="clearfix"></div><br/>
 				<div class="row-fluid">

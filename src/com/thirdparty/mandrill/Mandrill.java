@@ -287,7 +287,7 @@ public class Mandrill
 
 	    messageJSON.put(MANDRILL_TEXT, text);
 
-	    if (StringUtils.isBlank(metadata))
+	    if (!StringUtils.isBlank(metadata))
 		messageJSON.put(Mandrill.MANDRILL_METADATA, new JSONObject(metadata));
 
 	    messageJSON.put(MANDRILL_ATTACHMENTS, getAttachmentsJSON(attachments));
