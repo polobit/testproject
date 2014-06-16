@@ -9,6 +9,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
@@ -37,16 +38,14 @@ public class ShopifyAgileMapper {
 			  * formating address according to agile address format 
 			  */
 			  JSONObject addrs = new JSONObject();
-			  addrs.put("Street", address.get("address1") +" "+address.get("address2"));
+			  addrs.put("address", address.get("address1") +" "+address.get("address2"));
 			  addrs.put("city", address.get("city"));
-			  addrs.put("country", address.get("country"));
-			  addrs.put("First name",address.get("first_name"));
-			  addrs.put("last name", address.get("last_name"));
 			  addrs.put("state", address.get("province"));
-			  addrs.put("Mobile", address.get("phone"));
-			  addrs.put("Zip code", address.get("zip"));
+			  addrs.put("country", address.get("country"));
+			  addrs.put("mobile", address.get("phone"));
+			  addrs.put("zip", address.get("zip"));
 			  addrs.put("name", address.get("name"));
-			  contactField.add(new ContactField(Contact.ADDRESS,addrs.toString(),"work"));
+			  contactField.add(new ContactField(Contact.ADDRESS,addrs.toString(),"home"));
 			  if(address.has("company"))
 			  contactField.add(new ContactField(Contact.COMPANY,address.getString("company"),"Work"));
 			  contactField.add(new ContactField(Contact.PHONE,address.getString("phone"),"work"));
@@ -68,7 +67,8 @@ public class ShopifyAgileMapper {
 		if(customer.has("tags")){
 		/*	Tag t  = new Tag();
 			t.tag = customer.getString("tags");
-			t.addTag(tagName)*/
+			t.addTag(tagName)
+			ctx.addTags(t);*/
 		}
 			
 		

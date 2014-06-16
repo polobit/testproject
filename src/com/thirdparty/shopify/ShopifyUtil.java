@@ -2,16 +2,17 @@ package com.thirdparty.shopify;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -140,15 +141,10 @@ public class ShopifyUtil
 
 			String url ="https://0f99730e50a2493463d263f6f6003622:1a27610dee9600dd8366bf76d90b5589@shopatmyspace.myshopify.com/admin/customers.json";
 			try{
-				ContactPrefs pref = new ContactPrefs();
-				pref.userName = "jeetu345@gmail.com";
-				pref.password = "hungry";
-				pref.apiKey = "0f99730e50a2493463d263f6f6003622";
-				pref.save();
-				Key<DomainUser> key = pref.getDomainUser();
-                CloseableHttpClient client = HttpClients.createDefault();
+				
+				HttpClient client = new DefaultHttpClient();
 				HttpGet get = new HttpGet(url);
-			    CloseableHttpResponse response = client.execute(get);
+			    HttpResponse response = client.execute(get);
 				BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 				String line;
 				while((line= br.readLine())!=null){
@@ -164,17 +160,19 @@ public class ShopifyUtil
 	}
 	
 	public static void importCustomer(ContactPrefs prefs,Key<DomainUser> key){
-		String url =  buildUrl(prefs);
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpGet get = new HttpGet(url);
-	    try{
-	    CloseableHttpResponse response = client.execute(get);
-		BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		String line;
-		while((line= br.readLine())!=null){
-			System.out.println(line);
-			shopifyService.save(new JSONObject(line),key);
-		}
+
+		String url = buildUrl(prefs);
+		try{
+			URL ur = new URL(url);
+			URLConnection con = ur.openConnection();
+			con.connect();
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String line;
+			while((line= br.readLine())!=null){
+				System.out.println(line);
+				shopifyService.save(new JSONObject(line),key);
+			}
+			
 
 	}catch(Exception e){
 		e.printStackTrace();
