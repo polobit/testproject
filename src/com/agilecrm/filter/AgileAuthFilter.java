@@ -184,9 +184,10 @@ public class AgileAuthFilter implements Filter
     public void setAccessScopes(ServletRequest request, DomainUser user)
     {
 	UserInfo info = SessionManager.get();
-	if (!info.getScopes().containsAll(user.scopes) && user.scopes.size() != info.getScopes().size())
+
+	if (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes))
 	{
-	    System.out.println("doesnot contain all scopes");
+	    System.out.println("does not contain all scopes");
 	    System.out.println(info.getScopes());
 	    System.out.println(user.scopes);
 	    info.setScopes(user.scopes);

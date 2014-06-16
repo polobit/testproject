@@ -195,7 +195,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    BillingRestrictionUtil.throwLimitExceededException(clazz.getSimpleName());
 
 	// Checks User access control over current entity to be saved.
-	UserAccessControlUtil.check(clazz.getSimpleName(), this, CRUDOperation.CREATE, true);
+	UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.CREATE, true);
 
 	return ofy().put(entity);
     }
