@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -24,6 +23,8 @@ import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
 import com.thirdparty.salesforce.SalesforceImportUtil;
+import com.thirdparty.stripe.StripeUtil;
+import com.thirdparty.zoho.ZohoImportUtil;
 
 /**
  * <code>ContactUtilServlet</code> contains method to get and import contacts.
@@ -50,14 +51,14 @@ public class ContactUtilServlet extends HttpServlet
 	{
 
 	    System.out.println("in contact util servlet");
-	    String type = req.getParameter("type");
-	    String cron = req.getParameter("cron");
+	   // String type = req.getParameter("type");
+	    //String cron = req.getParameter("cron");
 
 	    /**
 	     * If sync type is google the contact sync based on duration is
 	     * initialized
 	     */
-	    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
+	/*    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
 	    {
 		String duration = req.getParameter("duration");
 		String offline = req.getParameter("offline");
@@ -69,7 +70,7 @@ public class ContactUtilServlet extends HttpServlet
 		}
 		syncGoogleContacts(duration);
 		return;
-	    }
+	    }*/
 
 	    InputStream stream = req.getInputStream();
 	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
@@ -157,23 +158,49 @@ public class ContactUtilServlet extends HttpServlet
 
 	    if (contactPrefs.type == Type.SALESFORCE)
 	    {
-		if (contactPrefs.salesforceFields.contains("accounts"))
+		if (contactPrefs.dataOptions.contains("accounts"))
 		    SalesforceImportUtil.importSalesforceAccounts(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("leads"))
+		if (contactPrefs.dataOptions.contains("leads"))
 		    SalesforceImportUtil.importSalesforceLeads(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("contacts"))
+		if (contactPrefs.dataOptions.contains("contacts"))
 		    SalesforceImportUtil.importSalesforceContacts(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("deals"))
+		if (contactPrefs.dataOptions.contains("deals"))
 		    SalesforceImportUtil.importSalesforceOpportunities(contactPrefs, key);
 
-		if (contactPrefs.salesforceFields.contains("cases"))
+		if (contactPrefs.dataOptions.contains("cases"))
 		    SalesforceImportUtil.importSalesforceCases(contactPrefs, key);
 
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
 			"Imported successfully from Salesforce");
+	    }else if(contactPrefs.type == Type.ZOHO){
+	    	assert contactPrefs!=null:"contact cant be empty";
+	    	
+	    	if(contactPrefs.dataOptions.contains("leads"))
+	    		ZohoImportUtil.importZohoLeads(contactPrefs, key);
+	    	
+	    	if(contactPrefs.dataOptions.contains("accounts"))
+	    		ZohoImportUtil.importAccounts(contactPrefs, key);
+	    	
+	    	if(contactPrefs.dataOptions.contains("contacts"))
+	    		ZohoImportUtil.importContacts(contactPrefs, key);
+	    	 
+	    	if(contactPrefs.dataOptions.contains("event"))
+	    		ZohoImportUtil.importEvent(contactPrefs, key);
+	    	
+	    	if(contactPrefs.dataOptions.contains("task"))
+	    		ZohoImportUtil.importTask(contactPrefs, key);
+	    	
+	    	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+	    			"Imported successfully from Zoho");
+	    }else if(contactPrefs.type == Type.STRIPE){
+	    	  StripeUtil.importCustomer(contactPrefs, key);
+	    	  
+	    		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+		    			"Imported successfully from Stripe");
+	    	
 	    }
 
 	}
