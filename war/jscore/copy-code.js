@@ -27,7 +27,7 @@ function initZeroClipboard(id, source) {
  // Set data to clickable element
  $("#" + id).attr("data-clipboard-text", scriptCode);
 
- var script_tooltip_timing = function() {
+/* var script_tooltip_timing = function() {
   $("#" + id).tooltip('hide').removeAttr('data-original-title');
  };
 
@@ -51,7 +51,7 @@ function initZeroClipboard(id, source) {
 
   timeOutHandler = setTimeout(script_tooltip_timing, 2000);
 
- });
+ });*/
 
 }
 
