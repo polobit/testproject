@@ -113,7 +113,7 @@ public class ContactPrefs implements Serializable
 
     public static enum Type
     {
-	GOOGLE, ZOHO, SUGAR, SALESFORCE
+	GOOGLE, ZOHO, SUGAR, SALESFORCE,SHOPIFY
     }
 
     /**
@@ -154,7 +154,7 @@ public class ContactPrefs implements Serializable
     public SYNC_TYPE sync_type = null;
 
     @NotSaved
-    public List<String> salesforceFields;
+    public List<String> thirdPartyField;
 
     public static String AGILE = "Agile";
     public static String CLIENT = "Client";
