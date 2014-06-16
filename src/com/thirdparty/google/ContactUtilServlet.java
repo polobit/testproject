@@ -51,14 +51,14 @@ public class ContactUtilServlet extends HttpServlet
 	{
 
 	    System.out.println("in contact util servlet");
-	    String type = req.getParameter("type");
-	    String cron = req.getParameter("cron");
+	  //  String type = req.getParameter("type");
+	   // String cron = req.getParameter("cron");
 
 	    /**
 	     * If sync type is google the contact sync based on duration is
 	     * initialized
 	     */
-	    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
+	/*    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
 	    {
 		String duration = req.getParameter("duration");
 		String offline = req.getParameter("offline");
@@ -70,7 +70,7 @@ public class ContactUtilServlet extends HttpServlet
 		}
 		syncGoogleContacts(duration);
 		return;
-	    }
+	    }*/
 
 	    InputStream stream = req.getInputStream();
 	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);

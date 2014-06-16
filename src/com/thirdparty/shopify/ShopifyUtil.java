@@ -185,7 +185,7 @@ public class ShopifyUtil
 
 private static String buildUrl(ContactPrefs prefs){
 	StringBuilder uri = new StringBuilder();
-	 uri.append("https://").append(prefs.apiKey+":").append(prefs.password).append(prefs.userName)
+	 uri.append("https://").append(prefs.apiKey+":").append(prefs.password).append("@"+prefs.userName)
 	 .append("/admin/customers.json");
 	 System.out.println(uri.toString());
 	 return uri.toString();
