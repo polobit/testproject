@@ -209,6 +209,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		head.js(LIB_PATH + 'lib/prettify-min.js', LIB_PATH + 'lib/zeroclipboard/ZeroClipboard.js', function()
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
@@ -224,7 +225,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
-			$("#content").html(getTemplate("admin-settings"), {});
 			$('#content').find('#admin-prefs-tabs-content').html(view.el);
 			$('#content').find('#AdminPrefsTab .active').removeClass('active');
 			$('#content').find('.analytics-code-tab').addClass('active');
