@@ -13,7 +13,7 @@
 $(function() {
 
 	// Prevent default on click
-	$('#helpMail').die().live('click',function(e){
+	$('#helpMail').die().live('click', function(e){
 		e.preventDefault();
 
 		if($(this).attr('disabled'))
@@ -50,6 +50,7 @@ $(function() {
 			
 			// Enables Send Email button.
 		    enable_send_button($('#helpMail'));
+		    window.history.back();
 		});
 	});
 });
