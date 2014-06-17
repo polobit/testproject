@@ -136,11 +136,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			  <h1 style="font-size:29px;">Create your First User</h1>
 				  <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();" style="padding:10px 0px 5px;border-top: 1px dotted #CCC;">
 				 
-<<<<<<< HEAD
 						<div id="domain-error" class="alert alert-error login-error hide" ></div>
-=======
-						
->>>>>>> yaswanth
+
 			<%-- 			<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
 						<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
@@ -153,17 +150,11 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					</div>
 					 <%}%> --%>
 					 <!-- <h3><small>Select your domain at Agile CRM</small></h3> -->
-<<<<<<< HEAD
-					 <div style="padding-top:10px;">
-          				<input id='subdomain' type="text" placeholder="Company"
-						   	   name="subdomain" class="input-medium field required domainLength commonDomain domainCharacters" autocapitalize="off"><b> .agilecrm.com</b>
-=======
     
 					 <div style="padding-top:10px;" class="input-prepend input-append">
           				<input id='subdomain' type="text" placeholder="Company"
 						   	   name="subdomain" class="required domainLength commonDomain domainCharacters domain_input_field input-medium" autocapitalize="off">
 						   	   <span class="add-on field_domain_add_on" id="app_address">.agilecrm.com</span>
->>>>>>> yaswanth
 						   	  <!--  <span style="color:#999"></span>
 						   	   -->
 				   </div>
