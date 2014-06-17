@@ -15,7 +15,7 @@
 package com.agilecrm.session;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
 
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.user.DomainUser;
@@ -48,7 +48,7 @@ public class UserInfo implements Serializable
      */
     private Long domainId = 0L;
 
-    private List<UserAccessScopes> scopes;
+    private HashSet<UserAccessScopes> scopes;
     /**
      * Number of users allowed in current plan
      */
@@ -78,6 +78,7 @@ public class UserInfo implements Serializable
 	if (domainUser != null)
 	{
 	    setDomainId(domainUser.id);
+	    setScopes(domainUser.scopes);
 	}
 
 	try
@@ -165,12 +166,12 @@ public class UserInfo implements Serializable
 	this.plan = plan;
     }
 
-    public List<UserAccessScopes> getScopes()
+    public HashSet<UserAccessScopes> getScopes()
     {
 	return this.scopes;
     }
 
-    public void setScopes(List<UserAccessScopes> scopes)
+    public void setScopes(HashSet<UserAccessScopes> scopes)
     {
 	this.scopes = scopes;
     }

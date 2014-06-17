@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.core.api.search.SearchAPI;
 import com.agilecrm.search.BuilderInterface;
 import com.agilecrm.search.QueryInterface.Type;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.DateUtil;
 
 /**
@@ -73,6 +75,10 @@ public class QueryDocumentUtil
     public static String constructQuery(List<SearchRule> rules)
     {
 	String query = "";
+
+	int existingRulesCount = rules.size();
+
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), rules);
 
 	// Iterates though each rule object, and constructs query based on type
 	// (Date, Number, Text fields) and conditions (Equals, OR, AND, ON)
@@ -164,6 +170,14 @@ public class QueryDocumentUtil
 			nestedLhs, nestedRhs);
 	    }
 	}
+
+	// Removes extra added rule if any. Extra rule is added if user dont
+	// have access to read others contacts.
+	if (rules.size() > existingRulesCount)
+	    rules.remove(rules.size() - 1);
+
+	System.out.println("query " + query);
+
 	return query;
     }
 

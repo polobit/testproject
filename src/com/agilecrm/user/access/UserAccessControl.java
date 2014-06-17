@@ -1,12 +1,15 @@
 package com.agilecrm.user.access;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>UserAccessControl</code> Checks if read, write access are allowed on to
@@ -15,7 +18,7 @@ import com.agilecrm.user.util.DomainUserUtil;
  * @author yaswanth
  * 
  */
-public class UserAccessControl
+public abstract class UserAccessControl
 {
     protected UserInfo info;
 
@@ -34,7 +37,7 @@ public class UserAccessControl
     }
 
     // Returns current user scopes
-    public List<UserAccessScopes> getCurrentUserScopes()
+    public HashSet<UserAccessScopes> getCurrentUserScopes()
     {
 	// Gets user info from session manager
 	UserInfo info = SessionManager.get();
@@ -42,7 +45,9 @@ public class UserAccessControl
 	// If info is null then scopes are returned from domain user. It barely
 	// occurs
 	if (info == null)
-	    return Arrays.asList(UserAccessScopes.values());
+	{
+	    return new HashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	}
 
 	// If scopes in info is not set, scopes are fetched from current domain
 	// user, set in user info, and returned.
@@ -87,25 +92,19 @@ public class UserAccessControl
      * 
      * @return
      */
-    public boolean canCreate()
-    {
-	return true;
-    }
+    public abstract boolean canCreate();
 
-    public boolean canDelete()
-    {
-	return true;
-    }
+    public abstract boolean canDelete();
 
-    public boolean canImport()
-    {
-	return true;
-    }
+    public abstract boolean canImport();
 
-    public boolean canExport()
-    {
-	return true;
-    }
+    public abstract boolean canExport();
+
+    public abstract boolean canRead();
+
+    public abstract <T> Query<T> modifyQuery(Query<T> query);
+
+    public abstract void modifyTextSearchQuery(List<SearchRule> rules);
 
     /**
      * Initializing function, called after access control object is created

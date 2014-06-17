@@ -372,6 +372,7 @@ public class Contact extends Cursor
 	{
 
 	    oldContact = ContactUtil.getContact(id);
+	    owner_key = oldContact.owner_key != null ? oldContact.owner_key : owner_key;
 	    //
 	    // if (Type.COMPANY == type
 	    // &&
@@ -915,6 +916,7 @@ public class Contact extends Cursor
 	// Set owner, when only the owner_key is null
 	if (owner_key == null)
 	{
+	    System.out.println("prepersist ___________________++++++++++++++++++++++__________________");
 	    // Set lead owner(current domain user)
 	    owner_key = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
 	}

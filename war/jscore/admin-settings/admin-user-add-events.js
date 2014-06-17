@@ -7,4 +7,10 @@ function bindAdminChangeAction(el)
 	else
 		$("input[type=checkbox]", $('div[name="scopes"]', el)).attr("checked", "checked" ).attr("disabled", "disabled");
 	})
+	
+	$("input[type=checkbox]", $('div[name="scopes"]', el)).die().live('change', function(e){
+		if(!this.checked){
+			$(this).removeAttr("checked");
+		}
+	})
 }

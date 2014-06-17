@@ -34,10 +34,8 @@ var contact_details_tab = {
 	              	})
 	            }
 	        });
-	        notesView.collection.fetch({success: function(){
-	        	$('#notes', App_Contacts.contactDetailView.el).html(notesView.render(true).el);
-	        }});
-	        
+	        notesView.collection.fetch();
+	        $('#notes', App_Contacts.contactDetailView.el).html(notesView.el);
 		},
 		load_events : function()
 		{
@@ -55,10 +53,8 @@ var contact_details_tab = {
 	              	})
 	            }
 	        });
-			eventsView.collection.fetch({success: function(){
-				$('#events', App_Contacts.contactDetailView.el).html(eventsView.render(true).el);
-			}});
-	        
+			eventsView.collection.fetch();
+	        $('#events', App_Contacts.contactDetailView.el).html(eventsView.el);
 		},
 		load_documents : function()
 		{
@@ -76,9 +72,8 @@ var contact_details_tab = {
 		              	})
 		            }
 		        });
-			    documentsView.collection.fetch({success: function(){
-			    		$('#documents', App_Contacts.contactDetailView.el).html(documentsView.render(true).el);
-			    	}});
+			    documentsView.collection.fetch();
+		        $('#documents', App_Contacts.contactDetailView.el).html(documentsView.el);
 		},
 		load_tasks : function()
 		{
@@ -96,9 +91,8 @@ var contact_details_tab = {
 		              	})
 		            }
 		        });
-				tasksView.collection.fetch({success: function(){
-		    		$('#tasks', App_Contacts.contactDetailView.el).html(tasksView.render(true).el);
-		    	}});
+				tasksView.collection.fetch();
+		        $('#tasks', App_Contacts.contactDetailView.el).html(tasksView.el);
 		},
 		load_deals : function ()
 		{
@@ -116,10 +110,8 @@ var contact_details_tab = {
 	            	})
 	            }
 	        });
-	        dealsView.collection.fetch({success : function(data){
-	        	$('#deals', App_Contacts.contactDetailView.el).html(dealsView.render(true).el);
-	        }});
-	        
+	        dealsView.collection.fetch();
+	        $('#deals', App_Contacts.contactDetailView.el).html(dealsView.el);
 		},
 		load_cases : function()
 		{
@@ -138,10 +130,7 @@ var contact_details_tab = {
 	            }
 	        });
 			casesView.collection.fetch();
-			 dealsView.collection.fetch({success : function(data){
-				 $('#cases', App_Contacts.contactDetailView.el).html(casesView.render(true).el);
-		        }});
-	        
+	        $('#cases', App_Contacts.contactDetailView.el).html(casesView.el);
 		},
 		load_mail : function()
 		{
@@ -190,10 +179,8 @@ var contact_details_tab = {
 	             });
 	            }
 			});
-	        mailsView.collection.fetch({success: function(){
-	        	 $('#mail', App_Contacts.contactDetailView.el).html(mailsView.render(true).el);
-	        }});
-	       
+	        mailsView.collection.fetch();
+	        $('#mail', App_Contacts.contactDetailView.el).html(mailsView.el);
 		},
 		load_stats : function()
 		{
@@ -267,4 +254,4 @@ var contact_details_tab = {
 	        $('#campaigns', App_Contacts.contactDetailView.el).html(campaignsView.el);
 		}
 
-};
+}

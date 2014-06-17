@@ -42,6 +42,8 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.webrules.WebRule;
@@ -192,6 +194,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	if (daoRestriction != null && !daoRestriction.check())
 	    BillingRestrictionUtil.throwLimitExceededException(clazz.getSimpleName());
 
+	// Checks User access control over current entity to be saved.
+	UserAccessControlUtil.check(clazz.getSimpleName(), this, CRUDOperation.CREATE, true);
+
 	return ofy().put(entity);
     }
 
@@ -213,8 +218,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public void delete(T entity)
     {
-
-	ofy().delete(entity);
+	if (canDelete(entity))
+	    ofy().delete(entity);
     }
 
     /**
@@ -296,7 +301,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public T get(Long id) throws EntityNotFoundException
     {
-	return ofy().get(this.clazz, id);
+	Key<T> key = new Key<T>(this.clazz, id);
+	return get(key);
     }
 
     /**
@@ -322,7 +328,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	Query<T> q = ofy().query(clazz);
 	q.filter(propName, propValue);
-	return q.get();
+
+	return fetch(q);
     }
 
     /**
@@ -338,7 +345,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	{
 	    q.filter(propName, map.get(propName));
 	}
-	return q.get();
+
+	return fetch(q);
     }
 
     /**
@@ -351,7 +359,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	Query<T> q = ofy().query(clazz);
 	q.filter(propName, propValue);
-	return q.count();
+
+	return getCount(q);
     }
 
     /**
@@ -367,7 +376,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	{
 	    q.filter(propName, map.get(propName));
 	}
-	return q.count();
+
+	return getCount(q);
     }
 
     /**
@@ -381,7 +391,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	Query<T> q = ofy().query(clazz);
 	q.filter(propName, propValue);
-	return asList(q.fetch());
+
+	return fetchAll(q);
     }
 
     /**
@@ -398,7 +409,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	    q.filter(propName, map.get(propName));
 	}
 
-	return asList(q.fetch());
+	return fetchAll(q);
     }
 
     /**
@@ -409,7 +420,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public List<T> fetchAll()
     {
 	Query<T> q = ofy().query(clazz);
-	return asList(q.fetch());
+
+	return fetchAll(q);
     }
 
     /**
@@ -431,7 +443,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public int count()
     {
 	Query<T> q = ofy().query(clazz);
-	return q.count();
+
+	return getCount(q);
     }
 
     /**
@@ -474,6 +487,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
      */
     public List<T> fetchAll(int max, String cursor, Map<String, Object> map)
     {
+	System.out.println(":::::::::::::::::::::::::::::::::::::::::");
 	return fetchAll(max, cursor, map, false, true);
     }
 
@@ -496,6 +510,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	if (map != null)
 	    for (String propName : map.keySet())
 	    {
+		System.out.println(propName);
 		query.filter(propName, map.get(propName));
 	    }
 
@@ -507,6 +522,12 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
     public List<T> fetchAllWithCursor(int max, String cursor, Query<T> query, boolean forceLoad, boolean cache)
     {
+	// Checks if read access is allowed to current user. If read access is
+	// not provided then query is modified such that user can access only
+	// entities he had created
+	System.out.println("check read query");
+	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), query);
+
 	if (cursor != null)
 	    query.startCursor(Cursor.fromWebSafeString(cursor));
 
@@ -581,13 +602,15 @@ public class ObjectifyGenericDao<T> extends DAOBase
     {
 	Query<T> q = ofy().query(clazz);
 	q.filter(propName, propValue);
-	return asKeyList(q.fetchKeys());
+
+	return fetchAllKeys(q);
     }
 
     public List<Key<T>> listAllKeys()
     {
 	Query<T> q = ofy().query(clazz);
-	return asKeyList(q.fetchKeys());
+
+	return fetchAllKeys(q);
     }
 
     /**
@@ -603,7 +626,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	{
 	    q.filter(propName, map.get(propName));
 	}
-	return asKeyList(q.fetchKeys());
+
+	return fetchAllKeys(q);
     }
 
     /**
@@ -622,7 +646,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	if (limit != null)
 	    q.limit(limit);
 	q.order(orderBy);
-	return asKeyList(q.fetchKeys());
+
+	return fetchAllKeys(q);
     }
 
     /**
@@ -652,7 +677,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
     public List<T> listByExample(T exampleObj)
     {
 	Query<T> queryByExample = buildQueryByExample(exampleObj);
-	return asList(queryByExample.fetch());
+
+	return fetchAll(queryByExample);
     }
 
     /**
@@ -728,5 +754,50 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	}
 
 	return q;
+    }
+
+    public T fetch(Query<T> q)
+    {
+	// Checks if read access is allowed to current user. If read access is
+	// not provided then query is modified such that user can access only
+	// entities he had created
+	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+
+	return q.get();
+    }
+
+    public List<T> fetchAll(Query<T> q)
+    {
+	// Checks if read access is allowed to current user. If read access is
+	// not provided then query is modified such that user can access only
+	// entities he had created
+	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+
+	return asList(q.fetch());
+    }
+
+    public List<Key<T>> fetchAllKeys(Query<T> q)
+    {
+	// Checks if read access is allowed to current user. If read access is
+	// not provided then query is modified such that user can access only
+	// entities he had created
+	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+
+	return asKeyList(q.fetchKeys());
+    }
+
+    public int getCount(Query<T> q)
+    {
+	// Checks if read access is allowed to current user. If read access is
+	// not provided then query is modified such that user can access only
+	// entities he had created
+	UserAccessControlUtil.checkReadAccessAndModifyQuery(clazz.getSimpleName(), q);
+
+	return q.count();
+    }
+
+    public boolean canDelete(T entity)
+    {
+	return UserAccessControlUtil.check(clazz.getSimpleName(), entity, CRUDOperation.DELETE, false);
     }
 }

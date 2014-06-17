@@ -62,14 +62,6 @@ public class RegisterServlet extends HttpServlet
     {
 	String type = request.getParameter("type");
 
-	// Check if this domain is valid and not given out to anyone else
-	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-	    if (StringUtils.isEmpty(NamespaceManager.get()) || (DomainUserUtil.count() != 0 && StringUtils.isEmpty(type)))
-	    {
-		response.sendRedirect(Globals.CHOOSE_DOMAIN);
-		return;
-	    }
-
 	// Type the type of registration for the user - oauth or agile
 	try
 	{
@@ -90,7 +82,8 @@ public class RegisterServlet extends HttpServlet
 	catch (Exception e)
 	{
 	    // Send to Login Page
-	    request.getRequestDispatcher("register.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request, response);
+	    request.getRequestDispatcher("register.jsp?error=" + URLEncoder.encode(e.getMessage())).forward(request,
+		    response);
 	    return;
 	}
 
@@ -204,7 +197,8 @@ public class RegisterServlet extends HttpServlet
      * @return DomainUser
      * @throws Exception
      */
-    DomainUser createUser(HttpServletRequest request, HttpServletResponse response, UserInfo userInfo, String password) throws Exception
+    DomainUser createUser(HttpServletRequest request, HttpServletResponse response, UserInfo userInfo, String password)
+	    throws Exception
     {
 	// Get Domain
 	String domain = NamespaceManager.get();
@@ -220,7 +214,8 @@ public class RegisterServlet extends HttpServlet
 	    // Delete Login Session
 	    request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
-	    throw new Exception("User with same email address already exists in our system for " + domainUser.domain + " domain");
+	    throw new Exception("User with same email address already exists in our system for " + domainUser.domain
+		    + " domain");
 	}
 
 	request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);

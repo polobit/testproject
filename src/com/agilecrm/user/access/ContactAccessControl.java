@@ -1,8 +1,15 @@
 package com.agilecrm.user.access;
 
+import java.util.List;
+
 import com.agilecrm.contact.Contact;
+import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>ContactAccess</code> class checks if current user can
@@ -25,10 +32,10 @@ public class ContactAccessControl extends UserAccessControl
     {
 	try
 	{
-	    System.out.println("************************************");
-	    System.out.println(entityObject);
-	    contact = (Contact) entityObject;
-	    System.out.println(contact);
+	    if (entityObject != null)
+		contact = (Contact) entityObject;
+	    else
+		contact = new Contact();
 	}
 	catch (ClassCastException e)
 	{
@@ -40,22 +47,73 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	if (contact.id != null)
+	if (!isNewContact() && !checkOwner())
 	{
-	    // Gets current user id and contact owner id and checks for equity
-	    Long currentContactOwnerId = contact.getContactOwnerKey().getId();
-	    UserInfo info = SessionManager.get();
-	    if (info != null && info.getDomainId() != currentContactOwnerId)
-		return hasScope(UserAccessScopes.UPDATE_CONTACT);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
 	}
 
-	return hasScope(UserAccessScopes.CREATE_CONTACT);
+	if (isNewContact())
+	    return hasScope(UserAccessScopes.CREATE_CONTACT);
+
+	return true;
     }
 
     public boolean canDelete()
     {
+	// Delete condition is checked only if current user is not owner of the
+	// contact
+	if (!isNewContact() && !checkOwner())
+	{
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
+	}
+
 	return true;
-	// return hasScope(UserAccessScopes.DELETE_CONTACTS);
+    }
+
+    /**
+     * Checks if user can read other users contacts
+     */
+    public boolean canRead()
+    {
+	// If contact is defined it checks for update operation if owner in the
+	// contact and current owner is different
+	return hasScope(UserAccessScopes.VIEW_CONTACTS);
+
+    }
+
+    /**
+     * Checks if current user is owner of the contact he is trying to access.
+     * 
+     * @return boolean
+     */
+    public boolean checkOwner()
+    {
+	// Gets current user id and contact owner id and checks for equity
+	Long currentContactOwnerId = contact.getContactOwnerKey().getId();
+	UserInfo info = SessionManager.get();
+
+	if (info == null)
+	    return true;
+
+	System.out.println("id" + info.getDomainId() + ", " + currentContactOwnerId);
+
+	if (info.getDomainId().equals(currentContactOwnerId))
+	    return true;
+
+	return false;
+    }
+
+    /**
+     * Checks if contact is new
+     * 
+     * @return
+     */
+    public boolean isNewContact()
+    {
+	if (contact == null || contact.id != null)
+	    return false;
+
+	return true;
     }
 
     public boolean canImport()
@@ -68,4 +126,34 @@ public class ContactAccessControl extends UserAccessControl
 	return hasScope(UserAccessScopes.EXPORT_CONTACTS);
     }
 
+    public <T> Query<T> modifyDaoFetchQuery(Query<T> query)
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return query;
+
+	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, info.getDomainId());
+	return query.filter("owner_key", ownerKey);
+    }
+
+    @Override
+    public <T> Query<T> modifyQuery(Query<T> query)
+    {
+	return modifyDaoFetchQuery(query);
+    }
+
+    @Override
+    public void modifyTextSearchQuery(List<SearchRule> rules)
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return;
+
+	SearchRule rule = new SearchRule();
+	rule.RHS = info.getDomainId().toString();
+	rule.CONDITION = RuleCondition.EQUALS;
+	rule.LHS = "owner_id";
+
+	rules.add(rule);
+    }
 }
