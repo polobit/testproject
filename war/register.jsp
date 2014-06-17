@@ -50,6 +50,22 @@ body {
 	padding-left: 10px !important;
 }
 
+.field_domain_add_on
+{
+    height: 30px !important;  
+    margin: 8px -4px !important;  
+    padding-left: 10px !important;
+    line-height: 26px !important;
+
+}
+
+.domain_input_field {
+	height: 30px !important;
+	margin: 8px 0px !important;
+	padding-left: 10px !important;
+}
+
+
 .error {
 	color: red;
 }
@@ -120,7 +136,11 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 			  <h1 style="font-size:29px;">Create your First User</h1>
 				  <form name='choose_domain' id="choose_domain" method='post' onsubmit="return validateAndSubmit();" style="padding:10px 0px 5px;border-top: 1px dotted #CCC;">
 				 
+<<<<<<< HEAD
 						<div id="domain-error" class="alert alert-error login-error hide" ></div>
+=======
+						
+>>>>>>> yaswanth
 			<%-- 			<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
 						<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
@@ -133,9 +153,17 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					</div>
 					 <%}%> --%>
 					 <!-- <h3><small>Select your domain at Agile CRM</small></h3> -->
+<<<<<<< HEAD
 					 <div style="padding-top:10px;">
           				<input id='subdomain' type="text" placeholder="Company"
 						   	   name="subdomain" class="input-medium field required domainLength commonDomain domainCharacters" autocapitalize="off"><b> .agilecrm.com</b>
+=======
+    
+					 <div style="padding-top:10px;" class="input-prepend input-append">
+          				<input id='subdomain' type="text" placeholder="Company"
+						   	   name="subdomain" class="required domainLength commonDomain domainCharacters domain_input_field input-medium" autocapitalize="off">
+						   	   <span class="add-on field_domain_add_on" id="app_address">.agilecrm.com</span>
+>>>>>>> yaswanth
 						   	  <!--  <span style="color:#999"></span>
 						   	   -->
 				   </div>
@@ -171,7 +199,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
                     <input class="input-xlarge field required" maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
 					<div style="margin-top:7px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the <a href="https://www.agilecrm.com/terms.html" target="_blank">Terms and conditions</a><input type="checkbox" checked="checked" name="agree" class="required"></label>
-					  <input type='submit' style="margin-top:20px;" value="Create  >>" class='btn btn-large btn-primary'>
+					  <input type='submit' id="register_account" style="margin-top:20px;" value="Create  >>" class='btn btn-large btn-primary'>
 				  </div>
 				</div>
 				</form>
@@ -201,17 +229,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				if($("#choose_domain").valid())	
 				{
 					var domain = $("#subdomain").val();
-					
-					 $.post("/backend/register-check?domain="+domain+"&oauth=true", function(){
-							$("#oauth").attr('action', "https://" + domain + ".agilecrm.com/register");
-							$('#oauth').submit(); 
-					 }).error(function(resp, error){
-						 
-						 $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + resp.statusText).show();
-						 
-					 });
-					 
 				
+					checkAndCreateUser("/backend/register-check?domain="+domain+"&oauth=true", $("oauth"))
 				}
 				
 				e.preventDefault();
@@ -252,7 +271,13 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				%>
 				
 			}); --%>
-             
+			$("#choose_domain").validate({
+				errorPlacement: function(error, element) {
+					console.log(error);
+					console.log(error.insertAfter($(element).siblings("span")));
+					}
+			});
+			
 			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
 				 submitHandler: function(form) {
@@ -261,38 +286,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 						 var domain = $("#subdomain").val();
 						 var email = $("#login_email").val();
 						 
-							$.ajax({
-								  type: "POST",
-								  url: "/backend/register-check?domain="+domain+"&email=" + email,
-								  dataType : "json",
-								  success: function(data){
-									  if(data && data.error)
-										{
-										  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
-										  return;
-										}
-									  $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
-										form.submit();	 
-								  },
-								  error: function(xhr, status, error)
-								  {
-									  console.log(error);
-									  console.log(xhr);
-									  console.log(status);
-		//							  console.log(resp);
-									 
-								  }
-								});
-							
-				/* 		 $.post("/backend/register-check?domain="+domain+"&email=" + email, function(){
-							 $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
-							 form.submit();	 
-						 }).error(function(resp, error){
-							 console.log(resp);
-							 $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + resp.statusText).show();
-							 
-						 });
-					    */
+						 checkAndCreateUser("/backend/register-check?domain="+domain+"&email=" + email, form);
 						}
 					 }
 			});
@@ -319,10 +313,58 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 		
 		//validates the form fields
 		function isValid(){
+			
+			// Return if action is already in process 
+			if($("#register_account").attr("disabled"))
+				return;
+			
 		    $("#agile").validate();
 		    $("#choose_domain").validate();
 		    return  $("#choose_domain").valid() && $("#agile").valid();
 		    }
+		
+		function checkAndCreateUser(url, form)
+		{
+			 $("#register_account").attr("disabled", "disabled");
+				$.ajax({
+					  type: "POST",
+					  url: url,
+					  dataType : "json",
+					  success: function(data){
+						
+						
+						  $("#register_account").removeAttr("disabled");
+						  if(data && data.error)
+							{
+							
+							
+							// If error block is removed, it is added again into DOM 
+							  var error_block = $("#domain-error");
+							
+							  if(error_block.length)
+								  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
+							  else
+								  $("#choose_domain").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+							  return;
+							  
+							}
+						  
+						  // Hides error message if any 
+						  $("#domain-error").hide();
+						  
+						// Read domain
+						 var domain = $("#subdomain").val();
+						
+						  // Form data is posted to its subdomain 
+						  $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
+						  form.submit();	 
+					  },
+					  error: function(xhr, status, error)
+					  {
+						  console.log(error);
+					  }
+					});
+		}
 		</script>
 	<!-- Clicky code -->
  	<script src="//static.getclicky.com/js" type="text/javascript"></script>
