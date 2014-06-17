@@ -22,11 +22,11 @@
 							</form>
 						</div>
 						<div
-							style='margin-top: 0%; width: 16em; display: inline-block; vertical-align: middle'>
+							style='margin-top: 0%; width: 20em; display: inline-block; vertical-align: middle'>
 							<div
 								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-								<b> <font size="5">{{getPropertyValue properties
-										"first_name"}} {{getPropertyValue properties "last_name"}}</font>
+								<b style="font-size:2em;">{{getPropertyValue properties
+										"first_name"}} {{getPropertyValue properties "last_name"}}
 								</b>{{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}}
 
 								</br>{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
