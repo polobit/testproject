@@ -97,8 +97,6 @@ public class AgileAuthFilter implements Filter
 	// Check if userinfo is valid for this namespace
 	DomainUser domainUser = DomainUserUtil.getCurrentDomainUser();
 
-	setAccessScopes(request, domainUser);
-
 	// Get Namespace
 	String domain = NamespaceManager.get();
 
@@ -111,6 +109,8 @@ public class AgileAuthFilter implements Filter
 	    SessionManager.set((UserInfo) null);
 	    httpResponse.sendRedirect("error/auth-failed.jsp");
 	}
+
+	setAccessScopes(request, domainUser);
 
 	// Check if the domain of the user is same as namespace. Otherwise,
 	// Redirect
@@ -185,6 +185,9 @@ public class AgileAuthFilter implements Filter
     {
 	UserInfo info = SessionManager.get();
 
+	System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+	System.out.println();
+	System.out.println(user.scopes);
 	if (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes))
 	{
 	    System.out.println("does not contain all scopes");
