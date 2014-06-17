@@ -137,6 +137,7 @@ debug = false;
 <script>
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
+var LIB_PATH ="/";
 	
 
 var CSS_PATH = "/";
