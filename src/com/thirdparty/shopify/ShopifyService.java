@@ -1,24 +1,27 @@
 package com.thirdparty.shopify;
 
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
+import com.thirdparty.google.ContactPrefs;
 
 public class ShopifyService {
 	private ShopifyAgileMapper mapper = new ShopifyAgileMapper();
-	
-	public void save(org.json.JSONObject jsonObject,Key<DomainUser> key){
-		try{
-		JSONArray customerList = new JSONArray(jsonObject.get("customers").toString());
-		for(int i=0;i<customerList.length();i++){
-			JSONObject customer = new JSONObject(customerList.get(i).toString());
-			mapper.saveCustomer(customer, key);
-		}
-		
-		}catch(Exception e){
+
+	public void save(ContactPrefs prefs,JSONArray customers, Key<DomainUser> key) {
+
+		try {
+			for (int i = 0; i < customers.length(); i++) {
+				JSONObject 	customer = new JSONObject(customers.get(i).toString());
+				System.out.println(customer.get("email"));
+				mapper.saveCustomer(prefs,customer, key);
+
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
+
 		}
 	}
 

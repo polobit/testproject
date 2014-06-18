@@ -50,6 +50,7 @@ public class ShopifyImportAPI {
 		
 		return pref;
 		}catch(Exception e){
+			ContactsImportUtil.initilaizeImportBackend(pref);
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 						.build());
 		}

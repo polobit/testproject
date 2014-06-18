@@ -1,9 +1,13 @@
 package com.thirdparty.shopify;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.codehaus.jettison.json.JSONObject;
+import javax.ws.rs.WebApplicationException;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
@@ -12,33 +16,34 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
+import com.thirdparty.google.ContactPrefs;
 
 public class ShopifyAgileMapper {
 	
-	public void saveCustomer(JSONObject customer ,Key<DomainUser> key){
+	public void saveCustomer(ContactPrefs prefs,JSONObject customer ,Key<DomainUser> key){
 		
 		Contact ctx = new Contact();
 		List<ContactField> contactField = new ArrayList<ContactField>();
 		try{
 		
-		  if(customer.has("email"))
+		  if(!customer.isNull("email"))
 			  contactField.add(new ContactField(Contact.EMAIL,customer.getString("email"),null));
 		  
-		  if(customer.has("first_name"))
+		  if(!customer.isNull("first_name"))
 			  contactField.add(new ContactField(Contact.FIRST_NAME,customer.getString("first_name"),null));
 		  
-		  if(customer.has("last_name"))
+		  if(!customer.isNull("last_name"))
 			  contactField.add(new ContactField(Contact.LAST_NAME,customer.getString("last_name"),null));
 		  
 		  
-		  if(customer.has("default_address")){
+		  if(!customer.isNull("default_address")){
 			  JSONObject address = new JSONObject(customer.get("default_address").toString());
 			 
 			 /*
 			  * formating address according to agile address format 
 			  */
 			  JSONObject addrs = new JSONObject();
-			  addrs.put("address", address.get("address1") +" "+address.get("address2"));
+			  addrs.put("address", address.get("address1"));
 			  addrs.put("city", address.get("city"));
 			  addrs.put("state", address.get("province"));
 			  addrs.put("country", address.get("country"));
@@ -46,9 +51,10 @@ public class ShopifyAgileMapper {
 			  addrs.put("zip", address.get("zip"));
 			  addrs.put("name", address.get("name"));
 			  contactField.add(new ContactField(Contact.ADDRESS,addrs.toString(),"home"));
-			  if(address.has("company"))
-			  contactField.add(new ContactField(Contact.COMPANY,address.getString("company"),"Work"));
-			  contactField.add(new ContactField(Contact.PHONE,address.getString("phone"),"work"));
+			  if(!address.isNull("company")){
+					  contactField.add(new ContactField(Contact.COMPANY,address.getString("company"),"Work"));
+			     contactField.add(new ContactField(Contact.PHONE,address.getString("phone"),"work"));
+			  }
 			  
 		  }
 		   ctx.properties = contactField;
@@ -57,23 +63,52 @@ public class ShopifyAgileMapper {
 		   ctx.save();
 		  
 		 
-		if(customer.has("note")){
+		if(!customer.isNull("note")){
+		
 			  Note note = new Note();
+			   note.subject = "Customer's Note";
 		       note.description = customer.getString("note");
 		       note.addContactIds(ctx.id.toString());
 		       note.save();
+			
 		}
 		
-		if(customer.has("tags")){
-		/*	Tag t  = new Tag();
-			t.tag = customer.getString("tags");
-			t.addTag(tagName)
-			ctx.addTags(t);*/
+		/*
+		 * saving order related to customer
+		 */
+		JSONArray orders = ShopifyUtil.getOrder(prefs, Long.valueOf(customer.getInt("id")));
+		
+		for(int i=0; i < orders.length(); i++){
+			JSONObject order = new JSONObject(orders.get(i).toString());
+			StringBuilder sb = new StringBuilder();
+			Note note = new Note();
+			note.subject = "Order";
+			JSONArray item = order.getJSONArray("line_items");
+			LinkedHashSet<String>tag = new LinkedHashSet<String>();
+			for(int j=0;j<item.length();j++){
+				JSONObject ob = item.getJSONObject(j);
+				sb.append("Item : "+ob.getString("title") +"	");
+				sb.append("Price : "+ob.getString("price")+"	");
+				sb.append("Quantity : "+ob.getString("fulfillable_quantity")+"	");
+				tag.add(ob.getString("title"));
+			}
+			sb.append("Payment Status :"+order.getString("financial_status"));
+			note.description = sb.toString();
+		    note.addContactIds(ctx.id.toString());
+			note.save();
+			ctx.tags = tag;
+			ctx.update();
 		}
+		
 			
 		
-		}catch(Exception e){
-			e.printStackTrace();
+		}
+		catch(WebApplicationException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
 		}
 		
 		

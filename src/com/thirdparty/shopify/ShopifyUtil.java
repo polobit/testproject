@@ -161,33 +161,89 @@ public class ShopifyUtil
 	
 	public static void importCustomer(ContactPrefs prefs,Key<DomainUser> key){
 
-		String url = buildUrl(prefs);
 		try{
-			URL ur = new URL(url);
-			URLConnection con = ur.openConnection();
-			con.connect();
-			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String line;
-			while((line= br.readLine())!=null){
-				System.out.println(line);
-				shopifyService.save(new JSONObject(line),key);
-			}
-			
-
-	}catch(Exception e){
-		e.printStackTrace();
-	}	
+			int custId = 0;
+		while(true){
+			String url = buildUrl(prefs,custId);
+			System.out.println(url);
+			JSONObject customer = getObject(prefs,url);
+			JSONArray arr = new JSONArray(customer.get("customers").toString());
+				if(arr != null && arr.length() >0){
+		
+					JSONObject lastCustomer = arr.getJSONObject(arr.length()-1);
+					custId = lastCustomer.getInt("id");
+					shopifyService.save(prefs,arr, key);
+				}else{
+					break;
+				}
+		
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	
 	
 		
 }
 
-private static String buildUrl(ContactPrefs prefs){
-	StringBuilder uri = new StringBuilder();
-	 uri.append("https://").append(prefs.apiKey+":").append(prefs.password).append("@"+prefs.userName)
-	 .append("/admin/customers.json");
-	 System.out.println(uri.toString());
-	 return uri.toString();
+private static String buildUrl(ContactPrefs prefs,int fromIndex){
 	
+	StringBuilder uri = new StringBuilder();
+	uri.append("https://").append(prefs.apiKey+":").append(prefs.password).append("@"+prefs.userName);
+	
+	if(fromIndex > 0){
+	 uri.append("/admin/customers.json?since_id="+fromIndex+"&limit=250");
+	}else{
 
+		 uri.append("/admin/customers.json?limit=250");
+		
+	}
+	return uri.toString();
+
+}
+
+public static JSONArray getOrder(ContactPrefs prefs,Long custID){
+	StringBuilder orderUrl = new StringBuilder();
+	orderUrl.append("https://").append(prefs.apiKey+":").append(prefs.password).append("@"+prefs.userName)
+	.append("/admin/orders.json?customer_id=").append(custID);
+	JSONObject response = getObject(prefs, orderUrl.toString());
+	JSONArray orders = null;
+	try{
+	orders = response.getJSONArray("orders");
+	
+	}catch(Exception e){
+		e.printStackTrace();
+	}
+	
+	return orders;
+	
+	
+}
+
+private static JSONObject getObject(ContactPrefs pref,String url){
+	String uri = null;
+	if(url == null){
+		uri = buildUrl(pref, 0);
+	}else{
+		uri = url;
+	}
+	JSONObject customers = null;
+	try{
+		URL ur = new URL(uri);
+		URLConnection con = ur.openConnection();
+		con.setConnectTimeout(30 * 1000);
+		con.connect();
+		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String line;
+		while((line= br.readLine())!=null){
+			customers = new JSONObject(line);
+		}
+	}catch(Exception e){
+		// retry
+		e.printStackTrace();
+		return getObject(pref, url);
+	}
+	return customers;
 }
 }
