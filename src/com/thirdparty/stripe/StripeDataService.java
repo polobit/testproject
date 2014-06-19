@@ -65,7 +65,7 @@ public class StripeDataService {
 			if(customer){
                  ArrayList<String> options =  new ArrayList<String>();
                  options.add("customer");
-				 ctxPrefs.dataOptions = options;
+				 ctxPrefs.thirdPartyField = options;
 				 ContactsImportUtil.initilaizeImportBackend(ctxPrefs);
 				
 			}else{
