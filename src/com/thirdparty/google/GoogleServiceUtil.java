@@ -204,7 +204,7 @@ public class GoogleServiceUtil
 	    scope = "";
 
 	oAuthRequest.addBodyParameter("scope", scope);
-	oAuthRequest.addBodyParameter("redirect_uri", GoogleApi);
+	oAuthRequest.addBodyParameter("redirect_uri", GoogleApi.getRedirectURL());
 	oAuthRequest.addBodyParameter("code", authToken);
 	oAuthRequest.addBodyParameter("grant_type", "authorization_code");
 
