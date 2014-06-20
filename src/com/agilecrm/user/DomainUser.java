@@ -19,8 +19,6 @@ import com.agilecrm.Globals;
 import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.session.SessionManager;
-import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -438,12 +436,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 	    dao.put(this);
 
-	    // Sets scopes when domain user is updated
-	    UserInfo info = SessionManager.get();
-	    if (info != null && id.equals(info.getDomainId()))
-		info.setScopes(this.scopes);
-
-	    System.out.println("savined user info scopes : " + info.getScopes());
+	    /*
+	     * // Sets scopes when domain user is updated UserInfo info =
+	     * SessionManager.get(); if (info != null)
+	     * info.setScopes(this.scopes);
+	     */
+	  //  System.out.println("savined user info scopes : " + info.getScopes());
 
 	}
 	finally
