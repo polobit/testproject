@@ -27,8 +27,6 @@ label.error {
 <legend>Import contacts from Zoho</legend>
 <center><p>Enter Zoho details</p></center>
 
-<div id="zoho-error" style="display:none;color:red;margin-bottom:20px"></div>
-			
 
 <form action="" class="form-horizontal" id="zoho_form">
 
@@ -58,7 +56,9 @@ label.error {
 			<span><img src="img/ajax-spinner.gif" id="spinner-sales" style="display:none;"></img></span>
 			<a id="save_zoho_info" class="btn"
 				style="text-decoration: none; margin-right: 30px;">Next</a>
-			</div></div>
+			</div>
+			<div id="zoho-error" style="color:red;margin-left: 93px;"></div>
+			</div>
 
 </form>
 </fieldset>

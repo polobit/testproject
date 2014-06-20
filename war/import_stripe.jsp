@@ -27,9 +27,6 @@ label.error {
 <legend>Import Customer from Stripe</legend>
 <center><p>Enter Stripe details</p></center>
 
-<div id="stripe-error" style="display:none;color:red;margin-bottom:20px"></div>
-			
-
 <form action="" class="form-horizontal" id="stripe_form">
 
 <div class="control-group">
@@ -58,7 +55,9 @@ label.error {
 			<span><img src="img/ajax-spinner.gif" id="spinner-sales" style="display:none;"></img></span>
 			<a id="save_stripe_info" class="btn"
 				style="text-decoration: none; margin-right: 30px;">Next</a>
-			</div></div>
+			</div>
+			<div id="stripe-error" style="color:red;margin-left: 93px;"></div>
+			</div>
 
 </form>
 </fieldset>
