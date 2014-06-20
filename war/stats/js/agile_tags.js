@@ -29,20 +29,22 @@ function agile_addTag(tags, callback, email)
 		else
 			email = agile_guid.get_email();
 	}
-
-	if (!agile_isKnown(email))
-	{
-		agile_create_cookie("agile-tags", tags, 365 * 5);
-		return;
-	}
-
+	
 	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
+	
+	agile_isKnown(email, function(){
+		agile_create_cookie("agile-tags", tags, 365 * 5);
+		return;
+	}, function(){
 
-	// Callback
-	agile_json(agile_url, callback);
+		// Callback
+		agile_isAuth(function(){
+			agile_json(agile_url, callback);
+			}, agile_url, callback);
+	}, agile_url, callback);
 }
 
 /**
@@ -77,7 +79,9 @@ function agile_removeTag(tags, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/remove-tags?callback=?&id=" + agile_id.get() + "&" + params;
 
 	// Callback
-	agile_json(agile_url, callback);
+	agile_isAuth(function(){
+		agile_json(agile_url, callback);
+		}, agile_url, callback);
 }
 
 /**
@@ -104,5 +108,7 @@ function agile_getTags(callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
 
 	// Callback
-	agile_json(agile_url, callback);
+	agile_isAuth(function(){
+		agile_json(agile_url, callback);
+		}, agile_url, callback);
 }

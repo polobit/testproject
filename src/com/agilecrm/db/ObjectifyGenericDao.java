@@ -47,6 +47,7 @@ import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.notification.NotificationPrefs;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.webrules.WebRule;
+import com.agilecrm.whitelist.AccessDomain;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.Workflow;
@@ -99,6 +100,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(CustomView.class);
 	ObjectifyService.register(ContactFilter.class);
 	ObjectifyService.register(WebRule.class);
+	ObjectifyService.register(AccessDomain.class);
 
 	ObjectifyService.register(Note.class);
 	ObjectifyService.register(UserPrefs.class);
