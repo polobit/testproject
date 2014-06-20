@@ -46,11 +46,6 @@ label.error {
 		<legend>Import from Shopify </legend>
 
 		<form action="" method="post"  id="shopify-login-form" class="form-horizontal">
-
-			<center>Enter your Shopify Account details </center><br />
-			
-			<div id="shopify-error" style="display:none;color:red;margin-bottom:20px"></div>
-			
 			
 			<div class="control-group">
 			<label class="control-label"> Shop-name </label>
@@ -75,11 +70,15 @@ label.error {
 			</div>
 			</div>
 			
-				<div class="clearfix"><div class="pull-right">
+				<div class="clearfix">
+				<div class="pull-right">
 			<span><img src="img/ajax-spinner.gif" id="spinner-sales" style="display:none;"></img></span>
 			<a id="save_shopify_prefs" class="btn"
 				style="text-decoration: none; margin-right: 30px;">Next</a>
-			</div></div>
+			</div>
+			<div id="shopify-error" style="color:red;margin-left: 93px;"></div>
+			</div>
+			
 			</form>
 			</div>
 		</fieldset>	
