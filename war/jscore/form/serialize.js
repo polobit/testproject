@@ -50,7 +50,9 @@ function serializeForm(form_id) {
 	// Serialize tags
 	arr = arr.concat(get_tags(form_id));
 
-
+	// Serialize notes
+	arr = arr.concat(get_notes(form_id));
+	
 	/*
 	 * Multiple select, If field is of type muti select then this returns set of
 	 * values selected with the name of the field. To use this multi select,

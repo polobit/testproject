@@ -15,6 +15,9 @@ $(function(){
 			
 			$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 		});
+		
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
 	});
 	
 	// Event edit in contact details tab

@@ -509,8 +509,23 @@ function complete_task(taskId, collection, ui, callback) {
 		contacts.push(contact.id);
 	});
 
+    console.log(taskJSON.notes);
+	
+	// Replace notes object with note ids
+	var notes = [];
+	$.each(taskJSON.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	
+	console.log(notes);
+	
+	taskJSON.notes = notes;
+	taskJSON.note_description = "";
 	taskJSON.contacts = contacts;
 	taskJSON.is_complete = true;
+	taskJSON.status = "COMPLETED";
+	taskJSON.progress = 100;
 	taskJSON.owner_id = taskJSON.taskOwner.id;
 
 	var new_task = new Backbone.Model();
