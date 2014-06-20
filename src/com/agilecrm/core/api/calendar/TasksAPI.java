@@ -24,6 +24,7 @@ import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
@@ -158,7 +159,11 @@ public class TasksAPI
 	{
 	    Task task = TaskUtil.getTask(id);
 	    if (task != null)
+	    {
+		if (!task.getNotes(id).isEmpty())
+		    NoteUtil.deleteBulkNotes(task.getNotes(id));
 		task.delete();
+	    }
 	}
 	catch (Exception e)
 	{
@@ -349,4 +354,66 @@ public class TasksAPI
 	task.save();
 	return task;
     }
+
+    /************************ New task view methods ******************************/
+    /**
+     * Gets count of task based on type of category
+     * 
+     * @param type
+     * @return JSON object of count and type
+     */
+    @Path("/countoftype")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getCountOfTasksCategoryType(@QueryParam("criteria") String criteria, @QueryParam("type") String type,
+	    @QueryParam("owner") String owner, @QueryParam("pending") boolean pending) throws Exception
+    {
+	return TaskUtil.getCountOfTasksCategoryType(criteria, type, owner, pending);
+    }
+
+    /**
+     * Gets all task based on due and type
+     * 
+     * @param type
+     * @return {@link Task}
+     */
+    @Path("/fordue")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> getTasksBasedOnOwnerOfTypeAndDue(@QueryParam("criteria") String criteria,
+	    @QueryParam("type") String type, @QueryParam("owner") String owner, @QueryParam("pending") boolean pending,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count) throws Exception
+    {
+	if (count != null)
+	{
+	    return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, Integer.parseInt(count),
+		    cursor);
+	}
+
+	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null);
+    }
+
+    /**
+     * Gets all task based on owner and type
+     * 
+     * @param type
+     * @return {@link Task}
+     */
+    @Path("/forcategory")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Task> getTasksBasedOnOwnerOfTypeAndCategory(@QueryParam("criteria") String criteria,
+	    @QueryParam("type") String type, @QueryParam("owner") String owner, @QueryParam("pending") boolean pending,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count) throws Exception
+    {
+	if (count != null)
+	{
+	    return TaskUtil.getTasksRelatedToOwnerOfTypeAndCategory(criteria, type, owner, pending,
+		    Integer.parseInt(count), cursor);
+	}
+
+	return TaskUtil.getTasksRelatedToOwnerOfTypeAndCategory(criteria, type, owner, pending, null, null);
+    }
+
+    /***************************************************************************/
 }

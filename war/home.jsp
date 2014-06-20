@@ -227,7 +227,7 @@ setTimeout(loadMiscScripts, 10000);
 <!-- Unified CSS for All Lib -->
 
 
-<!-- <link rel="stylesheet" type="text/css" href="css/misc/agile-tasks.css"></link> -->
+<link rel="stylesheet" type="text/css" href="css/misc/agile-tasks.css"></link>
 <link rel="stylesheet" type="text/css" href="css/misc/agile-social-suite.css"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>-->
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link> -->
