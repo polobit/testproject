@@ -2,6 +2,7 @@ package com.agilecrm.scribe.api;
 
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.OAuthConfig;
+import org.scribe.model.Verb;
 import org.scribe.utils.OAuthEncoder;
 
 import com.agilecrm.scribe.ScribeServlet;
@@ -52,6 +53,11 @@ public class GoogleApi extends DefaultApi20
 	return REDIRECT_URL;
     }
 
+    public Verb getAccessTokenVerb()
+    {
+	return Verb.POST;
+    }
+
     /**
      * Forms an authorize URL with the required parameters from
      * {@link OAuthConfig} after building a service in scribe and returns the
@@ -69,7 +75,8 @@ public class GoogleApi extends DefaultApi20
 	// For OAuth2 Authorization for profile, we do not have offline every
 	// time
 	String url = AUTHORIZE_URL;
-	if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE))
+	if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE)
+		|| config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_OAUTH2_SCOPE))
 	    url = AUTHORIZE_URL_AUTO_PROMPT_TYPE;
 
 	else if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CONTACTS_SCOPE)
