@@ -416,4 +416,170 @@ public class TaskUtil
 
 	return query.list();
     }
+
+    /************************ New task view methods ******************************/
+    /**
+     * Gets count of tasks based on type of category.
+     * 
+     * @return JSON object of count and type
+     */
+    public static String getCountOfTasksCategoryType(String criteria, String type, String owner, boolean pending)
+    {
+	System.out.println(criteria + " " + type + " " + owner);
+
+	JSONObject countAndType = new JSONObject();
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    Query<Task> query = dao.ofy().query(Task.class);
+
+	    if (StringUtils.isNotBlank(owner))
+		searchMap.put("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
+
+	    if (pending)
+		searchMap.put("is_complete", !pending);
+
+	    if (StringUtils.isNotBlank(type))
+		searchMap.put("type", type);
+
+	    countAndType.put("type", type);
+	    countAndType.put("count", dao.getCountByProperty(searchMap));
+
+	    System.out.println("countAndType : " + countAndType.toString());
+
+	    return countAndType.toString();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Gets all the tasks based on due, owner and type.
+     * 
+     * @return List of tasks
+     */
+    public static List<Task> getTasksRelatedToOwnerOfTypeAndDue(String criteria, String type, String owner,
+	    boolean pending, Integer max, String cursor)
+    {
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    Query<Task> query = dao.ofy().query(Task.class);
+
+	    System.out.println(criteria + " " + type);
+
+	    // Gets Today's date
+	    DateUtil startDateUtil = new DateUtil();
+	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
+
+	    if (type.equalsIgnoreCase("OVERDUE"))
+	    {
+		System.out.println("check for " + startTime);
+		searchMap.put("due <", startTime);
+	    }
+	    else if (type.equalsIgnoreCase("TODAY"))
+	    {
+		System.out.println("check for " + startTime);
+		searchMap.put("due", startTime);
+	    }
+	    else if (type.equalsIgnoreCase("TOMORROW"))
+	    {
+		// Gets Date after numDays days
+		DateUtil endDateUtil = new DateUtil();
+		Long endTime = endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000;
+
+		System.out.println("check for " + startTime + " " + endTime);
+
+		searchMap.put("due >", startTime);
+		searchMap.put("due <=", endTime);
+	    }
+	    else if (type.equalsIgnoreCase("LATER"))
+	    {
+		// Gets Date after numDays days
+		DateUtil endDateUtil = new DateUtil();
+		Long endTime = endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000;
+
+		System.out.println("check for " + startTime + " " + endTime);
+
+		searchMap.put("due >", endTime);
+	    }
+
+	    if (StringUtils.isNotBlank(owner))
+		searchMap.put("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
+
+	    if (pending)
+		searchMap.put("is_complete", !pending);
+
+	    if (max != null)
+		return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "due");
+
+	    return dao.listByProperty(searchMap);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Gets all the tasks based on owner and type.
+     * 
+     * @return List of tasks
+     */
+    public static List<Task> getTasksRelatedToOwnerOfTypeAndCategory(String criteria, String type, String owner,
+	    boolean pending, Integer max, String cursor)
+    {
+	System.out.println(criteria + " " + type + " " + owner);
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    Query<Task> query = dao.ofy().query(Task.class);
+
+	    if (StringUtils.isNotBlank(owner))
+		searchMap.put("owner", new Key<DomainUser>(DomainUser.class, Long.parseLong(owner)));
+
+	    if (pending)
+		searchMap.put("is_complete", !pending);
+
+	    if (StringUtils.isNotBlank(criteria))
+	    {
+		if (criteria.equalsIgnoreCase("PRIORITY"))
+		    searchMap.put("priority_type", type);
+		if (criteria.equalsIgnoreCase("STATUS"))
+		{
+		    searchMap.put("status", type);
+
+		    if (type.equalsIgnoreCase("COMPLETED"))
+			searchMap.put("is_complete", true);
+		    else if (type.equalsIgnoreCase("YET_TO_START"))
+			searchMap.put("is_complete", false);
+		}
+
+		if (criteria.equalsIgnoreCase("CATEGORY"))
+		    searchMap.put("type", type);
+	    }
+	    else if (StringUtils.isNotBlank(type))
+		searchMap.put("type", type);
+
+	    if (max != null)
+		return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "due");
+
+	    return dao.listByProperty(searchMap);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /***************************************************************************/
 }

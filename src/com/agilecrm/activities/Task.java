@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
@@ -132,6 +133,34 @@ public class Task extends Cursor
      */
     @NotSaved
     public String entity_type = "task";
+
+    /*********************** new fields *****************************/
+    /**
+     * List of note keys related to a task
+     */
+    private List<Key<Note>> related_notes = new ArrayList<Key<Note>>();
+
+    /**
+     * List of note ids related to a task
+     */
+    @NotSaved(IfDefault.class)
+    public List<String> notes = null;
+
+    /**
+     * note's description related to a task
+     */
+    @NotSaved(IfDefault.class)
+    public String note_description = null;
+
+    public int progress = 0;
+
+    public enum Status
+    {
+	YET_TO_START, IN_PROGRESS, COMPLETED
+    };
+
+    public Status status = Status.YET_TO_START;
+    /**************************************************************/
 
     // Dao
     public static ObjectifyGenericDao<Task> dao = new ObjectifyGenericDao<Task>(Task.class);
@@ -313,5 +342,72 @@ public class Task extends Cursor
 	    owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 
 	System.out.println("Owner : " + this.owner);
+
+	/************* New added code ******************/
+	// If new note is added to task
+	if (this.note_description != null)
+	{
+	    if (!this.note_description.trim().isEmpty())
+	    {
+		// Create note
+		Note note = new Note(null, this.note_description);
+
+		// Save note
+		note.save();
+
+		// Add note to task
+		this.related_notes.add(new Key<Note>(Note.class, note.id));
+	    }
+
+	    // Make temp note null
+	    this.note_description = null;
+	}
+
+	if (this.notes != null)
+	{
+	    // Create list of Note keys
+	    for (String note_id : this.notes)
+	    {
+		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    }
+
+	    this.notes = null;
+	}
     }
+
+    /************************ New task view methods ******************************/
+    /**
+     * While saving a task it contains list of notes keys, but while retrieving
+     * includes complete note object.
+     * 
+     * @return List of note objects
+     */
+    @XmlElement
+    public List<Note> getNotes()
+    {
+	return Note.dao.fetchAllByKeys(this.related_notes);
+    }
+
+    public void addNotes(String id)
+    {
+	if (notes == null)
+	    notes = new ArrayList<String>();
+
+	notes.add(id);
+    }
+
+    /**
+     * Returns list of notes related to task.
+     * 
+     * @param id
+     *            - Task Id.
+     * @return list of Notes
+     */
+    public List<Note> getNotes(Long id)
+    {
+	Task task = TaskUtil.getTask(id);
+	return task.getNotes();
+    }
+
+    /***************************************************************************/
 }

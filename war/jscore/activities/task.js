@@ -8,6 +8,10 @@
  */
 
 $(function() {
+	
+	// Loads progress slider in add task / update modal.
+	loadProgressSlider($("#taskForm"));
+	loadProgressSlider($("#updateTaskForm"));
 
 	/**
 	 * To stop propagation to edit page
@@ -113,6 +117,14 @@ $(function() {
 	$('#updateTaskModal').on('hidden', function() {
 
 		$("#updateTaskForm").find("li").remove();
+		
+		resetForm($("#updateTaskForm"));
+
+		// Removes note from from task form
+		$('#updateTaskForm #forNoteForm').html("");
+
+		// Hide + Add note link
+		$(".task-add-note", $("#updateTaskForm")).show();
 	});
 
 	/**
@@ -121,6 +133,9 @@ $(function() {
 	$('#updateTaskModal').on('shown', function() {
 		var el = $("#updateTaskForm");
 		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
+		
+		// Fill details in form
+		setForm(el);
 	});
 
 	/**
@@ -153,6 +168,9 @@ $(function() {
 					}
 					$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 				});
+		
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
 	}
 
 	/**
@@ -279,6 +297,10 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
   					App_Calendar.allTasksListView.collection.add(data);
   				
 				App_Calendar.allTasksListView.render(true);
+			}
+			else if (Current_Route == 'tasks-new')
+			{
+				updateTask(isUpdate, data, json);
 			}
 			// Updates data to temeline
 			else if (App_Contacts.contactDetailView
