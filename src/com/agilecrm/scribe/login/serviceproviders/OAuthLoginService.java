@@ -55,8 +55,19 @@ public interface OAuthLoginService
 
     public String getCallback();
 
+    /**
+     * Provision to set callback it is required to set custom return types
+     * sometimes
+     * 
+     * @param callback
+     */
     public void setCallback(String callback);
 
+    /**
+     * Creates and Returns User info based on the response from endpoint
+     * 
+     * @return
+     */
     public UserInfo getUserInfo();
 }
 
@@ -78,6 +89,10 @@ public interface OAuthLoginService
 abstract class OAuthLoginServiceAdapter implements OAuthLoginService
 {
 
+    /**
+     * Preferences/configuration of service provider. Appropriate values should
+     * be assigned in implemented classes
+     */
     protected String scope = null;
     protected Class<? extends DefaultApi20> apiClassV20 = null;
     protected Class<? extends DefaultApi10a> apiClassV10a = null;
