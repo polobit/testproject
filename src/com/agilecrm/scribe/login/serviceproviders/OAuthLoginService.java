@@ -22,12 +22,35 @@ import org.scribe.oauth.OAuthService;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.session.UserInfo;
 
+/**
+ * <code>OAuthLoginService</code> provides guidelines to impletement service
+ * provider connector classes.
+ * 
+ * @author yaswanth
+ * 
+ */
 public interface OAuthLoginService
 {
+    /**
+     * Provides services object based on underlying provider class
+     * 
+     * @return ({@link OAuthService}
+     */
     public OAuthService getService();
 
+    /**
+     * Generates token based on OAuth code. Used for OAuth 2 calls
+     * 
+     * @param code
+     * @return
+     */
     public Token getToken(String code);
 
+    /**
+     * Returns scopes of implemented provider class
+     * 
+     * @return
+     */
     public String getScope();
 
     public String getCallback();
