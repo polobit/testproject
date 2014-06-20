@@ -345,10 +345,6 @@ public class Task extends Cursor
 
 	/************* New added code ******************/
 
-	System.out.println(this.note_description);
-	System.out.println(this.related_notes);
-	System.out.println(this.notes);
-
 	// If new note is added to task
 	if (this.note_description != null)
 	{
