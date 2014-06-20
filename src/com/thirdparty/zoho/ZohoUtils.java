@@ -13,9 +13,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 
 public class ZohoUtils {
-
+	public static ZohoAgileMapping zohoAgileMapper = new ZohoAgileMappingImpl();
 	/**
 	 * Holds authentication token of agent's zoho account
 	 */
@@ -92,9 +94,6 @@ public class ZohoUtils {
 		return con;
 	}
 
-	public boolean isAuthenticated(String username, String password) {
-		return false;
-	}
 
 
 
@@ -135,11 +134,11 @@ public class ZohoUtils {
 		return flag;
 	}
 
-	public static String getZohoLeads(ContactPrefs ctx,int i) {
+	public static String getZohoLeads(ContactPrefs ctx,int i,String time) {
 
 		JSONArray data = new JSONArray();
 			try {
-				String url = buildUrl("Leads", ctx, i, i+200);
+				String url = buildUrl("Leads", ctx, i, i+200,time);
 				System.out.println(url);
 					URLConnection con = getConnection(url);
 					BufferedReader result = new BufferedReader(
@@ -155,10 +154,10 @@ public class ZohoUtils {
 		return data.toString();
 	}
 
-	public static String getAccounts(ContactPrefs ctx,int index) {
+	public static String getAccounts(ContactPrefs ctx,int index,String time) {
 		JSONArray data = new JSONArray();
 
-			String url = buildUrl("Accounts", ctx, index, index+200);
+			String url = buildUrl("Accounts", ctx, index, index+200,time);
 			System.out.println(url);
 			try {
 					URLConnection con = getConnection(url);
@@ -187,12 +186,12 @@ public class ZohoUtils {
 		return data.toString();
 	}
 
-	public static String getEvents(ContactPrefs ctx) {
+	public static String getEvents(ContactPrefs ctx,String time) {
 
 		JSONArray data = new JSONArray();
 		for (int index = 1; index < MAX_INDEX;) {
 
-			String url = buildUrl("Events", ctx, index, index+200);
+			String url = buildUrl("Events", ctx, index, index+200,time);
 			System.out.println(url);
 			URLConnection con = getConnection(url);
 			try {
@@ -225,11 +224,11 @@ public class ZohoUtils {
 		return null;
 	}
 
-	public static String getContacts(ContactPrefs ctx,int index) {
+	public static String getContacts(ContactPrefs ctx,int index,String time) {
 
 		JSONArray data = new JSONArray();
 		
-			String url = buildUrl("Contacts", ctx, index, index+200);
+			String url = buildUrl("Contacts", ctx, index, index+200,time);
 			try {
 					URLConnection con = getConnection(url);
 					BufferedReader br = new BufferedReader(
@@ -245,12 +244,13 @@ public class ZohoUtils {
 	}
 
 	public static String buildUrl(String module, ContactPrefs ctx,
-			int fromIndex, int toIndex) {
+			int fromIndex, int toIndex,String time) {
 		StringBuilder url = new StringBuilder(SERVER_URL)
 				.append(module + "/getRecords?")
 				.append("authtoken=" + ctx.token)
 				.append("&fromIndex=" + fromIndex + "&toIndex=" + toIndex)
-				.append("&scope=crmapi");
+				.append("&scope=crmapi")
+		         .append("&lastModifiedTime="+time);
 
 		return url.toString();
 	}
@@ -285,5 +285,7 @@ public class ZohoUtils {
 		return false;
 
 	}
+	
+
 
 }
