@@ -47,7 +47,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	showNoteOnForm("updateTaskForm", taskJson.notes);
 	
 	// Creates normal time.
-	displayTimeAgo($(".list"));
+	displayTimeAgo($(".task-trello-list"));
 }
 
 // Update edited task

@@ -2,7 +2,7 @@
 function displaySettings()
 {
 	// Creates normal time.
-	displayTimeAgo($(".list"));
+	displayTimeAgo($(".task-trello-list"));
 
 	$(".listed-task").parent().css('padding-bottom', '5px');
 

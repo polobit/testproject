@@ -79,7 +79,8 @@ function createNestedCollection(criteria, criteriaArray, pending)
 function initTaskListCollection()
 {
 	// Define main collection
-	TASKS_LIST_COLLECTION = new Base_Collection_View({ restKey : "task", templateKey : "new-tasks-lists", individual_tag_name : 'div',
+	TASKS_LIST_COLLECTION = new Base_Collection_View({ restKey : "task", 
+		templateKey : "new-tasks-lists", individual_tag_name : 'div',
 		className : "list-area-wrapper", sort_collection : false, postRenderCallback : function(el)
 		{
 			// Remove loding imgs
@@ -97,7 +98,8 @@ function initTaskListCollection()
 // Append sub collection and model
 function taskAppend(base_model)
 {
-	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "new-tasks-lists-model", tagName : 'div', className : "list",
+	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", 
+		template : "new-tasks-lists-model", tagName : 'div', className : "task-trello-list",
 		id : base_model.get("heading") });
 
 	// Render model in main collection

@@ -251,8 +251,9 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 	// Show loading symbol until model get saved
 	//$('#' + modalId).find('span.save-status').html(LOADING_HTML);
-
+	
 	var json = serializeForm(formId);
+		
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
 
