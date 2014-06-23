@@ -24,6 +24,7 @@ import com.agilecrm.activities.TaskReminder;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
 
 /**
  * <code>TaskAPI</code> includes REST calls to interact with {@link Task} class
@@ -158,7 +159,11 @@ public class TasksAPI
 	{
 	    Task task = TaskUtil.getTask(id);
 	    if (task != null)
+	    {
+		if (!task.getNotes(id).isEmpty())
+		    NoteUtil.deleteBulkNotes(task.getNotes(id));
 		task.delete();
+	    }
 	}
 	catch (Exception e)
 	{

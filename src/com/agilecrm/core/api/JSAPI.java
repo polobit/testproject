@@ -36,6 +36,8 @@ import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.whitelist.AccessDomain;
+import com.agilecrm.whitelist.util.AccessDomainUtil;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
@@ -1162,6 +1164,27 @@ public class JSAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get domains with access
+     */
+    @Path("whitelist")
+    @GET
+    @Produces("application / x-javascript")
+    public String getDomainsWithAccess()
+    {
+	List<AccessDomain> whiteListDomains = AccessDomainUtil.getDomainsWithAccess();
+	ObjectMapper mapper = new ObjectMapper();
+
+	try
+	{
+	    return mapper.writeValueAsString(whiteListDomains);
+	}
+	catch (Exception e)
+	{
 	    return null;
 	}
     }

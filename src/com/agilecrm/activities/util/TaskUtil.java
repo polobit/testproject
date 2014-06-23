@@ -476,6 +476,12 @@ public class TaskUtil
 	    DateUtil startDateUtil = new DateUtil();
 	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
 
+	    System.out.println("startDateUtil: " + startDateUtil);
+	    System.out.println("startDateUtil.toMidnight().getTime().getTime(): "
+		    + startDateUtil.toMidnight().getTime().getTime());
+	    System.out.println("startDateUtil.toMidnight(): " + startDateUtil.toMidnight());
+	    System.out.println("startTime: " + startTime);
+
 	    if (type.equalsIgnoreCase("OVERDUE"))
 	    {
 		System.out.println("check for " + startTime);
