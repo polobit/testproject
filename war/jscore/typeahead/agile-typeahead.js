@@ -38,11 +38,14 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
     var CONTACTS = {};
 
-   var typeAheadXHRRequest;
    var el_typeahead =  $('#' + id, el).typeahead({
-    	
+	   
+	    // Time delay to start query
+	   	timedelay : 300,
+	   	
+	   	// Holds current search query xhr object
+	   	searchAJAXRequest : undefined,
         source: function (query, process) {
-        	console.log(this.options);
         	
         	
         	/* Resets the results before query */
@@ -51,26 +54,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         	/* Stores type ahead object in temporary variable */
         	var that = this;
 
-        	that.$menu.empty();
-        	/* Sets css to html data to be displayed */
-        	that.$menu.css("width", 300);
-
-     		/*
-        	 * Calls render because menu needs to be initialized
-        	 * even before first result is fetched to show
-        	 * loading 
-        	 */
-        
-
-        	/*
-        	 * If loading image is not available in menu then
-        	 * appends it to menu
-        	 */
-        	if (!$(this.$menu.find('li').last()).hasClass('loading-results')){
-        			that.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
-        			that.render();
-        	}
-
+        	
+        	this.options.showLoading(this);
+        	
         	// Drop down with loading image is shown
         	//this.shown = true;
 
@@ -80,21 +66,17 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         	
         	if(urlParams && urlParams.length)type_url='&'+urlParams;
         	
-        	// Checks if there is previous request and cancels it
-        	if(typeAheadXHRRequest != null && (typeAheadXHRRequest && typeAheadXHRRequest.readystate != 4)) {
-        		typeAheadXHRRequest.abort();
-               }
         	
-        	typeAheadXHRRequest = $.getJSON(url + query+"?page_size=10"+type_url, function (data){
+        	// Sends search request and holds request object, which can be reference to cancel request if there is any new request
+        	this.options.searchAJAXRequest = $.getJSON(url + query+"?page_size=10"+type_url, function (data){
         		
-        		console.log(this.url);
         		var current_query = $('#' + id, el).val(); 
+        		
+        		// If current query is not equal to that of token in search url, results are not shown (never occurs now as it is handled in keyup function)
         		if(query != current_query)
         		{
-        			console.log("returning query " + query);
         			return;
         		}
-        		
         		
         		
 
@@ -144,6 +126,29 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		 */
         		process(items_list);
         	});
+        },
+        showLoading : function(self)
+        {
+        	self.$menu.empty();
+        	/* Sets css to html data to be displayed */
+        	self.$menu.css("width", 300);
+        	
+     		/*
+        	 * Calls render because menu needs to be initialized
+        	 * even before first result is fetched to show
+        	 * loading 
+        	 */
+        
+
+        	/*
+        	 * If loading image is not available in menu then
+        	 * appends it to menu
+        	 */
+        	if (!$(self.$menu.find('li').last()).hasClass('loading-results')){
+        		self.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
+        		self.render();
+        	}
+        	
         },
         
         /**
@@ -242,6 +247,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	}
         },
+        // Needs to be overridden to set timedelay on search
         keyup: function (e) {
             switch(e.keyCode) {
               case 40: // down arrow
@@ -263,7 +269,26 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
                 break
 
               default:
-                this.lookup()
+            	 {
+            		// Checks if there is previous request and cancels it
+            	  if(this.options.searchAJAXRequest != null && (this.options.searchAJAXRequest && this.options.searchAJAXRequest.readystate != 4)) {
+                		this.options.searchAJAXRequest.abort();
+                       }
+                	
+                  if (this.timer) clearTimeout(this.timer);
+                  var self = this;
+                  
+                  // Reset results
+                  CONTACTS = {};
+                  
+                  /*
+              	 * If loading image is not available in menu then
+              	 * appends it to menu
+              	 */
+                  this.options.showLoading(self);
+                  
+                  this.timer = setTimeout(function () { self.lookup(); }, this.options.timedelay);
+            	 }
             }
 
             e.stopPropagation()
