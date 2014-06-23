@@ -23,14 +23,14 @@ function setup_sortable_tasks()
 					beforeStop : function(event, ui)
 					{
 						// If sender and receiver is same
-						if ($(ui.helper).closest('.list').find('.list-header').attr('attr') === $(ui.placeholder).closest('.list').find('.list-header').attr(
+						if ($(ui.helper).closest('.task-trello-list').find('.list-header').attr('attr') === $(ui.placeholder).closest('.task-trello-list').find('.list-header').attr(
 								'attr'))
 						{
 							// If criteria is owner
-							if ($(ui.helper).closest('.list').find('.list-header').attr('ownerID'))
+							if ($(ui.helper).closest('.task-trello-list').find('.list-header').attr('ownerID'))
 							{
 								// If sender and receiver is same owner
-								if ($(ui.helper).closest('.list').find('.list-header').attr('ownerID') === $(ui.placeholder).closest('.list').find(
+								if ($(ui.helper).closest('.task-trello-list').find('.list-header').attr('ownerID') === $(ui.placeholder).closest('.task-trello-list').find(
 										'.list-header').attr('ownerID'))
 									return false;
 								// $(this).sortable('cancel');

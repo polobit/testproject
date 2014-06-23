@@ -145,8 +145,12 @@ public class RegisterServlet extends HttpServlet
 	// Delete Login Session
 	request.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
+	System.out.println("Oauth start");
 	// Send to OpenID for Authentication
-	response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
+	if (server.equals("google"))
+	    response.sendRedirect("/oauth?hd=" + server);
+	else
+	    response.sendRedirect("/openid?hd=" + URLEncoder.encode(url));
 	return;
     }
 

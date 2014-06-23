@@ -65,6 +65,8 @@ function getNewDueDate(newTaskListId)
 	if (newTaskListId == "LATER")
 		d.setDate(d.getDate() + 2);
 
+	console.log((getGMTTimeFromDate(d) / 1000));
+
 	return (getGMTTimeFromDate(d) / 1000);
 }
 
@@ -92,7 +94,7 @@ function getTaskId(element)
 // Get heading of task list
 function getTaskListId(element)
 {
-	return $(element).closest('.list').attr('id');
+	return $(element).closest('.task-trello-list').attr('id');
 }
 
 /*
@@ -101,7 +103,7 @@ function getTaskListId(element)
  */
 function getTaskListOwnerId(element)
 {
-	return $(element).closest('.list').find('.list-header').attr('ownerID');
+	return $(element).closest('.task-trello-list').find('.list-header').attr('ownerID');
 }
 
 // Get Criteria from dropdown
@@ -214,32 +216,38 @@ function getDetailsForCollection()
  * 
  * @returns {String} query string
  */
-function getParamsNew() {
-
+function getParamsNew()
+{	
 	var params = "?";
 
 	// Get task type and append it to params
-	var criteria = $('#new-type-tasks').data("selected_item");
+	var criteria = getCriteria();
 	if (criteria)
 		params += ("&criteria=" + criteria);
+
+	if (criteria == "DUE")
+	{
+		params += ("&start_time=" + getNewDueDate("TODAY"));
+		params += ("&end_time=" + getNewDueDate("TOMORROW"));
+	}
+
 	// Get owner name and append it to params
 	var owner = $('#new-owner-tasks').data("selected_item");
-	if(owner == 'my-pending-tasks')
+	if (owner == 'my-pending-tasks')
 	{
 		params += ("&pending=" + true);
 		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
 		return params;
 	}
-	if(owner == 'all-pending-tasks')
+	if (owner == 'all-pending-tasks')
 	{
 		params += ("&pending=" + true);
 		owner = "";
 	}
 	if (owner)
 		params += ("&owner=" + owner);
-	else if(owner == undefined)
+	else if (owner == undefined)
 		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
-	
+
 	return params;
 }
-

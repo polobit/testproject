@@ -12,24 +12,35 @@
 	<div class="span9">
 		<ul class="nav nav-tabs" id="APITab">
 			<li class="api-tab active"><a data-toggle="tab" href="#api">API Key</a></li>
-			<li class="analytics-tab"><a data-toggle="tab" href="#analytics">Analytics
-					Code</a></li>
+			<li class="analytics-tab"><a data-toggle="tab" href="#analytics">Analytics Code</a></li>
 		</ul>
 		<div class="tab-content">
 
 			<!--  API Key templete -->
-			<div class="tab-pane active" id="api">
-Here is your API key you can use to access through various clients<div class="clearfix"></div><br/>
-				<div class="row-fluid">
-    				<div class="span11">
-<div><a class="right btn" id="api_key_code_icon" style="margin:4px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>
-        				<pre class="prettyprint" id="api_key_code">
-{{api_key}}
-</pre></div>
-    				</div>
-				</div>
-
-			</div>
+<div class="tab-pane active" id="api">
+   Here is your API key you can use to access through various clients
+   <div class="clearfix"></div>
+   <br/>
+   <div class="row-fluid">
+      <div class="span11">
+         <div>
+            <a class="right btn" id="api_key_code_icon" style="margin:4px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>
+            <pre class="prettyprint" id="api_key_code">{{api_key}}</pre>
+         </div>
+      </div>
+   </div>
+  Here is your JSAPI key you can use to access throught JavaScript
+  <div class="clearfix"></div>
+   <br/>
+      <div class="row-fluid">
+      <div class="span11">
+         <div>
+            <a class="right btn" id="jsapi_key_code_icon" style="margin:4px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>
+            <pre class="prettyprint" id="jsapi_key_code">{{js_api_key}}</pre>
+         </div>
+      </div>
+   </div>
+</div>
 			<!-- End of API Key templete-->
 
 			<div class="tab-pane" id="analytics">
@@ -43,7 +54,7 @@ Here is your API key you can use to access through various clients<div class="cl
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
- _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
  _agile.track_page_view();
 &lt;/script&gt;
 </pre></div>
@@ -57,7 +68,7 @@ Here is your API key you can use to access through various clients<div class="cl
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
- _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
  _agile.track_page_view();
  _agile_execute_web_rules();
 &lt;/script&gt;

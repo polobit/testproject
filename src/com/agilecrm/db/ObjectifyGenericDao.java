@@ -19,6 +19,7 @@ import com.agilecrm.account.AccountEmailStats;
 import com.agilecrm.account.AccountPrefs;
 import com.agilecrm.account.EmailTemplates;
 import com.agilecrm.account.MenuSetting;
+import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.cases.Case;
@@ -159,6 +160,9 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(AccountEmailStats.class);
 
 	ObjectifyService.register(BillingRestriction.class);
+
+	// For all Activities
+	ObjectifyService.register(Activity.class);
     }
 
     /**
