@@ -12,7 +12,7 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 		modelTaskList = getTaskList("OWNER", tasksToAdd.taskOwner.name, tasksToAdd.taskOwner.id);
 
 		// Remove Loading Icon from task list
-		$('.task-list-loading-img-' + tasksToAdd.taskOwner.name + "-" + tasksToAdd.taskOwner.id, ".list").hide();
+		$('.task-list-loading-img-' + tasksToAdd.taskOwner.name + "-" + tasksToAdd.taskOwner.id, ".task-trello-list").hide();
 	}
 	else if ((conditionToCheck == "dragged" || conditionToCheck == true) && headingToSearch == "taskOwner.name")
 	// dragged/edited task
@@ -20,7 +20,7 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 		modelTaskList = getTaskList("OWNER", tasksToAdd.get("taskOwner").name, tasksToAdd.get("taskOwner").id);
 
 		// Remove Loading Icon from task list
-		$('.task-list-loading-img-' + tasksToAdd.get("taskOwner").name + "-" + tasksToAdd.get("taskOwner").id, ".list").hide();
+		$('.task-list-loading-img-' + tasksToAdd.get("taskOwner").name + "-" + tasksToAdd.get("taskOwner").id, ".task-trello-list").hide();
 	}
 	else
 	// task other than owner criteria
@@ -28,7 +28,7 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 		modelTaskList = getTaskList(null, headingToSearch, null);
 
 		// Remove Loading Icon from task list
-		$('.task-list-loading-img-' + headingToSearch + "-", ".list").hide();
+		$('.task-list-loading-img-' + headingToSearch + "-", ".task-trello-list").hide();
 	}
 
 	console.log(modelTaskList);
@@ -76,7 +76,7 @@ function deleteTask(taskId, taskListId, taskListOwnerId)
 	new_task.destroy({ success : function(model, response)
 	{
 		// Creates normal time.
-		displayTimeAgo($(".list"));
+		displayTimeAgo($(".task-trello-list"));
 
 		// change task count in header of task list
 		changeTaskCount(modelTaskList[0].toJSON(), false);

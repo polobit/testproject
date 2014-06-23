@@ -251,11 +251,15 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 	// Show loading symbol until model get saved
 	//$('#' + modalId).find('span.save-status').html(LOADING_HTML);
-
+	
 	var json = serializeForm(formId);
-	if (!isUpdate)
+	
+	var d = json.due;
+	console.log(d);
+	
+	/*if (!isUpdate)
 		json.due = new Date(json.due).getTime();
-
+*/
 	console.log(json);
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';

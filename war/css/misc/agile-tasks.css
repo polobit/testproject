@@ -52,7 +52,7 @@
 	border-radius: 10px;
 }
 
-.list {
+.task-trello-list {
 	background: #dbdbdb;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -70,7 +70,7 @@
 	max-height: 100%;
 }
 
-.list:first-child {
+.task-trello-list:first-child {
 	margin-left: 0;
 }
 
@@ -175,8 +175,8 @@
 	/* apply ellipses if more contacts are there */   
     display: -webkit-box;
     line-height: 16px;     /* fallback */
-    max-height: 48px;      /* fallback */
-    -webkit-line-clamp: 3; /* number of lines to show */
+    max-height: 32px;      /* fallback */
+    -webkit-line-clamp: 2; /* number of lines to show */
     -webkit-box-orient: vertical;
 }
 
@@ -204,7 +204,7 @@
 	padding-bottom: 2px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	width: 50%;
+	width: 60%;
 	display: block;
 	overflow: hidden;
 	cursor: move;
