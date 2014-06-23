@@ -219,7 +219,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				if($("#choose_domain").valid())	
 				{
 					var domain = $("#subdomain").val();
-					checkAndCreateUser("/backend/register-check?domain="+domain+"&oauth=true", $("oauth"))
+					checkAndCreateUser("/backend/register-check?domain="+domain+"&oauth=true", $("#oauth"))
 				}
 				
 				e.preventDefault();
