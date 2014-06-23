@@ -187,7 +187,7 @@ public class AgileAuthFilter implements Filter
 
 	System.out.println();
 	System.out.println(user.scopes);
-	if (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes))
+	if (info.getScopes() == null || (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes)))
 	{
 	    System.out.println("does not contain all scopes");
 	    System.out.println(info.getScopes());

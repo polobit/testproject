@@ -14,7 +14,6 @@ import com.agilecrm.reports.Reports;
 import com.agilecrm.search.QueryInterface;
 import com.agilecrm.search.query.util.QueryDocumentUtil;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.search.util.SearchUtil;
 import com.google.appengine.api.search.Cursor;
 import com.google.appengine.api.search.Document;
@@ -79,15 +78,8 @@ public class QueryDocument<T> implements QueryInterface
 	 * filed name search_tokens)
 	 */
 	String query = "search_tokens : " + keyword;
-	List<SearchRule> rules = new ArrayList<SearchRule>();
-	SearchRule rule = new SearchRule();
-	rule.LHS = "search_tokens";
-	rule.CONDITION = RuleCondition.EQUALS;
-	rule.RHS = keyword;
 
-	rules.add(rule);
-
-	return processQuery(QueryDocumentUtil.constructQuery(rules), count, cursor);
+	return processQuery(query, count, cursor);
     }
 
     /**
@@ -104,24 +96,7 @@ public class QueryDocument<T> implements QueryInterface
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
 	SearchUtil.normalizeString(keyword);
-
-	List<SearchRule> rules = new ArrayList<SearchRule>();
-
-	// Adding rules search token and type query
-	SearchRule rule1 = new SearchRule();
-	rule1.LHS = "search_tokens";
-	rule1.CONDITION = RuleCondition.EQUALS;
-	rule1.RHS = keyword;
-
-	SearchRule rule2 = new SearchRule();
-	rule2.LHS = "type";
-	rule2.CONDITION = RuleCondition.EQUALS;
-	rule2.RHS = "PERSON";
-
-	rules.add(rule1);
-	rules.add(rule2);
-
-	return processQuery(QueryDocumentUtil.constructQuery(rules), count, cursor);
+	return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 
     /**

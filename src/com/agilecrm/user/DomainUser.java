@@ -441,6 +441,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	     * SessionManager.get(); if (info != null)
 	     * info.setScopes(this.scopes);
 	     */
+	    // System.out.println("savined user info scopes : " +
+	    // info.getScopes());
 	  //  System.out.println("savined user info scopes : " + info.getScopes());
 
 	}

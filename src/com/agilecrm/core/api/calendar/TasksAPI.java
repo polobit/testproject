@@ -382,15 +382,17 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List<Task> getTasksBasedOnOwnerOfTypeAndDue(@QueryParam("criteria") String criteria,
 	    @QueryParam("type") String type, @QueryParam("owner") String owner, @QueryParam("pending") boolean pending,
-	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count) throws Exception
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count,
+	    @QueryParam("start_time") Long startTime, @QueryParam("end_time") Long endTime) throws Exception
     {
 	if (count != null)
 	{
 	    return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, Integer.parseInt(count),
-		    cursor);
+		    cursor, startTime, endTime);
 	}
 
-	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null);
+	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime,
+		endTime);
     }
 
     /**
