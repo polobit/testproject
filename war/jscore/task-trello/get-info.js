@@ -65,6 +65,8 @@ function getNewDueDate(newTaskListId)
 	if (newTaskListId == "LATER")
 		d.setDate(d.getDate() + 2);
 
+	console.log((getGMTTimeFromDate(d) / 1000));
+
 	return (getGMTTimeFromDate(d) / 1000);
 }
 
@@ -215,14 +217,19 @@ function getDetailsForCollection()
  * @returns {String} query string
  */
 function getParamsNew()
-{
-
+{	
 	var params = "?";
 
 	// Get task type and append it to params
 	var criteria = getCriteria();
 	if (criteria)
 		params += ("&criteria=" + criteria);
+
+	if (criteria == "DUE")
+	{
+		params += ("&start_time=" + getNewDueDate("TODAY"));
+		params += ("&end_time=" + getNewDueDate("TOMORROW"));
+	}
 
 	// Get owner name and append it to params
 	var owner = $('#new-owner-tasks').data("selected_item");
@@ -241,12 +248,6 @@ function getParamsNew()
 		params += ("&owner=" + owner);
 	else if (owner == undefined)
 		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
-
-	if (criteria == "DUE")
-	{
-		params += ("&start_time=" + getNewDueDate("TODAY"));
-		params += ("&end_time=" + getNewDueDate("TOMORROW"));
-	}
 
 	return params;
 }
