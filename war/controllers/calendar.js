@@ -7,7 +7,7 @@ var CalendarRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Shows fullCalendar page */
-	"calendar" : "calendar", "tasks" : "tasks" },
+	"calendar" : "calendar", "tasks" : "tasks", "tasks-new" : "tasks_new" },
 	/**
 	 * Activates the calendar menu and loads minified fullcalendar and jquery-ui
 	 * to show calendar view. Also shows tasks list in separate section.
@@ -63,4 +63,29 @@ var CalendarRouter = Backbone.Router.extend({
 
 		$(".active").removeClass("active");
 		$("#calendarmenu").addClass("active");
+	},
+
+	/* Show new view of tasks. */
+	tasks_new : function()
+	{
+		$('#content').html(getTemplate("new-tasks-list-header", {}));
+		
+		fillSelect("new-owner-tasks", '/core/api/users/current-user', 'domainUser', function fillOwner()
+		{			
+			$('#content').find("#new-owner-tasks").prepend("<li><a href=''>All Tasks</a></li>");
+			$('#content').find("#new-owner-tasks").append("<li><a href='all-pending-tasks' class='hide-on-status'>All Pending Tasks</a></li>");
+			$('#content').find("#new-owner-tasks").append("<li><a href='my-pending-tasks' class='hide-on-owner hide-on-status'>My Pending Tasks</a></li>");
+			
+			// Read stored selections from cookie and Creates nested collection
+			readDetailsFromCookie();
+
+		}, "<li><a href='{{id}}' class='hide-on-owner'>My Tasks</a></li>", true);
+
+		$('.loading').remove();
+		
+		$(".active").removeClass("active");
+		$("#calendarmenu").addClass("active");
+
+		// Hide owner's and status task selection options from dropdown
+		$(".hide-on-pending").hide();
 	} });

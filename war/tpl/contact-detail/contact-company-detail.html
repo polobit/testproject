@@ -21,7 +21,7 @@
 							</form>
 						</div>
 						<div
-							style='margin-top: 0%; width: 16em; display: inline-block; vertical-align: middle'>
+							style='margin-top: 0%; width: 20em; display: inline-block; vertical-align: middle'>
 							<div
 								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
 
@@ -42,7 +42,7 @@
 											TWITTER"}}" style="font-size: 1.4em !important"></i>
 									</a>
 									</span> {{else}} <span style="margin-right: 5px"> <a
-										target="_blank" href="{{value}}" style="text-decoration: none">
+										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none">
 											<i class="{{get_social_icon subtype}}"
 											style="font-size: 1.4em !important"></i>
 									</a>
@@ -54,7 +54,7 @@
 						<div class="right" style='position: relative'>
 							<div class="btn-group right" style='position: relative'>
 								<div id='star' style='padding-bottom: 13px; width: auto !important'></div>
-								<a class="btn" style="border-radius: 4px 0px 0px 4px!important;" href="#contact-edit"><i class="icon-edit"></i> Edit</a> 
+								<a class="btn" style="border-radius: 4px 0px 0px 4px!important;margin-left: 6px;" href="#contact-edit"><i class="icon-edit"></i> Edit</a> 
 								<a class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
 								<ul class="dropdown-menu">
 
@@ -63,7 +63,7 @@
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
 											Add Opportunity</a></li>
 									<li class='divider'></li>
-									<li><a href='#send-email' id="contact-send-email"><i
+									<li><a href='#send-email{{#if_propertyName "email"}}/{{value}}{{/if_propertyName}}' id="contact-send-email"><i
 											class="icon-envelope-alt"></i> Send Email</a></li>
 									<li class='divider'></li>
 									<li><a href='#' id='contact-actions-delete'><i

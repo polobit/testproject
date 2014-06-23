@@ -66,8 +66,7 @@ public class QueryDocument<T> implements QueryInterface
      * @return {@link Collection}
      */
     @Override
-    public Collection<T> simpleSearch(String keyword, Integer count,
-	    String cursor)
+    public Collection<T> simpleSearch(String keyword, Integer count, String cursor)
     {
 	// Normalizes the string. Removes spaces from the string as space are
 	// excluded while saving in documents
@@ -94,12 +93,10 @@ public class QueryDocument<T> implements QueryInterface
      * @return
      */
     @Override
-    public Collection<T> simpleSearchWithType(String keyword, Integer count,
-	    String cursor, String type)
+    public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
 	SearchUtil.normalizeString(keyword);
-	return processQuery("search_tokens:" + keyword + " AND type:" + type,
-		count, cursor);
+	return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 
     /**
@@ -136,8 +133,7 @@ public class QueryDocument<T> implements QueryInterface
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public Collection<T> advancedSearch(List<SearchRule> rules, Integer count,
-	    String cursor)
+    public Collection<T> advancedSearch(List<SearchRule> rules, Integer count, String cursor)
     {
 
 	// Construct query based on rules
@@ -174,8 +170,7 @@ public class QueryDocument<T> implements QueryInterface
 	 * accordingly
 	 */
 
-	QueryOptions options = QueryOptions.newBuilder()
-		.setNumberFoundAccuracy(10000).build();
+	QueryOptions options = QueryOptions.newBuilder().setNumberFoundAccuracy(10000).build();
 
 	Query query = Query.newBuilder().setOptions(options).build(queryString);
 
@@ -241,22 +236,13 @@ public class QueryDocument<T> implements QueryInterface
 	     */
 	    if (cursor == null)
 
-		options = QueryOptions
-			.newBuilder()
-			.setFieldsToReturn("type")
-			.setLimit(page)
-			.setCursor(
-				Cursor.newBuilder().setPerResult(true).build())
-			.setNumberFoundAccuracy(10000).build();
+		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
+			.setCursor(Cursor.newBuilder().setPerResult(true).build()).setNumberFoundAccuracy(10000)
+			.build();
 	    else
-		options = QueryOptions
-			.newBuilder()
-			.setFieldsToReturn("type")
-			.setLimit(page)
-			.setCursor(
-				Cursor.newBuilder().setPerResult(true)
-					.build(cursor))
-			.setNumberFoundAccuracy(10000).build();
+		options = QueryOptions.newBuilder().setFieldsToReturn("type").setLimit(page)
+			.setCursor(Cursor.newBuilder().setPerResult(true).build(cursor)).setNumberFoundAccuracy(10000)
+			.build();
 
 	    return options;
 	}
@@ -265,12 +251,8 @@ public class QueryDocument<T> implements QueryInterface
 	if (index == null)
 	    return null;
 
-	return QueryOptions
-		.newBuilder()
-		.setReturningIdsOnly(true)
-		.setLimit(
-			Long.valueOf(index.search(query).getNumberFound())
-				.intValue()).build();
+	return QueryOptions.newBuilder().setReturningIdsOnly(true)
+		.setLimit(Long.valueOf(index.search(query).getNumberFound()).intValue()).build();
     }
 
     /**
@@ -292,67 +274,48 @@ public class QueryDocument<T> implements QueryInterface
 	 * sets of 1000 documents at time
 	 */
 	QueryOptions options = QueryOptions.newBuilder().setLimit(1000)
-		.setCursor(Cursor.newBuilder().setPerResult(true).build())
-		.setFieldsToReturn("type").setNumberFoundAccuracy(10000)
-		.build();
+		.setCursor(Cursor.newBuilder().setPerResult(true).build()).setFieldsToReturn("type")
+		.setNumberFoundAccuracy(10000).build();
 
 	// Builds query on query options
-	Query query_string = Query.newBuilder().setOptions(options)
-		.build(query);
+	Query query_string = Query.newBuilder().setOptions(options).build(query);
 
 	// Gets sorted documents
-	List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(
-		index.search(query_string).getResults());
+	List<ScoredDocument> contact_documents = new ArrayList<ScoredDocument>(index.search(query_string).getResults());
 
 	if (contact_documents.size() == 0)
 	    return new ArrayList();
 
-	String cursorString = contact_documents
-		.get(contact_documents.size() - 1).getCursor()
-		.toWebSafeString();
+	String cursorString = contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString();
 	/*
 	 * As text search returns only 1000 in a query, we fetch remaining
 	 * documents.
 	 */
 
-	if (contact_documents.size() >= 1000
-		&& contact_documents.get(contact_documents.size() - 1)
-			.getCursor() != null)
+	if (contact_documents.size() >= 1000 && contact_documents.get(contact_documents.size() - 1).getCursor() != null)
 	    do
 	    {
-		cursorString = contact_documents
-			.get(contact_documents.size() - 1).getCursor()
-			.toWebSafeString();
+		cursorString = contact_documents.get(contact_documents.size() - 1).getCursor().toWebSafeString();
 
-		System.out.println("while"
-			+ contact_documents.get(contact_documents.size() - 1)
-				.getCursor());
+		System.out.println("while" + contact_documents.get(contact_documents.size() - 1).getCursor());
 		options = QueryOptions
 			.newBuilder()
 			.setLimit(1000)
 			.setCursor(
 				Cursor.newBuilder()
 					.setPerResult(true)
-					.build(contact_documents
-						.get(contact_documents.size() - 1)
-						.getCursor().toWebSafeString()))
-			.setFieldsToReturn("type").build();
+					.build(contact_documents.get(contact_documents.size() - 1).getCursor()
+						.toWebSafeString())).setFieldsToReturn("type").build();
 
 		// Build query on query options
-		query_string = Query.newBuilder().setOptions(options)
-			.build(query);
+		query_string = Query.newBuilder().setOptions(options).build(query);
 
 		// Fetches next 1000 documents and them to list
-		contact_documents.addAll(new ArrayList<ScoredDocument>(index
-			.search(query_string).getResults()));
-		System.out.println("results fetched : "
-			+ contact_documents.size());
-	    }
-	    while (contact_documents.get(contact_documents.size() - 1)
-		    .getCursor() != null
-		    && !StringUtils.equals(cursorString,
-			    contact_documents.get(contact_documents.size() - 1)
-				    .getCursor().toWebSafeString()));
+		contact_documents.addAll(new ArrayList<ScoredDocument>(index.search(query_string).getResults()));
+		System.out.println("results fetched : " + contact_documents.size());
+	    } while (contact_documents.get(contact_documents.size() - 1).getCursor() != null
+		    && !StringUtils.equals(cursorString, contact_documents.get(contact_documents.size() - 1)
+			    .getCursor().toWebSafeString()));
 
 	System.out.println("total count  : " + contact_documents.size());
 
@@ -380,8 +343,7 @@ public class QueryDocument<T> implements QueryInterface
 	List<ScoredDocument> contact_documents = getDocuments(query);
 
 	// Return datastore entities based on documents.
-	return getDatastoreEntities(contact_documents,
-		Long.valueOf(contact_documents.size()));
+	return getDatastoreEntities(contact_documents, Long.valueOf(contact_documents.size()));
     }
 
     /**
@@ -391,20 +353,17 @@ public class QueryDocument<T> implements QueryInterface
      * @param query
      * @return
      */
-    private Map<String, Object> processQueryWithOptions(QueryOptions options,
-	    String query)
+    private Map<String, Object> processQueryWithOptions(QueryOptions options, String query)
     {
 	// Build query on query options
-	Query query_string = Query.newBuilder().setOptions(options)
-		.build(query);
+	Query query_string = Query.newBuilder().setOptions(options).build(query);
 
 	// If index is null return without querying
 	if (index == null)
 	    return null;
 
 	// Fetches documents based on query options
-	Collection<ScoredDocument> searchResults = index.search(query_string)
-		.getResults();
+	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
 
 	// Results fetched and total number of available contacts are set in map
 	Map<String, Object> documents = new HashMap<String, Object>();
@@ -416,11 +375,9 @@ public class QueryDocument<T> implements QueryInterface
 	    // If search results size is less than limit set, the returned doc
 	    // ids are considered as total local available documents.
 	    if (options.getLimit() > searchResults.size())
-		documents.put("availableDocuments",
-			Long.valueOf(searchResults.size()));
+		documents.put("availableDocuments", Long.valueOf(searchResults.size()));
 	    else
-		documents.put("availableDocuments", index.search(query_string)
-			.getNumberFound());
+		documents.put("availableDocuments", index.search(query_string).getNumberFound());
 	}
 
 	documents.put("fetchedDocuments", searchResults);
@@ -437,8 +394,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param cursor
      * @return
      */
-    public List<Long> getDocumentIds(List<SearchRule> rules, Integer count,
-	    String cursor)
+    public List<Long> getDocumentIds(List<SearchRule> rules, Integer count, String cursor)
     {
 	String query = QueryDocumentUtil.constructQuery(rules);
 
@@ -446,8 +402,7 @@ public class QueryDocument<T> implements QueryInterface
 	    return new ArrayList();
 
 	// return query results
-	Collection<ScoredDocument> contact_documents = getDocuments(query,
-		count, cursor);
+	Collection<ScoredDocument> contact_documents = getDocuments(query, count, cursor);
 
 	List<Long> entity_ids = new ArrayList<Long>();
 
@@ -468,14 +423,12 @@ public class QueryDocument<T> implements QueryInterface
      * @return
      */
     @SuppressWarnings("unchecked")
-    public Collection<ScoredDocument> getDocuments(String query, Integer page,
-	    String cursor)
+    public Collection<ScoredDocument> getDocuments(String query, Integer page, String cursor)
     {
 
 	QueryOptions options = buildOptions(query, page, cursor);
 
-	return (Collection<ScoredDocument>) processQueryWithOptions(options,
-		query).get("fetchedDocuments");
+	return (Collection<ScoredDocument>) processQueryWithOptions(options, query).get("fetchedDocuments");
     }
 
     /**
@@ -487,18 +440,15 @@ public class QueryDocument<T> implements QueryInterface
      * @param cursor
      * @return
      */
-    public Collection getDatastoreEntities(Map<String, Object> results,
-	    Integer page, String cursor)
+    public Collection getDatastoreEntities(Map<String, Object> results, Integer page, String cursor)
     {
-	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results
-		.get("fetchedDocuments");
+	Collection<ScoredDocument> documents = (Collection<ScoredDocument>) results.get("fetchedDocuments");
 
 	Long availableResults = (Long) results.get("availableDocuments");
 
 	// Converts collection of documents in to a list, it enable easy
 	// retrieval of documents based on index
-	List<ScoredDocument> DocumentList = new ArrayList<ScoredDocument>(
-		documents);
+	List<ScoredDocument> DocumentList = new ArrayList<ScoredDocument>(documents);
 
 	// Fetches Entites. It fetches based on the template type on the class
 	// in datastore and returns a list
@@ -528,8 +478,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param DocumentList
      * @return
      */
-    public List getDatastoreEntities(Collection<ScoredDocument> DocumentList,
-	    Long count)
+    public List getDatastoreEntities(Collection<ScoredDocument> DocumentList, Long count)
     {
 	String newCursor = null;
 
@@ -551,8 +500,7 @@ public class QueryDocument<T> implements QueryInterface
 
 	    if (typeKeyMap.containsKey(Type.valueOf(type)))
 	    {
-		typeKeyMap.get(Type.valueOf(type)).add(
-			Long.parseLong(doc.getId()));
+		typeKeyMap.get(Type.valueOf(type)).add(Long.parseLong(doc.getId()));
 	    }
 	    else
 	    {
@@ -598,8 +546,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param documentList
      * @return
      */
-    public List<T> getGenericEntites(Collection<ScoredDocument> documentList,
-	    Long count)
+    public List<T> getGenericEntites(Collection<ScoredDocument> documentList, Long count)
     {
 	List<Key<T>> entityKeys = new ArrayList<Key<T>>();
 
@@ -620,8 +567,7 @@ public class QueryDocument<T> implements QueryInterface
 	    // Fetches dao field based on class using reflection API
 	    Field o = clazz.getDeclaredField("dao");
 	    ObjectifyGenericDao<T> dao = (ObjectifyGenericDao<T>) o.get(null);
-	    return (List<T>) setCursors(dao.fetchAllByKeys(entityKeys), cursor,
-		    count);
+	    return (List<T>) setCursors(dao.fetchAllByKeys(entityKeys), cursor, count);
 	}
 	catch (Exception e)
 	{
@@ -633,8 +579,7 @@ public class QueryDocument<T> implements QueryInterface
 
     }
 
-    public static List<com.agilecrm.cursor.Cursor> setCursors(List entities,
-	    String cursor, Long numberOfContacts)
+    public static List<com.agilecrm.cursor.Cursor> setCursors(List entities, String cursor, Long numberOfContacts)
     {
 	if (entities.size() == 0)
 	    return entities;
@@ -655,8 +600,7 @@ public class QueryDocument<T> implements QueryInterface
 	if (firstEntity instanceof com.agilecrm.cursor.Cursor)
 	{
 	    com.agilecrm.cursor.Cursor agileCursor = null;
-	    if (cursor != null && numberOfContacts != null
-		    && entities.size() != 0)
+	    if (cursor != null && numberOfContacts != null && entities.size() != 0)
 	    {
 		agileCursor = (com.agilecrm.cursor.Cursor) lastEntity;
 		agileCursor.count = numberOfContacts.intValue();

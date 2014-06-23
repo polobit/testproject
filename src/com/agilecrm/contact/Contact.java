@@ -372,6 +372,7 @@ public class Contact extends Cursor
 	{
 
 	    oldContact = ContactUtil.getContact(id);
+	    owner_key = oldContact.owner_key != null ? oldContact.owner_key : owner_key;
 	    //
 	    // if (Type.COMPANY == type
 	    // &&

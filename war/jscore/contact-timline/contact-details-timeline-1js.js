@@ -1,6 +1,6 @@
 
 
-function load_timeline_details(el, contactId, callback1, noAnimation)
+function load_timeline_details1(el, contactId, callback1, noAnimation)
 {
 	noAnimationBruteForce = true;
 	timeline_entity_loader.init(App_Contacts.contactDetailView.model.toJSON());

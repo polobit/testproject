@@ -48,21 +48,13 @@ var SettingsRouter = Backbone.Router.extend({
 	userPrefs : function()
 	{
 		$("#content").html(getTemplate("settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", reload : true, postRenderCallback: function(el)
+		var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", reload : true,
+			postRenderCallback : function(el)
 			{
-			/** TinyMCE **/
-
-			// set up TinyMCE Editor
-			setupTinyMCEEditor('textarea#WYSItextarea', true);
-			
-			// Insert content into tinymce
-			set_tinymce_content('WYSItextarea', view.model.toJSON().signature);
-			
-			/**End of TinyMCE**/
-			}
-			 });
+				// Setup HTML Editor
+				setupHTMLEditor($('#WYSItextarea'));
+			} });
 		$('#prefs-tabs-content').html(view.render().el);
-		
 		$('#PrefsTab .active').removeClass('active');
 		$('.user-prefs-tab').addClass('active');
 		// $('#content').html(view.render().el);

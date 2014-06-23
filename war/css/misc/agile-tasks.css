@@ -1,9 +1,4 @@
-
 /* ************* Task UI (Trello) CSS ***************** */
-#taskForm {
-	margin: 0px 0px 0px 0px;
-}
-
 #activityModal>.modal-body {
 	max-height: 453px;
 	padding-bottom: 0 !important;
@@ -16,14 +11,17 @@
 }
 
 .ui-sortable-placeholder {
-	border: 3px dashed #aaa;
-	min-height: 50px;
+	border: 3px dashed #aaa;	
 	background: #ccc;
+}
+
+.ui-sortable-helper{
+    cursor: move;
 }
 
 .list-area-wrapper {
 	font: 14px/18px "Helvetica Neue", Arial, Helvetica, sans-serif;
-	padding: 12px;
+	height: 100%;
 }
 
 .list-area {
@@ -37,7 +35,7 @@
 }
 
 .list-area::-webkit-scrollbar {
-	height: 12px;
+	height: 8px;
 }
 
 .list-area::-webkit-scrollbar-track {
@@ -69,6 +67,7 @@
 	width: 240px;
 	vertical-align: top;
 	white-space: normal;
+	max-height: 100%;
 }
 
 .list:first-child {
@@ -89,11 +88,10 @@
 	box-sizing: border-box;
 	overflow: auto;
 	margin-right: -4px;
-	max-height: 400px;
 }
 
 .list-tasks::-webkit-scrollbar {
-	width: 9px;
+	width: 7px;
 }
 
 .list-tasks::-webkit-scrollbar-track {
@@ -123,10 +121,8 @@
 	right: 0;
 }
 
-.list-bottom:hover {
-	background: #c3c3c3;
-	color: #000;
-	text-decoration: underline;
+.list-bottom:hover,.list-bottom>a {
+	text-decoration: none;
 }
 
 .listed-task {
@@ -134,8 +130,7 @@
 	border-bottom: 1px solid #bdbdbd;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
-	border-radius: 3px;
-	cursor: pointer;
+	border-radius: 3px;	
 	min-height: 30px;
 	padding: 8px 50px 4px 8px;
 	position: relative;
@@ -169,25 +164,53 @@
 	background: #f2f2f2;
 }
 
-.task-subject {
-	font-size: 15px;
+.new-task-subject {
+	font-size: 13px;
 	font-weight: bold;
 	margin-bottom: 2px;
+	text-overflow: ellipsis;
+	/* display: block; */
+	overflow: hidden;
+	
+	/* apply ellipses if more contacts are there */   
+    display: -webkit-box;
+    line-height: 16px;     /* fallback */
+    max-height: 48px;      /* fallback */
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
 }
 
-.task-related-to {
+.task-completed {
+	text-decoration: line-through;
+}
+
+.new-task-related-to {
 	color: #1f1f8e;
+	font-size: 13px;
+	
+	/* apply ellipses if more contacts are there */
+	display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
 }
 
-.task-due-time {
+.new-task-due-time {
 	color: #888;
 	font-size: 12px;
 	line-height: 16px;
 	float: left;
 	padding-bottom: 2px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 50%;
+	display: block;
+	overflow: hidden;
+	cursor: move;
 }
 
-.task-type {
+.new-task-type {
 	background: #800080;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -198,9 +221,10 @@
 	right: 5px;
 	top: 4px;
 	text-align: center;
+	cursor: move;
 }
 
-.task-owner {
+.new-task-owner {
 	border: 1px solid #e6e6e6;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -216,7 +240,7 @@
 }
 
 .task-body {
-	padding-bottom: 15px;
+	padding-bottom: 18px;
 	min-height: 52px;
 }
 
@@ -228,61 +252,87 @@
 	min-height: 20px;
 }
 
-.task-footer {
-	min-height: 10px;
+.new-task-footer {
+	min-height: 20px;
 	position: absolute;
 	bottom: 0;
-	width: 97%;
+	width: 97%;	
 }
 
-.task-actions {
+.task-note-action {
+	color: #888;
+	padding-right: 4px;
 	float: right;
-}
-
-.task-model-list {
-	min-height: 50px;
-}
-
-.task-left {
-	width: 70%;
 }
 
 .task-actions {
 	color: #888;
 	display: none;
 	padding-right: 4px;
+	float: right;
+	cursor: pointer;
+}
+
+.progress-label {
+	width: 20px;
+	cursor: move;
+}
+
+.task-model-list {
+	min-height: 30px;
+}
+
+.task-left {
+	width: 70%;
 }
 
 .priority-btn {
 	width: 14px;
 }
 
-.status-btn {
-	padding: 2px 5px 2px 5px;
-	width: 14px;
-	text-align: center;
-	cursor: pointer;
-	margin-left: 4px;
-	margin-right: 18px;
-}
-
 .progress-slider {
-	margin-left: 1 px;
-	cursor: pointer;
+	margin-left: 1 px;	
 	width: 103%;
 	margin-top: 6 px;
 	display: none;
 }
 
 .task-add-note {
-	color: navy;
 	margin-top: -21px;
 	margin-right: -10px;
 	cursor: pointer;
 }
+
+.notes>li {
+	list-style: none !important;
+	display: -webkit-box;
+	margin-left: -24px;
+	margin-bottom: 10px;
+}
+
+#new-tasks-lists-model-list {
+	height: 100%;
+}
+
+#show_loader {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding-bottom: 10px;
+}
+
+div.task-body:hover{
+	cursor: move;
+}
+
+.task-related-contacts {
+	text-overflow: ellipsis;
+	display: block;
+	overflow: hidden;
+}
 /* .task-actions:hover,.task-actions:focus {display: block;} */
 /* ********************************************************* */
-
 
 /** add to cart **/
 .cat-addtocart-out {

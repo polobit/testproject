@@ -455,13 +455,12 @@ var Base_Model_View = Backbone.View
 				if (!this.model.isNew() || this.options.isNew
 						|| !$.isEmptyObject(this.model.toJSON()) || isFetched) {
 
-					$(this.el).html(getRandomLoadingImg());
+					//$(this.el).html(getRandomLoadingImg());
 					/*
 					 * Uses handlebars js to fill the model data in the template
 					 */
 					getTemplate(this.options.template, this.model
 							.toJSON(), "yes", this.buildModelViewUI);
-
 					
 				}
 				// Shows loading in the view, if render conditions are

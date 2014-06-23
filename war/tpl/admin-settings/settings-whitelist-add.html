@@ -1,0 +1,25 @@
+<script id="admin-settings-whitelist-add-template" type="text/html">
+	<div class="row">
+       <div class="span9">
+    	<div class="well">
+    		<form id="domainAccessForm" name="domainAccessForm" method="get" action="" class="form-horizontal">
+    			<fieldset>
+                		<legend>Add domain to access</legend>
+    					<input type="text" name="id" class="hide" value={{id}} >
+    				<br/>
+                   	<div class="control-group">
+    					<label class="control-label">Domain <span class="field_req">*</span></label> 
+                   		<div class="controls">
+    						<input type="text" name="accessDomains" class="required" placeholder="Enter domain" autocapitalize="off"/>
+    					</div>
+    				</div>
+    				<div class="form-actions">
+               			<button type="submit" class="save btn btn-primary">Save Changes</button>
+						<a type="reset" href='#access-domain' class="btn">Cancel</a>
+             		</div>
+    			</fieldset>
+    		</form>
+    	</div>
+    </div>
+    </div>
+</script>

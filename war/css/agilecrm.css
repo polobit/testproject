@@ -1168,7 +1168,9 @@ time {
 
 }
 
-
+small {
+color: #b2b0b1;
+}
 
 
 /* Disable drop-down menu item, add class="disabled" to <a>

@@ -66,7 +66,7 @@ var DealsRouter = Backbone.Router.extend({
 							}
 							else
 							{
-								width = 24.89;
+								width = 24.87;
 								if(count < 4)
 									width = (100/count) - 0.12;
 								$('#opportunities-by-milestones-model-list').find('.milestone-column').width(width +"%");

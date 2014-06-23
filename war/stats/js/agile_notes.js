@@ -34,7 +34,9 @@ function agile_addNote(data, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/add-note?callback=?&id=" + agile_id.get() + "&" + params;
 	
 	// Callback
-	agile_json(agile_url, callback);
+	agile_isAuth(function(){
+		agile_json(agile_url, callback);
+		}, agile_url, callback);
 }
 
 /**
@@ -60,5 +62,7 @@ function agile_getNotes(callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/get-notes?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
 	
 	// Callback
-	agile_json(agile_url, callback);
+	agile_isAuth(function(){
+		agile_json(agile_url, callback);
+		}, agile_url, callback);
 }

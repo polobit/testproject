@@ -133,11 +133,31 @@ debug = false;
 <!-- <script src='/lib/headjs-min.js'></script> -->
 
 
-<script>
-//var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
-//var LIB_PATH = "//cdnapp.agilecrm.com/";
-var LIB_PATH = "/";
-var HANDLEBARS_PRECOMPILATION = false;
+	<script>
+	var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	//var LIB_PATH = "/";
+	var HANDLEBARS_PRECOMPILATION = false;
+	
+	var CSS_PATH = "/";
+	//var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+	
+	var IS_CONSOLE_ENABLED = <%=debug%>;
+	var LOCAL_SERVER = <%=debug%>;
+	
+	var IS_FLUID = <%=is_fluid%>;
+	
+	// Get current user prefs json
+	var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
+	
+	// Get current domain user json
+	var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
+	
+	
+	// Billing Restriction
+	var _billing_restriction = <%=mapper.writeValueAsString(restriction)%>;
+	
+	//var JQUERY_LIB_PATH = "//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js";
+	 var JQUERY_LIB_PATH = LIB_PATH + 'lib/jquery.min.js';
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -207,7 +227,7 @@ setTimeout(loadMiscScripts, 10000);
 <!-- Unified CSS for All Lib -->
 
 
-<!-- <link rel="stylesheet" type="text/css" href="css/misc/agile-tasks.css"></link> -->
+<link rel="stylesheet" type="text/css" href="css/misc/agile-tasks.css"></link>
 <link rel="stylesheet" type="text/css" href="css/misc/agile-social-suite.css"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>-->
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link> -->

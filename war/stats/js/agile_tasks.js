@@ -32,7 +32,9 @@ function agile_addTask(data, callback, email)
 	var agile_url = agile_id.getURL() + "/task?callback=?&id=" + agile_id.get() + "&" + params;
 	
 	// Callback
-	agile_json(agile_url, callback);
+	agile_isAuth(function(){
+		agile_json(agile_url, callback);
+		}, agile_url, callback);
 }
 
 /**
@@ -61,5 +63,7 @@ function agile_getTasks(callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/get-tasks?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
 	
 	// Callback
-	agile_json(agile_url, callback);
+	agile_isAuth(function(){
+		agile_json(agile_url, callback);
+		}, agile_url, callback);
 }
