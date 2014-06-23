@@ -1,7 +1,7 @@
 package com.agilecrm.account;
 
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -97,8 +97,8 @@ public class EmailTemplates
      * Sets name to subject if its null for old templates. PrePersist is called
      * each time before object gets saved.
      */
-    @PrePersist
-    private void PrePersist()
+    @PostLoad
+    public void postLoad()
     {
 	if (this.name == null)
 	    this.name = this.subject;
