@@ -38,9 +38,11 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
     var CONTACTS = {};
 
-    $('#' + id, el).typeahead({
+   var typeAheadXHRRequest;
+   var el_typeahead =  $('#' + id, el).typeahead({
     	
         source: function (query, process) {
+        	console.log(this.options);
         	
         	
         	/* Resets the results before query */
@@ -78,7 +80,23 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         	
         	if(urlParams && urlParams.length)type_url='&'+urlParams;
         	
-        	$.getJSON(url + query+"?page_size=10"+type_url, function (data){
+        	// Checks if there is previous request and cancels it
+        	if(typeAheadXHRRequest != null && (typeAheadXHRRequest && typeAheadXHRRequest.readystate != 4)) {
+        		typeAheadXHRRequest.abort();
+               }
+        	
+        	typeAheadXHRRequest = $.getJSON(url + query+"?page_size=10"+type_url, function (data){
+        		
+        		console.log(this.url);
+        		var current_query = $('#' + id, el).val(); 
+        		if(query != current_query)
+        		{
+        			console.log("returning query " + query);
+        			return;
+        		}
+        		
+        		
+        		
 
         	    /*
         		 * Stores query results to use them in updater and render
@@ -224,6 +242,35 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	}
         },
+        keyup: function (e) {
+            switch(e.keyCode) {
+              case 40: // down arrow
+              case 38: // up arrow
+              case 16: // shift
+              case 17: // ctrl
+              case 18: // alt
+                break
+
+              case 9: // tab
+              case 13: // enter
+                if (!this.shown) return
+                this.select()
+                break
+
+              case 27: // escape
+                if (!this.shown) return
+                this.hide()
+                break
+
+              default:
+                this.lookup()
+            }
+
+            e.stopPropagation()
+            e.preventDefault()
+        }
+
+        , 
         
         // Hides the results list
         hide: function () {
@@ -244,6 +291,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         },
         minLength: 2,
     })
+    
 }
 
 // Removes tags ("Related to" field contacts)
