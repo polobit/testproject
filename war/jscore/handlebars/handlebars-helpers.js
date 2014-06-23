@@ -1228,10 +1228,9 @@ $(function()
      */
     Handlebars.registerHelper('getHyperlinkFromURL', function(url)
     {
-
-	if (url.match(/((http[s]|ftp|file):\/\/)/) != null)
-	    return url;
-	return 'http://' + url;
+    	if (url.match(/((http|http[s]|ftp|file):\/\/)/) != null)
+    	    return url;
+    	return 'http://' + url;
     });
 
     // Get Count

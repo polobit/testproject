@@ -1,0 +1,27 @@
+<script id="admin-settings-whitelist-collection-template" type="text/html">
+<div class="row">
+        <div class="span12">
+            <div class="">
+                <h3><strong>Access Domains</strong></h3>
+                <a href="#access-domain-add" class="btn right" id="addDomain" style='top:-27px;position:relative'><span><i class='icon-plus-sign'/></span> Add Domain</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+            <div class="span9"> 
+            <table class="table table-striped showCheckboxes" url="core/api/whitelist/bulk" style="overflow:scroll;">
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                    </tr>
+                 </thead>
+                 <tbody id='admin-settings-whitelist-model-list' route='access-domain-edit/' style="overflow:scroll;">
+                 </tbody>
+            </table>
+            </div>
+    </div>
+</script>
+<script id="admin-settings-whitelist-model-template" type="text/html">
+    <td class='data' data='{{id}}'><div style='text-overflow:ellipsis;width:9em;overflow:hidden;'>{{accessDomains}}</div></td>
+</script>

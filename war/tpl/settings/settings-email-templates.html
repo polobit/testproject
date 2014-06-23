@@ -16,6 +16,7 @@
             <thead>
                 <tr>
                     <th class="hide">Id</th>
+					<th>Name</th>
                     <th>Subject</th>
                     <th>Description</th>
                 </tr>
@@ -44,6 +45,11 @@
 
  <script id="settings-email-templates-model-template" type="text/html">
     <td class='data hide' data='{{id}}'>{{id}}</td>
+    <td>
+    	<div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:15em;overflow:hidden;'>
+    		{{name}}
+    	</div>
+    </td>
     <td>
     	<div style='height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:15em;overflow:hidden;'>
     		{{subject}}

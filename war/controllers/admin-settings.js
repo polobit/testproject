@@ -19,7 +19,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
+	
+	/* Access Domain */
+	"access-domain" : "access_domain", "access-domain-add" : "access_domain_add", "access-domain-edit/:id" : "access_domain_edit",
 
 	/* Milestones */
 	"milestones" : "milestones",
@@ -209,6 +212,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
+		$("#content").html(getTemplate("admin-settings"), {});
 		head.js(LIB_PATH + 'lib/prettify-min.js', LIB_PATH + 'lib/zeroclipboard/ZeroClipboard.js', function()
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
@@ -224,8 +228,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
-			$("#content").html(getTemplate("admin-settings"), {});
-			$('#content').find('#admin-prefs-tabs-content').html(view.el);
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .active').removeClass('active');
 			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
@@ -254,6 +257,66 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
 		});
+	},
+	
+	/**
+	 *  List all access domain
+	 */
+	access_domain : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"), {});
+		this.accessDomainsListView = new Base_Collection_View({ url : 'core/api/whitelist', restKey: "accessDomains", templateKey : "admin-settings-whitelist", "individual_tag_name": 'tr', postRenderCallback : function(el){}});
+		this.accessDomainsListView.collection.fetch();
+		
+		$("#content").find("#admin-prefs-tabs-content").html(this.accessDomainsListView.el);
+		$("#content").find("#AdminPrefsTab .active").removeClass("active");
+		$("#content").find(".access-domain-tab").addClass('active');
+	},
+
+	/**
+	 *  Used to set domains allowed to acces JSAPI
+	 */
+	access_domain_add : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		var view = new Base_Model_View({ url : 'core/api/whitelist', template : "admin-settings-whitelist-add", isNew : true, window : "access-domain", reload : true,
+			postRenderCallback : function(el){}});
+		$("#content").html(getTemplate("admin-settings"), {});
+		$("#content").find('#admin-prefs-tabs-content').html(view.render().el);
+		$("#content").find('#AdminPrefsTab .active').removeClass('active');
+		$("#content").find('.access-domain-tab').addClass('active');
+	},
+	
+	/**
+	 * Used to edit set access domains
+	 */
+	access_domain_edit : function(id)
+	{
+		if(!CURRENT_DOMAIN_USER.is_admin){
+			$("#content").html("You have no Admin Privileges");
+			return;
+		}
+		$("#content").html(getTemplate("admin-settings"),{});
+		if(!this.accessDomainsListView || !this.accessDomainsListView.collection.get(id))
+		{
+			this.navigate("access-domain", {trigger : true});
+			return;
+		}
+		
+		var accessDomain = this.accessDomainsListView.collection.get(id);
+		var view = new Base_Model_View({url : 'core/api/whitelist', model : accessDomain, template : "admin-settings-whitelist-add", window : "access-domain", reload: true, postRenderCallback : function(el){}});
+		$("#content").find("#admin-prefs-tabs-content").html(view.render().el);
+		$("#content").find("#AdminPrefsTab .active").removeClass("active");
+		$("#content").find('.access-domain-tab').addClass('active');
 	},
 
 	/**

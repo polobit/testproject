@@ -72,11 +72,14 @@ public class JerseyApplication extends Application
 		s.add(com.socialsuite.StreamAPI.class);
 		s.add(com.socialsuite.cron.ScheduledUpdateAPI.class);
 		s.add(com.thirdparty.salesforce.SalesforceImportAPI.class);
+		s.add(com.thirdparty.zoho.ZohoImport.class);
+		s.add(com.thirdparty.stripe.StripeDataService.class);
+		s.add(com.thirdparty.shopify.ShopifyImportAPI.class);
 		s.add(com.agilecrm.gmap.GmapQueryAPI.class);
 		s.add(com.agilecrm.core.api.webrule.WebRuleAPI.class);
 		s.add(com.agilecrm.core.api.TemplatesAPI.class);
 		s.add(com.agilecrm.core.api.calendar.GoogleCalendarPrefsAPI.class);
-	
+		s.add(com.agilecrm.core.api.whitelist.AccessDomainAPI.class);
 		return s;
 	}
 }
