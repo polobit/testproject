@@ -76,6 +76,19 @@ function subscribeToPubNub(domain)
 				showNoty('information', html, 'bottomRight', "CALL");
 				return;
 			}
+			
+			if(message.notification == "CAMPAIGN_NOTIFY")
+			{
+			   var custom_json = JSON.parse(message["custom_value"]);
+
+			   if(custom_json.owner_id == "ALL")
+				   showNoty('information', getTemplate('campaign-notify',message), 'bottomRight',"CAMPAIGN_NOTIFY");
+			   
+			   if(custom_json.owner_id == CURRENT_DOMAIN_USER['id'])
+				   showNoty('information', getTemplate('campaign-notify', message), 'bottomRight',"CAMPAIGN_NOTIFY");
+				   
+			   return;
+			}
 
 			// sets notification for notification preferences.
 			_setupNotification(message);
@@ -272,13 +285,13 @@ function check_browser_notification_settings(el)
 
 	// Verify desktop notification settings.
 	// Check if browser support
-	if (!window.webkitNotifications)
+	if (notify && !notify.isSupported)
 	{
 		$('#set-desktop-notification').css('display', 'none');
 	}
 
 	// Allowed
-	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
+	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_GRANTED)
 	{
 		$('#set-desktop-notification').css('display', 'none');
 		$('#desktop-notification-content')
@@ -287,7 +300,7 @@ function check_browser_notification_settings(el)
 	}
 
 	// Denied
-	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 2)
+	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_DENIED)
 	{
 		$('#set-desktop-notification').css('display', 'none');
 		$('#desktop-notification-content')
@@ -354,17 +367,24 @@ function showSwitchChanges(el)
  */
 function showNoty(type, message, position, notification_type)
 {
-	// Don't show notifications when disabled by user
-	if (!notification_prefs.control_notifications)
+	// Don't show notifications when disabled by user. Neglect campaign ones
+	if (!notification_prefs.control_notifications && notification_type != "CAMPAIGN_NOTIFY")
 		return;
 
 	// Check for html5 notification permission.
-	if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 0)
+	if (notify && notify.isSupported && notify.permissionLevel() == notify.PERMISSION_GRANTED)
 	{
 		if(notification_type=="CALL"){
 			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find('#calling-contact-id').text(),
 									  $(message).find('#call-notification-text').text(), $(message).find('#calling-contact-id').attr('href'),
 									  $(message).find('#calling-contact-id').attr('href').split('/')[1] + '-' + "CALL");
+			return;
+		}
+		
+		if(notification_type=="CAMPAIGN_NOTIFY"){
+			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find('#campaign-contact-id').text(),
+									  $(message).find('#campaign-notify-text').text(), $(message).find('#campaign-contact-id').attr('href'),
+									  $(message).find('#campaign-contact-id').attr('href').split('/')[1] + '-' + "CAMPAIGN_NOTIFY");
 			return;
 		}
 		
