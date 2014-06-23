@@ -1085,6 +1085,15 @@ tbody a.no-style-a {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+small {
+	color: #b2b0b1;
+}
+
+time {
+	color: #b2b0b1; 
+}
+
 /**
 @media (min-width: 980px) and (max-width: 1201px)  {
 	.agile-menu  > li:nth-child(n + 6):not(.nav-bar-search):not(#more-menu)   {     display:none }	

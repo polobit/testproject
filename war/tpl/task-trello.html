@@ -1,3 +1,39 @@
+<script id="new-tasks-list-header-template" type="text/html">
+<div class="row">
+    <div style="margin-left:30px; ">
+        <div class="page-header">
+            <h1 id="new-task-heading" class="task-heading"><span>My Pending Tasks</span>&nbsp<small class="tasks-count"></small></h1>            
+            <div class="btn-group pull-right type-task-button" style="cursor:pointer;top: -28px;">
+                <div class="btn selected_name">Due</div>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="new-type-tasks">
+					 <li><a href="CATEGORY">Category</a></li>
+                     <li><a href="OWNER" class="hide-on-pending hide-on-my-task">Owner</a></li>
+                     <li><a href="DUE">Due</a></li>
+                     <li><a href="PRIORITY">Priority</a></li>
+                     <li><a href="STATUS" class="hide-on-pending hide-on-all-pending">Status</a></li>                     
+                </ul>
+            </div>
+            <div class="btn-group pull-right owner-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
+                <div class="btn selected_name">My Pending Tasks</div>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="new-owner-tasks">
+                    		 
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="new-task-list-based-condition"> 
+  <img class="loading_task_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
+</div>
+</script>
+
 <script id="new-tasks-lists-collection-template" type="text/html"> 
  <div id="new-tasks-lists-model-list" class="list-area row-fluid">
 
@@ -6,17 +42,25 @@
 
 <script id="new-tasks-lists-model-template" type="text/html">
      <div class="list-header" attr="{{heading}}" ownerID={{owner_id}}> 
-         {{get_normal_name heading}}                 
-     </div> 
-     <div id="list-tasks" class="list-tasks">
+         <span>{{get_normal_name heading}}</span>
+         <span id="task-count-{{heading}}-{{owner_id}}" class="txt-small txt-mute"></span>
+         <div class="pull-right"><img id="task-list-loading-img-{{heading}}-{{owner_id}}" src="img/ajax-loader-cursor.gif"></img></div>                 
+     </div>     
 
-     </div>   
-     <div class="list-bottom left add-task"><a href="#"><i class="icon-plus" /> Add a task...</a></div>     
+     {{#if owner_id}}
+      <div id="list-tasks-{{heading}}-{{owner_id}}" class="list-tasks">
+     {{else}}
+      <div id="list-tasks-{{heading}}" class="list-tasks">
+     {{/if}}
+        
+     </div>  
+     <div id="show_loader"></div>      
+     <div class="list-bottom left add-task"><a href="#"><i class="icon-plus" /> Add a task</a></div>     
 </script>
 
 <script id="task-collection-template" type="text/html">
 <div id="task-model-list" class="task-model-list">
-   
+  
 </div>
 </script>
 
@@ -33,25 +77,31 @@
 
   <div class="task-body">    
     <div class="task-left">  
-      {{#is_link subject}}<span class="task-subject activate-link">{{else}}<span class="task-subject">{{/is_link}}{{safe_string subject}}</span>
+
+      {{#if is_complete}}
+         {{#is_link subject}}<span class="new-task-subject activate-link task-completed">{{else}}<span class="new-task-subject task-completed">{{/is_link}}{{safe_string subject}}</span>
+      {{else}}
+         {{#if_equals status "COMPLETED"}}
+           {{#is_link subject}}<span class="new-task-subject activate-link task-completed">{{else}}<span class="new-task-subject task-completed">{{/is_link}}{{safe_string subject}}</span>
+         {{else}}
+           {{#is_link subject}}<span class="new-task-subject activate-link">{{else}}<span class="new-task-subject">{{/is_link}}{{safe_string subject}}</span>
+         {{/if_equals}}       
+      {{/if}}      
 
       {{#if contacts}}  
-         <div class="task-related-to" title="Related To">
-        	{{#each contacts}}
-        		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
-        		{{/if_contact_type}}
-				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "name"}}</a>
-        		{{/if_contact_type}}
-        	{{/each}}
+         <div class="new-task-related-to" title="Related To">        	
+			{{#related_to_one contacts}}{{/related_to_one}}
 		 </div>
       {{/if}}
+
+      {{#if_equals status "IN_PROGRESS"}}
+        <label class="label progress-label" title="Progress">{{progress}}%</label>
+      {{/if_equals}}
     </div>
 
     <div class="task-right">
-      <label class="task-type label" title="Category">{{get_normal_name type}}</label>
-      <div class="task-owner">     
+      <label class="new-task-type label" title="Category">{{get_normal_name type}}</label>
+      <div class="new-task-owner">     
          {{#if ownerPic}}
         	<img src="{{ownerPic}}" width="32" height="32" title="{{taskOwner.name}}"/>
 	     {{else}}
@@ -60,13 +110,49 @@
       </div> 
     </div>
    </div> <!--task-body-->  
-   <div class="task-footer">
-      <time class="task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time>
-      <div class="task-actions">           
-           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>
-           <i class="task-action icon icon-check is-task-complete" data="{{id}}" title="Is Task Complete?"></i>
+   <div class="new-task-footer">
+      <time class="new-task-due-time time-ago" data="{{id}}" value="{{due}}" datetime="{{epochToHumanDate "" due}}">{{epochToHumanDate "ddd mmm dd yyyy" due}}</time>
+      <div class="task-actions">
+           <i class="task-action icon icon-check is-task-complete" data="{{id}}" title="Mark as Complete"></i>
+           <i class="task-action icon icon-edit edit-task" data="{{id}}" title="Edit Task"></i>           
            <i class="task-action icon icon-trash delete-task" data="{{id}}" title="Delete Task"></i>
+           {{#if notes}} 
+             <i class="task-action icon icon-comment edit-task" data="{{id}}" title="Notes"></i>
+             <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+           {{/if}}
       </div>
+      {{#if notes}} 
+           <div class="task-note-action">
+             <i class="task-action icon icon-comment" data="{{id}}" title="Notes"></i>
+             <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+           </div>
+      {{/if}}
    </div> <!--task-footer-->
 </div>
+</script>
+
+<script id="related-to-contacts-template" type="text/html">
+    {{#if_contact_type "PERSON"}}
+        <a href="#contact/{{id}}" class="activate-link task-related-contacts">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+    {{/if_contact_type}}
+	{{#if_contact_type "COMPANY"}}
+    	<a href="#contact/{{id}}" class="activate-link task-related-contacts">{{getPropertyValue properties "name"}}</a>
+    {{/if_contact_type}}	
+</script>
+
+<script id="notes-for-task-template" type="text/html">
+<li class="task-note" data="{{id}}"> 
+{{#if prefs.pic}}
+    <img class="thumbnail" src="{{prefs.pic}}" width="20" height="20" title="{{prefs.currentDomainUserName}}"/>
+{{else}}
+	<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="20" height="20" title="{{prefs.currentDomainUserName}}"/>
+{{/if}}
+<div style="border: 1px solid #cccccc;border-radius: 3px;margin-left: 5px;padding-left: 5px;width: 92%;"> 
+ <div class="txt-mute">{{description}}</div>
+</div>
+</li>
+</script>
+
+<script id="note-form-template" type="text/html">
+   <textarea placeholder="Detailed Note" name="note_description" id="note_description" style="width:100%;"></textarea> 
 </script>

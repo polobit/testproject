@@ -22,10 +22,10 @@
 	<div  style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
 			<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>	
-				{{#if_equals Customer.FullyQualifiedName ""}}
-					{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}
+				{{#if_equals Customer.FullyQualifiedName ""}}{{#if_equals Customer.DisplayName ""}}
+					{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
 				{{else}}
-					{{Customer.FullyQualifiedName}}
+					{{Customer.FullyQualifiedName}} {{Customer.DisplayName}}
 				{{/if_equals}}
 			</b></h4></a>
 		</div>
@@ -75,12 +75,13 @@
 {{#if Invoices}}
 	{{#isArray Invoices}}
 	<div class="sub_header">
-		<h4>Invoices</h4>
+		<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4>Invoices</h4></a>
 	</div>
 	<ul style="margin:0px;">
 		{{#each Invoices}}
 			<li class="row-fluid sub_header_li">
-				<a class="pull-left"  href="https://sg.qbo.intuit.com/app/invoice?txnId={{Id}}" target="_blank" >{{DocNumber}}</a>
+				
+				<a class="pull-left" data-toggle="collapse" href="#collapse-{{Id}}" >{{DocNumber}}</a>
 				<div class="pull-right">
 					{{#if CurrencyRef}}
 					{{#if CurrencyRef.value}}
@@ -88,8 +89,18 @@
 					{{/if}}
 					{{/if}}
 					{{currencyFormat TotalAmt}}</div><br>
-				<div class="pull-left"><small><time class="time-ago pull-left" datetime={{QbDateFormat DueDate}}>{{QbDateFormat DueDate}}</time></small></div>					
 				
+						<div id="collapse-{{Id}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+						{{#isArray Line}}						
+							{{#each Line}}	
+								{{#if SalesItemLineDetail.ItemRef.name}}
+									<div class="pull-left" style="padding-left: 20px;">{{SalesItemLineDetail.ItemRef.name}}</div>					
+									<div class="pull-right">{{currencyFormat Amount}}</div><br>
+								{{/if}}	         
+							{{/each}}					
+						{{/isArray}}
+					</div>
+				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
 				<div class="pull-right"><span class="badge">{{qbStatus  Balance}}</span></div><br>
 					
 			</li>
@@ -109,20 +120,37 @@
 		<a class="btn" id="quickbooks_add_contact" style="margin-top:10px;cursor:pointer;"><i class="icon-plus"></i>Add Contact</a>
 	</div>
 </script>
-<script id="quickbooks-revoke-access-template" type="text/html">
-<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
-	<div class="row-fluid">
-		<div class="span7">
-			<p class="title_txt"><a href="{{profile.url}}" target="_blank" >{{profile.name}}</a></p>
-			<p style="margin:0px;">{{profile.location}}</p>
-			<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement profile.summary}}</p>
-		</div>
-	</div>
-	<div>
-		<p style='margin: 10px 0px 5px 0px;' >
-			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Xero">Revoke Access</a>
-			<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Xero">Cancel</a>
-		</p>
-	</div>
-</div>
+<script id="quickbook-items-template" type="text/html">
+	{{#if_equals Line "0"}}
+		<li class="sub_header_li" style='color: #999;'>
+	    	No Items available. Add an item in your account to generate invoice.
+		</li>		
+	{{else}}
+		<li class="sub_header row-fluid" style="padding-bottom: 0px;">
+			<div class="span6">Item name</div>
+			<div class="span6" style="text-align: right;">Unit cost</div>
+		</li>
+		{{#isArray Line}}
+			{{#each Line}}
+				<li class="row-fluid">
+					<div class="pull-left" rel="tooltip" title="{{DetailType.ItemRef.name}}">{{DetailType.ItemRef.name}}</div>
+					<div class="pull-right">{{Amount}}</div><br>
+					<ul class="widget_tab_link" style="float:left;margin:0px">
+						<li><a href="#add" id="freshbooks_add_invoice" item_name={{name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
+						<li><small><time class="time-ago pull-left l_border" datetime="{{updated}}">{{updated}}</time></small></li>
+					</ul>
+				</li>
+			{{/each}}
+		{{else}}
+			<li class="row-fluid">
+				<div class="pull-left" rel="tooltip" title="{{item.description}}">{{item.name}}</div>
+				<div class="pull-right">{{item.unit_cost}}</div><br>
+				<small><time class="time-ago pull-left" datetime="{{item.updated}}">{{item.updated}}</time></small>
+				<ul class="widget_tab_link" style="float:left;margin:0px">
+					<li><a href="#add" id="freshbooks_add_invoice" item_name={{item.name}} rel="tooltip" title="Generate invoice and send an email for this item">Add Invoice</a></li>
+					<li><small><time class="time-ago pull-left l_border" datetime="{{item.updated}}">{{item.updated}}</time></small></li>
+				</ul>
+			</li>
+		{{/isArray}}
+	{{/if_equals}}
 </script>

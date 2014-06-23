@@ -192,23 +192,24 @@ var contact_details_tab = {
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
-				$('#stats', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>').show();
+				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>').show();
 				return;	
 			}
 			
 			// To avoid unnecessary JSAPI count, first verify in cookie
 			if(!(readCookie('_agile_jsapi') != null && readCookie('_agile_jsapi') == "true") && (NO_WEB_STATS_SETUP && get_web_stats_count_for_domain() == '0'))
 			{
-				$('#stats', App_Contacts.contactDetailView.model.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
+				$('#stats', App_Contacts.contactDetailView.el).html('<h4><p>You have not yet setup the Javascript API on your website.</p><p>Please <a href="#analytics-code">set it up</a> to see the contact\'s site visits here.</p></h4>');
 				return;
 			}
 				
+			
 			// Add tag if data is not 0
 	        addTagAgile(CODE_SETUP_TAG);
 
 				var statsView = new Base_Collection_View({
 				url: 'core/api/web-stats?e=' + encodeURIComponent(email),
-				data: statsCollection.toJSON(),
+			//	data: statsCollection.toJSON(),
 				templateKey: "stats",
 	            individual_tag_name: 'li',
 	            postRenderCallback: function(el)
@@ -230,8 +231,8 @@ var contact_details_tab = {
 		            return -model.get('created_time');
 		                                      
 	        }
-	        
-	        $('#stats', App_Contacts.contactDetailView.el).html(statsView.el);
+	        console.log($('#stats', App_Contacts.contactDetailView.el));
+	        $('#stats', App_Contacts.contactDetailView.el).html(statsView.render().el);
 		},
 		load_campaigns : function()
 		{

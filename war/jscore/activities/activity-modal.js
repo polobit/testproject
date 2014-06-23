@@ -49,6 +49,14 @@ $(function() {
 			$('#activityForm #event-date-2').closest('.row').show(); // only of modal, no inside modal
 		}
 		
+		resetForm($("#taskForm"));
+
+		// Removes note from from task form
+		$('#taskForm #forNoteForm').html("");
+
+		// Hide + Add note link
+		$(".task-add-note", $("#taskForm")).show();
+		
 	});
 	
 	/**

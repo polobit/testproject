@@ -1228,10 +1228,9 @@ $(function()
      */
     Handlebars.registerHelper('getHyperlinkFromURL', function(url)
     {
-
-	if (url.match(/((http[s]|ftp|file):\/\/)/) != null)
-	    return url;
-	return 'http://' + url;
+    	if (url.match(/((http|http[s]|ftp|file):\/\/)/) != null)
+    	    return url;
+    	return 'http://' + url;
     });
 
     // Get Count
@@ -2387,7 +2386,7 @@ $(function()
 	    return "Unsubscribed";
 	
 	if (hash.indexOf("hardbounced") != -1)
-	    return "HardBounced";
+	    return "Hard Bounced";
     });
 
     Handlebars.registerHelper("check_plan", function(plan, options)
