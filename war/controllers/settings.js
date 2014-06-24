@@ -288,7 +288,7 @@ var SettingsRouter = Backbone.Router.extend({
 		var view = new Base_Model_View({ url : 'core/api/notifications', template : 'settings-notification-prefs', reload : true,
 			postRenderCallback : function(el)
 			{
-				head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', function()
+				head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js', function()
 				{
 					showSwitchChanges(el);
 					check_browser_notification_settings(el);
