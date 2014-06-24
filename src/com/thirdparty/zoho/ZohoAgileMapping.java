@@ -4,9 +4,10 @@ import org.codehaus.jettison.json.JSONArray;
 
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
-
-/*
+/**
+ * <code>This interface is provide method for saving Module data in agile contacts</code>
  * @author jitendra
+ *
  */
 public interface ZohoAgileMapping
 {

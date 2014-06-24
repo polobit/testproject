@@ -31,11 +31,13 @@ public class Activity
      * Key object of DomainUser.
      */
     @NotSaved(IfDefault.class)
+    @Indexed
     private Key<DomainUser> user = null;
 
     /**
      * Name of the user performing the activity.
      */
+    @NotSaved(IfDefault.class)
     private String user_name = null;
 
     /**
@@ -59,23 +61,25 @@ public class Activity
     /**
      * Type of the entity.
      */
-    @NotSaved
-    public EntityType entity_type;
+    @NotSaved(IfDefault.class)
+    public EntityType entity_type = null;
 
     /**
      * Type of the activity.
      */
-    @NotSaved
-    public ActivityType activity_type = ActivityType.ADD;
+    @NotSaved(IfDefault.class)
+    public ActivityType activity_type = null;
 
     /**
      * Id of the entity.
      */
+    @Indexed
     public Long entity_id;
 
     /**
      * The value of the unique field in the entity to identify it.
      */
+    @NotSaved(IfDefault.class)
     public String label = null;
 
     /**
@@ -85,7 +89,13 @@ public class Activity
     public Long time = 0L;
 
     @NotSaved(IfDefault.class)
-    public String custom1;
+    public String custom1 = null;
+
+    @NotSaved(IfDefault.class)
+    public String custom2 = null;
+
+    @NotSaved(IfDefault.class)
+    public String custom3 = null;
 
     // Dao
     private static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
