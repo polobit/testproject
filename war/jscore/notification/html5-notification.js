@@ -23,21 +23,24 @@ $(function() {
  */
 function show_desktop_notification(imageURL, title, message, link, tag) {
 
-		var notification = new Notification(title, {
-		    body : message,
-		    tag :  tag,
-		    icon : imageURL
-		});
+	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
+		
+		var notification = notify.createNotification(title, {
+			   body : message,
+			   icon : imageURL,
+			   tag : tag,
+			   onClickCallback : function() {
+					
+				   window.focus();
+					
+				   // Open respective block
+					Backbone.history.navigate(link, {
+						trigger : true
+					});
 
-		notification.onclick = function(x) {
-			window.focus();
-			// Open respective block
-			Backbone.history.navigate(link, {
-				trigger : true
-			});
-
-			this.close();
-		};
+					notification.close();
+				 }
+			  });
 		
 		setTimeout(function() {
 			notification.close();
@@ -50,6 +53,7 @@ function show_desktop_notification(imageURL, title, message, link, tag) {
 				play_sound(notification_prefs.notification_sound);
 			
 		}
+	});
 }
 
 /**
@@ -59,26 +63,31 @@ function show_desktop_notification(imageURL, title, message, link, tag) {
  * @method request_notification_permission
  */
 function request_notification_permission() {
-	if (window.webkitNotifications
-			&& window.webkitNotifications.checkPermission() != 0) {
+	
+	head.js(LIB_PATH +'lib/desktop-notify-min.js',function(){
+		
+		if (notify.permissionLevel() == notify.PERMISSION_DEFAULT) {
 
-		$('#set-desktop-notification').live('click', function() {
-			window.webkitNotifications.requestPermission(function() {
-				if(window.webkitNotifications.checkPermission() == 0)
-				{	
-					$('#set-desktop-notification').css('display', 'none');
-				    $('#desktop-notification-content')
-						.html(
-								"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" style=\"text-decoration:underline;\">Disable</a></i>");
-				}
-				else
-				{
-					$('#set-desktop-notification').css('display', 'none');
-		            $('#desktop-notification-content').html(
-						"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable</a></i>")
-                 }	
+			$('#set-desktop-notification').live('click', function() {
+				notify.requestPermission(function() {
+					if(notify.permissionLevel() == notify.PERMISSION_GRANTED)
+					{	
+						$('#set-desktop-notification').css('display', 'none');
+					    $('#desktop-notification-content')
+							.html(
+									"<i>Desktop Notifications are now enabled. <a href=\"#\" id=\"disable-notification\" style=\"text-decoration:underline;\">Disable</a></i>");
+					}
+					else
+					{
+						$('#set-desktop-notification').css('display', 'none');
+			            $('#desktop-notification-content').html(
+							"<i>Desktop Notifications are now disabled. <a href=\"#\" id=\"enable-notification\" style=\"text-decoration:underline;\">Enable</a></i>")
+	                 }	
+				});
 			});
-		});
 
-	}
+		}
+		
+	});
+
 }

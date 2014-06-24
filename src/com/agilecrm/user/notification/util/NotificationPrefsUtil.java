@@ -75,8 +75,8 @@ public class NotificationPrefsUtil
      */
     private static NotificationPrefs getDefaultNotifications(AgileUser agileUser)
     {
-	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT", "ANY_CONTACT", false, true, false, false,
-		false, false, true, "alert_1");
+	NotificationPrefs notifications = new NotificationPrefs(agileUser.id, true, "ANY_CONTACT", "ANY_CONTACT",
+		"ANY_CONTACT", false, true, false, false, false, false, true, "alert_1");
 	notifications.save();
 	return notifications;
     }
@@ -178,43 +178,43 @@ public class NotificationPrefsUtil
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
-	    objectStr = mapper.writeValueAsString(object);
+
+	    // Contact
+	    if (object instanceof Contact)
+	    {
+		try
+		{
+		    objectStr = mapper.writeValueAsString(object);
+		    return getContactJSONForNotification(new JSONObject(objectStr));
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+		}
+	    }
+
+	    // Deals
+	    if (object instanceof Opportunity)
+	    {
+		try
+		{
+		    objectStr = mapper.writeValueAsString(object);
+		    return getDealJSONForNotification(new JSONObject(objectStr));
+		}
+		catch (JSONException e)
+		{
+		    e.printStackTrace();
+		}
+
+	    }
+
+	    return new JSONObject(object.toString());
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    return new JSONObject();
 	}
-
-	JSONObject json = new JSONObject();
-
-	// Contact
-	if (object instanceof Contact)
-	{
-	    try
-	    {
-		json = getContactJSONForNotification(new JSONObject(objectStr));
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-
-	// Deals
-	if (object instanceof Opportunity)
-	{
-	    try
-	    {
-		json = getDealJSONForNotification(new JSONObject(objectStr));
-	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-
-	}
-
-	return json;
     }
 
     /**
@@ -273,7 +273,8 @@ public class NotificationPrefsUtil
 		// Contact properties of type PERSON
 		if (contactJSON.getString("type").equals("PERSON"))
 		{
-		    if (property.getString("name").equals("first_name") || property.getString("name").equals("last_name")
+		    if (property.getString("name").equals("first_name")
+			    || property.getString("name").equals("last_name")
 			    || property.getString("name").equals("email") || property.getString("name").equals("image"))
 			propertyArray.put(property);
 		}

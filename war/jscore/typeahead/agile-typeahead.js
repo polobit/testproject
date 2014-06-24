@@ -41,7 +41,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
    var el_typeahead =  $('#' + id, el).typeahead({
 	   
 	    // Time delay to start query
-	   	timedelay : 300,
+	   	timedelay : 250,
 	   	
 	   	// Holds current search query xhr object
 	   	searchAJAXRequest : undefined,
