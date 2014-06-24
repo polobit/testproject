@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,6 +39,12 @@ public class APIKey
      */
     public String api_key;
 
+    // JS API Key
+    public String js_api_key;
+
+    // Allowed Domains
+    public String allowed_domains = "localhost, *";
+
     /**
      * Domain User Key
      */
@@ -63,9 +70,10 @@ public class APIKey
      * @param randomNumber
      *            - Random Number generated.
      */
-    APIKey(String randomNumber)
+    APIKey(String apiKey, String jsAPIKey)
     {
-	this.api_key = randomNumber;
+	this.api_key = apiKey;
+	this.js_api_key = jsAPIKey;
     }
 
     /**
@@ -92,10 +100,38 @@ public class APIKey
      */
     private static APIKey generateAPIKey()
     {
-	SecureRandom random = new SecureRandom();
-	String randomNumber = new BigInteger(130, random).toString(32);
+	// Generate two randoms for API Key and JS API Key
+	APIKey apiKeyObject = new APIKey(generateRandom(), generateRandom());
+	dao.put(apiKeyObject);
+	return apiKeyObject;
+    }
 
-	APIKey apiKey = new APIKey(randomNumber);
+    // Generate Random Number
+    private static String generateRandom()
+    {
+	SecureRandom random = new SecureRandom();
+	return new BigInteger(130, random).toString(32);
+    }
+
+    // Regenerate API Key
+    public static APIKey regenerateAPIKey()
+    {
+	APIKey apiKey = getAPIKey();
+
+	// Set new Random Number
+	apiKey.api_key = generateRandom();
+
+	dao.put(apiKey);
+	return apiKey;
+    }
+
+    // Regenerate JS API Key
+    public static APIKey regenerateJSAPIKey()
+    {
+	APIKey apiKey = getAPIKey();
+
+	// Set new Random Number
+	apiKey.js_api_key = generateRandom();
 
 	dao.put(apiKey);
 	return apiKey;
@@ -224,5 +260,14 @@ public class APIKey
     void prePersist()
     {
 	owner = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+    }
+
+    // Load JS API Key for the first time for old users
+    @PostLoad
+    void setJSAPIKey()
+    {
+	// Set JS API Key to API Key for the old users
+	if (js_api_key == null)
+	    js_api_key = api_key;
     }
 }

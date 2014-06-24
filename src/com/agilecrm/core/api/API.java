@@ -34,4 +34,22 @@ public class API
     {
 	return APIKey.getAPIKey();
     }
+
+    // Regenerate API Key
+    @Path("api-key/regenerate/api-key")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public APIKey regenerateAPIKey()
+    {
+	return APIKey.regenerateAPIKey();
+    }
+
+    // Regenerate JS API Key
+    @Path("api-key/regenerate/js-api-key")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public APIKey regenerateJSAPIKey()
+    {
+	return APIKey.regenerateJSAPIKey();
+    }
 }
