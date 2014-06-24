@@ -54,6 +54,7 @@ public class ActivityUtil
 	Activity activity = new Activity();
 	activity.label = contact.getContactFieldByName("first_name").value + " "
 		+ contact.getContactFieldByName("last_name").value;
+	activity.label = activity.label.trim();
 	activity.activity_type = activity_type;
 	activity.entity_type = EntityType.CONTACT;
 	activity.entity_id = contact.id;

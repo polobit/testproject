@@ -21,6 +21,7 @@ import com.stripe.model.Card;
 import com.stripe.model.Customer;
 
 /**
+ * <code>It Maps Stripe customer fields into agile Contact fields</code>
  * @author jitendra
  * 
  */
