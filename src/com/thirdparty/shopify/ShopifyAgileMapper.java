@@ -13,10 +13,14 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
+/**
+ * <code>ShopifyAgileMapper Maps customers contacts fields into Agile Contacts fields</code>
+ * @author jitendra
+ *
+ */
 
 public class ShopifyAgileMapper
 {

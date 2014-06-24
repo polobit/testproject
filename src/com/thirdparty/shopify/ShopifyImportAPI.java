@@ -17,9 +17,24 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
+/**
+ * Shopify RestApi method save UserContactPrefs and used for Import data from
+ * shopify API
+ * @author jitendra
+ *
+ */
 
 @Path("/api/shopify")
 public class ShopifyImportAPI {
+	
+	/**
+	 * validating  and saving users ContactPrefs
+	 * @param shopname
+	 * @param apiKey
+	 * @param apiPass
+	 * @return
+	 * @throws Exception
+	 */
 	
 	@Path("/save")
 	@POST
@@ -52,6 +67,12 @@ public class ShopifyImportAPI {
 					.build());
 		}
 	}
+	
+	/**
+	 * Import customers from shopify
+	 * @param customer
+	 * @return
+	 */
 
 	@POST
 	@Path("/importCustomer")
