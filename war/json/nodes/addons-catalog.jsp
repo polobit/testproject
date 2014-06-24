@@ -5,6 +5,7 @@
 <%@page import="org.json.JSONObject"%> 
 <%@page import="org.json.JSONArray"%>
 <%@page import="com.agilecrm.util.HTTPUtil"%>
+<%@page import="com.agilecrm.util.CacheUtil"%>
 
 <%
     // Get Catalog
@@ -13,7 +14,7 @@
     /* String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js",
 		    "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
     String[] DEVELOPERS_CATALOG = { "json/nodes/developers/jsonio.js", "json/nodes/developers/condition.js"};
-    String[] CRM_CATALOG = {"json/nodes/crm/adddeal.jsp","json/nodes/crm/addnote.js","json/nodes/crm/addtask.jsp","json/nodes/common/add_case.js","json/nodes/crm/tags.js", "json/nodes/common/score.js"};
+    String[] CRM_CATALOG = {"json/nodes/crm/adddeal.jsp","json/nodes/crm/addnote.js","json/nodes/crm/addtask.jsp","json/nodes/common/add_case.js","json/nodes/crm/tags.js", "json/nodes/common/score.js", "json/nodes/crm/notify.js"};
     String[] SOCIAL_CATALOG = {"json/nodes/social/tweet.js"};
     String [] WEB_CATALOG = {"json/nodes/common/url.js"};
 
@@ -28,7 +29,28 @@
 		type = type.toLowerCase().replace("addons", "");
 
     System.out.println("Type  " + type);
-
+    
+    String cachedAddons = null;
+    
+    try
+	{
+		cachedAddons = (String) CacheUtil.getCache("addons_" + type);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting addon nodes from cache... " + e.getMessage());
+	}
+	
+	if(cachedAddons != null)
+	{
+	    System.out.println("Addon nodes obtained from cache...");
+	    
+	    jsonArray = new JSONArray(cachedAddons);
+	    out.println(jsonArray);
+	    return;
+	}
+	
     if (type.equalsIgnoreCase("crm"))
 		target = CRM_CATALOG;
    /*  else if (type.equalsIgnoreCase("mobile"))
@@ -87,5 +109,17 @@
 		
     }
 
+    try
+	{
+	    // Add nodes array to cache
+	 	CacheUtil.setCache("addons_"+type, jsonArray.toString());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while setting addon nodes in cache... " + e.getMessage());
+	}
+   
+    
     out.println(jsonArray);
 %>

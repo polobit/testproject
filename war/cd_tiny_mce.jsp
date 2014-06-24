@@ -212,6 +212,8 @@ function init_tinymce()
         toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image",
 		toolbar2 : "formatselect fontselect fontsizeselect | merge_fields | preview",
         valid_elements: "*[*]",
+        browser_spellcheck : true,
+        gecko_spellcheck: true,
         extended_valid_elements : "*[*]",
         setup: function(editor) {
             editor.addButton('merge_fields', {
@@ -225,6 +227,7 @@ function init_tinymce()
         
     });
 }
+
 </script>
 
 </head>
