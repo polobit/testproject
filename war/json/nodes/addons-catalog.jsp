@@ -44,6 +44,8 @@
 	
 	if(cachedAddons != null)
 	{
+	    System.out.println("Addon nodes obtained from cache...");
+	    
 	    jsonArray = new JSONArray(cachedAddons);
 	    out.println(jsonArray);
 	    return;
@@ -109,7 +111,7 @@
 
     try
 	{
-	    // Add nodes array to cache to compare
+	    // Add nodes array to cache
 	 	CacheUtil.setCache("addons_"+type, jsonArray.toString());
 	}
 	catch (Exception e)
