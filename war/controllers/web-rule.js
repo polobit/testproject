@@ -12,17 +12,24 @@ var WebreportsRouter = Backbone.Router.extend({
 	},
 	webrules : function()
 	{
-		$(".active").removeClass("active");
-		$("#web-rules-menu").addClass("active");
 		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr',
 			sortKey : 'position', postRenderCallback : function(el)
 			{
-				//enableWebruletSoring(el);
+				head.js(LIB_PATH + 'lib/prettify-min.js', LIB_PATH + 'lib/zeroclipboard/ZeroClipboard.js', function()
+				{
+					enableWebruletSoring(el);
+					prettyPrint();
+					if($(el).has("#api_track_webrules_code_icon").length != 0){
+						initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
+					}
+				});
 			}	
 		});
-
+		
 		this.webrules.collection.fetch();
 		$("#content").html(this.webrules.render().el);
+		$(".active").removeClass("active");
+		$("#web-rules-menu").addClass("active");
 		
 	},
 	web_reports_add : function()
