@@ -99,14 +99,14 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	
-	"web-rules" : {
+	/*"web-rules" : {
 		
 		"title" : "Engage visitors on website",
 		"description" : "Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href='https://github.com/agilecrm/agile-popups'>documentation</a>",
 		"button_text" : "Add Web Rule",
 		"route" : "#webrules-add",
 		"image" : "/img/clipboard.png"
-	}
+	}*/
 	
 };
 
