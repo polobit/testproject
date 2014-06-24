@@ -40,12 +40,7 @@ public class StripeDataService {
 		       ctx.apiKey   = apiKey;
 		       ctx.type     = Type.STRIPE;
 		       try{
-		       
-		          // if(ZohoUtils.isValidContactPrefs(ctx))
 		        	   ctx.save();
-		          // else{
-		        	//	throw new Exception("Invalid login. Please try again");
-		         //  }
 		           
 		       }catch (Exception e)
 				{

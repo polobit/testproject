@@ -25,58 +25,54 @@ import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 
 /**
+ * <code>This class implements {@link ZohoAgileMapping}. It maps all Accounts ,Leads,and Contacts in 
+ * agile {@link Contact}</code>
+ * 
  * @author jitendra
  * 
  */
-public class ZohoAgileMappingImpl implements ZohoAgileMapping {
+public class ZohoAgileMappingImpl implements ZohoAgileMapping
+{
 
-	/***
-	 * saving contact of Account module for company in Agile setting by contact
-	 * type is company
+	/**
+	 * mapping zoho Accounts into Agile contact
 	 */
 
 	@Override
-	public void saveAccounts(JSONArray zohoData, Key<DomainUser> key) {
+	public void saveAccounts(JSONArray zohoData, Key<DomainUser> key)
+	{
 		List<Map> list = getMapList(zohoData, ZohoModule.ACCOUNTS.getValue());
 		Iterator it = list.iterator();
 		int counter = 0;
-		while (it.hasNext()) {
-			HashMap<String, String> dataMap = (HashMap<String, String>) it
-					.next();
+		while (it.hasNext())
+		{
+			HashMap<String, String> dataMap = (HashMap<String, String>) it.next();
 			List<ContactField> contactFields = new ArrayList<ContactField>();
-			/*
-			 * saving contact for Account module in agile company
-			 */
 
 			Contact contact = new Contact();
 			List<ContactField> fields = new ArrayList<ContactField>();
 
 			if (dataMap.containsKey("Account Name"))
-				fields.add(new ContactField(Contact.NAME, dataMap
-						.get("Account Name"), null));
+				fields.add(new ContactField(Contact.NAME, dataMap.get("Account Name"), null));
 
 			if (dataMap.containsKey("Website"))
-				fields.add(new ContactField(Contact.WEBSITE, dataMap
-						.get("Website"), "url"));
+				fields.add(new ContactField(Contact.WEBSITE, dataMap.get("Website"), "url"));
 
 			if (dataMap.containsKey("Phone"))
-				fields.add(new ContactField(Contact.PHONE,
-						dataMap.get("Phone"), "main"));
+				fields.add(new ContactField(Contact.PHONE, dataMap.get("Phone"), "main"));
 
 			if (dataMap.containsKey("Mobile"))
-				fields.add(new ContactField("Mobile", dataMap.get("Mobile"),
-						"home"));
+				fields.add(new ContactField("Mobile", dataMap.get("Mobile"), "home"));
 
 			if (dataMap.containsKey("Fax"))
-				fields.add(new ContactField("Fax", dataMap.get("Fax"),
-						"home fax"));
+				fields.add(new ContactField("Fax", dataMap.get("Fax"), "home fax"));
 
 			JSONObject shippingAddress = new JSONObject();
-			try {
+			try
+			{
 
 				if (dataMap.containsKey("Shipping Street"))
-					shippingAddress.put("Street",
-							dataMap.get("Shipping Street"));
+					shippingAddress.put("Street", dataMap.get("Shipping Street"));
 
 				if (dataMap.containsKey("Shipping State"))
 					shippingAddress.put("State", dataMap.get("Shipping State"));
@@ -85,11 +81,9 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 					shippingAddress.put("Code", dataMap.get("Shipping Code"));
 
 				if (dataMap.containsKey("Shipping Country"))
-					shippingAddress.put("Country",
-							dataMap.get("Shipping Country"));
+					shippingAddress.put("Country", dataMap.get("Shipping Country"));
 				if (shippingAddress != null && shippingAddress.length() > 1)
-					fields.add(new ContactField(Contact.ADDRESS,
-							shippingAddress.toString(), "Home"));
+					fields.add(new ContactField(Contact.ADDRESS, shippingAddress.toString(), "Home"));
 
 				JSONObject billingAddress = new JSONObject();
 
@@ -103,109 +97,107 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 					billingAddress.put("Code", dataMap.get("Billing Code"));
 
 				if (dataMap.containsKey("Billing Country"))
-					billingAddress.put("Country",
-							dataMap.get("Billing Country"));
+					billingAddress.put("Country", dataMap.get("Billing Country"));
 
 				if (billingAddress != null && billingAddress.length() > 1)
-					fields.add(new ContactField(Contact.ADDRESS, billingAddress
-							.toString(), "Work"));
+					fields.add(new ContactField(Contact.ADDRESS, billingAddress.toString(), "Work"));
 
 				contact.properties = fields;
 				contact.setContactOwner(key);
 				contact.type = Type.COMPANY;
 				contact.save();
 
-				if (dataMap.containsKey("Industry")) {
+				if (dataMap.containsKey("Industry"))
+				{
 					Note note = new Note();
 					note.subject = "Industry";
 					note.description = dataMap.get("Industry");
-					note.addRelatedContacts(String.valueOf(contact.id));
+					note.addContactIds(contact.id.toString());
 					note.save();
 				}
 
-				if (dataMap.containsKey("Description")) {
+				if (dataMap.containsKey("Description"))
+				{
 					Note note = new Note();
 					note.subject = "Description";
 					note.description = dataMap.get("Description");
-					note.addRelatedContacts(String.valueOf(contact.id));
+					note.addContactIds(String.valueOf(contact.id));
 					note.save();
 				}
 
-				if (dataMap.containsKey("Employees")) {
+				if (dataMap.containsKey("Employees"))
+				{
 					Note note = new Note();
 					note.subject = "Number of Employees";
 					note.description = dataMap.get("Employees");
-					note.addRelatedContacts(String.valueOf(contact.id));
+					note.addContactIds(String.valueOf(contact.id));
 					note.save();
 				}
 
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				e.printStackTrace();
 			}
 			counter++;
 		}
-		BulkActionNotifications.publishconfirmation(
-				BulkAction.CONTACTS_IMPORT_MESSAGE, String.valueOf(counter)
-						+ " Accounts imported from Zoho");
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, String.valueOf(counter)
+				+ " Accounts imported from Zoho");
 
 	}
+	
+	/**
+	 * mapping zoho leads into agile contacts
+	 */
 
 	@Override
-	public void saveLeads(JSONArray arrayOfLeads, Key<DomainUser> ownerKey) {
+	public void saveLeads(JSONArray arrayOfLeads, Key<DomainUser> ownerKey)
+	{
 		int counter = 0;
 		List<Map> list = getMapList(arrayOfLeads, ZohoModule.LEADS.getValue());
 		Iterator it = list.iterator();
 
-		while (it.hasNext()) {
+		while (it.hasNext())
+		{
 			Contact ctx = new Contact();
 			List<ContactField> contactFields = new ArrayList<ContactField>();
 			Map<String, String> objectField = (Map<String, String>) it.next();
 
 			if (objectField.containsKey("First Name"))
-				contactFields.add(new ContactField(Contact.FIRST_NAME,
-						objectField.get("First Name"), null));
+				contactFields.add(new ContactField(Contact.FIRST_NAME, objectField.get("First Name"), null));
 
 			if (objectField.containsKey("Last Name"))
-				contactFields.add(new ContactField(Contact.LAST_NAME,
-						objectField.get("Last Name"), null));
+				contactFields.add(new ContactField(Contact.LAST_NAME, objectField.get("Last Name"), null));
 
 			if (objectField.containsKey("Email"))
-				contactFields.add(new ContactField(Contact.EMAIL, objectField
-						.get("Email"), null));
+				contactFields.add(new ContactField(Contact.EMAIL, objectField.get("Email"), null));
 
 			if (objectField.containsKey("Company"))
-				contactFields.add(new ContactField(Contact.COMPANY, objectField
-						.get("Company"), null));
+				contactFields.add(new ContactField(Contact.COMPANY, objectField.get("Company"), null));
 
 			if (objectField.containsKey("Website"))
-				contactFields.add(new ContactField(Contact.WEBSITE, objectField
-						.get("Website"), "URL"));
+				contactFields.add(new ContactField(Contact.WEBSITE, objectField.get("Website"), "URL"));
 
 			if (objectField.containsKey("Phone"))
-				contactFields.add(new ContactField(Contact.PHONE, objectField
-						.get("Phone"), "Work"));
+				contactFields.add(new ContactField(Contact.PHONE, objectField.get("Phone"), "Work"));
 
 			if (objectField.containsKey("Title"))
-				contactFields.add(new ContactField(Contact.TITLE, objectField
-						.get("Title"), null));
+				contactFields.add(new ContactField(Contact.TITLE, objectField.get("Title"), null));
 
 			if (objectField.containsKey("Rating"))
-				contactFields.add(new ContactField("star_value", objectField
-						.get("Rating"), null));
+				contactFields.add(new ContactField("star_value", objectField.get("Rating"), null));
 
 			if (objectField.containsKey("Mobile"))
-				contactFields.add(new ContactField("Mobile", objectField
-						.get("Mobile"), "Home"));
+				contactFields.add(new ContactField("Mobile", objectField.get("Mobile"), "Home"));
 
 			if (objectField.containsKey("Fax"))
-				contactFields.add(new ContactField("Fax", objectField
-						.get("Fax"), "Home Fax"));
+				contactFields.add(new ContactField("Fax", objectField.get("Fax"), "Home Fax"));
 
 			if (objectField.containsKey("Skype ID"))
-				contactFields.add(new ContactField("Skype ID", objectField
-						.get("Skype ID"), null));
+				contactFields.add(new ContactField("Skype ID", objectField.get("Skype ID"), null));
 			JSONObject address = new JSONObject();
-			try {
+			try
+			{
 				if (objectField.containsKey("Street"))
 					address.put("Street", objectField.get("Street"));
 				if (objectField.containsKey("City"))
@@ -215,48 +207,50 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 				if (objectField.containsKey("Country"))
 					address.put("Country", objectField.get("Country"));
 				if (address != null && address.length() > 1)
-					contactFields.add(new ContactField(Contact.ADDRESS, address
-							.toString(), "Work"));
+					contactFields.add(new ContactField(Contact.ADDRESS, address.toString(), "Work"));
 
 				ctx.setContactOwner(ownerKey);
 				ctx.properties = contactFields;
 				ctx.type = Type.PERSON;
 				ctx.save();
 				counter++;
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				e.printStackTrace();
 			}
 
 		}
-		BulkActionNotifications.publishconfirmation(
-				BulkAction.CONTACTS_IMPORT_MESSAGE, String.valueOf(counter)
-						+ " leads imported from Zoho crm");
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, String.valueOf(counter)
+				+ " leads imported from Zoho crm");
 
 	}
 
-	private JSONArray getRecords(JSONArray zohoData,String module)
+	private JSONArray getRecords(JSONArray zohoData, String module)
 	{
 		JSONArray rows = null;
 		try
 		{
-			if(zohoData != null){
-				
-			
-			JSONObject res = new JSONObject(zohoData.get(0).toString());
-			JSONObject o = res.getJSONObject("response");
-			
-			if(o.has("result")){
-			   JSONObject data = new JSONObject(o.getJSONObject("result").toString()).getJSONObject(module);
-			   Object jsonObject = data.get("row");
-			   
-			if(jsonObject instanceof JSONObject){
-				rows = new JSONArray();
-				rows.put(((JSONObject) jsonObject));
+			if (zohoData != null)
+			{
+
+				JSONObject res = new JSONObject(zohoData.get(0).toString());
+				JSONObject o = res.getJSONObject("response");
+
+				if (o.has("result"))
+				{
+					JSONObject data = new JSONObject(o.getJSONObject("result").toString()).getJSONObject(module);
+					Object jsonObject = data.get("row");
+
+					if (jsonObject instanceof JSONObject)
+					{
+						rows = new JSONArray();
+						rows.put(((JSONObject) jsonObject));
+					}
+					else
+						rows = (JSONArray) jsonObject;
+				}
 			}
-			else 
-			rows = (JSONArray) jsonObject;
-		 }
-		  }
 		}
 		catch (Exception e)
 		{
@@ -264,110 +258,122 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 		}
 		return rows;
 	}
+	
+	
+	/**
+	 * creating map of Zoho response data and zoho module
+	 * @param jsonData JSONArray representation of zoho response data
+	 * @param module module value can be Accounts,Leads,Contacts etc
+	 * @return List of map
+	 */
 
-	private List getMapList(JSONArray jsonData, String module) {
+	private List getMapList(JSONArray jsonData, String module)
+	{
 
 		List<Map> list = new ArrayList<Map>();
 
 		JSONArray rows = getRecords(jsonData, module);
-		if(rows != null && rows.length() >0){
-		try {
-			for (int i = 0; i < rows.length(); i++) {
+		if (rows != null && rows.length() > 0)
+		{
+			try
+			{
+				for (int i = 0; i < rows.length(); i++)
+				{
 
-				JSONObject object = rows.getJSONObject(i);
-				JSONArray fields = object.getJSONArray("FL");
+					JSONObject object = rows.getJSONObject(i);
+					JSONArray fields = object.getJSONArray("FL");
 
-				Map<String, String> objectField = new HashMap<String, String>();
+					Map<String, String> objectField = new HashMap<String, String>();
 
-				for (int j = 0; j < fields.length(); j++) {
-					Map<String, String> map = new HashMap<String, String>();
-					ObjectMapper mapper = new ObjectMapper();
-					map = mapper.readValue(fields.getString(j),
-							new TypeReference<HashMap<String, String>>() {
-							});
-					String arr[] = new String[2];
-					int index = 0;
-					for (Map.Entry<String, String> m : map.entrySet()) {
-						arr[index] = m.getValue();
-						index++;
+					for (int j = 0; j < fields.length(); j++)
+					{
+						Map<String, String> map = new HashMap<String, String>();
+						ObjectMapper mapper = new ObjectMapper();
+						map = mapper.readValue(fields.getString(j), new TypeReference<HashMap<String, String>>()
+						{
+						});
+						String arr[] = new String[2];
+						int index = 0;
+						for (Map.Entry<String, String> m : map.entrySet())
+						{
+							arr[index] = m.getValue();
+							index++;
+						}
+						objectField.put(arr[1], arr[0]);
 					}
-					objectField.put(arr[1], arr[0]);
-				}
-				list.add(objectField);
+					list.add(objectField);
 
+				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
-	 }
 		return list;
 
 	}
 
 	@Override
-	public void saveCases(JSONArray zohoData, Key<DomainUser> key) {
-		// TODO Auto-generated method stub
+	public void saveCases(JSONArray zohoData, Key<DomainUser> key)
+	{
+		// TODO:jitendra implemente later
 
 	}
 
+	/**
+	 * Mapping contacts from zoho crm to agile crm
+	 */
 	@Override
-	public void saveContact(JSONArray zohoData, Key<DomainUser> key) {
+	public void saveContact(JSONArray zohoData, Key<DomainUser> key)
+	{
 		int counter = 0;
 
 		List<Map> list = getMapList(zohoData, "Contacts");
 		Iterator it = list.iterator();
 
-		while (it.hasNext()) {
+		while (it.hasNext())
+		{
 			Contact ctx = new Contact();
 			List<ContactField> contactFields = new ArrayList<ContactField>();
-			HashMap<String, String> objectField = (HashMap<String, String>) it
-					.next();
+			
+			HashMap<String, String> objectField = (HashMap<String, String>) it.next();
 
 			if (objectField.containsKey("First Name"))
-				contactFields.add(new ContactField(Contact.FIRST_NAME,
-						objectField.get("First Name"), null));
+				contactFields.add(new ContactField(Contact.FIRST_NAME, objectField.get("First Name"), null));
 
 			if (objectField.containsKey("Last Name"))
-				contactFields.add(new ContactField(Contact.LAST_NAME,
-						objectField.get("Last Name"), null));
+				contactFields.add(new ContactField(Contact.LAST_NAME, objectField.get("Last Name"), null));
 
 			if (objectField.containsKey("Email"))
-				contactFields.add(new ContactField(Contact.EMAIL, objectField
-						.get("Email"), null));
+				contactFields.add(new ContactField(Contact.EMAIL, objectField.get("Email"), null));
 
 			if (objectField.containsKey("Company"))
-				contactFields.add(new ContactField(Contact.COMPANY, objectField
-						.get("Company"), null));
+				contactFields.add(new ContactField(Contact.COMPANY, objectField.get("Company"), null));
 
 			if (objectField.containsKey("Website"))
-				contactFields.add(new ContactField(Contact.WEBSITE, objectField
-						.get("Website"), "URL"));
+				contactFields.add(new ContactField(Contact.WEBSITE, objectField.get("Website"), "URL"));
 
 			if (objectField.containsKey("Phone"))
-				contactFields.add(new ContactField(Contact.PHONE, objectField
-						.get("Phone"), "Work"));
+				contactFields.add(new ContactField(Contact.PHONE, objectField.get("Phone"), "Work"));
 
 			if (objectField.containsKey("Title"))
-				contactFields.add(new ContactField(Contact.TITLE, objectField
-						.get("Title"), null));
+				contactFields.add(new ContactField(Contact.TITLE, objectField.get("Title"), null));
 
 			if (objectField.containsKey("Rating"))
-				contactFields.add(new ContactField("star_value", objectField
-						.get("Rating"), null));
+				contactFields.add(new ContactField("star_value", objectField.get("Rating"), null));
 
 			if (objectField.containsKey("Mobile"))
-				contactFields.add(new ContactField("Mobile", objectField
-						.get("Mobile"), "Home"));
+				contactFields.add(new ContactField("Mobile", objectField.get("Mobile"), "Home"));
 
 			if (objectField.containsKey("Fax"))
-				contactFields.add(new ContactField("Fax", objectField
-						.get("Fax"), "Home Fax"));
+				contactFields.add(new ContactField("Fax", objectField.get("Fax"), "Home Fax"));
 
 			if (objectField.containsKey("Skype ID"))
-				contactFields.add(new ContactField("Skype ID", objectField
-						.get("Skype ID"), null));
+				contactFields.add(new ContactField("Skype ID", objectField.get("Skype ID"), null));
 			JSONObject address = new JSONObject();
-			try {
+			try
+			{
 				if (objectField.containsKey("Street"))
 					address.put("Street", objectField.get("Street"));
 				if (objectField.containsKey("City"))
@@ -377,30 +383,32 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 				if (objectField.containsKey("Country"))
 					address.put("Country", objectField.get("Country"));
 				if (address != null && address.length() > 1)
-					contactFields.add(new ContactField(Contact.ADDRESS, address
-							.toString(), "Work"));
+					contactFields.add(new ContactField(Contact.ADDRESS, address.toString(), "Work"));
 
 				ctx.setContactOwner(key);
 				ctx.properties = contactFields;
 				ctx.type = Type.PERSON;
 				ctx.save();
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				e.printStackTrace();
 			}
 		}
 	}
 
 	@Override
-	public void saveEvents(JSONArray zohoData, Key<DomainUser> key) {
+	public void saveEvents(JSONArray zohoData, Key<DomainUser> key)
+	{
 		List<Map> eventList = getMapList(zohoData, "Events");
 		Iterator it = eventList.iterator();
 
-		while (it.hasNext()) {
+		while (it.hasNext())
+		{
 			Event event = new Event();
 			Contact ctx = new Contact();
 			List<ContactField> fieldContact = new ArrayList<ContactField>();
-			HashMap<String, String> dataMap = (HashMap<String, String>) it
-					.next();
+			HashMap<String, String> dataMap = (HashMap<String, String>) it.next();
 
 			if (dataMap.containsKey("Subject"))
 				event.title = dataMap.get("Subject");
@@ -409,10 +417,10 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 				event.start = Long.valueOf(dataMap.get("Start DateTime"));
 			if (dataMap.containsKey("End DateTime"))
 				event.end = Long.valueOf(dataMap.get("End DateTime"));
-			if (dataMap.containsKey("Contact Name")) {
+			if (dataMap.containsKey("Contact Name"))
+			{
 				ctx.type = Type.PERSON;
-				fieldContact.add(new ContactField(Contact.FIRST_NAME, dataMap
-						.get("Contact Name"), null));
+				fieldContact.add(new ContactField(Contact.FIRST_NAME, dataMap.get("Contact Name"), null));
 				ctx.properties = fieldContact;
 				ctx.save();
 			}
@@ -422,16 +430,17 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 	}
 
 	@Override
-	public void saveTask(JSONArray zohoData, Key<DomainUser> key) {
+	public void saveTask(JSONArray zohoData, Key<DomainUser> key)
+	{
 		List<Map> tasks = getMapList(zohoData, "Tasks");
 		Iterator it = tasks.iterator();
 
-		while (it.hasNext()) {
+		while (it.hasNext())
+		{
 			Event event = new Event();
 			Contact ctx = new Contact();
 			List<ContactField> fieldContact = new ArrayList<ContactField>();
-			HashMap<String, String> dataMap = (HashMap<String, String>) it
-					.next();
+			HashMap<String, String> dataMap = (HashMap<String, String>) it.next();
 
 			if (dataMap.containsKey("Subject"))
 				event.title = dataMap.get("Subject");
@@ -440,10 +449,10 @@ public class ZohoAgileMappingImpl implements ZohoAgileMapping {
 				event.start = Long.valueOf(dataMap.get("Start DateTime"));
 			if (dataMap.containsKey("End DateTime"))
 				event.end = Long.valueOf(dataMap.get("End DateTime"));
-			if (dataMap.containsKey("Contact Name")) {
+			if (dataMap.containsKey("Contact Name"))
+			{
 				ctx.type = Type.PERSON;
-				fieldContact.add(new ContactField(Contact.FIRST_NAME, dataMap
-						.get("Contact Name"), null));
+				fieldContact.add(new ContactField(Contact.FIRST_NAME, dataMap.get("Contact Name"), null));
 				ctx.properties = fieldContact;
 				ctx.save();
 			}

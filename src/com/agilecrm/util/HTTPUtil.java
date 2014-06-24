@@ -45,7 +45,7 @@ public class HTTPUtil
 	    conn.setConnectTimeout(600000);
 	    conn.setReadTimeout(600000);
 
-	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 
 	    String output = "";
 	    String inputLine;
@@ -54,6 +54,7 @@ public class HTTPUtil
 		output += inputLine;
 	    }
 	    reader.close();
+
 	    return output;
 	}
 	catch (Exception e)
@@ -225,8 +226,9 @@ public class HTTPUtil
      * @throws Exception
      *             If server throws an exception
      */
-    public static String accessURLUsingAuthentication(String url, String username, String password, String requestMethod, String data,
-	    boolean setContentLength, String contentType, String acceptType) throws Exception
+    public static String accessURLUsingAuthentication(String url, String username, String password,
+	    String requestMethod, String data, boolean setContentLength, String contentType, String acceptType)
+	    throws Exception
     {
 	HttpURLConnection connection = null;
 
