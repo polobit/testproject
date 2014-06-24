@@ -34,6 +34,7 @@ public class StripeUtil {
 	public static final StripeAgileDataMapperService mapper = new StripeAgileDataMapperService();
 
 	/**
+	 * Test method 
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -58,6 +59,11 @@ public class StripeUtil {
  
 	}
 	
+	/**
+	 * Importing customer from stripe 
+	 * @param prefs
+	 * @param key
+	 */
 	public static void importCustomer(ContactPrefs prefs ,Key<DomainUser> key){
 		          Stripe.apiVersion ="2012-09-24";
 			try {
@@ -78,6 +84,9 @@ public class StripeUtil {
 		       
 	}
 	
+	/**
+	 * synCustomer in agile
+	 */
 	public static void syncCustomer(){
 		ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.STRIPE);
 		if(pref != null && pref.getDomainUser()!= null){

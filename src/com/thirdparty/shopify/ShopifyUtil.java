@@ -22,7 +22,11 @@ import com.thirdparty.forms.FormsUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.utl.ContactPrefsUtil;
-
+/**
+ * 
+ * @author jitendra
+ *
+ */
 public class ShopifyUtil
 {
 
@@ -132,7 +136,6 @@ public class ShopifyUtil
 			return null;
 		}
 	}
-
 
 	public static void importCustomer(ContactPrefs prefs, Key<DomainUser> key)
 	{
@@ -332,7 +335,6 @@ public class ShopifyUtil
 		}
 
 	}
-	
 
 	public static void main(String[] args)
 	{
@@ -352,8 +354,7 @@ public class ShopifyUtil
 		 * 
 		 * } catch (Exception e) { e.printStackTrace(); }
 		 */
-       sync();
-		
+		// sync();
 
 	}
 
