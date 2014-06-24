@@ -1,4 +1,6 @@
 /***
+ * ZohoImportUtil is used for fetching contacts ,leads ,Accounts from zoho crm
+ *
  * @author jitendra
  */
 
@@ -18,6 +20,12 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ZohoImportUtil
 {
 	public static ZohoAgileMapping zohoAgileMapper = new ZohoAgileMappingImpl();
+	
+	/**
+	 * static hard coded max value for iterating loop for maximum 10k records 
+	 * assumption zoho can have max 10k records we can change it based on records later
+	 */
+	
 	public static int MAX_INDEX = 10000;
 
 	public static void importZohoLeads(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
@@ -148,6 +156,11 @@ public class ZohoImportUtil
 			importEvent(prefs, key);
 		}
 	}
+	
+	/**
+	 * this method sync contacts,leads, Accounts from zoho crm
+	 * and save in agile contacts
+	 */
 	
 	public static void sync(){
 		ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
