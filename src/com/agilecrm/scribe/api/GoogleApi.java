@@ -73,7 +73,8 @@ public class GoogleApi extends DefaultApi20
 	    url = AUTHORIZE_URL_AUTO_PROMPT_TYPE;
 
 	else if (config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CONTACTS_SCOPE)
-		|| config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CALENDAR_SCOPE))
+		|| config.getScope().equalsIgnoreCase(ScribeServlet.GOOGLE_CALENDAR_SCOPE)
+		|| config.getScope().equalsIgnoreCase(ScribeServlet.GMAIL_SCOPE))
 	    url = AUTHORIZE_URL_GOOGLE_APPS;
 
 	return String.format(url, config.getApiKey(), OAuthEncoder.encode(config.getScope()),
