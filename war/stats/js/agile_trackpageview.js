@@ -48,7 +48,5 @@ function agile_trackPageview(callback)
 	var agile_url = "https://" + agile_id.getNamespace() + ".agilecrm.com/stats?callback=?&" + params;
 
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }

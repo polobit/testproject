@@ -25,7 +25,5 @@ function agile_getEmail(callback)
 	var agile_url = agile_id.getURL() + "/email?callback=?&id=" + agile_id.get() + "&email=" + encodeURIComponent(email);
 
 	// Request
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }

@@ -270,4 +270,85 @@ public class APIKey
 	if (js_api_key == null)
 	    js_api_key = api_key;
     }
+
+    /**
+     * Returns Agile User key with respect to api key. Gets domain user from js
+     * api key and then gets agile user from domain user id.
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static AgileUser getAgileUserRelatedToJSAPIKey(String apiKey)
+    {
+	APIKey key = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get();
+
+	if (key == null)
+	    return null;
+
+	Key<DomainUser> domainUserKey = key.owner;
+	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey.getId());
+    }
+
+    /**
+     * Returns domain user related to JSAPI Key. Domain user key is stored in
+     * APIKey entity. Queries with JSAPIKey and fetches domain user based on key
+     * saved in owner field
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static DomainUser getDomainUserRelatedToJSAPIKey(String apiKey)
+    {
+	Key<DomainUser> userKey = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get().owner;
+	if (userKey == null)
+	    return null;
+	return DomainUserUtil.getDomainUser(userKey.getId());
+    }
+
+    /**
+     * Returns Domain User Key with respect to JSAPI key
+     * 
+     * @param apiKey
+     *            - api key of domain user
+     * @return Domain user key
+     */
+    public static Key<DomainUser> getDomainUserKeyRelatedToJSAPIKey(String apiKey)
+    {
+	APIKey apiKeyObject = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get();
+	if (apiKeyObject == null)
+	    return null;
+	return apiKeyObject.owner;
+    }
+
+    /**
+     * Checks whether api is related to this domain, used while verifying JSAPI
+     * request in JSAPI filter
+     * 
+     * @param key
+     *            APIKey to be verified
+     * @return {@link Boolean} returns true if JSAPI Key exists in current
+     *         domain and vice-versa
+     */
+    public static Boolean isValidJSKey(String key)
+    {
+	APIKey apiKey = dao.ofy().query(APIKey.class).filter("js_api_key", key).get();
+
+	if (apiKey != null)
+	    return true;
+	return false;
+    }
+
+    /**
+     * Updates the allowed_domains field of APIKey object
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static APIKey updateAllowedDomains(APIKey apiKey)
+    {
+	APIKey key = getAPIKey();
+	key.allowed_domains = apiKey.allowed_domains;
+	dao.put(key);
+	return key;
+    }
 }

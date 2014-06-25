@@ -1171,7 +1171,12 @@ time {
 small {
 color: #b2b0b1;
 }
-
+.modal {
+	background: none!important;
+}
+.modal-body {
+	background: #fff;
+}
 
 /* Disable drop-down menu item, add class="disabled" to <a>
 Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
