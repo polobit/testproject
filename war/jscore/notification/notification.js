@@ -50,6 +50,7 @@ function getDomainFromCurrentUser()
  */
 function subscribeToPubNub(domain)
 {
+
 	// Put http or https
 	// var protocol = document.location.protocol;
 	var protocol = 'https';
@@ -368,7 +369,7 @@ function showSwitchChanges(el)
 function showNoty(type, message, position, notification_type)
 {
 	// Don't show notifications when disabled by user. Neglect campaign ones
-	if (!notification_prefs.control_notifications && notification_type != "CAMPAIGN_NOTIFY")
+	if (notification_type != "CAMPAIGN_NOTIFY" && !notification_prefs.control_notifications)
 		return;
 
 	// Check for html5 notification permission.
