@@ -25,9 +25,7 @@ function agile_addCampaign(data, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/add-campaign?callback=?&id=" + agile_id.get() + "&" + params;
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
 
 /**
@@ -51,9 +49,7 @@ function agile_getCampaigns(callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/get-campaigns?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
 
 /**
@@ -77,9 +73,7 @@ function agile_getCampaignlogs(callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/get-campaign-logs?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
 
 /**
@@ -91,9 +85,7 @@ function agile_getWorkflows(callback)
 	var agile_url = agile_id.getURL() + "/contacts/get-workflows?callback=?&id=" + agile_id.get();
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
 
 /**
@@ -119,7 +111,5 @@ function agile_unsubscribeCampaign(data, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/unsubscribe-campaign?callback=?&id=" + agile_id.get() + "&" + params;
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }

@@ -28,9 +28,7 @@ function agile_setProperty(data, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/add-property?callback=?&id=" + agile_id.get() + "&" + params;
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
 
 /**
@@ -62,9 +60,7 @@ function agile_getProperty(name, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/get-property?callback=?&id=" + agile_id.get() + "&name=" + name + "&email=" + encodeURIComponent(email);
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
 /**
  * Remove a contact property by name
@@ -95,7 +91,5 @@ function agile_removeProperty(name, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/remove-property?callback=?&id=" + agile_id.get() + "&name=" + name + "&email=" + encodeURIComponent(email);
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
