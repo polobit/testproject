@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,10 +39,11 @@ public class APIKey
      */
     public String api_key;
 
-    /**
-     * JS API key that is generated
-     */
+    // JS API Key
     public String js_api_key;
+
+    // Allowed Domains
+    public String allowed_domains = "localhost, *";
 
     /**
      * Domain User Key
@@ -65,15 +67,13 @@ public class APIKey
     /**
      * Constructs a new {@link APIKey} with apikey generated.
      * 
-     * @param randomNumberOne
-     *            - Random Number generated.
-     * @param randomNumberTwo
+     * @param randomNumber
      *            - Random Number generated.
      */
-    APIKey(String randomNumberOne, String randomNumberTwo)
+    APIKey(String apiKey, String jsAPIKey)
     {
-	this.api_key = randomNumberOne;
-	this.js_api_key = randomNumberTwo;
+	this.api_key = apiKey;
+	this.js_api_key = jsAPIKey;
     }
 
     /**
@@ -84,20 +84,13 @@ public class APIKey
     public static APIKey getAPIKey()
     {
 	APIKey apiKey = getAPIKeyRelatedToUser(SessionManager.get().getDomainId());
-
-	try
+	if (apiKey == null)
 	{
-	    if (apiKey == null || apiKey.js_api_key == null)
-	    {
-		// Generate API key and save
-		return generateAPIKey();
-	    }
-	    return apiKey;
-	}
-	catch (Exception e)
-	{
+	    // Generate API key and save
 	    return generateAPIKey();
 	}
+
+	return apiKey;
     }
 
     /**
@@ -107,21 +100,41 @@ public class APIKey
      */
     private static APIKey generateAPIKey()
     {
-	APIKey apiKey = new APIKey(generateRandomNumber(), generateRandomNumber());
+	// Generate two randoms for API Key and JS API Key
+	APIKey apiKeyObject = new APIKey(generateRandom(), generateRandom());
+	dao.put(apiKeyObject);
+	return apiKeyObject;
+    }
+
+    // Generate Random Number
+    private static String generateRandom()
+    {
+	SecureRandom random = new SecureRandom();
+	return new BigInteger(130, random).toString(32);
+    }
+
+    // Regenerate API Key
+    public static APIKey regenerateAPIKey()
+    {
+	APIKey apiKey = getAPIKey();
+
+	// Set new Random Number
+	apiKey.api_key = generateRandom();
+
 	dao.put(apiKey);
 	return apiKey;
     }
 
-    /**
-     * Returns random string
-     * 
-     * @return
-     */
-    private static String generateRandomNumber()
+    // Regenerate JS API Key
+    public static APIKey regenerateJSAPIKey()
     {
-	SecureRandom random = new SecureRandom();
-	String randomNumber = new BigInteger(130, random).toString(32);
-	return randomNumber;
+	APIKey apiKey = getAPIKey();
+
+	// Set new Random Number
+	apiKey.js_api_key = generateRandom();
+
+	dao.put(apiKey);
+	return apiKey;
     }
 
     /**
@@ -143,8 +156,8 @@ public class APIKey
     }
 
     /**
-     * Checks whether api is related to this domain, used while verifying
-     * requests other than JSAPI requests
+     * Checks whether api is related to this domain, used while verifying JsAPI
+     * request in JsAPiFilter
      * 
      * @param key
      *            APIKey to be verified
@@ -164,24 +177,6 @@ public class APIKey
     }
 
     /**
-     * Checks whether api is related to this domain, used while verifying JSAPI
-     * request in JSAPI filter
-     * 
-     * @param key
-     *            APIKey to be verified
-     * @return {@link Boolean} returns true if JSAPI Key exists in current
-     *         domain and vice-versa
-     */
-    public static Boolean isValidJSKey(String key)
-    {
-	APIKey apiKey = dao.ofy().query(APIKey.class).filter("js_api_key", key).get();
-
-	if (apiKey != null)
-	    return true;
-	return false;
-    }
-
-    /**
      * Returns Domain User key with respect to api key.
      * 
      * @param apiKey
@@ -195,21 +190,6 @@ public class APIKey
 	if (apiKeyObject == null)
 	    return null;
 
-	return apiKeyObject.owner;
-    }
-
-    /**
-     * Returns Domain Userr Key with respect to JSAPI key
-     * 
-     * @param apiKey
-     *            - api key of domain user
-     * @return Domain user key
-     */
-    public static Key<DomainUser> getDomainUserKeyRelatedToJSAPIKey(String apiKey)
-    {
-	APIKey apiKeyObject = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get();
-	if (apiKeyObject == null)
-	    return null;
 	return apiKeyObject.owner;
     }
 
@@ -235,22 +215,6 @@ public class APIKey
     }
 
     /**
-     * Returns domain user related to JSAPI Key. Domain user key is stored in
-     * APIKey entity. Queries with JSAPIKey and fetches domain user based on key
-     * saved in owner field
-     * 
-     * @param apiKey
-     * @return
-     */
-    public static DomainUser getDomainUserRelatedToJSAPIKey(String apiKey)
-    {
-	Key<DomainUser> userKey = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get().owner;
-	if (userKey == null)
-	    return null;
-	return DomainUserUtil.getDomainUser(userKey.getId());
-    }
-
-    /**
      * Returns Agile User key with respect to apikey. Gets domain user from api
      * key and then gets agile user from domain user id.
      * 
@@ -267,25 +231,6 @@ public class APIKey
 
 	Key<DomainUser> domainUserKey = key.owner;
 
-	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey.getId());
-    }
-
-    /**
-     * Returns Agile User key with respect to api key. Gets domain user from js
-     * api key and then gets agile user from domain user id.
-     * 
-     * @param apiKey
-     * @return
-     */
-
-    public static AgileUser getAgileUserRelatedToJSAPIKey(String apiKey)
-    {
-	APIKey key = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get();
-
-	if (key == null)
-	    return null;
-
-	Key<DomainUser> domainUserKey = key.owner;
 	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey.getId());
     }
 
@@ -315,5 +260,95 @@ public class APIKey
     void prePersist()
     {
 	owner = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
+    }
+
+    // Load JS API Key for the first time for old users
+    @PostLoad
+    void setJSAPIKey()
+    {
+	// Set JS API Key to API Key for the old users
+	if (js_api_key == null)
+	    js_api_key = api_key;
+    }
+
+    /**
+     * Returns Agile User key with respect to api key. Gets domain user from js
+     * api key and then gets agile user from domain user id.
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static AgileUser getAgileUserRelatedToJSAPIKey(String apiKey)
+    {
+	APIKey key = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get();
+
+	if (key == null)
+	    return null;
+
+	Key<DomainUser> domainUserKey = key.owner;
+	return AgileUser.getCurrentAgileUserFromDomainUser(domainUserKey.getId());
+    }
+
+    /**
+     * Returns domain user related to JSAPI Key. Domain user key is stored in
+     * APIKey entity. Queries with JSAPIKey and fetches domain user based on key
+     * saved in owner field
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static DomainUser getDomainUserRelatedToJSAPIKey(String apiKey)
+    {
+	Key<DomainUser> userKey = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get().owner;
+	if (userKey == null)
+	    return null;
+	return DomainUserUtil.getDomainUser(userKey.getId());
+    }
+
+    /**
+     * Returns Domain User Key with respect to JSAPI key
+     * 
+     * @param apiKey
+     *            - api key of domain user
+     * @return Domain user key
+     */
+    public static Key<DomainUser> getDomainUserKeyRelatedToJSAPIKey(String apiKey)
+    {
+	APIKey apiKeyObject = dao.ofy().query(APIKey.class).filter("js_api_key", apiKey).get();
+	if (apiKeyObject == null)
+	    return null;
+	return apiKeyObject.owner;
+    }
+
+    /**
+     * Checks whether api is related to this domain, used while verifying JSAPI
+     * request in JSAPI filter
+     * 
+     * @param key
+     *            APIKey to be verified
+     * @return {@link Boolean} returns true if JSAPI Key exists in current
+     *         domain and vice-versa
+     */
+    public static Boolean isValidJSKey(String key)
+    {
+	APIKey apiKey = dao.ofy().query(APIKey.class).filter("js_api_key", key).get();
+
+	if (apiKey != null)
+	    return true;
+	return false;
+    }
+
+    /**
+     * Updates the allowed_domains field of APIKey object
+     * 
+     * @param apiKey
+     * @return
+     */
+    public static APIKey updateAllowedDomains(APIKey apiKey)
+    {
+	APIKey key = getAPIKey();
+	key.allowed_domains = apiKey.allowed_domains;
+	dao.put(key);
+	return key;
     }
 }
