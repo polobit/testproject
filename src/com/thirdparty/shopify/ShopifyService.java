@@ -7,6 +7,11 @@ import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 
+/**
+ * 
+ * @author jitendra
+ * 
+ */
 public class ShopifyService
 {
 	private ShopifyAgileMapper mapper = new ShopifyAgileMapper();
@@ -19,7 +24,7 @@ public class ShopifyService
 			for (int i = 0; i < customers.length(); i++)
 			{
 				JSONObject customer = new JSONObject(customers.get(i).toString());
-				System.out.println(customer.get("email"));
+				// System.out.println(customer.get("email"));
 				mapper.saveCustomer(prefs, customer, key);
 
 			}

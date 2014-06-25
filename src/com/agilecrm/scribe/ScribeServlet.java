@@ -76,8 +76,7 @@ public class ScribeServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{
-		/*code to handle the request from facebook while adding and share posts */
-		
+		//handle facebook popup windows
 		if("facebook".equalsIgnoreCase(req.getParameter("act")))
 		{
 			PrintWriter out = resp.getWriter();  

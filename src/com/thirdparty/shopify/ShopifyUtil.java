@@ -4,15 +4,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,7 +20,13 @@ import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.forms.FormsUtil;
 import com.thirdparty.google.ContactPrefs;
-
+import com.thirdparty.google.ContactPrefs.Type;
+import com.thirdparty.google.utl.ContactPrefsUtil;
+/**
+ * 
+ * @author jitendra
+ *
+ */
 public class ShopifyUtil
 {
 
@@ -131,33 +135,6 @@ public class ShopifyUtil
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public static void main(String[] args)
-	{
-		// TODO Auto-generated method stub
-
-		String url = "https://0f99730e50a2493463d263f6f6003622:1a27610dee9600dd8366bf76d90b5589@shopatmyspace.myshopify.com/admin/customers.json";
-		try
-		{
-
-			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet(url);
-			HttpResponse response = client.execute(get);
-			BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-			String line;
-			while ((line = br.readLine()) != null)
-			{
-				System.out.println(line);
-				// shopify.save(new JSONObject(line),key);
-			}
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
 	}
 
 	public static void importCustomer(ContactPrefs prefs, Key<DomainUser> key)
@@ -313,6 +290,72 @@ public class ShopifyUtil
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	public static void sync()
+	{
+		ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
+		String d = df.format(new Date());
+
+		if (prefs != null)
+		{
+
+			StringBuilder url = new StringBuilder();
+			url.append("https://").append(prefs.apiKey + ":").append(prefs.password).append("@" + prefs.userName)
+					.append("/admin/customers.json?created_at_min=").append(d);
+
+			/***
+			 * calculating total records in shopify database
+			 * <p>
+			 * shopify api show data pagewise and each can hold max 250 records
+			 * </p>
+			 */
+			int total_records = getCount(prefs);
+			int page_size = 250;
+			int pages = (int) Math.ceil(total_records / page_size);
+			int current_page = 1;
+			/*
+			 */
+			try
+			{
+
+				while (current_page <= pages)
+				{
+					JSONObject customer = getObject(prefs, url.toString());
+					JSONArray arr = customer.getJSONArray("customers");
+					shopifyService.save(prefs, arr, prefs.getDomainUser());
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	public static void main(String[] args)
+	{
+		// TODO Auto-generated method stub
+
+		/*
+		 * String url =
+		 * "https://0f99730e50a2493463d263f6f6003622:1a27610dee9600dd8366bf76d90b5589@shopatmyspace.myshopify.com/admin/customers.json"
+		 * ; try {
+		 * 
+		 * HttpClient client = new DefaultHttpClient(); HttpGet get = new
+		 * HttpGet(url); HttpResponse response = client.execute(get);
+		 * BufferedReader br = new BufferedReader(new
+		 * InputStreamReader(response.getEntity().getContent())); String line;
+		 * while ((line = br.readLine()) != null) { System.out.println(line); //
+		 * shopify.save(new JSONObject(line),key); }
+		 * 
+		 * } catch (Exception e) { e.printStackTrace(); }
+		 */
+		// sync();
+
 	}
 
 }

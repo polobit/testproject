@@ -463,7 +463,7 @@ public class TaskUtil
      * @return List of tasks
      */
     public static List<Task> getTasksRelatedToOwnerOfTypeAndDue(String criteria, String type, String owner,
-	    boolean pending, Integer max, String cursor)
+	    boolean pending, Integer max, String cursor, Long startTime, Long endTime)
     {
 	try
 	{
@@ -471,46 +471,24 @@ public class TaskUtil
 	    Query<Task> query = dao.ofy().query(Task.class);
 
 	    System.out.println(criteria + " " + type);
-
-	    // Gets Today's date
-	    DateUtil startDateUtil = new DateUtil();
-	    Long startTime = startDateUtil.toMidnight().getTime().getTime() / 1000;
-
-	    System.out.println("startDateUtil: " + startDateUtil);
-	    System.out.println("startDateUtil.toMidnight().getTime().getTime(): "
-		    + startDateUtil.toMidnight().getTime().getTime());
-	    System.out.println("startDateUtil.toMidnight(): " + startDateUtil.toMidnight());
 	    System.out.println("startTime: " + startTime);
+	    System.out.println("endTime: " + endTime);
 
 	    if (type.equalsIgnoreCase("OVERDUE"))
 	    {
-		System.out.println("check for " + startTime);
 		searchMap.put("due <", startTime);
 	    }
 	    else if (type.equalsIgnoreCase("TODAY"))
 	    {
-		System.out.println("check for " + startTime);
 		searchMap.put("due", startTime);
 	    }
 	    else if (type.equalsIgnoreCase("TOMORROW"))
 	    {
-		// Gets Date after numDays days
-		DateUtil endDateUtil = new DateUtil();
-		Long endTime = endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000;
-
-		System.out.println("check for " + startTime + " " + endTime);
-
 		searchMap.put("due >", startTime);
 		searchMap.put("due <=", endTime);
 	    }
 	    else if (type.equalsIgnoreCase("LATER"))
 	    {
-		// Gets Date after numDays days
-		DateUtil endDateUtil = new DateUtil();
-		Long endTime = endDateUtil.addDays(1).toMidnight().getTime().getTime() / 1000;
-
-		System.out.println("check for " + startTime + " " + endTime);
-
 		searchMap.put("due >", endTime);
 	    }
 

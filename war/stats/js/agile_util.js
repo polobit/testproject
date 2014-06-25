@@ -18,30 +18,3 @@ function agile_isKnown(email, success_callback, error_callback, a, b)
 		success_callback();
 	} });
 }
-
-/**
- * Function to authenticate domain
- * 
- * @param callback
- * @param a
- * @param b
- */
-function agile_isAuth(callback, a, b)
-{
-	agile_accessDomains({ success : function(data)
-	{
-		var i = data.length;
-		while (i > 0)
-		{
-			if (data[--i].accessDomains == window.location.hostname)
-			{
-				callback(a, b);
-				return;
-			}
-		}
-		console.log("unauthenticated");
-	}, error : function(data)
-	{
-		console.log("unauthenticated");
-	} });
-}

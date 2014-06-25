@@ -12,20 +12,43 @@
         {{#if this.length}}
 		{{add_tag "Web Rules"}}
         <table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/webrule/bulk">
-			<col width="30px"><col width="65%"><col width="20%"><col width="10%"><!--<col width="5%">-->
+			<col width="30px"><col width="65%"><col width="20%"><col width="10%"><col width="5%">
             <thead>
                 <tr>
                     <th>Name</th>
 					<th>Action</th>
 					<th></th>
-					<!--<th></th>-->
+					<th></th>
                 </tr>
             </thead>
-            <tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/">
+            <tbody class="webrule-sortable" id="webrule-model-list" route="webrule-edit/" style="margin:20px 0px;">
             </tbody>
         </table>
 		{{else}}
-			<div id="slate"></div>
+			<div class="slate">
+   				<div class="slate-content">
+					<div class="box-left">
+ 	           			<img alt="Clipboard" src="/img/clipboard.png">
+					</div>
+					<div class="box-right">
+            			<h3>Engage visitors on website</h3>
+            			<div class="text">Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href="https://github.com/agilecrm/agile-popups">documentation</a></div>
+            			<a href="#webrules-add" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Web Rule</a><br/>
+						<p>Please copy this script code before the </body> tag for Web Rules to work</p>
+						<div><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
+<pre class="prettyprint" id="api_track_webrules_code">
+&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+ _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
+ _agile.track_page_view();
+ _agile_execute_web_rules();
+&lt;/script&gt;
+</pre>
+						</div>
+					</div>
+    			</div>
+			</div>
 		{{/if}}
     </div>
     <div class="span3">
@@ -35,6 +58,8 @@
             </h3><br />
 			<div>To start using Web Rules, please setup our <a href="#analytics-code/analytics">tracking code</a>.</div>
             <br />
+			<p style="margin:-10px;"><iframe width="100%" height="200" src="//www.youtube.com/embed/XGouq0B_7G8" frameborder="0" allowfullscreen></iframe></p>
+			<br/>
             <h3>
                 What are Web Rules?
             </h3>
@@ -67,8 +92,8 @@ For example, when visitors are about to leave your website, show them a sign-up 
 {{/if}}
 </div>
 </td>
-<!--<td>
+<td>
 <div style="visibility:hidden;"><i class="icon-move"></i></div>
-</td>-->
+</td>
 
 </script>

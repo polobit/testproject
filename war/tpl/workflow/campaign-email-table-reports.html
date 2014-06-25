@@ -5,15 +5,15 @@
 			<tr>
 				<th>Emails Sent</th>
 				<th>Emails Opened</th>
-				<th>Clicked</th>
+				<th>Click (Unique)</th>
 				<th>Unsubscribed</th>
-				<th>Hard Bounce</th>
-				<th>Soft Bounce</th>
+				<th>Hard Bounces</th>
+				<th>Soft Bounces</th>
 			</tr>
             <tr>
 				<td>{{#if sent}}{{sent}}{{else}} - {{/if}}</td>
 				<td>{{#if opened}}{{opened}} {{else}} - {{/if}}</td>
-				<td>{{#if unique_clicks}}{{unique_clicks}} ({{total_clicks}}) {{else}} - {{/if}}</td>
+				<td>{{#if unique_clicks}} {{total_clicks}} ({{unique_clicks}}) {{else}} - {{/if}}</td>
 				<td>{{#if unsubscribed}}{{unsubscribed}} {{else}} - {{/if}}</td>
 				<td>{{#if hard_bounce}}{{hard_bounce}} {{else}} - {{/if}}</td>
 				<td>{{#if soft_bounce}}{{soft_bounce}} {{else}} - {{/if}}</td>

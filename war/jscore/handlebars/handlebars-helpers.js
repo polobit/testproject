@@ -2387,7 +2387,7 @@ $(function()
 	    return "Unsubscribed";
 	
 	if (hash.indexOf("hardbounced") != -1)
-	    return "HardBounced";
+	    return "Hard Bounced";
     });
 
     Handlebars.registerHelper("check_plan", function(plan, options)

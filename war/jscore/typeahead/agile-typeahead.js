@@ -38,8 +38,13 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
 
     var CONTACTS = {};
 
-    $('#' + id, el).typeahead({
-    	
+   var el_typeahead =  $('#' + id, el).typeahead({
+	   
+	    // Time delay to start query
+	   	timedelay : 250,
+	   	
+	   	// Holds current search query xhr object
+	   	searchAJAXRequest : undefined,
         source: function (query, process) {
         	
         	
@@ -49,26 +54,9 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         	/* Stores type ahead object in temporary variable */
         	var that = this;
 
-        	that.$menu.empty();
-        	/* Sets css to html data to be displayed */
-        	that.$menu.css("width", 300);
-
-     		/*
-        	 * Calls render because menu needs to be initialized
-        	 * even before first result is fetched to show
-        	 * loading 
-        	 */
-        
-
-        	/*
-        	 * If loading image is not available in menu then
-        	 * appends it to menu
-        	 */
-        	if (!$(this.$menu.find('li').last()).hasClass('loading-results')){
-        			that.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
-        			that.render();
-        	}
-
+        	
+        	this.options.showLoading(this);
+        	
         	// Drop down with loading image is shown
         	//this.shown = true;
 
@@ -78,7 +66,19 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         	
         	if(urlParams && urlParams.length)type_url='&'+urlParams;
         	
-        	$.getJSON(url + query+"?page_size=10"+type_url, function (data){
+        	
+        	// Sends search request and holds request object, which can be reference to cancel request if there is any new request
+        	this.options.searchAJAXRequest = $.getJSON(url + query+"?page_size=10"+type_url, function (data){
+        		
+        		var current_query = $('#' + id, el).val(); 
+        		
+        		// If current query is not equal to that of token in search url, results are not shown (never occurs now as it is handled in keyup function)
+        		if(query != current_query)
+        		{
+        			return;
+        		}
+        		
+        		
 
         	    /*
         		 * Stores query results to use them in updater and render
@@ -126,6 +126,29 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         		 */
         		process(items_list);
         	});
+        },
+        showLoading : function(self)
+        {
+        	self.$menu.empty();
+        	/* Sets css to html data to be displayed */
+        	self.$menu.css("width", 300);
+        	
+     		/*
+        	 * Calls render because menu needs to be initialized
+        	 * even before first result is fetched to show
+        	 * loading 
+        	 */
+        
+
+        	/*
+        	 * If loading image is not available in menu then
+        	 * appends it to menu
+        	 */
+        	if (!$(self.$menu.find('li').last()).hasClass('loading-results')){
+        		self.$menu.html('<li class="divider"></li><li class="loading-results"><p align="center">' + LOADING_ON_CURSOR + '</p></li>');
+        		self.render();
+        	}
+        	
         },
         
         /**
@@ -224,6 +247,55 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
             		$('.tags', el).append('<li class="tag"  style="display: inline-block;" data="' + TYPEHEAD_TAGS[items] + '"><a href="#contact/' + TYPEHEAD_TAGS[items] +'">' + items_temp + '</a><a class="close" id="remove_tag">&times</a></li>');
             	}
         },
+        // Needs to be overridden to set timedelay on search
+        keyup: function (e) {
+            switch(e.keyCode) {
+              case 40: // down arrow
+              case 38: // up arrow
+              case 16: // shift
+              case 17: // ctrl
+              case 18: // alt
+                break
+
+              case 9: // tab
+              case 13: // enter
+                if (!this.shown) return
+                this.select()
+                break
+
+              case 27: // escape
+                if (!this.shown) return
+                this.hide()
+                break
+
+              default:
+            	 {
+            		// Checks if there is previous request and cancels it
+            	  if(this.options.searchAJAXRequest != null && (this.options.searchAJAXRequest && this.options.searchAJAXRequest.readystate != 4)) {
+                		this.options.searchAJAXRequest.abort();
+                       }
+                	
+                  if (this.timer) clearTimeout(this.timer);
+                  var self = this;
+                  
+                  // Reset results
+                  CONTACTS = {};
+                  
+                  /*
+              	 * If loading image is not available in menu then
+              	 * appends it to menu
+              	 */
+                  this.options.showLoading(self);
+                  
+                  this.timer = setTimeout(function () { self.lookup(); }, this.options.timedelay);
+            	 }
+            }
+
+            e.stopPropagation()
+            e.preventDefault()
+        }
+
+        , 
         
         // Hides the results list
         hide: function () {
@@ -244,6 +316,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         },
         minLength: 2,
     })
+    
 }
 
 // Removes tags ("Related to" field contacts)
