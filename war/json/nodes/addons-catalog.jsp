@@ -9,7 +9,7 @@
 
 <%
     // Get Catalog
-    String[] EMAIL_CATALOG = {"json/nodes/email/send_email.jsp","json/nodes/email/ab.js", "json/nodes/common/wait.js", "json/nodes/email/clicked.js","json/nodes/email/opened.js","json/nodes/email/replied.js"};
+    String[] EMAIL_CATALOG = {"json/nodes/email/send_email.jsp","json/nodes/email/ab.js", "json/nodes/common/wait.js", "json/nodes/email/clicked.js","json/nodes/email/opened.js"};
     String[] UTILITIES_CATALOG = {"json/nodes/common/close_case.js","json/nodes/crm/has_deal.js","json/nodes/common/change_deal_milestone.js","json/nodes/common/check_tags.js","json/nodes/crm/set_owner.jsp","json/nodes/crm/transfer.jsp"};
     /* String[] MOBILE_CATALOG = { "json/nodes/sms/sendmessage.js",
 		    "json/nodes/sms/getmessage.js", "json/nodes/sms/menusms.js" };  */
@@ -44,6 +44,8 @@
 	
 	if(cachedAddons != null)
 	{
+	    System.out.println("Addon nodes obtained from cache...");
+	    
 	    jsonArray = new JSONArray(cachedAddons);
 	    out.println(jsonArray);
 	    return;
@@ -109,7 +111,7 @@
 
     try
 	{
-	    // Add nodes array to cache to compare
+	    // Add nodes array to cache
 	 	CacheUtil.setCache("addons_"+type, jsonArray.toString());
 	}
 	catch (Exception e)

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.NamespaceManager;
@@ -118,9 +119,11 @@ public class EmailLinksConversion
 		// Replaces valid http urls with agile tracking links
 		if (isSpecialLink(url))
 		{
+
 		    // Appends to StringBuffer
-		    m.appendReplacement(stringBuffer, domainURL + "/click?u=" + URLEncoder.encode(url, "UTF-8") + cid
-			    + sid + push);
+		    m.appendReplacement(stringBuffer,
+			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
+				    + cid + sid + push);
 		}
 	    }
 
