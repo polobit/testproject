@@ -1,6 +1,7 @@
 package com.agilecrm.scribe;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -75,6 +76,18 @@ public class ScribeServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{
+		/*code to handle the request from facebook while adding and share posts */
+		
+		if("facebook".equalsIgnoreCase(req.getParameter("act")))
+		{
+			PrintWriter out = resp.getWriter();  
+			resp.setContentType("text/html");  
+			out.println("<script type=\"text/javascript\">");  
+			out.println("this.close()");  
+			out.println("</script>");
+			return;
+		}
+		
 		/*
 		 * OAuth1.0 - Check if it is first time or returning from OAuth1.0
 		 * authentication.If token and verifier is present, we just store or
