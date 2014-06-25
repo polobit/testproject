@@ -1,43 +1,88 @@
-<script id="onboarding-saas-template" type="text/html">
-<div class="row">
-    <div class="span12">
-        <div class="page-header">
-            <h1>&nbsp;Steps to Configure</h1>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="span12">
-		<div class="tabbable tabs-left">
-   				<ul class="nav nav-tabs nav-stacked" style="width:50%;">
-   					<li class="active" style="background-color:#eee;margin: -3px 0px;">
-      					<a href="#" id="track_visitors" data-toggle="tab">
-         					<h3>1 - Track Visitors</h3>
-							<p style="color:#555">Track visitors on your website and get insights into user activity.<br/>How to setup?  Watch a video or check the documentation.</p>
-      					</a>
-   					</li>
-   					<li style="background-color:#eee;margin: -3px 0px;"><a href="#" id="sync_new_signups" data-toggle="tab">
-							<h3>2 - Sync new Signups</h3>
-							<p style="color:#555">Sync all your customer data into agile automatically along with their activity.<br/>How to link? Watch a video or check the documentation.</p>
-						</a>
-					</li>
-   					<li style="background-color:#eee;margin: -3px 0px;"><a href="#" id="automate_email" data-toggle="tab">
-							<h3>3 - Automate Email Messages</h3>
-							<p style="color:#555">Agile can send relevant messages to your signups to come back to your site by sending the most appropriate emails.<br/>How? Watch a video or start by creating a campaign</p>
-						</a>
-					</li>
-   					<li style="background-color:#eee;margin: -3px 0px;"><a href="#" id="app_messages_popups" data-toggle="tab">
-							<h3>4 - In-app Messages & Web popups</h3>
-							<p style="color:#555">Engage your visitors on your website or app with timely popups based on what they do or suggest things to be done.<br/>How? Watch a video or start by creating a Web Rule</p>
-						</a>
-					</li>
-				</ul>
-				<div class="tab-content">
-   					<div class="tab-pane fade in active" id="setupContent">
-      					<p><iframe src="//www.youtube.com/embed/CWMelsl70H4" height="390" width="560" allowfullscreen="" frameborder="0"></iframe></p>
-   					</div>
-			   </div>
+ <script id="onboarding-saas-template" type="text/html">
+	<div class="row">
+		<div class="span12">
+			<div class="page-header">
+				<h1>&nbsp;Agile CRM for SaaS Companies</h1>
+			</div>
 		</div>
 	</div>
-</div>
+	
+	<div  class="row" style="margin:0px 250px 0px 150px">
+			<div   class = "col-md-6"  style ="width:335px !important;height:260px;margin: 0px 0px 0px 0px;float:left;">  <iframe width="335" height="260" style = "overflow:auto;"
+				src="//www.youtube.com/embed/CWMelsl70H4" frameborder="0"
+				allowfullscreen></iframe>
+			 </div>
+    		<div  class = "col-md-6" style="width:335px!important;height:260px;margin: 0px 0px 0px 0px;float:right" > <iframe src="https://www.slideshare.net/slideshow/embed_code/32115990" width="335" height="260" frameborder="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; max-width: 100%; float:right;" allowfullscreen> </iframe> 
+			</div>
+	</div>
+   
+	<ul style="width: 60%; margin: 0px 0px 0px 0px;">
+		<div class="row">
+			<div class="span12">
+				<br><h2>&nbsp;Things you need to do</h2><br>
+			</div>
+		</div>
+		<li class="active" style="background-color: #ffff; list-style-type: none;">
+			<h3>
+				<span class="badge" style="font-size: 16px; font-weight: 700; border-radius: 10px;">1</span>
+							 &nbsp;Track Visitors
+			</h3>
+			<p style="color: #555;  padding-left: 40px;">Track visitors on your website or app and get insights into user activity.
+						Setup the following tracking code on your website. 
+			</p>
+			<div class="clearfix"></div>
+			<div style="padding-left:40px;">
+				<a class="right" id="saas_api_track_code_icon"
+							style="margin: 5px 10px 0px 0px; cursor: pointer; position: absolute; left: 740px;"><i
+							class="icon-copy"></i>
+				</a>
+				<pre class="prettyprint" id="saas_api_track_code" style="height: 120px;margin:0px 0px 0px 0px;">&lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
+&lt;/script&gt;
+&lt;script type="text/javascript" &gt;
+ _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
+ _agile.track_page_view();
+&lt;/script&gt;
+				</pre>
+				<p style="color: #555;  padding-left: 0px;">Need help? Check the <a id = "documentation" href = "https://github.com/agilecrm/javascript-api#setting-api--analytics/" target="_blank">documentation</a>.</p>
+			</div>
+		</li><br>
+		<li style="background-color: #ffff; list-style-type: none;">
+			<h3>
+				<span class="badge"
+					style="font-size: 16px; font-weight: 700; border-radius: 10px;">2</span>
+					&nbsp; Sync new Signups
+			</h3>
+						
+			<p style="color: #555; padding-left: 40px;">
+				Sync all your customer data into agile automatically along with their activity. Add new signups as contacts and start engaging with them.
+				Use our <a id="webToLead" name="webToLead" href="#integrations">web to lead</a>
+				 integrations or  <a id="JsApi" name="JsApi" href="https://github.com/agilecrm/javascript-api#2contact" target="_blank">JS API</a> to set up contacts sync.
+			</p>
+		</li><br>
+		<li style="background-color: #ffff; list-style-type: none;">
+			<h3>
+				<span class="badge"
+					style="font-size: 16px; font-weight: 700; border-radius: 10px;">3</span>
+					&nbsp; Automate Email Messages
+			</h3>
+			<p style="color: #555;  padding-left: 40px;">Agile can send relevant messages to your users based on what they do (or don’t do) on your site or application. Start engaging your users on email by creating a <a id= "campaign" href = "#workflows">campaign</a>.</p>
+			<p style="margin:0px 0px 0px 160px">
+				<iframe width="335" height="260" src="//www.youtube.com/embed/RXOqougExkM" frameborder="0" allowfullscreen></iframe>
+			</p>
+		</li><br>
+		<li style="background-color: #ffff; list-style-type: none; ">
+			<h3>
+				<span class="badge"
+					style="font-size: 16px; font-weight: 700; border-radius: 10px;">4</span>
+							 &nbsp;In-app Messages & Web popups
+			</h3>
+			<p style="color: #555; padding-left: 40px; ">Engage your visitors on your website or app with timely popups. Suggest them things to do, show signup forms, or promotional offers.
+				Start by creating a <a id="web-rules" href="#web-rules">Web Rule</a> or watch the video.
+			</p>
+			<p style="margin:0px 0px 0px 160px">
+				<iframe width="335" height="260" src="//www.youtube.com/embed/XGouq0B_7G8" frameborder="0" allowfullscreen></iframe>
+			</p>
+						
+		</li><br>
+	</ul>
 </script>
