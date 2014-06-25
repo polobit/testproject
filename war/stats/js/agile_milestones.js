@@ -16,7 +16,5 @@ function agile_getMilestones(callback)
 	var agile_url = agile_id.getURL() + "/contact/get-milestones?callback=?&id=" + agile_id.get();
 	
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }

@@ -1502,6 +1502,7 @@ $(function()
 
     Handlebars.registerHelper("getCurrentDomain", function(options)
     {
+    	
 	var url = window.location.host;
 
 	var exp = /(\.)/;
@@ -2480,5 +2481,14 @@ $(function()
 	return i[0]+"-"+i[2]+"-"+i[1];
     });
     
+    Handlebars.registerHelper('fetchXeroUser', function(data)
+    {
+    	    			return JSON.parse(data).xeroemail;
+    });
     
-});
+    Handlebars.registerHelper('getfbreturndomain', function(data)
+    {
+    	var arr = window.location.href.split('/')
+    	return arr[2];
+    });
+ });

@@ -87,7 +87,7 @@ public class DefaultWidgets
 		widgets.add(new Widget(
 				"Facebook",
 				"Facebook is a social utility that connects people with friends and others who work, study and live around them",
-				"/widgets/facebook.js", "/widgets/facebookIcon.jpg", "/widgets/fb.logo.lg.png", null, WidgetType.SOCIAL));
+				"/widgets/facebook.js", "/widgets/facebookIcon.jpg", "/widgets/Fb24x24icon.png", null, WidgetType.SOCIAL));
 
 		System.out.println("Default widgets ");
 		System.out.println(widgets);

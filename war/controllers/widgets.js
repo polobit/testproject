@@ -533,8 +533,8 @@ var WidgetsRouter = Backbone.Router
 		if (!id)
 		    show_set_up_widget("Facebook", 'facebook-login', '/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.href) + "/facebook");
 		else
-		// return;
-		{}
+		{
+		}
 	    },
 
 	    /**

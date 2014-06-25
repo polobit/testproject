@@ -351,4 +351,15 @@ public class APIKey
 	dao.put(key);
 	return key;
     }
+
+    /**
+     * Get allowed_domains field of APIKey Object
+     * 
+     * @return
+     */
+    public static String getAllowedDomains()
+    {
+	APIKey key = getAPIKey();
+	return key.allowed_domains;
+    }
 }

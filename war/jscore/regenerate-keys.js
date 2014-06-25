@@ -10,7 +10,7 @@ $(function(){
 					type : 'GET',
 					dataType  : 'json',
 					success : function(data){
-						$('#api_key_code')[0].innerHTML = data.api_key;
+						$("#admin-prefs-tabs-content").html(getTemplate("admin-settings-api-key-model",data));
 					}
 				});
 			}
@@ -27,7 +27,7 @@ $(function(){
 					type : 'GET',
 					dataType : 'json',
 					success : function(data){
-						$("#jsapi_key_code")[0].innerHTML = data.js_api_key;
+						$("#admin-prefs-tabs-content").html(getTemplate("admin-settings-api-key-model",data));
 					}
 				});
 			}
