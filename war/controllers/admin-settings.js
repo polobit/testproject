@@ -210,7 +210,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		head.js(LIB_PATH + 'lib/prettify-min.js', LIB_PATH + 'lib/zeroclipboard/ZeroClipboard.js', function()
+		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
@@ -220,9 +220,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$(el).find('#APITab a[href="#'+ id +'"]').trigger('click');
 				}
 				
-				initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-				initZeroClipboard("api_key_code_icon", "api_key_code");
-				initZeroClipboard("api_track_code_icon", "api_track_code");
+				//initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
+				//initZeroClipboard("api_key_code_icon", "api_key_code");
+				//initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
 			$('#content').find('#admin-prefs-tabs-content').html(view.el);
