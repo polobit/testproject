@@ -179,8 +179,9 @@ var contact_details_tab = {
 	             });
 	            }
 			});
+	       
+	        $('#mail', App_Contacts.contactDetailView.el).html(mailsView.render().el);
 	        mailsView.collection.fetch();
-	        $('#mail', App_Contacts.contactDetailView.el).html(mailsView.el);
 		},
 		load_stats : function()
 		{

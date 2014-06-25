@@ -13,13 +13,13 @@ var WebreportsRouter = Backbone.Router.extend({
 		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr',
 			sortKey : 'position', postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/prettify-min.js', LIB_PATH + 'lib/zeroclipboard/ZeroClipboard.js', function()
+				head.js(LIB_PATH + 'lib/prettify-min.js', function()
 				{
 					enableWebruletSoring(el);
 					prettyPrint();
-					if($(el).has("#api_track_webrules_code_icon").length != 0){
+					/*if($(el).has("#api_track_webrules_code_icon").length != 0){
 						initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-					}
+					}*/
 				});
 			}	
 		});

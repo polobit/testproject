@@ -7,9 +7,7 @@ function agile_webRules(callback)
 	var agile_url = agile_id.getURL() + "/web-rules?callback=?&id=" + agile_id.get();
 
 	// Callback
-	agile_isAuth(function(){
-		agile_json(agile_url, callback);
-		}, agile_url, callback);
+	agile_json(agile_url, callback);
 }
 /**
  * Download all web rules and execute them
