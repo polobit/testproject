@@ -6,7 +6,6 @@
 function agile_deleteTagsFromCookie(tags)
 {
 	var cookie_tags = agile_read_cookie("agile-tags");
-	;
 	var cookie_tags_array = cookie_tags.split(",");
 	var tags_array = tags.split(",");
 	for ( var i = 0; i < cookie_tags_array.length; i++)
