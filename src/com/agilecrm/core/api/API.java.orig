@@ -38,14 +38,32 @@ public class API
 	return APIKey.getAPIKey();
     }
 
+<<<<<<< HEAD
+    // Regenerate API Key
+    @Path("api-key/regenerate/api-key")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public APIKey regenerateAPIKey()
+=======
     @Path("api-key/key")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public APIKey generateAPIKey()
+>>>>>>> ad9d5e5bb8fe840bba242481b88cccf8e8ce22b2
     {
 	return APIKey.regenerateAPIKey();
     }
 
+<<<<<<< HEAD
+    // Regenerate JS API Key
+    @Path("api-key/regenerate/js-api-key")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public APIKey regenerateJSAPIKey()
+    {
+	return APIKey.regenerateJSAPIKey();
+    }
+=======
     @Path("api-key/jskey")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -62,4 +80,5 @@ public class API
     {
 	return APIKey.updateAllowedDomains(apiKey);
     }
+>>>>>>> ad9d5e5bb8fe840bba242481b88cccf8e8ce22b2
 }

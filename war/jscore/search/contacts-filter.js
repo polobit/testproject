@@ -167,8 +167,10 @@ function setupContactFilterList(cel, tag_id)
 	if (tag_id)
 		$('.filter-criteria', cel)
 				.html(
-						'<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + tag_id + '<a class="close default_contact_remove_tag" style="margin-left:5px">&times</a></span></li></ul>')
+						'<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + tag_id + '<a class="close default_contact_remove_tag" style="margin-left:5px">&times</a></span></li></ul>').attr("_filter", tag_id);
+						
 
+	var filter_id = null;
 	contactFiltersListView = new Base_Collection_View(
 			{
 				url : '/core/api/filters',
@@ -198,7 +200,11 @@ function setupContactFilterList(cel, tag_id)
 						// If is not system type get the name of the filter from
 						// id(from cookie)
 						else if (filter_name.indexOf("system") < 0)
+						{
+							filter_id = filter_name;
 							filter_name = contactFiltersListView.collection.get(filter_name).toJSON().name;
+							
+						}
 
 						el.find('.filter-dropdown').append(filter_name);
 					}
@@ -208,9 +214,16 @@ function setupContactFilterList(cel, tag_id)
 					if (!filter_name)
 						return;
 
+					
 					$('.filter-criteria', cel)
 							.html(
-									'<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + filter_name + '<a class="close default_filter" style="margin-left:5px;">&times</a></span></li></ul>')
+									'<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + filter_name + '<a class="close default_filter" style="margin-left:5px;">&times</a></span></li></ul>');
+					
+					if(filter_id)
+						$('.filter-criteria', cel).attr("_filter", filter_id);
+					else
+						$('.filter-criteria', cel).attr("_filter", filter_name);
+						
 				} });
 
 	// Fetchs filters
