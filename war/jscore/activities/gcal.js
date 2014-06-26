@@ -85,6 +85,7 @@ function _fetchGCAndAddEvents(sourceOptions, start, end)
 		for (var i = 0; i < resp.items.length; i++) {	
 			var fc_event = google2fcEvent(resp.items[i]);
 			
+			if(fc_event)
 			// Add event
 			$('#calendar').fullCalendar( 'renderEvent', fc_event  )
 		}
@@ -99,7 +100,7 @@ function ts2googleDate(ts) {
 // Convert Google Event to Full Calendar Event  
 function google2fcEvent(google) {
     var fc = {
-      title: google.summary,
+      title: google.summary || "No title",
       start: google.start.date || google.start.dateTime,
       end: google.end.date || google.end.dateTime,
       allDay: google.start.date ? true : false,

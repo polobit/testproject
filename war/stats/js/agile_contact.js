@@ -50,6 +50,7 @@ function agile_createContact(data, callback)
 	}
 	if (tags_from_cookie)
 	{
+		agile_delete_cookie("agile-tags");
 		var tags_string = tags_from_cookie.trim().replace("/ /g", " ");
 		tags_string = tags_string.replace("/, /g", ",");
 		var tags_array = tags_string.split(",");
