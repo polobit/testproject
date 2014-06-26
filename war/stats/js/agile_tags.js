@@ -24,6 +24,12 @@ function agile_addTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			if(agile_read_cookie("agile-tags"))
+				{
+					agile_addTagsToCookie(tags);
+				}
+			else
+				agile_create_cookie("agile-tags", tags, 365 * 5);
 			return;
 		}
 		else
@@ -35,14 +41,8 @@ function agile_addTag(tags, callback, email)
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
 	
-	agile_isKnown(email, function(){
-		agile_create_cookie("agile-tags", tags, 365 * 5);
-		return;
-	}, function(){
-
-		// Callback
-		agile_json(agile_url, callback);
-	}, agile_url, callback);
+	// Callback
+	agile_json(agile_url, callback);
 }
 
 /**
@@ -66,6 +66,10 @@ function agile_removeTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			if(agile_read_cookie("agile-tags")){
+				agile_deleteTagsFromCookie(tags);
+				return;
+			}
 			return;
 		}
 		else

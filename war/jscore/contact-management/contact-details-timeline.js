@@ -625,7 +625,7 @@ function customize_isotope()
  * @param el
  * 			html object of contact detail view
  */
-function remove_loading_img(el){
+function loading_img(el){
 	$('#time-line', el).find('.loading-img').remove();
 }
 
@@ -780,6 +780,9 @@ function remove_loading_img(el){
 
  function addTagToTimelineDynamically(tags)
  {
+	 if(!timelineView || !timelineView.collection)
+		 return;
+	 
  	if (timelineView.collection.length == 0)
  	{
  		$.each(tags, function(index, tag)
@@ -882,11 +885,21 @@ function remove_loading_img(el){
   */
  function removeItemFromTimeline(element)
  {
- 	console.log(element);
- 	$('#timeline').isotope('remove', element, function()
- 	{
- 		$("#timeline").isotope( 'reLayout')
- 	});
+ 
+	 try
+	 {
+		 var element = $('#timeline');
+		 if(element.length == 0)
+			 return;
+		 $(element).isotope('remove', element, function()
+				 {
+			 		$("#timeline").isotope( 'reLayout')
+				 });
+	 }
+	 catch(err)
+	 {
+		 console.log(err);
+	 }
  }
 
 /**
