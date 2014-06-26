@@ -51,6 +51,7 @@ function enableWebrulesSorting(el)
 				      $(this).width($originals.eq(index).width());
 				    });
 				    return $helper;
+
 				}
 
 		});
@@ -70,6 +71,7 @@ function enableWebrulesSorting(el)
 			$('.webrule-sortable > tr', el).each(function(index, element)
 			{
 				if(!$(element).hasClass("pseduo-row")){
+
 
 					var model_id = $(element).find('.data').attr('data');
 
