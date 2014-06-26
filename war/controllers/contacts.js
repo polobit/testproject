@@ -105,6 +105,7 @@ var ContactsRouter = Backbone.Router.extend({
 		// Tags, Search & default browse comes to the same function
 		if (tag_id)
 		{
+			tag_id = decodeURI(tag_id);
 
 			// erase filter cookie
 			eraseCookie('contact_filter');
