@@ -1177,7 +1177,7 @@ time {
 }
 
 /** Webrules sorting **/
-#webrule-model-list > tr:last-child td{
+#webrule-model-list > tr.pseduo-row td{
 	border-top:0px #fff!important;
 	background-color:#fff!important;
 }
@@ -1186,7 +1186,7 @@ time {
 	display:none;
 }
 #webrule-model-list tr:hover td:last-child div { 
-	display:inline-block;
+	display:block!important;
 }
 
 /** Google apps **/

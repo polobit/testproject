@@ -12,7 +12,7 @@
         {{#if this.length}}
 		{{add_tag "Web Rules"}}
         <table class="table table-bordered table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/webrule/bulk">
-			<col width="30px"><col width="65%"><col width="20%"><col width="10%"><col width="5%">
+			<col width="30px"><col width="35%"><col width="50%"><col width="10%"><col width="5%">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -33,8 +33,8 @@
 					<div class="box-right">
             			<h3>Engage visitors on website</h3>
             			<div class="text">Define web rules and enagage your website visitors with smart popups, or perform automatic actions when contacts do (or don't do) something in your application or website. Checkout the <a href="https://github.com/agilecrm/agile-popups">documentation</a></div>
-            			<a href="#webrules-add" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Web Rule</a><br/>
-						<p>Please copy this script code before the </body> tag for Web Rules to work</p>
+            			<a href="#webrules-add" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i>  Add Web Rule</a><br/><br/>
+						<p>For Web Rules to work, Please copy and paste the code below on your web pages before the <code style="color:black;">&lt;/body&gt;</code> tag.</p>
 						<div><!--<a class="right btn" id="api_track_webrules_code_icon" style="margin:5px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
 <pre class="prettyprint" id="api_track_webrules_code">
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
@@ -93,7 +93,7 @@ For example, when visitors are about to leave your website, show them a sign-up 
 </div>
 </td>
 <td>
-<div style="display:inline-block;"><i class="icon-move"></i></div>
+<div style="display:none;"><i class="icon-move"></i></div>
 </td>
 
 </script>
