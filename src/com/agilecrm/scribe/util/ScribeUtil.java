@@ -537,8 +537,9 @@ public class ScribeUtil
 		    accessToken.getToken(), accessToken.getSecret(), "https://api.xero.com/api.xro/2.0/users", "GET",
 		    "", "XERO");
 	    JSONObject xeroProfile = new JSONObject(res);
-	    properties.put("xeroId", xeroProfile.getString("UserID"));
-	    properties.put("xeroemail", xeroProfile.getString("EmailAddress"));
+	    JSONObject js = (JSONObject) xeroProfile.getJSONArray("Users").get(0);
+	    properties.put("xeroId",js.getString("UserID"));
+	    properties.put("xeroemail",js.getString("EmailAddress"));
 	}
 	catch (JSONException e)
 	{
