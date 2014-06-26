@@ -41,9 +41,8 @@ public class WebRule
     @Unindexed
     public List<WebRuleAction> actions = new ArrayList<WebRuleAction>();
 
-    /*
-     * @NotSaved(IfDefault.class) public int position = 0;
-     */
+    @NotSaved(IfDefault.class)
+    public int position = 0;
 
     // Added to send the country to the client - this is not saved
     @NotSaved
