@@ -30,26 +30,6 @@
 
     System.out.println("Type  " + type);
     
-    try
-	{
-	
-		String cachedAddons = (String) CacheUtil.getCache("addons_" + type);
-		
-		if(cachedAddons != null)
-		{
-		    System.out.println("Addon nodes obtained from cache...");
-		    
-		    jsonArray = new JSONArray(cachedAddons);
-		    out.println(jsonArray);
-		    return;
-		}
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while getting addon nodes from cache... " + e.getMessage());
-	}
-	
     if (type.equalsIgnoreCase("crm"))
 		target = CRM_CATALOG;
    /*  else if (type.equalsIgnoreCase("mobile"))
@@ -108,17 +88,5 @@
 		
     }
 
-    try
-	{
-	    // Add nodes array to cache
-	 	CacheUtil.setCache("addons_" + type, jsonArray.toString());
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while setting addon nodes in cache... " + e.getMessage());
-	}
-   
-    
     out.println(jsonArray);
 %>
