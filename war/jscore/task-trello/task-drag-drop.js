@@ -9,7 +9,7 @@ function setup_sortable_tasks()
 				{
 					connectWith : '.task-model-list',
 					cursor : "move",
-					containment : ".list-area-wrapper",
+					/*containment : ".list-area-wrapper",*/
 					scroll : false,
 					helper : "clone",
 					placeholder : "ui-sortable-placeholder",

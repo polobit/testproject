@@ -110,6 +110,13 @@ public class ContactPrefs implements Serializable
     // domain user key
     @JsonIgnore
     private Key<DomainUser> domainUser;
+    
+    // storing no of time same pref is saved in db if count == 0 then need fresh import else sync existing contact
+    @NotSaved(IfDefault.class)
+    public Integer count;
+    
+    // String representation of formated time for syn contact query
+    public String last_update_time;
 
     public static enum Type
     {

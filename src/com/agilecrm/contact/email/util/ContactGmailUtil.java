@@ -71,7 +71,8 @@ public class ContactGmailUtil
 	if (properties.containsKey("access_token"))
 	{
 	    prefs.token = String.valueOf(properties.get("access_token"));
-	    prefs.expires_at = System.currentTimeMillis() + Integer.parseInt(String.valueOf(properties.get("expires_in")));
+	    prefs.expires_at = System.currentTimeMillis()
+		    + Integer.parseInt(String.valueOf(properties.get("expires_in"))) * 1000;
 	    prefs.save();
 	}
     }
@@ -106,14 +107,16 @@ public class ContactGmailUtil
 	// oauth2, we store secret as v2
 	if (StringUtils.equalsIgnoreCase(gmailPrefs.secret, "v2"))
 	{
-	    return "https://agile-imap.appspot.com/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail
-		    + "&host=" + URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
+	    return "https://agile-imap.appspot.com/imap?command=oauth_email2&user_name=" + URLEncoder.encode(userName)
+		    + "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(host) + "&port="
+		    + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&oauth_key="
 		    + URLEncoder.encode(oauth_key);
 	}
 
-	return "https://agile-imap.appspot.com/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName) + "&search_email=" + searchEmail + "&host="
-		+ URLEncoder.encode(host) + "&port=" + URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
-		+ URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret) + "&oauth_key=" + URLEncoder.encode(oauth_key)
-		+ "&oauth_secret=" + URLEncoder.encode(oauth_secret);
+	return "https://agile-imap.appspot.com/imap?command=oauth_email&user_name=" + URLEncoder.encode(userName)
+		+ "&search_email=" + searchEmail + "&host=" + URLEncoder.encode(host) + "&port="
+		+ URLEncoder.encode(port) + "&offset=" + offset + "&count=" + count + "&consumer_key="
+		+ URLEncoder.encode(consumerKey) + "&consumer_secret=" + URLEncoder.encode(consumerSecret)
+		+ "&oauth_key=" + URLEncoder.encode(oauth_key) + "&oauth_secret=" + URLEncoder.encode(oauth_secret);
     }
 }

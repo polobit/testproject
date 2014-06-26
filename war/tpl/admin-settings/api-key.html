@@ -43,12 +43,12 @@
       </div>
    </div>
 	<form id="allowedDomainsForm" method="get" action="" class="form-horizontal">
-    	<label>Allowed Domains<span class="field_req">*</span></label> <br/>
-		<textarea class="required" name="allowed_domains" cols="50" rows="4" id="allowed_domains">{{allowed_domains}}</textarea>
+    	<label>Allowed Domains<span class="field_req">*</span></label><br/>
+		<textarea style="margin-left: 5px;" class="required" name="allowed_domains" cols="50" rows="4" id="allowed_domains">{{allowed_domains}}</textarea><br/><br/>
+		<button style="margin-left: 5px;" type="submit" class="save btn btn-primary">Save Changes</button>
 		<input type="text" name="id" class="hidden" value={{id}}>
 		<input type="text" name="api_key" class="hidden" value={{api_key}}>
-		<input type="text" name="js_api_key" class="hidden" value={{js_api_key}}> <br/> <br/>       	
-		<button type="submit" class="save btn btn-primary">Save Changes</button>
+		<input type="text" name="js_api_key" class="hidden" value={{js_api_key}}>      	
 	</form>
 </div>
 			<!-- End of API Key templete-->

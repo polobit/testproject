@@ -132,4 +132,8 @@ var _agile = {
 		unsubscribe_campaign : function(data, callback, email)
 		{
 			agile_unsubscribeCampaign(data, callback, email);		// Unsubscribe a contact from campaign based on email
+		},
+		allowed_domains : function(callback)
+		{
+			agile_allowedDomains(callback);							// Get string of allowed domains
 		}};
