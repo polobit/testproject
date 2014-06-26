@@ -54,25 +54,33 @@ public class WebRuleAPI
      * @param webrules
      *            {@link List} of {@link WebRule}
      */
-    /*
-     * @Path("/positions")
-     * 
-     * @POST
-     * 
-     * @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-     * 
-     * @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-     * public void savePositions(List<WebRule> webrules) { if (webrules == null)
-     * return;
-     * 
-     * // UI sends only ID and Position for (WebRule webrule : webrules) {
-     * WebRule fullWebrule; try { fullWebrule = WebRule.dao.get(webrule.id);
-     * System.out.println(fullWebrule); fullWebrule.position = webrule.position;
-     * fullWebrule.save(); } catch (EntityNotFoundException e) {
-     * e.printStackTrace(); }
-     * 
-     * } }
-     */
+
+    @Path("/positions")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void savePositions(List<WebRule> webrules)
+    {
+	if (webrules == null)
+	    return;
+
+	// UI sends only ID and Position
+	for (WebRule webrule : webrules)
+	{
+	    WebRule fullWebrule;
+	    try
+	    {
+		fullWebrule = WebRule.dao.get(webrule.id);
+		System.out.println(fullWebrule);
+		fullWebrule.position = webrule.position;
+		fullWebrule.save();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+    }
 
     /**
      * Webrule delete functionality

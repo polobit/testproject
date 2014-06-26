@@ -32,8 +32,7 @@
 	overflow-y: hidden;
 	padding-bottom: 10px;
 	white-space: nowrap;
-	width: 100%;
-	overflow-y: hidden;
+	width: 100%;	
 }
 
 .list-area::-webkit-scrollbar {
