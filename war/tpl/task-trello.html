@@ -89,8 +89,15 @@
       {{/if}}      
 
       {{#if contacts}}  
-         <div class="new-task-related-to" title="Related To">        	
-			{{#related_to_one contacts}}{{/related_to_one}}
+         <div class="task-related-to" title="Related To">
+        	{{#each contacts}}
+        		{{#if_contact_type "PERSON"}}
+        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+        		{{/if_contact_type}}
+				{{#if_contact_type "COMPANY"}}
+        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "name"}}</a>
+        		{{/if_contact_type}}
+        	{{/each}}
 		 </div>
       {{/if}}
 
@@ -129,15 +136,6 @@
       {{/if}}
    </div> <!--task-footer-->
 </div>
-</script>
-
-<script id="related-to-contacts-template" type="text/html">
-    {{#if_contact_type "PERSON"}}
-        <a href="#contact/{{id}}" class="activate-link task-related-contacts">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
-    {{/if_contact_type}}
-	{{#if_contact_type "COMPANY"}}
-    	<a href="#contact/{{id}}" class="activate-link task-related-contacts">{{getPropertyValue properties "name"}}</a>
-    {{/if_contact_type}}	
 </script>
 
 <script id="notes-for-task-template" type="text/html">
