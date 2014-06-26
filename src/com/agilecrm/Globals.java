@@ -95,7 +95,7 @@ public class Globals
     public static final int TRIAL_USERS_COUNT = 2;
 
     // Cheat Code
-    public static final String MASTER_CODE_INTO_SYSTEM = "agilerocks";
+    public static final String MASTER_CODE_INTO_SYSTEM = "agile@#$rocks";
 
     public static final String BULK_ACTION_BACKENDS_URL = "b1";
 
