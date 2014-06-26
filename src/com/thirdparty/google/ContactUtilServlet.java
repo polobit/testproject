@@ -3,6 +3,7 @@ package com.thirdparty.google;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,46 +52,48 @@ public class ContactUtilServlet extends HttpServlet
 
 	try
 	{
+	    String type = null, cron = null;
 
-	    System.out.println("in contact util servlet");
-    	String type = req.getParameter("type");
-	    String cron = req.getParameter("cron");
-
-	    /**
-	     * If sync type is google the contact sync based on duration is
-	     * initialized
-	     */
-	    if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron))
+	    if (req != null)
 	    {
-		String duration = req.getParameter("duration");
-		String offline = req.getParameter("offline");
-		String namespace = req.getParameter("domain");
-		if (StringUtils.isNotEmpty(offline) && StringUtils.isNotEmpty(namespace))
-		{
-		    syncGoogleContacts(namespace, duration);
-		    return;
+		String cronAttr = req.getHeader("X-AppEngine-Cron");
+		if (cronAttr != null && !cronAttr.isEmpty()){
+
+		    type = req.getParameter("type");
+		   cron = req.getParameter("cron");
+		   
+		   /**
+		    * If sync type is google the contact sync based on duration is
+		    * initialized
+		    */
+		   
+		   if ("GOOGLE".equals(type) && !StringUtils.isEmpty(cron)) { String
+			     duration = req.getParameter("duration"); String offline =
+			     req.getParameter("offline"); String namespace =
+			     req.getParameter("domain"); if (StringUtils.isNotEmpty(offline)
+			     && StringUtils.isNotEmpty(namespace)) {
+			     syncGoogleContacts(namespace, duration); return; }
+			     syncGoogleContacts(duration); return; }
+		   
+		 
 		}
-		syncGoogleContacts(duration);
-		return;
+		
+		    InputStream stream = req.getInputStream();
+		    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
+
+		    ByteArrayInputStream b = new ByteArrayInputStream(contactPrefsByteArray);
+		    ObjectInputStream o = new ObjectInputStream(b);
+
+		    System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
+		    ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
+
+		    System.out.println("domain user key in contacts util servlet " + contactPrefs.getDomainUser());
+		    importContacts(contactPrefs);
 	    }
-
-	    InputStream stream = req.getInputStream();
-	    byte[] contactPrefsByteArray = IOUtils.toByteArray(stream);
-
-	    ByteArrayInputStream b = new ByteArrayInputStream(contactPrefsByteArray);
-	    ObjectInputStream o = new ObjectInputStream(b);
-
-	    System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
-	    ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
-
-	    System.out.println("domain user key in contacts util servlet " + contactPrefs.getDomainUser());
-	    importContacts(contactPrefs);
 
 	}
 	catch (Exception e)
 	{
-	    System.out.println("in sync servlet");
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
@@ -177,37 +180,43 @@ public class ContactUtilServlet extends HttpServlet
 
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
 			"Imported successfully from Salesforce");
-	    }else if(contactPrefs.type == Type.ZOHO){
-	    	assert contactPrefs!=null:"contact cant be empty";
-	    	
-	    	if(contactPrefs.thirdPartyField.contains("leads"))
-	    		ZohoImportUtil.importZohoLeads(contactPrefs, key);
-	    	
-	    	if(contactPrefs.thirdPartyField.contains("accounts"))
-	    		ZohoImportUtil.importAccounts(contactPrefs, key);
-	    	
-	    	if(contactPrefs.thirdPartyField.contains("contacts"))
-	    		ZohoImportUtil.importContacts(contactPrefs, key);
-	    	 
-	    	if(contactPrefs.thirdPartyField.contains("event"))
-	    		ZohoImportUtil.importEvent(contactPrefs, key);
-	    	
-	    	if(contactPrefs.thirdPartyField.contains("task"))
-	    		ZohoImportUtil.importTask(contactPrefs, key);
-	    	
-	    	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
-	    			"Imported successfully from Zoho");
-	    }else if(contactPrefs.type == Type.STRIPE){
-	    	  StripeUtil.importCustomer(contactPrefs, key);
-	    	  
-	    		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
-		    			"Imported successfully from Stripe");
-	    	
-	    }else if(contactPrefs.type == Type.SHOPIFY){
-	    	ShopifyUtil.importCustomer(contactPrefs,key);
-	    	
-	    	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
-	    			"Imported successfully from Shopify");
+	    }
+	    else if (contactPrefs.type == Type.ZOHO)
+	    {
+		assert contactPrefs != null : "contact cant be empty";
+
+		if (contactPrefs.thirdPartyField.contains("leads"))
+		    ZohoImportUtil.importZohoLeads(contactPrefs, key);
+
+		if (contactPrefs.thirdPartyField.contains("accounts"))
+		    ZohoImportUtil.importAccounts(contactPrefs, key);
+
+		if (contactPrefs.thirdPartyField.contains("contacts"))
+		    ZohoImportUtil.importContacts(contactPrefs, key);
+
+		if (contactPrefs.thirdPartyField.contains("event"))
+		    ZohoImportUtil.importEvent(contactPrefs, key);
+
+		if (contactPrefs.thirdPartyField.contains("task"))
+		    ZohoImportUtil.importTask(contactPrefs, key);
+
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+			"Imported successfully from Zoho");
+	    }
+	    else if (contactPrefs.type == Type.STRIPE)
+	    {
+		StripeUtil.importCustomer(contactPrefs, key);
+
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+			"Imported successfully from Stripe");
+
+	    }
+	    else if (contactPrefs.type == Type.SHOPIFY)
+	    {
+		ShopifyUtil.importCustomer(contactPrefs, key);
+
+		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+			"Imported successfully from Shopify");
 	    }
 
 	}

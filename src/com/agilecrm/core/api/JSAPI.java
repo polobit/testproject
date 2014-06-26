@@ -140,7 +140,7 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
 	    }
 	    // Sets owner key to contact before saving
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
 
 	    // If zero, save it
 	    contact.save();
@@ -222,7 +222,7 @@ public class JSAPI
 
 	    // task.setOwner(new Key<AgileUser>(AgileUser.class,
 	    // APIKey.getAgileUserRelatedToAPIKey(key).id));
-	    task.setOwner(APIKey.getDomainUserKeyRelatedToAPIKey(key));
+	    task.setOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(key));
 
 	    task.contacts = new ArrayList<String>();
 	    task.contacts.add(contact.id.toString());
@@ -277,7 +277,7 @@ public class JSAPI
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
-	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey).getId());
+	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
 
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
@@ -952,7 +952,7 @@ public class JSAPI
 		ContactField field = mapper.readValue(jobj.toString(), ContactField.class);
 		contact.addProperty(field);
 	    }
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
 	    contact.save();
 	    return mapper.writeValueAsString(contact);
 	}
@@ -1005,7 +1005,7 @@ public class JSAPI
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = mapper.readValue(json, Contact.class);
 	    contact.type = Type.COMPANY;
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
 	    contact.save();
 	    return mapper.writeValueAsString(contact);
 	}
@@ -1062,7 +1062,7 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    contact.removeProperty(name);
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToAPIKey(apiKey));
+	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
 	    contact.save();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);
@@ -1162,6 +1162,25 @@ public class JSAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * Get allowed domains
+     */
+    @Path("allowed-domains")
+    @GET
+    @Produces("application / x-javascript")
+    public String getAllowedDomains()
+    {
+	try
+	{
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(APIKey.getAllowedDomains());
+	}
+	catch (Exception e)
+	{
 	    return null;
 	}
     }

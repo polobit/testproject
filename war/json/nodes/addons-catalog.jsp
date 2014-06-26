@@ -30,25 +30,24 @@
 
     System.out.println("Type  " + type);
     
-    String cachedAddons = null;
-    
     try
 	{
-		cachedAddons = (String) CacheUtil.getCache("addons_" + type);
+	
+		String cachedAddons = (String) CacheUtil.getCache("addons_" + type);
+		
+		if(cachedAddons != null)
+		{
+		    System.out.println("Addon nodes obtained from cache...");
+		    
+		    jsonArray = new JSONArray(cachedAddons);
+		    out.println(jsonArray);
+		    return;
+		}
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured while getting addon nodes from cache... " + e.getMessage());
-	}
-	
-	if(cachedAddons != null)
-	{
-	    System.out.println("Addon nodes obtained from cache...");
-	    
-	    jsonArray = new JSONArray(cachedAddons);
-	    out.println(jsonArray);
-	    return;
 	}
 	
     if (type.equalsIgnoreCase("crm"))
@@ -112,7 +111,7 @@
     try
 	{
 	    // Add nodes array to cache
-	 	CacheUtil.setCache("addons_"+type, jsonArray.toString());
+	 	CacheUtil.setCache("addons_" + type, jsonArray.toString());
 	}
 	catch (Exception e)
 	{
