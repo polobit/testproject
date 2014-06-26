@@ -608,13 +608,18 @@ function getAvailableContacts()
  */
 function getSelectionCriteria()
 {
-	// Reads filter cookie
-	var filter_id = readCookie('contact_filter');
+	// Reads filter cookie$('.filter-criteria'
+	
+	var filter_id = $('.filter-criteria').attr("_filter");
 
 	if (filter_id)
 	{
 		return filter_id;
 	}
+	
+	// To avoid running on all contacts
+	if($('.filter-criteria').length > 0)
+		return;
 	// If filter cookie is not available then it returns either '#contacts' of
 	// '#tags/{tag}' according to current window hash
 	if (_BULK_CONTACTS)
