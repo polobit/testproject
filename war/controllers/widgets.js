@@ -580,7 +580,7 @@ var WidgetsRouter = Backbone.Router
 
 		// Adds header
 		$('#prefs-tabs-content').html(
-			'<div id="contact-prefs" class="span4"></div><div id="calendar-prefs" class="span4"></div><div id="email-prefs" class="span3"></div>');
+			'<div class="row-fluid"><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>');
 
 		// Adds Gmail Prefs
 		$('#contact-prefs').append(this.contact_sync_google.render().el);

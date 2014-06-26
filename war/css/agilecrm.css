@@ -1168,14 +1168,32 @@ time {
 
 }
 
-small {
-color: #b2b0b1;
-}
+/** Modal borders **/
 .modal {
 	background: none!important;
 }
 .modal-body {
 	background: #fff;
+}
+
+
+/** Webrules sorting **/
+#webrule-model-list > tr:last-child td{
+	border-top:0px #fff!important;
+	background-color:#fff!important;
+}
+#webrule-model-list > tr.pseduo-row  td input[type="checkbox"]
+{
+	display:none;
+}
+#webrule-model-list tr:hover td:last-child div { 
+	display:inline-block;
+}
+
+/** Google apps **/
+#email-prefs div.span3{
+	margin-left:0px;
+	width:257px;
 }
 
 
