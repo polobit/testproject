@@ -1,25 +1,3 @@
-$(function()
-{
-	/**
-	 * On mouseleave hides the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseleave', function()
-	{
-		$(this).find("td:last > div").css("visibility", "hidden");
-	});
-	
-	*//**
-	 * On mouseleave shows the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseenter', function()
-	{
-		$(this).find("td:last > div").css("visibility", "visible");
-	});*/
-
-
-});
-
-
 /**
  * For sorting of web rules
  * @param el
