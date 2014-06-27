@@ -24,12 +24,7 @@ function agile_addTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
-			if(agile_read_cookie("agile-tags"))
-				{
-					agile_addTagsToCookie(tags);
-				}
-			else
-				agile_create_cookie("agile-tags", tags, 365 * 5);
+			agile_cookieTags(tags, "add");
 			return;
 		}
 		else
@@ -66,10 +61,7 @@ function agile_removeTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
-			if(agile_read_cookie("agile-tags")){
-				agile_deleteTagsFromCookie(tags);
-				return;
-			}
+			agile_cookieTags(tags, "delete");
 			return;
 		}
 		else
