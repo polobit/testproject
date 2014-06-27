@@ -244,7 +244,7 @@ public class MandrillWebhook extends HttpServlet
 
 	    if (emailBounceType.equals(EmailBounceType.SPAM))
 	    {
-		message = "There was a spam complaint on email \'" + email + "\' <br><br> Email subject: "
+		message = "There was a spam complaint from email \'" + email + "\' <br><br> Email subject: "
 			+ emailSubject;
 		logType = LogType.EMAIL_SPAM.toString();
 	    }
