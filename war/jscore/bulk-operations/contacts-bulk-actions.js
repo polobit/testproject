@@ -613,7 +613,7 @@ function getSelectionCriteria()
 	
 	var filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
 	
-	if (filter_id)
+	if (filter_id && _BULK_CONTACTS == "#contacts")
 	{
 		return filter_id;
 	}
