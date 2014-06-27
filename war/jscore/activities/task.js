@@ -8,6 +8,10 @@
  */
 
 $(function() {
+	
+	// Loads progress slider in add task / update modal.
+	loadProgressSlider($("#taskForm"));
+	loadProgressSlider($("#updateTaskForm"));
 
 	/**
 	 * To stop propagation to edit page
@@ -113,6 +117,14 @@ $(function() {
 	$('#updateTaskModal').on('hidden', function() {
 
 		$("#updateTaskForm").find("li").remove();
+		
+		resetForm($("#updateTaskForm"));
+
+		// Removes note from from task form
+		$('#updateTaskForm #forNoteForm').html("");
+
+		// Hide + Add note link
+		$(".task-add-note", $("#updateTaskForm")).show();
 	});
 
 	/**
@@ -121,6 +133,9 @@ $(function() {
 	$('#updateTaskModal').on('shown', function() {
 		var el = $("#updateTaskForm");
 		agile_type_ahead("update_task_related_to", el, contacts_typeahead);
+		
+		// Fill details in form
+		setForm(el);
 	});
 
 	/**
@@ -153,6 +168,9 @@ $(function() {
 					}
 					$("#owners-list", $("#updateTaskForm")).closest('div').find('.loading-img').hide();
 				});
+		
+		// Add notes in task modal
+		showNoteOnForm("updateTaskForm", value.notes);
 	}
 
 	/**
@@ -233,8 +251,9 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 	// Show loading symbol until model get saved
 	//$('#' + modalId).find('span.save-status').html(LOADING_HTML);
-
+	
 	var json = serializeForm(formId);
+		
 	if (!isUpdate)
 		json.due = new Date(json.due).getTime();
 
@@ -279,6 +298,10 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
   					App_Calendar.allTasksListView.collection.add(data);
   				
 				App_Calendar.allTasksListView.render(true);
+			}
+			else if (Current_Route == 'tasks-new')
+			{
+				updateTask(isUpdate, data, json);
 			}
 			// Updates data to temeline
 			else if (App_Contacts.contactDetailView
@@ -487,8 +510,23 @@ function complete_task(taskId, collection, ui, callback) {
 		contacts.push(contact.id);
 	});
 
+    console.log(taskJSON.notes);
+	
+	// Replace notes object with note ids
+	var notes = [];
+	$.each(taskJSON.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	
+	console.log(notes);
+	
+	taskJSON.notes = notes;
+	taskJSON.note_description = "";
 	taskJSON.contacts = contacts;
 	taskJSON.is_complete = true;
+	taskJSON.status = "COMPLETED";
+	taskJSON.progress = 100;
 	taskJSON.owner_id = taskJSON.taskOwner.id;
 
 	var new_task = new Backbone.Model();
