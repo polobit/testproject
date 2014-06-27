@@ -51,8 +51,7 @@ function add_custom_fields_to_our_domain()
  * and not value is not equal to current loggedin date, then field is updated
  */
 function add_current_loggedin_time()
-{
-	// Gets current time, and updates the last loggedin time.
+{// Gets current time, and updates the last loggedin time.
 	var current_date_object = new Date();
 	var current_date_string = current_date_object.getUTCMonth() + 1 + "/" + current_date_object.getUTCDate() + "/" + current_date_object.getUTCFullYear();
 
@@ -74,7 +73,10 @@ function add_current_loggedin_time()
 
 	loggedin_time_property = create_contact_custom_field("Last login", parseInt(current_date_object.getTime() / 1000), 'CUSTOM');
 
-	_agile.add_property(loggedin_time_property);
+	_agile.add_property(loggedin_time_property, function(data){
+		Agile_Contact = data;
+		add_timezone_tag();
+	});
 }
 
 function create_contact_custom_field(name, value, type, subtype)
@@ -130,10 +132,20 @@ function add_account_canceled_info(info, callback)
 	});
 }
 
+//add GMT tag for user who is in between 4am to 4pm GMT
+function add_timezone_tag()
+{
+	var date = new Date(); 
+	var startTime = date.getUTCHours();
+	if(startTime >= 4 && startTime <=16) {
+		add_tag_our_domain("GMT");
+	}
+}
+
 function our_domain_set_account()
 {
-	// If it is local server then add contacts to local domain instead of
-	// our domain
+	 // If it is local server then add contacts to local domain instead of
+	 // our domain
 	if (LOCAL_SERVER)
 		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
 
@@ -169,7 +181,6 @@ function our_domain_sync()
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
 			initWebrules();
-
 		}, function(data)
 		{
 			var name = CURRENT_DOMAIN_USER['name'];
@@ -215,7 +226,6 @@ function add_signup_tag(callback)
 {
 	if (!Agile_Contact.tags || Agile_Contact.tags.indexOf(SIGN_UP) < 0)
 	{
-		console.log("adding tags");
 		add_tag_our_domain(SIGN_UP, function(data)
 		{
 			// Calling to add custom fields here so avoid data loss
