@@ -13,7 +13,7 @@ public class EmailBounceStatus
      */
     public enum EmailBounceType
     {
-	HARD_BOUNCE, SOFT_BOUNCE
+	HARD_BOUNCE, SOFT_BOUNCE, SPAM
     };
 
     public EmailBounceType emailBounceType = null;

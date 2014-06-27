@@ -2419,6 +2419,12 @@ $(function()
 	
 	if (hash.indexOf("hardbounced") != -1)
 	    return "Hard Bounced";
+	
+	if (hash.indexOf("softbounced") != -1)
+	    return "Soft Bounced";
+	
+	if (hash.indexOf("spam-reported") != -1)
+	    return "Spam Reported";
     });
 
     Handlebars.registerHelper("check_plan", function(plan, options)
