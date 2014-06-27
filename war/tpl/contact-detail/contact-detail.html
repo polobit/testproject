@@ -47,12 +47,19 @@
 											class="{{get_social_icon "
 											TWITTER"}}" style="font-size: 1.4em !important"></i>
 									</a>
-									</span> {{else}} <span style="margin-right: 5px"> <a
+									</span> {{else}}  {{#if_equals subtype "SKYPE"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="{{getSkypeURL value}}"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											SKYPE"}}" style="font-size: 1.4em !important"></i>
+									</a>
+									</span>{{else}}<span style="margin-right: 5px"> <a
 										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none">
 											<i class="{{get_social_icon subtype}}"
 											style="font-size: 1.4em !important"></i>
 									</a>
-									</span> {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
+									</span> {{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
 									{{/property_is_exists}}
 								</div>
 							</div>
