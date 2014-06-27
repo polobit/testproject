@@ -208,6 +208,16 @@ function fill_subscribers_slate(id, type)
 		    	"title": "No hard bounces for this campaign",
 		        "description": "Great! No email get hardbounced",
 				"image": "/img/clipboard.png"
+		    },
+		    "softbounced-subscribers": {
+		    	"title": "No soft bounces for this campaign",
+		        "description": "Great! No email get softbounced",
+				"image": "/img/clipboard.png"
+		    },
+		    "spam-reported-subscribers": {
+		    	"title": "No one reported spam for this campaign",
+		        "description": "Great! No one reported spam yet",
+				"image": "/img/clipboard.png"
 		    }
 		}
 
