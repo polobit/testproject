@@ -84,25 +84,26 @@
 	            </div>
 
                 <div class="row">
-                    <div class="span5  duplicate-email">
-                    </div>
+                    <div class="span5  duplicate-email"></div>
                 </div>
-                <div class="control-group" id='tags_source_person_modal'>
-                    <label class="control-label"><b>Tags</b></label>
-                    <div class="pull-left">
-                        <ul name="tags" class="tagsinput tags">
-                        </ul>
+                <div class="row-fluid">                
+	                <div class="control-group" id='tags_source_person_modal'>
+	                    <label class="control-label"><b>Tags</b></label>
+	                    <div class="pull-left">
+	                        <ul name="tags" class="tagsinput tags">
+	                        </ul>
+	                    </div>
+	                    <div class="controls pull-left">
+	                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead" />
+	                    </div>
+	                </div>
+	            </div>
+                <div class="row-fluid">
+                    <div class="span9" style="margin-top:5px;">
+                        <span style="display:inline;"><i class="icon-arrow-right"></i></span>
+                        <a href="#import" data-dismiss="modal" id="import-link"> Click here to import your contacts from CSV and other CRMs</a>
                     </div>
-                    <div class="controls pull-left">
-                        <input name="tags" type="text" id="tags-new-person" class="tags-typeahead" />
-                    </div>
-                </div>
-               <!--   <div class="row-fluid">
-                    <div class="span9">
-                        <span style="display:inline;"><i class="icon-arrow-right"></i></span><br/>
-                        <a href="#import" data-dismiss="modal" id="import-link"> Click here to import multiple contacts from a file</a>
-                    </div>
-                </div>  -->
+                </div>  
             </fieldset>
         </form>
     </div>
