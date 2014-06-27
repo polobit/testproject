@@ -747,6 +747,30 @@ $(function()
 	return ucfirst(str.toLowerCase());
 
     });
+    
+    Handlebars.registerHelper('actionTemplate', function(actions)
+    {
+		if (!actions)
+		    return;
+		 
+		var actions_count = actions.length;
+
+		var el = '<div style="white-space: normal!important;word-break: break-word;">';
+
+		$.each(actions, function(key, val)
+		{
+		    if (--actions_count == 0)
+		    {
+		    	el = el.concat(titleFromEnums(val.action));
+		    	return;
+		    }
+		    el = el.concat(titleFromEnums(val.action) + ", ");
+		});
+
+		el = el.concat('</div>');
+		return new Handlebars.SafeString(el);
+		
+    });
 
     Handlebars.registerHelper('triggerType', function(value)
     {
@@ -1231,6 +1255,13 @@ $(function()
     	if (url.match(/((http|http[s]|ftp|file):\/\/)/) != null)
     	    return url;
     	return 'http://' + url;
+    });
+    
+    Handlebars.registerHelper('getSkypeURL', function(url)
+    {
+    	if (url.match("skype:") != null)
+    	    return url;
+    	return 'skype:' + url;
     });
 
     // Get Count
