@@ -220,7 +220,7 @@ public class ContactUtilServlet extends HttpServlet
 	    }
 	    else if (contactPrefs.type == Type.SHOPIFY)
 	    {
-		ShopifyUtil.importCustomer(contactPrefs, key);
+		ShopifyUtil.importCustomers(contactPrefs, key);
 
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
 			"Imported successfully from Shopify");
