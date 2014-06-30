@@ -212,7 +212,7 @@ public class ContactUtilServlet extends HttpServlet
 	    }
 	    else if (contactPrefs.type == Type.STRIPE)
 	    {
-		StripeUtil.importCustomer(contactPrefs, key);
+		StripeUtil.importCustomers(contactPrefs, key);
 
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
 			"Imported successfully from Stripe");
