@@ -90,7 +90,7 @@ function get_custom_fields()
     var url = window.location.protocol + '//' + window.location.host;
 	
 	// Sends GET request for customfields.
-    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
+    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields/scope?scope=CONTACT', async: false, dataType:'json'}).responseText;
 	
 	// Parse stringify json
 	var data = JSON.parse(msg);
