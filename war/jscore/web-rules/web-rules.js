@@ -170,7 +170,7 @@ function loadTinyMCE(name)
 function load_modal_templates()
 {
 	// If not empty, redirect to tinymce
-	if($('#tinyMCEhtml_email').val() !== "" && $(".custom_html").length < 2)
+	if($('#tinyMCEhtml_email').val() !== "")
 	{
 		loadTinyMCE("tinyMCEhtml_email");
 		return;
