@@ -41,8 +41,6 @@ public class ShopifyUtil
 
     private static ShopifyService shopifyService = new ShopifyService();
 
-  
-
     public static JSONObject convertShopifyJson(JSONObject json)
     {
 	try
@@ -173,17 +171,6 @@ public class ShopifyUtil
 		System.out.println(url);
 		JSONObject customer = getObject(prefs, url);
 		JSONArray arr = customer.getJSONArray("customers");
-		/*********************************************************************************************************************
-		 * testing total reccords
-		 * 
-		 * System.out.println("==========result================");
-		 * for(int i=0;i<arr.length();i++){ JSONObject o =
-		 * arr.getJSONObject(i);
-		 * 
-		 * System.out.println(o.getString("first_name")+" "+
-		 * o.getString("last_name") +"===>>"+o.getString("email")); }
-		 *********************************************************************************************************** */
-
 		shopifyService.save(prefs, arr, key);
 		current_page += 1;
 	    }
@@ -199,7 +186,7 @@ public class ShopifyUtil
     {
 	URIBuilder uri = getAuthURL(prefs);
 	uri.setPath("/admin/customers.json");
-	uri.setParameter("limit",""+250);
+	uri.setParameter("limit", "" + 250);
 	uri.setParameter("page", "" + current_page);
 
 	if (prefs.count > 0)
@@ -252,7 +239,7 @@ public class ShopifyUtil
 	{
 
 	    URL ur = new URL(uri);
-	   URLConnection con = ur.openConnection();
+	    URLConnection con = ur.openConnection();
 
 	    BufferedReader br = new BufferedReader((new InputStreamReader(con.getInputStream())));
 	    String line;
@@ -297,10 +284,10 @@ public class ShopifyUtil
     }
 
     private static int getCount(ContactPrefs prefs)
-    {     
-	 URIBuilder uri = getAuthURL(prefs);
-	  uri.setPath("/admin/customers/count.json");
-             System.out.println(uri.toString());
+    {
+	URIBuilder uri = getAuthURL(prefs);
+	uri.setPath("/admin/customers/count.json");
+	System.out.println(uri.toString());
 	if (prefs.count > 0)
 	{
 	    uri.addParameter("created_at_min", prefs.last_update_time);
@@ -309,7 +296,7 @@ public class ShopifyUtil
 	}
 	try
 	{
-	   System.out.println(uri.toString());
+	    System.out.println(uri.toString());
 	    JSONObject results = getObject(prefs, uri.toString());
 	    return results.getInt("count");
 
@@ -370,8 +357,11 @@ public class ShopifyUtil
 	uri.setHost(pref.apiKey + ":" + pref.password + "@" + pref.userName);
 	return uri;
     }
+    /**
+     * This method used for testing this util function
+     */
 
-    public static void main(String[] args)
+/*    public static void main(String[] args)
     {
 	// TODO Auto-generated method stub
 	StringBuilder sb = new StringBuilder();
@@ -379,16 +369,19 @@ public class ShopifyUtil
 	sb.append(url);
 	try
 	{
-	   /* SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd hh:ss");
-	     String d1 = dfs.format(new Date()).substring(0,10);
-	     System.out.println(d1.length());
-	     System.out.println(d1.substring(0,10));*/
-	 
-	}catch (Exception e)
+	    
+	     * SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd hh:ss");
+	     * String d1 = dfs.format(new Date()).substring(0,10);
+	     * System.out.println(d1.length());
+	     * System.out.println(d1.substring(0,10));
+	     
+
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
 
-    }
+    }*/
 
 }
