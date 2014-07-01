@@ -1188,6 +1188,9 @@ time {
 #webrule-model-list tr:hover td:last-child div { 
 	display:block!important;
 }
+#documents-model-list tr:hover td.data div b.activate-link { 
+	display:inline!important;
+}
 
 /** Google apps **/
 #email-prefs div.span3{
