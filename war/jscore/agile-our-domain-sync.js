@@ -79,14 +79,10 @@ function add_current_loggedin_time()
 
 	_agile.add_property(loggedin_time_property, function(data){
 		Agile_Contact = data;
-<<<<<<< HEAD
-		add_timezone_tag();
-=======
 		
 		// Adds timezone if customer is new
 		if(is_new_customer)
 			add_timezone_tag();
->>>>>>> master
 	});
 }
 

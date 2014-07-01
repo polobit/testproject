@@ -195,7 +195,7 @@ $(function(){
 	        contact.save(json,{
 	       		success: function(data){
 	       			
-	       			addTagToTimelineDynamically(data.get("tagsWithTime"));
+	       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
 	       			
 	       			// Get all existing tags of the contact to compare with the added tags
 	       			var old_tags = [];
