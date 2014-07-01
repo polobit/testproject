@@ -294,7 +294,7 @@ function get_merge_fields()
 function get_custom_fields()
 {
 	// Sends GET request for customfields.
-	var msg = $.ajax({ type : "GET", url : '/core/api/custom-fields', async : false, dataType : 'json' }).responseText;
+	var msg = $.ajax({ type : "GET", url : '/core/api/custom-fields/scope?scope=CONTACT', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
 	return JSON.parse(msg);

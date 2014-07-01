@@ -32,6 +32,8 @@ import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
+ * This <code>ShopifyUtil</code> provide static method for importing data from
+ * shopify
  * 
  * @author jitendra
  * 
@@ -40,8 +42,6 @@ public class ShopifyUtil
 {
 
     private static ShopifyService shopifyService = new ShopifyService();
-
-  
 
     public static JSONObject convertShopifyJson(JSONObject json)
     {
@@ -86,6 +86,12 @@ public class ShopifyUtil
 	}
     }
 
+    /**
+     * This will return All tags related to customers
+     * 
+     * @param json
+     * @return
+     */
     public static String[] getTags(JSONObject json)
     {
 	try
@@ -109,6 +115,12 @@ public class ShopifyUtil
 	}
     }
 
+    /**
+     * This code will return All Notes related to customer JSONObject
+     * 
+     * @param json
+     * @return
+     */
     public static Note getNote(JSONObject json)
     {
 	try
@@ -129,6 +141,12 @@ public class ShopifyUtil
 	}
     }
 
+    /**
+     * This will return of Products tag
+     * 
+     * @param arr
+     * @return
+     */
     public static String[] getProductTags(JSONArray arr)
     {
 	try
@@ -148,11 +166,18 @@ public class ShopifyUtil
 	}
     }
 
-    public static void importCustomer(ContactPrefs prefs, Key<DomainUser> key)
+    /**
+     * This code will import all customers from Shopify
+     * 
+     * @param prefs
+     * @param key
+     */
+    public static void importCustomers(ContactPrefs prefs, Key<DomainUser> key)
     {
 
 	/***
-	 * calculating total page
+	 * This trick used for implementation of pagination and fetching more
+	 * record provided by api calculating total page
 	 */
 	int total_records = getCount(prefs);
 	int page_size = 250;
@@ -161,9 +186,7 @@ public class ShopifyUtil
 
 	if (total_records < 250)
 	    pages = 1;
-	/*
-		 * 
-		 */
+
 	try
 	{
 
@@ -173,17 +196,6 @@ public class ShopifyUtil
 		System.out.println(url);
 		JSONObject customer = getObject(prefs, url);
 		JSONArray arr = customer.getJSONArray("customers");
-		/*********************************************************************************************************************
-		 * testing total reccords
-		 * 
-		 * System.out.println("==========result================");
-		 * for(int i=0;i<arr.length();i++){ JSONObject o =
-		 * arr.getJSONObject(i);
-		 * 
-		 * System.out.println(o.getString("first_name")+" "+
-		 * o.getString("last_name") +"===>>"+o.getString("email")); }
-		 *********************************************************************************************************** */
-
 		shopifyService.save(prefs, arr, key);
 		current_page += 1;
 	    }
@@ -195,11 +207,20 @@ public class ShopifyUtil
 
     }
 
+    /**
+     * <code>BuildUrl</code>This code materialize and url based on user contact
+     * preferences and return String representation of url
+     * 
+     * @param prefs
+     * @param current_page
+     * @return
+     * @throws URISyntaxException
+     */
     private static String buildUrl(ContactPrefs prefs, int current_page) throws URISyntaxException
     {
 	URIBuilder uri = getAuthURL(prefs);
 	uri.setPath("/admin/customers.json");
-	uri.setParameter("limit",""+250);
+	uri.setParameter("limit", "" + 250);
 	uri.setParameter("page", "" + current_page);
 
 	if (prefs.count > 0)
@@ -215,6 +236,14 @@ public class ShopifyUtil
 
     }
 
+    /**
+     * <code>getOrder</code> Return JSONArray of Orders Object purchased by
+     * customers
+     * 
+     * @param prefs
+     * @param custID
+     * @return
+     */
     public static JSONArray getOrder(ContactPrefs prefs, Long custID)
     {
 	URIBuilder uri = getAuthURL(prefs);
@@ -236,23 +265,28 @@ public class ShopifyUtil
 
     }
 
+    /**
+     * Return JSONObject which is found by provided URL if provided URL is null
+     * or empty then it will create default URL
+     * 
+     * @param pref
+     * @param url
+     * @return Customer JSONObject
+     * @throws Exception
+     */
     private static JSONObject getObject(ContactPrefs pref, String url) throws Exception
     {
-	String uri = null;
 	if (url == null)
 	{
-	    uri = buildUrl(pref, 0);
+	    url = buildUrl(pref, 0);
 	}
-	else
-	{
-	    uri = url;
-	}
+
 	JSONObject customers = null;
 	try
 	{
 
-	    URL ur = new URL(uri);
-	   URLConnection con = ur.openConnection();
+	    URL ur = new URL(url);
+	    URLConnection con = ur.openConnection();
 
 	    BufferedReader br = new BufferedReader((new InputStreamReader(con.getInputStream())));
 	    String line;
@@ -269,6 +303,13 @@ public class ShopifyUtil
 	return customers;
     }
 
+    /**
+     * Return Shop information in form Of JSONObject
+     * 
+     * @param prefs
+     * @return
+     * @throws Exception
+     */
     private static JSONObject getShop(ContactPrefs prefs) throws Exception
     {
 	URIBuilder uri = getAuthURL(prefs);
@@ -276,6 +317,13 @@ public class ShopifyUtil
 	return getObject(prefs, uri.toString());
     }
 
+    /**
+     * Test whether User is authenticated for access shop or not
+     * 
+     * @param prefs
+     * @return TRUE/FALSE
+     * @throws Exception
+     */
     public static boolean isValid(ContactPrefs prefs) throws Exception
     {
 	try
@@ -296,11 +344,17 @@ public class ShopifyUtil
 	return false;
     }
 
+    /**
+     * Return total number of customer in shop
+     * 
+     * @param prefs
+     * @return
+     */
     private static int getCount(ContactPrefs prefs)
-    {     
-	 URIBuilder uri = getAuthURL(prefs);
-	  uri.setPath("/admin/customers/count.json");
-             System.out.println(uri.toString());
+    {
+	URIBuilder uri = getAuthURL(prefs);
+	uri.setPath("/admin/customers/count.json");
+	System.out.println(uri.toString());
 	if (prefs.count > 0)
 	{
 	    uri.addParameter("created_at_min", prefs.last_update_time);
@@ -309,7 +363,7 @@ public class ShopifyUtil
 	}
 	try
 	{
-	   System.out.println(uri.toString());
+	    System.out.println(uri.toString());
 	    JSONObject results = getObject(prefs, uri.toString());
 	    return results.getInt("count");
 
@@ -321,6 +375,9 @@ public class ShopifyUtil
 	return 0;
     }
 
+    /**
+     * <code>Sync</code>Will sync all contact from shopify to agile crm contact
+     */
     public static void sync()
     {
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
@@ -341,8 +398,6 @@ public class ShopifyUtil
 
 	    if (total_records < 250)
 		pages = 1;
-	    /*
-			 */
 	    try
 	    {
 
@@ -363,32 +418,18 @@ public class ShopifyUtil
 
     }
 
+    /**
+     * This will create Base auth url for and return URIBuilder Object
+     * 
+     * @param pref
+     * @return
+     */
     private static URIBuilder getAuthURL(ContactPrefs pref)
     {
 	URIBuilder uri = new URIBuilder();
 	uri.setScheme("https");
 	uri.setHost(pref.apiKey + ":" + pref.password + "@" + pref.userName);
 	return uri;
-    }
-
-    public static void main(String[] args)
-    {
-	// TODO Auto-generated method stub
-	StringBuilder sb = new StringBuilder();
-	String url = "https://0f99730e50a2493463d263f6f6003622:1a27610dee9600dd8366bf76d90b5589@shopatmyspace.myshopify.com/admin/customers.json?";
-	sb.append(url);
-	try
-	{
-	   /* SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd hh:ss");
-	     String d1 = dfs.format(new Date()).substring(0,10);
-	     System.out.println(d1.length());
-	     System.out.println(d1.substring(0,10));*/
-	 
-	}catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
     }
 
 }

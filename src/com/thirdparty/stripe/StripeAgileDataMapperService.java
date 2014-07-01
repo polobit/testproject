@@ -21,50 +21,58 @@ import com.stripe.model.Card;
 import com.stripe.model.Customer;
 
 /**
- * <code>It Maps Stripe customer fields into agile Contact fields</code>
+ * <code>StripeAgileDataMapperService</code> This code will provide mapping all
+ * Stripe's customers field data into agile contact
+ * 
  * @author jitendra
  * 
  */
-public class StripeAgileDataMapperService {
+public class StripeAgileDataMapperService
+{
 
-	public Contact createCustomerDataMap(Customer customer) {
-		Contact ctx = new Contact();
-		List<ContactField> fields = new ArrayList<ContactField>();
-		ctx.type = Type.PERSON;
-		fields.add(new ContactField(Contact.EMAIL, customer.getEmail(), "work"));
-		Card card = customer.getActiveCard();
-		fields.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
-		Widget widget = WidgetUtil.getWidget("Stripe");
-		try {
-		if(widget != null){
-			JSONObject prefs = new JSONObject(widget.prefs);
-			if(prefs.has("stripe_field_name"))
-				fields.add(new ContactField(prefs.get("stripe_field_name").toString(),customer.getId(),null));
-			
-		}
-        
-		JSONObject address = new JSONObject();
-	
-			address.put("Street",
-					card.getAddressLine1() + " " + card.getAddressLine2());
-			address.put("City", card.getAddressCity());
-			address.put("State", card.getAddressState());
-			address.put("Country", card.getAddressCountry());
-			address.put("Zip", card.getAddressZip());
-			fields.add(new ContactField(Contact.ADDRESS, address.toString(),"Work"));
-			ctx.properties = fields;
-			List<ContactField> l = ctx.getProperties();
-			for(ContactField  f:l){
-			  if(f.type == FieldType.CUSTOM){
-				  System.out.println(f.name);
-			  }
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+    /**
+     * This code will create Maps Stripe's customer field value to agile contact
+     * field value
+     * 
+     * @param customer
+     * @return Contact
+     */
+    public Contact createCustomerDataMap(Customer customer, String stripeFieldValue)
+    {
+	Contact ctx = new Contact();
+	List<ContactField> fields = new ArrayList<ContactField>();
+	ctx.type = Type.PERSON;
+	fields.add(new ContactField(Contact.EMAIL, customer.getEmail(), "work"));
+	Card card = customer.getActiveCard();
+	fields.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
 
-		}
-		return ctx;
+	try
+	{
+	    if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
+	    {
+
+		fields.add(new ContactField(stripeFieldValue, customer.getId(), null));
+
+	    }
+
+	    JSONObject address = new JSONObject();
+
+	    address.put("Street", card.getAddressLine1() + " " + card.getAddressLine2());
+	    address.put("City", card.getAddressCity());
+	    address.put("State", card.getAddressState());
+	    address.put("Country", card.getAddressCountry());
+	    address.put("Zip", card.getAddressZip());
+	    fields.add(new ContactField(Contact.ADDRESS, address.toString(), "Work"));
+	    ctx.properties = fields;
 
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+
+	}
+	return ctx;
+
+    }
 
 }

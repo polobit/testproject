@@ -1,57 +1,30 @@
-<!-- Indices written at Thu, 26 Jun 2014 11:45:10 IST -->
+<!-- Indices written at Mon, 30 Jun 2014 15:39:55 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 23 times in query history -->
-    <datastore-index kind="Task" ancestor="false" source="auto">
-        <property name="is_complete" direction="asc"/>
-        <property name="owner" direction="asc"/>
-        <property name="due" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="viewed.viewer_id" direction="asc"/>
         <property name="viewed.viewed_time" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 2 times in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 64 times in query history -->
-    <datastore-index kind="Task" ancestor="false" source="auto">
-        <property name="type" direction="asc"/>
-        <property name="due" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Task" ancestor="false" source="auto">
-        <property name="owner" direction="asc"/>
-        <property name="type" direction="asc"/>
-        <property name="due" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 2 times in query history -->
+    <!-- Used 4 times in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="is_complete" direction="asc"/>
         <property name="owner" direction="asc"/>
-        <property name="type" direction="asc"/>
         <property name="due" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="Task" ancestor="false" source="auto">
-        <property name="owner" direction="asc"/>
-        <property name="due" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 6 times in query history -->
-    <datastore-index kind="Task" ancestor="false" source="auto">
-        <property name="priority_type" direction="asc"/>
-        <property name="due" direction="asc"/>
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="close_date" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

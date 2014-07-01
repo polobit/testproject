@@ -32,8 +32,9 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ShopifyImportAPI
 {
 
-     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
-     String date = df.format(new Date()).substring(0,10);
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
+    String date = df.format(new Date()).substring(0, 10);
+
     /**
      * validating and saving users ContactPrefs
      * 
@@ -56,7 +57,8 @@ public class ShopifyImportAPI
 	 * checking existing contact pref of same type
 	 */
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
-	if (prefs !=null && prefs.userName.equalsIgnoreCase(shopname)){
+	if (prefs != null && prefs.userName.equalsIgnoreCase(shopname))
+	{
 	    prefs.count = 1;
 	    prefs.save();
 	    return prefs;
@@ -111,18 +113,21 @@ public class ShopifyImportAPI
 	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
 	try
 	{
-	    if (pref != null){
-	    
-	    if (customer)
-		list.add("customer");
-	    pref.thirdPartyField = list;
+	    if (pref != null)
+	    {
 
-	    if (pref.count == 0)
-		ContactsImportUtil.initilaizeImportBackend(pref);
-	    else
-		ShopifyUtil.sync();
-	        pref.last_update_time = date;
-	        pref.save(); 
+		if (customer)
+		    list.add("customer");
+		pref.thirdPartyField = list;
+
+		if (pref.count == 0)
+		    ContactsImportUtil.initilaizeImportBackend(pref);
+		else
+		{
+		    ShopifyUtil.sync();
+		    pref.last_update_time = date;
+		    pref.save();
+		}
 	    }
 
 	    return pref;
