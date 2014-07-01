@@ -139,12 +139,12 @@ function add_account_canceled_info(info, callback)
 	});
 }
 
-//add GMT tag for user who is in between 4am to 4pm GMT
+//add GMT tag for user who is in between 4am to 6pm GMT
 function add_timezone_tag()
 {
 	var date = new Date(); 
 	var startTime = date.getUTCHours();
-	if(startTime >= 4 && startTime <=16) {
+	if(startTime >= 4 && startTime <=18) {
 		add_tag_our_domain("GMT");
 	}
 }
