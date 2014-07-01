@@ -1188,8 +1188,15 @@ time {
 #webrule-model-list tr:hover td:last-child div { 
 	display:block!important;
 }
+
+/** documents icon  **/
 #documents-model-list tr:hover td.data div b.activate-link { 
 	display:inline!important;
+}
+
+/** social suite modals **/
+#socialsuite_twitter_messageForm .modal-footer {
+margin-top: 0px;
 }
 
 /** Google apps **/
