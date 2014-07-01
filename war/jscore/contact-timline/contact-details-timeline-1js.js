@@ -1,6 +1,6 @@
 
 
-function load_timeline_details1(el, contactId, callback1, noAnimation)
+function load_timeline_details(el, contactId, callback1, noAnimation)
 {
 	noAnimationBruteForce = true;
 	timeline_entity_loader.init(App_Contacts.contactDetailView.model.toJSON());
@@ -40,16 +40,32 @@ function update_entity_template(model)
  */
 function removeItemFromTimeline(element)
 {
-	console.log(element);
-	$('#timeline').isotope('remove', element, function()
+	try
 	{
-		$("#timeline").isotope('reLayout')
-	});
+		$('#timeline').isotope('remove', element, function()
+				{
+					$("#timeline").isotope('reLayout')
+				});
+	}
+	catch(err)
+	{
+		
+	}
 }
 
-function addTagToTimelineDynamically(tags)
+function addTagToTimelineDynamically(tag, collection)
 {
-	timeline_collection_view.addItems(tags);
+	if(!timeline_collection_view || !timeline_collection_view.collection)
+		return;
+	
+	$.each(collection, function(index, tagObject){
+		if(tagObject.tag == tag)
+			{
+				timeline_collection_view.collection.add(new BaseModel(tagObject));
+			}
+	})
+	console.log(collection);
+	
 }
 
 function timline_fetch_data(url, callback)
