@@ -30,7 +30,7 @@ function initOwnerslist() {
 	});
 	$("ul#owner-tasks li a").die().live("click", function() {
 		
-		$('.task-heading').html($(this).html() +'&nbsp<small class="tasks-count"></small>');
+		$('.task-heading').html($(this).html() +'&nbsp<small class="tasks-count"></small> <span style="font-size: small;color: #525252;  background-color: rgb(255,255,204);  border: 1px solid rgb(211,211,211);border-radius: 3px;padding: 3px 5px 3px 5px;">Try our <a href="#tasks-new">new look</a></span>');
 		//$('.task-heading').text($(this).html());
 		pieTasks(getParams()); // Show tasks only when user changes My Tasks vs All Tasks
 	});

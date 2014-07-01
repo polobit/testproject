@@ -7,6 +7,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -116,5 +117,18 @@ public class NoteUtil
 		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	return query.count();
+    }
+
+    /**
+     * Deletes notes bulk
+     * 
+     * @param notes_ids
+     *            notes ids
+     * @return
+     * @throws JSONException
+     */
+    public static void deleteBulkNotes(List<Note> list) throws JSONException
+    {
+	Note.dao.deleteAll(list);
     }
 }
