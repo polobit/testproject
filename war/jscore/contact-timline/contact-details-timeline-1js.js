@@ -13,7 +13,8 @@ function add_entity_to_timeline(model)
 	var list = [];
 	list.push(model.toJSON())
 
-	// console.log(model.get('id'));
+	if(!timeline_collection_view)
+		return;
 
 	if (!timeline_collection_view.collection.get(model.get('id')))
 	{
