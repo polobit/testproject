@@ -338,7 +338,8 @@ function prefill_from_details(nodeJSONDefinition, jsonData)
     	 
     	 jsonData = {
     			     	"from_name" : current_domain_user["name"],
-    			     	"from_email" : current_domain_user["email"]
+    			     	"from_email" : current_domain_user["email"],
+    	                "to_email" : "{{email}}"
     	 			}
      }
 	 
