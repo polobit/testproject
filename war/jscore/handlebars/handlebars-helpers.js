@@ -621,7 +621,18 @@ $(function()
 	var obj = JSON.parse(info_json);
 
 	if (!obj[date_type])
-	    return "-"
+	    return "-";
+	if(date_type != "created_time")
+	{
+		if ((obj[date_type] / 100000000000) > 1)
+		{
+		    return new Date(parseInt(obj[date_type])).format("mmm dd yyyy HH:MM:ss",0);
+		}
+		// date form milliseconds
+		return new Date(parseInt(obj[date_type]) * 1000).format("mmm dd yyyy HH:MM:ss",0);
+	}
+	else
+	{
 	var intMonth = new Date(parseInt(obj[date_type]) * 1000).getMonth();
 	var intDay = new Date(parseInt(obj[date_type]) * 1000).getDate();
 	var intYear = new Date(parseInt(obj[date_type]) * 1000).getFullYear();
@@ -631,6 +642,7 @@ $(function()
 	];
 
 	return (monthArray[intMonth] + " " + intDay + ", " + intYear);
+    }
     });
 
     /**
