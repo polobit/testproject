@@ -1194,8 +1194,8 @@ time {
 	display:inline!important;
 }
 
-/** social suite modals **/
-#socialsuite_twitter_messageForm .modal-footer {
+/** custom feilds modals **/
+#custom-field-add-modal .modal-footer {
 margin-top: 0px;
 }
 
