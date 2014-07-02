@@ -59,7 +59,7 @@ public class JSAPIFilter implements Filter
 	if (agileId != null)
 	{
 	    // Check if ApiKey
-	    if (APIKey.isPresent(agileId))
+	    if (APIKey.isValidJSKey(agileId))
 	    {
 		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
 			SessionManager.AUTH_SESSION_COOKIE_NAME);
