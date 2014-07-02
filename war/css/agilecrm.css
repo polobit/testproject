@@ -1189,9 +1189,18 @@ time {
 #webrule-model-list tr:hover td:last-child div { 
 	display:block!important;
 }
+
+/** Documents icon change **/
 #documents-model-list tr:hover td.data div b.activate-link { 
 	display:inline!important;
 }
+
+
+/** custom feilds modals **/
+#custom-field-add-modal .modal-footer {
+margin-top: 0px;
+}
+
 
 /** Google apps **/
 #email-prefs div.span3{
