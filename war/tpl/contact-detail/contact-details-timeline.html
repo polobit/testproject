@@ -41,7 +41,7 @@
         {{/if_entity}}
 	
 	  {{#if_entity "tag"}}
-			<div id="{{tag}}-tag-timeline-element"></div>
+			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
@@ -219,7 +219,7 @@
         {{/if_entity}}
 	
 	  {{#if_entity "tag"}}
-			<div id="{{tag}}-tag-timeline-element"></div>
+			<div id="{{remove_spaces tag}}-tag-timeline-element"></div>
             <div class="timestamp">{{createdTime}}</div>
             <div class="title"><h3><span><a class="no-line"><i class="icon-tag"></i></a></span> Tag Added - {{tag}}</h3></div>
             <div class="date">{{epochToTaskDate createdTime}}</div>
