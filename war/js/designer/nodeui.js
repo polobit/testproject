@@ -38,17 +38,20 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 	        translateNode(language);
 	        return;
     }
-       
-
+     
     // Change Grid default values in nodeJSONDefinition
     // Clone
     var newJSONDefinition = JSON.parse(JSON.stringify(nodeJSONDefinition));
+    
+    
+    // prefills from params of send email node with current username and email
+    jsonData = prefill_from_details(newJSONDefinition, jsonData);
+     
     if(jsonData != undefined)
 	    newJSONDefinition = changeDefaultValues(newJSONDefinition, jsonData);
         
     // Change Grid default values       
     constructUI($("#nodeui"), newJSONDefinition);
-    
     
     // Deserialize form values
     if(jsonData != undefined)
@@ -69,7 +72,8 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 		}     	
      	
      }
-            	    	        
+            	    
+    
     // Init validator
     initValidator($("#nodeui"), saveNode);
     
@@ -97,6 +101,9 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
             	
             	// Triggers change events of of URL Visited select
             	$(this).find("form #type-select").trigger('change');
+            	
+            	// Disables 'text' required property if html is given and text is empty 
+            	disable_text_required_property($(this));
                 
             	$(this).find("form").trigger('submit');
             }

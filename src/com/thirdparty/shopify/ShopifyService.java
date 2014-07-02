@@ -8,32 +8,37 @@ import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 
 /**
- * 
+ * This Service provide save customer details into agile contact
  * @author jitendra
  * 
  */
 public class ShopifyService
 {
-	private ShopifyAgileMapper mapper = new ShopifyAgileMapper();
+    private ShopifyAgileMapper mapper = new ShopifyAgileMapper();
 
-	public void save(ContactPrefs prefs, JSONArray customers, Key<DomainUser> key)
+    /**
+     * Saving customer details into agile contact
+     * @param prefs
+     * @param customers
+     * @param key
+     */
+    public void save(ContactPrefs prefs, JSONArray customers, Key<DomainUser> key)
+    {
+
+	try
 	{
+	    for (int i = 0; i < customers.length(); i++)
+	    {
+		JSONObject customer = new JSONObject(customers.get(i).toString());
+		mapper.map(prefs, customer, key);
 
-		try
-		{
-			for (int i = 0; i < customers.length(); i++)
-			{
-				JSONObject customer = new JSONObject(customers.get(i).toString());
-				// System.out.println(customer.get("email"));
-				mapper.saveCustomer(prefs, customer, key);
-
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-
-		}
+	    }
 	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+
+	}
+    }
 
 }

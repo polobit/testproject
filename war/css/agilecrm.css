@@ -1189,6 +1189,16 @@ time {
 	display:block!important;
 }
 
+/** documents icon  **/
+#documents-model-list tr:hover td.data div b.activate-link { 
+	display:inline!important;
+}
+
+/** social suite modals **/
+#socialsuite_twitter_messageForm .modal-footer {
+margin-top: 0px;
+}
+
 /** Google apps **/
 #email-prefs div.span3{
 	margin-left:0px;
