@@ -77,7 +77,7 @@
 	</div>
 	<div class="agile-overflow-ellipsis">
 
-		<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>
+		<span>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{numberWithCommas expected_value}}</span>
 		{{#if this.contacts}}
 			<span style="margin:0px 5px;border:1px solid #d5d5d5"></span>
 			{{#related_to_one contacts}}{{/related_to_one}}

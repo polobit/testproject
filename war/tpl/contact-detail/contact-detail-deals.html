@@ -39,7 +39,7 @@
 							
 		<p><span style="margin-right: 10px;">Value : </span>
 
-			{{currencySymbol}} {{numberWithCommas expected_value}}
+			{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{numberWithCommas expected_value}}
 		</p>
 
     <p>{{description}}</p>
