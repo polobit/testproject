@@ -139,6 +139,13 @@
 			<form id="CCform" class="form-horizontal card_details"
 				name="card_details">
 				<fieldset>
+				<div class="control-group">
+						<label class="control-label">Name<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="name" class="input required "
+								placeholder="Cardholder's name" />
+						</div>
+					</div>
 					<div class="control-group">
 						<label class="control-label">Card Number <span
 							class="field_req">*</span></label>
@@ -148,21 +155,7 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label">Name<span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="name" class="input required "
-								placeholder="Cardholder's name" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">CVC<span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="cvc" class="input required digits"
-								placeholder="CVC" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Expiry Month<span
+						<label class="control-label">Expiry<span
 							class="field_req">*</span></label>
 						<div class="controls">
 							<select name="exp_month" id="exp_month"
@@ -174,6 +167,14 @@
 								placeholder="Expiry Year" style="width: 94px"></select>
 						</div>
 					</div>
+					<div class="control-group">
+						<label class="control-label">CVC<span class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="cvc" class="input required digits"
+								placeholder="CVC" />
+						</div>
+					</div>
+			
 					<div class="control-group">
 						<label class="control-label">Address<span class="field_req">*</span></label>
 						<div class="controls">

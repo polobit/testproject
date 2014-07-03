@@ -103,7 +103,7 @@ function setup_tags_typeahead() {
 	       			
 	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
 	       			
-	       			addTagToTimelineDynamically(data.get("tagsWithTime"));
+	       			addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
 	       			
 	       			// Append to the list, when no match is found 
 	       			if ($.inArray(tag, old_tags) == -1) 
@@ -163,7 +163,7 @@ function setup_tags_typeahead() {
     			
     				// Updates to both model and collection
     				App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
-    				addTagToTimelineDynamically(data.get("tagsWithTime"));
+    				addTagToTimelineDynamically(tag, data.get("tagsWithTime"));
     				tagsCollection.add(new BaseModel( {"tag" : tag} ));
     			$("#addTagsForm").css("display", "none");
     		    $("#add-tags").css("display", "block");

@@ -102,4 +102,35 @@ public class XeroWidgetsAPI
 					.build());
 		}
 	}
+
+	/**
+	 * Retrieve line items for given invoiceId
+	 * @param widgetId
+	 * @param invoiceId
+	 * @return
+	 */
+	@Path("lineItems/{widget-id}/{invoiceId}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getLineItemsOfInvoice(@PathParam("widget-id") Long widgetId, @PathParam("invoiceId") String invoiceId)
+	{
+		// Retrieves widget based on its id
+		Widget widget = WidgetUtil.getWidget(widgetId);
+		if (widget == null)
+			return null;
+
+		XeroUtil utilObj = new XeroUtil(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, widget.getProperty("token"),
+				widget.getProperty("secret"));
+
+		try
+		{
+			// Calls XeroUtil metod to retrieve invoices
+			return utilObj.getLineItemsOfInvoice(invoiceId);
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
 }

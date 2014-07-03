@@ -1,0 +1,32 @@
+<script id="campaign-analysis-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1 class="pull-left">Campaign <small>analysis</small></h1>
+            <div class="right">
+        		<select id="campaign-reports-select" class="required">
+        			<option value="">Select...</option>
+        		</select>
+			</div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div id="campaign-analysis-tabs"></div>
+</script>
+
+<script id="campaign-analysis-tabs-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<ul class="nav nav-tabs" id="campaign-tabs">
+			<li class="campaign-stats-tab" data-campaign-tab-active="STATS"><a href="#email-reports/{{id}}">Stats</a></li>
+			<li class="campaign-subscribers-tab active" data-campaign-tab-active="SUBSCRIBERS"><a href="#workflow/all-subscribers/{{id}}">Subscribers</a></li>
+			<li class="campaign-logs-tab" data-campaign-tab-active="LOGS"><a href="#workflows/logs/{{id}}">Logs</a></li>
+		</ul>
+		<div class="tab-content" style="overflow:visible;">
+			<div class="tabs" id="campaign-analysis-tabs-content"></div>
+		</div>
+	</div>
+</div>
+</script>

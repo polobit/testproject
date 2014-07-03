@@ -154,6 +154,12 @@ public class CampaignReportsAPI
 			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId,
 				EmailBounceType.SOFT_BOUNCE, Long.parseLong(startTime) / 1000,
 				Long.parseLong(endTime) / 1000) : 0));
+
+		// Soft Bounce Data
+		stats.put(new JSONObject().put("log_type", "SPAM").put(
+			"count",
+			statsLength != 0 ? ContactUtil.getEmailBouncedContactsCount(campaignId, EmailBounceType.SPAM,
+				Long.parseLong(startTime) / 1000, Long.parseLong(endTime) / 1000) : 0));
 	    }
 	    catch (Exception e)
 	    {
@@ -179,7 +185,8 @@ public class CampaignReportsAPI
 
 	    return statsJSON.toString().replace("EMAIL_SENT", "sent").replace("EMAIL_OPENED", "opened")
 		    .replace("EMAIL_CLICKED", "unique_clicks").replace("UNSUBSCRIBED", "unsubscribed")
-		    .replace("HARD_BOUNCE", "hard_bounce").replace("SOFT_BOUNCE", "soft_bounce");
+		    .replace("HARD_BOUNCE", "hard_bounce").replace("SOFT_BOUNCE", "soft_bounce")
+		    .replace("SPAM", "spam");
 	}
 	catch (Exception e)
 	{

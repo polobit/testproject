@@ -19,8 +19,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
-
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
+	
 	/* Milestones */
 	"milestones" : "milestones",
 
@@ -209,7 +209,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
-		head.js(LIB_PATH + 'lib/prettify-min.js', LIB_PATH + 'lib/zeroclipboard/ZeroClipboard.js', function()
+		$("#content").html(getTemplate("admin-settings"), {});
+		head.js(LIB_PATH + 'lib/prettify-min.js', function()
 		{
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
@@ -219,13 +220,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					$(el).find('#APITab a[href="#'+ id +'"]').trigger('click');
 				}
 				
-				initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-				initZeroClipboard("api_key_code_icon", "api_key_code");
-				initZeroClipboard("api_track_code_icon", "api_track_code");
+				//initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
+				//initZeroClipboard("api_key_code_icon", "api_key_code");
+				//initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
-			$("#content").html(getTemplate("admin-settings"), {});
-			$('#content').find('#admin-prefs-tabs-content').html(view.el);
+			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 			$('#content').find('#AdminPrefsTab .active').removeClass('active');
 			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
@@ -255,7 +255,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// $('#content').html(view.el);
 		});
 	},
-
+	
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success

@@ -110,10 +110,17 @@ public class ContactPrefs implements Serializable
     // domain user key
     @JsonIgnore
     private Key<DomainUser> domainUser;
+    
+    // storing no of time same pref is saved in db if count == 0 then need fresh import else sync existing contact
+    @NotSaved(IfDefault.class)
+    public Integer count;
+    
+    // String representation of formated time for syn contact query
+    public String last_update_time;
 
     public static enum Type
     {
-	GOOGLE, ZOHO, SUGAR, SALESFORCE
+	GOOGLE, ZOHO, SUGAR, SALESFORCE,STRIPE,SHOPIFY
     }
 
     /**
@@ -152,9 +159,13 @@ public class ContactPrefs implements Serializable
 
     @NotSaved(IfDefault.class)
     public SYNC_TYPE sync_type = null;
-
+   /**
+    * various field data can be set as list in dataOption
+    * field can be like Account,leads,customer etc..
+    */
+    
     @NotSaved
-    public List<String> salesforceFields;
+    public List<String> thirdPartyField;
 
     public static String AGILE = "Agile";
     public static String CLIENT = "Client";

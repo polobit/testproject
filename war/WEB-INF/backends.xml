@@ -16,7 +16,7 @@
  </backend>
  
  <backend name="bulk">
-   <class>B2</class>
+   <class>B4</class>
    <instances>2</instances>
    <options>
      <dynamic>true</dynamic>
@@ -24,7 +24,7 @@
  </backend>
  
  <backend name="normal">
-   <class>B2</class>
+   <class>B4</class>
    <instances>2</instances>
    <options>
      <dynamic>true</dynamic>

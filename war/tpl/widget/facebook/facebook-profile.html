@@ -1,0 +1,91 @@
+<script id="facebook-login-template" type="text/html">
+<div class="widget_content" style="border-bottom:none;line-height: 160%;">
+	See the contact's subscriptions history and payments from your xero account.
+	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your facebook</a>
+</div>
+</script>
+
+<script id="facebook-matching-profiles-template" type="text/html">
+<div class="widget_content" style="border-bottom:none;line-height: 160%;">
+	{{#if profiles}}
+	<div style='padding:10px'><p class='a-dotted'>Search results for  <a href='#' class="facebook_modify_search">{{searchString}}</a></p></div>
+	{{#each profiles}}	
+		
+			<a href="" target="_blank"><img rel='popover' data-original-title='Facebook Profile' class='facebookImage thumbnail' id='{{userId}}' src ='{{userPicUrl}}' screen_name=""
+   				summary="" style='display:inline-block; margin-right:2px; margin-bottom:2px; cursor:pointer;width: 35px;height: 35px' 
+   				data-content="
+     				<div class='row-fluid' style='padding-bottom:10px;'>
+           		 		<div class='span4' style='padding:0px 10px 0px 10px;'>
+             		 		<img src='{{userPicUrl}}'></img>
+           		 		</div>
+            			<div class='span8'>
+               				<b style='color:#069;font-size:14px;'>{{userName}}</b>
+							<p style='padding-top:5px'>{{email}}</p>
+							<p style='padding-top:5px'>{{location}}</p>
+							<p style='padding-top:5px'>{{website}}</p>
+            			</div>		
+      				</div>"   
+			></img></a>
+		
+{{/each}}
+{{else}}
+	<div style='padding:10px'><p class='a-dotted'>No matches found for <a href='#' class="facebook_modify_search">{{searchString}}</a></p></div>
+{{/if}}
+</div>
+</script>
+
+<script id="facebook-error-template" type="text/html">
+{{#check_length message "140"}}
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+		{{{message}}}
+	</div>
+{{else}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{{message}}}
+	</div>
+{{/check_length}}
+</script>
+
+<script id="facebook-modified-search-template" type="text/html">
+	<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;" id="facebook-search_form" name="facebook-search_form" method="get">
+	    	<fieldset>
+				<p><label>Enter search details</label></p>
+				<div class="control-group"><div class="controls"><input type="text" id="facebook_keywords" class="input-medium required widget_input_box" style="width:90%" placeholder="Key Words" value="{{searchString}}" name="keywords"  maxlength="40"></input></div></div>{{searchString}}
+				<a href="#" id="facebook_search_btn" class="btn" style="text-decoration:none;">Search</a>
+				<span><img src="img/ajax-spinner.gif" id="spinner-facebook-search" style="display:none;"></img></span>
+				<a href="#" id="facebook_search_close" class="btn close" style="float:none;margin-left:5px;">Close</a>
+			 </fieldset>
+	    </form>
+	</div>
+</script>
+<script id="facebook-profile-template" type="text/html">
+	<div class="widget_content row-fluid">
+		<div class="span3"><img src="{{image}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+		<div class="pull-left ml_5 span8">
+			<p class="title_txt"><a href="{{user.link}}" target="_blank" >{{user.name}}</a></p>
+		<a class="btn" id="send_fb_friend_request_w" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/friends/?id={{user.id}}&app_id=1472962409608031&redirect_uri=http://{{getfbreturndomain}}/scribe?act=facebook','Sample','toolbar=no,width=800,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false"><i class="icon-plus"></i>Add Friend</a>
+		<a class="btn" id="fb_post_on_wall" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/feed?app_id=1472962409608031&display=popup&from={{me.id}}&to={{id}}&caption=An example caption&link=https://developers.facebook.com%2Fdocs%2F%20%20%20&redirect_uri=http://{{getfbreturndomain}}/scribe?act=facebook','Sample','toolbar=no,width=1000,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Post</a>
+</div>	
+</div>
+</script>
+
+<script id="facebook-revoke-access-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+	<div class="row-fluid">
+		<div class="span4">
+			<img src="{{profile.picture.data.url}}" width="70" height="70" alt="" class="thumbnail"/>
+		</div>
+		<div class="span7">
+			<p class="title_txt"><a href="{{profile.link}}" target="_blank" >{{profile.name}}</a></p>
+			<p style="margin:0px;">{{profile.location.name}}</p>
+		</div>
+	</div>
+	<div>
+		<p style='margin: 10px 0px 5px 0px;' >
+			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Facebook">Revoke Access</a>
+			<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Facebook">Cancel</a>
+		</p>
+	</div>
+</div>
+</script>

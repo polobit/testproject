@@ -34,6 +34,7 @@ public class MandrillWebhook extends HttpServlet
     public static final String EVENT = "event";
     public static final String HARD_BOUNCE = "hard_bounce";
     public static final String SOFT_BOUNCE = "soft_bounce";
+    public static final String SPAM = "spam";
 
     public static final String MSG = "msg";
     public static final String EMAIL = "email";
@@ -66,7 +67,8 @@ public class MandrillWebhook extends HttpServlet
 
 		// Set to contact if event is HardBounce or SoftBounce
 		if (StringUtils.equalsIgnoreCase(event, HARD_BOUNCE)
-			|| StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE))
+			|| StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
+			|| StringUtils.equalsIgnoreCase(event, SPAM))
 		    setBounceStatusToContact(eventJSON);
 	    }
 	}
@@ -119,6 +121,9 @@ public class MandrillWebhook extends HttpServlet
 
 	    if (HARD_BOUNCE.equals(eventJSON.getString(EVENT)))
 		type = EmailBounceType.HARD_BOUNCE;
+
+	    if (SPAM.equals(eventJSON.getString(EVENT)))
+		type = EmailBounceType.SPAM;
 
 	    // Set status to Agile Contact
 	    setContactEmailBounceStatus(msgJSON.getString(EMAIL), subject, type, metadata);
@@ -228,16 +233,23 @@ public class MandrillWebhook extends HttpServlet
 	try
 	{
 	    String logType = LogType.EMAIL_HARD_BOUNCED.toString();
-	    String type = "hard";
+	    String message = "There was a hard bounce on email \'" + email + "\' <br><br> Email subject: "
+		    + emailSubject;
 
 	    if (emailBounceType.equals(EmailBounceType.SOFT_BOUNCE))
 	    {
-		type = "soft";
+		message = "There was a soft bounce on email \'" + email + "\' <br><br> Email subject: " + emailSubject;
 		logType = LogType.EMAIL_SOFT_BOUNCED.toString();
 	    }
 
-	    LogUtil.addLogToSQL(campaignId, subscriberId, "There was a " + type + " bounce on email \'" + email
-		    + "\' <br><br> Email subject: " + emailSubject, logType);
+	    if (emailBounceType.equals(EmailBounceType.SPAM))
+	    {
+		message = "There was a spam complaint from email \'" + email + "\' <br><br> Email subject: "
+			+ emailSubject;
+		logType = LogType.EMAIL_SPAM.toString();
+	    }
+
+	    LogUtil.addLogToSQL(campaignId, subscriberId, message, logType);
 	}
 	catch (Exception e)
 	{

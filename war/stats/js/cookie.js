@@ -70,3 +70,12 @@ function agile_create_cookie(name, value, days)
 	
 	document.cookie = name + "=" + escape(value) + expires + "; path=/" + document_cookie;
 }
+
+/**
+ *  Function to delete a cookie
+ *  
+ * @param name
+ */
+function agile_delete_cookie(name){
+	agile_create_cookie(name, "", -1);
+}

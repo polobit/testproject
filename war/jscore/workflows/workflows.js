@@ -13,13 +13,38 @@ $(function(){
 		e.stopPropagation();
 	});
 	
+	// Show logs of selected filter
 	$(".log-filters").die().live('click', function(e){
 		e.preventDefault();
 		
 		var log_type = $(this).data('log-type');
 		var id = $(this).data('campaign-id');
 		
-		App_Workflows.logsToCampaign(id, log_type);
+		App_Workflows.logsToCampaign(id, log_type, $(this).text());
+	});
+	
+	// Show stats of selected campaign
+	$('#campaign-reports-select').live('change', function(e){
+		
+		e.preventDefault();
+		
+		var active_tab = $('#campaign-tabs .active').data('campaign-tab-active');
+		
+		if(active_tab == "STATS")
+			Backbone.history.navigate("email-reports/"+$(this).val() , {
+                trigger: true
+            });
+		
+		if(active_tab == "SUBSCRIBERS")
+			Backbone.history.navigate("workflow/all-subscribers/"+$(this).val() , {
+                trigger: true
+            });
+		
+		if(active_tab == "LOGS")
+			Backbone.history.navigate("workflows/logs/"+$(this).val() , {
+                trigger: true
+            });
+		
 	});
 
 	/**

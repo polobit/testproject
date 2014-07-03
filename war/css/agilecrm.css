@@ -1168,8 +1168,42 @@ time {
 
 }
 
+/** Modal borders **/
+.modal {
+	background: none!important;
+}
+.modal-body {
+	background: #fff;
+}
 
+/** Webrules sorting **/
+#webrule-model-list > tr.pseduo-row td{
+	border-top:0px #fff!important;
+	background-color:#fff!important;
+}
+#webrule-model-list > tr.pseduo-row  td input[type="checkbox"]
+{
+	display:none;
+}
+#webrule-model-list tr:hover td:last-child div { 
+	display:block!important;
+}
 
+/** documents icon  **/
+#documents-model-list tr:hover td.data div b.activate-link { 
+	display:inline!important;
+}
+
+/** custom feilds modals **/
+#custom-field-add-modal .modal-footer {
+margin-top: 0px;
+}
+
+/** Google apps **/
+#email-prefs div.span3{
+	margin-left:0px;
+	width:257px;
+}
 
 /* Disable drop-down menu item, add class="disabled" to <a>
 Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats

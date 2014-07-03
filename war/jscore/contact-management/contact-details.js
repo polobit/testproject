@@ -108,7 +108,7 @@ $(function(){
 		e.preventDefault();
 		
 		var tag = $(this).attr("tag");
-		removeItemFromTimeline($("#" + tag+ '-tag-timeline-element', $('#timeline')).parent('.inner'))
+		removeItemFromTimeline($("#" +  tag.replace(/ +/g, '') + '-tag-timeline-element', $('#timeline')).parent('.inner'))
 		console.log($(this).closest("li").parent('ul').append(getRandomLoadingImg()));
 		
      	var json = App_Contacts.contactDetailView.model.toJSON();
@@ -195,7 +195,7 @@ $(function(){
 	        contact.save(json,{
 	       		success: function(data){
 	       			
-	       			addTagToTimelineDynamically(data.get("tagsWithTime"));
+	       			addTagToTimelineDynamically(new_tags, data.get("tagsWithTime"));
 	       			
 	       			// Get all existing tags of the contact to compare with the added tags
 	       			var old_tags = [];
