@@ -2,6 +2,7 @@ var timeline_entity_loader = {
 
 	init : function(contact)
 	{
+		this.active_connections = 0;
 		MONTH_YEARS = [];
 		var _this = this;
 		// Load plugins for timeline
@@ -108,15 +109,27 @@ var timeline_entity_loader = {
 	{
 		$("#timeline-loading-img", App_Contacts.contactDetailView.el).show();
 
-		this.active_connections = true;
+		console.log(this.active_connections);
+		//this.active_connections = true;
+		++this.active_connections;
+		var _this = this;
 		$.getJSON(url, function(data)
 		{
+			
+			console.log("success : " + _this.active_connections)
+			--_this.active_connections;
+			console.log("success : " + _this.active_connections)
 			if (callback && typeof callback === "function")
 				callback(data);
-			$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+			
+			if(!_this.active_connections)
+				$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
 		}).error(function()
 		{
-			$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+			-- _this.active_connections;
+			
+			if(!_this.active_connections)
+				$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
 		});
 	}, getOpenedEmailsFromEmails : function(emails)
 	{
