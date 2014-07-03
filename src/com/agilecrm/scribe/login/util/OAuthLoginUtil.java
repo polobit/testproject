@@ -1,7 +1,6 @@
 package com.agilecrm.scribe.login.util;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -154,9 +153,7 @@ public class OAuthLoginUtil
 
 	    // String path = "https://" + domainUser.domain +
 	    // "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/oauth";
-	    String path = "https://" + domainUser.domain + ".agilecrm.com/oauth";
-	    if (returnURL != null)
-		path += "?return_url=" + URLEncoder.encode(returnURL);
+	    String path = "https://" + domainUser.domain + ".agilecrm.com/";
 
 	    System.out.println("Redirecting to " + path);
 
