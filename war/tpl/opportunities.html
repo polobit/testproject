@@ -93,7 +93,7 @@
        {{/each}}
 	</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 </td>
-<td value="{{expected_value}}"><div>{{numberWithCommas expected_value}}{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}</div></td>
+<td value="{{expected_value}}"><div>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{numberWithCommas expected_value}}</div></td>
 <td><div style="">{{milestone}} ({{probability}}%) </div></td>
 <!--<td><div style="">
     {{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{calculatePipeline expected_value probability pipeline}} </div>

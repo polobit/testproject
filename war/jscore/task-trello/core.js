@@ -156,10 +156,8 @@ function taskFetch(index)
 	taskCollection.collection.fetch({ success : function(data)
 	{
 		// Add sub collection in model of main collection.
-		base_model.set('taskCollection', taskCollection.collection);
+		base_model.set('taskCollection', taskCollection.collection);		
 
-		console.log("base_model");
-		console.log(base_model);
 		
 		// Update UI
 		if(base_model.has("owner_id"))

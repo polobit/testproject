@@ -12,6 +12,7 @@ var timeline_entity_loader = {
 			timeline_collection_view = new timeline_view();
 			console.log(_this);
 			_this.load_other_timline_entities(contact);
+
 			timeline_collection_view.render();
 			// timeline_collection_view.render();
 
@@ -24,6 +25,8 @@ var timeline_entity_loader = {
 		this.load_related_entites(contactId);
 		this.load_stats(contact);
 		this.load_campaign_logs(contactId);
+		
+		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
 	},
 	load_related_entites : function(contactId)
 	{
@@ -60,34 +63,16 @@ var timeline_entity_loader = {
 		// Go for mails when only the contact has an email
 		if (email)
 		{
-			this.get_stats('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', contact, App_Contacts.contactDetailView.el,
-					function(stats)
-					{
-						// Clone emails Array to not affect original emails
-
-						var stats_processed = [];
-						if (stats && stats.length > 0)
-						{
-							for ( var i = 0; i < stats.length; i++)
-							{
-								// if error occurs in imap (model is obtained
-								// with the error
-								// msg along with contact-email models),
-								// ignore that model
-								if (('errormssg' in stats[i]) || stats[i].status === "error")
-									continue;
-
-								stats_processed.push(stats[i]);
-							}
-
-							// Addes opened emails into timeline
-							var opened_emails = this.getOpenedEmailsFromEmails(stats_processed);
-							if (opened_emails.length > 0)
-								stats_processed.push(opened_emails);
-
-							timeline_collection_view.addItems(stats_processed);
-						}
-					})
+			this.timline_fetch_data('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', function(stats)
+			{
+				console.log(stats);
+				
+				if(stats)
+				{
+					console.log(stats["emails"]);
+					timeline_collection_view.addItems(stats["emails"]);
+				}
+			})
 		}
 	},
 	load_campaign_logs : function(contactId)
@@ -184,7 +169,8 @@ var timeline_entity_loader = {
 			is_logs_fetched = false;
 			is_array_urls_fetched = false;
 
-			show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
+			// show_timeline_padcontent(is_logs_fetched, is_mails_fetched,
+			// is_array_urls_fetched);
 
 			$('#time-line', el).find('.loading-img-stats').remove();
 
@@ -217,7 +203,7 @@ var timeline_entity_loader = {
 					}
 				}
 
-				timeline_collection_view.addItems(data);
+				timeline_collection_view.addItems(data.toJSON());
 
 				addTagAgile(CODE_SETUP_TAG);
 			}
