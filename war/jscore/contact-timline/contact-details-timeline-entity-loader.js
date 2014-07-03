@@ -68,10 +68,19 @@ var timeline_entity_loader = {
 			{
 				console.log(stats);
 				
-				if(stats)
+				if(stats && stats["emails"])
 				{
-					console.log(stats["emails"]);
-					timeline_collection_view.addItems(stats["emails"]);
+					var array = [];
+					$.each(stats["emails"], function(index,data){
+						// if error occurs in imap (model is obtained with the error msg along with contact-email models),
+						// ignore that model
+						if(('errormssg' in data) || data.status === "error")
+						return;
+						
+						array.push(data);
+						
+						});
+					timeline_collection_view.addItems(array);
 				}
 			})
 		}
