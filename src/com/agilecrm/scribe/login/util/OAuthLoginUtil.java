@@ -10,6 +10,7 @@ import org.scribe.builder.api.Api;
 import org.scribe.builder.api.YahooApi;
 import org.scribe.oauth.OAuthService;
 
+import com.agilecrm.LoginServlet;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.scribe.login.serviceproviders.GoogleLoginService;
 import com.agilecrm.scribe.login.serviceproviders.OAuthLoginService;
@@ -134,9 +135,9 @@ public class OAuthLoginUtil
 
 	if (domainUser == null)
 	{
-
-	    // resp.sendRedirect("/register");
-	    req.getSession().setAttribute("return_url", "/register");
+	    // Oauth should be set as query parameter so it creates new account
+	    // based on session info set
+	    req.getSession().setAttribute("return_url", "/register?type=oauth");
 	    return;
 	}
 
@@ -167,6 +168,21 @@ public class OAuthLoginUtil
 	// or return_url
 	req.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 	SessionManager.set(userInfo);
+
+	// Redirect to page in session is present - eg: user can access #reports
+	// but we store reports in session and then forward to auth. After auth,
+	// we forward back to the old page
+	req.getSession().removeAttribute("return_url");
+
+	String redirect = (String) req.getSession().getAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+	if (redirect != null)
+	{
+	    req.getSession().removeAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+	    resp.sendRedirect(redirect);
+	    return;
+	}
+
+	resp.sendRedirect("/");
     }
 
     public static OAuthService getLoginService(HttpServletRequest request, HttpServletResponse response,
