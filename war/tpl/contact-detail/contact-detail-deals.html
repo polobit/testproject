@@ -38,7 +38,7 @@
 		<h4 style="margin-bottom: 9px;"><a style="text-decoration: none"><b>{{name}}</b></a><span style="margin-left:20px;">{{milestone}} ({{probability}} %)</span></h4>
 							
 		<p><span style="margin-right: 10px;">Value : </span>
-			{{numberWithCommas expected_value}}{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
+			{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{numberWithCommas expected_value}}
 		</p>
 				
 	<!--  <ul style="list-style: none;">
