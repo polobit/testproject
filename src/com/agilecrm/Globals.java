@@ -73,10 +73,8 @@ public class Globals
     public static final String STRIPE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     // development keys
-    // public static final String STRIPE_API_KEY =
-    // "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
-    // public static final String STRIPE_CLIENT_ID =
-    // "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
+     public static final String DEV_STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
+     public static final String DEV_STRIPE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
     // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
@@ -120,4 +118,6 @@ public class Globals
     // Campaign and Email pull queues
     public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
+    //shopify app credential
+    public static final String API_KEY ="70a2391cd9e9af0d666657a67885d9ec";
 }

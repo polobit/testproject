@@ -1,6 +1,8 @@
+
 <!-- Indices written at Thu, 3 Jul 2014 10:23:41 IST -->
 
-<datastore-indexes>
+
+<datastore-indexes/>
 
     <!-- Used 7 times in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
@@ -22,3 +24,4 @@
     </datastore-index>
 
 </datastore-indexes>
+

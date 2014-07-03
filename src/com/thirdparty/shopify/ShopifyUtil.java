@@ -5,20 +5,12 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -431,5 +423,27 @@ public class ShopifyUtil
 	uri.setHost(pref.apiKey + ":" + pref.password + "@" + pref.userName);
 	return uri;
     }
+    
+    public static void main(String[]args){
+	
+
+	try{
+	
+	URL ur = new URL("https://shopperschois.myshopify.com/admin/oauth/authorize?client_id=70a2391cd9e9af0d666657a67885d9ec&scope=read_customers");
+	
+	
+	URLConnection con = ur.openConnection();
+	con.connect();
+	BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	String s;
+	while((s = br.readLine())!= null){
+	    System.out.println(s);
+	}
+	
+	}catch(Exception e){
+	    e.printStackTrace();
+	}
+    }
+
 
 }
