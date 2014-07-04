@@ -1,7 +1,6 @@
 package com.agilecrm.scribe;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,12 +38,13 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_GMAIL = "gmail";
     public static final String SERVICE_TYPE_GOOGLE = "google";
     public static final String SERVICE_TYPE_GOOGLE_CALENDAR = "google_calendar";
-    public static final String SERVICE_TYPE_GOOGLE_OAUTH2 = "google_oauth2";
+
     public static final String SERVICE_TYPE_STRIPE = "stripe";
     public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
     public static final String SERVICE_TYPE_GOOGLE_DRIVE = "google_drive";
     public static final String SERVICE_TYPE_XERO = "xero";
     public static final String SERVICE_TYPE_FACEBOOK = "facebook";
+    public static final String SERVICE_TYPE_STRIPE_IMPORT = "stripe_import";
 
     // Scopes
     public static final String STRIPE_SCOPE = "read_only";
@@ -52,8 +52,9 @@ public class ScribeServlet extends HttpServlet
     public static final String GOOGLE_CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
     public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
     public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
-    public static final String GOOGLE_OAUTH2_SCOPE = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email";
+    public static final String GOOGLE_OAUTH2_SCOPE = "email profile";
 
+    // OAuth login
     public static final String SERVICE_TYPE_OAUTH_LOGIN = "oauth_login";
 
     /**
@@ -78,17 +79,6 @@ public class ScribeServlet extends HttpServlet
      */
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-	// handle facebook popup windows
-	if ("facebook".equalsIgnoreCase(req.getParameter("act")))
-	{
-	    PrintWriter out = resp.getWriter();
-	    resp.setContentType("text/html");
-	    out.println("<script type=\"text/javascript\">");
-	    out.println("this.close()");
-	    out.println("</script>");
-	    return;
-	}
-
 	/*
 	 * OAuth1.0 - Check if it is first time or returning from OAuth1.0
 	 * authentication.If token and verifier is present, we just store or
@@ -164,7 +154,7 @@ public class ScribeServlet extends HttpServlet
 
 	// OAuth needn't send any service type
 	if (serviceName == null && req.getRequestURI().contains("oauth"))
-	    serviceName = SERVICE_TYPE_GOOGLE_OAUTH2;
+	    serviceName = SERVICE_TYPE_OAUTH_LOGIN;
 
 	if (serviceName != null)
 	    req.getSession().setAttribute("service_type", serviceName);
@@ -191,9 +181,10 @@ public class ScribeServlet extends HttpServlet
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 	{
 	    // After building service, redirects to authorization page
 	    url = service.getAuthorizationUrl(null);
@@ -252,6 +243,7 @@ public class ScribeServlet extends HttpServlet
 	// Retrieve Token and Service Name from session
 	String serviceName = (String) req.getSession().getAttribute("oauth.service");
 
+	System.out.println("service name " + serviceName);
 	String code = null;
 	Token requestToken = null;
 	Token accessToken = null;
@@ -261,9 +253,10 @@ public class ScribeServlet extends HttpServlet
 	if (serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE) || serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_CALENDAR)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 	    code = req.getParameter("code");
 
 	// OAuth 1.0 requires token and verifier

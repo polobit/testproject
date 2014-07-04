@@ -538,8 +538,8 @@ public class ScribeUtil
 		    "", "XERO");
 	    JSONObject xeroProfile = new JSONObject(res);
 	    JSONObject js = (JSONObject) xeroProfile.getJSONArray("Users").get(0);
-	    properties.put("xeroId",js.getString("UserID"));
-	    properties.put("xeroemail",js.getString("EmailAddress"));
+	    properties.put("xeroId", js.getString("UserID"));
+	    properties.put("xeroemail", js.getString("EmailAddress"));
 	}
 	catch (JSONException e)
 	{
