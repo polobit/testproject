@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -49,13 +50,14 @@ public class ShopifyImportAPI
     @POST
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactPrefs saveContactPref(@FormParam("Shop") String shopname, @FormParam("ApiKey") String apiKey,
-	    @FormParam("ApiPass") String apiPass) throws Exception
+    public ContactPrefs isAutherize(@FormParam("Shop") String shopname,@FormParam("Shop") String apiPass,@FormParam("api") String apiKey) throws Exception
     {
 
 	/**
 	 * checking existing contact pref of same type
 	 */
+	
+	
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
 	if (prefs != null && prefs.userName.equalsIgnoreCase(shopname))
 	{
@@ -94,6 +96,14 @@ public class ShopifyImportAPI
 			.build());
 	    }
 	}
+    }
+    
+    @GET
+    @Path("/getPref")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public ContactPrefs getContactPref(){
+	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
+	return prefs;
     }
 
     /**

@@ -43,39 +43,7 @@ public class StripeUtil
     public static final StripeAgileDataMapperService mapper = new StripeAgileDataMapperService();
 
     /**
-     * Test method used for local console testing
-     * 
-     * @param args
-     */
-    public static void main(String[] args)
-    {
-	// Stripe.apiKey = Globals.STRIPE_API_KEY;
-	// Stripe.apiKey ="sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
-	// Stripe.apiKey ="sk_test_2RbCiX2Bf2QoEdRhGqY8nttc";
-	Stripe.apiVersion = "2012-09-24";
-	Map<String, Object> option = new HashMap<String, Object>();
-	option.put("limit", 100);
-	// option.put("", arg1)
-	try
-	{
-	    CustomerCollection list = Customer.all(option, "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5");
-	    List<Customer> customers = list.getData();
-	    int i = 0;
-	    for (Customer c : customers)
-	    {
-		System.out.println(i + " " + c.getId());
-		i++;
-	    }
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-    }
-
-    /**
-     * This code will do import all Customer from Stripe. It will check whether
+     * This will do import all Customer from Stripe. It will check whether
      * Stripe widget is Configured or not if is configured then it will fetch
      * custom field value of widget and fill customer ID in that widget and auto
      * saved stripe customerID
@@ -87,7 +55,16 @@ public class StripeUtil
      */
     public static void importCustomers(ContactPrefs prefs, Key<DomainUser> key)
     {
+	/**
+	 * setting api version for Stripe
+	 */
 	Stripe.apiVersion = "2012-09-24";
+	/**
+	 * store last customer id to get next records from stripe if last
+	 * customerID is null then it will fetch records from start of index
+	 */
+	String lastCustomerID = prefs.userName;
+
 	try
 	{
 	    String stripeFieldValue = null;
@@ -99,16 +76,36 @@ public class StripeUtil
 		    stripeFieldValue = stripePref.get("stripe_field_name").toString();
 	    }
 
-	    HashMap<String, Object> options = new HashMap<String, Object>();
-	    options.put("limit", 100);
-	    CustomerCollection collections = Customer.all(options, prefs.apiKey);
-	    List<Customer> customers = collections.getData();
-	    for (Customer c : customers)
+	    while (true)
 	    {
-		Contact contact = mapper.createCustomerDataMap(c, stripeFieldValue);
-		contact.setContactOwner(key);
-		contact.save();
+		HashMap<String, Object> options = new HashMap<String, Object>();
+		options.put("limit", 100);
+		options.put("starting_after", lastCustomerID);
+		CustomerCollection collections = Customer.all(options, prefs.token);
+		List<Customer> customers = collections.getData();
+		System.out.println(customers.size());
+		for (Customer c : customers)
+		{
+		    Contact contact = mapper.createCustomerDataMap(c, stripeFieldValue);
+		    contact.setContactOwner(key);
+		    contact.save();
+		}
+		if (customers.size() == 0)
+		    break;
+		else
+		{
+		    Customer customer = customers.get(customers.size() - 1);
+
+		    lastCustomerID = customer.getId();
+
+		}
+
 	    }
+	    /**
+	     * updating last sync check
+	     */
+
+	    updateLastestSync(prefs, lastCustomerID);
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
@@ -120,15 +117,16 @@ public class StripeUtil
     }
 
     /**
-     * sync customer details into agile contact
+     * Update last sync prefs
+     * 
+     * @param pref
+     * @param lastCustomerID
      */
-    public static void sync()
+    private static void updateLastestSync(ContactPrefs pref, String lastCustomerID)
     {
-	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.STRIPE);
-	if (pref != null && pref.getDomainUser() != null)
-	{
-	    importCustomers(pref, pref.getDomainUser());
-	}
+	pref.userName = lastCustomerID;
+	pref.save();
+
     }
 
 }
