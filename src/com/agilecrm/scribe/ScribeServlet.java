@@ -45,6 +45,7 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_GOOGLE_DRIVE = "google_drive";
     public static final String SERVICE_TYPE_XERO = "xero";
     public static final String SERVICE_TYPE_FACEBOOK = "facebook";
+    public static final String SERVICE_TYPE_STRIPE_IMPORT ="stripe_import";
 
     // Scopes
     public static final String STRIPE_SCOPE = "read_only";
@@ -193,7 +194,8 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 	{
 	    // After building service, redirects to authorization page
 	    url = service.getAuthorizationUrl(null);
@@ -263,7 +265,8 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GMAIL)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 	    code = req.getParameter("code");
 
 	// OAuth 1.0 requires token and verifier

@@ -155,8 +155,7 @@ function addTaskCount(target)
 		return;
 
 	var targetModel = target.taskCollection.at(0);
-	console.log(targetModel);
-
+	
 	if (!targetModel)
 		return;
 
@@ -192,8 +191,7 @@ function displayTaskCount(count, heading, owner_id)
 function changeTaskCount(target, increased)
 {
 	var targetModel = target.taskCollection.at(0);
-	console.log(targetModel);
-
+	
 	if (!targetModel)
 		return;
 
@@ -206,8 +204,7 @@ function changeTaskCount(target, increased)
 		count = $("span[id='task-count-" + target.heading + "-']").attr("count");
 
 	if (count != null)
-	{
-		console.log(count);
+	{		
 		if (increased)
 			count++;
 		else

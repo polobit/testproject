@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
@@ -15,6 +14,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.DateUtil;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -425,8 +425,6 @@ public class TaskUtil
      */
     public static String getCountOfTasksCategoryType(String criteria, String type, String owner, boolean pending)
     {
-	System.out.println(criteria + " " + type + " " + owner);
-
 	JSONObject countAndType = new JSONObject();
 
 	try

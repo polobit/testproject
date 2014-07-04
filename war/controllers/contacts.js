@@ -107,6 +107,9 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			tag_id = decodeURI(tag_id);
 
+			tag_id = decodeURI(tag_id);
+
+			
 			// erase filter cookie
 			eraseCookie('contact_filter');
 			eraseCookie('company_filter');
@@ -131,6 +134,7 @@ var ContactsRouter = Backbone.Router.extend({
 			url = '/core/api/tags/' + tag_id;
 
 			tag_id = unescape(tag_id);
+			
 		}
 		else
 		{

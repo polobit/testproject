@@ -2,8 +2,7 @@
 function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 {
 	console.log("In addTaskToTaskList");
-	console.log(tasksToAdd);
-
+	
 	var modelTaskList;
 
 	// Get task list on basis of heading and id in case of owner criteria
@@ -31,15 +30,11 @@ function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 		$('.task-list-loading-img-' + headingToSearch + "-", ".task-trello-list").hide();
 	}
 
-	console.log(modelTaskList);
-
 	if (!modelTaskList)
 		return;
 
 	// Copy cursor for infi-scroll
 	tasksToAdd = setCursor(modelTaskList[0], tasksToAdd, conditionToCheck);
-
-	console.log(tasksToAdd);
 
 	// Add task in sub collection means in Task List
 	if (conditionToCheck == "dragged") // if dragged task then do not update UI
