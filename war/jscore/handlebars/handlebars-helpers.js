@@ -636,8 +636,9 @@ $(function()
     /**
      * Returns currency symbol based on the currency value (deals)
      */
-    Handlebars.registerHelper('currencySymbol', function(value)
+    Handlebars.registerHelper('currencySymbol', function()
     {
+    var value =  ((CURRENT_USER_PREFS.currency != null) ? CURRENT_USER_PREFS.currency : "USD-$");
 	var symbol = ((value.length < 4) ? "$" : value.substring(4, value.length));
 	return symbol;
     });
