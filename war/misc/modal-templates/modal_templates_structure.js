@@ -263,6 +263,42 @@
                     ]
                 }
             ]
+        },
+        {
+            "label": "Suvey",
+            "category": "survey",
+            "themes": [
+                {
+                    "label": "q",
+                    "title": "q-survey",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/survey/q/images/q.png",
+                        "theme_big": "/misc/modal-templates/survey/q/images/q.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "q-survey",
+                            "href": "/misc/modal-templates/survey/q/images/q.png",
+                            "link": "/misc/modal-templates/survey/q/q.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "r",
+                    "title": "r-survey",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/survey/r/images/r.png",
+                        "theme_big": "/misc/modal-templates/survey/r/images/r.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "r-survey",
+                            "href": "/misc/modal-templates/survey/r/images/r.png",
+                            "link": "/misc/modal-templates/survey/r/r.html"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
