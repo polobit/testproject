@@ -26,11 +26,11 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	// Show loading image instead of textarea
 //	$('#loading-editor').html(getRandomLoadingImg());
 	
-	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview";
+	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview | code";
 	
 	// Remove Agile Contact fields button
 	if(noAgileContactFields)
-		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview";
+		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview | code";
 	
 	// Init tinymce first time
 	if (typeof (tinymce) === "undefined")
@@ -55,7 +55,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 //			$('#loading-editor').html("");
 			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
-				"textcolor link image preview"
+				"textcolor link image preview code fullpage"
 			], menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
