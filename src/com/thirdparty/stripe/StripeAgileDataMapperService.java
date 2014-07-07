@@ -6,6 +6,7 @@ package com.thirdparty.stripe;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
@@ -24,54 +25,71 @@ import com.stripe.model.Customer;
 public class StripeAgileDataMapperService
 {
 
-    /**
-     * This code will create Maps Stripe's customer field value to agile contact
-     * field value
-     * 
-     * @param customer
-     * @return Contact
-     */
-    public Contact createCustomerDataMap(Customer customer, String stripeFieldValue)
-    {
-	Contact ctx = new Contact();
-	List<ContactField> fields = new ArrayList<ContactField>();
-	ctx.type = Type.PERSON;
-	fields.add(new ContactField(Contact.EMAIL, customer.getEmail(), "work"));
-	Card card = customer.getActiveCard();
-	fields.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
-
-	try
+	/**
+	 * This code will create Maps Stripe's customer field value to agile contact
+	 * field value
+	 * 
+	 * @param customer
+	 * @return Contact
+	 */
+	public Contact createCustomerDataMap(Customer customer, String stripeFieldValue)
 	{
-	    if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
-	    {
+		Contact contact = new Contact();
+		List<ContactField> contactFields = new ArrayList<ContactField>();
+		contact.type = Type.PERSON;
+		contactFields.add(new ContactField(Contact.EMAIL, customer.getEmail(), "work"));
+		Card card = customer.getActiveCard();
+		contactFields.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
+		contactFields.add(new ContactField(Contact.ADDRESS, getAddress(card), "office"));
 
-		fields.add(new ContactField(stripeFieldValue, customer.getId(), null));
+		// check stripe custom field
+		if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
+		{
 
-	    }
+			contactFields.add(new ContactField(stripeFieldValue, customer.getId(), null));
 
-	    JSONObject address = new JSONObject();
+		}
 
-	    String addressLine2 ="";
-	    if(card.getAddressLine2() != null){
-		addressLine2  = card.getAddressLine2();
-	    }
-	    System.out.println(card.getAddressLine1());
-	    address.put("address", card.getAddressLine1() + " " + addressLine2);
-	    System.out.println(card.getAddressCity());
-	    address.put("city", card.getAddressCity());
-	    address.put("state", card.getAddressState());
-	    address.put("country", card.getAddressCountry());
-	    address.put("zip", card.getAddressZip());
-	    fields.add(new ContactField(Contact.ADDRESS, address.toString(), "office"));
-	    ctx.properties = fields;
+		contact.properties = contactFields;
+
+		return contact;
 
 	}
-	catch (Exception e)
+
+	/**
+	 * Extract address from {@link Card} and set return JSON address in string
+	 * format
+	 * 
+	 * @param card
+	 * @return
+	 */
+	private String getAddress(Card card)
 	{
-	    e.printStackTrace();
 
+		JSONObject address = new JSONObject();
+
+		String addressLine2 = "";
+		if (card.getAddressLine2() != null)
+		{
+			addressLine2 = card.getAddressLine2();
+		}
+		try
+		{
+			address.put("address", card.getAddressLine1() + " " + addressLine2);
+
+			if (card.getAddressCity() != null)
+				address.put("city", card.getAddressCity());
+
+			if (card.getAddressState() != null)
+				address.put("state", card.getAddressState());
+
+			address.put("country", card.getAddressCountry());
+			address.put("zip", card.getAddressZip());
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		return address.toString();
 	}
-	return ctx;
-
-    }
 }
