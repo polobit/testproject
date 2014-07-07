@@ -50,58 +50,33 @@ public class ShopifyImportAPI
     @POST
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactPrefs isAutherize(@FormParam("Shop") String shopname,@FormParam("Shop") String apiPass,@FormParam("api") String apiKey) throws Exception
+    public ContactPrefs isAutherize(@FormParam("Shop") String shopname) throws Exception
     {
 
-	/**
-	 * checking existing contact pref of same type
-	 */
-	
-	
-	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
-	if (prefs != null && prefs.userName.equalsIgnoreCase(shopname))
+	try
 	{
-	    prefs.count = 1;
-	    prefs.save();
-	    return prefs;
+	    
+	 ContactPrefs pref = new ContactPrefs();
+		pref.userName = shopname;
+		
+	    if (ShopifyUtil.isValid(pref))
+		pref.save();
+	    return pref;
 	}
-	else
+
+	catch (Exception e)
 	{
-	    ContactPrefs pref = new ContactPrefs();
-	    pref.apiKey = apiKey;
-	    pref.password = apiPass;
-	    pref.userName = shopname;
-	    pref.type = Type.SHOPIFY;
-	    pref.count = 0;
-	    pref.last_update_time = date;
-	    try
-	    {
-		if (ShopifyUtil.isValid(pref))
-		    pref.save();
-		return pref;
-	    }
-	    catch (SocketTimeoutException e)
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Request timed out. Refresh and Please try again.").build());
-	    }
-	    catch (IOException e)
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("An error occurred. Refresh and Please try again.").build());
-	    }
-	    catch (Exception e)
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-			.build());
-	    }
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
+
     }
-    
+
     @GET
     @Path("/getPref")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactPrefs getContactPref(){
+    public ContactPrefs getContactPref()
+    {
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
 	return prefs;
     }

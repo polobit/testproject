@@ -10,9 +10,12 @@ import java.util.Map;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.CSVUtil.ImportStatus;
+import com.agilecrm.util.email.SendMail;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.googlecode.objectify.Key;
@@ -22,24 +25,21 @@ import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
-import com.stripe.exception.StripeException;
-import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerCollection;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
-import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
- * This util contains Static method for importing all customers from Stripe api.
- * All customers will saved into agile contacts
+ * <code>StripeUtil</code> contains Static method for importing all customers
+ * from Stripe api. All customers will saved into agile contacts
  * 
  * @author jitendra
  * 
  */
-public class StripeUtil
+public class StripeImportUtil
 {
 
+    // creating StripeDataMapperService
     public static final StripeAgileDataMapperService mapper = new StripeAgileDataMapperService();
 
     /**
@@ -65,9 +65,21 @@ public class StripeUtil
 	 */
 	String lastCustomerID = prefs.userName;
 
+	// initializing total saved contact
+	int savedContacts = 0;
+	// counting total contact found from Stripe
+	int total = 0;
+	// total duplicate contact
+	int duplicatedContact = 0;
+
+	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
+	// retrieving domain user
+	DomainUser domainUser = DomainUserUtil.getDomainUser(key.getId());
 	try
 	{
 	    String stripeFieldValue = null;
+	    // checking widget is configure or not if configure then retrieve
+	    // customer infomation using widget
 	    Widget widget = WidgetUtil.getWidget("Stripe");
 	    if (widget != null)
 	    {
@@ -83,12 +95,16 @@ public class StripeUtil
 		options.put("starting_after", lastCustomerID);
 		CustomerCollection collections = Customer.all(options, prefs.token);
 		List<Customer> customers = collections.getData();
-		System.out.println(customers.size());
+		total += customers.size();
 		for (Customer c : customers)
 		{
 		    Contact contact = mapper.createCustomerDataMap(c, stripeFieldValue);
 		    contact.setContactOwner(key);
 		    contact.save();
+		    if (ContactUtil.isDuplicateContact(contact))
+			duplicatedContact++;
+		    else
+			savedContacts++;
 		}
 		if (customers.size() == 0)
 		    break;
@@ -106,6 +122,14 @@ public class StripeUtil
 	     */
 
 	    updateLastestSync(prefs, lastCustomerID);
+
+	    buildStripeImportStatus(status, ImportStatus.TOTAL, total);
+	    buildStripeImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+	    buildStripeImportStatus(status, ImportStatus.DUPLICATE_CONTACT, duplicatedContact);
+
+	    // seding email notification to domain user
+	    SendMail.sendMail(domainUser.email, SendMail.STRIPE_IMPORT_NOTIFICATION_SUBJECT,
+		    SendMail.STRIPE_IMPORT_NOTIFICATION, new Object[] { domainUser, status });
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
@@ -126,6 +150,30 @@ public class StripeUtil
     {
 	pref.userName = lastCustomerID;
 	pref.save();
+
+    }
+
+    /**
+     * building import status for send email notification about import status
+     * and total success or fail
+     * 
+     * @param map
+     *            {@link java.util.Map}
+     * @param status
+     *            {@link ImportStatus }
+     * @param total
+     *            integer value of total record
+     */
+    private static void buildStripeImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, int total)
+    {
+	if (statusMap.containsKey(status))
+	{
+	    statusMap.put(status, statusMap.get(status) + total);
+	    statusMap.get(status);
+	    return;
+	}
+
+	statusMap.put(status, total);
 
     }
 
