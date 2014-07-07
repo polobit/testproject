@@ -6,17 +6,11 @@ package com.thirdparty.stripe;
 import java.util.ArrayList;
 import java.util.List;
 
-import javassist.bytecode.stackmap.BasicBlock.Catch;
-
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.ContactField.FieldType;
-import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
 
