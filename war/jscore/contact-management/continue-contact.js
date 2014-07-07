@@ -386,7 +386,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
         		show_error(modal_id,form_id,'duplicate-email', response.responseText);
         	}
         	else
-        		show_error(modal_id,form_id,'duplicate-email','Server Error - '+response.status+' :<br/>'+response.responseText);
+        		show_error(modal_id,form_id,'duplicate-email', response.responseText);
         }
     });
 
