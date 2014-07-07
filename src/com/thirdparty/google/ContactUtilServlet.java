@@ -3,7 +3,6 @@ package com.thirdparty.google;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.util.Map;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +24,9 @@ import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
 import com.thirdparty.salesforce.SalesforceImportUtil;
-import com.thirdparty.stripe.StripeUtil;
-import com.thirdparty.zoho.ZohoImportService;
 import com.thirdparty.shopify.ShopifyUtil;
+import com.thirdparty.stripe.StripeImportUtil;
+import com.thirdparty.zoho.ZohoImportService;
 
 /**
  * <code>ContactUtilServlet</code> contains method to get and import contacts.
@@ -212,7 +211,7 @@ public class ContactUtilServlet extends HttpServlet
 	    }
 	    else if (contactPrefs.type == Type.STRIPE)
 	    {
-		StripeUtil.importCustomers(contactPrefs, key);
+		StripeImportUtil.importCustomers(contactPrefs, key);
 
 		BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
 			"Imported successfully from Stripe");

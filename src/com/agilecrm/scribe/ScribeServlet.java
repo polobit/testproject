@@ -14,6 +14,7 @@ import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.scribe.util.ScribeUtil;
 import com.thirdparty.google.ContactsImportUtil;
+import com.thirdparty.shopify.OAuthCustomService;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -45,7 +46,8 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_GOOGLE_DRIVE = "google_drive";
     public static final String SERVICE_TYPE_XERO = "xero";
     public static final String SERVICE_TYPE_FACEBOOK = "facebook";
-    public static final String SERVICE_TYPE_STRIPE_IMPORT ="stripe_import";
+    public static final String SERVICE_TYPE_STRIPE_IMPORT = "stripe_import";
+    public static final String SERVICE_TYPE_SHOPIFY = "shopify_import";
 
     // Scopes
     public static final String STRIPE_SCOPE = "read_only";
@@ -184,8 +186,7 @@ public class ScribeServlet extends HttpServlet
 	}
 
 	OAuthService service = null;
-	service = ScribeUtil.getService(req, resp, serviceName);
-	String url;
+	String url = null;
 	Token token = null;
 
 	// OAuth 2.0
@@ -197,6 +198,7 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 	{
+	    service = ScribeUtil.getService(req, resp, serviceName);
 	    // After building service, redirects to authorization page
 	    url = service.getAuthorizationUrl(null);
 	    String query = req.getParameter("query");
@@ -205,6 +207,22 @@ public class ScribeServlet extends HttpServlet
 		req.getSession().setAttribute("query", query);
 
 	    System.out.println("Redirect URL OAuth2: " + url);
+	}
+	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
+	{
+	    OAuthCustomService shopifyService = ScribeUtil.getShopifyService(req, resp, serviceName);
+	    String param = req.getParameter("shopName");
+
+	    if (shopifyService != null)
+	    {
+		url = shopifyService.getAuthorizationUrl(param);
+		//token = shopifyService.getRequestToken();
+		String query = req.getParameter("query");
+
+		if (query != null)
+		    req.getSession().setAttribute("query", query);
+	    }
+
 	}
 
 	// OAuth 1.0
@@ -266,7 +284,9 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_OAUTH2)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT)
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
+
 	    code = req.getParameter("code");
 
 	// OAuth 1.0 requires token and verifier

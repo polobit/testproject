@@ -57,12 +57,18 @@ public class StripeAgileDataMapperService
 
 	    JSONObject address = new JSONObject();
 
-	    address.put("Street", card.getAddressLine1() + " " + card.getAddressLine2());
-	    address.put("City", card.getAddressCity());
-	    address.put("State", card.getAddressState());
-	    address.put("Country", card.getAddressCountry());
-	    address.put("Zip", card.getAddressZip());
-	    fields.add(new ContactField(Contact.ADDRESS, address.toString(), "Work"));
+	    String addressLine2 ="";
+	    if(card.getAddressLine2() != null){
+		addressLine2  = card.getAddressLine2();
+	    }
+	    System.out.println(card.getAddressLine1());
+	    address.put("address", card.getAddressLine1() + " " + addressLine2);
+	    System.out.println(card.getAddressCity());
+	    address.put("city", card.getAddressCity());
+	    address.put("state", card.getAddressState());
+	    address.put("country", card.getAddressCountry());
+	    address.put("zip", card.getAddressZip());
+	    fields.add(new ContactField(Contact.ADDRESS, address.toString(), "office"));
 	    ctx.properties = fields;
 
 	}
@@ -74,5 +80,4 @@ public class StripeAgileDataMapperService
 	return ctx;
 
     }
-
 }
