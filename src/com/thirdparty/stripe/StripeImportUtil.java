@@ -109,7 +109,7 @@ public class StripeImportUtil
 					else
 						savedContacts++;
 				}
-				if (customers.size() == 0 || total >= MAX_LIMIT)
+				if (customers.size() == 0)
 					break;
 				else
 				{
@@ -118,6 +118,9 @@ public class StripeImportUtil
 					lastCustomerID = customer.getId();
 
 				}
+
+				if (total >= MAX_LIMIT)
+					break;
 
 			}
 			/**
