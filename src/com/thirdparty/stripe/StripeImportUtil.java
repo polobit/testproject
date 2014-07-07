@@ -78,8 +78,8 @@ public class StripeImportUtil
 	try
 	{
 	    String stripeFieldValue = null;
-	    // checking widget is configure or not if configure then retrieve
-	    // customer infomation using widget
+	    // checking stripe widget is configure or not if configure then retrieve
+	    // custom field which is configured for stripe widget
 	    Widget widget = WidgetUtil.getWidget("Stripe");
 	    if (widget != null)
 	    {
