@@ -40,7 +40,10 @@ public class StripeImportUtil
 {
 
 	// initializing StripeDataMapperService
-	public static final StripeAgileDataMapperService mapper = new StripeAgileDataMapperService();
+	private static final StripeAgileDataMapperService mapper = new StripeAgileDataMapperService();
+
+	// setting max fetch records limit
+	private static final int MAX_LIMIT = 1000;
 
 	/**
 	 * This will do import all Customer from Stripe. It will check whether
@@ -106,7 +109,7 @@ public class StripeImportUtil
 					else
 						savedContacts++;
 				}
-				if (customers.size() == 0)
+				if (customers.size() == 0 || total >= MAX_LIMIT)
 					break;
 				else
 				{
