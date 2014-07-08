@@ -145,6 +145,15 @@ public class OAuthLoginUtil
 	String domain = NamespaceManager.get();
 	System.out.println(domainUser + " " + domain);
 	String returnURL = (String) req.getSession().getAttribute("return_url");
+
+	// If return url contains gmail?command= then request is to associate
+	// google gadget to user
+	if (!StringUtils.isEmpty(returnURL) && returnURL.contains("gmail?command="))
+	{
+	    System.out.println("return to gmail gadget service");
+	    return;
+	}
+
 	if (domainUser != null && domainUser.domain != null && domain != null
 		&& !domain.equalsIgnoreCase(domainUser.domain))
 	{
@@ -172,6 +181,7 @@ public class OAuthLoginUtil
 	// Redirect to page in session is present - eg: user can access #reports
 	// but we store reports in session and then forward to auth. After auth,
 	// we forward back to the old page
+
 	req.getSession().removeAttribute("return_url");
 
 	String redirect = (String) req.getSession().getAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
@@ -194,11 +204,12 @@ public class OAuthLoginUtil
 
 	System.out.println("*********************************************");
 	System.out.println(serverFromSession);
-	if (StringUtils.isEmpty(server) && StringUtils.isEmpty(serverFromSession))
-	    return null;
-
 	if (server == null)
 	    server = serverFromSession;
+
+	if (StringUtils.isEmpty(server) && StringUtils.isEmpty(serverFromSession))
+	    server = "google";
+
 	System.out.println(server);
 	OpenIdServiceProvider serviceProvider = null;
 	try
