@@ -38,6 +38,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 		/* Return back from Scribe after oauth authorization */
 		"gmail" : "email", "twitter" : "socialPrefs", "linkedin" : "socialPrefs",
+		
+		/* CALL */
+		"contacts/call-lead/:first/:last" : "addLead"
 	},
 
 	initialize : function()
@@ -712,5 +715,12 @@ var ContactsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 	},
-
+	
+	addLead : function(first, last){
+		$("#personModal").on("shown", function(){
+			$(this).find("#fname").val(first);
+			$(this).find("#lname").val(last);
+		});
+		$("#personModal").modal();
+	}
 });
