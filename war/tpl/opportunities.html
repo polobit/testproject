@@ -82,7 +82,8 @@
 	<b style="height:auto;display:inline-block;">{{name}}</b>
 </td>
 <td>
-	<div style="height:auto;max-height:50px;display:inline-block;width:158px!important;">
+	<div style="max-height:50px!important;">
+		<div style="max-height:50px!important;display:inline-block;width:158px!important;text-overflow:clip!important;">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
         		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
@@ -91,13 +92,11 @@
         		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
         	{{/if_contact_type}}
        {{/each}}
-	</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
+		</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
+	</div>
 </td>
-<td value="{{expected_value}}"><div>{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}} {{numberWithCommas expected_value}}</div></td>
+<td value="{{expected_value}}"><div>{{currencySymbol}} {{numberWithCommas expected_value}}</div></td>
 <td><div style="">{{milestone}} ({{probability}}%) </div></td>
-<!--<td><div style="">
-    {{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}{{calculatePipeline expected_value probability pipeline}} </div>
-</td>-->
 <td><div style="width:8em;"><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
 <td>
     <div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:4em;overflow:hidden;">

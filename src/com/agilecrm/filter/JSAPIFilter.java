@@ -65,7 +65,7 @@ public class JSAPIFilter implements Filter
 			SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Get AgileUser
-		DomainUser domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
+		DomainUser domainUser = APIKey.getDomainUserRelatedToJSAPIKey(agileId);
 
 		// Domain becomes null if user is deleted
 		if (domainUser != null)

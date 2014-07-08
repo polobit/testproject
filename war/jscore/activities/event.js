@@ -417,7 +417,7 @@ function save_event(formId, modalName, isUpdate, saveBtn)
 					// Activates "Timeline" tab and its tab content in
 					// contact detail view
 					// activate_timeline_tab();
-					add_entity_to_timeline(data);
+					//add_entity_to_timeline(data);
 
 					return false;
 				}

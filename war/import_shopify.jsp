@@ -51,7 +51,7 @@ label.error {
 				<label class="control-label">Shop-Name :</label>
 					<div class="controls">
 						<input type="text" placeholder="Enter shop name" name="Shop"
-							required="required" /><br />eg: company.myshopify.com</br>
+							required="required" id="shopeName" /><br />eg: company name</br>
 					</div>
 
 				</div>
@@ -74,50 +74,14 @@ label.error {
 	<script type="text/javascript">
 		$(function()
 		{
-
-			$('#save_shopify_prefs')
-					.die()
-					.live(
-							'click',
-							function(data)
-							{
-
-								if (!isValid('#shopify-login-form'))
-									return;
-
-								$('#spinner-sales').show();
-
-								$
-										.post(
-												"/core/api/shopify/save",
-												$('#shopify-login-form').serialize(),
-												function(data)
-												{
-
-													$("#shopify_import")
-															.html(
-																	'<br /><div class="well" style="margin-left:10px">' +
-
-																	'<legend>Select the items to import from Shopify</legend>' +
-
-																	'<form action="" method="post"  id="form">' +
-
-																	'<div id="shopify_options_error" style="display:none;color:red;margin-bottom:20px"></div>' +
-
-																	'<div style="margin-left: 50px;"><label for="customer"> ' + '<input name="customer" id="customer" type="checkbox" style="vertical-align:top; " value="true" checked="checked"/>Customer</label>' + '<small> Customers will be saved in our Contacts </small>' + '</div>' +
-
-																	'<div class="clearfix"><a id="shopify_import_options" class="btn pull-right" style="text-decoration: none; margin-right: 30px;">Import</a></div>' +
-
-																	'</form></div>');
-
-												}).error(function(data)
-										{
-											$("#shopify-error").html(data.responseText);
-											$('#spinner-sales').hide();
-											$("#shopify-error").show();
-										});
-
-							});
+               $('#save_shopify_prefs').die().live('click',function(){
+            	   var callbackURL = window.location.href + "/shopifyImport";
+                   var shopName = $('#shopeName').val();
+           		// For every request of import, it will ask to grant access
+           		window.location = "/scribe?service=shopify_import&shopName="+shopName+"&return_url=" + encodeURIComponent(callbackURL);
+           		return false;
+               })
+			
 
 			$('#shopify_import_options').die().live('click', function(data)
 			{
