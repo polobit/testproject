@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CreditCard
 {
     public String name = "";
-    public Integer cvc = null;
+    public String cvc = null;
     public String address_line1 = "";
     public String address_line2 = "";
     public String address_state = "";
