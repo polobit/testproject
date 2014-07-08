@@ -71,17 +71,19 @@ public class SearchUtil
 	    // Trims the spaces in field value
 	    String normalized_value = normalizeString(contactField.value);
 
+	    String field_name = normalizeTextSearchString(contactField.name);
+
+	    System.out.println(field_name);
 	    /*
 	     * Replaces special characters with "_" in field name
 	     */
-	    String field_name = contactField.name.replaceAll("[^a-zA-Z0-9_]", "_");
+	    field_name = field_name.replaceAll("[^a-zA-Z0-9_]", "_");
 
 	    if (customField != null && customField.field_type == CustomFieldDef.Type.DATE)
 	    {
 		try
 		{
-		    doc.addField(Field.newBuilder()
-			    .setName(normalizeTextSearchString(contactField.name) + "_time_epoch")
+		    doc.addField(Field.newBuilder().setName(normalizeTextSearchString(field_name) + "_time_epoch")
 			    .setNumber(Double.valueOf(contactField.value)));
 		}
 		catch (NumberFormatException e)
@@ -136,7 +138,7 @@ public class SearchUtil
      * @param value
      * @return {@link String}
      */
-    public static String normalizeTextSearchString(String value)
+    public static String normalizeString(String value)
     {
 
 	// return ParserUtils.normalizePhrase("\"" + URLEncoder.encode(value)
@@ -155,7 +157,7 @@ public class SearchUtil
      * @param value
      * @return {@link String}
      */
-    public static String normalizeString(String value)
+    public static String normalizeTextSearchString(String value)
     {
 
 	// return ParserUtils.normalizePhrase("\"" + URLEncoder.encode(value)
@@ -165,9 +167,27 @@ public class SearchUtil
 	if (StringUtils.isEmpty(value))
 	    return "";
 
-	return (value).replace(" ", "").replace("@", "_AT_").replace("#", "_HASH_").replace("-", "_HYPHEN_")
-		.replace(":", "_COLUMN_").replace(";", "_SEMI_COLUMN_").replace("&", "_AMPERSAND_")
-		.replace("*", "_STAR_");
+	if (!value.matches("^[A-Za-z][A-Za-z0-9_]*$"))
+	{
+	    if (value.startsWith("#"))
+		value = value.replace("#", "HASH_");
+	    else if (value.startsWith("@"))
+		value = value.replace("@", "AT_");
+
+	    value = (value).replace(" ", "").replace("@", "_AT_").replace("#", "_HASH_").replace("-", "_HYPHEN_")
+		    .replace(":", "_COLON_").replace(";", "_SEMI_COLON_").replace("&", "_AMPERSAND_")
+		    .replace("*", "_STAR_");
+	    System.out.println(value);
+
+	    if (value.matches("^[A-Za-z][A-Za-z0-9_]*$"))
+		return value;
+
+	    if (!value.startsWith(("[A-Za-z]")))
+		return value = "SPECIAL_" + value;
+
+	}
+
+	return (value).replace(" ", "");
     }
 
     /**
