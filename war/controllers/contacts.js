@@ -586,6 +586,9 @@ var ContactsRouter = Backbone.Router.extend({
 			setupTinyMCEEditor('textarea#email-body');
 		else
 			setupTinyMCEEditor('textarea#email-body', true);
+
+		// Reset tinymce content
+		set_tinymce_content('email-body', '');
 		
 	},
 	
