@@ -4,7 +4,8 @@ public class Globals
 {
 
     public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
-	    "-dot-sandbox-dot-agilecrmbeta.appspot.com" };
+	    "-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com" };
+
     public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
     public static String GOOGLE_APPS_DOMAIN = "googleapps";
@@ -73,8 +74,8 @@ public class Globals
     public static final String STRIPE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     // development keys
-     public static final String DEV_STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
-     public static final String DEV_STRIPE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
+    public static final String DEV_STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
+    public static final String DEV_STRIPE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
     // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
@@ -118,12 +119,13 @@ public class Globals
     // Campaign and Email pull queues
     public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
-    //shopify app credential
+    // shopify app credential
     public static final String SHOPIFY_API_KEY = "70a2391cd9e9af0d666657a67885d9ec";
     public static final String SHOPIFY_SECRET_KEY = "a1f88bc91e5c70c34c215bf224ebd7d3";
-    
-   // public static final String SHOPIFY_API_KEY = "0655ecab47a7c443bf07f3b72be6035b";
-   // public static final String SHOPIFY_SECRET_KEY = "016cb9b32bdc3e65530e9daf8eee57e6";
-    
-    
+
+    // public static final String SHOPIFY_API_KEY =
+    // "0655ecab47a7c443bf07f3b72be6035b";
+    // public static final String SHOPIFY_SECRET_KEY =
+    // "016cb9b32bdc3e65530e9daf8eee57e6";
+
 }
