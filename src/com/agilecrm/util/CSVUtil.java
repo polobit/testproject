@@ -33,8 +33,6 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
-import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -272,12 +270,12 @@ public class CSVUtil
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
 		// Checks if user can update the contact
-		if (UserAccessControlUtil
-			.check(Contact.class.getSimpleName(), tempContact, CRUDOperation.UPDATE, false))
-		{
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
+		/*
+		 * if
+		 * (!UserAccessControlUtil.check(Contact.class.getSimpleName(),
+		 * tempContact, CRUDOperation.DELETE, false)) {
+		 * ++accessDeniedToUpdate; continue; }
+		 */
 		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
 	    }
