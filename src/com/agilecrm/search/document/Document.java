@@ -44,7 +44,7 @@ public class Document
 	    {
 		try
 		{
-		    builder.setName(SearchUtil.normalizeString(data.name) + "_time_epoch");
+		    builder.setName(SearchUtil.normalizeTextSearchString(data.name) + "_time_epoch");
 
 		    builder.setNumber(Double.valueOf(data.value));
 		    doc.addField(Field.newBuilder().setNumber(Double.valueOf(data.value)));
@@ -56,7 +56,7 @@ public class Document
 	    }
 	    else
 	    {
-		builder.setName(SearchUtil.normalizeString(data.name));
+		builder.setName(SearchUtil.normalizeTextSearchString(data.name));
 		builder.setText(data.value);
 	    }
 

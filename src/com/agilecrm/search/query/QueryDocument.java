@@ -70,7 +70,7 @@ public class QueryDocument<T> implements QueryInterface
     {
 	// Normalizes the string. Removes spaces from the string as space are
 	// excluded while saving in documents
-	keyword = SearchUtil.normalizeString(keyword);
+	keyword = SearchUtil.normalizeTextSearchString(keyword);
 
 	/*
 	 * Builds the query, search on field search_tokens(since contact
@@ -95,7 +95,7 @@ public class QueryDocument<T> implements QueryInterface
     @Override
     public Collection<T> simpleSearchWithType(String keyword, Integer count, String cursor, String type)
     {
-	keyword = SearchUtil.normalizeString(keyword);
+	keyword = SearchUtil.normalizeTextSearchString(keyword);
 	return processQuery("search_tokens:" + keyword + " AND type:" + type, count, cursor);
     }
 
