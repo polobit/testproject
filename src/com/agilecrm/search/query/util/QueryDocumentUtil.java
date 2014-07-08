@@ -114,8 +114,9 @@ public class QueryDocumentUtil
 		 * Create new query with LHS and RHS conditions to be processed
 		 * further for necessary queries
 		 */
+		lhs = SearchUtil.normalizeTextSearchString(lhs);
 		lhs = lhs.replaceAll("[^a-zA-Z0-9_]", "_");
-		String newQuery = lhs + ":" + SearchUtil.normalizeTextSearchString(rhs);
+		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
 
 		// For equals condition
 		if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON))
@@ -135,7 +136,7 @@ public class QueryDocumentUtil
 		// For equals condition
 		else if (condition.equals(SearchRule.RuleCondition.IS_GREATER_THAN))
 		{
-		    newQuery = lhs + ">" + SearchUtil.normalizeTextSearchString(rhs);
+		    newQuery = lhs + ">" + SearchUtil.normalizeString(rhs);
 
 		    /*
 		     * Build query by passing condition old query and new query
@@ -145,7 +146,7 @@ public class QueryDocumentUtil
 
 		else if (condition.equals(SearchRule.RuleCondition.IS_LESS_THAN))
 		{
-		    newQuery = lhs + "<" + SearchUtil.normalizeTextSearchString(rhs);
+		    newQuery = lhs + "<" + SearchUtil.normalizeString(rhs);
 
 		    /*
 		     * Build query by passing condition old query and new query
@@ -163,8 +164,8 @@ public class QueryDocumentUtil
 
 	    if (lhs.contains("time") && lhs.contains("tags"))
 	    {
-		query = createTimeQueryEpoch(query, SearchUtil.normalizeTextSearchString(rhs) + "_time", nestedCondition,
-			nestedLhs, nestedRhs);
+		query = createTimeQueryEpoch(query, SearchUtil.normalizeTextSearchString(rhs) + "_time",
+			nestedCondition, nestedLhs, nestedRhs);
 	    }
 	}
 	return query;
