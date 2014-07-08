@@ -69,7 +69,7 @@ public class SearchUtil
 	    }
 
 	    // Trims the spaces in field value
-	    String normalized_value = normalizeTextSearchString(contactField.value);
+	    String normalized_value = normalizeString(contactField.value);
 
 	    /*
 	     * Replaces special characters with "_" in field name
@@ -187,7 +187,7 @@ public class SearchUtil
 	// Concat all tags in to one string normalized and space seperated
 	for (String tag : values)
 	{
-	    normalizedString += " " + normalizeTextSearchString(tag);
+	    normalizedString += " " + normalizeString(tag);
 	}
 
 	return normalizedString.trim();
@@ -248,18 +248,18 @@ public class SearchUtil
 	    }
 
 	    // If field is not first_name or last_name or address directly
-	    tokens.add(normalizeTextSearchString(contactField.value));
+	    tokens.add(normalizeString(contactField.value));
 
 	}
 
 	String contactName = "";
 
 	// contact contact name first name then last name add to tokens
-	contactName = normalizeTextSearchString(firstName + lastName);
+	contactName = normalizeString(firstName + lastName);
 	tokens.add(contactName);
 
 	// contact contact name last name then first name add to tokens
-	contactName = normalizeTextSearchString(lastName + firstName);
+	contactName = normalizeString(lastName + firstName);
 	tokens.add(contactName);
 
 	// Splits each token in to fragments to search based on keyword
