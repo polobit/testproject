@@ -69,11 +69,11 @@
 <script id="opportunities-grid-view-template" type="text/html">
 <div data="{{id}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b style="max-width: 75%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;">{{name}}</b>
-		<span class="right deal-options" style="display:none;">
+		<b style="max-width: 75%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
+		<span class="right deal-options" style="visibility:hidden;">
 			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
             <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
-        </span>
+        </span><div class="clearfix"</div>
 	</div>
 	<div class="agile-overflow-ellipsis">
 		<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>

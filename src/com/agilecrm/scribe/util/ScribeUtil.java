@@ -39,6 +39,9 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.shopify.OAuthCustomService;
+import com.thirdparty.shopify.ShopifyApi;
+import com.thirdparty.shopify.ShopifyServiceBuilder;
 
 //import org.codehaus.jackson.map.ObjectMapper;
 
@@ -52,6 +55,8 @@ import com.thirdparty.google.calendar.GoogleCalenderPrefs;
  */
 public class ScribeUtil
 {
+
+    private static final String SHOPIFY_SCOPE = "read_customers, read_orders,read_products";
 
     /**
      * Builds service using serviceBuilder based on type of service specified,
@@ -124,6 +129,9 @@ public class ScribeUtil
 		    com.agilecrm.scribe.api.FacebookApi.class, callback, Globals.FACEBOOK_APP_ID,
 		    Globals.FACEBOOK_APP_SECRET, null);
 
+	/**
+	 * create service for stripe import
+	 */
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
 	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT,
 		    com.agilecrm.scribe.api.StripeApi.class, callback, Globals.DEV_STRIPE_CLIENT_ID,
@@ -629,6 +637,35 @@ public class ScribeUtil
 
 	// update widget with tokens
 	saveWidgetPrefsByName(serviceType, properties);
+
+    }
+
+    public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
+	    String serviceType)
+    {
+	/**
+	 * create service for Shopify
+	 */
+	String callback = req.getRequestURL().toString();
+	if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
+	    return getShopifyCustomService(req, ScribeServlet.SERVICE_TYPE_SHOPIFY, ShopifyApi.class, callback,
+		    Globals.SHOPIFY_API_KEY, Globals.SHOPIFY_SECRET_KEY, SHOPIFY_SCOPE);
+
+	return null;
+    }
+
+    private static OAuthCustomService getShopifyCustomService(HttpServletRequest req, String serviceType,
+	    Class<? extends com.thirdparty.shopify.Api> apiClass, String callback, String apiKey, String apiSecret,
+	    String scope)
+    {
+
+	// Gets session and sets attribute "oauth.service" to service type
+	req.getSession().setAttribute("oauth.service", serviceType);
+
+	return new ShopifyServiceBuilder().provider((Class<? extends com.thirdparty.shopify.Api>) apiClass)
+		.apiKey(apiKey).apiSecret(apiSecret).callback(callback).scope(scope).build();
+
+	// if scope is needed in the service
 
     }
 }

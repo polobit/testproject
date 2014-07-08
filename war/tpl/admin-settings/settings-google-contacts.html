@@ -150,44 +150,84 @@
 
 </script>
 
-<script id="admin-settings-import-shopify-contact-sync-template"
-	type="text/html">
-<div class="span4 well">
- <form id="shopify_import_form">
-<legend>Import from Shopify <span class="label label-important">Alpha</span></legend>
-<div>
-	Import Customers from Shopify
-</div>
-   <div class="btn" id="import_shopify" style="display:inline-block;">Import</div>
-</form>
-</div>
 
 
-</script>
-
-
-<script id="admin-settings-zoho-contact-sync-template" type="text/html">
-<div class="span4 well" style="height: 200px;">
-    <form id="imap-prefs-form">
-        <legend>Import from Zoho <span class="label label-important">Alpha</span></legend>
-		<div style="padding-bottom:10px; height:50px;">
-			Import accounts, leads,contacts, deals and cases from Zoho
-		</div>
-        <fieldset>
-           <div class="btn" id="zoho-import" style="display:inline-block;">Import</div>
-        </fieldset>
-    </form>
-</div>
-</script>
-
-<script id="admin-settings-import-stripe-contact-syncPref-template"
-	type="text/html">
+<script id="admin-settings-import-stripe-contact-sync-prefs-template" type="text/html">
 <div class="span4 well">
     <form id="imap-prefs-form">
 <input type ="hidden" value = "{{id}}" name ="id">
         <legend>Import from Stripe <span class="label label-important">Alpha</span></legend>
 		<div>
 			Import customers from Stripe
+		</div>
+           {{#if id}}
+             	<div class="control-group">
+					<label class="control-label" style="text-align:">Frequency</label> 
+           				<div class="controls">
+							<select class="required" name="duration" id="freq">
+
+						{{#check_plan "FREE"}}
+							<option value="" disabled>Only once (Paid plans)</option>
+							<option value="" disabled>Daily  (Paid plans)</option>
+						{{else}}
+							<option value="ONCE">Only once</option>
+							<option value="DAILY">Daily</option>
+						{{/check_plan}}
+							<option value="WEEKLY">Weekly</option>
+							<option value="MONTHLY">Monthly</option>
+						</select>
+					</div>
+		   		</div>
+
+			<div class="form-actions">
+          		 <button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
+           		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+       	  	</div>
+
+	{{/if}}
+
+       
+    </form>
+</div>
+</script>
+
+
+<script id="admin-settings-import-stripe-contact-sync-template"
+	type="text/html">
+<div class="span4 well">
+    <form id="imap-prefs-form">
+
+        <legend>Import from Stripe <span class="label label-important">Alpha</span></legend>
+		<div>
+			Import customers from Stripe
+		</div>
+
+           {{#if id}}
+          <div class="form-actions">
+        	   <a class="btn btn-danger delete"  id="stripe-import-prefs-delete" >Disable</a>
+				<a href="#google-apps/stripe-import" class="btn" id="setting-widget">Settings</a>
+			</div>
+         {{else}}
+         <div class="form-actions">
+           <button class="btn" id="stripe_import" style="display:inline-block;">Enable</button>
+        </div>
+
+	{{/if}}
+
+       
+    </form>
+</div>
+</script>
+
+// template for shopify setting
+<script id="admin-settings-import-shopify-contact-sync_prefs-template"
+	type="text/html">
+<div class="span4 well">
+    <form id="imap-prefs-form">
+<input type ="hidden" value = "{{id}}" name ="id">
+        <legend>Import from Stripe <span class="label label-important">Alpha</span></legend>
+		<div>
+			Import customers from Shopify
 		</div>
            {{#if id}}
              	<div class="control-group">
@@ -222,29 +262,39 @@
 </script>
 
 
-<script id="admin-settings-import-stripe-contact-sync-template"
+<script id="admin-settings-import-shopify-contact-sync-template"
 	type="text/html">
+<div class="span4 well">
+ <form id="shopify_import_form">
+<legend>Import from Shopify <span class="label label-important">Alpha</span></legend>
+<div>
+	Import Customers from Shopify
+</div>
+{{#if id}}
+        <div class="form-actions">
+        	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
+				<a href="#google-apps/shopify-import" class="btn">Settings</a>
+			</div>
+{{/if}}
+   <div class="btn" id="import_shopify" style="display:inline-block;">Import</div>
+</form>
+</div>
+
+
+</script>
+
+// creating template for zoho crm syn
+
+<script id="admin-settings-zoho-contact-sync-template" type="text/html">
 <div class="span4 well" style="height: 200px;">
     <form id="imap-prefs-form">
-
-        <legend>Import from Stripe <span class="label label-important">Alpha</span></legend>
-		<div>
-			Import customers from Stripe
+        <legend>Import from Zoho <span class="label label-important">Alpha</span></legend>
+		<div style="padding-bottom:10px; height:50px;">
+			Import accounts, leads,contacts, deals and cases from Zoho
 		</div>
-
-           {{#if id}}
-          <div class="form-actions">
-        	   <a class="btn btn-danger delete"  id="stripe-import-prefs-delete" >Disable</a>
-				<a href="#google-apps/stripeImport" class="btn" id="setting-widget">Settings</a>
-			</div>
-         {{else}}
-         <div class="form-actions">
-           <button class="btn" id="stripe_import" style="display:inline-block;">Enable</button>
-        </div>
-
-	{{/if}}
-
-       
+        <fieldset>
+           <div class="btn" id="zoho-import" style="display:inline-block;">Import</div>
+        </fieldset>
     </form>
 </div>
 </script>
