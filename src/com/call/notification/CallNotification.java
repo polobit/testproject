@@ -4,7 +4,6 @@
 package com.call.notification;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,39 +23,39 @@ import com.thirdparty.PubNub;
 @SuppressWarnings("serial")
 public class CallNotification extends HttpServlet
 {
-	protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException
-	{
-		String apiKey = req.getParameter("api-key");
-		String phoneNumber = req.getParameter("number");
-		String firstName = req.getParameter("fname");
-		String lastName = req.getParameter("lname");
-		String namespace = NamespaceManager.get();
+    protected void service(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException
+    {
+	String apiKey = req.getParameter("api-key");
+	String phoneNumber = req.getParameter("number");
+	String firstName = req.getParameter("fname");
+	String lastName = req.getParameter("lname");
+	String namespace = NamespaceManager.get();
 
-		PrintWriter out = res.getWriter();
-		if (StringUtils.isBlank(apiKey))
-		{
-			out.println("API KEY MISSING");
-			return;
-		}
-		if (!APIKey.isPresent(apiKey))
-		{
-			out.println("INVALID API KEY");
-			return;
-		}
-		Contact contact = ContactUtil.searchContactByPhoneNumber(phoneNumber);
-		if (contact == null)
-		{
-			res.sendRedirect("https://" + namespace + "agilecrm.com/#contacts/call-lead/" + firstName + "/" + lastName);
-		}
-		try
-		{
-			JSONObject obj = NotificationPrefsUtil.getNotificationJSON(contact);
-			obj.put("type", "CALL");
-			PubNub.pubNubPush(namespace, obj);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+	if (StringUtils.isBlank(apiKey))
+	{
+	    res.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request: API Key is missing");
+	    return;
 	}
+	if (!APIKey.isPresent(apiKey))
+	{
+	    res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Invalid API Key");
+	    return;
+	}
+	Contact contact = ContactUtil.searchContactByPhoneNumber(phoneNumber);
+	if (contact == null)
+	{
+	    res.sendRedirect("https://" + namespace + ".agilecrm.com/#contacts/call-lead/" + firstName + "/" + lastName);
+	    return;
+	}
+	try
+	{
+	    JSONObject obj = NotificationPrefsUtil.getNotificationJSON(contact);
+	    obj.put("type", "CALL");
+	    PubNub.pubNubPush(namespace, obj);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
 }
