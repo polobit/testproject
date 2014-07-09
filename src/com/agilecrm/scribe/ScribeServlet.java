@@ -76,9 +76,16 @@ public class ScribeServlet extends HttpServlet
      * "oauth_verifier" then request is from provider with token keys which are
      * saved in widget.
      */
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
 	// handle facebook popup windows
+    	System.out.println("in scribe");
 	if ("facebook".equalsIgnoreCase(req.getParameter("act")))
 	{
 	    PrintWriter out = resp.getWriter();
@@ -108,6 +115,30 @@ public class ScribeServlet extends HttpServlet
 	System.out.println("oAuthVerifier " + oAuthVerifier);
 	System.out.println("code " + code);
 
+	/** data return from xero 
+	 * contains accesstoken,tokensecret etc
+	 */
+	String data = req.getParameter("data");
+	System.out.println("data is :"+data);
+	if(data!=null)
+	{
+		System.out.println(data);
+		ScribeUtil.saveXeroPrefs(req,data);
+		String returnURL = (String) req.getSession().getAttribute("return_url");
+		System.out.println("return url " + returnURL);
+
+		// If return URL is null, redirect to dashboard
+		System.out.println(returnURL);
+		if (returnURL == null)
+		    resp.sendRedirect("/");
+		else
+		    resp.sendRedirect(returnURL);
+
+		// Delete return url Attribute
+		req.getSession().removeAttribute("return_url");
+	    
+		return;
+	}
 	/*
 	 * If aAuthToken and oAuthVerifier or code is not null i.e., request is
 	 * from service provider, tokens are saved

@@ -11,34 +11,35 @@
 	<div>
 		{{#if Contact.Addresses}}
 		<p style="font-size: 13px;">	
-				{{#if Contact.Addresses.0.AddressLine1}}
-					{{Contact.Addresses.0.AddressLine1}}
+				{{#if Contact.Addresses.Address.1.AddressLine1}}
+					{{Contact.Addresses.Address.1.AddressLine1}}
 				{{/if}}	
-				{{#if Contact.Addresses.0.AddressLine2}}
-					{{Contact.Addresses.0.AddressLine2}}
+				{{#if Contact.Addresses.Address.1.AddressLine2}}
+					{{Contact.Addresses.Address.1.AddressLine2}}
 				{{/if}}
-				{{#if Contact.Addresses.0.AddressLine3}}
-					{{Contact.Addresses.0.AddressLine3}}
+				{{#if Contact.Addresses.Address.1.AddressLine3}}
+					{{Contact.Addresses.Address.1.AddressLine3}}
 				{{/if}}
-				{{#if Contact.Addresses.0.AddressLine4}}
-					{{Contact.Addresses.0.AddressLine4}}
+				{{#if Contact.Addresses.Address.1.AddressLine4}}
+					{{Contact.Addresses.Address.1.AddressLine4}}
 				{{/if}}	
-				{{#if Contact.Addresses.0.City}}
-					{{Contact.Addresses.0.City}}
+				{{#if Contact.Addresses.Address.1.City}}
+					{{Contact.Addresses.Address.1.City}}
 				{{/if}}
-				{{#if Contact.Addresses.0.Country}}
-					{{Contact.Addresses.0.Country}}
+				{{#if Contact.Addresses.Address.1.Region}}
+					{{Contact.Addresses.Address.1.Region}}
 				{{/if}}
-				{{#if Contact.Addresses.0.Region}}
-					{{Contact.Addresses.0.Region}}
+				{{#if Contact.Addresses.Address.1.Country}}
+					{{Contact.Addresses.Address.1.Country}}
 				{{/if}}
+				
 		</p>				
 		{{/if}}
 	</div>
 	<div>
 		{{#if Contact.Phones}}
-		{{#each Contact.Phones}}
-			{{#if PhoneNumber}}<i class="icon-phone"></i> {{PhoneCountryCode}}-{{PhoneAreaCode}}-{{PhoneNumber}} ({{capFirstLetter PhoneType}})<br> {{/if}}
+		{{#each Contact.Phones.Phone}}
+			{{#if PhoneNumber}}<i class="icon-phone"></i> {{#if PhoneCountryCode}}{{PhoneCountryCode}}-{{/if}}{{#if PhoneAreaCode}}{{PhoneAreaCode}}-{{/if}}{{PhoneNumber}}    {{capFirstLetter PhoneType}}<br> {{/if}}
 		{{/each}}
 		{{/if}}
 	</div>
@@ -46,15 +47,16 @@
 		<a class="btn" id="xero_add_invoice" style="margin-top:10px;cursor:pointer;" href="https://go.xero.com/AccountsReceivable/Edit.aspx?fromContactID={{Contact.ContactID}}" target="_blank"><i class="icon-plus"></i>Add Invoice</a>
 	</div>
 </div>
-	{{#if Invoices}}
-	{{#isArray Invoices}}
+	{{#if invoice.Invoice}}
 	<div class="sub_header">
 		<a href="https://go.xero.com/AccountsReceivable/Search.aspx?graphSearch=False" target="_blank"><h4>Invoices</h4></a>
 	</div>
+	{{#isArray invoice.Invoice}}
+	
 	<ul style="margin:0px;">
-		{{#each Invoices}}
+		{{#each invoice.Invoice}}
 			<li class="row-fluid sub_header_li">
-				<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{InvoiceID}}"  value="{{InvoiceID}}" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" style="cursor:pointer;">{{InvoiceNumber}} {{xeroType Type}}</a>
+				<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{InvoiceID}}"  value="{{InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>&nbsp;<a  data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" style="cursor:pointer;" href="https://go.xero.com/AccountsReceivable/View.aspx?InvoiceID={{InvoiceID}}" target="_blank">{{InvoiceNumber}} {{xeroType Type}}</a>
 				<div class="pull-right">{{CurrencyCode}} {{Total}}</div><br>
 				
 				<div id="collapse-{{InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
@@ -64,7 +66,21 @@
 				<div class="pull-right"><span class="badge">{{capFirstLetter Status}}</span></div><br>			
 			</li>
 		{{/each}}
-	</ul>	
+	</ul>
+{{else}}
+		<ul style="margin:0px;">
+			<li class="row-fluid sub_header_li">
+				<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>&nbsp;<a  data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" style="cursor:pointer;" href="https://go.xero.com/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
+				<div class="pull-right">{{invoice.Invoice.CurrencyCode}} {{invoice.Invoice.Total}}</div><br>
+				
+				<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
+				</div>		
+				
+				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{invoice.Invoice.DueDateString}}">{{invoice.Invoice.DueDateString}}</time></small></div>					
+				<div class="pull-right"><span class="badge">{{capFirstLetter invoice.Invoice.Status}}</span></div><br>			
+			</li>
+	</ul>
+	
 	{{/isArray}}
 	{{else}}
 		<li class="sub_header_li" style='color: #999;'>
@@ -123,11 +139,15 @@
 </div>
 </script>
 
-<script id="xero-invoice-lineitems-template" type="text/html">
-	{{#isArray LineItems}}						
-		{{#each LineItems}}	
+<script id="xero-invoice-lineitems-template" type="text/html">	
+{{#isArray LineItems.LineItem}}						
+		{{#each LineItems.LineItem}}	
 			<div class="pull-left" style="padding-left: 20px;">{{ItemCode}}</div>					
 			<div class="pull-right">{{currencyFormat LineAmount}}</div><br>
-		{{/each}}					
+		{{/each}}
+{{else}}
+		<div class="pull-left" style="padding-left: 20px;">{{LineItems.LineItem.ItemCode}}</div>					
+		<div class="pull-right">{{currencyFormat LineItems.LineItem.LineAmount}}</div><br>					
 	{{/isArray}}
+
 </script>

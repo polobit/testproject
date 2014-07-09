@@ -30,6 +30,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.scribe.api.StripeApi;
 import com.agilecrm.scribe.login.util.OAuthLoginUtil;
+import com.agilecrm.social.FacebookUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -257,10 +258,6 @@ public class ScribeUtil
 	    // Appends code in return url
 	    returnURL = returnURL + "&code=" + code;
 	    req.getSession().setAttribute("return_url", returnURL);
-	}
-	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_XERO))
-	{
-	    saveXeroPrefs(req, accessToken);
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
 	    saveFacebookPrefs(req, code, service);
@@ -512,28 +509,27 @@ public class ScribeUtil
 
     /**
      * If service type is xero, we make a post request with the code and get the
-     * access token,widget is fetched by plugin_id in session and is updated
-     * with new access token and refresh token
+     * access token and saved into xero widgets
      * 
      * @param {@link HttpServletRequest}
-     * @param code
+     * @param data
      *            {@link String} code retrieved after OAuth
      * @throws IOException
      */
-    public static void saveXeroPrefs(HttpServletRequest req, Token accessToken) throws IOException
+    public static void saveXeroPrefs(HttpServletRequest req, String data) throws IOException
     {
 	System.out.println("In Xero save");
 
 	/*
 	 * Make a post request and retrieve tokens
 	 */
-	Map<String, String> properties = new HashMap<String, String>();
-	properties.put("token", accessToken.getToken());
-	properties.put("secret", accessToken.getSecret());
-	properties.put("time", String.valueOf(System.currentTimeMillis()));
-	try
+	HashMap<String, String> properties = new ObjectMapper().readValue(data,
+			new TypeReference<HashMap<String, String>>()
+			{
+			});
+	/*try
 	{
-	    String res = SignpostUtil.accessURLWithOauth(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID,
+	   String res = SignpostUtil.accessURLWithOauth(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID,
 		    accessToken.getToken(), accessToken.getSecret(), "https://api.xero.com/api.xro/2.0/users", "GET",
 		    "", "XERO");
 	    JSONObject xeroProfile = new JSONObject(res);
@@ -544,9 +540,10 @@ public class ScribeUtil
 	catch (JSONException e)
 	{
 	    e.printStackTrace();
-	}
+	}*/
 	// Gets widget name from the session
-	String serviceType = (String) req.getSession().getAttribute("service_type");
+	String serviceType = ScribeServlet.SERVICE_TYPE_XERO;
+			//(String) req.getSession().getAttribute("service_type");
 
 	System.out.println("serviceName " + serviceType);
 
@@ -555,7 +552,61 @@ public class ScribeUtil
 	saveWidgetPrefsByName(serviceType, properties);
 
     }
+    
+    
+    
+    
+    /**
+     * If service type is xero, we make a post request with the code and get the
+     * access token, when it expires .and replace old token with new token
+     * 
+     * @param {@link HttpServletRequest}
+     * @param code
+     *            {@link String} code retrieved after OAuth
+     * @throws IOException
+     */
+    public static void editXeroPrefs(HttpServletRequest req, String data) throws IOException
+    {
+	System.out.println("In Xero save");
 
+	/*
+	 * Make a post request and retrieve tokens
+	 */
+	HashMap<String, String> properties = new ObjectMapper().readValue(data,
+			new TypeReference<HashMap<String, String>>()
+			{
+			});
+	// Gets widget name from the session
+	String serviceType = ScribeServlet.SERVICE_TYPE_XERO;
+			//(String) req.getSession().getAttribute("service_type");
+
+	System.out.println("serviceName " + serviceType);
+
+	// update widget with tokens
+
+	Widget widget = WidgetUtil.getWidget(Long.parseLong(properties.get("widget_id")));
+	// If widget is null returns, since no widget exists with id.
+	if (widget == null)
+	{
+	    System.out.println("Widget is null");
+	    return;
+	}
+	System.out.println("Response from Plugin:" + properties.toString());
+	properties.remove("widget_id");
+	saveWidgetPrefs(widget, properties);
+
+    }
+
+    
+    
+    
+    /**
+     * save facebook prefs data contain accesstoken tokensecret etc
+     * @param req
+     * @param code
+     * @param service
+     * @throws IOException
+     */
     public static void saveFacebookPrefs(HttpServletRequest req, String code, OAuthService service) throws IOException
     {
 	System.out.println("In Facebook save");
@@ -568,7 +619,8 @@ public class ScribeUtil
 	properties.put("verifier", verifier.getValue());
 	properties.put("code", code);
 	properties.put("time", String.valueOf(System.currentTimeMillis()));
-
+	
+	
 	// Gets widget name from the session
 	String serviceType = (String) req.getSession().getAttribute("service_type");
 
