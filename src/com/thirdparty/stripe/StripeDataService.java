@@ -30,6 +30,7 @@ public class StripeDataService
 
 	/**
 	 * Retrieves {@link ContactPrefs} based on its type
+	 * 
 	 * @return
 	 */
 	@GET
@@ -41,8 +42,8 @@ public class StripeDataService
 	}
 
 	/**
-	 * update Users {@link ContactPrefs} if token will be there in contactPref then it
-	 * will initialize import data from stripe
+	 * update Users {@link ContactPrefs} if token will be there in contactPref
+	 * then it will initialize import data from stripe
 	 * 
 	 * @param prefs
 	 */

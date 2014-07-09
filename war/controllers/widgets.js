@@ -37,7 +37,7 @@ var WidgetsRouter = Backbone.Router
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
 
 			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
-				"google-apps/stripe-import" : "stripe_sync","google-apps/shopify":"shopify" },
+				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify" },
 
 			/**
 			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -568,8 +568,8 @@ var WidgetsRouter = Backbone.Router
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
 
 				// Adding E-commerce Pref
-				 this.shopify_sync = new Base_Model_View({url:'core/api/shopify/get-prefs',template:'admin-settings-import-shopify-contact-sync'});
-				 $('#shopify').append(this.shopify_sync.render().el);
+				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/get-prefs', template : 'admin-settings-import-shopify-contact-sync' });
+				$('#shopify').append(this.shopify_sync.render().el);
 
 				// adding zoho crm contact sync template preferences
 				// this.zoho_sync = new
@@ -579,7 +579,7 @@ var WidgetsRouter = Backbone.Router
 				// adding stripe payment gateway contact syn template
 				// preferences
 				this.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' });
-				
+
 				$('#stripe').append(this.stripe_sync.render().el);
 
 				var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
@@ -666,29 +666,34 @@ var WidgetsRouter = Backbone.Router
 
 			stripe_sync : function()
 			{
-				
+
 				$("#content").html(getTemplate("settings"), {});
 
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
 
-				this.stripe_sync_setting = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync-prefs', saveCallback:function(model){
-					showNotyPopUp("information", "Contacts sync initated", "top", 1000);
-				} });
-				
+				this.stripe_sync_setting = new Base_Model_View({ url : 'core/api/stripe/import-settings',
+					template : 'admin-settings-import-stripe-contact-sync-prefs', saveCallback : function(model)
+					{
+						showNotyPopUp("information", "Contacts sync initated", "top", 1000);
+					} });
+
 				$("#prefs-tabs-content").html(this.stripe_sync_setting.render().el);
 			},
-			
-			shopify : function(){
+
+			shopify : function()
+			{
 
 				$("#content").html(getTemplate("settings"), {});
 
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
-				
-				this.shopify_sync_setting = new Base_Model_View({url:'core/api/shopify/import-prefs',template :'admin-settings-import-shopify-contact-sync-prefs',saveCallback:function(model){
-					$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
-				}})
+
+				this.shopify_sync_setting = new Base_Model_View({ url : 'core/api/shopify/import-prefs',
+					template : 'admin-settings-import-shopify-contact-sync-prefs', saveCallback : function(model)
+					{
+						$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
+					} })
 			}
 
 		});
