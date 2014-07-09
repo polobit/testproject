@@ -28,61 +28,61 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class StripeDataService
 {
 
-	/**
-	 * Retrieves {@link ContactPrefs} based on its type
-	 * 
-	 * @return
-	 */
-	@GET
-	@Path("/import-settings")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ContactPrefs getPrefs()
-	{
-		return ContactPrefsUtil.getPrefsByType(Type.STRIPE);
-	}
+    /**
+     * Retrieves {@link ContactPrefs} based on its type
+     * 
+     * @return
+     */
+    @GET
+    @Path("/import-settings")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ContactPrefs getPrefs()
+    {
+	return ContactPrefsUtil.getPrefsByType(Type.STRIPE);
+    }
 
-	/**
-	 * update Users {@link ContactPrefs} if token will be there in contactPref
-	 * then it will initialize import data from stripe
-	 * 
-	 * @param prefs
-	 */
-	@PUT
-	@Path("/import-settings")
-	public void saveImportPrefs(ContactPrefs prefs)
-	{
+    /**
+     * update Users {@link ContactPrefs} if token will be there in contactPref
+     * then it will initialize import data from stripe
+     * 
+     * @param prefs
+     */
+    @PUT
+    @Path("/import-settings")
+    public void saveImportPrefs(ContactPrefs prefs)
+    {
 
-		ContactPrefs pref = ContactPrefsUtil.get(prefs.id);
-		pref.save();
+	ContactPrefs pref = ContactPrefsUtil.get(prefs.id);
+	pref.save();
 
-		if (!pref.token.isEmpty() && pref != null)
-			doImport(pref);
+	if (!pref.token.isEmpty() && pref != null)
+	    doImport(pref);
 
-	}
+    }
 
-	/**
-	 * delete ContactPref
-	 */
-	@DELETE
-	@Path("/import-settings")
-	public void deletePrefs()
-	{
-		ContactPrefsUtil.delete(Type.STRIPE);
+    /**
+     * delete ContactPref
+     */
+    @DELETE
+    @Path("/import-settings")
+    public void deletePrefs()
+    {
+	ContactPrefsUtil.delete(Type.STRIPE);
 
-	}
+    }
 
-	/**
-	 * initialize import data for given configuration preferences
-	 * 
-	 * @param pref
-	 */
-	private void doImport(ContactPrefs pref)
-	{
-		ArrayList<String> options = new ArrayList<String>();
-		options.add("customer");
-		pref.thirdPartyField = options;
-		ContactsImportUtil.initilaizeImportBackend(pref);
+    /**
+     * initialize import data for given configuration preferences
+     * 
+     * @param pref
+     */
+    private void doImport(ContactPrefs pref)
+    {
+	ArrayList<String> options = new ArrayList<String>();
+	options.add("customer");
+	pref.thirdPartyField = options;
+	ContactsImportUtil.initilaizeImportBackend(pref);
 
-	}
+    }
 
 }

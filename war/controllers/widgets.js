@@ -697,7 +697,7 @@ var WidgetsRouter = Backbone.Router
 					} });
 
 				$("#prefs-tabs-content").html(this.stripe_sync_setting.render().el);
-			},
+			}, 
 
 			shopify : function()
 			{
