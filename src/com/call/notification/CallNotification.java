@@ -42,10 +42,22 @@ public class CallNotification extends HttpServlet
 	    return;
 	}
 	Contact contact = ContactUtil.searchContactByPhoneNumber(phoneNumber);
-	if (contact == null)
+	if (contact == null && !StringUtils.isBlank(firstName) && !StringUtils.isBlank(lastName))
 	{
-	    res.sendRedirect("https://" + namespace + ".agilecrm.com/#contacts/call-lead/" + firstName + "/" + lastName);
-	    return;
+	    try
+	    {
+		JSONObject obj = new JSONObject();
+		obj.put(Contact.FIRST_NAME, firstName);
+		obj.put(Contact.LAST_NAME, lastName);
+		obj.put(Contact.PHONE, phoneNumber);
+		obj.put("type", "UNKNOWN_CALL");
+		PubNub.pubNubPush(namespace, obj);
+		return;
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	}
 	try
 	{
