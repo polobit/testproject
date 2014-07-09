@@ -69,9 +69,10 @@ function enableWebruletSoring(el)
 				// Get Model, model is set as data to widget element
 				var model = App_WebReports.webrules.collection.get(model_id);
 
-				model.set({ 'position' : index }, { silent : true });
+					model.set({ 'position' : index+1 }, { silent : true });
 
-				models.push({ id : model.get("id"), position : index });
+					models.push({ id : model.get("id"), position : index+1 });
+				}
 
 			});
 			// Saves new positions in server
