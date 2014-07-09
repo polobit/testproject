@@ -45,6 +45,7 @@ public class XeroWidgetsAPI
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getInvoicesFromXero(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
 	{
+		System.out.println("xero widgets api");
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 		if (widget == null)
@@ -56,7 +57,9 @@ public class XeroWidgetsAPI
 		try
 		{
 			// Calls XeroUtil metod to retrieve invoices
-			return utilObj.getInvoicesOfClient(null, email);
+			String res =utilObj.getInvoicesOfClient(widget, email);
+			//System.out.println(res);
+			return res;
 		}
 		catch (Exception e)
 		{
@@ -125,7 +128,7 @@ public class XeroWidgetsAPI
 		try
 		{
 			// Calls XeroUtil metod to retrieve invoices
-			return utilObj.getLineItemsOfInvoice(invoiceId);
+			return utilObj.getLineItemsOfInvoice(invoiceId,widget);
 		}
 		catch (Exception e)
 		{
