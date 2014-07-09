@@ -69,13 +69,13 @@ $(function()
 function update_collection_with_prefs(data)
 {
     console.log(data);
-    if (Catalog_Widgets_View && Catalog_Widgets_View.collection)
+    if (App_Widgets.Catalog_Widgets_View && App_Widgets.Catalog_Widgets_View.collection)
     {
-	var models = Catalog_Widgets_View.collection.where({ name : data["name"] });
+	var models = App_Widgets.Catalog_Widgets_View.collection.where({ name : data["name"] });
 	if (models && models[0])
 	{
 	    models[0].set({ 'prefs' : data.prefs });
-	    console.log(Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
+	    console.log(App_Widgets.Catalog_Widgets_View.collection.where({ name : data["name"] })[0]);
 	}
 
     }
@@ -357,7 +357,7 @@ function save_widget_prefs(pluginName, prefs, callback)
      * Get widget model from collection based on the name attribute of the
      * widget model
      */
-    var models = Catalog_Widgets_View.collection.where({ name : pluginName });
+    var models = App_Widgets.Catalog_Widgets_View.collection.where({ name : pluginName });
 
     /*
      * Saves widget model and on success navigate back to contact detailed view
@@ -408,16 +408,26 @@ function show_set_up_widget(widget_name, template_id, url, model)
 	el = $(getTemplate("widget-settings", model));
     else
     {
-	if (!Catalog_Widgets_View)
+	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 	{
-	    $.getJSON('core/api/widgets/' + widget_name, function(data)
-	    {
-		show_set_up_widget(widget_name, template_id, url, data);
-	    })
-	    return;
-	}
+		
+		App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
 
-	models = Catalog_Widgets_View.collection.where({ name : widget_name });
+		// Fetch the list of widgets
+		App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+			{
+
+			$.getJSON('core/api/widgets/' + widget_name, function(data)
+			    {
+					show_set_up_widget(widget_name, template_id, url, data);
+			    });
+		} });
+
+		return;
+		
+	}
+	models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
+
 	el = $(getTemplate("widget-settings", models[0].toJSON()));
     }
 
@@ -482,16 +492,27 @@ function set_up_access(widget_name, template_id, data, url, model)
     }
     else
     {
-	if (!Catalog_Widgets_View)
+	
+	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 	{
-	    $.getJSON('core/api/widgets/' + widget_name, function(data1)
-	    {
-		set_up_access(widget_name, template_id, data, url, data1)
-	    })
-	    return;
+		
+		App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+
+		// Fetch the list of widgets
+		App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+			{
+
+		    $.getJSON('core/api/widgets/' + widget_name, function(data1)
+	    	    {
+	    			set_up_access(widget_name, template_id, data, url, data1)
+	    	    });
+		} });
+
+		return;
+		
 	}
 
-	models = Catalog_Widgets_View.collection.where({ name : widget_name });
+	models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
 	json = models[0].toJSON();
 	el = $(getTemplate("widget-settings", json));
     }
@@ -535,7 +556,7 @@ function fill_form(id, widget_name, template_id)
     console.log("In fill_form");
     console.log(id + " " + widget_name + " " + template_id);
 
-    var model = Catalog_Widgets_View.collection.get(id);
+    var model = App_Widgets.Catalog_Widgets_View.collection.get(id);
     console.log(model.get("prefs"));
 
     show_set_up_widget(widget_name, template_id);
@@ -597,16 +618,27 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
     }
     else
     {
-	if (!Catalog_Widgets_View)
+
+	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 	{
-	    $.getJSON('core/api/widgets/' + widget_name, function(data1)
-	    {
-		setUpError(widget_name, template_id, error_data, error_url, data1)
-	    })
-	    return;
+		
+		App_Widgets.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default' });
+
+		// Fetch the list of widgets
+		App_Widgets.Catalog_Widgets_View.collection.fetch({ success : function()
+			{
+
+		    $.getJSON('core/api/widgets/' + widget_name, function(data1)
+	    	    {
+	    			setUpError(widget_name, template_id, error_data, error_url, data1)
+	    	    });
+		} });
+
+		return;
+		
 	}
 
-	models = Catalog_Widgets_View.collection.where({ name : widget_name });
+	models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
 	json = models[0].toJSON();
 	el = $(getTemplate("widget-settings", json));
     }

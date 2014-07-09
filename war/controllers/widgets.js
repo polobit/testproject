@@ -38,14 +38,32 @@ var WidgetsRouter = Backbone.Router
 
 	    "google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar" },
 
-	    /**
-	     * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
-	     */
-	    addWidget : function()
-	    {
-		$("#content").html(getTemplate("settings"), {});
-		pickWidget();
-	    },
+		/**
+		 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
+		 */
+		addWidget : function()
+		{
+			$("#content").html(getTemplate("settings"), {});
+			
+			this.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
+				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
+				{
+					build_custom_widget_form(el);
+
+				} });
+
+			// Append widgets into view by organizing them
+			this.Catalog_Widgets_View.appendItem = organize_widgets;
+
+			// Fetch the list of widgets
+			this.Catalog_Widgets_View.collection.fetch();
+			
+			// Shows available widgets in the content
+			$('#prefs-tabs-content').html(this.Catalog_Widgets_View.el);
+			
+			$('#PrefsTab .active').removeClass('active');
+		    $('.add-widget-prefs-tab').addClass('active');
+		},
 
 	    /**
 	     * Manages Linked in widget
@@ -65,6 +83,7 @@ var WidgetsRouter = Backbone.Router
 				.getJSON(
 					"core/api/widgets/social/profile/" + id,
 					function(data)
+
 					{
 					    set_up_access(
 						    "Linkedin",
