@@ -200,6 +200,10 @@ function savefreshBooksWidgetPrefs()
     freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
 
     // Saves the preferences into widget with FreshBooks widget name
+    
+    //Disabling the savebutton after first click
+    $("#freshbooks_save_token").attr("disabled", true);
+    
     save_widget_prefs("FreshBooks", JSON.stringify(freshbooks_prefs), function(data)
     {
 	console.log('In freshbooks save success');
