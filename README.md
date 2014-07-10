@@ -2,6 +2,7 @@
 =================
 ####1.4 - 06/10/2014
 > Yaswanth
+
 1. Added support for special characters in custom fields to save in Text search DB.
    - Supported special characters #, @, ;, :, &.
    - Added client side validation in custom field configuration form
