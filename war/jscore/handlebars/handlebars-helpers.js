@@ -1803,8 +1803,53 @@ $(function()
 	key = key.replace("_", " ");
 
 	var isFound = false;
+	
+	var match_weight = 0;
 
-	// Iterates to create various combinations and check with the header
+	var key_length = key.length;
+	var key = key.toLowerCase();
+	var matched_value;
+	
+	var selected_element;
+	template.find('option').each(function(index, element)
+		    {
+				if ($(element).text().toLowerCase().indexOf(key) != -1)
+				{
+					
+					var current_match_weight = key_length / $(element).text().length;
+					if(match_weight >= current_match_weight)
+						return;
+					
+					selected_element = $(element);
+					matched_value = $(element).text();
+					match_weight = current_match_weight; 
+				}
+		    })
+	
+	console.log(matched_value + ", " + key +" : " + match_weight);
+	
+	
+	for ( var i = 0; i < key.length - 3; i++)
+	{
+		template.find('option').each(function(index, element)
+			    {
+					if ($(element).text().toLowerCase().indexOf(key.substr(0, key.length - i).toLowerCase()) != -1)
+					{
+						console.log(key.substr(0, key.length - i) +" , " + $(element).text());
+						var current_match_weight = key.substr(0, key.length - i).length / $(element).text().length;
+						console.log(current_match_weight);
+						if(match_weight >= current_match_weight)
+							return;
+						selected_element = $(element);
+						matched_value = $(element).text();
+						match_weight = current_match_weight; 
+					}
+			    })
+	}
+	
+	$(selected_element).attr("selected", true);
+	
+/*	// Iterates to create various combinations and check with the header
 	for ( var i = 0; i < key.length - 3; i++)
 	{
 	    template.find('option').each(function(index, element)
@@ -1826,7 +1871,7 @@ $(function()
 	    if (isFound)
 		break;
 	}
-
+*/
 	return new Handlebars.SafeString($('<div>').html(template).html());
     });
 
