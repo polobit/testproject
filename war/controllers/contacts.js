@@ -490,7 +490,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		// Contact Duplicate
-		var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
+		var contact = this.contactDetailView.model
 		var json = contact.toJSON();
 
 		// Delete email as well as it has to be unique
