@@ -449,7 +449,7 @@ var WidgetsRouter = Backbone.Router
 			{
 				if (!id)
 					show_set_up_widget("Xero", 'xero-login',
-							'http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'http://localhost:1234/scribe?data=');
+							'http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'http://agilecrmbeta.appspot.com/scribe?data=');
 				else
 				{
 					{

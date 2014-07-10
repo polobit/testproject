@@ -1,13 +1,7 @@
 package com.agilecrm.social;
 
-import java.net.URLEncoder;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.XML;
 
-import com.agilecrm.scribe.util.SignpostUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.Widget;
 
@@ -23,28 +17,7 @@ import com.agilecrm.widgets.Widget;
 public class XeroUtil
 {
 
-	/** The field holds agent's Xero account consumer key */
-	private String consumerKey;
-
-	/** The field holds agent's Xero account consumer secret */
-	private String consumerSecret;
-
-	/** The field holds agent's Xero account access token */
-	private String accessToken;
-
-	/** The field holds agent's Xero account token secret */
-	private String tokenSecret;
-
-	private static final String APIURL = "https://api.xero.com/api.xro/2.0";
-
-	/** Parameterized constructor for initializing the instance variables */
-	public XeroUtil(String consumerKey, String consumerSecret, String accessToken, String tokenSecret)
-	{
-		this.consumerKey = consumerKey;
-		this.consumerSecret = consumerSecret;
-		this.accessToken = accessToken;
-		this.tokenSecret = tokenSecret;
-	}
+	private String callbackUrl = "https://agilecrmbeta.appspot.com/backend/XeroServlet?data=";
 
 	/**
 	 * Calls method in ClickDeskPlugins server using REST API to get invoices of
@@ -65,7 +38,7 @@ public class XeroUtil
 		String widget_id = widget.id.toString();
 		
 		//get invoices from url
-		String res = HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/invoice",(new JSONObject(widget.prefs).put("email",email).put("widget_id", widget_id).put("callbackUrl","http://localhost:1234/backend/XeroServlet?data=")).toString(), "PUT");
+		String res = HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/invoice",(new JSONObject(widget.prefs).put("email",email).put("widget_id", widget_id).put("callbackUrl",callbackUrl)).toString(), "PUT");
 		
 		if (res.contains("token_expired"))
 		{
@@ -86,10 +59,8 @@ public class XeroUtil
 
 	public String addContact(Widget widget, String firstName, String lastName, String email) throws Exception
 	{
-		//http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/rest/agile-xero/
-		 return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/addcontact",(new JSONObject(widget.prefs).put("name",firstName+" "+lastName).put("email",email).put("callbackUrl","http://localhost:1234/backend/XeroServlet?data=")).toString(), "PUT");
-		
-		
+		//call to create contact in xero
+		 return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/addcontact",(new JSONObject(widget.prefs).put("name",firstName+" "+lastName).put("email",email).put("callbackUrl",callbackUrl)).toString(), "PUT");
 	}
 
 	/**
@@ -100,8 +71,8 @@ public class XeroUtil
 	 */
 	public String getLineItemsOfInvoice(String invoiceId,Widget widget) throws Exception
 	{
-		
-		return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/lineitems",(new JSONObject(widget.prefs).put("invoiceId",invoiceId).put("callbackUrl","http://localhost:1234/backend/XeroServlet?data=")).toString(), "PUT");
+		//call to get lineitems in xero for invoice id
+		return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/lineitems",(new JSONObject(widget.prefs).put("invoiceId",invoiceId).put("callbackUrl",callbackUrl)).toString(), "PUT");
 	}
 
 }

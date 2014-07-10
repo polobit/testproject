@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
-import com.agilecrm.Globals;
 import com.agilecrm.social.XeroUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -51,8 +50,7 @@ public class XeroWidgetsAPI
 		if (widget == null)
 			return null;
 
-		XeroUtil utilObj = new XeroUtil(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, widget.getProperty("token"),
-				widget.getProperty("secret"));
+		XeroUtil utilObj = new XeroUtil();
 
 		try
 		{
@@ -92,8 +90,7 @@ public class XeroWidgetsAPI
 		if (widget == null)
 			return null;
 
-		XeroUtil utilObj = new XeroUtil(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, widget.getProperty("token"),
-				widget.getProperty("secret"));
+		XeroUtil utilObj = new XeroUtil();
 		try
 		{
 			// calls XeroUtil method to add Contact to Xero account
@@ -122,8 +119,7 @@ public class XeroWidgetsAPI
 		if (widget == null)
 			return null;
 
-		XeroUtil utilObj = new XeroUtil(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, widget.getProperty("token"),
-				widget.getProperty("secret"));
+		XeroUtil utilObj = new XeroUtil();
 
 		try
 		{
