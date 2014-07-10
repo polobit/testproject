@@ -219,6 +219,10 @@ else if (templateName.indexOf("quickbooks") == 0)
 {
 template_relative_urls.push("quickbooks.js");
 }
+else if (templateName.indexOf("facebook") == 0)
+{
+template_relative_urls.push("facebook.js");
+}
 
 if (templateName.indexOf("socialsuite") == 0)
 {
