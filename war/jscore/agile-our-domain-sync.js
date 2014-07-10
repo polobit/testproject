@@ -144,7 +144,7 @@ function add_timezone_tag()
 {
 	var date = new Date(); 
 	var startTime = date.getUTCHours();
-	if(startTime >= 4 && startTime <=18) {
+	if(startTime >= 4 && startTime <=21) {
 		add_tag_our_domain("GMT");
 	}
 }
