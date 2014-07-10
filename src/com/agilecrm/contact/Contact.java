@@ -427,9 +427,9 @@ public class Contact extends Cursor
 
 	}
 
-	// Updated time is updated only if particular fields are changed. It is
-	// updated only when search document is tobe updated
-	updated_time = System.currentTimeMillis() / 1000;
+	// Updated time is updated only if particular fields are changed.
+	if (oldContact != null && isDocumentUpdateRequired(oldContact))
+	    updated_time = System.currentTimeMillis() / 1000;
 	System.out.println("viewed time : " + viewed_time);
 	if (viewed_time != 0L)
 	{
