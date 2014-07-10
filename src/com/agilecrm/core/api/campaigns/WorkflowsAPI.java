@@ -237,7 +237,7 @@ public class WorkflowsAPI
 	    @PathParam("contact-id") String contactId)
     {
 	// if any one of the path params is empty
-	if (StringUtils.isEmpty(contactId) || StringUtils.isEmpty(contactId))
+	if (StringUtils.isEmpty(workflowId) || StringUtils.isEmpty(contactId))
 	    return;
 
 	// Remove from Cron.
@@ -289,7 +289,7 @@ public class WorkflowsAPI
     }
 
     /**
-     * Returns HardBounced contacts
+     * Returns Hard Bounced contacts
      * 
      * @param count
      *            - count (or limit) of subscribers per request
@@ -305,6 +305,44 @@ public class WorkflowsAPI
     {
 	return CampaignSubscribersUtil.getBoucedContactsByCampaignId(Integer.parseInt(count), cursor,
 		EmailBounceType.HARD_BOUNCE, workflow_id);
+    }
+
+    /**
+     * Returns Soft Bounced contacts
+     * 
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("softbounced-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getSoftBouncedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getBoucedContactsByCampaignId(Integer.parseInt(count), cursor,
+		EmailBounceType.SOFT_BOUNCE, workflow_id);
+    }
+
+    /**
+     * Returns spam reported contacts
+     * 
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("spam-reported-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getSpamReportedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getBoucedContactsByCampaignId(Integer.parseInt(count), cursor,
+		EmailBounceType.SPAM, workflow_id);
     }
 
 }

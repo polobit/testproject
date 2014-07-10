@@ -195,7 +195,7 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 			System.out.println(tag);
 
 			// Tag value
-			String normalizedTag = SearchUtil.normalizeString(tag.tag);
+			String normalizedTag = SearchUtil.normalizeTextSearchString(tag.tag);
 
 			// Created time
 			Long TagCreationTimeInMills = tag.createdTime;

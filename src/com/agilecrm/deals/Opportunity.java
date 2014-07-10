@@ -253,34 +253,6 @@ public class Opportunity extends Cursor
     }
 
     /**
-     * Gets UserPrefs object with respect to agile user. In order to display
-     * owner name of a deal in Deals table, UserPrefs are taken into account.
-     * 
-     * @return UserPrefs object with respect to agile user.
-     * @throws Exception
-     *             if unable to fetch UserPrefs.
-     */
-    @XmlElement(name = "Prefs")
-    public UserPrefs getPrefs() throws Exception
-    {
-	if (agileUser != null)
-	{
-	    Objectify ofy = ObjectifyService.begin();
-	    try
-	    {
-		// Gets User prefs in return to access owner name , pic
-		// etc..details of a deal
-		return ofy.query(UserPrefs.class).ancestor(agileUser).get();
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-	return null;
-    }
-
-    /**
      * Gets picture of owner who created deal. Owner picture is retrieved from
      * user prefs of domain user who created deal and is used to display owner
      * picture in deals list.

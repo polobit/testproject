@@ -48,13 +48,20 @@ var SettingsRouter = Backbone.Router.extend({
 	userPrefs : function()
 	{
 		$("#content").html(getTemplate("settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", reload : true,
-			postRenderCallback : function(el)
-			{
-				// Setup HTML Editor
-				setupHTMLEditor($('#WYSItextarea'));
-			} });
-		$('#prefs-tabs-content').html(view.render().el);
+		
+		var view = new Base_Model_View({ 
+						url : '/core/api/user-prefs', 
+						template : "settings-user-prefs", 
+						el: $('#prefs-tabs-content'), 
+						change: false, 
+						reload : true,
+						postRenderCallback: function(el)
+						{
+							// setup TinyMCE
+							setupTinyMCEEditor('textarea#WYSItextarea', true);
+						}
+			 		});
+		
 		$('#PrefsTab .active').removeClass('active');
 		$('.user-prefs-tab').addClass('active');
 		// $('#content').html(view.render().el);
@@ -227,6 +234,9 @@ var SettingsRouter = Backbone.Router.extend({
 		
 		// setup TinyMCE
 		setupTinyMCEEditor('textarea#email-template-html');
+
+		// Reset tinymce content inside editor
+		set_tinymce_content('email-template-html', '');
 		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');

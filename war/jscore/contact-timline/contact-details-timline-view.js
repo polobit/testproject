@@ -117,7 +117,6 @@ function configure_timeline_comparator(collection)
 
 				var monthYear = month_year.split('-');
 				var timestamp = getTimestamp(monthYear[0], monthYear[1]) / 1000;
-				console.log("(((((((((((((((((((((((((((((((((((((" + monthArray[monthYear[0]].split(' ')[0]);
 				var context = { year : monthArray[monthYear[0]].split(' ')[0], timestamp : timestamp, "entity_type" : "year-marker" };
 				if (!collection.where({ "year" : monthArray[monthYear[0]].split(' ')[0] })[0])
 					;

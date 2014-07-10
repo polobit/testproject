@@ -372,7 +372,13 @@ public class Contact extends Cursor
 	{
 
 	    oldContact = ContactUtil.getContact(id);
-	    owner_key = oldContact.owner_key != null ? oldContact.owner_key : owner_key;
+
+	    // Sets old owner key to updated contact which restricts contact
+	    // owner being changed everytime contact is updated
+	    if (owner_key == null)
+	    {
+		owner_key = oldContact.owner_key;
+	    }
 	    //
 	    // if (Type.COMPANY == type
 	    // &&

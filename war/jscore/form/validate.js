@@ -6,6 +6,7 @@
  * @returns
  */
 function isValidForm(form) {
+	
 
 	// Credit card validation to check card is valid for next 3 months
 	jQuery.validator.addMethod("atleastThreeMonths", function(value, element) {
@@ -45,6 +46,13 @@ function isValidForm(form) {
         
         return valid;
     }, "Please enter valid email each separated by comma.");
+
+	
+	jQuery.validator.addMethod("noSpecialChars", function(value, element) {
+		return isAlphaNumeric(value);
+	//	console.log(params);
+		
+	}, "Should start with an alphabet and special characters are not allowed.");
 
 	// Internal regex of jQuery validator allows for special characters in e-mails.
 	// This regex solves that, overriding 'email'
@@ -117,4 +125,26 @@ function isNotValid(value) {
 function isValidField(id) {
     var value = $('#' + id).val();
     return !isNotValid(value);
+}
+
+
+function isAlphaNumeric(subdomain) {
+	subdomain = subdomain.toString();
+  
+  var regularExpression  = new RegExp(/^[A-Za-z][a-zA-Z0-9]{3,20}$/);
+  if(!regularExpression.test(subdomain)) {
+        error = "Domain should start with an alphabet and special characters are not allowed.";
+		return false;
+    }
+  return true;
+}
+
+function isAlphaNumeric(subdomain) {
+	subdomain = subdomain.toString();
+	
+  var regularExpression  = new RegExp(/^[A-Za-z#@][A-Za-z0-9_:&@;]*$/);
+  if(!regularExpression.test(subdomain)) {
+		return false;
+    }
+  return true;
 }

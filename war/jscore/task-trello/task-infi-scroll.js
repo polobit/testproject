@@ -1,8 +1,6 @@
 function initialize_infinite_scrollbar(element_id, targetCollection)
 {
-	console.log("initialize_infinite_scrollbar");
-	console.log(element_id);
-	console.log(targetCollection);
+	console.log("initialize_infinite_scrollbar");	
 
 	if (element_id == undefined || element_id == null)
 	{
@@ -50,17 +48,12 @@ function initialize_infinite_scrollbar(element_id, targetCollection)
 function setCursor(targetTaskListModel, newTaskToAdd, conditionToCheck)
 {
 	console.log("In setCursor");
-	console.log(targetTaskListModel);
-	console.log(newTaskToAdd);
-
+	
 	if (!targetTaskListModel.get('taskCollection') || targetTaskListModel.get('taskCollection').length == 0)
 		return newTaskToAdd;
 
 	var len = targetTaskListModel.get('taskCollection').length;
 	var crsr = targetTaskListModel.get('taskCollection').at(len - 1).get("cursor");
-
-	console.log(len);
-	console.log(crsr);
 
 	if (crsr)
 	{

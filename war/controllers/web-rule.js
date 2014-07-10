@@ -15,7 +15,7 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				head.js(LIB_PATH + 'lib/prettify-min.js', function()
 				{
-					enableWebruletSoring(el);
+					enableWebrulesSorting(el);
 					prettyPrint();
 					/*if($(el).has("#api_track_webrules_code_icon").length != 0){
 						initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");

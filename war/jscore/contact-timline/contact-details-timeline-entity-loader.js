@@ -2,6 +2,7 @@ var timeline_entity_loader = {
 
 	init : function(contact)
 	{
+		this.active_connections = 0;
 		MONTH_YEARS = [];
 		var _this = this;
 		// Load plugins for timeline
@@ -12,6 +13,7 @@ var timeline_entity_loader = {
 			timeline_collection_view = new timeline_view();
 			console.log(_this);
 			_this.load_other_timline_entities(contact);
+
 			timeline_collection_view.render();
 			// timeline_collection_view.render();
 
@@ -24,6 +26,8 @@ var timeline_entity_loader = {
 		this.load_related_entites(contactId);
 		this.load_stats(contact);
 		this.load_campaign_logs(contactId);
+		
+		this.get_stats(getPropertyValue(contact.properties, "email"), contact, App_Contacts.contactDetailView.el);
 	},
 	load_related_entites : function(contactId)
 	{
@@ -60,34 +64,25 @@ var timeline_entity_loader = {
 		// Go for mails when only the contact has an email
 		if (email)
 		{
-			this.get_stats('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', contact, App_Contacts.contactDetailView.el,
-					function(stats)
-					{
-						// Clone emails Array to not affect original emails
-
-						var stats_processed = [];
-						if (stats && stats.length > 0)
-						{
-							for ( var i = 0; i < stats.length; i++)
-							{
-								// if error occurs in imap (model is obtained
-								// with the error
-								// msg along with contact-email models),
-								// ignore that model
-								if (('errormssg' in stats[i]) || stats[i].status === "error")
-									continue;
-
-								stats_processed.push(stats[i]);
-							}
-
-							// Addes opened emails into timeline
-							var opened_emails = this.getOpenedEmailsFromEmails(stats_processed);
-							if (opened_emails.length > 0)
-								stats_processed.push(opened_emails);
-
-							timeline_collection_view.addItems(stats_processed);
-						}
-					})
+			this.timline_fetch_data('core/api/emails/imap-email?e=' + encodeURIComponent(email) + '&c=10&o=0', function(stats)
+			{
+				console.log(stats);
+				
+				if(stats && stats["emails"])
+				{
+					var array = [];
+					$.each(stats["emails"], function(index,data){
+						// if error occurs in imap (model is obtained with the error msg along with contact-email models),
+						// ignore that model
+						if(('errormssg' in data) || data.status === "error")
+						return;
+						
+						array.push(data);
+						
+						});
+					timeline_collection_view.addItems(array);
+				}
+			})
 		}
 	},
 	load_campaign_logs : function(contactId)
@@ -123,15 +118,27 @@ var timeline_entity_loader = {
 	{
 		$("#timeline-loading-img", App_Contacts.contactDetailView.el).show();
 
-		this.active_connections = true;
+		console.log(this.active_connections);
+		//this.active_connections = true;
+		++this.active_connections;
+		var _this = this;
 		$.getJSON(url, function(data)
 		{
+			
+			console.log("success : " + _this.active_connections)
+			--_this.active_connections;
+			console.log("success : " + _this.active_connections)
 			if (callback && typeof callback === "function")
 				callback(data);
-			$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+			
+			if(!_this.active_connections)
+				$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
 		}).error(function()
 		{
-			$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
+			-- _this.active_connections;
+			
+			if(!_this.active_connections)
+				$(".timeline-loading-img", App_Contacts.contactDetailView.el).hide();
 		});
 	}, getOpenedEmailsFromEmails : function(emails)
 	{
@@ -184,7 +191,8 @@ var timeline_entity_loader = {
 			is_logs_fetched = false;
 			is_array_urls_fetched = false;
 
-			show_timeline_padcontent(is_logs_fetched, is_mails_fetched, is_array_urls_fetched);
+			// show_timeline_padcontent(is_logs_fetched, is_mails_fetched,
+			// is_array_urls_fetched);
 
 			$('#time-line', el).find('.loading-img-stats').remove();
 
@@ -217,7 +225,7 @@ var timeline_entity_loader = {
 					}
 				}
 
-				timeline_collection_view.addItems(data);
+				timeline_collection_view.addItems(data.toJSON());
 
 				addTagAgile(CODE_SETUP_TAG);
 			}

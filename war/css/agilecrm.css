@@ -1189,6 +1189,16 @@ time {
 	display:block!important;
 }
 
+/** documents icon  **/
+#documents-model-list tr:hover td.data div b.activate-link { 
+	display:inline!important;
+}
+
+/** custom feilds modals **/
+#custom-field-add-modal .modal-footer {
+margin-top: 0px;
+}
+
 /** Google apps **/
 #email-prefs div.span3{
 	margin-left:0px;
@@ -1206,10 +1216,10 @@ Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
 .rhs>.dynamic-option {
 	max-width: 125px;
 }
+
 /* to fix copy icon alignment onboarding/saas page*/
 .agile-doc-view .prettyprint
 {
 	padding-right:30px;
 
 }
-

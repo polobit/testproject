@@ -38,6 +38,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 		/* Return back from Scribe after oauth authorization */
 		"gmail" : "email", "twitter" : "socialPrefs", "linkedin" : "socialPrefs",
+		
+		/* CALL */
+		"contacts/call-lead/:first/:last" : "addLead"
 	},
 
 	initialize : function()
@@ -107,6 +110,9 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			tag_id = decodeURI(tag_id);
 
+			tag_id = decodeURI(tag_id);
+
+			
 			// erase filter cookie
 			eraseCookie('contact_filter');
 			eraseCookie('company_filter');
@@ -131,6 +137,7 @@ var ContactsRouter = Backbone.Router.extend({
 			url = '/core/api/tags/' + tag_id;
 
 			tag_id = unescape(tag_id);
+			
 		}
 		else
 		{
@@ -582,6 +589,9 @@ var ContactsRouter = Backbone.Router.extend({
 			setupTinyMCEEditor('textarea#email-body');
 		else
 			setupTinyMCEEditor('textarea#email-body', true);
+
+		// Reset tinymce content
+		set_tinymce_content('email-body', '');
 		
 	},
 	
@@ -705,5 +715,12 @@ var ContactsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 	},
-
+	
+	addLead : function(first, last){
+		$("#personModal").on("shown", function(){
+			$(this).find("#fname").val(first);
+			$(this).find("#lname").val(last);
+		});
+		$("#personModal").modal();
+	}
 });

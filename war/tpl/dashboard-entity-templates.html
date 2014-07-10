@@ -48,7 +48,7 @@
        {{/each}}
 	</div>{{#if_greater this.contacts.length "3"}}<span>...</span>{{/if_greater}}
 </td>
-<td><div style="height:auto;">{{numberWithCommas expected_value}}{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}</div></td>
+<td><div style="height:auto;">{{currencySymbol}} {{numberWithCommas expected_value}}</div></td>
 <td><div style="height:auto;">{{milestone}}<br />({{probability}}%) </div></td>
 <td><div style="height:auto;"><time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>
 </script>

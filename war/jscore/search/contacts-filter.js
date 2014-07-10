@@ -167,7 +167,7 @@ function setupContactFilterList(cel, tag_id)
 	if (tag_id)
 		$('.filter-criteria', cel)
 				.html(
-						'<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + tag_id + '<a class="close default_contact_remove_tag" style="margin-left:5px">&times</a></span></li></ul>').attr("_filter", tag_id);
+						'<ul id="added-tags-ul" class="tagsinput" style="display: inline; vertical-align: top; margin-bottom: 10px"><li style="display: inline-block;" class="tag" data="developer"><span style="margin-left:5px">' + decodeURI(tag_id) + '<a class="close default_contact_remove_tag" style="margin-left:5px">&times</a></span></li></ul>').attr("_filter", tag_id);
 						
 
 	var filter_id = null;

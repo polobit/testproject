@@ -19,7 +19,7 @@ public class StripeApi extends DefaultApi20
     /**
      * Authorize URL of Stripe for OAuth 2.0
      */
-    private static final String AUTHORIZE_URL = "https://connect.stripe.com/oauth/authorize?client_id=%s&state=%s&response_type=code";;
+    private static final String AUTHORIZE_URL = "https://connect.stripe.com/oauth/authorize?client_id=%s&state=%s&response_type=code";
 
     /**
      * Authorize URL of Stripe with scope for OAuth 2.0

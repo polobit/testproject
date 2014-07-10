@@ -24,13 +24,13 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	}
 	
 	// Show loading image instead of textarea
-//	$('#loading-editor').html(getRandomLoadingImg());
+	$('#loading-editor').html(getRandomLoadingImg());
 	
-	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview";
+	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview | code";
 	
 	// Remove Agile Contact fields button
 	if(noAgileContactFields)
-		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview";
+		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview | code";
 	
 	// Init tinymce first time
 	if (typeof (tinymce) === "undefined")
@@ -51,11 +51,11 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 			}
 			
 			// Show textarea and remove loading img
-//			$(selector).css('display', '');
-//			$('#loading-editor').html("");
+			$(selector).css('display', '');
+			$('#loading-editor').html("");
 			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
-				"textcolor link image preview"
+				"textcolor link image preview code"
 			], menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
@@ -71,8 +71,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	}
 
 	// Show textarea and remove loading img
-//	$(selector).css('display', '');
-//	$('#loading-editor').html("");
+	$(selector).css('display', '');
+	$('#loading-editor').html("");
 	
 	// if tinymce instance exists, reinitialize tinymce on given selector
 	if (selector.indexOf('#') !== -1)
@@ -83,9 +83,6 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	
 	// reinitialize tinymce
 	reinitialize_tinymce_editor_instance(selector);
-		
-	// reset previous content
-    set_tinymce_content(selector, '');
 		
 }
 
@@ -294,7 +291,7 @@ function get_merge_fields()
 function get_custom_fields()
 {
 	// Sends GET request for customfields.
-	var msg = $.ajax({ type : "GET", url : '/core/api/custom-fields', async : false, dataType : 'json' }).responseText;
+	var msg = $.ajax({ type : "GET", url : '/core/api/custom-fields/scope?scope=CONTACT', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
 	return JSON.parse(msg);

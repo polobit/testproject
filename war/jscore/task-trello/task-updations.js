@@ -8,15 +8,11 @@ function editTask(taskId, taskListId, taskListOwnerId)
 		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
 		modelTaskList = getTaskList(null, taskListId, null);
-
-	console.log(modelTaskList);
 	
 	if (!modelTaskList)
 		return;
 
 	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
-
-	console.log(modelTask);
 	
 	if (!modelTask)
 		return;
@@ -54,11 +50,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 function updateTask(isUpdate, data, json)
 {
 	console.log("In updateTask");
-	console.log(isUpdate);
-	console.log(data);
-	console.log(data.toJSON());
-	console.log(json);
-	
+		
 	// Get selected criteria
 	var criteria = getCriteria();
 
@@ -91,14 +83,9 @@ function updateTask(isUpdate, data, json)
 			modelTaskList = getTaskList(criteria, json.taskListId, json.taskListOwnerId);
 		else
 			modelTaskList = getTaskList(null, headingToSearch, null);
-
-		console.log(headingToSearch);
-		console.log(modelTaskList);
 		
 		if (!modelTaskList)
 			return;
-
-		console.log(modelTaskList[0].get('taskCollection'));
 		
 		// Set new details in Task
 		modelTaskList[0].get('taskCollection').get(json.id).set(data);
@@ -126,11 +113,6 @@ function updateTask(isUpdate, data, json)
 function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 {
 	console.log("In changeTaskList");
-	console.log(data);
-	console.log(json);
-	console.log(criteria);
-	console.log(headingToSearch);
-	console.log(isUpdate);
 	
 	var modelOldTaskList;
 
@@ -160,10 +142,7 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 
 		// Remove task from UI
 		$("#" + json.taskListId).find("#" + json.id).remove();
-	}
-
-	console.log(modelOldTaskList);
-	
+	}	
 	
 	if (!modelOldTaskList)
 		return;
@@ -193,8 +172,6 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	var modelTsk = modelTaskList[0].get('taskCollection').get(taskId);
 
 	var taskJson = modelTsk.toJSON();
-
-	console.log(taskJson);
 	
 	if(taskJson.status == COMPLETED || taskJson.is_complete == true)
 		return;	
@@ -206,17 +183,13 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 		contacts.push(contact.id);
 	});
 
-	console.log(taskJson.notes);
-	
 	// Replace notes object with note ids
 	var notes = [];
 	$.each(taskJson.notes, function(index, note)
 	{
 		notes.push(note.id);
 	});
-	
-	console.log(notes);
-	
+			
 	taskJson.contacts = contacts;
 	taskJson.notes = notes;
 	taskJson.is_complete = true;
@@ -232,8 +205,6 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	
 	if (taskListOwnerId)
 	  taskJson.taskListOwnerId = taskListOwnerId;
-
-	console.log(taskJson);
 	
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
