@@ -57,8 +57,8 @@ public class Document
 	    }
 	    else
 	    {
-		builder.setName(SearchUtil.normalizeString(data.name));
-		builder.setText(data.value);
+		builder.setName(SearchUtil.normalizeTextSearchString(data.name));
+		builder.setText(SearchUtil.normalizeString(data.value));
 	    }
 
 	    doc.addField(builder);
