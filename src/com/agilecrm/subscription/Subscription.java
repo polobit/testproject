@@ -341,7 +341,7 @@ public class Subscription
 	// Deletes the customer before deleting agile subscription object
 	try
 	{
-	    deleteCustomer();
+	    // deleteCustomer();
 	}
 	catch (Exception e)
 	{
