@@ -429,9 +429,9 @@ var WidgetsRouter = Backbone.Router
 	    Xero : function(id)
 	    {
 		if (!id)
-		    show_set_up_widget("Xero", 'xero-login', '/scribe?service=xero&return_url=' + encodeURIComponent(window.location.href) + "/xero");
-		else
-		// return;
+		    //show_set_up_widget("Xero", 'xero-login', '/scribe?service=xero&return_url=' + encodeURIComponent(window.location.href) + "/xero");
+			show_set_up_widget("Xero", 'xero-login', 'http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl='+'http://localhost:1234/scribe?data=');
+			else
 		{
 		    {
 			$
@@ -534,6 +534,72 @@ var WidgetsRouter = Backbone.Router
 		    show_set_up_widget("Facebook", 'facebook-login', '/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.href) + "/facebook");
 		else
 		{
+			if (!isNaN(parseInt(id)))
+		    {
+			$
+				.getJSON(
+					"/core/api/widgets/facebook/currentUserProfile/" + id,
+					function(data)
+					{
+					console.log("data is")
+					console.log(data)
+					set_up_access(
+						    "Facebook",
+						    'facebook-login',
+						    data,
+						    '/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Facebook/facebook"));
+
+					}).error(
+					function(data)
+					{
+
+					    console.log(data);
+					    setUpError("Facebook", "widget-settings-error", data.responseText,
+						    window.location.protocol + "//" + window.location.host + "/#Facebook/facebook1");
+
+					});
+			return;
+
+		    }
+
+		    $
+			    .getJSON(
+				    "core/api/widgets/Facebook",
+				    function(data1)
+				    {
+					console.log(data1);
+
+					if (data1)
+					{
+					    $
+						    .getJSON(
+							    "core/api/widgets/facebook/currentUserProfile/" + data1.id,
+							    function(data)
+							    {
+								set_up_access(
+									"Facebook",
+									'twitter-login',
+									data,
+									'/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Facebook/facebook"),
+									data1);
+
+							    }).error(
+							    function(data)
+							    {
+								setUpError("Twitter", "widget-settings-error", data.responseText,
+									window.location.protocol + "//" + window.location.host + "/#Facebook/facebook1", data1);
+							    });
+
+					    return;Facebook
+
+					}
+					else
+					{
+					    show_set_up_widget("Twitter", 'twitter-login',
+						    '/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href));
+					}
+				    });
+
 		}
 	    },
 
