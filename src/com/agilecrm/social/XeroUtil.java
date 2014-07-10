@@ -87,7 +87,7 @@ public class XeroUtil
 	public String addContact(Widget widget, String firstName, String lastName, String email) throws Exception
 	{
 		//http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/rest/agile-xero/
-		 return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/addcontact",(new JSONObject(widget.prefs).put("name",firstName+" "+lastName).put("email",email)).toString(), "PUT");
+		 return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/addcontact",(new JSONObject(widget.prefs).put("name",firstName+" "+lastName).put("email",email).put("callbackUrl","http://localhost:1234/backend/XeroServlet?data=")).toString(), "PUT");
 		
 		
 	}
@@ -101,7 +101,7 @@ public class XeroUtil
 	public String getLineItemsOfInvoice(String invoiceId,Widget widget) throws Exception
 	{
 		
-		return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/lineitems",(new JSONObject(widget.prefs).put("invoiceId",invoiceId)).toString(), "PUT");
+		return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/lineitems",(new JSONObject(widget.prefs).put("invoiceId",invoiceId).put("callbackUrl","http://localhost:1234/backend/XeroServlet?data=")).toString(), "PUT");
 	}
 
 }
