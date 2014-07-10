@@ -1,7 +1,7 @@
 <script id="facebook-login-template" type="text/html">
 <div class="widget_content" style="border-bottom:none;line-height: 160%;">
-	See the contact's subscriptions history and payments from your xero account.
-	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your facebook</a>
+	Facebook is a social utility that connects people with friends and others who work, study and live around them.
+	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your Facebook</a>
 </div>
 </script>
 
@@ -65,7 +65,7 @@
 		<div class="pull-left ml_5 span8">
 			<p class="title_txt"><a href="{{user.link}}" target="_blank" >{{user.name}}</a></p>
 		<a class="btn" id="send_fb_friend_request_w" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/friends/?id={{user.id}}&app_id=1472962409608031&redirect_uri=http://{{getfbreturndomain}}/scribe?act=facebook','Sample','toolbar=no,width=800,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false"><i class="icon-plus"></i>Add Friend</a>
-		<a class="btn" id="fb_post_on_wall" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/feed?app_id=1472962409608031&display=popup&from={{me.id}}&to={{id}}&caption=An example caption&link=https://developers.facebook.com%2Fdocs%2F%20%20%20&redirect_uri=http://{{getfbreturndomain}}/scribe?act=facebook','Sample','toolbar=no,width=1000,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Post</a>
+		<a class="btn" id="fb_post_on_wall" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/feed?app_id=1472962409608031&display=popup&from={{me.id}}&to={{user.id}}&caption=An example caption&link=https://developers.facebook.com%2Fdocs%2F%20%20%20&redirect_uri=http://{{getfbreturndomain}}/scribe?act=facebook','Sample','toolbar=no,width=1000,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false">Post</a>
 </div>	
 </div>
 </script>
@@ -77,7 +77,7 @@
 			<img src="{{profile.picture.data.url}}" width="70" height="70" alt="" class="thumbnail"/>
 		</div>
 		<div class="span7">
-			<p class="title_txt"><a href="{{profile.link}}" target="_blank" >{{profile.name}}</a></p>
+			<p ><a href="{{profile.link}}" target="_blank" >{{profile.name}}</a></p>
 			<p style="margin:0px;">{{profile.location.name}}</p>
 		</div>
 	</div>
