@@ -56,13 +56,17 @@
 	<ul style="margin:0px;">
 		{{#each invoice.Invoice}}
 			<li class="row-fluid sub_header_li">
-				<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{InvoiceID}}"  value="{{InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>&nbsp;<a  data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" style="cursor:pointer;" href="https://go.xero.com/AccountsReceivable/View.aspx?InvoiceID={{InvoiceID}}" target="_blank">{{InvoiceNumber}} {{xeroType Type}}</a>
+				<div class="pull-left">
+				<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{InvoiceID}}"  value="{{InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>
+				&nbsp;
+				<a  data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip Type}}" style="cursor:pointer;" href="https://go.xero.com/AccountsReceivable/View.aspx?InvoiceID={{InvoiceID}}" target="_blank">{{InvoiceNumber}} {{xeroType Type}}</a>
+				</div>				
 				<div class="pull-right">{{CurrencyCode}} {{Total}}</div><br>
 				
 				<div id="collapse-{{InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 				</div>		
 				
-				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{DueDateString}}">{{DueDateString}}</time></small></div>					
+				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{DueDate}}">{{DueDate}}</time></small></div>					
 				<div class="pull-right"><span class="badge">{{capFirstLetter Status}}</span></div><br>			
 			</li>
 		{{/each}}
@@ -70,13 +74,17 @@
 {{else}}
 		<ul style="margin:0px;">
 			<li class="row-fluid sub_header_li">
-				<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>&nbsp;<a  data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" style="cursor:pointer;" href="https://go.xero.com/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
+				<div class="pull-left">
+					<a class="invoices" data-toggle="collapse"  id="getInvoice-lineitems-{{invoice.Invoice.InvoiceID}}"  value="{{invoice.Invoice.InvoiceID}}"   style="cursor:pointer;"><i class="icon-plus"></i></a>
+					&nbsp;
+					<a id="xeroinvoicelink" data-toggle="tooltip" data-placement="top" title= "{{xeroTypeToolTip invoice.Invoice.Type}}" style="cursor:pointer;" href="https://go.xero.com/AccountsReceivable/View.aspx?InvoiceID={{invoice.Invoice.InvoiceID}}" target="_blank">{{invoice.Invoice.InvoiceNumber}} {{xeroType invoice.Invoice.Type}}</a>
+				</div>
 				<div class="pull-right">{{invoice.Invoice.CurrencyCode}} {{invoice.Invoice.Total}}</div><br>
 				
 				<div id="collapse-{{invoice.Invoice.InvoiceID}}" class="collapse" style="color: rgba(0, 0, 0, 0.5);">
 				</div>		
 				
-				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{invoice.Invoice.DueDateString}}">{{invoice.Invoice.DueDateString}}</time></small></div>					
+				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{invoice.Invoice.DueDate}}">{{invoice.Invoice.DueDate}}</time></small></div>					
 				<div class="pull-right"><span class="badge">{{capFirstLetter invoice.Invoice.Status}}</span></div><br>			
 			</li>
 	</ul>
@@ -104,7 +112,7 @@
 
 <script id="xero-login-template" type="text/html">
 <div class="widget_content" style="border-bottom:none;line-height: 160%;">
-	See the contact's subscriptions history and payments from your xero account.
+	Xero is an online accounting software for small business - Explore invoicing, reconciliation anytime, anywhere.
 	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your Xero</a>
 </div>
 </script>
