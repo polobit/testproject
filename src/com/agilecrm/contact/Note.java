@@ -11,8 +11,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.AgileUser;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.UserPrefs;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -62,9 +67,24 @@ public class Note
      */
     @NotSaved
     private List<String> contact_ids = new ArrayList<String>();
-
+    
+    /**
+     * Owner key of AgileUser id.
+     */
     @NotSaved(IfDefault.class)
     private Key<AgileUser> owner = null;
+    
+    /**
+     * DomainUser Id who adds note.
+     */
+    @NotSaved
+    public String owner_id = null;
+
+    /**
+     * Owner Key object of DomainUser id.
+     */
+    @NotSaved(IfDefault.class)
+    private Key<DomainUser> domain_owner = null;
 
     /**
      * List of contact keys, a note related to
@@ -146,8 +166,24 @@ public class Note
 	    this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id.toString())));
 	}
 
-	if (owner == null)
-	    owner = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+	/**
+	 * Commented because not to fill AgileUser as owner for new notes.
+	 */
+	/*if (owner == null)
+	    owner = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);*/
+	
+	// If owner_id is null
+	if (owner_id == null)
+	{
+	    UserInfo userInfo = SessionManager.get();
+	    if (userInfo == null)
+		return;
+
+	    owner_id = SessionManager.get().getDomainId().toString();
+	}
+
+	// Saves domain user key
+	domain_owner = new Key<DomainUser>(DomainUser.class, Long.parseLong(owner_id));
 
 	// Store Created Time
 	if (created_time == 0L)
@@ -214,6 +250,63 @@ public class Note
 	    }
 	}
 	return null;
+    }
+    
+    /**
+     * Gets domain user with respect to owner id if exists, otherwise null.
+     * 
+     * @return Domain user object.
+     * @throws Exception
+     *             when Domain User not exists with respect to id.
+     */
+    @XmlElement(name = "domainOwner")
+    public DomainUser getDomainOwner() throws Exception
+    {
+	if (domain_owner != null)
+	{
+	    try
+	    {
+		// Gets Domain User Object
+		return DomainUserUtil.getDomainUser(domain_owner.getId());
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+
+    /**
+     * Gets picture of owner who created deal. Owner picture is retrieved from
+     * user prefs of domain user who created deal and is used to display owner
+     * picture in deals list.
+     * 
+     * @return picture of owner.
+     * @throws Exception
+     *             when agileuser doesn't exist with respect to owner key.
+     */
+    @XmlElement(name = "ownerPic")
+    public String getOwnerPic() throws Exception
+    {
+	AgileUser agileuser = null;
+	UserPrefs userprefs = null;
+
+	try
+	{
+	    // Get owner pic through agileuser prefs
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(domain_owner.getId());
+	    if (agileuser != null)
+		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+	    if (userprefs != null)
+		return userprefs.pic;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	return "";
     }
 
     @Override
