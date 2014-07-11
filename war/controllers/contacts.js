@@ -400,6 +400,9 @@ var ContactsRouter = Backbone.Router.extend({
 		var el = this.contactDetailView.render(true).el;
 
 		$('#content').html(el);
+		
+		// Check updates in the contact.
+		checkContactUpdated();
 	},
 
 	/**
