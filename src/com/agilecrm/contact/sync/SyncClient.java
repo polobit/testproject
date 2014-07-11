@@ -13,6 +13,9 @@ import com.agilecrm.contact.sync.service.SyncService;
 import com.agilecrm.contact.sync.service.ZohoSync;
 
 /**
+ * <code>SyncClient</code> contains various third party client that client need
+ * to set for import contact
+ * 
  * @author jitendra
  * 
  */

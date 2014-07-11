@@ -37,7 +37,7 @@ var WidgetsRouter = Backbone.Router
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
 
 			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
-				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify" },
+				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify","google-apps/salesforce":"salesforce" },
 
 			/**
 			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -558,7 +558,7 @@ var WidgetsRouter = Backbone.Router
 								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import Contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>'+
 								'<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + 
 								'<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import Contact from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' +
-								'<div class="row-fluid"><div class="page-header"><h2>CRM <small>import Contact from CRM</small></h2></div><div class="span11"><div id ="zoho"></div></div></div>'+
+								'<div class="row-fluid"><div class="page-header"><h2>CRM <small>import Contact from CRM</small></h2></div><div class="span11"><div id ="zoho"></div><div id ="force"></div></div></div>'+
 								'<div class="row-fluid"><div class="page-header"><h2>Payment <small>import Contact from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
 
 						);
@@ -574,6 +574,10 @@ var WidgetsRouter = Backbone.Router
 				/* Add E-commerce Prefs template*/
 				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/get-prefs', template : 'admin-settings-import-shopify-contact-sync' });
 				$('#shopify').append(this.shopify_sync.render().el);
+				
+				/*salesforce import template*/
+				this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				$('#force').append(this.salesforce.render().el);
 
 				// adding zoho crm contact sync template preferences
 				// this.zoho_sync = new

@@ -29,6 +29,8 @@ import com.stripe.model.CustomerCollection;
 import com.thirdparty.google.ContactPrefs;
 
 /**
+ * <code>StripeSync</code> implements {@link OneWaySyncService}
+ * 
  * @author jitendra
  * 
  */
@@ -43,6 +45,12 @@ public class StripeSync extends OneWaySyncService
     private String stripeFieldValue = null;
     private String lastSyncCheckPoint = null;
 
+    /**
+     * 
+     * Implementation of initSync for Stripe
+     * 
+     * @see com.agilecrm.contact.sync.service.OneWaySyncService#initSync()
+     */
     @Override
     public void initSync()
     {
@@ -110,12 +118,23 @@ public class StripeSync extends OneWaySyncService
 
     }
 
+    /**
+     * Update Last SyncId which is user later for retrieve contacts from that id
+     * 
+     * @param prefs
+     * @param customerId
+     */
     private void updateLatestSync(ContactPrefs prefs, String customerId)
     {
 	prefs.lastSyncCheckPoint = customerId;
 	prefs.save();
     }
 
+    /**
+     * Wraps Stripe Customer field into Agile schema
+     * 
+     * @see com.agilecrm.contact.sync.service.OneWaySyncService#wrapContactToAgileSchema(java.lang.Object)
+     */
     @Override
     public Contact wrapContactToAgileSchema(Object object)
     {
@@ -151,6 +170,9 @@ public class StripeSync extends OneWaySyncService
     }
 
     /**
+     * return String formate of customer address which is extracted from stripe
+     * model {@link Card}
+     * 
      * @param card
      * @return address
      */
@@ -184,6 +206,11 @@ public class StripeSync extends OneWaySyncService
 	return address.toString();
     }
 
+    /**
+     * Stripe data retrieve Options
+     * 
+     * @return
+     */
     private Map<String, Object> options()
     {
 	HashMap<String, Object> options = new HashMap<String, Object>();

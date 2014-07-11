@@ -5,11 +5,14 @@ package com.agilecrm.contact.sync;
 
 import org.scribe.utils.Preconditions;
 
+import com.agilecrm.contact.sync.config.SyncPrefs;
 import com.agilecrm.contact.sync.service.SyncService;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
+ * <code>SyncPrefBuilder</code> build {@link SyncPrefs} based on client and it
+ * will return {@link SyncService}
+ * 
  * @author jitendra
  * 
  */
@@ -19,6 +22,12 @@ public class SyncPrefsBuilder
 
     private SyncService api;
 
+    /**
+     * initialize {@link ContactPrefs}
+     * 
+     * @param prefs
+     * @return SyncPrefsBuilder
+     */
     public SyncPrefsBuilder config(ContactPrefs prefs)
     {
 	Preconditions.checkNotNull(prefs, "ContactPrefs can't be null");
@@ -26,21 +35,26 @@ public class SyncPrefsBuilder
 	return this;
     }
 
+    /**
+     * return {@link SyncService}
+     * 
+     * @param clazz
+     *            which extends {@link SyncService}
+     * @return SyncService
+     */
     public SyncService getService(Class<? extends SyncService> clazz)
     {
-	Preconditions.checkNotNull(clazz, "service class can't be empty");
+	Preconditions.checkNotNull(clazz, "service Provider class can't be empty");
 	try
 	{
 	    this.api = clazz.newInstance();
 	}
 	catch (InstantiationException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	catch (IllegalAccessException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 

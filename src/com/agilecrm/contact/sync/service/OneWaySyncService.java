@@ -12,6 +12,9 @@ import com.agilecrm.util.email.SendMail;
 import com.thirdparty.google.ContactPrefs;
 
 /**
+ * <code>OneWaySyncService</code> implements {@link ContactSyncService} provide
+ * abstraction for initSync which is implemented by third party client
+ * 
  * @author jitendra
  * 
  */
@@ -36,6 +39,17 @@ public abstract class OneWaySyncService implements ContactSyncService
 
     public abstract void initSync();
 
+    /**
+     * send Email Notification status to domain user after import completed.this
+     * method needs to be called from third party client
+     * 
+     * @param Map
+     *            Map<ImportStatus,Integer> map
+     * @param notificationSubject
+     *            String value of subject
+     * 
+     * 
+     */
     @Override
     public void sendNotification(Map<ImportStatus, Integer> syncStatus, String notificationSubject)
     {

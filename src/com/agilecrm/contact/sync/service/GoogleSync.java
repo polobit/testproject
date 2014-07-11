@@ -13,7 +13,7 @@ import com.thirdparty.google.ContactPrefs;
  * @author jitendra
  * 
  */
-public class GoogleSync extends TwoWaySyncServiceImpl
+public class GoogleSync extends TwoWaySyncService
 {
 
     @Override

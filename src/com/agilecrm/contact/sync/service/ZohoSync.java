@@ -6,6 +6,8 @@ package com.agilecrm.contact.sync.service;
 import com.agilecrm.contact.Contact;
 
 /**
+ * <code>ZohoSync</code> will sync Contacts from Zoho crm and save in agile crm
+ * 
  * @author jitendra
  * 
  */
