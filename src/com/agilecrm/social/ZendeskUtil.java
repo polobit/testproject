@@ -118,11 +118,9 @@ public class ZendeskUtil
      * @return {@link String} form of JSON
      * @throws Exception
      */
-    public static String getUserInfo(Widget widget) throws Exception
+    public static String getUserInfo(Widget widget , String email) throws Exception
     {
-	// get user info for the user logged in
-	String email = widget.getProperty("zendesk_username");
-
+	
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email);
 
@@ -192,7 +190,7 @@ public class ZendeskUtil
     public static String getZendeskProfile(Widget widget, String email) throws Exception
     {
 	// Get the info of Zendesk logged in user
-	String userInfo = getUserInfo(widget);
+	String userInfo = getUserInfo(widget,email);
 	System.out.println("UserInfo in zendesk " + userInfo);
 
 	JSONObject zendeskInfo = new JSONObject();

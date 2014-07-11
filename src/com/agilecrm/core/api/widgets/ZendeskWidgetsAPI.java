@@ -217,7 +217,7 @@ public class ZendeskWidgetsAPI
 		return null;
 
 	    // Calls ZendeskUtil and retrieves Zendesk account user information
-	    return ZendeskUtil.getUserInfo(widget);
+	    return ZendeskUtil.getUserInfo(widget,"");
 	}
 	catch (SocketTimeoutException e)
 	{
