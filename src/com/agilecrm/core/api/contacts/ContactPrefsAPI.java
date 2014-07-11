@@ -9,11 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.StringUtils;
-
+import com.agilecrm.contact.sync.SyncClient;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
-import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -44,7 +41,7 @@ public class ContactPrefsAPI
     {
 
 	System.out.println("in contact prefs api");
-	return ContactPrefsUtil.getPrefsByType(Type.GOOGLE);
+	return ContactPrefsUtil.getPrefsByType(SyncClient.GOOGLE);
     }
 
     @Path("/{type}")
@@ -66,8 +63,8 @@ public class ContactPrefsAPI
 
 	System.out.println("Sync" + sync);
 
-	if (!StringUtils.isEmpty(sync))
-	    ContactsImportUtil.initilaizeGoogleSyncBackend(updatedPrefs.id);
+	// if (!StringUtils.isEmpty(sync))
+	// ContactsImportUtil.initilaizeGoogleSyncBackend(updatedPrefs.id);
     }
 
     /**
@@ -83,8 +80,9 @@ public class ContactPrefsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void deleteContactPrefs(@PathParam("type") String type)
     {
-	ContactPrefs.Type prefsType = ContactPrefs.Type.valueOf(type.toUpperCase());
-	if (prefsType != null)
-	    ContactPrefsUtil.delete(prefsType);
+	// ContactPrefs.Type prefsType =
+	// ContactPrefs.Type.valueOf(type.toUpperCase());
+	// if (prefsType != null)
+	// ContactPrefsUtil.delete(prefsType);
     }
 }

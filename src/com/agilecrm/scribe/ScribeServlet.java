@@ -12,7 +12,6 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.scribe.util.ScribeUtil;
-import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.shopify.OAuthCustomService;
 
 /**
@@ -47,7 +46,6 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_FACEBOOK = "facebook";
     public static final String SERVICE_TYPE_STRIPE_IMPORT = "stripe_import";
     public static final String SERVICE_TYPE_SHOPIFY = "shopify_import";
-
 
     // Scopes
     public static final String STRIPE_SCOPE = "read_only";
@@ -124,7 +122,7 @@ public class ScribeServlet extends HttpServlet
 	if (serviceType != null)
 	{
 	    // Initializes backends to import contacts
-	    ContactsImportUtil.initializeImport(serviceType);
+	    // ContactsImportUtil.initializeImport(serviceType);
 	    return;
 	}
 
@@ -206,7 +204,7 @@ public class ScribeServlet extends HttpServlet
 	    if (shopifyService != null)
 	    {
 		url = shopifyService.getAuthorizationUrl(param);
-		//token = shopifyService.getRequestToken();
+		// token = shopifyService.getRequestToken();
 		String query = req.getParameter("query");
 
 		if (query != null)

@@ -25,6 +25,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -63,14 +64,6 @@ public class CSVUtil
     public CSVUtil(BillingRestriction billingRestriction)
     {
 	this.billingRestriction = billingRestriction;
-    }
-
-    public static enum ImportStatus
-    {
-	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
-
-	ACCESS_DENIED;
-
     }
 
     /**

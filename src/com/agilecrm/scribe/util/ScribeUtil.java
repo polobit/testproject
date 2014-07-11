@@ -25,6 +25,7 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.Globals;
+import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
@@ -36,7 +37,6 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
 import com.thirdparty.shopify.OAuthCustomService;
@@ -310,14 +310,14 @@ public class ScribeUtil
 		    {
 		    });
 
-	    ContactPrefs pref = new ContactPrefs();
+	    ContactPrefs prefs = new ContactPrefs();
 	    if (properties.containsKey("refresh_token"))
 	    {
 
-		pref.refreshToken = properties.get("refresh_token");
-		pref.token = properties.get("access_token");
-		pref.type = Type.STRIPE;
-		pref.save();
+		prefs.refreshToken = properties.get("refresh_token");
+		prefs.apiKey = properties.get("access_token");
+		prefs.client = SyncClient.STRIPE;
+		prefs.save();
 	    }
 	}
 	catch (Exception e)
@@ -464,14 +464,16 @@ public class ScribeUtil
 	}
 
 	// after getting access token save prefs in db
-	ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null,
-		(Long.parseLong((String.valueOf(properties.get("expires_in"))))),
-		((String) properties.get("refresh_token")));
+	ContactPrefs contactPrefs = new ContactPrefs();
+	contactPrefs.client = SyncClient.GOOGLE;
+	contactPrefs.token = properties.get("access_token").toString();
+	contactPrefs.expires = Long.valueOf(properties.get("expires_in").toString());
+	contactPrefs.refreshToken = properties.get("refresh_token").toString();
 
 	contactPrefs.setPrefs(object);
 	System.out.println(contactPrefs.duration);
 	System.out.println(contactPrefs.sync_type);
-	contactPrefs.setExpiryTime(contactPrefs.expires);
+	contactPrefs.expires = contactPrefs.expires;
 	contactPrefs.save();
 
 	// initialize backend to save contacts
