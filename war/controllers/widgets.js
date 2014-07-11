@@ -555,7 +555,11 @@ var WidgetsRouter = Backbone.Router
 				// Adds header
 				$('#prefs-tabs-content')
 						.html(
-								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import contact from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>CRM <small>import contact from CRM</small></h2></div><div class="span11"><div id ="zoho"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>Payment <small>import contact from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
+								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import Contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>'+
+								'<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + 
+								'<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import Contact from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' +
+								'<div class="row-fluid"><div class="page-header"><h2>CRM <small>import Contact from CRM</small></h2></div><div class="span11"><div id ="zoho"></div></div></div>'+
+								'<div class="row-fluid"><div class="page-header"><h2>Payment <small>import Contact from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
 
 						);
 
@@ -567,7 +571,7 @@ var WidgetsRouter = Backbone.Router
 				// console.log(getTemplate("import-google-contacts", {}));
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
 
-				// Adding E-commerce Pref
+				/* Add E-commerce Prefs template*/
 				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/get-prefs', template : 'admin-settings-import-shopify-contact-sync' });
 				$('#shopify').append(this.shopify_sync.render().el);
 
@@ -576,8 +580,8 @@ var WidgetsRouter = Backbone.Router
 				// Base_Model_View({url:'core/api/zoho',template:'zoho-contact-sync'});
 				// $('#zoho').append(this.zoho_sync.render().el);
 
-				// adding stripe payment gateway contact syn template
-				// preferences
+				 /* Add stripe payment gateway contact sync template
+				 preferences*/
 				this.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' });
 
 				$('#stripe').append(this.stripe_sync.render().el);
