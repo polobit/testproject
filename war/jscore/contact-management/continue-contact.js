@@ -421,6 +421,8 @@ function deserialize_contact(contact, template) {
     // Iterates through properties and ui clones
     $.each(contact.properties, function (index, element) {
 
+    	if(element.type == "CUSTOM")
+    		return;
         // Removes first input field
         $($('#' + form.attr('id') + ' div.multiple-template.' + element.name).closest('div.controls.second')).remove();
         var field_element = $('#' + form.attr('id') + ' div.multiple-template.' + element.name);
@@ -465,6 +467,8 @@ function deserialize_contact(contact, template) {
  */
 function fill_multi_options(field_element, element) {
 	
+	if(element.type == "CUSTOM")
+		return;
 	// Fills address fields
 	if(element.name == 'address'){
 		var json = JSON.parse(element.value);
