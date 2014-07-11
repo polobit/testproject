@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
-import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.contact.sync.SyncPrefsBuilder;
-import com.agilecrm.contact.sync.service.StripeSync;
 import com.agilecrm.contact.sync.service.SyncService;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
@@ -55,17 +53,11 @@ public class ContactUtilServlet extends HttpServlet
 	    // retrieves Object which was added in taskQueue
 	    ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
 
-	    SyncService service = null;
+	    SyncService service = new SyncPrefsBuilder().config(contactPrefs)
+		    .getService(contactPrefs.client.getClazz());
 
-	    if (contactPrefs.client.equals(SyncClient.STRIPE))
-		service = new SyncPrefsBuilder().config(contactPrefs).getService(StripeSync.class);
-	    if (contactPrefs.client.equals(SyncClient.GOOGLE))
-		// TODO: getService for google sync
-
-		if (contactPrefs.client.equals(SyncClient.SALESFORCE))
-		    // TODO: service for salesforce
-		    if (service != null)
-			service.initSync();
+	    if (service != null)
+		service.initSync();
 
 	    /*
 	     * if (req != null) { // check this request comes from cron or

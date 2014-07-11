@@ -85,17 +85,17 @@ public class ContactPrefsUtil
 
     public static ContactPrefs mergePrefs(ContactPrefs currentPrefs, ContactPrefs updatedPrefs)
     {
-	updatedPrefs.setToken(currentPrefs.getToken());
-	updatedPrefs.setSecret(currentPrefs.getSecret());
-	updatedPrefs.setRefreshToken(currentPrefs.getRefreshToken());
-	updatedPrefs.setLast_synced_to_client(currentPrefs.getLast_synced_to_client());
-	updatedPrefs.setLast_synced_from_client(currentPrefs.getLast_synced_from_client());
+	updatedPrefs.token = currentPrefs.token;
+	updatedPrefs.secret = currentPrefs.secret;
+	updatedPrefs.refreshToken = currentPrefs.refreshToken;
+	updatedPrefs.last_synced_to_client = currentPrefs.last_synced_to_client;
+	updatedPrefs.last_synced_from_client = currentPrefs.last_synced_from_client;
 	return updatedPrefs;
     }
 
     public static GoogleGroupDetails getGroup(String title, ContactPrefs prefs)
     {
-	if (prefs.getGroups().isEmpty())
+	if (prefs.groups().isEmpty())
 	    prefs.fillGroups();
 
 	for (GoogleGroupDetails group : prefs.getGroups())
@@ -134,7 +134,7 @@ public class ContactPrefsUtil
 
     public static GoogleGroupDetails getGroupBasedOnID(String atomId, ContactPrefs prefs)
     {
-	for (GoogleGroupDetails group : prefs.getGroups())
+	for (GoogleGroupDetails group : prefs.groups)
 	{
 	    if (atomId.equals(group.atomId))
 	    {

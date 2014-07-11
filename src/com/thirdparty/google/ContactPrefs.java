@@ -20,7 +20,6 @@ import com.agilecrm.user.DomainUser;
 import com.google.gdata.util.common.base.StringUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
-import com.googlecode.objectify.annotation.Subclass;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -33,7 +32,6 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @SuppressWarnings("serial")
-@Subclass
 public class ContactPrefs extends SyncPrefs implements Serializable
 {
 

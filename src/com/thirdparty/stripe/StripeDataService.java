@@ -55,7 +55,7 @@ public class StripeDataService
 	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
 	contactPrefs.save();
 
-	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
+	if (!contactPrefs.apiKey.isEmpty() && contactPrefs != null)
 	    doImport(contactPrefs);
 
     }

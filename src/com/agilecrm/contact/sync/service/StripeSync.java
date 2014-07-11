@@ -128,8 +128,11 @@ public class StripeSync extends OneWaySyncService
 	    contact.type = Type.PERSON;
 	    contactFields.add(new ContactField(Contact.EMAIL, customer.getEmail(), "work"));
 	    Card card = customer.getActiveCard();
-	    contactFields.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
-	    contactFields.add(new ContactField(Contact.ADDRESS, getAddress(card), "office"));
+	    if (card != null)
+	    {
+		contactFields.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
+		contactFields.add(new ContactField(Contact.ADDRESS, getAddress(card), "office"));
+	    }
 
 	    // check stripe custom field
 	    if (stripeFieldValue != null && !stripeFieldValue.isEmpty())

@@ -10,8 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
@@ -20,8 +18,6 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  */
 @XmlRootElement
-@Cached
-@Entity
 public class SyncPrefs implements Serializable
 {
 
