@@ -47,8 +47,8 @@ public class EmailsAPI
     @Path("send-email")
     @POST
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to, @QueryParam("subject") String subject,
-	    @QueryParam("body") String body)
+    public void createEmail(@QueryParam("from") String fromEmail, @QueryParam("to") String to,
+	    @QueryParam("subject") String subject, @QueryParam("body") String body)
     {
 	try
 	{
@@ -75,9 +75,10 @@ public class EmailsAPI
     @Path("contact/send-email")
     @POST
     @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    public void sendEmail(@Context HttpServletRequest request, @FormParam("from_name") String fromName, @FormParam("from_email") String fromEmail,
-	    @FormParam("to") String to, @FormParam("email_cc") String cc, @FormParam("email_bcc") String bcc, @FormParam("subject") String subject,
-	    @FormParam("body") String body, @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks)
+    public void sendEmail(@Context HttpServletRequest request, @FormParam("from_name") String fromName,
+	    @FormParam("from_email") String fromEmail, @FormParam("to") String to, @FormParam("email_cc") String cc,
+	    @FormParam("email_bcc") String bcc, @FormParam("subject") String subject, @FormParam("body") String body,
+	    @FormParam("signature") String signature, @FormParam("track_clicks") boolean trackClicks)
     {
 	// Removes traling commas if any
 	to = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', to);
@@ -89,7 +90,8 @@ public class EmailsAPI
 	    bcc = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', bcc);
 
 	// Saves Contact Email.
-	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null, trackClicks);
+	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null,
+	        trackClicks);
 
     }
 
@@ -109,17 +111,24 @@ public class EmailsAPI
     @Path("imap-email")
     @GET
     @Produces({ MediaType.APPLICATION_JSON + " ;charset=utf-8" })
-    public String getEmails(@QueryParam("e") String searchEmail, @QueryParam("o") String offset, @QueryParam("c") String count)
+    public String getEmails(@QueryParam("e") String searchEmail, @QueryParam("o") String offset,
+	    @QueryParam("c") String count)
     {
 	try
 	{
+
+	    // Removes unwanted spaces in between commas
+	    String normalisedEmail = AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', searchEmail);
+
 	    // Gets gmailPrefs url if not null, otherwise imap url.
-	    String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), searchEmail, offset, count);
+	    String url = ContactEmailUtil.getEmailsFetchURL(AgileUser.getCurrentAgileUser(), normalisedEmail, offset,
+		    count);
 
 	    // If both are not set, return Contact emails.
 	    if (url == null)
 	    {
-		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(searchEmail, null);
+		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
+		        null);
 
 		// return in the same format {emails:[]}
 		return new JSONObject().put("emails", contactEmails).toString();
@@ -139,7 +148,7 @@ public class EmailsAPI
 	    emailsArray = ContactEmailUtil.addOwnerAndParseEmailBody(emailsArray);
 
 	    // Merges imap emails and contact emails.
-	    emailsArray = ContactEmailUtil.mergeContactEmails(searchEmail, emailsArray);
+	    emailsArray = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0], emailsArray);
 
 	    return emails.toString();
 	}
@@ -174,4 +183,5 @@ public class EmailsAPI
 
 	return info;
     }
+
 }
