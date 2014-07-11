@@ -361,6 +361,43 @@ return items[i].value;
 }
 
 /**
+* Iterates the given "items", to find all matches with the given "name" and 
+* concats each matched value by given separator
+*
+* @param {Object}
+* items array of json objects
+* @param {String}
+* name to get the value (of value atribute)
+* @param {String}
+* separator to combine matched values like ,(comma) etc
+* 
+* @returns matched values combined by separator or undefined
+*/
+function getAllPropertyValuesByName(items, name, separator)
+{
+	if (items == undefined)
+		return;
+
+	var val="";
+	
+	for ( var i = 0, l = items.length; i < l; i++)
+	{
+		if (items[i].name == name)
+		{
+			var va = items[i].value;
+			val += va + separator;
+		} 
+	}
+	
+	// Removes trailing separators
+	var regex = new RegExp("(^"+separator+")|("+separator+"$)","g");
+	val = val.replace(regex, "");
+	
+	console.log(val);
+	return val;
+}
+
+/**
 * Returns contact property based on the name of the property
 *
 * @param items :
