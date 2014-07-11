@@ -1,7 +1,7 @@
 <script id="quickbooks-login-template" type="text/html">
 <div class="widget_content" style="border-bottom:none;line-height: 160%;">
 	See the contact's subscriptions history and payments from your quickbooks account.
-	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your quickbooks</a>
+	<p style="margin: 10px 0px 5px 0px;"></p><a class="btn" href="{{url}}">Link Your Quickbooks</a>
 </div>
 </script>
 
@@ -22,11 +22,7 @@
 	<div  style="display:inline-block;">
 		<div  class="title_txt" style="display:inline-block;">
 			<a href="https://sg.qbo.intuit.com/app/customerdetail?nameId={{Customer.Id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>	
-				{{#if_equals Customer.FullyQualifiedName ""}}{{#if_equals Customer.DisplayName ""}}
-					{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}{{/if_equals}}
-				{{else}}
-					{{Customer.FullyQualifiedName}} {{Customer.DisplayName}}
-				{{/if_equals}}
+				 {{Customer.DisplayName}}
 			</b></h4></a>
 		</div>
 	</div>
@@ -81,7 +77,7 @@
 		{{#each Invoices}}
 			<li class="row-fluid sub_header_li">
 				
-				<a class="pull-left" data-toggle="collapse" href="#collapse-{{Id}}" >{{DocNumber}}</a>
+				<a class="pull-left" data-toggle="collapse" href="#collapse-{{Id}}" ><i class="icon-plus"></i></a>&nbsp;<a class="pull-left"  href="https://sg.qbo.intuit.com/app/invoice?txnId={{Id}}"  target="_blank">{{DocNumber}}</a>
 				<div class="pull-right">
 					{{#if CurrencyRef}}
 					{{#if CurrencyRef.value}}
@@ -153,4 +149,19 @@
 			</li>
 		{{/isArray}}
 	{{/if_equals}}
+</script>
+<script id="quickbooks-revoke-access-template" type="text/html">
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+	<div class="row-fluid">
+		<div class="span4">
+			<br><p class="title_txt"><a href="https://go.xero.com/Dashboard/" target="_blank" >{{fetchXeroUser prefs}}</a></p>
+		</div>
+	</div>
+	<div>
+		<p style='margin: 10px 0px 5px 0px;' >
+			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Xero">Revoke Access</a>
+			<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Xero">Cancel</a>
+		</p>
+	</div>
+</div>
 </script>

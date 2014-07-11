@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
-import com.agilecrm.Globals;
 import com.agilecrm.social.XeroUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -45,18 +44,20 @@ public class XeroWidgetsAPI
 	@Produces(MediaType.TEXT_PLAIN)
 	public String getInvoicesFromXero(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
 	{
+		System.out.println("xero widgets api");
 		// Retrieves widget based on its id
 		Widget widget = WidgetUtil.getWidget(widgetId);
 		if (widget == null)
 			return null;
 
-		XeroUtil utilObj = new XeroUtil(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, widget.getProperty("token"),
-				widget.getProperty("secret"));
+		XeroUtil utilObj = new XeroUtil();
 
 		try
 		{
 			// Calls XeroUtil metod to retrieve invoices
-			return utilObj.getInvoicesOfClient(null, email);
+			String res =utilObj.getInvoicesOfClient(widget, email);
+			//System.out.println(res);
+			return res;
 		}
 		catch (Exception e)
 		{
@@ -89,8 +90,7 @@ public class XeroWidgetsAPI
 		if (widget == null)
 			return null;
 
-		XeroUtil utilObj = new XeroUtil(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, widget.getProperty("token"),
-				widget.getProperty("secret"));
+		XeroUtil utilObj = new XeroUtil();
 		try
 		{
 			// calls XeroUtil method to add Contact to Xero account
@@ -119,13 +119,12 @@ public class XeroWidgetsAPI
 		if (widget == null)
 			return null;
 
-		XeroUtil utilObj = new XeroUtil(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, widget.getProperty("token"),
-				widget.getProperty("secret"));
+		XeroUtil utilObj = new XeroUtil();
 
 		try
 		{
 			// Calls XeroUtil metod to retrieve invoices
-			return utilObj.getLineItemsOfInvoice(invoiceId);
+			return utilObj.getLineItemsOfInvoice(invoiceId,widget);
 		}
 		catch (Exception e)
 		{

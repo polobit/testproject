@@ -468,6 +468,8 @@ function updateTicketInZendesk(ticket_id)
  */
 function sendRequestToZendesk(url, formId, modalId, errorPanelId)
 {
+	//disabling the send request button after first click
+	$("#send_request").attr("disabled", true);
 	/*
 	 * Sends post request to given url and Calls ZendeskWidgetsAPI with Zendesk
 	 * id as path parameter and form as post data

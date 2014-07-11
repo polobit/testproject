@@ -31,7 +31,8 @@ public class Document
      */
     public Index index = searchService.getIndex(IndexSpec.newBuilder().setName("contacts"));
 
-    public void addCustomFieldsToIndex(List<CustomFieldData> customFields, CustomFieldDef.SCOPE scope, com.google.appengine.api.search.Document.Builder doc)
+    public void addCustomFieldsToIndex(List<CustomFieldData> customFields, CustomFieldDef.SCOPE scope,
+	    com.google.appengine.api.search.Document.Builder doc)
     {
 	for (CustomFieldData data : customFields)
 	{
@@ -44,7 +45,7 @@ public class Document
 	    {
 		try
 		{
-		    builder.setName(SearchUtil.normalizeString(data.name) + "_time_epoch");
+		    builder.setName(SearchUtil.normalizeTextSearchString(data.name) + "_time_epoch");
 
 		    builder.setNumber(Double.valueOf(data.value));
 		    doc.addField(Field.newBuilder().setNumber(Double.valueOf(data.value)));
@@ -56,8 +57,8 @@ public class Document
 	    }
 	    else
 	    {
-		builder.setName(SearchUtil.normalizeString(data.name));
-		builder.setText(data.value);
+		builder.setName(SearchUtil.normalizeTextSearchString(data.name));
+		builder.setText(SearchUtil.normalizeString(data.value));
 	    }
 
 	    doc.addField(builder);

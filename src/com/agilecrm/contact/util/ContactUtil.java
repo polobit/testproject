@@ -23,6 +23,7 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>ContactUtil</code> is a utility class to process the data of contact
@@ -761,5 +762,27 @@ public class ContactUtil
 	properties.put("emailBounceStatus.time <", endTime);
 
 	return dao.getCountByProperty(properties);
+    }
+
+    /**
+     * Checks whether the given contact updated after the given time.
+     * 
+     * @param contactId
+     *            the id of contact to check.
+     * @param updatedTime
+     *            previously updated time.
+     * @return true if the contact is updated after the given time or else
+     *         false.
+     */
+    public static boolean isContactUpdated(Long contactId, Long updatedTime)
+    {
+	Query<Contact> query = dao.ofy().query(Contact.class);
+
+	query.filter("id = ", contactId);
+	query.filter("updated_time > ", updatedTime);
+
+	int count = query.count();
+	System.out.println("Is updated count - " + count);
+	return count > 0 ? true : false;
     }
 }
