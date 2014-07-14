@@ -12,7 +12,9 @@ import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.LoginServlet;
 import com.agilecrm.scribe.api.GoogleApi;
+import com.agilecrm.scribe.api.LinkedinAPI;
 import com.agilecrm.scribe.login.serviceproviders.GoogleLoginService;
+import com.agilecrm.scribe.login.serviceproviders.LinkedinLoginService;
 import com.agilecrm.scribe.login.serviceproviders.OAuthLoginService;
 import com.agilecrm.scribe.login.serviceproviders.YahooLoginService;
 import com.agilecrm.session.SessionManager;
@@ -37,7 +39,9 @@ public class OAuthLoginUtil
 
 	GOOGLE(GoogleLoginService.class, GoogleApi.class),
 
-	YAHOO(YahooLoginService.class, YahooApi.class);
+	YAHOO(YahooLoginService.class, YahooApi.class),
+
+	LINKEDIN(LinkedinLoginService.class, LinkedinAPI.class);
 
 	Class<? extends OAuthLoginService> loginService;
 	Class<? extends Api> apiClass;

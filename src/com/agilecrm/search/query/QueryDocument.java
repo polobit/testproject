@@ -446,7 +446,7 @@ public class QueryDocument<T> implements QueryInterface
 
 	Long availableResults = (Long) results.get("availableDocuments");
 
-	// Converts collection of documents in to a list, it enable easy
+	// Converts collection ochf documents in to a list, it enable easy
 	// retrieval of documents based on index
 	List<ScoredDocument> DocumentList = new ArrayList<ScoredDocument>(documents);
 

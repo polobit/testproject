@@ -51,11 +51,16 @@ public class GoogleServiceUtil
 	    throw new Exception(String.valueOf(properties.get("error")));
 	else if (properties.containsKey("access_token"))
 	{
-	    contactPrefs.token = String.valueOf(properties.get("access_token"));
-	    contactPrefs.expires = Long.parseLong(String.valueOf(properties.get("expires_in")));
-	    System.out.println("domiain user key in refresh token method: " + contactPrefs.getDomainUser());
-	    contactPrefs.setExpiryTime(contactPrefs.expires);
-	    contactPrefs.save();
+	    /*
+	     * contactPrefs.getToken =
+	     * String.valueOf(properties.get("access_token"));
+	     * contactPrefs.expires =
+	     * Long.parseLong(String.valueOf(properties.get("expires_in")));
+	     * System.out.println("domiain user key in refresh token method: " +
+	     * contactPrefs.getDomainUser());
+	     * contactPrefs.setExpiryTime(contactPrefs.expires);
+	     * contactPrefs.save();
+	     */
 	}
 
     }

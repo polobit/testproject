@@ -443,6 +443,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	     */
 	    // System.out.println("savined user info scopes : " +
 	    // info.getScopes());
+	  //  System.out.println("savined user info scopes : " + info.getScopes());
 
 	}
 	finally

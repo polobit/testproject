@@ -100,7 +100,11 @@ public class SearchUtil
 	     */
 	    if (fields.containsKey(field_name))
 	    {
+<<<<<<< HEAD
 		String value = normalizeString(fields.get(field_name)) + " " + normalized_value;
+=======
+		String value = normalizeTextSearchString(fields.get(field_name)) + " " + normalized_value;
+>>>>>>> d6d2aa38609930755a6666a050790cfddb8b532f
 
 		normalized_value = value;
 	    }

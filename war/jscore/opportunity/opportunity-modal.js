@@ -95,11 +95,11 @@ $(function(){
 	});
 	
 	$('.milestones > li').live('mouseenter', function () {
-		$(this).find('.deal-options').css("display","inline");
+		$(this).find('.deal-options').css("visibility","visible");
 	});
 	
 	$('.milestones > li').live('mouseleave', function () {
-		$(this).find('.deal-options').css("display","none");
+		$(this).find('.deal-options').css("visibility","hidden");
 	});
 	
 	/**

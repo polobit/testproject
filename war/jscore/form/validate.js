@@ -142,7 +142,11 @@ function isAlphaNumeric(subdomain) {
 function isAlphaNumeric(subdomain) {
 	subdomain = subdomain.toString();
 	
+<<<<<<< HEAD
   var regularExpression  = new RegExp(/^[A-Za-z#@][A-Za-z0-9_:&@;/\s/g]*$/);
+=======
+  var regularExpression  = new RegExp(/^[A-Za-z#@][A-Za-z0-9_:&@;]*$/);
+>>>>>>> d6d2aa38609930755a6666a050790cfddb8b532f
   if(!regularExpression.test(subdomain)) {
 		return false;
     }

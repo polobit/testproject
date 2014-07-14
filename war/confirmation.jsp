@@ -15,6 +15,8 @@
 <%@page import="com.agilecrm.workflows.status.util.CampaignStatusUtil"%>
 <%@page import="com.campaignio.cron.util.CronUtil"%>
 <%@page import="com.thirdparty.mandrill.Mandrill" %>
+<%@page import="com.agilecrm.user.DomainUser" %>
+<%@page import="com.agilecrm.user.util.DomainUserUtil" %>
 
 <html>
 <head>
@@ -423,13 +425,21 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from campaign " + campaign_name);
 						}
 					    
-					    map.put("domain", NamespaceManager.get());
+					    String domain = NamespaceManager.get();
+					    String fromEmail = "noreply@agilecrm.com";
+					    
+					    DomainUser owner = DomainUserUtil.getDomainOwner(domain);
+					    
+					    if(owner != null)
+							fromEmail = owner.email;
+					    
+					    map.put("domain", domain);
 					    
 					    map.put("campaign_id", campaignId);
 					    map.put("email", email);
 						 
 						if(map.size() != 0)
-						   SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, "noreply@agilecrm.com", company);
+						   SendMail.sendMail(email, subjectMessage, SendMail.UNSUBSCRIBE_CONFIRMATION , map, StringUtils.isBlank(fromEmail) ? "noreply@agilecrm.com" : fromEmail, company);
 					}
 					catch (Exception e)
 					{

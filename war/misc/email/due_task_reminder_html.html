@@ -17,11 +17,11 @@
 			<div
 				style="font-size: 14px; background-color: #fff; padding: 10px 7px 7px 7px">
 				<p>*****This is an automated email. Please do not reply*****</p>
-				<table width="100%" cellpadding="5" cellspacing="0"style:"margin-top:-40px">
+				<table width="100%" cellpadding="5" cellspacing="0" style:"margin-top:-40px;">
 					<thead>
 						<tr bgcolor="#CCCCCC">
 							<th align="left" style="font-size: 12px"><strong>Subject</strong></th>
-							<th align="left" style="font-size: 12px"><strong>Type</strong></th>
+							<th align="left" style="font-size: 12px;"><strong>Type</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Priority</strong></th>
 							<th align="left" style="font-size: 12px"><strong>Related To</strong></th>
 		      			</tr>
@@ -29,25 +29,25 @@
 					<tbody>
 						{{#tasks}}
 						<tr>
-						   <td align="left" style="font-size: 12px">{{{subject}}}</td>
-						   <td align="left" style="font-size: 12px">{{type}}</td>
-						   <td align="left" style="font-size: 12px">{{priority_type}}</td>
-						   <td align="left" style="font-size: 12px; position:relative; text-align: left; ">
+						   <td align="left" style="font-size: 12px;width:40%;color:#000;vertical-align:top;text-align:justify;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{{subject}}}</td>
+						   <td align="left" style="font-size: 12px;width:5%;color:#000;vertical-align:top;text-transform:lowercase;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{type}}</td>
+						   <td align="left" style="font-size: 12px;width:5%;color:#000;vertical-align:top;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px;">{{priority_type}}</td>
+						   <td align="left" style="font-size: 12px;width:50%;color:#000;vertical-align:top;position:relative; text-align: left;border-bottom:1px solid #e6e6e6;padding:5px 8px 0px 5px; ">
 						   		{{#related_contacts}}
 						   		
-						   		<div style="display:inline-table; ">
+						   		<div style="display:inline-table;float:left;margin:2px 10px 10px 0px;width:75px;">
 						   		
 						   		{{#taskOwner.domain}}
 						   			<a href="https://{{taskOwner.domain}}.agilecrm.com/#contact/{{/taskOwner.domain}}
 						   		{{^taskOwner.domain}}
-						   			<a href="http://localhost:8888#contact/{{/taskOwner.domain}}{{id}}" target="_blank">
+						   			<a href="http://localhost:8888#contact/{{/taskOwner.domain}}{{id}}" target="_blank" style="text-decoration:none;">
 						   			{{#image}}
 						   				<img style="width:40px; height:40px; max-width:40px; max-height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px; " src="{{value}}"
 						   			{{/image}}
 						   			
 						   			{{^image}}
 						   				{{#first_name}}
-						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="https://secure.gravatar.com/avatar/d69f6d6be04a92525fbd0e486bea9d6a.jpg?s=40&d=https%3A//da4o37ei6ybbh.cloudfront.net/css/images/pic.png"
+						   					<img style="width:40px; height:40px; border: 1px solid #ddd; border-radius: 5px; padding: 4px;" src="https://secure.gravatar.com/avatar/afbd1e5924d99dd19fcd0bb016e25a34.jpg?s=80&d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png"
 						   				{{/first_name}}
 						   				{{^first_name}}
 						   					{{#url}}
@@ -65,7 +65,7 @@
 						   			{{/image}}
 						   			
 						   			title="{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}"
-						   			/>
+						   			/><span style="display:block;overflow:hidden;color:#000;text-overflow:ellipsis;white-space:nowrap;width:70px;">{{#first_name}}{{value}}{{/first_name}}{{#last_name}} {{value}}{{/last_name}}{{#name}}{{value}}{{/name}}</span>
 						   			</a>
 						   		</div>		
 						   		{{/related_contacts}}

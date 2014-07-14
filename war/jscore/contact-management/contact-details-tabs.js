@@ -488,7 +488,7 @@ function populate_send_email_details(el){
 	//$("#emailForm").find( 'input[name="signature"]' ).val(CURRENT_USER_PREFS.signature);
 
 	// Prefill the templates
-	var optionsTemplate = "<option value='{{id}}'> {{subject}}</option>";
+	var optionsTemplate = "<option value='{{id}}'> {{#if name}}{{name}}{{else}}{{subject}}{{/if}}</option>";
 	fillSelect('sendEmailSelect', '/core/api/email/templates', 'emailTemplates', undefined , optionsTemplate, false, el, '- Fill from Template -');
 }
 

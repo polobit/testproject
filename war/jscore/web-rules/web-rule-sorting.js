@@ -1,41 +1,23 @@
-$(function()
-{
-	/**
-	 * On mouseleave hides the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseleave', function()
-	{
-		$(this).find("td:last > div").css("visibility", "hidden");
-	});
-	
-	*//**
-	 * On mouseleave shows the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseenter', function()
-	{
-		$(this).find("td:last > div").css("visibility", "visible");
-	});*/
-
-
-});
-
-
 /**
  * For sorting of web rules
  * @param el
  */
-function enableWebruletSoring(el)
+function enableWebrulesSorting(el)
 {
+	$("#webrule-model-list").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td><td></td><td></td></tr>");
 	// Loads jquery-ui to get sortable functionality on widgets
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function()
 	{
 		$('.webrule-sortable', el).sortable( 
 		{
 				axis: "y" ,
+				forcePlaceholderSize: true,
+				placeholder:'<tr><td></td></tr>',
 				handle: ".icon-move",
 				containment: "#webrule-model-list",
 				cursor: "move",
 				forceHelperSize: true,
+				scroll: false,
 				items: "> tr",
 				helper: function(e, tr)
 				{
@@ -48,6 +30,7 @@ function enableWebruletSoring(el)
 				    });
 				    return $helper;
 				}
+
 		});
 
 		/*
@@ -64,16 +47,20 @@ function enableWebruletSoring(el)
 			 */
 			$('.webrule-sortable > tr', el).each(function(index, element)
 			{
-				var model_id = $(element).find('.data').attr('data');
+				if(!$(element).hasClass("pseduo-row")){
+					
+					var model_id = $(element).find('.data').attr('data');
 
-				// Get Model, model is set as data to widget element
-				var model = App_WebReports.webrules.collection.get(model_id);
+					// Get Model, model is set as data to widget element
+					var model = App_WebReports.webrules.collection.get(model_id);
 
-				model.set({ 'position' : index }, { silent : true });
+					model.set({ 'position' : index }, { silent : true });
 
-				models.push({ id : model.get("id"), position : index });
+					models.push({ id : model.get("id"), position : index });
+				}
 
 			});
+	
 			// Saves new positions in server
 			$.ajax({ type : 'POST', url : '/core/api/webrule/positions', data : JSON.stringify(models),
 				contentType : "application/json; charset=utf-8", dataType : 'json' });

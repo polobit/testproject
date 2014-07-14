@@ -1,6 +1,7 @@
 package com.agilecrm.account;
 
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -30,6 +31,12 @@ public class EmailTemplates
     public Long id;
 
     /**
+     * Email Name.
+     */
+    @NotSaved(IfDefault.class)
+    public String name = null;
+
+    /**
      * Email Subject.
      */
     @NotSaved(IfDefault.class)
@@ -44,8 +51,7 @@ public class EmailTemplates
     /**
      * EmailTemplates Dao.
      */
-    public static ObjectifyGenericDao<EmailTemplates> dao = new ObjectifyGenericDao<EmailTemplates>(
-	    EmailTemplates.class);
+    public static ObjectifyGenericDao<EmailTemplates> dao = new ObjectifyGenericDao<EmailTemplates>(EmailTemplates.class);
 
     /**
      * Default EmailTemplates.
@@ -63,8 +69,9 @@ public class EmailTemplates
      * @param text
      *            - Email Text Body.
      */
-    public EmailTemplates(String subject, String text)
+    public EmailTemplates(String name, String subject, String text)
     {
+	this.name = name;
 	this.subject = subject;
 	this.text = text;
     }
@@ -74,6 +81,7 @@ public class EmailTemplates
      */
     public void save()
     {
+	System.out.println("email template : " + this);
 	dao.put(this);
     }
 
@@ -83,5 +91,26 @@ public class EmailTemplates
     public void delete()
     {
 	dao.delete(this);
+    }
+
+    /**
+     * Sets name to subject if its null for old templates. PrePersist is called
+     * each time before object gets saved.
+     */
+    @PostLoad
+    public void postLoad()
+    {
+	if (this.name == null)
+	    this.name = this.subject;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString()
+    {
+	return "id: " + id + " name: " + this.name + " subject" + this.subject;
     }
 }

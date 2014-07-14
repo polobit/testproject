@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.json.JSONObject;
 
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
@@ -15,6 +14,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.DateUtil;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -128,8 +128,9 @@ public class TaskUtil
     {
 	try
 	{
-	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("due")
-		    .filter("is_complete", false).limit(50).list();
+	    return dao.ofy().query(Task.class)
+		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		    .order("due").filter("is_complete", false).limit(50).list();
 	}
 	catch (Exception e)
 	{
@@ -150,8 +151,9 @@ public class TaskUtil
 	     * int thisWeekDate = (7-date.getDay());
 	     * System.out.println("all pending tasks this week="+thisWeekDate);
 	     */
-	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("due")
-		    .filter("is_complete", false).limit(7).list();
+	    return dao.ofy().query(Task.class)
+		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		    .order("due").filter("is_complete", false).limit(7).list();
 	}
 	catch (Exception e)
 	{
@@ -165,8 +167,9 @@ public class TaskUtil
     {
 	try
 	{
-	    return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("due")
-		    .filter("is_complete", false).list();
+	    return dao.ofy().query(Task.class)
+		    .filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		    .order("due").filter("is_complete", false).list();
 	}
 	catch (Exception e)
 	{
@@ -214,7 +217,8 @@ public class TaskUtil
 	    System.out.println("check for " + startTime + " " + endTime);
 
 	    // Gets list of tasks filtered on given conditions
-	    return dao.ofy().query(Task.class).filter("due >=", startTime).filter("due <=", endTime).filter("is_complete", false).list();
+	    return dao.ofy().query(Task.class).filter("due >=", startTime).filter("due <=", endTime)
+		    .filter("is_complete", false).list();
 	}
 	catch (Exception e)
 	{
@@ -248,7 +252,8 @@ public class TaskUtil
 	System.out.println("check for " + startTime + " " + endTime);
 
 	// Gets list of tasks filtered on given conditions
-	List<Task> dueTasks = dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
+	List<Task> dueTasks = dao.ofy().query(Task.class)
+		.filter("owner", new Key<DomainUser>(DomainUser.class, domainUserId)).filter("due >", startTime)
 		.filter("due <=", endTime).filter("is_complete", false).list();
 
 	return dueTasks;
@@ -256,8 +261,9 @@ public class TaskUtil
 
     public static List<Task> getTasksRelatedToCurrentUser()
     {
-	return dao.ofy().query(Task.class).filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order("-created_time")
-		.list();
+	return dao.ofy().query(Task.class)
+		.filter("owner", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+		.order("-created_time").list();
     }
 
     /**
@@ -265,7 +271,8 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatedToOwnerOfType(String criteria, String type, String owner, boolean pending, Integer max, String cursor)
+    public static List<Task> getTasksRelatedToOwnerOfType(String criteria, String type, String owner, boolean pending,
+	    Integer max, String cursor)
     {
 	try
 	{
@@ -379,7 +386,8 @@ public class TaskUtil
      */
     public static int getTaskCountForContact(String taskType, Long contactId) throws Exception
     {
-	Query<Task> query = dao.ofy().query(Task.class).filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+	Query<Task> query = dao.ofy().query(Task.class)
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	if (!StringUtils.isEmpty(taskType))
 	    query.filter("type =", taskType);
@@ -400,7 +408,8 @@ public class TaskUtil
      */
     public static List<Task> getContactSortedTasks(String taskType, Long contactId) throws Exception
     {
-	Query<Task> query = dao.ofy().query(Task.class).filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("due");
+	Query<Task> query = dao.ofy().query(Task.class)
+		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId)).order("due");
 
 	if (!StringUtils.isEmpty(taskType))
 	    query.filter("type =", taskType);
@@ -451,8 +460,8 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatedToOwnerOfTypeAndDue(String criteria, String type, String owner, boolean pending, Integer max, String cursor,
-	    Long startTime, Long endTime)
+    public static List<Task> getTasksRelatedToOwnerOfTypeAndDue(String criteria, String type, String owner,
+	    boolean pending, Integer max, String cursor, Long startTime, Long endTime)
     {
 	try
 	{
@@ -505,7 +514,8 @@ public class TaskUtil
      * 
      * @return List of tasks
      */
-    public static List<Task> getTasksRelatedToOwnerOfTypeAndCategory(String criteria, String type, String owner, boolean pending, Integer max, String cursor)
+    public static List<Task> getTasksRelatedToOwnerOfTypeAndCategory(String criteria, String type, String owner,
+	    boolean pending, Integer max, String cursor)
     {
 	System.out.println(criteria + " " + type + " " + owner);
 

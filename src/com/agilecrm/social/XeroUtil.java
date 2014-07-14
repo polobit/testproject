@@ -67,13 +67,14 @@ public class XeroUtil
 		JSONArray contactsArray = null;
 		JSONObject resJson = new JSONObject();
 		String res = "";
-		// call to get contacts of email Id
 
+		// call to get contacts of email Id
 		res = getContactsByEmail(email);
 
 		if (res.contains("token_expired"))
 		{
-			return "Authentication Error.\r\nThe access token has expired. Please reconfigure your Xero integration.";
+			throw new Exception(
+					"Authentication Error.\r\nThe access token has expired. Please reconfigure your Xero integration.");
 		}
 		try
 		{
@@ -86,16 +87,17 @@ public class XeroUtil
 			else
 			{
 				contactJson = contactsArray.getJSONObject(0);
-			
+
 				// Call to get invoices of a contact ID
 				res = getInvoicesForContact(contactJson.getString("ContactID"));
 
 				// System.out.println("invoices for the client is  "+response);
 				invoicesArray = new JSONObject(res).getJSONArray("Invoices");
-				
+
 			}
 			resJson.put("Contact", contactJson);
-			resJson.put("Invoices", invoicesArray);	
+			resJson.put("Invoices", invoicesArray);
+
 		}
 		catch (JSONException ex)
 		{
@@ -114,10 +116,10 @@ public class XeroUtil
 	 */
 	public String getContactsByEmail(String email) throws Exception
 	{
-		String query = URLEncoder.encode("EmailAddress=" + "\"" + email + "\"","UTF-8");
+		String query = URLEncoder.encode("EmailAddress=" + "\"" + email + "\"", "UTF-8");
 		String endPointURL = APIURL + "/Contacts?where=" + query;
-		return SignpostUtil.accessURLWithOauth(consumerKey, consumerSecret, accessToken, tokenSecret,
-				endPointURL, "GET", null, "xero");
+		return SignpostUtil.accessURLWithOauth(consumerKey, consumerSecret, accessToken, tokenSecret, endPointURL,
+				"GET", null, "xero");
 	}
 
 	/**
@@ -129,13 +131,12 @@ public class XeroUtil
 	 */
 	public String getInvoicesForContact(String contactID) throws Exception
 	{
-		String query = URLEncoder.encode("Contact.ContactID=Guid(\"" + contactID + "\")" ,"UTF-8");
+		String query = URLEncoder.encode("Contact.ContactID=Guid(\"" + contactID + "\")", "UTF-8");
 		String endPointURL = APIURL + "/Invoices?where=" + query;
 
-		return  SignpostUtil.accessURLWithOauth(consumerKey, consumerSecret, accessToken, tokenSecret,
-				endPointURL, "GET", null, "xero");
+		return SignpostUtil.accessURLWithOauth(consumerKey, consumerSecret, accessToken, tokenSecret, endPointURL,
+				"GET", null, "xero");
 
-		
 	}
 
 	/**
@@ -164,6 +165,19 @@ public class XeroUtil
 		System.out.println("Respone JSON: " + responseJSON);
 
 		return responseJSON.toString();
+	}
+
+	/**
+	 * @param invoiceId
+	 * @return
+	 * @throws Exception
+	 */
+	public String getLineItemsOfInvoice(String invoiceId) throws Exception
+	{
+		String endPointURL = APIURL + "/Invoices/" + invoiceId;
+
+		return SignpostUtil.accessURLWithOauth(consumerKey, consumerSecret, accessToken, tokenSecret, endPointURL,
+				"GET", null, "xero");
 	}
 
 }

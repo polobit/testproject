@@ -100,6 +100,15 @@
 		<servlet-name>register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>registration checker</servlet-name>
+		<servlet-class>com.agilecrm.user.RegisterVerificationServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>registration checker</servlet-name>
+		<url-pattern>backend/register-check</url-pattern>
+	</servlet-mapping>
 
 
 	<!-- Rest Easy -->

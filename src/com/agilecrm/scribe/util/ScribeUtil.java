@@ -25,6 +25,7 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.Globals;
+import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
@@ -36,9 +37,11 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.shopify.OAuthCustomService;
+import com.thirdparty.shopify.ShopifyApi;
+import com.thirdparty.shopify.ShopifyServiceBuilder;
 
 //import org.codehaus.jackson.map.ObjectMapper;
 
@@ -52,6 +55,8 @@ import com.thirdparty.google.calendar.GoogleCalenderPrefs;
  */
 public class ScribeUtil
 {
+
+    private static final String SHOPIFY_SCOPE = "read_customers, read_orders,read_products";
 
     /**
      * Builds service using serviceBuilder based on type of service specified,
@@ -123,6 +128,14 @@ public class ScribeUtil
 	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_FACEBOOK,
 		    com.agilecrm.scribe.api.FacebookApi.class, callback, Globals.FACEBOOK_APP_ID,
 		    Globals.FACEBOOK_APP_SECRET, null);
+
+	/**
+	 * create service for stripe import
+	 */
+	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
+	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT,
+		    com.agilecrm.scribe.api.StripeApi.class, callback, Globals.DEV_STRIPE_CLIENT_ID,
+		    Globals.DEV_STRIPE_API_KEY, "read_only");
 
 	// Creates a Service, specific to Gmail
 	else
@@ -262,9 +275,55 @@ public class ScribeUtil
 	{
 	    saveXeroPrefs(req, accessToken);
 	}
+	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
+	{
+	    saveStripeImportPref(req, accessToken);
+
+	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
 	    saveFacebookPrefs(req, code, service);
 
+    }
+
+    /**
+     * If service is StripeImport
+     * 
+     * @param req
+     *            {@link HttpServletRequest}
+     * @param accessToken
+     *            {@link String} access token after OAuth
+     */
+    public static void saveStripeImportPref(HttpServletRequest req, Token accessToken)
+    {
+
+	String code = req.getParameter("code");
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format(
+		"https://connect.stripe.com/oauth/token?code=%s&grant_type=%s", code, "authorization_code"));
+
+	oAuthRequest.addHeader("Authorization", "Bearer " + Globals.DEV_STRIPE_API_KEY);
+
+	Response response = oAuthRequest.send();
+	try
+	{
+	    HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
+		    new TypeReference<HashMap<String, String>>()
+		    {
+		    });
+
+	    ContactPrefs prefs = new ContactPrefs();
+	    if (properties.containsKey("refresh_token"))
+	    {
+
+		prefs.refreshToken = properties.get("refresh_token");
+		prefs.apiKey = properties.get("access_token");
+		prefs.client = SyncClient.STRIPE;
+		prefs.save();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     /**
@@ -405,14 +464,16 @@ public class ScribeUtil
 	}
 
 	// after getting access token save prefs in db
-	ContactPrefs contactPrefs = new ContactPrefs(Type.GOOGLE, ((String) properties.get("access_token")), null,
-		(Long.parseLong((String.valueOf(properties.get("expires_in"))))),
-		((String) properties.get("refresh_token")));
+	ContactPrefs contactPrefs = new ContactPrefs();
+	contactPrefs.client = SyncClient.GOOGLE;
+	contactPrefs.token = properties.get("access_token").toString();
+	contactPrefs.expires = Long.valueOf(properties.get("expires_in").toString());
+	contactPrefs.refreshToken = properties.get("refresh_token").toString();
 
 	contactPrefs.setPrefs(object);
 	System.out.println(contactPrefs.duration);
 	System.out.println(contactPrefs.sync_type);
-	contactPrefs.setExpiryTime(contactPrefs.expires);
+	contactPrefs.expires = contactPrefs.expires;
 	contactPrefs.save();
 
 	// initialize backend to save contacts
@@ -537,8 +598,9 @@ public class ScribeUtil
 		    accessToken.getToken(), accessToken.getSecret(), "https://api.xero.com/api.xro/2.0/users", "GET",
 		    "", "XERO");
 	    JSONObject xeroProfile = new JSONObject(res);
-	    properties.put("xeroId", xeroProfile.getString("UserID"));
-	    properties.put("xeroemail", xeroProfile.getString("EmailAddress"));
+	    JSONObject js = (JSONObject) xeroProfile.getJSONArray("Users").get(0);
+	    properties.put("xeroId", js.getString("UserID"));
+	    properties.put("xeroemail", js.getString("EmailAddress"));
 	}
 	catch (JSONException e)
 	{
@@ -577,6 +639,35 @@ public class ScribeUtil
 
 	// update widget with tokens
 	saveWidgetPrefsByName(serviceType, properties);
+
+    }
+
+    public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
+	    String serviceType)
+    {
+	/**
+	 * create service for Shopify
+	 */
+	String callback = req.getRequestURL().toString();
+	if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
+	    return getShopifyCustomService(req, ScribeServlet.SERVICE_TYPE_SHOPIFY, ShopifyApi.class, callback,
+		    Globals.SHOPIFY_API_KEY, Globals.SHOPIFY_SECRET_KEY, SHOPIFY_SCOPE);
+
+	return null;
+    }
+
+    private static OAuthCustomService getShopifyCustomService(HttpServletRequest req, String serviceType,
+	    Class<? extends com.thirdparty.shopify.Api> apiClass, String callback, String apiKey, String apiSecret,
+	    String scope)
+    {
+
+	// Gets session and sets attribute "oauth.service" to service type
+	req.getSession().setAttribute("oauth.service", serviceType);
+
+	return new ShopifyServiceBuilder().provider((Class<? extends com.thirdparty.shopify.Api>) apiClass)
+		.apiKey(apiKey).apiSecret(apiSecret).callback(callback).scope(scope).build();
+
+	// if scope is needed in the service
 
     }
 }

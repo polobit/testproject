@@ -621,7 +621,18 @@ $(function()
 	var obj = JSON.parse(info_json);
 
 	if (!obj[date_type])
-	    return "-"
+	    return "-";
+	if(date_type != "created_time")
+	{
+		if ((obj[date_type] / 100000000000) > 1)
+		{
+		    return new Date(parseInt(obj[date_type])).format("mmm dd yyyy HH:MM:ss",0);
+		}
+		// date form milliseconds
+		return new Date(parseInt(obj[date_type]) * 1000).format("mmm dd yyyy HH:MM:ss",0);
+	}
+	else
+	{
 	var intMonth = new Date(parseInt(obj[date_type]) * 1000).getMonth();
 	var intDay = new Date(parseInt(obj[date_type]) * 1000).getDate();
 	var intYear = new Date(parseInt(obj[date_type]) * 1000).getFullYear();
@@ -631,6 +642,7 @@ $(function()
 	];
 
 	return (monthArray[intMonth] + " " + intDay + ", " + intYear);
+    }
     });
 
     /**
@@ -747,6 +759,30 @@ $(function()
 	var str = value.replace(/_/g, ' ');
 	return ucfirst(str.toLowerCase());
 
+    });
+    
+    Handlebars.registerHelper('actionTemplate', function(actions)
+    {
+		if (!actions)
+		    return;
+		 
+		var actions_count = actions.length;
+
+		var el = '<div style="white-space: normal!important;word-break: break-word;">';
+
+		$.each(actions, function(key, val)
+		{
+		    if (--actions_count == 0)
+		    {
+		    	el = el.concat(titleFromEnums(val.action));
+		    	return;
+		    }
+		    el = el.concat(titleFromEnums(val.action) + ", ");
+		});
+
+		el = el.concat('</div>');
+		return new Handlebars.SafeString(el);
+		
     });
 
     Handlebars.registerHelper('triggerType', function(value)
@@ -1229,10 +1265,16 @@ $(function()
      */
     Handlebars.registerHelper('getHyperlinkFromURL', function(url)
     {
-
-	if (url.match(/((http[s]|ftp|file):\/\/)/) != null)
-	    return url;
-	return 'http://' + url;
+    	if (url.match(/((http|http[s]|ftp|file):\/\/)/) != null)
+    	    return url;
+    	return 'http://' + url;
+    });
+    
+    Handlebars.registerHelper('getSkypeURL', function(url)
+    {
+    	if (url.match("skype:") != null)
+    	    return url;
+    	return 'skype:' + url;
     });
 
     // Get Count
@@ -1504,6 +1546,7 @@ $(function()
 
     Handlebars.registerHelper("getCurrentDomain", function(options)
     {
+    	
 	var url = window.location.host;
 
 	var exp = /(\.)/;
@@ -2434,6 +2477,12 @@ $(function()
 	
 	if (hash.indexOf("hardbounced") != -1)
 	    return "Hard Bounced";
+	
+	if (hash.indexOf("softbounced") != -1)
+	    return "Soft Bounced";
+	
+	if (hash.indexOf("spam-reported") != -1)
+	    return "Spam Reported";
     });
 
     Handlebars.registerHelper("check_plan", function(plan, options)
@@ -2527,5 +2576,14 @@ $(function()
 	return i[0]+"-"+i[2]+"-"+i[1];
     });
     
+    Handlebars.registerHelper('fetchXeroUser', function(data)
+    {
+    	    			return JSON.parse(data).xeroemail;
+    });
     
-});
+    Handlebars.registerHelper('getfbreturndomain', function(data)
+    {
+    	var arr = window.location.href.split('/')
+    	return arr[2];
+    });
+ });
