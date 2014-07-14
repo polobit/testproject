@@ -14,8 +14,6 @@ public class QuickBooksUtil
 	String consumerSecret;
 	String APIURL = "https://quickbooks.api.intuit.com/v3/company/$companyID";
 
-	// String APIURL ="https://qb.sbfinance.intuit.com/v3/company/$companyID";
-
 	/**
 	 * @param accessToken
 	 * @param tokenSecret
@@ -32,8 +30,6 @@ public class QuickBooksUtil
 		this.consumerSecret = consumerSecret;
 		this.APIURL = APIURL.replace("$companyID", companyID);
 
-		System.out.println("accesstoken" + accessToken + "secret" + tokenSecret + "consumerkey" + consumerKey
-				+ "consumersecret" + consumerSecret);
 	}
 
 	/**
@@ -52,9 +48,8 @@ public class QuickBooksUtil
 		String response = SignpostUtil.accessURLWithOauth(this.consumerKey, this.consumerSecret, this.accessToken,
 				this.tokenSecret, APIURL + query, "POST", "", "quickbooks");
 
-		System.out.println("Fetched Invoices is : " + response);
 		validateResponse(response);
-		System.out.println("response is \n" + response);
+		// System.out.println("response is \n" + response);
 		return response;
 
 	}
@@ -68,14 +63,27 @@ public class QuickBooksUtil
 	 */
 	public String getCustomersByEmail(String email) throws Exception
 	{
-		String query = "/query?query=select%20%2A%20from%20Customer%20where%20PrimaryEmailAddr%20%3D%20%27"
-				+ email.replace("@", "%40") + "%27";
-
-		// authenthicating & retreiving result from quickbooks.com
+		StringBuffer query =new StringBuffer("/query?query=select%20%2A%20from%20Customer%20where%20PrimaryEmailAddr%20IN%20%28");
+		String emailArr[] = email.split(",");
+		//build query wit multiple email 
+		for(int i=0;i<emailArr.length;i++)
+		{	
+			if(i==0)
+			{
+			query.append("%27"+ emailArr[i].replace("@","%40") +"%27%20");
+			}
+			else
+			{	
+			
+			query.append("%20%2C"+ "%27" + emailArr[i].replace("@","%40") +"%27");
+			}
+		}
+		query.append("%29");
+		
+		//get customer details from quickbooks.com
 		String response = SignpostUtil.accessURLWithOauth(this.consumerKey, this.consumerSecret, this.accessToken,
-				this.tokenSecret, APIURL + query, "POST", "", "quickbooks");
+				this.tokenSecret, APIURL + query.toString(), "POST", "", "quickbooks");
 		validateResponse(response);
-		System.out.println("Fetched customers: " + response);
 		return response;
 	}
 
@@ -95,7 +103,7 @@ public class QuickBooksUtil
 		JSONObject customerJSON = new JSONObject();
 
 		customerJSON.put("GivenName", firstname);
-		customerJSON.put("MiddleName", lastname);
+		customerJSON.put("FamilyName", lastname);
 
 		customerJSON.put("DisplayName", firstname + " " + lastname);
 		JSONObject emailJSON = new JSONObject();
@@ -126,7 +134,6 @@ public class QuickBooksUtil
 		{
 			// call getCustomersByEmail method to get customer details based on
 			// email
-			//System.out.println(new JSONObject(getCustomersByEmail(email)));
 			JSONObject queryres = new JSONObject(getCustomersByEmail(email)).getJSONObject("QueryResponse");
 
 			if (queryres.isNull("Customer"))

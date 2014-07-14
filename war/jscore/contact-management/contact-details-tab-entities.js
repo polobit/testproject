@@ -138,11 +138,11 @@ var contact_details_tab = {
 			var json = contact.toJSON();
 			 
 			// Get email of the contact in contact detail
-			var email = getPropertyValue(json.properties, "email");
+			var email = getAllPropertyValuesByName(json.properties, "email", ",");
 			
 			// Shows an error alert, when there is no email to the contact 
+
 			if(!email){
-				console.log()
 				$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 				return;	
 			}	

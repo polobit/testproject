@@ -7,7 +7,7 @@ body {
 	background: #fff;
 	bottom: 0;
 	width: 300px;
-	height: 300px;
+	height: 200px;
 	right: 0;
 }
 
@@ -144,7 +144,32 @@ body {
 			</div>
 		</div>
 	</div>
-	<script src = "https://s3.amazonaws.com/PopupTemplates/survey/choice-multi/scripts/choice_multi.js">
+	<script type = "text/javascript">
+	var iframe_div = window.parent.document.body.getElementsByClassName('simple-modal-body')[0];
+	var iframe_doc = iframe_div.getElementsByTagName('iframe')[0].contentWindow.document || iframe_div.getElementsByTagName('iframe')[0].contentDocument;
+	iframe_doc.getElementById('popup-open').onclick = function (e) {
+	    e.preventDefault();
+	    iframe_doc.getElementById('closed').style.display = 'none';
+	    iframe_doc.getElementById('opened').style.display = 'block';
+	    for (var i = 0; i < iframe_doc.getElementById('popup-content-options').length; i++) {
+	        iframe_doc.getElementById('popup-content-options')[i].onclick = function (e) {
+	            e.preventDefault();
+	            window.parent._agile.add_tag(this.value);
+	            iframe_doc.getElementById('popup-content-title').innerHTML = 'Thank You!';
+	            iframe_doc.getElementById('popup-content-options').innerHTML = 'Your preference was submitted sucessfully';
+	            iframe_doc.getElementById('popup-close').onclick = function (e) {
+	                e.preventDefault();
+	                iframe_doc.getElementById('opened').style.display = 'none';
+	                window.parent.document.getElementById('simple-modal').style.display = 'none'
+	            }
+	        }
+	    }
+	};
+	iframe_doc.getElementById('popup-close').onclick = function (e) {
+	    e.preventDefault();
+	    iframe_doc.getElementById('opened').style.display = 'none';
+	    iframe_doc.getElementById('closed').style.display = 'block'
+	}
 	</script>
 </body>
 </html>
