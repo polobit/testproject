@@ -589,12 +589,17 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Setup HTML Editor
 		if(id)
-			setupTinyMCEEditor('textarea#email-body');
+			setupTinyMCEEditor('textarea#email-body', false, function(){
+				
+				// Reset tinymce content
+				set_tinymce_content('email-body', '');
+			});
 		else
-			setupTinyMCEEditor('textarea#email-body', true);
-
-		// Reset tinymce content
-		set_tinymce_content('email-body', '');
+			setupTinyMCEEditor('textarea#email-body', true, function(){
+				
+				// Reset tinymce content
+				set_tinymce_content('email-body', '');
+			});
 		
 	},
 	
