@@ -328,7 +328,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 				postRenderCallback : function(el)
 				{
-
+					fill_company_related_contacts(id, 'company-contacts');
 					// Clone contact model, to avoid render and
 					// post-render fell in to
 					// loop while changing attributes of contact
@@ -589,12 +589,17 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Setup HTML Editor
 		if(id)
-			setupTinyMCEEditor('textarea#email-body');
+			setupTinyMCEEditor('textarea#email-body', false, function(){
+				
+				// Reset tinymce content
+				set_tinymce_content('email-body', '');
+			});
 		else
-			setupTinyMCEEditor('textarea#email-body', true);
-
-		// Reset tinymce content
-		set_tinymce_content('email-body', '');
+			setupTinyMCEEditor('textarea#email-body', true, function(){
+				
+				// Reset tinymce content
+				set_tinymce_content('email-body', '');
+			});
 		
 	},
 	

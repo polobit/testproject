@@ -232,11 +232,12 @@ var SettingsRouter = Backbone.Router.extend({
 		
 		$('#prefs-tabs-content').html(view.render().el);
 		
-		// setup TinyMCE
-		setupTinyMCEEditor('textarea#email-template-html');
-
-		// Reset tinymce content inside editor
-		set_tinymce_content('email-template-html', '');
+		// set up TinyMCE Editor
+		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+			
+			// Reset tinymce
+			set_tinymce_content('email-template-html', '');			
+		});
 		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
@@ -270,16 +271,16 @@ var SettingsRouter = Backbone.Router.extend({
 		    window: 'email-templates'
 		});
 
-		var view = view.render();
-		$('#prefs-tabs-content').html(view.el);
+		$('#prefs-tabs-content').html(view.render().el);
 		
 		/** TinyMCE **/
 		
 		// set up TinyMCE Editor
-		setupTinyMCEEditor('textarea#email-template-html');
-		
-		// Insert content into tinymce
-		set_tinymce_content('email-template-html', currentTemplate.toJSON().text);
+		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+			
+			// Insert content into tinymce
+			set_tinymce_content('email-template-html', currentTemplate.toJSON().text);			
+		});
 		
 		/**End of TinyMCE**/
 		
