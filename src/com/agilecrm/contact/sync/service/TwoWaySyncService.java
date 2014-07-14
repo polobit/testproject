@@ -10,7 +10,7 @@ package com.agilecrm.contact.sync.service;
  * @author jitendra
  * 
  */
-public abstract class TwoWaySyncService implements ContactSyncService
+public abstract class TwoWaySyncService extends ContactSyncService
 {
 
 }

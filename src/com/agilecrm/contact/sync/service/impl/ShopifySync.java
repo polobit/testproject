@@ -1,17 +1,16 @@
 /**
  * 
  */
-package com.agilecrm.contact.sync.service;
+package com.agilecrm.contact.sync.service.impl;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.service.OneWaySyncService;
 
 /**
- * <code>ZohoSync</code> will sync Contacts from Zoho crm and save in agile crm
- * 
  * @author jitendra
  * 
  */
-public class ZohoSync extends OneWaySyncService
+public class ShopifySync extends OneWaySyncService
 {
 
     @Override

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.agilecrm.contact.sync.service;
+package com.agilecrm.contact.sync.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +14,7 @@ import org.codehaus.jettison.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.sync.ImportStatus;
-import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.exception.APIConnectionException;
@@ -34,14 +33,10 @@ import com.thirdparty.google.ContactPrefs;
  * @author jitendra
  * 
  */
-public class StripeSync extends OneWaySyncService
+public class StripeSyncImpl extends OneWaySyncService
 {
 
     private static final String STRIPE_NOTIFICATION_SUBJECT = "Stripe Import Status";
-    private Map<ImportStatus, Integer> syncStatus = new HashMap<ImportStatus, Integer>();
-    private Integer savedContacts = 0;
-    private Integer totalContacts = 0;
-    private Integer duplicateContacts = 0;
     private String stripeFieldValue = null;
     private String lastSyncCheckPoint = null;
 
@@ -80,14 +75,9 @@ public class StripeSync extends OneWaySyncService
 		CustomerCollection collections = Customer.all(options(), prefs.apiKey);
 
 		List<Customer> customers = collections.getData();
-		totalContacts += customers.size();
 		for (Customer customer : customers)
 		{
-		    Contact contact = wrapContactToAgileSchema(customer);
-		    if (ContactUtil.isDuplicateContact(contact))
-			duplicateContacts++;
-		    else
-			savedContacts++;
+		    wrapContactToAgileSchemaAndSave(customer);
 		}
 		if (customers.size() == 0)
 		    break;
@@ -96,18 +86,12 @@ public class StripeSync extends OneWaySyncService
 		    Customer customer = customers.get(customers.size() - 1);
 
 		    lastSyncCheckPoint = customer.getId();
-
 		}
 
-		if (totalContacts >= super.MAX_SYNC_LIMIT)
+		if (isLimitExceeded())
 		    break;
-
 	    }
 	    updateLatestSync(prefs, lastSyncCheckPoint);
-	    syncStatus.put(ImportStatus.TOTAL, totalContacts);
-	    syncStatus.put(ImportStatus.NEW_CONTACTS, savedContacts);
-	    syncStatus.put(ImportStatus.DUPLICATE_CONTACT, duplicateContacts);
-	    sendNotification(syncStatus, STRIPE_NOTIFICATION_SUBJECT);
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
@@ -163,7 +147,6 @@ public class StripeSync extends OneWaySyncService
 
 	    contact.properties = contactFields;
 	    contact.setContactOwner(prefs.getDomainUser());
-	    contact.save();
 	}
 
 	return contact;

@@ -1,9 +1,10 @@
 /**
  * 
  */
-package com.agilecrm.contact.sync.service;
+package com.agilecrm.contact.sync.service.impl;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.service.OneWaySyncService;
 
 /**
  * @author jitendra

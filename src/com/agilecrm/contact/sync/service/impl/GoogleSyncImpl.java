@@ -1,19 +1,21 @@
 /**
  * 
  */
-package com.agilecrm.contact.sync.service;
+package com.agilecrm.contact.sync.service.impl;
 
 import java.util.Map;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
+import com.agilecrm.contact.sync.service.SyncService;
+import com.agilecrm.contact.sync.service.TwoWaySyncService;
 import com.thirdparty.google.ContactPrefs;
 
 /**
  * @author jitendra
  * 
  */
-public class GoogleSync extends TwoWaySyncService
+public class GoogleSyncImpl extends TwoWaySyncService
 {
 
     @Override
