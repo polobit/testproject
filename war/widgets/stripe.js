@@ -239,6 +239,10 @@ function getStripeProfile(customer_id, callback)
 	}, function error(data)
 	{
 		// If error occurs, show error in Stripe Panel
+		if(data.indexOf('Expired API key provided:')!= -1)
+		{
+			data.responseText = "API key Expired ";
+		}
 		stripeError(Stripe_PLUGIN_NAME, data.responseText);
 	});
 }
