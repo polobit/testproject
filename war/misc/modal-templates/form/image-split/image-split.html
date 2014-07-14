@@ -126,6 +126,27 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/additional-methods.min.js"></script>
-      <script src="https://s3.amazonaws.com/PopupTemplates/form/image-split/scripts/split-image_script.js"></script>
+      <script type="text/javascript">
+      window.parent._agile_load_fields();
+      jQuery.validator.setDefaults({
+          debug: true,
+          success: 'valid'
+      });
+      $('#popup-form').validate({
+          rules: {
+              name: 'required',
+              email: {
+                  required: true,
+                  email: true
+              }
+          },
+          submitHandler: function (form) {
+              window.parent._agile_save_form(true, window.parent._agile.set_email(document.getElementsByName('email')[0].value));
+              form.submit()
+          },
+          errorPlacement: function (error, element) {
+          }
+      })
+      </script>
    </body>
 </html>

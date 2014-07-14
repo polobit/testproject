@@ -3,7 +3,7 @@
  * chooses to add/manage widgets from any contact detailed view, list of
  * available widgets are shown to add or delete if already added.
  */
-var Catalog_Widgets_View = null;
+//var Catalog_Widgets_View1 = null;
 
 // Show when Add widget is selected by user in contact view
 /**
@@ -12,13 +12,12 @@ var Catalog_Widgets_View = null;
  * on is_added variable in widget model, which is checked in template using
  * handle bars
  */
-function pickWidget()
+/*function pickWidget()
 {
 	Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
 		sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
 		{
 			build_custom_widget_form(el);
-
 		} });
 
 	// Append widgets into view by organizing them
@@ -26,12 +25,12 @@ function pickWidget()
 
 	// Fetch the list of widgets
 	Catalog_Widgets_View.collection.fetch();
-
+	
 	// Shows available widgets in the content
 	$('#prefs-tabs-content').html(Catalog_Widgets_View.el);
 	$('#PrefsTab .active').removeClass('active');
     $('.add-widget-prefs-tab').addClass('active');
-}
+}*/
 
 /**
  * Organizes widgets into different categories like (SOCIAL, SUPPORT, EMAIL,
@@ -105,14 +104,14 @@ $(function()
 		console.log('In add widget');
 		console.log(widget_name);
 
-		if (Catalog_Widgets_View == null)
+		if (App_Widgets.Catalog_Widgets_View == null)
 			return;
 
 		
 		 /* Get widget model from collection based on the name attribute of the
 		 * widget model
 		 */
-		var models = Catalog_Widgets_View.collection.where({ name : widget_name });
+		var models = App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name });
 
 		
 		 /* Saves widget model and on success navigate back to contact detailed
@@ -180,7 +179,7 @@ $(function()
 			update_collection(widget_name);
 			
 			// Call fetch on collection to update widget models
-			 Catalog_Widgets_View.collection.fetch();
+			App_Widgets.Catalog_Widgets_View.collection.fetch();
 
 		}, dataType : 'json' });
 	});
@@ -202,7 +201,7 @@ function delete_widget(widget_name)
 	success : function(data)
 	{
 
-		Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
+		App_Widgets.Catalog_Widgets_View.collection.where({ name : widget_name })[0].set('is_added', false);
 		update_collection(widget_name);
 		
 	}, dataType : 'json' });
@@ -265,7 +264,7 @@ function build_custom_widget_form(el)
 						if (model == null)
 							alert("A widget with this name exists already. Please choose a different name");
 
-						Catalog_Widgets_View.collection.add(model);
+						App_Widgets.Catalog_Widgets_View.collection.add(model);
 						$("#custom-widget").replaceWith(divClone);
 					} });
 

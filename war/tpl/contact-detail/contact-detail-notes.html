@@ -27,12 +27,16 @@
 
 <div class="activity-text-block">
 	<span class="activity-block-owner">
-		{{#if prefs.pic}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{prefs.pic}}" >
+		{{#if domainOwner}}
+			{{#if ownerPic}}
+				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
+			{{else}}
+				<img class="user-img thumbnail" width="40" height="40" alt="" src="{{defaultGravatarurl 40}}" >
+			{{/if}}
 		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
+			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
 		{{/if}}
-		<span class="owner-name">{{prefs.currentDomainUserName}}</span>
+		<span class="owner-name">{{#if domainOwner}} {{domainOwner.name}} {{else}} {{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}} {{/if}}</span>
 	</span>
 	<h4><a style="text-decoration: none"><b>{{subject}}</b></a></h4>
 	<br/>

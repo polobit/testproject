@@ -117,14 +117,12 @@ public class ContactFilterAPI
     @Path("/query/{filter_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection getQueryResults(@PathParam("filter_id") String id,
-	    @QueryParam("page_size") String count,
+    public List<Contact> getQueryResults(@PathParam("filter_id") String id, @QueryParam("page_size") String count,
 	    @QueryParam("cursor") String cursor)
     {
 	System.out.println("cursor : " + cursor);
 	if (!StringUtils.isEmpty(count))
-	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count),
-		    cursor);
+	    return ContactFilterUtil.getContacts(id, Integer.parseInt(count), cursor);
 
 	return ContactFilterUtil.getContacts(id, null, null);
     }
@@ -139,8 +137,7 @@ public class ContactFilterAPI
     @Path("bulk")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteContacts(@FormParam("ids") String model_ids)
-	    throws JSONException
+    public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 
 	JSONArray contactFiltersJSONArray = new JSONArray(model_ids);

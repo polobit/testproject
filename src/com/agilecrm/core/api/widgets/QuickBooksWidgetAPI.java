@@ -57,7 +57,7 @@ public class QuickBooksWidgetAPI
 
 		try
 		{
-			// Calls QuickBooksUtil metod to retrieve invoices
+			// Calls QuickBooksUtil method to retrieve invoices
 			return utilObj.getQuickBooksProfile(email);
 		}
 		catch (Exception e)
