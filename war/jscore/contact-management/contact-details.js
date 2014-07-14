@@ -64,7 +64,7 @@ function checkContactUpdated(){
 		{
 			// If true show refresh contact button.
 			if (data == 'true')
-				$('#action_refresh_contact').show();
+				$('#refresh_contact').show();
 				
 		}, function error(data)
 		{
@@ -295,7 +295,7 @@ $(function(){
 				
 				// Call Contact Details again
 				App_Contacts.contactDetails(id, model);
-				$('#action_refresh_contact').hide();
+				$('#refresh_contact').hide();
 
 			} });
 	});

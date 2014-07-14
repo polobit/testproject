@@ -279,7 +279,12 @@
 						</div>
 						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
 						<!-- For refreshing the contact in the model list -->
-						<a id="action_refresh_contact" class="btn btn-primary" style="display:none;" title="Contact is Updated. Click to get new details.">Refresh Contact</a>
+						<div id="refresh_contact" style="display:none;margin: 0px 25px;">This contact has been updated[
+							<a id="action_refresh_contact" style="cursor:pointer;">
+								<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="Click to get updated contact details." data-trigger="hover"></i>
+							</a>]
+						</div>
+
 						<div class="clearfix"></div>
 						<div style='word-wrap: break-word; padding-top: 10px'>
 							{{#property_is_exists "phone" properties}}
