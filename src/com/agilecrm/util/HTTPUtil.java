@@ -181,14 +181,14 @@ public class HTTPUtil
 	// Set Connection Timeout as Google AppEngine has 5 secs timeout
 	conn.setConnectTimeout(600000);
 	conn.setReadTimeout(600000);
-
+	
 	conn.setRequestMethod(methodType.toUpperCase());
-	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(),"UTF-8");
 	wr.write(data);
 	wr.flush();
 
 	// Get the response
-	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 	String output = "";
 	String inputLine;
 	while ((inputLine = reader.readLine()) != null)
