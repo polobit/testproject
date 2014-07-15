@@ -117,8 +117,8 @@ $(function()
 		
 			App_Widgets.setup_google_contacts.render(true);
 			App_Widgets.setup_google_contacts.model.url = url;	
-				show_success_message_after_save_button("Sync Initated", App_Widgets.setup_google_contacts.el);
-				showNotyPopUp("information", "Contacts sync initated", "top", 1000);
+				show_success_message_after_save_button("Sync Initiated", App_Widgets.setup_google_contacts.el);
+				showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
 			}});
 		
 	})
@@ -139,3 +139,39 @@ function show_success_message_after_save_button(message, el)
 	$save_info.show().delay(3000).hide(1);	
 		
 }
+
+
+//Compute the edit distance between the two given strings
+function getEditDistance(a, b) {
+  if(a.length === 0) return b.length; 
+  if(b.length === 0) return a.length; 
+ 
+  var matrix = [];
+ 
+  // increment along the first column of each row
+  var i;
+  for(i = 0; i <= b.length; i++){
+    matrix[i] = [i];
+  }
+ 
+  // increment each column in the first row
+  var j;
+  for(j = 0; j <= a.length; j++){
+    matrix[0][j] = j;
+  }
+ 
+  // Fill in the rest of the matrix
+  for(i = 1; i <= b.length; i++){
+    for(j = 1; j <= a.length; j++){
+      if(b.charAt(i-1) == a.charAt(j-1)){
+        matrix[i][j] = matrix[i-1][j-1];
+      } else {
+        matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
+                                Math.min(matrix[i][j-1] + 1, // insertion
+                                         matrix[i-1][j] + 1)); // deletion
+      }
+    }
+  }
+ 
+  return matrix[b.length][a.length];
+};
