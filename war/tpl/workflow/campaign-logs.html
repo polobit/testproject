@@ -28,22 +28,7 @@
 <div class="row">
 	<div class="span12">
     {{#unless this.length}}
-    <div class="slate">
-        <div class="slate-content">
-            <div class="box-left">
-            <img alt="Clipboard" src="/img/clipboard.png">
-            </div>
-            <div class="box-right">
-                <h3>No logs to {{workflowName}} campaign currently.</h3>
-                <div class="text">
-                Logs show events that take place in your campaign.
-                </div>
-               
-                <br>
-               <!-- <span class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Add the first task</span> -->
-            </div>
-        </div>
-    </div>
+	<div id="logs-slate"></div>
     {{/unless}}
 
     {{#if this.length}}
