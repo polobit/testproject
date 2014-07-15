@@ -3,8 +3,8 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
-import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
+import com.agilecrm.contact.sync.wrapper.WrapperService;
 
 /**
  * <code>ZohoSync</code> will sync Contacts from Zoho crm and save in agile crm
@@ -23,7 +23,7 @@ public class ZohoSync extends OneWaySyncService
     }
 
     @Override
-    public Contact wrapContactToAgileSchema(Object object)
+    public Class<? extends WrapperService> getWrapperService()
     {
 	// TODO Auto-generated method stub
 	return null;

@@ -6,6 +6,7 @@ package com.agilecrm.contact.sync.service;
 import java.util.List;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -39,4 +40,6 @@ public interface SyncService
     public void initSync();
 
     public void saveContact(List<Contact> contact);
+
+    public Class<? extends WrapperService> getWrapperService();
 }

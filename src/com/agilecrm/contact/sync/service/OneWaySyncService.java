@@ -1,6 +1,5 @@
 package com.agilecrm.contact.sync.service;
 
-import com.agilecrm.contact.Contact;
 
 /**
  * <code>OneWaySyncService</code> implements {@link ContactSyncService} provide
@@ -13,8 +12,4 @@ public abstract class OneWaySyncService extends ContactSyncService
 {
 
     public abstract void initSync();
-
-    @Override
-    public abstract Contact wrapContactToAgileSchema(Object object);
-
 }
