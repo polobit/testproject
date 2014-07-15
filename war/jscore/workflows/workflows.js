@@ -302,3 +302,62 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
                 }
     });
 }
+
+/**
+ * Fills pad-content for logs when empty json obtains.
+ * 
+ * @param id -
+ *          slate div id.
+ * @param type - 
+ *          to match with LOGS_PAD_CONTENT json key
+ **/
+function fill_logs_slate(id, type, workflow_name)
+{
+	if(type == undefined)
+		type="ALL";
+	
+	var LOGS_PAD_CONTENT = {
+		    "ALL": {
+		        "title": "No logs to "+workflow_name+" campaign currently",
+		        "description": "Logs show events that take place in your campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SENT": {
+		    	"title": "No email sent logs for this campaign",
+		        "description": "No email is sent through this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_OPENED": {
+		    	"title": "No email opened logs for this campaign",
+		        "description": "No email of this campaign is opened",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_CLICKED": {
+		    	"title": "No email click logs for this campaign",
+		        "description": "No email link of this campaign is clicked",
+				"image": "/img/clipboard.png"
+		    },
+		    "UNSUBSCRIBED": {
+		    	"title": "No unsubscribed logs for this campaign",
+		        "description": "No one unsubscribed from this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_HARD_BOUNCED": {
+		    	"title": "No hard bounced logs for this campaign",
+		        "description": "No email of this campaign got hard bounced",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SOFT_BOUNCED": {
+		    	"title": "No soft bounced logs for this campaign",
+		        "description": "No email of this campaign got soft bounced",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SPAM": {
+		    	"title": "No spam reported logs for this campaign",
+		        "description": "No one reported spam to the email(s) of this campaign",
+				"image": "/img/clipboard.png"
+		    }
+		}
+
+	$("#" + id).html(getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type]));
+}
