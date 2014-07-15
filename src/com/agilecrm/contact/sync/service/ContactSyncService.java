@@ -4,9 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.scribe.utils.Preconditions;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
+import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
@@ -24,8 +31,23 @@ public abstract class ContactSyncService implements SyncService
 {
     protected static final String NOTIFICATION_TEMPLATE = "contact_sync_notification_template";
 
+    /**
+     * To check if it contacts limit is exceeded in current plan
+     */
+    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
+    DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
+	    DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
+
     protected ContactPrefs prefs;
     protected int total_synced_contact;
+
+    @Override
+    public SyncService createService(ContactPrefs pref)
+    {
+	Preconditions.checkNotNull(pref, "Prefs can't be null");
+	this.prefs = pref;
+	return this;
+    }
 
     public boolean isLimitExceeded()
     {
@@ -34,7 +56,7 @@ public abstract class ContactSyncService implements SyncService
 	    sendNotification(prefs.client.getNotificationEmailSubject());
 	    return true;
 	}
-
+	sendNotification(prefs.client.getNotificationEmailSubject());
 	return false;
     }
 
@@ -99,16 +121,34 @@ public abstract class ContactSyncService implements SyncService
 
     private void saveContact(Contact contact)
     {
-
 	if (ContactUtil.isDuplicateContact(contact))
 	{
-	    ContactUtil.mergeContactFields(contact);
+	    contact = ContactUtil.mergeContactFields(contact);
+	    contact.save();
 	    syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
-	    return;
+	}
+	else if (contactRestriction.can_create())
+	{
+	    addTagToContact(contact);
+	    contact.save();
+	    restriction.contacts_count++;
+	    syncStatus.put(ImportStatus.NEW_CONTACTS, syncStatus.get(ImportStatus.NEW_CONTACTS) + 1);
+	}
+	else
+	{
+	    syncStatus.put(ImportStatus.LIMIT_REACHED, syncStatus.get(ImportStatus.LIMIT_REACHED) + 1);
 	}
 
-	contact.save();
-	syncStatus.put(ImportStatus.NEW_CONTACTS, syncStatus.get(ImportStatus.NEW_CONTACTS) + 1);
     }
 
+    private void addTagToContact(Contact contact)
+    {
+	String tag;
+	if (prefs.client == SyncClient.GOOGLE)
+	    tag = "gmail contact".toLowerCase();
+	else
+	    tag = prefs.client.toString().toLowerCase() + " contact";
+
+	contact.addTags(StringUtils.capitalize(tag));
+    }
 }

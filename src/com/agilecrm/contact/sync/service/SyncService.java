@@ -34,11 +34,6 @@ public interface SyncService
     public SyncService createService(ContactPrefs prefs);
 
     /**
-     * @return ContactPrefs
-     */
-    public ContactPrefs getPrefs();
-
-    /**
      * initialize Contact Sync into agile
      */
     public void initSync();

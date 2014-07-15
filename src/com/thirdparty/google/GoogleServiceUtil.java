@@ -14,6 +14,7 @@ import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.util.HTTPUtil;
 import com.google.gdata.client.authn.oauth.GoogleOAuthParameters;
+import com.google.gdata.client.authn.oauth.OAuthException;
 import com.google.gdata.client.authn.oauth.OAuthHmacSha1Signer;
 import com.google.gdata.client.authn.oauth.OAuthSigner;
 import com.google.gdata.client.contacts.ContactsService;
@@ -71,9 +72,10 @@ public class GoogleServiceUtil
      * @param token
      *            {@link String} access token retrieved from OAuth
      * @return {@link ContactsService}
+     * @throws OAuthException
      * @throws Exception
      */
-    public static ContactsService getService(String token) throws Exception
+    public static ContactsService getService(String token) throws OAuthException
     {
 	GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
 	ContactsService contactService;

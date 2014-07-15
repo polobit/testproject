@@ -9,8 +9,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.sync.SyncClient;
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -63,8 +66,8 @@ public class ContactPrefsAPI
 
 	System.out.println("Sync" + sync);
 
-	// if (!StringUtils.isEmpty(sync))
-	// ContactsImportUtil.initilaizeGoogleSyncBackend(updatedPrefs.id);
+	if (!StringUtils.isEmpty(sync))
+	    ContactsImportUtil.initilaizeImportBackend(updatedPrefs);
     }
 
     /**

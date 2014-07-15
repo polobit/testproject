@@ -95,10 +95,10 @@ public class ContactPrefsUtil
 
     public static GoogleGroupDetails getGroup(String title, ContactPrefs prefs)
     {
-	if (prefs.groups().isEmpty())
+	if (prefs.groups.isEmpty())
 	    prefs.fillGroups();
 
-	for (GoogleGroupDetails group : prefs.getGroups())
+	for (GoogleGroupDetails group : prefs.groups)
 	{
 	    if (prefs.sync_from_group == null && group.groupName.equals("Contacts"))
 	    {
@@ -114,11 +114,11 @@ public class ContactPrefsUtil
 
     public static List<GoogleGroupDetails> getGroupList(String title, ContactPrefs prefs)
     {
-	if (prefs.getGroups().isEmpty())
+	if (prefs.groups.isEmpty())
 	    prefs.fillGroups();
 
 	List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
-	for (GoogleGroupDetails group : prefs.getGroups())
+	for (GoogleGroupDetails group : prefs.groups)
 	{
 	    if (prefs.sync_from_group == null && group.groupName.equals("Contacts"))
 	    {
