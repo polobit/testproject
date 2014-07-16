@@ -20,6 +20,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.util.common.base.Charsets;
 
 /**
@@ -36,139 +37,141 @@ import com.google.gdata.util.common.base.Charsets;
 public class BasicAuthFilter implements Filter
 {
 
-	public static final String PARAM_USER = "user";
-	public static final String PARAM_PASSWORD = "password";
-	public static final String PARAM_REALM = "realm";
+    public static final String PARAM_USER = "user";
+    public static final String PARAM_PASSWORD = "password";
+    public static final String PARAM_REALM = "realm";
 
-	public static String _realm = "agilecrm";
+    public static String _realm = "agilecrm";
 
-	@Override
-	public void destroy()
+    @Override
+    public void destroy()
+    {
+	// Nothing to do.
+    }
+
+    /**
+     * Filter the request, retrives the domain user email, its respective APIKey
+     * and verifies them to allow access
+     */
+    @Override
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+	    throws IOException, ServletException
+    {
+	System.out.println("Basic OAuth Filter");
+
+	final HttpServletRequest httpRequest = (HttpServletRequest) request;
+	final HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+	// Gets the "Authorization" from header, which is set with domain user
+	// and APIKey
+	final String auth = httpRequest.getHeader("Authorization");
+
+	// If Authorization in header is not null, then retrieves domain user
+	// and password from the header
+	if (auth != null)
 	{
-		// Nothing to do.
-	}
+	    final int index = auth.indexOf(' ');
+	    if (index > 0)
+	    {
+		final String[] credentials = StringUtils.split(
+			new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
 
-	/**
-	 * Filter the request, retrives the domain user email, its respective APIKey
-	 * and verifies them to allow access
-	 */
-	@Override
-	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-			throws IOException, ServletException
-	{
-		System.out.println("Basic OAuth Filter");
-
-		final HttpServletRequest httpRequest = (HttpServletRequest) request;
-		final HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-		// Gets the "Authorization" from header, which is set with domain user
-		// and APIKey
-		final String auth = httpRequest.getHeader("Authorization");
-
-		// If Authorization in header is not null, then retrieves domain user
-		// and password from the header
-		if (auth != null)
+		if (credentials.length == 2)
 		{
-			final int index = auth.indexOf(' ');
-			if (index > 0)
+		    // Get user & password
+		    String user = credentials[0];
+		    String password = credentials[1];
+
+		    // Get AgileUser
+		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
+
+		    // Domain should be checked to avoid saving in other domains
+		    if (domainUser != null && domainUser.domain != null
+			    && domainUser.domain.equals(NamespaceManager.get()) && !StringUtils.isEmpty(password))
+		    {
+			// If domain user exists and the APIKey matches, request
+			// is
+			// given access
+			if (isValidPassword(password, domainUser) || isValidAPIKey(password, domainUser))
 			{
-				final String[] credentials = StringUtils.split(
-						new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
-
-				if (credentials.length == 2)
-				{
-					// Get user & password
-					String user = credentials[0];
-					String password = credentials[1];
-
-					// Get AgileUser
-					DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
-
-					if (domainUser != null && !StringUtils.isEmpty(password))
-					{
-						// If domain user exists and the APIKey matches, request
-						// is
-						// given access
-						if (isValidPassword(password, domainUser) || isValidAPIKey(password, domainUser))
-						{
-							setUser(domainUser);
-							chain.doFilter(httpRequest, httpResponse);
-							return;
-						}
-					}
-				}
+			    setUser(domainUser);
+			    chain.doFilter(httpRequest, httpResponse);
+			    return;
 			}
+		    }
 		}
-
-		System.out.println("Error");
-		httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"" + _realm + "\"");
-		httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+	    }
 	}
 
-	@Override
-	public void init(FilterConfig arg0) throws ServletException
-	{
-		// Nothing to do
-	}
+	System.out.println("Error");
+	httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"" + _realm + "\"");
+	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+    }
 
-	/**
-	 * Sets user in session, so it can be used while filling owner to entities
-	 * 
-	 * @param domainUser
-	 */
-	public void setUser(DomainUser domainUser)
-	{
-		UserInfo userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
+    @Override
+    public void init(FilterConfig arg0) throws ServletException
+    {
+	// Nothing to do
+    }
 
-		SessionManager.set(userInfo);
-	}
+    /**
+     * Sets user in session, so it can be used while filling owner to entities
+     * 
+     * @param domainUser
+     */
+    public void setUser(DomainUser domainUser)
+    {
+	UserInfo userInfo = new UserInfo("agilecrm.com", domainUser.email, domainUser.name);
 
-	/**
-	 * Checks if API key sent in request matches with user.
-	 * 
-	 * @param apiKey
-	 * @param user
-	 * @return
-	 */
-	boolean isValidAPIKey(String apiKey, DomainUser user)
-	{
-		// Gets APIKey, to authenticate the user
-		APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
+	SessionManager.set(userInfo);
+    }
 
-		if (key == null)
-			return false;
+    /**
+     * Checks if API key sent in request matches with user.
+     * 
+     * @param apiKey
+     * @param user
+     * @return
+     */
+    boolean isValidAPIKey(String apiKey, DomainUser user)
+    {
+	// Gets APIKey, to authenticate the user
+	APIKey key = APIKey.getAPIKeyRelatedToUser(user.id);
 
-		String apiKeyFromDB = key.api_key;
+	if (key == null)
+	    return false;
 
-		// Checks APIKey received in request and APIKey from DB
-		if (StringUtils.equals(apiKey, apiKeyFromDB))
-			return true;
+	String apiKeyFromDB = key.api_key;
 
-		return false;
-	}
+	// Checks APIKey received in request and APIKey from DB
+	if (StringUtils.equals(apiKey, apiKeyFromDB))
+	    return true;
 
-	/**
-	 * Checks if password sent in request is valid and matches with encoded
-	 * password in domainuser
-	 * 
-	 * @param password
-	 * @param user
-	 * @return
-	 */
-	boolean isValidPassword(String password, DomainUser user)
-	{
+	return false;
+    }
 
-		// Encodes password received in request, so it can be verified with
-		// encoded pasword in domain user
-		String hashedPassword = MD5Util.getMD5HashedPassword(password);
+    /**
+     * Checks if password sent in request is valid and matches with encoded
+     * password in domainuser
+     * 
+     * @param password
+     * @param user
+     * @return
+     */
+    boolean isValidPassword(String password, DomainUser user)
+    {
 
-		// Gets encoded password from domain user
-		String passwordFromDB = user.getHashedString();
+	// Encodes password received in request, so it can be verified with
+	// encoded pasword in domain user
+	String hashedPassword = MD5Util.getMD5HashedPassword(password);
 
-		if (StringUtils.equals(hashedPassword, passwordFromDB))
-			return true;
+	// Gets encoded password from domain user
+	String passwordFromDB = user.getHashedString();
 
-		return false;
-	}
+	if (StringUtils.equals(hashedPassword, passwordFromDB))
+	    return true;
+
+	return false;
+    }
 
 }
