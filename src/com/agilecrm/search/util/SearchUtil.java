@@ -167,27 +167,26 @@ public class SearchUtil
 	if (StringUtils.isEmpty(value))
 	    return "";
 
+	value = (value).replace(" ", "");
+
 	if (!value.matches("^[A-Za-z][A-Za-z0-9_]*$"))
 	{
-	    if (value.startsWith("#"))
-		value = value.replace("#", "HASH_");
-	    else if (value.startsWith("@"))
-		value = value.replace("@", "AT_");
-
 	    value = (value).replace(" ", "").replace("@", "_AT_").replace("#", "_HASH_").replace("-", "_HYPHEN_")
 		    .replace(":", "_COLON_").replace(";", "_SEMI_COLON_").replace("&", "_AMPERSAND_")
-		    .replace("*", "_STAR_");
-	    System.out.println(value);
+		    .replace("*", "_ASTERISK_");
 
-	    if (value.matches("^[A-Za-z][A-Za-z0-9_]*$"))
-		return value;
+	    // If string still doesn't satisfy text search criteria, all specail
+	    // characters are replaced with _SPECIAL_
+	    if (!value.matches("^[A-Za-z_][A-Za-z0-9_]*$"))
+		value = value.replaceAll("[^A-Za-z0-9_]", "_SPECAIL_");
 
-	    if (!value.startsWith(("[A-Za-z]")))
-		return value = "SPECIAL_" + value;
+	    if (value.startsWith("_"))
+		value = value.substring(1);
 
+	    System.out.println("value to map : " + value);
 	}
 
-	return (value).replace(" ", "");
+	return value;
     }
 
     /**
