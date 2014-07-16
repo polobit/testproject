@@ -29,4 +29,11 @@ public class ZohoSync extends OneWaySyncService
 	return null;
     }
 
+    @Override
+    protected void updateLastSyncedInPrefs()
+    {
+	// TODO Auto-generated method stub
+
+    }
+
 }

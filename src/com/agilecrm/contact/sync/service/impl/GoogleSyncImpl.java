@@ -166,4 +166,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	// TODO Auto-generated method stub
 	return GoogleContactWrapperImpl.class;
     }
+
+    @Override
+    protected void updateLastSyncedInPrefs()
+    {
+	// TODO Auto-generated method stub
+
+    }
 }

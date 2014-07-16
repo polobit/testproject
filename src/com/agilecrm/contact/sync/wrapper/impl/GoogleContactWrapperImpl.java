@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.sync.wrapper.WrapperServiceBuilder;
+import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.data.contacts.ContactEntry;
@@ -15,7 +15,7 @@ import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 
-public class GoogleContactWrapperImpl extends WrapperServiceBuilder
+public class GoogleContactWrapperImpl extends ContactWrapper
 {
     // Gdata specific contact object.
     ContactEntry entry;

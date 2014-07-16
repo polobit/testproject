@@ -5,13 +5,13 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.sync.wrapper.WrapperServiceBuilder;
+import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
 
-public class StripeContactWrapperImpl extends WrapperServiceBuilder
+public class StripeContactWrapperImpl extends ContactWrapper
 {
 
     Customer customer;

@@ -10,7 +10,7 @@ import org.scribe.utils.Preconditions;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.SyncClient;
-import com.agilecrm.contact.sync.wrapper.WrapperServiceBuilder;
+import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -32,7 +32,7 @@ public abstract class ContactSyncService implements SyncService
 {
     protected static final String NOTIFICATION_TEMPLATE = "contact_sync_notification_template";
 
-    protected WrapperServiceBuilder contactWrapper = null;
+    protected ContactWrapper contactWrapper = null;
 
     /**
      * To check if it contacts limit is exceeded in current plan
@@ -93,7 +93,7 @@ public abstract class ContactSyncService implements SyncService
 	if (contactWrapper == null)
 	    try
 	    {
-		contactWrapper = getWrapperService().newInstance().buildWrapper(object);
+		contactWrapper = getWrapperService().newInstance().getWrapper(object);
 	    }
 	    catch (InstantiationException e)
 	    {
@@ -106,7 +106,7 @@ public abstract class ContactSyncService implements SyncService
 		e.printStackTrace();
 	    }
 
-	return contactWrapper.buildWrapper(object).buildContact();
+	return contactWrapper.getWrapper(object).buildContact();
     }
 
     /**

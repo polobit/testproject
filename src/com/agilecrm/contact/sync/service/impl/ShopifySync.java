@@ -27,4 +27,11 @@ public class ShopifySync extends OneWaySyncService
 	return null;
     }
 
+    @Override
+    protected void updateLastSyncedInPrefs()
+    {
+	// TODO Auto-generated method stub
+
+    }
+
 }

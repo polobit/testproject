@@ -4,13 +4,13 @@ import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
 
-public abstract class WrapperServiceBuilder implements WrapperService
+public abstract class ContactWrapper implements WrapperService
 {
     protected Contact contact;
     protected Object object;
 
     @Override
-    public WrapperServiceBuilder buildWrapper(Object object)
+    public ContactWrapper getWrapper(Object object)
     {
 
 	Preconditions.checkNotNull(object, "Contact entry object cannot be null");

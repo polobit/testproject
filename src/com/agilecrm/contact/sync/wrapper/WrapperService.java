@@ -22,7 +22,7 @@ public interface WrapperService
 
     public void addNotes();
 
-    public WrapperServiceBuilder buildWrapper(Object object);
+    public ContactWrapper getWrapper(Object object);
 
     public Contact buildContact();
 
