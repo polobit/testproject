@@ -162,8 +162,8 @@ function reinitialize_tinymce_editor_instance(selector, callback)
 	    setTimeout(function(){
 
 	    	// Show textarea and remove loading img
-			$('#'+ selector).css('display', '');
-			$('#loading-editor').html("");
+	    	$('#loading-editor').html("");
+	    	$('#'+ selector).css('display', '');
 			
 	    	tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
 	    	
