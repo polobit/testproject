@@ -169,8 +169,11 @@ public class SearchUtil
 
 	value = (value).replace(" ", "");
 
+	// Checks if value is compatible as text search table heading
 	if (!value.matches("^[A-Za-z][A-Za-z0-9_]*$"))
 	{
+	    // Replaces particular set of special chars with their respective
+	    // names
 	    value = (value).replace(" ", "").replace("@", "_AT_").replace("#", "_HASH_").replace("-", "_HYPHEN_")
 		    .replace(":", "_COLON_").replace(";", "_SEMI_COLON_").replace("&", "_AMPERSAND_")
 		    .replace("*", "_ASTERISK_");
@@ -180,6 +183,8 @@ public class SearchUtil
 	    if (!value.matches("^[A-Za-z_][A-Za-z0-9_]*$"))
 		value = value.replaceAll("[^A-Za-z0-9_]", "_SPECAIL_");
 
+	    // Removes "_" from the sarting of string as it could be added when
+	    // special character is replaced with _<special char name>_
 	    if (value.startsWith("_"))
 		value = value.substring(1);
 
