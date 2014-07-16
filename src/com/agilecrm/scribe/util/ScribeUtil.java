@@ -118,12 +118,7 @@ public class ScribeUtil
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GOOGLE_DRIVE,
 					com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
 					Globals.GOOGLE_CLIENT_ID, ScribeServlet.GOOGLE_DRIVE_SCOPE);
-
-		// Create a Service specific to xero
-		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_XERO))
-			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_XERO, com.agilecrm.scribe.api.XeroApi.class,
-					callback, Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, null);
-
+	  
 		// Create a Service specific to facebook
 		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_FACEBOOK,
@@ -565,85 +560,7 @@ public class ScribeUtil
 		String token = String.valueOf(result.get("access_token"));
 		return token;
 	}
-
-	/**
-	 * If service type is xero, we make a post request with the code and get the
-	 * access token and saved into xero widgets
-	 * 
-	 * @param {@link HttpServletRequest}
-	 * @param data
-	 *            {@link String} code retrieved after OAuth
-	 * @throws IOException
-	 */
-	public static void saveXeroPrefs(HttpServletRequest req, String data) throws IOException
-	{
-		System.out.println("In Xero save");
-
-		/*
-		 * Make a post request and retrieve tokens
-		 */
-		HashMap<String, String> properties = new ObjectMapper().readValue(data,
-				new TypeReference<HashMap<String, String>>()
-				{
-				});
-		/*
-		 * try { String res =
-		 * SignpostUtil.accessURLWithOauth(Globals.XERO_API_KEY,
-		 * Globals.XERO_CLIENT_ID, accessToken.getToken(),
-		 * accessToken.getSecret(), "https://api.xero.com/api.xro/2.0/users",
-		 * "GET", "", "XERO"); JSONObject xeroProfile = new JSONObject(res);
-		 * JSONObject js = (JSONObject)
-		 * xeroProfile.getJSONArray("Users").get(0); properties.put("xeroId",
-		 * js.getString("UserID")); properties.put("xeroemail",
-		 * js.getString("EmailAddress")); } catch (JSONException e) {
-		 * e.printStackTrace(); }
-		 */
-		// Gets widget name from the session
-		String serviceType = ScribeServlet.SERVICE_TYPE_XERO;
-		// (String) req.getSession().getAttribute("service_type");
-
-		System.out.println("serviceName " + serviceType);
-
-		// update widget with tokens
-
-		saveWidgetPrefsByName(serviceType, properties);
-
-	}
-
-	/**
-	 * If service type is xero, we make a post request with the code and get the
-	 * access token, when it expires .and replace old token with new token
-	 * 
-	 * @param {@link HttpServletRequest}
-	 * @param code
-	 *            {@link String} code retrieved after OAuth
-	 * @throws IOException
-	 */
-	public static void editXeroPrefs(HttpServletRequest req, String data) throws IOException
-	{
-
-		/*
-		 * Make a post request and retrieve tokens
-		 */
-		HashMap<String, String> properties = new ObjectMapper().readValue(data,
-				new TypeReference<HashMap<String, String>>()
-				{
-				});
-
-		Widget widget = WidgetUtil.getWidget(Long.parseLong(properties.get("widget_id")));
-
-		// If widget is null returns, since no widget exists with id.
-		if (widget == null)
-		{
-			return;
-		}
-
-		// removing widgetId from properties
-		properties.remove("widget_id");
-		saveWidgetPrefs(widget, properties);
-
-	}
-
+		
 	/**
 	 * save facebook prefs data contain accesstoken tokensecret etc
 	 * 

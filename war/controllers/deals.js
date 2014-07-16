@@ -117,9 +117,10 @@ var DealsRouter = Backbone.Router.extend({
 		// Shows deals as list view
 		if (readCookie("agile_deal_view"))
 			$('#content').html(this.opportunityCollectionView.render().el);
-
+		
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
+		setTimeout(function(){$('a.deal-notes').tooltip();}, 2000);
 	},
 
 });

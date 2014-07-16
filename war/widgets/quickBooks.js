@@ -70,6 +70,10 @@ function showQuickbooksContacts()
 	{
 	    $('#' + QUICKBOOKS_PLUGIN_NAME).html(getTemplate('quickbooks-profile-addcontact', {}));
 	}
+	else if(data.responseText.indexOf('Exception Timeout while fetching') != -1)
+	{
+		quickBooksError('Timeout while fetching Please refresh ');
+	}
 	else
 	{
 	    quickBooksError(data.responseText);
