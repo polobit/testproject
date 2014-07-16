@@ -50,7 +50,6 @@ function getDomainFromCurrentUser()
  */
 function subscribeToPubNub(domain)
 {
-
 	// Put http or https
 	// var protocol = document.location.protocol;
 	var protocol = 'https';
@@ -75,6 +74,12 @@ function subscribeToPubNub(domain)
 			if(message.type == "CALL"){
 				var html = getTemplate('call-notification', message);
 				showNoty('information', html, 'bottomRight', "CALL");
+				return;
+			}
+
+			if(message.type == "UNKNOWN_CALL"){
+				var html = getTemplate("unknown-call-notification", message);
+				showNoty('information', html, "bottomRight", "UNKNOWN_CALL");
 				return;
 			}
 			
@@ -381,7 +386,12 @@ function showNoty(type, message, position, notification_type)
 									  $(message).find('#calling-contact-id').attr('href').split('/')[1] + '-' + "CALL");
 			return;
 		}
-		
+		if(notification_type=="UNKNOWN_CALL"){
+			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find("#unknown-contact-name").text(),$(message).find("#unknown-call-notification-text").text(),
+										$(message).find("#unknown-contact-name").attr('href'),
+										$(message).find("#unknown-contact-name").attr('href').split('/')[2]+'-'+"UNKNOWN_CALL");
+			return;
+		}
 		if(notification_type=="CAMPAIGN_NOTIFY"){
 			show_desktop_notification($('span:eq(0)', message).attr('id'), $(message).find('#campaign-contact-id').text(),
 									  $(message).find('#campaign-notify-text').text(), $(message).find('#campaign-contact-id').attr('href'),

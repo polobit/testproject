@@ -1,6 +1,7 @@
 package com.thirdparty.google;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Embedded;
@@ -22,6 +23,9 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.annotation.Unindexed;
 import com.googlecode.objectify.condition.IfDefault;
+import com.thirdparty.google.groups.GoogleGroupDetails;
+import com.thirdparty.google.groups.util.ContactGroupUtil;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * <code>ContactPrefs</code> class stores the details of different sources to
@@ -87,6 +91,10 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public SyncFrequency duration = SyncFrequency.ONCE;
 
+    @NotSaved
+    @Embedded
+    public List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
+
     // Category of report generation - daily, weekly, monthly.
     public static enum SYNC_TYPE
     {
@@ -148,40 +156,62 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     {
 	if (client == SyncClient.GOOGLE)
 	{
-	    // fillGroups();
+	    fillGroups();
 	}
     }
 
     /**
      * Fill groups in fetching from google
      */
-    /*
-     * public void fillGroups() { try { // Fetches froups from google groups =
-     * ContactGroupUtil.getGroups(this);
-     * 
-     * // Get group Agile from set, and deletes if there is a duplicate // Agile
-     * group, or add one if there are none (Adds only in the list // to show in
-     * UI does not create at this point) GoogleGroupDetails agileGroup =
-     * ContactPrefsUtil.getGroup("Agile", this); List<GoogleGroupDetails>
-     * groupList = ContactPrefsUtil.getGroupList("Agile", this); if
-     * (groupList.isEmpty()) { agileGroup = new GoogleGroupDetails(); //
-     * agileGroup.atomId = "Agile"; agileGroup.groupName = "Agile";
-     * groups.add(agileGroup); } else if (groupList.size() > 1) {
-     * System.out.println("duplicate groups = " + groupList); for
-     * (GoogleGroupDetails googleGroup : groupList) { //
-     * 
-     * @NotSaved(IfDefault.class) // public Long last_synched_to_client = 0L;
-     * 
-     * System.out.println("duplicate groups = " + googleGroup.atomId);
-     * 
-     * // @NotSaved(IfDefault.class) // public Long last_synched_from_client =
-     * 0L; if (!(googleGroup.atomId.equals(sync_from_group) ||
-     * googleGroup.atomId.equals(sync_to_group))) {
-     * System.out.println("delete + " + googleGroup.atomId);
-     * ContactGroupUtil.deleteGroup(this, googleGroup.atomId); } } } } catch
-     * (Exception e) { // TODO Auto-generated catch block e.printStackTrace(); }
-     * }
+    /**
+     * Fill groups in fetching from google
      */
+    public void fillGroups()
+    {
+	try
+	{
+	    // Fetches froups from google
+	    groups = ContactGroupUtil.getGroups(this);
+
+	    // Get group Agile from set, and deletes if there is a duplicate
+	    // Agile group, or add one if there are none (Adds only in the list
+	    // to show in UI does not create at this point)
+	    GoogleGroupDetails agileGroup = ContactPrefsUtil.getGroup("Agile", this);
+	    List<GoogleGroupDetails> groupList = ContactPrefsUtil.getGroupList("Agile", this);
+	    if (groupList.isEmpty())
+	    {
+		agileGroup = new GoogleGroupDetails();
+		// agileGroup.atomId = "Agile";
+		agileGroup.groupName = "Agile";
+		groups.add(agileGroup);
+	    }
+	    else if (groupList.size() > 1)
+	    {
+		System.out.println("duplicate groups = " + groupList);
+		for (GoogleGroupDetails googleGroup : groupList)
+		{
+		    // @NotSaved(IfDefault.class)
+		    // public Long last_synched_to_client = 0L;
+
+		    System.out.println("duplicate groups = " + googleGroup.atomId);
+
+		    // @NotSaved(IfDefault.class)
+		    // public Long last_synched_from_client = 0L;
+		    if (!(googleGroup.atomId.equals(sync_from_group) || googleGroup.atomId.equals(sync_to_group)))
+		    {
+			System.out.println("delete + " + googleGroup.atomId);
+			ContactGroupUtil.deleteGroup(this, googleGroup.atomId);
+		    }
+		}
+	    }
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+    }
+
     /**
      * Sets domianUser key.
      * 

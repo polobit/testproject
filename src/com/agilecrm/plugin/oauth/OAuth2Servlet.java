@@ -22,9 +22,19 @@ public class OAuth2Servlet extends HttpServlet
      * code and state parameters for any OAuth2.0 request and redirected to
      * state with code appended as query param
      */
-    public void service(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+
+	String data = request.getParameter("data");
+	System.out.println("data is :" + data);
+	if (data != null)
+	{
+	    System.out.println(data);
+	    // ScribeUtil.editXeroPrefs(request,data);
+	    String returnURL = (String) request.getSession().getAttribute("return_url");
+
+	    return;
+	}
 
 	/*
 	 * This parameter specifies the path from where the request is made and
@@ -43,7 +53,8 @@ public class OAuth2Servlet extends HttpServlet
 	System.out.println("OAuth2Servlet code " + code);
 
 	/*
-	 * If state is not null, the response is redirected to the path specified in state along with code as query parameter
+	 * If state is not null, the response is redirected to the path
+	 * specified in state along with code as query parameter
 	 */
 	if (state != null)
 	    response.sendRedirect(state + "?code=" + code);

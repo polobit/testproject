@@ -29,16 +29,22 @@ public class SyncPrefs implements Serializable
     public Long id;
     @NotSaved(IfDefault.class)
     public String apiKey = null;
+
     /** Access token for OAuth */
     @NotSaved(IfDefault.class)
     public String token = null;
+
     @NotSaved(IfDefault.class)
     @JsonIgnore
     public String secret;
+
     @NotSaved(IfDefault.class)
+    @JsonIgnore
     public String refreshToken = null;
+
     @NotSaved(IfDefault.class)
     public Long last_synced_to_client = 0L;
+
     @NotSaved(IfDefault.class)
     public Long last_synced_from_client = 0L;
 

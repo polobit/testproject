@@ -114,7 +114,8 @@ public class ContactGroupUtil
 	ContactsService service = GoogleServiceUtil.getService(token);
 
 	// Request the feed
-	URL feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full" + "?access_token=" + token);
+	URL feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full" + "?access_token="
+		+ token);
 	Query myQuery = new Query(feedUrl);
 	System.out.println(feedUrl);
 	System.out.println(token);
@@ -122,8 +123,6 @@ public class ContactGroupUtil
 	ContactGroupFeed resultFeed = service.query(myQuery, ContactGroupFeed.class);
 
 	List<GoogleGroupDetails> groupsList = new ArrayList<GoogleGroupDetails>();
-
-	System.out.println("_********************************************************sdfSDFSDF" + resultFeed.getEntries().size());
 
 	for (ContactGroupEntry groupEntry : resultFeed.getEntries())
 	{
@@ -135,7 +134,8 @@ public class ContactGroupUtil
 	return groupsList;
     }
 
-    public static GoogleGroupDetails getSyncToGroup(ContactPrefs prefs, String group) throws ServiceException, Exception
+    public static GoogleGroupDetails getSyncToGroup(ContactPrefs prefs, String group) throws ServiceException,
+	    Exception
     {
 	ContactsService service = GoogleServiceUtil.getService(prefs.token);
 
@@ -214,10 +214,11 @@ public class ContactGroupUtil
 	try
 	{
 
-	    String url = GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full/" + URLEncoder.encode(atomId);
+	    String url = GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full/"
+		    + URLEncoder.encode(atomId);
 	    URL groupUrl = new URL(atomId);
 
-	    ContactsService service = GoogleServiceUtil.getService(prefs.apiKey);
+	    ContactsService service = GoogleServiceUtil.getService(prefs.token);
 	    ContactGroupEntry group = service.getEntry(groupUrl, ContactGroupEntry.class);
 	    System.out.println(group);
 	    ContactGroupEntry group1 = service.getEntry(new URL(url), ContactGroupEntry.class);
@@ -244,13 +245,16 @@ public class ContactGroupUtil
      */
     public static ContactFeed getGroups(ContactsService contactService, String accessToken) throws Exception
     {
-	return ContactGroupUtil.getGroups(contactService, GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full", accessToken);
+	return ContactGroupUtil.getGroups(contactService, GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL
+		+ "groups/default/full", accessToken);
     }
 
-    public static ContactFeed getGroups(ContactsService contactService, String url, String accessToken) throws IOException, ServiceException
+    public static ContactFeed getGroups(ContactsService contactService, String url, String accessToken)
+	    throws IOException, ServiceException
     {
 
-	URL feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full?" + "access_token=" + accessToken);
+	URL feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full?" + "access_token="
+		+ accessToken);
 
 	// Build query with URL
 	Query myQuery = new Query(feedUrl);

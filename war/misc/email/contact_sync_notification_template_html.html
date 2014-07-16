@@ -28,17 +28,10 @@
 									{{#HashMap.MERGED_CONTACTS}}
 									&nbsp;- Merged Contacts: {{HashMap.MERGED_CONTACTS}}
 									{{/HashMap.MERGED_CONTACTS}}<br />
-								{{#HashMap.TOTAL_FAILED}} 
-								 <b>Failed Contacts : {{HashMap.TOTAL_FAILED}}</b> <br />
-								{{/HashMap.TOTAL_FAILED}}
-								 
-								{{#HashMap.NAME_MANDATORY}} 
-									&nbsp;- Name missing : {{HashMap.NAME_MANDATORY}}<br /> 
-								{{/HashMap.NAME_MANDATORY}}
-								{{#HashMap.EMAIL_REQUIRED}} 
-									&nbsp;- Email missing/Invalid : {{HashMap.EMAIL_REQUIRED}} 
-								{{/HashMap.EMAIL_REQUIRED}}
-								
+								 <b>Failed Contacts </b>
+								 {{#HashMap.LIMIT_REACHED}}
+									&nbsp;- Limit exceeded: {{HashMap.LIMIT_REACHED}}
+									{{/HashMap.LIMIT_REACHED}}<br />
 							</td>
 						</tr>
 					</tbody>

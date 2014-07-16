@@ -3,6 +3,10 @@
  */
 package com.agilecrm.contact.sync.service;
 
+import java.util.List;
+
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -31,13 +35,11 @@ public interface SyncService
     public SyncService createService(ContactPrefs prefs);
 
     /**
-     * @return ContactPrefs
-     */
-    public ContactPrefs getPrefs();
-
-    /**
      * initialize Contact Sync into agile
      */
     public void initSync();
 
+    public void saveContact(List<Contact> contact);
+
+    public Class<? extends WrapperService> getWrapperService();
 }

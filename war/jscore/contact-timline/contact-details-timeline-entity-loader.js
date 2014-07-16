@@ -59,7 +59,7 @@ var timeline_entity_loader = {
 		 * using same collection by changing its url.
 		 */
 
-		var email = getPropertyValue(contact.properties, "email");
+		var email = getAllPropertyValuesByName(contact.properties, "email", ",");
 
 		// Go for mails when only the contact has an email
 		if (email)

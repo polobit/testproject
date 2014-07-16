@@ -23,7 +23,8 @@ $(function()
 
 		var noteModal = $("#noteModal").clone();
 
-		$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>')
+		$("#noteForm > fieldset", noteModal).prepend('<input name="id" type="hidden"/>');
+		$("#noteForm", noteModal).parent().parent().find(".modal-header > h3").html('<i class="icon-edit"></i>&nbsp;Edit Note');
 		$("#noteForm", noteModal).attr('id', "noteUpdateForm");
 		noteModal.attr('id', "noteUpdateModal");
 		$("#note_validate", noteModal).attr("id", "note_update");

@@ -56,36 +56,6 @@ function chainWebRules(el, data, isNew, actions)
 	scramble_input_names($(".reports-condition-table", element_clone))
 }
 
-function show_web_rule_action_preview(action)
-{
-	if(!action)
-		return;
-	head.js("lib/web-rule/lib/mootools-core-1.3.1.js", "lib/web-rule/lib/mootools-more-1.3.1.1.js", "lib/web-rule/simple-modal.js", function(){
-		var modal_options = {};
-		modal_options["show_btn_cancel"] = true;
-		
-		var actions = [];
-		actions.push(action);
-		var json = {};
-		json["actions"] = actions;
-		
-		var actions_array = [];
-		json.rules = [];
-		console.log(json);
-		actions_array.push(json);
-		
-		head.js("https://d2l6lw2yloivu1.cloudfront.net/web-grabbers/lib/head.load.min.js", "https://agilegrabbers.appspot.com/demo/appspotmodal.js", function(){
-			webrules_execute(actions_array, Agile_Contact, "email", false);
-		});
-//		perform_actions(actions_array, false);
-	});
-	
-	
-	
-	
-
-}
-
 $(function()
 		{
 			// Filter Contacts- Clone Multiple

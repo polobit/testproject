@@ -5,12 +5,12 @@ package com.agilecrm.contact.sync;
 
 import java.io.Serializable;
 
-import com.agilecrm.contact.sync.service.GoogleSync;
-import com.agilecrm.contact.sync.service.SalesforceSync;
-import com.agilecrm.contact.sync.service.ShopifySync;
-import com.agilecrm.contact.sync.service.StripeSync;
 import com.agilecrm.contact.sync.service.SyncService;
-import com.agilecrm.contact.sync.service.ZohoSync;
+import com.agilecrm.contact.sync.service.impl.GoogleSyncImpl;
+import com.agilecrm.contact.sync.service.impl.SalesforceSync;
+import com.agilecrm.contact.sync.service.impl.ShopifySync;
+import com.agilecrm.contact.sync.service.impl.StripeSyncImpl;
+import com.agilecrm.contact.sync.service.impl.ZohoSync;
 
 /**
  * <code>SyncClient</code> contains various third party client that client need
@@ -21,19 +21,27 @@ import com.agilecrm.contact.sync.service.ZohoSync;
  */
 public enum SyncClient implements Serializable
 {
-    GOOGLE(GoogleSync.class), STRIPE(StripeSync.class), ZOHO(ZohoSync.class), SALESFORCE(SalesforceSync.class), SHOPIFY(
-	    ShopifySync.class);
+    GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
+	    ZohoSync.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
+	    ShopifySync.class, "Shopify Import Status");
 
     Class<? extends SyncService> clazz;
+    String notificationEmailSubject = "";
 
-    SyncClient(Class<? extends SyncService> service)
+    SyncClient(Class<? extends SyncService> service, String notificationEmailSubject)
     {
 	this.clazz = service;
+	this.notificationEmailSubject = notificationEmailSubject;
     }
 
     public Class<? extends SyncService> getClazz()
     {
 	return clazz;
+    }
+
+    public String getNotificationEmailSubject()
+    {
+	return notificationEmailSubject;
     }
 
 }

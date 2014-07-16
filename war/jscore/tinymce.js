@@ -13,7 +13,7 @@
  *            id of HTML element e.g., textarea#email-body
  * 
  */
-function setupTinyMCEEditor(selector, noAgileContactFields)
+function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 {
 	
 	// Id undefined
@@ -70,10 +70,6 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 		return;
 	}
 
-	// Show textarea and remove loading img
-	$(selector).css('display', '');
-	$('#loading-editor').html("");
-	
 	// if tinymce instance exists, reinitialize tinymce on given selector
 	if (selector.indexOf('#') !== -1)
 		selector = selector.split('#')[1];
@@ -82,7 +78,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	tinymce.settings.toolbar2 = toolbar_2;
 	
 	// reinitialize tinymce
-	reinitialize_tinymce_editor_instance(selector);
+	reinitialize_tinymce_editor_instance(selector, callback);
 		
 }
 
@@ -154,7 +150,7 @@ function trigger_tinymce_save()
  * @param selector -
  *            id of an element without '#'
  */
-function reinitialize_tinymce_editor_instance(selector)
+function reinitialize_tinymce_editor_instance(selector, callback)
 {
 	try
 	{
@@ -162,8 +158,21 @@ function reinitialize_tinymce_editor_instance(selector)
 		// instance
 		remove_tinymce_editor_instance(selector);
 
-		// Adds tinymce
-	    tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
+		// Surrounded within timeout to work in Firefox
+	    setTimeout(function(){
+
+	    	// Show textarea and remove loading img
+			$('#'+ selector).css('display', '');
+			$('#loading-editor').html("");
+			
+	    	tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
+	    	
+	    	// callback after tinymce re-initialised
+	    	if(callback != undefined && typeof (callback) === "function")
+	    		callback();
+	    		
+
+	    }, 5);
 	
 	}
 	catch (err)
@@ -183,7 +192,13 @@ function remove_tinymce_editor_instance(selector)
 {
 	try
 	{
-		tinymce.EditorManager.execCommand("mceRemoveEditor", false, selector);
+		// Removes all tinymce editors 
+		for(var i=0; i<tinymce.editors.length; i++)
+		{
+			tinyMCE.remove(tinyMCE.editors[i]);
+		}
+		
+		//tinymce.EditorManager.execCommand("mceRemoveEditor", false, selector);
 	}
 	catch (err)
 	{

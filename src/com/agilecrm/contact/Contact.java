@@ -427,9 +427,9 @@ public class Contact extends Cursor
 
 	}
 
-	// Updated time is updated only if particular fields are changed. It is
-	// updated only when search document is tobe updated
-	updated_time = System.currentTimeMillis() / 1000;
+	// Updated time is updated only if particular fields are changed.
+	if (oldContact != null && isDocumentUpdateRequired(oldContact))
+	    updated_time = System.currentTimeMillis() / 1000;
 	System.out.println("viewed time : " + viewed_time);
 	if (viewed_time != 0L)
 	{
@@ -461,16 +461,8 @@ public class Contact extends Cursor
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
 
-	// Enables to build "Document" search on current entity
-	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+	addToSearch();
 
-	// If contact is new then add it to document else edit document
-	if (id == null)
-	{
-	    search.add(this);
-	    return;
-	}
-	search.edit(this);
     }
 
     public void update()
@@ -480,11 +472,35 @@ public class Contact extends Cursor
 
 	dao.put(this);
 
+	addToSearch();
+    }
+
+    private void addToSearch()
+    {
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 
 	// If contact is new then add it to document else edit document
-	search.edit(this);
+	if (id == null)
+	{
+	    try
+	    {
+		search.add(this);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("unable to update document " + this.getContactFieldValue(Contact.EMAIL));
+	    }
+	    return;
+	}
+	try
+	{
+	    search.edit(this);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("unable to update document " + this.getContactFieldValue(Contact.EMAIL));
+	}
 
     }
 

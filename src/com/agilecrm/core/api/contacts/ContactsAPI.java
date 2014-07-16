@@ -882,4 +882,21 @@ public class ContactsAPI
 	    return null;
 	}
     }
+
+    /**
+     * Checks whether the given contact updated after the given time.
+     * 
+     * @param contactId
+     *            the id of contact to check.
+     * @param updatedTime
+     *            previously updated time.
+     * @return true if the contact is updated after the given time or else
+     *         false.
+     */
+    @Path("/{contact-id}/isUpdated")
+    @GET
+    public boolean isContactUpdated(@PathParam("contact-id") Long id, @QueryParam("updated_time") Long updatedTime)
+    {
+	return ContactUtil.isContactUpdated(id, updatedTime);
+    }
 }
