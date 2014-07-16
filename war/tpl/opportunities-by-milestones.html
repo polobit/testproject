@@ -69,11 +69,20 @@
 <script id="opportunities-grid-view-template" type="text/html">
 <div data="{{id}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b style="max-width: 75%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
+		<b style="max-width: 65%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
 		<span class="right deal-options" style="visibility:hidden;">
 			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
             <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
-        </span><div class="clearfix"</div>
+        </span>
+		<span class="right" style="padding-right:5px;">
+			{{#if notes}}
+             <a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
+              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+			{{else}}
+				<a href="#" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" title="Notes" class="deal-notes" style="cursor:pointer;text-decoration:none;"><i class="task-action icon icon-comment-alt deal-notes" data="{{id}}" title="Notes"></i></a>
+			{{/if}}
+		</span>
+		<div class="clearfix"</div>
 	</div>
 	<div class="agile-overflow-ellipsis">
 		<span>{{currencySymbol}} {{numberWithCommas expected_value}}</span>

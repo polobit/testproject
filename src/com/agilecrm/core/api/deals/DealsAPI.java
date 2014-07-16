@@ -21,6 +21,7 @@ import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
@@ -145,14 +146,20 @@ public class DealsAPI
      * 
      * @param id
      *            - Opportunity id that should be deleted.
+     * @throws com.google.appengine.labs.repackaged.org.json.JSONException
      */
     @Path("{opportunity-id}")
     @DELETE
     public void deleteOpportunity(@PathParam("opportunity-id") Long id)
+	    throws com.google.appengine.labs.repackaged.org.json.JSONException
     {
 	Opportunity opportunity = OpportunityUtil.getOpportunity(id);
 	if (opportunity != null)
+	{
+	    if (!opportunity.getNotes().isEmpty())
+		NoteUtil.deleteBulkNotes(opportunity.getNotes());
 	    opportunity.delete();
+	}
     }
 
     /**

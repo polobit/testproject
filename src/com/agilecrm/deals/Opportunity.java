@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.util.OpportunityUtil;
@@ -153,6 +154,23 @@ public class Opportunity extends Cursor
     public static String MILESTONES[] = {};
 
     /**
+     * Notes id's of related notes for a deal.
+     */
+    @NotSaved
+    private List<String> notes = new ArrayList<String>();
+
+    /**
+     * Related notes objects fetched using notes id's.
+     */
+    private List<Key<Note>> related_notes = new ArrayList<Key<Note>>();
+
+    /**
+     * note's description related to a task
+     */
+    @NotSaved
+    public String note_description = null;
+
+    /**
      * ObjectifyDao of Opportunity.
      */
     public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
@@ -286,6 +304,18 @@ public class Opportunity extends Cursor
     }
 
     /**
+     * While saving an opportunity it contains list of notes keys, but while
+     * retrieving includes complete note object.
+     * 
+     * @return List of note objects
+     */
+    @XmlElement
+    public List<Note> getNotes()
+    {
+	return Note.dao.fetchAllByKeys(this.related_notes);
+    }
+
+    /**
      * Sets owner_key to the Case. Annotated with @JsonIgnore to prevent auto
      * execution of this method (conflict with "PUT" request)
      * 
@@ -386,6 +416,36 @@ public class Opportunity extends Cursor
 
 	// Saves agile user key
 	agileUser = new Key<AgileUser>(AgileUser.class, user.id);
+
+	// If new note is added to deal
+	if (this.note_description != null)
+	{
+	    if (!this.note_description.trim().isEmpty())
+	    {
+		// Create note
+		Note note = new Note(null, this.note_description);
+
+		// Save note
+		note.save();
+
+		// Add note to task
+		this.related_notes.add(new Key<Note>(Note.class, note.id));
+	    }
+
+	    // Make temp note null
+	    this.note_description = null;
+	}
+
+	if (this.notes != null)
+	{
+	    // Create list of Note keys
+	    for (String note_id : this.notes)
+	    {
+		this.related_notes.add(new Key<Note>(Note.class, Long.parseLong(note_id)));
+	    }
+
+	    this.notes = null;
+	}
     }
 
     /*
