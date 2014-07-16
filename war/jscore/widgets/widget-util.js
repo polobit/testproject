@@ -401,6 +401,22 @@ function save_widget_prefs(pluginName, prefs, callback)
 
 }
 
+function show_custom_widget_settings(widget_name, template_id, url, model)
+{
+	$("#content").html(getTemplate("settings"), {});
+	console.log("model is")
+	console.log(model)
+	el = $(getTemplate("widget-settings", {'logo_url':model.attributes.logo_url}));
+	console.log("el is ");
+	console.log(el)
+	$('#widget-settings', el).html(getTemplate(template_id,model.attributes ));
+	 $('#prefs-tabs-content').html(el);
+
+	    $('#PrefsTab .active').removeClass('active');
+	    $('.add-widget-prefs-tab').addClass('active');
+}
+
+
 function show_set_up_widget(widget_name, template_id, url, model)
 {
     $("#content").html(getTemplate("settings"), {});
@@ -469,8 +485,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
     }
     else
     {
-	$('#widget-settings', el).html(getTemplate(template_id, {}));
-	console.log(el);
+    $('#widget-settings', el).html(getTemplate(template_id, {}));
     }
 
     $('#prefs-tabs-content').html(el);
@@ -564,9 +579,16 @@ function fill_form(id, widget_name, template_id)
     console.log(id + " " + widget_name + " " + template_id);
 
     var model = App_Widgets.Catalog_Widgets_View.collection.get(id);
-    console.log(model.get("prefs"));
-
-    show_set_up_widget(widget_name, template_id);
+    if(widget_name =="Custom")
+    {
+    	widget_name = model.attributes.name
+    	show_custom_widget_settings(widget_name, template_id,null,model)
+    }
+    else
+    {
+    	console.log(model.get("prefs"));
+    	show_set_up_widget(widget_name, template_id);
+    }	
 
     if (model && model.get("prefs"))
     {

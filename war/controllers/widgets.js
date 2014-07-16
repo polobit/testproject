@@ -449,7 +449,7 @@ var WidgetsRouter = Backbone.Router
 			{
 				if (!id)
 					show_set_up_widget("Xero", 'xero-login',
-							'http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'http://agilecrmbeta.appspot.com/scribe?data=');
+							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'http://localhost:1234/backend/XeroServlet?data=');
 				else
 				{
 					{
@@ -621,7 +621,8 @@ var WidgetsRouter = Backbone.Router
 			 */
 			Custom : function(id)
 			{
-
+				if(id)
+				fill_form(id, "Custom", 'custom-widget-settings');
 			},
 
 			/**
@@ -641,7 +642,7 @@ var WidgetsRouter = Backbone.Router
 				// Adds header
 				$('#prefs-tabs-content')
 						.html(
-								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import contact from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>CRM <small>import contact from CRM</small></h2></div><div class="span11"><div id ="zoho"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>Payment <small>import contact from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
+								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import contacts from Google</small></h2></div><div class="span11" style="margin-left:0px;"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import contact from E-commerce</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="shopify"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>CRM <small>import contact from CRM</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="zoho"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>Payment <small>import contact from payment gateway</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="stripe"></div></div></div>'
 
 						);
 
