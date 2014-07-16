@@ -163,3 +163,34 @@
 <div>{{show_link_in_statement error_message}}</div>
 <a href="{{error_url}}" style="text-decoration: none;" widget-name="{{name}}">Try again</a>
 </script>
+
+
+
+
+<script id="custom-widget-settings-template" type="text/html">
+<div class="well widget-edit" style="width:220px;">
+		<form style="border-bottom:none;margin-top:-10px;margin-bottom: 0px;" id="custom_widget_form" name="custom_widget_login_form" method="post">
+	    	<fieldset>
+				<legend style="margin-bottom: 16px;font-size: 16px;line-height: 30px;">Edit custom widget details </legend>
+				<input type="hidden" id="widget_type" class="input-medium required" style="width:90%" value="CUSTOM" name="widget_type"></input>
+				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="text" id="name" class="input-medium required widget_input_box" style="width:90%" placeholder="Widget name" value={{name}} name="name"></input></div></div>
+				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="text" id="description" class="input-medium required widget_input_box" style="width:90%"  value={{description}} name="description"></input></div></div>
+				<div class="control-group" style="margin-bottom:0px"><div class="controls">
+				<select name="script_type" id="script_type" class="required" style="width:50%" >
+					<option value="script">HTML</option> 
+					<option value="url">URL</option> 
+				</select></div></div>
+				<div class="control-group" style="margin-bottom:0px"><div class="controls">
+					<textarea rows="4" class="required" name="script" id="script" value={{script}} style="" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
+					<input type="url" id="url" class="input-medium required widget_input_box" style="width:90%;display:none;" placeholder="Script URL" value={{url}} name="url"></input>
+				</div></div>
+				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Logo URL" value={{logo_url}} name="logo_url"></input></div></div>
+				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value={{mini_logo_url}} name="mini_logo_url"></input></div></div>
+				<div class="form-actions" style="padding: 15px 20px 0px;margin-top: 14px;margin-bottom: 0px;">
+               		<a id="save_custom_widget" type="submit" class="save btn btn-primary">Save</a>
+               		<a type="reset" id="cancel_custom_widget" class="btn">Cancel</a>
+             	</div>
+			 </fieldset>
+	    </form>
+	</div>
+</script>

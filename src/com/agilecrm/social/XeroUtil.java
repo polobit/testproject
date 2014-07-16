@@ -18,6 +18,7 @@ public class XeroUtil
 {
 
 	private String callbackUrl = "https://agilecrmbeta.appspot.com/backend/XeroServlet?data=";
+	private String xeroPluginurl ="http://integrations.clickdesk.com:8080/ClickdeskPlugins/core/agile/xero";
 
 	/**
 	 * Calls method in ClickDeskPlugins server using REST API to get invoices of
@@ -38,7 +39,7 @@ public class XeroUtil
 		String widget_id = widget.id.toString();
 		
 		//get invoices from url
-		String res = HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/invoice",(new JSONObject(widget.prefs).put("email",email).put("widget_id", widget_id).put("callbackUrl",callbackUrl)).toString(), "PUT");
+		String res = HTTPUtil.accessHTTPURL(xeroPluginurl+"/invoice",(new JSONObject(widget.prefs).put("email",email).put("widget_id", widget_id).put("callbackUrl",callbackUrl)).toString(), "PUT");
 		
 		if (res.contains("token_expired"))
 		{
@@ -60,7 +61,7 @@ public class XeroUtil
 	public String addContact(Widget widget, String firstName, String lastName, String email) throws Exception
 	{
 		//call to create contact in xero
-		 return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/addcontact",(new JSONObject(widget.prefs).put("name",firstName+" "+lastName).put("email",email).put("callbackUrl",callbackUrl)).toString(), "PUT");
+		 return HTTPUtil.accessHTTPURL(xeroPluginurl+"/addcontact",(new JSONObject(widget.prefs).put("name",firstName+" "+lastName).put("email",email).put("callbackUrl",callbackUrl)).toString(), "PUT");
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class XeroUtil
 	public String getLineItemsOfInvoice(String invoiceId,Widget widget) throws Exception
 	{
 		//call to get lineitems in xero for invoice id
-		return HTTPUtil.accessHTTPURL("http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/core/agile/xero/lineitems",(new JSONObject(widget.prefs).put("invoiceId",invoiceId).put("callbackUrl",callbackUrl)).toString(), "PUT");
+		return HTTPUtil.accessHTTPURL(xeroPluginurl+"/lineitems",(new JSONObject(widget.prefs).put("invoiceId",invoiceId).put("callbackUrl",callbackUrl)).toString(), "PUT");
 	}
 
 }
