@@ -44,7 +44,6 @@ public class ScribeServlet extends HttpServlet
 	public static final String SERVICE_TYPE_STRIPE = "stripe";
 	public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
 	public static final String SERVICE_TYPE_GOOGLE_DRIVE = "google_drive";
-	public static final String SERVICE_TYPE_XERO = "xero";
 	public static final String SERVICE_TYPE_FACEBOOK = "facebook";
 	public static final String SERVICE_TYPE_STRIPE_IMPORT = "stripe_import";
 	public static final String SERVICE_TYPE_SHOPIFY = "shopify_import";
@@ -125,30 +124,7 @@ public class ScribeServlet extends HttpServlet
 		System.out.println("oAuthVerifier " + oAuthVerifier);
 		System.out.println("code " + code);
 
-		/**
-		 * data return from xero contains accesstoken,tokensecret etc
-		 */
-		String data = req.getParameter("data");
-		System.out.println("data is :" + data);
-		if (data != null)
-		{
-			System.out.println(data);
-			ScribeUtil.saveXeroPrefs(req, data);
-			String returnURL = (String) req.getSession().getAttribute("return_url");
-			System.out.println("return url " + returnURL);
-
-			// If return URL is null, redirect to dashboard
-			System.out.println(returnURL);
-			if (returnURL == null)
-				resp.sendRedirect("/");
-			else
-				resp.sendRedirect(returnURL);
-
-			// Delete return url Attribute
-			req.getSession().removeAttribute("return_url");
-
-			return;
-		}
+		
 		/*
 		 * If aAuthToken and oAuthVerifier or code is not null i.e., request is
 		 * from service provider, tokens are saved
