@@ -59,7 +59,7 @@ public abstract class ContactSyncService implements SyncService
 	    sendNotification(prefs.client.getNotificationEmailSubject());
 	    return true;
 	}
-	sendNotification(prefs.client.getNotificationEmailSubject());
+
 	return false;
     }
 
@@ -139,10 +139,13 @@ public abstract class ContactSyncService implements SyncService
 	    saveContact(contact);
 	}
 
+	updateLastSyncedInPrefs();
 	// Sets total number of contacts imported/updated
 	syncStatus.put(ImportStatus.TOTAL, syncStatus.get(ImportStatus.TOTAL) + contacts.size());
 
     }
+
+    protected abstract void updateLastSyncedInPrefs();
 
     private void saveContact(Contact contact)
     {
