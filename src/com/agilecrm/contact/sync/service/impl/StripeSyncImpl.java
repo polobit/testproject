@@ -17,7 +17,6 @@ import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerCollection;
-import com.thirdparty.google.ContactPrefs;
 
 /**
  * <code>StripeSync</code> implements {@link OneWaySyncService}
@@ -59,7 +58,10 @@ public class StripeSyncImpl extends OneWaySyncService
 		    wrapContactToAgileSchemaAndSave(customer);
 		}
 		if (customers.size() == 0)
+		{
+		    sendNotification(prefs.client.getNotificationEmailSubject());
 		    break;
+		}
 		else
 		{
 		    Customer customer = customers.get(customers.size() - 1);
@@ -70,7 +72,7 @@ public class StripeSyncImpl extends OneWaySyncService
 		if (isLimitExceeded())
 		    break;
 	    }
-	    updateLatestSync(prefs, lastSyncCheckPoint);
+	    updateLastSyncedInPrefs();
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
@@ -87,9 +89,9 @@ public class StripeSyncImpl extends OneWaySyncService
      * @param prefs
      * @param customerId
      */
-    private void updateLatestSync(ContactPrefs prefs, String customerId)
+    protected void updateLastSyncedInPrefs()
     {
-	prefs.lastSyncCheckPoint = customerId;
+	prefs.lastSyncCheckPoint = lastSyncCheckPoint;
 	prefs.save();
     }
 
