@@ -2,6 +2,7 @@ package com.agilecrm.core.api;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -668,7 +669,7 @@ public class JSAPI
     @Path("contacts/get-tags")
     @GET
     @Produces("application / x-javascript")
-    public String getTags(@QueryParam("email") String email)
+    public String getTags(@QueryParam("email") String email, @QueryParam("tags") String tags)
     {
 	try
 	{
@@ -679,6 +680,16 @@ public class JSAPI
 	    {
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println("getting tags" + contact.tags);
+		if (!StringUtils.equals(tags, "null"))
+		{
+		    List<String> cookieTagsList = new ArrayList<String>();
+		    String[] tagsArray = tags.split(",");
+		    for (String tag : tagsArray)
+		    {
+			cookieTagsList.add(tag.trim());
+		    }
+		    contact.tags.addAll(new LinkedHashSet<String>(cookieTagsList));
+		}
 		return mapper.writeValueAsString(contact.tags);
 	    }
 	}
