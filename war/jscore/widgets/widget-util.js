@@ -200,10 +200,6 @@ function savefreshBooksWidgetPrefs()
     freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
 
     // Saves the preferences into widget with FreshBooks widget name
-    
-    //Disabling the savebutton after first click
-    $("#freshbooks_save_token").attr("disabled", true);
-    
     save_widget_prefs("FreshBooks", JSON.stringify(freshbooks_prefs), function(data)
     {
 	console.log('In freshbooks save success');
@@ -401,22 +397,6 @@ function save_widget_prefs(pluginName, prefs, callback)
 
 }
 
-function show_custom_widget_settings(widget_name, template_id, url, model)
-{
-	$("#content").html(getTemplate("settings"), {});
-	console.log("model is")
-	console.log(model)
-	el = $(getTemplate("widget-settings", {'logo_url':model.attributes.logo_url}));
-	console.log("el is ");
-	console.log(el)
-	$('#widget-settings', el).html(getTemplate(template_id,model.attributes ));
-	 $('#prefs-tabs-content').html(el);
-
-	    $('#PrefsTab .active').removeClass('active');
-	    $('.add-widget-prefs-tab').addClass('active');
-}
-
-
 function show_set_up_widget(widget_name, template_id, url, model)
 {
     $("#content").html(getTemplate("settings"), {});
@@ -425,11 +405,8 @@ function show_set_up_widget(widget_name, template_id, url, model)
     var models;
     $('#prefs-tabs-content').html(getRandomLoadingImg());
     if (model)
-    {
-    console.log(model)	
 	el = $(getTemplate("widget-settings", model));
-    }
-	else
+    else
     {
 	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 	{
@@ -485,7 +462,8 @@ function show_set_up_widget(widget_name, template_id, url, model)
     }
     else
     {
-    $('#widget-settings', el).html(getTemplate(template_id, {}));
+	$('#widget-settings', el).html(getTemplate(template_id, {}));
+	console.log(el);
     }
 
     $('#prefs-tabs-content').html(el);
@@ -542,7 +520,7 @@ function set_up_access(widget_name, template_id, data, url, model)
     if (json.name == "Twilio")
 	json['outgoing_numbers'] = data;
 
-    else if (json.name == "Linkedin" || json.name == "Twitter" || json.name == "Facebook")
+    else if (json.name == "Linkedin" || json.name == "Twitter")
 	json['profile'] = data;
 
     else
@@ -579,16 +557,9 @@ function fill_form(id, widget_name, template_id)
     console.log(id + " " + widget_name + " " + template_id);
 
     var model = App_Widgets.Catalog_Widgets_View.collection.get(id);
-    if(widget_name =="Custom")
-    {
-    	widget_name = model.attributes.name
-    	show_custom_widget_settings(widget_name, template_id,null,model)
-    }
-    else
-    {
-    	console.log(model.get("prefs"));
-    	show_set_up_widget(widget_name, template_id);
-    }	
+    console.log(model.get("prefs"));
+
+    show_set_up_widget(widget_name, template_id);
 
     if (model && model.get("prefs"))
     {
