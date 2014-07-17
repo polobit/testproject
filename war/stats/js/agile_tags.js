@@ -30,7 +30,7 @@ function agile_addTag(tags, callback, email)
 		else
 			email = agile_guid.get_email();
 	}
-	
+
 	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 
 	// Post
@@ -95,9 +95,11 @@ function agile_getTags(callback, email)
 		else
 			email = agile_guid.get_email();
 	}
+	var tags = agile_read_cookie("agile-tags");
+	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 
 	// Get
-	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
+	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + params;
 
 	// Callback
 		agile_json(agile_url, callback);

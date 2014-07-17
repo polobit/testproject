@@ -16,7 +16,7 @@ public class DomainUserBillingRestriction extends DaoBillingRestriction
 	System.out.println("max allowed : " + max_allowed + ", available :" + DomainUserUtil.count());
 	// Returns true if count is less than maximum allowed users in
 	// current plan
-	if (restriction.users_count == null || restriction.users_count < max_allowed)
+	if (restriction.users_count == null || restriction.users_count <= max_allowed)
 	    return true;
 
 	// TODO Auto-generated method stub

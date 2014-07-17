@@ -51,6 +51,18 @@ $(function(){
 								   (confirmationModal).modal('hide');
 							            }, 2000);
 
+					}).fail(function(response){
+						$save_info = $('<div style="display:inline-block"><small><p style="color:#B94A48; font-size:14px"><i>'+response.responseText+'</i></p></small></div>');
+						
+						$('.report-message').html($save_info);
+			
+						$save_info.show();
+
+						setTimeout(function ()
+						            {
+							   (confirmationModal).modal('hide');
+						            }, 2000);
+
 					});
 				});
 	});

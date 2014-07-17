@@ -615,4 +615,19 @@ public class QueryDocument<T> implements QueryInterface
 
 	return entities;
     }
+
+    private Long getCount(String query)
+    {
+	if (index == null)
+	    return 0l;
+
+	return index.search(query).getNumberFound();
+    }
+
+    public Long getCount(List<SearchRule> rules)
+    {
+	String query = QueryDocumentUtil.constructQuery(rules);
+
+	return getCount(query);
+    }
 }
