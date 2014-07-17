@@ -24,7 +24,8 @@ public interface QueryInterface
 {
     public static enum Type
     {
-	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(Case.class), DOCUMENT(Document.class);
+	CONTACT(Contact.class), PERSON(Contact.class), COMPANY(Contact.class), OPPORTUNITY(Opportunity.class), CASES(
+		Case.class), DOCUMENT(Document.class);
 
 	private Class clazz;
 
@@ -90,4 +91,7 @@ public interface QueryInterface
      * @return
      */
     int advancedSearchCount(List<SearchRule> rules);
+
+    public Long getCount(List<SearchRule> rules);
+
 }
