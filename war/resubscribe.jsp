@@ -356,19 +356,20 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				        if(workflow == null)
 				        {
 				            System.err.println("Workflow is null...");
-				            return;
 				        }
-				        	
-				        String tag =  workflow.unsubscribe.tag;
+				        else
+				        {	
+				        	String tag =  workflow.unsubscribe.tag;
 				        
-				        System.out.println("Workflow unsubscribe tags to be removed - " + tag);
+				        	System.out.println("Workflow unsubscribe tags to be removed - " + tag);
+				        
+				        	// Remove unsubscribe tag
+				        	if (!StringUtils.isBlank(tag))
+								contact.removeTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
 				        	
-				        // Remove unsubscribe tag
-				        if (!StringUtils.isBlank(tag))
-							contact.removeTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
-				        	
-				        // Remove unsubscribe status
-				        UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
+				        	// Remove unsubscribe status
+				        	UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
+				        }
 				        
 					}
 					catch (Exception e)
