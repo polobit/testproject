@@ -508,12 +508,20 @@ var WorkflowsRouter = Backbone.Router
 						}
 
 						// Calls TagsTypeAhead on focus event.
-						if (type == 'TAG_IS_ADDED' || type == 'TAG_IS_DELETED')
+						if (type == 'TAG_IS_ADDED' || type == 'TAG_IS_DELETED'){
+							
+							// Show custom tags textbox
+							$('#trigger-custom-tags', el).css('display','');
+							
 							$('.trigger-tags', el).live("focus", function(e)
 							{
 								e.preventDefault();
 								addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));
 							});
+						}
+						
+						if(type == 'ADD_SCORE')
+							$('#trigger-custom-score', el).css('display','');
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
@@ -551,9 +559,7 @@ var WorkflowsRouter = Backbone.Router
 
 				});
 
-				var view = view.render();
-
-				$("#content").html(view.el);
+				$("#content").html(view.render().el);
 			},
 
 			/**
