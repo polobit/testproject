@@ -1,25 +1,3 @@
-$(function()
-{
-	/**
-	 * On mouseleave hides the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseleave', function()
-	{
-		$(this).find("td:last > div").css("visibility", "hidden");
-	});
-	
-	*//**
-	 * On mouseleave shows the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseenter', function()
-	{
-		$(this).find("td:last > div").css("visibility", "visible");
-	});*/
-
-
-});
-
-
 /**
  * For sorting of web rules
  * @param el
@@ -51,6 +29,7 @@ function enableWebrulesSorting(el)
 				      $(this).width($originals.eq(index).width());
 				    });
 				    return $helper;
+
 				}
 
 		});
@@ -70,6 +49,7 @@ function enableWebrulesSorting(el)
 			$('.webrule-sortable > tr', el).each(function(index, element)
 			{
 				if(!$(element).hasClass("pseduo-row")){
+
 
 					var model_id = $(element).find('.data').attr('data');
 
