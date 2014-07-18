@@ -449,7 +449,7 @@ var WidgetsRouter = Backbone.Router
 			{
 				if (!id)
 					show_set_up_widget("Xero", 'xero-login',
-							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'http://localhost:1234/backend/XeroServlet?data=');
+							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=');
 				else
 				{
 					{
@@ -462,7 +462,7 @@ var WidgetsRouter = Backbone.Router
 													"Xero",
 													'xero-login',
 													data,
-													'/scribe?service=xero&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Xero/xero"));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=');
 										});
 						return;
 
@@ -485,7 +485,7 @@ var WidgetsRouter = Backbone.Router
 																		"Xero",
 																		'xero-login',
 																		data,
-																		'/scribe?service=xero&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Xero/xero"),
+																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=',
 																		data1);
 															});
 											return;
@@ -494,7 +494,9 @@ var WidgetsRouter = Backbone.Router
 										else
 										{
 											show_set_up_widget("Xero", 'xero-login',
-													'/scribe?service=xero&return_url=' + encodeURIComponent(window.location.href));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=');
+									
+													// encodeURIComponent(window.location.href));
 										}
 									});
 				}

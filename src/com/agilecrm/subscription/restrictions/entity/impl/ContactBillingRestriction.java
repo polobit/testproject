@@ -28,7 +28,7 @@ public class ContactBillingRestriction extends DaoBillingRestriction
 
 	// Returns true if count is less than maximum allowed contacts in
 	// current plan
-	if (restriction.contacts_count == null || restriction.contacts_count < max_allowed)
+	if (restriction.contacts_count == null || restriction.contacts_count <= max_allowed)
 	    return true;
 
 	return false;
