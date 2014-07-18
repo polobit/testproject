@@ -13,7 +13,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import net.sf.json.JSONException;
 
@@ -115,7 +117,8 @@ public class ReportsAPI
     @Path("/show-results/{report_id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection<Contact> getReportResults(@PathParam("report_id") String id, @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    public Collection<Contact> getReportResults(@PathParam("report_id") String id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
     {
 	try
 	{
@@ -153,14 +156,26 @@ public class ReportsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void sendReportResults(@PathParam("report_id") String id)
     {
-	try
+
+	Long reportId = Long.valueOf(id);
+	Long available_count = ReportsUtil.getAvailableEntitiesCountInReport(reportId);
+
+	if (available_count > 0)
 	{
-	    ReportsUtil.sendReport(Long.valueOf(id));
+	    try
+	    {
+		ReportsUtil.sendReport(Long.valueOf(reportId));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	    return;
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
+
+	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		.entity("No records availabe found for this report.").build());
+
     }
 
     /**
@@ -209,8 +224,9 @@ public class ReportsAPI
     @Path("/funnel/{tags}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getFunnelStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
-	    @QueryParam("time_zone") String timeZone, @QueryParam("filter") String filterId)
+    public String getFunnelStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime,
+	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone,
+	    @QueryParam("filter") String filterId)
     {
 	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
 
@@ -258,8 +274,9 @@ public class ReportsAPI
     @Path("/growth/{tags}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
-	    @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency, @QueryParam("filter") String filterId) throws Exception
+    public String getGrowthStats(@PathParam("tags") String tagsString, @QueryParam("start_time") String startTime,
+	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone,
+	    @QueryParam("frequency") String frequency, @QueryParam("filter") String filterId) throws Exception
     {
 	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
 
@@ -311,8 +328,9 @@ public class ReportsAPI
     @Path("/ratio/{tag1}/{tag2}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String getRatioStats(@PathParam("tag1") String tag1, @PathParam("tag2") String tag2, @QueryParam("start_time") String startTime,
-	    @QueryParam("end_time") String endTime, @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency,
+    public String getRatioStats(@PathParam("tag1") String tag1, @PathParam("tag2") String tag2,
+	    @QueryParam("start_time") String startTime, @QueryParam("end_time") String endTime,
+	    @QueryParam("time_zone") String timeZone, @QueryParam("frequency") String frequency,
 	    @QueryParam("filter") String filterId) throws Exception
     {
 	ReportsUtil.check(Long.parseLong(startTime), Long.parseLong(endTime));
