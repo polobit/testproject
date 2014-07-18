@@ -46,6 +46,10 @@ var DealsRouter = Backbone.Router.extend({
 					var id = $(element).attr('id');
 					$("#" + id + "> div").addClass("milestone-main");
 					
+					// $('.milestone-main
+					// :last-child').find("ul").closest('div').css({"border-right":"none"});
+					setup_deals_in_milestones(id);
+					
 					// For adding dynamic width to milestone columns
 					var count;
 					$.ajax({
@@ -73,11 +77,6 @@ var DealsRouter = Backbone.Router.extend({
 							}
 						}
 					});
-					
-					// $('.milestone-main
-					// :last-child').find("ul").closest('div').css({"border-right":"none"});
-
-					setup_deals_in_milestones(id);
 					
 					if(!readCookie("agile_full_view"))
 					{
