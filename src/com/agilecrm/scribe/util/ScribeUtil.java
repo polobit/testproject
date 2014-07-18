@@ -467,13 +467,8 @@ public class ScribeUtil
 	ContactPrefs contactPrefs = new ContactPrefs();
 	contactPrefs.client = SyncClient.GOOGLE;
 	contactPrefs.token = properties.get("access_token").toString();
-	contactPrefs.expires = (Long.parseLong((String.valueOf(properties.get("expires_in")))));
-	contactPrefs.refreshToken = properties.get("refresh_token").toString();
-
 	contactPrefs.setPrefs(object);
-	System.out.println(contactPrefs.duration);
-	System.out.println(contactPrefs.sync_type);
-	contactPrefs.expires = contactPrefs.expires;
+	contactPrefs.setExpiryTime(Long.valueOf(properties.get("expires_in").toString()));
 	contactPrefs.save();
 
 	// initialize backend to save contacts

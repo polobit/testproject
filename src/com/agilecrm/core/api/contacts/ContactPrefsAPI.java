@@ -83,9 +83,8 @@ public class ContactPrefsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void deleteContactPrefs(@PathParam("type") String type)
     {
-	// ContactPrefs.Type prefsType =
-	// ContactPrefs.Type.valueOf(type.toUpperCase());
-	// if (prefsType != null)
-	// ContactPrefsUtil.delete(prefsType);
+
+	ContactPrefsUtil.delete(SyncClient.GOOGLE);
+
     }
 }

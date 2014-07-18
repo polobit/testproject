@@ -19,6 +19,7 @@ import org.scribe.oauth.OAuthService;
 import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.scribe.util.ScribeUtil;
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.utl.ContactPrefsUtil;
 import com.thirdparty.shopify.OAuthCustomService;
 
 /**
@@ -141,8 +142,17 @@ public class ScribeServlet extends HttpServlet
 		String password = req.getParameter("password");
 		if (username != null && password != null)
 		{
-		    String url = getZohoAuthUrl(username, password);
-		    saveZohoToken(url, username);
+		    // check contactPrefs already exists then return from here
+
+		    ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
+		    if (contactPrefs != null && contactPrefs.username.equalsIgnoreCase(username))
+			return;
+		    else
+		    {
+
+			String url = getZohoAuthUrl(username, password);
+			saveZohoToken(url, username);
+		    }
 		}
 
 	    }
