@@ -7,6 +7,7 @@
 <%@page import="com.agilecrm.contact.Contact"%>
 <%@page import="com.agilecrm.contact.util.ContactUtil"%>
 <%@page import="com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil"%>
+<%@page import="com.agilecrm.workflows.status.util.CampaignSubscribersUtil"%>
 
 <html>
 <head>
@@ -369,6 +370,9 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				        	
 				        	// Remove unsubscribe status
 				        	UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
+				        	
+				        	// Remove campaign status to delete from Removed Subscribers list
+				        	CampaignSubscribersUtil.removeCampaignStatus(contact, campaignId);
 				        }
 				        
 					}
