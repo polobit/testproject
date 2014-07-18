@@ -1,3 +1,25 @@
+$(function()
+{
+	/**
+	 * On mouseleave hides the icon
+	 *//*
+	$('#webrule-model-list > tr').die().live('mouseleave', function()
+	{
+		$(this).find("td:last > div").css("visibility", "hidden");
+	});
+	
+	*//**
+	 * On mouseleave shows the icon
+	 *//*
+	$('#webrule-model-list > tr').die().live('mouseenter', function()
+	{
+		$(this).find("td:last > div").css("visibility", "visible");
+	});*/
+
+
+});
+
+
 /**
  * For sorting of web rules
  * @param el
@@ -38,7 +60,7 @@ function enableWebrulesSorting(el)
 		 * widgets
 		 */
 		$('.webrule-sortable', el).on("sortstop", function(event, ui) {
-			
+
 			var models = [];
 
 			/*
@@ -48,7 +70,7 @@ function enableWebrulesSorting(el)
 			$('.webrule-sortable > tr', el).each(function(index, element)
 			{
 				if(!$(element).hasClass("pseduo-row")){
-					
+
 					var model_id = $(element).find('.data').attr('data');
 
 					// Get Model, model is set as data to widget element
@@ -60,7 +82,7 @@ function enableWebrulesSorting(el)
 				}
 
 			});
-	
+
 			// Saves new positions in server
 			$.ajax({ type : 'POST', url : '/core/api/webrule/positions', data : JSON.stringify(models),
 				contentType : "application/json; charset=utf-8", dataType : 'json' });
