@@ -174,7 +174,7 @@ public class ReportsAPI
 	}
 
 	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		.entity("No records availabe found for this report.").build());
+		.entity("No records availabe to send report.").build());
 
     }
 
