@@ -485,7 +485,7 @@ var WidgetsRouter = Backbone.Router
 																		"Xero",
 																		'xero-login',
 																		data,
-																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data='),
+																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=',
 																		data1);
 															});
 											return;
