@@ -57,7 +57,7 @@ public class AnalyticsServlet extends HttpServlet
 	String email = req.getParameter("email");
 
 	// Trim
-	StringUtils.trim(email);
+	email = StringUtils.trim(email);
 
 	// Client IP Address
 	String ip = getClientIP(req);
@@ -92,7 +92,8 @@ public class AnalyticsServlet extends HttpServlet
 	if (!StringUtils.isEmpty(domain))
 	{
 	    // Insert into table
-	    AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region, city, cityLatLong);
+	    AnalyticsSQLUtil.addToPageViews(domain, guid, email, sid, url, ip, isNew, ref, userAgent, country, region,
+		    city, cityLatLong);
 	}
 
 	// Show notification with url
@@ -101,6 +102,10 @@ public class AnalyticsServlet extends HttpServlet
 	    JSONObject json = new JSONObject();
 	    try
 	    {
+		// If not null or empty - remove query params from urls
+		if (!StringUtils.isEmpty(url))
+		    url = StringUtils.split(url, '?')[0];
+
 		json.put("custom_value", url);
 	    }
 	    catch (JSONException e)

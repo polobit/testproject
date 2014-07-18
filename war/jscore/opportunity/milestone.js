@@ -130,6 +130,7 @@ $(function(){
  * using sortable.js when it is dropped in middle or dragged over.
  */
 function setup_deals_in_milestones(id){
+	 console.log(App_Deals.opportunityCollectionView.collection);
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
 		      connectWith : "ul",
@@ -147,6 +148,10 @@ function setup_deals_in_milestones(id){
 		      },
 		      // When deal is dropped its milestone is changed 
 		      update : function(event, ui) {
+		    	  console.log(">>>>>>>>>>>>>>>>>> deals id");
+		    	  console.log(ui);
+		    	  console.log(ui.item[0]);
+		    	  console.log(ui.item[0].id);
 					var id = ui.item[0].id;
 					var DealJSON = App_Deals.opportunityCollectionView.collection.get(id).toJSON();
 					var oldMilestone = DealJSON.milestone;
