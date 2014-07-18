@@ -25,6 +25,9 @@ import com.google.gdata.util.ServiceException;
 import com.thirdparty.google.GoogleServiceUtil;
 
 /**
+ * <code>GoogleSyncImpl</code> provide service to upload contacts from agile to
+ * google and retrieve contacts from google
+ * 
  * @author jitendra
  * 
  */
@@ -32,6 +35,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 {
     private ContactsService contactService;
 
+    /**
+     * fetch contacts from google
+     */
     public void syncContactFromClient()
     {
 	String accessToken = prefs.token;

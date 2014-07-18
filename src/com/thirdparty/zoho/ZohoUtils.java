@@ -18,11 +18,6 @@ public class ZohoUtils
 {
 
     /**
-     * Holds URL of the Zoho server
-     */
-    public static final String SERVER_URL = "https://crm.zoho.com/crm/private/json/";
-
-    /**
      * <code>getConnection</code> method take string param as url and open
      * connection
      * 
@@ -45,6 +40,26 @@ public class ZohoUtils
 	    e.printStackTrace();
 	}
 	return con;
+    }
+
+    public static JSONArray getData(String url)
+    {
+	JSONArray data = new JSONArray();
+	try
+	{
+	    URLConnection con = getConnection(url);
+	    BufferedReader result = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	    String line;
+	    while ((line = result.readLine()) != null)
+	    {
+		data.put(new JSONParser().parse(line));
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	return data;
     }
 
     /**
