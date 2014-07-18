@@ -114,7 +114,7 @@
 		            "required": "No",
 		            "category": "Settings",
 		            "name": "track_clicks",
-		            "title": "Agile will track your clicks and can also push the contact info to the link.",
+		            "title": "Enable tracking for email link clicks. Use \"Yes &amp; Push\" if you want to push contact data to your website (to enable web activity tracking)",
 		            "options": {
 		                "*No": "no",
 		                "Yes": "yes",
