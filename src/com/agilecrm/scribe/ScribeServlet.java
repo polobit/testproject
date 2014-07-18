@@ -1,6 +1,11 @@
 package com.agilecrm.scribe;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.LinkedList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +16,9 @@ import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
+import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.scribe.util.ScribeUtil;
+import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.shopify.OAuthCustomService;
 
 /**
@@ -46,6 +53,7 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_FACEBOOK = "facebook";
     public static final String SERVICE_TYPE_STRIPE_IMPORT = "stripe_import";
     public static final String SERVICE_TYPE_SHOPIFY = "shopify_import";
+    public static final String SERVICE_TYPE_ZOHO = "zoho_import";
 
     // Scopes
     public static final String STRIPE_SCOPE = "read_only";
@@ -54,6 +62,7 @@ public class ScribeServlet extends HttpServlet
     public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
     public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
     public static final String GOOGLE_OAUTH2_SCOPE = "email profile";
+    private static final String ZOHO_AUTH_URL = "https://accounts.zoho.com/apiauthtoken/nb/create?SCOPE=ZohoCRM/crmapi&EMAIL_ID=%s&PASSWORD=%s";
 
     // OAuth login
     public static final String SERVICE_TYPE_OAUTH_LOGIN = "oauth_login";
@@ -77,6 +86,8 @@ public class ScribeServlet extends HttpServlet
      * provider and returned). If request parameters have "oauth_token" and
      * "oauth_verifier" then request is from provider with token keys which are
      * saved in widget.
+     * 
+     * @return
      */
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
@@ -121,8 +132,20 @@ public class ScribeServlet extends HttpServlet
 	// If service type is not null, we have Contact preferences
 	if (serviceType != null)
 	{
-	    // Initializes backends to import contacts
-	    // ContactsImportUtil.initializeImport(serviceType);
+	    // managing zoho authentication Note:this code is only specific to
+	    // zoho only
+	    // generating access token dynamically
+	    if (serviceType.equalsIgnoreCase(SERVICE_TYPE_ZOHO))
+	    {
+		String username = req.getParameter("username");
+		String password = req.getParameter("password");
+		if (username != null && password != null)
+		{
+		    String url = getZohoAuthUrl(username, password);
+		    saveZohoToken(url, username);
+		}
+
+	    }
 	    return;
 	}
 
@@ -211,6 +234,10 @@ public class ScribeServlet extends HttpServlet
 		    req.getSession().setAttribute("query", query);
 	    }
 
+	}
+	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO))
+	{
+	    System.out.println("wait");
 	}
 
 	// OAuth 1.0
@@ -328,5 +355,61 @@ public class ScribeServlet extends HttpServlet
 
 	// Delete return url Attribute
 	req.getSession().removeAttribute("return_url");
+    }
+
+    private String getZohoAuthUrl(String username, String password)
+    {
+	System.out.println(String.format(ZOHO_AUTH_URL, username, password));
+	return String.format(ZOHO_AUTH_URL, username, password);
+    }
+
+    /**
+     * Check authentication of user and save token in ContactPrefs
+     * 
+     * @param url
+     */
+    private boolean saveZohoToken(String url, String username)
+    {
+	try
+	{
+
+	    URL uri = new URL(url);
+	    URLConnection conn = uri.openConnection();
+	    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	    String res;
+	    conn.connect();
+	    LinkedList<String> list = new LinkedList<String>();
+	    while ((res = br.readLine()) != null)
+	    {
+		String temp = res.trim();
+		if (temp.isEmpty() || temp.startsWith("#"))
+		    continue;
+		else
+		    list.add(temp);
+	    }
+
+	    if (list.getLast().contains("TRUE"))
+	    {
+		String token = list.getFirst().substring(10);
+
+		if (!token.isEmpty() && token != null)
+		{
+		    ContactPrefs prefs = new ContactPrefs();
+		    prefs.token = token;
+		    prefs.client = SyncClient.ZOHO;
+		    prefs.username = username;
+		    prefs.save();
+
+		    return true;
+		}
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	return false;
     }
 }

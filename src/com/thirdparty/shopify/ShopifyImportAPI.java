@@ -14,6 +14,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.agilecrm.contact.sync.SyncClient;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -54,7 +55,7 @@ public class ShopifyImportAPI
 	{
 
 	    ContactPrefs prefs = new ContactPrefs();
-	    prefs.userName = shopname;
+	    prefs.username = shopname;
 
 	    if (ShopifyUtil.isValid(prefs))
 		prefs.save();
@@ -93,7 +94,7 @@ public class ShopifyImportAPI
     public ContactPrefs importCustomers(@FormParam("customer") boolean customer)
     {
 	ArrayList<String> list = new ArrayList<String>();
-	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
+	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(SyncClient.SHOPIFY);
 	try
 	{
 	    if (pref != null)
@@ -101,16 +102,12 @@ public class ShopifyImportAPI
 
 		if (customer)
 		    list.add("customer");
-		pref.thirdPartyField = list;
+		pref.importOptions = list;
 
-		if (pref.count == 0)
-		    ContactsImportUtil.initilaizeImportBackend(pref);
-		else
-		{
-		    ShopifyUtil.sync();
-		    pref.last_update_time = date;
-		    pref.save();
-		}
+		ContactsImportUtil.initilaizeImportBackend(pref);
+		/*
+		 * else { ShopifyUtil.sync(); // pref. = date; pref.save(); }
+		 */
 	    }
 
 	    return pref;

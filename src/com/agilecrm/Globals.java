@@ -119,12 +119,12 @@ public class Globals
     public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
     // shopify app credential
-    public static final String SHOPIFY_API_KEY = "70a2391cd9e9af0d666657a67885d9ec";
-    public static final String SHOPIFY_SECRET_KEY = "a1f88bc91e5c70c34c215bf224ebd7d3";
-
     // public static final String SHOPIFY_API_KEY =
-    // "0655ecab47a7c443bf07f3b72be6035b";
+    // "70a2391cd9e9af0d666657a67885d9ec";
     // public static final String SHOPIFY_SECRET_KEY =
-    // "016cb9b32bdc3e65530e9daf8eee57e6";
+    // "a1f88bc91e5c70c34c215bf224ebd7d3";
+
+    public static final String SHOPIFY_API_KEY = "66198cc5eb16795088bfc0a3f8d2c011";
+    public static final String SHOPIFY_SECRET_KEY = "68e7c78529457be317dde3807b67de0b";
 
 }

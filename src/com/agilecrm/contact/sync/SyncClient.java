@@ -10,7 +10,7 @@ import com.agilecrm.contact.sync.service.impl.GoogleSyncImpl;
 import com.agilecrm.contact.sync.service.impl.SalesforceSync;
 import com.agilecrm.contact.sync.service.impl.ShopifySync;
 import com.agilecrm.contact.sync.service.impl.StripeSyncImpl;
-import com.agilecrm.contact.sync.service.impl.ZohoSync;
+import com.agilecrm.contact.sync.service.impl.ZohoSyncImpl;
 
 /**
  * <code>SyncClient</code> contains various third party client that client need
@@ -22,7 +22,7 @@ import com.agilecrm.contact.sync.service.impl.ZohoSync;
 public enum SyncClient implements Serializable
 {
     GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
-	    ZohoSync.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
+	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
 	    ShopifySync.class, "Shopify Import Status");
 
     Class<? extends SyncService> clazz;

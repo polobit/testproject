@@ -47,6 +47,8 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     @Unindexed
     public Boolean my_contacts = true;
+    @NotSaved(IfDefault.class)
+    public String username = null;
 
     /**
      * If access token expire time is specified, we store it

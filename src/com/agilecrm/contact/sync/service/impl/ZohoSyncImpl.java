@@ -3,6 +3,8 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
+import java.util.List;
+
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 
@@ -12,13 +14,17 @@ import com.agilecrm.contact.sync.wrapper.WrapperService;
  * @author jitendra
  * 
  */
-public class ZohoSync extends OneWaySyncService
+public class ZohoSyncImpl extends OneWaySyncService
 {
+    private List<String> importOptions = prefs.importOptions;
 
     @Override
     public void initSync()
     {
-	// TODO Auto-generated method stub
+	for (String module : importOptions)
+	{
+	    doImport(module);
+	}
 
     }
 
@@ -33,6 +39,11 @@ public class ZohoSync extends OneWaySyncService
     protected void updateLastSyncedInPrefs()
     {
 	// TODO Auto-generated method stub
+
+    }
+
+    private void doImport(String module)
+    {
 
     }
 
