@@ -469,6 +469,7 @@ public class ScribeUtil
 	contactPrefs.token = properties.get("access_token").toString();
 	contactPrefs.setPrefs(object);
 	contactPrefs.setExpiryTime(Long.valueOf(properties.get("expires_in").toString()));
+	contactPrefs.refreshToken = properties.get("refresh_token").toString();
 	contactPrefs.save();
 
 	// initialize backend to save contacts
