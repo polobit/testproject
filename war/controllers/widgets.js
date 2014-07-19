@@ -449,7 +449,7 @@ var WidgetsRouter = Backbone.Router
 			{
 				if (!id)
 					show_set_up_widget("Xero", 'xero-login',
-							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=');
+							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
 				else
 				{
 					{
@@ -462,7 +462,7 @@ var WidgetsRouter = Backbone.Router
 													"Xero",
 													'xero-login',
 													data,
-													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=');
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
 										});
 						return;
 
@@ -485,7 +485,7 @@ var WidgetsRouter = Backbone.Router
 																		"Xero",
 																		'xero-login',
 																		data,
-																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data='),
+																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="),
 																		data1);
 															});
 											return;
@@ -494,9 +494,7 @@ var WidgetsRouter = Backbone.Router
 										else
 										{
 											show_set_up_widget("Xero", 'xero-login',
-													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'https://agilecrmbeta.appspot.com/backend/XeroServlet?data=');
-									
-													// encodeURIComponent(window.location.href));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "backend/XeroServlet?data="));
 										}
 									});
 				}
