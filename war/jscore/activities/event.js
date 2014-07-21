@@ -167,6 +167,12 @@ $(function()
 		var el = $("#updateActivityForm");
 		agile_type_ahead("event_related_to", el, contacts_typeahead);
 		
+		if($('#updateActivityModal #allDay').is(':checked'))
+		{
+			$('#update-event-time-1').closest('.control-group').hide();
+			$('#update-event-date-2').closest('.row').hide();
+		}	
+		
 		// Removes alert message of error related date and time.
 		$('#' + this.id).find('.alert').css('display', 'none');
 
@@ -200,10 +206,14 @@ $(function()
 	$('#updateActivityModal').on('hidden', function() {
 
 		$("#updateActivityForm").find("li").remove();
+		$('#update-event-time-1').closest('.control-group').show();
+		$('#update-event-date-2').closest('.row').show();
 	});
 	$('#activityModal').on('hidden', function() {
 
 		$("#activityForm").find("li").remove();
+		$('#event-time-1').closest('.control-group').show();
+		$('#event-date-2').closest('.row').show();
 	});
 
 
