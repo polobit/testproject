@@ -5,10 +5,9 @@ package com.agilecrm.contact.sync;
 
 /**
  * <code>ImportStatus</code> contains constant which is used to
- * buildNotification status and send emailNotification to domain user
+ * buildNotification status and send emailNotification to domain user.
  * 
  * @author jitendra
- * 
  */
 public enum ImportStatus
 {

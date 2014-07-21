@@ -19,11 +19,20 @@ import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 
+/**
+ * The Class GoogleContactWrapperImpl.
+ */
 public class GoogleContactWrapperImpl extends ContactWrapper
 {
     // Gdata specific contact object.
+    /** The entry. */
     ContactEntry entry;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#wrapContact()
+     */
     @Override
     public void wrapContact()
     {
@@ -33,6 +42,13 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return;
     }
 
+    /**
+     * Gets the subtype from google contacts rel.
+     * 
+     * @param rel
+     *            the rel
+     * @return the subtype from google contacts rel
+     */
     private String getSubtypeFromGoogleContactsRel(String rel)
     {
 	if (StringUtils.isEmpty(rel))
@@ -65,6 +81,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.ContactWrapper#getMoreCustomInfo()
+     */
     @Override
     public List<ContactField> getMoreCustomInfo()
     {
@@ -99,6 +120,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getEmail()
+     */
     @Override
     public ContactField getEmail()
     {
@@ -112,6 +138,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return field;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getPhoneNumber()
+     */
     @Override
     public ContactField getPhoneNumber()
     {
@@ -128,6 +159,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return field;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getOrganization()
+     */
     @Override
     public ContactField getOrganization()
     {
@@ -140,6 +176,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return field;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getDescription()
+     */
     @Override
     public String getDescription()
     {
@@ -147,6 +188,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getTags()
+     */
     @Override
     public List<String> getTags()
     {
@@ -154,6 +200,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getAddress()
+     */
     @Override
     public ContactField getAddress()
     {
@@ -196,6 +247,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return field;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getNotes()
+     */
     @Override
     public List<Note> getNotes()
     {
@@ -203,6 +259,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getFirstName()
+     */
     @Override
     public ContactField getFirstName()
     {
@@ -223,6 +284,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	return field;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getLastName()
+     */
     @Override
     public ContactField getLastName()
     {

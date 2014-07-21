@@ -21,6 +21,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
     Customer customer;
     private String stripeFieldValue = null;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#wrapContact()
+     */
     @Override
     public void wrapContact()
     {

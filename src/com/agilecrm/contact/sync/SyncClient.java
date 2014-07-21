@@ -34,6 +34,11 @@ public enum SyncClient implements Serializable
 	this.notificationEmailSubject = notificationEmailSubject;
     }
 
+    /**
+     * Gets the clazz.
+     * 
+     * @return the clazz
+     */
     public Class<? extends SyncService> getClazz()
     {
 	return clazz;

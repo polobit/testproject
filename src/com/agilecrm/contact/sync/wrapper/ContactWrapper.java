@@ -1,3 +1,7 @@
+/**
+ * @auther jitendra
+ * @since 2014
+ */
 package com.agilecrm.contact.sync.wrapper;
 
 import java.util.ArrayList;
@@ -13,6 +17,13 @@ public abstract class ContactWrapper implements WrapperService
     private Contact contact;
     protected Object object;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.wrapper.WrapperService#getWrapper(java.lang
+     * .Object)
+     */
     @Override
     public ContactWrapper getWrapper(Object object)
     {
