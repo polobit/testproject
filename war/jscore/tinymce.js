@@ -54,7 +54,9 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 			$(selector).css('display', '');
 			$('#loading-editor').html("");
 			
-			tinymce.init({ mode : "exact", selector : selector, menubar : false,
+			tinymce.init({ mode : "exact", selector : selector, plugins : [
+			    "textcolor link image preview code"], 
+			    menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
