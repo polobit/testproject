@@ -19,6 +19,7 @@ import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class GoogleContactWrapperImpl.
  */

@@ -1,3 +1,7 @@
+/**
+ * @auther jitendra
+ * @since 2014
+ */
 package com.thirdparty.google;
 
 import java.io.Serializable;
@@ -27,6 +31,7 @@ import com.thirdparty.google.groups.GoogleGroupDetails;
 import com.thirdparty.google.groups.util.ContactGroupUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
+// TODO: Auto-generated Javadoc
 /**
  * <code>ContactPrefs</code> class stores the details of different sources to
  * import contacts.
@@ -39,70 +44,94 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ContactPrefs extends SyncPrefs implements Serializable
 {
 
-    public String lastSyncCheckPoint;
+    /** The last sync check point. */
+    @NotSaved(IfDefault.class)
+    public String lastSyncCheckPoint = null;
 
+    /** The client. */
     @NotSaved(IfDefault.class)
     public SyncClient client = null;
 
+    /** The my_contacts. */
     @NotSaved(IfDefault.class)
     @Unindexed
     public Boolean my_contacts = true;
+
+    /** The username. */
     @NotSaved(IfDefault.class)
     public String username = null;
 
-    /**
-     * If access token expire time is specified, we store it
-     */
+    /** If access token expire time is specified, we store it. */
     @NotSaved(IfDefault.class)
     public Long expires = 0L;
 
     // created time
+    /** The created at. */
     @NotSaved(IfDefault.class)
     public Long createdAt = 0L;
 
     // modified time
+    /** The last modifed at. */
     @NotSaved(IfDefault.class)
     public Long lastModifedAt = 0L;
 
+    /** The last_synced_updated_contacts_to_client. */
     @NotSaved(IfDefault.class)
     public Long last_synced_updated_contacts_to_client = 0L;
 
-    @NotSaved
+    /** The import options. */
     @Embedded
-    // public List<GoogleGroupDetails> groups = new
-    // ArrayList<GoogleGroupDetails>();
-    public List<String> importOptions;
+    public List<String> importOptions = new ArrayList<String>();
 
     // domain user key
+    /** The domain user. */
     @JsonIgnore
     public Key<DomainUser> domainUser;
 
+    /** The sync_to_group. */
     @NotSaved(IfDefault.class)
     public String sync_to_group = null;
 
+    /** The sync_from_group. */
     @NotSaved(IfDefault.class)
     public String sync_from_group = null;
 
+    /** The conflict. */
     @NotSaved(IfDefault.class)
     public String conflict = null;
 
+    /**
+     * Instantiates a new contact prefs.
+     */
     public ContactPrefs()
     {
     }
 
+    /** The duration. */
     @NotSaved(IfDefault.class)
     public SyncFrequency duration = SyncFrequency.ONCE;
 
+    /** The groups. */
     @NotSaved
     @Embedded
     public List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
 
     // Category of report generation - daily, weekly, monthly.
+    /**
+     * The Enum SYNC_TYPE.
+     */
     public static enum SYNC_TYPE
     {
-	CLIENT_TO_AGILE, AGILE_TO_CLIENT, TWO_WAY
+
+	/** The client to agile. */
+	CLIENT_TO_AGILE,
+	/** The agile to client. */
+	AGILE_TO_CLIENT,
+	/** The two way. */
+	TWO_WAY
     };
 
+    /** The sync_type. */
     @NotSaved(IfDefault.class)
     public SYNC_TYPE sync_type = null;
     /**
@@ -123,7 +152,7 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     public static ObjectifyGenericDao<ContactPrefs> dao = new ObjectifyGenericDao<ContactPrefs>(ContactPrefs.class);
 
     /**
-     * Saves ContactPrefs in database
+     * Saves ContactPrefs in database.
      */
     public void save()
     {
@@ -131,7 +160,7 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     }
 
     /**
-     * sets created time,expire time for access token and domain user key
+     * sets created time,expire time for access token and domain user key.
      */
     @PrePersist
     public void prePersist()
@@ -140,6 +169,12 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 	    domainUser = new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId());
     }
 
+    /**
+     * Sets the expiry time.
+     * 
+     * @param time
+     *            the new expiry time
+     */
     @JsonIgnore
     public void setExpiryTime(Long time)
     {
@@ -153,6 +188,9 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 	System.out.println(expires);
     }
 
+    /**
+     * Post load.
+     */
     @PostLoad
     void postLoad()
     {
@@ -163,7 +201,7 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     }
 
     /**
-     * Fill groups in fetching from google
+     * Fill groups in fetching from google.
      */
     /**
      * Fill groups in fetching from google
@@ -225,6 +263,13 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 	this.domainUser = domianUser;
     }
 
+    /**
+     * Gets the domain user.
+     * 
+     * @param domianUser
+     *            the domian user
+     * @return the domain user
+     */
     public Key<DomainUser> getDomainUser(Key<DomainUser> domianUser)
     {
 	return domianUser;
@@ -249,6 +294,12 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 	dao.delete(this);
     }
 
+    /**
+     * Sets the prefs.
+     * 
+     * @param object
+     *            the new prefs
+     */
     public void setPrefs(JSONObject object)
     {
 	if (object == null)

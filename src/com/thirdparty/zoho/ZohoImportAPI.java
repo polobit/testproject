@@ -3,9 +3,6 @@
  */
 package com.thirdparty.zoho;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -24,12 +21,12 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
+// TODO: Auto-generated Javadoc
 /**
  * <code>ZohoImport</code> This class Used for REST call for saving user Auth
- * preferences and Importing contact from saved preferences;
+ * preferences and Importing contact from saved preferences;.
  * 
  * @author jitendra
- * 
  */
 
 @Path("/api/zoho")
@@ -37,9 +34,9 @@ public class ZohoImportAPI
 {
 
     /**
-     * Retrieve ContactPrefs
+     * Retrieve ContactPrefs.
      * 
-     * @return
+     * @return the prefs
      */
     @Path("/import-settings")
     @GET
@@ -49,6 +46,9 @@ public class ZohoImportAPI
 	return ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
     }
 
+    /**
+     * Delete prefs.
+     */
     @Path("/import-settings")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,6 +58,12 @@ public class ZohoImportAPI
 
     }
 
+    /**
+     * Update prefs.
+     * 
+     * @param prefs
+     *            the prefs
+     */
     @Path("/import-settings")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -71,6 +77,13 @@ public class ZohoImportAPI
 
     }
 
+    /**
+     * Checks if is authenticated.
+     * 
+     * @param username
+     *            the username
+     * @return true, if is authenticated
+     */
     @GET
     @Path("/auth-user")
     public boolean isAuthenticated(@QueryParam("username") String username)
@@ -94,12 +107,15 @@ public class ZohoImportAPI
     }
 
     /**
-     * This method will do import data from zoho crm from different modules
+     * This method will do import data from zoho crm from different modules.
      * 
      * @param accounts
+     *            the accounts
      * @param leads
+     *            the leads
      * @param contacts
-     * @return
+     *            the contacts
+     * @return the contact prefs
      */
     @Path("/import")
     @POST
@@ -110,19 +126,18 @@ public class ZohoImportAPI
     {
 
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
-	List<String> list = new ArrayList<String>();
+	if (prefs != null)
+	{
 
-	if (accounts)
-	    list.add("accounts");
+	    if (accounts)
+		prefs.importOptions.add("accounts");
 
-	if (leads)
-	    list.add("leads");
-
-	if (contacts)
-	    list.add("contacts");
-
-	prefs.importOptions = list;
-	prefs.save();
+	    if (leads)
+		prefs.importOptions.add("leads");
+	    if (contacts)
+		prefs.importOptions.add("contacts");
+	    prefs.save();
+	}
 
 	return prefs;
 

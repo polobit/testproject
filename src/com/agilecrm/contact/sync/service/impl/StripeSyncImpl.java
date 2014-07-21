@@ -30,8 +30,7 @@ public class StripeSyncImpl extends OneWaySyncService
     private String lastSyncCheckPoint = null;
 
     /**
-     * 
-     * Implementation of initSync for Stripe
+     * Implementation of initSync for Stripe.
      * 
      * @see com.agilecrm.contact.sync.service.OneWaySyncService#initSync()
      */

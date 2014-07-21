@@ -3,12 +3,14 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
 
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.sync.wrapper.impl.ZohoContactWrapperImpl;
 import com.thirdparty.zoho.ZohoUtils;
 
 /**
@@ -19,11 +21,15 @@ import com.thirdparty.zoho.ZohoUtils;
  */
 public class ZohoSyncImpl extends OneWaySyncService
 {
-    private List<String> importOptions = null;
+
+    /** The import options. */
+    private List<String> importOptions = new ArrayList<String>(0);
 
     @Override
     public void initSync()
     {
+	importOptions = prefs.importOptions;
+
 	for (String module : importOptions)
 	{
 	    doImport(module);
@@ -31,6 +37,11 @@ public class ZohoSyncImpl extends OneWaySyncService
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
+     */
     @Override
     public Class<? extends WrapperService> getWrapperService()
     {

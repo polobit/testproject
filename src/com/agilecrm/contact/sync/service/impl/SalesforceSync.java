@@ -20,6 +20,11 @@ public class SalesforceSync extends OneWaySyncService
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
+     */
     @Override
     public Class<? extends WrapperService> getWrapperService()
     {
@@ -27,6 +32,13 @@ public class SalesforceSync extends OneWaySyncService
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.ContactSyncService#updateLastSyncedInPrefs
+     * ()
+     */
     @Override
     protected void updateLastSyncedInPrefs()
     {

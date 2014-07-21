@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.agilecrm.contact.sync.service.impl;
+package com.agilecrm.contact.sync.wrapper.impl;
 
 import java.util.List;
 
@@ -21,6 +21,11 @@ public class ZohoContactWrapperImpl extends ContactWrapper
 {
     JSONObject object;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#wrapContact()
+     */
     @Override
     public void wrapContact()
     {
