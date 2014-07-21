@@ -1,3 +1,4 @@
+<%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="java.io.FileInputStream"%>
 <%@page import="org.apache.commons.io.IOUtils"%>
 <%@page import="java.io.InputStream"%>
@@ -29,6 +30,29 @@
 		type = type.toLowerCase().replace("addons", "");
 
     System.out.println("Type  " + type);
+    
+    String domain = NamespaceManager.get();
+    
+    try
+	{
+        
+		String cachedAddons = (String) CacheUtil.getCache(domain + "_addons_" + type);
+
+		if(cachedAddons != null)
+		{
+		    System.out.println("Addon nodes obtained from cache...");
+
+		    jsonArray = new JSONArray(cachedAddons);
+		    out.println(jsonArray);
+		    return;
+		}
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting addon nodes from cache... " + e.getMessage());
+	}
+    
     
     if (type.equalsIgnoreCase("crm"))
 		target = CRM_CATALOG;
@@ -88,5 +112,16 @@
 		
     }
 
+    try
+   	{
+   	    // Add nodes array to cache
+   	 	CacheUtil.setCache(domain + "_addons_" + type, jsonArray.toString(), 3600000);
+   	}
+   	catch (Exception e)
+   	{
+   	    e.printStackTrace();
+   	    System.err.println("Exception occured while setting addon nodes in cache... " + e.getMessage());
+   	}
+      
     out.println(jsonArray);
 %>
