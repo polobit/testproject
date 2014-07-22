@@ -379,13 +379,18 @@ function serialize_custom_fields(form)
 	console.log(custom_field_elements.length);
    var arr = [];
     $.each(custom_field_elements, function(index, element){
-    	console.log($(element));
     	name = $(element).attr('name');
     	
     	var json = {};
-    	json["name"] = name;
-        json["value"] = $(element).val();
-        console.log(json);
+    	json.name = name;
+    	var elem_type = $(element).attr('type')
+    	json.value =  $(element).val();
+    	
+    	if(elem_type=='checkbox')json.value = $(element).is(':checked')?'on':'off';
+    	
+    	
+    	if(!json.value)
+    		return;
         arr.push(json);
     });
    return arr;
