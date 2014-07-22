@@ -2084,6 +2084,18 @@ $(function()
 	return buffer;
 
     });
+    
+   /**
+    * If log_type equals true otherwise false
+    **/
+    Handlebars.registerHelper("if_log_type_equals", function(object, key, log_type, options){
+    	
+    	if(object[key] == log_type)
+    		return options.fn(object);
+    	
+    	return options.inverse(object);
+    	
+    });
 
     /**
      * Identifies EMAIL_SENT campaign-log string and splits the log string based
