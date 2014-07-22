@@ -181,6 +181,8 @@ head.js(HANDLEBARS_LIB);
 <!-- Country Names from country codes -->
 head.js(LIB_PATH + 'lib/country-from-code.js');
 
+<!-- Inital.js Text avatars -->
+head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};

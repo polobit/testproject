@@ -63,7 +63,7 @@
             "required": "required",
             "category": "Settings",
             "name": "variable_2",
-            "title": "Enter a value. For Date value enter in 'MM/dd/yyyy'",
+            "title": "Enter a value. For Date value enter in 'mm/dd/yyyy'",
             "fieldType": "input",
             "type": "text" 
         },

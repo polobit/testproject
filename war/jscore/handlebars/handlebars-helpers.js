@@ -202,6 +202,45 @@ $(function()
 
 	return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + "&d=" + escape(img);
     });
+    
+    /**
+     * CSS text avatars
+     */
+    Handlebars.registerHelper('nameAvatar', function(items, width)
+	{
+
+			if (items == undefined)
+			    return;
+
+			// Checks if properties already has an image, to return it
+			var agent_image = getPropertyValue(items, "image");
+			if (agent_image)
+			    return agent_image;
+		
+			var email = getPropertyValue(items, "email");
+			if (email)
+			{
+			    return 'https://secure.gravatar.com/avatar/' + Agile_MD5(email) + '.jpg?s=' + width + '&d=404';
+			}
+		
+			return 'https://secure.gravatar.com/avatar/' + Agile_MD5("") + '.jpg?s=' + width + '&d=404';
+
+	 });
+    
+    /**
+     * To add data-name attribute to image tags
+     */	  
+	Handlebars.registerHelper('dataNameAvatar', function(items)
+	{
+
+			if (items == undefined)
+			    return;
+		
+			var name = getPropertyValue(items, "first_name").substr(0,1) + "" + getPropertyValue(items, "last_name").substr(0,1);
+			
+			return name;
+
+	  });
 
     /**
      * Helper function to return icons based on given name

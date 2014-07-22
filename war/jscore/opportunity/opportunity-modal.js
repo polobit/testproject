@@ -41,6 +41,8 @@ $(function(){
 	});
 	
 	$('#opportunityModal, #opportunityUpdateModal').on("shown", function(){
+		
+		
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder","MM/DD/YYYY");
     
@@ -182,9 +184,13 @@ function updateDeal(ele) {
 	
 	var dealForm = $("#opportunityUpdateForm");
 	
+	$("#opportunityUpdateForm")[0].reset();
+	
 	deserializeForm(value, $("#opportunityUpdateForm"));
 	
 	$("#opportunityUpdateModal").modal('show');
+	
+	
 	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
