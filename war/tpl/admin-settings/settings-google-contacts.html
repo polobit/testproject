@@ -155,15 +155,22 @@
 <script id="admin-settings-import-stripe-contact-sync-prefs-template"
 	type="text/html">
 <div class="span4 well">
-    <form id="imap-prefs-form">
+<span class="label label-important" style="float:right">Beta</span>
+<center> <img class="thumbnail" src="/img/plugins/Stripe.png" style="width:210px; height:70px;margin-left:40px" /></center>
+<br/>
+{{#unless id}}
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Setup contact sync with your Stripe account.
+	</div>
+{{/unless}} 
+    {{#if id}}
+<form id="imap-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-        <legend>Import from Stripe <span class="label label-important">Alpha</span></legend>
-		<div>
-			Import customers from Stripe
-		</div>
-           {{#if id}}
-             	<div class="control-group">
-					<label class="control-label" style="text-align:">Frequency</label> 
+       
+	
+          
+             	<div class="control-group" style="margin-left: -80px;">
+					<label class="control-label">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
 
@@ -180,7 +187,8 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
+			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+
 {{#if inProgress}}
           		 <button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;" disabled>Sync</button>
 {{else}}
@@ -189,10 +197,10 @@
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
 
-	{{/if}}
 
        
     </form>
+{{/if}}
 </div>
 </script>
 
