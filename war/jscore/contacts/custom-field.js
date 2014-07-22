@@ -328,6 +328,8 @@ function fill_custom_fields_values_generic(form, content)
 
 function fill_custom_data(property, form)
 {
+	if(!property.value)
+		return;
 	var element = $(form).find('*[name="' + property.name + '"]');
 	console.log(element);
 	// If custom field is deleted or not found with property name return
