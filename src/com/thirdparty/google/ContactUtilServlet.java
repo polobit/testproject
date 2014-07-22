@@ -57,7 +57,20 @@ public class ContactUtilServlet extends HttpServlet
 		    .getService(contactPrefs.client.getClazz());
 
 	    if (service != null)
-		service.initSync();
+	    {
+		try
+		{
+		    contactPrefs.inProgress = true;
+		    contactPrefs.save();
+		    service.initSync();
+
+		}
+		finally
+		{
+		    contactPrefs.inProgress = false;
+		    contactPrefs.save();
+		}
+	    }
 
 	    /*
 	     * if (req != null) { // check this request comes from cron or

@@ -27,7 +27,7 @@ import com.stripe.model.CustomerCollection;
 public class StripeSyncImpl extends OneWaySyncService
 {
 
-    private String lastSyncCheckPoint = null;
+    public String lastSyncCheckPoint = null;
 
     /**
      * Implementation of initSync for Stripe.
@@ -102,7 +102,7 @@ public class StripeSyncImpl extends OneWaySyncService
     private Map<String, Object> options()
     {
 	HashMap<String, Object> options = new HashMap<String, Object>();
-	options.put("limit", 100);
+	options.put("limit", 10);
 	options.put("starting_after", lastSyncCheckPoint);
 	return options;
     }

@@ -38,7 +38,8 @@ public class StripeDataService
     @Produces(MediaType.APPLICATION_JSON)
     public ContactPrefs getPrefs()
     {
-	return ContactPrefsUtil.getPrefsByType(SyncClient.STRIPE);
+	ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(SyncClient.STRIPE);
+	return contactPrefs; //
     }
 
     /**
