@@ -15,8 +15,17 @@ var WebreportsRouter = Backbone.Router.extend({
 			{
 				head.js(LIB_PATH + 'lib/prettify-min.js', function()
 				{
-					enableWebrulesSorting(el);
-					prettyPrint();
+					$.ajax({
+						url : 'core/api/api-key',
+						type : 'GET',
+						dataType : 'json',
+						success : function(data){
+							$('#content').html(getTemplate("webrule-collection", data));
+							enableWebrulesSorting(el);
+							prettyPrint();
+						}
+					});
+
 					/*if($(el).has("#api_track_webrules_code_icon").length != 0){
 						initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
 					}*/
