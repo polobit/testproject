@@ -12,8 +12,11 @@ var WebreportsRouter = Backbone.Router.extend({
 	},
 	webrules : function()
 	{
+		var that = this;
 		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr',
 			sortKey : 'position', postRenderCallback : function(el)
+			{
+			if(that.webrules.collection && that.webrules.collection.length == 0)
 			{
 				head.js(LIB_PATH + 'lib/prettify-min.js', function()
 				{
@@ -32,6 +35,7 @@ var WebreportsRouter = Backbone.Router.extend({
 						initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
 					}*/
 				});
+			}
 			}	
 		});
 		
