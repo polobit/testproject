@@ -10,7 +10,7 @@ import org.scribe.utils.Preconditions;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.SyncClient;
-import com.agilecrm.contact.sync.wrapper.WrapperServiceBuilder;
+import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -30,20 +30,35 @@ import com.thirdparty.google.ContactPrefs;
  */
 public abstract class ContactSyncService implements SyncService
 {
+
+    /** The Constant NOTIFICATION_TEMPLATE. */
     protected static final String NOTIFICATION_TEMPLATE = "contact_sync_notification_template";
 
-    protected WrapperServiceBuilder contactWrapper = null;
+    /** The contact wrapper. */
+    protected ContactWrapper contactWrapper = null;
 
     /**
      * To check if it contacts limit is exceeded in current plan
      */
     BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
+
+    /** The contact restriction. */
     DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
 	    DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
 
+    /** The prefs. */
     protected ContactPrefs prefs;
+
+    /** The total_synced_contact. */
     protected int total_synced_contact;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.SyncService#createService(com.thirdparty
+     * .google.ContactPrefs)
+     */
     @Override
     public SyncService createService(ContactPrefs pref)
     {
@@ -52,6 +67,11 @@ public abstract class ContactSyncService implements SyncService
 	return this;
     }
 
+    /**
+     * Checks if is limit exceeded.
+     * 
+     * @return true, if is limit exceeded
+     */
     public boolean isLimitExceeded()
     {
 	if (total_synced_contact >= MAX_SYNC_LIMIT)
@@ -65,6 +85,7 @@ public abstract class ContactSyncService implements SyncService
 
     // public List<Contact> retrieveContact();
 
+    /** The sync status. */
     protected Map<ImportStatus, Integer> syncStatus;
 
     {
@@ -75,6 +96,13 @@ public abstract class ContactSyncService implements SyncService
 	}
     }
 
+    /**
+     * Wrap contact to agile schema and save.
+     * 
+     * @param object
+     *            the object
+     * @return the contact
+     */
     public Contact wrapContactToAgileSchemaAndSave(Object object)
     {
 	Contact contact = wrapContactToAgileSchema(object);
@@ -88,12 +116,19 @@ public abstract class ContactSyncService implements SyncService
 	return contact;
     }
 
+    /**
+     * Wrap contact to agile schema.
+     * 
+     * @param object
+     *            the object
+     * @return the contact
+     */
     private Contact wrapContactToAgileSchema(Object object)
     {
 	if (contactWrapper == null)
 	    try
 	    {
-		contactWrapper = getWrapperService().newInstance().buildWrapper(object);
+		contactWrapper = getWrapperService().newInstance().getWrapper(object);
 	    }
 	    catch (InstantiationException e)
 	    {
@@ -106,7 +141,7 @@ public abstract class ContactSyncService implements SyncService
 		e.printStackTrace();
 	    }
 
-	return contactWrapper.buildWrapper(object).buildContact();
+	return contactWrapper.getWrapper(object).buildContact();
     }
 
     /**
@@ -131,6 +166,12 @@ public abstract class ContactSyncService implements SyncService
 	}
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.SyncService#saveContact(java.util.List)
+     */
     @Override
     public void saveContact(List<Contact> contacts)
     {
@@ -145,8 +186,17 @@ public abstract class ContactSyncService implements SyncService
 
     }
 
+    /**
+     * Update last synced in prefs.
+     */
     protected abstract void updateLastSyncedInPrefs();
 
+    /**
+     * Save contact.
+     * 
+     * @param contact
+     *            the contact
+     */
     private void saveContact(Contact contact)
     {
 	if (ContactUtil.isDuplicateContact(contact))
@@ -169,6 +219,12 @@ public abstract class ContactSyncService implements SyncService
 
     }
 
+    /**
+     * Adds the tag to contact.
+     * 
+     * @param contact
+     *            the contact
+     */
     private void addTagToContact(Contact contact)
     {
 	String tag;

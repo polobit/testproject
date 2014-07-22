@@ -16,11 +16,11 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.forms.FormsUtil;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -215,12 +215,13 @@ public class ShopifyUtil
 	uri.setParameter("limit", "" + 250);
 	uri.setParameter("page", "" + current_page);
 
-	if (prefs.count > 0)
-	{
-	    uri.addParameter("created_at_min", prefs.last_update_time);
-	    uri.addParameter("updated_at_min", prefs.last_update_time);
-
-	}
+	/*
+	 * if (prefs.count > 0) { uri.addParameter("created_at_min",
+	 * prefs.last_update_time); uri.addParameter("updated_at_min",
+	 * prefs.last_update_time);
+	 * 
+	 * }
+	 */
 	uri.build();
 	System.out.println(uri.toString());
 
@@ -326,7 +327,7 @@ public class ShopifyUtil
 
 	    String domain = shop.getString("domain");
 
-	    if (domain.equalsIgnoreCase(prefs.userName))
+	    if (domain.equalsIgnoreCase(prefs.username))
 		return true;
 	}
 	catch (Exception e)
@@ -347,12 +348,13 @@ public class ShopifyUtil
 	URIBuilder uri = getAuthURL(prefs);
 	uri.setPath("/admin/customers/count.json");
 	System.out.println(uri.toString());
-	if (prefs.count > 0)
-	{
-	    uri.addParameter("created_at_min", prefs.last_update_time);
-	    uri.addParameter("updated_at_min", prefs.last_update_time);
-
-	}
+	/*
+	 * if (prefs.count > 0) { uri.addParameter("created_at_min",
+	 * prefs.last_update_time); uri.addParameter("updated_at_min",
+	 * prefs.last_update_time);
+	 * 
+	 * }
+	 */
 	try
 	{
 	    System.out.println(uri.toString());
@@ -372,7 +374,7 @@ public class ShopifyUtil
      */
     public static void sync()
     {
-	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
+	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(SyncClient.SHOPIFY);
 
 	if (prefs != null)
 	{
@@ -420,30 +422,33 @@ public class ShopifyUtil
     {
 	URIBuilder uri = new URIBuilder();
 	uri.setScheme("https");
-	uri.setHost(pref.apiKey + ":" + pref.password + "@" + pref.userName);
+	// uri.setHost(pref.apiKey + ":" + pref.password + "@" + pref.userName);
 	return uri;
     }
-    
-    public static void main(String[]args){
-	
 
-	try{
-	
-	URL ur = new URL("https://shopperschois.myshopify.com/admin/oauth/authorize?client_id=70a2391cd9e9af0d666657a67885d9ec&scope=read_customers");
-	
-	
-	URLConnection con = ur.openConnection();
-	con.connect();
-	BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	String s;
-	while((s = br.readLine())!= null){
-	    System.out.println(s);
+    public static void main(String[] args)
+    {
+
+	try
+	{
+
+	    URL ur = new URL(
+		    "https://shopperschois.myshopify.com/admin/oauth/authorize?client_id=70a2391cd9e9af0d666657a67885d9ec&scope=read_customers");
+
+	    URLConnection con = ur.openConnection();
+	    con.connect();
+	    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	    String s;
+	    while ((s = br.readLine()) != null)
+	    {
+		System.out.println(s);
+	    }
+
 	}
-	
-	}catch(Exception e){
+	catch (Exception e)
+	{
 	    e.printStackTrace();
 	}
     }
-
 
 }

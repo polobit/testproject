@@ -13,22 +13,13 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
-import com.thirdparty.google.utl.ContactPrefsUtil;
 
 public class ZohoUtils
 {
-  
 
     /**
-     * Holds URL of the Zoho server
-     */
-    public static final String SERVER_URL = "https://crm.zoho.com/crm/private/json/";
-
-
-
-    /**
-     * <code>getConnection</code> method take string param as url and open connection
+     * <code>getConnection</code> method take string param as url and open
+     * connection
      * 
      * @param url
      * @return URLConnection object
@@ -51,51 +42,24 @@ public class ZohoUtils
 	return con;
     }
 
-    /**
-     * Validation of Users Credential
-     * 
-     * @param prefs
-     * @return True/False
-     * @throws Exception  IOException,JSONException
-     */
-
-    public static boolean isValidContactPrefs(ContactPrefs prefs) throws Exception
+    public static JSONArray getData(String url)
     {
-	boolean flag = false;
-	String token = prefs.token;
-	StringBuilder sb = new StringBuilder(SERVER_URL).append("Users/getUsers?").append("authtoken=").append(token)
-		.append("&type=AdminUsers").append("&scope=crmapi&selectColumns=Contacts(Email)");
-	URLConnection con = getConnection(sb.toString());
+	JSONArray data = new JSONArray();
 	try
 	{
-	    JSONArray data = new JSONArray();
-	    String inputLine;
-	    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	    while ((inputLine = br.readLine()) != null)
-		data.put(inputLine);
-	    try
+	    URLConnection con = getConnection(url);
+	    BufferedReader result = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	    String line;
+	    while ((line = result.readLine()) != null)
 	    {
-
-		JSONObject jsonGeneralData = new JSONObject(data.get(0).toString());
-
-		JSONObject res = new JSONObject(jsonGeneralData.getString("users").toString());
-		JSONArray arr = new JSONArray(res.get("user").toString());
-		JSONObject obj = arr.getJSONObject(0);
-		if (obj.has("email"))
-		    if (obj.getString("email").equalsIgnoreCase(prefs.userName))
-			flag = true;
+		data.put(new JSONParser().parse(line));
 	    }
-	    catch (JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-
 	}
-	catch (IOException e)
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-	return flag;
+	return data;
     }
 
     /**

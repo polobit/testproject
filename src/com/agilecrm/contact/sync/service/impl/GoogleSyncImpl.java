@@ -25,17 +25,25 @@ import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.util.ServiceException;
 import com.thirdparty.google.GoogleServiceUtil;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author jitendra
+ * <code>GoogleSyncImpl</code> provide service to upload contacts from agile to
+ * google and retrieve contacts from google.
  * 
+ * @author jitendra
  */
 public class GoogleSyncImpl extends TwoWaySyncService
 {
     private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 200;
+
+    /** The contact service. */
     private ContactsService contactService;
     private Long previous_synced_time = 0l;
     private Long last_synced_from_client = 0l;
 
+    /**
+     * fetch contacts from google.
+     */
     public void syncContactFromClient()
     {
 	int i = 0;
@@ -202,6 +210,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
     }
 
+    /**
+     * Save contacts in agile.
+     * 
+     * @param entries
+     *            the entries
+     */
     private void saveContactsInAgile(List<ContactEntry> entries)
     {
 	Contact contact;
@@ -226,6 +240,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	prefs.save();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.TwoWaySyncService#fetchNewContactsFromAgile
+     * ()
+     */
     @Override
     public List<Contact> fetchNewContactsFromAgile()
     {
@@ -233,6 +254,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.service.TwoWaySyncService#
+     * fetchUpdatedContactsFromAgile()
+     */
     @Override
     public List<Contact> fetchUpdatedContactsFromAgile()
     {
@@ -240,6 +267,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.TwoWaySyncService#uploadContactsToClient
+     * (java.util.List)
+     */
     @Override
     public void uploadContactsToClient(List<Contact> contacts)
     {
@@ -247,11 +281,24 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
+     */
     @Override
     public Class<? extends WrapperService> getWrapperService()
     {
 	// TODO Auto-generated method stub
 	return GoogleContactWrapperImpl.class;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.ContactSyncService#updateLastSyncedInPrefs
+     * ()
+     */
 
 }

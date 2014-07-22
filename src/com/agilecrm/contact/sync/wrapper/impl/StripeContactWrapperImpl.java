@@ -1,22 +1,31 @@
 package com.agilecrm.contact.sync.wrapper.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.sync.wrapper.WrapperServiceBuilder;
+import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
 
-public class StripeContactWrapperImpl extends WrapperServiceBuilder
+public class StripeContactWrapperImpl extends ContactWrapper
 {
 
     Customer customer;
     private String stripeFieldValue = null;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#wrapContact()
+     */
     @Override
     public void wrapContact()
     {
@@ -44,87 +53,9 @@ public class StripeContactWrapperImpl extends WrapperServiceBuilder
 	    }
 	    catch (org.json.JSONException e)
 	    {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	}
-    }
-
-    @Override
-    public void addName()
-    {
-	Card card = customer.getActiveCard();
-	if (card != null)
-	{
-	    contact.properties.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
-	}
-
-    }
-
-    @Override
-    public void addEmail()
-    {
-	// TODO Auto-generated method stub
-	contact.properties.add(new ContactField(Contact.EMAIL, customer.getEmail(), "work"));
-    }
-
-    @Override
-    public void addPhoneNumber()
-    {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addOrganization()
-    {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addDescription()
-    {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addTag()
-    {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addAddress()
-    {
-	Card card = customer.getActiveCard();
-	if (card != null)
-	{
-	    contact.properties.add(new ContactField(Contact.ADDRESS, getAddress(card), "office"));
-	}
-
-    }
-
-    @Override
-    public void addMoreCustomInfo()
-    {
-	// TODO Auto-generated method stub
-	// check stripe custom field
-	if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
-	{
-
-	    contact.properties.add(new ContactField(stripeFieldValue, customer.getId(), null));
-
-	}
-    }
-
-    @Override
-    public void addNotes()
-    {
-	// TODO Auto-generated method stub
-
     }
 
     /**
@@ -162,6 +93,97 @@ public class StripeContactWrapperImpl extends WrapperServiceBuilder
 	    e.printStackTrace();
 	}
 	return address.toString();
+    }
+
+    @Override
+    public ContactField getFirstName()
+    {
+	Card card = customer.getActiveCard();
+	if (card != null)
+	{
+	    return new ContactField(Contact.FIRST_NAME, card.getName(), null);
+	}
+
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public ContactField getEmail()
+    {
+	return new ContactField(Contact.EMAIL, customer.getEmail(), "work");
+    }
+
+    @Override
+    public ContactField getAddress()
+    {
+	Card card = customer.getActiveCard();
+
+	ContactField field = null;
+	if (card != null)
+	{
+	    field = new ContactField(Contact.ADDRESS, getAddress(card), "office");
+	}
+
+	return field;
+    }
+
+    public List<ContactField> getMoreCustomInfo()
+    {
+	List<ContactField> customFields = new ArrayList<ContactField>(0);
+	// TODO Auto-generated method stub
+	// check stripe custom field
+	if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
+	{
+	    customFields.add(new ContactField(stripeFieldValue, customer.getId(), null));
+	}
+
+	return customFields;
+    }
+
+    /**
+     * Following fields data is not available in stripe
+     */
+    @Override
+    public ContactField getPhoneNumber()
+    {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public ContactField getOrganization()
+    {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public String getDescription()
+    {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public List<String> getTags()
+    {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public List<Note> getNotes()
+    {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public ContactField getLastName()
+    {
+	// TODO Auto-generated method stub
+	return null;
     }
 
 }

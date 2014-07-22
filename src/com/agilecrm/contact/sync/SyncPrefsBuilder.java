@@ -23,9 +23,10 @@ public class SyncPrefsBuilder
     private SyncService api;
 
     /**
-     * initialize {@link ContactPrefs}
+     * initialize {@link ContactPrefs}.
      * 
      * @param prefs
+     *            the prefs
      * @return SyncPrefsBuilder
      */
     public SyncPrefsBuilder config(ContactPrefs prefs)

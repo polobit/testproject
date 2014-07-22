@@ -20,6 +20,11 @@ public abstract class TwoWaySyncService extends ContactSyncService
 
     private static final Integer MAX_UPLOAD_LIMIT = 1000;
 
+    /**
+     * Gets the new contacts.
+     * 
+     * @return the new contacts
+     */
     public List<Contact> getNewContacts()
     {
 	return null;

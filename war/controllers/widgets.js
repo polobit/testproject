@@ -37,7 +37,8 @@ var WidgetsRouter = Backbone.Router
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
 
 			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
-				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify","google-apps/salesforce":"salesforce" },
+				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify","google-apps/salesforce":"salesforce",
+				"google-apps/zoho-import":"zoho_sync"},
 
 			/**
 			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -662,13 +663,12 @@ var WidgetsRouter = Backbone.Router
 				$('#shopify').append(this.shopify_sync.render().el);
 				
 				/*salesforce import template*/
-				this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
-				$('#force').append(this.salesforce.render().el);
+				//this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				//$('#force').append(this.salesforce.render().el);
 
 				// adding zoho crm contact sync template preferences
-				// this.zoho_sync = new
-				// Base_Model_View({url:'core/api/zoho',template:'zoho-contact-sync'});
-				// $('#zoho').append(this.zoho_sync.render().el);
+				 this.zoho_sync = new Base_Model_View({url:'core/api/zoho/import-settings',template:'admin-settings-import-zoho-contact-sync'});
+			     $('#zoho').append(this.zoho_sync.render().el);
 
 				 /* Add stripe payment gateway contact sync template
 				 preferences*/
@@ -769,7 +769,7 @@ var WidgetsRouter = Backbone.Router
 				this.stripe_sync_setting = new Base_Model_View({ url : 'core/api/stripe/import-settings',
 					template : 'admin-settings-import-stripe-contact-sync-prefs', saveCallback : function(model)
 					{
-						showNotyPopUp("information", "Contacts sync initated", "top", 1000);
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
 					} });
 
 				$("#prefs-tabs-content").html(this.stripe_sync_setting.render().el);
@@ -788,6 +788,22 @@ var WidgetsRouter = Backbone.Router
 					{
 						$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
 					} })
+			},
+			
+			zoho_sync:function(){
+				
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+
+				this.zoho_sync_settings = new Base_Model_View({ url : 'core/api/zoho/import-settings',template : 'admin-settings-import-zoho-prefs',saveCallback:function(model){
+					showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+				}});
+					
+				$("#prefs-tabs-content").html(this.zoho_sync_settings.render().el);
+					
+				
 			}
 
 		});

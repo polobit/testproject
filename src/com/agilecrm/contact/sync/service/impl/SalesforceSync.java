@@ -20,11 +20,30 @@ public class SalesforceSync extends OneWaySyncService
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
+     */
     @Override
     public Class<? extends WrapperService> getWrapperService()
     {
 	// TODO Auto-generated method stub
 	return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.ContactSyncService#updateLastSyncedInPrefs
+     * ()
+     */
+    @Override
+    protected void updateLastSyncedInPrefs()
+    {
+	// TODO Auto-generated method stub
+
     }
 
 }
