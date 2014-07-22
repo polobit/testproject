@@ -150,7 +150,11 @@ $(function(){
        			{ 	      		
        				$(that).closest("li").parent('ul').find('.loading').remove();
        				$(that).closest("li").remove();
-       				App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+       				
+       			// Updates to both model and collection
+	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+	       			
+	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
        				
        				// Also deletes from Tag class if no more contacts are found with this tag
        				$.ajax({

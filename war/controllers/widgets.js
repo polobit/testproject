@@ -450,7 +450,7 @@ var WidgetsRouter = Backbone.Router
 			{
 				if (!id)
 					show_set_up_widget("Xero", 'xero-login',
-							'http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + 'http://agilecrmbeta.appspot.com/scribe?data=');
+							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
 				else
 				{
 					{
@@ -463,7 +463,7 @@ var WidgetsRouter = Backbone.Router
 													"Xero",
 													'xero-login',
 													data,
-													'/scribe?service=xero&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Xero/xero"));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
 										});
 						return;
 
@@ -486,7 +486,7 @@ var WidgetsRouter = Backbone.Router
 																		"Xero",
 																		'xero-login',
 																		data,
-																		'/scribe?service=xero&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Xero/xero"),
+																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="),
 																		data1);
 															});
 											return;
@@ -495,7 +495,7 @@ var WidgetsRouter = Backbone.Router
 										else
 										{
 											show_set_up_widget("Xero", 'xero-login',
-													'/scribe?service=xero&return_url=' + encodeURIComponent(window.location.href));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "backend/XeroServlet?data="));
 										}
 									});
 				}
@@ -622,7 +622,8 @@ var WidgetsRouter = Backbone.Router
 			 */
 			Custom : function(id)
 			{
-
+				if(id)
+				fill_form(id, "Custom", 'custom-widget-settings');
 			},
 
 			/**

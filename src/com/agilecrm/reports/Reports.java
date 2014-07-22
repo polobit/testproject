@@ -14,6 +14,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -99,6 +100,11 @@ public class Reports implements Serializable
     @SuppressWarnings("rawtypes")
     public Collection generateReports()
     {
+	SearchRule rule = new SearchRule();
+	rule.LHS = "type";
+	rule.CONDITION = RuleCondition.EQUALS;
+	rule.RHS = "PERSON";
+	rules.add(rule);
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules);
     }
 
@@ -114,5 +120,10 @@ public class Reports implements Serializable
     public Collection generateReports(int count, String cursor)
     {
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
+    }
+
+    public Long getCount()
+    {
+	return new AppengineSearch<Contact>(Contact.class).query.getCount(rules);
     }
 }

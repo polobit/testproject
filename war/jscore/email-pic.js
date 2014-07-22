@@ -6,6 +6,17 @@
  */
 $(function()
 {
+	
+	// Using initials as image 
+	$('body').live('agile_collection_loaded', function(event, element)
+	{
+		$(".img-inital").closest("img").error(function()
+		{
+			$(this).initial({charCount: 2});
+		});
+
+	});
+	
 	//prevent default focusout of email
 	$('#email').live('focusout', function(e)
 	{

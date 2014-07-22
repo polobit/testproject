@@ -402,7 +402,7 @@ public class ContactUtil
 	    contact.removeTags(tags_array);
 	}
 
-	dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     /**

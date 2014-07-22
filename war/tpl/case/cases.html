@@ -83,7 +83,7 @@
         	{{#each contacts}}
 			<div style="display:inline-block;">
 				{{#if_equals type "PERSON"}}
-          	 	<img class='thumbnail' src="{{gravatarurl properties 50}}" width="40px" height="40px" style=" width:40px; height:40px; " title="{{contact_name_necessary this}}" />
+          	 	<img class='thumbnail img-inital' data-name="{{dataNameAvatar properties}}" src="{{nameAvatar properties 50}}" width="40px" height="40px" style=" width:40px; height:40px; " title="{{contact_name_necessary this}}" />
 				{{/if_equals}}
 
 				{{#if_equals type "COMPANY"}}
@@ -127,7 +127,7 @@
 				{{#each_with_index contacts}}
                 	<div class="span4" style="display:inline-block;margin:5px;margin-left:25px;">
 					{{#if_equals type "PERSON"}}
-                    	<img class="thumbnail" src="{{gravatarurl properties 50}}" width="40px" height="40px" style=" width:40px; height:40px; "/>
+                    	<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{nameAvatar properties 50}}" width="40px" height="40px" style=" width:40px; height:40px; "/>
                     	<div style="display:inline-block;text-overflow:ellipsis;white-space:nowrap;width:90px;overflow:hidden;">
                         	{{contact_name_necessary this}}
 					{{/if_equals}}

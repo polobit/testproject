@@ -329,21 +329,25 @@ function extractLast( term ) {
  * @param jsonData - prefilled data
  *
  **/
-function prefill_from_details(nodeJSONDefinition, jsonData)
+function prefill_from_details(nodeJSONDefinition)
 {
-	 // Prefill only new Send Email node of toolbar and addons
-	if(nodeJSONDefinition["name"] == "Send Email" && (jsonData == undefined || jsonData == "/json/nodes/email/send_email.jsp"))
-     {
-    	 var current_domain_user = window.parent.CURRENT_DOMAIN_USER;
+	try
+	{
+		var current_domain_user = window.parent.CURRENT_DOMAIN_USER;
     	 
-    	 jsonData = {
-    			     	"from_name" : current_domain_user["name"],
-    			     	"from_email" : current_domain_user["email"],
-    	                "to_email" : "{{email}}"
-    	 			}
-     }
-	 
-	 return jsonData;
+		var from_json = {
+    		       			"from_name" : current_domain_user["name"],
+    		       			"from_email" : current_domain_user["email"]
+    	 	        	}
+    	 
+		return JSON.parse(JSON.stringify(from_json));
+    }
+	catch(err)
+    {
+    	console.log("Error occured in prefill_from_details...");
+    	console.log(err);
+    	return {};
+    }
 }
 
 /**

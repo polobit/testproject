@@ -3,6 +3,7 @@ package com.agilecrm.scribe;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
@@ -50,7 +51,6 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_STRIPE = "stripe";
     public static final String SERVICE_TYPE_FRESHBOOKS = "freshbooks";
     public static final String SERVICE_TYPE_GOOGLE_DRIVE = "google_drive";
-    public static final String SERVICE_TYPE_XERO = "xero";
     public static final String SERVICE_TYPE_FACEBOOK = "facebook";
     public static final String SERVICE_TYPE_STRIPE_IMPORT = "stripe_import";
     public static final String SERVICE_TYPE_SHOPIFY = "shopify_import";
@@ -92,6 +92,7 @@ public class ScribeServlet extends HttpServlet
      */
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
+
 	/*
 	 * OAuth1.0 - Check if it is first time or returning from OAuth1.0
 	 * authentication.If token and verifier is present, we just store or
@@ -182,6 +183,17 @@ public class ScribeServlet extends HttpServlet
      */
     public void setupOAuth(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
+
+	// handle facebook popup windows
+	if ("facebook".equalsIgnoreCase(req.getParameter("act")))
+	{
+	    PrintWriter out = resp.getWriter();
+	    resp.setContentType("text/html");
+	    out.println("<script type=\"text/javascript\">");
+	    out.println("this.close()");
+	    out.println("</script>");
+	    return;
+	}
 
 	// Get service name from request
 	String serviceName = req.getParameter("service");

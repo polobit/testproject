@@ -387,13 +387,20 @@ function addTicketToZendesk()
 	$('#send_request').click(function(e)
 	{
 		e.preventDefault();
-
+		
+		//check button disabled or not
+		if ($("#send_request").attr('disabled'))
+			return;
+		
 		// Checks whether all the input fields are filled
 		if (!isValidForm($("#zendesk_messageForm")))
 		{
 			return;
 		}
 
+		//disabling the send request button after first click
+		$("#send_request").attr("disabled", true);
+		
 		// Sends request to Zendesk to add ticket
 		sendRequestToZendesk("/core/api/widgets/zendesk/add/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
 	});
@@ -443,13 +450,20 @@ function updateTicketInZendesk(ticket_id)
 	$('#send_request').click(function(e)
 	{
 		e.preventDefault();
-
+		
+		//check button disabled or not
+		if ($("#send_request").attr('disabled'))
+			return;
+		
 		// Checks whether all the input fields are filled
 		if (!isValidForm($("#zendesk_messageForm")))
 		{
 			return;
 		}
-
+		
+		//disabling the send request button after first click
+		$("#send_request").attr("disabled", true);
+		
 		sendRequestToZendesk("/core/api/widgets/zendesk/update/" + Zendesk_Plugin_Id, "zendesk_messageForm", "zendesk_messageModal", "add-ticket-error-panel");
 	});
 }

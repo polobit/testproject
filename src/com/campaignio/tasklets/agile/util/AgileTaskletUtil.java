@@ -249,6 +249,103 @@ public class AgileTaskletUtil
     }
 
     /**
+     * Converts company contact object into json object.
+     * 
+     * @param contact
+     *            Contact object that subscribes to workflow.
+     * @return JsonObject of contact.
+     */
+    public static JSONObject getCompanyJSON(Contact contact)
+    {
+	if (contact == null)
+	    return null;
+
+	// Return if contact is not company.
+	if (!(contact.type.equals(Contact.Type.COMPANY)))
+	{
+	    System.err.println("Contact should be company...");
+	    return null;
+	}
+
+	try
+	{
+	    JSONObject subscriberJSON = new JSONObject();
+
+	    List<ContactField> properties = contact.getProperties();
+
+	    // Contact Properties
+	    for (ContactField field : properties)
+	    {
+		// If field is null just continue
+		if (field == null)
+		    continue;
+
+		if (field.name != null && field.value != null)
+		{
+
+		    // Converts address string to JSONObject
+		    if (field.name.equals(Contact.ADDRESS))
+		    {
+			try
+			{
+			    // Address property is saved as json string with
+			    // city, state
+			    // and country, so converting to json.
+			    subscriberJSON.put("location", new JSONObject(field.value));
+			}
+			catch (JSONException e)
+			{
+			    e.printStackTrace();
+			    System.err.println("Exception occured while converting address string to json "
+				    + e.getMessage());
+			}
+
+			// Already inserted address as location, so continue
+			continue;
+		    }
+
+		    subscriberJSON.put(field.name, field.value);
+		}
+	    }
+
+	    // Get contact owner.
+	    DomainUser domainUser = contact.getOwner();
+	    JSONObject owner = new JSONObject();
+
+	    if (domainUser != null)
+	    {
+		owner.put("id", domainUser.id);
+		owner.put("name", domainUser.name);
+		owner.put("email", domainUser.email);
+	    }
+
+	    // Inserts contact owner-name and owner-email.
+	    subscriberJSON.put("owner", owner);
+
+	    // Returns Created and Updated date in GMT with given format.
+	    subscriberJSON.put("created_date",
+		    DateUtil.getGMTDateInGivenFormat(contact.created_time * 1000, "MM/dd/yyyy"));
+	    subscriberJSON.put("modified_date",
+		    DateUtil.getGMTDateInGivenFormat(contact.updated_time * 1000, "MM/dd/yyyy"));
+
+	    System.out.println("SubscriberJSON in WorkflowUtil: " + subscriberJSON);
+
+	    // Add Id and data
+	    JSONObject subscriberJSONWithAddedParams = new JSONObject();
+
+	    subscriberJSONWithAddedParams.put("data", subscriberJSON).put("id", contact.id);
+
+	    return subscriberJSONWithAddedParams;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while converting contact to subscriberJSON " + e.getMessage());
+	    return null;
+	}
+    }
+
+    /**
      * Converts list of contacts into JSONArray.
      * 
      * @param contacts

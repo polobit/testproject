@@ -24,18 +24,6 @@ public class OAuth2Servlet extends HttpServlet
      */
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-
-	String data = request.getParameter("data");
-	System.out.println("data is :" + data);
-	if (data != null)
-	{
-	    System.out.println(data);
-	    // ScribeUtil.editXeroPrefs(request,data);
-	    String returnURL = (String) request.getSession().getAttribute("return_url");
-
-	    return;
-	}
-
 	/*
 	 * This parameter specifies the path from where the request is made and
 	 * helps us to redirect there

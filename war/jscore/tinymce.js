@@ -55,8 +55,8 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 			$('#loading-editor').html("");
 			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
-				"textcolor link image preview code"
-			], menubar : false,
+			    "textcolor link image preview code"], 
+			    menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
@@ -162,8 +162,8 @@ function reinitialize_tinymce_editor_instance(selector, callback)
 	    setTimeout(function(){
 
 	    	// Show textarea and remove loading img
-			$('#'+ selector).css('display', '');
-			$('#loading-editor').html("");
+	    	$('#loading-editor').html("");
+//	    	$('#'+ selector).css('display', '');
 			
 	    	tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
 	    	
@@ -171,8 +171,10 @@ function reinitialize_tinymce_editor_instance(selector, callback)
 	    	if(callback != undefined && typeof (callback) === "function")
 	    		callback();
 	    		
+	    	// Show hidden tinymce
+	    	$('.mce-tinymce').css('display','');
 
-	    }, 5);
+	    }, 1);
 	
 	}
 	catch (err)
@@ -193,7 +195,7 @@ function remove_tinymce_editor_instance(selector)
 	try
 	{
 		// Removes all tinymce editors 
-		for(var i=0; i<tinymce.editors.length; i++)
+		for(var i=0; i < tinymce.editors.length; i++)
 		{
 			tinyMCE.remove(tinyMCE.editors[i]);
 		}

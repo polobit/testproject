@@ -15,7 +15,7 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
 
     console.log("constructNodeFromDefinition "+nodeId);
 	console.log(nodeJSONDefinition);
-   
+	
     // Remove old data
     $("#nodeui").removeData();
     $("#nodeui").empty();
@@ -43,20 +43,16 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
     // Clone
     var newJSONDefinition = JSON.parse(JSON.stringify(nodeJSONDefinition));
     
-    
-    // prefills from params of send email node with current username and email
-    jsonData = prefill_from_details(newJSONDefinition, jsonData);
-     
     if(jsonData != undefined)
 	    newJSONDefinition = changeDefaultValues(newJSONDefinition, jsonData);
         
     // Change Grid default values       
     constructUI($("#nodeui"), newJSONDefinition);
     
-    // Deserialize form values
-    if(jsonData != undefined)
+    // Deserialize form values. 2nd condition is needed to avoid deserialize 
+    // for Send Email node in addons.
+    if(jsonData != undefined && jsonData != "/json/nodes/email/send_email.jsp")
 	    $("#nodeui").deserialize(jsonData);
-    
     
     // Set node name field
     if( nodeId == undefined || nodeId == null ) {    
@@ -73,6 +69,15 @@ function constructNodeFromDefinition(nodeJSONDefinition, jsonData, nodeId) {
      	
      }
             	    
+    // Init SendEmail from name and email with current user details
+    if(nodeJSONDefinition["name"] == "Send Email" && (jsonData == undefined || jsonData == "/json/nodes/email/send_email.jsp"))
+    {
+    	 // prefills from params of send email node with current username and email
+        var current_user = prefill_from_details(newJSONDefinition);
+         
+        $("#nodeui").find("[name=from_name]").val(current_user["from_name"]);
+        $("#nodeui").find("[name=from_email]").val(current_user["from_email"]);
+    }
     
     // Init validator
     initValidator($("#nodeui"), saveNode);

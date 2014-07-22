@@ -200,10 +200,6 @@ function savefreshBooksWidgetPrefs()
     freshbooks_prefs["freshbooks_url"] = $("#freshbooks_url").val();
 
     // Saves the preferences into widget with FreshBooks widget name
-    
-    //Disabling the savebutton after first click
-    $("#freshbooks_save_token").attr("disabled", true);
-    
     save_widget_prefs("FreshBooks", JSON.stringify(freshbooks_prefs), function(data)
     {
 	console.log('In freshbooks save success');
@@ -409,11 +405,8 @@ function show_set_up_widget(widget_name, template_id, url, model)
     var models;
     $('#prefs-tabs-content').html(getRandomLoadingImg());
     if (model)
-    {
-    console.log(model)	
 	el = $(getTemplate("widget-settings", model));
-    }
-	else
+    else
     {
 	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 	{
@@ -527,7 +520,7 @@ function set_up_access(widget_name, template_id, data, url, model)
     if (json.name == "Twilio")
 	json['outgoing_numbers'] = data;
 
-    else if (json.name == "Linkedin" || json.name == "Twitter" || json.name == "Facebook")
+    else if (json.name == "Linkedin" || json.name == "Twitter")
 	json['profile'] = data;
 
     else

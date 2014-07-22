@@ -266,12 +266,17 @@ var WorkflowsRouter = Backbone.Router
 							$("time.log-created-time", el).timeago();
 						});
 
-						$('#logs-campaign-name').text(workflowName);
+					   // $('#logs-campaign-name').text(workflowName);
 						
 						$('#log-filter-title').html(log_filter_title);
 					} });
 
-				logsListView.collection.fetch();
+				logsListView.collection.fetch({ success : function(collection)
+				{
+					if (collection.length === 0)
+						fill_logs_slate('logs-slate', log_type.split('=')[1], workflowName);
+				} });
+				
 				$('#campaign-analysis-tabs-content').html(logsListView.el);
 				
 				$('#campaign-tabs .active').removeClass('active');
@@ -407,7 +412,7 @@ var WorkflowsRouter = Backbone.Router
 						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function(id)
 						{
 							$('#campaign-select', el).find('option[value=' + campaign_id + ']').attr('selected', 'selected');
-						}, optionsTemplate);
+						}, optionsTemplate, false, el);
 
 					}
 					else
@@ -426,7 +431,7 @@ var WorkflowsRouter = Backbone.Router
 						 * @param optionsTemplate-
 						 *            to fill options with workflows
 						 */
-						fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate);
+						fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
 					}
 				},
 
@@ -503,12 +508,20 @@ var WorkflowsRouter = Backbone.Router
 						}
 
 						// Calls TagsTypeAhead on focus event.
-						if (type == 'TAG_IS_ADDED' || type == 'TAG_IS_DELETED')
+						if (type == 'TAG_IS_ADDED' || type == 'TAG_IS_DELETED'){
+							
+							// Show custom tags textbox
+							$('#trigger-custom-tags', el).css('display','');
+							
 							$('.trigger-tags', el).live("focus", function(e)
 							{
 								e.preventDefault();
 								addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));
 							});
+						}
+						
+						if(type == 'ADD_SCORE')
+							$('#trigger-custom-score', el).css('display','');
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
@@ -534,7 +547,7 @@ var WorkflowsRouter = Backbone.Router
 							{
 								$('#campaign-select', el).find('option[value=' + value.campaign_id + ']').attr('selected', 'selected');
 							}
-						}, optionsTemplate);
+						}, optionsTemplate, false, el);
 					},
 
 					saveCallback : function()
@@ -546,9 +559,7 @@ var WorkflowsRouter = Backbone.Router
 
 				});
 
-				var view = view.render();
-
-				$("#content").html(view.el);
+				$("#content").html(view.render().el);
 			},
 
 			/**

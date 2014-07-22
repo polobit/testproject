@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
@@ -118,11 +117,6 @@ public class ScribeUtil
 		    com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
 		    Globals.GOOGLE_CLIENT_ID, ScribeServlet.GOOGLE_DRIVE_SCOPE);
 
-	// Create a Service specific to xero
-	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_XERO))
-	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_XERO, com.agilecrm.scribe.api.XeroApi.class,
-		    callback, Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, null);
-
 	// Create a Service specific to facebook
 	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
 	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_FACEBOOK,
@@ -215,6 +209,7 @@ public class ScribeUtil
     public static void saveTokens(HttpServletRequest req, HttpServletResponse resp, OAuthService service,
 	    String serviceName, Token accessToken, String code) throws IOException
     {
+
 	// We use Scribe for OAuth2 Authentication as well
 	if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_OAUTH_LOGIN))
 	{
@@ -230,8 +225,8 @@ public class ScribeUtil
 	    System.out.println("Cannot find Agile User");
 	    return;
 	}
-
 	/*
+	 * 
 	 * If service name is Twitter or LinkedIn, widget is fetched by
 	 * plugin_id in session and widget is updated with new token key and
 	 * secret key
@@ -270,10 +265,6 @@ public class ScribeUtil
 	    // Appends code in return url
 	    returnURL = returnURL + "&code=" + code;
 	    req.getSession().setAttribute("return_url", returnURL);
-	}
-	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_XERO))
-	{
-	    saveXeroPrefs(req, accessToken);
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
 	{
@@ -568,51 +559,13 @@ public class ScribeUtil
     }
 
     /**
-     * If service type is xero, we make a post request with the code and get the
-     * access token,widget is fetched by plugin_id in session and is updated
-     * with new access token and refresh token
+     * save facebook prefs data contain accesstoken tokensecret etc
      * 
-     * @param {@link HttpServletRequest}
+     * @param req
      * @param code
-     *            {@link String} code retrieved after OAuth
+     * @param service
      * @throws IOException
      */
-    public static void saveXeroPrefs(HttpServletRequest req, Token accessToken) throws IOException
-    {
-	System.out.println("In Xero save");
-
-	/*
-	 * Make a post request and retrieve tokens
-	 */
-	Map<String, String> properties = new HashMap<String, String>();
-	properties.put("token", accessToken.getToken());
-	properties.put("secret", accessToken.getSecret());
-	properties.put("time", String.valueOf(System.currentTimeMillis()));
-	try
-	{
-	    String res = SignpostUtil.accessURLWithOauth(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID,
-		    accessToken.getToken(), accessToken.getSecret(), "https://api.xero.com/api.xro/2.0/users", "GET",
-		    "", "XERO");
-	    JSONObject xeroProfile = new JSONObject(res);
-	    JSONObject js = (JSONObject) xeroProfile.getJSONArray("Users").get(0);
-	    properties.put("xeroId", js.getString("UserID"));
-	    properties.put("xeroemail", js.getString("EmailAddress"));
-	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
-	// Gets widget name from the session
-	String serviceType = (String) req.getSession().getAttribute("service_type");
-
-	System.out.println("serviceName " + serviceType);
-
-	// update widget with tokens
-
-	saveWidgetPrefsByName(serviceType, properties);
-
-    }
-
     public static void saveFacebookPrefs(HttpServletRequest req, String code, OAuthService service) throws IOException
     {
 	System.out.println("In Facebook save");

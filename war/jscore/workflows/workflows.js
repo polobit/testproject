@@ -302,3 +302,54 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
                 }
     });
 }
+
+/**
+ * Fills pad-content for logs when empty json obtains.
+ * 
+ * @param id -
+ *          slate div id.
+ * @param type - 
+ *          to match with LOGS_PAD_CONTENT json key
+ **/
+function fill_logs_slate(id, type, workflow_name)
+{
+	if(type == undefined)
+		type="ALL";
+	
+	var LOGS_PAD_CONTENT = {
+		    "ALL": {
+		        "title": "No logs for this campaign yet",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SENT": {
+		    	"title": "No emails sent yet",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_OPENED": {
+		    	"title": "No emails opened in this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_CLICKED": {
+		    	"title": "No emails clicked in this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "UNSUBSCRIBED": {
+		    	"title": "No one unsubscribed from this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_HARD_BOUNCED": {
+		    	"title": "No hard bounces seen for  this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SOFT_BOUNCED": {
+		    	"title": "No soft bounces seen for this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SPAM": {
+		    	"title": "No spam reports seen for this campaign",
+				"image": "/img/clipboard.png"
+		    }
+		}
+
+	$("#" + id).html(getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type]));
+}

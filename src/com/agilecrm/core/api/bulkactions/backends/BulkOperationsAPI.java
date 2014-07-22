@@ -45,6 +45,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -216,6 +217,20 @@ public class BulkOperationsAPI
 	System.out.println("Total contacts subscribed to campaign " + workflowId + " is " + String.valueOf(count));
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN, String.valueOf(count));
+
+	try
+	{
+	    Mailgun.sendMail("campaigns@agile.com", "Campaign Observer", "naresh@agilecrm.com", null, null,
+		    "Campaign Initiated in " + NamespaceManager.get(), null,
+		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
+		            + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
+		            + count, null);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while sending campaign initiated mail " + e.getMessage());
+	}
     }
 
     /**
@@ -295,7 +310,7 @@ public class BulkOperationsAPI
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(count));
+	        .toString(), String.valueOf(count));
     }
 
     @SuppressWarnings("unchecked")
@@ -367,7 +382,7 @@ public class BulkOperationsAPI
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(count));
+	        .toString(), String.valueOf(count));
     }
 
     /**

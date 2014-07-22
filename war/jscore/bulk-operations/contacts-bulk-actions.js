@@ -326,7 +326,11 @@ $(function()
 			populate_send_email_details();
 			
 			// Setup HTML Editor
-			setupTinyMCEEditor('textarea#email-body');
+			setupTinyMCEEditor('textarea#email-body', false, function(){
+				
+				// Reset tinymce content
+				set_tinymce_content('email-body', '');
+			 });
 			
 			// when SELECT_ALL is true i.e., all contacts are selected.
 			if(id_array.length === 0)

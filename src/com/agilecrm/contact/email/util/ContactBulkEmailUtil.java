@@ -41,6 +41,10 @@ public class ContactBulkEmailUtil
 
 	    for (Contact contact : contactList)
 	    {
+
+		if (contact == null)
+		    continue;
+
 		// if contact has no email
 		if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 		{
@@ -49,14 +53,19 @@ public class ContactBulkEmailUtil
 		}
 
 		// Converts contact to JSON
-		JSONObject subscriberJSON = AgileTaskletUtil.getSubscriberJSON(contact).getJSONObject("data");
+		JSONObject subscriberJSON = (contact.type.equals(Contact.Type.COMPANY)) ? AgileTaskletUtil
+		        .getCompanyJSON(contact) : AgileTaskletUtil.getSubscriberJSON(contact);
 
-		// Compiles subject and body mustache templates
-		String replacedSubject = MustacheUtil.compile(subject, subscriberJSON);
-		String replacedBody = MustacheUtil.compile(body, subscriberJSON);
+		if (subscriberJSON != null)
+		{
+		    // Compiles subject and body mustache templates
+		    String replacedSubject = MustacheUtil.compile(subject, subscriberJSON.getJSONObject("data"));
+		    String replacedBody = MustacheUtil.compile(body, subscriberJSON.getJSONObject("data"));
 
-		ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, contact.getContactFieldValue(Contact.EMAIL), null, null, replacedSubject,
-			replacedBody, signature, contact, trackClicks);
+		    ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName,
+			    contact.getContactFieldValue(Contact.EMAIL), null, null, replacedSubject, replacedBody,
+			    signature, contact, trackClicks);
+		}
 	    }
 
 	}
@@ -68,5 +77,4 @@ public class ContactBulkEmailUtil
 	}
 	return noEmailsCount;
     }
-
 }

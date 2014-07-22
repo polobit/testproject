@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@page import="com.campaignio.logger.Log.LogType"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.tasklets.agile.util.AgileTaskletUtil"%>
 <%@page import="com.agilecrm.workflows.Workflow"%>
@@ -7,6 +8,8 @@
 <%@page import="com.agilecrm.contact.Contact"%>
 <%@page import="com.agilecrm.contact.util.ContactUtil"%>
 <%@page import="com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil"%>
+<%@page import="com.agilecrm.workflows.status.util.CampaignSubscribersUtil"%>
+<%@page import="com.campaignio.logger.util.LogUtil"%>
 
 <html>
 <head>
@@ -356,19 +359,26 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				        if(workflow == null)
 				        {
 				            System.err.println("Workflow is null...");
-				            return;
 				        }
-				        	
-				        String tag =  workflow.unsubscribe.tag;
+				        else
+				        {	
+				        	String tag =  workflow.unsubscribe.tag;
 				        
-				        System.out.println("Workflow unsubscribe tags to be removed - " + tag);
+				        	System.out.println("Workflow unsubscribe tags to be removed - " + tag);
+				        
+				        	// Remove unsubscribe tag
+				        	if (!StringUtils.isBlank(tag))
+								contact.removeTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
 				        	
-				        // Remove unsubscribe tag
-				        if (!StringUtils.isBlank(tag))
-							contact.removeTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
+				        	// Remove unsubscribe status
+				        	UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
 				        	
-				        // Remove unsubscribe status
-				        UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
+				        	// Remove campaign status to delete from Removed Subscribers list
+				        	CampaignSubscribersUtil.removeCampaignStatus(contact, campaignId);
+				        	
+				        	// Remove Unsubscribe logs 
+				        	LogUtil.deleteSQLLogs(campaignId, String.valueOf(contact.id), LogType.UNSUBSCRIBED);
+				        }
 				        
 					}
 					catch (Exception e)
