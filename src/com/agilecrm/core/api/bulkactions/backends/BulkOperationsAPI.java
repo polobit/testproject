@@ -25,6 +25,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportEmailUtil;
+import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -46,7 +47,6 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Duration;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -672,7 +672,7 @@ public class BulkOperationsAPI
 	if (StringUtils.isEmpty(duration))
 	    return;
 
-	Duration interval = Duration.valueOf(duration);
+	SyncFrequency interval = SyncFrequency.valueOf(duration);
 
 	// Fetches all Prefs and start sync
 	List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(interval);

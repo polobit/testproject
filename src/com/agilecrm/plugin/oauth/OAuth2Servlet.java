@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.scribe.util.ScribeUtil;
-
 /**
  * <code>OAuth2Servlet</code> handles the request after OAuth2.0 specification
  * for any service
@@ -24,11 +22,8 @@ public class OAuth2Servlet extends HttpServlet
      * code and state parameters for any OAuth2.0 request and redirected to
      * state with code appended as query param
      */
-    public void service(HttpServletRequest request, HttpServletResponse response)
-	    throws IOException
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-
-    	
 	/*
 	 * This parameter specifies the path from where the request is made and
 	 * helps us to redirect there
@@ -46,7 +41,8 @@ public class OAuth2Servlet extends HttpServlet
 	System.out.println("OAuth2Servlet code " + code);
 
 	/*
-	 * If state is not null, the response is redirected to the path specified in state along with code as query parameter
+	 * If state is not null, the response is redirected to the path
+	 * specified in state along with code as query parameter
 	 */
 	if (state != null)
 	    response.sendRedirect(state + "?code=" + code);

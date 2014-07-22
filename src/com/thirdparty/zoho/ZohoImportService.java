@@ -5,10 +5,10 @@ import java.util.Date;
 
 import org.codehaus.jettison.json.JSONArray;
 
+import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -74,7 +74,7 @@ public class ZohoImportService
      * @param key
      * @throws Exception
      */
-    public  void importAccounts(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
+    public void importAccounts(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
     {
 	try
 	{
@@ -111,7 +111,7 @@ public class ZohoImportService
      * @param key
      * @throws Exception
      */
-    public  void importContacts(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
+    public void importContacts(ContactPrefs contactPrefs, Key<DomainUser> key) throws Exception
     {
 	try
 	{
@@ -142,7 +142,7 @@ public class ZohoImportService
      * @param prefs
      * @param key
      */
-    public  void importCases(ContactPrefs prefs, Key<DomainUser> key)
+    public void importCases(ContactPrefs prefs, Key<DomainUser> key)
     {
 	try
 	{
@@ -161,7 +161,7 @@ public class ZohoImportService
      * @param prefs
      * @param key
      */
-    public  void importTask(ContactPrefs prefs, Key<DomainUser> key)
+    public void importTask(ContactPrefs prefs, Key<DomainUser> key)
     {
 	try
 	{
@@ -180,7 +180,7 @@ public class ZohoImportService
      * @param prefs
      * @param key
      */
-    public  void importEvent(ContactPrefs prefs, Key<DomainUser> key)
+    public void importEvent(ContactPrefs prefs, Key<DomainUser> key)
     {
 	try
 	{
@@ -202,7 +202,7 @@ public class ZohoImportService
 
     public void sync()
     {
-	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
+	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
 	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
 	String d = df.format(new Date());
 	Key<DomainUser> key = pref.getDomainUser();

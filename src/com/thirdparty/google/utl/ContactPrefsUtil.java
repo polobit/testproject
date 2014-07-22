@@ -5,18 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Duration;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.groups.GoogleGroupDetails;
 
 public class ContactPrefsUtil
 {
-    public static void delete(Type type)
+    public static void delete(SyncClient type)
     {
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(type);
 	prefs.delete();
@@ -30,10 +30,10 @@ public class ContactPrefsUtil
      *            {@link ContactPrefs.Type} from which contacts are imported
      * @return
      */
-    public static ContactPrefs getPrefsByType(ContactPrefs.Type type)
+    public static ContactPrefs getPrefsByType(SyncClient type)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("type", type);
+	searchMap.put("client", type);
 	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
 	return ContactPrefs.dao.getByProperty(searchMap);
     }
@@ -51,7 +51,7 @@ public class ContactPrefsUtil
 
     }
 
-    public static List<Key<ContactPrefs>> getAllKeysBasedOnDuration(Duration duration)
+    public static List<Key<ContactPrefs>> getAllKeysBasedOnDuration(SyncFrequency duration)
     {
 	return ContactPrefs.dao.listKeysByProperty("duration", duration);
     }
@@ -75,7 +75,7 @@ public class ContactPrefsUtil
 	return ContactPrefs.dao.fetchAll();
     }
 
-    public static List<ContactPrefs> getprefs(Duration duration)
+    public static List<ContactPrefs> getprefs(SyncFrequency duration)
     {
 	Map<String, Object> queryMap = new HashMap<String, Object>();
 	queryMap.put("duration", duration);

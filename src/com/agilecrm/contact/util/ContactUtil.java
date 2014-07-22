@@ -653,7 +653,7 @@ public class ContactUtil
 	if (oldContact != null)
 	    return mergeContactFeilds(contact, oldContact);
 
-	return contact;
+	return oldContact;
 
     }
 

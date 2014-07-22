@@ -11,10 +11,10 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.CSVUtil.ImportStatus;
 import com.agilecrm.util.email.SendMail;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -66,7 +66,7 @@ public class StripeImportUtil
 	 * store last customer id to get next records from stripe if last
 	 * customerID is null then it will fetch records from start of index
 	 */
-	String lastCustomerID = prefs.userName;
+	// String lastCustomerID = prefs.userName;
 
 	// initialize total saved contact
 	int savedContacts = 0;
@@ -95,8 +95,8 @@ public class StripeImportUtil
 	    {
 		HashMap<String, Object> options = new HashMap<String, Object>();
 		options.put("limit", 100);
-		options.put("starting_after", lastCustomerID);
-		CustomerCollection collections = Customer.all(options, prefs.token);
+		options.put("starting_after", null);
+		CustomerCollection collections = Customer.all(options, null);
 		List<Customer> customers = collections.getData();
 		total += customers.size();
 		for (Customer c : customers)
@@ -115,7 +115,7 @@ public class StripeImportUtil
 		{
 		    Customer customer = customers.get(customers.size() - 1);
 
-		    lastCustomerID = customer.getId();
+		    // lastCustomerID = customer.getId();
 
 		}
 
@@ -127,7 +127,7 @@ public class StripeImportUtil
 	     * update last sync check
 	     */
 
-	    updateLastestSync(prefs, lastCustomerID);
+	    // updateLastestSync(prefs, lastCustomerID);
 
 	    buildStripeImportStatus(status, ImportStatus.TOTAL, total);
 	    buildStripeImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
@@ -154,7 +154,7 @@ public class StripeImportUtil
      */
     private static void updateLastestSync(ContactPrefs pref, String lastCustomerID)
     {
-	pref.userName = lastCustomerID;
+	// pref.userName = lastCustomerID;
 	pref.save();
 
     }

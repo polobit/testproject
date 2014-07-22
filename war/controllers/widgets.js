@@ -37,7 +37,8 @@ var WidgetsRouter = Backbone.Router
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
 
 			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
-				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify" },
+				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify","google-apps/salesforce":"salesforce",
+				"google-apps/zoho-import":"zoho_sync"},
 
 			/**
 			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -642,7 +643,11 @@ var WidgetsRouter = Backbone.Router
 				// Adds header
 				$('#prefs-tabs-content')
 						.html(
-								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import contacts from Google</small></h2></div><div class="span11" style="margin-left:0px;"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import contact from E-commerce</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="shopify"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>CRM <small>import contact from CRM</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="zoho"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>Payment <small>import contact from payment gateway</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="stripe"></div></div></div>'
+								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import Contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>'+
+								'<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + 
+								'<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import Contact from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' +
+								'<div class="row-fluid"><div class="page-header"><h2>CRM <small>import Contact from CRM</small></h2></div><div class="span11"><div id ="zoho"></div><div id ="force"></div></div></div>'+
+								'<div class="row-fluid"><div class="page-header"><h2>Payment <small>import Contact from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
 
 						);
 
@@ -654,17 +659,20 @@ var WidgetsRouter = Backbone.Router
 				// console.log(getTemplate("import-google-contacts", {}));
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
 
-				// Adding E-commerce Pref
+				/* Add E-commerce Prefs template*/
 				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/get-prefs', template : 'admin-settings-import-shopify-contact-sync' });
 				$('#shopify').append(this.shopify_sync.render().el);
+				
+				/*salesforce import template*/
+				//this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				//$('#force').append(this.salesforce.render().el);
 
 				// adding zoho crm contact sync template preferences
-				// this.zoho_sync = new
-				// Base_Model_View({url:'core/api/zoho',template:'zoho-contact-sync'});
-				// $('#zoho').append(this.zoho_sync.render().el);
+				 this.zoho_sync = new Base_Model_View({url:'core/api/zoho/import-settings',template:'admin-settings-import-zoho-contact-sync'});
+			     $('#zoho').append(this.zoho_sync.render().el);
 
-				// adding stripe payment gateway contact syn template
-				// preferences
+				 /* Add stripe payment gateway contact sync template
+				 preferences*/
 				this.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' });
 
 				$('#stripe').append(this.stripe_sync.render().el);
@@ -762,7 +770,7 @@ var WidgetsRouter = Backbone.Router
 				this.stripe_sync_setting = new Base_Model_View({ url : 'core/api/stripe/import-settings',
 					template : 'admin-settings-import-stripe-contact-sync-prefs', saveCallback : function(model)
 					{
-						showNotyPopUp("information", "Contacts sync initated", "top", 1000);
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
 					} });
 
 				$("#prefs-tabs-content").html(this.stripe_sync_setting.render().el);
@@ -781,6 +789,22 @@ var WidgetsRouter = Backbone.Router
 					{
 						$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
 					} })
+			},
+			
+			zoho_sync:function(){
+				
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+
+				this.zoho_sync_settings = new Base_Model_View({ url : 'core/api/zoho/import-settings',template : 'admin-settings-import-zoho-prefs',saveCallback:function(model){
+					showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+				}});
+					
+				$("#prefs-tabs-content").html(this.zoho_sync_settings.render().el);
+					
+				
 			}
 
 		});

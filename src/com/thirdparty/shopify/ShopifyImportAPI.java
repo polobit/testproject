@@ -14,8 +14,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.agilecrm.contact.sync.SyncClient;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -31,96 +31,93 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ShopifyImportAPI
 {
 
-	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
-	String date = df.format(new Date()).substring(0, 10);
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
+    String date = df.format(new Date()).substring(0, 10);
 
-	/**
-	 * validating and saving users ContactPrefs
-	 * 
-	 * @param shopname
-	 * @param apiKey
-	 * @param apiPass
-	 * @return
-	 * @throws Exception
-	 */
+    /**
+     * validating and saving users ContactPrefs
+     * 
+     * @param shopname
+     * @param apiKey
+     * @param apiPass
+     * @return
+     * @throws Exception
+     */
 
-	@Path("/save")
-	@POST
-	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public ContactPrefs isAutherize(@FormParam("Shop") String shopname) throws Exception
+    @Path("/save")
+    @POST
+    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public ContactPrefs isAutherize(@FormParam("Shop") String shopname) throws Exception
+    {
+
+	try
 	{
 
-		try
-		{
+	    ContactPrefs prefs = new ContactPrefs();
+	    prefs.username = shopname;
 
-			ContactPrefs prefs = new ContactPrefs();
-			prefs.userName = shopname;
-
-			if (ShopifyUtil.isValid(prefs))
-				prefs.save();
-			return prefs;
-		}
-
-		catch (Exception e)
-		{
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
-
+	    if (ShopifyUtil.isValid(prefs))
+		prefs.save();
+	    return prefs;
 	}
 
-	@GET
-	@Path("/get-prefs")
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public ContactPrefs getContactPrefs()
+	catch (Exception e)
 	{
-		ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
-		return prefs;
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
-	/**
-	 * Import customers from shopify
-	 * 
-	 * @param customer
-	 * @return
-	 */
+    }
 
-	@POST
-	@Path("/import-customers")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public ContactPrefs importCustomers(@FormParam("customer") boolean customer)
+    @GET
+    @Path("/get-prefs")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public ContactPrefs getContactPrefs()
+    {
+	// ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
+	// return prefs;
+	return null;
+    }
+
+    /**
+     * Import customers from shopify
+     * 
+     * @param customer
+     * @return
+     */
+
+    @POST
+    @Path("/import-customers")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public ContactPrefs importCustomers(@FormParam("customer") boolean customer)
+    {
+	ArrayList<String> list = new ArrayList<String>();
+	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(SyncClient.SHOPIFY);
+	try
 	{
-		ArrayList<String> list = new ArrayList<String>();
-		ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
-		try
-		{
-			if (pref != null)
-			{
+	    if (pref != null)
+	    {
 
-				if (customer)
-					list.add("customer");
-				pref.thirdPartyField = list;
+		if (customer)
+		    list.add("customer");
+		pref.importOptions = list;
 
-				if (pref.count == 0)
-					ContactsImportUtil.initilaizeImportBackend(pref);
-				else
-				{
-					ShopifyUtil.sync();
-					pref.last_update_time = date;
-					pref.save();
-				}
-			}
+		ContactsImportUtil.initilaizeImportBackend(pref);
+		/*
+		 * else { ShopifyUtil.sync(); // pref. = date; pref.save(); }
+		 */
+	    }
 
-			return pref;
-		}
-		catch (Exception e)
-		{
-			ContactsImportUtil.initilaizeImportBackend(pref);
-			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-					.build());
-		}
+	    return pref;
 	}
+	catch (Exception e)
+	{
+	    ContactsImportUtil.initilaizeImportBackend(pref);
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
 
 }
