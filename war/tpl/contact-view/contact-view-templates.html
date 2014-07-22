@@ -1,6 +1,6 @@
 <script id = "contacts-custom-view-image-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div style="width:4em;overflow:hidden;">
+    	<div style="width:4em;overflow:hidden;min-height:50px">
 			{{#if_equals type "COMPANY"}}
 					<img class="thumbnail pull-left" {{getCompanyImage "40"}}/></img>
 				{{else}}
@@ -12,7 +12,7 @@
 
 <script id = "contacts-custom-view-first_name-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+    	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;min-height:50px">
     	<b>{{getPropertyValue properties "first_name"}}</b>
     	</div>
 	</td>
@@ -20,7 +20,7 @@
 
 <script id = "contacts-custom-view-last_name-template" type="text/html">
 	<td class="data" data="{{id}}">
-    	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+    	<div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;min-height:50px">
         <b>{{getPropertyValue properties "last_name"}}</b>
         </div>
 	</td>
@@ -28,7 +28,7 @@
 
 <script id = "contacts-custom-view-phone-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;min-height:50px">
     	{{getPropertyValue properties "phone"}}
         </div>
 	</td>
@@ -36,7 +36,7 @@
 
 <script id = "contacts-custom-view-address-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;min-height:50px">
     	{{#address_Template properties}}{{/address_Template}}
         </div>
 	</td>
@@ -44,7 +44,7 @@
 
 <script id = "contacts-custom-view-website-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;min-height:50px">
     	{{getPropertyValue properties "website"}}
         </div>
 	</td>
@@ -52,7 +52,7 @@
 
 <script id = "contacts-custom-view-email-template" type="text/html">
 	<td class="data" data="{{id}}">
-        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+        <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;min-height:50px">
     	{{getPropertyValue properties "email"}}
         </div>
 	</td>
@@ -60,7 +60,7 @@
 
 <script id = "contacts-custom-view-company-template" type="text/html">
 	<td class="data" data="{{id}}">
-      <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;">
+      <div style="text-overflow:ellipsis;width:10em;white-space:nowrap;overflow:hidden;min-height:50px">
     	{{getPropertyValue properties "company"}}
       </div>
 	</td>
@@ -68,7 +68,7 @@
 
 <script id = "contacts-custom-view-tags-template" type="text/html">
 	<td class="data" data="{{id}}">
-	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;"> 	
+	 <div class="ellipsis-multiline" style="line-height:20px !important; word-break:keep-all;min-height:50px"> 	
 		{{#each tags}}
 	    	<span class="label">{{this}}</span>	
 		{{/each}}
@@ -78,7 +78,7 @@
 
 <script id = "contacts-custom-view-created_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div style="text-overflow:ellipsis;width:8em;overflow:hidden;">
+    <div style="text-overflow:ellipsis;width:8em;overflow:hidden;min-height:50px">
 		{{epochToHumanDate "mm-dd-yy" created_time}}
     </div>
 	</td>
@@ -86,7 +86,7 @@
 
 <script id = "contacts-custom-view-updated_time-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div style="text-overflow:ellipsis;width:8em;overflow:hidden;">
+    <div style="text-overflow:ellipsis;width:8em;overflow:hidden;min-height:50px">
 		{{#if updated_time}}
 			{{epochToHumanDate "mm-dd-yy" updated_time}}
 		{{/if}}
@@ -96,7 +96,7 @@
 
 <script id = "contacts-custom-view-title-template" type="text/html">
 	<td class='data' data='{{id}}'>
-    <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
+    <div style="text-overflow:ellipsis;width:7em;overflow:hidden;min-height:50px">
 		{{getPropertyValue properties "title"}}
     </div>
 	</td>
@@ -104,7 +104,7 @@
 
 <script id = "contacts-custom-view-lead_owner-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
+       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;min-height:50px">
 		  <b>{{owner.name}}</b>
        </div>
 	</td>
@@ -112,7 +112,7 @@
 
 <script id = "contacts-custom-view-star_value-template" type="text/html">
 	<td class='data' data='{{id}}'>
-		 <ul style="margin: 0; padding: 0; list-style-type: none;width:8em">
+		 <ul style="margin: 0; padding: 0; list-style-type: none;width:8em;min-height:50px">
 			{{setupRating star_value}}
 		</ul>
 	</td>
@@ -120,7 +120,7 @@
 
 <script id = "contacts-custom-view-lead_score-template" type="text/html">
 	<td class='data' data='{{id}}'>
-       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
+       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;min-height:50px">
 		  <b>{{lead_score}}</b>
        </div>
 	</td>
@@ -129,7 +129,7 @@
 
 <script id = "contacts-custom-view-custom-template" type="text/html">
 	<td class='data' data=''>
-       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;">
+       <div style="text-overflow:ellipsis;width:7em;overflow:hidden;min-height:50px">
 		  <b>{{value}}</b>
        </div>
 	</td>
