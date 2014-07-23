@@ -67,6 +67,11 @@ public class ContactFilterResultFetcher
 
     }
 
+    public int getTotalFetchedCount()
+    {
+	return fetched_count;
+    }
+
     /**
      * Checks if filter is system filter
      * 
@@ -119,7 +124,7 @@ public class ContactFilterResultFetcher
 
 	// Fetches first 200 contacts
 	Collection<Contact> contactCollection = new QueryDocument<Contact>(new ContactDocument().getIndex(),
-		Contact.class).advancedSearch(filter.rules, 200, cursor);
+		Contact.class).advancedSearch(filter.rules, max_fetch_size, cursor);
 
 	if (contactCollection == null)
 	{
@@ -137,7 +142,8 @@ public class ContactFilterResultFetcher
 
     private void setCursor()
     {
-	cursor = contacts.get(contacts.size() - 1).cursor;
+	if (size() > 0)
+	    cursor = contacts.get(contacts.size() - 1).cursor;
     }
 
     private int size()
@@ -150,7 +156,7 @@ public class ContactFilterResultFetcher
 
     private String getNewCursor()
     {
-	if (size() < 0)
+	if (size() == 0)
 	{
 	    cursor = null;
 	    return cursor;
@@ -164,11 +170,11 @@ public class ContactFilterResultFetcher
     {
 	if (!init_fetch || (size() >= max_fetch_size && cursor != null))
 	{
-	    int size = contacts.size();
-	    if (size == 0)
+	    int size = size();
+	    if (size == 0 && init_fetch)
 		return false;
 
-	    if (StringUtils.equals(cursor, contacts.get(size() - 1).cursor))
+	    if (StringUtils.equals(cursor, getNewCursor()))
 		return true;
 
 	    contacts = null;
@@ -186,12 +192,20 @@ public class ContactFilterResultFetcher
     {
 	// If current index is less than available contacts in list, it returns
 	// true so next contact will be returned from next contact
-	if (current_index < size() - 1)
+	if (current_index <= size() - 1)
 	    return true;
+
+	if (!init_fetch)
+	{
+	    fetchNextSet();
+	    if (size() > 0)
+		return true;
+	    return false;
+	}
 
 	// If index reaches max available size and then it checks if there are
 	// more contacts to be fetched
-	if (current_index >= size() && !StringUtils.equals(cursor, getNewCursor()))
+	if (current_index > size() - 1 && cursor != null)
 	{
 	    fetchNextSet();
 	    if (size() > 0)
@@ -203,11 +217,13 @@ public class ContactFilterResultFetcher
 
     public Contact next()
     {
+	Contact contact = null;
 	if (current_index < size())
 	{
+
+	    contact = contacts.get(current_index);
 	    ++current_index;
-	    return contacts.get(current_index);
 	}
-	return null;
+	return contact;
     }
 }

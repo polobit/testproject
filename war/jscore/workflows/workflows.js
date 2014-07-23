@@ -318,43 +318,35 @@ function fill_logs_slate(id, type, workflow_name)
 	
 	var LOGS_PAD_CONTENT = {
 		    "ALL": {
-		        "title": "No logs to "+workflow_name+" campaign currently",
-		        "description": "Logs show events that take place in your campaign",
+		        "title": "No logs for this campaign yet",
 				"image": "/img/clipboard.png"
 		    },
 		    "EMAIL_SENT": {
-		    	"title": "No email sent logs for this campaign",
-		        "description": "No email is sent through this campaign",
+		    	"title": "No emails sent yet",
 				"image": "/img/clipboard.png"
 		    },
 		    "EMAIL_OPENED": {
-		    	"title": "No email opened logs for this campaign",
-		        "description": "No email of this campaign is opened",
+		    	"title": "No emails opened in this campaign",
 				"image": "/img/clipboard.png"
 		    },
 		    "EMAIL_CLICKED": {
-		    	"title": "No email click logs for this campaign",
-		        "description": "No email link of this campaign is clicked",
+		    	"title": "No emails clicked in this campaign",
 				"image": "/img/clipboard.png"
 		    },
 		    "UNSUBSCRIBED": {
-		    	"title": "No unsubscribed logs for this campaign",
-		        "description": "No one unsubscribed from this campaign",
+		    	"title": "No one unsubscribed from this campaign",
 				"image": "/img/clipboard.png"
 		    },
 		    "EMAIL_HARD_BOUNCED": {
-		    	"title": "No hard bounced logs for this campaign",
-		        "description": "No email of this campaign got hard bounced",
+		    	"title": "No hard bounces seen for  this campaign",
 				"image": "/img/clipboard.png"
 		    },
 		    "EMAIL_SOFT_BOUNCED": {
-		    	"title": "No soft bounced logs for this campaign",
-		        "description": "No email of this campaign got soft bounced",
+		    	"title": "No soft bounces seen for this campaign",
 				"image": "/img/clipboard.png"
 		    },
 		    "EMAIL_SPAM": {
-		    	"title": "No spam reported logs for this campaign",
-		        "description": "No one reported spam to the email(s) of this campaign",
+		    	"title": "No spam reports seen for this campaign",
 				"image": "/img/clipboard.png"
 		    }
 		}

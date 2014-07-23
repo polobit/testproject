@@ -18,6 +18,6 @@ public class RegularPlanLimits extends PlanLimits
 	webRuleLimit = 5;
 	pageViewsLimit = 10000;
 	reporting = "ALL";
-	whiteLabelEnabled = false;
+	whiteLabelEnabled = true;
     }
 }

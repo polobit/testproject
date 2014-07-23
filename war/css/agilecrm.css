@@ -110,6 +110,17 @@ table {
 	/*float:right;*/
 }
 
+ul.tagsinput li.tag > span > a:first-child
+{
+	display:inline-block !important;
+}
+
+ul.tagsinput li.tag > span > a:second-child
+{
+	display:inline !important;
+}
+
+
 /* core.css,tooltip.css,bootstrap-min.css*/
 .underline {
 	border-bottom: 1px solid whiteSmoke;

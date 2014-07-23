@@ -55,7 +55,7 @@
 		<div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:104px;overflow:hidden;display:inline-block;">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{nameAvatar properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
         			<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
