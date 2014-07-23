@@ -35,7 +35,6 @@ var WebreportsRouter = Backbone.Router.extend({
 				}
 				else
 				{
-
 					enableWebrulesSorting(el);
 				}
 			}	
