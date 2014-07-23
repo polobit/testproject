@@ -10,26 +10,34 @@ var WebreportsRouter = Backbone.Router.extend({
 	},
 	webrules : function()
 	{
+		var that = this;
 		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr',
 			sortKey : 'position', postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/prettify-min.js', function()
+				if(that.webrules.collection && that.webrules.collection.length == 0)
 				{
-					$.ajax({
-						url : 'core/api/api-key',
-						type : 'GET',
-						dataType : 'json',
-						success : function(data){
-							$('#content').html(getTemplate("webrule-collection", data));
-							enableWebrulesSorting(el);
-							prettyPrint();
-						}
+					head.js(LIB_PATH + 'lib/prettify-min.js', function()
+					{
+						$.ajax({
+							url : 'core/api/api-key',
+							type : 'GET',
+							dataType : 'json',
+							success : function(data){
+								$('#content').html(getTemplate("webrule-collection", data));
+								prettyPrint();
+							}
+						});
+	
+						/*if($(el).has("#api_track_webrules_code_icon").length != 0){
+							initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
+						}*/
 					});
+				}
+				else
+				{
 
-					/*if($(el).has("#api_track_webrules_code_icon").length != 0){
-						initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-					}*/
-				});
+					enableWebrulesSorting(el);
+				}
 			}	
 		});
 		
