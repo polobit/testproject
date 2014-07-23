@@ -2,7 +2,7 @@
 	<td></td>
 	<td class="data" data="{{id}}" style="white-space: nowrap;">
     	<div style="display: inline; padding-right: 10px; height: auto;">
-        	{{#if_contact_type "PERSON"}} <img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{nameAvatar properties 40}}" width="40px" height="40px" style="display: inline; width:40px; height:40px; " /> {{/if_contact_type}}
+        	{{#if_contact_type "PERSON"}} <img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display: inline; width:40px; height:40px; " /> {{/if_contact_type}}
         	{{#if_contact_type "COMPANY"}} <img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} /> {{/if_contact_type}}
     	</div>
     	<div style="height: auto; display: inline-block; vertical-align: top; text-overflow: ellipsis; width: 14em; overflow: hidden;">

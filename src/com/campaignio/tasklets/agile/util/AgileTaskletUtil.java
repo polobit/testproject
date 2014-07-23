@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -10,8 +11,12 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.EmailUtil;
@@ -37,6 +42,27 @@ public class AgileTaskletUtil
 
     // Default encoding to convert Unicode strings
     public final static String DEFAULT_ENCODING = "UTF-8";
+
+    static List<String> customFieldLabels = new ArrayList<String>();
+
+    static
+    {
+	try
+	{
+	    List<CustomFieldDef> contactCustomFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
+		    String.valueOf(Type.DATE));
+
+	    // Add labels to list
+	    for (CustomFieldDef customField : contactCustomFields)
+		customFieldLabels.add(customField.field_label);
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in AgileTaskletUtil static block..." + e.getMessage());
+	    e.printStackTrace();
+	}
+    }
 
     /**
      * Returns contact owner-id from subscriberJSON.
@@ -174,6 +200,24 @@ public class AgileTaskletUtil
 		    // Get LinkedIn id
 		    if (field.name.equals(Contact.WEBSITE) && "LINKEDIN".equals(field.subtype))
 			field.name = "linkedin_id";
+
+		    // Convert Epoch to date
+		    if (ContactField.FieldType.CUSTOM.equals(field.type))
+		    {
+			try
+			{
+			    System.out.println("Field name is " + field.name);
+
+			    if (isDateCustomField(field.name))
+				field.value = DateUtil.getGMTDateInGivenFormat(Long.parseLong(field.value) * 1000,
+				        "dd MMM yyyy");
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			    System.err.println("Exception occured while converting epoch time..." + e.getMessage());
+			}
+		    }
 
 		    // Converts address string to JSONObject
 		    if (field.name.equals(Contact.ADDRESS))
@@ -508,5 +552,19 @@ public class AgileTaskletUtil
 	    return null;
 
 	return Long.parseLong(givenOwnerId);
+    }
+
+    /**
+     * Returns boolean value whether current field label exists in custom date
+     * fields
+     * 
+     * 
+     * @param fieldLabel
+     *            - Contact field name
+     * @return boolean
+     */
+    public static boolean isDateCustomField(String fieldLabel)
+    {
+	return customFieldLabels.contains(fieldLabel);
     }
 }

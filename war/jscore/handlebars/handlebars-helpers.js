@@ -235,8 +235,14 @@ $(function()
 
 			if (items == undefined)
 			    return;
-		
-			var name = getPropertyValue(items, "first_name").substr(0,1) + "" + getPropertyValue(items, "last_name").substr(0,1);
+			
+			var name = "";
+			
+			if(getPropertyValue(items, "first_name"))
+			name = name + "" + getPropertyValue(items, "first_name").substr(0,1);
+			
+			if(getPropertyValue(items, "last_name"))
+			name = name + "" + getPropertyValue(items, "last_name").substr(0,1);
 			
 			return name;
 
