@@ -77,7 +77,7 @@ public class DefaultWidgets
 		widgets.add(new Widget(
 				"Xero",
 				"Xero is an online accounting software for small business - Explore invoicing, reconciliation anytime, anywhere.",
-				"/widgets/xero.js", "/widgets/xero-logo-lowres-RGB.gif", "/widgets/xero24x24.png", null,
+				"/widgets/xero.js", "/widgets/xero 210x70.png", "/widgets/xero24x24.png", null,
 				WidgetType.BILLING));
 		widgets.add(new Widget(
 				"QuickBooks",
