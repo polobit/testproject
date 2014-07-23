@@ -225,43 +225,74 @@
                             "link": "/misc/modal-templates/form/split-message/split-message.html"
                         }
                     ]
+                },
+                {
+                    "label": "Pop Out",
+                    "title": "pop-out-form",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/form/pop-out/images/pop-out.png",
+                        "theme_big": "/misc/modal-templates/form/pop-out/images/pop-out.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "pop-out-form",
+                            "href": "/misc/modal-templates/form/pop-out/images/pop-out.png",
+                            "link": "/misc/modal-templates/form/pop-out/pop-out.html"
+                        }
+                    ]
                 }
             ]
         },
         {
-            "label": "Choice",
-            "category": "choice",
+            "label": "Survey",
+            "category": "survey",
             "themes": [
                 {
                     "label": "Choice Four",
-                    "title": "choice-four-choice",
+                    "title": "choice-four-survey",
                     "theme_preview": {
-                        "theme_small": "/misc/modal-templates/choice/choice-four/images/choice-four.png",
-                        "theme_big": "/misc/modal-templates/choice/choice-four/images/choice-four.png"
+                        "theme_small": "/misc/modal-templates/survey/choice-four/images/choice-four.png",
+                        "theme_big": "/misc/modal-templates/survey/choice-four/images/choice-four.png"
                     },
                     "layouts": [
                         {
-                            "title": "choice-four-choice",
-                            "href": "/misc/modal-templates/choice/choice-four/images/choice-four.png",
-                            "link": "/misc/modal-templates/choice/choice-four/choice-four.html"
+                            "title": "choice-four-survey",
+                            "href": "/misc/modal-templates/survey/choice-four/images/choice-four.png",
+                            "link": "/misc/modal-templates/survey/choice-four/choice-four.html"
                         }
                     ]
                 },
                 {
                     "label": "Choice Two",
-                    "title": "choice-two-choice",
+                    "title": "choice-two-survey",
                     "theme_preview": {
-                        "theme_small": "/misc/modal-templates/choice/choice-two/images/choice-two.png",
-                        "theme_big": "/misc/modal-templates/choice/choice-two/images/choice-two.png"
+                        "theme_small": "/misc/modal-templates/survey/choice-two/images/choice-two.png",
+                        "theme_big": "/misc/modal-templates/survey/choice-two/images/choice-two.png"
                     },
                     "layouts": [
                         {
-                            "title": "choice-two-choice",
-                            "href": "/misc/modal-templates/choice/choice-two/images/choice-two.png",
-                            "link": "/misc/modal-templates/choice/choice-two/choice-two.html"
+                            "title": "choice-two-survey",
+                            "href": "/misc/modal-templates/survey/choice-two/images/choice-two.png",
+                            "link": "/misc/modal-templates/survey/choice-two/choice-two.html"
+                        }
+                    ]
+                },
+                {
+                    "label": "Choice Multi",
+                    "title": "choice-multi-survey",
+                    "theme_preview": {
+                        "theme_small": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png",
+                        "theme_big": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png"
+                    },
+                    "layouts": [
+                        {
+                            "title": "choice-multi-survey",
+                            "href": "/misc/modal-templates/survey/choice-multi/images/choice-multi.png",
+                            "link": "/misc/modal-templates/survey/choice-multi/choice-multi.html"
                         }
                     ]
                 }
+                
             ]
         }
     ]
