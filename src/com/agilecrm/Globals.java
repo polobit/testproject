@@ -84,12 +84,13 @@ public class Globals
     public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdPRUUGiDZ0Ik0P2p3NdGA0fc7E";
     public static final String QUICKBOOKS_CONSUMER_SECRET = "u1E4PJ87d5jHO9bJodbRPo9MQIWTnXZu37fqzGQD";
 
-    // public static final String FACEBOOK_APP_ID = "1472694689634803";
-    public static final String FACEBOOK_APP_ID = "1472962409608031";
-    // public static final String FACEBOOK_APP_SECRET =
-    // "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
-    public static final String FACEBOOK_APP_SECRET = "f9d7abe14b5610ab861d373036521abc";
-
+    /** test facebook app details*/
+    // public static final String FACEBOOK_APP_ID = "1472962409608031";
+    //public static final String FACEBOOK_APP_SECRET = "f9d7abe14b5610ab861d373036521abc";
+    /** facebook app details*/
+    public static final String FACEBOOK_APP_ID = "1472694689634803";
+    public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
+  
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
 
