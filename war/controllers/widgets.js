@@ -449,7 +449,7 @@ var WidgetsRouter = Backbone.Router
 			{
 				if (!id)
 					show_set_up_widget("Xero", 'xero-login',
-							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
+							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 				else
 				{
 					{
@@ -462,7 +462,7 @@ var WidgetsRouter = Backbone.Router
 													"Xero",
 													'xero-login',
 													data,
-													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 										});
 						return;
 
@@ -485,7 +485,7 @@ var WidgetsRouter = Backbone.Router
 																		"Xero",
 																		'xero-login',
 																		data,
-																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="),
+																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="),
 																		data1);
 															});
 											return;
@@ -494,7 +494,7 @@ var WidgetsRouter = Backbone.Router
 										else
 										{
 											show_set_up_widget("Xero", 'xero-login',
-													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "backend/XeroServlet?data="));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 										}
 									});
 				}
@@ -598,12 +598,12 @@ var WidgetsRouter = Backbone.Router
 													.error(
 															function(data)
 															{
-																setUpError("Twitter", "widget-settings-error", data.responseText,
+																setUpError("Facebook", "widget-settings-error", data.responseText,
 																		window.location.protocol + "//" + window.location.host + "/#Facebook/facebook1", data1);
 															});
 
 											return;
-											Facebook
+											
 
 										}
 										else
@@ -622,7 +622,55 @@ var WidgetsRouter = Backbone.Router
 			Custom : function(id)
 			{
 				if(id)
-				fill_form(id, "Custom", 'custom-widget-settings');
+					{
+					console.log($(this))
+						divClone = $(this).clone();
+						var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
+							postRenderCallback : function(el)
+							{
+								console.log('In post render callback');
+								console.log(el);
+
+								$('#script_type').die().live('change', function(e)
+								{
+									var script_type = $('#script_type').val();
+									if (script_type == "script")
+									{
+										$('#script').show();
+										$('#url').hide();
+										return;
+									}
+
+									if (script_type == "url")
+									{
+										$('#script').hide();
+										$('#url').show();
+									}
+								});
+
+							}, saveCallback : function(model)
+							{
+								console.log('In save callback');
+
+								console.log(model);
+
+								if (model == null)
+									alert("A widget with this name exists already. Please choose a different name");
+
+								App_Widgets.Catalog_Widgets_View.collection.add(model);
+								$("#custom-widget").replaceWith(divClone);
+							} });
+
+						$('#custom-widget', el).html(widget_custom_view.render(true).el);
+
+						$('#cancel_custom_widget').die().live('click', function(e)
+						{
+							// Restore element back to original
+							$("#custom-widget").replaceWith(divClone); 
+						});
+					
+					}
+				// fill_form(id, "Custom", 'custom-widget-settings');
 			},
 
 			/**
