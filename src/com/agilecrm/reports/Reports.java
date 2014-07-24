@@ -10,6 +10,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
@@ -116,6 +118,7 @@ public class Reports implements Serializable
 	return new AppengineSearch<Contact>(Contact.class).getAdvacnedSearchResults(rules, count, cursor);
     }
 
+    @JsonIgnore
     public Long getCount()
     {
 	return new AppengineSearch<Contact>(Contact.class).query.getCount(rules);
