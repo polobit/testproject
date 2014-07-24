@@ -125,7 +125,8 @@
                         "title": "AgileCRM will track your Clicks.",
                         "options": {
                             "*No": "no",
-                            "Yes": "yes"
+                            "Yes": "yes",
+                            "Yes & Push": "yes_and_push"
                         },
                         "fieldType": "select",
                         "type": "select"
@@ -1079,7 +1080,8 @@
                         "title": "AgileCRM will track your Clicks.",
                         "options": {
                             "*No": "no",
-                            "Yes": "yes"
+                            "Yes": "yes",
+                            "Yes & Push": "yes_and_push"
                         },
                         "fieldType": "select",
                         "type": "select"

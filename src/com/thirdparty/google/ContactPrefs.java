@@ -80,8 +80,8 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     public Long last_synced_updated_contacts_to_client = 0L;
 
     /** The import options. */
-    @Embedded
-    public List<String> importOptions = new ArrayList<String>();
+
+    public List<String> importOptions;
 
     // domain user key
     /** The domain user. */

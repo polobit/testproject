@@ -52,6 +52,10 @@ public class SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public Long last_synced_from_client = 0L;
 
+    /** The is completed. */
+    @NotSaved(IfDefault.class)
+    public boolean inProgress = false;
+
     /**
      * Instantiates a new sync prefs.
      */

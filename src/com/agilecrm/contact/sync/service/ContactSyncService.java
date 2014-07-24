@@ -1,3 +1,7 @@
+/**
+ * @auther jitendra
+ * @since 2014
+ */
 package com.agilecrm.contact.sync.service;
 
 import java.util.HashMap;
@@ -162,8 +166,46 @@ public abstract class ContactSyncService implements SyncService
 
 	if (user != null)
 	{
-	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user, syncStatus });
+	    SendMail.sendMail(user.email, notificationSubject, NOTIFICATION_TEMPLATE, new Object[] { user,
+		    buildNotificationStatus() });
 	}
+    }
+
+    /**
+     * Builds the notification status.
+     * 
+     * @return the map
+     */
+    private Map<ImportStatus, Integer> buildNotificationStatus()
+    {
+	Integer fail = syncStatus.get(ImportStatus.TOTAL_FAILED);
+	Integer total = syncStatus.get(ImportStatus.TOTAL);
+	Integer totalSaved = syncStatus.get(ImportStatus.SAVED_CONTACTS);
+	for (Map.Entry<ImportStatus, Integer> entry : syncStatus.entrySet())
+	{
+	    if (entry.getKey() == ImportStatus.NEW_CONTACTS)
+	    {
+		total += entry.getValue();
+		totalSaved += entry.getValue();
+	    }
+	    else if (entry.getKey() == ImportStatus.MERGED_CONTACTS)
+	    {
+		total += entry.getValue();
+		totalSaved += entry.getValue();
+	    }
+	    else if (entry.getKey() == ImportStatus.LIMIT_REACHED)
+	    {
+		total += entry.getValue();
+		fail += entry.getValue();
+	    }
+
+	}
+
+	syncStatus.put(ImportStatus.TOTAL_FAILED, fail);
+	syncStatus.put(ImportStatus.TOTAL, total);
+	syncStatus.put(ImportStatus.SAVED_CONTACTS, totalSaved);
+
+	return syncStatus;
     }
 
     /*
