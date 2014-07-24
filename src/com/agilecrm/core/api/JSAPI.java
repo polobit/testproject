@@ -45,7 +45,6 @@ import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.Log;
 import com.campaignio.logger.util.LogUtil;
-campaignio.logger.util.LogUtil;
 
 /**
  * <code>JSAPI</code> provides facility to perform actions, such as creating a
