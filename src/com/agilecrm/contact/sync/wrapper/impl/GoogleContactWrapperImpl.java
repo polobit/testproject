@@ -119,8 +119,9 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	    }
 
 	// If image link there there then it is synced to agile
-	if (entry.getContactPhotoLink() != null)
-	    fields.add(new ContactField(Contact.IMAGE, entry.getContactPhotoLink().getHref(), null));
+	// if (entry.getContactPhotoLink() != null)
+	// fields.add(new ContactField(Contact.IMAGE,
+	// entry.getContactPhotoLink().getHref(), null));
 
 	return fields;
 
