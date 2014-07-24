@@ -17,7 +17,7 @@ import com.agilecrm.widgets.Widget;
 public class XeroUtil
 {
 
-	private String callbackUrl = "https://agilecrmbeta.appspot.com/backend/XeroServlet?data=";
+	private String callbackUrl = "https://agilecrmbeta.appspot.com/XeroServlet?data=";
 	private String xeroPluginurl ="http://integrations.clickdesk.com:8080/ClickdeskPlugins/core/agile/xero";
 
 	/**
