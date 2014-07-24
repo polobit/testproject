@@ -117,6 +117,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		}
 
 	    }
+
+	// If image link there there then it is synced to agile
+	if (entry.getContactPhotoLink() != null)
+	    fields.add(new ContactField(Contact.IMAGE, entry.getContactPhotoLink().getHref(), null));
+
 	return fields;
 
     }
@@ -129,14 +134,14 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public ContactField getEmail()
     {
-	ContactField field = null;
 	for (Email email : entry.getEmailAddresses())
 	    if (email.getAddress() != null)
 	    {
 		String subType = ContactSyncUtil.getSubtypeFromGoogleContactsRel(email.getRel());
-		field = new ContactField(Contact.EMAIL, email.getAddress(), subType);
+		ContactField field = new ContactField(Contact.EMAIL, email.getAddress(), subType);
+		contact.properties.add(field);
 	    }
-	return field;
+	return null;
     }
 
     /*
