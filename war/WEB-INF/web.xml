@@ -40,12 +40,12 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>XeroOAuth</servlet-name>
+		<servlet-name>XeroScribeServlet</servlet-name>
 		<servlet-class>com.agilecrm.scribe.XeroScribeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>XeroOAuth</servlet-name>
-		<url-pattern>/backend/XeroServlet</url-pattern>
+		<servlet-name>XeroScribeServlet</servlet-name>
+		<url-pattern>/XeroServlet</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -344,6 +344,7 @@
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
 		<url-pattern>/upload-google-document.jsp</url-pattern>
+		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
 	</filter-mapping>
 
