@@ -1,6 +1,7 @@
 package com.agilecrm.plugin.oauth;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,17 @@ public class OAuth2Servlet extends HttpServlet
 	String state = request.getParameter("state");
 
 	System.out.println("OAuth2Servlet state " + state);
+	
+	// handle facebook popup windows
+	if ("facebook".equalsIgnoreCase(request.getParameter("act")))
+	{
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/html");
+		out.println("<script type=\"text/javascript\">");
+		out.println("this.close()");
+		out.println("</script>");
+		return;
+	}
 
 	/*
 	 * This parameter specifies the code which is required to generate
@@ -49,7 +61,11 @@ public class OAuth2Servlet extends HttpServlet
 	 * If state is not null, the response is redirected to the path specified in state along with code as query parameter
 	 */
 	if (state != null)
-	    response.sendRedirect(state + "?code=" + code);
-
+	{
+		if(code!=null)
+			response.sendRedirect(state + "?code=" + code);
+		else
+			response.sendRedirect(state);
+	}
     }
 }

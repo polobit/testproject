@@ -95,16 +95,7 @@ public class ScribeServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{
-		// handle facebook popup windows
-		if ("facebook".equalsIgnoreCase(req.getParameter("act")))
-		{
-			PrintWriter out = resp.getWriter();
-			resp.setContentType("text/html");
-			out.println("<script type=\"text/javascript\">");
-			out.println("this.close()");
-			out.println("</script>");
-			return;
-		}
+		
 		/*
 		 * OAuth1.0 - Check if it is first time or returning from OAuth1.0
 		 * authentication.If token and verifier is present, we just store or
