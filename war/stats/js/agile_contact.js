@@ -47,6 +47,12 @@ function agile_createContact(data, callback)
 
 		// Splitting tags string at ,
 		model.tags = tags_string.split(",");
+
+		// Trim each tag for spaces
+		for ( var i = 0; i < model.tags.length; i++)
+		{
+			model.tags[i] = model.tags[i].trim();
+		}
 	}
 	if (tags_from_cookie)
 	{
