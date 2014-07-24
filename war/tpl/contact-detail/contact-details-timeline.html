@@ -262,7 +262,7 @@
 
         {{#if_entity "log"}}
             <div class="timestamp">{{time}}</div>
-            <div class="title"><h3><span><a class="no-line"><i class="icon-inbox"></i></a></span> {{titleFromEnums log_type}}</h3></div>
+            <div class="title"><h3><span><a class="no-line"><i class={{#if_log_type_equals this "log_type" "EMAIL_SENT"}}"icon-envelope"{{else}} {{#if_log_type_equals this "log_type" "EMAIL_OPENED"}}"icon-folder-open-alt"{{else}}"icon-inbox"{{/if_log_type_equals}}{{/if_log_type_equals}}></i></a></span> {{titleFromEnums log_type}}</h3></div>
             <div class="date">{{epochToTaskDate time}}</div>
             <div class="body">
                 <div class="caption" style="margin-top:-8px">Campaign - {{campaign_name}}</div>
