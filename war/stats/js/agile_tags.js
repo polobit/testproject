@@ -6,12 +6,12 @@
 /**
  * Add tags to contact based on email
  * 
- * @param tags {String}
- *            tags to be added to contact
+ * @param tags
+ *            {String} tags to be added to contact
  * @param callback
  *            callback for agile_addTag
- * @param email {String}
- *            email of the contact
+ * @param email
+ *            {String} email of the contact
  */
 function agile_addTag(tags, callback, email)
 {
@@ -24,28 +24,31 @@ function agile_addTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			agile_cookieTags(tags, "add");
 			return;
 		}
 		else
 			email = agile_guid.get_email();
 	}
+
 	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 
 	// Post
 	var agile_url = agile_id.getURL() + "/contacts/add-tags?callback=?&id=" + agile_id.get() + "&" + params;
-
+	
 	// Callback
 	agile_json(agile_url, callback);
 }
 
 /**
  * Remove tags from contact based on email
- * @param tags {String}
- * 				tags to be removed
- * @param callback	
- * 				callback function for agile_removeTag
- * @param email {String}
- * 				email of the contact
+ * 
+ * @param tags
+ *            {String} tags to be removed
+ * @param callback
+ *            callback function for agile_removeTag
+ * @param email
+ *            {String} email of the contact
  */
 function agile_removeTag(tags, callback, email)
 {
@@ -58,6 +61,7 @@ function agile_removeTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
+			agile_cookieTags(tags, "delete");
 			return;
 		}
 		else
@@ -69,19 +73,20 @@ function agile_removeTag(tags, callback, email)
 	var agile_url = agile_id.getURL() + "/contacts/remove-tags?callback=?&id=" + agile_id.get() + "&" + params;
 
 	// Callback
-	agile_json(agile_url, callback);
+		agile_json(agile_url, callback);
 }
 
 /**
  * Get tags based on contact email
+ * 
  * @param callback
- * 				callback function for agile_getTag
+ *            callback function for agile_getTag
  * @param email
- * 				email of the contact
+ *            email of the contact
  */
 function agile_getTags(callback, email)
 {
-	if(!email)
+	if (!email)
 	{
 		if (!agile_guid.get_email())
 		{
@@ -90,10 +95,12 @@ function agile_getTags(callback, email)
 		else
 			email = agile_guid.get_email();
 	}
-	
+	var tags = agile_read_cookie("agile-tags");
+	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
+
 	// Get
-	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
-	
+	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + params;
+
 	// Callback
-	agile_json(agile_url, callback);
+		agile_json(agile_url, callback);
 }

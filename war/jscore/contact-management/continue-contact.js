@@ -477,6 +477,15 @@ function fill_multi_options(field_element, element) {
 			var name = $(sub_field_element).attr('name');
 			if(name == 'address-type')
 				$(sub_field_element).val(element.subtype);
+			else if(name == 'country'){
+				if(json[name] && json[name].length > 2){
+					$("#country").remove();
+					$(field_element).append('<input type="text" name="country" id="country" placeholder="country">');
+					$("#country").val(json[name]);
+				}
+				else
+					$(sub_field_element).val(json[name]);
+			}
 			else
 				$(sub_field_element).val(json[name]);
 		});

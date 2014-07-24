@@ -1,6 +1,9 @@
 package com.agilecrm.core.api;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -29,27 +32,34 @@ public class API
     // This method is called if TEXT_PLAIN is request
     @Path("api-key")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public APIKey getAPIKey()
     {
 	return APIKey.getAPIKey();
     }
 
-    // Regenerate API Key
-    @Path("api-key/regenerate/api-key")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public APIKey regenerateAPIKey()
+    @Path("api-key/key")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public APIKey generateAPIKey()
     {
 	return APIKey.regenerateAPIKey();
     }
 
-    // Regenerate JS API Key
-    @Path("api-key/regenerate/js-api-key")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public APIKey regenerateJSAPIKey()
+    @Path("api-key/jskey")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public APIKey generateJSAPIKey()
     {
 	return APIKey.regenerateJSAPIKey();
+    }
+
+    @Path("api-key")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public APIKey updateAllowedDomains(APIKey apiKey)
+    {
+	return APIKey.updateAllowedDomains(apiKey);
     }
 }
