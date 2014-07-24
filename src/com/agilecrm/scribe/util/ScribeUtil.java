@@ -16,6 +16,7 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.LinkedInApi;
 import org.scribe.builder.api.TwitterApi;
+import org.scribe.model.OAuthConstants;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
@@ -28,6 +29,7 @@ import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
+import com.agilecrm.scribe.api.FacebookApi;
 import com.agilecrm.scribe.api.StripeApi;
 import com.agilecrm.scribe.login.util.OAuthLoginUtil;
 import com.agilecrm.user.AgileUser;
@@ -571,10 +573,35 @@ public class ScribeUtil
 	System.out.println("In Facebook save");
 
 	Verifier verifier = new Verifier(code);
-	Token accessToken = service.getAccessToken(null, verifier);
+
+	/*
+	 * Signed get request is made to retrieve access token and secret
+	 */
+	OAuthRequest request = new OAuthRequest(Verb.GET, "https://graph.facebook.com/oauth/access_token");
+	request.addQuerystringParameter(OAuthConstants.CLIENT_ID, Globals.FACEBOOK_APP_ID);
+	request.addQuerystringParameter(OAuthConstants.CLIENT_SECRET, Globals.FACEBOOK_APP_SECRET);
+	request.addQuerystringParameter(OAuthConstants.CODE, verifier.getValue());
+	request.addQuerystringParameter(OAuthConstants.REDIRECT_URI, FacebookApi.getRedirectURL());
+	Response response = request.send();
+
+	String responseString = response.getBody();
+	String accessToken = null;
+
+	System.out.println(responseString);
+
+	// get accesstoken from responsebody string
+	String ts[] = responseString.split("&");
+	for (int i = 0; i < ts.length; i++)
+	{
+	    if (ts[i].contains("access_token="))
+	    {
+		accessToken = ts[i].substring(ts[i].lastIndexOf("=") + 1);
+		break;
+	    }
+	}
 
 	Map<String, String> properties = new HashMap<String, String>();
-	properties.put("token", accessToken.getToken());
+	properties.put("token", accessToken);
 	properties.put("verifier", verifier.getValue());
 	properties.put("code", code);
 	properties.put("time", String.valueOf(System.currentTimeMillis()));
