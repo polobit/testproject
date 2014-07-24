@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -91,11 +92,9 @@ public class SignpostUtil
 
 			if (!(postData == null || postData.isEmpty()))
 			{
-				// write data
-				DataOutputStream wr = new DataOutputStream(request.getOutputStream());
-				wr.writeBytes(postData);
+				OutputStreamWriter wr = new OutputStreamWriter(request.getOutputStream(),"UTF-8");
+				wr.write(postData);
 				wr.flush();
-				wr.close();
 			}
 
 			request.connect();
@@ -103,9 +102,9 @@ public class SignpostUtil
 			// removed some response code conditions for desk.com
 			if (request.getResponseCode() == 400 || request.getResponseCode() == 401
 					|| request.getResponseCode() == 500 || request.getResponseCode() == 404)
-				rd = new BufferedReader(new InputStreamReader(request.getErrorStream()));
+				rd = new BufferedReader(new InputStreamReader(request.getErrorStream(),"UTF-8"));
 			else
-				rd = new BufferedReader(new InputStreamReader(request.getInputStream()));
+				rd = new BufferedReader(new InputStreamReader(request.getInputStream(),"UTF-8"));
 
 			response = new StringBuilder();
 			String line = null;
