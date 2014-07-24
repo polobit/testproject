@@ -24,6 +24,10 @@ $(function()
 	var first_name = agile_crm_get_contact_property("first_name");
 	var last_name = agile_crm_get_contact_property("last_name");
 
+	//setting lastname to empty string if it is undefined
+	if(last_name==undefined||last_name=='undefined')
+	lastname='';
+	
 	console.log("firstName:" + first_name + "lastname:" + last_name);
 
 	//search string as global varibale
