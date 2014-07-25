@@ -19,6 +19,7 @@
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
 	
+	
 	<servlet>
 		<servlet-name>OAuth2</servlet-name>
 		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>
@@ -342,9 +343,11 @@
 		<url-pattern>/core/*</url-pattern>
 		<url-pattern>/scribe</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
+		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
+		
 	</filter-mapping>
 
 	<filter-mapping>

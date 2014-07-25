@@ -13,6 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
@@ -429,21 +432,25 @@ public class ShopifyUtil
     public static void main(String[] args)
     {
 
+	String uri = "https://agiletestshop.myshopify.com/admin/customers/count.json?";
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, uri);
+	oAuthRequest.addHeader("X-Shopify-Access-Token", "59260c2e72fcfe96b8d6c366046baf4a");
+	Response response = oAuthRequest.send();
 	try
 	{
+	    /*
+	     * URL ur = new URL(uri); HttpURLConnection con =
+	     * (HttpURLConnection) ur.openConnection();
+	     * con.addRequestProperty("X-Shopify-Access-Token",
+	     * "59260c2e72fcfe96b8d6c366046baf4a");
+	     * 
+	     * con.connect(); BufferedReader br = new BufferedReader(new
+	     * InputStreamReader(con.getInputStream())); String res; while ((res
+	     * = br.readLine()) != null) { System.out.println(res); }
+	     */
 
-	    URL ur = new URL(
-		    "https://shopperschois.myshopify.com/admin/oauth/authorize?client_id=70a2391cd9e9af0d666657a67885d9ec&scope=read_customers");
-
-	    URLConnection con = ur.openConnection();
-	    con.connect();
-	    BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	    String s;
-	    while ((s = br.readLine()) != null)
-	    {
-		System.out.println(s);
-	    }
-
+	    // if (properties.containsKey("count"))
+	    // count = Integer.parseInt(properties.get("count"));
 	}
 	catch (Exception e)
 	{

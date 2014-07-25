@@ -1,11 +1,11 @@
-<!-- Indices written at Tue, 22 Jul 2014 18:16:40 IST -->
+<!-- Indices written at Fri, 25 Jul 2014 18:40:32 IST -->
 
 <datastore-indexes>
 
     <!-- Used 3 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="close_date" direction="asc"/>
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="viewed.viewer_id" direction="asc"/>
+        <property name="viewed.viewed_time" direction="desc"/>
     </datastore-index>
 
     <!-- Used 3 times in query history -->
@@ -16,9 +16,9 @@
     </datastore-index>
 
     <!-- Used 3 times in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="viewed.viewer_id" direction="asc"/>
-        <property name="viewed.viewed_time" direction="desc"/>
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

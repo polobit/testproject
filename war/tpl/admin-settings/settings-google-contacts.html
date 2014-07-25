@@ -269,7 +269,7 @@
 <script id="admin-settings-import-shopify-contact-sync-template"
 	type="text/html">
 <div class="span4 well">
- <form id="shopify_import_form">
+ <form id="shopify_import_form" action="">
 <legend>Import from Shopify <span class="label label-important">Alpha</span></legend>
 <div>
 	Import Customers from Shopify
@@ -280,7 +280,10 @@
 				<a href="#google-apps/shopify-import" class="btn">Settings</a>
 			</div>
 {{/if}}
-   <div class="btn" id="import_shopify" style="display:inline-block;">Import</div>
+<div>
+<input type="text" name="shop" id="shopeName"/>
+</div>
+   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Import</button>
 </form>
 </div>
 
