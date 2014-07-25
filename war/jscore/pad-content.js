@@ -26,7 +26,7 @@ var CONTENT_JSON = {
 		//"learn_more" : "click here to learn more",
 		//"button_text" : "Add Contacts",
 		"route" : "#",
-		"modal_id" : "personModal",
+		//"modal_id" : "personModal",
 		"image" : "/img/clipboard.png"
 	},
 	"tag_results" : {
@@ -34,7 +34,7 @@ var CONTENT_JSON = {
 		//"learn_more" : "click here to learn more",
 		//"button_text" : "Add Contacts",
 		"route" : "#",
-		"modal_id" : "personModal",
+		//"modal_id" : "personModal",
 		"image" : "/img/clipboard.png"
 	},
 	"companies" : {
