@@ -21,6 +21,22 @@ var CONTENT_JSON = {
 		"modal_id" : "personModal",
 		"image" : "/img/clipboard.png"
 	},
+	"filter_results" : {
+		"title" : "No contacts matching this criteria.",
+		//"learn_more" : "click here to learn more",
+		//"button_text" : "Add Contacts",
+		"route" : "#",
+		"modal_id" : "personModal",
+		"image" : "/img/clipboard.png"
+	},
+	"tag_results" : {
+		"title" : "No contacts avaiable with this tag.",
+		//"learn_more" : "click here to learn more",
+		//"button_text" : "Add Contacts",
+		"route" : "#",
+		"modal_id" : "personModal",
+		"image" : "/img/clipboard.png"
+	},
 	"companies" : {
 		"title" : "You do not have any companies currently.",
 		"description" : "companies are prospects that you interact with using Agile.",
@@ -114,9 +130,13 @@ var CONTENT_JSON = {
  * Fills the slate with the content respective to the current route in the
  * CONTENT_JSON
  */
-function fill_slate(id, el) {
-
-	var route_path=window.location.hash.split("#")[1];
+function fill_slate(id, el, key) {
+	var route_path = key;
+	
+	if(!route_path)
+	{
+		route_path = window.location.hash.split("#")[1];
+	}
 
 	// If content for current route is available in the CONTENT_JSON, slate
 	// template is made with the content related to current route
@@ -130,6 +150,21 @@ function fill_slate(id, el) {
 				getTemplate("empty-collection-model",
 						CONTENT_JSON[route_path]));
 	}
+}
+
+function getContactPadcontentKey(url)
+{
+	if(!url)
+		return;
+	
+	if(url.indexOf('tag') > 0)
+		return "tag_results";
+	
+	if(url.indexOf('filter') > 0)
+		return "filter_results";
+	
+	return "contacts";
+		
 }
 
 /**

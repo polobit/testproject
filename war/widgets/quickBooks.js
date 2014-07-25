@@ -129,8 +129,15 @@ function addContactToQuickbooks(first_name, last_name)
 	}
 	else
 	{
-	    quickBooksError(data)
+	    console.log(data)
+		quickBooksError(data)
 	}
 	$("#quickbooks_add_contact").removeAttr("disabled");
-    });
+    }).error(function(data)
+	{
+		// Shows error if error occurs in quickbooks widget panel
+    	console.log("data is in add contact error")
+    	console.log(data)
+		quickBooksError(data.responseText)
+	});
 }
