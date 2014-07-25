@@ -1,5 +1,8 @@
 package com.campaignio.logger.util;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
@@ -211,5 +214,53 @@ public class CampaignLogsSQLUtil
 	    return "";
 
 	return " AND log_type=" + GoogleSQLUtil.encodeSQLColumnValue(logFilterType);
+    }
+
+    /**
+     * Returns count of rows w.r.t log type
+     * 
+     * @param campaignId
+     *            - campaign id
+     * @param subscriberId
+     *            - subscriber id
+     * @param logType
+     *            - log type
+     * @param domain
+     *            - domain
+     * @return integer value
+     */
+    public static int getCountByLogType(String campaignId, String subscriberId, String logType, String domain)
+    {
+	String logsCountQuery = "SELECT COUNT(*) FROM campaign_logs WHERE domain = "
+	        + GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND campaign_id = "
+	        + GoogleSQLUtil.encodeSQLColumnValue(campaignId) + " AND subscriber_id = "
+	        + GoogleSQLUtil.encodeSQLColumnValue(subscriberId) + " AND log_type="
+	        + GoogleSQLUtil.encodeSQLColumnValue(logType);
+
+	int count = 0;
+
+	System.out.println("Count Query of logs by logtype: " + logsCountQuery);
+
+	ResultSet rs = GoogleSQL.executeQuery(logsCountQuery);
+
+	try
+	{
+	    if (rs.next())
+	    {
+		// Gets first column
+		count = rs.getInt(1);
+	    }
+	}
+	catch (SQLException e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    // Closes the Connection and ResultSet Objects
+	    GoogleSQL.closeResultSet(rs);
+	}
+
+	return count;
     }
 }
