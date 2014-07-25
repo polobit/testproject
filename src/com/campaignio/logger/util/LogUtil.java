@@ -161,4 +161,30 @@ public class LogUtil
 	System.out.println("Process time for deleteing logs is " + processTime + "ms");
 
     }
+
+    /**
+     * Returns count of logs based on log type
+     * 
+     * @param campaignId
+     *            - Campaign Id
+     * @param subscriberId
+     *            - Subscriber Id
+     * @param logType
+     *            - log type
+     * @return integer
+     */
+    public static int getLogsCount(String campaignId, String subscriberId, LogType logType)
+    {
+	String domain = NamespaceManager.get();
+
+	// For localhost
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+	    domain = "localhost";
+
+	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
+	    return 0;
+
+	return CampaignLogsSQLUtil.getCountByLogType(campaignId, subscriberId, String.valueOf(logType), domain);
+
+    }
 }
