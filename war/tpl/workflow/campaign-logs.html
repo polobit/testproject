@@ -55,6 +55,7 @@
 </script>
 
 <script id="campaign-logs-model-template" type="text/html">
+{{#if contact}}
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
 <td></td>
 <td class="data" data={{subscriber_id}} style="white-space:nowrap;">
@@ -73,4 +74,5 @@
 		<time class="log-created-time" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 	</small></td>
 <br/>
+{{/if}}
 </script>
