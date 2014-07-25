@@ -16,12 +16,15 @@ import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -68,6 +71,14 @@ public abstract class ContactSyncService implements SyncService
     {
 	Preconditions.checkNotNull(pref, "Prefs can't be null");
 	this.prefs = pref;
+	Key<DomainUser> key = prefs.getDomainUser();
+	if (key == null)
+	    return null;
+	DomainUser user = DomainUserUtil.getDomainUser(key.getId());
+	if (user == null)
+	    return null;
+	UserInfo info = new UserInfo("agilecrm.com", user.email, user.name);
+	SessionManager.set(info);
 	return this;
     }
 

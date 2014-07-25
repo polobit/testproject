@@ -599,12 +599,12 @@ var WidgetsRouter = Backbone.Router
 													.error(
 															function(data)
 															{
-																setUpError("Twitter", "widget-settings-error", data.responseText,
+																setUpError("Facebook", "widget-settings-error", data.responseText,
 																		window.location.protocol + "//" + window.location.host + "/#Facebook/facebook1", data1);
 															});
 
 											return;
-											Facebook
+											
 
 										}
 										else

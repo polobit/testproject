@@ -14,7 +14,7 @@ import com.agilecrm.contact.ContactField;
 
 public abstract class ContactWrapper implements WrapperService
 {
-    private Contact contact;
+    protected Contact contact;
     protected Object object;
 
     /*
