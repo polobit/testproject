@@ -138,7 +138,7 @@ debug = false;
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
-var HANDLEBARS_PRECOMPILATION = false;
+var HANDLEBARS_PRECOMPILATION = true;
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";

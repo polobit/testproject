@@ -11,6 +11,7 @@ import com.agilecrm.user.notification.NotificationPrefs.Type;
 import com.agilecrm.user.notification.util.NotificationPrefsUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
+import com.campaignio.servlets.EmailOpenServlet;
 import com.campaignio.servlets.deferred.EmailClickDeferredTask;
 import com.campaignio.tasklets.agile.SendEmail;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
@@ -34,8 +35,14 @@ public class TrackClickUtil
      */
     public static void addEmailClickedLog(String campaignId, String subscriberId, String longURL, String workflowName)
     {
+	System.out.println("In email clicked log...");
+
 	LogUtil.addLogToSQL(campaignId, subscriberId, "Email link clicked " + longURL + " of campaign " + workflowName,
-		LogType.EMAIL_CLICKED.toString());
+	        LogType.EMAIL_CLICKED.toString());
+
+	// If no email opened log, add it along with click
+	if (!isOpened(campaignId, subscriberId))
+	    EmailOpenServlet.addEmailOpenedLog(campaignId, subscriberId, workflowName);
     }
 
     /**
@@ -200,6 +207,27 @@ public class TrackClickUtil
 	}
 
 	return contactJSON;
+    }
+
+    /**
+     * Returns true if Email Opened logs count is greater than zero
+     * 
+     * @param campaignId
+     *            - Campaign Id
+     * @param subscriberId
+     *            - Subscriber Id
+     * @return boolean
+     */
+    private static boolean isOpened(String campaignId, String subscriberId)
+    {
+	int count = LogUtil.getLogsCount(campaignId, subscriberId, LogType.EMAIL_OPENED);
+
+	System.out.println("Email Opened logs count is " + count);
+
+	if (count == 0)
+	    return false;
+
+	return true;
     }
 
 }

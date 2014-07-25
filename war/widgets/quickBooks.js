@@ -18,7 +18,11 @@ $(function()
     Email = agile_crm_get_contact_property('email');
     var first_name = agile_crm_get_contact_property("first_name");
     var last_name = agile_crm_get_contact_property("last_name");
-
+    
+    //set last name empty if it is undifned
+    if(last_name==undefined||last_name==null)
+    	last_name='';
+    
     console.log("Email is" + Email)
 
     showQuickbooksContacts();
@@ -129,8 +133,15 @@ function addContactToQuickbooks(first_name, last_name)
 	}
 	else
 	{
-	    quickBooksError(data)
+	    console.log(data)
+		quickBooksError(data)
 	}
 	$("#quickbooks_add_contact").removeAttr("disabled");
-    });
+    }).error(function(data)
+	{
+		// Shows error if error occurs in quickbooks widget panel
+    	console.log("data is in add contact error")
+    	console.log(data)
+		quickBooksError(data.responseText)
+	});
 }
