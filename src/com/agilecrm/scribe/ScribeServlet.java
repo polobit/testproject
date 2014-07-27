@@ -162,8 +162,8 @@ public class ScribeServlet extends HttpServlet
 		String shop = req.getParameter("shop");
 		String domain = req.getParameter("domain");
 		String jsessionID = req.getSession().getId();
-		resp.sendRedirect("http://localhost:8080/shopify?shop=" + shop + "&domain=" + domain + "&jsessionid="
-			+ jsessionID);
+		resp.sendRedirect("https://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain
+			+ "&jsessionid=" + jsessionID);
 		return;
 	    }
 	    return;
@@ -303,6 +303,8 @@ public class ScribeServlet extends HttpServlet
 	// Retrieve Token and Service Name from session
 	String serviceName = (String) req.getSession().getAttribute("oauth.service");
 
+	if (serviceName == null)
+	    serviceName = (String) req.getSession().getAttribute("service_type");
 	System.out.println("service name " + serviceName);
 	String code = null;
 	Token requestToken = null;
