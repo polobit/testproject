@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import com.agilecrm.contact.sync.SyncClient;
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactUtilServlet;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -31,53 +34,17 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ShopifyImportAPI
 {
 
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
-    String date = df.format(new Date()).substring(0, 10);
-
     /**
-     * validating and saving users ContactPrefs
-     * 
-     * @param shopname
-     * @param apiKey
-     * @param apiPass
-     * @return
-     * @throws Exception
+     * Gets the contact prefs.
+     *
+     * @return the contact prefs
      */
-
-    @Path("/save")
-    @POST
-    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactPrefs isAutherize(@FormParam("Shop") String shopname) throws Exception
-    {
-
-	try
-	{
-
-	    ContactPrefs prefs = new ContactPrefs();
-	    prefs.username = shopname;
-
-	    if (ShopifyUtil.isValid(prefs))
-		prefs.save();
-	    return prefs;
-	}
-
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-
-    }
-
     @GET
-    @Path("/get-prefs")
+    @Path("/import-settings")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public ContactPrefs getContactPrefs()
     {
-	// ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
-	// return prefs;
-	return null;
+	 return ContactPrefsUtil.getPrefsByType(SyncClient.SHOPIFY);
     }
 
     /**
@@ -87,37 +54,29 @@ public class ShopifyImportAPI
      * @return
      */
 
-    @POST
-    @Path("/import-customers")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactPrefs importCustomers(@FormParam("customer") boolean customer)
+    @PUT
+    @Path("/import-settings")
+    public void saveImportPrefs(ContactPrefs prefs)
     {
-	ArrayList<String> list = new ArrayList<String>();
-	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(SyncClient.SHOPIFY);
-	try
-	{
-	    if (pref != null)
-	    {
 
-		if (customer)
-		    list.add("customer");
-		pref.importOptions = list;
+	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
+	contactPrefs.save();
 
-		ContactsImportUtil.initilaizeImportBackend(pref);
-		/*
-		 * else { ShopifyUtil.sync(); // pref. = date; pref.save(); }
-		 */
-	    }
+	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
+		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 
-	    return pref;
-	}
-	catch (Exception e)
-	{
-	    ContactsImportUtil.initilaizeImportBackend(pref);
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
+
+    }
+    
+    /**
+     * Delete prefs.
+     */
+    @DELETE
+    @Path("/import-settings")
+    public void deletePrefs()
+    {
+	ContactPrefsUtil.delete(SyncClient.SHOPIFY);
+
     }
 
 }

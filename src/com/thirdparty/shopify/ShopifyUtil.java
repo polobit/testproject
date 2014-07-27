@@ -1,16 +1,28 @@
 package com.thirdparty.shopify;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.scribe.model.OAuthRequest;
@@ -432,26 +444,29 @@ public class ShopifyUtil
     public static void main(String[] args)
     {
 
-	String uri = "https://agiletestshop.myshopify.com/admin/customers/count.json?";
+	String uri = "https://agiletestshop.myshopify.com/admin/orders.json";
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, uri);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", "59260c2e72fcfe96b8d6c366046baf4a");
-	Response response = oAuthRequest.send();
 	try
 	{
-	    /*
-	     * URL ur = new URL(uri); HttpURLConnection con =
-	     * (HttpURLConnection) ur.openConnection();
-	     * con.addRequestProperty("X-Shopify-Access-Token",
-	     * "59260c2e72fcfe96b8d6c366046baf4a");
-	     * 
-	     * con.connect(); BufferedReader br = new BufferedReader(new
-	     * InputStreamReader(con.getInputStream())); String res; while ((res
-	     * = br.readLine()) != null) { System.out.println(res); }
-	     */
+	
+	//Response response = oAuthRequest.send();
+		InputStream in = new FileInputStream(new File("order.txt"));
+	
+		Map<String, ArrayList<LinkedHashMap<String, Object>>> properties = new ObjectMapper().readValue(in,Map.class);
+		ArrayList<LinkedHashMap<String, Object>> customers = properties.get("orders");
 
-	    // if (properties.containsKey("count"))
-	    // count = Integer.parseInt(properties.get("count"));
+		for(int i =0;i<customers.size();i++){
+			LinkedHashMap<String, String> address = (LinkedHashMap<String, String>) customers.get(i).get("default_address");
+		  System.out.println(address);
+		  System.out.println(customers.get(i).get("email"));
+		  if(address.containsValue("address2")){
+			  System.out.println(address.get("address2"));
+		  }
+		}
+		
 	}
+	
 	catch (Exception e)
 	{
 	    e.printStackTrace();

@@ -19,6 +19,15 @@
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>Shopify</servlet-name>
+		<servlet-class>com.thirdparty.shopify.ShopifyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Shopify</servlet-name>
+		<url-pattern>/shopify</url-pattern>
+	</servlet-mapping>
+	
 	
 	<servlet>
 		<servlet-name>OAuth2</servlet-name>

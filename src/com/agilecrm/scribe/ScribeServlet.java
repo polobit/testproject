@@ -161,9 +161,7 @@ public class ScribeServlet extends HttpServlet
 	    {
 		String shop = req.getParameter("shop");
 		String domain = req.getParameter("domain");
-		String jsessionID = req.getSession().getId();
-		resp.sendRedirect("http://localhost:8080/shopify?shop=" + shop + "&domain=" + domain + "&jsessionid="
-			+ jsessionID);
+		resp.sendRedirect("http://localhost:8080/shopify?shop=" + shop + "&domain=" + domain );
 		return;
 	    }
 	    return;
