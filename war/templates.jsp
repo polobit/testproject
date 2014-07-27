@@ -69,6 +69,18 @@
 .fancybox-prev {
     left: -60px;
 }
+
+.custom-title
+{
+	margin: 0 0 15px 0px;
+}
+
+.custom-title > h3 
+{
+  font-size:16.5px;
+  color: white;
+  text-decoration: underline;
+}
 	</style>
 
 </head>
@@ -231,6 +243,7 @@ function show_fancy_box(content_array)
     $.fancybox.open(content_array,{
     	padding     : 10,
         margin      : [20, 60, 20, 60],
+        width : 100,
         helpers : {
      	        overlay : {
      	            css : {
@@ -243,6 +256,11 @@ function show_fancy_box(content_array)
      	    this.href = location.origin + this.href;
              
             this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
+         },
+         afterLoad: function()
+         {
+        	 // Title on top
+        	 $('.fancybox-wrap').prepend("<div class='custom-title'><h3>Select a color theme/layout</h3></div>")
          }
  	}); // End of fancybox
 }
