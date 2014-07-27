@@ -41,7 +41,7 @@ public class SearchAPI
     @Path("/{keyword}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection searchContacts(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
+    public Collection searchContacts(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
 	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
@@ -60,10 +60,10 @@ public class SearchAPI
      * @param type
      * @return
      */
-    @Path("/all/{keyword}")
+    @Path("/all/keyword")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection searchAll(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
+    public Collection searchAll(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
 	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
     {
 

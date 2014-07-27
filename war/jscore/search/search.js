@@ -77,7 +77,7 @@ $(function()
 	 * Enables typeahead in search field in top nav-bar, custom callback to
 	 * redefine events on dropdown, which takes to contact details page
 	 */
-	agile_type_ahead("searchText", undefined, contacts_typeahead, navigateToDetailsPage, undefined, undefined, 'core/api/search/all/');
+	agile_type_ahead("searchText", undefined, contacts_typeahead, navigateToDetailsPage, undefined, undefined, 'core/api/search/all/keyword');
 
 	/*
 	 * Click on search icon in search field top nav-bar, shows simple search
