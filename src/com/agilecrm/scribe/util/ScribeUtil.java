@@ -1,3 +1,7 @@
+/**
+ * @auther jitendra
+ * @since 2014
+ */
 package com.agilecrm.scribe.util;
 
 import java.io.IOException;
@@ -40,9 +44,7 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
-import com.thirdparty.shopify.OAuthCustomService;
-import com.thirdparty.shopify.ShopifyApi;
-import com.thirdparty.shopify.ShopifyServiceBuilder;
+import com.thirdparty.shopify.ShopifyAccessURLBuilder;
 
 //import org.codehaus.jackson.map.ObjectMapper;
 
@@ -56,8 +58,6 @@ import com.thirdparty.shopify.ShopifyServiceBuilder;
  */
 public class ScribeUtil
 {
-
-    private static final String SHOPIFY_SCOPE = "read_customers, read_orders,read_products";
 
     /**
      * Builds service using serviceBuilder based on type of service specified,
@@ -274,7 +274,49 @@ public class ScribeUtil
 
 	}
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
+	{
 	    saveFacebookPrefs(req, code, service);
+	}
+	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
+	{
+	    saveShopifyPrefs(req, code);
+	}
+
+    }
+
+    /**
+     * Save shopify prefs.
+     * 
+     * @param req
+     *            the req
+     * @param code
+     *            the code
+     */
+    private static void saveShopifyPrefs(HttpServletRequest req, String code)
+    {
+	String shopDomain = req.getParameter("shop");
+	String accessURl = new ShopifyAccessURLBuilder(shopDomain).code(code).clientKey(Globals.SHOPIFY_API_KEY)
+		.scretKey(Globals.SHOPIFY_SECRET_KEY).buildAccessUrl();
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, accessURl);
+	Response response = oAuthRequest.send();
+	try
+	{
+	    HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
+		    new TypeReference<HashMap<String, String>>()
+		    {
+
+		    });
+	    ContactPrefs shopifyPrefs = new ContactPrefs();
+	    shopifyPrefs.token = properties.get("access_token").toString();
+	    shopifyPrefs.client = SyncClient.SHOPIFY;
+	    shopifyPrefs.othersParams = shopDomain;
+	    shopifyPrefs.save();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 
     }
 
@@ -618,32 +660,4 @@ public class ScribeUtil
 
     }
 
-    public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
-	    String serviceType)
-    {
-	/**
-	 * create service for Shopify
-	 */
-	String callback = req.getRequestURL().toString();
-	if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
-	    return getShopifyCustomService(req, ScribeServlet.SERVICE_TYPE_SHOPIFY, ShopifyApi.class, callback,
-		    Globals.SHOPIFY_API_KEY, Globals.SHOPIFY_SECRET_KEY, SHOPIFY_SCOPE);
-
-	return null;
-    }
-
-    private static OAuthCustomService getShopifyCustomService(HttpServletRequest req, String serviceType,
-	    Class<? extends com.thirdparty.shopify.Api> apiClass, String callback, String apiKey, String apiSecret,
-	    String scope)
-    {
-
-	// Gets session and sets attribute "oauth.service" to service type
-	req.getSession().setAttribute("oauth.service", serviceType);
-
-	return new ShopifyServiceBuilder().provider((Class<? extends com.thirdparty.shopify.Api>) apiClass)
-		.apiKey(apiKey).apiSecret(apiSecret).callback(callback).scope(scope).build();
-
-	// if scope is needed in the service
-
-    }
 }

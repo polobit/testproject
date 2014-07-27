@@ -11,12 +11,12 @@ public class ShopifyApi extends ShopifyCustomApi
      * Access token of Shopify for OAuth 2.0
      */
 
-    private static String ACCESS_TOKEN_URL = "https://" + SHOP_NAME + ".myshopify.com/admin/oauth/access_token";
+    private static String AUTH__URL = "https://" + SHOP_NAME + ".myshopify.com/admin/oauth/access_token";
 
     @Override
     public String getAccessTokenEndpoint()
     {
-	return ACCESS_TOKEN_URL;
+	return AUTH__URL;
     }
 
     @Override
@@ -38,4 +38,5 @@ public class ShopifyApi extends ShopifyCustomApi
 
 	return sb.toString();
     }
+
 }
