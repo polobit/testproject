@@ -16,6 +16,7 @@ import com.agilecrm.contact.filter.util.ContactFilterUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
+import com.agilecrm.search.ui.serialize.SearchRule;
 
 /**
  * Fetches filter results for backend operations. It has similar methods as
@@ -34,6 +35,9 @@ public class ContactFilterResultFetcher
     private DefaultFilter systemFilter = null;
     private List<Contact> contacts;
     private boolean init_fetch = false;
+    
+    private Integer number_of_contacts;
+    private Integer number_of_companies;
 
     /**
      * Search map
@@ -44,6 +48,8 @@ public class ContactFilterResultFetcher
     {
 
     }
+    
+    
 
     public ContactFilterResultFetcher(long filter_id)
     {
@@ -75,6 +81,44 @@ public class ContactFilterResultFetcher
 	    this.systemFilter = getSystemFilter(filter_id);
 	}
 
+    }
+    
+    public int getAvailableContacts()
+    {
+	if(number_of_contacts != null)
+	    return number_of_contacts;
+	
+	if(filter != null)
+	{
+	   SearchRule rule = new SearchRule();
+	   rule.LHS = "type";
+	   rule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	   rule.RHS = Contact.Type.PERSON.toString();
+	   filter.rules.add(rule);
+	   number_of_contacts = filter.queryContactsCount();
+	    filter.rules.remove(filter.rules.size() - 1);
+	}
+	
+	return number_of_contacts;
+    }
+    
+    public int getAvailableCompanies()
+    {
+	if(number_of_contacts != null)
+	    return number_of_contacts;
+	
+	if(filter != null)
+	{
+	   SearchRule rule = new SearchRule();
+	   rule.LHS = "type";
+	   rule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	   rule.RHS = Contact.Type.COMPANY.toString();
+	   filter.rules.add(rule);
+	   number_of_companies = filter.queryContactsCount();
+	   filter.rules.remove(filter.rules.size() - 1);
+	}
+	
+	return number_of_contacts;
     }
 
     public int getTotalFetchedCount()
