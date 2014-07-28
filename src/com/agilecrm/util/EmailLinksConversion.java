@@ -1,13 +1,15 @@
 package com.agilecrm.util;
 
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.google.appengine.api.NamespaceManager;
 
@@ -20,10 +22,12 @@ public class EmailLinksConversion
 
     /**
      * Extensions to avoid url shortening
+     * 
+     * public static String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2",
+     * ".jpx", ".gif", ".tif", ".pbm", ".bmp", ".tiff", ".ppm", ".pgm", ".pnm",
+     * ".dtd" }; public static List<String> extensionsList =
+     * Arrays.asList(extensions);
      */
-    public static String extensions[] = { ".png", ".jpg", ".jpeg", ".jp2", ".jpx", ".gif", ".tif", ".pbm", ".bmp",
-	    ".tiff", ".ppm", ".pgm", ".pnm", ".dtd" };
-    public static List<String> extensionsList = Arrays.asList(extensions);
 
     /**
      * Flag whether to append contact data to clicked url or not
@@ -41,25 +45,95 @@ public class EmailLinksConversion
      */
     private static boolean isSpecialLink(String str)
     {
-	boolean isContains = false;
-
-	if (str.indexOf('.') == -1)
-	    return false;
-
-	// Compares string token with the extensions
-	isContains = extensionsList.contains(str.substring(str.lastIndexOf('.')).toLowerCase());
 
 	if ((str.toLowerCase().startsWith("http") || str.toLowerCase().startsWith("https"))
-		&& !isContains
-		&& !str.toLowerCase().contains("unsubscribe")
-		&& !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
-		&& (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
-			".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
-		&& !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
-		&& !str.toLowerCase().startsWith("http://unscr.be"))
+	        && !str.toLowerCase().contains("unsubscribe")
+	        && !StringUtils.equals(str, EmailUtil.getPoweredByAgileURL("campaign"))
+	        && (StringUtils.startsWith(str, "https://www.agilecrm.com") || !str.toLowerCase().contains(
+	                ".agilecrm.com")) && !str.toLowerCase().contains("www.w3.org")
+	        && !str.toLowerCase().startsWith("http://goo.gl") && !str.toLowerCase().startsWith("http://agle.cc")
+	        && !str.toLowerCase().startsWith("http://unscr.be"))
 	    return true;
 
 	return false;
+    }
+
+    /**
+     * Converts all links within href in HTML
+     * 
+     * @param input
+     *            - HTML body of email
+     * @param subscriberId
+     *            - subscriber id
+     * @param campaignId
+     *            - campaign id
+     * @param doPush
+     *            - boolean value to push contact data
+     * @return String
+     */
+    public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, boolean doPush)
+    {
+	try
+	{
+	    Document doc = Jsoup.parse(input);
+
+	    // Get all anchor element href attributes
+	    Elements links = doc.select("a[href]");
+
+	    // Domain URL
+	    // String domainURL =
+	    // VersioningUtil.getLoginURL(NamespaceManager.get(),
+	    // "sandbox");
+
+	    String domainURL = VersioningUtil.getDefaultLoginUrl(NamespaceManager.get());
+
+	    // Remove all /
+	    while (domainURL.endsWith("/"))
+	    {
+		domainURL = domainURL.substring(0, domainURL.length() - 1);
+	    }
+
+	    String sid = "", cid = "", push = "", url = "";
+
+	    // Add contactId as param if not empty
+	    if (!StringUtils.isBlank(subscriberId))
+		sid = "&s=" + URLEncoder.encode(subscriberId, "UTF-8");
+
+	    // Add campaign id as param if not empty
+	    if (!StringUtils.isBlank(campaignId))
+		cid = "&c=" + URLEncoder.encode(campaignId, "UTF-8");
+
+	    if (doPush)
+		push = "&p=" + URLEncoder.encode(AGILE_EMAIL_PUSH, "UTF-8");
+
+	    // All href links
+	    for (Element link : links)
+	    {
+
+		// Absolute urls
+		url = link.attr("abs:href");
+
+		// If href is '#'
+		if (url.startsWith("#"))
+		    continue;
+
+		if (isSpecialLink(url))
+		{
+		    link.attr("href",
+			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
+			            + cid + sid + push);
+		}
+	    }
+
+	    return doc.html();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println("Got Exception while parsing email body... " + e);
+	}
+
+	return input;
     }
 
     /**
@@ -123,7 +197,7 @@ public class EmailLinksConversion
 		    // Appends to StringBuffer
 		    m.appendReplacement(stringBuffer,
 			    domainURL + "/click?u=" + URLEncoder.encode(StringEscapeUtils.unescapeXml(url), "UTF-8")
-				    + cid + sid + push);
+			            + cid + sid + push);
 		}
 	    }
 

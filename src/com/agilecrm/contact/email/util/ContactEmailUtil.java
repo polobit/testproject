@@ -74,8 +74,8 @@ public class ContactEmailUtil
      * @param body
      *            - body
      */
-    public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body,
-	    String signature, Contact contact, boolean trackClicks)
+    public static void saveContactEmailAndSend(String fromEmail, String fromName, String to, String cc, String bcc,
+	    String subject, String body, String signature, Contact contact, boolean trackClicks)
     {
 
 	// Personal Email open tracking id
@@ -94,7 +94,8 @@ public class ContactEmailUtil
 	    if (contact != null)
 	    {
 		contactId = contact.id.toString();
-		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, Long.parseLong(contactId), toEmailSet.size(), openTrackerId);
+		saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, Long.parseLong(contactId),
+		        toEmailSet.size(), openTrackerId);
 	    }
 	    else
 	    {
@@ -108,7 +109,8 @@ public class ContactEmailUtil
 		    if (contact != null)
 		    {
 			contactId = contact.id.toString();
-			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id, toEmailSet.size(), openTrackerId);
+			saveContactEmail(fromEmail, fromName, to, cc, bcc, subject, body, signature, contact.id,
+			        toEmailSet.size(), openTrackerId);
 		    }
 		}
 	    }
@@ -128,7 +130,7 @@ public class ContactEmailUtil
 	    body = EmailUtil.appendTrackingImage(body, null, String.valueOf(openTrackerId));
 
 	    if (trackClicks)
-		body = EmailLinksConversion.convertLinksUsingRegex(body, contactId, null, false);
+		body = EmailLinksConversion.convertLinksUsingJSOUP(body, contactId, null, false);
 	}
 
 	// combine body and signature.
@@ -187,8 +189,8 @@ public class ContactEmailUtil
      * @param toEmailSize
      *            - to identify number of To emails separated by comma
      */
-    public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject, String body, String signature,
-	    Long contactId, int toEmailSize, long trackerId)
+    public static void saveContactEmail(String fromEmail, String fromName, String to, String cc, String bcc,
+	    String subject, String body, String signature, Long contactId, int toEmailSize, long trackerId)
     {
 
 	// combine body and signature.
