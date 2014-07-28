@@ -444,7 +444,7 @@ var Base_Collection_View = Backbone.View
 				{
 					// Add element slate element in collection template send
 					// collection template to show slate pad
-					fill_slate("slate", this.el);
+					fill_slate("slate", this.el, this.options.slateKey);
 				}
 
 				// Add row-fluid if user prefs are set to fluid
