@@ -100,6 +100,10 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public String conflict = null;
 
+    /** The others params. */
+    @NotSaved(IfDefault.class)
+    public String othersParams = null;
+
     /**
      * Instantiates a new contact prefs.
      */

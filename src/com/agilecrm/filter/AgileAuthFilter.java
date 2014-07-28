@@ -73,6 +73,7 @@ public class AgileAuthFilter implements Filter
 	// }
 
 	// If no sessions are there, redirect to login page
+
 	if (httpRequest.getSession(false) == null)
 	{
 	    redirectToLogin(httpRequest, httpResponse);
@@ -186,7 +187,8 @@ public class AgileAuthFilter implements Filter
 	UserInfo info = SessionManager.get();
 	System.out.println();
 	System.out.println(user.scopes);
-	if (info.getScopes() == null || (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes)))
+	if (info.getScopes() == null
+		|| (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes)))
 	{
 	    System.out.println("does not contain all scopes");
 	    System.out.println(info.getScopes());

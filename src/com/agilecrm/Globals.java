@@ -132,8 +132,10 @@ public class Globals
     // "70a2391cd9e9af0d666657a67885d9ec";
     // public static final String SHOPIFY_SECRET_KEY =
     // "a1f88bc91e5c70c34c215bf224ebd7d3";
-
+    /** The Constant SHOPIFY_API_KEY. */
     public static final String SHOPIFY_API_KEY = "66198cc5eb16795088bfc0a3f8d2c011";
+
+    /** The Constant SHOPIFY_SECRET_KEY. */
     public static final String SHOPIFY_SECRET_KEY = "68e7c78529457be317dde3807b67de0b";
 
 }

@@ -21,7 +21,6 @@ import com.agilecrm.contact.sync.SyncClient;
 import com.agilecrm.scribe.util.ScribeUtil;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.utl.ContactPrefsUtil;
-import com.thirdparty.shopify.OAuthCustomService;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -67,6 +66,7 @@ public class ScribeServlet extends HttpServlet
 
     // OAuth login
     public static final String SERVICE_TYPE_OAUTH_LOGIN = "oauth_login";
+    public static final String SHOPIFY_SERVICE = "shopify";
 
     /**
      * Process the post request to servlet request, request can be sent either
@@ -157,6 +157,15 @@ public class ScribeServlet extends HttpServlet
 		}
 
 	    }
+	    if (serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
+	    {
+		String shop = req.getParameter("shop");
+		String domain = req.getParameter("domain");
+		String jsessionID = req.getSession().getId();
+		resp.sendRedirect("https://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain
+			+ "&jsessionid=" + jsessionID);
+		return;
+	    }
 	    return;
 	}
 
@@ -241,22 +250,7 @@ public class ScribeServlet extends HttpServlet
 
 	    System.out.println("Redirect URL OAuth2: " + url);
 	}
-	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
-	{
-	    OAuthCustomService shopifyService = ScribeUtil.getShopifyService(req, resp, serviceName);
-	    String param = req.getParameter("shopName");
 
-	    if (shopifyService != null)
-	    {
-		url = shopifyService.getAuthorizationUrl(param);
-		// token = shopifyService.getRequestToken();
-		String query = req.getParameter("query");
-
-		if (query != null)
-		    req.getSession().setAttribute("query", query);
-	    }
-
-	}
 	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO))
 	{
 	    System.out.println("wait");
@@ -309,6 +303,8 @@ public class ScribeServlet extends HttpServlet
 	// Retrieve Token and Service Name from session
 	String serviceName = (String) req.getSession().getAttribute("oauth.service");
 
+	if (serviceName == null)
+	    serviceName = (String) req.getSession().getAttribute("service_type");
 	System.out.println("service name " + serviceName);
 	String code = null;
 	Token requestToken = null;
@@ -322,8 +318,7 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 
 	    code = req.getParameter("code");
 

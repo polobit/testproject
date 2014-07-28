@@ -2,13 +2,12 @@ $(function()
 {
 	$("#import_shopify").die().live('click', function(e)
 			{
+				var shopName = $('#shopeName').val();
+				var domain = window.location.origin;
+		      
 				e.preventDefault();
-				var newwindow = window.open("import_shopify.jsp?id=import_shopify", 'name', 'height=420,width=500');
-				if (window.focus)
-				{
-					newwindow.focus();
-				}
-				return false;
+				window.location = "/scribe?service_type=shopify&shop="+shopName+"&domain="+domain+"";
+				
 			})
 
 });
