@@ -1,0 +1,330 @@
+@font-face {
+	font-family: ProximaNova-Bold;
+	src: url(ProximaNova-Bold.otf);
+}
+
+@font-face {
+	font-family: ProximaNova-Regular;
+	src: url(ProximaNova-Regular.otf);
+}
+
+@font-face {
+	font-family: ProximaNova-Light;
+	src: url(ProximaNova-Light.otf);
+}
+
+body {
+	background: #F6F6F6;
+	font-family: ProximaNova-Regular;
+}
+
+.minutes.activemin {
+	color: #4A90E2;
+}
+
+#avatar {
+	margin: 15px auto;
+	display: block;
+	height: 95px;
+}
+
+.lead {
+	max-width: 80%;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.segment {
+	margin: 0 auto;
+	float: none;
+	border: 1px solid #bbb;
+	border-radius: 6px;
+	padding: 12px 25px 25px 25px;
+	position: relative;
+	margin-bottom: 50px;
+	min-height: 140px;
+}
+
+.segment p {
+	margin: 0;
+}
+
+.segment .col-sm-4 {
+	text-align: center;
+}
+
+.segment2 {
+	min-height: 290px;
+	overflow: auto;
+}
+
+.segmenth {
+	font-size: 16px;
+	color: #8E8F8F;
+	padding-left: 20px;
+}
+
+.segment2 .segmenth {
+	font-size: 16px;
+	color: #8E8F8F;
+	padding-left: 30px;
+}
+
+.datepickerContainer {
+	border: 1px solid #aaa;
+	padding: 3px;
+}
+
+tbody.datepickerDays td.datepickerSelected {
+	background: #0198E1 !important;
+	border-radius: 22px;
+}
+
+tbody.datepickerDays td.datepickerSelected a {
+	background: white;
+	border-radius: 22px;
+}
+
+tbody.datepickerDays td:hover {
+	background: #0198E1;
+	border-radius: 22px;
+}
+
+tbody.datepickerDays td:hover a {
+	background: white;
+	border-radius: 22px;
+}
+
+div.datepicker table td {
+	text-align: center !important;
+}
+
+.numberlt {
+	position: absolute;
+	background: #4A90E2;
+	font-size: 22px;
+	color: white;
+	left: -17px;
+	top: -14px;
+	padding: 0 13px;
+	font-family: arial;
+	border-radius: 18px;
+}
+
+.timezone {
+	float: right;
+	font-size: 14px;
+	color: #333;
+}
+
+.timezone1 {
+	font-family: ProximaNova-Bold;
+}
+
+.availability {
+	font-size: 14px;
+	color: #666;
+	text-align: center;
+	margin-top: 20px;
+}
+
+.segment3 input,.segment3 textarea {
+	outline: 0 !important;
+}
+
+.segment3 input:focus,.segment3 textarea:focus {
+	-webkit-box-shadow: 0px 0px 5px 3px rgba(116, 186, 239, 1);
+	-moz-box-shadow: 0px 0px 5px 3px rgba(116, 186, 239, 1);
+	box-shadow: 0px 0px 5px 3px rgba(116, 186, 239, 1);
+}
+
+#mainwrap {
+	background: white;
+	border: 1px solid #EBEBEC;
+	border-radius: 6px;
+	margin-top: 20px;
+}
+
+.datepicker>div {
+	background: none;
+}
+
+div.datepicker table td {
+	text-align: right;
+	padding: 8px !important;
+	margin: 0;
+}
+
+.datepickerGoNext a,.datepickerGoPrev a {
+	color: #0198E1 !important;
+}
+
+.datepickerMonth a span {
+	color: black;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+#mainwrap div.datepicker a {
+	color: #000;
+}
+
+.datepickerDoW {
+	display: none;
+}
+
+.datepickerNotInMonth a span {
+	color: #a9a9a9;
+}
+
+.checkbox-main-grid li {
+	float: left;
+	margin-left: 0px;
+}
+
+.checkbox-main-grid {
+	list-style: none;
+}
+
+.checkbox-grid li {
+	display: block;
+	float: none;
+	margin-left: -24px;
+}
+
+.checkbox-grid li label {
+	margin-left: 5px;
+	font-weight: 500;
+	color: #8E8F8F;
+	font-size: 16px;
+}
+
+.segment1 p.choose {
+	font-size: 16px;
+}
+
+.choose {
+	color: #979797;
+	cursor: pointer;
+}
+
+.minutes {
+	color: #4a4a4a;
+}
+
+.segment3 {
+	min-height: 265px;
+	margin-bottom: 10px;
+}
+
+.segment3 input {
+	margin: 5px 0 10px 0px;
+	border: 1px solid #74B9EF;
+	border-radius: 6px;
+	width: 100%;
+	padding: 8px;
+}
+
+.segment3 input[type="checkbox"] {
+	width: auto;
+	vertical-align: middle;
+	margin-top: 4px;
+	float: left;
+}
+
+.inputtext {
+	border: 1px solid #74B9EF;
+	border-radius: 6px;
+	height: 150px;
+	max-width: 100%;
+	max-height: 100%;
+	padding: 5px;
+}
+
+.segment3 label {
+	float: left;
+	margin-left: 5px;
+	color: #8E8F8F;
+	max-width: 85%;
+}
+
+.segment3 .error {
+	float: left;
+	color: red;
+	margin-left: 0px;
+	max-width: 100%;
+	font-size: small;
+}
+
+.segment2 .segmenth {
+	
+}
+
+.segment1 .segmenth {
+	margin-bottom: 20px;
+}
+
+#confirm {
+	padding: 10px;
+	margin: 0 auto;
+	display: block;
+	background: #5DB85C;
+	border: 1px solid #4BAD4B;
+	border-radius: 6px;
+	color: white;
+	font-weight: bold;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+#confirm:hover {
+	background: #6Dc86C;
+}
+
+@media screen and (max-width: 991px) {
+	.checkbox-grid li {
+		width: 50% !important;
+	}
+	.segment2 {
+		min-height: 370px;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.datepicker {
+		margin: 0 auto;
+	}
+	.segment2 {
+		min-height: 525px;
+	}
+	.checkbox-grid li {
+		width: 33% !important;
+	}
+	.inputtext {
+		width: 100%;
+	}
+	.timezone {
+		font-size: 14px;
+		display: block;
+		float: none;
+	}
+	.timezone1 {
+		font-family: ProximaNova-bold;
+	}
+	.segment p.choose {
+		margin-bottom: 25px;
+	}
+}
+
+@media screen and (max-width: 435px) {
+	.segment2 {
+		min-height: 640px;
+	}
+	.checkbox-grid li {
+		width: 50% !important;
+	}
+}
+
+.me-disable {
+	background: beige;
+}

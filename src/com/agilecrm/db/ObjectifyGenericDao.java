@@ -22,6 +22,7 @@ import com.agilecrm.account.MenuSetting;
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.WebCalendarEvent;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
@@ -120,6 +121,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(APIKey.class);
 	ObjectifyService.register(Opportunity.class);
 	ObjectifyService.register(Milestone.class);
+
+	ObjectifyService.register(WebCalendarEvent.class);
 
 	// Campaign
 	ObjectifyService.register(Cron.class);
