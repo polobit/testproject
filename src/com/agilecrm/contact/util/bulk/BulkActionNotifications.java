@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.appengine.api.NamespaceManager;
+import com.google.gson.JsonObject;
 import com.thirdparty.PubNub;
 
 public class BulkActionNotifications
@@ -14,7 +15,7 @@ public class BulkActionNotifications
 	 * Basic Bulk Actions notification
 	 */
 	BULK_ACTIONS(""), DELETE("%s contacts %s deleted"), ADD_TAGS("Tag(s) %s added to %s contacts"), REMOVE_TAGS(
-	s	"Tag(s) %s removed from %s contacts"),
+		"Tag(s) %s removed from %s contacts"),
 
 	/**
 	 * Import export bulk action notification
@@ -50,13 +51,26 @@ public class BulkActionNotifications
 
     public static void publishconfirmation(BulkAction type, String... parameters)
     {
+	JSONObject messageJSON = constructMessageJSON(String.format(type.getMessage(), parameters).toString(), type);
+
+	PubNub.pubNubPush(NamespaceManager.get(), messageJSON);
+    }
+
+    public static void publishNotification(String message)
+    {
+	JSONObject messageJSON = constructMessageJSON(message, BulkAction.BULK_ACTIONS);
+	PubNub.pubNubPush(NamespaceManager.get(), messageJSON);
+    }
+
+    private static JSONObject constructMessageJSON(String message, BulkAction actionType)
+    {
 	JSONObject messageJSON = new JSONObject();
 	try
 	{
-	    messageJSON.put("message", String.format(type.getMessage(), parameters));
-
+	    messageJSON.put("message", message);
 	    messageJSON.put("type", BulkAction.BULK_ACTIONS);
-	    messageJSON.put("sub_type", type);
+	    messageJSON.put("sub_type", BulkAction.BULK_ACTIONS);
+
 	}
 	catch (JSONException e)
 	{
@@ -64,6 +78,7 @@ public class BulkActionNotifications
 	    e.printStackTrace();
 	}
 
-	PubNub.pubNubPush(NamespaceManager.get(), messageJSON);
+	
+	return messageJSON;
     }
 }
