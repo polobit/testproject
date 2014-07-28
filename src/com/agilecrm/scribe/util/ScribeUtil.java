@@ -43,9 +43,9 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
-import com.thirdparty.shopify.OAuthCustomService;
-import com.thirdparty.shopify.ShopifyApi;
-import com.thirdparty.shopify.ShopifyServiceBuilder;
+//import com.thirdparty.shopify.OAuthCustomService;
+//import com.thirdparty.shopify.ShopifyApi;
+//import com.thirdparty.shopify.ShopifyServiceBuilder;
 
 import facebook4j.auth.AccessToken;
 
@@ -133,11 +133,11 @@ public class ScribeUtil
 		/**
 		 * create service for stripe import
 		 */
-		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
+	/*	else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT,
 					com.agilecrm.scribe.api.StripeApi.class, callback, Globals.DEV_STRIPE_CLIENT_ID,
 					Globals.DEV_STRIPE_API_KEY, "read_only");
-
+*/
 		// Creates a Service, specific to Gmail
 		else
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_GMAIL,
@@ -297,7 +297,7 @@ public class ScribeUtil
 		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format(
 				"https://connect.stripe.com/oauth/token?code=%s&grant_type=%s", code, "authorization_code"));
 
-		oAuthRequest.addHeader("Authorization", "Bearer " + Globals.DEV_STRIPE_API_KEY);
+		//oAuthRequest.addHeader("Authorization", "Bearer " + Globals.DEV_STRIPE_API_KEY);
 
 		Response response = oAuthRequest.send();
 		try
@@ -624,13 +624,13 @@ public class ScribeUtil
 
 	}
 
-	public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
-			String serviceType)
-	{
+//	public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
+	//		String serviceType)
+	//{
 		/**
 		 * create service for Shopify
 		 */
-		String callback = req.getRequestURL().toString();
+	/*	String callback = req.getRequestURL().toString();
 		if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
 			return getShopifyCustomService(req, ScribeServlet.SERVICE_TYPE_SHOPIFY, ShopifyApi.class, callback,
 					Globals.SHOPIFY_API_KEY, Globals.SHOPIFY_SECRET_KEY, SHOPIFY_SCOPE);
@@ -651,5 +651,5 @@ public class ScribeUtil
 
 		// if scope is needed in the service
 
-	}
+	}*/
 }

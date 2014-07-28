@@ -14,7 +14,7 @@ import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.scribe.util.ScribeUtil;
 import com.thirdparty.google.ContactsImportUtil;
-import com.thirdparty.shopify.OAuthCustomService;
+//import com.thirdparty.shopify.OAuthCustomService;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -213,7 +213,7 @@ public class ScribeServlet extends HttpServlet
 
 			System.out.println("Redirect URL OAuth2: " + url);
 		}
-		else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
+	/*	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
 		{
 			OAuthCustomService shopifyService = ScribeUtil.getShopifyService(req, resp, serviceName);
 			String param = req.getParameter("shopName");
@@ -228,7 +228,7 @@ public class ScribeServlet extends HttpServlet
 					req.getSession().setAttribute("query", query);
 			}
 
-		}
+		}*/
 
 		// OAuth 1.0
 		else
