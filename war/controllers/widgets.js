@@ -660,7 +660,7 @@ var WidgetsRouter = Backbone.Router
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
 
 				/* Add E-commerce Prefs template*/
-				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings', template : 'admin-settings-import-shopify-contact-sync' });
+				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings', template : 'admin-settings-import-shopify-contact-syncPrefs' });
 				$('#shopify').append(this.shopify_sync.render().el);
 				
 				/*salesforce import template*/
@@ -785,7 +785,7 @@ var WidgetsRouter = Backbone.Router
 				$('.contact-sync-tab').addClass('active');
 
 				this.shopify_sync_setting = new Base_Model_View({ url : 'core/api/shopify/import-settings',
-					template : 'admin-settings-import-shopify-contact-sync_prefs', saveCallback : function(model)
+					template : 'admin-settings-import-shopify-prefs', saveCallback : function(model)
 					{
 						$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
 					} })
