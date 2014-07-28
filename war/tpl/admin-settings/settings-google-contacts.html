@@ -224,8 +224,7 @@
 </div>
 </script>
 
-<!-- template for shopify setting -->
-<script id="admin-settings-import-shopify-contact-sync_prefs-template"
+<script id="admin-settings-import-shopify-prefs-template"
 	type="text/html">
 <div class="span4 well">
     <form id="imap-prefs-form">
@@ -267,26 +266,25 @@
 </script>
 
 
-<script id="admin-settings-import-shopify-contact-sync-template"
+<script id="admin-settings-import-shopify-contact-syncPrefs-template"
 	type="text/html">
-<div class="span4 well">
- <form id="shopify_import_form" action="">
-<legend>Import from Shopify <span class="label label-important">Alpha</span></legend>
-<div>
-	Import Customers from Shopify
-</div>
-{{#if id}}
-        <div class="form-actions">
+	<div class="well widget-add" style="width:220px; height:270px;">
+
+    <img class="thumbnail"  src="img/crm-plugins/shopify.png" style="width:210px; height:70px;" />
+	<br />
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 120px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Agile can periodically sync your contacts in your CRM with your Shopify Contacts.
+	</div>
+    <div>
+			{{#if id}}
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
-				<a href="#google-apps/shopify-import" class="btn">Settings</a>
-			</div>
-{{/if}}
-<div>
-<input type="text" name="shop" id="shopeName"/>
+				<a href="#google-apps/shopify" class="btn">Settings</a>
+			{{else}}
+			   <input type="text" name="shop" id="shopeName"/>
+			   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Enable</button>
+			{{/if}}
 </div>
-   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Import</button>
-</form>
-</div>
+</div
 
 
 </script>
