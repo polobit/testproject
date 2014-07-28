@@ -38,7 +38,6 @@ public class SearchAPI
      * @param type
      * @return
      */
-    @Path("/{keyword}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Collection searchContacts(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
