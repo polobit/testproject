@@ -184,6 +184,10 @@ try{
 	$('#navigate-back').die().live('click', function(e){
 		e.preventDefault();
 		
+		// Confirm before going to Templates
+    	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
+    		return;
+		
 		window.history.back();
 		
 	});
@@ -245,6 +249,10 @@ function init_tinymce()
                 text: 'Templates',
                 icon: false,
                 onclick: function() {
+                	
+                	// Confirm before going to Templates
+                	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
+                		return;
                 	
                 	var type= 'email';
 

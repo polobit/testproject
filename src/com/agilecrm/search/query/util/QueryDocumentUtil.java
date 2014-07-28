@@ -116,7 +116,8 @@ public class QueryDocumentUtil
 		 */
 		lhs = SearchUtil.normalizeTextSearchString(lhs);
 		lhs = lhs.replaceAll("[^a-zA-Z0-9_]", "_");
-		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
+		String value = SearchUtil.normalizeString(rhs).replace(":", "\\:");
+		String newQuery = lhs + ":" + SearchUtil.normalizeString(value);
 
 		// For equals condition
 		if (condition.equals(SearchRule.RuleCondition.EQUALS) || condition.equals(SearchRule.RuleCondition.ON))
