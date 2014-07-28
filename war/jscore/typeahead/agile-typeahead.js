@@ -68,7 +68,7 @@ function agile_type_ahead(id, el, callback, isSearch, urlParams, noResultText, u
         	
         	
         	// Sends search request and holds request object, which can be reference to cancel request if there is any new request
-        	this.options.searchAJAXRequest = $.getJSON(url + query+"?page_size=10"+type_url, function (data){
+        	this.options.searchAJAXRequest = $.getJSON(url + "?q="+ encodeURIComponent(query)+ "&page_size=10"+type_url, function (data){
         		
         		var current_query = $('#' + id, el).val(); 
         		
