@@ -12,16 +12,24 @@
 <!--[if lt IE 8]><style type="text/css" media="all">@import url("css/ie.css");</style><![endif]-->
 <!--[if IE]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
 
-<style>
-h1,h2,h3,h4,h5,h6{margin:0;font-family:Ubuntu;font-weight:400;color:#525252;text-rendering:optimizelegibility;}
-h1{font-size:30px;line-height:36px;}
-h2{font-size:24px;line-height:36px;}
-h3{font-size:18px;line-height:27px;}
-
-.page-header{padding-bottom:17px;margin:18px 0;border-bottom:1px solid #f5f5f5;}
-.well{width:100%; float:left;background-color: #f5f5f5;padding: 10px 10px;-webkit-box-shadow: inset 0 1px 1px;border: 1px solid rgba(0, 0, 0, 0.05);border-radius: 4px;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);}
-</style>
-
+<%
+	String	template = "pink";
+%>
+	
+<%
+	String CSS_PATH = "/";
+		//String CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
+%> 
+	 
+<%
+		//String LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
+	String LIB_PATH = "/";
+%>
+	
+<!-- Bootstrap  -->
+<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
+<link rel="stylesheet" type="text/css"	href="<%= CSS_PATH%>css/bootstrap-responsive.min.css" />
+	
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/designer/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
@@ -153,7 +161,7 @@ try{
 		console.log(err);
 	} 
 
-	$('#save_html').live('click', function(e){
+	$('#save_html, #top_save_html').live('click', function(e){
 		
 		e.preventDefault();
 		
@@ -169,11 +177,16 @@ try{
 		// Return Back here
 		window.opener.tinyMCECallBack(getUrlVars()["id"], html);
 		window.close();
+		
 	});
 	
 	// Navigate history back on Back is clicked
 	$('#navigate-back').die().live('click', function(e){
 		e.preventDefault();
+		
+		// Confirm before going to Templates
+    	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
+    		return;
 		
 		window.history.back();
 		
@@ -200,6 +213,12 @@ function validateInput()
  **/
 function init_tinymce()
 {
+	
+	// Hide message and show textarea
+	$('#loading-msg').hide();
+	$('textarea#content').show();
+	
+	// Initialize tinymce
 	tinymce.init({
         mode: "textareas",
 		theme: "modern",
@@ -209,18 +228,47 @@ function init_tinymce()
             "insertdatetime media nonbreaking save table contextmenu directionality",
             "paste textcolor"
         ],
-        toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image",
-		toolbar2 : "formatselect fontselect fontsizeselect | merge_fields | preview",
+        toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent blockquote | forecolor backcolor | link image | preview",
+		toolbar2 : "formatselect fontselect fontsizeselect | merge_fields | templates",
         valid_elements: "*[*]",
         browser_spellcheck : true,
         gecko_spellcheck: true,
         extended_valid_elements : "*[*]",
         setup: function(editor) {
+            
+        	// Agile Merge Fields
             editor.addButton('merge_fields', {
                 type: 'menubutton',
                 text: 'Agile Contact Fields',
                 icon: false,
                 menu: set_up_merge_fields(editor)
+            });
+            
+            // Templates button
+            editor.addButton('templates', {
+                text: 'Templates',
+                icon: false,
+                onclick: function() {
+                	
+                	// Confirm before going to Templates
+                	if(!confirm("Your changes will be lost. Are you sure you want to go back to templates?"))
+                		return;
+                	
+                	var type= 'email';
+
+                	// When loaded from templates page
+                	if(window.opener == null)
+                	{
+                		window.history.back();
+                		return;
+                	}
+                	
+                	// For Webrules templates, open Webrules
+                	if(window.opener.location.hash.indexOf('webrule') != -1)
+                		type= 'web_rules';
+                	
+                	window.location = '/templates.jsp?id=tinyMCEhtml_email&t='+type;
+                }
             });
             
         }
@@ -233,44 +281,36 @@ function init_tinymce()
 </head>
 
 <body>
-<div id="hld" style='padding:10px'>
-	<div class="wrapper" style='min-width:450px;'>
-
-	<!-- wrapper begins -->
-		<div class="block small">
-			<div class="block_head">
-				<div class="bheadl"></div>
-				<div class="bheadr"></div>
-				
-				<!-- Back button -->
-				<div style="height: 25px; display:none;" id="navigate-back">
-				
-    				<!-- Back link to navigate to history back  -->
-					<a href="#"> < Back </a>
-					
-				</div>
-				
-			</div>
-			<!-- .block_head ends -->
-
-			<div class="block_content center">
-			<!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
-
-				<form method="post" action="somepage">
-					<textarea name="content" id='content' rows="30" cols="90"></textarea>
- 					<br/>
- 					<p><input type="submit" id="save_html" class="submit long" style="cursor:pointer;padding: 5px 25px 5px 25px;font-size: 15px;float: right; font-weight: bold;" value="Save"/> &nbsp;</p>
- 					</form>
- 			</div>
-			<!-- .block_content ends -->
-
-			<div class="bendl"></div>
-			<div class="bendr"></div>
-		</div>
-	</div>
-<!-- wrapper ends -->
+<div style='padding:10px'>
+    <div style='min-width:450px;'>
+        <!-- wrapper begins -->
+        <div class="block small">
+            <div class="block_head">
+                <!-- Back button -->
+                <div style="margin: 0 0 10px 0">
+                    <div style="display:none; float: left;" id="navigate-back">
+                        <!-- Back link to navigate to history back  -->
+                        <a href="#" class="btn btn-large"> &lt; Back </a>
+                    </div>
+                    <div style="display: block; float:right;">
+                        <a href="#" id="top_save_html" class="btn btn-large" style="cursor:pointer; font-weight: bold;">Save</a>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+            <!-- .block_head ends -->
+            <div class="block_content center">
+                <!-- out.println(Util.getHTMLMessageBox("","error", "errormsg")); -->
+                <form method="post" action="somepage">
+                    <p id="loading-msg">Loading HTML Editor...</p>
+                    <textarea name="content" id='content' rows="30" cols="90" style="display:none;"></textarea>
+                    <br/>
+                    <p><a href="#" id="save_html" class="btn btn-large pull-right" style="font-weight: bold;">Save</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- #hld ends -->
 
 </body>
 </html>

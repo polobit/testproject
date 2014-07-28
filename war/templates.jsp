@@ -69,6 +69,18 @@
 .fancybox-prev {
     left: -60px;
 }
+
+.custom-title
+{
+	margin: 0 0 15px 0px;
+}
+
+.custom-title > h3 
+{
+  font-size:16.5px;
+  color: white;
+  text-decoration: underline;
+}
 	</style>
 
 </head>
@@ -108,49 +120,31 @@ $(function(){
     	  
    		// Gets email_templates_structure.js
 		get_templates_json(url);
-   
-    	    // Init fancybox on theme images
-    	    $(".fancybox").fancybox({
-    			padding     : 10,
-    	        margin      : [20, 60, 20, 60], 
-    	        helpers : {
-    	     	        overlay : {
-    	     	            css : {
-    	     	                'background' : 'rgba(58, 42, 45, 0.95)'
-    	     	            }
-    	     	        }
-    	     	    },
-    	     	    beforeLoad: function() {
+   		
+		 // When any theme is clicked, opens respective layouts
+		 $('div.theme-preview>a').die().live('click', function(e){
+		    
+			e.preventDefault();
+		     	    
+		    // Get label to identify clicked theme in json
+		    var title = $(this).parent().find('input').val();
+		    var layouts=[];
 
-    	            this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a id="f-link" style="color: white; text-decoration: underline;" href="#" data="'+this.title+'">Select a layout</a>';
-    	         }
-    		});
-        
-        // When 'Select a layout' is clicked
-        $('#f-link').live('click', function(e){
-        	e.preventDefault();
-        
-        	// Close current one
-        	$.fancybox.close();
-        	
-        	var title = $(this).attr("data");
-        	
-        	var layouts=[];
-        	
     	    // load all layouts of clicked theme
     	    $.each(TEMPLATES_JSON["templates"], function(index, value){
     			
-    	    	// to exit on condition met
+    	    	// to exit from nested loops
     	    	var flag = true;
     	    	
     			$.each(value.themes, function(index, theme){
     				
     				if(theme.title === title){
 
-    				layouts= theme.layouts;
+    					layouts = theme.layouts;
     				
-    				flag = false;
-    				return false;
+    					flag = false;
+    					
+    					return false;
     				
     				}
     			});
@@ -159,8 +153,9 @@ $(function(){
     			
     		});
     	    
+        	// Init fancy on layouts
         	show_fancy_box(layouts);
-        });
+       });
        
 });
 
@@ -239,7 +234,7 @@ function getMergeFields(){
 	return merge_fields;
 }
 
-function show_fancy_box(content_array, href, title)
+function show_fancy_box(content_array)
 {
 	
 	var t_id = '<%=id%>';
@@ -248,6 +243,7 @@ function show_fancy_box(content_array, href, title)
     $.fancybox.open(content_array,{
     	padding     : 10,
         margin      : [20, 60, 20, 60],
+        width : 100,
         helpers : {
      	        overlay : {
      	            css : {
@@ -260,6 +256,11 @@ function show_fancy_box(content_array, href, title)
      	    this.href = location.origin + this.href;
              
             this.title = (this.index + 1) + ' of ' + this.group.length + '<br/> <a style="color: white; text-decoration: underline;" href="cd_tiny_mce.jsp?id='+t_id+'&url='+this.link+'">Load in Editor</a>';
+         },
+         afterLoad: function()
+         {
+        	 // Title on top
+        	 $('.fancybox-wrap').prepend("<div class='custom-title'><h3>Select a color theme/layout</h3></div>")
          }
  	}); // End of fancybox
 }
@@ -286,10 +287,13 @@ function show_fancy_box(content_array, href, title)
 			<div class="span5">
 				<div class="theme-preview">
 				<!-- Make image as clickable -->
-				<a class="fancybox" rel="theme_previews" href="{{theme_preview.theme_big}}" title="{{title}}">
-					<img src="{{theme_preview.theme_small}}" width="226px" height="136px" style="border-radius: 3px;border: 3px solid #e0e5e9;background: #fff;" alt="Template image"/>
+                <a href="#">
+ 					<img src="{{theme_preview.theme_small}}" width="226px" height="136px" style="border-radius: 3px;border: 3px solid #e0e5e9;background: #fff;" alt="Template image"/>
 				</a>
 				<p style="padding-top: 15px;">{{label}} ({{this.layouts.length}})</p>
+
+                <!-- To identify the theme clicked -->
+  				<input type="hidden" value="{{title}}">
 			</div>
 			</div>
 		{{/each}}
