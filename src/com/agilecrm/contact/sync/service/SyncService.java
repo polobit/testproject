@@ -20,7 +20,7 @@ public interface SyncService
 {
 
     /** max limit of contact to be saved in agile per call. */
-    Integer MAX_SYNC_LIMIT = 10;
+    Integer MAX_SYNC_LIMIT = 1000;
 
     /**
      * create service based on passed {@link SyncPref} and return SyncService

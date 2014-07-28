@@ -355,6 +355,7 @@
 		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
 		<url-pattern>/upload-google-document.jsp</url-pattern>
+		<url-pattern>/shopify</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
 		
 	</filter-mapping>

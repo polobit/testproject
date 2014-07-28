@@ -787,8 +787,9 @@ var WidgetsRouter = Backbone.Router
 				this.shopify_sync_setting = new Base_Model_View({ url : 'core/api/shopify/import-settings',
 					template : 'admin-settings-import-shopify-prefs', saveCallback : function(model)
 					{
-						$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
 					} })
+				$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
 			},
 			
 			zoho_sync:function(){

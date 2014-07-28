@@ -11,10 +11,11 @@ import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Note;
 
 public abstract class ContactWrapper implements WrapperService
 {
-    private Contact contact;
+    protected Contact contact;
     protected Object object;
 
     /*
@@ -53,7 +54,7 @@ public abstract class ContactWrapper implements WrapperService
 	setDescription();
 	setAddress();
 	setTag();
-	setNotes();
+
 	addMoreCustomInfo();
 
 	return contact;
@@ -117,6 +118,7 @@ public abstract class ContactWrapper implements WrapperService
 
     private void setNotes()
     {
+	List<Note> notes = getNotes();
 
     }
 
@@ -135,6 +137,11 @@ public abstract class ContactWrapper implements WrapperService
     {
 	// TODO Auto-generated method stub
 	return new ArrayList<ContactField>(0);
+    }
+
+    public void saveCallback()
+    {
+
     }
 
 }

@@ -227,12 +227,21 @@
 <script id="admin-settings-import-shopify-prefs-template"
 	type="text/html">
 <div class="span4 well">
+<span class="label label-important" style="float:right">Beta</span>
+<center> <img class="thumbnail" src="img/crm-plugins/shopify.png" style="width:210px; height:70px;margin-left:40px" /></center>
+<br/>
+{{#unless id}}
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Setup contact sync with your Shopify account.
+	</div>
+{{/unless}} 
+
+    
+
     <form id="imap-prefs-form">
 <input type ="hidden" value = "{{id}}" name ="id">
-        <legend>Import from Shopify <span class="label label-important">Alpha</span></legend>
-		<div>
-			Import customers from Shopify
-		</div>
+        
+	
            {{#if id}}
              	<div class="control-group">
 					<label class="control-label" style="text-align:">Frequency</label> 
@@ -268,7 +277,7 @@
 
 <script id="admin-settings-import-shopify-contact-syncPrefs-template"
 	type="text/html">
-	<div class="well widget-add" style="width:220px; height:270px;">
+	<div class="well widget-add" style="width:220px; height:321px;">
 
     <img class="thumbnail"  src="img/crm-plugins/shopify.png" style="width:210px; height:70px;" />
 	<br />
@@ -280,11 +289,12 @@
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
 				<a href="#google-apps/shopify" class="btn">Settings</a>
 			{{else}}
-			   <input type="text" name="shop" id="shopeName"/>
+              <div> Enter shop name
+			   <input type="text" name="shop" id="shopeName"/></div>
 			   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Enable</button>
 			{{/if}}
 </div>
-</div
+</div>
 
 
 </script>

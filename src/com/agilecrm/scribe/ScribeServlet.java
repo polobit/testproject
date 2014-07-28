@@ -161,7 +161,7 @@ public class ScribeServlet extends HttpServlet
 	    {
 		String shop = req.getParameter("shop");
 		String domain = req.getParameter("domain");
-		resp.sendRedirect("http://localhost:8080/shopify?shop=" + shop + "&domain=" + domain );
+		resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain);
 		return;
 	    }
 	    return;

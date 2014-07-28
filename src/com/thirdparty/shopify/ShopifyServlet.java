@@ -22,8 +22,8 @@ public class ShopifyServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException
     {
 	String token = req.getParameter("code");
-	String domain = req.getParameter("domain");
-	String redirectUrl = domain + "/#google-apps";
+	// String domain = req.getParameter("domain");
+	String redirectUrl = "/#google-apps";
 
 	if (token != null)
 	{
@@ -35,6 +35,7 @@ public class ShopifyServlet extends HttpServlet
     private void saveToken(HttpServletRequest req, String token)
     {
 	String shop = req.getParameter("shop");
+	shop = shop + ".myshopify.com";
 	ContactPrefs prefs = new ContactPrefs();
 	prefs.token = token;
 	prefs.othersParams = shop;

@@ -236,6 +236,7 @@ $(function()
 			if (items == undefined)
 			    return;
 		
+			return;
 			var name = getPropertyValue(items, "first_name").substr(0,1) + "" + getPropertyValue(items, "last_name").substr(0,1);
 			
 			return name;
