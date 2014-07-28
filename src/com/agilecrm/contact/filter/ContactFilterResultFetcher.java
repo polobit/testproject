@@ -1,14 +1,19 @@
 package com.agilecrm.contact.filter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilter.DefaultFilter;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
 
@@ -29,6 +34,11 @@ public class ContactFilterResultFetcher
     private DefaultFilter systemFilter = null;
     private List<Contact> contacts;
     private boolean init_fetch = false;
+
+    /**
+     * Search map
+     */
+    private Map<String, Object> searchMap;
 
     ContactFilterResultFetcher()
     {
@@ -78,7 +88,7 @@ public class ContactFilterResultFetcher
      * @param id
      * @return
      */
-    private static DefaultFilter getSystemFilter(String id)
+    private DefaultFilter getSystemFilter(String id)
     {
 	// Checks if Filter id contacts "system", which indicates the
 	// request is to load results based on the default filters provided
@@ -95,6 +105,38 @@ public class ContactFilterResultFetcher
 	    // If requested id contains "system" in it, but it doesn't match
 	    // with RECENT/LEAD/CONTACTS then return null
 	    return filter;
+	}
+	// If criteria starts with '#tags/' then it splits after '#tags/' and
+	// gets tag and returns contact keys
+	if (id.startsWith("#tags/"))
+	{
+	    String[] tagCondition = StringUtils.split("#tags/");
+	    String tag = tagCondition.length > 0 ? tagCondition[1] : "";
+
+	    try
+	    {
+		searchMap.put("tagsWithTime.tag", URLDecoder.decode(tag, "UTF-8"));
+	    }
+	    catch (UnsupportedEncodingException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    return null;
+	}
+
+	// If criteria is '#contacts' then keys of all available contacts are
+	// returned
+	if (id.equals("#contacts"))
+	{
+	    searchMap.put("type", Type.PERSON);
+	    return null;
+	}
+	
+	if(id.equals("#companies"))
+	{
+	    searchMap.put("type", Type.COMPANY);
+	    return null;
 	}
 
 	return null;
@@ -117,6 +159,13 @@ public class ContactFilterResultFetcher
 	if (systemFilter != null)
 	{
 	    contacts = ContactFilterUtil.getContacts(systemFilter, max_fetch_size, cursor);
+	    fetched_count += size();
+	    setCursor();
+	    return contacts;
+	}
+	else if(searchMap != null)
+	{
+	    contacts = Contact.dao.fetchAll(max_fetch_size, cursor, searchMap);
 	    fetched_count += size();
 	    setCursor();
 	    return contacts;
