@@ -165,6 +165,8 @@ public class QuickBooksUtil
 
 		return qbUser.toString();
 	}
+	
+	
 
 	/**
 	 * Validate response
@@ -201,7 +203,11 @@ public class QuickBooksUtil
 			throw new Exception(
 					"Not a valid customer name.\nNames must have at least one character and cannot include tabs, newlines or ':'.");
 
-		if (details.contains("name supplied already"))
+		else if (details.contains("name supplied already"))
 			throw new Exception("Customer already exists");
+		else if(details.contains("String length specified does not match the supported length"))
+			throw new Exception("String length specified does not match the supported length");
+		else
+			throw new Exception(details);
 	}
 }

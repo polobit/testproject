@@ -77,7 +77,7 @@ public class Globals
     // public static final String STRIPE_CLIENT_ID =
     // "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
-    // Xero live keys
+ // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
     public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
 
@@ -85,11 +85,12 @@ public class Globals
     public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
     public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
 
-    // public static final String FACEBOOK_APP_ID = "1472694689634803";
-    public static final String FACEBOOK_APP_ID = "1472962409608031";
-    // public static final String FACEBOOK_APP_SECRET =
-    // "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
-    public static final String FACEBOOK_APP_SECRET = "f9d7abe14b5610ab861d373036521abc";
+    /** test facebook app details*/
+    // public static final String FACEBOOK_APP_ID = "1472962409608031";
+    //public static final String FACEBOOK_APP_SECRET = "f9d7abe14b5610ab861d373036521abc";
+    /** facebook app details*/
+    public static final String FACEBOOK_APP_ID = "1472694689634803";
+    public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
 
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;

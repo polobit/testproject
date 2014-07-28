@@ -297,7 +297,7 @@ public class ScribeUtil
 		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format(
 				"https://connect.stripe.com/oauth/token?code=%s&grant_type=%s", code, "authorization_code"));
 
-		//oAuthRequest.addHeader("Authorization", "Bearer " + Globals.DEV_STRIPE_API_KEY);
+	//	oAuthRequest.addHeader("Authorization", "Bearer " + Globals.DEV_STRIPE_API_KEY);
 
 		Response response = oAuthRequest.send();
 		try
@@ -624,20 +624,20 @@ public class ScribeUtil
 
 	}
 
-//	public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
-	//		String serviceType)
-	//{
-		/**
+/*	public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
+			String serviceType)
+	{
+		*//**
 		 * create service for Shopify
-		 */
-	/*	String callback = req.getRequestURL().toString();
+		 *//*
+		String callback = req.getRequestURL().toString();
 		if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
 			return getShopifyCustomService(req, ScribeServlet.SERVICE_TYPE_SHOPIFY, ShopifyApi.class, callback,
 					Globals.SHOPIFY_API_KEY, Globals.SHOPIFY_SECRET_KEY, SHOPIFY_SCOPE);
 
 		return null;
-	}
-
+	}*/
+/*
 	private static OAuthCustomService getShopifyCustomService(HttpServletRequest req, String serviceType,
 			Class<? extends com.thirdparty.shopify.Api> apiClass, String callback, String apiKey, String apiSecret,
 			String scope)
