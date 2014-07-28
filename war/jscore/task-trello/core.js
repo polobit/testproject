@@ -156,16 +156,9 @@ function taskFetch(index)
 	taskCollection.collection.fetch({ success : function(data)
 	{
 		// Add sub collection in model of main collection.
-<<<<<<< HEAD
-		base_model.set('taskCollection', taskCollection.collection);
-
-		console.log("base_model");
-		console.log(base_model);
-=======
 		base_model.set('taskCollection', taskCollection.collection);		
->>>>>>> ad24f157c1822145cc574a3b8719acb614a76e90
-		
-		// Update UI
+
+// Update UI
 		if(base_model.has("owner_id"))
 		    $("div[id='list-tasks-" + base_model.get("heading")+"-"+base_model.get("owner_id")+ "']").html(taskCollection.render(true).el);
 		else
