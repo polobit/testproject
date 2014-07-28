@@ -257,7 +257,7 @@ function saveDocument(form_id, modal_id, saveBtn, isUpdate, json)
 							// Activates "Timeline" tab and its tab content in
 							// contact detail view
 							// activate_timeline_tab();
-							add_entity_to_timeline(data);
+							//add_entity_to_timeline(data);
 							/*
 							 * If timeline is not defined yet, initiates with the
 							 * data else inserts

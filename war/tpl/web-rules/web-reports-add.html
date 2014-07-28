@@ -507,7 +507,7 @@
 									<tr>	
 										<td class="controls"
 											style="vertical-align: top;">
-											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css" style="margin-top:3px;max-width:100% !important">
+											<div name="RHS" id="WEB_RULE_RHS" class="exclude-dynamic-option-css" style="margin-top:3px;max-width:45% !important">
 												</select>
 												<input type="number" name="temp" class="ADD_SCORE required number" placeholder="Enter score to add"></input>
 												<input type="number" name="temp" class="SUBTRACT_SCORE required number" placeholder="Enter score to substract"></input>
@@ -516,7 +516,6 @@
 											</div>
 										</td>
 									</tr>
-									
 									<tr>
 										<td class="controls"
 											style="vertical-align: top; ">
@@ -538,7 +537,7 @@
 											style="vertical-align: top;">
 												<div id="noty-message" name="popup_text"  style="padding-top:10px">
  													<a href='#' id="tiny_mce_webrules_link" style="float:right;display:none">(Select a template / Edit in HTML editor)</a>
-													<textarea  cols="50" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required" rows="10" placeholder="Paste HTML context"></textarea>
+													<textarea  cols="" name="webrule-information-field" class="information confirmation CORNER_NOTY span5 required" rows="10" placeholder="Paste HTML context" style="width:100%"></textarea>
 													<textarea  cols="" name="webrule-custom-html" id="tinyMCEhtml_email" class="custom_html required MODAL_POPUP" rows="10" placeholder="Paste HTML context" style="width:100%"></textarea>
 <textarea  cols="60" name="webrule-javascript" class="code  JAVA_SCRIPT span5 required" rows="10" placeholder="">function agile_js_code_exec() {
     // Copy your code here
@@ -552,14 +551,25 @@
 
 										</td>
 									</tr>
-										
+									<tr>
+										<td class="controls" style="vertical-align: top;">
+											<div name="position" id="possition">
+												<div class="pull-left" style="padding-top:10px"><span style="color:#474444">Where to show</span></div></br></br>
+												<select class="required" style="margin-top:-2px;margin-left:50px">
+													<option value="CENTER" class="MODAL_POPUP">Center</option>
+													<option value="RIGHT_BOTTOM" class="MODAL_POPUP">Right Bottom</option>
+													<option value="LEFT_BOTTOM" class="MODAL_POPUP">Left Bottom</option>
+												</select>
+											</div>
+										</td>
+									</tr>
 									<tr>
 										<td class="controls"
 											style="vertical-align: top;">
 											<div name="delay" id="delay">
 												<div class="pull-left" style="padding-top:10px"><span style="color:#474444">When to show</span></div></br></br>
 												<select class="required" style="margin-top:-2px;margin-left:50px">
-														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY">Immediate</option>
+														<option value="IMMEDIATE" class="MODAL_POPUP FORM CORNER_NOTY">Immediately</option>
 														<option value="AFTER_SECS" class="MODAL_POPUP FORM CORNER_NOTY">After certain time</option>
 														<option value="FIRST_SCROLL" class="MODAL_POPUP FORM CORNER_NOTY">On starting scroll</option>
 														<option value="END_OF_PAGE" class="MODAL_POPUP FORM CORNER_NOTY">On reaching end of page</option>
@@ -589,8 +599,7 @@
 
 <div class="pull-right" style="margin-top:-4%"><a href="#" class="web-rule-multiple-add" width="12%">Add Action</a></div>
 							</div>
-						<div style="width:60%; margin: 0 auto;">
-   								<input name="disabled" type="checkbox" style="vertical-align:top;">&nbsp;<span>Disable</span>
+						<div style="width:65%; margin: 0 auto;">&nbsp;<span>Disable</span><input name="disabled" type="checkbox" style="float:left;">
 						</div>
 					</div>
 			{{#if id}} <input type="text" name="id" class="hide" value="{{id}}" />

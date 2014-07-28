@@ -28,12 +28,8 @@
 <div class="activity" style="display:block;">
 	<div class="activity-text-block">
 	<span class="activity-block-owner">
-		{{#if ownerPic}}
-			<img class="user-img thumbnail" width="40" height="40" alt="" src="{{ownerPic}}" >
-		{{else}}
-			<img class="user-img thumbnail" width="40" height="40" src="{{defaultGravatarurl 40}}">
-		{{/if}}
-		<span class="owner-name">{{taskOwner.name}}</span>
+		<img class="user-img thumbnail" width="40" height="40" alt="" src="{{#getCurrentUserPrefs}}{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}{{/getCurrentUserPrefs}}" >
+		<span class="owner-name">{{#getCurrentUserPrefs}}{{currentDomainUserName}}{{/getCurrentUserPrefs}}</span>
 	</span>
 	<div style="margin-bottom: 9px;"><h4 class="event-title" style="display:inline;"><b style="margin:0px 20px 20px 0px;">{{title}}</b><span class="label label-{{task_label_color color}}">{{event_priority color}}</span></h4></div>
 

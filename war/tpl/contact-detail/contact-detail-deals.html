@@ -38,20 +38,10 @@
 		<h4 style="margin-bottom: 9px;"><a style="text-decoration: none"><b>{{name}}</b></a><span style="margin-left:20px;">{{milestone}} ({{probability}} %)</span></h4>
 							
 		<p><span style="margin-right: 10px;">Value : </span>
-			{{numberWithCommas expected_value}}{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
+
+			{{currencySymbol}} {{numberWithCommas expected_value}}
 		</p>
-				
-	<!--  <ul style="list-style: none;">
-				<li class="row-fluid">	
-					<div class="span2"><b>Pipeline</b>
-						<div class="pull-right">:</div>
-					</div>		
-					<div class="span6" style="margin-left: 10px;">
-						{{#if prefs.currency}}{{currencySymbol prefs.currency}}{{else}}<span>$</span>{{/if}}
-     						{{calculatePipeline expected_value probability pipeline}}
-					</div>
-				</li>  
-		</ul>-->
+
     <p>{{description}}</p>
 	<div class="clear">
 		<div style="margin-bottom: 9px;">	

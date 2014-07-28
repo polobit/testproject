@@ -142,7 +142,8 @@ var contact_details_tab = {
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
-				$('#mail', App_Contacts.contactDetailView.model.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>').show();
+				console.log()
+				$('#mail', App_Contacts.contactDetailView.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the mails.</div>');
 				return;	
 			}	
 			
@@ -193,7 +194,7 @@ var contact_details_tab = {
 			
 			// Shows an error alert, when there is no email to the contact 
 			if(!email){
-				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>').show();
+				$('#stats', App_Contacts.contactDetailView.el).html('<div class="alert alert-error span4" style="margin-top:30px"><a class="close" data-dismiss="alert" href="#">&times;</a>Sorry! this contact has no email to get the stats.</div>');
 				return;	
 			}
 			

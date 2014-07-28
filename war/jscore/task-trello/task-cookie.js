@@ -6,10 +6,7 @@ function addDetailsInCookie(elmnt)
 	var id = $(elmnt).attr("href");
 
 	var taskField = null;
-	var taskFieldValue = null;
-
-	console.log($(elmnt).closest("ul").attr('id'));
-	console.log(name + " " + id);
+	var taskFieldValue = null;	
 
 	if ($(elmnt).closest("ul").attr('id') == "new-type-tasks")
 		taskField = "task_criteria";

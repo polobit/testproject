@@ -24,7 +24,7 @@ public class ZendeskUtil
     /**
      * ClickDesk plugins Server URL
      */
-    public static final String pluginURL = "http://ec2-72-44-57-140.compute-1.amazonaws.com:8080/ClickdeskPlugins/";
+    public static final String pluginURL = "http://integrations.clickdesk.com:8080/ClickdeskPlugins/";
 
     /**
      * Calls method in ClickDeskPlugins server using REST API to get the details

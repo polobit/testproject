@@ -107,6 +107,9 @@ var ContactsRouter = Backbone.Router.extend({
 		{
 			tag_id = decodeURI(tag_id);
 
+			tag_id = decodeURI(tag_id);
+
+			
 			// erase filter cookie
 			eraseCookie('contact_filter');
 			eraseCookie('company_filter');
@@ -131,6 +134,7 @@ var ContactsRouter = Backbone.Router.extend({
 			url = '/core/api/tags/' + tag_id;
 
 			tag_id = unescape(tag_id);
+			
 		}
 		else
 		{
@@ -321,7 +325,7 @@ var ContactsRouter = Backbone.Router.extend({
 			this.contactDetailView = new Base_Model_View({ model : contact, isNew : true, template : "company-detail",
 				postRenderCallback : function(el)
 				{
-
+					fill_company_related_contacts(id, 'company-contacts');
 					// Clone contact model, to avoid render and
 					// post-render fell in to
 					// loop while changing attributes of contact
@@ -487,7 +491,7 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 
 		// Contact Duplicate
-		var contact = this.contactsListView.collection.get(this.contactDetailView.model.id);
+		var contact = this.contactDetailView.model
 		var json = contact.toJSON();
 
 		// Delete email as well as it has to be unique

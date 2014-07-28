@@ -36,6 +36,7 @@ var WidgetsRouter = Backbone.Router
 
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
 
+<<<<<<< HEAD
 			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
 				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify" },
 
@@ -48,6 +49,63 @@ var WidgetsRouter = Backbone.Router
 
 				this.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
 					sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
+=======
+		/**
+		 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
+		 */
+		addWidget : function()
+		{
+			$("#content").html(getTemplate("settings"), {});
+			
+			this.Catalog_Widgets_View = new Base_Collection_View({ url : '/core/api/widgets/default', restKey : "widget", templateKey : "widgets-add",
+				sort_collection : false, individual_tag_name : 'div', postRenderCallback : function(el)
+				{
+					build_custom_widget_form(el);
+
+				} });
+
+			// Append widgets into view by organizing them
+			this.Catalog_Widgets_View.appendItem = organize_widgets;
+
+			// Fetch the list of widgets
+			this.Catalog_Widgets_View.collection.fetch();
+			
+			// Shows available widgets in the content
+			$('#prefs-tabs-content').html(this.Catalog_Widgets_View.el);
+			
+			$('#PrefsTab .active').removeClass('active');
+		    $('.add-widget-prefs-tab').addClass('active');
+		},
+
+	    /**
+	     * Manages Linked in widget
+	     */
+	    Linkedin : function(id)
+	    {
+		if (!id)
+		{
+		    show_set_up_widget("Linkedin", 'linkedin-login',
+			    '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.href) + "/linkedin");
+		}
+		else
+		{
+		    if (!isNaN(parseInt(id)))
+		    {
+			$
+				.getJSON(
+					"core/api/widgets/social/profile/" + id,
+					function(data)
+
+					{
+					    set_up_access(
+						    "Linkedin",
+						    'linkedin-login',
+						    data,
+						    '/scribe?service=linkedin&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Linkedin/linkedin"));
+
+					}).error(
+					function(data)
+>>>>>>> ad24f157c1822145cc574a3b8719acb614a76e90
 					{
 						build_custom_widget_form(el);
 
@@ -796,6 +854,7 @@ var WidgetsRouter = Backbone.Router
 					$("#prefs-tabs-content").html(this.setup_google_calendar.render().el);
 					return;
 				}
+<<<<<<< HEAD
 				$("#prefs-tabs-content").html(this.setup_google_calendar.render(true).el);
 			},
 
@@ -832,3 +891,136 @@ var WidgetsRouter = Backbone.Router
 			}
 
 		});
+=======
+			    }); 
+		
+		}
+	    },
+	    
+	    Facebook : function(id)
+	    {
+		if (!id)
+		    show_set_up_widget("Facebook", 'facebook-login', '/scribe?service=facebook&return_url=' + encodeURIComponent(window.location.href) + "/facebook");
+		else
+		// return;
+		{}
+	    },
+
+	    /**
+	     * Manages widget added by user
+	     */
+	    Custom : function(id)
+	    {
+
+	    },
+
+	    /**
+	     * Contact synchronization with Google
+	     */
+	    contactSync : function()
+	    {
+
+		$("#content").html(getTemplate("settings"), {});
+
+		$('#PrefsTab .active').removeClass('active');
+		$('.contact-sync-tab').addClass('active');
+		// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+
+		this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
+
+		// Adds header
+		$('#prefs-tabs-content').html(
+			'<div class="row-fluid"><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>');
+
+		// Adds Gmail Prefs
+		$('#contact-prefs').append(this.contact_sync_google.render().el);
+
+		this.calendar_sync_google = new Base_Model_View({ url : 'core/api/calendar-prefs/get', template : 'import-google-calendar', });
+
+		// console.log(getTemplate("import-google-contacts", {}));
+		$('#calendar-prefs').append(this.calendar_sync_google.render().el);
+
+		var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
+		var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
+		itemView.model.fetch();
+
+		// Adds Gmail Prefs
+		$('#email-prefs').html(itemView.render().el);
+
+		// Gets IMAP Prefs
+		/*
+		 * var itemView2 = new Base_Model_View({ url : '/core/api/imap',
+		 * template : "settings-imap-prefs" }); // Appends IMAP
+		 * $('#prefs-tabs-content').append(itemView2.render().el);
+		 * $('#PrefsTab .active').removeClass('active');
+		 * $('.email-tab').addClass('active');
+		 */
+	    },
+
+	    google_apps_contacts : function()
+	    {
+
+		$("#content").html(getTemplate("settings"), {});
+
+		$('#PrefsTab .active').removeClass('active');
+		$('.contact-sync-tab').addClass('active');
+
+		var options = { url : "core/api/contactprefs/GOOGLE", template : "admin-settings-import-google-contacts-setup",
+		    postRenderCallback : function(el)
+		    {
+			console.log(el);
+			// App_Settings.setup_google_contacts.model =
+			// App_Settings.contact_sync_google.model;
+		    } };
+
+		var fetch_prefs = true;
+		if (this.contact_sync_google && this.contact_sync_google.model)
+		{
+		    options["model"] = this.contact_sync_google.model;
+		    fetch_prefs = false;
+		}
+		else
+		{
+		    this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'import-google-contacts', });
+		}
+
+		this.setup_google_contacts = new Base_Model_View(options);
+
+		if (fetch_prefs)
+		{
+		    $("#prefs-tabs-content").html(this.setup_google_contacts.render().el);
+		    return;
+		}
+		$("#prefs-tabs-content").html(this.setup_google_contacts.render(true).el);
+	    },
+
+	    google_apps_calendar : function()
+	    {
+		$("#content").html(getTemplate("settings"), {});
+
+		$('#PrefsTab .active').removeClass('active');
+		$('.contact-sync-tab').addClass('active');
+
+		var options = {
+
+		url : "core/api/calendar-prefs/get", template : "import-google-calendar-setup" };
+
+		var fetch_prefs = true;
+		if (this.calendar_sync_google && this.calendar_sync_google.model)
+		{
+		    options["model"] = this.calendar_sync_google.model;
+		    fetch_prefs = false;
+		}
+
+		this.setup_google_calendar = new Base_Model_View(options);
+
+		if (fetch_prefs)
+		{
+		    $("#prefs-tabs-content").html(this.setup_google_calendar.render().el);
+		    return;
+		}
+		$("#prefs-tabs-content").html(this.setup_google_calendar.render(true).el);
+	    }
+
+	});
+>>>>>>> ad24f157c1822145cc574a3b8719acb614a76e90

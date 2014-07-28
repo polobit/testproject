@@ -30,33 +30,7 @@ $(function()
 	$(window).resize(function() {
 		// Adjust Height Of Task List And Scroll as per window size
 		adjustHeightOfTaskListAndScroll();
-	});
-	
-	// Display list of notes related task.
-	/*$('.notes-task-popover').live('click', function()
-	{			
-		$(this).popover({ trigger: "click" ,title: 'Notes', content: '<div class="notes-list"> <img id="notes-loading-img" src="/img/ajax-loader.gif" style="margin-left: 44%;"> </div>'});  
-		$(this).popover('toggle');
-			
-		var tasklist = getTaskList(getCriteria(), getTaskListId(this), getTaskListOwnerId(this));
-		console.log(tasklist);
-		var task = tasklist[0].get("taskCollection").get(getTaskId(this));
-		console.log(task);
-		
-		$.each(task.get("notes"), function(index, note)
-				{
-					$(".notes-list").append(getTemplate('notes-for-task', note));
-					$("#notes-loading-img").remove();
-				});
-	});
-	
-	// Remove old popover
-	$('.notes-task-popover').live('mouseenter', function()
-	{
-		console.log("mouseenter");
-		$(this).popover('hide');
-	});*/
-
+	});	
 	
 	// Display task actions
 	$('.listed-task').live('mouseenter', function()

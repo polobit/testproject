@@ -59,13 +59,17 @@ public class JSAPIFilter implements Filter
 	if (agileId != null)
 	{
 	    // Check if ApiKey
-	    if (APIKey.isPresent(agileId))
+	    if (APIKey.isValidJSKey(agileId) || APIKey.isPresent(agileId))
 	    {
 		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
 			SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Get AgileUser
-		DomainUser domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
+		DomainUser domainUser = null;
+		if (APIKey.isPresent(agileId))
+		    domainUser = APIKey.getDomainUserRelatedToAPIKey(agileId);
+		if (APIKey.isValidJSKey(agileId))
+		    domainUser = APIKey.getDomainUserRelatedToJSAPIKey(agileId);
 
 		// Domain becomes null if user is deleted
 		if (domainUser != null)

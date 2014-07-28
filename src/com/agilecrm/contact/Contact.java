@@ -372,7 +372,13 @@ public class Contact extends Cursor
 	{
 
 	    oldContact = ContactUtil.getContact(id);
-	    owner_key = oldContact.owner_key != null ? oldContact.owner_key : owner_key;
+
+	    // Sets old owner key to updated contact which restricts contact
+	    // owner being changed everytime contact is updated
+	    if (owner_key == null)
+	    {
+		owner_key = oldContact.owner_key;
+	    }
 	    //
 	    // if (Type.COMPANY == type
 	    // &&
@@ -455,16 +461,8 @@ public class Contact extends Cursor
 	if (oldContact != null && !isDocumentUpdateRequired(oldContact))
 	    return;
 
-	// Enables to build "Document" search on current entity
-	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+	addToSearch();
 
-	// If contact is new then add it to document else edit document
-	if (id == null)
-	{
-	    search.add(this);
-	    return;
-	}
-	search.edit(this);
     }
 
     public void update()
@@ -474,11 +472,35 @@ public class Contact extends Cursor
 
 	dao.put(this);
 
+	addToSearch();
+    }
+
+    private void addToSearch()
+    {
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 
 	// If contact is new then add it to document else edit document
-	search.edit(this);
+	if (id == null)
+	{
+	    try
+	    {
+		search.add(this);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("unable to update document " + this.getContactFieldValue(Contact.EMAIL));
+	    }
+	    return;
+	}
+	try
+	{
+	    search.edit(this);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("unable to update document " + this.getContactFieldValue(Contact.EMAIL));
+	}
 
     }
 

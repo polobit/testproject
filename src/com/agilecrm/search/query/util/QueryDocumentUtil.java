@@ -1,8 +1,11 @@
 package com.agilecrm.search.query.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import com.agilecrm.core.api.search.SearchAPI;
 import com.agilecrm.search.BuilderInterface;
@@ -111,6 +114,7 @@ public class QueryDocumentUtil
 		 * Create new query with LHS and RHS conditions to be processed
 		 * further for necessary queries
 		 */
+		lhs = SearchUtil.normalizeTextSearchString(lhs);
 		lhs = lhs.replaceAll("[^a-zA-Z0-9_]", "_");
 		String newQuery = lhs + ":" + SearchUtil.normalizeString(rhs);
 
@@ -160,8 +164,8 @@ public class QueryDocumentUtil
 
 	    if (lhs.contains("time") && lhs.contains("tags"))
 	    {
-		query = createTimeQueryEpoch(query, SearchUtil.normalizeString(rhs) + "_time", nestedCondition,
-			nestedLhs, nestedRhs);
+		query = createTimeQueryEpoch(query, SearchUtil.normalizeTextSearchString(rhs) + "_time",
+			nestedCondition, nestedLhs, nestedRhs);
 	    }
 	}
 	return query;
@@ -207,6 +211,9 @@ public class QueryDocumentUtil
 	else if (condition.equals(SearchRule.RuleCondition.LAST))
 	{
 	    long fromDateInSecs = new DateUtil().removeDays(Integer.parseInt(rhs) - 1).getTime().getTime();
+
+	    Date truncatedDate = DateUtils.truncate(new Date(fromDateInSecs), Calendar.DATE);
+	    System.out.println("tryncated date : " + truncatedDate);
 
 	    System.out.println(new DateUtil(new Date(fromDateInSecs)).getTime().toGMTString());
 
@@ -274,7 +281,7 @@ public class QueryDocumentUtil
 	// Formated to build query
 	String date = SearchUtil.getDateWithoutTimeComponent(Long.parseLong(rhs));
 
-	lhs = SearchUtil.normalizeString(lhs);
+	lhs = SearchUtil.normalizeTextSearchString(lhs);
 
 	// Created on date condition
 	if (condition.equals(SearchRule.RuleCondition.ON) || condition.equals(SearchRule.RuleCondition.EQUALS))
@@ -411,7 +418,7 @@ public class QueryDocumentUtil
 	 * query query
 	 */
 
-	lhs = SearchUtil.normalizeString(lhs);
+	lhs = SearchUtil.normalizeTextSearchString(lhs);
 	// Day start and end epoch times are calculated.
 	String dayStartEpochTime = String.valueOf(startTimeEpoch / 1000);
 	String dayEndEpochTime = String.valueOf(endTimeEpoch / 1000);
@@ -472,8 +479,17 @@ public class QueryDocumentUtil
 
 	    int days = Integer.parseInt(rhs);
 
+	    Calendar cal = Calendar.getInstance();
+
+	    // Minutes and seconds are removed and time is set one hour extra so
+	    // few contacts will not be missed out
+	    cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY) + 1);
+	    cal.set(Calendar.MINUTE, 0);
+	    cal.set(Calendar.SECOND, 0);
+	    cal.set(Calendar.MILLISECOND, 0);
+
 	    // Current epoch time to get current time.
-	    long currentEpochTime = new DateUtil().getTime().getTime() / 1000;
+	    long currentEpochTime = cal.getTimeInMillis() / 1000;
 
 	    long fromDateInSecs = currentEpochTime - days * 24 * 3600;
 

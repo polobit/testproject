@@ -2,7 +2,7 @@
 <div class="row">
     <div class="span12">
         <div class="page-header">
-            <h1>Web Rules<span class="label label-important" style="vertical-align:top;margin:10px">Beta</span></h1>
+            <h1>Web Rules</h1>
             <a href="#webrules-add" class="btn right" id="addWebrule" style="top:-28px;position:relative"><span><i class="icon-plus-sign" /></span>  Add Web Rule</a>
         </div>
     </div>
@@ -40,7 +40,7 @@
 &lt;script type="text/javascript" src="https://{{getCurrentDomain}}.agilecrm.com/stats/min/agile-min.js"&gt; 
 &lt;/script&gt;
 &lt;script type="text/javascript" &gt;
- _agile.set_account('{{api_key}}', '{{getCurrentDomain}}');
+ _agile.set_account('{{js_api_key}}', '{{getCurrentDomain}}');
  _agile.track_page_view();
  _agile_execute_web_rules();
 &lt;/script&gt;
@@ -81,14 +81,12 @@ For example, when visitors are about to leave your website, show them a sign-up 
 </div>
 </td>
 <td>
-{{#each actions}}
-	{{titleFromEnums action}} 
-{{/each}}
+{{#actionTemplate actions}}{{/actionTemplate}}
 </td>
 <td>
 <div style="width: 60px;text-align: center;">
 {{#if disabled}} 
-	<label class="label label-important">Disabled</label>
+	<label class="label label-important" style="margin-bottom: 0px!important;">Disabled</label>
 {{/if}}
 </div>
 </td>

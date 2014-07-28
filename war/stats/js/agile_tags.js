@@ -24,18 +24,13 @@ function agile_addTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
-			if(agile_read_cookie("agile-tags"))
-				{
-					agile_addTagsToCookie(tags);
-				}
-			else
-				agile_create_cookie("agile-tags", tags, 365 * 5);
+			agile_cookieTags(tags, "add");
 			return;
 		}
 		else
 			email = agile_guid.get_email();
 	}
-	
+
 	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 
 	// Post
@@ -66,10 +61,7 @@ function agile_removeTag(tags, callback, email)
 	{
 		if (!agile_guid.get_email())
 		{
-			if(agile_read_cookie("agile-tags")){
-				agile_deleteTagsFromCookie(tags);
-				return;
-			}
+			agile_cookieTags(tags, "delete");
 			return;
 		}
 		else
@@ -103,9 +95,11 @@ function agile_getTags(callback, email)
 		else
 			email = agile_guid.get_email();
 	}
+	var tags = agile_read_cookie("agile-tags");
+	var params = "email={0}&tags={1}".format(encodeURIComponent(email), encodeURIComponent(tags));
 
 	// Get
-	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + "email={0}".format(encodeURIComponent(email));
+	var agile_url = agile_id.getURL() + "/contacts/get-tags?callback=?&id=" + agile_id.get() + "&" + params;
 
 	// Callback
 		agile_json(agile_url, callback);

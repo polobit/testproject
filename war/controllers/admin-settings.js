@@ -19,8 +19,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
-	
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
+
 	/* Milestones */
 	"milestones" : "milestones",
 
@@ -225,7 +225,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				//initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
-			$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+			$('#content').find('#admin-prefs-tabs-content').html(view.el);
 			$('#content').find('#AdminPrefsTab .active').removeClass('active');
 			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
@@ -255,7 +255,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// $('#content').html(view.el);
 		});
 	},
-	
+
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success

@@ -331,6 +331,16 @@ public class ReportsUtil
 	}
     }
 
+    public static Long getAvailableEntitiesCountInReport(Long id)
+    {
+	Reports report = getReport(id);
+
+	if (report == null)
+	    return 0l;
+
+	return report.getCount();
+    }
+
     public static void check(Long startTime, Long endTime) throws PlanRestrictedException
     {
 	JSONObject object = new JSONObject();

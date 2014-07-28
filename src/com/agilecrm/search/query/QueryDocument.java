@@ -249,7 +249,10 @@ public class QueryDocument<T> implements QueryInterface
 
 	// If index is null return without querying
 	if (index == null)
+	{
+	    System.out.println("index is null");
 	    return null;
+	}
 
 	return QueryOptions.newBuilder().setReturningIdsOnly(true)
 		.setLimit(Long.valueOf(index.search(query).getNumberFound()).intValue()).build();
@@ -360,8 +363,12 @@ public class QueryDocument<T> implements QueryInterface
 
 	// If index is null return without querying
 	if (index == null)
+	{
+	    System.out.println("index is null in query processing");
 	    return null;
+	}
 
+	System.out.println("query string : " + query_string);
 	// Fetches documents based on query options
 	Collection<ScoredDocument> searchResults = index.search(query_string).getResults();
 
@@ -556,7 +563,6 @@ public class QueryDocument<T> implements QueryInterface
 	{
 	    Key<T> key = new Key<T>(clazz, Long.parseLong(doc.getId()));
 	    entityKeys.add(key);
-	    System.out.println(key);
 	    cursor = doc.getCursor().toWebSafeString();
 	}
 
@@ -608,5 +614,20 @@ public class QueryDocument<T> implements QueryInterface
 	}
 
 	return entities;
+    }
+
+    private Long getCount(String query)
+    {
+	if (index == null)
+	    return 0l;
+
+	return index.search(query).getNumberFound();
+    }
+
+    public Long getCount(List<SearchRule> rules)
+    {
+	String query = QueryDocumentUtil.constructQuery(rules);
+
+	return getCount(query);
     }
 }

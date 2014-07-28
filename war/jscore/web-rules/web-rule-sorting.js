@@ -1,30 +1,8 @@
-$(function()
-{
-	/**
-	 * On mouseleave hides the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseleave', function()
-	{
-		$(this).find("td:last > div").css("visibility", "hidden");
-	});
-	
-	*//**
-	 * On mouseleave shows the icon
-	 *//*
-	$('#webrule-model-list > tr').die().live('mouseenter', function()
-	{
-		$(this).find("td:last > div").css("visibility", "visible");
-	});*/
-
-
-});
-
-
 /**
  * For sorting of web rules
  * @param el
  */
-function enableWebruletSoring(el)
+function enableWebrulesSorting(el)
 {
 	$("#webrule-model-list").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td><td></td><td></td></tr>");
 	// Loads jquery-ui to get sortable functionality on widgets
@@ -51,15 +29,9 @@ function enableWebruletSoring(el)
 				      $(this).width($originals.eq(index).width());
 				    });
 				    return $helper;
-				},
-		        /*start: function (event, ui) {
-		        	console.log("adding");
-		        	$("#webrule-model-list").append("<tr class='pseduo-row' style='border:none!important;'><td></td><td></td><td></td><td></td><td></td></tr>");
-		        },
-		        beforeStop: function (event, ui) {
-		        	console.log("removing");
-		        	$("#webrule-model-list").find("tr.pseduo-row").remove();
-		        }*/
+
+				}
+
 		});
 
 		/*
@@ -67,7 +39,7 @@ function enableWebruletSoring(el)
 		 * widgets
 		 */
 		$('.webrule-sortable', el).on("sortstop", function(event, ui) {
-			
+
 			var models = [];
 
 			/*
@@ -77,19 +49,20 @@ function enableWebruletSoring(el)
 			$('.webrule-sortable > tr', el).each(function(index, element)
 			{
 				if(!$(element).hasClass("pseduo-row")){
-					
+
+
 					var model_id = $(element).find('.data').attr('data');
 
 					// Get Model, model is set as data to widget element
 					var model = App_WebReports.webrules.collection.get(model_id);
 
-					model.set({ 'position' : index }, { silent : true });
+					model.set({ 'position' : index+1 }, { silent : true });
 
-					models.push({ id : model.get("id"), position : index });
+					models.push({ id : model.get("id"), position : index+1 });
 				}
 
 			});
-	
+
 			// Saves new positions in server
 			$.ajax({ type : 'POST', url : '/core/api/webrule/positions', data : JSON.stringify(models),
 				contentType : "application/json; charset=utf-8", dataType : 'json' });

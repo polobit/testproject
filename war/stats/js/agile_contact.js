@@ -47,6 +47,34 @@ function agile_createContact(data, callback)
 
 		// Splitting tags string at ,
 		model.tags = tags_string.split(",");
+
+		// Trim each tag for spaces
+		for ( var i = 0; i < model.tags.length; i++)
+		{
+			model.tags[i] = model.tags[i].trim();
+		}
+	}
+	if (tags_from_cookie)
+	{
+		agile_delete_cookie("agile-tags");
+		var tags_string = tags_from_cookie.trim().replace("/ /g", " ");
+		tags_string = tags_string.replace("/, /g", ",");
+		var tags_array = tags_string.split(",");
+		if (model.tags)
+		{
+			for ( var i = 0; i < tags_array.length; i++)
+			{
+				model.tags.push(tags_array[i].trim());
+			}
+		}
+		else
+		{
+			model.tags = [];
+			for ( var i = 0; i < tags_array.length; i++)
+			{
+				model.tags.push(tags_array[i].trim());
+			}
+		}
 	}
 	if (tags_from_cookie)
 	{

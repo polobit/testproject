@@ -92,10 +92,10 @@
          <div class="task-related-to" title="Related To">
         	{{#each contacts}}
         		{{#if_contact_type "PERSON"}}
-        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
+        			<a href="#contact/{{id}}" class="activate-link task-related-contacts">{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}</a>
         		{{/if_contact_type}}
 				{{#if_contact_type "COMPANY"}}
-        			<a href="#contact/{{id}}" class="activate-link">{{getPropertyValue properties "name"}}</a>
+        			<a href="#contact/{{id}}" class="activate-link task-related-contacts">{{getPropertyValue properties "name"}}</a>
         		{{/if_contact_type}}
         	{{/each}}
 		 </div>
@@ -140,11 +140,17 @@
 
 <script id="notes-for-task-template" type="text/html">
 <li class="task-note" data="{{id}}"> 
-{{#if prefs.pic}}
-    <img class="thumbnail" src="{{prefs.pic}}" width="20" height="20" title="{{prefs.currentDomainUserName}}"/>
+
+{{#if domainOwner}}
+	{{#if ownerPic}}
+		<img class="thumbnail" width="20" height="20" alt="" src="{{ownerPic}}" title="{{domainOwner.name}}">
+	{{else}}
+		<img class="thumbnail" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{domainOwner.name}}">
+	{{/if}}
 {{else}}
-	<img class="thumbnail" src="{{defaultGravatarurl 50}}" width="20" height="20" title="{{prefs.currentDomainUserName}}"/>
+	{{#getCurrentUserPrefs}}<img class="thumbnail" width="20" height="20" alt="" title="{{currentDomainUserName}}" src="{{#if pic}}{{pic}}{{else}}{{defaultGravatarurl 40}}{{/if}}">{{/getCurrentUserPrefs}}
 {{/if}}
+
 <div style="border: 1px solid #cccccc;border-radius: 3px;margin-left: 5px;padding-left: 5px;width: 92%;"> 
  <div class="txt-mute">{{description}}</div>
 </div>

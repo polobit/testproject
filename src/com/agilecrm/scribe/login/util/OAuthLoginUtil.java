@@ -1,7 +1,6 @@
 package com.agilecrm.scribe.login.util;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,10 +10,9 @@ import org.scribe.builder.api.Api;
 import org.scribe.builder.api.YahooApi;
 import org.scribe.oauth.OAuthService;
 
+import com.agilecrm.LoginServlet;
 import com.agilecrm.scribe.api.GoogleApi;
-import com.agilecrm.scribe.api.LinkedinAPI;
 import com.agilecrm.scribe.login.serviceproviders.GoogleLoginService;
-import com.agilecrm.scribe.login.serviceproviders.LinkedinLoginService;
 import com.agilecrm.scribe.login.serviceproviders.OAuthLoginService;
 import com.agilecrm.scribe.login.serviceproviders.YahooLoginService;
 import com.agilecrm.session.SessionManager;
@@ -39,9 +37,7 @@ public class OAuthLoginUtil
 
 	GOOGLE(GoogleLoginService.class, GoogleApi.class),
 
-	YAHOO(YahooLoginService.class, YahooApi.class),
-
-	LINKEDIN(LinkedinLoginService.class, LinkedinAPI.class);
+	YAHOO(YahooLoginService.class, YahooApi.class);
 
 	Class<? extends OAuthLoginService> loginService;
 	Class<? extends Api> apiClass;
@@ -139,9 +135,9 @@ public class OAuthLoginUtil
 
 	if (domainUser == null)
 	{
-
-	    // resp.sendRedirect("/register");
-	    req.getSession().setAttribute("return_url", "/register");
+	    // Oauth should be set as query parameter so it creates new account
+	    // based on session info set
+	    req.getSession().setAttribute("return_url", "/register?type=oauth");
 	    return;
 	}
 
@@ -149,6 +145,15 @@ public class OAuthLoginUtil
 	String domain = NamespaceManager.get();
 	System.out.println(domainUser + " " + domain);
 	String returnURL = (String) req.getSession().getAttribute("return_url");
+
+	// If return url contains gmail?command= then request is to associate
+	// google gadget to user
+	if (!StringUtils.isEmpty(returnURL) && returnURL.contains("gmail?command="))
+	{
+	    System.out.println("return to gmail gadget service");
+	    return;
+	}
+
 	if (domainUser != null && domainUser.domain != null && domain != null
 		&& !domain.equalsIgnoreCase(domainUser.domain))
 	{
@@ -158,9 +163,7 @@ public class OAuthLoginUtil
 
 	    // String path = "https://" + domainUser.domain +
 	    // "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/oauth";
-	    String path = "https://" + domainUser.domain + ".agilecrm.com/oauth";
-	    if (returnURL != null)
-		path += "?return_url=" + URLEncoder.encode(returnURL);
+	    String path = "https://" + domainUser.domain + ".agilecrm.com/";
 
 	    System.out.println("Redirecting to " + path);
 
@@ -174,6 +177,22 @@ public class OAuthLoginUtil
 	// or return_url
 	req.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 	SessionManager.set(userInfo);
+
+	// Redirect to page in session is present - eg: user can access #reports
+	// but we store reports in session and then forward to auth. After auth,
+	// we forward back to the old page
+
+	req.getSession().removeAttribute("return_url");
+
+	String redirect = (String) req.getSession().getAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+	if (redirect != null)
+	{
+	    req.getSession().removeAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+	    resp.sendRedirect(redirect);
+	    return;
+	}
+
+	resp.sendRedirect("/");
     }
 
     public static OAuthService getLoginService(HttpServletRequest request, HttpServletResponse response,
@@ -185,11 +204,12 @@ public class OAuthLoginUtil
 
 	System.out.println("*********************************************");
 	System.out.println(serverFromSession);
-	if (StringUtils.isEmpty(server) && StringUtils.isEmpty(serverFromSession))
-	    return null;
-
 	if (server == null)
 	    server = serverFromSession;
+
+	if (StringUtils.isEmpty(server) && StringUtils.isEmpty(serverFromSession))
+	    server = "google";
+
 	System.out.println(server);
 	OpenIdServiceProvider serviceProvider = null;
 	try

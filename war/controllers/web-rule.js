@@ -6,21 +6,40 @@ var WebreportsRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Settings */
-	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit"
+	"web-rules" : "webrules", "webrules-add" : "web_reports_add", "webrule-edit/:id" : "web_reports_edit",
+	"shopify-rule-add" : "shopify_rule_add", "shopify-rule-edit/:id" : "shopify_rule_edit", "shopify/:url" : "shopify", "shopify" : "shopify"
+		
 	},
 	webrules : function()
 	{
+		var that = this;
 		this.webrules = new Base_Collection_View({ url : '/core/api/webrule', restKey : "webrule", templateKey : "webrule", individual_tag_name : 'tr',
 			sortKey : 'position', postRenderCallback : function(el)
 			{
-				head.js(LIB_PATH + 'lib/prettify-min.js', function()
+				if(that.webrules.collection && that.webrules.collection.length == 0)
 				{
-					enableWebruletSoring(el);
-					prettyPrint();
-					/*if($(el).has("#api_track_webrules_code_icon").length != 0){
-						initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-					}*/
-				});
+					head.js(LIB_PATH + 'lib/prettify-min.js', function()
+					{
+						$.ajax({
+							url : 'core/api/api-key',
+							type : 'GET',
+							dataType : 'json',
+							success : function(data){
+								$('#content').html(getTemplate("webrule-collection", data));
+								prettyPrint();
+							}
+						});
+	
+						/*if($(el).has("#api_track_webrules_code_icon").length != 0){
+							initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
+						}*/
+					});
+				}
+				else
+				{
+					enableWebrulesSorting(el);
+				}
+
 			}	
 		});
 		
@@ -90,5 +109,47 @@ var WebreportsRouter = Backbone.Router.extend({
 
 		$("#content").html(getRandomLoadingImg());
 		web_reports_add.render();
+	}, 
+	shopify_rule_add : function()
+	{
+		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', template : "shopifyrules-add", window : "web-rules", isNew : true,
+			postRenderCallback : function(el)
+			{
+				head.js('lib/agile.jquery.chained.min.js', function()
+				{
+
+					chainFilters(el, undefined, function()
+					{
+						chainWebRules(el, undefined, true);
+						$("#content").html(el);
+					}, true);
+
+				})
+			} });
+
+		$("#content").html(getRandomLoadingImg());
+		web_reports_add.render();
+	},
+	shopify : function(url)
+	{
+		our_domain_set_account();
+		
+		if(!Agile_Contact["id"])
+			{
+				agile_getContact(CURRENT_DOMAIN_USER['email'], {success : function(data){
+					Agile_Contact = data;
+					add_property("Shopify shop", url, "CUSTOM", function(data){
+						addTagAgile("Shopify");
+					});
+				}});
+			}
+		else
+		add_property("Shopify shop", url, "CUSTOM", function(data){
+			addTagAgile("Shopify");
+		})
+		
+		
+		
+		$("#content").html(getTemplate("shopify"), {});
 	}
 });

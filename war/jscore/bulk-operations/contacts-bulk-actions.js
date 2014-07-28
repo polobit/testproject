@@ -610,16 +610,14 @@ function getSelectionCriteria()
 {
 	// Reads filter cookie$('.filter-criteria'
 	
-	var filter_id = $('.filter-criteria').attr("_filter");
-
-	if (filter_id)
+	
+	var filter_id = $('.filter-criteria', $(App_Contacts.contactsListView.el)).attr("_filter");
+	
+	if (filter_id && _BULK_CONTACTS == "#contacts")
 	{
 		return filter_id;
 	}
 	
-	// To avoid running on all contacts
-	if($('.filter-criteria').length > 0)
-		return;
 	// If filter cookie is not available then it returns either '#contacts' of
 	// '#tags/{tag}' according to current window hash
 	if (_BULK_CONTACTS)

@@ -60,10 +60,14 @@ function add_current_loggedin_time()
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
 	var existing_date_string = "";
+	
+	// To whether custom is new or old.
+	var is_new_customer = true;
 	if (loggedin_time_property)
 	{
 		var existing_date_object = new Date(parseFloat(loggedin_time_property.value) * 1000);
 		existing_date_string = existing_date_object.getUTCMonth() + 1 + "/" + existing_date_object.getUTCDate() + "/" + existing_date_object.getUTCFullYear();
+		is_new_customer = false;
 	}
 
 	// If loggedin time is defined and it is not equal to current date then it
@@ -75,7 +79,10 @@ function add_current_loggedin_time()
 
 	_agile.add_property(loggedin_time_property, function(data){
 		Agile_Contact = data;
-		add_timezone_tag();
+		
+		// Adds timezone if customer is new
+		if(is_new_customer)
+			add_timezone_tag();
 	});
 }
 
@@ -132,12 +139,12 @@ function add_account_canceled_info(info, callback)
 	});
 }
 
-//add GMT tag for user who is in between 4am to 4pm GMT
+//add GMT tag for user who is in between 4am to 6pm GMT
 function add_timezone_tag()
 {
 	var date = new Date(); 
 	var startTime = date.getUTCHours();
-	if(startTime >= 4 && startTime <=16) {
+	if(startTime >= 4 && startTime <=18) {
 		add_tag_our_domain("GMT");
 	}
 }
