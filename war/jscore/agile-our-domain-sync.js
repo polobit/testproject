@@ -94,8 +94,7 @@ function create_contact_custom_field(name, value, type, subtype)
 	var json = {};
 	json["name"] = name;
 	json["value"] = value;
-	json["type"] = type;
-	json["subtype"] = subtype;
+	json["subtype"] = type;
 
 	console.log(value);
 	return json;
