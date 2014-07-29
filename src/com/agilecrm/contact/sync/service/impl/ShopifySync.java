@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -285,24 +284,25 @@ public class ShopifySync extends OneWaySyncService
 	if (orders != null && orders.size() > 0)
 	{
 	    Iterator<LinkedHashMap<String, Object>> it = orders.listIterator();
-	    List<String> tags = new ArrayList<String>();
 	    while (it.hasNext())
 	    {
 		LinkedHashMap<String, Object> order = it.next();
-		Note n = new Note();
-		n.subject = "Orders";
+
 		ArrayList<LinkedHashMap<String, String>> itemDetails = (ArrayList<LinkedHashMap<String, String>>) order
 			.get("line_items");
 		Iterator<LinkedHashMap<String, String>> iterator = itemDetails.listIterator();
 		while (iterator.hasNext())
 		{
 		    LinkedHashMap<String, String> details = iterator.next();
-		    n.description = details.get("name") + "-" + details.get("price");
-		    tags.add(details.get("title"));
+		    Note n = new Note("Orders", details.get("name") + "-" + details.get("price"));
+
+		    n.addRelatedContacts(contact.id.toString());
+		    n.save();
+
+		    contact.tags.add(details.get("title"));
+		    contact.save();
 		}
-		n.addRelatedContacts(contact.id.toString());
-		n.save();
-		contact.tags.addAll(tags);
+
 	    }
 	}
 
