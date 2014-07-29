@@ -217,7 +217,7 @@ function getDetailsForCollection()
  * @returns {String} query string
  */
 function getParamsNew()
-{	
+{
 	var params = "?";
 
 	// Get task type and append it to params
