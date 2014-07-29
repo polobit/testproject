@@ -26,7 +26,7 @@ $(function()
 
 	//setting lastname to empty string if it is undefined
 	if(last_name==undefined||last_name==null)
-	lastname='';
+		last_name='';
 	
 	console.log("firstName:" + first_name + "lastname:" + last_name);
 

@@ -15,17 +15,17 @@ import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
 /**
- * <code>XeroScribeServlet</code> is used to handle response return from plugin url xero
- * methods and save data in to back end.If widget with widgetId is exist update that widget 
- * data and save.
+ * <code>XeroScribeServlet</code> is used to handle response return from plugin
+ * url xero methods and save data in to back end.If widget with widgetId is
+ * exist update that widget data and save.
  */
 @SuppressWarnings("serial")
 public class XeroScribeServlet extends HttpServlet
 {
-	
-	/**static variable for type xero*/
+
+	/** static variable for type xero */
 	public static final String SERVICE_TYPE_XERO = "xero";
-	
+
 	/**
 	 * Process the post request to servlet request, request can be sent either
 	 * from application client or from service provider (After connecting to
@@ -107,7 +107,7 @@ public class XeroScribeServlet extends HttpServlet
 			Widget widget = WidgetUtil.getWidget(Long.parseLong(widgetId));
 			if (widget == null)
 			{
-			
+
 			}
 			else
 			{

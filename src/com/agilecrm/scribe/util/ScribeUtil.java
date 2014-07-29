@@ -595,7 +595,7 @@ public class ScribeUtil
 
 		System.out.println(responseString);
 
-		//get accesstoken from responsebody string
+		// get accesstoken from responsebody string
 		String ts[] = responseString.split("&");
 		for (int i = 0; i < ts.length; i++)
 		{
