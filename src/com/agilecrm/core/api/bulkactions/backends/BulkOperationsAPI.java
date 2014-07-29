@@ -115,9 +115,9 @@ public class BulkOperationsAPI
 
 	String message = "Owner changed for ";
 	if(fetcher.getAvailableContacts() > 0)
-	    message = fetcher.getAvailableCompanies() +" Contacts";
+	    message = message + fetcher.getAvailableContacts() +" Contacts";
 	else if(fetcher.getAvailableCompanies() > 0)
-	    message = fetcher.getAvailableCompanies() +" Companies";
+	    message = message + fetcher.getAvailableCompanies() +" Companies";
 	
 	BulkActionNotifications.publishNotification(message);
 	
@@ -425,7 +425,7 @@ public class BulkOperationsAPI
 
 	String message = "";
 	if(fetcher.getAvailableContacts() > 0)
-	    message = fetcher.getAvailableCompanies() +" Contacts deleted";
+	    message = fetcher.getAvailableContacts() +" Contacts deleted";
 	else if(fetcher.getAvailableCompanies() > 0)
 	    message = fetcher.getAvailableCompanies() +" Companies deleted";
 	

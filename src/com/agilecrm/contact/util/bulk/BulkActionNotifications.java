@@ -68,6 +68,7 @@ public class BulkActionNotifications
 	JSONObject messageJSON = new JSONObject();
 	try
 	{
+	    System.out.println("message to send in notification " + message);
 	    messageJSON.put("message", message);
 	    messageJSON.put("type", BulkAction.BULK_ACTIONS);
 	    messageJSON.put("sub_type", BulkAction.BULK_ACTIONS);

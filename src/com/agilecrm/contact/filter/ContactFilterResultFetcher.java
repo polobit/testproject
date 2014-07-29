@@ -127,19 +127,6 @@ public class ContactFilterResultFetcher
 	    number_of_companies = 0;
 	}
 
-	else if (contact_ids != null)
-	{
-	    if (contacts.size() == 0)
-	    {
-		return;
-	    }
-	    Contact contact = contacts.get(0);
-	    if (contact.type == Contact.Type.PERSON)
-		number_of_contacts = contacts.size();
-	    else
-		number_of_companies = contacts.size();
-	}
-
 	System.out.println("total available contacts : " + number_of_contacts + " , total available companies : "
 		+ number_of_companies);
     }
@@ -262,7 +249,15 @@ public class ContactFilterResultFetcher
 	    try
 	    {
 		contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
-
+		if (contacts.size() == 0)
+		{
+		    return contacts;
+		}
+		Contact contact = contacts.get(0);
+		if (contact.type == Contact.Type.PERSON)
+		    number_of_contacts = contacts.size();
+		else
+		    number_of_companies = contacts.size();
 	    }
 	    catch (JSONException e)
 	    {
