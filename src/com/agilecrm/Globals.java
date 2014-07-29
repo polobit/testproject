@@ -76,7 +76,7 @@ public class Globals
     public static final String DEV_STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String DEV_STRIPE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
-    // Xero live keys
+ // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
     public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
 
@@ -90,7 +90,6 @@ public class Globals
     /** facebook app details*/
     public static final String FACEBOOK_APP_ID = "1472694689634803";
     public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
-  
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
 
@@ -119,13 +118,8 @@ public class Globals
     // Campaign and Email pull queues
     public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
-    // shopify app credential
+// shopify app credential
     public static final String SHOPIFY_API_KEY = "70a2391cd9e9af0d666657a67885d9ec";
     public static final String SHOPIFY_SECRET_KEY = "a1f88bc91e5c70c34c215bf224ebd7d3";
-
-    // public static final String SHOPIFY_API_KEY =
-    // "0655ecab47a7c443bf07f3b72be6035b";
-    // public static final String SHOPIFY_SECRET_KEY =
-    // "016cb9b32bdc3e65530e9daf8eee57e6";
 
 }
