@@ -1,6 +1,6 @@
 function initialize_infinite_scrollbar(element_id, targetCollection)
 {
-	console.log("initialize_infinite_scrollbar");	
+	console.log("initialize_infinite_scrollbar");
 
 	if (element_id == undefined || element_id == null)
 	{
@@ -33,7 +33,7 @@ function initialize_infinite_scrollbar(element_id, targetCollection)
 		onFetch : function()
 		{
 			console.log('in fetch');
-			
+
 			// Add loading icon
 			$(targetCollection.infiniScroll.options.target.nextElementSibling).html(
 					'<div class="scroll-loading"> <img src="/img/ajax-loader.gif" style="margin-left: 44%;"> </div>');
@@ -48,7 +48,7 @@ function initialize_infinite_scrollbar(element_id, targetCollection)
 function setCursor(targetTaskListModel, newTaskToAdd, conditionToCheck)
 {
 	console.log("In setCursor");
-	
+
 	if (!targetTaskListModel.get('taskCollection') || targetTaskListModel.get('taskCollection').length == 0)
 		return newTaskToAdd;
 

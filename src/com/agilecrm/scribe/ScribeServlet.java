@@ -95,7 +95,7 @@ public class ScribeServlet extends HttpServlet
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{
-		
+
 		/*
 		 * OAuth1.0 - Check if it is first time or returning from OAuth1.0
 		 * authentication.If token and verifier is present, we just store or
@@ -115,7 +115,6 @@ public class ScribeServlet extends HttpServlet
 		System.out.println("oAuthVerifier " + oAuthVerifier);
 		System.out.println("code " + code);
 
-		
 		/*
 		 * If aAuthToken and oAuthVerifier or code is not null i.e., request is
 		 * from service provider, tokens are saved

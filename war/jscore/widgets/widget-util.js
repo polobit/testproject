@@ -405,8 +405,11 @@ function show_set_up_widget(widget_name, template_id, url, model)
     var models;
     $('#prefs-tabs-content').html(getRandomLoadingImg());
     if (model)
+    {
+    console.log(model)	
 	el = $(getTemplate("widget-settings", model));
-    else
+    }
+	else
     {
 	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 	{
@@ -520,7 +523,7 @@ function set_up_access(widget_name, template_id, data, url, model)
     if (json.name == "Twilio")
 	json['outgoing_numbers'] = data;
 
-    else if (json.name == "Linkedin" || json.name == "Twitter")
+    else if (json.name == "Linkedin" || json.name == "Twitter" || json.name == "Facebook")
 	json['profile'] = data;
 
     else
