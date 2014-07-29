@@ -105,7 +105,7 @@ public class QuickBooksUtil
 		customerJSON.put("GivenName", firstname);
 		customerJSON.put("FamilyName", lastname);
 
-		customerJSON.put("DisplayName", firstname + " " + lastname);
+		customerJSON.put("DisplayName", (firstname + " " + lastname).trim());
 		JSONObject emailJSON = new JSONObject();
 		emailJSON.put("Address", email);
 		customerJSON.put("PrimaryEmailAddr", emailJSON);
