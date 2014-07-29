@@ -39,14 +39,14 @@
 		
 	</servlet-mapping>
 	
-	<!-- <servlet>
+	 <servlet>
 		<servlet-name>XeroScribeServlet</servlet-name>
 		<servlet-class>com.agilecrm.scribe.XeroScribeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>XeroScribeServlet</servlet-name>
 		<url-pattern>/XeroServlet</url-pattern>
-	</servlet-mapping> -->
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>ContactUtilServlet</servlet-name>
