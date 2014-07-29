@@ -128,6 +128,10 @@ public abstract class ContactSyncService implements SyncService
 	++total_synced_contact;
 
 	saveContact(contact);
+
+	// Works as save callback to perform actions like creating notes/tasks
+	// and relating to newly created contact
+	contactWrapper.saveCallback();
 	return contact;
     }
 

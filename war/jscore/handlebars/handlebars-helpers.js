@@ -243,6 +243,8 @@ $(function()
 			
 			if(getPropertyValue(items, "last_name"))
 			name = name + "" + getPropertyValue(items, "last_name").substr(0,1);
+		
+		
 			
 			return name;
 

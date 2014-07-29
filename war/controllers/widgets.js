@@ -836,7 +836,8 @@ var WidgetsRouter = Backbone.Router
 					template : 'admin-settings-import-shopify-prefs', saveCallback : function(model)
 					{
 						
-					} })
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+					} });
 				
 				$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
 			},
