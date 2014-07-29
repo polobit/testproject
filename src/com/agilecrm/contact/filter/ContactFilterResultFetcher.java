@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,14 +81,14 @@ public class ContactFilterResultFetcher
 	{
 	    this.systemFilter = getSystemFilter(filter_id);
 	}
+	
+	setAvailableCount();
 
     }
     
-    public int getAvailableContacts()
+    
+    private void setAvailableCount()
     {
-	if(number_of_contacts != null)
-	    return number_of_contacts;
-	
 	if(filter != null)
 	{
 	   SearchRule rule = new SearchRule();
@@ -95,30 +96,39 @@ public class ContactFilterResultFetcher
 	   rule.CONDITION = SearchRule.RuleCondition.EQUALS;
 	   rule.RHS = Contact.Type.PERSON.toString();
 	   filter.rules.add(rule);
+	   
+	   // Set number of contacts
 	   number_of_contacts = filter.queryContactsCount();
-	    filter.rules.remove(filter.rules.size() - 1);
-	}
-	
-	return number_of_contacts;
-    }
-    
-    public int getAvailableCompanies()
-    {
-	if(number_of_contacts != null)
-	    return number_of_contacts;
-	
-	if(filter != null)
-	{
-	   SearchRule rule = new SearchRule();
+	   filter.rules.remove(filter.rules.size() - 1);
+	    
+	    // Set number of companies
+	   SearchRule companyRule = new SearchRule();
 	   rule.LHS = "type";
 	   rule.CONDITION = SearchRule.RuleCondition.EQUALS;
 	   rule.RHS = Contact.Type.COMPANY.toString();
 	   filter.rules.add(rule);
+	   
+	   // Set number of contacts
 	   number_of_companies = filter.queryContactsCount();
 	   filter.rules.remove(filter.rules.size() - 1);
+	    
 	}
-	
+	else if(searchMap != null)
+	{
+	    number_of_contacts = Contact.dao.getCountByProperty(searchMap);
+	    number_of_companies = 0;
+	}
+    }
+    
+    public Integer getAvailableContacts()
+    {
 	return number_of_contacts;
+    }
+  
+    
+    public int getAvailableCompanies()
+    {
+	return number_of_companies;
     }
 
     public int getTotalFetchedCount()
@@ -134,6 +144,8 @@ public class ContactFilterResultFetcher
      */
     private DefaultFilter getSystemFilter(String id)
     {
+	searchMap = new HashMap<String, Object>();
+	
 	// Checks if Filter id contacts "system", which indicates the
 	// request is to load results based on the default filters provided
 	if (id.contains("system-"))
@@ -148,17 +160,19 @@ public class ContactFilterResultFetcher
 
 	    // If requested id contains "system" in it, but it doesn't match
 	    // with RECENT/LEAD/CONTACTS then return null
+	    searchMap = ContactFilterUtil.getDefaultContactSearchMap(filter);
 	    return filter;
 	}
 	// If criteria starts with '#tags/' then it splits after '#tags/' and
 	// gets tag and returns contact keys
 	if (id.startsWith("#tags/"))
 	{
-	    String[] tagCondition = StringUtils.split("#tags/");
+	    String[] tagCondition = id.split("/");
 	    String tag = tagCondition.length > 0 ? tagCondition[1] : "";
 
 	    try
 	    {
+		
 		searchMap.put("tagsWithTime.tag", URLDecoder.decode(tag, "UTF-8"));
 	    }
 	    catch (UnsupportedEncodingException e)

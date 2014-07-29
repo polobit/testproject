@@ -81,6 +81,9 @@ public class BulkOperationsAPI
 		//ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    }
 	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, current_user_id);
+	    
+	    System.out.println(fetcher.getAvailableCompanies());
+	    System.out.println(fetcher.getAvailableContacts());
 	}
 	
 	else if (!StringUtils.isEmpty(model_ids))
