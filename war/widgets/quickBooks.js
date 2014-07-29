@@ -21,7 +21,7 @@ $(function()
     
     //set last name empty if it is undifned
     if(last_name==undefined||last_name==null)
-    	last_name='';
+    	last_name=' ';
     
     console.log("Email is" + Email)
 

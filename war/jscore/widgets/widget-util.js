@@ -523,7 +523,7 @@ function set_up_access(widget_name, template_id, data, url, model)
     if (json.name == "Twilio")
 	json['outgoing_numbers'] = data;
 
-    else if (json.name == "Linkedin" || json.name == "Twitter" || json.name == "Facebook")
+    else if (json.name == "Linkedin" || json.name == "Twitter" )
 	json['profile'] = data;
 
     else
