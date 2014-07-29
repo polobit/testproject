@@ -1330,16 +1330,29 @@ $(function()
 
     Handlebars.registerHelper('contacts_count', function()
     {
+    	var count_message;
 	if (this[0] && this[0].count && (this[0].count != -1))
 	{
+		
 	    if (this[0].count > 9999 && readCookie('contact_filter'))
-		return "(" + this[0].count + "+ Total)";
+	    	count_message = "<small> (" + 10000 + "+ Total) </small>" +
+				'<span style="vertical-align: text-top; margin-left: -5px">' +
+									'<img border="0" src="/img/help.png"' +
+									'style="height: 10px; vertical-align: middle" rel="popover"' +
+									'data-placement="bottom" data-title="Lead Score"' +
+									'data-content="When the count is over 10,000, we can\'t give you the precise number. Sorry about that."' +
+									'id="element" data-trigger="hover">' +
+								'</span>';
 
-	    return "(" + this[0].count + " Total)";
+	    else
+	    	count_message =  "(" + this[0].count + " Total)";
 	}
 	else
-	    return "(" + this.length + " Total)";
+		count_message = "(" + this.length + " Total)";
+	
+	return new Handlebars.SafeString(count_message);
     });
+    
 
     /**
      * 
