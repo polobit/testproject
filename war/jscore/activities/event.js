@@ -93,10 +93,24 @@ $(function()
 	 * Activates the date picker to the corresponding fields in activity modal
 	 * and activity-update modal
 	 */
-	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' });
+	var eventDate = $('#event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
+		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
+		var eventDate2 = new Date($('#event-date-2').val());
+		  if (ev.date.valueOf() > eventDate2.valueOf()) {
+			    $('#event-date-2').val($('#event-date-1').val());
+			  }
+			 
+			});
 
 	$('#event-date-2').datepicker({ format : 'mm/dd/yyyy' });
-	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' });
+	$('#update-event-date-1').datepicker({ format : 'mm/dd/yyyy' }).on('changeDate', function(ev) {
+		// If event start date is changed and end date is less than start date, change the value of the end date to start date.
+		var eventDate2 = new Date($('#update-event-date-2').val());
+		  if (ev.date.valueOf() > eventDate2.valueOf()) {
+			    $('#update-event-date-2').val($('#update-event-date-1').val());
+			  }
+			 
+			});
 	$('#update-event-date-2').datepicker({ format : 'mm/dd/yyyy' });
 
 	/**
