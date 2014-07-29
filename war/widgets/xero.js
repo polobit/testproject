@@ -38,6 +38,9 @@ $(function()
 	var first_name = agile_crm_get_contact_property("first_name");
 	var last_name = agile_crm_get_contact_property("last_name");
 
+	if(last_name==undefined||last_name==null)
+		last_name = ' ';
+	
 	showXeroClient();
 
 	$('#xero_add_contact').die().live('click', function(e)

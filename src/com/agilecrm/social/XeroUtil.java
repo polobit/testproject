@@ -64,7 +64,7 @@ public class XeroUtil
 	{
 		// call to create contact in xero
 		return HTTPUtil.accessHTTPURL(xeroPluginurl + "/addcontact",
-				(new JSONObject(widget.prefs).put("name", firstName + " " + lastName).put("email", email).put(
+				(new JSONObject(widget.prefs).put("name", (firstName + " " + lastName).trim()).put("email", email).put(
 						"callbackUrl", callbackUrl)).toString(), "PUT");
 	}
 
