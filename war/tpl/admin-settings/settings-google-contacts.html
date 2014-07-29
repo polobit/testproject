@@ -238,12 +238,12 @@
 
     
 
-    <form id="imap-prefs-form">
+    <form id="imap-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
         
 	
            {{#if id}}
-             	<div class="control-group">
+             	<div class="control-group" style="margin-left: -80px;">
 					<label class="control-label" style="text-align:">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
@@ -261,10 +261,15 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
-          		 <button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
+			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+
+{{#if inProgress}}
+          		 <button class="btn btn-primary save" style="display:inline-block;" disabled>Sync</button>
+{{else}}
+<button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
+{{/if}}
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
-					<span id="msg"  style=" color: red;margin-left: 10px;"><span>
+
        	  	</div>
 
 	{{/if}}
