@@ -51,9 +51,8 @@ public class BulkActionNotifications
 
     public static void publishconfirmation(BulkAction type, String... parameters)
     {
-	String message = String.valueOf(String.format(type.getMessage(), (Object[])parameters));
+	JSONObject messageJSON = constructMessageJSON(String.format(type.getMessage(), (Object[]) parameters).toString(), type);
 
-	JSONObject messageJSON  = constructMessageJSON(message, type);
 	
 	PubNub.pubNubPush(NamespaceManager.get(), messageJSON);
     }
