@@ -44,7 +44,7 @@
 
 	<!-- Invox Form Validator -->
 	<script src="js/designer/formvalidator.js" type="text/javascript"></script>
-
+ 
 	<!-- Grid JS -->
 	<script src="js/designer/grid.js" type="text/javascript"></script>
 <script src="js/designer/audiogrid.js" type="text/javascript"></script>
@@ -120,6 +120,15 @@
 	<!--<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
 	<script type="text/javascript"src="http://jqueryui.com/themeroller/themeswitchertool/"></script>	
  -->
+ 
+ <style>
+ 
+/* To avoid box shadow by default in firefox*/
+ :-moz-ui-invalid {
+  box-shadow:none;
+}
+
+ </style>
 </head>
 
 <body>
@@ -213,9 +222,9 @@
 
 <!--  Node ui changes (Yasin/3-09-10)-->
 <div style="display:none">
-	<form id="nodetemplate" class="ui-widget"  onSubmit="return false;">
+	<form id="nodetemplate" class="ui-widget"  onsubmit="return false;">
 		<fieldset>
-			<div style="display:block;height:80px;width:590px; ">
+			<div style="display:block; height:80px; width:590px; ">
 				<div style="display:inline;" >
 					
 					<div  style="width:380px;float:left;" >	
@@ -227,7 +236,7 @@
 					<div style="float:left;width:185px;margin-left: 10px;padding: 5px;display: block;" class="ui-widget-content ui-corner-all">
 						<label style="line-height: 2;">Node Name:</label>
 						
-						<input type="text" name="nodename" required="Yes" style="padding:2px;width: 150px;background: url(images/draw2d/mouseoveredit.png);background-repeat: no-repeat ;background-position: 134px;" title="You can edit node name." />
+						<input type="text" name="nodename" required="Yes" style="padding:2px;width: 150px;background: url('images/draw2d/mouseoveredit.png');background-repeat: no-repeat ;background-position: 134px;" title="You can edit node name." />
 						<!-- <img src="images/edit1.png" style="width: 16px;vertical-align: middle;"/>  -->
 					</div>	
 					
@@ -262,7 +271,7 @@
 
 <!--   Connectors -->
 <div style="display:none" id="connectortemplate">
-	<form class="ui-widget"  onSubmit="return false;">
+	<form class="ui-widget"  onsubmit="return false;">
 		<fieldset>
 			<div style="display:inline;">
 				<p id="info"></p>
@@ -352,7 +361,7 @@
 <!-- end of addons Tabs --> 
 
 
-
+</div>
 </body>
 </html>
 
