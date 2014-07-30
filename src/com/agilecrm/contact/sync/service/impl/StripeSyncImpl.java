@@ -102,7 +102,7 @@ public class StripeSyncImpl extends OneWaySyncService
     private Map<String, Object> options()
     {
 	HashMap<String, Object> options = new HashMap<String, Object>();
-	options.put("limit", 10);
+	options.put("limit", 50);
 	options.put("starting_after", lastSyncCheckPoint);
 	return options;
     }
