@@ -129,6 +129,16 @@ public class CronUtil
 	    searchMap.put("campaign_id", campaignId);
 
 	String oldNamespace = NamespaceManager.get();
+	
+	// As Crons exist in empty namespace, namespace is must
+	if (StringUtils.isBlank(oldNamespace))
+	    return;
+
+	System.out.println("Deleting crons from namespace..." + oldNamespace);
+
+	// namespace
+	searchMap.put("namespace", oldNamespace);
+	
 	NamespaceManager.set("");
 
 	try
