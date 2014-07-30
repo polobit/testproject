@@ -1,6 +1,9 @@
 // On change of date, change right column above available slot box
 function change_availability_date(selected_date)
 {
+	console.log("In change_availability_date");
+	console.log(selected_date);
+	
 	var date = new Date(selected_date);
 
 	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
@@ -43,7 +46,10 @@ function resetAll()
 {
 	// Get current date
 	var newDate = new Date();
-	var currentDate = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate();
+	var currMonth = (newDate.getMonth() + 1);
+	if(currMonth <10)
+		currMonth = "0"+currMonth;
+	var currentDate = newDate.getFullYear() + '-' + currMonth + '-' + newDate.getDate();
 
 	// Set current date as selected date
 	Selected_Date = currentDate;
@@ -75,10 +81,10 @@ function get_slots(s_date, s_slot)
 	console.log(timezone);
 
 	console.log(new Date().toString());
-	
+
 	// Current timezone name
 	var timezoneName = /\((.*)\)/.exec(new Date().toString())[1];
-	console.log(timezoneName);	
+	console.log(timezoneName);
 
 	// selected date in current epoch time
 	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
@@ -89,6 +95,14 @@ function get_slots(s_date, s_slot)
 	$.getJSON(initialURL, function(data)
 	{
 		console.log(data);
+
+		// No slots available for selected day
+		if (data.length == 0)
+		{
+			displayNoSlotsMsg();
+			return;
+		}
+
 		Available_Slots = data;
 
 		// Update in UI
@@ -96,6 +110,17 @@ function get_slots(s_date, s_slot)
 	});
 }
 
+// Add no slots available msg in grid of checkbox
+function displayNoSlotsMsg()
+{
+	// Empty div where all slots listed, to display new slots
+	$('.checkbox-main-grid').html('');
+
+	// Add msg
+	$('.checkbox-main-grid').append('<label for="no-slots">Slots are not available for selected day.</label>');
+}
+
+// Add slots in grid checkbox in checkbox list
 function displaySlots()
 {
 	var i = 0, j = 0, k = 0;
@@ -159,6 +184,7 @@ function save_web_event(formId, confirmBtn)
 	var data = $('#' + formId).serializeArray();
 	console.log(data);
 
+	// Make json
 	var web_calendar_event = {};
 	$.each(data, function()
 	{
@@ -203,6 +229,14 @@ function save_web_event(formId, confirmBtn)
 		}
 	}
 
+	console.log(web_calendar_event["selectedSlotsString"].length);
+
+	if (web_calendar_event["selectedSlotsString"].length == 0)
+	{
+		alert("Please select appointment time.");
+		return false;
+	}
+
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
 	console.log(web_calendar_event);
@@ -210,10 +244,11 @@ function save_web_event(formId, confirmBtn)
 
 	// Send request to save slot, if new then contact, event
 	$.ajax({ url : '/core/api/webevents/save', type : 'PUT', contentType : 'application/json; charset=utf-8', data : JSON.stringify(web_calendar_event),
-		dataType : 'json', success : function(output)
+		dataType : 'json', complete : function(res, status)
 		{
-			alert("Event added." + output);
-			document.getElementById("addEventForm").reset();
+			console.log(res);
+			console.log(status);
+			alert("Appointment Scheduled.");
 
 			// Reset whole form
 			resetAll();

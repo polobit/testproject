@@ -16,6 +16,7 @@ import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.DateUtil;
+import com.google.appengine.api.datastore.Cursor;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -96,6 +97,22 @@ public class ContactFilterUtil
 	// filter
 	if (type == ContactFilter.DefaultFilter.RECENT)
 	{
+	   Map<String, Object> searchMap =  getDefaultContactSearchMap(type);
+	   return Contact.dao.fetchAllByOrder(max, cursor, searchMap, true, true, "-created_time");
+	}
+	
+	Map<String, Object> searchMap  = getDefaultContactSearchMap(type);
+
+	return Contact.dao.fetchAll(max, cursor, searchMap);
+    }
+
+    public static Map<String, Object> getDefaultContactSearchMap(ContactFilter.DefaultFilter type)
+    {
+	Map<String, Object> queryMap = new HashMap<String, Object>();
+	// Checks the type of default filter and returns results based on the
+	// filter
+	if (type == ContactFilter.DefaultFilter.RECENT)
+	{
 	    // Gets current date
 	    DateUtil current_date = new DateUtil(new Date());
 
@@ -106,9 +123,8 @@ public class ContactFilterUtil
 	    // Gets last 20 recently created. Queries for last 20 contacts
 	    // created prior to current time and returns list sorted based on
 	    // current_time
-	    Map<String, Object> queryMap = new HashMap<String, Object>();
 	    queryMap.put("created_time < ", current_time);
-	    return Contact.dao.fetchAllByOrder(max, cursor, queryMap, true, true, "-created_time");
+	    return queryMap;
 	}
 	else if (type == ContactFilter.DefaultFilter.CONTACTS)
 	{
@@ -123,21 +139,14 @@ public class ContactFilterUtil
 
 	    // Queries contacts whose owner_key is equal to current domain user
 	    // key
-	    Map<String, Object> searchMap = new HashMap<String, Object>();
-	    searchMap.put("owner_key", userKey);
-
-	    if (max != null)
-		return Contact.dao.fetchAll(max, cursor, searchMap);
-
-	    return Contact.dao.listByProperty(searchMap);
+	    queryMap.put("owner_key", userKey);
 	}
 	else if (type == ContactFilter.DefaultFilter.LEADS)
 	{
-	    return ContactUtil.getContactsForTag("lead", max, cursor);
-
+	    queryMap.put("tagsWithTime.tag", "lead");
 	}
-
-	return null;
+	
+	return queryMap;
     }
 
     public static List<Key<Contact>> getContactsKeys(String id, Long userId)

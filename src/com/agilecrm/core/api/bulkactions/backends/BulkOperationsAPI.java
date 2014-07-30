@@ -25,6 +25,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportEmailUtil;
+import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -72,29 +73,19 @@ public class BulkOperationsAPI
 	List<Contact> contacts_list = new ArrayList<Contact>();
 	if (!StringUtils.isEmpty(filter))
 	{
-	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, current_user_id);
-
-	    String currentCursor = null;
-	    String previousCursor = null;
-	    do
+	    ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200);
+	    
+	    while(fetcher.hasNextSet())
 	    {
-		count += contacts_list.size();
-		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
-
-		ContactUtil.deleteContactsbyListSupressNotification(contacts_list);
-
-		if (!StringUtils.isEmpty(previousCursor))
-		{
-		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user_id);
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
-			    : null;
-		    continue;
-		}
-
-		break;
-	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
+		System.out.println(fetcher.nextSet().size());
+		//ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+	    }
+	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, current_user_id);
+	    
+	    System.out.println(fetcher.getAvailableCompanies());
+	    System.out.println(fetcher.getAvailableContacts());
 	}
+	
 	else if (!StringUtils.isEmpty(model_ids))
 	{
 	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(model_ids));
