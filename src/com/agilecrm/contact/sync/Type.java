@@ -8,7 +8,7 @@ import java.io.Serializable;
 import com.agilecrm.contact.sync.service.SyncService;
 import com.agilecrm.contact.sync.service.impl.GoogleSyncImpl;
 import com.agilecrm.contact.sync.service.impl.SalesforceSync;
-import com.agilecrm.contact.sync.service.impl.ShopifySync;
+import com.agilecrm.contact.sync.service.impl.ShopifySyncImpl;
 import com.agilecrm.contact.sync.service.impl.StripeSyncImpl;
 import com.agilecrm.contact.sync.service.impl.ZohoSyncImpl;
 
@@ -23,7 +23,7 @@ public enum Type implements Serializable
 {
     GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
 	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
-	    ShopifySync.class, "Shopify Import Status");
+	    ShopifySyncImpl.class, "Shopify Import Status");
 
     Class<? extends SyncService> clazz;
     String notificationEmailSubject = "";
