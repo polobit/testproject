@@ -154,12 +154,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		// Gets user from the collection based on id
 		var user = this.usersListView.collection.get(id);
+		
+		var needLogout = false;
+		if(CURRENT_DOMAIN_USER.email == user.attributes.email){
+			needLogout = true;
+		}
 
 		/*
 		 * Creates a Model for users edit, navigates back to 'user' window on
 		 * save success
 		 */
-		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users', reload : true, postRenderCallback: function(el){
+		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback: function(response){
+				// If user changed his own email, redirect it to the login page.
+				if(needLogout && CURRENT_DOMAIN_USER.email != response.email){
+					console.log('Logging out...');
+					showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
+					var hash = window.location.hash;
+					setTimeout(function(){window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;},5000);
+				} else {
+					Backbone.history.navigate('users', { trigger : true });
+				}
+					
+			}, postRenderCallback: function(el){
 			bindAdminChangeAction(el);
 		} });
 
