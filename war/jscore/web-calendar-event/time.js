@@ -1,9 +1,32 @@
 // Convert human date to epoch time
 function getEpochTimeFromDate(selectedDate)
 {
+	console.log("in getEpochTimeFromDate");
 	var d = new Date(selectedDate);
-	return d.getTime() / 1000;
+	console.log(d);
+	return getGMTTimeFromDate(d) / 1000;
 }
+
+/**
+ * Returns GMT time.
+ * 
+ * @param date
+ * @returns
+ */
+function getGMTTimeFromDate(date)
+{
+	var current_sys_date = new Date();
+	console.log(new Date().getHours());
+	console.log(new Date().getMinutes());
+	console.log(new Date().getSeconds());
+	console.log(date.getYear() + "," + date.getMonth() + "," + date.getDate())
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+
+	// Adding offset to date returns GMT time
+	return date.getTime();
+}
+
+
 
 // Convert epoch time to human time
 function createNormalTime(slotTime)
@@ -43,7 +66,7 @@ function createNormalTime(slotTime)
 	result[counter++] = min;
 
 	// Decide pm or am
-	if (hr > 12)
+	if (hr >= 12)
 		result[counter++] = " pm";
 	else
 		result[counter++] = " am";
