@@ -23,6 +23,8 @@ import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ShopifySync.
@@ -295,13 +297,45 @@ public class ShopifySyncImpl extends OneWaySyncService
 		while (iterator.hasNext())
 		{
 		    LinkedHashMap<String, String> details = iterator.next();
-		    note.subject = "Order -"+details.get("title");
-		    note.description =  details.get("name") + "-" + details.get("price");
+		    note.subject = "Ordered -Items" ;
+		    if (note.description != null && !note.description.isEmpty())
+		    {
+			note.description = note.description + "\n" + details.get("name") + "-" + details.get("price");
+			
+		    }
+		    else
+		    {
+			note.description = details.get("name") + "-" + details.get("price");
+		    }
 
 		    note.addRelatedContacts(contact.id.toString());
+		   
 		    note.save();
 
 		    contact.tags.add(details.get("title"));
+		    contact.save();
+		}
+		// setting total price of orders item
+		 note.description = note.description + "\n" +"Total Price -"+ order.get("total_price");
+		 //update notes
+		 note.save();
+		// save order related customer note
+		if (order.containsKey("note"))
+		{
+		    String customerNote = order.get("note").toString();
+		    if (customerNote != null && !customerNote.isEmpty())
+		    {
+			Note n = new Note("Customer's Note", customerNote);
+			n.addRelatedContacts(contact.id.toString());
+			n.save();
+		    }
+		}
+
+		// save order related tags
+		if (order.containsKey("tags"))
+		{
+		    String[] tags = order.get("tags").toString().split(",");
+		    contact.tags.addAll(Arrays.asList(tags));
 		    contact.save();
 		}
 
