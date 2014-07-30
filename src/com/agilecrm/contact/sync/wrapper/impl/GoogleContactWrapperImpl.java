@@ -11,6 +11,8 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import com.google.gdata.data.Content;
+import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
@@ -90,6 +92,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public List<ContactField> getMoreCustomInfo()
     {
+	entry.getContent();
 	List<ContactField> fields = new ArrayList<ContactField>();
 	if (entry.hasImAddresses())
 	    for (Im im : entry.getImAddresses())
@@ -109,6 +112,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 			    subType = "GOOGLE-PLUS";
 		    }
 
+		    
 		    if (!StringUtils.isBlank(subType))
 			fields.add(new ContactField("website", im.getAddress(), subType));
 		    else
@@ -153,17 +157,20 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public ContactField getPhoneNumber()
     {
+	
 	ContactField field = null;
 	if (entry.hasPhoneNumbers())
 	    for (PhoneNumber phone : entry.getPhoneNumbers())
 	    {
+		
 		if (phone.getPhoneNumber() != null)
 		{
 		    String subType = ContactSyncUtil.getSubtypeFromGoogleContactsRel(phone.getRel());
 		    field = new ContactField("phone", phone.getPhoneNumber(), subType);
 		}
-	    }
-	return field;
+		contact.properties.add(field);
+		}
+	return (ContactField)null;
     }
 
     /*
@@ -312,5 +319,24 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	}
 	return field;
     }
+    
+    @Override
+    public void saveCallback()
+    {
+        // TODO Auto-generated method stub
+	TextContent content =  entry.getTextContent();
+       if(content != null)
+       {
+	   System.out.println(content.getContent().getPlainText());
+	   Note note = new Note("Google Contact Notes", content.getContent().getPlainText());
+	   
+	   note.addContactIds(String.valueOf(contact.id));
+	   note.save();
+	   //String notes = content.
+       }
+       
+    }
+    
+    
 
 }

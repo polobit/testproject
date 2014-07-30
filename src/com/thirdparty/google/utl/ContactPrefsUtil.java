@@ -33,7 +33,7 @@ public class ContactPrefsUtil
     public static ContactPrefs getPrefsByType(Type type)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("client", type);
+	searchMap.put("type", type);
 	searchMap.put("domainUser", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
 	return ContactPrefs.dao.getByProperty(searchMap);
     }
