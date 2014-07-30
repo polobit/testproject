@@ -120,9 +120,7 @@
 							%>
 								</ul>
 							</li>
-							<%
-							    }
-							%>
+							
 							
 						
 							<li class="nav-bar-search">
@@ -135,6 +133,9 @@
 										type="image" src="img/SearchIcon.png" class="searchbox" />
 								</form>
 							</li>
+							<%
+							    }
+							%>
 						</ul>
 
 						<ul class="nav pull-right">

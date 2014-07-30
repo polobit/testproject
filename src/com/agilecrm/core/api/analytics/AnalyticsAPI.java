@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -27,55 +28,70 @@ import com.google.appengine.api.NamespaceManager;
  * 
  */
 @Path("/api/web-stats")
-public class AnalyticsAPI
-{
-    /**
-     * Returns pageViews statistics
-     * 
-     * @param searchEmail
-     *            - required email-id.
-     * @return List
-     */
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON })
-    public List<Analytics> getAnalyticsGroupedBySessions(@QueryParam("e") String searchEmail)
-    {
-	JSONArray pageViewsList = AnalyticsSQLUtil.getPageViews(searchEmail);
+public class AnalyticsAPI {
+	/**
+	 * Returns pageViews statistics
+	 * 
+	 * @param searchEmail
+	 *            - required email-id.
+	 * @return List
+	 */
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<Analytics> getAnalyticsGroupedBySessions(
+			@QueryParam("e") String searchEmail) {
+		JSONArray pageViewsList = AnalyticsSQLUtil.getPageViews(searchEmail);
 
-	JSONArray mergedStats = AnalyticsUtil.mergePageViewsBasedOnSessions(pageViewsList);
+		JSONArray mergedStats = AnalyticsUtil
+				.mergePageViewsBasedOnSessions(pageViewsList);
 
-	if (mergedStats == null)
-	    return null;
+		if (mergedStats == null)
+			return null;
 
-	try
-	{
-	    // to attach parsed user-agent string
-	    return new ObjectMapper().readValue(mergedStats.toString(), new TypeReference<List<Analytics>>()
-	    {
-	    });
+		try {
+			// to attach parsed user-agent string
+			return new ObjectMapper().readValue(mergedStats.toString(),
+					new TypeReference<List<Analytics>>() {
+					});
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
+
+	/**
+	 * Returns pageViews count based on domain.
+	 * 
+	 * @return - int
+	 */
+	@Path("JSAPI-status")
+	@GET
+	@Produces({ MediaType.TEXT_PLAIN })
+	public int getJSAPIStatus() {
+		String domain = NamespaceManager.get();
+
+		if (StringUtils.isEmpty(domain))
+			return 0;
+
+		return AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
 	}
-    }
 
-    /**
-     * Returns pageViews count based on domain.
-     * 
-     * @return - int
-     */
-    @Path("JSAPI-status")
-    @GET
-    @Produces({ MediaType.TEXT_PLAIN })
-    public int getJSAPIStatus()
-    {
-	String domain = NamespaceManager.get();
+	@Path("JSAPI-status/adminpanel/{domainname}")
+	@GET
+	@Produces({ MediaType.TEXT_PLAIN })
+	public int getJSAPIStatusOfParticularDomain(
+			@PathParam("domainname") String domainname) {
+		String oldnamespace = NamespaceManager.get();
+		NamespaceManager.set(domainname);
+		String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain))
-	    return 0;
+		if (StringUtils.isEmpty(domain))
+			return 0;
+		System.out.println("in Analytics api "
+				+ AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain));
+		int count = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
+		NamespaceManager.set(oldnamespace);
+		return count;
+	}
 
-	return AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
-    }
 }
