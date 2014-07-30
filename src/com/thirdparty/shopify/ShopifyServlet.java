@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -39,7 +39,7 @@ public class ShopifyServlet extends HttpServlet
 	ContactPrefs prefs = new ContactPrefs();
 	prefs.token = token;
 	prefs.othersParams = shop;
-	prefs.client = SyncClient.SHOPIFY;
+	prefs.type = Type.SHOPIFY;
 	prefs.save();
     }
 }

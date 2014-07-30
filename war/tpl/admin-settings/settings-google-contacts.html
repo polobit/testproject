@@ -207,10 +207,10 @@
 
 <script id="admin-settings-import-stripe-contact-sync-template"
 	type="text/html">
-	<div class="well widget-add" style="width:220px; height:270px;">
+	<div class="well widget-add" style="width:220px;">
     <img class="thumbnail" src="/img/plugins/Stripe.png" style="width:210px; height:70px;" />
 	<br />
-    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 120px !important;margin-bottom: 20px;"  rel="tooltip" >
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
 		Agile can periodically sync your contacts in your CRM with your Stripe Contacts.
 	</div>
     <div>
@@ -238,12 +238,12 @@
 
     
 
-    <form id="imap-prefs-form">
+    <form id="imap-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
         
 	
            {{#if id}}
-             	<div class="control-group">
+             	<div class="control-group" style="margin-left: -80px;">
 					<label class="control-label" style="text-align:">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
@@ -261,10 +261,15 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
-          		 <button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
+			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+
+{{#if inProgress}}
+          		 <button class="btn btn-primary save" style="display:inline-block;" disabled>Sync</button>
+{{else}}
+<button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
+{{/if}}
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
-					<span id="msg"  style=" color: red;margin-left: 10px;"><span>
+
        	  	</div>
 
 	{{/if}}
@@ -277,11 +282,11 @@
 
 <script id="admin-settings-import-shopify-contact-syncPrefs-template"
 	type="text/html">
-	<div class="well widget-add" style="width:220px; height:321px;">
+	<div class="well widget-add" style="width:220px;">
 
     <img class="thumbnail"  src="img/crm-plugins/shopify.png" style="width:210px; height:70px;" />
 	<br />
-    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 120px !important;margin-bottom: 20px;"  rel="tooltip" >
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
 		Agile can periodically sync your contacts in your CRM with your Shopify Contacts.
 	</div>
     <div>
@@ -289,8 +294,8 @@
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
 				<a href="#google-apps/shopify" class="btn">Settings</a>
 			{{else}}
-              <div> Enter shop name
-			   <input type="text" name="shop" id="shopeName"/></div>
+              <div> 
+			   <input type="text" name="shop" id="shopeName" placeholder ="Enter shopname"/></div>
 			   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Enable</button>
 			{{/if}}
 </div>

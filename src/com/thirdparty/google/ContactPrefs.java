@@ -16,7 +16,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.sync.config.SyncPrefs;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -50,7 +50,7 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 
     /** The client. */
     @NotSaved(IfDefault.class)
-    public SyncClient client = null;
+    public Type type = null;
 
     /** The my_contacts. */
     @NotSaved(IfDefault.class)
@@ -198,7 +198,7 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @PostLoad
     void postLoad()
     {
-	if (client == SyncClient.GOOGLE)
+	if (type == Type.GOOGLE)
 	{
 	    fillGroups();
 	}

@@ -58,7 +58,7 @@ public class StripeSyncImpl extends OneWaySyncService
 		}
 		if (customers.size() == 0)
 		{
-		    sendNotification(prefs.client.getNotificationEmailSubject());
+		    sendNotification(prefs.type.getNotificationEmailSubject());
 		    break;
 		}
 		else

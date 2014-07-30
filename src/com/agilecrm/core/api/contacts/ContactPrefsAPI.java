@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -44,7 +44,7 @@ public class ContactPrefsAPI
     {
 
 	System.out.println("in contact prefs api");
-	return ContactPrefsUtil.getPrefsByType(SyncClient.GOOGLE);
+	return ContactPrefsUtil.getPrefsByType(Type.GOOGLE);
     }
 
     @Path("/{type}")
@@ -84,7 +84,7 @@ public class ContactPrefsAPI
     public void deleteContactPrefs(@PathParam("type") String type)
     {
 
-	ContactPrefsUtil.delete(SyncClient.GOOGLE);
+	ContactPrefsUtil.delete(Type.GOOGLE);
 
     }
 }

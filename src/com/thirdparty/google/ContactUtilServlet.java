@@ -54,7 +54,7 @@ public class ContactUtilServlet extends HttpServlet
 	    ContactPrefs contactPrefs = (ContactPrefs) o.readObject();
 
 	    SyncService service = new SyncPrefsBuilder().config(contactPrefs)
-		    .getService(contactPrefs.client.getClazz());
+		    .getService(contactPrefs.type.getClazz());
 
 	    if (service != null)
 	    {
