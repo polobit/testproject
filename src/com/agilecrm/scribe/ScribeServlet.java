@@ -134,6 +134,9 @@ public class ScribeServlet extends HttpServlet
 	    if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
 	    {
 		String shop = req.getParameter("shop");
+		if(shop.contains(".myshopify.com")){
+		    shop = shop.split("\\.")[0];
+		}
 		String domain = req.getParameter("domain");
 		resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain);
 		return;
