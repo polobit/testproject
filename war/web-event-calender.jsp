@@ -32,7 +32,7 @@
 
 <body onload="bodyLoad();">
 	<div id="mainwrap" class="container">
-		<img src="avatar.png" id="avatar" />
+		<img src="/img/gravatar.png" id="avatar" />
 		<p class="lead">Welcome to my scheduling page. Please follow the
 			instructions to add an event to my calendar.</p>
 
@@ -71,16 +71,12 @@
 					</p>
 
 					<div class="col-sm-4">
-						<input type="text" id="userName" name="userName"
-							placeholder="Name" class="required me-disable"
-							disabled="disabled" /> <input type="text" id="email"
-							name="email" placeholder="Email" class="required me-disable"
-							disabled="disabled" /> <input type="text" id="phoneNumber"
-							name="phoneNumber" placeholder="Skype or Phone #"
-							class="me-disable" disabled="disabled" /> <input type="checkbox"
-							id="confirmation" name="confirmation" class="me-disable"
-							disabled="disabled" /> <label for="confirmation">Send me
-							a confirmation email</label>
+						<input type="text" id="userName" name="userName" placeholder="Name" class="required me-disable" disabled="disabled" /> 
+						<input type="text" id="email" name="email" placeholder="Email" class="required me-disable" disabled="disabled" /> 
+						<input type="text" id="phoneNumber"	name="phoneNumber" placeholder="Skype or Phone #" class="me-disable" disabled="disabled" /> 
+						<div class="clearfix"></div>
+						<input type="checkbox" id="confirmation" name="confirmation" class="me-disable" disabled="disabled" /> 
+						<label for="confirmation">Send me a confirmation email</label>
 					</div>
 
 					<div class="col-sm-8">
@@ -109,7 +105,10 @@
 						{
 							// Get current date
 							var newDate = new Date();
-							var currentDate = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate();
+							var currMonth = (newDate.getMonth() + 1);
+							if(currMonth <10)
+								currMonth = "0"+currMonth;
+							var currentDate = newDate.getFullYear() + '-' + currMonth + '-' + newDate.getDate();
 
 							console.log("in doc ready");
 							console.log(currentDate);
@@ -158,7 +157,7 @@
 												// Specify the validation rules
 												rules : { userName : { required : true, minlength : 3 }, 
 													      email : { required : true, email : true },
-													      phoneNumber : { required : true, minlength : 10, phonevalidation : true } 
+													      phoneNumber : { required : true, minlength : 6, phonevalidation : true } 
 													    },
 
 												// Specify the validation error messages
@@ -168,7 +167,7 @@
 													email : { required : "We need your email address to contact you",
 														      email : "Your email address must be in the format of name@domain.com" },
 													phoneNumber : { required : "Please specify your number",
-														            minlength : jQuery.format("At least {0} characters required!") } 
+														            minlength : jQuery.format("At least {0} digits required!") } 
 														   },
 
 												submitHandler : function(form)
