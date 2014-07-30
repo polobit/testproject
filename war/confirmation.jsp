@@ -409,8 +409,17 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						
 					    if ("all".equals(status))
 						{
+							// If company is My company (default), make empty
+							if(company.equals("My company"))
+								company = "";
+							    
 							map.put("company", company);
-							subjectMessage = "Unsubscribed successfully from "+company+" company";
+								
+							if(StringUtils.isEmpty(company))
+							    subjectMessage = "Unsubscribed successfully";
+							else
+								subjectMessage = "Unsubscribed successfully from "+company+" company";
+							
 							
 							// Add unsubscribe log
 							UnsubscribeStatusUtil.addUnsubscribeLog(campaignId, contactId, "Unsubscribed from all campaigns");

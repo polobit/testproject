@@ -53,7 +53,7 @@ $(function(){
 	 * so ids are separated by comma in click event.
 	 * 
 	 **/
-	$('#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom').live('click', function (e) {
+	$('#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom').live('click', function (e, trigger_data) {
            e.preventDefault();
            
            // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
@@ -102,7 +102,7 @@ $(function(){
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(this).attr('id') === 'duplicate-workflow-top' || $(this).attr('id') === 'duplicate-workflow-bottom') 
         {
-        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button)
+        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data);
         }
         // Update workflow
         else
@@ -117,13 +117,21 @@ $(function(){
             	
             	// Adds tag in our domain
             	add_tag_our_domain(CAMPAIGN_TAG);
+            	
+            	// Hide message
+            	$('#workflow-edit-msg').hide();
+            	
+            	// Boolean data used on clicking on Done
+    	    	if(trigger_data && trigger_data["navigate"])
+    	    	{
+    	    		Backbone.history.navigate("workflows", {
+                      trigger: true
+                  });
+    	    	}
+    	    	
             	//$('#workflowform').find('#save-workflow').removeAttr('disabled');
                
                //$(".save-workflow-img").remove();
-  
-            	Backbone.history.navigate("workflows", {
-                    trigger: true
-                });
             	
             },
             
@@ -233,6 +241,26 @@ $(function(){
 			$p_ele.html(ask_text);
 		
 	});
+	
+	// Clicking on done, save changes and exit
+	$(".workflow-done").live('click', function(e){
+		e.preventDefault();
+		
+		if($('#workflow-edit-msg').is(':visible'))
+		{
+			if(!confirm("You have unsaved changes. Save & Exit?"))
+			return;
+		
+			// Trigger click
+			$('#save-workflow-top').trigger("click", [{"navigate": true}]);
+			return;
+		}
+		
+		Backbone.history.navigate("workflows", {
+            trigger: true
+        });
+		
+	});
 
 });
 
@@ -244,7 +272,7 @@ $(function(){
  * @param unsubscribe_json - unsubscribe data of workflow
  * @param $clicked_button - jquery object to know clicked button
  **/
-function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button)
+function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data)
 {
 	var workflowJSON = {};
 	
@@ -260,12 +288,18 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     	    	enable_save_button($clicked_button);
     	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
     	    	
-    	    	// $(".save-workflow-img").remove();
-    	    	            	    	
-    	    	Backbone.history.navigate("workflows", {
-                trigger: true
+    	    	// Hide edit message
+    	    	$('#workflow-edit-msg').hide();
     	    	
-    	    	});
+    	    	// $(".save-workflow-img").remove();
+    	    	        
+    	    	// Boolean data used on clicking on Done
+    	    	if(trigger_data && trigger_data["navigate"])
+    	    	{
+    	    		Backbone.history.navigate("workflows", {
+                      trigger: true
+                  });
+    	    	}
     	    },
             
             error: function(jqXHR, status, errorThrown){ 
