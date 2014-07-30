@@ -48,6 +48,7 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
+import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -110,7 +111,6 @@ public class BulkOperationsAPI
 	while (fetcher.hasNextSet())
 	{
 	    ContactUtil.changeOwnerToContactsBulk(fetcher.nextSet(), new_owner);
-	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	}
 
 	String message = "Owner changed for ";
