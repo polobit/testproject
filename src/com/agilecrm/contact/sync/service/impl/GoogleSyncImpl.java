@@ -97,7 +97,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    i += entries.size();
 	}
 
-	sendNotification(prefs.client.getNotificationEmailSubject());
+	sendNotification(prefs.type.getNotificationEmailSubject());
 
 	updateLastSyncedInPrefs();
     }

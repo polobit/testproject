@@ -13,7 +13,7 @@ import org.scribe.utils.Preconditions;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.ImportStatus;
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
@@ -91,7 +91,7 @@ public abstract class ContactSyncService implements SyncService
     {
 	if (total_synced_contact >= MAX_SYNC_LIMIT)
 	{
-	    sendNotification(prefs.client.getNotificationEmailSubject());
+	    sendNotification(prefs.type.getNotificationEmailSubject());
 	    return true;
 	}
 
@@ -285,10 +285,10 @@ public abstract class ContactSyncService implements SyncService
     private void addTagToContact(Contact contact)
     {
 	String tag;
-	if (prefs.client == SyncClient.GOOGLE)
+	if (prefs.type == Type.GOOGLE)
 	    tag = "gmail contact".toLowerCase();
 	else
-	    tag = prefs.client.toString().toLowerCase() + " contact";
+	    tag = prefs.type.toString().toLowerCase() + " contact";
 
 	contact.addTags(StringUtils.capitalize(tag));
     }

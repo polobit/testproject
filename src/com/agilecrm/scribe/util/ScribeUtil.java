@@ -29,7 +29,7 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.Globals;
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
@@ -308,7 +308,7 @@ public class ScribeUtil
 		    });
 	    ContactPrefs shopifyPrefs = new ContactPrefs();
 	    shopifyPrefs.token = properties.get("access_token").toString();
-	    shopifyPrefs.client = SyncClient.SHOPIFY;
+	    shopifyPrefs.type = Type.SHOPIFY;
 	    shopifyPrefs.othersParams = shopDomain;
 	    shopifyPrefs.save();
 
@@ -351,7 +351,7 @@ public class ScribeUtil
 
 		prefs.refreshToken = properties.get("refresh_token");
 		prefs.apiKey = properties.get("access_token");
-		prefs.client = SyncClient.STRIPE;
+		prefs.type = Type.STRIPE;
 		prefs.save();
 	    }
 	}
@@ -500,7 +500,7 @@ public class ScribeUtil
 
 	// after getting access token save prefs in db
 	ContactPrefs contactPrefs = new ContactPrefs();
-	contactPrefs.client = SyncClient.GOOGLE;
+	contactPrefs.type = Type.GOOGLE;
 	contactPrefs.token = properties.get("access_token").toString();
 	contactPrefs.setPrefs(object);
 	contactPrefs.setExpiryTime(Long.valueOf(properties.get("expires_in").toString()));
@@ -659,5 +659,4 @@ public class ScribeUtil
 	saveWidgetPrefsByName(serviceType, properties);
 
     }
-
 }

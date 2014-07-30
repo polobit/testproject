@@ -16,7 +16,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -43,7 +43,7 @@ public class ZohoImportAPI
     @Produces(MediaType.APPLICATION_JSON)
     public ContactPrefs getPrefs()
     {
-	return ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
+	return ContactPrefsUtil.getPrefsByType(Type.ZOHO);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ZohoImportAPI
     @Produces(MediaType.APPLICATION_JSON)
     public void deletePrefs()
     {
-	ContactPrefsUtil.delete(SyncClient.ZOHO);
+	ContactPrefsUtil.delete(Type.ZOHO);
 
     }
 
@@ -91,7 +91,7 @@ public class ZohoImportAPI
 
 	try
 	{
-	    ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
+	    ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
 	    String user = prefs.username;
 
 	    if (prefs != null && user != null && user.equalsIgnoreCase(username))
@@ -125,7 +125,7 @@ public class ZohoImportAPI
 	    @FormParam("contacts") boolean contacts)
     {
 
-	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
+	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
 	if (prefs != null)
 	{
 

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -16,7 +16,7 @@ import com.thirdparty.google.groups.GoogleGroupDetails;
 
 public class ContactPrefsUtil
 {
-    public static void delete(SyncClient type)
+    public static void delete(Type type)
     {
 	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(type);
 	prefs.delete();
@@ -30,7 +30,7 @@ public class ContactPrefsUtil
      *            {@link ContactPrefs.Type} from which contacts are imported
      * @return
      */
-    public static ContactPrefs getPrefsByType(SyncClient type)
+    public static ContactPrefs getPrefsByType(Type type)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
 	searchMap.put("client", type);

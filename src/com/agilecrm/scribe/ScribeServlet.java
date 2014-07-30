@@ -17,10 +17,9 @@ import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.scribe.util.ScribeUtil;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -131,32 +130,7 @@ public class ScribeServlet extends HttpServlet
 	 */
 	String serviceType = req.getParameter("service_type");
 
-	// If service type is not null, we have Contact preferences
-	if (serviceType != null)
-	{
-	    // managing zoho authentication Note:this code is only specific to
-	    // zoho only
-	    // generating access token dynamically
-	    if (serviceType.equalsIgnoreCase(SERVICE_TYPE_ZOHO))
-	    {
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		if (username != null && password != null)
-		{
-		    // check contactPrefs already exists then return from here
-
-		    ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
-		    if (contactPrefs != null && contactPrefs.username.equalsIgnoreCase(username))
-			return;
-		    else
-		    {
-
-			String url = getZohoAuthUrl(username, password);
-			saveZohoToken(url, username);
-		    }
-		}
-
-	    }
+	
 	    if (serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
 	    {
 		String shop = req.getParameter("shop");
@@ -164,8 +138,7 @@ public class ScribeServlet extends HttpServlet
 		resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain);
 		return;
 	    }
-	    return;
-	}
+	
 
 	/*
 	 * If request is from application the setup, request is sent based on
@@ -411,7 +384,7 @@ public class ScribeServlet extends HttpServlet
 		{
 		    ContactPrefs prefs = new ContactPrefs();
 		    prefs.token = token;
-		    prefs.client = SyncClient.ZOHO;
+		    prefs.type = Type.ZOHO;
 		    prefs.username = username;
 		    prefs.save();
 

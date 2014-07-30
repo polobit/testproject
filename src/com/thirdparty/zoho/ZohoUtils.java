@@ -205,11 +205,11 @@ public class ZohoUtils
      */
     public static String buildUrl(String module, ContactPrefs ctx, int fromIndex, int toIndex, String time)
     {
-	StringBuilder url = new StringBuilder(SERVER_URL).append(module + "/getRecords?")
+	/*StringBuilder url = new StringBuilder(SERVER_URL).append(module + "/getRecords?")
 		.append("authtoken=" + ctx.token).append("&fromIndex=" + fromIndex + "&toIndex=" + toIndex)
-		.append("&scope=crmapi").append("&lastModifiedTime=" + time);
+		.append("&scope=crmapi").append("&lastModifiedTime=" + time);*/
 
-	return url.toString();
+	return "";//url.toString();
     }
 
     /**

@@ -31,7 +31,7 @@ import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.forms.FormsUtil;
@@ -389,7 +389,7 @@ public class ShopifyUtil
      */
     public static void sync()
     {
-	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(SyncClient.SHOPIFY);
+	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
 
 	if (prefs != null)
 	{

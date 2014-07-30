@@ -12,7 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
@@ -38,7 +38,7 @@ public class StripeDataService
     @Produces(MediaType.APPLICATION_JSON)
     public ContactPrefs getPrefs()
     {
-	ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(SyncClient.STRIPE);
+	ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(Type.STRIPE);
 	return contactPrefs; //
     }
 
@@ -68,7 +68,7 @@ public class StripeDataService
     @Path("/import-settings")
     public void deletePrefs()
     {
-	ContactPrefsUtil.delete(SyncClient.STRIPE);
+	ContactPrefsUtil.delete(Type.STRIPE);
 
     }
 

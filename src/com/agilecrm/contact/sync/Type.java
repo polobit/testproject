@@ -19,7 +19,7 @@ import com.agilecrm.contact.sync.service.impl.ZohoSyncImpl;
  * @author jitendra
  * 
  */
-public enum SyncClient implements Serializable
+public enum Type implements Serializable
 {
     GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
 	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
@@ -28,7 +28,7 @@ public enum SyncClient implements Serializable
     Class<? extends SyncService> clazz;
     String notificationEmailSubject = "";
 
-    SyncClient(Class<? extends SyncService> service, String notificationEmailSubject)
+    Type(Class<? extends SyncService> service, String notificationEmailSubject)
     {
 	this.clazz = service;
 	this.notificationEmailSubject = notificationEmailSubject;

@@ -5,7 +5,7 @@ import java.util.Date;
 
 import org.codehaus.jettison.json.JSONArray;
 
-import com.agilecrm.contact.sync.SyncClient;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.google.ContactPrefs;
@@ -202,7 +202,7 @@ public class ZohoImportService
 
     public void sync()
     {
-	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(SyncClient.ZOHO);
+	ContactPrefs pref = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
 	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:ss");
 	String d = df.format(new Date());
 	Key<DomainUser> key = pref.getDomainUser();

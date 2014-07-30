@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<servlet>
 		<servlet-name>Home</servlet-name>
@@ -18,7 +22,7 @@
 		<servlet-name>Scribe</servlet-name>
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Shopify</servlet-name>
 		<servlet-class>com.thirdparty.shopify.ShopifyServlet</servlet-class>
@@ -37,7 +41,7 @@
 		<servlet-name>OAuth2</servlet-name>
 		<url-pattern>/oauth</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>OAuth2Servlet</servlet-name>
 		<servlet-class>com.agilecrm.plugin.oauth.OAuth2Servlet</servlet-class>
@@ -46,9 +50,8 @@
 		<servlet-name>OAuth2Servlet</servlet-name>
 		<url-pattern>/backend/googleservlet</url-pattern>
 		<url-pattern>/backend/StripeServlet</url-pattern>
-		
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>XeroScribeServlet</servlet-name>
 		<servlet-class>com.agilecrm.scribe.XeroScribeServlet</servlet-class>
@@ -57,6 +60,7 @@
 		<servlet-name>XeroScribeServlet</servlet-name>
 		<url-pattern>/XeroServlet</url-pattern>
 	</servlet-mapping>
+
 
 	<servlet>
 		<servlet-name>ContactUtilServlet</servlet-name>
@@ -74,7 +78,7 @@
 		<servlet-name>GmailContextualGadget</servlet-name>
 		<url-pattern>/gmail</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Cron</servlet-name>
 		<servlet-class>com.campaignio.cron.Cron</servlet-class>
@@ -93,7 +97,7 @@
 		<url-pattern>/backend/cron/twitter</url-pattern>
 	</servlet-mapping>
 
-    <servlet>
+	<servlet>
 		<servlet-name>ScheduledUpdateCron</servlet-name>
 		<servlet-class>com.socialsuite.cron.ScheduledUpdateCron</servlet-class>
 	</servlet>
@@ -120,7 +124,7 @@
 		<servlet-name>register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>registration checker</servlet-name>
 		<servlet-class>com.agilecrm.user.RegisterVerificationServlet</servlet-class>
@@ -201,11 +205,11 @@
 		<servlet-class>com.agilecrm.session.CalendarServlet</servlet-class>
 		<init-param>
 			<param-name>consumer_key</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 		<init-param>
 			<param-name>consumer_secret</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 
@@ -232,7 +236,7 @@
 		<servlet-name>TaskReminder</servlet-name>
 		<url-pattern> /backend/cron/tasks</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>AccountLimitChecker</servlet-name>
 		<servlet-class>com.agilecrm.subscription.limits.cron.AccountLimitCheckerCronServlet</servlet-class>
@@ -252,7 +256,7 @@
 		<servlet-name>Stripe Webhook</servlet-name>
 		<url-pattern>/backend/stripewebhook/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Mandrill Webhook</servlet-name>
 		<servlet-class>com.thirdparty.mandrill.webhook.MandrillWebhook</servlet-class>
@@ -282,10 +286,10 @@
 		<url-pattern>/backend/voice</url-pattern>
 		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
-	
-	
-	
-	
+
+
+
+
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>
@@ -321,7 +325,7 @@
 		<servlet-name>EnterDomain</servlet-name>
 		<url-pattern>/enter-domain</url-pattern>
 	</servlet-mapping>
-	
+
 
 
 	<filter>
@@ -376,7 +380,7 @@
 		<filter-name>JSAPIFilter</filter-name>
 		<url-pattern>/core/js/*</url-pattern>
 	</filter-mapping>
-	
+
 	<!-- JSON Filter -->
 	<filter>
 		<filter-name>JSONPFilter</filter-name>
@@ -388,40 +392,40 @@
 		<url-pattern>/core/js/*</url-pattern>
 	</filter-mapping>
 	<!-- JSON Filter -->
-	
+
 	<filter>
 		<filter-name>PHPAPIFilter</filter-name>
 		<filter-class>com.agilecrm.filter.PHPAPIFilter</filter-class>
 	</filter>
-	
+
 	<filter-mapping>
 		<filter-name>PHPAPIFilter</filter-name>
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
 
-	<filter> 
-	  <filter-name>trimFilter</filter-name> 
-  	  <filter-class>com.cj.trim.trimFilter</filter-class> 
- 	  <init-param> 
-    	<param-name>removeComments</param-name> 
-    	<param-value>true</param-value> 
-  	  </init-param>
-  	  <init-param> 
-    	<param-name>trimSpaces</param-name> 
-    	<param-value>true</param-value> 
-  	  </init-param> 
+	<filter>
+		<filter-name>trimFilter</filter-name>
+		<filter-class>com.cj.trim.trimFilter</filter-class>
+		<init-param>
+			<param-name>removeComments</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>trimSpaces</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</filter>
-	
-	<filter-mapping> 
-  		<filter-name>trimFilter</filter-name> 
-  		<url-pattern>*.jsp</url-pattern>
+
+	<filter-mapping>
+		<filter-name>trimFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
-	
+
 	<filter-mapping>
 		<filter-name>PHPAPIFilter</filter-name>
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
-	
+
 	<welcome-file-list>
 		<welcome-file>home</welcome-file>
 	</welcome-file-list>
@@ -434,15 +438,15 @@
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
 	</security-constraint>
-	
-    <security-constraint>
-        <web-resource-collection>
-            <url-pattern>admin.*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>admin.*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
 
 	<servlet>
 		<servlet-name>RedirectServlet</servlet-name>
@@ -482,52 +486,52 @@
 		<servlet-name>AnalyticsServlet</servlet-name>
 		<url-pattern>/stats</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-	<servlet-name>UnbounceWebhook</servlet-name>
-	<servlet-class>com.thirdparty.forms.UnbounceWebhook</servlet-class>
+		<servlet-name>UnbounceWebhook</servlet-name>
+		<servlet-class>com.thirdparty.forms.UnbounceWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UnbounceWebhook</servlet-name>
 		<url-pattern>/unbounce</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-	<servlet-name>WufooWebhook</servlet-name>
-	<servlet-class>com.thirdparty.forms.WufooWebhook</servlet-class>
+		<servlet-name>WufooWebhook</servlet-name>
+		<servlet-class>com.thirdparty.forms.WufooWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>WufooWebhook</servlet-name>
 		<url-pattern>/wufoo</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-	<servlet-name>GravityForm</servlet-name>
-	<servlet-class>com.thirdparty.forms.GravityForm</servlet-class>
+		<servlet-name>GravityForm</servlet-name>
+		<servlet-class>com.thirdparty.forms.GravityForm</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GravityForm</servlet-name>
 		<url-pattern>/gform</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-	<servlet-name>ShopifyCustomerWebhook</servlet-name>
-	<servlet-class>com.thirdparty.shopify.ShopifyCustomerWebhook</servlet-class>
+		<servlet-name>ShopifyCustomerWebhook</servlet-name>
+		<servlet-class>com.thirdparty.shopify.ShopifyCustomerWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ShopifyCustomerWebhook</servlet-name>
 		<url-pattern>/shopifycustomer</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-	<servlet-name>ShopifyOrderWebhook</servlet-name>
-	<servlet-class>com.thirdparty.shopify.ShopifyOrderWebhook</servlet-class>
+		<servlet-name>ShopifyOrderWebhook</servlet-name>
+		<servlet-class>com.thirdparty.shopify.ShopifyOrderWebhook</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ShopifyOrderWebhook</servlet-name>
 		<url-pattern>/shopifyorder</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>CallNotification</servlet-name>
 		<servlet-class>com.call.notification.CallNotification</servlet-class>
@@ -536,7 +540,7 @@
 		<servlet-name>CallNotification</servlet-name>
 		<url-pattern>/call</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>upload_contacts</servlet-name>
 		<servlet-class>com.agilecrm.contact.upload.blob.UploadServlet</servlet-class>
@@ -545,7 +549,7 @@
 		<servlet-name>upload_contacts</servlet-name>
 		<url-pattern>/upload</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>CleanBlobStore</servlet-name>
 		<servlet-class>com.agilecrm.contact.upload.blob.cron.BlobDeleteCron</servlet-class>
@@ -554,7 +558,7 @@
 		<servlet-name>CleanBlobStore</servlet-name>
 		<url-pattern>/backend/cron/blobs-delete</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>CronPullServlet</servlet-name>
 		<servlet-class>com.agilecrm.queues.cron.CronPullServlet</servlet-class>
@@ -563,7 +567,7 @@
 		<servlet-name>CronPullServlet</servlet-name>
 		<url-pattern>/backend/cron/cron-pull/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>BackendPullServlet</servlet-name>
 		<servlet-class>com.agilecrm.queues.backend.BackendPullServlet</servlet-class>
@@ -572,40 +576,40 @@
 		<servlet-name>BackendPullServlet</servlet-name>
 		<url-pattern>/backend-pull</url-pattern>
 	</servlet-mapping>
-	
-   <servlet>
-   		<servlet-name>Unsubscribe</servlet-name>
-   		<jsp-file>/unsubscribe.jsp</jsp-file>
-   </servlet>
-   <servlet-mapping>
-   		<servlet-name>Unsubscribe</servlet-name>
-   		<url-pattern>/unsubscribe</url-pattern>
-   </servlet-mapping>
-   
-   <servlet>
-   		<servlet-name>Confirmation</servlet-name>
-   		<jsp-file>/confirmation.jsp</jsp-file>
-   </servlet>
-   <servlet-mapping>
-   		<servlet-name>Confirmation</servlet-name>
-   		<url-pattern>/confirmation</url-pattern>
-   </servlet-mapping>
 
-   <servlet>
-   		<servlet-name>Resubscribe</servlet-name>
-   		<jsp-file>/resubscribe.jsp</jsp-file>
-   </servlet>
-   <servlet-mapping>
-   		<servlet-name>Resubscribe</servlet-name>
-   		<url-pattern>/resubscribe</url-pattern>
-   </servlet-mapping>
-   
+	<servlet>
+		<servlet-name>Unsubscribe</servlet-name>
+		<jsp-file>/unsubscribe.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Unsubscribe</servlet-name>
+		<url-pattern>/unsubscribe</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Confirmation</servlet-name>
+		<jsp-file>/confirmation.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Confirmation</servlet-name>
+		<url-pattern>/confirmation</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Resubscribe</servlet-name>
+		<jsp-file>/resubscribe.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Resubscribe</servlet-name>
+		<url-pattern>/resubscribe</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 	<servlet-mapping>

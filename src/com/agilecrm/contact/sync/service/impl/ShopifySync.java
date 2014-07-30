@@ -88,7 +88,7 @@ public class ShopifySync extends OneWaySyncService
 		    }
 		    currentPage += 1;
 		}
-		sendNotification(prefs.client.getNotificationEmailSubject());
+		sendNotification(prefs.type.getNotificationEmailSubject());
 		updateLastSyncedInPrefs();
 	    }
 	    catch (Exception e)

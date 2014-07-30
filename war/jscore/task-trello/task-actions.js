@@ -2,7 +2,7 @@
 function addTaskToTaskList(headingToSearch, tasksToAdd, conditionToCheck)
 {
 	console.log("In addTaskToTaskList");
-	
+
 	var modelTaskList;
 
 	// Get task list on basis of heading and id in case of owner criteria
@@ -87,7 +87,7 @@ function fetchForNextTaskList()
 	// is All task list are done?
 	if (IS_FECHING_DONE)
 		return;
-	
+
 	var criteria = getCriteria();
 	var criteriaArray = GROUPING_MAP[criteria].type;
 
