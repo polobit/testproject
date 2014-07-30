@@ -127,8 +127,8 @@ public abstract class ContactSyncService implements SyncService
 
 	++total_synced_contact;
 
-	saveContact(contact);
-
+	contact = saveContact(contact);
+	
 	// Works as save callback to perform actions like creating notes/tasks
 	// and relating to newly created contact
 	contactWrapper.saveCallback();
@@ -237,7 +237,6 @@ public abstract class ContactSyncService implements SyncService
 	    saveContact(contact);
 	}
 
-	updateLastSyncedInPrefs();
 	// Sets total number of contacts imported/updated
 	syncStatus.put(ImportStatus.TOTAL, syncStatus.get(ImportStatus.TOTAL) + contacts.size());
 
@@ -254,7 +253,7 @@ public abstract class ContactSyncService implements SyncService
      * @param contact
      *            the contact
      */
-    private void saveContact(Contact contact)
+    private Contact saveContact(Contact contact)
     {
 	if (ContactUtil.isDuplicateContact(contact))
 	{
@@ -273,7 +272,8 @@ public abstract class ContactSyncService implements SyncService
 	{
 	    syncStatus.put(ImportStatus.LIMIT_REACHED, syncStatus.get(ImportStatus.LIMIT_REACHED) + 1);
 	}
-
+	
+	return contact;
     }
 
     /**

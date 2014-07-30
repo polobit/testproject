@@ -1,5 +1,21 @@
 <backends>
+
+ <backend name="b1">
+   <class>B4</class>
+   <instances>2</instances>
+   <options>
+     <dynamic>true</dynamic>
+   </options>
+ </backend>
  
+  <backend name="bulk">
+   <class>B4</class>
+   <instances>2</instances>
+   <options>
+     <dynamic>true</dynamic>
+   </options>
+ </backend>
+  
  
  <backend name="normal">
    <class>B4</class>
