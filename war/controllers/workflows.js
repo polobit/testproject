@@ -511,7 +511,7 @@ var WorkflowsRouter = Backbone.Router
 						if (type == 'TAG_IS_ADDED' || type == 'TAG_IS_DELETED'){
 							
 							// Show custom tags textbox
-							$('#trigger-custom-tags', el).css('display','');
+							$('#trigger-custom-tags', el).closest('div.control-group').css('display','');
 							
 							$('.trigger-tags', el).live("focus", function(e)
 							{
@@ -521,7 +521,7 @@ var WorkflowsRouter = Backbone.Router
 						}
 						
 						if(type == 'ADD_SCORE')
-							$('#trigger-custom-score', el).css('display','');
+							$('#trigger-custom-score', el).closest('div.control-group').css('display','');
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 

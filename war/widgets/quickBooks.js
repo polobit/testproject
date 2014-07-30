@@ -18,7 +18,11 @@ $(function()
     Email = agile_crm_get_contact_property('email');
     var first_name = agile_crm_get_contact_property("first_name");
     var last_name = agile_crm_get_contact_property("last_name");
-
+    
+    //set last name empty if it is undifned
+    if(last_name==undefined||last_name==null)
+    	last_name=' ';
+    
     console.log("Email is" + Email)
 
     showQuickbooksContacts();

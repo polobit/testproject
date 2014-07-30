@@ -20,7 +20,7 @@ $(function()
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
 		{
-			$('form#addTriggerForm').find('#trigger-custom-tags').css('display', '');
+			$('form#addTriggerForm').find('#trigger-custom-tags').closest('div.control-group').css('display', '');
 			
 			// Tags typeahead for tag input field
 			addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));
@@ -28,7 +28,7 @@ $(function()
 
 		// Show score
 		if ($(this).val() == 'ADD_SCORE')
-			$('form#addTriggerForm').find('#trigger-custom-score').css('display', '');
+			$('form#addTriggerForm').find('#trigger-custom-score').closest('div.control-group').css('display', '');
 		
 		// Populate milestones for triggers
 		if ($(this).val() == 'DEAL_MILESTONE_IS_CHANGED')
