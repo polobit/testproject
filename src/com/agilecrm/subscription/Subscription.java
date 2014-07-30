@@ -108,6 +108,9 @@ public class Subscription
      */
     @NotSaved(IfDefault.class)
     public String billing_data_json_string = null;
+    
+    @NotSaved
+    public String customer_email = null;
 
     /** This {@link Enum} gateway represents the payment gateway */
     public static enum Gateway
@@ -180,6 +183,37 @@ public class Subscription
 	}
     }
 
+    /**
+     * Returns {@link Subscription} object of particular domain domain
+     * 
+     * @return {@link Subscription}
+     * */
+    public static Subscription getSubscriptionOfParticularDomain(String namespace)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+	    Subscription subscription = getSubscription();
+	    if (subscription != null){
+	      return subscription;
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+    
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+	 return null;
+    }
+
+    
+    
     public void save()
     {
 	Subscription subscription = Subscription.getSubscription();
@@ -311,6 +345,24 @@ public class Subscription
 	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
     }
 
+    /**
+     * Fetchs {@link List} of {@link Invoice} from respective Domain
+     * 
+     * @return {@link List} of {@link Invoice}
+     * @throws Exception
+     */
+    public static List<Invoice> getInvoicesOfParticularDomain(String domainname) throws Exception
+    {
+	Subscription subscription = getSubscriptionOfParticularDomain(domainname);
+
+	// If current domain has subscription object get invoices for that
+	// domain
+	if (subscription == null)
+	    return null;
+	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
+    }
+    
+    
     /**
      * Cancels the subscription in its respective gateway
      * 

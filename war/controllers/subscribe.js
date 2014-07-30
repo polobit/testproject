@@ -10,9 +10,14 @@ var SubscribeRouter = Backbone.Router.extend({
 	routes : {
 	/* Subscription page */
 	"subscribe" : "subscribe", "subscribe/:id" : "subscribe",
+	
+	"domainSubscribe":"domainSubscribeDetails", "domainSubscribe/:id" : "domainSubscribeDetails",
 
 	/* Updating subscription details */
 	"updatecard" : "updateCreditCard", "updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
+	
+	
+	"purchase-plan-formAdminPanel" : "purchasePlanFromAdminpanel",
 
 	/* Invoices */
 	"invoice" : "invoice", "invoice/:id" : "invoiceDetails" },
@@ -71,7 +76,56 @@ var SubscribeRouter = Backbone.Router.extend({
 		} });
 		$('#content').html(subscribe_plan.render().el);
 	},
+	
+	
+	
+	domainSubscribeDetails : function(id)
+	{
+		
+		
+		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription/adminpanel/subscription/"+id, template : "all-domain-admin-subscribe-new", window : 'domainSubscribe',
+		/*
+		 * postRenderCallback : function(el) { // Setup account statistics
+		 * set_up_account_stats(el); // Load date and year for card expiry
+		 * card_expiry(el); // Load countries and respective states
+		 * head.js(LIB_PATH + 'lib/countries.js', function() {
+		 * print_country($("#country", el)); }); },
+		 */
+		postRenderCallback : function(el)
+		{
+			var data = subscribe_plan.model.toJSON();
 
+			//console.log(data.get('billing_data_json_string'));
+			
+			// Setup account statistics
+			set_up_account_stats(el);
+
+			if (!$.isEmptyObject(data))
+			{
+				USER_BILLING_PREFS = data;
+				USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
+				console.log(USER_CREDIRCARD_DETAILS);
+				element = setPriceTemplete(data.plan.plan_type, el);
+			}
+
+			else
+				element = setPriceTemplete("free", el);
+
+			// Show Coupon code input field
+			id = (id && id == "coupon") ? id : "";
+			showCouponCodeContainer(id);
+
+			head.load(CSS_PATH + 'css/jslider.css', CSS_PATH + "css/misc/agile-plan-upgrade.css", LIB_PATH + 'lib/jquery.slider.min.js', function()
+			{
+				if ($.isEmptyObject(data))
+					setPlan("free");
+				else
+					setPlan(data);
+				load_slider(el);
+			});
+		} });
+		$('#content').html(subscribe_plan.render().el);
+	},
 	/**
 	 * Shows forms to updates Credit card details, loads subscription details
 	 * from core/api/subscription to deserailize and show credit card details in
@@ -114,6 +168,11 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(card_details.render().el);
 	},
 
+	
+	
+	
+	
+	
 	/**
 	 * Shows form the update plan, uses the same url used to create new
 	 * subscription/update credit card of plan, deserializes the current plan
@@ -142,6 +201,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 		// Fetches the invoice payments
 		this.invoice.collection.fetch();
+		console.log(this.invoice.collection.fetch());
 
 		$('#content').html(this.invoice.el);
 	},
@@ -190,7 +250,6 @@ var SubscribeRouter = Backbone.Router.extend({
 		var window = this;
 		// Plan json is posted along with credit card details
 		var plan = plan_json
-
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", isNew : true, data : plan,
 			postRenderCallback : function(el)
 			{
@@ -215,4 +274,50 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(upgrade_plan.render().el);
 		$(".active").removeClass("active");
 		// $("#fat-menu").addClass("active");
-	} });
+	} ,
+
+	
+	purchasePlanFromAdminpanel : function()
+	{
+		// If plan is not defined i.e., reloaded, or plan not chosen properly,
+		// then page is navigated back to subcription/ choose plan page
+		if (!plan_json.plan)
+		{
+			this.navigate("all-domain-users", { trigger : true });
+
+			return;
+		}
+
+		var window = this;
+		// Plan json is posted along with credit card details
+		var plan = plan_json
+		
+		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription/adminpanel/subscribe", template : "admin-purchase-plan", isNew : true, data : plan,
+			postRenderCallback : function(el)
+			{
+				// Discount
+				showCouponDiscountAmount(plan_json, el);
+
+				card_expiry(el);
+				head.js(LIB_PATH + 'lib/countries.js', function()
+				{
+					print_country($("#country", el));
+				});
+			},
+			saveCallback : function(data)
+			{
+				window.navigate("domainSubscribe", { trigger : true });
+				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+			}
+			
+		});
+
+		// Prepend Loading
+		$('#content').html(upgrade_plan.render().el);
+		$(".active").removeClass("active");
+		// $("#fat-menu").addClass("active");
+	}
+	
+	
+
+});
