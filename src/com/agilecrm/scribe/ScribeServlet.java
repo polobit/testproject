@@ -131,7 +131,7 @@ public class ScribeServlet extends HttpServlet
 	String serviceType = req.getParameter("service_type");
 
 	
-	    if (serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
+	    if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
 	    {
 		String shop = req.getParameter("shop");
 		String domain = req.getParameter("domain");
