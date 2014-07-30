@@ -55,7 +55,7 @@ public class ContactGroupUtil
     public static void printAllGroups(String token) throws Exception
     {
 	// Request the feed
-	URL feedUrl = new URL("https://www.google.com/m8/feeds/groups/default/full" + "?access_token=" + token);
+	URL feedUrl = new URL("https://www.google.com/m8/feeds/groups/default/full" + "?access_token=" + token +"&max-results=" + 100 );
 	System.out.println(feedUrl);
 	System.out.println(token);
 	System.out.println("**********************************");
@@ -94,6 +94,7 @@ public class ContactGroupUtil
 		System.out.println("System Group Id: " + groupEntry.getSystemGroup().getId());
 	    }
 	}
+	
     }
 
     public static List<GoogleGroupDetails> getGroups(ContactPrefs contactPrefs) throws Exception
@@ -115,7 +116,7 @@ public class ContactGroupUtil
 
 	// Request the feed
 	URL feedUrl = new URL(GoogleServiceUtil.GOOGLE_CONTACTS_BASE_URL + "groups/default/full" + "?access_token="
-		+ token);
+		+ token + "&max-results=" + 100);
 	Query myQuery = new Query(feedUrl);
 	System.out.println(feedUrl);
 	System.out.println(token);
@@ -261,6 +262,20 @@ public class ContactGroupUtil
 
 	// queries google for groups
 	return contactService.query(myQuery, ContactFeed.class);
+    }
+    
+    public static void main(String[] args)
+    {
+	try
+	{
+	    printAllGroups("ya29.UgBBEEB9obXY5iEAAABiCc94PPJxRT1t3cvmGBjemMrQ08BS3olI2zAQI8qLqNvh5V97yRPwJ52EsvjjrSU");
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	
     }
 
 }
