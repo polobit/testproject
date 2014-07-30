@@ -206,13 +206,12 @@ public class StripeImpl implements AgileBilling
      * @throws StripeException
      * */
     public List<Invoice> getInvoices(JSONObject stripeCustomer) throws StripeException
-    {
+    { int sum=0;
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 
 	// Sets invoice parameters (Stripe customer id is required to get
 	// invoices of a customer form stripe)
 	invoiceParams.put("customer", StripeUtil.getCustomerFromJson(stripeCustomer).getId());
-
 	/*
 	 * Fetches all invoices for given stripe customer id and returns
 	 * invoices
@@ -310,4 +309,6 @@ public class StripeImpl implements AgileBilling
 	return new JSONObject();
     }
 
+  
+    
 }

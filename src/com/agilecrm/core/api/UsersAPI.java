@@ -54,11 +54,11 @@ public class UsersAPI
     {
 	try
 	{
+		
+		
 	    String domain = NamespaceManager.get();
-
 	    // Gets the users and update the password to the masked one
 	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
-
 	    return users;
 	}
 	catch (Exception e)
@@ -68,6 +68,37 @@ public class UsersAPI
 	}
     }
 
+    @Path("/admin/domain/{domainname}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<DomainUser> getDomainUserDetails(@PathParam("domainname") String domainname)
+    {
+	try
+	{
+	    String domain = domainname;
+	    if(domain.contains("@")){
+	    	String email=domain;
+	    	DomainUser domainUser =DomainUserUtil.getDomainUserFromEmail(email);
+	    	if(domainUser!=null){
+	    	String userDomain=domainUser.domain;
+	    	 List<DomainUser> domainUsers = DomainUserUtil.getUsers(userDomain);
+	 	    return domainUsers;
+	    	}
+	    }
+	    // Gets the users and update the password to the masked one
+	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
+	    return users;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    
+    
+    
     // Send Current User Info
     @Path("current-user")
     @GET
@@ -100,9 +131,39 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
+    	
 	try
 	{
 	    domainUser.save();
+	    return domainUser;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	}
+    }
+    
+    /**
+     * Saves new users into database with particular domain name, if any exception is raised throws
+     * webApplication exception.
+     * 
+     * @param domainUser
+     *            user to be saved into database
+     * @return saved user
+     */
+    @POST @Path("/adminpanel/addNewUser/{domainname}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public DomainUser createDomainUserWithDomainname(DomainUser domainUser,@PathParam("domainname") String domainname)
+    {
+    	System.out.println("adding new user from admin  panel");
+    	String oldnamespace=NamespaceManager.get();
+	try
+	{
+		NamespaceManager.set(domainname);
+	    domainUser.save();
+	    NamespaceManager.set(oldnamespace);
 	    return domainUser;
 	}
 	catch (Exception e)
@@ -121,6 +182,20 @@ public class UsersAPI
 	return String.valueOf(DomainUserUtil.count());
     }
 
+    @GET
+    @Path("adminpanel/count/{domainname}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String particularDomainUserCount(@PathParam("domainname") String domainname)
+    {
+    	String oldnamespace=NamespaceManager.get();
+    	NamespaceManager.set(domainname);
+    	String count=String.valueOf(DomainUserUtil.count());
+    	NamespaceManager.set(oldnamespace);
+	return count;
+    }
+    
+    
+    
     /**
      * Updates the existing user
      * 
@@ -221,11 +296,11 @@ public class UsersAPI
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
+	/*if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry you don't have privileges to access this page.")
 		    .build());
-	}
+	}*/
 
 	if (count != null)
 	{
@@ -236,6 +311,13 @@ public class UsersAPI
 	return DomainUserUtil.getAllUsers();
     }
 
+    
+  
+
+    
+    
+    
+    
     /**
      * Delete domain users of particular namespace
      */
@@ -243,6 +325,7 @@ public class UsersAPI
     @DELETE
     public void deleteDomainUser(@PathParam("namespace") String namespace)
     {
+    	System.out.println("delete request for deletion of account from admin panel "+namespace);
 	String domain = NamespaceManager.get();
 
 	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
@@ -293,5 +376,40 @@ public class UsersAPI
     public List<AgileUser> getAgileUsers()
     {
 	return AgileUser.getUsers();
+    }
+    
+    
+    @Path("/admin/domain/adminpanel/{id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteDomainUserFromAdminPanel(@PathParam("id") String id)
+    {
+    	System.out.println("delete request for domain user deletion from admin panel"+id);
+    	DomainUser domainUser;
+	try
+	{
+		long domainuserid=Long.parseLong(id);
+		
+		 domainUser=DomainUserUtil.getDomainUser(domainuserid);
+	    int count = DomainUserUtil.count();
+
+	    // Throws exception, if only one account exists
+	    if (count == 1)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Can’t delete all users").build());
+
+	    // Throws exception, if user is owner
+	    if (domainUser.is_account_owner)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Master account can’t be deleted").build());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	}
+
+	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
+
+	domainUser.delete();
     }
 }
