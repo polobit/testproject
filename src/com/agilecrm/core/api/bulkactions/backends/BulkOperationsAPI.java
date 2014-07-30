@@ -77,8 +77,7 @@ public class BulkOperationsAPI
 	    
 	    while(fetcher.hasNextSet())
 	    {
-		System.out.println(fetcher.nextSet().size());
-		//ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+		ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    }
 	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, current_user_id);
 	    
