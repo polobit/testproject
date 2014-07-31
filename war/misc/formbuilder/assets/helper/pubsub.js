@@ -8,8 +8,6 @@ define([
 var getAgileFields = function(fields, callback)
 {
 	var url = window.location.protocol + '//' + window.location.host + '/core/api/custom-fields';
-	//var url = 'http://localhost:8888/core/api/custom-fields';
-	
 	$.ajax({ type : 'GET', url : url, asynch : true, dataType : 'json', success : function(data)
 	{
 		fields = data;
