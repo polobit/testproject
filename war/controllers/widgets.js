@@ -638,12 +638,9 @@ var WidgetsRouter = Backbone.Router
 				this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 
 				// Adds header
-				$('#prefs-tabs-content')
-						.html(
-								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import contacts from Google</small></h2></div><div class="span11" style="margin-left:0px;"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import contact from E-commerce</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="shopify"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>CRM <small>import contact from CRM</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="zoho"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>Payment <small>import contact from payment gateway</small></h2></div><div class="span11" style="margin-left:0px;"><div id ="stripe"></div></div></div>'
-
-						);
-
+				$('#prefs-tabs-content').html(
+					'<div class="row-fluid"><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>');
+				
 				// Adds Gmail Prefs
 				$('#contact-prefs').append(this.contact_sync_google.render().el);
 
@@ -652,6 +649,7 @@ var WidgetsRouter = Backbone.Router
 				// console.log(getTemplate("import-google-contacts", {}));
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
 
+				return;
 				// Adding E-commerce Pref
 				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/get-prefs', template : 'admin-settings-import-shopify-contact-sync' });
 				$('#shopify').append(this.shopify_sync.render().el);
