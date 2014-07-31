@@ -92,7 +92,6 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public List<ContactField> getMoreCustomInfo()
     {
-	entry.getContent();
 	List<ContactField> fields = new ArrayList<ContactField>();
 	if (entry.hasImAddresses())
 	    for (Im im : entry.getImAddresses())
