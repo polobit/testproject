@@ -3,6 +3,8 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.scribe.model.OAuthRequest;
@@ -38,7 +41,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     private int currentPage = 1;
     private String lastSyncPoint;
 
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
     String date = df.format(new Date());
 
     /*
@@ -142,14 +145,13 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     private String materializeURL(String shop, String entityName, int page, String update)
     {
-
 	StringBuilder uri = new StringBuilder();
 	if (entityName.equalsIgnoreCase("count"))
 	{
 	    uri.append("https://").append(shop).append("/admin/customers/").append(entityName + ".json?");
 	    if (lastSyncPoint != null)
 	    {
-		uri.append("&created_at_min=" + lastSyncPoint);
+		uri.append("&created_at_min=" + URLEncoder.encode(lastSyncPoint));
 	    }
 	}
 	else
@@ -164,16 +166,15 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    {
 		if (update.equalsIgnoreCase("new"))
 		{
-		    uri.append("&created_at_min=" + lastSyncPoint);
+		    uri.append("&created_at_min=" + URLEncoder.encode(lastSyncPoint));
 		}
 		else if (update.equalsIgnoreCase("edited"))
 		{
-		    uri.append("&updated_at_max=" + lastSyncPoint);
+		    uri.append("&updated_at_max=" + URLEncoder.encode(lastSyncPoint));
 		}
 	    }
 	}
-	System.out.println(uri.toString());
-
+	
 	return uri.toString();
 
     }
@@ -272,7 +273,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     }
 
     /**
-     * Save customers order.
+     * Save customers order add Product name as tag and Item as Note
      * 
      * @param customerId
      *            the customer id
@@ -291,34 +292,35 @@ public class ShopifySyncImpl extends OneWaySyncService
 		Note note = new Note();
 		LinkedHashMap<String, Object> order = it.next();
 
-		ArrayList<LinkedHashMap<String, String>> itemDetails = (ArrayList<LinkedHashMap<String, String>>) order
+		ArrayList<LinkedHashMap<String, Object>> listItems = (ArrayList<LinkedHashMap<String, Object>>) order
 			.get("line_items");
-		Iterator<LinkedHashMap<String, String>> iterator = itemDetails.listIterator();
+		Iterator<LinkedHashMap<String, Object>> iterator = listItems.listIterator();
 		while (iterator.hasNext())
 		{
-		    LinkedHashMap<String, String> details = iterator.next();
-		    note.subject = "Ordered -Items" ;
+		    LinkedHashMap<String, Object> itemDetails = iterator.next();
+		    ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails.get("tax_lines");
+		    note.subject = "Ordered -Items";
 		    if (note.description != null && !note.description.isEmpty())
 		    {
-			note.description = note.description + "\n" + details.get("name") + "-" + details.get("price");
-			
+			note.description = note.description + "\n" + itemDetails.get("name") + "- "+ itemDetails.get("price") + " ("+order.get("currency")+") + Tax - "+taxDetails.get(0).get("price")+" "+order.get("currency")+""  ;
+
 		    }
 		    else
 		    {
-			note.description = details.get("name") + "-" + details.get("price");
+			note.description = itemDetails.get("name") + "- "+ itemDetails.get("price") + " ("+order.get("currency")+") + Tax - "+taxDetails.get(0).get("price")+" "+order.get("currency")+""  ;
 		    }
 
 		    note.addRelatedContacts(contact.id.toString());
-		   
+
 		    note.save();
 
-		    contact.tags.add(details.get("title"));
+		    contact.tags.add((String) itemDetails.get("title"));
 		    contact.save();
 		}
 		// setting total price of orders item
-		 note.description = note.description + "\n" +"Total Price -"+ order.get("total_price");
-		 //update notes
-		 note.save();
+		note.description = note.description + "\n" + "Total Price -" + order.get("total_price")+ " ("+order.get("currency")+")";
+		// update notes
+		note.save();
 		// save order related customer note
 		if (order.containsKey("note"))
 		{
