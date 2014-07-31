@@ -301,15 +301,15 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    note.subject = "Ordered -Items";
 		    if (note.description != null && !note.description.isEmpty())
 		    {
-			note.description = note.description + "\n" + itemDetails.get("name") + "- "
-				+ itemDetails.get("price") + " (" + order.get("currency") + ") + Tax - "
+			note.description = note.description + "\n" + itemDetails.get("name") + ": "
+				+ itemDetails.get("price") + " (" + order.get("currency") + ") + Tax : "
 				+ taxDetails.get(0).get("price") + " " + order.get("currency") + "";
 
 		    }
 		    else
 		    {
-			note.description = itemDetails.get("name") + "- " + itemDetails.get("price") + " ("
-				+ order.get("currency") + ") + Tax - " + taxDetails.get(0).get("price") + " "
+			note.description = itemDetails.get("name") + ": " + itemDetails.get("price") + " ("
+				+ order.get("currency") + ") + Tax : " + taxDetails.get(0).get("price") + " "
 				+ order.get("currency") + "";
 		    }
 
@@ -321,7 +321,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    contact.save();
 		}
 		// setting total price of orders item
-		note.description = note.description + "\n" + "Total Price -" + order.get("total_price") + " ("
+		note.description = note.description + "\n" + "Total Price :" + order.get("total_price") + " ("
 			+ order.get("currency") + ")";
 		// update notes
 		note.save();
