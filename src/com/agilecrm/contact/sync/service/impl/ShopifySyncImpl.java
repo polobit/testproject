@@ -303,14 +303,14 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    {
 			note.description = note.description + "\n" + itemDetails.get("name") + ": "
 				+ itemDetails.get("price") + " (" + order.get("currency") + ") + Tax : "
-				+ taxDetails.get(0).get("price") + " " + order.get("currency") + "";
+				+ taxDetails.get(0).get("price") + " (" + order.get("currency") + ")";
 
 		    }
 		    else
 		    {
 			note.description = itemDetails.get("name") + ": " + itemDetails.get("price") + " ("
-				+ order.get("currency") + ") + Tax : " + taxDetails.get(0).get("price") + " "
-				+ order.get("currency") + "";
+				+ order.get("currency") + ") + Tax : " + taxDetails.get(0).get("price") + " ("
+				+ order.get("currency") + ")";
 		    }
 
 		    note.addRelatedContacts(contact.id.toString());
