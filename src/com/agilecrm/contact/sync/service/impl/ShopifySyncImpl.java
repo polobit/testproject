@@ -3,7 +3,6 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.scribe.model.OAuthRequest;
@@ -174,7 +172,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		}
 	    }
 	}
-	
+
 	return uri.toString();
 
     }
@@ -298,16 +296,21 @@ public class ShopifySyncImpl extends OneWaySyncService
 		while (iterator.hasNext())
 		{
 		    LinkedHashMap<String, Object> itemDetails = iterator.next();
-		    ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails.get("tax_lines");
+		    ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails
+			    .get("tax_lines");
 		    note.subject = "Ordered -Items";
 		    if (note.description != null && !note.description.isEmpty())
 		    {
-			note.description = note.description + "\n" + itemDetails.get("name") + "- "+ itemDetails.get("price") + " ("+order.get("currency")+") + Tax - "+taxDetails.get(0).get("price")+" "+order.get("currency")+""  ;
+			note.description = note.description + "\n" + itemDetails.get("name") + "- "
+				+ itemDetails.get("price") + " (" + order.get("currency") + ") + Tax - "
+				+ taxDetails.get(0).get("price") + " " + order.get("currency") + "";
 
 		    }
 		    else
 		    {
-			note.description = itemDetails.get("name") + "- "+ itemDetails.get("price") + " ("+order.get("currency")+") + Tax - "+taxDetails.get(0).get("price")+" "+order.get("currency")+""  ;
+			note.description = itemDetails.get("name") + "- " + itemDetails.get("price") + " ("
+				+ order.get("currency") + ") + Tax - " + taxDetails.get(0).get("price") + " "
+				+ order.get("currency") + "";
 		    }
 
 		    note.addRelatedContacts(contact.id.toString());
@@ -318,16 +321,17 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    contact.save();
 		}
 		// setting total price of orders item
-		note.description = note.description + "\n" + "Total Price -" + order.get("total_price")+ " ("+order.get("currency")+")";
+		note.description = note.description + "\n" + "Total Price -" + order.get("total_price") + " ("
+			+ order.get("currency") + ")";
 		// update notes
 		note.save();
 		// save order related customer note
 		if (order.containsKey("note"))
 		{
-		    String customerNote = order.get("note").toString();
-		    if (customerNote != null && !customerNote.isEmpty())
+		    Object customerNote = order.get("note");
+		    if (customerNote != null)
 		    {
-			Note n = new Note("Customer's Note", customerNote);
+			Note n = new Note("Customer's Note", customerNote.toString());
 			n.addRelatedContacts(contact.id.toString());
 			n.save();
 		    }
@@ -336,9 +340,13 @@ public class ShopifySyncImpl extends OneWaySyncService
 		// save order related tags
 		if (order.containsKey("tags"))
 		{
-		    String[] tags = order.get("tags").toString().split(",");
-		    contact.tags.addAll(Arrays.asList(tags));
-		    contact.save();
+		    Object tag = order.get("tags");
+		    if (tag != null)
+		    {
+			String[] tags = tag.toString().split(",");
+			contact.tags.addAll(Arrays.asList(tags));
+			contact.save();
+		    }
 		}
 
 	    }
