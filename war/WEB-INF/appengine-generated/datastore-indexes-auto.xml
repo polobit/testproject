@@ -1,8 +1,6 @@
 <!-- Indices written at Tue, 29 Jul 2014 18:41:30 IST -->
 
-
-<datastore-indexes>
-
+<datastore-indexes/>
     <!-- Used 4 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="__key__" direction="asc"/>
@@ -23,8 +21,4 @@
     </datastore-index>
 
     <!-- Used 2 times in query history -->
-
-
-
-
 </datastore-indexes>
