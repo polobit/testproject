@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -17,9 +18,11 @@ import net.sf.json.JSONException;
 
 import org.json.JSONArray;
 
+import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.webrules.WebRule;
 import com.agilecrm.webrules.util.WebRuleUtil;
+import com.google.appengine.api.NamespaceManager;
 
 @Path("/api/webrule")
 public class WebRuleAPI
@@ -30,7 +33,34 @@ public class WebRuleAPI
     {
 	return WebRuleUtil.getAllWebRules();
     }
-
+    @Path("/adminpanel/domain/{domainname}")
+    @GET
+    @Produces({MediaType.TEXT_PLAIN })
+    public int getWebRulesByParticularDomain(@PathParam("domainname") String domainname)
+    {
+    	String oldnamespace=NamespaceManager.get();
+    	
+	
+	try
+	{
+	    NamespaceManager.set(domainname);
+	    System.out.println("in web rules count  "+WebRule.dao.count());
+	    return WebRule.dao.count();
+	  
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+    
+	}
+	finally
+	{
+	    NamespaceManager.set(oldnamespace);
+	}
+	return 0;
+    }
+    
+    
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

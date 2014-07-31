@@ -119,7 +119,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$.ajax({
 			url: 'core/api/subscription/adminpanel/subscription/'+domainname,
 			type: 'GET',
-			success: function(data) { var that=this;
+			success: function(data) { 
+				var that=this;
 				console.log(data);
 				 $("#content").find('#planinfo').html(getTemplate("plan-info", data));
 				
@@ -129,10 +130,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						individual_tag_name : 'tr',postRenderCallback : function(el)
 						{
 							var arr=that.invoicecollection.collection; 
-							var d1=arr.models;
-							var total_amount=d1[0].get('total')
+							var amount=arr.models;
+							if(amount.length!=0){
+							var total_amount=amount[0].get('total')
 							 $("#content").find('#totalamount').html("<h3>Total Amount:"+total_amount+"");
-					
+							}
 						} });
 
 					// Fetches the invoice payments
@@ -140,10 +142,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			
 				console.log(this.invoicecollection.collection.fetch());
 				 $("#content").find('.past-invoicecollection').html(this.invoicecollection.el);
-				 App_Admin_Settings.get_email_count_for_domain_from_adminpanel(domainname);
-					 App_Admin_Settings.get_compaigns_count_for_domain_from_adminpanel(domainname);
-					 App_Admin_Settings.get_web_rule_count_for_domain_from_adminpanel(domainname);
-					 App_Admin_Settings.get_web_stats_count_for_domain_from_adminpanel(domainname);
+				
 			}
 		});
 	
@@ -151,7 +150,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 	getDomainUserDetails: function(query){
 	
-		 var domainname="",ownername="";
+		 var domainname="",ownername="";var ar=[];
 		this.usersListViewCollection = new Base_Collection_View({ url : '/core/api/users/admin/domain/'+query,  templateKey : "all-domain",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
 			{
@@ -159,7 +158,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				{
 					$(".last-login-time", el).timeago();
 				});
-				var ar=[];
+				
 				ar=App_Admin_Settings.usersListViewCollection.collection.models; 
 				for(var i=0;i<ar.length;i++){
 					var mod=ar[i];
@@ -171,12 +170,21 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						// 
 					}
 					$("#content").find('#ownername').html(ownername);
+					if(domainname==undefined){
+						var dom=ar[0];
+						domainname=dom.get('domain');
+					}
 					console.log(domainname+"----------------------------------"+ownername);
-					
+					if(domainname!=undefined)
+						$("#content").find('.domainname').html("<h3>Domain Name:"+domainname);
 				}	
-	
-				App_Admin_Settings.get_collection_of_invoices_for_domain_from_adminpanel(el,domainname);
 				 $(".delete-namespace").attr("data", domainname);
+				 App_Admin_Settings.get_email_count_for_domain_from_adminpanel(domainname);
+				 App_Admin_Settings.get_compaigns_count_for_domain_from_adminpanel(domainname);
+				 App_Admin_Settings.get_web_rule_count_for_domain_from_adminpanel(domainname);
+				 App_Admin_Settings.get_web_stats_count_for_domain_from_adminpanel(domainname);
+				App_Admin_Settings.get_collection_of_invoices_for_domain_from_adminpanel(el,domainname);
+				
 			} });
 	this.usersListViewCollection.collection.fetch();
 	

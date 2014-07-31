@@ -27,7 +27,9 @@ $(".delete_user").die().live('click', function(e){
 			success : function(data)
 			{
 				alert("user deleted" );
-			
+				Backbone.history.navigate("all-domain-users" , {
+	                trigger: true
+	            });
 			},
 			error : function(response)
 			{

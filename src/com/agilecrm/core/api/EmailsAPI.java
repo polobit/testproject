@@ -6,6 +6,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -184,4 +185,33 @@ public class EmailsAPI
 	return info;
     }
 
+    
+    /**
+     * Returns mandrill subaccount information when domain is sent from admin panel
+     * 
+     * @return String
+     * @throws Exception
+     */
+    @Path("/email-stats/adminpanel/{domainname}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getEmailActivityFromMandrillofPartcularDomain(@PathParam("domainname") String domainname) throws Exception
+    {
+    	String oldnamespace=NamespaceManager.get();
+    	NamespaceManager.set(domainname);
+	// Returns mandrill subaccount info if created, otherwise error json.
+	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get());
+
+	// If subaccount did not exist, return null
+	if (StringUtils.contains(info, "Unknown_Subaccount"))
+	{
+	    System.out.println("Mandrill sub-account is not yet created or can't get info. So return null");
+	    NamespaceManager.set(oldnamespace);
+	    return null;
+	}
+NamespaceManager.set(oldnamespace);
+	return info;
+    }
+
+    
 }

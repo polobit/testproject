@@ -18,10 +18,6 @@
         <h1>Domain Details <small>{{count}}Users</small></h1>
     </div>
 
-
-
-
-
     {{#unless this.length}}
     <div class="slate">
         <div class="slate-content">
@@ -33,7 +29,9 @@
     </div>
     {{/unless}}
     {{#if this.length}}
-<div ><h3  style="color:#069"> Domain Users </h3>
+<div ><h3  style="color:#069"> Domain Users </h3> <div style="color:#069" class="domainname pull-right"></div>
+<div class="clearfix"></div>
+<br/><br/>
     <div class="">
         <div class="">
             <table class="table table-striped onlySorting">
