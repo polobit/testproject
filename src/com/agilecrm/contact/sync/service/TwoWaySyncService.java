@@ -47,8 +47,16 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	}
 
     }
+    
+    public void syncContactsToClient()
+    {
+	uploadContactsToClient(fetchNewContactsFromAgile());
+	uploadContactsToClient(fetchUpdatedContactsFromAgile());
+    }
 
     public abstract List<Contact> fetchNewContactsFromAgile();
+    
+    public abstract Contact wrapContactToClientFormat();
 
     public abstract List<Contact> fetchUpdatedContactsFromAgile();
 
