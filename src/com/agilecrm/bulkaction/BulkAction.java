@@ -31,8 +31,8 @@ public class BulkAction
 	this.form_data = form_data;
 	domainUserId = current_id;
 
-	if (!StringUtils.isEmpty(condition))
-	    fetcher = new ContactFilterResultFetcher(condition, 200);
+	if (!StringUtils.isEmpty(condition));
+	   //fetcher = new ContactFilterResultFetcher(condition, 200);
 	else
 	    try
 	    {
