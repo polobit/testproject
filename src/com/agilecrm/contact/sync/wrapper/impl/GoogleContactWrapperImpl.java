@@ -11,9 +11,9 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
-import com.google.gdata.data.Content;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
+import com.google.gdata.data.contacts.Occupation;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
@@ -102,24 +102,34 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		    if (im.hasProtocol() && im.getProtocol() != null)
 		    {
 			if (im.getProtocol().indexOf("#") >= 0
-				&& im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
-					.equalsIgnoreCase("SKYPE"))
+			        && im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
+			                .equalsIgnoreCase("SKYPE"))
 			    subType = "SKYPE";
 			if (im.getProtocol().indexOf("#") >= 0
-				&& im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
-					.equalsIgnoreCase("GOOGLE_TALK"))
+			        && im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
+			                .equalsIgnoreCase("GOOGLE_TALK"))
 			    subType = "GOOGLE-PLUS";
+			else
+			{
+			    String[] sub_type = im.getProtocol().split("#");
+			    subType = (sub_type.length > 1) ? sub_type[1] : "";
+			}
+
 		    }
 
-		    
 		    if (!StringUtils.isBlank(subType))
-			fields.add(new ContactField("website", im.getAddress(), subType));
+			fields.add(new ContactField(Contact.WEBSITE, im.getAddress(), subType));
 		    else
-			fields.add(new ContactField("website", im.getAddress(), null));
+			fields.add(new ContactField(Contact.WEBSITE, im.getAddress(), null));
 
 		}
 
 	    }
+
+	if (entry.getContactPhotoLink() != null)
+	{
+	    fields.add(new ContactField(Contact.IMAGE, entry.getContactPhotoLink().getHref(), null));
+	}
 
 	// If image link there there then it is synced to agile
 	// if (entry.getContactPhotoLink() != null)
@@ -156,20 +166,20 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public ContactField getPhoneNumber()
     {
-	
+
 	ContactField field = null;
 	if (entry.hasPhoneNumbers())
 	    for (PhoneNumber phone : entry.getPhoneNumbers())
 	    {
-		
+
 		if (phone.getPhoneNumber() != null)
 		{
 		    String subType = ContactSyncUtil.getSubtypeFromGoogleContactsRel(phone.getRel());
 		    field = new ContactField("phone", phone.getPhoneNumber(), subType);
 		}
 		contact.properties.add(field);
-		}
-	return (ContactField)null;
+	    }
+	return (ContactField) null;
     }
 
     /*
@@ -181,12 +191,28 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     public ContactField getOrganization()
     {
 	ContactField field = null;
+	
 	if (entry.hasOrganizations())
-	{
-	    if (entry.getOrganizations().get(0).hasOrgName() && entry.getOrganizations().get(0).getOrgName().hasValue())
-		field = new ContactField(Contact.COMPANY, entry.getOrganizations().get(0).getOrgName().getValue(), null);
-	}
+	    if (entry.getOrganizations().get(0).hasOrgName()
+		    && entry.getOrganizations().get(0).getOrgName().hasValue())
+		return new ContactField(Contact.COMPANY, entry.getOrganizations().get(0).getOrgName()
+			.getValue(), null);
+	
 	return field;
+    }
+    
+    @Override
+    public ContactField getJobTitle()
+    {
+	Occupation occupation = entry.getOccupation();
+	entry.getTitle();
+	if(occupation == null)
+	    return (ContactField) null;
+	    System.out.println("job");
+	    System.out.println(entry.getOccupation());
+	
+        // TODO Auto-generated method stub
+        return new ContactField(Contact.TITLE, occupation.getValue(), null);
     }
 
     /*
@@ -318,24 +344,26 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	}
 	return field;
     }
-    
+
     @Override
     public void saveCallback()
     {
-        // TODO Auto-generated method stub
-	TextContent content =  entry.getTextContent();
-       if(content != null)
-       {
-	   System.out.println(content.getContent().getPlainText());
-	   Note note = new Note("Google Contact Notes", content.getContent().getPlainText());
-	   
-	   note.addContactIds(String.valueOf(contact.id));
-	   note.save();
-	   //String notes = content.
-       }
-       
+	// TODO Auto-generated method stub
+	TextContent content = null;
+	try
+	{
+	    content = entry.getTextContent();
+
+	    Note note = new Note("Google Contact Notes", content.getContent().getPlainText());
+
+	    note.addContactIds(String.valueOf(contact.id));
+	    note.save();
+	}
+	catch (Exception e)
+	{
+	    System.out.println("no notes");
+	}
+
     }
-    
-    
 
 }
