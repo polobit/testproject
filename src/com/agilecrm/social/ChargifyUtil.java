@@ -1,5 +1,7 @@
 package com.agilecrm.social;
 
+import java.util.Arrays;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -91,6 +93,8 @@ public class ChargifyUtil
 	 */
 	public JSONArray getCustomerId(String email) throws Exception
 	{
+		String emailArr[] = email.split(",");
+		
 		// preparing chargify URL for fetching customers
 		String url = CHARGIFY_API_URL.replace("$<ns>", chargifyNamespace) + "customers.json";
 
@@ -113,7 +117,7 @@ public class ChargifyUtil
 		{
 			JSONObject eachCustomerJson = customersArray.getJSONObject(i).getJSONObject("customer");
 
-			if (eachCustomerJson.getString("email").equals(email))
+			if (Arrays.asList(emailArr).contains(eachCustomerJson.getString("email")))
 				foundCustomersArray.put(eachCustomerJson);
 		}
 
