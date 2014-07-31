@@ -8,8 +8,12 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactField.FieldType;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Card;
@@ -135,8 +139,13 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	// check stripe custom field
 	if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
 	{
-	    customFields.add(new ContactField(stripeFieldValue, customer.getId(), null));
+	    ContactField field = new ContactField();
+	    field.type = FieldType.CUSTOM;
+	    field.name = stripeFieldValue;
+	    field.value = customer.getId();
+	    customFields.add(field);
 	}
+	
 
 	return customFields;
     }
