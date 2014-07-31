@@ -12,11 +12,12 @@
 </script>
 
 <script id="all-domain-collection-template" type="text/html">
-<div class="row">
-<div class="span9">
-    <div class="page-header">
+ <div class="page-header">
         <h1>Domain Details <small>{{count}}Users</small></h1>
     </div>
+<div class="row">
+<div class="span9">
+   
 
     {{#unless this.length}}
     <div class="slate">
@@ -30,8 +31,8 @@
     {{/unless}}
     {{#if this.length}}
 <div ><h3  style="color:#069"> Domain Users </h3> <div style="color:#069" class="domainname pull-right"></div>
-<div class="clearfix"></div>
-<br/><br/>
+<div class="clearfix"></div><br/><br/>
+
     <div class="">
         <div class="">
             <table class="table table-striped onlySorting">
@@ -52,48 +53,17 @@
     </div>
     {{/if}}
 </div>
-</div><br/><br/><br/><br/><br/>
-<div class="span3" id="planinfo"></div>
-
+<div  class=" past-invoicecollection">here past payment hostory wil come</div>
+</div>
+<div class="span3">
+<div  id="planinfo"></div>
+<div id="account" class="pull-left" style="floatr:left" > here is div</div>
+</div>
 </div>
 
 <div class="row">
-<div  class="span9 past-invoicecollection">here past payment hostory wil come</div>
-<div class="span3" style=" float:right;" >
-<legend>Account Stats</legend>
-<table class="table table-bordered">
-    
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>campaigns_count</td>
-            <td id="comapignscount"></td>
-        </tr>
-      
- <tr>
-            <td>webrules_count</td>
-            <td id="webrulecount"></td>
-        </tr>
-        <tr>
-            <td>emails_count</td>
-            <td id="emailscount"></td>
-        </tr>
 
-        <tr>
-            <td>Web-stats_count</td>
-            <td id="webstats"></td>
-        </tr>
 
-    </tbody>
-</table>
-<a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  Account</a>
-</div>
-</div>
 
 </script>
 
@@ -128,6 +98,62 @@
 
 </script>
 
+<script id="domain-info-template" type="text/html">
+<div style=" float:right;" >
+<legend>Account Stats</legend>
+<table class="table table-bordered">
+    
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>campaigns_count</td>
+            <td >{{compaign_count}}</td>
+        </tr>
+      
+ <tr>
+            <td>webrules_count</td>
+            <td>{{webrule_count}}</td>
+        </tr>
+        <tr>
+            <td>emails_count</td>
+            <td id="emailcount" ></td>
+        </tr>
 
+        <tr>
+            <td>Web-stats_count</td>
+            <td id="webstatscount"></td>
+        </tr>
+ <tr>
+            <td>Contacts_count</td>
+            <td >{{contact_count}}</td>
+        </tr>
 
+ <tr>
+            <td>deals_count</td>
+            <td >{{deals_count}}</td>
+        </tr>
+ <tr>
+            <td>documents_count</td>
+            <td >{{docs_count}}</td>
+        </tr>
+ <tr>
+            <td>events_count</td>
+            <td >{{events_count}}</td>
+        </tr>
+ <tr>
+            <td>triggers_count</td>
+            <td >{{triggers_count}}</td>
+        </tr>
+
+    </tbody>
+</table>
+<a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  Account</a>
+</div>
+</div>
+</script>
 

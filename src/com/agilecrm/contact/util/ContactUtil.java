@@ -1,7 +1,6 @@
 package com.agilecrm.contact.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,12 +19,10 @@ import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.document.Document;
 import com.agilecrm.search.AppengineSearch;
-import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
-import com.google.appengine.api.search.Document.Builder;
-import com.google.gdata.data.introspection.Collection;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -108,6 +105,13 @@ public class ContactUtil
 	return dao.fetchAll();
     }
 
+    //returns all documents count 
+    public static int getCount(){
+    	List<Contact> li=dao.fetchAll();
+    	return li.size();
+    }
+    /*
+    
     /**
      * Fetches all the contacts but not all at once, step by step based on max
      * parameter value (When scroll bar is scrolled down from client side, "max"
@@ -406,7 +410,7 @@ public class ContactUtil
 	    contact.removeTags(tags_array);
 	}
 
-	// dao.putAll(contacts_list);
+	dao.putAll(contacts_list);
     }
 
     /**
@@ -545,34 +549,16 @@ public class ContactUtil
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 
-	ContactDocument contactDocuments = new ContactDocument();
-	Builder[] docs = new Builder[contacts_list.size()];
-	List<Builder> builderObjects = new ArrayList<Builder>();
-	int i = 0;
 	for (Contact contact : contacts_list)
 	{
 	    contact.setContactOwner(newOwnerKey);
 	    Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 	    if (!new_owner.equals(userKey))
-	    {
-		builderObjects.add(contactDocuments.buildDocument(contact));
-//		docs[i] = contactDocuments.buildDocument(contact);
-		++i;
-	    }	
-	    
-	    if(i >= 150)
-	    {
-		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() -1]));    
-		builderObjects.clear();
-		i = 0;
-	    }
+		search.edit(contact);
 	}
-	
-	if(builderObjects.size() > 1)
-	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() -1]));
-	
 	Contact.dao.putAll(contacts_list);
+
     }
 
     /**

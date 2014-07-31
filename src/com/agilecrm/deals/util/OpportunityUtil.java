@@ -13,6 +13,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.document.Document;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
@@ -68,7 +69,12 @@ public class OpportunityUtil
     {
 	return dao.fetchAll();
     }
-
+    //returns all deals count 
+    public static int getCount(){
+    	List<Opportunity> li=dao.fetchAll();
+    	return li.size();
+    }
+    /*
     /**
      * Gets list of all opportunities.
      * 
