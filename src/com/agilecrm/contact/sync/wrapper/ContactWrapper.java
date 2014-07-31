@@ -54,6 +54,7 @@ public abstract class ContactWrapper implements WrapperService
 	setDescription();
 	setAddress();
 	setTag();
+	setJobTitle();
 
 	addMoreCustomInfo();
 
@@ -108,12 +109,16 @@ public abstract class ContactWrapper implements WrapperService
 
     private void setOrganization()
     {
-
+	addPropertyToContact(getOrganization());
     }
 
     private void setDescription()
     {
-
+    }
+    
+    private void setJobTitle()
+    {
+	addPropertyToContact(getJobTitle());
     }
 
     private void setNotes()
@@ -137,6 +142,11 @@ public abstract class ContactWrapper implements WrapperService
     {
 	// TODO Auto-generated method stub
 	return new ArrayList<ContactField>(0);
+    }
+    
+    public ContactField getJobTitle()
+    {
+	return null;
     }
 
     public void saveCallback()

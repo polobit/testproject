@@ -63,7 +63,7 @@ public class StripeSyncImpl extends OneWaySyncService
 		}
 		else
 		{
-		    Customer customer = customers.get(customers.size() - 1);
+		    Customer customer = customers.get(customers.size() - 2);
 
 		    lastSyncCheckPoint = customer.getId();
 		}
