@@ -31,7 +31,9 @@
 			try
 			{
 				AccountPrefs accountPrefs = AccountPrefsUtil.getAccountPrefs();
-				company = accountPrefs.company_name;
+				
+				if(!accountPrefs.company_name.equals("My company"))
+				    company = accountPrefs.company_name;
 			}
 			catch(Exception e)
 			{
