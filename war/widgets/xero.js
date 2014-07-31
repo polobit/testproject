@@ -32,12 +32,15 @@ $(function()
 	// Email as global variable
 	Email = agile_crm_get_contact_property('email');
 
-	//Email list as global variable
+	// Email list as global variable
 	EmailList = agile_crm_get_contact_properties_list("email");
 
 	var first_name = agile_crm_get_contact_property("first_name");
 	var last_name = agile_crm_get_contact_property("last_name");
 
+	if(last_name==undefined||last_name==null)
+		last_name = ' ';
+	
 	showXeroClient();
 
 	$('#xero_add_contact').die().live('click', function(e)
@@ -47,13 +50,13 @@ $(function()
 		addContactToXero(first_name, last_name, Email);
 	});
 
-	//attach event to invoices + icon to get lineitems
+	// attach event to invoices + icon to get lineitems
 	$('.invoices').die().live('click', function(e)
 	{
 		e.preventDefault();
 		var invoiceId = $(this).attr('value');
 
-		//checking for  data existence in div
+		// checking for data existence in div
 		if ($('#collapse-' + invoiceId).text().trim() === "")
 		{
 			console.log("no data present");
@@ -126,7 +129,6 @@ function showXeroClient()
 	}, function error(data)
 	{
 		console.log("In Xero error ");
-		console.log(data);
 
 		// Remove loading on error
 		$('#XERO_PROFILE_LOAD_IMAGE').remove();
@@ -160,9 +162,9 @@ function showXeroClient()
  * Shows Xero error message in the div allocated with given id
  * 
  * @param id
- *                div id
+ *            div id
  * @param message
- *                error message
+ *            error message
  */
 function xeroError(id, message)
 {

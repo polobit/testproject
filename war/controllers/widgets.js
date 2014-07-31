@@ -449,7 +449,7 @@ var WidgetsRouter = Backbone.Router
 			{
 				if (!id)
 					show_set_up_widget("Xero", 'xero-login',
-							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
+							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 				else
 				{
 					{
@@ -462,7 +462,7 @@ var WidgetsRouter = Backbone.Router
 													"Xero",
 													'xero-login',
 													data,
-													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 										});
 						return;
 
@@ -485,7 +485,7 @@ var WidgetsRouter = Backbone.Router
 																		"Xero",
 																		'xero-login',
 																		data,
-																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/backend/XeroServlet?data="),
+																		'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="),
 																		data1);
 															});
 											return;
@@ -494,7 +494,7 @@ var WidgetsRouter = Backbone.Router
 										else
 										{
 											show_set_up_widget("Xero", 'xero-login',
-													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "backend/XeroServlet?data="));
+													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 										}
 									});
 				}
@@ -598,17 +598,15 @@ var WidgetsRouter = Backbone.Router
 													.error(
 															function(data)
 															{
-																setUpError("Twitter", "widget-settings-error", data.responseText,
+																setUpError("Facebook", "widget-settings-error", data.responseText,
 																		window.location.protocol + "//" + window.location.host + "/#Facebook/facebook1", data1);
 															});
 
 											return;
-											Facebook
-
 										}
 										else
 										{
-											show_set_up_widget("Twitter", 'twitter-login',
+											show_set_up_widget("Facebook", 'facebook-login',
 													'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href));
 										}
 									});
