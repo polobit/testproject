@@ -13,6 +13,7 @@ import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -142,6 +143,13 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	    ContactField field = new ContactField();
 	    field.type = FieldType.CUSTOM;
 	    field.name = stripeFieldValue;
+	    field.value = customer.getId();
+	    customFields.add(field);
+	}else{
+	    CustomFieldDef customField = CustomFieldDefUtil.getFieldByType("TEXT").get(0);
+	    ContactField field = new ContactField();
+	    field.type = FieldType.CUSTOM;
+	    field.name = customField.field_label;
 	    field.value = customer.getId();
 	    customFields.add(field);
 	}
