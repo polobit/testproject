@@ -119,7 +119,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$.ajax({
 			url: 'core/api/subscription/adminpanel/subscription/'+domainname,
 			type: 'GET',
-			success: function(data) { var that=this;
+			success: function(data) { 
+				var that=this;
 				console.log(data);
 				 $("#content").find('#planinfo').html(getTemplate("plan-info", data));
 				
@@ -130,10 +131,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						{
 							var arr=that.invoicecollection.collection; 
 							var amount=arr.models;
-							if(amount.length!=0)
+							if(amount.length!=0){
 							var total_amount=amount[0].get('total')
 							 $("#content").find('#totalamount').html("<h3>Total Amount:"+total_amount+"");
-					
+							}
 						} });
 
 					// Fetches the invoice payments
