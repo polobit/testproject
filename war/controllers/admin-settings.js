@@ -175,7 +175,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 						domainname=dom.get('domain');
 					}
 					console.log(domainname+"----------------------------------"+ownername);
-					
+					if(domainname!=undefined)
+						$("#content").find('.domainname').html("<h3>Domain Name:"+domainname);
 				}	
 				 $(".delete-namespace").attr("data", domainname);
 				 App_Admin_Settings.get_email_count_for_domain_from_adminpanel(domainname);
