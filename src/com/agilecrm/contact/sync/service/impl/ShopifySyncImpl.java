@@ -298,7 +298,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    LinkedHashMap<String, Object> itemDetails = iterator.next();
 		    ArrayList<LinkedHashMap<String, String>> taxDetails = (ArrayList<LinkedHashMap<String, String>>) itemDetails
 			    .get("tax_lines");
-		    note.subject = "Ordered -Items";
+		    note.subject = "Order-" + order.get("order_number");
 		    if (note.description != null && !note.description.isEmpty())
 		    {
 			note.description = note.description + "\n" + itemDetails.get("name") + ": "
@@ -321,7 +321,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    contact.save();
 		}
 		// setting total price of orders item
-		note.description = note.description + "\n" + "Total Price :" + order.get("total_price") + " ("
+		note.description = note.description + "\n" + "Total Price : " + order.get("total_price") + " ("
 			+ order.get("currency") + ")";
 		// update notes
 		note.save();
@@ -331,9 +331,13 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    Object customerNote = order.get("note");
 		    if (customerNote != null)
 		    {
-			Note n = new Note("Customer's Note", customerNote.toString());
-			n.addRelatedContacts(contact.id.toString());
-			n.save();
+			// check for empty string
+			if (!customerNote.toString().isEmpty())
+			{
+			    Note n = new Note("Customer's Note", customerNote.toString());
+			    n.addRelatedContacts(contact.id.toString());
+			    n.save();
+			}
 		    }
 		}
 
@@ -344,7 +348,14 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    if (tag != null)
 		    {
 			String[] tags = tag.toString().split(",");
-			contact.tags.addAll(Arrays.asList(tags));
+			for (String s : tags)
+			{
+			    if (!s.isEmpty())
+			    {
+				contact.tags.add(s);
+
+			    }
+			}
 			contact.save();
 		    }
 		}
