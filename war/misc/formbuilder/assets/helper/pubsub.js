@@ -1,0 +1,57 @@
+define([
+		'jquery', 'underscore', 'backbone'
+], function($, _, Backbone)
+{
+	return _.extend({}, Backbone.Events)
+});
+
+var getAgileFields = function(fields, callback)
+{
+	var url = window.location.protocol + '//' + window.location.host + '/core/api/custom-fields';
+	//var url = 'http://localhost:8888/core/api/custom-fields';
+	
+	$.ajax({ type : 'GET', url : url, asynch : true, dataType : 'json', success : function(data)
+	{
+		fields = data;
+		callback(fields)
+	} });
+}
+
+var addAgileFields = function(json, fields, callback)
+{
+	for ( var s = 0; s < json.length; s++)
+	{
+		json[s] = JSON.parse(json[s]);
+	}
+	var agilefield = {};
+	agilefield.label = "Agile Field";
+	agilefield.type = "select";
+	var values = [
+			{ value : null, label : "Select", selected : true },
+			{ value : "first_name", label : "First Name", selected : false },
+			{ value : "last_name", label : "Last Name", selected : false },
+			{ value : "email", label : "Email", selected : false },
+			{ value : "company", label : "Company", selected : false },
+			{ value : "title", label : "Title", selected : false },
+			{ value : "website", label : "Website", selected : false },
+			{ value : "phone", label : "Phone", selected : false },
+			{ value : "score", label : "Score", selected : false }
+	];
+	for ( var j = 0; j < fields.length; j++)
+	{
+		var value = {};
+		value.value = fields[j].field_label;
+		value.label = fields[j].field_label;
+		value.selected = false;
+		values.push(value);
+	}
+	agilefield.value = values;
+	for ( var k = 0; k < json.length; k++)
+	{
+		for ( var i = 0; i < json[k].length; i++)
+		{
+			json[k][i].fields["agilefield"] = agilefield;
+		}
+	}
+	callback(json);
+}
