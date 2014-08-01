@@ -1,0 +1,163 @@
+<script id="chargify-login-template" type="text/html">
+	<div display:inline;  line-height:12px;word-wrap: break-word;">
+		<form class="widget_content" style="border-bottom:none;margin-bottom:0px;" id="chargify_login_form" name="chargify_login_form">
+	    	<fieldset>
+				<p >Chargify simplifies recurring billing for Web 2.0 and SaaS companies. Build innovative web apps without worrying how to bill your customers. </p>
+				<p>
+				<label>Enter your API key</label>
+				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="chargify_api_key" class="input-medium required" placeholder="API Key" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				</p>
+				<p>
+				<label>Enter your SubDomain</label>
+				<div class="control-group" style="margin-bottom:0px;"><div class="controls"><input type="text" id="chargify_subdomain" class="input-medium required" placeholder="chargify SubDomain" value="" onkeydown="if (event.keyCode == 13) { event.preventDefault(); }"></input></div></div>
+				</p>
+				<a href="#" id="chargify_save_api_key" class="btn btn-primary" style="text-decoration:none;">Save</a>
+				<a href="#add-widget" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+				<p style="line-height: 25px;padding:5px;">Don't have an API key? <a href="http://chargify.com/" target="_blank"> SignUp </a></p></div>
+			</fieldset>
+	    </form>
+	</div>
+</script>
+
+<script id="chargify-error-template" type="text/html">
+{{#check_length message "140"}}
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{else}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{message}}
+	</div>
+{{/check_length}}
+</script>
+
+<script id="chargify-profile-addcontact-template" type="text/html">
+<div class="widget_content">
+		<div>{{{message}}}</div>
+		<a class="btn" id="chargify_add_contact" style="margin-top:10px;cursor:pointer;"><i class="icon-plus"></i>Add Contact</a>
+	</div>
+</script>
+<script id="chargify-profile-template" type="text/html"> 
+<div class="widget_content">
+	<div  style="display:inline-block;">
+		<div  class="title_txt" style="display:inline-block;">
+			<a href="https://agilecrm.chargify.com/customers/{{customer.id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>
+			{{customer.first_name}} {{customer.last_name}}<br>	
+			</b></h4></a>
+		</div>
+	</div>
+	<div>
+		<p style="font-size: 13px;">	
+				{{#if customer.address}}
+					{{ customer.address}}
+				{{/if}}
+				{{#if customer.city}}
+					{{customer.city}}
+				{{/if}}	
+				{{#if customer.state}}
+					{{customer.state}}
+				{{/if}}
+				{{#if customer.country}}
+					{{customer.country}}
+				{{/if}}
+				{{#if customer.organization}}
+					{{customer.organization}}
+				{{/if}}	
+				
+		</p>				
+	</div>
+	<div>
+		{{#if customer.phone}}
+			<i class="icon-phone"></i> {{customer.phone}}
+		{{/if}}
+	</div>
+	<div>
+		<a class="btn" id="chargify_add_subscription" style="margin-top:10px;cursor:pointer;" href="https://agilecrm.chargify.com/subscriptions/new" target="_blank"><i class="icon-plus"></i>Add Subscription</a>
+	</div>
+</div>
+	{{#if subscriptions}}
+	<div class="sub_header">
+		<a href="https://agilecrm.chargify.com/subscriptions" target="_blank"><h4>Subscriptions</h4></a>
+	</div>
+	{{#each subscriptions}}
+		{{#if subscription}}	
+			<ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
+				<li class="row-fluid">	
+					<div class="span5">ID
+						<div class="pull-right">:</div>
+					</div>
+					<div class="span6" style="margin-left: 10px;">
+						{{subscription.id}}
+					</div>
+				</li>
+				<li class="row-fluid">	
+					<div class="span5">Product
+						<div class="pull-right">:</div>
+					</div>
+					<div class="span6" style="margin-left: 10px;">
+						{{subscription.product.name}}
+					</div>
+				</li>
+				<li class="row-fluid">	
+					<div class="span5">Start Date
+						<div class="pull-right">:</div>
+					</div>
+					<div class="span6" style="margin-left: 10px;">
+						<time class="time-ago" datetime="{{subscription.current_period_started_at}}">{{subscription.current_period_started_at}}</time>
+					</div>
+				</li>
+				<li class="row-fluid">	
+					<div class="span5">End Date
+						<div class="pull-right">:</div>
+					</div>
+					<div class="span6" style="margin-left: 10px;">
+						<time class="time-ago" datetime="{{subscription.current_period_ends_at}}">{{subscription.current_period_ends_at}}</time>
+					</div>
+				</li>
+				<li class="row-fluid">	
+					<div class="span5">Interval
+						<div class="pull-right">:</div>
+					</div>
+					<div class="span6" style="margin-left: 10px;">
+						{{subscription.product.expiration_interval}}{{subscription.product.expiration_interval_unit}}
+					</div>
+				</li>
+				<li class="row-fluid">	
+					<div class="span5">Amount
+						<div class="pull-right">:</div>
+					</div>
+							
+					<div class="span6" style="margin-left: 10px;">
+						{{subscription.product_price_in_cents}}
+					</div>
+				</li>
+		
+			</ul>
+		{{/if}}
+	{{/each}}
+{{/if}}
+
+{{#if invoices}}
+	<div class="sub_header">
+		<a href="https://agilecrm.chargify.com/invoices" target="_blank"><h4>Invoices</h4></a>
+	</div>
+	{{#isArray invoices}}
+	{{#each invoices}}
+			<li class="row-fluid sub_header_li">
+				<div class="pull-left">
+				<a class="invoices"   value="#{{invoice.number}}"   style="cursor:pointer;"></i></a>
+				&nbsp;
+				<a  data-toggle="tooltip" data-placement="top"  style="cursor:pointer;" href="https://agilecrm.chargify.com/invoices/{{invoice.id}}" target="_blank">#{{invoice.number}} </a>&nbsp;({{invoice.subscription_id}})
+				</div>				
+				<div class="pull-right"> {{invoice.total_amount_in_cents}}</div><br>
+				
+				<div>
+				<div class="pull-left"><small><time class="time-ago pull-left" datetime="{{invoice.updated_at}}">{{invoice.updated_at}}</time></small></div>					
+				<div class="pull-right"><span class="badge">{{capFirstLetter invoice.state}}</span></div><br>
+				</div>			
+			</li>
+		{{/each}}	
+	{{/isArray}}
+{{/if}}
+
+</script>

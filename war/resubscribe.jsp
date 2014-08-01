@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.agilecrm.workflows.status.CampaignStatus.Status"%>
+<%@page import="com.agilecrm.workflows.status.util.CampaignStatusUtil"%>
 <%@page import="com.campaignio.logger.Log.LogType"%>
 <%@page import="com.google.appengine.api.NamespaceManager"%>
 <%@page import="com.campaignio.tasklets.agile.util.AgileTaskletUtil"%>
@@ -374,7 +376,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				        	UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
 				        	
 				        	// Remove campaign status to delete from Removed Subscribers list
-				        	CampaignSubscribersUtil.removeCampaignStatus(contact, campaignId);
+				        	CampaignStatusUtil.setStatusOfCampaign(String.valueOf(contact.id), campaignId, Status.DONE);
 				        	
 				        	// Remove Unsubscribe logs 
 				        	LogUtil.deleteSQLLogs(campaignId, String.valueOf(contact.id), LogType.UNSUBSCRIBED);
