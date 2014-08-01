@@ -11,12 +11,13 @@ var SubscribeRouter = Backbone.Router.extend({
 	/* Subscription page */
 	"subscribe" : "subscribe", "subscribe/:id" : "subscribe",
 	
+	//from adminpanel these routers will be effected
 	"domainSubscribe":"domainSubscribeDetails", "domainSubscribe/:id" : "domainSubscribeDetails",
 
 	/* Updating subscription details */
 	"updatecard" : "updateCreditCard", "updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
 	
-	
+	//from admin panel subscription for particular domain will be done 
 	"purchase-plan-formAdminPanel" : "purchasePlanFromAdminpanel",
 
 	/* Invoices */

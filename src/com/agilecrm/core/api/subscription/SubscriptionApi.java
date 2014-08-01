@@ -144,6 +144,8 @@ public class SubscriptionApi
 	}
     }
     
+    //upgrades subscription plan from adminpanel
+    
     @Path("/adminpanel/subscribe")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -151,6 +153,8 @@ public class SubscriptionApi
     public Subscription subscribeForParticularDomain(Subscription subscribe) throws PlanRestrictedException, WebApplicationException
     {
     	System.out.println("plan upgradation request from Admin panel/support panel");
+    	
+    	String oldnamespace=NamespaceManager.get(); 
 	try
 	{   
 		
@@ -158,7 +162,7 @@ public class SubscriptionApi
 		
 	//String domain="jagadeesh";
 		System.out.println("domain name in subscribe for particular domain "+domain);
-		String oldnamespace=NamespaceManager.get(); 
+		
 	
 		NamespaceManager.set(domain);
 	
@@ -193,7 +197,7 @@ public class SubscriptionApi
 	    // Add to queue
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(task));
-        NamespaceManager.set(oldnamespace);
+       
 	    return subscribe;
 	}
 	catch (PlanRestrictedException e)
@@ -209,6 +213,9 @@ public class SubscriptionApi
 	     */
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
+	}
+	finally{
+		 NamespaceManager.set(oldnamespace);
 	}
     }
     
@@ -291,7 +298,7 @@ public class SubscriptionApi
 	}
     }
     
-    
+    //fetches list invoices for particular domain
     @Path("/adminpanel/invoices/{domainname}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

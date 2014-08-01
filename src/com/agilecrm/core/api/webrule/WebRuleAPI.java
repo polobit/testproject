@@ -33,32 +33,7 @@ public class WebRuleAPI
     {
 	return WebRuleUtil.getAllWebRules();
     }
-    @Path("/adminpanel/domain/{domainname}")
-    @GET
-    @Produces({MediaType.TEXT_PLAIN })
-    public int getWebRulesByParticularDomain(@PathParam("domainname") String domainname)
-    {
-    	String oldnamespace=NamespaceManager.get();
-    	
-	
-	try
-	{
-	    NamespaceManager.set(domainname);
-	    System.out.println("in web rules count  "+WebRule.dao.count());
-	    return WebRule.dao.count();
-	  
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-    
-	}
-	finally
-	{
-	    NamespaceManager.set(oldnamespace);
-	}
-	return 0;
-    }
+  
     
     
     @POST

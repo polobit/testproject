@@ -70,18 +70,7 @@ public class WorkflowsAPI {
 		return WorkflowUtil.getAllWorkflows();
 	}
 
-	// * Gets workflows count based on domainname
-	@Path("/adminpanel/{domainname}")
-	@GET
-	@Produces({ MediaType.TEXT_PLAIN })
-	public int getWorkflowsCountForAdminPanel(
-			@QueryParam("domainname") String domainname) {
-		String oldnamespace = NamespaceManager.get();
-		NamespaceManager.set(domainname);
-		int count = Workflow.dao.count();
-		NamespaceManager.set(oldnamespace);
-		return count;
-	}
+	
 
 	/**
 	 * Returns single workflow for the given id.

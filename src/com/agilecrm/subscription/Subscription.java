@@ -108,7 +108,9 @@ public class Subscription
      */
     @NotSaved(IfDefault.class)
     public String billing_data_json_string = null;
+   
     
+    //used when upgrade subscription from adminpanel
     @NotSaved
     public String domain_name = null;
 
@@ -271,8 +273,6 @@ public class Subscription
     {
 	// Gets subscription object of current domain
 	Subscription subscription = getSubscription();
-System.out.println("subscription object in update plan subscription.java "+subscription);
-System.out.println("subscription object in update plan subscription.java "+subscription.id);
 	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
 		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
 	{
@@ -428,7 +428,9 @@ System.out.println("subscription object in update plan subscription.java "+subsc
 		Subscription sub=new Subscription();
 	    if (billing_data_json_string != null)
 		billing_data = new JSONObject(billing_data_json_string);
-	  sub.domain_name=NamespaceManager.get();  
+	 
+	    //sets domain name  in subscription obj before returning 
+	    sub.domain_name=NamespaceManager.get();  
 	}
 	catch (Exception e)
 	{

@@ -118,6 +118,8 @@ public class UserPrefsAPI
 	    throw new Exception("Current Password not matched");
     }
     
+    
+    //used to changes password from admin panel
     @Path("admin/changePassword/{id}")
     @PUT
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
