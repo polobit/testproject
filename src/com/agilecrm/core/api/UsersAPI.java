@@ -19,13 +19,24 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import org.json.JSONObject;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.webrules.WebRule;
+import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.gson.JsonObject;
 
 /**
  * <code>UsersAPI</code> includes REST calls to interact with {@link DomainUser}
@@ -412,4 +423,41 @@ public class UsersAPI
 
 	domainUser.delete();
     }
+    
+    @Path("/adminpanel/domainstatscount/{domainname}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String getAccountStats(@PathParam ("domainname") String domainname) {
+    	String oldnamespace=NamespaceManager.get();
+    	NamespaceManager.set(domainname);
+    	
+    	JSONObject json = new JSONObject();
+    	 
+    	 int webrulecount=WebRuleUtil.getCount();
+    	 int contactcount=ContactUtil.getCount();
+    	 int dealscount=OpportunityUtil.getCount();
+    	 int docs=DocumentUtil.getCount();
+    	 int eventcount=EventUtil.getCount();
+    	 int compaigncount=WorkflowUtil.getCount();
+    	 int triggerscount=TriggerUtil.getCount();
+    	
+    	try {
+			json.put("webrule_count",webrulecount);
+			json.put("contact_count",contactcount);
+	    	json.put("deals_count",dealscount);
+	    	json.put("docs_count",docs);
+	    	json.put("events_count",eventcount);
+	    	json.put("compaign_count",compaigncount);
+	    	json.put("triggers_count",triggerscount);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	System.out.println("status account "+json);
+    	NamespaceManager.set(oldnamespace);
+    	return json.toString();
+    }
+    
+    
 }
