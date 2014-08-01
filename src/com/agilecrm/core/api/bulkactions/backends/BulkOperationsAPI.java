@@ -82,7 +82,7 @@ public class BulkOperationsAPI
 
 	String message = "";
 	if(fetcher.getAvailableContacts() > 0)
-	    message = fetcher.getAvailableCompanies() +" Contacts deleted";
+	    message = fetcher.getAvailableContacts() +" Contacts deleted";
 	else if(fetcher.getAvailableCompanies() > 0)
 	    message = fetcher.getAvailableCompanies() +" Companies deleted";
 	
