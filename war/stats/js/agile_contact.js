@@ -47,6 +47,12 @@ function agile_createContact(data, callback)
 
 		// Splitting tags string at ,
 		model.tags = tags_string.split(",");
+
+		// Trim each tag for spaces
+		for ( var i = 0; i < model.tags.length; i++)
+		{
+			model.tags[i] = model.tags[i].trim();
+		}
 	}
 	if (tags_from_cookie)
 	{
@@ -58,11 +64,17 @@ function agile_createContact(data, callback)
 		{
 			for ( var i = 0; i < tags_array.length; i++)
 			{
-				model.tags.push(tags_array[i]);
+				model.tags.push(tags_array[i].trim());
 			}
 		}
 		else
-			model.tags = tags_array;
+		{
+			model.tags = [];
+			for ( var i = 0; i < tags_array.length; i++)
+			{
+				model.tags.push(tags_array[i].trim());
+			}
+		}
 	}
 
 	// var params = "contact={0}&tags={1}".format(encodeURIComponent(data),
