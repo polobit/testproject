@@ -31,7 +31,6 @@ public class StripeSyncImpl extends OneWaySyncService
     private int currentPage = 1;
     private int pageSize = 100;
     private String syncTime = null;
-    int count=0;
 
     /**
      * Implementation of initSync for Stripe.
@@ -85,8 +84,6 @@ public class StripeSyncImpl extends OneWaySyncService
 		    if (!isLimitExceeded())
 			wrapContactToAgileSchemaAndSave(customer);
 		   
-		    count++;
-		    
 		}
 
 		if (customers.size() != 0)
