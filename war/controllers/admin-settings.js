@@ -83,7 +83,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 	get_account_stats_for_domain_from_adminpanel: function (domainname)
 	{
-		
+		console.log("in accountstats object");console.log(domainname);
 		$.ajax({
 			 url : 'core/api/users/adminpanel/domainstatscount/'+domainname,
 			type : 'GET',
@@ -106,8 +106,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	},
 	
 	
-	get_subscriptionobject_for_domain_from_adminpanel: function (el,domainname)
+	get_subscriptionobject_for_domain_from_adminpanel: function (domainname)
 	{ 
+		console.log("in subscription object");console.log(domainname);
 		$.ajax({
 			url: 'core/api/subscription/adminpanel/subscription/'+domainname,
 			type: 'GET',
@@ -126,7 +127,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 	get_collection_of_invoices_for_domain_from_adminpanel: function (el,domainname)
 	{ 
-		
+		console.log("in invoice list object");console.log(domainname);
 	 this.invoicecollection = new Base_Collection_View({ url :"core/api/subscription/adminpanel/invoices/"+domainname, templateKey : "admin-invoice",
 		 
 			individual_tag_name : 'tr',postRenderCallback : function(el)
@@ -153,27 +154,34 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		 var domainname="",ownername="";var ar=[];
 		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/users/admin/domain/'+query,  templateKey : "all-domain",
 			individual_tag_name : 'tr', postRenderCallback : function(el)
-			{
+			{ console.log("inside post render callback of getDomainUSers");
 				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 				{
 					$(".last-login-time", el).timeago();
 				});
 				
-				ar=App_Admin_Settings.usersListViewCollection.collection.models; 
+				ar=App_Admin_Settings.usersListViewCollection.collection.models;
+				console.log("after userlistcollection models");
+				console.log(ar);
 				for(var i=0;i<ar.length;i++){
 					var mod=ar[i];
+					console.log("indide model loop execites ar.length ");console.log(mod);
 					if(mod.get('is_account_owner')){
 						ownername=mod.get('name');
 						domainname=mod.get('domain');
+						console.log("inside  accountowner loop  ");
+						
 					}
 					
 				}	
-				
-				if(domainname==undefined){
+				console.log("after for loop");console.log(domainname);
+				if(domainname==undefined||domainname==""){
 					var dom=ar[0];
+					console.log("afetr dom");console.log(dom);
 					domainname=dom.get('domain');
+					console.log("inside undefined loop  "+domainname);
+					console.log(dom);
 				}
-				
 				console.log(domainname+"----------------------------------"+ownername);
 				$("#content").find('.domainname').html("<h4 >Domain Name:   "+domainname);
 				$("#content").find('#ownername').html(ownername);
