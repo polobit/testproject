@@ -139,7 +139,6 @@ public class ContactsSynctoGoogle
 	int MAX_FETCH_SIZE = 1000;
 	int fetched = 0;
 
-	System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 	System.out.println("sync time updated : " + prefs.last_synced_updated_contacts_to_client);
 	List<Contact> contacts_list = ContactSyncUtil.fetchUpdatedContactsToSync(prefs, page, cursor);
 

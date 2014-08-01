@@ -243,6 +243,8 @@ $(function()
 			
 			if(getPropertyValue(items, "last_name"))
 			name = name + "" + getPropertyValue(items, "last_name").substr(0,1);
+		
+		
 			
 			return name;
 
@@ -2645,6 +2647,13 @@ $(function()
 	i = data.split("-");
 	return i[0]+"-"+i[2]+"-"+i[1];
     });
+    
+    Handlebars.registerHelper("hasScope", function(scope_constant, options){
+    	if(CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1)
+    		    return options.fn(this);
+
+    	return options.inverse(this);	
+    })
     
     Handlebars.registerHelper('fetchXeroUser', function(data)
     {

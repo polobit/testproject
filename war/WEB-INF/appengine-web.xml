@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-	<application>agile-crm-cloud</application>
+	<application>agilecrmbeta</application>
 	<version>sandbox</version>
 	<threadsafe>true</threadsafe>
 	<sessions-enabled>true</sessions-enabled>
@@ -54,12 +54,14 @@
 
 		<!-- End of Error handlers -->
 
-		<exclude path="/css/agilecrm.css" />
-		<exclude path="/css/all.css" />
-		<exclude path="/jscore/min/**.js" />
-		<exclude path="/tpl/min/**.js" />
-		<exclude path="/tpl/min/**.js" />
-		<exclude path="/stats/min/**.js" />
+      <exclude path="/css/agilecrm.css" />
+      <exclude path="/css/misc/*.css" />
+	  <exclude path="/css/all.css" />
+	  <exclude path="/jscore/min/**.js" />
+	  <exclude path="/tpl/min/**.js" />
+	   <exclude path="/tpl/min/**.js" />
+	   <exclude path="/stats/min/**.js" />
+
 
 	</static-files>
 
