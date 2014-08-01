@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
@@ -19,10 +18,12 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.googlecode.objectify.Key;
@@ -42,27 +43,6 @@ public class AgileTaskletUtil
 
     // Default encoding to convert Unicode strings
     public final static String DEFAULT_ENCODING = "UTF-8";
-
-    static List<String> customFieldLabels = new ArrayList<String>();
-
-    static
-    {
-	try
-	{
-	    List<CustomFieldDef> contactCustomFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
-		    String.valueOf(Type.DATE));
-
-	    // Add labels to list
-	    for (CustomFieldDef customField : contactCustomFields)
-		customFieldLabels.add(customField.field_label);
-
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured in AgileTaskletUtil static block..." + e.getMessage());
-	    e.printStackTrace();
-	}
-    }
 
     /**
      * Returns contact owner-id from subscriberJSON.
@@ -166,6 +146,7 @@ public class AgileTaskletUtil
      *            Contact object that subscribes to workflow.
      * @return JsonObject of contact.
      */
+    @SuppressWarnings("unchecked")
     public static JSONObject getSubscriberJSON(Contact contact)
     {
 	if (contact == null)
@@ -180,6 +161,9 @@ public class AgileTaskletUtil
 
 	try
 	{
+	    // Custom date labels to convert epoch to Date format
+	    List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
 	    JSONObject subscriberJSON = new JSONObject();
 
 	    List<ContactField> properties = contact.getProperties();
@@ -208,9 +192,15 @@ public class AgileTaskletUtil
 			{
 			    System.out.println("Field name is " + field.name);
 
-			    if (isDateCustomField(field.name))
-				field.value = DateUtil.getGMTDateInGivenFormat(Long.parseLong(field.value) * 1000,
-				        "dd MMM yyyy");
+			    // If it is Date field
+			    if (dateCustomFieldLabels.contains(field.name))
+			    {
+				long fieldValue = Long.parseLong(field.value);
+
+				fieldValue = (fieldValue / 100000000000L > 1) ? fieldValue : fieldValue * 1000;
+
+				field.value = DateUtil.getGMTDateInGivenFormat(fieldValue, "dd MMM yyyy");
+			    }
 			}
 			catch (Exception e)
 			{
@@ -555,16 +545,35 @@ public class AgileTaskletUtil
     }
 
     /**
-     * Returns boolean value whether current field label exists in custom date
-     * fields
+     * Fetches list of date custom labels from cache.
      * 
-     * 
-     * @param fieldLabel
-     *            - Contact field name
-     * @return boolean
+     * @return List
      */
-    public static boolean isDateCustomField(String fieldLabel)
+    @SuppressWarnings("unchecked")
+    public static List<String> getDateCustomLabelsFromCache()
     {
-	return customFieldLabels.contains(fieldLabel);
+	List<String> customFieldLabels = new ArrayList<String>();
+
+	try
+	{
+	    customFieldLabels = (List<String>) CacheUtil.getCache(NamespaceManager.get() + "_custom_date_labels");
+
+	    if (customFieldLabels == null || customFieldLabels.size() == 0)
+	    {
+		// Fetch custom date labels and set in cache
+		customFieldLabels = CustomFieldDefUtil.getFieldLabelsByType(SCOPE.CONTACT, Type.DATE);
+
+		// Set cache for 1 Hour
+		CacheUtil.setCache(NamespaceManager.get() + "_custom_date_labels", customFieldLabels, 3600000);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while getting custom labels from cache..." + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return customFieldLabels;
     }
 }
