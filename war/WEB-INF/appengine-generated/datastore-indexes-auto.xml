@@ -1,4 +1,4 @@
-<!-- Indices written at Fri, 1 Aug 2014 17:32:08 IST -->
+<!-- Indices written at Fri, 1 Aug 2014 17:54:41 IST -->
 
 <datastore-indexes>
 
@@ -19,6 +19,12 @@
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 7 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="__key__" direction="asc"/>
+        <property name="updated_time" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
