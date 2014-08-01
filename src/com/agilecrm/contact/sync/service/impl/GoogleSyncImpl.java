@@ -24,6 +24,7 @@ import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.util.ServiceException;
 import com.thirdparty.google.GoogleServiceUtil;
+import com.thirdparty.google.contacts.ContactsSynctoGoogle;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -278,6 +279,15 @@ public class GoogleSyncImpl extends TwoWaySyncService
     public void uploadContactsToClient(List<Contact> contacts)
     {
 	// TODO Auto-generated method stub
+	try
+        {
+	    ContactsSynctoGoogle.updateContacts(contacts, prefs);
+        }
+        catch (Exception e)
+        {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+        }
 
     }
 
@@ -293,12 +303,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	return GoogleContactWrapperImpl.class;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.agilecrm.contact.sync.service.ContactSyncService#updateLastSyncedInPrefs
-     * ()
-     */
+    @Override
+    public Contact wrapContactToClientFormat()
+    {
+	// TODO Auto-generated method stub
+	return null;
+    }
+    
 
 }

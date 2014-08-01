@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.agilecrm.contact.Contact;
 import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
+import com.thirdparty.google.contacts.ContactsSynctoGoogle;
 
 /**
  * <code>TwoWaySyncService</code> can be implemented by third party who needs to
@@ -62,11 +63,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 
     private void syncContactToClient()
     {
-	// Uploads newly created contacts in agile to client
-	uploadContactsToClient(fetchNewContactsFromAgile());
-
-	// Uploads updated contacts in agile to client
-	uploadContactsToClient(fetchUpdatedContactsFromAgile());
+	ContactsSynctoGoogle.updateContacts(prefs);
     }
 
     public abstract void syncContactFromClient();
