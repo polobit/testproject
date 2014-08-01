@@ -110,7 +110,7 @@ public class Subscription
     public String billing_data_json_string = null;
     
     @NotSaved
-    public String customer_email = null;
+    public String domain_name = null;
 
     /** This {@link Enum} gateway represents the payment gateway */
     public static enum Gateway
@@ -194,7 +194,9 @@ public class Subscription
 	try
 	{
 	    NamespaceManager.set(namespace);
+	    
 	    Subscription subscription = getSubscription();
+	    subscription.domain_name=namespace;
 	    if (subscription != null){
 	      return subscription;
 	    }
@@ -217,7 +219,6 @@ public class Subscription
     public void save()
     {
 	Subscription subscription = Subscription.getSubscription();
-
 	// If Subscription object already exists, update it(Only one
 	// subscription object per domain)
 	if (subscription != null)
@@ -270,7 +271,8 @@ public class Subscription
     {
 	// Gets subscription object of current domain
 	Subscription subscription = getSubscription();
-
+System.out.println("subscription object in update plan subscription.java "+subscription);
+System.out.println("subscription object in update plan subscription.java "+subscription.id);
 	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
 		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
 	{
@@ -287,10 +289,8 @@ public class Subscription
 
 	// Updates the plan in related gateway
 	subscription.billing_data = subscription.getAgileBilling().updatePlan(subscription.billing_data, plan);
-
 	// Updates plan of current domain subscription object
 	subscription.plan = plan;
-
 	// Saves updated subcription object
 	subscription.save();
 
@@ -425,8 +425,10 @@ public class Subscription
     {
 	try
 	{
+		Subscription sub=new Subscription();
 	    if (billing_data_json_string != null)
 		billing_data = new JSONObject(billing_data_json_string);
+	  sub.domain_name=NamespaceManager.get();  
 	}
 	catch (Exception e)
 	{
