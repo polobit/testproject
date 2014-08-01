@@ -80,7 +80,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 			{
 
 			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
-			   
+
 			    saveCustomersOrder(customers.get(i).get("id").toString(), contact);
 
 			}
@@ -326,40 +326,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 			+ order.get("currency") + ")";
 		// update notes
 		note.save();
-		// save order related customer note
-		if (order.containsKey("note"))
-		{
-		    Object customerNote = order.get("note");
-		    if (customerNote != null)
-		    {
-			// check for empty string
-			if (!customerNote.toString().isEmpty())
-			{
-			    Note n = new Note("Customer's Note", customerNote.toString());
-			    n.addRelatedContacts(contact.id.toString());
-			    n.save();
-			}
-		    }
-		}
-
-		// save order related tags
-		if (order.containsKey("tags"))
-		{
-		    Object tag = order.get("tags");
-		    if (tag != null)
-		    {
-			String[] tags = tag.toString().split(",");
-			for (String s : tags)
-			{
-			    if (!s.isEmpty())
-			    {
-				contact.tags.add(s);
-
-			    }
-			}
-			contact.save();
-		    }
-		}
+	
 
 	    }
 	}

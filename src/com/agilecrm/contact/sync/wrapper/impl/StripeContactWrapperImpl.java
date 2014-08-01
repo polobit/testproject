@@ -146,12 +146,7 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	    field.value = customer.getId();
 	    customFields.add(field);
 	}else{
-	    CustomFieldDef customField = CustomFieldDefUtil.getFieldByType("TEXT").get(0);
-	    ContactField field = new ContactField();
-	    field.type = FieldType.CUSTOM;
-	    field.name = customField.field_label;
-	    field.value = customer.getId();
-	    customFields.add(field);
+	   contact.addProperty(new ContactField("StripeID",customer.getId(),null));
 	}
 	
 
