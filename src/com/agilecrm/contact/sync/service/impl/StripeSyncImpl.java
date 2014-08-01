@@ -28,6 +28,9 @@ public class StripeSyncImpl extends OneWaySyncService
 {
 
     public String lastSyncCheckPoint = null;
+    private int currentPage = 1;
+    private int pageSize = 100;
+    private String syncTime = null;
 
     /**
      * Implementation of initSync for Stripe.
@@ -42,37 +45,81 @@ public class StripeSyncImpl extends OneWaySyncService
 	{
 
 	    /**
-	     * check last sync check point
+	     * check last sync check point and sync time syncTime is String
+	     * variable to check this sync is first time or second onwards
 	     */
+
 	    lastSyncCheckPoint = prefs.lastSyncCheckPoint;
+	    syncTime = prefs.othersParams;
 
-	    while (true)
+	    Map<String, Object> option = new HashMap<String, Object>();
+
+	    option.put("include[]", "total_count");
+	    if (syncTime.equalsIgnoreCase("second"))
 	    {
+		option.put("ending_before", lastSyncCheckPoint);
+	    }
 
-		CustomerCollection collections = Customer.all(options(), prefs.apiKey);
+	    CustomerCollection collections = Customer.all(option, prefs.apiKey);
 
-		List<Customer> customers = collections.getData();
+	    int pages = (int) Math.ceil(collections.getCount() / pageSize);
+
+	    if (collections.getCount() <= pageSize)
+	    {
+		pages = currentPage;
+	    }
+
+	    int remain = collections.getCount() % pageSize;
+	    if (remain < pageSize)
+	    {
+		pages = pages + 1;
+	    }
+
+	    while (currentPage <= pages)
+	    {
+		CustomerCollection customerCollections = Customer.all(Options(syncTime), prefs.apiKey);
+		List<Customer> customers = customerCollections.getData();
 		for (Customer customer : customers)
 		{
-		    wrapContactToAgileSchemaAndSave(customer);
+		    if (!isLimitExceeded())
+			wrapContactToAgileSchemaAndSave(customer);
 		}
-		if (customers.size() == 0)
-		{
-		    sendNotification(prefs.type.getNotificationEmailSubject());
-		    break;
-		}
-		else
-		{
-		    Customer customer = customers.get(customers.size() - 2);
 
+		if (customers.size() != 0)
+		{
+		    Customer customer = customers.get(customers.size() - 1);
 		    lastSyncCheckPoint = customer.getId();
+		    updateLastSyncedInPrefs();
 		}
-
-		if (isLimitExceeded())
-		    break;
+		currentPage += 1;
 	    }
-	    updateLastSyncedInPrefs();
+	    moveCurrentCursorToTop();
+	    prefs.othersParams = "second";
+	    prefs.save();
 
+	}
+	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
+		| APIException e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
+
+    /**
+     * After sync all contact from stripe set cursor on top in stripe table it
+     * will fetch newly added records from top using param ending_before
+     */
+    private void moveCurrentCursorToTop()
+    {
+	Map<String, Object> option = new HashMap<String, Object>();
+	option.put("limit", 1);
+	try
+	{
+	    CustomerCollection collection = Customer.all(option, prefs.apiKey);
+	    Customer customers = collection.getData().get(0);
+	    prefs.lastSyncCheckPoint = customers.getId();
+	    prefs.save();
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
 		| APIException e)
@@ -99,11 +146,19 @@ public class StripeSyncImpl extends OneWaySyncService
      * 
      * @return
      */
-    private Map<String, Object> options()
+    private Map<String, Object> Options(String syncTime)
     {
 	HashMap<String, Object> options = new HashMap<String, Object>();
-	options.put("limit", 50);
-	options.put("starting_after", lastSyncCheckPoint);
+	options.put("limit", pageSize);
+	if (syncTime != null && syncTime.equalsIgnoreCase("first"))
+	{
+	    options.put("starting_after", lastSyncCheckPoint);
+	}
+	else
+	{
+	    options.put("ending_before", lastSyncCheckPoint);
+	}
+
 	return options;
     }
 

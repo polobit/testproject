@@ -352,6 +352,7 @@ public class ScribeUtil
 		prefs.refreshToken = properties.get("refresh_token");
 		prefs.apiKey = properties.get("access_token");
 		prefs.type = Type.STRIPE;
+		prefs.othersParams = "first";
 		prefs.save();
 	    }
 	}
