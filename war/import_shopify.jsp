@@ -74,14 +74,6 @@ label.error {
 	<script type="text/javascript">
 		$(function()
 		{
-               $('#save_shopify_prefs').die().live('click',function(){
-            	   var callbackURL = window.location.href + "/shopifyImport";
-                   var shopName = $('#shopeName').val();
-           		// For every request of import, it will ask to grant access
-           		window.location = "/scribe?service=shopify_import&shopName="+shopName+"&return_url=" + encodeURIComponent(callbackURL);
-           		return false;
-               })
-			
 
 			$('#shopify_import_options').die().live('click', function(data)
 			{

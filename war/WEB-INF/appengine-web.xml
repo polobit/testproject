@@ -54,12 +54,14 @@
 
 		<!-- End of Error handlers -->
 
-		<exclude path="/css/agilecrm.css" />
-		<exclude path="/css/all.css" />
-		<exclude path="/jscore/min/**.js" />
-		<exclude path="/tpl/min/**.js" />
-		<exclude path="/tpl/min/**.js" />
-		<exclude path="/stats/min/**.js" />
+      <exclude path="/css/agilecrm.css" />
+      <exclude path="/css/misc/*.css" />
+	  <exclude path="/css/all.css" />
+	  <exclude path="/jscore/min/**.js" />
+	  <exclude path="/tpl/min/**.js" />
+	   <exclude path="/tpl/min/**.js" />
+	   <exclude path="/stats/min/**.js" />
+
 
 	</static-files>
 

@@ -12,8 +12,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -38,7 +38,8 @@ public class StripeDataService
     @Produces(MediaType.APPLICATION_JSON)
     public ContactPrefs getPrefs()
     {
-	return ContactPrefsUtil.getPrefsByType(Type.STRIPE);
+	ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(Type.STRIPE);
+	return contactPrefs; //
     }
 
     /**
@@ -52,11 +53,11 @@ public class StripeDataService
     public void saveImportPrefs(ContactPrefs prefs)
     {
 
-	ContactPrefs pref = ContactPrefsUtil.get(prefs.id);
-	pref.save();
+	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
+	contactPrefs.save();
 
-	if (!pref.token.isEmpty() && pref != null)
-	    doImport(pref);
+	if (!contactPrefs.apiKey.isEmpty() && contactPrefs != null)
+	    doImport(contactPrefs);
 
     }
 
@@ -76,12 +77,12 @@ public class StripeDataService
      * 
      * @param pref
      */
-    private void doImport(ContactPrefs pref)
+    private void doImport(ContactPrefs prefs)
     {
 	ArrayList<String> options = new ArrayList<String>();
 	options.add("customer");
-	pref.thirdPartyField = options;
-	ContactsImportUtil.initilaizeImportBackend(pref);
+	prefs.importOptions = options;
+	ContactsImportUtil.initilaizeImportBackend(prefs);
 
     }
 
