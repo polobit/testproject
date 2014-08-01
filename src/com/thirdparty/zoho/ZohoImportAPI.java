@@ -3,81 +3,119 @@
  */
 package com.thirdparty.zoho;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
+// TODO: Auto-generated Javadoc
 /**
  * <code>ZohoImport</code> This class Used for REST call for saving user Auth
- * preferences and Importing contact from saved preferences;
+ * preferences and Importing contact from saved preferences;.
  * 
  * @author jitendra
- * 
  */
+
 @Path("/api/zoho")
 public class ZohoImportAPI
 {
 
     /**
-     * This Method is used for saving user zoho crm auth preferences
+     * Retrieve ContactPrefs.
      * 
-     * @param username
-     * @param password
-     * @param authtoken
-     * @return
+     * @return the prefs
      */
-    @Path("/save")
-    @POST
-    @Consumes({ MediaType.APPLICATION_FORM_URLENCODED })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactPrefs saveAuthPrefs(@FormParam("username") String username, @FormParam("password") String password,
-	    @FormParam("authtoken") String authtoken)
+    @Path("/import-settings")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public ContactPrefs getPrefs()
     {
-	ContactPrefs ctx = new ContactPrefs();
-	ctx.userName = username;
-	ctx.password = password;
-	ctx.token = authtoken;
-	ctx.type = Type.ZOHO;
-	try
-	{
-
-	    if (ZohoUtils.isValidContactPrefs(ctx))
-		ctx.save();
-	    else
-	    {
-		throw new Exception("Invalid login. Please try again");
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-
-	return ctx;
+	return ContactPrefsUtil.getPrefsByType(Type.ZOHO);
     }
 
     /**
-     * This method will do import data from zoho crm from different modules
+     * Delete prefs.
+     */
+    @Path("/import-settings")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deletePrefs()
+    {
+	ContactPrefsUtil.delete(Type.ZOHO);
+
+    }
+
+    /**
+     * Update prefs.
+     * 
+     * @param prefs
+     *            the prefs
+     */
+    @Path("/import-settings")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public void updatePrefs(ContactPrefs prefs)
+    {
+	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
+	contactPrefs.save();
+
+	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
+	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+
+    }
+
+    /**
+     * Checks if is authenticated.
+     * 
+     * @param username
+     *            the username
+     * @return true, if is authenticated
+     */
+    @GET
+    @Path("/auth-user")
+    public boolean isAuthenticated(@QueryParam("username") String username)
+    {
+
+	try
+	{
+	    ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
+	    String user = prefs.username;
+
+	    if (prefs != null && user != null && user.equalsIgnoreCase(username))
+		return true;
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Invalid login Please try again").build());
+	}
+	return false;
+
+    }
+
+    /**
+     * This method will do import data from zoho crm from different modules.
      * 
      * @param accounts
+     *            the accounts
      * @param leads
+     *            the leads
      * @param contacts
-     * @return
+     *            the contacts
+     * @return the contact prefs
      */
     @Path("/import")
     @POST
@@ -87,29 +125,21 @@ public class ZohoImportAPI
 	    @FormParam("contacts") boolean contacts)
     {
 
-	ContactPrefs ctxPrefs = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
-	List<String> list = new ArrayList<String>();
-
-	if (accounts)
-	    list.add("accounts");
-
-	if (leads)
-	    list.add("leads");
-
-	if (contacts)
-	    list.add("contacts");
-
-	ctxPrefs.thirdPartyField = list;
-	try
+	ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
+	if (prefs != null)
 	{
-	    ContactsImportUtil.initilaizeImportBackend(ctxPrefs);
+
+	    if (accounts)
+		prefs.importOptions.add("accounts");
+
+	    if (leads)
+		prefs.importOptions.add("leads");
+	    if (contacts)
+		prefs.importOptions.add("contacts");
+	    prefs.save();
 	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-	return ctxPrefs;
+
+	return prefs;
 
     }
 

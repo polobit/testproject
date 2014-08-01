@@ -1,5 +1,4 @@
-/**
- * ===facebook.js==== It is a pluginIn to be integrated with CRM, developed based on
+ /* ===facebook.js==== It is a pluginIn to be integrated with CRM, developed based on
  * the third party JavaScript API provided. It interacts with the application
  * based on the function provided on agile_widgets.js (Third party API).
  */

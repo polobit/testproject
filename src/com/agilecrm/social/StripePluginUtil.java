@@ -38,21 +38,20 @@ public class StripePluginUtil
      * @return {@link JSONObject} form of the response returned from Stripe
      * @throws Exception
      */
-    public static JSONObject getCustomerDetails(Widget widget, String customerId)
-	    throws SocketTimeoutException, IOException, Exception
+    public static JSONObject getCustomerDetails(Widget widget, String customerId) throws SocketTimeoutException,
+	    IOException, Exception
     {
 	JSONObject customer_info = new JSONObject();
 	String apiKey = widget.getProperty("access_token");
 
 	if (StringUtils2.isNullOrEmpty(new String[] { customerId }))
-	    throw new Exception(
-		    "Please provide the Stripe customer id for this contact");
+	    throw new Exception("Please provide the Stripe customer id for this contact");
 
 	/*
 	 * Retrieves Stripe customer based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	Customer customer = Customer.retrieve(customerId, apiKey);
+	Customer customer = Customer.retrieve(customerId.trim(), apiKey);
 
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 	invoiceParams.put("customer", customerId);
@@ -61,8 +60,7 @@ public class StripePluginUtil
 	 * Retrieves list of invoices based on Stripe customer ID and Stripe
 	 * account API key
 	 */
-	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey)
-		.getData();
+	List<Invoice> invoiceList = Invoice.all(invoiceParams, apiKey).getData();
 
 	// Converts list to JSON using GSON and returns output in JSON format
 	JSONArray list = new JSONArray(new Gson().toJson(invoiceList));

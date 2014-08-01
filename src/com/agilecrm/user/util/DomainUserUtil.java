@@ -362,4 +362,15 @@ public class DomainUserUtil
     {
 	return getUsers(NamespaceManager.get());
     }
+
+    public static void setScopes(DomainUser user)
+    {
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return;
+
+	info.setScopes(user.scopes);
+	SessionManager.set(info);
+    }
+
 }

@@ -8,7 +8,6 @@
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="com.agilecrm.scribe.ScribeServlet"%>
-<%@page import="com.thirdparty.google.ContactPrefs.Type"%>
 <%@page import="com.thirdparty.google.ContactPrefs.SYNC_TYPE"%>
 <%@page import="com.thirdparty.google.utl.ContactPrefsUtil"%>
 <%@page import="com.thirdparty.google.ContactPrefs"%>
