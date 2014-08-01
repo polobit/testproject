@@ -76,22 +76,6 @@ function agile_createContact(data, callback)
 			}
 		}
 	}
-	if (tags_from_cookie)
-	{
-		agile_delete_cookie("agile-tags");
-		var tags_string = tags_from_cookie.trim().replace("/ /g", " ");
-		tags_string = tags_string.replace("/, /g", ",");
-		var tags_array = tags_string.split(",");
-		if (model.tags)
-		{
-			for ( var i = 0; i < tags_array.length; i++)
-			{
-				model.tags.push(tags_array[i]);
-			}
-		}
-		else
-			model.tags = tags_array;
-	}
 
 	// var params = "contact={0}&tags={1}".format(encodeURIComponent(data),
 	// encodeURIComponent(JSON.stringify(tags)));

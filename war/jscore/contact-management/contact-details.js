@@ -51,6 +51,29 @@ function starify(el) {
 }
 
 /**
+ * Check whether there are any updates in the displaying contact.
+ * If there are any updates, show the refresh contact button.
+ */
+function checkContactUpdated(){
+	var contact_model  =  App_Contacts.contactDetailView.model;
+	
+	var contact_id = contact_model.id;
+	var updated_time = contact_model.attributes.updated_time;
+
+		queueGetRequest("widget_queue", "/core/api/contacts/" + contact_model.id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		{
+			// If true show refresh contact button.
+			if (data == 'true')
+				$('#refresh_contact').show();
+				
+		}, function error(data)
+		{
+			// Error message is shown
+			
+		});
+}
+
+/**
  * Shows all the domain users names as ul drop down list 
  * to change the owner of a contact 
  */
@@ -127,7 +150,11 @@ $(function(){
        			{ 	      		
        				$(that).closest("li").parent('ul').find('.loading').remove();
        				$(that).closest("li").remove();
-       				App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
+       				
+       			// Updates to both model and collection
+	       			App_Contacts.contactDetailView.model.set(data.toJSON(), {silent : true});
+	       			
+	       		//	App_Contacts.contactDetailView.model.set({'tags' : data.get('tags')}, {silent : true}, {merge:false});
        				
        				// Also deletes from Tag class if no more contacts are found with this tag
        				$.ajax({
@@ -254,6 +281,29 @@ $(function(){
 				
 		    }});
    	});
+	
+	/**
+	 * Get the updated details of the contact and update the model.
+	 */
+	$('#action_refresh_contact').live('click',function(){
+			var id =  App_Contacts.contactDetailView.model.id;
+		var contact_details_model = Backbone.Model.extend({ url : function()
+			{
+				return '/core/api/contacts/' + this.id;
+			} });
+
+			var model = new contact_details_model();
+			model.id = id;
+			model.fetch({ success : function(data)
+			{
+				
+				// Call Contact Details again
+				App_Contacts.contactDetails(id, model);
+				$('#refresh_contact').hide();
+
+			} });
+	});
+	
 });
 /**
  * To download vcard

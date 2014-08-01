@@ -2,7 +2,7 @@
 <!--
 {{#each fields_set}}
 	{{#equals "image" this}}
-		 <td><img src="{{gravatarurl properties 40}}" width='40px' height='40px' style="width:40px; height:40px; "></td>
+		 <td><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width='40px' height='40px' style="width:40px; height:40px; "></td>
 	{{/equals}}
 			<td>{{getPropertyFieldValue .. this}}</td>
 {{/each}}

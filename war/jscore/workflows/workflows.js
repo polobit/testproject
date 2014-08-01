@@ -13,13 +13,38 @@ $(function(){
 		e.stopPropagation();
 	});
 	
+	// Show logs of selected filter
 	$(".log-filters").die().live('click', function(e){
 		e.preventDefault();
 		
 		var log_type = $(this).data('log-type');
 		var id = $(this).data('campaign-id');
 		
-		App_Workflows.logsToCampaign(id, log_type);
+		App_Workflows.logsToCampaign(id, log_type, $(this).text());
+	});
+	
+	// Show stats of selected campaign
+	$('#campaign-reports-select').live('change', function(e){
+		
+		e.preventDefault();
+		
+		var active_tab = $('#campaign-tabs .active').data('campaign-tab-active');
+		
+		if(active_tab == "STATS")
+			Backbone.history.navigate("email-reports/"+$(this).val() , {
+                trigger: true
+            });
+		
+		if(active_tab == "SUBSCRIBERS")
+			Backbone.history.navigate("workflow/all-subscribers/"+$(this).val() , {
+                trigger: true
+            });
+		
+		if(active_tab == "LOGS")
+			Backbone.history.navigate("workflows/logs/"+$(this).val() , {
+                trigger: true
+            });
+		
 	});
 
 	/**
@@ -28,7 +53,7 @@ $(function(){
 	 * so ids are separated by comma in click event.
 	 * 
 	 **/
-	$('#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom').live('click', function (e) {
+	$('#save-workflow-top, #save-workflow-bottom, #duplicate-workflow-top, #duplicate-workflow-bottom').live('click', function (e, trigger_data) {
            e.preventDefault();
            
            // Temporary variable to hold clicked button, either top or bottom. $ is preceded, just to show 
@@ -77,7 +102,7 @@ $(function(){
         // New Workflow or Copy Workflow
         if (App_Workflows.workflow_model === undefined || $(this).attr('id') === 'duplicate-workflow-top' || $(this).attr('id') === 'duplicate-workflow-bottom') 
         {
-        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button)
+        	create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data);
         }
         // Update workflow
         else
@@ -92,13 +117,21 @@ $(function(){
             	
             	// Adds tag in our domain
             	add_tag_our_domain(CAMPAIGN_TAG);
+            	
+            	// Hide message
+            	$('#workflow-edit-msg').hide();
+            	
+            	// Boolean data used on clicking on Done
+    	    	if(trigger_data && trigger_data["navigate"])
+    	    	{
+    	    		Backbone.history.navigate("workflows", {
+                      trigger: true
+                  });
+    	    	}
+    	    	
             	//$('#workflowform').find('#save-workflow').removeAttr('disabled');
                
                //$(".save-workflow-img").remove();
-  
-            	Backbone.history.navigate("workflows", {
-                    trigger: true
-                });
             	
             },
             
@@ -208,6 +241,26 @@ $(function(){
 			$p_ele.html(ask_text);
 		
 	});
+	
+	// Clicking on done, save changes and exit
+	$(".workflow-done").live('click', function(e){
+		e.preventDefault();
+		
+		if($('#workflow-edit-msg').is(':visible'))
+		{
+			if(!confirm("You have unsaved changes. Save & Exit?"))
+			return;
+		
+			// Trigger click
+			$('#save-workflow-top').trigger("click", [{"navigate": true}]);
+			return;
+		}
+		
+		Backbone.history.navigate("workflows", {
+            trigger: true
+        });
+		
+	});
 
 });
 
@@ -219,7 +272,7 @@ $(function(){
  * @param unsubscribe_json - unsubscribe data of workflow
  * @param $clicked_button - jquery object to know clicked button
  **/
-function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button)
+function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_button, trigger_data)
 {
 	var workflowJSON = {};
 	
@@ -235,12 +288,18 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
     	    	enable_save_button($clicked_button);
     	    	// $('#workflowform').find('#save-workflow').removeAttr('disabled');
     	    	
-    	    	// $(".save-workflow-img").remove();
-    	    	            	    	
-    	    	Backbone.history.navigate("workflows", {
-                trigger: true
+    	    	// Hide edit message
+    	    	$('#workflow-edit-msg').hide();
     	    	
-    	    	});
+    	    	// $(".save-workflow-img").remove();
+    	    	        
+    	    	// Boolean data used on clicking on Done
+    	    	if(trigger_data && trigger_data["navigate"])
+    	    	{
+    	    		Backbone.history.navigate("workflows", {
+                      trigger: true
+                  });
+    	    	}
     	    },
             
             error: function(jqXHR, status, errorThrown){ 
@@ -276,4 +335,55 @@ function create_new_workflow(name, designerJSON, unsubscribe_json, $clicked_butt
             	  }
                 }
     });
+}
+
+/**
+ * Fills pad-content for logs when empty json obtains.
+ * 
+ * @param id -
+ *          slate div id.
+ * @param type - 
+ *          to match with LOGS_PAD_CONTENT json key
+ **/
+function fill_logs_slate(id, type, workflow_name)
+{
+	if(type == undefined)
+		type="ALL";
+	
+	var LOGS_PAD_CONTENT = {
+		    "ALL": {
+		        "title": "No logs for this campaign yet",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SENT": {
+		    	"title": "No emails sent yet",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_OPENED": {
+		    	"title": "No emails opened in this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_CLICKED": {
+		    	"title": "No emails clicked in this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "UNSUBSCRIBED": {
+		    	"title": "No one unsubscribed from this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_HARD_BOUNCED": {
+		    	"title": "No hard bounces seen for  this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SOFT_BOUNCED": {
+		    	"title": "No soft bounces seen for this campaign",
+				"image": "/img/clipboard.png"
+		    },
+		    "EMAIL_SPAM": {
+		    	"title": "No spam reports seen for this campaign",
+				"image": "/img/clipboard.png"
+		    }
+		}
+
+	$("#" + id).html(getTemplate("empty-collection-model", LOGS_PAD_CONTENT[type]));
 }

@@ -28,7 +28,7 @@
 								<b style="font-size:2em;">{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}
 								</b>{{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}}
-
+								
 								</br>{{#if_propertyName "title"}} {{value}}{{/if_propertyName}}
 								{{#comma_in_between_property "title" "company" properties}}{{/comma_in_between_property}}
 								{{#if contact_company_id}} 
@@ -64,6 +64,7 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="right" style='position: relative'>
 							<div class="btn-group right" style='position: relative'>
 								<div id='star' style='padding-bottom: 13px; width: auto !important'></div>
@@ -277,6 +278,13 @@
 							</div>
 						</div>
 						<!-- <div id="qrcode"><img src="img/1-0.gif"></div> -->
+						<!-- For refreshing the contact in the model list -->
+						<div id="refresh_contact" style="display:none;margin: 0px 25px;">This contact has been updated[
+							<a id="action_refresh_contact" style="cursor:pointer;">
+								<i class="icon-refresh" rel="popover" data-placement="top" data-title="Refresh Contact" data-content="Click to get updated contact details." data-trigger="hover"></i>
+							</a>]
+						</div>
+
 						<div class="clearfix"></div>
 						<div style='word-wrap: break-word; padding-top: 10px'>
 							{{#property_is_exists "phone" properties}}

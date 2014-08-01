@@ -103,7 +103,16 @@ public class TwilioVoiceServlet extends HttpServlet
 	}
 	catch (TwiMLException e)
 	{
-	    e.printStackTrace();
+		e.printStackTrace();
+		response.setContentType("text/plain");
+		response.getWriter().print(e.getMessage());
+	}
+	catch (Exception e)
+	{
+		e.printStackTrace();
+		response.setContentType("text/plain");
+		response.getWriter().print(e.getMessage());
+		
 	}
 
 	System.out.println("Twilio TWIML response: " + twiml.toXML());

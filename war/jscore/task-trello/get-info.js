@@ -143,7 +143,7 @@ function getTaskFormId(element)
 // collection.
 function getArraySortOnCount(criteria, criteriaArray, pending)
 {
-	var initialURL = '/core/api/tasks/countoftype' + getParamsNew() + "&pending=" + pending;
+	var initialURL = '/core/api/tasks/countoftype' + getParams() + "&pending=" + pending;
 
 	var countTypeArray = {};
 
@@ -186,10 +186,6 @@ function sortArray(criteria, countTypeArray, pending)
 
 	for (a in array)
 		result.push(array[a][0]);
-	
-	
-	console.log(array);
-	console.log(result);
 
 	// Creates nested collection
 	createNestedCollection(criteria, result, pending);
@@ -221,7 +217,7 @@ function getDetailsForCollection()
  * @returns {String} query string
  */
 function getParamsNew()
-{	
+{
 	var params = "?";
 
 	// Get task type and append it to params

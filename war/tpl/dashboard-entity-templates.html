@@ -40,7 +40,7 @@
 	<div style="height:auto;display:inline-block;">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px;  "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px;  "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
         		<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
@@ -118,7 +118,7 @@
 		{{#each contacts}} 
 			{{#if_contact_type "PERSON"}}
 			 	<a href="#contact/{{id}}" class="activate-link">
-				<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display: inline; width:40px; height:40px; " title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+				<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display: inline; width:40px; height:40px; " title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
 			{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}} 
 				<a href="#contact/{{id}}" class="activate-link">
@@ -136,7 +136,7 @@
 	<div class="row-fluid">
     	<div style="display:inline;padding-right:5px;height:auto;">
         	{{#if_contact_type "PERSON"}}
-        		<img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+        		<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
         	{{/if_contact_type}}
         
 			{{#if_contact_type "COMPANY"}}
@@ -272,7 +272,7 @@
 <input name="id" class="campaign" type="hidden" value="{{campaign_id}}" />
 <td class="data" data={{subscriber_id}} style="width:20em;">
 	<div style="display:inline;padding-right:10px;height:auto;">
-    	<img class="thumbnail" src="{{gravatarurl contact.properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
+    	<img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl contact.properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; " />
     </div>
  	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
     	<b>	{{getPropertyValue contact.properties "first_name"}} {{getPropertyValue contact.properties "last_name"}} </b>

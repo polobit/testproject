@@ -1,5 +1,8 @@
 package com.campaignio.logger.util;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 
@@ -36,16 +39,16 @@ public class CampaignLogsSQLUtil
 	    String message, String type)
     {
 	String insertToLogs = "INSERT INTO campaign_logs (domain, campaign_id, campaign_name, subscriber_id, log_time, message, log_type) VALUES("
-		+ GoogleSQLUtil.encodeSQLColumnValue(domain)
-		+ ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(campaignId)
-		+ ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(campaignName)
-		+ ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
-		+ ",NOW()"
-		+ ","
-		+ GoogleSQLUtil.encodeSQLColumnValue(message) + "," + GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
+	        + GoogleSQLUtil.encodeSQLColumnValue(domain)
+	        + ","
+	        + GoogleSQLUtil.encodeSQLColumnValue(campaignId)
+	        + ","
+	        + GoogleSQLUtil.encodeSQLColumnValue(campaignName)
+	        + ","
+	        + GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
+	        + ",NOW()"
+	        + ","
+	        + GoogleSQLUtil.encodeSQLColumnValue(message) + "," + GoogleSQLUtil.encodeSQLColumnValue(type) + ")";
 
 	System.out.println("Insert Query to CampaignLogs: " + insertToLogs);
 
@@ -74,9 +77,9 @@ public class CampaignLogsSQLUtil
 	    String filterType)
     {
 	String logs = "SELECT *, UNIX_TIMESTAMP(log_time) AS time FROM campaign_logs WHERE log_type <> 'EMAIL_SLEEP' AND "
-		+ getWhereConditionOfLogs(campaignId, subscriberId, domain)
-		+ getFilterType(filterType)
-		+ " ORDER BY log_time DESC" + GoogleSQLUtil.appendLimitToQuery(limit);
+	        + getWhereConditionOfLogs(campaignId, subscriberId, domain)
+	        + getFilterType(filterType)
+	        + " ORDER BY log_time DESC" + GoogleSQLUtil.appendLimitToQuery(limit);
 	try
 	{
 	    return GoogleSQL.getJSONQuery(logs);
@@ -99,7 +102,37 @@ public class CampaignLogsSQLUtil
     public static void deleteLogsFromSQL(String campaignId, String subscriberId, String domain)
     {
 	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE"
-		+ getWhereConditionOfLogs(campaignId, subscriberId, domain);
+	        + getWhereConditionOfLogs(campaignId, subscriberId, domain);
+	try
+	{
+	    GoogleSQL.executeNonQuery(deleteCampaignLogs);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Deletes logs with respect to campaign, subscriber and logtype.
+     * 
+     * @param campaignId
+     *            - Campaign id.
+     * @param subscriberId
+     *            - Subscriber id.
+     * @param domain
+     *            - Domain.
+     * @param logType
+     *            - campaign log type
+     */
+    public static void deleteLogsFromSQL(String campaignId, String subscriberId, String domain, String logType)
+    {
+	String deleteCampaignLogs = "DELETE FROM campaign_logs WHERE"
+	        + getWhereConditionOfLogs(campaignId, subscriberId, domain);
+
+	if (!StringUtils.isEmpty(logType))
+	    deleteCampaignLogs += "AND log_type=" + GoogleSQLUtil.encodeSQLColumnValue(logType);
+
 	try
 	{
 	    GoogleSQL.executeNonQuery(deleteCampaignLogs);
@@ -132,7 +165,7 @@ public class CampaignLogsSQLUtil
 	    // If both are not null
 	    if (!StringUtils.isEmpty(subscriberId))
 		return condition += " AND " + " subscriber_id = " + GoogleSQLUtil.encodeSQLColumnValue(subscriberId)
-			+ " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
+		        + " AND " + GoogleSQLUtil.appendDomainToQuery(domain);
 	}
 
 	if (!StringUtils.isEmpty(subscriberId))
@@ -181,5 +214,53 @@ public class CampaignLogsSQLUtil
 	    return "";
 
 	return " AND log_type=" + GoogleSQLUtil.encodeSQLColumnValue(logFilterType);
+    }
+
+    /**
+     * Returns count of rows w.r.t log type
+     * 
+     * @param campaignId
+     *            - campaign id
+     * @param subscriberId
+     *            - subscriber id
+     * @param logType
+     *            - log type
+     * @param domain
+     *            - domain
+     * @return integer value
+     */
+    public static int getCountByLogType(String campaignId, String subscriberId, String logType, String domain)
+    {
+	String logsCountQuery = "SELECT COUNT(*) FROM campaign_logs WHERE domain = "
+	        + GoogleSQLUtil.encodeSQLColumnValue(domain) + " AND campaign_id = "
+	        + GoogleSQLUtil.encodeSQLColumnValue(campaignId) + " AND subscriber_id = "
+	        + GoogleSQLUtil.encodeSQLColumnValue(subscriberId) + " AND log_type="
+	        + GoogleSQLUtil.encodeSQLColumnValue(logType);
+
+	int count = 0;
+
+	System.out.println("Count Query of logs by logtype: " + logsCountQuery);
+
+	ResultSet rs = GoogleSQL.executeQuery(logsCountQuery);
+
+	try
+	{
+	    if (rs.next())
+	    {
+		// Gets first column
+		count = rs.getInt(1);
+	    }
+	}
+	catch (SQLException e)
+	{
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    // Closes the Connection and ResultSet Objects
+	    GoogleSQL.closeResultSet(rs);
+	}
+
+	return count;
     }
 }

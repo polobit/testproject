@@ -3,7 +3,7 @@ function startMakingCollection(criteria, pending)
 {
 	// Shows loading image untill data gets ready for displaying
 	$('#new-task-list-based-condition').html(LOADING_HTML);
-	
+
 	// Get user details and add into GROUPING_MAP's owner array.
 	if (criteria == "OWNER" && GROUPING_MAP[criteria].type.length == 0)
 		getUserDetails(function(data)
@@ -29,7 +29,7 @@ function findArrayForCollection(criteria, pending)
 function createNestedCollection(criteria, criteriaArray, pending)
 {
 	console.log("In createNestedCollection");
-	
+
 	// Initialize nested collection
 	initTaskListCollection();
 
@@ -43,7 +43,7 @@ function createNestedCollection(criteria, criteriaArray, pending)
 
 	// Creates main collection with Task lists
 	for ( var i in criteriaArray)
-	{	
+	{
 		var newTaskList;
 
 		// Url to call DB
@@ -62,8 +62,8 @@ function createNestedCollection(criteria, criteriaArray, pending)
 		}
 
 		if (!newTaskList)
-			return;		
-		
+			return;
+
 		// Add task list in main collection
 		TASKS_LIST_COLLECTION.collection.add(newTaskList);// main-collection
 	}
@@ -79,14 +79,13 @@ function createNestedCollection(criteria, criteriaArray, pending)
 function initTaskListCollection()
 {
 	// Define main collection
-	TASKS_LIST_COLLECTION = new Base_Collection_View({ restKey : "task", 
-		templateKey : "new-tasks-lists", individual_tag_name : 'div',
+	TASKS_LIST_COLLECTION = new Base_Collection_View({ restKey : "task", templateKey : "new-tasks-lists", individual_tag_name : 'div',
 		className : "list-area-wrapper", sort_collection : false, postRenderCallback : function(el)
 		{
 			// Remove loding imgs
 			$('.loading-img', el).remove();
 			$('.loading', el).remove();
-			
+
 			// Adjust Height Of Task List And Scroll as per window size
 			adjustHeightOfTaskListAndScroll();
 		} });
@@ -98,9 +97,8 @@ function initTaskListCollection()
 // Append sub collection and model
 function taskAppend(base_model)
 {
-	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", 
-		template : "new-tasks-lists-model", tagName : 'div', className : "task-trello-list",
-		id : base_model.get("heading") });
+	var tasksListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "new-tasks-lists-model", tagName : 'div',
+		className : "task-trello-list", id : base_model.get("heading") });
 
 	// Render model in main collection
 	var el = tasksListModel.render().el;
@@ -116,24 +114,29 @@ function taskAppend(base_model)
 function taskFetch(index)
 {
 	console.log("index: " + index);
-	
+
 	// Get model from main collection
 	var base_model = TASKS_LIST_COLLECTION.collection.at(index);
-	
-	if(!base_model)
+
+	if (!base_model)
 		return;
-	
+
 	// Define sub collection
-	var taskCollection = new Base_Collection_View({ url : base_model.get("url"), 
-		templateKey : 'task', individual_tag_name : 'div', sort_collection : false,
-		cursor : true, page_size : 20, postRenderCallback : function(el)
+	var taskCollection = new Base_Collection_View({
+		url : base_model.get("url"),
+		templateKey : 'task',
+		individual_tag_name : 'div',
+		sort_collection : false,
+		cursor : true,
+		page_size : 20,
+		postRenderCallback : function(el)
 		{
 			var flag = false;
-			
-			if(base_model.has("owner_id"))
-				flag = $("div[id='list-tasks-" + base_model.get("heading") +"-"+base_model.get("owner_id")+ "']")[0];
+
+			if (base_model.has("owner_id"))
+				flag = $("div[id='list-tasks-" + base_model.get("heading") + "-" + base_model.get("owner_id") + "']")[0];
 			else
-				flag = $("div[id='list-tasks-" + base_model.get("heading") + "']")[0];				
+				flag = $("div[id='list-tasks-" + base_model.get("heading") + "']")[0];
 
 			// If we have task list then only need to apply following
 			if (flag)
@@ -145,10 +148,11 @@ function taskFetch(index)
 				addTaskCount(base_model.toJSON());
 
 				// Apply infi scroll on sub-collection
-				if(base_model.has("owner_id"))
-					initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") +"-"+base_model.get("owner_id")+ "']")[0], taskCollection);
+				if (base_model.has("owner_id"))
+					initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") + "-" + base_model.get("owner_id") + "']")[0],
+							taskCollection);
 				else
-				    initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") + "']")[0], taskCollection);
+					initialize_infinite_scrollbar($("div[id='list-tasks-" + base_model.get("heading") + "']")[0], taskCollection);
 			}
 		} });
 
@@ -156,17 +160,17 @@ function taskFetch(index)
 	taskCollection.collection.fetch({ success : function(data)
 	{
 		// Add sub collection in model of main collection.
-		base_model.set('taskCollection', taskCollection.collection);		
+		base_model.set('taskCollection', taskCollection.collection);
 
-// Update UI
-		if(base_model.has("owner_id"))
-		    $("div[id='list-tasks-" + base_model.get("heading")+"-"+base_model.get("owner_id")+ "']").html(taskCollection.render(true).el);
+		// Update UI
+		if (base_model.has("owner_id"))
+			$("div[id='list-tasks-" + base_model.get("heading") + "-" + base_model.get("owner_id") + "']").html(taskCollection.render(true).el);
 		else
 			$("div[id='list-tasks-" + base_model.get("heading") + "']").html(taskCollection.render(true).el);
 
 		// Adjust Height Of Task List And Scroll as per window size
 		adjustHeightOfTaskListAndScroll();
-		
+
 		// Maintain changes in UI
 		displaySettings();
 

@@ -6,6 +6,8 @@
  * @author Naresh
  */
 
+var CONTACT_CUSTOM_FIELDS = undefined;
+
 /**
  * Sets up tinymce HTML Editor on given selector
  * 
@@ -13,7 +15,7 @@
  *            id of HTML element e.g., textarea#email-body
  * 
  */
-function setupTinyMCEEditor(selector, noAgileContactFields)
+function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 {
 	
 	// Id undefined
@@ -24,13 +26,13 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	}
 	
 	// Show loading image instead of textarea
-//	$('#loading-editor').html(getRandomLoadingImg());
+	$('#loading-editor').html(getRandomLoadingImg());
 	
-	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview";
+	var toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | merge_fields | preview | code";
 	
 	// Remove Agile Contact fields button
 	if(noAgileContactFields)
-		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview";
+		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview | code";
 	
 	// Init tinymce first time
 	if (typeof (tinymce) === "undefined")
@@ -51,12 +53,12 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 			}
 			
 			// Show textarea and remove loading img
-//			$(selector).css('display', '');
-//			$('#loading-editor').html("");
+			$(selector).css('display', '');
+			$('#loading-editor').html("");
 			
 			tinymce.init({ mode : "exact", selector : selector, plugins : [
-				"textcolor link image preview"
-			], menubar : false,
+			    "textcolor link image preview code"], 
+			    menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
 				toolbar_items_size: 'small',
@@ -70,10 +72,6 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 		return;
 	}
 
-	// Show textarea and remove loading img
-//	$(selector).css('display', '');
-//	$('#loading-editor').html("");
-	
 	// if tinymce instance exists, reinitialize tinymce on given selector
 	if (selector.indexOf('#') !== -1)
 		selector = selector.split('#')[1];
@@ -82,10 +80,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields)
 	tinymce.settings.toolbar2 = toolbar_2;
 	
 	// reinitialize tinymce
-	reinitialize_tinymce_editor_instance(selector);
-		
-	// reset previous content
-    set_tinymce_content(selector, '');
+	reinitialize_tinymce_editor_instance(selector, callback);
 		
 }
 
@@ -157,7 +152,7 @@ function trigger_tinymce_save()
  * @param selector -
  *            id of an element without '#'
  */
-function reinitialize_tinymce_editor_instance(selector)
+function reinitialize_tinymce_editor_instance(selector, callback)
 {
 	try
 	{
@@ -165,8 +160,23 @@ function reinitialize_tinymce_editor_instance(selector)
 		// instance
 		remove_tinymce_editor_instance(selector);
 
-		// Adds tinymce
-	    tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
+		// Surrounded within timeout to work in Firefox
+	    setTimeout(function(){
+
+	    	// Show textarea and remove loading img
+	    	$('#loading-editor').html("");
+//	    	$('#'+ selector).css('display', '');
+			
+	    	tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
+	    	
+	    	// callback after tinymce re-initialised
+	    	if(callback != undefined && typeof (callback) === "function")
+	    		callback();
+	    		
+	    	// Show hidden tinymce
+	    	$('.mce-tinymce').css('display','');
+
+	    }, 1);
 	
 	}
 	catch (err)
@@ -186,7 +196,13 @@ function remove_tinymce_editor_instance(selector)
 {
 	try
 	{
-		tinymce.EditorManager.execCommand("mceRemoveEditor", false, selector);
+		// Removes all tinymce editors 
+		for(var i=0; i < tinymce.editors.length; i++)
+		{
+			tinyMCE.remove(tinyMCE.editors[i]);
+		}
+		
+		//tinymce.EditorManager.execCommand("mceRemoveEditor", false, selector);
 	}
 	catch (err)
 	{
@@ -293,11 +309,17 @@ function get_merge_fields()
  */
 function get_custom_fields()
 {
+	// If already fetched, return
+	if(CONTACT_CUSTOM_FIELDS != undefined)
+		return CONTACT_CUSTOM_FIELDS;
+	
 	// Sends GET request for customfields.
-	var msg = $.ajax({ type : "GET", url : '/core/api/custom-fields', async : false, dataType : 'json' }).responseText;
+	var msg = $.ajax({ type : "GET", url : '/core/api/custom-fields/scope?scope=CONTACT', async : false, dataType : 'json' }).responseText;
 
 	// Parse stringify json
-	return JSON.parse(msg);
+	CONTACT_CUSTOM_FIELDS = JSON.parse(msg);
+	
+	return CONTACT_CUSTOM_FIELDS;
 }
 
 /**
@@ -307,21 +329,12 @@ function get_custom_fields()
  */
 function get_custom_merge_fields()
 {
-	var data = get_custom_fields();
-
 	var customfields = {};
 
 	// Iterate over data and get field labels of each custom field
-	$.each(data, function(index, obj)
+	$.each(get_custom_fields(), function(index, obj)
 	{
-		// Iterate over single custom field to get field-label
-		$.each(obj, function(key, value)
-		{
-
-			// Needed only field labels for merge fields
-			if (key == 'field_label')
-				customfields[value] = "{{" + value + "}}"
-		});
+		customfields[obj['field_label']] = "{{" + obj['field_label'] + "}}"
 	});
 
 	return customfields;
@@ -343,18 +356,28 @@ function get_contact_json_for_merge_fields()
 	// Compile templates immediately in Send email but not for bulk contacts
 	if (App_Contacts.contactDetailView != undefined && App_Contacts.contactDetailView.model != undefined)
 	{
+
 		// Get Current Contact
 		var contact_json = App_Contacts.contactDetailView.model.toJSON();
-		contact_property_json = get_property_JSON(contact_json);
+		var contact_property_json = get_property_JSON(contact_json);
 		
 		try
 		{
 			contact_property_json["score"]= contact_json["lead_score"];
+			
+			// Replace epoch times with formatted date values in property json
+			var arr = get_custom_field_labels_by_type(get_custom_fields(), 'DATE');
+			
+			// Format each epochtime to Date
+			for(var i in arr)
+				contact_property_json[arr[i]]= get_formatted_date(contact_property_json[arr[i]] * 1000);
+			
 			contact_property_json["location"] = JSON.parse(contact_property_json["address"]);
 		}
 		catch(err)
 		{
-			
+			console.log("Error occured while parsing json");
+			console.log(err);
 		}
 		
 		return merge_jsons({}, {"owner":contact_json.owner}, contact_property_json);
@@ -362,6 +385,12 @@ function get_contact_json_for_merge_fields()
 	}  
 }
 
+/**
+ * Replaces {{}} with {{[]}} to allow spaces in keys
+ * 
+ * @param text - text to replace
+ * 
+ **/
 function add_square_brackets_to_merge_fields(text)
 {
 	// Matches all strings within {{}}. e.g., {{first_name}}, {{New Note}}
@@ -379,4 +408,50 @@ function add_square_brackets_to_merge_fields(text)
 	};
 	
 	return text;
+}
+
+/**
+ * Returns array of custom field labels that matches
+ * with given field_type
+ * 
+ * @param custom_data - Custom fields
+ * 
+ * @param field_type - field type
+ **/
+function get_custom_field_labels_by_type(custom_data, field_type)
+{
+	var field_labels = [];
+	
+	// Iterate over data and get field labels of each custom field
+	$.each(custom_data, function(index, obj)
+	{
+		
+		if(obj['field_type'] == field_type)
+			field_labels.push(obj['field_label']);
+		
+	});
+	
+	return field_labels;
+}
+
+/**
+ * Returns formatted date from epoch time
+ * 
+ * @param epoch_time - Epoch time in milliseconds
+ *                     
+ **/
+function get_formatted_date(epoch_time)
+{
+	var month_names = new Array("Jan", "Feb", "Mar", 
+			"Apr", "May", "Jun", "Jul", "Aug", "Sep", 
+			"Oct", "Nov", "Dec");
+
+	var d = new Date(epoch_time);
+	
+	var date = d.getDate();
+	var month = d.getMonth();
+	var year = d.getFullYear();
+	
+	return date + " " + month_names[month] 
+			+ " " + year;
 }

@@ -110,6 +110,17 @@ table {
 	/*float:right;*/
 }
 
+ul.tagsinput li.tag > span > a:first-child
+{
+	display:inline-block !important;
+}
+
+ul.tagsinput li.tag > span > a:second-child
+{
+	display:inline !important;
+}
+
+
 /* core.css,tooltip.css,bootstrap-min.css*/
 .underline {
 	border-bottom: 1px solid whiteSmoke;
@@ -1190,24 +1201,21 @@ time {
 	display:block!important;
 }
 
-/** Documents icon change **/
+/** documents icon  **/
 #documents-model-list tr:hover td.data div b.activate-link { 
 	display:inline!important;
 }
-
 
 /** custom feilds modals **/
 #custom-field-add-modal .modal-footer {
 margin-top: 0px;
 }
 
-
 /** Google apps **/
 #email-prefs div.span3{
 	margin-left:0px;
 	width:257px;
 }
-
 
 /* Disable drop-down menu item, add class="disabled" to <a>
 Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats

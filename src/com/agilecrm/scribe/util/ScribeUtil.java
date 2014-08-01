@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,7 @@ import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.scribe.api.FacebookApi;
 import com.agilecrm.scribe.api.StripeApi;
 import com.agilecrm.scribe.login.util.OAuthLoginUtil;
+import com.agilecrm.social.FacebookUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
@@ -41,6 +43,11 @@ import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
+import com.thirdparty.shopify.OAuthCustomService;
+import com.thirdparty.shopify.ShopifyApi;
+import com.thirdparty.shopify.ShopifyServiceBuilder;
+
+import facebook4j.auth.AccessToken;
 
 //import org.codehaus.jackson.map.ObjectMapper;
 
@@ -54,6 +61,8 @@ import com.thirdparty.google.calendar.GoogleCalenderPrefs;
  */
 public class ScribeUtil
 {
+
+	private static final String SHOPIFY_SCOPE = "read_customers, read_orders,read_products";
 
 	/**
 	 * Builds service using serviceBuilder based on type of service specified,
@@ -115,16 +124,19 @@ public class ScribeUtil
 					com.agilecrm.scribe.api.GoogleApi.class, callback, Globals.GOOGLE_CLIENT_ID,
 					Globals.GOOGLE_CLIENT_ID, ScribeServlet.GOOGLE_DRIVE_SCOPE);
 
-		// Create a Service specific to xero
-		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_XERO))
-			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_XERO, com.agilecrm.scribe.api.XeroApi.class,
-					callback, Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID, null);
-
 		// Create a Service specific to facebook
 		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
 			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_FACEBOOK,
 					com.agilecrm.scribe.api.FacebookApi.class, callback, Globals.FACEBOOK_APP_ID,
 					Globals.FACEBOOK_APP_SECRET, null);
+
+		/**
+		 * create service for stripe import
+		 */
+		else if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
+			service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT,
+					com.agilecrm.scribe.api.StripeApi.class, callback, Globals.DEV_STRIPE_CLIENT_ID,
+					Globals.DEV_STRIPE_API_KEY, "read_only");
 
 		// Creates a Service, specific to Gmail
 		else
@@ -260,13 +272,55 @@ public class ScribeUtil
 			returnURL = returnURL + "&code=" + code;
 			req.getSession().setAttribute("return_url", returnURL);
 		}
-		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_XERO))
+		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT))
 		{
-			saveXeroPrefs(req, accessToken);
+			saveStripeImportPref(req, accessToken);
+
 		}
 		else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_FACEBOOK))
 			saveFacebookPrefs(req, code, service);
 
+	}
+
+	/**
+	 * If service is StripeImport
+	 * 
+	 * @param req
+	 *            {@link HttpServletRequest}
+	 * @param accessToken
+	 *            {@link String} access token after OAuth
+	 */
+	public static void saveStripeImportPref(HttpServletRequest req, Token accessToken)
+	{
+
+		String code = req.getParameter("code");
+		OAuthRequest oAuthRequest = new OAuthRequest(Verb.POST, String.format(
+				"https://connect.stripe.com/oauth/token?code=%s&grant_type=%s", code, "authorization_code"));
+
+		oAuthRequest.addHeader("Authorization", "Bearer " + Globals.DEV_STRIPE_API_KEY);
+
+		Response response = oAuthRequest.send();
+		try
+		{
+			HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
+					new TypeReference<HashMap<String, String>>()
+					{
+					});
+
+			ContactPrefs pref = new ContactPrefs();
+			if (properties.containsKey("refresh_token"))
+			{
+
+				pref.refreshToken = properties.get("refresh_token");
+				pref.token = properties.get("access_token");
+				pref.type = Type.STRIPE;
+				pref.save();
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -513,51 +567,6 @@ public class ScribeUtil
 	}
 
 	/**
-	 * If service type is xero, we make a post request with the code and get the
-	 * access token,widget is fetched by plugin_id in session and is updated
-	 * with new access token and refresh token
-	 * 
-	 * @param {@link HttpServletRequest}
-	 * @param code
-	 *            {@link String} code retrieved after OAuth
-	 * @throws IOException
-	 */
-	public static void saveXeroPrefs(HttpServletRequest req, Token accessToken) throws IOException
-	{
-		System.out.println("In Xero save");
-
-		/*
-		 * Make a post request and retrieve tokens
-		 */
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put("token", accessToken.getToken());
-		properties.put("secret", accessToken.getSecret());
-		properties.put("time", String.valueOf(System.currentTimeMillis()));
-		try
-		{
-			String res = SignpostUtil.accessURLWithOauth(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID,
-					accessToken.getToken(), accessToken.getSecret(), "https://api.xero.com/api.xro/2.0/users", "GET",
-					"", "XERO");
-			JSONObject xeroProfile = new JSONObject(res);
-			properties.put("xeroId", xeroProfile.getString("UserID"));
-			properties.put("xeroemail", xeroProfile.getString("EmailAddress"));
-		}
-		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
-		// Gets widget name from the session
-		String serviceType = (String) req.getSession().getAttribute("service_type");
-
-		System.out.println("serviceName " + serviceType);
-
-		// update widget with tokens
-
-		saveWidgetPrefsByName(serviceType, properties);
-
-	}
-
-	/**
 	 * save facebook prefs data contain accesstoken tokensecret etc
 	 * 
 	 * @param req
@@ -612,6 +621,35 @@ public class ScribeUtil
 
 		// update widget with tokens
 		saveWidgetPrefsByName(serviceType, properties);
+
+	}
+
+	public static OAuthCustomService getShopifyService(HttpServletRequest req, HttpServletResponse res,
+			String serviceType)
+	{
+		/**
+		 * create service for Shopify
+		 */
+		String callback = req.getRequestURL().toString();
+		if (serviceType.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
+			return getShopifyCustomService(req, ScribeServlet.SERVICE_TYPE_SHOPIFY, ShopifyApi.class, callback,
+					Globals.SHOPIFY_API_KEY, Globals.SHOPIFY_SECRET_KEY, SHOPIFY_SCOPE);
+
+		return null;
+	}
+
+	private static OAuthCustomService getShopifyCustomService(HttpServletRequest req, String serviceType,
+			Class<? extends com.thirdparty.shopify.Api> apiClass, String callback, String apiKey, String apiSecret,
+			String scope)
+	{
+
+		// Gets session and sets attribute "oauth.service" to service type
+		req.getSession().setAttribute("oauth.service", serviceType);
+
+		return new ShopifyServiceBuilder().provider((Class<? extends com.thirdparty.shopify.Api>) apiClass)
+				.apiKey(apiKey).apiSecret(apiSecret).callback(callback).scope(scope).build();
+
+		// if scope is needed in the service
 
 	}
 }

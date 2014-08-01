@@ -18,6 +18,7 @@ import com.agilecrm.user.DomainUser;
 import com.google.appengine.api.search.Document;
 import com.google.appengine.api.search.Field;
 import com.google.appengine.api.search.Index;
+import com.google.appengine.api.search.Document.*;
 
 /**
  * <code>ContactDocument</code> class represents "Document" created based on app
@@ -70,6 +71,15 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	public void add(Object entity)
 	{
 		Contact contact = (Contact) entity;
+		Builder doc = buildDocument(contact);
+		
+		// Adds document to Index
+		addToIndex(doc);   
+			
+	}
+	
+	public Builder buildDocument(Contact contact)
+	{
 
 		// Gets builder object required to build a document
 		Document.Builder doc = Document.newBuilder();
@@ -123,9 +133,11 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 		if (user != null)
 			doc.addField(Field.newBuilder().setName("owner_id").setText(String.valueOf(user.id)));
 
-		// Adds document to Index
-		addToIndex(doc.setId(contact.id.toString()).build());
+		doc.setId(contact.id.toString()).build();
+		return doc;
 	}
+	
+	
 
 	@Override
 	public void edit(Object entity)
@@ -152,6 +164,27 @@ public class ContactDocument extends com.agilecrm.search.document.Document imple
 	{
 		// TODO Auto-generated method stub
 		return index;
+	}
+	
+	/**
+	 * Adds Document to index
+	 * 
+	 * @param doc
+	 *            {@link Document}..
+	 */
+	public void addToIndex(Builder... docs)
+	{
+		// Adds document to index
+		try
+		{
+			index.put(docs);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
 	}
 
 	/**

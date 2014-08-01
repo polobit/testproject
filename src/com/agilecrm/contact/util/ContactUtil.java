@@ -1,6 +1,7 @@
 package com.agilecrm.contact.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -20,9 +21,13 @@ import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.search.Document.Builder;
+import com.google.gdata.data.introspection.Collection;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Query;
 
 /**
  * <code>ContactUtil</code> is a utility class to process the data of contact
@@ -401,7 +406,7 @@ public class ContactUtil
 	    contact.removeTags(tags_array);
 	}
 
-	dao.putAll(contacts_list);
+	// dao.putAll(contacts_list);
     }
 
     /**
@@ -540,16 +545,34 @@ public class ContactUtil
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 
+	ContactDocument contactDocuments = new ContactDocument();
+	Builder[] docs = new Builder[contacts_list.size()];
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	int i = 0;
 	for (Contact contact : contacts_list)
 	{
 	    contact.setContactOwner(newOwnerKey);
 	    Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 	    if (!new_owner.equals(userKey))
-		search.edit(contact);
+	    {
+		builderObjects.add(contactDocuments.buildDocument(contact));
+//		docs[i] = contactDocuments.buildDocument(contact);
+		++i;
+	    }	
+	    
+	    if(i >= 150)
+	    {
+		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() -1]));    
+		builderObjects.clear();
+		i = 0;
+	    }
 	}
+	
+	if(builderObjects.size() > 1)
+	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() -1]));
+	
 	Contact.dao.putAll(contacts_list);
-
     }
 
     /**
@@ -761,5 +784,27 @@ public class ContactUtil
 	properties.put("emailBounceStatus.time <", endTime);
 
 	return dao.getCountByProperty(properties);
+    }
+
+    /**
+     * Checks whether the given contact updated after the given time.
+     * 
+     * @param contactId
+     *            the id of contact to check.
+     * @param updatedTime
+     *            previously updated time.
+     * @return true if the contact is updated after the given time or else
+     *         false.
+     */
+    public static boolean isContactUpdated(Long contactId, Long updatedTime)
+    {
+	Query<Contact> query = dao.ofy().query(Contact.class);
+
+	query.filter("id = ", contactId);
+	query.filter("updated_time > ", updatedTime);
+
+	int count = query.count();
+	System.out.println("Is updated count - " + count);
+	return count > 0 ? true : false;
     }
 }

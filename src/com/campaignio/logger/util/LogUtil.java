@@ -9,6 +9,7 @@ import org.json.JSONArray;
 
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.logger.Log;
+import com.campaignio.logger.Log.LogType;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -51,7 +52,7 @@ public class LogUtil
 
 	// Insert to SQL
 	CampaignLogsSQLUtil.addToCampaignLogs(domain, campaignId, WorkflowUtil.getCampaignName(campaignId),
-		subscriberId, message, logType);
+	        subscriberId, message, logType);
 
 	long processTime = System.currentTimeMillis() - startTime;
 	System.out.println("Process time for adding log is " + processTime + "ms");
@@ -128,6 +129,62 @@ public class LogUtil
 
 	long processTime = System.currentTimeMillis() - startTime;
 	System.out.println("Process time for deleteing logs is " + processTime + "ms");
+
+    }
+
+    /**
+     * Deletes campaign logs.
+     * 
+     * @param campaignId
+     *            - Campaign Id.
+     * @param subscriberId
+     *            - subscriber Id
+     * @param logType
+     *            - campaign log type
+     */
+    public static void deleteSQLLogs(String campaignId, String subscriberId, LogType logType)
+    {
+	String domain = NamespaceManager.get();
+
+	// For localhost
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+	    domain = "localhost";
+
+	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
+	    return;
+
+	// To know SQL process time
+	long startTime = System.currentTimeMillis();
+	CampaignLogsSQLUtil.deleteLogsFromSQL(campaignId, subscriberId, domain, String.valueOf(logType));
+
+	long processTime = System.currentTimeMillis() - startTime;
+	System.out.println("Process time for deleteing logs is " + processTime + "ms");
+
+    }
+
+    /**
+     * Returns count of logs based on log type
+     * 
+     * @param campaignId
+     *            - Campaign Id
+     * @param subscriberId
+     *            - Subscriber Id
+     * @param logType
+     *            - log type
+     * @return integer
+     */
+    public static int getLogsCount(String campaignId, String subscriberId, LogType logType)
+    {
+	String domain = NamespaceManager.get();
+
+	// For localhost
+	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development)
+	    domain = "localhost";
+
+	if (StringUtils.isEmpty(domain) || (StringUtils.isEmpty(campaignId) && StringUtils.isEmpty(subscriberId)))
+	    return 0;
+
+	return CampaignLogsSQLUtil.getCountByLogType(campaignId, subscriberId, String.valueOf(logType), domain);
 
     }
 }

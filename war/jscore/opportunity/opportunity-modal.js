@@ -41,6 +41,8 @@ $(function(){
 	});
 	
 	$('#opportunityModal, #opportunityUpdateModal').on("shown", function(){
+		
+		
 		// Add placeholder and date picker to date custom fields
 		$('.date_input').attr("placeholder","MM/DD/YYYY");
     
@@ -61,6 +63,11 @@ $(function(){
 		
 		// Removes validation error messages
 		remove_validation_errors('opportunityModal');
+		
+		// Removes note from deal form
+		$('#opportunityModal #forNoteForm').html("");
+		// Hide + Add note link
+		$(".deal-add-note", $("#opportunityModal")).show();
 
     });
     
@@ -75,6 +82,12 @@ $(function(){
 		
 		// Removes validation error messages
 		remove_validation_errors('opportunityUpdateModal');
+		
+		// Removes note from deal form
+		$('#opportunityUpdateModal #forNoteForm').html("");
+		
+		// Hide + Add note link
+		$(".deal-add-note", $("#opportunityUpdateModal")).show();
 
     });
     
@@ -171,9 +184,13 @@ function updateDeal(ele) {
 	
 	var dealForm = $("#opportunityUpdateForm");
 	
+	$("#opportunityUpdateForm")[0].reset();
+	
 	deserializeForm(value, $("#opportunityUpdateForm"));
 	
 	$("#opportunityUpdateModal").modal('show');
+	
+	
 	
 	// Call setupTypeAhead to get contacts
 	agile_type_ahead("relates_to", dealForm, contacts_typeahead);
@@ -197,6 +214,9 @@ function updateDeal(ele) {
 		}
 		$("#milestone", dealForm).closest('div').find('.loading-img').hide();
 	});
+	
+	// Add notes in deal modal
+	showNoteOnForm("opportunityUpdateForm", value.notes);
 	
 	add_custom_fields_to_form(value, function(data){
 		var el = show_custom_fields_helper(data["custom_fields"], []);

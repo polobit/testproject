@@ -101,6 +101,9 @@ public class SendMail
 
     public static final String UNSUBSCRIBE_CONFIRMATION = "unsubscribe_confirmation";
     public static final String UNSUBSCRIBE_CONFIRMATION_SUBJECT = "Unsubscribe";
+    
+    public static final String STRIPE_IMPORT_NOTIFICATION = "contact_sync_notification_template";
+    public static final String STRIPE_IMPORT_NOTIFICATION_SUBJECT = "Stripe Import Report";
 
     /**
      * From Name of email.

@@ -21,6 +21,6 @@ public class StarterPlanLimits extends PlanLimits
 	webRuleLimit = 3;
 	pageViewsLimit = 1000;
 	reporting = "ALL";
-	whiteLabelEnabled = false;
+	whiteLabelEnabled = true;
     }
 }

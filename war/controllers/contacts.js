@@ -38,6 +38,9 @@ var ContactsRouter = Backbone.Router.extend({
 
 		/* Return back from Scribe after oauth authorization */
 		"gmail" : "email", "twitter" : "socialPrefs", "linkedin" : "socialPrefs",
+		
+		/* CALL */
+		"contacts/call-lead/:first/:last" : "addLead"
 	},
 
 	initialize : function()
@@ -82,22 +85,27 @@ var ContactsRouter = Backbone.Router.extend({
 	contacts : function(tag_id, filter_id, grid_view)
 	{
 
+		
 		// If contacts are selected then un selects them
 		SELECT_ALL = false;
 
 		var max_contacts_count = 20;
 		var template_key = "contacts";
 		var individual_tag_name = "tr";
+		
+		// Checks if user is using custom view. It check for grid view
 		if (grid_view || readCookie("agile_contact_view"))
 		{
 			template_key = "contacts-grid";
 			individual_tag_name = "div";
 		}
+		
 		// Default url for contacts route
 		var url = '/core/api/contacts';
 		var collection_is_reverse = false;
 		this.tag_id = tag_id;
 
+		// Check if contacts page is set to show companie
 		if (readCookie('company_filter'))
 		{
 			eraseCookie('contact_filter');
@@ -210,12 +218,14 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
+		var slateKey = getContactPadcontentKey(url);
+		
 		/*
 		 * cursor and page_size options are taken to activate
 		 * infiniScroll
 		 */
 		this.contactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : individual_tag_name,
-			cursor : true, page_size : 25, sort_collection : collection_is_reverse, postRenderCallback : function(el)
+			cursor : true, page_size : 25, sort_collection : collection_is_reverse, slateKey : slateKey,  postRenderCallback : function(el)
 			{
 
 				// Contacts are fetched when the app loads in
@@ -397,6 +407,9 @@ var ContactsRouter = Backbone.Router.extend({
 		var el = this.contactDetailView.render(true).el;
 
 		$('#content').html(el);
+		
+		// Check updates in the contact.
+		checkContactUpdated();
 	},
 
 	/**
@@ -583,9 +596,17 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Setup HTML Editor
 		if(id)
-			setupTinyMCEEditor('textarea#email-body');
+			setupTinyMCEEditor('textarea#email-body', false, function(){
+				
+				// Reset tinymce content
+				set_tinymce_content('email-body', '');
+			});
 		else
-			setupTinyMCEEditor('textarea#email-body', true);
+			setupTinyMCEEditor('textarea#email-body', true, function(){
+				
+				// Reset tinymce content
+				set_tinymce_content('email-body', '');
+			});
 		
 	},
 	
@@ -676,8 +697,10 @@ var ContactsRouter = Backbone.Router.extend({
 			return;
 		}
 
+		var slateKey = getContactPadcontentKey(url);
+		
 		this.contact_custom_view = new Base_Collection_View({ url : url, restKey : "contact", modelData : view_data,
-			templateKey : "contacts-custom-view", individual_tag_name : 'tr', cursor : true, page_size : 25, sort_collection : false,
+			templateKey : "contacts-custom-view", individual_tag_name : 'tr', slateKey : slateKey, cursor : true, page_size : 25, sort_collection : false,
 			postRenderCallback : function(el)
 			{
 				App_Contacts.contactsListView = App_Contacts.contact_custom_view;
@@ -709,5 +732,12 @@ var ContactsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 	},
-
+	
+	addLead : function(first, last){
+		$("#personModal").on("shown", function(){
+			$(this).find("#fname").val(first);
+			$(this).find("#lname").val(last);
+		});
+		$("#personModal").modal();
+	}
 });

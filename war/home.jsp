@@ -68,7 +68,11 @@ href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
 href="/css/agilecrm.css" />
-
+<style>
+.clickdesk_bubble {
+	display: none !important;
+}
+</style>
  <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script>
 
@@ -81,6 +85,8 @@ href="/css/agilecrm.css" />
 <script src="lib/ie/json.js"></script>
 <![endif]-->
 </head>
+
+
 
 <body>
 <div id="wrap">
@@ -148,6 +154,8 @@ var LOCAL_SERVER = <%=debug%>;
 
 var IS_FLUID = <%=is_fluid%>;
 
+var CLICKDESK_CODE_LOADED = false;
+
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
 
@@ -181,6 +189,8 @@ head.js(HANDLEBARS_LIB);
 <!-- Country Names from country codes -->
 head.js(LIB_PATH + 'lib/country-from-code.js');
 
+<!-- Inital.js Text avatars -->
+head.js(LIB_PATH + 'lib/text-avatar/initial.min.js');
 
 // Fetch/Create contact from our domain
 var Agile_Contact = {};
@@ -215,6 +225,27 @@ setTimeout(loadMiscScripts, 10000);
 
 
 <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/lib.css"></link>
+
+<!-- Google analytics code -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-44894190-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<!-- ClickDesk Live Chat Service for websites -->
+<script type='text/javascript'>
+var _glc =_glc || []; _glc.push('all_ag9zfmNsaWNrZGVza2NoYXRyDgsSBXVzZXJzGKD0uQoM');
+var glcpath = (('https:' == document.location.protocol) ? 'https://my.clickdesk.com/clickdesk-ui/browser/' : 
+'http://my.clickdesk.com/clickdesk-ui/browser/');
+var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
+</script>
+<!-- End of ClickDesk -->
 
 </body>
 </html>

@@ -35,6 +35,8 @@ var WidgetsRouter = Backbone.Router
 			"QuickBooks" : "QuickBooks", "QuickBooks/:id" : "QuickBooks",
 
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
+			
+			"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
 
 			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
 				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify" },
@@ -614,6 +616,18 @@ var WidgetsRouter = Backbone.Router
 									});
 
 				}
+			},
+			
+
+			/**
+			 * Manage Chargify Widget.
+			 */
+			Chargify : function(id)
+			{
+				if (!id)
+					show_set_up_widget("Chargify", "chargify-login");
+				else
+					fill_form(id, "Chargify", 'chargify-login')
 			},
 
 			/**

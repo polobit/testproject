@@ -148,7 +148,7 @@ public class EmailOpenServlet extends HttpServlet
 		}
 
 		List<ContactEmail> contactEmails = ContactEmailUtil.getContactEmailsBasedOnTrackerId(Long
-			.parseLong(trackerId));
+		        .parseLong(trackerId));
 		// If there is a Contact Email with the tracker Id, send the
 		// notification. If not, save the contact email.
 		if (contactEmails.size() > 0)
@@ -242,10 +242,10 @@ public class EmailOpenServlet extends HttpServlet
      * @param workflowName
      *            - Workflow Name of campaign with campaignId.
      */
-    private void addEmailOpenedLog(String campaignId, String subscriberId, String workflowName)
+    public static void addEmailOpenedLog(String campaignId, String subscriberId, String workflowName)
     {
 	LogUtil.addLogToSQL(campaignId, subscriberId, "Email Opened of campaign " + workflowName,
-		LogType.EMAIL_OPENED.toString());
+	        LogType.EMAIL_OPENED.toString());
     }
 
     /**
@@ -265,7 +265,7 @@ public class EmailOpenServlet extends HttpServlet
 	    if (!StringUtils.isEmpty(workflowName))
 	    {
 		NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,
-			new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName)));
+		        new JSONObject().put("custom_value", new JSONObject().put("workflow_name", workflowName)));
 		return;
 	    }
 	    NotificationPrefsUtil.executeNotification(Type.OPENED_EMAIL, contact,

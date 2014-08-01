@@ -44,11 +44,13 @@ public class ZendeskUtil
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON",
+		contactPrefsJSON);
 
-	// send request to plugins server and return response
-	return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/get", prefsJSON.toString(), "PUT");
-
+	// send request to plugins server and return response.
+	String tickets = new String(HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/get", prefsJSON.toString(),
+		"PUT").getBytes("UTF-8"), "UTF-8");
+	return tickets;
     }
 
     // Each Chat
@@ -68,14 +70,16 @@ public class ZendeskUtil
      * @throws Exception
      *             if the response is an exception
      */
-    public static String addTicket(Widget widget, String name, String email, String subject, String description) throws Exception
+    public static String addTicket(Widget widget, String name, String email, String subject, String description)
+	    throws Exception
     {
 
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email).put("visitor_name", name);
 	JSONObject messageJSON = new JSONObject().put("subject", subject).put("message", description);
 
-	JSONObject json = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON).put("messageJSON", messageJSON);
+	JSONObject json = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON)
+		.put("messageJSON", messageJSON);
 
 	// send request to plugins server and return response
 	return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/add", json.toString(), "PUT");
@@ -118,15 +122,14 @@ public class ZendeskUtil
      * @return {@link String} form of JSON
      * @throws Exception
      */
-    public static String getUserInfo(Widget widget) throws Exception
+    public static String getUserInfo(Widget widget, String email) throws Exception
     {
-	// get user info for the user logged in
-	String email = widget.getProperty("zendesk_username");
 
 	JSONObject pluginPrefsJSON = buildPluginPrefsJSON(widget);
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON",
+		contactPrefsJSON);
 
 	// send request to plugins server
 	String response = HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/users", prefsJSON.toString(), "PUT");
@@ -173,7 +176,8 @@ public class ZendeskUtil
 	JSONObject contactPrefsJSON = new JSONObject().put("visitor_email", email);
 	JSONObject messageJSON = new JSONObject().put("ticket_status", status);
 
-	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON).put("visitorJSON", contactPrefsJSON).put("messageJSON", messageJSON);
+	JSONObject prefsJSON = new JSONObject().put("pluginPrefsJSON", pluginPrefsJSON)
+		.put("visitorJSON", contactPrefsJSON).put("messageJSON", messageJSON);
 
 	return HTTPUtil.accessHTTPURL(pluginURL + "core/agile/zendesk/tickets/status", prefsJSON.toString(), "PUT");
     }
@@ -192,7 +196,7 @@ public class ZendeskUtil
     public static String getZendeskProfile(Widget widget, String email) throws Exception
     {
 	// Get the info of Zendesk logged in user
-	String userInfo = getUserInfo(widget);
+	String userInfo = getUserInfo(widget, email);
 	System.out.println("UserInfo in zendesk " + userInfo);
 
 	JSONObject zendeskInfo = new JSONObject();
@@ -233,7 +237,8 @@ public class ZendeskUtil
 	{
 	    // If widget properties null, exception occurs
 	    JSONObject pluginPrefs = new JSONObject().put("zendesk_username", widget.getProperty("zendesk_username"))
-		    .put("zendesk_password", widget.getProperty("zendesk_password")).put("zendesk_url", widget.getProperty("zendesk_url"));
+		    .put("zendesk_password", widget.getProperty("zendesk_password"))
+		    .put("zendesk_url", widget.getProperty("zendesk_url"));
 
 	    return pluginPrefs;
 	}

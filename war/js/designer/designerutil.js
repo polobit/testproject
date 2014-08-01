@@ -90,7 +90,7 @@ function get_custom_fields()
     var url = window.location.protocol + '//' + window.location.host;
 	
 	// Sends GET request for customfields.
-    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields', async: false, dataType:'json'}).responseText;
+    var msg = $.ajax({type: "GET", url: url+'/core/api/custom-fields/scope?scope=CONTACT', async: false, dataType:'json'}).responseText;
 	
 	// Parse stringify json
 	var data = JSON.parse(msg);
@@ -319,3 +319,45 @@ function split( val ) {
 function extractLast( term ) {
     return split( term ).pop();
   }
+
+/**
+ * Prefills Send Email's node from name and from email with CurrentUser
+ * email and name.
+ * 
+ * @param nodeJSONDefinition - node json
+ * 
+ * @param jsonData - prefilled data
+ *
+ **/
+function prefill_from_details(nodeJSONDefinition)
+{
+	try
+	{
+		var current_domain_user = window.parent.CURRENT_DOMAIN_USER;
+    	 
+		var from_json = {
+    		       			"from_name" : current_domain_user["name"],
+    		       			"from_email" : current_domain_user["email"]
+    	 	        	}
+    	 
+		return JSON.parse(JSON.stringify(from_json));
+    }
+	catch(err)
+    {
+    	console.log("Error occured in prefill_from_details...");
+    	console.log(err);
+    	return {};
+    }
+}
+
+/**
+ * Disables Text mandatory field only if HTML is given and Text is empty.
+ * 
+ * @param selector - nodeui element
+ **/
+function disable_text_required_property(selector)
+{
+	// Remove 'required' property of 'text' if 'html' is not empty and 'text' is empty
+	if(selector.find('#tinyMCEhtml_email').val() != "" && selector.find('#text_email').val() == "")
+		selector.find('#text_email').removeProp("required");
+}

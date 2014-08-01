@@ -48,13 +48,20 @@ var SettingsRouter = Backbone.Router.extend({
 	userPrefs : function()
 	{
 		$("#content").html(getTemplate("settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/user-prefs', template : "settings-user-prefs", reload : true,
-			postRenderCallback : function(el)
-			{
-				// Setup HTML Editor
-				setupHTMLEditor($('#WYSItextarea'));
-			} });
-		$('#prefs-tabs-content').html(view.render().el);
+		
+		var view = new Base_Model_View({ 
+						url : '/core/api/user-prefs', 
+						template : "settings-user-prefs", 
+						el: $('#prefs-tabs-content'), 
+						change: false, 
+						reload : true,
+						postRenderCallback: function(el)
+						{
+							// setup TinyMCE
+							setupTinyMCEEditor('textarea#WYSItextarea', true);
+						}
+			 		});
+		
 		$('#PrefsTab .active').removeClass('active');
 		$('.user-prefs-tab').addClass('active');
 		// $('#content').html(view.render().el);
@@ -225,8 +232,12 @@ var SettingsRouter = Backbone.Router.extend({
 		
 		$('#prefs-tabs-content').html(view.render().el);
 		
-		// setup TinyMCE
-		setupTinyMCEEditor('textarea#email-template-html');
+		// set up TinyMCE Editor
+		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+			
+			// Reset tinymce
+			set_tinymce_content('email-template-html', '');			
+		});
 		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-templates-tab').addClass('active');
@@ -260,16 +271,16 @@ var SettingsRouter = Backbone.Router.extend({
 		    window: 'email-templates'
 		});
 
-		var view = view.render();
-		$('#prefs-tabs-content').html(view.el);
+		$('#prefs-tabs-content').html(view.render().el);
 		
 		/** TinyMCE **/
 		
 		// set up TinyMCE Editor
-		setupTinyMCEEditor('textarea#email-template-html');
-		
-		// Insert content into tinymce
-		set_tinymce_content('email-template-html', currentTemplate.toJSON().text);
+		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+			
+			// Insert content into tinymce
+			set_tinymce_content('email-template-html', currentTemplate.toJSON().text);			
+		});
 		
 		/**End of TinyMCE**/
 		
@@ -288,6 +299,13 @@ var SettingsRouter = Backbone.Router.extend({
 		var view = new Base_Model_View({ url : 'core/api/notifications', template : 'settings-notification-prefs', reload : true,
 			postRenderCallback : function(el)
 			{
+				
+				// Update Notification prefs
+				notification_prefs = view.model.toJSON();
+				
+				console.log("updated notification prefs are...");
+				console.log(notification_prefs);
+				
 				head.load(CSS_PATH + 'css/bootstrap_switch.css', LIB_PATH + 'lib/bootstrapSwitch.js', LIB_PATH + 'lib/desktop-notify-min.js', function()
 				{
 					showSwitchChanges(el);

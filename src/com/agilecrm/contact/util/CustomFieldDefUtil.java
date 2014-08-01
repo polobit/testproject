@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.db.ObjectifyGenericDao;
 
 /**
@@ -130,6 +131,29 @@ public class CustomFieldDefUtil
     public static List<CustomFieldDef> getFieldByType(String type)
     {
 	return dao.listByProperty("field_type", CustomFieldDef.Type.valueOf(type.toUpperCase()));
+    }
+
+    public static List<String> getFieldLabelsByType(SCOPE scope, Type type)
+    {
+	List<String> customFieldLabels = new ArrayList<String>();
+
+	try
+	{
+	    List<CustomFieldDef> contactCustomFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(scope,
+		    String.valueOf(type));
+
+	    // Add labels to list
+	    for (CustomFieldDef customField : contactCustomFields)
+		customFieldLabels.add(customField.field_label);
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured in AgileTaskletUtil static block..." + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return customFieldLabels;
     }
 
 }

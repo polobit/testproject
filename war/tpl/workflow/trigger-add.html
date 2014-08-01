@@ -34,18 +34,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="control-group">
+                        <div class="control-group" style="display:none;">
                             <div id="RHS" name="RHS">
-
                                 <label class="control-label TAG_IS_ADDED TAG_IS_DELETED ADD_SCORE " style="width:200px!important;"></label>
                                 <div class="controls" style="margin-left:220px!important;width:230px!important;">
-
-                                    <input type="text" value="{{custom_tags}}" id="custom_tags" name="custom_tags" class="trigger-tags TAG_IS_ADDED TAG_IS_DELETED" style="margin-bottom: -1px;" placeholder="Enter tag" />
-                                    {{#if custom_score}}
-                                    <input type="text" placeholder="Enter Score" value="{{this.custom_score}}"id="add-score-value" name="custom_score" class="ADD_SCORE required custom-value digits" />
-                                    {{else}}
-                                    <input type="text" placeholder="Enter Score" id="add-score-value" name="custom_score" class="ADD_SCORE required custom-value digits" />
-                                    {{/if}}
+                                    <input type="text" value="{{custom_tags}}" id="trigger-custom-tags" name="custom_tags" class="required trigger-tags TAG_IS_ADDED TAG_IS_DELETED" style="margin-bottom: -1px;" placeholder="Enter tag" />
+                                    <input type="text" placeholder="Enter Score" {{#if custom_score}} value="{{this.custom_score}}" {{/if}} id="trigger-custom-score" name="custom_score" class="ADD_SCORE required custom-value digits" />
                                 </div>
                             </div>
                         </div>

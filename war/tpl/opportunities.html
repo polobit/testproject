@@ -86,7 +86,7 @@
 		<div style="max-height:50px!important;display:inline-block;width:158px!important;text-overflow:clip!important;">
 		{{#each contacts}}
         	{{#if_contact_type "PERSON"}}
-        		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+        		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px; "  title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
         	{{/if_contact_type}}
 			{{#if_contact_type "COMPANY"}}
         		<a href="#contact/{{id}}" class="activate-link hide-popover"><img class="thumbnail" {{getCompanyImage "40" "display:inline;"}} title="{{getPropertyValue properties "name"}}"/></a>
@@ -95,7 +95,6 @@
 		</div>{{#if_greater this.contacts.length "4"}}<span>...</span>{{/if_greater}}
 	</div>
 </td>
-
 <td value="{{expected_value}}"><div>{{currencySymbol}} {{numberWithCommas expected_value}}</div></td>
 <td><div style="">{{milestone}} ({{probability}}%) </div></td>
 <td><div style="width:8em;"><time class="deal-close-time" value="{{close_date}}" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time></div></td>

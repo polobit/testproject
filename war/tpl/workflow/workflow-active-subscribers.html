@@ -14,10 +14,12 @@
                         <li><a href="#workflow/removed-subscribers/{{get_id_from_hash}}">Removed</a></li>
                         <li><a href="#workflow/unsubscribed-subscribers/{{get_id_from_hash}}">Unsubscribed</a></li>
                         <li><a href="#workflow/hardbounced-subscribers/{{get_id_from_hash}}">Hard Bounced</a></li>
+						<li><a href="#workflow/softbounced-subscribers/{{get_id_from_hash}}">Soft Bounced</a></li>
+						<li><a href="#workflow/spam-reported-subscribers/{{get_id_from_hash}}">Spam Reported</a></li>
 					</ul>
 				</div>
 			</div>
-			<h1>Active Subscribers<small> - <span id="subscribers-campaign-name"></span></small> <span class="badge">{{subscribers_count}}</span></h1>
+			<h3>Active Subscribers<!-- <small> - <span id="subscribers-campaign-name"></span></small>--> <span class="badge">{{subscribers_count}}</span></h3>
         </div>
     </div>
 </div>
@@ -28,7 +30,7 @@
 
 {{#if this.length}}
 <div class="row">
-	<div class="span10">
+	<div class="span12">
  		<div class="data">
         	<div class="data-container">
 		    	<div class="btn delete-checked-contacts" id="remove-active-from-campaign" style="top: -10px; display: none;"> Delete</div>
@@ -57,7 +59,7 @@
 <script id="workflow-active-contacts-model-template" type="text/html">
 <td class="data" data={{id}} style="width:20em;">
 	<div style="display:inline;padding-right:10px;height:auto;">
-    	<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px;" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
+    	<a href="#contact/{{id}}" class="activate-link"><img class="thumbnail img-inital" data-name="{{dataNameAvatar properties}}" src="{{gravatarurl properties 40}}" width="40px" height="40px" style="display:inline; width:40px; height:40px;" title="{{getPropertyValue properties "first_name"}} {{getPropertyValue properties "last_name"}}" /></a>
     </div>
  	<div style="height:auto;display:inline-block;vertical-align:top;text-overflow:ellipsis;white-space:nowrap;width:12em;overflow:hidden;">
     	<b>	{{contact_name properties type}} </b>

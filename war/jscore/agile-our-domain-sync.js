@@ -94,8 +94,7 @@ function create_contact_custom_field(name, value, type, subtype)
 	var json = {};
 	json["name"] = name;
 	json["value"] = value;
-	json["type"] = type;
-	json["subtype"] = subtype;
+	json["subtype"] = type;
 
 	console.log(value);
 	return json;
@@ -144,7 +143,7 @@ function add_timezone_tag()
 {
 	var date = new Date(); 
 	var startTime = date.getUTCHours();
-	if(startTime >= 4 && startTime <=18) {
+	if(startTime >= 4 && startTime <=21) {
 		add_tag_our_domain("GMT");
 	}
 }
