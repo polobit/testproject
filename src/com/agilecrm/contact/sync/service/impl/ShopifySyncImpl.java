@@ -80,6 +80,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 			{
 
 			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
+			   
 			    saveCustomersOrder(customers.get(i).get("id").toString(), contact);
 
 			}
@@ -168,7 +169,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		}
 		else if (update.equalsIgnoreCase("edited"))
 		{
-		    uri.append("&updated_at_max=" + URLEncoder.encode(lastSyncPoint));
+		    uri.append("&updated_at_min=" + URLEncoder.encode(lastSyncPoint));
 		}
 	    }
 	}
