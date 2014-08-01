@@ -88,6 +88,11 @@ public class ContactFilterResultFetcher
 	setAvailableCount();
 
     }
+    
+    public ContactFilterResultFetcher(Map<String, Object> queryMap, String orderBy)
+    {
+	
+    }
 
     private void setAvailableCount()
     {

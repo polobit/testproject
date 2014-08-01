@@ -48,11 +48,6 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
-<<<<<<< HEAD
-=======
-import com.thirdparty.google.ContactPrefs.Duration;
-import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
->>>>>>> yaswanth
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 

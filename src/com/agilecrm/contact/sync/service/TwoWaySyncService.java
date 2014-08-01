@@ -3,9 +3,12 @@
  */
 package com.agilecrm.contact.sync.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
 import com.thirdparty.google.contacts.ContactsSynctoGoogle;
 
@@ -46,7 +49,6 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	{
 	    syncContactFromClient();
 	}
-
     }
     
     public void syncContactsToClient()
@@ -55,7 +57,18 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	uploadContactsToClient(fetchUpdatedContactsFromAgile());
     }
 
-    public abstract List<Contact> fetchNewContactsFromAgile();
+    public List<Contact> fetchNewContactsFromAgile()
+    {
+	Map<String, Object> queryMap = new HashMap<String, Object>();
+	queryMap.put("created_time > ", time);
+
+	if (prefs.my_contacts)
+	    queryMap.put("owner_key", pref.getDomainUser());
+
+	queryMap.put("type", Type.PERSON);
+
+	System.out.println(queryMap);
+    }
     
     public abstract Contact wrapContactToClientFormat();
 
