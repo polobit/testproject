@@ -33,12 +33,16 @@ public class ContactFilterResultFetcher
     private String cursor = null;
     private int fetched_count = 0;
     private int current_index = 0;
+    private int max_fetch_set_size;
+
     private int max_fetch_size;
+    
     private ContactFilter filter;
     private DefaultFilter systemFilter = null;
     private List<Contact> contacts;
     private boolean init_fetch = false;
     private String contact_ids = null;
+    private String orderBy = null;
 
     private Integer number_of_contacts;
     private Integer number_of_companies;
@@ -58,21 +62,21 @@ public class ContactFilterResultFetcher
 	this.filter = ContactFilter.getContactFilter(filter_id);
     }
 
-    public ContactFilterResultFetcher(long filter_id, int max_fetch_size)
+    public ContactFilterResultFetcher(long filter_id, int max_fetch_set_size)
     {
 	this.filter = ContactFilter.getContactFilter(filter_id);
-	this.max_fetch_size = max_fetch_size;
+	this.max_fetch_set_size = max_fetch_set_size;
     }
 
-    public ContactFilterResultFetcher(ContactFilter filter, int max_fetch_size)
+    public ContactFilterResultFetcher(ContactFilter filter, int max_fetch_set_size)
     {
 	this.filter = filter;
-	this.max_fetch_size = max_fetch_size;
+	this.max_fetch_set_size = max_fetch_set_size;
     }
 
-    public ContactFilterResultFetcher(String filter_id, int max_fetch_size, String contact_ids, Long currentDomainUserId)
+    public ContactFilterResultFetcher(String filter_id, int max_fetch_set_size, String contact_ids, Long currentDomainUserId)
     {
-	this.max_fetch_size = max_fetch_size;
+	this.max_fetch_set_size = max_fetch_set_size;
 	this.contact_ids = contact_ids;
 	try
 	{
@@ -89,9 +93,12 @@ public class ContactFilterResultFetcher
 
     }
     
-    public ContactFilterResultFetcher(Map<String, Object> queryMap, String orderBy)
+    public ContactFilterResultFetcher(Map<String, Object> searchMap, String orderBy, Integer max_fetch_set_size, Integer max_limit)
     {
-	
+	this.searchMap = searchMap;
+	this.orderBy = orderBy;
+	this.max_fetch_set_size = max_fetch_set_size;
+	this.max_fetch_size = max_limit;
     }
 
     private void setAvailableCount()
@@ -236,14 +243,17 @@ public class ContactFilterResultFetcher
 
 	if (systemFilter != null)
 	{
-	    contacts = ContactFilterUtil.getContacts(systemFilter, max_fetch_size, cursor);
+	    contacts = ContactFilterUtil.getContacts(systemFilter, max_fetch_set_size, cursor);
 	    fetched_count += size();
 	    setCursor();
 	    return contacts;
 	}
 	else if (searchMap != null)
 	{
-	    contacts = Contact.dao.fetchAll(max_fetch_size, cursor, searchMap);
+	    if(orderBy != null)
+		contacts = Contact.dao.fetchAllByOrder(max_fetch_set_size, cursor, searchMap, true, false, orderBy);
+	    else
+		contacts = Contact.dao.fetchAll(max_fetch_set_size, cursor, searchMap);
 	    fetched_count += size();
 	    setCursor();
 	    return contacts;
@@ -274,7 +284,7 @@ public class ContactFilterResultFetcher
 
 	// Fetches first 200 contacts
 	Collection<Contact> contactCollection = new QueryDocument<Contact>(new ContactDocument().getIndex(),
-		Contact.class).advancedSearch(filter.rules, max_fetch_size, cursor);
+		Contact.class).advancedSearch(filter.rules, max_fetch_set_size, cursor);
 
 	if (contactCollection == null)
 	{
@@ -318,7 +328,7 @@ public class ContactFilterResultFetcher
 
     public boolean hasNextSet()
     {
-	if (!init_fetch || (size() >= max_fetch_size && cursor != null))
+	if (max_fetch_size <= fetched_count && (!init_fetch || (size() >= max_fetch_set_size && cursor != null)))
 	{
 	    int size = size();
 	    if (size == 0 && init_fetch)
@@ -373,7 +383,6 @@ public class ContactFilterResultFetcher
 	Contact contact = null;
 	if (current_index < size())
 	{
-
 	    contact = contacts.get(current_index);
 	    ++current_index;
 	}
