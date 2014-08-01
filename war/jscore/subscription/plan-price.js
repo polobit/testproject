@@ -56,6 +56,13 @@ var USER_DETAILS = {
 				return "free";
 			return userJSON.plan.PlanType;
 		},
+		
+		getDomainName : function(userJSON){
+			if(!userJSON)
+				return "free";
+			return userJSON.domain_name;
+		},
+		
 		getCurrentPlanId: function(userJSON)
 		{
 			if(!userJSON)
@@ -303,6 +310,7 @@ $(function()
 	        plan_json.discount = discount;
 		    plan_json.quantity = quantity;
 		    plan_json.current_plan = USER_DETAILS.getCurrentPlanName(USER_BILLING_PREFS);
+		    plan_json.domain_name = USER_DETAILS.getDomainName(USER_BILLING_PREFS);
 		    if(!$.isEmptyObject(USER_CREDIRCARD_DETAILS)){
 		    	
 		    	plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);

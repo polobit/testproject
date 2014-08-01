@@ -1,10 +1,10 @@
 <script id="all-domain-users-model-template" type="text/html">
 <td></td>
-<td>{{domain}}</td>
+ <td class='data' data='{{domain}}'>{{domain}}</td>
 <td>{{name}}</td>
 <td>{{email}}</td>
 <td>{{is_account_owner}}</td>
-<td>{{#if is_account_owner}}<a href="#" data="{{domain}}" class="delete-namespace btn btn-danger">Delete</a>{{/if}}</td>
+
 </script>
 
 <script id="all-domain-users-collection-template" type="text/html">
@@ -45,10 +45,10 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Account Owner</th>
-						<th>Delete Domain</th>
+						
                     </tr>
                 </thead>
-                <tbody id="all-domain-users-model-list"></tbody>
+                <tbody id="all-domain-users-model-list" ></tbody>
             </table>
         </div>
     </div>

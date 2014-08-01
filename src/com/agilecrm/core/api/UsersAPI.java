@@ -19,13 +19,24 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import org.json.JSONObject;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.webrules.WebRule;
+import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.gson.JsonObject;
 
 /**
  * <code>UsersAPI</code> includes REST calls to interact with {@link DomainUser}
@@ -54,11 +65,11 @@ public class UsersAPI
     {
 	try
 	{
+		
+		
 	    String domain = NamespaceManager.get();
-
 	    // Gets the users and update the password to the masked one
 	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
-
 	    return users;
 	}
 	catch (Exception e)
@@ -67,7 +78,39 @@ public class UsersAPI
 	    return null;
 	}
     }
-
+//fetches users for particular domain
+   
+    @Path("/admin/domain/{domainname}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<DomainUser> getDomainUserDetails(@PathParam("domainname") String domainname)
+    {
+	try
+	{
+	    String domain = domainname;
+	    if(domain.contains("@")){
+	    	String email=domain;
+	    	DomainUser domainUser =DomainUserUtil.getDomainUserFromEmail(email);
+	    	if(domainUser!=null){
+	    	String userDomain=domainUser.domain;
+	    	 List<DomainUser> domainUsers = DomainUserUtil.getUsers(userDomain);
+	 	    return domainUsers;
+	    	}
+	    }
+	    // Gets the users and update the password to the masked one
+	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
+	    return users;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+    
+    
+    
+    
     // Send Current User Info
     @Path("current-user")
     @GET
@@ -100,6 +143,7 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
+    	
 	try
 	{
 	    domainUser.save();
@@ -112,6 +156,7 @@ public class UsersAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
+    
 
     @GET
     @Path("count")
@@ -121,6 +166,7 @@ public class UsersAPI
 	return String.valueOf(DomainUserUtil.count());
     }
 
+    
     /**
      * Updates the existing user
      * 
@@ -221,11 +267,11 @@ public class UsersAPI
     {
 	String domain = NamespaceManager.get();
 
-	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
+	/*if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry you don't have privileges to access this page.")
 		    .build());
-	}
+	}*/
 
 	if (count != null)
 	{
@@ -236,6 +282,13 @@ public class UsersAPI
 	return DomainUserUtil.getAllUsers();
     }
 
+    
+  
+
+    
+    
+    
+    
     /**
      * Delete domain users of particular namespace
      */
@@ -243,6 +296,7 @@ public class UsersAPI
     @DELETE
     public void deleteDomainUser(@PathParam("namespace") String namespace)
     {
+    	System.out.println("delete request for deletion of account from admin panel "+namespace);
 	String domain = NamespaceManager.get();
 
 	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
@@ -294,4 +348,76 @@ public class UsersAPI
     {
 	return AgileUser.getUsers();
     }
+    
+    
+    @Path("/admin/domain/adminpanel/{id}")
+    @DELETE
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void deleteDomainUserFromAdminPanel(@PathParam("id") String id)
+    {
+    	System.out.println("delete request for domain user deletion from admin panel"+id);
+    	DomainUser domainUser;
+	try
+	{
+		long domainuserid=Long.parseLong(id);
+		
+		 domainUser=DomainUserUtil.getDomainUser(domainuserid);
+	    int count = DomainUserUtil.count();
+
+	    // Throws exception, if only one account exists
+	    if (count == 1)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Can’t delete all users").build());
+
+	    // Throws exception, if user is owner
+	    if (domainUser.is_account_owner)
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Master account can’t be deleted").build());
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.out.println(e.getMessage());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	}
+
+	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
+
+	domainUser.delete();
+    }
+   //fetches account stats  from admin panel for partcular domain- stats means count for contacts,triggers.. 
+    @Path("/adminpanel/domainstatscount/{domainname}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String getAccountStats(@PathParam ("domainname") String domainname) {
+    	String oldnamespace=NamespaceManager.get();
+    	NamespaceManager.set(domainname);
+    	
+    	JSONObject json = new JSONObject();
+    	 
+    	 int webrulecount=WebRuleUtil.getCount();
+    	 int contactcount=ContactUtil.getCount();
+    	 int dealscount=OpportunityUtil.getCount();
+    	 int docs=DocumentUtil.getCount();
+    	 int eventcount=EventUtil.getCount();
+    	 int compaigncount=WorkflowUtil.getCount();
+    	 int triggerscount=TriggerUtil.getCount();
+    	
+    	try {
+			json.put("webrule_count",webrulecount);
+			json.put("contact_count",contactcount);
+	    	json.put("deals_count",dealscount);
+	    	json.put("docs_count",docs);
+	    	json.put("events_count",eventcount);
+	    	json.put("compaign_count",compaigncount);
+	    	json.put("triggers_count",triggerscount);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	System.out.println("status account "+json);
+    	NamespaceManager.set(oldnamespace);
+    	return json.toString();
+    }
+    
+    
 }
