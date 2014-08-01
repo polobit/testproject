@@ -19,35 +19,27 @@
 			<!--  API Key templete -->
 
 <div class="tab-pane active" id="api">
-   Here is your API key you can use to access through various clients
+   Here is your API key to access Agile using REST clients.
    <div class="clearfix"></div>
    <br/>
    <div class="row-fluid">
       <div class="span11">
          <div>
-			<!--<a class="right btn" id="api_key_code_icon" style="margin:4px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
-
-			<a class="right btn" id="api_key_generate_icon" style="margin:4px 10px 0px 0px;cursor:pointer;"><i class="icon-repeat"></i></a>
-            <pre class="prettyprint pln" id="api_key_code">{{api_key}}</pre>
-
+			<pre class="prettyprint pln" id="api_key_code">{{api_key}}<span style="display: inline-block; float:right;"><a id="api_key_generate_icon" style="margin:4px 4px 0px 0px;cursor:pointer;"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" style="height: 6px; vertical-align: text-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
          </div>
       </div>
    </div>
-  Here is your JSAPI key you can use to access throught JavaScript
+  Here is your Javascript API key for analytics and web grabbers.
   <div class="clearfix"></div>
    <br/>
       <div class="row-fluid">
       <div class="span11">
          <div>
-            <!--<a class="right btn" id="jsapi_key_code_icon" style="margin:4px 10px 0px 0px;cursor:pointer;"><i class="icon-copy"></i></a>-->
-
-			<a class="right btn" id="jsapi_key_generate_icon" style="margin:4px 10px 0px 0px;cursor:pointer;"><i class="icon-repeat"></i></a>
-            <pre class="prettyprint pln" id="jsapi_key_code">{{js_api_key}}</pre>
-
+			<pre class="prettyprint pln" id="jsapi_key_code">{{js_api_key}}<span style="display: inline-block; float:right;"><a id="jsapi_key_generate_icon" style="margin:4px 4px 0px 0px;cursor:pointer;"><i class="icon-repeat"></i></a><img border="0" src="/img/help.png" style="height: 6px; vertical-align: text-top" rel="popover" data-placement="bottom" data-title="" data-content="Reset JavaScript API Key" id="element" data-trigger="hover" data-original-title=""></span></pre>
          </div>
       </div>
    </div>
-	<form id="allowedDomainsForm" method="get" action="" class="form-horizontal">
+	<!--<form id="allowedDomainsForm" method="get" action="" class="form-horizontal">
 
     	<label>Allowed Domains<span class="field_req">*</span></label> <br/>
 		<textarea class="required" name="allowed_domains" cols="50" rows="4" id="allowed_domains">{{allowed_domains}}</textarea>
@@ -55,7 +47,7 @@
 		<input type="text" name="api_key" class="hidden" value={{api_key}}>
 		<input type="text" name="js_api_key" class="hidden" value={{js_api_key}}> <br/> <br/>       	
 		<button type="submit" class="save btn btn-primary">Save Changes</button>
-	</form>
+	</form>-->
 </div>
 
 			<!-- End of API Key templete-->
