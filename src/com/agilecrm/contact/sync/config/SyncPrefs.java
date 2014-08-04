@@ -14,8 +14,8 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * Class SyncPrefs contains only required property i.e needs most of client to
- * save prefs
+ * Class SyncPrefs contains required properties that found in most of third
+ * party client for import contacts and save prefs
  * 
  * @author jitendra
  */

@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package com.agilecrm.contact.sync.service.impl;
 
 import java.util.ArrayList;
@@ -22,9 +20,15 @@ import com.thirdparty.zoho.ZohoUtils;
 public class ZohoSyncImpl extends OneWaySyncService
 {
 
-    /** The import options. */
+    /**
+     * import options holds third party module whose data needs to be imported
+     * in case of zoho option can be Leads,Accounts,Contacts.. etc
+     */
     private List<String> importOptions = new ArrayList<String>(0);
 
+    /**
+     * Initializing import
+     */
     @Override
     public void initSync()
     {
