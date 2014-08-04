@@ -186,9 +186,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	// Build query with URL
 
-	// query.setMaxResults(150);
+	 query.setMaxResults(MAX_FETCH_LIMIT_FOR_GOOGLE);
 
-	// query.setUpdatedMin(dateTime);
+	query.setUpdatedMin(dateTime);
 	query.setStringCustomParameter("access_token", prefs.token);
 
 	/*
@@ -214,7 +214,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 * Query set to fetch contacts ordered by last modified time, so saving
 	 * last contacts time can be saved in last synced time
 	 */
-	// query.setStringCustomParameter("orderby", "lastmodified");
+	 query.setStringCustomParameter("orderby", "lastmodified");
 
 	return query;
 
