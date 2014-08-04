@@ -413,9 +413,11 @@ public class UsersAPI
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
+    	finally{
+    		NamespaceManager.set(oldnamespace);
+    	}
     	System.out.println("status account "+json);
-    	NamespaceManager.set(oldnamespace);
+    	
     	return json.toString();
     }
     
