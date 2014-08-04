@@ -3,10 +3,13 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.StripeContactWrapperImpl;
@@ -15,6 +18,8 @@ import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
+import com.stripe.model.Charge;
+import com.stripe.model.ChargeCollection;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerCollection;
 
@@ -31,6 +36,8 @@ public class StripeSyncImpl extends OneWaySyncService
     private int currentPage = 1;
     private int pageSize = 100;
     private String syncTime = null;
+
+    SimpleDateFormat sf = new SimpleDateFormat("dd / MM / yyyy");
 
     /**
      * Implementation of initSync for Stripe.
@@ -53,7 +60,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    syncTime = prefs.othersParams;
 
 	    Map<String, Object> option = new HashMap<String, Object>();
-            option.put("limit", 1);
+	    option.put("limit", 1);
 	    option.put("include[]", "total_count");
 	    if (syncTime.equalsIgnoreCase("second"))
 	    {
@@ -77,13 +84,17 @@ public class StripeSyncImpl extends OneWaySyncService
 
 	    while (currentPage <= pages)
 	    {
-		CustomerCollection customerCollections = Customer.all(Options(syncTime), prefs.apiKey);
+		CustomerCollection customerCollections = Customer.all(Options(syncTime),prefs.apiKey);
 		List<Customer> customers = customerCollections.getData();
 		for (Customer customer : customers)
 		{
 		    if (!isLimitExceeded())
-			wrapContactToAgileSchemaAndSave(customer);
-		   
+		    {
+			Contact contact = wrapContactToAgileSchemaAndSave(customer);
+
+			printCustomerCharges(contact, customer.getId());
+		    }
+
 		}
 
 		if (customers.size() != 0)
@@ -168,6 +179,46 @@ public class StripeSyncImpl extends OneWaySyncService
     {
 	// TODO Auto-generated method stub
 	return StripeContactWrapperImpl.class;
+    }
+
+    private void printCustomerCharges(Contact contact, String customerId)
+    {
+	HashMap<String, Object> chargeOption = new HashMap<String, Object>();
+	chargeOption.put("customer", customerId);
+	if (contact != null)
+	{
+	    try
+	    {
+		ChargeCollection chargeCollection = Charge.all(chargeOption, prefs.apiKey);
+		List<Charge> charges = chargeCollection.getData();
+		if (charges.size() > 0)
+		{
+		    System.out.println("==================================================================");
+		    System.out.println("==============    Customer Charge Details  =======================");
+		    System.out.println("--------------------------------------------------------------------");
+		    for (Charge charge : charges)
+		    {
+			System.out.println("Customer name  :  "+charge.getCard().getName());
+			System.out.println("ContactId    :  " + contact.id);
+			System.out.println("Charge       :  " + charge.getAmount() + " " + charge.getCurrency());
+			if (charge.getFailureMessage() == null)
+			    System.out.println("Status       :  Successfull");
+			else
+			    System.out.println("Status    :  " + charge.getFailureMessage());
+			System.out.println("Date         :  " + sf.format(new Date(charge.getCreated()*1000)));
+		    }
+		    System.out.println("--------------------------------------------------------------------");
+		    System.out.println("==================================================================");
+		}
+	    }
+	    catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
+		    | APIException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
+	}
     }
 
 }
