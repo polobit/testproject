@@ -32,20 +32,25 @@ import com.thirdparty.google.contacts.ContactsSynctoGoogle;
 import com.thirdparty.google.groups.GoogleGroupDetails;
 import com.thirdparty.google.groups.util.ContactGroupUtil;
 
-// TODO: Auto-generated Javadoc
 /**
- * <code>GoogleSyncImpl</code> provide service to upload contacts from agile to
- * google and retrieve contacts from google.
+ * <code>GoogleSyncImpl</code> extends TwoWaySyncService provides functionality
+ * for sync contact from google and save in agile.
  * 
  * @author jitendra
  */
 public class GoogleSyncImpl extends TwoWaySyncService
 {
+
+    /** The Constant MAX_FETCH_LIMIT_FOR_GOOGLE. */
     private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 200;
 
-    /** The contact service. */
+    /** contact service. */
     private ContactsService contactService;
+
+    /** previous_synced_time unix timestamp date object */
     private Long previous_synced_time = 0l;
+
+    /** last_synced_from_client hold date as long ie unix timestamp */
     private Long last_synced_from_client = 0l;
     private int index = 1;
 
@@ -56,7 +61,9 @@ public class GoogleSyncImpl extends TwoWaySyncService
     {
 	int i = 0;
 
-	// Refresh token before starting sync
+	/**
+	 * Refresh token before starting sync
+	 */
 	try
 	{
 	    GoogleServiceUtil.refreshGoogleContactPrefsandSave(prefs);
@@ -64,16 +71,17 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
 	while (i <= MAX_SYNC_LIMIT)
 	{
 
-	    // Retrieves contacts from google.
+	    /**
+	     * Retrieves contacts from google.
+	     */
 	    List<ContactEntry> entries = fetchContactsFromGoogle();
-	    /*
+	    /**
 	     * If entires are null then method should either return or break
 	     * loop. If it is first set of results then saving contact prefs is
 	     * not necessary as not atleast single set of 200 contacts are
@@ -116,14 +124,15 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	Preconditions.checkEmptyString(accessToken, "Access token is empty");
 
-	// Builds service with token
+	/**
+	 * Builds service with token
+	 */
 	try
 	{
 	    contactService = GoogleServiceUtil.getService(accessToken);
 	}
 	catch (OAuthException e1)
 	{
-	    // TODO Auto-generated catch block
 	    e1.printStackTrace();
 	    return new ArrayList<ContactEntry>();
 	}
@@ -136,14 +145,15 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	ContactFeed resultFeed = null;
 
-	// Retrieves result feed
+	/**
+	 * Retrieves result feed
+	 */
 	try
 	{
 	    resultFeed = contactService.getFeed(myQuery, ContactFeed.class);
 	}
 	catch (IOException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	catch (ServiceException e)
@@ -156,6 +166,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	return resultFeed.getEntries();
     }
 
+    /**
+     * Builds the query for retrieves google contacts.
+     * 
+     * @return the query
+     */
     private Query buildQuery()
     {
 	// myQuery.setUpdatedMin(dateTime);
@@ -166,7 +181,6 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	}
 	catch (MalformedURLException e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
@@ -191,7 +205,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	query.setUpdatedMin(dateTime);
 	query.setStringCustomParameter("access_token", prefs.token);
 
-	/*
+	/**
 	 * If sync from group is not null then considering user chose a group to
 	 * sync from instead of default "My contacts" group. If it is null then
 	 * , by default, contacts are fetched from My contacts group.
@@ -204,15 +218,12 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    query.setStringCustomParameter("group", prefs.sync_from_group);
 	}
 
-	/*
+	/**
 	 * To avoid fetching contacts that are already synced, query is set to
 	 * fetch contacts that are created/updated after last syced time (which
-	 * is created time of last contact fetched from google)
-	 */
-
-	/*
-	 * Query set to fetch contacts ordered by last modified time, so saving
-	 * last contacts time can be saved in last synced time
+	 * is created time of last contact fetched from google) Query set to
+	 * fetch contacts ordered by last modified time, so saving last contacts
+	 * time can be saved in last synced time
 	 */
 	 query.setStringCustomParameter("orderby", "lastmodified");
 
@@ -221,7 +232,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
     }
 
     /**
-     * Save contacts in agile.
+     * Save contacts in agile crm.
      * 
      * @param entries
      *            the entries
@@ -243,6 +254,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	last_synced_from_client = created_at > last_synced_from_client ? created_at : last_synced_from_client;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.agilecrm.contact.sync.service.ContactSyncService#updateLastSyncedInPrefs
+     * ()
+     */
     @Override
     protected void updateLastSyncedInPrefs()
     {
