@@ -153,14 +153,13 @@ public class SubscriptionApi
     public Subscription subscribeForParticularDomain(Subscription subscribe) throws PlanRestrictedException, WebApplicationException
     {
     	System.out.println("plan upgradation request from Admin panel/support panel");
-    	
+    	System.out.println(subscribe);
     	String oldnamespace=NamespaceManager.get(); 
 	try
 	{   
 		
 		String domain=subscribe.domain_name;
 		
-	//String domain="jagadeesh";
 		System.out.println("domain name in subscribe for particular domain "+domain);
 		
 	
