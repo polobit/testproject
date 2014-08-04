@@ -71,6 +71,12 @@ public class ContactsImportUtil
 	    
 	    
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+	    
+	    if(contactPrefs.inProgress)
+		return;
+	    
+	    contactPrefs.inProgress = true;
+	    contactPrefs.save();
 
 		// Create Task and push it into Task Queue
 		taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray())
@@ -83,6 +89,8 @@ public class ContactsImportUtil
 	}
 	catch (Exception e)
 	{
+	    contactPrefs.inProgress = false;
+	    contactPrefs.save();
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
