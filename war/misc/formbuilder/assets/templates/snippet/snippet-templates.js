@@ -5,7 +5,6 @@ define(function(require) {
   , textinput                = require('text!templates/snippet/textinput.html')
   , appendedcheckbox         = require('text!templates/snippet/appendedcheckbox.html')
   , appendedtext             = require('text!templates/snippet/appendedtext.html')
-  , filebutton               = require('text!templates/snippet/filebutton.html')
   , button                   = require('text!templates/snippet/button.html')
   , buttondouble             = require('text!templates/snippet/buttondouble.html')
   , buttondropdown           = require('text!templates/snippet/buttondropdown.html')
@@ -29,7 +28,6 @@ define(function(require) {
     , textinput                : textinput
     , appendedcheckbox         : appendedcheckbox
     , appendedtext             : appendedtext
-    , filebutton               : filebutton
     , singlebutton             : button
     , doublebutton             : buttondouble
     , buttondropdown           : buttondropdown
