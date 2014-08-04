@@ -129,7 +129,6 @@ public class CronUtil
 	    searchMap.put("campaign_id", campaignId);
 
 	String oldNamespace = NamespaceManager.get();
-
 	// As Crons exist in empty namespace, namespace is must
 	if (StringUtils.isBlank(oldNamespace))
 	    return;
@@ -138,7 +137,6 @@ public class CronUtil
 
 	// namespace
 	searchMap.put("namespace", oldNamespace);
-
 	NamespaceManager.set("");
 
 	try
