@@ -46,7 +46,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	if (prefs.sync_type == SYNC_TYPE.TWO_WAY)
 	{
 	    syncContactToClient();
-	    syncContactFromClient();
+	    uploadContactsToClient();
 	}
 	else if (prefs.sync_type == SYNC_TYPE.AGILE_TO_CLIENT)
 	{
@@ -54,7 +54,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	}
 	else if (prefs.sync_type == SYNC_TYPE.CLIENT_TO_AGILE)
 	{
-	    syncContactFromClient();
+	    uploadContactsToClient();
 	}
     }
 
@@ -65,16 +65,10 @@ public abstract class TwoWaySyncService extends ContactSyncService
 	        : prefs.last_synced_to_client;
     }
 
-    public abstract Contact wrapContactToClientFormat();
-
-    public abstract List<Contact> fetchUpdatedContactsFromAgile();
-
     private void syncContactToClient()
     {
 	ContactsSynctoGoogle.updateContacts(prefs);
     }
-
-    public abstract void syncContactFromClient();
 
     private void uploadContactsToClient()
     {

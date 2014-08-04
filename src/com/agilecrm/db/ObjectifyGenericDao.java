@@ -471,8 +471,6 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	if (!forceLoad)
 	    return fetchAll(max, cursor, map);
 
-	System.out.println("cached result : "
-		+ CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count"));
 	CacheUtil.deleteCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count");
 	return fetchAll(max, cursor, map);
     }

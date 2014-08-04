@@ -73,19 +73,18 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	    ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
-
+	    ContactUtil.deleteContacts(fetcher.nextSet());
 	}
-	
+
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
 
 	String message = "";
-	if(fetcher.getAvailableContacts() > 0)
-	    message = fetcher.getAvailableContacts() +" Contacts deleted";
-	else if(fetcher.getAvailableCompanies() > 0)
-	    message = fetcher.getAvailableCompanies() +" Companies deleted";
-	
+	if (fetcher.getAvailableContacts() > 0)
+	    message = fetcher.getAvailableContacts() + " Contacts deleted";
+	else if (fetcher.getAvailableCompanies() > 0)
+	    message = fetcher.getAvailableCompanies() + " Companies deleted";
+
 	BulkActionNotifications.publishNotification(message);
     }
 
@@ -115,14 +114,15 @@ public class BulkOperationsAPI
 	}
 
 	String message = "Owner changed for ";
-	if(fetcher.getAvailableContacts() > 0)
-	    message = message + fetcher.getAvailableContacts() +" Contacts";
-	else if(fetcher.getAvailableCompanies() > 0)
-	    message = message + fetcher.getAvailableCompanies() +" Companies";
-	
+	if (fetcher.getAvailableContacts() > 0)
+	    message = message + fetcher.getAvailableContacts() + " Contacts";
+	else if (fetcher.getAvailableCompanies() > 0)
+	    message = message + fetcher.getAvailableCompanies() + " Companies";
+
 	BulkActionNotifications.publishNotification(message);
-	
-	//BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE, String.valueOf(0));
+
+	// BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+	// String.valueOf(0));
     }
 
     /**
@@ -146,26 +146,26 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	   // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), workflowId);
 	}
-	
+
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
-	
-	
 
-	System.out.println("Total contacts subscribed to campaign " + workflowId + " is " + String.valueOf(fetcher.getAvailableContacts()));
+	System.out.println("Total contacts subscribed to campaign " + workflowId + " is "
+	        + String.valueOf(fetcher.getAvailableContacts()));
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN, String.valueOf(fetcher.getAvailableContacts()));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
+	        String.valueOf(fetcher.getAvailableContacts()));
 
 	try
 	{
 	    Mailgun.sendMail("campaigns@agile.com", "Campaign Observer", "naresh@agilecrm.com", null, null,
 		    "Campaign Initiated in " + NamespaceManager.get(), null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
-			    + fetcher.getAvailableContacts(), null);
+		            + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
+		            + fetcher.getAvailableContacts(), null);
 	}
 	catch (Exception e)
 	{
@@ -219,12 +219,12 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	   // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.addTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
-	
+
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     @SuppressWarnings("unchecked")
@@ -264,13 +264,12 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	   // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.removeTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
-	
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     /**
@@ -401,38 +400,35 @@ public class BulkOperationsAPI
 	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
 	    @FormParam("data") String data) throws JSONException
     {
-	
-	
-	
+
 	int count = 0;
 
 	JSONObject emailData = new JSONObject(data);
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
-	
-	
+
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, currentUserId);
 
-	count = fetcher.getAvailableContacts() > 0 ?  fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
+	count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
 	while (fetcher.hasNextSet())
 	{
 	    int noEmailsCount = ContactBulkEmailUtil.sendBulkContactEmails(emailData, fetcher.nextSet());
-	    
+
 	    count -= noEmailsCount;
 	}
-	
+
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
 
 	String message = "";
-	if(fetcher.getAvailableContacts() > 0)
-	    message = fetcher.getAvailableContacts() +" Contacts deleted";
-	else if(fetcher.getAvailableCompanies() > 0)
-	    message = fetcher.getAvailableCompanies() +" Companies deleted";
-	
-	if(fetcher.getAvailableContacts() > 0)
+	if (fetcher.getAvailableContacts() > 0)
+	    message = fetcher.getAvailableContacts() + " Contacts deleted";
+	else if (fetcher.getAvailableCompanies() > 0)
+	    message = fetcher.getAvailableCompanies() + " Companies deleted";
+
+	if (fetcher.getAvailableContacts() > 0)
 	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " Contacts");
-	else if(fetcher.getAvailableCompanies() > 0)
+	else if (fetcher.getAvailableCompanies() > 0)
 	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " companies");
 	else
 	    BulkActionNotifications.publishNotification("Email successfully sent to 0 contacts/companies");

@@ -60,12 +60,15 @@ public class ContactUtilServlet extends HttpServlet
 	    {
 		try
 		{
+		    if(contactPrefs.inProgress)
+			return;
+		    
 		    contactPrefs.inProgress = true;
 		    contactPrefs.save();
 		    service.initSync();
 
 		}
-		finally
+		catch(Exception e)
 		{
 		    contactPrefs.inProgress = false;
 		    contactPrefs.save();
