@@ -14,7 +14,8 @@ import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
 
 /**
- * The Class SyncPrefs.
+ * Class SyncPrefs contains only required property i.e needs most of client to
+ * save prefs
  * 
  * @author jitendra
  */
@@ -22,11 +23,11 @@ import com.googlecode.objectify.condition.IfDefault;
 public class SyncPrefs implements Serializable
 {
 
-    /** The id. */
+    /** Id */
     @Id
     public Long id;
 
-    /** The api key. */
+    /** api key */
     @NotSaved(IfDefault.class)
     public String apiKey = null;
 
@@ -34,25 +35,28 @@ public class SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public String token = null;
 
-    /** The secret. */
+    /** secret key */
     @NotSaved(IfDefault.class)
     @JsonIgnore
     public String secret;
 
-    /** The refresh token. */
+    /** refresh token */
     @NotSaved(IfDefault.class)
     @JsonIgnore
     public String refreshToken = null;
 
-    /** The last_synced_to_client. */
+    /** holds date time(unix timestamp) of last sync to client. */
     @NotSaved(IfDefault.class)
     public Long last_synced_to_client = 0L;
 
-    /** The last_synced_from_client. */
+    /** last_synced_from_client date time (timestamp). */
     @NotSaved(IfDefault.class)
     public Long last_synced_from_client = 0L;
 
-    /** The is completed. */
+    /**
+     * hold boolean value set true if sync is in progress state other wise set
+     * false basically this is for button enable and disable sync button from UI
+     */
     @NotSaved(IfDefault.class)
     public boolean inProgress = false;
 
