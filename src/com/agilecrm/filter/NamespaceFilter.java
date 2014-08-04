@@ -193,7 +193,7 @@ public class NamespaceFilter implements Filter
 	// namespace verification i.e., no filter on url which starts with
 	// "/backend" (crons, StripeWebhooks etc..)
 	String path = ((HttpServletRequest) request).getRequestURI();
-	if (path.startsWith("/backend"))
+	if (path.startsWith("/backend") || path.startsWith("/register"))
 	{
 	    chain.doFilter(request, response);
 	    return;
