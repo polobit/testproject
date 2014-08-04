@@ -198,13 +198,14 @@ public class StripeSyncImpl extends OneWaySyncService
 		    System.out.println("--------------------------------------------------------------------");
 		    for (Charge charge : charges)
 		    {
+			System.out.println("Customer name  :  "+charge.getCard().getName());
 			System.out.println("ContactId    :  " + contact.id);
 			System.out.println("Charge       :  " + charge.getAmount() + " " + charge.getCurrency());
 			if (charge.getFailureMessage() == null)
 			    System.out.println("Status       :  Successfull");
 			else
 			    System.out.println("Status    :  " + charge.getFailureMessage());
-			System.out.println("Date         :  " + sf.format(new Date(charge.getCreated())));
+			System.out.println("Date         :  " + sf.format(new Date(charge.getCreated()*1000)));
 		    }
 		    System.out.println("--------------------------------------------------------------------");
 		    System.out.println("==================================================================");
