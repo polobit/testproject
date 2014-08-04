@@ -116,7 +116,7 @@ padding-left:10px!important;
 		</div>
 	</div>
 	 <div style="text-align: center; line-height: 19px;">
-	   New User? <a href="/choose-domain">Click here</a><br/>
+	   New User? <a href="/register">Click here</a><br/>
 	   <a href="/forgot-domain"> Forgot Domain?</a>
 	 </div>
 </div>
