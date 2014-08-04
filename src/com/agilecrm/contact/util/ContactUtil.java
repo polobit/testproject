@@ -32,10 +32,9 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.document.Document;
 import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
-<<<<<<< HEAD
-=======
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
@@ -43,7 +42,6 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.search.Document.Builder;
 import com.google.appengine.api.search.Index;
 import com.google.gdata.data.introspection.Collection;
->>>>>>> praveen
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -643,6 +641,10 @@ public class ContactUtil
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 
+	ContactDocument contactDocuments = new ContactDocument();
+	Builder[] docs = new Builder[contacts_list.size()];
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	int i = 0;
 	for (Contact contact : contacts_list)
 	{
 	    contact.setContactOwner(newOwnerKey);
@@ -667,7 +669,6 @@ public class ContactUtil
 	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
 
 	Contact.dao.putAll(contacts_list);
-
     }
 
     /**
