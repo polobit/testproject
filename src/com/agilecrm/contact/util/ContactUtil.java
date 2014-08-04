@@ -1,11 +1,9 @@
 package com.agilecrm.contact.util;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
+
 import java.util.Arrays;
 import java.util.Collections;
->>>>>>> praveen
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
