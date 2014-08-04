@@ -72,7 +72,7 @@ public class BulkOperationsAPI
 
 	    while(fetcher.hasNextSet())
 	    {
-		ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+		ContactUtil.deleteContacts(fetcher.nextSet());
 	    }
 	    
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
