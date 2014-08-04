@@ -43,10 +43,6 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ContactPrefs extends SyncPrefs implements Serializable
 {
 
-    /** last sync check point hold last sync date or any cursor value */
-    @NotSaved(IfDefault.class)
-    public String lastSyncCheckPoint = null;
-
     /** type defines third party client type eg google,zoho,stripe etc */
     @NotSaved(IfDefault.class)
     public Type type = null;
@@ -60,10 +56,6 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public String username = null;
     
-    /** The refresh token. */
-    @NotSaved(IfDefault.class)
-    @JsonIgnore
-    public String refreshToken = null;
 
     /** If access token expire time is specified, we store it. */
     @NotSaved(IfDefault.class)
@@ -78,9 +70,6 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public Long lastModifedAt = 0L;
 
-    /** last_synced_updated_contacts_to_client. */
-    @NotSaved(IfDefault.class)
-    public Long last_synced_updated_contacts_to_client = 0L;
 
     /**
      * import options can hold various modules option from third party client eg
