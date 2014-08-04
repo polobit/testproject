@@ -44,22 +44,18 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ContactPrefs extends SyncPrefs implements Serializable
 {
 
-    /** The last sync check point. */
-    @NotSaved(IfDefault.class)
-    public String lastSyncCheckPoint = null;
-
     /** The client. */
     @NotSaved(IfDefault.class)
     public Type type = null;
 
-    /** The my_contacts. */
-    @NotSaved(IfDefault.class)
-    @Unindexed
-    public Boolean my_contacts = true;
-
     /** The username. */
     @NotSaved(IfDefault.class)
     public String username = null;
+    
+    /** The refresh token. */
+    @NotSaved(IfDefault.class)
+    @JsonIgnore
+    public String refreshToken = null;
 
     /** If access token expire time is specified, we store it. */
     @NotSaved(IfDefault.class)
@@ -75,10 +71,6 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public Long lastModifedAt = 0L;
 
-    /** The last_synced_updated_contacts_to_client. */
-    @NotSaved(IfDefault.class)
-    public Long last_synced_updated_contacts_to_client = 0L;
-
     /** The import options. */
 
     public List<String> importOptions;
@@ -87,22 +79,6 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     /** The domain user. */
     @JsonIgnore
     public Key<DomainUser> domainUser;
-
-    /** The sync_to_group. */
-    @NotSaved(IfDefault.class)
-    public String sync_to_group = null;
-
-    /** The sync_from_group. */
-    @NotSaved(IfDefault.class)
-    public String sync_from_group = null;
-
-    /** The conflict. */
-    @NotSaved(IfDefault.class)
-    public String conflict = null;
-
-    /** The others params. */
-    @NotSaved(IfDefault.class)
-    public String othersParams = null;
 
     /**
      * Instantiates a new contact prefs.
