@@ -13,12 +13,12 @@ import java.io.Serializable;
 public enum SyncFrequency implements Serializable
 {
 
-    /** The daily. */
+    /** daily. */
     DAILY,
-    /** The weekly. */
+    /** weekly. */
     WEEKLY,
-    /** The monthly. */
+    /** monthly. */
     MONTHLY,
-    /** The once. */
+    /** once. */
     ONCE
 }

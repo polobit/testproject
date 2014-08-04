@@ -1,5 +1,4 @@
-<!-- Indices written at Mon, 4 Aug 2014 10:58:29 IST -->
-
+<!-- Indices written at Mon, 4 Aug 2014 12:32:36 IST -->
 
 <datastore-indexes>
 
@@ -10,16 +9,16 @@
     </datastore-index>
 
     <!-- Used 1 time in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="is_complete" direction="asc"/>
         <property name="owner" direction="asc"/>
         <property name="due" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
     </datastore-index>
 
     <!-- Used 1 time in query history -->

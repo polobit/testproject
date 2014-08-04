@@ -13,19 +13,28 @@ package com.agilecrm.contact.sync;
 public enum ImportStatus
 {
 
-    /** The total. */
-    TOTAL, /** The saved contacts. */
-    SAVED_CONTACTS, /** The merged contacts. */
-    MERGED_CONTACTS, /** The duplicate contact. */
-    DUPLICATE_CONTACT, /** The name mandatory. */
-    NAME_MANDATORY, /** The email required. */
-    EMAIL_REQUIRED, /** The invalid email. */
-    INVALID_EMAIL, /** The total failed. */
-    TOTAL_FAILED, /** The new contacts. */
-    NEW_CONTACTS, /** The limit reached. */
+    /** total records */
+    TOTAL,
+    /** total saved contacts. */
+    SAVED_CONTACTS,
+    /** Total merged contacts. */
+    MERGED_CONTACTS,
+    /** Total duplicate contact. */
+    DUPLICATE_CONTACT,
+    /** mandatory. */
+    NAME_MANDATORY,
+    /** email required. */
+    EMAIL_REQUIRED,
+    /** invalid email. */
+    INVALID_EMAIL,
+    /** total failed. */
+    TOTAL_FAILED,
+    /** new contacts. */
+    NEW_CONTACTS,
+    /** limit reached. */
     LIMIT_REACHED,
 
-    /** The access denied. */
+    /** access denied. */
     ACCESS_DENIED;
 
 }

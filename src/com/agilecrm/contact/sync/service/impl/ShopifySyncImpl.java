@@ -26,20 +26,32 @@ import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ShopifySync.
+ * <code>ShopifySyncImpl</code> is Shopify client Implementation of Oneway sync
+ * it will fetch Contacts from shopify and and Sync in agile crm
  * 
  * @author jitendra
  */
 public class ShopifySyncImpl extends OneWaySyncService
 {
+
+    /** shop name */
     private static String shop;
-    private static final int MAX_FETCH_RESULT = 50;
+
+    /**
+     * set limit for max fetch result per call maximum allowed limit is 250
+     * according to shopify doc and 50 by default
+     */
+    private static final int MAX_FETCH_RESULT = 200;
+
+    /** set default page is current page. */
     private int currentPage = 1;
+
+    /** hold date as String . */
     private String lastSyncPoint;
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
     String date = df.format(new Date());
 
     /*
@@ -103,10 +115,9 @@ public class ShopifySyncImpl extends OneWaySyncService
 	}
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
+    /**
+     * create Shopify contact wrapper instance that will implements wrapper
+     * service
      */
     @Override
     public Class<? extends WrapperService> getWrapperService()
@@ -130,7 +141,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     }
 
     /**
-     * Materialize url.
+     * Materialize url return string representation of URL.
      * 
      * @param shop
      *            the shop
@@ -179,7 +190,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     }
 
     /**
-     * Gets the total new customers .
+     * Returns total customers from shop takes shop name as param
      * 
      * @param shopName
      *            the shop name
@@ -211,11 +222,12 @@ public class ShopifySyncImpl extends OneWaySyncService
     }
 
     /**
-     * Gets the customers.
+     * Gets the customers base on pass access url. URL can have various params
+     * result will be filtered out according to params
      * 
      * @param accessURl
-     *            the access u rl
-     * @return the customers
+     *            the access url
+     * @return ArrayList of Customers
      */
     public ArrayList<LinkedHashMap<String, Object>> getCustomers(String accessURl)
     {
@@ -239,7 +251,8 @@ public class ShopifySyncImpl extends OneWaySyncService
     }
 
     /**
-     * Gets the order related to customer.
+     * Gets purchased product order of Customer method will takes customerID as
+     * params customer Orders as list
      * 
      * @param customerId
      *            the customer id
@@ -265,6 +278,13 @@ public class ShopifySyncImpl extends OneWaySyncService
 	return orders;
     }
 
+    /**
+     * Construct order URL of customer.
+     * 
+     * @param custId
+     *            the cust id
+     * @return the order url
+     */
     public String getOrderUrl(String custId)
     {
 	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + custId);
@@ -272,7 +292,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     }
 
     /**
-     * Save customers order add Product name as tag and Item as Note
+     * Save customers order add Product name as tag and Item as Note.
      * 
      * @param customerId
      *            the customer id
@@ -326,7 +346,6 @@ public class ShopifySyncImpl extends OneWaySyncService
 			+ order.get("currency") + ")";
 		// update notes
 		note.save();
-	
 
 	    }
 	}

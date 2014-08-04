@@ -35,7 +35,7 @@ public enum Type implements Serializable
     }
 
     /**
-     * Gets the clazz.
+     * return  clazz of Client.
      * 
      * @return the clazz
      */

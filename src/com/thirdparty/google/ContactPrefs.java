@@ -31,7 +31,6 @@ import com.thirdparty.google.groups.GoogleGroupDetails;
 import com.thirdparty.google.groups.util.ContactGroupUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
-// TODO: Auto-generated Javadoc
 /**
  * <code>ContactPrefs</code> class stores the details of different sources to
  * import contacts.
@@ -44,11 +43,20 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ContactPrefs extends SyncPrefs implements Serializable
 {
 
-    /** The client. */
+    /** last sync check point hold last sync date or any cursor value */
+    @NotSaved(IfDefault.class)
+    public String lastSyncCheckPoint = null;
+
+    /** type defines third party client type eg google,zoho,stripe etc */
     @NotSaved(IfDefault.class)
     public Type type = null;
 
-    /** The username. */
+    /** my_contacts. */
+    @NotSaved(IfDefault.class)
+    @Unindexed
+    public Boolean my_contacts = true;
+
+    /**  username. */
     @NotSaved(IfDefault.class)
     public String username = null;
     
@@ -61,24 +69,46 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     @NotSaved(IfDefault.class)
     public Long expires = 0L;
 
-    // created time
-    /** The created at. */
+    /** created at. */
     @NotSaved(IfDefault.class)
     public Long createdAt = 0L;
 
     // modified time
-    /** The last modifed at. */
+    /** last modifed at. */
     @NotSaved(IfDefault.class)
     public Long lastModifedAt = 0L;
 
-    /** The import options. */
+    /** last_synced_updated_contacts_to_client. */
+    @NotSaved(IfDefault.class)
+    public Long last_synced_updated_contacts_to_client = 0L;
+
+    /**
+     * import options can hold various modules option from third party client eg
+     * zoho have cases,leads,contact in import option we can set modules that
+     * are need to be imported in agile
+     */
 
     public List<String> importOptions;
 
-    // domain user key
-    /** The domain user. */
+    /** hold domain user. */
     @JsonIgnore
     public Key<DomainUser> domainUser;
+
+    /** sync_to_group. */
+    @NotSaved(IfDefault.class)
+    public String sync_to_group = null;
+
+    /** sync_from_group. */
+    @NotSaved(IfDefault.class)
+    public String sync_from_group = null;
+
+    /** conflict. */
+    @NotSaved(IfDefault.class)
+    public String conflict = null;
+
+    /** other optional params values can be set from third party client */
+    @NotSaved(IfDefault.class)
+    public String othersParams = null;
 
     /**
      * Instantiates a new contact prefs.
@@ -87,31 +117,31 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     {
     }
 
-    /** The duration. */
+    /** holds sync prefs frequency for job scheduling for cron */
     @NotSaved(IfDefault.class)
     public SyncFrequency duration = SyncFrequency.ONCE;
 
-    /** The groups. */
+    /** Group option specific to google client   */
     @NotSaved
     @Embedded
     public List<GoogleGroupDetails> groups = new ArrayList<GoogleGroupDetails>();
 
-    // Category of report generation - daily, weekly, monthly.
     /**
-     * The Enum SYNC_TYPE.
+     *  Category of report generation - daily, weekly, monthly.
+     *
      */
     public static enum SYNC_TYPE
     {
 
-	/** The client to agile. */
+	/**  client to agile. */
 	CLIENT_TO_AGILE,
-	/** The agile to client. */
+	/**  agile to client. */
 	AGILE_TO_CLIENT,
-	/** The two way. */
+	/**  two way. */
 	TWO_WAY
     };
 
-    /** The sync_type. */
+    /**  sync_type. */
     @NotSaved(IfDefault.class)
     public SYNC_TYPE sync_type = null;
     /**
@@ -150,7 +180,7 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     }
 
     /**
-     * Sets the expiry time.
+     * Sets the expiry time of token.
      * 
      * @param time
      *            the new expiry time
@@ -233,7 +263,7 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     }
 
     /**
-     * Sets domianUser key.
+     * Sets domianUser key in contact.
      * 
      * @param domianUser
      *            - domianUser Key.
