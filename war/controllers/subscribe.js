@@ -293,6 +293,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		// Plan json is posted along with credit card details
 		var plan = plan_json
 		
+		if(plan.domain_name!="free"){
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription/adminpanel/subscribe", template : "admin-purchase-plan", isNew : true, data : plan,
 			postRenderCallback : function(el)
 			{
@@ -307,7 +308,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			},
 			saveCallback : function(data)
 			{
-				window.navigate("domainSubscribe", { trigger : true });
+				window.navigate("domainSubscribe/"+plan.domain_name, { trigger : true });
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 			
@@ -315,7 +316,10 @@ var SubscribeRouter = Backbone.Router.extend({
 
 		// Prepend Loading
 		$('#content').html(upgrade_plan.render().el);
-		$(".active").removeClass("active");
+		$(".active").removeClass("active");}
+		else{
+			alert("cannot be create subscription from admin");
+		}
 		// $("#fat-menu").addClass("active");
 	}
 	

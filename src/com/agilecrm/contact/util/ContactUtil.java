@@ -105,9 +105,10 @@ public class ContactUtil
 	return dao.fetchAll();
     }
 
-    //returns all documents count 
+    //returns all contacts count 
     public static int getCount(){
     	List<Contact> li=dao.fetchAll();
+    	System.out.println(li.size()+" In contact util.java ");
     	return li.size();
     }
     /*

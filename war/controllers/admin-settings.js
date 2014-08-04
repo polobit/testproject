@@ -141,12 +141,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr',postRenderCallback : function(el)
 			{
 				var arr=App_Admin_Settings.invoicecollection.collection;console.log("invoiceesdata");console.log(arr.models);
-				/*var arr=that.invoicecollection.collection; 
 				var amount=arr.models;
 				if(amount.length!=0){
 				var total_amount=amount[0].get('total')
-				 $("#content").find('#totalamount').html("<h3>Total Amount:"+total_amount+"");
-				}*/
+				// $("#content").find('.totalamount').html("<h4>Total Amount:"+total_amount+"");
+				}
 			} });
 	this.invoicecollection.collection.fetch();
 

@@ -64,7 +64,7 @@ $(".delete_user").die().live('click', function(e){
 					
 				
 					var namespace = $(this).closest('a').attr("data");
-					alert(namespace);
+					
 					if(namespace != "")
 					{
 							if (!confirm("Are you sure you want to delete ?" ))
@@ -79,7 +79,8 @@ $(".delete_user").die().live('click', function(e){
 								type : "DELETE",
 								url : "core/api/users/admin/delete/" + namespace,
 								success : function()
-								{alert("account deleted");
+								{
+									alert("account deleted");
 									location.reload(true);
 								}
 							});
