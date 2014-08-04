@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
@@ -95,7 +96,7 @@ public class StripeSyncImpl extends OneWaySyncService
 
 	    while (currentPage <= pages)
 	    {
-		CustomerCollection customerCollections = Customer.all(Options(syncTime), prefs.apiKey);
+		CustomerCollection customerCollections = Customer.all(Options(syncTime), Globals.STRIPE_LIVE_API_KEY);
 		List<Customer> customers = customerCollections.getData();
 		for (Customer customer : customers)
 		{
@@ -103,7 +104,7 @@ public class StripeSyncImpl extends OneWaySyncService
 		    {
 			Contact contact = wrapContactToAgileSchemaAndSave(customer);
 
-			printCustomerCharges(contact, customer.getId());
+			printCustomerCharges(contact, customer);
 		    }
 
 		}
@@ -205,15 +206,15 @@ public class StripeSyncImpl extends OneWaySyncService
      * @param customerId
      *            the customer id
      */
-    private void printCustomerCharges(Contact contact, String customerId)
+    private void printCustomerCharges(Contact contact, Customer customer)
     {
-	HashMap<String, Object> chargeOption = new HashMap<String, Object>();
-	chargeOption.put("customer", customerId);
+  	HashMap<String, Object> chargeOption = new HashMap<String, Object>();
+	chargeOption.put("customer", customer.getId());
 	if (contact != null)
 	{
 	    try
 	    {
-		ChargeCollection chargeCollection = Charge.all(chargeOption, prefs.apiKey);
+		ChargeCollection chargeCollection = Charge.all(chargeOption, Globals.STRIPE_LIVE_API_KEY);
 		List<Charge> charges = chargeCollection.getData();
 		if (charges.size() > 0)
 		{
@@ -222,14 +223,23 @@ public class StripeSyncImpl extends OneWaySyncService
 		    System.out.println("--------------------------------------------------------------------");
 		    for (Charge charge : charges)
 		    {
-			System.out.println("Customer name  :  " + charge.getCard().getName());
-			System.out.println("ContactId    :  " + contact.id);
-			System.out.println("Charge       :  " + charge.getAmount() + " " + charge.getCurrency());
+			System.out.println("Customer name    :  " + charge.getCard().getName());
+			System.out.println("ContactId        :  " + contact.id);
+			System.out.println("Charge           :  " + charge.getAmount() + " " + charge.getCurrency());
+			System.out.println("Ammount Refunded :  " + charge.getAmountRefunded() + " "+charge.getCurrency());
 			if (charge.getFailureMessage() == null)
-			    System.out.println("Status       :  Successfull");
+			{
+			    System.out.println("Status           :  Successfull");
+			}
 			else
-			    System.out.println("Status    :  " + charge.getFailureMessage());
-			System.out.println("Date         :  " + sf.format(new Date(charge.getCreated() * 1000)));
+			{
+			    System.out.println("Status         :  " + charge.getFailureMessage());
+			}
+			
+			System.out.println("Plan             :  "+customer.getSubscription().getPlan().getName());
+			System.out.println("Date             :  " + sf.format(new Date(charge.getCreated() * 1000)));
+			
+			//Charge.retrieve(charge.getId()).getr
 		    }
 		    System.out.println("--------------------------------------------------------------------");
 		    System.out.println("==================================================================");
@@ -238,11 +248,11 @@ public class StripeSyncImpl extends OneWaySyncService
 	    catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
 		    | APIException e)
 	    {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 
 	}
     }
+
 
 }
