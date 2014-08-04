@@ -41,7 +41,7 @@ import com.thirdparty.google.groups.util.ContactGroupUtil;
  */
 public class GoogleSyncImpl extends TwoWaySyncService
 {
-    private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 10;
+    private static final Integer MAX_FETCH_LIMIT_FOR_GOOGLE = 200;
 
     /** The contact service. */
     private ContactsService contactService;
