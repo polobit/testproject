@@ -98,6 +98,12 @@ public class ContactPrefs extends SyncPrefs implements Serializable
     /** other optional params values can be set from third party client */
     @NotSaved(IfDefault.class)
     public String othersParams = null;
+    /**
+     * Store last Syn date in string format
+     */
+    @NotSaved(IfDefault.class)
+    public String lastSyncCheckPoint = null;
+
 
     /**
      * Instantiates a new contact prefs.
