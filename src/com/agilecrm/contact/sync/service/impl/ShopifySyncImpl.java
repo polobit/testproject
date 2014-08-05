@@ -3,26 +3,38 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
+import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.jdo.identity.IntIdentity;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.scribe.exceptions.OAuthException;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.NoteUtil;
+import com.agilecrm.contact.util.TagUtil;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -93,7 +105,9 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
 
-			    saveCustomersOrder(customers.get(i).get("id").toString(), contact);
+			    saveCustomersOrder(customers.get(i), contact);
+
+			    addCustomerRelatedNote(customers.get(i).get("note").toString(), contact);
 
 			}
 		    }
@@ -161,7 +175,14 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    uri.append("https://").append(shop).append("/admin/customers/").append(entityName + ".json?");
 	    if (lastSyncPoint != null)
 	    {
-		uri.append("&created_at_min=" + URLEncoder.encode(lastSyncPoint));
+		if (update.equalsIgnoreCase("new"))
+		{
+		    uri.append("&created_at_min=" + URLEncoder.encode(lastSyncPoint));
+		}
+		else if (update.equalsIgnoreCase("edited"))
+		{
+		    uri.append("&updated_at_min=" + URLEncoder.encode(lastSyncPoint));
+		}
 	    }
 	}
 	else
@@ -190,7 +211,7 @@ public class ShopifySyncImpl extends OneWaySyncService
     }
 
     /**
-     * Returns total customers from shop takes shop name as param
+     * Returns total customers new and updated customer count
      * 
      * @param shopName
      *            the shop name
@@ -199,12 +220,33 @@ public class ShopifySyncImpl extends OneWaySyncService
     private int getTotalCustomers(String shopName)
     {
 	Integer count = 0;
-	String uri = materializeURL(shopName, "count", 0, "new");
-	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, uri);
+	String newCustomerCount = materializeURL(shopName, "count", 0, "new");
+
+	String updatedCustomerCount = materializeURL(shopName, "count", 0, "edited");
+	count += getCustomerCount(newCustomerCount);
+	if (lastSyncPoint != null)
+	{
+	    count += getCustomerCount(updatedCustomerCount);
+	}
+
+	return count.intValue();
+    }
+
+    /**
+     * Return total customer base on url params
+     * 
+     * @param url
+     * @return
+     */
+
+    private int getCustomerCount(String url)
+    {
+	int count = 0;
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
-	Response response = oAuthRequest.send();
 	try
 	{
+	    Response response = oAuthRequest.send();
 	    HashMap<String, String> properties = new ObjectMapper().readValue(response.getBody(),
 		    new TypeReference<HashMap<String, String>>()
 		    {
@@ -213,12 +255,18 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    if (properties.containsKey("count"))
 		count = Integer.parseInt(properties.get("count"));
 	}
+
+	catch (OAuthException e)
+	{
+
+	    if (e.getCause().equals(new SocketTimeoutException()))
+		getCustomerCount(url);
+	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-
-	return count.intValue();
+	return count;
     }
 
     /**
@@ -235,13 +283,18 @@ public class ShopifySyncImpl extends OneWaySyncService
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
 	ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
-	Response response = oAuthRequest.send();
 	try
 	{
+	    Response response = oAuthRequest.send();
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    customers = results.get("customers");
 
+	}
+	catch (OAuthException e)
+	{
+	    if (e.getCause().equals(new SocketTimeoutException()))
+		getCustomers(accessURl);
 	}
 	catch (Exception e)
 	{
@@ -260,16 +313,37 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public ArrayList<LinkedHashMap<String, Object>> getOrder(String customerId)
     {
-	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, getOrderUrl(customerId));
+	ArrayList<LinkedHashMap<String, Object>> listOrder = new ArrayList<LinkedHashMap<String, Object>>();
+	String newOrder = getOrderUrl(customerId, "new");
+	String updatedOrder = getOrderUrl(customerId, "updated");
+	listOrder.addAll(Orders(newOrder));
+	if (lastSyncPoint != null)
+	{
+	    listOrder.addAll(Orders(updatedOrder));
+	}
+	return listOrder;
+
+    }
+
+    private ArrayList<LinkedHashMap<String, Object>> Orders(String url)
+    {
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
 	ArrayList<LinkedHashMap<String, Object>> orders = new ArrayList<LinkedHashMap<String, Object>>();
-	Response response = oAuthRequest.send();
 	try
 	{
+	    Response response = oAuthRequest.send();
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
 	    orders = results.get("orders");
 
+	}
+	catch (OAuthException e)
+	{
+	    if (e.getCause().equals(new SocketTimeoutException()))
+		;
+	    // retry
+	    Orders(url);
 	}
 	catch (Exception e)
 	{
@@ -285,9 +359,20 @@ public class ShopifySyncImpl extends OneWaySyncService
      *            the cust id
      * @return the order url
      */
-    public String getOrderUrl(String custId)
+    public String getOrderUrl(String custId, String status)
     {
 	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + custId);
+	if (lastSyncPoint != null)
+	{
+	    if (status.equalsIgnoreCase("new"))
+	    {
+		sb.append("&created_at_min=" + URLEncoder.encode(lastSyncPoint));
+	    }
+	    else if (status.equalsIgnoreCase("updated"))
+	    {
+		sb.append("&updated_at_min=" + URLEncoder.encode(lastSyncPoint));
+	    }
+	}
 	return sb.toString();
     }
 
@@ -299,12 +384,14 @@ public class ShopifySyncImpl extends OneWaySyncService
      * @param contact
      *            the contact
      */
-    public void saveCustomersOrder(String customerId, Contact contact)
+    public void saveCustomersOrder(Object customer, Contact contact)
     {
-	ArrayList<LinkedHashMap<String, Object>> orders = getOrder(customerId);
+	LinkedHashMap<String, Object> customerProperties = (LinkedHashMap<String, Object>) customer;
+	ArrayList<LinkedHashMap<String, Object>> orders = getOrder(customerProperties.get("id").toString());
 
 	if (orders != null && orders.size() > 0)
 	{
+	    removeOlderNotes(contact);
 	    Iterator<LinkedHashMap<String, Object>> it = orders.listIterator();
 	    while (it.hasNext())
 	    {
@@ -338,8 +425,9 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 		    note.save();
 
-		    contact.tags.add((String) itemDetails.get("title"));
+		    contact.tags.add(itemDetails.get("title").toString());
 		    contact.save();
+
 		}
 		// setting total price of orders item
 		note.description = note.description + "\n" + "Total Price : " + order.get("total_price") + " ("
@@ -348,7 +436,64 @@ public class ShopifySyncImpl extends OneWaySyncService
 		note.save();
 
 	    }
+
 	}
 
+    }
+
+    /**
+     * Add Notes to the Customer
+     * 
+     * @param noteString
+     * @param contact
+     */
+
+    private void addCustomerRelatedNote(String noteString, Contact contact)
+    {
+	try
+	{
+	    if (ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
+	    {
+		List<Note> notes = NoteUtil.getNotes(contact.id);
+		List<Note> duplicatedNote = new ArrayList<Note>();
+		for (Note note : notes)
+		{
+		    if (note.subject.equalsIgnoreCase("Customer's Note"))
+		    {
+			duplicatedNote.add(note);
+		    }
+
+		}
+		NoteUtil.deleteBulkNotes(duplicatedNote);
+	    }
+
+	    Note n = new Note("Customer's Note", noteString);
+	    n.addRelatedContacts(contact.id.toString());
+	    n.save();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Remove Previous Product and Order information and updates with new
+     * 
+     * @param contact
+     */
+    private void removeOlderNotes(Contact contact)
+    {
+	try
+	{
+	    List<Note> notes = NoteUtil.getNotes(contact.id);
+	    if (notes.size() > 0)
+		NoteUtil.deleteBulkNotes(notes);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 }
