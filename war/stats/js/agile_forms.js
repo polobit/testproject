@@ -3,6 +3,10 @@
  */
 var _agile_synch_form = function()
 {
+	var agile_button = document.getElementsByClassName("agile-button")[0];
+	agile_button.setAttribute("disabled");
+	var agile_error_msg = document.getElementById("agile-error-msg");
+
 	// Get form data
 	var agile_form = document.getElementById('agile-form');
 	var agile_form_data = document.getElementById('agile-form-data');
@@ -46,7 +50,9 @@ var _agile_synch_form = function()
 		// Create contact
 		_agile.create_contact(agile_contact, { success : function(data)
 		{
-			window.location.replace(agile_redirect_url) // Redirect to url
+			agile_formCallback([
+					"contact created", agile_error_msg
+			], agile_button, agile_redirect_url);
 		}, error : function(data)
 		{
 			if (data.error.indexOf('Duplicate') != -1)
@@ -54,15 +60,20 @@ var _agile_synch_form = function()
 				// Update contact if duplicate
 				_agile.update_contact(agile_contact, { success : function(data)
 				{
-					window.location.replace(agile_redirect_url) // Redirect to url
+					agile_formCallback([
+							"contact updated", agile_error_msg
+					], agile_button, agile_redirect_url);
 				}, error : function(data)
 				{
-					console.log('Error submitting form ' + data.error);
-					window.location.replace(agile_redirect_url) // Redirect to url
+					agile_formCallback([
+							data.error, agile_error_msg
+					], agile_button, agile_redirect_url);
 				} })
 			}
 			else
-				window.location.replace(agile_redirect_url) // Redirect to url
+				agile_formCallback([
+						data.error, agile_error_msg
+				], agile_button, agile_redirect_url);
 		} })
 	}
 }
