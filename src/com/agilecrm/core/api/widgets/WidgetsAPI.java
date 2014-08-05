@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.widgets.CustomWidget;
@@ -23,7 +24,6 @@ import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.CustomWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
 
 /**
@@ -271,8 +271,8 @@ public class WidgetsAPI
 
 			ContactPrefs contactPrefs = new ContactPrefs();
 			contactPrefs.type = Type.SALESFORCE;
-			contactPrefs.userName = userId;// "tejaswitest@gmail.com";
-			contactPrefs.password = password;// "agile1234";
+			//contactPrefs.userName = userId;// "tejaswitest@gmail.com";
+			//contactPrefs.password = password;// "agile1234";
 			contactPrefs.apiKey = apiKey;// "CgBv3oy3GAY7eoNNQnx7yb2e";
 			System.out.println("here");
 

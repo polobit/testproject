@@ -19,8 +19,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
-
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
+	
 	/* Milestones */
 	"milestones" : "milestones",
 
@@ -34,10 +34,237 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"email-stats" : "emailStats",
 
 	/* Web to Lead */
-	"integrations" : "integrations"
+	"integrations" : "integrations",  "change-password-admin/:id" : "changePasswordadmin",
+	
+	"getDomainUserDetails/:query" : "getDomainUserDetails"
+	
 
 	},
+	
+	// function will be called from getDomainDetails Navigation
+	//todisplay email count
+	get_email_count_for_domain_from_adminpanel:  function(domainname)
+	{ 
+		
+		
+		$.ajax({
+			url: 'core/api/emails/email-stats/adminpanel/'+domainname, 
+			type : 'GET',
+			success : function(data)
+			{
+				
+				 $("#content").find('#emailcount').html(getTemplate("email-stats", data));
+					
+			},
+			error : function(response)
+			{
+				
+			} });
+		
+	},
+	
+	// function will be called from getDomainDetails Navigation
+	//todisplay count
+	
+	get_web_stats_count_for_domain_from_adminpanel: function (domainname)
+	{
+		
+		$.ajax({
+			url: 'core/api/web-stats/JSAPI-status/adminpanel/'+domainname,
+			type : 'GET',
+			success : function(data)
+			{
+				 $("#content").find('#webstatscount').html(data);
+			},
+			error : function(response)
+			{
+				
+			} });
+	
+	},
+	
+	// function will be called from getDomainDetails Navigation
+	//todisplay get domain stats object for particular domain
+	
+	get_account_stats_for_domain_from_adminpanel: function (domainname)
+	{
+		console.log("in accountstats object");console.log(domainname);
+		$.ajax({
+			 url : 'core/api/users/adminpanel/domainstatscount/'+domainname,
+			type : 'GET',
+			success : function(db)
+			{
+				
+				
+				console.log(db);
+				 $("#content").find('#account').html(getTemplate("domain-info", db));
+				 $(".delete-namespace").attr("data", domainname);
+				 App_Admin_Settings.get_email_count_for_domain_from_adminpanel(domainname);
+				 App_Admin_Settings.get_web_stats_count_for_domain_from_adminpanel(domainname);
+			},
+			error : function(response)
+			{
+				
+				console.log(response);
+			} });
+	
+	},
+	
+	// function will be called from getDomainDetails Navigation
+	//todisplay get subscription object for particular domain
+	get_subscriptionobject_for_domain_from_adminpanel: function (domainname)
+	{ 
+		console.log("in subscription object");console.log(domainname);
+		$.ajax({
+			url: 'core/api/subscription/adminpanel/subscription/'+domainname,
+			type: 'GET',
+			success: function(data) { 
+				
+				console.log(data);
+				
+				 $("#content").find('#planinfo').html(getTemplate("plan-info", data));
+				
+				 $("#domainhref").attr("href", "/#domainSubscribe/"+domainname);
+			}
+		});
+	
+	},
+	
+	// function will be called from getDomainDetails Navigation
+	//todisplay get collection of invoices  for particular domain
+	
+	get_collection_of_invoices_for_domain_from_adminpanel: function (el,domainname)
+	{ 
+		console.log("in invoice list object");console.log(domainname);
+	 this.invoicecollection = new Base_Collection_View({ url :"core/api/subscription/adminpanel/invoices/"+domainname, templateKey : "admin-invoice",
+		 
+			individual_tag_name : 'tr',postRenderCallback : function(el)
+			{
+				var arr=App_Admin_Settings.invoicecollection.collection;console.log("invoiceesdata");console.log(arr.models);
+				var amount=arr.models;
+				if(amount.length!=0){
+				var total_amount=amount[0].get('total')
+				// $("#content").find('.totalamount').html("<h4>Total Amount:"+total_amount+"");
+				}
+			} });
+	this.invoicecollection.collection.fetch();
 
+	console.log(this.invoicecollection.collection.fetch());
+	 $("#content").find('.past-invoicecollection').html(this.invoicecollection.el);
+	
+},
+	
+	
+	//router to fill domain details template from admin panel
+	getDomainUserDetails: function(query){
+	
+		 var domainname="",ownername="";var ar=[];
+		this.usersListViewCollection = new Base_Collection_View({ url : 'core/api/users/admin/domain/'+query,  templateKey : "all-domain",
+			individual_tag_name : 'tr', postRenderCallback : function(el)
+			{ console.log("inside post render callback of getDomainUSers");
+				head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+				{
+					$(".last-login-time", el).timeago();
+				});
+				
+				ar=App_Admin_Settings.usersListViewCollection.collection.models;
+				console.log("after userlistcollection models");
+				console.log(ar);
+				for(var i=0;i<ar.length;i++){
+					var mod=ar[i];
+					if(mod.get('is_account_owner')){
+						ownername=mod.get('name');
+						domainname=mod.get('domain');
+						
+					}
+					
+				}	
+				console.log("after for loop");console.log(domainname);
+				if(domainname==undefined||domainname==""){
+					var dom=ar[0];
+					domainname=dom.get('domain');
+				}
+				$("#content").find('.domainname').html("<h4 >Domain Name:   "+domainname);
+				$("#content").find('#ownername').html(ownername);
+				App_Admin_Settings.get_subscriptionobject_for_domain_from_adminpanel(domainname); 
+				App_Admin_Settings.get_account_stats_for_domain_from_adminpanel(domainname);
+				App_Admin_Settings.get_collection_of_invoices_for_domain_from_adminpanel(el,domainname);
+				
+				
+			} });
+	this.usersListViewCollection.collection.fetch();
+	
+	$('#content').html(this.usersListViewCollection.el);
+		
+	},
+	
+	//used to change password for particular user from admin panel
+	changePasswordadmin : function(id)
+	{
+		$("#content").html(getTemplate("settings"), {});
+
+		$('#content').html(getTemplate("settings-change-password-adminpanel"), {});
+		
+		// Save button action of change password form, If it is out of
+		// this router wont navigate properly
+		$("#saveNewPasswordFromAdmin").on(
+				"click",
+				function(e)
+				{
+
+					e.preventDefault();
+					var saveBtn = $(this);
+
+					// Returns, if the save button has disabled
+					// attribute
+					if ($(saveBtn).attr('disabled'))
+						return;
+
+					// Disables save button to prevent multiple click
+					// event issues
+					disable_save_button($(saveBtn));
+
+					var form_id = $(this).closest('form').attr("id");
+
+					if (!isValidForm('#' + form_id))
+					{
+
+						// Removes disabled attribute of save button
+						enable_save_button($(saveBtn));
+						return false;
+					}
+					
+					// Show loading symbol until model get saved
+					$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
+
+					var json = serializeForm(form_id);
+
+					$.ajax({
+						url : '/core/api/user-prefs/admin/changePassword/'+id,
+						type : 'PUT',
+						data : json,
+						success : function()
+						{
+							$('#changePasswordForm').find('span.save-status').html(
+									"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
+							Backbone.history.navigate("all-domain-users" , {
+				                trigger: true
+				            });
+						},
+						error : function(response)
+						{
+							$('#changePasswordForm').find('span.save-status').html("");
+							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
+									"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
+							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
+							enable_save_button($(saveBtn));
+						} });
+
+				});
+	},
+	
+	
 	/**
 	 * Show menu-settings modules selection ( calendar, cases, deals, campaign ) &
 	 * saving option
@@ -132,6 +359,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	},
 
+	/**
+	 * Loads a template to add new user, to a particular domain
+	 * user
+	 */
+	
 	/**
 	 * Edits the existing user by verifying whether the users list view is
 	 * defined or not
@@ -241,8 +473,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				//initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
-			
+
 			$('#content').find('#admin-prefs-tabs-content').html(view.el);
+
 			$('#content').find('#AdminPrefsTab .active').removeClass('active');
 			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
@@ -272,7 +505,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// $('#content').html(view.el);
 		});
 	},
-
+	
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success

@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="css/bootstrap-pink.min.css" />
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script type="text/javascript" src="/lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="/lib/bootstrap.2.3.min.js"></script>
 
 
 
@@ -45,13 +45,6 @@ label.error {
 </div>
 </div>
 
-<div class="control-group">
-<label class="control-label" for="auth_token">Authtoken:</label>
-<div class="controls">
-<input type="text" id="auth_token" name="authtoken" placeholder="Auth-token" class="input-large" required="required" style="height: 30px;">
-</div>
-</div>
-
 <div class="clearfix"><div class="pull-right">
 			<span><img src="img/ajax-spinner.gif" id="spinner-sales" style="display:none;"></img></span>
 			<a id="save_zoho_info" class="btn"
@@ -66,41 +59,14 @@ label.error {
 
 <script type="text/javascript">
 
-$('#save_zoho_info').die().live('click',function(data){
+$('#save_zoho_infoe').die().live('click',function(data){
 	
 	if(!isValid('#zoho_form'))
 		return;
 	$('#spinner-sales').show();
 	
-	$.post("/core/api/zoho/save",$('#zoho_form').serialize(),function(data){
-		$('#zoho-import').html('<br /><div class="well" style="margin-left:10px">' +
-				
-				'<legend>Select the items to import from Zoho</legend>' + 
-
-				'<form action="" method="post"  id="form">' + 
-
-				'<div id="zoho_options_error" style="display:none;color:red;margin-bottom:20px"></div>' +
-				
-				
-							'<div style="margin-left: 50px;"><label  class="checkbox"> ' + 
-		                        '<input name="accounts" id="zoho_accounts" type="checkbox"  value="true" checked="checked"/>Accounts<br/>Account will be saved as Company</label>' + 
-		                    '</div>' + 
-		                    
-		                    '<div style="margin-left: 50px;"><label class="checkbox">' + 
-		                        '<input name="leads" id="zoho_leads" type="checkbox" value="true"  checked="checked"/> Leads<br/> <small>Leads will be saved as Contacts</small></label>' + 
-		                    '</div>' +
-		                    
-		                    '<div style="margin-left: 50px;"><label class="checkbox">' + 
-		                         '<input name="contacts" id="zoho_contacts" type="checkbox"  value="true"  checked="checked"/> Contacts<br/> Contacts will be saved as Contacts</label>' + 
-		                    '</div>'+ 
-		                    
-		                    /* 
-		                    '<div style="margin-left: 50px;"> <label class="checkbox"><input type="checkbox" name="event" checked="checked" id="zoho_event">Events</label></div>'+
-		                    '<div style="margin-left: 50px;"> <label class="checkbox"><input type="checkbox" name ="task" checked="checked" id="zoho_task">Tasks</label></div>'+ */
-		                    
-		                    '<div class="clearfix"><a id="zoho_import_options" class="btn pull-right" style="text-decoration: none; margin-right: 30px;">Import</a></div>' +
-		                    
-				'</form></div>');
+	$.post("core/api/zoho/save-prefs",$('#zoho_form').serialize(),function(data){
+	
 		
 
 	}).error(function(data)
@@ -111,6 +77,78 @@ $('#save_zoho_info').die().live('click',function(data){
 	});
 		
 	});
+	
+$('#save_zoho_info').die().live('click', function(e)
+		{
+	       e.preventDefault();
+	       var username = $('#id_user').val();
+
+	       var password = $('#pass').val();
+	       
+			var callbackURL = window.location.href + "/zoho-import";
+			
+			// For every request of import, it will ask to grant access
+			var authUrl = '/scribe?service_type=zoho_import';
+
+			$.ajax({url:authUrl,
+			     data:{'username':username,'password':password},
+				success:function(){
+				$.ajax({url:'core/api/zoho/auth-user',
+					 data:{'username':username},
+						success:function(res){
+							if(res){
+								$('#zoho-import').html('<br /><div class="well" style="margin-left:10px">' +
+										
+										'<legend>Select the items to import from Zoho</legend>' + 
+
+										'<form action="" method="post"  id="form">' + 
+
+										'<div id="zoho_options_error" style="display:none;color:red;margin-bottom:20px"></div>' +
+										
+										
+													'<div style="margin-left: 50px;"><label  class="checkbox"> ' + 
+								                        '<input name="accounts" id="zoho_accounts" type="checkbox"  value="true" checked="checked"/>Accounts<br/>Account will be saved as Company</label>' + 
+								                    '</div>' + 
+								                    
+								                    '<div style="margin-left: 50px;"><label class="checkbox">' + 
+								                        '<input name="leads" id="zoho_leads" type="checkbox" value="true"  checked="checked"/> Leads<br/> <small>Leads will be saved as Contacts</small></label>' + 
+								                    '</div>' +
+								                    
+								                    '<div style="margin-left: 50px;"><label class="checkbox">' + 
+								                         '<input name="contacts" id="zoho_contacts" type="checkbox"  value="true"  checked="checked"/> Contacts<br/> Contacts will be saved as Contacts</label>' + 
+								                    '</div>'+ 
+								                    
+								                    /* 
+								                    '<div style="margin-left: 50px;"> <label class="checkbox"><input type="checkbox" name="event" checked="checked" id="zoho_event">Events</label></div>'+
+								                    '<div style="margin-left: 50px;"> <label class="checkbox"><input type="checkbox" name ="task" checked="checked" id="zoho_task">Tasks</label></div>'+ */
+								                    
+								                   '<div class="clearfix"><a id="zoho_import_options" class="btn pull-right" style="text-decoration: none; margin-right: 30px;">Import</a></div>' +
+								                    
+										'</form></div>');
+							}else{
+								$("#zoho-error").html("Invalid login Please try again");
+								$('#spinner-sales').hide();
+								$("#zoho-error").show();
+							}
+						},
+						error:function(data){
+							$("#zoho-error").html(data.responseText);
+							$('#spinner-sales').hide();
+							$("#zoho-error").show();
+						}
+					 })
+				
+			},error:function(){
+				alert("Invalid credential")
+			}});
+		
+			 
+			 
+			 
+		
+		});
+		
+	
 	
 $('#zoho_import_options').die().live('click', function(data){
 	
@@ -212,7 +250,7 @@ function isValid(form){
 
 		// Return valid of invalid, to stop from saving the data
 		return $(form).valid();
-   }  
+   } 
 
 
 </script>

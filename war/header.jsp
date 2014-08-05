@@ -41,7 +41,7 @@
 							<%
 							    if ("admin".equals(domainUser.domain)) {
 											out.println("<li><a href='#all-domain-users'><i class='icon-group'></i> All Domain Users</a></li></ul>");
-											out.println("<ul class='nav pull-right' style='float:right!important;'><li><a href="
+											out.println("<ul class='nav pull-right' style='float:right!important;'><li class='nav-bar-search'>	<form id='domainSearchForm' class=' navbar-search'	style='margin: 5px;'>	<input id='domainSearchText' type='text' style='line-height: 17px'	data-provide='typeahead'		placeholder='Search'></input> <input id='domain-search-results' type='image' src='img/SearchIcon.png' class='searchbox' /></form></li><li><a href="
 													+ logoutURL
 													+ "><i class='icon-off'></i>Logout</a></li>");
 										} else {
@@ -120,9 +120,7 @@
 							%>
 								</ul>
 							</li>
-							<%
-							    }
-							%>
+							
 							
 						
 							<li class="nav-bar-search">
@@ -135,6 +133,9 @@
 										type="image" src="img/SearchIcon.png" class="searchbox" />
 								</form>
 							</li>
+							<%
+							    }
+							%>
 						</ul>
 
 						<ul class="nav pull-right">

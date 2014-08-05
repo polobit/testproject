@@ -3,15 +3,14 @@ package com.thirdparty.google;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
-import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
-import com.thirdparty.google.deferred.GoogleContactsDeferredTask;
-import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
  * <code>ContactsImporter</code> contains methods to initialize backend process
@@ -30,27 +29,24 @@ public class ContactsImportUtil
      * @param type
      *            {@link ContactPrefs.Type}
      */
-    public static void initializeImport(String type)
-    {
-	ContactPrefs contactPrefs = ContactPrefsUtil.getPrefsByType(ContactPrefs.Type.valueOf(type.toUpperCase()));
-
-	System.out.println("in initialize backends");
-	System.out.println(contactPrefs);
-
-	/*
-	 * If no preferences are saved, there might an error while
-	 * authenticating
-	 */
-	if (contactPrefs == null)
-	{
-	    // notifies user after adding contacts
-	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Authentication failed. Please import again");
-	    return;
-	}
-
-	// if contact preferences exists for google, initialize backends
-	initilaizeImportBackend(contactPrefs);
-    }
+    /*
+     * public static void initializeImport(String type) { ContactPrefs
+     * contactPrefs = ContactPrefsUtil.getPrefsByType(SyncClient.valueOf(type));
+     * 
+     * System.out.println("in initialize backends");
+     * System.out.println(contactPrefs);
+     * 
+     * 
+     * If no preferences are saved, there might an error while authenticating
+     * 
+     * if (contactPrefs == null) { // notifies user after adding contacts
+     * BulkActionNotifications
+     * .publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE,
+     * "Authentication failed. Please import again"); return; }
+     * 
+     * // if contact preferences exists for google, initialize backends
+     * initilaizeImportBackend(contactPrefs); }
+     */
 
     /**
      * Initializes backend with contact preferences and hits
@@ -68,29 +64,46 @@ public class ContactsImportUtil
 	TaskOptions taskOptions;
 	try
 	{
+	    // load contactPrefs in taskQueue
 	    ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
 	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayStream);
 	    objectOutputStream.writeObject(contactPrefs);
-	    System.out.println("byte array length in initialize backends: " + byteArrayStream.toByteArray().length);
-	    taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray()).method(Method.POST);
+	    
+	    
+	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+	    
+	    if(contactPrefs.inProgress)
+		return;
+	    
+	    contactPrefs.inProgress = true;
+	    contactPrefs.save();
+
+		// Create Task and push it into Task Queue
+		taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray())
+			.header("Host", url).method(Method.POST);
+
+		queue.addAsync(taskOptions);
+
+	    // submitting jobs in push queue
 	    queue.addAsync(taskOptions);
 	}
 	catch (Exception e)
 	{
+	    contactPrefs.inProgress = false;
+	    contactPrefs.save();
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
     }
-
-    public static void initilaizeGoogleSyncBackend(Long id)
-    {
-	GoogleContactsDeferredTask task = new GoogleContactsDeferredTask(NamespaceManager.get(), id);
-
-	// Create Task and push it into Task Queue
-	Queue queue = QueueFactory.getQueue("contact-sync-queue");
-
-	// Add to queue
-	queue.addAsync(TaskOptions.Builder.withPayload(task));
-    }
+    /*
+     * public static void initilaizeGoogleSyncBackend(Long id) {
+     * GoogleContactsDeferredTask task = new
+     * GoogleContactsDeferredTask(NamespaceManager.get(), id);
+     * 
+     * // Create Task and push it into Task Queue Queue queue =
+     * QueueFactory.getQueue("contact-sync-queue");
+     * 
+     * // Add to queue queue.addAsync(TaskOptions.Builder.withPayload(task)); }
+     */
 }

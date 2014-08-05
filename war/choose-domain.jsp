@@ -24,6 +24,10 @@ if(!StringUtils.isEmpty(domain))
 	    error = "Domain '"+ domain +"' already exists. If you already have an account, you can login <a href='https://" + domain + ".agilecrm.com/login" + "'>here</a>.";
 	}
 }
+else
+{
+    response.sendRedirect("https://my.agilecrm.com/register");
+}
 
 %>
 

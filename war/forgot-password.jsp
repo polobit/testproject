@@ -33,7 +33,8 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
     
     try
     {
-	    domainUser = DomainUserUtil.generatePassword(email);
+		domainUser = DomainUserUtil.generateForgotPassword(email);
+		
 	    if(domainUser == null)
 		{
 		    error = "We are not able to find any user";

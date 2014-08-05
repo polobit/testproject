@@ -1,7 +1,6 @@
 package com.thirdparty.shopify;
 
 import org.scribe.model.OAuthConfig;
-import org.scribe.utils.OAuthEncoder;
 
 public class ShopifyApi extends ShopifyCustomApi
 {
@@ -12,12 +11,12 @@ public class ShopifyApi extends ShopifyCustomApi
      * Access token of Shopify for OAuth 2.0
      */
 
-    private static String ACCESS_TOKEN_URL = "https://"+SHOP_NAME+".myshopify.com/admin/oauth/access_token";
+    private static String AUTH__URL = "https://" + SHOP_NAME + ".myshopify.com/admin/oauth/access_token";
 
     @Override
     public String getAccessTokenEndpoint()
     {
-	return ACCESS_TOKEN_URL;
+	return AUTH__URL;
     }
 
     @Override
@@ -34,8 +33,10 @@ public class ShopifyApi extends ShopifyCustomApi
 	StringBuilder sb = new StringBuilder();
 	sb.append("https://" + SHOP_NAME + ".myshopify.com/admin/oauth");
 	sb.append("/authorize?").append(
-		"client_id=" + config.getApiKey() + "&redirect_uri ="+config.getCallback()+"&scope=" + config.getScope());
+		"client_id=" + config.getApiKey() + "&redirect_uri =" + config.getCallback() + "&scope="
+			+ config.getScope() + "&state=contact");
 
 	return sb.toString();
     }
+
 }

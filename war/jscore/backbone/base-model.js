@@ -155,7 +155,7 @@ var Base_Model_View = Backbone.View
 			deleteItem : function(e) {
 				e.preventDefault();
 				if(!confirm("Are you sure you want to delete?"))
-		    		return;
+		    		return false;
 				/*
 				 * Sends delete request, and reloads view on success
 				 */

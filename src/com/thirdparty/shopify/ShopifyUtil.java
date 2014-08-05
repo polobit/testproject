@@ -1,26 +1,41 @@
 package com.thirdparty.shopify;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.utils.URIBuilder;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.scribe.model.OAuthRequest;
+import org.scribe.model.Response;
+import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.Type;
 import com.agilecrm.user.DomainUser;
 import com.googlecode.objectify.Key;
 import com.thirdparty.forms.FormsUtil;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
@@ -215,12 +230,13 @@ public class ShopifyUtil
 	uri.setParameter("limit", "" + 250);
 	uri.setParameter("page", "" + current_page);
 
-	if (prefs.count > 0)
-	{
-	    uri.addParameter("created_at_min", prefs.last_update_time);
-	    uri.addParameter("updated_at_min", prefs.last_update_time);
-
-	}
+	/*
+	 * if (prefs.count > 0) { uri.addParameter("created_at_min",
+	 * prefs.last_update_time); uri.addParameter("updated_at_min",
+	 * prefs.last_update_time);
+	 * 
+	 * }
+	 */
 	uri.build();
 	System.out.println(uri.toString());
 
@@ -326,7 +342,7 @@ public class ShopifyUtil
 
 	    String domain = shop.getString("domain");
 
-	    if (domain.equalsIgnoreCase(prefs.userName))
+	    if (domain.equalsIgnoreCase(prefs.username))
 		return true;
 	}
 	catch (Exception e)
@@ -347,12 +363,13 @@ public class ShopifyUtil
 	URIBuilder uri = getAuthURL(prefs);
 	uri.setPath("/admin/customers/count.json");
 	System.out.println(uri.toString());
-	if (prefs.count > 0)
-	{
-	    uri.addParameter("created_at_min", prefs.last_update_time);
-	    uri.addParameter("updated_at_min", prefs.last_update_time);
-
-	}
+	/*
+	 * if (prefs.count > 0) { uri.addParameter("created_at_min",
+	 * prefs.last_update_time); uri.addParameter("updated_at_min",
+	 * prefs.last_update_time);
+	 * 
+	 * }
+	 */
 	try
 	{
 	    System.out.println(uri.toString());
@@ -420,30 +437,40 @@ public class ShopifyUtil
     {
 	URIBuilder uri = new URIBuilder();
 	uri.setScheme("https");
-	uri.setHost(pref.apiKey + ":" + pref.password + "@" + pref.userName);
+	// uri.setHost(pref.apiKey + ":" + pref.password + "@" + pref.userName);
 	return uri;
     }
-    
-    public static void main(String[]args){
-	
 
-	try{
+    public static void main(String[] args)
+    {
+
+	String uri = "https://agiletestshop.myshopify.com/admin/orders.json";
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, uri);
+	oAuthRequest.addHeader("X-Shopify-Access-Token", "59260c2e72fcfe96b8d6c366046baf4a");
+	try
+	{
 	
-	URL ur = new URL("https://shopperschois.myshopify.com/admin/oauth/authorize?client_id=70a2391cd9e9af0d666657a67885d9ec&scope=read_customers");
+	//Response response = oAuthRequest.send();
+		InputStream in = new FileInputStream(new File("order.txt"));
 	
-	
-	URLConnection con = ur.openConnection();
-	con.connect();
-	BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-	String s;
-	while((s = br.readLine())!= null){
-	    System.out.println(s);
+		Map<String, ArrayList<LinkedHashMap<String, Object>>> properties = new ObjectMapper().readValue(in,Map.class);
+		ArrayList<LinkedHashMap<String, Object>> customers = properties.get("orders");
+
+		for(int i =0;i<customers.size();i++){
+			LinkedHashMap<String, String> address = (LinkedHashMap<String, String>) customers.get(i).get("default_address");
+		  System.out.println(address);
+		  System.out.println(customers.get(i).get("email"));
+		  if(address.containsValue("address2")){
+			  System.out.println(address.get("address2"));
+		  }
+		}
+		
 	}
 	
-	}catch(Exception e){
+	catch (Exception e)
+	{
 	    e.printStackTrace();
 	}
     }
-
 
 }
