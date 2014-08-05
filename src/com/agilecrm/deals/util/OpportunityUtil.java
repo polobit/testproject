@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.agilecrm.contact.Contact;
@@ -128,7 +129,8 @@ public class OpportunityUtil
      */
     public static List<Opportunity> getOpportunities(long minTime, long maxTime)
     {
-	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
+		.list();
     }
 
     /**
@@ -288,7 +290,8 @@ public class OpportunityUtil
      */
     public static int getTotalNumberOfMilestones(long minTime, long maxTime, String milestone)
     {
-	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone).count();
+	return dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime)
+		.filter("milestone", milestone).count();
     }
 
     /**
@@ -336,7 +339,8 @@ public class OpportunityUtil
     public static JSONObject getConversionDetails(long minTime, long maxTime)
     {
 	// Gets total count of opportunities within the given period
-	int numOpportunities = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime).filter("close_date <= ", maxTime).count();
+	int numOpportunities = dao.ofy().query(Opportunity.class).filter("close_date >= ", minTime)
+		.filter("close_date <= ", maxTime).count();
 
 	JSONObject conversionObject = new JSONObject();
 
@@ -351,13 +355,64 @@ public class OpportunityUtil
 
     public static List<Opportunity> getDealsRelatedToCurrentUser()
     {
-	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	return dao.ofy().query(Opportunity.class)
+		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
 		.order("-created_time").limit(10).list();
     }
 
     public static List<Opportunity> getUpcomingDealsRelatedToCurrentUser(String pageSize)
     {
-	return dao.ofy().query(Opportunity.class).filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
+	return dao.ofy().query(Opportunity.class)
+		.filter("ownerKey", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()))
 		.order("close_date").limit(Integer.parseInt(pageSize)).list();
+    }
+
+    /**
+     * Returns list of opportunities. This method is called if TEXT_PLAIN is
+     * request.
+     * 
+     * @param ownerId
+     *            Owner of the deal.
+     * @param milestone
+     *            Deals Milestone.
+     * @param contactId
+     *            Id of the contact related to deal.
+     * @param fieldName
+     *            the name field to sort on.
+     * @param cursor
+     * @param count
+     *            page size.
+     * @return List of deals.
+     */
+    public static List<Opportunity> getOpportunitiesByFilter(String ownerId, String milestone, String contactId,
+	    String fieldName, int max, String cursor)
+    {
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	    if (StringUtils.isNotBlank(ownerId))
+		searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId)));
+
+	    if (StringUtils.isNotBlank(milestone))
+		searchMap.put("milestone", milestone);
+
+	    if (StringUtils.isNotBlank(contactId))
+		searchMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
+	    System.out.println("-------------------" + searchMap.toString());
+	    if (!StringUtils.isNotBlank(fieldName))
+		fieldName = "-created_time";
+
+	    if (max != 0)
+		return dao.fetchAllByOrder(max, cursor, searchMap, true, false, fieldName);
+
+	    return dao.listByProperty(searchMap);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
     }
 }
