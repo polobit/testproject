@@ -80,6 +80,11 @@ public class SendEmail extends TaskletAdapter
     public static String CC = "cc_email";
 
     /**
+     * BCC email id.
+     */
+    public static String BCC = "bcc_email";
+
+    /**
      * HTML content of email
      */
     public static String HTML_EMAIL = "html_email";
@@ -443,6 +448,7 @@ public class SendEmail extends TaskletAdapter
 
 	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
 	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
+	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
 
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 
@@ -495,13 +501,13 @@ public class SendEmail extends TaskletAdapter
 		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
 
 	    // Send HTML Email
-	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, html, text,
+	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
 	}
 	else
 	{
 	    // Send Text Email
-	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, null, text,
+	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, null, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
 	}
 
@@ -563,17 +569,17 @@ public class SendEmail extends TaskletAdapter
      * @param text
      *            - text body
      */
-    private void sendEmail(String fromEmail, String fromName, String to, String cc, String subject, String replyTo,
-	    String html, String text, String mandrillMetadata)
+    private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
+	    String replyTo, String html, String text, String mandrillMetadata)
     {
 	// For domain "clickdeskengage" - use SendGrid API
 	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
 	{
-	    SendGrid.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
+	    SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
 	    return;
 	}
 
-	MandrillUtil.sendMail(fromEmail, fromName, to, cc, subject, replyTo, html, text, mandrillMetadata);
+	MandrillUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
     }
 
 }
