@@ -9,15 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.jdo.identity.IntIdentity;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -28,15 +23,11 @@ import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
-import com.agilecrm.contact.util.TagUtil;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * <code>ShopifySyncImpl</code> is Shopify client Implementation of Oneway sync
@@ -436,6 +427,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 		note.save();
 
 		printRefunds(contact, order.get("id").toString(), customerProperties.get("id").toString());
+		printOrderRelatedEvents(order.get("id").toString(), contact);
 
 	    }
 
@@ -505,18 +497,21 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, refundUrl);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
-	ArrayList<LinkedHashMap<String, Object>> orders = new ArrayList<LinkedHashMap<String, Object>>();
+	ArrayList<LinkedHashMap<String, Object>> refunds = new ArrayList<LinkedHashMap<String, Object>>();
 	try
 	{
 	    Response response = oAuthRequest.send();
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
-	    orders = results.get("orders");
+	    if (results.get("refunds") != null)
+	    {
+		refunds.addAll(results.get("refunds"));
+	    }
 
 	}
 	catch (OAuthException e)
 	{
-	   e.printStackTrace();
+	    e.printStackTrace();
 	}
 	catch (Exception e)
 	{
@@ -527,8 +522,54 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     private String getRefundUrl(String orderId, String customerId)
     {
-	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders/" + orderId + "/refunds/" + customerId
-		+ "");
+	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders/" + orderId + "/refunds.json" + "");
 	return sb.toString();
+    }
+
+    public void printOrderRelatedEvents(String orderId, Contact contact)
+    {
+	String eventUrl = new StringBuilder("https://" + shop + "/admin/orders/" + orderId + "/events.json").toString();
+
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, eventUrl);
+	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
+	ArrayList<LinkedHashMap<String, Object>> events = new ArrayList<LinkedHashMap<String, Object>>();
+	try
+	{
+	    Response response = oAuthRequest.send();
+	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
+		    response.getStream(), Map.class);
+	    if (results.get("events") != null)
+	    {
+		events.addAll(results.get("events"));
+	    }
+
+	    if (events != null && events.size() > 0)
+	    {
+		Iterator<LinkedHashMap<String, Object>> it = events.listIterator();
+		System.out.println("==============================================================");
+		System.out.println("----------------------- Customer  Events ----------------------");
+		while (it.hasNext())
+		{
+		    LinkedHashMap<String, Object> event = it.next();
+		    System.out.println("ContactId         :  "+contact.id);
+		    System.out.println("OrderId           :  "+ orderId);
+		    System.out.println("Event             :  "+ event.get("verb"));
+		    System.out.println("Event message     :   "+ event.get("message"));
+		    System.out.println("Created date      :   "+event.get("created_at"));
+
+		}
+		System.out.println("==============================================================");
+		System.out.println("----------------------- Customer Events ----------------------");
+	    }
+	}
+	catch (OAuthException e)
+	{
+	    e.printStackTrace();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
     }
 }
