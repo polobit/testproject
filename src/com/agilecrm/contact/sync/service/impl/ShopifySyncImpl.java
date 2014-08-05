@@ -435,6 +435,8 @@ public class ShopifySyncImpl extends OneWaySyncService
 		// update notes
 		note.save();
 
+		printRefunds(contact, order.get("id").toString(), customerProperties.get("id").toString());
+
 	    }
 
 	}
@@ -495,5 +497,38 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    private void printRefunds(Contact conact, String orderId, String customerId)
+    {
+	String refundUrl = getRefundUrl(orderId, customerId);
+
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, refundUrl);
+	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
+	ArrayList<LinkedHashMap<String, Object>> orders = new ArrayList<LinkedHashMap<String, Object>>();
+	try
+	{
+	    Response response = oAuthRequest.send();
+	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
+		    response.getStream(), Map.class);
+	    orders = results.get("orders");
+
+	}
+	catch (OAuthException e)
+	{
+	   e.printStackTrace();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
+
+    private String getRefundUrl(String orderId, String customerId)
+    {
+	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders/" + orderId + "/refunds/" + customerId
+		+ "");
+	return sb.toString();
     }
 }

@@ -208,7 +208,7 @@ public class StripeSyncImpl extends OneWaySyncService
      */
     private void printCustomerCharges(Contact contact, Customer customer)
     {
-  	HashMap<String, Object> chargeOption = new HashMap<String, Object>();
+	HashMap<String, Object> chargeOption = new HashMap<String, Object>();
 	chargeOption.put("customer", customer.getId());
 	if (contact != null)
 	{
@@ -226,7 +226,8 @@ public class StripeSyncImpl extends OneWaySyncService
 			System.out.println("Customer name    :  " + charge.getCard().getName());
 			System.out.println("ContactId        :  " + contact.id);
 			System.out.println("Charge           :  " + charge.getAmount() + " " + charge.getCurrency());
-			System.out.println("Ammount Refunded :  " + charge.getAmountRefunded() + " "+charge.getCurrency());
+			System.out.println("Ammount Refunded :  " + charge.getAmountRefunded() + " "
+				+ charge.getCurrency());
 			if (charge.getFailureMessage() == null)
 			{
 			    System.out.println("Status           :  Successfull");
@@ -235,11 +236,9 @@ public class StripeSyncImpl extends OneWaySyncService
 			{
 			    System.out.println("Status         :  " + charge.getFailureMessage());
 			}
-			
-			System.out.println("Plan             :  "+customer.getSubscription().getPlan().getName());
+
 			System.out.println("Date             :  " + sf.format(new Date(charge.getCreated() * 1000)));
-			
-			//Charge.retrieve(charge.getId()).getr
+
 		    }
 		    System.out.println("--------------------------------------------------------------------");
 		    System.out.println("==================================================================");
@@ -254,5 +253,6 @@ public class StripeSyncImpl extends OneWaySyncService
 	}
     }
 
+    
 
 }
