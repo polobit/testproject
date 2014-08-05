@@ -11,6 +11,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
@@ -51,48 +52,51 @@ public class DomainUserUtil
      */
     public static DomainUser generatePassword(String email) throws Exception
     {
+	DomainUser domainUser = generateNewPassword(email);
+
+	if (domainUser == null)
+	    return null;
+
+	domainUser.save();
+	return domainUser;
+    }
+
+    public static DomainUser generateForgotPassword(String email) throws Exception
+    {
+	DomainUser user = generateNewPassword(email);
+	
+	if(user == null)
+	    return null;
+	
+	// Set password in different variable as current password will be encrypted before saving.
+	String password = user.password;
+	
+	user.save();
+	
+	user.password = password;
+	
+	SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
+		 SendMail.FORGOT_PASSWORD, user);
+	
+	return user;
+	
+    }
+
+    private static DomainUser generateNewPassword(String email)
+    {
 	DomainUser domainUser = getDomainUserFromEmail(email);
 
 	if (email != null && domainUser != null)
 	{
-	    /*
-	     * Commented to send forgot password mail also to OpenId users
-	     * if(StringUtils.isEmpty(domainUser.getHashedString())) { throw new
-	     * Exception(); }
-	     */
-	    String oldNamespace = NamespaceManager.get();
-	    NamespaceManager.set("");
 
 	    String randomNumber = RandomStringUtils.randomAlphanumeric(8).toUpperCase();
 
 	    domainUser.password = randomNumber;
-
-	    // Send an email with the new password to avoid two notification
-	    // templates.
-	    // SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-	    // SendMail.FORGOT_PASSWORD, domainUser);
-
-	    try
-	    {
-		domainUser.save();
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
-	    finally
-	    {
-		NamespaceManager.set(oldNamespace);
-	    }
-	    return domainUser;
 	}
-	else
-	{
-	    return null;
-	}
+
+	return domainUser;
 
     }
-
     /**
      * Gets a user based on its id
      * 
@@ -323,7 +327,7 @@ public class DomainUserUtil
 	NamespaceManager.set("");
 
 	DomainUser user = dao.ofy().query(DomainUser.class).filter("domain", domain).filter("is_account_owner", true)
-		.get();
+	        .get();
 
 	NamespaceManager.set(oldNamespace);
 	return user;
