@@ -71,9 +71,11 @@ public class ContactsImportUtil
 
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
-	    // Create Task and push it into Task Queue
-	    taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet")
-		    .payload(byteArrayStream.toByteArray()).header("Host", url).method(Method.POST);
+		// Create Task and push it into Task Queue
+		taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray())
+			.header("Host", url).method(Method.POST);
+
+
 
 	    // submitting jobs in push queue
 	    queue.addAsync(taskOptions);
