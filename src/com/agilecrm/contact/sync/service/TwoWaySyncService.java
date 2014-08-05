@@ -45,16 +45,16 @@ public abstract class TwoWaySyncService extends ContactSyncService
     {
 	if (prefs.sync_type == SYNC_TYPE.TWO_WAY)
 	{
-	    syncContactToClient();
+	    syncContactFromClient();
 	    uploadContactsToClient();
 	}
 	else if (prefs.sync_type == SYNC_TYPE.AGILE_TO_CLIENT)
 	{
-	    syncContactToClient();
+	    uploadContactsToClient();
 	}
 	else if (prefs.sync_type == SYNC_TYPE.CLIENT_TO_AGILE)
 	{
-	    uploadContactsToClient();
+	    syncContactFromClient();
 	}
     }
 
@@ -117,5 +117,7 @@ public abstract class TwoWaySyncService extends ContactSyncService
     }
 
     public abstract void saveContactsToClient(List<Contact> contacts);
+    
+    public abstract void syncContactFromClient();
 
 }

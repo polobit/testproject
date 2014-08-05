@@ -12,6 +12,10 @@ import org.apache.commons.io.IOUtils;
 
 import com.agilecrm.contact.sync.SyncPrefsBuilder;
 import com.agilecrm.contact.sync.service.SyncService;
+import com.agilecrm.contact.util.BulkActionUtil;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -53,13 +57,21 @@ public class ContactUtilServlet extends HttpServlet
 	    System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
 	    // retrieves Object which was added in taskQueue
 	    contactPrefs = (ContactPrefs) o.readObject();
+	    
+	    if(contactPrefs == null)
+		return;
+	    
+	    if(contactPrefs.domainUser != null)
+	    {
+		DomainUser user = DomainUserUtil.getDomainUser(contactPrefs.domainUser.getId());
+		BulkActionUtil.setSessionManager(user);
+	    }
 
 	    SyncService service = new SyncPrefsBuilder().config(contactPrefs)
 		    .getService(contactPrefs.type.getClazz());
 
 	    if (service != null)
 	    {
-		    contactPrefs.save();
 		    service.initSync();
 
 	    }
