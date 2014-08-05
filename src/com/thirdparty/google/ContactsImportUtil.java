@@ -82,7 +82,6 @@ public class ContactsImportUtil
 		taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray())
 			.header("Host", url).method(Method.POST);
 
-		queue.addAsync(taskOptions);
 
 	    // submitting jobs in push queue
 	    queue.addAsync(taskOptions);
