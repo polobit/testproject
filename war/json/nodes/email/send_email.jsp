@@ -39,7 +39,7 @@
 		            "required": "required",
 					"title": "Enter your subscriber E-mail ID. If you are using a list, you can use {{email}}",
 					"fieldType": "input",
-		            "type": "email"
+		            "type": "multipleEmails"
 				},
 				{
 					"label": "CC",
@@ -48,7 +48,16 @@
 		            "id":"cc_email",
 					"title": "Enter CC email address",
 					"fieldType": "input",
-		            "type": "email"
+		            "type": "multipleEmails"
+				},
+				{
+					"label": "BCC",
+					"category": "Info",
+					"name": "bcc_email",
+		            "id":"bcc_email",
+					"title": "Enter BCC email address",
+					"fieldType": "input",
+		            "type": "multipleEmails"
 				},
 				{
 					"label": "Subject",
