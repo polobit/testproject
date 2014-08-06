@@ -3,6 +3,8 @@
  */
 package com.agilecrm.contact.sync.service.impl;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -13,9 +15,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.codehaus.jettison.json.JSONObject;
 import org.scribe.exceptions.OAuthException;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
@@ -55,7 +59,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
-    String date = df.format(new Date());
+   
 
     /*
      * (non-Javadoc)
@@ -140,8 +144,36 @@ public class ShopifySyncImpl extends OneWaySyncService
     @Override
     protected void updateLastSyncedInPrefs()
     {
-	prefs.lastSyncCheckPoint = date;
-	prefs.save();
+	String shopUrl = new StringBuilder("https://" + shop + "/admin/shop.json?").toString();
+	
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, shopUrl);
+	oAuthRequest.addHeader("X-Shopify-Access-Token", prefs.token);
+	try
+	{
+	    Response response = oAuthRequest.send();
+	    BufferedReader br = new BufferedReader(new InputStreamReader(response.getStream()));
+	    String str;JSONObject shopObject = null;
+	    while((str = br.readLine())!= null){
+		    shopObject = new JSONObject(str);
+	    }
+	    
+	    if(shopObject != null){
+		    JSONObject object = shopObject.getJSONObject("shop");
+		    Object timezone = object.get("timezone").toString().subSequence(1,10);
+		    df.setTimeZone(TimeZone.getTimeZone(timezone.toString()));
+		    String date = df.format(new Date());
+		    prefs.lastSyncCheckPoint = date;
+		    prefs.save();
+		    
+	    }
+	
+	}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+	
 
     }
 
