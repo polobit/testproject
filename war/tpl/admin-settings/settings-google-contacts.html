@@ -168,7 +168,7 @@
 	</div>
 {{/unless}} 
     {{#if id}}
-<form id="imap-prefs-form" class="form-horizontal">
+<form id="stripe-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
           <div>Account Linked : {{username}} <span><a href="#" class="delete">Change</a></span></div>
 	
@@ -193,11 +193,9 @@
 
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
-{{#if inProgress}}
-          		 <button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;" disabled>Sync</button>
-{{else}}
-<button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
-{{/if}}
+
+			<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;">Sync</button>
+
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
 
@@ -255,7 +253,7 @@
 
   
 
-    <form id="imap-prefs-form" class="form-horizontal">
+    <form id="shopify-contact-import-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
         
 	
@@ -286,11 +284,8 @@
 
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
-{{#if inProgress}}
-          		 <button class="btn btn-primary save" style="display:inline-block;" disabled>Sync</button>
-{{else}}
-<button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
-{{/if}}
+
+			<button class="btn btn-primary" id="shopify-setting" style="display:inline-block;">Sync</button>
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 
        	  	</div>

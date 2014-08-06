@@ -125,6 +125,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
 		| APIException e)
 	{
+		  
 	    e.printStackTrace();
 	}
 

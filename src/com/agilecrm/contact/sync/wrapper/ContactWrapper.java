@@ -180,9 +180,7 @@ public abstract class ContactWrapper implements WrapperService
     {
 	List<ContactField> fields = getMoreCustomInfo();
 
-	if (fields == null || fields.size() == 0)
-	    return;
-
+	if (fields != null && fields.size() > 0)
 	contact.properties.addAll(fields);
     }
 

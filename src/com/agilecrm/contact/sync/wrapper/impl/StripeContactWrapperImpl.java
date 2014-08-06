@@ -31,231 +31,236 @@ import com.stripe.model.Customer;
 public class StripeContactWrapperImpl extends ContactWrapper
 {
 
-    /**  customer Instance */
-    Customer customer;
+	/** customer Instance */
+	Customer customer;
 
-    /**  Stripe field value. */
-    private String stripeFieldValue = null;
+	/** Stripe field value. */
+	private String stripeFieldValue = null;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#wrapContact()
-     */
-    @Override
-    public void wrapContact()
-    {
-	if (!(object instanceof Customer))
-	    return;
-
-	customer = (Customer) object;
-    }
-
-    {
-	/**
-	 * check stripe widget is configure or not if configure then retrieve
-	 * custom field which is configured for stripe widget
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.agilecrm.contact.sync.wrapper.WrapperService#wrapContact()
 	 */
-	Widget widget = WidgetUtil.getWidget("Stripe");
-	if (widget != null)
+	@Override
+	public void wrapContact()
 	{
+		if (!(object instanceof Customer))
+			return;
 
-	    try
-	    {
-		JSONObject stripePref = new JSONObject(widget.prefs);
-
-		if (stripePref.has("stripe_field_name"))
-		    stripeFieldValue = stripePref.get("stripe_field_name").toString();
-	    }
-	    catch (org.json.JSONException e)
-	    {
-		e.printStackTrace();
-	    }
-	}
-    }
-
-    /**
-     * Return String format of customer address which is extracted from stripe
-     * model {@link Card}.
-     * 
-     * @param card
-     *            the card
-     * @return address
-     */
-    private String getAddress(Card card)
-    {
-
-	JSONObject address = new JSONObject();
-
-	String addressLine2 = "";
-	if (card.getAddressLine2() != null)
-	{
-	    addressLine2 = card.getAddressLine2();
-	}
-	try
-	{
-	    address.put("address", card.getAddressLine1() + " " + addressLine2);
-
-	    if (card.getAddressCity() != null)
-		address.put("city", card.getAddressCity());
-
-	    if (card.getAddressState() != null)
-		address.put("state", card.getAddressState());
-
-	    address.put("country", card.getAddressCountry());
-	    address.put("zip", card.getAddressZip());
-	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
-	return address.toString();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getFirstName()
-     */
-    @Override
-    public ContactField getFirstName()
-    {
-	Card card = customer.getActiveCard();
-	if (card != null)
-	{
-	    return new ContactField(Contact.FIRST_NAME, card.getName(), null);
+		customer = (Customer) object;
 	}
 
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getEmail()
-     */
-    @Override
-    public ContactField getEmail()
-    {
-	return new ContactField(Contact.EMAIL, customer.getEmail(), "work");
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getAddress()
-     */
-    @Override
-    public ContactField getAddress()
-    {
-	Card card = customer.getActiveCard();
-
-	ContactField field = null;
-	if (card != null)
 	{
-	    field = new ContactField(Contact.ADDRESS, getAddress(card), "office");
+		/**
+		 * check stripe widget is configure or not if configure then
+		 * retrieve custom field which is configured for stripe widget
+		 */
+		Widget widget = WidgetUtil.getWidget("Stripe");
+		if (widget != null)
+		{
+
+			try
+			{
+				JSONObject stripePref = new JSONObject(widget.prefs);
+
+				if (stripePref.has("stripe_field_name"))
+					stripeFieldValue = stripePref.get("stripe_field_name").toString();
+			}
+			catch (org.json.JSONException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
-	return field;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.ContactWrapper#getMoreCustomInfo()
-     */
-    public List<ContactField> getMoreCustomInfo()
-    {
-	List<ContactField> customFields = new ArrayList<ContactField>(0);
-	// TODO Auto-generated method stub
-	// check stripe custom field
-	if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
+	/**
+	 * Return String format of customer address which is extracted from
+	 * stripe model {@link Card}.
+	 * 
+	 * @param card
+	 *                the card
+	 * @return address
+	 */
+	private String getAddress(Card card)
 	{
-	    ContactField field = new ContactField();
-	    field.type = FieldType.CUSTOM;
-	    field.name = stripeFieldValue;
-	    field.value = customer.getId();
-	    customFields.add(field);
+
+		JSONObject address = new JSONObject();
+
+		String addressLine2 = "";
+		if (card.getAddressLine2() != null)
+		{
+			addressLine2 = card.getAddressLine2();
+		}
+		try
+		{
+			address.put("address", card.getAddressLine1() + " " + addressLine2);
+
+			if (card.getAddressCity() != null)
+				address.put("city", card.getAddressCity());
+
+			if (card.getAddressState() != null)
+				address.put("state", card.getAddressState());
+
+			address.put("country", card.getAddressCountry());
+			address.put("zip", card.getAddressZip());
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
+		return address.toString();
 	}
-	else
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.agilecrm.contact.sync.wrapper.WrapperService#getFirstName()
+	 */
+	@Override
+	public ContactField getFirstName()
 	{
-	    contact.addProperty(new ContactField("StripeID", customer.getId(), null));
+		Card card = customer.getActiveCard();
+		if (card != null)
+		{
+			return new ContactField(Contact.FIRST_NAME, card.getName(), null);
+		}
+
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	return customFields;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.agilecrm.contact.sync.wrapper.WrapperService#getEmail()
+	 */
+	@Override
+	public ContactField getEmail()
+	{
+		return new ContactField(Contact.EMAIL, customer.getEmail(), "work");
+	}
 
-    /**
-     * Following fields data is not available in stripe.
-     * 
-     * @return the phone number
-     */
-    @Override
-    public ContactField getPhoneNumber()
-    {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.agilecrm.contact.sync.wrapper.WrapperService#getAddress()
+	 */
+	@Override
+	public ContactField getAddress()
+	{
+		Card card = customer.getActiveCard();
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getOrganization()
-     */
-    @Override
-    public ContactField getOrganization()
-    {
-	// TODO Auto-generated method stub
-	return null;
-    }
+		ContactField field = null;
+		if (card != null)
+		{
+			field = new ContactField(Contact.ADDRESS, getAddress(card), "office");
+		}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getDescription()
-     */
-    @Override
-    public String getDescription()
-    {
-	// TODO Auto-generated method stub
-	return null;
-    }
+		return field;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getTags()
-     */
-    @Override
-    public List<String> getTags()
-    {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.agilecrm.contact.sync.wrapper.ContactWrapper#getMoreCustomInfo()
+	 */
+	public List<ContactField> getMoreCustomInfo()
+	{
+		List<ContactField> customFields = new ArrayList<ContactField>();
+		// check stripe custom field
+		if (stripeFieldValue != null && !stripeFieldValue.isEmpty())
+		{
+			ContactField field = new ContactField();
+			field.type = FieldType.CUSTOM;
+			field.name = stripeFieldValue;
+			field.value = customer.getId();
+			customFields.add(field);
+		}
+		else
+		{
+			if (customer != null)
+			{
+				customFields.add(new ContactField("StripeID", customer.getId(), null));
+			}
+		}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getNotes()
-     */
-    @Override
-    public List<Note> getNotes()
-    {
-	// TODO Auto-generated method stub
-	return null;
-    }
+		return customFields;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getLastName()
-     */
-    @Override
-    public ContactField getLastName()
-    {
-	// TODO Auto-generated method stub
-	return null;
-    }
+	/**
+	 * Following fields data is not available in stripe.
+	 * 
+	 * @return the phone number
+	 */
+	@Override
+	public ContactField getPhoneNumber()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.agilecrm.contact.sync.wrapper.WrapperService#getOrganization()
+	 */
+	@Override
+	public ContactField getOrganization()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.agilecrm.contact.sync.wrapper.WrapperService#getDescription()
+	 */
+	@Override
+	public String getDescription()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.agilecrm.contact.sync.wrapper.WrapperService#getTags()
+	 */
+	@Override
+	public List<String> getTags()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.agilecrm.contact.sync.wrapper.WrapperService#getNotes()
+	 */
+	@Override
+	public List<Note> getNotes()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.agilecrm.contact.sync.wrapper.WrapperService#getLastName()
+	 */
+	@Override
+	public ContactField getLastName()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

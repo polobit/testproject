@@ -13,22 +13,36 @@ $(function()
 				e.preventDefault();
 				window.location = "/scribe?service_type=shopify&shop="+shopName+"&domain="+domain+"";
 				
-			})
+			});
 			
+	
 			
-			$('#change-shop').die().live('click',function(e){
+			$("#shopify-setting").die().live('click',function(e){
 				e.preventDefault();
-				alert("Are you sure?");
-				$.ajax({
-					url:'/core/api/shopify/delete',
-					success:function(){
-						window.location.reload();
-					},
-					error:function(){
-						window.location.reload();
-					}
-					
-				});
-			})
+				var disabled = $(this).attr("disabled");
+				if(disabled){
+					return false;
+				}else{
+				$(this).attr("disabled", "disabled");
+				}
+
+				
+				var syncPrefs = serializeForm("shopify-contact-import-form");
+				syncPrefs["inProgress"] = true;
+				App_Widgets.shopify_sync_setting.model.set(syncPrefs, {silent:true});
+				var url = App_Widgets.shopify_sync_setting.model.url;
+
+				$(this).after(getRandomLoadingImg());
+				App_Widgets.shopify_sync_setting.model.url = url + "?sync=true"
+				App_Widgets.shopify_sync_setting.model.save({}, {success : function(data){
+				
+					App_Widgets.shopify_sync_setting.render(true);
+					App_Widgets.shopify_sync_setting.model.url = url;	
+						show_success_message_after_save_button("Sync Initiated", App_Widgets.shopify_sync_setting.el);
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+					}});
+				
+			});
+			
 
 });
