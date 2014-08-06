@@ -170,10 +170,10 @@
     {{#if id}}
 <form id="imap-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-       
+          <div>Account Linked : {{username}} <span><a href="#" class="delete">Change</a></span></div>
 	
           
-             	<div class="control-group" style="margin-left: -80px;">
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
 					<label class="control-label">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
@@ -204,7 +204,10 @@
 
        
     </form>
+{{else}}
+<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
 {{/if}}
+
 </div>
 </script>
 
@@ -230,7 +233,7 @@
 
 <script id="admin-settings-import-shopify-prefs-template"
 	type="text/html">
-<div class="span5 well">
+<div class="span4 well">
 <span class="label label-important" style="float:right">Beta</span>
 <center> <img class="thumbnail" src="img/crm-plugins/shopify.png" style="width:210px; height:70px;margin-left:40px" /></center>
 <br/>
@@ -240,13 +243,13 @@
 	</div>
 
 
-<div class='input-append input-prepend' style="margin-left: 25px;">
+<div class='input-append input-prepend' style="margin-left: 46px;">
 	<span class="add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">https://</span>
-	  <input id="shop" style="margin-left: -3px;margin-right: -3px;" class="span3" required="required" name="shopname"  type="text" placeholder="If you are using abc.myshopify.com, enter abc">
+	  <input id="shop" style="margin-left: -3px;margin-right: -3px;width: 116px;" required="required" name="shopname"  type="text" placeholder="Enter shop domain">
     <span class="add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">.myshopify.com</span>
     
     </div>
-<a href ="#" id ="import_shopify" class="btn" style="margin-left: 24px;">connect</a>
+<a href ="#" id ="import_shopify" class="btn" style="margin-left: 46px;">connect</a>
 
   {{/unless}}
 
@@ -257,11 +260,11 @@
         
 	
            {{#if id}}
-              
+              <div>
                    Shop : <span style="margin-left: 38px;">{{othersParams}}</span>
                 
-                      <button id="change-shop" class="btn" style="margin-left: 15px;">Change</button>
-					
+                       <a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a>
+					</div>
                  
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
 					<label class="control-label" style="text-align:">Frequency</label> 
