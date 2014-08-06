@@ -2,6 +2,7 @@ package com.agilecrm.subscription.stripe;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,14 +12,23 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.codehaus.jettison.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
+import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import com.stripe.model.Customer;
+import com.stripe.model.Invoice;
 
 /**
  * <code>StripeUtil</code> is utility class used to process data, to support
@@ -115,11 +125,37 @@ public class StripeUtil
     {
 	// Converts Customer JSON to customer object
 	Customer customer = new Gson().fromJson(customerJSON.toString(), Customer.class);
-
+System.out.println(Customer.retrieve(customer.getId()));
 	// Retrieves the customer from stripe based on id
 	return Customer.retrieve(customer.getId());
     }
 
+    
+    public static List<Charge> getCharges(String customerid) throws StripeException{
+    	
+    	Map<String, Object> chargeParams = new HashMap<String, Object>();
+
+    	// Sets charge parameters (Stripe customer id is required to get
+    	// charges of a customer form stripe)
+    	chargeParams.put("customer", customerid);
+    	/*
+    	 * Fetches all charges for given stripe customer id and returns
+    	 * invoices
+    	 */
+    	return Charge.all(chargeParams).getData();
+    }
+    
+    // based on charge id, that charge will be refunded 
+    public static Charge createRefund(String chargeid) throws StripeException{
+    	
+    	Charge ch=Charge.retrieve(chargeid);
+    	
+    	return ch.refund( Stripe.apiKey);
+    }
+    
+    
+  
+  
     /**
      * Converts {@link Customer} of stripe to a {@link JSONObject}
      * 
@@ -137,5 +173,7 @@ public class StripeUtil
 	JSONObject customerJSON = new JSONObject(customerJSONString);
 	return customerJSON;
     }
+    
+ 
 
 }

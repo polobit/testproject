@@ -16,7 +16,13 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
@@ -206,7 +212,7 @@ public class StripeImpl implements AgileBilling
      * @throws StripeException
      * */
     public List<Invoice> getInvoices(JSONObject stripeCustomer) throws StripeException
-    { int sum=0;
+    { 
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 
 	// Sets invoice parameters (Stripe customer id is required to get
@@ -304,11 +310,13 @@ public class StripeImpl implements AgileBilling
 	}
 	catch (Exception e)
 	{
+		e.printStackTrace();
 	}
 
 	return new JSONObject();
     }
 
-  
+    
+   
     
 }

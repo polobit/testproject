@@ -119,27 +119,5 @@ public class UserPrefsAPI
     }
     
     
-    //used to changes password from admin panel
-    @Path("admin/changePassword/{id}")
-    @PUT
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void changePasswordOfCurrentDomainUserFromAdminPanel(@PathParam("id") String id, @FormParam("new_pswd") String newPassword) throws Exception
-    {
-    	long idofuseremail=Long.parseLong(id);
-    DomainUser currentDomainUser = DomainUserUtil.getDomainUser(idofuseremail);
-
-        try
-        {
-    	currentDomainUser.password = newPassword;
-    	currentDomainUser.save();
-        }
-        catch (Exception e)
-        {
-    	e.printStackTrace();	
-    	System.out.println(e.getMessage());
-    	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
-        }
-
-
-    }
+   
 }
