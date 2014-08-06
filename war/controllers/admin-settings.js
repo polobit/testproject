@@ -41,7 +41,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	},
 	
-	
+	// function will be called from getDomainDetails Navigation
+	//todisplay email count
 	get_email_count_for_domain_from_adminpanel:  function(domainname)
 	{ 
 		
@@ -62,6 +63,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 	},
 	
+	// function will be called from getDomainDetails Navigation
+	//todisplay count
 	
 	get_web_stats_count_for_domain_from_adminpanel: function (domainname)
 	{
@@ -80,6 +83,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 	},
 	
+	// function will be called from getDomainDetails Navigation
+	//todisplay get domain stats object for particular domain
 	
 	get_account_stats_for_domain_from_adminpanel: function (domainname)
 	{
@@ -105,7 +110,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 	},
 	
-	
+	// function will be called from getDomainDetails Navigation
+	//todisplay get subscription object for particular domain
 	get_subscriptionobject_for_domain_from_adminpanel: function (domainname)
 	{ 
 		console.log("in subscription object");console.log(domainname);
@@ -124,6 +130,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 	},
 	
+	// function will be called from getDomainDetails Navigation
+	//todisplay get collection of invoices  for particular domain
 	
 	get_collection_of_invoices_for_domain_from_adminpanel: function (el,domainname)
 	{ 
@@ -133,12 +141,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			individual_tag_name : 'tr',postRenderCallback : function(el)
 			{
 				var arr=App_Admin_Settings.invoicecollection.collection;console.log("invoiceesdata");console.log(arr.models);
-				/*var arr=that.invoicecollection.collection; 
 				var amount=arr.models;
 				if(amount.length!=0){
 				var total_amount=amount[0].get('total')
-				 $("#content").find('#totalamount').html("<h3>Total Amount:"+total_amount+"");
-				}*/
+				// $("#content").find('.totalamount').html("<h4>Total Amount:"+total_amount+"");
+				}
 			} });
 	this.invoicecollection.collection.fetch();
 
@@ -148,7 +155,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 },
 	
 	
-	
+	//router to fill domain details template from admin panel
 	getDomainUserDetails: function(query){
 	
 		 var domainname="",ownername="";var ar=[];
@@ -165,11 +172,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				console.log(ar);
 				for(var i=0;i<ar.length;i++){
 					var mod=ar[i];
-					console.log("indide model loop execites ar.length ");console.log(mod);
 					if(mod.get('is_account_owner')){
 						ownername=mod.get('name');
 						domainname=mod.get('domain');
-						console.log("inside  accountowner loop  ");
 						
 					}
 					
@@ -177,12 +182,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				console.log("after for loop");console.log(domainname);
 				if(domainname==undefined||domainname==""){
 					var dom=ar[0];
-					console.log("afetr dom");console.log(dom);
 					domainname=dom.get('domain');
-					console.log("inside undefined loop  "+domainname);
-					console.log(dom);
 				}
-				console.log(domainname+"----------------------------------"+ownername);
 				$("#content").find('.domainname').html("<h4 >Domain Name:   "+domainname);
 				$("#content").find('#ownername').html(ownername);
 				App_Admin_Settings.get_subscriptionobject_for_domain_from_adminpanel(domainname); 
@@ -197,7 +198,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 	},
 	
-	
+	//used to change password for particular user from admin panel
 	changePasswordadmin : function(id)
 	{
 		$("#content").html(getTemplate("settings"), {});

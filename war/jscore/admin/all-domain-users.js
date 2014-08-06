@@ -1,6 +1,6 @@
 $(function()
 {
-	//$("#domain-search-results").live('click', function(e)
+//takes searchbox value and navigate this to router
 	$( "#domainSearchForm" ).submit(function( e ) 	{
 		e.preventDefault(e);
 		
@@ -12,6 +12,8 @@ $(function()
             });
 	
 	});
+	
+	//deltes user from domain from admin panel
 	
 $(".delete_user").die().live('click', function(e){
 		
@@ -38,7 +40,7 @@ $(".delete_user").die().live('click', function(e){
 		
 	});
 	
-	
+	//navigates to domain details from all domain users
 	
 	$("#all-domain-users-model-list > tr").live('click', function(e)
 			{
@@ -62,7 +64,7 @@ $(".delete_user").die().live('click', function(e){
 					
 				
 					var namespace = $(this).closest('a').attr("data");
-					alert(namespace);
+					
 					if(namespace != "")
 					{
 							if (!confirm("Are you sure you want to delete ?" ))
@@ -77,7 +79,8 @@ $(".delete_user").die().live('click', function(e){
 								type : "DELETE",
 								url : "core/api/users/admin/delete/" + namespace,
 								success : function()
-								{alert("account deleted");
+								{
+									alert("account deleted");
 									location.reload(true);
 								}
 							});

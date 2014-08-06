@@ -44,22 +44,13 @@ public class TagUtil
     public static void updateTags(Set<String> tags)
     {
 
-	try
-	{
-	    // Add tags to cache to compare
-	    CacheUtil.setCache(NamespaceManager.get() + "-" + "tags", tags);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while setting tags in cache... " + e.getMessage());
-	}
-
 	List<Key<Tag>> tagKeys = null;
 
 	// If tags exist, fetch tagKeys
 	if (tags.size() != 0)
 	    tagKeys = dao.listAllKeys();
+
+	boolean newTags = false;
 
 	// Add to tags Library
 	for (String tagName : tags)
@@ -71,13 +62,17 @@ public class TagUtil
 
 	    if (tagKeys.indexOf(new Key<Tag>(Tag.class, tagName)) == -1)
 	    {
-		System.out.println("New Tag added is " + tagName);
-
 		// Add tag to db
 		Tag.addTag(tagName);
-	    }
 
+		newTags = true;
+	    }
 	}
+
+	// Remove tags from cache
+	if (newTags)
+	    CacheUtil.deleteCache(NamespaceManager.get() + "-" + "tags");
+
     }
 
     /**
@@ -89,22 +84,37 @@ public class TagUtil
      */
     public static void deleteTags(Set<String> tags)
     {
+
+	boolean tagsDeleted = false;
 	// Add to tags Library
 	for (String tagName : tags)
 	{
-	    if (StringUtils.isBlank(tagName))
-		continue;
-
-	    // Check if there is any contact with this tag
-	    int count = ContactUtil.getContactsCountForTag(tagName);
-	    if (count == 0)
-	    {
-		// Delete this tag
-		Key<Tag> tagKey = new Key<Tag>(Tag.class, tagName);
-
-		dao.deleteKey(tagKey);
-	    }
+	    tagsDeleted = deleteTag(tagName);
 	}
+
+	if (tagsDeleted)
+	    CacheUtil.deleteCache(NamespaceManager.get() + "-" + "tags");
+
+    }
+
+    public static boolean deleteTag(String tagName)
+    {
+	if (StringUtils.isBlank(tagName))
+	    return false;
+
+	// Check if there is any contact with this tag
+	int count = ContactUtil.getContactsCountForTag(tagName);
+	if (count == 0)
+	{
+	    // Delete this tag
+	    Key<Tag> tagKey = new Key<Tag>(Tag.class, tagName);
+
+	    dao.deleteKey(tagKey);
+	    return true;
+	}
+
+	return false;
+
     }
 
     /**

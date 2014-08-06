@@ -3,8 +3,10 @@ package com.thirdparty.google;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -67,16 +69,21 @@ public class ContactsImportUtil
 	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayStream);
 	    objectOutputStream.writeObject(contactPrefs);
 
-	    System.out.println("byte array length in initialize backends: " + byteArrayStream.toByteArray().length);
-	    taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet")
+	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
-	    .payload(byteArrayStream.toByteArray()).method(Method.POST);
+		// Create Task and push it into Task Queue
+		taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray())
+			.header("Host", url).method(Method.POST);
+
+
 
 	    // submitting jobs in push queue
 	    queue.addAsync(taskOptions);
 	}
 	catch (Exception e)
 	{
+	    contactPrefs.inProgress = false;
+	    contactPrefs.save();
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}

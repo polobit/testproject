@@ -140,8 +140,12 @@
 
 
       <div class="form-actions">
-			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
-			<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+{{#if inProgress}}
+			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px" disabled>Sync</div>
+	{{else}}
+<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
+{{/if}}		
+<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 	 </div>
 	{{/if}}
         </fieldset>
@@ -282,20 +286,23 @@
 
 <script id="admin-settings-import-shopify-contact-syncPrefs-template"
 	type="text/html">
-	<div class="well widget-add" style="width:220px;">
+	<div class="well widget-add" style="width:285px;">
 
-    <img class="thumbnail"  src="img/crm-plugins/shopify.png" style="width:210px; height:70px;" />
+    <img class="thumbnail"  src="img/crm-plugins/shopify.png" style="width:281px; height:70px;" />
 	<br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
 		Agile can periodically sync your contacts in your CRM with your Shopify Contacts.
 	</div>
-    <div>
+    <div style="margin-left: 15px;">
 			{{#if id}}
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
 				<a href="#google-apps/shopify" class="btn">Settings</a>
 			{{else}}
-              <div> 
-			   <input type="text" name="shop" id="shopeName" placeholder ="Enter shopname"/></div>
+<div class="input-prepend input-append">
+  <span class="add-on">https://</span>
+  <input id="shopeName" type="text" name="shop" placeholder ="Enter shopname" class="span5">
+  <span class="add-on">.myshopify.com</span>
+</div>
 			   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Enable</button>
 			{{/if}}
 </div>

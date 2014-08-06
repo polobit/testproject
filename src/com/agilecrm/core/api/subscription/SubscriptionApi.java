@@ -144,6 +144,8 @@ public class SubscriptionApi
 	}
     }
     
+    //upgrades subscription plan from adminpanel
+    
     @Path("/adminpanel/subscribe")
     @POST
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -151,12 +153,15 @@ public class SubscriptionApi
     public Subscription subscribeForParticularDomain(Subscription subscribe) throws PlanRestrictedException, WebApplicationException
     {
     	System.out.println("plan upgradation request from Admin panel/support panel");
+    	System.out.println(subscribe);
+    	String oldnamespace=NamespaceManager.get(); 
 	try
 	{   
-		String email=subscribe.customer_email;
-		DomainUser domainuser=DomainUserUtil.getDomainUserFromEmail(email);
-		String domain=domainuser.domain;
-		String oldnamespace=NamespaceManager.get(); 
+		
+		String domain=subscribe.domain_name;
+		
+		System.out.println("domain name in subscribe for particular domain "+domain);
+		
 	
 		NamespaceManager.set(domain);
 	
@@ -191,7 +196,7 @@ public class SubscriptionApi
 	    // Add to queue
 	    Queue queue = QueueFactory.getDefaultQueue();
 	    queue.add(TaskOptions.Builder.withPayload(task));
-        NamespaceManager.set(oldnamespace);
+       
 	    return subscribe;
 	}
 	catch (PlanRestrictedException e)
@@ -207,6 +212,9 @@ public class SubscriptionApi
 	     */
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
+	}
+	finally{
+		 NamespaceManager.set(oldnamespace);
 	}
     }
     
@@ -289,19 +297,19 @@ public class SubscriptionApi
 	}
     }
     
-    
+    //fetches list invoices for particular domain
     @Path("/adminpanel/invoices/{domainname}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public List getCollectionOfInvoicesOfParticularDomain(@PathParam("domainname") String domainname)
-    {System.out.println("collection of invoices request  1-- subsctiptiuonapi.java");
+    {
 	try
 	{
 		
 	    return Subscription.getInvoicesOfParticularDomain(domainname);
 	}
 	catch (Exception e)
-	{ System.out.println("in subscription api catch block");
+	{ 
 	e.printStackTrace();    
 	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
@@ -354,7 +362,7 @@ public class SubscriptionApi
 	}
     }
     
-    
+  
   
     
 }

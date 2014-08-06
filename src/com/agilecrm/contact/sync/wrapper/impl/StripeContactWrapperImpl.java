@@ -1,3 +1,7 @@
+/**
+ * @auther jitendra
+ * @since 2014
+ */
 package com.agilecrm.contact.sync.wrapper.impl;
 
 import java.util.ArrayList;
@@ -20,10 +24,17 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
 
+/**
+ * <code>StripeContactWrapperImpl</code> extends ContactWrapper wraps individual
+ * field in agile Contact Object
+ */
 public class StripeContactWrapperImpl extends ContactWrapper
 {
 
+    /**  customer Instance */
     Customer customer;
+
+    /**  Stripe field value. */
     private String stripeFieldValue = null;
 
     /*
@@ -64,10 +75,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
     }
 
     /**
-     * return String formate of customer address which is extracted from stripe
-     * model {@link Card}
+     * Return String format of customer address which is extracted from stripe
+     * model {@link Card}.
      * 
      * @param card
+     *            the card
      * @return address
      */
     private String getAddress(Card card)
@@ -100,6 +112,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return address.toString();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getFirstName()
+     */
     @Override
     public ContactField getFirstName()
     {
@@ -113,12 +130,22 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getEmail()
+     */
     @Override
     public ContactField getEmail()
     {
 	return new ContactField(Contact.EMAIL, customer.getEmail(), "work");
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getAddress()
+     */
     @Override
     public ContactField getAddress()
     {
@@ -133,6 +160,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return field;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.ContactWrapper#getMoreCustomInfo()
+     */
     public List<ContactField> getMoreCustomInfo()
     {
 	List<ContactField> customFields = new ArrayList<ContactField>(0);
@@ -145,21 +177,19 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	    field.name = stripeFieldValue;
 	    field.value = customer.getId();
 	    customFields.add(field);
-	}else{
-	    CustomFieldDef customField = CustomFieldDefUtil.getFieldByType("TEXT").get(0);
-	    ContactField field = new ContactField();
-	    field.type = FieldType.CUSTOM;
-	    field.name = customField.field_label;
-	    field.value = customer.getId();
-	    customFields.add(field);
 	}
-	
+	else
+	{
+	    contact.addProperty(new ContactField("StripeID", customer.getId(), null));
+	}
 
 	return customFields;
     }
 
     /**
-     * Following fields data is not available in stripe
+     * Following fields data is not available in stripe.
+     * 
+     * @return the phone number
      */
     @Override
     public ContactField getPhoneNumber()
@@ -168,6 +198,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getOrganization()
+     */
     @Override
     public ContactField getOrganization()
     {
@@ -175,6 +210,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getDescription()
+     */
     @Override
     public String getDescription()
     {
@@ -182,6 +222,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getTags()
+     */
     @Override
     public List<String> getTags()
     {
@@ -189,6 +234,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getNotes()
+     */
     @Override
     public List<Note> getNotes()
     {
@@ -196,6 +246,11 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getLastName()
+     */
     @Override
     public ContactField getLastName()
     {

@@ -1,10 +1,18 @@
 package com.agilecrm.contact.util;
 
 import java.util.ArrayList;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,12 +25,21 @@ import org.json.JSONException;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.document.Document;
 import com.agilecrm.search.AppengineSearch;
+import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.campaignio.cron.util.CronUtil;
+import com.campaignio.logger.util.LogUtil;
+import com.campaignio.twitter.util.TwitterJobQueueUtil;
+import com.google.appengine.api.NamespaceManager;
+import com.google.appengine.api.search.Document.Builder;
+import com.google.appengine.api.search.Index;
+import com.google.gdata.data.introspection.Collection;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -105,9 +122,10 @@ public class ContactUtil
 	return dao.fetchAll();
     }
 
-    //returns all documents count 
+    //returns all contacts count 
     public static int getCount(){
     	List<Contact> li=dao.fetchAll();
+    	System.out.println(li.size()+" In contact util.java ");
     	return li.size();
     }
     /*
@@ -307,7 +325,7 @@ public class ContactUtil
     public static int searchContactCountByEmail(String email)
     {
 	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email).count();
+	        .filter("properties.value = ", email).count();
     }
 
     /**
@@ -428,7 +446,7 @@ public class ContactUtil
 	    return "?";
 
 	String contactName = contact.getContactFieldValue(Contact.FIRST_NAME) + " "
-		+ contact.getContactFieldValue(Contact.LAST_NAME);
+	        + contact.getContactFieldValue(Contact.LAST_NAME);
 
 	return contactName;
     }
@@ -453,7 +471,7 @@ public class ContactUtil
     public static List<Contact> getRecentContacts(String page_size)
     {
 	return dao.ofy().query(Contact.class).filter("viewed.viewer_id", SessionManager.get().getDomainId())
-		.order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
+	        .order("-viewed.viewed_time").limit(Integer.parseInt(page_size)).list();
     }
 
     public static void deleteContactsbyList(List<Contact> contacts)
@@ -468,6 +486,78 @@ public class ContactUtil
 	    contact.delete(false);
     }
 
+    public static void deleteContacts(List<Contact> contacts)
+    {
+	Set<String> tags = new HashSet<String>();
+	List<Long> contactIds = new ArrayList<Long>();
+	List<Contact> contactsSubList = new ArrayList<Contact>();
+	for (int i = 0; i < contacts.size(); i++)
+	{
+	    Contact contact = contacts.get(i);
+	    contactIds.add(contact.id);
+	    tags.addAll(contact.tags);
+	    contactsSubList.add(contact);
+	    if (contactsSubList.size() >= 100 || i == contacts.size() - 1)
+	    {
+		Contact.dao.deleteAll(contactsSubList);
+		postDeleteOperation(contactIds, tags);
+
+		contactsSubList.clear();
+	    }
+	}
+    }
+
+    public static void postDeleteOperation(List<Long> ids, Set<String> tags)
+    {
+	String[] docIds = new String[ids.size()];
+	for (int i = 0; i < ids.size(); i++)
+	{
+	    Long id = ids.get(i);
+	    // Delete Notes
+	    NoteUtil.deleteAllNotes(id);
+
+	    // Delete Crons.
+	    CronUtil.removeTask(null, id.toString());
+
+	    // Deletes logs of contact.
+	    LogUtil.deleteSQLLogs(null, id.toString());
+
+	    // Deletes TwitterCron
+	    TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
+
+	    docIds[i] = String.valueOf(id);
+	}
+
+	Index index = new AppengineSearch<Contact>(Contact.class).index;
+	
+	if(index != null)
+	    index.delete(docIds);
+	
+	// Delete Tags
+	TagUtil.deleteTags(tags);
+    }
+
+    public static void postDeleteOperation(Long id, Set<String> tags)
+    {
+	new AppengineSearch<Contact>(Contact.class).delete(id.toString());
+
+	// Delete Notes
+	NoteUtil.deleteAllNotes(id);
+
+	// Delete Tags
+	TagUtil.deleteTags(tags);
+
+	// Delete Crons.
+	CronUtil.removeTask(null, id.toString());
+
+	// Deletes logs of contact.
+	LogUtil.deleteSQLLogs(null, id.toString());
+
+	// Deletes TwitterCron
+	TwitterJobQueueUtil.removeTwitterJobs(null, id.toString(), NamespaceManager.get());
+
+    }
+
     /**
      * Returns Key of a company by its name.
      * 
@@ -478,7 +568,7 @@ public class ContactUtil
     public static Key<Contact> getCompanyByName(String companyName)
     {
 	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name")
-		.filter("properties.value", companyName).getKey();
+	        .filter("properties.value", companyName).getKey();
 
     }
 
@@ -549,16 +639,34 @@ public class ContactUtil
 	// Enables to build "Document" search on current entity
 	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
 
+	ContactDocument contactDocuments = new ContactDocument();
+	Builder[] docs = new Builder[contacts_list.size()];
+	List<Builder> builderObjects = new ArrayList<Builder>();
+	int i = 0;
 	for (Contact contact : contacts_list)
 	{
 	    contact.setContactOwner(newOwnerKey);
 	    Key<DomainUser> userKey = contact.getContactOwnerKey();
 
 	    if (!new_owner.equals(userKey))
-		search.edit(contact);
-	}
-	Contact.dao.putAll(contacts_list);
+	    {
+		builderObjects.add(contactDocuments.buildDocument(contact));
+		// docs[i] = contactDocuments.buildDocument(contact);
+		++i;
+	    }
 
+	    if (i >= 150)
+	    {
+		search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+		builderObjects.clear();
+		i = 0;
+	    }
+	}
+
+	if (builderObjects.size() > 1)
+	    search.index.put(builderObjects.toArray(new Builder[builderObjects.size() - 1]));
+
+	Contact.dao.putAll(contacts_list);
     }
 
     /**
@@ -668,7 +776,7 @@ public class ContactUtil
     public static boolean isValidFields(Contact contact)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))
-		&& StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
+	        && StringUtils.isBlank(contact.getContactFieldValue(contact.LAST_NAME)))
 	{
 	    return false;
 	}
@@ -701,7 +809,7 @@ public class ContactUtil
     {
 
 	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 

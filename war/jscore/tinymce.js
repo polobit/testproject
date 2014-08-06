@@ -370,7 +370,7 @@ function get_contact_json_for_merge_fields()
 			
 			// Format each epochtime to Date
 			for(var i in arr)
-				contact_property_json[arr[i]]= get_formatted_date(contact_property_json[arr[i]] * 1000);
+				contact_property_json[arr[i]]= get_formatted_date(contact_property_json[arr[i]]);
 			
 			contact_property_json["location"] = JSON.parse(contact_property_json["address"]);
 		}
@@ -440,14 +440,22 @@ function get_custom_field_labels_by_type(custom_data, field_type)
  * @param epoch_time - Epoch time in milliseconds
  *                     
  **/
-function get_formatted_date(epoch_time)
+function get_formatted_date(epoch_time, format)
 {
+	if (!epoch_time)
+	    return;
+
+	var d = undefined;
+	
+	if ((epoch_time / 100000000000) > 1)
+	   d = new Date(parseInt(epoch_time));
+	else
+	   d = new Date(parseInt(epoch_time) * 1000);
+	
 	var month_names = new Array("Jan", "Feb", "Mar", 
 			"Apr", "May", "Jun", "Jul", "Aug", "Sep", 
 			"Oct", "Nov", "Dec");
 
-	var d = new Date(epoch_time);
-	
 	var date = d.getDate();
 	var month = d.getMonth();
 	var year = d.getFullYear();

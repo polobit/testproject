@@ -21,9 +21,9 @@ import com.google.gdata.data.extensions.PhoneNumber;
 import com.google.gdata.data.extensions.StructuredPostalAddress;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GoogleContactWrapperImpl.
+ * <code> GoogleContactWrapperImpl</code> implemented ContactWrapper wraps the
+ * Google contacts in agile schema format
  */
 public class GoogleContactWrapperImpl extends ContactWrapper
 {
@@ -102,12 +102,12 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		    if (im.hasProtocol() && im.getProtocol() != null)
 		    {
 			if (im.getProtocol().indexOf("#") >= 0
-			        && im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
-			                .equalsIgnoreCase("SKYPE"))
+				&& im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
+					.equalsIgnoreCase("SKYPE"))
 			    subType = "SKYPE";
 			if (im.getProtocol().indexOf("#") >= 0
-			        && im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
-			                .equalsIgnoreCase("GOOGLE_TALK"))
+				&& im.getProtocol().substring(im.getProtocol().indexOf("#") + 1)
+					.equalsIgnoreCase("GOOGLE_TALK"))
 			    subType = "GOOGLE-PLUS";
 			else
 			{
@@ -191,28 +191,26 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     public ContactField getOrganization()
     {
 	ContactField field = null;
-	
+
 	if (entry.hasOrganizations())
-	    if (entry.getOrganizations().get(0).hasOrgName()
-		    && entry.getOrganizations().get(0).getOrgName().hasValue())
-		return new ContactField(Contact.COMPANY, entry.getOrganizations().get(0).getOrgName()
-			.getValue(), null);
-	
+	    if (entry.getOrganizations().get(0).hasOrgName() && entry.getOrganizations().get(0).getOrgName().hasValue())
+		return new ContactField(Contact.COMPANY, entry.getOrganizations().get(0).getOrgName().getValue(), null);
+
 	return field;
     }
-    
+
     @Override
     public ContactField getJobTitle()
     {
 	Occupation occupation = entry.getOccupation();
 	entry.getTitle();
-	if(occupation == null)
+	if (occupation == null)
 	    return (ContactField) null;
-	    System.out.println("job");
-	    System.out.println(entry.getOccupation());
-	
-        // TODO Auto-generated method stub
-        return new ContactField(Contact.TITLE, occupation.getValue(), null);
+	System.out.println("job");
+	System.out.println(entry.getOccupation());
+
+	// TODO Auto-generated method stub
+	return new ContactField(Contact.TITLE, occupation.getValue(), null);
     }
 
     /*

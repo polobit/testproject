@@ -107,8 +107,9 @@ $(function()
 		
 //	return;
 		
-		App_Widgets.setup_google_contacts.model.set(serializeForm("google-contacts-import-form"));
-		console.log(App_Widgets.setup_google_contacts.model.toJSON())
+		var syncPrefs = serializeForm("google-contacts-import-form");
+		syncPrefs["inProgress"] = true;
+		App_Widgets.setup_google_contacts.model.set(syncPrefs, {silent:true});
 		var url = App_Widgets.setup_google_contacts.model.url;
 
 		$(this).after(getRandomLoadingImg());

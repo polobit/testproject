@@ -78,7 +78,8 @@ public class UsersAPI
 	    return null;
 	}
     }
-
+//fetches users for particular domain
+   
     @Path("/admin/domain/{domainname}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -156,34 +157,6 @@ public class UsersAPI
 	}
     }
     
-    /**
-     * Saves new users into database with particular domain name, if any exception is raised throws
-     * webApplication exception.
-     * 
-     * @param domainUser
-     *            user to be saved into database
-     * @return saved user
-     */
-    @POST @Path("/adminpanel/addNewUser/{domainname}")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public DomainUser createDomainUserWithDomainname(DomainUser domainUser,@PathParam("domainname") String domainname)
-    {
-    	System.out.println("adding new user from admin  panel");
-    	String oldnamespace=NamespaceManager.get();
-	try
-	{
-		NamespaceManager.set(domainname);
-	    domainUser.save();
-	    NamespaceManager.set(oldnamespace);
-	    return domainUser;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println(e.getMessage());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
-    }
 
     @GET
     @Path("count")
@@ -193,19 +166,6 @@ public class UsersAPI
 	return String.valueOf(DomainUserUtil.count());
     }
 
-    @GET
-    @Path("adminpanel/count/{domainname}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String particularDomainUserCount(@PathParam("domainname") String domainname)
-    {
-    	String oldnamespace=NamespaceManager.get();
-    	NamespaceManager.set(domainname);
-    	String count=String.valueOf(DomainUserUtil.count());
-    	NamespaceManager.set(oldnamespace);
-	return count;
-    }
-    
-    
     
     /**
      * Updates the existing user
@@ -423,7 +383,7 @@ public class UsersAPI
 
 	domainUser.delete();
     }
-    
+   //fetches account stats  from admin panel for partcular domain- stats means count for contacts,triggers.. 
     @Path("/adminpanel/domainstatscount/{domainname}")
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
@@ -453,9 +413,11 @@ public class UsersAPI
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
+    	finally{
+    		NamespaceManager.set(oldnamespace);
+    	}
     	System.out.println("status account "+json);
-    	NamespaceManager.set(oldnamespace);
+    	
     	return json.toString();
     }
     
