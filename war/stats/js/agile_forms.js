@@ -4,7 +4,7 @@
 var _agile_synch_form = function()
 {
 	var agile_button = document.getElementsByClassName("agile-button")[0];
-	agile_button.setAttribute("disabled");
+	agile_button.setAttribute("disabled", "disabled");
 	var agile_error_msg = document.getElementById("agile-error-msg");
 
 	// Get form data

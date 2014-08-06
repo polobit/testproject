@@ -38,8 +38,7 @@ var addAgileApi = function(json, api, callback)
 	var agiledomain = {};
 	agiledomain.label = "Agile Domain";
 	agiledomain.type = "input";
-	// agiledomain.value = window.location.hostname.split('.')[0];
-	agiledomain.value = "localhost";
+	agiledomain.value = window.location.hostname.split('.')[0];
 
 	var agileredirecturl = {};
 	agileredirecturl.label = "Agile Redirect URL";

@@ -92,7 +92,7 @@ public class Trigger
     /**
      * Initialize DataAccessObject.
      */
-    private static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(Trigger.class);
+    public static ObjectifyGenericDao<Trigger> dao = new ObjectifyGenericDao<Trigger>(Trigger.class);
 
     /**
      * Default Trigger.

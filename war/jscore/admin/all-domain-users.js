@@ -24,7 +24,7 @@ $(".delete_user").die().live('click', function(e){
 		
 
 		$.ajax({
-			url: '/core/api/users/admin/domain/adminpanel/'+id, 
+			url: '/core/api/admin_panel/deleteuser?id='+id, 
 			type : 'DELETE',
 			success : function(data)
 			{
@@ -77,7 +77,7 @@ $(".delete_user").die().live('click', function(e){
 							 */
 							$.ajax({
 								type : "DELETE",
-								url : "core/api/users/admin/delete/" + namespace,
+								url : "core/api/admin_panel/deletedomain/" + namespace,
 								success : function()
 								{
 									alert("account deleted");
@@ -88,4 +88,33 @@ $(".delete_user").die().live('click', function(e){
 					
 				   }
 		});
+		
+		
+		$(".refund").die().live('click', function(e){
+	
+			e.preventDefault();
+			if (!confirm("Are you sure you want to apply for refund ?" ))
+				return;
+			var chargeid=$(".refund").attr("data");
+
+			$.ajax({
+				url: '/core/api/admin_panel/applyrefund?chargeid='+chargeid, 
+				type : 'DELETE',
+				success : function(data)
+				{
+					alert("successfully applied for refund");
+					window.navigate("getDomainUserDetails", { trigger : true });
+				},
+				error : function(response)
+				{
+					showNotyPopUp("information", "error occured please try again", "top");
+				} });
+			
+		});
+		
+		
+	
+		
+		
+		
 });

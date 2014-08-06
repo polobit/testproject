@@ -70,8 +70,8 @@ public class EventUtil
     
     //returns all events count 
     public static int getCount(){
-    	List<Event> li=dao.fetchAll();
-    	return li.size();
+    	
+    	return Event.dao.count();
     }
 
     /**
