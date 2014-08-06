@@ -10,7 +10,7 @@
       "label": {
         "label": "Label Text",
         "type": "input",
-        "value": "Single Button"
+        "value": ""
       },
       "buttonlabel": {
         "label": "Button Label",
@@ -66,7 +66,7 @@
       "label": {
         "label": "Label Text",
         "type": "input",
-        "value": "Double Button"
+        "value": ""
       },
       "button1label": {
         "label": "Button Label",
