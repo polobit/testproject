@@ -170,7 +170,9 @@
     {{#if id}}
 <form id="imap-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-       
+<div class="form-actions" style ="padding-left: 0px;">
+          <div>Account Linked : {{username}} <span><a href="#" class="delete">Change</a></span></div>
+</div>
 	
           
              	<div class="control-group" style="margin-left: -80px;">
@@ -204,7 +206,10 @@
 
        
     </form>
+{{else}}
+<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
 {{/if}}
+
 </div>
 </script>
 
