@@ -60,9 +60,16 @@ public class ShopifyImportAPI
     /**
      * Delete prefs.
      */
+    @Path("/delete")
+    public void deletePrefs()
+    {
+	ContactPrefsUtil.delete(Type.SHOPIFY);
+
+    }
+    
     @DELETE
     @Path("/import-settings")
-    public void deletePrefs()
+    public void deleteShopifyPrefs()
     {
 	ContactPrefsUtil.delete(Type.SHOPIFY);
 
