@@ -1,6 +1,7 @@
 package com.agilecrm.contact.util;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -158,7 +159,7 @@ public class TagUtil
 
     public static List<Tag> getTags(int size, String cursor)
     {
-	return dao.fetchAll(size, cursor);
+	return dao.fetchAllByOrder(size, cursor, (Map<String, Object>)null, true, false, "id");
     }
 
     /**
