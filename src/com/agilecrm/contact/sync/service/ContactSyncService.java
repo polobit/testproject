@@ -258,8 +258,16 @@ public abstract class ContactSyncService implements SyncService
 	if (ContactUtil.isDuplicateContact(contact))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
-	    contact.save();
+	    try
+	    {
+		contact.save();
+		
 	    syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
+	    }
+	    catch(Exception e)
+	    {
+		System.out.println("exception raised : " + e.getMessage());
+	    }
 	}
 	else if (contactRestriction.can_create())
 	{

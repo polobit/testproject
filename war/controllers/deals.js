@@ -97,6 +97,7 @@ var DealsRouter = Backbone.Router.extend({
 		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',// cursor : true, page_size : 25,
 			postRenderCallback : function(el)
 			{
+				appendCustomfields(el);
 				// Showing time ago plugin for close date
 				includeTimeAgo(el);
 				// Shows Milestones Pie
@@ -123,3 +124,49 @@ var DealsRouter = Backbone.Router.extend({
 	},
 
 });
+
+/**
+ * Append Deals customfields to the Deals List view.
+ */ 
+function appendCustomfields(el){
+	$.ajax({
+		url: 'core/api/custom-fields/scope?scope=DEAL',
+		type: 'GET',
+		dataType: 'json',
+		success: function(customfields){
+			var columns = '';
+			$.each(customfields, function(index,customfield){
+				//console.log(customfield);
+				columns += '<th>'+customfield.field_label+'</th>';
+			});
+			 $(el).find('#deal-list thead tr').append(columns);
+			 var deals = App_Deals.opportunityCollectionView.collection.models;
+			 $(el).find('#opportunities-model-list tr').each(function(index,element){
+				 var row = '';
+				 $.each(customfields, function(i,customfield){
+						console.log(customfield);
+						 row += '<td><div style="width:6em;overflow:visible;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+					});
+				 $(this).append(row);
+			 });
+			 
+		}
+	});
+}
+
+/**
+ * Returns the value of the custom field.
+ * @param name name of the custom field.
+ * @param data the name. value pair of the custom fields of the deal.
+ * @returns {String} value of the custom field.
+ */
+function dealCustomFieldValue(name, data){
+	console.log(data);
+	var value = '';
+	$.each(data,function(index, field){
+		if(field.name == name){
+			value = field.value;
+		}
+	});
+	return value;
+}

@@ -68,21 +68,14 @@ public class ContactsImportUtil
 	    ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
 	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayStream);
 	    objectOutputStream.writeObject(contactPrefs);
-	    
-	    
+
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
-	    
-	    if(contactPrefs.inProgress)
-		return;
-	    
-	    contactPrefs.inProgress = true;
-	    contactPrefs.save();
 
 		// Create Task and push it into Task Queue
 		taskOptions = TaskOptions.Builder.withUrl("/backend/contactsutilservlet").payload(byteArrayStream.toByteArray())
 			.header("Host", url).method(Method.POST);
 
-		queue.addAsync(taskOptions);
+
 
 	    // submitting jobs in push queue
 	    queue.addAsync(taskOptions);

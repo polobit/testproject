@@ -39,7 +39,7 @@ public class NoteUtil
     {
 	Key<Contact> contactKey = new Key<Contact>(Contact.class, contactId);
 
-	return dao.listByProperty("related_contacts = ", contactKey);
+	return dao.ofy().query(Note.class).filter("related_contacts = ", contactKey).order("-created_time").list();
     }
 
     /**

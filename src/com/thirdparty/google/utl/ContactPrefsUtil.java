@@ -90,6 +90,7 @@ public class ContactPrefsUtil
 	updatedPrefs.refreshToken = currentPrefs.refreshToken;
 	updatedPrefs.last_synced_to_client = currentPrefs.last_synced_to_client;
 	updatedPrefs.last_synced_from_client = currentPrefs.last_synced_from_client;
+	updatedPrefs.inProgress = currentPrefs.inProgress;
 	return updatedPrefs;
     }
 

@@ -673,6 +673,17 @@ public class Contact extends Cursor
 
 	this.save();
     }
+    
+    public boolean addTag(Tag tag)
+    {
+	// Adds to list if there it is a new tag
+	if (tagsWithTime.contains(tag))
+		return false;
+
+	tagsWithTime.add(tag);
+	
+	return true;
+    }
 
     /**
      * Removed tags from tagsWithTime object
