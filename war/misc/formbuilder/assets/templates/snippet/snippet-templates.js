@@ -7,7 +7,6 @@ define(function(require) {
   , appendedtext             = require('text!templates/snippet/appendedtext.html')
   , button                   = require('text!templates/snippet/button.html')
   , buttondouble             = require('text!templates/snippet/buttondouble.html')
-  , buttondropdown           = require('text!templates/snippet/buttondropdown.html')
   , multiplecheckboxes       = require('text!templates/snippet/multiplecheckboxes.html')
   , multiplecheckboxesinline = require('text!templates/snippet/multiplecheckboxesinline.html')
   , multipleradios           = require('text!templates/snippet/multipleradios.html')
@@ -30,7 +29,6 @@ define(function(require) {
     , appendedtext             : appendedtext
     , singlebutton             : button
     , doublebutton             : buttondouble
-    , buttondropdown           : buttondropdown
     , multiplecheckboxes       : multiplecheckboxes
     , multiplecheckboxesinline : multiplecheckboxesinline
     , multipleradios           : multipleradios
