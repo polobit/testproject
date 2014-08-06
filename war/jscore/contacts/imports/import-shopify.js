@@ -3,6 +3,11 @@ $(function()
 	$("#import_shopify").die().live('click', function(e)
 			{
 				var shopName = $('#shop').val();
+				if(shopName == ""){
+					alert("Enter Shop name");
+					$('#shop').focus();
+					return false;
+				}
 				var domain = window.location.origin;
 		      
 				e.preventDefault();
