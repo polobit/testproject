@@ -190,7 +190,7 @@ public class ScribeServlet extends HttpServlet
 			return;
 		}
 
-		OAuthService service = null;
+		OAuthService service = ScribeUtil.getService(req, resp, serviceName);
 		String url = null;
 		Token token = null;
 
@@ -203,7 +203,7 @@ public class ScribeServlet extends HttpServlet
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
 				|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 		{
-			service = ScribeUtil.getService(req, resp, serviceName);
+			// service = ScribeUtil.getService(req, resp, serviceName);
 			// After building service, redirects to authorization page
 			url = service.getAuthorizationUrl(null);
 			String query = req.getParameter("query");
