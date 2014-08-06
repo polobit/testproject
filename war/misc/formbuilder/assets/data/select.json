@@ -25,17 +25,17 @@
         "type": "select",
         "value": [
           {
-            "value": "input-sm",
+            "value": "agile-height-small",
             "label": "Small",
             "selected": false
           },
           {
-            "value": null,
+            "value": "agile-height-default",
             "label": "Default",
             "selected": true
           },
           {
-            "value": "input-lg",
+            "value": "agile-height-large",
             "label": "Large",
             "selected": false
           }
@@ -46,34 +46,24 @@
         "type": "select",
         "value": [
         {
-          "value": "col-md-2",
-          "label": "Mini",
-          "selected": false
-        },
-        {
-          "value": "col-md-3",
+          "value": "agile-field-small",
           "label": "Small",
           "selected": false
         },
         {
-          "value": "col-md-4",
+          "value": "agile-field-medium",
           "label": "Medium",
           "selected": false
         },
         {
-          "value": "col-md-5",
+          "value": "agile-field-large",
           "label": "Large",
           "selected": false
         },
         {
-          "value": "col-md-6",
+          "value": "agile-field-xlarge",
           "label": "Xlarge",
           "selected": true
-        },
-        {
-          "value": "col-md-8",
-          "label": "Xxlarge",
-          "selected": false
         }
         ]
       }
@@ -105,17 +95,17 @@
         "type": "select",
         "value": [
           {
-            "value": "input-sm",
+            "value": "agile-height-small",
             "label": "Small",
             "selected": false
           },
           {
-            "value": null,
+            "value": "agile-height-default",
             "label": "Default",
             "selected": true
           },
           {
-            "value": "input-lg",
+            "value": "agile-height-large",
             "label": "Large",
             "selected": false
           }
@@ -126,34 +116,24 @@
         "type": "select",
         "value": [
         {
-          "value": "col-md-2",
-          "label": "Mini",
-          "selected": false
-        },
-        {
-          "value": "col-md-3",
+          "value": "agile-field-small",
           "label": "Small",
           "selected": false
         },
         {
-          "value": "col-md-4",
+          "value": "agile-field-medium",
           "label": "Medium",
           "selected": false
         },
         {
-          "value": "col-md-5",
+          "value": "agile-field-large",
           "label": "Large",
           "selected": false
         },
         {
-          "value": "col-md-6",
+          "value": "agile-field-xlarge",
           "label": "Xlarge",
           "selected": true
-        },
-        {
-          "value": "col-md-8",
-          "label": "Xxlarge",
-          "selected": false
         }
         ]
       }
