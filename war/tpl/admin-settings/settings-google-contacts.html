@@ -238,16 +238,32 @@
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
 		Setup contact sync with your Shopify account.
 	</div>
-{{/unless}} 
 
+
+<div class='input-append input-prepend' style="margin-left: 25px;">
+	<span class="btn add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">https://</span>
+	  <input id="shop" style="margin-left: -3px;margin-right: -3px;" class="span2" required="required" name="shopname"  type="text" placeholder="Enter Shop name">
+    <span class="btn add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">.myshopify.com</span>
     
+    </div>
+<a href ="#" id ="import_shopify" class="btn" style="margin-left: 24px;">connect</a>
+
+  {{/unless}}
+
+  
 
     <form id="imap-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
         
 	
            {{#if id}}
-             	<div class="control-group" style="margin-left: -80px;">
+              
+                   Shop : <span style="margin-left: 38px;">{{othersParams}}</span>
+                
+                      <button id="change-shop" class="btn" style="margin-left: 15px;">Change</button>
+					
+                 
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
 					<label class="control-label" style="text-align:">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
@@ -286,9 +302,9 @@
 
 <script id="admin-settings-import-shopify-contact-syncPrefs-template"
 	type="text/html">
-	<div class="well widget-add" style="width:285px;">
+	<div class="well widget-add" style="width:220px;">
 
-    <img class="thumbnail"  src="img/crm-plugins/shopify.png" style="width:281px; height:70px;" />
+    <img class="thumbnail"  src="img/crm-plugins/shopify.png" style="width:210px; height:70px;" />
 	<br />
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
 		Agile can periodically sync your contacts in your CRM with your Shopify Contacts.
@@ -298,12 +314,8 @@
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
 				<a href="#google-apps/shopify" class="btn">Settings</a>
 			{{else}}
-<div class="input-prepend input-append">
-  <span class="add-on">https://</span>
-  <input id="shopeName" type="text" name="shop" placeholder ="Enter shopname" class="span5">
-  <span class="add-on">.myshopify.com</span>
-</div>
-			   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Enable</button>
+
+			   <a href="#google-apps/shopify"  class="btn"  style="display:inline-block;">Enable</a>
 			{{/if}}
 </div>
 </div>
