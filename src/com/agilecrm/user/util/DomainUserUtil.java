@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -302,6 +303,10 @@ public class DomainUserUtil
 
 	try
 	{
+		
+		//return dao.fetchAllByOrder(max, cursor, null, true, false, "-created_time");
+		//return dao.ofy().query(DomainUser.class).order("-created_time").list();
+		// return DomainUser.dao.fetchAllByOrder(max, cursor, null, true, true, "-created_time");
 	    return dao.fetchAll(max, cursor);
 	}
 	finally

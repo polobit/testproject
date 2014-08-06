@@ -133,9 +133,7 @@
 										type="image" src="img/SearchIcon.png" class="searchbox" />
 								</form>
 							</li>
-							<%
-							    }
-							%>
+							
 						</ul>
 
 						<ul class="nav pull-right">
@@ -198,7 +196,9 @@
 											Logout</a></li>
 
 								</ul></li>
-							
+							<%
+							    }
+							%>
 						</ul>
 					</div>
 					<!--/.nav-collapse -->

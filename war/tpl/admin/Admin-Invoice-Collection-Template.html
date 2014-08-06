@@ -1,15 +1,15 @@
    <script id="admin-invoice-collection-template" type="html/text">
         <div class="page-header">
-            <h1>Invoice <small>AgileCrm</small></h1> <div  class="totalamount pull-right"></div>
+            <h2>Invoice Details</h2> <div  class="totalamount pull-right"></div>
         </div>
     <div >
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
-                    <th>Description</th>
+                    <th>Plan Type</th>
                     <th>From Date</th>
                     <th>To Date</th>
-                    <th>Amount</th>
+                    <th>Amount(USD)</th>
                 </tr>
             </thead>
             <tbody id="admin-invoice-model-list" class="model-list-cursor">
@@ -28,7 +28,7 @@
 	</td>
 	<td>{{epochToHumanDate "mm/dd/yyyy" period.start}}</td>
 	<td>{{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
-	<td>{{this.plan.amount}}</td>
+	<td>{{numeric_operation plan.amount 100 "/"}}</td>
 
 {{/if}}
 {{/each}}	

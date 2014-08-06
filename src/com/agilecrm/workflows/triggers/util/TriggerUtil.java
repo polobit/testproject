@@ -65,8 +65,8 @@ public class TriggerUtil
     }
     //returns all triggers count 
     public static int getCount(){
-    	List<Trigger> li=dao.fetchAll();
-    	return li.size();
+    	
+    	return Trigger.dao.count();
     }
     /*
     /**

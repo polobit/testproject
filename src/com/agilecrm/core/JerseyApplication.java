@@ -80,6 +80,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.TemplatesAPI.class);
 	s.add(com.agilecrm.core.api.calendar.GoogleCalendarPrefsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.WebCalendarEventsAPI.class);
+	s.add(com.agilecrm.core.api.AdminPanelAPI.class);
 	return s;
     }
 }

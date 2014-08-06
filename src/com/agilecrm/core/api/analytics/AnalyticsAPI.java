@@ -76,22 +76,5 @@ public class AnalyticsAPI {
 		return AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
 	}
 
-	@Path("JSAPI-status/adminpanel/{domainname}")
-	@GET
-	@Produces({ MediaType.TEXT_PLAIN })
-	public int getJSAPIStatusOfParticularDomain(
-			@PathParam("domainname") String domainname) {
-		String oldnamespace = NamespaceManager.get();
-		NamespaceManager.set(domainname);
-		String domain = NamespaceManager.get();
-
-		if (StringUtils.isEmpty(domain))
-			return 0;
-		System.out.println("in Analytics api "
-				+ AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain));
-		int count = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domain);
-		NamespaceManager.set(oldnamespace);
-		return count;
-	}
-
+	
 }

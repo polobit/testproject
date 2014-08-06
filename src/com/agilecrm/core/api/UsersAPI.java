@@ -78,36 +78,7 @@ public class UsersAPI
 	    return null;
 	}
     }
-//fetches users for particular domain
-   
-    @Path("/admin/domain/{domainname}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<DomainUser> getDomainUserDetails(@PathParam("domainname") String domainname)
-    {
-	try
-	{
-	    String domain = domainname;
-	    if(domain.contains("@")){
-	    	String email=domain;
-	    	DomainUser domainUser =DomainUserUtil.getDomainUserFromEmail(email);
-	    	if(domainUser!=null){
-	    	String userDomain=domainUser.domain;
-	    	 List<DomainUser> domainUsers = DomainUserUtil.getUsers(userDomain);
-	 	    return domainUsers;
-	    	}
-	    }
-	    // Gets the users and update the password to the masked one
-	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
-	    return users;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-    }
-    
+
     
     
     
@@ -254,67 +225,7 @@ public class UsersAPI
 	}
     }
 
-    /**
-     * Gets list of all domain users irrespective of domain for the users of
-     * domain "admin".
-     * 
-     * @return DomainUsers list
-     */
-    @Path("/admin/domain-users")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<DomainUser> getAllDomainUsers(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
-    {
-	String domain = NamespaceManager.get();
-
-	/*if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry you don't have privileges to access this page.")
-		    .build());
-	}*/
-
-	if (count != null)
-	{
-	    System.out.println("Fetching page by page");
-	    return DomainUserUtil.getAllDomainUsers(Integer.parseInt(count), cursor);
-	}
-
-	return DomainUserUtil.getAllUsers();
-    }
-
     
-  
-
-    
-    
-    
-    
-    /**
-     * Delete domain users of particular namespace
-     */
-    @Path("/admin/delete/{namespace}")
-    @DELETE
-    public void deleteDomainUser(@PathParam("namespace") String namespace)
-    {
-    	System.out.println("delete request for deletion of account from admin panel "+namespace);
-	String domain = NamespaceManager.get();
-
-	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry you don't have privileges to access this page.")
-		    .build());
-	}
-
-	try
-	{
-	    AccountDeleteUtil.deleteNamespace(namespace);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
-    }
-
     // Get Stats for particular name-space
     @Path("/admin/namespace-stats/{namespace}")
     @GET
@@ -350,76 +261,7 @@ public class UsersAPI
     }
     
     
-    @Path("/admin/domain/adminpanel/{id}")
-    @DELETE
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void deleteDomainUserFromAdminPanel(@PathParam("id") String id)
-    {
-    	System.out.println("delete request for domain user deletion from admin panel"+id);
-    	DomainUser domainUser;
-	try
-	{
-		long domainuserid=Long.parseLong(id);
-		
-		 domainUser=DomainUserUtil.getDomainUser(domainuserid);
-	    int count = DomainUserUtil.count();
-
-	    // Throws exception, if only one account exists
-	    if (count == 1)
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Can’t delete all users").build());
-
-	    // Throws exception, if user is owner
-	    if (domainUser.is_account_owner)
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Master account can’t be deleted").build());
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.out.println(e.getMessage());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
-
-	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
-
-	domainUser.delete();
-    }
-   //fetches account stats  from admin panel for partcular domain- stats means count for contacts,triggers.. 
-    @Path("/adminpanel/domainstatscount/{domainname}")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON })
-    public String getAccountStats(@PathParam ("domainname") String domainname) {
-    	String oldnamespace=NamespaceManager.get();
-    	NamespaceManager.set(domainname);
-    	
-    	JSONObject json = new JSONObject();
-    	 
-    	 int webrulecount=WebRuleUtil.getCount();
-    	 int contactcount=ContactUtil.getCount();
-    	 int dealscount=OpportunityUtil.getCount();
-    	 int docs=DocumentUtil.getCount();
-    	 int eventcount=EventUtil.getCount();
-    	 int compaigncount=WorkflowUtil.getCount();
-    	 int triggerscount=TriggerUtil.getCount();
-    	
-    	try {
-			json.put("webrule_count",webrulecount);
-			json.put("contact_count",contactcount);
-	    	json.put("deals_count",dealscount);
-	    	json.put("docs_count",docs);
-	    	json.put("events_count",eventcount);
-	    	json.put("compaign_count",compaigncount);
-	    	json.put("triggers_count",triggerscount);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	finally{
-    		NamespaceManager.set(oldnamespace);
-    	}
-    	System.out.println("status account "+json);
-    	
-    	return json.toString();
-    }
+   
     
     
 }
