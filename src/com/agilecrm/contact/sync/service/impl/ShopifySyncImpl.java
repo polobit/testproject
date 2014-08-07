@@ -100,9 +100,9 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 			    Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
 
+			   
+			    addCustomerRelatedNote(customers.get(i).get("note"), contact);
 			    saveCustomersOrder(customers.get(i), contact);
-
-			    addCustomerRelatedNote(customers.get(i).get("note").toString(), contact);
 
 			}
 		    }
@@ -474,8 +474,10 @@ public class ShopifySyncImpl extends OneWaySyncService
      * @param contact
      */
 
-    private void addCustomerRelatedNote(String noteString, Contact contact)
+    private void addCustomerRelatedNote(Object noteObject, Contact contact)
     {
+	    if(noteObject != null){
+	    String noteString = noteObject.toString();
 	try
 	{
 	    if (ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
@@ -502,6 +504,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	{
 	    e.printStackTrace();
 	}
+	    }
     }
 
     /**
@@ -533,11 +536,14 @@ public class ShopifySyncImpl extends OneWaySyncService
 	try
 	{
 	    Response response = oAuthRequest.send();
+	    if(response.getCode() == 200){
 	    Map<String, ArrayList<LinkedHashMap<String, Object>>> results = new ObjectMapper().readValue(
 		    response.getStream(), Map.class);
+	    
 	    if (results.get("refunds") != null)
 	    {
 		refunds.addAll(results.get("refunds"));
+	    }
 	    }
 
 	}
