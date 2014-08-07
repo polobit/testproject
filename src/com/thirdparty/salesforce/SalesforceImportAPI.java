@@ -13,9 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import com.agilecrm.contact.sync.Type;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Type;
 import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -99,7 +98,7 @@ public class SalesforceImportAPI
 			if (cases)
 				list.add("cases");
 
-			contactPrefs.thirdPartyField = list;
+			contactPrefs.importOptions = list;
 			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 
 			return contactPrefs;

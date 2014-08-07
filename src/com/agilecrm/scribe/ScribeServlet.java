@@ -387,7 +387,7 @@ public class ScribeServlet extends HttpServlet
 		    ContactPrefs prefs = new ContactPrefs();
 		    prefs.token = token;
 		    prefs.type = Type.ZOHO;
-		    prefs.username = username;
+		    prefs.userName = username;
 		    prefs.save();
 
 		    return true;

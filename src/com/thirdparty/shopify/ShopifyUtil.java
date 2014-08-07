@@ -342,7 +342,7 @@ public class ShopifyUtil
 
 	    String domain = shop.getString("domain");
 
-	    if (domain.equalsIgnoreCase(prefs.username))
+	    if (domain.equalsIgnoreCase(prefs.userName))
 		return true;
 	}
 	catch (Exception e)

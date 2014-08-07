@@ -92,7 +92,7 @@ public class ZohoImportAPI
 	try
 	{
 	    ContactPrefs prefs = ContactPrefsUtil.getPrefsByType(Type.ZOHO);
-	    String user = prefs.username;
+	    String user = prefs.userName;
 
 	    if (prefs != null && user != null && user.equalsIgnoreCase(username))
 		return true;
