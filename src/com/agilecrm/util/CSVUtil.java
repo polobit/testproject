@@ -36,6 +36,8 @@ import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestrict
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -57,6 +59,9 @@ public class CSVUtil
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
 
+    private UserAccessControl accessControl = UserAccessControlUtil.getAccessControl(Contact.class.getSimpleName(),
+	    null);
+
     private CSVUtil()
     {
 
@@ -65,7 +70,8 @@ public class CSVUtil
     public CSVUtil(BillingRestriction billingRestriction)
     {
 	this.billingRestriction = billingRestriction;
-	dBbillingRestriction = (ContactBillingRestriction)DaoBillingRestriction.getInstace(Contact.class.getSimpleName(), this.billingRestriction);
+	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
+	        Contact.class.getSimpleName(), this.billingRestriction);
     }
 
     public static enum ImportStatus
@@ -275,12 +281,19 @@ public class CSVUtil
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
 		// Checks if user can update the contact
-		/*
-		 * if
-		 * (!UserAccessControlUtil.check(Contact.class.getSimpleName(),
-		 * tempContact, CRUDOperation.DELETE, false)) {
-		 * ++accessDeniedToUpdate; continue; }
-		 */
+
+		if (!UserAccessControlUtil.check(Contact.class.getSimpleName(), tempContact, CRUDOperation.,
+		        false))
+		{
+		    ++accessDeniedToUpdate;
+		    continue;
+		}
+		
+		if(accessControl.canDelete())
+		{
+		    
+		}
+
 		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
 	    }
@@ -289,7 +302,6 @@ public class CSVUtil
 
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
-
 		++billingRestriction.contacts_count;
 		try
 		{
@@ -300,7 +312,6 @@ public class CSVUtil
 		    {
 			limitCrossed = true;
 		    }
-
 		}
 		catch (PlanRestrictedException e)
 		{
@@ -316,7 +327,7 @@ public class CSVUtil
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.EMAIL));
+		        + tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
 
 	    }
@@ -374,9 +385,9 @@ public class CSVUtil
 
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
-	
+
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
-		new Object[] { domainUser, status });
+	        new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
@@ -411,7 +422,7 @@ public class CSVUtil
     public boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
-		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+	        && StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    return false;

@@ -47,13 +47,10 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canCreate()
     {
-	System.out.println("-----------------------------------checking ----------------");
-	System.out.println(!isNewContact() && !checkOwner());
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
 	if (!isNewContact() && !checkOwner())
 	{
-	    System.out.println("************** updating ********************");
 	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
 	}
 
@@ -82,7 +79,7 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	return hasScope(UserAccessScopes.VIEW_CONTACTS);
+	return hasScope(UserAccessScopes.IMPORT_CONTACTS) || hasScope(UserAccessScopes.VIEW_CONTACTS);
 
     }
 
@@ -99,8 +96,6 @@ public class ContactAccessControl extends UserAccessControl
 
 	if (info == null)
 	    return true;
-
-	System.out.println("id" + info.getDomainId() + ", " + currentContactOwnerId);
 
 	if (info.getDomainId().equals(currentContactOwnerId))
 	    return true;
@@ -128,7 +123,7 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canExport()
     {
-	return hasScope(UserAccessScopes.EXPORT_CONTACTS);
+	return canRead();
     }
 
     public <T> Query<T> modifyDaoFetchQuery(Query<T> query)

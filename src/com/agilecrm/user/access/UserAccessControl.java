@@ -2,6 +2,7 @@ package com.agilecrm.user.access;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -46,7 +47,7 @@ public abstract class UserAccessControl
 	// occurs
 	if (info == null)
 	{
-	    return new HashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 	}
 
 	// If scopes in info is not set, scopes are fetched from current domain
@@ -55,7 +56,7 @@ public abstract class UserAccessControl
 	{
 	    DomainUser user = DomainUserUtil.getCurrentDomainUser();
 	    if (user == null)
-		Arrays.asList(UserAccessScopes.values());
+		return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
 	    info.setScopes(DomainUserUtil.getCurrentDomainUser().scopes);
 	}
