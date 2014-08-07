@@ -180,10 +180,9 @@ public class StripeContactWrapperImpl extends ContactWrapper
 		}
 		else
 		{
-			if (customer != null)
-			{
-				customFields.add(new ContactField("StripeID", customer.getId(), null));
-			}
+			
+	             contact.addpropertyWithoutSaving(new ContactField("StripeID", customer.getId(), null));
+			
 		}
 
 		return customFields;
