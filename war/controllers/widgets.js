@@ -724,7 +724,7 @@ var WidgetsRouter = Backbone.Router
 				/* Add E-commerce Prefs template*/
 				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings', template : 'admin-settings-import-shopify-contact-syncPrefs' });
 				$('#shopify').append(this.shopify_sync.render().el);
-				
+
 				/*salesforce import template*/
 				//this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
 				//$('#force').append(this.salesforce.render().el);

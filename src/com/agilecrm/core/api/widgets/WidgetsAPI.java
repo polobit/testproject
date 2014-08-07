@@ -77,8 +77,6 @@ public class WidgetsAPI
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Widget getWidgetByName(@PathParam("widget_name") String name)
 	{
-		// Returns list of widgets saved by current user
-		System.out.println(WidgetUtil.getWidget(name));
 		return WidgetUtil.getWidget(name);
 	}
 

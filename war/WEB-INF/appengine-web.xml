@@ -62,7 +62,6 @@
 	   <exclude path="/tpl/min/**.js" />
 	   <exclude path="/stats/min/**.js" />
 
-
 	</static-files>
 
 	<!-- End of static files configuration -->
