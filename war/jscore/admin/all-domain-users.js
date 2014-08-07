@@ -1,6 +1,6 @@
 $(function()
 {
-//takes searchbox value and navigate this to router
+// takes searchbox value and navigate this to router
 	$( "#domainSearchForm" ).submit(function( e ) 	{
 		e.preventDefault(e);
 		
@@ -13,7 +13,7 @@ $(function()
 	
 	});
 	
-	//deltes user from domain from admin panel
+	// deltes user from domain from admin panel
 	
 $(".delete_user").die().live('click', function(e){
 		
@@ -29,8 +29,7 @@ $(".delete_user").die().live('click', function(e){
 			success : function(data)
 			{
 				alert("user deleted" );
-				Backbone.history.navigate("all-domain-users" , {
-	                trigger: true
+				location.reload(true);
 	            });
 			},
 			error : function(response)
@@ -40,13 +39,13 @@ $(".delete_user").die().live('click', function(e){
 		
 	});
 	
-	//navigates to domain details from all domain users
+	// navigates to domain details from all domain users
 	
 	$("#all-domain-users-model-list > tr").live('click', function(e)
 			{
 				e.preventDefault();
 
-				// Reads the id 
+				// Reads the id
 				var domainname = $(this).find('.data').attr('data');
 
 				Backbone.history.navigate("getDomainUserDetails/"+domainname , {
@@ -55,8 +54,8 @@ $(".delete_user").die().live('click', function(e){
 				// App_Subscription.invoiceDetails(data);
 			});
 		/**
-		 * If user clicks on delete,
-		 * delete request is sent to "core/api/admin/delete/namespace"
+		 * If user clicks on delete, delete request is sent to
+		 * "core/api/admin/delete/namespace"
 		 */
 		$(".delete-namespace").die().live('click', function(e){
 			
@@ -73,15 +72,15 @@ $(".delete_user").die().live('click', function(e){
 							// Show loading in content
 							$("#content").html(getRandomLoadingImg());
 							/**
-							 * Sends delete request to delete namespace 
+							 * Sends delete request to delete namespace
 							 */
 							$.ajax({
 								type : "DELETE",
 								url : "core/api/admin_panel/deletedomain/" + namespace,
-								success : function()
+								success : function(data)
 								{
 									alert("account deleted");
-									location.reload(true);
+									Backbone.history.navigate("all-domain-users", { trigger : true });
 								}
 							});
 						
@@ -99,11 +98,11 @@ $(".delete_user").die().live('click', function(e){
 
 			$.ajax({
 				url: '/core/api/admin_panel/applyrefund?chargeid='+chargeid, 
-				type : 'DELETE',
+				type : 'GET',
 				success : function(data)
 				{
 					alert("successfully applied for refund");
-					window.navigate("getDomainUserDetails", { trigger : true });
+					location.reload(true);
 				},
 				error : function(response)
 				{
