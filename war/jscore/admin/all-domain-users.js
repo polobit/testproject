@@ -30,7 +30,7 @@ $(".delete_user").die().live('click', function(e){
 			{
 				alert("user deleted" );
 				location.reload(true);
-	            });
+	           
 			},
 			error : function(response)
 			{

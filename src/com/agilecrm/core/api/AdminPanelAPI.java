@@ -389,7 +389,7 @@ public class AdminPanelAPI
 	{
 
 		Customer cus = Subscription.getCustomer(domainname);
-
+		System.out.println("customer object in Adminpanel api " + cus);
 		return cus;
 	}
 
