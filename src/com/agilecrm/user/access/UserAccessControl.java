@@ -71,10 +71,23 @@ public abstract class UserAccessControl
 
     public static UserAccessControl getAccessControl(String className, Object entityObject)
     {
-	AccessControlClasses access = null;
 	try
 	{
-	    access = AccessControlClasses.valueOf(className);
+	    return getAccessControl(AccessControlClasses.valueOf(className), entityObject);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+	
+	
+    }
+    
+    
+    public static UserAccessControl getAccessControl(AccessControlClasses access, Object entityObject)
+    {
+	try
+	{
 	    UserAccessControl accessControl = access.clazz.newInstance();
 	    accessControl.entityObject = entityObject;
 	    accessControl.init();
@@ -84,6 +97,11 @@ public abstract class UserAccessControl
 	{
 	    return null;
 	}
+    }
+    
+    public void setObject(Object object)
+    {
+	entityObject = object;
     }
 
     /**
