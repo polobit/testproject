@@ -51,7 +51,7 @@ public class StripeImpl implements AgileBilling
 	static
 	{
 		Stripe.apiKey = Globals.STRIPE_API_KEY;
-		// Stripe.apiVersion = "2012-09-24";
+		Stripe.apiVersion = "2012-09-24";
 	}
 
 	/**
