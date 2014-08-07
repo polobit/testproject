@@ -43,6 +43,10 @@ public class OAuthServlet extends HttpServlet
 	    {
 		getAccessToken(req, resp, verifier, org);
 	    }
+	    else
+	    {
+		req.getSession().setAttribute("referer", req.getHeader("referer"));
+	    }
 	    if (serviceType != null)
 	    {
 		setupOAuth(req, resp, serviceType);
@@ -93,10 +97,16 @@ public class OAuthServlet extends HttpServlet
 	properties.put("secret", consumer.getTokenSecret());
 	properties.put("company", companyID);
 	properties.put("time", String.valueOf(System.currentTimeMillis()));
-
 	if (SERVICE_TYPE_QUICKBOOKS.equalsIgnoreCase(serviceType))
 	{
 	    ScribeUtil.saveWidgetPrefsByName("quickbooks", properties);
+	}
+	else if (serviceType.equalsIgnoreCase("quickbook-import"))
+	{
+	    ScribeUtil.saveQuickBookPrefs(properties);
+	    String redirectURL = (String) req.getSession().getAttribute("referer");
+	    resp.sendRedirect(redirectURL + "#google-apps/quickbook");
+	    return;
 	}
 	resp.sendRedirect(getRedirectURI(req) + "/#add-widget");
 	// resp.getWriter().println("<script>window.opener.force_plugins_route(); window.close();</script>");
@@ -149,7 +159,7 @@ public class OAuthServlet extends HttpServlet
 		    "https://api.xero.com/oauth/AccessToken", "https://api.xero.com/oauth/Authorize");
 
 	return new DefaultOAuthProvider("https://oauth.intuit.com/oauth/v1/get_request_token",
-	        "https://oauth.intuit.com/oauth/v1/get_access_token", "https://appcenter.intuit.com/Connect/Begin");
+		"https://oauth.intuit.com/oauth/v1/get_access_token", "https://appcenter.intuit.com/Connect/Begin");
     }
 
     public OAuthConsumer getOAuthConsumer(String serviceType)
