@@ -280,6 +280,8 @@ legend {
 	margin-bottom: 18px;
 	padding-bottom: 6px;
 	width: 100%;
+	font-weight: bold;
+	font-size: 20px;
 }
 
 fieldset {
