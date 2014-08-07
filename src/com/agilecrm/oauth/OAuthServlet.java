@@ -27,13 +27,14 @@ import com.agilecrm.session.UserInfo;
 public class OAuthServlet extends HttpServlet
 {
 	public static final String SERVICE_TYPE_QUICKBOOKS = "quickbooks";
-
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		try
 		{
 			String serviceType = req.getParameter("service");
+			
 
 			String verifier = req.getParameter("oauth_verifier");
 			String org = req.getParameter("org");
@@ -42,6 +43,8 @@ public class OAuthServlet extends HttpServlet
 			if (verifier != null)
 			{
 				getAccessToken(req, resp, verifier, org);
+			}else{
+				req.getSession().setAttribute("referer", req.getHeader("referer"));	
 			}
 			if (serviceType != null)
 			{
@@ -97,6 +100,11 @@ public class OAuthServlet extends HttpServlet
 		if (SERVICE_TYPE_QUICKBOOKS.equalsIgnoreCase(serviceType))
 		{
 			ScribeUtil.saveWidgetPrefsByName("quickbooks", properties);
+		}else if(serviceType.equalsIgnoreCase("quickbook-import")){
+			ScribeUtil.saveQuickBookPrefs(properties);
+			String redirectURL = (String) req.getSession().getAttribute("referer");
+			resp.sendRedirect(redirectURL+"#google-apps/quickbook");
+			return;
 		}
 		resp.sendRedirect(getRedirectURI(req) + "/#add-widget");
 		// resp.getWriter().println("<script>window.opener.force_plugins_route(); window.close();</script>");

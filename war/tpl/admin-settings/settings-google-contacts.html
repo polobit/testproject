@@ -353,18 +353,24 @@
 </script>
 
 
-<script id="admin-settings-import-zoho-prefs-template" type="text/html">
+<script id="admin-settings-import-quickbook-settings-template" type="text/html">
 <div class="span4 well">
-    <form id="imap-prefs-form">
+<span class="label label-important" style="float:right">Beta</span>
+<center> <img class="thumbnail" src="/widgets/QuickBooks210x70.png" style="width:210px; height:70px;margin-left:40px" /></center>
+<br/>
+{{#unless id}}
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Setup contact sync with your Quickbook account.
+	</div>
+{{/unless}} 
+    {{#if id}}
+<form id="stripe-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-        <legend>Zoho Import Settings <span class="label label-important">Alpha</span></legend>
-		<div>
-			Import customers from Zoho
-		</div>
-
- {{#if id}}
-             	<div class="control-group">
-					<label class="control-label" style="text-align:">Frequency</label> 
+          <div>Account Linked : {{otherParams}} <span><a href="#" class="delete">Change</a></span></div>
+	
+          
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
+					<label class="control-label">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
 
@@ -381,17 +387,49 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
-          		 <button class="btn btn-primary save" id="zoho_prefs" style="display:inline-block;">Sync</button>
+			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+
+{{#if inProgress}}
+			<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;" disabled="disabled">Sync</button>
+{{else}}
+<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;">Sync</button>
+{{/if}}
+
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
 
-	{{/if}}
-          
 
        
     </form>
+{{else}}
+<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
+{{/if}}
+
 </div>
+</script>
+
+
+<script id="admin-settings-import-quickbook-template"
+	type="text/html">
+	<div class="well widget-add" style="width:220px;">
+
+    <img class="thumbnail"  src="/widgets/QuickBooks210x70.png" style="width:210px; height:70px;" />
+	<br />
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
+		Agile can periodically sync your contacts in your CRM with your QuickBook Contacts.
+	</div>
+    <div style="margin-left: 15px;">
+			{{#if id}}
+        	   <a class="btn btn-danger delete"  id="quick-book-delete" >Disable</a>
+				<a href="#google-apps/quickbook" class="btn">Settings</a>
+			{{else}}
+
+			   <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
+			{{/if}}
+</div>
+</div>
+
+
 </script>
 
 

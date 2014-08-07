@@ -666,4 +666,14 @@ public class ScribeUtil
 	saveWidgetPrefsByName(serviceType, properties);
 
     }
+    
+    public static void saveQuickBookPrefs(Map<String,String>map){
+	    ContactPrefs contactPrefs = new ContactPrefs();
+	    contactPrefs.token = map.get("token");
+	    contactPrefs.secret = map.get("secret");
+	    contactPrefs.othersParams = map.get("company");
+	    contactPrefs.type = Type.QUICKBOOK;
+	    contactPrefs.save();
+	    
+    }
 }
