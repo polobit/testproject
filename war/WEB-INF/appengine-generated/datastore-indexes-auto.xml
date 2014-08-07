@@ -1,6 +1,6 @@
 <!-- Indices written at Thu, 7 Aug 2014 17:04:18 IST -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
