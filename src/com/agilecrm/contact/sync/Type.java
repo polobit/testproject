@@ -11,6 +11,7 @@ import com.agilecrm.contact.sync.service.impl.SalesforceSync;
 import com.agilecrm.contact.sync.service.impl.ShopifySyncImpl;
 import com.agilecrm.contact.sync.service.impl.StripeSyncImpl;
 import com.agilecrm.contact.sync.service.impl.ZohoSyncImpl;
+import com.thirdparty.quickbook.QuickBookSyncImpl;
 
 /**
  * <code>SyncClient</code> contains various third party client that client need
@@ -23,7 +24,8 @@ public enum Type implements Serializable
 {
     GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
 	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
-	    ShopifySyncImpl.class, "Shopify Import Status");
+	    ShopifySyncImpl.class, "Shopify Import Status"),
+	    QUICKBOOK(QuickBookSyncImpl.class,"QuickBook Import Status");
 
     Class<? extends SyncService> clazz;
     String notificationEmailSubject = "";
