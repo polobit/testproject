@@ -358,7 +358,7 @@ public class ScribeUtil
 	    }
 	    // retrieve User Account information from stripe
 	     Account account = Account.retrieve(prefs.apiKey);
-	     prefs.username = account.getEmail();
+	     prefs.userName = account.getEmail();
 	     prefs.save();
 	    
 	}

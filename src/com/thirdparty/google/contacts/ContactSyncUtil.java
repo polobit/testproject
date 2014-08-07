@@ -394,7 +394,7 @@ public class ContactSyncUtil
 
     public static Contact mergeContact(ContactEntry entry, Contact contact, ContactPrefs prefs)
     {
-	if (prefs.conflict.equals(ContactPrefs.AGILE))
+	if (prefs.conflict.equals(null))
 	{
 	    return CopyFromAgileContact(entry, contact);
 
