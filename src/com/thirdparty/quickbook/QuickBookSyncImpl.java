@@ -36,7 +36,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		
 	}
 	private String materializeUrl(Map<String,String> params){
-		
+		return (String) null;
 	}
 
 }
