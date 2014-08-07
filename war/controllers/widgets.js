@@ -606,12 +606,11 @@ var WidgetsRouter = Backbone.Router
 															});
 
 											return;
-											
 
 										}
 										else
 										{
-											show_set_up_widget("Twitter", 'twitter-login',
+											show_set_up_widget("Facebook", 'facebook-login',
 													'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href));
 										}
 									});
@@ -723,6 +722,7 @@ var WidgetsRouter = Backbone.Router
 
 				/* Add E-commerce Prefs template*/
 				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings', template : 'admin-settings-import-shopify-contact-syncPrefs' });
+
 				$('#shopify').append(this.shopify_sync.render().el);
 				
 				/*salesforce import template*/
