@@ -476,10 +476,11 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     private void addCustomerRelatedNote(Object noteObject, Contact contact)
     {
-	    if(noteObject != null){
-	    String noteString = noteObject.toString();
 	try
 	{
+		if(noteObject != null){
+			String noteString = noteObject.toString();
+			if(!noteString.isEmpty()){
 	    if (ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
 	    {
 		List<Note> notes = NoteUtil.getNotes(contact.id);
@@ -500,11 +501,12 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    n.save();
 
 	}
+		}
+	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
-	    }
     }
 
     /**
@@ -607,7 +609,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	}
+		}
 
-    }
+	}
 }
