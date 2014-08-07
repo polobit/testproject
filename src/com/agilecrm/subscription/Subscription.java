@@ -201,8 +201,9 @@ public class Subscription
 	    NamespaceManager.set(namespace);
 	    
 	    Subscription subscription = getSubscription();
-	    subscription.domain_name=namespace;
+
 	    if (subscription != null){
+		    subscription.domain_name=namespace;
 	      return subscription;
 	    }
 
@@ -225,7 +226,7 @@ public class Subscription
 	    Subscription subscription = getSubscriptionOfParticularDomain(namespace);
 	    if (subscription != null){
 	      JSONObject billing=subscription.billing_data;
-	   
+	   System.out.println(billing+" in subscription.java");
 	     return StripeUtil.getCustomerFromJson(billing);
 	    }
 		return null;

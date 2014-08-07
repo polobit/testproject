@@ -47,7 +47,7 @@ import com.stripe.model.Invoice;
  */
 public class StripeUtil
 {
-
+	 
     /**
      * Creates a map of customer card details, plan and other details required
      * to create a customer in stripe
@@ -123,11 +123,11 @@ public class StripeUtil
      */
     public static Customer getCustomerFromJson(JSONObject customerJSON) throws StripeException
     {
+    	 Stripe.apiKey=Globals.STRIPE_API_KEY;
 	// Converts Customer JSON to customer object
 	Customer customer = new Gson().fromJson(customerJSON.toString(), Customer.class);
-System.out.println(Customer.retrieve(customer.getId()));
 	// Retrieves the customer from stripe based on id
-	return Customer.retrieve(customer.getId());
+	return Customer.retrieve(customer.getId(),Stripe.apiKey);
     }
 
     
@@ -148,9 +148,11 @@ System.out.println(Customer.retrieve(customer.getId()));
     // based on charge id, that charge will be refunded 
     public static Charge createRefund(String chargeid) throws StripeException{
     	
+    	Stripe.apiKey=Globals.STRIPE_API_KEY;
+    	
     	Charge ch=Charge.retrieve(chargeid);
     	
-    	return ch.refund( Stripe.apiKey);
+    	return ch.refund(Stripe.apiKey);
     }
     
     

@@ -1,10 +1,7 @@
 package com.agilecrm.core.api;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.List;
 
-import javax.jdo.annotations.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -27,7 +24,6 @@ import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.util.DocumentUtil;
-import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -38,8 +34,6 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.webrules.util.WebRuleUtil;
-import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.util.WidgetUtil;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.analytics.util.AnalyticsSQLUtil;
@@ -53,31 +47,35 @@ import com.stripe.model.Customer;
 import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
 
 @Path("/api/admin_panel")
-public class AdminPanelAPI {
+public class AdminPanelAPI
+{
 	// fetches users for particular domain
 
 	@Path("/getParticularDomainUsers")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<DomainUser> getDomainUserDetails(
-			@QueryParam("d") String domainname) {
-		try {
+	public List<DomainUser> getDomainUserDetails(@QueryParam("d") String domainname)
+	{
+		try
+		{
 			String domain = domainname;
-			if (domain.contains("@")) {
+			if (domain.contains("@"))
+			{
 				String email = domain;
-				DomainUser domainUser = DomainUserUtil
-						.getDomainUserFromEmail(email);
-				if (domainUser != null) {
+				DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+				if (domainUser != null)
+				{
 					String userDomain = domainUser.domain;
-					List<DomainUser> domainUsers = DomainUserUtil
-							.getUsers(userDomain);
+					List<DomainUser> domainUsers = DomainUserUtil.getUsers(userDomain);
 					return domainUsers;
 				}
 			}
 			// Gets the users and update the password to the masked one
 			List<DomainUser> users = DomainUserUtil.getUsers(domain);
 			return users;
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 			return null;
 		}
@@ -92,9 +90,8 @@ public class AdminPanelAPI {
 	@Path("/getAllDomainUsers")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<DomainUser> getAllDomainUsers(
-			@QueryParam("cursor") String cursor,
-			@QueryParam("page_size") String count) {
+	public List<DomainUser> getAllDomainUsers(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+	{
 		String domain = NamespaceManager.get();
 
 		/*
@@ -105,10 +102,10 @@ public class AdminPanelAPI {
 		 * .build()); }
 		 */
 
-		if (count != null) {
+		if (count != null)
+		{
 			System.out.println("Fetching page by page");
-			return DomainUserUtil.getAllDomainUsers(Integer.parseInt(count),
-					cursor);
+			return DomainUserUtil.getAllDomainUsers(Integer.parseInt(count), cursor);
 		}
 
 		return DomainUserUtil.getAllUsers();
@@ -119,24 +116,24 @@ public class AdminPanelAPI {
 	 */
 	@Path("/deletedomain/{namespace}")
 	@DELETE
-	public void deleteDomainUser(@PathParam("namespace") String namespace) {
-		System.out
-				.println("delete request for deletion of account from admin panel "
-						+ namespace);
+	public void deleteDomainUser(@PathParam("namespace") String namespace)
+	{
+		System.out.println("delete request for deletion of account from admin panel " + namespace);
 		String domain = NamespaceManager.get();
 
-		if (StringUtils.isEmpty(domain) || !domain.equals("admin")) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST)
-							.entity("Sorry you don't have privileges to access this page.")
-							.build());
+		if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Sorry you don't have privileges to access this page.").build());
 		}
 
-		try {
+		try
+		{
 			AccountDeleteUtil.deleteNamespace(namespace);
-		} catch (Exception e) {
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 	}
@@ -144,12 +141,12 @@ public class AdminPanelAPI {
 	@Path("/deleteuser")
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void deleteDomainUserFromAdminPanel(@QueryParam("id") String id) {
-		System.out
-				.println("delete request for domain user deletion from admin panel"
-						+ id);
+	public void deleteDomainUserFromAdminPanel(@QueryParam("id") String id)
+	{
+		System.out.println("delete request for domain user deletion from admin panel" + id);
 		DomainUser domainUser;
-		try {
+		try
+		{
 			long domainuserid = Long.parseLong(id);
 
 			domainUser = DomainUserUtil.getDomainUser(domainuserid);
@@ -157,20 +154,19 @@ public class AdminPanelAPI {
 
 			// Throws exception, if only one account exists
 			if (count == 1)
-				throw new WebApplicationException(Response
-						.status(Response.Status.BAD_REQUEST)
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 						.entity("Can’t delete all users").build());
 
 			// Throws exception, if user is owner
 			if (domainUser.is_account_owner)
-				throw new WebApplicationException(Response
-						.status(Response.Status.BAD_REQUEST)
+				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 						.entity("Master account can’t be deleted").build());
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 
@@ -184,7 +180,8 @@ public class AdminPanelAPI {
 	@Path("/getdomainstats")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public String getAccountStats(@QueryParam("d") String domainname) {
+	public String getAccountStats(@QueryParam("d") String domainname)
+	{
 		String oldnamespace = NamespaceManager.get();
 		NamespaceManager.set(domainname);
 
@@ -197,12 +194,12 @@ public class AdminPanelAPI {
 		int eventcount = EventUtil.getCount();
 		int compaigncount = WorkflowUtil.getCount();
 		int triggerscount = TriggerUtil.getCount();
-		int webstats = AnalyticsSQLUtil
-				.getPageViewsCountForGivenDomain(domainname);
-	
+		int webstats = AnalyticsSQLUtil.getPageViewsCountForGivenDomain(domainname);
+
 		String emailinfo = MandrillSubAccounts.getSubAccountInfo(domainname);
 
-		try {
+		try
+		{
 			json.put("webrule_count", webrulecount);
 			json.put("contact_count", contactcount);
 			json.put("deals_count", dealscount);
@@ -213,9 +210,13 @@ public class AdminPanelAPI {
 			json.put("webstats_count", webstats);
 			json.put("emailcount", emailinfo);
 
-		} catch (JSONException e) {
+		}
+		catch (JSONException e)
+		{
 			e.printStackTrace();
-		} finally {
+		}
+		finally
+		{
 			NamespaceManager.set(oldnamespace);
 		}
 		System.out.println("status account " + json);
@@ -227,21 +228,22 @@ public class AdminPanelAPI {
 	@Path("/changepassword/{id}")
 	@PUT
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public void changePasswordOfCurrentDomainUserFromAdminPanel(
-			@PathParam("id") String id,
-			@FormParam("new_pswd") String newPassword) throws Exception {
+	public void changePasswordOfCurrentDomainUserFromAdminPanel(@PathParam("id") String id,
+			@FormParam("new_pswd") String newPassword) throws Exception
+	{
 		long idofuseremail = Long.parseLong(id);
-		DomainUser currentDomainUser = DomainUserUtil
-				.getDomainUser(idofuseremail);
+		DomainUser currentDomainUser = DomainUserUtil.getDomainUser(idofuseremail);
 
-		try {
+		try
+		{
 			currentDomainUser.password = newPassword;
 			currentDomainUser.save();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 			System.out.println(e.getMessage());
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 
@@ -258,8 +260,8 @@ public class AdminPanelAPI {
 	@Path("/subscriptionofparticulardomain")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Subscription getsubscriptionOfDomain(
-			@QueryParam("d") String domainname) throws StripeException {
+	public Subscription getsubscriptionOfDomain(@QueryParam("d") String domainname) throws StripeException
+	{
 
 		// System.out.println(sc.billing_data_json_string.toString());
 		return Subscription.getSubscriptionOfParticularDomain(domainname);
@@ -272,19 +274,18 @@ public class AdminPanelAPI {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Subscription subscribeForParticularDomain(Subscription subscribe)
-			throws PlanRestrictedException, WebApplicationException {
-		System.out
-				.println("plan upgradation request from Admin panel/support panel");
+	public Subscription subscribeForParticularDomain(Subscription subscribe) throws PlanRestrictedException,
+			WebApplicationException
+	{
+		System.out.println("plan upgradation request from Admin panel/support panel");
 		System.out.println(subscribe);
 		String oldnamespace = NamespaceManager.get();
-		try {
+		try
+		{
 
 			String domain = subscribe.domain_name;
 
-			System.out
-					.println("domain name in subscribe for particular domain "
-							+ domain);
+			System.out.println("domain name in subscribe for particular domain " + domain);
 
 			NamespaceManager.set(domain);
 
@@ -299,26 +300,30 @@ public class AdminPanelAPI {
 			BillingRestrictionUtil.setPlanInSession(subscribe.plan);
 
 			// Initializes task to clear tags
-			AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(
-					NamespaceManager.get());
+			AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
 
 			// Add to queue
 			Queue queue = QueueFactory.getDefaultQueue();
 			queue.add(TaskOptions.Builder.withPayload(task));
 
 			return subscribe;
-		} catch (PlanRestrictedException e) {
+		}
+		catch (PlanRestrictedException e)
+		{
 			throw e;
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 			/*
 			 * If Exception is raised during subscription send the exception
 			 * message to client
 			 */
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
-		} finally {
+		}
+		finally
+		{
 			NamespaceManager.set(oldnamespace);
 		}
 	}
@@ -334,17 +339,22 @@ public class AdminPanelAPI {
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Subscription changePlan(Plan plan) {
-		try {
+	public Subscription changePlan(Plan plan)
+	{
+		try
+		{
 			// Return updated subscription object
 			return Subscription.updatePlan(plan);
-		} catch (PlanRestrictedException e) {
+		}
+		catch (PlanRestrictedException e)
+		{
 			System.out.println("excpetion plan exception");
 			throw e;
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 		}
 
@@ -356,84 +366,83 @@ public class AdminPanelAPI {
 	@Path("/getinvoices")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List getCollectionOfInvoicesOfParticularDomain(
-			@QueryParam("d") String domainname) {
-		try {
+	public List getCollectionOfInvoicesOfParticularDomain(@QueryParam("d") String domainname)
+	{
+		try
+		{
 
 			return Subscription.getInvoicesOfParticularDomain(domainname);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 
 		}
 	}
-	
-	
-	
+
 	@Path("/getcustomer")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Customer getStripeCustomerDetails(@QueryParam("d") String customerId) throws StripeException
-    {
-	
-    	Customer cus=Subscription.getCustomer(customerId);
-    	
-       return cus;
-    }
-	
-	//gets collection of charges of a customer
-	
+	public Customer getStripeCustomerDetails(@QueryParam("d") String domainname) throws StripeException
+	{
+
+		Customer cus = Subscription.getCustomer(domainname);
+
+		return cus;
+	}
+
+	// gets collection of charges of a customer
+
 	@Path("/getcharges")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List getCollectionOfChargesOfCustomer(
-			@QueryParam("d") String customerid) {
-		try {
+	public List getCollectionOfChargesOfCustomer(@QueryParam("d") String customerid)
+	{
+		try
+		{
 
 			return StripeUtil.getCharges(customerid);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
-			throw new WebApplicationException(Response
-					.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 					.build());
 
 		}
 	}
-	
-	
-	//apply for refund based on charge id
-	
-	@Path("/applyrefund")
-		@GET
-		@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-		public Charge applyRefund(
-				@QueryParam("chargeid") String chargeid) {
-		String domain=NamespaceManager.get();
-		
-		if (StringUtils.isEmpty(chargeid) || !domain.equals("admin")) {
-			throw new WebApplicationException(
-					Response.status(Response.Status.BAD_REQUEST)
-							.entity("Sorry you don't have privileges to access this page.")
-							.build());
-		}
-		
-			try {
-              
-				Charge chrge=StripeUtil.createRefund(chargeid);
-				return chrge;
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new WebApplicationException(Response
-						.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-						.build());
 
-			}
-			
+	// apply for refund based on charge id
+
+	@Path("/applyrefund")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Charge applyRefund(@QueryParam("chargeid") String chargeid)
+	{
+		String domain = NamespaceManager.get();
+
+		if (StringUtils.isEmpty(chargeid) || !domain.equals("admin"))
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Sorry you don't have privileges to access this page.").build());
 		}
-	
-	
-	
+
+		try
+		{
+
+			Charge chrge = StripeUtil.createRefund(chargeid);
+			return chrge;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+
+		}
+
+	}
 
 }
