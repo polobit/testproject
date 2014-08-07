@@ -193,8 +193,11 @@
 
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
-
-			<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;">Sync</button>
+{{#if inProgress}}
+			<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;" disabled="disabled">Sync</button>
+{{else}}
+<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;">Sync</button>
+{{/if}}
 
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
@@ -284,8 +287,11 @@
 
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
-
-			<button class="btn btn-primary" id="shopify-setting" style="display:inline-block;">Sync</button>
+{{#if inProgress}}
+			<button class="btn btn-primary" id="shopify-setting" style="display:inline-block;" disabled="disabled">Sync</button>
+{{else}}
+<button class="btn btn-primary" id="shopify-setting" style="display:inline-block;">Sync</button>
+{{/if}}
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 
        	  	</div>
