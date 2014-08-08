@@ -33,7 +33,6 @@
         <property name="updated_time" direction="asc"/>
     </datastore-index>
 
-<<<<<<< HEAD
     <!-- Used 1 time in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="viewed.viewer_id" direction="asc"/>
@@ -48,6 +47,3 @@
     </datastore-index>
 
 </datastore-indexes>
-=======
-</datastore-indexes>
->>>>>>> Sandbox_master
