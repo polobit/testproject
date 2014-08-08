@@ -79,8 +79,8 @@ public class Globals
 	public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
 
     // Stripe live keys
-    public static final String STRIPE_API_KEY = DEV_STRIPE_API_KEY;
-    public static final String STRIPE_CLIENT_ID = DEV_STRIPE_CLIENT_ID;
+    public static final String STRIPE_API_KEY = STRIPE_LIVE_API_KEY;
+    public static final String STRIPE_CLIENT_ID = STRIPE_LIVE_CLIENT_ID;
 
     // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
@@ -103,7 +103,7 @@ public class Globals
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agile@#$rocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
 
     public static final String BULK_BACKENDS = "bulk";
     public static final String NORMAL_BACKENDS = "normal";
