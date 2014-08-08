@@ -181,14 +181,14 @@ public class HTTPUtil
 	// Set Connection Timeout as Google AppEngine has 5 secs timeout
 	conn.setConnectTimeout(600000);
 	conn.setReadTimeout(600000);
-	
+
 	conn.setRequestMethod(methodType.toUpperCase());
-	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(),"UTF-8");
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
 	wr.write(data);
 	wr.flush();
 
 	// Get the response
-	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 	String output = "";
 	String inputLine;
 	while ((inputLine = reader.readLine()) != null)
@@ -361,5 +361,37 @@ public class HTTPUtil
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
+    }
+
+    public static String accessURLUsingPostForWebCalendar(String postURL, String data) throws Exception
+    {
+	// Send data
+	URL url = new URL(postURL);
+	URLConnection conn = url.openConnection();
+	conn.setDoOutput(true);
+
+	conn.setRequestProperty("Content-Type", "application/json");
+	conn.setRequestProperty("Accept", "application/json");
+
+	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+	if (data != null)
+	{
+	    wr.write(data);
+	    wr.flush();
+	}
+
+	// Get the response
+	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	String output = "";
+	String inputLine;
+	while ((inputLine = reader.readLine()) != null)
+	{
+	    output += inputLine;
+	}
+
+	wr.close();
+	reader.close();
+
+	return output;
     }
 }

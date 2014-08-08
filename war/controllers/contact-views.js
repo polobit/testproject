@@ -68,7 +68,7 @@ var ContactViewsRouter = Backbone.Router.extend({
 		}
 		var contact_view_model = App_Contact_Views.contactViewListView.collection.get(id);
 
-		var contactView = new Base_Model_View({ url : 'core/api/contact-view/scope?scope=PERSON', model : contact_view_model, template : "contact-view",
+		var contactView = new Base_Model_View({ url : 'core/api/contact-view/', model : contact_view_model, template : "contact-view",
 			restKey : "contactView", window : "contact-views", postRenderCallback : function(el)
 			{
 				fillSelect("custom-fields-optgroup", "core/api/custom-fields", undefined, function(data)

@@ -68,7 +68,11 @@ href="<%=CSS_PATH%>css/bootstrap-<%=template%>.min.css" />
 href="<%=CSS_PATH%>css/bootstrap-responsive.min.css" />
 <link rel="stylesheet" type="text/css"
 href="/css/agilecrm.css" />
-
+<style>
+.clickdesk_bubble {
+	display: none !important;
+}
+</style>
  <!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.load.min.js'></script> -->
 <script src='//cdnjs.cloudflare.com/ajax/libs/headjs/1.0.3/head.js'></script>
 
@@ -81,6 +85,8 @@ href="/css/agilecrm.css" />
 <script src="lib/ie/json.js"></script>
 <![endif]-->
 </head>
+
+
 
 <body>
 <div id="wrap">
@@ -138,7 +144,7 @@ debug = false;
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
-var HANDLEBARS_PRECOMPILATION = false;
+var HANDLEBARS_PRECOMPILATION = true || <%=!debug%>;
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -147,6 +153,8 @@ var IS_CONSOLE_ENABLED = <%=debug%>;
 var LOCAL_SERVER = <%=debug%>;
 
 var IS_FLUID = <%=is_fluid%>;
+
+var CLICKDESK_CODE_LOADED = false;
 
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
@@ -229,6 +237,15 @@ setTimeout(loadMiscScripts, 10000);
   ga('send', 'pageview');
 
 </script>
+
+<!-- ClickDesk Live Chat Service for websites -->
+<script type='text/javascript'>
+var _glc =_glc || []; _glc.push('all_ag9zfmNsaWNrZGVza2NoYXRyDgsSBXVzZXJzGKD0uQoM');
+var glcpath = (('https:' == document.location.protocol) ? 'https://my.clickdesk.com/clickdesk-ui/browser/' : 
+'http://my.clickdesk.com/clickdesk-ui/browser/');
+var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
+</script>
+<!-- End of ClickDesk -->
 
 </body>
 </html>

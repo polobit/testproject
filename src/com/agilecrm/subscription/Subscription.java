@@ -17,6 +17,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -29,6 +30,8 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
@@ -108,6 +111,11 @@ public class Subscription
      */
     @NotSaved(IfDefault.class)
     public String billing_data_json_string = null;
+   
+    
+    //used when upgrade subscription from adminpanel
+    @NotSaved
+    public String domain_name = null;
 
     /** This {@link Enum} gateway represents the payment gateway */
     public static enum Gateway
@@ -180,10 +188,56 @@ public class Subscription
 	}
     }
 
+    /**
+     * Returns {@link Subscription} object of particular domain domain
+     * 
+     * @return {@link Subscription}
+     * */
+    public static Subscription getSubscriptionOfParticularDomain(String namespace)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+	    
+	    Subscription subscription = getSubscription();
+
+	    if (subscription != null){
+		    subscription.domain_name=namespace;
+	      return subscription;
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+    
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+	 return null;
+    }
+
+    
+    public static Customer getCustomer(String namespace) throws StripeException
+    {
+	    Subscription subscription = getSubscriptionOfParticularDomain(namespace);
+	    if (subscription != null){
+	      JSONObject billing=subscription.billing_data;
+	   System.out.println(billing+" in subscription.java");
+	     return StripeUtil.getCustomerFromJson(billing);
+	    }
+		return null;
+
+    }
+    
+    
+    
     public void save()
     {
 	Subscription subscription = Subscription.getSubscription();
-
 	// If Subscription object already exists, update it(Only one
 	// subscription object per domain)
 	if (subscription != null)
@@ -236,7 +290,6 @@ public class Subscription
     {
 	// Gets subscription object of current domain
 	Subscription subscription = getSubscription();
-
 	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
 		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
 	{
@@ -253,10 +306,8 @@ public class Subscription
 
 	// Updates the plan in related gateway
 	subscription.billing_data = subscription.getAgileBilling().updatePlan(subscription.billing_data, plan);
-
 	// Updates plan of current domain subscription object
 	subscription.plan = plan;
-
 	// Saves updated subcription object
 	subscription.save();
 
@@ -311,6 +362,24 @@ public class Subscription
 	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
     }
 
+    /**
+     * Fetchs {@link List} of {@link Invoice} from respective Domain
+     * 
+     * @return {@link List} of {@link Invoice}
+     * @throws Exception
+     */
+    public static List<Invoice> getInvoicesOfParticularDomain(String domainname) throws Exception
+    {
+	Subscription subscription = getSubscriptionOfParticularDomain(domainname);
+
+	// If current domain has subscription object get invoices for that
+	// domain
+	if (subscription == null)
+	    return null;
+	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
+    }
+    
+    
     /**
      * Cancels the subscription in its respective gateway
      * 
@@ -373,8 +442,12 @@ public class Subscription
     {
 	try
 	{
+		
 	    if (billing_data_json_string != null)
 		billing_data = new JSONObject(billing_data_json_string);
+	 
+	    //sets domain name  in subscription obj before returning 
+	    this.domain_name=NamespaceManager.get();  
 	}
 	catch (Exception e)
 	{

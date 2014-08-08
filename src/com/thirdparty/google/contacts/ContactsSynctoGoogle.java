@@ -139,7 +139,6 @@ public class ContactsSynctoGoogle
 	int MAX_FETCH_SIZE = 1000;
 	int fetched = 0;
 
-	System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 	System.out.println("sync time updated : " + prefs.last_synced_updated_contacts_to_client);
 	List<Contact> contacts_list = ContactSyncUtil.fetchUpdatedContactsToSync(prefs, page, cursor);
 
@@ -247,6 +246,7 @@ public class ContactsSynctoGoogle
 	    if (createContact == null)
 	    {
 		System.out.println("contact null : " + createContact);
+		
 		// Last synced time is still set to avoid current contact being
 		// fetched again ang again
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time

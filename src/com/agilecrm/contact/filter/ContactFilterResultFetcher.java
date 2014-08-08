@@ -1,16 +1,25 @@
 package com.agilecrm.contact.filter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilter.DefaultFilter;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
+import com.agilecrm.search.ui.serialize.SearchRule;
 
 /**
  * Fetches filter results for backend operations. It has similar methods as
@@ -24,11 +33,24 @@ public class ContactFilterResultFetcher
     private String cursor = null;
     private int fetched_count = 0;
     private int current_index = 0;
+    private int max_fetch_set_size;
+
     private int max_fetch_size;
+    
     private ContactFilter filter;
     private DefaultFilter systemFilter = null;
     private List<Contact> contacts;
     private boolean init_fetch = false;
+    private String contact_ids = null;
+    private String orderBy = null;
+
+    private Integer number_of_contacts;
+    private Integer number_of_companies;
+
+    /**
+     * Search map
+     */
+    private Map<String, Object> searchMap;
 
     ContactFilterResultFetcher()
     {
@@ -40,21 +62,22 @@ public class ContactFilterResultFetcher
 	this.filter = ContactFilter.getContactFilter(filter_id);
     }
 
-    public ContactFilterResultFetcher(long filter_id, int max_fetch_size)
+    public ContactFilterResultFetcher(long filter_id, int max_fetch_set_size)
     {
 	this.filter = ContactFilter.getContactFilter(filter_id);
-	this.max_fetch_size = max_fetch_size;
+	this.max_fetch_set_size = max_fetch_set_size;
     }
 
-    public ContactFilterResultFetcher(ContactFilter filter, int max_fetch_size)
+    public ContactFilterResultFetcher(ContactFilter filter, int max_fetch_set_size)
     {
 	this.filter = filter;
-	this.max_fetch_size = max_fetch_size;
+	this.max_fetch_set_size = max_fetch_set_size;
     }
 
-    public ContactFilterResultFetcher(String filter_id, int max_fetch_size)
+    public ContactFilterResultFetcher(String filter_id, int max_fetch_set_size, String contact_ids, Long currentDomainUserId)
     {
-	this.max_fetch_size = max_fetch_size;
+	this.max_fetch_set_size = max_fetch_set_size;
+	this.contact_ids = contact_ids;
 	try
 	{
 	    Long filterId = Long.parseLong(filter_id);
@@ -62,9 +85,72 @@ public class ContactFilterResultFetcher
 	}
 	catch (NumberFormatException e)
 	{
-	    this.systemFilter = getSystemFilter(filter_id);
+	    if (filter_id != null)
+		this.systemFilter = getSystemFilter(filter_id);
 	}
 
+	setAvailableCount();
+
+    }
+    
+    public ContactFilterResultFetcher(Map<String, Object> searchMap, String orderBy, Integer max_fetch_set_size, Integer max_limit)
+    {
+	this.searchMap = searchMap;
+	this.orderBy = orderBy;
+	this.max_fetch_set_size = max_fetch_set_size;
+	this.max_fetch_size = max_limit;
+    }
+
+    private void setAvailableCount()
+    {
+	if (filter != null)
+	{
+	    SearchRule rule = new SearchRule();
+
+	    // Set number of companies
+	    rule.LHS = "type";
+	    rule.CONDITION = SearchRule.RuleCondition.EQUALS;
+	    rule.RHS = Contact.Type.COMPANY.toString();
+	    filter.rules.add(rule);
+
+	    // Set number of contacts
+	    number_of_companies = filter.queryContactsCount();
+
+	    rule.RHS = Contact.Type.PERSON.toString();
+	    filter.rules.add(rule);
+
+	    // Set number of contacts
+	    number_of_contacts = filter.queryContactsCount();
+	    filter.rules.remove(filter.rules.size() - 1);
+
+	    filter.rules.remove(filter.rules.size() - 1);
+	    filter.rules.add(rule);
+	}
+	else if (searchMap != null)
+	{
+	    if (searchMap.containsKey("type")
+		    && Contact.Type.COMPANY.toString().equals(searchMap.get("type").toString()))
+	    {
+		number_of_companies = Contact.dao.getCountByProperty(searchMap);
+		return;
+	    }
+
+	    number_of_contacts = Contact.dao.getCountByProperty(searchMap);
+	    number_of_companies = 0;
+	}
+
+	System.out.println("total available contacts : " + number_of_contacts + " , total available companies : "
+		+ number_of_companies);
+    }
+
+    public Integer getAvailableContacts()
+    {
+	return number_of_contacts == null ? 0 : number_of_contacts;
+    }
+
+    public int getAvailableCompanies()
+    {
+	return number_of_companies == null ? 0 : number_of_companies;
     }
 
     public int getTotalFetchedCount()
@@ -78,8 +164,10 @@ public class ContactFilterResultFetcher
      * @param id
      * @return
      */
-    private static DefaultFilter getSystemFilter(String id)
+    private DefaultFilter getSystemFilter(String id)
     {
+	searchMap = new HashMap<String, Object>();
+
 	// Checks if Filter id contacts "system", which indicates the
 	// request is to load results based on the default filters provided
 	if (id.contains("system-"))
@@ -94,7 +182,46 @@ public class ContactFilterResultFetcher
 
 	    // If requested id contains "system" in it, but it doesn't match
 	    // with RECENT/LEAD/CONTACTS then return null
+	    searchMap = ContactFilterUtil.getDefaultContactSearchMap(filter);
 	    return filter;
+	}
+	// If criteria starts with '#tags/' then it splits after '#tags/' and
+	// gets tag and returns contact keys
+	if (id.startsWith("#tags/"))
+	{
+	    String[] tagCondition = id.split("/");
+	    String tag = tagCondition.length > 0 ? tagCondition[1] : "";
+
+	    try
+	    {
+
+		searchMap.put("tagsWithTime.tag", URLDecoder.decode(tag, "UTF-8"));
+	    }
+	    catch (UnsupportedEncodingException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    return null;
+	}
+	// If criteria is '#contacts' then keys of all available contacts are
+	// returned
+	if (id.equals("#contacts"))
+	{
+	    searchMap.put("type", Type.PERSON);
+	    return null;
+	}
+
+	if ("Companies".equals(id))
+	{
+	    searchMap.put("type", Type.COMPANY);
+	    return null;
+	}
+
+	if (id.equals("#companies"))
+	{
+	    searchMap.put("type", Type.COMPANY);
+	    return null;
 	}
 
 	return null;
@@ -116,15 +243,48 @@ public class ContactFilterResultFetcher
 
 	if (systemFilter != null)
 	{
-	    contacts = ContactFilterUtil.getContacts(systemFilter, max_fetch_size, cursor);
+	    contacts = ContactFilterUtil.getContacts(systemFilter, max_fetch_set_size, cursor);
+	    fetched_count += size();
+	    setCursor();
+	    return contacts;
+	}
+	else if (searchMap != null)
+	{
+	    if(orderBy != null)
+		contacts = Contact.dao.fetchAllByOrder(max_fetch_set_size, cursor, searchMap, true, false, orderBy);
+	    else
+		contacts = Contact.dao.fetchAll(max_fetch_set_size, cursor, searchMap);
 	    fetched_count += size();
 	    setCursor();
 	    return contacts;
 	}
 
+	else if (contact_ids != null)
+	{
+	    try
+	    {
+		contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+		if (contacts.size() == 0)
+		{
+		    return contacts;
+		}
+		Contact contact = contacts.get(0);
+		if (contact.type == Contact.Type.PERSON)
+		    number_of_contacts = contacts.size();
+		else
+		    number_of_companies = contacts.size();
+	    }
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	    return contacts;
+	}
+
 	// Fetches first 200 contacts
 	Collection<Contact> contactCollection = new QueryDocument<Contact>(new ContactDocument().getIndex(),
-		Contact.class).advancedSearch(filter.rules, max_fetch_size, cursor);
+		Contact.class).advancedSearch(filter.rules, max_fetch_set_size, cursor);
 
 	if (contactCollection == null)
 	{
@@ -168,13 +328,16 @@ public class ContactFilterResultFetcher
 
     public boolean hasNextSet()
     {
-	if (!init_fetch || (size() >= max_fetch_size && cursor != null))
+	if (max_fetch_size <= fetched_count && (!init_fetch || (size() >= max_fetch_set_size && cursor != null)))
 	{
 	    int size = size();
 	    if (size == 0 && init_fetch)
 		return false;
 
-	    if (StringUtils.equals(cursor, getNewCursor()))
+	    if (cursor == null)
+		return true;
+
+	    if (cursor != null && init_fetch)
 		return true;
 
 	    contacts = null;
@@ -220,7 +383,6 @@ public class ContactFilterResultFetcher
 	Contact contact = null;
 	if (current_index < size())
 	{
-
 	    contact = contacts.get(current_index);
 	    ++current_index;
 	}

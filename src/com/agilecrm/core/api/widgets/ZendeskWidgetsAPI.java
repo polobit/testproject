@@ -217,7 +217,7 @@ public class ZendeskWidgetsAPI
 		return null;
 
 	    // Calls ZendeskUtil and retrieves Zendesk account user information
-	    return ZendeskUtil.getUserInfo(widget,"");
+	    return ZendeskUtil.getUserInfo(widget, "");
 	}
 	catch (SocketTimeoutException e)
 	{
@@ -295,7 +295,7 @@ public class ZendeskWidgetsAPI
      */
     @Path("profile/{widget-id}/{email}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
     public String getZendeskProfile(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
     {
 	try

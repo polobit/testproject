@@ -11,7 +11,7 @@
                             <input name="workflow-name" type="text" id="workflow-name" class="span3 required" placeholder="Name of campaign" />
                             <span id="workflow-edit-msg" style="margin-left: 130px; display: none; color: red;">You have unsaved changes. Click on &lsquo;Save Campaign&rsquo; to save.</span>
 							<span id="workflow-limit-reached-msg" style="margin-left: 130px;"></span>
-							<a href="#workflows" class="btn right" style="position:relative">Cancel</a>
+							<a href="#workflows" class="btn right workflow-done" style="position:relative">Done</a>
 							{{#if is_new}}
 							<button class="btn btn-primary right" id="save-workflow-top" style="position:relative; margin-right:5px">Save Campaign</button>
 							{{else}}
@@ -77,7 +77,7 @@
 							</ul>
                          </div>
                     {{/if}}
-                    <a href="#workflows" class="btn">Cancel</a>
+                    <a href="#workflows" class="btn workflow-done">Done</a>
                     <div style="display:inline-block" class="save-workflow-img"></div>
                     <br />
                 </fieldset>

@@ -15,16 +15,20 @@ import javax.ws.rs.core.Response;
 
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.stripe.exception.StripeException;
+
 
 /**
  * <code>SubscriptionApi</code> class includes REST calls to interact with
@@ -55,6 +59,9 @@ public class SubscriptionApi
 
     }
 
+    
+   
+    
     /**
      * Called from client either for new Subscription or updating user credit
      * card or plan , Based on the type of request(create, update(credit card or
@@ -69,7 +76,6 @@ public class SubscriptionApi
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Subscription subscribe(Subscription subscribe) throws PlanRestrictedException, WebApplicationException
     {
-
 	try
 	{
 	    /*
@@ -120,6 +126,7 @@ public class SubscriptionApi
 		    .build());
 	}
     }
+    
 
     /**
      * Updates the plan of current domain subscription object
@@ -198,6 +205,9 @@ public class SubscriptionApi
 		    .build());
 	}
     }
+    
+    
+    
 
     /**
      * Deletes subscription object of the domain and deletes related customer
@@ -241,4 +251,8 @@ public class SubscriptionApi
 		    .build());
 	}
     }
+    
+  
+  
+    
 }

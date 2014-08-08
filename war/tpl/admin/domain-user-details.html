@@ -1,0 +1,180 @@
+<script id="all-domain-model-template" type="text/html">
+
+<td></td>
+<td>{{name}}</td>
+<td>{{email}}</td>
+<td><time class="last-login-time" datetime="{{epochToDate info_json_string "logged_in_time"}}" style="border-bottom:dotted 1px #999">{{epochToDate info_json_string "logged_in_time"}}</time></td>
+<td ><a href="/#change-password-admin/{{id}}"  >Reset password</a></td>
+<td><a href="#" data="{{id}}" class="delete_user btn-mini btn-danger">Delete</a></td>
+<td>{{#if is_account_owner}}<i class="agilecrm-profile-dropdown"></i>{{/if}}</td>
+ 
+
+</script>
+
+<script id="all-domain-collection-template" type="text/html">
+ <div class="page-header">
+        <h2 >DomainDetails </h2><br/>
+<h3 >Domain Name:&nbsp;&nbsp;&nbsp;{{this.0.domain}}</h3>
+    </div>
+
+<div class="row">
+<div class="span9">
+   
+
+    {{#unless this.length}}
+    <div class="slate">
+        <div class="slate-content">
+                <h3>Domain Not Found.</h3>
+                <br />
+                <a href="#" class="btn blue btn-slate-action"><i class="icon-plus-sign"></i> Domain Users </a>
+            
+        </div>
+    </div>
+    {{/unless}}
+    {{#if this.length}}
+<div ><h3  style="color:#069">Users <small>{{count}}</small></h3> 
+
+    <div class="">
+        <div class="">
+            <table class="table table-striped onlySorting">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Last Logged In</th>
+                        <th>Reset Password</th>
+						<th>Delete User</th>
+                    </tr>
+                </thead>
+                <tbody id="all-domain-model-list" ></tbody>
+            </table>
+        </div>
+    </div>
+    {{/if}}
+</div>
+<div  class=" past-invoicecollection"></div>
+<div  class=" past-chargecollection"></div>
+</div>
+<div class="span3">
+<div  id="planinfo"></div>
+<div id="account" class="pull-left" style="float:left" > </div>
+</div>
+</div>
+
+<div class="row">
+
+
+
+</script>
+
+<script id="plan-info-template" type="text/html">
+<div class="header"><a id="login_id"   href='https://{{description}}.agilecrm.com/login'  target='_self'><strong><u>Login To Domain</u></strong></a></div>
+<div class="well">
+<p>
+	<strong><u>Your Current Plan</u>:</strong>
+</p>
+{{#if this.subscription}}
+<p>
+     Start Date: <time class="time-ago" datetime="{{epochToHumanDate "" subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" subscription.start}}</time>     
+</p>
+{{#if this.subscription.currentPeriodEnd}}
+<p>
+    End Date: <time class="time-ago" datetime="{{epochToHumanDate "" subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" subscription.currentPeriodEnd}}</time>     
+</p>
+{{/if}}
+
+<p>
+Current Plan: &nbsp;&nbsp;{{subscription.plan.id}}
+</p>
+
+<p>
+Interval: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subscription.plan.interval}}
+</p>
+<p>
+Amount: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{numeric_operation subscription.plan.amount 100 "/"}} {{toUpperCase subscription.plan.currency}}
+</p>
+<p>
+Plan Type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subscription.plan.name}}
+</p>
+<p>
+Users: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{subscription.quantity}}
+</p><br/>
+<p>
+	<a href="/#domainSubscribe/{{description}}"  ><strong><u> Change Plan</strong></u> </a>&nbsp;&nbsp;
+</p>
+  {{else}}
+        <div ><strong>No active subscription</strong></div>
+{{/if}}
+</div>
+
+</script>
+
+<script id="email-stats-template" type="text/html">
+<div>
+					This Hour:{{numberWithCommas sent_hourly}}<br/>
+				This Week:{{numberWithCommas sent_weekly}}<br/>
+					This Month:{{numberWithCommas sent_monthly}}<br/>
+					Overall :{{numberWithCommas sent_total}}<br/>
+	</div>		
+
+</script>
+
+<script id="domain-info-template" type="text/html">
+<div style=" float:right;" >
+<legend>Account Stats</legend>
+<table class="table table-bordered" style="width:280px">
+    
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>campaigns_count</td>
+            <td >{{compaign_count}}</td>
+        </tr>
+      
+ <tr>
+            <td>webrules_count</td>
+            <td>{{webrule_count}}</td>
+        </tr>
+        <tr>
+            <td>emails_count</td>
+            <td id="emailcount" ></td>
+        </tr>
+
+        <tr>
+            <td>Web-stats_count</td>
+            <td >{{webstats_count}}</td>
+        </tr>
+ <tr>
+            <td>Contacts_count</td>
+            <td >{{contact_count}}</td>
+        </tr>
+
+ <tr>
+            <td>deals_count</td>
+            <td >{{deals_count}}</td>
+        </tr>
+ <tr>
+            <td>documents_count</td>
+            <td >{{docs_count}}</td>
+        </tr>
+ <tr>
+            <td>events_count</td>
+            <td >{{events_count}}</td>
+        </tr>
+ <tr>
+            <td>triggers_count</td>
+            <td >{{triggers_count}}</td>
+        </tr>
+
+    </tbody>
+</table>
+<a  align="center" data="" class="delete-namespace data btn btn-danger">Delete  Account</a>
+</div>
+</div>
+</script>

@@ -2,10 +2,13 @@ package com.agilecrm.activities.util;
 
 import java.util.List;
 
+import javax.ws.rs.PathParam;
+
 import com.agilecrm.activities.Event;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -63,6 +66,12 @@ public class EventUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    //returns all events count 
+    public static int getCount(){
+    	
+    	return Event.dao.count();
     }
 
     /**

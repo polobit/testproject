@@ -80,6 +80,11 @@ public class SendEmail extends TaskletAdapter
     public static String CC = "cc_email";
 
     /**
+     * BCC email id.
+     */
+    public static String BCC = "bcc_email";
+
+    /**
      * HTML content of email
      */
     public static String HTML_EMAIL = "html_email";
@@ -239,14 +244,14 @@ public class SendEmail extends TaskletAdapter
 	    if (subscriberJSON.getBoolean("isUnsubscribedAll"))
 	    {
 		System.err.println("Skipping SendEmail node for "
-			+ subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
-			+ " as it is Unsubscribed from All.");
+		        + subscriberJSON.getJSONObject("data").getString(Contact.EMAIL)
+		        + " as it is Unsubscribed from All.");
 
 		// Add log
 		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-			"Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
-				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
-			LogType.EMAIL_SENDING_SKIPPED.toString());
+		        "Campaign email was not sent since the contact unsubscribed from the campaign <br><br> Email subject: "
+		                + getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+		        LogType.EMAIL_SENDING_SKIPPED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -262,11 +267,11 @@ public class SendEmail extends TaskletAdapter
 	    {
 		// Add log
 		LogUtil.addLogToSQL(
-			AgileTaskletUtil.getId(campaignJSON),
-			AgileTaskletUtil.getId(subscriberJSON),
-			"Campaign email was not sent due to hard bounce <br><br> Email subject: "
-				+ getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
-			LogType.EMAIL_SENDING_SKIPPED.toString());
+		        AgileTaskletUtil.getId(campaignJSON),
+		        AgileTaskletUtil.getId(subscriberJSON),
+		        "Campaign email was not sent due to hard bounce <br><br> Email subject: "
+		                + getStringValue(nodeJSON, subscriberJSON, data, SUBJECT),
+		        LogType.EMAIL_SENDING_SKIPPED.toString());
 
 		// Execute Next One in Loop
 		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -443,6 +448,7 @@ public class SendEmail extends TaskletAdapter
 
 	String to = getStringValue(nodeJSON, subscriberJSON, data, TO);
 	String cc = getStringValue(nodeJSON, subscriberJSON, data, CC);
+	String bcc = getStringValue(nodeJSON, subscriberJSON, data, BCC);
 
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 
@@ -462,8 +468,8 @@ public class SendEmail extends TaskletAdapter
 
 	// Check if we need to convert links
 	if (trackClicks != null
-		&& (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
-			.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
+	        && (trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES) || trackClicks
+	                .equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH)))
 	{
 	    try
 	    {
@@ -471,10 +477,8 @@ public class SendEmail extends TaskletAdapter
 		// clicks
 		data.put(CLICK_TRACKING_ID, System.currentTimeMillis());
 
-		text = EmailLinksConversion.convertLinksUsingRegex(text, subscriberId, campaignId,
-			trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
-		html = EmailLinksConversion.convertLinksUsingRegex(html, subscriberId, campaignId,
-			trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
+		html = EmailLinksConversion.convertLinksUsingJSOUP(html, subscriberId, campaignId,
+		        trackClicks.equalsIgnoreCase(TRACK_CLICKS_YES_AND_PUSH));
 
 	    }
 	    catch (Exception e)
@@ -497,13 +501,13 @@ public class SendEmail extends TaskletAdapter
 		html = EmailUtil.appendAgileToHTML(html, "campaign", "Powered by");
 
 	    // Send HTML Email
-	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, html, text,
+	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
 	}
 	else
 	{
 	    // Send Text Email
-	    sendEmail(fromEmail, fromName, to, cc, subject, replyTo, null, text,
+	    sendEmail(fromEmail, fromName, to, cc, bcc, subject, replyTo, null, text,
 		    new JSONObject().put(MandrillWebhook.METADATA_CAMPAIGN_ID, campaignId).toString());
 	}
 
@@ -531,11 +535,11 @@ public class SendEmail extends TaskletAdapter
 	    // Get Data
 	    if (subscriberJSON.has("data"))
 		subscriberJSON.getJSONObject("data").put(
-			"unsubscribe_link",
-			"https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
-				+ URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
-				+ URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
-				+ URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
+		        "unsubscribe_link",
+		        "https://" + NamespaceManager.get() + ".agilecrm.com/unsubscribe?sid="
+		                + URLEncoder.encode(AgileTaskletUtil.getId(subscriberJSON), "UTF-8") + "&cid="
+		                + URLEncoder.encode(AgileTaskletUtil.getId(campaignJSON), "UTF-8") + "&e="
+		                + URLEncoder.encode(subscriberJSON.getJSONObject("data").getString("email"), "UTF-8"));
 	}
 	catch (Exception e)
 	{
@@ -565,17 +569,17 @@ public class SendEmail extends TaskletAdapter
      * @param text
      *            - text body
      */
-    private void sendEmail(String fromEmail, String fromName, String to, String cc, String subject, String replyTo,
-	    String html, String text, String mandrillMetadata)
+    private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
+	    String replyTo, String html, String text, String mandrillMetadata)
     {
 	// For domain "clickdeskengage" - use SendGrid API
 	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
 	{
-	    SendGrid.sendMail(fromEmail, fromName, to, cc, null, subject, replyTo, html, text);
+	    SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
 	    return;
 	}
 
-	MandrillUtil.sendMail(fromEmail, fromName, to, cc, subject, replyTo, html, text, mandrillMetadata);
+	MandrillUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
     }
 
 }

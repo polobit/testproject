@@ -42,11 +42,11 @@ public class QuickBooksUtil
     public String getInvoicesByContactRef(String contactId) throws Exception
     {
 	String query = "/query?query=SELECT%20%2A%20FROM%20Invoice%20where%20CustomerRef%20%3D%20%27"
-	        + contactId.trim() + "%27";
+		+ contactId.trim() + "%27";
 
 	// Authenticating & retrieving result from quickbooks.com
 	String response = SignpostUtil.accessURLWithOauth(this.consumerKey, this.consumerSecret, this.accessToken,
-	        this.tokenSecret, APIURL + query, "POST", "", "quickbooks");
+		this.tokenSecret, APIURL + query, "POST", "", "quickbooks");
 
 	validateResponse(response);
 	// System.out.println("response is \n" + response);
@@ -64,7 +64,7 @@ public class QuickBooksUtil
     public String getCustomersByEmail(String email) throws Exception
     {
 	StringBuffer query = new StringBuffer(
-	        "/query?query=select%20%2A%20from%20Customer%20where%20PrimaryEmailAddr%20IN%20%28");
+		"/query?query=select%20%2A%20from%20Customer%20where%20PrimaryEmailAddr%20IN%20%28");
 	String emailArr[] = email.split(",");
 	// build query wit multiple email
 	for (int i = 0; i < emailArr.length; i++)
@@ -83,7 +83,7 @@ public class QuickBooksUtil
 
 	// get customer details from quickbooks.com
 	String response = SignpostUtil.accessURLWithOauth(this.consumerKey, this.consumerSecret, this.accessToken,
-	        this.tokenSecret, APIURL + query.toString(), "POST", "", "quickbooks");
+		this.tokenSecret, APIURL + query.toString(), "POST", "", "quickbooks");
 	validateResponse(response);
 	return response;
     }
@@ -115,7 +115,7 @@ public class QuickBooksUtil
 
 	// authenthicating & retreiving result from quickbooks.com
 	String response = SignpostUtil.accessURLWithOauth(this.consumerKey, this.consumerSecret, this.accessToken,
-	        this.tokenSecret, endPointURL, "POST", customerJSON.toString(), "quickbooks");
+		this.tokenSecret, endPointURL, "POST", customerJSON.toString(), "quickbooks");
 	validateResponse(response);
 
 	return response;
@@ -201,7 +201,6 @@ public class QuickBooksUtil
 	if (details.contains("Business Validation Error"))
 	    throw new Exception(
 		    "Not a valid customer name.\nNames must have at least one character and cannot include tabs, newlines or ':'.");
-
 	else if (details.contains("name supplied already"))
 	    throw new Exception("Customer already exists");
 	else if (details.contains("String length specified does not match the supported length"))

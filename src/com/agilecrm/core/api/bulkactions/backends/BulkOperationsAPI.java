@@ -25,6 +25,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportEmailUtil;
+import com.agilecrm.contact.sync.SyncFrequency;
+import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -46,7 +48,7 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.Duration;
+import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -67,43 +69,23 @@ public class BulkOperationsAPI
     public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user_id) throws JSONException
     {
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, model_ids, current_user_id);
 
-	Integer count = 0;
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	if (!StringUtils.isEmpty(filter))
+	while (fetcher.hasNextSet())
 	{
-	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, current_user_id);
-
-	    String currentCursor = null;
-	    String previousCursor = null;
-	    do
-	    {
-		count += contacts_list.size();
-		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
-
-		ContactUtil.deleteContactsbyListSupressNotification(contacts_list);
-
-		if (!StringUtils.isEmpty(previousCursor))
-		{
-		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user_id);
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
-			    : null;
-		    continue;
-		}
-
-		break;
-	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
-	}
-	else if (!StringUtils.isEmpty(model_ids))
-	{
-	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(model_ids));
-
-	    ContactUtil.deleteContactsbyListSupressNotification(contacts_list);
-	    count += contacts_list.size();
+	    ContactUtil.deleteContacts(fetcher.nextSet());
 	}
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.DELETE, String.valueOf(count), "companies");
+	System.out.println("contacts : " + fetcher.getAvailableContacts());
+	System.out.println("companies : " + fetcher.getAvailableCompanies());
+
+	String message = "";
+	if (fetcher.getAvailableContacts() > 0)
+	    message = fetcher.getAvailableContacts() + " Contacts deleted";
+	else if (fetcher.getAvailableCompanies() > 0)
+	    message = fetcher.getAvailableCompanies() + " Companies deleted";
+
+	BulkActionNotifications.publishNotification(message);
     }
 
     /**
@@ -124,43 +106,23 @@ public class BulkOperationsAPI
 	    @PathParam("current_user") Long current_user) throws JSONException
     {
 
-	Integer count = 0;
-	List<Contact> contacts_list = new ArrayList<Contact>();
-	if (!StringUtils.isEmpty(filter))
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user);
+
+	while (fetcher.hasNextSet())
 	{
-	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, current_user);
-
-	    String currentCursor = null;
-	    String previousCursor = null;
-	    do
-	    {
-		count += contacts_list.size();
-		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
-
-		ContactUtil.changeOwnerToContactsBulk(contacts_list, new_owner);
-
-		if (!StringUtils.isEmpty(previousCursor))
-		{
-		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user);
-
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
-			    : null;
-		    continue;
-		}
-
-		break;
-	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
-	}
-	else if (!StringUtils.isEmpty(contact_ids))
-	{
-	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
-
-	    ContactUtil.changeOwnerToContactsBulk(contacts_list, new_owner);
-	    count += contacts_list.size();
+	    ContactUtil.changeOwnerToContactsBulk(fetcher.nextSet(), new_owner);
 	}
 
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE, String.valueOf(count));
+	String message = "Owner changed for ";
+	if (fetcher.getAvailableContacts() > 0)
+	    message = message + fetcher.getAvailableContacts() + " Contacts";
+	else if (fetcher.getAvailableCompanies() > 0)
+	    message = message + fetcher.getAvailableCompanies() + " Companies";
+
+	BulkActionNotifications.publishNotification(message);
+
+	// BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
+	// String.valueOf(0));
     }
 
     /**
@@ -180,43 +142,22 @@ public class BulkOperationsAPI
 	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
 	    @PathParam("current_user_id") Long current_user_id) throws JSONException
     {
-	List<Contact> contact_list = null;
-	int count = 0;
-	if (!StringUtils.isEmpty(filter))
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user_id);
+
+	while (fetcher.hasNextSet())
 	{
-	    contact_list = BulkActionUtil.getFilterContacts(filter, null, current_user_id);
-
-	    String currentCursor = null;
-	    String previousCursor = null;
-	    do
-	    {
-		count += contact_list.size();
-		previousCursor = contact_list.size() > 0 ? contact_list.get(contact_list.size() - 1).cursor : null;
-
-		WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
-
-		if (!StringUtils.isEmpty(previousCursor))
-		{
-		    contact_list = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user_id);
-		    currentCursor = contact_list.size() > 0 ? contact_list.get(contact_list.size() - 1).cursor : null;
-		    continue;
-		}
-		break;
-	    } while (contact_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
+	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+	    WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), workflowId);
 	}
 
-	else if (!StringUtils.isEmpty(contact_ids))
-	{
-	    contact_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
+	System.out.println("contacts : " + fetcher.getAvailableContacts());
+	System.out.println("companies : " + fetcher.getAvailableCompanies());
 
-	    WorkflowSubscribeUtil.subscribeDeferred(contact_list, workflowId);
-	    count += contact_list.size();
-	}
+	System.out.println("Total contacts subscribed to campaign " + workflowId + " is "
+	        + String.valueOf(fetcher.getAvailableContacts()));
 
-	System.out.println("Total contacts subscribed to campaign " + workflowId + " is " + String.valueOf(count));
-
-	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN, String.valueOf(count));
+	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
+	        String.valueOf(fetcher.getAvailableContacts()));
 
 	try
 	{
@@ -224,7 +165,7 @@ public class BulkOperationsAPI
 		    "Campaign Initiated in " + NamespaceManager.get(), null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
 		            + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
-		            + count, null);
+		            + fetcher.getAvailableContacts(), null);
 	}
 	catch (Exception e)
 	{
@@ -274,43 +215,16 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	List<Contact> contacts = null;
-	int count = 0;
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user);
 
-	if (!StringUtils.isEmpty(filter))
+	while (fetcher.hasNextSet())
 	{
-	    contacts = BulkActionUtil.getFilterContacts(filter, null, current_user);
-
-	    String currentCursor = null;
-	    String previousCursor = null;
-	    do
-	    {
-		count += contacts.size();
-		previousCursor = contacts.get(contacts.size() - 1).cursor;
-
-		ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
-
-		if (!StringUtils.isEmpty(previousCursor))
-		{
-		    contacts = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user);
-		    currentCursor = contacts.size() > 0 ? contacts.get(contacts.size() - 1).cursor : null;
-		    continue;
-		}
-		break;
-	    } while (contacts.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
-	}
-
-	else if (!StringUtils.isEmpty(contact_ids))
-	{
-	    contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
-
-	    ContactUtil.addTagsToContactsBulk(contacts, tagsArray);
-	    count += contacts.size();
+	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+	    ContactUtil.addTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-	        .toString(), String.valueOf(count));
+	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     @SuppressWarnings("unchecked")
@@ -346,43 +260,16 @@ public class BulkOperationsAPI
 	if (tagsArray == null)
 	    return;
 
-	List<Contact> contacts = null;
-	int count = 0;
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user);
 
-	if (!StringUtils.isEmpty(filter))
+	while (fetcher.hasNextSet())
 	{
-	    contacts = BulkActionUtil.getFilterContacts(filter, null, current_user);
-
-	    String currentCursor = null;
-	    String previousCursor = null;
-	    do
-	    {
-		count += contacts.size();
-		previousCursor = contacts.get(contacts.size() - 1).cursor;
-
-		ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
-
-		if (!StringUtils.isEmpty(previousCursor))
-		{
-		    contacts = BulkActionUtil.getFilterContacts(filter, previousCursor, current_user);
-		    currentCursor = contacts.size() > 0 ? contacts.get(contacts.size() - 1).cursor : null;
-		    continue;
-		}
-		break;
-	    } while (contacts.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
-	}
-
-	else if (!StringUtils.isEmpty(contact_ids))
-	{
-	    contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
-
-	    ContactUtil.removeTagsToContactsBulk(contacts, tagsArray);
-	    count += contacts.size();
+	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
+	    ContactUtil.removeTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-	        .toString(), String.valueOf(count));
+	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     /**
@@ -513,51 +400,41 @@ public class BulkOperationsAPI
 	    @FormParam("contact_ids") String contact_ids, @FormParam("filter") String filter,
 	    @FormParam("data") String data) throws JSONException
     {
+
 	int count = 0;
 
 	JSONObject emailData = new JSONObject(data);
 
 	List<Contact> contacts_list = new ArrayList<Contact>();
 
-	// If filter is not empty, fetch contacts based on filter
-	if (!StringUtils.isEmpty(filter))
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, currentUserId);
+
+	count = fetcher.getAvailableContacts() > 0 ? fetcher.getAvailableContacts() : fetcher.getAvailableCompanies();
+	while (fetcher.hasNextSet())
 	{
-	    contacts_list = BulkActionUtil.getFilterContacts(filter, null, currentUserId);
+	    int noEmailsCount = ContactBulkEmailUtil.sendBulkContactEmails(emailData, fetcher.nextSet());
 
-	    String currentCursor = null;
-	    String previousCursor = null;
-	    do
-	    {
-		int noEmailsCount = ContactBulkEmailUtil.sendBulkContactEmails(emailData, contacts_list);
-
-		count += contacts_list.size() - noEmailsCount;
-		previousCursor = contacts_list.get(contacts_list.size() - 1).cursor;
-
-		if (!StringUtils.isEmpty(previousCursor))
-		{
-		    contacts_list = BulkActionUtil.getFilterContacts(filter, previousCursor, currentUserId);
-
-		    currentCursor = contacts_list.size() > 0 ? contacts_list.get(contacts_list.size() - 1).cursor
-			    : null;
-		    continue;
-		}
-
-		break;
-	    } while (contacts_list.size() > 0 && !StringUtils.equals(previousCursor, currentCursor));
-
+	    count -= noEmailsCount;
 	}
-	else if (!StringUtils.isEmpty(contact_ids))
-	{
-	    contacts_list = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
 
-	    int noEmailsCount = ContactBulkEmailUtil.sendBulkContactEmails(emailData, contacts_list);
-	    count += contacts_list.size() - noEmailsCount;
-	}
+	System.out.println("contacts : " + fetcher.getAvailableContacts());
+	System.out.println("companies : " + fetcher.getAvailableCompanies());
+
+	String message = "";
+	if (fetcher.getAvailableContacts() > 0)
+	    message = fetcher.getAvailableContacts() + " Contacts deleted";
+	else if (fetcher.getAvailableCompanies() > 0)
+	    message = fetcher.getAvailableCompanies() + " Companies deleted";
+
+	if (fetcher.getAvailableContacts() > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " Contacts");
+	else if (fetcher.getAvailableCompanies() > 0)
+	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " companies");
+	else
+	    BulkActionNotifications.publishNotification("Email successfully sent to 0 contacts/companies");
 
 	// Record email sent stats
 	AccountEmailStatsUtil.recordAccountEmailStats(NamespaceManager.get(), count);
-
-	BulkActionNotifications.publishconfirmation(BulkAction.SEND_EMAIL, String.valueOf(count));
     }
 
     /**
@@ -672,7 +549,7 @@ public class BulkOperationsAPI
 	if (StringUtils.isEmpty(duration))
 	    return;
 
-	Duration interval = Duration.valueOf(duration);
+	SyncFrequency interval = SyncFrequency.valueOf(duration);
 
 	// Fetches all Prefs and start sync
 	List<ContactPrefs> prefs = ContactPrefsUtil.getprefs(interval);

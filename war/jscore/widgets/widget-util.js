@@ -405,8 +405,11 @@ function show_set_up_widget(widget_name, template_id, url, model)
     var models;
     $('#prefs-tabs-content').html(getRandomLoadingImg());
     if (model)
+    {
+    console.log(model)	
 	el = $(getTemplate("widget-settings", model));
-    else
+    }
+	else
     {
 	if (!App_Widgets.Catalog_Widgets_View || App_Widgets.Catalog_Widgets_View.collection.length == 0)
 	{
@@ -451,8 +454,11 @@ function show_set_up_widget(widget_name, template_id, url, model)
     else if (widget_name == "Sip")
 	sip_save_widget_prefs();
     
-   /* else if(widget_name =="QuickBooks")
-	quickBooks_save_widget_prefs();*/
+    else if(widget_name =="QuickBooks")
+	quickBooks_save_widget_prefs();
+    
+    else if(widget_name =="Chargify")
+    	chargify_save_widget_prefs();
     
     // Shows available widgets in the content
     if (url)
@@ -520,7 +526,7 @@ function set_up_access(widget_name, template_id, data, url, model)
     if (json.name == "Twilio")
 	json['outgoing_numbers'] = data;
 
-    else if (json.name == "Linkedin" || json.name == "Twitter")
+    else if (json.name == "Linkedin" || json.name == "Twitter" )
 	json['profile'] = data;
 
     else
@@ -679,6 +685,7 @@ function xero_save_widget_prefs()
 	    console.log(data);
 	});
     });
+}
 
     function quickBooks_save_widget_prefs(template_id,url)
     {
@@ -690,4 +697,43 @@ function xero_save_widget_prefs()
 		    });
 	
     }
-}
+    function chargify_save_widget_prefs()
+    {
+        $('#chargify_save_api_key').unbind("click");
+
+        // Saves the API key
+        $('#chargify_save_api_key').die().live('click', function(e)
+        {
+    	e.preventDefault();
+
+    	// Checks whether all input fields are given
+    	if (!isValidForm($("#chargify_login_form")))
+    	{
+    	    return;
+    	}
+
+    	// Saves HelpScout preferences in HelpScout widget object
+    	saveChargifyWidgetPrefs();
+        });
+
+    }
+
+    /**
+     * Calls method in script API (agile_widget.js) to save HelpScout preferences in
+     * HelpScout widget object
+     */
+    function saveChargifyWidgetPrefs()
+    {
+        // Retrieve and store the HelpScout API key entered by the user
+        var Chargify_prefs = {};
+        Chargify_prefs["chargify_api_key"] = $("#chargify_api_key").val();
+        Chargify_prefs["chargify_subdomain"] = $("#chargify_subdomain").val();
+
+        // Saves the preferences into widget with Rapleaf widget name
+        save_widget_prefs("Chargify", JSON.stringify(Chargify_prefs), function(data)
+        {
+    	console.log('In chargify save success');
+    	console.log(data);
+        });
+    }
+

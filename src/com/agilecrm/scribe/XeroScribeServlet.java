@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+
 import com.agilecrm.scribe.util.ScribeUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
@@ -93,9 +94,9 @@ public class XeroScribeServlet extends HttpServlet
 	 * Make a post request and retrieve tokens
 	 */
 	HashMap<String, String> properties = new ObjectMapper().readValue(data,
-	        new TypeReference<HashMap<String, String>>()
-	        {
-	        });
+		new TypeReference<HashMap<String, String>>()
+		{
+		});
 
 	String widgetId = properties.get("widget_id");
 	if (widgetId == null)

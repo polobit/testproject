@@ -24,9 +24,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Milestones */
 	"milestones" : "milestones",
 
-	/* All Domain Users */
-	"all-domain-users" : "allDomainUsers",
-
+	
 	/* Menu settings - select modules on menu bar */
 	"menu-settings" : "menu_settings",
 
@@ -35,8 +33,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	/* Web to Lead */
 	"integrations" : "integrations"
+	
 
 	},
+	
 
 	/**
 	 * Show menu-settings modules selection ( calendar, cases, deals, campaign ) &
@@ -133,6 +133,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	},
 
 	/**
+	 * Loads a template to add new user, to a particular domain
+	 * user
+	 */
+	
+	/**
 	 * Edits the existing user by verifying whether the users list view is
 	 * defined or not
 	 */
@@ -154,12 +159,28 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		// Gets user from the collection based on id
 		var user = this.usersListView.collection.get(id);
+		
+		var needLogout = false;
+		if(CURRENT_DOMAIN_USER.email == user.attributes.email){
+			needLogout = true;
+		}
 
 		/*
 		 * Creates a Model for users edit, navigates back to 'user' window on
 		 * save success
 		 */
-		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", window : 'users', reload : true, postRenderCallback: function(el){
+		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback: function(response){
+				// If user changed his own email, redirect it to the login page.
+				if(needLogout && CURRENT_DOMAIN_USER.email != response.email){
+					console.log('Logging out...');
+					showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
+					var hash = window.location.hash;
+					setTimeout(function(){window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;},5000);
+				} else {
+					Backbone.history.navigate('users', { trigger : true });
+				}
+					
+			}, postRenderCallback: function(el){
 			bindAdminChangeAction(el);
 		} });
 
@@ -313,17 +334,5 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(getTemplate("admin-settings-web-to-lead"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-	},
-
-
-	/**
-	 * Creates a Model to show All Domain Users.
-	 */
-	allDomainUsers : function()
-	{
-		allDomainUsersCollectionView = new Base_Collection_View({ url : 'core/api/users/admin/domain-users', templateKey : "all-domain-users",
-			individual_tag_name : 'tr', cursor : true, page_size : 25 });
-
-		allDomainUsersCollectionView.collection.fetch();
-		$('#content').html(allDomainUsersCollectionView.el);
-	} });
+	}
+	});

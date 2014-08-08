@@ -23,13 +23,16 @@
     </div>
 </div>
 </script>
-<script id="invoice-model-template" type="text/html">	
+<script id="invoice-model-template" type="text/html">
+	{{#each lines.data}}	
+{{#if this.plan}}
 	<td class="data" data="{{this.id}}">
-    	{{#each lines.subscriptions}}
     	{{this.plan.name}}
 	</td>
 	<td>{{epochToHumanDate "mm/dd/yyyy" period.start}}</td>
 	<td>{{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
 	<td>{{this.plan.amount}}</td>
-	{{/each}}	
+
+{{/if}}
+{{/each}}		
 </script>

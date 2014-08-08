@@ -25,11 +25,14 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
+import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
@@ -52,6 +55,7 @@ import com.googlecode.objectify.Key;
 public class CSVUtil
 {
     BillingRestriction billingRestriction;
+    private ContactBillingRestriction dBbillingRestriction;
 
     private CSVUtil()
     {
@@ -61,6 +65,7 @@ public class CSVUtil
     public CSVUtil(BillingRestriction billingRestriction)
     {
 	this.billingRestriction = billingRestriction;
+	dBbillingRestriction = (ContactBillingRestriction)DaoBillingRestriction.getInstace(Contact.class.getSimpleName(), this.billingRestriction);
     }
 
     public static enum ImportStatus
@@ -291,12 +296,6 @@ public class CSVUtil
 		    if (limitCrossed)
 			continue;
 
-		    if (billingRestriction.tagsToAddInOurDomain != null
-			    && !billingRestriction.tagsToAddInOurDomain.isEmpty())
-			billingRestriction.tagsToAddInOurDomain.clear();
-
-		    billingRestriction.check(Contact.class.getSimpleName());
-
 		    if (billingRestriction.contacts_count >= allowedContacts)
 		    {
 			limitCrossed = true;
@@ -373,6 +372,9 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
 	}
 
+	// Sends notification on CSV import completion
+	dBbillingRestriction.send_warning_message();
+	
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
 		new Object[] { domainUser, status });
 

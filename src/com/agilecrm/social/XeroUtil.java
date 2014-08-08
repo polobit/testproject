@@ -40,8 +40,8 @@ public class XeroUtil
 
 	// get invoices from url
 	String res = HTTPUtil.accessHTTPURL(xeroPluginurl + "/invoice",
-	        (new JSONObject(widget.prefs).put("email", email).put("widget_id", widget_id).put("callbackUrl",
-	                callbackUrl)).toString(), "PUT");
+		(new JSONObject(widget.prefs).put("email", email).put("widget_id", widget_id).put("callbackUrl",
+			callbackUrl)).toString(), "PUT");
 
 	if (res.contains("token_expired"))
 	{
@@ -64,8 +64,8 @@ public class XeroUtil
     {
 	// call to create contact in xero
 	return HTTPUtil.accessHTTPURL(xeroPluginurl + "/addcontact",
-	        (new JSONObject(widget.prefs).put("name", (firstName + " " + lastName).trim()).put("email", email).put(
-	                "callbackUrl", callbackUrl)).toString(), "PUT");
+		(new JSONObject(widget.prefs).put("name", (firstName + " " + lastName).trim()).put("email", email).put(
+			"callbackUrl", callbackUrl)).toString(), "PUT");
     }
 
     /**
@@ -79,8 +79,7 @@ public class XeroUtil
     {
 	// call to get lineitems in xero for invoice id
 	return HTTPUtil.accessHTTPURL(xeroPluginurl + "/lineitems",
-	        (new JSONObject(widget.prefs).put("invoiceId", invoiceId).put("callbackUrl", callbackUrl)).toString(),
-	        "PUT");
+		(new JSONObject(widget.prefs).put("invoiceId", invoiceId).put("callbackUrl", callbackUrl)).toString(),
+		"PUT");
     }
-
 }

@@ -1,5 +1,6 @@
 package com.campaignio.tasklets.agile.util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -10,14 +11,19 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
+import com.agilecrm.contact.CustomFieldDef.Type;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.util.CacheUtil;
 import com.agilecrm.util.EmailUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus.UnsubscribeType;
 import com.campaignio.reports.DateUtil;
+import com.google.appengine.api.NamespaceManager;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.googlecode.objectify.Key;
@@ -140,6 +146,7 @@ public class AgileTaskletUtil
      *            Contact object that subscribes to workflow.
      * @return JsonObject of contact.
      */
+    @SuppressWarnings("unchecked")
     public static JSONObject getSubscriberJSON(Contact contact)
     {
 	if (contact == null)
@@ -154,6 +161,9 @@ public class AgileTaskletUtil
 
 	try
 	{
+	    // Custom date labels to convert epoch to Date format
+	    List<String> dateCustomFieldLabels = getDateCustomLabelsFromCache();
+
 	    JSONObject subscriberJSON = new JSONObject();
 
 	    List<ContactField> properties = contact.getProperties();
@@ -174,6 +184,30 @@ public class AgileTaskletUtil
 		    // Get LinkedIn id
 		    if (field.name.equals(Contact.WEBSITE) && "LINKEDIN".equals(field.subtype))
 			field.name = "linkedin_id";
+
+		    // Convert Epoch to date
+		    if (ContactField.FieldType.CUSTOM.equals(field.type))
+		    {
+			try
+			{
+			    System.out.println("Field name is " + field.name);
+
+			    // If it is Date field
+			    if (dateCustomFieldLabels.contains(field.name))
+			    {
+				long fieldValue = Long.parseLong(field.value);
+
+				fieldValue = (fieldValue / 100000000000L > 1) ? fieldValue : fieldValue * 1000;
+
+				field.value = DateUtil.getGMTDateInGivenFormat(fieldValue, "dd MMM yyyy");
+			    }
+			}
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			    System.err.println("Exception occured while converting epoch time..." + e.getMessage());
+			}
+		    }
 
 		    // Converts address string to JSONObject
 		    if (field.name.equals(Contact.ADDRESS))
@@ -508,5 +542,38 @@ public class AgileTaskletUtil
 	    return null;
 
 	return Long.parseLong(givenOwnerId);
+    }
+
+    /**
+     * Fetches list of date custom labels from cache.
+     * 
+     * @return List
+     */
+    @SuppressWarnings("unchecked")
+    public static List<String> getDateCustomLabelsFromCache()
+    {
+	List<String> customFieldLabels = new ArrayList<String>();
+
+	try
+	{
+	    customFieldLabels = (List<String>) CacheUtil.getCache(NamespaceManager.get() + "_custom_date_labels");
+
+	    if (customFieldLabels == null || customFieldLabels.size() == 0)
+	    {
+		// Fetch custom date labels and set in cache
+		customFieldLabels = CustomFieldDefUtil.getFieldLabelsByType(SCOPE.CONTACT, Type.DATE);
+
+		// Set cache for 1 Hour
+		CacheUtil.setCache(NamespaceManager.get() + "_custom_date_labels", customFieldLabels, 3600000);
+	    }
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while getting custom labels from cache..." + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return customFieldLabels;
     }
 }

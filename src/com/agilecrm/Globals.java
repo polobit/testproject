@@ -5,6 +5,7 @@ public class Globals
 
     public static String[] URLS = { "agilecrm.com", "helptor.com", "-dot-sandbox-dot-agile-crm-cloud.appspot.com",
 	    "-dot-sandbox-dot-agilecrmbeta.appspot.com", "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com" };
+
     public static String SUB_VERSION_URL = "-dot-agile-crm-cloud.appspot.com";
 
     public static String GOOGLE_APPS_DOMAIN = "googleapps";
@@ -13,7 +14,7 @@ public class Globals
 
     public static String REDIRECT_URL = "/redirect";
     public static String LOGIN = "/login";
-    public static String CHOOSE_DOMAIN = "https://my.agilecrm.com/choose-domain";
+    public static String CHOOSE_DOMAIN = "https://my.agilecrm.com/register";
 
     // Push data into stats
     public static String PUSH_STATS = "https://stats.agilecrm.com:90/push";
@@ -68,15 +69,20 @@ public class Globals
     public static final String STRIPE = "Stripe";
     public static final String PAYPAL = "Paypal";
 
-    // Stripe live keys
-    public static final String STRIPE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
-    public static final String STRIPE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
-
     // development keys
     public static final String DEV_STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
     public static final String DEV_STRIPE_CLIENT_ID = "ca_33Msd2IrjZ2f4JPH4c2GanFe9uGqnhPX";
 
- // Xero live keys
+
+	// Stripe live keys
+	public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+	public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
+
+    // Stripe live keys
+    public static final String STRIPE_API_KEY = DEV_STRIPE_API_KEY;
+    public static final String STRIPE_CLIENT_ID = DEV_STRIPE_CLIENT_ID;
+
+    // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
     public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
 
@@ -84,13 +90,13 @@ public class Globals
     public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
     public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
 
-    /** test facebook app details*/
+    /** test facebook app details */
     // public static final String FACEBOOK_APP_ID = "1472962409608031";
-    //public static final String FACEBOOK_APP_SECRET = "f9d7abe14b5610ab861d373036521abc";
-    /** facebook app details*/
+    // public static final String FACEBOOK_APP_SECRET =
+    // "f9d7abe14b5610ab861d373036521abc";
+    /** facebook app details */
     public static final String FACEBOOK_APP_ID = "1472694689634803";
     public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
-
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
 
@@ -119,13 +125,16 @@ public class Globals
     // Campaign and Email pull queues
     public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
-    // shopify app credential
-    public static final String SHOPIFY_API_KEY = "70a2391cd9e9af0d666657a67885d9ec";
-    public static final String SHOPIFY_SECRET_KEY = "a1f88bc91e5c70c34c215bf224ebd7d3";
 
+    /** The Constant SHOPIFY_API_KEY. */
+    public static final String SHOPIFY_API_KEY = "66198cc5eb16795088bfc0a3f8d2c011";
+
+    /** The Constant SHOPIFY_SECRET_KEY. */
+    public static final String SHOPIFY_SECRET_KEY = "68e7c78529457be317dde3807b67de0b";
+    // shopify app php app credential
     // public static final String SHOPIFY_API_KEY =
-    // "0655ecab47a7c443bf07f3b72be6035b";
+    // "70a2391cd9e9af0d666657a67885d9ec";
     // public static final String SHOPIFY_SECRET_KEY =
-    // "016cb9b32bdc3e65530e9daf8eee57e6";
+    // "a1f88bc91e5c70c34c215bf224ebd7d3";
 
 }

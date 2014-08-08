@@ -8,12 +8,12 @@ function editTask(taskId, taskListId, taskListOwnerId)
 		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
 		modelTaskList = getTaskList(null, taskListId, null);
-	
+
 	if (!modelTaskList)
 		return;
 
 	var modelTask = modelTaskList[0].get('taskCollection').get(taskId);
-	
+
 	if (!modelTask)
 		return;
 
@@ -41,7 +41,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 	});
 
 	showNoteOnForm("updateTaskForm", taskJson.notes);
-	
+
 	// Creates normal time.
 	displayTimeAgo($(".task-trello-list"));
 }
@@ -50,7 +50,7 @@ function editTask(taskId, taskListId, taskListOwnerId)
 function updateTask(isUpdate, data, json)
 {
 	console.log("In updateTask");
-		
+
 	// Get selected criteria
 	var criteria = getCriteria();
 
@@ -83,13 +83,13 @@ function updateTask(isUpdate, data, json)
 			modelTaskList = getTaskList(criteria, json.taskListId, json.taskListOwnerId);
 		else
 			modelTaskList = getTaskList(null, headingToSearch, null);
-		
+
 		if (!modelTaskList)
 			return;
-		
+
 		// Set new details in Task
 		modelTaskList[0].get('taskCollection').get(json.id).set(data);
-		
+
 		// Update task in UI : set() won't work on task which is dragged, so need to do manually. 
 		if (criteria == "OWNER")
 			$(".list-header[ownerID=" + json.taskListOwnerId + "]").parent().find("#" + json.id).parent().html(getTemplate('task-model', data.toJSON()));
@@ -113,7 +113,7 @@ function updateTask(isUpdate, data, json)
 function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 {
 	console.log("In changeTaskList");
-	
+
 	var modelOldTaskList;
 
 	// Get old task list
@@ -142,8 +142,8 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 
 		// Remove task from UI
 		$("#" + json.taskListId).find("#" + json.id).remove();
-	}	
-	
+	}
+
 	if (!modelOldTaskList)
 		return;
 
@@ -156,12 +156,12 @@ function changeTaskList(data, json, criteria, headingToSearch, isUpdate)
 
 // On click of task action , makes task completed
 function completeTask(taskId, taskListId, taskListOwnerId)
-{	
+{
 	var modelTaskList;
-		
+
 	// Get task list
 	if (taskListOwnerId)
-		modelTaskList = getTaskList("OWNER",taskListId, taskListOwnerId);
+		modelTaskList = getTaskList("OWNER", taskListId, taskListOwnerId);
 	else
 		modelTaskList = getTaskList(null, taskListId, null);
 
@@ -172,10 +172,10 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	var modelTsk = modelTaskList[0].get('taskCollection').get(taskId);
 
 	var taskJson = modelTsk.toJSON();
-	
-	if(taskJson.status == COMPLETED || taskJson.is_complete == true)
-		return;	
-	
+
+	if (taskJson.status == COMPLETED || taskJson.is_complete == true)
+		return;
+
 	// Replace contacts object with contact ids
 	var contacts = [];
 	$.each(taskJson.contacts, function(index, contact)
@@ -189,7 +189,7 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	{
 		notes.push(note.id);
 	});
-			
+
 	taskJson.contacts = contacts;
 	taskJson.notes = notes;
 	taskJson.is_complete = true;
@@ -198,14 +198,14 @@ function completeTask(taskId, taskListId, taskListOwnerId)
 	taskJson.progress = 100;
 	taskJson.note_description = "";
 
-	if(taskJson.taskOwner)
-		 taskJson.owner_id = taskJson.taskOwner.id;
-			
+	if (taskJson.taskOwner)
+		taskJson.owner_id = taskJson.taskOwner.id;
+
 	taskJson.taskListId = taskListId;
-	
+
 	if (taskListOwnerId)
-	  taskJson.taskListOwnerId = taskListOwnerId;
-	
+		taskJson.taskListOwnerId = taskListOwnerId;
+
 	var newTask = new Backbone.Model();
 	newTask.url = 'core/api/tasks';
 	newTask.save(taskJson, { success : function(data)
