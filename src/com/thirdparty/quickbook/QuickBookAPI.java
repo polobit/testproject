@@ -20,41 +20,43 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 @Path("/quickbook")
 public class QuickBookAPI
 {
-	/**
-	 * Return ContactPrefs
-	 * @return
-	 */
-	@GET
-	@Path("/import-settings")
-	public ContactPrefs getPrefs(){
-		return ContactPrefsUtil.getPrefsByType(Type.QUICKBOOK);
-	}
-	
-	@PUT
-	@Path("/import-settings")
-	public void savePrefs(ContactPrefs prefs){
-		ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
-		contactPrefs.save();
+    /**
+     * Return ContactPrefs
+     * 
+     * @return
+     */
+    @GET
+    @Path("/import-settings")
+    public ContactPrefs getPrefs()
+    {
+	return ContactPrefsUtil.getPrefsByType(Type.QUICKBOOK);
+    }
 
-		if (!contactPrefs.token.isEmpty() && contactPrefs != null)
-		    doImport(contactPrefs);
-	}
-	
+    @PUT
+    @Path("/import-settings")
+    public void savePrefs(ContactPrefs prefs)
+    {
+	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
+	contactPrefs.save();
 
-	    /**
-	     * delete ContactPref
-	     */
-	    @DELETE
-	    @Path("/import-settings")
-	    public void deletePrefs()
-	    {
-		ContactPrefsUtil.delete(Type.QUICKBOOK);
+	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
+	    doImport(contactPrefs);
+    }
 
-	    }
+    /**
+     * delete ContactPref
+     */
+    @DELETE
+    @Path("/import-settings")
+    public void deletePrefs()
+    {
+	ContactPrefsUtil.delete(Type.QUICKBOOK);
 
-	
-	private void doImport(ContactPrefs contactPrefs){
-		ContactsImportUtil.initilaizeImportBackend(contactPrefs);
-	}
+    }
+
+    private void doImport(ContactPrefs contactPrefs)
+    {
+	ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+    }
 
 }
