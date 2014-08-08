@@ -18,7 +18,7 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
  *
  */
 @Path("/quickbook")
-public class QuickBookController
+public class QuickBookAPI
 {
 	/**
 	 * Return ContactPrefs
