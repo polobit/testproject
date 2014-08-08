@@ -74,20 +74,20 @@ public class DefaultWidgets
 		"Help Scout is a help desk for teams that insist on a delightful customer experience without exposing to ticket numbers, portals or robotic emails.",
 		"/widgets/helpscout.js", "/img/plugins/helpscout-logo.png", "/widgets/helpscout-logo-small.png", null,
 		WidgetType.SUPPORT));
-	/*widgets.add(new Widget(
+	widgets.add(new Widget(
 		"Xero",
 		"Xero is an online accounting software for small business - Explore invoicing, reconciliation anytime, anywhere.",
-		"/widgets/xero.js", "/widgets/xero210x70.png", "/widgets/xero24x24.png", null, WidgetType.BILLING)); */
+		"/widgets/xero.js", "/widgets/xero210x70.png", "/widgets/xero24x24.png", null, WidgetType.BILLING)); 
 	widgets.add(new Widget(
 		"QuickBooks",
 		"Run your whole business better with QuickBooks wherever you are. Automate your invoicing, billing and reporting and simplify your business for life!",
 		"/widgets/quickBooks.js", "/widgets/QuickBooks210x70.png", "/widgets/quickbooks_small.jpg", null,
 		WidgetType.BILLING));
-	/*widgets.add(new Widget(
+	widgets.add(new Widget(
 		"Facebook",
 		"Facebook is a social utility that connects people with friends and others who work, study and live around them",
 		"/widgets/facebook.js", "/widgets/facebookIcon.jpg", "/widgets/Fb24x24icon.png", null,
-		WidgetType.SOCIAL));*/
+		WidgetType.SOCIAL));
 
 	System.out.println("Default widgets ");
 	System.out.println(widgets);
