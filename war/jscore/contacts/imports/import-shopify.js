@@ -24,6 +24,7 @@ $(function()
 					return false;
 				}else{
 				$(this).attr("disabled", "disabled");
+				$(this).text("Syncing");
 				}
 
 				

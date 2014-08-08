@@ -170,7 +170,7 @@
     {{#if id}}
 <form id="stripe-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{username}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
@@ -364,7 +364,7 @@
 	</div>
 {{/unless}} 
     {{#if id}}
-<form id="stripe-prefs-form" class="form-horizontal">
+<form id="quickbook-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
           <div>Account Linked : {{otherParams}} <span><a href="#" class="delete">Change</a></span></div>
 	
@@ -390,9 +390,9 @@
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
 {{#if inProgress}}
-			<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;" disabled="disabled">Sync</button>
+			<button class="btn btn-primary" id="quickbook_sync_prefs" style="display:inline-block;" disabled="disabled">Sync</button>
 {{else}}
-<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;">Sync</button>
+<button class="btn btn-primary" id="quickbook_sync_prefs" style="display:inline-block;">Sync</button>
 {{/if}}
 
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
