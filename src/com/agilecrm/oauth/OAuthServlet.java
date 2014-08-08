@@ -164,10 +164,10 @@ public class OAuthServlet extends HttpServlet
 
     public OAuthConsumer getOAuthConsumer(String serviceType)
     {
-	if (StringUtils.equalsIgnoreCase(serviceType, "quickbooks"))
+	//if (StringUtils.equalsIgnoreCase(serviceType, "quickbooks"))
 	    return new DefaultOAuthConsumer(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET);
 
-	return new DefaultOAuthConsumer("qyprdHZrAT1Ud51gPM4xN32ipsGxmq", "5YoQSFM8t3l0a38gTLWSW3ZNpeJROuuVn7Vzd62f");
+	//return new DefaultOAuthConsumer("qyprdHZrAT1Ud51gPM4xN32ipsGxmq", "5YoQSFM8t3l0a38gTLWSW3ZNpeJROuuVn7Vzd62f");
     }
 
     public String getRedirectURI(HttpServletRequest request)

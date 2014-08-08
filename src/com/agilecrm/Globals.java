@@ -86,9 +86,9 @@ public class Globals
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
     public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
 
-    public static final String QUICKBOOKS_APP_KEY = "a572c32cb35f8b404cbbadbb224fbd6d0fc6";
-    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
-    public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
+    public static final String QUICKBOOKS_APP_KEY = "f0fca6d6b0541b470bb9711b713000493994";
+    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdnkO01AkcMJjNmabqS1PBDsmFp";
+    public static final String QUICKBOOKS_CONSUMER_SECRET = "CmBH6OWTlDmemY3uHOBIjFE87MZ6O8FRcsLqtYZF";
 
     /** test facebook app details */
     // public static final String FACEBOOK_APP_ID = "1472962409608031";

@@ -36,7 +36,7 @@ public class QuickBookController
 		ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
 		contactPrefs.save();
 
-		if (!contactPrefs.apiKey.isEmpty() && contactPrefs != null)
+		if (!contactPrefs.token.isEmpty() && contactPrefs != null)
 		    doImport(contactPrefs);
 	}
 	
