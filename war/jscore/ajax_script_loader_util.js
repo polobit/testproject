@@ -31,7 +31,9 @@ function loadMiscScripts()
 	load_urls_on_ajax_stop('lib/user-voice.js');
 
 	load_urls_on_ajax_stop('//static.getclicky.com/js');
-
+	
+	load_clickdesk_code();
+	
 	// Clicky code
 	load_urls_on_ajax_stop('//static.getclicky.com/js', function()
 	{
@@ -43,7 +45,6 @@ function loadMiscScripts()
 		catch (e)
 		{
 		}
-		;
 	});
 
 	/**
@@ -51,6 +52,26 @@ function loadMiscScripts()
 	 * loads and calls downloadAndRegisterForNotifications function
 	 */
 	downloadAndRegisterForNotifications();
+}
+
+
+/**
+ * Clickdesk Widget
+ */
+function load_clickdesk_code()
+{
+	
+	if (CLICKDESK_CODE_LOADED)
+		return;
+
+	console.log("loading clickdesk..");
+	
+	CLICKDESK_CODE_LOADED = true;
+	
+	load_urls_on_ajax_stop(glcpath + 'livechat-new.js', function(){
+		CLICKDESK_CODE_LOADED = true;
+	})
+
 }
 
 
