@@ -277,6 +277,8 @@ public class CSVUtil
 	    boolean isMerged = false;
 	    accessControl.setObject(tempContact);
 	    
+	    accessControl.init();
+	    
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
@@ -286,6 +288,7 @@ public class CSVUtil
 		
 		if (accessControl.canCreate())
 		{
+		    
 		    ++accessDeniedToUpdate;
 		    continue;
 		}
@@ -295,6 +298,12 @@ public class CSVUtil
 	    }
 	    else
 	    {
+		
+		if (accessControl.canCreate())
+		{
+		    ++accessDeniedToUpdate;
+		    continue;
+		}
 
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
