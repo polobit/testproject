@@ -515,25 +515,16 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    List<Note> notes = NoteUtil.getNotes(contact.id);
 		    for (Note note : notes)
 		    {
-			if (noteMap.containsKey(note.subject))
-			{
-			    String notetext = note.description;
-			    if (!notetext.equalsIgnoreCase(noteString))
-			    {
-				note.description = noteString;
-			    }
-			}
-			else
-			{
-			    Note n = new Note("Customer's Note", noteString);
-			    n.addRelatedContacts(contact.id.toString());
-			    n.save();
-			    noteMap.put(n.subject, n);
-			}
 			noteMap.put(note.subject, note);
 		    }
 
+		    Note n = new Note("Customer Note", noteString);
+		    n.addRelatedContacts(contact.id.toString());
+		    n.save();
+		    noteMap.put(n.subject, n);
+
 		}
+
 	    }
 
 	    for (Entry<String, Note> e : noteMap.entrySet())
