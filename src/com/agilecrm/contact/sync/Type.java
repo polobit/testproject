@@ -24,8 +24,8 @@ public enum Type implements Serializable
 {
     GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
 	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
-	    ShopifySyncImpl.class, "Shopify Import Status"),
-	    QUICKBOOK(QuickBookSyncImpl.class,"QuickBook Import Status");
+	    ShopifySyncImpl.class, "Shopify Import Status"), QUICKBOOK(QuickBookSyncImpl.class,
+	    "QuickBook Import Status");
 
     Class<? extends SyncService> clazz;
     String notificationEmailSubject = "";
@@ -37,7 +37,7 @@ public enum Type implements Serializable
     }
 
     /**
-     * return  clazz of Client.
+     * return clazz of Client.
      * 
      * @return the clazz
      */
