@@ -615,8 +615,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		info_json = new JSONObject(info_json_string);
 
 	    // If no scopes are set, then all scopes are added
-	    if (scopes == null)
+	    if (scopes == null || (scopes.size() == 1 && scopes.contains(UserAccessScopes.RESTRICTED)))
 		scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	    
 
 	    if (menu_scopes == null)
 	    {

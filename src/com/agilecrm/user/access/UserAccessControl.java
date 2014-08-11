@@ -67,11 +67,6 @@ public abstract class UserAccessControl
     public boolean hasScope(UserAccessScopes scope)
     {
 	HashSet<UserAccessScopes> scopes = getCurrentUserScopes();
-	if(scopes.size() == 1 && scopes.contains(UserAccessScopes.RESTRICTED))
-	{
-	    return true;
-	}
-	
 	
 	return scopes.contains(scope);
     }
