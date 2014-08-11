@@ -588,6 +588,10 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		//scopes.add(UserAccessScopes.RESTRICTED);
 	    }
 	}
+	else if(scopes.size() == 1 && scopes.contains(UserAccessScopes.RESTRICTED))
+	{
+	    scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	}
 
 	info_json_string = info_json.toString();
 
