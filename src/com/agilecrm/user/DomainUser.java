@@ -573,16 +573,19 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 
 	    System.out.println(" id in domain user :" + id);
+	    
+	    scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	    
 	    if (id == null)
 	    {
 
-		scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+		//scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
 
 	    }
 	    else
 	    {
-		scopes = new LinkedHashSet<UserAccessScopes>();
-		scopes.add(UserAccessScopes.RESTRICTED);
+		//scopes = new LinkedHashSet<UserAccessScopes>();
+		//scopes.add(UserAccessScopes.RESTRICTED);
 	    }
 	}
 
