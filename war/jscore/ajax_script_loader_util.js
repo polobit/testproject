@@ -60,6 +60,7 @@ function loadMiscScripts()
  */
 function load_clickdesk_code()
 {
+	return;
 	
 	if (CLICKDESK_CODE_LOADED)
 		return;
