@@ -1,6 +1,8 @@
- /* ===facebook.js==== It is a pluginIn to be integrated with CRM, developed based on
- * the third party JavaScript API provided. It interacts with the application
- * based on the function provided on agile_widgets.js (Third party API).
+/**
+ * ===facebook.js==== It is a pluginIn to be integrated with CRM, developed
+ * based on the third party JavaScript API provided. It interacts with the
+ * application based on the function provided on agile_widgets.js (Third party
+ * API).
  */
 $(function()
 {
@@ -23,13 +25,13 @@ $(function()
 	var first_name = agile_crm_get_contact_property("first_name");
 	var last_name = agile_crm_get_contact_property("last_name");
 
-	//setting lastname to empty string if it is undefined
-	if(last_name==undefined||last_name==null)
-		last_name='';
-	
+	// setting lastname to empty string if it is undefined
+	if (last_name == undefined || last_name == null)
+		last_name = '';
+
 	console.log("firstName:" + first_name + "lastname:" + last_name);
 
-	//search string as global varibale
+	// search string as global varibale
 	SEARCH_STRING = first_name + ' ' + last_name;
 	console.log("    SEARCH_STRING" + SEARCH_STRING)
 
@@ -62,7 +64,7 @@ $(function()
 	{
 		e.preventDefault();
 
-		//Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
+		// Twitter_search_details['plugin_id'] = Twitter_Plugin_Id;
 
 		$('#' + FACEBOOK_PLUGIN_NAME).html(getTemplate('facebook-modified-search', { "searchString" : SEARCH_STRING }));
 	});
@@ -70,10 +72,10 @@ $(function()
 	{
 		e.preventDefault();
 
-		/*if (search_data)
-			showTwitterMatchingProfiles(search_data);
-		else
-			getTwitterMatchingProfiles();*/
+		/*
+		 * if (search_data) showTwitterMatchingProfiles(search_data); else
+		 * getTwitterMatchingProfiles();
+		 */
 	});
 
 });
@@ -81,17 +83,15 @@ $(function()
 function showFacebookMatchingProfile(first_name)
 {
 	var contact_image = agile_crm_get_contact_property("image");
-	/*    if (!Email)
-	 {
-	 facebookError(FACEBOOK_PLUGIN_NAME, "Please provide email for this contact");
-	 return;
-	 }
+	/*
+	 * if (!Email) { facebookError(FACEBOOK_PLUGIN_NAME, "Please provide email
+	 * for this contact"); return; }
 	 */
 	console.log("am in facebook show")
 	queueGetRequest("widget_queue", "/core/api/widgets/facebook/contacts/" + FACEBOOK_PLUGIN_ID + "/" + first_name, 'json', function success(data)
 	{
 		console.log('Facebook');
-		//console.log(data)
+		// console.log(data)
 		// If data is not defined return
 		if (data)
 		{
@@ -110,8 +110,8 @@ function showFacebookMatchingProfile(first_name)
 				$(this).popover({ placement : 'left' });
 
 				/*
-				 * Called show to overcome pop over bug (not showing pop over on mouse
-				 * hover for first time)
+				 * Called show to overcome pop over bug (not showing pop over on
+				 * mouse hover for first time)
 				 */
 				$(this).popover('show');
 
@@ -138,19 +138,21 @@ function showFacebookMatchingProfile(first_name)
 					];
 					if (!contact_image)
 					{
-						// Get image link which can be used to save image for contact
+						// Get image link which can be used to save image for
+						// contact
 						var facebook_image = $(this).attr('src');
 						propertiesArray.push({ "name" : "image", "value" : facebook_image });
 					}
 
 					/*
-					 * If contact title is undefined, saves headline of the Twitter
-					 * profile to the contact title
+					 * If contact title is undefined, saves headline of the
+					 * Twitter profile to the contact title
 					 */
 					if (!agile_crm_get_contact_property("title"))
 					{
-						//var summary = $(this).attr("summary");
-						//propertiesArray.push({ "name" : "title", "value" : summary });
+						// var summary = $(this).attr("summary");
+						// propertiesArray.push({ "name" : "title", "value" :
+						// summary });
 					}
 
 					console.log(propertiesArray);
@@ -187,9 +189,9 @@ function showFacebookMatchingProfile(first_name)
  * Shows Facebook error message in the div allocated with given id
  * 
  * @param id
- *                div id
+ *            div id
  * @param message
- *                error message
+ *            error message
  */
 function facebookError(message)
 {

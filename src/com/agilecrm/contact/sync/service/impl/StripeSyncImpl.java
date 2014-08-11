@@ -96,7 +96,7 @@ public class StripeSyncImpl extends OneWaySyncService
 
 	    while (currentPage <= pages)
 	    {
-		CustomerCollection customerCollections = Customer.all(Options(syncTime), Globals.STRIPE_LIVE_API_KEY);
+		CustomerCollection customerCollections = Customer.all(Options(syncTime), prefs.apiKey);
 		List<Customer> customers = customerCollections.getData();
 		for (Customer customer : customers)
 		{
@@ -125,6 +125,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
 		| APIException e)
 	{
+		  
 	    e.printStackTrace();
 	}
 
@@ -214,7 +215,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	{
 	    try
 	    {
-		ChargeCollection chargeCollection = Charge.all(chargeOption, Globals.STRIPE_LIVE_API_KEY);
+		ChargeCollection chargeCollection = Charge.all(chargeOption, prefs.apiKey);
 		List<Charge> charges = chargeCollection.getData();
 		if (charges.size() > 0)
 		{

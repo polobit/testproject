@@ -72,8 +72,8 @@ public class OpportunityUtil
     }
     //returns all deals count 
     public static int getCount(){
-    	List<Opportunity> li=dao.fetchAll();
-    	return li.size();
+    	
+    	return Opportunity.dao.count();
     }
     /*
     /**

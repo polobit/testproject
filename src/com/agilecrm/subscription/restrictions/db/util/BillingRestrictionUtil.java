@@ -17,6 +17,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
+import com.google.inject.name.Names;
 
 @XmlRootElement
 public class BillingRestrictionUtil
@@ -198,6 +199,33 @@ public class BillingRestrictionUtil
 
 	info.setPlan(plan.plan_type.toString());
 	info.setUsersCount(plan.quantity);
+    }
+
+    /**
+     * Sets plan in user info
+     * 
+     * @param info
+     */
+    public static void setPlan(UserInfo info, String domain)
+    {
+	if (StringUtils.isEmpty(domain))
+	    return;
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set(domain);
+	try
+	{
+	    Subscription subscription = Subscription.getSubscription();
+
+	    Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
+
+	    info.setPlan(plan.plan_type.toString());
+	    info.setUsersCount(plan.quantity);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**

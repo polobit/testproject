@@ -24,48 +24,49 @@ import com.thirdparty.google.utl.ContactPrefsUtil;
 public class ShopifyImportAPI
 {
 
-    /**
-     * Gets the contact prefs.
-     * 
-     * @return the contact prefs
-     */
-    @GET
-    @Path("/import-settings")
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public ContactPrefs getContactPrefs()
-    {
-	return ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
-    }
+	/**
+	 * Gets the contact prefs.
+	 * 
+	 * @return the contact prefs
+	 */
+	@GET
+	@Path("/import-settings")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public ContactPrefs getContactPrefs()
+	{
+		return ContactPrefsUtil.getPrefsByType(Type.SHOPIFY);
+	}
 
-    /**
-     * Import customers from shopify
-     * 
-     * @param customer
-     * @return
-     */
+	/**
+	 * Import customers from shopify
+	 * 
+	 * @param customer
+	 * @return
+	 */
 
-    @PUT
-    @Path("/import-settings")
-    public void saveImportPrefs(ContactPrefs prefs)
-    {
+	@PUT
+	@Path("/import-settings")
+	public void saveImportPrefs(ContactPrefs prefs)
+	{
 
-	ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
-	contactPrefs.save();
+		ContactPrefs contactPrefs = ContactPrefsUtil.get(prefs.id);
+		contactPrefs.save();
 
-	if (!contactPrefs.token.isEmpty() && contactPrefs != null)
-	    ContactsImportUtil.initilaizeImportBackend(contactPrefs);
+		if (!contactPrefs.token.isEmpty() && contactPrefs != null)
+			ContactsImportUtil.initilaizeImportBackend(contactPrefs);
 
-    }
+	}
 
-    /**
-     * Delete prefs.
-     */
-    @DELETE
-    @Path("/import-settings")
-    public void deletePrefs()
-    {
-	ContactPrefsUtil.delete(Type.SHOPIFY);
+	/**
+	 * delete shopify import prefs
+	 */
 
-    }
+	@DELETE
+	@Path("/import-settings")
+	public void deleteShopifyPrefs()
+	{
+		ContactPrefsUtil.delete(Type.SHOPIFY);
+
+	}
 
 }

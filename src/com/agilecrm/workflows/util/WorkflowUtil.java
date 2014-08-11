@@ -65,8 +65,8 @@ public class WorkflowUtil
     }
     //returns all workflows count 
     public static int getCount(){
-    	List<Workflow> li=dao.fetchAll();
-    	return li.size();
+    	
+    	return Workflow.dao.count();
     }
     
     

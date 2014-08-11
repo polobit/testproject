@@ -48,10 +48,11 @@ import com.stripe.model.Invoice;
  */
 public class StripeImpl implements AgileBilling
 {
+
     static
     {
 	Stripe.apiKey = Globals.STRIPE_API_KEY;
-	//Stripe.apiVersion = "2012-09-24";
+	Stripe.apiVersion = "2012-09-24";
     }
 
     /**
@@ -206,7 +207,7 @@ public class StripeImpl implements AgileBilling
      * @throws StripeException
      * */
     public List<Invoice> getInvoices(JSONObject stripeCustomer) throws StripeException
-    { int sum=0;
+    {
 	Map<String, Object> invoiceParams = new HashMap<String, Object>();
 
 	// Sets invoice parameters (Stripe customer id is required to get
@@ -304,11 +305,10 @@ public class StripeImpl implements AgileBilling
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	}
 
 	return new JSONObject();
     }
 
-  
-    
 }

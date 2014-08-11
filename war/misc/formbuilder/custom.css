@@ -193,6 +193,13 @@ form .popover form {
 	padding: 6px 12px;
 }
 
+.agile-field select {
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	width: 100%;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+
 .agile-input-group {
 	border-collapse: separate;
 	display: table;
@@ -273,6 +280,8 @@ legend {
 	margin-bottom: 18px;
 	padding-bottom: 6px;
 	width: 100%;
+	font-weight: bold;
+	font-size: 20px;
 }
 
 fieldset {

@@ -101,8 +101,8 @@ public class DocumentUtil
     
     //returns all documents count 
     public static int getCount(){
-    	List<Document> li=dao.fetchAll();
-    	return li.size();
+    	
+    	return Document.dao.count();
     }
     /**
      * Returns list of cases related to document.

@@ -574,7 +574,7 @@
             "textarea": {
                 "label": "Starting Text",
                 "type": "textarea",
-                "value": "default text"
+                "value": ""
             },
             "required": {
                 "label": "Required",
