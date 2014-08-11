@@ -438,22 +438,24 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    {
 
 			Note n = notes.get(note.subject);
-			n.description += "\n"+itemDetails.get("name") + ": " + itemDetails.get("price") + " ("
+			n.description += "\n" + itemDetails.get("name") + ": " + itemDetails.get("price") + " ("
 				+ order.get("currency") + ") + Tax : " + taxDetails.get(0).get("price") + " ("
-				+ order.get("currency") + ") \n Total Price : "+ order.get("total_price") + ""+order.get("currency");
-		
+				+ order.get("currency") + ") \n Total Price : " + order.get("total_price") + ""
+				+ order.get("currency");
 
-		    }else{
+		    }
+		    else
+		    {
 			note.description = itemDetails.get("name") + ": " + itemDetails.get("price") + " ("
 				+ order.get("currency") + ") + Tax : " + taxDetails.get(0).get("price") + " ("
 				+ order.get("currency") + ")";
 
-			    
 		    }
-		    if(listItems.size() == 1){
-			note.description+= "\n Total Price : "+ order.get("total_price") + ""+order.get("currency")+"";
+		    if (listItems.size() == 1)
+		    {
+			note.description += "\n Total Price : " + order.get("total_price") + "" + order.get("currency")
+				+ "";
 		    }
-
 
 		    note.addRelatedContacts(contact.id.toString());
 
@@ -501,6 +503,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
     private void addCustomerRelatedNote(Object noteObject, Contact contact)
     {
+	Map<String, Note> noteMap = new HashMap<String, Note>();
 	try
 	{
 
@@ -509,29 +512,34 @@ public class ShopifySyncImpl extends OneWaySyncService
 		String noteString = noteObject.toString();
 		if (!noteString.isEmpty())
 		{
-		    if (ContactUtil.isExists(contact.getContactFieldValue(Contact.EMAIL)))
+		    List<Note> notes = NoteUtil.getNotes(contact.id);
+		    for (Note note : notes)
 		    {
-			List<Note> notes = NoteUtil.getNotes(contact.id);
-			List<Note> duplicatedNote = new ArrayList<Note>();
-			for (Note note : notes)
+			if (noteMap.containsKey(note.subject))
 			{
-			    if (note.subject.equalsIgnoreCase("Customer's Note"))
+			    String notetext = note.description;
+			    if (!notetext.equalsIgnoreCase(noteString))
 			    {
-				duplicatedNote.add(note);
+				note.description = noteString;
 			    }
-
 			}
-			NoteUtil.deleteBulkNotes(duplicatedNote);
-		    }
-		    else if (!ContactUtil.isDuplicateContact(contact))
-		    {
-
-			Note n = new Note("Customer's Note", noteString);
-			n.addRelatedContacts(contact.id.toString());
-			n.save();
+			else
+			{
+			    Note n = new Note("Customer's Note", noteString);
+			    n.addRelatedContacts(contact.id.toString());
+			    n.save();
+			    noteMap.put(n.subject, n);
+			}
+			noteMap.put(note.subject, note);
 		    }
 
 		}
+	    }
+
+	    for (Entry<String, Note> e : noteMap.entrySet())
+	    {
+		Note n = e.getValue();
+		n.save();
 	    }
 	}
 	catch (Exception e)
