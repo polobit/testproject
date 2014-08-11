@@ -31,7 +31,7 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
+	        "This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
 	private String message;
 
 	ErrorMessages(String message)
@@ -166,6 +166,9 @@ public class BillingRestrictionUtil
 
 	// Fetches account subscription
 	Subscription subscription = Subscription.getSubscription();
+
+	// Namespace and subscription
+	System.err.println("" + NamespaceManager.get() + " domain is having subscription - " + subscription);
 
 	// If plan is null then it is considered free plan.
 	plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
