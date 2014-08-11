@@ -55,7 +55,7 @@ public class SyncPrefs implements Serializable
     public Long last_synced_from_client = 0L;
     // store cursor of updated contact while uploading contact to client ie google
     @NotSaved(IfDefault.class)
-    public Long last_synced_updated_contacts_to_client = null;
+    public Long last_synced_updated_contacts_to_client = 0L;
 
     
 

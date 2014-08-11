@@ -23,7 +23,7 @@ public class ShopifyServlet extends HttpServlet
     {
 	String token = req.getParameter("code");
 
-	String redirectUrl = "/#google-apps";
+	String redirectUrl = "/#google-apps/shopify";
 
 	if (token != null)
 	{

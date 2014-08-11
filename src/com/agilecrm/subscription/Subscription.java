@@ -17,6 +17,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -29,6 +30,8 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 
@@ -198,8 +201,9 @@ public class Subscription
 	    NamespaceManager.set(namespace);
 	    
 	    Subscription subscription = getSubscription();
-	    subscription.domain_name=namespace;
+
 	    if (subscription != null){
+		    subscription.domain_name=namespace;
 	      return subscription;
 	    }
 
@@ -216,6 +220,19 @@ public class Subscription
 	 return null;
     }
 
+    
+    public static Customer getCustomer(String namespace) throws StripeException
+    {
+	    Subscription subscription = getSubscriptionOfParticularDomain(namespace);
+	    if (subscription != null){
+	      JSONObject billing=subscription.billing_data;
+	   System.out.println(billing+" in subscription.java");
+	     return StripeUtil.getCustomerFromJson(billing);
+	    }
+		return null;
+
+    }
+    
     
     
     public void save()
@@ -425,12 +442,12 @@ public class Subscription
     {
 	try
 	{
-		Subscription sub=new Subscription();
+		
 	    if (billing_data_json_string != null)
 		billing_data = new JSONObject(billing_data_json_string);
 	 
 	    //sets domain name  in subscription obj before returning 
-	    sub.domain_name=NamespaceManager.get();  
+	    this.domain_name=NamespaceManager.get();  
 	}
 	catch (Exception e)
 	{

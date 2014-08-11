@@ -342,14 +342,11 @@ public class TasksAPI
     {
 	// Get the Contact based on the Email and assign the task to it.
 	Contact contact = ContactUtil.searchContactByEmail(email);
-	if (contact == null)
+	if (contact != null)
 	{
-	    System.out.println("Null contact");
-	    return null;
+	    task.contacts = new ArrayList<String>();
+	    task.contacts.add(contact.id.toString());
 	}
-
-	task.contacts = new ArrayList<String>();
-	task.contacts.add(contact.id.toString());
 
 	task.save();
 	return task;

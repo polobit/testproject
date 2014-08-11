@@ -321,13 +321,10 @@ public class DealsAPI
     {
 	// Get the Contact based on the Email and add it to the Deal.
 	Contact contact = ContactUtil.searchContactByEmail(email);
-	if (contact == null)
+	if (contact != null)
 	{
-	    System.out.println("Null contact");
-	    return null;
+	    opportunity.addContactIds(contact.id.toString());
 	}
-
-	opportunity.addContactIds(contact.id.toString());
 
 	opportunity.save();
 	return opportunity;

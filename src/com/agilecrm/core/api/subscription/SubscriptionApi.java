@@ -60,23 +60,7 @@ public class SubscriptionApi
     }
 
     
-    /**
-     * Gets subscription entity of particular domain
-     * 
-     * @return {@link Subscription}
-     * @throws StripeException
-     */
-    @Path("/adminpanel/subscription/{domainname}")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Subscription getsubscriptionOfDomain(@PathParam("domainname") String domainname) throws StripeException
-    { 
-    	
-    	//System.out.println(sc.billing_data_json_string.toString());
-	return Subscription.getSubscriptionOfParticularDomain(domainname);
-
-    }
-    
+   
     
     /**
      * Called from client either for new Subscription or updating user credit
@@ -94,7 +78,6 @@ public class SubscriptionApi
     {
 	try
 	{
-		
 	    /*
 	     * If plan variable in subscription is not null and card details are
 	     * null then updateCreditcard is called
@@ -141,80 +124,6 @@ public class SubscriptionApi
 	     */
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
-	}
-    }
-    
-    //upgrades subscription plan from adminpanel
-    
-    @Path("/adminpanel/subscribe")
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Subscription subscribeForParticularDomain(Subscription subscribe) throws PlanRestrictedException, WebApplicationException
-    {
-    	System.out.println("plan upgradation request from Admin panel/support panel");
-    	System.out.println(subscribe);
-    	String oldnamespace=NamespaceManager.get(); 
-	try
-	{   
-		
-		String domain=subscribe.domain_name;
-		
-		System.out.println("domain name in subscribe for particular domain "+domain);
-		
-	
-		NamespaceManager.set(domain);
-	
-		
-	    /*
-	     * If plan variable in subscription is not null and card details are
-	     * null then updateCreditcard is called
-	     */
-	    if (subscribe.plan == null && subscribe.card_details != null)
-		subscribe = updateCreditcard(subscribe.card_details);
-
-	    /*
-	     * If card_details are null and plan in not null then update plan
-	     * for current domain subscription object
-	     */
-	    else if (subscribe.card_details == null && subscribe.plan != null)
-		subscribe = changePlan(subscribe.plan);
-
-	    /*
-	     * If credit_card details and plan details are not null then it is
-	     * new subscription
-	     */
-	    else if (subscribe.card_details != null && subscribe.plan != null)
-		subscribe = subscribe.createNewSubscription();
-
-	    // Sets plan in session
-	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
-
-	    // Initializes task to clear tags
-	    AccountLimitsRemainderDeferredTask task = new AccountLimitsRemainderDeferredTask(NamespaceManager.get());
-
-	    // Add to queue
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.add(TaskOptions.Builder.withPayload(task));
-       
-	    return subscribe;
-	}
-	catch (PlanRestrictedException e)
-	{
-	    throw e;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    /*
-	     * If Exception is raised during subscription send the exception
-	     * message to client
-	     */
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-	finally{
-		 NamespaceManager.set(oldnamespace);
 	}
     }
     
@@ -297,25 +206,6 @@ public class SubscriptionApi
 	}
     }
     
-    //fetches list invoices for particular domain
-    @Path("/adminpanel/invoices/{domainname}")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List getCollectionOfInvoicesOfParticularDomain(@PathParam("domainname") String domainname)
-    {
-	try
-	{
-		
-	    return Subscription.getInvoicesOfParticularDomain(domainname);
-	}
-	catch (Exception e)
-	{ 
-	e.printStackTrace();    
-	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	    
-	}
-    }
     
     
 

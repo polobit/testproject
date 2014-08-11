@@ -1,12 +1,7 @@
 package com.agilecrm.scribe;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.LinkedList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,9 +12,7 @@ import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
-import com.agilecrm.contact.sync.Type;
 import com.agilecrm.scribe.util.ScribeUtil;
-import com.thirdparty.google.ContactPrefs;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -130,18 +123,17 @@ public class ScribeServlet extends HttpServlet
 	 */
 	String serviceType = req.getParameter("service_type");
 
-	
-	    if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
+	if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
+	{
+	    String shop = req.getParameter("shop");
+	    if (shop.contains(".myshopify.com"))
 	    {
-		String shop = req.getParameter("shop");
-		if(shop.contains(".myshopify.com")){
-		    shop = shop.split("\\.")[0];
-		}
-		String domain = req.getParameter("domain");
-		resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain);
-		return;
+		shop = shop.split("\\.")[0];
 	    }
-	
+	    String domain = req.getParameter("domain");
+	    resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain);
+	    return;
+	}
 
 	/*
 	 * If request is from application the setup, request is sent based on
@@ -201,7 +193,8 @@ public class ScribeServlet extends HttpServlet
 	    return;
 	}
 
-	OAuthService service = null;
+	OAuthService service = ScribeUtil.getService(req, resp, serviceName);
+	;
 	String url = null;
 	Token token = null;
 
@@ -214,7 +207,6 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 	{
-	    service = ScribeUtil.getService(req, resp, serviceName);
 	    // After building service, redirects to authorization page
 	    url = service.getAuthorizationUrl(null);
 	    String query = req.getParameter("query");
@@ -346,61 +338,5 @@ public class ScribeServlet extends HttpServlet
 
 	// Delete return url Attribute
 	req.getSession().removeAttribute("return_url");
-    }
-
-    private String getZohoAuthUrl(String username, String password)
-    {
-	System.out.println(String.format(ZOHO_AUTH_URL, username, password));
-	return String.format(ZOHO_AUTH_URL, username, password);
-    }
-
-    /**
-     * Check authentication of user and save token in ContactPrefs
-     * 
-     * @param url
-     */
-    private boolean saveZohoToken(String url, String username)
-    {
-	try
-	{
-
-	    URL uri = new URL(url);
-	    URLConnection conn = uri.openConnection();
-	    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-	    String res;
-	    conn.connect();
-	    LinkedList<String> list = new LinkedList<String>();
-	    while ((res = br.readLine()) != null)
-	    {
-		String temp = res.trim();
-		if (temp.isEmpty() || temp.startsWith("#"))
-		    continue;
-		else
-		    list.add(temp);
-	    }
-
-	    if (list.getLast().contains("TRUE"))
-	    {
-		String token = list.getFirst().substring(10);
-
-		if (!token.isEmpty() && token != null)
-		{
-		    ContactPrefs prefs = new ContactPrefs();
-		    prefs.token = token;
-		    prefs.type = Type.ZOHO;
-		    prefs.username = username;
-		    prefs.save();
-
-		    return true;
-		}
-	    }
-
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-
-	return false;
     }
 }

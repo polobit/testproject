@@ -54,7 +54,11 @@ public class ContactPrefs extends SyncPrefs implements Serializable
 
     /**  username. */
     @NotSaved(IfDefault.class)
-    public String username = null;
+    public String userName = null;
+    
+    /**  username. */
+    @NotSaved(IfDefault.class)
+    public String password = null;
     
 
     /** If access token expire time is specified, we store it. */

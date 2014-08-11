@@ -17,8 +17,8 @@ public class WebRuleUtil
 
     //returns all webrule count 
     public static int getCount(){
-    	List<WebRule> li=WebRule.dao.fetchAll();
-    	return li.size();
+    	
+    	return WebRule.dao.count();
     }
     
     

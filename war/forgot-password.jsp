@@ -21,8 +21,8 @@ if (!StringUtils.isEmpty(password)) {
 
 	domainUser.password = EncryptDecryptUtil.decrypt(password);
 
-	AppengineMail.sendMail(email, SendMail.PASSWORD_CHANGE_NOTIFICATION_SUBJECT,
-			SendMail.PASSWORD_CHANGE_NOTIFICATION, domainUser);
+	AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
+			SendMail.FORGOT_PASSWORD, domainUser);
 	
 	success = "We have sent you an email";
 }
@@ -34,8 +34,7 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
     try
     {
 		domainUser = DomainUserUtil.generateForgotPassword(email);
-		
-	    if(domainUser == null)
+		if(domainUser == null)
 		{
 		    error = "We are not able to find any user";
 		}

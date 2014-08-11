@@ -16,6 +16,9 @@ $(function()
     console.log("plugin Id" + QUICKBOOKS_PLUGIN_ID);
 
     Email = agile_crm_get_contact_property('email');
+    
+ // Email list as global variable
+	EmailList = agile_crm_get_contact_properties_list("email");
     var first_name = agile_crm_get_contact_property("first_name");
     var last_name = agile_crm_get_contact_property("last_name");
     
@@ -43,8 +46,14 @@ function showQuickbooksContacts()
     }
 
     console.log("In show Quickbooks Client" + QUICKBOOKS_PLUGIN_ID);
-
-    queueGetRequest("widget_queue", "/core/api/widgets/quickbooks/contacts/" + QUICKBOOKS_PLUGIN_ID + "/" + Email, 'json', function success(data)
+    
+    var emailArray = [];
+	for ( var i = 0; i < EmailList.length; i++)
+	{
+		emailArray[i] = EmailList[i].value;
+	}
+	
+    queueGetRequest("widget_queue", "/core/api/widgets/quickbooks/contacts/" + QUICKBOOKS_PLUGIN_ID + "/" + emailArray, 'json', function success(data)
     {
 	console.log('QuickBooks');
 	console.log(data)

@@ -60,7 +60,7 @@ function checkContactUpdated(){
 	var contact_id = contact_model.id;
 	var updated_time = contact_model.attributes.updated_time;
 
-		queueGetRequest("widget_queue", "/core/api/contacts/" + contact_model.id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
+		queueGetRequest("contact_queue", "/core/api/contacts/" + contact_model.id + "/isUpdated?updated_time=" + updated_time, "", function success(data)
 		{
 			// If true show refresh contact button.
 			if (data == 'true')
