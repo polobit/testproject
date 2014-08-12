@@ -86,9 +86,10 @@ public abstract class TwoWaySyncService extends ContactSyncService
 
 	queryMap.put("type", Type.PERSON);
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(queryMap, "created_time", 300,
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(queryMap, "created_time", 200,
 	        MAX_UPLOAD_LIMIT);
 
+	System.out.println("total available new contacts: " + fetcher.getAvailableContacts());
 	while (fetcher.hasNextSet())
 	{
 	    saveContactsToClient(fetcher.nextSet());
@@ -106,9 +107,10 @@ public abstract class TwoWaySyncService extends ContactSyncService
 
 	queryMap.put("type", Type.PERSON);
 
-	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(queryMap, "updated_time", 300,
+	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(queryMap, "updated_time", 200,
 	        MAX_UPLOAD_LIMIT);
 
+	System.out.println("total available : " + fetcher.getAvailableContacts());
 	while (fetcher.hasNextSet())
 	{
 	    saveContactsToClient(fetcher.nextSet());

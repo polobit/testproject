@@ -202,9 +202,11 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	 query.setMaxResults(MAX_FETCH_LIMIT_FOR_GOOGLE);
 
-	query.setUpdatedMin(dateTime);
+	     query.setUpdatedMin(dateTime);
 	query.setStringCustomParameter("access_token", prefs.token);
 
+	//query.setStrict(true);
+	
 	/**
 	 * If sync from group is not null then considering user chose a group to
 	 * sync from instead of default "My contacts" group. If it is null then
@@ -226,6 +228,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	 * time can be saved in last synced time
 	 */
 	 query.setStringCustomParameter("orderby", "lastmodified");
+	 query.setStringCustomParameter("sortOrder", "ascending");
 
 	return query;
 
@@ -368,22 +371,13 @@ public class GoogleSyncImpl extends TwoWaySyncService
 		    insertRequestCount++;
 		}
 	    }
-	    if (contacts.size() < 20)
-	    {
-		System.out.println(i + ", " + (contacts.size() - 1));
-		System.out.println((i >= contacts.size() - 1 && insertRequestCount >= 0));
-	    }
 
 	    if (insertRequestCount >= 95 || (i >= contacts.size() - 1 && insertRequestCount != 0))
 	    {
 
-		System.out.println("inserted" + i + " , " + contacts.size() + ", " + insertRequestCount);
-
-		System.out.println("start time create : " + System.currentTimeMillis());
 		// Submit the batch request to the server.
 		responseFeed = contactService.batch(url, requestFeed);
 
-		System.out.println("end time create : " + System.currentTimeMillis());
 
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time
 		        : prefs.last_synced_to_client;
@@ -395,14 +389,10 @@ public class GoogleSyncImpl extends TwoWaySyncService
 
 	    if (updateRequestCount >= 95 || ((i >= (contacts.size() - 1) && updateRequestCount != 0)))
 	    {
-		System.out.println("updated" + i + " , " + contacts.size() + ", " + insertRequestCount);
-
-		System.out.println("Start time update : " + System.currentTimeMillis());
 
 		contactService.batch(new URL("https://www.google.com/m8/feeds/contacts/default/full/batch?"
 		        + "access_token=" + token), updateFeed);
 
-		System.out.println("end time :update " + System.currentTimeMillis());
 
 		prefs.last_synced_updated_contacts_to_client = (contact.updated_time != 0 && contact.updated_time > prefs.last_synced_updated_contacts_to_client) ? contact.updated_time
 		        : prefs.last_synced_to_client;
