@@ -402,7 +402,22 @@ var ContactsRouter = Backbone.Router.extend({
 
 			fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
-		} });
+			
+			// For sip
+			{
+				console.log("for sip");				
+				console.log(Sip_Start);				
+
+				if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+				{			
+					console.log("in sip");			
+					$(".contact-make-sip-call").show();
+					$(".make-call").show();				
+					// Contact with tel: is hidden
+					$(".contact-make-call").hide();			
+				}	
+			}					
+			} });
 
 		var el = this.contactDetailView.render(true).el;
 
