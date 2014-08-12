@@ -16,6 +16,7 @@ import oauth.signpost.basic.DefaultOAuthConsumer;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.scribe.util.SignpostUtil;
 import com.intuit.ipp.core.Context;
 import com.intuit.ipp.core.ServiceType;
 import com.intuit.ipp.security.OAuthAuthorizer;
@@ -43,10 +44,10 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	if (customers != null)
 	{
-	   /* for (Customer customer : customers)
-	    {
-		Contact contact = wrapContactToAgileSchemaAndSave(customer);
-	    }*/
+	    /*
+	     * for (Customer customer : customers) { Contact contact =
+	     * wrapContactToAgileSchemaAndSave(customer); }
+	     */
 	}
 
     }
@@ -60,29 +61,43 @@ public class QuickBookSyncImpl extends OneWaySyncService
     public List getCustomers()
     {
 	List list = new ArrayList();
+	OAuthAuthorizer oauth = new OAuthAuthorizer(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret);
 	try
 	{
-	    /*
-	     * OAuthAuthorizer oauth = new
-	     * OAuthAuthorizer(Globals.QUICKBOOKS_CONSUMER_KEY,
-	     * Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.apiKey, prefs.secret);
-	     *  DataService service = new
-	     * DataService(context); QueryResult q =
-	     * service.executeQuery("SELECT * FROM Customer");
-	     */
-	    // list.add((Customer) q.getEntities());
-	
-	    OAuthAuthorizer oauth = new OAuthAuthorizer(Globals.QUICKBOOKS_CONSUMER_KEY,Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret);
-	    Context context = new Context(oauth, Globals.QUICKBOOKS_APP_KEY, ServiceType.QBO, prefs.othersParams);
-	    DataService service = new DataService(context);
-	    QueryResult  result = service.executeQuery("SELECT * FROM Customer");
-	    
+	   Context ctx = new Context(oauth, ServiceType.QBO, prefs.othersParams);   
+	   DataService service = new  DataService(ctx);
+	   QueryResult rs = service.executeQuery("SELECT * FROM Customer");
+	   System.out.println(rs.getEntities().size());
+	   
 	}
 	catch (Exception e)
 	{
+	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 	return list;
+    }
+    
+    public static void main(String[] args)
+    {
+	String id = "1248774125";
+		String secret = "MFp3qgsf7d3GTkXRk5jUKagNClEd3jKOu0muBgK7";
+		String token = "qyprdnnTLziE6b347OjQxMShP3bvp0PzycZEG864RkAgkVsz";
+		OAuthAuthorizer oauth = new OAuthAuthorizer(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET, token, secret);
+		try
+		{
+		   Context ctx = new Context(oauth, ServiceType.QBO, id);   
+		   DataService service = new  DataService(ctx);
+		   QueryResult rs = service.executeQuery("SELECT * FROM Customer");
+		   System.out.println(rs.getEntities().size());
+		   
+		}
+		catch (Exception e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+		
     }
 
 }
