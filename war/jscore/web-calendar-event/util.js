@@ -5,6 +5,7 @@ function change_availability_date(selected_date)
 	console.log(selected_date);
 	
 	var date = new Date(selected_date);
+	console.log(date);
 
 	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
 	$('.timezone').html('<span class="timezone1">Timezone</span> ' + /\((.*)\)/.exec(new Date().toString())[1]);
@@ -85,13 +86,25 @@ function get_slots(s_date, s_slot)
 	// Current timezone name
 	var timezoneName = /\((.*)\)/.exec(new Date().toString())[1];
 	console.log(timezoneName);
-
+	
+	// Get Timezone Abbreviation from Time
+	var timezoneAbbr = GetTimezoneShort(new Date());
+	console.log(timezoneAbbr);
+	
 	// selected date in current epoch time
 	var epochTime = getEpochTimeFromDate(s_date); // milliseconds
 	console.log(epochTime);
-
+	
+	var d = new Date(s_date)
+	console.log(d);
+	
+	var start_time = getEpochTimeFromDate(d);
+	d.setDate(d.getDate() + 1)
+	var end_time = getEpochTimeFromDate(d);
+	console.log(start_time+"  "+end_time);	
+	
 	// Send request to get available slot
-	var initialURL = '/core/api/webevents/getslots?&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneName + "&epoch_time=" + epochTime;
+	var initialURL = '/core/api/webevents/getslots?&user_name='+User_Name+'&user_id=' + User_Id +'&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime+ "&start_time=" + start_time+ "&end_time=" + end_time;
 	$.getJSON(initialURL, function(data)
 	{
 		console.log(data);
@@ -207,8 +220,10 @@ function save_web_event(formId, confirmBtn)
 
 	// Add selected parameter which are out of form
 	web_calendar_event["name"] = "Save in DB";
-	web_calendar_event["date"] = Selected_Date;
+	//web_calendar_event["date"] = Selected_Date;
 	web_calendar_event["slot_time"] = Selected_Time;
+	web_calendar_event["domainUserId"] = User_Id;
+	web_calendar_event["agileUserId"] = Agile_User_Id;
 	web_calendar_event["selectedSlotsString"] = [];
 
 	// Get selected slots in UI from available slots list.
@@ -226,6 +241,10 @@ function save_web_event(formId, confirmBtn)
 			result["end"] = Available_Slots[res[1]][1];
 			web_calendar_event["selectedSlotsString"][i] = result;
 			i++;
+			
+			console.log(result["start"]);
+			var dd = new Date(result["start"] * 1000);
+			web_calendar_event["date"] = dd.toString();
 		}
 	}
 
