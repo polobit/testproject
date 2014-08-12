@@ -99,6 +99,7 @@ public class ContactFilterResultFetcher
 	this.orderBy = orderBy;
 	this.max_fetch_set_size = max_fetch_set_size;
 	this.max_fetch_size = max_limit;
+	setAvailableCount();
     }
 
     private void setAvailableCount()
@@ -328,7 +329,8 @@ public class ContactFilterResultFetcher
 
     public boolean hasNextSet()
     {
-	if (max_fetch_size <= fetched_count && (!init_fetch || (size() >= max_fetch_set_size && cursor != null)))
+	if(!init_fetch || cursor != null)
+	//if (max_fetch_size <= fetched_count && (!init_fetch || (size() >= max_fetch_set_size && cursor != null)))
 	{
 	    int size = size();
 	    if (size == 0 && init_fetch)
