@@ -13,9 +13,17 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 
+/**
+ * <code>ContactWrapper</code> Abstraction of ContactWapper every third party
+ * needs to be extends this wrapper to Construct Contact in agile style format
+ */
 public abstract class ContactWrapper implements WrapperService
 {
+
+    /**  Contact Instance */
     protected Contact contact;
+
+    /**  Object */
     protected Object object;
 
     /*
@@ -36,6 +44,11 @@ public abstract class ContactWrapper implements WrapperService
 	return this;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#buildContact()
+     */
     @Override
     public Contact buildContact()
     {
@@ -61,6 +74,12 @@ public abstract class ContactWrapper implements WrapperService
 	return contact;
     }
 
+    /**
+     * Adds the property to contact.
+     * 
+     * @param field
+     *            the field
+     */
     private void addPropertyToContact(ContactField field)
     {
 	if (field == null)
@@ -72,28 +91,40 @@ public abstract class ContactWrapper implements WrapperService
     /**
      * Private setter methods which are called from build contact method, which
      * calls appropriate method from child implementations of contact wrapper
-     * class
+     * class.
      */
     private void setFirstName()
     {
 	addPropertyToContact(getFirstName());
     }
 
+    /**
+     * Sets the last name.
+     */
     private void setLastName()
     {
 	addPropertyToContact(getLastName());
     }
 
+    /**
+     * Sets the email.
+     */
     private void setEmail()
     {
 	addPropertyToContact(getEmail());
     }
 
+    /**
+     * Sets the phone number.
+     */
     private void setPhoneNumber()
     {
 	addPropertyToContact(getPhoneNumber());
     }
 
+    /**
+     * Sets the tag.
+     */
     private void setTag()
     {
 	List<String> tags = getTags();
@@ -102,53 +133,82 @@ public abstract class ContactWrapper implements WrapperService
 	    contact.tags.addAll(tags);
     }
 
+    /**
+     * Sets the address.
+     */
     private void setAddress()
     {
 	addPropertyToContact(getAddress());
     }
 
+    /**
+     * Sets the organization.
+     */
     private void setOrganization()
     {
 	addPropertyToContact(getOrganization());
     }
 
+    /**
+     * Sets the description.
+     */
     private void setDescription()
     {
     }
-    
+
+    /**
+     * Sets the job title.
+     */
     private void setJobTitle()
     {
 	addPropertyToContact(getJobTitle());
     }
 
+    /**
+     * Sets the notes.
+     */
     private void setNotes()
     {
 	List<Note> notes = getNotes();
 
     }
 
+    /**
+     * Adds the more custom info.
+     */
     private void addMoreCustomInfo()
     {
 	List<ContactField> fields = getMoreCustomInfo();
 
-	if (fields == null || fields.size() == 0)
-	    return;
-
+	if (fields != null && fields.size() > 0)
 	contact.properties.addAll(fields);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getMoreCustomInfo()
+     */
     @Override
     public List<ContactField> getMoreCustomInfo()
     {
 	// TODO Auto-generated method stub
 	return new ArrayList<ContactField>(0);
     }
-    
+
+    /**
+     * Gets the job title.
+     * 
+     * @return the job title
+     */
     public ContactField getJobTitle()
     {
 	return null;
     }
 
+    /**
+     * Save callback.
+     */
     public void saveCallback()
     {
 

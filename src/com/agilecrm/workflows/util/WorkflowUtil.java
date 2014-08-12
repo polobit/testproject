@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -62,7 +63,14 @@ public class WorkflowUtil
     {
 	return dao.ofy().query(Workflow.class).order("-created_time").list();
     }
-
+    //returns all workflows count 
+    public static int getCount(){
+    	
+    	return Workflow.dao.count();
+    }
+    
+    
+    
     /**
      * Returns list of workflows based on page size.
      * 

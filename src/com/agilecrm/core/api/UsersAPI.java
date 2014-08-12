@@ -19,13 +19,24 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import org.json.JSONObject;
+import com.agilecrm.activities.util.EventUtil;
+import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
+import com.agilecrm.webrules.WebRule;
+import com.agilecrm.webrules.util.WebRuleUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.triggers.util.TriggerUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.NamespaceManager;
+import com.google.gson.JsonObject;
 
 /**
  * <code>UsersAPI</code> includes REST calls to interact with {@link DomainUser}
@@ -54,11 +65,11 @@ public class UsersAPI
     {
 	try
 	{
+		
+		
 	    String domain = NamespaceManager.get();
-
 	    // Gets the users and update the password to the masked one
 	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
-
 	    return users;
 	}
 	catch (Exception e)
@@ -68,6 +79,9 @@ public class UsersAPI
 	}
     }
 
+    
+    
+    
     // Send Current User Info
     @Path("current-user")
     @GET
@@ -100,6 +114,7 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
+    	
 	try
 	{
 	    domainUser.save();
@@ -112,6 +127,7 @@ public class UsersAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
 	}
     }
+    
 
     @GET
     @Path("count")
@@ -121,6 +137,7 @@ public class UsersAPI
 	return String.valueOf(DomainUserUtil.count());
     }
 
+    
     /**
      * Updates the existing user
      * 
@@ -208,59 +225,7 @@ public class UsersAPI
 	}
     }
 
-    /**
-     * Gets list of all domain users irrespective of domain for the users of
-     * domain "admin".
-     * 
-     * @return DomainUsers list
-     */
-    @Path("/admin/domain-users")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public List<DomainUser> getAllDomainUsers(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
-    {
-	String domain = NamespaceManager.get();
-
-	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry you don't have privileges to access this page.")
-		    .build());
-	}
-
-	if (count != null)
-	{
-	    System.out.println("Fetching page by page");
-	    return DomainUserUtil.getAllDomainUsers(Integer.parseInt(count), cursor);
-	}
-
-	return DomainUserUtil.getAllUsers();
-    }
-
-    /**
-     * Delete domain users of particular namespace
-     */
-    @Path("/admin/delete/{namespace}")
-    @DELETE
-    public void deleteDomainUser(@PathParam("namespace") String namespace)
-    {
-	String domain = NamespaceManager.get();
-
-	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry you don't have privileges to access this page.")
-		    .build());
-	}
-
-	try
-	{
-	    AccountDeleteUtil.deleteNamespace(namespace);
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
-	}
-    }
-
+    
     // Get Stats for particular name-space
     @Path("/admin/namespace-stats/{namespace}")
     @GET
@@ -294,4 +259,9 @@ public class UsersAPI
     {
 	return AgileUser.getUsers();
     }
+    
+    
+
+    
+    
 }

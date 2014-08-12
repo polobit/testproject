@@ -46,7 +46,7 @@ public interface SyncService
     public void saveContact(List<Contact> contact);
 
     /**
-     * Gets the wrapper service.
+     * Return Contact Wrapper serviceObject dynamically.
      * 
      * @return the wrapper service
      */

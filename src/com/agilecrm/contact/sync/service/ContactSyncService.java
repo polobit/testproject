@@ -38,10 +38,10 @@ import com.thirdparty.google.ContactPrefs;
 public abstract class ContactSyncService implements SyncService
 {
 
-    /** The Constant NOTIFICATION_TEMPLATE. */
+    /** NOTIFICATION_TEMPLATE. */
     protected static final String NOTIFICATION_TEMPLATE = "contact_sync_notification_template";
 
-    /** The contact wrapper. */
+    /** contact wrapper. */
     protected ContactWrapper contactWrapper = null;
 
     /**
@@ -49,22 +49,19 @@ public abstract class ContactSyncService implements SyncService
      */
     BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(true);
 
-    /** The contact restriction. */
+    /** contact restriction. */
     DaoBillingRestriction contactRestriction = DaoBillingRestriction.getInstace(
 	    DaoBillingRestriction.ClassEntities.Contact.toString(), restriction);
 
-    /** The prefs. */
+    /** ContactPrefs. */
     protected ContactPrefs prefs;
 
-    /** The total_synced_contact. */
+    /** total_synced_contact. */
     protected int total_synced_contact;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.agilecrm.contact.sync.service.SyncService#createService(com.thirdparty
-     * .google.ContactPrefs)
+    /**
+     * creates ContactSyncService Instance at runtime follows Dynamic
+     * Polymorphism
      */
     @Override
     public SyncService createService(ContactPrefs pref)
@@ -83,7 +80,7 @@ public abstract class ContactSyncService implements SyncService
     }
 
     /**
-     * Checks if is limit exceeded.
+     * Checks if is limit exceeded as per user plan
      * 
      * @return true, if is limit exceeded
      */
@@ -100,7 +97,10 @@ public abstract class ContactSyncService implements SyncService
 
     // public List<Contact> retrieveContact();
 
-    /** The sync status. */
+    /**
+     * building import status map will hold how many new Contact ,merge Contact
+     * ,Conflict Contact found as sync status.
+     */
     protected Map<ImportStatus, Integer> syncStatus;
 
     {
@@ -128,7 +128,7 @@ public abstract class ContactSyncService implements SyncService
 	++total_synced_contact;
 
 	contact = saveContact(contact);
-	
+
 	// Works as save callback to perform actions like creating notes/tasks
 	// and relating to newly created contact
 	contactWrapper.saveCallback();
@@ -136,7 +136,8 @@ public abstract class ContactSyncService implements SyncService
     }
 
     /**
-     * Wrap contact to agile schema.
+     * Wrap contact to agile schema return Contact Object in agile schema
+     * format.
      * 
      * @param object
      *            the object
@@ -151,12 +152,10 @@ public abstract class ContactSyncService implements SyncService
 	    }
 	    catch (InstantiationException e)
 	    {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	    catch (IllegalAccessException e)
 	    {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 
@@ -187,7 +186,8 @@ public abstract class ContactSyncService implements SyncService
     }
 
     /**
-     * Builds the notification status.
+     * Builds the notification status creates Map of Total New Contact,Merge
+     * Contact and Failed Contact save in Agile for Email Notification .
      * 
      * @return the map
      */
@@ -258,8 +258,16 @@ public abstract class ContactSyncService implements SyncService
 	if (ContactUtil.isDuplicateContact(contact))
 	{
 	    contact = ContactUtil.mergeContactFields(contact);
-	    contact.save();
+	    try
+	    {
+		contact.save();
+		
 	    syncStatus.put(ImportStatus.MERGED_CONTACTS, syncStatus.get(ImportStatus.MERGED_CONTACTS) + 1);
+	    }
+	    catch(Exception e)
+	    {
+		System.out.println("exception raised : " + e.getMessage());
+	    }
 	}
 	else if (contactRestriction.can_create())
 	{
@@ -272,7 +280,7 @@ public abstract class ContactSyncService implements SyncService
 	{
 	    syncStatus.put(ImportStatus.LIMIT_REACHED, syncStatus.get(ImportStatus.LIMIT_REACHED) + 1);
 	}
-	
+
 	return contact;
     }
 

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.backends.BackendServiceFactory;
@@ -182,18 +183,18 @@ public class NamespaceFilter implements Filter
     {
 	System.out.println(request.getServerName());
 
-	/*
-	 * DomainUser domainUser = new DomainUser(null, "manohar@agilecrm.com",
-	 * "manohar", "password", true, true); try { domainUser.save(); } catch
-	 * (Exception e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); }
-	 */
+	
+	/* DomainUser domainUser = new DomainUser(null, "jitendra@invox.com",
+	 "hungry", "password", true, true); try { domainUser.save(); } catch
+	 (Exception e) { // TODO Auto-generated catch block
+	 e.printStackTrace(); }*/
+	
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
 	// "/backend" (crons, StripeWebhooks etc..)
 	String path = ((HttpServletRequest) request).getRequestURI();
-	if (path.startsWith("/backend"))
+	if (path.startsWith("/backend") || path.startsWith("/register"))
 	{
 	    chain.doFilter(request, response);
 	    return;

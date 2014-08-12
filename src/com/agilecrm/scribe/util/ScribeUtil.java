@@ -41,6 +41,7 @@ import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.stripe.model.Account;
 import com.thirdparty.google.ContactPrefs;
 import com.thirdparty.google.GoogleServiceUtil;
 import com.thirdparty.google.calendar.GoogleCalenderPrefs;
@@ -355,6 +356,11 @@ public class ScribeUtil
 		prefs.othersParams = "first";
 		prefs.save();
 	    }
+	    // retrieve User Account information from stripe
+	     Account account = Account.retrieve(prefs.apiKey);
+	     prefs.userName = account.getEmail();
+	     prefs.save();
+	    
 	}
 	catch (Exception e)
 	{
@@ -659,5 +665,15 @@ public class ScribeUtil
 	// update widget with tokens
 	saveWidgetPrefsByName(serviceType, properties);
 
+    }
+    
+    public static void saveQuickBookPrefs(Map<String,String>map){
+	    ContactPrefs contactPrefs = new ContactPrefs();
+	    contactPrefs.token = map.get("token");
+	    contactPrefs.secret = map.get("secret");
+	    contactPrefs.othersParams = map.get("company");
+	    contactPrefs.type = Type.QUICKBOOK;
+	    contactPrefs.save();
+	    
     }
 }

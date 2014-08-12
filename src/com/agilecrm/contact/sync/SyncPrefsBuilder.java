@@ -18,8 +18,14 @@ import com.thirdparty.google.ContactPrefs;
  */
 public class SyncPrefsBuilder
 {
+    /**
+     * Holds ContactPrefs instance
+     */
     private ContactPrefs prefs;
 
+    /**
+     * Holds SyncService Instance
+     */
     private SyncService api;
 
     /**
@@ -37,7 +43,8 @@ public class SyncPrefsBuilder
     }
 
     /**
-     * return {@link SyncService}
+     * create Service based in Sync Client ie third party and return
+     * {@link SyncService}
      * 
      * @param clazz
      *            which extends {@link SyncService}

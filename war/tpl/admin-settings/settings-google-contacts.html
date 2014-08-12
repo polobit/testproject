@@ -140,8 +140,12 @@
 
 
       <div class="form-actions">
-			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
-			<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+{{#if inProgress}}
+			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px" disabled>Syncing</div>
+	{{else}}
+<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
+{{/if}}		
+<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 	 </div>
 	{{/if}}
         </fieldset>
@@ -164,12 +168,12 @@
 	</div>
 {{/unless}} 
     {{#if id}}
-<form id="imap-prefs-form" class="form-horizontal">
+<form id="stripe-prefs-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-       
+          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
 	
           
-             	<div class="control-group" style="margin-left: -80px;">
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
 					<label class="control-label">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
@@ -190,17 +194,21 @@
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
 {{#if inProgress}}
-          		 <button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;" disabled>Sync</button>
+			<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;" disabled="disabled">Syncing</button>
 {{else}}
-<button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
+<button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;">Sync</button>
 {{/if}}
+
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
 
 
        
     </form>
+{{else}}
+<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
 {{/if}}
+
 </div>
 </script>
 
@@ -234,16 +242,32 @@
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
 		Setup contact sync with your Shopify account.
 	</div>
-{{/unless}} 
 
+
+<div class='input-append input-prepend' style="margin-left: 46px;">
+	<span class="add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">https://</span>
+	  <input id="shop" style="margin-left: -3px;margin-right: -3px;width: 116px;" required="required" name="shopname"  type="text" placeholder="Enter shop domain">
+    <span class="add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">.myshopify.com</span>
     
+    </div>
+<a href ="#" id ="import_shopify" class="btn" style="margin-left: 46px;">connect</a>
 
-    <form id="imap-prefs-form" class="form-horizontal">
+  {{/unless}}
+
+  
+
+    <form id="shopify-contact-import-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
         
 	
            {{#if id}}
-             	<div class="control-group" style="margin-left: -80px;">
+              <div>
+                   Shop : <span style="margin-left: 38px;">{{othersParams}}</span>
+                
+                       <a class="delete" href="#"  id="shopify-import-prefs-delete" >Change</a>
+					</div>
+                 
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
 					<label class="control-label" style="text-align:">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
@@ -264,9 +288,9 @@
 			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
 
 {{#if inProgress}}
-          		 <button class="btn btn-primary save" style="display:inline-block;" disabled>Sync</button>
+			<button class="btn btn-primary" id="shopify-setting" style="display:inline-block;" disabled="disabled">Syncing</button>
 {{else}}
-<button class="btn btn-primary save" id="stripe_pref" style="display:inline-block;">Sync</button>
+<button class="btn btn-primary" id="shopify-setting" style="display:inline-block;">Sync</button>
 {{/if}}
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 
@@ -289,14 +313,13 @@
     <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
 		Agile can periodically sync your contacts in your CRM with your Shopify Contacts.
 	</div>
-    <div>
+    <div style="margin-left: 15px;">
 			{{#if id}}
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
 				<a href="#google-apps/shopify" class="btn">Settings</a>
 			{{else}}
-              <div> 
-			   <input type="text" name="shop" id="shopeName" placeholder ="Enter shopname"/></div>
-			   <button type="submit" class="btn" id="import_shopify" style="display:inline-block;">Enable</button>
+
+			   <a href="#google-apps/shopify"  class="btn"  style="display:inline-block;">Enable</a>
 			{{/if}}
 </div>
 </div>
@@ -330,18 +353,24 @@
 </script>
 
 
-<script id="admin-settings-import-zoho-prefs-template" type="text/html">
+<script id="admin-settings-import-quickbook-settings-template" type="text/html">
 <div class="span4 well">
-    <form id="imap-prefs-form">
+<span class="label label-important" style="float:right">Beta</span>
+<center> <img class="thumbnail" src="/widgets/QuickBooks210x70.png" style="width:210px; height:70px;margin-left:40px" /></center>
+<br/>
+{{#unless id}}
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Setup contact sync with your Quickbook account.
+	</div>
+{{/unless}} 
+    {{#if id}}
+<form id="quickbook-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-        <legend>Zoho Import Settings <span class="label label-important">Alpha</span></legend>
-		<div>
-			Import customers from Zoho
-		</div>
-
- {{#if id}}
-             	<div class="control-group">
-					<label class="control-label" style="text-align:">Frequency</label> 
+          <div>Account Linked : {{otherParams}} <span><a href="#" class="delete">Change</a></span></div>
+	
+          
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
+					<label class="control-label">Frequency</label> 
            				<div class="controls">
 							<select class="required" name="duration" id="freq">
 
@@ -358,17 +387,49 @@
 					</div>
 		   		</div>
 
-			<div class="form-actions">
-          		 <button class="btn btn-primary save" id="zoho_prefs" style="display:inline-block;">Sync</button>
+			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+
+{{#if inProgress}}
+			<button class="btn btn-primary" id="quickbook_sync_prefs" style="display:inline-block;" disabled="disabled">Syncing</button>
+{{else}}
+<button class="btn btn-primary" id="quickbook_sync_prefs" style="display:inline-block;">Sync</button>
+{{/if}}
+
            		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
 
-	{{/if}}
-          
 
        
     </form>
+{{else}}
+<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
+{{/if}}
+
 </div>
+</script>
+
+
+<script id="admin-settings-import-quickbook-template"
+	type="text/html">
+	<div class="well widget-add" style="width:220px;">
+
+    <img class="thumbnail"  src="/widgets/QuickBooks210x70.png" style="width:210px; height:70px;" />
+	<br />
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
+		Agile can periodically sync your contacts in your CRM with your QuickBook Contacts.
+	</div>
+    <div style="margin-left: 15px;">
+			{{#if id}}
+        	   <a class="btn btn-danger delete"  id="quick-book-delete" >Disable</a>
+				<a href="#google-apps/quickbook" class="btn">Settings</a>
+			{{else}}
+
+			   <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
+			{{/if}}
+</div>
+</div>
+
+
 </script>
 
 

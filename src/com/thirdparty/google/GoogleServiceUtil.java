@@ -43,25 +43,22 @@ public class GoogleServiceUtil
 
 	// Creates HashMap from response JSON string
 	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-		new TypeReference<HashMap<String, Object>>()
-		{
-		});
+	        new TypeReference<HashMap<String, Object>>()
+	        {
+	        });
 	System.out.println(properties.toString());
 
 	if (properties.containsKey("error"))
 	    throw new Exception(String.valueOf(properties.get("error")));
 	else if (properties.containsKey("access_token"))
 	{
-	    /*
-	     * contactPrefs.getToken =
-	     * String.valueOf(properties.get("access_token"));
-	     * contactPrefs.expires =
-	     * Long.parseLong(String.valueOf(properties.get("expires_in")));
-	     * System.out.println("domiain user key in refresh token method: " +
-	     * contactPrefs.getDomainUser());
-	     * contactPrefs.setExpiryTime(contactPrefs.expires);
-	     * contactPrefs.save();
-	     */
+
+	    contactPrefs.token = String.valueOf(properties.get("access_token"));
+	    contactPrefs.expires = Long.parseLong(String.valueOf(properties.get("expires_in")));
+	    System.out.println("domiain user key in refresh token method: " + contactPrefs.getDomainUser());
+	    contactPrefs.setExpiryTime(contactPrefs.expires);
+	    contactPrefs.save();
+
 	}
 
     }
@@ -103,7 +100,7 @@ public class GoogleServiceUtil
     {
 	// Build data to post with all tokens
 	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_SECRET_KEY
-		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	        + "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
 	// send request and return response
 	try
@@ -133,7 +130,7 @@ public class GoogleServiceUtil
     {
 	// Build data to post with all tokens
 	String data = "client_id=" + Globals.GOOGLE_CALENDAR_CLIENT_ID + "&client_secret="
-		+ Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	        + Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
 	// send request and return response
 	try

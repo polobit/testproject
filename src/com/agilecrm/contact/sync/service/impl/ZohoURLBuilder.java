@@ -6,41 +6,41 @@ package com.agilecrm.contact.sync.service.impl;
 
 import org.scribe.utils.Preconditions;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ZohoURLBuilder.
+ * <code> ZohoURLBuilder<code> provides easy way to build Zoho URL with various param and path
+ * Implementation of Builder design pattern
  */
 public class ZohoURLBuilder
 {
 
-    /** The response type. */
+    /** set response type. */
     private String responseType = "json";
 
-    /** The method. */
+    /** Method to be executed of zoho API to get Result */
     private String method;
 
-    /** The token. */
+    /** token value */
     private String token;
 
-    /** The from index. */
+    /** start index */
     private int fromIndex = -1;
 
-    /** The to index. */
+    /** To index. */
     private int toIndex = 20;
 
-    /** The new format. */
+    /** api format by default new format. */
     private int newFormat = 1;
 
-    /** The version. */
+    /** api version. */
     private int version = 1;
 
-    /** The module. */
+    /** module name */
     private String module;
 
-    /** The Constant SCOPE. */
+    /** SCOPE of ZOHO CRM api */
     private static final String SCOPE = "crmapi";
 
-    /** The base url. */
+    /** base url. */
     private static String BASE_URL = "https://crm.zoho.com/crm/private/";
 
     /**
@@ -150,7 +150,7 @@ public class ZohoURLBuilder
     }
 
     /**
-     * Builds the.
+     * Builds construct URLBuilder Object and return URL as string.
      * 
      * @return the string
      */

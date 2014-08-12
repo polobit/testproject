@@ -1,8 +1,8 @@
 <!-- Multiple Radios (inline) -->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="<%= name %>"><%= label %></label>
-  <div class="col-lg-6"><% _.each(radios, function(radio, i){ %>
-    <label class="radio-inline" for="<%= name+'-'+i %>">
+<div class="agile-group">
+  <label class="agile-label" for="<%= name %>"><%= label %></label>
+  <div class="agile-field agile-field-xlarge agile-height-default"><% _.each(radios, function(radio, i){ %>
+    <label for="<%= name+'-'+i %>">
       <input type="radio" name="<%= name %>" agile-field="<%= agilefield %>" id="<%= name+'-'+i %>" value="<%= radio %>" <% if(i < 1) { %>checked="checked" <% } %>>
       <%= radio %>
     </label><% }); %>

@@ -1,12 +1,17 @@
 /**
- * 
+ * @auther jitendra
+ * @since 2014
  */
 package com.agilecrm.contact.sync.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.agilecrm.Globals;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.StripeContactWrapperImpl;
@@ -15,22 +20,36 @@ import com.stripe.exception.APIException;
 import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
+import com.stripe.model.Charge;
+import com.stripe.model.ChargeCollection;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerCollection;
 
 /**
- * <code>StripeSync</code> implements {@link OneWaySyncService}
+ * <code>StripeSync</code> implements {@link OneWaySyncService} provides Service
+ * for Sync Contacts from Stripe to agile.
  * 
  * @author jitendra
- * 
  */
 public class StripeSyncImpl extends OneWaySyncService
 {
 
+    /**
+     * holds last sync date. in first time date is null by default client will
+     * sync all contacts from stripe and set current date as sync date
+     */
     public String lastSyncCheckPoint = null;
+
+    /** initialize current page. */
     private int currentPage = 1;
+
+    /** page size. of stripe */
     private int pageSize = 100;
+
+    /** unix time stamp sync time. */
     private String syncTime = null;
+
+    SimpleDateFormat sf = new SimpleDateFormat("dd / MM / yyyy");
 
     /**
      * Implementation of initSync for Stripe.
@@ -53,7 +72,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    syncTime = prefs.othersParams;
 
 	    Map<String, Object> option = new HashMap<String, Object>();
-            option.put("limit", 1);
+	    option.put("limit", 1);
 	    option.put("include[]", "total_count");
 	    if (syncTime.equalsIgnoreCase("second"))
 	    {
@@ -82,8 +101,12 @@ public class StripeSyncImpl extends OneWaySyncService
 		for (Customer customer : customers)
 		{
 		    if (!isLimitExceeded())
-			wrapContactToAgileSchemaAndSave(customer);
-		   
+		    {
+			Contact contact = wrapContactToAgileSchemaAndSave(customer);
+
+			printCustomerCharges(contact, customer);
+		    }
+
 		}
 
 		if (customers.size() != 0)
@@ -102,6 +125,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
 		| APIException e)
 	{
+		  
 	    e.printStackTrace();
 	}
 
@@ -109,7 +133,7 @@ public class StripeSyncImpl extends OneWaySyncService
 
     /**
      * After sync all contact from stripe set cursor on top in stripe table it
-     * will fetch newly added records from top using param ending_before
+     * will fetch newly added records from top using param ending_before.
      */
     private void moveCurrentCursorToTop()
     {
@@ -131,10 +155,8 @@ public class StripeSyncImpl extends OneWaySyncService
     }
 
     /**
-     * Update Last SyncId which is user later for retrieve contacts from that id
-     * 
-     * @param prefs
-     * @param customerId
+     * Update Last SyncId which is user later for retrieve contacts from that
+     * id.
      */
     protected void updateLastSyncedInPrefs()
     {
@@ -143,9 +165,11 @@ public class StripeSyncImpl extends OneWaySyncService
     }
 
     /**
-     * Stripe data retrieve Options
+     * Stripe data retrieve Options.
      * 
-     * @return
+     * @param syncTime
+     *            the sync time
+     * @return the map
      */
     private Map<String, Object> Options(String syncTime)
     {
@@ -163,11 +187,73 @@ public class StripeSyncImpl extends OneWaySyncService
 	return options;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.agilecrm.contact.sync.service.SyncService#getWrapperService()
+     */
     @Override
     public Class<? extends WrapperService> getWrapperService()
     {
 	// TODO Auto-generated method stub
 	return StripeContactWrapperImpl.class;
     }
+
+    /**
+     * Prints the customer charges as log
+     * 
+     * @param contact
+     *            the contact
+     * @param customerId
+     *            the customer id
+     */
+    private void printCustomerCharges(Contact contact, Customer customer)
+    {
+	HashMap<String, Object> chargeOption = new HashMap<String, Object>();
+	chargeOption.put("customer", customer.getId());
+	if (contact != null)
+	{
+	    try
+	    {
+		ChargeCollection chargeCollection = Charge.all(chargeOption, prefs.apiKey);
+		List<Charge> charges = chargeCollection.getData();
+		if (charges.size() > 0)
+		{
+		    System.out.println("==================================================================");
+		    System.out.println("==============    Customer Charge Details  =======================");
+		    System.out.println("--------------------------------------------------------------------");
+		    for (Charge charge : charges)
+		    {
+			System.out.println("Customer name    :  " + charge.getCard().getName());
+			System.out.println("ContactId        :  " + contact.id);
+			System.out.println("Charge           :  " + charge.getAmount() + " " + charge.getCurrency());
+			System.out.println("Ammount Refunded :  " + charge.getAmountRefunded() + " "
+				+ charge.getCurrency());
+			if (charge.getFailureMessage() == null)
+			{
+			    System.out.println("Status           :  Successfull");
+			}
+			else
+			{
+			    System.out.println("Status         :  " + charge.getFailureMessage());
+			}
+
+			System.out.println("Date             :  " + sf.format(new Date(charge.getCreated() * 1000)));
+
+		    }
+		    System.out.println("--------------------------------------------------------------------");
+		    System.out.println("==================================================================");
+		}
+	    }
+	    catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
+		    | APIException e)
+	    {
+		e.printStackTrace();
+	    }
+
+	}
+    }
+
+    
 
 }

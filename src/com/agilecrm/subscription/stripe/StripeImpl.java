@@ -48,10 +48,11 @@ import com.stripe.model.Invoice;
  */
 public class StripeImpl implements AgileBilling
 {
+
     static
     {
 	Stripe.apiKey = Globals.STRIPE_API_KEY;
-	//Stripe.apiVersion = "2012-09-24";
+	Stripe.apiVersion = "2012-09-24";
     }
 
     /**
@@ -212,7 +213,6 @@ public class StripeImpl implements AgileBilling
 	// Sets invoice parameters (Stripe customer id is required to get
 	// invoices of a customer form stripe)
 	invoiceParams.put("customer", StripeUtil.getCustomerFromJson(stripeCustomer).getId());
-
 	/*
 	 * Fetches all invoices for given stripe customer id and returns
 	 * invoices
@@ -305,6 +305,7 @@ public class StripeImpl implements AgileBilling
 	}
 	catch (Exception e)
 	{
+	    e.printStackTrace();
 	}
 
 	return new JSONObject();

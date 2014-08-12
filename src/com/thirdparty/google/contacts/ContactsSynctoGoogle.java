@@ -246,6 +246,7 @@ public class ContactsSynctoGoogle
 	    if (createContact == null)
 	    {
 		System.out.println("contact null : " + createContact);
+		
 		// Last synced time is still set to avoid current contact being
 		// fetched again ang again
 		prefs.last_synced_to_client = contact.created_time > prefs.last_synced_to_client ? contact.created_time

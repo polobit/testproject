@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.agilecrm.contact.Contact;
 import com.agilecrm.webrules.WebRule;
 
 public class WebRuleUtil
@@ -14,6 +15,13 @@ public class WebRuleUtil
 	return WebRule.dao.fetchAll();
     }
 
+    //returns all webrule count 
+    public static int getCount(){
+    	
+    	return WebRule.dao.count();
+    }
+    
+    
     // Fill Countries
     public static List<WebRule> fillCountry(List<WebRule> webRules, HttpServletRequest request)
     {

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.agilecrm.contact.sync.wrapper.impl;
 
 import java.util.ArrayList;
@@ -16,6 +13,9 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 
 /**
+ * <code>ShopifyContactWrapperImple</code> Implements ContactWrapper This class
+ * Wraps Shopify Contacts in agile schema format 
+ * 
  * @author Jitendra
  * 
  */
@@ -159,11 +159,9 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 	return tags;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getAddress()
-     */
+  /**
+   * Wrap Address and return as ContactField Object
+   */
     @Override
     public ContactField getAddress()
     {
@@ -199,10 +197,8 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 	return new ContactField(Contact.ADDRESS, address.toString(), "home");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.agilecrm.contact.sync.wrapper.WrapperService#getNotes()
+    /**
+     * Return List of Note found customer account
      */
     @Override
     public List<Note> getNotes()

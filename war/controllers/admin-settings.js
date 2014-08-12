@@ -19,14 +19,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
-
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
+	
 	/* Milestones */
 	"milestones" : "milestones",
 
-	/* All Domain Users */
-	"all-domain-users" : "allDomainUsers",
-
+	
 	/* Menu settings - select modules on menu bar */
 	"menu-settings" : "menu_settings",
 
@@ -35,8 +33,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	/* Web to Lead */
 	"integrations" : "integrations"
+	
 
 	},
+	
 
 	/**
 	 * Show menu-settings modules selection ( calendar, cases, deals, campaign ) &
@@ -132,6 +132,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	},
 
+	/**
+	 * Loads a template to add new user, to a particular domain
+	 * user
+	 */
+	
 	/**
 	 * Edits the existing user by verifying whether the users list view is
 	 * defined or not
@@ -241,8 +246,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				//initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
-			
+
 			$('#content').find('#admin-prefs-tabs-content').html(view.el);
+
 			$('#content').find('#AdminPrefsTab .active').removeClass('active');
 			$('#content').find('.analytics-code-tab').addClass('active');
 			// $('#content').html(view.el);
@@ -272,7 +278,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// $('#content').html(view.el);
 		});
 	},
-
+	
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success
@@ -328,17 +334,5 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(getTemplate("admin-settings-web-to-lead"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-	},
-
-
-	/**
-	 * Creates a Model to show All Domain Users.
-	 */
-	allDomainUsers : function()
-	{
-		allDomainUsersCollectionView = new Base_Collection_View({ url : 'core/api/users/admin/domain-users', templateKey : "all-domain-users",
-			individual_tag_name : 'tr', cursor : true, page_size : 25 });
-
-		allDomainUsersCollectionView.collection.fetch();
-		$('#content').html(allDomainUsersCollectionView.el);
-	} });
+	}
+	});

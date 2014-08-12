@@ -1,8 +1,8 @@
 <!-- Select Multiple -->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="<%= id %>"><%= label %></label>
-  <div class="<%= inputsize %>">
-    <select id="<%= id %>" name="<%= id %>" agile-field="<%= agilefield %>" class="form-control <%= inputheight %>" multiple="multiple"><% _.each(options, function(option) { %>
+<div class="agile-group">
+  <label class="agile-label" for="<%= id %>"><%= label %></label>
+  <div class="<%= inputsize %> agile-field">
+    <select id="<%= id %>" name="<%= id %>" agile-field="<%= agilefield %>" class="<%= inputheight %>" multiple="multiple"><% _.each(options, function(option) { %>
       <option><%= option %></option><% }); %>
     </select>
   </div>

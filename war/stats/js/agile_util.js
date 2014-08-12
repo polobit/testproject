@@ -59,3 +59,21 @@ function agile_cookieTags(tags, action)
 	}
 	return;
 }
+
+/**
+ * Function to perform default actions on form submit
+ *
+ * @param error
+ * @param button
+ * @param url
+ */
+function agile_formCallback(error, button, url)
+{
+	error[1].innerHTML = error[0];
+	button.removeAttribute("disabled");
+	setTimeout(function()
+	{
+		error[1].innerHTML = "";
+		window.location.replace(url);
+	}, 1500);
+}

@@ -60,6 +60,39 @@ public class DealsAPI
     }
 
     /**
+     * Returns list of opportunities. This method is called if TEXT_PLAIN is
+     * request.
+     * 
+     * @param ownerId
+     *            Owner of the deal.
+     * @param milestone
+     *            Deals Milestone.
+     * @param contactId
+     *            Id of the contact related to deal.
+     * @param fieldName
+     *            the name field to sort on.
+     * @param cursor
+     * @param count
+     *            page size.
+     * @return List of deals.
+     */
+    @Path("/based")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Opportunity> getOpportunitiesByFilter(@QueryParam("owner_id") String ownerId,
+	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
+	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count)
+    {
+	if (count != null)
+	{
+	    return OpportunityUtil.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName,
+		    (Integer.parseInt(count)), cursor);
+	}
+	return OpportunityUtil.getOpportunities();
+    }
+
+    /**
      * Return opportunity with respect to Id. This method is called if XML is
      * request.
      * 
@@ -288,13 +321,10 @@ public class DealsAPI
     {
 	// Get the Contact based on the Email and add it to the Deal.
 	Contact contact = ContactUtil.searchContactByEmail(email);
-	if (contact == null)
+	if (contact != null)
 	{
-	    System.out.println("Null contact");
-	    return null;
+	    opportunity.addContactIds(contact.id.toString());
 	}
-
-	opportunity.addContactIds(contact.id.toString());
 
 	opportunity.save();
 	return opportunity;

@@ -2,6 +2,7 @@ package com.agilecrm.document.util;
 
 import java.util.List;
 
+import com.agilecrm.activities.Event;
 import com.agilecrm.cases.Case;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -97,7 +98,12 @@ public class DocumentUtil
 	Document document = getDocument(id);
 	return document.getDeals();
     }
-
+    
+    //returns all documents count 
+    public static int getCount(){
+    	
+    	return Document.dao.count();
+    }
     /**
      * Returns list of cases related to document.
      * 
