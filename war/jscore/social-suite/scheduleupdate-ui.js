@@ -33,7 +33,7 @@ $(function()
 								console.log(new Date(ev.date));
 
 								// Check selected schedule
-								isPastSchedule();
+								isTimeInPast();
 							});
 
 					// Set current time.
@@ -43,7 +43,7 @@ $(function()
 								console.log(e.time.value);
 
 								// Check selected schedule
-								isPastSchedule();
+								isTimeInPast();
 							});
 
 					// Save original URL from model.
@@ -82,7 +82,7 @@ $(function()
 	 */
 	/**$('.bootstrap-timepicker').die().live('hide', function()
 	{
-		isPastSchedule();
+		isTimeInPast();
 	});
 	*/
 
