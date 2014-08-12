@@ -277,6 +277,9 @@ public class ContactSyncUtil
 	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
 	String query_text = "";
 
+	if(emails == null || emails.isEmpty())
+	    return new ArrayList<ContactEntry>();
+	
 	// Creates a query string with emails
 	for (ContactField email : emails)
 	{
