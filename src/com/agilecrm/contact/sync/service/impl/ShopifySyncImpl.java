@@ -438,22 +438,29 @@ public class ShopifySyncImpl extends OneWaySyncService
 		    {
 
 			Note n = notes.get(note.subject);
-			n.description += "\n" + itemDetails.get("name") + ": " + itemDetails.get("price") + " ("
-				+ order.get("currency") + ") + Tax : " + taxDetails.get(0).get("price") + " ("
-				+ order.get("currency") + ") \n Total Price : " + order.get("total_price") + ""
-				+ order.get("currency");
+			StringBuilder sb = new StringBuilder(n.description);
+			sb.append("\n").append(itemDetails.get("name")+" : ").append(itemDetails.get("price") +"(").append( order.get("currency") +")");
+			if(taxDetails.size() > 0){
+			    sb.append("Tax : "+taxDetails.get(0).get("price") +"("+order.get("currency") +")");
+			}
+			sb.append("\n Total Price : "+order.get("total_price") +"("+order.get("currency")+")");
+			n.description = sb.toString();
+			
 
 		    }
 		    else
 		    {
-			note.description = itemDetails.get("name") + ": " + itemDetails.get("price") + " ("
-				+ order.get("currency") + ") + Tax : " + taxDetails.get(0).get("price") + " ("
-				+ order.get("currency") + ")";
+			StringBuilder sb = new StringBuilder();
+			sb.append(itemDetails.get("name")+" : ").append(itemDetails.get("price") +"(").append( order.get("currency") +")");
+			if(taxDetails.size() > 0){
+			    sb.append("Tax : "+taxDetails.get(0).get("price") +"("+order.get("currency") +")");
+			}
+			note.description = sb.toString();
 
 		    }
 		    if (listItems.size() == 1)
 		    {
-			note.description += "\n Total Price : " + order.get("total_price") + "" + order.get("currency")
+			note.description += "\n Total Price : " + order.get("total_price") + "(" + order.get("currency")+")"
 				+ "";
 		    }
 
