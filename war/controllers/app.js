@@ -71,3 +71,24 @@ function currentRoute(route)
 	load_clickdesk_code()
 }
 
+/**
+ * Clickdesk Widget
+ */
+function load_clickdesk_code()
+{
+	
+	if (CLICKDESK_CODE_LOADED)
+		return;
+
+	console.log("loading clickdesk..");
+	
+	CLICKDESK_CODE_LOADED = true;
+
+	var glcspt = document.createElement('script');
+	glcspt.type = 'text/javascript';
+	glcspt.async = true;
+	glcspt.src = glcpath + 'livechat-new.js';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(glcspt, s);
+}
+
