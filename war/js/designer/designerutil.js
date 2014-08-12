@@ -31,6 +31,8 @@ function insertSelectedMergeField(ele,target_id)
  **/
 function getMergeFields(type)
 {
+	
+	
 	var options=
 	{
 		"Select Merge Field": "",
@@ -57,6 +59,7 @@ function getMergeFields(type)
 	var custom_fields = get_custom_fields();
 	
 	console.log("Custom Fields are");
+	
 	console.log(custom_fields);
 	
 	// Merges options json and custom fields json
@@ -81,11 +84,47 @@ function getMergeFields(type)
 	return merged_json;
 }
 
+
+/**
+ * 
+ * 
+ */
+
+function getUpdateFields(type)
+{
+	 
+	var options=
+	{
+		"Select A Field To Update": "",
+		"First Name": "first_name",
+		"Last Name": "last_name",
+		"Email": "email",
+		"Company": "company",
+		"Title": "title",
+		"Name": "name",
+		"Website": "website",
+		"Phone":"phone",
+	};
+	
+	// Get Custom Fields in template format
+	var custom_fields = get_custom_fields(type);
+	
+	console.log("Custom Fields are");
+	
+	console.log(custom_fields);
+	
+	// Merges options json and custom fields json
+	var merged_json = merge_jsons({}, options, custom_fields);
+	
+	return merged_json;
+}
+
+
 /**
  * Returns custom fields in format required for merge fields. 
  * E.g., Nick Name:{{Nick Name}}
  */
-function get_custom_fields()
+function get_custom_fields(type)
 {
     var url = window.location.protocol + '//' + window.location.host;
 	
@@ -97,6 +136,7 @@ function get_custom_fields()
 	
 	var customfields = {};
 	
+	
 	// Iterate over data and get field labels of each custom field
 	$.each(data, function(index,obj)
 			{
@@ -104,13 +144,18 @@ function get_custom_fields()
 		            $.each(obj, function(key, value){
 						
 						// Needed only field labels for merge fields
-						if(key == 'field_label')
+						if(key == 'field_label'){
+							if(type=="update_field")
+								customfields[value] =   value 
+							else
 							customfields[value] = "{{" + value+"}}"
+						}
 					});
 			});	
 	
 	return customfields;
 }
+
 
 /**
  * Returns merged json of two json objects
