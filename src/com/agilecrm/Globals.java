@@ -85,10 +85,14 @@ public class Globals
     // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
     public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
-
+//develop key
     public static final String QUICKBOOKS_APP_KEY = "f0fca6d6b0541b470bb9711b713000493994";
-    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdnkO01AkcMJjNmabqS1PBDsmFp";
-    public static final String QUICKBOOKS_CONSUMER_SECRET = "CmBH6OWTlDmemY3uHOBIjFE87MZ6O8FRcsLqtYZF";
+   public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdnkO01AkcMJjNmabqS1PBDsmFp";
+   public static final String QUICKBOOKS_CONSUMER_SECRET = "CmBH6OWTlDmemY3uHOBIjFE87MZ6O8FRcsLqtYZF";
+    //production key
+   // public static final String QUICKBOOKS_APP_KEY = "08945c87bae1fb46bab9241ba0e81dc19bbf";
+   // public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
+    //public static final String QUICKBOOKS_CONSUMER_SECRET = "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
 
     /** test facebook app details */
     // public static final String FACEBOOK_APP_ID = "1472962409608031";

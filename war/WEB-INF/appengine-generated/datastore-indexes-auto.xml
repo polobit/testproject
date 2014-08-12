@@ -1,4 +1,17 @@
-<!-- Indices written at Fri, 8 Aug 2014 18:25:05 IST -->
+<!-- Indices written at Tue, 12 Aug 2014 20:06:21 IST -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="__key__" direction="asc"/>
+        <property name="updated_time" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Note" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>
