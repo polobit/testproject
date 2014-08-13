@@ -29,6 +29,25 @@ $(function(){
 		App_Deals.deals();
 
 	});
+	/**
+	 * If Pipelined View is selected, deals are loaded with pipelined view and 
+	 * creates the pipelined view cookie
+	 */
+	$('.deals-export-csv').die().live('click', function(e) {
+		e.preventDefault();
+
+		console.log('Exporting ...');
+		
+		$.ajax({
+			url: '/core/api/opportunity/export',
+			type: 'GET',
+			success: function() {
+				console.log('Exported!');
+			}
+		});
+		
+
+	});
 	
 	/**
 	 * Full screen view
