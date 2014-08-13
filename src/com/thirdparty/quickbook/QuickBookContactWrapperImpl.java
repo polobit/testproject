@@ -165,6 +165,7 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	    JSONObject billingAddrss = (JSONObject) customer.get("BillAddr");
 	    JSONObject address = new JSONObject();
 	    if(billingAddrss != null){
+		address.put("address", billingAddrss.get("Line1"));
 		address.put("city", billingAddrss.getString("City"));
 		address.put("country",  billingAddrss.getString("Country"));
 		address.put("state", billingAddrss.getString("CountrySubDivisionCode"));
