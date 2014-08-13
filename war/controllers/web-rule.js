@@ -78,9 +78,6 @@ var WebreportsRouter = Backbone.Router.extend({
 
 		// Default template is webrule-add. If rule is of type shopify template is changed accordingly
 		var template = "webrules-add";
-		if (webrule.get("rule_type") == "SHOPIFY_WEB_RULE")
-			template = "shopifyrules-add";
-
 		var web_reports_add = new Base_Model_View({ url : 'core/api/webrule', model : webrule, template : template, window : "web-rules",
 			postRenderCallback : function(el)
 			{
