@@ -38,9 +38,9 @@ var WidgetsRouter = Backbone.Router
 
 			"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
 
-			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
-				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify", "google-apps/salesforce" : "salesforce",
-				"google-apps/zoho-import" : "zoho_sync", "google-apps/quickbook" : "quickbook_import" },
+			"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar",
+				"sync/stripe-import" : "stripe_sync", "sync/shopify" : "shopify", "sync/salesforce" : "salesforce",
+				"sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import" },
 
 			/**
 			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
