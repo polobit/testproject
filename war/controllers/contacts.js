@@ -404,19 +404,12 @@ var ContactsRouter = Backbone.Router.extend({
 			start_tour("contact-details", el);
 			
 			// For sip
-			{
-				console.log("for sip");				
-				console.log(Sip_Start);				
-
-				if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
 				{			
-					console.log("in sip");			
 					$(".contact-make-sip-call").show();
 					$(".make-call").show();				
-					// Contact with tel: is hidden
 					$(".contact-make-call").hide();			
 				}	
-			}					
 			} });
 
 		var el = this.contactDetailView.render(true).el;
@@ -425,6 +418,14 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Check updates in the contact.
 		checkContactUpdated();
+		
+		// For sip
+		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+			{			
+				$(".contact-make-sip-call").show();
+				$(".make-call").show();				
+				$(".contact-make-call").hide();			
+			}
 	},
 
 	/**
