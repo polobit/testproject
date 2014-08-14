@@ -9,6 +9,9 @@
 *** Naresh ***
 - Allowed email-ids having domain name upto 10 characters in Send Email node.
 
+*** Saikiran ***
+- Ellipsing the value of the Custom fields, if their width is bigger than the width of the column.
+
 1-2 (11-August-2014)
 
 *** Yaswanth ***
@@ -22,6 +25,9 @@
 - Restricted conversion of urls within href only.
 - Disabled navigation to workflows on saving Campaign.
 - Custom fields epoch time conversion to Date.
+
+*** Saikiran ***
+- Displaying the Custom fields in the Deals List view.
 
 1-3 (14-August-2014)
 
