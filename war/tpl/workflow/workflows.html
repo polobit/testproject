@@ -1,6 +1,6 @@
 <script id="workflows-model-template" type="text/html">
 	<td class="hide data" data="{{id}}">{{id}}</td>
-	<td><a>{{name}}</a></td>
+	<td><a style="text-decoration:none;">{{name}}</a></td>
 <!--<td><div style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:5em;overflow:hidden;">
            {{#if pic}} 
                <img class="thumbnail" src="{{pic}}" width="40px" height="40px" />
@@ -19,7 +19,7 @@
     <td class="workflow-triggers" workflow-id={{id}}><a href="#trigger-add/{{id}}" class="stop-propagation"><i class="icon-plus" style="font-size:10px;margin-left:15px"></i> Add</a></td>
 	<!--<td><a href="#workflow/all-subscribers/{{id}}" class="workflow-subscribers stop-propagation">Subscribers</a></td>
 	<td><a href="#workflows/logs/{{id}}"  class="stop-propagation ">Logs</a></td> -->
-    <td><a href="#email-reports/{{id}}" class="stop-propagation"><span><i class="icon-bar-chart icon-white"></i></span> Reports</a></td>
+    <td><a href="#email-reports/{{id}}" class="stop-propagation">Reports</a></td>
     <td> 
         {{#if updated_time}}
         <div>
