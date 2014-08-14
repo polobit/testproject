@@ -160,7 +160,7 @@ public class TagUtil
 
     public static List<Tag> getTags(int size, String cursor)
     {
-	return dao.fetchAllByOrder(size, cursor, (Map<String, Object>)null, true, true, "ID");
+	return dao.fetchAll(size, cursor, null, true, true);
     }
 
     /**
