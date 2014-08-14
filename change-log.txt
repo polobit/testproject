@@ -1,0 +1,18 @@
+1-3 (14-August-2014)
+
+*** Yaswanth ***
+- Added live chat
+- Excluded formbuilder paths in page speed configuration
+- Redirection link to choose-domain changed to register page. Single page sign-up
+- Added backward compatibilty to keyword search API call.
+
+1-2 (11-August-2014)
+
+*** Yaswanth ***
+- Sync Framework for data sync integrations
+- Google contacts sync fix. Importing notes, websites
+- Added condition which checks available count in reports before sending when user chose to send now option from dashboard. If there are not matching results error message is shown in UI
+- Optimized contact delete and owner change bulk operations
+
+
+
