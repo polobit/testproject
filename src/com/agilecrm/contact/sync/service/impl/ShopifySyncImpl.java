@@ -28,6 +28,7 @@ import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.TimeZoneUtil;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
@@ -161,10 +162,13 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    if (shopObject != null)
 	    {
 		JSONObject object = shopObject.getJSONObject("shop");
-		Object timezone = object.get("timezone").toString().subSequence(1, 10);
-		df.setTimeZone(TimeZone.getTimeZone(timezone.toString()));
-		String date = df.format(new Date());
-		prefs.lastSyncCheckPoint = date;
+		String createdTime = (String) object.get("created_at");
+		TimeZone tz = TimeZoneUtil.getTimeZone(createdTime);
+		SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+		df.setTimeZone(tz);
+		String currentDate = df.format(new Date());
+		System.out.println("iso formate current date " + currentDate);
+		prefs.lastSyncCheckPoint = currentDate;
 		prefs.save();
 
 	    }
@@ -173,6 +177,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 	catch (Exception e)
 	{
+	    
+	    // retries when any problem happence
+	    
+	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
 
