@@ -77,10 +77,10 @@
         </span>
 		<span class="right" style="padding-right:5px;">
 			{{#if notes}}
-             <a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
+             <a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
               <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
 			{{else}}
-				<a href="#" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" title="Notes" class="deal-notes" style="cursor:pointer;text-decoration:none;"><i class="task-action icon icon-comment-alt deal-notes" data="{{id}}" title="Notes"></i></a>
+				<a data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" title="Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="task-action icon icon-comment-alt deal-notes" data="{{id}}" title="Notes"></i></a>
 			{{/if}}
 		</span>
 		<div class="clearfix"</div>
