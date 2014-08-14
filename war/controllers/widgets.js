@@ -38,9 +38,9 @@ var WidgetsRouter = Backbone.Router
 
 			"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
 
-			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
-				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify", "google-apps/salesforce" : "salesforce",
-				"google-apps/zoho-import" : "zoho_sync", "google-apps/quickbook" : "quickbook_import" },
+			"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar",
+				"sync/stripe-import" : "stripe_sync", "sync/shopify" : "shopify", "sync/salesforce" : "salesforce",
+				"sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import" },
 
 			/**
 			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -716,7 +716,7 @@ var WidgetsRouter = Backbone.Router
 				// Adds header
 				$('#prefs-tabs-content')
 						.html(
-								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import Contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import Contact from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>CRM <small>import Contact from CRM</small></h2></div><div class="span11"><div id ="quickbook"></div><div id ="force"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>Payment <small>import Contact from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
+								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import Contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import Contacts from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>CRM <small>import Contacts from CRM</small></h2></div><div class="span11"><div id ="quickbook"></div><div id ="force"></div></div></div>' + '<div class="row-fluid"><div class="page-header"><h2>Payment <small>import Contacts from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
 
 						);
 
