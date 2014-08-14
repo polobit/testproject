@@ -37,13 +37,30 @@ $(function(){
 		e.preventDefault();
 
 		console.log('Exporting ...');
+		var deals_csv_modal = $(getTemplate('deals-export-csv-modal'),{});
+		deals_csv_modal.modal('show');
 		
-		$.ajax({
-			url: '/core/api/opportunity/export',
-			type: 'GET',
-			success: function() {
-				console.log('Exported!');
-			}
+		// If Yes clicked
+		$('#deals-export-csv-confirm').die().live('click',function(e){
+			e.preventDefault();
+			if($(this).attr('disabled'))
+		   	     return;
+			
+			$(this).attr('disabled', 'disabled');
+			
+			 // Shows message
+		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+		    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);
+			$save_info.show();
+			// Export Deals.
+			$.ajax({
+				url: '/core/api/opportunity/export',
+				type: 'GET',
+				success: function() {
+					console.log('Exported!');
+					deals_csv_modal.modal('hide');
+				}
+			});
 		});
 		
 
