@@ -23,3 +23,16 @@
 - Disabled navigation to workflows on saving Campaign.
 - Custom fields epoch time conversion to Date.
 
+1-3 (14-August-2014)
+
+*** Jitendra ***
+- Fixed Shopify UI issues.
+- Fixed Shopify customers notes duplication issues.
+
+1-2 (11-August-2014)
+
+*** Jitendra ***
+- Implemented Sync Framework for data sync from third party to agilecrm.
+- Shopify data sync. Importing contacts,notes,payments,tags,orders and order events.
+- Stripe data sync. Importing contacts,payments with plan,charges,and refunds.
+
