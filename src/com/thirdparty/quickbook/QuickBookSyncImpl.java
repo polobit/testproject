@@ -5,7 +5,6 @@ package com.thirdparty.quickbook;
 
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -22,8 +21,9 @@ import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.scribe.util.SignpostUtil;
 
 /**
- * @author jitendra
- *
+ * @author jitendra Sync Quickbooks Cusomters as Contact in agile CRM its cursor
+ *         based implementation of contacts sync save lastSync date as
+ *         checkpoint for next time sync lastSync date is ISO formate of date
  */
 public class QuickBookSyncImpl extends OneWaySyncService
 {
@@ -61,11 +61,14 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    {
 			Contact contact = wrapContactToAgileSchemaAndSave(customers.get(i));
 			addCustomerInvoiceNote(contact, customers.get(i));
+			printPaymentDetails(customers.get(i));
 		    }
 		}
 	    }
 	    catch (Exception e)
 	    {
+		updateLastSyncedInPrefs();
+		sendNotification(prefs.type.getNotificationEmailSubject());
 		e.printStackTrace();
 	    }
 	    current_page += current_page + 1;
@@ -74,6 +77,58 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	sendNotification(prefs.type.getNotificationEmailSubject());
 	updateLastSyncedInPrefs();
+
+    }
+
+    //
+    private void printPaymentDetails(Object object)
+    {
+	JSONObject customer = (JSONObject) object;
+
+	try
+	{
+
+	    StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Payment WHERE CustomerRef='").append(customer
+		    .get("Id") + "'");
+	    String invoiceQuery = queryBuilder.toString();
+	    String invoicesURL = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(invoiceQuery));
+
+	    String result = SignpostUtil
+		    .accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET,
+			    prefs.token, prefs.secret, invoicesURL, "GET", "", "quickbooks");
+	    JSONObject response = new JSONObject(result);
+	    JSONObject queryResponse = (JSONObject) response.get("QueryResponse");
+	    if (queryResponse.has("Payment"))
+	    {
+		JSONArray payments = (JSONArray) queryResponse.get("Payment");
+		System.out
+			.println("==================================================================================================");
+		System.out
+			.println("============================   Customer payment details ==========================================");
+		for (int i = 0; i < payments.length(); i++)
+		{
+		    JSONObject payment = (JSONObject) payments.get(i);
+		    JSONObject customerRef = (JSONObject) payment.get("CustomerRef");
+		    JSONObject currencyRef = (JSONObject) payment.get("CurrencyRef");
+		    System.out.println("Customer Name        :  " + customerRef.get("name"));
+		    System.out.println("Total Amount paid    :  " + payment.get("TotalAmt") + " "
+			    + currencyRef.get("value"));
+		    System.out.println("Payment Refno        :  " + payment.get("PaymentRefNum"));
+		    System.out.println("Trasaction Date      :  " + payment.get("TxnDate"));
+
+		}
+		System.out
+			.println("===================================================================================================");
+
+	    }
+
+	}
+	catch (Exception e)
+	{
+
+	    updateLastSyncedInPrefs();
+	    e.printStackTrace();
+	}
 
     }
 
@@ -143,7 +198,8 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	catch (JSONException e)
 	{
-	    // TODO Auto-generated catch block
+	    // update last sync date even if got some exceptions
+	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
 
@@ -171,6 +227,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 	catch (Exception e)
 	{
+	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
 
@@ -203,7 +260,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    String offset = tz.getID().substring(3);
 		    SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-dd'T'hh:mm:ss");
 		    df.setTimeZone(tz);
-		    String currentDate = df.format(new Date())+offset;
+		    String currentDate = df.format(new Date()) + offset;
 		    System.out.println("iso formate current date " + currentDate);
 		    prefs.lastSyncCheckPoint = currentDate;
 		    prefs.save();
@@ -218,6 +275,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	}
 
     }
+
     // Retrieve All customer using filter and cursor
 
     public JSONArray getCustomers(int startIndex, int maxResult)
@@ -226,7 +284,8 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	String query = "SELECT *  FROM Customer  STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
 	if (prefs.lastSyncCheckPoint != null)
 	{
-	    query = "SELECT *  FROM Customer WHERE MetaData.CreateTime > '" + prefs.lastSyncCheckPoint+"' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult+"";
+	    query = "SELECT *  FROM Customer WHERE MetaData.CreateTime > '" + prefs.lastSyncCheckPoint
+		    + "' STARTPOSITION " + startIndex + " MAXRESULTS " + maxResult + "";
 	}
 	String customerAccessURl = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(query));
 
