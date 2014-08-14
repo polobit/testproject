@@ -60,7 +60,7 @@ public class ContactsImportUtil
 	// notifies user after adding contacts
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_IMPORT_MESSAGE, "Import scheduled");
 
-	Queue queue = QueueFactory.getQueue("bulk-actions-queue");
+	Queue queue = QueueFactory.getQueue("contact-sync-queue");
 	TaskOptions taskOptions;
 	try
 	{

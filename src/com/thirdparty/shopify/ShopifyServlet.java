@@ -19,27 +19,27 @@ import com.thirdparty.google.ContactPrefs;
 public class ShopifyServlet extends HttpServlet
 {
 
-    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException
-    {
-	String token = req.getParameter("code");
-
-	String redirectUrl = "/#google-apps/shopify";
-
-	if (token != null)
+	public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException
 	{
-	    saveToken(req, token);
-	    res.sendRedirect(redirectUrl);
-	}
-    }
+		String token = req.getParameter("code");
 
-    private void saveToken(HttpServletRequest req, String token)
-    {
-	String shop = req.getParameter("shop");
-	shop = shop + ".myshopify.com";
-	ContactPrefs prefs = new ContactPrefs();
-	prefs.token = token;
-	prefs.othersParams = shop;
-	prefs.type = Type.SHOPIFY;
-	prefs.save();
-    }
+		String redirectUrl = "/#sync/shopify";
+
+		if (token != null)
+		{
+			saveToken(req, token);
+			res.sendRedirect(redirectUrl);
+		}
+	}
+
+	private void saveToken(HttpServletRequest req, String token)
+	{
+		String shop = req.getParameter("shop");
+		shop = shop + ".myshopify.com";
+		ContactPrefs prefs = new ContactPrefs();
+		prefs.token = token;
+		prefs.othersParams = shop;
+		prefs.type = Type.SHOPIFY;
+		prefs.save();
+	}
 }
