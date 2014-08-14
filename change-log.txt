@@ -12,6 +12,9 @@
 *** Saikiran ***
 - Ellipsing the value of the Custom fields, if their width is bigger than the width of the column.
 
+*** Sukanya ***
+- Renamed "#google-apps" link to "#sync".
+
 1-2 (11-August-2014)
 
 *** Yaswanth ***
