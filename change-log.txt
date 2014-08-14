@@ -6,6 +6,9 @@
 - Redirection link to choose-domain changed to register page. Single page sign-up
 - Added backward compatibilty to keyword search API call.
 
+*** Naresh ***
+- Allowed email-ids having domain name upto 10 characters in Send Email node.
+
 1-2 (11-August-2014)
 
 *** Yaswanth ***
@@ -14,5 +17,9 @@
 - Added condition which checks available count in reports before sending when user chose to send now option from dashboard. If there are no matching results error message is shown in UI
 - Optimized contact delete and owner change bulk operations
 
-
+*** Naresh ***
+- Added BCC field in campaign Send Email node.
+- Restricted conversion of urls within href only.
+- Disabled navigation to workflows on saving Campaign.
+- Custom fields epoch time conversion to Date.
 
