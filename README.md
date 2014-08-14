@@ -3,6 +3,7 @@
 ####1-3 (14-August-2014)
 
 > Yaswanth 
+
 1. Added live chat
 2. Excluded formbuilder paths in page speed configuration
 3. Redirection link to choose-domain changed to register page. Single page sign-up
@@ -11,6 +12,7 @@
 ####1-2 (11-August-2014)
 
 > Yaswanth 
+
 1. Sync Framework for data sync integrations
 2. Google contacts sync fix. Importing notes, websites
 3. Added condition which checks available count in reports before sending when user chose to send now option 	   from dashboard. If there are not matching results error message is shown in UI
