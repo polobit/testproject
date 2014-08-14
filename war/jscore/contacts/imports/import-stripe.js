@@ -2,7 +2,7 @@ $(function()
 {
 	$('#stripe_import').die().live('click', function(e)
 	{
-		var callbackURL = window.location.origin + "/#google-apps/stripe-import";
+		var callbackURL = window.location.origin + "/#sync/stripe-import";
 		console.log(callbackURL);
 
 		// For every request of import, it will ask to grant access

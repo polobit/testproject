@@ -9,7 +9,7 @@
     <div>
 			{{#if id}}
     			<a class="btn btn-danger delete"  id="google-import-prefs-delete" >Disable</a>
-				<a href="#google-apps/contacts" class="btn" id="setting-widget">Settings</a>
+				<a href="#sync/contacts" class="btn" id="setting-widget">Settings</a>
     		{{else}}
     			<div class="btn" id="google-import" style="display:inline-block;">Enable</div>
     		{{/if}}
@@ -145,7 +145,7 @@
 	{{else}}
 <div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
 {{/if}}		
-<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+<a href="#sync" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 	 </div>
 	{{/if}}
         </fieldset>
@@ -199,7 +199,7 @@
 <button class="btn btn-primary" id="stripe_sync_prefs" style="display:inline-block;">Sync</button>
 {{/if}}
 
-           		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+           		<a href="#sync" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
 
 
@@ -224,7 +224,7 @@
     <div>
 			{{#if id}}
     			<a class="btn btn-danger delete"  id="stripe-import-prefs-delete" >Disable</a>
-				<a href="#google-apps/stripe-import" class="btn" id="setting-widget">Settings</a>
+				<a href="#sync/stripe-import" class="btn" id="setting-widget">Settings</a>
     		{{else}}
     			<div class="btn" id="stripe_import" style="display:inline-block;">Enable</div>
     		{{/if}}
@@ -250,7 +250,7 @@
     <span class="add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">.myshopify.com</span>
     
     </div>
-<a href ="#" id ="import_shopify" class="btn" style="margin-left: 46px;">connect</a>
+<a href ="#" id ="import_shopify" class="btn" style="margin-left: 46px;margin-top:10px;">connect</a>
 
   {{/unless}}
 
@@ -292,7 +292,7 @@
 {{else}}
 <button class="btn btn-primary" id="shopify-setting" style="display:inline-block;">Sync</button>
 {{/if}}
-           		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+           		<a href="#sync" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 
        	  	</div>
 
@@ -316,10 +316,10 @@
    
 			{{#if id}}
         	   <a class="btn btn-danger delete"  id="shopify-import-prefs-delete" >Disable</a>
-				<a href="#google-apps/shopify" class="btn">Settings</a>
+				<a href="#sync/shopify" class="btn">Settings</a>
 			{{else}}
 
-			   <a href="#google-apps/shopify"  class="btn"  style="display:inline-block;">Enable</a>
+			   <a href="#sync/shopify"  class="btn"  style="display:inline-block;">Enable</a>
 			{{/if}}
 
 </div>
@@ -340,7 +340,7 @@
            {{#if id}}
           <div class="form-actions">
         	   <a class="btn btn-danger delete"  id="zoho-prefs-delete" >Disable</a>
-				<a href="#google-apps/zoho-import" class="btn" id="setting-widget">Settings</a>
+				<a href="#sync/zoho-import" class="btn" id="setting-widget">Settings</a>
 			</div>
          {{else}}
          <div>
@@ -395,16 +395,14 @@
 <button class="btn btn-primary" id="quickbook_sync_prefs" style="display:inline-block;">Sync</button>
 {{/if}}
 
-           		<a href="#google-apps" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+           		<a href="#sync" class="btn ml_5" style="text-decoration:none;">Cancel</a>
        	  	</div>
 
 
        
     </form>
 {{else}}
-<div>
  <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
-</div>
 {{/if}}
 
 </div>
@@ -423,7 +421,7 @@
     
 			{{#if id}}
         	   <a class="btn btn-danger delete"  id="quick-book-delete" >Disable</a>
-				<a href="#google-apps/quickbook" class="btn">Settings</a>
+				<a href="#sync/quickbook" class="btn">Settings</a>
 			{{else}}
 
 			   <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>

@@ -116,6 +116,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    }
 	    catch (Exception e)
 	    {
+		updateLastSyncedInPrefs();
 		e.printStackTrace();
 	    }
 
