@@ -33,6 +33,7 @@
 
 *** Jitendra ***
 - Implemented Sync Framework for data sync from third party to agilecrm.
+- Implemented Shopify Apps for data sync.
 - Shopify data sync. Importing contacts,notes,payments,tags,orders and order events.
 - Stripe data sync. Importing contacts,payments with plan,charges,and refunds.
 
