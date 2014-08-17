@@ -88,8 +88,9 @@ initialize : function()
  * On click on ".delete" model representing the view is deleted, and removed
  * from the collection
  */
-deleteItem : function()
+deleteItem : function(e)
 {
+	e.preventDefault();
 	this.model.destroy();
 	this.remove();
 }, edit : function(e)
