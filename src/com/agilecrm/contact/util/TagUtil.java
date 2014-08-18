@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -19,6 +20,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gdata.data.introspection.Collection;
 import com.googlecode.objectify.Key;
 
 /**
@@ -160,7 +162,8 @@ public class TagUtil
 
     public static List<Tag> getTags(int size, String cursor)
     {
-	return dao.fetchAllByOrder(size, cursor, null, true, false, "tag");
+	return dao.fetchAll(size, cursor, null, true, true);
+	
     }
 
     /**

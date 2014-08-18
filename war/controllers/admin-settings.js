@@ -339,7 +339,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	tagManagement : function()
 	{
 		
-		var tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: false});
+		var tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: true, sortKey : 'tag', postRenderCallback: function(el){
+			console.log(tagsview1.collection.toJSON());
+		}});
 		tagsview1.appendItem = append_tag_management;
 		
 //		var tagsView = new Base_Model_View({ url : 'core/api/tags', template : 'admin-settings-tags-model', });
