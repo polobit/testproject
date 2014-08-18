@@ -71,11 +71,7 @@ public class TagManagement
      */
     private static void removeTagsFromContact(String tag)
     {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("tagsWithTime.tag", tag);
-
-	ContactFilterResultFetcher iterator = new ContactFilterResultFetcher(searchMap, "-created_time", 50,
-		Integer.MAX_VALUE);
+	ContactFilterResultFetcher iterator = getfetcher(tag);
 
 	Tag[] tags = { new Tag(tag) };
 
@@ -110,6 +106,28 @@ public class TagManagement
 	
 	TagUtil.deleteTag(tag);
     }
+    
+    private static ContactFilterResultFetcher getfetcher(String tag)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("tagsWithTime.tag", tag);
+
+	ContactFilterResultFetcher iterator = new ContactFilterResultFetcher(searchMap, "-created_time", 50,
+		Integer.MAX_VALUE);
+	
+	return iterator;
+    }
+    
+    private static int getAvailableContacts(ContactFilterResultFetcher fetcher)
+    {
+	return fetcher.getAvailableContacts();
+    }
+    
+    public static int getAvailableContactsCount(String tag)
+    {
+	return getAvailableContacts(getfetcher(tag));
+    }
+    
     
     private static void deleteTag(String tag)
     {
