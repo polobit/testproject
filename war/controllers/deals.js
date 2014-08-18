@@ -145,7 +145,7 @@ function appendCustomfields(el){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
 						console.log(customfield);
-						 row += '<td><div style="width:6em;overflow:visible;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+						 row += '<td><div style="width:6em;text-overflow:ellipsis;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });
