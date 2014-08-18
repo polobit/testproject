@@ -20,5 +20,10 @@
         <property name="viewed.viewer_id" direction="asc"/>
         <property name="viewed.viewed_time" direction="desc"/>
     </datastore-index>
+    
+     <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="tagsWithTime.tag" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
 
 </datastore-indexes>
