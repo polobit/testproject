@@ -199,6 +199,13 @@ public class TagsAPI
 	TagManagement.removeTag(tag);
     }
     
+    @Path("bulk/rename")
+    @POST
+    public void renameTag(Tag tag, @QueryParam("tag") String newTag)
+    {
+	TagManagement.renameTag(tag.tag, newTag);
+    }
+    
     
     
 

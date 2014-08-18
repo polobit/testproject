@@ -49,9 +49,10 @@ updateTag : function(e)
 		
 	}
 	
-	
+	this.model.url = 'core/api/tags/bulk/rename?tag=' + this.input.val()
+	this.model.save();
+	this.model.set('tag', this.input.val());
 		
-	alert("update");
 },
 /*
  * On click on ".delete" model representing the view is deleted, and removed
