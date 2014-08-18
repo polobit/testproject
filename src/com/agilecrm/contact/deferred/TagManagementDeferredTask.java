@@ -38,7 +38,7 @@ public class TagManagementDeferredTask implements DeferredTask
 	if(action == Action.RENAME)
 	    TagManagement.renameTag(primaryTag.tag, newTag.tag);
 	else if(action == Action.DELETE)
-	    TagManagement.renameTag(primaryTag.tag, newTag.tag);
+	    TagManagement.removeTag(primaryTag.tag);
 	else if(action == Action.MERGE)
 	    TagManagement.renameTag(primaryTag.tag, newTag.tag);
 	    
