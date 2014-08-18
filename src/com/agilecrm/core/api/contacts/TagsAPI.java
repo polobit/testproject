@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.TagManagement;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
 
@@ -133,6 +134,22 @@ public class TagsAPI
 	System.out.println("reload : " + reload);
 	return TagUtil.getStatus(reload);
     }
+    
+    /**
+     * Returns the statistics of tags and contacts (i.e no.of contacts
+     * associated with each tag) as json object (tag name as key and no.of
+     * contacts with that tag as value)
+     * 
+     * @return JSONObject as string
+     */
+    @Path("stats1")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Tag> getTagsStats1(@QueryParam("reload") boolean reload)
+    {
+	System.out.println("reload : " + reload);
+	return TagUtil.getStats(50, null);
+    }
 
     /**
      * Creates new tags in tags database
@@ -174,5 +191,22 @@ public class TagsAPI
 	tags.add(tag);
 	TagUtil.deleteTags(tags);
     }
+    
+    @Path("bulk/delete")
+    @DELETE
+    public void bulkDeleteTat(@QueryParam("tag") String tag)
+    {
+	TagManagement.removeTag(tag);
+    }
+    
+    @Path("bulk/rename")
+    @POST
+    public void renameTag(Tag tag, @QueryParam("tag") String newTag)
+    {
+	TagManagement.renameTag(tag.tag, newTag);
+    }
+    
+    
+    
 
 }
