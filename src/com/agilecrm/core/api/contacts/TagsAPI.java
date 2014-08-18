@@ -205,37 +205,51 @@ public class TagsAPI
 	TagUtil.deleteTags(tags);
     }
 
+    /**
+     * Bulk delete tag operations. If contacts that are to be modified are more
+     * than with in 800, task is carried out but front end of tasklet. For cases
+     * beyond that limit, backend process will be initialized. Although limits
+     * specified are quite less than that the limit that front end instance can
+     * handle, but just to make sure running without missing out any contacts,
+     * limits are set that way
+     * 
+     * @param tag
+     */
     @Path("bulk/delete")
     @DELETE
     public void bulkDeleteTag(@QueryParam("tag") String tag)
     {
-	TagManagementDeferredTask tagAction = new TagManagementDeferredTask(new Tag(tag), (Tag)null, Action.DELETE);
-	
+	TagManagementDeferredTask tagAction = new TagManagementDeferredTask(new Tag(tag), (Tag) null, Action.DELETE);
+
+	// Fetches count of contacts which are related to that tag
 	int count = TagManagement.getAvailableContactsCount(tag);
 
-	if (count <= 10)
+	// If count is less than 100, task is carried out but frontend instance
+	if (count <= 100)
 	    TagManagement.removeTag(tag);
-	else if (count > 10 && count < 11)
+
+	// If count is between 100 to 800, task is carried out by taskqueue.
+	else if (count > 100 && count < 800)
 	{
-	    // Initialize task here
 	    Queue queue = QueueFactory.getDefaultQueue();
+	    
 	    // Create Task and push it into Task Queue
 	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction);
+
 	    queue.addAsync(taskOptions);
 	}
+
+	// If count is more than 800, tasks are carried out but backends.
 	else
 	{
-	    System.out.println("initializing backends");
-	    
 	    // Initialize task here
 	    Queue queue = QueueFactory.getDefaultQueue();
-	    
+
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 	    // Create Task and push it into Task Queue
-	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction)
-		    .header("Host", url);
-	    
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction).header("Host", url);
+
 	    queue.add(taskOptions);
 	}
     }
@@ -244,19 +258,39 @@ public class TagsAPI
     @POST
     public void renameTag(Tag tag, @QueryParam("tag") String newTag, @Context HttpServletRequest request)
     {
+	TagManagementDeferredTask tagAction = new TagManagementDeferredTask(tag, new Tag(newTag), Action.RENAME);
+
+	// Fetches count of contacts which are related to that tag
 	int count = TagManagement.getAvailableContactsCount(tag.tag);
+
+	// If count is less than 100, task is carried out but frontend instance
 	if (count <= 100)
-	    TagManagement.renameTag(tag.tag, newTag);
-	
-	  Queue queue = QueueFactory.getQueue("contact-sync-queue");
+	    tagAction.run();
+
+	// If count is between 100 to 800, task is carried out by taskqueue.
+	else if (count > 100 && count < 800)
+	{
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction);
+
+	    queue.addAsync(taskOptions);
+	}
+
+	// If count is more than 800, tasks are carried out but backends.
+	else
+	{
+	    // Initialize task here
+	    Queue queue = QueueFactory.getDefaultQueue();
 
 	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 
 	    // Create Task and push it into Task Queue
-	//    TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/tags/bulk/delete").p
-	//	    .header("Host", url).method(Method.DELETE);
-	    
-	  //  queue.add(taskOptions);
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction).header("Host", url);
+
+	    queue.add(taskOptions);
+	}
     }
 
 }
