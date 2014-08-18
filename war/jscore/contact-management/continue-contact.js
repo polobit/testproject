@@ -421,7 +421,7 @@ function deserialize_contact(contact, template) {
     // Iterates through properties and ui clones
     $.each(contact.properties, function (index, element) {
 
-    	if(element.type == "CUSTOM")
+    	if(element.type == "CUSTOM" && element.name!="website")
     		return;
         // Removes first input field
         $($('#' + form.attr('id') + ' div.multiple-template.' + element.name).closest('div.controls.second')).remove();
@@ -467,8 +467,9 @@ function deserialize_contact(contact, template) {
  */
 function fill_multi_options(field_element, element) {
 	
-	if(element.type == "CUSTOM")
+	if(element.type == "CUSTOM" && element.name!="website")
 		return;
+		
 	// Fills address fields
 	if(element.name == 'address'){
 		var json = JSON.parse(element.value);
@@ -502,7 +503,7 @@ function fill_multi_options(field_element, element) {
 
 		$(html_element).find('input').val(element.value).attr('name', element.value);
 		$(html_element).find('select').val(element.subtype);
-    
+
 		html_element.appendTo(append_to);
 	}
 }
