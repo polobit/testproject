@@ -5,12 +5,7 @@ import com.agilecrm.contact.TagManagement;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
 public class TagManagementDeferredTask implements DeferredTask
-{
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    
+{    
     Tag primaryTag = null;
     Tag newTag = null;
     

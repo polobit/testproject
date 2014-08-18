@@ -97,6 +97,9 @@ public class TagManagement
 		builderObjects.add(contactDocuments.buildDocument(contact));
 	    }
 
+	    if(contacts.size() == 0)
+		break;
+	    
 	    Contact.dao.putAll(contacts);
 
 	    search.index.put(builderObjects.toArray(new Builder[contacts.size() - 1]));
@@ -144,11 +147,7 @@ public class TagManagement
 
     private static void replaceTags(String oldTag, String newTag)
     {
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("tagsWithTime.tag", oldTag);
-
-	ContactFilterResultFetcher iterator = new ContactFilterResultFetcher(searchMap, "-created_time", 50,
-		Integer.MAX_VALUE);
+	ContactFilterResultFetcher iterator = getfetcher(oldTag);
 
 	Tag oldTagObject = new Tag(oldTag);
 	Tag[] tags = { oldTagObject };
@@ -174,6 +173,9 @@ public class TagManagement
 
 		contacts.add(contact);
 	    }
+	    
+	    if(contacts.size() == 0)
+		break;
 
 	    Contact.dao.putAll(contacts);
 
