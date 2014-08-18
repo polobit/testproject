@@ -7,6 +7,10 @@
 - Added backward compatibilty to keyword search API call.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 65861d509e6a905451d31d610b6fe54958cccda2
 *** Naresh ***
 - Allowed email-ids having domain name upto 10 characters in Send Email node.
 
@@ -16,14 +20,26 @@
 *** Sukanya ***
 - Renamed "#google-apps" link to "#sync".
 
+<<<<<<< HEAD
 =======
 >>>>>>> 9e233cbef9875c347c775ba0cabb58f5bc2758a0
+=======
+>>>>>>> master
+>>>>>>> 65861d509e6a905451d31d610b6fe54958cccda2
 1-2 (11-August-2014)
 
 *** Yaswanth ***
 - Sync Framework for data sync integrations
 - Google contacts sync fix. Importing notes, websites
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+- Added condition which checks available count in reports before sending when user chose to send now option from dashboard. If there are not matching results error message is shown in UI
+- Optimized contact delete and owner change bulk operations
+
+
+=======
+>>>>>>> 65861d509e6a905451d31d610b6fe54958cccda2
 - Added condition which checks available count in reports before sending when user chose to send now option from dashboard. If there are no matching results error message is shown in UI
 - Optimized contact delete and owner change bulk operations
 
@@ -49,7 +65,11 @@
 - Implemented Shopify Apps for data sync.
 - Shopify data sync. Importing contacts,notes,payments,tags,orders and order events.
 - Stripe data sync. Importing contacts,payments with plan,charges,and refunds.
+<<<<<<< HEAD
 - Added condition which checks available count in reports before sending when user chose to send now option from dashboard. If there are not matching results error message is shown in UI
 - Optimized contact delete and owner change bulk operations
 
+=======
+>>>>>>> master
+>>>>>>> 65861d509e6a905451d31d610b6fe54958cccda2
 
