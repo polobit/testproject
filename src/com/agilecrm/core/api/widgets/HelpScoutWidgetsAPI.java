@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.social.HelpScoutUtil;
@@ -151,7 +152,7 @@ public class HelpScoutWidgetsAPI
     @Path("get/{widget-id}/customer/{customer-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getConversationsFromHelpScout(@PathParam("widget-id") Long widgetId,
+    public JSONObject getConversationsFromHelpScout(@PathParam("widget-id") Long widgetId,
 	    @PathParam("customer-id") int customerId)
     {
 	try

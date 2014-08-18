@@ -11,7 +11,9 @@ var TAG_MODEL_VIEW = Backbone.View.extend(
 					   "click .edit" : "edit", 
 					   "delete-checked .agile_delete" : "deleteItem",
 					   "keypress .edit-input" : "renameTag",
-					   "blur .edit-input"      : "updateTag"
+					   "blur .edit-input"      : "updateTag",
+					   "mouseover" : "showActionButtons",
+					   "mouseout" : "hideActionButtons"
 
 },
 /*
@@ -53,6 +55,16 @@ updateTag : function(e)
 	this.model.save();
 	this.model.set('tag', this.input.val());
 		
+},
+showActionButtons : function(e)
+{
+	e.preventDefault();
+	$('#actions', this.el).show();
+},
+hideActionButtons : function(e)
+{
+	e.preventDefault();
+	$('#actions', this.el).hide();
 },
 /*
  * On click on ".delete" model representing the view is deleted, and removed

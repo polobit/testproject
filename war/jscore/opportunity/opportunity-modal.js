@@ -120,9 +120,20 @@ $(function(){
 	 */
 	$('.deal-edit').live('click', function(e) {
 		e.preventDefault();
-        var data = $(this).closest('.data').attr('data');
-        var currentDeal = App_Deals.opportunityCollectionView.collection.get(data);
-		updateDeal(currentDeal);
+        var id = $(this).closest('.data').attr('data');
+        var milestone = ($(this).closest('ul').attr("milestone")).trim();
+        var currentDeal;
+        
+		// Checks and obtains the deal from milestone array
+		var milestone_array = App_Deals.opportunityMilestoneCollectionView.collection.models[0].get(milestone);
+		for(var i in milestone_array)
+		{
+			if(milestone_array[i].id == id)
+				currentDeal = milestone_array[i];
+		}
+		
+		if(currentDeal)
+        	updateDeal(currentDeal, true);
 	});
 
 	/**
@@ -176,9 +187,12 @@ $(function(){
 /**
  * Show deal popup for editing
  */ 
-function updateDeal(ele) {
+function updateDeal(ele, editFromMilestoneView)
+{
 	
-	var value = ele.toJSON();
+	// Checking Whether the edit is from milestone view,
+	// if it is we are passing JSON object so no need to convert
+	var value = (editFromMilestoneView ? ele : ele.toJSON());
 	
 	add_recent_view(new BaseModel(value));
 	
@@ -356,32 +370,35 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 			else if (Current_Route == 'deals') {
 
 				if(!readCookie("agile_deal_view")) {
+					
 					var modelJSON = App_Deals.opportunityMilestoneCollectionView.collection.models[0];
 					var newMilestone = json.milestone;
 					if (isUpdate)
 					{
-						var oldDealJSON = App_Deals.opportunityCollectionView.collection.get(json.id).toJSON();
-						var oldMilestone = oldDealJSON.milestone;
-						var milestone = modelJSON.get(oldMilestone);
-						for(var i in milestone)
+						for(var j in modelJSON.attributes)
 						{
-							if(milestone[i].id == json.id)
+							var milestone = modelJSON.attributes[j];
+							for(var i in milestone)
 							{
-								if(newMilestone != oldMilestone)
+								if(milestone[i].id == json.id)
 								{
-									milestone[i].owner_id = milestone[i].owner.id;
-									//milestone[i].milestone = newMilestone;
-									//modelJSON.get(newMilestone).push(milestone[i]);
-									modelJSON.get(newMilestone).push(deal);
-									milestone.splice(i, 1);
+									var oldDealJSON = milestone[i];
+									var oldMilestone = oldDealJSON.milestone;
+									if(newMilestone != oldMilestone)
+									{
+										milestone[i].owner_id = milestone[i].owner.id;
+										//milestone[i].milestone = newMilestone;
+										//modelJSON.get(newMilestone).push(milestone[i]);
+										modelJSON.get(newMilestone).push(deal);
+										milestone.splice(i, 1);
+									}
+									else 
+									{
+										deal.owner_id = milestone[i].owner.id;
+										milestone.splice(i, 1);
+										modelJSON.get(oldMilestone).push(deal);
+									}
 								}
-								else 
-								{
-									deal.owner_id = milestone[i].owner.id;
-									milestone.splice(i, 1);
-									modelJSON.get(oldMilestone).push(deal);
-								}
-								
 							}
 						}
 					}
@@ -390,11 +407,14 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 					
 					App_Deals.opportunityMilestoneCollectionView.render(true);
 				}
-				if (isUpdate)
-				 App_Deals.opportunityCollectionView.collection.remove(json);
-			
-				App_Deals.opportunityCollectionView.collection.add(data);
-				App_Deals.opportunityCollectionView.render(true);
+				else
+				{
+					if (isUpdate)
+						 App_Deals.opportunityCollectionView.collection.remove(json);
+					
+						App_Deals.opportunityCollectionView.collection.add(data);
+						App_Deals.opportunityCollectionView.render(true);
+				}
 
 			}
 			else {
