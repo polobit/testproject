@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,15 +13,27 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.RequestWrapper;
 
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
 import com.agilecrm.contact.TagManagement;
+import com.agilecrm.contact.deferred.TagManagementDeferredTask;
+import com.agilecrm.contact.deferred.TagManagementDeferredTask.Action;
+import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
+import com.google.appengine.api.backends.BackendService;
+import com.google.appengine.api.backends.BackendServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 /**
  * <code>TagsAPI</code> includes REST calls to interact with {@link Tag} class
@@ -134,7 +147,7 @@ public class TagsAPI
 	System.out.println("reload : " + reload);
 	return TagUtil.getStatus(reload);
     }
-    
+
     /**
      * Returns the statistics of tags and contacts (i.e no.of contacts
      * associated with each tag) as json object (tag name as key and no.of
@@ -191,22 +204,59 @@ public class TagsAPI
 	tags.add(tag);
 	TagUtil.deleteTags(tags);
     }
-    
+
     @Path("bulk/delete")
     @DELETE
-    public void bulkDeleteTat(@QueryParam("tag") String tag)
+    public void bulkDeleteTag(@QueryParam("tag") String tag)
     {
-	TagManagement.removeTag(tag);
+	TagManagementDeferredTask tagAction = new TagManagementDeferredTask(new Tag(tag), (Tag)null, Action.DELETE);
+	
+	int count = TagManagement.getAvailableContactsCount(tag);
+
+	if (count <= 10)
+	    TagManagement.removeTag(tag);
+	else if (count > 10 && count < 11)
+	{
+	    // Initialize task here
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction);
+	    queue.addAsync(taskOptions);
+	}
+	else
+	{
+	    System.out.println("initializing backends");
+	    
+	    // Initialize task here
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    
+	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction)
+		    .header("Host", url);
+	    
+	    queue.add(taskOptions);
+	}
     }
-    
+
     @Path("bulk/rename")
     @POST
-    public void renameTag(Tag tag, @QueryParam("tag") String newTag)
+    public void renameTag(Tag tag, @QueryParam("tag") String newTag, @Context HttpServletRequest request)
     {
-	TagManagement.renameTag(tag.tag, newTag);
+	int count = TagManagement.getAvailableContactsCount(tag.tag);
+	if (count <= 100)
+	    TagManagement.renameTag(tag.tag, newTag);
+	
+	  Queue queue = QueueFactory.getQueue("contact-sync-queue");
+
+	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+
+	    // Create Task and push it into Task Queue
+	//    TaskOptions taskOptions = TaskOptions.Builder.withUrl("/core/api/tags/bulk/delete").p
+	//	    .header("Host", url).method(Method.DELETE);
+	    
+	  //  queue.add(taskOptions);
     }
-    
-    
-    
 
 }
