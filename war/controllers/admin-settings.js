@@ -32,9 +32,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"email-stats" : "emailStats",
 
 	/* Web to Lead */
-	"integrations" : "integrations"
+	"integrations" : "integrations",
 	
-
+	"tags" : "tagManagement"
 	},
 	
 
@@ -334,5 +334,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(getTemplate("admin-settings-web-to-lead"), {});
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
+	},
+	
+	tagManagement : function()
+	{
+		
+		var tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: false});
+		tagsview1.appendItem = append_tag_management;
+		
+//		var tagsView = new Base_Model_View({ url : 'core/api/tags', template : 'admin-settings-tags-model', });
+		console.log(tagsview1);
+		tagsview1.collection.fetch();
+		$("#content").html(tagsview1.render().el);
 	}
 	});
