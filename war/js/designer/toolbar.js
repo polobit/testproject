@@ -191,7 +191,7 @@ function addDraggingCapability() {
 
             // Get jsonDefinition and add it      	
             var jsonDefinition = $(ui.draggable).data("json");
-            if($('#paintarea >div.contextMenuForNode').length>26){
+            if($('#paintarea >div.contextMenuForNode').length>25){
         		
           	     window.parent.$("#workflow-edit-msg").hide();
           		 window.parent.$("#nodes-limit-reached").show();
