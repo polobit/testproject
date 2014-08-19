@@ -1,9 +1,7 @@
 package com.campaignio.tasklets.util;
 
-import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -73,7 +71,7 @@ public class TaskletUtil
 	 * Keeps track of nodes in a workflow. It maps each workflow with number of
 	 * nodes which have been already processed.
 	 */
-	public static HashMap<String, Integer> hopsTracker = new HashMap<String, Integer>();
+	public static final String HOPS_COUNT = "hop_count";
 
 	/**
 	 * Executes Tasklet.
@@ -95,25 +93,18 @@ public class TaskletUtil
 			JSONObject currentNodeJSON, String branch) throws Exception
 	{
 
-		// get workflow ID
-		CAMPAIGN_WORKFLOW_ID = AgileTaskletUtil.getId(campaignJSON);
-		if (StringUtils.isEmpty(CAMPAIGN_WORKFLOW_ID))
-			return;
-
-		// Initialize a workflow if it is beginning
-		if (hopsTracker.get(CAMPAIGN_WORKFLOW_ID) == null)
-			hopsTracker.put(CAMPAIGN_WORKFLOW_ID, 1);
-
 		// reached maximum limit
-		if (hopsTracker.get(CAMPAIGN_WORKFLOW_ID) > 101)
-		{
-			hopsTracker.remove(CAMPAIGN_WORKFLOW_ID);
+		if (data != null && data.has(HOPS_COUNT))
+			if ((int) data.get(HOPS_COUNT) > 101)
+			{
 
-			LogUtil.addLogToSQL(CAMPAIGN_WORKFLOW_ID, AgileTaskletUtil.getId(subscriberJSON),
-					"Campaign Stoped. Subscriber removed from campaign after reaching maximum limit of 100 actions",
-					LogType.MAX_CAMPAIGN.toString());
-			return;
-		}
+				LogUtil.addLogToSQL(
+						AgileTaskletUtil.getId(campaignJSON),
+						AgileTaskletUtil.getId(subscriberJSON),
+						"Campaign Stoped. Subscriber removed from campaign after reaching maximum limit of 100 actions",
+						LogType.MAX_CAMPAIGN.toString());
+				return;
+			}
 
 		if (data == null)
 			data = new JSONObject();
@@ -125,6 +116,10 @@ public class TaskletUtil
 		{
 			nextNode = START_NODE_ID;
 			data = new JSONObject();
+
+			// initialize count
+			data.put(HOPS_COUNT, 0);
+
 		}
 		else
 		{
@@ -139,13 +134,12 @@ public class TaskletUtil
 			if (nextNode == null || nextNode.equalsIgnoreCase(HANGUP_NODE_ID))
 			{
 				System.out.println("Job Complete");
-				hopsTracker.remove(CAMPAIGN_WORKFLOW_ID);
 
 				// Records end-time of campaign and change status to
 				// campaignId-DONE.
 				CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON),
 						AgileTaskletUtil.getId(campaignJSON), Status.DONE);
-
+				data.remove(HOPS_COUNT);
 				return;
 			}
 		}
@@ -162,7 +156,7 @@ public class TaskletUtil
 		if (tasklet != null)
 		{
 			// increment the current node count
-			hopsTracker.put(CAMPAIGN_WORKFLOW_ID, hopsTracker.get(CAMPAIGN_WORKFLOW_ID) + 1);
+			data.put(HOPS_COUNT, (int) data.get(HOPS_COUNT) + 1);
 
 			tasklet.run(campaignJSON, subscriberJSON, data, nodeJSON);
 		}
@@ -264,6 +258,7 @@ public class TaskletUtil
 	public static JSONObject getNodeJSON(JSONObject campaignJSON, String nodeId) throws Exception
 	{
 		// Get Workflow Json
+
 		if (!campaignJSON.has(CAMPAIGN_WORKFLOW_JSON))
 			return null;
 
