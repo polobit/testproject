@@ -538,6 +538,7 @@ public class AgileTaskletUtil
 	if (givenOwnerId.equals("contact_owner"))
 	    return contactOwnerId;
 
+	// If given owner is All, e.g. Notify node
 	if (givenOwnerId.equals("any_owner"))
 	    return null;
 
