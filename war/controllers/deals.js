@@ -93,30 +93,33 @@ var DealsRouter = Backbone.Router.extend({
 			// Shows deals as milestone list view
 			$('#content').html(this.opportunityMilestoneCollectionView.render().el);
 		}
-		// Fetches deals as list
-		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',// cursor : true, page_size : 25,
-			postRenderCallback : function(el)
-			{
-				appendCustomfields(el);
-				// Showing time ago plugin for close date
-				includeTimeAgo(el);
-				// Shows Milestones Pie
-				pieMilestones();
+		else
+		{
+			// Fetches deals as list
+			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr', cursor : true, page_size : 25,
+				postRenderCallback : function(el)
+				{
+					appendCustomfields(el);
+					// Showing time ago plugin for close date
+					includeTimeAgo(el);
+					// Shows Milestones Pie
+					pieMilestones();
 
-				// Shows deals chart
-				dealsLineChart();
-			},
-			appendItemCallback : function(el)
-			{ 
-				// To show timeago for models appended by infini scroll
-				includeTimeAgo(el);
-			}
-			});
-		this.opportunityCollectionView.collection.fetch();
+					// Shows deals chart
+					dealsLineChart();
+				},
+				appendItemCallback : function(el)
+				{ 
+					appendCustomfields(el);
+					
+					// To show timeago for models appended by infini scroll
+					includeTimeAgo(el);
+				}
+				});
+			this.opportunityCollectionView.collection.fetch();
 
-		// Shows deals as list view
-		if (readCookie("agile_deal_view"))
 			$('#content').html(this.opportunityCollectionView.render().el);
+		}
 		
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
@@ -145,7 +148,7 @@ function appendCustomfields(el){
 				 var row = '';
 				 $.each(customfields, function(i,customfield){
 						console.log(customfield);
-						 row += '<td><div style="width:6em;overflow:visible;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
+						 row += '<td><div style="width:6em;text-overflow:ellipsis;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
 					});
 				 $(this).append(row);
 			 });

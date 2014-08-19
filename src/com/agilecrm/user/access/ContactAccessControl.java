@@ -81,7 +81,6 @@ public class ContactAccessControl extends UserAccessControl
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
 	return hasScope(UserAccessScopes.VIEW_CONTACTS) || hasScope(UserAccessScopes.EXPORT_CONTACTS);
-
     }
 
     /**

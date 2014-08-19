@@ -31,7 +31,7 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
+	        "This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
 	private String message;
 
 	ErrorMessages(String message)
@@ -134,7 +134,12 @@ public class BillingRestrictionUtil
 	UserInfo info = SessionManager.get();
 
 	if (info == null)
+	{
+	    System.out.println("UserInfo is null...");
 	    return BillingRestriction.getInstance(null, null);
+	}
+
+	System.out.println("Plan in UserInfo is " + info.getPlan() + " and users count is " + info.getUsersCount());
 
 	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
     }
@@ -170,6 +175,9 @@ public class BillingRestrictionUtil
 	// If plan is null then it is considered free plan.
 	plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
 
+	// Namespace and subscription
+	System.err.println("" + NamespaceManager.get() + " domain is having plan - " + plan);
+
 	// Gets user info and sets plan and sets back in session
 	UserInfo info = SessionManager.get();
 	if (info == null)
@@ -195,6 +203,33 @@ public class BillingRestrictionUtil
 
 	info.setPlan(plan.plan_type.toString());
 	info.setUsersCount(plan.quantity);
+    }
+
+    /**
+     * Sets plan in user info
+     * 
+     * @param info
+     */
+    public static void setPlan(UserInfo info, String domain)
+    {
+	if (StringUtils.isEmpty(domain))
+	    return;
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set(domain);
+	try
+	{
+	    Subscription subscription = Subscription.getSubscription();
+
+	    Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
+
+	    info.setPlan(plan.plan_type.toString());
+	    info.setUsersCount(plan.quantity);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**

@@ -13,6 +13,7 @@
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#" class="deals-list-view">List</a></li>
 						<li><a href="#" class="deals-pipelined-view">Milestone</a></li>
+						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 					</ul>
 			</div>
         </div>
@@ -26,7 +27,7 @@
         <div id="total-pipeline-chart" style="width:100%; height:300px"></div>
         <br /><br />
         <div class="data-block">
-            <div class="data-container" style="overflow-x:scroll;">
+            <div class="data-container" style="overflow-x:auto;">
                 <table class="table table-striped showCheckboxes agile-ellipsis-dynamic" url="core/api/opportunity/bulk" id="deal-list" style="table-layout:auto;">
                     <col width="30px"><col width="20%"><col width="27%"><col width="14%"><col width="13%"><col width="15%"><col width="10%">
 					<thead>
@@ -79,7 +80,9 @@
 
 <script id="opportunities-model-template" type="text/html">
 <td data="{{id}}" class="data">
+	<div style="width:10em;text-overflow:ellipsis;">
 	<b style="height:auto;display:inline-block;">{{name}}</b>
+	</div>
 </td>
 <td>
 	<div style="max-height:50px!important;">

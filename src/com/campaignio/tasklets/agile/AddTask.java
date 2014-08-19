@@ -132,17 +132,8 @@ public class AddTask extends TaskletAdapter
 	    // Contact ownerId.
 	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
-	    if (contactOwnerId == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-		return;
-	    }
-
 	    // Adds task
-	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId.toString());
+	    addTask(subject, category, priority, epochTime, contactId, givenOwnerId, contactOwnerId);
 	}
 	catch (Exception e)
 	{
@@ -152,8 +143,8 @@ public class AddTask extends TaskletAdapter
 
 	// Creates log for AddTask
 	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Task: "
-		+ subject + "<br/> Category: " + category + "<br/> Type: " + priority + " <br/> Date: "
-		+ new Date(epochTime * 1000), LogType.ADD_TASK.toString());
+	        + subject + "<br/> Category: " + category + "<br/> Type: " + priority + " <br/> Date: "
+	        + new Date(epochTime * 1000), LogType.ADD_TASK.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -178,7 +169,7 @@ public class AddTask extends TaskletAdapter
      *            - Contact owner-id.
      */
     private void addTask(String subject, String category, String priority, Long dueDateInEpoch, String contactId,
-	    String givenOwnerId, String contactOwnerId)
+	    String givenOwnerId, Long contactOwnerId)
     {
 	Task task = new Task(Type.valueOf(category), dueDateInEpoch);
 
@@ -192,7 +183,7 @@ public class AddTask extends TaskletAdapter
 
 	// If contact_owner, then owner is contact owner
 	if (givenOwnerId.equals("contact_owner"))
-	    task.owner_id = contactOwnerId;
+	    task.owner_id = contactOwnerId == null ? null : contactOwnerId.toString();
 	else
 	    task.owner_id = givenOwnerId;
 

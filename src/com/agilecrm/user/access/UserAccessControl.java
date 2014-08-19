@@ -66,7 +66,9 @@ public abstract class UserAccessControl
     // Checks if given scope exists for current user.
     public boolean hasScope(UserAccessScopes scope)
     {
-	return getCurrentUserScopes().contains(scope);
+	HashSet<UserAccessScopes> scopes = getCurrentUserScopes();
+	
+	return scopes.contains(scope);
     }
 
     public static UserAccessControl getAccessControl(String className, Object entityObject)

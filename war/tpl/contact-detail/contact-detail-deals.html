@@ -64,6 +64,10 @@
 			<time class="deal-created-time" datetime="{{epochToHumanDate "" created_time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created_time}}</time>
 		</small>
 		<span class="actions pull-right">
+			{{#if notes}}
+             <a title="Notes" data="{{id}}" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit-contact-tab" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
+              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+			{{/if}}
 			 <a title="Edit"  data="{{id}}" href="#" class="deal-edit-contact-tab" style="cursor:pointer;text-decoration: none;padding-right:10px"> <i class="icon-pencil"></i> </a>
              <a title="Delete" style="cursor:pointer;text-decoration: none"><span class="activity-delete icon-trash" style="display:inline" id="{{id}}" url="core/api/opportunity/bulk"></span></a>
         </span>

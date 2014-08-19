@@ -38,7 +38,8 @@ public class AddNote extends TaskletAdapter
      * @see com.campaignio.tasklets.TaskletAdapter#run(org.json.JSONObject,
      * org.json.JSONObject, org.json.JSONObject, org.json.JSONObject)
      */
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// Get Subject and Description
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
@@ -52,17 +53,8 @@ public class AddNote extends TaskletAdapter
 	    // Get Contact Owner Id.
 	    Long ownerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
-	    if (ownerId == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-		return;
-	    }
-
 	    // Add note
-	    addNote(subject, description, contactId, AgileTaskletUtil.getAgileUserKey(ownerId));
+	    addNote(subject, description, contactId, ownerId == null ? null : AgileTaskletUtil.getAgileUserKey(ownerId));
 	}
 	catch (Exception e)
 	{
@@ -71,8 +63,8 @@ public class AddNote extends TaskletAdapter
 	}
 
 	// Creates log for note
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subject: " + subject + "<br>Description: "
-		+ description, LogType.ADD_NOTE.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Subject: "
+	        + subject + "<br>Description: " + description, LogType.ADD_NOTE.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);

@@ -98,6 +98,11 @@ public class NamespaceFilter implements Filter
 	    redirectToChooseDomain(request, response);
 	    return false;
 	}
+	
+
+	// If request is from register and domain is "my", request is forwarded to register jsp without setting domain
+	if(((HttpServletRequest) request).getRequestURI().contains("/register") && "my".equals(subdomain))
+	    return true;
 
 	// If my or any special domain - support etc, choose subdomain
 	if (Arrays.asList(Globals.LOGIN_DOMAINS).contains(subdomain))
@@ -193,7 +198,7 @@ public class NamespaceFilter implements Filter
 	// namespace verification i.e., no filter on url which starts with
 	// "/backend" (crons, StripeWebhooks etc..)
 	String path = ((HttpServletRequest) request).getRequestURI();
-	if (path.startsWith("/backend") || path.startsWith("/register"))
+	if (path.startsWith("/backend"))
 	{
 	    chain.doFilter(request, response);
 	    return;
