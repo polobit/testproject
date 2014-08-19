@@ -38,6 +38,7 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -70,7 +71,6 @@ public class CSVUtil
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 	        Contact.class.getSimpleName(), this.billingRestriction);
-	
     }
 
     public static enum ImportStatus
@@ -285,7 +285,8 @@ public class CSVUtil
 		// Checks if user can update the contact
 
 		// Sets current object to check scope
-		
+		 accessControl.setObject(tempContact);
+		 
 		if (accessControl.canCreate())
 		{
 		    
@@ -307,7 +308,6 @@ public class CSVUtil
 
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
-
 		++billingRestriction.contacts_count;
 		try
 		{
@@ -318,7 +318,6 @@ public class CSVUtil
 		    {
 			limitCrossed = true;
 		    }
-
 		}
 		catch (PlanRestrictedException e)
 		{

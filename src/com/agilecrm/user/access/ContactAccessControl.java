@@ -47,7 +47,6 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canCreate()
     {
-	System.out.println(!isNewContact() && !checkOwner());
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
 	if (!isNewContact() && !checkOwner())
