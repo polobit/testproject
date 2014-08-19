@@ -193,7 +193,8 @@ public class Case extends Cursor
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileUser = AgileUser.getCurrentAgileUserFromDomainUser(owner_key.getId());
+	    if (owner_key != null)
+		agileUser = AgileUser.getCurrentAgileUserFromDomainUser(owner_key.getId());
 
 	    if (agileUser != null)
 		userPrefs = UserPrefsUtil.getUserPrefs(agileUser);

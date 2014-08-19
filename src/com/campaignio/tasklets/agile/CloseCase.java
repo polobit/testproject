@@ -25,7 +25,8 @@ public class CloseCase extends TaskletAdapter
      */
     public static String OWNER_ID = "owner_id";
 
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
 
@@ -35,15 +36,6 @@ public class CloseCase extends TaskletAdapter
 
 	    // Get Contact Owner Id.
 	    Long contactOwnerId = ContactUtil.getContactOwnerId(contactId);
-
-	    if (contactOwnerId == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-		return;
-	    }
 
 	    // Close Case
 	    closeCase(contactId, AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
