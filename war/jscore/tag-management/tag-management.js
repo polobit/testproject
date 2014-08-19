@@ -42,7 +42,11 @@ updateTag : function(e)
 			$("#editing", this.el).hide();
 			return;
 		}
-	var r = confirm("Press a button!");
+	
+	var newTag = this.input.val();
+	var oldTag = this.model.get('tag');
+	
+	var r = confirm("You are about to rename tag \"" + oldTag +"\" to \""+ newTag +"\"");
 	if(r == false)
 	{
 		$("#tag-solid-state", this.el).show();
@@ -51,9 +55,14 @@ updateTag : function(e)
 		
 	}
 	
-	this.model.url = 'core/api/tags/bulk/rename?tag=' + this.input.val()
-	this.model.save();
-	this.model.set('tag', this.input.val());
+	this.model.url = 'core/api/tags/bulk/rename?tag=' + newTag;
+	
+	this.model.save([], {success: function(data)
+		{
+			showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ data.get('tag') +"\"", "top", 5000);
+		}
+	});
+	this.model.set('tag', this.input.val().trim());
 		
 },
 showActionButtons : function(e)
@@ -73,6 +82,12 @@ hideActionButtons : function(e)
 deleteItem : function(e)
 {
 	e.preventDefault();
+	var r = confirm("You are about to delete \""+ this.model.get('tag') + "\" tag");
+	if(r == false)
+	{
+		return;
+	}
+	
 	this.model.url = "core/api/tags/bulk/delete?tag=" + this.model.get("tag");
 	this.model.set({"id" : this.model.get('tag')})
 	this.model.destroy();
@@ -94,10 +109,6 @@ deleteItem : function(e)
 	return this;
 } });
 
-function tagManagementDeleteTag(e)
-{
-	alert("delete 12");
-}
 
 function append_tag_management(base_model) {
 	
@@ -109,9 +120,10 @@ function append_tag_management(base_model) {
 	});
 	
 	console.log(itemView);
-	itemView.deleteItem = tagManagementDeleteTag;
 	
+	var key = base_model.get('tag').charAt(0).toUpperCase();
+	console.log($('div[tag-alphabet="'+encodeURI(key)+'"]', this.el))
+                    
+	$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append(itemView.render().el);
 	
-	
-	$(this.model_list_element).append(itemView.render().el);
 }

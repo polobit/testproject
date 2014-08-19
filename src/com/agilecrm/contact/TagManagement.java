@@ -97,19 +97,19 @@ public class TagManagement
 		builderObjects.add(contactDocuments.buildDocument(contact));
 	    }
 
-	    if(contacts.size() == 0)
+	    if (contacts.size() == 0)
 		break;
-	    
+
 	    Contact.dao.putAll(contacts);
 
 	    search.index.put(builderObjects.toArray(new Builder[contacts.size() - 1]));
 
 	    contacts.clear();
 	}
-	
+
 	TagUtil.deleteTag(tag);
     }
-    
+
     private static ContactFilterResultFetcher getfetcher(String tag)
     {
 	Map<String, Object> searchMap = new HashMap<String, Object>();
@@ -117,33 +117,30 @@ public class TagManagement
 
 	ContactFilterResultFetcher iterator = new ContactFilterResultFetcher(searchMap, "-created_time", 50,
 		Integer.MAX_VALUE);
-	
+
 	return iterator;
     }
-    
+
     private static int getAvailableContacts(ContactFilterResultFetcher fetcher)
     {
 	return fetcher.getAvailableContacts();
     }
-    
+
     public static int getAvailableContactsCount(String tag)
     {
 	return getAvailableContacts(getfetcher(tag));
     }
-    
-    
+
     private static void deleteTag(String tag)
     {
 	Tag tagObject = new Tag(tag);
 	deleteTag(tagObject);
     }
-    
+
     private static void deleteTag(Tag tag)
     {
 	TagUtil.dao.delete(tag);
     }
-    
-    
 
     private static void replaceTags(String oldTag, String newTag)
     {
@@ -152,17 +149,22 @@ public class TagManagement
 	Tag oldTagObject = new Tag(oldTag);
 	Tag[] tags = { oldTagObject };
 	Tag newTagObject = new Tag(newTag);
-	
+
 	deleteTag(oldTag);
-	
+
 	Set<String> newTagsSet = new HashSet<String>();
 	newTagsSet.add(newTag);
 	TagUtil.updateTags(newTagsSet);
 
 	List<Contact> contacts = new ArrayList<Contact>();
 
+	AppengineSearch<Contact> search = new AppengineSearch<Contact>(Contact.class);
+
 	while (iterator.hasNextSet())
 	{
+	    ContactDocument contactDocuments = new ContactDocument();
+	    List<Builder> builderObjects = new ArrayList<Builder>();
+
 	    for (Contact contact : iterator.nextSet())
 	    {
 		// Removed tag from contact
@@ -172,16 +174,20 @@ public class TagManagement
 		contact.addTag(newTagObject);
 
 		contacts.add(contact);
+
+		builderObjects.add(contactDocuments.buildDocument(contact));
 	    }
-	    
-	    if(contacts.size() == 0)
+
+	    if (contacts.size() == 0)
 		break;
 
 	    Contact.dao.putAll(contacts);
+	    
+	    search.index.put(builderObjects.toArray(new Builder[contacts.size() - 1]));
 
 	    contacts.clear();
 	}
-	
+
 	TagUtil.deleteTag(oldTag);
     }
 

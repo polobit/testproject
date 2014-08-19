@@ -8,13 +8,11 @@
 <script id="tag-management-collection-template" type="text/html">
 <div class="row">
 	<div class='span8 well'>
-    	<form id="milestonesForm" class="form-horizontal">
-    		{{#if id}}
-    			<input type="text" name="id" class="hide" value={{id}}>
-    		{{/if}} 		
+
     		<legend>Tag</legend>
 			<fieldset>
-    		<div class="control-group">  	 
+    		<div class="control-group">  
+{{tagManagementCollectionSetup this}}	 
                     <div id="milestone-values" class="milestone-ul-list" style="max-width:180px;">
 						<ul class='milestone-value-list tagsinput' id="tag-management-model-list" style='padding:1px;list-style:none;'><ul>
                     </div>
@@ -26,7 +24,6 @@
     				<input name="milestones" type="text" class="required hide"/>
     		</div> 
     		<fieldset>
-    	</form>
     </div>
 </div>
 </script>
