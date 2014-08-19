@@ -37,6 +37,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -287,6 +288,13 @@ public class CSVUtil
 		// Sets current object to check scope
 		 accessControl.setObject(tempContact);
 		 
+		if(accessControl.hasScope(UserAccessScopes.DELETE_CONTACTS) || accessControl.hasScope(UserAccessScopes.UPDATE_CONTACT))
+		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		else
+		{
+		    ++accessDeniedToUpdate;
+		    continue;
+		}
 		if (accessControl.canCreate())
 		{
 		    
@@ -294,7 +302,7 @@ public class CSVUtil
 		    continue;
 		}
 
-		tempContact = ContactUtil.mergeContactFields(tempContact);
+		
 		isMerged = true;
 	    }
 	    else

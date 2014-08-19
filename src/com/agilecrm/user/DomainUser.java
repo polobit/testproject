@@ -594,9 +594,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    
 	    if (id == null)
 	    {
-
 		scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
-
 	    }
 	    else
 	    {

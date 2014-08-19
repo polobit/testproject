@@ -66,7 +66,7 @@ public class ContactAccessControl extends UserAccessControl
 	// contact
 	if (!isNewContact() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
 	}
 
 	return true;
