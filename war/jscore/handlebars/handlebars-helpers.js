@@ -2655,6 +2655,7 @@ $(function()
     	return options.inverse(this);	
     })
     
+    
     Handlebars.registerHelper('fetchXeroUser', function(data)
     {
     	    			return JSON.parse(data).xeroemail;

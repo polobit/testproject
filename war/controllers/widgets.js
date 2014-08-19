@@ -710,6 +710,12 @@ var WidgetsRouter = Backbone.Router
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
 				// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+				
+				if(!canImportContacts())
+				{
+					showContactsImportAccessDeniedMessage("#prefs-tabs-content");
+					return;
+				}
 
 				this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 
@@ -735,6 +741,10 @@ var WidgetsRouter = Backbone.Router
 				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings',
 					template : 'admin-settings-import-shopify-contact-syncPrefs' });
 				$('#shopify').append(this.shopify_sync.render().el);
+
+				/*salesforce import template*/
+				//this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				//$('#force').append(this.salesforce.render().el);
 
 				/* salesforce import template */
 				// this.salesforce = new

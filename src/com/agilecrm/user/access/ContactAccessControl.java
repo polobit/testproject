@@ -47,13 +47,10 @@ public class ContactAccessControl extends UserAccessControl
 
     public boolean canCreate()
     {
-	System.out.println("-----------------------------------checking ----------------");
-	System.out.println(!isNewContact() && !checkOwner());
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
 	if (!isNewContact() && !checkOwner())
 	{
-	    System.out.println("************** updating ********************");
 	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
 	}
 
@@ -69,7 +66,7 @@ public class ContactAccessControl extends UserAccessControl
 	// contact
 	if (!isNewContact() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
 	}
 
 	return true;
@@ -81,9 +78,8 @@ public class ContactAccessControl extends UserAccessControl
     public boolean canRead()
     {
 	// If contact is defined it checks for update operation if owner in the
-	// contact and current owner is different 
+	// contact and current owner is different
 	return hasScope(UserAccessScopes.VIEW_CONTACTS) || hasScope(UserAccessScopes.EXPORT_CONTACTS);
-
     }
 
     /**
@@ -107,6 +103,7 @@ public class ContactAccessControl extends UserAccessControl
 
 	return false;
     }
+    
 
     /**
      * Checks if contact is new
