@@ -11,15 +11,7 @@
     			<a class="btn btn-danger delete"  id="google-import-prefs-delete" >Disable</a>
 				<a href="#sync/contacts" class="btn" id="setting-widget">Settings</a>
     		{{else}}
-{{#hasScope "IMPORT_CONTACTS"}}
-	<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
-{{else}}
-	<div style="display:inline-block;margin-left: 72px;" disabled>Enable</div>
-	<span style="margin-left:5px"><i>Access denied</i></span>
-{{/hasScope}}
-
-{{/if}}
-
+    			<div class="btn" id="google-import" style="display:inline-block;">Enable</div>
     		{{/if}}
 	</div>
 </div>
@@ -151,13 +143,7 @@
 {{#if inProgress}}
 			<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px" disabled>Syncing</div>
 	{{else}}
-{{#hasScope}}
-	<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
-	{{else}}
-	<div class="btn btn-primary"  style="display:inline-block;margin-left:-60px" disabled>Sync</div>
-	<span style="margin-left:5px"><i>Access denied</i></span>
-{{/hasScope}}
-
+<div class="btn btn-primary save-contact-prefs" id="google-import-prefs-save" style="display:inline-block;margin-left:-60px">Sync</div>
 {{/if}}		
 <a href="#sync" class="btn ml_5" style="text-decoration:none;">Cancel</a>
 	 </div>
@@ -220,13 +206,7 @@
        
     </form>
 {{else}}
-{{#hasScope "IMPORT_CONTACTS"}}
-	<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
-{{else}}
-	<div style="display:inline-block;margin-left: 72px;" disabled>Enable</div>
-	<span style="margin-left:5px"><i>Access denied</i></span>
-{{/hasScope}}
-
+<div class="btn" id="stripe_import" style="display:inline-block;margin-left: 72px;">Enable</div>
 {{/if}}
 
 </div>
@@ -451,9 +431,4 @@
 
 
 </script>
-
-
-
-
-
 
