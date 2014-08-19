@@ -161,7 +161,7 @@ public class TagsAPI
     public List<Tag> getTagsStats1(@QueryParam("reload") boolean reload)
     {
 	System.out.println("reload : " + reload);
-	return TagUtil.getStats(50, null);
+	return TagUtil.getTags(true);
     }
 
     /**
