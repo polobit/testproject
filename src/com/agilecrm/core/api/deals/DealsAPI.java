@@ -24,7 +24,10 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.export.util.DealExportBlobUtil;
+import com.agilecrm.export.util.DealExportEmailUtil;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 
 /**
@@ -328,6 +331,28 @@ public class DealsAPI
 
 	opportunity.save();
 	return opportunity;
+    }
+
+    /**
+     * Export list of opportunities. Create a CSV file with list of deals and
+     * add it as a attachment and send the email.
+     */
+    @Path("/export")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void exportOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    {
+	List<Opportunity> deals = OpportunityUtil.getOpportunities();
+	String path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
+	// Close channel after contacts completed
+	DealExportBlobUtil.editExistingBlobFile(path, null, true);
+	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
+	if (count == null)
+	    count = String.valueOf(deals.size());
+	// Send every partition as separate email
+	for (String partition : fileData)
+	    DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getCurrentDomainUser(), partition,
+		    String.valueOf(count));
     }
 
 }

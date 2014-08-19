@@ -28,6 +28,7 @@ import org.scribe.model.Verb;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.TimeZoneUtil;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
 import com.agilecrm.contact.sync.wrapper.impl.ShopifyContactWrapperImpl;
@@ -116,6 +117,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    }
 	    catch (Exception e)
 	    {
+		updateLastSyncedInPrefs();
 		e.printStackTrace();
 	    }
 
@@ -160,10 +162,13 @@ public class ShopifySyncImpl extends OneWaySyncService
 	    if (shopObject != null)
 	    {
 		JSONObject object = shopObject.getJSONObject("shop");
-		Object timezone = object.get("timezone").toString().subSequence(1, 10);
-		df.setTimeZone(TimeZone.getTimeZone(timezone.toString()));
-		String date = df.format(new Date());
-		prefs.lastSyncCheckPoint = date;
+		String createdTime = (String) object.get("created_at");
+		TimeZone tz = TimeZoneUtil.getTimeZone(createdTime);
+		SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+		df.setTimeZone(tz);
+		String currentDate = df.format(new Date());
+		System.out.println("iso formate current date " + currentDate);
+		prefs.lastSyncCheckPoint = currentDate;
 		prefs.save();
 
 	    }
@@ -172,6 +177,10 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 	catch (Exception e)
 	{
+	    
+	    // retries when any problem happence
+	    
+	    updateLastSyncedInPrefs();
 	    e.printStackTrace();
 	}
 
@@ -439,29 +448,32 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 			Note n = notes.get(note.subject);
 			StringBuilder sb = new StringBuilder(n.description);
-			sb.append("\n").append(itemDetails.get("name")+" : ").append(itemDetails.get("price") +"(").append( order.get("currency") +")");
-			if(taxDetails.size() > 0){
-			    sb.append("Tax : "+taxDetails.get(0).get("price") +"("+order.get("currency") +")");
+			sb.append("\n").append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
+				.append(order.get("currency") + ")");
+			if (taxDetails.size() > 0)
+			{
+			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
 			}
-			sb.append("\n Total Price : "+order.get("total_price") +"("+order.get("currency")+")");
+			sb.append("\n Total Price : " + order.get("total_price") + "(" + order.get("currency") + ")");
 			n.description = sb.toString();
-			
 
 		    }
 		    else
 		    {
 			StringBuilder sb = new StringBuilder();
-			sb.append(itemDetails.get("name")+" : ").append(itemDetails.get("price") +"(").append( order.get("currency") +")");
-			if(taxDetails.size() > 0){
-			    sb.append("Tax : "+taxDetails.get(0).get("price") +"("+order.get("currency") +")");
+			sb.append(itemDetails.get("name") + " : ").append(itemDetails.get("price") + "(")
+				.append(order.get("currency") + ")");
+			if (taxDetails.size() > 0)
+			{
+			    sb.append("Tax : " + taxDetails.get(0).get("price") + "(" + order.get("currency") + ")");
 			}
 			note.description = sb.toString();
 
 		    }
 		    if (listItems.size() == 1)
 		    {
-			note.description += "\n Total Price : " + order.get("total_price") + "(" + order.get("currency")+")"
-				+ "";
+			note.description += "\n Total Price : " + order.get("total_price") + "("
+				+ order.get("currency") + ")" + "";
 		    }
 
 		    note.addRelatedContacts(contact.id.toString());
@@ -513,22 +525,30 @@ public class ShopifySyncImpl extends OneWaySyncService
 	Map<String, Note> noteMap = new HashMap<String, Note>();
 	try
 	{
+	    List<Note> existing = new ArrayList<Note>();
 
 	    if (noteObject != null)
 	    {
 		String noteString = noteObject.toString();
 		if (!noteString.isEmpty())
 		{
-		    List<Note> notes = NoteUtil.getNotes(contact.id);
-		    for (Note note : notes)
-		    {
-			noteMap.put(note.subject, note);
-		    }
+		    // new note
 
 		    Note n = new Note("Customer Note", noteString);
 		    n.addRelatedContacts(contact.id.toString());
-		    n.save();
-		    noteMap.put(n.subject, n);
+		    noteMap.put("Customer Note", n);
+
+		    // checking existing customer note
+
+		    List<Note> notes = NoteUtil.getNotes(contact.id);
+		    for (Note note : notes)
+		    {
+			if (note.subject.equalsIgnoreCase("Customer Note"))
+			{
+			    existing.add(note);
+
+			}
+		    }
 
 		}
 
@@ -536,6 +556,7 @@ public class ShopifySyncImpl extends OneWaySyncService
 
 	    for (Entry<String, Note> e : noteMap.entrySet())
 	    {
+		NoteUtil.deleteBulkNotes(existing);
 		Note n = e.getValue();
 		n.save();
 	    }

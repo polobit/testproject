@@ -57,7 +57,7 @@ function loadMiscScripts()
 
 /**
  * Clickdesk Widget
- */
+ *//*
 function load_clickdesk_code()
 {
 	return;
@@ -73,7 +73,7 @@ function load_clickdesk_code()
 		CLICKDESK_CODE_LOADED = true;
 	})
 
-}
+}*/
 
 
 

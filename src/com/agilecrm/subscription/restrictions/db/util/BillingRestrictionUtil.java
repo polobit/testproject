@@ -17,7 +17,6 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
-import com.google.inject.name.Names;
 
 @XmlRootElement
 public class BillingRestrictionUtil
@@ -135,7 +134,12 @@ public class BillingRestrictionUtil
 	UserInfo info = SessionManager.get();
 
 	if (info == null)
+	{
+	    System.out.println("UserInfo is null...");
 	    return BillingRestriction.getInstance(null, null);
+	}
+
+	System.out.println("Plan in UserInfo is " + info.getPlan() + " and users count is " + info.getUsersCount());
 
 	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
     }
@@ -168,11 +172,11 @@ public class BillingRestrictionUtil
 	// Fetches account subscription
 	Subscription subscription = Subscription.getSubscription();
 
-	// Namespace and subscription
-	System.err.println("" + NamespaceManager.get() + " domain is having subscription - " + subscription);
-
 	// If plan is null then it is considered free plan.
 	plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
+
+	// Namespace and subscription
+	System.err.println("" + NamespaceManager.get() + " domain is having plan - " + plan);
 
 	// Gets user info and sets plan and sets back in session
 	UserInfo info = SessionManager.get();
