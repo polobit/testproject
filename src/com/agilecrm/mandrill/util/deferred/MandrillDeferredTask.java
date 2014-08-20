@@ -12,6 +12,7 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 @SuppressWarnings("serial")
 public class MandrillDeferredTask implements DeferredTask
 {
+    public String apiKey = null;
     public String subaccount = null;
     public String fromEmail = null;
     public String fromName = null;
@@ -27,6 +28,8 @@ public class MandrillDeferredTask implements DeferredTask
     /**
      * Constructs a new {@link MandrillDeferredTask}
      * 
+     * @param apiKey
+     *            - api Key
      * @param subaccount
      *            - domain name
      * @param fromEmail
@@ -44,9 +47,10 @@ public class MandrillDeferredTask implements DeferredTask
      * @param text
      *            - text content
      */
-    public MandrillDeferredTask(String subaccount, String fromEmail, String fromName, String to, String cc, String bcc,
-	    String subject, String replyTo, String html, String text, String metadata)
+    public MandrillDeferredTask(String apiKey, String subaccount, String fromEmail, String fromName, String to,
+	    String cc, String bcc, String subject, String replyTo, String html, String text, String metadata)
     {
+	this.apiKey = apiKey;
 	this.subaccount = subaccount;
 	this.fromEmail = fromEmail;
 	this.fromName = fromName;

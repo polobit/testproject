@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.SendGrid;
@@ -283,15 +284,29 @@ public class EmailUtil
 	    String subject, String replyTo, String html, String text)
     {
 
+	String domain = NamespaceManager.get();
+
 	// For domain "clickdeskengage" - use SendGrid API
-	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
+	if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
 	{
 	    SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
 	    return;
 	}
 
-	// if no cc or bcc, send by Mandrill
-	Mandrill.sendMail(true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
+	try
+	{
+	    // Send Email using email gateway
+	    EmailGatewayUtil.sendEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while sending emails through thirdparty email apis..."
+		    + e.getMessage());
+
+	    // Send through Agile API
+	    Mandrill.sendMail(true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
+	}
+
     }
 
     /**

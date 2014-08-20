@@ -65,7 +65,7 @@ public class MandrillSubAccounts
      * @param subaccountId
      *            - subaccount id which is AgileCRM domain.
      */
-    public static void createMandrillSubAccount(String subaccountId)
+    public static void createMandrillSubAccount(String subaccountId, String apiKey)
     {
 	System.out.println("Creating new subaccount id " + subaccountId);
 
@@ -73,11 +73,12 @@ public class MandrillSubAccounts
 
 	try
 	{
-	    subaccount.put(Mandrill.MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
+	    subaccount.put(Mandrill.MANDRILL_API_KEY, apiKey);
 	    subaccount.put(MANDRILL_SUBACCOUNT_ID, subaccountId);
 	    subaccount.put(MANDRILL_SUBACCOUNT_NAME, subaccountId);
 
-	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + MANDRILL_API_SUBACCOUNT_ADD_CALL, subaccount.toString());
+	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
+		    + MANDRILL_API_SUBACCOUNT_ADD_CALL, subaccount.toString());
 	    System.out.println("Response for creating subaccount: " + response);
 
 	}
@@ -107,7 +108,8 @@ public class MandrillSubAccounts
 	    info.put(MANDRILL_SUBACCOUNT_ID, subaccountId);
 
 	    // Request for subaccount json.
-	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + MANDRILL_API_SUBACCOUNT_INFO_CALL, info.toString());
+	    String response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL
+		    + MANDRILL_API_SUBACCOUNT_INFO_CALL, info.toString());
 
 	    return response;
 
