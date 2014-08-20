@@ -7,7 +7,7 @@ var CalendarRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Shows fullCalendar page */
-	"calendar" : "calendar", "tasks" : "tasks", "tasks-new" : "tasks_new" },
+	"calendar" : "calendar", "tasks" : "tasks_new", "tasks-new" : "tasks_new" },
 	/**
 	 * Activates the calendar menu and loads minified fullcalendar and jquery-ui
 	 * to show calendar view. Also shows tasks list in separate section.
