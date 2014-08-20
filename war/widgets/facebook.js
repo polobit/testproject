@@ -76,6 +76,20 @@ $(function()
 		else
 			getTwitterMatchingProfiles();*/
 	});
+	
+	// Deletes Twitter profile on click of delete button in template
+	$('#Facebook_plugin_delete').die().live('click', function(e)
+	{
+		e.preventDefault();
+		web_url = agile_crm_get_contact_property_by_subtype('website', 'FACEBOOK');
+		console.log('deleting facebook acct.',web_url);
+		agile_crm_delete_contact_property_by_subtype('website', 'FACEBOOK', web_url, function(data)
+		{
+			console.log("In facebook delete callback");
+			showFacebookMatchingProfile();
+		});
+
+	});
 
 });
 
@@ -89,7 +103,7 @@ function showFacebookMatchingProfile(first_name)
 	 }
 	 */
 	console.log("am in facebook show")
-	queueGetRequest("widget_queue", "/core/api/widgets/facebook/contacts/" + FACEBOOK_PLUGIN_ID + "/" + first_name, 'json', function success(data)
+	queueGetRequest("widget_queue", "/core/api/widgets/facebook/contacts/" + FACEBOOK_PLUGIN_ID + "?searchKey=" + first_name, 'json', function success(data)
 	{
 		console.log('Facebook');
 		//console.log(data)
