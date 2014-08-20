@@ -95,13 +95,12 @@ function getUpdateFields(type)
 	 
 	var options=
 	{
-		"Select A Field To Update": "",
+		
 		"First Name": "first_name",
 		"Last Name": "last_name",
 		"Email": "email",
 		"Company": "company",
 		"Title": "title",
-		"Name": "name",
 		"Website": "website",
 		"Phone":"phone",
 	};
