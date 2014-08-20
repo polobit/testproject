@@ -62,13 +62,15 @@ function agile_cookieTags(tags, action)
 
 /**
  * Function to perform default actions on form submit
- *
+ * 
  * @param error
  * @param button
  * @param url
  */
-function agile_formCallback(error, button, url)
+function agile_formCallback(error, button, url, data)
 {
+	if (data)
+		console.log("AgileCRM form error " + data.error);
 	error[1].innerHTML = error[0];
 	button.removeAttribute("disabled");
 	setTimeout(function()
