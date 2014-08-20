@@ -284,7 +284,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
 
 				App_Calendar.tasksListView.render(true);
 
-			} else if (Current_Route == 'tasks') {
+			} else if (Current_Route == 'tasks-old') {
 				
 				/*	To do without reloading the page should check the condition of (Owner and Category)*/
   				
@@ -299,7 +299,7 @@ function save_task(formId, modalId, isUpdate, saveBtn) {
   				
 				App_Calendar.allTasksListView.render(true);
 			}
-			else if (Current_Route == 'tasks-new')
+			else if (Current_Route == 'tasks')
 			{
 				updateTask(isUpdate, data, json);
 			}
