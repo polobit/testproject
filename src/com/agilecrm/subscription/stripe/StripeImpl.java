@@ -48,6 +48,7 @@ import com.stripe.model.Invoice;
  */
 public class StripeImpl implements AgileBilling
 {
+
     static
     {
 	Stripe.apiKey = Globals.STRIPE_API_KEY;

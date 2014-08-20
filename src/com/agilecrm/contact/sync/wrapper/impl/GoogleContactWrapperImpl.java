@@ -14,6 +14,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.Occupation;
+import com.google.gdata.data.contacts.Website;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
@@ -93,6 +94,14 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     public List<ContactField> getMoreCustomInfo()
     {
 	List<ContactField> fields = new ArrayList<ContactField>();
+	if(entry.hasWebsites())
+	{
+	    for(Website website : entry.getWebsites())
+	    {
+		fields.add(new ContactField(Contact.WEBSITE, website.getHref(), null));
+	    }
+	    
+	}
 	if (entry.hasImAddresses())
 	    for (Im im : entry.getImAddresses())
 	    {
@@ -116,6 +125,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 			}
 
 		    }
+		    
 
 		    if (!StringUtils.isBlank(subType))
 			fields.add(new ContactField(Contact.WEBSITE, im.getAddress(), subType));
@@ -126,10 +136,6 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 
 	    }
 
-	if (entry.getContactPhotoLink() != null)
-	{
-	    fields.add(new ContactField(Contact.IMAGE, entry.getContactPhotoLink().getHref(), null));
-	}
 
 	// If image link there there then it is synced to agile
 	// if (entry.getContactPhotoLink() != null)

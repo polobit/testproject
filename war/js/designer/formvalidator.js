@@ -12,13 +12,12 @@ function initValidator(selector, callback) {
         
         // Allow email or merge field. For e.g., Validates "abc@gmail.com, {{email}}" as true
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        var handlebar_regex = /{{[a-zA-Z0-9\s_.-]*[a-zA-Z0-9\s]}}/g;
+        var handlebar_regex = /{{[a-zA-Z0-9\s_.-]*[a-zA-Z0-9\s]}}/;
         
         for (var i in emails) {
-            value = emails[i];
+        	value = emails[i];
             valid = valid && (re.test($.trim(value)) || handlebar_regex.test($.trim(value)));
         }
-        
         return valid;
         
 	  });

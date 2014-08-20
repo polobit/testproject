@@ -1,6 +1,25 @@
 ﻿Change log
 =================
-####1.4 - 06/10/2014
+####1-3 (14-August-2014)
+
+> Yaswanth 
+
+1. Added live chat
+2. Excluded formbuilder paths in page speed configuration
+3. Redirection link to choose-domain changed to register page. Single page sign-up
+4. Added backward compatibilty to keyword search API call.
+
+####1-2 (11-August-2014)
+
+> Yaswanth 
+
+1. Sync Framework for data sync integrations
+2. Google contacts sync fix. Importing notes, websites
+3. Added condition which checks available count in reports before sending when user chose to send now option 	   from dashboard. If there are not matching results error message is shown in UI
+4. Optimized contact delete and owner change bulk operations
+
+
+####1.1 - 06/10/2014
 > Yaswanth
 
 1. Added support for special characters in custom fields to save in Text search DB.
@@ -12,7 +31,7 @@
 3. Issue Fix : Contact Details page: Loading symbol keeps on rotating in mail tab.
 4. Issue Fix : Web stats message displayed in all tabs.
 
-####1.1 - 04/14/2014
+####1.0 - 04/14/2014
 > Yaswanth
 
 1. Added billing restrictions 

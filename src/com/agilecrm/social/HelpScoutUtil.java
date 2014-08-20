@@ -110,7 +110,7 @@ public class HelpScoutUtil
      * @throws Exception
      *             if the response is an exception
      */
-    public static String getCustomerConversations(Widget widget, int customerId) throws Exception
+    public static JSONObject getCustomerConversations(Widget widget, int customerId) throws Exception
     {
 	// JSONObject for saving all the email/conversations categorized on
 	// Mailbox.
@@ -147,8 +147,8 @@ public class HelpScoutUtil
 	// If there are no conversations, add a message.
 	if (!customerConv.has("mailbox"))
 	    customerConv.put("message", "No Mails from this Customer.");
-
-	return customerConv.toString();
+	System.out.println("----------------" + customerConv.toString());
+	return customerConv;
     }
 
     /**

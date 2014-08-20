@@ -191,7 +191,16 @@ function addDraggingCapability() {
 
             // Get jsonDefinition and add it      	
             var jsonDefinition = $(ui.draggable).data("json");
-            constructNodeFromDefinition(jsonDefinition);
+            if($('#paintarea >div.contextMenuForNode').length>25){
+        		
+          	     window.parent.$("#workflow-edit-msg").hide();
+          		 window.parent.$("#nodes-limit-reached").show();
+          		 alert("Too many nodes in your campaign. Can't add more.");
+          		 console.log("You have reached maximum number of nodes");
+          		 
+          		return;
+          	}else               
+               constructNodeFromDefinition(jsonDefinition);
 
         }
     });

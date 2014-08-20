@@ -599,6 +599,15 @@
 		<servlet-name>Resubscribe</servlet-name>
 		<url-pattern>/resubscribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Formbuilder</servlet-name>
+		<jsp-file>/formbuilder.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Formbuilder</servlet-name>
+		<url-pattern>/formbuilder</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>

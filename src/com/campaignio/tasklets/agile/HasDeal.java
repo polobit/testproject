@@ -43,7 +43,8 @@ public class HasDeal extends TaskletAdapter
      */
     public static String ANY_MILESTONE = "any_milestone";
 
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	String milestone = getStringValue(nodeJSON, subscriberJSON, data, MILESTONE);
 	String givenOwnerId = getStringValue(nodeJSON, subscriberJSON, data, OWNER_ID);
@@ -55,21 +56,12 @@ public class HasDeal extends TaskletAdapter
 	    // Get Contact Owner Id.
 	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
-	    if (contactOwnerId == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
-		return;
-	    }
-
 	    // If milestone is any, then make it null
 	    if (StringUtils.equals(milestone, ANY_MILESTONE))
 		milestone = null;
 
-	    int count = OpportunityUtil.getDealsCount(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)), milestone,
-		    AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
+	    int count = OpportunityUtil.getDealsCount(Long.parseLong(AgileTaskletUtil.getId(subscriberJSON)),
+		    milestone, AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
 
 	    System.out.println("Count of deals is " + count);
 
