@@ -89,7 +89,7 @@ function sipRegister()
 		{
 			// Check websocket_proxy_url
 			if (credentials.sip_wsenable == "true")
-				url = "ws://54.83.12.176:10060";
+				url = "wss://54.83.12.176:10060";
 
 			// Define sip stack
 			Sip_Stack = new SIPml.Stack({ realm : credentials.sip_realm, impi : credentials.sip_privateid, impu : credentials.sip_publicid,

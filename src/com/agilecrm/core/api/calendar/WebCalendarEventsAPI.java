@@ -17,8 +17,6 @@ import com.agilecrm.activities.Event;
 import com.agilecrm.activities.WebCalendarEvent;
 import com.agilecrm.activities.util.WebCalendarEventUtil;
 import com.agilecrm.contact.Contact;
-import com.agilecrm.user.UserPrefs;
-import com.agilecrm.user.util.UserPrefsUtil;
 
 /**
  * <code>WebCalendarEventsAPI</code> includes REST calls to interact with
@@ -34,54 +32,48 @@ import com.agilecrm.user.util.UserPrefsUtil;
 public class WebCalendarEventsAPI
 {
 
-    /**
-     * Get slot duration and description for that.
-     */
-    @Path("/getslotdetails")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<String> getSlotDetails()
-    {
-	return WebCalendarEventUtil.getSlotDetails();
-    }
+	/**
+	 * Get slot duration and description for that.
+	 */
+	@Path("/getslotdetails")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<String> getSlotDetails()
+	{
+		return WebCalendarEventUtil.getSlotDetails();
+	}
 
-    /**
-     * Gets an event based on id
-     * 
-     * @param id
-     *            unique id of event
-     * @return {@link Event}
-     * @throws ParseException
-     */
-    @Path("/getslots")
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<List<Long>> getSlots(@QueryParam("slot_time") int slot_time, @QueryParam("date") String date,
-	    @QueryParam("timezone") int timezone, @QueryParam("timezone_name") String timezoneName,
-	    @QueryParam("epoch_time") Long epochTime) throws ParseException
-    {
-	WebCalendarEvent wce = new WebCalendarEvent();
+	/**
+	 * Gets an event based on id
+	 * 
+	 * @param id
+	 *            unique id of event
+	 * @return {@link Event}
+	 * @throws ParseException
+	 */
+	@Path("/getslots")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<List<Long>> getSlots(@QueryParam("slot_time") int slot_time, @QueryParam("date") String date,
+			@QueryParam("timezone") int timezone, @QueryParam("timezone_name") String timezoneName,
+			@QueryParam("epoch_time") Long epochTime, @QueryParam("start_time") Long startTime,
+			@QueryParam("end_time") Long endTime, @QueryParam("user_name") String userName,
+			@QueryParam("user_id") Long userid) throws ParseException
+	{
+		return WebCalendarEventUtil.getSlots(userName, userid, slot_time, date, timezone, timezoneName, epochTime,
+				startTime, endTime);
+	}
 
-	// Get current user prefs
-	UserPrefs currentUserPrefs = UserPrefsUtil.getCurrentUserPrefs();
-	System.out.println(currentUserPrefs.name);
+	@Path("/save")
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String saveWebEvent(WebCalendarEvent wce) throws JSONException
+	{
+		System.out.println(wce);
 
-	return WebCalendarEventUtil.getSlots(currentUserPrefs.name, slot_time, date, timezone, timezoneName, epochTime);
-    }
-
-    @Path("/save")
-    @PUT
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public String saveWebEvent(WebCalendarEvent wce) throws JSONException
-    {
-	// WebCalendarEvent wce = new WebCalendarEvent();
-
-	// System.out.println(obj);
-	System.out.println(wce);
-
-	Contact contact = new Contact();
-	String result = WebCalendarEventUtil.createEvents(wce, contact);
-	return result;
-    }
+		Contact contact = new Contact();
+		String result = WebCalendarEventUtil.createEvents(wce, contact);
+		return result;
+	}
 }

@@ -402,7 +402,15 @@ var ContactsRouter = Backbone.Router.extend({
 
 			fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
-		} });
+			
+			// For sip
+			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+				{			
+					$(".contact-make-sip-call").show();
+					$(".make-call").show();				
+					$(".contact-make-call").hide();			
+				}	
+			} });
 
 		var el = this.contactDetailView.render(true).el;
 
@@ -410,6 +418,14 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Check updates in the contact.
 		checkContactUpdated();
+		
+		// For sip
+		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+			{			
+				$(".contact-make-sip-call").show();
+				$(".make-call").show();				
+				$(".contact-make-call").hide();			
+			}
 	},
 
 	/**

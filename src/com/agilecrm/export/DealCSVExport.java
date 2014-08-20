@@ -11,6 +11,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.deals.CustomFieldData;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.user.util.UserPrefsUtil;
 
 /**
  * <code>DealCSVExport</code> handles building CSV file for obtained Deals.
@@ -26,6 +27,7 @@ public class DealCSVExport
     public static final String NAME = "Name";
     public static final String DESCRIPTION = "Description";
     public static final String MILESTONE = "Milestone";
+    public static final String PROBABILITY = "Probability";
     public static final String EXPECTED_VALUE = "Value";
     public static final String CLOSE_DATE = "Close Date";
     public static final String OWNER = "Owner";
@@ -52,7 +54,9 @@ public class DealCSVExport
 	str[indexMap.get(NAME)] = deal.name;
 	str[indexMap.get(DESCRIPTION)] = deal.description;
 	str[indexMap.get(MILESTONE)] = deal.milestone;
-	str[indexMap.get(EXPECTED_VALUE)] = String.valueOf(deal.expected_value);
+	str[indexMap.get(PROBABILITY)] = deal.probability + "%";
+	str[indexMap.get(EXPECTED_VALUE)] = UserPrefsUtil.getCurrentUserPrefs().currency.split("-")[1] + " "
+		+ (deal.expected_value != null ? deal.expected_value : 0);
 	try
 	{
 	    str[indexMap.get(OWNER)] = deal.getOwner().email;

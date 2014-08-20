@@ -61,7 +61,7 @@
 </script>
 <script id="facebook-profile-template" type="text/html">
 	<div class="widget_content row-fluid">
-		<div class="span3"><img src="{{image}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
+		<div class="span3"><img src="{{user.image}}" width="36" height="36" alt="" class="img-rounded pull-left"/></div>
 		<div class="pull-left ml_5 span8">
 			<p class="title_txt"><a href="{{user.link}}" target="_blank" >{{user.name}}</a></p>
 		<a class="btn" id="send_fb_friend_request_w" style="margin-top:10px;cursor:pointer;" href= "#" onClick="window.open('https://www.facebook.com/dialog/friends/?id={{user.id}}&app_id=1472694689634803&redirect_uri=https://my.agilecrm.com/backend/googleservlet?act=facebook','Sample','toolbar=no,width=800,height=500,left=200,top=200, status=no,scrollbars=no,resize=no');return false"><i class="icon-plus"></i>Add Friend</a>

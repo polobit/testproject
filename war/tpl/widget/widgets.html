@@ -23,7 +23,11 @@
 						{{#if_equals name "Twitter"}}
 							<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
 						{{else}}
-							<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+							{{#if_equals name "Facebook"}}
+								<a id="{{remove_spaces name}}_plugin_delete" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+							{{else}}
+								<a href="#add-widget" rel="tooltip" title="Reset settings"><i class="icon-wrench" style="font-size:1.12em;cursor:pointer;"></i></a>
+							{{/if_equals}}
 						{{/if_equals}}
 					{{/if_equals}}
 					</li>

@@ -26,7 +26,30 @@ function getGMTTimeFromDate(date)
 	return date.getTime();
 }
 
-
+//Get Timezone Abbreviation from Time
+function GetTimezoneShort(now)
+{ 
+	// now is expected as a Date object
+	if (now == null)
+		return '';
+	var str = now.toString();
+	// Split on the first ( character
+	var s = str.split("(");
+	if (s.length == 2)
+	{
+		// remove the ending ')'
+		var n = s[1].replace(")", "");
+		// split on words
+		var parts = n.split(" ");
+		var abbr = "";
+		for (i = 0; i < parts.length; i++)
+		{
+			// for each word - get the first letter
+			abbr += parts[i].charAt(0).toUpperCase();
+		}
+		return abbr;
+	}
+}
 
 // Convert epoch time to human time
 function createNormalTime(slotTime)
