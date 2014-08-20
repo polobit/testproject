@@ -187,7 +187,7 @@ function checkMaxNodesCount(){
 		
  	     window.parent.$("#workflow-edit-msg").hide();
  		 window.parent.$("#nodes-limit-reached").show();
- 		 alert("Too many nodes in your campaign. Can't add more.");
+ 		 alert("Too many items in your campaign. Can't add more.");
  		 console.log("You have reached maximum number of nodes");
  		 
  		return false;

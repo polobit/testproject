@@ -98,11 +98,9 @@ public class TaskletUtil
 			if ((int) data.get(HOPS_COUNT) > 101)
 			{
 
-				LogUtil.addLogToSQL(
-						AgileTaskletUtil.getId(campaignJSON),
-						AgileTaskletUtil.getId(subscriberJSON),
-						"Campaign Stoped. Subscriber removed from campaign after reaching maximum limit of 100 actions",
-						LogType.MAX_CAMPAIGN.toString());
+				LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+						"Subscriber removed from campaign after reaching maximum limit of 100 actions",
+						LogType.CAMPAIGN_STOPPED.toString());
 				return;
 			}
 
