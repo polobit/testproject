@@ -220,6 +220,18 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 			milestone.splice(i, 1);
 		}
 	}
+	
+	// Replace notes object with note ids
+	var notes = [];
+	$.each(DealJSON.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	
+	console.log(notes);
+	
+	DealJSON.notes = notes;
+	
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
