@@ -70,7 +70,7 @@ public class HelpScoutUtil
      * @return the Customer details as JSON String.
      * @throws Exception
      */
-    public static String getCustomerByEmail(Widget widget, String email) throws Exception
+    public static JSONObject getCustomerByEmail(Widget widget, String email) throws Exception
     {
 	// JSONObject for saving all the email categorized on Mailbox.
 	JSONObject customerMails = new JSONObject();
@@ -87,13 +87,13 @@ public class HelpScoutUtil
 	if (page.getCount() <= 0)
 	{
 	    customerMails.put("message", "No customer found.");
-	    return customerMails.toString();
+	    return customerMails;
 	}
 
 	// If there is a customer, get the Id.
 	JSONArray customers = new JSONArray(gson.toJson(page.getItems()));
 
-	return customers.getJSONObject(0).toString();
+	return customers.getJSONObject(0);
 
     }
 
