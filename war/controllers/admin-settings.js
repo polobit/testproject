@@ -339,8 +339,33 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	tagManagement : function()
 	{
 		
-		var tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: true, sortKey : 'tag', postRenderCallback: function(el){
+		var tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-cloud", individual_tag_name : 'li', sort_collection: true, sortKey : 'tag', postRenderCallback: function(el){
 			console.log(tagsview1.collection.toJSON());
+			$("#tag-cloud ul > li").addClass('tag1');
+			head.load('lib/tinysort.js', function(){
+				// create a style switch button
+				var switcher = $('<a href="javascript:void(0)" class="btn">Change appearance</a>').toggle(
+					function(){
+						$("#tag-cloud ul").hide().addClass("alternative-view").fadeIn("fast");
+						
+					},
+					function(){
+						$("#tag-cloud ul").hide().removeClass("alternative-view").fadeIn("fast");
+					}
+				);
+			 	$('#tag-cloud').append(switcher);
+			 	
+			 // create a sort by alphabet button
+				var sortabc = $('<a href="javascript:void(0)" class="btn">Sort alphabetically</a>').toggle(
+					function(){
+						$("#tag-cloud ul li").sort({order:"asc"});
+					},	
+					function(){
+						$("#tag-cloud ul li").sort({order:"desc"});
+					}		
+					);
+			 	$('#tag-cloud').append(sortabc);	
+			})
 		}});
 		tagsview1.appendItem = append_tag_management;
 		

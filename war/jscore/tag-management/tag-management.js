@@ -124,6 +124,7 @@ function append_tag_management(base_model) {
 	var key = base_model.get('tag').charAt(0).toUpperCase();
 	console.log($('div[tag-alphabet="'+encodeURI(key)+'"]', this.el))
                     
-	$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append(itemView.render().el);
+	//$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append(itemView.render().el);
 	
+	$(this.model_list_element).append(itemView.render().el);
 }

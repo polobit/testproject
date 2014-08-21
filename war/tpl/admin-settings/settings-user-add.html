@@ -104,13 +104,22 @@
 									<small> Add contacts</small>
 								</label>
 								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS"> 
+								{{#containsScope "UPDATE_CONTACTS" scopes}}
+											<input type="checkbox" name="temp"  value="DELETE_CONTACTS" checked/>
+										{{else}}
+										<input type="checkbox" name="temp"  value="DELETE_CONTACTS"/>
+								{{/containsScope}}
                         	    	Update Contacts  <br/>
 									<small>  Edit and delete contacts owned by other users</small>
                     	       </label>
 								<label class="checkbox" >
-                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS"> 
+								{{#containsScope "VIEW_CONTACTS" scopes}}
+											<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked/>
+										{{else}}
+										<input type="checkbox" name="temp"  value="EXPORT_CONTACTS"/>
+								{{/containsScope}}
                             		View Contacts  <br/>
+                        	    	
 									<small> View contacts owned by other users </small>
                            		</label>
 								<label class="checkbox" >
@@ -131,12 +140,20 @@
 									<small> Add contacts</small>
 								</label>
 								<label class="checkbox" >
-                        		    <input type="checkbox" name="temp" value="DELETE_CONTACTS" disabled> 
+                        		{{#containsScope "UPDATE_CONTACTS" scopes}}
+											<input type="checkbox" name="temp"  value="DELETE_CONTACTS" checked disabled/>
+										{{else}}
+										<input type="checkbox" name="temp"  value="DELETE_CONTACTS"/>
+								{{/containsScope}} 
                         	    	Update Contacts  <br/>
 									<small>  Edit and delete contacts owned by other users</small>
                     	       </label><label class="checkbox" >
-                        	    	<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled> 
-                            		View Contacts  <br/>
+									{{#containsScope "VIEW_CONTACTS" scopes}}
+											<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" checked disabled/>
+										{{else}}
+										<input type="checkbox" name="temp"  value="EXPORT_CONTACTS" disabled/>
+									{{/containsScope}}
+								View Contacts  <br/>
 									<small> View contacts owned by other  </small>
                            		</label>
 								<label class="checkbox" >
