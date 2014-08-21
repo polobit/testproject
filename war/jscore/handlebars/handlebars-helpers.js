@@ -2702,10 +2702,11 @@ $(function()
     		if(list.length == 0 || !item)
     			 return options.inverse(this);
     		
-    		if(jQuery.inArray(item, list))
-    			return options.fn(this);
+    		if(jQuery.inArray(item, list) == -1)
+    	   		return options.inverse(this);   			
     		
-    		return options.inverse(this);
+    			return options.fn(this);
+ 
 	    });
     
  });
