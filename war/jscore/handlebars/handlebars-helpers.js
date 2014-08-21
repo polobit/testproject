@@ -1323,6 +1323,11 @@ $(function()
     	    return url;
     	return 'skype:' + url;
     });
+    
+    Handlebars.registerHelper('getFacebookURL', function(url)
+    {
+    	return url.replace('@', '');
+    });
 
     // Get Count
     Handlebars.registerHelper('count', function()
