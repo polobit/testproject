@@ -42,6 +42,7 @@ import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 /**
@@ -60,7 +61,6 @@ public class CSVUtil
 {
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     private CSVUtil()
     {
@@ -276,44 +276,19 @@ public class CSVUtil
 		continue;
 
 	    boolean isMerged = false;
-	    accessControl.setObject(tempContact);
-	    
-	    accessControl.init();
 	    
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
 		// Checks if user can update the contact
 
-		// Sets current object to check scope
-		 accessControl.setObject(tempContact);
-		 
-		if(accessControl.hasScope(UserAccessScopes.DELETE_CONTACTS) || accessControl.hasScope(UserAccessScopes.UPDATE_CONTACT))
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		else
-		{
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
-		if (accessControl.canCreate())
-		{
-		    
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
-
 		
 		isMerged = true;
 	    }
 	    else
 	    {
 		
-		if (accessControl.canCreate())
-		{
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
-
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
 		++billingRestriction.contacts_count;
@@ -389,16 +364,20 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
-	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 
 	}
 	else
 	{
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts);
+	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
+	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	}
 
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
+	
+	System.out.println("CSV Import stats of domain : " + NamespaceManager.get() + ", " + status);
 
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
 	        new Object[] { domainUser, status });
