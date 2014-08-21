@@ -106,7 +106,7 @@ public class FacebookUtil
      * @return
      * @throws Exception
      */
-    public String getFacebookProfileById(String id) throws Exception
+    public JSONObject getFacebookProfileById(String id) throws Exception
     {
 	JSONObject fbJson = new JSONObject();
 	try
@@ -132,7 +132,7 @@ public class FacebookUtil
 	{
 	    e.printStackTrace();
 	}
-	return fbJson.toString();
+	return fbJson;
     }
 
     /**

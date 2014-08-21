@@ -11,12 +11,17 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
-import com.agilecrm.document.Document;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.backends.BackendServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.googlecode.objectify.Key;
 
 /**
@@ -70,14 +75,16 @@ public class OpportunityUtil
     {
 	return dao.fetchAll();
     }
-    //returns all deals count 
-    public static int getCount(){
-    	
-    	return Opportunity.dao.count();
+
+    // returns all deals count
+    public static int getCount()
+    {
+
+	return Opportunity.dao.count();
     }
+
     /*
-    /**
-     * Gets list of all opportunities.
+     * /** Gets list of all opportunities.
      * 
      * @return list of all opportunities.
      */
@@ -420,5 +427,27 @@ public class OpportunityUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Posts data to backends in the form of byte data. Entire request is
+     * forwarded to the url specified
+     * <p>
+     * It is used when the action is to be performed on list of deals
+     * <p>
+     * 
+     * @param uri
+     *            URL of the targeted request.
+     */
+    public static void postDataToDealBackend(String uri)
+    {
+
+	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+
+	// Create Task and push it into Task Queue
+	Queue queue = QueueFactory.getDefaultQueue();
+	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).header("Host", url).method(Method.POST);
+
+	queue.addAsync(taskOptions);
     }
 }

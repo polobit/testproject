@@ -9,6 +9,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONObject;
+
 import com.agilecrm.Globals;
 import com.agilecrm.social.FacebookUtil;
 import com.agilecrm.widgets.Widget;
@@ -78,8 +80,8 @@ public class FacebookWidgetsApi
      */
     @Path("userProfile/{widget-id}/{id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getFacebookUserById(@PathParam("widget-id") Long widgetId, @PathParam("id") String id)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
+    public JSONObject getFacebookUserById(@PathParam("widget-id") Long widgetId, @PathParam("id") String id)
     {
 	System.out.println("am in getFacebookUserById");
 	// Retrieves widget based on its id
@@ -95,7 +97,7 @@ public class FacebookWidgetsApi
 	{
 	    FacebookUtil facebookUtil = new FacebookUtil(Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
 		    widget.getProperty("token"));
-	    String res = facebookUtil.getFacebookProfileById(id).toString();
+	    JSONObject res = facebookUtil.getFacebookProfileById(id);
 	    System.out.println(res);
 	    return res;
 	}
@@ -116,7 +118,7 @@ public class FacebookWidgetsApi
      */
     @Path("currentUserProfile/{widget-id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
     public String getFacebookCurrentUser(@PathParam("widget-id") Long widgetId)
     {
 	System.out.println("currentUserProfile");
