@@ -340,12 +340,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
 		
-		this.email_gateways = new Base_Model_View({
-			url : 'core/api/email-integration',
+		this.email_gateway = new Base_Model_View({
+			url : 'core/api/email-gateway',
 			template: 'admin-settings-web-to-lead'
 		});
 		
-		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateways.render().el);
+		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
 		
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
@@ -372,12 +372,19 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	{
 		$("#content").html(getTemplate("admin-settings"), {});
 
+		// On Reload, navigate to integrations
+		if(!this.email_gateway)
+		{
+		    this.navigate("integrations", {trigger: true});
+			return;
+		}
+		
 		var value = 'SEND_GRID';
 
 		if (id == 'mandrill')
 			value = 'MANDRILL';
 
-		var view = new Base_Model_View({ model : App_Admin_Settings.email_gateways.model, url : 'core/api/email-integration',
+		var view = new Base_Model_View({ model : App_Admin_Settings.email_gateway.model, url : 'core/api/email-gateway',
 			template : 'settings-email-gateway', postRenderCallback : function(el)
 			{
 				// Loads jquery.chained.min.js

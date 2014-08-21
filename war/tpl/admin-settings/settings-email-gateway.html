@@ -18,7 +18,7 @@
 					</div>
 					<div class="controls">
 						<input type="password" class="input-medium required SEND_GRID" style="width:90%" placeholder="Password" value="{{#if api_user}}{{api_key}}{{/if}}"  name="api_key"/>
-                        <input type="text" class="input-medium required MANDRILL" style="width:90%" placeholder="API Key" value="{{api_key}}" name="api_key"/>
+                        <input type="text" class="input-medium required MANDRILL" style="width:90%" placeholder="API Key" value="{{#unless api_user}}{{api_key}}{{/unless}}" name="api_key"/>
 					</div>
 				</div>
 				<div class="form-actions" style="padding: 15px 20px 0px;margin-top: 14px;margin-bottom: 0px;">

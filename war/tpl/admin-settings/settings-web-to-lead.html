@@ -132,7 +132,7 @@
 <!-- Email API Integrations -->
 <div class="span11">
       <div class="page-header">
-          <h2>Email Gateways <small></small></h2>
+          <h2>Email Gateways <span class="label label-important">Beta</span></h2>
       </div>
 	  <!-- Send Grid-->
 	  <div class="row-fluid">
@@ -148,7 +148,11 @@
 					<a href="#" class="btn btn-danger delete">Disable</a>
 					<a href="#email-gateways/send_grid" class="btn">Settings</a>
 				{{else}}
-					<a href="#email-gateways/send_grid" class="btn">Enable</a>
+					{{#check_plan "FREE"}}
+						<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>					
+					{{else}}
+						<a href="#email-gateways/send_grid" class="btn">Enable</a>
+					{{/check_plan}}
 				{{/if_equals}}
 				</div>
 			</div>
@@ -161,14 +165,18 @@
 					<img alt="cms-integration" src="img/crm-plugins/mandrill_logo.png">
 				<br/><br/>
 				<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;"  rel="tooltip" title="Mandrill is a transactional email product by MailChimp.">
-					Use your Mandill account for all emails sent.
+					This integration allows you to send emails via your Mandrill account
 				</div><br/>
 				<div style="float:left;">
 				{{#if_equals email_api "MANDRILL"}}
 					<a href="#" class="btn btn-danger delete">Disable</a>
 					<a href="#email-gateways/mandrill" class="btn">Settings</a>
 				{{else}}
-					<a href="#email-gateways/mandrill" class="btn">Enable</a>
+					{{#check_plan "FREE"}}
+						<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>					
+					{{else}}
+						<a href="#email-gateways/mandrill" class="btn">Enable</a>
+					{{/check_plan}}
 				{{/if_equals}}
 				</div>
 			</div>

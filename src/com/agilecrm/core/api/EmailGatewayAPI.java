@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import com.agilecrm.account.EmailGateway;
 import com.agilecrm.account.util.EmailGatewayUtil;
 
-@Path("/api/email-integration")
+@Path("/api/email-gateway")
 public class EmailGatewayAPI
 {
 
