@@ -151,7 +151,7 @@ public class HelpScoutWidgetsAPI
      */
     @Path("get/{widget-id}/customer/{customer-id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
     public JSONObject getConversationsFromHelpScout(@PathParam("widget-id") Long widgetId,
 	    @PathParam("customer-id") int customerId)
     {
