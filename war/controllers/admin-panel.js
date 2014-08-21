@@ -114,7 +114,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 
 				var mod_collection = self.usersListViewCollection.collection.models;
 			
-				if(mod_collection.length>0)
+				
 				domainname = mod_collection[0].get('domain');
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
