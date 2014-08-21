@@ -1,7 +1,10 @@
 package com.agilecrm.contact.util;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -17,6 +20,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gdata.data.introspection.Collection;
 import com.googlecode.objectify.Key;
 
 /**
@@ -32,7 +36,7 @@ import com.googlecode.objectify.Key;
 public class TagUtil
 {
     // Dao
-    private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
+    public static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
 
     /**
      * Creates a tag in database, by verifying its existence in database.
@@ -44,22 +48,13 @@ public class TagUtil
     public static void updateTags(Set<String> tags)
     {
 
-	try
-	{
-	    // Add tags to cache to compare
-	    CacheUtil.setCache(NamespaceManager.get() + "-" + "tags", tags);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while setting tags in cache... " + e.getMessage());
-	}
-
 	List<Key<Tag>> tagKeys = null;
 
 	// If tags exist, fetch tagKeys
 	if (tags.size() != 0)
 	    tagKeys = dao.listAllKeys();
+
+	boolean newTags = false;
 
 	// Add to tags Library
 	for (String tagName : tags)
@@ -71,13 +66,17 @@ public class TagUtil
 
 	    if (tagKeys.indexOf(new Key<Tag>(Tag.class, tagName)) == -1)
 	    {
-		System.out.println("New Tag added is " + tagName);
-
 		// Add tag to db
 		Tag.addTag(tagName);
-	    }
 
+		newTags = true;
+	    }
 	}
+
+	// Remove tags from cache
+	if (newTags)
+	    CacheUtil.deleteCache(NamespaceManager.get() + "-" + "tags");
+
     }
 
     /**
@@ -89,22 +88,37 @@ public class TagUtil
      */
     public static void deleteTags(Set<String> tags)
     {
+
+	boolean tagsDeleted = false;
 	// Add to tags Library
 	for (String tagName : tags)
 	{
-	    if (StringUtils.isBlank(tagName))
-		continue;
-
-	    // Check if there is any contact with this tag
-	    int count = ContactUtil.getContactsCountForTag(tagName);
-	    if (count == 0)
-	    {
-		// Delete this tag
-		Key<Tag> tagKey = new Key<Tag>(Tag.class, tagName);
-
-		dao.deleteKey(tagKey);
-	    }
+	    tagsDeleted = deleteTag(tagName);
 	}
+
+	if (tagsDeleted)
+	    CacheUtil.deleteCache(NamespaceManager.get() + "-" + "tags");
+
+    }
+
+    public static boolean deleteTag(String tagName)
+    {
+	if (StringUtils.isBlank(tagName))
+	    return false;
+
+	// Check if there is any contact with this tag
+	int count = ContactUtil.getContactsCountForTag(tagName);
+	if (count == 0)
+	{
+	    // Delete this tag
+	    Key<Tag> tagKey = new Key<Tag>(Tag.class, tagName);
+
+	    dao.deleteKey(tagKey);
+	    return true;
+	}
+
+	return false;
+
     }
 
     /**
@@ -148,7 +162,8 @@ public class TagUtil
 
     public static List<Tag> getTags(int size, String cursor)
     {
-	return dao.fetchAll(size, cursor);
+	return dao.fetchAll(size, cursor, null, true, true);
+	
     }
 
     /**
@@ -267,6 +282,59 @@ public class TagUtil
 
 	return result.toString();
 
+    }
+    
+    public static List<Tag> getStatus()
+    {
+	List<Tag> tags = TagUtil.getTags(100, null);
+	
+	if (tags.size() == 0)
+	    return tags;
+	
+	Cursor cursor = (Cursor) tags.get(0);
+	
+	List<Tag> allTags = new ArrayList<Tag>();
+	
+	do
+	{
+	    for(Tag tag : tags)
+	    {
+		int count = ContactUtil.getContactsCountForTag(tag.tag);
+		tag.availableCount = count;
+		
+		allTags.add(tag);
+	    }
+	    
+	   
+	   Cursor currentCursor = (Cursor) tags.get(0);
+	   
+	   if(cursor.cursor.equals(currentCursor.cursor))
+	       break;
+	   
+	   tags = TagUtil.getTags(100, currentCursor.cursor);
+	    
+	} while(true);
+	
+	return allTags;
+    }
+    
+    public static List<Tag> getStats(int page_size, String cursor)
+    {
+	
+	List<Tag> tags = getTags(page_size, cursor);
+	
+	
+	return fillStats(tags);
+    }
+    
+    public static List<Tag> fillStats(List<Tag> tags)
+    {
+	for(Tag tag : tags)
+	{
+	    tag.availableCount = ContactUtil.getContactsCountForTag(tag.tag);
+	}
+	
+	return tags;
     }
 
 }

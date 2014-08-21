@@ -143,7 +143,7 @@ function getTaskFormId(element)
 // collection.
 function getArraySortOnCount(criteria, criteriaArray, pending)
 {
-	var initialURL = '/core/api/tasks/countoftype' + getParams() + "&pending=" + pending;
+	var initialURL = '/core/api/tasks/countoftype' + getParamsNew() + "&pending=" + pending;
 
 	var countTypeArray = {};
 
@@ -246,8 +246,8 @@ function getParamsNew()
 	}
 	if (owner)
 		params += ("&owner=" + owner);
-	else if (owner == undefined)
-		params += ("&owner=" + CURRENT_DOMAIN_USER.id);
-
+	else if (owner == undefined)		
+		params += ("&owner=" + CURRENT_DOMAIN_USER.id);	
+		
 	return params;
 }

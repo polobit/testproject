@@ -33,16 +33,8 @@ else if(!StringUtils.isEmpty(email) && StringUtils.isEmpty(password))
     
     try
     {
-	   // domainUser = DomainUserUtil.generatePassword(email);
-	   
-	   	domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-
-		domainUser.password = EncryptDecryptUtil.decrypt(password);
-	    
-	    AppengineMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-			SendMail.FORGOT_PASSWORD, domainUser);
-	    
-	    if(domainUser == null)
+		domainUser = DomainUserUtil.generateForgotPassword(email);
+		if(domainUser == null)
 		{
 		    error = "We are not able to find any user";
 		}

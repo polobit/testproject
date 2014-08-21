@@ -43,6 +43,10 @@ public class OAuthServlet extends HttpServlet
 			{
 				getAccessToken(req, resp, verifier, org);
 			}
+			else
+			{
+				req.getSession().setAttribute("referer", req.getHeader("referer"));
+			}
 			if (serviceType != null)
 			{
 				setupOAuth(req, resp, serviceType);
@@ -93,10 +97,16 @@ public class OAuthServlet extends HttpServlet
 		properties.put("secret", consumer.getTokenSecret());
 		properties.put("company", companyID);
 		properties.put("time", String.valueOf(System.currentTimeMillis()));
-
 		if (SERVICE_TYPE_QUICKBOOKS.equalsIgnoreCase(serviceType))
 		{
 			ScribeUtil.saveWidgetPrefsByName("quickbooks", properties);
+		}
+		else if (serviceType.equalsIgnoreCase("quickbook-import"))
+		{
+			ScribeUtil.saveQuickBookPrefs(properties);
+			String redirectURL = (String) req.getSession().getAttribute("referer");
+			resp.sendRedirect(redirectURL + "#sync/quickbook");
+			return;
 		}
 		resp.sendRedirect(getRedirectURI(req) + "/#add-widget");
 		// resp.getWriter().println("<script>window.opener.force_plugins_route(); window.close();</script>");
@@ -154,10 +164,11 @@ public class OAuthServlet extends HttpServlet
 
 	public OAuthConsumer getOAuthConsumer(String serviceType)
 	{
-		if (StringUtils.equalsIgnoreCase(serviceType, "quickbooks"))
-			return new DefaultOAuthConsumer(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET);
+		// if (StringUtils.equalsIgnoreCase(serviceType, "quickbooks"))
+		return new DefaultOAuthConsumer(Globals.QUICKBOOKS_CONSUMER_KEY, Globals.QUICKBOOKS_CONSUMER_SECRET);
 
-		return new DefaultOAuthConsumer("qyprdHZrAT1Ud51gPM4xN32ipsGxmq", "5YoQSFM8t3l0a38gTLWSW3ZNpeJROuuVn7Vzd62f");
+		// return new DefaultOAuthConsumer("qyprdHZrAT1Ud51gPM4xN32ipsGxmq",
+		// "5YoQSFM8t3l0a38gTLWSW3ZNpeJROuuVn7Vzd62f");
 	}
 
 	public String getRedirectURI(HttpServletRequest request)

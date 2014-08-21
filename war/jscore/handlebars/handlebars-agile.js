@@ -223,6 +223,10 @@ else if (templateName.indexOf("facebook") == 0)
 {
 template_relative_urls.push("facebook.js");
 }
+if (templateName.indexOf("chargify") == 0)
+{
+template_relative_urls.push("chargify.js");
+}
 
 if (templateName.indexOf("socialsuite") == 0)
 {

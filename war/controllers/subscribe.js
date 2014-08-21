@@ -10,9 +10,12 @@ var SubscribeRouter = Backbone.Router.extend({
 	routes : {
 	/* Subscription page */
 	"subscribe" : "subscribe", "subscribe/:id" : "subscribe",
-
+	
+	
 	/* Updating subscription details */
 	"updatecard" : "updateCreditCard", "updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
+	
+	
 
 	/* Invoices */
 	"invoice" : "invoice", "invoice/:id" : "invoiceDetails" },
@@ -71,7 +74,10 @@ var SubscribeRouter = Backbone.Router.extend({
 		} });
 		$('#content').html(subscribe_plan.render().el);
 	},
-
+	
+	
+	
+	
 	/**
 	 * Shows forms to updates Credit card details, loads subscription details
 	 * from core/api/subscription to deserailize and show credit card details in
@@ -114,6 +120,11 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(card_details.render().el);
 	},
 
+	
+	
+	
+	
+	
 	/**
 	 * Shows form the update plan, uses the same url used to create new
 	 * subscription/update credit card of plan, deserializes the current plan
@@ -142,6 +153,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 		// Fetches the invoice payments
 		this.invoice.collection.fetch();
+		console.log(this.invoice.collection.fetch());
 
 		$('#content').html(this.invoice.el);
 	},
@@ -190,7 +202,6 @@ var SubscribeRouter = Backbone.Router.extend({
 		var window = this;
 		// Plan json is posted along with credit card details
 		var plan = plan_json
-
 		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan", isNew : true, data : plan,
 			postRenderCallback : function(el)
 			{
@@ -215,4 +226,10 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(upgrade_plan.render().el);
 		$(".active").removeClass("active");
 		// $("#fat-menu").addClass("active");
-	} });
+	} ,
+
+	
+
+	
+
+});

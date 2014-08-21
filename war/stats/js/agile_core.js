@@ -18,8 +18,26 @@ function agile_propertyJSON(name, id, type)
 	 */
 	var json = {};
 
-	if (type == undefined)
-		json.type = "SYSTEM";
+	if (type == undefined){
+		switch(name){
+		case 'first_name':
+		case 'last_name':
+		case 'email':
+		case 'company':
+		case 'title':
+		case 'name':
+		case 'url':
+		case 'website':
+		case 'address':
+		case 'phone':
+		case 'original_ref':
+			json.type = "SYSTEM";
+			break;
+		default:
+			json.type = "CUSTOM";
+			break;
+		}
+	}
 	else
 		json.type = type;
 

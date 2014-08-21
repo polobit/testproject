@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.JSONArray;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.document.Document;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.Trigger.Type;
 
@@ -62,7 +63,12 @@ public class TriggerUtil
     {
 	return dao.fetchAll();
     }
-
+    //returns all triggers count 
+    public static int getCount(){
+    	
+    	return Trigger.dao.count();
+    }
+    /*
     /**
      * Returns all triggers based on condition.
      * 

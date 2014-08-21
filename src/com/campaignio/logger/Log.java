@@ -26,99 +26,99 @@ import com.googlecode.objectify.annotation.NotSaved;
 @Cached
 public class Log
 {
-    /**
-     * Uniquely generated Id for each log created.
-     */
-    @Id
-    public Long id;
+	/**
+	 * Uniquely generated Id for each log created.
+	 */
+	@Id
+	public Long id;
 
-    /**
-     * Id of a campaign.
-     */
-    public String campaign_id;
+	/**
+	 * Id of a campaign.
+	 */
+	public String campaign_id;
 
-    /**
-     * Campaign Name.
-     */
-    public String campaign_name;
+	/**
+	 * Campaign Name.
+	 */
+	public String campaign_name;
 
-    /**
-     * Contact id that subscribes to campaign.
-     */
-    public String subscriber_id;
+	/**
+	 * Contact id that subscribes to campaign.
+	 */
+	public String subscriber_id;
 
-    /**
-     * Log message
-     */
-    public String message;
+	/**
+	 * Log message
+	 */
+	public String message;
 
-    /**
-     * Domain
-     */
-    public String domain;
+	/**
+	 * Domain
+	 */
+	public String domain;
 
-    /**
-     * Log Type
-     */
-    public String log_type;
+	/**
+	 * Log Type
+	 */
+	public String log_type;
 
-    /**
-     * Log epoch time(log_time converted) is sent along with other fields. Epoch
-     * time is needed for timeline and tables.
-     **/
-    public String time;
+	/**
+	 * Log epoch time(log_time converted) is sent along with other fields. Epoch
+	 * time is needed for timeline and tables.
+	 **/
+	public String time;
 
-    /**
-     * Log Date time.
-     */
-    public String log_time;
+	/**
+	 * Log Date time.
+	 */
+	public String log_time;
 
-    /**
-     * Log level
-     */
-    public String level;
+	/**
+	 * Log level
+	 */
+	public String level;
 
-    /**
-     * To get log in contact-timeline.
-     */
-    @NotSaved
-    public String entity_type = "log";
+	/**
+	 * To get log in contact-timeline.
+	 */
+	@NotSaved
+	public String entity_type = "log";
 
-    /**
-     * Log Types. These names are also dependent to show images (img/campaigns)
-     * for contact-detail-campaigns.
-     * 
-     */
-    public enum LogType
-    {
-	EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED
-    };
-
-    /**
-     * Default Log.
-     */
-    public Log()
-    {
-
-    }
-
-    /**
-     * Returns name of contact that subscribes to campaign as an xml element.
-     * 
-     * @return Contact name.
-     * @throws Exception
-     */
-    @XmlElement
-    public Contact getContact() throws Exception
-    {
-	if (subscriber_id != null)
+	/**
+	 * Log Types. These names are also dependent to show images (img/campaigns)
+	 * for contact-detail-campaigns.
+	 * 
+	 */
+	public enum LogType
 	{
-	    Contact contact = ContactUtil.getContact(Long.parseLong(subscriber_id));
+		EMAIL_SENT, EMAIL_OPENED, EMAIL_CLICKED, EMAIL_HARD_BOUNCED, EMAIL_SPAM, EMAIL_SOFT_BOUNCED, WAIT, CLICKED, OPENED, AB, URL_VISITED, TWEET, ADD_NOTE, TAGS, CHECK_TAGS, CONDITION, JSONIO, SCORE, SET_OWNER, ADD_TASK, ADD_DEAL, ADD_CASE, TRANSFER, GENDER, REPLIED, CHANGED_DEAL_MILESTONE, EMAIL_SLEEP, EMAIL_SENDING_FAILED, EMAIL_SENDING_SKIPPED, UNSUBSCRIBED, SET_PROPERTY, CAMPAIGN_STOPPED
+	};
 
-	    if (contact != null)
-		return contact;
+	/**
+	 * Default Log.
+	 */
+	public Log()
+	{
+
 	}
 
-	return null;
-    }
+	/**
+	 * Returns name of contact that subscribes to campaign as an xml element.
+	 * 
+	 * @return Contact name.
+	 * @throws Exception
+	 */
+	@XmlElement
+	public Contact getContact() throws Exception
+	{
+		if (subscriber_id != null)
+		{
+			Contact contact = ContactUtil.getContact(Long.parseLong(subscriber_id));
+
+			if (contact != null)
+				return contact;
+		}
+
+		return null;
+	}
 }

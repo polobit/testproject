@@ -1,6 +1,27 @@
 // Initiliaze form validator
 function initValidator(selector, callback) {
       
+	// Multiple Emails validator separated by comma
+	$.tools.validator.fn("[type=multipleEmails]", "Please enter valid email each separated by comma.", function(input, value) {
+		
+		if(value == '')
+			return true;
+		
+        var emails = value.split(/[,]+/); // split element by , 
+        valid = true;
+        
+        // Allow email or merge field. For e.g., Validates "abc@gmail.com, {{email}}" as true
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        var handlebar_regex = /{{[a-zA-Z0-9\s_.-]*[a-zA-Z0-9\s]}}/;
+        
+        for (var i in emails) {
+        	value = emails[i];
+            valid = valid && (re.test($.trim(value)) || handlebar_regex.test($.trim(value)));
+        }
+        return valid;
+        
+	  });
+	
     // Adds wall effect to show the the first error
     $.tools.validator.addEffect("wall", function (errors, event) {
 

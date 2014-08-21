@@ -174,7 +174,7 @@ public class ReportsAPI
 	}
 
 	throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		.entity("No records availabe to send report.").build());
+		.entity("Report not sent as there are no records matching the report criteria.").build());
 
     }
 

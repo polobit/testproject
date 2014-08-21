@@ -17,12 +17,14 @@ $(function(){
 													'<p>Do you want to proceed?</p>' +
 												'</div>' +	
 										'<div class="modal-footer">' +
-											'<span class="report-message" style="margin-right:5px"></span>' +
+											'<div><span class="report-message" style="margin-right:5px"></span></div>' +
+											'<div>' +
 											'<a href="#" id="report-send-confirm" class="btn btn-primary">Yes</a>' +
-											'<a  href="#" class="btn close" data-dismiss="modal" >No</a>' +
+											'<a  href="#" class="btn close" data-dismiss="modal" >No</a>'+ 
+											'</div>' +
 										'</div>' +
 									'</div>' + 
-								'</div>')
+								'</div>');
 		
 		confirmationModal.modal('show');
 		

@@ -2,6 +2,7 @@ package com.agilecrm.user.access;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.agilecrm.search.ui.serialize.SearchRule;
@@ -46,7 +47,7 @@ public abstract class UserAccessControl
 	// occurs
 	if (info == null)
 	{
-	    return new HashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 	}
 
 	// If scopes in info is not set, scopes are fetched from current domain
@@ -55,7 +56,7 @@ public abstract class UserAccessControl
 	{
 	    DomainUser user = DomainUserUtil.getCurrentDomainUser();
 	    if (user == null)
-		Arrays.asList(UserAccessScopes.values());
+		return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
 	    info.setScopes(DomainUserUtil.getCurrentDomainUser().scopes);
 	}
@@ -66,15 +67,30 @@ public abstract class UserAccessControl
     // Checks if given scope exists for current user.
     public boolean hasScope(UserAccessScopes scope)
     {
-	return getCurrentUserScopes().contains(scope);
+	HashSet<UserAccessScopes> scopes = getCurrentUserScopes();
+	
+	return scopes.contains(scope);
     }
 
     public static UserAccessControl getAccessControl(String className, Object entityObject)
     {
-	AccessControlClasses access = null;
 	try
 	{
-	    access = AccessControlClasses.valueOf(className);
+	    return getAccessControl(AccessControlClasses.valueOf(className), entityObject);
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+	
+	
+    }
+    
+    
+    public static UserAccessControl getAccessControl(AccessControlClasses access, Object entityObject)
+    {
+	try
+	{
 	    UserAccessControl accessControl = access.clazz.newInstance();
 	    accessControl.entityObject = entityObject;
 	    accessControl.init();
@@ -84,6 +100,11 @@ public abstract class UserAccessControl
 	{
 	    return null;
 	}
+    }
+    
+    public void setObject(Object object)
+    {
+	entityObject = object;
     }
 
     /**

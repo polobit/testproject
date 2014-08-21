@@ -36,6 +36,8 @@ public class ContactAccessControl extends UserAccessControl
 		contact = (Contact) entityObject;
 	    else
 		contact = new Contact();
+	    System.out.println("scopes in contact checking");
+	    System.out.println(getCurrentUserScopes());
 	}
 	catch (ClassCastException e)
 	{
@@ -49,7 +51,7 @@ public class ContactAccessControl extends UserAccessControl
 	// contact and current owner is different
 	if (!isNewContact() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
 	}
 
 	if (isNewContact())
@@ -64,7 +66,7 @@ public class ContactAccessControl extends UserAccessControl
 	// contact
 	if (!isNewContact() && !checkOwner())
 	{
-	    return hasScope(UserAccessScopes.DELETE_CONTACTS);
+	    return hasScope(UserAccessScopes.DELETE_CONTACTS) || hasScope(UserAccessScopes.UPDATE_CONTACT);
 	}
 
 	return true;
@@ -77,8 +79,7 @@ public class ContactAccessControl extends UserAccessControl
     {
 	// If contact is defined it checks for update operation if owner in the
 	// contact and current owner is different
-	return hasScope(UserAccessScopes.VIEW_CONTACTS);
-
+	return hasScope(UserAccessScopes.VIEW_CONTACTS) || hasScope(UserAccessScopes.EXPORT_CONTACTS);
     }
 
     /**
@@ -102,6 +103,7 @@ public class ContactAccessControl extends UserAccessControl
 
 	return false;
     }
+    
 
     /**
      * Checks if contact is new

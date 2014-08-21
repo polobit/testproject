@@ -166,7 +166,6 @@ $(function(){
  * using sortable.js when it is dropped in middle or dragged over.
  */
 function setup_deals_in_milestones(id){
-	 console.log(App_Deals.opportunityCollectionView.collection);
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
 		      connectWith : "ul",
@@ -189,12 +188,27 @@ function setup_deals_in_milestones(id){
 		    	  console.log(ui.item[0]);
 		    	  console.log(ui.item[0].id);
 					var id = ui.item[0].id;
-					var DealJSON = App_Deals.opportunityCollectionView.collection.get(id).toJSON();
-					var oldMilestone = DealJSON.milestone;
-					var newMilestone = ($(this).closest('ul').attr("milestone")).trim();
-						// Checks current milestone is different from previous
-						if(newMilestone != oldMilestone)
-							update_milestone(App_Deals.opportunityMilestoneCollectionView.collection.models[0], id, newMilestone, oldMilestone);
+					
+					var modelJSON = App_Deals.opportunityMilestoneCollectionView.collection.models[0];
+			
+					for(var j in modelJSON.attributes)
+					{
+						var milestone = modelJSON.attributes[j];
+						for(var i in milestone)
+						{
+							if(milestone[i].id == id)
+							{
+								var DealJSON = milestone[i];
+								var newMilestone = ($(this).closest('ul').attr("milestone")).trim();
+
+								var oldMilestone = DealJSON.milestone;
+								// Checks current milestone is different from previous
+								if(newMilestone != oldMilestone)
+									update_milestone(modelJSON, id, newMilestone, oldMilestone);
+								return;
+							}
+						}
+					}
 		        }
 	    });
 
@@ -238,9 +252,7 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 	up_deal.save(DealJSON, {
 		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 		success : function(model, response) {
-			App_Deals.opportunityCollectionView.collection.remove(DealJSON);
-			App_Deals.opportunityCollectionView.collection.add(model);
-			App_Deals.opportunityCollectionView.render(true);
+			// App_Deals.opportunityMilestoneCollectionView.render(true);
 		}
 	});
 

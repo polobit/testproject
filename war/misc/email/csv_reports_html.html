@@ -38,6 +38,12 @@
 								{{#HashMap.EMAIL_REQUIRED}} 
 									&nbsp;- Email missing/Invalid : {{HashMap.EMAIL_REQUIRED}} 
 								{{/HashMap.EMAIL_REQUIRED}}
+								{{#HashMap.LIMIT_REACHED}} 
+									&nbsp;- Beyond plan limit : {{HashMap.LIMIT_REACHED}} 
+								{{/HashMap.LIMIT_REACHED}}
+								{{#HashMap.ACCESS_DENIED}} 
+									&nbsp;- Access denied to create/update : {{HashMap.ACCESS_DENIED}} 
+								{{/HashMap.ACCESS_DENIED}}
 								
 							</td>
 						</tr>

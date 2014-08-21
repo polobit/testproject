@@ -46,6 +46,17 @@ public class SearchAPI
 	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
 		cursor, type);
     }
+    
+    @Path("{keyword}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Collection searchContactsOld(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
+    {
+	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
+		cursor, type);
+    }
+
 
     /**
      * It initializes AppengineSearch, which is used to build query based on the

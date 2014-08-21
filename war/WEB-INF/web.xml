@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<servlet>
 		<servlet-name>Home</servlet-name>
@@ -23,6 +19,16 @@
 		<url-pattern>/scribe</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>Shopify</servlet-name>
+		<servlet-class>com.thirdparty.shopify.ShopifyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Shopify</servlet-name>
+		<url-pattern>/shopify</url-pattern>
+	</servlet-mapping>
+	
+	
 	<servlet>
 		<servlet-name>OAuth2</servlet-name>
 		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>
@@ -195,11 +201,11 @@
 		<servlet-class>com.agilecrm.session.CalendarServlet</servlet-class>
 		<init-param>
 			<param-name>consumer_key</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 		<init-param>
 			<param-name>consumer_secret</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 	</servlet>
 
@@ -346,10 +352,13 @@
 		<url-pattern>/core/*</url-pattern>
 		<url-pattern>/scribe</url-pattern>
 		<url-pattern>/upload.jsp</url-pattern>
+		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/XeroServlet</url-pattern>
+		<url-pattern>/shopify</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
+		
 	</filter-mapping>
 
 	<filter-mapping>
@@ -590,13 +599,22 @@
 		<servlet-name>Resubscribe</servlet-name>
 		<url-pattern>/resubscribe</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Formbuilder</servlet-name>
+		<jsp-file>/formbuilder.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Formbuilder</servlet-name>
+		<url-pattern>/formbuilder</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>SystemServiceServlet</servlet-name>
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
@@ -610,5 +628,14 @@
 	<servlet-mapping>
 		<servlet-name>OAuthServlet</servlet-name>
 		<url-pattern>/OAuthServlet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<jsp-file>/web-event-calendar.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<url-pattern>/webeventcalendar/*</url-pattern>
 	</servlet-mapping>
 </web-app>

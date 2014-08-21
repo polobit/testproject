@@ -277,6 +277,9 @@ public class ContactSyncUtil
 	List<ContactField> emails = contact.getContactPropertiesList(Contact.EMAIL);
 	String query_text = "";
 
+	if(emails == null || emails.isEmpty())
+	    return new ArrayList<ContactEntry>();
+	
 	// Creates a query string with emails
 	for (ContactField email : emails)
 	{
@@ -394,7 +397,7 @@ public class ContactSyncUtil
 
     public static Contact mergeContact(ContactEntry entry, Contact contact, ContactPrefs prefs)
     {
-	if (prefs.conflict.equals(ContactPrefs.AGILE))
+	if (prefs.conflict.equals(null))
 	{
 	    return CopyFromAgileContact(entry, contact);
 

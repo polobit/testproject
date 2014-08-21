@@ -134,7 +134,7 @@ function getOutgoingNumbers(callback)
 		// If data is not defined return
 		if (!data)
 			return;
-		
+
 		console.log("In getting twilio numbers");
 		console.log(data);
 
@@ -183,14 +183,17 @@ function verifyNumberFromTwilio(from_number, callback)
 		if (callback && typeof (callback) === "function")
 			callback(verified_data);
 
-	}).error(function(data)
-	{
-		// Append the url with the random number in order to differentiate the same action performed more than once.
-		var flag = Math.floor((Math.random()*10)+1); 
-		// Show error message in widget panel, if error occur while verifying numbers.
-		setUpError(Twilio_PLUGIN_NAME, "widget-settings-error", data.responseText, window.location.protocol + "//" 
-				+ window.location.host + "/#Twilio/twilio"+flag);
-	});
+	}).error(
+			function(data)
+			{
+				// Append the url with the random number in order to
+				// differentiate the same action performed more than once.
+				var flag = Math.floor((Math.random() * 10) + 1);
+				// Show error message in widget panel, if error occur while
+				// verifying numbers.
+				setUpError(Twilio_PLUGIN_NAME, "widget-settings-error", data.responseText,
+						window.location.protocol + "//" + window.location.host + "/#Twilio/twilio" + flag);
+			});
 }
 
 /**
@@ -214,13 +217,12 @@ function checkTwilioNumbersAndGenerateToken(twilio_prefs)
 			return;
 		}
 
-		if(twilio_prefs.verification_status && twilio_prefs.verification_status == "success" && twilio_prefs.verified_number)
+		if (twilio_prefs.verification_status && twilio_prefs.verification_status == "success" && twilio_prefs.verified_number)
 		{
 			checkTwilioPrefsAndGenerateToken(twilio_prefs, twilio_prefs.verified_number);
 			return;
 		}
-			
-		
+
 		// Else generate Twilio token for calls
 		checkTwilioPrefsAndGenerateToken(twilio_prefs, data[0].PhoneNumber);
 	});
@@ -415,7 +417,7 @@ function getTwilioLogs(to)
 		});
 		// Add the call logs to the timeline.
 		addLogsToTimeLine($.parseJSON(logs));
-			
+
 	}).error(function(data)
 	{
 		// Remove loading if error occcurs
@@ -441,6 +443,8 @@ function setUpTwilio(token, from_number)
 	// Loads twilio min.js to intiliaze twilio call events
 	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function()
 	{
+		var connection = null;
+
 		// setup Twilio device
 		Twilio.Device.setup(token);
 
@@ -463,7 +467,9 @@ function setUpTwilio(token, from_number)
 			// After call connects, show hang up buttton and hide call button
 			if (conn._status == "open")
 			{
+				connection = conn;
 				$("#twilio_hangup").show();
+				$("#twilio_dialpad").show();
 				$("#twilio_call").hide();
 			}
 		});
@@ -483,6 +489,8 @@ function setUpTwilio(token, from_number)
 				getTwilioLogs(to_number);
 				$('#twilio_note').show();
 				$("#twilio_hangup").hide();
+				$("#twilio_dialpad").hide();
+				$('#dialpad_in_twilio').hide();
 				$("#twilio_call").show();
 			}
 
@@ -507,7 +515,9 @@ function setUpTwilio(token, from_number)
 			// If connection is opened, hide call and show hang up
 			if (conn._status == "open")
 			{
+				connection = conn;
 				$("#twilio_hangup").show();
+				$("#twilio_dialpad").show();
 				$("#twilio_call").hide();
 			}
 
@@ -520,6 +530,8 @@ function setUpTwilio(token, from_number)
 			console.log(conn.parameters.From);
 
 			$("#twilio_hangup").hide();
+			$("#twilio_dialpad").hide();
+			$('#dialpad_in_twilio').hide();
 			$("#twilio_call").show();
 
 		});
@@ -547,11 +559,32 @@ function setUpTwilio(token, from_number)
 			console.log(e);
 
 			$("#twilio_hangup").hide();
+			$("#twilio_dialpad").hide();
+			$('#dialpad_in_twilio').hide();
 			$("#twilio_call").show();
 		});
 
 		registerClickEvents(from_number);
 
+		$.each([
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'star', 'pound'
+		], function(index, value)
+		{
+			$('#button' + value).click(function()
+			{
+				console.log(value);
+				if (connection)
+				{
+					if (value == 'star')
+						connection.sendDigits('*')
+					else if (value == 'pound')
+						connection.sendDigits('#')
+					else
+						connection.sendDigits(value)
+					return false;
+				}
+			});
+		});
 	});
 }
 
@@ -582,7 +615,16 @@ function registerClickEvents(from_number)
 		getTwilioLogs(to_number);
 		Twilio.Device.disconnectAll();
 		$("#twilio_hangup").hide();
+		$("#twilio_dialpad").hide();
+		$('#dialpad_in_twilio').hide();
 		$("#twilio_call").show();
+	});
+
+	$("#twilio_dialpad").die().live('click', function(e)
+	{
+		e.preventDefault();
+		console.log("Twilio call hang up");
+		$('#dialpad_in_twilio').toggle();
 	});
 
 	/*
@@ -591,19 +633,17 @@ function registerClickEvents(from_number)
 	$("#record_sound_play").die().live("click", function(e)
 	{
 		e.preventDefault();
-		
+
 		/**
 		 * We make play button on a widget disabled on click of it. This is done
 		 * to avoid continuous click in a short time, like double click on add
 		 * button
 		 */
 		/*
-		if ($(this).attr("disabled"))
-			return;
-
-		// set attribute disabled as disabled
-		$(this).attr("disabled", "disabled");
-		*/
+		 * if ($(this).attr("disabled")) return;
+		 *  // set attribute disabled as disabled $(this).attr("disabled",
+		 * "disabled");
+		 */
 
 		// Sound URL from Twilio to play call
 		var sound_url = "https://api.twilio.com" + $(this).attr("sound_url");
@@ -611,8 +651,8 @@ function registerClickEvents(from_number)
 
 		// plays call conversion
 		play_sound(sound_url, "true");
-		
-		//$(this).removeAttr("disabled");
+
+		// $(this).removeAttr("disabled");
 	});
 
 	/*
@@ -729,30 +769,30 @@ function twilioError(id, message)
 
 /**
  * Add the Call Logs to the time line.
- * @param logs 
- * 				the list of call made.
+ * 
+ * @param logs
+ *            the list of call made.
  */
 function addLogsToTimeLine(logs)
-{	
+{
 	var callInfo;
 	// Loop through all the calls and add each of them to the timeline.
-	for(var i=0; i< logs.length; i++){
-		if(logs[i].call.Status == 'no-answer'){
+	for ( var i = 0; i < logs.length; i++)
+	{
+		if (logs[i].call.Status == 'no-answer')
+		{
 			callInfo = 'Call unaswered - ' + logs[i].call.Duration + ' s';
-		} else {
+		}
+		else
+		{
 			callInfo = 'Duration ' + logs[i].call.Duration + ' s';
 		}
-		
+
 		var date = new Date(logs[i].call.StartTime);
-		// Prepare the model object with all the require information to add the call logs to timeline.
-		var model = {
-				id: 'twilio'+(logs.length-i),
-				name: callInfo,
-				body: date.toDateString() + ' ' + date.toLocaleTimeString(),
-				title: "Call",
-				created_time: Date.parse(logs[i].call.StartTime)/1000,
-				entity_type: "twilio"
-		}
+		// Prepare the model object with all the require information to add the
+		// call logs to timeline.
+		var model = { id : 'twilio' + (logs.length - i), name : callInfo, body : date.toDateString() + ' ' + date.toLocaleTimeString(), title : "Call",
+			created_time : Date.parse(logs[i].call.StartTime) / 1000, entity_type : "twilio" }
 		add_entity_to_timeline(new BaseModel(model));
 	}
 }

@@ -104,11 +104,13 @@ $(function()
 			};
 				
 		$(this).attr("disabled", "disabled");
+		$(this).text("Syncing");
 		
 //	return;
 		
-		App_Widgets.setup_google_contacts.model.set(serializeForm("google-contacts-import-form"));
-		console.log(App_Widgets.setup_google_contacts.model.toJSON())
+		var syncPrefs = serializeForm("google-contacts-import-form");
+		syncPrefs["inProgress"] = true;
+		App_Widgets.setup_google_contacts.model.set(syncPrefs, {silent:true});
 		var url = App_Widgets.setup_google_contacts.model.url;
 
 		$(this).after(getRandomLoadingImg());
@@ -122,6 +124,31 @@ $(function()
 			}});
 		
 	})
+	
+	
+	$('#quickbook_sync_prefs').die().live('click',function(e){
+		e.preventDefault();
+		var disable = $(this).attr('disabled');
+		if(disable)
+			return false;
+		
+		var quickbookPrefs = serializeForm("quickbook-form");
+		quickbookPrefs['inProgress'] = true;
+		
+		App_Widgets.quickbook_import_settings.model.set(quickbookPrefs, {silent:true});
+		var url = App_Widgets.quickbook_import_settings.model.url;
+
+		$(this).after(getRandomLoadingImg());
+		App_Widgets.quickbook_import_settings.model.url = url + "?sync=true"
+		App_Widgets.quickbook_import_settings.model.save({}, {success : function(data){
+		
+			App_Widgets.quickbook_import_settings.render(true);
+			App_Widgets.quickbook_import_settings.model.url = url;	
+				show_success_message_after_save_button("Sync Initiated", App_Widgets.quickbook_import_settings.el);
+				showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+			}});
+		
+	});
 	
 });
 

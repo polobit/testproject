@@ -36,8 +36,11 @@ var WidgetsRouter = Backbone.Router
 
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
 
-			"google-apps" : "contactSync", "google-apps/contacts" : "google_apps_contacts", "google-apps/calendar" : "google_apps_calendar",
-				"google-apps/stripe-import" : "stripe_sync", "google-apps/shopify" : "shopify" },
+			"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
+
+			"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar",
+				"sync/stripe-import" : "stripe_sync", "sync/shopify" : "shopify", "sync/salesforce" : "salesforce",
+				"sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import" },
 
 			/**
 			 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -316,8 +319,10 @@ var WidgetsRouter = Backbone.Router
 								}).error(
 								function(data)
 								{
-									// Append the url with the random number in
-									// order to differentiate the same action
+									// Append the url with the random
+									// number in
+									// order to differentiate the same
+									// action
 									// performed more than once.
 									var flag = Math.floor((Math.random() * 10) + 1);
 									setUpError("Twilio", "widget-settings-error", data.responseText,
@@ -345,9 +350,16 @@ var WidgetsRouter = Backbone.Router
 							}).error(
 									function(data)
 									{
-										// Append the url with the random number
-										// in order to differentiate the same
-										// action performed more than once.
+										// Append the
+										// url with the
+										// random number
+										// in order to
+										// differentiate
+										// the same
+										// action
+										// performed
+										// more than
+										// once.
 										var flag = Math.floor((Math.random() * 10) + 1);
 
 										setUpError("Twilio", "widget-settings-error", data.responseText,
@@ -448,7 +460,9 @@ var WidgetsRouter = Backbone.Router
 			Xero : function(id)
 			{
 				if (!id)
-					show_set_up_widget("Xero", 'xero-login',
+					show_set_up_widget(
+							"Xero",
+							'xero-login',
 							'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 				else
 				{
@@ -493,7 +507,9 @@ var WidgetsRouter = Backbone.Router
 										}
 										else
 										{
-											show_set_up_widget("Xero", 'xero-login',
+											show_set_up_widget(
+													"Xero",
+													'xero-login',
 													'http://integrations.clickdesk.com:8080/ClickdeskPlugins/agile-xero-oauth?callbackUrl=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/XeroServlet?data="));
 										}
 									});
@@ -603,12 +619,11 @@ var WidgetsRouter = Backbone.Router
 															});
 
 											return;
-											
 
 										}
 										else
 										{
-											show_set_up_widget("Twitter", 'twitter-login',
+											show_set_up_widget("Facebook", 'facebook-login',
 													'/scribe?service=twitter&return_url=' + encodeURIComponent(window.location.href));
 										}
 									});
@@ -617,59 +632,70 @@ var WidgetsRouter = Backbone.Router
 			},
 
 			/**
+			 * Manage Chargify Widget.
+			 */
+			Chargify : function(id)
+			{
+				if (!id)
+					show_set_up_widget("Chargify", "chargify-login");
+				else
+					fill_form(id, "Chargify", 'chargify-login')
+			},
+
+			/**
 			 * Manages widget added by user
 			 */
 			Custom : function(id)
 			{
-				if(id)
-					{
+				if (id)
+				{
 					console.log($(this))
-						divClone = $(this).clone();
-						var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
-							postRenderCallback : function(el)
-							{
-								console.log('In post render callback');
-								console.log(el);
-
-								$('#script_type').die().live('change', function(e)
-								{
-									var script_type = $('#script_type').val();
-									if (script_type == "script")
-									{
-										$('#script').show();
-										$('#url').hide();
-										return;
-									}
-
-									if (script_type == "url")
-									{
-										$('#script').hide();
-										$('#url').show();
-									}
-								});
-
-							}, saveCallback : function(model)
-							{
-								console.log('In save callback');
-
-								console.log(model);
-
-								if (model == null)
-									alert("A widget with this name exists already. Please choose a different name");
-
-								App_Widgets.Catalog_Widgets_View.collection.add(model);
-								$("#custom-widget").replaceWith(divClone);
-							} });
-
-						$('#custom-widget', el).html(widget_custom_view.render(true).el);
-
-						$('#cancel_custom_widget').die().live('click', function(e)
+					divClone = $(this).clone();
+					var widget_custom_view = new Base_Model_View({ url : "/core/api/widgets/custom", template : "add-custom-widget", isNew : true,
+						postRenderCallback : function(el)
 						{
-							// Restore element back to original
-							$("#custom-widget").replaceWith(divClone); 
-						});
-					
-					}
+							console.log('In post render callback');
+							console.log(el);
+
+							$('#script_type').die().live('change', function(e)
+							{
+								var script_type = $('#script_type').val();
+								if (script_type == "script")
+								{
+									$('#script').show();
+									$('#url').hide();
+									return;
+								}
+
+								if (script_type == "url")
+								{
+									$('#script').hide();
+									$('#url').show();
+								}
+							});
+
+						}, saveCallback : function(model)
+						{
+							console.log('In save callback');
+
+							console.log(model);
+
+							if (model == null)
+								alert("A widget with this name exists already. Please choose a different name");
+
+							App_Widgets.Catalog_Widgets_View.collection.add(model);
+							$("#custom-widget").replaceWith(divClone);
+						} });
+
+					$('#custom-widget', el).html(widget_custom_view.render(true).el);
+
+					$('#cancel_custom_widget').die().live('click', function(e)
+					{
+						// Restore element back to original
+						$("#custom-widget").replaceWith(divClone);
+					});
+
+				}
 				// fill_form(id, "Custom", 'custom-widget-settings');
 			},
 
@@ -684,12 +710,24 @@ var WidgetsRouter = Backbone.Router
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
 				// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+				
+				if(!canImportContacts())
+				{
+					showContactsImportAccessDeniedMessage("#prefs-tabs-content");
+					return;
+				}
 
 				this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 
 				// Adds header
-				$('#prefs-tabs-content').html(
-					'<div class="row-fluid"><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div><div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>');
+				$('#prefs-tabs-content')
+						.html(
+								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import Contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + 
+								'<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import Contacts from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' +
+
+								'<div class="row-fluid"><div class="page-header"><h2>Payment <small>import Contacts from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
+
+						);
 
 				// Adds Gmail Prefs
 				$('#contact-prefs').append(this.contact_sync_google.render().el);
@@ -699,18 +737,29 @@ var WidgetsRouter = Backbone.Router
 				// console.log(getTemplate("import-google-contacts", {}));
 				$('#calendar-prefs').append(this.calendar_sync_google.render().el);
 
-				return;
-				// Adding E-commerce Pref
-				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/get-prefs', template : 'admin-settings-import-shopify-contact-sync' });
+				/* Add E-commerce Prefs template */
+				this.shopify_sync = new Base_Model_View({ url : 'core/api/shopify/import-settings',
+					template : 'admin-settings-import-shopify-contact-syncPrefs' });
 				$('#shopify').append(this.shopify_sync.render().el);
 
-				// adding zoho crm contact sync template preferences
-				// this.zoho_sync = new
-				// Base_Model_View({url:'core/api/zoho',template:'zoho-contact-sync'});
-				// $('#zoho').append(this.zoho_sync.render().el);
+				/*salesforce import template*/
+				//this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				//$('#force').append(this.salesforce.render().el);
 
-				// adding stripe payment gateway contact syn template
-				// preferences
+				/* salesforce import template */
+				// this.salesforce = new
+				// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				// $('#force').append(this.salesforce.render().el);
+				// adding zoho crm contact sync template preferences
+				this.zoho_sync = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-contact-sync' });
+				$('#zoho').append(this.zoho_sync.render().el);
+				// model for quickbook import
+				//this.quickbook_sync = new Base_Model_View({ url : 'core/quickbook/import-settings', template : 'admin-settings-import-quickbook' });
+				//$('#quickbook').append(this.quickbook_sync.render().el);
+
+				/*
+				 * Add stripe payment gateway contact sync template preferences
+				 */
 				this.stripe_sync = new Base_Model_View({ url : 'core/api/stripe/import-settings', template : 'admin-settings-import-stripe-contact-sync' });
 
 				$('#stripe').append(this.stripe_sync.render().el);
@@ -808,7 +857,7 @@ var WidgetsRouter = Backbone.Router
 				this.stripe_sync_setting = new Base_Model_View({ url : 'core/api/stripe/import-settings',
 					template : 'admin-settings-import-stripe-contact-sync-prefs', saveCallback : function(model)
 					{
-						showNotyPopUp("information", "Contacts sync initated", "top", 1000);
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
 					} });
 
 				$("#prefs-tabs-content").html(this.stripe_sync_setting.render().el);
@@ -822,11 +871,50 @@ var WidgetsRouter = Backbone.Router
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
 
-				this.shopify_sync_setting = new Base_Model_View({ url : 'core/api/shopify/import-prefs',
-					template : 'admin-settings-import-shopify-contact-sync-prefs', saveCallback : function(model)
+				this.shopify_sync_setting = new Base_Model_View({ url : 'core/api/shopify/import-settings', template : 'admin-settings-import-shopify-prefs',
+					saveCallback : function(model)
 					{
-						$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
-					} })
+
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+					} });
+
+				$("#prefs-tabs-content").html(this.shopify_sync_setting.render().el);
+			},
+
+			zoho_sync : function()
+			{
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+
+				this.zoho_sync_settings = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-prefs',
+					saveCallback : function(model)
+					{
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+					} });
+
+				$("#prefs-tabs-content").html(this.zoho_sync_settings.render().el);
+
+			},
+
+			quickbook_import : function()
+			{
+
+				$("#content").html(getTemplate("settings"), {});
+
+				$('#PrefsTab .active').removeClass('active');
+				$('.contact-sync-tab').addClass('active');
+				this.quickbook_import_settings = new Base_Model_View({ url : 'core/quickbook/import-settings',
+					template : 'admin-settings-import-quickbook-settings', saveCallback : function(model)
+					{
+
+						showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+					} });
+
+				$("#prefs-tabs-content").html(this.quickbook_import_settings.render().el);
+
 			}
 
 		});

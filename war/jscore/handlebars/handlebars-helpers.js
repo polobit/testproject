@@ -243,6 +243,8 @@ $(function()
 			
 			if(getPropertyValue(items, "last_name"))
 			name = name + "" + getPropertyValue(items, "last_name").substr(0,1);
+		
+		
 			
 			return name;
 
@@ -482,7 +484,7 @@ $(function()
 			var html = "";
 			for ( var i = 0; i < keys.length; i++)
 			{
-			    html += "<div class='tag-element' style='margin-right:10px'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + keys[i] + "\"></div></div>";
+			    html += "<div class='tag-element' style='margin-right:10px;'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"></div></div>";
 			}
 			return new Handlebars.SafeString(html);
 		    });
@@ -1330,16 +1332,29 @@ $(function()
 
     Handlebars.registerHelper('contacts_count', function()
     {
+    	var count_message;
 	if (this[0] && this[0].count && (this[0].count != -1))
 	{
+		
 	    if (this[0].count > 9999 && readCookie('contact_filter'))
-		return "(" + this[0].count + "+ Total)";
+	    	count_message = "<small> (" + 10000 + "+ Total) </small>" +
+				'<span style="vertical-align: text-top; margin-left: -5px">' +
+									'<img border="0" src="/img/help.png"' +
+									'style="height: 10px; vertical-align: middle" rel="popover"' +
+									'data-placement="bottom" data-title="Lead Score"' +
+									'data-content="Looks like there are over 10,000 results. Sorry we can\'t give you a precise number in such cases."' +
+									'id="element" data-trigger="hover">' +
+								'</span>';
 
-	    return "(" + this[0].count + " Total)";
+	    else
+	    	count_message =  "<small> (" + this[0].count + " Total) </small>";
 	}
 	else
-	    return "(" + this.length + " Total)";
+		count_message = "<small> (" + this.length + " Total) </small>";
+	
+	return new Handlebars.SafeString(count_message);
     });
+    
 
     /**
      * 
@@ -2633,6 +2648,14 @@ $(function()
 	return i[0]+"-"+i[2]+"-"+i[1];
     });
     
+    Handlebars.registerHelper("hasScope", function(scope_constant, options){
+    	if(CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1)
+    		    return options.fn(this);
+
+    	return options.inverse(this);	
+    })
+    
+    
     Handlebars.registerHelper('fetchXeroUser', function(data)
     {
     	    			return JSON.parse(data).xeroemail;
@@ -2643,4 +2666,34 @@ $(function()
     	var arr = window.location.href.split('/')
     	return arr[2];
     });
+    
+    Handlebars
+    .registerHelper(
+	    'tagManagementCollectionSetup',
+	    function(tags)
+	    {
+
+		console.log(tags);
+		var json = {};
+
+		var keys = [];
+		// Store tags in a json, starting letter as key
+		for ( var i = 0; i < tags.length; i++)
+		{
+		    var tag = tags[i].tag;
+		    var key = tag.charAt(0).toUpperCase();
+		    // console.log(tag);
+		    if (jQuery.inArray(key, keys) == -1)
+			keys.push(key);
+		}
+		
+		console.log(keys);
+		var html_temp = "";
+		
+		for(var i = 0; i< keys.length ; i ++)
+			html_temp += "<div style='margin-right:10px;max-width:180px'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"milestone-value-list tagsinput\" style=\"padding:1px;list-style:none;\"></ul></div></div>";
+		 
+    console.log(html_temp);
+    return new Handlebars.SafeString(html_temp);
+	    });
  });

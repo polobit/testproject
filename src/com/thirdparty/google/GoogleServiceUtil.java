@@ -14,6 +14,7 @@ import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.util.HTTPUtil;
 import com.google.gdata.client.authn.oauth.GoogleOAuthParameters;
+import com.google.gdata.client.authn.oauth.OAuthException;
 import com.google.gdata.client.authn.oauth.OAuthHmacSha1Signer;
 import com.google.gdata.client.authn.oauth.OAuthSigner;
 import com.google.gdata.client.contacts.ContactsService;
@@ -42,20 +43,22 @@ public class GoogleServiceUtil
 
 	// Creates HashMap from response JSON string
 	HashMap<String, Object> properties = new ObjectMapper().readValue(response,
-		new TypeReference<HashMap<String, Object>>()
-		{
-		});
+	        new TypeReference<HashMap<String, Object>>()
+	        {
+	        });
 	System.out.println(properties.toString());
 
 	if (properties.containsKey("error"))
 	    throw new Exception(String.valueOf(properties.get("error")));
 	else if (properties.containsKey("access_token"))
 	{
+
 	    contactPrefs.token = String.valueOf(properties.get("access_token"));
 	    contactPrefs.expires = Long.parseLong(String.valueOf(properties.get("expires_in")));
 	    System.out.println("domiain user key in refresh token method: " + contactPrefs.getDomainUser());
 	    contactPrefs.setExpiryTime(contactPrefs.expires);
 	    contactPrefs.save();
+
 	}
 
     }
@@ -66,9 +69,10 @@ public class GoogleServiceUtil
      * @param token
      *            {@link String} access token retrieved from OAuth
      * @return {@link ContactsService}
+     * @throws OAuthException
      * @throws Exception
      */
-    public static ContactsService getService(String token) throws Exception
+    public static ContactsService getService(String token) throws OAuthException
     {
 	GoogleOAuthParameters oauthParameters = new GoogleOAuthParameters();
 	ContactsService contactService;
@@ -96,7 +100,7 @@ public class GoogleServiceUtil
     {
 	// Build data to post with all tokens
 	String data = "client_id=" + Globals.GOOGLE_CLIENT_ID + "&client_secret=" + Globals.GOOGLE_SECRET_KEY
-		+ "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	        + "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
 	// send request and return response
 	try
@@ -126,7 +130,7 @@ public class GoogleServiceUtil
     {
 	// Build data to post with all tokens
 	String data = "client_id=" + Globals.GOOGLE_CALENDAR_CLIENT_ID + "&client_secret="
-		+ Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
+	        + Globals.GOOGLE_CALENDAR_SECRET_KEY + "&grant_type=refresh_token&refresh_token=" + refreshToken;
 
 	// send request and return response
 	try

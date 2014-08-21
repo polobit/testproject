@@ -52,7 +52,7 @@ public class BulkActionNotifications
     public static void publishconfirmation(BulkAction type, String... parameters)
     {
 	JSONObject messageJSON = constructMessageJSON(String.format(type.getMessage(), (Object[]) parameters).toString(), type);
-
+	
 	PubNub.pubNubPush(NamespaceManager.get(), messageJSON);
     }
 
@@ -67,10 +67,10 @@ public class BulkActionNotifications
 	JSONObject messageJSON = new JSONObject();
 	try
 	{
+	    System.out.println("message to send in notification " + message);
 	    messageJSON.put("message", message);
 	    messageJSON.put("type", BulkAction.BULK_ACTIONS);
 	    messageJSON.put("sub_type", BulkAction.BULK_ACTIONS);
-
 	}
 	catch (JSONException e)
 	{

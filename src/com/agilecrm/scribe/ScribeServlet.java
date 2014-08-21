@@ -1,6 +1,7 @@
 package com.agilecrm.scribe;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,8 +13,6 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import com.agilecrm.scribe.util.ScribeUtil;
-import com.thirdparty.google.ContactsImportUtil;
-import com.thirdparty.shopify.OAuthCustomService;
 
 /**
  * <code>ScribeServlet</code> is used to create and configure a client to
@@ -46,6 +45,7 @@ public class ScribeServlet extends HttpServlet
     public static final String SERVICE_TYPE_FACEBOOK = "facebook";
     public static final String SERVICE_TYPE_STRIPE_IMPORT = "stripe_import";
     public static final String SERVICE_TYPE_SHOPIFY = "shopify_import";
+    public static final String SERVICE_TYPE_ZOHO = "zoho_import";
 
     // Scopes
     public static final String STRIPE_SCOPE = "read_only";
@@ -54,9 +54,11 @@ public class ScribeServlet extends HttpServlet
     public static final String GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.readonly";
     public static final String GMAIL_SCOPE = "https://mail.google.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
     public static final String GOOGLE_OAUTH2_SCOPE = "email profile";
+    private static final String ZOHO_AUTH_URL = "https://accounts.zoho.com/apiauthtoken/nb/create?SCOPE=ZohoCRM/crmapi&EMAIL_ID=%s&PASSWORD=%s";
 
     // OAuth login
     public static final String SERVICE_TYPE_OAUTH_LOGIN = "oauth_login";
+    public static final String SHOPIFY_SERVICE = "shopify";
 
     /**
      * Process the post request to servlet request, request can be sent either
@@ -77,20 +79,8 @@ public class ScribeServlet extends HttpServlet
      * provider and returned). If request parameters have "oauth_token" and
      * "oauth_verifier" then request is from provider with token keys which are
      * saved in widget.
-     */
-    /*
-     * (non-Javadoc)
      * 
-     * @see
-     * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
-     * , javax.servlet.http.HttpServletResponse)
-     */
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest
-     * , javax.servlet.http.HttpServletResponse)
+     * @return
      */
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
@@ -133,11 +123,15 @@ public class ScribeServlet extends HttpServlet
 	 */
 	String serviceType = req.getParameter("service_type");
 
-	// If service type is not null, we have Contact preferences
-	if (serviceType != null)
+	if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
 	{
-	    // Initializes backends to import contacts
-	    ContactsImportUtil.initializeImport(serviceType);
+	    String shop = req.getParameter("shop");
+	    if (shop.contains(".myshopify.com"))
+	    {
+		shop = shop.split("\\.")[0];
+	    }
+	    String domain = req.getParameter("domain");
+	    resp.sendRedirect("http://shopify4j.appspot.com/shopify?shop=" + shop + "&domain=" + domain);
 	    return;
 	}
 
@@ -164,6 +158,17 @@ public class ScribeServlet extends HttpServlet
      */
     public void setupOAuth(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
+
+	// handle facebook popup windows
+	if ("facebook".equalsIgnoreCase(req.getParameter("act")))
+	{
+	    PrintWriter out = resp.getWriter();
+	    resp.setContentType("text/html");
+	    out.println("<script type=\"text/javascript\">");
+	    out.println("this.close()");
+	    out.println("</script>");
+	    return;
+	}
 
 	// Get service name from request
 	String serviceName = req.getParameter("service");
@@ -202,7 +207,6 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 	{
-	    service = ScribeUtil.getService(req, resp, serviceName);
 	    // After building service, redirects to authorization page
 	    url = service.getAuthorizationUrl(null);
 	    String query = req.getParameter("query");
@@ -212,21 +216,10 @@ public class ScribeServlet extends HttpServlet
 
 	    System.out.println("Redirect URL OAuth2: " + url);
 	}
-	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
+
+	else if (serviceName.equalsIgnoreCase(SERVICE_TYPE_ZOHO))
 	{
-	    OAuthCustomService shopifyService = ScribeUtil.getShopifyService(req, resp, serviceName);
-	    String param = req.getParameter("shopName");
-
-	    if (shopifyService != null)
-	    {
-		url = shopifyService.getAuthorizationUrl(param);
-		// token = shopifyService.getRequestToken();
-		String query = req.getParameter("query");
-
-		if (query != null)
-		    req.getSession().setAttribute("query", query);
-	    }
-
+	    System.out.println("wait");
 	}
 
 	// OAuth 1.0
@@ -276,6 +269,8 @@ public class ScribeServlet extends HttpServlet
 	// Retrieve Token and Service Name from session
 	String serviceName = (String) req.getSession().getAttribute("oauth.service");
 
+	if (serviceName == null)
+	    serviceName = (String) req.getSession().getAttribute("service_type");
 	System.out.println("service name " + serviceName);
 	String code = null;
 	Token requestToken = null;
@@ -289,8 +284,7 @@ public class ScribeServlet extends HttpServlet
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_OAUTH_LOGIN)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_GOOGLE_DRIVE)
 		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_FACEBOOK)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT)
-		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_SHOPIFY))
+		|| serviceName.equalsIgnoreCase(SERVICE_TYPE_STRIPE_IMPORT))
 
 	    code = req.getParameter("code");
 

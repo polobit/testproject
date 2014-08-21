@@ -32,7 +32,7 @@ public class BulkAction
 	domainUserId = current_id;
 
 	if (!StringUtils.isEmpty(condition))
-	    fetcher = new ContactFilterResultFetcher(condition, 200);
+	    fetcher = new ContactFilterResultFetcher(condition, 200, null, current_id);
 	else
 	    try
 	    {
