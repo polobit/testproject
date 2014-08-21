@@ -89,9 +89,21 @@
 									<li class='divider'></li>
 									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
 											Duplicate</a></li>
-
-									<li><a href='#' id='contact-actions-delete'><i
+								{{#hasScope "DELETE_CONTACT"}}
+										<li><a href='#' id='contact-actions-delete'><i
 											class="icon-trash"></i> Delete</a></li>
+									{{else}}
+										{{#hasScope "UPDATE_CONTACT"}}
+											<li><a href='#' id='contact-actions-delete'><i
+											class="icon-trash"></i> Delete</a></li>
+											{{else}}
+												{{#isOwnerOfContact owner.id}}
+													<li><a href='#' id='contact-actions-delete'><i
+													class="icon-trash"></i> Delete</a></li>							
+												{{/isOwnerOfContact}}		
+										{{/hasScope}}
+								{{/hasScope}}
+									
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -165,11 +177,37 @@
 				<div style="padding: 20px 10px 20px 23px">
 					<ul id="added-tags-ul" class="tagsinput"
 						style="display: inline; vertical-align: top; margin-bottom: 10px">
-						{{#if tagsWithTime.length}} {{#each tagsWithTime}}
+							{{#if tagsWithTime.length}}{{#hasScope "DELETE_CONTACT"}}
+										{{#each tagsWithTime}}
+
 						<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
 								class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
 								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> {{/each}}
-						{{/if}}
+									{{else}}
+										{{#hasScope "UPDATE_CONTACT"}}
+											{{#each tagsWithTime}}
+												<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
+													class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+													class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+											{{/each}}
+											{{else}}
+												{{#isOwnerOfContact owner.id}}
+													{{#each tagsWithTime}}
+														<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
+															class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
+																class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+													{{/each}}
+													{{else}}
+													{{#each tagsWithTime}}
+														<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
+															class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+													{{/each}}
+												{{/isOwnerOfContact}}		
+										{{/hasScope}}
+								{{/hasScope}}
+							{{/if}}
+						 
+						
 					</ul>
 					<div style="display: inline-block; margin-top: 3px;">
 						<form id="addTagsForm" style="display: none; margin-bottom: 0px;">
