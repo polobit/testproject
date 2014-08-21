@@ -2654,7 +2654,6 @@ $(function()
     });
     
     Handlebars.registerHelper("hasScope", function(scope_constant, options){
-    	alert(scope_constant);
     	if(CURRENT_DOMAIN_USER.scopes && $.inArray(scope_constant, CURRENT_DOMAIN_USER.scopes) != -1)
     		    return options.fn(this);
 
@@ -2717,7 +2716,6 @@ $(function()
     
     Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
     		{	
-    	
     				if(CURRENT_DOMAIN_USER.id == owner_id)
     					return options.fn(this);
     				return options.inverse(this); 
