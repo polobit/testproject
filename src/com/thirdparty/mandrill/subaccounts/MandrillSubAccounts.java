@@ -1,5 +1,6 @@
 package com.thirdparty.mandrill.subaccounts;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -68,6 +69,10 @@ public class MandrillSubAccounts
     public static void createMandrillSubAccount(String subaccountId, String apiKey)
     {
 	System.out.println("Creating new subaccount id " + subaccountId);
+
+	// If empty use Agile Mandrill key
+	if (StringUtils.isBlank(apiKey))
+	    apiKey = Globals.MANDRIL_API_KEY_VALUE;
 
 	JSONObject subaccount = new JSONObject();
 
