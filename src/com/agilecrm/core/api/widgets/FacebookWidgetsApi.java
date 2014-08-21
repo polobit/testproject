@@ -4,13 +4,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.agilecrm.Globals;
 import com.agilecrm.social.FacebookUtil;
-import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 
@@ -37,11 +37,11 @@ public class FacebookWidgetsApi
      * @param firstname
      * @return
      */
-    @Path("contacts/{widget-id}/{firstname}")
+    @Path("contacts/{widget-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getStripeCustomerDetails(@PathParam("widget-id") Long widgetId,
-	    @PathParam("firstname") String firstname)
+	    @QueryParam("searchKey") String firstname)
     {
 	System.out.println("am in FacebookWidgetsApi");
 	// Retrieves widget based on its id

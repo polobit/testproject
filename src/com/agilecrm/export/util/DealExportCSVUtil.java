@@ -71,7 +71,8 @@ public class DealExportCSVUtil
     {
 	// CSV Header will get initialized in the same order
 	String[] headers = { DealCSVExport.NAME, DealCSVExport.DESCRIPTION, DealCSVExport.MILESTONE,
-		DealCSVExport.EXPECTED_VALUE, DealCSVExport.CLOSE_DATE, DealCSVExport.OWNER, DealCSVExport.RELATED_TO };
+		DealCSVExport.PROBABILITY, DealCSVExport.EXPECTED_VALUE, DealCSVExport.CLOSE_DATE, DealCSVExport.OWNER,
+		DealCSVExport.RELATED_TO };
 
 	return DealExportCSVUtil.appendCustomFieldsToHeaders(headers);
     }

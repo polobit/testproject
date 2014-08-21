@@ -1235,3 +1235,7 @@ Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
 	padding-right:30px;
 
 }
+
+.stop-propagation {
+	text-decoration: none !important;
+}

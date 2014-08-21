@@ -18,8 +18,35 @@
 		<div class="row-fluid">
 			<a href="#call" class="btn pull-right" id="twilio_call" style="display:none;"><i class="icon-phone"></i>Call</a>
 			<a href="#hangup" class="btn btn-danger pull-right" id="twilio_hangup" style="display:none;">Hang up</a>
+            <a href="#dialpad" class="btn pull-right" id="twilio_dialpad" style="margin-right:5px;display:none;">Dialpad</a>
 			<a href="#note" class="right contact-add-note" id="twilio_note" style="margin: 5px;">Add Note</a>
 		</div>
+
+<div id="dialpad_in_twilio" style="display:none;">
+    <table>
+    <tr>
+    <td><input type="button" value="1" id="button1"></td>
+    <td><input type="button" value="2" id="button2"></td>
+    <td><input type="button" value="3" id="button3"></td>
+    </tr>
+    <tr>
+    <td><input type="button" value="4" id="button4"></td>
+    <td><input type="button" value="5" id="button5"></td>
+    <td><input type="button" value="6" id="button6"></td>
+    </tr>
+    <tr>
+    <td><input type="button" value="7" id="button7"></td>
+    <td><input type="button" value="8" id="button8"></td>
+    <td><input type="button" value="9" id="button9"></td>
+    </tr>
+    <tr>
+    <td><input type="button" value="*" id="buttonstar"></td>
+    <td><input type="button" value="0" id="button0"></td>
+    <td><input type="button" value="#" id="buttonpound"></td>
+    </tr>
+    </table>
+</div>
+
  	</div>
 	<div class="sub_header">
 		<h4>Call History</h4>
