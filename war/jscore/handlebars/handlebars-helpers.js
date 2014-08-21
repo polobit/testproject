@@ -2696,4 +2696,16 @@ $(function()
     console.log(html_temp);
     return new Handlebars.SafeString(html_temp);
 	    });
+    
+    Handlebars.registerHelper('containsScope', function(item, list, options)
+	    {
+    		if(list.length == 0 || !item)
+    			 return options.inverse(this);
+    		
+    		if(jQuery.inArray(item, list))
+    			return options.fn(this);
+    		
+    		return options.inverse(this);
+	    });
+    
  });
