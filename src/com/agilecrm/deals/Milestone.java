@@ -35,11 +35,6 @@ public class Milestone
     public String milestones;
 
     /**
-     * Name of Pipeline
-     */
-    public String name;
-
-    /**
      * Milestone Dao
      */
     private static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(Milestone.class);
@@ -68,13 +63,5 @@ public class Milestone
     public void save()
     {
 	dao.put(this);
-    }
-
-    /**
-     * Deletes the milestone from database
-     */
-    public void delete()
-    {
-	dao.delete(this);
     }
 }
