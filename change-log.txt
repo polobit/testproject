@@ -13,6 +13,12 @@
 - DTMF (dailpad) added to Twilio call.
 - New Task UI is default UI.
 
+*** Bhasuri ***
+- Added Set Property node in Utilities catalog
+- Added limit to  stop the campaign after 100 actions
+- Added maximum limit to the nodes to be added in a campaign 
+
+
 1-3 (14-August-2014)
 
 *** Yaswanth ***
