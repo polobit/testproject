@@ -417,11 +417,6 @@
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
 
-	<filter-mapping>
-		<filter-name>PHPAPIFilter</filter-name>
-		<url-pattern>/core/php/*</url-pattern>
-	</filter-mapping>
-
 	<welcome-file-list>
 		<welcome-file>home</welcome-file>
 	</welcome-file-list>
