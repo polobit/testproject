@@ -6,6 +6,9 @@
 *** Jitendra ***
 - Quickbooks Conact Sync
 
+*** Saikiran ***
+- International Characters in Help Scout, Zendesk, Facebook widgets.
+
 1-3 (14-August-2014)
 
 *** Yaswanth ***
