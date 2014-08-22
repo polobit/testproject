@@ -162,6 +162,8 @@ var SocialSuiteRouter = Backbone.Router.extend({
 
 		Scheduled_Updates_View.collection.fetch();
 
+		console.log(Scheduled_Updates_View.collection);
+		
 		$('#content').html(Scheduled_Updates_View.render(true).el);
 
 		// Makes tab active

@@ -12,7 +12,7 @@
     "category": "Utilities",
     "ui": [
         {
-            "label": " Update Filed",
+            "label": "Select Property",
             "required": "required",
             "category": "Settings", 
             "name": "updated_field",

@@ -710,6 +710,12 @@ var WidgetsRouter = Backbone.Router
 				$('#PrefsTab .active').removeClass('active');
 				$('.contact-sync-tab').addClass('active');
 				// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
+				
+				if(!canImportContacts())
+				{
+					showContactsImportAccessDeniedMessage("#prefs-tabs-content");
+					return;
+				}
 
 				this.contact_sync_google = new Base_Model_View({ url : 'core/api/contactprefs/google', template : 'admin-settings-import-google-contacts', });
 
@@ -718,7 +724,7 @@ var WidgetsRouter = Backbone.Router
 						.html(
 								'<div class="row-fluid"><div class="page-header"><h2>Google <small>import Contacts from Google</small></h2></div><div class="span11"><div id="contact-prefs" class="span4" style="margin-left:0px;"></div>' + '<div id="calendar-prefs" class="span4" style="margin-left:0px;"></div><div id="email-prefs" class="span4" style="margin-left:0px;"></div></div></div>' + 
 								'<div class="row-fluid"><div class="page-header"><h2>E-commerce <small>import Contacts from E-commerce</small></h2></div><div class="span11"><div id ="shopify"></div></div></div>' +
-
+								'<div class="row-fluid"><div class="page-header"><h2>CRM <small>import Contacts from CRM</small></h2></div><div class="span11"><div id ="quickbook"></div></div></div>' +
 								'<div class="row-fluid"><div class="page-header"><h2>Payment <small>import Contacts from payment gateway</small></h2></div><div class="span11"><div id ="stripe"></div></div></div>'
 
 						);
@@ -736,6 +742,10 @@ var WidgetsRouter = Backbone.Router
 					template : 'admin-settings-import-shopify-contact-syncPrefs' });
 				$('#shopify').append(this.shopify_sync.render().el);
 
+				/*salesforce import template*/
+				//this.salesforce = new Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
+				//$('#force').append(this.salesforce.render().el);
+
 				/* salesforce import template */
 				// this.salesforce = new
 				// Base_Model_View({url:'core/api/salesforce/get-prefs',template:'admin-settings-salesforce-contact-sync'});
@@ -744,8 +754,8 @@ var WidgetsRouter = Backbone.Router
 				this.zoho_sync = new Base_Model_View({ url : 'core/api/zoho/import-settings', template : 'admin-settings-import-zoho-contact-sync' });
 				$('#zoho').append(this.zoho_sync.render().el);
 				// model for quickbook import
-				//this.quickbook_sync = new Base_Model_View({ url : 'core/quickbook/import-settings', template : 'admin-settings-import-quickbook' });
-				//$('#quickbook').append(this.quickbook_sync.render().el);
+				this.quickbook_sync = new Base_Model_View({ url : 'core/quickbook/import-settings', template : 'admin-settings-import-quickbook' });
+				$('#quickbook').append(this.quickbook_sync.render().el);
 
 				/*
 				 * Add stripe payment gateway contact sync template preferences

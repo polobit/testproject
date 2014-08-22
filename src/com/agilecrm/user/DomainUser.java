@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -566,9 +567,27 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		    this.name = oldDomainUser.name;
 	    }
 	}
+	
+	
+	// Sets user scopes
+	setScopes();
 
+	
+
+	info_json_string = info_json.toString();
+
+	// Lowercase
+	email = StringUtils.lowerCase(email);
+	domain = StringUtils.lowerCase(domain);
+    }
+    
+    private void setScopes()
+    {
 	System.out.println(" id in domain user before :" + id);
 
+	scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	
+	/*
 	if (scopes == null || scopes.size() == 0)
 	{
 
@@ -578,26 +597,19 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    
 	    if (id == null)
 	    {
-
-		//scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
-
+		scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 	    }
 	    else
 	    {
-		//scopes = new LinkedHashSet<UserAccessScopes>();
-		//scopes.add(UserAccessScopes.RESTRICTED);
+		scopes = new LinkedHashSet<UserAccessScopes>();
+		scopes.add(UserAccessScopes.RESTRICTED_ACCESS);
 	    }
 	}
 	else if(scopes.size() == 1 && scopes.contains(UserAccessScopes.RESTRICTED))
 	{
-	    scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 	}
-
-	info_json_string = info_json.toString();
-
-	// Lowercase
-	email = StringUtils.lowerCase(email);
-	domain = StringUtils.lowerCase(domain);
+	*/
     }
 
     /**
@@ -614,15 +626,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if (info_json != null)
 		info_json = new JSONObject(info_json_string);
 
-	    // If no scopes are set, then all scopes are added
-	    if (scopes == null || (scopes.size() == 1 && scopes.contains(UserAccessScopes.RESTRICTED)))
-		scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
 	    
+	    // If no scopes are set, then all scopes are added
+	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
 	    if (menu_scopes == null)
 	    {
 		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
+	    
 	}
 	catch (Exception e)
 	{

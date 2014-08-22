@@ -67,13 +67,13 @@ public class Note
      */
     @NotSaved
     private List<String> contact_ids = new ArrayList<String>();
-    
+
     /**
      * Owner key of AgileUser id.
      */
     @NotSaved(IfDefault.class)
     private Key<AgileUser> owner = null;
-    
+
     /**
      * DomainUser Id who adds note.
      */
@@ -169,9 +169,11 @@ public class Note
 	/**
 	 * Commented because not to fill AgileUser as owner for new notes.
 	 */
-	/*if (owner == null)
-	    owner = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);*/
-	
+	/*
+	 * if (owner == null) owner = new Key<AgileUser>(AgileUser.class,
+	 * AgileUser.getCurrentAgileUser().id);
+	 */
+
 	// If owner_id is null
 	if (owner_id == null)
 	{
@@ -251,7 +253,7 @@ public class Note
 	}
 	return null;
     }
-    
+
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
@@ -295,9 +297,12 @@ public class Note
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(domain_owner.getId());
+	    if (domain_owner != null)
+		agileuser = AgileUser.getCurrentAgileUserFromDomainUser(domain_owner.getId());
+
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+
 	    if (userprefs != null)
 		return userprefs.pic;
 	}

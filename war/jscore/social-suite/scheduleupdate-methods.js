@@ -2,7 +2,7 @@
  * Check valid scheduled. Selected schedule should be in future time. 
  * If it is past or current time then revert action and show alert.
  */
-function isPastSchedule()
+function isTimeInPast()
 {
 	// Get selected date and time.
 	var scheduledDate = document.getElementById('scheduled_date').value;
@@ -123,7 +123,7 @@ function scheduledmessagesEdit(id)
 
 					// For Testing: Enables schedule button if selected
 					// scheduled update having future schedule.
-					//isPastSchedule();
+					//isTimeInPast();
 					// Changes in UI.
 					$('#send_tweet').removeAttr("disabled");
 				});

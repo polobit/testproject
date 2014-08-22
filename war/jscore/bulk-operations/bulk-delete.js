@@ -52,7 +52,7 @@ $(function(){
 			var url = $(table).attr('url');
 			if(SELECT_ALL == true)
 			{
-				if($(table).attr('id') == "contacts")
+				if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
 					url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
 			}
 			

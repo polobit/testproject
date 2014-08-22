@@ -40,7 +40,7 @@ public class TwitterUtil
 	 * We include it, while sending a message or tweet in Twitter from Agile
 	 * </p>
 	 */
-	public static final String AGILE_TWITTER_SOURCE_MESSAGE = "-via @agile_crm";
+	public static final String AGILE_TWITTER_SOURCE_MESSAGE = "-via @agilecrm";
 
 	/**
 	 * Creates a twitter instance and sets the consumer tokens (developer

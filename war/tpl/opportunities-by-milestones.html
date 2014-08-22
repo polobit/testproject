@@ -13,7 +13,7 @@
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#" class="deals-list-view">List</a></li>
 						<li><a href="#" class="deals-pipelined-view">Milestone</a></li>
-						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
+						<!-- <li><a href="#" class="deals-export-csv">Export as CSV</a></li> -->
 					</ul>
 			</div>
         </div>
@@ -79,8 +79,6 @@
 			{{#if notes}}
              <a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
               <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
-			{{else}}
-				<a data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" title="Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="task-action icon icon-comment-alt deal-notes" data="{{id}}" title="Notes"></i></a>
 			{{/if}}
 		</span>
 		<div class="clearfix"</div>
