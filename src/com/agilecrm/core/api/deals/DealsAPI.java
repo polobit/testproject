@@ -374,9 +374,7 @@ public class DealsAPI
 	    SessionManager.get().setDomainId(user.id);
 	}
 	List<Opportunity> deals = OpportunityUtil.getOpportunities();
-	String path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
-	// Close channel after contacts completed
-	DealExportBlobUtil.editExistingBlobFile(path, null, true);
+	String path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, true);
 	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
 	if (count == null)
 	    count = String.valueOf(deals.size());
