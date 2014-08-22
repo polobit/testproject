@@ -3,6 +3,9 @@
 *** Yaswanth ***
 - Added ACL (Reverted back)
 
+*** Jitendra ***
+- Quickbooks Conact Sync
+
 1-3 (14-August-2014)
 
 *** Yaswanth ***
