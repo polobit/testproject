@@ -73,7 +73,12 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	    ContactUtil.deleteContacts(fetcher.nextSet());
+	    List<Contact> contacts = fetcher.nextSet();
+	
+	    if(model_ids != null)
+		ContactUtil.processContacts(contacts);
+	    
+	    ContactUtil.deleteContacts(contacts);
 	}
 
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
@@ -110,6 +115,12 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+	    List<Contact> contacts = fetcher.nextSet();
+		
+	    if(contact_ids != null)
+		ContactUtil.processContacts(contacts);
+	
+	    
 	    ContactUtil.changeOwnerToContactsBulk(fetcher.nextSet(), new_owner);
 	}
 
@@ -146,6 +157,7 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+	    
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), workflowId);
 	}
@@ -219,6 +231,11 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+	    List<Contact> contacts = fetcher.nextSet();
+		
+	    if(contact_ids != null)
+		ContactUtil.processContacts(contacts);
+	    
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.addTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
@@ -264,6 +281,11 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+	    List<Contact> contacts = fetcher.nextSet();
+		
+	    if(contact_ids != null)
+		ContactUtil.processContacts(contacts);
+	    
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.removeTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}

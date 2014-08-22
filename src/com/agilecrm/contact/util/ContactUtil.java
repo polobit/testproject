@@ -25,6 +25,8 @@ import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
@@ -891,5 +893,37 @@ public class ContactUtil
 		int count = query.count();
 		System.out.println("Is updated count - " + count);
 		return count > 0 ? true : false;
+	}
+	
+	/**
+	 * Removes contacts those if user dont have update privileges
+	 * @param contacts
+	 */
+	public static void processContacts(List<Contact> contacts)
+	{
+	    
+	    
+		
+	    if(contacts.size() > 0)
+		return;
+	    
+	    UserAccessControl control = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact.toString(), null);
+	    
+	   if(control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT))
+	       return;
+	    
+	   
+	  
+	    
+	    Iterator<Contact> i = contacts.iterator();
+	    while(i.hasNext())
+	    {
+		Contact c = i.next();
+		control.setObject(c);
+		if(control.canDelete())
+		    continue;
+		
+		i.remove();
+	    }
 	}
 }
