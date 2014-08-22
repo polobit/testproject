@@ -103,8 +103,8 @@ public class HelpScoutWidgetsAPI
      */
     @Path("get/createform/{widget-id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public static String getCreateFormData(@PathParam("widget-id") Long widgetId)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
+    public static JSONObject getCreateFormData(@PathParam("widget-id") Long widgetId)
     {
 	try
 	{
