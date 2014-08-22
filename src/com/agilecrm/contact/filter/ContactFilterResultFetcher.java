@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.bytecode.Descriptor.Iterator;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,10 +18,16 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.filter.ContactFilter.DefaultFilter;
 import com.agilecrm.contact.filter.util.ContactFilterUtil;
+import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessScopes;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * Fetches filter results for backend operations. It has similar methods as
@@ -46,6 +54,8 @@ public class ContactFilterResultFetcher
 
     private Integer number_of_contacts;
     private Integer number_of_companies;
+    
+    private Long domainUserId = null;
 
     /**
      * Search map
@@ -60,6 +70,7 @@ public class ContactFilterResultFetcher
     public ContactFilterResultFetcher(long filter_id)
     {
 	this.filter = ContactFilter.getContactFilter(filter_id);
+	
     }
 
     public ContactFilterResultFetcher(long filter_id, int max_fetch_set_size)
@@ -82,12 +93,18 @@ public class ContactFilterResultFetcher
 	{
 	    Long filterId = Long.parseLong(filter_id);
 	    this.filter = ContactFilter.getContactFilter(filterId);
+	    if(this.filter != null)
+		UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
 	}
 	catch (NumberFormatException e)
 	{
 	    if (filter_id != null)
 		this.systemFilter = getSystemFilter(filter_id);
 	}
+	
+	domainUserId = currentDomainUserId;
+	
+	BulkActionUtil.setSessionManager(currentDomainUserId);
 
 	setAvailableCount();
 
@@ -269,7 +286,31 @@ public class ContactFilterResultFetcher
 		{
 		    return contacts;
 		}
+		
 		Contact contact = contacts.get(0);
+		
+		UserAccessControl control = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact.toString(), contact);
+		if(!control.canRead())
+		{
+		    java.util.Iterator<Contact> i = contacts.iterator();
+		    while(i.hasNext())
+		    {
+			Contact c = i.next();
+			Key<DomainUser> userKey = c.getContactOwnerKey();
+			if(userKey == null || domainUserId == null) 
+			    break;
+			if(userKey.getId() == domainUserId)
+			    continue;
+			
+			i.remove();
+		    }
+		}
+		
+		if (contacts.size() == 0)
+		{
+		    return contacts;
+		}
+	
 		if (contact.type == Contact.Type.PERSON)
 		    number_of_contacts = contacts.size();
 		else
@@ -283,6 +324,7 @@ public class ContactFilterResultFetcher
 	    return contacts;
 	}
 
+	
 	// Fetches first 200 contacts
 	Collection<Contact> contactCollection = new QueryDocument<Contact>(new ContactDocument().getIndex(),
 		Contact.class).advancedSearch(filter.rules, max_fetch_set_size, cursor);
