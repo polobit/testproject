@@ -49,6 +49,12 @@ public abstract class UserAccessControl
 	{
 	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 	}
+	
+	// To give all scopes as of now.
+	int i = 0;
+	
+	if(i + 0 == 0)
+	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
 	// If scopes in info is not set, scopes are fetched from current domain
 	// user, set in user info, and returned.

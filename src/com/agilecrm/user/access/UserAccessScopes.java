@@ -1,5 +1,6 @@
 package com.agilecrm.user.access;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public enum UserAccessScopes
     
     public static List<UserAccessScopes> customValues()
     {
-	List<UserAccessScopes> defaultScopes = Arrays.asList(UserAccessScopes.values());
+	List<UserAccessScopes> defaultScopes = new ArrayList<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
 	defaultScopes.remove(UserAccessScopes.RESTRICTED_ACCESS);
 	defaultScopes.remove(UserAccessScopes.RESTRICTED);
 	return defaultScopes;
