@@ -2716,12 +2716,15 @@ $(function()
     
     Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
     		{	
+    	
     				if(CURRENT_DOMAIN_USER.id == owner_id)
     					return options.fn(this);
     				return options.inverse(this); 
     		});
     
     Handlebars.registerHelper('canEditContact', function(owner_id, options){
+    	return options.fn(this);
+    	
     	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
     		return options.fn(this);
     	

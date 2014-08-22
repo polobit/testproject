@@ -59,7 +59,7 @@ public class AddNote extends TaskletAdapter
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	    System.out.println("Got Exception while adding note.");
+	    System.out.println("Got Exception while adding note..." + e.getMessage());
 	}
 
 	// Creates log for note

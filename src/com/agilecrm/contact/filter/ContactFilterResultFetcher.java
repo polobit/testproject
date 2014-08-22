@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javassist.bytecode.Descriptor.Iterator;
 
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -23,11 +21,6 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
-import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessScopes;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
-import com.googlecode.objectify.Key;
 
 /**
  * Fetches filter results for backend operations. It has similar methods as
@@ -93,8 +86,8 @@ public class ContactFilterResultFetcher
 	{
 	    Long filterId = Long.parseLong(filter_id);
 	    this.filter = ContactFilter.getContactFilter(filterId);
-	    if(this.filter != null)
-		UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+	    //if(this.filter != null)
+		//UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
 	}
 	catch (NumberFormatException e)
 	{
