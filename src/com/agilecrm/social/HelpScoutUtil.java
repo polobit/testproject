@@ -161,14 +161,14 @@ public class HelpScoutUtil
      *         Conversations form.
      * @throws Exception
      */
-    public static String getCreateFormData(Widget widget) throws Exception
+    public static JSONObject getCreateFormData(Widget widget) throws Exception
     {
 	JSONObject formData = new JSONObject();
 	// Get list of user for assignees list.
 	formData.put("assignees", new JSONArray(getPersonsFromHelpScout(widget, PERSON_USER)));
 	// Get the list of Mailboxes.
 	formData.put("mailboxes", new JSONArray(getMailBoxes(widget)));
-	return formData.toString();
+	return formData;
 
     }
 
