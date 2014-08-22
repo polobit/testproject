@@ -289,28 +289,6 @@ public class ContactFilterResultFetcher
 		
 		Contact contact = contacts.get(0);
 		
-		UserAccessControl control = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact.toString(), contact);
-		if(!control.canRead())
-		{
-		    java.util.Iterator<Contact> i = contacts.iterator();
-		    while(i.hasNext())
-		    {
-			Contact c = i.next();
-			Key<DomainUser> userKey = c.getContactOwnerKey();
-			if(userKey == null || domainUserId == null) 
-			    break;
-			if(userKey.getId() == domainUserId)
-			    continue;
-			
-			i.remove();
-		    }
-		}
-		
-		if (contacts.size() == 0)
-		{
-		    return contacts;
-		}
-	
 		if (contact.type == Contact.Type.PERSON)
 		    number_of_contacts = contacts.size();
 		else
