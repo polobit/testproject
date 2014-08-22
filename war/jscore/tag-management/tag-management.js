@@ -40,6 +40,7 @@ updateTag : function(e)
 		{
 			$("#tag-solid-state", this.el).show();
 			$("#editing", this.el).hide();
+			$(this.el).addClass('tag');
 			return;
 		}
 	
@@ -69,6 +70,7 @@ showActionButtons : function(e)
 {
 	e.preventDefault();
 	$('#actions', this.el).show();
+	$("a", this.el).popover('toggle');
 },
 hideActionButtons : function(e)
 {
@@ -94,7 +96,9 @@ deleteItem : function(e)
 }, edit : function(e)
 {
 	e.preventDefault();
+	
 	$("#tag-solid-state", this.el).hide();
+	$(this.el).removeClass('tag');
 	$("#editing", this.el).show();
 	this.input.focus();
 	this.input.val(this.model.get('tag'));
@@ -123,8 +127,11 @@ function append_tag_management(base_model) {
 	
 	var key = base_model.get('tag').charAt(0).toUpperCase();
 	console.log($('div[tag-alphabet="'+encodeURI(key)+'"]', this.el))
-                    
-	//$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append(itemView.render().el);
+
+		var el = itemView.render().el;
+	$(el).addClass('tag').attr('count', base_model.get('availableCount')).css('width', '200px').css('float' , 'left').css('margin', '0px 10px 15px 10px');
 	
-	$(this.model_list_element).append(itemView.render().el);
+	$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append($(el));
+
+	//$(this.model_list_element).append($(el));
 }

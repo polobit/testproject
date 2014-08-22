@@ -5,25 +5,25 @@
 </div>
 </script>
 
-<script id="tag-management-collection-template1" type="text/html">
+<script id="tag-management-collection-template" type="text/html">
 <div class="row">
 	<div class='span8 well'>
-
     		<legend>Tag</legend>
-			<fieldset>
     		<div class="control-group">  
 {{tagManagementCollectionSetup this}}	 
-                    <div id="milestone-values" class="milestone-ul-list" style="max-width:180px;">
-						<ul class='milestone-value-list tagsinput' id="tag-management-model-list" style='padding:1px;list-style:none;'><ul>
+                    <div id="milestone-values" class="milestone-ul-list1">
+						<ul class='milestone-value-list1 tagsinput tag-cloud' id="tag-management-model-list" style='padding:1px;list-style:none;display: inline;'></ul>
                     </div>
+<div class="clearfix"></div>
 					<div><a href="#"><i class="icon-plus-sign"></i> Add Tag</a></div>
+
+
 					<div class="show_field" style="display:none;">
 						<input id="add_new_milestone" style="width:170px;margin-right:10px;" type="text" placeholder="New Milestone">
 						<a class="btn" id="add_milestone" href="#">Add</a>
 					</div>
     				<input name="milestones" type="text" class="required hide"/>
     		</div> 
-    		<fieldset>
     </div>
 </div>
 </script>
@@ -32,7 +32,11 @@
 <span>
 
 <div id="tag-solid-state">
-	<span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 12em; display: inline-block;">{{this.tag}} </span>
+	<span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 10em; display: inline-block;">
+
+<a class="anchor" href="#tags/{{this.tag}}">{{this.tag}}</a> 
+
+</span>
 <span id="actions" class="hide">
 	<span><a class="delete right" href="#">&times</a></span>
 	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
@@ -43,6 +47,24 @@
 </div>
 </span>
 </script>
+
+<script id="tag-management-model-template" type="text/html">
+<span>
+
+<div id="tag-solid-state">
+<a class="anchor" style="font-size:13px;padding:1px 5px;display:block;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 11em; display: inline-block;" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
+
+<span id="actions" class="hide">
+	<span><a class="delete right" href="#">&times</a></span>
+	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
+</span>
+</div>
+<div class="hide" id="editing">
+	<input type="text" class="edit-input " value='{{this.tag}}' style="max-width:200px" >  
+</div>
+</span>
+</script>
+
 
 
 <script id="tag-cloud-collection-template" type="text/html">
@@ -58,14 +80,31 @@
 </script>
 
 <script id="tag-cloud-model-template" type="text/html">
-<a href="#" class="tag1">{{tag}}</a>
-<!-- <span>
 
-<div id="tag-solid-state">
-
+<!--
+<div id="tag-solid-state" style="width:15em;">
+	<a href="#" id="{{tag}}" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title"><span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 12em; display: inline-block;">{{this.tag}} </span></a>
+<span id="actions" class="hide">
+	<span><a class="delete right" href="#">&times</a></span>
+	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
+<span>
 </div>
 <div class="hide" id="editing">
 	<input type="text" class="edit-input input-medium" value='{{this.tag}}' >  
 </div>
-</span> -->
+
+-->
+<span>
+<a href="#" class="tag1" trigger="click" data-toggle="popover" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title"><span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 12em; display: inline-block" count="{{availableCount}}">{{tag}}</a>
+<span id="actions" class="hide">
+	<span><a class="delete right" href="#">&times</a></span>
+	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
+</span>
+</span>
+<span>
+<div class="hide" id="editing">
+	<input type="text" class="edit-input input-medium" value='{{this.tag}}' >  
+</div>
+</span>  
+
 </script>

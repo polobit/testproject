@@ -1,2 +1,12 @@
 <h3>Rendered source of your form:</h3>
+<script>
+	var agile_analytics_code_page_url = window.location.origin + "/#analytics-code";
+	document.getElementById("agile_analytics_code_page_url").onclick = function()
+	{
+		window.location.replace(agile_analytics_code_page_url);
+	}
+</script>
+<small> Copy paste the below code in your web page <br>
+<b>Note:</b> you need to add <a id="agile_analytics_code_page_url">tracking
+		code</a> to your web page for the web forms to work.</small><br><br>
 <textarea id="render" class="col-md-6 form-control"></textarea>
