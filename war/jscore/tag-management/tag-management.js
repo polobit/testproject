@@ -12,7 +12,7 @@ var TAG_MODEL_VIEW = Backbone.View.extend(
 					   "delete-checked .agile_delete" : "deleteItem",
 					   "keypress .edit-input" : "renameTag",
 					   "blur .edit-input"      : "updateTag",
-					   "click" : "showActionButtons",
+					   "mouseover" : "showActionButtons",
 					   "mouseout" : "hideActionButtons"
 
 },
@@ -129,9 +129,9 @@ function append_tag_management(base_model) {
 	console.log($('div[tag-alphabet="'+encodeURI(key)+'"]', this.el))
 
 		var el = itemView.render().el;
-	$(el).addClass('tag').attr('count', base_model.get('availableCount'));
+	$(el).addClass('tag').attr('count', base_model.get('availableCount')).css('width', '200px').css('float' , 'left').css('margin', '0px 10px 15px 10px');
 	
-	//$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append($(el));
+	$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append($(el));
 
-	$(this.model_list_element).append($(el));
+	//$(this.model_list_element).append($(el));
 }

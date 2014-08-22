@@ -11,10 +11,13 @@
     		<legend>Tag</legend>
     		<div class="control-group">  
 {{tagManagementCollectionSetup this}}	 
-                    <div id="milestone-values" class="milestone-ul-list1" style="max-width:180px;">
-						<ul class='milestone-value-list1 tagsinput' id="tag-management-model-list" style='padding:1px;list-style:none;'></ul>
+                    <div id="milestone-values" class="milestone-ul-list1">
+						<ul class='milestone-value-list1 tagsinput tag-cloud' id="tag-management-model-list" style='padding:1px;list-style:none;display: inline;'></ul>
                     </div>
+<div class="clearfix"></div>
 					<div><a href="#"><i class="icon-plus-sign"></i> Add Tag</a></div>
+
+
 					<div class="show_field" style="display:none;">
 						<input id="add_new_milestone" style="width:170px;margin-right:10px;" type="text" placeholder="New Milestone">
 						<a class="btn" id="add_milestone" href="#">Add</a>
@@ -29,7 +32,11 @@
 <span>
 
 <div id="tag-solid-state">
-	<span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 10em; display: inline-block;">{{this.tag}} </span>
+	<span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 10em; display: inline-block;">
+
+<a class="anchor" href="#tags/{{this.tag}}">{{this.tag}}</a> 
+
+</span>
 <span id="actions" class="hide">
 	<span><a class="delete right" href="#">&times</a></span>
 	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
@@ -45,14 +52,15 @@
 <span>
 
 <div id="tag-solid-state">
-	<span style="white-space: nowrap; text-overflow: ellipsis; ; overflow: hidden; width: 10em; display: inline-block;">{{this.tag}} </span>
+<a class="anchor" style="font-size:13px;padding:1px 5px;display:block;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 11em; display: inline-block;" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
+
 <span id="actions" class="hide">
 	<span><a class="delete right" href="#">&times</a></span>
 	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
-<span>
+</span>
 </div>
 <div class="hide" id="editing">
-	<input type="text" class="edit-input " value='{{this.tag}}' >  
+	<input type="text" class="edit-input " value='{{this.tag}}' style="max-width:200px" >  
 </div>
 </span>
 </script>

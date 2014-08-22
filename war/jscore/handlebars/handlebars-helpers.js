@@ -2696,7 +2696,7 @@ $(function()
 		var html_temp = "";
 		
 		for(var i = 0; i< keys.length ; i ++)
-			html_temp += "<div style='margin-right:10px;max-width:180px'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"milestone-value-list tagsinput\" style=\"padding:1px;list-style:none;\"></ul></div></div>";
+			html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='tag-values left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"milestone-value-list1 tagsinput tag-cloud\" style=\"padding:1px;list-style:none;display: inline;\"></ul></div></div>";
 		 
     console.log(html_temp);
     return new Handlebars.SafeString(html_temp);
