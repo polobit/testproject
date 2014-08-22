@@ -366,7 +366,7 @@
     {{#if id}}
 <form id="quickbook-form" class="form-horizontal">
 <input type ="hidden" value = "{{id}}" name ="id">
-          <div>Account Linked : {{otherParams}} <span><a href="#" class="delete">Change</a></span></div>
+          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
 	
           
              	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
@@ -402,7 +402,7 @@
        
     </form>
 {{else}}
- <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;">Enable</a>
+ <a href="/OAuthServlet?service=quickbook-import&return_url=' + encodeURIComponent(window.location.href) + "/quickbooks""  class="btn"  style="display:inline-block;margin-left: 70px;">Enable</a>
 {{/if}}
 
 </div>
