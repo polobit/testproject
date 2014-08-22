@@ -635,6 +635,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
 	    
+	    
+	    
 	}
 	catch (Exception e)
 	{

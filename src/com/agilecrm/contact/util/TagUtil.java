@@ -308,7 +308,7 @@ public class TagUtil
 	   
 	   Cursor currentCursor = (Cursor) tags.get(0);
 	   
-	   if(cursor.cursor.equals(currentCursor.cursor))
+	   if(cursor.cursor== null || cursor.cursor.equals(currentCursor.cursor))
 	       break;
 	   
 	   tags = TagUtil.getTags(100, currentCursor.cursor);

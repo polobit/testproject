@@ -17,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.ws.RequestWrapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -163,7 +164,27 @@ public class TagsAPI
 	System.out.println("reload : " + reload);
 	return TagUtil.getTags(true);
     }
-
+    
+    @Path("stats2")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Tag> getTagsStats2(@QueryParam("reload") boolean reload, @QueryParam("page_size") String page_size, @QueryParam("cursor") String cursor)
+    {
+	System.out.println("reload : " + reload);
+	if(StringUtils.isEmpty(page_size))
+	    return TagUtil.getStatus();
+	try
+	{
+	    int tags_fetch_size = Integer.parseInt(page_size);
+	    
+	    return TagUtil.getStats(tags_fetch_size, cursor);
+	}
+	catch(NumberFormatException e)
+	{
+	    return TagUtil.getStatus();
+	}
+    }
+    
     /**
      * Creates new tags in tags database
      * 
