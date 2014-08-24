@@ -3,9 +3,9 @@ package com.agilecrm.util.email;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
@@ -226,8 +226,8 @@ public class SendMail
 
 	    System.out.println("Namespace in SendMail is " + NamespaceManager.get());
 
-	    // Send Email
-	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
+	    EmailGatewayUtil.sendEmail(NamespaceManager.get(), from, fromName, to, null, null, subject, from,
+		    emailHTML, emailBody, null, args);
 	}
 	catch (Exception e)
 	{

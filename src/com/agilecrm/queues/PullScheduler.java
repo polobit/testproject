@@ -10,6 +10,8 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
+import com.agilecrm.sendgrid.util.SendGridUtil;
+import com.agilecrm.sendgrid.util.deferred.SendGridDeferredTask;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.TaskHandle;
@@ -84,8 +86,8 @@ public class PullScheduler
     {
 	// Campaigns need more lease period (in secs)
 	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE))
+	        || StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE))
 	    return 3600;
 
 	return DEFAULT_LEASE_PERIOD;
@@ -198,6 +200,14 @@ public class PullScheduler
 		    PullQueueUtil.deleteTasks(queueName, tasks);
 		    return;
 		}
+		else if (deferredTask instanceof SendGridDeferredTask)
+		{
+		    System.out.println("Executing sendgrid mail tasks...");
+
+		    SendGridUtil.sendSendGridMails(tasks);
+		    PullQueueUtil.deleteTasks(queueName, tasks);
+		    return;
+		}
 		else
 		    deferredTask.run();
 
@@ -212,5 +222,4 @@ public class PullScheduler
 	PullQueueUtil.deleteTasks(queueName, completedTasks);
 
     }
-
 }

@@ -18,6 +18,10 @@
 - Added limit to  stop the campaign after 100 actions
 - Added maximum limit to the nodes to be added in a campaign 
 
+*** Naresh ***
+- Powered by Agile bug fix in paid accounts
+- Removed dependency on contact owner while adding task, note etc from campaigns
+
 
 1-3 (14-August-2014)
 
