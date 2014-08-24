@@ -58,7 +58,6 @@ public class CSVUtil
 {
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     private CSVUtil()
     {
