@@ -250,7 +250,7 @@ public class CSVUtil
 		    }
 		    continue;
 		}
-		if ("notes".equals(field.name))
+		if ("note".equals(field.name))
 		{
 		    notes_positions.add(j);
 		    continue;
