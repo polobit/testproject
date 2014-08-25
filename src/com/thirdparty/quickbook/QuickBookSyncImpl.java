@@ -45,6 +45,11 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	int noOfPages = 1;
 	int total_customer = getTotalCustomer();
+	if(total_customer == 0){
+	    sendNotification(prefs.type.getNotificationEmailSubject());
+	    updateLastSyncedInPrefs();
+	    return ;
+	}
 	if (total_customer > MAX_RESULT)
 	{
 	    noOfPages = (int) Math.ceil(total_customer / MAX_RESULT);
@@ -155,28 +160,40 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    {
 
 			JSONObject salesItemLineDetail = (JSONObject) items.get(j);
-			JSONObject salesInfo = (JSONObject) salesItemLineDetail.get("SalesItemLineDetail");
-			JSONObject itemRef = (JSONObject) salesInfo.get("ItemRef");
+			if (salesItemLineDetail.has("SalesItemLineDetail"))
+			{
+			    JSONObject salesInfo = (JSONObject) salesItemLineDetail.get("SalesItemLineDetail");
+			    if (salesInfo.has("ItemRef"))
+			    {
+				JSONObject itemRef = (JSONObject) salesInfo.get("ItemRef");
 
-			JSONObject taxCodeRef = (JSONObject) salesInfo.get("TaxCodeRef");
-			if (note.description == null)
-			{
-			    note.description = "Item #" + itemRef.get("name") + " Price # "
-				    + salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
-			    if (!taxCodeRef.get("value").equals("NON"))
-			    {
-				note.description += "Tax # " + taxCodeRef.get("value") + " ("
-					+ currencyRef.get("value") + ")";
-			    }
-			}
-			else
-			{
-			    note.description += "\n Item #" + itemRef.get("name") + " Price # "
-				    + salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
-			    if (!taxCodeRef.get("value").equals("NON"))
-			    {
-				note.description += "Tax # " + taxCodeRef.get("value") + " ("
-					+ currencyRef.get("value") + ")";
+				if (salesInfo.has("TaxCodeRef"))
+				{
+
+				    JSONObject taxCodeRef = (JSONObject) salesInfo.get("TaxCodeRef");
+
+				    if (note.description == null)
+				    {
+					note.description = "Item #" + itemRef.get("name") + " Price # "
+						+ salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
+					if (!taxCodeRef.get("value").equals("NON"))
+					{
+					    note.description += "Tax # " + taxCodeRef.get("value") + " ("
+						    + currencyRef.get("value") + ")";
+					}
+				    }
+				    else
+				    {
+					note.description += "\n Item #" + itemRef.get("name") + " Price # "
+						+ salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
+					if (!taxCodeRef.get("value").equals("NON"))
+					{
+					    note.description += "Tax # " + taxCodeRef.get("value") + " ("
+						    + currencyRef.get("value") + ")";
+					}
+				    }
+
+				}
 			    }
 			}
 
@@ -223,7 +240,10 @@ public class QuickBookSyncImpl extends OneWaySyncService
 			    prefs.token, prefs.secret, invoicesURL, "GET", "", "quickbooks");
 	    JSONObject response = new JSONObject(result);
 	    JSONObject invoice = (JSONObject) response.get("QueryResponse");
-	    allInvoices = (JSONArray) invoice.get("Invoice");
+	    if (invoice.has("Invoice"))
+	    {
+		allInvoices = (JSONArray) invoice.get("Invoice");
+	    }
 	}
 	catch (Exception e)
 	{
@@ -299,7 +319,9 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    JSONObject queryResponse = (JSONObject) object.get("QueryResponse");
 	    if (queryResponse != null)
 	    {
-		customers = queryResponse.getJSONArray("Customer");
+		if(queryResponse.has("Customer")){
+		    customers = queryResponse.getJSONArray("Customer");
+		}
 	    }
 
 	}
@@ -328,7 +350,10 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    JSONObject object = new JSONObject(response);
 
 	    JSONObject queryResponse = object.getJSONObject("QueryResponse");
-	    count = (int) queryResponse.get("totalCount");
+	    if (queryResponse.has("totalCount"))
+	    {
+		count = (int) queryResponse.get("totalCount");
+	    }
 
 	}
 	catch (Exception e)
