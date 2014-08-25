@@ -3,6 +3,7 @@
  */
 package com.thirdparty.quickbook;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
@@ -122,18 +123,13 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	try
 	{
 	    JSONObject phone = null;
-	    if(customer.has("Mobile")){
-		
-		phone = new JSONObject(customer.get("Mobile").toString());
-	    }
-	    if (phone != null)
+	    if (customer.has("PrimaryPhone"))
 	    {
-		if(phone.has("FreeFormNumber")){
-		    
-		    field = new ContactField(Contact.PHONE, phone.getString("FreeFormNumber"), "work");
-		}
 
+		phone = (JSONObject) customer.get("PrimaryPhone");
+		field = new ContactField(Contact.PHONE, phone.getString("FreeFormNumber"), "home");
 	    }
+
 	}
 	catch (JSONException e)
 	{
@@ -187,6 +183,42 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
+    public List<ContactField> getMoreCustomInfo()
+    {
+
+	List<ContactField> fields = new ArrayList<ContactField>();
+	ContactField field = null;
+	try
+	{
+	    if (customer.has("WebAddr"))
+	    {
+
+		JSONObject company = (JSONObject) customer.get("WebAddr");
+
+		String name = (String) company.get("URI");
+		if (company != null && !name.isEmpty())
+		{
+
+		    field = new ContactField(Contact.WEBSITE, name, "Website");
+		}
+	    }
+
+	    if (customer.has("Mobile"))
+	    {
+		JSONObject mob = (JSONObject) customer.get("Mobile");
+		fields.add(new ContactField("mobile", mob.get("FreeFormNumber").toString(), "mobile"));
+	    }
+
+	}
+	catch (JSONException e)
+	{
+
+	    e.printStackTrace();
+	}
+	fields.add(field);
+	return fields;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -209,33 +241,39 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	ContactField field = null;
 	try
 	{
-	    if(customer.has("BillAddr")){
-	    JSONObject billingAddrss = (JSONObject) customer.get("BillAddr");
-	    JSONObject address = new JSONObject();
-	    if (billingAddrss != null)
+	    if (customer.has("BillAddr"))
 	    {
-		if(billingAddrss.has("Line1")){
-		address.put("address", billingAddrss.get("Line1"));
-		}
-		if(billingAddrss.has("City")){
-		    address.put("city", billingAddrss.getString("City"));
-		    
-		}
-		
-		if(billingAddrss.has("Country")){
-		    address.put("country", billingAddrss.getString("Country"));
-		}
-		if(billingAddrss.has("CountrySubDivisionCode")){
-		    
-		    address.put("state", billingAddrss.getString("CountrySubDivisionCode"));
-		}
-		if(billingAddrss.has("PostalCode")){
-		    
-			address.put("zip", billingAddrss.getString("PostalCode"));
-		}
+		JSONObject billingAddrss = (JSONObject) customer.get("BillAddr");
+		JSONObject address = new JSONObject();
+		if (billingAddrss != null)
+		{
+		    if (billingAddrss.has("Line1"))
+		    {
+			address.put("address", billingAddrss.get("Line1"));
+		    }
+		    if (billingAddrss.has("City"))
+		    {
+			address.put("city", billingAddrss.getString("City"));
 
-		field = new ContactField(Contact.ADDRESS, address.toString(), "home");
-	    }
+		    }
+
+		    if (billingAddrss.has("Country"))
+		    {
+			address.put("country", billingAddrss.getString("Country"));
+		    }
+		    if (billingAddrss.has("CountrySubDivisionCode"))
+		    {
+
+			address.put("state", billingAddrss.getString("CountrySubDivisionCode"));
+		    }
+		    if (billingAddrss.has("PostalCode"))
+		    {
+
+			address.put("zip", billingAddrss.getString("PostalCode"));
+		    }
+
+		    field = new ContactField(Contact.ADDRESS, address.toString(), "home");
+		}
 	    }
 	}
 	catch (JSONException e)

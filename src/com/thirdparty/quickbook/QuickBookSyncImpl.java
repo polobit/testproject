@@ -159,7 +159,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    JSONObject invoice = (JSONObject) customerInvoices.get(i);
 		    JSONObject currencyRef = (JSONObject) invoice.get("CurrencyRef");
 		    Note note = new Note();
-		    note.subject = "Order No # " + invoice.get("DocNumber");
+		    note.subject = "Invoice No # " + invoice.get("DocNumber");
 		    JSONArray items = (JSONArray) invoice.get("Line");
 
 		    for (int j = 0; j < items.length() - 1; j++)
