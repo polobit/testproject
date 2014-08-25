@@ -14,7 +14,7 @@ var TAG_MODEL_VIEW = Backbone.View.extend(
 					   "blur .edit-input"      : "updateTag",
 					   "mouseover" : "showActionButtons",
 					   "mouseout" : "hideActionButtons",
-					   'click .details ' : "showDetails",
+					   'click .details' : "showDetails",
 					   "click #add-new-tag" : "addNewTag",
 					   
 						   
@@ -38,9 +38,28 @@ showDetails : function(e)
 {
 	e.preventDefault();
 	var _that = this;
+	var details_el = $(".details", this.el);
+	
+	console.log(_that);
+	
+    /**
+     * Checks for last 'tr' and change placement of popover to 'top' inorder
+     * to prevent scrolling on last row of list
+     **/
+    $(this.el).attr({
+    	"rel" : "popover",
+    	"data-original-title" : "\"" + this.model.get('tag') + "\" Stats",
+    	"data-content" :  LOADING_HTML,
+    	"data-container" : this.el
+    });
+    
+    $(this.el).popover('show');
+	
 	$.getJSON('core/api/tags/getstats/' + this.model.get('tag'), function(data){
 		_that.model.set('availableCount', data.availableCount);
 		console.log(_that.model.toJSON());
+		$(_that.el).attr('data-content', _that.model.get('availableCount') + " Contacts");
+		$(_that.el).popover('show');
 	})
 },
 renameTag : function (e)
@@ -91,6 +110,7 @@ hideActionButtons : function(e)
 {
 	e.preventDefault();
 	$('#actions', this.el).hide();
+	$(this.el).popover('hide');
 },
 addNewTag : function(e)
 {
@@ -111,7 +131,7 @@ deleteItem : function(e)
 		return;
 	}
 	
-	this.model.url = "core/api/tags/bulk/delete?tag=" + this.model.get("tag");
+	this.model.url = "core/api/tags/bulk/delete?tag=" + encodeURI(this.model.get("tag"));
 	this.model.set({"id" : this.model.get('tag')})
 	this.model.destroy();
 }, edit : function(e)

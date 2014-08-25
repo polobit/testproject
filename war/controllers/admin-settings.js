@@ -361,8 +361,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		console.log(this.tagsview1);
 		this.tagsview1.collection.fetch();
 		$("#content").html(this.tagsview1.render().el);
-	}
-	});
+	},
+	
 
 
 	emailGateways : function(id)
@@ -419,4 +419,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-	} });
+	} 
+	
+});
