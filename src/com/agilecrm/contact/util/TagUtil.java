@@ -78,6 +78,17 @@ public class TagUtil
 	    CacheUtil.deleteCache(NamespaceManager.get() + "-" + "tags");
 
     }
+    
+    public static void addTag(Tag tag)
+    {
+	Tag oldTag = getTag(tag.tag);
+	if(oldTag != null)
+	    return;
+	
+	tag.addTag(tag.tag);
+	    
+    }
+    
 
     /**
      * Deletes tags one by one (by iterating the set of tags) from database, if
@@ -141,6 +152,26 @@ public class TagUtil
 	{
 	    return null;
 	}
+    }
+    
+    public static Tag getTagWithStats(String tag)
+    {
+	Key<Tag> tagKey = new Key<Tag>(Tag.class, tag);
+
+	try
+	{
+	    Tag tagObject = dao.get(tagKey);
+	    int count = ContactUtil.getContactsCountForTag(tagObject.tag);
+	    tagObject.availableCount = count;
+	    
+	    return tagObject;
+	    
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
     }
 
     /**

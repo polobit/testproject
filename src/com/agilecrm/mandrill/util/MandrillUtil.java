@@ -82,12 +82,13 @@ public class MandrillUtil
      * @param text
      *            - text content
      */
-    public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String metadata)
+    public static void sendMail(String apiKey, String fromEmail, String fromName, String to, String cc, String bcc,
+	    String subject, String replyTo, String html, String text, String metadata)
     {
 	String subaccount = NamespaceManager.get();
-	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to, cc,
-	        bcc, subject, replyTo, html, text, metadata);
+
+	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(apiKey, subaccount, fromEmail, fromName,
+	        to, cc, bcc, subject, replyTo, html, text, metadata);
 
 	PullQueueUtil.addToPullQueue(
 	        "bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
@@ -109,9 +110,10 @@ public class MandrillUtil
 	        .deserialize(firstTaskHandle.getPayload());
 
 	// Initialize mailJSON with common fields
-	JSONObject mailJSON = getMandrillMailJSON(firstMandrillDefferedTask.subaccount,
-	        firstMandrillDefferedTask.fromEmail, firstMandrillDefferedTask.fromName,
-	        firstMandrillDefferedTask.replyTo, firstMandrillDefferedTask.metadata);
+	JSONObject mailJSON = getMandrillMailJSON(firstMandrillDefferedTask.apiKey,
+	        firstMandrillDefferedTask.subaccount, firstMandrillDefferedTask.fromEmail,
+	        firstMandrillDefferedTask.fromName, firstMandrillDefferedTask.replyTo,
+	        firstMandrillDefferedTask.metadata);
 
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();
@@ -215,13 +217,13 @@ public class MandrillUtil
      *            - from name
      * @return JSONObject
      */
-    public static JSONObject getMandrillMailJSON(String subaccount, String fromEmail, String fromName, String replyTo,
-	    String metadata)
+    public static JSONObject getMandrillMailJSON(String apiKey, String subaccount, String fromEmail, String fromName,
+	    String replyTo, String metadata)
     {
 	try
 	{
 	    // Complete mail json to be sent
-	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(subaccount);
+	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(apiKey, subaccount);
 
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, replyTo, metadata);
 	    mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
