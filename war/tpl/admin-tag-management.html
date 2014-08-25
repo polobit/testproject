@@ -8,21 +8,19 @@
 <script id="tag-management-collection-template" type="text/html">
 <div class="row">
 	<div class='span8 well'>
-    		<legend>Tag</legend>
+    		<legend>Tag Management</legend>
     		<div class="control-group">  
 {{tagManagementCollectionSetup this}}	 
                     <div id="milestone-values" class="milestone-ul-list1">
 						<ul class='milestone-value-list1 tagsinput tag-cloud' id="tag-management-model-list" style='padding:1px;list-style:none;display: inline;'></ul>
                     </div>
 <div class="clearfix"></div>
-					<div><a href="#"><i class="icon-plus-sign"></i> Add Tag</a></div>
+					<div><a href="#" id="add-new-tag"><i class="icon-plus-sign" ></i> Add Tag</a></div>
 
 
-					<div class="show_field" style="display:none;">
-						<input id="add_new_milestone" style="width:170px;margin-right:10px;" type="text" placeholder="New Milestone">
-						<a class="btn" id="add_milestone" href="#">Add</a>
+					<div id="new_tag_field_block" style="display:none;">
+						<input id="new_tag" style="width:170px;margin-right:10px;" type="text" placeholder="New Tag">
 					</div>
-    				<input name="milestones" type="text" class="required hide"/>
     		</div> 
     </div>
 </div>
@@ -38,7 +36,7 @@
 
 </span>
 <span id="actions" class="hide">
-	<span><a class="delete right" href="#">&times</a></span>
+	<span><a class="close delete right" href="#">&times</a></span>
 	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
 <span>
 </div>
@@ -55,12 +53,14 @@
 <a class="anchor" style="font-size:13px;padding:1px 5px;display:block;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 11em; display: inline-block;" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
 
 <span id="actions" class="hide">
-	<span><a class="delete right" href="#">&times</a></span>
-	<span><a class="edit right" href="#"><i class="icon-pencil"></i></a></span>
+<span><a class="delete right" href="#" style="font-size:1.1em"><i class="icon-remove-sign"></i></a></span>
+	<span><a class="edit right" href="#"><i class="icon-pencil" style="font-size:1.1em"></i></a></span>
+	<span><a class="details right" href="#" ><i class="icon-file-text"></i></a></span> 
+	
 </span>
 </div>
-<div class="hide" id="editing">
-	<input type="text" class="edit-input " value='{{this.tag}}' style="max-width:200px" >  
+<div class="hide" id="editing" style="float: left;width:200px;">
+	<input type="text" class="edit-input " value='{{this.tag}}' style="width:200px;float: left;" >  
 </div>
 </span>
 </script>

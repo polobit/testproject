@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,6 +73,15 @@ public class TagsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void saveTag(Tag tag)
+    {
+	Set<Tag> tags = new HashSet<Tag>();
+	tags.add(tag);
+	TagUtil.addTag(tag);
     }
 
     /**
@@ -183,6 +193,20 @@ public class TagsAPI
 	{
 	    return TagUtil.getStatus();
 	}
+    }
+    
+    /**
+     * Returns tag with stats (Number of contacts associated with contacts)
+     * @param tag
+     * @return
+     */
+    @Path("getstats/{tag}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Tag getTagStats(@PathParam("tag") String tag)
+    {
+	return TagUtil.getTagWithStats(tag);
+	
     }
     
     /**
