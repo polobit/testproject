@@ -484,7 +484,7 @@ $(function()
 			var html = "";
 			for ( var i = 0; i < keys.length; i++)
 			{
-			    html += "<div class='tag-element' style='margin-right:10px'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + keys[i] + "\"></div></div>";
+			    html += "<div class='tag-element' style='margin-right:10px;'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"></div></div>";
 			}
 			return new Handlebars.SafeString(html);
 		    });
@@ -1322,6 +1322,11 @@ $(function()
     	if (url.match("skype:") != null)
     	    return url;
     	return 'skype:' + url;
+    });
+    
+    Handlebars.registerHelper('getFacebookURL', function(url)
+    {
+    	return url.replace('@', '');
     });
 
     // Get Count
@@ -2655,6 +2660,7 @@ $(function()
     	return options.inverse(this);	
     })
     
+    
     Handlebars.registerHelper('fetchXeroUser', function(data)
     {
     	    			return JSON.parse(data).xeroemail;
@@ -2665,4 +2671,64 @@ $(function()
     	var arr = window.location.href.split('/')
     	return arr[2];
     });
+    
+    Handlebars
+    .registerHelper(
+	    'tagManagementCollectionSetup',
+	    function(tags)
+	    {
+
+		console.log(tags);
+		var json = {};
+
+		var keys = [];
+		// Store tags in a json, starting letter as key
+		for ( var i = 0; i < tags.length; i++)
+		{
+		    var tag = tags[i].tag;
+		    var key = tag.charAt(0).toUpperCase();
+		    // console.log(tag);
+		    if (jQuery.inArray(key, keys) == -1)
+			keys.push(key);
+		}
+		
+		console.log(keys);
+		var html_temp = "";
+		
+		for(var i = 0; i< keys.length ; i ++)
+			html_temp += "<div style='margin-right:10px;max-width:180px'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"milestone-value-list tagsinput\" style=\"padding:1px;list-style:none;\"></ul></div></div>";
+		 
+    console.log(html_temp);
+    return new Handlebars.SafeString(html_temp);
+	    });
+    
+    Handlebars.registerHelper('containsScope', function(item, list, options)
+	    {
+    		if(list.length == 0 || !item)
+    			 return options.inverse(this);
+    		
+    		if(jQuery.inArray(item, list) == -1)
+    	   		return options.inverse(this);   			
+    		
+    			return options.fn(this);
+ 
+	    });
+    
+    Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+    		{	
+    	
+    				if(CURRENT_DOMAIN_USER.id == owner_id)
+    					return options.fn(this);
+    				return options.inverse(this); 
+    		});
+    
+    Handlebars.registerHelper('canEditContact', function(owner_id, options){
+    	return options.fn(this);
+    	
+    	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+    		return options.fn(this);
+    	
+		return options.inverse(this)
+    });
+    
  });

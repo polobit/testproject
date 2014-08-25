@@ -43,7 +43,7 @@ public class ContactUtilServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse res)
     {
 
-	 ContactPrefs contactPrefs = null;
+	ContactPrefs contactPrefs = null;
 	try
 	{
 	    // String type = null, cron = null;
@@ -57,22 +57,21 @@ public class ContactUtilServlet extends HttpServlet
 	    System.out.println("contactPrefsByteArray " + contactPrefsByteArray);
 	    // retrieves Object which was added in taskQueue
 	    contactPrefs = (ContactPrefs) o.readObject();
-	    
-	    if(contactPrefs == null)
+
+	    if (contactPrefs == null)
 		return;
-	    
-	    if(contactPrefs.domainUser != null)
+
+	    if (contactPrefs.domainUser != null)
 	    {
 		DomainUser user = DomainUserUtil.getDomainUser(contactPrefs.domainUser.getId());
 		BulkActionUtil.setSessionManager(user);
 	    }
 
-	    SyncService service = new SyncPrefsBuilder().config(contactPrefs)
-		    .getService(contactPrefs.type.getClazz());
+	    SyncService service = new SyncPrefsBuilder().config(contactPrefs).getService(contactPrefs.type.getClazz());
 
 	    if (service != null)
 	    {
-		    service.initSync();
+		service.initSync();
 
 	    }
 
@@ -107,7 +106,8 @@ public class ContactUtilServlet extends HttpServlet
 	{
 	    e.printStackTrace();
 	}
-	finally{
+	finally
+	{
 	    contactPrefs.inProgress = false;
 	    contactPrefs.save();
 	}

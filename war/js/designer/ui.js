@@ -197,6 +197,11 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     		options = getMergeFields();
     }
     	
+    if(uiFieldDefinition.fieldType == "update_field")
+    {
+    	
+    	options = getUpdateFields("update_field");
+    }
     // Populate Options
     $.each(
     options, function (key, value) {
@@ -544,6 +549,18 @@ function _generateUIFields(selector, ui) {
            
            else
         	   uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
+        //update contacts
+        if(uiFieldType == "update_field")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
            
            $(uiField).appendTo(container);
            continue;

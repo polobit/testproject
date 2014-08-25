@@ -410,11 +410,7 @@ public class Contact extends Cursor
 
 	    if (myMail != null && !myMail.isEmpty())
 	    {
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("properties.name = ", EMAIL);
-		searchMap.put("properties.value = ", myMail);
-
-		countEmails = dao.getCountByProperty(searchMap);
+		countEmails = ContactUtil.searchContactCountByEmail(myMail);
 	    }
 	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
 	    // otherwise if countEmails==1, make sure its not due to previous
@@ -1075,8 +1071,11 @@ public class Contact extends Cursor
 	if (field != null)
 	{
 	    field.value = LinkedInUtil.changeImageUrl(field.value);
-	    if (StringUtils.contains(field.value, "twimg0-") || StringUtils.contains(field.value, "twimg.com"))
-		properties.remove(field);
+	    /*
+	     * if (StringUtils.contains(field.value, "twimg0-") ||
+	     * StringUtils.contains(field.value, "twimg.com"))
+	     * properties.remove(field);
+	     */
 	}
 
 	if (contact_company_key != null) // fill company name in

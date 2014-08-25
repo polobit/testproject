@@ -131,6 +131,8 @@ $(function()
 		var disable = $(this).attr('disabled');
 		if(disable)
 			return false;
+		$(this).attr("disabled", "disabled");
+		$(this).text("Syncing");
 		
 		var quickbookPrefs = serializeForm("quickbook-form");
 		quickbookPrefs['inProgress'] = true;

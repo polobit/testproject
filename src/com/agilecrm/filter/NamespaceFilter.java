@@ -193,7 +193,6 @@ public class NamespaceFilter implements Filter
 	 "hungry", "password", true, true); try { domainUser.save(); } catch
 	 (Exception e) { // TODO Auto-generated catch block
 	 e.printStackTrace(); }*/
-	
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with

@@ -4,7 +4,9 @@ import java.net.URL;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import com.agilecrm.util.HTTPUtil;
+
 import facebook4j.Facebook;
 import facebook4j.FacebookFactory;
 import facebook4j.ResponseList;
@@ -104,7 +106,7 @@ public class FacebookUtil
      * @return
      * @throws Exception
      */
-    public String getFacebookProfileById(String id) throws Exception
+    public JSONObject getFacebookProfileById(String id) throws Exception
     {
 	JSONObject fbJson = new JSONObject();
 	try
@@ -113,6 +115,15 @@ public class FacebookUtil
 	    System.out.println("accessToken:" + accessToken);
 	    String res1 = HTTPUtil.accessURL(APIURL + id + "?access_token=" + accessToken);
 	    fbJson.put("user", new JSONObject(res1));
+	    String res3 = HTTPUtil.accessURL(APIURL + id + "/picture?redirect=false" + "&access_token=" + accessToken);
+	    try
+	    {
+		fbJson.getJSONObject("user").put("image", new JSONObject(res3).getJSONObject("data").getString("url"));
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	    String res2 = HTTPUtil.accessURL(APIURL + "me?access_token=" + accessToken);
 	    fbJson.put("me", new JSONObject(res2));
 
@@ -121,7 +132,7 @@ public class FacebookUtil
 	{
 	    e.printStackTrace();
 	}
-	return fbJson.toString();
+	return fbJson;
     }
 
     /**
@@ -134,7 +145,7 @@ public class FacebookUtil
     {
 
 	return HTTPUtil.accessURL(APIURL + "me?access_token=" + accessToken
-	        + "&fields=picture,about,id,name,location,hometown,address,link");
+		+ "&fields=picture,about,id,name,location,hometown,address,link");
 
     }
 }

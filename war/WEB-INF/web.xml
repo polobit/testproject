@@ -629,4 +629,13 @@
 		<servlet-name>OAuthServlet</servlet-name>
 		<url-pattern>/OAuthServlet</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<jsp-file>/web-event-calendar.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WebEventCalendar</servlet-name>
+		<url-pattern>/webeventcalendar/*</url-pattern>
+	</servlet-mapping>
 </web-app>

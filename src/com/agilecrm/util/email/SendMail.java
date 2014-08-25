@@ -98,10 +98,12 @@ public class SendMail
 
     public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
+    public static final String EXPORT_DEALS_CSV = "export_csv";
+    public static final String EXPORT_DEALS_CSV_SUBJECT = "Agile CRM Deals CSV";
 
     public static final String UNSUBSCRIBE_CONFIRMATION = "unsubscribe_confirmation";
     public static final String UNSUBSCRIBE_CONFIRMATION_SUBJECT = "Unsubscribe";
-    
+
     public static final String STRIPE_IMPORT_NOTIFICATION = "contact_sync_notification_template";
     public static final String STRIPE_IMPORT_NOTIFICATION_SUBJECT = "Stripe Import Report";
 

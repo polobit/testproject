@@ -44,16 +44,7 @@ public class Notify extends TaskletAdapter
 	    Contact contact = ContactUtil.getContact(Long.parseLong(contactId));
 	    DomainUser contactOwner = contact.getOwner();
 
-	    if (contactOwner == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-		return;
-	    }
-
-	    Long givenOwnerId = AgileTaskletUtil.getOwnerId(ownerId, contactOwner.id);
+	    Long givenOwnerId = AgileTaskletUtil.getOwnerId(ownerId, contactOwner == null ? null : contactOwner.id);
 
 	    // Push notification
 	    pushNotification(contact, givenOwnerId, notifyName);
@@ -89,6 +80,6 @@ public class Notify extends TaskletAdapter
 
 	// Execute notification
 	NotificationPrefsUtil.executeNotification(Type.CAMPAIGN_NOTIFY, contact,
-		new JSONObject().put("custom_value", content.toString()));
+	        new JSONObject().put("custom_value", content.toString()));
     }
 }

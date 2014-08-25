@@ -49,6 +49,8 @@ function downloadNodes(callback) {
                 
                 menuNode.click(function()                
                 {
+                	if(!checkMaxNodesCount())
+                 		return;
                 	constructNodeFromDefinition(data);                
                 });
 
@@ -95,8 +97,7 @@ function downloadNodes(callback) {
 
 //download advanced nodes (Ramesh 24/09/2010)
 function downloadAdvancedNodes() {
-
-
+	
 	
     // Download the JSON files one by one	
     $.each(Second_Nodes_Toolbar_Global, function(index, url) {
@@ -138,6 +139,8 @@ function downloadAdvancedNodes() {
                 
                 menuNode.click(function()                
                 {
+                	if(!checkMaxNodesCount())
+                 		return;
                 	constructNodeFromDefinition(data);                
                 });
 
@@ -178,6 +181,20 @@ function downloadAdvancedNodes() {
     });
 }
 
+function checkMaxNodesCount(){
+	
+	if($('#paintarea >div.contextMenuForNode').length>25){
+		
+ 	     window.parent.$("#workflow-edit-msg").hide();
+ 		 window.parent.$("#nodes-limit-reached").show();
+ 		 alert("Too many items in your campaign. Can't add more.");
+ 		 console.log("You have reached maximum number of nodes");
+ 		 
+ 		return false;
+ 	}
+	else 
+		return true
+}
 // Add Dragging Capability for nodes and droppable for paintarea
 function addDraggingCapability() {
 
@@ -191,7 +208,11 @@ function addDraggingCapability() {
 
             // Get jsonDefinition and add it      	
             var jsonDefinition = $(ui.draggable).data("json");
-            constructNodeFromDefinition(jsonDefinition);
+            
+            if(!checkMaxNodesCount())
+        		return;
+          
+               constructNodeFromDefinition(jsonDefinition);
 
         }
     });

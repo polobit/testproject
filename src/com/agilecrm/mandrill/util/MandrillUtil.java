@@ -177,8 +177,6 @@ public class MandrillUtil
 		        + Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 	    }
 
-	    System.out.println("Mailjson is " + mailJSON.toString());
-
 	}
 	catch (Exception e)
 	{

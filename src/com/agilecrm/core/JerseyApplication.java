@@ -75,7 +75,7 @@ public class JerseyApplication extends Application
 	s.add(com.thirdparty.salesforce.SalesforceImportAPI.class);
 	s.add(com.thirdparty.zoho.ZohoImportAPI.class);
 	s.add(com.thirdparty.stripe.StripeDataService.class);
-	s.add(com.thirdparty.quickbook.QuickBookController.class);
+	s.add(com.thirdparty.quickbook.QuickBookAPI.class);
 	s.add(com.thirdparty.shopify.ShopifyImportAPI.class);
 	s.add(com.agilecrm.gmap.GmapQueryAPI.class);
 	s.add(com.agilecrm.core.api.webrule.WebRuleAPI.class);

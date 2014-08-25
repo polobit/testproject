@@ -69,6 +69,14 @@ public class Globals
     public static final String STRIPE = "Stripe";
     public static final String PAYPAL = "Paypal";
 
+    // development keys
+  //  public static final String DEV_STRIPE_API_KEY = "sk_test_qxs4FCoEJ3o5aED4d1rIWiCE";
+
+    // Stripe live keys
+    // public static final String STRIPE_API_KEY =
+    // "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
+    // public static final String STRIPE_CLIENT_ID =
+    // "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
     // Stripe live keys
     public static final String STRIPE_LIVE_API_KEY = "sk_live_kV3JFirLAOXsEUcYYO3YsCJ5";
     public static final String STRIPE_LIVE_CLIENT_ID = "ca_33Ms3QZgGsn0nqkvilqNUFYU9BcDyNVC";
@@ -81,13 +89,18 @@ public class Globals
     public static final String STRIPE_API_KEY = STRIPE_LIVE_API_KEY;
     public static final String STRIPE_CLIENT_ID = STRIPE_LIVE_CLIENT_ID;
 
+
     // Xero live keys
     public static final String XERO_API_KEY = "DLVO983KIWJ7AOZDYGVLNSC5VORU1F";
     public static final String XERO_CLIENT_ID = "EGL5WPETBTSYYQ6E8QI4JSZSOW3DZW";
-
-    public static final String QUICKBOOKS_APP_KEY = "a572c32cb35f8b404cbbadbb224fbd6d0fc6";
-    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
-    public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
+//develop key
+    public static final String QUICKBOOKS_APP_KEY = "f0fca6d6b0541b470bb9711b713000493994";
+   public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdnkO01AkcMJjNmabqS1PBDsmFp";
+   public static final String QUICKBOOKS_CONSUMER_SECRET = "CmBH6OWTlDmemY3uHOBIjFE87MZ6O8FRcsLqtYZF";
+    //production key
+   // public static final String QUICKBOOKS_APP_KEY = "08945c87bae1fb46bab9241ba0e81dc19bbf";
+   // public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
+    //public static final String QUICKBOOKS_CONSUMER_SECRET = "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
 
     /** test facebook app details */
     // public static final String FACEBOOK_APP_ID = "1472962409608031";
@@ -96,13 +109,14 @@ public class Globals
     /** facebook app details */
     public static final String FACEBOOK_APP_ID = "1472694689634803";
     public static final String FACEBOOK_APP_SECRET = "4b2d379cbb6c33a0bdab9a89dc2bb2c5";
+
     // Max Plan Users
     public static final int TRIAL_USERS_COUNT = 2;
 
     // Cheat Code
     public static final String MASTER_CODE_INTO_SYSTEM = "agile@#$rocks";
 
-    public static final String BULK_ACTION_BACKENDS_URL = "b1-sandbox";
+    public static final String BULK_ACTION_BACKENDS_URL = "b1";
 
     public static final String BULK_BACKENDS = "bulk";
     public static final String NORMAL_BACKENDS = "normal";
@@ -125,6 +139,11 @@ public class Globals
     public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
 
+    // shopify app credential
+    // public static final String SHOPIFY_API_KEY =
+    // "70a2391cd9e9af0d666657a67885d9ec";
+    // public static final String SHOPIFY_SECRET_KEY =
+    // "a1f88bc91e5c70c34c215bf224ebd7d3";
     /** The Constant SHOPIFY_API_KEY. */
     public static final String SHOPIFY_API_KEY = "66198cc5eb16795088bfc0a3f8d2c011";
 

@@ -70,7 +70,7 @@ public class HelpScoutUtil
      * @return the Customer details as JSON String.
      * @throws Exception
      */
-    public static String getCustomerByEmail(Widget widget, String email) throws Exception
+    public static JSONObject getCustomerByEmail(Widget widget, String email) throws Exception
     {
 	// JSONObject for saving all the email categorized on Mailbox.
 	JSONObject customerMails = new JSONObject();
@@ -87,13 +87,13 @@ public class HelpScoutUtil
 	if (page.getCount() <= 0)
 	{
 	    customerMails.put("message", "No customer found.");
-	    return customerMails.toString();
+	    return customerMails;
 	}
 
 	// If there is a customer, get the Id.
 	JSONArray customers = new JSONArray(gson.toJson(page.getItems()));
 
-	return customers.getJSONObject(0).toString();
+	return customers.getJSONObject(0);
 
     }
 
@@ -110,7 +110,7 @@ public class HelpScoutUtil
      * @throws Exception
      *             if the response is an exception
      */
-    public static String getCustomerConversations(Widget widget, int customerId) throws Exception
+    public static JSONObject getCustomerConversations(Widget widget, int customerId) throws Exception
     {
 	// JSONObject for saving all the email/conversations categorized on
 	// Mailbox.
@@ -147,8 +147,8 @@ public class HelpScoutUtil
 	// If there are no conversations, add a message.
 	if (!customerConv.has("mailbox"))
 	    customerConv.put("message", "No Mails from this Customer.");
-
-	return customerConv.toString();
+	System.out.println("----------------" + customerConv.toString());
+	return customerConv;
     }
 
     /**
