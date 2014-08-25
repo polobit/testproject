@@ -13,7 +13,11 @@ var TAG_MODEL_VIEW = Backbone.View.extend(
 					   "keypress .edit-input" : "renameTag",
 					   "blur .edit-input"      : "updateTag",
 					   "mouseover" : "showActionButtons",
-					   "mouseout" : "hideActionButtons"
+					   "mouseout" : "hideActionButtons",
+					   'click .details' : "showDetails",
+					   "click #add-new-tag" : "addNewTag",
+					   
+						   
 
 },
 /*
@@ -30,6 +34,34 @@ initialize : function()
 
 	this.model.bind("change", this.render, this);
 },
+showDetails : function(e)
+{
+	e.preventDefault();
+	var _that = this;
+	var details_el = $(".details", this.el);
+	
+	console.log(_that);
+	
+    /**
+     * Checks for last 'tr' and change placement of popover to 'top' inorder
+     * to prevent scrolling on last row of list
+     **/
+    $(this.el).attr({
+    	"rel" : "popover",
+    	"data-original-title" : "\"" + this.model.get('tag') + "\" Stats",
+    	"data-content" :  LOADING_HTML,
+    	"data-container" : this.el
+    });
+    
+    $(this.el).popover('show');
+	
+	$.getJSON('core/api/tags/getstats/' + this.model.get('tag'), function(data){
+		_that.model.set('availableCount', data.availableCount);
+		console.log(_that.model.toJSON());
+		$(_that.el).attr('data-content', _that.model.get('availableCount') + " Contacts");
+		$(_that.el).popover('show');
+	})
+},
 renameTag : function (e)
 {
 	 if (e.keyCode == 13) this.updateTag();
@@ -40,6 +72,7 @@ updateTag : function(e)
 		{
 			$("#tag-solid-state", this.el).show();
 			$("#editing", this.el).hide();
+			$(this.el).addClass('tag');
 			return;
 		}
 	
@@ -51,6 +84,7 @@ updateTag : function(e)
 	{
 		$("#tag-solid-state", this.el).show();
 		$("#editing", this.el).hide();
+		$(this.el).addClass('tag');
 		return;
 		
 	}
@@ -63,17 +97,26 @@ updateTag : function(e)
 		}
 	});
 	this.model.set('tag', this.input.val().trim());
+	$(this.el).addClass('tag');
 		
 },
 showActionButtons : function(e)
 {
 	e.preventDefault();
 	$('#actions', this.el).show();
+	$("a", this.el).popover('toggle');
 },
 hideActionButtons : function(e)
 {
 	e.preventDefault();
 	$('#actions', this.el).hide();
+	$(this.el).popover('hide');
+},
+addNewTag : function(e)
+{
+	e.preventDefault();
+	alert("new tag");
+	$("#new_tag_field_block", this.el).show();
 },
 /*
  * On click on ".delete" model representing the view is deleted, and removed
@@ -88,16 +131,20 @@ deleteItem : function(e)
 		return;
 	}
 	
-	this.model.url = "core/api/tags/bulk/delete?tag=" + this.model.get("tag");
+	this.model.url = "core/api/tags/bulk/delete?tag=" + encodeURI(this.model.get("tag"));
 	this.model.set({"id" : this.model.get('tag')})
 	this.model.destroy();
 }, edit : function(e)
 {
 	e.preventDefault();
+	
 	$("#tag-solid-state", this.el).hide();
+	$(this.el).removeClass('tag');
 	$("#editing", this.el).show();
-	this.input.focus();
+	addTagsDefaultTypeahead($("#editing", this.el));
+	this.input.attr('width','100%').focus();
 	this.input.val(this.model.get('tag'));
+	
 	
 }, render : function(callback)
 {
@@ -123,8 +170,42 @@ function append_tag_management(base_model) {
 	
 	var key = base_model.get('tag').charAt(0).toUpperCase();
 	console.log($('div[tag-alphabet="'+encodeURI(key)+'"]', this.el))
-                    
-	//$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append(itemView.render().el);
+
+		var el = itemView.render().el;
+	$(el).addClass('tag').attr('count', base_model.get('availableCount')).css('width', '200px').css('float' , 'left').css('margin', '0px 10px 15px 10px').css('background', 'gray');
 	
-	$(this.model_list_element).append(itemView.render().el);
+	var element = $( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el); 
+	console.log(element.length);
+	if(element.length > 0)
+		$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append($(el));
+	else
+		$(this.model_list_element).append("<div class='clearfix'></div>").append($(el));
+
+	//$(this.model_list_element).append($(el));
 }
+
+$("#add-new-tag").die().live('click', function(e){
+	e.preventDefault();
+	$("#new_tag_field_block").show();
+	$("#new_tag").focus();
+});
+
+$("#new_tag").die().live('keydown', function(event){
+	if(event.which != 13)
+		return;
+
+	var value = $(this).val();
+	
+	var tag = {};
+	tag.tag = value;
+	
+	var model =  new BaseModel(tag);
+	model.url = "core/api/tags";
+	model.save();
+	console.log(App_Admin_Settings);
+	App_Admin_Settings.tagsview1.collection.add(model);
+	$(this).val("");
+	$(this).hide();
+	
+	
+});

@@ -58,7 +58,6 @@ public class CSVUtil
 {
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     private CSVUtil()
     {
@@ -254,7 +253,7 @@ public class CSVUtil
 		    }
 		    continue;
 		}
-		if ("notes".equals(field.name))
+		if ("note".equals(field.name))
 		{
 		    notes_positions.add(j);
 		    continue;
@@ -275,9 +274,6 @@ public class CSVUtil
 		continue;
 
 	    boolean isMerged = false;
-	    accessControl.setObject(tempContact);
-	    
-	    accessControl.init();
 	    
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
@@ -286,12 +282,6 @@ public class CSVUtil
 
 		// Sets current object to check scope
 		
-		if (accessControl.canCreate())
-		{
-		    
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
 
 		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
@@ -299,12 +289,6 @@ public class CSVUtil
 	    else
 	    {
 		
-		if (accessControl.canCreate())
-		{
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
-
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
 

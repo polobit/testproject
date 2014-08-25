@@ -1,5 +1,6 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.ws.RequestWrapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -71,6 +73,15 @@ public class TagsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void saveTag(Tag tag)
+    {
+	Set<Tag> tags = new HashSet<Tag>();
+	tags.add(tag);
+	TagUtil.addTag(tag);
     }
 
     /**
@@ -163,7 +174,41 @@ public class TagsAPI
 	System.out.println("reload : " + reload);
 	return TagUtil.getTags(true);
     }
-
+    
+    @Path("stats2")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Tag> getTagsStats2(@QueryParam("reload") boolean reload, @QueryParam("page_size") String page_size, @QueryParam("cursor") String cursor)
+    {
+	System.out.println("reload : " + reload);
+	if(StringUtils.isEmpty(page_size))
+	    return TagUtil.getStatus();
+	try
+	{
+	    int tags_fetch_size = Integer.parseInt(page_size);
+	    
+	    return TagUtil.getStats(tags_fetch_size, cursor);
+	}
+	catch(NumberFormatException e)
+	{
+	    return TagUtil.getStatus();
+	}
+    }
+    
+    /**
+     * Returns tag with stats (Number of contacts associated with contacts)
+     * @param tag
+     * @return
+     */
+    @Path("getstats/{tag}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Tag getTagStats(@PathParam("tag") String tag)
+    {
+	return TagUtil.getTagWithStats(tag);
+	
+    }
+    
     /**
      * Creates new tags in tags database
      * 
