@@ -59,22 +59,17 @@ var DealsRouter = Backbone.Router.extend({
 							var milestones = data.milestones;
 							milestones = milestones.split(",");
 							count = milestones.length;
+							if(!count)return;
 							
 							var width;
-							if(readCookie("agile_full_view"))
-							{
-								width = 19.92;
-								if(count < 5)
-									width = (100/count) - 0.12;
-								$('#opportunities-full-screen-model-list').find('.milestone-column').width(width +"%");
-							}
-							else
-							{
-								width = 24.87;
-								if(count < 4)
-									width = (100/count) - 0.12;
-								$('#opportunities-by-milestones-model-list').find('.milestone-column').width(width +"%");
-							}
+							// Setting dynamic auto width
+							width = (100/count) - 0.12;
+							
+							// Setting minimun percentage to column
+							//width = (width < 16.5)? 16.5 : width;
+							
+							$("#" + id).find('.milestone-column').width(width +"%");
+
 						}
 					});
 					

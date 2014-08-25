@@ -996,7 +996,7 @@ tbody a.no-style-a {
 }
 
 .milestone-column {
-	width: 24.87%;
+	min-width: 200px;
 	vertical-align: top;
 	border-right: 1px solid #bbb;
 	display: inline-block;
