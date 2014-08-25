@@ -46,8 +46,7 @@ var DealsRouter = Backbone.Router.extend({
 					var id = $(element).attr('id');
 					$("#" + id + "> div").addClass("milestone-main");
 					
-					// $('.milestone-main
-					// :last-child').find("ul").closest('div').css({"border-right":"none"});
+					$('.milestone-main div:last-child').css({"border-right":"none"});
 					setup_deals_in_milestones(id);
 					
 					// For adding dynamic width to milestone columns
@@ -63,10 +62,7 @@ var DealsRouter = Backbone.Router.extend({
 							
 							var width;
 							// Setting dynamic auto width
-							width = (100/count) - 0.12;
-							
-							// Setting minimun percentage to column
-							//width = (width < 16.5)? 16.5 : width;
+							width = (100/count);
 							
 							$("#" + id).find('.milestone-column').width(width +"%");
 
