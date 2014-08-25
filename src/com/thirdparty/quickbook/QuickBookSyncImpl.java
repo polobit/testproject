@@ -5,8 +5,13 @@ package com.thirdparty.quickbook;
 
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.Map.Entry;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -18,6 +23,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.TimeZoneUtil;
 import com.agilecrm.contact.sync.service.OneWaySyncService;
 import com.agilecrm.contact.sync.wrapper.WrapperService;
+import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.scribe.util.SignpostUtil;
 
 /**
@@ -45,6 +51,12 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	int noOfPages = 1;
 	int total_customer = getTotalCustomer();
+	if (total_customer == 0)
+	{
+	    sendNotification(prefs.type.getNotificationEmailSubject());
+	    updateLastSyncedInPrefs();
+	    return;
+	}
 	if (total_customer > MAX_RESULT)
 	{
 	    noOfPages = (int) Math.ceil(total_customer / MAX_RESULT);
@@ -67,8 +79,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    }
 	    catch (Exception e)
 	    {
-		updateLastSyncedInPrefs();
-		sendNotification(prefs.type.getNotificationEmailSubject());
+
 		e.printStackTrace();
 	    }
 	    current_page += current_page + 1;
@@ -148,35 +159,47 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    JSONObject invoice = (JSONObject) customerInvoices.get(i);
 		    JSONObject currencyRef = (JSONObject) invoice.get("CurrencyRef");
 		    Note note = new Note();
-		    note.subject = "Order No # " + invoice.get("DocNumber");
+		    note.subject = "Invoice No # " + invoice.get("DocNumber");
 		    JSONArray items = (JSONArray) invoice.get("Line");
 
 		    for (int j = 0; j < items.length() - 1; j++)
 		    {
 
 			JSONObject salesItemLineDetail = (JSONObject) items.get(j);
-			JSONObject salesInfo = (JSONObject) salesItemLineDetail.get("SalesItemLineDetail");
-			JSONObject itemRef = (JSONObject) salesInfo.get("ItemRef");
+			if (salesItemLineDetail.has("SalesItemLineDetail"))
+			{
+			    JSONObject salesInfo = (JSONObject) salesItemLineDetail.get("SalesItemLineDetail");
+			    if (salesInfo.has("ItemRef"))
+			    {
+				JSONObject itemRef = (JSONObject) salesInfo.get("ItemRef");
 
-			JSONObject taxCodeRef = (JSONObject) salesInfo.get("TaxCodeRef");
-			if (note.description == null)
-			{
-			    note.description = "Item #" + itemRef.get("name") + " Price # "
-				    + salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
-			    if (!taxCodeRef.get("value").equals("NON"))
-			    {
-				note.description += "Tax # " + taxCodeRef.get("value") + " ("
-					+ currencyRef.get("value") + ")";
-			    }
-			}
-			else
-			{
-			    note.description += "\n Item #" + itemRef.get("name") + " Price # "
-				    + salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
-			    if (!taxCodeRef.get("value").equals("NON"))
-			    {
-				note.description += "Tax # " + taxCodeRef.get("value") + " ("
-					+ currencyRef.get("value") + ")";
+				if (salesInfo.has("TaxCodeRef"))
+				{
+
+				    JSONObject taxCodeRef = (JSONObject) salesInfo.get("TaxCodeRef");
+
+				    if (note.description == null)
+				    {
+					note.description = "Item #" + itemRef.get("name") + " Price # "
+						+ salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
+					if (!taxCodeRef.get("value").equals("NON"))
+					{
+					    note.description += "Tax # " + taxCodeRef.get("value") + " ("
+						    + currencyRef.get("value") + ")";
+					}
+				    }
+				    else
+				    {
+					note.description += "\n Item #" + itemRef.get("name") + " Price # "
+						+ salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
+					if (!taxCodeRef.get("value").equals("NON"))
+					{
+					    note.description += "Tax # " + taxCodeRef.get("value") + " ("
+						    + currencyRef.get("value") + ")";
+					}
+				    }
+
+				}
 			    }
 			}
 
@@ -193,8 +216,20 @@ public class QuickBookSyncImpl extends OneWaySyncService
 		    }
 		    note.addRelatedContacts(contact.id.toString());
 		    note.save();
+		    
+		    
+		   
+		    
+		    
 		}
 	    }
+	    
+	    // add customer related notes
+	    if(customer.has("Notes")){
+	     addCustomerRelatedNote(customer.get("Notes"), contact);
+	    }
+	    
+	    
 	}
 	catch (JSONException e)
 	{
@@ -203,6 +238,53 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    e.printStackTrace();
 	}
 
+    }
+    
+    private void addCustomerRelatedNote(Object noteObject, Contact contact)
+    {
+	Map<String, Note> noteMap = new HashMap<String, Note>();
+	try
+	{
+	    List<Note> existing = new ArrayList<Note>();
+
+	    if (noteObject != null)
+	    {
+		String noteString = noteObject.toString();
+		if (!noteString.isEmpty())
+		{
+		    // new note
+
+		    Note n = new Note("Customer Note", noteString);
+		    n.addRelatedContacts(contact.id.toString());
+		    noteMap.put("Customer Note", n);
+
+		    // checking existing customer note
+
+		    List<Note> notes = NoteUtil.getNotes(contact.id);
+		    for (Note note : notes)
+		    {
+			if (note.subject.equalsIgnoreCase("Customer Note"))
+			{
+			    existing.add(note);
+
+			}
+		    }
+
+		}
+
+	    }
+
+	    for (Entry<String, Note> e : noteMap.entrySet())
+	    {
+		NoteUtil.deleteBulkNotes(existing);
+		Note n = e.getValue();
+		n.save();
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     // retrieves all invoices related to customer
@@ -213,8 +295,14 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	try
 	{
 
-	    StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Invoice WHERE CustomerRef='").append(customer
-		    .get("Id") + "'");
+	    
+	    StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Invoice");
+	    if(prefs.lastSyncCheckPoint != null){
+		queryBuilder.append(" Where MetaData.CreateTime > '"+prefs.lastSyncCheckPoint+"' AND CustomerRef = '"+customer.get("Id")+"'");
+	    }else{
+		
+		queryBuilder.append(" Where CustomerRef='"+customer.get("Id")+"'");
+	    }
 	    String invoiceQuery = queryBuilder.toString();
 	    String invoicesURL = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(invoiceQuery));
 
@@ -223,7 +311,10 @@ public class QuickBookSyncImpl extends OneWaySyncService
 			    prefs.token, prefs.secret, invoicesURL, "GET", "", "quickbooks");
 	    JSONObject response = new JSONObject(result);
 	    JSONObject invoice = (JSONObject) response.get("QueryResponse");
-	    allInvoices = (JSONArray) invoice.get("Invoice");
+	    if (invoice.has("Invoice"))
+	    {
+		allInvoices = (JSONArray) invoice.get("Invoice");
+	    }
 	}
 	catch (Exception e)
 	{
@@ -291,6 +382,8 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 	try
 	{
+	    // get newly added customer after last sync
+
 	    String response = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
 		    Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, customerAccessURl, "GET", "",
 		    "quickbooks");
@@ -299,7 +392,36 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    JSONObject queryResponse = (JSONObject) object.get("QueryResponse");
 	    if (queryResponse != null)
 	    {
-		customers = queryResponse.getJSONArray("Customer");
+		if (queryResponse.has("Customer"))
+		{
+		    customers = queryResponse.getJSONArray("Customer");
+		}
+	    }
+
+	    // get updated customer
+
+	    if (prefs.lastSyncCheckPoint != null)
+	    {
+		String updatedCustomerQuery = "SELECT *  FROM Customer WHERE MetaData.LastUpdatedTime > '"
+			+ prefs.lastSyncCheckPoint + "'";
+		String url = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(updatedCustomerQuery));
+		String res = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
+			Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, url, "GET", "", "quickbooks");
+		JSONObject respObject = new JSONObject(res);
+
+		JSONObject results = (JSONObject) respObject.get("QueryResponse");
+		if (results != null)
+		{
+		    if (results.has("Customer"))
+		    {
+			JSONArray customerArray = results.getJSONArray("Customer");
+			for (int i = 0; i < customerArray.length(); i++)
+			{
+			    customers.put(customerArray.get(i));
+			}
+		    }
+		}
+
 	    }
 
 	}
@@ -313,9 +435,13 @@ public class QuickBookSyncImpl extends OneWaySyncService
     public int getTotalCustomer()
     {
 	String countQuery = "SELECT COUNT(*) FROM Customer";
+	String  updatecountURL = null;
 	if (prefs.lastSyncCheckPoint != null)
 	{
 	    countQuery = "SELECT COUNT(*) FROM Customer Where MetaData.CreateTime > '" + prefs.lastSyncCheckPoint + "'";
+	    String updatedCountQuery = "SELECT COUNT(*) FROM Customer Where MetaData.LastUpdatedTime > '"
+		    + prefs.lastSyncCheckPoint + "'";
+	     updatecountURL = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(updatedCountQuery));
 	}
 	int count = 0;
 	String countURL = String.format(BASE_URL, prefs.othersParams, URLEncoder.encode(countQuery));
@@ -328,7 +454,26 @@ public class QuickBookSyncImpl extends OneWaySyncService
 	    JSONObject object = new JSONObject(response);
 
 	    JSONObject queryResponse = object.getJSONObject("QueryResponse");
-	    count = (int) queryResponse.get("totalCount");
+	    if (queryResponse.has("totalCount"))
+	    {
+		count = (int) queryResponse.get("totalCount");
+	    }
+
+	    if (prefs.lastSyncCheckPoint != null)
+	    {
+		String updateResponse = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
+			Globals.QUICKBOOKS_CONSUMER_SECRET, prefs.token, prefs.secret, updatecountURL, "GET", "",
+			"quickbooks");
+
+		JSONObject updateCountResp = new JSONObject(updateResponse);
+
+		JSONObject countResp = updateCountResp.getJSONObject("QueryResponse");
+		if (countResp.has("totalCount"))
+		{
+		    count += (int) countResp.get("totalCount");
+		}
+
+	    }
 
 	}
 	catch (Exception e)

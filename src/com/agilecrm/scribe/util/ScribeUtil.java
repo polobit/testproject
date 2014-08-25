@@ -675,7 +675,7 @@ public class ScribeUtil
 	    contactPrefs.secret = map.get("secret");
 	    contactPrefs.othersParams = map.get("company");
 	    contactPrefs.type = Type.QUICKBOOK;
-	    String companyInfoQuery = "SELECT * FROM Company";
+	    String companyInfoQuery = "SELECT * FROM CompanyInfo";
 		String url = String.format("https://quickbooks.api.intuit.com/v3/company/"+map.get("company")+"/query?query=%s", URLEncoder.encode(companyInfoQuery));
 	    try
 	    {
@@ -686,18 +686,21 @@ public class ScribeUtil
 		    JSONObject queryResponse = (JSONObject) response.get("QueryResponse");
 		    if (queryResponse != null)
 		    {
-			JSONArray listCompany = (JSONArray) queryResponse.get("Company");
+			if(queryResponse.has("CompanyInfo")){
+			JSONArray listCompany = (JSONArray) queryResponse.get("CompanyInfo");
 			JSONObject company = (JSONObject) listCompany.get(0);
 			Object comp = company.get("CompanyName");
 			if(comp != null){
 			    String companyName = comp.toString().split("'")[0];
 			    contactPrefs.userName = companyName;
 			}
+			}
 		    }
 	    }
 	    catch (Exception e)
 	    {
-		// TODO Auto-generated catch block
+		// save token even it get time out while fetching company info
+		 contactPrefs.save();
 		e.printStackTrace();
 	    }
 	    contactPrefs.save();
