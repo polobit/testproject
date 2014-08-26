@@ -409,8 +409,7 @@
 </script>
 
 
-<script id="admin-settings-import-quickbook-template"
-	type="text/html">
+<script id="admin-settings-import-quickbook-template" type="text/html">
 	<div class="well widget-add" style="width:220px;">
 
     <img class="thumbnail"  src="/widgets/QuickBooks210x70.png" style="width:210px; height:70px;" />
@@ -431,4 +430,86 @@
 
 
 </script>
+
+
+<script id="admin-settings-import-xeroSync-template" type="text/html">
+	<div class="well widget-add" style="width:220px;">
+
+    <img class="thumbnail"  src="/widgets/xero210x70.png"  style="width:210px; height:70px;" />
+	<br />
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;"  rel="tooltip" >
+		Sync customers in Xero as Contacts in Agile CRM along with invoice and payment data.
+	</div>
+    
+			{{#if id}}
+        	   <a class="btn btn-danger delete" >Disable</a>
+				<a href="#sync/xero" class="btn">Settings</a>
+			{{else}}
+
+			    <a href="#" id ="xeroconnect"class="btn" style="display:inline-block;">Enable</a>
+			{{/if}}
+
+</div>
+
+
+</script>
+
+
+<script id="admin-settings-import-xero-settings-template" type="text/html">
+<div class="span4 well">
+<span class="label label-important" style="float:right">Beta</span>
+<center> <img class="thumbnail" src="/widgets/xero210x70.png"  style="width:210px; height:70px;margin-left:40px" /></center>
+<br/>
+{{#unless id}}
+    <div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;margin-bottom: 20px;"  rel="tooltip" >
+		Setup contact sync with your Xero account.
+	</div>
+{{/unless}} 
+    {{#if id}}
+<form id="xero-form" class="form-horizontal">
+<input type ="hidden" value = "{{id}}" name ="id">
+          <div>Account Linked : {{userName}} <span><a href="#" class="delete">Change</a></span></div>
+	
+          
+             	<div class="control-group" style="margin-left: -80px;margin-top:20px;">
+					<label class="control-label">Frequency</label> 
+           				<div class="controls">
+							<select class="required" name="duration" id="freq">
+
+						{{#check_plan "FREE"}}
+							<option value="" disabled>Only once (Paid plans)</option>
+							<option value="" disabled>Daily  (Paid plans)</option>
+						{{else}}
+							<option value="ONCE">Only once</option>
+							<option value="DAILY">Daily</option>
+						{{/check_plan}}
+							<option value="WEEKLY">Weekly</option>
+							<option value="MONTHLY">Monthly</option>
+						</select>
+					</div>
+		   		</div>
+
+			<div class="form-actions" style="margin-left: -68px;border-top: 0px;">
+
+{{#if inProgress}}
+			<button class="btn btn-primary" id="xero_sync_prefs" style="display:inline-block;" disabled="disabled">Syncing</button>
+{{else}}
+<button class="btn btn-primary" id="xero_sync_prefs" style="display:inline-block;">Sync</button>
+{{/if}}
+
+           		<a href="#sync" class="btn ml_5" style="text-decoration:none;">Cancel</a>
+       	  	</div>
+
+
+       
+    </form>
+{{else}}
+ <a href="#" id ="xeroconnect"class="btn" style="display:inline-block;">Enable</a>
+{{/if}}
+
+</div>
+</script>
+
+
+
 

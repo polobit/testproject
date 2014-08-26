@@ -37,6 +37,7 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.scribe.ScribeServlet;
 import com.agilecrm.scribe.api.FacebookApi;
 import com.agilecrm.scribe.api.StripeApi;
+import com.agilecrm.scribe.api.XeroApi;
 import com.agilecrm.scribe.login.util.OAuthLoginUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.SocialPrefs;
@@ -135,6 +136,12 @@ public class ScribeUtil
 	    service = getSpecificService(req, ScribeServlet.SERVICE_TYPE_STRIPE_IMPORT,
 		    com.agilecrm.scribe.api.StripeApi.class, callback, Globals.DEV_STRIPE_CLIENT_ID,
 		    Globals.DEV_STRIPE_API_KEY, "read_only");
+	
+	/**
+	 * create service for xero
+	 */
+	else if(serviceType.equalsIgnoreCase(ScribeServlet.XERO_SERVICE))
+	    service = getSpecificService(req, ScribeServlet.XERO_SERVICE, XeroApi.class, callback, Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID,null);
 
 	// Creates a Service, specific to Gmail
 	else
@@ -283,6 +290,8 @@ public class ScribeUtil
 	else if (serviceName.equalsIgnoreCase(ScribeServlet.SERVICE_TYPE_SHOPIFY))
 	{
 	    saveShopifyPrefs(req, code);
+	}else if(serviceName.equalsIgnoreCase(ScribeServlet.XERO_SERVICE)){
+	    saveXeroPrefs(req,accessToken);
 	}
 
     }
@@ -706,6 +715,38 @@ public class ScribeUtil
 	    contactPrefs.save();
 	    
 	    
+    }
+    
+    /**
+     *  save Xero ContactSyncPrefs
+     * @param req
+     * @param accessToken
+     */
+    
+    private static void saveXeroPrefs(HttpServletRequest req, Token accessToken){
+	ContactPrefs prefs = new ContactPrefs();
+	prefs.token = accessToken.getToken();
+	prefs.secret = accessToken.getSecret();
+	prefs.type = Type.XERO;
+	prefs.save();
+	try{
+	 String result = SignpostUtil
+		    .accessURLWithOauth(Globals.XERO_API_KEY, Globals.XERO_CLIENT_ID,
+			    prefs.token, prefs.secret, "https://api.xero.com/api.xro/2.0/users", "GET", "", "xero");
+	 JSONObject response = new JSONObject(result);
+	 if(response.has("Users")){
+	     JSONArray users = (JSONArray) response.get("Users");
+	     JSONObject user = (JSONObject) users.get(0);
+	     if(user.has("EmailAddress")){
+		 prefs.userName = user.getString("EmailAddress");
+	     }
+	 }
+	
+	}catch(Exception e){
+	    e.printStackTrace();
+	}
+	
+	prefs.save();
     }
     
 }
