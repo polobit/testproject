@@ -997,6 +997,7 @@ tbody a.no-style-a {
 
 .milestone-column {
 	min-width: 200px;
+	box-sizing: border-box;
 	vertical-align: top;
 	border-right: 1px solid #bbb;
 	display: inline-block;

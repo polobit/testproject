@@ -3,6 +3,7 @@
  */
 package com.thirdparty.quickbook;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
@@ -20,14 +21,17 @@ import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 public class QuickBookContactWrapperImpl extends ContactWrapper
 {
     JSONObject customer;
+
     @Override
     public void wrapContact()
     {
-	   customer =   (JSONObject) object;
+	customer = (JSONObject) object;
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getFirstName()
      */
     @Override
@@ -36,17 +40,30 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	ContactField field = null;
 	try
 	{
-	    field = new ContactField(Contact.FIRST_NAME , customer.getString("GivenName"),null);
+	    Object name = null;
+	    if (customer.has("GivenName"))
+	    {
+		name = customer.get("GivenName");
+
+	    }
+	    else
+	    {
+		name = customer.get("DisplayName");
+	    }
+
+	    field = new ContactField(Contact.FIRST_NAME, name.toString(), null);
 	}
 	catch (JSONException e)
 	{
-	  
+
 	    e.printStackTrace();
 	}
 	return field;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getLastName()
      */
     @Override
@@ -55,17 +72,23 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	ContactField field = null;
 	try
 	{
-	    field = new ContactField(Contact.LAST_NAME , customer.getString("FamilyName"),null);
+	    if (customer.has("FamilyName"))
+	    {
+		String lastName = customer.getString("FamilyName");
+		field = new ContactField(Contact.LAST_NAME, lastName, null);
+	    }
 	}
 	catch (JSONException e)
 	{
-	  
+
 	    e.printStackTrace();
 	}
 	return field;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getEmail()
      */
     @Override
@@ -75,19 +98,22 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	try
 	{
 	    JSONObject email = (JSONObject) customer.get("PrimaryEmailAddr");
-	    if(email !=null){
-	    field = new ContactField(Contact.EMAIL , email.getString("Address"),"work");
+	    if (email != null)
+	    {
+		field = new ContactField(Contact.EMAIL, email.getString("Address"), "work");
 	    }
 	}
 	catch (JSONException e)
 	{
-	  
+
 	    e.printStackTrace();
 	}
 	return field;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getPhoneNumber()
      */
     @Override
@@ -96,21 +122,26 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	ContactField field = null;
 	try
 	{
-	    JSONObject mobile = new JSONObject(customer.get("Mobile").toString());
-	    if(mobile != null){
-		
-		field = new ContactField(Contact.PHONE , mobile.getString("FreeFormNumber"),"work");
+	    JSONObject phone = null;
+	    if (customer.has("PrimaryPhone"))
+	    {
+
+		phone = (JSONObject) customer.get("PrimaryPhone");
+		field = new ContactField(Contact.PHONE, phone.getString("FreeFormNumber"), "home");
 	    }
+
 	}
 	catch (JSONException e)
 	{
-	  
+
 	    e.printStackTrace();
 	}
 	return field;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getOrganization()
      */
     @Override
@@ -119,22 +150,30 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	ContactField field = null;
 	try
 	{
-	    Object company = customer.get("CompanyName");
-	    String name = company.toString();
-	    if(company != null && !name.isEmpty()){
-		
-		field = new ContactField(Contact.COMPANY , name,null);
+	    if (customer.has("CompanyName"))
+	    {
+
+		Object company = customer.get("CompanyName");
+
+		String name = company.toString();
+		if (company != null && !name.isEmpty())
+		{
+
+		    field = new ContactField(Contact.COMPANY, name, null);
+		}
 	    }
 	}
 	catch (JSONException e)
 	{
-	  
+
 	    e.printStackTrace();
 	}
 	return field;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getDescription()
      */
     @Override
@@ -144,7 +183,45 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
-    /* (non-Javadoc)
+    public List<ContactField> getMoreCustomInfo()
+    {
+
+	List<ContactField> fields = new ArrayList<ContactField>();
+	ContactField field = null;
+	try
+	{
+	    if (customer.has("WebAddr"))
+	    {
+
+		JSONObject company = (JSONObject) customer.get("WebAddr");
+
+		String name = (String) company.get("URI");
+		if (company != null && !name.isEmpty())
+		{
+
+		    field = new ContactField(Contact.WEBSITE, name, "Website");
+		}
+	    }
+
+	    if (customer.has("Mobile"))
+	    {
+		JSONObject mob = (JSONObject) customer.get("Mobile");
+		fields.add(new ContactField("mobile", mob.get("FreeFormNumber").toString(), "mobile"));
+	    }
+
+	}
+	catch (JSONException e)
+	{
+
+	    e.printStackTrace();
+	}
+	fields.add(field);
+	return fields;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getTags()
      */
     @Override
@@ -153,7 +230,9 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getAddress()
      */
     @Override
@@ -162,27 +241,52 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	ContactField field = null;
 	try
 	{
-	    JSONObject billingAddrss = (JSONObject) customer.get("BillAddr");
-	    JSONObject address = new JSONObject();
-	    if(billingAddrss != null){
-		address.put("address", billingAddrss.get("Line1"));
-		address.put("city", billingAddrss.getString("City"));
-		address.put("country",  billingAddrss.getString("Country"));
-		address.put("state", billingAddrss.getString("CountrySubDivisionCode"));
-		address.put("zip",  billingAddrss.getString("PostalCode"));
-		
+	    if (customer.has("BillAddr"))
+	    {
+		JSONObject billingAddrss = (JSONObject) customer.get("BillAddr");
+		JSONObject address = new JSONObject();
+		if (billingAddrss != null)
+		{
+		    if (billingAddrss.has("Line1"))
+		    {
+			address.put("address", billingAddrss.get("Line1"));
+		    }
+		    if (billingAddrss.has("City"))
+		    {
+			address.put("city", billingAddrss.getString("City"));
+
+		    }
+
+		    if (billingAddrss.has("Country"))
+		    {
+			address.put("country", billingAddrss.getString("Country"));
+		    }
+		    if (billingAddrss.has("CountrySubDivisionCode"))
+		    {
+
+			address.put("state", billingAddrss.getString("CountrySubDivisionCode"));
+		    }
+		    if (billingAddrss.has("PostalCode"))
+		    {
+
+			address.put("zip", billingAddrss.getString("PostalCode"));
+		    }
+
+		    field = new ContactField(Contact.ADDRESS, address.toString(), "home");
+		}
 	    }
-	    field = new ContactField(Contact.ADDRESS, address.toString(), "home");
 	}
 	catch (JSONException e)
 	{
-	  
+
 	    e.printStackTrace();
 	}
 	return field;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.agilecrm.contact.sync.wrapper.WrapperService#getNotes()
      */
     @Override

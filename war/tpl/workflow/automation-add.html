@@ -1,0 +1,58 @@
+<script id="automation-add-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="span8">
+            <div class="well">
+                <form id="addAutomationForm" name="addAutomationForm" class="form-horizontal">
+                   {{#if id}}
+                        <legend>Edit Automation</legend>
+                        <input name="id" type="hidden" value="{{id}}" />
+                    {{else}}
+                        <legend><i class="icon-plus-sign"></i> Add Automation</legend>
+                    {{/if}} 
+                   <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" style="width:200px!important;">Name <span class="field_req">*</span></label>
+                            <div class="controls" style="margin-left:220px!important;">
+                                <input type="text" id="name" class="required" name="name" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" style="width:200px!important;">Select Filter type <span class="field_req">*</span></label>
+                                <div class="controls" style="margin-left:220px!important;">
+                                    <select id="filter-select" name="contactFilter_id" class="required"> 
+                                    <option value="">Select...</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" style="width:200px!important;">Run this Campaign on the Contacts<span class="field_req">*</span></label>
+                            <div class="controls" style="margin-left:220px!important;">
+                                <select id="campaign-select" name="campaign_id" class="required">
+                                    <option value="">Select...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" style="width:200px!important;">Select period <span class="field_req">*</span></label>
+                           
+                                  <div class="controls" style="margin-left:220px!important;">
+                                    <select id="period-type" name="durationType" class="required">
+				        <option value="">Select...</option>
+                                        <option value="DAILY">Daily</option>
+                                        <option value="WEEKLY">Weekly</option>
+                                        <option value="MONTHLY">Monthly</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="form-actions">          
+                            <a href="#automations" id="automation-save" class="save btn btn-primary">Save</a>
+                            <a href="#automations" id="automation-cancel" class="btn">Cancel</a> 
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</script>
