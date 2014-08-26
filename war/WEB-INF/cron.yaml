@@ -25,7 +25,7 @@ cron:
 
 - description: daily automation
   url: /backend/cron/automations?duration=DAILY
-  schedule: every day 23:30
+  schedule: every day 11:30
   
 - description: Monthly automation
   url: /backend/cron/automations?duration=MONTHLY
