@@ -46,8 +46,7 @@ var DealsRouter = Backbone.Router.extend({
 					var id = $(element).attr('id');
 					$("#" + id + "> div").addClass("milestone-main");
 					
-					// $('.milestone-main
-					// :last-child').find("ul").closest('div').css({"border-right":"none"});
+					$('.milestone-main div:last-child').css({"border-right":"none"});
 					setup_deals_in_milestones(id);
 					
 					// For adding dynamic width to milestone columns
@@ -59,22 +58,14 @@ var DealsRouter = Backbone.Router.extend({
 							var milestones = data.milestones;
 							milestones = milestones.split(",");
 							count = milestones.length;
+							if(!count)return;
 							
 							var width;
-							if(readCookie("agile_full_view"))
-							{
-								width = 19.92;
-								if(count < 5)
-									width = (100/count) - 0.12;
-								$('#opportunities-full-screen-model-list').find('.milestone-column').width(width +"%");
-							}
-							else
-							{
-								width = 24.87;
-								if(count < 4)
-									width = (100/count) - 0.12;
-								$('#opportunities-by-milestones-model-list').find('.milestone-column').width(width +"%");
-							}
+							// Setting dynamic auto width
+							width = (100/count);
+							
+							$("#" + id).find('.milestone-column').width(width +"%");
+
 						}
 					});
 					
@@ -93,30 +84,33 @@ var DealsRouter = Backbone.Router.extend({
 			// Shows deals as milestone list view
 			$('#content').html(this.opportunityMilestoneCollectionView.render().el);
 		}
-		// Fetches deals as list
-		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',// cursor : true, page_size : 25,
-			postRenderCallback : function(el)
-			{
-				appendCustomfields(el);
-				// Showing time ago plugin for close date
-				includeTimeAgo(el);
-				// Shows Milestones Pie
-				pieMilestones();
+		else
+		{
+			// Fetches deals as list
+			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr', cursor : true, page_size : 25,
+				postRenderCallback : function(el)
+				{
+					appendCustomfields(el);
+					// Showing time ago plugin for close date
+					includeTimeAgo(el);
+					// Shows Milestones Pie
+					pieMilestones();
 
-				// Shows deals chart
-				dealsLineChart();
-			},
-			appendItemCallback : function(el)
-			{ 
-				// To show timeago for models appended by infini scroll
-				includeTimeAgo(el);
-			}
-			});
-		this.opportunityCollectionView.collection.fetch();
+					// Shows deals chart
+					dealsLineChart();
+				},
+				appendItemCallback : function(el)
+				{ 
+					appendCustomfields(el);
+					
+					// To show timeago for models appended by infini scroll
+					includeTimeAgo(el);
+				}
+				});
+			this.opportunityCollectionView.collection.fetch();
 
-		// Shows deals as list view
-		if (readCookie("agile_deal_view"))
 			$('#content').html(this.opportunityCollectionView.render().el);
+		}
 		
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");

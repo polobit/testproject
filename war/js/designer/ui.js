@@ -197,6 +197,11 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     		options = getMergeFields();
     }
     	
+    if(uiFieldDefinition.fieldType == "update_field")
+    {
+    	
+    	options = getUpdateFields("update_field");
+    }
     // Populate Options
     $.each(
     options, function (key, value) {
@@ -297,6 +302,10 @@ function generateDefaultUI(uiFieldDefinition) {
 		    	 	attributes += " checked "; 		    	 	
 					continue;
 		 	}
+        	
+        	//style is appended at the end. Refer getStyleAttribute(styleAttributes)
+        	if( key == "style")
+        		continue;
 
             attributes += (key + "=\"" + uiFieldDefinition[key] + "\" ");
         }
@@ -318,8 +327,23 @@ function generateDefaultUI(uiFieldDefinition) {
 		 return ("<" + tagName + " " + attributes + " />");
 	}else
 
-    return ("<" + tagName + " " + attributes + " style='width:75%'/>");
+    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style);
+
 }
+//Bhasuri 
+function getStyleAttribute(styleAttributes)
+{
+	if(styleAttributes == undefined)
+		return " style='width:75%'/>";
+	
+	var style=" style='";
+	$.each(
+			styleAttributes, function (key, value){
+				style+=key+":"+value+";";
+			} );
+	
+		return style+"'/>";
+	}
 
 function loadTinyMCE(name)
 {
@@ -544,6 +568,18 @@ function _generateUIFields(selector, ui) {
            
            else
         	   uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
+        //update contacts
+        if(uiFieldType == "update_field")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
            
            $(uiField).appendTo(container);
            continue;

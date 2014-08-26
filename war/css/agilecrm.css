@@ -996,7 +996,8 @@ tbody a.no-style-a {
 }
 
 .milestone-column {
-	width: 24.87%;
+	min-width: 200px;
+	box-sizing: border-box;
 	vertical-align: top;
 	border-right: 1px solid #bbb;
 	display: inline-block;
@@ -1234,4 +1235,8 @@ Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
 {
 	padding-right:30px;
 
+}
+
+.stop-propagation {
+	text-decoration: none !important;
 }

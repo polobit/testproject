@@ -162,7 +162,6 @@ public class OAuthServlet extends HttpServlet
 				"https://oauth.intuit.com/oauth/v1/get_access_token", "https://appcenter.intuit.com/Connect/Begin");
 	}
 
-
 	public OAuthConsumer getOAuthConsumer(String serviceType)
 	{
 		// if (StringUtils.equalsIgnoreCase(serviceType, "quickbooks"))

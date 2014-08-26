@@ -50,225 +50,256 @@ import java.util.TimeZone;
 public class DateUtil
 {
 
-    // -------------------------------------------------------------- Attributes
-    private Calendar cal;
+	// -------------------------------------------------------------- Attributes
+	private Calendar cal;
 
-    // ------------------------------------------------------------ Constructors
+	// ------------------------------------------------------------ Constructors
 
-    /** Inizialize a new instance with the current date */
-    public DateUtil()
-    {
-	this(new Date());
-    }
-
-    /** Inizialize a new instance with the given date */
-    public DateUtil(Date d)
-    {
-	cal = Calendar.getInstance();
-	cal.setTime(d);
-    }
-
-    // ---------------------------------------------------------- Public methods
-
-    /** Set a new time */
-    public void setTime(Date d)
-    {
-	cal.setTime(d);
-    }
-
-    /** Get the current time */
-    public Date getTime()
-    {
-	return cal.getTime();
-    }
-
-    /** Get the current TimeZone */
-    public String getTZ()
-    {
-	return cal.getTimeZone().getID();
-    }
-
-    /**
-     * Convert the time to the midnight of the currently set date. The internal
-     * date is changed after this call.
-     * 
-     * @return a reference to this DateUtil, for concatenation.
-     */
-    public DateUtil toMidnight()
-    {
-
-	cal.set(Calendar.HOUR_OF_DAY, 0);
-	cal.set(Calendar.MINUTE, 0);
-	cal.set(Calendar.SECOND, 0);
-	cal.set(Calendar.MILLISECOND, 0);
-
-	return this;
-    }
-
-    /**
-     * Make the date go back of the specified amount of days The internal date
-     * is changed after this call.
-     * 
-     * @return a reference to this DateUtil, for concatenation.
-     */
-    public DateUtil removeDays(int days)
-    {
-
-	Date d = cal.getTime();
-	long time = d.getTime();
-	time -= days * 24 * 3600 * 1000l;
-	d.setTime(time);
-	cal.setTime(d);
-
-	return this;
-    }
-
-    /**
-     * Make the date go back of the specified amount of days The internal date
-     * is changed after this call.
-     * 
-     * @return a reference to this DateUtil, for concatenation.
-     */
-    public DateUtil addDays(int days)
-    {
-
-	Date d = cal.getTime();
-	long time = d.getTime();
-	time += days * 24 * 3600 * 1000;
-	d.setTime(time);
-	cal.setTime(d);
-
-	return this;
-    }
-
-    /**
-     * Make the date go forward of the specified amount of minutes The internal
-     * date is changed after this call.
-     * 
-     * @return a reference to this DateUtil, for concatenation.
-     */
-    public DateUtil addMinutes(int minutes)
-    {
-	Date d = cal.getTime();
-	long time = d.getTime();
-	time += minutes * 60 * 1000;
-	d.setTime(time);
-	cal.setTime(d);
-
-	return this;
-    }
-
-    /**
-     * Convert the date to GMT. The internal date is changed
-     * 
-     * @return a reference to this DateUtil, for concatenation.
-     */
-    public DateUtil toGMT()
-    {
-	return toTZ("GMT");
-    }
-
-    /**
-     * Convert the date to the given timezone. The internal date is changed.
-     * 
-     * @param tz
-     *            The name of the timezone to set
-     * 
-     * @return a reference to this DateUtil, for concatenation.
-     */
-    public DateUtil toTZ(String tz)
-    {
-	cal.setTimeZone(TimeZone.getTimeZone(tz));
-
-	return this;
-    }
-
-    /**
-     * Get the days passed from the specified date up to the date provided in
-     * the constructor
-     * 
-     * @param date
-     *            The starting date
-     * 
-     * @return number of days within date used in constructor and the provided
-     *         date
-     */
-    public int getDaysSince(Date date)
-    {
-	long millisecs = date.getTime();
-	Date d = cal.getTime();
-	long time = d.getTime();
-	long daysMillisecs = time - millisecs;
-	int days = (int) ((((daysMillisecs / 1000) / 60) / 60) / 24);
-	return days;
-    }
-
-    /**
-     * Utility method wrapping Calendar.after method Compares the date field
-     * parameter with the date provided with the constructor answering the
-     * question: date from constructor is after the given param date ?
-     * 
-     * @param date
-     *            The date to be used for comparison
-     * 
-     * @return true if date from constructor is after given param date
-     */
-    public boolean isAfter(Date date)
-    {
-	Calendar cal2 = Calendar.getInstance();
-	cal2.setTime(date);
-	return cal.after(cal2);
-    }
-
-    /**
-     * Gets Calendar in Pacific. Returns date in specified format and time zone
-     * for the give epoch time.
-     * 
-     * @param timeout
-     * @return date string
-     */
-    public static String getCalendarString(long timeout)
-    {
-	// Defines output format and print
-	SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
-	TimeZone pst = TimeZone.getTimeZone("PST");
-
-	sdf.setTimeZone(pst);
-	Calendar calendar = Calendar.getInstance();
-	calendar.setTimeInMillis(timeout);
-
-	String date = sdf.format(calendar.getTime());
-	return date;
-    }
-
-    /**
-     * Gets the difference in number of months between two dates
-     * 
-     * @param first
-     *            date and second date
-     * @return difference in double
-     */
-    public static double monthsBetween(String endTime, String startTime)
-    {
-	// Get all the months first. Then create a filter monthly for tag1 while
-	// running monthly reports on tags2
-	Calendar date1 = Calendar.getInstance();
-	date1.setTimeInMillis(Long.parseLong(endTime));
-
-	Calendar date2 = Calendar.getInstance();
-	date2.setTimeInMillis(Long.parseLong(startTime));
-
-	double monthsBetween = 0;
-	// difference in month for years
-	monthsBetween = (date1.get(Calendar.YEAR) - date2.get(Calendar.YEAR)) * 12;
-	// difference in month for months
-	monthsBetween += date1.get(Calendar.MONTH) - date2.get(Calendar.MONTH);
-	// difference in month for days
-	if (date1.get(Calendar.DAY_OF_MONTH) != date1.getActualMaximum(Calendar.DAY_OF_MONTH)
-		&& date1.get(Calendar.DAY_OF_MONTH) != date1.getActualMaximum(Calendar.DAY_OF_MONTH))
+	/** Inizialize a new instance with the current date */
+	public DateUtil()
 	{
-	    monthsBetween += ((date1.get(Calendar.DAY_OF_MONTH) - date2.get(Calendar.DAY_OF_MONTH)) / 31d);
+		this(new Date());
 	}
-	return monthsBetween;
-    }
+
+	/** Inizialize a new instance with the given date */
+	public DateUtil(Date d)
+	{
+		cal = Calendar.getInstance();
+		cal.setTime(d);
+	}
+
+	// ---------------------------------------------------------- Public methods
+
+	/** Set a new time */
+	public void setTime(Date d)
+	{
+		cal.setTime(d);
+	}
+
+	/** Get the current time */
+	public Date getTime()
+	{
+		return cal.getTime();
+	}
+
+	/** Get the current TimeZone */
+	public String getTZ()
+	{
+		return cal.getTimeZone().getID();
+	}
+
+	/**
+	 * Convert the time to the midnight of the currently set date. The internal
+	 * date is changed after this call.
+	 * 
+	 * @return a reference to this DateUtil, for concatenation.
+	 */
+	public DateUtil toMidnight()
+	{
+
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+
+		return this;
+	}
+
+	/**
+	 * Make the date go back of the specified amount of days The internal date
+	 * is changed after this call.
+	 * 
+	 * @return a reference to this DateUtil, for concatenation.
+	 */
+	public DateUtil removeDays(int days)
+	{
+
+		Date d = cal.getTime();
+		long time = d.getTime();
+		time -= days * 24 * 3600 * 1000l;
+		d.setTime(time);
+		cal.setTime(d);
+
+		return this;
+	}
+
+	/**
+	 * Make the date go back of the specified amount of days The internal date
+	 * is changed after this call.
+	 * 
+	 * @return a reference to this DateUtil, for concatenation.
+	 */
+	public DateUtil addDays(int days)
+	{
+
+		Date d = cal.getTime();
+		long time = d.getTime();
+		time += days * 24 * 3600 * 1000;
+		d.setTime(time);
+		cal.setTime(d);
+
+		return this;
+	}
+
+	/**
+	 * Make the date go forward of the specified amount of minutes The internal
+	 * date is changed after this call.
+	 * 
+	 * @return a reference to this DateUtil, for concatenation.
+	 */
+	public DateUtil addMinutes(int minutes)
+	{
+		Date d = cal.getTime();
+		long time = d.getTime();
+		time += minutes * 60 * 1000;
+		d.setTime(time);
+		cal.setTime(d);
+
+		return this;
+	}
+
+	/**
+	 * Convert the date to GMT. The internal date is changed
+	 * 
+	 * @return a reference to this DateUtil, for concatenation.
+	 */
+	public DateUtil toGMT()
+	{
+		return toTZ("GMT");
+	}
+
+	/**
+	 * Convert the date to the given timezone. The internal date is changed.
+	 * 
+	 * @param tz
+	 *            The name of the timezone to set
+	 * 
+	 * @return a reference to this DateUtil, for concatenation.
+	 */
+	public DateUtil toTZ(String tz)
+	{
+		cal.setTimeZone(TimeZone.getTimeZone(tz));
+
+		return this;
+	}
+
+	/**
+	 * Get the days passed from the specified date up to the date provided in
+	 * the constructor
+	 * 
+	 * @param date
+	 *            The starting date
+	 * 
+	 * @return number of days within date used in constructor and the provided
+	 *         date
+	 */
+	public int getDaysSince(Date date)
+	{
+		long millisecs = date.getTime();
+		Date d = cal.getTime();
+		long time = d.getTime();
+		long daysMillisecs = time - millisecs;
+		int days = (int) ((((daysMillisecs / 1000) / 60) / 60) / 24);
+		return days;
+	}
+
+	/**
+	 * Utility method wrapping Calendar.after method Compares the date field
+	 * parameter with the date provided with the constructor answering the
+	 * question: date from constructor is after the given param date ?
+	 * 
+	 * @param date
+	 *            The date to be used for comparison
+	 * 
+	 * @return true if date from constructor is after given param date
+	 */
+	public boolean isAfter(Date date)
+	{
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(date);
+		return cal.after(cal2);
+	}
+
+	/**
+	 * Gets Calendar in Pacific. Returns date in specified format and time zone
+	 * for the give epoch time.
+	 * 
+	 * @param timeout
+	 * @return date string
+	 */
+	public static String getCalendarString(long timeout)
+	{
+		// Defines output format and print
+		SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy hh:mm aaa");
+		TimeZone pst = TimeZone.getTimeZone("PST");
+
+		sdf.setTimeZone(pst);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timeout);
+
+		String date = sdf.format(calendar.getTime());
+		return date;
+	}
+
+	/**
+	 * Gets the difference in number of months between two dates
+	 * 
+	 * @param first
+	 *            date and second date
+	 * @return difference in double
+	 */
+	public static double monthsBetween(String endTime, String startTime)
+	{
+		// Get all the months first. Then create a filter monthly for tag1 while
+		// running monthly reports on tags2
+		Calendar date1 = Calendar.getInstance();
+		date1.setTimeInMillis(Long.parseLong(endTime));
+
+		Calendar date2 = Calendar.getInstance();
+		date2.setTimeInMillis(Long.parseLong(startTime));
+
+		double monthsBetween = 0;
+		// difference in month for years
+		monthsBetween = (date1.get(Calendar.YEAR) - date2.get(Calendar.YEAR)) * 12;
+		// difference in month for months
+		monthsBetween += date1.get(Calendar.MONTH) - date2.get(Calendar.MONTH);
+		// difference in month for days
+		if (date1.get(Calendar.DAY_OF_MONTH) != date1.getActualMaximum(Calendar.DAY_OF_MONTH)
+				&& date1.get(Calendar.DAY_OF_MONTH) != date1.getActualMaximum(Calendar.DAY_OF_MONTH))
+		{
+			monthsBetween += ((date1.get(Calendar.DAY_OF_MONTH) - date2.get(Calendar.DAY_OF_MONTH)) / 31d);
+		}
+		return monthsBetween;
+	}
+
+	/**
+	 * Returns calendar for given date with its timezone at given time
+	 * 
+	 * @param duration
+	 *            Date string. Eg: 18-08-2014
+	 * @param timeZoneString
+	 *            Timezone in string. Eg: IST
+	 * @param at
+	 *            Time in string. Eg: 21:00
+	 * @return
+	 */
+	public static Calendar getCalendar(String duration, String timeZoneString, String at)
+	{
+		TimeZone timeZone = TimeZone.getTimeZone(timeZoneString);
+		Calendar calendar = Calendar.getInstance(timeZone);
+
+		String hours = at.substring(0, 2);
+		String mins = at.substring(3);
+		String year = duration.substring(0, 4);
+		String month = duration.substring(5, 7);
+		String date = duration.substring(8);
+
+		calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hours));
+		calendar.set(Calendar.MINUTE, Integer.parseInt(mins));
+
+		// month begins from zero
+		calendar.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(date));
+		return calendar;
+	}
+
 }

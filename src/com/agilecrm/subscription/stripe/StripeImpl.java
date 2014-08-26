@@ -128,7 +128,7 @@ public class StripeImpl implements AgileBilling
 	if (oldPlan == null
 		|| (newPlan.getAmount() * plan.quantity) > (oldPlan.getAmount() * oldSubscription.getQuantity()))
 	{
-	    updateParams.put("prorate", true);
+	    updateParams.put("prorate", "true");
 
 	}
 

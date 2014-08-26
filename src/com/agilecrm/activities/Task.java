@@ -274,9 +274,12 @@ public class Task extends Cursor
 	try
 	{
 	    // Get owner pic through agileuser prefs
-	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
+	    if (owner != null)
+		agileuser = AgileUser.getCurrentAgileUserFromDomainUser(owner.getId());
+
 	    if (agileuser != null)
 		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+
 	    if (userprefs != null)
 		return userprefs.pic;
 	}

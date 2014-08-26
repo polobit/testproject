@@ -3,9 +3,9 @@ package com.agilecrm.util.email;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.util.JSONUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.thirdparty.mandrill.Mandrill;
 
 /**
  * <code>SendMail</code> is the base class to send email using different
@@ -98,10 +98,12 @@ public class SendMail
 
     public static final String EXPORT_CONTACTS_CSV = "export_contacts_csv";
     public static final String EXPORT_CONTACTS_CSV_SUBJECT = "Agile CRM Contacts CSV";
+    public static final String EXPORT_DEALS_CSV = "export_csv";
+    public static final String EXPORT_DEALS_CSV_SUBJECT = "Agile CRM Deals CSV";
 
     public static final String UNSUBSCRIBE_CONFIRMATION = "unsubscribe_confirmation";
     public static final String UNSUBSCRIBE_CONFIRMATION_SUBJECT = "Unsubscribe";
-    
+
     public static final String STRIPE_IMPORT_NOTIFICATION = "contact_sync_notification_template";
     public static final String STRIPE_IMPORT_NOTIFICATION_SUBJECT = "Stripe Import Report";
 
@@ -224,8 +226,8 @@ public class SendMail
 
 	    System.out.println("Namespace in SendMail is " + NamespaceManager.get());
 
-	    // Send Email
-	    Mandrill.sendMail(false, from, fromName, to, null, null, subject, from, emailHTML, emailBody, null, args);
+	    EmailGatewayUtil.sendEmail(NamespaceManager.get(), from, fromName, to, null, null, subject, from,
+		    emailHTML, emailBody, null, args);
 	}
 	catch (Exception e)
 	{

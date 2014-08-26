@@ -389,6 +389,7 @@ function addTagsDefaultTypeahead(element)
 		} });
 		return;
 	}
+	
 
 	// Adds typeahead to given element
 	addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);

@@ -1,7 +1,10 @@
 package com.agilecrm.contact.util;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
@@ -17,6 +20,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gdata.data.introspection.Collection;
 import com.googlecode.objectify.Key;
 
 /**
@@ -32,7 +36,7 @@ import com.googlecode.objectify.Key;
 public class TagUtil
 {
     // Dao
-    private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
+    public static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
 
     /**
      * Creates a tag in database, by verifying its existence in database.
@@ -74,6 +78,17 @@ public class TagUtil
 	    CacheUtil.deleteCache(NamespaceManager.get() + "-" + "tags");
 
     }
+    
+    public static void addTag(Tag tag)
+    {
+	Tag oldTag = getTag(tag.tag);
+	if(oldTag != null)
+	    return;
+	
+	tag.addTag(tag.tag);
+	    
+    }
+    
 
     /**
      * Deletes tags one by one (by iterating the set of tags) from database, if
@@ -138,6 +153,26 @@ public class TagUtil
 	    return null;
 	}
     }
+    
+    public static Tag getTagWithStats(String tag)
+    {
+	Key<Tag> tagKey = new Key<Tag>(Tag.class, tag);
+
+	try
+	{
+	    Tag tagObject = dao.get(tagKey);
+	    int count = ContactUtil.getContactsCountForTag(tagObject.tag);
+	    tagObject.availableCount = count;
+	    
+	    return tagObject;
+	    
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+
+    }
 
     /**
      * Fetches all the tags from the database and returns as list
@@ -158,7 +193,8 @@ public class TagUtil
 
     public static List<Tag> getTags(int size, String cursor)
     {
-	return dao.fetchAll(size, cursor);
+	return dao.fetchAll(size, cursor, null, true, true);
+	
     }
 
     /**
@@ -277,6 +313,59 @@ public class TagUtil
 
 	return result.toString();
 
+    }
+    
+    public static List<Tag> getStatus()
+    {
+	List<Tag> tags = TagUtil.getTags(100, null);
+	
+	if (tags.size() == 0)
+	    return tags;
+	
+	Cursor cursor = (Cursor) tags.get(0);
+	
+	List<Tag> allTags = new ArrayList<Tag>();
+	
+	do
+	{
+	    for(Tag tag : tags)
+	    {
+		int count = ContactUtil.getContactsCountForTag(tag.tag);
+		tag.availableCount = count;
+		
+		allTags.add(tag);
+	    }
+	    
+	   
+	   Cursor currentCursor = (Cursor) tags.get(0);
+	   
+	   if(cursor.cursor== null || cursor.cursor.equals(currentCursor.cursor))
+	       break;
+	   
+	   tags = TagUtil.getTags(100, currentCursor.cursor);
+	    
+	} while(true);
+	
+	return allTags;
+    }
+    
+    public static List<Tag> getStats(int page_size, String cursor)
+    {
+	
+	List<Tag> tags = getTags(page_size, cursor);
+	
+	
+	return fillStats(tags);
+    }
+    
+    public static List<Tag> fillStats(List<Tag> tags)
+    {
+	for(Tag tag : tags)
+	{
+	    tag.availableCount = ContactUtil.getContactsCountForTag(tag.tag);
+	}
+	
+	return tags;
     }
 
 }

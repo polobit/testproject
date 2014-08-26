@@ -168,8 +168,9 @@ public class Mandrill
      * @param text
      *            - text body
      */
-    public static String sendMail(boolean async, String fromEmail, String fromName, String to, String cc, String bcc,
-	    String subject, String replyTo, String html, String text, String metadata, String... attachments)
+    public static String sendMail(String apiKey, boolean async, String fromEmail, String fromName, String to,
+	    String cc, String bcc, String subject, String replyTo, String html, String text, String metadata,
+	    String... attachments)
     {
 	try
 	{
@@ -182,7 +183,7 @@ public class Mandrill
 	     */
 
 	    // Complete mail json to be sent
-	    JSONObject mailJSON = setMandrillAPIKey(subaccount);
+	    JSONObject mailJSON = setMandrillAPIKey(apiKey, subaccount);
 
 	    // All email params are inserted into Message json
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, to, cc, bcc, replyTo, subject,
@@ -200,7 +201,7 @@ public class Mandrill
 		long start_time = System.currentTimeMillis();
 
 		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL,
-			mailJSON.toString());
+		        mailJSON.toString());
 
 		long process_time = System.currentTimeMillis() - start_time;
 
@@ -219,13 +220,13 @@ public class Mandrill
 	    catch (RetryException e)
 	    {
 		// Creates new subaccount
-		MandrillSubAccounts.createMandrillSubAccount(subaccount);
+		MandrillSubAccounts.createMandrillSubAccount(subaccount, apiKey);
 
 		System.out.println("Resending email with subaccount " + subaccount + "...");
 
 		// Send email again.
 		response = HTTPUtil.accessURLUsingPost(MANDRILL_API_POST_URL + MANDRILL_API_MESSAGE_CALL,
-			mailJSON.toString());
+		        mailJSON.toString());
 
 		System.out.println("Response for second attempt " + response);
 	    }
@@ -239,6 +240,13 @@ public class Mandrill
 	    System.err.println("Exception occured in sendMail of Mandrill " + e.getMessage());
 	    return e.getMessage();
 	}
+    }
+
+    public static String sendMail(boolean async, String fromEmail, String fromName, String to, String cc, String bcc,
+	    String subject, String replyTo, String html, String text, String metadata, String... attachments)
+    {
+	return sendMail(null, async, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, metadata,
+	        attachments);
     }
 
     /**
@@ -332,7 +340,7 @@ public class Mandrill
 
 	    if (!StringUtils.isBlank(bcc))
 		recipientsArray = buildRecipientJSON(recipientsArray, EmailUtil.getStringTokenSet(bcc, ","),
-			MANDRILL_BCC);
+		        MANDRILL_BCC);
 
 	}
 	catch (Exception e)
@@ -464,9 +472,12 @@ public class Mandrill
      *            - current namespace
      * @return mailJSON
      */
-    public static JSONObject setMandrillAPIKey(String subaccount)
+    public static JSONObject setMandrillAPIKey(String apiKey, String subaccount)
     {
 	JSONObject mailJSON = new JSONObject();
+
+	if (StringUtils.isBlank(apiKey))
+	    apiKey = Globals.MANDRIL_API_KEY_VALUE;
 
 	try
 	{
@@ -477,7 +488,7 @@ public class Mandrill
 		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRILL_TEST_API_KEY_VALUE);
 	    }
 	    else
-		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
+		mailJSON.put(MANDRILL_API_KEY, apiKey);
 	}
 	catch (Exception e)
 	{
