@@ -33,7 +33,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Web to Lead */
 	"integrations" : "integrations",
 
-	"tags" : "tagManagement",
+	"tag-management" : "tagManagement",
+	
 
 	"email-gateways/:id" : "emailGateways" },
 
@@ -353,6 +354,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	tagManagement : function()
 	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		
+		$("#content").html(getTemplate("admin-settings"), {});
+		
 		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: true, sortKey : 'tag', postRenderCallback: function(el){
 		}});
 		this.tagsview1.appendItem = append_tag_management;
@@ -360,7 +369,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 //		var tagsView = new Base_Model_View({ url : 'core/api/tags', template : 'admin-settings-tags-model', });
 		console.log(this.tagsview1);
 		this.tagsview1.collection.fetch();
-		$("#content").html(this.tagsview1.render().el);
+		
+		$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
+		
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.tag-management-tab').addClass('active');
 	},
 	
 
