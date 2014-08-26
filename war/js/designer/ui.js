@@ -302,6 +302,10 @@ function generateDefaultUI(uiFieldDefinition) {
 		    	 	attributes += " checked "; 		    	 	
 					continue;
 		 	}
+        	
+        	//style is appended at the end. Refer getStyleAttribute(styleAttributes)
+        	if( key == "style")
+        		continue;
 
             attributes += (key + "=\"" + uiFieldDefinition[key] + "\" ");
         }
@@ -323,8 +327,23 @@ function generateDefaultUI(uiFieldDefinition) {
 		 return ("<" + tagName + " " + attributes + " />");
 	}else
 
-    return ("<" + tagName + " " + attributes + " style='width:75%'/>");
+    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style);
+
 }
+//Bhasuri 
+function getStyleAttribute(styleAttributes)
+{
+	if(styleAttributes == undefined)
+		return " style='width:75%'/>";
+	
+	var style=" style='";
+	$.each(
+			styleAttributes, function (key, value){
+				style+=key+":"+value+";";
+			} );
+	
+		return style+"'/>";
+	}
 
 function loadTinyMCE(name)
 {
