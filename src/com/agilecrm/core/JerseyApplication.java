@@ -39,6 +39,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.prefs.EmailTemplatesPrefsAPI.class);
 	s.add(com.agilecrm.core.api.search.SearchAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.TriggersAPI.class);
+	s.add(com.agilecrm.core.api.campaigns.AutomationsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.EventsAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.WorkflowsAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.WorkflowTemplatesAPI.class);
