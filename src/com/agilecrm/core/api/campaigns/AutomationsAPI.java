@@ -20,12 +20,12 @@ import com.agilecrm.workflows.automation.Automation;
 import com.agilecrm.workflows.automation.util.AutomationUtil;
 
 /**
- * <code>AutomtionsAPI</code> includes REST calls to interact with {@link Automation}
- * class to initiate Configuration CRUD operations.
+ * <code>AutomtionsAPI</code> includes REST calls to interact with
+ * {@link Automation} class to initiate Configuration CRUD operations.
  * <p>
- * It is called from client side to create, fetch, update and delete configurations.
- * It also interact with {@link Automation} class to fetch the data of Configuration
- * class from database.
+ * It is called from client side to create, fetch, update and delete
+ * configurations. It also interact with {@link Automation} class to fetch the
+ * data of Automation class from database.
  * </p>
  * 
  * @author Ramesh
@@ -34,84 +34,83 @@ import com.agilecrm.workflows.automation.util.AutomationUtil;
 @Path("/api/automations")
 public class AutomationsAPI
 {
-    /**
-     * Gets all configurations.
-     * 
-     * @return List of all configurations.
-     */
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Automation> getAutomations()
-    {
-	return AutomationUtil.getAllAutomations();
-    }
+	/**
+	 * Gets all automations.
+	 * 
+	 * @return List of all automations.
+	 */
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<Automation> getAutomations()
+	{
+		return AutomationUtil.getAllAutomations();
+	}
 
-    /**
-     * Saves new trigger.
-     * 
-     * @param trigger
-     *            Trigger object that is newly created.
-     * @return Created trigger.
-     */
-    @POST
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Automation createAutomation(Automation automation)
-    {
-    automation.save();
-	return automation;
-    }
+	/**
+	 * Saves new Automation.
+	 * 
+	 * @param automation
+	 *            Automation object that is newly created.
+	 * @return Created automation.
+	 */
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Automation createAutomation(Automation automation)
+	{
+		automation.save();
+		return automation;
+	}
 
-    /**
-     * Updates trigger.
-     * 
-     * @param trigger
-     *            Trigger object that is updated.
-     * @return Updated trigger.
-     */
-    @PUT
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Automation updateAutomation(Automation automation)
-    {
-	automation.save();
-	return automation;
-    }
+	/**
+	 * Updates automation.
+	 * 
+	 * @param automation
+	 *            Automation object that is updated.
+	 * @return Updated automation.
+	 */
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Automation updateAutomation(Automation automation)
+	{
+		automation.save();
+		return automation;
+	}
 
-    /**
-     * Deletes single automation.
-     * 
-     * @param id
-     *            Automation id that should be deleted.
-     */
-    @Path("{configuration_id}")
-    @DELETE
-    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void deleteAutomation(@PathParam("configuration_id") Long id)
-    {
-	Automation configuration = AutomationUtil.getAutomation(id);
+	/**
+	 * Deletes single automation.
+	 * 
+	 * @param id
+	 *            Automation id that should be deleted.
+	 */
+	@Path("{configuration_id}")
+	@DELETE
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public void deleteAutomation(@PathParam("configuration_id") Long id)
+	{
+		Automation configuration = AutomationUtil.getAutomation(id);
 
-	if (configuration != null)
-	    configuration.delete();
-    }
+		if (configuration != null)
+			configuration.delete();
+	}
 
-    /**
-     * Deletes multiple configurations
-     * 
-     * @param model_ids
-     *            Configuration ids that are selected to delete
-     * @throws JSONException
-     *             throws Exception when configurationIds are failed to convert to
-     *             json
-     */
-    @Path("/bulk")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public void deleteAutomation(@FormParam("ids") String model_ids)
-	    throws JSONException
-    {
-	JSONArray configurationsJSONArray = new JSONArray(model_ids);
-	AutomationUtil.deleteAutomationsBulk(configurationsJSONArray);
-    }
+	/**
+	 * Deletes multiple configurations
+	 * 
+	 * @param model_ids
+	 *            Configuration ids that are selected to delete
+	 * @throws JSONException
+	 *             throws Exception when configurationIds are failed to convert
+	 *             to json
+	 */
+	@Path("/bulk")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public void deleteAutomation(@FormParam("ids") String model_ids) throws JSONException
+	{
+		JSONArray configurationsJSONArray = new JSONArray(model_ids);
+		AutomationUtil.deleteAutomationsBulk(configurationsJSONArray);
+	}
 }

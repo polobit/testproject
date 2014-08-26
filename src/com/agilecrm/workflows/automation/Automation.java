@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -58,14 +57,14 @@ public class Automation
 	};
 
 	/**
-	 * Trigger type.
+	 * Automation duration type.
 	 */
 	public Duration durationType;
 
 	public static ObjectifyGenericDao<Automation> dao = new ObjectifyGenericDao<Automation>(Automation.class);
 
 	/**
-	 * Default Trigger.
+	 * Default Automation.
 	 */
 	Automation()
 	{
@@ -73,14 +72,16 @@ public class Automation
 	}
 
 	/**
-	 * Constructs new {@link Trigger} with name,type and campaign id.
+	 * Constructs new {@link Automation} with name,type and campaign id.
 	 * 
 	 * @param name
-	 *            The trigger name.Required.
+	 *            The Automation name.Required.
 	 * @param type
-	 *            The trigger condition.Required.
+	 *            The Automation duration type.Required.
 	 * @param campaign_id
 	 *            The campaign id from campaign.Required.
+	 * @param contactFilter_id
+	 *            The contactFilter id from contactFilter.Required.
 	 */
 	public Automation(String name, Duration type, Long campaign_id, Long contactFilter_id)
 	{
@@ -146,7 +147,7 @@ public class Automation
 	}
 
 	/**
-	 * Removes trigger from database.
+	 * Removes Automation from database.
 	 */
 	public void delete()
 	{
