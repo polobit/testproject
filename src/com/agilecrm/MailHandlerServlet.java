@@ -26,12 +26,17 @@ public class MailHandlerServlet extends HttpServlet
 {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+	System.out.println("/_ah/mail");
+
 	Properties properties = new Properties();
 	Session session = Session.getDefaultInstance(properties, null);
 	try
 	{
 	    MimeMessage email = new MimeMessage(session, request.getInputStream());
+	    System.out.println("email " + email);
 	    Address[] recepientAddresses = email.getAllRecipients();
+
+	    System.out.println("recepients " + recepientAddresses);
 
 	    String apiKey = getAgileAPIKey(recepientAddresses);
 	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
@@ -44,6 +49,8 @@ public class MailHandlerServlet extends HttpServlet
 
 	    for (Address recepientAddress : recepientAddresses)
 	    {
+		System.out.println("address " + recepientAddress);
+
 		if (isAgileRecepient(recepientAddress))
 		    continue;
 
@@ -73,6 +80,9 @@ public class MailHandlerServlet extends HttpServlet
 		else
 		    contactProperties.add(new ContactField(Contact.FIRST_NAME, recepient.getAddress().split("@")[0],
 			    null));
+
+		System.out.println("contact properties ");
+		System.out.println(contactProperties);
 
 		contact.properties = contactProperties;
 		contact.setContactOwner(owner);
