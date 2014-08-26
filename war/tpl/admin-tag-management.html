@@ -12,14 +12,15 @@
     		<div class="control-group">  
 {{tagManagementCollectionSetup this}}	 
                     <div id="milestone-values" class="milestone-ul-list1">
-						<ul class='milestone-value-list1 tagsinput tag-cloud' id="tag-management-model-list" style='padding:1px;list-style:none;display: inline;'></ul>
+						<ul class="tags-management tag-cloud" id="tag-management-model-list" style='padding:1px;list-style:none;display: inline;'></ul>
                     </div>
 <div class="clearfix"></div>
 					<div><a href="#" id="add-new-tag"><i class="icon-plus-sign" ></i> Add Tag</a></div>
 
 
 					<div id="new_tag_field_block" style="display:none;">
-						<input id="new_tag" style="width:170px;margin-right:10px;" type="text" placeholder="New Tag">
+						<input id="new_tag" style="width:170px;margin-top:10px;margin-right:10px;" type="text" placeholder="New Tag">
+						<a class="btn" id="add_new_tag" href="#">Add</a>
 					</div>
     		</div> 
     </div>
@@ -42,6 +43,7 @@
 </div>
 <div class="hide" id="editing">
 	<input type="text" class="edit-input input-medium" value='{{this.tag}}' >  
+	<a class="btn" id="add_milestone" href="#">Add</a>
 </div>
 </span>
 </script>
@@ -50,17 +52,19 @@
 <span>
 
 <div id="tag-solid-state">
-<a class="anchor" style="font-size:13px;padding:1px 5px;display:block;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 11em; display: inline-block;" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
+<a class="anchor" style="vertical-align:middle;font-size:13px;padding:1px 5px;display:block;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; max-width: 9em; display: inline-block;" href="#tags/{{this.tag}}" >{{this.tag}}</a>  
 
 <span id="actions" class="hide">
-<span><a class="delete right" href="#" style="font-size:1.1em"><i class="icon-remove-sign"></i></a></span>
-	<span><a class="edit right" href="#"><i class="icon-pencil" style="font-size:1.1em"></i></a></span>
-	<span><a class="details right" href="#" ><i class="icon-file-text"></i></a></span> 
-	
-</span>
+<div class="pull-right tag-management-actions">
+	<a class="details" href="#"><i class="icon-file-text"></i></a>
+	<a class="edit" href="#" ><i class="icon-pencil"></i></a>
+	<a class="delete" href="#" ><i class="icon-trash"></i></a>
 </div>
-<div class="hide" id="editing" style="float: left;width:200px;">
+<div class="clearfix"></div>
+</div>
+<div class="hide" id="editing" style="width:200px;padding:0px 20px 5px 9px;float:left">
 	<input type="text" class="edit-input " value='{{this.tag}}' style="width:200px;float: left;" >  
+	
 </div>
 </span>
 </script>

@@ -11,7 +11,7 @@ var TAG_MODEL_VIEW = Backbone.View.extend(
 					   "click .edit" : "edit", 
 					   "delete-checked .agile_delete" : "deleteItem",
 					   "keypress .edit-input" : "renameTag",
-					   "blur .edit-input"      : "updateTag",
+					  "blur .edit-input"      : "updateTag",
 					   "mouseover" : "showActionButtons",
 					   "mouseout" : "hideActionButtons",
 					   'click .details' : "showDetails",
@@ -50,10 +50,10 @@ showDetails : function(e)
     	"rel" : "popover",
     	"data-original-title" : "\"" + this.model.get('tag') + "\" Stats",
     	"data-content" :  LOADING_HTML,
-    	"data-container" : this.el
+    	//"data-container" : '.tag'
     });
     
-    $(this.el).popover('show');
+    $(this.el).popover({'show' : true, 'data-container' : this.el});
 	
 	$.getJSON('core/api/tags/getstats/' + this.model.get('tag'), function(data){
 		_that.model.set('availableCount', data.availableCount);
@@ -64,10 +64,15 @@ showDetails : function(e)
 },
 renameTag : function (e)
 {
-	 if (e.keyCode == 13) this.updateTag();
+	 if (e.keyCode == 13) 
+		{
+		 	this.updateTag();
+		}
 },
 updateTag : function(e)
 {
+	
+	
 	if(this.model.get('tag') == this.input.val())
 		{
 			$("#tag-solid-state", this.el).show();
@@ -75,30 +80,54 @@ updateTag : function(e)
 			$(this.el).addClass('tag');
 			return;
 		}
+	if(!isValidTag(this.input.val(), true))
+	{
+		this.input.val(this.model.get('tag')).focus();
+ 		return;
+	}
 	
-	var newTag = this.input.val();
+	var newTag = this.input.val().trim();
 	var oldTag = this.model.get('tag');
 	
-	var r = confirm("You are about to rename tag \"" + oldTag +"\" to \""+ newTag +"\"");
+	
+	var r = false;
+	var is_merge = isMergeTag(this.model.toJSON()); 
+	
+	if(is_merge)
+		r = confirm('Tag "' +newTag+ '" already exists. You are about to merge "' + oldTag +'" and "' + newTag + '"');
+	else
+		r = confirm("You are about to rename tag \"" + oldTag +"\" to \""+ newTag +"\"");
 	if(r == false)
 	{
-		$("#tag-solid-state", this.el).show();
-		$("#editing", this.el).hide();
-		$(this.el).addClass('tag');
+		this.reset();
 		return;
-		
 	}
 	
 	this.model.url = 'core/api/tags/bulk/rename?tag=' + newTag;
 	
 	this.model.save([], {success: function(data)
 		{
+			if(is_merge)
+				showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ data.get('tag') +"\"", "top", 5000);
+			else
 			showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ data.get('tag') +"\"", "top", 5000);
 		}
 	});
+	
+	if(is_merge)
+	{
+		this.remove();
+		return;
+	}
 	this.model.set('tag', this.input.val().trim());
 	$(this.el).addClass('tag');
 		
+},
+reset : function()
+{
+	$("#tag-solid-state", this.el).show();
+	$("#editing", this.el).hide();
+	$(this.el).addClass('tag');
 },
 showActionButtons : function(e)
 {
@@ -115,7 +144,6 @@ hideActionButtons : function(e)
 addNewTag : function(e)
 {
 	e.preventDefault();
-	alert("new tag");
 	$("#new_tag_field_block", this.el).show();
 },
 /*
@@ -131,8 +159,9 @@ deleteItem : function(e)
 		return;
 	}
 	
-	this.model.url = "core/api/tags/bulk/delete?tag=" + encodeURI(this.model.get("tag"));
-	this.model.set({"id" : this.model.get('tag')})
+	this.model.url = "core/api/tags/bulk/delete?tag=" + escape(this.model.get('tag'));
+	this.model.set({"id" : this.model.get('tag')});
+	console.log(this.model.toJSON())
 	this.model.destroy();
 }, edit : function(e)
 {
@@ -172,14 +201,16 @@ function append_tag_management(base_model) {
 	console.log($('div[tag-alphabet="'+encodeURI(key)+'"]', this.el))
 
 		var el = itemView.render().el;
-	$(el).addClass('tag').attr('count', base_model.get('availableCount')).css('width', '200px').css('float' , 'left').css('margin', '0px 10px 15px 10px').css('background', 'gray');
+	$(el).addClass('tag');
 	
 	var element = $( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el); 
 	console.log(element.length);
 	if(element.length > 0)
 		$( 'div[tag-alphabet="'+encodeURI(key)+'"] ul', this.el).append($(el));
 	else
-		$(this.model_list_element).append("<div class='clearfix'></div>").append($(el));
+		{
+			$(this.model_list_element).append("<div class='clearfix'></div>").append($(el));
+		}
 
 	//$(this.model_list_element).append($(el));
 }
@@ -194,18 +225,107 @@ $("#new_tag").die().live('keydown', function(event){
 	if(event.which != 13)
 		return;
 
-	var value = $(this).val();
+	saveTag(this);
+});
+
+
+$("#add_new_tag").die().live('click', function(e){
+	e.preventDefault();
+	var newTag = $().val();
 	
-	var tag = {};
-	tag.tag = value;
+	saveTag("#new_tag");
+});
+
+function saveTag(field)
+{
+	var fieldValue = $(field).val();
 	
-	var model =  new BaseModel(tag);
+	if(!isValidTag(fieldValue, true))
+	{
+		$(field).focus();
+		return;
+	}
+	
+		
+	var tagObject = {};
+	tagObject.tag = fieldValue.trim();
+	
+	
+	
+	// Disables input field
+	$(field).attr('disabled');
+	$("#add_new_tag").attr('disabled');
+	
+	var model =  new BaseModel(tagObject);
 	model.url = "core/api/tags";
-	model.save();
+	model.save([], {success: function(response){
+		$(field).val("");
+		$(field).removeAttr('disabled');
+		$("#add_new_tag").removeAttr('disabled');
+		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" added", "top", 5000);
+		
+	}});
 	console.log(App_Admin_Settings);
 	App_Admin_Settings.tagsview1.collection.add(model);
-	$(this).val("");
-	$(this).hide();
 	
+}
+
+function isValidTag(tag, showAlert)
+{
+	var is_valid = (/^[A-Za-z][A-Za-z0-9_ :-]*$/).test(tag); 
+	if(showAlert && !is_valid)
+		alert("Tag should start with an alphabet and should not contain special characters")
+	return is_valid;
+}
+
+
+
+/**
+ * Added tags typeahead on fields
+ * 
+ * @param element
+ */
+function addTagsDefaultTypeaheadTagManagement(element)
+{
+	var tags_array = [];
+
+	// 'TAGS' are saved in global variable when they are fetched to show stats
+	// in contacts page. If it is undefined, tags are fetched from DB an then type ahead is built
+	if (!TAGS)
+	{
+		var TagsCollection = Backbone.Collection.extend({ url : '/core/api/tags', sortKey : 'tag' });
+
+		tagsCollection = new TagsCollection();
+
+		tagsCollection.fetch({ success : function(data)
+		{
+			TAGS = tagsCollection.models;
+			addTagsArrayasTypeaheadSource(tagsCollection.toJSON(), element);
+
+		} });
+		return;
+	}
 	
-});
+
+	// Adds typeahead to given element
+	addTagsArrayasTypeaheadSourceTagManagement(tagsCollection.toJSON(), element);
+}
+
+function isMergeTag(tag)
+{
+	return (App_Admin_Settings.tagsview1.collection.where({"tag" : tag.tag}).length > 0);
+}
+
+// With tags JSON sent type ahead is built on input fields
+function addTagsArrayasTypeaheadSource(tagsJSON, element)
+{
+	var tags_array = [];
+
+	$.each(tagsJSON, function(index, element)
+	{
+		tags_array.push(element.tag.toString());
+	});
+
+	// $("input", element).attr("data-provide","typeahead");
+	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag");
+}

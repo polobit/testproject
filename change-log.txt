@@ -1,3 +1,6 @@
+*** Yaswanth ***
+Added tag management. Added it in admin pannel (26th August).
+
 1-4 (22-August-2014)
 
 *** Yaswanth ***

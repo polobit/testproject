@@ -53,6 +53,7 @@ import com.agilecrm.webrules.WebRule;
 import com.agilecrm.widgets.CustomWidget;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.automation.Automation;
 import com.agilecrm.workflows.templates.WorkflowTemplate;
 import com.agilecrm.workflows.triggers.Trigger;
 import com.campaignio.cron.Cron;
@@ -131,6 +132,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Log.class);
 	ObjectifyService.register(URLShortener.class);
 	ObjectifyService.register(Trigger.class);
+	ObjectifyService.register(Automation.class);
 
 	// widgets
 	ObjectifyService.register(Widget.class);

@@ -161,7 +161,7 @@ if (templateName.indexOf("webrule") == 0)
 {
 template_relative_urls.push("web-rules.js");
 }
-if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0)
+if (templateName.indexOf("workflow") == 0 || templateName.indexOf("campaign") == 0 || templateName.indexOf("trigger") == 0 || templateName.indexOf("automation") == 0)
 {
 template_relative_urls.push("workflow.js");
 }
