@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.agilecrm.Globals;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.backends.BackendServiceFactory;
@@ -74,6 +73,10 @@ public class NamespaceFilter implements Filter
 	if (((HttpServletRequest) request).getRequestURI().contains("forgot-domain"))
 	    return true;
 
+	// If it is _ah/mail, just return
+	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail/"))
+	    return true;
+
 	// Read Subdomain
 	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
 	System.out.println(subdomain);
@@ -98,10 +101,10 @@ public class NamespaceFilter implements Filter
 	    redirectToChooseDomain(request, response);
 	    return false;
 	}
-	
 
-	// If request is from register and domain is "my", request is forwarded to register jsp without setting domain
-	if(((HttpServletRequest) request).getRequestURI().contains("/register") && "my".equals(subdomain))
+	// If request is from register and domain is "my", request is forwarded
+	// to register jsp without setting domain
+	if (((HttpServletRequest) request).getRequestURI().contains("/register") && "my".equals(subdomain))
 	    return true;
 
 	// If my or any special domain - support etc, choose subdomain
@@ -188,11 +191,12 @@ public class NamespaceFilter implements Filter
     {
 	System.out.println(request.getServerName());
 
-	
-	/* DomainUser domainUser = new DomainUser(null, "jitendra@invox.com",
-	 "hungry", "password", true, true); try { domainUser.save(); } catch
-	 (Exception e) { // TODO Auto-generated catch block
-	 e.printStackTrace(); }*/
+	/*
+	 * DomainUser domainUser = new DomainUser(null, "jitendra@invox.com",
+	 * "hungry", "password", true, true); try { domainUser.save(); } catch
+	 * (Exception e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); }
+	 */
 
 	// If URL path starts with "/backend", then request is forwarded without
 	// namespace verification i.e., no filter on url which starts with
