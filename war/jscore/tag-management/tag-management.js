@@ -40,7 +40,6 @@ showDetails : function(e)
 	var _that = this;
 	var details_el = $(".details", this.el);
 	
-	console.log(_that);
 	
     /**
      * Checks for last 'tr' and change placement of popover to 'top' inorder
@@ -94,9 +93,9 @@ updateTag : function(e)
 	var is_merge = isMergeTag(this.model.toJSON()); 
 	
 	if(is_merge)
-		r = confirm('Tag "' +newTag+ '" already exists. You are about to merge "' + oldTag +'" and "' + newTag + '"');
+		r = confirm('Tag "' +newTag+ '" exists already. Do you want to merge "' + oldTag +'" and "' + newTag + '" ?');
 	else
-		r = confirm("You are about to rename tag \"" + oldTag +"\" to \""+ newTag +"\"");
+		r = confirm("Rename tag \"" + oldTag +"\" to \""+ newTag +"\" ?");
 	if(r == false)
 	{
 		this.reset();
@@ -110,7 +109,7 @@ updateTag : function(e)
 			if(is_merge)
 				showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ data.get('tag') +"\"", "top", 5000);
 			else
-			showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ data.get('tag') +"\"", "top", 5000);
+			showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ data.get('tag') +"\". This amy take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
 		}
 	});
 	
@@ -153,7 +152,7 @@ addNewTag : function(e)
 deleteItem : function(e)
 {
 	e.preventDefault();
-	var r = confirm("You are about to delete \""+ this.model.get('tag') + "\" tag");
+	var r = confirm("Delete \""+ this.model.get('tag') + "\" tag ?");
 	if(r == false)
 	{
 		return;
@@ -262,7 +261,7 @@ function saveTag(field)
 		$(field).val("");
 		$(field).removeAttr('disabled');
 		$("#add_new_tag").removeAttr('disabled');
-		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" added", "top", 5000);
+		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" added. </br> This amy take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
 		
 	}});
 	console.log(App_Admin_Settings);
@@ -274,7 +273,7 @@ function isValidTag(tag, showAlert)
 {
 	var is_valid = (/^[A-Za-z][A-Za-z0-9_ :-]*$/).test(tag); 
 	if(showAlert && !is_valid)
-		alert("Tag should start with an alphabet and should not contain special characters")
+		alert("Tag name should start with an alphabet and can not contain special characters other than hyphen, underscore, colon and space");
 	return is_valid;
 }
 
