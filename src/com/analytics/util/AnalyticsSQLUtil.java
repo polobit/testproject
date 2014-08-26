@@ -174,7 +174,7 @@ public class AnalyticsSQLUtil {
 			urlCountQuery += " \'%" + url + "%\'";
 
 		// User doesn't want date and time or old url visited node
-		if (!duration.equals("0"))
+		if (!duration.equals("0") && !duration.equals(""))
 			urlCountQuery += " AND stats_time BETWEEN DATE_SUB(DATE(NOW()),"
 					+ " INTERVAL " + duration + " " + durationType
 					+ ") AND NOW() ";

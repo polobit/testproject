@@ -144,7 +144,7 @@ debug = false;
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
-var HANDLEBARS_PRECOMPILATION = false;
+var HANDLEBARS_PRECOMPILATION = true || <%=!debug%>;
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -235,7 +235,7 @@ setTimeout(loadMiscScripts, 10000);
 
   ga('create', 'UA-44894190-1', 'auto');
   ga('send', 'pageview');
-
+ 
 </script>
 
 <!-- ClickDesk Live Chat Service for websites -->

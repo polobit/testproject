@@ -202,7 +202,7 @@ public class MandrillUtil
 	}
 
 	// Records email sent count
-	AccountEmailStatsUtil.recordAccountEmailStats(firstMandrillDefferedTask.subaccount, tasks.size());
+	//AccountEmailStatsUtil.recordAccountEmailStats(firstMandrillDefferedTask.subaccount, tasks.size());
 
     }
 

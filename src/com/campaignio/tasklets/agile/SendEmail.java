@@ -584,6 +584,9 @@ public class SendEmail extends TaskletAdapter
 	// Send Email using email gateway
 	EmailGatewayUtil.sendBulkEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
 	        mandrillMetadata);
+	        
+	// Increment emails count
+	AccountEmailStatsUtil.recordAccountEmailStats(domain, 1);
 
     }
 }
