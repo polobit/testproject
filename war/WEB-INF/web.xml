@@ -5,8 +5,7 @@
 		<servlet-class>com.agilecrm.HomeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-
-		<servlet-name>Home</servlet-name>
+	<servlet-name>Home</servlet-name>
 		<url-pattern>/home</url-pattern>
 	</servlet-mapping>
 
@@ -56,7 +55,6 @@
 		<servlet-name>XeroScribeServlet</servlet-name>
 		<url-pattern>/XeroServlet</url-pattern>
 	</servlet-mapping>
-
 
 	<servlet>
 		<servlet-name>ContactUtilServlet</servlet-name>
@@ -438,16 +436,6 @@
 	<security-constraint>
 		<web-resource-collection>
 			<url-pattern>admin.*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>admin</role-name>
-		</auth-constraint>
-	</security-constraint>
-	
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>mail</web-resource-name>
-			<url-pattern>/_ah/mail/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>
