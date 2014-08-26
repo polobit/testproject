@@ -61,13 +61,13 @@ var AdminPanelRouter = Backbone.Router.extend({
 			console.log("ssssssssssssssssssssssss");
 			console.log(data);
 			$(el).find('#planinfo').html(getTemplate("plan-info", data));
-
+			
 			if (data == null || data == "" || data == undefined)
 			{
 
 				$("#login_id").attr("href", "https://" + domainname + ".agilecrm.com/login");
 			}
-			// $("#domainhref").attr("href", "/#domainSubscribe/"+domainname);
+			
 			else
 				that.get_collection_of_charges_for_customer_from_adminpanel(el, data.id);
 		} });
@@ -92,7 +92,7 @@ var AdminPanelRouter = Backbone.Router.extend({
 	{
 		this.chargecollection = new Base_Collection_View({ url : "core/api/admin_panel/getcharges?d=" + customerid, templateKey : "admin-charge",
 
-		individual_tag_name : 'tr' });
+		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
 		this.chargecollection.collection.fetch();
 
 		$('.past-chargecollection', el).html(this.chargecollection.render().el);
@@ -113,7 +113,8 @@ var AdminPanelRouter = Backbone.Router.extend({
 				});
 
 				var mod_collection = self.usersListViewCollection.collection.models;
-
+			
+				
 				domainname = mod_collection[0].get('domain');
 				self.get_customerobject_for_domain_from_adminpanel(el, domainname);
 				self.get_account_stats_for_domain_from_adminpanel(el, domainname);
@@ -176,9 +177,8 @@ var AdminPanelRouter = Backbone.Router.extend({
 						data : json,
 						success : function()
 						{
-							$('#changePasswordForm').find('span.save-status').html(
-									"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
 							Backbone.history.navigate("all-domain-users", { trigger : true });
+							showNotyPopUp("information", "password changed successfully", "top");
 						},
 						error : function(response)
 						{

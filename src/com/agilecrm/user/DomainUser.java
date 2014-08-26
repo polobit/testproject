@@ -585,6 +585,9 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     {
 	System.out.println(" id in domain user before :" + id);
 
+	scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	
+	/*
 	if (scopes == null || scopes.size() == 0)
 	{
 
@@ -606,6 +609,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 	}
+	*/
     }
 
     /**
@@ -624,13 +628,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	    
 	    // If no scopes are set, then all scopes are added
-	    if(scopes == null)
-		scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
 	    if (menu_scopes == null)
 	    {
 		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
+	    
+	    
 	    
 	}
 	catch (Exception e)

@@ -37,9 +37,7 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
-import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -60,7 +58,6 @@ public class CSVUtil
 {
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
-    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     private CSVUtil()
     {
@@ -72,6 +69,7 @@ public class CSVUtil
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
 	        Contact.class.getSimpleName(), this.billingRestriction);
+	
     }
 
     public static enum ImportStatus
@@ -255,7 +253,7 @@ public class CSVUtil
 		    }
 		    continue;
 		}
-		if ("notes".equals(field.name))
+		if ("note".equals(field.name))
 		{
 		    notes_positions.add(j);
 		    continue;
@@ -276,9 +274,6 @@ public class CSVUtil
 		continue;
 
 	    boolean isMerged = false;
-	    accessControl.setObject(tempContact);
-	    
-	    accessControl.init();
 	    
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
@@ -286,36 +281,17 @@ public class CSVUtil
 		// Checks if user can update the contact
 
 		// Sets current object to check scope
-		 accessControl.setObject(tempContact);
-		 
-		if(accessControl.hasScope(UserAccessScopes.DELETE_CONTACTS) || accessControl.hasScope(UserAccessScopes.UPDATE_CONTACT))
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		else
-		{
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
-		if (accessControl.canCreate())
-		{
-		    
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
-
 		
+
+		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
 	    }
 	    else
 	    {
 		
-		if (accessControl.canCreate())
-		{
-		    ++accessDeniedToUpdate;
-		    continue;
-		}
-
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
+
 		++billingRestriction.contacts_count;
 		try
 		{
@@ -326,6 +302,7 @@ public class CSVUtil
 		    {
 			limitCrossed = true;
 		    }
+
 		}
 		catch (PlanRestrictedException e)
 		{

@@ -70,7 +70,7 @@ var addAgileFields = function(json, fields, callback)
 			{ value : "website", label : "Website", selected : false }, { value : "phone", label : "Phone", selected : false },
 			{ value : "city", label : "City", selected : false }, { value : "state", label : "State", selected : false },
 			{ value : "country", label : "Country", selected : false }, { value : "zip", label : "Zip", selected : false },
-			{ value : "address", label : "Address", selected : false }, { value : "score", label : "Score", selected : false }
+			{ value : "address", label : "Address", selected : false }, { value : "tags", label : "Tags", selected : false }
 	];
 	for ( var j = 0; j < fields.length; j++)
 	{

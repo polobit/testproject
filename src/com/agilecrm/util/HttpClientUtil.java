@@ -89,7 +89,7 @@ public class HttpClientUtil
 	    {
 		String response = HTTPUtil.accessURLUsingPost(url, postData);
 
-		System.out.println("Mandrill response in HttpClientUtil..." + response);
+		System.out.println("Response in HttpClientUtil..." + response);
 	    }
 	    catch (Exception e1)
 	    {

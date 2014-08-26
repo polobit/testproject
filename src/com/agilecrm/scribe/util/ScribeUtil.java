@@ -5,6 +5,7 @@
 package com.agilecrm.scribe.util;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
@@ -673,7 +675,37 @@ public class ScribeUtil
 	    contactPrefs.secret = map.get("secret");
 	    contactPrefs.othersParams = map.get("company");
 	    contactPrefs.type = Type.QUICKBOOK;
+	    String companyInfoQuery = "SELECT * FROM CompanyInfo";
+		String url = String.format("https://quickbooks.api.intuit.com/v3/company/"+map.get("company")+"/query?query=%s", URLEncoder.encode(companyInfoQuery));
+	    try
+	    {
+		String result = SignpostUtil.accessURLWithOauth(Globals.QUICKBOOKS_CONSUMER_KEY,
+		    Globals.QUICKBOOKS_CONSUMER_SECRET, map.get("token"), map.get("secret"), url, "GET", "", "quickbooks");
+		
+		  JSONObject response = new JSONObject(result);
+		    JSONObject queryResponse = (JSONObject) response.get("QueryResponse");
+		    if (queryResponse != null)
+		    {
+			if(queryResponse.has("CompanyInfo")){
+			JSONArray listCompany = (JSONArray) queryResponse.get("CompanyInfo");
+			JSONObject company = (JSONObject) listCompany.get(0);
+			Object comp = company.get("CompanyName");
+			if(comp != null){
+			    String companyName = comp.toString().split("'")[0];
+			    contactPrefs.userName = companyName;
+			}
+			}
+		    }
+	    }
+	    catch (Exception e)
+	    {
+		// save token even it get time out while fetching company info
+		 contactPrefs.save();
+		e.printStackTrace();
+	    }
 	    contactPrefs.save();
 	    
+	    
     }
+    
 }

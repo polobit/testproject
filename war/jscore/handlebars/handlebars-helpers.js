@@ -1323,6 +1323,11 @@ $(function()
     	    return url;
     	return 'skype:' + url;
     });
+    
+    Handlebars.registerHelper('getFacebookURL', function(url)
+    {
+    	return url.replace('@', '');
+    });
 
     // Get Count
     Handlebars.registerHelper('count', function()
@@ -2691,9 +2696,39 @@ $(function()
 		var html_temp = "";
 		
 		for(var i = 0; i< keys.length ; i ++)
-			html_temp += "<div style='margin-right:10px;max-width:180px'><div class='tag-key'>" + keys[i] + "</div><div class='tag-values' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"milestone-value-list tagsinput\" style=\"padding:1px;list-style:none;\"></ul></div></div>";
+			html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='tag-values left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"milestone-value-list1 tagsinput tag-cloud\" style=\"padding:1px;list-style:none;display: inline;\"></ul></div></div>";
 		 
     console.log(html_temp);
     return new Handlebars.SafeString(html_temp);
 	    });
+    
+    Handlebars.registerHelper('containsScope', function(item, list, options)
+	    {
+    		if(list.length == 0 || !item)
+    			 return options.inverse(this);
+    		
+    		if(jQuery.inArray(item, list) == -1)
+    	   		return options.inverse(this);   			
+    		
+    			return options.fn(this);
+ 
+	    });
+    
+    Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+    		{	
+    	
+    				if(CURRENT_DOMAIN_USER.id == owner_id)
+    					return options.fn(this);
+    				return options.inverse(this); 
+    		});
+    
+    Handlebars.registerHelper('canEditContact', function(owner_id, options){
+    	return options.fn(this);
+    	
+    	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+    		return options.fn(this);
+    	
+		return options.inverse(this)
+    });
+    
  });

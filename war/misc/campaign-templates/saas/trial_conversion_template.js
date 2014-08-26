@@ -314,25 +314,34 @@
                         "type": "email"
                     },
                     {
-                        "label": "To",
-                        "category": "Info",
-                        "name": "to_email",
-                        "id": "to_email",
-                        "value": "{{email}}",
-                        "required": "required",
-                        "title": "Enter your subscriber E-mail ID. If you are using a list, you can use {{email}}",
-                        "fieldType": "input",
-                        "type": "email"
-                    },
-                    {
-                        "label": "CC",
-                        "category": "Info",
-                        "name": "cc_email",
-                        "id": "cc_email",
-                        "title": "Enter CC email address",
-                        "fieldType": "input",
-                        "type": "email"
-                    },
+    					"label": "To",
+    					"category": "Info",
+    					"name": "to_email",
+    		            "id":"to_email",
+    		            "value":"{{email}}",
+    		            "required": "required",
+    					"title": "Enter your subscriber E-mail ID. If you are using a list, you can use {{email}}",
+    					"fieldType": "input",
+    		            "type": "multipleEmails"
+    				},
+    				{
+    					"label": "CC",
+    					"category": "Info",
+    					"name": "cc_email",
+    		            "id":"cc_email",
+    					"title": "Enter CC email address",
+    					"fieldType": "input",
+    		            "type": "multipleEmails"
+    				},
+    				{
+    					"label": "BCC",
+    					"category": "Info",
+    					"name": "bcc_email",
+    		            "id":"bcc_email",
+    					"title": "Enter BCC email address",
+    					"fieldType": "input",
+    		            "type": "multipleEmails"
+    				},
                     {
                         "label": "Subject",
                         "category": "Info",

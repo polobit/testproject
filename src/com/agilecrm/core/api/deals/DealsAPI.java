@@ -26,6 +26,9 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.export.util.DealExportBlobUtil;
 import com.agilecrm.export.util.DealExportEmailUtil;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
@@ -342,10 +345,36 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public void exportOpportunities(@QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
     {
+	// Append the URL with the current userId to set the session manager in
+	// the backend.
+	OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
+		+ SessionManager.get().getDomainId());
+    }
+
+    /**
+     * Export list of opportunities. Create a CSV file with list of deals and
+     * add it as a attachment and send the email.
+     */
+    @Path("/backend/export/{current_user_id}")
+    @POST
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void exportOpportunitiesBackend(@PathParam("current_user_id") Long currentUserId,
+	    @QueryParam("cursor") String cursor, @QueryParam("page_size") String count)
+    {
+	// Set the session manager to get the user preferences and the other
+	// details required.
+	if (SessionManager.get() != null)
+	{
+	    SessionManager.get().setDomainId(currentUserId);
+	}
+	else
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	    SessionManager.set(new UserInfo(null, user.email, user.name));
+	    SessionManager.get().setDomainId(user.id);
+	}
 	List<Opportunity> deals = OpportunityUtil.getOpportunities();
-	String path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, false);
-	// Close channel after contacts completed
-	DealExportBlobUtil.editExistingBlobFile(path, null, true);
+	String path = DealExportBlobUtil.writeDealCSVToBlobstore(deals, true);
 	List<String> fileData = DealExportBlobUtil.retrieveBlobFileData(path);
 	if (count == null)
 	    count = String.valueOf(deals.size());

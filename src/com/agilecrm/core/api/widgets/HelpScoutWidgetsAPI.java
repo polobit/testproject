@@ -50,8 +50,8 @@ public class HelpScoutWidgetsAPI
      */
     @Path("get/{widget-id}/{email}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getCustomerByEmail(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
+    public JSONObject getCustomerByEmail(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
     {
 	try
 	{
@@ -103,8 +103,8 @@ public class HelpScoutWidgetsAPI
      */
     @Path("get/createform/{widget-id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public static String getCreateFormData(@PathParam("widget-id") Long widgetId)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
+    public static JSONObject getCreateFormData(@PathParam("widget-id") Long widgetId)
     {
 	try
 	{
@@ -151,7 +151,7 @@ public class HelpScoutWidgetsAPI
      */
     @Path("get/{widget-id}/customer/{customer-id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
     public JSONObject getConversationsFromHelpScout(@PathParam("widget-id") Long widgetId,
 	    @PathParam("customer-id") int customerId)
     {
