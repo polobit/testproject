@@ -217,6 +217,16 @@
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Automations</servlet-name>
+		<servlet-class>com.agilecrm.workflows.automation.AutomationServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Automations</servlet-name>
+		<url-pattern>/backend/cron/automations/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>TaskReminder</servlet-name>

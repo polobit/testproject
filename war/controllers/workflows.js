@@ -23,12 +23,18 @@ var WorkflowsRouter = Backbone.Router
 
 			/* Triggers */
 			"triggers" : "triggers",
+			
+			/* Automation */
+			"automations" : "automations",
 
 			// Appends campaign-id to show selected campaign-name in add trigger
 			// form.
 			"trigger-add/:id" : "triggerAdd",
 
 			"trigger-add" : "triggerAdd", "trigger/:id" : "triggerEdit",
+			
+			/* Add automation */
+			"automation-add" : "automationAdd", "automation/:id" : "automationEdit",
 
 			/* Subscribers */
 			"workflow/all-subscribers/:id" : "allSubscribers", 
@@ -54,7 +60,6 @@ var WorkflowsRouter = Backbone.Router
 				this.workflow_list_view = new Base_Collection_View({ url : '/core/api/workflows', restKey : "workflow", sort_collection: false, templateKey : "workflows",
 					individual_tag_name : 'tr', cursor : true, page_size : 20, postRenderCallback : function(el)
 					{
-
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
 							$("time.campaign-created-time", el).timeago();
@@ -561,6 +566,162 @@ var WorkflowsRouter = Backbone.Router
 
 				$("#content").html(view.render().el);
 			},
+			
+			
+			/**
+			 * Saves new automation. Loads jquery.chained.js to link Conditions and
+			 * Value of input field.Fills campaign list and contact filter list using fillSelect
+			 * function.
+			 */
+			automationAdd : function()
+			{
+				this.automationModelview = new Base_Model_View({ url : '/core/api/automations', template : "automation-add", isNew : true, window : 'automations',
+				/**
+				 * Callback after page rendered.
+				 * 
+				 * @param el
+				 *            el property of Backbone.js
+				 */
+				postRenderCallback : function(el)
+				{
+
+					var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+
+					/**
+						 * Fills campaign select with existing Campaigns.
+						 * 
+						 * @param campaign-select -
+						 *            Id of select element of Campaign
+						 * @param /core/api/workflows -
+						 *            Url to get workflows
+						 * @param 'workflow' -
+						 *            parse key
+						 * @param no-callback -
+						 *            No callback
+						 * @param optionsTemplate-
+						 *            to fill options with workflows
+						 */
+						fillSelect('campaign-select', '/core/api/workflows', 'workflow', 'no-callback', optionsTemplate, false, el);
+						
+						fillSelect('filter-select', '/core/api/filters', 'workflow', 'no-callback', optionsTemplate, false, el);
+					}
+
+				});
+
+				var view = this.automationModelview.render();
+
+				$('#content').html(view.el);
+			},
+			
+			
+			
+			/** Gets list of automations */
+			automations : function()
+			{
+				this.automationsCollectionView = new Base_Collection_View({
+
+				url : '/core/api/automations', restKey : "automations", templateKey : "automations", individual_tag_name : 'tr' });
+
+				this.automationsCollectionView.collection.fetch();
+
+				$('#content').html(this.automationsCollectionView.el);
+
+				$(".active").removeClass("active");
+				$("#workflowsmenu").addClass("active");
+			},
+			
+			/**
+			 * Updates automation.
+			 * 
+			 * @param id -
+			 *            automation id
+			 */
+			automationEdit : function(id)
+			{
+
+				// Send to triggers if the user refreshes it directly
+				if (!this.automationsCollectionView || this.automationsCollectionView.collection.length == 0)
+				{
+					this.navigate("automations", { trigger : true });
+					return;
+				}
+
+				// Gets automation with respect to id
+				var currentAutomation = this.automationsCollectionView.collection.get(id);
+
+				var view = new Base_Model_View({ url : 'core/api/automations', model : currentAutomation, template : "automation-add", window : 'automations',
+					postRenderCallback : function(el)
+					{
+
+						/**
+						 * Shows given values when automation selected
+						 */
+
+						// To get the input values
+						var durationType = currentAutomation.toJSON()['durationType'];
+
+						// Shows the Value field with given value
+						$('#period-type', el).val(durationType).attr("selected", "selected").trigger('change');
+						
+						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+						/**
+						 * Fills campaign select drop down with existing
+						 * Campaigns and shows previous option as selected.
+						 * 
+						 * @param campaign-select -
+						 *            Id of select element of Campaign
+						 * @param /core/api/workflows -
+						 *            Url to get workflows
+						 * @param 'workflow' -
+						 *            parse key
+						 * @param callback-function -
+						 *            Shows previous option selected
+						 * @param optionsTemplate-
+						 *            to fill options with workflows
+						 */
+						fillSelect('campaign-select', '/core/api/workflows', 'workflow', function fillCampaign()
+						{
+							var value = currentAutomation.toJSON();
+							if (value)
+							{
+								$('#campaign-select', el).find('option[value=' + value.campaign_id + ']').attr('selected', 'selected');			
+							}
+						}, optionsTemplate, false, el);
+						
+						/**
+						 * Fills contact filer select drop down with existing
+						 * Contact filters and shows previous option as selected.
+						 * 
+						 * @param campaign-select -
+						 *            Id of select element of Campaign
+						 * @param /core/api/workflows -
+						 *            Url to get workflows
+						 * @param 'workflow' -
+						 *            parse key
+						 * @param callback-function -
+						 *            Shows previous option selected
+						 * @param optionsTemplate-
+						 *            to fill options with workflows
+						 */
+						fillSelect('filter-select', '/core/api/filters', 'workflow', function fillContactFilter()
+						{
+							var value = currentAutomation.toJSON();
+							if (value)
+							{
+								$('#filter-select', el).find('option[value=' + value.contactFilter_id + ']').attr('selected', 'selected');
+								
+								
+							}
+						}, optionsTemplate, false, el);
+						
+					},
+
+				});
+
+				$("#content").html(view.render().el);
+			},
+			
+
 
 			/**
 			 * Returns all subscribers including active, completed and removed.
