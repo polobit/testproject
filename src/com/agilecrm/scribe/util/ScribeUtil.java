@@ -684,6 +684,7 @@ public class ScribeUtil
 	    contactPrefs.secret = map.get("secret");
 	    contactPrefs.othersParams = map.get("company");
 	    contactPrefs.type = Type.QUICKBOOK;
+	    contactPrefs.save();
 	    String companyInfoQuery = "SELECT * FROM CompanyInfo";
 		String url = String.format("https://quickbooks.api.intuit.com/v3/company/"+map.get("company")+"/query?query=%s", URLEncoder.encode(companyInfoQuery));
 	    try
@@ -708,8 +709,8 @@ public class ScribeUtil
 	    }
 	    catch (Exception e)
 	    {
-		// save token even it get time out while fetching company info
-		 contactPrefs.save();
+		
+		
 		e.printStackTrace();
 	    }
 	    contactPrefs.save();

@@ -97,10 +97,14 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 	ContactField field = null;
 	try
 	{
-	    JSONObject email = (JSONObject) customer.get("PrimaryEmailAddr");
-	    if (email != null)
+	    if (customer.has("PrimaryEmailAddr"))
 	    {
-		field = new ContactField(Contact.EMAIL, email.getString("Address"), "work");
+		JSONObject email = (JSONObject) customer.get("PrimaryEmailAddr");
+		if (email != null)
+		{
+		    field = new ContactField(Contact.EMAIL, email.getString("Address"), "work");
+		}
+
 	    }
 	}
 	catch (JSONException e)
@@ -215,8 +219,11 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 
 	    e.printStackTrace();
 	}
-	fields.add(field);
-	return fields;
+	if (fields.size() > 0)
+	{
+	    return fields;
+	}
+	return null;
     }
 
     /*
