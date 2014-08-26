@@ -1,5 +1,6 @@
 /**
- * 
+ * @author jitendra
+ * @sinnce 2014
  */
 package com.thirdparty.quickbook;
 
@@ -14,11 +15,13 @@ import com.thirdparty.google.ContactsImportUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
 /**
- * @author jitendra
+ * <code>QuickBookController</code> provide controller Service handles all REST
+ * API calls. it maps calls using @path annotation and provide HTTP CRUD service
+ * for ContactSyncPrefs and also initialize sync service for sync contacts.
  *
  */
 @Path("/quickbook")
-public class QuickBookAPI
+public class QuickBookController
 {
     /**
      * Return ContactPrefs
