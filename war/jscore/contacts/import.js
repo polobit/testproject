@@ -152,6 +152,32 @@ $(function()
 		
 	});
 	
+	$('#xero_sync_prefs').die().live('click',function(e){
+		e.preventDefault();
+		var disable = $(this).attr('disabled');
+		if(disable)
+			return false;
+		$(this).attr("disabled", "disabled");
+		$(this).text("Syncing");
+		
+		var xeroPrefs = serializeForm("quickbook-form");
+		xeroPrefs['inProgress'] = true;
+		
+		App_Widgets.xero_import_settings.model.set(xeroPrefs, {silent:true});
+		var url = App_Widgets.xero_import_settings.model.url;
+
+		$(this).after(getRandomLoadingImg());
+		App_Widgets.xero_import_settings.model.url = url + "?sync=true"
+		App_Widgets.xero_import_settings.model.save({}, {success : function(data){
+		
+			App_Widgets.xero_import_settings.render(true);
+			App_Widgets.xero_import_settings.model.url = url;	
+				show_success_message_after_save_button("Sync Initiated", App_Widgets.xero_import_settings.el);
+				showNotyPopUp("information", "Contacts sync initiated", "top", 1000);
+			}});
+		
+	});
+	
 });
 
 function show_success_message_after_save_button(message, el)
@@ -168,6 +194,17 @@ function show_success_message_after_save_button(message, el)
 	$save_info.show().delay(3000).hide(1);	
 		
 }
+
+//oauth request for xero
+
+$('#xeroconnect').die().live('click', function(e){
+	var callbackURL = window.location.href;
+	console.log(callbackURL);
+
+	// For every request of import, it will ask to grant access
+	window.location = "/scribe?service=xero&return_url=" + encodeURIComponent(callbackURL);
+	return false;
+});
 
 
 //Compute the edit distance between the two given strings
