@@ -191,7 +191,7 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
     {
 
 	List<ContactField> fields = new ArrayList<ContactField>();
-	ContactField field = null;
+	
 	try
 	{
 	    if (customer.has("WebAddr"))
@@ -203,14 +203,23 @@ public class QuickBookContactWrapperImpl extends ContactWrapper
 		if (company != null && !name.isEmpty())
 		{
 
-		    field = new ContactField(Contact.WEBSITE, name, "Website");
+		    fields.add(new ContactField(Contact.WEBSITE, name, "URL"));
 		}
 	    }
 
 	    if (customer.has("Mobile"))
 	    {
 		JSONObject mob = (JSONObject) customer.get("Mobile");
-		fields.add(new ContactField("mobile", mob.get("FreeFormNumber").toString(), "mobile"));
+		fields.add(new ContactField(Contact.PHONE, mob.get("FreeFormNumber").toString(), "mobile"));
+	    }
+	    if(customer.has("Fax")){
+		JSONObject fax = (JSONObject) customer.get("Fax");
+		fields.add(new ContactField(Contact.PHONE, fax.get("FreeFormNumber").toString(), "home fax"));
+	    }
+	    
+	    if(customer.has("AlternatePhone")){
+		JSONObject alternativePhone = (JSONObject) customer.get("AlternatePhone");
+		fields.add(new ContactField(Contact.PHONE, alternativePhone.get("FreeFormNumber").toString(), "other"));
 	    }
 
 	}
