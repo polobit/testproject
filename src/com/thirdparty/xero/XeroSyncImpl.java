@@ -116,14 +116,14 @@ public class XeroSyncImpl extends OneWaySyncService
 
 				    if (invoiceNote.description == null)
 				    {
-					invoiceNote.description = "Item # " + itemDetails.get("ItemCode") + " Amount "
+					invoiceNote.description = itemDetails.get("ItemCode") + " Amount "
 						+ itemDetails.get("UnitAmount") + "(" + invoice.get("CurrencyCode")
 						+ ")" + " Tax " + itemDetails.get("TaxAmount") + "("
 						+ invoice.get("CurrencyCode") + ")";
 				    }
 				    else
 				    {
-					invoiceNote.description += "\n Item # " + itemDetails.get("ItemCode")
+					invoiceNote.description += "\n" + itemDetails.get("ItemCode")
 						+ " Amount " + itemDetails.get("UnitAmount") + "("
 						+ invoice.get("CurrencyCode") + ")" + " Tax "
 						+ itemDetails.get("TaxAmount") + "(" + invoice.get("CurrencyCode")
