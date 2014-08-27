@@ -39,6 +39,9 @@ public class MailHandlerServlet extends HttpServlet
 	    System.out.println("recepients " + recepientAddresses);
 
 	    String apiKey = getAgileAPIKey(recepientAddresses);
+
+	    System.out.println(apiKey);
+
 	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 
 	    if (owner == null)
