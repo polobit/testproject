@@ -519,6 +519,15 @@
 		<servlet-name>GravityForm</servlet-name>
 		<url-pattern>/gform</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>StripeChargeWebhook</servlet-name>
+		<servlet-class>com.thirdparty.stripe.StripeChargeWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StripeChargeWebhook</servlet-name>
+		<url-pattern>/stripe</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>ShopifyCustomerWebhook</servlet-name>
