@@ -180,7 +180,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 
 				    if (note.description == null)
 				    {
-					note.description = "Item #" + itemRef.get("name") + " Price # "
+					note.description = itemRef.get("name") + " Price # "
 						+ salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
 					if (!taxCodeRef.get("value").equals("NON"))
 					{
@@ -190,7 +190,7 @@ public class QuickBookSyncImpl extends OneWaySyncService
 				    }
 				    else
 				    {
-					note.description += "\n Item #" + itemRef.get("name") + " Price # "
+					note.description += "\n" + itemRef.get("name") + " Price # "
 						+ salesInfo.get("UnitPrice") + " (" + currencyRef.get("value") + ")";
 					if (!taxCodeRef.get("value").equals("NON"))
 					{
