@@ -107,9 +107,9 @@ updateTag : function(e)
 	this.model.save([], {success: function(data)
 		{
 			if(is_merge)
-				showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ data.get('tag') +"\"", "top", 5000);
+				showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ newTag +"\"", "top", 5000);
 			else
-			showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ data.get('tag') +"\". This amy take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
+			showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ newTag +"\". This may take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
 		}
 	});
 	
