@@ -8,20 +8,15 @@
 <script id="tag-management-collection-template" type="text/html">
 <div class="row">
 	<div class='span8 well'>
-    		<legend>Tag Management</legend>
+    		<legend><div style="display:inline;line-height:43px">Tag Management</div> <div class="right" style="font-size:small"><a href="#" id="add-new-tag"><i class="icon-plus-sign" ></i> Add Tag</a></div> <div id="new_tag_field_block" style="display:inline;float:right;display:none"><input id="new_tag" type="text" style="margin-right:10px" placeholder="New Tag"/><a class="btn" style="margin-top:2px;vertical-align:top" id="add_new_tag" href="#">Add</a></div></legend>
     		<div class="control-group">  
 {{tagManagementCollectionSetup this}}	 
                     <div id="milestone-values" class="milestone-ul-list1">
 						<ul class="tags-management tag-cloud" id="tag-management-model-list" style='padding:1px;list-style:none;display: inline;'></ul>
                     </div>
 <div class="clearfix"></div>
-					<div><a href="#" id="add-new-tag"><i class="icon-plus-sign" ></i> Add Tag</a></div>
+					
 
-
-					<div id="new_tag_field_block" style="display:none;">
-						<input id="new_tag" style="width:170px;margin-top:10px;margin-right:10px;" type="text" placeholder="New Tag">
-						<a class="btn" id="add_new_tag" href="#">Add</a>
-					</div>
     		</div> 
     </div>
 </div>

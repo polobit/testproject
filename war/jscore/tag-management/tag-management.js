@@ -216,17 +216,61 @@ function append_tag_management(base_model) {
 
 $("#add-new-tag").die().live('click', function(e){
 	e.preventDefault();
-	$("#new_tag_field_block").show();
-	$("#new_tag").focus();
+	
+	toggleAddTag(true);
 });
 
-$("#new_tag").die().live('keydown', function(event){
-	if(event.which != 13)
+$("#new_tag").die().live('blur keydown', function(event){
+	console.log(event.which)
+	
+	if(event.which == 0)
+	 {
+		blur_out_input_field(this);
 		return;
-
+	 }
+	else if(event.which != 13)
+		return;
 	saveTag(this);
 });
 
+function blur_out_input_field(element)
+{
+	var value = $(element).val().trim();
+	
+	if(value == "")
+		{
+			toggleAddTag(false);
+			return;
+		}
+	r = confirm("Create new tag \"" + value + "\" ? ");
+	if(!r)
+		{
+			toggleAddTag(false);
+			$(element).val("");
+			return;
+		}
+		
+	saveTag(this);
+}
+
+function toggleAddTag(show)
+{
+	if(show)
+		{
+			$("#add-new-tag").hide();
+			$("#new_tag_field_block").show();
+			$("#new_tag").focus();
+			return;
+		}
+	$("#add-new-tag").show();
+	$("#new_tag_field_block").hide();
+	
+}
+
+/*$("#new_tag").die().live('blur', function(event){
+	
+});
+*/
 
 $("#add_new_tag").die().live('click', function(e){
 	e.preventDefault();
@@ -234,6 +278,8 @@ $("#add_new_tag").die().live('click', function(e){
 	
 	saveTag("#new_tag");
 });
+
+
 
 function saveTag(field)
 {
@@ -253,15 +299,12 @@ function saveTag(field)
 	
 	// Disables input field
 	$(field).attr('disabled');
-	$("#add_new_tag").attr('disabled');
 	
 	var model =  new BaseModel(tagObject);
 	model.url = "core/api/tags";
 	model.save([], {success: function(response){
 		$(field).val("");
-		$(field).removeAttr('disabled');
-		$("#add_new_tag").removeAttr('disabled');
-		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" added. </br> This amy take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
+		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" created.", "top", 5000);
 		
 	}});
 	console.log(App_Admin_Settings);
