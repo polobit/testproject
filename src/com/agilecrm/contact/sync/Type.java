@@ -31,7 +31,7 @@ public enum Type implements Serializable
     ZOHO(ZohoSyncImpl.class, "Zoho Import Status"), 
     SALESFORCE(SalesforceSync.class, "Salesforce Import Status"),
     SHOPIFY(ShopifySyncImpl.class, "Shopify Import Status"),
-    QUICKBOOK(QuickBookSyncImpl.class,"QuickBook Import Status"),
+    QUICKBOOK(QuickBookSyncImpl.class,"QuickBooks Import Status"),
     XERO(XeroSyncImpl.class,"Xero Import Status");
 
     Class<? extends SyncService> clazz;
