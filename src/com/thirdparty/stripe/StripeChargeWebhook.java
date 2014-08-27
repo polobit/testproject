@@ -67,11 +67,6 @@ public class StripeChargeWebhook extends HttpServlet
 
 	    if (contact == null)
 		contact = new Contact();
-	    else
-	    {
-		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Contact with email already exists");
-		return;
-	    }
 
 	    List<ContactField> contactProperties = new ArrayList<ContactField>();
 	    contactProperties.add(new ContactField(Contact.EMAIL, email, null));
