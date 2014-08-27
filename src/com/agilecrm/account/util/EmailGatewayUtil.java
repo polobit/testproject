@@ -115,7 +115,7 @@ public class EmailGatewayUtil
 	try
 	{
 	    // Fetch EmailGateway
-	    EmailGateway emailGateway = EmailGatewayUtil.getEmailGatewayFromMap(domain);
+	    EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
 
 	    // If no gateway setup, sends email through Agile Mandrill
 	    if (emailGateway == null)
