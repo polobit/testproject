@@ -234,11 +234,7 @@
                 </h3>
                 <br />
 				<ul>
-					<li>Email is mandatory for all contacts. If some of your contacts don't have email, please add a dummy email (distinct for each contact) before importing.</li>
-					<li>Either of first name or last name is mandatory.</li>
-					<li>Define <a href="#custom-fields">custom fields</a> to import some of the columns in your CSV file and map them here.</li>
-					<li>Notes can be imported by selecting the 'Note' option.</li>
-					<li>Tags can be imported with 'Tag' option. If the csv has "abc,xyz" in the column we add 2 tags 'abc' and 'xyz'.</li>
+					<li></li>
 				</ul>
             </div>
 
@@ -312,5 +308,56 @@
 </select>
 
 
-</script>	
+</script>
+
+
+<script id="csv_companies_upload_options-template" type="text/html">
+<select class="import-select">
+<option value="properties__ignore_">-Ignore-</option>
+<option value="properties_company">Company</option>
+<optgroup label="Email">
+    <option value="properties_home-email">Email (Personal)</option>
+    <option value="properties_work-email">Email (Work)</option>
+</optgroup>
+<optgroup label="Phone">
+    <option value="properties_home-phone">Phone (Home)</option>
+    <option value="properties_work-phone">Phone (Work)</option>
+    <option value="properties_mobile-phone">Phone (Mobile)</option>
+    <option value="properties_main-phone">Phone (Main)</option>
+    <option value="properties_home fax-phone">Phone (Home fax)</option>
+    <option value="properties_work fax-phone">Phone (Work fax)</option>
+    <option value="properties_other-phone">Phone (Other)</option>
+</optgroup>
+<optgroup label="Website">
+    <option value="properties_URL-website">Website</option>
+    <option value="properties_SKYPE-website">Skype</option>
+    <option value="properties_TWITTER-website">Twitter</option>
+    <option value="properties_LINKED_IN-website">LinkedIn</option>
+    <option value="properties_FACEBOOK-website">Facebook</option>
+    <option value="properties_XING-website">Xing</option>
+    <option value="properties_FEED-website">Blog</option>
+    <option value="properties_GOOGLE_PLUS-website">Google+</option>
+    <option value="properties_FLICKR-website">Flickr</option>
+    <option value="properties_GITHUB-website">GitHub</option>
+    <option value="properties_YOUTUBE-website">YouTube</option>
+</optgroup>
+<optgroup label="Address">
+    <option value="properties_address-address">Street</option>
+    <option value="properties_address-city">City</option>
+    <option value="properties_address-state">State</option>
+    <option value="properties_address-zip">Zip</option>
+    <option value="properties_address-country">Country</option>
+</optgroup>
+ {{#if custom_fields}}
+<optgroup label="Custom field" id = "custom_fields">
+   
+		{{#each custom_fields}}
+			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
+		{{/each}}
+</optgroup>
+{{/if}}
+</select>
+
+
+</script>		
 

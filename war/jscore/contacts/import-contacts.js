@@ -264,7 +264,7 @@ $(function()
  * 
  * @param key
  */
-function parseCSV(key)
+function parseCSV(key,type)
 {
 
 	BLOB_KEY = key;

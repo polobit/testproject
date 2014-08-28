@@ -41,7 +41,7 @@ function getUrlVars() {
     return vars;
 }
 
-function returnBack(key)
+function returnBack(key,type)
 {
 	
 	if(!key)
@@ -49,7 +49,7 @@ function returnBack(key)
 	
 	if (window.opener)
 	{
-		window.opener.parseCSV(key);
+		window.opener.parseCSV(key,type);
 	   	window.close();
 	}
 	return;
@@ -60,6 +60,7 @@ $(function()
 	// Check if this was referred back again
 	var key = getUrlVars()["key"];
 	var fail = getUrlVars()["f"];
+	var file = getUrlVars()["type"];
 
 	//$('.error', $("#form")).remove();
 	if(fail && !key)
@@ -69,7 +70,7 @@ $(function()
 		}
 	if(key != undefined)
 	{
-		returnBack(key);
+		returnBack(key,file);
 		return;
 	} 
 });
