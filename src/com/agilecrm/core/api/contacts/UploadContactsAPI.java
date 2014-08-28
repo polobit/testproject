@@ -147,7 +147,7 @@ public class UploadContactsAPI
 		    .withUrl(
 			    "/core/api/bulk-actions/upload/"
 				    + String.valueOf(SessionManager.get().getDomainId() + "/"
-					    + request.getParameter("key"))).payload(bytes)
+					    + request.getParameter("key")+"/"+request.getParameter("type"))).payload(bytes)
 		    .header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
 
 	    // Task is added into queue

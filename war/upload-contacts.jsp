@@ -61,6 +61,7 @@ $(function()
 	var key = getUrlVars()["key"];
 	var fail = getUrlVars()["f"];
 	var file = getUrlVars()["type"];
+	
 
 	//$('.error', $("#form")).remove();
 	if(fail && !key)
@@ -130,11 +131,18 @@ function isValid(){
 <legend>Upload CSV file</legend>
 
 <br/>
- <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload?type=upload-contacts.jsp")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
-    
+ <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
+  
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
 <input name="upload" value="Upload" class='submit btn btn-primary' type="submit" /> 
+<%String filetype = request.getParameter("type"); 
+if(!filetype.equalsIgnoreCase("undefind")){
+    %>
+    <input  type ="hidden" name="type" value ="<%=filetype%>"/>
+    <%
+}
+%>
 </form> 
 </div>
 

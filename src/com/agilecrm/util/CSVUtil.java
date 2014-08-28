@@ -68,8 +68,8 @@ public class CSVUtil
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
-	        Contact.class.getSimpleName(), this.billingRestriction);
-	
+		Contact.class.getSimpleName(), this.billingRestriction);
+
     }
 
     public static enum ImportStatus
@@ -131,7 +131,7 @@ public class CSVUtil
      * @param ownerId
      * @throws IOException
      */
-    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
+    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId, String type)
 	    throws PlanRestrictedException, IOException
     {
 	// Refreshes count of contacts
@@ -152,6 +152,7 @@ public class CSVUtil
 	if (contacts.isEmpty())
 	    return;
 
+	// remove header information form csv
 	String[] headings = contacts.remove(0);
 
 	contact.type = Contact.Type.PERSON;
@@ -160,6 +161,7 @@ public class CSVUtil
 
 	tags.addAll(contact.tags);
 
+	// copy contact schema or property 
 	List<ContactField> properties = contact.properties;
 
 	// Creates domain user key, which is set as a contact owner
@@ -179,6 +181,8 @@ public class CSVUtil
 	List<String> emails = new ArrayList<String>();
 	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
 
+	// creates contacts by iterating contact properties
+	
 	for (String[] csvValues : contacts)
 	{
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
@@ -194,7 +198,7 @@ public class CSVUtil
 	    // backends
 	    tempContact.setContactOwner(ownerKey);
 
-	    tempContact.properties = new ArrayList<ContactField>();
+	   // tempContact.properties = new ArrayList<ContactField>();
 
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
@@ -242,7 +246,7 @@ public class CSVUtil
 			{
 			    addressJSON.put(field.value, csvValues[j]);
 			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
-				    field.type.toString()));
+				    field.subtype.toString()));
 			}
 
 		    }
@@ -265,30 +269,35 @@ public class CSVUtil
 		    continue;
 
 		field.value = csvValues[j];
-
 		tempContact.properties.add(field);
 
 	    }
 
-	    if (!isValidFields(tempContact, status))
-		continue;
+	    if (type.equalsIgnoreCase("contacts"))
+	    {
+		if (!isValidFields(tempContact, status))
+		    continue;
+	    }else{
+		// save contact as company
+		tempContact.type = Contact.Type.COMPANY;
+		
+	    }
 
 	    boolean isMerged = false;
-	    
+
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
 		// Checks if user can update the contact
 
 		// Sets current object to check scope
-		
 
 		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
 	    }
 	    else
 	    {
-		
+
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
 
@@ -313,12 +322,13 @@ public class CSVUtil
 
 	    try
 	    {
-		tempContact.save(false);
+		
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
-		        + tempContact.getContactFieldValue(Contact.EMAIL));
+			+ tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
 
 	    }
@@ -378,7 +388,7 @@ public class CSVUtil
 	dBbillingRestriction.send_warning_message();
 
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
-	        new Object[] { domainUser, status });
+		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
@@ -413,7 +423,7 @@ public class CSVUtil
     public boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
-	        && StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    return false;
