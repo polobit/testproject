@@ -24,6 +24,17 @@ $(function()
 		}
 		return false;
 	})
+	
+		$("#upload_company").die().live('click', function(e)
+	{
+		e.preventDefault();
+		var newwindow = window.open("upload-company.jsp?id=upload_companies", 'name', 'height=310,width=500');
+		if (window.focus)
+		{
+			newwindow.focus();
+		}
+		return false;
+	})
 
 	$('#import-contacts')
 			.die()

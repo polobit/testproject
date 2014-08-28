@@ -12,7 +12,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Upload CSV</title>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" />
+<%-- <link rel="stylesheet" type="text/css" href="css/bootstrap-<%= UserPrefsUtil.getCurrentUserPrefs().template%>.min.css" /> --%>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/lib/bootstrap.min.js"></script>
@@ -129,7 +129,7 @@ function isValid(){
 <legend>Upload CSV file</legend>
 
 <br/>
- <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload?type=upload-contacts.jsp")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
+ <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload?type=upload-company.jsp")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
     
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>

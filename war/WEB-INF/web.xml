@@ -361,6 +361,7 @@
 		<url-pattern>/upload.jsp</url-pattern>
 		<url-pattern>/import_shopify.jsp</url-pattern>
 		<url-pattern>/upload-contacts.jsp</url-pattern>
+		<url-pattern>/upload-company.jsp</url-pattern>
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
