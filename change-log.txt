@@ -1,5 +1,10 @@
-*** Yaswanth ***
-Added tag management. Added it in admin pannel (26th August).
+*** Bhasuri (28th August)***
+Updated URL visited node
+Added Wait Till node
+
+*** Yaswanth (26th August)***
+Added tag management. Added it in admin pannel.
+CSV notes import fix
 
 1-4 (22-August-2014)
 

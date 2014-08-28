@@ -65,12 +65,12 @@ renameTag : function (e)
 {
 	 if (e.keyCode == 13) 
 		{
-		 	this.updateTag();
+		 	$(e.currentTarget).blur();
 		}
 },
 updateTag : function(e)
 {
-	
+	//console.log(this.input);
 	
 	if(this.model.get('tag') == this.input.val())
 		{
@@ -90,36 +90,55 @@ updateTag : function(e)
 	
 	
 	var r = false;
-	var is_merge = isMergeTag(this.model.toJSON()); 
+	var newTagObject = {};
+	newTagObject.tag = newTag;
+	var is_merge = isMergeTag(newTagObject); 
 	
+	
+	var message = "";
 	if(is_merge)
-		r = confirm('Tag "' +newTag+ '" exists already. Do you want to merge "' + oldTag +'" and "' + newTag + '" ?');
+		message = '<p>Tag "' +newTag+ '" exists already. Do you want to merge "' + oldTag +'" and "' + newTag + '" ?</p>';
 	else
-		r = confirm("Rename tag \"" + oldTag +"\" to \""+ newTag +"\" ?");
-	if(r == false)
-	{
-		this.reset();
-		return;
-	}
+		message = "<p>Rename tag \"" + oldTag +"\" to \""+ newTag +"\" ?</p>";
 	
-	this.model.url = 'core/api/tags/bulk/rename?tag=' + newTag;
+	var _that = this;
+	r = showModalConfirmation('Tag Management Action', message,
+				function()
+				{
+					_that.model.url = 'core/api/tags/bulk/rename?tag=' + newTag;
+		
+					_that.model.save([], {success: function(data)
+						{
+							if(is_merge)
+								showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ newTag +"\"", "top", 5000);
+							else
+								showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ newTag +"\". This may take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
+						}
+					});
+		
+					if(is_merge)
+					{
+						_that.remove();
+						return;
+					}
+					
+					_that.model.set('tag', _that.input.val().trim());
+					$(_that.el).addClass('tag');
+					
+				},
+				function()
+				{
+					_that.reset();
+					return;
+				},
+				function()
+				{
+					_that.reset();
+					return;
+				}
+		);
 	
-	this.model.save([], {success: function(data)
-		{
-			if(is_merge)
-				showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ newTag +"\"", "top", 5000);
-			else
-			showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ newTag +"\". This may take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
-		}
-	});
-	
-	if(is_merge)
-	{
-		this.remove();
-		return;
-	}
-	this.model.set('tag', this.input.val().trim());
-	$(this.el).addClass('tag');
+
 		
 },
 reset : function()
@@ -152,16 +171,15 @@ addNewTag : function(e)
 deleteItem : function(e)
 {
 	e.preventDefault();
-	var r = confirm("Delete \""+ this.model.get('tag') + "\" tag ?");
-	if(r == false)
-	{
-		return;
-	}
-	
-	this.model.url = "core/api/tags/bulk/delete?tag=" + escape(this.model.get('tag'));
-	this.model.set({"id" : this.model.get('tag')});
-	console.log(this.model.toJSON())
-	this.model.destroy();
+	var _that = this;
+	showModalConfirmation('Tag Management', "<p>Delete \""+ this.model.get('tag') + "\" tag ?</p>", 
+			function(){
+		_that.model.url = "core/api/tags/bulk/delete?tag=" + escape(_that.model.get('tag'));
+		_that.model.set({"id" : _that.model.get('tag')});
+		_that.model.destroy({success: function(model, respone){
+			showNotyPopUp('information', "Deleting tag \"" + _that.model.get('tag') + "\"", "top", 5000);
+		}});
+	});
 }, edit : function(e)
 {
 	e.preventDefault();
@@ -216,17 +234,61 @@ function append_tag_management(base_model) {
 
 $("#add-new-tag").die().live('click', function(e){
 	e.preventDefault();
-	$("#new_tag_field_block").show();
-	$("#new_tag").focus();
+	
+	toggleAddTag(true);
 });
 
-$("#new_tag").die().live('keydown', function(event){
-	if(event.which != 13)
+$("#new_tag").die().live('blur keydown', function(event){
+	console.log(event.which)
+	
+	if(event.which == 0)
+	 {
+		blur_out_input_field(this);
 		return;
-
+	 }
+	else if(event.which != 13)
+		return;
 	saveTag(this);
 });
 
+function blur_out_input_field(element)
+{
+	var value = $(element).val().trim();
+	
+	if(value == "")
+		{
+			toggleAddTag(false);
+			return;
+		}
+	r = confirm("Create new tag \"" + value + "\" ? ");
+	if(!r)
+		{
+			toggleAddTag(false);
+			$(element).val("");
+			return;
+		}
+		
+	saveTag(this);
+}
+
+function toggleAddTag(show)
+{
+	if(show)
+		{
+			$("#add-new-tag").hide();
+			$("#new_tag_field_block").show();
+			$("#new_tag").focus();
+			return;
+		}
+	$("#add-new-tag").show();
+	$("#new_tag_field_block").hide();
+	
+}
+
+/*$("#new_tag").die().live('blur', function(event){
+	
+});
+*/
 
 $("#add_new_tag").die().live('click', function(e){
 	e.preventDefault();
@@ -234,6 +296,8 @@ $("#add_new_tag").die().live('click', function(e){
 	
 	saveTag("#new_tag");
 });
+
+
 
 function saveTag(field)
 {
@@ -253,15 +317,12 @@ function saveTag(field)
 	
 	// Disables input field
 	$(field).attr('disabled');
-	$("#add_new_tag").attr('disabled');
 	
 	var model =  new BaseModel(tagObject);
 	model.url = "core/api/tags";
 	model.save([], {success: function(response){
 		$(field).val("");
-		$(field).removeAttr('disabled');
-		$("#add_new_tag").removeAttr('disabled');
-		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" added. </br> This amy take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
+		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" created.", "top", 5000);
 		
 	}});
 	console.log(App_Admin_Settings);
@@ -312,6 +373,7 @@ function addTagsDefaultTypeaheadTagManagement(element)
 
 function isMergeTag(tag)
 {
+	console.log(App_Admin_Settings.tagsview1.collection.where({"tag" : tag.tag}));
 	return (App_Admin_Settings.tagsview1.collection.where({"tag" : tag.tag}).length > 0);
 }
 
@@ -327,4 +389,52 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 
 	// $("input", element).attr("data-provide","typeahead");
 	$("input", element).typeahead({ "source" : tags_array }).attr('placeholder', "Enter Tag");
+}
+
+
+function showModalConfirmation(title, body, yes_callback, no_callback, close_callback)
+{
+	var confirmationModal = $('<div id="confirmation" class="modal fade in">' +
+			'<div class="modal-header" >'+
+				'<a href="#" data-dismiss="modal" class="close">&times;</a>' +
+					'<h3>'+title+'</h3></div>' +
+						'<div class="modal-body">' + body +
+						'</div>' +	
+				'<div class="modal-footer">' +
+					'<div>' +
+					'<a href="#" id="confirm" class="action btn btn-primary" action="confirm">Yes</a>' +
+					'<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>'+ 
+					'</div>' +
+				'</div>' +
+			'</div>' + 
+		'</div>');
+	
+	confirmationModal.modal('show');
+	confirmationModal.focus();
+	
+	confirmationModal.on('hidden', function(e){
+		if(close_callback && typeof close_callback  == "function")
+			close_callback();
+			
+	});
+	
+	$(".action", confirmationModal).click(function(e)
+			{
+				e.preventDefault();
+				var action = $(this).attr('action');
+				
+				confirmationModal.modal('hide');
+				
+				if(action == "confirm" && yes_callback && typeof yes_callback == "function")
+					{
+						yes_callback();
+						return;
+					}
+				
+				if(no_callback && typeof no_callback == "function")
+					no_callback();
+				
+			})
+	
+	
 }
