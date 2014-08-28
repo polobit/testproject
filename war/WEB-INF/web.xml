@@ -412,7 +412,7 @@
 	</filter-mapping>
 	
 	<filter>
-		<filter-name>InboundMailFitler</filter-name>
+		<filter-name>InboundMailFilter</filter-name>
 		<filter-class>com.agilecrm.filter.InboundMailFilter</filter-class>
 	</filter>
 	<filter-mapping>
