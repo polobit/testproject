@@ -121,8 +121,7 @@ public class EmailGatewayUtil
 	    if (emailGateway == null)
 	    {
 		// Add to Pull Queue
-		MandrillUtil.sendMail(null, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		        mandrillMetadata);
+		MandrillUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
 		return;
 	    }
 
@@ -131,8 +130,7 @@ public class EmailGatewayUtil
 		SendGridUtil.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
 		        subject, replyTo, html, text);
 	    else
-		MandrillUtil.sendMail(emailGateway.api_key, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-		        text, mandrillMetadata);
+		MandrillUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
 
 	}
 	catch (Exception e)
@@ -144,8 +142,7 @@ public class EmailGatewayUtil
 
 	    System.out.println("Sending email again from exception in EmailGatewayUtil... " + e.getMessage());
 
-	    MandrillUtil.sendMail(null, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-		    mandrillMetadata);
+	    MandrillUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
 
 	}
     }
