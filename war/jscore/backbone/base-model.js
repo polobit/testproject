@@ -189,9 +189,9 @@ var Base_Model_View = Backbone.View
 				
 				// Represents form element
 				var $form = $('#' + formId);
-				
+				console.log($form.find('.save'));
 				// Returns, if the save button has disabled attribute 
-				if($form.find('.save').attr('disabled'))
+				if($(e.currentTarget).attr('disabled'))
 					return;
 				
 								
@@ -219,6 +219,8 @@ var Base_Model_View = Backbone.View
 				 * </pre>
 				 */
 				if ($(this.el).find('form').length > 1) {
+					
+					
 					// Initialize variable json as a map
 					json = {};
 

@@ -221,14 +221,13 @@ public class ContactUtil
 			return null;
 
 		Map<String, Object> searchMap = new HashMap<String, Object>();
-		
+
 		Query<Contact> q = dao.ofy().query(Contact.class);
 		q.filter("properties.name", Contact.EMAIL);
-		q.filter("properties.value", email);
+		q.filter("properties.value", email.toLowerCase());
 
 		return q.get();
 	}
-	
 
 	public static Contact searchContactByPhoneNumber(String phoneNumber)
 	{
@@ -246,7 +245,7 @@ public class ContactUtil
 
 		if (StringUtils.isBlank(email))
 			return false;
-		
+
 		return searchContactCountByEmail(email) != 0 ? true : false;
 	}
 
@@ -270,7 +269,7 @@ public class ContactUtil
 			// In case email field value is empty it removes property from
 			// contact and continue
 
-		    if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
+			if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
 			{
 				System.out.println(contact.properties.contains(emailField));
 				contact.properties.remove(emailField);
@@ -316,7 +315,7 @@ public class ContactUtil
 	public static int searchContactCountByEmail(String email)
 	{
 		return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-				.filter("properties.value = ", email).count();
+				.filter("properties.value = ", email.toLowerCase()).count();
 	}
 
 	/**
