@@ -1,6 +1,7 @@
 *** Yaswanth (26th August)***
-Added tag management. Added it in admin pannel.
-CSV notes import fix
+- Added tag management. Added it in admin pannel.
+- CSV notes import fix.
+- Subscription form fix on update button multiple submits.
 
 1-4 (22-August-2014)
 
