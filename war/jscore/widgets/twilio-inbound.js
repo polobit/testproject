@@ -2,14 +2,16 @@
 $(function()
 {
 	var Twilio_Plugin_Id;
-	
+
 	// After 15 sec procedure will start.
 	setTimeout(function()
-	{		
-		
+	{
+
 		// after DOM ready.
 		if (document.readyState === "complete")
-		{	
+		{
+
+			console.log("In Twilio inbound call");
 			// Get Sip widget
 			$.getJSON("/core/api/widgets/Twilio", function(twilio_widget)
 			{
@@ -17,16 +19,16 @@ $(function()
 					return;
 
 				Twilio_Widget_Object = twilio_widget;
-				
+
 				console.log(twilio_widget.prefs);
-				
+
 				// ID of the ClickDesk widget as global variable
 				Twilio_Plugin_Id = twilio_widget.id;
-				
+
 				console.log(Twilio_Plugin_Id);
 				if (twilio_widget.prefs != undefined)
-				{		
-					
+				{
+
 					// Parse string preferences as JSON
 					var twilio_prefs = JSON.parse(twilio_widget.prefs);
 					console.log(twilio_prefs);
@@ -36,7 +38,7 @@ $(function()
 					 * set up to verify if no numbers available, else generates
 					 * token required to make calls
 					 */
-					checkTwilioNumbersAndGenerateToken(Twilio_Plugin_Id,twilio_prefs);
+					checkTwilioNumbersAndGenerateToken(Twilio_Plugin_Id, twilio_prefs);
 				}
 			}).error(function(data)
 			{
@@ -47,11 +49,10 @@ $(function()
 	}, 20000); // 20 sec
 });
 
-
-function checkTwilioNumbersAndGenerateToken(Twilio_Plugin_Id,twilio_prefs)
+function checkTwilioNumbersAndGenerateToken(Twilio_Plugin_Id, twilio_prefs)
 {
 	// Retrieves outgoing numbers from Twilio
-	getOutgoingNumbers(Twilio_Plugin_Id,function(data)
+	getOutgoingNumbers(Twilio_Plugin_Id, function(data)
 	{
 		console.log("Twilio outgoing numbers: " + data[0].PhoneNumber);
 
@@ -62,49 +63,49 @@ function checkTwilioNumbersAndGenerateToken(Twilio_Plugin_Id,twilio_prefs)
 			return;
 		}
 
-		if(twilio_prefs.verification_status && twilio_prefs.verification_status == "success" && twilio_prefs.verified_number)
+		if (twilio_prefs.verification_status && twilio_prefs.verification_status == "success" && twilio_prefs.verified_number)
 		{
 			console.log("in if");
-			checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id,twilio_prefs, twilio_prefs.verified_number);
+			checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id, twilio_prefs, twilio_prefs.verified_number);
 			return;
 		}
-			
-		
+
 		// Else generate Twilio token for calls
-		checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id,twilio_prefs, data[0].PhoneNumber);
+		checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id, twilio_prefs, data[0].PhoneNumber);
 	});
 }
-	
-function getOutgoingNumbers(Twilio_Plugin_Id,callback)
+
+function getOutgoingNumbers(Twilio_Plugin_Id, callback)
+{
+	/*
+	 * Calls queueGetRequest method in widget_loader.js, with queue name as
+	 * "widget_queue" to retrieve numbers
+	 */
+	queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + Twilio_Plugin_Id, 'json', function(data)
 	{
-		/*
-		 * Calls queueGetRequest method in widget_loader.js, with queue name as
-		 * "widget_queue" to retrieve numbers
-		 */
-		queueGetRequest("widget_queue", "/core/api/widgets/twilio/numbers/" + Twilio_Plugin_Id, 'json', function(data)
-		{
-			// If data is not defined return
-			if (!data)
-				return;
-			
-			console.log("In getting twilio numbers");
-			console.log(data);
+		// If data is not defined return
+		if (!data)
+			return;
 
-			// If defined, execute the callback function
-			if (callback && typeof (callback) === "function")
-				callback(data);
+		console.log("In getting twilio numbers");
+		console.log(data);
 
-		}, function(data)
-		{
-			console.log("Error in getOutgoingNumbers: ");console.log( data);
-		});
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(data);
 
-	}
+	}, function(data)
+	{
+		console.log("Error in getOutgoingNumbers: ");
+		console.log(data);
+	});
 
-function checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id,twilio_prefs, from_number)
+}
+
+function checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id, twilio_prefs, from_number)
 {
 	console.log("in checkTwilioPrefsAndGenerateToken");
-	
+
 	/*
 	 * If Twilio preferences has account SID after OAuth, checks for application
 	 * SID whether we have created an application in AgileUser Twilio account,
@@ -113,12 +114,12 @@ function checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id,twilio_prefs, from_nu
 	 */
 	if (twilio_prefs.account_sid)
 	{
-		console.log(twilio_prefs.account_sid +" "+ twilio_prefs.app_sid);
+		console.log(twilio_prefs.account_sid + " " + twilio_prefs.app_sid);
 		// If no applicaiton SID
 		if (!twilio_prefs.app_sid)
 		{
 			// Create application in Twilio and return
-			createApplicationInTwilio(Twilio_Plugin_Id,function(appSid)
+			createApplicationInTwilio(Twilio_Plugin_Id, function(appSid)
 			{
 				twilio_prefs['app_sid'] = appSid;
 
@@ -126,7 +127,7 @@ function checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id,twilio_prefs, from_nu
 				agile_crm_save_widget_prefs("Twilio", JSON.stringify(twilio_prefs), function(data)
 				{
 					// Call same method after setting application SID
-					checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id,twilio_prefs, from_number);
+					checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id, twilio_prefs, from_number);
 				});
 			});
 			return;
@@ -136,15 +137,15 @@ function checkTwilioPrefsAndGenerateToken(Twilio_Plugin_Id,twilio_prefs, from_nu
 		 * generates a token in Twilio and shows set up to make calls and shows
 		 * details in Twilio panel
 		 */
-		generateTokenInTwilio(Twilio_Plugin_Id,from_number, function(token)
+		generateTokenInTwilio(Twilio_Plugin_Id, from_number, function(token)
 		{
-			 setUpTwilio(token, from_number);
+			setUpTwilio(token, from_number);
 			return;
 		});
 	}
 }
 
-function createApplicationInTwilio(Twilio_Plugin_Id , callback)
+function createApplicationInTwilio(Twilio_Plugin_Id, callback)
 {
 	/*
 	 * Sends GET request to the URL "/core/api/widgets/twilio/appsid/" with
@@ -194,7 +195,7 @@ function setUpTwilio(token, from_number)
 	head.js("https://static.twilio.com/libs/twiliojs/1.1/twilio.min.js", function()
 	{
 		// setup Twilio device
-		Twilio.Device.setup(token, {debug: true});
+		Twilio.Device.setup(token, { debug : true });
 
 		// When set up is ready this is called
 		Twilio.Device.ready(function()
@@ -250,19 +251,19 @@ function setUpTwilio(token, from_number)
 		// When incoming call comes to Twilio
 		Twilio.Device.incoming(function(conn)
 		{
+			console.log("Twilio incoming call");
 			// who is calling
 			console.log(conn.parameters.From);
 			// status before accepting call
 			console.log(conn._status);
-			conn.accept();
+			// conn.accept();
+			alert("incoming call");
 
 			// If connection is opened, hide call and show hang up
-			if (conn._status == "open")
-			{
-				$("#twilio_hangup").show();
-				$("#twilio_call").hide();
-			}
-
+			/*
+			 * if (conn._status == "open") { $("#twilio_hangup").show();
+			 * $("#twilio_call").hide(); }
+			 */
 		});
 
 		// When call is cancelled, hide hang up and show call
@@ -302,7 +303,7 @@ function setUpTwilio(token, from_number)
 			$("#twilio_call").show();
 		});
 
-		//registerClickEvents(from_number);
+		// registerClickEvents(from_number);
 
 	});
 }

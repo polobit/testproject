@@ -73,6 +73,9 @@ public class NamespaceFilter implements Filter
 	if (((HttpServletRequest) request).getRequestURI().contains("forgot-domain"))
 	    return true;
 
+	if (((HttpServletRequest) request).getRequestURI().contains("/_ah/mail"))
+	    return true;
+
 	// Read Subdomain
 	String subdomain = NamespaceUtil.getNamespaceFromURL(request.getServerName());
 	System.out.println(subdomain);
