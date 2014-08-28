@@ -10,8 +10,6 @@ import com.agilecrm.AgileQueues;
 import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
-import com.agilecrm.sendgrid.util.SendGridUtil;
-import com.agilecrm.sendgrid.util.deferred.SendGridDeferredTask;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.TaskHandle;
@@ -197,14 +195,6 @@ public class PullScheduler
 		    // System.out.println("Executing mandrill mail tasks...");
 
 		    MandrillUtil.sendMandrillMails(tasks);
-		    PullQueueUtil.deleteTasks(queueName, tasks);
-		    return;
-		}
-		else if (deferredTask instanceof SendGridDeferredTask)
-		{
-		    System.out.println("Executing sendgrid mail tasks...");
-
-		    SendGridUtil.sendSendGridMails(tasks);
 		    PullQueueUtil.deleteTasks(queueName, tasks);
 		    return;
 		}

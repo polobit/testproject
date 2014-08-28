@@ -13,7 +13,6 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
-import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.SendGrid;
@@ -293,20 +292,8 @@ public class EmailUtil
 	    return;
 	}
 
-	try
-	{
-	    // Send Email using email gateway
-	    EmailGatewayUtil.sendEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while sending emails through thirdparty email apis..."
-		    + e.getMessage());
-
-	    // Send through Agile API
-	    Mandrill.sendMail(true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
-	}
-
+	// if no cc or bcc, send by Mandrill
+	Mandrill.sendMail(true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
     }
 
     /**
