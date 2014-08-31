@@ -238,7 +238,7 @@ public class CSVUtil
 		    {
 			if (addressField != null && addressField.value != null)
 			{
-			    addressJSON = new JSONObject(addressField.value);
+			  //  addressJSON = new JSONObject(addressField.value);
 			    addressJSON.put(field.value, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
@@ -262,6 +262,11 @@ public class CSVUtil
 		    notes_positions.add(j);
 		    continue;
 		}
+		
+		if(Contact.COMPANY.equalsIgnoreCase(field.name)){
+		    tempContact.properties.add(new ContactField("name",csvValues[j],null));
+		    continue;
+		}
 
 		// To avoid saving ignore field value/ and avoid fields with
 		// empty values
@@ -270,6 +275,7 @@ public class CSVUtil
 
 		field.value = csvValues[j];
 		tempContact.properties.add(field);
+		
 
 	    }
 
@@ -323,7 +329,7 @@ public class CSVUtil
 	    try
 	    {
 		
-		tempContact.save();
+		tempContact.save(false);
 	    }
 	    catch (Exception e)
 	    {
