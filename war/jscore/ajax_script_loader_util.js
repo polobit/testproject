@@ -32,7 +32,7 @@ function loadMiscScripts()
 
 	load_urls_on_ajax_stop('//static.getclicky.com/js');
 	
-	load_clickdesk_code();
+	// load_clickdesk_code();
 	
 	// Clicky code
 	load_urls_on_ajax_stop('//static.getclicky.com/js', function()
