@@ -2,7 +2,7 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="page-header">
-            <h1>Import Contacts <small></small>	</h1>
+            <h1>Import From CSV <small></small>	</h1>
         </div>
     </div>
 </div>
@@ -35,6 +35,25 @@
 <input type="hidden" id ="type" value="company"/>
         <fieldset>
 			{{#hasScope "IMPORT_CONTACTS"}}
+           		<div class="btn upload" style="display:inline-block;">Upload CSV file</div>
+					{{else}}
+           				<div class="btn upload" style="display:inline-block;" disabled>Upload CSV file</div>
+			{{/hasScope}}
+           
+        </fieldset>
+    </form>
+</div>
+
+
+<div class="span4 well" style="height: 200px;">
+    <form id="deal-import-form">
+        <legend>CSV Deals Import <span class="label label-important">Beta</span></legend>
+		<div style="padding-bottom:10px;height:50px;">
+			Import upto 10,000 deals from a CSV file
+		</div>
+<input type="hidden" id ="type" value="deals"/>
+        <fieldset>
+			{{#hasScope "IMPORT_DEALS"}}
            		<div class="btn upload" style="display:inline-block;">Upload CSV file</div>
 					{{else}}
            				<div class="btn upload" style="display:inline-block;" disabled>Upload CSV file</div>
@@ -330,22 +349,20 @@
 <script id="csv_companies_upload_options-template" type="text/html">
 <select class="import-select">
 <option value="properties__ignore_">-Ignore-</option>
-<option value="properties_company">Organization</option>
+<option value="properties_name">Organization</option>
 <optgroup label="Email">
-    <option value="properties_home-email">Email (Personal)</option>
-    <option value="properties_work-email">Email (Work)</option>
+    <option value="properties_primary-email">Email (Primary)</option>
+    <option value="properties_alternate-email">Email (Alternate)</option>
 </optgroup>
 <optgroup label="Phone">
-    <option value="properties_home-phone">Phone (Home)</option>
-    <option value="properties_work-phone">Phone (Work)</option>
-    <option value="properties_mobile-phone">Phone (Mobile)</option>
-    <option value="properties_main-phone">Phone (Main)</option>
-    <option value="properties_home fax-phone">Phone (Home fax)</option>
-    <option value="properties_work fax-phone">Phone (Work fax)</option>
+    <option value="properties_primary-phone">Phone (Primary)</option>
+    <option value="properties_alternative-phone">Phone (Alternate)</option>
+    <option value="properties_fax-phone">Phone (Fax)</option>
     <option value="properties_other-phone">Phone (Other)</option>
 </optgroup>
 <optgroup label="Website">
     <option value="properties_URL-website">Website</option>
+    <option value="properties_url">URL</option>
     <option value="properties_SKYPE-website">Skype</option>
     <option value="properties_TWITTER-website">Twitter</option>
     <option value="properties_LINKED_IN-website">LinkedIn</option>
