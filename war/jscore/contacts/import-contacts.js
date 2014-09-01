@@ -284,7 +284,7 @@ $('#import-comp').die().live('click',function(e){
 	$(".import-select").each(function(index, element)
 	{
 		var value = $(element).val()
-		if (value == "properties_company")
+		if (value == "properties_name")
 			company_count += 1;
 		
 	})

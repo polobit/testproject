@@ -198,7 +198,7 @@ public class CSVUtil
 	    // backends
 	    tempContact.setContactOwner(ownerKey);
 
-	   // tempContact.properties = new ArrayList<ContactField>();
+	    tempContact.properties = new ArrayList<ContactField>();
 
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
@@ -263,10 +263,7 @@ public class CSVUtil
 		    continue;
 		}
 		
-		if(Contact.COMPANY.equalsIgnoreCase(field.name)){
-		    tempContact.properties.add(new ContactField("name",csvValues[j],null));
-		    continue;
-		}
+		
 
 		// To avoid saving ignore field value/ and avoid fields with
 		// empty values
@@ -274,6 +271,8 @@ public class CSVUtil
 		    continue;
 
 		field.value = csvValues[j];
+		
+		
 		tempContact.properties.add(field);
 		
 
