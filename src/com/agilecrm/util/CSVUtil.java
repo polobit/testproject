@@ -199,6 +199,7 @@ public class CSVUtil
 	    tempContact.setContactOwner(ownerKey);
 
 	    tempContact.properties = new ArrayList<ContactField>();
+	    String companyName = null;
 
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
@@ -271,6 +272,7 @@ public class CSVUtil
 		if (field.name.equalsIgnoreCase("name"))
 		{
 		    field.value = StringUtils.capitalise(csvValues[j].toLowerCase());
+		    companyName = field.value;
 		}
 		else
 		{
@@ -290,45 +292,61 @@ public class CSVUtil
 	    {
 		// save contact as company
 		tempContact.type = Contact.Type.COMPANY;
-		
 
 	    }
 
 	    boolean isMerged = false;
 
-	    // If contact is duplicate, it fetches old contact and updates data.
-	    if (ContactUtil.isDuplicateContact(tempContact))
+	    if (type.equalsIgnoreCase("contacts"))
 	    {
-		// Checks if user can update the contact
+		// duplicate contact test and merge field
+		// If contact is duplicate, it fetches old contact and updates
+		// data.
+		if (ContactUtil.isDuplicateContact(tempContact))
+		{
+		    // Checks if user can update the contact
 
-		// Sets current object to check scope
+		    // Sets current object to check scope
 
-		tempContact = ContactUtil.mergeContactFields(tempContact);
-		isMerged = true;
+		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    isMerged = true;
+		}
+
 	    }
 	    else
 	    {
 
-		// If it is new contacts billingRestriction count is increased
-		// and checked with plan limits
-
-		++billingRestriction.contacts_count;
-		try
+		// check for duplicate company and merge field
+		if (ContactUtil.companyExists(companyName))
 		{
-		    if (limitCrossed)
-			continue;
 
-		    if (billingRestriction.contacts_count >= allowedContacts)
-		    {
-			limitCrossed = true;
-		    }
-
+		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    isMerged = true;
 		}
-		catch (PlanRestrictedException e)
-		{
-		    ++limitExceeded;
+
+	    }
+
+	    /**
+	     * If it is new contacts billingRestriction count is increased and
+	     * checked with plan limits
+	     */
+
+	    ++billingRestriction.contacts_count;
+	    try
+	    {
+		if (limitCrossed)
 		    continue;
+
+		if (billingRestriction.contacts_count >= allowedContacts)
+		{
+		    limitCrossed = true;
 		}
+
+	    }
+	    catch (PlanRestrictedException e)
+	    {
+		++limitExceeded;
+		continue;
 	    }
 
 	    try
