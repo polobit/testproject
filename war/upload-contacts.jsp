@@ -41,7 +41,7 @@ function getUrlVars() {
     return vars;
 }
 
-function returnBack(key)
+function returnBack(key,type)
 {
 	
 	if(!key)
@@ -49,7 +49,7 @@ function returnBack(key)
 	
 	if (window.opener)
 	{
-		window.opener.parseCSV(key);
+		window.opener.parseCSV(key,type);
 	   	window.close();
 	}
 	return;
@@ -60,6 +60,8 @@ $(function()
 	// Check if this was referred back again
 	var key = getUrlVars()["key"];
 	var fail = getUrlVars()["f"];
+	var file = getUrlVars()["type"];
+	
 
 	//$('.error', $("#form")).remove();
 	if(fail && !key)
@@ -69,7 +71,7 @@ $(function()
 		}
 	if(key != undefined)
 	{
-		returnBack(key);
+		returnBack(key,file);
 		return;
 	} 
 });
@@ -130,10 +132,17 @@ function isValid(){
 
 <br/>
  <form action="<%= BlobstoreServiceFactory.getBlobstoreService().createUploadUrl("/upload")  %>" method="post" enctype="multipart/form-data" onsubmit="return isValid();" id="form">
-    
+  
 <p><input name="file" id='fileextension' type="file" /></p>
 <br/>
 <input name="upload" value="Upload" class='submit btn btn-primary' type="submit" /> 
+<%String filetype = request.getParameter("type"); 
+if(!filetype.equalsIgnoreCase("undefind")){
+    %>
+    <input  type ="hidden" name="type" value ="<%=filetype%>"/>
+    <%
+}
+%>
 </form> 
 </div>
 
