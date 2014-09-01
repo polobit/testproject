@@ -193,9 +193,17 @@ var SettingsRouter = Backbone.Router.extend({
 			itemView2.model.set("password","");
 		} });
 		
-		
 		// Appends IMAP
 		$('#prefs-tabs-content').append(itemView2.render().el);
+		
+		// Gets Office Prefs
+		var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", postRenderCallback : function(el){
+			itemView3.model.set("password","");
+		} });
+		
+		// Appends Office
+		$('#prefs-tabs-content').append(itemView3.render().el);
+		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-tab').addClass('active');
 	},
