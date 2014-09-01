@@ -88,7 +88,7 @@ public class StripeChargeWebhook extends HttpServlet
 		System.out.println("trigger is " + trigger.name);
 		System.out.println("campaign id is " + trigger.campaign_id);
 
-		if (StringUtils.equals(trigger.type.toString(), eventType.replace(".", "_").toUpperCase()))
+		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase()))
 		{
 		    System.out.println("Assigning campaign to contact ... ");
 		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
