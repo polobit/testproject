@@ -1902,10 +1902,16 @@ $(function()
      * Builds options to be shown in the table heading of CSV import. Also tries
      * to match headings in select field
      */
-    Handlebars.registerHelper('setupCSVUploadOptions', function(key, context)
+    Handlebars.registerHelper('setupCSVUploadOptions', function(type,key, context)
     {
 	// console.log(context.toJSON());
-	var template = $(getTemplate('csv_upload_options', context));
+    	var template;
+    	if(type == "contacts"){
+	   template = $(getTemplate('csv_upload_options', context));
+    	}else{
+    		template = $(getTemplate('csv_companies_upload_options', context));
+    	}
+	
 
 	// Replaces _ with spaces
 	key = key.replace("_", " ");
