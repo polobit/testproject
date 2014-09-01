@@ -348,7 +348,7 @@ $('#import-comp').die().live('click',function(e){
 			{
 				var splits = name.split("-");
 				name = "address";
-				property["subtype"] = "home";
+				property["subtype"] = "office";
 				property["type"] = type;
 				console.log(splits);
 				// Set the value and name fields
