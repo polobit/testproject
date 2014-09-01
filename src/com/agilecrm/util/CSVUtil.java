@@ -161,7 +161,7 @@ public class CSVUtil
 
 	tags.addAll(contact.tags);
 
-	// copy contact schema or property 
+	// copy contact schema or property
 	List<ContactField> properties = contact.properties;
 
 	// Creates domain user key, which is set as a contact owner
@@ -182,7 +182,7 @@ public class CSVUtil
 	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
 
 	// creates contacts by iterating contact properties
-	
+
 	for (String[] csvValues : contacts)
 	{
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
@@ -238,7 +238,7 @@ public class CSVUtil
 		    {
 			if (addressField != null && addressField.value != null)
 			{
-			  //  addressJSON = new JSONObject(addressField.value);
+			    addressJSON = new JSONObject(addressField.value);
 			    addressJSON.put(field.value, csvValues[j]);
 			    addressField.value = addressJSON.toString();
 			}
@@ -262,19 +262,22 @@ public class CSVUtil
 		    notes_positions.add(j);
 		    continue;
 		}
-		
-		
 
 		// To avoid saving ignore field value/ and avoid fields with
 		// empty values
 		if (field.name == null || StringUtils.isEmpty(field.value))
 		    continue;
 
-		field.value = csvValues[j];
-		
-		
+		if (field.name.equalsIgnoreCase("name"))
+		{
+		    field.value = StringUtils.capitalise(csvValues[j].toLowerCase());
+		}
+		else
+		{
+		    field.value = csvValues[j];
+		}
+
 		tempContact.properties.add(field);
-		
 
 	    }
 
@@ -282,10 +285,13 @@ public class CSVUtil
 	    {
 		if (!isValidFields(tempContact, status))
 		    continue;
-	    }else{
+	    }
+	    else
+	    {
 		// save contact as company
 		tempContact.type = Contact.Type.COMPANY;
 		
+
 	    }
 
 	    boolean isMerged = false;
@@ -327,7 +333,7 @@ public class CSVUtil
 
 	    try
 	    {
-		
+
 		tempContact.save(false);
 	    }
 	    catch (Exception e)
