@@ -138,29 +138,7 @@ function hashchanged()
 	//if (Twilio_Caller_Url != window.location.href && Twilio.Device.status() == "busy")
 	if (Twilio.Device.status() == "busy")
 	{
-		showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);
-		
-		/*head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/bottomRight.js',
-				LIB_PATH + 'lib/noty/themes/default.js', LIB_PATH + 'lib/noty/packaged/jquery.noty.packaged.min.js', function()
-				{
-					// Close noty
-					if (Twilio_Call_Noty != undefined)
-						Twilio_Call_Noty.close();
-
-					// Set properties
-					Twilio_Call_Noty = noty({
-						text : "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>",
-						type : "success",
-						layout : "bottomRight",
-						buttons : [
-								{ addClass : 'btn btn-primary noty_twilio_dialpad', text : 'Dialpad' },
-								{ addClass : 'btn btn-danger noty_twilio_hangup', text : 'Hangup' }
-						] });
-				
-					// Add dialpad template in twilio content
-					var dialpad = $(getTemplate("twilio-dialpad"), {});
-					$('.noty_message').append(dialpad);
-				});*/
+		showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);		
 	}	
 }
 
