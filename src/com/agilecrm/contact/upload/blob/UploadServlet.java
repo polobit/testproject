@@ -49,7 +49,17 @@ public class UploadServlet extends HttpServlet
 	try
 	{
 	    // Forward request back to JSP with blobkey as parameter
-	    res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString());
+	
+	    String fileType = req.getParameter("type");
+	    if(fileType != null){
+		if(fileType.equalsIgnoreCase("contacts")){
+		 res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString()+"&type="+fileType);
+		}else{
+		    res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString()+"&type=company");
+		}
+	    }
+	   
+	   
 	}
 	catch (IOException e)
 	{

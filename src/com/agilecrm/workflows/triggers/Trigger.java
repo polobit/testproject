@@ -55,7 +55,7 @@ public class Trigger
      */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT
     };
 
     /**
@@ -88,6 +88,12 @@ public class Trigger
      */
     @NotSaved(IfDefault.class)
     public String trigger_deal_milestone = null;
+
+    /**
+     * Stripe event for STRIPE_CHARGE_EVENT trigger
+     */
+    @NotSaved(IfDefault.class)
+    public String trigger_stripe_event = null;
 
     /**
      * Initialize DataAccessObject.

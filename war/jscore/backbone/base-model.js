@@ -404,7 +404,7 @@ var Base_Model_View = Backbone.View
 
 										// Appends error info to form actions
 										// block.
-										$(".form-actions", this.el).append(
+										$(e.currentTarget).closest(".form-actions", this.el).append(
 												$save_info);
 
 										// Hides the error message after 3

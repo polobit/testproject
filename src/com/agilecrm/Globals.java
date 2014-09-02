@@ -101,9 +101,19 @@ public class Globals
     // public static final String QUICKBOOKS_CONSUMER_SECRET =
     // "CmBH6OWTlDmemY3uHOBIjFE87MZ6O8FRcsLqtYZF";
     // production key
-    public static final String QUICKBOOKS_APP_KEY = "08945c87bae1fb46bab9241ba0e81dc19bbf";
+/**    public static final String QUICKBOOKS_APP_KEY = "08945c87bae1fb46bab9241ba0e81dc19bbf";
     public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
     public static final String QUICKBOOKS_CONSUMER_SECRET = "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
+*/
+    // "8f73de20b0e45b476ab9b8abd3e659c2aa74";
+    // public static final String QUICKBOOKS_CONSUMER_KEY =
+    // "qyprdGhvaKh6kMZEKXIKffUmQIwMuK";
+    // public static final String QUICKBOOKS_CONSUMER_SECRET =
+    // "CSLHb8B5vIlcgLN3N1LcOe5tt5iagel1QZNk9Kye";
+    // production key
+    public static final String QUICKBOOKS_APP_KEY = "a572c32cb35f8b404cbbadbb224fbd6d0fc6";
+    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdiBIgnIhxVdzKKdnWohGfPmrOD";
+    public static final String QUICKBOOKS_CONSUMER_SECRET = "sHeU8i12GIHe6YpgdgFpNfLV0jIiZhe0iG4A9cgS";
 
     /** test facebook app details */
     // public static final String FACEBOOK_APP_ID = "1472962409608031";
