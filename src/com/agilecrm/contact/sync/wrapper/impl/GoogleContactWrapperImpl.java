@@ -94,13 +94,13 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     public List<ContactField> getMoreCustomInfo()
     {
 	List<ContactField> fields = new ArrayList<ContactField>();
-	if(entry.hasWebsites())
+	if (entry.hasWebsites())
 	{
-	    for(Website website : entry.getWebsites())
+	    for (Website website : entry.getWebsites())
 	    {
 		fields.add(new ContactField(Contact.WEBSITE, website.getHref(), null));
 	    }
-	    
+
 	}
 	if (entry.hasImAddresses())
 	    for (Im im : entry.getImAddresses())
@@ -125,7 +125,6 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 			}
 
 		    }
-		    
 
 		    if (!StringUtils.isBlank(subType))
 			fields.add(new ContactField(Contact.WEBSITE, im.getAddress(), subType));
@@ -135,7 +134,6 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		}
 
 	    }
-
 
 	// If image link there there then it is synced to agile
 	// if (entry.getContactPhotoLink() != null)
@@ -260,11 +258,6 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		String addr = "";
 		if (address.hasStreet())
 		    addr = addr + address.getStreet().getValue();
-		if (address.hasSubregion())
-		    addr = addr + ", " + address.getSubregion().getValue();
-		if (address.hasRegion())
-		    addr = addr + ", " + address.getRegion().getValue();
-
 		try
 		{
 		    if (!StringUtils.isBlank(addr))
@@ -272,6 +265,9 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 
 		    if (address.hasCity() && address.getCity().hasValue())
 			json.put("city", address.getCity().getValue());
+
+		    if (address.hasRegion() && address.getRegion().hasValue())
+			json.put("state", address.getRegion().getValue());
 
 		    if (address.hasCountry() && address.getCountry().hasValue())
 			json.put("country", address.getCountry().getValue());
@@ -283,8 +279,15 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		{
 		    continue;
 		}
+		// default subtype is postal
+		String subType = "postal";
+		if (address.hasRel())
+		{
+		    String[] labels = address.getRel().split("#");
+		    subType = labels[1];
+		}
 
-		field = new ContactField("address", json.toString(), null);
+		field = new ContactField("address", json.toString(), subType);
 
 	    }
 	return field;
