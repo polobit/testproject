@@ -18,8 +18,10 @@ $(function()
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');
 
 		// Hide trigger stripe event div for other trigger conditions.
-		if($(this).val() !== 'STRIPE_CHARGE_EVENT')
+		if($(this).val() !== 'STRIPE_CHARGE_EVENT'){
 			$('form#addTriggerForm').find('select#trigger-stripe-event').closest('div.control-group').css('display', 'none');
+			$('form#addTriggerForm').find('select#trigger-stripe-event').val("");
+		}
 		
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
