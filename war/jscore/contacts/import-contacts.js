@@ -265,7 +265,9 @@ $('#import-comp').die().live('click',function(e){
 		return;
 	
 	var upload_valudation_errors = {
-		"company_name_missing" : { "error_message" : "Company Name is mandatory. Please select Company name." }
+		"company_name_missing" : { "error_message" : "Company Name is mandatory. Please select Company name." },
+		"company_name_duplicated" : { "error_message" : "Company Name is Duplicated." }
+		
 
 	}
 	var models = [];
@@ -299,7 +301,7 @@ $('#import-comp').die().live('click',function(e){
 
 	else if (company_count > 1)
 	{
-		$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_duplicate));
+		$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_name_duplicated));
 		return false;
 	}
 
@@ -429,7 +431,8 @@ $('#import-deals').die().live('click',function(e){
 		return;
 	
 	var upload_valudation_errors = {
-		"company_name_missing" : { "error_message" : "Company Name is mandatory. Please select Company name." }
+		"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select Deal name." },
+		"deal_duplicated" :{"error_message" : "Deal Name is Duplicated"}
 
 	}
 	var models = [];
@@ -444,26 +447,26 @@ $('#import-deals').die().live('click',function(e){
 	 * duplicate table headings are set. If validations failed the error alerts
 	 * a explaining the cause are shown
 	 */
-     company_count = 0;
+     deal_count = 0;
 	$(".import-select").each(function(index, element)
 	{
 		var value = $(element).val()
 		if (value == "properties_name")
-			company_count += 1;
+			deal_count += 1;
 		
 	})
 
 	
-	if (company_count == 0)
+	if (deal_count == 0)
 	{
-		$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_name_missing));
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_name_missing));
 		return false;
 	}
 
 
-	else if (company_count > 1)
+	else if (deal_count > 1)
 	{
-		$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_duplicate));
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_duplicated));
 		return false;
 	}
 
@@ -508,28 +511,6 @@ $('#import-deals').die().live('click',function(e){
 		{
 			name = name.split("properties_")[1];
 			property["type"] = type;
-			if(name.indexOf('address-') != -1)
-			{
-				var splits = name.split("-");
-				name = "address";
-				property["subtype"] = "office";
-				property["type"] = type;
-				console.log(splits);
-				// Set the value and name fields
-				property["value"] = splits[1];
-			}
-			
-			// Reads the sub type of the fields
-			else if (name.indexOf("-") != -1)
-			{
-				var splits = name.split("-");
-				name = splits[1];
-				var subType = splits[0];
-				property["subtype"] = subType;
-				console.log($(select).attr('class'));
-				property["type"] = type;
-			}
-			
 			
 			// Set the value and name fields
 			if(!property["value"])
@@ -552,7 +533,7 @@ $('#import-deals').die().live('click',function(e){
 	});
 
 	model.properties = properties;
-	model.type = "COMPANY";
+	
 
 	// Shows Updating
 	$waiting.find('#status-message').html(getRandomLoadingImg());
@@ -566,7 +547,7 @@ $('#import-deals').die().live('click',function(e){
 	// Sends request to save the contacts uploaded from csv,
 	// present in the blobstore. Contact is sent to save
 	// each row in csv file in to a contact
-	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=company&key=" + BLOB_KEY, data : JSON.stringify(contact),
+	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=deals&key=" + BLOB_KEY, data : JSON.stringify(contact),
 		contentType : "application/json", success : function(data)
 		{								
 				// Navigate to contacts page

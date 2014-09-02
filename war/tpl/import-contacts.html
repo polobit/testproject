@@ -315,6 +315,18 @@
 </div>
 </script>
 
+
+<script id="import-deal-validation-message-template" type="text/html">
+<div class="row">
+    <div class="span5">
+        <div class="alert alert-error import_contact_error">
+            <a class="close" data-dismiss="alert" href="#">&times</a>
+          {{error_message}}
+        </div>
+    </div>
+</div>
+</script>
+
 <script id="csv_upload_options-template" type="text/html">
 <select class="import-select">
 <option value="properties__ignore_">-Ignore-</option>
@@ -424,39 +436,21 @@
 <script id="csv_deals_options-template" type="text/html">
 <select class="import-select">
 <option value="properties__ignore_">-Ignore-</option>
-<option value="properties_name">Organization</option>
-<optgroup label="Email">
-    <option value="properties_primary-email">Email (Primary)</option>
-    <option value="properties_alternate-email">Email (Alternate)</option>
+<option value="properties_name">Deal Name</option>
+    <option value="properties_value">Value</option>
+<optgroup label="Milestone">
+  <option value="properties_milestone_New">New</option>
+  <option value="properties_milestone_Prospect">Prospect</option>
+  <option value="properties_milestone_Proposal">Proposal</option>
+  <option value="properties_milestone_Won">Won</option>
+  <option value="properties_milestone_Lost">Lost</option>
 </optgroup>
-<optgroup label="Phone">
-    <option value="properties_primary-phone">Phone (Primary)</option>
-    <option value="properties_alternative-phone">Phone (Alternate)</option>
-    <option value="properties_fax-phone">Phone (Fax)</option>
-    <option value="properties_other-phone">Phone (Other)</option>
-</optgroup>
-<optgroup label="Website">
-    <option value="properties_URL-website">Website</option>
-    <option value="properties_url">URL</option>
-    <option value="properties_SKYPE-website">Skype</option>
-    <option value="properties_TWITTER-website">Twitter</option>
-    <option value="properties_LINKED_IN-website">LinkedIn</option>
-    <option value="properties_FACEBOOK-website">Facebook</option>
-    <option value="properties_XING-website">Xing</option>
-    <option value="properties_FEED-website">Blog</option>
-    <option value="properties_GOOGLE_PLUS-website">Google+</option>
-    <option value="properties_FLICKR-website">Flickr</option>
-    <option value="properties_GITHUB-website">GitHub</option>
-    <option value="properties_YOUTUBE-website">YouTube</option>
-</optgroup>
-<optgroup label="Address">
-    <option value="properties_address-address">Address</option>
-    <option value="properties_address-city">City</option>
-    <option value="properties_address-state">State</option>
-    <option value="properties_address-zip">Zip</option>
-    <option value="properties_address-country">Country</option>
-</optgroup>
- {{#if custom_fields}}
+    <option value="properties_probability">Probability</option>
+    <option value="properties_closeDate">Close Date</option>
+<option value="properties_relatedTo">Related To</option>
+<option value="properties_note">Note</option>
+<option value="properties_description">Descriptions</option> 
+{{#if custom_fields}}
 <optgroup label="Custom field" id = "custom_fields">
    
 		{{#each custom_fields}}
