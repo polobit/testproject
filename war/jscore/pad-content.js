@@ -30,7 +30,7 @@ var CONTENT_JSON = {
 		"image" : "/img/clipboard.png"
 	},
 	"tag_results" : {
-		"title" : "No contacts avaiable with this tag.",
+		"title" : "No contacts available with this tag.",
 		//"learn_more" : "click here to learn more",
 		//"button_text" : "Add Contacts",
 		"route" : "#",
