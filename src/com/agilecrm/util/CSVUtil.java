@@ -561,9 +561,9 @@ public class CSVUtil
 			e.printStackTrace();
 
 		    }
-		    System.out.println(c.g);
+		   // System.out.println(c.g);
 
-		    opportunity.close_date = c.getTimeInMillis();
+		    opportunity.close_date = Long.valueOf(c.getTimeInMillis()/1000);
 		}
 		if (prop.equalsIgnoreCase("Description") || prop.equalsIgnoreCase("Descriptions"))
 		{
