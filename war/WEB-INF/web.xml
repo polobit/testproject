@@ -422,6 +422,16 @@
 		<url-pattern>/core/php/*</url-pattern>
 	</filter-mapping>
 
+	<filter>
+	<filter-name>InboundMailFilter</filter-name>
+		<filter-class>com.agilecrm.filter.InboundMailFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+	<filter-name>InboundMailFilter</filter-name>
+		<url-pattern>/_ah/mail/*</url-pattern>
+	</filter-mapping>
+
 	<welcome-file-list>
 		<welcome-file>home</welcome-file>
 	</welcome-file-list>
@@ -616,6 +626,15 @@
 	<servlet-mapping>
 		<servlet-name>Formbuilder</servlet-name>
 		<url-pattern>/formbuilder</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>mailhandler</servlet-name>
+		<servlet-class>com.agilecrm.MailHandlerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mailhandler</servlet-name>
+		<url-pattern>/_ah/mail/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
