@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+ 1-6 (2-Sept-2014)
+*** Jitendra ***
+-- Changed QuickBooks Development and Production Keys
+
+>>>>>>> d853de9... changes version
 *** Yaswanth (26th August)***
 Added tag management. Added it in admin pannel.
 CSV notes import fix
