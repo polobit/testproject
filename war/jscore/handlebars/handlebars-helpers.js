@@ -511,7 +511,6 @@ $(function()
 						html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
 						for ( var i in value)
 						{
-							consloe.log("id>>>>>>>>>>>>>" + value[i].id);
 							if(value[i].id)
 								html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 						}
@@ -2666,8 +2665,18 @@ $(function()
     		    return options.fn(this);
 
     	return options.inverse(this);	
-    })
+    });
     
+	/**
+	 * To check Access controls for showing icons on dashboard
+	 */
+	Handlebars.registerHelper('hasMenuScope', function(item, options)
+	{	
+			if((CURRENT_DOMAIN_USER.menu_scopes).indexOf(item) != -1)
+			    return options.fn(this);
+			else
+			    return options.inverse(this);
+	});
     
     Handlebars.registerHelper('fetchXeroUser', function(data)
     {
