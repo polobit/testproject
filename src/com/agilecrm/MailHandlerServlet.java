@@ -44,15 +44,12 @@ public class MailHandlerServlet extends HttpServlet
 
 	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
 
-	    if (owner == null)
-	    {
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "API Key Invalid");
-		return;
-	    }
+	    System.out.println("owner is " + owner);
 
 	    for (Address recepientAddress : recepientAddresses)
 	    {
-		System.out.println("address " + recepientAddress);
+		System.out.println("received recepients");
+		System.out.println("address " + recepientAddress.toString());
 
 		if (isAgileRecepient(recepientAddress))
 		    continue;
@@ -117,6 +114,6 @@ public class MailHandlerServlet extends HttpServlet
 		agileRecepientUserName = address.toString().split("@");
 
 	String agileDetails[] = agileRecepientUserName[0].split("-");
-	return agileDetails[1];
+	return agileDetails[1].toString();
     }
 }
