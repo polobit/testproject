@@ -235,7 +235,7 @@ $(function()
 						// Sends request to save the contacts uploaded from csv,
 						// present in the blobstore. Contact is sent to save
 						// each row in csv file in to a contact
-						$.ajax({ type : 'POST', url : "/core/api/upload/save?type=contacts&key=" + BLOB_KEY, data : JSON.stringify(contact),
+						$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Contacts&key=" + BLOB_KEY, data : JSON.stringify(contact),
 							contentType : "application/json", success : function(data)
 							{								
 									// Navigate to contacts page
@@ -404,7 +404,7 @@ $('#import-comp').die().live('click',function(e){
 	// Sends request to save the contacts uploaded from csv,
 	// present in the blobstore. Contact is sent to save
 	// each row in csv file in to a contact
-	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=company&key=" + BLOB_KEY, data : JSON.stringify(contact),
+	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Companies&key=" + BLOB_KEY, data : JSON.stringify(contact),
 		contentType : "application/json", success : function(data)
 		{								
 				// Navigate to contacts page
@@ -584,7 +584,7 @@ $('#import-deals').die().live('click',function(e){
 	// Sends request to save the contacts uploaded from csv,
 	// present in the blobstore. Contact is sent to save
 	// each row in csv file in to a contact
-	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=deals&key=" + BLOB_KEY, data : JSON.stringify(contact),
+	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Deals&key=" + BLOB_KEY, data : JSON.stringify(contact),
 		contentType : "application/json", success : function(data)
 		{								
 				// Navigate to contacts page

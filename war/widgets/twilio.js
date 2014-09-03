@@ -6,7 +6,7 @@ var Twilio_Caller_Url;
 
 var connection;
 var To_Number;
-var To_Name;
+var To_Name = "";
 
 window.onhashchange = hashchanged;
 

@@ -20,16 +20,16 @@
 						<tr>
 							<td
 								style="padding-right: 20px; padding-left: 20px; line-height: 20px; font-size: 14px; font-family: Lucida Grande, verdana">
-								<b>Total Contacts in CSV file: {{HashMap.TOTAL}} </b><br /> 
+								<b>Total {{HashMap.type}} in CSV file: {{HashMap.TOTAL}} </b><br /> 
 								<b>Successfully Saved: {{HashMap.SAVED_CONTACTS}}</b> <br />
 								{{#HashMap.NEW_CONTACTS}}
-									&nbsp;- New Contacts: {{HashMap.NEW_CONTACTS}}
+									&nbsp;- New {{HashMap.type}}: {{HashMap.NEW_CONTACTS}}
 									{{/HashMap.NEW_CONTACTS}}<br />
 									{{#HashMap.MERGED_CONTACTS}}
-									&nbsp;- Merged Contacts: {{HashMap.MERGED_CONTACTS}}
+									&nbsp;- Merged {{HashMap.type}}: {{HashMap.MERGED_CONTACTS}}
 									{{/HashMap.MERGED_CONTACTS}}<br />
 								{{#HashMap.TOTAL_FAILED}} 
-								 <b>Failed Contacts : {{HashMap.TOTAL_FAILED}}</b> <br />
+								 <b>Failed {{HashMap.type}} : {{HashMap.TOTAL_FAILED}}</b> <br />
 								{{/HashMap.TOTAL_FAILED}}
 								 
 								{{#HashMap.NAME_MANDATORY}} 
