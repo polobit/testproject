@@ -528,6 +528,12 @@ var WorkflowsRouter = Backbone.Router
 						if(type == 'ADD_SCORE')
 							$('#trigger-custom-score', el).closest('div.control-group').css('display','');
 
+						if(type == 'STRIPE_CHARGE_EVENT')
+						{
+							var stripe_charge_event_type = currentTrigger.toJSON()['trigger_stripe_event'];
+							populate_stripe_events_in_trigger($('form#addTriggerForm', el), 'trigger-stripe-event', stripe_charge_event_type);
+						}
+
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 
 						/**

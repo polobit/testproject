@@ -30,6 +30,7 @@
                                         <option value="DEAL_IS_DELETED">Deal is deleted</option>
                                         <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
                                         <option value="ADD_SCORE" id="add-score">Score (>=)</option>
+										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe</option>
                                     </select>
                                 </div>
                             </div>
@@ -50,6 +51,18 @@
                                 </select>
 							</div>
                         </div>
+						<div class="control-group" style="display:none;">
+							<div class="controls" style="margin-left:220px!important">
+							<select id="trigger-stripe-event" name="trigger_stripe_event" class="required">
+									<option></option>
+									<option value="CHARGE_SUCCEEDED" id="charge-succeeded">Charge succeeded</option>
+									<option value="CHARGE_FAILED" id="charge-failed">Charge failed</option>
+									<option value="CHARGE_REFUNDED" id="charge-refunded">Charge refunded</option>
+									<option value="CHARGE_CAPTURED" id="charge-captured">Charge captured</option>
+									<option value="CHARGE_UPDATED" id="charge-updated">Charge updated</option>
+							</select>
+							</div>
+						</div>
                         <div class="control-group">
                             <label class="control-label" style="width:200px!important;">Run this Campaign on the Contact <span class="field_req">*</span></label>
                             <div class="controls" style="margin-left:220px!important;">

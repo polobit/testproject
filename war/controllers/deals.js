@@ -8,6 +8,7 @@ var DealsRouter = Backbone.Router.extend({
 
 	/* Deals/Opportunity */
 	"deals" : "deals",
+	"deals/import" :"importDeals",
 	},
 
 	/**
@@ -115,6 +116,15 @@ var DealsRouter = Backbone.Router.extend({
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
 		setTimeout(function(){$('a.deal-notes').tooltip();}, 2000);
+	},
+	
+	
+	/**
+	 * import deals from a csv file and then upload all deals to databse
+	 */
+	importDeals : function()
+	{
+		$('#content').html(getTemplate("import-deals", {}));
 	},
 
 });

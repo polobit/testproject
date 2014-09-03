@@ -77,9 +77,9 @@ function checkContactUpdated(){
  * Shows all the domain users names as ul drop down list 
  * to change the owner of a contact 
  */
-function fill_owners(el, data){
+function fill_owners(el, data, callback){
 	var optionsTemplate = "<li><a class='contact-owner-list' data='{{id}}'>{{name}}</a></li>";
-    fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', undefined, optionsTemplate, true); 
+    fillSelect('contact-detail-owner','/core/api/users', 'domainUsers', callback, optionsTemplate, true); 
 }
 
 /**
@@ -471,16 +471,21 @@ $(function(){
     
     $('#change-owner-element').live('click',function(e){
     	e.preventDefault();
-    	$('#change-owner-element').popover('hide');
     	
-    	// Hiding the owner name
-    	$('#change-owner-element').css('display', 'none');
-    	$('#contact-owner').css('display', 'none');
+    	fill_owners(undefined, undefined, function(){
+    		$('#change-owner-element').popover('hide');
+        	
+        	// Hiding the owner name
+        	$('#change-owner-element').css('display', 'none');
+        	$('#contact-owner').css('display', 'none');
+        	
+        	if($('#change-owner-ul').css('display') == 'inline-block')
+        		$('#change-owner-ul').css('display', 'none');
+        	
+        	else
+        		$('#change-owner-ul').css('display', 'inline-block');
+    	});
     	
-    	if($('#change-owner-ul').css('display') == 'inline-block')
-    		$('#change-owner-ul').css('display', 'none');
     	
-    	else
-    		$('#change-owner-ul').css('display', 'inline-block');
     });
 });

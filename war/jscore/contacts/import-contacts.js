@@ -235,7 +235,7 @@ $(function()
 						// Sends request to save the contacts uploaded from csv,
 						// present in the blobstore. Contact is sent to save
 						// each row in csv file in to a contact
-						$.ajax({ type : 'POST', url : "/core/api/upload/save?type=contacts&key=" + BLOB_KEY, data : JSON.stringify(contact),
+						$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Contacts&key=" + BLOB_KEY, data : JSON.stringify(contact),
 							contentType : "application/json", success : function(data)
 							{								
 									// Navigate to contacts page
@@ -265,7 +265,9 @@ $('#import-comp').die().live('click',function(e){
 		return;
 	
 	var upload_valudation_errors = {
-		"company_name_missing" : { "error_message" : "Company Name is mandatory. Please select Company name." }
+		"company_name_missing" : { "error_message" : "Company Name is mandatory. Please select Company name." },
+		"company_name_duplicated" : { "error_message" : "Company Name is Duplicated." }
+		
 
 	}
 	var models = [];
@@ -284,7 +286,7 @@ $('#import-comp').die().live('click',function(e){
 	$(".import-select").each(function(index, element)
 	{
 		var value = $(element).val()
-		if (value == "properties_company")
+		if (value == "properties_name")
 			company_count += 1;
 		
 	})
@@ -299,7 +301,7 @@ $('#import-comp').die().live('click',function(e){
 
 	else if (company_count > 1)
 	{
-		$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_duplicate));
+		$("#import-validation-error").html(getTemplate("import-company-validation-message", upload_valudation_errors.company_name_duplicated));
 		return false;
 	}
 
@@ -348,7 +350,7 @@ $('#import-comp').die().live('click',function(e){
 			{
 				var splits = name.split("-");
 				name = "address";
-				property["subtype"] = "home";
+				property["subtype"] = "office";
 				property["type"] = type;
 				console.log(splits);
 				// Set the value and name fields
@@ -402,7 +404,7 @@ $('#import-comp').die().live('click',function(e){
 	// Sends request to save the contacts uploaded from csv,
 	// present in the blobstore. Contact is sent to save
 	// each row in csv file in to a contact
-	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=company&key=" + BLOB_KEY, data : JSON.stringify(contact),
+	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Companies&key=" + BLOB_KEY, data : JSON.stringify(contact),
 		contentType : "application/json", success : function(data)
 		{								
 				// Navigate to contacts page
@@ -411,6 +413,186 @@ $('#import-comp').die().live('click',function(e){
 				$('#content').html(getTemplate("import-contacts", {}));
 				showNotyPopUp('information', "Companies are now being imported. You will be notified on email when it is done", "top", 5000);
 
+			// Calls vefiryUploadStatus with data returned
+			// from the url i.e., key of the memcache
+			// verifyUploadStatus(data);
+		}, });
+
+});
+
+/**
+ * import deals  validations
+ */
+
+
+$('#import-deals').die().live('click',function(e){
+	
+	if($(this).attr('disabled'))
+		return;
+	
+	var upload_valudation_errors = {
+		"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
+		"deal_duplicated" :{"error_message" : "Deal Name is Duplicated"},
+		"deal_value_missing" :{"error_message" : "Deal value is mandatory.Please select deal value."},
+		"deal_milestone_missing" :{"error_message" : "Milestone is mandatory. Please select milestone."},
+		"deal_probability_missing" :{"error_message" : "Deal probability is mandatory. Please select probability."}
+
+	}
+	var models = [];
+
+	// Hide the alerts
+	$(".import_contact_error").hide();
+
+	// Headings validation jitendra: 28-08-14
+	/*
+	 * Reads all the table heading set after importing contacts list from CSV
+	 * and ensures that company_name which are mandatory fields. Checks if
+	 * duplicate table headings are set. If validations failed the error alerts
+	 * a explaining the cause are shown
+	 */
+     deal_count = 0,value_count = 0,probability_count = 0,milestone_count = 0;
+	$(".import-select").each(function(index, element)
+	{
+		var value = $(element).val();
+		if (value == "properties_name")
+			deal_count += 1;
+		if(value == "properties_value")
+			value_count+= 1;
+		if(value == "properties_probability")
+			probability_count +=1;
+		if(value == "properties_milestone_New")
+			milestone_count = 1;
+		if(value == "properties_milestone_Proposal")
+			milestone_count = 1;
+		if(value == "properties_milestone_Prospect")
+			milestone_count = 1;
+		if(value == "properties_milestone_Won")
+			milestone_count = 1;
+		if(value == "properties_milestone_Lost")
+			milestone_count = 1;
+		
+	})
+
+	
+	if (deal_count == 0)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_name_missing));
+		return false;
+	}
+
+
+	else if (deal_count > 1)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_duplicated));
+		return false;
+	}
+	
+
+	else if (value_count == 0)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_value_missing));
+		return false;
+	}
+	
+	else if (milestone_count == 0)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_milestone_missing));
+		return false;
+	}
+	
+	else if (probability_count == 0)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_probability_missing));
+		return false;
+	}
+
+
+	$(this).attr('disabled', true);
+
+	/*
+	 * After validation checks are passed then loading is shown
+	 */
+	$waiting = $('<div style="display:inline-block;padding-left:5px"><small><p class="text-success"><i><span id="status-message">Please wait</span></i></p></small></div>');
+	$waiting.insertAfter($('#import-cancel'));
+
+	var properties = [];
+
+	/*
+	 * Iterates through all tbody tr's and reads the table heading from the
+	 * table, push the table name as property name and value as property value
+	 * as ContactField properties.
+	 */
+	var model = {};
+
+	// Add Tags
+
+	$('td.import-contact-fields').each(function(index, element)
+	{
+
+		console.log(this);
+		console.log(index);
+		// Empty property map (Represents
+		// ContactField in contact.java)
+
+		var property = {};
+
+		// Read the name of the property from
+		// table heading
+		var select = $(this).find('select');
+		console.log(select);
+		var name = $(select).val();
+		var type = $(select).find(":selected").attr('class') == 'CUSTOM' ? 'CUSTOM' : 'SYSTEM';
+		console.log("name :" + name +", type" + type);
+
+		if (name.indexOf("properties_") != -1)
+		{
+			name = name.split("properties_")[1];
+			property["type"] = type;
+			
+			// Set the value and name fields
+			if(!property["value"])
+			property["value"] = name;
+			
+			property["name"] = name;
+			console.log(property);
+			if (name.indexOf("_ignore_") != -1)
+				property = {};
+		}
+		else
+		{
+			property["name"] = name;
+		}
+
+		// Push in to properties array (represents
+		// ContactField array)
+		properties.push(property);
+
+	});
+
+	model.properties = properties;
+	
+
+	// Shows Updating
+	$waiting.find('#status-message').html(getRandomLoadingImg());
+
+	// Represents prototype of contact, which specifies the
+	// order of properties
+	var contact = model;
+
+	console.log(contact);
+
+	// Sends request to save the contacts uploaded from csv,
+	// present in the blobstore. Contact is sent to save
+	// each row in csv file in to a contact
+	$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Deals&key=" + BLOB_KEY, data : JSON.stringify(contact),
+		contentType : "application/json", success : function(data)
+		{								
+				// Navigate to contacts page
+				// Sends empty JSON to remove
+				// contact uploaded
+				
+				showNotyPopUp('information', "Deals are now being imported. You will be notified on email when it is done", "top", 5000);
+                location.href = window.location.origin+"#deals";
 			// Calls vefiryUploadStatus with data returned
 			// from the url i.e., key of the memcache
 			// verifyUploadStatus(data);
@@ -448,8 +630,10 @@ function parseCSV(key,type)
 			data["custom_fields"] = fields.toJSON();
 			if(type == "contacts"){
 			 template = $(getTemplate("import-contacts-2", data));
-			}else{
+			}else if(type == "company"){
 				template = $(getTemplate("import-companies", data));
+			}else if(type == "deals"){
+				template = $(getTemplate("import-deals2", data));
 			}
 
 			$('#content').html(template);

@@ -35,11 +35,7 @@ public class TwilioUtil
 	 * Twilio authentication token of the account which contains Agile
 	 * application
 	 */
-	// public static final String authToken =
-	// "5e7085bb019e378fb18822f319a3ec46"; //default
-	// public static final String authToken =
-	// "29705c11647e670e2017ee1e86a2b61e"; // farah
-	public static final String authToken = "e5acedcd48274247089656493e55f43f";// tejuclickdesk
+	public static final String authToken = "5e7085bb019e378fb18822f319a3ec46";
 
 	/**
 	 * Creates a {@link TwilioRestClient} instance and sets the account SID of
@@ -167,7 +163,7 @@ public class TwilioUtil
 		// parameters required to create application
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("FriendlyName", "Agile CRM");
-		params.put("VoiceUrl", "https://agilecrmbeta.appspot.com/backend/voice");
+		params.put("VoiceUrl", "https://agile-crm-cloud.appspot.com/backend/voice");
 		params.put("VoiceMethod", "GET");
 
 		// Make a POST request to create application
@@ -209,7 +205,6 @@ public class TwilioUtil
 
 		// allow outgoing from agile application
 		capability.allowClientOutgoing(appSid);
-		capability.allowClientIncoming("myagiletry");
 
 		try
 		{

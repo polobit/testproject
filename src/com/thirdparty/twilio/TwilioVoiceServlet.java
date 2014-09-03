@@ -10,7 +10,6 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.googlecode.objectify.Key;
-import com.twilio.sdk.verbs.Client;
 import com.twilio.sdk.verbs.Dial;
 import com.twilio.sdk.verbs.Number;
 import com.twilio.sdk.verbs.TwiMLException;
@@ -95,17 +94,9 @@ public class TwilioVoiceServlet extends HttpServlet
 		 */
 		try
 		{
-			if (phoneNumber != null)
-			{
-				dial.append(new Number(phoneNumber));
-				dial.setCallerId(callerId);
-			}
-			else
-			{
-				dial.append(new Client("myagiletry"));
-			}
-
+			dial.setCallerId(callerId);
 			dial.set("record", record);
+			dial.append(new Number(phoneNumber));
 			twiml.append(dial);
 		}
 		catch (TwiMLException e)

@@ -6,7 +6,7 @@ var Twilio_Caller_Url;
 
 var connection;
 var To_Number;
-var To_Name;
+var To_Name = "";
 
 window.onhashchange = hashchanged;
 
@@ -135,11 +135,12 @@ function hashchanged()
 	console.log(Twilio.Device.status());
 	console.log(Twilio_Caller_Url);
 
-	//if (Twilio_Caller_Url != window.location.href && Twilio.Device.status() == "busy")
+	// if (Twilio_Caller_Url != window.location.href && Twilio.Device.status()
+	// == "busy")
 	if (Twilio.Device.status() == "busy")
 	{
-		showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);		
-	}	
+		showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);
+	}
 }
 
 /**
@@ -506,14 +507,14 @@ function setUpTwilio(token, from_number)
 				var dialpad = $(getTemplate("twilio-dialpad"), {});
 				$('#Twilio').find('.widget_content').append(dialpad);
 			}
-			
+
 			if (Twilio_Caller_Url == window.location.href && Twilio.Device.status() == "busy")
 			{
 				console.log("Twilio call is already connected");
 
 				$("#twilio_hangup").show();
 				$("#twilio_dialpad").show();
-				$("#twilio_call").hide();				
+				$("#twilio_call").hide();
 			}
 		});
 
@@ -531,8 +532,15 @@ function setUpTwilio(token, from_number)
 				// Save twilio caller's url
 				Twilio_Caller_Url = window.location.href;
 				To_Number = $('#contact_number').val();
-				To_Name = agile_crm_get_contact_property('first_name') + " " + agile_crm_get_contact_property('last_name');
-				
+
+				var firstName = agile_crm_get_contact_property('first_name');
+				var lastName = agile_crm_get_contact_property('last_name');
+
+				if (firstName)
+					To_Name = firstName + " ";
+				if (lastName)
+					To_Name = To_Name + lastName;
+
 				connection = conn;
 				$("#twilio_hangup").show();
 				$("#twilio_dialpad").show();
@@ -586,9 +594,8 @@ function setUpTwilio(token, from_number)
 			console.log(conn.parameters.From);
 			// status before accepting call
 			console.log(conn._status);
-			//conn.accept();
+			conn.accept();
 
-			alert("incoming call");
 			// If connection is opened, hide call and show hang up
 			if (conn._status == "open")
 			{
@@ -652,8 +659,9 @@ function twilioSendDTMF(digit)
 
 	// session for call is active and number is available.
 	if (Twilio.Device.status() == "busy" && digit)
-	{				
-		// send dtmf on twilio	
+	{
+		// send dtmf on twilio
+		// if (connection)
 		connection.sendDigits(digit);
 	}
 }
@@ -752,7 +760,7 @@ function registerClickEvents(from_number)
 
 		// Shows the modal after filling with details
 		$("#twilio-record-modal").modal("show");
-		
+
 	});
 
 	/*
@@ -783,7 +791,7 @@ function registerClickEvents(from_number)
 
 				// Call connect method of Twilio
 				Twilio.Device.connect({ from : from_number, PhoneNumber : to_number, record : record,
-					Url : "https://agilecrmbeta.appspot.com/backend/voice?record=" + record });				
+					Url : "https://agile-crm-cloud.appspot.com/backend/voice?record=" + record });
 			});
 }
 

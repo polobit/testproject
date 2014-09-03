@@ -183,7 +183,7 @@ var SettingsRouter = Backbone.Router.extend({
 		itemView.model.fetch();
 
 		// Adds header
-		$('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3><br/></div>");
+		// $('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3></div>");
 
 		// Adds Gmail Prefs
 		$('#prefs-tabs-content').append(itemView.render().el);
@@ -191,11 +191,37 @@ var SettingsRouter = Backbone.Router.extend({
 		// Gets IMAP Prefs
 		var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs", postRenderCallback : function(el){
 			itemView2.model.set("password","");
+		}, saveCallback : function(){
+			$save_info = $('<div style="display:inline-block"><small><p style="color:#2D8130; font-size:14px">Saved Successfully</p></small></div>');
+
+			// Appends error info to form actions block.
+			$("#imap-prefs-form").find(".form-actions").append($save_info);
+
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);
 		} });
-		
 		
 		// Appends IMAP
 		$('#prefs-tabs-content').append(itemView2.render().el);
+		
+		// Gets Office Prefs
+		var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", postRenderCallback : function(el){
+			itemView3.model.set("password","");
+		}, saveCallback : function(){
+			$("#office-prefs-form").find("#office-password").val("");
+			$save_info = $('<div style="display:inline-block"><small><p style="color:#2D8130; font-size:14px">Saved Successfully</p></small></div>');
+
+			// Appends error info to form actions block.
+			$("#office-prefs-form").find(".form-actions").append($save_info);
+
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);
+			
+		}  });
+		
+		// Appends Office
+		$('#prefs-tabs-content').append(itemView3.render().el);
+		
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-tab').addClass('active');
 	},
