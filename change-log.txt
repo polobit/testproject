@@ -1,11 +1,15 @@
+1-7 (2-Sept-2014)
+*** Naresh ***
+- Send Email bug fix when HTML is empty and Track Clicks yes
+
+
 1-6 (2-Sept-2014)
 *** Jitendra ***
 - Changed QuickBooks Development and Production Keys
 
 *** Yaswanth (26th August)***
-- Added tag management. Added it in admin pannel.
-- CSV notes import fix.
-- Subscription form fix on update button multiple submits.
+Added tag management. Added it in admin pannel.
+CSV notes import fix
 
 1-4 (22-August-2014)
 
@@ -79,4 +83,3 @@
 *** Jitendra ***
 - Fixed Shopify UI issues.
 - Fixed Shopify customers notes duplication issues.
-
