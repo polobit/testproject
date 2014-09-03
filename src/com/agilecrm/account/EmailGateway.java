@@ -10,34 +10,72 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.Indexed;
+import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
+/**
+ * <code>EmailGateway</code> is the core class for Agile Email Gateways. It
+ * stores third party email api values.
+ * 
+ * @author naresh
+ * 
+ */
 @SuppressWarnings("serial")
 @XmlRootElement
 @Cached
 public class EmailGateway implements Serializable
 {
+    /**
+     * Auto generated id
+     */
     @Id
     public Long id = null;
 
+    /**
+     * API User - SendGrid API have api_user
+     */
+    @NotSaved(IfDefault.class)
     public String api_user = null;
 
+    /**
+     * API Key
+     */
+    @NotSaved(IfDefault.class)
     public String api_key = null;
 
+    /**
+     * Email API types
+     * 
+     */
     public enum EMAIL_API
     {
 	SEND_GRID, MANDRILL
     };
 
-    @Indexed
     public EMAIL_API email_api = EMAIL_API.MANDRILL;
 
-    private static ObjectifyGenericDao<EmailGateway> dao = new ObjectifyGenericDao<EmailGateway>(EmailGateway.class);
+    /**
+     * Objectify dao
+     */
+    public static ObjectifyGenericDao<EmailGateway> dao = new ObjectifyGenericDao<EmailGateway>(EmailGateway.class);
 
+    /**
+     * Constructs default {@link EmailGateway}
+     */
     EmailGateway()
     {
     }
 
+    /**
+     * Constructs {@link EmailGateway}
+     * 
+     * @param apiUser
+     *            - api user
+     * @param apiKey
+     *            - api key
+     * @param emailApi
+     *            - Email API type
+     */
     public EmailGateway(String apiUser, String apiKey, EMAIL_API emailApi)
     {
 	this.api_user = apiUser;
@@ -45,10 +83,14 @@ public class EmailGateway implements Serializable
 	this.email_api = emailApi;
     }
 
+    /**
+     * Saves EmailGateway to datastore
+     */
     public void save()
     {
 	try
 	{
+	    // Validates given api values before saving
 	    EmailGatewayUtil.checkEmailAPISettings(this);
 	}
 	catch (Exception e)
@@ -60,6 +102,9 @@ public class EmailGateway implements Serializable
 	dao.put(this);
     }
 
+    /**
+     * Deletes EmailGateway from datastore
+     */
     public void delete()
     {
 	dao.delete(this);

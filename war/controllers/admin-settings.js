@@ -421,10 +421,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					}, 1);
 				});
 			},
-			saveCallback: function()
+			saveCallback: function(data)
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
+				
+				//console.log(data);
+				
+				// Add webhook
+				if(data.email_api == "MANDRILL")
+				{
+					// Add mandrill webhook
+					$.getJSON("core/api/email-gateway/add-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+						
+						console.log(data);
+						
+					});
+				}
 			}
 			
 		});

@@ -7,8 +7,8 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.mandrill.util.MandrillUtil;
-import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
+import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -190,11 +190,10 @@ public class PullScheduler
 	    {
 		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
-		if (deferredTask instanceof MandrillDeferredTask)
+		if (deferredTask instanceof MailDeferredTask)
 		{
 		    // System.out.println("Executing mandrill mail tasks...");
-
-		    MandrillUtil.sendMandrillMails(tasks);
+		    EmailGatewayUtil.sendMails(tasks);
 		    PullQueueUtil.deleteTasks(queueName, tasks);
 		    return;
 		}
