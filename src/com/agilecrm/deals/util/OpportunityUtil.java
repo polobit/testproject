@@ -14,6 +14,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
@@ -393,16 +394,26 @@ public class OpportunityUtil
      * @param fieldName
      *            the name field to sort on.
      * @param cursor
+     * @param pipelineId
+     *            the id of the pipeline the deal belongs to.
      * @param count
      *            page size.
      * @return List of deals.
      */
     public static List<Opportunity> getOpportunitiesByFilter(String ownerId, String milestone, String contactId,
-	    String fieldName, int max, String cursor)
+	    String fieldName, int max, String cursor, Long pipelineId)
     {
 	try
 	{
 	    Map<String, Object> searchMap = new HashMap<String, Object>();
+
+	    if (pipelineId != null & pipelineId != 1)
+	    {
+		if (pipelineId != null && pipelineId == 0L)
+		    searchMap.put("pipeline", new Key<Milestone>(Milestone.class, MilestoneUtil.getMilestones().id));
+		else if (pipelineId != null)
+		    searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+	    }
 
 	    if (StringUtils.isNotBlank(ownerId))
 		searchMap.put("ownerKey", new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId)));
@@ -412,7 +423,7 @@ public class OpportunityUtil
 
 	    if (StringUtils.isNotBlank(contactId))
 		searchMap.put("related_contacts", new Key<Contact>(Contact.class, contactId));
-	    System.out.println("-------------------" + searchMap.toString());
+
 	    if (!StringUtils.isNotBlank(fieldName))
 		fieldName = "-created_time";
 
@@ -450,4 +461,260 @@ public class OpportunityUtil
 
 	queue.addAsync(taskOptions);
     }
+
+    /* Methods related to Multiple Pipeline */
+
+    public static JSONObject getOpportunitiesWithMilestones(String ownerId, String milestone, String contactId,
+	    String fieldName, int max, String cursor, Long pipelineId)
+    {
+
+	JSONObject milestonesObject = new JSONObject();
+
+	if (pipelineId == null || pipelineId == 0L)
+	    pipelineId = MilestoneUtil.getMilestones().id;
+
+	ObjectMapper mapper = new ObjectMapper();
+	List<Opportunity> dealslist = null;
+
+	if (!StringUtils.isEmpty(milestone))
+	{
+	    String json = "";
+	    Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+
+	    if (milestone != null)
+		conditionsMap.put("milestone", milestone.trim());
+
+	    if (max != 0)
+		dealslist = dao.fetchAllByOrder(max, cursor, conditionsMap, true, false, "id");
+
+	    dealslist = dao.listByProperty(conditionsMap);
+
+	    try
+	    {
+		json = mapper.writeValueAsString(dealslist);
+		json = json.replace("null", "\"\"");
+		milestonesObject.put(milestone.trim(), json);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+
+	    return milestonesObject;
+	}
+
+	// Array of milestones
+	Opportunity.MILESTONES = MilestoneUtil.getMilestone(pipelineId).milestones.split(",");
+	// Iterate through all possible milestones
+	for (String mile : Opportunity.MILESTONES)
+	{
+	    String json = "";
+	    Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+	    conditionsMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+
+	    if (mile != null)
+		conditionsMap.put("milestone", mile.trim());
+
+	    if (max != 0)
+		dealslist = dao.fetchAllByOrder(max, cursor, conditionsMap, true, false, "id");
+
+	    dealslist = dao.listByProperty(conditionsMap);
+
+	    try
+	    {
+		json = mapper.writeValueAsString(dealslist);
+		json = json.replace("null", "\"\"");
+		milestonesObject.put(mile.trim(), json);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return milestonesObject;
+    }
+
+    /**
+     * Gets total number of milestones in a given period.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @param milestone
+     *            - Given milestone.
+     * @return Count of total number of milestones.
+     */
+    public static int getTotalNumberOfMilestonesByPipeline(Long pipelineId, long minTime, long maxTime, String milestone)
+    {
+	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
+		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).filter("milestone", milestone)
+		.count();
+    }
+
+    /**
+     * Gets milestone JSONObject with respect to given time period. Filters the
+     * opportunities with respect to milestones. For e.g. Milestone 'Lost'
+     * consists of 4 opportunities, having closed date within the given range.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @return Milestone JSONObjects with respect to given time period.
+     */
+    public static JSONObject getMilestonesByPipeline(Long pipelineId, long minTime, long maxTime)
+    {
+	// Milestones object
+	JSONObject milestonesObject = new JSONObject();
+
+	if (pipelineId == null || pipelineId == 0L)
+	    pipelineId = MilestoneUtil.getMilestones().id;
+
+	// Array of milestones
+	Opportunity.MILESTONES = MilestoneUtil.getMilestone(pipelineId).milestones.split(",");
+
+	// Iterate through all possible milestones
+	for (String milestone : Opportunity.MILESTONES)
+	{
+	    int numOpportunities = getTotalNumberOfMilestonesByPipeline(pipelineId, minTime, maxTime, milestone.trim());
+	    milestonesObject.put(milestone, numOpportunities);
+	}
+
+	System.out.println(milestonesObject);
+	return milestonesObject;
+    }
+
+    /**
+     * Gets list of opportunities with respect to closed date and given time
+     * period.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @return list of opportunities with closed date in between min and max
+     *         times.
+     */
+    public static List<Opportunity> getOpportunitiesByPipeline(Long pipelineId, long minTime, long maxTime)
+    {
+	return dao.ofy().query(Opportunity.class).filter("pipeline", new Key<Milestone>(Milestone.class, pipelineId))
+		.filter("close_date >= ", minTime).filter("close_date <= ", maxTime).list();
+    }
+
+    /**
+     * Gets JSONObject of expected-values and pipeline values of deals with
+     * respect to month. Gets list of opportunities with respect to given time
+     * period. Adds expected-values and pipeline values by iterating through
+     * each deal having closed date on same month. These are used for graph
+     * building.
+     * 
+     * @param minTime
+     *            - Given time less than closed date.
+     * @param maxTime
+     *            - Given time greater than closed date.
+     * @return JsonObject having total and pipeline values with respect to
+     *         month.
+     */
+    public static JSONObject getDealsDetailsByPipeline(Long pipelineId, long minTime, long maxTime)
+    {
+	// Final JSON Constants
+	String TOTAL = "total";
+	String PIPELINE = "pipeline";
+
+	// Deals Object
+	JSONObject dealsObject = new JSONObject();
+
+	if (pipelineId == null || pipelineId == 0L)
+	    pipelineId = MilestoneUtil.getMilestones().id;
+
+	// Returns month (key) and total and pipeline
+	List<Opportunity> opportunitiesList = getOpportunitiesByPipeline(pipelineId, minTime, maxTime);
+	for (Opportunity opportunity : opportunitiesList)
+	{
+	    try
+	    {
+		// Total and Pipeline (total * probability)
+		double total = opportunity.expected_value;
+		double pipeline = opportunity.expected_value * opportunity.probability / 100;
+
+		/*
+		 * //mm-yy DateFormat formatter = new SimpleDateFormat("MM-yy");
+		 * //Get mm/yy String mmYY = formatter.format(new
+		 * Date(opportunity.close_date * 1000));
+		 */
+		Date opportunityDate = new Date(opportunity.close_date * 1000);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(opportunityDate);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+		Date firstDayOfMonth = calendar.getTime();
+		String mmYY = Math.round(firstDayOfMonth.getTime() / 1000) + "";
+
+		Double oldTotal = 0D, oldPipeline = 0D;
+
+		// Read from previous object if present
+		if (dealsObject.containsKey(mmYY))
+		{
+		    JSONObject totalAndPipeline = dealsObject.getJSONObject(mmYY);
+		    oldTotal = totalAndPipeline.getDouble(TOTAL);
+		    oldPipeline = totalAndPipeline.getDouble(PIPELINE);
+		}
+
+		// If already present, get the previous one and add total and
+		// pipeline
+		JSONObject totalAndPipeline;
+
+		// Check whether dealsObject is null
+		if (dealsObject.containsKey(mmYY) && dealsObject.getJSONObject(mmYY) == null)
+		{
+		    totalAndPipeline = dealsObject.getJSONObject(mmYY);
+		}
+		else
+		{
+		    totalAndPipeline = new JSONObject();
+		}
+
+		// Update the mmYY with the new totals
+		totalAndPipeline.put(TOTAL, total + oldTotal);
+		totalAndPipeline.put(PIPELINE, pipeline + oldPipeline);
+		dealsObject.put(mmYY, totalAndPipeline);
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("Exception :" + e);
+	    }
+	}
+
+	System.out.println(dealsObject);
+	return dealsObject;
+    }
+
+    /**
+     * @param pipelineId
+     * @param max
+     * @param cursor
+     * @return
+     */
+    /*
+     * public static List<Opportunity> getOpportunities(Long pipelineId, int
+     * max, String cursor) { Map<String, Object> conditionsMap = new
+     * HashMap<String, Object>();
+     * 
+     * if (pipelineId != null) conditionsMap.put("pipeline", new
+     * Key<Milestone>(Milestone.class, pipelineId)); else
+     * conditionsMap.put("pipeline", null);
+     * 
+     * if (max != 0) return dao.fetchAllByOrder(max, cursor, conditionsMap,
+     * true, false, "id");
+     * 
+     * return dao.listByProperty(conditionsMap);
+     * 
+     * }
+     */
+
 }

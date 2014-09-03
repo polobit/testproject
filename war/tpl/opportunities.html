@@ -15,9 +15,6 @@
 						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 					</ul>
 			</div>
-			<div class="btn-group right" id="deals-tracks"
-				style="display: inline; top: -30px;margin-right:20px;">
-			</div>
 			<div class="btn-group right" id="deals-view"
 				style="display: inline; top: -30px;margin-right:20px;">
 					<div class="btn"><i class="icon-list" style="margin-right:3px"></i></div>
@@ -27,8 +24,10 @@
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#" class="deals-list-view" onclick="return false;">List</a></li>
 						<li><a href="#" class="deals-pipelined-view">Milestone</a></li>
-						<li><a href="#" class="deals-export-csv">Export as CSV</a></li>
 					</ul>
+			</div>
+			<div class="btn-group right" id="deals-tracks"
+				style="display: inline; top: -30px;margin-right:20px;">
 			</div>
         </div>
     </div>
@@ -139,8 +138,8 @@
 
 <script id="opportunity-track-list-model-template" type="text/html">
 {{#if name}}
-<a id='{{id}}' class="filter" data="{{name}}">{{name}}</a>
+<a id='{{id}}' class="pipeline" data="{{name}}">{{name}}</a>
  {{else}}
-<a id='{{id}}' class="filter" data="Default">Default</a>
+<a id='{{id}}' class="pipeline" data="Default">Default</a>
 {{/if}}
 </script>

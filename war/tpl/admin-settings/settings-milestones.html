@@ -1,29 +1,69 @@
-<script id="admin-settings-milestones-template" type="text/html">
+<script id="admin-settings-milestones-collection-template" type="text/html">
 <div class="row">
 	<div class='span8 well'>
-    	<form id="milestonesForm" class="form-horizontal">
-    		{{#if id}}
-    			<input type="text" name="id" class="hide" value={{id}}>
-    		{{/if}} 		
-    		<legend>Milestones</legend>
-			<fieldset>
-    		<div class="control-group">  	 
-				<p>Define the various Milestones for your deals according to your sales process.</p>
-                    <div id="milestone-values" class="milestone-ul-list" style="max-width:180px;">
-					{{#milestone_ul milestones}}{{/milestone_ul}}
+		<div><a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;">New Track</a></div>
+    	<div id="admin-settings-milestones-model-list"></div>
+		<div class="form-actions">
+    		<a href="#" class="save-pipelines btn btn-primary">Save</a>
+    	</div>
+		<!-- New (Pipeline) Modal views -->
+<div class="modal hide fade" id="pipelineModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Add Pipeline</h3>
+    </div>
+    <div class="modal-body" style="max-height:420px !important;">
+        <form id="pipelineForm" name="pipelineForm" method="post">
+            <fieldset>
+                <p>
+                <div class="control-group">
+                    <label class="control-label"><b>Pipeline Name</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input name="name" type="text" field="pipeline" class="required" id="pipline_name" placeholder="Pipeline" />
+
                     </div>
-					<div><a href="#" id="show_milestone_field"><i class="icon-plus-sign"></i> Add Milestone</a></div>
-					<div class="show_field" style="display:none;">
-						<input id="add_new_milestone" style="width:170px;margin-right:10px;" type="text" placeholder="New Milestone">
-						<a class="btn" id="add_milestone" href="#">Add</a>
-					</div>
-    				<input name="milestones" type="text" class="required hide"/>
-    		</div> 
-    		<div class="form-actions">
-    		<a href="#" type="submit" class="save btn btn-primary">Save</a>
-    		</div>
-    		<fieldset>
-    	</form>
+                </div>
+                <div class="control-group">
+					<label class="control-label"><b>Milestones</b> <span class="field_req">*</span></label>
+                    <div class="controls">
+                        <input class="input-large" name="milestones" type="text" id="milestones" value="Lost,Open,Won,Stage 1" />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="save btn btn-primary" id="pipeline_validate">Save
+        </a>
+        <span class="save-status"></span>
     </div>
 </div>
+<!-- End of Modal views -->
+    </div>
+</div>
+</script>
+
+<script id="admin-settings-milestones-model-template" type="text/html">
+    	<form id="milestonesForm_{{id}}" class="form-horizontal pipeline" method=post>
+    		{{#if id}}
+    			<input type="text" name="id" class="hide" value={{id}}>
+    		{{/if}} 
+			{{#if id}}
+    			<input type="text" name="name" class="hide" value={{name}}>
+    		{{/if}} 		
+    		<legend style="margin-bottom:0px;">{{name}} <a class="delete" data="{{id}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash delete" data="{{id}}" title="Delete Track"></i></a></legend>
+			<fieldset>
+    		<div class="control-group">  	 
+                    <div id="milestone-values-{{id}}" class="milestone-ul-list" style="max-width:180px;">
+					{{#milestone_ul milestones}}{{/milestone_ul}}
+                    </div>
+					<div><a href="#" class="show_milestone_field"><i class="icon-plus-sign"></i> Add Milestone</a></div>
+					<div class="show_field" style="display:none;">
+						<input id="add_new_milestone" class="add_new_milestone" style="width:170px;margin-right:10px;" type="text" placeholder="New Milestone">
+						<a class="btn add_milestone" id="add_milestone" href="#">Add</a>
+					</div>
+    				<input name="milestones" type="text" class="required hide" value="{{milestones}}"/>
+    		</div> 
+    		<fieldset>
+    	</form>
 </script>

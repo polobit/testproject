@@ -291,12 +291,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/milestone', template : "admin-settings-milestones", reload : true, postRenderCallback : function(el)
+		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones", individual_tag_name : 'div', sortKey: "id", descending:true, postRenderCallback : function(el)
 		{
-			setup_milestones();
+			setup_milestones(el);
 		} });
-
-		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		this.pipelineGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.milestones-tab').addClass('active');
 	},

@@ -19,10 +19,12 @@ import net.sf.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.deferred.DealsDeferredTask;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.export.util.DealExportBlobUtil;
 import com.agilecrm.export.util.DealExportEmailUtil;
@@ -32,6 +34,10 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
+import com.google.appengine.api.backends.BackendServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -48,6 +54,27 @@ import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 @Path("/api/opportunity")
 public class DealsAPI
 {
+    /**
+     * Returns list of opportunities. This method is called if TEXT_PLAIN is
+     * request.
+     * 
+     * @return list of opportunities.
+     */
+    @Path("/byPipeline/based")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public JSONObject getOpportunitiesByPipelineWithMilestones(@QueryParam("owner_id") String ownerId,
+	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
+	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId)
+    {
+	if (count != null)
+	    return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName,
+		    (Integer.parseInt(count)), cursor, pipelineId);
+	return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName, 0, cursor,
+		pipelineId);
+    }
+
     /**
      * Returns list of opportunities. This method is called if TEXT_PLAIN is
      * request.
@@ -88,14 +115,15 @@ public class DealsAPI
     public List<Opportunity> getOpportunitiesByFilter(@QueryParam("owner_id") String ownerId,
 	    @QueryParam("milestone") String milestone, @QueryParam("related_to") String contactId,
 	    @QueryParam("order_by") String fieldName, @QueryParam("cursor") String cursor,
-	    @QueryParam("page_size") String count)
+	    @QueryParam("page_size") String count, @QueryParam("pipeline_id") Long pipelineId)
     {
 	if (count != null)
 	{
 	    return OpportunityUtil.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName,
-		    (Integer.parseInt(count)), cursor);
+		    (Integer.parseInt(count)), cursor, pipelineId);
 	}
-	return OpportunityUtil.getOpportunities();
+	return OpportunityUtil
+		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
 
     /**
@@ -220,6 +248,25 @@ public class DealsAPI
     }
 
     /**
+     * Returns milestones with respect to given minimum time and maximum time.
+     * Deals Stats - Milestones.
+     * 
+     * @param min
+     *            - given time less than closed date of deal.
+     * @param max
+     *            - given time more than closed date of deal.
+     * @return milestones.
+     */
+    @Path("stats/milestones/{pipeline-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsStatsForMilestonesByPipeline(@PathParam("pipeline-id") Long pipelineId,
+	    @QueryParam("min") Long min, @QueryParam("max") Long max)
+    {
+	return OpportunityUtil.getMilestonesByPipeline(pipelineId, min, max).toString();
+    }
+
+    /**
      * Returns percentage of opportunities won compared to total opportunities
      * exist with respect to closed date. Deals Stats - Conversions.
      * 
@@ -254,6 +301,26 @@ public class DealsAPI
     public String getDealsDetails(@QueryParam("min") Long min, @QueryParam("max") Long max)
     {
 	return OpportunityUtil.getDealsDetails(min, max).toString();
+    }
+
+    /**
+     * Gets sum of expected values and pipeline values of the deals having
+     * closed date within the month of given time period. Deals Stats - Details.
+     * 
+     * @param min
+     *            - Given time less than closed date.
+     * @param max
+     *            - Given time more than closed date.
+     * @return string having sum of expected values and pipeline values of the
+     *         deals of same month.
+     */
+    @Path("stats/details/{pipeline-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public String getDealsDetailsByPipeline(@PathParam("pipeline-id") Long pipelineId, @QueryParam("min") Long min,
+	    @QueryParam("max") Long max)
+    {
+	return OpportunityUtil.getDealsDetailsByPipeline(pipelineId, min, max).toString();
     }
 
     /**
@@ -382,6 +449,22 @@ public class DealsAPI
 	for (String partition : fileData)
 	    DealExportEmailUtil.exportDealCSVAsEmail(DomainUserUtil.getCurrentDomainUser(), partition,
 		    String.valueOf(count));
+    }
+
+    @Path("/bulk/default_track")
+    @POST
+    public void setDealtoDefaultTrack()
+    {
+	DealsDeferredTask dealTracks = new DealsDeferredTask();
+	// Initialize task here
+	Queue queue = QueueFactory.getDefaultQueue();
+
+	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+
+	// Create Task and push it into Task Queue
+	TaskOptions taskOptions = TaskOptions.Builder.withPayload(dealTracks).header("Host", url);
+
+	queue.add(taskOptions);
     }
 
 }

@@ -23,7 +23,6 @@
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#" class="deals-list-view">List</a></li>
 						<li><a href="#" class="deals-pipelined-view">Milestone</a></li>
-						<!-- <li><a href="#" class="deals-export-csv">Export as CSV</a></li> -->
 					</ul>
 			</div>
 			<div class="btn-group right" id="deals-tracks"
@@ -58,9 +57,9 @@
 
 <script id="opportunity-track-list-model-template" type="text/html">
 {{#if name}}
-<a id='{{id}}' class="filter" data="{{name}}">{{name}}</a>
+<a id='{{id}}' class="pipeline" data="{{name}}">{{name}}</a>
  {{else}}
-<a id='{{id}}' class="filter" data="Default">Default</a>
+<a id='{{id}}' class="pipeline" data="Default">Default</a>
 {{/if}}
 </script>
 
