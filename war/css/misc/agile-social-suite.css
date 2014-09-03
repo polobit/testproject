@@ -47,7 +47,8 @@
 	white-space: normal;
 	overflow: hidden;
 	position: relative;
-	border: 1px solid #a1a1a1;
+	/*border: 1px solid #a1a1a1;*/
+	border:1px solid #ddd;
 	border-radius: 4px;
 }
 
@@ -573,7 +574,7 @@
 }
 
 .no-tweet,.stream-notifications {
-	border-bottom: 1px solid #e5e5e5;
+	/*border-bottom: 1px solid #e5e5e5;*/
 	background-color: lightYellow;
 	font-size: 15px;
 	text-align: center;

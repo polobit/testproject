@@ -183,7 +183,7 @@ var SettingsRouter = Backbone.Router.extend({
 		itemView.model.fetch();
 
 		// Adds header
-		$('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3><br/></div>");
+		// $('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3></div>");
 
 		// Adds Gmail Prefs
 		$('#prefs-tabs-content').append(itemView.render().el);
