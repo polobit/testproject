@@ -43,8 +43,16 @@
         </fieldset>
     </form>
 </div>
+</script>
 
-
+<script id="import-deals-template" type="text/html">
+<div class="row-fluid">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Import Deals From CSV <small></small>	</h1>
+        </div>
+    </div>
+</div>
 <div class="span4 well" style="height: 200px;">
     <form id="deal-import-form">
         <legend>CSV Deals Import <span class="label label-important">Beta</span></legend>
@@ -53,7 +61,7 @@
 		</div>
 <input type="hidden" id ="type" value="deals"/>
         <fieldset>
-			{{#hasScope "IMPORT_DEALS"}}
+			{{#hasScope "IMPORT_CONTACTS"}}
            		<div class="btn upload" style="display:inline-block;">Upload CSV file</div>
 					{{else}}
            				<div class="btn upload" style="display:inline-block;" disabled>Upload CSV file</div>
@@ -63,57 +71,6 @@
     </form>
 </div>
 
-
-
-
-<!-- <div class="span4 well" style="height: 200px;">
-    <form id="imap-prefs-form">
-        <legend>Import from Zoho <span class="label label-important">Alpha</span></legend>
-		<div style="padding-bottom:10px; height:50px;">
-			Import accounts, leads,contacts, deals and cases from Zoho
-		</div>
-        <fieldset>
-           <div class="btn" id="zoho-import" style="display:inline-block;">Import</div>
-        </fieldset>
-    </form>
-</div>
-<div class="row-fluid">
-<div class="span4 well" style="height: 200px;">
-    <form id="imap-prefs-form">
-        <legend>Import from Stripe <span class="label label-important">Alpha</span></legend>
-		<div style="padding-bottom:10px; height:50px;">
-			Import customers from Stripe
-		</div>
-        <fieldset>
-           <div class="btn" style="display:inline-block;"><a href="https://www.google.com">Import</a></div>
-        </fieldset>
-    </form>
-</div>
-<div class="span4 well" style="height: 200px;">
-        <legend>Import from Shopify <span class="label label-important">Alpha</span></legend>
-		<div style="padding-bottom:10px; height:50px;">
-			Import Customers from Shopify
-		</div>
-        <fieldset>
-           <div class="btn" id="import_shopify" style="display:inline-block;">Import</div>
-        </fieldset>
-    </form>
-</div>
-
-
- <div class="span4 well" style="height: 200px;">
-    <form id="imap-prefs-form">
-        <legend>Google Contacts <span class="label label-important">Alpha</span></legend>
-		<div style="padding-bottom:10px; height:50px;">
-			Import contacts
-		</div>
-        <fieldset>
-           <div class="btn" id="google-import" style="display:inline-block;">Import</div>
-        </fieldset>
-    </form>
-</div> 
-</div>-->
-</div>
 </script>
 
 <script id="import-contacts-2-template" type="text/html">
@@ -268,6 +225,74 @@
 </script>
 
 
+
+<script id="import-deals2-template" type="text/html">
+<div class="row-fluid">
+    <div class="span12">
+        <div class="page-header">
+            <h1>Import Deals From CSV <small> Field mapping </small></h1>
+        </div>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span9">
+		<div class="span9">
+			<table class="table table-bordered table-striped" style="border-collapse: collapse;">
+			    <thead id="import-header">
+			       <thead>
+						<th>
+							CSV headings
+						</th>
+						<th>	
+							Fields
+						</th>
+					</thead>
+			 <tbody id="import-tbody">
+			    {{#each_with_index1 data}}
+				 <tr>
+			 		<td>
+					{{#is_blank this.value}}
+							{{../index}}
+						{{else}}
+							{{this}}		
+					{{/is_blank}}	
+			        </td>
+					<td class="import-contact-fields">
+						{{setupCSVUploadOptions "deals" this.value ../this}}
+					</td>
+				 </tr>
+				{{/each_with_index1}}           		          
+				</tbody>
+			</table>
+		</div>
+		<br/>
+		<div class="span12">
+			<div id="import-validation-error"></div>
+			<a class="btn btn-primary" id="import-deals">Import</a>
+			<a class="btn" id="import-cancel" style="margin-left:2px">Cancel</a>
+		</div>
+	</div>
+	<div class="span3">
+        <div class="data-block">
+            <div class="well">
+				<h3>
+                    Import Help
+                </h3>
+                <br />
+				<ul>
+					<li>Company name is mandatory for import companies</li>
+				</ul>
+            </div>
+
+        </div>
+	</div>
+</div>
+</script>
+
+
+
+
 <script id="import-contacts-validation-message-template" type="text/html">
 <div class="row">
     <div class="span5">
@@ -280,6 +305,18 @@
 </script>
 
 <script id="import-company-validation-message-template" type="text/html">
+<div class="row">
+    <div class="span5">
+        <div class="alert alert-error import_contact_error">
+            <a class="close" data-dismiss="alert" href="#">&times</a>
+          {{error_message}}
+        </div>
+    </div>
+</div>
+</script>
+
+
+<script id="import-deal-validation-message-template" type="text/html">
 <div class="row">
     <div class="span5">
         <div class="alert alert-error import_contact_error">
@@ -392,5 +429,37 @@
 </select>
 
 
-</script>		
+</script>	
+
+
+
+<script id="csv_deals_options-template" type="text/html">
+<select class="import-select">
+<option value="properties__ignore_">-Ignore-</option>
+<option value="properties_name">Deal Name</option>
+    <option value="properties_value">Value</option>
+<optgroup label="Milestone">
+  <option value="properties_milestone_New">New</option>
+  <option value="properties_milestone_Prospect">Prospect</option>
+  <option value="properties_milestone_Proposal">Proposal</option>
+  <option value="properties_milestone_Won">Won</option>
+  <option value="properties_milestone_Lost">Lost</option>
+</optgroup>
+    <option value="properties_probability">Probability</option>
+    <option value="properties_closeDate">Close Date</option>
+<option value="properties_relatedTo">Related To</option>
+<option value="properties_note">Note</option>
+<option value="properties_description">Descriptions</option> 
+{{#if custom_fields}}
+<optgroup label="Custom field" id = "custom_fields">
+   
+		{{#each custom_fields}}
+			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
+		{{/each}}
+</optgroup>
+{{/if}}
+</select>
+
+
+</script>	
 

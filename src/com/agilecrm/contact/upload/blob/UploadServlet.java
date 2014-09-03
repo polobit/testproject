@@ -54,8 +54,11 @@ public class UploadServlet extends HttpServlet
 	    if(fileType != null){
 		if(fileType.equalsIgnoreCase("contacts")){
 		 res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString()+"&type="+fileType);
+		}else if(fileType.equalsIgnoreCase("deals")){
+		    res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString()+"&type=deals");
 		}else{
 		    res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString()+"&type=company");
+		    
 		}
 	    }
 	   

@@ -1910,8 +1910,10 @@ $(function()
     	var template;
     	if(type == "contacts"){
 	   template = $(getTemplate('csv_upload_options', context));
-    	}else{
+    	}else if(type == "company"){
     		template = $(getTemplate('csv_companies_upload_options', context));
+    	}else if(type == "deals"){
+    		template = $(getTemplate('csv_deals_options', context));
     	}
 	
 
