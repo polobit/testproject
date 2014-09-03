@@ -511,7 +511,7 @@ $(function()
 						html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
 						for ( var i in value)
 						{
-							consloe.log("id>>>>>>>>>>>>>" + value[i].id);
+							console.log("id>>>>>>>>>>>>>" + value[i].id);
 							if(value[i].id)
 								html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 						}
