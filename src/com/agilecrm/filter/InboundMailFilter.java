@@ -23,7 +23,7 @@ public class InboundMailFilter implements Filter
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException,
 	    ServletException
     {
-	System.out.println("entering mail handler filter");
+	System.out.println("Entering inbound mail filter");
 	chain.doFilter(req, res);
     }
 
