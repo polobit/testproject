@@ -189,7 +189,7 @@
 									%>
 									<li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
-								 <!-- 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li> --> 
+								 	<!-- <li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li> --> 
 									<li><a href="#contact-us"><i class="icon-pencil"></i>
 											Contact Us</a></li>
 									<li><a href="<%=logoutURL%>"><i class="icon-off"></i>

@@ -22,18 +22,6 @@ cron:
 - description: Weekly reports
   url: /backend/cron/reports?duration=WEEKLY
   schedule: every friday 23:50 
-
-- description: daily automation
-  url: /backend/cron/automations?duration=DAILY
-  schedule: every day 11:30
-  
-- description: Monthly automation
-  url: /backend/cron/automations?duration=MONTHLY
-  schedule: 1st friday of month 23:55
-  
-- description: Weekly automation
-  url: /backend/cron/automations?duration=WEEKLY
-  schedule: every friday 23:50 
   
 - description: Due Tasks Reminder
   url: /backend/cron/tasks

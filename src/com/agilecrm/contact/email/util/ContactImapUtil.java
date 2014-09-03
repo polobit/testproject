@@ -60,9 +60,11 @@ public class ContactImapUtil
 
 	try
 	{
-	    url = "https://agile-imap.appspot.com/imap?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&search_email=" + searchEmail + "&host="
-		    + URLEncoder.encode(host, "UTF-8") + "&port=" + URLEncoder.encode(port, "UTF-8") + "&offset=" + offset + "&count=" + count
-		    + "&command=imap_email&password=" + URLEncoder.encode(password, "UTF-8");
+	    url = "https://naresh-dot-imap-dot-agilecrmbeta.appspot.com/imap?user_name="
+		    + URLEncoder.encode(userName, "UTF-8") + "&search_email=" + searchEmail + "&host="
+		    + URLEncoder.encode(host, "UTF-8") + "&port=" + URLEncoder.encode(port, "UTF-8") + "&offset="
+		    + offset + "&count=" + count + "&command=imap_email&password="
+		    + URLEncoder.encode(password, "UTF-8");
 	}
 	catch (Exception e)
 	{

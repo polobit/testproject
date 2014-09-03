@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-	<servlet>
-		<servlet-name>mailhandler</servlet-name>
-		<servlet-class>com.agilecrm.MailHandlerServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>mailhandler</servlet-name>
-		<url-pattern>/_ah/mail/*</url-pattern>
-	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Home</servlet-name>
 		<servlet-class>com.agilecrm.HomeServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
+
 		<servlet-name>Home</servlet-name>
 		<url-pattern>/home</url-pattern>
 	</servlet-mapping>
@@ -109,6 +102,7 @@
 		<url-pattern>/backend/cron/scheduledupdate</url-pattern>
 	</servlet-mapping>
 
+
 	<servlet>
 		<servlet-name>login</servlet-name>
 		<servlet-class>com.agilecrm.LoginServlet</servlet-class>
@@ -168,10 +162,12 @@
 		</init-param>
 	</servlet>
 
+
 	<servlet-mapping>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<url-pattern>/core/*</url-pattern>
 	</servlet-mapping>
+
 
 	<servlet>
 		<servlet-name>Jersey Developers REST Service</servlet-name>
@@ -186,6 +182,9 @@
 		<servlet-name>Jersey Developers REST Service</servlet-name>
 		<url-pattern>/dev/*</url-pattern>
 	</servlet-mapping>
+
+
+
 
 	<servlet>
 		<servlet-name>OpenIdServlet</servlet-name>
@@ -223,16 +222,6 @@
 	<servlet-mapping>
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>Automations</servlet-name>
-		<servlet-class>com.agilecrm.workflows.automation.AutomationServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>Automations</servlet-name>
-		<url-pattern>/backend/cron/automations/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -294,6 +283,9 @@
 		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
 
+
+
+
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>
@@ -330,6 +322,8 @@
 		<url-pattern>/enter-domain</url-pattern>
 	</servlet-mapping>
 
+
+
 	<filter>
 		<filter-name>NamespaceFilter</filter-name>
 		<filter-class>com.agilecrm.filter.NamespaceFilter</filter-class>
@@ -350,6 +344,7 @@
 		<filter-class>com.agilecrm.filter.BasicAuthFilter</filter-class>
 	</filter>
 
+
 	<filter-mapping>
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/home</url-pattern>
@@ -363,12 +358,14 @@
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
+		
 	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>BasicAuthFilter</filter-name>
 		<url-pattern>/dev/*</url-pattern>
 	</filter-mapping>
+
 
 	<filter>
 		<filter-name>JSAPIFilter</filter-name>
@@ -420,10 +417,25 @@
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
 
+	<filter-mapping>
+		<filter-name>PHPAPIFilter</filter-name>
+		<url-pattern>/core/php/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+	<filter-name>InboundMailFilter</filter-name>
+		<filter-class>com.agilecrm.filter.InboundMailFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+	<filter-name>InboundMailFilter</filter-name>
+		<url-pattern>/_ah/mail/*</url-pattern>
+	</filter-mapping>
+
 	<welcome-file-list>
 		<welcome-file>home</welcome-file>
 	</welcome-file-list>
-	
+
 	<security-constraint>
 		<web-resource-collection>
 			<url-pattern>/*</url-pattern>
@@ -506,6 +518,15 @@
 	<servlet-mapping>
 		<servlet-name>GravityForm</servlet-name>
 		<url-pattern>/gform</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>StripeChargeWebhook</servlet-name>
+		<servlet-class>com.thirdparty.stripe.StripeChargeWebhook</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StripeChargeWebhook</servlet-name>
+		<url-pattern>/stripe</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -605,6 +626,15 @@
 	<servlet-mapping>
 		<servlet-name>Formbuilder</servlet-name>
 		<url-pattern>/formbuilder</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>mailhandler</servlet-name>
+		<servlet-class>com.agilecrm.MailHandlerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mailhandler</servlet-name>
+		<url-pattern>/_ah/mail/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
