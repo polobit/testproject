@@ -2,22 +2,22 @@
 	<div class="well widget-add" style="width:220px;">
 		<form style="border-bottom:none;margin-top:-10px;margin-bottom: 0px;" id="mandrill-integration-form">
 	    	<fieldset>
-				<legend style="margin-bottom: 16px;font-size: 16px;line-height: 30px;">Enter your API details </legend>
+				<legend style="margin-bottom: 16px;font-size: 16px;line-height: 30px;">Enter your account details</legend>
 				<input type="hidden" name="id" value="{{id}}">
 				<div class="control-group" style="margin-bottom:0px">
 					<div class="controls" id="LHS">
 						<select name="email_api" id="email-api" class="required" style="width:94%">
-							<option value="SEND_GRID">SendGrid</option> 
+							<!--<option value="SEND_GRID">SendGrid</option>--> 
 							<option value="MANDRILL">Mandrill</option> 
 						</select>
 					</div>
 				</div>
 				<div class="control-group" style="margin-bottom:0px" id="RHS">
-					<div class="controls">
+					<!--<div class="controls">
 						<input type="text" class="input-medium required SEND_GRID" style="width:90%" placeholder="Username" value="{{api_user}}" name="api_user">
-					</div>
+					</div>-->
 					<div class="controls">
-						<input type="password" class="input-medium required SEND_GRID" style="width:90%" placeholder="Password" value="{{#if api_user}}{{api_key}}{{/if}}"  name="api_key"/>
+						<!--<input type="password" class="input-medium required SEND_GRID" style="width:90%" placeholder="Password" value="{{#if api_user}}{{api_key}}{{/if}}"  name="api_key"/>-->
                         <input type="text" class="input-medium required MANDRILL" style="width:90%" placeholder="API Key" value="{{#unless api_user}}{{api_key}}{{/unless}}" name="api_key"/>
 					</div>
 				</div>
