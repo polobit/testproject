@@ -431,8 +431,11 @@ $('#import-deals').die().live('click',function(e){
 		return;
 	
 	var upload_valudation_errors = {
-		"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select Deal name." },
-		"deal_duplicated" :{"error_message" : "Deal Name is Duplicated"}
+		"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
+		"deal_duplicated" :{"error_message" : "Deal Name is Duplicated"},
+		"deal_value_missing" :{"error_message" : "Deal value is mandatory.Please select deal value."},
+		"deal_milestone_missing" :{"error_message" : "Milestone is mandatory. Please select milestone."},
+		"deal_probability_missing" :{"error_message" : "Deal probability is mandatory. Please select probability."}
 
 	}
 	var models = [];
@@ -447,12 +450,26 @@ $('#import-deals').die().live('click',function(e){
 	 * duplicate table headings are set. If validations failed the error alerts
 	 * a explaining the cause are shown
 	 */
-     deal_count = 0;
+     deal_count = 0,value_count = 0,probability_count = 0,milestone_count = 0;
 	$(".import-select").each(function(index, element)
 	{
-		var value = $(element).val()
+		var value = $(element).val();
 		if (value == "properties_name")
 			deal_count += 1;
+		if(value == "properties_value")
+			value_count+= 1;
+		if(value == "properties_probability")
+			probability_count +=1;
+		if(value == "properties_milestone_New")
+			milestone_count = 1;
+		if(value == "properties_milestone_Proposal")
+			milestone_count = 1;
+		if(value == "properties_milestone_Prospect")
+			milestone_count = 1;
+		if(value == "properties_milestone_Won")
+			milestone_count = 1;
+		if(value == "properties_milestone_Lost")
+			milestone_count = 1;
 		
 	})
 
@@ -469,6 +486,26 @@ $('#import-deals').die().live('click',function(e){
 		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_duplicated));
 		return false;
 	}
+	
+
+	else if (value_count == 0)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_value_missing));
+		return false;
+	}
+	
+	else if (milestone_count == 0)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_milestone_missing));
+		return false;
+	}
+	
+	else if (probability_count == 0)
+	{
+		$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_probability_missing));
+		return false;
+	}
+
 
 	$(this).attr('disabled', true);
 
@@ -553,9 +590,9 @@ $('#import-deals').die().live('click',function(e){
 				// Navigate to contacts page
 				// Sends empty JSON to remove
 				// contact uploaded
-				$('#content').html(getTemplate("opportunities-by-milestones", {}));
+				
 				showNotyPopUp('information', "Deals are now being imported. You will be notified on email when it is done", "top", 5000);
-
+                location.href = window.location.origin+"#deals";
 			// Calls vefiryUploadStatus with data returned
 			// from the url i.e., key of the memcache
 			// verifyUploadStatus(data);

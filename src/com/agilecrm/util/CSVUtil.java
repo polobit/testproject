@@ -491,12 +491,15 @@ public class CSVUtil
     public void createDealsFromCSV(InputStream blobStream, String ownerId, String type) throws PlanRestrictedException,
 	    IOException
     {
-
+	Integer totalDeals = 0;
+	Integer savedDeals = 0;
+	Integer failedDeals = 0;
 	/**
 	 * Reading CSV file from input stream
 	 */
 	CSVReader reader = new CSVReader(new InputStreamReader(blobStream, "UTF-8"));
-
+	Map<String, Object> status = new HashMap<String, Object>();
+	status.put("type", "Deals");
 	List<String[]> deals = reader.readAll();
 	// remove headings
 	if (deals.isEmpty())
@@ -512,7 +515,7 @@ public class CSVUtil
 	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
 
 	BulkActionUtil.setSessionManager(domainUser);
-
+	totalDeals = deals.size();
 	// create Deals by iterating deals properties
 	Iterator<String[]> it = deals.iterator();
 	while (it.hasNext())
@@ -555,15 +558,15 @@ public class CSVUtil
 			    c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
 			}
 		    }
-		  
+
 		    catch (Exception e)
 		    {
 			e.printStackTrace();
 
 		    }
-		   // System.out.println(c.g);
+		    // System.out.println(c.g);
 
-		    opportunity.close_date = Long.valueOf(c.getTimeInMillis()/1000);
+		    opportunity.close_date = Long.valueOf(c.getTimeInMillis() / 1000);
 		}
 		if (prop.equalsIgnoreCase("Description") || prop.equalsIgnoreCase("Descriptions"))
 		{
@@ -577,8 +580,30 @@ public class CSVUtil
 		}
 	    }
 	    opportunity.setOpportunityOwner(ownerKey);
-	    opportunity.save();
+	    try
+	    {
+		opportunity.save();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+		failedDeals++;
+	    }
+	    savedDeals++;
 	}
 
+	buildDealsImportStatus(status, "SAVED", savedDeals);
+	buildDealsImportStatus(status, "FAILD", failedDeals);
+	buildDealsImportStatus(status, "TOTAL", totalDeals);
+
+	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, "csv_deal_import", new Object[] {
+		domainUser, status });
+
+    }
+
+    private void buildDealsImportStatus(Map<String, Object> statusMap, String status, Integer count)
+    {
+
+	statusMap.put(status, count);
     }
 }
