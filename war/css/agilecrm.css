@@ -1110,9 +1110,9 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 	text-transform: capitalize;
 }
 #new-task-list-based-condition {
-	border: 1px solid #ddd;
+	/*border: 1px solid #ddd;
 	border-radius: 3px;
-	padding: 15px 0 0 15px;
+	padding: 15px 0 0 15px;*/
 	margin-bottom: 15px;
 }
 h2 small {
