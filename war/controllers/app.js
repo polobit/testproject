@@ -27,6 +27,8 @@ $(function()
 	App_Widgets = new WidgetsRouter();
 	App_Configuration = new AgileConfigRouter();
 	App_Adminpanel = new AdminPanelRouter();
+	App_ReferelRouter = new ReferelRouter();
+	App_Activity_log = new ActivitylogRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
