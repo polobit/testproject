@@ -7,7 +7,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,7 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.deals.Opportunity;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
@@ -40,6 +44,7 @@ import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.gdata.data.dublincore.DublincoreNamespace;
 import com.googlecode.objectify.Key;
 
 /**
@@ -119,10 +124,10 @@ public class CSVUtil
     }
 
     /**
-     * Creates contacts from CSV string using a contact prototype built from
-     * import page. It takes owner id to sent contact owner explicitly instead
-     * of using session manager, as there is a chance of getting null in
-     * backends.
+     * Creates contacts,companies from CSV string using a contact prototype
+     * built from import page. It takes owner id to sent contact owner
+     * explicitly instead of using session manager, as there is a chance of
+     * getting null in backends.
      * 
      * Contact is saved only if there is email exists and it is a valid email
      * 
@@ -471,5 +476,134 @@ public class CSVUtil
 	 * iterator.remove(); }
 	 */
 	return true;
+    }
+
+    /**
+     * Create Deals from CSV file
+     * 
+     * @param blobStream
+     * @param ownerId
+     * @param type
+     * @throws PlanRestrictedException
+     * @throws IOException
+     */
+
+    public void createDealsFromCSV(InputStream blobStream, String ownerId, String type) throws PlanRestrictedException,
+	    IOException
+    {
+	Integer totalDeals = 0;
+	Integer savedDeals = 0;
+	Integer failedDeals = 0;
+	/**
+	 * Reading CSV file from input stream
+	 */
+	CSVReader reader = new CSVReader(new InputStreamReader(blobStream, "UTF-8"));
+	Map<String, Object> status = new HashMap<String, Object>();
+	status.put("type", "Deals");
+	List<String[]> deals = reader.readAll();
+	// remove headings
+	if (deals.isEmpty())
+	{
+	    return;
+	}
+	// remove header information form csv
+	String[] headings = deals.remove(0);
+
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+	BulkActionUtil.setSessionManager(domainUser);
+	totalDeals = deals.size();
+	// create Deals by iterating deals properties
+	Iterator<String[]> it = deals.iterator();
+	while (it.hasNext())
+	{
+	    Opportunity opportunity = new Opportunity();
+	    String[] dealPropValues = it.next();
+	    for (int i = 0; i < dealPropValues.length; i++)
+	    {
+		String prop = headings[i];
+		if (prop.equalsIgnoreCase("Deal Name") || prop.equalsIgnoreCase("Name"))
+		{
+		    opportunity.name = dealPropValues[i];
+		}
+
+		if (prop.equalsIgnoreCase("Value"))
+		{
+		    opportunity.expected_value = Double.parseDouble(dealPropValues[i]);
+		}
+
+		if (prop.equalsIgnoreCase("Probability"))
+		{
+		    opportunity.probability = Integer.parseInt(dealPropValues[i]);
+		}
+		if (prop.equalsIgnoreCase("Milestone"))
+		{
+		    opportunity.milestone = StringUtils.capitalise(dealPropValues[i].toLowerCase());
+		}
+
+		if (prop.equalsIgnoreCase("Close Date") || prop.equalsIgnoreCase("close"))
+		{
+		    // set close date
+		    Calendar c = Calendar.getInstance();
+		    try
+		    {
+			String dateValue = dealPropValues[i];
+			String[] data = dateValue.split("/");
+			c = Calendar.getInstance();
+			if (data.length == 3)
+			{
+			    c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
+			}
+		    }
+
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+
+		    }
+		    // System.out.println(c.g);
+
+		    opportunity.close_date = Long.valueOf(c.getTimeInMillis() / 1000);
+		}
+		if (prop.equalsIgnoreCase("Description") || prop.equalsIgnoreCase("Descriptions"))
+		{
+		    opportunity.description = dealPropValues[i];
+		}
+		if (prop.equalsIgnoreCase("Note"))
+		{
+		    Note note = new Note();
+		    note.description = dealPropValues[i];
+		    note.save();
+		}
+	    }
+	    opportunity.setOpportunityOwner(ownerKey);
+	    try
+	    {
+		opportunity.save();
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+		failedDeals++;
+	    }
+	    savedDeals++;
+	}
+
+	buildDealsImportStatus(status, "SAVED", savedDeals);
+	buildDealsImportStatus(status, "FAILD", failedDeals);
+	buildDealsImportStatus(status, "TOTAL", totalDeals);
+
+	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, "csv_deal_import", new Object[] {
+		domainUser, status });
+
+    }
+
+    private void buildDealsImportStatus(Map<String, Object> statusMap, String status, Integer count)
+    {
+
+	statusMap.put(status, count);
     }
 }

@@ -558,6 +558,7 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		$('#content').html(getTemplate("import-contacts", {}));
 	},
+	
 
 	/**
 	 * Subscribes a contact to a campaign. Loads the related template
