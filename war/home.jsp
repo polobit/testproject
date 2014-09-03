@@ -126,7 +126,7 @@ Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 
 <!-- Determine Console.logging - we log in local boxes -->
 <%
-boolean debug = true;
+boolean debug = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 debug = false;
 %>
