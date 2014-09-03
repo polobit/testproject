@@ -68,6 +68,8 @@ $(function(){
 		$('#opportunityModal #forNoteForm').html("");
 		// Hide + Add note link
 		$(".deal-add-note", $("#opportunityModal")).show();
+		// Hide the Note label.
+		$(".deal-note-label").hide();
 
     });
     
@@ -88,6 +90,8 @@ $(function(){
 		
 		// Hide + Add note link
 		$(".deal-add-note", $("#opportunityUpdateModal")).show();
+		// Hide the Note label.
+		$("#deal-note-label").hide();
 
     });
     
@@ -182,6 +186,19 @@ $(function(){
 			}
 		});
 	});
+	
+	/**
+	 * Update the milestones list when the pipeline is changed in the modal.
+	 */
+	$("#pipeline").live("change",function(e){
+		var el = $(this).closest('form');
+		$('#milestone',el).closest('div').find('.loading-img').show();
+		// Fills milestone select element
+		populateMilestones(el, undefined,$(this).val(), undefined, function(data){
+			$("#milestone", el).html(data);
+			$("#milestone", el).closest('div').find('.loading-img').hide();
+		});
+	});
 });
 
 /**
@@ -219,14 +236,23 @@ function updateDeal(ele, editFromMilestoneView)
 				}
 	});
 	
-	// Fills milestone select element
-	populateMilestones(dealForm, undefined, value, function(data){
-		dealForm.find("#milestone").html(data);
-		if (value.milestone) {
-			$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
-					.attr("selected", "selected");
-		}
-		$("#milestone", dealForm).closest('div').find('.loading-img').hide();
+	// Fills the pipelines list in the select menu.
+	populateTracks(dealForm, undefined, value, function(pipelinesList){
+
+		// Fills milestone select element
+		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data){
+			dealForm.find("#milestone").html(data);
+			if (value.milestone) {
+				$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
+						.attr("selected", "selected");
+			}
+			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
+		});
+	});
+	
+	// Enable the datepicker
+	$('#close_date', dealForm).datepicker({
+		format : 'mm/dd/yyyy',
 	});
 	
 	// Add notes in deal modal
@@ -266,11 +292,19 @@ function show_deal(){
 	});
 	// Contacts type-ahead
 	agile_type_ahead("relates_to", el, contacts_typeahead);
-	
-	// Fills milestone select element
-	populateMilestones(el, undefined, undefined, function(data){
-		$("#milestone", el).html(data);
-		$("#milestone", el).closest('div').find('.loading-img').hide();
+
+	// Fills the pipelines list in select box.
+	populateTracks(el, undefined, undefined, function(pipelinesList){
+		// Fills milestone select element if there is only one pipeline.
+		if(pipelinesList.length == 1)
+		populateMilestones(el, undefined, 0, undefined, function(data){
+			el.find("#milestone").html(data);
+			if (value.milestone) {
+				$("#milestone", el).find('option[value=\"'+value.milestone+'\"]')
+						.attr("selected", "selected");
+			}
+			$("#milestone", el).closest('div').find('.loading-img').hide();
+		});
 	});
 	
 	

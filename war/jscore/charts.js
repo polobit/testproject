@@ -50,7 +50,6 @@ function pie(url, selector, name)
 						url,
 						function(data)
 						{
-
 							// Convert into labels and data as required by
 							// Highcharts
 							var pieData = [];
@@ -64,7 +63,7 @@ function pie(url, selector, name)
 								count ++;
 							});
 
-							console.log(data);
+							console.log(data,total);
 							// Iterates through data, gets each tag, count and
 							// calculate
 							// percentage of each tag
@@ -80,7 +79,7 @@ function pie(url, selector, name)
 								item.push(v / total * 100);
 								pieData.push(item);
 							})
-							
+							console.log(pieData);
 							var animation = count > 20 ? false : true;
 							
 							// Initializes Highcharts,
@@ -676,6 +675,15 @@ function pieMilestones()
 }
 
 /**
+ * Shows pie chart of milestones using high charts, called from deals controller
+ * when deals collection is loaded.
+ */
+function pieMilestonesByPipeline(pipeline_id)
+{
+	pie('/core/api/opportunity/stats/milestones/'+pipeline_id+'?min=0&max=1543842319', 'pie-deals-chart', '');
+}
+
+/**
  * Shows pie chart of tasks split by Type
  * @param params - params e.g. owner=<owner-id>, directly sent with url as GET request
  */
@@ -691,6 +699,15 @@ function pieTasks(params)
 function dealsLineChart()
 {
 	showLine('core/api/opportunity/stats/details?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
+}
+
+/**
+ * Shows line chart for deal statistics. Compares deal totals and pipeline with respect to 
+ * time
+ */
+function dealsLineChartByPipeline(pipeline_id)
+{
+	showLine('core/api/opportunity/stats/details/'+pipeline_id+'?min=0&max=1543842319', 'total-pipeline-chart', 'Monthly Deals', 'Total Value');
 }
 
 /**
