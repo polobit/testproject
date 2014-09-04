@@ -13,10 +13,10 @@ import org.jsoup.select.Elements;
 
 import com.agilecrm.Globals;
 import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.thirdparty.SendGrid;
-import com.thirdparty.mandrill.Mandrill;
 
 public class EmailUtil
 {
@@ -292,8 +292,8 @@ public class EmailUtil
 	    return;
 	}
 
-	// if no cc or bcc, send by Mandrill
-	Mandrill.sendMail(true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
+	// Send email
+	EmailGatewayUtil.sendEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, null);
     }
 
     /**

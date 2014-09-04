@@ -13,7 +13,7 @@ $(function()
 		
 		// Append note form
 		$("#forNoteForm", "#" + formId).html(getTemplate('note-form'));	
-		
+		$(".deal-note-label").show();
 		// Hide + Add note link
 		$(this).hide();
 	});			

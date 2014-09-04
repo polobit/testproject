@@ -42,7 +42,7 @@ public class FacebookWidgetsApi
     @Path("contacts/{widget-id}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getStripeCustomerDetails(@PathParam("widget-id") Long widgetId,
+    public JSONObject getFacebookUsersDetails(@PathParam("widget-id") Long widgetId,
 	    @QueryParam("searchKey") String firstname)
     {
 	System.out.println("am in FacebookWidgetsApi");
@@ -53,15 +53,18 @@ public class FacebookWidgetsApi
 	    return null;
 
 	/*
-	 * Calls StripePluginUtil method to retrieve customer details
+	 * Calls FacebookUtil method to retrieve customer details
 	 */
 	try
 	{
 	    FacebookUtil facebookUtil = new FacebookUtil(Globals.FACEBOOK_APP_ID, Globals.FACEBOOK_APP_SECRET,
 		    widget.getProperty("token"));
-	    String res = facebookUtil.searchContactsByName(firstname).toString();
-	    System.out.println(res);
-	    return res;
+	    /*
+	     * String res =
+	     * facebookUtil.searchContactsByName(firstname).toString();
+	     * System.out.println(res);
+	     */
+	    return facebookUtil.searchContactsByName(firstname);
 	}
 	catch (Exception e)
 	{

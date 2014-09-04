@@ -150,17 +150,17 @@ public class AdminPanelAPI
 			long domainuserid = Long.parseLong(id);
 
 			domainUser = DomainUserUtil.getDomainUser(domainuserid);
-			int count = DomainUserUtil.count();
+			int count = DomainUserUtil.count(domainUser.domain);
 
 			// Throws exception, if only one account exists
 			if (count == 1)
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-						.entity("Can’t delete all users").build());
+						.entity("Canï¿½t delete all users").build());
 
 			// Throws exception, if user is owner
 			if (domainUser.is_account_owner)
 				throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-						.entity("Master account can’t be deleted").build());
+						.entity("Master account canï¿½t be deleted").build());
 		}
 		catch (Exception e)
 		{

@@ -6,7 +6,7 @@ var Twilio_Caller_Url;
 
 var connection;
 var To_Number;
-var To_Name;
+var To_Name = "";
 
 window.onhashchange = hashchanged;
 
@@ -533,13 +533,7 @@ function setUpTwilio(token, from_number)
 				Twilio_Caller_Url = window.location.href;
 				To_Number = $('#contact_number').val();
 
-				var firstName = agile_crm_get_contact_property('first_name');
-				var lastName = agile_crm_get_contact_property('last_name');
-
-				if (firstName)
-					To_Name = firstName + " ";
-				if (lastName)
-					To_Name = To_Name + lastName;
+				To_Name = getContactName();
 
 				connection = conn;
 				$("#twilio_hangup").show();
@@ -652,6 +646,21 @@ function setUpTwilio(token, from_number)
 	});
 }
 
+// Get name of contact
+function getContactName()
+{
+	var contactName = "";
+	var firstName = agile_crm_get_contact_property('first_name');
+	var lastName = agile_crm_get_contact_property('last_name');
+
+	if (firstName)
+		contactName = firstName + " ";
+	if (lastName)
+		contactName = contactName + lastName;
+	
+	return contactName;
+}
+
 // Send DTMF signal to twilio active connection from dialpad.
 function twilioSendDTMF(digit)
 {
@@ -750,7 +759,7 @@ function registerClickEvents(from_number)
 		// parameters to show in record modal
 		var to_display = {};
 		to_display['to'] = to_number;
-		to_display['name'] = agile_crm_get_contact_property('first_name') + " " + agile_crm_get_contact_property('last_name');
+		to_display['name'] = getContactName();
 
 		// Get and fill template with details
 		var record_modal = $(getTemplate('twilio-record', to_display));

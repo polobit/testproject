@@ -49,15 +49,15 @@
   </span>        
   <h4 class="column-title txt-ellipsis"> 
       {{#if_equals stream_type "All_Updates"}}    
-          <span><b>All Updates</b></span>
+          <span>All Updates</span>
       {{else}} 
         {{#if_equals stream_type "DM_Inbox"}}
-           <span><b>DM Inbox</b></span>
+           <span>DM Inbox</span>
         {{else}} 
            {{#if_equals stream_type "DM_Outbox"}}
-               <span><b>DM Outbox</b></span>
+               <span>DM Outbox</span>
            {{else}}
-  		       <span><b>{{stream_type}}</b></span>
+  		       <span>{{stream_type}}</span>
            {{/if_equals}}
         {{/if_equals}}
       {{/if_equals}}
