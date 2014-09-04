@@ -369,7 +369,7 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
             });
             
             // Removes tags list(remove them from new person modal)
-            $('.tagsinput', $("#"+modal_id)).empty().append('<li class="tag" style="display: inline-block;" data="lead">lead<a class="close" id="remove_tag">&times</a></li>');
+            $('.tagsinput', $("#"+modal_id)).empty();
         },
         error: function (model, response) {
         	
