@@ -21,7 +21,8 @@
 			href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fwww.agilecrm.com&title=AgileCRM&summary=Sell%20like%20Fortune%20500%20with%20%23AgileCRM%20-%20&source=https%3A%2F%2Fwww.agilecrm.com"
 			target="_blank"><i class="icon-linkedin"></i></a></span> <span
 			style="margin: 0 10px;"><a id="share-email" href="#"><i
-				class="icon-envelope-alt"></i></a></span>
+				class="icon-envelope-alt"></i></a></span><span
+			><a id="referer_program" href="#referels"><i class="icon-share"></i></a></span>
 	</div>
 
 	<!-- <div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
