@@ -178,6 +178,7 @@ public class CSVUtil
 	int mergedContacts = 0;
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
+	int failedContact = 0;
 	List<String> emails = new ArrayList<String>();
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
@@ -284,7 +285,7 @@ public class CSVUtil
 
 	    }
 
-	    if (type.equalsIgnoreCase("contacts"))
+	    if (type.equalsIgnoreCase("Contacts"))
 	    {
 		if (!isValidFields(tempContact, status))
 		    continue;
@@ -296,36 +297,6 @@ public class CSVUtil
 
 	    }
 
-	    boolean isMerged = false;
-
-	    if (type.equalsIgnoreCase("contacts"))
-	    {
-		// duplicate contact test and merge field
-		// If contact is duplicate, it fetches old contact and updates
-		// data.
-		if (ContactUtil.isDuplicateContact(tempContact))
-		{
-		    // Checks if user can update the contact
-
-		    // Sets current object to check scope
-
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    isMerged = true;
-		}
-
-	    }
-	    else
-	    {
-
-		// check for duplicate company and merge field
-		if (ContactUtil.companyExists(companyName))
-		{
-
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    isMerged = true;
-		}
-
-	    }
 
 	    /**
 	     * If it is new contacts billingRestriction count is increased and
@@ -353,20 +324,19 @@ public class CSVUtil
 	    try
 	    {
 
-		tempContact.save(false);
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
 			+ tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
+		failedContact++;
+		
 
 	    }
-	    if (isMerged)
-	    {
-		mergedContacts++;
-	    }
-	    else
+	
+	   if(tempContact.id != null)
 	    {
 		// Increase counter on each contact save
 		savedContacts++;
@@ -407,6 +377,7 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContact);
 
 	}
 	else
