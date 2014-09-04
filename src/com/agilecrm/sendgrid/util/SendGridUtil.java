@@ -8,11 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
 import com.agilecrm.mandrill.util.MandrillUtil;
-import com.agilecrm.queues.backend.BackendUtil;
-import com.agilecrm.queues.util.PullQueueUtil;
-import com.agilecrm.sendgrid.util.deferred.SendGridDeferredTask;
+import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.taskqueue.TaskHandle;
 import com.thirdparty.SendGrid;
@@ -42,43 +39,6 @@ public class SendGridUtil
     }
 
     /**
-     * Adds SendGrid deferred tasks to email pull queue
-     * 
-     * @param apiUser
-     *            - sendgrid api user
-     * @param apiKey
-     *            - sendgrid api key
-     * @param fromEmail
-     *            - from email
-     * @param fromName
-     *            - from name
-     * @param to
-     *            - to email (can be multiple separated by comma)
-     * @param cc
-     *            - cc email (can be multiple separated by comma)
-     * @param bcc
-     *            - bcc email (can be multiple separated by comma)
-     * @param subject
-     *            - email subject
-     * @param replyTo
-     *            - reply to
-     * @param html
-     *            - html body
-     * @param text
-     *            - text body
-     */
-    public static void sendMail(String apiUser, String apiKey, String fromEmail, String fromName, String to, String cc,
-	    String bcc, String subject, String replyTo, String html, String text)
-    {
-	SendGridDeferredTask sendGridDeferredTask = new SendGridDeferredTask(apiUser, apiKey, fromEmail, fromName, to,
-	        cc, bcc, subject, replyTo, html, text);
-
-	PullQueueUtil.addToPullQueue(
-	        "bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
-	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, sendGridDeferredTask, fromEmail);
-    }
-
-    /**
      * Sends bulk emails in one request
      * 
      * @param tasks
@@ -102,28 +62,28 @@ public class SendGridUtil
 
 	    for (TaskHandle task : tasks)
 	    {
-		SendGridDeferredTask sendgridDeferredTask = (SendGridDeferredTask) SerializationUtils.deserialize(task
-		        .getPayload());
+		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
+		        .deserialize(task.getPayload());
 
 		// If same To email or CC or BCC exists, send email without
 		// merging
-		if (!StringUtils.isBlank(sendgridDeferredTask.cc) || !StringUtils.isBlank(sendgridDeferredTask.bcc)
-		        || isToExists(toArray, sendgridDeferredTask.to) || sendgridDeferredTask.to.contains(","))
+		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
+		        || isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
-		    sendWithoutMerging(sendgridDeferredTask);
+		    sendWithoutMerging(mailDeferredTask);
 		    continue;
 		}
 
-		toArray.put(sendgridDeferredTask.to);
+		toArray.put(mailDeferredTask.to);
 
-		subjectArray.put(sendgridDeferredTask.subject);
+		subjectArray.put(mailDeferredTask.subject);
 
-		htmlArray.put(MandrillUtil.getHTML(sendgridDeferredTask.html, sendgridDeferredTask.text));
+		htmlArray.put(MandrillUtil.getHTML(mailDeferredTask.html, mailDeferredTask.text));
 
-		textArray.put(sendgridDeferredTask.text);
+		textArray.put(mailDeferredTask.text);
 
 		// to emails separated by comma
-		to += sendgridDeferredTask.to + ",";
+		to += mailDeferredTask.to + ",";
 
 		if (toArray.length() > MandrillUtil.MIN_TO_EMAILS
 		        && htmlArray.toString().length() >= MandrillUtil.MAX_CONTENT_SIZE)
@@ -146,7 +106,7 @@ public class SendGridUtil
 		tempArray.put(new JSONObject().put("to", to).put("to_list", toArray).put("subject_list", subjectArray)
 		        .put("html_list", htmlArray).put("text_list", textArray));
 
-	    SendGridDeferredTask firstSendGridDefferedTask = (SendGridDeferredTask) SerializationUtils
+	    MailDeferredTask firstSendGridDefferedTask = (MailDeferredTask) SerializationUtils
 		    .deserialize(firstTaskHandle.getPayload());
 
 	    // Iterates over splitted json array and send batch of emails
@@ -197,7 +157,7 @@ public class SendGridUtil
      * 
      * @param sendGridDeferred
      */
-    public static void sendWithoutMerging(SendGridDeferredTask sendGridDeferred)
+    public static void sendWithoutMerging(MailDeferredTask sendGridDeferred)
     {
 
 	SendGrid.sendMail(sendGridDeferred.apiUser, sendGridDeferred.apiKey, sendGridDeferred.fromEmail,

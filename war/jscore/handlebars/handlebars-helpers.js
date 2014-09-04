@@ -965,6 +965,14 @@ $(function()
 	return options.inverse(this);
     });
 
+    //gets the refernce code of current domain
+    
+    Handlebars.registerHelper('get_reference_code', function()
+    	    {
+    		return CURRENT_DOMAIN_REFERENCE_CODE;
+    	    });
+    
+    
     /*
      * To add comma in between the elements.
      */

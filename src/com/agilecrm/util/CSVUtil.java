@@ -8,7 +8,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -28,7 +27,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -40,11 +38,8 @@ import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestrict
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
-import com.agilecrm.user.access.UserAccessControl;
-import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
-import com.google.gdata.data.dublincore.DublincoreNamespace;
 import com.googlecode.objectify.Key;
 
 /**
@@ -81,7 +76,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED;
+	ACCESS_DENIED, TYPE;
 
     }
 
@@ -183,8 +178,10 @@ public class CSVUtil
 	int mergedContacts = 0;
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
+	int failedContact = 0;
 	List<String> emails = new ArrayList<String>();
-	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
+	Map<Object, Object> status = new HashMap<Object, Object>();
+	status.put("type", type);
 
 	// creates contacts by iterating contact properties
 
@@ -288,7 +285,7 @@ public class CSVUtil
 
 	    }
 
-	    if (type.equalsIgnoreCase("contacts"))
+	    if (type.equalsIgnoreCase("Contacts"))
 	    {
 		if (!isValidFields(tempContact, status))
 		    continue;
@@ -300,36 +297,6 @@ public class CSVUtil
 
 	    }
 
-	    boolean isMerged = false;
-
-	    if (type.equalsIgnoreCase("contacts"))
-	    {
-		// duplicate contact test and merge field
-		// If contact is duplicate, it fetches old contact and updates
-		// data.
-		if (ContactUtil.isDuplicateContact(tempContact))
-		{
-		    // Checks if user can update the contact
-
-		    // Sets current object to check scope
-
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    isMerged = true;
-		}
-
-	    }
-	    else
-	    {
-
-		// check for duplicate company and merge field
-		if (ContactUtil.companyExists(companyName))
-		{
-
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    isMerged = true;
-		}
-
-	    }
 
 	    /**
 	     * If it is new contacts billingRestriction count is increased and
@@ -357,20 +324,19 @@ public class CSVUtil
 	    try
 	    {
 
-		tempContact.save(false);
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
 			+ tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
+		failedContact++;
+		
 
 	    }
-	    if (isMerged)
-	    {
-		mergedContacts++;
-	    }
-	    else
+	
+	   if(tempContact.id != null)
 	    {
 		// Increase counter on each contact save
 		savedContacts++;
@@ -411,6 +377,7 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContact);
 
 	}
 	else
@@ -429,11 +396,12 @@ public class CSVUtil
 
     }
 
-    public void buildCSVImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, Integer count)
+    public void buildCSVImportStatus(Map<Object, Object> statusMap, ImportStatus status, Integer count)
     {
 	if (statusMap.containsKey(status))
 	{
-	    statusMap.put(status, statusMap.get(status) + count);
+	    Integer value = (Integer) statusMap.get(status);
+	    statusMap.put(status, value + count);
 	    statusMap.get(status);
 	    return;
 	}
@@ -442,19 +410,25 @@ public class CSVUtil
 	billingRestriction.refreshContacts();
     }
 
-    public static void calculateTotalFailedContacts(Map<ImportStatus, Integer> status)
+    public static void calculateTotalFailedContacts(Map<Object, Object> status)
     {
 	int total = 0;
-	for (int i : status.values())
+
+	for (Object o : status.values())
 	{
-	    System.out.println(i);
-	    total += i;
+	    System.out.println(o);
+	    if (o.equals("Companies")|| o.equals("Contacts"))
+	    {
+		continue;
+	    }else{
+		total += (int) o;
+	    }
 	}
 	System.out.println(total);
 	status.put(ImportStatus.TOTAL_FAILED, total);
     }
 
-    public boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
+    public boolean isValidFields(Contact contact, Map<Object, Object> statusMap)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
 		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))

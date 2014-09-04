@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.deals.CustomFieldData;
@@ -57,6 +59,9 @@ public class Document
 	    }
 	    else
 	    {
+		if(StringUtils.isEmpty(data.name))
+		    continue;
+		
 		builder.setName(SearchUtil.normalizeTextSearchString(data.name));
 		builder.setText(SearchUtil.normalizeString(data.value));
 	    }

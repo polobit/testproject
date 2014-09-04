@@ -30,7 +30,7 @@
                                         <option value="DEAL_IS_DELETED">Deal is deleted</option>
                                         <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
                                         <option value="ADD_SCORE" id="add-score">Score (>=)</option>
-										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe</option>
+										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
                                     </select>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
 						<div class="control-group" style="display:none;">
 							<div class="controls" style="margin-left:220px!important">
 							<select id="trigger-stripe-event" name="trigger_stripe_event" class="required">
-									<option></option>
+									<option value="">Select Stripe Event</option>
 									<option value="CHARGE_SUCCEEDED" id="charge-succeeded">Charge succeeded</option>
 									<option value="CHARGE_FAILED" id="charge-failed">Charge failed</option>
 									<option value="CHARGE_REFUNDED" id="charge-refunded">Charge refunded</option>

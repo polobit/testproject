@@ -1,7 +1,12 @@
 package com.agilecrm.deals.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.agilecrm.core.api.deals.MilestoneAPI;
+import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Milestone;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 
@@ -19,6 +24,10 @@ import com.googlecode.objectify.ObjectifyService;
  */
 public class MilestoneUtil
 {
+
+    // Dao
+    private static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(Milestone.class);
+
     /**
      * Returns milestone object saved in datastore, otherwise returns default
      * milestone
@@ -28,7 +37,11 @@ public class MilestoneUtil
     public static Milestone getMilestones()
     {
 	Objectify ofy = ObjectifyService.begin();
-	Milestone milestone = ofy.query(Milestone.class).get();
+	Milestone milestone = null;
+	if (ofy.query(Milestone.class).count() == 1)
+	    milestone = ofy.query(Milestone.class).get();
+	else
+	    milestone = ofy.query(Milestone.class).filter("name", "Default").get();
 	if (milestone == null)
 	    return getDefaultMilestones();
 
@@ -43,7 +56,49 @@ public class MilestoneUtil
     public static Milestone getDefaultMilestones()
     {
 	Milestone milestone = new Milestone("New,Prospect,Proposal,Won,Lost");
+	milestone.name = "Default";
 	milestone.save();
 	return milestone;
     }
+
+    /**
+     * Returns milestone object saved in datastore, otherwise returns default
+     * milestone
+     * 
+     * @return milestone object
+     */
+    public static List<Milestone> getMilestonesList()
+    {
+	List<Milestone> milestone = dao.fetchAll();
+	if (milestone == null)
+	{
+	    milestone = new ArrayList<>();
+	    milestone.add(getDefaultMilestones());
+	}
+
+	return milestone;
+    }
+
+    /**
+     * Get milestones of Pipeline with given Id.
+     * 
+     * @param id
+     *            id of the pipeline.
+     * @return Milestone
+     */
+    public static Milestone getMilestone(Long id)
+    {
+	try
+	{
+	    if (id == 0L)
+		return getMilestones();
+	    return dao.get(id);
+	}
+	catch (EntityNotFoundException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
 }
