@@ -372,6 +372,12 @@ public class Opportunity extends Cursor
 
 	}
 
+	// Set Deal Pipeline.
+	if (pipeline_id != null && pipeline_id > 0)
+	{
+	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
+	}
+
 	Long id = this.id;
 
 	// old opportunity (or deal) having id.
@@ -478,11 +484,6 @@ public class Opportunity extends Cursor
 	    this.notes = null;
 	}
 
-	// Set Deal Pipeline.
-	if (pipeline_id != null && pipeline_id > 0)
-	{
-	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
-	}
     }
 
     /**
