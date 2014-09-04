@@ -269,7 +269,6 @@ public class Opportunity extends Cursor
 	return contact_ids;
     }
 
-    @XmlElement(name = "pipeline_id")
     public Long getPipeline_id()
     {
 	if (pipeline != null)
