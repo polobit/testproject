@@ -51,7 +51,11 @@
 			{{#if id}}
     			<input type="text" name="name" class="hide" value={{name}}>
     		{{/if}} 		
-    		<legend style="margin-bottom:0px;">{{name}} <a class="delete" data="{{id}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash delete" data="{{id}}" title="Delete Track"></i></a></legend>
+    		<legend style="margin-bottom:0px;">{{name}}
+			{{#if_equals "Default" name}} {{else}}
+			 <a class="delete" data="{{id}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash delete" data="{{id}}" title="Delete Track"></i></a>
+			{{/if_equals}}
+			</legend>
 			<fieldset>
     		<div class="control-group">  	 
                     <div id="milestone-values-{{id}}" class="milestone-ul-list" style="max-width:180px;">
