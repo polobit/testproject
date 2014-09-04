@@ -95,7 +95,11 @@ public class StripeChargeWebhook extends HttpServlet
 		}
 	    }
 
-	    contact.properties = contactProperties;
+	    if (contact.properties.isEmpty())
+		contact.properties = contactProperties;
+	    else
+		contact.properties = updateAgileContactProperties(contact.properties, contactProperties);
+
 	    contact.setContactOwner(owner);
 	    contact.save();
 	}
@@ -153,5 +157,21 @@ public class StripeChargeWebhook extends HttpServlet
 	    agileJson.put(Contact.ADDRESS, agileAddress);
 
 	return agileJson;
+    }
+
+    public List<ContactField> updateAgileContactProperties(List<ContactField> oldProperties,
+	    List<ContactField> newProperties)
+    {
+	List<ContactField> outDatedProperties = new ArrayList<ContactField>();
+
+	for (ContactField oldProperty : oldProperties)
+	    for (ContactField newProperty : newProperties)
+		if (StringUtils.equals(oldProperty.name, newProperty.name)
+			&& StringUtils.equals(oldProperty.subtype, newProperty.subtype))
+		    outDatedProperties.add(oldProperty);
+
+	oldProperties.removeAll(outDatedProperties);
+	newProperties.addAll(oldProperties);
+	return newProperties;
     }
 }
