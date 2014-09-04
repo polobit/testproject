@@ -7,7 +7,7 @@ var ReferelRouter = Backbone.Router.extend({
 	},
 
 	referrelprogram:  function() {
-		CURRENT_DOMAIN_REFERENCE_CODE="cef20eb0-23b0-44be-9b06-431cfe3cd9e0";
+		
 	    referelsview = new Base_Collection_View({
 	     url : '/core/api/users/getreferedbyme?referenceid='+CURRENT_DOMAIN_REFERENCE_CODE,
 	     templateKey : "referrals",
