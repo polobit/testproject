@@ -31,6 +31,7 @@ public class DealsDeferredTask implements DeferredTask
 	    for (String domain : NamespaceUtil.getAllNamespaces())
 	    {
 		NamespaceManager.set(domain);
+		System.out.println("Domain name is " + domain);
 		Milestone milestone = MilestoneUtil.getMilestones();
 		milestone.name = "Default";
 		milestone.save();
@@ -51,5 +52,4 @@ public class DealsDeferredTask implements DeferredTask
 	}
 
     }
-
 }
