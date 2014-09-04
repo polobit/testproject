@@ -428,7 +428,7 @@ public class Contact extends Cursor
 	}
 	else if (Type.COMPANY == type)
 	{
-	    if (ContactUtil.companyExists(getContactFieldValue(NAME)))
+	    if (ContactUtil.companyExists(StringUtils.capitalise(getContactFieldValue(NAME).toLowerCase())))
 	    {
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
