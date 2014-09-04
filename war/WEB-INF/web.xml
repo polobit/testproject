@@ -252,6 +252,16 @@
 		<servlet-name>Stripe Webhook</servlet-name>
 		<url-pattern>/backend/stripewebhook/*</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Stripe Webhook2</servlet-name>
+		<servlet-class>com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet2</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Stripe Webhook2</servlet-name>
+		<url-pattern>/backend/stripewebhook2/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Mandrill Webhook</servlet-name>

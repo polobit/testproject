@@ -168,6 +168,7 @@ public class ReferenceUtil
 			{
 				System.out.println("in else condition in creating domain reference code");
 				domainuser.referer.reference_code = getReferanceNumber();
+				domainuser.referer.referral_count = 0;
 				domainuser.save();
 				return domainuser.referer.reference_code;
 
@@ -178,9 +179,4 @@ public class ReferenceUtil
 		return null;
 	}
 
-	public static void main(String... args) throws Exception
-	{
-		getCurrentDomainReferenceCode();
-
-	}
 }

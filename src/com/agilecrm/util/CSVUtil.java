@@ -345,15 +345,19 @@ public class CSVUtil
 
 		// Creates notes, set CSV heading as subject and value as
 		// description.
-		for (Integer i : notes_positions)
+		// if contact is not saved then no need to save note
+		if (tempContact.id != null)
 		{
-		    Note note = new Note();
-		    note.subject = headings[i];
-		    note.description = csvValues[i];
-		    note.addRelatedContacts(String.valueOf(tempContact.id));
+		    for (Integer i : notes_positions)
+		    {
+			Note note = new Note();
+			note.subject = headings[i];
+			note.description = csvValues[i];
+			note.addRelatedContacts(String.valueOf(tempContact.id));
 
-		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
-		    note.save();
+			note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+			note.save();
+		    }
 		}
 	    }
 	    catch (Exception e)
@@ -396,8 +400,7 @@ public class CSVUtil
 	}
 	else
 	{
-	    BulkActionNotifications
-		    .publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedContacts));
+	    BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedContacts));
 	}
 
     }

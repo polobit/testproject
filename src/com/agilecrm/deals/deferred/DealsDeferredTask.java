@@ -1,5 +1,7 @@
 package com.agilecrm.deals.deferred;
 
+import java.util.Set;
+
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
@@ -26,8 +28,11 @@ public class DealsDeferredTask implements DeferredTask
     public void run()
     {
 	String oldNamespace = NamespaceManager.get();
+	int count = 0;
 	try
 	{
+	    Set<String> namespaces = NamespaceUtil.getAllNamespaces();
+	    System.out.println("Total namespaces - " + namespaces.size());
 	    for (String domain : NamespaceUtil.getAllNamespaces())
 	    {
 		NamespaceManager.set(domain);
@@ -36,19 +41,35 @@ public class DealsDeferredTask implements DeferredTask
 		milestone.name = "Default";
 		milestone.save();
 		Long pipelineId = milestone.id;
+		System.out.println("Default pipeline " + pipelineId);
 		// Util function fetches reports based on duration, generates
 		// reports and sends report
 		for (Opportunity deal : OpportunityUtil.getOpportunities())
 		{
-		    deal.pipeline_id = pipelineId;
-		    deal.save();
+		    try
+		    {
+			deal.pipeline_id = pipelineId;
+			deal.save();
+			System.out.println(deal.pipeline_id);
+		    }
+		    catch (Exception e)
+		    {
+			System.out.println(e.getMessage());
+		    }
 		}
+		count++;
+		System.out.println("Present count " + count);
 	    }
 
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
+	    System.out.println("Final count " + count);
 	}
 
     }

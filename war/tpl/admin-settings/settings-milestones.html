@@ -7,26 +7,26 @@
     		<a href="#" class="save-pipelines btn btn-primary">Save</a>
     	</div>
 		<!-- New (Pipeline) Modal views -->
-<div class="modal hide fade" id="pipelineModal">
+	<div class="modal hide fade" id="pipelineModal">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-plus-sign"></i>&nbsp;Add Pipeline</h3>
+        <h3><i class="icon-plus-sign"></i>&nbsp;Add Track</h3>
     </div>
     <div class="modal-body" style="max-height:420px !important;">
         <form id="pipelineForm" name="pipelineForm" method="post">
             <fieldset>
                 <p>
                 <div class="control-group">
-                    <label class="control-label"><b>Pipeline Name</b> <span class="field_req">*</span></label>
+                    <label class="control-label"><b>Track Name</b> <span class="field_req">*</span></label>
                     <div class="controls">
-                        <input name="name" type="text" field="pipeline" class="required" id="pipline_name" placeholder="Pipeline" />
+                        <input name="name" type="text" field="pipeline" class="required" id="pipline_name" placeholder="Track" />
 
                     </div>
                 </div>
                 <div class="control-group">
 					<label class="control-label"><b>Milestones</b> <span class="field_req">*</span></label>
                     <div class="controls">
-                        <input class="input-large" name="milestones" type="text" id="milestones" value="Lost,Open,Won,Stage 1" />
+                        <input class="input-large" name="milestones" type="text" id="milestones" value="New,Prospect,Proposal,Won,Lost" />
                     </div>
                 </div>
             </fieldset>
@@ -40,6 +40,18 @@
 </div>
 <!-- End of Modal views -->
     </div>
+<!-- Help Text -->
+<div class="span3">
+	<div class="data-block">
+		<div class="well">
+			<h3>What are Tracks and Milestones?</h3>
+			<p>Tracks are sales processes. Use tracks to correspond to particular products or services offered by your company, or set up tracks to be used in deals with customers, partners, resellers, etc. When you create a new deal, you choose which track to associate it with.</p>
+			<br/>
+			<p>Milestones define the status of deals in a particular track. You can create any number of custom milestones in a track. Common milestones include 'New', 'In Progress',  'Won' or  'Lost'. When you associate a deal with a track, that deal will typically need to go through all of the track's milestones to be completed or finalized.</p>
+		</div>
+	</div>
+</div>
+<!-- End Help Text -->
 </div>
 </script>
 
@@ -51,7 +63,11 @@
 			{{#if id}}
     			<input type="text" name="name" class="hide" value={{name}}>
     		{{/if}} 		
-    		<legend style="margin-bottom:0px;">{{name}} <a class="delete" data="{{id}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash delete" data="{{id}}" title="Delete Track"></i></a></legend>
+    		<legend style="margin-bottom:0px;">{{name}}
+			{{#if_equals "Default" name}} {{else}}
+			 <a class="delete" data="{{id}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash delete" data="{{id}}" title="Delete Track"></i></a>
+			{{/if_equals}}
+			</legend>
 			<fieldset>
     		<div class="control-group">  	 
                     <div id="milestone-values-{{id}}" class="milestone-ul-list" style="max-width:180px;">

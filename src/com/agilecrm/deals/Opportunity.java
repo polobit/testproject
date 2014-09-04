@@ -269,7 +269,6 @@ public class Opportunity extends Cursor
 	return contact_ids;
     }
 
-    @XmlElement(name = "pipeline_id")
     public Long getPipeline_id()
     {
 	if (pipeline != null)
@@ -371,6 +370,12 @@ public class Opportunity extends Cursor
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
 
+	}
+
+	// Set Deal Pipeline.
+	if (pipeline_id != null && pipeline_id > 0)
+	{
+	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
 	}
 
 	Long id = this.id;
@@ -479,11 +484,6 @@ public class Opportunity extends Cursor
 	    this.notes = null;
 	}
 
-	// Set Deal Pipeline.
-	if (pipeline_id != null && pipeline_id > 0)
-	{
-	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
-	}
     }
 
     /**
