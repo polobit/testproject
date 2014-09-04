@@ -297,7 +297,6 @@ public class CSVUtil
 
 	    }
 
-
 	    /**
 	     * If it is new contacts billingRestriction count is increased and
 	     * checked with plan limits
@@ -332,11 +331,10 @@ public class CSVUtil
 			+ tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
 		failedContact++;
-		
 
 	    }
-	
-	   if(tempContact.id != null)
+
+	    if (tempContact.id != null)
 	    {
 		// Increase counter on each contact save
 		savedContacts++;
@@ -392,7 +390,15 @@ public class CSVUtil
 		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
-	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+	if (type.equalsIgnoreCase("Contacts"))
+	{
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+	}
+	else
+	{
+	    BulkActionNotifications
+		    .publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedContacts));
+	}
 
     }
 
@@ -417,10 +423,12 @@ public class CSVUtil
 	for (Object o : status.values())
 	{
 	    System.out.println(o);
-	    if (o.equals("Companies")|| o.equals("Contacts"))
+	    if (o.equals("Companies") || o.equals("Contacts"))
 	    {
 		continue;
-	    }else{
+	    }
+	    else
+	    {
 		total += (int) o;
 	    }
 	}
@@ -572,6 +580,7 @@ public class CSVUtil
 
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, "csv_deal_import", new Object[] {
 		domainUser, status });
+	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
 
     }
 
