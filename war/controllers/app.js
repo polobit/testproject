@@ -70,7 +70,9 @@ function currentRoute(route)
 		_agile_execute_web_rules();
 	}
 	// disposeEvents();
-	// load_clickdesk_code()
+
+	load_clickdesk_code();
+
 }
 
 /**
@@ -93,4 +95,3 @@ function load_clickdesk_code()
 	var s = document.getElementsByTagName('script')[0];
 	s.parentNode.insertBefore(glcspt, s);
 }
-
