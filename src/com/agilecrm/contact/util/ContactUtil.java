@@ -316,6 +316,19 @@ public class ContactUtil
 	{
 		return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
 				.filter("properties.value = ", email.toLowerCase()).count();
+		
+	}
+	
+	
+	/**
+	 * Get Count of contact by Email and Type i.e PERSON or COMPANY
+	 */
+	
+	public static int searchContactCountByEmailAndType(String email,Type type)
+	{
+		return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+				.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
+		
 	}
 
 	/**
@@ -574,9 +587,10 @@ public class ContactUtil
 		Map<String, Object> searchFields = new HashMap<String, Object>();
 		searchFields.put("properties.name", Contact.NAME);
 		searchFields.put("properties.value", companyName);
-		System.out.println("contact count" + dao.getCountByProperty(searchFields));
+		int countProps = dao.getCountByProperty(searchFields);
+		System.out.println("contact count" + countProps);
 
-		if (dao.getCountByProperty(searchFields) != 0)
+		if (countProps != 0)
 			return true;
 
 		return false;
