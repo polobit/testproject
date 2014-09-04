@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import javax.naming.Reference;
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -21,9 +23,11 @@ import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
+import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -41,7 +45,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * It stores encrypted password in database and allows default password
  * (MASKED_PASSWORD) to travel through the network along with encrypted, by
  * assigning the default one to its "password" attribute.
- * </p>
+ * </p>region
  * <p>
  * Accessibility of the user is limited based on "is_admin" attribute value of
  * the user.
@@ -69,6 +73,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      */
     public String email;
 
+    
+    /** The Reference tracking object represents referercount  and referece key */
+    @Embedded
+    @NotSaved(IfDefault.class)
+    public Referer referer = new Referer();
+    
+    
     /**
      * Specifies the user accessibility
      */
@@ -183,7 +194,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * @param isAccountOwner
      *            specifies ownership
      */
-    public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner)
+    public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner,String referencecode)
     {
 	this.domain = domain;
 	this.email = email;
@@ -191,6 +202,15 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	this.password = password;
 	this.is_admin = isAdmin;
 	this.is_account_owner = isAccountOwner;
+	
+	//added by jagadeesh for referral trackingm
+	//creates new reference code and stores in DoaminUser
+	this.referer.reference_code = ReferenceUtil.getReferanceNumber();
+	
+	this.referer.referral_count=0;// stores referelcount 0 when creating domain
+   
+	this.referer.reference_by=referencecode;
+    System.out.println(this.referer.reference_code +"  "+this.referer.referral_count+"   "+this.referer.reference_by);
     }
 
     /**
@@ -644,6 +664,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	}
     }
 
+	/*@Override
+	public String toString()
+	{
+		return "DomainUser [id=" + id + ", domain=" + domain + ", email=" + email + ", referer=" + referer
+				+ ", is_admin=" + is_admin + ", is_account_owner=" + is_account_owner + ", is_disabled=" + is_disabled
+				+ ", email_template=" + email_template + ", scopes=" + scopes + ", menu_scopes=" + menu_scopes
+				+ ", name=" + name + ", password=" + password + ", encrypted_password=" + encrypted_password
+				+ ", info_json_string=" + info_json_string + ", gadget_id=" + gadget_id + ", info_json=" + info_json
+				+ "]";
+	}*/
+
     // To String
     @Override
     public String toString()
@@ -651,4 +682,5 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
 		+ this.id + " Name: " + this.name + "\n " + info_json;
     }
+    
 }

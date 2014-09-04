@@ -3,6 +3,10 @@
 - Loading indicator issue fix in emails tab in contact details page
 - Owners are fetched only when user chose to change owner in contact details page
 
+*** Sukanya ***
+- Office365 template
+- Email case insensitivity
+
 1-5 (30-August-2014)
 
 *** Sukanya (28th August) ***

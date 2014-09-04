@@ -5,6 +5,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.googlecode.objectify.annotation.Cached;
+import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
 
 /**
  * <code>Milestone</code> is the base class for milestones set for any deal.
@@ -35,6 +37,12 @@ public class Milestone
     public String milestones;
 
     /**
+     * Name of Pipeline
+     */
+    @NotSaved(IfDefault.class)
+    public String name;
+
+    /**
      * Milestone Dao
      */
     private static ObjectifyGenericDao<Milestone> dao = new ObjectifyGenericDao<Milestone>(Milestone.class);
@@ -63,5 +71,13 @@ public class Milestone
     public void save()
     {
 	dao.put(this);
+    }
+
+    /**
+     * Deletes the milestone from database
+     */
+    public void delete()
+    {
+	dao.delete(this);
     }
 }

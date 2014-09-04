@@ -19,8 +19,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"custom-fields" : "customFields",
 
 	/* Api & Analytics */
-	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode",
-
+	"api" : "api", "analytics-code" : "analyticsCode", "analytics-code/:id" : "analyticsCode", 
+	
 	/* Milestones */
 	"milestones" : "milestones",
 
@@ -37,6 +37,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	
 
 	"email-gateways/:id" : "emailGateways" },
+
 
 	/**
 	 * Show menu-settings modules selection ( calendar, cases, deals, campaign ) &
@@ -287,7 +288,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			// $('#content').html(view.el);
 		});
 	},
-
+	
 	/**
 	 * Creates a Model to show and edit milestones, reloads the page on save
 	 * success
@@ -300,12 +301,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/milestone', template : "admin-settings-milestones", reload : true, postRenderCallback : function(el)
+		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones", individual_tag_name : 'div', sortKey: "id", descending:true, postRenderCallback : function(el)
 		{
-			setup_milestones();
+			setup_milestones(el);
 		} });
-
-		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		this.pipelineGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.milestones-tab').addClass('active');
 	},
@@ -420,10 +421,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					}, 1);
 				});
 			},
-			saveCallback: function()
+			saveCallback: function(data)
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
+				
+				//console.log(data);
+				
+				// Add webhook
+				if(data.email_api == "MANDRILL")
+				{
+					// Add mandrill webhook
+					$.getJSON("core/api/email-gateway/add-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+						
+						console.log(data);
+						
+					});
+				}
 			}
 			
 		});

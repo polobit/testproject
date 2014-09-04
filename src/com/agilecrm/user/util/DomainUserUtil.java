@@ -380,5 +380,68 @@ public class DomainUserUtil
 	info.setScopes(user.scopes);
 	SessionManager.set(info);
     }
+    
+    
+    /**
+     * Gets a domainuser entity based on one propery
+     * 
+     * @param id
+     * @return
+     */
+    public static DomainUser getDomainUser_To_Check_Reference_CodeStatus(String field,Object property_value)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.getByProperty(field, property_value);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    
+    
+    
+    /**
+     * Gets a List of  users based on referencecode 
+     * it is used to display referrals in that patcular domain
+     * 
+     * all domains it was referred by this domain code
+     * 
+     * @param id
+     * @return
+     */
+    public static List<DomainUser> getAllDomainUsersBasedOnReferenceCode(String referencecode)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.listByProperty("referer.reference_by", referencecode);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    
+    
+    
 
 }

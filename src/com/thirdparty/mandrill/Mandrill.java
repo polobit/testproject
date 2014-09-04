@@ -476,6 +476,7 @@ public class Mandrill
     {
 	JSONObject mailJSON = new JSONObject();
 
+	// If apiKey is null, set Agile Mandrill
 	if (StringUtils.isBlank(apiKey))
 	    apiKey = Globals.MANDRIL_API_KEY_VALUE;
 
@@ -484,9 +485,7 @@ public class Mandrill
 	    // Use Mandrill test api key for naresh1 domain having username
 	    // nrsh.mkl@gmail.com
 	    if (StringUtils.equals(subaccount, "naresh1"))
-	    {
 		mailJSON.put(MANDRILL_API_KEY, Globals.MANDRILL_TEST_API_KEY_VALUE);
-	    }
 	    else
 		mailJSON.put(MANDRILL_API_KEY, apiKey);
 	}
