@@ -25,6 +25,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.deferred.DealsDeferredTask;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.export.util.DealExportBlobUtil;
 import com.agilecrm.export.util.DealExportEmailUtil;
@@ -188,6 +189,8 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity createOpportunity(Opportunity opportunity)
     {
+	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
+	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	opportunity.save();
 	return opportunity;
     }
@@ -204,6 +207,8 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
+	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
+	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	opportunity.save();
 	return opportunity;
     }
