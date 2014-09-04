@@ -426,10 +426,11 @@ public class Contact extends Cursor
 
 	    }
 	}
-	else if (Type.COMPANY == type)
+	else if (Type.COMPANY == this.type)
 	{
 	    if (ContactUtil.companyExists(StringUtils.capitalise(getContactFieldValue(NAME).toLowerCase())))
 	    {
+		
 		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
 			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
 			.build());
@@ -990,7 +991,7 @@ public class Contact extends Cursor
 		if (contactField != null && StringUtils.isNotEmpty(contactField.value))
 		{
 		    // Create new Company
-		    Key<Contact> companyKey = ContactUtil.getCompanyByName(contactField.value);
+		    Key<Contact> companyKey = ContactUtil.getCompanyByName(StringUtils.capitalise(contactField.value.toLowerCase()));
 
 		    if (companyKey != null)
 		    {
