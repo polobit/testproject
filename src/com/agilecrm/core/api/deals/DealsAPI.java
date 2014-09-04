@@ -462,7 +462,7 @@ public class DealsAPI
     {
 	DealsDeferredTask dealTracks = new DealsDeferredTask();
 	// Initialize task here
-	Queue queue = QueueFactory.getDefaultQueue();
+	Queue queue = QueueFactory.getQueue("pipeline-queue");
 
 	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
 

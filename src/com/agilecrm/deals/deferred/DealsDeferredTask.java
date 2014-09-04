@@ -26,6 +26,7 @@ public class DealsDeferredTask implements DeferredTask
     public void run()
     {
 	String oldNamespace = NamespaceManager.get();
+	int count = 0;
 	try
 	{
 	    for (String domain : NamespaceUtil.getAllNamespaces())
@@ -43,12 +44,19 @@ public class DealsDeferredTask implements DeferredTask
 		    deal.pipeline_id = pipelineId;
 		    deal.save();
 		}
+		count++;
+		System.out.println("Present count " + count);
 	    }
 
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
+	    System.out.println("Final count " + count);
 	}
 
     }
