@@ -96,14 +96,12 @@ jQuery.validator.setDefaults({
 	success: "valid"
 });;
 </script>
-<%
-String ua = request.getHeader( "User-Agent" );
-boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
-%>
-
-<% if( isMSIE ){ 
-	response.sendRedirect("/error/ie-upgrade.jsp");
-} %>
+<script>
+var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+if(isIE || isIENew) 
+	window.location = '/error/ie-upgrade.jsp';
+</script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
       <script src="lib/ie/html5.js"></script>
