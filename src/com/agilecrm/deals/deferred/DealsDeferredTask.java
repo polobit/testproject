@@ -1,5 +1,7 @@
 package com.agilecrm.deals.deferred;
 
+import java.util.Set;
+
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
@@ -26,27 +28,38 @@ public class DealsDeferredTask implements DeferredTask
     public void run()
     {
 	String oldNamespace = NamespaceManager.get();
-	int count = 0;
+	// int count = 0;
 	try
 	{
-	    for (String domain : NamespaceUtil.getAllNamespaces())
+	    Set<String> namespaces = NamespaceUtil.getAllNamespaces();
+	    System.out.println("Total namespaces - " + namespaces.size());
+	    // for (String domain : NamespaceUtil.getAllNamespaces())
+	    // {
+	    NamespaceManager.set("prabathk");
+	    // System.out.println("Domain name is " + domain);
+	    Milestone milestone = MilestoneUtil.getMilestones();
+	    milestone.name = "Default";
+	    milestone.save();
+	    Long pipelineId = milestone.id;
+	    System.out.println("Default pipeline " + pipelineId);
+	    // Util function fetches reports based on duration, generates
+	    // reports and sends report
+	    for (Opportunity deal : OpportunityUtil.getOpportunities())
 	    {
-		NamespaceManager.set(domain);
-		System.out.println("Domain name is " + domain);
-		Milestone milestone = MilestoneUtil.getMilestones();
-		milestone.name = "Default";
-		milestone.save();
-		Long pipelineId = milestone.id;
-		// Util function fetches reports based on duration, generates
-		// reports and sends report
-		for (Opportunity deal : OpportunityUtil.getOpportunities())
+		try
 		{
 		    deal.pipeline_id = pipelineId;
 		    deal.save();
+		    System.out.println(deal.pipeline_id);
 		}
-		count++;
-		System.out.println("Present count " + count);
+		catch (Exception e)
+		{
+		    System.out.println(e.getMessage());
+		}
 	    }
+	    // count++;
+	    // System.out.println("Present count " + count);
+	    // }
 
 	}
 	catch (Exception e)
@@ -56,7 +69,7 @@ public class DealsDeferredTask implements DeferredTask
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
-	    System.out.println("Final count " + count);
+	    // System.out.println("Final count " + count);
 	}
 
     }
