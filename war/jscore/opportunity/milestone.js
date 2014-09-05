@@ -78,7 +78,9 @@ $(function(){
 	 */
 	$('.pipeline-delete').die().live('click', function(e) {
 		e.preventDefault();
-		var id = $(this).attr('data');
+		var id = $(this).attr('id');
+		var name = $(this).attr('data');
+		$('#track-name').text(name);
 		// If Yes clicked
 		$('#pipeline-delete-confirm').die().live('click',function(e){
 			e.preventDefault();
@@ -98,6 +100,8 @@ $(function(){
 				success: function() {
 					console.log('Deleted!');
 					$('#pipeline-delete-modal').modal('hide');
+					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
+						eraseCookie("agile_deal_track");
 					App_Admin_Settings.milestones();
 				}
 			});
@@ -185,6 +189,7 @@ $(function(){
         	pipeline.save(mile, {
         		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
         		success : function(model, response) {
+        			App_Admin_Settings.milestones();
         		}
         	});
     	});
