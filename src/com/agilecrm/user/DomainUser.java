@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 
-import javax.naming.Reference;
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
@@ -23,7 +21,6 @@ import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
-import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
@@ -45,7 +42,8 @@ import com.googlecode.objectify.condition.IfDefault;
  * It stores encrypted password in database and allows default password
  * (MASKED_PASSWORD) to travel through the network along with encrypted, by
  * assigning the default one to its "password" attribute.
- * </p>region
+ * </p>
+ * region
  * <p>
  * Accessibility of the user is limited based on "is_admin" attribute value of
  * the user.
@@ -59,628 +57,647 @@ import com.googlecode.objectify.condition.IfDefault;
 public class DomainUser extends Cursor implements Cloneable, Serializable
 {
 
-    // Key
-    @Id
-    public Long id;
+	// Key
+	@Id
+	public Long id;
 
-    /**
-     * Domain of the user
-     */
-    public String domain;
+	/**
+	 * Domain of the user
+	 */
+	public String domain;
 
-    /**
-     * Email of the user
-     */
-    public String email;
+	/**
+	 * Email of the user
+	 */
+	public String email;
 
-    
-    /** The Reference tracking object represents referercount  and referece key */
-    @Embedded
-    @NotSaved(IfDefault.class)
-    public Referer referer = new Referer();
-    
-    
-    /**
-     * Specifies the user accessibility
-     */
-    @NotSaved(IfDefault.class)
-    public boolean is_admin = false;
+	/** The Reference tracking object represents referercount and referece key */
+	@Embedded
+	@NotSaved(IfDefault.class)
+	public Referer referer = new Referer();
 
-    /**
-     * Specifies the user ownership
-     */
-    @Indexed
-    @NotSaved(IfDefault.class)
-    public boolean is_account_owner = false;
+	/**
+	 * Specifies the user accessibility
+	 */
+	@NotSaved(IfDefault.class)
+	public boolean is_admin = false;
 
-    /**
-     * Makes the user disable for its true value
-     */
-    @NotSaved(IfDefault.class)
-    public boolean is_disabled = false;
+	/**
+	 * Specifies the user ownership
+	 */
+	@Indexed
+	@NotSaved(IfDefault.class)
+	public boolean is_account_owner = false;
 
-    /**
-     * Email content to be sent for the first time
-     */
-    @NotSaved
-    public String email_template = null;
+	/**
+	 * Makes the user disable for its true value
+	 */
+	@NotSaved(IfDefault.class)
+	public boolean is_disabled = false;
 
-    /**
-     * Stores user access scopes
-     */
-    @NotSaved(IfDefault.class)
-    public HashSet<UserAccessScopes> scopes = null;
+	/**
+	 * Email content to be sent for the first time
+	 */
+	@NotSaved
+	public String email_template = null;
 
-    @NotSaved(IfDefault.class)
-    public LinkedHashSet<NavbarConstants> menu_scopes = null;
+	/**
+	 * Stores user access scopes
+	 */
+	@NotSaved(IfDefault.class)
+	public HashSet<UserAccessScopes> scopes = null;
 
-    /**
-     * Name of the domain user
-     */
-    @NotSaved(IfDefault.class)
-    public String name = null;
+	@NotSaved(IfDefault.class)
+	public LinkedHashSet<NavbarConstants> menu_scopes = null;
 
-    /**
-     * Assigns its value to password attribute
-     */
-    public static final String MASKED_PASSWORD = "PASSWORD";
+	/**
+	 * Name of the domain user
+	 */
+	@NotSaved(IfDefault.class)
+	public String name = null;
 
-    /**
-     * Domain Password
-     */
-    @NotSaved
-    public String password = MASKED_PASSWORD;
+	/**
+	 * Assigns its value to password attribute
+	 */
+	public static final String MASKED_PASSWORD = "PASSWORD";
 
-    /**
-     * Stores encrypted password
-     */
-    @NotSaved(IfDefault.class)
-    private String encrypted_password = null;
+	/**
+	 * Domain Password
+	 */
+	@NotSaved
+	public String password = MASKED_PASSWORD;
 
-    /**
-     * Misc User Info
-     */
-    @NotSaved(IfDefault.class)
-    public String info_json_string = null;
+	/**
+	 * Stores encrypted password
+	 */
+	@NotSaved(IfDefault.class)
+	private String encrypted_password = null;
 
-    /**
-     * Gadget id of the user
-     */
-    @NotSaved(IfDefault.class)
-    public String gadget_id = null;
+	/**
+	 * Misc User Info
+	 */
+	@NotSaved(IfDefault.class)
+	public String info_json_string = null;
 
-    /**
-     * Stores created time and logged_in time of the user
-     */
-    @NotSaved
-    private JSONObject info_json = new JSONObject();
+	/**
+	 * Gadget id of the user
+	 */
+	@NotSaved(IfDefault.class)
+	public String gadget_id = null;
 
-    /**
-     * Info Keys of the user
-     */
-    public static final String CREATED_TIME = "created_time";
-    public static final String LOGGED_IN_TIME = "logged_in_time";
-    public static final String LAST_LOGGED_IN_TIME = "last_logged_in_time";
-    public static final String COUNTRY = "country";
-    public static final String REGION = "region";
-    public static final String CITY = "city";
-    public static final String LAT_LONG = "lat_long";
-    public static final String IP_ADDRESS = "ip_address";
+	/**
+	 * Stores created time and logged_in time of the user
+	 */
+	@NotSaved
+	private JSONObject info_json = new JSONObject();
 
-    // Dao
-    private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
+	/**
+	 * Info Keys of the user
+	 */
+	public static final String CREATED_TIME = "created_time";
+	public static final String LOGGED_IN_TIME = "logged_in_time";
+	public static final String LAST_LOGGED_IN_TIME = "last_logged_in_time";
+	public static final String COUNTRY = "country";
+	public static final String REGION = "region";
+	public static final String CITY = "city";
+	public static final String LAT_LONG = "lat_long";
+	public static final String IP_ADDRESS = "ip_address";
 
-    /**
-     * Default constructor
-     */
-    public DomainUser()
-    {
+	// Dao
+	private static ObjectifyGenericDao<DomainUser> dao = new ObjectifyGenericDao<DomainUser>(DomainUser.class);
 
-    }
-
-    /**
-     * Constructs new {@link DomainUser} entity with the following parameters
-     * 
-     * @param domain
-     *            domain of the user
-     * @param email
-     *            email of the user to login into agileCRM
-     * @param name
-     *            name of the user
-     * @param password
-     *            password to login into agileCRM
-     * @param isAdmin
-     *            specifies the accessibility of the user
-     * @param isAccountOwner
-     *            specifies ownership
-     */
-    public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner,String referencecode)
-    {
-	this.domain = domain;
-	this.email = email;
-	this.name = name;
-	this.password = password;
-	this.is_admin = isAdmin;
-	this.is_account_owner = isAccountOwner;
-	
-	//added by jagadeesh for referral trackingm
-	//creates new reference code and stores in DoaminUser
-	this.referer.reference_code = ReferenceUtil.getReferanceNumber();
-	
-	this.referer.referral_count=0;// stores referelcount 0 when creating domain
-   
-	this.referer.reference_by=referencecode;
-    System.out.println(this.referer.reference_code +"  "+this.referer.referral_count+"   "+this.referer.reference_by);
-    }
-
-    /**
-     * Sends notification on disabling or enabling the domain user
-     */
-    private void sendNotification()
-    {
-	try
+	/**
+	 * Default constructor
+	 */
+	public DomainUser()
 	{
-	    if (is_disabled)
-		sendEmail(SendMail.USER_DISABLED_SUBJECT, SendMail.USER_DISABLED_NOTIFICATION);
-	    else
-		sendEmail(SendMail.USER_ENABLED_NOTIFICATION, SendMail.USER_ENABLED_NOTIFICATION);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
 
-    /**
-     * Checks maximum users allowed in the domain, and throws exception if
-     * maximum allowed users quantity exceeds
-     * 
-     * @return
-     * @throws Exception
-     */
-    private boolean checkMaxUsersInPlan() throws Exception
-    {
-	if (DomainUserUtil.count() != 0)
-	{
-	    // Get subscription details of account
-	    Subscription subscription = Subscription.getSubscription();
-
-	    // If subscription is null, it indicates user is in free plan.
-	    // Limits users to global trail users count
-	    if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
-		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-			+ " users in the free plan");
-
-	    // If Subscription is not null then limits users to current plan
-	    // quantity).
-	    if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
-		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-			+ " users in the current plan");
-
-	    return false;
-	}
-	return false;
-    }
-
-    /**
-     * Sends welcome email to user on creating a new one. It clones user and
-     * marks password as null if it is openid registration as it can be checked
-     * in email template
-     */
-    private void sendWelcomeEmail()
-    {
-	try
-	{
-	    // Cloned as we change password to null if user from open id
-	    // registration. so it can be checked in email template
-	    // based on
-	    // password field
-	    DomainUser user = (DomainUser) this.clone();
-
-	    if (user.password.equals(MASKED_PASSWORD))
-		user.password = null;
-
-	    user.sendEmail(SendMail.WELCOME_SUBJECT, SendMail.WELCOME);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    /**
-     * Send password changed notification e-mail to user via function
-     * user.SendMail
-     * 
-     * @param oldPassword
-     *            - old encrypted password of the user, handles even if its null
-     */
-    private void sendPasswordChangedNotification(String oldPassword)
-    {
-	try
-	{
-	    if (StringUtils.equals(this.password, MASKED_PASSWORD))
-		return;
-
-	    String newhash = MD5Util.getMD5HashedPassword(this.password);
-
-	    if (StringUtils.equals(newhash, oldPassword))
-		return;
-
-	    // no need to send any mail, password hasn't changed.
-
-	    // Cloned as we change password to null if user from open id
-	    // registration. so it can be checked in email template
-	    // based on
-	    // password field
-	    DomainUser user = (DomainUser) this.clone();
-
-	    if (user.password.equals(MASKED_PASSWORD))
-		user.password = null;
-
-	    user.sendEmail(SendMail.PASSWORD_CHANGE_NOTIFICATION_SUBJECT, SendMail.PASSWORD_CHANGE_NOTIFICATION);
-	    System.out.println("SENT-CHANGED:-----------------");
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-    /**
-     * Checks if super user is being marked as not admin. It compares with
-     * existing user with current change
-     * 
-     * @param user
-     * @return
-     * @throws Exception
-     */
-    private void checkSuperUserDisabled(DomainUser user) throws Exception
-    {
-	// If existing domain user is Super User
-	if (user.is_account_owner)
-	{
-	    // If user is account owner then account owner should be set to true
-	    // when it is being updated
-	    this.is_account_owner = true;
-
-	    if (!is_admin)
-		throw new Exception(user.name + " is the owner of '" + user.domain
-			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
-	}
-    }
-
-    /**
-     * Checks if user is admin and disabled
-     * 
-     * @throws Exception
-     */
-    private void checkAdminDisabled() throws Exception
-    {
-	// User cannot be admin and disabled
-	if (this.is_admin == true && this.is_disabled == true)
-	{
-	    throw new Exception("Can not disable Admin user. You should remove admin privilege first.");
-	}
-    }
-
-    /**
-     * Sends email with template and subject chosen, and sends to domain user's
-     * email. It passes current domain user to fill the template.
-     * 
-     * @param subject
-     * @param template
-     */
-    private void sendEmail(String subject, String template)
-    {
-	SendMail.sendMail(this.email, subject, template, this);
-    }
-
-    /**
-     * Gets encrypted password
-     * 
-     * @return encrypted password
-     */
-    public String getHashedString()
-    {
-	return encrypted_password;
-    }
-
-    /**
-     * Saves domain user by validating the existence of duplicates and the
-     * values of the attributes "is_admin" and "is_disable" (i.e both can't be
-     * true) and also no.of users in the domain.
-     * 
-     * @throws Exception
-     */
-    public void save() throws Exception
-    {
-	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-
-	// Set to current namespace if it is empty
-	if (StringUtils.isEmpty(this.domain))
-	{
-	    this.domain = NamespaceManager.get();
-	    System.out.println("Domain empty - setting it to " + this.domain);
 	}
 
-	System.out.println("Creating or updating new user " + this);
+	/**
+	 * Constructs new {@link DomainUser} entity with the following parameters
+	 * 
+	 * @param domain
+	 *            domain of the user
+	 * @param email
+	 *            email of the user to login into agileCRM
+	 * @param name
+	 *            name of the user
+	 * @param password
+	 *            password to login into agileCRM
+	 * @param isAdmin
+	 *            specifies the accessibility of the user
+	 * @param isAccountOwner
+	 *            specifies ownership
+	 */
 
-	// Check if user exists with this email
-
-	if (domainUser != null)
+	public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner)
 	{
-	    // If domain user exists, not allowing to create new user
-	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
-	    {
-		throw new Exception("User with this email address " + domainUser.email + " already exists in "
-			+ domainUser.domain + " domain.");
-	    }
-
-	    // Checks if super user is disabled, and throws exception if super
-	    // is disabled
-	    checkSuperUserDisabled(domainUser);
-
-	    // Checks and throws exception if user is admin and disabled
-	    checkAdminDisabled();
-
-	    // To send enabled/disabled user email notification
-	    if (domainUser.is_disabled != this.is_disabled)
-	    {
-		sendNotification();
-	    }
-
-	    sendPasswordChangedNotification(domainUser.encrypted_password);
+		this.domain = domain;
+		this.email = email;
+		this.name = name;
+		this.password = password;
+		this.is_admin = isAdmin;
+		this.is_account_owner = isAccountOwner;
 	}
 
-	// Check if namespace is null or empty. Then, do not allow to be created
-	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-	    if (StringUtils.isEmpty(this.domain))
-	    {
-		System.out.println("Domain user not created");
-		throw new Exception("Domain is empty. Please login again & try.");
-	    }
-
-	// Sends email, if the user is new
-	if (this.id == null)
+	/**
+	 * Constructs new {@link DomainUser} entity with the following parameters
+	 * domain user gets created whrn registering and domain user is created with
+	 * reference code
+	 * 
+	 * @param domain
+	 *            domain of the user
+	 * @param email
+	 *            email of the user to login into agileCRM
+	 * @param name
+	 *            name of the user
+	 * @param password
+	 *            password to login into agileCRM
+	 * @param isAdmin
+	 *            specifies the accessibility of the user
+	 * @param isAccountOwner
+	 *            specifies ownership
+	 */
+	public DomainUser(String domain, String email, String name, String password, boolean isAdmin,
+			boolean isAccountOwner, String referencecode)
 	{
-	    if (checkMaxUsersInPlan())
-		return;
+		this.domain = domain;
+		this.email = email;
+		this.name = name;
+		this.password = password;
+		this.is_admin = isAdmin;
+		this.is_account_owner = isAccountOwner;
 
-	    sendWelcomeEmail();
+		// added by jagadeesh for referral trackingm
+		// creates new reference code and stores in DoaminUser
+		this.referer.reference_code = ReferenceUtil.getReferanceNumber();
+
+		this.referer.referral_count = 0;// stores referelcount 0 when creating
+										// domain
+
+		this.referer.reference_by = referencecode;
+		System.out.println(this.referer.reference_code + "  " + this.referer.referral_count + "   "
+				+ this.referer.reference_by);
 	}
 
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-
-	try
+	/**
+	 * Sends notification on disabling or enabling the domain user
+	 */
+	private void sendNotification()
 	{
-	    dao.put(this);
-
-	    /*
-	     * // Sets scopes when domain user is updated UserInfo info =
-	     * SessionManager.get(); if (info != null)
-	     * info.setScopes(this.scopes);
-	     */
-	    // System.out.println("savined user info scopes : " +
-	    // info.getScopes());
-	  //  System.out.println("savined user info scopes : " + info.getScopes());
-
+		try
+		{
+			if (is_disabled)
+				sendEmail(SendMail.USER_DISABLED_SUBJECT, SendMail.USER_DISABLED_NOTIFICATION);
+			else
+				sendEmail(SendMail.USER_ENABLED_NOTIFICATION, SendMail.USER_ENABLED_NOTIFICATION);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	finally
+
+	/**
+	 * Checks maximum users allowed in the domain, and throws exception if
+	 * maximum allowed users quantity exceeds
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	private boolean checkMaxUsersInPlan() throws Exception
 	{
-	    NamespaceManager.set(oldNamespace);
+		if (DomainUserUtil.count() != 0)
+		{
+			// Get subscription details of account
+			Subscription subscription = Subscription.getSubscription();
+
+			// If subscription is null, it indicates user is in free plan.
+			// Limits users to global trail users count
+			if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
+				throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
+						+ " users in the free plan");
+
+			// If Subscription is not null then limits users to current plan
+			// quantity).
+			if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
+				throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
+						+ " users in the current plan");
+
+			return false;
+		}
+		return false;
 	}
-    }
 
-    /**
-     * Deletes domain user
-     */
-    public void delete()
-    {
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
-	dao.delete(this);
-	NamespaceManager.set(oldNamespace);
-    }
-
-    /**
-     * Sets information to info_json
-     * 
-     * @param key
-     *            name of the key (crated_time or updated_time)
-     * @param value
-     *            value to be associated with the key
-     */
-    public void setInfo(String key, Object value)
-    {
-	if (value == null)
-	    return;
-	try
+	/**
+	 * Sends welcome email to user on creating a new one. It clones user and
+	 * marks password as null if it is openid registration as it can be checked
+	 * in email template
+	 */
+	private void sendWelcomeEmail()
 	{
-	    info_json.put(key, value);
+		try
+		{
+			// Cloned as we change password to null if user from open id
+			// registration. so it can be checked in email template
+			// based on
+			// password field
+			DomainUser user = (DomainUser) this.clone();
+
+			if (user.password.equals(MASKED_PASSWORD))
+				user.password = null;
+
+			user.sendEmail(SendMail.WELCOME_SUBJECT, SendMail.WELCOME);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	catch (Exception e)
+
+	/**
+	 * Send password changed notification e-mail to user via function
+	 * user.SendMail
+	 * 
+	 * @param oldPassword
+	 *            - old encrypted password of the user, handles even if its null
+	 */
+	private void sendPasswordChangedNotification(String oldPassword)
 	{
+		try
+		{
+			if (StringUtils.equals(this.password, MASKED_PASSWORD))
+				return;
+
+			String newhash = MD5Util.getMD5HashedPassword(this.password);
+
+			if (StringUtils.equals(newhash, oldPassword))
+				return;
+
+			// no need to send any mail, password hasn't changed.
+
+			// Cloned as we change password to null if user from open id
+			// registration. so it can be checked in email template
+			// based on
+			// password field
+			DomainUser user = (DomainUser) this.clone();
+
+			if (user.password.equals(MASKED_PASSWORD))
+				user.password = null;
+
+			user.sendEmail(SendMail.PASSWORD_CHANGE_NOTIFICATION_SUBJECT, SendMail.PASSWORD_CHANGE_NOTIFICATION);
+			System.out.println("SENT-CHANGED:-----------------");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-    }
 
-    /**
-     * Gets value associated with the given key
-     * 
-     * @param key
-     *            name of the key
-     * @return value of the key
-     */
-    public Object getInfo(String key)
-    {
-	try
+	/**
+	 * Checks if super user is being marked as not admin. It compares with
+	 * existing user with current change
+	 * 
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	private void checkSuperUserDisabled(DomainUser user) throws Exception
 	{
-	    return info_json.getString(key);
+		// If existing domain user is Super User
+		if (user.is_account_owner)
+		{
+			// If user is account owner then account owner should be set to true
+			// when it is being updated
+			this.is_account_owner = true;
+
+			if (!is_admin)
+				throw new Exception(user.name + " is the owner of '" + user.domain
+						+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
+		}
 	}
-	catch (Exception e)
+
+	/**
+	 * Checks if user is admin and disabled
+	 * 
+	 * @throws Exception
+	 */
+	private void checkAdminDisabled() throws Exception
 	{
-	    return null;
+		// User cannot be admin and disabled
+		if (this.is_admin == true && this.is_disabled == true)
+		{
+			throw new Exception("Can not disable Admin user. You should remove admin privilege first.");
+		}
 	}
-    }
 
-    /**
-     * Checks whether the given key has a value or not
-     * 
-     * @param key
-     *            name of the key
-     * @return boolean value based on value of the key
-     */
-    public boolean hasInfo(String key)
-    {
-	try
+	/**
+	 * Sends email with template and subject chosen, and sends to domain user's
+	 * email. It passes current domain user to fill the template.
+	 * 
+	 * @param subject
+	 * @param template
+	 */
+	private void sendEmail(String subject, String template)
 	{
-	    return info_json.has(key);
+		SendMail.sendMail(this.email, subject, template, this);
 	}
-	catch (Exception e)
+
+	/**
+	 * Gets encrypted password
+	 * 
+	 * @return encrypted password
+	 */
+	public String getHashedString()
 	{
-	    return false;
+		return encrypted_password;
 	}
-    }
 
-    /**
-     * Check is user is registered via OpenID.<br/>
-     * For OpenID we have <code>encrypted_password</code> as <code>null</code>.
-     * This parameter is not sent on network when the object is serialized.
-     * 
-     * @return - true if user is registered via OpenId
-     */
-    @JsonIgnore
-    public boolean isOpenIdRegisteredUser()
-    {
-	return StringUtils.isEmpty(encrypted_password);
-    }
-
-    /**
-     * Assigns values to info_json_string and for created time and encrypted
-     * password based on their old values.
-     */
-    @PrePersist
-    private void PrePersist()
-    {
-	// Stores created time in info_json
-	if (!hasInfo(CREATED_TIME))
-	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
-
-	// Stores password
-	if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
+	/**
+	 * Saves domain user by validating the existence of duplicates and the
+	 * values of the attributes "is_admin" and "is_disable" (i.e both can't be
+	 * true) and also no.of users in the domain.
+	 * 
+	 * @throws Exception
+	 */
+	public void save() throws Exception
 	{
-	    // Encrypt password while saving
-	    encrypted_password = MD5Util.getMD5HashedPassword(password);
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+
+		// Set to current namespace if it is empty
+		if (StringUtils.isEmpty(this.domain))
+		{
+			this.domain = NamespaceManager.get();
+			System.out.println("Domain empty - setting it to " + this.domain);
+		}
+
+		System.out.println("Creating or updating new user " + this);
+
+		// Check if user exists with this email
+
+		if (domainUser != null)
+		{
+			// If domain user exists, not allowing to create new user
+			if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
+			{
+				throw new Exception("User with this email address " + domainUser.email + " already exists in "
+						+ domainUser.domain + " domain.");
+			}
+
+			// Checks if super user is disabled, and throws exception if super
+			// is disabled
+			checkSuperUserDisabled(domainUser);
+
+			// Checks and throws exception if user is admin and disabled
+			checkAdminDisabled();
+
+			// To send enabled/disabled user email notification
+			if (domainUser.is_disabled != this.is_disabled)
+			{
+				sendNotification();
+			}
+
+			sendPasswordChangedNotification(domainUser.encrypted_password);
+		}
+
+		// Check if namespace is null or empty. Then, do not allow to be created
+		if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
+			if (StringUtils.isEmpty(this.domain))
+			{
+				System.out.println("Domain user not created");
+				throw new Exception("Domain is empty. Please login again & try.");
+			}
+
+		// Sends email, if the user is new
+		if (this.id == null)
+		{
+			if (checkMaxUsersInPlan())
+				return;
+
+			sendWelcomeEmail();
+		}
+
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+
+		try
+		{
+			dao.put(this);
+
+			/*
+			 * // Sets scopes when domain user is updated UserInfo info =
+			 * SessionManager.get(); if (info != null)
+			 * info.setScopes(this.scopes);
+			 */
+			// System.out.println("savined user info scopes : " +
+			// info.getScopes());
+			// System.out.println("savined user info scopes : " +
+			// info.getScopes());
+
+		}
+		finally
+		{
+			NamespaceManager.set(oldNamespace);
+		}
 	}
-	else
-	{
-	    // Gets password from old values
-	    if (this.id != null)
-	    {
-		// Get Old password
-		DomainUser oldDomainUser = DomainUserUtil.getDomainUser(id);
-		this.encrypted_password = oldDomainUser.encrypted_password;
 
-		// Somewhere name is going null which updating.
-		if (this.name == null)
-		    this.name = oldDomainUser.name;
-	    }
+	/**
+	 * Deletes domain user
+	 */
+	public void delete()
+	{
+		String oldNamespace = NamespaceManager.get();
+		NamespaceManager.set("");
+		dao.delete(this);
+		NamespaceManager.set(oldNamespace);
 	}
-	
-	
-	// Sets user scopes
-	setScopes();
 
-	
-
-	info_json_string = info_json.toString();
-
-	// Lowercase
-	email = StringUtils.lowerCase(email);
-	domain = StringUtils.lowerCase(domain);
-    }
-    
-    private void setScopes()
-    {
-	System.out.println(" id in domain user before :" + id);
-
-	scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
-	
-	/*
-	if (scopes == null || scopes.size() == 0)
+	/**
+	 * Sets information to info_json
+	 * 
+	 * @param key
+	 *            name of the key (crated_time or updated_time)
+	 * @param value
+	 *            value to be associated with the key
+	 */
+	public void setInfo(String key, Object value)
 	{
+		if (value == null)
+			return;
+		try
+		{
+			info_json.put(key, value);
+		}
+		catch (Exception e)
+		{
+		}
+	}
 
-	    System.out.println(" id in domain user :" + id);
-	    
-	    scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
-	    
-	    if (id == null)
-	    {
+	/**
+	 * Gets value associated with the given key
+	 * 
+	 * @param key
+	 *            name of the key
+	 * @return value of the key
+	 */
+	public Object getInfo(String key)
+	{
+		try
+		{
+			return info_json.getString(key);
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * Checks whether the given key has a value or not
+	 * 
+	 * @param key
+	 *            name of the key
+	 * @return boolean value based on value of the key
+	 */
+	public boolean hasInfo(String key)
+	{
+		try
+		{
+			return info_json.has(key);
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Check is user is registered via OpenID.<br/>
+	 * For OpenID we have <code>encrypted_password</code> as <code>null</code>.
+	 * This parameter is not sent on network when the object is serialized.
+	 * 
+	 * @return - true if user is registered via OpenId
+	 */
+	@JsonIgnore
+	public boolean isOpenIdRegisteredUser()
+	{
+		return StringUtils.isEmpty(encrypted_password);
+	}
+
+	/**
+	 * Assigns values to info_json_string and for created time and encrypted
+	 * password based on their old values.
+	 */
+	@PrePersist
+	private void PrePersist()
+	{
+		// Stores created time in info_json
+		if (!hasInfo(CREATED_TIME))
+			setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
+
+		// Stores password
+		if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
+		{
+			// Encrypt password while saving
+			encrypted_password = MD5Util.getMD5HashedPassword(password);
+		}
+		else
+		{
+			// Gets password from old values
+			if (this.id != null)
+			{
+				// Get Old password
+				DomainUser oldDomainUser = DomainUserUtil.getDomainUser(id);
+				this.encrypted_password = oldDomainUser.encrypted_password;
+
+				// Somewhere name is going null which updating.
+				if (this.name == null)
+					this.name = oldDomainUser.name;
+			}
+		}
+
+		// Sets user scopes
+		setScopes();
+
+		info_json_string = info_json.toString();
+
+		// Lowercase
+		email = StringUtils.lowerCase(email);
+		domain = StringUtils.lowerCase(domain);
+	}
+
+	private void setScopes()
+	{
+		System.out.println(" id in domain user before :" + id);
+
 		scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
-	    }
-	    else
-	    {
-		scopes = new LinkedHashSet<UserAccessScopes>();
-		scopes.add(UserAccessScopes.RESTRICTED_ACCESS);
-	    }
+
+		/*
+		 * if (scopes == null || scopes.size() == 0) {
+		 * 
+		 * System.out.println(" id in domain user :" + id);
+		 * 
+		 * scopes = new
+		 * LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes
+		 * .values()));
+		 * 
+		 * if (id == null) { scopes = new
+		 * LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues()); }
+		 * else { scopes = new LinkedHashSet<UserAccessScopes>();
+		 * scopes.add(UserAccessScopes.RESTRICTED_ACCESS); } } else
+		 * if(scopes.size() == 1 &&
+		 * scopes.contains(UserAccessScopes.RESTRICTED)) { scopes = new
+		 * LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues()); }
+		 */
 	}
-	else if(scopes.size() == 1 && scopes.contains(UserAccessScopes.RESTRICTED))
+
+	/**
+	 * Gets execute on saving a user, and assigns data to info_json when it is
+	 * not null
+	 * 
+	 * @throws DecoderException
+	 */
+	@PostLoad
+	public void postLoad() throws DecoderException
 	{
-	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+		try
+		{
+			if (info_json != null)
+				info_json = new JSONObject(info_json_string);
+
+			// If no scopes are set, then all scopes are added
+			scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+
+			if (menu_scopes == null)
+			{
+				menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-	*/
-    }
 
-    /**
-     * Gets execute on saving a user, and assigns data to info_json when it is
-     * not null
-     * 
-     * @throws DecoderException
-     */
-    @PostLoad
-    public void postLoad() throws DecoderException
-    {
-	try
-	{
-	    if (info_json != null)
-		info_json = new JSONObject(info_json_string);
+	/*
+	 * @Override public String toString() { return "DomainUser [id=" + id +
+	 * ", domain=" + domain + ", email=" + email + ", referer=" + referer +
+	 * ", is_admin=" + is_admin + ", is_account_owner=" + is_account_owner +
+	 * ", is_disabled=" + is_disabled + ", email_template=" + email_template +
+	 * ", scopes=" + scopes + ", menu_scopes=" + menu_scopes + ", name=" + name
+	 * + ", password=" + password + ", encrypted_password=" + encrypted_password
+	 * + ", info_json_string=" + info_json_string + ", gadget_id=" + gadget_id +
+	 * ", info_json=" + info_json + "]"; }
+	 */
 
-	    
-	    // If no scopes are set, then all scopes are added
-	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
-
-	    if (menu_scopes == null)
-	    {
-		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
-	    }
-	    
-	    
-	    
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
-    }
-
-	/*@Override
+	// To String
+	@Override
 	public String toString()
 	{
-		return "DomainUser [id=" + id + ", domain=" + domain + ", email=" + email + ", referer=" + referer
-				+ ", is_admin=" + is_admin + ", is_account_owner=" + is_account_owner + ", is_disabled=" + is_disabled
-				+ ", email_template=" + email_template + ", scopes=" + scopes + ", menu_scopes=" + menu_scopes
-				+ ", name=" + name + ", password=" + password + ", encrypted_password=" + encrypted_password
-				+ ", info_json_string=" + info_json_string + ", gadget_id=" + gadget_id + ", info_json=" + info_json
-				+ "]";
-	}*/
+		return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
+				+ this.id + " Name: " + this.name + "\n " + info_json;
+	}
 
-    // To String
-    @Override
-    public String toString()
-    {
-	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-		+ this.id + " Name: " + this.name + "\n " + info_json;
-    }
-    
 }
