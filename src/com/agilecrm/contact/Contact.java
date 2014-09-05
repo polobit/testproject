@@ -1,11 +1,9 @@
 package com.agilecrm.contact;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -379,18 +377,6 @@ public class Contact extends Cursor
 	    {
 		owner_key = oldContact.owner_key;
 	    }
-	    //
-	    // if (Type.COMPANY == type
-	    // &&
-	    // !getContactFieldValue(NAME).equalsIgnoreCase(oldContact.getContactFieldValue(NAME))
-	    // && ContactUtil.companyExists(getContactFieldValue(NAME)))
-	    // {
-	    // throw new
-	    // WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-	    // .entity("Sorry, a company with name \'" +
-	    // getContactFieldValue(NAME) + "\' already exists ")
-	    // .build());
-	    // }
 
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
@@ -399,28 +385,62 @@ public class Contact extends Cursor
 
 	// Check for already existing email if any,
 	// loop through for checking multiple emails
-	for (ContactField contactField : this.properties)
+	if (Type.PERSON == type)
 	{
-	    if (!StringUtils.equalsIgnoreCase(contactField.name, "EMAIL"))
-		continue;
-
-	    String myMail = contactField.value;
-	    int countEmails = 0; // to allow if this new entry doesn't have
-	    // email-id
-
-	    if (myMail != null && !myMail.isEmpty())
+	    for (ContactField contactField : this.properties)
 	    {
-		countEmails = ContactUtil.searchContactCountByEmail(myMail);
-	    }
-	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
-	    // otherwise if countEmails==1, make sure its not due to previous
-	    // value of this(current) Contact
-	    if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a contact with this email already exists " + myMail).build());
-	    }
+		if (!StringUtils.equalsIgnoreCase(contactField.name, "EMAIL"))
+		    continue;
 
+		String myMail = contactField.value;
+		int countEmails = 0; // to allow if this new entry doesn't have
+		// email-id
+
+		if (myMail != null && !myMail.isEmpty())
+		{
+		    countEmails = ContactUtil.searchContactCountByEmailAndType(myMail, type);
+		    // countEmails =
+		    // ContactUtil.searchContactCountByEmail(myMail);
+		}
+		// Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
+		// otherwise if countEmails==1, make sure its not due to
+		// previous
+		// value of this(current) Contact
+		if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, a contact with this email already exists " + myMail).build());
+		}
+
+	    }
+	}
+	else if (Type.COMPANY == this.type)
+	{
+	    for (ContactField contactField : this.properties)
+	    {
+		if (!StringUtils.equalsIgnoreCase(contactField.name, "name"))
+		    continue;
+		String companyName = contactField.value;
+
+		if (companyName != null && !companyName.isEmpty())
+		{
+
+		    int companyCount = ContactUtil.searchCompanyCountByNameAndType(
+			    StringUtils.capitalise(companyName.toLowerCase()), type);
+		    System.out.println(companyCount);
+
+		    if ((companyCount >= 2 || (companyCount == 1 && (id == null || !ContactUtil
+			    .companyExists(StringUtils.capitalise(companyName.toLowerCase()))))))
+		    {
+
+			throw new WebApplicationException(Response
+				.status(Response.Status.BAD_REQUEST)
+				.entity("Sorry, a company with name \'" + getContactFieldValue(NAME)
+					+ "\' already exists ").build());
+		    }
+		}
+
+	    }
 	}
 
 	// Updated time is updated only if particular fields are changed.
@@ -669,15 +689,15 @@ public class Contact extends Cursor
 
 	this.save();
     }
-    
+
     public boolean addTag(Tag tag)
     {
 	// Adds to list if there it is a new tag
 	if (tagsWithTime.contains(tag))
-		return false;
+	    return false;
 
 	tagsWithTime.add(tag);
-	
+
 	return true;
     }
 
@@ -917,10 +937,24 @@ public class Contact extends Cursor
     {
 	for (ContactField field : properties)
 	{
-	    if (StringUtils.equals(field.name, EMAIL) && StringUtils.equals(field.value, email))
+	    if (StringUtils.equals(field.name, EMAIL)
+		    && StringUtils.equals((field.value).toLowerCase(), email.toLowerCase()))
 		return true;
 	}
 	return false;
+    }
+
+    /**
+     * To convert EmailId of contact to lower case
+     */
+    public void convertEmailToLower()
+    {
+	for (ContactField field : properties)
+	{
+	    if (StringUtils.equals(field.name, EMAIL))
+		field.value = (field.value).toLowerCase();
+	}
+
     }
 
     /**
@@ -963,7 +997,8 @@ public class Contact extends Cursor
 		if (contactField != null && StringUtils.isNotEmpty(contactField.value))
 		{
 		    // Create new Company
-		    Key<Contact> companyKey = ContactUtil.getCompanyByName(contactField.value);
+		    Key<Contact> companyKey = ContactUtil.getCompanyByName(StringUtils.capitalise(contactField.value
+			    .toLowerCase()));
 
 		    if (companyKey != null)
 		    {

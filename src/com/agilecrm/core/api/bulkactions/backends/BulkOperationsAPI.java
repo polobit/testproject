@@ -281,10 +281,11 @@ public class BulkOperationsAPI
      * @param ownerId
      * @param key
      */
-    @Path("/upload/{owner_id}/{key}")
+    @Path("/upload/{owner_id}/{key}/{type}")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void contactsBulkSave(Contact contact, @PathParam("owner_id") String ownerId, @PathParam("key") String key)
+    public void contactsBulkSave(Contact contact, @PathParam("owner_id") String ownerId, @PathParam("key") String key,
+	    @PathParam("type") String type)
     {
 	System.out.println("backend running");
 
@@ -303,7 +304,14 @@ public class BulkOperationsAPI
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
-	    new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
+	    if (type.equalsIgnoreCase("deals"))
+	    {
+                 new CSVUtil(restrictions).createDealsFromCSV(blobStream, ownerId, type);
+	    }
+	    else
+	    {
+		new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId, type);
+	    }
 	}
 	catch (IOException e)
 	{
