@@ -102,7 +102,7 @@ var DealsRouter = Backbone.Router.extend({
 				pipeline_id = readCookie("agile_deal_track");
 			
 			// Fetches deals as list
-			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id, templateKey : "opportunities", individual_tag_name : 'tr', cursor : true, page_size : 25,
+			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
 				postRenderCallback : function(el)
 				{
 					if(pipeline_id == 1)
