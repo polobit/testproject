@@ -218,6 +218,7 @@ public class Opportunity extends Cursor
 	this.name = name;
 	this.description = description;
 	this.expected_value = expectedValue;
+	this.milestone = milestone;
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
@@ -494,7 +495,7 @@ public class Opportunity extends Cursor
     public String toString()
     {
 	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
-		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	        + " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
+	        + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }
