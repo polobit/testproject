@@ -52,7 +52,7 @@ public class AddonSubscription
 	  
 	   Map<String, Object> params = new HashMap<String, Object>();
 	   params.put("plan", plan.getId());
-	   customer.createSubscription(params, Globals.STRIPE_API_KEY);	  
+	  // customer.createSubscription(params, Globals.STRIPE_API_KEY);	  
 	   
 	   
 	}
