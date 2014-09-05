@@ -152,7 +152,7 @@ public class StripeUtil
 	    org.json.JSONObject ob = new org.json.JSONObject(event_json_string);
 	    System.out.println("event id" + ob.getString("id"));
 	    // Converts Customer JSON to1 customer object
-	    Event event = Event.retrieve(ob.getString("id"));
+	    Event event = Event.retrieve(ob.getString("id"), Globals.STRIPE_API_KEY);
 	    // Retrieves the customer from stripe based on id
 	    return event;
 	}
