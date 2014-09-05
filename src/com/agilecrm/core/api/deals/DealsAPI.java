@@ -464,7 +464,7 @@ public class DealsAPI
 	// Initialize task here
 	Queue queue = QueueFactory.getQueue("pipeline-queue");
 
-	String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+	String url = BackendServiceFactory.getBackendService().getBackendAddress("b1-sandbox");
 
 	// Create Task and push it into Task Queue
 	TaskOptions taskOptions = TaskOptions.Builder.withPayload(dealTracks).header("Host", url);
