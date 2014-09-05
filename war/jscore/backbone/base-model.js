@@ -154,13 +154,27 @@ var Base_Model_View = Backbone.View
 			 */
 			deleteItem : function(e) {
 				e.preventDefault();
+				
+				var deleteCallback = this.options.deleteCallback;
+				
 				if(!confirm("Are you sure you want to delete?"))
 		    		return false;
+				
 				/*
 				 * Sends delete request, and reloads view on success
 				 */
 				this.model.destroy({
 					success : function(model, response) {
+						
+						// Delete callback
+						if (deleteCallback && typeof (deleteCallback) === "function") {
+							
+							console.log(response)
+							
+							// execute the callback, passing parameters as necessary
+							deleteCallback(model, response);
+						}
+						
 						location.reload(true);
 					}
 				});

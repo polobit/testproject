@@ -107,6 +107,10 @@ public class Globals
     // "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
     // public static final String QUICKBOOKS_CONSUMER_SECRET =
     // "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
+/**    public static final String QUICKBOOKS_APP_KEY = "08945c87bae1fb46bab9241ba0e81dc19bbf";
+    public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
+    public static final String QUICKBOOKS_CONSUMER_SECRET = "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
+*/
     // "8f73de20b0e45b476ab9b8abd3e659c2aa74";
     // public static final String QUICKBOOKS_CONSUMER_KEY =
     // "qyprdGhvaKh6kMZEKXIKffUmQIwMuK";

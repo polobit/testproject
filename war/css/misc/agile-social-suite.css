@@ -14,7 +14,10 @@
 .app-content>small,.tweet-body>small {
 	font-size: 0.8571rem
 }
-
+.column-content
+{
+	background:#fff;
+}
 .app-content {
 	position: relative;
 	left: 0;
@@ -47,7 +50,8 @@
 	white-space: normal;
 	overflow: hidden;
 	position: relative;
-	border: 1px solid #a1a1a1;
+	/*border: 1px solid #a1a1a1;*/
+	border: 1px solid #ddd;
 	border-radius: 4px;
 }
 
@@ -109,8 +113,7 @@
 }
 
 .txt-small {
-	font-size: 0.5571rem
-} /* 0.8571rem */
+	font-size: 12px;} /* 0.8571rem */
 .txt-sub-antialiased {
 	-webkit-font-smoothing: subpixel-antialiased
 }
@@ -573,7 +576,7 @@
 }
 
 .no-tweet,.stream-notifications {
-	border-bottom: 1px solid #e5e5e5;
+	/*border-bottom: 1px solid #e5e5e5;*/
 	background-color: lightYellow;
 	font-size: 15px;
 	text-align: center;

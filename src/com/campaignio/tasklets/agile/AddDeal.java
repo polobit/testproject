@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -99,7 +100,7 @@ public class AddDeal extends TaskletAdapter
 	    // Add log
 	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 		    "Deal Title: " + dealName + "<br/> Value: " + expectedValue + "<br/> Milestone: " + milestone
-		            + " (" + probability + "%)", LogType.ADD_DEAL.toString());
+			    + " (" + probability + "%)", LogType.ADD_DEAL.toString());
 	}
 	catch (Exception e)
 	{
@@ -134,8 +135,9 @@ public class AddDeal extends TaskletAdapter
 	    Long closedEpochTime, String contactId, Long ownerId)
     {
 	Opportunity opportunity = new Opportunity(name, description, Double.parseDouble(value), milestone,
-	        Integer.parseInt(probability), null, ownerId == null ? null : ownerId.toString());
+		Integer.parseInt(probability), null, ownerId == null ? null : ownerId.toString());
 	opportunity.addContactIds(contactId);
+	opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	opportunity.close_date = closedEpochTime;
 	opportunity.save();
     }

@@ -61,15 +61,16 @@ var ContactsRouter = Backbone.Router.extend({
 		var time_int = parseInt($('meta[name="last-login-time"]').attr('content'));
 		var time_date = new Date(time_int * 1000);
 
-		var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
-		$("#content").html(el);
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 		{
+			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
+			$("#content").html(el);
+			
 			$("span#last-login-time").timeago();
+			
+			setup_dashboard(el);
+			// loadDynamicTimeline("my-timeline", el);
 		});
-		setup_dashboard(el);
-		// loadDynamicTimeline("my-timeline", el);
 	},
 	
 	/**
@@ -558,6 +559,7 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		$('#content').html(getTemplate("import-contacts", {}));
 	},
+	
 
 	/**
 	 * Subscribes a contact to a campaign. Loads the related template

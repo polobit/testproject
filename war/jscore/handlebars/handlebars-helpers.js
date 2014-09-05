@@ -511,9 +511,14 @@ $(function()
 						html += "<div class='milestone-column'><p class='milestone-heading'><b>" + key + "</b></p><ul class='milestones' milestone='" + key + "'>";
 						for ( var i in value)
 						{
+<<<<<<< HEAD
 						    console.log("id>>>>>>>>>>>>>" + value[i].id);
  						    if(value[i].id)
  							html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+=======
+							if(value[i].id)
+								html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
+>>>>>>> Sandbox_master
 						}
 						html += "</ul></div>";
 					    }
@@ -966,6 +971,14 @@ $(function()
 	return options.inverse(this);
     });
 
+    //gets the refernce code of current domain
+    
+    Handlebars.registerHelper('get_reference_code', function()
+    	    {
+    		return CURRENT_DOMAIN_REFERENCE_CODE;
+    	    });
+    
+    
     /*
      * To add comma in between the elements.
      */
@@ -1904,10 +1917,18 @@ $(function()
      * Builds options to be shown in the table heading of CSV import. Also tries
      * to match headings in select field
      */
-    Handlebars.registerHelper('setupCSVUploadOptions', function(key, context)
+    Handlebars.registerHelper('setupCSVUploadOptions', function(type,key, context)
     {
 	// console.log(context.toJSON());
-	var template = $(getTemplate('csv_upload_options', context));
+    	var template;
+    	if(type == "contacts"){
+	   template = $(getTemplate('csv_upload_options', context));
+    	}else if(type == "company"){
+    		template = $(getTemplate('csv_companies_upload_options', context));
+    	}else if(type == "deals"){
+    		template = $(getTemplate('csv_deals_options', context));
+    	}
+	
 
 	// Replaces _ with spaces
 	key = key.replace("_", " ");
@@ -2660,8 +2681,18 @@ $(function()
     		    return options.fn(this);
 
     	return options.inverse(this);	
-    })
+    });
     
+	/**
+	 * To check Access controls for showing icons on dashboard
+	 */
+	Handlebars.registerHelper('hasMenuScope', function(item, options)
+	{	
+			if((CURRENT_DOMAIN_USER.menu_scopes).indexOf(item) != -1)
+			    return options.fn(this);
+			else
+			    return options.inverse(this);
+	});
     
     Handlebars.registerHelper('fetchXeroUser', function(data)
     {

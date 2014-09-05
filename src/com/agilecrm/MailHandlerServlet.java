@@ -19,44 +19,43 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.user.DomainUser;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Key;
 
 @SuppressWarnings("serial")
 public class MailHandlerServlet extends HttpServlet
 {
+    public enum AgileDetail
+    {
+	API_KEY, SUB_DOMAIN;
+    }
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-	System.out.println("/_ah/mail");
-
 	Properties properties = new Properties();
 	Session session = Session.getDefaultInstance(properties, null);
 	try
 	{
 	    MimeMessage email = new MimeMessage(session, request.getInputStream());
-	    System.out.println("email " + email);
 	    Address[] recepientAddresses = email.getAllRecipients();
 
-	    System.out.println("recepients " + recepientAddresses);
+	    String subDomain = getAgileDetails(recepientAddresses, AgileDetail.SUB_DOMAIN);
+	    NamespaceManager.set(subDomain);
+	    System.out.println("Setting namespace " + subDomain);
 
-	    String apiKey = getAgileAPIKey(recepientAddresses);
-
-	    System.out.println(apiKey);
-
+	    String apiKey = getAgileDetails(recepientAddresses, AgileDetail.API_KEY);
 	    Key<DomainUser> owner = APIKey.getDomainUserKeyRelatedToAPIKey(apiKey);
+	    System.out.println("API Key is " + apiKey);
 
 	    if (owner == null)
-	    {
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "API Key Invalid");
 		return;
-	    }
 
 	    for (Address recepientAddress : recepientAddresses)
 	    {
-		System.out.println("address " + recepientAddress);
-
 		if (isAgileRecepient(recepientAddress))
 		    continue;
 
+		System.out.println("Recepient is " + recepientAddress.toString());
 		InternetAddress recepient = new InternetAddress(recepientAddress.toString());
 
 		Contact contact = ContactUtil.searchContactByEmail(recepient.getAddress().toString());
@@ -84,9 +83,7 @@ public class MailHandlerServlet extends HttpServlet
 		    contactProperties.add(new ContactField(Contact.FIRST_NAME, recepient.getAddress().split("@")[0],
 			    null));
 
-		System.out.println("contact properties ");
-		System.out.println(contactProperties);
-
+		System.out.println("Contact properties " + contactProperties);
 		contact.properties = contactProperties;
 		contact.setContactOwner(owner);
 		contact.save();
@@ -108,7 +105,7 @@ public class MailHandlerServlet extends HttpServlet
 	    return false;
     }
 
-    public String getAgileAPIKey(Address[] addresses)
+    public String getAgileDetails(Address[] addresses, AgileDetail agileDetail)
     {
 	String agileRecepientUserName[] = null;
 
@@ -117,6 +114,12 @@ public class MailHandlerServlet extends HttpServlet
 		agileRecepientUserName = address.toString().split("@");
 
 	String agileDetails[] = agileRecepientUserName[0].split("-");
-	return agileDetails[1];
+
+	if (agileDetail == AgileDetail.SUB_DOMAIN)
+	    return agileDetails[0];
+	else if (agileDetail == AgileDetail.API_KEY)
+	    return agileDetails[1];
+
+	return null;
     }
 }

@@ -154,18 +154,18 @@ public class BulkOperationsAPI
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
 
 	System.out.println("Total contacts subscribed to campaign " + workflowId + " is "
-	        + String.valueOf(fetcher.getAvailableContacts()));
+		+ String.valueOf(fetcher.getAvailableContacts()));
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
-	        String.valueOf(fetcher.getAvailableContacts()));
+		String.valueOf(fetcher.getAvailableContacts()));
 
 	try
 	{
 	    Mailgun.sendMail("campaigns@agile.com", "Campaign Observer", "naresh@agilecrm.com", null, null,
 		    "Campaign Initiated in " + NamespaceManager.get(), null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-		            + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
-		            + fetcher.getAvailableContacts(), null);
+			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
+			    + fetcher.getAvailableContacts(), null);
 	}
 	catch (Exception e)
 	{
@@ -224,7 +224,7 @@ public class BulkOperationsAPI
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     @SuppressWarnings("unchecked")
@@ -269,7 +269,7 @@ public class BulkOperationsAPI
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     /**

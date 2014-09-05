@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1-7 (2-Sept-2014)
 *** Naresh ***
 - Send Email bug fix when HTML is empty and Track Clicks yes
@@ -6,6 +7,26 @@
 1-6 (2-Sept-2014)
 *** Jitendra ***
 - Changed QuickBooks Development and Production Keys
+=======
+1-6 
+*** Yaswanth ***
+- Loading indicator issue fix in emails tab in contact details page
+- Owners are fetched only when user chose to change owner in contact details page
+
+*** Sukanya ***
+- Office365 template
+- Email case insensitivity
+
+1-5 (30-August-2014)
+
+*** Sukanya (28th August) ***
+Deals Auto width
+Clickdesk live-chat Removed
+
+*** Bhasuri (28th August)***
+Updated URL visited node
+Added Wait Till node
+>>>>>>> Sandbox_master
 
 *** Yaswanth (26th August)***
 Added tag management. Added it in admin pannel.

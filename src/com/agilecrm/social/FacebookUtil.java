@@ -57,7 +57,7 @@ public class FacebookUtil
      * @return
      * @throws Exception
      */
-    public String searchContactsByName(String name) throws Exception
+    public JSONObject searchContactsByName(String name) throws Exception
 
     {
 
@@ -89,7 +89,7 @@ public class FacebookUtil
 	    }
 	    userArr.put(user);
 	}
-	return new JSONObject().put("profiles", userArr).toString();
+	return new JSONObject().put("profiles", userArr);
 
 	/*
 	 * String searchEndpoint =

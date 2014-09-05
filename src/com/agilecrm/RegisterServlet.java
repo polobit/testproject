@@ -14,6 +14,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -61,6 +62,7 @@ public class RegisterServlet extends HttpServlet
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	String type = request.getParameter("type");
+	System.out.println("type   " + type);
 
 	// Type the type of registration for the user - oauth or agile
 	try
@@ -87,6 +89,8 @@ public class RegisterServlet extends HttpServlet
 	    return;
 	}
 
+	System.out.println("before request redirection " + request.getParameter("mecode"));
+	request.setAttribute("reference_code", request.getParameter("mecode"));
 	// Return to Login Page
 	request.getRequestDispatcher("register.jsp").forward(request, response);
     }
@@ -115,7 +119,8 @@ public class RegisterServlet extends HttpServlet
 	    System.out.println("namespace :" + NamespaceManager.get());
 	    if (DomainUserUtil.count() == 0)
 	    {
-		DomainUser domainUser = createUser(request, response, userInfo, "");
+		DomainUser domainUser = createUser(request, response, userInfo, "", "");
+		System.out.println("before forwarding to domain.agilecrm.com");
 		response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
 		return;
 	    }
@@ -163,6 +168,7 @@ public class RegisterServlet extends HttpServlet
      */
     void registerAgile(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+	String reference_code = "";
 	// Get User Name
 	String email = request.getParameter("email");
 
@@ -172,6 +178,18 @@ public class RegisterServlet extends HttpServlet
 	// Get Name
 	String name = request.getParameter("name");
 
+	// Get reference code
+	String referer_code = request.getParameter("referer_code");
+	System.out.println("in register servlet " + referer_code);
+
+	if (referer_code != null)
+	{
+	    if (ReferenceUtil.checkReferenceCodeStatus(referer_code))
+		reference_code = referer_code;
+	    else
+		reference_code = null;
+	}
+
 	if (email == null || password == null)
 	    throw new Exception("Invalid Input. Email or password has been left blank.");
 
@@ -179,8 +197,16 @@ public class RegisterServlet extends HttpServlet
 
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
-	DomainUser domainUser = createUser(request, response, userInfo, password);
 
+	System.out.println("reference code before callig create USer " + reference_code);
+
+	DomainUser domainUser = createUser(request, response, userInfo, password, reference_code);
+
+	if (domainUser != null && reference_code != null)
+	{
+	    ReferenceUtil.update_referel_count_of_reference_domain(reference_code);
+	}
+	System.out.println("domaunuser in register servlet  " + domainUser);
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
     }
@@ -201,8 +227,8 @@ public class RegisterServlet extends HttpServlet
      * @return DomainUser
      * @throws Exception
      */
-    DomainUser createUser(HttpServletRequest request, HttpServletResponse response, UserInfo userInfo, String password)
-	    throws Exception
+    DomainUser createUser(HttpServletRequest request, HttpServletResponse response, UserInfo userInfo, String password,
+	    String referercode) throws Exception
     {
 	// Get Domain
 	String domain = NamespaceManager.get();
@@ -223,7 +249,7 @@ public class RegisterServlet extends HttpServlet
 	}
 
 	request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-
+	System.out.println("referer code before callihg new Domainuser");
 	// Create Domain User, Agile User
 	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true);
 

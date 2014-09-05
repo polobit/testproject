@@ -3,9 +3,12 @@
     <div class="span12">
         <div class="page-header">
             <h1>Deals <small>Opportunities</small></h1>
-			<a href="#deals-add" class="deals-add btn right" style="top:-30px;position: relative;"><i class="icon-plus-sign" /> Add Deal</a>
-			<div class="btn-group right" id="deals-view"
-				style="display: inline; top: -30px;margin-right:20px;">
+			<div class="btn-group right" id="deals-action" style="display: inline; top: -30px;margin-right:20px;">
+					<a href="#deals-add" class="deals-add btn right"><i class="icon-plus-sign" /> Add Deal
+					</a>
+				
+			</div>
+			<div class="btn-group right" id="deals-view" style="display: inline; top: -30px;margin-right:20px;">
 					<div class="btn"><i class="icon-list" style="margin-right:3px"></i></div>
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="caret"></span>
@@ -13,51 +16,18 @@
 					<ul class="dropdown-menu pull-right">
 						<li><a href="#" class="deals-list-view">List</a></li>
 						<li><a href="#" class="deals-pipelined-view">Milestone</a></li>
-						<!-- <li><a href="#" class="deals-export-csv">Export as CSV</a></li> -->
 					</ul>
+			</div>
+			<div class="btn-group right" id="deals-tracks"
+				style="display: inline; top: -30px;margin-right:20px;">
 			</div>
         </div>
     </div>
 </div>
 <div class="row">
-    <div class="span9">
-        <div id="slate">
-        </div>
-        {{#if this.length}}
-        <div id="total-pipeline-chart" style="width:100%; height:300px"></div>
-        <br /><br />
+    <div class="span12">
         <div class="row-fluid">
-			<span><a id="deals-full-screen" href="#deals-full-screen" style="float:right;margin-top:-16px;"><i class="icon-resize-full"></i></a></span>
 			<div id="opportunities-by-milestones-model-list"></div>
-        </div>
-        {{/if}}
-    </div>
-    <div class="span3">
-        <div class="data-block">
-            <div class="well">
-                <header>
-                    <h3><span><i class="icon-flag"></i></span> Milestones</h3>
-                </header>
-                <div id="pie-deals-chart" style="width:100%; height:400px"></div>
-                <h3 style="margin-top:10px;">
-                    What are Milestones?
-                </h3>
-                <br />
-                <p>
-                    Milestones are used to define the status of the deal.
-                </p>
-                <p>
-                    e.g. Use 'Won' in case of a successfully completed deal or 'New' for a newly added deal. You can define custom milestones.
-                </p>
-                <br />
-                <h3>
-                    What are Deals?
-                </h3>
-                <br />
-                <p>
-                    Deals are opportunities you can continuously track throughout its life cycle. You may add contacts related to the deal, add description, monetary value and timelines. You can also setup milestones to constantly track the status of the deal.
-                </p>
-            </div>
         </div>
     </div>
 </div>
@@ -81,7 +51,7 @@
               <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
 			{{/if}}
 		</span>
-		<div class="clearfix"</div>
+		<div class="clearfix"></div>
 	</div>
 	<div class="agile-overflow-ellipsis">
 
@@ -106,4 +76,22 @@
 	{{#if_contact_type "COMPANY"}}
      	<a href="#contact/{{id}}">{{getPropertyValue properties "name"}}</a>
     {{/if_contact_type}}
+</script>
+<script id="opportunity-track-list-collection-template" type="text/html">
+<div class="btn-group right" style='position:relative' id="pipeline-tour-step">
+	<button class="btn filter-dropdown ">Tracks</button>
+	<button class="btn dropdown-toggle" data-toggle="dropdown">
+    	<span class="caret"></span>
+  	</button>
+	<ul id = "opportunity-track-list-model-list" class="pull-right dropdown-menu">
+	</ul>
+</div>
+</script>
+
+<script id="opportunity-track-list-model-template" type="text/html">
+{{#if name}}
+<a id='{{id}}' class="pipeline" data="{{name}}">{{name}}</a>
+ {{else}}
+<a id='{{id}}' class="pipeline" data="Default">Default</a>
+{{/if}}
 </script>

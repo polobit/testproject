@@ -171,6 +171,18 @@ public class Opportunity extends Cursor
     public String note_description = null;
 
     /**
+     * Related notes objects fetched using notes id's.
+     */
+    @NotSaved(IfDefault.class)
+    private Key<Milestone> pipeline = null;
+
+    /**
+     * note's description related to a task
+     */
+    @NotSaved
+    public Long pipeline_id = 0L;
+
+    /**
      * ObjectifyDao of Opportunity.
      */
     public static ObjectifyGenericDao<Opportunity> dao = new ObjectifyGenericDao<Opportunity>(Opportunity.class);
@@ -212,6 +224,19 @@ public class Opportunity extends Cursor
 	this.owner_id = ownerId;
     }
 
+    public Opportunity(String name, String description, Double expectedValue, Long pipelineId, String milestone,
+	    int probability, String track, String ownerId)
+    {
+	this.name = name;
+	this.description = description;
+	this.expected_value = expectedValue;
+	this.pipeline_id = pipelineId;
+	this.milestone = milestone;
+	this.probability = probability;
+	this.track = track;
+	this.owner_id = ownerId;
+    }
+
     /**
      * Gets contacts related with deals.
      * 
@@ -243,6 +268,13 @@ public class Opportunity extends Cursor
 	    contact_ids.add(String.valueOf(contactKey.getId()));
 
 	return contact_ids;
+    }
+
+    public Long getPipeline_id()
+    {
+	if (pipeline != null)
+	    return pipeline.getId();
+	return 0L;
     }
 
     /**
@@ -339,6 +371,12 @@ public class Opportunity extends Cursor
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
 
+	}
+
+	// Set Deal Pipeline.
+	if (pipeline_id != null && pipeline_id > 0)
+	{
+	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
 	}
 
 	Long id = this.id;
@@ -446,9 +484,10 @@ public class Opportunity extends Cursor
 
 	    this.notes = null;
 	}
+
     }
 
-    /*
+    /**
      * (non-Javadoc)
      * 
      * @see java.lang.Object#toString()
@@ -456,7 +495,7 @@ public class Opportunity extends Cursor
     public String toString()
     {
 	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
-		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	        + " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
+	        + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }

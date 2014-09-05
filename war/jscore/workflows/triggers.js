@@ -17,6 +17,12 @@ $(function()
 		if ($(this).val() !== 'DEAL_MILESTONE_IS_CHANGED')
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');
 
+		// Hide trigger stripe event div for other trigger conditions.
+		if($(this).val() !== 'STRIPE_CHARGE_EVENT'){
+			$('form#addTriggerForm').find('select#trigger-stripe-event').closest('div.control-group').css('display', 'none');
+			$('form#addTriggerForm').find('select#trigger-stripe-event').val("");
+		}
+		
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
 		{
@@ -35,9 +41,14 @@ $(function()
 		{
 			populate_milestones_in_trigger($('form#addTriggerForm'), 'trigger-deal-milestone');
 		}
-
+		
+		// Show stripe events
+		if($(this).val() == 'STRIPE_CHARGE_EVENT')
+		{
+			populate_stripe_events_in_trigger($('form#addTriggerForm'), 'trigger-stripe-event');
+		}
 	});
-
+	
 	// When cancel clicked, take to Back page
 	$('#trigger-cancel').die().live('click', function(e)
 	{
@@ -82,7 +93,26 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 			trigger_form.find('select#' + milestones_select_id).val(trigger_deal_milestone_value).attr('selected', 'selected').trigger('change');
 		}
 	}, "Select new milestone...");
+}
 
+/**
+ *	Function to populate the stripe event trigger with stripe events
+ * 
+ * @param trigger_form
+ * 				trigger form object
+ * @param stripe_event_select_id
+ * 				stripe event select element id
+ * @param stripe_event_value
+ * 				stripe event type
+ */
+function populate_stripe_events_in_trigger(trigger_form, stripe_event_select_id, stripe_event_value)
+{
+	trigger_form.find('select#' + stripe_event_select_id).closest('div.control-group').css('display','');
+	
+	if(stripe_event_value !== undefined)
+	{
+		trigger_form.find('select#' + stripe_event_select_id).val(stripe_event_value).attr('selected', 'selected').trigger('change');
+	}
 }
 
 /**

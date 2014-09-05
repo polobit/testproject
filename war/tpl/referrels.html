@@ -1,0 +1,79 @@
+<script id="referrals-model-template" type="text/html">
+<td style="width:13%"><img class="thumbnail" src="https://secure.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.jpg?s=50&amp;d=https%3A//dpm72z3r2fvl4.cloudfront.net/css/images/user-default.png" width="40px" height="40px" title="{{name}}"></td>
+<td><span><b>{{name}}</b></span><br><span>{{email}}</span><br></td>
+</script>
+<script id="referrals-collection-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<div class="page-header">
+			<h1>Referral Program</h1>
+			<h4 class="pull-right"> Your Reference Code : {{get_reference_code}}</h4>
+		</div>
+	</div>
+</div>
+<div class="row">
+	
+	
+	
+	<div class="span7">
+
+		<div style="padding-bottom: 8px; ">
+			<h2  style="display: inline-block;font-size: 20px;">
+				Partner Link
+			</h2>
+			<div style="padding-top: 10px; padding-bottom: 5px;">
+				Place this link on your website, in your email newsletter, or give it to someone when you refer them to AgileCRM .
+			</div>	
+		</div>
+		<div class="data" style="margin-bottom: 20px;">
+			<div class="data-container">
+				<div style="padding: 10px;border-radius:5px;border: 1px solid whitesmoke;display: inline-block;">
+					<span id="referral_url" style="font-size:15px;font-weight:bold;display:inline-block !important;margin-right:50px;color:#656565">https://my.agilecrm.com/register?mecode={{get_reference_code}}</span>
+						<!--<a href="javascript:;" id="url_clip_button" style="text-decoration: none;" data-clipboard-text="https://my.agilecrm.com/register?mecode={{get_reference_code}}">
+							<i style="font-size: 24px; font-weight: bold; padding-top: 2px; padding-right: 3px;" class="icon-copy copy_email_clipboard_icon" title=""></i> Copy</a>-->
+				</div>
+            </div>
+		</div>
+    </div>
+
+	
+		
+			
+				<div id="your_referrals" class="span5 pull-right" >
+						{{#unless this.length}}
+							<div class="page-header" style="margin: 0px;">
+								<h2 style="font-size: 20px;">
+									Your Referrals till date 
+								</h2>
+							</div>
+							<div style="margin-top: 10px; margin-bottom: 10px;">
+								<div class="slate-content">
+									<div class="box-right">
+										<span style="font-weight: bold !important; color: #858585 !important; font-size: 14px;"><i class="icon-info-sign"></i>  You
+											have no referrals till date.</span>
+											
+									</div>
+								</div>
+							</div>
+						
+						{{else}}
+							<div class="page-header" style="margin: 0px; padding-bottom: 8px;">
+								<h2 style="font-size: 20px;">Your Referrals till date{{count}}</h2>
+							</div>
+							<div class="data">
+								<div class="data-container">
+									<table id="referrals" class="table">
+										<tbody id="referrals-model-list" class="referrals-model-list"
+											style="overflow: scroll; cursor: pointer;">
+										</tbody>
+									</table>
+								</div>
+							</div>
+						{{/unless}}
+					
+					
+				</div>
+			</div>
+	
+</script>
+

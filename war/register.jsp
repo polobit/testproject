@@ -12,7 +12,7 @@ if(error != null)
     System.out.println(error);
 else
     error = "";
-
+String reference_code=(String)request.getAttribute("reference_code");
 %>
 
 <!DOCTYPE html>
@@ -96,14 +96,12 @@ jQuery.validator.setDefaults({
 	success: "valid"
 });;
 </script>
-<%
-String ua = request.getHeader( "User-Agent" );
-boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
-%>
-
-<% if( isMSIE ){ 
-	response.sendRedirect("/error/ie-upgrade.jsp");
-} %>
+<script>
+var isIE = (window.navigator.userAgent.indexOf("MSIE") != -1); 
+var isIENew = (window.navigator.userAgent.indexOf("rv:11") != -1);  
+if(isIE || isIENew) 
+	window.location = '/error/ie-upgrade.jsp';
+</script>
 <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
       <script src="lib/ie/html5.js"></script>
@@ -187,6 +185,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input class="input-xlarge field required" name='name' type="text" maxlength="50" minlength="3" placeholder="Full Name" autocapitalize="off">
                     <input class="input-xlarge field required email" id="login_email" name='email' type="text" maxlength="50" minlength="6" placeholder="Email Address (User ID)" autocapitalize="off">
                     <input class="input-xlarge field required" maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
+					 <input class="input-xlarge field " maxlength="200" minlength="4" name='referer_code' type="hidden"  autocapitalize="off" value=<%=reference_code%>>
 					<div style="margin-top:7px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the <a href="https://www.agilecrm.com/terms.html" target="_blank">Terms and conditions</a><input type="checkbox" checked="checked" name="agree" class="required"></label>
 					  <input type='submit' id="register_account" style="margin-top:20px;" value="Create  >>" class='btn btn-large btn-primary'>
