@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import javax.jdo.annotations.Embedded;
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
