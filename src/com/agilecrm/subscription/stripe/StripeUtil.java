@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.Subscription;
@@ -20,6 +21,11 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
@@ -130,14 +136,33 @@ public class StripeUtil
      * 
      * @param customerid
      * @return
+     * @throws APIException 
+     * @throws CardException 
+     * @throws APIConnectionException 
+     * @throws InvalidRequestException 
+     * @throws AuthenticationException 
      * @throws StripeException
      */
-    public static Event getEventFromJSON(String event_json_string)
+    public static Event getEventFromJSON(String event_json_string) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException
     {
-	// Converts Customer JSON to customer object
-	Event event = new Gson().fromJson(event_json_string, Event.class);
-	// Retrieves the customer from stripe based on id
-	return event;
+	System.out.println();
+
+	try
+	{
+	    org.json.JSONObject ob = new org.json.JSONObject(event_json_string);
+	    System.out.println("event id" + ob.getString("id"));
+	    // Converts Customer JSON to1 customer object
+	    Event event = Event.retrieve(ob.getString("id"));
+	    // Retrieves the customer from stripe based on id
+	    return event;
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
+
     }
 
     public static List<Charge> getCharges(String customerid) throws StripeException
