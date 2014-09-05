@@ -23,7 +23,7 @@
 
                     </div>
                 </div>
-                <div class="control-group">
+                <div class="control-group hide">
 					<label class="control-label"><b>Milestones</b> <span class="field_req">*</span></label>
                     <div class="controls">
                         <input class="input-large" name="milestones" class="required" type="text" id="milestones" value="New,Prospect,Proposal,Won,Lost" />
@@ -59,7 +59,8 @@
     </div>
 	<div class="modal-body">
         <div id="deals-export-csv-detail">
-            <p>Do you want to delte this Track?</p>
+             <p>Are you sure you want to delete Track - <span id="track-name"></span> ? </p>
+			<p>All existing deals in this track can be accessed from the Deals list view.</p>
         </div>
     </div>
     <div class="modal-footer">
@@ -81,7 +82,7 @@
     		{{/if}} 		
     		<legend style="margin-bottom:0px;">{{name}}
 			{{#if_equals "Default" name}} {{else}}
-			 <a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete" data="{{id}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
+			 <a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete" id="{{id}}" data="{{name}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
 			{{/if_equals}}
 			</legend>
 			<fieldset>
@@ -98,22 +99,4 @@
     		</div> 
     		<fieldset>
     	</form>
-</script>
-<script id="pipeline-delete-model-template" type="text/html">
-<div class="modal hide fade" id="pipeline-delete-modal">
-	<div class="modal-header">
-        <button class="close" data-dismiss="modal">x</button>
-        <h3><i class="icon-file-text"></i> Delete Track</h3>
-    </div>
-	<div class="modal-body">
-        <div id="deals-export-csv-detail">
-            <p>Do you want to delte this Track?</p>
-        </div>
-    </div>
-    <div class="modal-footer">
-    <span class="pipeline-delete-message" style="margin-right:5px"></span>
-    <a href="#" id="pipeline-delete-confirm" class="btn btn-primary">Yes</a>
-    <a  href="#" class="btn close" data-dismiss="modal" >No</a>
-    </div>
-</div>
 </script>
