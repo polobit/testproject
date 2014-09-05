@@ -422,7 +422,7 @@
 <optgroup label="Custom field" id = "custom_fields">
    
 		{{#each custom_fields}}
-			<option class="CUSTOM" value="properties_{{this.field_label}}">{{this.field_label}}</option>
+			<option class="CUSTOM" value="properties_{{this.field_type}}-{{this.field_label}}">{{this.field_label}}</option>
 		{{/each}}
 </optgroup>
 {{/if}}
