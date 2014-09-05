@@ -1093,7 +1093,7 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 /*css updates (author "santhosh")*/
 
 .link-border {
-	border-bottom: 1px solid #8a6086;
+	border-bottom: 1px solid;
 }
 .link-border:hover {
 	text-decoration: none;

@@ -61,7 +61,7 @@ public class ContactOfficeUtil
 
 		try
 		{
-			url = "http://54.87.153.50:8080/exchange-app-beta/exchange?user_name="
+			url = "http://54.87.153.50:8080/exchange-app/exchange?user_name="
 					+ URLEncoder.encode(userName, "UTF-8") + "&search_email=" + searchEmail + "&host="
 					+ URLEncoder.encode(protocal + host, "UTF-8") + "&offset=" + offset + "&count=" + count
 					+ "&password=" + URLEncoder.encode(password, "UTF-8");
