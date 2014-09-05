@@ -13,6 +13,11 @@ import com.agilecrm.Globals;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.impl.SubscriptionWebhookHandlerImpl;
 import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Event;
 
 /**
@@ -93,9 +98,39 @@ class StripeWebhookHandlerUtil
 
     public static StripeWebhookHandler getHandler(String eventResponse)
     {
-	Event event = StripeUtil.getEventFromJSON(eventResponse);
+	Event event = null;
+	try
+	{
+	    event = StripeUtil.getEventFromJSON(eventResponse);
+	}
+	catch (AuthenticationException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (InvalidRequestException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (APIConnectionException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (CardException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	catch (APIException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 
 	if (event == null)
+	    
 	    return null;
 
 	String event_name;
