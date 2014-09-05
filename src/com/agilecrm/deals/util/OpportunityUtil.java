@@ -403,16 +403,15 @@ public class OpportunityUtil
     public static List<Opportunity> getOpportunitiesByFilter(String ownerId, String milestone, String contactId,
 	    String fieldName, int max, String cursor, Long pipelineId)
     {
+	if (pipelineId == null || pipelineId == 0L)
+	    pipelineId = MilestoneUtil.getMilestones().id;
 	try
 	{
 	    Map<String, Object> searchMap = new HashMap<String, Object>();
 
 	    if (pipelineId != null & pipelineId != 1)
 	    {
-		if (pipelineId != null && pipelineId == 0L)
-		    searchMap.put("pipeline", new Key<Milestone>(Milestone.class, MilestoneUtil.getMilestones().id));
-		else if (pipelineId != null)
-		    searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
+		searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
 	    }
 
 	    if (StringUtils.isNotBlank(ownerId))
@@ -494,7 +493,7 @@ public class OpportunityUtil
 	    try
 	    {
 		json = mapper.writeValueAsString(dealslist);
-		json = json.replace("null", "\"\"");
+		json = json.replace("null", "\'\'");
 		milestonesObject.put(milestone.trim(), json);
 	    }
 	    catch (Exception e)
@@ -526,7 +525,7 @@ public class OpportunityUtil
 	    try
 	    {
 		json = mapper.writeValueAsString(dealslist);
-		json = json.replace("null", "\"\"");
+		json = json.replace("null", "\'\'");
 		milestonesObject.put(mile.trim(), json);
 	    }
 	    catch (Exception e)

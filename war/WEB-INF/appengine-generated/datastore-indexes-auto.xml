@@ -43,5 +43,10 @@
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
+    
+     <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
 
 </datastore-indexes>
