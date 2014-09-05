@@ -55,6 +55,10 @@ public abstract class StripeWebhookHandler
 	if (user != null)
 	    return user;
 
+	
+
+	System.out.println("fetching user from domain : " + getDomain());
+	
 	String domain = getDomain();
 	if (StringUtils.isEmpty(domain))
 	    return null;
