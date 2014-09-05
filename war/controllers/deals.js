@@ -22,10 +22,7 @@ var DealsRouter = Backbone.Router.extend({
 		// Depending on cookie shows list or milestone view
 		if (!readCookie("agile_deal_view"))
 		{
-			if(!readCookie("agile_full_view"))
-				template_key = "opportunities-by-milestones";
-			else
-				template_key = "opportunities-full-screen";
+			template_key = "opportunities-by-milestones";
 			
 			var pipeline_id = 0;
 			if(readCookie("agile_deal_track"))
@@ -41,16 +38,10 @@ var DealsRouter = Backbone.Router.extend({
 			this.opportunityMilestoneCollectionView = new Base_Collection_View({ url : url, templateKey : template_key,
 				individual_tag_name : individual_tag_name, postRenderCallback : function(el)
 				{
-					//var cel = App_Deals.opportunityMilestoneCollectionView.el;
 					// To show timeago for close date
 					includeTimeAgo(el);
 					
-					var element;
-					
-					if(!readCookie("agile_full_view"))
-						element = $('#opportunities-by-milestones-model-list');
-					else
-						element = $('#opportunities-full-screen-model-list');
+					var element = $('#opportunities-by-milestones-model-list');
 
 					var id = $(element).attr('id');
 					$("#" + id + "> div").addClass("milestone-main");
@@ -77,14 +68,6 @@ var DealsRouter = Backbone.Router.extend({
 
 						}
 					});
-					
-					if(!readCookie("agile_full_view"))
-					{
-						// Shows Milestones Pie
-						pieMilestonesByPipeline(pipeline_id);
-
-						dealsLineChartByPipeline(pipeline_id);
-					}
 					
 					setupDealsTracksList(el);
 

@@ -71,34 +71,6 @@ $(function(){
 		
 
 	});
-	
-	/**
-	 * Full screen view
-	 */
-	$('#deals-full-screen').live('click', function(e){
-		e.preventDefault();
-		
-		// Creates the cookie
-		createCookie("agile_full_view", "full_view");
-		
-		// Loads the deals
-		App_Deals.deals();
-
-    });
-	
-	/**
-	 * Small screen view
-	 */
-	$('#deals-small-screen').die().live('click', function(e) {
-		e.preventDefault();
-
-		// Erases the cookie
-		eraseCookie("agile_full_view");
-
-		// Loads the deals
-		App_Deals.deals();
-
-	});
 
 	// Admin Settings milestone list
 	/**
