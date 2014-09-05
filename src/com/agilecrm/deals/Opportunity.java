@@ -218,6 +218,7 @@ public class Opportunity extends Cursor
 	this.name = name;
 	this.description = description;
 	this.expected_value = expectedValue;
+	this.milestone = milestone;
 	this.probability = probability;
 	this.track = track;
 	this.owner_id = ownerId;
@@ -269,7 +270,6 @@ public class Opportunity extends Cursor
 	return contact_ids;
     }
 
-    @XmlElement(name = "pipeline_id")
     public Long getPipeline_id()
     {
 	if (pipeline != null)
@@ -371,6 +371,12 @@ public class Opportunity extends Cursor
 		this.related_contacts.add(new Key<Contact>(Contact.class, Long.parseLong(contact_id)));
 	    }
 
+	}
+
+	// Set Deal Pipeline.
+	if (pipeline_id != null && pipeline_id > 0)
+	{
+	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
 	}
 
 	Long id = this.id;
@@ -479,11 +485,6 @@ public class Opportunity extends Cursor
 	    this.notes = null;
 	}
 
-	// Set Deal Pipeline.
-	if (pipeline_id != null && pipeline_id > 0)
-	{
-	    this.pipeline = new Key<Milestone>(Milestone.class, pipeline_id);
-	}
     }
 
     /**
@@ -494,7 +495,7 @@ public class Opportunity extends Cursor
     public String toString()
     {
 	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
-		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+	        + " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
+	        + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }

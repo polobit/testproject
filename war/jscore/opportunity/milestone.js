@@ -71,6 +71,40 @@ $(function(){
 		
 
 	});
+	
+	/**
+	 * If Pipelined View is selected, deals are loaded with pipelined view and 
+	 * creates the pipelined view cookie
+	 */
+	$('.pipeline-delete').die().live('click', function(e) {
+		e.preventDefault();
+		var id = $(this).attr('data');
+		// If Yes clicked
+		$('#pipeline-delete-confirm').die().live('click',function(e){
+			e.preventDefault();
+			if($(this).attr('disabled'))
+		   	     return;
+			
+			$(this).attr('disabled', 'disabled');
+			
+			 // Shows message
+		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Deleting track.</i></small></span>');
+		    $(this).parent('.modal-footer').find('.pipeline-delete-message').append($save_info);
+			$save_info.show();
+			// Export Deals.
+			$.ajax({
+				url: '/core/api/milestone/pipelines/'+id,
+				type: 'DELETE',
+				success: function() {
+					console.log('Deleted!');
+					$('#pipeline-delete-modal').modal('hide');
+					App_Admin_Settings.milestones();
+				}
+			});
+		});
+		
+
+	});
 
 	// Admin Settings milestone list
 	/**
@@ -184,13 +218,10 @@ $(function(){
     			// Removes disabled attribute of save button
     			enable_save_button($(this));
     			$('#pipelineModal').modal('hide');
-    			App_Admin_Settings.pipelineGridView.collection.add(model);
-    	    	$('#content').find('#admin-prefs-tabs-content').html(App_Admin_Settings.pipelineGridView.render(true).el);
+    			App_Admin_Settings.milestones();
     	    	
     		}
     	});
-    	//App_Admin_Settings.pipelineGridView.collection.add(new Backbone.Model(mile));
-    	//$('#content').find('#admin-prefs-tabs-content').html(App_Admin_Settings.pipelineGridView.render(true).el);
     	
     });
 });

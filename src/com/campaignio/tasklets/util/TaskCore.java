@@ -77,11 +77,11 @@ public class TaskCore
 		String namespace = NamespaceManager.get();
 
 		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
-			AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
+		        AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
 
 		// Add deferred tasks to pull queue with namespace as tag
-		PullQueueUtil.addToPullQueue(len >= 500 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
-			: AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
+		PullQueueUtil.addToPullQueue(len >= 200 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		        : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, taskletWorkflowDeferredTask, namespace);
 
 	    }
 	    catch (Exception e)

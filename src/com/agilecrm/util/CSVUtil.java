@@ -178,6 +178,7 @@ public class CSVUtil
 	int mergedContacts = 0;
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
+	int failedContact = 0;
 	List<String> emails = new ArrayList<String>();
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
@@ -284,7 +285,7 @@ public class CSVUtil
 
 	    }
 
-	    if (type.equalsIgnoreCase("contacts"))
+	    if (type.equalsIgnoreCase("Contacts"))
 	    {
 		if (!isValidFields(tempContact, status))
 		    continue;
@@ -293,37 +294,6 @@ public class CSVUtil
 	    {
 		// save contact as company
 		tempContact.type = Contact.Type.COMPANY;
-
-	    }
-
-	    boolean isMerged = false;
-
-	    if (type.equalsIgnoreCase("contacts"))
-	    {
-		// duplicate contact test and merge field
-		// If contact is duplicate, it fetches old contact and updates
-		// data.
-		if (ContactUtil.isDuplicateContact(tempContact))
-		{
-		    // Checks if user can update the contact
-
-		    // Sets current object to check scope
-
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    isMerged = true;
-		}
-
-	    }
-	    else
-	    {
-
-		// check for duplicate company and merge field
-		if (ContactUtil.companyExists(companyName))
-		{
-
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    isMerged = true;
-		}
 
 	    }
 
@@ -353,20 +323,18 @@ public class CSVUtil
 	    try
 	    {
 
-		tempContact.save(false);
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
 			+ tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
+		failedContact++;
 
 	    }
-	    if (isMerged)
-	    {
-		mergedContacts++;
-	    }
-	    else
+
+	    if (tempContact.id != null)
 	    {
 		// Increase counter on each contact save
 		savedContacts++;
@@ -377,15 +345,19 @@ public class CSVUtil
 
 		// Creates notes, set CSV heading as subject and value as
 		// description.
-		for (Integer i : notes_positions)
+		// if contact is not saved then no need to save note
+		if (tempContact.id != null)
 		{
-		    Note note = new Note();
-		    note.subject = headings[i];
-		    note.description = csvValues[i];
-		    note.addRelatedContacts(String.valueOf(tempContact.id));
+		    for (Integer i : notes_positions)
+		    {
+			Note note = new Note();
+			note.subject = headings[i];
+			note.description = csvValues[i];
+			note.addRelatedContacts(String.valueOf(tempContact.id));
 
-		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
-		    note.save();
+			note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+			note.save();
+		    }
 		}
 	    }
 	    catch (Exception e)
@@ -407,6 +379,7 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContact);
 
 	}
 	else
@@ -421,7 +394,14 @@ public class CSVUtil
 		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
-	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+	if (type.equalsIgnoreCase("Contacts"))
+	{
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+	}
+	else
+	{
+	    BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedContacts));
+	}
 
     }
 
@@ -446,10 +426,12 @@ public class CSVUtil
 	for (Object o : status.values())
 	{
 	    System.out.println(o);
-	    if (o.equals("Companies")|| o.equals("Contacts"))
+	    if (o.equals("Companies") || o.equals("Contacts"))
 	    {
 		continue;
-	    }else{
+	    }
+	    else
+	    {
 		total += (int) o;
 	    }
 	}
@@ -601,6 +583,7 @@ public class CSVUtil
 
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, "csv_deal_import", new Object[] {
 		domainUser, status });
+	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
 
     }
 

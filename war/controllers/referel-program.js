@@ -2,7 +2,7 @@ var ReferelRouter = Backbone.Router.extend({
 
 	routes : {
 
-	"referels":"referrelprogram"
+	"referrals":"referrelprogram"
 
 	},
 

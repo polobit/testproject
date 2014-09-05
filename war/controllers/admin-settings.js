@@ -301,7 +301,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones", individual_tag_name : 'div', sortKey: "id", descending:true, postRenderCallback : function(el)
+		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones", individual_tag_name : 'div', sortKey: "name", postRenderCallback : function(el)
 		{
 			setup_milestones(el);
 		} });
@@ -344,7 +344,24 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 		this.email_gateway = new Base_Model_View({
 			url : 'core/api/email-gateway',
-			template: 'admin-settings-web-to-lead'
+			template: 'admin-settings-web-to-lead',
+			deleteCallback: function(model, response)
+			{
+			     if(model)
+			     {
+			    	 var data = model.toJSON();
+			    	 
+			    	 if(data.email_api == "MANDRILL")
+			    	 {
+			    		 	// Delete mandrill webhook
+							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+								
+								console.log(data);
+								
+							});
+			    	 }
+			     }	
+			}
 		});
 		
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
@@ -421,10 +438,23 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					}, 1);
 				});
 			},
-			saveCallback: function()
+			saveCallback: function(data)
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
+				
+				//console.log(data);
+				
+				// Add webhook
+				if(data.email_api == "MANDRILL")
+				{
+					// Add mandrill webhook
+					$.getJSON("core/api/email-gateway/add-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+						
+						console.log(data);
+						
+					});
+				}
 			}
 			
 		});

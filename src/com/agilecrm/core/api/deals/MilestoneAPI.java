@@ -118,7 +118,7 @@ public class MilestoneAPI
     }
 
     /**
-     * Returns milestone saved in datastores.
+     * Delete milestone with the given id from datastores.
      * 
      * @return milestone objects.
      */

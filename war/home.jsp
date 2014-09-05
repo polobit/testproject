@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@page import="com.agilecrm.util.ReferenceUtil"%>
+<%-- <%@page import="com.agilecrm.util.ReferenceUtil"%> --%>
 <%@page import="com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil"%>
 <%@page import="com.agilecrm.subscription.restrictions.db.BillingRestriction"%>
 <%@page import="com.agilecrm.user.util.DomainUserUtil"%>
@@ -160,7 +160,9 @@ var IS_FLUID = <%=is_fluid%>;
 var CLICKDESK_CODE_LOADED = false;
 
 //gets current reference code of domain
-var CURRENT_DOMAIN_REFERENCE_CODE = "<%=ReferenceUtil.getCurrentDomainReferenceCode()%>";
+<%-- var CURRENT_DOMAIN_REFERENCE_CODE = "<%=ReferenceUtil.getCurrentDomainReferenceCode()%>"; --%>
+
+var CURRENT_DOMAIN_REFERENCE_CODE=null;
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
 

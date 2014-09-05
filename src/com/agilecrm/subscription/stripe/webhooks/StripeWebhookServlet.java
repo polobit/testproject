@@ -56,6 +56,7 @@ public class StripeWebhookServlet extends HttpServlet
 	public static final String STRIPE_INVOICE_PAYMENT_FAILED = "invoice.payment_failed";
 	public static final String STRIPE_SUBSCRIPTION_DELETED = "customer.subscription.deleted";
 	public static final String STRIPE_CUSTOMER_DELETED = "customer.deleted";
+	public static final String STRIPE_CUSTOMER_SUBSCRIPTION_CREATED = "customer.subscription.created";
 	public static final String STRIPE_INVOICE_PAYMENT_SUCCEEDED = "invoice.payment_succeeded";
 	public static final String STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED = "customer.subscription.updated";
 	public static final String STRIPE_CHARGE_REFUNDED = "charge.refunded";
