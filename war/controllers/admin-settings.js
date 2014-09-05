@@ -344,7 +344,24 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 		this.email_gateway = new Base_Model_View({
 			url : 'core/api/email-gateway',
-			template: 'admin-settings-web-to-lead'
+			template: 'admin-settings-web-to-lead',
+			deleteCallback: function(model, response)
+			{
+			     if(model)
+			     {
+			    	 var data = model.toJSON();
+			    	 
+			    	 if(data.email_api == "MANDRILL")
+			    	 {
+			    		 	// Delete mandrill webhook
+							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+								
+								console.log(data);
+								
+							});
+			    	 }
+			     }	
+			}
 		});
 		
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);

@@ -24,12 +24,14 @@ public class MandrillWebhookUtil
     public static final String AGILE_MANDRILL_WEBHOOK_URL = "https://agile-crm-cloud.appspot.com/backend/mandrillwebhook";
 
     public static final String KEY = "key";
+    public static final String ID = "id";
     public static final String URL = "url";
     public static final String DESCRIPTION = "description";
     public static final String EVENTS = "events";
 
     public static final String MANDRILL_API_WEBHOOK_ADD_CALL = "/webhooks/add.json";
     public static final String MANDRILL_API_WEBHOOK_LIST_CALL = "/webhooks/list.json";
+    public static final String MANDRILL_API_WEBHOOK_DELETE_CALL = "/webhooks/delete.json";
 
     /**
      * Adds webhook to Mandrill account
@@ -130,6 +132,22 @@ public class MandrillWebhookUtil
      */
     public static boolean isWebhookAlreadyExists(String apiKey)
     {
+	// If Agile webhook doesn't exists
+	if (getAgileWebhook(apiKey) == null)
+	    return false;
+
+	return true;
+    }
+
+    /**
+     * Returns Agile webhook JSONObject
+     * 
+     * @param apiKey
+     *            - Mandrill api key
+     * @return JSONObject
+     */
+    private static JSONObject getAgileWebhook(String apiKey)
+    {
 	// Fetch all webhooks
 	String webhooks = getAllWebhooks(apiKey);
 
@@ -144,7 +162,7 @@ public class MandrillWebhookUtil
 
 		// If exists return
 		if (webhook.has(URL) && webhook.getString(URL).equals(AGILE_MANDRILL_WEBHOOK_URL))
-		    return true;
+		    return webhook;
 	    }
 
 	}
@@ -154,6 +172,52 @@ public class MandrillWebhookUtil
 	    e.printStackTrace();
 	}
 
-	return false;
+	return null;
+    }
+
+    /**
+     * Deletes agile webhook from given api Mandrill account
+     * 
+     * @param apiKey
+     *            - Mandrill api key
+     * @return String
+     */
+    public static String deleteWebhook(String apiKey)
+    {
+	String response = null;
+	String webhookId = null;
+
+	try
+	{
+	    JSONObject webhook = getAgileWebhook(apiKey);
+
+	    // If no Agile Webhook
+	    if (webhook == null)
+		return null;
+
+	    // Get webhook Id
+	    if (webhook.has(ID))
+		webhookId = webhook.getString(ID);
+
+	    // If no webhook Id
+	    if (webhookId == null)
+		return null;
+
+	    // Delete json
+	    JSONObject key = new JSONObject();
+	    key.put(KEY, apiKey);
+	    key.put(ID, webhookId);
+
+	    response = HTTPUtil.accessURLUsingPost(Mandrill.MANDRILL_API_POST_URL + MANDRILL_API_WEBHOOK_DELETE_CALL,
+		    key.toString());
+
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while deleting webhook..." + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return response;
     }
 }
