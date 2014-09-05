@@ -7,9 +7,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,17 +25,19 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
-import com.agilecrm.deals.Opportunity;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.googlecode.objectify.Key;
@@ -68,15 +68,15 @@ public class CSVUtil
     {
 	this.billingRestriction = billingRestriction;
 	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
-		Contact.class.getSimpleName(), this.billingRestriction);
-
+	        Contact.class.getSimpleName(), this.billingRestriction);
+	
     }
 
     public static enum ImportStatus
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE;
+	ACCESS_DENIED;
 
     }
 
@@ -119,10 +119,10 @@ public class CSVUtil
     }
 
     /**
-     * Creates contacts,companies from CSV string using a contact prototype
-     * built from import page. It takes owner id to sent contact owner
-     * explicitly instead of using session manager, as there is a chance of
-     * getting null in backends.
+     * Creates contacts from CSV string using a contact prototype built from
+     * import page. It takes owner id to sent contact owner explicitly instead
+     * of using session manager, as there is a chance of getting null in
+     * backends.
      * 
      * Contact is saved only if there is email exists and it is a valid email
      * 
@@ -131,7 +131,7 @@ public class CSVUtil
      * @param ownerId
      * @throws IOException
      */
-    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId, String type)
+    public void createContactsFromCSV(InputStream blobStream, Contact contact, String ownerId)
 	    throws PlanRestrictedException, IOException
     {
 	// Refreshes count of contacts
@@ -152,7 +152,6 @@ public class CSVUtil
 	if (contacts.isEmpty())
 	    return;
 
-	// remove header information form csv
 	String[] headings = contacts.remove(0);
 
 	contact.type = Contact.Type.PERSON;
@@ -161,7 +160,6 @@ public class CSVUtil
 
 	tags.addAll(contact.tags);
 
-	// copy contact schema or property
 	List<ContactField> properties = contact.properties;
 
 	// Creates domain user key, which is set as a contact owner
@@ -178,12 +176,8 @@ public class CSVUtil
 	int mergedContacts = 0;
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
-	int failedContact = 0;
 	List<String> emails = new ArrayList<String>();
-	Map<Object, Object> status = new HashMap<Object, Object>();
-	status.put("type", type);
-
-	// creates contacts by iterating contact properties
+	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
 
 	for (String[] csvValues : contacts)
 	{
@@ -201,7 +195,6 @@ public class CSVUtil
 	    tempContact.setContactOwner(ownerKey);
 
 	    tempContact.properties = new ArrayList<ContactField>();
-	    String companyName = null;
 
 	    for (int j = 0; j < csvValues.length; j++)
 	    {
@@ -249,7 +242,7 @@ public class CSVUtil
 			{
 			    addressJSON.put(field.value, csvValues[j]);
 			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
-				    field.subtype.toString()));
+				    field.type.toString()));
 			}
 
 		    }
@@ -271,87 +264,69 @@ public class CSVUtil
 		if (field.name == null || StringUtils.isEmpty(field.value))
 		    continue;
 
-		if (field.name.equalsIgnoreCase("name"))
-		{
-		    field.value = StringUtils.capitalise(csvValues[j].toLowerCase());
-		    companyName = field.value;
-		}
-		else
-		{
-		    field.value = csvValues[j];
-		}
+		field.value = csvValues[j];
 
 		tempContact.properties.add(field);
 
 	    }
 
+	    if (!isValidFields(tempContact, status))
+		continue;
+
 	    boolean isMerged = false;
-
-	    if (type.equalsIgnoreCase("Contacts"))
+	    
+	    // If contact is duplicate, it fetches old contact and updates data.
+	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
-		if (!isValidFields(tempContact, status))
-		    continue;
-		if (ContactUtil.isDuplicateContact(tempContact))
-		{
+		// Checks if user can update the contact
 
-		    tempContact = ContactUtil.mergeContactFields(tempContact);
-		    isMerged = true;
-		}
+		// Sets current object to check scope
+		
+
+		tempContact = ContactUtil.mergeContactFields(tempContact);
+		isMerged = true;
 	    }
 	    else
 	    {
-		// save contact as company
-		tempContact.type = Contact.Type.COMPANY;
-		if (ContactUtil.companyExists(StringUtils.capitalise(companyName.toLowerCase())))
+		
+		// If it is new contacts billingRestriction count is increased
+		// and checked with plan limits
+
+		++billingRestriction.contacts_count;
+		try
 		{
-		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
-		    isMerged = true;
+		    if (limitCrossed)
+			continue;
+
+		    if (billingRestriction.contacts_count >= allowedContacts)
+		    {
+			limitCrossed = true;
+		    }
+
 		}
-
-	    }
-
-	    /**
-	     * If it is new contacts billingRestriction count is increased and
-	     * checked with plan limits
-	     */
-
-	    ++billingRestriction.contacts_count;
-	    try
-	    {
-		if (limitCrossed)
+		catch (PlanRestrictedException e)
+		{
+		    ++limitExceeded;
 		    continue;
-
-		if (billingRestriction.contacts_count >= allowedContacts)
-		{
-		    limitCrossed = true;
 		}
-
-	    }
-	    catch (PlanRestrictedException e)
-	    {
-		++limitExceeded;
-		continue;
 	    }
 
 	    try
 	    {
-
-		tempContact.save();
+		tempContact.save(false);
 	    }
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.COMPANY));
+		        + tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
-		failedContact++;
 
 	    }
-
 	    if (isMerged)
 	    {
 		mergedContacts++;
 	    }
-	    if (tempContact.id != null)
+	    else
 	    {
 		// Increase counter on each contact save
 		savedContacts++;
@@ -362,19 +337,15 @@ public class CSVUtil
 
 		// Creates notes, set CSV heading as subject and value as
 		// description.
-		// if contact is not saved then no need to save note
-		if (tempContact.id != null)
+		for (Integer i : notes_positions)
 		{
-		    for (Integer i : notes_positions)
-		    {
-			Note note = new Note();
-			note.subject = headings[i];
-			note.description = csvValues[i];
-			note.addRelatedContacts(String.valueOf(tempContact.id));
+		    Note note = new Note();
+		    note.subject = headings[i];
+		    note.description = csvValues[i];
+		    note.addRelatedContacts(String.valueOf(tempContact.id));
 
-			note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
-			note.save();
-		    }
+		    note.setOwner(new Key<AgileUser>(AgileUser.class, tempContact.id));
+		    note.save();
 		}
 	    }
 	    catch (Exception e)
@@ -396,7 +367,6 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
-	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedContact);
 
 	}
 	else
@@ -408,26 +378,18 @@ public class CSVUtil
 	dBbillingRestriction.send_warning_message();
 
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
-		new Object[] { domainUser, status });
+	        new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
-	if (type.equalsIgnoreCase("Contacts"))
-	{
-	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
-	}
-	else
-	{
-	    BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedContacts));
-	}
+	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
 
     }
 
-    public void buildCSVImportStatus(Map<Object, Object> statusMap, ImportStatus status, Integer count)
+    public void buildCSVImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, Integer count)
     {
 	if (statusMap.containsKey(status))
 	{
-	    Integer value = (Integer) statusMap.get(status);
-	    statusMap.put(status, value + count);
+	    statusMap.put(status, statusMap.get(status) + count);
 	    statusMap.get(status);
 	    return;
 	}
@@ -436,30 +398,22 @@ public class CSVUtil
 	billingRestriction.refreshContacts();
     }
 
-    public static void calculateTotalFailedContacts(Map<Object, Object> status)
+    public static void calculateTotalFailedContacts(Map<ImportStatus, Integer> status)
     {
 	int total = 0;
-
-	for (Object o : status.values())
+	for (int i : status.values())
 	{
-	    System.out.println(o);
-	    if (o.equals("Companies") || o.equals("Contacts"))
-	    {
-		continue;
-	    }
-	    else
-	    {
-		total += (int) o;
-	    }
+	    System.out.println(i);
+	    total += i;
 	}
 	System.out.println(total);
 	status.put(ImportStatus.TOTAL_FAILED, total);
     }
 
-    public boolean isValidFields(Contact contact, Map<Object, Object> statusMap)
+    public boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
-		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+	        && StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
 	    return false;
@@ -478,135 +432,5 @@ public class CSVUtil
 	 * iterator.remove(); }
 	 */
 	return true;
-    }
-
-    /**
-     * Create Deals from CSV file
-     * 
-     * @param blobStream
-     * @param ownerId
-     * @param type
-     * @throws PlanRestrictedException
-     * @throws IOException
-     */
-
-    public void createDealsFromCSV(InputStream blobStream, String ownerId, String type) throws PlanRestrictedException,
-	    IOException
-    {
-	Integer totalDeals = 0;
-	Integer savedDeals = 0;
-	Integer failedDeals = 0;
-	/**
-	 * Reading CSV file from input stream
-	 */
-	CSVReader reader = new CSVReader(new InputStreamReader(blobStream, "UTF-8"));
-	Map<String, Object> status = new HashMap<String, Object>();
-	status.put("type", "Deals");
-	List<String[]> deals = reader.readAll();
-	// remove headings
-	if (deals.isEmpty())
-	{
-	    return;
-	}
-	// remove header information form csv
-	String[] headings = deals.remove(0);
-
-	// Creates domain user key, which is set as a contact owner
-	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
-
-	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
-
-	BulkActionUtil.setSessionManager(domainUser);
-	totalDeals = deals.size();
-	// create Deals by iterating deals properties
-	Iterator<String[]> it = deals.iterator();
-	while (it.hasNext())
-	{
-	    Opportunity opportunity = new Opportunity();
-	    String[] dealPropValues = it.next();
-	    for (int i = 0; i < dealPropValues.length; i++)
-	    {
-		String prop = headings[i];
-		if (prop.equalsIgnoreCase("Deal Name") || prop.equalsIgnoreCase("Name"))
-		{
-		    opportunity.name = dealPropValues[i];
-		}
-
-		if (prop.equalsIgnoreCase("Value"))
-		{
-		    opportunity.expected_value = Double.parseDouble(dealPropValues[i]);
-		}
-
-		if (prop.equalsIgnoreCase("Probability"))
-		{
-		    opportunity.probability = Integer.parseInt(dealPropValues[i]);
-		}
-		if (prop.equalsIgnoreCase("Milestone"))
-		{
-		    opportunity.milestone = StringUtils.capitalise(dealPropValues[i].toLowerCase());
-		}
-
-		if (prop.equalsIgnoreCase("Close Date") || prop.equalsIgnoreCase("close"))
-		{
-		    // set close date
-		    Calendar c = Calendar.getInstance();
-		    try
-		    {
-			String dateValue = dealPropValues[i];
-			String[] data = dateValue.split("/");
-			c = Calendar.getInstance();
-			if (data.length == 3)
-			{
-			    c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
-			}
-		    }
-
-		    catch (Exception e)
-		    {
-			e.printStackTrace();
-
-		    }
-		    // System.out.println(c.g);
-
-		    opportunity.close_date = Long.valueOf(c.getTimeInMillis() / 1000);
-		}
-		if (prop.equalsIgnoreCase("Description") || prop.equalsIgnoreCase("Descriptions"))
-		{
-		    opportunity.description = dealPropValues[i];
-		}
-		if (prop.equalsIgnoreCase("Note"))
-		{
-		    Note note = new Note();
-		    note.description = dealPropValues[i];
-		    note.save();
-		}
-	    }
-	    opportunity.setOpportunityOwner(ownerKey);
-	    try
-	    {
-		opportunity.save();
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-		failedDeals++;
-	    }
-	    savedDeals++;
-	}
-
-	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILD", failedDeals);
-	buildDealsImportStatus(status, "TOTAL", totalDeals);
-
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, "csv_deal_import", new Object[] {
-		domainUser, status });
-	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
-
-    }
-
-    private void buildDealsImportStatus(Map<String, Object> statusMap, String status, Integer count)
-    {
-
-	statusMap.put(status, count);
     }
 }
