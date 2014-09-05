@@ -88,7 +88,8 @@ public class ChangeDealMilestone extends TaskletAdapter
 	if (StringUtils.equals(currentMilestone, ANY_MILESTONE))
 	    currentMilestone = null;
 
-	List<Opportunity> deals = OpportunityUtil.getDeals(Long.parseLong(contactId), currentMilestone, ownerId);
+	List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilter(ownerId == null ? null : ownerId.toString(),
+	        currentMilestone, contactId, null, 0, null, null);
 
 	System.out.println("Deals size id " + deals.size());
 
