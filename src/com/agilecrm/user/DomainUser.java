@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import javax.jdo.annotations.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -70,11 +71,11 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String email;
 
     /** The Reference tracking object represents referercount and referece key */
-    /*
-     * @Embedded
-     * 
-     * @NotSaved(IfDefault.class) public Referer referer = new Referer();
-     */
+
+    @Embedded
+    @NotSaved
+    public Referer referer = new Referer();
+
     /**
      * Specifies the user accessibility
      */
