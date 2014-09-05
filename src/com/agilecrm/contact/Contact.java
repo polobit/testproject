@@ -377,7 +377,7 @@ public class Contact extends Cursor
 	    {
 		owner_key = oldContact.owner_key;
 	    }
-	
+
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
 	    oldContact.tags = oldContact.getContactTags();
@@ -416,12 +416,30 @@ public class Contact extends Cursor
 	}
 	else if (Type.COMPANY == this.type)
 	{
-	    if (id==null && ContactUtil.companyExists(StringUtils.capitalise(getContactFieldValue(NAME).toLowerCase())))
+	    for (ContactField contactField : this.properties)
 	    {
-		
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a company with name \'" + getContactFieldValue(NAME) + "\' already exists ")
-			.build());
+		if (!StringUtils.equalsIgnoreCase(contactField.name, "name"))
+		    continue;
+		String companyName = contactField.value;
+
+		if (companyName != null && !companyName.isEmpty())
+		{
+
+		    int companyCount = ContactUtil.searchCompanyCountByNameAndType(
+			    StringUtils.capitalise(companyName.toLowerCase()), type);
+		    System.out.println(companyCount);
+
+		    if ((companyCount >= 2 || (companyCount == 1 && (id == null || !ContactUtil
+			    .companyExists(StringUtils.capitalise(companyName.toLowerCase()))))))
+		    {
+
+			throw new WebApplicationException(Response
+				.status(Response.Status.BAD_REQUEST)
+				.entity("Sorry, a company with name \'" + getContactFieldValue(NAME)
+					+ "\' already exists ").build());
+		    }
+		}
+
 	    }
 	}
 
@@ -979,7 +997,8 @@ public class Contact extends Cursor
 		if (contactField != null && StringUtils.isNotEmpty(contactField.value))
 		{
 		    // Create new Company
-		    Key<Contact> companyKey = ContactUtil.getCompanyByName(StringUtils.capitalise(contactField.value.toLowerCase()));
+		    Key<Contact> companyKey = ContactUtil.getCompanyByName(StringUtils.capitalise(contactField.value
+			    .toLowerCase()));
 
 		    if (companyKey != null)
 		    {

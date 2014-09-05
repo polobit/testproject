@@ -285,15 +285,28 @@ public class CSVUtil
 
 	    }
 
+	    boolean isMerged = false;
+
 	    if (type.equalsIgnoreCase("Contacts"))
 	    {
 		if (!isValidFields(tempContact, status))
 		    continue;
+		if (ContactUtil.isDuplicateContact(tempContact))
+		{
+
+		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    isMerged = true;
+		}
 	    }
 	    else
 	    {
 		// save contact as company
 		tempContact.type = Contact.Type.COMPANY;
+		if (ContactUtil.companyExists(StringUtils.capitalise(companyName.toLowerCase())))
+		{
+		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
+		    isMerged = true;
+		}
 
 	    }
 
@@ -328,12 +341,16 @@ public class CSVUtil
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.EMAIL));
+			+ tempContact.getContactFieldValue(Contact.COMPANY));
 		e.printStackTrace();
 		failedContact++;
 
 	    }
 
+	    if (isMerged)
+	    {
+		mergedContacts++;
+	    }
 	    if (tempContact.id != null)
 	    {
 		// Increase counter on each contact save
