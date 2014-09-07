@@ -1,11 +1,13 @@
 package com.agilecrm.subscription.stripe;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.Globals;
@@ -16,9 +18,15 @@ import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Coupon;
 import com.stripe.model.Customer;
+import com.stripe.model.CustomerSubscriptionCollection;
 import com.stripe.model.Invoice;
 
 /**
@@ -309,6 +317,111 @@ public class StripeImpl implements AgileBilling
 	}
 
 	return new JSONObject();
+    }
+
+    @Override
+    public void addSubscriptionAddon(CreditCard card, Plan plan) throws Exception
+    {
+	Subscription subscription = Subscription.getSubscription();
+	if (subscription == null)
+	{
+	    createCustomer(card, plan);
+	    return;
+	}
+	    
+
+	// New plan to subscribe
+	com.stripe.model.Plan newPlan = com.stripe.model.Plan.retrieve(plan.plan_id);
+
+	// Flag to check whether to user
+	boolean isProrated = false;
+
+	// Existing email plan in agile subscription object
+	Plan emailPlan = subscription.emailPlan;
+
+	// Fetches subscription from customer object in stripe
+	Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(subscription.billing_data_json_string));
+
+	// If there exists email plan, then it is updated instead of creating
+	// new subscription
+	if (emailPlan == null)
+	{
+	    try
+	    {
+
+		// To hold current email package plan object
+		com.stripe.model.Plan existingAddonPlan = null;
+		com.stripe.model.Subscription existingSubscription = null;
+
+		// Retrieves all current subscriptions of user
+		CustomerSubscriptionCollection subscriptionCollection = customer.getSubscriptions();
+		List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection.getData();
+
+		Iterator<com.stripe.model.Subscription> subscriptionIterator = subscriptionList.iterator();
+
+		// Iterates through all plans and get existing email plan
+		while (subscriptionIterator.hasNext())
+		{
+		    existingSubscription = subscriptionIterator.next();
+		    com.stripe.model.Plan stripePlan = existingSubscription.getPlan();
+
+		    // If plan contains email, it holds exiting plan to update
+		    if (StringUtils.containsIgnoreCase(stripePlan.getId(), "email"))
+		    {
+			existingAddonPlan = stripePlan;
+			break;
+		    }
+		}
+
+		Map<String, Object> newSubscriptionParams = new HashMap<String, Object>();
+		newSubscriptionParams.put("plan", plan.plan_id);
+
+		// Checks if any email subscription available to current contact
+		// and updates if there is any email plan
+		if (existingAddonPlan != null)
+		{
+
+		    // If amount is more than current plan, upgrade the plan and
+		    // charge invoice prorated
+		    if (newPlan.getAmount() > existingAddonPlan.getAmount())
+		    {
+			isProrated = true;
+			newSubscriptionParams.put("prorate", "true");
+			existingSubscription.setStart(new Date().getTime());
+		    }
+		    else
+		    {
+			newSubscriptionParams.put("prorate", "false");
+			existingSubscription.setStart(existingSubscription.getEndedAt());
+		    }
+
+		    existingSubscription.update(newSubscriptionParams);
+
+		    if (isProrated)
+		    {
+			Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
+			invoiceItemParams.put("customer", customer.getId());
+			try
+			{
+			    Invoice invoice = Invoice.create(invoiceItemParams);
+			    if (invoice != null)
+				invoice.pay();
+			}
+			catch (Exception e)
+			{
+			}
+		    }
+		}
+
+		customer.createSubscription(newSubscriptionParams);
+	    }
+	    catch (StripeException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
+	}
     }
 
 }

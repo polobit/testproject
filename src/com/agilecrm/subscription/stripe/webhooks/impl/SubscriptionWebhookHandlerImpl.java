@@ -62,19 +62,24 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	if (user == null)
 	    return;
 
+	// Sets billing restrictions email count
+	if (isEmailAddonPlan())
+	    setEmailsCountBillingRestriction();
+
 	customizeEventAttributes(user);
 
 	// Send mail to domain user
 	sendMail(SendMail.PLAN_CHANGED_SUBJECT, SendMail.PLAN_CHANGED);
-	
-//	updateContactInOurDomain(getContactFromOurDomain(), user.email, null, getPlanFromeventSubscriptionEvent());
+
+	 updateContactInOurDomain(getContactFromOurDomain(), user.email, null,
+	 getPlanName());
     }
 
     public void deleteSubscription()
     {
 	// Get domain owner
 	DomainUser user = getUser();
-	
+
 	// If user is null return
 	if (user == null)
 	    return;
@@ -84,9 +89,9 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	// Send mail to domain user
 	sendMail(SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FINAL_TIME);
 
-	String userDomain  = getDomain();
-	
-	if(StringUtils.isEmpty(userDomain))
+	String userDomain = getDomain();
+
+	if (StringUtils.isEmpty(userDomain))
 	    return;
 
 	Subscription.deleteSubscriptionOfParticularDomain(userDomain);

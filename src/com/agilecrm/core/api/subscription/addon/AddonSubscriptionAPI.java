@@ -30,7 +30,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 
 @Path("/api/subscription-addon")
-public class AddonSubscription
+public class AddonSubscriptionAPI
 {
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -63,4 +63,14 @@ public class AddonSubscription
 	}
 	return;
     }
+    
+    @POST
+    @Path("/addon-new/email")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public void addAddonToExistingSubscription(Subscription subscription)
+    { 
+	
+    }
+    
 }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.stripe.StripeUtil;
+import com.agilecrm.subscription.stripe.webhooks.impl.InvoiceWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.impl.SubscriptionWebhookHandlerImpl;
 import com.stripe.Stripe;
 import com.stripe.exception.APIConnectionException;
@@ -53,6 +54,7 @@ public class StripeWebhookServlet2 extends HttpServlet
 
 	res.setContentType("text/plain;charset=UTF-8");
 
+	System.out.println("event started");
 	String stripe_event_message = readData(req);
 
 	// If event message is empty return
@@ -105,8 +107,8 @@ class StripeWebhookHandlerUtil
 	Event event = null;
 	try
 	{
-	    
 	    event = StripeUtil.getEventFromJSON(eventResponse);
+	    
 	}
 	catch (AuthenticationException e)
 	{
@@ -142,11 +144,15 @@ class StripeWebhookHandlerUtil
 
 	event_name = event.getType();
 
-	SubscriptionWebhookHandlerImpl handler = null;
+	StripeWebhookHandler handler = null;
 
+	
 	if (event_name.contains("subscription"))
 	    handler = new SubscriptionWebhookHandlerImpl();
-	
+	else if(event_name.contains("invoice"))
+	    handler = new InvoiceWebhookHandler();
+	    
+	System.out.println(event_name + ", " + handler);
 	
 	if(handler == null)
 	    return null;
