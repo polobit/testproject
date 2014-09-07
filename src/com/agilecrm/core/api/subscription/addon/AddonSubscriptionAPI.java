@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.http.message.BasicNameValuePair;
 import org.mozilla.javascript.tools.shell.Global;
@@ -70,7 +71,20 @@ public class AddonSubscriptionAPI
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public void addAddonToExistingSubscription(Subscription subscription)
     { 
-	
+	try
+	{
+	    new Subscription().getAgileBilling().addSubscriptionAddon(subscription.card_details, subscription.plan);
+	}
+	catch (Exception e)
+	{
+	    /*
+	     * If Exception is raised during subscription send the exception
+	     * message to client
+	     */
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+	}
     }
     
 }

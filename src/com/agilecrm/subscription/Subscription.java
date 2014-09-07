@@ -474,7 +474,7 @@ public class Subscription
      * @return {@link AgileBilling}
      * @throws Exception
      */
-    private AgileBilling getAgileBilling() throws Exception
+    public AgileBilling getAgileBilling() throws Exception
     {
 	/*
 	 * Respective gateway implementation is expected to be in sub package of
