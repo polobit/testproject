@@ -189,4 +189,11 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	return plan;
     }
 
+    @Override
+    protected Map<String, Object> getMailDetails()
+    {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
 }

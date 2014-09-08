@@ -16,7 +16,9 @@ import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.gson.Gson;
+import com.stripe.model.Card;
 import com.stripe.model.Customer;
+import com.stripe.model.CustomerCardCollection;
 import com.stripe.model.Event;
 import com.stripe.model.StripeObject;
 
@@ -250,7 +252,23 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	Map<String, Object> details = getPlanDetails();
 	details.put("user_name", user.name);
 	details.put("domain", getDomain());
-	details.put("last_four", customer.getDefaultCard());
+	CustomerCardCollection cardCollection = customer.getCards();
+	
+	String defaultCard = customer.getDefaultCard();
+
+	String last_four = null;
+	for(Card card : cardCollection.getData())
+	{
+	    if(card.getId().equals(defaultCard))
+	    {
+		last_four = card.getLast4();
+		break;
+	    }
+	}
+	
+	details.put("last_four", last_four);
+	
+	//details.put("last_four", customer.getDefaultCard());
 	return details;
     }
 
