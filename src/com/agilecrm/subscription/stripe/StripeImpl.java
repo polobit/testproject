@@ -87,6 +87,7 @@ public class StripeImpl implements AgileBilling
     public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception
     {
 
+	System.out.println(StripeUtil.getCustomerParams(cardDetails, plan));
 	// Creates customer and add subscription to it
 	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails, plan));
 
@@ -128,7 +129,23 @@ public class StripeImpl implements AgileBilling
 
 	updateParams.put("prorate", false);
 
-	com.stripe.model.Subscription oldSubscription = customer.getSubscription();
+	CustomerSubscriptionCollection subscriptionCollection = customer.getSubscriptions();
+	List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection.getData();
+	
+	// Fetches all subscriptions and check if there is an account plan
+	Iterator<com.stripe.model.Subscription> iterator = subscriptionList.iterator();
+	com.stripe.model.Subscription oldSubscription = null;
+	while (iterator.hasNext())
+	{
+	    com.stripe.model.Subscription s = iterator.next();
+	    com.stripe.model.Plan p = s.getPlan();
+	    if (!StringUtils.containsIgnoreCase(p.getId(), "email"))
+	    {
+		oldSubscription = s;
+		break;
+	    }
+	}
+
 	com.stripe.model.Plan oldPlan = (oldSubscription == null) ? null : oldSubscription.getPlan();
 	com.stripe.model.Plan newPlan = com.stripe.model.Plan.retrieve(plan.plan_id);
 
@@ -141,7 +158,17 @@ public class StripeImpl implements AgileBilling
 	}
 
 	// Updates customer with changed plan
-	customer.updateSubscription(updateParams);
+	if (oldSubscription != null)
+	{
+	    oldSubscription.update(updateParams);
+	}
+	else
+	{
+	    customer.createSubscription(updateParams);
+
+	    // Returns Customer object as JSONObject
+	    return StripeUtil.getJSONFromCustomer(customer);
+	}
 
 	// Create the invoice and pay immediately
 	if (updateParams.get("prorate").equals("true"))
@@ -320,15 +347,16 @@ public class StripeImpl implements AgileBilling
     }
 
     @Override
-    public void addSubscriptionAddon(CreditCard card, Plan plan) throws Exception
+    public void addSubscriptionAddon(Subscription newSubscription) throws Exception
     {
 	Subscription subscription = Subscription.getSubscription();
+	CreditCard card = newSubscription.card_details;
+	Plan plan = newSubscription.emailPlan;
 	if (subscription == null)
 	{
-	    createCustomer(card, plan);
+	    newSubscription.createNewEmailSubscription();
 	    return;
 	}
-	    
 
 	// New plan to subscribe
 	com.stripe.model.Plan newPlan = com.stripe.model.Plan.retrieve(plan.plan_id);
@@ -411,6 +439,8 @@ public class StripeImpl implements AgileBilling
 			{
 			}
 		    }
+
+		    return;
 		}
 
 		customer.createSubscription(newSubscriptionParams);

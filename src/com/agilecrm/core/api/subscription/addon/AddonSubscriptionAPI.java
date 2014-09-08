@@ -17,9 +17,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.mozilla.javascript.tools.shell.Global;
 
 import com.agilecrm.Globals;
+import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gdata.util.common.xml.XmlWriter.Namespace;
 import com.stripe.exception.APIConnectionException;
@@ -35,27 +37,25 @@ public class AddonSubscriptionAPI
 {
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void subscribe(@QueryParam("plan") String planid) throws PlanRestrictedException, WebApplicationException, AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException
+    public void subscribe(@QueryParam("plan") String planid) throws PlanRestrictedException, WebApplicationException,
+	    AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException
     {
 	System.out.println(planid);
 	com.stripe.model.Plan plan = com.stripe.model.Plan.retrieve(planid, Globals.STRIPE_API_KEY);
-	if(plan == null)
+	if (plan == null)
 	    return;
-	
-	
+
 	try
 	{
-	   Customer customer =  Subscription.getCustomer(NamespaceManager.get());
-	   
-	  // Returns live mode sut
-	  if(customer.getLivemode())
-	      return;
-	  
-	   Map<String, Object> params = new HashMap<String, Object>();
-	   params.put("plan", plan.getId());
-	  // customer.createSubscription(params, Globals.STRIPE_API_KEY);	  
-	   
-	   
+	    Customer customer = Subscription.getCustomer(NamespaceManager.get());
+	    // Returns live mode sut
+	    if (customer.getLivemode())
+		return;
+
+	    Map<String, Object> params = new HashMap<String, Object>();
+	    params.put("plan", plan.getId());
+	    // customer.createSubscription(params, Globals.STRIPE_API_KEY);
+
 	}
 	catch (StripeException e)
 	{
@@ -64,16 +64,32 @@ public class AddonSubscriptionAPI
 	}
 	return;
     }
-    
+
+    @GET
+    @Path("/subscribe")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Subscription getSubscription()
+    {
+	Subscription sub = Subscription.getSubscription();
+	if (sub != null)
+	    return sub;
+
+	sub = new Subscription();
+	sub.plan = new Plan(PlanType.FREE.toString(), 2);
+	return sub;
+    }
+
     @POST
-    @Path("/addon-new/email")
+    @Path("/subscribe")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public void addAddonToExistingSubscription(Subscription subscription)
-    { 
+    public void subscribe(Subscription subscription)
+    {
 	try
 	{
-	    new Subscription().getAgileBilling().addSubscriptionAddon(subscription.card_details, subscription.plan);
+	    AgileBilling billing = subscription.getAgileBilling();
+	    
+	    billing.addSubscriptionAddon(subscription);
 	}
 	catch (Exception e)
 	{
@@ -84,5 +100,5 @@ public class AddonSubscriptionAPI
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
 		    .build());
 	}
-	}
     }
+}

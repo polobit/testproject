@@ -95,6 +95,6 @@ public interface AgileBilling
      */
     public void cancelSubscription(JSONObject billingData) throws Exception;
     
-    public void addSubscriptionAddon(CreditCard card, Plan plan) throws Exception;
+    public void addSubscriptionAddon(Subscription subscription) throws Exception;
 
 }
