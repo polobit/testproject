@@ -41,7 +41,7 @@ public class FacebookWidgetsApi
      */
     @Path("contacts/{widget-id}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN + "; charset=UTF-8;")
     public JSONObject getFacebookUsersDetails(@PathParam("widget-id") Long widgetId,
 	    @QueryParam("searchKey") String firstname)
     {
