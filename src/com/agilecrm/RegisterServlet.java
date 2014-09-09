@@ -89,8 +89,8 @@ public class RegisterServlet extends HttpServlet
 	    return;
 	}
 
-	System.out.println("before request redirection " + request.getParameter("mecode"));
-	request.setAttribute("reference_code", request.getParameter("mecode"));
+	System.out.println("before request redirection " + request.getParameter("utm_domain"));
+	request.setAttribute("reference_code", request.getParameter("utm_domain"));
 	// Return to Login Page
 	request.getRequestDispatcher("register.jsp").forward(request, response);
     }
