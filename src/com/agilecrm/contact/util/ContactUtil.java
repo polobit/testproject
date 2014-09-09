@@ -327,7 +327,7 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("type", Type.PERSON)
 		.filter("properties.value = ", email.toLowerCase()).count();
 
     }
@@ -722,9 +722,6 @@ public class ContactUtil
 	    if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name)
 		    || Contact.PHONE.equals(field.name) || Contact.URL.equals(field.name))
 	    {
-		if (Contact.WEBSITE.equals(field.name))
-		{
-		}
 
 		// Fetches all contact fields by property name
 		List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
@@ -734,7 +731,7 @@ public class ContactUtil
 		{
 		    // If field value is equal to existing property, set
 		    // subtype, there could be change in subtype
-		    if (field.value.equals(contactField.value))
+		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
 			contactField.subtype = field.subtype;
 
