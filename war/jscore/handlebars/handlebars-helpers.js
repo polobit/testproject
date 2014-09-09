@@ -967,9 +967,9 @@ $(function()
 
     //gets the refernce code of current domain
     
-    Handlebars.registerHelper('get_reference_code', function()
+    Handlebars.registerHelper('get_current_domain', function()
     	    {
-    		return CURRENT_DOMAIN_REFERENCE_CODE;
+    		return CURRENT_DOMAIN_USER.domain;
     	    });
     
     
