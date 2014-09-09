@@ -94,5 +94,7 @@ public interface AgileBilling
      * @throws Exception
      */
     public void cancelSubscription(JSONObject billingData) throws Exception;
+    
+    public void addSubscriptionAddon(Subscription subscription) throws Exception;
 
 }
