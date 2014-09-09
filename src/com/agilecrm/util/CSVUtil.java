@@ -313,7 +313,7 @@ public class CSVUtil
 
 	    try
 	    {
-		tempContact.save(false);
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {
