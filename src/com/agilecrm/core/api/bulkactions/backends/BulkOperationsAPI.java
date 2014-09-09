@@ -306,11 +306,15 @@ public class BulkOperationsAPI
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
 	    if (type.equalsIgnoreCase("deals"))
 	    {
-                 new CSVUtil(restrictions).createDealsFromCSV(blobStream, ownerId, type);
+		new CSVUtil(restrictions).createDealsFromCSV(blobStream, ownerId, type);
 	    }
-	    else
+	    else if (type.equalsIgnoreCase("contacts"))
 	    {
-		new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId, type);
+		new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
+	    }
+	    else if (type.equalsIgnoreCase("companies"))
+	    {
+		new CSVUtil(restrictions).createCompaniesFromCSV(blobStream, contact, ownerId, type);
 	    }
 	}
 	catch (IOException e)
