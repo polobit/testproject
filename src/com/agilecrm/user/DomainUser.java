@@ -73,7 +73,6 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     /** The Reference tracking object represents referercount and referece key */
 
     @Embedded
-    @NotSaved
     public Referer referer = new Referer();
 
     /**
@@ -240,6 +239,29 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     /**
      * Sends notification on disabling or enabling the domain user
      */
+
+    public DomainUser(String domain, String email, String name, String password, boolean isAdmin,
+	    boolean isAccountOwner, String referenced_domain_name)
+    {
+	this.domain = domain;
+	this.email = email;
+	this.name = name;
+	this.password = password;
+	this.is_admin = isAdmin;
+	this.is_account_owner = isAccountOwner;
+
+	// added by jagadeesh for referral trackingm // creates new reference
+	// code and stores in DoaminUser
+
+	this.referer.referral_count = 0;// stores referelcount 0 when creating
+
+	this.referer.reference_by_domain = referenced_domain_name;
+
+	System.out.println(this.referer.referral_count + "   " + this.referer.reference_by_domain);
+    }
+
+    // Sends notification on disabling or enabling the domain user
+
     private void sendNotification()
     {
 	try
@@ -458,6 +480,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
+
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	    if (StringUtils.isEmpty(this.domain))
 	    {

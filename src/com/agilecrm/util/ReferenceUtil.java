@@ -1,36 +1,12 @@
 package com.agilecrm.util;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.google.appengine.api.NamespaceManager;
-
-//class used generate random referance code for each domain
 
 public class ReferenceUtil
 {
-
-    public static String getReferanceNumber()
-    {
-
-	UUID idOne = UUID.randomUUID();
-
-	String referencecode = idOne.toString();
-
-	// @@reference code was generated or not will be checked here if is
-	// avaliable agin generates reference code and returns that num
-	if (checkReferenceCodeStatus(referencecode))
-	{
-	    String refercode = getReferanceNumber();
-	    return refercode;
-
-	}
-
-	System.out.println(idOne.toString());
-	return referencecode;
-    }
 
     // increases count for referer domain
 
@@ -41,15 +17,15 @@ public class ReferenceUtil
 	return reference_count;
     }
 
-    // checks weather referer_code entered in register.java valid or nor
+    // checks weather referer_domain entered in registerservlet.java valid or
+    // not
 
-    public static boolean checkReferenceCodeStatus(String referer_code)
+    public static boolean check_reference_domain_status(String reference_domain)
     {
 
-	DomainUser domainuser = DomainUserUtil.getDomainUser_To_Check_Reference_CodeStatus("referer.reference_code",
-	        referer_code);
+	DomainUser domainuser = DomainUserUtil.getDomainOwner(reference_domain);
 
-	System.out.println(domainuser + "in reference util checking reference code status");
+	System.out.println(domainuser + "in reference util checking reference domain status");
 
 	if (domainuser != null)
 	{
@@ -66,11 +42,10 @@ public class ReferenceUtil
     // the user is created. it will be
     // called from register servlet only after creation of domainuser
 
-    public static void update_referel_count_of_reference_domain(String referer_code)
+    public static void update_referel_count_of_reference_domain(String reference_domain)
     {
 
-	DomainUser domainuser = DomainUserUtil.getDomainUser_To_Check_Reference_CodeStatus("referer.reference_code",
-	        referer_code);
+	DomainUser domainuser = DomainUserUtil.getDomainOwner(reference_domain);
 
 	if (domainuser != null)
 	{
@@ -90,89 +65,20 @@ public class ReferenceUtil
 
     }
 
-    // based on reference_code fetches the name of that domain owner
-
-    public static DomainUser getDomainInfoBasedOnReferencecode(String referer_code)
-    {
-
-	DomainUser domainuser = DomainUserUtil.getDomainUser_To_Check_Reference_CodeStatus("referer.reference_code",
-	        referer_code);
-	if (domainuser != null)
-	{
-
-	    System.out.println(domainuser);
-	    return domainuser;
-
-	}
-
-	return null;
-    }
-
-    //
-
-    // based on reference_code fetches the domain owner entity
-    // from that we caan get referenc code
-
-    public static DomainUser getDomainReferenceCode()
-    {
-
-	DomainUser domainuser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
-	if (domainuser != null)
-	{
-
-	    return domainuser;
-
-	}
-
-	return null;
-    }
-
     //
 
     // based on reference_code fetches the all the domain who used this refernce
     // code when they are logged in
 
-    public static List<DomainUser> getAllReferel(String referencecode)
+    public static List<DomainUser> getAllReferel(String refernce_domain)
     {
 
-	List<DomainUser> referencedByMe = DomainUserUtil.getAllDomainUsersBasedOnReferenceCode(referencecode);
+	List<DomainUser> referencedByMe = DomainUserUtil.getAllDomainUsersBasedOnReferenceDomain(refernce_domain);
 	if (referencedByMe != null)
 	{
 
 	    return referencedByMe;
 
-	}
-
-	return null;
-    }
-
-    //
-
-    // purely used to fetch domain reference code based on current domain
-
-    public static String getCurrentDomainReferenceCode() throws Exception
-    {
-
-	DomainUser domainuser = DomainUserUtil.getDomainOwner(NamespaceManager.get());
-
-	System.out.println("domainuser in getCurrentdomainReferenceCode");
-	if (domainuser != null)
-	{
-	    String reference_code = domainuser.referer.reference_code;
-	    System.out.println("referenceCode ===============" + reference_code);
-	    if (reference_code != null)
-	    {
-		return reference_code;
-	    }
-	    /*
-	     * else { System.out.println(
-	     * "in else condition in creating domain reference code");
-	     * domainuser.referer.reference_code = getReferanceNumber();
-	     * domainuser.referer.referral_count = 0; domainuser.save(); return
-	     * domainuser.referer.reference_code;
-	     * 
-	     * }
-	     */
 	}
 
 	return null;
