@@ -608,6 +608,8 @@ public class ContactUtil
     public static boolean companyExists(String companyName)
     {
 
+	if (companyName == null || companyName.isEmpty())
+	    return false;
 	Map<String, Object> searchFields = new HashMap<String, Object>();
 	searchFields.put("properties.name", Contact.NAME);
 	searchFields.put("properties.value", companyName);

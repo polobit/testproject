@@ -439,7 +439,6 @@ public class CSVUtil
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
 	int failedCompany = 0;
-	List<String> emails = new ArrayList<String>();
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
 
@@ -476,7 +475,6 @@ public class CSVUtil
 		    continue;
 		}
 
-	
 		if (Contact.ADDRESS.equals(field.name))
 		{
 		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
@@ -529,11 +527,18 @@ public class CSVUtil
 	    boolean isMerged = false;
 
 	    // save contact as company
-
-	    if (ContactUtil.companyExists(StringUtils.capitalise(companyName.toLowerCase())))
+	    if (companyName != null && !companyName.isEmpty())
 	    {
-		tempContact = ContactUtil.mergeCompanyFields(tempContact);
-		isMerged = true;
+
+		if (ContactUtil.companyExists(StringUtils.capitalise(companyName.toLowerCase())))
+		{
+		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
+		    isMerged = true;
+		}
+	    }
+	    else
+	    {
+		continue;
 	    }
 
 	    /**
@@ -563,7 +568,7 @@ public class CSVUtil
 	    {
 
 		tempContact.save();
-		
+
 	    }
 	    catch (Exception e)
 	    {
@@ -577,7 +582,9 @@ public class CSVUtil
 	    if (isMerged)
 	    {
 		mergedCompany++;
-	    }else{
+	    }
+	    else
+	    {
 		savedCompany++;
 	    }
 
