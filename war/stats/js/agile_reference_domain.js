@@ -3,6 +3,8 @@
  * string when user visited from referral link
  */
 
+
+
 function getParameterByName(name)
 {
 	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -18,7 +20,7 @@ function agile_create_reference_domain_cookie()
 		if (reference_domain)
 		{
 
-			agile_create_cookie("Agile_Reference_Domain", reference_domain, 90);
+			agile_createCookieInAllAgileSubdomains("Agile_Reference_Domain", reference_domain, 90);
 			console.log("cookie created " + reference_domain);
 		}
 		else
