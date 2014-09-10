@@ -1,12 +1,9 @@
 package com.agilecrm.deals.deferred;
 
-import java.util.Set;
-
 import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.util.NamespaceUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 
@@ -24,6 +21,13 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 public class DealsDeferredTask implements DeferredTask
 {
 
+    private String domain;
+
+    public DealsDeferredTask(String domain)
+    {
+	this.domain = domain;
+    }
+
     @Override
     public void run()
     {
@@ -31,36 +35,30 @@ public class DealsDeferredTask implements DeferredTask
 	int count = 0;
 	try
 	{
-	    Set<String> namespaces = NamespaceUtil.getAllNamespaces();
-	    System.out.println("Total namespaces - " + namespaces.size());
-	    for (String domain : NamespaceUtil.getAllNamespaces())
+	    NamespaceManager.set(domain);
+	    System.out.println("Domain name is " + domain);
+	    Milestone milestone = MilestoneUtil.getMilestones();
+	    milestone.name = "Default";
+	    milestone.save();
+	    Long pipelineId = milestone.id;
+	    System.out.println("Default pipeline " + pipelineId);
+	    // Util function fetches reports based on duration, generates
+	    // reports and sends report
+	    for (Opportunity deal : OpportunityUtil.getOpportunities())
 	    {
-	   	//String domain = "prabathk";
-		NamespaceManager.set(domain);
-		System.out.println("Domain name is " + domain);
-		Milestone milestone = MilestoneUtil.getMilestones();
-		milestone.name = "Default";
-		milestone.save();
-		Long pipelineId = milestone.id;
-		System.out.println("Default pipeline " + pipelineId);
-		// Util function fetches reports based on duration, generates
-		// reports and sends report
-		for (Opportunity deal : OpportunityUtil.getOpportunities())
+		try
 		{
-		    try
-		    {
-			deal.pipeline_id = pipelineId;
-			deal.save();
-			System.out.println(deal.pipeline_id);
-		    }
-		    catch (Exception e)
-		    {
-			System.out.println(e.getMessage());
-		    }
+		    deal.pipeline_id = pipelineId;
+		    deal.save();
+		    System.out.println(deal.pipeline_id);
 		}
-		count++;
-		System.out.println("Present count " + count);
+		catch (Exception e)
+		{
+		    System.out.println(e.getMessage());
+		}
 	    }
+	    count++;
+	    System.out.println("Present count " + count);
 
 	}
 	catch (Exception e)

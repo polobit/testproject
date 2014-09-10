@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.deals;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,7 +20,6 @@ import net.sf.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
@@ -34,11 +34,13 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -456,20 +458,57 @@ public class DealsAPI
 		    String.valueOf(count));
     }
 
+    /**
+     * Call backends for updating deals pipeline.
+     */
     @Path("/bulk/default_track")
     @POST
     public void setDealtoDefaultTrack()
     {
-	DealsDeferredTask dealTracks = new DealsDeferredTask();
-	// Initialize task here
-	Queue queue = QueueFactory.getQueue("pipeline-queue");
+	// Append the URL with the current userId to set the session manager in
+	// the backend.
+	String uri = "/core/api/opportunity/backend/bulk/default_track" + SessionManager.get().getDomainId();
 
 	String url = BackendServiceFactory.getBackendService().getBackendAddress("b1-sandbox");
 
 	// Create Task and push it into Task Queue
-	TaskOptions taskOptions = TaskOptions.Builder.withPayload(dealTracks).header("Host", url);
+	Queue queue = QueueFactory.getQueue("pipeline-queue");
+	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).header("Host", url).method(Method.POST);
 
-	queue.add(taskOptions);
+	queue.addAsync(taskOptions);
+    }
+
+    @Path("/backend/bulk/default_track/{current_user_id}")
+    @POST
+    public void setDealtoDefaultTrackBackend(@PathParam("current_user_id") Long currentUserId)
+    {
+	// Set the session manager to get the user preferences and the other
+	// details required.
+	if (SessionManager.get() != null)
+	{
+	    SessionManager.get().setDomainId(currentUserId);
+	}
+	else
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	    SessionManager.set(new UserInfo(null, user.email, user.name));
+	    SessionManager.get().setDomainId(user.id);
+	}
+
+	Set<String> namespaces = NamespaceUtil.getAllNamespaces();
+	System.out.println("Total namespaces - " + namespaces.size());
+	for (String domain : namespaces)
+	{
+	    DealsDeferredTask dealTracks = new DealsDeferredTask(domain);
+	    // Initialize task here
+	    Queue queue = QueueFactory.getQueue("pipeline-queue");
+
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(dealTracks);
+
+	    queue.add(taskOptions);
+	}
+
     }
 
 }
