@@ -6,7 +6,7 @@ public class Referer
     // @referral_count store the count of domains which are referred by same
     // domain
 
-    public int referral_count = 0;
+    public Integer referral_count = 0;
     public String reference_by_domain = null;
 
     /*
