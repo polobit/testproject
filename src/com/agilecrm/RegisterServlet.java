@@ -175,7 +175,7 @@ public class RegisterServlet extends HttpServlet
 	    for (int i = 0; i < cookies.length; i++)
 	    {
 		Cookie c = cookies[i];
-		if (c.getName().equals("Agile_Reference_Domain"))
+		if (c.getName().equals("Agile_Reference_Domain_cookie_chnged_the_name"))
 		{
 		    reference_domain = c.getValue();
 		    if (reference_domain != null)
@@ -221,14 +221,7 @@ public class RegisterServlet extends HttpServlet
 
 	DomainUser domainUser = createUser(request, response, userInfo, password, reference_domain);
 
-	// checks 3 conditions,domainuser saved ,refernce_domain
-	// exists,&refernce_domain not null
-	if (domainUser != null && reference_domain != null
-	        && ReferenceUtil.check_reference_domain_status(reference_domain))
-	{
-	    ReferenceUtil.update_referel_count_of_reference_domain(reference_domain);
-	}
-	System.out.println("domaunuser in register servlet  " + domainUser);
+	
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
     }
@@ -273,8 +266,7 @@ public class RegisterServlet extends HttpServlet
 	request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
 	// Create Domain User, Agile User
-	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true,
-	        reference_domain);
+	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true);
 
 	// Set IP Address
 	domainUser.setInfo(DomainUser.IP_ADDRESS, "");
