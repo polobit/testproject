@@ -757,7 +757,7 @@ public class ContactUtil
 	    }
 
 	    // If company is different then
-	    if (existingField.name.equals(Contact.NAME))
+	    if (existingField.name.equals(Contact.COMPANY))
 	    {
 		if (!StringUtils.equals(existingField.value, field.value))
 		{
