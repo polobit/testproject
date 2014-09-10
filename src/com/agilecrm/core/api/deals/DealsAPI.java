@@ -467,7 +467,7 @@ public class DealsAPI
     {
 	// Append the URL with the current userId to set the session manager in
 	// the backend.
-	String uri = "/core/api/opportunity/backend/bulk/default_track" + SessionManager.get().getDomainId();
+	String uri = "/core/api/opportunity/backend/bulk/default_track/" + SessionManager.get().getDomainId();
 
 	String url = BackendServiceFactory.getBackendService().getBackendAddress("b1-sandbox");
 
