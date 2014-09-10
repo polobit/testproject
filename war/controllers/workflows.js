@@ -533,6 +533,12 @@ var WorkflowsRouter = Backbone.Router
 							var stripe_charge_event_type = currentTrigger.toJSON()['trigger_stripe_event'];
 							populate_stripe_events_in_trigger($('form#addTriggerForm', el), 'trigger-stripe-event', stripe_charge_event_type);
 						}
+						
+						if(type == 'SHOPIFY_EVENT')
+						{
+							var shopify_event_type = currentTrigger.toJSON()['trigger_shopify_event'];
+							populate_shopify_events_in_trigger($('form#addTriggerForm', el), 'trigger-shopify-event', shopify_event_type);
+						}
 
 						var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
 

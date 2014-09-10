@@ -31,7 +31,8 @@
                                         <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
                                         <option value="ADD_SCORE" id="add-score">Score (>=)</option>
 										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
-                                    </select>
+                                    	<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
+									</select>
                                 </div>
                             </div>
                         </div>
@@ -63,6 +64,20 @@
 							</select>
 							</div>
 						</div>
+						<div class="control-group" style="display:none;">
+							<div class="controls" style="margin-left:220px!important">
+							<select id="trigger-shopify-event" name="trigger_shopify_event" class="required">
+									<option value="">Select Shopify Event</option>
+									<option value="CUSTOMER_CREATE">Customer created</option>
+									<option value="CUSTOMER_UPDATE">Customer updated</option>
+									<option value="ORDER_CREATE">Order created</option>
+									<option value="ORDER_UPDATE">Order updated</option>
+									<option value="ORDER_PAYMENT">Order payment</option>
+									<option value="CHECKOUT_CREATE">Checkout created</option>
+									<option value="CHECKOUT_UPDATE">Checkout updated</option>
+							</select>
+							</div>	
+						</div> 
                         <div class="control-group">
                             <label class="control-label" style="width:200px!important;">Run this Campaign on the Contact <span class="field_req">*</span></label>
                             <div class="controls" style="margin-left:220px!important;">
