@@ -179,6 +179,7 @@ public class CSVUtil
 	int accessDeniedToUpdate = 0;
 	List<String> emails = new ArrayList<String>();
 	Map<Object, Object> status = new HashMap<Object, Object>();
+	status.put("type", "Contact");
 
 	for (String[] csvValues : contacts)
 	{
@@ -313,7 +314,7 @@ public class CSVUtil
 
 	    try
 	    {
-		tempContact.save(false);
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {

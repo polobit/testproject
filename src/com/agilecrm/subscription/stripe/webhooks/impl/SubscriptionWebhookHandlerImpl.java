@@ -61,9 +61,18 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	System.out.println(user);
 	if (user == null)
 	    return;
+	
+	System.out.println(getPlanDetails());
 
 	// Sets billing restrictions email count
 	if (isEmailAddonPlan())
+	{
+	    System.out.println("email plan");
+	    System.out.println("(*****************************************)");
+	 // Send mail to domain user
+		sendMail1(SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED);
+		return;
+	}
 	    setEmailsCountBillingRestriction();
 
 	customizeEventAttributes(user);
@@ -148,7 +157,8 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
     private boolean isEmailAddonPlan()
     {
-	String plan_id = String.valueOf(getPlanDetails().get("id"));
+	String plan_id = String.valueOf(getPlanDetails().get("plan_id"));
+	System.out.println("plan :" + plan_id);
 	if (StringUtils.containsIgnoreCase(plan_id, "email"))
 	    return true;
 
@@ -168,15 +178,25 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	JSONObject object;
 	try
 	{
+	    System.out.println("plan in getting details : " + plan);
 	    if (plan != null && !plan.isEmpty())
 		return plan;
-
+	    
+	    
+	    plan = new HashMap<String, Object>();
+	    
 	    object = eventJSON.getJSONObject("data").getJSONObject("object");
 
+	    if(object.has("quantity"))
+	 		plan.put("quantity", object.get("quantity"));
+	    
 	    JSONObject planJSON = object.getJSONObject("plan");
 
 	    plan.put("plan", planJSON.getString("name"));
 	    plan.put("plan_id", planJSON.getString("id"));
+	    
+	    System.out.println("--------------------------------------------");
+	    System.out.println(plan);
 
 	}
 	catch (Exception e)
@@ -192,8 +212,19 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
     @Override
     protected Map<String, Object> getMailDetails()
     {
+	Map<String, Object> map = getPlanDetails();
+	map.put("domain", getDomain());
+	map.put("user_name", getUser().name);
+	map.put("email", getUser().email);
+	
+	// Get the attibutes from event object
+	Map<String, Object> attributes = getEvent().getData().getPreviousAttributes();
+	if(eventType.equals(StripeWebhookServlet.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED) && attributes != null)
+	    map.put("previous_attributes", attributes);
+	
+	
 	// TODO Auto-generated method stub
-	return null;
+	return map;
     }
 
 }

@@ -327,7 +327,7 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("type", Type.PERSON)
 		.filter("properties.value = ", email.toLowerCase()).count();
 
     }
@@ -608,8 +608,6 @@ public class ContactUtil
     public static boolean companyExists(String companyName)
     {
 
-	if (companyName == null || companyName.isEmpty())
-	    return false;
 	Map<String, Object> searchFields = new HashMap<String, Object>();
 	searchFields.put("properties.name", Contact.NAME);
 	searchFields.put("properties.value", companyName);
@@ -724,9 +722,6 @@ public class ContactUtil
 	    if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name)
 		    || Contact.PHONE.equals(field.name) || Contact.URL.equals(field.name))
 	    {
-		if (Contact.WEBSITE.equals(field.name))
-		{
-		}
 
 		// Fetches all contact fields by property name
 		List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
@@ -736,7 +731,7 @@ public class ContactUtil
 		{
 		    // If field value is equal to existing property, set
 		    // subtype, there could be change in subtype
-		    if (field.value.equals(contactField.value))
+		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
 			contactField.subtype = field.subtype;
 
@@ -762,7 +757,7 @@ public class ContactUtil
 	    }
 
 	    // If company is different then
-	    if (existingField.name.equals(Contact.NAME))
+	    if (existingField.name.equals(Contact.COMPANY))
 	    {
 		if (!StringUtils.equals(existingField.value, field.value))
 		{
