@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
@@ -22,7 +21,6 @@ import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
-import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.appengine.api.NamespaceManager;
@@ -79,10 +77,6 @@ public class Subscription
     @NotSaved(IfDefault.class)
     public Plan plan = null;
 
-    @Embedded
-    @NotSaved(IfDefault.class)
-    public Plan emailPlan = null;
-
     /**
      * The card_details variable is used for serialization of card details from
      * form this field is not saved only encrypted card details will be saved
@@ -102,12 +96,6 @@ public class Subscription
     @NotSaved(IfDefault.class)
     public BillingStatus status;
 
-    /**
-     * The status {@link Enum} type variable holds status of Subscription status
-     */
-    @NotSaved(IfDefault.class)
-    public BillingStatus emailStatus;
-
     /** The created_time variable represents when subscription object is created */
     @NotSaved(IfDefault.class)
     public Long created_time = 0L;
@@ -123,8 +111,9 @@ public class Subscription
      */
     @NotSaved(IfDefault.class)
     public String billing_data_json_string = null;
-
-    // used when upgrade subscription from adminpanel
+   
+    
+    //used when upgrade subscription from adminpanel
     @NotSaved
     public String domain_name = null;
 
@@ -210,41 +199,42 @@ public class Subscription
 	try
 	{
 	    NamespaceManager.set(namespace);
-
+	    
 	    Subscription subscription = getSubscription();
 
-	    if (subscription != null)
-	    {
-		subscription.domain_name = namespace;
-		return subscription;
+	    if (subscription != null){
+		    subscription.domain_name=namespace;
+	      return subscription;
 	    }
 
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-
+    
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-	return null;
+	 return null;
     }
 
+    
     public static Customer getCustomer(String namespace) throws StripeException
     {
-	Subscription subscription = getSubscriptionOfParticularDomain(namespace);
-	if (subscription != null)
-	{
-	    JSONObject billing = subscription.billing_data;
-	    System.out.println(billing + " in subscription.java");
-	    return StripeUtil.getCustomerFromJson(billing);
-	}
-	return null;
+	    Subscription subscription = getSubscriptionOfParticularDomain(namespace);
+	    if (subscription != null){
+	      JSONObject billing=subscription.billing_data;
+	   System.out.println(billing+" in subscription.java");
+	     return StripeUtil.getCustomerFromJson(billing);
+	    }
+		return null;
 
     }
-
+    
+    
+    
     public void save()
     {
 	Subscription subscription = Subscription.getSubscription();
@@ -270,27 +260,6 @@ public class Subscription
     {
 	// Creates customer and adds subscription
 	billing_data = getAgileBilling().createCustomer(card_details, plan);
-
-	// Saves new subscription information
-	save();
-
-	return this;
-    }
-    
-    /**
-     * Creates a Customer in respective {@link Gateway} and store customer
-     * details in {@link Subscription} object
-     * 
-     * @return {@link Subscription}
-     * 
-     * @throws Exception
-     *             as Customer creation can be failed due to various
-     *             reasons(incorrect creditcard details)
-     */
-    public Subscription createNewEmailSubscription() throws Exception
-    {
-	// Creates customer and adds subscription
-	billing_data = getAgileBilling().createCustomer(card_details, emailPlan);
 
 	// Saves new subscription information
 	save();
@@ -409,7 +378,8 @@ public class Subscription
 	    return null;
 	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
     }
-
+    
+    
     /**
      * Cancels the subscription in its respective gateway
      * 
@@ -464,9 +434,6 @@ public class Subscription
     @Produces("application/json")
     public String getBillingData() throws Exception
     {
-	if(billing_data == null)
-	    return null;
-	
 	return billing_data.toString();
     }
 
@@ -475,17 +442,12 @@ public class Subscription
     {
 	try
 	{
-	    if (this.plan == null)
-	    {
-		plan = new Plan(PlanType.FREE.toString(), 2);
-	    }
-
-	    // sets domain name in subscription obj before returning
-	    this.domain_name = NamespaceManager.get();
-
+		
 	    if (billing_data_json_string != null)
 		billing_data = new JSONObject(billing_data_json_string);
-
+	 
+	    //sets domain name  in subscription obj before returning 
+	    this.domain_name=NamespaceManager.get();  
 	}
 	catch (Exception e)
 	{
@@ -499,8 +461,7 @@ public class Subscription
      * @return {@link AgileBilling}
      * @throws Exception
      */
-    @JsonIgnore
-    public AgileBilling getAgileBilling() throws Exception
+    private AgileBilling getAgileBilling() throws Exception
     {
 	/*
 	 * Respective gateway implementation is expected to be in sub package of
