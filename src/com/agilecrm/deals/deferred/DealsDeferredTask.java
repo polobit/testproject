@@ -33,9 +33,9 @@ public class DealsDeferredTask implements DeferredTask
 	{
 	    Set<String> namespaces = NamespaceUtil.getAllNamespaces();
 	    System.out.println("Total namespaces - " + namespaces.size());
-	   // for (String domain : NamespaceUtil.getAllNamespaces())
-	   // {
-	   	String domain = "prabathk";
+	    for (String domain : NamespaceUtil.getAllNamespaces())
+	    {
+	   	//String domain = "prabathk";
 		NamespaceManager.set(domain);
 		System.out.println("Domain name is " + domain);
 		Milestone milestone = MilestoneUtil.getMilestones();
@@ -60,7 +60,7 @@ public class DealsDeferredTask implements DeferredTask
 		}
 		count++;
 		System.out.println("Present count " + count);
-	   // }
+	    }
 
 	}
 	catch (Exception e)
