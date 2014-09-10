@@ -174,10 +174,12 @@ public class RegisterServlet extends HttpServlet
 	{
 	    for (int i = 0; i < cookies.length; i++)
 	    {
-		Cookie c = cookies[i];
+		Cookie c = cookies[i]; 
+		System.out.println("cookie "+c);
 		if (c.getName().equals("Agile_Reference_Domain"))
 		{
 		    reference_domain = c.getValue();
+		    System.out.println("reference domain cookie "+reference_domain);
 		    if (reference_domain != null)
 		    {
 			if (ReferenceUtil.check_reference_domain_status(reference_domain))

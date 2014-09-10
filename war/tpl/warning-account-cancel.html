@@ -78,3 +78,26 @@
     </div>
 </div>
 </script>
+
+<script id="send-cancellation-request-template" type="text/html">
+<div id="send-cancellation" class="modal hide">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Request for cancellation</h3>
+    </div>
+    <div class="modal-body">
+            <p>
+			   <b>Sorry to see you go. Please tell us why?</b>
+            </p>
+		<form id="cancelation-request-form">
+			<div class="controls">
+				<textarea name="account_cancel_reason" class="required span4" id="account_cancel_reason" rows="3" placeholder="Please give us more details. This will help us a lot."></textarea>
+    		</div>
+		</form>
+	</div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Cancel</a>
+        <a href="#" id="send-delete-request" class="btn btn-primary ">Send Request</a>
+    </div>
+</div>
+</script>

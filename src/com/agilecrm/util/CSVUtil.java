@@ -179,7 +179,7 @@ public class CSVUtil
 	int accessDeniedToUpdate = 0;
 	List<String> emails = new ArrayList<String>();
 	Map<Object, Object> status = new HashMap<Object, Object>();
-	status.put("type", "Contact");
+	status.put("type", "Contacts");
 
 	for (String[] csvValues : contacts)
 	{
