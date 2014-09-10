@@ -253,9 +253,9 @@ public class UsersAPI
 	@Path("/getreferedbyme")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<DomainUser> getAllReferedPeople(@QueryParam("referenceid") String referenceid)
+	public List<DomainUser> getAllReferedPeople(@QueryParam("reference_domain") String referencedomain)
 	{
-		return ReferenceUtil.getAllReferel(referenceid);
+		return ReferenceUtil.getAllReferel(referencedomain);
 	}
 
 }
