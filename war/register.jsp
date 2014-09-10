@@ -343,7 +343,7 @@ if(isIE || isIENew)
 						 var domain = $("#subdomain").val();
 						
 						  // Form data is posted to its subdomain 
-						  $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+						  $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 						  form.submit();	 
 					  },
 					  error: function(xhr, status, error)
