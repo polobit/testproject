@@ -64,14 +64,15 @@
 	  <tr>
 	   <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Lucida Grande,verdana">
 		  <br/>
-		 Dear {{Event.data.previousAttributes.user_name}},
+		 Dear {{user_name}},
          <br/>
          <br/>
          <b>Plan Changed</b><br/>
         We would like to notify you of a change in your Agile CRM Subscription. You have either changed the subscription or this change has been done as per your request to our support team.<br/>
 <br/>
 <b>Plan Details</b><br/>
-         Old Plan : {{#Event.data.previousAttributes.plan.name}}{{Event.data.previousAttributes.plan.name}} {{/Event.data.previousAttributes.plan.name}} {{^Event.data.previousAttributes.plan.name}} {{Event.data.object.plan.name}} {{/Event.data.previousAttributes.plan.name}} ({{Event.data.previousAttributes.quantity}} {{^Event.data.previousAttributes.quantity}} {{Event.data.object.quantity}} {{/Event.data.previousAttributes.quantity}} users),<br/>
+         Old Plan : {{previous_attributes.plan.name}} ({{previous_attributes.quantity}} users),<br/>
+         New Plan : {{plan}}  ({{quantity}} users)<br/>
 <br/>
 <b>Have questions or need help?</b><br/>
 Drop us an <a  href="mailto:billing@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
