@@ -401,7 +401,7 @@ public class DomainUserUtil
 
 	try
 	{
-	    return dao.listByProperty("referer.reference_by", referencecode);
+	    return dao.listByProperty("referer.reference_by_domain", referencecode);
 	}
 	catch (Exception e)
 	{

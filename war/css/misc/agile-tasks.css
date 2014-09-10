@@ -308,6 +308,14 @@
 {
 float:right;
 }
+.task-content-view
+{
+	width:82%;
+}
+.task-body-owner .task-content-view
+{
+	width:100%!important;
+}
 
 .progress-slider {
 	margin-left: 1 px;
