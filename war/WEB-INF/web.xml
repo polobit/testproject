@@ -531,6 +531,15 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>ShopifyWebhookTrigger</servlet-name>
+		<servlet-class>com.thirdparty.shopify.ShopifyWebhookTrigger</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyWebhookTrigger</servlet-name>
+		<url-pattern>/shopifytrigger</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>StripeChargeWebhook</servlet-name>
 		<servlet-class>com.thirdparty.stripe.StripeChargeWebhook</servlet-class>
 	</servlet>

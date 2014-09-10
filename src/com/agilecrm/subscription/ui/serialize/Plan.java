@@ -22,6 +22,8 @@ public class Plan
 	
     }
 
+    
+    public String subscription_id = null;
     public PlanType plan_type = null;
     public String plan_id = null;
     public Integer quantity = null;

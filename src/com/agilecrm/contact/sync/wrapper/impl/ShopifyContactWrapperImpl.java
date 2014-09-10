@@ -14,7 +14,7 @@ import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 
 /**
  * <code>ShopifyContactWrapperImple</code> Implements ContactWrapper This class
- * Wraps Shopify Contacts in agile schema format 
+ * Wraps Shopify Contacts in agile schema format
  * 
  * @author Jitendra
  * 
@@ -101,11 +101,15 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
     public ContactField getPhoneNumber()
     {
 	String phoneNumber = null;
-	if (defaultAddress.containsKey("phone"))
+	if (defaultAddress != null)
 	{
-	    phoneNumber = defaultAddress.get("phone");
+	    if (defaultAddress.containsKey("phone"))
+	    {
+		phoneNumber = defaultAddress.get("phone");
+	    }
+	    return new ContactField(Contact.PHONE, phoneNumber, "home");
 	}
-	return new ContactField(Contact.PHONE, phoneNumber, "home");
+	return null;
     }
 
     /*
@@ -159,40 +163,43 @@ public class ShopifyContactWrapperImpl extends ContactWrapper
 	return tags;
     }
 
-  /**
-   * Wrap Address and return as ContactField Object
-   */
+    /**
+     * Wrap Address and return as ContactField Object
+     */
     @Override
     public ContactField getAddress()
     {
 	JSONObject address = new JSONObject();
-	String strete = defaultAddress.get("address1");
-	if (defaultAddress.containsKey("address2"))
+	if (defaultAddress != null)
 	{
-	    String address2 = defaultAddress.get("address2");
-	    if (address2 != null)
-		strete = strete + address2;
-	}
-	try
-	{
-	    if (defaultAddress.containsKey("city"))
-		address.put("city", defaultAddress.get("city"));
+	    String strete = defaultAddress.get("address1");
+	    if (defaultAddress.containsKey("address2"))
+	    {
+		String address2 = defaultAddress.get("address2");
+		if (address2 != null)
+		    strete = strete + address2;
+	    }
+	    try
+	    {
+		if (defaultAddress.containsKey("city"))
+		    address.put("city", defaultAddress.get("city"));
 
-	    if (defaultAddress.containsKey("province"))
-		address.put("state", defaultAddress.get("province"));
+		if (defaultAddress.containsKey("province"))
+		    address.put("state", defaultAddress.get("province"));
 
-	    if (defaultAddress.containsKey("country"))
-		address.put("country", defaultAddress.get("country"));
+		if (defaultAddress.containsKey("country"))
+		    address.put("country", defaultAddress.get("country"));
 
-	    if (defaultAddress.containsKey("zip"))
-		address.put("zip", defaultAddress.get("zip"));
+		if (defaultAddress.containsKey("zip"))
+		    address.put("zip", defaultAddress.get("zip"));
 
-	    address.put("address", strete);
-	}
-	catch (JSONException e)
-	{
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+		address.put("address", strete);
+	    }
+	    catch (JSONException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	}
 	return new ContactField(Contact.ADDRESS, address.toString(), "home");
     }

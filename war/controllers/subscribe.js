@@ -131,7 +131,6 @@ var SubscribeRouter = Backbone.Router.extend({
 	 */
 	updatePlan : function()
 	{
-		alert("here");
 		var update_plan = new Base_Model_View({ url : "core/api/subscription-addon/subscribe", template : "purchase-email-plan",  
 			
 			saveCallback : function(){

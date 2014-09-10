@@ -61,6 +61,7 @@ public class BillingRestriction
     public Integer emails_count;
     public Integer users_count;
     public Integer one_time_emails_count;
+    public Integer companies_count;
 
     @NotSaved(IfDefault.class)
     public Plan plan;
