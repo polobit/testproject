@@ -119,11 +119,12 @@ public class CSVUtil
 
     }
 
+
     /**
-     * Creates contacts,companies from CSV string using a contact prototype
-     * built from import page. It takes owner id to sent contact owner
-     * explicitly instead of using session manager, as there is a chance of
-     * getting null in backends.
+     * Creates contacts from CSV string using a contact prototype built from
+     * import page. It takes owner id to sent contact owner explicitly instead
+     * of using session manager, as there is a chance of getting null in
+     * backends.
      * 
      * Contact is saved only if there is email exists and it is a valid email
      * 
@@ -275,20 +276,21 @@ public class CSVUtil
 		continue;
 
 	    boolean isMerged = false;
-
+	    
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
 		// Checks if user can update the contact
 
 		// Sets current object to check scope
+		
 
 		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
 	    }
 	    else
 	    {
-
+		
 		// If it is new contacts billingRestriction count is increased
 		// and checked with plan limits
 
@@ -313,12 +315,12 @@ public class CSVUtil
 
 	    try
 	    {
-		tempContact.save();
+		tempContact.save(false);
 	    }
 	    catch (Exception e)
 	    {
 		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.EMAIL));
+		        + tempContact.getContactFieldValue(Contact.EMAIL));
 		e.printStackTrace();
 
 	    }
@@ -378,7 +380,7 @@ public class CSVUtil
 	dBbillingRestriction.send_warning_message();
 
 	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
-		new Object[] { domainUser, status });
+	        new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
@@ -532,7 +534,7 @@ public class CSVUtil
 
 		if (ContactUtil.companyExists(StringUtils.capitalise(companyName.toLowerCase())))
 		{
-		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
+		   // tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
 		}
 	    }
