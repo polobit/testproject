@@ -123,7 +123,7 @@ public class EmailGatewayUtil
 	try
 	{
 	    // Fetch EmailGateway
-	    EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	    EmailGateway emailGateway = null;
 
 	    // If no gateway setup, sends email through Agile Mandrill
 	    if (emailGateway == null)
@@ -136,8 +136,10 @@ public class EmailGatewayUtil
 	    }
 
 	    // Add To Queue
-	    addToQueue(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain,
-		    fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
+	    // addToQueue(emailGateway.email_api.toString(),
+	    // emailGateway.api_user, emailGateway.api_key, domain,
+	    // fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+	    // mandrillMetadata);
 
 	}
 	catch (Exception e)
@@ -182,7 +184,7 @@ public class EmailGatewayUtil
 	try
 	{
 	    // Fetch EmailGateway
-	    EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+	    EmailGateway emailGateway = null;
 
 	    // If no gateway setup, sends email through Agile Mandrill
 	    if (emailGateway == null)
@@ -192,15 +194,17 @@ public class EmailGatewayUtil
 		return;
 	    }
 
-	    // If SendGrid
-	    if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
-		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
-		        subject, replyTo, html, text, null, attachments);
-
-	    // If Mandrill
-	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
-		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
-		        text, mandrillMetadata, attachments);
+	    // // If SendGrid
+	    // if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
+	    // SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key,
+	    // fromEmail, fromName, to, cc, bcc,
+	    // subject, replyTo, html, text, null, attachments);
+	    //
+	    // // If Mandrill
+	    // if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
+	    // Mandrill.sendMail(emailGateway.api_key, true, fromEmail,
+	    // fromName, to, cc, bcc, subject, replyTo, html,
+	    // text, mandrillMetadata, attachments);
 
 	}
 	catch (Exception e)
