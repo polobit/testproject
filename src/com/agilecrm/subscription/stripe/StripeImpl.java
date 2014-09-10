@@ -91,6 +91,8 @@ public class StripeImpl implements AgileBilling
 	// Creates customer and add subscription to it
 	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails, plan));
 
+	plan.subscription_id = customer.getSubscription().getId();
+
 	System.out.println(customer);
 	System.out.println(StripeUtil.getJSONFromCustomer(customer));
 	// Return Customer JSON
@@ -131,7 +133,7 @@ public class StripeImpl implements AgileBilling
 
 	CustomerSubscriptionCollection subscriptionCollection = customer.getSubscriptions();
 	List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection.getData();
-	
+
 	// Fetches all subscriptions and check if there is an account plan
 	Iterator<com.stripe.model.Subscription> iterator = subscriptionList.iterator();
 	com.stripe.model.Subscription oldSubscription = null;
@@ -349,9 +351,16 @@ public class StripeImpl implements AgileBilling
     @Override
     public void addSubscriptionAddon(Subscription newSubscription) throws Exception
     {
+	// Fetches current subscription of domain to check if add on
+	// subscription already exists and it is update request
 	Subscription subscription = Subscription.getSubscription();
 	CreditCard card = newSubscription.card_details;
-	Plan plan = newSubscription.emailPlan;
+
+	// New email plan to subscribe user to
+	Plan newPlan = newSubscription.emailPlan;
+
+	// If subscription does not exist in curent domain, we have to create
+	// new customer in stripe and subscribe him to add on plan
 	if (subscription == null)
 	{
 	    newSubscription.createNewEmailSubscription();
@@ -359,99 +368,109 @@ public class StripeImpl implements AgileBilling
 	}
 
 	// New plan to subscribe
-	com.stripe.model.Plan newPlan = com.stripe.model.Plan.retrieve(plan.plan_id);
+	com.stripe.model.Plan newPlanFromStripe = com.stripe.model.Plan.retrieve(newPlan.plan_id);
 
-	// Flag to check whether to user
+	// Flag to check whether request is upgrade of plan or downgrade
 	boolean isProrated = false;
 
 	// Existing email plan in agile subscription object
-	Plan emailPlan = subscription.emailPlan;
+	Plan emailPlanInAgile = subscription.emailPlan;
 
 	// Fetches subscription from customer object in stripe
 	Customer customer = StripeUtil.getCustomerFromJson(new JSONObject(subscription.billing_data_json_string));
 
 	// If there exists email plan, then it is updated instead of creating
 	// new subscription
-	if (emailPlan == null)
+	try
 	{
-	    try
+
+	    /**
+	     * Retrieves all subscriptions from customer object. It is used to
+	     * find out the existing subscription object based on the
+	     * subscription id that is saved in embedded Plan object (which is
+	     * saved when ever a new subscription is created) <a>
+	     */
+	    CustomerSubscriptionCollection subscriptionCollection = customer.getSubscriptions();
+	    List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection.getData();
+
+	    // To hold current email package plan object from stripe
+	    com.stripe.model.Plan existingAddonPlan = null;
+	    com.stripe.model.Subscription existingSubscription = null;
+
+	    Iterator<com.stripe.model.Subscription> subscriptionIterator = subscriptionList.iterator();
+
+	    // Iterates through all plans and get existing email plan
+	    while (subscriptionIterator.hasNext())
 	    {
+		com.stripe.model.Subscription s = subscriptionIterator.next();
+		com.stripe.model.Plan stripePlan = s.getPlan();
 
-		// To hold current email package plan object
-		com.stripe.model.Plan existingAddonPlan = null;
-		com.stripe.model.Subscription existingSubscription = null;
-
-		// Retrieves all current subscriptions of user
-		CustomerSubscriptionCollection subscriptionCollection = customer.getSubscriptions();
-		List<com.stripe.model.Subscription> subscriptionList = subscriptionCollection.getData();
-
-		Iterator<com.stripe.model.Subscription> subscriptionIterator = subscriptionList.iterator();
-
-		// Iterates through all plans and get existing email plan
-		while (subscriptionIterator.hasNext())
+		// If plan contains email, it holds exiting plan to update
+		if (StringUtils.equals(s.getId(), emailPlanInAgile.subscription_id))
 		{
-		    existingSubscription = subscriptionIterator.next();
-		    com.stripe.model.Plan stripePlan = existingSubscription.getPlan();
+		    existingSubscription = s;
+		    existingAddonPlan = stripePlan;
+		    break;
+		}
+	    }
 
-		    // If plan contains email, it holds exiting plan to update
-		    if (StringUtils.containsIgnoreCase(stripePlan.getId(), "email"))
+	    Map<String, Object> newSubscriptionParams = new HashMap<String, Object>();
+	    newSubscriptionParams.put("plan", newPlan.plan_id);
+
+	    // If there is no existing subscription that falls under current
+	    // Category it is considered as new plan subscription
+	    if (existingAddonPlan == null)
+	    {
+		existingSubscription = customer.createSubscription(newSubscriptionParams);
+
+		newPlan.subscription_id = existingSubscription.getId();
+	    }
+
+	    // If amount is greater than current plan, subscription is
+	    // updated and invoice is charged immediately
+	    if (newPlanFromStripe.getAmount() > existingAddonPlan.getAmount())
+	    {
+		isProrated = true;
+		newSubscriptionParams.put("prorate", "true");
+		existingSubscription.setStart(new Date().getTime());
+	    }
+	    else
+	    {
+		newSubscriptionParams.put("prorate", "false");
+		existingSubscription.setStart(existingSubscription.getEndedAt());
+	    }
+
+	    // Updates existing
+	    existingSubscription.update(newSubscriptionParams);
+
+	    if (isProrated)
+	    {
+		Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
+		invoiceItemParams.put("customer", customer.getId());
+		try
+		{
+		    // Creates invoice for plan upgrade and charges customer
+		    // immediately
+		    Invoice invoice = Invoice.create(invoiceItemParams);
+		    if (invoice != null)
 		    {
-			existingAddonPlan = stripePlan;
-			break;
+			if (invoice.getSubscription().equals(existingSubscription.getId()))
+			    invoice.pay();
 		    }
 		}
-
-		Map<String, Object> newSubscriptionParams = new HashMap<String, Object>();
-		newSubscriptionParams.put("plan", plan.plan_id);
-
-		// Checks if any email subscription available to current contact
-		// and updates if there is any email plan
-		if (existingAddonPlan != null)
+		catch (Exception e)
 		{
-
-		    // If amount is more than current plan, upgrade the plan and
-		    // charge invoice prorated
-		    if (newPlan.getAmount() > existingAddonPlan.getAmount())
-		    {
-			isProrated = true;
-			newSubscriptionParams.put("prorate", "true");
-			existingSubscription.setStart(new Date().getTime());
-		    }
-		    else
-		    {
-			newSubscriptionParams.put("prorate", "false");
-			existingSubscription.setStart(existingSubscription.getEndedAt());
-		    }
-
-		    existingSubscription.update(newSubscriptionParams);
-
-		    if (isProrated)
-		    {
-			Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
-			invoiceItemParams.put("customer", customer.getId());
-			try
-			{
-			    Invoice invoice = Invoice.create(invoiceItemParams);
-			    if (invoice != null)
-				invoice.pay();
-			}
-			catch (Exception e)
-			{
-			}
-		    }
-
-		    return;
 		}
-
-		customer.createSubscription(newSubscriptionParams);
 	    }
-	    catch (StripeException e)
-	    {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+	    return;
 
 	}
+	catch (StripeException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
     }
 
 }
