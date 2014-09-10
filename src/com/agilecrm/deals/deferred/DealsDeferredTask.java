@@ -21,6 +21,11 @@ import com.google.appengine.api.taskqueue.DeferredTask;
 public class DealsDeferredTask implements DeferredTask
 {
 
+    /**
+     * Serial version id.
+     */
+    private static final long serialVersionUID = 8225965474422062021L;
+    
     private String domain;
 
     public DealsDeferredTask(String domain)
