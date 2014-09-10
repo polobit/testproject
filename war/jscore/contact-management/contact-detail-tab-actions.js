@@ -58,10 +58,18 @@ $(function(){
 		// Contacts type-ahead
 		agile_type_ahead("relates_to", el, contacts_typeahead);
 		
-		// Fills milestone select element
-		populateMilestones(el, undefined, undefined, function(data){
-			$("#milestone", el).html(data);
-			$("#milestone", el).closest('div').find('.loading-img').hide();
+		// Fills the pipelines list in select box.
+		populateTracks(el, undefined, undefined, function(pipelinesList){
+			// Fills milestone select element if there is only one pipeline.
+			if(pipelinesList.length == 1)
+			populateMilestones(el, undefined, 0, undefined, function(data){
+				el.find("#milestone").html(data);
+				if (value.milestone) {
+					$("#milestone", el).find('option[value=\"'+value.milestone+'\"]')
+							.attr("selected", "selected");
+				}
+				$("#milestone", el).closest('div').find('.loading-img').hide();
+			});
 		});
 
 		// Enable the datepicker
