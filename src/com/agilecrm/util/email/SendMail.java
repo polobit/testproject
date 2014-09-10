@@ -71,6 +71,9 @@ public class SendMail
 
     public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
+    
+    public static final String EMAIL_PLAN_CHANGED = "subscription/add-on/email/plan_changed";
+    public static final String EMAIL_PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
 
     public static final String FAILED_BILLINGS_FIRST_TIME = "subscription/failed_billings_first_time";
     public static final String FAILED_BILLINGS_FIRST_TIME_SUBJECT = "[Notice #1] Your Payment to Agile CRM has Declined";

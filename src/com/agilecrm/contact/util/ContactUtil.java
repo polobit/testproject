@@ -611,6 +611,7 @@ public class ContactUtil
 	Map<String, Object> searchFields = new HashMap<String, Object>();
 	searchFields.put("properties.name", Contact.NAME);
 	searchFields.put("properties.value", companyName);
+	searchFields.put("type", Contact.Type.COMPANY);
 	int countProps = dao.getCountByProperty(searchFields);
 	System.out.println("contact count" + countProps);
 
@@ -757,7 +758,7 @@ public class ContactUtil
 	    }
 
 	    // If company is different then
-	    if (existingField.name.equals(Contact.NAME))
+	    if (existingField.name.equals(Contact.COMPANY))
 	    {
 		if (!StringUtils.equals(existingField.value, field.value))
 		{
@@ -790,27 +791,32 @@ public class ContactUtil
 
 	    // If email, website, phone, url, if value is not duplicate then new
 	    // field is added.
-
-	    // Fetches all contact fields by property name
-	    List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
-
-	    boolean newField = true;
-	    for (ContactField contactField : contactFields)
+	    if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name)
+		    || Contact.PHONE.equals(field.name))
 	    {
-		// If field value is equal to existing property, set
-		// subtype, there could be change in subtype
-		if (field.value.equals(contactField.value))
+
+		// Fetches all contact fields by property name
+		List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
+
+		boolean newField = true;
+		for (ContactField contactField : contactFields)
 		{
-		    contactField.subtype = field.subtype;
+		    // If field value is equal to existing property, set
+		    // subtype, there could be change in subtype
+		    if (field.value.equalsIgnoreCase(contactField.value))
+		    {
+			contactField.subtype = field.subtype;
 
-		    // Sets it to false so property wont be added again.
-		    newField = false;
-		    continue;
+			// Sets it to false so property wont be added again.
+			newField = false;
+			continue;
+		    }
 		}
-	    }
-	    if (newField)
-	    {
-		oldContact.properties.add(field);
+		if (newField)
+		{
+		    oldContact.properties.add(field);
+		}
+		continue;
 	    }
 
 	    // Read property by name
@@ -825,7 +831,7 @@ public class ContactUtil
 	    // If company is different then
 	    if (existingField.name.equals(Contact.NAME))
 	    {
-		if (!StringUtils.equals(existingField.value, field.value))
+		if (!existingField.value.equalsIgnoreCase(field.value))
 		{
 		    oldContact.contact_company_id = null;
 		    oldContact.contact_company_key = null;
