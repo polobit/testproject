@@ -282,7 +282,7 @@ public class ContactUtil
 	    // In case email field value is empty it removes property from
 	    // contact and continue
 
-	    if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
+	    if (StringUtils.isBlank(emailField.value))
 	    {
 		System.out.println(contact.properties.contains(emailField));
 		contact.properties.remove(emailField);
@@ -734,7 +734,9 @@ public class ContactUtil
 		    // subtype, there could be change in subtype
 		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
-			contactField.subtype = field.subtype;
+			// Sets new subtype if there is any subtype availe
+			if(field.subtype != null)
+			    contactField.subtype = field.subtype;
 
 			// Sets it to false so property wont be added again.
 			newField = false;
@@ -757,7 +759,7 @@ public class ContactUtil
 		continue;
 	    }
 
-	    // If company is different then
+	    // If company is different then remove the exiting company from contact
 	    if (existingField.name.equals(Contact.COMPANY))
 	    {
 		if (!StringUtils.equals(existingField.value, field.value))

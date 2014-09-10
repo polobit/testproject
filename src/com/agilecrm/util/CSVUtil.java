@@ -159,6 +159,7 @@ public class CSVUtil
 
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 
+	// Adds new tags to temporary list to save them in all contacts
 	tags.addAll(contact.tags);
 
 	List<ContactField> properties = contact.properties;
@@ -181,19 +182,20 @@ public class CSVUtil
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", "Contacts");
 
+	/**
+	 * Iterates through all the records from blob
+	 */
 	for (String[] csvValues : contacts)
 	{
+	    // Set to hold the notes column positions so they can be created
+	    // after a contact is created.
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
 
 	    Contact tempContact = new Contact();
-	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
-	    tempContact.properties = contact.properties;
 
-	    // Sets owner of contact explicitly. If owner is not set,
-	    // contact
-	    // prepersist
-	    // tries to read it from session, and session is not shared with
-	    // backends
+	    // Cloning so that wrong tags don't get to some contact if previous
+	    // contact is merged with exiting contact
+	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
 	    tempContact.setContactOwner(ownerKey);
 
 	    tempContact.properties = new ArrayList<ContactField>();
@@ -294,20 +296,16 @@ public class CSVUtil
 		// and checked with plan limits
 
 		++billingRestriction.contacts_count;
-		try
-		{
-		    if (limitCrossed)
-			continue;
-
-		    if (billingRestriction.contacts_count >= allowedContacts)
-		    {
-			limitCrossed = true;
-		    }
-
-		}
-		catch (PlanRestrictedException e)
+		if (limitCrossed)
 		{
 		    ++limitExceeded;
+		    continue;
+		}
+		    
+		if (billingRestriction.contacts_count >= allowedContacts)
+		{
+		    limitCrossed = true;
+
 		    continue;
 		}
 	    }
