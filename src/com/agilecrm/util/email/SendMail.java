@@ -39,10 +39,10 @@ public class SendMail
     public static final String FORGOT_PASSWORD = "forgot_password";
     public static final String FORGOT_PASSWORD_SUBJECT = "Your new Agile CRM password";
 
-    public static final String SUBSCRIPTION_PAYMENT_FAILED = "payment_failed";
+    public static final String SUBSCRIPTION_PAYMENT_FAILED = "subscription/payment_failed";
     public static final String SUBSCRIPTION_PAYMENT_FAILED_SUBJECT = "Your payment failed";
 
-    public static final String SUBSCRIPTION_DELETED = "subscription_deleted";
+    public static final String SUBSCRIPTION_DELETED = "subscription/subscription_deleted";
     public static final String SUBSCRIPTION_DELETED_SUBJECT = "Your Account Deleted";
 
     public static final String REPORTS = "reports";
@@ -60,31 +60,37 @@ public class SendMail
     public static final String AGENT_ADDED = "agent_added";
     public static final String AGENT_ADDED_SUBJECT = "You have been added to Agile CRM";
 
-    public static final String FIRST_PAYMENT_RECEIVED = "first_payment_received";
+    public static final String FIRST_PAYMENT_RECEIVED = "subscription/first_payment_received";
     public static final String FIRST_PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you";
 
-    public static final String PAYMENT_RECEIVED = "payment_received";
+    public static final String PAYMENT_RECEIVED = "subscription/payment_received";
     public static final String PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
+    
+    public static final String EMAIL_PAYMENT_RECEIVED = "subscription/add-on/email/payment_received";
+    public static final String EMAIL_PAYMENT_RECEIVED_SUBJECT = "Payment Received. Thank you.";
 
-    public static final String PLAN_CHANGED = "plan_changed";
+    public static final String PLAN_CHANGED = "subscription/plan_changed";
     public static final String PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
+    
+    public static final String EMAIL_PLAN_CHANGED = "subscription/add-on/email/plan_changed";
+    public static final String EMAIL_PLAN_CHANGED_SUBJECT = "Your Agile CRM plan has changed";
 
-    public static final String FAILED_BILLINGS_FIRST_TIME = "failed_billings_first_time";
+    public static final String FAILED_BILLINGS_FIRST_TIME = "subscription/failed_billings_first_time";
     public static final String FAILED_BILLINGS_FIRST_TIME_SUBJECT = "[Notice #1] Your Payment to Agile CRM has Declined";
 
-    public static final String FAILED_BILLINGS_SECOND_TIME = "failed_billings_second_time";
+    public static final String FAILED_BILLINGS_SECOND_TIME = "subscription/failed_billings_second_time";
     public static final String FAILED_BILLINGS_SECOND_TIME_SUBJECT = "[Notice #2] Your Payment to Agile CRM has Declined Again.";
 
-    public static final String FAILED_BILLINGS_THIRD_TIME = "failed_billings_third_time";
+    public static final String FAILED_BILLINGS_THIRD_TIME = "subscription/failed_billings_third_time";
     public static final String FAILED_BILLINGS_THIRD_TIME_SUBJECT = "[Final Notice] Your Payment to AgileCRM has Declined Yet Again";
 
     public static final String FAILED_BILLINGS_FINAL_TIME = "failed_billings_final_time";
     public static final String FAILED_BILLINGS_FINAL_TIME_SUBJECT = "[Cancelled] Your Payment to Agile CRM has Declined Yet Again";
 
-    public static final String REFUND = "refund";
+    public static final String REFUND = "subscription/refund";
     public static final String REFUND_SUBJECT = "[Refund] Your Refund has been Processed";
 
-    public static final String CHARGEBACK_NOTICE = "chargeback_notice";
+    public static final String CHARGEBACK_NOTICE = "subscription/chargeback_notice";
     public static final String CHARGEBACK_NOTICE_SUBJECT = "[Payment dispute] Agile CRM chargeback resolution steps";
 
     public static final String DUE_TASK_REMINDER = "due_task_reminder";

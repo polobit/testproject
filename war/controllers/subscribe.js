@@ -131,12 +131,19 @@ var SubscribeRouter = Backbone.Router.extend({
 	 */
 	updatePlan : function()
 	{
-		var update_plan = new Base_Model_View({ url : "core/api/subscription", template : "update-plan",  
+		var update_plan = new Base_Model_View({ url : "core/api/subscription-addon/subscribe", template : "purchase-email-plan",  
 			
 			saveCallback : function(){
 				window.navigate("subscribe", { trigger : true });
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
-			}  
+			},
+			postRenderCallback : function(el) {
+				card_expiry(el);
+				head.js(LIB_PATH + 'lib/countries.js', function()
+				{
+					print_country($("#country", el));
+				});
+			}
 			
 		});
 

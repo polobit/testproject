@@ -75,7 +75,7 @@ var USER_DETAILS = {
 		
 			if(userJSON.plan.plan_type)
 			{			
-				if(userJSON.plan.plan_type.split("_").length == 1) return plan;
+				if(userJSON.plan.plan_type.split("_").length == 1) return userJSON.plan.plan_type;
 	
 				// Returns lite-yearly....
 				return userJSON.plan.plan_type.split("_")[0];
@@ -84,18 +84,18 @@ var USER_DETAILS = {
 		},
 		getPlanInterval : function(userJSON){
 			
-			if(!userJSON || !userJSON.plan.plan_type)
+			if(!userJSON || !userJSON.plan.plan_type || userJSON.plan.plan_type == "FREE")
 				return "MONTHLY";
 
 			var plan = userJSON.plan.plan_type
 			
 			if(plan)
-				return plan.split("_")[1];
+			  return plan.split("_")[1];
 			
 		},
 		getQuantity : function(userJSON){
 			
-			if(!userJSON)
+			if(!userJSON || !userJSON.plan || userJSON.plan.plan_type == "FREE")
 				return 2;
 			
 			return userJSON.plan.quantity;

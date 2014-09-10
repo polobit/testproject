@@ -64,22 +64,22 @@ public class DomainUserUtil
     public static DomainUser generateForgotPassword(String email) throws Exception
     {
 	DomainUser user = generateNewPassword(email);
-	
-	if(user == null)
+
+	if (user == null)
 	    return null;
-	
-	// Set password in different variable as current password will be encrypted before saving.
+
+	// Set password in different variable as current password will be
+	// encrypted before saving.
 	String password = user.password;
-	
+
 	user.save();
-	
+
 	user.password = password;
-	
-	SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-		 SendMail.FORGOT_PASSWORD, user);
-	
+
+	SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT, SendMail.FORGOT_PASSWORD, user);
+
 	return user;
-	
+
     }
 
     private static DomainUser generateNewPassword(String email)
@@ -97,6 +97,7 @@ public class DomainUserUtil
 	return domainUser;
 
     }
+
     /**
      * Gets a user based on its id
      * 
@@ -306,10 +307,13 @@ public class DomainUserUtil
 
 	try
 	{
-		
-		//return dao.fetchAllByOrder(max, cursor, null, true, false, "-created_time");
-		//return dao.ofy().query(DomainUser.class).order("-created_time").list();
-		// return DomainUser.dao.fetchAllByOrder(max, cursor, null, true, true, "-created_time");
+
+	    // return dao.fetchAllByOrder(max, cursor, null, true, false,
+	    // "-created_time");
+	    // return
+	    // dao.ofy().query(DomainUser.class).order("-created_time").list();
+	    // return DomainUser.dao.fetchAllByOrder(max, cursor, null, true,
+	    // true, "-created_time");
 	    return dao.fetchAll(max, cursor);
 	}
 	finally
@@ -380,54 +384,24 @@ public class DomainUserUtil
 	info.setScopes(user.scopes);
 	SessionManager.set(info);
     }
-    
-    
-    /**
-     * Gets a domainuser entity based on one propery
-     * 
-     * @param id
-     * @return
-     */
-    public static DomainUser getDomainUser_To_Check_Reference_CodeStatus(String field,Object property_value)
-    {
-	String oldNamespace = NamespaceManager.get();
-	NamespaceManager.set("");
 
-	try
-	{
-	    return dao.getByProperty(field, property_value);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
-	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-    }
-
-    
-    
-    
     /**
-     * Gets a List of  users based on referencecode 
-     * it is used to display referrals in that patcular domain
+     * Gets a List of users based on referencecode it is used to display
+     * referrals in that patcular domain
      * 
      * all domains it was referred by this domain code
      * 
      * @param id
      * @return
      */
-    public static List<DomainUser> getAllDomainUsersBasedOnReferenceCode(String referencecode)
+    public static List<DomainUser> getAllDomainUsersBasedOnReferenceDomain(String referencecode)
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
 	try
 	{
-	    return dao.listByProperty("referer.reference_by", referencecode);
+	    return dao.listByProperty("referer.reference_by_domain", referencecode);
 	}
 	catch (Exception e)
 	{
@@ -439,9 +413,5 @@ public class DomainUserUtil
 	    NamespaceManager.set(oldNamespace);
 	}
     }
-    
-    
-    
-    
 
 }

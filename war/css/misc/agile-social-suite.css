@@ -359,7 +359,7 @@
 
 .stream-item:hover .tweet-actions {
 	visibility: visible !important;
-	margin-top: 2px !important;
+	margin-top: 0px !important;
 }
 
 .tweet-actions>li {
@@ -576,15 +576,19 @@
 }
 
 .no-tweet,.stream-notifications {
-	/*border-bottom: 1px solid #e5e5e5;*/
-	background-color: lightYellow;
+	/* border-bottom: 1px solid #e5e5e5; */
+	background-color: #fff;
 	font-size: 15px;
 	text-align: center;
 }
 
 .no-tweet>p,.stream-notifications>p {
-	padding-top: 6px;
-}
+	/*padding-top: 6px;*/
+	margin: 0px;
+border-bottom: 1px solid #e5e5e5;
+padding: 6px 0 6px 0;
+	
+	}
 
 #addStreamModal:focus {
 	outline-style: none;

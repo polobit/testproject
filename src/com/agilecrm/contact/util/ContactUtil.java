@@ -327,7 +327,7 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("type", Type.PERSON)
 		.filter("properties.value = ", email.toLowerCase()).count();
 
     }
@@ -722,9 +722,6 @@ public class ContactUtil
 	    if (Contact.EMAIL.equals(field.name) || Contact.WEBSITE.equals(field.name)
 		    || Contact.PHONE.equals(field.name) || Contact.URL.equals(field.name))
 	    {
-		if (Contact.WEBSITE.equals(field.name))
-		{
-		}
 
 		// Fetches all contact fields by property name
 		List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
@@ -734,7 +731,7 @@ public class ContactUtil
 		{
 		    // If field value is equal to existing property, set
 		    // subtype, there could be change in subtype
-		    if (field.value.equals(contactField.value))
+		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
 			contactField.subtype = field.subtype;
 
@@ -761,6 +758,72 @@ public class ContactUtil
 
 	    // If company is different then
 	    if (existingField.name.equals(Contact.COMPANY))
+	    {
+		if (!StringUtils.equals(existingField.value, field.value))
+		{
+		    oldContact.contact_company_id = null;
+		    oldContact.contact_company_key = null;
+		}
+	    }
+
+	    existingField.value = field.value;
+	    if (!StringUtils.isEmpty(field.subtype))
+		existingField.subtype = field.subtype;
+	}
+
+	oldContact.tags.addAll(newContact.tags);
+
+	return oldContact;
+    }
+
+    public static Contact mergeCompanyFields(Contact newContact, Contact oldContact)
+    {
+
+	/**
+	 * Iterates through new properties in new contacts
+	 */
+	for (ContactField field : newContact.properties)
+	{
+	    // If field name of value is null, continues with remaining fields.
+	    if (field.name == null || field.value == null)
+		continue;
+
+	    // If email, website, phone, url, if value is not duplicate then new
+	    // field is added.
+
+	    // Fetches all contact fields by property name
+	    List<ContactField> contactFields = oldContact.getContactPropertiesList(field.name);
+
+	    boolean newField = true;
+	    for (ContactField contactField : contactFields)
+	    {
+		// If field value is equal to existing property, set
+		// subtype, there could be change in subtype
+		if (field.value.equals(contactField.value))
+		{
+		    contactField.subtype = field.subtype;
+
+		    // Sets it to false so property wont be added again.
+		    newField = false;
+		    continue;
+		}
+	    }
+	    if (newField)
+	    {
+		oldContact.properties.add(field);
+	    }
+
+	    // Read property by name
+	    ContactField existingField = oldContact.getContactField(field.name);
+
+	    if (existingField == null)
+	    {
+		oldContact.properties.add(field);
+		continue;
+	    }
+
+	    // If company is different then
+	    if (existingField.name.equals(Contact.NAME))
 	    {
 		if (!StringUtils.equals(existingField.value, field.value))
 		{
@@ -808,7 +871,7 @@ public class ContactUtil
 	ContactField field = contact.getContactFieldByName(Contact.NAME);
 	oldContact = ContactUtil.searchContactByCompanyName(StringUtils.capitalise(field.value.toLowerCase()));
 	if (oldContact != null)
-	    return mergeContactFeilds(contact, oldContact);
+	    return mergeCompanyFields(contact, oldContact);
 
 	return oldContact;
 

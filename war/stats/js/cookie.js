@@ -65,10 +65,28 @@ function agile_create_cookie(name, value, days)
 	var subdomain = window.location.hostname.replace(/([a-zA-Z0-9]+.)/,"");
 	if(subdomain.length > 5 ) // Avoid .co.uk etc.
 	{
-		document_cookie = ";document=." + subdomain;
+		document_cookie = ";domain=." + subdomain;
 	}
 	
 	document.cookie = name + "=" + escape(value) + expires + "; path=/" + document_cookie;
+}
+
+//function creates cookie in all subdomains 
+function agile_createCookieInAllAgileSubdomains(name, value, days)
+{
+	// If days is not equal to null, undefined or ""
+	if (days)
+	{
+		var date = new Date();
+
+		// Set cookie variable's updated expire time in milliseconds
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		var expires = "; expires=" + date.toGMTString();
+	}
+	else
+		// If days is null, undefined or "" set expires as ""
+		var expires = "";
+	document.cookie = name + "=" + escape(value) + expires + "; path=/; domain=agilecrm.com";
 }
 
 /**
