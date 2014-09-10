@@ -807,7 +807,8 @@ public class ContactUtil
 		    // subtype, there could be change in subtype
 		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
-			contactField.subtype = field.subtype;
+			if(!StringUtils.isEmpty(field.subtype))
+			    contactField.subtype = field.subtype;
 
 			// Sets it to false so property wont be added again.
 			newField = false;
@@ -828,16 +829,6 @@ public class ContactUtil
 	    {
 		oldContact.properties.add(field);
 		continue;
-	    }
-
-	    // If company is different then
-	    if (existingField.name.equals(Contact.NAME))
-	    {
-		if (!existingField.value.equalsIgnoreCase(field.value))
-		{
-		    oldContact.contact_company_id = null;
-		    oldContact.contact_company_key = null;
-		}
 	    }
 
 	    existingField.value = field.value;
@@ -868,7 +859,7 @@ public class ContactUtil
 	if (oldContact != null)
 	    return mergeContactFeilds(contact, oldContact);
 
-	return oldContact;
+	return contact;
 
     }
 
@@ -881,7 +872,7 @@ public class ContactUtil
 	if (oldContact != null)
 	    return mergeCompanyFields(contact, oldContact);
 
-	return oldContact;
+	return contact;
 
     }
 

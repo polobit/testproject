@@ -301,7 +301,7 @@ public class CSVUtil
 		    ++limitExceeded;
 		    continue;
 		}
-		    
+
 		if (billingRestriction.contacts_count >= allowedContacts)
 		{
 		    limitCrossed = true;
@@ -438,6 +438,7 @@ public class CSVUtil
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
 	int failedCompany = 0;
+	int nameMissing = 0;
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
 
@@ -448,7 +449,6 @@ public class CSVUtil
 
 	    Contact tempContact = new Contact();
 	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
-	    tempContact.properties = contact.properties;
 
 	    tempContact.type = Type.COMPANY;
 	    tempContact.setContactOwner(ownerKey);
@@ -537,6 +537,7 @@ public class CSVUtil
 	    }
 	    else
 	    {
+		 ++nameMissing;
 		continue;
 	    }
 
@@ -546,34 +547,27 @@ public class CSVUtil
 	     */
 
 	    ++billingRestriction.contacts_count;
-	    try
-	    {
-		if (limitCrossed)
-		    continue;
-
-		if (billingRestriction.contacts_count >= allowedContacts)
-		{
-		    limitCrossed = true;
-		}
-
-	    }
-	    catch (PlanRestrictedException e)
+	    
+	    if (limitCrossed)
 	    {
 		++limitExceeded;
 		continue;
 	    }
 
+	    if (billingRestriction.contacts_count >= allowedContacts)
+	    {
+		limitCrossed = true;
+	    }
+
 	    try
 	    {
-
 		tempContact.save();
-
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.NAME));
+		System.out.println("exception raised while saving company");
 		e.printStackTrace();
+		
 		failedCompany++;
 
 	    }
@@ -601,6 +595,8 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany);
+	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
+	    
 
 	}
 	else
