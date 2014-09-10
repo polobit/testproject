@@ -10,9 +10,9 @@ import org.json.JSONObject;
 
 import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.subscription.stripe.StripeUtil;
-import com.agilecrm.subscription.stripe.webhooks.impl.SubscriptionWebhookHandlerImpl;
+import com.agilecrm.subscription.Subscription;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
@@ -55,10 +55,8 @@ public abstract class StripeWebhookHandler
 	if (user != null)
 	    return user;
 
-	
-
 	System.out.println("fetching user from domain : " + getDomain());
-	
+
 	String domain = getDomain();
 	if (StringUtils.isEmpty(domain))
 	    return null;
@@ -100,6 +98,8 @@ public abstract class StripeWebhookHandler
 	if (customer != null)
 	    return customer;
 
+	System.out.println("fetching customer from stripe");
+
 	// If event type is not customer deleted the we get the customer id and
 	// retieve the customer object from stripe and get
 	// description(namespace/domain)
@@ -107,6 +107,7 @@ public abstract class StripeWebhookHandler
 	try
 	{
 	    customerId = eventJSON.getJSONObject("data").getJSONObject("object").getString("customer");
+	    System.out.println("customer id : " + customerId);
 	    customer = Customer.retrieve(customerId, Globals.STRIPE_API_KEY);
 	}
 	catch (JSONException e)
@@ -194,11 +195,27 @@ public abstract class StripeWebhookHandler
 	// Send mail to domain user
 	SendMail.sendMail(user.email, emailSubject, template, getcustomDataForMail());
     }
+    
+    protected void sendMail1(String emailSubject, String template)
+    {
+	// Send mail to domain user
+	SendMail.sendMail(user.email, emailSubject, template, getMailDetails());
+    }
+    
+    protected abstract Map<String, Object> getMailDetails();
 
     public void init(String event_response_string, Event event)
     {
 	this.event_rensponse_string = event_response_string;
-	eventJSON = new JSONObject(event);
+	try
+	{
+	    eventJSON = new JSONObject(event_rensponse_string);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	this.event = event;
 
 	// Get event type from event json
@@ -275,7 +292,6 @@ public abstract class StripeWebhookHandler
 		plan.put("price", Float.valueOf(stripeJSONJSON.getString("total")) / 100);
 		plan.put("start_date", new Date(subscription.getCurrentPeriodStart() * 1000).toString());
 		plan.put("end_date", new Date(subscription.getCurrentPeriodEnd() * 1000).toString());
-		System.out.println(plan);
 	    }
 	}
 	catch (Exception e)
@@ -292,4 +308,68 @@ public abstract class StripeWebhookHandler
      * Parses the current event object and fetches plan data
      */
     protected abstract Map<String, Object> getPlanDetails();
+
+    public void updateContactInOurDomain(Contact contact, String email, Subscription subscription, String planString)
+    {
+	String plan = null;
+
+	if (subscription == null)
+	    plan = planString;
+	else
+	    plan = subscription.plan.plan_type.toString();
+
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set("our");
+
+	    if (contact == null)
+	    {
+		contact = ContactUtil.searchContactByEmail(email);
+	    }
+
+	    if (contact == null)
+		return;
+	    boolean isUpdateRequired = false;
+
+	    if (!contact.tags.contains("Paid"))
+	    {
+		contact.tags.add("Paid");
+		isUpdateRequired = true;
+	    }
+
+	    ContactField field = contact.getContactField("Plan");
+	    if (field == null)
+	    {
+		field = new ContactField("Plan", plan, null);
+		contact.addProperty(field);
+		isUpdateRequired = true;
+	    }
+	    else if (!StringUtils.equals(plan, field.value))
+	    {
+		field.value = plan;
+		isUpdateRequired = true;
+	    }
+
+	    ContactField stripeCustomField = contact.getContactField("Stripe Id");
+	    if (stripeCustomField == null)
+	    {
+		// Converts Customer JSON to customer object
+		Customer customer = new Gson().fromJson(subscription.billing_data_json_string, Customer.class);
+
+		field = new ContactField("Stripe Id", customer.getId(), null);
+		field.type = ContactField.FieldType.CUSTOM;
+		contact.addProperty(field);
+		isUpdateRequired = true;
+	    }
+
+	    if (isUpdateRequired)
+		contact.save();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
 }

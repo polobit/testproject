@@ -76,11 +76,6 @@ public class Subscription
     @Embedded
     @NotSaved(IfDefault.class)
     public Plan plan = null;
-    
-    
-    @Embedded
-    @NotSaved(IfDefault.class)
-    public Plan emailPlan = null;
 
     /**
      * The card_details variable is used for serialization of card details from
@@ -94,20 +89,12 @@ public class Subscription
     {
 	BILLING_FAILED_0, BILLING_FAILED_1, BILLING_FAILED_2, BILLING_FAILED_3, BILLING_SUCCESS, SUBSCRIPTION_DELETED
     };
-    
 
     /**
      * The status {@link Enum} type variable holds status of Subscription status
      */
     @NotSaved(IfDefault.class)
     public BillingStatus status;
-    
-    /**
-     * The status {@link Enum} type variable holds status of Subscription status
-     */
-    @NotSaved(IfDefault.class)
-    public BillingStatus emailStatus;
-
 
     /** The created_time variable represents when subscription object is created */
     @NotSaved(IfDefault.class)

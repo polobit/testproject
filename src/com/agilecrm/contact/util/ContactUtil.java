@@ -224,22 +224,9 @@ public class ContactUtil
 
 	Query<Contact> q = dao.ofy().query(Contact.class);
 	q.filter("properties.name", Contact.EMAIL);
-	q.filter("type", Type.PERSON);
 	q.filter("properties.value", email.toLowerCase());
 
 	return q.get();
-    }
-
-    public static Contact searchContactByCompanyName(String companyName)
-    {
-	if (StringUtils.isBlank(companyName))
-	    return null;
-
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("properties.name", "name");
-	searchMap.put("properties.value", companyName);
-	return dao.getByProperty(searchMap);
-
     }
 
     public static Contact searchContactByPhoneNumber(String phoneNumber)
@@ -329,30 +316,6 @@ public class ContactUtil
     {
 	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
 		.filter("properties.value = ", email.toLowerCase()).count();
-
-    }
-
-    /**
-     * Get Count of contact by Email and Type i.e PERSON or COMPANY
-     */
-
-    public static int searchContactCountByEmailAndType(String email, Type type)
-    {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
-		.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
-
-    }
-
-    /**
-     * Get Count of company by Name and Type i.e PERSON or COMPANY
-     */
-
-    public static int searchCompanyCountByNameAndType(String companyName, Type type)
-    {
-	int count = dao.ofy().query(Contact.class).filter("type", type).filter("properties.value", companyName).count();
-	System.out.println(count);
-	return count;
-
     }
 
     /**
@@ -611,10 +574,9 @@ public class ContactUtil
 	Map<String, Object> searchFields = new HashMap<String, Object>();
 	searchFields.put("properties.name", Contact.NAME);
 	searchFields.put("properties.value", companyName);
-	int countProps = dao.getCountByProperty(searchFields);
-	System.out.println("contact count" + countProps);
+	System.out.println("contact count" + dao.getCountByProperty(searchFields));
 
-	if (countProps != 0)
+	if (dao.getCountByProperty(searchFields) != 0)
 	    return true;
 
 	return false;
@@ -794,19 +756,6 @@ public class ContactUtil
 		break;
 	}
 
-	if (oldContact != null)
-	    return mergeContactFeilds(contact, oldContact);
-
-	return oldContact;
-
-    }
-
-    public static Contact mergeCompanyFields(Contact contact)
-    {
-
-	Contact oldContact = null;
-	ContactField field = contact.getContactFieldByName(Contact.NAME);
-	oldContact = ContactUtil.searchContactByCompanyName(StringUtils.capitalise(field.value.toLowerCase()));
 	if (oldContact != null)
 	    return mergeContactFeilds(contact, oldContact);
 

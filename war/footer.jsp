@@ -22,7 +22,7 @@
 			target="_blank"><i class="icon-linkedin"></i></a></span> <span
 			style="margin: 0 10px;"><a id="share-email" href="#"><i
 				class="icon-envelope-alt"></i></a></span>
-				<!-- <span><a id="referer_program" href="#referrals"><i class="icon-share"></i></a></span> -->
+				 <span><a id="referer_program" href="#referrals"><i class="icon-share"></i></a></span> 
 	</div>
 
 	<!-- <div style="margin-right:5px;display:inline-block;vertical-align:top;">Refer your friends.</div>
