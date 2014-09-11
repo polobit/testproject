@@ -272,7 +272,7 @@ public class RegisterServlet extends HttpServlet
 
 	System.out.println("reading cookies");
 	if (cookies != null && cookies.length > 0)
-	{
+	{System.out.println("inside cookie length");
 	    for (int i = 0; i < cookies.length; i++)
 	    {
 		Cookie c = cookies[i];
