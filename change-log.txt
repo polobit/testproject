@@ -13,6 +13,12 @@
 - IE erroe page
 - Lead tag removed completely
 
+*** Santhosh Boga ***
+
+- Tasks new UI
+- Prefs,Adminsettings UI changes (widgets,data sync)
+- Webrules removed iframe replaced with image
+- Make tag management as milestones and few UI changes .
 
 1-7 (2-Sept-2014)
 *** Naresh ***
