@@ -94,7 +94,7 @@ $(".delete_user").die().live('click', function(e){
 			e.preventDefault();
 			if (!confirm("Are you sure you want to apply for refund ?" ))
 				return;
-			var chargeid=$(".refund").attr("data");
+			var chargeid=$(this).attr("data");
 
 			$.ajax({
 				url: '/core/api/admin_panel/applyrefund?chargeid='+chargeid, 
