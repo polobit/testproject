@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -120,12 +121,75 @@ public class CSVUtil
     }
 
     /**
+     * Reads CSV data from blob input stream and returns list of string arrays
+     * 
+     * @param blobStream
+     * @param encoding_type
+     * @return
+     */
+    private List<String[]> getCSVDataFromStream(InputStream blobStream, String encoding_type)
+    {
+	List<String[]> data = new ArrayList<String[]>();
+
+	// Reads blob data line by line upto first 10 line of file
+	Reader csvStream = null;
+	try
+	{
+	    if (StringUtils.isEmpty(encoding_type))
+		csvStream = new InputStreamReader(blobStream, "UTF-8");
+	    else
+		csvStream = new InputStreamReader(blobStream, encoding_type);
+
+	}
+	catch (UnsupportedEncodingException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (csvStream == null)
+	    return data;
+
+	CSVReader reader = new CSVReader(csvStream);
+
+	try
+	{
+	    data = reader.readAll();
+
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    // Closes reader after reading data
+	    try
+	    {
+		reader.close();
+	    }
+	    catch (IOException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+
+	return data;
+
+    }
+
+    /**
      * Creates contacts,companies from CSV string using a contact prototype
      * built from import page. It takes owner id to sent contact owner
      * explicitly instead of using session manager, as there is a chance of
      * getting null in backends.
      * 
-     * Contact is saved only if there is email exists and it is a valid email
+     * Contact is saved only if there is email exists and it is a valid email.
+     * 
+     * Down the line Encoding type should read from request based on user
+     * preference and encode the input stream and read data
      * 
      * @param blobStream
      * @param contact
@@ -141,13 +205,7 @@ public class CSVUtil
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	// Reads blob data line by line upto first 10 line of file
-	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
-
-	System.out.println(contact);
-	CSVReader reader = new CSVReader(csvStream);
-
-	List<String[]> contacts = reader.readAll();
+	List<String[]> contacts = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (contacts.isEmpty())
 	    return;
@@ -379,7 +437,6 @@ public class CSVUtil
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
-              reader.close();
     }
 
     /**
@@ -399,13 +456,7 @@ public class CSVUtil
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	// Reads blob data line by line upto first 10 line of file
-	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
-
-	System.out.println(contact);
-	CSVReader reader = new CSVReader(csvStream);
-
-	List<String[]> companies = reader.readAll();
+	List<String[]> companies  = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (companies.isEmpty())
 	    return;
@@ -534,7 +585,7 @@ public class CSVUtil
 	    }
 	    else
 	    {
-		 ++nameMissing;
+		++nameMissing;
 		continue;
 	    }
 
@@ -544,7 +595,7 @@ public class CSVUtil
 	     */
 
 	    ++billingRestriction.contacts_count;
-	    
+
 	    if (limitCrossed)
 	    {
 		++limitExceeded;
@@ -564,7 +615,7 @@ public class CSVUtil
 	    {
 		System.out.println("exception raised while saving company");
 		e.printStackTrace();
-		
+
 		failedCompany++;
 
 	    }
@@ -593,7 +644,6 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany);
 	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
-	    
 
 	}
 	else
@@ -616,7 +666,6 @@ public class CSVUtil
 	{
 	    BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedCompany));
 	}
-              reader.close();
     }
 
     public void buildCSVImportStatus(Map<Object, Object> statusMap, ImportStatus status, Integer count)
