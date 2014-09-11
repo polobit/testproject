@@ -14,7 +14,6 @@
 - Lead tag removed completely
 
 *** Santhosh Boga ***
-
 - Tasks new UI
 - Prefs,Adminsettings UI changes (widgets,data sync)
 - Webrules removed iframe replaced with image
