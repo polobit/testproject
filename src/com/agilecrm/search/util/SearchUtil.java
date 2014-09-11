@@ -90,6 +90,10 @@ public class SearchUtil
 		{
 		    e.printStackTrace();
 		}
+		catch(Exception e)
+		{
+		    e.printStackTrace();
+		}
 		continue;
 	    }
 
