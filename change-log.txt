@@ -25,6 +25,9 @@
 *** Sukanya ***
 - Office365 template
 - Email case insensitivity
+- Deals full view only
+- IE erroe page
+- Lead tag removed completely
 
 1-5 (30-August-2014)
 
