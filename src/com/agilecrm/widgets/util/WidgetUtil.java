@@ -8,7 +8,7 @@ import java.util.Map;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.Widget.WidgetType;
+import com.agilecrm.widgets.Widget.IntegrationType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -91,7 +91,7 @@ public class WidgetUtil
 	 * Fetches list of widgets related to AgileUser key and adds is_added
 	 * field as true to default widgets if not present
 	 */
-	return ofy.query(Widget.class).ancestor(userKey).list();
+	return ofy.query(Widget.class).ancestor(userKey).filter("integration_type !=", null).list();
     }
 
     /**
@@ -130,12 +130,12 @@ public class WidgetUtil
      *            - widget type
      * @return
      */
-    public static Widget getWidgetByNameAndType(String name, WidgetType widgetType)
+    public static Widget getWidgetByNameAndType(String name, IntegrationType inegrationType)
     {
 	Map<String, Object> conditionsMap = new HashMap<String, Object>();
 
 	conditionsMap.put("name", name);
-	conditionsMap.put("widget_type", widgetType);
+	conditionsMap.put("integration_type", inegrationType);
 
 	return dao.getByProperty(conditionsMap);
     }
