@@ -8,6 +8,11 @@
 - Revereted Jitendra changes contacts CSV import to old code.
 - Added case insenstive compatision on emails while merging contacts in CSV import. 
 
+*** Sukanya ***
+- Deals full view only
+- IE erroe page
+- Lead tag removed completely
+
 
 1-7 (2-Sept-2014)
 *** Naresh ***
@@ -25,9 +30,6 @@
 *** Sukanya ***
 - Office365 template
 - Email case insensitivity
-- Deals full view only
-- IE erroe page
-- Lead tag removed completely
 
 1-5 (30-August-2014)
 
