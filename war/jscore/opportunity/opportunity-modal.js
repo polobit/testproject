@@ -315,6 +315,16 @@ function show_deal(){
 	});
 }
 
+function checkPipeline(pipeId){
+	var presentPipe = 0;
+	if(readCookie("agile_deal_track"))
+		presentPipe = readCookie("agile_deal_track");
+	
+	if(presentPipe== pipeId)
+		return true;
+	return false;
+}
+
 /**
  * Updates or Saves a deal
  */ 
@@ -331,7 +341,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 		enable_save_button($(saveBtn));//$(saveBtn).removeAttr('disabled');
 		return false;
 	}
-	
+
 	// Shows loading symbol until model get saved
     // $('#' + modalId).find('span.save-status').html(getRandomLoadingImg());
 
@@ -436,7 +446,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							}
 						}
 					}
-					else
+					else if(checkPipeline(deal.pipeline_id))
 					  modelJSON.get(newMilestone).push(deal);
 					
 					App_Deals.opportunityMilestoneCollectionView.render(true);
