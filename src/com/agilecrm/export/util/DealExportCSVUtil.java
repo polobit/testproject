@@ -42,15 +42,18 @@ public class DealExportCSVUtil
 
 	    Map<String, Integer> indexMap = DealExportCSVUtil.getIndexMapOfCSVHeaders(headers);
 
+	    System.out.println("Writing deals to CSV file.");
 	    for (Opportunity deal : dealList)
 	    {
 		if (deal == null)
 		    continue;
 
 		String str[] = DealCSVExport.insertDealFields(deal, indexMap, headers.length);
-		writer.writeNext(str);
+		if (str.length > 0)
+		    writer.writeNext(str);
 	    }
 
+	    System.out.println("Completed writing deals to CSV file.");
 	    // Close without finalizing
 	    writer.close();
 	}
