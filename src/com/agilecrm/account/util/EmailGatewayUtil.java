@@ -2,8 +2,12 @@ package com.agilecrm.account.util;
 
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,10 +19,12 @@ import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.backend.BackendUtil;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
+import com.agilecrm.util.CacheUtil;
+import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.WidgetType;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.thirdparty.SendGrid;
 import com.thirdparty.mandrill.Mandrill;
 
@@ -32,6 +38,48 @@ import com.thirdparty.mandrill.Mandrill;
  */
 public class EmailGatewayUtil
 {
+
+    public static EmailGateway saveEmailGateway(EmailGateway emailGateway)
+    {
+
+	try
+	{
+	    // Check given api keys
+	    EmailGatewayUtil.checkEmailAPISettings(emailGateway);
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
+		    .entity(e.getMessage()).build());
+	}
+
+	try
+	{
+	    Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", WidgetType.EMAIL);
+
+	    if (widget == null)
+	    {
+		widget = new Widget("EmailGateway",
+		        "Email gateway supports third party email apis integration into Agile.", "", "", "", "",
+		        WidgetType.EMAIL);
+	    }
+
+	    ObjectMapper map = new ObjectMapper();
+	    widget.prefs = map.writeValueAsString(emailGateway);
+	    widget.save();
+
+	    if (emailGateway != null)
+		CacheUtil.setCache(NamespaceManager.get() + "_email_gateway", emailGateway);
+
+	    return emailGateway;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
     /**
      * Returns email gateway from datastore
      * 
@@ -39,8 +87,56 @@ public class EmailGatewayUtil
      */
     public static EmailGateway getEmailGateway()
     {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(EmailGateway.class).get();
+
+	// Get from Cache
+	EmailGateway gateway = (EmailGateway) CacheUtil.getCache(NamespaceManager.get() + "_email_gateway");
+
+	if (gateway != null)
+	{
+	    System.out.println("Returning gateway from Cache...");
+	    return gateway;
+	}
+
+	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", WidgetType.EMAIL);
+
+	// If no widget return null
+	if (widget == null)
+	    return null;
+
+	EmailGateway emailGateway = null;
+
+	try
+	{
+	    // Fetch from widget prefs and wrap to EmailGateway
+	    ObjectMapper mapper = new ObjectMapper();
+	    emailGateway = mapper.readValue(widget.prefs, EmailGateway.class);
+	}
+	catch (Exception e)
+	{
+	    System.out.println("Exception occured while getting email gateway from object mapper..." + e.getMessage());
+	    e.printStackTrace();
+	}
+
+	return emailGateway;
+    }
+
+    /**
+     * Deletes Email Gateway widget from datastore and memcache
+     */
+    public static void deleteEmailGateway()
+    {
+	try
+	{
+	    // Delete from cache
+	    CacheUtil.deleteCache(NamespaceManager.get() + "_email_gateway");
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while deleting gateway from cache..." + e.getMessage());
+	}
+
+	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", WidgetType.EMAIL);
+	widget.delete();
     }
 
     /**

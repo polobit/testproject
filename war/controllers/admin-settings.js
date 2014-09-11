@@ -344,24 +344,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 		this.email_gateway = new Base_Model_View({
 			url : 'core/api/email-gateway',
-			template: 'admin-settings-web-to-lead',
-			deleteCallback: function(model, response)
-			{
-			     if(model)
-			     {
-			    	 var data = model.toJSON();
-			    	 
-			    	 if(data.email_api == "MANDRILL")
-			    	 {
-			    		 	// Delete mandrill webhook
-							$.getJSON("core/api/email-gateway/delete-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
-								
-								console.log(data);
-								
-							});
-			    	 }
-			     }	
-			}
+			template: 'admin-settings-web-to-lead'
 		});
 		
 		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
@@ -411,7 +394,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		if (id == 'mandrill')
 			value = 'MANDRILL';
-
+		
 		var view = new Base_Model_View({ model : App_Admin_Settings.email_gateway.model, url : 'core/api/email-gateway',
 			template : 'settings-email-gateway', postRenderCallback : function(el)
 			{
@@ -438,13 +421,13 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					}, 1);
 				});
 			},
-			saveCallback: function(data)
+			saveCallback: function()
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
 				
-				//console.log(data);
-				
+				data = view.model.toJSON();
+
 				// Add webhook
 				if(data.email_api == "MANDRILL")
 				{
@@ -458,7 +441,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			}
 			
 		});
-
+		
+		
+		
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
