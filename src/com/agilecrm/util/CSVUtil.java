@@ -432,7 +432,7 @@ public class CSVUtil
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
 
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
+	SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
@@ -654,7 +654,7 @@ public class CSVUtil
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
 
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
+	SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
@@ -844,7 +844,7 @@ public class CSVUtil
 	buildDealsImportStatus(status, "FAILD", failedDeals);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
 
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, "csv_deal_import", new Object[] {
+	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] {
 		domainUser, status });
 	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
 

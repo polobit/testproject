@@ -621,7 +621,7 @@ function parseCSV(key,type)
 		console.log(data);
 		if (data == undefined)
 			return;
-		constructCustomfieldOptions(function(fields, el)
+		constructCustomfieldOptions(type,function(fields, el)
 		{
 			/*
 			 * $('#custom_fields', template).each(function(index, element) {
@@ -662,11 +662,18 @@ function parseCSV(key,type)
  * 
  * @param callback
  */
-function constructCustomfieldOptions(callback)
+function constructCustomfieldOptions(type,callback)
 {
 
-	var custom_fields = Backbone.Collection.extend({ url : 'core/api/custom-fields' });
-
+	var custom_fields;
+	if(type == "contacts"){
+	  custom_fields = Backbone.Collection.extend({ url : 'core/api/custom-fields/byscope?scope=CONTACT' });
+	}else if(type == "company"){
+		 custom_fields = Backbone.Collection.extend({ url : 'core/api/custom-fields/byscope?scope=COMPANY' });
+	}else if(type == "deals"){
+		 custom_fields = Backbone.Collection.extend({ url : 'core/api/custom-fields/byscope?scope=DEAL' });
+	}
+	
 	new custom_fields().fetch({ success : function(data)
 	{
 		var el = "";
