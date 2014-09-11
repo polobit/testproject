@@ -265,6 +265,9 @@ public class RegisterServlet extends HttpServlet
     {
 
 	String reference_domain = request.getParameter("r_domain");
+	
+	System.out.println("reference domain "+reference_domain);
+	
 	Cookie[] cookies = request.getCookies();
 
 	System.out.println("reading cookies");
@@ -289,6 +292,6 @@ public class RegisterServlet extends HttpServlet
 
 	    }
 	}
-	return null;
+	return reference_domain;
     }
 }
