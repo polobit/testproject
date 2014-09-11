@@ -51,10 +51,13 @@ public class SearchUtil
 
 	    CustomFieldDef customField = null;
 
+	    if(contactField.value == null || contactField.name == null)
+		continue;
+		
 	    /*
 	     * Iterates through custom properties of contact
 	     */
-	    if (contactField.type.equals(ContactField.FieldType.CUSTOM))
+	    if (ContactField.FieldType.CUSTOM.equals(contactField.type))
 	    {
 		// Get the custom field based on field name
 		customField = CustomFieldDefUtil.getFieldByName(contactField.name);
