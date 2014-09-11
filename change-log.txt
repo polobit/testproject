@@ -1,4 +1,14 @@
-<<<<<<< HEAD
+1-8 (11-sept-2014)
+***Saikiran***
+- Multiple Tracks for Deals
+- Deals Export.
+- Showing international characters in facebook.
+
+*** Yaswnth ***
+- Revereted Jitendra changes contacts CSV import to old code.
+- Added case insenstive compatision on emails while merging contacts in CSV import. 
+
+
 1-7 (2-Sept-2014)
 *** Naresh ***
 - Send Email bug fix when HTML is empty and Track Clicks yes
@@ -7,8 +17,7 @@
 1-6 (2-Sept-2014)
 *** Jitendra ***
 - Changed QuickBooks Development and Production Keys
-=======
-1-6 
+
 *** Yaswanth ***
 - Loading indicator issue fix in emails tab in contact details page
 - Owners are fetched only when user chose to change owner in contact details page
