@@ -22,7 +22,7 @@ public class ReferenceUtil
 
     public static boolean check_reference_domain_status(String reference_domain)
     {
-
+System.out.println(reference_domain+"in reference util refernce domain");
 	DomainUser domainuser = DomainUserUtil.getDomainOwner(reference_domain);
 
 	System.out.println(domainuser + "in reference util checking reference domain status");

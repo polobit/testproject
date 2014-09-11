@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -120,12 +121,75 @@ public class CSVUtil
     }
 
     /**
+     * Reads CSV data from blob input stream and returns list of string arrays
+     * 
+     * @param blobStream
+     * @param encoding_type
+     * @return
+     */
+    private List<String[]> getCSVDataFromStream(InputStream blobStream, String encoding_type)
+    {
+	List<String[]> data = new ArrayList<String[]>();
+
+	// Reads blob data line by line upto first 10 line of file
+	Reader csvStream = null;
+	try
+	{
+	    if (StringUtils.isEmpty(encoding_type))
+		csvStream = new InputStreamReader(blobStream, "UTF-8");
+	    else
+		csvStream = new InputStreamReader(blobStream, encoding_type);
+
+	}
+	catch (UnsupportedEncodingException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (csvStream == null)
+	    return data;
+
+	CSVReader reader = new CSVReader(csvStream);
+
+	try
+	{
+	    data = reader.readAll();
+
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    // Closes reader after reading data
+	    try
+	    {
+		reader.close();
+	    }
+	    catch (IOException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+
+	return data;
+
+    }
+
+    /**
      * Creates contacts,companies from CSV string using a contact prototype
      * built from import page. It takes owner id to sent contact owner
      * explicitly instead of using session manager, as there is a chance of
      * getting null in backends.
      * 
-     * Contact is saved only if there is email exists and it is a valid email
+     * Contact is saved only if there is email exists and it is a valid email.
+     * 
+     * Down the line Encoding type should read from request based on user
+     * preference and encode the input stream and read data
      * 
      * @param blobStream
      * @param contact
@@ -138,17 +202,10 @@ public class CSVUtil
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
-	int availableContacts = billingRestriction.contacts_count;
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	// Reads blob data line by line upto first 10 line of file
-	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
-
-	System.out.println(contact);
-	CSVReader reader = new CSVReader(csvStream);
-
-	List<String[]> contacts = reader.readAll();
+	List<String[]> contacts = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (contacts.isEmpty())
 	    return;
@@ -159,6 +216,7 @@ public class CSVUtil
 
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 
+	// Adds new tags to temporary list to save them in all contacts
 	tags.addAll(contact.tags);
 
 	List<ContactField> properties = contact.properties;
@@ -177,23 +235,23 @@ public class CSVUtil
 	int mergedContacts = 0;
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
-	List<String> emails = new ArrayList<String>();
 	Map<Object, Object> status = new HashMap<Object, Object>();
-	status.put("type", "Contact");
+	status.put("type", "Contacts");
 
+	/**
+	 * Iterates through all the records from blob
+	 */
 	for (String[] csvValues : contacts)
 	{
+	    // Set to hold the notes column positions so they can be created
+	    // after a contact is created.
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
 
 	    Contact tempContact = new Contact();
-	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
-	    tempContact.properties = contact.properties;
 
-	    // Sets owner of contact explicitly. If owner is not set,
-	    // contact
-	    // prepersist
-	    // tries to read it from session, and session is not shared with
-	    // backends
+	    // Cloning so that wrong tags don't get to some contact if previous
+	    // contact is merged with exiting contact
+	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
 	    tempContact.setContactOwner(ownerKey);
 
 	    tempContact.properties = new ArrayList<ContactField>();
@@ -294,20 +352,16 @@ public class CSVUtil
 		// and checked with plan limits
 
 		++billingRestriction.contacts_count;
-		try
-		{
-		    if (limitCrossed)
-			continue;
-
-		    if (billingRestriction.contacts_count >= allowedContacts)
-		    {
-			limitCrossed = true;
-		    }
-
-		}
-		catch (PlanRestrictedException e)
+		if (limitCrossed)
 		{
 		    ++limitExceeded;
+		    continue;
+		}
+
+		if (billingRestriction.contacts_count >= allowedContacts)
+		{
+		    limitCrossed = true;
+
 		    continue;
 		}
 	    }
@@ -383,7 +437,6 @@ public class CSVUtil
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
-
     }
 
     /**
@@ -400,17 +453,10 @@ public class CSVUtil
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
-	int availableContacts = billingRestriction.contacts_count;
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	// Reads blob data line by line upto first 10 line of file
-	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
-
-	System.out.println(contact);
-	CSVReader reader = new CSVReader(csvStream);
-
-	List<String[]> companies = reader.readAll();
+	List<String[]> companies  = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (companies.isEmpty())
 	    return;
@@ -440,6 +486,7 @@ public class CSVUtil
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
 	int failedCompany = 0;
+	int nameMissing = 0;
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", type);
 
@@ -450,7 +497,6 @@ public class CSVUtil
 
 	    Contact tempContact = new Contact();
 	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
-	    tempContact.properties = contact.properties;
 
 	    tempContact.type = Type.COMPANY;
 	    tempContact.setContactOwner(ownerKey);
@@ -539,6 +585,7 @@ public class CSVUtil
 	    }
 	    else
 	    {
+		++nameMissing;
 		continue;
 	    }
 
@@ -548,34 +595,27 @@ public class CSVUtil
 	     */
 
 	    ++billingRestriction.contacts_count;
-	    try
-	    {
-		if (limitCrossed)
-		    continue;
 
-		if (billingRestriction.contacts_count >= allowedContacts)
-		{
-		    limitCrossed = true;
-		}
-
-	    }
-	    catch (PlanRestrictedException e)
+	    if (limitCrossed)
 	    {
 		++limitExceeded;
 		continue;
 	    }
 
+	    if (billingRestriction.contacts_count >= allowedContacts)
+	    {
+		limitCrossed = true;
+	    }
+
 	    try
 	    {
-
 		tempContact.save();
-
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.NAME));
+		System.out.println("exception raised while saving company");
 		e.printStackTrace();
+
 		failedCompany++;
 
 	    }
@@ -603,6 +643,7 @@ public class CSVUtil
 	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany);
+	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
 
 	}
 	else
@@ -625,7 +666,6 @@ public class CSVUtil
 	{
 	    BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedCompany));
 	}
-
     }
 
     public void buildCSVImportStatus(Map<Object, Object> statusMap, ImportStatus status, Integer count)

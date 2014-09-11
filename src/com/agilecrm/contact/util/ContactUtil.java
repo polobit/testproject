@@ -282,7 +282,7 @@ public class ContactUtil
 	    // In case email field value is empty it removes property from
 	    // contact and continue
 
-	    if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
+	    if (StringUtils.isBlank(emailField.value))
 	    {
 		System.out.println(contact.properties.contains(emailField));
 		contact.properties.remove(emailField);
@@ -734,7 +734,9 @@ public class ContactUtil
 		    // subtype, there could be change in subtype
 		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
-			contactField.subtype = field.subtype;
+			// Sets new subtype if there is any subtype availe
+			if(field.subtype != null)
+			    contactField.subtype = field.subtype;
 
 			// Sets it to false so property wont be added again.
 			newField = false;
@@ -757,7 +759,7 @@ public class ContactUtil
 		continue;
 	    }
 
-	    // If company is different then
+	    // If company is different then remove the exiting company from contact
 	    if (existingField.name.equals(Contact.COMPANY))
 	    {
 		if (!StringUtils.equals(existingField.value, field.value))
@@ -805,7 +807,8 @@ public class ContactUtil
 		    // subtype, there could be change in subtype
 		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
-			contactField.subtype = field.subtype;
+			if(!StringUtils.isEmpty(field.subtype))
+			    contactField.subtype = field.subtype;
 
 			// Sets it to false so property wont be added again.
 			newField = false;
@@ -826,16 +829,6 @@ public class ContactUtil
 	    {
 		oldContact.properties.add(field);
 		continue;
-	    }
-
-	    // If company is different then
-	    if (existingField.name.equals(Contact.NAME))
-	    {
-		if (!existingField.value.equalsIgnoreCase(field.value))
-		{
-		    oldContact.contact_company_id = null;
-		    oldContact.contact_company_key = null;
-		}
 	    }
 
 	    existingField.value = field.value;
@@ -866,7 +859,7 @@ public class ContactUtil
 	if (oldContact != null)
 	    return mergeContactFeilds(contact, oldContact);
 
-	return oldContact;
+	return contact;
 
     }
 
@@ -879,7 +872,7 @@ public class ContactUtil
 	if (oldContact != null)
 	    return mergeCompanyFields(contact, oldContact);
 
-	return oldContact;
+	return contact;
 
     }
 

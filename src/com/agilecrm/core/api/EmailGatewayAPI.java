@@ -37,9 +37,7 @@ public class EmailGatewayAPI
     @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public EmailGateway saveEmailGateway(EmailGateway emailGateway)
     {
-	emailGateway.save();
-
-	return emailGateway;
+	return EmailGatewayUtil.saveEmailGateway(emailGateway);
     }
 
     /**
@@ -60,10 +58,7 @@ public class EmailGatewayAPI
     @DELETE
     public void deleteEmailGateway()
     {
-	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
-
-	if (emailGateway != null)
-	    emailGateway.delete();
+	EmailGatewayUtil.deleteEmailGateway();
     }
 
     /**

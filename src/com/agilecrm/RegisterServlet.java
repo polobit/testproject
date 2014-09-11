@@ -174,12 +174,14 @@ public class RegisterServlet extends HttpServlet
 	{
 	    for (int i = 0; i < cookies.length; i++)
 	    {
-		Cookie c = cookies[i]; 
-		System.out.println("cookie "+c);
+
+		Cookie c = cookies[i];
+		System.out.println("cookie " + c);
 		if (c.getName().equals("Agile_Reference_Domain"))
 		{
 		    reference_domain = c.getValue();
-		    System.out.println("reference domain cookie "+reference_domain);
+		    System.out.println("reference domain cookie " + reference_domain);
+
 		    if (reference_domain != null)
 		    {
 			if (ReferenceUtil.check_reference_domain_status(reference_domain))
@@ -199,7 +201,15 @@ public class RegisterServlet extends HttpServlet
 		}
 	    }
 	}
-
+	reference_domain = request.getParameter("r_domain");
+	System.out.println("refernce domain value read from form param " + reference_domain);
+	if (reference_domain != null)
+	{
+	    if (ReferenceUtil.check_reference_domain_status(reference_domain))
+		reference_domain = reference_domain;
+	    else
+		reference_domain = null;
+	}
 	// Get User Name
 	String email = request.getParameter("email");
 

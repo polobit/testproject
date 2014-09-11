@@ -168,7 +168,7 @@
 				</div><br/>
 				<div style="float:left;">
 				{{#if_equals email_api "MANDRILL"}}
-					<a href="#" class="btn btn-danger delete">Disable</a>
+					<a href="#" class="btn btn-danger" id="email-gateway-delete">Disable</a>
 					<a href="#email-gateways/mandrill" class="btn">Settings</a>
 				{{else}}
 					{{#check_plan "FREE"}}
