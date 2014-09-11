@@ -117,8 +117,8 @@ public class RegisterServlet extends HttpServlet
 	    System.out.println("namespace :" + NamespaceManager.get());
 	    if (DomainUserUtil.count() == 0)
 	    {
-		DomainUser domainUser = createUser(request, response, userInfo, "", "");
-		System.out.println("before forwarding to domain.agilecrm.com");
+		DomainUser domainUser = createUser(request, response, userInfo, "");
+
 		response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
 		return;
 	    }
@@ -166,50 +166,7 @@ public class RegisterServlet extends HttpServlet
      */
     void registerAgile(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
-	String reference_domain = "";
 
-	Cookie[] cookies = request.getCookies();
-
-	if (cookies != null && cookies.length > 0)
-	{
-	    for (int i = 0; i < cookies.length; i++)
-	    {
-
-		Cookie c = cookies[i];
-		System.out.println("cookie " + c);
-		if (c.getName().equals("Agile_Reference_Domain"))
-		{
-		    reference_domain = c.getValue();
-		    System.out.println("reference domain cookie " + reference_domain);
-
-		    if (reference_domain != null)
-		    {
-			if (ReferenceUtil.check_reference_domain_status(reference_domain))
-			    reference_domain = reference_domain;
-			else
-			    reference_domain = null;
-		    }
-		    // for safety purpose . reference_domain should be null if
-		    // it doesnot exist
-		    else
-			reference_domain = null;
-
-		}
-		else
-		{
-		    reference_domain = null;
-		}
-	    }
-	}
-	reference_domain = request.getParameter("r_domain");
-	System.out.println("refernce domain value read from form param " + reference_domain);
-	if (reference_domain != null)
-	{
-	    if (ReferenceUtil.check_reference_domain_status(reference_domain))
-		reference_domain = reference_domain;
-	    else
-		reference_domain = null;
-	}
 	// Get User Name
 	String email = request.getParameter("email");
 
@@ -221,8 +178,6 @@ public class RegisterServlet extends HttpServlet
 
 	// Get reference code
 
-	System.out.println("in register servlet " + reference_domain);
-
 	if (email == null || password == null)
 	    throw new Exception("Invalid Input. Email or password has been left blank.");
 
@@ -231,16 +186,8 @@ public class RegisterServlet extends HttpServlet
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
 
-	DomainUser domainUser = createUser(request, response, userInfo, password, reference_domain);
+	DomainUser domainUser = createUser(request, response, userInfo, password);
 
-	// checks 3 conditions,domainuser saved ,refernce_domain
-	// exists,&refernce_domain not null
-	if (domainUser != null && reference_domain != null
-	        && ReferenceUtil.check_reference_domain_status(reference_domain))
-	{
-	    ReferenceUtil.update_referel_count_of_reference_domain(reference_domain);
-	}
-	System.out.println("domaunuser in register servlet  " + domainUser);
 	// Redirect to home page
 	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
     }
@@ -261,9 +208,10 @@ public class RegisterServlet extends HttpServlet
      * @return DomainUser
      * @throws Exception
      */
-    DomainUser createUser(HttpServletRequest request, HttpServletResponse response, UserInfo userInfo, String password,
-	    String reference_domain) throws Exception
+    DomainUser createUser(HttpServletRequest request, HttpServletResponse response, UserInfo userInfo, String password)
+	    throws Exception
     {
+
 	// Get Domain
 	String domain = NamespaceManager.get();
 	if (StringUtils.isEmpty(domain))
@@ -284,6 +232,9 @@ public class RegisterServlet extends HttpServlet
 
 	request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
+	String reference_domain = getReferenceDomainFromCookie(request);
+
+	System.out.println("reference domain inregister servlet " + reference_domain);
 	// Create Domain User, Agile User
 	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true,
 	        reference_domain);
@@ -296,7 +247,51 @@ public class RegisterServlet extends HttpServlet
 
 	domainUser.save();
 
+	if (domainUser != null && reference_domain != null)
+	{
+	    ReferenceUtil.updateReferralCount(reference_domain);
+	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;
+    }
+
+    /**
+     * 
+     * @param request
+     * @return reads all cookies and check for reference_domain cookie and
+     *         returns
+     */
+    public String getReferenceDomainFromCookie(HttpServletRequest request)
+    {
+
+	String reference_domain = request.getParameter("r_domain");
+	
+	System.out.println("reference domain "+reference_domain);
+	
+	Cookie[] cookies = request.getCookies();
+
+	System.out.println("reading cookies");
+	if (cookies != null && cookies.length > 0)
+	{System.out.println("inside cookie length");
+	    for (int i = 0; i < cookies.length; i++)
+	    {
+		Cookie c = cookies[i];
+
+		if (c.getName().equals("agile_reference_domain"))
+		{
+		    reference_domain = c.getValue();
+		    System.out.println("reference domain cookie " + reference_domain);
+		    if (reference_domain != null)
+		    {
+			if (ReferenceUtil.checkReferenceDomainExistance(reference_domain))
+			    return reference_domain;
+
+		    }
+
+		}
+
+	    }
+	}
+	return reference_domain;
     }
 }
