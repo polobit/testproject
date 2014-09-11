@@ -138,7 +138,6 @@ public class CSVUtil
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
-	int availableContacts = billingRestriction.contacts_count;
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
@@ -178,7 +177,6 @@ public class CSVUtil
 	int mergedContacts = 0;
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
-	List<String> emails = new ArrayList<String>();
 	Map<Object, Object> status = new HashMap<Object, Object>();
 	status.put("type", "Contacts");
 
@@ -381,7 +379,7 @@ public class CSVUtil
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
-
+              reader.close();
     }
 
     /**
@@ -398,7 +396,6 @@ public class CSVUtil
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
 
-	int availableContacts = billingRestriction.contacts_count;
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
@@ -619,7 +616,7 @@ public class CSVUtil
 	{
 	    BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedCompany));
 	}
-
+              reader.close();
     }
 
     public void buildCSVImportStatus(Map<Object, Object> statusMap, ImportStatus status, Integer count)
