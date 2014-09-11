@@ -1,19 +1,19 @@
 package com.agilecrm.user;
 
+import com.googlecode.objectify.annotation.NotSaved;
+import com.googlecode.objectify.condition.IfDefault;
+
 public class Referer
 {
 
-    // @referral_count store the count of domains which are referred by same
-    // domain
+    /**
+     * referral_count to store referralcount reference_by_domain to store
+     * referenced domain
+     */
 
     public Integer referral_count = 0;
+    @NotSaved(IfDefault.class)
     public String reference_by_domain = null;
-
-    /*
-     * public Referer(String reference_code, Integer referaal_count, String
-     * reference_by) { this.reference_code = reference_code; this.referral_count
-     * = referaal_count; this.reference_by = reference_by; }
-     */
 
     public Referer()
     {
@@ -23,7 +23,7 @@ public class Referer
     @Override
     public String toString()
     {
-	return "Referer [referral_count=" + referral_count + ", reference_by=" + reference_by_domain + "]";
+	return "Referer [referral_count=" + referral_count + ", reference_by_domain=" + reference_by_domain + "]";
     }
 
 }

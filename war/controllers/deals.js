@@ -55,6 +55,10 @@ var DealsRouter = Backbone.Router.extend({
 						url: '/core/api/milestone/'+pipeline_id,
 						type: 'GET',
 						success: function(data) {
+							if(pipeline_id == 0){
+								pipeline_id = data.id;
+								createCookie("agile_deal_track",pipeline_id);
+							}
 							var milestones = data.milestones;
 							milestones = milestones.split(",");
 							count = milestones.length;

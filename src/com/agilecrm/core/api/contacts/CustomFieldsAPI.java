@@ -139,6 +139,28 @@ public class CustomFieldsAPI
 	    return null;
 	}
     }
+    
+    /**
+     * Retrieves Custom fields according to scope SCOPE can be like PERSION,COMPANY,CONTACT etc
+     */
+    @Path("/byscope")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<CustomFieldDef> getCustomFieldsByScope(@QueryParam("scope") SCOPE scope)
+    {
+	try
+	{
+	    if (scope == null)
+		CustomFieldDefUtil.getSearchableCustomFields();
+
+	    return CustomFieldDefUtil.getCustomFieldsByScope(scope);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
 
     /**
      * Gets all custom fields

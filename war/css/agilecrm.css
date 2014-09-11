@@ -1053,6 +1053,10 @@ Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
 .rhs>.dynamic-option {
 	max-width: 125px;
 }
+/* To fix select drop down width in webrules table */
+.web-rule-contact-condition-table .dynamic-option{
+	max-width: 100%;
+}
 /* to fix copy icon alignment onboarding/saas page*/
 .agile-doc-view .prettyprint {
 	padding-right: 30px;
