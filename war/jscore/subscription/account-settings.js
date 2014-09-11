@@ -196,6 +196,9 @@ $(function()
 					// Enables Send Email button.
 				    enable_send_button($('#send-delete-request'));
 				    $("#send-cancellation").modal('hide');	
+				    
+				    // Showing Noty
+				    showNotyPopUp("information", "Cancellation request sent. You should hear back from us in one working day.", "top", 3000);
 				});
 				
 			});
