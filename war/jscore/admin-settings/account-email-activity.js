@@ -38,7 +38,7 @@ $(function(){
 		$.ajax({
 			url: 'core/api/email-gateway',
 			type: 'DELETE',
-			success: function(data){
+			success: function(){
 				
 				if(App_Admin_Settings.email_gateway && App_Admin_Settings.email_gateway.model)
 			     {

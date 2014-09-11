@@ -21,6 +21,7 @@ import com.agilecrm.queues.util.PullQueueUtil;
 import com.agilecrm.sendgrid.util.SendGridUtil;
 import com.agilecrm.util.CacheUtil;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.IntegrationType;
 import com.agilecrm.widgets.Widget.WidgetType;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -55,13 +56,13 @@ public class EmailGatewayUtil
 
 	try
 	{
-	    Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", WidgetType.EMAIL);
+	    Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
 
 	    if (widget == null)
 	    {
 		widget = new Widget("EmailGateway",
 		        "Email gateway supports third party email apis integration into Agile.", "", "", "", "",
-		        WidgetType.EMAIL);
+		        WidgetType.EMAIL, IntegrationType.EMAIL);
 	    }
 
 	    ObjectMapper map = new ObjectMapper();
@@ -97,7 +98,7 @@ public class EmailGatewayUtil
 	    return gateway;
 	}
 
-	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", WidgetType.EMAIL);
+	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
 
 	// If no widget return null
 	if (widget == null)
@@ -135,7 +136,7 @@ public class EmailGatewayUtil
 	    System.err.println("Exception occured while deleting gateway from cache..." + e.getMessage());
 	}
 
-	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", WidgetType.EMAIL);
+	Widget widget = WidgetUtil.getWidgetByNameAndType("EmailGateway", IntegrationType.EMAIL);
 	widget.delete();
     }
 
@@ -219,7 +220,7 @@ public class EmailGatewayUtil
 	try
 	{
 	    // Fetch EmailGateway
-	    EmailGateway emailGateway = null;
+	    EmailGateway emailGateway = getEmailGateway();
 
 	    // If no gateway setup, sends email through Agile Mandrill
 	    if (emailGateway == null)
@@ -232,10 +233,8 @@ public class EmailGatewayUtil
 	    }
 
 	    // Add To Queue
-	    // addToQueue(emailGateway.email_api.toString(),
-	    // emailGateway.api_user, emailGateway.api_key, domain,
-	    // fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
-	    // mandrillMetadata);
+	    addToQueue(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain,
+		    fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
 
 	}
 	catch (Exception e)
@@ -280,7 +279,7 @@ public class EmailGatewayUtil
 	try
 	{
 	    // Fetch EmailGateway
-	    EmailGateway emailGateway = null;
+	    EmailGateway emailGateway = getEmailGateway();
 
 	    // If no gateway setup, sends email through Agile Mandrill
 	    if (emailGateway == null)
@@ -290,17 +289,15 @@ public class EmailGatewayUtil
 		return;
 	    }
 
-	    // // If SendGrid
-	    // if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
-	    // SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key,
-	    // fromEmail, fromName, to, cc, bcc,
-	    // subject, replyTo, html, text, null, attachments);
-	    //
-	    // // If Mandrill
-	    // if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
-	    // Mandrill.sendMail(emailGateway.api_key, true, fromEmail,
-	    // fromName, to, cc, bcc, subject, replyTo, html,
-	    // text, mandrillMetadata, attachments);
+	    // If SendGrid
+	    if (EMAIL_API.SEND_GRID.equals(emailGateway.email_api))
+		SendGrid.sendMail(emailGateway.api_user, emailGateway.api_key, fromEmail, fromName, to, cc, bcc,
+		        subject, replyTo, html, text, null, attachments);
+
+	    // If Mandrill
+	    if (EMAIL_API.MANDRILL.equals(emailGateway.email_api))
+		Mandrill.sendMail(emailGateway.api_key, true, fromEmail, fromName, to, cc, bcc, subject, replyTo, html,
+		        text, mandrillMetadata, attachments);
 
 	}
 	catch (Exception e)

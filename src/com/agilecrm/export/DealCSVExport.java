@@ -51,18 +51,36 @@ public class DealCSVExport
 	// Initialize new array to insert as new row.
 	String str[] = new String[headersLength];
 
-	str[indexMap.get(NAME)] = deal.name;
-	str[indexMap.get(DESCRIPTION)] = deal.description;
-	str[indexMap.get(MILESTONE)] = deal.milestone;
-	str[indexMap.get(PROBABILITY)] = deal.probability + "%";
-	str[indexMap.get(EXPECTED_VALUE)] = UserPrefsUtil.getCurrentUserPrefs().currency.split("-")[1] + " "
-		+ (deal.expected_value != null ? deal.expected_value : 0);
 	try
 	{
+	    str[indexMap.get(NAME)] = deal.name;
+	    str[indexMap.get(DESCRIPTION)] = deal.description;
+	    str[indexMap.get(MILESTONE)] = deal.milestone;
+	    str[indexMap.get(PROBABILITY)] = deal.probability + "%";
+	    str[indexMap.get(EXPECTED_VALUE)] = UserPrefsUtil.getCurrentUserPrefs().currency.split("-")[1] + " "
+		    + (deal.expected_value != null ? deal.expected_value : 0);
+
 	    str[indexMap.get(OWNER)] = deal.getOwner().email;
 	    Date d = new Date();
 	    d.setTime(deal.close_date * 1000);
 	    str[indexMap.get(CLOSE_DATE)] = date.format(d);
+
+	    String relatedTo = "";
+	    List<Contact> relatedContacts = deal.getContacts();
+	    for (Contact contact : relatedContacts)
+	    {
+		relatedTo += getContactFieldValue("email", contact) + ",";
+
+	    }
+
+	    str[indexMap.get(RELATED_TO)] = relatedTo.length() > 0 ? relatedTo.substring(0, relatedTo.length() - 1)
+		    : "";
+
+	    for (CustomFieldData field : deal.custom_data)
+	    {
+		str[indexMap.get(field.name)] = field.value;
+	    }
+
 	}
 	catch (ParseException e)
 	{
@@ -71,20 +89,6 @@ public class DealCSVExport
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-	}
-	String relatedTo = "";
-	List<Contact> relatedContacts = deal.getContacts();
-	for (Contact contact : relatedContacts)
-	{
-	    relatedTo += getContactFieldValue("email", contact) + ",";
-
-	}
-
-	str[indexMap.get(RELATED_TO)] = relatedTo.length() > 0 ? relatedTo.substring(0, relatedTo.length() - 1) : "";
-
-	for (CustomFieldData field : deal.custom_data)
-	{
-	    str[indexMap.get(field.name)] = field.value;
 	}
 
 	return str;

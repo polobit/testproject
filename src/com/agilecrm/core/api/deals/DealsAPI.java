@@ -19,7 +19,6 @@ import net.sf.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
@@ -403,6 +402,9 @@ public class DealsAPI
 	{
 	    opportunity.addContactIds(contact.id.toString());
 	}
+
+	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
+	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 
 	opportunity.save();
 	return opportunity;

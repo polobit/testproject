@@ -80,6 +80,13 @@ public class CustomFieldDefUtil
 	map.put("scope", scope);
 	return dao.listByProperty(map);
     }
+    
+    public static List<CustomFieldDef> getCustomFieldsByScope(SCOPE scope)
+    {
+	Map<String, Object> map = new HashMap<String, Object>();
+	map.put("scope", scope);
+	return dao.listByProperty(map);
+    }
 
     public static List<CustomFieldDef> getCustomFieldsByScopeAndType(SCOPE scope, String type)
     {
