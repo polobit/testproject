@@ -4,6 +4,10 @@
 - Deals Export.
 - Showing international characters in facebook.
 
+*** Yaswnth ***
+- Revereted Jitendra changes contacts CSV import to old code.
+- Added case insenstive compatision on emails while merging contacts in CSV import. 
+
 
 1-7 (2-Sept-2014)
 *** Naresh ***
