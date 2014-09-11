@@ -275,6 +275,8 @@ public class ContactUtil
 		contact.properties.remove(emailField);
 		continue;
 	    }
+	    
+	    emailField.value = emailField.value.toLowerCase();
 
 	    // If email is not available, then it iterates though other emails
 	    if (!isExists(emailField.value))
@@ -751,6 +753,10 @@ public class ContactUtil
 	Contact oldContact = null;
 	for (ContactField field : emails)
 	{
+	    if(StringUtils.isEmpty(field.value))
+		continue;
+	    
+	    field.value = field.value.toLowerCase();
 	    oldContact = searchContactByEmail(field.value);
 	    if (oldContact != null)
 		break;
