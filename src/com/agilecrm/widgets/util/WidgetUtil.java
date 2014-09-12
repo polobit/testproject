@@ -91,7 +91,7 @@ public class WidgetUtil
 	 * Fetches list of widgets related to AgileUser key and adds is_added
 	 * field as true to default widgets if not present
 	 */
-	return ofy.query(Widget.class).ancestor(userKey).filter("integration_type !=", null).list();
+	return ofy.query(Widget.class).ancestor(userKey).filter("integration_type", null).list();
     }
 
     /**
