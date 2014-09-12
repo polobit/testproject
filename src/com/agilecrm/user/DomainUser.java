@@ -73,6 +73,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     /** The Reference tracking object represents referercount and referece key */
 
     @Embedded
+    @NotSaved
     public Referer referer = new Referer();
 
     /**

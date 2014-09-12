@@ -631,7 +631,7 @@ function parseCSV(key,type)
 			if(type == "contacts"){
 			 template = $(getTemplate("import-contacts-2", data));
 			}else if(type == "company"){
-				template = $(getTemplate("import-companies", data));
+			//	template = $(getTemplate("import-companies", data));
 			}else if(type == "deals"){
 				template = $(getTemplate("import-deals2", data));
 			}
