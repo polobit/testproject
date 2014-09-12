@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<servlet>
 		<servlet-name>Home</servlet-name>
@@ -27,8 +31,8 @@
 		<servlet-name>Shopify</servlet-name>
 		<url-pattern>/shopify</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 	<servlet>
 		<servlet-name>OAuth2</servlet-name>
 		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>
@@ -201,11 +205,11 @@
 		<servlet-class>com.agilecrm.session.CalendarServlet</servlet-class>
 		<init-param>
 			<param-name>consumer_key</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 		<init-param>
 			<param-name>consumer_secret</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 
@@ -222,6 +226,15 @@
 	<servlet-mapping>
 		<servlet-name>Reports</servlet-name>
 		<url-pattern>/backend/cron/reports/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Triggers</servlet-name>
+		<servlet-class>com.agilecrm.workflows.triggers.TriggerServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Triggers</servlet-name>
+		<url-pattern>/backend/cron/triggers/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -252,7 +265,7 @@
 		<servlet-name>Stripe Webhook</servlet-name>
 		<url-pattern>/backend/stripewebhook/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Stripe Webhook2</servlet-name>
 		<servlet-class>com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet2</servlet-class>
@@ -368,7 +381,7 @@
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
-		
+
 	</filter-mapping>
 
 	<filter-mapping>
@@ -433,12 +446,12 @@
 	</filter-mapping>
 
 	<filter>
-	<filter-name>InboundMailFilter</filter-name>
+		<filter-name>InboundMailFilter</filter-name>
 		<filter-class>com.agilecrm.filter.InboundMailFilter</filter-class>
 	</filter>
 
 	<filter-mapping>
-	<filter-name>InboundMailFilter</filter-name>
+		<filter-name>InboundMailFilter</filter-name>
 		<url-pattern>/_ah/mail/*</url-pattern>
 	</filter-mapping>
 
@@ -529,7 +542,7 @@
 		<servlet-name>GravityForm</servlet-name>
 		<url-pattern>/gform</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>
 		<servlet-class>com.thirdparty.shopify.ShopifyWebhookTrigger</servlet-class>
@@ -538,7 +551,7 @@
 		<servlet-name>ShopifyWebhookTrigger</servlet-name>
 		<url-pattern>/shopifytrigger</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>StripeChargeWebhook</servlet-name>
 		<servlet-class>com.thirdparty.stripe.StripeChargeWebhook</servlet-class>
@@ -637,7 +650,7 @@
 		<servlet-name>Resubscribe</servlet-name>
 		<url-pattern>/resubscribe</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Formbuilder</servlet-name>
 		<jsp-file>/formbuilder.jsp</jsp-file>
@@ -646,7 +659,7 @@
 		<servlet-name>Formbuilder</servlet-name>
 		<url-pattern>/formbuilder</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>mailhandler</servlet-name>
 		<servlet-class>com.agilecrm.MailHandlerServlet</servlet-class>
@@ -661,7 +674,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 	<servlet-mapping>
@@ -676,7 +689,7 @@
 		<servlet-name>OAuthServlet</servlet-name>
 		<url-pattern>/OAuthServlet</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>WebEventCalendar</servlet-name>
 		<jsp-file>/web-event-calendar.jsp</jsp-file>
