@@ -1,4 +1,39 @@
-1-6 
+1-9(12-sept-2014)
+
+*** jagadeesh ***
+-referral tracking
+
+
+1-8 (11-sept-2014)
+***Saikiran***
+- Multiple Tracks for Deals
+- Deals Export.
+- Showing international characters in facebook.
+
+*** Yaswnth ***
+- Revereted Jitendra changes contacts CSV import to old code.
+- Added case insenstive compatision on emails while merging contacts in CSV import. 
+
+*** Sukanya ***
+- Deals full view only
+- IE erroe page
+- Lead tag removed completely
+
+*** Santhosh Boga ***
+- Tasks new UI
+- Prefs,Adminsettings UI changes (widgets,data sync)
+- Webrules removed iframe replaced with image
+- Make tag management as milestones and few UI changes .
+
+1-7 (2-Sept-2014)
+*** Naresh ***
+- Send Email bug fix when HTML is empty and Track Clicks yes
+
+
+1-6 (2-Sept-2014)
+*** Jitendra ***
+- Changed QuickBooks Development and Production Keys
+
 *** Yaswanth ***
 - Loading indicator issue fix in emails tab in contact details page
 - Owners are fetched only when user chose to change owner in contact details page
@@ -6,6 +41,8 @@
 *** Sukanya ***
 - Office365 template
 - Email case insensitivity
+
+
 
 1-5 (30-August-2014)
 
@@ -16,11 +53,11 @@ Clickdesk live-chat Removed
 *** Bhasuri (28th August)***
 Updated URL visited node
 Added Wait Till node
+>>>>>>> Sandbox_master
 
 *** Yaswanth (26th August)***
-- Added tag management. Added it in admin pannel.
-- CSV notes import fix.
-- Subscription form fix on update button multiple submits.
+Added tag management. Added it in admin pannel.
+CSV notes import fix
 
 1-4 (22-August-2014)
 
@@ -94,4 +131,3 @@ Added Wait Till node
 *** Jitendra ***
 - Fixed Shopify UI issues.
 - Fixed Shopify customers notes duplication issues.
-

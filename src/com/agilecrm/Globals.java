@@ -101,6 +101,12 @@ public class Globals
     // public static final String QUICKBOOKS_CONSUMER_SECRET =
     // "CmBH6OWTlDmemY3uHOBIjFE87MZ6O8FRcsLqtYZF";
     // production key
+    // public static final String QUICKBOOKS_APP_KEY =
+    // "08945c87bae1fb46bab9241ba0e81dc19bbf";
+    // public static final String QUICKBOOKS_CONSUMER_KEY =
+    // "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
+    // public static final String QUICKBOOKS_CONSUMER_SECRET =
+    // "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";
 /**    public static final String QUICKBOOKS_APP_KEY = "08945c87bae1fb46bab9241ba0e81dc19bbf";
     public static final String QUICKBOOKS_CONSUMER_KEY = "qyprdCLvyUgaMn6K9lrd3eyPDn1DuL";
     public static final String QUICKBOOKS_CONSUMER_SECRET = "o7hOCLRSBidVE9gkGQPBaFy0IIcyvtHuXPpL8kmw";

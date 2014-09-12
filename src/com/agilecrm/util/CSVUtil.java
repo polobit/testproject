@@ -33,7 +33,9 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
@@ -78,7 +80,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE;
+	ACCESS_DENIED, TYPE, PROBABILITY;
 
     }
 
@@ -456,7 +458,7 @@ public class CSVUtil
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	List<String[]> companies  = getCSVDataFromStream(blobStream, "UTF-8");
+	List<String[]> companies = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (companies.isEmpty())
 	    return;
@@ -742,14 +744,13 @@ public class CSVUtil
 	Integer totalDeals = 0;
 	Integer savedDeals = 0;
 	Integer failedDeals = 0;
+	Integer probabilityError = 0;
 	/**
 	 * Reading CSV file from input stream
 	 */
-	CSVReader reader = new CSVReader(new InputStreamReader(blobStream, "UTF-8"));
 	Map<String, Object> status = new HashMap<String, Object>();
 	status.put("type", "Deals");
-	List<String[]> deals = reader.readAll();
-	// remove headings
+	List<String[]> deals = getCSVDataFromStream(blobStream, "UTF-8");
 	if (deals.isEmpty())
 	{
 	    return;
@@ -787,18 +788,75 @@ public class CSVUtil
 		{
 		    opportunity.probability = Integer.parseInt(dealPropValues[i]);
 		}
-		if (prop.equalsIgnoreCase("Milestone"))
+
+		/**
+		 * Retrive track information from db
+		 */
+		if (prop.equalsIgnoreCase("Track") || prop.equalsIgnoreCase("Milestone"))
 		{
-		    opportunity.milestone = StringUtils.capitalise(dealPropValues[i].toLowerCase());
+		    String trackName = dealPropValues[i];
+		    try
+		    {
+			List<Milestone> list = MilestoneUtil.getMilestonesList(trackName);
+			if (list != null && list.size() > 0)
+			{
+			    for (Milestone milestone : list)
+			    {
+				if (milestone.name.equalsIgnoreCase(trackName))
+				{
+				    opportunity.pipeline_id = milestone.id;
+				    // search for milestone
+				    String[] milestonesValues = milestone.milestones.split(",");
+				    if (milestonesValues.length > 0)
+				    {
+					for (String s : milestonesValues)
+					{
+					    if (s.equalsIgnoreCase(trackName))
+					    {
+						opportunity.milestone = s;
+					    }
+					}
+				    }
+
+				}
+			    }
+			}
+			else
+			{
+			    Milestone milestone = MilestoneUtil.getMilestones();
+			    if (milestone != null)
+			    {
+				opportunity.pipeline_id = milestone.id;
+				// search for milestone name
+				String[] milestonesValues = milestone.milestones.split(",");
+				if (milestonesValues.length > 0)
+				{
+				    for (String s : milestonesValues)
+				    {
+					if (s.equalsIgnoreCase(trackName))
+					{
+					    opportunity.milestone = s;
+					}
+				    }
+				}
+
+			    }
+			}
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+		    }
+
 		}
 
 		if (prop.equalsIgnoreCase("Close Date") || prop.equalsIgnoreCase("close"))
 		{
 		    // set close date
 		    Calendar c = Calendar.getInstance();
+		    String dateValue = dealPropValues[i];
 		    try
 		    {
-			String dateValue = dealPropValues[i];
 			String[] data = dateValue.split("/");
 			c = Calendar.getInstance();
 			if (data.length == 3)
@@ -813,8 +871,13 @@ public class CSVUtil
 
 		    }
 		    // System.out.println(c.g);
-
-		    opportunity.close_date = Long.valueOf(c.getTimeInMillis() / 1000);
+		    // if date if empty then no close date is required
+		    if (dateValue != null && !dateValue.isEmpty())
+		    {
+			opportunity.close_date = Long.valueOf(c.getTimeInMillis() / 1000);
+		    }else{
+			opportunity.close_date = null;
+		    }
 		}
 		if (prop.equalsIgnoreCase("Description") || prop.equalsIgnoreCase("Descriptions"))
 		{
@@ -830,22 +893,31 @@ public class CSVUtil
 	    opportunity.setOpportunityOwner(ownerKey);
 	    try
 	    {
-		opportunity.save();
+		if (opportunity.probability <= 100)
+		{
+
+		    opportunity.save();
+		    savedDeals++;
+		}
+		else
+		{
+		    buildDealsImportStatus(status, "PROBABILITY", ++probabilityError);
+		}
 	    }
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
 		failedDeals++;
 	    }
-	    savedDeals++;
+
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILD", failedDeals);
+	buildDealsImportStatus(status, "FAILED", failedDeals+probabilityError);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
 
-	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] {
-		domainUser, status });
+	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
+		status });
 	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
 
     }
@@ -855,4 +927,5 @@ public class CSVUtil
 
 	statusMap.put(status, count);
     }
+
 }

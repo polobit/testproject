@@ -65,11 +65,12 @@ public class StripeChargeWebhook extends HttpServlet
 	    String email = customer.getString("receipt_email");
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
-	    if (contact == null)
-		contact = new Contact();
-
 	    List<ContactField> contactProperties = new ArrayList<ContactField>();
-	    contactProperties.add(new ContactField(Contact.EMAIL, email, null));
+	    if (contact == null)
+	    {
+		contact = new Contact();
+		contactProperties.add(new ContactField(Contact.EMAIL, email, null));
+	    }
 
 	    JSONObject cardDetails = customer.getJSONObject("card");
 	    JSONObject agileJson = getAgileJson(cardDetails);
@@ -122,7 +123,7 @@ public class StripeChargeWebhook extends HttpServlet
 	    String key = (String) keys.next();
 	    String value = json.getString(key);
 
-	    if (!StringUtils.isBlank(value))
+	    if (!(StringUtils.isBlank(value) || StringUtils.equals(value, "null")))
 	    {
 		switch (key)
 		{

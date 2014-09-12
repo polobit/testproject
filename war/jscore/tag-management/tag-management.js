@@ -110,9 +110,9 @@ updateTag : function(e)
 					_that.model.save([], {success: function(data)
 						{
 							if(is_merge)
-								showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ newTag +"\"", "top", 5000);
+								showNotyPopUp('information', "Merging tags \""+ oldTag +"\" and \""+ newTag +"\". This may take a while.  You may see the merged tag on some contacts cc", "top", 5000);
 							else
-								showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ newTag +"\". This may take a while. You may see the delete/renamed tag on some contacts while this happens", "top", 5000);
+								showNotyPopUp('information', "Renaming tag \""+ oldTag +"\" to \""+ newTag +"\". This may take a while. You may see the renamed tag on some contacts while this happens", "top", 5000);
 						}
 					});
 		
@@ -177,7 +177,7 @@ deleteItem : function(e)
 		_that.model.url = "core/api/tags/bulk/delete?tag=" + escape(_that.model.get('tag'));
 		_that.model.set({"id" : _that.model.get('tag')});
 		_that.model.destroy({success: function(model, respone){
-			showNotyPopUp('information', "Deleting tag \"" + _that.model.get('tag') + "\"", "top", 5000);
+			showNotyPopUp('information', "Deleting tag \"" + _that.model.get('tag') + "\".  You may see the deleted tag on some contacts while this happens", "top", 5000);
 		}});
 	});
 }, edit : function(e)
