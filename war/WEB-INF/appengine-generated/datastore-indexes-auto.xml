@@ -20,5 +20,9 @@
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Widget" ancestor="true" source="manual">
+        <property name="widget_type" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
