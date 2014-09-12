@@ -8,7 +8,8 @@ public class JSAPIUtil
     public static enum Errors
     {
 	UNAUTHORIZED("Invalid API key"), CONTACT_MISSING("Contact not found"), INVALID_PARAMETERS("Invalid parameter"), API_KEY_MISSING(
-		"API key missing"), DUPLICATE_CONTACT("Duplicate found for \"%s\"");
+		"API key missing"), DUPLICATE_CONTACT("Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED(
+		"Contacts limit reached");
 
 	String errorMessage;
 
