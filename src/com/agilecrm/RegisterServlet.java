@@ -234,7 +234,7 @@ public class RegisterServlet extends HttpServlet
 
 	String reference_domain = getReferenceDomainFromCookie(request);
 
-	System.out.println("reference domain inregister servlet " + reference_domain);
+	System.out.println("reference domain in register servlet " + reference_domain);
 	// Create Domain User, Agile User
 	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true,
 	        reference_domain);
@@ -264,22 +264,19 @@ public class RegisterServlet extends HttpServlet
     public String getReferenceDomainFromCookie(HttpServletRequest request)
     {
 
-	String reference_domain = request.getParameter("r_domain");
-	
-	System.out.println("reference domain "+reference_domain);
-	
 	Cookie[] cookies = request.getCookies();
 
 	System.out.println("reading cookies");
 	if (cookies != null && cookies.length > 0)
-	{System.out.println("inside cookie length");
+	{
+	    System.out.println("inside cookie length");
 	    for (int i = 0; i < cookies.length; i++)
 	    {
 		Cookie c = cookies[i];
-
+		System.out.println("cookie " + c);
 		if (c.getName().equals("agile_reference_domain"))
 		{
-		    reference_domain = c.getValue();
+		    String reference_domain = c.getValue();
 		    System.out.println("reference domain cookie " + reference_domain);
 		    if (reference_domain != null)
 		    {
@@ -292,6 +289,6 @@ public class RegisterServlet extends HttpServlet
 
 	    }
 	}
-	return reference_domain;
+	return null;
     }
 }

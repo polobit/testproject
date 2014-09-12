@@ -13,24 +13,6 @@ if(error != null)
 else
     error = "";
 
-String ref_domain="";
-Cookie[] cookies = request.getCookies();
-
-if (cookies != null && cookies.length > 0)
-{
-    for (int i = 0; i < cookies.length; i++)
-    {
-	Cookie c = cookies[i];
-	System.out.println("cookie " + c);
-	if (c.getName().equals("agile_reference_domain"))
-	{
-	    ref_domain = c.getValue();
-	    System.out.println("reference domain cookie " + ref_domain);
-	   
-	}
-	
-    }
-}
 %>
 
 <!DOCTYPE html>
@@ -203,7 +185,6 @@ if(isIE || isIENew)
 					<input class="input-xlarge field required" name='name' type="text" maxlength="50" minlength="3" placeholder="Full Name" autocapitalize="off">
                     <input class="input-xlarge field required email" id="login_email" name='email' type="text" maxlength="50" minlength="6" placeholder="Email Address (User ID)" autocapitalize="off">
                     <input class="input-xlarge field required" maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
-                     <input class="input-xlarge field " maxlength="200"  name='r_domain' type="hidden" value=<%=ref_domain%>>
 					<div style="margin-top:7px;">
 					  <label class="checkbox" style="display:inline-block;">I agree with the <a href="https://www.agilecrm.com/terms.html" target="_blank">Terms and conditions</a><input type="checkbox" checked="checked" name="agree" class="required"></label>
 					  <input type='submit' id="register_account" style="margin-top:20px;" value="Create  >>" class='btn btn-large btn-primary'>
@@ -362,7 +343,7 @@ if(isIE || isIENew)
 						 var domain = $("#subdomain").val();
 						
 						  // Form data is posted to its subdomain 
-						  $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+						  $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 						  form.submit();	 
 					  },
 					  error: function(xhr, status, error)
