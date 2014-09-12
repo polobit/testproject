@@ -107,7 +107,7 @@ public class SearchUtil
 	     */
 	    if (fields.containsKey(field_name))
 	    {
-		String value = normalizeTextSearchString(fields.get(field_name)) + " " + normalized_value;
+		String value = normalizeString(fields.get(field_name)) + " " + normalized_value;
 
 		normalized_value = value;
 	    }
