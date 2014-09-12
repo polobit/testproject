@@ -104,7 +104,7 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 	$('select#' + milestones_select_id).after(getRandomLoadingImg());
 
 	// Fills milestone select element
-	populateMilestones(trigger_form, undefined, undefined, function(data)
+	populateMilestones(trigger_form, undefined, 0, undefined, function(data)
 	{
 		$('.loading').remove();
 
