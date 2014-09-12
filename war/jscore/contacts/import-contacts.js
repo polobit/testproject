@@ -610,8 +610,8 @@ function parseCSV(key, type)
 
 	BLOB_KEY = key;
 	$("#upload_contacts").after(getRandomLoadingImg());
-	$
-			.getJSON('core/api/upload/process?blob-key=' + key, function(data)
+
+	$.getJSON('core/api/upload/process?blob-key=' + key, function(data)
 			{
 				var template;
 				console.log(data);

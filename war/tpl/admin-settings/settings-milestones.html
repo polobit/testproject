@@ -1,9 +1,10 @@
 <script id="admin-settings-milestones-collection-template" type="text/html">
 <div class="row">
-	<div class='span8 well'>
+	<div class='span9'>
+	<div class="well">
 		<div>
 			<h3>Deal Tracks
-			<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;">New Track</a></h3></div>
+			<a href="#pipelineModal" role="button" data-toggle="modal" type="submit" class="add-pipeline btn" style="float:right;"><i class="icon icon-plus-sign"></i> Add Track</a></h3></div>
     	<div id="admin-settings-milestones-model-list"></div>
 		<div class="form-actions">
     		<a href="#" class="save-pipelines btn btn-primary">Save</a>
@@ -39,6 +40,7 @@
         </a>
         <span class="save-status"></span>
     </div>
+</div>
 </div>
 <!-- End of Modal views -->
     </div>
@@ -93,7 +95,7 @@
                     <div id="milestone-values-{{id}}" class="milestone-ul-list" style="max-width:180px;">
 					{{#milestone_ul milestones}}{{/milestone_ul}}
                     </div>
-					<div><a href="#" class="show_milestone_field"><i class="icon-plus-sign"></i> Add Milestone</a></div>
+					<div><a href="#" class="show_milestone_field anchor-link"><i class="icon-plus-sign"></i> Add Milestone</a></div>
 					<div class="show_field" style="display:none;">
 						<input id="add_new_milestone" class="add_new_milestone" style="width:170px;margin-right:10px;" type="text" placeholder="New Milestone">
 						<a class="btn add_milestone" id="add_milestone" href="#">Add</a>
