@@ -33,7 +33,9 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
@@ -456,7 +458,7 @@ public class CSVUtil
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	List<String[]> companies  = getCSVDataFromStream(blobStream, "UTF-8");
+	List<String[]> companies = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (companies.isEmpty())
 	    return;
@@ -768,6 +770,7 @@ public class CSVUtil
 	Iterator<String[]> it = deals.iterator();
 	while (it.hasNext())
 	{
+	    List<Milestone> milestones = new ArrayList<Milestone>();
 	    Opportunity opportunity = new Opportunity();
 	    String[] dealPropValues = it.next();
 	    for (int i = 0; i < dealPropValues.length; i++)
@@ -787,9 +790,66 @@ public class CSVUtil
 		{
 		    opportunity.probability = Integer.parseInt(dealPropValues[i]);
 		}
-		if (prop.equalsIgnoreCase("Milestone"))
+
+		/**
+		 * Retrive track information from db
+		 */
+		if (prop.equalsIgnoreCase("Track") || prop.equalsIgnoreCase("Milestone"))
 		{
-		    opportunity.milestone = StringUtils.capitalise(dealPropValues[i].toLowerCase());
+		    String trackName = dealPropValues[i];
+		    try
+		    {
+			List<Milestone> list = MilestoneUtil.getMilestonesList(trackName);
+			if (list != null && list.size() > 0)
+			{
+			    for (Milestone milestone : list)
+			    {
+				if (milestone.name.equalsIgnoreCase(trackName))
+				{
+				    opportunity.pipeline_id = milestone.id;
+				    // search for milestone
+				    String[] milestonesValues = milestone.milestones.split(",");
+				    if (milestonesValues.length > 0)
+				    {
+					for (String s : milestonesValues)
+					{
+					    if (s.equalsIgnoreCase(trackName))
+					    {
+						opportunity.milestone = s;
+					    }
+					}
+				    }
+
+				}
+			    }
+			}
+			else
+			{
+			    Milestone milestone = MilestoneUtil.getMilestones();
+			    if (milestone != null)
+			    {
+				opportunity.pipeline_id = milestone.id;
+				// search for milestone name
+				String[] milestonesValues = milestone.milestones.split(",");
+				if (milestonesValues.length > 0)
+				{
+				    for (String s : milestonesValues)
+				    {
+					if (s.equalsIgnoreCase(trackName))
+					{
+					    opportunity.milestone = s;
+					}
+				    }
+				}
+
+			    }
+			}
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+		    }
+
 		}
 
 		if (prop.equalsIgnoreCase("Close Date") || prop.equalsIgnoreCase("close"))
@@ -844,8 +904,8 @@ public class CSVUtil
 	buildDealsImportStatus(status, "FAILD", failedDeals);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
 
-	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] {
-		domainUser, status });
+	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
+		status });
 	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
 
     }

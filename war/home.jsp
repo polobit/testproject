@@ -145,7 +145,7 @@ debug = false;
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = true || <%=!debug%>;
+var HANDLEBARS_PRECOMPILATION = false || <%=!debug%>;
 
 
 var CSS_PATH = "/";
