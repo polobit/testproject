@@ -232,6 +232,9 @@ public class EmailGatewayUtil
 		return;
 	    }
 
+	    System.out.println("Sending email using emailgateway " + emailGateway.email_api.toString() + " of domain "
+		    + domain);
+
 	    // Add To Queue
 	    addToQueue(emailGateway.email_api.toString(), emailGateway.api_user, emailGateway.api_key, domain,
 		    fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
