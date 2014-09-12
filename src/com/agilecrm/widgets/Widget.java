@@ -88,6 +88,7 @@ public class Widget
     /**
      * Widget type which stores info to categorize the widgets
      */
+    @Indexed
     public WidgetType widget_type = null;
 
     /**
