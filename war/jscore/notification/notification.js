@@ -35,7 +35,7 @@ function downloadAndRegisterForNotifications()
 function getDomainFromCurrentUser()
 {
 		var domain = CURRENT_DOMAIN_USER['domain'];
-		subscribeToPubNub(domain, function(message)
+		subscribeToPubNub("_localhost", function(message)
 		{
 
 			_setupNotification(message);
@@ -61,7 +61,12 @@ function subscribeToPubNub(domain)
 		pubnub.ready();
 		pubnub.subscribe({ channel : domain, callback : function(message)
 		{
-
+			if(message.type  == "LOGIN_INSTANCE")
+			{
+				check_login_instance(message);
+				return;
+			}
+			
 			// shows notification for bulk actions
 			if (message.type == "BULK_ACTIONS")
 			{
@@ -98,7 +103,14 @@ function subscribeToPubNub(domain)
 
 			// sets notification for notification preferences.
 			_setupNotification(message);
-		} });
+		},
+		connect : function()
+		{
+			console.log("connected");
+			publishLoginEvent(pubnub);
+		}
+		
+		});
 	});
 }
 
