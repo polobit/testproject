@@ -409,8 +409,13 @@ public class OpportunityUtil
 	{
 	    Map<String, Object> searchMap = new HashMap<String, Object>();
 
-	    if (pipelineId != null & pipelineId != 1)
+	    if (pipelineId != null && pipelineId != 1L)
 	    {
+		// If the track is deleted by the user, get the deals from the
+		// default track.
+		if (MilestoneUtil.getMilestone(pipelineId) == null)
+		    pipelineId = MilestoneUtil.getMilestones().id;
+
 		searchMap.put("pipeline", new Key<Milestone>(Milestone.class, pipelineId));
 	    }
 
@@ -469,7 +474,7 @@ public class OpportunityUtil
 
 	JSONObject milestonesObject = new JSONObject();
 
-	if (pipelineId == null || pipelineId == 0L)
+	if (pipelineId == null || pipelineId == 0L || MilestoneUtil.getMilestone(pipelineId) == null)
 	    pipelineId = MilestoneUtil.getMilestones().id;
 
 	ObjectMapper mapper = new ObjectMapper();

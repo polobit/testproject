@@ -325,6 +325,10 @@ public class CSVUtil
 		// empty values
 		if (field.name == null || StringUtils.isEmpty(field.value))
 		    continue;
+		if (field.name.equalsIgnoreCase(Contact.NAME))
+		{
+		    field.value = StringUtils.capitalise(csvValues[j].toLowerCase());
+		}
 
 		field.value = csvValues[j];
 

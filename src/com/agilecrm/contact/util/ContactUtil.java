@@ -316,7 +316,7 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("type", Type.PERSON)
 		.filter("properties.value = ", email.toLowerCase()).count();
     }
 
