@@ -169,6 +169,9 @@ public class MandrillUtil
     {
 	try
 	{
+	    if (!StringUtils.isEmpty(apiKey))
+		System.out.println("Sending emails in MandrillUtil through subaccount api..." + apiKey);
+
 	    // Complete mail json to be sent
 	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(apiKey, subaccount);
 
