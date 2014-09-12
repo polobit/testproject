@@ -119,11 +119,7 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
  */
 function populate_stripe_events_in_trigger(trigger_form, stripe_event_select_id, stripe_event_value)
 {
-	$.getJSON("core/api/subscription", function(data){
-		trigger_form.find('select#' + stripe_event_select_id).closest('div.control-group').css('display','');
-		if(data.plan.plan_type == "FREE")
-			$('#trigger-stripe-event').prop('disabled','disabled');
-	});
+	trigger_form.find('select#' + stripe_event_select_id).closest('div.control-group').css('display','');
 
 	if(stripe_event_value !== undefined)
 	{
