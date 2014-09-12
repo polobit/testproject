@@ -291,6 +291,7 @@ a.no-line:hover {
 }
 .navbar .navbar-search .typeahead {
 	margin-top: 0px;
+	width:205px;
 }
 /* Table sorting css */
 th.header {
@@ -466,7 +467,7 @@ html {
 	background-color: transparent; /*important*/
 	position: absolute; /*important*/
 	top: 5px;
-	left: 210px;
+	left: 205px;
 	width: 16px;
 	height: 16px;
 }
@@ -1065,6 +1066,18 @@ Used in home.jsp mainmenu->#recent-menu, to disable first item which shows stats
 	text-decoration: none !important;
 }
 /* Tag management */
+.tag-management-key
+{
+display: block;
+font-size: 16px;
+padding-right: 5px;
+color: gray;
+border-bottom: 1px solid #ddd;
+padding-bottom: 8px;
+margin-bottom: 9px;	
+font-weight:normal;
+width:92%;
+}
 ul.tags-management li.tag {
 	margin : 0px 10px 15px;
 	text-shadow: none;
@@ -1096,12 +1109,17 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 }
 /*css updates (author "santhosh")*/
 
-.link-border {
+.link-border,.anchor-link:hover {
 	border-bottom: 1px solid;
 }
-.link-border:hover {
+.link-border:hover,.anchor-link {
 	text-decoration: none;
 }
+.anchor-link:hover
+{
+	text-decoration:none;
+}
+
 #TrackingTab li a span {
 	border-bottom:1px solid #8a6086;
 }

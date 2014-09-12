@@ -2723,7 +2723,7 @@ $(function()
 		var html_temp = "";
 		
 		for(var i = 0; i< keys.length ; i ++)
-			html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
+			html_temp += "<div class=\"clearfix\"></div><div style='margin-right:10px;'><div class='tag-key tag-management-key'>" + keys[i] + "</div><div class=\"clearfix\"></div><div class='left' tag-alphabet=\"" + encodeURI(keys[i]) + "\"><ul class=\"tags-management tag-cloud\" style=\"list-style:none;\"></ul></div></div>";
 		 
     console.log(html_temp);
     return new Handlebars.SafeString(html_temp);

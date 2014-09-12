@@ -442,3 +442,7 @@ div.cat-addtocart-row.row1 span,div.cat-addtocart-row.row2 span {
 #djc_additionallink span,#djc_additionallink a:hover {
 	color: #000;
 }
+.task-trello-list .txt-small
+{
+	font-size:75%;
+}
