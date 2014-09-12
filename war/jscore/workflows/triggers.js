@@ -14,8 +14,13 @@ $(function()
 		e.preventDefault();
 
 		// Hide trigger milestones div for other trigger conditions.
-		if ($(this).val() !== 'DEAL_MILESTONE_IS_CHANGED')
+		if ($(this).val() !== 'DEAL_MILESTONE_IS_CHANGED'){
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');
+		}
+		
+		if($(this).val() !== 'RUNS_DAILY' || $(this).val() !== 'RUNS_WEEKLY' || $(this).val() !== 'RUNS_MONTHLY'){
+			$('form#addTriggerForm').find('select#contact-filter').closest('div.control-group').css('display', 'none');
+		}
 
 		// Hide trigger stripe event div for other trigger conditions.
 		if($(this).val() !== 'STRIPE_CHARGE_EVENT'){
@@ -37,6 +42,13 @@ $(function()
 			// Tags typeahead for tag input field
 			addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));
 		}
+		
+		// Initialize tags typeahead
+		if ($(this).val() == 'RUNS_DAILY' || $(this).val() == 'RUNS_WEEKLY' || $(this).val() == 'RUNS_MONTHLY')
+		{	
+			populate_contact_filters_in_trigger($('form#addTriggerForm'), 'contact-filter');
+		}
+
 
 		// Show score
 		if ($(this).val() == 'ADD_SCORE')
@@ -105,6 +117,33 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 			trigger_form.find('select#' + milestones_select_id).val(trigger_deal_milestone_value).attr('selected', 'selected').trigger('change');
 		}
 	}, "Select new milestone...");
+}
+
+/**
+ * Shows hidden trigger-milestones select element and fills with milestones
+ * data.
+ * 
+ * @param trigger_form -
+ *            trigger form jQuery object
+ * @param filter_select_id -
+ *            contact filter select id
+ * @param trigger_deal_milestone_value -
+ *            trigger milestone value obtained from saved trigger.
+ */
+function populate_contact_filters_in_trigger(trigger_form, filter_select_id, value)
+{
+	// Show milestones select element
+	trigger_form.find('select#' + filter_select_id).closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	fillSelect('contact-filter', '/core/api/filters', 'workflow', function fillContactFilter()
+	{
+		if (value)
+		{
+			$('#contact-filter',trigger_form).find('option[value=' + value + ']').attr('selected', 'selected');
+		}
+	}, optionsTemplate, false,undefined,"Select Contact filter");
 }
 
 /**
