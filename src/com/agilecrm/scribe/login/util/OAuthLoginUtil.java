@@ -10,7 +10,6 @@ import org.scribe.builder.api.Api;
 import org.scribe.builder.api.YahooApi;
 import org.scribe.oauth.OAuthService;
 
-import com.agilecrm.Globals;
 import com.agilecrm.LoginServlet;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.scribe.api.LinkedinAPI;
@@ -149,7 +148,8 @@ public class OAuthLoginUtil
 	    if (isGmailGadgetRequest)
 	    {
 		req.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-		resp.sendRedirect(Globals.CHOOSE_DOMAIN);
+		resp.sendRedirect(returnURL);
+
 		return;
 	    }
 	    // Oauth should be set as query parameter so it creates new account
