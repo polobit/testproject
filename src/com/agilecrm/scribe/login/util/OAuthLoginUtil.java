@@ -10,6 +10,7 @@ import org.scribe.builder.api.Api;
 import org.scribe.builder.api.YahooApi;
 import org.scribe.oauth.OAuthService;
 
+import com.agilecrm.Globals;
 import com.agilecrm.LoginServlet;
 import com.agilecrm.scribe.api.GoogleApi;
 import com.agilecrm.scribe.api.LinkedinAPI;
@@ -32,206 +33,217 @@ import com.google.appengine.api.NamespaceManager;
 public class OAuthLoginUtil
 {
 
-	public static final String OAUTH_SERVER_ATTRIBUTE = "oauth_server";
+    public static final String OAUTH_SERVER_ATTRIBUTE = "oauth_server";
 
-	public static enum OpenIdServiceProvider
+    public static enum OpenIdServiceProvider
+    {
+
+	GOOGLE(GoogleLoginService.class, GoogleApi.class),
+
+	YAHOO(YahooLoginService.class, YahooApi.class),
+
+	LINKEDIN(LinkedinLoginService.class, LinkedinAPI.class);
+
+	Class<? extends OAuthLoginService> loginService;
+	Class<? extends Api> apiClass;
+
+	OpenIdServiceProvider(Class<? extends OAuthLoginService> loginService, Class<? extends Api> apiClass)
 	{
-
-		GOOGLE(GoogleLoginService.class, GoogleApi.class),
-
-		YAHOO(YahooLoginService.class, YahooApi.class),
-
-		LINKEDIN(LinkedinLoginService.class, LinkedinAPI.class);
-
-		Class<? extends OAuthLoginService> loginService;
-		Class<? extends Api> apiClass;
-
-		OpenIdServiceProvider(Class<? extends OAuthLoginService> loginService, Class<? extends Api> apiClass)
-		{
-			this.loginService = loginService;
-			this.apiClass = apiClass;
-		}
-
-		public OAuthLoginService getLoginService()
-		{
-			try
-			{
-				return loginService.newInstance();
-			}
-			catch (InstantiationException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-			catch (IllegalAccessException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-		}
-
-		public Class<? extends Api> getApiClass()
-		{
-			return apiClass;
-		}
-
+	    this.loginService = loginService;
+	    this.apiClass = apiClass;
 	}
 
-	public static UserInfo getUserInfo(HttpServletRequest req, HttpServletResponse resp, OAuthService service,
-			String code)
+	public OAuthLoginService getLoginService()
 	{
-		String server = (String) req.getSession().getAttribute(OAUTH_SERVER_ATTRIBUTE);
-		if (StringUtils.isEmpty(server))
-			return null;
-
-		OpenIdServiceProvider serviceProvider = null;
-		try
-		{
-			serviceProvider = OpenIdServiceProvider.valueOf(server.toUpperCase());
-		}
-		catch (EnumConstantNotPresentException e)
-		{
-			return null;
-		}
-
-		// System.out.println(GoogleServiceUtil.exchangeAuthTokenForAccessToken(code,
-		// ScribeServlet.GOOGLE_OAUTH2_SCOPE));
-		OAuthLoginService loginService = null;
-		try
-		{
-			loginService = GoogleLoginService.class.newInstance();
-		}
-		catch (ReflectiveOperationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-
-		loginService.getService();
-
-		loginService.getToken(code);
-
-		System.out.println("login service");
-		return loginService.getUserInfo();
+	    try
+	    {
+		return loginService.newInstance();
+	    }
+	    catch (InstantiationException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null;
+	    }
+	    catch (IllegalAccessException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null;
+	    }
 	}
 
-	// Login
-	public static void login(HttpServletRequest req, HttpServletResponse resp, String code, OAuthService service)
-			throws IOException
+	public Class<? extends Api> getApiClass()
 	{
-		// email = getEmail(service, code);
-
-		UserInfo userInfo = getUserInfo(req, resp, service, code);
-		DomainUser domainUser = null;
-
-		// Redirect to register if Domain User is not found
-		if (userInfo != null && userInfo.getEmail() != null)
-		{
-			domainUser = DomainUserUtil.getDomainUserFromEmail(userInfo.getEmail());
-		}
-
-		req.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-
-		System.out.println(domainUser);
-
-		if (domainUser == null)
-		{
-			// Oauth should be set as query parameter so it creates new account
-			// based on session info set
-			req.getSession().setAttribute("return_url", "/register?type=oauth");
-			return;
-		}
-
-		// If the namespace is different, redirect to the correct domain
-		String domain = NamespaceManager.get();
-		System.out.println(domainUser + " " + domain);
-		String returnURL = (String) req.getSession().getAttribute("return_url");
-
-		// If return url contains gmail?command= then request is to associate
-		// google gadget to user
-		if (!StringUtils.isEmpty(returnURL) && returnURL.contains("gmail?command="))
-		{
-			System.out.println("return to gmail gadget service");
-			return;
-		}
-
-		if (domainUser != null && domainUser.domain != null && domain != null
-				&& !domain.equalsIgnoreCase(domainUser.domain))
-		{
-			// String path = "https://" + domainUser.domain +
-			// ".agilecrm.com/scribe?service=" +
-			// ScribeServlet.SERVICE_TYPE_GOOGLE_OAUTH2;
-
-			// String path = "https://" + domainUser.domain +
-			// "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/oauth";
-			String path = "https://" + domainUser.domain + ".agilecrm.com/";
-
-			System.out.println("Redirecting to " + path);
-
-			// Remove from Current Session
-			req.getSession(false).removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
-			resp.sendRedirect(path);
-			return;
-		}
-
-		// Set Cookie and forward. Scribe Servlet will redirect to either home
-		// or return_url
-		req.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
-		SessionManager.set(userInfo);
-
-		// Redirect to page in session is present - eg: user can access #reports
-		// but we store reports in session and then forward to auth. After auth,
-		// we forward back to the old page
-
-		req.getSession().removeAttribute("return_url");
-
-		String redirect = (String) req.getSession().getAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
-		if (redirect != null)
-		{
-			req.getSession().removeAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
-			resp.sendRedirect(redirect);
-			return;
-		}
-
-		resp.sendRedirect("/");
+	    return apiClass;
 	}
 
-	public static OAuthService getLoginService(HttpServletRequest request, HttpServletResponse response,
-			String serviceName)
+    }
+
+    public static UserInfo getUserInfo(HttpServletRequest req, HttpServletResponse resp, OAuthService service,
+	    String code)
+    {
+	String server = (String) req.getSession().getAttribute(OAUTH_SERVER_ATTRIBUTE);
+	if (StringUtils.isEmpty(server))
+	    return null;
+
+	OpenIdServiceProvider serviceProvider = null;
+	try
 	{
-		String server = (String) request.getParameter("hd");
-
-		String serverFromSession = (String) request.getSession().getAttribute(OAUTH_SERVER_ATTRIBUTE);
-
-		System.out.println("*********************************************");
-		System.out.println(serverFromSession);
-		if (server == null)
-			server = serverFromSession;
-
-		if (StringUtils.isEmpty(server) && StringUtils.isEmpty(serverFromSession))
-			server = "google";
-
-		System.out.println(server);
-		OpenIdServiceProvider serviceProvider = null;
-		try
-		{
-			serviceProvider = OpenIdServiceProvider.valueOf(server.toUpperCase());
-		}
-		catch (EnumConstantNotPresentException e)
-		{
-			return null;
-		}
-
-		request.getSession().setAttribute(OAUTH_SERVER_ATTRIBUTE, server);
-		String callbackURL = request.getRequestURL().toString();
-		OAuthLoginService loginService = serviceProvider.getLoginService();
-		loginService.setCallback(callbackURL);
-
-		// Gets session and sets attribute "oauth.service" to service type
-		request.getSession().setAttribute("oauth.service", serviceName);
-		return loginService.getService();
+	    serviceProvider = OpenIdServiceProvider.valueOf(server.toUpperCase());
 	}
+	catch (EnumConstantNotPresentException e)
+	{
+	    return null;
+	}
+
+	// System.out.println(GoogleServiceUtil.exchangeAuthTokenForAccessToken(code,
+	// ScribeServlet.GOOGLE_OAUTH2_SCOPE));
+	OAuthLoginService loginService = null;
+	try
+	{
+	    loginService = GoogleLoginService.class.newInstance();
+	}
+	catch (ReflectiveOperationException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	    return null;
+	}
+
+	loginService.getService();
+
+	loginService.getToken(code);
+
+	System.out.println("login service");
+	return loginService.getUserInfo();
+    }
+
+    // Login
+    public static void login(HttpServletRequest req, HttpServletResponse resp, String code, OAuthService service)
+	    throws IOException
+    {
+	// email = getEmail(service, code);
+
+	UserInfo userInfo = getUserInfo(req, resp, service, code);
+	DomainUser domainUser = null;
+
+	// Redirect to register if Domain User is not found
+	if (userInfo != null && userInfo.getEmail() != null)
+	{
+	    domainUser = DomainUserUtil.getDomainUserFromEmail(userInfo.getEmail());
+	}
+
+	req.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+
+	System.out.println(domainUser);
+
+	String returnURL = (String) req.getSession().getAttribute("return_url");
+
+	boolean isGmailGadgetRequest = !StringUtils.isEmpty(returnURL) && returnURL.contains("gmail?command=");
+
+	if (domainUser == null)
+	{
+	    // Request is Gmail gadget request, page should be redirected to
+	    // register page.
+	    if (isGmailGadgetRequest)
+	    {
+		req.getSession().removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+		resp.sendRedirect(Globals.CHOOSE_DOMAIN);
+		return;
+	    }
+	    // Oauth should be set as query parameter so it creates new account
+	    // based on session info set
+	    req.getSession().setAttribute("return_url", "/register?type=oauth");
+	    return;
+	}
+
+	// If the namespace is different, redirect to the correct domain
+	String domain = NamespaceManager.get();
+	System.out.println(domainUser + " " + domain);
+
+	// If return url contains gmail?command= then request is to associate
+	// google gadget to user
+	if (isGmailGadgetRequest)
+	{
+	    System.out.println("return to gmail gadget service");
+	    return;
+	}
+
+	if (domainUser != null && domainUser.domain != null && domain != null
+		&& !domain.equalsIgnoreCase(domainUser.domain))
+	{
+	    // String path = "https://" + domainUser.domain +
+	    // ".agilecrm.com/scribe?service=" +
+	    // ScribeServlet.SERVICE_TYPE_GOOGLE_OAUTH2;
+
+	    // String path = "https://" + domainUser.domain +
+	    // "-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/oauth";
+	    String path = "https://" + domainUser.domain + ".agilecrm.com/";
+
+	    System.out.println("Redirecting to " + path);
+
+	    // Remove from Current Session
+	    req.getSession(false).removeAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
+	    resp.sendRedirect(path);
+	    return;
+	}
+
+	// Set Cookie and forward. Scribe Servlet will redirect to either home
+	// or return_url
+	req.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
+	SessionManager.set(userInfo);
+
+	// Redirect to page in session is present - eg: user can access #reports
+	// but we store reports in session and then forward to auth. After auth,
+	// we forward back to the old page
+
+	req.getSession().removeAttribute("return_url");
+
+	String redirect = (String) req.getSession().getAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+	if (redirect != null)
+	{
+	    req.getSession().removeAttribute(LoginServlet.RETURN_PATH_SESSION_PARAM_NAME);
+	    resp.sendRedirect(redirect);
+	    return;
+	}
+
+	resp.sendRedirect("/");
+    }
+
+    public static OAuthService getLoginService(HttpServletRequest request, HttpServletResponse response,
+	    String serviceName)
+    {
+	String server = (String) request.getParameter("hd");
+
+	String serverFromSession = (String) request.getSession().getAttribute(OAUTH_SERVER_ATTRIBUTE);
+
+	System.out.println("*********************************************");
+	System.out.println(serverFromSession);
+	if (server == null)
+	    server = serverFromSession;
+
+	if (StringUtils.isEmpty(server) && StringUtils.isEmpty(serverFromSession))
+	    server = "google";
+
+	System.out.println(server);
+	OpenIdServiceProvider serviceProvider = null;
+	try
+	{
+	    serviceProvider = OpenIdServiceProvider.valueOf(server.toUpperCase());
+	}
+	catch (EnumConstantNotPresentException e)
+	{
+	    return null;
+	}
+
+	request.getSession().setAttribute(OAUTH_SERVER_ATTRIBUTE, server);
+	String callbackURL = request.getRequestURL().toString();
+	OAuthLoginService loginService = serviceProvider.getLoginService();
+	loginService.setCallback(callbackURL);
+
+	// Gets session and sets attribute "oauth.service" to service type
+	request.getSession().setAttribute("oauth.service", serviceName);
+	return loginService.getService();
+    }
 }
