@@ -13,6 +13,15 @@ $(function()
 		// contact uploaded
 		$('#content').html(getTemplate("import-contacts", {}));
 	});
+	
+	// cancel option for deals import
+	$('#deal-cancel').die().live('click', function(e)
+			{
+
+				// Sends empty JSON to remove
+				// contact uploaded
+				$('#content').html(getTemplate("import-deals", {}));
+			});
 
 	$(".upload").die().live('click', function(e)
 	{

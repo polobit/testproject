@@ -1,28 +1,41 @@
-<!-- Indices written at Fri, 12 Sep 2014 15:53:12 IST -->
+<!-- Indices written at Mon, 15 Sep 2014 15:33:23 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="pipeline" direction="asc"/>
+    <!-- Used 10 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="__key__" direction="asc"/>
+        <property name="updated_time" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 11 times in query history -->
+    <datastore-index kind="Note" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
         <property name="created_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 12 times in query history -->
+    <datastore-index kind="Widget" ancestor="true" source="auto">
+        <property name="widget_type" direction="asc"/>
     </datastore-index>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="pipeline" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 5 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="owner" direction="asc"/>
+        <property name="due" direction="asc"/>
     </datastore-index>
-    
-    <datastore-index kind="Widget" ancestor="true" source="manual">
-        <property name="widget_type" direction="asc"/>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="viewed.viewer_id" direction="asc"/>
+        <property name="viewed.viewed_time" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>
