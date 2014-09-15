@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -784,7 +786,7 @@ public class CSVUtil
 
 		if (prop.equalsIgnoreCase("Value"))
 		{
-		    String value = dealPropValues[i].replaceAll("[\\W A-za-z]", "");
+		    String value = dealPropValues[i].replaceAll("[\\%$&*#@!()+\\- A-Za-z]", "");
 		    Double dealValue = Double.parseDouble(value.trim());
 		    if (dealValue > Double.valueOf(1000000000000.0))
 		    {
@@ -798,16 +800,22 @@ public class CSVUtil
 
 		if (prop.equalsIgnoreCase("Probability"))
 		{
-		    String prob = dealPropValues[i];
-		    prob.replaceAll("[\\W A-Za-z]", "");
-		    int probability = Integer.parseInt(prob.trim());
+		    String prob = dealPropValues[i].replaceAll("[\\%$&*#@!()+\\- A-Za-z]", "");
+		    Double probability = Double.parseDouble(prob.trim());
 		    if (probability > 100)
 		    {
 			opportunity.probability = 100;
 		    }
 		    else
 		    {
-			opportunity.probability = probability;
+			try
+			{
+			    opportunity.probability = (int) Math.round(probability);
+			}
+			catch (NumberFormatException | ClassCastException e)
+			{
+			    e.printStackTrace();
+			}
 		    }
 		}
 
@@ -914,6 +922,21 @@ public class CSVUtil
 		{
 		    opportunity.description = dealPropValues[i];
 		}
+
+		if (prop.equalsIgnoreCase("Related to"))
+		{
+		    String value = dealPropValues[i].toLowerCase();
+		    boolean email = isValidEmail(value);
+
+		    if (email)
+		    {
+			Contact contact = ContactUtil.searchContactByEmail(value);
+			if (contact.id != null)
+			{
+			    opportunity.addContactIds(contact.id.toString());
+			}
+		    }
+		}
 		if (prop.equalsIgnoreCase("Note"))
 		{
 		    Note note = new Note();
@@ -951,6 +974,15 @@ public class CSVUtil
     {
 
 	statusMap.put(status, count);
+    }
+
+    private boolean isValidEmail(final String hex)
+    {
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@ [A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+	Matcher matcher = pattern.matcher(hex);
+	return matcher.matches();
+
     }
 
 }

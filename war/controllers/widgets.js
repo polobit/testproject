@@ -35,6 +35,7 @@ var WidgetsRouter = Backbone.Router
 			"QuickBooks" : "QuickBooks", "QuickBooks/:id" : "QuickBooks",
 
 			"Facebook" : "Facebook", "Facebook/:id" : "Facebook",
+			"Shopify" : "Shopify", "Shopify/:id" : "Shopify",
 
 			"Chargify" : "Chargify", "Chargify/:id" : "Chargify",
 
