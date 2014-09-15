@@ -201,9 +201,13 @@ $(function()
 									var splits = name.split("-");
 									name = splits[1];
 									var subType = splits[0];
+									if(subType=="GOOGLE"){
+										property["subtype"] = "GOOGLE-PLUS";
+									}else{
 									property["subtype"] = subType;
 									console.log($(select).attr('class'));
 									property["type"] = type;
+									}
 								}
 
 								// Set the value and name fields
@@ -368,11 +372,16 @@ $('#import-comp')
 							else if (name.indexOf("-") != -1)
 							{
 								var splits = name.split("-");
+								
 								name = splits[1];
 								var subType = splits[0];
+								if(subType=="GOOGLE"){
+									property["subtype"] = "GOOGLE-PLUS";
+								}else{
 								property["subtype"] = subType;
 								console.log($(select).attr('class'));
 								property["type"] = type;
+								}
 							}
 
 							// Set the value and name fields
