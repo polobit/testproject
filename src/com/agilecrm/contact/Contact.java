@@ -932,6 +932,8 @@ public class Contact extends Cursor
 		{
 			if (StringUtils.equals(field.name, EMAIL))
 				field.value = (field.value).toLowerCase();
+			else if (StringUtils.equals(field.name, Contact.NAME))
+				field.value = StringUtils.capitalise(field.value.toLowerCase());
 		}
 
 	}
