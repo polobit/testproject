@@ -275,6 +275,9 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    opportunity.addContactIds(contact.id.toString());
+	    // If there is no pipeline id, then set it to default.
+	    if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
+		opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
