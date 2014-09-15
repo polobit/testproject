@@ -799,7 +799,7 @@ public class CSVUtil
 		if (prop.equalsIgnoreCase("Probability"))
 		{
 		    String prob = dealPropValues[i];
-		    prob.replaceAll("[\\W A-Za-z]", " ");
+		    prob.replaceAll("[\\W A-Za-z]", "");
 		    int probability = Integer.parseInt(prob.trim());
 		    if (probability > 100)
 		    {
