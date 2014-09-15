@@ -224,9 +224,22 @@ public class ContactUtil
 
 	Query<Contact> q = dao.ofy().query(Contact.class);
 	q.filter("properties.name", Contact.EMAIL);
+	q.filter("type", Type.PERSON);
 	q.filter("properties.value", email.toLowerCase());
 
 	return q.get();
+    }
+
+    public static Contact searchContactByCompanyName(String companyName)
+    {
+	if (StringUtils.isBlank(companyName))
+	    return null;
+
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	searchMap.put("properties.name", "name");
+	searchMap.put("properties.value", companyName);
+	return dao.getByProperty(searchMap);
+
     }
 
     public static Contact searchContactByPhoneNumber(String phoneNumber)
@@ -269,17 +282,15 @@ public class ContactUtil
 	    // In case email field value is empty it removes property from
 	    // contact and continue
 
-	    if (StringUtils.isBlank(emailField.value))
+	    if (StringUtils.isBlank(emailField.value) || !ContactUtil.isValidEmail(emailField.value))
 	    {
 		System.out.println(contact.properties.contains(emailField));
 		contact.properties.remove(emailField);
 		continue;
 	    }
-	    
-	    emailField.value = emailField.value.toLowerCase();
 
 	    // If email is not available, then it iterates though other emails
-	    if (!isExists(emailField.value))
+	    if (!isExists(emailField.value.toLowerCase()))
 		continue;
 
 	    // If count is not 0 and contact is new, then contact is contact is
@@ -316,8 +327,32 @@ public class ContactUtil
      */
     public static int searchContactCountByEmail(String email)
     {
-	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL).filter("type", Type.PERSON)
-		.filter("properties.value = ", email.toLowerCase()).count();
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		.filter("type", Contact.Type.PERSON).filter("properties.value = ", email).count();
+
+    }
+
+    /**
+     * Get Count of contact by Email and Type i.e PERSON or COMPANY
+     */
+
+    public static int searchContactCountByEmailAndType(String email, Type type)
+    {
+	return dao.ofy().query(Contact.class).filter("properties.name = ", Contact.EMAIL)
+		.filter("properties.value = ", email.toLowerCase()).filter("type", type).count();
+
+    }
+
+    /**
+     * Get Count of company by Name and Type i.e PERSON or COMPANY
+     */
+
+    public static int searchCompanyCountByNameAndType(String companyName, Type type)
+    {
+	int count = dao.ofy().query(Contact.class).filter("type", type).filter("properties.value", companyName).count();
+	System.out.println(count);
+	return count;
+
     }
 
     /**
@@ -576,8 +611,10 @@ public class ContactUtil
 	Map<String, Object> searchFields = new HashMap<String, Object>();
 	searchFields.put("properties.name", Contact.NAME);
 	searchFields.put("properties.value", companyName);
+	int countProps = dao.getCountByProperty(searchFields);
+	System.out.println("contact count" + countProps);
 
-	if (dao.getCountByProperty(searchFields) != 0)
+	if (countProps != 0)
 	    return true;
 
 	return false;
@@ -659,6 +696,7 @@ public class ContactUtil
 
 	Contact.dao.putAll(contacts_list);
     }
+
     /**
      * Merge new contact data to oldcontact. If fields are email, website, phone
      * or url, new field is added if not duplicate value.
@@ -696,7 +734,7 @@ public class ContactUtil
 		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
 			// Sets new subtype if there is any subtype availe
-			if(field.subtype != null)
+			if (field.subtype != null)
 			    contactField.subtype = field.subtype;
 
 			// Sets it to false so property wont be added again.
@@ -720,7 +758,8 @@ public class ContactUtil
 		continue;
 	    }
 
-	    // If company is different then remove the exiting company from contact
+	    // If company is different then remove the exiting company from
+	    // contact
 	    if (existingField.name.equals(Contact.COMPANY))
 	    {
 		if (!StringUtils.equals(existingField.value, field.value))
@@ -768,7 +807,7 @@ public class ContactUtil
 		    // subtype, there could be change in subtype
 		    if (field.value.equalsIgnoreCase(contactField.value))
 		    {
-			if(!StringUtils.isEmpty(field.subtype))
+			if (!StringUtils.isEmpty(field.subtype))
 			    contactField.subtype = field.subtype;
 
 			// Sets it to false so property wont be added again.
@@ -820,7 +859,7 @@ public class ContactUtil
 	if (oldContact != null)
 	    return mergeContactFeilds(contact, oldContact);
 
-	return contact;
+	return oldContact;
 
     }
 
@@ -833,22 +872,10 @@ public class ContactUtil
 	if (oldContact != null)
 	    return mergeCompanyFields(contact, oldContact);
 
-	return contact;
+	return oldContact;
 
     }
-    
-    public static Contact searchContactByCompanyName(String companyName)
-    {
-	if (StringUtils.isBlank(companyName))
-	    return null;
 
-	Map<String, Object> searchMap = new HashMap<String, Object>();
-	searchMap.put("properties.name", "name");
-	searchMap.put("properties.value", companyName);
-	return dao.getByProperty(searchMap);
-
-    }
-    
     public static boolean isValidFields(Contact contact)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(contact.FIRST_NAME))

@@ -378,8 +378,7 @@ public class CSVUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.EMAIL));
+		System.out.println("exception raised while saving contact ");
 		e.printStackTrace();
 
 	    }
@@ -583,7 +582,7 @@ public class CSVUtil
 	    if (companyName != null && !companyName.isEmpty())
 	    {
 
-		if (ContactUtil.companyExists(StringUtils.capitalise(companyName.toLowerCase())))
+		if (ContactUtil.companyExists(companyName))
 		{
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
@@ -879,7 +878,9 @@ public class CSVUtil
 		    if (dateValue != null && !dateValue.isEmpty())
 		    {
 			opportunity.close_date = Long.valueOf(c.getTimeInMillis() / 1000);
-		    }else{
+		    }
+		    else
+		    {
 			opportunity.close_date = null;
 		    }
 		}
@@ -917,7 +918,7 @@ public class CSVUtil
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILED", failedDeals+probabilityError);
+	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
 
 	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
