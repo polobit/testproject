@@ -784,12 +784,31 @@ public class CSVUtil
 
 		if (prop.equalsIgnoreCase("Value"))
 		{
-		    opportunity.expected_value = Double.parseDouble(dealPropValues[i]);
+		    String value = dealPropValues[i].replaceAll("[\\W A-za-z]", "");
+		    Double dealValue = Double.parseDouble(value.trim());
+		    if (dealValue > Double.valueOf(1000000000000.0))
+		    {
+			opportunity.expected_value = 0.0;
+		    }
+		    else
+		    {
+			opportunity.expected_value = Double.parseDouble(dealPropValues[i]);
+		    }
 		}
 
 		if (prop.equalsIgnoreCase("Probability"))
 		{
-		    opportunity.probability = Integer.parseInt(dealPropValues[i]);
+		    String prob = dealPropValues[i];
+		    prob.replaceAll("[\\W A-Za-z]", " ");
+		    int probability = Integer.parseInt(prob.trim());
+		    if (probability > 100)
+		    {
+			opportunity.probability = 100;
+		    }
+		    else
+		    {
+			opportunity.probability = probability;
+		    }
 		}
 
 		/**
@@ -798,9 +817,15 @@ public class CSVUtil
 		if (prop.equalsIgnoreCase("Track") || prop.equalsIgnoreCase("Milestone"))
 		{
 		    String trackName = dealPropValues[i];
+		    List<Milestone> list = null;
 		    try
 		    {
-			List<Milestone> list = MilestoneUtil.getMilestonesList(trackName);
+			list = MilestoneUtil.getMilestonesList(trackName.toLowerCase());
+			if (list == null)
+			{
+			    // search deals with all capital case
+			    list = MilestoneUtil.getMilestonesList(trackName);
+			}
 			if (list != null && list.size() > 0)
 			{
 			    for (Milestone milestone : list)
@@ -864,6 +889,7 @@ public class CSVUtil
 			c = Calendar.getInstance();
 			if (data.length == 3)
 			{
+			    // date formate is yyyy-mm-dd
 			    c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
 			}
 		    }
@@ -898,16 +924,10 @@ public class CSVUtil
 	    opportunity.setOpportunityOwner(ownerKey);
 	    try
 	    {
-		if (opportunity.probability <= 100)
-		{
 
-		    opportunity.save();
-		    savedDeals++;
-		}
-		else
-		{
-		    buildDealsImportStatus(status, "PROBABILITY", ++probabilityError);
-		}
+		opportunity.save();
+		savedDeals++;
+
 	    }
 	    catch (Exception e)
 	    {
