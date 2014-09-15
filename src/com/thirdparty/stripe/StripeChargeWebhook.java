@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,23 +57,27 @@ public class StripeChargeWebhook extends HttpServlet
 	    JSONObject stripeJson = new JSONObject(stripeData);
 	    System.out.println("stripe json is " + stripeJson);
 
-	    JSONObject customer = stripeJson.getJSONObject("data").getJSONObject("object");
-	    System.out.println("customer is " + customer);
-
 	    String eventType = stripeJson.getString("type");
 	    System.out.println("stripe post event type is " + eventType);
 
-	    String email = customer.getString("receipt_email");
+	    JSONObject stripeEventJson = getStripeEventJson(stripeJson, eventType);
+	    if (stripeEventJson == null)
+	    {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		return;
+	    }
+
+	    String email = getStripeEmail(stripeJson, eventType);
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
-	    if (contact == null)
-		contact = new Contact();
-
 	    List<ContactField> contactProperties = new ArrayList<ContactField>();
-	    contactProperties.add(new ContactField(Contact.EMAIL, email, null));
+	    if (contact == null)
+	    {
+		contact = new Contact();
+		contactProperties.add(new ContactField(Contact.EMAIL, email, null));
+	    }
 
-	    JSONObject cardDetails = customer.getJSONObject("card");
-	    JSONObject agileJson = getAgileJson(cardDetails);
+	    JSONObject agileJson = getAgileJson(stripeEventJson);
 
 	    Iterator<?> keys = agileJson.keys();
 	    while (keys.hasNext())
@@ -122,7 +127,7 @@ public class StripeChargeWebhook extends HttpServlet
 	    String key = (String) keys.next();
 	    String value = json.getString(key);
 
-	    if (!StringUtils.isBlank(value))
+	    if (!(StringUtils.isBlank(value) || StringUtils.equals(value, "null")))
 	    {
 		switch (key)
 		{
@@ -159,19 +164,80 @@ public class StripeChargeWebhook extends HttpServlet
 	return agileJson;
     }
 
-    public List<ContactField> updateAgileContactProperties(List<ContactField> oldProperties,
-	    List<ContactField> newProperties)
+    public List<ContactField> updateAgileContactProperties(List<ContactField> oldProperties, List<ContactField> newProperties)
     {
 	List<ContactField> outDatedProperties = new ArrayList<ContactField>();
 
 	for (ContactField oldProperty : oldProperties)
 	    for (ContactField newProperty : newProperties)
-		if (StringUtils.equals(oldProperty.name, newProperty.name)
-			&& StringUtils.equals(oldProperty.subtype, newProperty.subtype))
+		if (StringUtils.equals(oldProperty.name, newProperty.name) && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
 		    outDatedProperties.add(oldProperty);
 
 	oldProperties.removeAll(outDatedProperties);
 	newProperties.addAll(oldProperties);
 	return newProperties;
+    }
+
+    public JSONObject getStripeEventJson(JSONObject stripeJson, String stripeEventType)
+    {
+	try
+	{
+	    JSONObject cJson = new JSONObject();
+
+	    if (stripeEventType.contains("charge"))
+		cJson = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("card");
+	    else if (stripeEventType.contains("customer"))
+		cJson = getDefaultCustomerCard(stripeJson);
+
+	    return cJson;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public String getStripeEmail(JSONObject stripeJson, String stripeEventType)
+    {
+	try
+	{
+	    String stripeEmail = new String();
+
+	    if (stripeEventType.contains("charge"))
+		stripeEmail = stripeJson.getJSONObject("data").getJSONObject("object").getString("receipt_email");
+	    else if (stripeEventType.contains("customer"))
+		stripeEmail = stripeJson.getJSONObject("data").getJSONObject("object").getString("email");
+
+	    return stripeEmail;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public JSONObject getDefaultCustomerCard(JSONObject stripeJson)
+    {
+	try
+	{
+	    String defaultCardId = stripeJson.getJSONObject("data").getJSONObject("object").getString("default_card");
+	    if (!StringUtils.equals(defaultCardId, "null"))
+	    {
+		JSONArray customerCards = stripeJson.getJSONObject("data").getJSONObject("object").getJSONArray("cards");
+		for (int i = 0; i < customerCards.length(); i++)
+		{
+		    JSONObject customerCard = customerCards.getJSONObject(i);
+		    if (StringUtils.equals(defaultCardId, customerCard.getString("id")))
+		    {
+			return customerCard;
+		    }
+		}
+	    }
+	    return null;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
     }
 }
