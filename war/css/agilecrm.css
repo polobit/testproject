@@ -1119,14 +1119,13 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 {
 	text-decoration:none;
 }
-
 #TrackingTab li a span {
-	border-bottom:1px solid #8a6086;
+	border-bottom:1px solid;
 }
 #TrackingTab li.active a span {
 	color: #fff;
-
-	opacity: 1;
+        opacity: 1;
+	border-bottom:none;
 }
 .text-first-capital::first-letter {
 	text-transform: capitalize;
