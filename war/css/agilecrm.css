@@ -1188,3 +1188,30 @@ height: 70px;
 margin:0 auto;
 /* background: #fff; */
 }
+.ref-head
+{
+	border-bottom: 1px solid #ddd;
+padding-bottom: 5px;
+margin-bottom: 3px;
+
+}
+.ref-log li
+{
+	list-style: none;
+border-bottom: 1px solid #f5f5f5;
+}
+.ref-log li td
+{
+	border-top:none;
+}
+.ref-roundedimg
+{
+display: block;
+padding: 2px;
+width: 30px;
+line-height: 1;
+border: 1px solid #ddd;
+border-radius: 50%;
+height: 30px;
+
+}
