@@ -64,7 +64,7 @@
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Created a task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> for <a>{{custom1}}</a> 
+ Created a Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> for {{custom1}} 
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -124,7 +124,7 @@
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Assigned Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> to Owner {{custom1}} 
+ Assigned Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> to  {{custom1}} 
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -144,7 +144,7 @@
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Modified task <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+ Modified Task <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -184,7 +184,11 @@
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Deleted  <a>{{custom2}}  tasks</a> 
+{{#if_equals "1" custom2}}
+   {{custom2}} Task Deleted
+{{else}} 
+	{{custom2}} Tasks Deleted
+{{/if_equals}}	
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -227,7 +231,7 @@
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Deal Closed <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> 
+ Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> closed
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -288,7 +292,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-	Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" class="edit-note" >Note </a> to  deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>
+	Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" class="edit-note" >Note </a> to  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -308,7 +312,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Assigned Deal  <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> to Owner <a>{{custom1}}</a> 
+ Assigned Deal  <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> to {{custom1}} 
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -327,7 +331,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Changed milestone for Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>  to <a>{{custom1}}</a> 
+ Changed Milestone for Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>  to {{custom1}} 
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -366,8 +370,11 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-   <a >{{custom2}} Deals </a> Deleted 
-		
+    {{#if_equals "1" custom2}}
+   {{custom2}} Deal Deleted
+{{else}} 
+	{{custom2}} Deals Deleted
+{{/if_equals}}	
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -389,7 +396,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Created new event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+ Created new Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -408,7 +415,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Modified event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>  
+ Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>  
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -428,7 +435,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Deleted event <a >{{label}}</a>
+ Deleted Event {{label}}
 
 		
 		<small class="edit-hover pull-left" > 
@@ -448,7 +455,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Modified event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+ Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
 	
 		
 		<small class="edit-hover pull-left" > 
@@ -472,7 +479,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" class="edit-note" >Note </a> to  contact <a href="#contact/{{entity_id}}">{{label}}</a>  
+ Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" class="edit-note" >Note </a> to  Contact <a href="#contact/{{entity_id}}">{{label}}</a>  
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -492,7 +499,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Sent email to contact <a href="#contact/{{entity_id}}">{{label}}</a> 
+ Sent Email to Contact <a href="#contact/{{entity_id}}">{{label}}</a> 
 
 		
 		<small class="edit-hover pull-left" > 
@@ -516,7 +523,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Added tag <a >{{removeSquareBrackets custom2}}</a> to <a >{{custom3}} Contacts </a> 
+ Added Tag <a >{{removeDoubleCoutes custom2}}</a> to {{custom3}} Contacts 
 
 		
 		<small class="edit-hover pull-left" > 
@@ -536,7 +543,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Romved tag  <a> {{removeSquareBrackets custom2}}</a> on <a>{{custom3}} Contacts </a> 
+ Removed Tag  <a> {{removeDoubleCoutes custom2}}</a> on {{custom3}} Contacts 
 
 		
 		<small class="edit-hover pull-left" > 
@@ -556,7 +563,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-		Added <a  data="{{id}}">{{custom3}} Contacts </a> to Campaign <a>{{custom2}}</a> 
+		Added <a  data="{{id}}">{{custom3}} Contacts </a> to Campaign {{custom2}} 
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -574,7 +581,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-Sent email to <a >{{custom3}} Contacts </a> 
+Sent email to {{custom3}} Contacts 
 
 		
 		<small class="edit-hover pull-left" > 
@@ -594,7 +601,7 @@ Sent email to <a >{{custom3}} Contacts </a>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-		Assgined  <a>{{custom3}} Contacts </a>  to Owner <a>{{custom2}}</a>
+		Assgined  {{custom3}} Contacts to <a>{{custom2}}</a>
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -612,7 +619,7 @@ Sent email to <a >{{custom3}} Contacts </a>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-    Deleted   <a >{{custom3}} Contacts </a>
+    Deleted {{custom3}} Contacts
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -636,8 +643,7 @@ Sent email to <a >{{custom3}} Contacts </a>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-<a>{{custom2}}</a> Campaign assigned to <a href="#contact/{{entity_id}}">{{label}}</a>
-	
+	Added <a href="#contact/{{entity_id}}">{{label}}</a> to Campaign {{custom2}}
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
@@ -659,14 +665,13 @@ Sent email to <a >{{custom3}} Contacts </a>
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
-Added tag <a >{{removeSquareBrackets custom1}}</a> to <a href="#contact/{{entity_id}}">{{label}}</a>
+Added Tag <a >{{removeDoubleCoutes custom1}}</a> to <a href="#contact/{{entity_id}}">{{label}}</a>
 	
 		
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
 <div class="clearfix"></div>
-	
 
 	</div>	
 {{/if_equals}}
@@ -684,9 +689,12 @@ Added tag <a >{{removeSquareBrackets custom1}}</a> to <a href="#contact/{{entity
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</span>	
- Added document <a>{{label}}</a> to <a>{{custom2}} contact</a> 
-	
-		
+{{#if_equals "1" custom2}}
+   Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contact
+{{else}} 
+	 Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contacts
+{{/if_equals}}	
+
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -694,6 +702,28 @@ Added tag <a >{{removeSquareBrackets custom1}}</a> to <a href="#contact/{{entity
 	
 
 	</div>	
+{{/if_equals}}
+
+{{#if_equals "BULK_DELETE" activity_type}}
+	<div >
+	<span style="float:left;margin-right:15px;">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</span>	
+    {{#if_equals "1" custom2}}
+   {{custom2}} Document Deleted
+{{else}} 
+	{{custom2}} Documents Deleted
+{{/if_equals}}	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+<div class="clearfix"></div>
+	</div> 
+
 {{/if_equals}}
 {{/if_equals}}
 
@@ -707,19 +737,19 @@ Added tag <a >{{removeSquareBrackets custom1}}</a> to <a href="#contact/{{entity
 <div class="row">
     <div class="span12">
         <div class="page-header">
-            <h1 class="activity-heading"><span>Activity Log</span>&nbsp;<small class="activity-sub-heading" style="font-size: small;color: #525252;"></small>&nbsp;<small class="activity-user" style="font-size: small;color: #525252;"></small></h1>
+            <h1 class="activity-heading"><span>Activity</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h1>
 		<div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name">All Activities</div>
+                <div class="btn selected_name">All Activity</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" id="entity_type">
-					 <li><a href="">All Activities</a></li>
-                     <li><a href="TASK">Task</a></li>
-                     <li><a href="DEAL">Deal</a></li>
-					 <li><a href="EVENT">Event</a></li>
-					 <li><a href="CONTACT">Contact</a></li>
- 					<li><a href="DOCUMENT">Document</a></li>
+					 <li><a href="">All Activity</a></li>
+                     <li><a href="TASK">Tasks</a></li>
+                     <li><a href="DEAL">Deals</a></li>
+					 <li><a href="EVENT">Events</a></li>
+					 <li><a href="CONTACT">Contacts</a></li>
+ 					<li><a href="DOCUMENT">Documents</a></li>
                     
                 </ul>
             </div>            
