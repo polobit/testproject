@@ -10,22 +10,22 @@
     	{{#if picture}}
     		<i class="media-grid">
 			{{#if_equals picture "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"}}
-					<img class="thumbnail" src="{{emailGravatarurl 75 email}}" width="75px" height="75px" /> </a>
+					<img class="thumbnail" src="{{emailGravatarurl 75 email}}" width="40px" height="40px" /> </a>
 				{{else}}
-    				<img class="thumbnail" src="{{picture}}" width="75px" height="75px" /> </a>
+    				<img class="thumbnail" src="{{picture}}" width="40px" height="40px" /> </a>
 			{{/if_equals}}
     		</i>
 		
     	{{else}}
     		<i class="media-grid">
-    		<img class="thumbnail" src="{{emailGravatarurl 50 email}}" width="75px" height="75px" /> </a>
+    		<img class="thumbnail" src="{{emailGravatarurl 50 email}}" width="40px" height="40px" /> </a>
     		</i>
     	{{/if}}
     	
-	    <br />
+	    
  	   	<label>{{name}}</label>
-    	<br /> 
-    	<a href="#social-prefs" class="btn btn-primary delete">Revoke</a> 
+    	 
+    	<a href="#social-prefs" class="btn btn-primary delete" style="margin-top:5px;">Revoke</a> 
     	</div>
 	{{else}}
 	
