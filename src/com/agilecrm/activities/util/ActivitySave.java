@@ -457,7 +457,7 @@ public class ActivitySave
 
     }
 
-    /**
+   /**
      * creates DOCUMENT_ADD activity
      * 
      * @param document
@@ -473,12 +473,9 @@ public class ActivitySave
 	JSONArray jsn = js.getJSONArray("contact_ids");
 	if (jsn != null && jsn.length() > 0)
 	{
-	    List contact_names = getContactNames(jsn);
 
-	    String contact_namess = contact_names.toString().replaceAll("[^\\w\\s\\-,]", "");
-
-	    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, contact_namess,
-		    String.valueOf(contact_names.size()), "Related contact to this Document");
+	    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
+		    String.valueOf(jsn.length()), "Related contact to this Document");
 	}
 
     }
