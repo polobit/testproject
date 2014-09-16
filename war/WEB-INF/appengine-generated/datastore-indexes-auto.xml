@@ -14,5 +14,10 @@
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
+    
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="user" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
