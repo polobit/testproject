@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -25,8 +26,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportEmailUtil;
-import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -48,7 +49,6 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -208,7 +208,6 @@ public class BulkOperationsAPI
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
@@ -253,7 +252,6 @@ public class BulkOperationsAPI
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
@@ -304,11 +302,8 @@ public class BulkOperationsAPI
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
-	    if (type.equalsIgnoreCase("deals"))
-	    {
-		new CSVUtil(restrictions).createDealsFromCSV(blobStream, ownerId, type);
-	    }
-	    else if (type.equalsIgnoreCase("contacts"))
+
+	    if (type.equalsIgnoreCase("contacts"))
 	    {
 		new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
 	    }
@@ -319,7 +314,50 @@ public class BulkOperationsAPI
 	}
 	catch (IOException e)
 	{
-	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    CacheUtil.deleteCache(key);
+
+	    // Delete blob data after contacts are created
+	    BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+	}
+    }
+
+    /**
+     * 
+     */
+    @Path("/upload-deals/{owner_id}/{key}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void dealsBulkSave(Object deal, @PathParam("owner_id") String ownerId, @PathParam("key") String key)
+    {
+	System.out.println("backend running");
+
+	System.out.println(key);
+
+	// Creates a blobkey object from blobkey string
+	BlobKey blobKey = new BlobKey(key);
+
+	// Reads the stream from blobstore
+	InputStream blobStream;
+	try
+	{
+	    blobStream = new BlobstoreInputStream(blobKey);
+	    // Converts stream data into valid string data
+
+	    // Calls utility method to save contacts in csv with owner id,
+	    // according to contact prototype sent
+	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
+	    LinkedHashMap<String, Object> dealMap = (LinkedHashMap<String, Object>) deal;
+	    ArrayList<LinkedHashMap<String, String>> props = (ArrayList<LinkedHashMap<String, String>>) dealMap
+		    .get("properties");
+	    new CSVUtil(restrictions).createDealsFromCSV(blobStream, props, ownerId);
+
+	}
+	catch (IOException e)
+	{
 	    e.printStackTrace();
 	}
 	finally
@@ -576,7 +614,6 @@ public class BulkOperationsAPI
 	    }
 	    catch (Exception e)
 	    {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	}
@@ -612,7 +649,6 @@ public class BulkOperationsAPI
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }
