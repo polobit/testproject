@@ -571,7 +571,7 @@ public class ActivitySave
 	    throws JSONException
     {
 
-	List<String> contact_names = getContactNames(contactids);
+	
 
 	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactids.length()));
 
