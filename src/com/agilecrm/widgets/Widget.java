@@ -82,7 +82,7 @@ public class Widget
      */
     public static enum WidgetType
     {
-	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM
+	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM,ECOMMERCE
     };
 
     /**
