@@ -65,7 +65,7 @@ function agile_create_cookie(name, value, days)
 	var subdomain = window.location.hostname.replace(/([a-zA-Z0-9]+.)/,"");
 	if(subdomain.length > 5 ) // Avoid .co.uk etc.
 	{
-		document_cookie = ";domain=." + subdomain;
+		document_cookie = ";document=." + subdomain;
 	}
 	
 	document.cookie = name + "=" + escape(value) + expires + "; path=/" + document_cookie;
