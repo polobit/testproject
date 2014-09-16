@@ -350,7 +350,7 @@ public class ActivityUtil
 	}
 	catch (Exception e)
 	{
-	    System.out.println("error in fetching activities of current domain user");
+	    System.out.println("error in fetching activities of current domain user "+e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}
