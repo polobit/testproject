@@ -1831,7 +1831,7 @@ $(function()
      */
     Handlebars.registerHelper('removeSquareBrackets', function(value)
     {
-	return value.replace(/[\[\]]+/, '');
+	return value.replace(/[\[\]]+/g, '');
     });
 
     /**

@@ -19,8 +19,10 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Task;
 import com.agilecrm.activities.TaskReminder;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
@@ -145,6 +147,23 @@ public class TasksAPI
     }
 
     /**
+     * Gets a task based on id
+     * 
+     * @param id
+     *            unique id of task
+     * @return {@link Task}
+     */
+    @Path("/getTaskObject/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Task getTaskForActivity(@PathParam("id") Long id)
+    {
+	Task task = TaskUtil.getTask(id);
+	System.out.println("task id " + task);
+	return task;
+    }
+
+    /**
      * Deletes a task based on id
      * 
      * @param id
@@ -160,6 +179,7 @@ public class TasksAPI
 	    Task task = TaskUtil.getTask(id);
 	    if (task != null)
 	    {
+		ActivitySave.createTaskDeleteActivity(task);
 		if (!task.getNotes(id).isEmpty())
 		    NoteUtil.deleteBulkNotes(task.getNotes(id));
 		task.delete();
@@ -184,6 +204,15 @@ public class TasksAPI
     public Task createTask(Task task)
     {
 	task.save();
+	try
+	{
+	    ActivitySave.createTaskAddActivity(task);
+	}
+
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
 	return task;
     }
 
@@ -199,6 +228,7 @@ public class TasksAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Task updateTask(Task task)
     {
+	ActivitySave.createTaskEditActivity(task);
 	task.save();
 	return task;
     }
@@ -216,7 +246,8 @@ public class TasksAPI
     public void deleteContacts(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray tasksJSONArray = new JSONArray(model_ids);
-
+	ActivitySave.createLogForBulkDeletes(EntityType.TASK, tasksJSONArray.toString(),
+	        String.valueOf(tasksJSONArray.length()), "");
 	Task.dao.deleteBulkByIds(tasksJSONArray);
     }
 
@@ -389,7 +420,7 @@ public class TasksAPI
 	}
 
 	return TaskUtil.getTasksRelatedToOwnerOfTypeAndDue(criteria, type, owner, pending, null, null, startTime,
-		endTime);
+	        endTime);
     }
 
     /**

@@ -20,6 +20,8 @@ import net.sf.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
@@ -75,7 +77,7 @@ public class DealsAPI
 	    return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName,
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName, 0, cursor,
-		pipelineId);
+	        pipelineId);
     }
 
     /**
@@ -126,7 +128,7 @@ public class DealsAPI
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	}
 	return OpportunityUtil
-		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
+	        .getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
 
     /**
@@ -194,6 +196,15 @@ public class DealsAPI
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	opportunity.save();
+	try
+	{
+	    ActivitySave.createDealAddActivity(opportunity);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	return opportunity;
     }
 
@@ -209,8 +220,19 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
+
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+
+	try
+	{
+	    ActivitySave.createDealEditActivity(opportunity);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	opportunity.save();
 	return opportunity;
     }
@@ -350,7 +372,8 @@ public class DealsAPI
 
 	// Executes notification when deal is deleted
 	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
-
+	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray.toString(),
+	        String.valueOf(opportunitiesJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
 
@@ -425,7 +448,7 @@ public class DealsAPI
 	// Append the URL with the current userId to set the session manager in
 	// the backend.
 	OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
-		+ SessionManager.get().getDomainId());
+	        + SessionManager.get().getDomainId());
     }
 
     /**

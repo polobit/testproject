@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
@@ -176,7 +177,15 @@ public class ContactsAPI
 	}
 
 	contact.save();
-
+	try
+	{
+	    ActivitySave.createTagAddActivity(contact);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	System.out.println("Contacts properties = ");
 	for (ContactField f : contact.properties)
 	{
@@ -198,6 +207,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Contact updateContact(Contact contact)
     {
+
 	contact.save();
 	System.out.println("returned tags : " + contact.tags);
 	return contact;

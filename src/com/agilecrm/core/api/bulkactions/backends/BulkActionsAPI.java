@@ -12,9 +12,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.BulkActionUtil.ActionType;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.workflows.Workflow;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 @Path("/api/bulk")
@@ -47,6 +54,8 @@ public class BulkActionsAPI
 	InputStream stream = null;
 	byte[] bytes = null;
 
+	createActivity(request, action_type);
+
 	/**
 	 * Reads request body in to bytes if filter is null i.e., action is to
 	 * be performed on the contacts with the ids sent in the reqeust
@@ -69,6 +78,7 @@ public class BulkActionsAPI
 	 * Get the content type, as same content type will be set while sending
 	 * request to backend
 	 */
+
 	String contentType = request.getHeader("Content-Type");
 
 	/*
@@ -87,7 +97,7 @@ public class BulkActionsAPI
 	    {
 		System.out.println("filter id is not null");
 		BulkActionUtil.changeOwner(filterId, request.getParameterMap(), ActionType.CHANGE_OWNER.getUrl(),
-			contentType, Method.POST);
+		        contentType, Method.POST);
 		return;
 	    }
 
@@ -104,7 +114,7 @@ public class BulkActionsAPI
 	    if (filterId != null)
 	    {
 		BulkActionUtil.enrollCampaign(filterId, request.getParameterMap(), ActionType.ASIGN_WORKFLOW.getUrl(),
-			contentType, Method.POST);
+		        contentType, Method.POST);
 		return;
 	    }
 
@@ -119,7 +129,7 @@ public class BulkActionsAPI
 	    if (filterId != null && filterId.equals("all-active-subscribers"))
 	    {
 		BulkActionUtil.removeActiveSubscribers(filterId, request.getParameterMap(),
-			ActionType.REMOVE_ACTIVE_SUBSCRIBERS.getUrl(), contentType, Method.POST);
+		        ActionType.REMOVE_ACTIVE_SUBSCRIBERS.getUrl(), contentType, Method.POST);
 		return;
 	    }
 
@@ -144,6 +154,50 @@ public class BulkActionsAPI
 	System.out.println(bytes.length);
 
 	BulkActionUtil.postDataToBulkActionBackend(bytes, ActionType.valueOf(action_type).getUrl(), contentType,
-		Method.POST);
+	        Method.POST);
+    }
+
+    public void createActivity(@Context HttpServletRequest request, String action_type)
+    {
+	try
+	{
+	    String contact_ids = "", data = "";
+	    if (("DELETE").equals(action_type))
+		contact_ids = request.getParameter("ids");
+	    else if (("EMAIL_SENT").equals(action_type))
+	    {
+		contact_ids = request.getParameter("ids");
+
+	    }
+	    else if (("ASIGN_WORKFLOW").equals(action_type))
+	    {
+		contact_ids = request.getParameter("contact_ids");
+		Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(request.getParameter("workflow_id")));
+		data = workflow.name;
+	    }
+	    else if (("CHANGE_OWNER").equals(action_type))
+	    {
+		contact_ids = request.getParameter("contact_ids");
+		DomainUser domainuser = DomainUserUtil.getDomainUser(Long.parseLong(request.getParameter("owner")));
+		data = domainuser.name;
+	    }
+	    else
+	    {
+		contact_ids = request.getParameter("contact_ids");
+		data = request.getParameter("data");
+	    }
+
+	    System.out.println("contactids in bulk actions api " + contact_ids);
+	    System.out.println(data);
+	    JSONArray jsncontact_ids = new JSONArray(contact_ids);
+	    System.out.println("contactids in bulk actions api json array " + jsncontact_ids);
+	    ActivitySave.createBulkActionActivity(jsncontact_ids, action_type, data);
+
+	}
+	catch (JSONException e1)
+	{
+	    // TODO Auto-generated catch block
+	    e1.printStackTrace();
+	}
     }
 }

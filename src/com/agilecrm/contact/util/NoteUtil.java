@@ -68,6 +68,25 @@ public class NoteUtil
     }
 
     /**
+     * gets note object based on id
+     * 
+     * @param id
+     * @return
+     */
+    public static Note getNote(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
      * Deletes all notes related to a contact (as parent)
      * 
      * @param contactId
@@ -99,8 +118,8 @@ public class NoteUtil
     public static List<Note> getNotesRelatedToCurrentUser()
     {
 	return dao.ofy().query(Note.class)
-		.filter("owner", new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id))
-		.order("-created_time").limit(10).list();
+	        .filter("owner", new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id))
+	        .order("-created_time").limit(10).list();
     }
 
     /**
@@ -114,7 +133,7 @@ public class NoteUtil
     public static int getNotesCount(Long contactId) throws Exception
     {
 	Query<Note> query = dao.ofy().query(Note.class)
-		.filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
+	        .filter("related_contacts =", new Key<Contact>(Contact.class, contactId));
 
 	return query.count();
     }
