@@ -338,8 +338,10 @@ public class ActivityUtil
     {
 	try
 	{
+	
+	 System.out.println("user " + new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
 	    Query<Activity> query = dao.ofy().query(Activity.class);
-	    query.filter("user", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
+	    query.filter("user =", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
 		    "time");
 	    if (max != null && max > 0)
 		dao.fetchAll(max, cursor);
@@ -348,6 +350,7 @@ public class ActivityUtil
 	}
 	catch (Exception e)
 	{
+	    System.out.println("error in fetching activities of current domain user");
 	    e.printStackTrace();
 	    return null;
 	}
