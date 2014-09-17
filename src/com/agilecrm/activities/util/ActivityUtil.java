@@ -1,10 +1,14 @@
 package com.agilecrm.activities.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.agilecrm.activities.Activity;
 import com.agilecrm.activities.Activity.ActivityType;
@@ -12,11 +16,18 @@ import com.agilecrm.activities.Activity.EntityType;
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.document.Document;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.workflows.Workflow;
+import com.google.gson.Gson;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -49,18 +60,40 @@ public class ActivityUtil
      *            extra information about the activity like Tag name when a tag
      *            is added. null if nothing.
      */
-    public static Activity createContactActivity(ActivityType activity_type, Contact contact, String data)
+    public static Activity createContactActivity(ActivityType activity_type, Contact contact, String new_data,
+	    String old_data, String changed_field)
     {
+	String contact_name = "";
 	Activity activity = new Activity();
-	activity.label = contact.getContactFieldByName("first_name").value + " "
-		+ contact.getContactFieldByName("last_name").value;
-	activity.label = activity.label.trim();
+	if (contact != null)
+	{
+
+	    ContactField firstname = contact.getContactFieldByName("first_name");
+	    ContactField lastname = contact.getContactFieldByName("last_name");
+	    if (firstname != null)
+	    {
+		contact_name += firstname.value;
+	    }
+	    if (lastname != null)
+	    {
+		contact_name += "";
+		contact_name += lastname.value;
+	    }
+
+	    activity.label = contact_name;
+	    activity.label = activity.label.trim();
+	    contact_name = "";
+	    activity.entity_id = contact.id;
+	}
 	activity.activity_type = activity_type;
 	activity.entity_type = EntityType.CONTACT;
-	activity.entity_id = contact.id;
 
-	if (StringUtils.isNotEmpty(data))
-	    activity.custom1 = data;
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
 
 	activity.save();
 	return activity;
@@ -78,7 +111,8 @@ public class ActivityUtil
      *            the extra information of the activity like the progress when
      *            ever user changed the progress. null if nothing.
      */
-    public static Activity createTaskActivity(ActivityType activity_type, Task task, String data)
+    public static Activity createTaskActivity(ActivityType activity_type, Task task, String new_data, String old_data,
+	    String changed_field)
     {
 	Activity activity = new Activity();
 	activity.label = task.subject;
@@ -87,12 +121,17 @@ public class ActivityUtil
 	activity.entity_id = task.id;
 
 	// If user changed the progress, save it.
-	if (activity_type == ActivityType.PROGRESS)
-	    activity.custom1 = String.valueOf(task.is_complete);
+	/*
+	 * if (activity_type == ActivityType.PROGRESS) activity.custom1 =
+	 * String.valueOf(task.is_complete);
+	 */
 
-	if (StringUtils.isNotEmpty(data))
-	    activity.custom1 = data;
-
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
 	activity.save();
 	return activity;
     }
@@ -109,7 +148,8 @@ public class ActivityUtil
      *            the extra information about the activity performed on the
      *            event. null if nothing.
      */
-    public static Activity createEventActivity(ActivityType activity_type, Event event, String data)
+    public static Activity createEventActivity(ActivityType activity_type, Event event, String new_data,
+	    String old_data, String changed_field)
     {
 	Activity activity = new Activity();
 	activity.label = event.title;
@@ -117,8 +157,12 @@ public class ActivityUtil
 	activity.entity_type = EntityType.EVENT;
 	activity.entity_id = event.id;
 
-	if (StringUtils.isNotEmpty(data))
-	    activity.custom1 = data;
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
 
 	activity.save();
 	return activity;
@@ -137,7 +181,8 @@ public class ActivityUtil
      *            milestone name when the user change the milestone. null if
      *            nothing.
      */
-    public static Activity createDealActivity(ActivityType activity_type, Opportunity deal, String data)
+    public static Activity createDealActivity(ActivityType activity_type, Opportunity deal, String new_data,
+	    String old_data, String changed_field)
     {
 	Activity activity = new Activity();
 	activity.label = deal.name;
@@ -145,12 +190,50 @@ public class ActivityUtil
 	activity.entity_type = EntityType.DEAL;
 	activity.entity_id = deal.id;
 
-	// save the new milestone, if user changed the milestone.
-	if (activity_type == ActivityType.MILESTONE)
-	    activity.custom1 = deal.milestone;
+	/*
+	 * // save the new milestone, if user changed the milestone. if
+	 * (activity_type == ActivityType.MILESTONE) activity.custom1 =
+	 * deal.milestone;
+	 */
 
-	if (StringUtils.isNotEmpty(data))
-	    activity.custom1 = data;
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
+
+	activity.save();
+	return activity;
+    }
+
+    /**
+     * To save the document activity.
+     * 
+     * @param activity_type
+     *            the type of the activity performed on the document (ADD, EDIT
+     *            etc..)
+     * @param document
+     *            the document object on which the activity is performed.
+     * @param data
+     *            the extra information about the activity like the new
+     * 
+     */
+    public static Activity createDocumentActivity(ActivityType activity_type, Document document, String new_data,
+	    String old_data, String changed_field)
+    {
+	Activity activity = new Activity();
+	activity.label = document.name;
+	activity.activity_type = activity_type;
+	activity.entity_type = EntityType.DOCUMENT;
+	activity.entity_id = document.id;
+
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
 
 	activity.save();
 	return activity;
@@ -178,6 +261,43 @@ public class ActivityUtil
 
 	if (StringUtils.isNotEmpty(data))
 	    activity.custom1 = data;
+
+	activity.save();
+	return activity;
+    }
+
+    public static Activity createBulkDeleteActivity(EntityType entitytype, String new_data, String old_data,
+	    String changed_field)
+    {
+	Activity activity = new Activity();
+	activity.label = "bulk delete";
+	activity.activity_type = ActivityType.BULK_DELETE;
+	activity.entity_type = entitytype;
+
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
+
+	activity.save();
+	return activity;
+    }
+
+    public static Activity createBulkActionActivity(String new_data, String old_data, String changed_field)
+    {
+	Activity activity = new Activity();
+	activity.label = "bulk Action performed to Contacts";
+	activity.activity_type = ActivityType.BULK_ACTION;
+	activity.entity_type = EntityType.CONTACT;
+
+	if (StringUtils.isNotEmpty(new_data))
+	    activity.custom1 = new_data;
+	if (StringUtils.isNotEmpty(old_data))
+	    activity.custom2 = old_data;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom3 = changed_field;
 
 	activity.save();
 	return activity;
@@ -218,13 +338,35 @@ public class ActivityUtil
     {
 	try
 	{
+	
+	 System.out.println("user " + new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
 	    Query<Activity> query = dao.ofy().query(Activity.class);
-	    query.filter("user", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
+	    query.filter("user =", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
 		    "time");
 	    if (max != null && max > 0)
 		dao.fetchAll(max, cursor);
 
 	    return query.list();
+	}
+	catch (Exception e)
+	{
+	    System.out.println("error in fetching activities of current domain user "+e.getMessage());
+	    e.printStackTrace();
+	    return null;
+	}
+    }
+
+    /**
+     * fetches an activity by its id
+     * 
+     * @param id
+     * @return
+     */
+    public static Activity getActivity(Long id)
+    {
+	try
+	{
+	    return dao.get(id);
 	}
 	catch (Exception e)
 	{
@@ -281,4 +423,627 @@ public class ActivityUtil
 	    return null;
 	}
     }
+
+    public static List<Activity> getActivitites(String entitytype, Long userid, int max, String cursor)
+    {
+	Map<String, Object> searchMap = new HashMap<String, Object>();
+	if (!entitytype.equalsIgnoreCase("ALL"))
+	    searchMap.put("entity_type", entitytype);
+	if (userid != null)
+	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
+
+	if (max != 0)
+	    return dao.fetchAll(max, cursor, searchMap);
+
+	return dao.listByProperty(searchMap);
+    }
+
+    /**
+     * 
+     * @param obj
+     *            used to construct map object with the fileds changed in the
+     *            deal
+     * @mapvalue[0] stores new values given for updation
+     * @mapvalue[1] stores the previous value stored in db
+     * @mapvalue[2] stores the field name which was modified
+     * @return
+     * @throws JSONException
+     */
+
+    public static Map<String, Object[]> dealChangedFields(Opportunity obj) throws JSONException
+    {
+	Opportunity oldobj = OpportunityUtil.getOpportunity(obj.id);
+	// getJsonCompares(obj, oldobj);
+
+	Map<String, Object[]> dealmap = new HashMap<String, Object[]>();
+
+	try
+	{
+	    if (obj.close_date != null)
+		if (!obj.close_date.equals(oldobj.close_date))
+		{
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.close_date;
+		    mapvalue[1] = oldobj.close_date;
+		    mapvalue[2] = "close_date";
+		    dealmap.put("close_date", mapvalue);
+		}
+	    if (obj.name != null)
+		if (!obj.name.equalsIgnoreCase(oldobj.name))
+		{
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.name;
+		    mapvalue[1] = oldobj.name;
+		    mapvalue[2] = "name";
+		    dealmap.put("name", mapvalue);
+		}
+
+	    if (obj.owner_id != null)
+		if (!oldobj.getOwner().id.toString().equalsIgnoreCase(obj.owner_id))
+		{
+
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = DomainUserUtil.getDomainUser(Long.parseLong(obj.owner_id)).name;
+		    mapvalue[1] = DomainUserUtil.getDomainUser(oldobj.getOwner().id).name;
+		    mapvalue[2] = "owner_name";
+		    dealmap.put("owner_name", mapvalue);
+
+		}
+
+	    if (compareDoubleValues(oldobj.expected_value, obj.expected_value) != 0)
+	    {
+		Object[] mapvalue = new Object[3];
+		mapvalue[0] = obj.expected_value;
+		mapvalue[1] = oldobj.expected_value;
+		mapvalue[2] = "expected_value";
+		dealmap.put("expected_value", mapvalue);
+	    }
+
+	    if (compareDoubleValues(oldobj.probability, obj.probability) != 0)
+	    {
+		Object[] mapvalue = new Object[3];
+		mapvalue[0] = obj.probability;
+		mapvalue[1] = oldobj.probability;
+		mapvalue[2] = "probability";
+		dealmap.put("probability", mapvalue);
+	    }
+
+	    // @@ in case of mile stone mapvalue[3] will store name of the deal
+	    // andmapvalue[4] willstore deal owner name
+	    // it is useful in case of determining deal won or lost
+
+	    if (obj.milestone != null)
+		if (!oldobj.milestone.equalsIgnoreCase(obj.milestone))
+		{
+		    Object[] mapvalue = new Object[5];
+		    mapvalue[0] = obj.milestone;
+		    mapvalue[1] = oldobj.milestone;
+		    mapvalue[2] = "milestone";
+		    mapvalue[3] = obj.name;
+		    mapvalue[4] = DomainUserUtil.getDomainUser(Long.parseLong(obj.owner_id)).name;
+		    dealmap.put("milestone", mapvalue);
+		}
+	    JSONObject js = new JSONObject(new Gson().toJson(obj));
+	    JSONArray jsn = js.getJSONArray("contact_ids");
+
+	    List<String> oldcontactids = oldobj.getContact_ids();
+
+	    Object[] mapvalue = new Object[3];
+
+	    if (oldcontactids.size() > 0)
+	    {
+		mapvalue = getChangedContactNames(jsn, oldcontactids);
+	    }
+	    else
+	    {
+
+		mapvalue[0] = ActivitySave.getContactNames(jsn);
+		mapvalue[1] = "[]";
+		mapvalue[2] = "contacts_added";
+	    }
+	    dealmap.put("Contacts_related_to", mapvalue);
+	    System.out.println(mapvalue[0] + "  " + mapvalue[1] + "   " + mapvalue[2]);
+	    System.out.println("deals==============================");
+
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return dealmap;
+    }
+
+    /**
+     * commin method to compare double value
+     * 
+     * @param d1
+     *            old value
+     * @param d2
+     *            new value given in updation request
+     * @return returns the value 0 if d1 is numerically equal to d2 return value
+     *         less than 0 if d1 is numerically less than d2 return value
+     *         greater than 0 if d1 is numerically greater than d2.
+     */
+    public static int compareDoubleValues(double d1, double d2)
+    {
+
+	int result = Double.compare(d1, d2);
+	return result;
+
+    }
+
+    /**
+     * 
+     * @param epoch
+     *            if date fields were modified while updation i.e
+     *            startdate,duedate,end end etc.. simply converting them to
+     *            normal time from epoch and stores in activity entity. because
+     *            if multiple fields updated at a time we are not creating each
+     *            log. so all will be stored as a single log
+     * @return
+     */
+    public static String getTimeFromEppoch(Long epoch)
+    {
+	String date = new java.text.SimpleDateFormat("EEE, d MMM yyyy ").format(new java.util.Date(epoch * 1000));
+
+	return date;
+    }
+
+    /**
+     * 
+     * @param obj
+     *            method used to construct map object with the fileds changed in
+     *            the event
+     * @mapvalue[0] stores new values given for updation
+     * @mapvalue[1] stores the previous value stored in db
+     * @return
+     */
+    public static Map<String, Object[]> eventchangedfields(Event obj)
+    {
+
+	Event oldobj = EventUtil.getEvent(obj.id);
+	Map<String, Object[]> eventmap = new HashMap<String, Object[]>();
+
+	try
+	{
+	    if (obj.start != null)
+		if (!obj.start.equals(oldobj.start))
+		{
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = getTimeFromEppoch(obj.start);
+		    mapvalue[1] = getTimeFromEppoch(oldobj.start);
+		    mapvalue[2] = "start_date";
+		    eventmap.put("start_date", mapvalue);
+
+		}
+	    if (obj.end != null)
+		if (!obj.end.equals(oldobj.end))
+		{
+
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = getTimeFromEppoch(obj.end);
+		    mapvalue[1] = getTimeFromEppoch(oldobj.end);
+		    mapvalue[2] = "end_date";
+		    eventmap.put("end_date", mapvalue);
+
+		}
+
+	    if (oldobj.title != null && obj.title != null)
+		if (!oldobj.title.equalsIgnoreCase(obj.title))
+		{
+
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.title;
+		    mapvalue[1] = oldobj.title;
+		    mapvalue[2] = "title";
+		    eventmap.put("title", mapvalue);
+
+		}
+	    if (oldobj.color != null && obj.color != null)
+		if (!oldobj.color.equalsIgnoreCase(obj.color))
+		{
+
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.color;
+		    mapvalue[1] = oldobj.color;
+		    mapvalue[2] = "priority";
+		    eventmap.put("priority", mapvalue);
+
+		}
+
+	    JSONObject js = new JSONObject(new Gson().toJson(obj));
+	    JSONArray jsn = js.getJSONArray("contacts");
+
+	    List<Contact> contacts = oldobj.getContacts();
+	    List<String> old_cont_ids = new ArrayList<>();
+
+	    if (contacts.size() > 0)
+	    {
+		old_cont_ids = getContactIds(contacts);
+	    }
+
+	    Object[] mapvalue = new Object[3];
+
+	    if (old_cont_ids.size() > 0)
+	    {
+		mapvalue = getChangedContactNames(jsn, old_cont_ids);
+	    }
+	    else
+	    {
+
+		mapvalue[0] = ActivitySave.getContactNames(jsn);
+		mapvalue[1] = "[]";
+		mapvalue[2] = "contacts_added";
+	    }
+
+	    eventmap.put("Contacts_related_to", mapvalue);
+
+	    System.out.println(mapvalue[0] + "  " + mapvalue[1] + "   " + mapvalue[2]);
+	    System.out.println("events==============================");
+
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return eventmap;
+
+    }
+
+    /**
+     * 
+     * @param obj
+     *            method used to construct map object with the fileds changed in
+     *            the task object when it is updated
+     * @return @mapvalue[0] stores new values given for updation
+     * @mapvalue[1] stores the previous value stored in db
+     */
+    public static Map<String, Object[]> taskChangedFields(Task obj)
+    {
+
+	Task oldobj = TaskUtil.getTask(obj.id);
+	Map<String, Object[]> taskmap = new HashMap<String, Object[]>();
+
+	try
+	{
+
+	    if (!oldobj.due.equals(obj.due))
+	    {
+		Object[] mapvalue = new Object[3];
+		mapvalue[0] = getTimeFromEppoch(obj.due);
+		mapvalue[1] = getTimeFromEppoch(oldobj.due);
+		mapvalue[2] = "due_date";
+		taskmap.put("due", mapvalue);
+
+	    }
+
+	    if (oldobj.status != null && obj.status != null)
+		if (!oldobj.status.toString().equalsIgnoreCase(obj.status.toString()))
+		{
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.status;
+		    mapvalue[1] = oldobj.status;
+		    mapvalue[2] = "status";
+		    taskmap.put("status", mapvalue);
+		}
+
+	    if (oldobj.priority_type != null && obj.priority_type != null)
+		if (!oldobj.priority_type.toString().equalsIgnoreCase(obj.priority_type.toString()))
+		{
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.priority_type;
+		    mapvalue[1] = oldobj.priority_type;
+		    mapvalue[2] = "priority_type";
+		    taskmap.put("priority", mapvalue);
+		}
+
+	    if (oldobj.progress != obj.progress)
+	    {
+		Object[] mapvalue = new Object[3];
+		mapvalue[0] = obj.progress;
+		mapvalue[1] = oldobj.progress;
+		mapvalue[2] = "progress";
+		taskmap.put("progress", mapvalue);
+	    }
+	    if (oldobj.subject != null && obj.subject != null)
+		if (!oldobj.subject.equalsIgnoreCase(obj.subject))
+		{
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.subject;
+		    mapvalue[1] = oldobj.subject;
+		    mapvalue[2] = "subject";
+		    taskmap.put("subject", mapvalue);
+
+		}
+
+	    if (oldobj.type != null && obj.type != null)
+		if (!oldobj.type.toString().equalsIgnoreCase(obj.type.toString()))
+		{
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = obj.type;
+		    mapvalue[1] = oldobj.type;
+		    mapvalue[2] = "task_type";
+		    taskmap.put("task_type", mapvalue);
+
+		}
+
+	    if (obj.owner_id != null)
+		if (!oldobj.getTaskOwner().id.toString().equalsIgnoreCase(obj.owner_id))
+		{
+
+		    Object[] mapvalue = new Object[3];
+		    mapvalue[0] = DomainUserUtil.getDomainUser(Long.parseLong(obj.owner_id)).name;
+		    mapvalue[1] = DomainUserUtil.getDomainUser(oldobj.getTaskOwner().id).name;
+		    mapvalue[2] = "Task_owner";
+		    taskmap.put("Task_owner", mapvalue);
+
+		}
+	    JSONObject js = new JSONObject(new Gson().toJson(obj));
+	    JSONArray jsn = js.getJSONArray("contacts");
+
+	    List<Contact> contacts = oldobj.getContacts();
+	    List<String> old_cont_ids = new ArrayList<>();
+
+	    if (contacts.size() > 0)
+	    {
+		old_cont_ids = getContactIds(contacts);
+	    }
+
+	    Object[] mapvalue = new Object[3];
+	    // mapvalue[0] stores newly added contacs
+	    // mapvalue[1] stores removed contacts
+	    if (old_cont_ids.size() > 0)
+	    {
+		mapvalue = getChangedContactNames(jsn, old_cont_ids);
+	    }
+	    else
+	    {
+
+		mapvalue[0] = ActivitySave.getContactNames(jsn);
+		mapvalue[1] = "[]";
+		mapvalue[2] = "contacts_added";
+	    }
+	    taskmap.put("Contacts_related_to", mapvalue);
+	    System.out.println(mapvalue[0] + "  " + mapvalue[1] + "   " + mapvalue[2]);
+	    System.out.println("tasks==============================");
+
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return taskmap;
+
+    }
+
+    /**
+     * method used to get the removed contacts ids when updating deal or task or
+     * event
+     * 
+     * @param oldcont
+     *            list of old contacts
+     * @param ar
+     *            new contacts given in updation
+     * @return
+     * @throws JSONException
+     */
+    public static List<Object> removedContacts(List oldcont, JSONArray ar) throws JSONException
+    {
+	for (int i = 0; i <= ar.length() - 1; i++)
+	{
+	    if (oldcont.contains(ar.get(i)))
+	    {
+		oldcont.remove(ar.get(i));
+
+	    }
+
+	}
+	return oldcont;
+
+    }
+
+    /**
+     * methood fetches the newly added and removed contacts in
+     * contacts_related_to field in task ,event,deal updations
+     * 
+     * @param jsncontacts
+     * @param oldcont_ids
+     * @return
+     * @throws JSONException
+     */
+    public static Object[] getChangedContactNames(JSONArray jsncontacts, List<String> oldcont_ids) throws JSONException
+    {
+
+	List<Object> added_cont = new ArrayList<>();
+	List<Object> new_contacts = new ArrayList<>();
+	List<Object> removed_cont = new ArrayList<>();
+
+	Object[] related_to = new Object[3];
+
+	if (jsncontacts.length() >= oldcont_ids.size())
+	{
+	    for (int i = 0; i <= jsncontacts.length() - 1; i++)
+	    {
+		if (!oldcont_ids.contains(jsncontacts.get(i)))
+		    new_contacts.add(jsncontacts.get(i));
+
+	    }
+	    removed_cont = removedContacts(oldcont_ids, jsncontacts);
+	    related_to[0] = getContactNamesFromIds(new_contacts);
+	    related_to[1] = getContactNamesFromIds(removed_cont);
+	    related_to[2] = "new_contacts_added";
+	}
+
+	else
+	{
+
+	    for (int i = 0; i <= jsncontacts.length() - 1; i++)
+	    {
+		if (!oldcont_ids.contains(jsncontacts.get(i)))
+		    added_cont.add(jsncontacts.get(i));
+
+	    }
+	    removed_cont = removedContacts(oldcont_ids, jsncontacts);
+	    related_to[0] = getContactNamesFromIds(added_cont);
+	    related_to[1] = getContactNamesFromIds(removed_cont);
+	    related_to[2] = "contacts_changed";
+
+	}
+
+	System.out.println(new_contacts + " " + oldcont_ids);
+	System.out.println("dassdakjsdahsdakhsahjsalksdklsakljsad");
+	System.out.println(added_cont + " " + removed_cont);
+	return related_to;
+    }
+
+    /**
+     * gets the contact ids by giving list of contact objects
+     * 
+     * @param contacts
+     * @return list of contact ids
+     */
+    public static List<String> getContactIds(List<Contact> contacts)
+    {
+
+	List<String> contids = new ArrayList<>();
+	for (Contact con : contacts)
+	{
+	    contids.add(con.id.toString());
+	}
+	return contids;
+
+    }
+
+    /**
+     * 
+     * gets contact names by giving contactids
+     * 
+     * @param contactids
+     * @return list of contacts names
+     * @throws JSONException
+     */
+    public static List<String> getContactNamesFromIds(List<Object> contactids) throws JSONException
+    {
+	List<String> list = new ArrayList<>();
+	String contact_name = "";
+	for (int i = 0; i <= contactids.size() - 1; i++)
+	{
+
+	    if (contactids.get(i) != null)
+	    {
+		Contact contact = ContactUtil.getContact(Long.parseLong(contactids.get(i).toString()));
+		if (contact != null)
+		{
+		    ContactField firstname = contact.getContactFieldByName("first_name");
+		    ContactField lastname = contact.getContactFieldByName("last_name");
+		    if (firstname != null)
+		    {
+			contact_name += firstname.value;
+		    }
+		    if (lastname != null)
+		    {
+			contact_name += "";
+			contact_name += lastname.value;
+		    }
+
+		    list.add(contact_name.trim());
+		    contact_name = "";
+		}
+	    }
+
+	}
+	return list;
+    }
+
+    /**
+     * method used to get the deal names by giving array of deal ids.
+     * 
+     * @param js
+     * @return list of deal names
+     * 
+     * @throws JSONException
+     */
+    public static List<String> getDealNames(JSONArray js) throws JSONException
+    {
+	List<String> list = new ArrayList<>();
+
+	for (int i = 0; i <= js.length() - 1; i++)
+	{
+
+	    if (js.get(i) != null)
+	    {
+		Opportunity opertunity = OpportunityUtil.getOpportunity(js.getLong(i));
+		if (opertunity != null)
+		{
+		    list.add(opertunity.name);
+
+		}
+	    }
+
+	}
+	return list;
+    }
+
+    /**
+     * gets the list of task names by giving array of task ids
+     * 
+     * @param js
+     * @return
+     * @throws JSONException
+     */
+    public static List<String> getTaskNames(JSONArray js) throws JSONException
+    {
+	List<String> list = new ArrayList<>();
+
+	for (int i = 0; i <= js.length() - 1; i++)
+	{
+
+	    if (js.get(i) != null)
+	    {
+		Task task = TaskUtil.getTask(js.getLong(i));
+		if (task != null)
+		{
+		    list.add(task.subject);
+
+		}
+	    }
+
+	}
+	return list;
+    }
+
+    /**
+     * gets list of document names
+     * 
+     * @param js
+     * @return
+     * @throws JSONException
+     */
+    public static List<String> getDocumentNames(JSONArray js) throws JSONException
+    {
+	List<String> list = new ArrayList<>();
+	String contact_name = "";
+	for (int i = 0; i <= js.length() - 1; i++)
+	{
+
+	    if (js.get(i) != null)
+	    {
+		Document document = DocumentUtil.getDocument(js.getLong(i));
+		if (document != null)
+		{
+		    list.add(document.name);
+
+		}
+	    }
+
+	}
+	return list;
+    }
+
 }

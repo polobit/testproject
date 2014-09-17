@@ -33,13 +33,13 @@
                                         <option value="DEAL_IS_ADDED">Deal is added</option>
                                         <option value="DEAL_IS_DELETED">Deal is deleted</option>
                                         <option value="DEAL_MILESTONE_IS_CHANGED">Deal milestone is changed</option>
-										<optgroup label="Stripe">
-										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
-                                        <!--<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>-->
 										<optgroup label="Timer">
 										<option value="RUNS_DAILY">Daily</option>
                                         <option value="RUNS_WEEKLY">Weekly</option>
                                         <option value="RUNS_MONTHLY">Monthly</option>
+										<optgroup label="Payments">
+										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
+                                        <!--<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>-->
 									</select>
                                 </div>
                             </div>
@@ -71,7 +71,6 @@
                         </div>
 						<div class="control-group" style="display:none;">
 							<div class="controls" style="margin-left:220px!important">
-							<small>You need to <a href="https://stripe.com/docs/webhooks#configuring-your-webhook-settings" target="_blank">setup webhooks</a> in your stripe account for this.</small></br>
 							<select id="trigger-stripe-event" name="trigger_stripe_event" class="required">
 									<option value="">Select Stripe Event</option>
 									<option value="CHARGE_SUCCEEDED" id="charge-succeeded">Charge succeeded</option>
@@ -80,6 +79,9 @@
 									<option value="CHARGE_CAPTURED" id="charge-captured">Charge captured</option>
 									<option value="CHARGE_UPDATED" id="charge-updated">Charge updated</option>
 							</select>
+							<div style="margin-top:2px;">
+							<small>You need to <a href="https://stripe.com/docs/webhooks#configuring-your-webhook-settings" target="_blank">setup webhooks</a> in your stripe account for this</small>
+							</div>
 							</div>
 						</div>
 						<div class="control-group" style="display:none;">

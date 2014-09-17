@@ -635,6 +635,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		    this.name = oldDomainUser.name;
 	    }
 	}
+	if (this.is_account_owner)
+	{
+
+	    if (this.id != null)
+	    {
+		// Get Old password
+		DomainUser oldDomainUser = DomainUserUtil.getDomainUser(id);
+		this.referer.reference_by_domain = oldDomainUser.referer.reference_by_domain;
+	    }
+
+	}
 
 	// Sets user scopes
 	setScopes();

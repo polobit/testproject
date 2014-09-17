@@ -1,5 +1,4 @@
 <script id="settings-imap-prefs-template" type="text/html">
-<div class="span1"><div style="font-size: 22px;margin: 10px;padding-top: 80px;"> Or </div></div>
 <div class="span3 well" style="margin-left:5px;">
     <form id="imap-prefs-form">
         <legend>IMAP</legend>
@@ -42,9 +41,7 @@
             </div>
             <div class="form-actions"> 
                 <button type="submit" class="save btn btn-primary" style="margin-left:-15pt">Save </button>
-                {{#if id}}
-                <button class="delete btn">Delete </button>
-                {{/if}}
+                <a href="#email" class="btn">Cancel</a>
             </div>
         </fieldset>
     </form>

@@ -201,9 +201,13 @@ $(function()
 									var splits = name.split("-");
 									name = splits[1];
 									var subType = splits[0];
+									if(subType=="GOOGLE"){
+										property["subtype"] = "GOOGLE-PLUS";
+									}else{
 									property["subtype"] = subType;
 									console.log($(select).attr('class'));
 									property["type"] = type;
+									}
 								}
 
 								// Set the value and name fields
@@ -368,11 +372,16 @@ $('#import-comp')
 							else if (name.indexOf("-") != -1)
 							{
 								var splits = name.split("-");
+								
 								name = splits[1];
 								var subType = splits[0];
+								if(subType=="GOOGLE"){
+									property["subtype"] = "GOOGLE-PLUS";
+								}else{
 								property["subtype"] = subType;
 								console.log($(select).attr('class'));
 								property["type"] = type;
+								}
 							}
 
 							// Set the value and name fields
@@ -584,14 +593,14 @@ $('#import-deals')
 
 					// Represents prototype of contact, which specifies the
 					// order of properties
-					var contact = model;
+					var Opportunity = model;
 
-					console.log(contact);
+					console.log(Opportunity);
 
 					// Sends request to save the contacts uploaded from csv,
 					// present in the blobstore. Contact is sent to save
 					// each row in csv file in to a contact
-					$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Deals&key=" + BLOB_KEY, data : JSON.stringify(contact),
+					$.ajax({ type : 'POST', url : "/core/api/upload/save?type=Deals&key=" + BLOB_KEY, data : JSON.stringify(Opportunity),
 						contentType : "application/json", success : function(data)
 						{
 							// Navigate to contacts page

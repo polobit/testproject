@@ -1,28 +1,23 @@
-<!-- Indices written at Fri, 12 Sep 2014 15:53:12 IST -->
+<!-- Indices written at Tue, 16 Sep 2014 19:21:21 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="pipeline" direction="asc"/>
-        <property name="created_time" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 5 times in query history -->
+    <!-- Used 15 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="milestone" direction="asc"/>
         <property name="pipeline" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
     
-    <datastore-index kind="Widget" ancestor="true" source="manual">
-        <property name="widget_type" direction="asc"/>
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="user" direction="asc"/>
+        <property name="time" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
