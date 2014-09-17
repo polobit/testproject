@@ -48,6 +48,12 @@ $(function(){
 		var el = $("#opportunityForm");
 		$("#opportunityModal").modal('show');
 		
+		add_custom_fields_to_form({}, function(data){
+			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+			$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+			
+		}, "DEAL");
+		
 		// Fills owner select element
 		populateUsers("owners-list", el, undefined, undefined, function(data){
 			

@@ -196,6 +196,30 @@
 
 {{/if_equals}}
 
+{{#if_equals "TASK_STATUS_CHANGE" activity_type}}
+	<div>
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left">
+<div>	
+ Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> status  changed from {{get_normal_name custom2}} to {{get_normal_name custom1}}  
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+
+
 {{#if_equals "BULK_DELETE" activity_type}}
 	
 	<div style="margin-right:15px;" class="pull-left">

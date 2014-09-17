@@ -433,7 +433,7 @@ public class ActivityUtil
 	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
 
 	if (max != 0)
-	    return dao.fetchAll(max, cursor, searchMap);
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "time");
 
 	return dao.listByProperty(searchMap);
     }

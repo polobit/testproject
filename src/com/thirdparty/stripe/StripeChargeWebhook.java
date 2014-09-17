@@ -222,7 +222,7 @@ public class StripeChargeWebhook extends HttpServlet
 	    String defaultCardId = stripeJson.getJSONObject("data").getJSONObject("object").getString("default_card");
 	    if (!StringUtils.equals(defaultCardId, "null"))
 	    {
-		JSONArray customerCards = stripeJson.getJSONObject("data").getJSONObject("object").getJSONArray("cards");
+		JSONArray customerCards = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("cards").getJSONArray("data");
 		for (int i = 0; i < customerCards.length(); i++)
 		{
 		    JSONObject customerCard = customerCards.getJSONObject(i);
