@@ -49,7 +49,7 @@ function publishLoginEvent(pubnub)
 	publishJSON["login_time"] = new Date().getTime();
 	
 	// Message has data.
-	pubnub.publish({ channel : "_localhost", message : publishJSON, callback : function(info)
+	pubnub.publish({ channel : CURRENT_DOMAIN_USER['domain'], message : publishJSON, callback : function(info)
 	{
 		console.log(info);
 	}});

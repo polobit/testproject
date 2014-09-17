@@ -35,7 +35,7 @@ function downloadAndRegisterForNotifications()
 function getDomainFromCurrentUser()
 {
 		var domain = CURRENT_DOMAIN_USER['domain'];
-		subscribeToPubNub("_localhost", function(message)
+		subscribeToPubNub(domain, function(message)
 		{
 
 			_setupNotification(message);

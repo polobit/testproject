@@ -25,7 +25,7 @@ function updateActivty(params)
 {
 
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sort_collection : false, templateKey : "activity-list-log",
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time', descending : true, templateKey : "activity-list-log",
 		cursor : true, page_size : 25, individual_tag_name : 'li',
 		postRenderCallback : function(el) {
 			includeTimeAgo(el);

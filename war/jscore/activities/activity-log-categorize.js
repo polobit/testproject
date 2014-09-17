@@ -163,15 +163,18 @@ function updatedeals(ele)
 		}
 	});
 
-	// Fills milestone select element
-	populateMilestones(dealForm, undefined, value, function(data)
-	{
-		dealForm.find("#milestone").html(data);
-		if (value.milestone)
-		{
-			$("#milestone", dealForm).find('option[value=\"' + value.milestone + '\"]').attr("selected", "selected");
-		}
-		$("#milestone", dealForm).closest('div').find('.loading-img').hide();
+// Fills the pipelines list in the select menu.
+	populateTracks(dealForm, undefined, value, function(pipelinesList){
+
+		// Fills milestone select element
+		populateMilestones(dealForm, undefined, value.pipeline_id, value, function(data){
+			dealForm.find("#milestone").html(data);
+			if (value.milestone) {
+				$("#milestone", dealForm).find('option[value=\"'+value.milestone+'\"]')
+						.attr("selected", "selected");
+			}
+			$("#milestone", dealForm).closest('div').find('.loading-img').hide();
+		});
 	});
 
 	// Add notes in deal modal

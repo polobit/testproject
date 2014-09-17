@@ -20,7 +20,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 		{
 			$('#content').find("#user-select").append("<li><a href=''>All Users</a></li>");
 
-			var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesofcurrentdomainuser', sort_collection : false,
+			var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesofcurrentdomainuser', sortKey : 'time', descending : true,
 				templateKey : "activity-list-log", cursor : true, page_size : 25, individual_tag_name : 'li', postRenderCallback : function(el)
 				{
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()

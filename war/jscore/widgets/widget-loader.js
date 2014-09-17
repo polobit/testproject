@@ -12,7 +12,8 @@ var widget_template_loaded_map = {};
  */
 function loadWidgets(el, contact)
 {
-
+	// Before loading the widgets, clear the queue of requests.
+	queueClear("widget_queue");
 	// Create Data JSON
 	var data = { contact : contact };
 
@@ -409,6 +410,14 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
 			console.log('completed post');
 		} });
 	});
+}
+
+/**
+ * Aborts all the requests in the queue.
+ * @param queueName the name of the queue.
+ */
+function queueClear(queueName){
+	$.ajaxq.clear(queueName);
 }
 
 /**

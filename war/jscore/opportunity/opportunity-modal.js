@@ -279,7 +279,7 @@ function show_deal(){
 		var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
 		$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
 		
-	}, "DEAL")
+	}, "DEAL");
 	
 	
 	
