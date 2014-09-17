@@ -822,7 +822,7 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("milestone"))
 			{
 			    mileStoneValue = dealPropValues[i];
-			    if ( mileStoneValue != null && (!mileStoneValue.isEmpty()))
+			    if (mileStoneValue != null && (!mileStoneValue.isEmpty()))
 			    {
 				if (list != null)
 				{
@@ -849,21 +849,23 @@ public class CSVUtil
 			    String prob = dealPropValues[i];
 			    if (prob != null && (!prob.isEmpty()))
 			    {
-				Double probability = Double.parseDouble(parse(prob));
-				if (probability > 100)
+				try
 				{
-				    opportunity.probability = 100;
-				}
-				else
-				{
-				    try
+				    Double probability = Double.parseDouble(parse(prob));
+				    if (probability > 100)
 				    {
+					opportunity.probability = 100;
+				    }
+				    else
+				    {
+
 					opportunity.probability = (int) Math.round(probability);
+
 				    }
-				    catch (NumberFormatException | ClassCastException e)
-				    {
-					e.printStackTrace();
-				    }
+				}
+				catch (NumberFormatException | ClassCastException e)
+				{
+				    e.printStackTrace();
 				}
 			    }
 			}
@@ -872,14 +874,21 @@ public class CSVUtil
 			    String val = dealPropValues[i];
 			    if (val != null && (!val.isEmpty()))
 			    {
-				Double dealValue = Double.parseDouble(parse(val));
-				if (dealValue > Double.valueOf(1000000000000.0))
+				try
 				{
-				    opportunity.expected_value = 0.0;
+				    Double dealValue = Double.parseDouble(parse(val));
+				    if (dealValue > Double.valueOf(1000000000000.0))
+				    {
+					opportunity.expected_value = 0.0;
+				    }
+				    else
+				    {
+					opportunity.expected_value = dealValue;
+				    }
 				}
-				else
+				catch (NumberFormatException e)
 				{
-				    opportunity.expected_value = dealValue;
+				    e.printStackTrace();
 				}
 			    }
 			}
@@ -1031,7 +1040,9 @@ public class CSVUtil
 
     private String parse(String data)
     {
-	return data.replaceAll("[\\%$&*#@!()+\\- A-Za-z]", "").trim();
+	String val =  data.replaceAll("[\\W A-Za-z]", "");
+	System.out.println(val);
+	return val.trim();
     }
 
 }
