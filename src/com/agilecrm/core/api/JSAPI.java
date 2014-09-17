@@ -33,6 +33,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.gadget.GadgetTemplate;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
@@ -143,8 +144,15 @@ public class JSAPI
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
 
-	    // If zero, save it
-	    contact.save();
+	    try
+	    {
+		// If zero, save it
+		contact.save();
+	    }
+	    catch (PlanRestrictedException e)
+	    {
+		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	    }
 
 	    return mapper.writeValueAsString(contact);
 	}
