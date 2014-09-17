@@ -822,7 +822,7 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("milestone"))
 			{
 			    mileStoneValue = dealPropValues[i];
-			    if (!mileStoneValue.isEmpty())
+			    if ( mileStoneValue != null && (!mileStoneValue.isEmpty()))
 			    {
 				if (list != null)
 				{
@@ -846,33 +846,41 @@ public class CSVUtil
 			}
 			else if (value.equals("probability"))
 			{
-			    Double probability = Double.parseDouble(parse(dealPropValues[i]));
-			    if (probability > 100)
+			    String prob = dealPropValues[i];
+			    if (prob != null && (!prob.isEmpty()))
 			    {
-				opportunity.probability = 100;
-			    }
-			    else
-			    {
-				try
+				Double probability = Double.parseDouble(parse(prob));
+				if (probability > 100)
 				{
-				    opportunity.probability = (int) Math.round(probability);
+				    opportunity.probability = 100;
 				}
-				catch (NumberFormatException | ClassCastException e)
+				else
 				{
-				    e.printStackTrace();
+				    try
+				    {
+					opportunity.probability = (int) Math.round(probability);
+				    }
+				    catch (NumberFormatException | ClassCastException e)
+				    {
+					e.printStackTrace();
+				    }
 				}
 			    }
 			}
 			else if (value.equalsIgnoreCase("value"))
 			{
-			    Double dealValue = Double.parseDouble(parse(dealPropValues[i]));
-			    if (dealValue > Double.valueOf(1000000000000.0))
+			    String val = dealPropValues[i];
+			    if (val != null && (!val.isEmpty()))
 			    {
-				opportunity.expected_value = 0.0;
-			    }
-			    else
-			    {
-				opportunity.expected_value = dealValue;
+				Double dealValue = Double.parseDouble(parse(val));
+				if (dealValue > Double.valueOf(1000000000000.0))
+				{
+				    opportunity.expected_value = 0.0;
+				}
+				else
+				{
+				    opportunity.expected_value = dealValue;
+				}
 			    }
 			}
 			else if (value.equalsIgnoreCase("closeDate"))
@@ -880,21 +888,22 @@ public class CSVUtil
 			    String dealDate = dealPropValues[i];
 			    if (dealDate != null && !dealDate.isEmpty())
 			    {
-				//date is dd/MM/yyyy format
-				String[]data = dealDate.split("/");
-				if(data.length == 3){
+				// date is dd/MM/yyyy format
+				String[] data = dealDate.split("/");
+				if (data.length == 3)
+				{
 				    Calendar c = Calendar.getInstance();
 				    int year = Integer.parseInt(data[2]);
 				    int month = Integer.parseInt(data[0]);
 				    int day = Integer.parseInt(data[1]);
-				    c.set(year, month-1, day);
+				    c.set(year, month - 1, day);
 				    Date date = c.getTime();
-				    opportunity.close_date = date.getTime()/1000;
-				}else{
+				    opportunity.close_date = date.getTime() / 1000;
+				}
+				else
+				{
 				    opportunity.close_date = null;
 				}
-				
-				
 
 			    }
 			    else
@@ -913,7 +922,7 @@ public class CSVUtil
 				try
 				{
 				    Contact contact = ContactUtil.searchContactByEmail(data);
-				    if (contact.id != null)
+				    if (contact != null && contact.id != null)
 				    {
 					opportunity.addContactIds(contact.id.toString());
 				    }
@@ -965,7 +974,7 @@ public class CSVUtil
 				if (s.equalsIgnoreCase(mileStoneValue))
 				{
 				    opportunity.milestone = s;
-				    opportunity.track = "Default";
+
 				    break;
 				}
 			    }
@@ -973,6 +982,10 @@ public class CSVUtil
 		    }
 
 		}
+	    }
+	    if (opportunity.track == null)
+	    {
+		opportunity.track = "Default";
 	    }
 	    // add all custom field in deals
 	    opportunity.custom_data = customFields;
