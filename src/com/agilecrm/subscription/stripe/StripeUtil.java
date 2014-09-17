@@ -85,6 +85,25 @@ public class StripeUtil
     }
 
     /**
+     * Creates map to create customer without any subscription just by adding
+     * credit card
+     */
+    public static Map<String, Object> getCustomerParams(CreditCard customerCard) throws JsonParseException,
+	    JsonMappingException, IOException
+    {
+	Map<String, Object> customerParams = new HashMap<String, Object>();
+
+	// Gets credit card details map
+	customerParams.put("card", getCardParams(customerCard));
+
+	// Sets Description and Email for subscription
+	customerParams.put("description", NamespaceManager.get());
+	customerParams.put("email", DomainUserUtil.getCurrentDomainUser().email);
+
+	return customerParams;
+    }
+
+    /**
      * This method creates a Map with creditcard details as requirement of
      * stripe
      * 
@@ -136,14 +155,15 @@ public class StripeUtil
      * 
      * @param customerid
      * @return
-     * @throws APIException 
-     * @throws CardException 
-     * @throws APIConnectionException 
-     * @throws InvalidRequestException 
-     * @throws AuthenticationException 
+     * @throws APIException
+     * @throws CardException
+     * @throws APIConnectionException
+     * @throws InvalidRequestException
+     * @throws AuthenticationException
      * @throws StripeException
      */
-    public static Event getEventFromJSON(String event_json_string) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException
+    public static Event getEventFromJSON(String event_json_string) throws AuthenticationException,
+	    InvalidRequestException, APIConnectionException, CardException, APIException
     {
 	System.out.println();
 

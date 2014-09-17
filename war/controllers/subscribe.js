@@ -15,10 +15,14 @@ var SubscribeRouter = Backbone.Router.extend({
 	/* Updating subscription details */
 	"updatecard" : "updateCreditCard", "updateplan" : "updatePlan", "purchase-plan" : "purchasePlan",
 	
-	
+	"purchase-plan-new" : "purchasePlanNew",
 
 	/* Invoices */
-	"invoice" : "invoice", "invoice/:id" : "invoiceDetails" },
+	"invoice" : "invoice", "invoice/:id" : "invoiceDetails",
+	"suscribe_new" : "suscribe_new" ,
+	"email_subscription" : "email_subscription"
+		
+	},
 
 	/**
 	 * Shows the subscription details(If subscribed ) of subscription form, this
@@ -75,6 +79,78 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(subscribe_plan.render().el);
 	},
 	
+	
+	suscribe_new : function()
+	{
+		var that = this;
+		var counter = 0;
+		/*
+		 * Creates new view with a render callback to setup expiry dates
+		 * field(show dropdown of month and year), countries list and respective
+		 * states list using countries.js plugin account stats in subscription
+		 * page
+		 */
+		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription", template : "subscribe", window : 'subscribe',
+		/*
+		 * postRenderCallback : function(el) { // Setup account statistics
+		 * set_up_account_stats(el); // Load date and year for card expiry
+		 * card_expiry(el); // Load countries and respective states
+		 * head.js(LIB_PATH + 'lib/countries.js', function() {
+		 * print_country($("#country", el)); }); },
+		 */
+		postRenderCallback : function(el)
+		{
+			if(++counter <= 1)
+			{
+				$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+					e.preventDefault();
+					that.email_subscription();
+				})
+				
+				
+			}
+			// that.email_subscription();
+			
+		}});
+		
+		$('#content').html(subscribe_plan.render().el);
+	},
+	
+	/**
+	 * After selecting plan, page is navigated to purchase plan where user enter
+	 * his credit card details. It shows a form with countries and states and
+	 * fields to enter credit card details
+	 */
+	purchasePlanNew : function()
+	{
+
+		var that = this;
+		var window = this;
+		// Plan json is posted along with credit card details
+		var plan = plan_json
+		var upgrade_plan = new Base_Model_View({ url : "core/api/subscription", template : "purchase-plan-new", isNew : true,
+			postRenderCallback : function(el)
+			{
+				head.js(LIB_PATH + 'lib/countries.js', function()
+				{
+					print_country($("#country", el));
+				});
+				
+				
+			},
+			saveCallback : function(data)
+			{
+				window.navigate("subscribe", { trigger : true });
+				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
+			}
+			
+		});
+
+		// Prepend Loading
+		$('#content').html(upgrade_plan.render().el);
+		$(".active").removeClass("active");
+		// $("#fat-menu").addClass("active");
+	} ,
 	
 	
 	
@@ -198,7 +274,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	purchasePlan : function()
 	{
 		// If plan is not defined i.e., reloaded, or plan not chosen properly,
-		// then page is navigated back to subcription/ choose plan page
+		// then page is navigated back to subscription/ choose plan page
 		if (!plan_json.plan)
 		{
 			this.navigate("subscribe", { trigger : true });
@@ -237,6 +313,35 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	
 
+	/**
+	 * Email plans
+	 */
+	email_subscription : function(subscription)
+	{
+		var counter = 0;
+		var viewParams = {
+				url : "core/api/subscription",
+				template : "purchase-email-plan",
+				postRenderCallback : function(el) {
+					
+					if(++counter <= 1)
+						$("#email-plan-upgrade-modal", el).modal('show');
+					
+				}
+			}
+		
+		if(subscription)
+		{
+			viewParams["data"] = subscription;
+		}
+		
+		var counter = 0;
+		var email_subscription = new Base_Model_View(viewParams);
+		
+		// Prepend Loading
+		email_subscription.render();
+	},
+	
 	
 
 });

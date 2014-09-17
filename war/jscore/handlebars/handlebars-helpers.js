@@ -2758,4 +2758,25 @@ $(function()
 		return options.inverse(this)
     });
     
+    Handlebars.registerHelper('getAccountPlanName', function(plan_name){
+    	if(!plan_name)
+    		return "Free";
+    	
+    	var plan_fragments = plan_name.split("_");
+    	
+    	return ucfirst(plan_fragments[0]);
+    		
+    	
+    });
+    
+    Handlebars.registerHelper('getAccountPlanInteval', function(plan_name){
+    	if(!plan_name)
+    		return "Monthly";
+    	
+    	var plan_fragments = plan_name.split("_");
+    	
+    	return ucfirst(plan_fragments[1]);
+    	
+    });
+    
  });

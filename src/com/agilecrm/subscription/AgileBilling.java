@@ -25,6 +25,11 @@ import com.stripe.model.Invoice;
 public interface AgileBilling
 {
     /**
+     * Attaches card/update card in payment gateway 
+     */
+    public JSONObject addCreditCard(CreditCard card) throws Exception;
+    
+    /**
      * Creates customer and return Customer as {@link JSONObject}
      * 
      * @param cardDetails

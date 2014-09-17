@@ -60,8 +60,6 @@ public class SubscriptionApi
     }
 
     
-   
-    
     /**
      * Called from client either for new Subscription or updating user credit
      * card or plan , Based on the type of request(create, update(credit card or

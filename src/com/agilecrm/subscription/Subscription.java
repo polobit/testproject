@@ -170,7 +170,22 @@ public class Subscription
     public static Subscription getSubscription()
     {
 	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Subscription.class).get();
+	Subscription subscription = ofy.query(Subscription.class).get();
+	if(subscription == null)
+	{
+	   subscription =  new Subscription();
+	   subscription.fillDefaultPlans();
+	}
+	
+	return subscription;
+    }
+    
+    private void fillDefaultPlans()
+    {
+	if(plan == null)
+	{
+	    plan = new Plan(PlanType.FREE.toString(), 2);
+	}	
     }
 
     /**
@@ -276,7 +291,7 @@ public class Subscription
 
 	return this;
     }
-    
+
     /**
      * Creates a Customer in respective {@link Gateway} and store customer
      * details in {@link Subscription} object
@@ -361,9 +376,13 @@ public class Subscription
 	// Gets subscription of current domain
 	Subscription subscription = getSubscription();
 
-	// Updates credit card details in related gateway
-	subscription.billing_data = subscription.getAgileBilling().updateCreditCard(subscription.billing_data,
-		cardDetails);
+	AgileBilling billing = subscription.getAgileBilling();
+
+	if (subscription.billing_data != null)
+	    // Updates credit card details in related gateway
+	    subscription.billing_data = billing.updateCreditCard(subscription.billing_data, cardDetails);
+	else
+	    subscription.billing_data = billing.addCreditCard(cardDetails);
 
 	// Assigns details which will be encrypted before saving
 	// subscription entity
@@ -376,7 +395,7 @@ public class Subscription
     }
 
     /**
-     * Fetchs {@link List} of {@link Invoice} from respective gateway
+     * Fetches {@link List} of {@link Invoice} from respective gateway
      * 
      * @return {@link List} of {@link Invoice}
      * @throws Exception
@@ -464,9 +483,9 @@ public class Subscription
     @Produces("application/json")
     public String getBillingData() throws Exception
     {
-	if(billing_data == null)
+	if (billing_data == null)
 	    return null;
-	
+
 	return billing_data.toString();
     }
 

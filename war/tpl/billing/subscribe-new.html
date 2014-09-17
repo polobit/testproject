@@ -1,0 +1,73 @@
+<script id="subscribe-template" type="text/html">
+<div class="row">
+	<div class="span12">
+		<div class="page-header">
+			<h1>Plan and Upgrade
+				<a href="#" id="cancel-account-request" class="pull-right btn btn-danger" align="center" style="margin-top:10px;">Cancel My Account</a>
+			</h1>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span11">
+		<div class="span4">
+		<div class="well" style="width: 220px; height: 200px;">
+			<div style="width: 220px; height: 180px;">
+				<div style="border-bottom: 1px solid #e5e5e5">
+					<h3>Your current plan</h3>
+				</div>
+				<div class="clearfix"></div>
+				<div style="margin-top:10%;text-align:center;font-size:15px">
+					{{#if plan}}
+						{{getAccountPlanName plan.plan_type}} {{getAccountPlanInteval plan.plan_type}} <br/>
+						{{plan.quantity}} Users
+						{{else}}
+							Free <br/>
+						    2 Users
+					{{/if}}
+				</div>
+			</div>
+			<a class="btn btn-primary" href="#subscribe" id="account_plan_upgrade"> Upgrade </a>
+
+		</div>
+		</div>
+	<div class="span4">
+	<div class="well" style="width: 220px; height: 200px;">
+		<div style="width: 220px; height: 180px;">
+			<div style="border-bottom: 1px solid #e5e5e5;">
+				<h3>Email plan</h3>
+			</div>
+			<div class="clearfix"></div>
+				<div style="margin-top:10%;text-align:center;font-size:15px">
+
+				{{#if emailPlan}}
+						{{getAccountPlanName emailPlan.plan_type}} <br/>
+						{{getAccountPlanInteval emailPlan.plan_type}}
+						{{else}}
+						 	5000 <br>
+							Powered by AgileCRM
+					{{/if}}
+			</div>
+		</div>
+		<a class="btn btn-primary" href="#" id="account_email_plan_upgrade"> Modify </a>
+</div>
+	</div>
+</div>
+</div>
+<div class="clear-fix"></div>
+<div class="row-fluid" style="margin-top:50px">
+	<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
+		<h3>Your Credit Card Details</h3>
+	</div>
+
+	<div class="clear-fix"></div>
+{{#if billingData}}
+	<div class="card-details">
+		Name : Yaswanth </br> Credit card : ends with 4242 (Expiry : xx/xx/xxxx) <a
+			href="#updatecard">Change card</a>
+	</div>
+	{{else}}
+		No Credit Cards attached.
+{{/if}}
+</div>
+</script>

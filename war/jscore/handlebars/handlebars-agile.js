@@ -31,7 +31,12 @@ var is_async = callback && typeof (callback) == "function";
 
 // Check if it is (compiled template) present in templates
 if (Handlebars_Compiled_Templates[templateName])
-return Handlebars_Compiled_Templates[templateName](context);
+{
+	if(is_async)
+		callback(Handlebars_Compiled_Templates[templateName](context));
+	else 
+		return Handlebars_Compiled_Templates[templateName](context);
+}		
 else
 Handlebars_Compiled_Templates = {};
 
@@ -168,6 +173,7 @@ template_relative_urls.push("workflow.js");
 if (templateName.indexOf("purchase") == 0 || templateName.indexOf("subscription") == 0 || templateName.indexOf("subscribe") == 0 || templateName
 .indexOf("invoice") == 0)
 {
+	alert("loading billing");
 template_relative_urls.push("billing.js");
 }
 

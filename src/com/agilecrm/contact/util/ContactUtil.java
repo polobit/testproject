@@ -762,7 +762,7 @@ public class ContactUtil
 	    // If company is different then remove the exiting company from contact
 	    if (existingField.name.equals(Contact.COMPANY))
 	    {
-		if (!StringUtils.equals(existingField.value, field.value))
+		if (!StringUtils.equalsIgnoreCase(existingField.value, field.value))
 		{
 		    oldContact.contact_company_id = null;
 		    oldContact.contact_company_key = null;
