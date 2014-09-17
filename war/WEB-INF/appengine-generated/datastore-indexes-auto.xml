@@ -25,5 +25,10 @@
         <property name="user" direction="asc"/>
         <property name="time" direction="asc"/>
     </datastore-index>
+    <!-- Used 5 times in query history -->
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="entity_type" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
 
 </datastore-indexes>
