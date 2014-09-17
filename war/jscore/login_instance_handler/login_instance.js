@@ -26,14 +26,12 @@ function check_login_instance(pubnub_message)
 			return;
 		
 		pubnub_message["email"] = get_current_user_email();
+		
+		// Sets cookie to user it in error page to show information. 0.0025 is 10min in approx
 		createCookie("_multiple_instances", JSON.stringify(pubnub_message), 0.0025);
 		
-		setTimeout(function()
-				{
-						window.location = "/login?ml=true";
-				}, 3000);
+		window.location = "/login?ml=true";
 		
-		showNotyPopUp('information', "Logging out", "top", 4000);
 		
 	}
 		
