@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.account.APIKey;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
@@ -26,6 +27,7 @@ import com.agilecrm.workflows.triggers.Trigger;
 import com.agilecrm.workflows.triggers.util.TriggerUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
 import com.googlecode.objectify.Key;
+import com.stripe.model.Customer;
 
 @SuppressWarnings("serial")
 public class StripeChargeWebhook extends HttpServlet
@@ -92,7 +94,8 @@ public class StripeChargeWebhook extends HttpServlet
 		System.out.println("trigger is " + trigger.name);
 		System.out.println("campaign id is " + trigger.campaign_id);
 
-		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase()))
+		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase())
+			|| stripeEventMatch(eventType, stripeJson, trigger.trigger_stripe_event))
 		{
 		    System.out.println("Assigning campaign to contact ... ");
 		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
@@ -187,6 +190,8 @@ public class StripeChargeWebhook extends HttpServlet
 		cJson = stripeJson.getJSONObject("data").getJSONObject("object").getJSONObject("card");
 	    else if (stripeEventType.contains("customer"))
 		cJson = getDefaultCustomerCard(stripeJson);
+	    else if (stripeEventType.contains("invoice"))
+		cJson = getCustomerFromInvoice(stripeJson);
 
 	    return cJson;
 	}
@@ -238,5 +243,50 @@ public class StripeChargeWebhook extends HttpServlet
 	{
 	    return null;
 	}
+    }
+
+    public JSONObject getCustomerFromInvoice(JSONObject stripeJson)
+    {
+	try
+	{
+	    String stripeCustomerId = stripeJson.getString("customer");
+	    if (!StringUtils.equals(stripeCustomerId, "null"))
+	    {
+		Customer customer = Customer.retrieve(stripeCustomerId, Globals.STRIPE_API_KEY);
+		if (customer != null)
+		{
+		    JSONObject customerJson = new JSONObject(customer);
+		    JSONObject cJson = getDefaultCustomerCard(customerJson);
+		    return cJson;
+		}
+		return null;
+	    }
+	    return null;
+	}
+	catch (Exception e)
+	{
+	    return null;
+	}
+    }
+
+    public Boolean stripeEventMatch(String stripeEvent, JSONObject stripeJson, String triggerStripeEvent)
+    {
+	if (stripeEvent.contains("invoice"))
+	{
+	    try
+	    {
+		String attemptCount = stripeJson.getJSONObject("data").getJSONObject("object").getString("attempt_count");
+		if (StringUtils.equals(attemptCount, triggerStripeEvent))
+		    return true;
+		else
+		    return false;
+	    }
+	    catch (JSONException e)
+	    {
+		return false;
+	    }
+	}
+	else
+	    return false;
     }
 }
