@@ -189,9 +189,12 @@ public class BulkActionsAPI
 
 	    System.out.println("contactids in bulk actions api " + contact_ids);
 	    System.out.println(data);
+	     if (contact_ids != null)
+	    {
 	    JSONArray jsncontact_ids = new JSONArray(contact_ids);
 	    System.out.println("contactids in bulk actions api json array " + jsncontact_ids);
 	    ActivitySave.createBulkActionActivity(jsncontact_ids, action_type, data);
+	    }
 
 	}
 	catch (JSONException e1)
