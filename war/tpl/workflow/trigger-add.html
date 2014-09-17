@@ -39,7 +39,8 @@
                                         <option value="RUNS_MONTHLY">Monthly</option>
 										<optgroup label="Payments">
 										<option value="STRIPE_CHARGE_EVENT" id="stripe-charge-event">Stripe Event</option>
-                                        <!--<option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>-->
+										<optgroup label="Ecommerce">
+                                        <option value="SHOPIFY_EVENT" id="shopify-event">Shopify Event</option>
 									</select>
                                 </div>
                             </div>
@@ -73,12 +74,18 @@
 							<div class="controls" style="margin-left:220px!important">
 							<select id="trigger-stripe-event" name="trigger_stripe_event" class="required">
 									<option value="">Select Stripe Event</option>
+									<optgroup label="Charge">
 									<option value="CHARGE_SUCCEEDED" id="charge-succeeded">Charge succeeded</option>
 									<option value="CHARGE_FAILED" id="charge-failed">Charge failed</option>
 									<option value="CHARGE_REFUNDED" id="charge-refunded">Charge refunded</option>
 									<option value="CHARGE_CAPTURED" id="charge-captured">Charge captured</option>
 									<option value="CHARGE_UPDATED" id="charge-updated">Charge updated</option>
+									<optgroup label="Customer">
 									<option value="CUSTOMER_DELETED" id="customer-deleted">Customer deleted</option>
+									<optgroup label="Invoice payment failed">
+									<option value="1" id="invoice-payment-failed-1">Attempt 1</option>
+									<option value="2" id="invoice-payment-failed-2">Attempt 2</option>
+									<option value="3" id="invoice-payment-failed-3">Attempt 3</option>
 							</select>
 							<div style="margin-top:2px;">
 							<small>You need to <a href="https://stripe.com/docs/webhooks#configuring-your-webhook-settings" target="_blank">setup webhooks</a> in your stripe account for this</small>
