@@ -39,7 +39,6 @@ import com.google.appengine.api.utils.SystemProperty;
 @SuppressWarnings("serial")
 public class LoginServlet extends HttpServlet
 {
-
     public static String RETURN_PATH_SESSION_PARAM_NAME = "redirect_after_openid";
 
     @Override
@@ -71,6 +70,16 @@ public class LoginServlet extends HttpServlet
 	    response.sendRedirect(Globals.CHOOSE_DOMAIN);
 	    return;
 	}
+	
+	// If request is due to multiple logins, page is redirected to error page
+	String multipleLogin = (String)request.getParameter("ml");
+	
+	if(!StringUtils.isEmpty(multipleLogin))
+	{
+	    handleMulipleLogin(response);
+	}
+	
+	
 
 	// Check the type of authentication
 	try
@@ -218,5 +227,18 @@ public class LoginServlet extends HttpServlet
 	}
 
 	response.sendRedirect("/");
+    }
+    
+    private void handleMulipleLogin(HttpServletResponse response)
+    {
+	try
+	{
+	    response.sendRedirect("error/multiple-login.jsp");
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 }

@@ -6,20 +6,28 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,7 +41,10 @@ import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
@@ -78,7 +89,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE;
+	ACCESS_DENIED, TYPE, PROBABILITY;
 
     }
 
@@ -323,6 +334,10 @@ public class CSVUtil
 		// empty values
 		if (field.name == null || StringUtils.isEmpty(field.value))
 		    continue;
+		if (field.name.equalsIgnoreCase(Contact.NAME))
+		{
+		    field.value = StringUtils.capitalise(csvValues[j].toLowerCase());
+		}
 
 		field.value = csvValues[j];
 
@@ -372,8 +387,7 @@ public class CSVUtil
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.EMAIL));
+		System.out.println("exception raised while saving contact ");
 		e.printStackTrace();
 
 	    }
@@ -456,7 +470,7 @@ public class CSVUtil
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	List<String[]> companies  = getCSVDataFromStream(blobStream, "UTF-8");
+	List<String[]> companies = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (companies.isEmpty())
 	    return;
@@ -577,7 +591,7 @@ public class CSVUtil
 	    if (companyName != null && !companyName.isEmpty())
 	    {
 
-		if (ContactUtil.companyExists(StringUtils.capitalise(companyName.toLowerCase())))
+		if (ContactUtil.companyExists(companyName))
 		{
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
@@ -736,20 +750,19 @@ public class CSVUtil
      * @throws IOException
      */
 
-    public void createDealsFromCSV(InputStream blobStream, String ownerId, String type) throws PlanRestrictedException,
-	    IOException
+    public void createDealsFromCSV(InputStream blobStream, ArrayList<LinkedHashMap<String, String>> schema,
+	    String ownerId) throws PlanRestrictedException, IOException
     {
 	Integer totalDeals = 0;
 	Integer savedDeals = 0;
 	Integer failedDeals = 0;
+	Integer probabilityError = 0;
 	/**
 	 * Reading CSV file from input stream
 	 */
-	CSVReader reader = new CSVReader(new InputStreamReader(blobStream, "UTF-8"));
 	Map<String, Object> status = new HashMap<String, Object>();
 	status.put("type", "Deals");
-	List<String[]> deals = reader.readAll();
-	// remove headings
+	List<String[]> deals = getCSVDataFromStream(blobStream, "UTF-8");
 	if (deals.isEmpty())
 	{
 	    return;
@@ -770,82 +783,241 @@ public class CSVUtil
 	{
 	    Opportunity opportunity = new Opportunity();
 	    String[] dealPropValues = it.next();
+	    String mileStoneValue = null;
+
+	    // retriveing track information
+	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
+	    List<Milestone> list = null;
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
-		String prop = headings[i];
-		if (prop.equalsIgnoreCase("Deal Name") || prop.equalsIgnoreCase("Name"))
-		{
-		    opportunity.name = dealPropValues[i];
-		}
 
-		if (prop.equalsIgnoreCase("Value"))
-		{
-		    opportunity.expected_value = Double.parseDouble(dealPropValues[i]);
-		}
+		LinkedHashMap<String, String> prop = (LinkedHashMap<String, String>) schema.get(i);
 
-		if (prop.equalsIgnoreCase("Probability"))
+		if (prop.size() > 0)
 		{
-		    opportunity.probability = Integer.parseInt(dealPropValues[i]);
-		}
-		if (prop.equalsIgnoreCase("Milestone"))
-		{
-		    opportunity.milestone = StringUtils.capitalise(dealPropValues[i].toLowerCase());
-		}
 
-		if (prop.equalsIgnoreCase("Close Date") || prop.equalsIgnoreCase("close"))
-		{
-		    // set close date
-		    Calendar c = Calendar.getInstance();
-		    try
+		    String type = (String) prop.get("type");
+		    String value = prop.get("value");
+		    if (type.equalsIgnoreCase("SYSTEM"))
 		    {
-			String dateValue = dealPropValues[i];
-			String[] data = dateValue.split("/");
-			c = Calendar.getInstance();
-			if (data.length == 3)
+			if (value.equalsIgnoreCase("name"))
 			{
-			    c.set(Integer.parseInt(data[2]), Integer.parseInt(data[1]), Integer.parseInt(data[0]));
+			    opportunity.name = dealPropValues[i];
+			}
+			else if (value.equalsIgnoreCase("track"))
+			{
+			    String trackName = dealPropValues[i];
+			    list = MilestoneUtil.getMilestonesList(trackName);
+			    if (list != null && list.size() > 0)
+			    {
+				opportunity.track = trackName;
+			    }
+
+			}
+
+			else if (value.equalsIgnoreCase("description"))
+			{
+			    opportunity.description = dealPropValues[i];
+			}
+			else if (value.equalsIgnoreCase("milestone"))
+			{
+			    mileStoneValue = dealPropValues[i];
+			    if (mileStoneValue != null && (!mileStoneValue.isEmpty()))
+			    {
+				if (list != null)
+				{
+				    for (Milestone milestone : list)
+				    {
+					String[] milestonesName = milestone.milestones.split(",");
+					for (String s : milestonesName)
+					{
+					    if (s.equalsIgnoreCase(mileStoneValue))
+					    {
+						opportunity.milestone = mileStoneValue;
+						opportunity.pipeline_id = milestone.id;
+						break;
+					    }
+					}
+				    }
+				}
+
+			    }
+
+			}
+			else if (value.equals("probability"))
+			{
+			    String prob = dealPropValues[i];
+			    if (prob != null && (!prob.isEmpty()))
+			    {
+				try
+				{
+				    Double probability = Double.parseDouble(parse(prob));
+				    if (probability > 100)
+				    {
+					opportunity.probability = 100;
+				    }
+				    else
+				    {
+
+					opportunity.probability = (int) Math.round(probability);
+
+				    }
+				}
+				catch (NumberFormatException | ClassCastException e)
+				{
+				    e.printStackTrace();
+				}
+			    }
+			}
+			else if (value.equalsIgnoreCase("value"))
+			{
+			    String val = dealPropValues[i];
+			    if (val != null && (!val.isEmpty()))
+			    {
+				try
+				{
+				    Double dealValue = Double.parseDouble(parse(val));
+				    if (dealValue > Double.valueOf(1000000000000.0))
+				    {
+					opportunity.expected_value = 0.0;
+				    }
+				    else
+				    {
+					opportunity.expected_value = dealValue;
+				    }
+				}
+				catch (NumberFormatException e)
+				{
+				    e.printStackTrace();
+				}
+			    }
+			}
+			else if (value.equalsIgnoreCase("closeDate"))
+			{
+			    String dealDate = dealPropValues[i];
+			    if (dealDate != null && !dealDate.isEmpty())
+			    {
+				// date is dd/MM/yyyy format
+				String[] data = dealDate.split("/");
+				if (data.length == 3)
+				{
+				    Calendar c = Calendar.getInstance();
+				    int year = Integer.parseInt(data[2]);
+				    int month = Integer.parseInt(data[0]);
+				    int day = Integer.parseInt(data[1]);
+				    c.set(year, month - 1, day);
+				    Date date = c.getTime();
+				    opportunity.close_date = date.getTime() / 1000;
+				}
+				else
+				{
+				    opportunity.close_date = null;
+				}
+
+			    }
+			    else
+			    {
+				opportunity.close_date = null;
+			    }
+
+			}
+			else if (value.equalsIgnoreCase("relatedTo"))
+			{
+			    String data = dealPropValues[i].toLowerCase();
+			    boolean email = isValidEmail(data);
+
+			    if (email)
+			    {
+				try
+				{
+				    Contact contact = ContactUtil.searchContactByEmail(data);
+				    if (contact != null && contact.id != null)
+				    {
+					opportunity.addContactIds(contact.id.toString());
+				    }
+				}
+				catch (NullPointerException e)
+				{
+				    e.printStackTrace();
+				}
+			    }
+			}
+			else if (value.equalsIgnoreCase("note"))
+			{
+			    Note note = new Note();
+			    note.description = dealPropValues[i];
+			    note.save();
+			}
+
+		    }
+		    else
+		    {
+			CustomFieldData custom = new CustomFieldData();
+			custom.name = value;
+			custom.value = dealPropValues[i];
+			customFields.add(custom);
+
+		    }
+		}
+
+	    }
+
+	    opportunity.setOpportunityOwner(ownerKey);
+
+	    // check milestone if null the search in default
+
+	    if (opportunity.milestone == null)
+	    {
+		Milestone milestone = MilestoneUtil.getMilestones();
+		if (milestone != null && !mileStoneValue.isEmpty())
+		{
+		    opportunity.pipeline_id = milestone.id;
+		    // search for milestone name
+		    String[] milestonesValues = milestone.milestones.split(",");
+		    if (milestonesValues.length > 0)
+		    {
+			for (String s : milestonesValues)
+			{
+			    if (s != null)
+			    {
+				if (s.equalsIgnoreCase(mileStoneValue))
+				{
+				    opportunity.milestone = s;
+
+				    break;
+				}
+			    }
 			}
 		    }
 
-		    catch (Exception e)
-		    {
-			e.printStackTrace();
-
-		    }
-		    // System.out.println(c.g);
-
-		    opportunity.close_date = Long.valueOf(c.getTimeInMillis() / 1000);
-		}
-		if (prop.equalsIgnoreCase("Description") || prop.equalsIgnoreCase("Descriptions"))
-		{
-		    opportunity.description = dealPropValues[i];
-		}
-		if (prop.equalsIgnoreCase("Note"))
-		{
-		    Note note = new Note();
-		    note.description = dealPropValues[i];
-		    note.save();
 		}
 	    }
-	    opportunity.setOpportunityOwner(ownerKey);
+	    if (opportunity.track == null)
+	    {
+		opportunity.track = "Default";
+	    }
+	    // add all custom field in deals
+	    opportunity.custom_data = customFields;
 	    try
 	    {
+
 		opportunity.save();
+		savedDeals++;
+
 	    }
 	    catch (Exception e)
 	    {
 		e.printStackTrace();
 		failedDeals++;
 	    }
-	    savedDeals++;
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILD", failedDeals);
+	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
 
-	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] {
-		domainUser, status });
+	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
+		status });
 	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
 
     }
@@ -855,4 +1027,22 @@ public class CSVUtil
 
 	statusMap.put(status, count);
     }
+
+    private boolean isValidEmail(final String hex)
+    {
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+	Matcher matcher = pattern.matcher(hex);
+	return matcher.matches();
+
+    }
+
+    private String parse(String data)
+    {
+	String val =  data.replaceAll("[\\W A-Za-z]", "");
+	System.out.println(val);
+	return val.trim();
+    }
+
 }

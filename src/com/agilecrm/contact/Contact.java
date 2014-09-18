@@ -398,7 +398,7 @@ public class Contact extends Cursor
 
 		if (myMail != null && !myMail.isEmpty())
 		{
-		    countEmails = ContactUtil.searchContactCountByEmailAndType(myMail.trim(), type);
+		    countEmails = ContactUtil.searchContactCountByEmailAndType(myMail, type);
 		    // countEmails =
 		    // ContactUtil.searchContactCountByEmail(myMail);
 		}
@@ -442,8 +442,9 @@ public class Contact extends Cursor
 
 	    }
 	}
-	// convert all Emails in lower case
+
 	convertEmailToLower();
+
 	// Updated time is updated only if particular fields are changed.
 	if (oldContact != null && isDocumentUpdateRequired(oldContact))
 	    updated_time = System.currentTimeMillis() / 1000;
@@ -954,10 +955,8 @@ public class Contact extends Cursor
 	{
 	    if (StringUtils.equals(field.name, EMAIL))
 		field.value = (field.value).toLowerCase();
-	    if (StringUtils.equals(field.name, Contact.NAME))
-	    {
+	    else if (StringUtils.equals(field.name, Contact.NAME))
 		field.value = StringUtils.capitalise(field.value.toLowerCase());
-	    }
 	}
 
     }

@@ -9,6 +9,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.Widget.IntegrationType;
+import com.agilecrm.widgets.Widget.WidgetType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -91,7 +92,7 @@ public class WidgetUtil
 	 * Fetches list of widgets related to AgileUser key and adds is_added
 	 * field as true to default widgets if not present
 	 */
-	return ofy.query(Widget.class).ancestor(userKey).filter("integration_type", null).list();
+	return ofy.query(Widget.class).ancestor(userKey).filter("widget_type !=", WidgetType.EMAIL).list();
     }
 
     /**

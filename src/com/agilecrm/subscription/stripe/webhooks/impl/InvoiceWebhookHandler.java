@@ -18,7 +18,6 @@ import com.agilecrm.util.email.SendMail;
 import com.google.gson.Gson;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
-import com.stripe.model.CustomerCardCollection;
 import com.stripe.model.Event;
 import com.stripe.model.StripeObject;
 
@@ -50,18 +49,19 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    System.out.println("********** Sending mail ***********");
 	    System.out.println(user.email);
-	    
+
 	    System.out.println(getPlanName());
-	    if(StringUtils.containsIgnoreCase(getPlanName(), "email"))
-	    {	
+	    if (StringUtils.containsIgnoreCase(getPlanName(), "email"))
+	    {
 		System.out.println("email plan payment made");
 		sendMail1(SendMail.EMAIL_PAYMENT_RECEIVED_SUBJECT, SendMail.EMAIL_PAYMENT_RECEIVED);
 		return;
 	    }
-	    
+
 	    sendMail1(SendMail.FIRST_PAYMENT_RECEIVED_SUBJECT, SendMail.FIRST_PAYMENT_RECEIVED);
 
-	    updateContactInOurDomain(getContactFromOurDomain(), user.email, subscription, null);
+	    // updateContactInOurDomain(getContactFromOurDomain(), user.email,
+	    // subscription, null);
 	}
 
 	/**
@@ -99,7 +99,6 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	// TODO Auto-generated method stub
 
     }
-
 
     /**
      * Process the payment failed webhookss calls to set subscription flags,
@@ -193,7 +192,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	}
 	return null;
     }
-    
+
     private String getPlanName()
     {
 	return String.valueOf(getPlanDetails().get("plan"));
@@ -213,25 +212,25 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    JSONObject obj = new JSONObject(stripeJSONString);
 	    JSONObject lines = obj.getJSONObject("lines");
 	    JSONObject data = lines.getJSONArray("data").getJSONObject(0);
-	    
-	    if(data.has("quantity"))
+
+	    if (data.has("quantity"))
 		plan.put("quantity", data.get("quantity"));
-	    
-	    if(data.has("plan"))
+
+	    if (data.has("plan"))
 	    {
 		JSONObject planJSON = data.getJSONObject("plan");
 		plan.put("plan", planJSON.get("name"));
 		plan.put("plan_id", planJSON.getString("id"));
-		if(data.has("period"))
+		if (data.has("period"))
 		{
 		    JSONObject period = data.getJSONObject("period");
 		    plan.put("start_date", new Date(Long.parseLong(period.getString("start")) * 1000).toString());
 		    plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
 		}
 	    }
-	    
+
 	    plan.put("amount", Integer.valueOf(obj.getString("total")) / 100);
-		
+
 	    return plan;
 	}
 	catch (JSONException e1)
@@ -242,33 +241,29 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	return null;
     }
-    
+
     @Override
     protected Map<String, Object> getMailDetails()
     {
 	Customer customer = getCustomerFromStripe();
 	DomainUser user = getUser();
-	
+
 	Map<String, Object> details = getPlanDetails();
 	details.put("user_name", user.name);
 	details.put("domain", getDomain());
-	CustomerCardCollection cardCollection = customer.getCards();
 	
-	String defaultCard = customer.getDefaultCard();
-
-	String last_four = null;
-	for(Card card : cardCollection.getData())
-	{
-	    if(card.getId().equals(defaultCard))
-	    {
-		last_four = card.getLast4();
-		break;
-	    }
-	}
-	
-	details.put("last_four", last_four);
-	
-	//details.put("last_four", customer.getDefaultCard());
+	/*
+	 * CustomerCardCollection cardCollection = customer.getCards();
+	 * 
+	 * String defaultCard = customer.getDefaultCard();
+	 * 
+	 * String last_four = null; for(Card card : cardCollection.getData()) {
+	 * if(card.getId().equals(defaultCard)) { last_four = card.getLast4();
+	 * break; } }
+	 * 
+	 * details.put("last_four", last_four);
+	 */
+	// details.put("last_four", customer.getDefaultCard());
 	return details;
     }
 

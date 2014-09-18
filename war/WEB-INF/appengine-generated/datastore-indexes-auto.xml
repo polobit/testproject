@@ -1,11 +1,34 @@
-<!-- Indices written at Fri, 12 Sep 2014 11:06:15 IST -->
+<!-- Indices written at Tue, 16 Sep 2014 19:21:21 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Contact" ancestor="false" source="auto">
-        <property name="__key__" direction="asc"/>
-        <property name="updated_time" direction="asc"/>
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 15 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="milestone" direction="asc"/>
+        <property name="pipeline" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="user" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="entity_type" direction="asc"/>
+        <property name="user" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
+    <!-- Used 5 times in query history -->
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="entity_type" direction="asc"/>
+        <property name="time" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>

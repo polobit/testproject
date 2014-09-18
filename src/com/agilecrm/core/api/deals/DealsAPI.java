@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.deals;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,6 +20,8 @@ import net.sf.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
@@ -33,11 +36,13 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.DealNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.NamespaceUtil;
 import com.agilecrm.workflows.triggers.util.DealTriggerUtil;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 /**
  * <code>DealsAPI</code> includes REST calls to interact with
@@ -72,7 +77,7 @@ public class DealsAPI
 	    return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName,
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	return OpportunityUtil.getOpportunitiesWithMilestones(ownerId, milestone, contactId, fieldName, 0, cursor,
-		pipelineId);
+	        pipelineId);
     }
 
     /**
@@ -123,7 +128,7 @@ public class DealsAPI
 		    (Integer.parseInt(count)), cursor, pipelineId);
 	}
 	return OpportunityUtil
-		.getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
+	        .getOpportunitiesByFilter(ownerId, milestone, contactId, fieldName, 0, cursor, pipelineId);
     }
 
     /**
@@ -191,6 +196,15 @@ public class DealsAPI
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	opportunity.save();
+	try
+	{
+	    ActivitySave.createDealAddActivity(opportunity);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	return opportunity;
     }
 
@@ -206,8 +220,19 @@ public class DealsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Opportunity updateOpportunity(Opportunity opportunity)
     {
+
 	if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
 	    opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+
+	try
+	{
+	    ActivitySave.createDealEditActivity(opportunity);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
 	opportunity.save();
 	return opportunity;
     }
@@ -347,7 +372,8 @@ public class DealsAPI
 
 	// Executes notification when deal is deleted
 	DealNotificationPrefsUtil.executeNotificationForDeleteDeal(opportunitiesJSONArray);
-
+	ActivitySave.createLogForBulkDeletes(EntityType.DEAL, opportunitiesJSONArray.toString(),
+	        String.valueOf(opportunitiesJSONArray.length()), "");
 	Opportunity.dao.deleteBulkByIds(opportunitiesJSONArray);
     }
 
@@ -422,7 +448,7 @@ public class DealsAPI
 	// Append the URL with the current userId to set the session manager in
 	// the backend.
 	OpportunityUtil.postDataToDealBackend("/core/api/opportunity/backend/export/"
-		+ SessionManager.get().getDomainId());
+	        + SessionManager.get().getDomainId());
     }
 
     /**
@@ -458,20 +484,57 @@ public class DealsAPI
 		    String.valueOf(count));
     }
 
+    /**
+     * Call backends for updating deals pipeline.
+     */
     @Path("/bulk/default_track")
     @POST
     public void setDealtoDefaultTrack()
     {
-	DealsDeferredTask dealTracks = new DealsDeferredTask();
-	// Initialize task here
-	Queue queue = QueueFactory.getQueue("pipeline-queue");
+	// Append the URL with the current userId to set the session manager in
+	// the backend.
+	String uri = "/core/api/opportunity/backend/bulk/default_track/" + SessionManager.get().getDomainId();
 
 	String url = BackendServiceFactory.getBackendService().getBackendAddress("b1-sandbox");
 
 	// Create Task and push it into Task Queue
-	TaskOptions taskOptions = TaskOptions.Builder.withPayload(dealTracks).header("Host", url);
+	Queue queue = QueueFactory.getQueue("pipeline-queue");
+	TaskOptions taskOptions = TaskOptions.Builder.withUrl(uri).header("Host", url).method(Method.POST);
 
-	queue.add(taskOptions);
+	queue.addAsync(taskOptions);
+    }
+
+    @Path("/backend/bulk/default_track/{current_user_id}")
+    @POST
+    public void setDealtoDefaultTrackBackend(@PathParam("current_user_id") Long currentUserId)
+    {
+	// Set the session manager to get the user preferences and the other
+	// details required.
+	if (SessionManager.get() != null)
+	{
+	    SessionManager.get().setDomainId(currentUserId);
+	}
+	else
+	{
+	    DomainUser user = DomainUserUtil.getDomainUser(currentUserId);
+	    SessionManager.set(new UserInfo(null, user.email, user.name));
+	    SessionManager.get().setDomainId(user.id);
+	}
+
+	Set<String> namespaces = NamespaceUtil.getAllNamespaces();
+	System.out.println("Total namespaces - " + namespaces.size());
+	for (String domain : namespaces)
+	{
+	    DealsDeferredTask dealTracks = new DealsDeferredTask(domain);
+	    // Initialize task here
+	    Queue queue = QueueFactory.getQueue("pipeline-queue");
+
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(dealTracks);
+
+	    queue.add(taskOptions);
+	}
+
     }
 
 }

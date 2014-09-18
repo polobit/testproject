@@ -80,7 +80,6 @@ public class StripeChargeWebhook extends HttpServlet
 	    }
 
 	    JSONObject agileJson = getAgileJson(stripeEventJson);
-
 	    Iterator<?> keys = agileJson.keys();
 	    while (keys.hasNext())
 	    {

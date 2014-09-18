@@ -80,6 +80,16 @@ public class MilestoneUtil
     }
 
     /**
+     * Get list of milestone based on track name
+     * 
+     */
+    public static List<Milestone> getMilestonesList(String track)
+    {
+	return dao.listByProperty("name", track);
+
+    }
+
+    /**
      * Get milestones of Pipeline with given Id.
      * 
      * @param id
@@ -95,6 +105,11 @@ public class MilestoneUtil
 	    return dao.get(id);
 	}
 	catch (EntityNotFoundException e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    return null;

@@ -7,9 +7,13 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONException;
+
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.NoteUtil;
 
@@ -42,6 +46,15 @@ public class NotesAPI
     public Note saveNote(Note note)
     {
 	note.save();
+	try
+	{
+	    ActivitySave.createNoteAddActivityToContact(note);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	return note;
     }
 
@@ -58,6 +71,22 @@ public class NotesAPI
     public Note updateNote(Note note)
     {
 	note.save();
+	return note;
+    }
+
+    /**
+     * 
+     * @param id
+     *            note id
+     * @return note object based on id
+     */
+    @Path("{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Note getNote(@PathParam("id") Long id)
+    {
+	Note note = NoteUtil.getNote(id);
+	System.out.println("note id " + note);
 	return note;
     }
 
