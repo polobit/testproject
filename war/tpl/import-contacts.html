@@ -270,7 +270,7 @@
 		<div class="span12">
 			<div id="import-validation-error"></div>
 			<a class="btn btn-primary" id="import-deals">Import</a>
-			<a class="btn" id="import-cancel" style="margin-left:2px">Cancel</a>
+			<a class="btn" id="deal-cancel" style="margin-left:2px">Cancel</a>
 		</div>
 	</div>
 	<div class="span3">
@@ -281,7 +281,11 @@
                 </h3>
                 <br />
 				<ul>
-					<li>Company name is mandatory for import companies</li>
+					<li>Deals name is mandatory for import deals</li>
+					<li>Deals track is mandatory for import deals</li>
+					<li>Deals Milestone is mandatory for import deals</li>
+					<li>Deals Close date in "dd/mm/yyyy" format</li>
+                    <li>Deals Value should be less or equal to 1000000000000</li>
 				</ul>
             </div>
 
@@ -293,7 +297,8 @@
 
 
 
-<script id="import-contacts-validation-message-template" type="text/html">
+<script id="import-contacts-validation-message-template"
+	type="text/html">
 <div class="row">
     <div class="span5">
         <div class="alert alert-error import_contact_error">
@@ -357,7 +362,7 @@
     <option value="properties_FACEBOOK-website">Facebook</option>
     <option value="properties_XING-website">Xing</option>
     <option value="properties_FEED-website">Blog</option>
-    <option value="properties_GOOGLE-PLUS-website">Google+</option>
+    <option value="properties_GOOGLE-website">Google+</option>
     <option value="properties_FLICKR-website">Flickr</option>
     <option value="properties_GITHUB-website">GitHub</option>
     <option value="properties_YOUTUBE-website">YouTube</option>
@@ -405,7 +410,7 @@
     <option value="properties_FACEBOOK-website">Facebook</option>
     <option value="properties_XING-website">Xing</option>
     <option value="properties_FEED-website">Blog</option>
-    <option value="properties_GOOGLE-PLUS-website">Google+</option>
+    <option value="properties_GOOGLE-website">Google+</option>
     <option value="properties_FLICKR-website">Flickr</option>
     <option value="properties_GITHUB-website">GitHub</option>
     <option value="properties_YOUTUBE-website">YouTube</option>
@@ -428,7 +433,7 @@
 </select>
 
 
-</script>	
+</script>
 
 
 
@@ -437,13 +442,9 @@
 <option value="properties__ignore_">-Ignore-</option>
 <option value="properties_name">Deal Name</option>
     <option value="properties_value">Value</option>
-<optgroup label="Milestone">
-  <option value="properties_milestone_New">New</option>
-  <option value="properties_milestone_Prospect">Prospect</option>
-  <option value="properties_milestone_Proposal">Proposal</option>
-  <option value="properties_milestone_Won">Won</option>
-  <option value="properties_milestone_Lost">Lost</option>
-</optgroup>
+  <option value="properties_track">Track</option>
+  <option value="properties_milestone">Milestone</option>
+
     <option value="properties_probability">Probability</option>
     <option value="properties_closeDate">Close Date</option>
 <option value="properties_relatedTo">Related To</option>
@@ -460,5 +461,5 @@
 </select>
 
 
-</script>	
+</script>
 

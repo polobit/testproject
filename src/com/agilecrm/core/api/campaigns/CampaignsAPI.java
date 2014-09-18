@@ -16,8 +16,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -70,6 +73,8 @@ public class CampaignsAPI
 	contactList.add(contact);
 
 	WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
+	Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
+	ActivityUtil.createContactActivity(ActivityType.CAMPAIGN, contact, "", workflow.name, "");
 	// return "true";
     }
 

@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.EmailUtil;
@@ -92,6 +93,7 @@ public class EmailsAPI
 	// Saves Contact Email.
 	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null,
 	        trackClicks);
+	ActivitySave.createEmailSentActivityToContact(to, subject, body);
 
     }
 

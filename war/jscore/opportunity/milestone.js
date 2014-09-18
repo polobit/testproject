@@ -140,7 +140,7 @@ $(function(){
     	e.preventDefault();
     	var form = $(this).closest('form');
     	form.find('.show_field').css("display","none");
-    	form.find(".show_milestone_field").css("display","block");
+    	form.find(".show_milestone_field").css("display","inline-block");
     	
     	var new_milestone = form.find(".add_new_milestone").val().trim();
     	

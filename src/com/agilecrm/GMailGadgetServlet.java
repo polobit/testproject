@@ -99,9 +99,9 @@ public class GMailGadgetServlet extends HttpServlet
 	System.out.println("domain user : " + domainUser);
 	if (domainUser == null)
 	{
-	    resp.getWriter().println(
-		    "Sorry, you do not have access to " + NamespaceManager.get()
-			    + ".agilecrm.com. Please contact your Agile CRM administrator to get a User account.");
+	    resp.getWriter()
+		    .println(
+			    "Sorry, you do not have any account. Please contact your Agile CRM administrator to get a User account or <a href='https://my.agilecrm.com/register'>click here</a>.");
 	    return false;
 	}
 

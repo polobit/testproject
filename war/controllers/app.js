@@ -28,7 +28,7 @@ $(function()
 	App_Configuration = new AgileConfigRouter();
 	App_Adminpanel = new AdminPanelRouter();
 	App_ReferelRouter = new ReferelRouter();
-	
+	App_Activity_log = new ActivitylogRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
@@ -80,12 +80,12 @@ function currentRoute(route)
  */
 function load_clickdesk_code()
 {
-	
+
 	if (CLICKDESK_CODE_LOADED)
 		return;
 
 	console.log("loading clickdesk..");
-	
+
 	CLICKDESK_CODE_LOADED = true;
 
 	var glcspt = document.createElement('script');

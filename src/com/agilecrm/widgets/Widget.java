@@ -82,12 +82,13 @@ public class Widget
      */
     public static enum WidgetType
     {
-	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM
+	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM,ECOMMERCE
     };
 
     /**
      * Widget type which stores info to categorize the widgets
      */
+    @Indexed
     public WidgetType widget_type = null;
 
     /**

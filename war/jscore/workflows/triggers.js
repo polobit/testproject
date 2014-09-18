@@ -104,7 +104,7 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 	$('select#' + milestones_select_id).after(getRandomLoadingImg());
 
 	// Fills milestone select element
-	populateMilestones(trigger_form, undefined, undefined, function(data)
+	populateMilestones(trigger_form, undefined, 0, undefined, function(data)
 	{
 		$('.loading').remove();
 
@@ -158,11 +158,7 @@ function populate_contact_filters_in_trigger(trigger_form, filter_select_id, val
  */
 function populate_stripe_events_in_trigger(trigger_form, stripe_event_select_id, stripe_event_value)
 {
-	$.getJSON("core/api/subscription", function(data){
-		trigger_form.find('select#' + stripe_event_select_id).closest('div.control-group').css('display','');
-		if(data.plan.plan_type == "FREE")
-			$('#trigger-stripe-event').prop('disabled','disabled');
-	});
+	trigger_form.find('select#' + stripe_event_select_id).closest('div.control-group').css('display','');
 
 	if(stripe_event_value !== undefined)
 	{

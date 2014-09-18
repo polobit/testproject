@@ -25,15 +25,15 @@ cron:
 
 - description: daily triggers
   url: /backend/cron/triggers?period=DAILY
-  schedule: every day 09:00
+  schedule: every day 01:00
   
 - description: Monthly triggers
   url: /backend/cron/triggers?period=MONTHLY
-  schedule: 1st monday of month 09:00
+  schedule: 1st monday of month 01:00
   
 - description: Weekly triggers
   url: /backend/cron/triggers?period=WEEKLY
-  schedule: every monday 09:00 
+  schedule: every monday 01:00
 
   
 - description: Due Tasks Reminder

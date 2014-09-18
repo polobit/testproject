@@ -5,13 +5,15 @@ import javax.persistence.PrePersist;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
+import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.user.util.UserPrefsUtil;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.Indexed;
@@ -20,7 +22,7 @@ import com.googlecode.objectify.condition.IfDefault;
 
 @XmlRootElement
 @Cached
-public class Activity
+public class Activity extends Cursor
 {
 
     // Key
@@ -46,7 +48,7 @@ public class Activity
      */
     public static enum EntityType
     {
-	CONTACT, DEAL, TASK, EVENT, CAMPAIGN
+	CONTACT, DEAL, TASK, EVENT, CAMPAIGN, DOCUMENT
     };
 
     /**
@@ -55,7 +57,9 @@ public class Activity
      */
     public static enum ActivityType
     {
-	ADD, EDIT, DELETE, OPEN, CLOSE, COMPLETE, CLICK, START, TAG, CHANGE, SCORE, MILESTONE, PROGRESS
+	TASK_ADD, TASK_EDIT, TASK_PROGRESS_CHANGE, TASK_OWNER_CHANGE, TASK_STATUS_CHANGE, EVENT_EDIT, CLICK, TASK_COMPLETED, EVENT_DELETE, TASK_DELETE,
+
+	CAMPAIGN, BULK_ACTION, BULK_DELETE, EVENT_RELATED_CONTACTS, TASK_RELATED_CONTACTS, DEAL_RELATED_CONTACTS, BULK_EMAIL_SENT, DEAL_LOST, TAG_ADD, EMAIL_SENT, EVENT_ADD, DEAL_CHANGE, DEAL_ADD, DEAL_EDIT, DEAL_DELETE, DEAL_OWNER_CHANGE, DEAL_MILESTONE_CHANGE, DEAL_CLOSE, DOCUMENT_ADD, NOTE_ADD
     };
 
     /**
@@ -105,12 +109,10 @@ public class Activity
 
     }
 
-    @JsonIgnore
-    public void setUser(Key<DomainUser> user)
-    {
-	this.user = user;
-    }
-
+    /*
+     * @JsonIgnore public void setUser(Key<DomainUser> user) { this.user = user;
+     * }
+     */
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
@@ -134,6 +136,30 @@ public class Activity
 	    }
 	}
 	return null;
+    }
+
+    @XmlElement(name = "userPic")
+    public String getUserPic() throws Exception
+    {
+	AgileUser agileuser = null;
+	UserPrefs userprefs = null;
+
+	try
+	{
+	    // Get owner pic through agileuser prefs
+	    agileuser = AgileUser.getCurrentAgileUserFromDomainUser(user.getId());
+	    if (agileuser != null)
+		userprefs = UserPrefsUtil.getUserPrefs(agileuser);
+	    if (userprefs != null)
+		return userprefs.pic;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+
+	}
+
+	return "";
     }
 
     /**
@@ -181,9 +207,9 @@ public class Activity
     {
 	StringBuilder builder = new StringBuilder();
 	builder.append("Activity [id=").append(id).append(", user=").append(user).append(", user_name=")
-		.append(user_name).append(", entity_type=").append(entity_type).append(", activity_type=")
-		.append(activity_type).append(", entity_id=").append(entity_id).append(", label=").append(label)
-		.append(", time=").append(time).append(", custom1=").append(custom1).append("]");
+	        .append(user_name).append(", entity_type=").append(entity_type).append(", activity_type=")
+	        .append(activity_type).append(", entity_id=").append(entity_id).append(", label=").append(label)
+	        .append(", time=").append(time).append(", custom1=").append(custom1).append("]");
 	return builder.toString();
     }
 
