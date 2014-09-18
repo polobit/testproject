@@ -27,6 +27,9 @@ var ActivitylogRouter = Backbone.Router.extend({
 							{
 								$("time", el).timeago();
 							});
+					var user=CURRENT_DOMAIN_USER.name;
+					
+					$('.activity-user').html("("+user+")");
 				} });
 
 			activitiesview.appendItem = append_activity_log;
