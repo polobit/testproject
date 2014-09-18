@@ -63,12 +63,17 @@ if(cookieJSON.has("userAgent"))
 
   <body>
    
-	<div class="container">
+   <div class="container">
 			<div class="error-container">
-					We detected a login into your account from a new device ("<%= agent %>"). You have been logged out now. <br/> <br/>
-					<a href="/login">Click here</a> to login
+				<h1>Wait!</h1> 
+				<h2>We had to log you out as you seem to have logged in from some other system/browser ("<%= agent %>")</h2>
+				<div class="error-details">
+					You may <a href="/login">Re-login</a>. This will log your out in the other system/browser."
+				</div>
+			
 			</div>
 	</div>
+	
 	<script src="//static.getclicky.com/js" type='text/javascript'>
 	try
 	{
