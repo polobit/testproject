@@ -80,7 +80,6 @@ $(function()
 						window.location.href = window.location.href .split('#')[0] + 'login';
 					})
 					
-					
 				}
 			});
 	});
@@ -192,6 +191,9 @@ $(function()
 					$("#cancelation-request-form").each(function () {
 						this.reset();
 					});
+					
+					// Adds "Cancellation Request" tag in "Our" domain
+					addTagAgile("Cancellation Request");
 					
 					// Enables Send Email button.
 				    enable_send_button($('#send-delete-request'));
