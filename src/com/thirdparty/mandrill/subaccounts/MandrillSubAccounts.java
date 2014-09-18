@@ -103,13 +103,17 @@ public class MandrillSubAccounts
      *            - subaccount id which is agilecrm domain
      * @return String of subaccount info
      */
-    public static String getSubAccountInfo(String subaccountId)
+    public static String getSubAccountInfo(String subaccountId, String apiKey)
     {
 	JSONObject info = new JSONObject();
 
+	// If api is null or blank, use Agile key
+	if (StringUtils.isBlank(apiKey))
+	    apiKey = Globals.MANDRIL_API_KEY_VALUE;
+
 	try
 	{
-	    info.put(Mandrill.MANDRILL_API_KEY, Globals.MANDRIL_API_KEY_VALUE);
+	    info.put(Mandrill.MANDRILL_API_KEY, apiKey);
 	    info.put(MANDRILL_SUBACCOUNT_ID, subaccountId);
 
 	    // Request for subaccount json.

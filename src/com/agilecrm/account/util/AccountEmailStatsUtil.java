@@ -42,7 +42,7 @@ public class AccountEmailStatsUtil
 	    // if null add AccountEmailStats
 	    if (as == null)
 	    {
-		String info = MandrillSubAccounts.getSubAccountInfo(subAccount);
+		String info = MandrillSubAccounts.getSubAccountInfo(subAccount, null);
 
 		// If subaccount doesn't exist, create new one
 		if (StringUtils.contains(info, "Unknown_Subaccount"))
