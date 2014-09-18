@@ -24,5 +24,9 @@ public class AgileQueues
     // Email pull queues
     public static final String BULK_EMAIL_PULL_QUEUE = "bulk-email-pull-queue";
     public static final String NORMAL_EMAIL_PULL_QUEUE = "normal-email-pull-queue";
+    
+    // SMS pull queues
+    public static final String BULK_SMS_PULL_QUEUE = "bulk-sms-pull-queue";
+    public static final String NORMAL_SMS_PULL_QUEUE = "normal-sms-pull-queue";
 
 }

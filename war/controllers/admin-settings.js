@@ -1,3 +1,4 @@
+
 /**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
@@ -36,7 +37,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"tag-management" : "tagManagement",
 	
 
-	"email-gateways/:id" : "emailGateways" },
+	"email-gateways/:id" : "emailGateways",
+	
+	"sms-gateways/:id" : "smsGateways"
+	
+		},
 
 
 	/**
@@ -342,12 +347,14 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
 		
-		this.email_gateway = new Base_Model_View({
-			url : 'core/api/email-gateway',
-			template: 'admin-settings-web-to-lead'
+		this.integrations = new Base_Collection_View({
+			url : 'core/api/widgets/integrations',
+			templateKey: 'admin-settings-web-to-lead'
 		});
 		
-		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
+		this.integrations.collection.fetch();
+		
+		$('#content').find('#admin-prefs-tabs-content').html(this.integrations.render().el);
 		
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
@@ -381,10 +388,11 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	emailGateways : function(id)
 	{
+		console.log(App_Admin_Settings.integrations.collection);
 		$("#content").html(getTemplate("admin-settings"), {});
 
 		// On Reload, navigate to integrations
-		if(!this.email_gateway)
+		if(!this.integrations || this.integrations.collection==undefined)
 		{
 		    this.navigate("integrations", {trigger: true});
 			return;
@@ -395,7 +403,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		if (id == 'mandrill')
 			value = 'MANDRILL';
 		
-		var view = new Base_Model_View({ model : App_Admin_Settings.email_gateway.model, url : 'core/api/email-gateway',
+
+		
+		 this.email_gateway = new Base_Model_View({url : 'core/api/email-gateway',
+
 			template : 'settings-email-gateway', postRenderCallback : function(el)
 			{
 				// Loads jquery.chained.min.js
@@ -426,7 +437,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
 				
-				data = view.model.toJSON();
+
+				data = App_Admin_Settings.email_gateway.model.toJSON();
+
 
 				// Add webhook
 				if(data.email_api == "MANDRILL")
@@ -444,8 +457,61 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		
 		
 		
-		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 
+		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
+
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.integrations-tab').addClass('active');
+	} ,
+	
+	smsGateways : function(id)
+	{
+		console.log("inside sms gateways");
+		$("#content").html(getTemplate("admin-settings"), {});
+
+		// On Reload, navigate to integrations
+		if(!this.integrations || this.integrations.collection==undefined)
+		{
+		    this.navigate("integrations", {trigger: true});
+			return;
+		}
+	
+		
+		var view = new Base_Model_View({ model : App_Admin_Settings.integrations.collection.where({name:"SMS-Gateway"})[0], url : 'core/api/sms-gateway',
+			template : 'settings-sms-gateway',prePersist: function(model){
+				
+				var prefJSON={
+						account_sid:model.attributes.account_sid,
+						auth_token:model.attributes.auth_token,
+						endpoint:model.attributes.endpoint,
+						sms_api:"TWILIO"
+							};
+				
+				model.set({prefs : JSON.stringify(prefJSON)}, {silent:true});
+				}, postRenderCallback : function(el)
+					{
+				// Loads jquery.chained.min.js
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				{
+					var LHS, RHS;
+					LHS = $("#LHS", el);
+					RHS = $("#RHS", el);
+					RHS.chained(LHS);
+					setTimeout(function()
+					{
+						$('#sms-api', el).val(value).attr("selected", "selected").trigger('change')
+					}, 1);
+				});
+			},
+			saveCallback: function(data)
+			{
+				// On saved, navigate to integrations
+				Backbone.history.navigate("integrations",{trigger:true});
+			}
+			
+		});
+
+		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
 	} 

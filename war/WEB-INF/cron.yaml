@@ -92,5 +92,12 @@ cron:
   url: /backend/cron/cron-pull?q=bulk-campaign-pull-queue
   schedule: every 1 mins
 
+- description: Bulk SMS Cron
+  url: /backend/cron/cron-pull?q=bulk-sms-pull-queue
+  schedule: every 1 mins
+
+- description: Bulk Normal SMS Cron
+  url: /backend/cron/cron-pull?q=normal-sms-pull-queue
+  schedule: every 1 mins
 
 

@@ -65,8 +65,7 @@ public class WidgetsAPI
 		// Returns list of widgets saved by current user
 		return WidgetUtil.getAddedWidgetsForCurrentUser();
 	}
-	
-	
+
 	/**
 	 * Gets List of widgets added for current user
 	 * 
@@ -269,8 +268,8 @@ public class WidgetsAPI
 
 			ContactPrefs contactPrefs = new ContactPrefs();
 			contactPrefs.type = Type.SALESFORCE;
-			//contactPrefs.userName = userId;// "tejaswitest@gmail.com";
-			//contactPrefs.password = password;// "agile1234";
+			// contactPrefs.userName = userId;// "tejaswitest@gmail.com";
+			// contactPrefs.password = password;// "agile1234";
 			contactPrefs.apiKey = apiKey;// "CgBv3oy3GAY7eoNNQnx7yb2e";
 			System.out.println("here");
 
@@ -286,5 +285,34 @@ public class WidgetsAPI
 			System.out.println(e.getMessage());
 		}
 
+	}
+
+	/**
+	 * Gets a list of widgets based on widget_type which is INTEGRATIONS
+	 * 
+	 * @return
+	 */
+	@Path("/integrations")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public List<Widget> getIntegrations()
+	{
+		// Returns list of widgets
+		return WidgetUtil.getIntegrationGateways();
+	}
+
+	/**
+	 * Deletes the current id in Integrations
+	 * 
+	 * @param id
+	 */
+	@Path("/integrations/{id}")
+	@DELETE
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void deleteGatewayWidget(@PathParam("id") Long id)
+	{
+
+		Widget widget = WidgetUtil.getWidget(id);
+		widget.delete();
 	}
 }

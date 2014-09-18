@@ -157,7 +157,7 @@ public class Globals
     // Campaign and Email pull queues
     public static final String CAMPAIGN_PULL_QUEUE = "campaign-pull-queue";
     public static final String EMAIL_PULL_QUEUE = "email-pull-queue";
-
+    public static final String SMS_PULL_QUEUE = "sms-pull-queue";
     // shopify app credential
     // public static final String SHOPIFY_API_KEY =
     // "70a2391cd9e9af0d666657a67885d9ec";

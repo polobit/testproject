@@ -478,4 +478,89 @@ public class TwilioUtil
 
 		throw new Exception("Error in Twilio : " + response.getHttpStatus() + "\n" + response.getResponseText());
 	}
+
+	/**
+	 * Checks the given Account SID and Auth Token is valid or not
+	 * 
+	 * @author Bhasuri
+	 * 
+	 **/
+	public static boolean checkCredentials(String account_sid, String auth_token) throws JSONException, Exception
+	{
+
+		TwilioRestClient client = new TwilioRestClient(account_sid, auth_token, "");
+
+		boolean hasError = false;
+
+		TwilioRestResponse response = client.request("/" + APIVERSION + "/Accounts/" + account_sid, "GET", null);
+
+		JSONObject responseJSON = new JSONObject(response);
+
+		hasError = (boolean) responseJSON.get("error");
+
+		if (hasError)
+			return false;
+		else
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * Returns Account SID from a widget
+	 * 
+	 * @author Bhasuri
+	 **/
+	public static String getAccountSID(Widget widget)
+	{
+
+		String account_sid = null;
+
+		try
+		{
+			String prefs = widget.prefs;
+
+			JSONObject prefsJSON = new JSONObject(prefs);
+
+			account_sid = prefsJSON.getString("account_sid");
+
+		}
+		catch (Exception e)
+		{
+
+			System.out.println("Inside getAccountSID");
+			e.printStackTrace();
+		}
+
+		return account_sid;
+	}
+
+	/**
+	 * Returns Account SID from a widget
+	 * 
+	 * @author Bhasuri
+	 **/
+	public static String getAuthToken(Widget widget)
+	{
+
+		String auth_token = null;
+
+		try
+		{
+			String prefs = widget.prefs;
+
+			JSONObject prefsJSON = new JSONObject(prefs);
+
+			auth_token = prefsJSON.getString("auth_token");
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("Inside getAuthToken");
+			e.printStackTrace();
+		}
+
+		return auth_token;
+	}
+
 }
