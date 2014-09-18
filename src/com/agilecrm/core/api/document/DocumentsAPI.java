@@ -132,7 +132,7 @@ public class DocumentsAPI
     {
 	try
 	{
-	    ActivitySave.createDocumentAddActivity(document);
+	    ActivitySave.createDocumentUpdateActivity(document);
 	}
 	catch (JSONException e)
 	{

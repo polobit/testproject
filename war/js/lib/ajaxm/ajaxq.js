@@ -61,3 +61,20 @@ jQuery.ajaxq = function (queue, options)
 		document.ajaxq.q[queue] = [];
 	}
 }
+
+jQuery.ajaxq.clear = function (qname)
+{
+	var queues = document.ajaxq.q;
+	 if (!qname) {
+         for (var i in queues) {
+             if (queues.hasOwnProperty(i)) {
+                 delete queues[i];
+             }
+         }
+     }
+     else {
+         if (queues[qname]) {
+             delete queues[qname];
+         }
+     }
+}

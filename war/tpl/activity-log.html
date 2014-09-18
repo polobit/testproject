@@ -4,13 +4,10 @@
 
         <div class="slate">
             <div class="slate-content">
-                <div class="box-left">
-                    <img alt="Clipboard" src="/img/clipboard.png" />
-                </div>
+                
                 <div class="box-right">
-                    <h3>You have No Activities For This search Criteria</h3>
+                    <h3>You have no Activities for this search criteria</h3>
                     
-                    <a href="#" data-toggle="modal" class="btn blue btn-slate-action contact-add-note"><i class="icon-plus-sign">Activities</i></a>
                 </div>
             </div>
         </div>
@@ -33,7 +30,7 @@
             <tbody id="tomorrow-activity" style="display: inline;"></tbody>
         </table>
         <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
-		<div id="next-week-heading" style="display: none">
+		<div id="next-week-heading" style="display: none" class="ref-head">
             <b >Before</b>
 			</div>
 			<colgroup><col width="30px"><col width="99%"></colgroup>
@@ -161,7 +158,7 @@
 	</div>
 <div class="pull-left">
 <div>	
- Modified Task <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+ Modified Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
 	</div>
 <div>	
 		<small class="edit-hover pull-left" > 
@@ -218,7 +215,6 @@
 <div class="clearfix"></div>
 
 {{/if_equals}}
-
 
 {{#if_equals "BULK_DELETE" activity_type}}
 	
@@ -285,7 +281,7 @@
 	</div>
 <div class="pull-left">
 <div>	
- Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> closed
+ Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> Won
 	</div>	
 		<div>
 		<small class="edit-hover pull-left" > 
@@ -367,7 +363,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 
 
 {{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
-	<div style="margin-right:15px;" class="pull-left">
+	<div style="margin-right:15px; class="pull-left">
 			{{#if this.userPic}}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
 			{{else}}
@@ -613,7 +609,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 	</div>
 <div class="pull-left">
 <div>	
- Added Tag <a >{{removeDoubleCoutes custom2}}</a> to {{custom3}} Contacts 
+ Added Tag {{removeDoubleCoutes custom2}} to {{custom3}} Contacts 
 
 	</div>
 <div>	
@@ -636,7 +632,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 	</div>
 <div class="pull-left">
 <div>	
- Removed Tag  <a> {{removeDoubleCoutes custom2}}</a> on {{custom3}} Contacts 
+ Removed Tag  {{removeDoubleCoutes custom2}} on {{custom3}} Contacts 
 
 	</div>
 <div>	
@@ -658,10 +654,15 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 			{{/if}}
 	</div>
 <div class="pull-left">
-<div>	
-		Added <a  data="{{id}}">{{custom3}} Contacts </a> to Campaign {{custom2}} 
+<div>
+	{{#if_equals "1" custom3}}
+		Added {{custom3}} Contact to Campaign {{custom2}}
+{{else}}
+Added {{custom3}} Contacts to Campaign {{custom2}}
+{{/if_equals}}
 </div>
 <div>
+
 		<small class="edit-hover pull-left" > 
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
@@ -704,7 +705,11 @@ Sent email to {{custom3}} Contacts
 	</div>
 <div class="pull-left">
 <div>	
-		Assgined  {{custom3}} Contacts to <a>{{custom2}}</a>
+{{#if_equals "1" custom3}}
+		Assgined  {{custom3}} Contact to {{custom2}}
+{{else}}
+		Assgined  {{custom3}} Contacts to {{custom2}}
+{{/if_equals}}
 </div>
 <div>
 		<small class="edit-hover pull-left" > 
@@ -777,7 +782,7 @@ Sent email to {{custom3}} Contacts
 	</div>
 <div class="pull-left">
 <div>	
-Added Tag <a >{{removeDoubleCoutes custom1}}</a> to <a href="#contact/{{entity_id}}">{{label}}</a>
+Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{label}}</a>
 	</div>
 <div>
 		
@@ -808,6 +813,32 @@ Added Tag <a >{{removeDoubleCoutes custom1}}</a> to <a href="#contact/{{entity_i
    Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contact
 {{else}} 
 	 Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contacts
+{{/if_equals}}	
+</div>
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DOCUMENT_REMOVE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left">
+<div>	
+{{#if_equals "1" custom2}}
+   Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contact
+{{else}} 
+	 Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contacts
 {{/if_equals}}	
 </div>
 <div>
