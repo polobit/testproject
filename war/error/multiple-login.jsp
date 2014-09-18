@@ -75,7 +75,7 @@ if(cookieJSON.has("userAgent"))
 	<script src="//static.getclicky.com/js" type='text/javascript'>
 	try
 	{
-		clicky.init();
+		clicky.init(100729733);
 	}
 	catch (e)
 	{
