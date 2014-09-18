@@ -499,15 +499,23 @@ public class ActivitySave
 	JSONArray jsn = js.getJSONArray("contact_ids");
 
 	System.out.println(jsn + "  new contacts left side and old contacts right side  " + contactids);
-	if (jsn != null)
+	if (jsn != null && jsn.length() > 0)
 	{
 	    System.out.println("inside  contacts  ");
-	    if (contactids.size() > jsn.length())
+	    if (contactids != null)
 	    {
-		int numberofcontacts = contactids.size() - jsn.length();
+		if (contactids.size() > jsn.length())
+		{
+		    int numberofcontacts = contactids.size() - jsn.length();
 
-		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
-		        String.valueOf(numberofcontacts), "Related contact to this Document");
+		    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
+			    String.valueOf(numberofcontacts), "Related contact to this Document");
+		}
+		else
+		{
+		    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
+			    String.valueOf(jsn.length()), "Related contact to this Document");
+		}
 	    }
 	    else
 	    {
