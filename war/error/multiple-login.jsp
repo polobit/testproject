@@ -28,7 +28,7 @@ String cookieString = null;
 // Reads multiple instace cookie which contains user agent info
 if( cookies != null ){
    for (Cookie cookie : cookies){
-      if(cookie.getName().equals("_multiple_instances"))
+      if(cookie.getName().equals("_multiple_login"))
       {
 		  cookieString = URLDecoder.decode(cookie.getValue());
 		  break;
@@ -64,7 +64,7 @@ if(cookieJSON.has("userAgent"))
    <div class="container">
 			<div class="error-container">
 				<h1>Wait!</h1> 
-				<h2>We had to log you out as you seem to have logged in from some other system/browser (<%= agent %>)</h2>
+				<h2>We had to log you out as you seem to have logged in from some other system/browser</h2> (<%= agent %>)
 				<div class="error-details">
 					You may <a href="/login">Re-login</a>. This will log your out in the other system/browser."
 				</div>
@@ -110,6 +110,8 @@ if(cookieJSON.has("userAgent"))
 			var expires = "";
 		document.cookie = name + "=" + escape(value) + expires + "; path=/";
 	}
+	
+	eraseCookie("_multiple_login");
 
 	</script>
   </body>
