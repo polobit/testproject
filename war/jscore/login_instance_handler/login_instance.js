@@ -28,7 +28,7 @@ function check_login_instance(pubnub_message)
 		pubnub_message["email"] = get_current_user_email();
 		
 		// Sets cookie to user it in error page to show information. 0.0025 is 10min in approx
-		createCookie("_multiple_instances", JSON.stringify(pubnub_message), 0.0025);
+		createCookie("_multiple_login", JSON.stringify(pubnub_message), 0.0025);
 		
 		window.location = "/login?ml=true";
 		

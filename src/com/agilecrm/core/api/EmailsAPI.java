@@ -15,6 +15,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.user.AgileUser;
@@ -173,8 +175,16 @@ public class EmailsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getEmailActivityFromMandrill() throws Exception
     {
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+
+	String apiKey = null;
+
+	// Get emailGateway api-key
+	if (emailGateway != null)
+	    apiKey = emailGateway.api_key;
+
 	// Returns mandrill subaccount info if created, otherwise error json.
-	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get());
+	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get(), apiKey);
 
 	// If subaccount did not exist, return null
 	if (StringUtils.contains(info, "Unknown_Subaccount"))

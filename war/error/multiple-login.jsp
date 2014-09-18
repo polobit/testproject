@@ -28,11 +28,9 @@ String cookieString = null;
 // Reads multiple instace cookie which contains user agent info
 if( cookies != null ){
    for (Cookie cookie : cookies){
-      if(cookie.getName().equals("_multiple_instances"))
+      if(cookie.getName().equals("_multiple_login"))
       {
 		  cookieString = URLDecoder.decode(cookie.getValue());
-		  cookie.setMaxAge(-1);
-		  response.addCookie(cookie);
 		  break;
       }
    }
@@ -63,20 +61,58 @@ if(cookieJSON.has("userAgent"))
 
   <body>
    
-	<div class="container">
+   <div class="container">
 			<div class="error-container">
-					We detected a login into your account from a new device ("<%= agent %>"). You have been logged out now. <br/> <br/>
-					<a href="/login">Click here</a> to login
+				<h1>Wait!</h1> 
+				<h3>We had to log you out as you seem to have logged in from some other system/browser  <span style="font-size:12px">(<%= agent %>) </span></h3> 
+				<div class="error-details">
+					You may <a href="/login">Re-login</a>. This will log you out in the other system/browser."
+				</div>
+			
 			</div>
 	</div>
+	
 	<script src="//static.getclicky.com/js" type='text/javascript'>
 	try
 	{
-		clicky.init();
+		clicky.init(100729733);
 	}
 	catch (e)
 	{
 	}
 	</script> 
+	<script>
+	/**
+	 * Used to delete a variable from document.cookie
+	 * 
+	 * @param name
+	 *            name of the variable to be removed from the cookie
+	 * @returns cookie without the variable
+	 */
+	function eraseCookie(name)
+	{
+		createCookie(name, "", -1);
+	}
+	
+	function createCookie(name, value, days)
+	{
+		// If days is not equal to null, undefined or ""
+		if (days)
+		{
+			var date = new Date();
+
+			// Set cookie variable's updated expire time in milliseconds
+			date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+			var expires = "; expires=" + date.toGMTString();
+		}
+		else
+			// If days is null, undefined or "" set expires as ""
+			var expires = "";
+		document.cookie = name + "=" + escape(value) + expires + "; path=/";
+	}
+	
+	eraseCookie("_multiple_login");
+
+	</script>
   </body>
 </html>
