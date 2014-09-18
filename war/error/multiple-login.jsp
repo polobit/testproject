@@ -31,8 +31,6 @@ if( cookies != null ){
       if(cookie.getName().equals("_multiple_instances"))
       {
 		  cookieString = URLDecoder.decode(cookie.getValue());
-		  cookie.setMaxAge(-1);
-		  response.addCookie(cookie);
 		  break;
       }
    }
@@ -66,7 +64,7 @@ if(cookieJSON.has("userAgent"))
    <div class="container">
 			<div class="error-container">
 				<h1>Wait!</h1> 
-				<h2>We had to log you out as you seem to have logged in from some other system/browser ("<%= agent %>")</h2>
+				<h2>We had to log you out as you seem to have logged in from some other system/browser (<%= agent %>)</h2>
 				<div class="error-details">
 					You may <a href="/login">Re-login</a>. This will log your out in the other system/browser."
 				</div>
@@ -83,5 +81,36 @@ if(cookieJSON.has("userAgent"))
 	{
 	}
 	</script> 
+	<script>
+	/**
+	 * Used to delete a variable from document.cookie
+	 * 
+	 * @param name
+	 *            name of the variable to be removed from the cookie
+	 * @returns cookie without the variable
+	 */
+	function eraseCookie(name)
+	{
+		createCookie(name, "", -1);
+	}
+	
+	function createCookie(name, value, days)
+	{
+		// If days is not equal to null, undefined or ""
+		if (days)
+		{
+			var date = new Date();
+
+			// Set cookie variable's updated expire time in milliseconds
+			date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+			var expires = "; expires=" + date.toGMTString();
+		}
+		else
+			// If days is null, undefined or "" set expires as ""
+			var expires = "";
+		document.cookie = name + "=" + escape(value) + expires + "; path=/";
+	}
+
+	</script>
   </body>
 </html>
