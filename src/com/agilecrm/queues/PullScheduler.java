@@ -86,7 +86,7 @@ public class PullScheduler
 	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE))
-	    return 3600;
+	    return 43200;
 
 	return DEFAULT_LEASE_PERIOD;
     }

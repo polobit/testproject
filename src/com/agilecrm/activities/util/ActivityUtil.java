@@ -76,7 +76,7 @@ public class ActivityUtil
 	    }
 	    if (lastname != null)
 	    {
-		contact_name += "";
+		contact_name += " ";
 		contact_name += lastname.value;
 	    }
 

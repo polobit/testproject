@@ -479,6 +479,43 @@ public class ActivitySave
 	}
 
     }
+    
+     /**
+     * creates document updated activity
+     * 
+     * @param document
+     * @throws JSONException
+     */
+    public static void createDocumentUpdateActivity(Document document) throws JSONException
+    {
+
+	Document olddoc = DocumentUtil.getDocument(document.id);
+
+	List<String> contactids = olddoc.getContact_ids();
+
+	JSONObject js = new JSONObject(new Gson().toJson(document));
+
+	JSONArray jsn = js.getJSONArray("contact_ids");
+
+	System.out.println(jsn + "  new contacts left side and old contacts right side  " + contactids);
+	if (jsn != null)
+	{
+	    System.out.println("inside  contacts  ");
+	    if (contactids.size() > jsn.length())
+	    {
+		int numberofcontacts = contactids.size() - jsn.length();
+
+		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
+		        String.valueOf(numberofcontacts), "Related contact to this Document");
+	    }
+	    else
+	    {
+		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
+		        String.valueOf(jsn.length()), "Related contact to this Document");
+	    }
+	}
+
+    }
 
     /**
      * creates NOTE_ADD activity w.r.t a contact
