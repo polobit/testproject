@@ -86,6 +86,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.calendar.WebCalendarEventsAPI.class);
 	s.add(com.agilecrm.core.api.AdminPanelAPI.class);
 	s.add(com.agilecrm.core.api.EmailGatewayAPI.class);
+	s.add(com.agilecrm.core.api.widgets.ShopifyWidgetApi.class);
 	s.add(com.agilecrm.core.api.subscription.addon.AddonSubscriptionAPI.class);
 	s.add(com.agilecrm.core.api.ActivityApi.class);
 	return s;

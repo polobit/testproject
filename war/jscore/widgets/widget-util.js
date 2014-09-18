@@ -459,6 +459,8 @@ function show_set_up_widget(widget_name, template_id, url, model)
     
     else if(widget_name =="Chargify")
     	chargify_save_widget_prefs();
+    else if(widget_name == "Shopify")
+    	shopify_save_widget_prefs();
     
     // Shows available widgets in the content
     if (url)
@@ -574,6 +576,13 @@ function fill_form(id, widget_name, template_id)
     }
 }
 
+
+function show_shopify_prefs(id, widget_name, template_id){
+	console.log("In show pref  setting ");
+	 $('#prefs-tabs-content').html(getTemplate(template_id));
+	
+}
+
 function fill_fields(fieldsJSON)
 {
     for (i in fieldsJSON)
@@ -663,6 +672,9 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
     $('#PrefsTab .active').removeClass('active');
     $('.add-widget-prefs-tab').addClass('active');
 
+}
+function shopify_save_widget_prefs(){
+	
 }
 
 function xero_save_widget_prefs()

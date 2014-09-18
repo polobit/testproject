@@ -11,9 +11,10 @@ $(function()
 				var domain = window.location.origin;
 		      
 				e.preventDefault();
-				window.location = "/scribe?service_type=shopify&shop="+shopName+"&domain="+domain+"";
+				window.location = "/scribe?service_type=shopify&type=sync&shop="+shopName+"&domain="+domain+"";
 				
 			});
+	
 			
 	
 			

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.sync.Type;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.util.DefaultWidgets;
 import com.thirdparty.google.ContactPrefs;
 
 /**
@@ -27,7 +28,6 @@ public class ShopifyServlet extends HttpServlet
     {
 	String token = req.getParameter("code");
 
-	String redirectUrl = "/#sync/shopify";
 	String type = (String) req.getSession().getAttribute("type");
 
 	if (token != null)
@@ -38,16 +38,19 @@ public class ShopifyServlet extends HttpServlet
 		if (id != null)
 		{
 
-		    redirectUrl = "#Shopify/" + id;
+		    res.sendRedirect("/#Shopify/" + id);
+		    return ;
 		}
 	    }
 	    else
 	    {
 		saveToken(req, token);
+		res.sendRedirect("/#sync/shopify");
+		return ;
 	    }
-	    res.sendRedirect(redirectUrl);
 
 	}
+	return ;
     }
 
     /**
@@ -75,27 +78,16 @@ public class ShopifyServlet extends HttpServlet
      */
     private String saveWidgetPref(HttpServletRequest req, String token)
     {
-	Widget shopifyWidget = new Widget();
-	String shop = req.getParameter("shop");
-	shop = shop + ".myshopify.com";
-	JSONObject prefs = new JSONObject();
-	try
+	Widget shopifyWidget = DefaultWidgets.getDefaultWidgetByName("Shopify");
+	if (shopifyWidget != null)
 	{
-	    prefs.put("widget_type", Widget.WidgetType.BILLING);
-	    prefs.put("token", token);
-	    prefs.put("shop", shop);
+	    String shop = req.getParameter("shop");
+	    shop = shop + ".myshopify.com";
+	    shopifyWidget.addProperty("token", token);
+	    shopifyWidget.addProperty("shop", shop);
+	    shopifyWidget.save();
 	}
-	catch (JSONException e)
-	{
-	    e.printStackTrace();
-	}
-	shopifyWidget.prefs = prefs.toString();
-	shopifyWidget.save();
-	if (shopifyWidget.id != null)
-	{
-	    return shopifyWidget.id.toString();
-	}
-	return null;
+	return shopifyWidget.id.toString();
 
     }
 }
