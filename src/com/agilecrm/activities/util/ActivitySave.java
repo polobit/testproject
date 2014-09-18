@@ -18,6 +18,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 
@@ -457,7 +458,7 @@ public class ActivitySave
 
     }
 
-   /**
+    /**
      * creates DOCUMENT_ADD activity
      * 
      * @param document
@@ -479,8 +480,8 @@ public class ActivitySave
 	}
 
     }
-    
-     /**
+
+    /**
      * creates document updated activity
      * 
      * @param document
@@ -601,16 +602,16 @@ public class ActivitySave
      * @param actiontype
      *            action_type might be TAG_ADD,TAG_REMOVE,ADD_TO_CAMPAIGn etc..
      * 
+     * 
      * @param data
      * @throws JSONException
+     * 
      */
-    public static void createBulkActionActivity(JSONArray contactids, String actiontype, String data)
+    public static void createBulkActionActivity(int contactidscount, String actiontype, String data)
 	    throws JSONException
     {
 
-	
-
-	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactids.length()));
+	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactidscount));
 
     }
 
