@@ -189,7 +189,7 @@ public class RegisterServlet extends HttpServlet
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 
 	// Redirect to home page
-	response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
+	response.sendRedirect("https://" + domainUser.domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/");
     }
 
     /**
