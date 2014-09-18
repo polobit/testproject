@@ -156,7 +156,7 @@ var LOCAL_SERVER = <%=debug%>;
 
 var IS_FLUID = <%=is_fluid%>;
 
-//var CLICKDESK_CODE_LOADED = false;
+var CLICKDESK_CODE_LOADED = false;
 
 // Get current user prefs json
 var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
@@ -239,7 +239,6 @@ setTimeout(loadMiscScripts, 10000);
   ga('send', 'pageview');
  
 </script>
-
 
 
 <script type="text/javascript">
