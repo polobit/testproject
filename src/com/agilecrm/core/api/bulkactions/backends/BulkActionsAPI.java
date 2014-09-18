@@ -54,7 +54,7 @@ public class BulkActionsAPI
 	InputStream stream = null;
 	byte[] bytes = null;
 
-	createActivity(request, action_type);
+//	createActivity(request, action_type);
 
 	/**
 	 * Reads request body in to bytes if filter is null i.e., action is to

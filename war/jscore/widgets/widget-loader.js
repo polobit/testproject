@@ -417,7 +417,13 @@ function queuePostRequest(queueName, url, data, successcallback, errorCallback)
  * @param queueName the name of the queue.
  */
 function queueClear(queueName){
-	$.ajaxq.clear(queueName);
+	console.log('clear queue.');
+	if(document.ajaxq){
+		document.ajaxq.q[queueName] = [];
+	}
+	/*head.js('/js/lib/ajaxm/ajaxq.js', function(){
+		$.ajaxq.clear(queueName);
+	});*/
 }
 
 /**
