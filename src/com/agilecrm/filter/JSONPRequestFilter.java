@@ -43,7 +43,7 @@ public class JSONPRequestFilter implements Filter
 	    chain.doFilter(request, response);
 	    out.println(");");
 
-	    response.setContentType("text/javascript");
+	    response.setContentType("application/javascript");
 	}
 	else
 	{
