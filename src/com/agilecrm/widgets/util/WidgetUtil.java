@@ -92,7 +92,26 @@ public class WidgetUtil
 		 * Fetches list of widgets related to AgileUser key and adds is_added
 		 * field as true to default widgets if not present
 		 */
-		return ofy.query(Widget.class).ancestor(userKey).filter("widget_type !=", WidgetType.EMAIL).list();
+		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
+
+		for (Widget widget : widgets)
+		{
+			if (WidgetType.EMAIL.equals(widget.widget_type))
+			{
+				System.out.println("Converting widget type email to integrations...");
+
+				widget.widget_type = WidgetType.INTEGRATIONS;
+				widget.save();
+
+				// Remove from list
+				widgets.remove(widget);
+
+				break;
+			}
+		}
+
+		return widgets;
 	}
 
 	/**
@@ -152,13 +171,11 @@ public class WidgetUtil
 	{
 		try
 		{
-
 			System.out.println("In get widget bu name ");
 			// Queries on widget name, with current AgileUser Key
 			return getWidget(name, AgileUser.getCurrentAgileUser().id);
 		}
 		catch (Exception e)
-
 		{
 			e.printStackTrace();
 			return null;
@@ -191,7 +208,6 @@ public class WidgetUtil
 			e.printStackTrace();
 			return null;
 		}
-
 	}
 
 	/**
@@ -245,5 +261,4 @@ public class WidgetUtil
 
 		return listOfIntegrations;
 	}
-
 }
