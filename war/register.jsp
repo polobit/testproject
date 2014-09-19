@@ -329,7 +329,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					  success: function(data){
 						
 						
-						  $("#register_account").removeAttr("disabled");
+						  
 						  if(data && data.error)
 							{
 							
@@ -341,6 +341,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 								  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
 							  else
 								  $("#agile").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+							  
+							  $("#register_account").removeAttr("disabled");
 							  return;
 							  
 							}
