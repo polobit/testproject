@@ -241,15 +241,14 @@ setTimeout(loadMiscScripts, 10000);
 </script>
 
 
-<script type="text/javascript">
+<!-- ClickDesk Live Chat Service for websites -->
+<script type='text/javascript'>
 var _glc =_glc || [];_glc.version="1.0"; _glc.push('all_ag9zfmNsaWNrZGVza2NoYXRyDQsSBXVzZXJzGP6OEAw');
 var glcpath = (('https:' == document.location.protocol) ? 'https://beta2.clickdesk.com/clickdesk-ui/browser/' : 
 'http://beta2.clickdesk.com/clickdesk-ui/browser/');
 var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
-var glcspt = document.createElement('script'); glcspt.type = 'text/javascript'; 
-glcspt.async = true; glcspt.src = glcpath + 'livechat-new.js';
-var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(glcspt, s);
 </script>
+<!-- End of ClickDesk -->
 
 </body>
 </html>
