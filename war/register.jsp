@@ -239,24 +239,6 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 		<script type="text/javascript">
 		$(document).ready(function() {			
 			
-         
-			$('.openid_large_btn').click(function(e)
-			{
-				// Get Data Google/Yahoo and submits to to LoginServlet
-				var data = $(this).attr('data');
-				$('#oauth-name').val(data);
-				
-				$("#choose_domain").validate();
-				if($("#choose_domain").valid())	
-				{
-					var domain = $("#subdomain").val();
-					checkAndCreateUser("/backend/register-check?domain="+domain+"&oauth=true", $("#oauth"))
-				}
-				
-				e.preventDefault();
-				
-			});
-			
 			jQuery.validator.addMethod("domainLength", function(value, element) {
 				var subdomain = value;
 				return !(subdomain == null || subdomain == "" || subdomain.length < 4 || subdomain.length > 20)
@@ -291,13 +273,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				%>
 				
 			}); --%>
-			$("#choose_domain").validate({
-				errorPlacement: function(error, element) {
-					console.log(error);
-					console.log(error.insertAfter($(element).siblings("span")));
-					}
-			});
-			
+		
 			// Submits the Agile form to to RegisterServlet
 			$("#agile").validate({
 				 submitHandler: function(form) {
@@ -339,8 +315,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				return;
 			
 		    $("#agile").validate();
-		    $("#choose_domain").validate();
-		    return  $("#choose_domain").valid() && $("#agile").valid();
+		  //  $("#choose_domain").validate();
+		    return  $("#agile").valid();
 		    }
 		
 		function checkAndCreateUser(url, form)
@@ -364,7 +340,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 							  if(error_block.length)
 								  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
 							  else
-								  $("#choose_domain").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+								  $("#agile").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
 							  return;
 							  
 							}
@@ -376,7 +352,8 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 						 var domain = $("#subdomain").val();
 						
 						  // Form data is posted to its subdomain 
-						  $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+						// $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+						   $(form).attr('action', "http://localhost:8888/register");
 						  form.submit();	 
 					  },
 					  error: function(xhr, status, error)
