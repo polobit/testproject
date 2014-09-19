@@ -451,11 +451,15 @@ $('#import-deals')
 
 					var upload_valudation_errors = {
 						"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
-						"deal_duplicated" : { "error_message" : "Deal Name is Duplicated" },
-						"deal_value_missing" : { "error_message" : "Deal value is mandatory.Please select deal value." },
-						"deal_milestone_missing" : { "error_message" : "Milestone is mandatory. Please select milestone." },
-						"deal_probability_missing" : { "error_message" : "Deal probability is mandatory. Please select probability value should be less than or equal to 100." },
-						"deal_track_missing" : { "error_message" : "Deal track is mandatory. Please select track." }
+						"deal_duplicated" : { "error_message" : "Deal Name field is duplicated" },
+						"deal_value_duplicated" : { "error_message" : "Deal value field is duplicated" },
+						"deal_track_duplicated" : { "error_message" : "Deal track field is duplicated" },
+						"deal_milestone_duplicated" : { "error_message" : "Milestone field is duplicated." },
+						"deal_related_contact_duplicated" : { "error_message" : "Deal relatsTo field duplicated" },
+						"deal_probability_duplicated" : { "error_message" : "Deal probability field is duplicated" },
+						"deal_close_date_duplicated" : { "error_message" : "Deal close date field is duplicated" },
+						"deal_note_duplicated" : { "error_message" : "Deal Note field duplicated" },
+						"deal_description_duplicated" {"error_message","Deal descriptions field is duplicated"}
 
 					}
 					var models = [];
@@ -471,9 +475,11 @@ $('#import-deals')
 					 * set. If validations failed the error alerts a explaining
 					 * the cause are shown
 					 */
-					deal_count = 0, value_count = 0, probability_count = 0, milestone_count = 0, track_count = 0;
+					deal_count = 0, value_count = 0, probability_count = 0, milestone_count = 0, track_count = 0,
+					close_date_count=0,related_count=0,note_count=0,description_count = 0;
 					$(".import-select").each(function(index, element)
 					{
+					
 						var value = $(element).val();
 						if (value == "properties_name")
 							deal_count += 1;
@@ -485,6 +491,15 @@ $('#import-deals')
 							milestone_count += 1;
 						if (value == "properties_track")
 							track_count += 1;
+						if(value == "properties_closeDate")
+										close_date_count +=1;
+						if(value == "properties_relatedTo")
+										related_count +=1;
+						if(value == "properties_note")
+										note_count +=1;
+						if(value == "properties_description")
+										description_count +=1;
+										
 
 					})
 
@@ -493,11 +508,7 @@ $('#import-deals')
 						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_name_missing));
 						return false;
 					}
-					else if (track_count == 0)
-					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_track_missing));
-						return false;
-					}
+			
 
 					else if (deal_count > 1)
 					{
@@ -505,21 +516,51 @@ $('#import-deals')
 						return false;
 					}
 
-					else if (value_count == 0)
+					else if (value_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_value_missing));
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_value_duplicated));
 						return false;
 					}
 
-					else if (milestone_count == 0)
+					else if (track_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_milestone_missing));
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_track_duplicated));
 						return false;
 					}
 
-					else if (probability_count == 0)
+					else if (milestone_count > 1)
 					{
-						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_probability_missing));
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_milestone_duplicated));
+						return false;
+					}
+					
+					else if (related_count > 1)
+					{
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_related_contact_duplicated));
+						return false;
+					}
+
+					else if (probability_count > 1)
+					{
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_probability_duplicated));
+						return false;
+					}
+					
+					else if (close_date_count > 1)
+					{
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_close_date_duplicated));
+						return false;
+					}
+					
+					else if (note_count > 1)
+					{
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_note_duplicated));
+						return false;
+					}
+					
+					else if (description_count > 1)
+					{
+						$("#import-validation-error").html(getTemplate("import-deal-validation-message", upload_valudation_errors.deal_description_duplicated));
 						return false;
 					}
 
