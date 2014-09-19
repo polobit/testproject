@@ -11,7 +11,7 @@ import com.agilecrm.shopifyapp.util.ShopifyAppUtil;
 public class ShopifyAppAPI
 {
     @GET
-    @Produces()
+    @Produces("text/plain")
     public String getDomainByShopURL(@QueryParam("shop") String shopURL)
     {
 	return ShopifyAppUtil.getDomainByShop(shopURL);
