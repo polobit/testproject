@@ -2,14 +2,26 @@
 
 /*css for all login pages */
 
+html,body
+{
+	height:100%;
+}
 .reg-page-bg
 {
-	background:url("../../img/signin/reg-bg.jpg") repeat scroll center center ;
+	background:url("../../img/signin/reg-bg.jpg") no-repeat scroll center center ;
+	background-attachment:fixed;
+	background-size:100% 100%;
+	
 	
 }
 .logpages
 {
 	font-family:"Open Sans",Arial,sans-serif;
+}
+#domain-error
+{
+	background: #e87251;
+color: #fff;
 }
 
  
@@ -56,7 +68,7 @@ background: none repeat scroll 0 0 #fff;
 border-radius: 8px;
 padding: 0 40px;
 width: 500px;
-margin: 0 auto;
+margin: 10px auto 20px;
 }
 .regpage-uname,.regpage-mail,.regpage-password,.login-uname,.login-password
 {
@@ -107,7 +119,7 @@ vertical-align: bottom;
     padding: 0 0 19px;
 	 color: #74b9ef;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .regpage-fieldview

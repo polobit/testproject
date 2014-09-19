@@ -33,7 +33,7 @@ else
 
 
 <link rel="stylesheet" type="text/css" href="/css/bootstrap.v3.min.css" /> 
-<link type="text/css" rel="stylesheet" href="/css/agilecrm.css"/>
+<!-- <link type="text/css" rel="stylesheet" href="/css/agilecrm.css"/> -->
 <link type="text/css" rel="stylesheet" href="/css/openid-min.css"/>
 <link type="text/css" rel="stylesheet" href="/css/signin.css"/>
 <link type="text/css" rel="stylesheet" href="/css/register.css"/>
@@ -46,6 +46,8 @@ else
 
 body {
 	padding-top: 20px;
+	overflow-x:hidden;
+	overflow-y:scroll;
 	}
 	
 .navbar-search{
@@ -191,7 +193,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 				   	   <div align="center" class="regpage-signup">
 				  <input type='submit' id="register_account"  value="Sign up" class='btn btn-large btn-primary  regpage-btn'>
 				</div>
-					<div class="form-group regpage-options log-terms">
+					<div class="form-group regpage-options log-terms" style="margin-bottom:0px;">
 					  <!-- <label class="checkbox" style="display:inline-block;">I agree with the <a href="https://www.agilecrm.com/terms.html" target="_blank">Terms and conditions</a><input type="checkbox" checked="checked" name="agree" class="required"></label> -->
 					  By clicking sign up, I agree to  agileCRM's  <a href="https://www.agilecrm.com/terms.html" target="_blank" class="log-text-underline">Terms of service</a>
 				  </div>
@@ -340,7 +342,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 							  if(error_block.length)
 								  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
 							  else
-								  $("#agile").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
+								  $("#domain-error").html('<a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error).show();
 							  
 							  $("#register_account").removeAttr("disabled");
 							  return;
