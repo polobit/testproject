@@ -788,7 +788,7 @@ public class CSVUtil
 
 	    // retriveing track information
 	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
-	    List<Milestone> list = null;
+	    List<Milestone> list = new ArrayList<Milestone>();
 	    for (int i = 0; i < dealPropValues.length; i++)
 	    {
 
@@ -809,7 +809,7 @@ public class CSVUtil
 			{
 			    String trackName = dealPropValues[i];
 			    opportunity.track = trackName;
-			    list = MilestoneUtil.getMilestonesList(trackName);
+			    list.addAll(MilestoneUtil.getMilestonesList(trackName));
 
 			}
 
@@ -820,27 +820,7 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("milestone"))
 			{
 			    mileStoneValue = dealPropValues[i];
-			    if (mileStoneValue != null && (!mileStoneValue.isEmpty()))
-			    {
-				if (list != null)
-				{
-				    for (Milestone milestone : list)
-				    {
-					String[] milestonesName = milestone.milestones.split(",");
-					for (String s : milestonesName)
-					{
-					    if (s.equalsIgnoreCase(mileStoneValue))
-					    {
-						opportunity.milestone = mileStoneValue;
-						opportunity.pipeline_id = milestone.id;
-						break;
-					    }
-					}
-				    }
-				}
-
-			    }
-
+			   
 			}
 			else if (value.equals("probability"))
 			{
@@ -961,6 +941,38 @@ public class CSVUtil
 	    }
 
 	    opportunity.setOpportunityOwner(ownerKey);
+	    
+	    
+	    if (mileStoneValue != null && (!mileStoneValue.isEmpty()))
+	    {
+		if (list != null)
+		{
+		    for (Milestone milestone : list)
+		    {
+			String[] milestonesName = milestone.milestones.split(",");
+			for (String s : milestonesName)
+			{
+			    if (s.equalsIgnoreCase(mileStoneValue))
+			    {
+				opportunity.milestone = mileStoneValue;
+				opportunity.pipeline_id = milestone.id;
+				break;
+			    }
+			}
+		    }
+		}
+
+	    }
+	    // if track is get mapped and milestone is field is empty then map all to first milestone name
+	    else if(list != null && list.size()>0 && (mileStoneValue == null|| mileStoneValue.isEmpty())){
+		Milestone milestone = list.get(0);
+		String[]names = milestone.milestones.split(",");
+		if(names.length > 0 ){
+		    opportunity.milestone = names[0];
+		    opportunity.pipeline_id = milestone.id;
+		}
+	    }
+
 
 	    // check milestone if null the search in default
 
@@ -1023,10 +1035,12 @@ public class CSVUtil
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError+nameMissiong);
+	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError + nameMissiong);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
-	buildDealsImportStatus(status, "NAMEMISSING", nameMissiong);
-
+	if (nameMissiong > 0)
+	{
+	    buildDealsImportStatus(status, "NAMEMISSING", nameMissiong);
+	}
 	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
 		status });
 	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));

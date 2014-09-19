@@ -328,7 +328,7 @@ function saveTag(field) {
 	tagObject.tag = fieldValue.trim();
 
 	// Disables input field
-	$(field).attr('disabled');
+	$(field).attr('disabled', 'disabled');
 
 	var model = new BaseModel(tagObject);
 	model.url = "core/api/tags";
