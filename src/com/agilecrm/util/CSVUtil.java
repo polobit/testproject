@@ -757,6 +757,7 @@ public class CSVUtil
 	Integer savedDeals = 0;
 	Integer failedDeals = 0;
 	Integer probabilityError = 0;
+	Integer nameMissiong = 0;
 	/**
 	 * Reading CSV file from input stream
 	 */
@@ -807,11 +808,8 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("track"))
 			{
 			    String trackName = dealPropValues[i];
+			    opportunity.track = trackName;
 			    list = MilestoneUtil.getMilestonesList(trackName);
-			    if (list != null && list.size() > 0)
-			    {
-				opportunity.track = trackName;
-			    }
 
 			}
 
@@ -854,7 +852,7 @@ public class CSVUtil
 				    Double probability = Double.parseDouble(parse(prob));
 				    if (probability > 100)
 				    {
-					opportunity.probability = 100;
+					opportunity.probability = 0;
 				    }
 				    else
 				    {
@@ -969,7 +967,7 @@ public class CSVUtil
 	    if (opportunity.milestone == null)
 	    {
 		Milestone milestone = MilestoneUtil.getMilestones();
-		if (milestone != null && !mileStoneValue.isEmpty())
+		if (milestone != null)
 		{
 		    opportunity.pipeline_id = milestone.id;
 		    // search for milestone name
@@ -989,6 +987,12 @@ public class CSVUtil
 			    }
 			}
 		    }
+		    // if milestone is blank string or null then set milestone
+		    // as first milestone value in default track
+		    if ((mileStoneValue == null || mileStoneValue.isEmpty()) && milestonesValues.length > 0)
+		    {
+			opportunity.milestone = milestonesValues[0];
+		    }
 
 		}
 	    }
@@ -1000,9 +1004,15 @@ public class CSVUtil
 	    opportunity.custom_data = customFields;
 	    try
 	    {
-
-		opportunity.save();
-		savedDeals++;
+		if (opportunity.name != null && (!opportunity.name.isEmpty()))
+		{
+		    opportunity.save();
+		    savedDeals++;
+		}
+		else
+		{
+		    nameMissiong++;
+		}
 
 	    }
 	    catch (Exception e)
@@ -1015,6 +1025,7 @@ public class CSVUtil
 	buildDealsImportStatus(status, "SAVED", savedDeals);
 	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
+	buildDealsImportStatus(status, "NAMEMISSING", nameMissiong);
 
 	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
 		status });
@@ -1040,7 +1051,7 @@ public class CSVUtil
 
     private String parse(String data)
     {
-	String val =  data.replaceAll("[\\W A-Za-z]", "");
+	String val = data.replaceAll("[\\W A-Za-z]", "");
 	System.out.println(val);
 	return val.trim();
     }
