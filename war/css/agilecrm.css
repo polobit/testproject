@@ -1227,11 +1227,14 @@ margin:0 auto;
 padding-bottom: 5px;
 margin-bottom: 3px;
 
+
 }
 .ref-log li
 {
 	list-style: none;
 border-bottom: 1px solid #f5f5f5;
+margin: 8px 0;
+padding-bottom: 8px;
 }
 .ref-log li td
 {
