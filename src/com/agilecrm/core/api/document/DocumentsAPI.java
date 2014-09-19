@@ -130,6 +130,7 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Document updateDocument(Document document)
     {
+
 	try
 	{
 	    ActivitySave.createDocumentUpdateActivity(document);
@@ -158,7 +159,7 @@ public class DocumentsAPI
     public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray documentsJSONArray = new JSONArray(model_ids);
-     ActivityUtil.createBulkDeleteActivity(EntityType.DOCUMENT, "", String.valueOf(documentsJSONArray.length()),
+	ActivityUtil.createBulkDeleteActivity(EntityType.DOCUMENT, "", String.valueOf(documentsJSONArray.length()),
 	        "documents deleted");
 
 	Document.dao.deleteBulkByIds(documentsJSONArray);
