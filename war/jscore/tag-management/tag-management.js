@@ -263,12 +263,13 @@ function blur_out_input_field(element)
 	r = confirm("Create new tag \"" + value + "\" ? ");
 	if(!r)
 		{
-			toggleAddTag(false);
 			$(element).val("");
+			toggleAddTag(false);
+			
 			return;
 		}
 		
-	saveTag(this);
+	saveTag(element);
 }
 
 function toggleAddTag(show)
@@ -278,6 +279,8 @@ function toggleAddTag(show)
 			$("#add-new-tag").hide();
 			$("#new_tag_field_block").show();
 			$("#new_tag").focus();
+			console.log($("#add_new_tag").attr('disabled'));
+			$("#add_new_tag").removeAttr('disabled');
 			return;
 		}
 	$("#add-new-tag").show();
@@ -294,7 +297,7 @@ $("#add_new_tag").die().live('click', function(e){
 	e.preventDefault();
 	var newTag = $().val();
 	
-	saveTag("#new_tag");
+	blur_out_input_field("#new_tag");
 });
 
 
@@ -302,6 +305,9 @@ $("#add_new_tag").die().live('click', function(e){
 function saveTag(field)
 {
 	var fieldValue = $(field).val();
+	
+	if($(field).attr('disabled'))
+		return;
 	
 	if(!isValidTag(fieldValue, true))
 	{
@@ -322,6 +328,8 @@ function saveTag(field)
 	model.url = "core/api/tags";
 	model.save([], {success: function(response){
 		$(field).val("");
+		toggleAddTag(false);
+		$(field).removeAttr('disabled');
 		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" created.", "top", 5000);
 		
 	}});
