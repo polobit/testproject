@@ -65,6 +65,10 @@ label{
 	color: #ff604f;
 	font-weight:normal;
 }
+.close
+{
+color:#000!important;
+}
 .login-page .openid_large_btn:hover {
 margin: 4px 0px 0px 4px;
 border: 2px solid #999;
@@ -211,13 +215,13 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 						
 						<% if(!StringUtils.isEmpty(error)){%>
 					 <div class="alert alert-error login-error">
-						<a class="close" data-dismiss="alert" href="#">×</a><%=error%> 
+						<a class="close" data-dismiss="alert" href="#">Ã—</a><%=error%> 
 					</div>
 					<%}%>
 					
 					 <% if(!StringUtils.isEmpty(success)){%>
 					<div class="alert alert-success login-success">
-						<a class="close" data-dismiss="alert" href="#">×</a><%=success%> 
+						<a class="close" data-dismiss="alert" href="#">Ã—</a><%=success%> 
 					</div>
 					 <%}%>
 					 <!-- <h3><small>Select your domain at Agile CRM</small></h3> -->
