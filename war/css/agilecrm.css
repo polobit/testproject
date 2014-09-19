@@ -842,11 +842,16 @@ tbody a.no-style-a {
  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 /* For UI in deals milestones */
+.milestone-main .milestone-column:last-child p:after,.milestone-main .milestone-column:last-child span:after
+{
+	border-left:0px solid;
+}
+
 .milestone-main {
 	white-space: nowrap;
 	overflow: auto;
 	width: 100%;
-	/*height: 517px;*/
+	height: 517px;
 	border: 1px solid #d5d5d5;
 	border-radius: 5px;
 }
