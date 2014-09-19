@@ -18,6 +18,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
+import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.gson.Gson;
 
@@ -457,7 +458,7 @@ public class ActivitySave
 
     }
 
-   /**
+    /**
      * creates DOCUMENT_ADD activity
      * 
      * @param document
@@ -479,8 +480,8 @@ public class ActivitySave
 	}
 
     }
-    
-     /**
+
+    /**
      * creates document updated activity
      * 
      * @param document
@@ -498,20 +499,37 @@ public class ActivitySave
 	JSONArray jsn = js.getJSONArray("contact_ids");
 
 	System.out.println(jsn + "  new contacts left side and old contacts right side  " + contactids);
-	if (jsn != null)
+	if (jsn != null && jsn.length() > 0)
 	{
 	    System.out.println("inside  contacts  ");
-	    if (contactids.size() > jsn.length())
+	    if (contactids != null)
 	    {
-		int numberofcontacts = contactids.size() - jsn.length();
+		if (contactids.size() > jsn.length())
+		{
+		    int numberofcontacts = contactids.size() - jsn.length();
 
-		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
-		        String.valueOf(numberofcontacts), "Related contact to this Document");
+		    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
+			    String.valueOf(numberofcontacts), "Related contact to this Document");
+		}
+		else
+		{
+		    ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
+			    String.valueOf(jsn.length()), "Related contact to this Document");
+		}
 	    }
 	    else
 	    {
 		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_ADD, document, document.url,
 		        String.valueOf(jsn.length()), "Related contact to this Document");
+	    }
+	}
+	
+	else
+	{
+	    if (contactids.size() > 0)
+	    {
+		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
+		        String.valueOf(contactids.size()), "Related contact to this Document");
 	    }
 	}
 
@@ -601,16 +619,16 @@ public class ActivitySave
      * @param actiontype
      *            action_type might be TAG_ADD,TAG_REMOVE,ADD_TO_CAMPAIGn etc..
      * 
+     * 
      * @param data
      * @throws JSONException
+     * 
      */
-    public static void createBulkActionActivity(JSONArray contactids, String actiontype, String data)
+    public static void createBulkActionActivity(int contactidscount, String actiontype, String data)
 	    throws JSONException
     {
 
-	
-
-	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactids.length()));
+	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactidscount));
 
     }
 

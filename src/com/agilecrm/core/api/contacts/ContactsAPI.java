@@ -905,6 +905,7 @@ public class ContactsAPI
      */
     @Path("/{contact-id}/isUpdated")
     @GET
+    @Produces(MediaType.TEXT_PLAIN)
     public boolean isContactUpdated(@PathParam("contact-id") Long id, @QueryParam("updated_time") Long updatedTime)
     {
 	return ContactUtil.isContactUpdated(id, updatedTime);
