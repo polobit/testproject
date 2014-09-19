@@ -62,7 +62,7 @@ public class EmailGatewayUtil
 	    {
 		widget = new Widget("EmailGateway",
 		        "Email gateway supports third party email apis integration into Agile.", "", "", "", "",
-		        WidgetType.EMAIL, IntegrationType.EMAIL);
+		        WidgetType.INTEGRATIONS, IntegrationType.EMAIL);
 	    }
 
 	    ObjectMapper map = new ObjectMapper();
