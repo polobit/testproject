@@ -77,6 +77,7 @@ public class LoginServlet extends HttpServlet
 	if(!StringUtils.isEmpty(multipleLogin))
 	{
 	    handleMulipleLogin(response);
+	    return;
 	}
 	
 	
