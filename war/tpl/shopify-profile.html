@@ -19,3 +19,34 @@
 </div>
 
 </script>
+
+<script id="shopify-custom-field-template" type="text/html">
+<div class="widget_content">
+{{#if_equals this.custom_fields.length "0"}}
+	<p>Shopify id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+{{else}}
+	<p>Shopify id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+	<select name="shopify_field" id="shopify_custom_field_name" class="required span10" style="width:100%" >
+     		<option class="default-select" value="">-Select-</option>
+		{{#each this.custom_fields}}
+			<option value="{{field_label}}">{{field_label}} 
+			</option>
+		{{/each}}
+	</select>
+	<p>Or, you can <a href="#custom-fields">create </a> a new text custom field.</p>
+	<a href="#" class="btn" id="save_shopify_name" style="text-decoration:none;">Save</a>
+{{/if_equals}}
+</div>
+</script>
+
+<script id="shopify-error-template" type="text/html">
+{{#check_length message "140"}}
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+		{{{message}}}
+	</div>
+{{else}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{{message}}}
+	</div>
+{{/check_length}}
+</script>
