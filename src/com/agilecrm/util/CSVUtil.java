@@ -1023,7 +1023,7 @@ public class CSVUtil
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError);
+	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError+nameMissiong);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
 	buildDealsImportStatus(status, "NAMEMISSING", nameMissiong);
 
