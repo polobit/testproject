@@ -363,7 +363,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 						 var domain = $("#subdomain").val();
 						
 						  // Form data is posted to its subdomain 
-						 $(form).attr('action', "https://" + domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/register");
+						 $(form).attr('action', "https://" + domain + ".agilecrm.com/register");
 						  // $(form).attr('action', "http://localhost:8888/register");
 						  form.submit();	 
 					  },
