@@ -21,9 +21,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.BulkActionUtil.ActionType;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -262,6 +264,8 @@ public class BulkActionsAPI
 		    if (decoded_contact_ids != null)
 		    {
 			JSONArray contact_ids = new JSONArray(decoded_contact_ids);
+			Contact contact = ContactUtil.getContact(contact_ids.getLong(0));
+			if (!("COMPANY").equals(contact.type.toString()))
 			ActivitySave.createBulkActionActivity(contact_ids.length(), action_type, decoded_data);
 
 		    }
@@ -294,6 +298,8 @@ public class BulkActionsAPI
 		    if (decoded_contact_ids != null)
 		    {
 			JSONArray contact_ids = new JSONArray(decoded_contact_ids);
+			Contact contact = ContactUtil.getContact(contact_ids.getLong(0));
+			if (!("COMPANY").equals(contact.type.toString()))
 			ActivitySave.createBulkActionActivity(contact_ids.length(), action_type, domainuser.name);
 
 		    }
@@ -305,6 +311,8 @@ public class BulkActionsAPI
 		    if (decoded_contact_ids != null)
 		    {
 			JSONArray contact_ids = new JSONArray(decoded_contact_ids);
+			Contact contact = ContactUtil.getContact(contact_ids.getLong(0));
+			if (!("COMPANY").equals(contact.type.toString()))
 			ActivitySave.createBulkActionActivity(contact_ids.length(), action_type, "");
 
 		    }
