@@ -28,17 +28,17 @@ public class ShopifyServlet extends HttpServlet
     {
 	String token = req.getParameter("code");
 
-	String type = (String) req.getSession().getAttribute("type");
+	String callback = (String) req.getSession().getAttribute("url");
 
 	if (token != null)
 	{
-	    if (type.equalsIgnoreCase("widget"))
+	    if (callback.equalsIgnoreCase("shopify"))
 	    {
 		String id = saveWidgetPref(req, token);
 		if (id != null)
 		{
 
-		    res.sendRedirect("/#Shopify/" + id);
+		    res.sendRedirect("/#Shopify/shopify");
 		    return ;
 		}
 	    }

@@ -400,34 +400,23 @@ var WidgetsRouter = Backbone.Router
 																}
 																else
 																{
-																				{
-																								$
-																																.getJSON(
-																																								"core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
+																				{	$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
 																																								function(data)
 																																								{
-																																												set_up_access(
-																																																				"Stripe",
-																																																				'stripe-login',
-																																																				data,
+																																												set_up_access("Stripe",'stripe-login',data,
 																																																				'/scribe?service=stripe&return_url=' + encodeURIComponent(window.location.protocol + "//" + window.location.host + "/#Stripe/stripe"));
 																																								});
 																								return;
 
 																				}
 
-																				$
-																												.getJSON(
-																																				"core/api/widgets/Stripe",
-																																				function(data1)
+																				$.getJSON("core/api/widgets/Stripe",function(data1)
 																																				{
 																																								console.log(data1);
 
 																																								if (data1)
 																																								{
-																																												$
-																																																				.getJSON(
-																																																												"core/api/custom-fields/scope?scope=CONTACT&type=TEXT",
+																																												$.getJSON(	"core/api/custom-fields/scope?scope=CONTACT&type=TEXT",
 																																																												function(data)
 																																																												{
 																																																																set_up_access(
@@ -448,6 +437,51 @@ var WidgetsRouter = Backbone.Router
 																																				});
 																}
 												},
+												
+
+												/**
+												 * Manage Shopify Widget
+												 */
+												Shopify : function(id)
+												{
+
+																 if(!id){
+															       show_set_up_widget("Shopify", "shopify-login");
+																 }
+																 else{ 
+																 			//	show_set_up_widget("Shopify","shopify-revoke")
+																 				{	$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
+																																									function(data)
+																																									{
+																																													set_up_access("Shopify",'shopify-login',data,null);
+																																									});
+																									return;
+
+																					}
+
+																					$.getJSON("core/api/widgets/Shopify",
+																																					function(data1)
+																																					{
+																																									console.log(data1);
+
+																																									if (data1)
+																																									{
+																																													$.getJSON("core/api/custom-fields/scope?scope=CONTACT&type=TEXT",
+																																																													function(data)
+																																																													{
+																																																																	set_up_access("Shopify",'shopify-login',data,null,data1);
+																																																													});
+																																													return;
+
+																																									}
+																																									else
+																																									{
+																																													show_set_up_widget("Shopify", 'shopify-login');
+																																									}
+																																					});
+																 }
+												},
+
 
 												/**
 												 * Manages Xero widget
@@ -636,20 +670,6 @@ var WidgetsRouter = Backbone.Router
 																				show_set_up_widget("Chargify", "chargify-login");
 																else
 																				fill_form(id, "Chargify", 'chargify-login')
-												},
-
-												/**
-												 * Manage Shopify Widget
-												 */
-												Shopify : function(id)
-												{
-
-																 if(!id){
-																show_set_up_widget("Shopify", "shopify-login");
-																 }
-																 else{ 
-																 				show_set_up_widget("Shopify","shopify-revoke")
-																 }
 												},
 
 												/**
