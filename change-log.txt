@@ -1,3 +1,10 @@
+1-10(19-sept-2014)
+
+***Saikiran***
+- Refresh icon when any user updates Contact
+- Date customfield issue in company details page.
+- Deals Custom fields in Contact and Company details
+
 1-9(12-sept-2014)
 
 *** jagadeesh ***
