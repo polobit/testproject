@@ -450,18 +450,17 @@ $('#import-deals')
 						return;
 
 					var upload_valudation_errors = {
-						"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
-						"deal_duplicated" : { "error_message" : "Deal Name field is duplicated" },
-						"deal_value_duplicated" : { "error_message" : "Deal value field is duplicated" },
-						"deal_track_duplicated" : { "error_message" : "Deal track field is duplicated" },
-						"deal_milestone_duplicated" : { "error_message" : "Milestone field is duplicated." },
-						"deal_related_contact_duplicated" : { "error_message" : "Deal relatsTo field duplicated" },
-						"deal_probability_duplicated" : { "error_message" : "Deal probability field is duplicated" },
-						"deal_close_date_duplicated" : { "error_message" : "Deal close date field is duplicated" },
-						"deal_note_duplicated" : { "error_message" : "Deal Note field duplicated" },
-						"deal_description_duplicated" {"error_message","Deal descriptions field is duplicated"}
-
-					}
+													"deal_name_missing" : { "error_message" : "Deal Name is mandatory. Please select deal name." },
+													"deal_duplicated" : { "error_message" : "Deal Name field is duplicated" },
+													"deal_value_duplicated" : { "error_message" : "Deal value field is duplicated" },
+													"deal_track_duplicated" : { "error_message" : "Deal track field is duplicated" },
+													"deal_milestone_duplicated" : {"error_message" : "Milestone field is duplicated."},
+													"deal_related_contact_duplicated" : {"error_message" : "Deal relatsTo field duplicated" },
+													"deal_probability_duplicated" : {"error_message" : "Deal probability field is duplicated"},
+													"deal_close_date_duplicated" : {"error_message" : "Deal close date field is duplicated"},
+													"deal_note_duplicated" : {"error_message" : "Deal Note field duplicated"},
+													"deal_description_duplicated" : {"error_message":"Deal descriptions field is duplicated"},
+												}
 					var models = [];
 
 					// Hide the alerts
@@ -475,11 +474,9 @@ $('#import-deals')
 					 * set. If validations failed the error alerts a explaining
 					 * the cause are shown
 					 */
-					deal_count = 0, value_count = 0, probability_count = 0, milestone_count = 0, track_count = 0,
-					close_date_count=0,related_count=0,note_count=0,description_count = 0;
+					deal_count = 0, value_count = 0, probability_count = 0, milestone_count = 0, track_count = 0,	close_date_count=0,related_count=0,note_count=0,description_count = 0;
 					$(".import-select").each(function(index, element)
 					{
-					
 						var value = $(element).val();
 						if (value == "properties_name")
 							deal_count += 1;
@@ -501,7 +498,7 @@ $('#import-deals')
 										description_count +=1;
 										
 
-					})
+					});
 
 					if (deal_count == 0)
 					{
