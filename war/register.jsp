@@ -68,6 +68,7 @@ label{
 .close
 {
 color:#000!important;
+text-decoration:none!important;
 }
 .login-page .openid_large_btn:hover {
 margin: 4px 0px 0px 4px;
