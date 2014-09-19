@@ -243,9 +243,9 @@ setTimeout(loadMiscScripts, 10000);
 
 <!-- ClickDesk Live Chat Service for websites -->
 <script type='text/javascript'>
-var _glc =_glc || [];_glc.version="1.0"; _glc.push('all_ag9zfmNsaWNrZGVza2NoYXRyDQsSBXVzZXJzGP6OEAw');
-var glcpath = (('https:' == document.location.protocol) ? 'https://beta2.clickdesk.com/clickdesk-ui/browser/' : 
-'http://beta2.clickdesk.com/clickdesk-ui/browser/');
+var _glc =_glc || []; _glc.push('all_ag9zfmNsaWNrZGVza2NoYXRyDgsSBXVzZXJzGKD0uQoM');
+var glcpath = (('https:' == document.location.protocol) ? 'https://my.clickdesk.com/clickdesk-ui/browser/' : 
+'http://my.clickdesk.com/clickdesk-ui/browser/');
 var glcp = (('https:' == document.location.protocol) ? 'https://' : 'http://');
 </script>
 <!-- End of ClickDesk -->
