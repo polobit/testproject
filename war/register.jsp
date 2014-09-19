@@ -347,8 +347,9 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 								  $("#domain-error").html("<a class='close' data-dismiss='alert' href='#'>&times</a> " + data.error).show();
 							  else
 
-								  $("#domain-error").html('<a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error).show();
+								  $("#agile").prepend('<div id="domain-error" class="alert alert-error login-error" ><a class="close" data-dismiss="alert" href="#">&times</a>'+ data.error+'</div');
 
+						
 							  
 							  $("#register_account").removeAttr("disabled");
 							  return;
