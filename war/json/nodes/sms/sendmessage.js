@@ -2,9 +2,9 @@
     "name": "Send Message",
     "thumbnail": "json/nodes/images/sms/sendmessage.png",
     "icon": "json/nodes/icons/sms/sendmessage.png",
-    "info": "Send text messages (SMS) anywhere in the world",
-    "help": "Send text messages (SMS) anywhere in the world. ",
-    "author": "John",
+    "info": "Send SMS to the contact using the Twilio Integration",
+    "help": "You can enable Twilio integration from Admin settings -> Integrations.",
+    "author": "Bhasuri",
     "company": "mantra",
     "language": "en",
     "branches": "yes",
@@ -16,8 +16,7 @@
             "category": "Settings",
 			"name": "from",
             "id":"from",
-			"value": "$subscriber.Sender",
-           	"title": "Enter 'From' CallerId should match the numbers on your account.",
+			"title": "Enter 'From' CallerId should match the numbers on your account.",
 			"fieldType": "input",
             "type": "text"		
 		},{
@@ -26,7 +25,6 @@
             "category": "Settings",
 			"name": "to",
             "id":"to",
-			"value": "$subscriber.Number",
            	"title": "Enter the recipient number. If you are using a list - you can use $subscriber.Number",
 			"fieldType": "input",
             "type": "text"

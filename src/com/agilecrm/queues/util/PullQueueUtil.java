@@ -125,12 +125,14 @@ public class PullQueueUtil
 
 	// Runs BULK_PULL_QUEUE tasks in bulk backend
 	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE))
+		|| StringUtils.equals(queueName, AgileQueues.BULK_EMAIL_PULL_QUEUE)
+		||StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE))
 	    return backendService.getBackendAddress(Globals.BULK_BACKENDS);
 
 	// Runs NORMAL_PULL_QUEUE tasks in normal backend
 	if (StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.NORMAL_EMAIL_PULL_QUEUE))
+		|| StringUtils.equals(queueName, AgileQueues.NORMAL_EMAIL_PULL_QUEUE)
+		|| StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE))
 	    return backendService.getBackendAddress(Globals.NORMAL_BACKENDS);
 
 	return backendService.getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);

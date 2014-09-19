@@ -68,6 +68,7 @@ parse : function(response)
  * view.
  */
 var Base_List_View = Backbone.View.extend({ events : { "click .delete" : "deleteItem", "click .edit" : "edit", "delete-checked .agile_delete" : "deleteItem",
+	"click .delete-model" : "deleteModel"
 
 },
 /*
@@ -75,7 +76,7 @@ var Base_List_View = Backbone.View.extend({ events : { "click .delete" : "delete
  */
 initialize : function()
 {
-	_.bindAll(this, 'render', 'deleteItem', 'edit'); // every function
+	_.bindAll(this, 'render', 'deleteItem', 'edit', 'deleteModel'); // every function
 	// that uses 'this'
 	// as the current
 	// object should be
@@ -90,10 +91,22 @@ initialize : function()
  */
 deleteItem : function(e)
 {
+	
 	e.preventDefault();
 	this.model.destroy();
 	this.remove();
-}, edit : function(e)
+}, 
+deleteModel : function(e)
+{
+	e.preventDefault();
+	if(!confirm("Are you sure you want to delete?"))
+		return false;
+	$.ajax({ type: 'DELETE', url: this.model.url(),success : function() {
+		location.reload(true);
+	}
+        });
+},
+edit : function(e)
 {
 	/*
 	 * console.log(this.model); console.log("Editing " +

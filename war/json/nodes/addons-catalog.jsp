@@ -18,6 +18,7 @@
     String[] CRM_CATALOG = {"json/nodes/crm/adddeal.jsp","json/nodes/crm/addnote.js","json/nodes/crm/addtask.jsp","json/nodes/common/add_case.js","json/nodes/crm/tags.js", "json/nodes/common/score.js", "json/nodes/crm/notify.js"};
     String[] SOCIAL_CATALOG = {"json/nodes/social/tweet.js"};
     String [] WEB_CATALOG = {"json/nodes/common/url.js"};
+    /**String [] WEB_CATALOG = {"json/nodes/common/url.js","json/nodes/sms/sendmessage.js"};*/
 
     // Download Each Catalog
     JSONArray jsonArray = new JSONArray();

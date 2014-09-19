@@ -37,6 +37,8 @@ public class TaskCore
      */
     public static void executeCampaign(JSONObject campaignJSON, JSONArray subscriberJSONArray)
     {
+	String namespace = NamespaceManager.get();
+
 	// Iterate through JSONArray
 	for (int i = 0, len = subscriberJSONArray.length(); i < len; i++)
 	{
@@ -73,8 +75,6 @@ public class TaskCore
 	    {
 		// Execute it in a task queue each batch
 		// executeWorkflow(campaignJSON, subscriberJSON);
-
-		String namespace = NamespaceManager.get();
 
 		TaskletWorkflowDeferredTask taskletWorkflowDeferredTask = new TaskletWorkflowDeferredTask(
 		        AgileTaskletUtil.getId(campaignJSON), subscriberJSON.toString(), namespace);
