@@ -50,7 +50,7 @@
 
 
 
-	<td style="width:100%!important;">
+
 		{{#if_equals "TASK" entity_type}}
 	{{#if_equals "TASK_ADD" activity_type}}{{#if_equals "Task_owner_name" custom3}}
 	<div >
@@ -522,6 +522,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
 </div>
+</div>
 <div class="clearfix"></div>
 	 
 {{/if_equals}}
@@ -878,7 +879,7 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 {{/if_equals}}
 {{/if_equals}}
 
-	</td>
+	
 
 
 
@@ -920,6 +921,3 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 
 <div id="activity-list-based-condition"></div>
 </script>
-
-
-
