@@ -32,7 +32,15 @@
 		<url-pattern>/shopify</url-pattern>
 	</servlet-mapping>
 
-
+	<servlet>
+		<servlet-name>ShopifyApp</servlet-name>
+		<servlet-class>com.thirdparty.shopify.ShopifyAppServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyApp</servlet-name>
+		<url-pattern>/shopifyapp</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>OAuth2</servlet-name>
 		<servlet-class>com.agilecrm.scribe.ScribeServlet</servlet-class>

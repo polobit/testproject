@@ -47,8 +47,7 @@ public class AgileAuthFilter implements Filter
      * to login page, where new session cookie is set.
      */
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-	    throws IOException, ServletException
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException
     {
 	System.out.println("Agile Auth Filter");
 
@@ -58,13 +57,20 @@ public class AgileAuthFilter implements Filter
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+	if (((HttpServletRequest) request).getRequestURI().contains("/shopifyapp/installed-domain"))
+	{
+	    System.out.println("Ignoring authentication for shopify app");
+	    chain.doFilter(request, response);
+	    return;
+	}
+
 	// If it is JS API, we will pass it through JSAPIFilter is used to
-	// filter the request i.e., to check the API key allocated to the domain
+	// filter the request i.e., to check the API key allocated to the
+	// domain
 	// if(!(httpRequest.getRequestURI().contains("xero")||httpRequest.getRequestURI().contains("freshbooks")))
 	// {
 	if (httpRequest.getRequestURI().contains("js/api") || httpRequest.getRequestURI().contains("php/api")
-		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions")
-		|| httpRequest.getRequestURI().contains("/core/api/opportunity/backend")
+		|| httpRequest.getRequestURI().contains("/core/api/bulk-actions") || httpRequest.getRequestURI().contains("/core/api/opportunity/backend")
 		|| httpRequest.getRequestURI().contains("oauth") || httpRequest.getRequestURI().contains("/gmail")
 		|| httpRequest.getRequestURI().contains("/core/api/webevents"))
 	{
@@ -117,8 +123,7 @@ public class AgileAuthFilter implements Filter
 
 	// Check if the domain of the user is same as namespace. Otherwise,
 	// Redirect
-	if (domainUser != null && domainUser.domain != null && domain != null
-		&& !domain.equalsIgnoreCase(domainUser.domain))
+	if (domainUser != null && domainUser.domain != null && domain != null && !domain.equalsIgnoreCase(domainUser.domain))
 	{
 	    // Probably forward to the domain again he registered
 	    System.out.println("Forwarding to actual domain " + domainUser.domain);
@@ -189,8 +194,7 @@ public class AgileAuthFilter implements Filter
 	UserInfo info = SessionManager.get();
 	System.out.println();
 	System.out.println(user.scopes);
-	if (info.getScopes() == null
-		|| (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes)))
+	if (info.getScopes() == null || (user.scopes.size() != info.getScopes().size() || !info.getScopes().containsAll(user.scopes)))
 	{
 	    System.out.println("does not contain all scopes");
 	    System.out.println(info.getScopes());
