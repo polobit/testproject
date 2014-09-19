@@ -40,13 +40,13 @@ public class BackendPullServlet extends HttpServlet
 	    pullScheduler.run();
 
 	    // Runs background threads
-	    runBackgroudnThread(queueName);
-	    runBackgroudnThread(queueName);
-	    runBackgroudnThread(queueName);
-
-	    runBackgroudnThread(queueName);
-	    runBackgroudnThread(queueName);
-	    runBackgroudnThread(queueName);
+	    // runBackgroudnThread(queueName);
+	    // runBackgroudnThread(queueName);
+	    // runBackgroudnThread(queueName);
+	    //
+	    // runBackgroudnThread(queueName);
+	    // runBackgroudnThread(queueName);
+	    // runBackgroudnThread(queueName);
 
 	}
 	catch (Exception e)

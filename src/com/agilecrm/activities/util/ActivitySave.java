@@ -523,6 +523,16 @@ public class ActivitySave
 		        String.valueOf(jsn.length()), "Related contact to this Document");
 	    }
 	}
+	
+	else
+	{
+	System.out.println("contacts size in else condition "+contactids.size());
+	    if (contactids.size() > 0)
+	    {
+		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
+		        String.valueOf(contactids.size()), "Related contact to this Document");
+	    }
+	}
 
     }
 

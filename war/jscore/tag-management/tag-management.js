@@ -5,7 +5,6 @@
  */
 var TAG_MODEL_VIEW = Backbone.View
 		.extend(
-
 		{
 			events : {
 				"click .delete" : "deleteItem",
@@ -283,11 +282,6 @@ function blur_out_input_field(element) {
 		return;
 	}
 	
-	$(element).val("");
-	toggleAddTag(false);
-
-	return;
-
 	saveTag(element);
 }
 
@@ -295,9 +289,10 @@ function toggleAddTag(show) {
 	if (show) {
 		$("#add-new-tag").hide();
 		$("#new_tag_field_block").show();
+		$("#add_new_tag").removeAttr('disabled');
 		$("#new_tag").focus();
 		console.log($("#add_new_tag").attr('disabled'));
-		$("#add_new_tag").removeAttr('disabled');
+		
 		return;
 	}
 	$("#add-new-tag").show();
@@ -340,8 +335,9 @@ function saveTag(field) {
 	model.save([], {
 		success : function(response) {
 			$(field).val("");
-			toggleAddTag(false);
 			$(field).removeAttr('disabled');
+			toggleAddTag(false);
+			
 			showNotyPopUp('information', "New tag \"" + model.get('tag')
 					+ "\" created.", "top", 5000);
 

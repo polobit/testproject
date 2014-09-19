@@ -2754,4 +2754,25 @@ $(function()
 		return options.inverse(this)
 	});
 
+	Handlebars.registerHelper('gateway_exists', function(value, target, options)
+    	    {
+    	 
+    	for(var i = 0; i<target.length;i++){
+    		
+    		var prefs = JSON.parse(target[i].prefs);
+    		
+    		if(target[i].name=="EmailGateway"){
+    			
+    			if(prefs.email_api==value)
+    				return options.fn(target[i]);
+    		}
+    		
+    		if(target[i].name=="SMS-Gateway"){
+    			if(prefs.sms_api==value)
+    				return options.fn(target[i]);
+    		}
+    	}
+    	return options.inverse(this);
+    	    });
+
 });
