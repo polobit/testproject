@@ -31,8 +31,9 @@ color: #fff;
  {
  	color:#fff;
  	text-decoration:underline;
+ 	font-weight:bold;
  }
- #doamin-error a:hover
+ #domain-error a:hover
  {
  	text-decoration:none;
  }
