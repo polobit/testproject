@@ -92,7 +92,7 @@ public class SMSGatewayUtil
 	private static void addToQueue(String smsGatewaytype, String domain, String version, String from, String to,
 			String message, String account_sid, String auth_token, String endpoint, String metadata)
 	{
-		SMSDeferredTask smsDeferredTask = new SMSDeferredTask(smsGatewaytype, domain, version, from, to, message,
+	    SMSDeferredTask smsDeferredTask = new SMSDeferredTask(smsGatewaytype, domain, version, from, to, message,
 				account_sid, auth_token, endpoint, metadata);
 
 		// Add to pull queue with from number as Tag
