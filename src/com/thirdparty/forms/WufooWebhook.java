@@ -123,7 +123,7 @@ public class WufooWebhook extends HttpServlet
 		else if (!StringUtils.isBlank(json.optString("Type"))
 			&& (StringUtils.equals("date", json.getString("Type")) || StringUtils.equals("eurodate", json.getString("Type"))))
 		{
-		    finalJson.put(json.getString("Title"), dateFieldValue(json.getString("ID")));
+		    finalJson.put(json.getString("Title"), dateFieldValue(req.getParameter(json.getString("ID"))));
 		    continue;
 		}
 
