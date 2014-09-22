@@ -340,14 +340,14 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 
 		// function to be executed on success, if successCallback is defined
 		success : function(data)
-		{
+		{console.log("Sucesses",url);
 			if (successCallback && typeof (successCallback) === "function")
 				successCallback(data);
 		},
 
 		// function to be executed on success, if errorCallback is defined
 		error : function(data)
-		{
+		{console.log("error",url);
 			if (errorCallback && typeof (errorCallback) === "function")
 				errorCallback(data);
 		},
