@@ -20,18 +20,17 @@ var ActivitylogRouter = Backbone.Router.extend({
 		{
 			$('#content').find("#user-select").append("<li><a href=''>All Users</a></li>");
 
-			var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesofcurrentdomainuser', sortKey : 'time',
-				descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, page_size : 25, individual_tag_name : 'li',
+			var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getAllActivities', sortKey : 'time',
+				descending : true, templateKey : "activity-list-log", cursor : true, page_size : 25, individual_tag_name : 'li',
 				postRenderCallback : function(el)
 				{
 					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 					{
 						$("time", el).timeago();
 					});
-					var user = CURRENT_DOMAIN_USER.name;
 
-					$('.activity-user').html("(" + user + ")");
-					$('#currentusername').html(user);
+					$('.activity-user').html("(All users)");
+					
 				} });
 
 			activitiesview.appendItem = append_activity_log;
