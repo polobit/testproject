@@ -128,7 +128,7 @@ Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 <%
 boolean debug = true;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-debug = false;
+debug = true;
 %>
 
 </div>
