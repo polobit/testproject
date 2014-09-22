@@ -98,7 +98,7 @@ function agile_json(URL, callback)
 	document.getElementsByTagName('body')[0].appendChild((function()
 	{
 		var s = document.createElement('script');
-		s.type = 'text/javascript';
+		s.type = 'application/json';
 		s.src = URL.replace('callback=?', 'callback=' + ud);
 		return s;
 	})());
