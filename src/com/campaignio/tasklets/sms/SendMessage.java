@@ -12,7 +12,7 @@ import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
-import com.thirdparty.twilio.TwilioSMS;
+import com.thirdparty.twilio.TwilioSMSUtil;
 
 /**
  * <code>SendMessage</code> represents Send Message node in workflow. It send
@@ -90,7 +90,7 @@ public class SendMessage extends TaskletAdapter
 
 		// if(SMSGateway.getSMSGateway().equals(SMSGateway.SMS_API.TWILIO))
 
-		TwilioSMS.sendSMS(SMS_API, from, to, message, ACCOUNT_SID, AUTH_TOKEN);
+		TwilioSMSUtil.sendSMS(SMS_API, from, to, message, ACCOUNT_SID, AUTH_TOKEN);
 
 		// Creates log for sending sms
 		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "SMS Sent ",
@@ -105,14 +105,13 @@ public class SendMessage extends TaskletAdapter
 	{
 
 		// Convert number in E164 format which is accepted by twilio
-		String universalFormatNumber = "+" + from.replaceAll("\\D+", "");
 
 		List<String> verifiedNumbers = getVerifiedTwilioNumbers();
 
 		if (verifiedNumbers.isEmpty())
 			return false;
 
-		if (verifiedNumbers.contains(universalFormatNumber))
+		if (verifiedNumbers.contains(from))
 			return true;
 
 		return false;
@@ -140,7 +139,7 @@ public class SendMessage extends TaskletAdapter
 		if (ACCOUNT_SID == null || AUTH_TOKEN == null)
 			return null;
 
-		return TwilioSMS.verifiedTwilioNumbers(ACCOUNT_SID, AUTH_TOKEN);
+		return TwilioSMSUtil.verifiedTwilioNumbers(ACCOUNT_SID, AUTH_TOKEN);
 
 	}
 

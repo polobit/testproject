@@ -202,6 +202,14 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     	
     	options = getUpdateFields("update_field");
     }
+    
+    
+    if(uiFieldDefinition.fieldType == "twilio_incoming_list")
+    {
+    	
+    	options = getTwilioIncomingList("twilio_incoming_list");
+    }
+    
     // Populate Options
     $.each(
     options, function (key, value) {
@@ -636,6 +644,17 @@ function _generateUIFields(selector, ui) {
 			//$(uiField).removeAttr('value').text(uiFieldDefinition.value).appendTo(container);				                                                               
             continue;               
                 
+        }
+        
+        if(uiFieldType == "twilio_incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
         }
         
         // Else Input, textarea,		                
