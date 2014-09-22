@@ -224,6 +224,7 @@ function append_activity_log(base_model)
 		var heading = $('#today-heading', this.el);
 
 		$('#today-activity', this.el).append(itemView.render().el);
+		$('#today-activity', this.el).parent('table').css("display", "block");
 		$('#today-activity', this.el).show();
 		$('#today-heading', this.el).show();
 	}
@@ -234,6 +235,7 @@ function append_activity_log(base_model)
 		var heading = $('#tomorrow-heading', this.el);
 
 		$('#tomorrow-activity', this.el).append(itemView.render().el);
+		$('#tomorrow-activity', this.el).parent('table').css("display", "block");
 		$('#tomorrow-activity', this.el).show();
 		$('#tomorrow-heading', this.el).show();
 	}
@@ -243,6 +245,7 @@ function append_activity_log(base_model)
 		var heading = $('#next-week-heading', this.el);
 
 		$('#next-week-activity', this.el).append(itemView.render().el);
+		$('#next-week-activity', this.el).parent('table').css("display", "block");
 		$('#next-week-activity', this.el).show();
 		$('#next-week-heading', this.el).show();
 	}

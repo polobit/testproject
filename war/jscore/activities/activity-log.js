@@ -1,7 +1,4 @@
 
-
-
-
 function includeTimeAgo(element){
 	head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 			{
@@ -25,8 +22,8 @@ function updateActivty(params)
 {
 
 	// Creates backbone collection view
-	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time', descending : false, templateKey : "activity-list-log",
-		cursor : true, page_size : 25, individual_tag_name : 'li',
+	this.activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesOnSelectedCondition' + params, sortKey : 'time', descending : true, templateKey : "activity-list-log",
+		sort_collection : false,cursor : true, page_size : 25, individual_tag_name : 'li',
 		postRenderCallback : function(el) {
 			includeTimeAgo(el);
 		}
