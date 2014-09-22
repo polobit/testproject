@@ -28,6 +28,7 @@ function agile_send_auth(url) {
 	
 	params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
 	params[gadgets.io.RequestParameters.AUTHORIZATION] = gadgets.io.AuthorizationType.SIGNED;
+
 	gadgets.io.makeRequest(url, agile_handle_load_response, params);
 }
 
@@ -252,15 +253,18 @@ function agile_user_associated() {
 
 	// Get all emails
 	var emails = agile_get_emails();
+	
 	Contacts_Json = {};
 	$.each(emails, function(index, value)
 	{
 		Contacts_Json[value.email] = value;
 	});
+	
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', emails);
 	});
+	
 }
 // Prefs after association
 var PREFS_API_KEY = "agile_api_key";
@@ -330,7 +334,7 @@ function agile_delete_all_prefs()
 
 	gadgets.io.makeRequest(LIB_PATH + 'gmail?command=delete', function()
 	{
-		agile_init_gadget();
+		agile_init_gadget();	
 	}, params);
 
 	
@@ -450,11 +454,10 @@ function agile_gadget_open_popup(url) {
 		 */
 		if (popup.closed) {
 			clearInterval(finished_interval);
-console.log("in setInterval");
+
 			// Reset the credentials
 			agile_delete_prefs(PREFS_POPUP_LINK);
 			agile_login();
-			console.log("after login in setInterval");
 		}
 	}, 100);
 }var TPL_PATH = "http://localhost:8888/misc/gmail/gadget-js-all/tpl/min/"

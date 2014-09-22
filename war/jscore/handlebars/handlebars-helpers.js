@@ -512,7 +512,7 @@ $(function()
 													if (value[i].id)
 														html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 												}
-												html += "</ul><span></span></div>";
+												html += "</ul></div>";
 											}
 										});
 						return html;
