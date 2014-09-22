@@ -13,6 +13,7 @@ import org.codehaus.jettison.json.JSONObject;
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -87,7 +88,6 @@ public class StripeImpl implements AgileBilling
     public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception
     {
 
-	System.out.println(StripeUtil.getCustomerParams(cardDetails, plan));
 	// Creates customer and add subscription to it
 	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails, plan));
 
@@ -98,6 +98,16 @@ public class StripeImpl implements AgileBilling
 	// Return Customer JSON
 	return StripeUtil.getJSONFromCustomer(customer);
 
+    }
+
+    @Override
+    public JSONObject createCustomer(CreditCard cardDetails) throws Exception
+    {
+	// TODO Auto-generated method stub
+	// Creates customer and add subscription to it
+	Customer customer = Customer.create(StripeUtil.getCustomerParams(cardDetails));
+
+	return StripeUtil.getJSONFromCustomer(customer);
     }
 
     /**
@@ -349,29 +359,16 @@ public class StripeImpl implements AgileBilling
     }
 
     @Override
-    public void addSubscriptionAddon(Subscription newSubscription) throws Exception
+    public JSONObject addSubscriptionAddon(Plan newPlan) throws Exception
     {
 	// Fetches current subscription of domain to check if add on
 	// subscription already exists and it is update request
-	Subscription subscription = Subscription.getSubscription();
-	CreditCard card = newSubscription.card_details;
+	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	// New email plan to subscribe user to
-	Plan newPlan = newSubscription.emailPlan;
-
-	// If subscription does not exist in curent domain, we have to create
-	// new customer in stripe and subscribe him to add on plan
-	if (subscription == null)
-	{
-	    newSubscription.createNewEmailSubscription();
-	    return;
-	}
-
-	// New plan to subscribe
-	com.stripe.model.Plan newPlanFromStripe = com.stripe.model.Plan.retrieve(newPlan.plan_id);
-
-	// Flag to check whether request is upgrade of plan or downgrade
-	boolean isProrated = false;
+	String plan_id = SubscriptionUtil.getEmailPlan(newPlan.count);
+	
+	newPlan.plan_id = plan_id;
 
 	// Existing email plan in agile subscription object
 	Plan emailPlanInAgile = subscription.emailPlan;
@@ -399,24 +396,26 @@ public class StripeImpl implements AgileBilling
 
 	    Iterator<com.stripe.model.Subscription> subscriptionIterator = subscriptionList.iterator();
 
-	    // Iterates through all plans and get existing email plan
-	    while (subscriptionIterator.hasNext())
-	    {
-		com.stripe.model.Subscription s = subscriptionIterator.next();
-		com.stripe.model.Plan stripePlan = s.getPlan();
-
-		// If plan contains email, it holds exiting plan to update
-		if (StringUtils.equals(s.getId(), emailPlanInAgile.subscription_id))
+	    if (emailPlanInAgile != null)
+		// Iterates through all plans and get existing email plan
+		while (subscriptionIterator.hasNext())
 		{
-		    existingSubscription = s;
-		    existingAddonPlan = stripePlan;
-		    break;
+		    com.stripe.model.Subscription s = subscriptionIterator.next();
+		    com.stripe.model.Plan stripePlan = s.getPlan();
+
+		    // If plan contains email, it holds exiting plan to update
+		    if (StringUtils.equals(s.getId(), emailPlanInAgile.subscription_id))
+		    {
+			existingSubscription = s;
+			existingAddonPlan = stripePlan;
+			break;
+		    }
 		}
-	    }
 
 	    Map<String, Object> newSubscriptionParams = new HashMap<String, Object>();
 	    newSubscriptionParams.put("plan", newPlan.plan_id);
-
+	    newSubscriptionParams.put("quantity", newPlan.count / 1000);
+	    newPlan.count = null;
 	    // If there is no existing subscription that falls under current
 	    // Category it is considered as new plan subscription
 	    if (existingAddonPlan == null)
@@ -425,52 +424,38 @@ public class StripeImpl implements AgileBilling
 
 		newPlan.subscription_id = existingSubscription.getId();
 	    }
-
-	    // If amount is greater than current plan, subscription is
-	    // updated and invoice is charged immediately
-	    if (newPlanFromStripe.getAmount() > existingAddonPlan.getAmount())
-	    {
-		isProrated = true;
-		newSubscriptionParams.put("prorate", "true");
-		existingSubscription.setStart(new Date().getTime());
-	    }
 	    else
-	    {
-		newSubscriptionParams.put("prorate", "false");
-		existingSubscription.setStart(existingSubscription.getEndedAt());
-	    }
+		// Updates existing
+		existingSubscription.update(newSubscriptionParams);
 
-	    // Updates existing
-	    existingSubscription.update(newSubscriptionParams);
-
-	    if (isProrated)
+	    Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
+	    invoiceItemParams.put("customer", customer.getId());
+	    try
 	    {
-		Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
-		invoiceItemParams.put("customer", customer.getId());
-		try
+		// Creates invoice for plan upgrade and charges customer
+		// immediately
+		Invoice invoice = Invoice.create(invoiceItemParams);
+		if (invoice != null)
 		{
-		    // Creates invoice for plan upgrade and charges customer
-		    // immediately
-		    Invoice invoice = Invoice.create(invoiceItemParams);
-		    if (invoice != null)
-		    {
-			if (invoice.getSubscription().equals(existingSubscription.getId()))
-			    invoice.pay();
-		    }
-		}
-		catch (Exception e)
-		{
+		    if (invoice.getSubscription().equals(existingSubscription.getId()))
+			invoice.pay();
 		}
 	    }
-	    return;
-
+	    catch (Exception e)
+	    {
+	    }
+	   
+	    return StripeUtil.getJSONFromCustomer(Customer.retrieve(customer.getId()));
+	    
 	}
 	catch (StripeException e)
 	{
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
+	    return null;
 	}
 
+	
     }
 
     @Override

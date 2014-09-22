@@ -10,49 +10,9 @@
 </div>
 <div class="row">
 	<div class="span11">
-		<div class="span4">
-		<div class="well" style="width: 220px; height: 200px;">
-			<div style="width: 220px; height: 180px;">
-				<div style="border-bottom: 1px solid #e5e5e5">
-					<h3>Your current plan</h3>
-				</div>
-				<div class="clearfix"></div>
-				<div style="margin-top:10%;text-align:center;font-size:15px">
-					{{#if plan}}
-						{{getAccountPlanName plan.plan_type}} {{getAccountPlanInteval plan.plan_type}} <br/>
-						{{plan.quantity}} Users
-						{{else}}
-							Free <br/>
-						    2 Users
-					{{/if}}
-				</div>
-			</div>
-			<a class="btn btn-primary" href="#subscribe" id="account_plan_upgrade"> Upgrade </a>
-
-		</div>
-		</div>
-	<div class="span4">
-	<div class="well" style="width: 220px; height: 200px;">
-		<div style="width: 220px; height: 180px;">
-			<div style="border-bottom: 1px solid #e5e5e5;">
-				<h3>Email plan</h3>
-			</div>
-			<div class="clearfix"></div>
-				<div style="margin-top:10%;text-align:center;font-size:15px">
-
-				{{#if emailPlan}}
-						{{getAccountPlanName emailPlan.plan_type}} <br/>
-						{{getAccountPlanInteval emailPlan.plan_type}}
-						{{else}}
-						 	5000 <br>
-							Powered by AgileCRM
-					{{/if}}
-			</div>
-		</div>
-		<a class="btn btn-primary" href="#" id="account_email_plan_upgrade"> Modify </a>
-</div>
+		<div class="span4" id="plan-details-pane"></div>
+		<div class="span4" id="email-details-pane"></div>
 	</div>
-</div>
 </div>
 <div class="clear-fix"></div>
 <div class="row-fluid" style="margin-top:50px">
@@ -69,5 +29,113 @@
 	{{else}}
 		No Credit Cards attached.
 {{/if}}
+</div>
+</script>
+
+<script id="account-plan-details-template" type="text/html">
+
+		<div class="well" style="width: 220px; height: 200px;">
+			<div style="width: 220px; height: 180px;">
+				<div style="border-bottom: 1px solid #e5e5e5">
+					<h3>Your current plan</h3>
+				</div>
+				<div class="clearfix"></div>
+					{{#stringToJSON this "billingData"}}{{/stringToJSON}}
+					<div class="form-horizontal" style="margin-left:-33%">
+						{{#getSubscriptionBasedOnPlan billingData plan}}
+							<div class="control-group">
+                       		 <label class="control-label">Current Plan</label>
+                        		<div class="controls" style="margin-top: 5px;">
+                          			 {{getAccountPlanName ../plan.plan_type}}, {{getAccountPlanInteval ../plan.plan_type}}
+                        		</div>
+                    		</div>
+							<div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">Users</label>
+                        			<div class="controls">
+										{{quantity}}
+                        			</div>
+                    		</div>
+							<div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">Amount</label>
+                        			<div class="controls">
+										${{numeric_operation plan.amount 100 "/"}}
+                        			</div>
+                    		</div>
+							 <div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">Start</label>
+                        			<div class="controls">
+										<time class="time-ago">{{epochToHumanDate "mmm dd, yyyy HH:MM tt" currentPeriodStart}}</time>
+                        			</div>
+                    		</div>
+							<div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">End</label>
+                        			<div class="controls">
+										<time class="time-ago">{{epochToHumanDate "mmm dd, yyyy HH:MM tt" currentPeriodEnd}}</time>
+                        			</div>
+                    		</div>
+						{{/getSubscriptionBasedOnPlan}}
+					</div>
+			<a class="btn btn-primary" href="#subscribe" id="account_plan_upgrade"> Upgrade </a>
+			</div>
+		</div>
+</script>
+
+<script id="email-plan-details-template" type="text/html">
+	<div class="span4">
+	<div class="well" style="width: 220px; height: 200px;">
+		<div style="width: 220px; height: 180px;">
+			<div style="border-bottom: 1px solid #e5e5e5;">
+				<h3>Email plan</h3>
+			</div>
+			<div class="clearfix"></div>
+
+				<form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden" value="Stripe" />
+			</form>
+				<form class="form-horizontal" name="emailPlan" style="margin-left:-40%" id="email-plan-form">
+						<div class="control-group">
+                       		 <label class="control-label">Emails</label>
+                        		<div class="controls" style="margin-top: 5px;">
+									<input name="count" type="text" class="input input-medium required"></input>
+                        		</div>
+                    		</div>
+						{{#getSubscriptionBasedOnPlan billingData emailPlan}}
+							<div class="control-group">
+                       		 <label class="control-label">Current Plan</label>
+                        		<div class="controls" style="margin-top: 5px;">
+                          			 {{getAccountPlanName ../emailPlan.plan_type}}, {{getAccountPlanInteval ../emailPlan.plan_type}}
+                        		</div>
+                    		</div>
+							<div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">Users</label>
+                        			<div class="controls">
+										{{quantity}}
+                        			</div>
+                    		</div>
+							<div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">Amount</label>
+                        			<div class="controls">
+										{{plan.amount}}
+                        			</div>
+                    		</div>
+							 <div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">Start</label>
+                        			<div class="controls">
+										{{epochToHumanDate "mmm dd, yyyy HH:MM" currentPeriodStart}}
+                        			</div>
+                    		</div>
+							<div class="control-group" style="margin-top:-5%">
+                       			 <label class="control-label" style="margin-top:-2%">End</label>
+                        			<div class="controls">
+										{{epochToHumanDate "mmm dd, yyyy HH:MM" currentPeriodEnd}}
+                        			</div>
+                    		</div>
+						{{/getSubscriptionBasedOnPlan}}
+					</form>
+		</div>
+		<div class="clearfix"></div>
+					<a class="btn btn-primary save" href="#" id="account_email_plan_upgrade"> Modify </a>
+</div>
+	</div>
 </div>
 </script>

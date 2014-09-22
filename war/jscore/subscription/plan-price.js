@@ -52,26 +52,26 @@ var USER_BILLING_PREFS;
 
 var USER_DETAILS = {
 		getCurrentPlanName : function(userJSON){
-			if(!userJSON)
+			if(userJSON.plan.plan_type == "FREE")
 				return "free";
-			return userJSON.plan.PlanType;
+			return userJSON.plan.plan_type;
 		},
 		
 		getDomainName : function(userJSON){
-			if(!userJSON)
+			if(userJSON.plan.plan_type == "FREE")
 				return "free";
 			return userJSON.domain_name;
 		},
 		
 		getCurrentPlanId: function(userJSON)
 		{
-			if(!userJSON)
+			if(userJSON.plan.plan_type == "FREE")
 				return "free";
 			return userJSON.plan.plan_id;
 		},
 		getPlanType : function(userJSON){
-			if(!userJSON)
-			return "free";
+			if(userJSON.plan.plan_type == "FREE")
+				return "free";
 		
 			if(userJSON.plan.plan_type)
 			{			

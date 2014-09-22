@@ -294,7 +294,7 @@ $("#add_new_tag").die().live('click', function(e){
 	e.preventDefault();
 	var newTag = $().val();
 	
-	saveTag("#new_tag");
+	blur_out_input_field("#new_tag");
 });
 
 
@@ -325,7 +325,7 @@ function saveTag(field)
 		showNotyPopUp('information', "New tag \"" + model.get('tag') + "\" created.", "top", 5000);
 		
 	}});
-	console.log(App_Admin_Settings);
+	
 	App_Admin_Settings.tagsview1.collection.add(model);
 	
 }

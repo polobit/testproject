@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
@@ -74,8 +74,8 @@ public class AccountPrefs
     @XmlElement(name = "subscription_plan")
     public Plan getPlan()
     {
-	if (Subscription.getSubscription() != null)
-	    return Subscription.getSubscription().plan;
+	if (SubscriptionUtil.getSubscription() != null)
+	    return SubscriptionUtil.getSubscription().plan;
 
 	return null;
     }

@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -170,7 +171,7 @@ public class BillingRestrictionUtil
 	    return new Plan(planName, users);
 
 	// Fetches account subscription
-	Subscription subscription = Subscription.getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	// If plan is null then it is considered free plan.
 	plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
@@ -198,7 +199,7 @@ public class BillingRestrictionUtil
      */
     public static void setPlan(UserInfo info)
     {
-	Subscription subscription = Subscription.getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 	Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
 
 	info.setPlan(plan.plan_type.toString());
@@ -219,7 +220,7 @@ public class BillingRestrictionUtil
 	NamespaceManager.set(domain);
 	try
 	{
-	    Subscription subscription = Subscription.getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 
 	    Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
 

@@ -52,16 +52,11 @@ var SubscribeRouter = Backbone.Router.extend({
 			// Setup account statistics
 			set_up_account_stats(el);
 
-			if (!$.isEmptyObject(data))
-			{
-				USER_BILLING_PREFS = data;
-				USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
-				console.log(USER_CREDIRCARD_DETAILS);
-				element = setPriceTemplete(data.plan.plan_type, el);
-			}
-
-			else
-				element = setPriceTemplete("free", el);
+			USER_BILLING_PREFS = data;
+			
+			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
+			
+			element = setPriceTemplete(data.plan.plan_type, el);
 
 			// Show Coupon code input field
 			id = (id && id == "coupon") ? id : "";
@@ -84,36 +79,85 @@ var SubscribeRouter = Backbone.Router.extend({
 	{
 		var that = this;
 		var counter = 0;
+		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
 		 * field(show dropdown of month and year), countries list and respective
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_plan = new Base_Model_View({ url : "core/api/subscription", template : "subscribe", window : 'subscribe',
-		/*
-		 * postRenderCallback : function(el) { // Setup account statistics
-		 * set_up_account_stats(el); // Load date and year for card expiry
-		 * card_expiry(el); // Load countries and respective states
-		 * head.js(LIB_PATH + 'lib/countries.js', function() {
-		 * print_country($("#country", el)); }); },
-		 */
-		postRenderCallback : function(el)
-		{
-			if(++counter <= 1)
-			{
-				$("#account_email_plan_upgrade", el).die().live('click' , function(e){
-					e.preventDefault();
-					that.email_subscription();
-				})
-				
-				
-			}
-			// that.email_subscription();
-			
-		}});
+		$.getJSON("core/api/subscription", function(data){
+			$("#content").html(getTemplate("subscribe", data))
 		
-		$('#content').html(subscribe_plan.render().el);
+				/*
+				 * Creates new view with a render callback to setup expiry dates
+				 * field(show dropdown of month and year), countries list and respective
+				 * states list using countries.js plugin account stats in subscription
+				 * page
+				 */
+				var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", isNew : true, data : data, template : "account-plan-details", window : 'subscribe',
+				/*
+				 * postRenderCallback : function(el) { // Setup account statistics
+				 * set_up_account_stats(el); // Load date and year for card expiry
+				 * card_expiry(el); // Load countries and respective states
+				 * head.js(LIB_PATH + 'lib/countries.js', function() {
+				 * print_country($("#country", el)); }); },
+				 */
+				postRenderCallback : function(el)
+				{
+					console.log(subscribe_account_plan.model.toJSON());
+					console.log(JSON.parse(subscribe_account_plan.model.toJSON().billingData));
+					if(++counter <= 1)
+					{
+						$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+							e.preventDefault();
+							that.email_subscription();
+						})
+						
+						
+					}
+					// that.email_subscription();
+					
+				}});
+				
+				$('#plan-details-pane').html(subscribe_account_plan.render().el);
+				
+				/*
+				 * Creates new view with a render callback to setup expiry dates
+				 * field(show dropdown of month and year), countries list and respective
+				 * states list using countries.js plugin account stats in subscription
+				 * page
+				 */
+				var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-plan-details", isNew : true, data : data, window : 'subscribe',
+				/*
+				 * postRenderCallback : function(el) { // Setup account statistics
+				 * set_up_account_stats(el); // Load date and year for card expiry
+				 * card_expiry(el); // Load countries and respective states
+				 * head.js(LIB_PATH + 'lib/countries.js', function() {
+				 * print_country($("#country", el)); }); },
+				 */
+				postRenderCallback : function(el)
+				{
+					console.log(subscribe_email_plan.model.toJSON());
+					console.log(JSON.parse(subscribe_email_plan.model.toJSON().billingData));
+					if(++counter <= 1)
+					{
+						$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+							e.preventDefault();
+							that.email_subscription();
+						})
+						
+						
+					}
+					// that.email_subscription();
+					
+				}});
+				
+				$('#email-details-pane').html(subscribe_email_plan.render().el);
+
+	});
+		
+		
 	},
 	
 	/**

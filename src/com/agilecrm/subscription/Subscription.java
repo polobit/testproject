@@ -18,7 +18,6 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
-import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -27,12 +26,9 @@ import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
-import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
@@ -153,7 +149,8 @@ public class Subscription
      * {@link Customer} as {@link JSONObject}
      */
     @NotSaved
-    private JSONObject billing_data;
+    @JsonIgnore
+    JSONObject billing_data;
 
     private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(Subscription.class);
 
@@ -162,30 +159,12 @@ public class Subscription
 
     }
 
-    /**
-     * Returns {@link Subscription} object of current domain
-     * 
-     * @return {@link Subscription}
-     * */
-    public static Subscription getSubscription()
+    void fillDefaultPlans()
     {
-	Objectify ofy = ObjectifyService.begin();
-	Subscription subscription = ofy.query(Subscription.class).get();
-	if(subscription == null)
-	{
-	   subscription =  new Subscription();
-	   subscription.fillDefaultPlans();
-	}
-	
-	return subscription;
-    }
-    
-    private void fillDefaultPlans()
-    {
-	if(plan == null)
+	if (plan == null)
 	{
 	    plan = new Plan(PlanType.FREE.toString(), 2);
-	}	
+	}
     }
 
     /**
@@ -199,7 +178,7 @@ public class Subscription
 	try
 	{
 	    NamespaceManager.set(namespace);
-	    Subscription subscription = getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 	    if (subscription != null)
 		subscription.cancelSubscription();
 
@@ -226,7 +205,7 @@ public class Subscription
 	{
 	    NamespaceManager.set(namespace);
 
-	    Subscription subscription = getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 
 	    if (subscription != null)
 	    {
@@ -247,22 +226,9 @@ public class Subscription
 	return null;
     }
 
-    public static Customer getCustomer(String namespace) throws StripeException
-    {
-	Subscription subscription = getSubscriptionOfParticularDomain(namespace);
-	if (subscription != null)
-	{
-	    JSONObject billing = subscription.billing_data;
-	    System.out.println(billing + " in subscription.java");
-	    return StripeUtil.getCustomerFromJson(billing);
-	}
-	return null;
-
-    }
-
     public void save()
     {
-	Subscription subscription = Subscription.getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 	// If Subscription object already exists, update it(Only one
 	// subscription object per domain)
 	if (subscription != null)
@@ -292,24 +258,10 @@ public class Subscription
 	return this;
     }
 
-    /**
-     * Creates a Customer in respective {@link Gateway} and store customer
-     * details in {@link Subscription} object
-     * 
-     * @return {@link Subscription}
-     * 
-     * @throws Exception
-     *             as Customer creation can be failed due to various
-     *             reasons(incorrect creditcard details)
-     */
-    public Subscription createNewEmailSubscription() throws Exception
+    public Subscription createNewCustomer() throws Exception
     {
-	// Creates customer and adds subscription
-	billing_data = getAgileBilling().createCustomer(card_details, emailPlan);
-
-	// Saves new subscription information
+	billing_data = getAgileBilling().createCustomer(card_details);
 	save();
-
 	return this;
     }
 
@@ -335,7 +287,7 @@ public class Subscription
     public static Subscription updatePlan(Plan plan) throws PlanRestrictedException, Exception
     {
 	// Gets subscription object of current domain
-	Subscription subscription = getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
 		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
 	{
@@ -374,7 +326,7 @@ public class Subscription
     {
 
 	// Gets subscription of current domain
-	Subscription subscription = getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	AgileBilling billing = subscription.getAgileBilling();
 
@@ -402,7 +354,7 @@ public class Subscription
      */
     public static List<Invoice> getInvoices() throws Exception
     {
-	Subscription subscription = getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	// If current domain has subscription object get invoices for that
 	// domain
@@ -481,7 +433,7 @@ public class Subscription
      */
     @XmlElement
     @Produces("application/json")
-    public String getBillingData() throws Exception
+    public String getBillingData()
     {
 	if (billing_data == null)
 	    return null;

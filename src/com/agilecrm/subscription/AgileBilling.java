@@ -40,6 +40,18 @@ public interface AgileBilling
      * @throws Exception
      */
     public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception;
+    
+    /**
+     * Creates customer and return Customer as {@link JSONObject}
+     * 
+     * @param cardDetails
+     *            {@link CreditCard}, plan {@link Plan}
+     * 
+     * @return {@link JSONObject}
+     * 
+     * @throws Exception
+     */
+    public JSONObject createCustomer(CreditCard cardDetails) throws Exception;
 
     /**
      * Updates customer plan and return Customer as {@link JSONObject}
@@ -100,6 +112,6 @@ public interface AgileBilling
      */
     public void cancelSubscription(JSONObject billingData) throws Exception;
     
-    public void addSubscriptionAddon(Subscription subscription) throws Exception;
+    public JSONObject addSubscriptionAddon(Plan plan) throws Exception;
 
 }

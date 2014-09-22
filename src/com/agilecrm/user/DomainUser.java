@@ -21,6 +21,7 @@ import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
@@ -289,7 +290,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	if (DomainUserUtil.count() != 0)
 	{
 	    // Get subscription details of account
-	    Subscription subscription = Subscription.getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 
 	    // If subscription is null, it indicates user is in free plan.
 	    // Limits users to global trail users count

@@ -9,11 +9,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -28,7 +30,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.stripe.exception.StripeException;
-
 
 /**
  * <code>SubscriptionApi</code> class includes REST calls to interact with
@@ -53,13 +54,16 @@ public class SubscriptionApi
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Subscription getsubscription() throws StripeException
+    public Subscription getsubscription(@QueryParam("reload") boolean reload) throws StripeException
     {
-	return Subscription.getSubscription();
 
+	// If reload is set customer object is fetched from stripe
+	if (reload)
+	    return SubscriptionUtil.getSubscription(true);
+
+	return SubscriptionUtil.getSubscription();
     }
 
-    
     /**
      * Called from client either for new Subscription or updating user credit
      * card or plan , Based on the type of request(create, update(credit card or
@@ -81,21 +85,30 @@ public class SubscriptionApi
 	     * null then updateCreditcard is called
 	     */
 	    if (subscribe.plan == null && subscribe.card_details != null)
+	    {
 		subscribe = updateCreditcard(subscribe.card_details);
+		return subscribe;
+	    }
 
 	    /*
 	     * If card_details are null and plan in not null then update plan
 	     * for current domain subscription object
 	     */
-	    else if (subscribe.card_details == null && subscribe.plan != null)
-		subscribe = changePlan(subscribe.plan);
+	    else if (subscribe.card_details == null)
+		if (subscribe.plan != null)
+		    subscribe = changePlan(subscribe.plan);
 
-	    /*
-	     * If credit_card details and plan details are not null then it is
-	     * new subscription
-	     */
-	    else if (subscribe.card_details != null && subscribe.plan != null)
-		subscribe = subscribe.createNewSubscription();
+		else if (subscribe.emailPlan != null)
+		{
+		    subscribe = addEmailPlan(subscribe.emailPlan);
+		    return subscribe;
+		}
+		/*
+		 * If credit_card details and plan details are not null then it
+		 * is new subscription
+		 */
+		else if (subscribe.card_details != null && subscribe.plan != null)
+		    subscribe = subscribe.createNewSubscription();
 
 	    // Sets plan in session
 	    BillingRestrictionUtil.setPlanInSession(subscribe.plan);
@@ -124,7 +137,6 @@ public class SubscriptionApi
 		    .build());
 	}
     }
-    
 
     /**
      * Updates the plan of current domain subscription object
@@ -143,6 +155,38 @@ public class SubscriptionApi
 	{
 	    // Return updated subscription object
 	    return Subscription.updatePlan(plan);
+	}
+	catch (PlanRestrictedException e)
+	{
+	    System.out.println("excpetion plan exception");
+	    throw e;
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
+
+    /**
+     * Updates the plan of current domain subscription object
+     * 
+     * @param plan
+     *            {@link Plan}
+     * @return
+     */
+    @Path("/change-email-plan")
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Subscription addEmailPlan(Plan plan)
+    {
+	try
+	{
+	    // Return updated subscription object
+	    return SubscriptionUtil.createEmailSubscription(plan);
 	}
 	catch (PlanRestrictedException e)
 	{
@@ -203,9 +247,6 @@ public class SubscriptionApi
 		    .build());
 	}
     }
-    
-    
-    
 
     /**
      * Deletes subscription object of the domain and deletes related customer
@@ -217,7 +258,7 @@ public class SubscriptionApi
 	try
 	{
 	    // Get current domain subscription entity
-	    Subscription subscription = Subscription.getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 
 	    // Check if subscription is not null delete
 	    // subscription(subscription call delete customer form gateway)
@@ -241,7 +282,7 @@ public class SubscriptionApi
     {
 	try
 	{
-	    Subscription.getSubscription().cancelSubscription();
+	    SubscriptionUtil.getSubscription().cancelSubscription();
 	}
 	catch (Exception e)
 	{
@@ -249,8 +290,5 @@ public class SubscriptionApi
 		    .build());
 	}
     }
-    
-  
-  
-    
+
 }

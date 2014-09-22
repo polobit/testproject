@@ -25,6 +25,7 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.util.DocumentUtil;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -388,7 +389,7 @@ public class AdminPanelAPI
 	public Customer getStripeCustomerDetails(@QueryParam("d") String domainname) throws StripeException
 	{
 
-		Customer cus = Subscription.getCustomer(domainname);
+		Customer cus = SubscriptionUtil.getCustomer(domainname);
 		System.out.println("customer object in Adminpanel api " + cus);
 		return cus;
 	}
