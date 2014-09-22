@@ -13,7 +13,7 @@ var widget_template_loaded_map = {};
 function loadWidgets(el, contact)
 {
 	// Before loading the widgets, clear the queue of requests.
-	queueClear("widget_queue");
+//	queueClear("widget_queue");
 	// Create Data JSON
 	var data = { contact : contact };
 

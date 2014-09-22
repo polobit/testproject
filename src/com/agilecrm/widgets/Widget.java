@@ -149,7 +149,7 @@ public class Widget
     public boolean is_added = false;
 
     // Default constructor
-    Widget()
+   public  Widget()
     {
 
     }
