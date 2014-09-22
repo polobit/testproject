@@ -88,80 +88,25 @@
 
 <script id="shopify-profile-template" type="text/html">
 <div class="widget_content">
-	{{#if customer.activeCard.name}}
-		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank"><h4 style="text-transform: capitalize;"><b>{{customer.activeCard.name}}</b></h4></a>
-		{{#if customer.activeCard.addressState}}
-			<p style="font-size: 13px;margin-bottom:0px;">
-				{{#if customer.activeCard.addressLine1}}{{customer.activeCard.addressLine1}},<br/>{{/if}}
-				{{#if customer.activeCard.addressLine2}}{{customer.activeCard.addressLine2}},<br/>{{/if}}	
-				{{#if customer.activeCard.addressCity}}{{customer.activeCard.addressCity}},<br/>{{/if}}
-				{{customer.activeCard.addressState}}, 
-				{{#if customer.activeCard.addressCountry}}
-					{{customer.activeCard.addressCountry}}
-				{{else}}
-					{{customer.activeCard.country}}
-				{{/if}}
-			</p>
-		{{/if}}
-	{{else}}
-		<a href="https://manage.stripe.com/customers/{{customer.id}}" target="_blank">{{getCurrentContactProperty "first_name"}} {{getCurrentContactProperty "last_name"}}</a>
-	{{/if}}
+// customer info like fist name last name
 </div>
 <div class="sub_header">
-	<h4>Subscription Details</h4>
+	<h4>Order Details</h4>
 </div>
 <ul style="margin:0px;padding:10px;border-bottom:1px solid #ddd;">
-	{{#if customer.subscription}}
-		<li class="row-fluid">	
-			<div class="span5">Start Date
-				<div class="pull-right">:</div>
-			</div>
-			<div class="span6" style="margin-left: 10px;">
-				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.start}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.start}}</time>
-			</div>
-		</li>
-		{{#if customer.subscription.currentPeriodEnd}}
-		<li class="row-fluid">	
-			<div class="span5">End Date
-				<div class="pull-right">:</div>
-			</div>
-			<div class="span6" style="margin-left: 10px;">
-				<time class="time-ago" datetime="{{epochToHumanDate "" customer.subscription.currentPeriodEnd}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" customer.subscription.currentPeriodEnd}}</time>
-			</div>
-		</li>
-		{{/if}}
-		<li class="row-fluid">	
-			<div class="span5">Current Plan
-				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="span6" style="margin-left: 10px;">
-				{{customer.subscription.plan.id}}
-			</div>
-		</li>
-		<li class="row-fluid">	
-			<div class="span5">Interval
-				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="span6" style="margin-left: 10px;">
-				{{customer.subscription.plan.interval}}
-			</div>
-		</li>
-		<li class="row-fluid">	
-			<div class="span5">Amount
-				<div class="pull-right">:</div>
-			</div>
-							
-			<div class="span6" style="margin-left: 10px;">
-				{{numeric_operation customer.subscription.plan.amount 100 "/"}} {{toUpperCase customer.subscription.plan.currency}}
-			</div>
-		</li>
-	{{else}}
-		<li style='color: #999;'>
-	    	No active subscription
-		</li>
-	{{/if}}
+
+{{#each this}}
+<li><ul>Order No #{{this.id}}
+{{#each line_items}}
+<li>Item # {{title}} &nbsp; Price {{price}} </li>
+{{/each}}
+Total Price # {{total_price}}
+
+<li></li>
+</ul></li>
+
+{{/each}}
+
 </ul>
 
 <div class="sub_header">

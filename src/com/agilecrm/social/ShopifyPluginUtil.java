@@ -5,26 +5,19 @@ package com.agilecrm.social;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.scribe.exceptions.OAuthException;
 import org.scribe.model.OAuthRequest;
 import org.scribe.model.Response;
 import org.scribe.model.Verb;
 
-import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.util.StringUtils2;
 import com.agilecrm.widgets.Widget;
-import com.google.gson.Gson;
-import com.stripe.model.Customer;
-import com.stripe.model.Invoice;
 
 /**
  * The <code>ShopifyPluginUtil</code> class acts as a Client to Shopify server
@@ -47,10 +40,9 @@ public class ShopifyPluginUtil
      * @return {@link JSONObject} form of the response returned from Stripe
      * @throws Exception
      */
-    public static JSONObject getCustomerDetails(Widget widget, String customerId) throws SocketTimeoutException,
-	    IOException, Exception
+    public static List<LinkedHashMap<String, Object>> getCustomerOrderDetails(Widget widget, String customerId)
+	    throws SocketTimeoutException, IOException, Exception
     {
-	JSONObject customer_info = new JSONObject();
 	String token = widget.getProperty("token");
 	String shopName = widget.getProperty("shop");
 
@@ -64,7 +56,9 @@ public class ShopifyPluginUtil
 	    Response response = oAuthRequest.send();
 	    Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
 		    Map.class);
-	    //customer_info = results.get("customer");
+	    System.out.println(results);
+	    List<LinkedHashMap<String, Object>> orders = (List<LinkedHashMap<String, Object>>) results.get("orders");
+	    return orders;
 
 	}
 	catch (OAuthException e)
@@ -72,7 +66,7 @@ public class ShopifyPluginUtil
 	    e.printStackTrace();
 	}
 
-	return customer_info;
+	return null;
 
     }
 
@@ -104,7 +98,7 @@ public class ShopifyPluginUtil
 
     private static String getAccessUrl(String shop, String customer_id)
     {
-	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/customers/" + customer_id + ".json");
+	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + customer_id);
 	System.out.println("Access url " + sb.toString());
 	return sb.toString();
     }

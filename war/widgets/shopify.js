@@ -168,7 +168,7 @@ $(function()
 											   
 											   agile_crm_save_contact_property(shopify_custom_field_name, "", customer_id, "CUSTOM");
 											   
-											   showStripeProfile(shopify_custom_field_name);
+											   showShopifyProfile(shopify_custom_field_name);
 											   return;
 											   
 											  });
@@ -187,6 +187,8 @@ $(function()
 									getShopifyProfile(customer_id, function(data)
 									{
 										// Get and Fill the template with data
+													console.log(data.length);
+													console.log(data);
 										var shopify_template = $(getTemplate("shopify-profile", data));
 
 										// Load jquery time ago function to show time ago in invoices
@@ -223,8 +225,8 @@ $(function()
 									 */
 									queueGetRequest("widget_queue", "/core/api/widgets/shopify/" + Shopify_Plugin_Id + "/" + customer_id, 'json', function success(data)
 									{
-										console.log('In Shopify profile');
-										console.log(data);
+										console.log('In Shopify profile ');
+										console.log("my order is "+data);
 
 										// If defined, execute the callback function
 										if (callback && typeof (callback) === "function")
