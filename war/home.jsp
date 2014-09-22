@@ -127,8 +127,13 @@ Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 <!-- Determine Console.logging - we log in local boxes -->
 <%
 boolean debug = true;
+boolean production = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-debug = true;
+{
+    debug = true;
+    production = true;
+}
+
 %>
 
 </div>
@@ -145,7 +150,7 @@ debug = true;
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = false || <%=!debug%>;
+var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
 var CSS_PATH = "/";
