@@ -842,11 +842,43 @@ tbody a.no-style-a {
  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 /* For UI in deals milestones */
+/*UI for deals new look*/
+.milestone-heading:after {
+border-bottom: 12px solid transparent;
+border-left: 12px solid #bbb;
+border-top: 12px solid transparent;
+content: "";
+position: absolute;
+right: -12px;
+z-index: 9;
+}
+.dealtitle-angular > span:after {
+border-bottom: 12px solid transparent;
+border-left: 12px solid #fff;
+border-top: 12px solid transparent;
+content: "";
+position: absolute;
+right: -11px;
+top: 35%;
+z-index: 99;
+}
+.dealtitle-angular
+{
+	position:relative;
+	border-bottom:1px solid #ddd;
+}
+.milestone-main .milestone-column:last-child .milestone-heading:after,.milestone-main .milestone-column:last-child span:after
+{
+	display:none;
+}
+
+/*ending UI for deals new look*/
+
 .milestone-main {
 	white-space: nowrap;
 	overflow: auto;
 	width: 100%;
-	height: 517px;
+	
 	border: 1px solid #d5d5d5;
 	border-radius: 5px;
 }
@@ -858,10 +890,10 @@ tbody a.no-style-a {
 	display: inline-block;
 }
 .milestone-heading {
-	padding: 7px 0px;
+	padding: 21px 0px;
 	text-align: center;
 	font-size: 17px;
-	background-color: lightgrey;
+	background-color: #fff;
 	margin-bottom: 0px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -874,6 +906,17 @@ tbody a.no-style-a {
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
+}
+#opportunities-by-milestones-model-list .milestone-column>ul>li
+{
+margin: 10px 5px 10px;
+	cursor: move;
+	text-align: left;
+	border: 1px solid #DDD;
+	border-radius: 4px;
+	padding: 10px;
+	background-color: #fff;
+	box-shadow:2px 2px 2px 0px #eee;	
 }
 .milestone-column>ul>li {
 	margin: 5px;
