@@ -26,6 +26,10 @@ function updateActivty(params)
 		sort_collection : false,cursor : true, page_size : 25, individual_tag_name : 'li',
 		postRenderCallback : function(el) {
 			includeTimeAgo(el);
+		},
+		appendItemCallback : function(el)
+		{
+			includeTimeAgo(el);
 		}
 
 	});
