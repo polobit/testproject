@@ -1220,4 +1220,9 @@ border: 1px solid #ddd;
 border-radius: 5px;
 height: 30px;
 }
+.activity-tag
+{
+	word-wrap:break-word;
+	width:95%;
+}
 /*activity css code ending*/
