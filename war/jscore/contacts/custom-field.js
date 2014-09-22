@@ -215,6 +215,33 @@ function show_custom_fields_helper(custom_fields, properties){
 		else if(field.field_type.toLowerCase() == "checkbox")
 			{
 				field_type = "checkbox";
+				
+				if(field.scope=="DEAL"){
+					if(field.is_required)
+						el = el.concat('<div class="control-group">	<label class="control-label">'
+									+field.field_label
+									+' <span class="field_req">*</span><input type="'
+									+field_type
+									+'" class="'
+									+field.field_type.toLowerCase()
+									+'_input custom_field required" id='
+									+field.id+' name="'
+									+field.field_label
+									+'" style="margin-left: 5px;"></label></div></div>');
+					else
+						el = el.concat('<div class="control-group">	<label class="control-label">'
+									+field.field_label
+									+'<input type="'
+									+field_type
+									+'" class="'
+									+field.field_type.toLowerCase()
+									+'_input custom_field" id='
+									+field.id+' name="'
+									+field.field_label
+									+'" style="margin-left: 5px;"></label></div>');
+					return;
+				}
+				
 				if(field.is_required)
 					el = el.concat('<div class="control-group">	<label class="control-label">'
 								+field.field_label
