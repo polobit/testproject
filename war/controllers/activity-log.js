@@ -31,7 +31,13 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 					$('.activity-user').html("(All users)");
 					
-				} });
+				},
+				appendItemCallback : function(el)
+				{
+				includeTimeAgo(el);
+				}
+				
+			});
 
 			activitiesview.appendItem = append_activity_log;
 
