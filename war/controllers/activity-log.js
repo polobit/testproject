@@ -11,6 +11,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 	activities : function(id)
 	{
+		add_referrar_info_as_note();
 		$('#content').html(getTemplate("activity-list-header", {}));
 
 		var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
@@ -30,6 +31,8 @@ var ActivitylogRouter = Backbone.Router.extend({
 					var user=CURRENT_DOMAIN_USER.name;
 					
 					$('.activity-user').html("("+user+")");
+					$('#currentusername').html(user);
+					
 				} });
 
 			activitiesview.appendItem = append_activity_log;
@@ -45,6 +48,29 @@ var ActivitylogRouter = Backbone.Router.extend({
 	}
 
 });
+
+function add_referrar_info_as_note()
+{
+	console.log("created note for referrals");
+	var utmsource = readCookie("_agile_utm_source");
+	var utmcampaign = readCookie("_agile_utm_campaign");
+	var utmmedium = readCookie("_agile_utm_medium");
+	var utmreferencedomain = readCookie("agile_reference_domain");
+	if (utmsource && utmcampaign && utmmedium && utmreferencedomain)
+	{
+		var note = {};
+		note.title = "Referrer";
+		note.text = "Source:" + utmsource + "<br> Campaign: " + utmcampaign + " <br>Medium :" + utmmedium + " <br>Reference Domain " + utmreferencedomain;
+
+		_agile.add_note(note, function(data)
+		{
+			console.log(data);
+			console.log("000000000000000000000000000000000");
+			Agile_Contact = data;
+
+		});
+	}
+}
 
 $(function()
 {
