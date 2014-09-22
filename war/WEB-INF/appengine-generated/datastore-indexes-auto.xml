@@ -39,5 +39,10 @@
         <property name="user" direction="asc"/>
         <property name="time" direction="desc"/>
     </datastore-index>
+    
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="entity_type" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
 
 </datastore-indexes>
