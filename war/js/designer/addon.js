@@ -104,6 +104,8 @@ function addAddonTabTemplate(data, url, callback, container)
              //Has to be changed
              if(json.name == "Send Message"){
             	 var list = getTwilioIncomingList();
+            	 if(list.hasOwnProperty("select"))
+            		 list={};
             	 if($.isEmptyObject(list)){
             		 alert("Please configure twilio in integrations");
             		 return;
