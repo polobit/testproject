@@ -39,7 +39,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 				{
 					$('#selectedusername').html(username_value);
 
-					$('.activity-user').html("(" + username_value + ")");
+					
 				}
 				if (entity_value)
 				{
@@ -58,7 +58,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 							$("time", el).timeago();
 						});
 
-						$('.activity-user').html("(All users)");
+					
 
 					}, appendItemCallback : function(el)
 					{
@@ -117,7 +117,7 @@ $(function()
 		createCookie("selecteduser", user_attribute, 90);
 		createCookie("selecteduser_value", user, 90);
 
-		$('.activity-user').html("(" + user + ")");
+	
 
 	});
 
