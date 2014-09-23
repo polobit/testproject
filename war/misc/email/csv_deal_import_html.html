@@ -32,17 +32,17 @@
 								 <b>Failed {{HashMap.type}} : {{HashMap.FAILED}}</b> <br />
 								{{/HashMap.FAILED}}
 								 
-								{{#HashMap.PROBABILITY}} 
-									&nbsp;- Invalid Probability Value Error : {{HashMap.PROBABILITY}}<br /> 
-								{{/HashMap.PROBABILITY}}
+								{{#HashMap.TRACKMISING}} 
+									&nbsp;- Wrong track value or track not found in agile : {{HashMap.TRACKMISING}}<br /> 
+								{{/HashMap.TRACKMISING}}
 								
 								{{#HashMap.NAMEMISSING}} 
 									&nbsp;- Deal Name is missing : {{HashMap.NAMEMISSING}} 
 								{{/HashMap.NAMEMISSING}}
 								
-								{{#HashMap.LIMIT_REACHED}} 
-									&nbsp;- Limit exceeded : {{HashMap.LIMIT_REACHED}} 
-								{{/HashMap.LIMIT_REACHED}}
+								{{#HashMap.MILESTONE}} 
+									&nbsp;- Wrong milestone : {{HashMap.MILESTONE}} 
+								{{/HashMap.MILESTONE}}
 								{{#HashMap.ACCESS_DENIED}} 
 									&nbsp;- Access denied to create/update : {{HashMap.ACCESS_DENIED}} 
 								{{/HashMap.ACCESS_DENIED}}
