@@ -4,6 +4,7 @@
  * users management, custom fields, milestones and etc..).
  * 
  */
+var view={};
 var AdminSettingsRouter = Backbone.Router.extend({
 
 	routes : {
@@ -477,9 +478,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		}
 	
 		
-		var view = new Base_Model_View({ model : App_Admin_Settings.integrations.collection.where({name:"SMS-Gateway"})[0], url : 'core/api/sms-gateway',
+		 view = new Base_Model_View({ model : App_Admin_Settings.integrations.collection.where({name:"SMS-Gateway"})[0], url : 'core/api/sms-gateway',
 			template : 'settings-sms-gateway',prePersist: function(model){
-				
+				view=model.attributes.account_sid;
 				var prefJSON={
 						account_sid:model.attributes.account_sid,
 						auth_token:model.attributes.auth_token,

@@ -316,7 +316,7 @@ public class ActivityUtil
     {
 	try
 	{
-	    return dao.fetchAll(max, cursor);
+	    return dao.fetchAllByOrder(max, cursor, null, true, false, "-time");
 	}
 	catch (Exception e)
 	{
@@ -433,7 +433,7 @@ public class ActivityUtil
 	    searchMap.put("user", new Key<DomainUser>(DomainUser.class, userid));
 
 	if (max != 0)
-	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "time");
+	    return dao.fetchAllByOrder(max, cursor, searchMap, true, false, "-time");
 
 	return dao.listByProperty(searchMap);
     }

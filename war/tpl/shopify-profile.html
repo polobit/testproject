@@ -1,0 +1,131 @@
+<script id="shopify-login-template" type="text/html">
+
+<div class='input-append input-prepend'>
+	<span class="add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">https://</span>
+	  <input id="shop" style="margin-left: -3px;margin-right: -3px;width: 116px;" required="required" name="shopname"  type="text" placeholder="Enter shop domain">
+    <span class="add-on" style="border-bottom-right-radius: 0;border-top-right-radius: 0;background-color: #eee;">.myshopify.com</span>
+    
+    </div>
+<a href ="#" id ="widget_shopify" class="btn" style="margin-left: 46px;margin-top:10px;">connect</a>
+
+</script>
+
+
+<script id="shopify-revoke-access-template" type="text/html">
+
+<div class='widget_content' style='border-bottom:none;line-height: 160%;' >
+
+{{#if_equals custom_data.length "0"}}
+				<p>Shopify id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+	{{else}}
+				{{#stringToJSON this "prefs"}}{{/stringToJSON}}
+<p>Shopify id for each contact is stored in a text custom field. Select the custom field to be used.</p><form id="reportsForm">
+<fieldset style="margin-left: 20px">
+		<div class="control-group" style="margin-left: -20px">
+				<label class="control-label">Current custom field</label>
+				<div class="controls" id="contactTypeAhead">
+			
+			<select name="shopify_field_name" id="shopify_custom_field" class="required span10" style="width:100%" >
+     				<option class="default-select" value="">-Select-</option>
+				{{#each custom_data}}
+					{{#if_equals ../prefs.shopify_field_name field_label}}
+						<option selected="selected" value="{{field_label}}">{{field_label}}</option>
+						{{else}}	
+							<option value="{{field_label}}">{{field_label}}</option>
+					{{/if_equals}}
+				{{/each}}
+			</select>
+			</div>
+			</div>
+		</fieldset>
+
+				<p style='margin: 10px 0px 5px 0px;' >
+					<a class='btn btn-primary' style='text-decoration: none;' widget-name="Shopify" id="widget-prefs-save">Save</a>
+					<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Shopify">Revoke Access</a>
+					<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Shopify">Cancel</a>
+				</p> 
+	</div>
+</form>
+{{/if_equals}}
+</div>
+
+
+
+
+</script>
+
+<script id="shopify-custom-field-template" type="text/html">
+<div class="widget_content">
+{{#if_equals this.custom_fields.length "0"}}
+	<p>Shopify id for each contact is stored in a text custom field. You have no custom fields defined. Please <a href="#custom-fields">create one</a>.</p>
+{{else}}
+	<p>Shopify id for each contact is stored in a text custom field. Select the custom field to be used.</p>
+	<select name="shopify_field" id="shopify_custom_field_name" class="required span10" style="width:100%" >
+     		<option class="default-select" value="">-Select-</option>
+		{{#each this.custom_fields}}
+			<option value="{{field_label}}">{{field_label}} 
+			</option>
+		{{/each}}
+	</select>
+	<p>Or, you can <a href="#custom-fields">create </a> a new text custom field.</p>
+	<a href="#" class="btn" id="save_shopify_name" style="text-decoration:none;">Save</a>
+{{/if_equals}}
+</div>
+</script>
+
+<script id="shopify-error-template" type="text/html">
+{{#check_length message "140"}}
+	<div class="ellipsis-multi-line collapse-25" title="{{message}}" style="height:110px;overflow: hidden;line-height:160%;word-wrap: break-word;padding:10px">
+		{{{message}}}
+	</div>
+{{else}}
+	<div style="line-height:160%;word-wrap: break-word;padding:10px">
+		{{{message}}}
+	</div>
+{{/check_length}}
+</script>
+
+
+<script id="shopify-profile-template" type="text/html">
+<div class="widget_content">
+{{#if this.length}}
+{{#each this}}
+<li><a href="https://{{shop}}/admin/customers/{{customer.id}}">{{customer.first_name}} &nbsp; {{customer.last_name}}</a></li>
+{{/each}}
+</div>
+<div class="sub_header">
+	<h4>Order Details</h4>
+</div>
+{{#each this}}
+<div class="accordion" id="accordion2">
+  <div class="accordion-group" style="border: 0px;margin-bottom: 23px;">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{this.id}}">
+       <i class="icon-plus pull-left"></i> Order No #{{this.id}} <span class="pull-right">{{currency}} &nbsp;{{customer.total_spent}}</span>
+      </a>
+    
+    </div>
+ 
+    <div id="{{this.id}}" class="accordion-body collapse in">
+      <div class="accordion-inner">
+      {{#each line_items}}
+<li>Item # {{title}} &nbsp; Price {{price}}  Quantity : {{quantity}}</li>
+{{/each}}
+Total Price # {{total_price}} {{currency}}
+      </div>
+    </div>
+<div class="pull-right" style ="margin-right: 13px;"><span class="badge">{{capFirstLetter financial_status}}</span></div>
+  </div>
+
+{{/each}}
+{{else}}
+<li class="sub_header_li" style='color: #999;'>
+	    	No data	found		
+		</li>
+{{/if}}
+
+
+
+
+
+</script>

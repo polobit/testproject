@@ -64,7 +64,7 @@ $(function(){
 				type: 'GET',
 				success: function() {
 					console.log('Exported!');
-					//deals_csv_modal.modal('hide');
+					deals_csv_modal.modal('hide');
 				}
 			});
 		});

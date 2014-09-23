@@ -14,6 +14,7 @@
  * @param target_id - id of target field where value should be inserted.
  * 
  **/
+
 function insertSelectedMergeField(ele,target_id)
 {
 	// current value
@@ -119,6 +120,29 @@ function getUpdateFields(type)
 }
 
 
+
+function getTwilioIncomingList(type)
+{
+	var numbers={};
+	$.ajax({
+		  url: 'core/api/sms-gateway/twilio',
+		  type: "GET",
+		  async:false,
+		  dataType:'json',
+		  success: function (twilioNumbers) {
+			  if(twilioNumbers!=null){
+			  for (var i=0;i<twilioNumbers.length;i++) {
+					numbers[twilioNumbers[i]]=twilioNumbers[i];
+		  } 
+			  }else
+				  numbers["select"]="";
+		}
+		
+	});
+	
+	// Parse stringify json
+	return numbers;	
+}
 /**
  * Returns custom fields in format required for merge fields. 
  * E.g., Nick Name:{{Nick Name}}

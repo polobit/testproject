@@ -13,7 +13,7 @@ var widget_template_loaded_map = {};
 function loadWidgets(el, contact)
 {
 	// Before loading the widgets, clear the queue of requests.
-	queueClear("widget_queue");
+//	queueClear("widget_queue");
 	// Create Data JSON
 	var data = { contact : contact };
 
@@ -340,14 +340,14 @@ function queueGetRequest(queueName, url, dataType, successCallback, errorCallbac
 
 		// function to be executed on success, if successCallback is defined
 		success : function(data)
-		{
+		{console.log("Sucesses",url);
 			if (successCallback && typeof (successCallback) === "function")
 				successCallback(data);
 		},
 
 		// function to be executed on success, if errorCallback is defined
 		error : function(data)
-		{
+		{console.log("error",url);
 			if (errorCallback && typeof (errorCallback) === "function")
 				errorCallback(data);
 		},

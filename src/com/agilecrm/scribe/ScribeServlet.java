@@ -127,6 +127,8 @@ public class ScribeServlet extends HttpServlet
 	if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
 	{
 	    String shop = req.getParameter("shop");
+	    String callback = req.getParameter("url");
+	    req.getSession().setAttribute("url", callback);
 	    if (shop.contains(".myshopify.com"))
 	    {
 		shop = shop.split("\\.")[0];

@@ -91,7 +91,7 @@ public class DefaultWidgets
 	widgets.add(new Widget(
 		"Shopify",
 		"Shopify is a powerful ecommerce solution that includes everything you need to create an online store",
-		"/widgets/shopify.js", "/widgets/shopify.png", "/widgets/shopify.png", null,
+		"/widgets/shopify.js", "/widgets/shopify.png","/widgets/shopify-small.jpg", null,
 		WidgetType.ECOMMERCE));
 
 	System.out.println("Default widgets ");

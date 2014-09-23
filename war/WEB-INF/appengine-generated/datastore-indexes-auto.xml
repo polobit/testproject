@@ -1,34 +1,48 @@
-<!-- Indices written at Tue, 16 Sep 2014 19:21:21 IST -->
+<!-- Indices written at Mon, 22 Sep 2014 14:48:17 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 3 times in query history -->
+    <!-- Used 17 times in query history -->
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="user" direction="asc"/>
+        <property name="time" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 42 times in query history -->
+    <datastore-index kind="Activity" ancestor="false" source="auto">
+        <property name="user" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="owner" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="viewed.viewer_id" direction="asc"/>
+        <property name="viewed.viewed_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="pipeline" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 15 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Activity" ancestor="false" source="manual">
-        <property name="user" direction="asc"/>
-        <property name="time" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Activity" ancestor="false" source="manual">
-        <property name="entity_type" direction="asc"/>
-        <property name="user" direction="asc"/>
-        <property name="time" direction="asc"/>
-    </datastore-index>
-    <!-- Used 5 times in query history -->
+    <!-- Used 8 times in query history -->
     <datastore-index kind="Activity" ancestor="false" source="auto">
         <property name="entity_type" direction="asc"/>
-        <property name="time" direction="asc"/>
+        <property name="user" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Activity" ancestor="false" source="manual">
+        <property name="entity_type" direction="asc"/>
+        <property name="time" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>
