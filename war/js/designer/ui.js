@@ -207,6 +207,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     if(uiFieldDefinition.fieldType == "twilio_incoming_list")
     {
     	options = getTwilioIncomingList("twilio_incoming_list");
+    	
     }
     
     // Populate Options

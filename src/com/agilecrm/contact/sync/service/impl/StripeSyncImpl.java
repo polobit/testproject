@@ -122,6 +122,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    moveCurrentCursorToTop();
 	    prefs.othersParams = "second";
 	    prefs.save();
+	    sendNotification(prefs.type.getNotificationEmailSubject());
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException
