@@ -89,7 +89,7 @@ public class CSVUtil
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED, TYPE, PROBABILITY;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK;
 
     }
 
@@ -757,7 +757,9 @@ public class CSVUtil
 	Integer savedDeals = 0;
 	Integer failedDeals = 0;
 	Integer probabilityError = 0;
-	Integer nameMissiong = 0;
+	Integer nameMissing = 0;
+	Integer trackMissing = 0;
+	Integer milestoneMissing = 0;
 	/**
 	 * Reading CSV file from input stream
 	 */
@@ -769,7 +771,7 @@ public class CSVUtil
 	    return;
 	}
 	// remove header information form csv
-	String[] headings = deals.remove(0);
+	deals.remove(0);
 
 	// Creates domain user key, which is set as a contact owner
 	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
@@ -786,7 +788,6 @@ public class CSVUtil
 	    String[] dealPropValues = it.next();
 	    String mileStoneValue = null;
 
-	    // retriveing track information
 	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
 	    List<Milestone> list = null;
 	    for (int i = 0; i < dealPropValues.length; i++)
@@ -805,11 +806,21 @@ public class CSVUtil
 			{
 			    opportunity.name = dealPropValues[i];
 			}
+
 			else if (value.equalsIgnoreCase("track"))
 			{
 			    String trackName = dealPropValues[i];
-			    opportunity.track = trackName;
+
 			    list = MilestoneUtil.getMilestonesList(trackName);
+			    if (list.size() == 0)
+			    {
+				trackMissing++;
+				break;
+			    }
+			    else
+			    {
+				opportunity.track = trackName;
+			    }
 
 			}
 
@@ -819,20 +830,22 @@ public class CSVUtil
 			}
 			else if (value.equalsIgnoreCase("milestone"))
 			{
+
 			    mileStoneValue = dealPropValues[i];
+
 			    if (mileStoneValue != null && (!mileStoneValue.isEmpty()))
 			    {
 				if (list != null)
 				{
-				    for (Milestone milestone : list)
+				    for (Milestone m : list)
 				    {
-					String[] milestonesName = milestone.milestones.split(",");
+					String[] milestonesName = m.milestones.split(",");
 					for (String s : milestonesName)
 					{
 					    if (s.equalsIgnoreCase(mileStoneValue))
 					    {
 						opportunity.milestone = mileStoneValue;
-						opportunity.pipeline_id = milestone.id;
+						opportunity.pipeline_id = m.id;
 						break;
 					    }
 					}
@@ -962,9 +975,15 @@ public class CSVUtil
 
 	    opportunity.setOpportunityOwner(ownerKey);
 
+	    // if trackmissing is 0 then track is not mapped set it to default
+	    if (trackMissing == 0 && opportunity.track == null)
+	    {
+		opportunity.track = "Default";
+	    }
+
 	    // check milestone if null the search in default
 
-	    if (opportunity.milestone == null)
+	    if (opportunity.track != null && opportunity.milestone == null)
 	    {
 		Milestone milestone = MilestoneUtil.getMilestones();
 		if (milestone != null)
@@ -996,22 +1015,24 @@ public class CSVUtil
 
 		}
 	    }
-	    if (opportunity.track == null)
-	    {
-		opportunity.track = "Default";
-	    }
+
 	    // add all custom field in deals
 	    opportunity.custom_data = customFields;
 	    try
 	    {
-		if (opportunity.name != null && (!opportunity.name.isEmpty()))
+		if (opportunity.name != null && (!opportunity.name.isEmpty()) && opportunity.track != null
+			&& opportunity.milestone != null)
 		{
 		    opportunity.save();
 		    savedDeals++;
 		}
 		else
 		{
-		    nameMissiong++;
+		    if (opportunity.name == null || opportunity.name.isEmpty())
+		    {
+			nameMissing++;
+		    }
+
 		}
 
 	    }
@@ -1023,9 +1044,21 @@ public class CSVUtil
 	}
 
 	buildDealsImportStatus(status, "SAVED", savedDeals);
-	buildDealsImportStatus(status, "FAILED", failedDeals + probabilityError+nameMissiong);
+	buildDealsImportStatus(status, "FAILED", totalDeals - savedDeals);
 	buildDealsImportStatus(status, "TOTAL", totalDeals);
-	buildDealsImportStatus(status, "NAMEMISSING", nameMissiong);
+	if (nameMissing > 0)
+	{
+	    buildDealsImportStatus(status, "NAMEMISSING", nameMissing);
+	}
+
+	if (trackMissing > 0)
+	{
+	    buildDealsImportStatus(status, "TRACKMISING", trackMissing);
+	}
+	if (milestoneMissing > 0)
+	{
+	    buildDealsImportStatus(status, "MILESTONE", milestoneMissing);
+	}
 
 	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
 		status });
