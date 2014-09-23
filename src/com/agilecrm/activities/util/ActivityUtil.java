@@ -316,7 +316,7 @@ public class ActivityUtil
     {
 	try
 	{
-	    return dao.fetchAll(max, cursor);
+	    return dao.fetchAllByOrder(max, cursor, null, true, false, "-time");
 	}
 	catch (Exception e)
 	{

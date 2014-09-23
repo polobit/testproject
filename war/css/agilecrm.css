@@ -808,16 +808,18 @@ tbody a.no-style-a {
 }
 /* Track */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-track, #opportunities-by-milestones-model-list ::-webkit-scrollbar-track {
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+/* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
  -webkit-border-radius: 10px;
- border-radius: 10px;
+ border-radius: 10px;*/
+ 
 }
 /* Handle */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb {
- -webkit-border-radius: 10px;
+/* -webkit-border-radius: 10px;
  border-radius: 10px;
- background: rgba(185, 182, 182, 0.8);
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+ -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
+ background: #bebebe;
+ 
 }
  #tags ::-webkit-scrollbar {
  width: 10px;
@@ -854,7 +856,7 @@ z-index: 9;
 }
 .dealtitle-angular > span:after {
 border-bottom: 12px solid transparent;
-border-left: 12px solid #fff;
+border-left: 12px solid #eee;
 border-top: 12px solid transparent;
 content: "";
 position: absolute;
@@ -871,7 +873,17 @@ z-index: 99;
 {
 	display:none;
 }
-
+.dealnotes-view .note-count
+{
+	visibility:hidden;
+}
+.dealnotes-view:hover .note-count
+{
+	visibility:visible;
+}
+.milestones .agile-overflow-ellipsis:hover .icon-comment-alt:before {
+content: "\f075"!important;
+}
 /*ending UI for deals new look*/
 
 .milestone-main {
@@ -893,12 +905,17 @@ z-index: 99;
 	padding: 21px 0px;
 	text-align: center;
 	font-size: 17px;
-	background-color: #fff;
+	background-color: #eee;
 	margin-bottom: 0px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	text-transform: capitalize;
+}
+.milestones .ui-sortable-helper
+{
+	box-shadow:0 0 3px 0px #eee;
+	border:1px solid #ddd!Important;
 }
 .milestone-column>ul {
 	height: 468px;
@@ -909,14 +926,14 @@ z-index: 99;
 }
 #opportunities-by-milestones-model-list .milestone-column>ul>li
 {
-margin: 10px 5px 10px;
+margin:0px;
 	cursor: move;
 	text-align: left;
-	border: 1px solid #DDD;
-	border-radius: 4px;
+	border:none;
+	border-bottom: 1px solid #DDD;
+	border-radius: 2px;
 	padding: 10px;
-	background-color: #fff;
-	box-shadow:2px 2px 2px 0px #eee;	
+	background-color: #fff;	
 }
 .milestone-column>ul>li {
 	margin: 5px;

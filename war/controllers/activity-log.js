@@ -12,6 +12,10 @@ var ActivitylogRouter = Backbone.Router.extend({
 	activities : function(id)
 	{
 		$('#content').html(getTemplate("activity-list-header", {}));
+		var selecteduser = readCookie("selecteduser");
+		var selectedentity = readCookie("selectedentity");
+
+		console.log("values read from activity cookie  selected user " + selecteduser + "  selected entityname " + selectedentity);
 
 		var optionsTemplate = "<li><a  href='{{id}}'>{{name}}</li>";
 
@@ -20,27 +24,53 @@ var ActivitylogRouter = Backbone.Router.extend({
 		{
 			$('#content').find("#user-select").append("<li><a href=''>All Users</a></li>");
 
-			var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getActivitiesofcurrentdomainuser', sortKey : 'time',
-				descending : true, templateKey : "activity-list-log", sort_collection : false, cursor : true, page_size : 25, individual_tag_name : 'li',
-				postRenderCallback : function(el)
+			if (selecteduser || selectedentity)
+			{
+
+				$('ul#user-select li a').closest("ul").data("selected_item", selecteduser);
+				$('ul#entity_type li a').closest("ul").data("selected_item", selectedentity);
+
+				updateActivty(getParameters());
+
+				var username_value = readCookie("selecteduser_value");
+				var entity_value = readCookie("selectedentity_value");
+				if (username_value)
 				{
-					head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+					$('#selectedusername').html(username_value);
+
+					$('.activity-user').html("(" + username_value + ")");
+				}
+				if (entity_value)
+				{
+					$('#selectedentity_type').html(entity_value);
+					$('.activity-sub-heading').html(entity_value);
+				}
+			}
+			else
+			{
+
+				var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getAllActivities', sortKey : 'time', descending : true,
+					templateKey : "activity-list-log", cursor : true, page_size : 25, individual_tag_name : 'li', postRenderCallback : function(el)
 					{
-						$("time", el).timeago();
-					});
-					var user = CURRENT_DOMAIN_USER.name;
+						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+						{
+							$("time", el).timeago();
+						});
 
-					$('.activity-user').html("(" + user + ")");
-					$('#currentusername').html(user);
-				} });
+						$('.activity-user').html("(All users)");
 
-			activitiesview.appendItem = append_activity_log;
+					}, appendItemCallback : function(el)
+					{
+						includeTimeAgo(el);
+					} });
 
-			activitiesview.collection.fetch();
-			// Renders data to tasks list page.
-			$('#activity-list-based-condition').html(activitiesview.el);
+				activitiesview.appendItem = append_activity_log;
 
-			// updateActivty(getParameters());
+				activitiesview.collection.fetch();
+				// Renders data to tasks list page.
+				$('#activity-list-based-condition').html(activitiesview.el);
+
+			}
 
 		}, optionsTemplate, true);
 
@@ -58,7 +88,7 @@ $(function()
 		// Show selected name
 		var name = $(this).html(), id = $(this).attr("href");
 
-		console.log(name);
+		console.log(name + "  idlllllllllllllll " + id);
 
 		$(this).closest("ul").data("selected_item", id);
 		$(this).closest(".btn-group").find(".selected_name").text(name);
@@ -69,16 +99,24 @@ $(function()
 	});
 	$("ul#entity_type li a").die().live("click", function()
 	{
+		var entitytype = $(this).html();
 
-		$('.activity-sub-heading').html($(this).html());
+		var entity_attribute = $(this).attr("href");
+		createCookie("selectedentity", entity_attribute, 90);
+		createCookie("selectedentity_value", entitytype, 90);
+		$('.activity-sub-heading').html(entitytype);
 
 	});
 	$("ul#user-select li a").die().live("click", function()
 	{
 
 		var user = $(this).html();
+		var user_attribute = $(this).attr("href");
+		createCookie("selecteduser", user_attribute, 90);
+		createCookie("selecteduser_value", user, 90);
 
 		$('.activity-user').html("(" + user + ")");
 
 	});
+
 });

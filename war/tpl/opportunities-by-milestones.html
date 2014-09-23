@@ -46,15 +46,12 @@
 <script id="opportunities-grid-view-template" type="text/html">
 <div data="{{id}}" class="data agile-overflow-ellipsis">
 	<div>
-		<b style="max-width: 65%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
-		<span class="right deal-options" style="visibility:hidden;">
-			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
-            <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
-        </span>
-		<span class="right" style="padding-right:5px;">
+		<b style="max-width: 78%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
+		
+		<span class="right dealnotes-view">
 			{{#if notes}}
-             <a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment deal-notes" data="{{id}}" title="Notes"></i></a>
-              <span class="txt-small note-count" title="Notes">{{notes.length}}</span>
+             <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}" title="Notes"></i></a>
+              
 			{{/if}}
 		</span>
 		<div class="clearfix"></div>
@@ -67,11 +64,18 @@
 			{{#related_to_one contacts}}{{/related_to_one}}
 		{{/if}}{{#if_greater this.contacts.length "5"}}<span>,..</span>{{/if_greater}}
 	</div>
-	<div>
+	<div class="pull-left">
 		<small>
 			<time class="deal-close-time" datetime="{{epochToHumanDate "" close_date}}" style="border-bottom:dotted 1px #999;">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" close_date}}</time>
 		</small>
 	</div>
+<div class="pull-right">
+<span class="right deal-options" style="visibility:hidden;">
+			<a title="Edit" class="deal-edit" style="cursor:pointer;text-decoration:none;"> <i style="width: 0.9em!important;" class="icon-pencil"></i> </a>
+            <a title="Delete" class="deal-delete" style="cursor:pointer;text-decoration:none;"><i style="width: 0.9em!important;" class="icon-trash"></i></a>
+        </span>
+</div>
+<div class="clearfix"></div>
 </div>
 </script>
 
