@@ -183,7 +183,6 @@ $(function()
 										  
 										 return;
 									}
-									// Retrieve Stripe profile and shows profile in Stripe panel on success
 									getShopifyProfile(customer_id, function(data)
 									{
 										// Get and Fill the template with data

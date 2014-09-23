@@ -85,6 +85,38 @@ public class ShopifyWidgetAPI
 	}
 
     }
+   /**
+    *  Retrieves customer informations 
+    * @param widgetId
+    * @param customerId
+    * @return
+    */
+    
+    @Path("/customer/{widget-id}/{customerId}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public LinkedHashMap<String, Object> getCustomerDetails(@PathParam("widget-id") Long widgetId,
+	    @PathParam("customerId") String customerId)
+    {
+	try
+	{
+	    // Retrieves widget based on its id
+	    Widget widget = WidgetUtil.getWidget(widgetId);
+
+	    if (widget == null)
+		return null;
+
+	  return ShopifyPluginUtil.getCustomer(widget, customerId);
+	   
+	}
+	
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+
+    }
 
     /**
      * delete shopify widget

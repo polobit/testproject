@@ -64,6 +64,8 @@ function organize_widgets(base_model)
 
 	if (widget_type == "BILLING")
 		$('#billing', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
+	if (widget_type == "ECOMMERCE")
+				$('#ecommerce', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));
 
 	if (widget_type == "CUSTOM")
 		$('#custom', this.el).append($(itemView.render().el).addClass('span4').css("margin-left", "0px"));

@@ -89,34 +89,40 @@
 <script id="shopify-profile-template" type="text/html">
 <div class="widget_content">
 
-<div class="sub_header" style="margin-left: -10px;margin-right: -10px;"><h4>Customer's Details</h4></div>
 {{#each this}}
-<li>Name - {{customer.first_name}} &nbsp; {{customer.last_name}}</li>
-<li>Email - {{customer.email}}</li>
+<li><a href="#">{{customer.first_name}} &nbsp; {{customer.last_name}}</a></li>
 {{/each}}
-
-<div class="sub_header" style="margin-left: -10px;margin-right: -10px;">
+</div>
+<div class="sub_header">
 	<h4>Order Details</h4>
 </div>
 {{#each this}}
-<div class="accordion" id="accordion2" style ="margin-top: 2px;margin-left: -10px;margin-right: -10px;">
-  <div class="accordion-group">
+<div class="accordion" id="accordion2">
+  <div class="accordion-group" style="border: 0px;margin-bottom: 23px;">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{this.id}}">
-        Order No #{{this.id}}
+       <i class="icon-plus pull-left"></i> Order No #{{this.id}} <span class="pull-right">{{currency}} &nbsp;{{total_price}}</span>
       </a>
+    
     </div>
+ 
     <div id="{{this.id}}" class="accordion-body collapse in">
       <div class="accordion-inner">
       {{#each line_items}}
 <li>Item # {{title}} &nbsp; Price {{price}}  Quantity : {{quantity}}</li>
 {{/each}}
 Total Price # {{total_price}} {{currency}}
+Total Price # {{total_price}} {{currency}}
       </div>
     </div>
+<div class="pull-right" style ="margin-right: 13px;"><span class="badge">{{capFirstLetter financial_status}}</span></div>
   </div>
+
 {{/each}}
 
 
-</div>
+
+
+
+
 </script>

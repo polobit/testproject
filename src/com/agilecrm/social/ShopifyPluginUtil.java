@@ -70,7 +70,15 @@ public class ShopifyPluginUtil
 
     }
 
-    private LinkedHashMap<String, Object> getCustomer(String accessURl, String token)
+    public static LinkedHashMap<String, Object> getCustomer(Widget widget, String customerId)
+    {
+	String token = widget.getProperty("token");
+	String shopName = widget.getProperty("shop");
+	String url = "https/" + shopName + "/admin/customers/" + customerId + ".json";
+	return  getCustomer(url, token);
+    }
+
+    private static LinkedHashMap<String, Object> getCustomer(String accessURl, String token)
     {
 
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
