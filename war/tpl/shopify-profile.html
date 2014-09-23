@@ -88,7 +88,7 @@
 
 <script id="shopify-profile-template" type="text/html">
 <div class="widget_content">
-
+{{#if this.length}}
 {{#each this}}
 <li><a href="https://{{shop}}/admin/customers/{{customer.id}}">{{customer.first_name}} &nbsp; {{customer.last_name}}</a></li>
 {{/each}}
@@ -118,7 +118,11 @@ Total Price # {{total_price}} {{currency}}
   </div>
 
 {{/each}}
-
+{{else}}
+<li class="sub_header_li" style='color: #999;'>
+	    	No data	found		
+		</li>
+{{/if}}
 
 
 

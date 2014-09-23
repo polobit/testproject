@@ -88,18 +88,19 @@ public class ShopifyWidgetAPI
 	}
 
     }
-   /**
-    *  Retrieves customer informations 
-    * @param widgetId
-    * @param customerId
-    * @return
-    */
-    
+
+    /**
+     * Retrieves customer informations
+     * 
+     * @param widgetId
+     * @param customerId
+     * @return
+     */
+
     @Path("/customer/{widget-id}/{customerId}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getCustomerDetails(@PathParam("widget-id") Long widgetId,
-	    @PathParam("customerId") String customerId)
+    public String getCustomerDetails(@PathParam("widget-id") Long widgetId, @PathParam("customerId") String customerId)
     {
 	try
 	{
@@ -109,10 +110,10 @@ public class ShopifyWidgetAPI
 	    if (widget == null)
 		return null;
 
-	  return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
-	   
+	    return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
+
 	}
-	
+
 	catch (Exception e)
 	{
 	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
