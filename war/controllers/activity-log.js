@@ -12,6 +12,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 	activities : function(id)
 	{
 		$('#content').html(getTemplate("activity-list-header", {}));
+		$(".activity-log-button").hide();
 		var selecteduser = readCookie("selecteduser");
 		var selectedentity = readCookie("selectedentity");
 
@@ -71,6 +72,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 				$('#activity-list-based-condition').html(activitiesview.el);
 
 			}
+			$(".activity-log-button").show();
 
 		}, optionsTemplate, true);
 
