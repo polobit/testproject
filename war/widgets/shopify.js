@@ -135,10 +135,10 @@ $(function()
 								}
 
 								/**
-								 * Shows stripe profile based on customer Id and Stripe_Plugin_Id
+								 * Shows shopify profile based on customer Id and Shopify_plugin_id
 								 * 
-								 * @param stripe_custom_field_name
-								 *            Stripe custom field name in which Stripe customer id related to
+								 * @param shopify_custom_field_name
+								 *            Shopify custom field name in which Shopify customer id related to
 								 *            contact is stored
 								 */
 								function showShopifyProfile(shopify_custom_field_name)
@@ -183,28 +183,35 @@ $(function()
 										  
 										 return;
 									}
-									getShopifyProfile(customer_id, function(data)
-									{
-										// Get and Fill the template with data
-													console.log(data.length);
-													console.log(data);
-										var shopify_template = $(getTemplate("shopify-profile", data));
+									
+									       getShopifyProfile(customer_id, function(data)
+																	{
+																		// Get and Fill the template with data
+																					console.log(data.length);
+																					console.log(data);
+																				
+																		var shopify_template = $(getTemplate("shopify-profile", data));
+																		console.log("shopify template"+shopify_template);
 
-										// Load jquery time ago function to show time ago in invoices
-										head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
-										{
-											$(".time-ago", shopify_template).timeago();
-										});
+																		// Load jquery time ago function to show time ago in invoices
+																		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+																		{
+																			$(".time-ago", shopify_template).timeago();
+																		});
 
-										// Show the template in Stripe widget panel
-										$('#Shopify').html(shopify_template);
-									});
+																		$('#Shopify').html(shopify_template);
+																	});
+									      
+																			
+															
 
 								}
+								
+			
 
 								/**
-								 * Initializes an AJAX queue request to retrieve Stripe customer details and
-								 * invoices based on given Stripe customer id
+								 * Initializes an AJAX queue request to retrieve Shopify customer details and
+								 * invoices based on given Shopify customer id
 								 * 
 								 * <p>
 								 * Request is added to queue to make the requests from all the widgets

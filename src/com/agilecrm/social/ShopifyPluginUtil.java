@@ -74,7 +74,7 @@ public class ShopifyPluginUtil
     {
 	String token = widget.getProperty("token");
 	String shopName = widget.getProperty("shop");
-	String url = "https/" + shopName + "/admin/customers/" + customerId + ".json";
+	String url = "https://" + shopName + "/admin/customers/" + customerId + ".json";
 	return  getCustomer(url, token);
     }
 

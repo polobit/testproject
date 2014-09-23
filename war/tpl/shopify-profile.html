@@ -90,7 +90,7 @@
 <div class="widget_content">
 
 {{#each this}}
-<li><a href="#">{{customer.first_name}} &nbsp; {{customer.last_name}}</a></li>
+<li><a href="https://{{shop}}/admin/customers/{{customer.id}}">{{customer.first_name}} &nbsp; {{customer.last_name}}</a></li>
 {{/each}}
 </div>
 <div class="sub_header">
@@ -101,7 +101,7 @@
   <div class="accordion-group" style="border: 0px;margin-bottom: 23px;">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{this.id}}">
-       <i class="icon-plus pull-left"></i> Order No #{{this.id}} <span class="pull-right">{{currency}} &nbsp;{{total_price}}</span>
+       <i class="icon-plus pull-left"></i> Order No #{{this.id}} <span class="pull-right">{{currency}} &nbsp;{{customer.total_spent}}</span>
       </a>
     
     </div>
@@ -111,7 +111,6 @@
       {{#each line_items}}
 <li>Item # {{title}} &nbsp; Price {{price}}  Quantity : {{quantity}}</li>
 {{/each}}
-Total Price # {{total_price}} {{currency}}
 Total Price # {{total_price}} {{currency}}
       </div>
     </div>

@@ -52,6 +52,7 @@ public class ShopifyWidgetAPI
 	{
 	    // Retrieves widget based on its id
 	    Widget widget = WidgetUtil.getWidget(widgetId);
+	    String shopName = widget.getProperty("shop");
 
 	    if (widget == null)
 		return null;
@@ -62,7 +63,9 @@ public class ShopifyWidgetAPI
 	    Iterator<LinkedHashMap<String, Object>> it = orders.iterator();
 	    while (it.hasNext())
 	    {
-		customerOrders.put(it.next());
+		LinkedHashMap<String, Object> order = it.next();
+		order.put("shop", shopName);
+		customerOrders.put(order);
 	    }
 
 	    return customerOrders;
@@ -95,7 +98,7 @@ public class ShopifyWidgetAPI
     @Path("/customer/{widget-id}/{customerId}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public LinkedHashMap<String, Object> getCustomerDetails(@PathParam("widget-id") Long widgetId,
+    public String getCustomerDetails(@PathParam("widget-id") Long widgetId,
 	    @PathParam("customerId") String customerId)
     {
 	try
@@ -106,7 +109,7 @@ public class ShopifyWidgetAPI
 	    if (widget == null)
 		return null;
 
-	  return ShopifyPluginUtil.getCustomer(widget, customerId);
+	  return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
 	   
 	}
 	
