@@ -12,6 +12,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 	activities : function(id)
 	{
 		$('#content').html(getTemplate("activity-list-header", {}));
+		$(".activity-log-button").hide();
 		var selecteduser = readCookie("selecteduser");
 		var selectedentity = readCookie("selectedentity");
 
@@ -38,7 +39,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 				{
 					$('#selectedusername').html(username_value);
 
-					$('.activity-user').html("(" + username_value + ")");
+					
 				}
 				if (entity_value)
 				{
@@ -57,7 +58,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 							$("time", el).timeago();
 						});
 
-						$('.activity-user').html("(All users)");
+					
 
 					}, appendItemCallback : function(el)
 					{
@@ -71,6 +72,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 				$('#activity-list-based-condition').html(activitiesview.el);
 
 			}
+			$(".activity-log-button").show();
 
 		}, optionsTemplate, true);
 
@@ -115,7 +117,7 @@ $(function()
 		createCookie("selecteduser", user_attribute, 90);
 		createCookie("selecteduser_value", user, 90);
 
-		$('.activity-user').html("(" + user + ")");
+	
 
 	});
 

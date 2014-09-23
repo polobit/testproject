@@ -14,7 +14,7 @@
  * @param target_id - id of target field where value should be inserted.
  * 
  **/
-var view;
+
 function insertSelectedMergeField(ele,target_id)
 {
 	// current value
@@ -130,9 +130,12 @@ function getTwilioIncomingList(type)
 		  async:false,
 		  dataType:'json',
 		  success: function (twilioNumbers) {
+			  if(twilioNumbers!=null){
 			  for (var i=0;i<twilioNumbers.length;i++) {
 					numbers[twilioNumbers[i]]=twilioNumbers[i];
-		  }
+		  } 
+			  }else
+				  numbers["select"]="";
 		}
 		
 	});

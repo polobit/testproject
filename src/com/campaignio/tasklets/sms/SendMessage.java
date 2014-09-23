@@ -68,7 +68,7 @@ public class SendMessage extends TaskletAdapter
 		String to = getStringValue(nodeJSON, subscriberJSON, data, TO_NUMBER);
 		String message = getStringValue(nodeJSON, subscriberJSON, data, MESSAGE);
 
-		if (StringUtils.isEmpty(to))
+		if (StringUtils.isEmpty(to) || StringUtils.isEmpty(from))
 		{
 			LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
 					"SMS failed", LogType.SMS_FAILED.toString());

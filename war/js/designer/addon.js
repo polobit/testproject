@@ -98,9 +98,18 @@ function addAddonTabTemplate(data, url, callback, container)
          // Add handler for add this                        
          catalogTemplate.find('#add').click(function () {
 
-             // Get JSON and JSONSrc
+        	 // Get JSON and JSONSrc
              var json = $(this).data('json');
-
+            
+             //Has to be changed
+             if(json.name == "Send Message"){
+            	 var list = getTwilioIncomingList();
+            	 if($.isEmptyObject(list)){
+            		 alert("Please configure twilio in integrations");
+            		 return;
+            	}
+             } 
+             
              var jsonsrc = $(this).data('jsonsrc');
 
              // Close the dialog
