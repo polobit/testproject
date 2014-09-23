@@ -207,6 +207,8 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     if(uiFieldDefinition.fieldType == "twilio_incoming_list")
     {
     	options = getTwilioIncomingList("twilio_incoming_list");
+    	if(options.hasOwnProperty("select"))
+    		options={};
     }
     
     // Populate Options
