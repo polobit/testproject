@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.deals.CustomFieldData;
@@ -26,6 +28,7 @@ public class DealCSVExport
 
     public static final String NAME = "Name";
     public static final String DESCRIPTION = "Description";
+    public static final String PIPELINE = "Track";
     public static final String MILESTONE = "Milestone";
     public static final String PROBABILITY = "Probability";
     public static final String EXPECTED_VALUE = "Value";
@@ -55,9 +58,16 @@ public class DealCSVExport
 	{
 	    str[indexMap.get(NAME)] = deal.name;
 	    str[indexMap.get(DESCRIPTION)] = deal.description;
+	    if (deal.pipeline_id != 0)
+		str[indexMap.get(PIPELINE)] = deal.getPipeline().name;
 	    str[indexMap.get(MILESTONE)] = deal.milestone;
 	    str[indexMap.get(PROBABILITY)] = deal.probability + "%";
-	    str[indexMap.get(EXPECTED_VALUE)] = UserPrefsUtil.getCurrentUserPrefs().currency.split("-")[1] + " "
+	    String currency = UserPrefsUtil.getCurrentUserPrefs().currency;
+	    if (StringUtils.isNotBlank(currency))
+		currency = currency.split("-")[1];
+	    else
+		currency = "$";
+	    str[indexMap.get(EXPECTED_VALUE)] = currency + " "
 		    + (deal.expected_value != null ? deal.expected_value : 0);
 
 	    str[indexMap.get(OWNER)] = deal.getOwner().email;
