@@ -392,8 +392,10 @@ function addTagsArrayasTypeaheadSource(tagsJSON, element)
 }
 
 
-function showModalConfirmation(title, body, yes_callback, no_callback, close_callback)
+function showModalConfirmation(title, body, yes_callback, no_callback, close_callback, button1, button2)
 {
+	console.log(button1);
+	console.log(button2);
 	var confirmationModal = $('<div id="confirmation" class="modal fade in">' +
 			'<div class="modal-header" >'+
 				'<a href="#" data-dismiss="modal" class="close">&times;</a>' +
@@ -402,13 +404,13 @@ function showModalConfirmation(title, body, yes_callback, no_callback, close_cal
 						'</div>' +	
 				'<div class="modal-footer">' +
 					'<div>' +
-					'<a href="#" id="confirm" class="action btn btn-primary" action="confirm">Yes</a>' +
-					'<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">No</a>'+ 
+					 '<a href="#" id="confirm" class="action btn btn-primary" action="confirm">'+(button1 ? button1 : "Yes" )+'</a>' +
+							 '<a  href="#" id="deny" class="btn action" data-dismiss="modal" action="deny">'+(button2 ? button2 : "No") +'</a>' +
 					'</div>' +
 				'</div>' +
 			'</div>' + 
 		'</div>');
-	
+	console.log(confirmationModal);
 	confirmationModal.modal('show');
 	confirmationModal.focus();
 	

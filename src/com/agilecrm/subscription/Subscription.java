@@ -161,9 +161,11 @@ public class Subscription
 
     void fillDefaultPlans()
     {
+	
 	if (plan == null)
 	{
 	    plan = new Plan(PlanType.FREE.toString(), 2);
+	    gateway = Gateway.Stripe;
 	}
     }
 

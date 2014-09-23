@@ -21,13 +21,14 @@
 	</div>
 
 	<div class="clear-fix"></div>
+{{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
 	<div class="card-details">
-		Name : Yaswanth </br> Credit card : ends with 4242 (Expiry : xx/xx/xxxx) <a
-			href="#updatecard">Change card</a>
+		Name : {{billingData.cards.data.0.name}} </br> Credit card : ends with {{billingData.cards.data.0.last4}} (Expiry : {{billingData.cards.data.0.expMonth}} / {{billingData.cards.data.0.expYear}}) <a
+			href="#update-card">Change card</a>
 	</div>
 	{{else}}
-		No Credit Cards attached.
+		No Credit Cards attached. <a href="#attach-card">Attach card</a>
 {{/if}}
 </div>
 </script>
@@ -40,8 +41,7 @@
 					<h3>Your current plan</h3>
 				</div>
 				<div class="clearfix"></div>
-					{{#stringToJSON this "billingData"}}{{/stringToJSON}}
-					<div class="form-horizontal" style="margin-left:-33%">
+					<div class="form-horizontal" style="margin-left:-33%;margin-top:10px">
 						{{#getSubscriptionBasedOnPlan billingData plan}}
 							<div class="control-group">
                        		 <label class="control-label">Current Plan</label>
@@ -58,7 +58,7 @@
 							<div class="control-group" style="margin-top:-5%">
                        			 <label class="control-label" style="margin-top:-2%">Amount</label>
                         			<div class="controls">
-										${{numeric_operation plan.amount 100 "/"}}
+										${{total}}
                         			</div>
                     		</div>
 							 <div class="control-group" style="margin-top:-5%">
@@ -73,9 +73,17 @@
 										<time class="time-ago">{{epochToHumanDate "mmm dd, yyyy HH:MM tt" currentPeriodEnd}}</time>
                         			</div>
                     		</div>
+							{{else}}
+									<div>Free Plan</div>
+									<div>2 Users</div>
 						{{/getSubscriptionBasedOnPlan}}
+						
 					</div>
-			<a class="btn btn-primary" href="#subscribe" id="account_plan_upgrade"> Upgrade </a>
+		{{#if billingData}}
+				<a class="btn btn-primary" href="#subscribe" id="account_plan_upgrade"> Upgrade </a>
+			{{else}}
+				<a class="btn btn-primary" href="#" id="attach_card_notification"> Upgrade </a>
+		{{/if}}
 			</div>
 		</div>
 </script>
@@ -89,53 +97,97 @@
 			</div>
 			<div class="clearfix"></div>
 
-				<form id="gateway" class="form-horizontal hide">
+			<form id="gateway" class="form-horizontal hide">
 				<input type="text" name="gateway" class="hidden" value="Stripe" />
 			</form>
-				<form class="form-horizontal" name="emailPlan" style="margin-left:-40%" id="email-plan-form">
-						<div class="control-group">
+				
+				{{#getSubscriptionBasedOnPlan billingData emailPlan}}
+						<div class="form-horizontal" name="emailPlan" style="margin-left:-33%;margin-top:10px" id="email-plan-form">
+							<div class="control-group">
                        		 <label class="control-label">Emails</label>
                         		<div class="controls" style="margin-top: 5px;">
-									<input name="count" type="text" class="input input-medium required"></input>
+                          			 {{numeric_operation ../emailPlan.quantity 1000 "*"}}
                         		</div>
-                    		</div>
-						{{#getSubscriptionBasedOnPlan billingData emailPlan}}
-							<div class="control-group">
-                       		 <label class="control-label">Current Plan</label>
-                        		<div class="controls" style="margin-top: 5px;">
-                          			 {{getAccountPlanName ../emailPlan.plan_type}}, {{getAccountPlanInteval ../emailPlan.plan_type}}
-                        		</div>
-                    		</div>
-							<div class="control-group" style="margin-top:-5%">
-                       			 <label class="control-label" style="margin-top:-2%">Users</label>
-                        			<div class="controls">
-										{{quantity}}
-                        			</div>
                     		</div>
 							<div class="control-group" style="margin-top:-5%">
                        			 <label class="control-label" style="margin-top:-2%">Amount</label>
                         			<div class="controls">
-										{{plan.amount}}
+										${{total}}
                         			</div>
                     		</div>
 							 <div class="control-group" style="margin-top:-5%">
                        			 <label class="control-label" style="margin-top:-2%">Start</label>
                         			<div class="controls">
-										{{epochToHumanDate "mmm dd, yyyy HH:MM" currentPeriodStart}}
+										<time class="time-ago">{{epochToHumanDate "mmm dd, yyyy HH:MM tt" currentPeriodStart}}</time>
                         			</div>
                     		</div>
 							<div class="control-group" style="margin-top:-5%">
                        			 <label class="control-label" style="margin-top:-2%">End</label>
                         			<div class="controls">
-										{{epochToHumanDate "mmm dd, yyyy HH:MM" currentPeriodEnd}}
+										<time class="time-ago">{{epochToHumanDate "mmm dd, yyyy HH:MM tt" currentPeriodEnd}}</time>
                         			</div>
                     		</div>
-						{{/getSubscriptionBasedOnPlan}}
-					</form>
+							
+					</div>
+					{{else}}
+							<form class="form-horizontal" name="emailPlan" style="margin-left:-40%;margin-top:10px" id="email-plan-form">
+						<div class="control-group">
+                       		 <label class="control-label">Send Rate</label>
+                        		<div class="controls" style="margin-top: 5px;">
+									<input type="text" class="input input-small required" id="email-quantity" name="quantity"></input> X 1000
+                        		</div>
+                    		</div>
+							<div class="control-group">
+								<div class="controls">
+									<span style="color: #FA782D; font-size: 30px;">$<span id="emails_total_cost">0</span></span>
+									<p class="help-block" style="margin-top: 0px">
+										( charged @ <span style="color: #FA782D;" id="email_rate">$5</span> / 1000 emails)
+									</p>
+								</div>
+							</div>
+						</form>
+				{{/getSubscriptionBasedOnPlan}}
 		</div>
-		<div class="clearfix"></div>
-					<a class="btn btn-primary save" href="#" id="account_email_plan_upgrade"> Modify </a>
+	<div class="clearfix"></div>
+					<a class="btn btn-primary" href="#" id="account_email_plan_upgrade"> Modify </a>
 </div>
+	</div>
+</div>
+</script>
+
+<script id="email-plan-form-template" type="text/html">
+<div class="span4">
+	<div class="well" style="width: 220px; height: 200px;">
+		<div style="width: 220px; height: 180px;">
+			<div style="border-bottom: 1px solid #e5e5e5;">
+				<h3>Email plan</h3>
+			</div>
+			<div class="clearfix"></div>
+
+			<form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden" value="Stripe" />
+			</form>
+				<form class="form-horizontal" name="emailPlan" style="margin-left:-40%;margin-top:10px" id="email-plan-form">
+						<div class="control-group">
+                       		 <label class="control-label">Send Rate</label>
+                        		<div class="controls" style="margin-top: 5px;">
+									<input type="text" class="input input-small required" id="email-quantity" name="quantity"></input> X 1000
+                        		</div>
+                    		</div>
+							<div class="control-group">
+								<div class="controls">
+									<span style="color: #FA782D; font-size: 30px;">$<span id="emails_total_cost">0</span></span>
+									<p class="help-block" style="margin-top: 0px">
+										( charged @ <span style="color: #FA782D;" id="email_rate">$5</span> / 1000 emails)
+									</p>
+								</div>
+							</div>
+				</form>
+		</div>
+<div class="clearfix"></div>
+					<a class="btn btn-primary save" href="#"> Purchase </a>
+
+					<a class="btn" href="#" id="close"> close </a>
 	</div>
 </div>
 </script>

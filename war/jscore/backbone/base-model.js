@@ -193,6 +193,7 @@ var Base_Model_View = Backbone.View
 				// textarea before form serialization
 				trigger_tinymce_save();
 
+				
 				/*
 				 * Gets the form id from the view, this.el represents html
 				 * element of the view.
@@ -200,6 +201,8 @@ var Base_Model_View = Backbone.View
 				var formId = $(this.el).find('form').attr('id');
 				
 				var saveCallback = this.options.saveCallback;
+				
+				
 				
 				// Represents form element
 				var $form = $('#' + formId);
@@ -325,6 +328,12 @@ var Base_Model_View = Backbone.View
 				// Store Modal Id
 				var modal = this.options.modal;
 
+				var prePersist = this.options.prePersist;
+				
+				if (prePersist && typeof (prePersist) === "function") {
+				    
+				     prePersist(this.model);
+				    }
 				// Loading while saving
 				//$save_info = $('<div style="display:inline-block"><img src="img/1-0.gif" height="15px" width="15px"></img></div>');
 				//$(".form-actions", this.el).append($save_info);

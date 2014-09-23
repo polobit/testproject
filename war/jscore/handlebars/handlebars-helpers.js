@@ -2780,40 +2780,10 @@ $(function()
     });
     
     Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options){
-    	console.log(customer);
-    	if(!plan)
-    		return options.inverse(this);
-    	if(!customer)
-    		return options.inverse(this);
-    	var subscriptions = customer.subscriptions;
-    	if(!subscriptions)
-    		{
-    		console.log("(((((((((())))))))))))))");
-    		console.log(customer.subscription);
-    			if(!customer.subscription)
-    				return options.inverse(this);
-    			else
-    				return options.fn(customer.subscription);
-    			
-    			return options.inverse(this);;
-    		}
+    	var subscription = getSubscriptionWithAmount(customer, plan);
     	
-    	var has_subscription_id = false;
-    	if(plan.subscription_id)
-    		has_subscription_id = true;
-    	for(var i = 0; i < subscriptions.data.length ; i ++)
-    		{
-    			var subscription = subscriptions.data[i];
-    			if(has_subscription_id)
-    				{
-    					if(subscription.id != plan.subscription_id)
-    						continue;
-    					
-    					return options.fn(subscription);
-    				}
-    			else if(subscription.plan.id == plan.plan_id)
-    				return options.fn(subscription);
-    		}
+    	if(subscription != null)
+    		return options.fn(subscription);
     	
     	return options.inverse(this);
     });

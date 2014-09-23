@@ -95,6 +95,7 @@ public class SubscriptionApi
 	     * for current domain subscription object
 	     */
 	    else if (subscribe.card_details == null)
+	    {
 		if (subscribe.plan != null)
 		    subscribe = changePlan(subscribe.plan);
 
@@ -103,10 +104,12 @@ public class SubscriptionApi
 		    subscribe = addEmailPlan(subscribe.emailPlan);
 		    return subscribe;
 		}
+	    }
 		/*
 		 * If credit_card details and plan details are not null then it
 		 * is new subscription
 		 */
+	    
 		else if (subscribe.card_details != null && subscribe.plan != null)
 		    subscribe = subscribe.createNewSubscription();
 

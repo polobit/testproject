@@ -27,6 +27,7 @@ public class SubscriptionUtil
 	if (subscription == null)
 	{
 	    subscription = new Subscription();
+	    
 	    subscription.fillDefaultPlans();
 	}
 
@@ -107,8 +108,9 @@ public class SubscriptionUtil
         return subscription;
     }
     
-    public static String getEmailPlan(Integer count)
+    public static String getEmailPlan(Integer quantity)
     {
+	Integer count = quantity * 1000;
 	if(count < 5000)
 	    return null;
 	
@@ -117,8 +119,8 @@ public class SubscriptionUtil
 	    plan_id = "email-4";
 	else if(count <= 1000000)
 	    plan_id = "email-3";
-	
-	
+	else if(count > 1000000)
+	    plan_id = "email-3";
 	return plan_id;
     }
 

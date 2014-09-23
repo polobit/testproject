@@ -366,7 +366,7 @@ public class StripeImpl implements AgileBilling
 	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	// New email plan to subscribe user to
-	String plan_id = SubscriptionUtil.getEmailPlan(newPlan.count);
+	String plan_id = SubscriptionUtil.getEmailPlan(newPlan.quantity);
 	
 	newPlan.plan_id = plan_id;
 
@@ -414,22 +414,28 @@ public class StripeImpl implements AgileBilling
 
 	    Map<String, Object> newSubscriptionParams = new HashMap<String, Object>();
 	    newSubscriptionParams.put("plan", newPlan.plan_id);
-	    newSubscriptionParams.put("quantity", newPlan.count / 1000);
+	    newSubscriptionParams.put("quantity", newPlan.quantity);
+	    newSubscriptionParams.put("prorate", true);
 	    newPlan.count = null;
 	    // If there is no existing subscription that falls under current
 	    // Category it is considered as new plan subscription
 	    if (existingAddonPlan == null)
 	    {
 		existingSubscription = customer.createSubscription(newSubscriptionParams);
-
-		newPlan.subscription_id = existingSubscription.getId();
 	    }
 	    else
+	    {
 		// Updates existing
-		existingSubscription.update(newSubscriptionParams);
+		com.stripe.model.Subscription x = existingSubscription.update(newSubscriptionParams);
+		System.out.println(x);
+	    }
 
+	    newPlan.subscription_id = existingSubscription.getId();
+	    
 	    Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
 	    invoiceItemParams.put("customer", customer.getId());
+	    invoiceItemParams.put("subscription", existingSubscription.getId());
+	    
 	    try
 	    {
 		// Creates invoice for plan upgrade and charges customer
@@ -445,6 +451,7 @@ public class StripeImpl implements AgileBilling
 	    {
 	    }
 	   
+	    subscription.emailPlan = newPlan;
 	    return StripeUtil.getJSONFromCustomer(Customer.retrieve(customer.getId()));
 	    
 	}
