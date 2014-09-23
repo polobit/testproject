@@ -57,13 +57,6 @@ public class AgileAuthFilter implements Filter
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-	if (((HttpServletRequest) request).getRequestURI().contains("/shopifyapp/installed-domain"))
-	{
-	    System.out.println("Ignoring authentication for shopify app");
-	    chain.doFilter(request, response);
-	    return;
-	}
-
 	// If it is JS API, we will pass it through JSAPIFilter is used to
 	// filter the request i.e., to check the API key allocated to the
 	// domain

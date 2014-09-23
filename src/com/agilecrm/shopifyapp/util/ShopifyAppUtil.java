@@ -11,7 +11,7 @@ public class ShopifyAppUtil
 
     public static String getDomainByShop(String shop)
     {
-	// String oldNameSpace = NamespaceManager.get();
+	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
 	try
@@ -20,17 +20,17 @@ public class ShopifyAppUtil
 	    query.filter("shop", shop);
 	    ShopifyApp shopifyApp = query.get();
 	    if (shopifyApp.domain == null)
-		return "";
+		return null;
 	    else
 		return shopifyApp.domain;
 	}
 	catch (Exception e)
 	{
-	    return "";
+	    return null;
 	}
 	finally
 	{
-	    // NamespaceManager.set(oldNameSpace);
+	    NamespaceManager.set(oldNamespace);
 	}
     }
 
@@ -38,5 +38,6 @@ public class ShopifyAppUtil
     {
 	ShopifyApp shopifyApp = new ShopifyApp(shop, domain);
 	shopifyApp.save();
+	return;
     }
 }
