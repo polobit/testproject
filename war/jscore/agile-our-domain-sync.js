@@ -60,7 +60,7 @@ function add_current_loggedin_time()
 	// Gets logged in time property.
 	var loggedin_time_property = getProperty(Agile_Contact.properties, 'Last login');
 	var existing_date_string = "";
-	
+
 	// To whether custom is new or old.
 	var is_new_customer = true;
 	if (loggedin_time_property)
@@ -77,11 +77,12 @@ function add_current_loggedin_time()
 
 	loggedin_time_property = create_contact_custom_field("Last login", parseInt(current_date_object.getTime() / 1000), 'CUSTOM');
 
-	_agile.add_property(loggedin_time_property, function(data){
+	_agile.add_property(loggedin_time_property, function(data)
+	{
 		Agile_Contact = data;
-		
+
 		// Adds timezone if customer is new
-		if(is_new_customer)
+		if (is_new_customer)
 			add_timezone_tag();
 	});
 }
@@ -138,20 +139,46 @@ function add_account_canceled_info(info, callback)
 	});
 }
 
-//add GMT tag for user who is in between 4am to 6pm GMT
+/**
+ * adds referral info as a note while adding contact as a note in our domain
+ */
+
+function add_referrar_info_as_note()
+{
+	var utmsource = readCookie("_agile_utm_source");
+	var utmcampaign = readCookie("_agile_utm_campaign");
+	var utmmedium = readCookie("_agile_utm_medium");
+	var utmreferencedomain = readCookie("agile_reference_domain");
+	if (utmsource && utmcampaign && utmmedium && utmreferencedomain)
+	{
+		var note = {};
+		note.subject = "Referrer";
+		note.description = "Source:" + utmsource + ",Campaign: " + utmcampaign + ",Medium :" + utmmedium + ",Reference Domain " + utmreferencedomain;
+
+		_agile.add_note(note, function(data)
+		{
+			console.log(data);
+			Agile_Contact = data;
+
+		});
+	}
+}
+
+// add GMT tag for user who is in between 4am to 6pm GMT
 function add_timezone_tag()
 {
-	var date = new Date(); 
+	var date = new Date();
 	var startTime = date.getUTCHours();
-	if(startTime >= 3 && startTime <= 15) {
+	if (startTime >= 3 && startTime <= 15)
+	{
 		add_tag_our_domain("GMT");
 	}
 }
 
 function our_domain_set_account()
 {
-	 // If it is local server then add contacts to local domain instead of
-	 // our domain
+	// If it is local server then add contacts to local domain instead of
+	// our domain
 	if (LOCAL_SERVER)
 		_agile.set_account('7n7762stfek4hj61jnpce7uedi', 'local');
 
@@ -199,6 +226,7 @@ function our_domain_sync()
 				// set_profile_noty();
 				add_custom_fields_to_our_domain();
 				initWebrules();
+				add_referrar_info_as_note();
 			});
 
 		})
