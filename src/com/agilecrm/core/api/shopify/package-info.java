@@ -5,4 +5,4 @@
  * @author agile
  *
  */
-package com.agilecrm.shopifyapp.util;
+package com.agilecrm.core.api.shopify;

@@ -1,7 +1,7 @@
-package com.agilecrm.shopifyapp.util;
+package com.agilecrm.shopify.util;
 
 import com.agilecrm.db.ObjectifyGenericDao;
-import com.agilecrm.shopifyapp.ShopifyApp;
+import com.agilecrm.shopify.ShopifyApp;
 import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Query;
 

@@ -1,4 +1,4 @@
-package com.agilecrm.core.api.shopifyapp;
+package com.agilecrm.core.api.shopify;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -6,9 +6,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import com.agilecrm.shopifyapp.util.ShopifyAppUtil;
+import com.agilecrm.shopify.util.ShopifyAppUtil;
+import com.google.appengine.api.NamespaceManager;
 
-@Path("shopifyapp/installed-domain")
+@Path("shopifyapp")
 public class ShopifyAppAPI
 {
     @GET
@@ -19,10 +20,9 @@ public class ShopifyAppAPI
     }
 
     @POST
-    public void setDomainAndShopURL(@QueryParam("shop") String shopURL, @QueryParam("domain") String agileDomain)
+    public void setDomainAndShopURL(@QueryParam("shop") String shopURL)
     {
-	System.out.println("hitting");
-	ShopifyAppUtil.setShopifyAppPrefs(shopURL, agileDomain);
+	ShopifyAppUtil.setShopifyAppPrefs(shopURL, NamespaceManager.get());
 	return;
     }
 }
