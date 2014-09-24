@@ -40,7 +40,7 @@ var WidgetsRouter = Backbone.Router
 
 												"sync" : "contactSync", "sync/contacts" : "google_apps_contacts", "sync/calendar" : "google_apps_calendar", "sync/stripe-import" : "stripe_sync",
 																"sync/shopify" : "shopify", "sync/salesforce" : "salesforce", "sync/zoho-import" : "zoho_sync", "sync/quickbook" : "quickbook_import",
-																"sync/xero" : "xero_import", "shopify" : "shopify" },
+																"sync/xero" : "xero_import" },
 
 												/**
 												 * Adds social widgets (twitter, linkedIn and RapLeaf) to a contact
@@ -973,18 +973,6 @@ var WidgetsRouter = Backbone.Router
 
 																$("#prefs-tabs-content").html(this.xero_import_settings.render().el);
 
-												},
-												
-												shopify : function(){
-																var shop_url = window.location.href.split("/")[4];
-																var agile_domain = window.location.hostname.split(".")[0];
-																var post_url = "core/shopifyapp/installed-domain?shop="+shop_url+"&domain="+agile_domain;
-													
-																$.ajax({
-																	type : "POST",
-																	url : post_url,
-																});
 												}
-
 								});
 
