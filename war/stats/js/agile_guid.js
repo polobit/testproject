@@ -82,7 +82,8 @@ var agile_guid = {
 			var original_referrer = document.referrer;
 
 			// Write to cookie
-			agile_create_cookie(this.cookie_original_ref, original_referrer, 365 * 5);
+			if(original_referrer)
+				agile_create_cookie(this.cookie_original_ref, original_referrer, 365 * 5);
 		} };
 
 agile_guid.init();
