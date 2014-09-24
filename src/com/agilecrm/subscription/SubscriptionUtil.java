@@ -33,6 +33,20 @@ public class SubscriptionUtil
 
 	return subscription;
     }
+    
+    public static boolean isFreePlan()
+    {
+	Objectify ofy = ObjectifyService.begin();
+	Subscription subscription = ofy.query(Subscription.class).get();
+	if (subscription == null)
+	{
+	    subscription = new Subscription();
+	    
+	    subscription.fillDefaultPlans();
+	}
+	
+	return subscription.isFreePlan();
+    }
 
     /**
      * Returns {@link Subscription} object of current domain

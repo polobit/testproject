@@ -174,7 +174,7 @@ public class BillingRestrictionUtil
 	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	// If plan is null then it is considered free plan.
-	plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
+	plan = subscription.plan;
 
 	// Namespace and subscription
 	System.err.println("" + NamespaceManager.get() + " domain is having plan - " + plan);
@@ -200,7 +200,7 @@ public class BillingRestrictionUtil
     public static void setPlan(UserInfo info)
     {
 	Subscription subscription = SubscriptionUtil.getSubscription();
-	Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
+	Plan plan = subscription.plan;
 
 	info.setPlan(plan.plan_type.toString());
 	info.setUsersCount(plan.quantity);
@@ -222,7 +222,7 @@ public class BillingRestrictionUtil
 	{
 	    Subscription subscription = SubscriptionUtil.getSubscription();
 
-	    Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
+	    Plan plan = subscription.plan;
 
 	    info.setPlan(plan.plan_type.toString());
 	    info.setUsersCount(plan.quantity);

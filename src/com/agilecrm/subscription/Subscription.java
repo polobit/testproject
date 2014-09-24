@@ -507,6 +507,20 @@ public class Subscription
 	    e.printStackTrace();
 	}
     }
+    
+    public boolean isFreePlan()
+    {
+	if(plan.plan_type == PlanType.FREE)
+	    return true;
+	return false;
+    }
+    
+    public boolean isFreeEmailPack()
+    {
+	if(emailPlan == null)
+	    return true;
+	return false;
+    }
 
     @Override
     public String toString()

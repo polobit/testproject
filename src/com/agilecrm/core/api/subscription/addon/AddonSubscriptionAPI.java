@@ -72,11 +72,7 @@ public class AddonSubscriptionAPI
     public Subscription getSubscription()
     {
 	Subscription sub = SubscriptionUtil.getSubscription();
-	if (sub != null)
-	    return sub;
-
-	sub = new Subscription();
-	sub.plan = new Plan(PlanType.FREE.toString(), 2);
+	
 	return sub;
     }
 

@@ -74,7 +74,7 @@ public class AccountPrefs
     @XmlElement(name = "subscription_plan")
     public Plan getPlan()
     {
-	if (SubscriptionUtil.getSubscription() != null)
+	if (SubscriptionUtil.isFreePlan())
 	    return SubscriptionUtil.getSubscription().plan;
 
 	return null;
