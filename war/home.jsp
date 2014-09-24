@@ -130,7 +130,7 @@ boolean debug = true;
 boolean production = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 {
-    debug = true;
+    debug = false;
     production = true;
 }
 
