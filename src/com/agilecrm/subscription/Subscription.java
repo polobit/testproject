@@ -14,6 +14,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.limits.plan.FreePlanLimits;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -151,6 +153,10 @@ public class Subscription
     @NotSaved
     @JsonIgnore
     JSONObject billing_data;
+    
+    
+    @NotSaved
+    public PlanLimits planLimits;
 
     private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(Subscription.class);
 
@@ -166,7 +172,9 @@ public class Subscription
 	{
 	    plan = new Plan(PlanType.FREE.toString(), 2);
 	    gateway = Gateway.Stripe;
+	    planLimits = new FreePlanLimits();
 	}
+	   
     }
 
     /**
@@ -452,7 +460,9 @@ public class Subscription
 	    {
 		plan = new Plan(PlanType.FREE.toString(), 2);
 	    }
-
+	    
+	    planLimits = PlanLimits.getPlanDetails(plan);
+	    
 	    // sets domain name in subscription obj before returning
 	    this.domain_name = NamespaceManager.get();
 

@@ -6,6 +6,7 @@ import com.agilecrm.subscription.Subscription.Gateway;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.google.appengine.api.NamespaceManager;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.stripe.Stripe;
@@ -137,5 +138,50 @@ public class SubscriptionUtil
 	    plan_id = "email-3";
 	return plan_id;
     }
+    
+    public static void deleteEmailSubscription(String namespace)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+	    deleteEmailSubscription();
+	} finally 
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    public static void deleteUserSubscription(String namespace)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+	    deleteUserSubscription();
+	} finally 
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
 
+    public static void deleteEmailSubscription()
+    {
+	Subscription subscription = getSubscription();
+	if(subscription.isFreeEmailPack())
+	    return;
+	
+	subscription.emailPlan = null;
+	subscription.save();
+    }
+    
+    public static void deleteUserSubscription()
+    {
+	Subscription subscription = getSubscription();
+	if(subscription.isFreePlan())
+	    return;
+	
+	subscription.emailPlan = null;
+	subscription.save();
+    }
 }
