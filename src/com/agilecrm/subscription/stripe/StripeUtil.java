@@ -27,8 +27,10 @@ import com.stripe.exception.AuthenticationException;
 import com.stripe.exception.CardException;
 import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Card;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
+import com.stripe.model.CustomerCardCollection;
 import com.stripe.model.Event;
 
 /**
@@ -76,6 +78,25 @@ public class StripeUtil
 
 	if (!StringUtils.isEmpty(plan.coupon))
 	    customerParams.put("coupon", plan.coupon);
+
+	// Sets Description and Email for subscription
+	customerParams.put("description", NamespaceManager.get());
+	customerParams.put("email", DomainUserUtil.getCurrentDomainUser().email);
+
+	return customerParams;
+    }
+
+    /**
+     * Creates map to create customer without any subscription just by adding
+     * credit card
+     */
+    public static Map<String, Object> getCustomerParams(CreditCard customerCard) throws JsonParseException,
+	    JsonMappingException, IOException
+    {
+	Map<String, Object> customerParams = new HashMap<String, Object>();
+
+	// Gets credit card details map
+	customerParams.put("card", getCardParams(customerCard));
 
 	// Sets Description and Email for subscription
 	customerParams.put("description", NamespaceManager.get());
@@ -136,14 +157,15 @@ public class StripeUtil
      * 
      * @param customerid
      * @return
-     * @throws APIException 
-     * @throws CardException 
-     * @throws APIConnectionException 
-     * @throws InvalidRequestException 
-     * @throws AuthenticationException 
+     * @throws APIException
+     * @throws CardException
+     * @throws APIConnectionException
+     * @throws InvalidRequestException
+     * @throws AuthenticationException
      * @throws StripeException
      */
-    public static Event getEventFromJSON(String event_json_string) throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException
+    public static Event getEventFromJSON(String event_json_string) throws AuthenticationException,
+	    InvalidRequestException, APIConnectionException, CardException, APIException
     {
 	System.out.println();
 
@@ -208,6 +230,23 @@ public class StripeUtil
 	// Creates customer JSONObject from customer JSON string
 	JSONObject customerJSON = new JSONObject(customerJSONString);
 	return customerJSON;
+    }
+    
+    public static Card getDefaultCard(Customer customer)
+    {
+	String cardId = customer.getDefaultCard();
+	
+	if(StringUtils.isEmpty(cardId))
+	    return (Card) null;
+	
+	CustomerCardCollection cardCollection = customer.getCards();
+	
+	for(Card card  : cardCollection.getData())
+	{
+	    if(cardId.equals(card.getId()))
+		    return card;
+	}
+	return (Card) null;
     }
 
 }

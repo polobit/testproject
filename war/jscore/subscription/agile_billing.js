@@ -56,13 +56,13 @@ function card_expiry(el)
  * @param form
  *            form html element
  */
-function deserialize_card_details(data, form)
+function deserialize_card_details(activeCard, form)
 {
 	/**
 	 * Iterates through activeCard details in data, finds corresponding values
 	 * for the fields and fills them
 	 */
-	$.each(data.activeCard, function(key, value)
+	$.each(activeCard, function(key, value)
 	{
 		/**
 		 * Match all the fields according to value key and actual field name and
@@ -119,7 +119,7 @@ function deserialize_card_details(data, form)
 					$("#country").val(value).prop('selected', true).trigger(
 							'change');
 					// $(fel).val(value).trigger('change');
-					$("#state").val(data.activeCard.addressState).prop(
+					$("#state").val(activeCard.addressState).prop(
 							'selected', true).trigger('change');
 				}
 		}

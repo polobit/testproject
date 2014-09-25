@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
@@ -180,7 +181,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	try
 	{
 	    // Set status and save subscription
-	    Subscription subscription = Subscription.getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 	    subscription.status = status;
 	    subscription.save();
 	    return subscription;

@@ -19,6 +19,7 @@ import org.mozilla.javascript.tools.shell.Global;
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
@@ -47,7 +48,7 @@ public class AddonSubscriptionAPI
 
 	try
 	{
-	    Customer customer = Subscription.getCustomer(NamespaceManager.get());
+	    Customer customer = SubscriptionUtil.getCustomer(NamespaceManager.get());
 	    // Returns live mode sut
 	    if (customer.getLivemode())
 		return;
@@ -70,12 +71,8 @@ public class AddonSubscriptionAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Subscription getSubscription()
     {
-	Subscription sub = Subscription.getSubscription();
-	if (sub != null)
-	    return sub;
-
-	sub = new Subscription();
-	sub.plan = new Plan(PlanType.FREE.toString(), 2);
+	Subscription sub = SubscriptionUtil.getSubscription();
+	
 	return sub;
     }
 
@@ -89,7 +86,6 @@ public class AddonSubscriptionAPI
 	{
 	    //AgileBilling billing = subscription.getAgileBilling();
 	    
-	   // billing.addSubscriptionAddon(subscription);
 	}
 	catch (Exception e)
 	{

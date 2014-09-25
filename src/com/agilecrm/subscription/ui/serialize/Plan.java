@@ -28,6 +28,7 @@ public class Plan
     public String plan_id = null;
     public Integer quantity = null;
     public String coupon = null;
+    public Integer count = 0;
 
     public Plan(String plan_type, Integer quantity)
     {

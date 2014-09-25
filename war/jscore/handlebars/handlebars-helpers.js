@@ -2774,5 +2774,52 @@ $(function()
     	}
     	return options.inverse(this);
     	    });
-
-});
+	    });
+    
+    Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+    		{	
+    	
+    				if(CURRENT_DOMAIN_USER.id == owner_id)
+    					return options.fn(this);
+    				return options.inverse(this); 
+    		});
+    
+    Handlebars.registerHelper('canEditContact', function(owner_id, options){
+    	return options.fn(this);
+    	
+    	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+    		return options.fn(this);
+    	
+		return options.inverse(this)
+    });
+    
+    Handlebars.registerHelper('getAccountPlanName', function(plan_name){
+    	if(!plan_name)
+    		return "Free";
+    	
+    	var plan_fragments = plan_name.split("_");
+    	
+    	return ucfirst(plan_fragments[0]);
+    		
+    	
+    });
+    
+    Handlebars.registerHelper('getAccountPlanInteval', function(plan_name){
+    	if(!plan_name)
+    		return "Monthly";
+    	
+    	var plan_fragments = plan_name.split("_");
+    	
+    	return ucfirst(plan_fragments[1]);
+    	
+    });
+    
+    Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options){
+    	var subscription = getSubscriptionWithAmount(customer, plan);
+    	
+    	if(subscription != null)
+    		return options.fn(subscription);
+    	
+    	return options.inverse(this);
+    });
+ });

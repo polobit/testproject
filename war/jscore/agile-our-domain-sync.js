@@ -221,6 +221,7 @@ function our_domain_sync()
 			// Creates a new contact and assigns it to global value
 			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name }, function(data)
 			{
+				
 				Agile_Contact = data;
 				// Shows noty
 				// set_profile_noty();

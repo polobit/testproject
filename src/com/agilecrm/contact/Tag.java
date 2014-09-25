@@ -96,7 +96,7 @@ public class Tag extends Cursor implements Serializable
 
 	String tagTrimmed = this.tag.trim();
 
-	return tagTrimmed.equalsIgnoreCase(tag.tag.trim());
+	return tagTrimmed.equals(tag.tag.trim());
     }
 
     @Override

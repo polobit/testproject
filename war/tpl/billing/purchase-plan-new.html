@@ -1,4 +1,4 @@
-<script id="purchase-plan-template" type="text/html">
+<script id="purchase-plan-new-template" type="text/html">
 <div>
 	<div class="span9">
 		<div class="well">
@@ -8,14 +8,6 @@
 			<form id="planform" class="form-horizontal update_plan" name="plan">
 				<fieldset>
 					<div class="alert alert-info hide"></div>
-					<div style="display: none;">
-						<div class="control-group">
-							<label class="control-label">Plan<span class="field_req">*</span></label>
-							<div class="controls">
-								<input type="text" name="plan_id" class="input required"
-									value="{{plan_id}}" />
-							</div>
-						</div>
 						<div class="control-group">
 							<label class="control-label">Plan<span class="field_req">*</span></label>
 							<div class="controls">
@@ -31,24 +23,6 @@
 									class="input required  digits" value="{{quantity}}" />
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label">Discount<span
-								class="field_req">*</span></label>
-							<div class="controls">
-								<input type="text" name="discount" class="input required"
-									value="{{discount}}" />
-							</div>
-						</div>
-					<div class="control-group">
-							<label class="control-label">coupon<span
-								class="field_req">*</span></label>
-							<div class="controls">
-								<input type="text" name="coupon" class="input required"
-									value="{{coupon_code}}" />
-							</div>
-						</div>
-
-					</div>
 
 					<div class="span8"
 						style="background-color: rgb(221, 232, 248); border-radius: 10px; padding: 5px; overflow:auto;">
@@ -108,7 +82,7 @@
 								</div>
 							</div>
  						{{/if}}
-			</div>
+</div>
 						<div class="span4" style="float:right; ">
 							{{#if_equals "Monthly" cycle}}
 							<div class="info-block" style="margin: 10px;">
@@ -131,11 +105,10 @@
 							</div>
 							{{/if_equals}}
 						</div>
-					</div>
 
 				</fieldset>
 			</form>
-		<!--	{{#if_equals "free" current_plan}}
+			{{#if_equals "free" current_plan}}
 			<form id="CCform" class="form-horizontal card_details"
 				name="card_details">
 				<fieldset>
@@ -228,7 +201,8 @@
 				<input type="text" name="gateway" class="hidden" value="Stripe" />
 			</form>
 
-		
+			 {{#if_equals "free" current_plan}} {{else}}
+
 			<legend>Existing Card Details</legend>
 			<div class="span8"
 				style="background-color: rgb(221, 232, 248); border-radius: 10px; padding: 5px; margin-bottom: 10px;">
@@ -256,6 +230,7 @@
 					</div>
 				</form>
 			</div>
+			{{/if_equals}}
 	<br/>
 			<div class="form-actions" style="padding-left: 160px;">
 				<a href="#" type="submit" id="subscribe"

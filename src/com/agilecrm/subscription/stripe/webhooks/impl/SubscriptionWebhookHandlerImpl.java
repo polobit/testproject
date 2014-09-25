@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
@@ -61,27 +62,25 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	System.out.println(user);
 	if (user == null)
 	    return;
-	
+
 	System.out.println(getPlanDetails());
 
 	// Sets billing restrictions email count
 	if (isEmailAddonPlan())
 	{
 	    System.out.println("email plan");
-	    System.out.println("(*****************************************)");
-	 // Send mail to domain user
-		sendMail1(SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED);
-		return;
-	}
 	    setEmailsCountBillingRestriction();
+	    // Send mail to domain user
+	    sendMail1(SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED);
+	    return;
+	}
 
 	customizeEventAttributes(user);
 
 	// Send mail to domain user
 	sendMail(SendMail.PLAN_CHANGED_SUBJECT, SendMail.PLAN_CHANGED);
 
-	 updateContactInOurDomain(getContactFromOurDomain(), user.email, null,
-	 getPlanName());
+	updateContactInOurDomain(getContactFromOurDomain(), user.email, null, getPlanName());
     }
 
     public void deleteSubscription()
@@ -103,7 +102,10 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	if (StringUtils.isEmpty(userDomain))
 	    return;
 
-	Subscription.deleteSubscriptionOfParticularDomain(userDomain);
+	if(isEmailAddonPlan())
+	  SubscriptionUtil.deleteEmailSubscription(getDomain());
+	else
+	  SubscriptionUtil.deleteUserSubscription(getDomain());
     }
 
     private void setEmailsCountBillingRestriction()
@@ -116,8 +118,15 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
 	try
 	{
+	    Map<String, Object> map = getPlanDetails();
+	    int count = (int) map.get("quantity");
+	    if (count == 0)
+		count = 1;
 	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
-	    restriction.emails_count = 10000;
+
+	    // Email count and according to plan and extra free pack that is
+	    // provided to all users
+	    restriction.emails_count = (count * 1000) + 5000;
 	    restriction.save();
 	}
 	finally
@@ -181,20 +190,19 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	    System.out.println("plan in getting details : " + plan);
 	    if (plan != null && !plan.isEmpty())
 		return plan;
-	    
-	    
+
 	    plan = new HashMap<String, Object>();
-	    
+
 	    object = eventJSON.getJSONObject("data").getJSONObject("object");
 
-	    if(object.has("quantity"))
-	 		plan.put("quantity", object.get("quantity"));
-	    
+	    if (object.has("quantity"))
+		plan.put("quantity", object.get("quantity"));
+
 	    JSONObject planJSON = object.getJSONObject("plan");
 
 	    plan.put("plan", planJSON.getString("name"));
 	    plan.put("plan_id", planJSON.getString("id"));
-	    
+
 	    System.out.println("--------------------------------------------");
 	    System.out.println(plan);
 
@@ -216,13 +224,12 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	map.put("domain", getDomain());
 	map.put("user_name", getUser().name);
 	map.put("email", getUser().email);
-	
+
 	// Get the attibutes from event object
 	Map<String, Object> attributes = getEvent().getData().getPreviousAttributes();
-	if(eventType.equals(StripeWebhookServlet.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED) && attributes != null)
+	if (eventType.equals(StripeWebhookServlet.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED) && attributes != null)
 	    map.put("previous_attributes", attributes);
-	
-	
+
 	// TODO Auto-generated method stub
 	return map;
     }
