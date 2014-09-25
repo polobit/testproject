@@ -1177,7 +1177,8 @@ public class JSAPI
 	    Workflow workflow = mapper.readValue(json, Workflow.class);
 
 	    CronUtil.removeTask(workflow.id.toString(), contact.id.toString());
-	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), Status.REMOVED);
+	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), workflow.name,
+		    Status.REMOVED);
 
 	    return mapper.writeValueAsString(contact);
 	}
