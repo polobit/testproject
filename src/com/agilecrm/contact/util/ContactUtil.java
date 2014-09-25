@@ -1,6 +1,7 @@
 package com.agilecrm.contact.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
@@ -364,10 +366,11 @@ public class ContactUtil
 
     public static boolean isCompanyExist(String companyName)
     {
+
 	boolean flag = false;
-	List<Contact> contacts = dao.ofy().query(Contact.class).filter("type", Type.COMPANY)
-		.filter("properties.name", Contact.NAME).list();
-	for (Contact contact : contacts)
+	Collection<Contact> c = createSearchRule(companyName);
+	Iterator<Contact> contactIterator = c.iterator();
+	for (Contact contact : c)
 	{
 	    ContactField field = contact.getContactFieldByName(Contact.NAME);
 	    if (field.value.equalsIgnoreCase(companyName))
@@ -376,7 +379,53 @@ public class ContactUtil
 		break;
 	    }
 	}
+
 	return flag;
+
+    }
+
+    /**
+     * Company Search rule
+     * 
+     * @param companyName
+     * @return
+     */
+    private static Collection createSearchRule(String companyName)
+    {
+	SearchRule rule = new SearchRule();
+	rule.LHS = "type";
+	rule.CONDITION = rule.CONDITION.EQUALS;
+	rule.RHS = Contact.COMPANY;
+
+	SearchRule rule1 = new SearchRule();
+	rule1.LHS = "name";
+	rule1.CONDITION = rule.CONDITION.EQUALS;
+	rule1.RHS = companyName;
+
+	List<SearchRule> rules = new ArrayList<SearchRule>();
+	rules.add(rule);
+	rules.add(rule1);
+
+	Collection<Contact> c = (Collection<Contact>) new AppengineSearch(Contact.class)
+		.getAdvacnedSearchResults(rules);
+	return c;
+    }
+
+    /**
+     * search company by name
+     */
+    public static Contact searchCompany(String companyName)
+    {
+	Contact oldContact = null;
+	Collection<Contact>search = createSearchRule(companyName);
+	for(Contact contact:search){
+	    ContactField company = contact.getContactFieldByName(Contact.NAME);
+	    if(company.value.equalsIgnoreCase(companyName)){
+		 oldContact = contact;
+		 break;
+	    }
+	}
+	return oldContact;
 
     }
 
@@ -619,8 +668,12 @@ public class ContactUtil
      */
     public static Key<Contact> getCompanyByName(String companyName)
     {
-	return dao.ofy().query(Contact.class).filter("type", "COMPANY").filter("properties.name", "name")
-		.filter("properties.value", companyName).getKey();
+	Contact contact =  searchCompany(companyName);
+	if(contact != null){
+	    
+	    return new Key(Contact.class,contact.id);
+	}
+	return null;
 
     }
 
@@ -895,7 +948,7 @@ public class ContactUtil
 
 	Contact oldContact = null;
 	ContactField field = contact.getContactFieldByName(Contact.NAME);
-	oldContact = ContactUtil.searchContactByCompanyName(StringUtils.capitalise(field.value.toLowerCase()));
+	oldContact = ContactUtil.searchCompany(field.value.toLowerCase());
 	if (oldContact != null)
 	    return mergeCompanyFields(contact, oldContact);
 

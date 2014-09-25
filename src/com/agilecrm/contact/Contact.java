@@ -414,7 +414,7 @@ public class Contact extends Cursor
 
 	    }
 	}
-	else if (Type.COMPANY == this.type)
+/*	else if (Type.COMPANY == this.type)
 	{
 	    for (ContactField contactField : this.properties)
 	    {
@@ -425,23 +425,17 @@ public class Contact extends Cursor
 		if (companyName != null && !companyName.isEmpty())
 		{
 
-		    int companyCount = ContactUtil.searchCompanyCountByNameAndType(
-			    StringUtils.capitalise(companyName.toLowerCase()), type);
-		    System.out.println(companyCount);
+		    boolean company = ContactUtil.isCompanyExist(companyName);
 
-		    if ((companyCount >= 2 || (companyCount == 1 && (id == null || !ContactUtil
-			    .companyExists(StringUtils.capitalise(companyName.toLowerCase()))))))
+		    if (company)
 		    {
-
-			throw new WebApplicationException(Response
-				.status(Response.Status.BAD_REQUEST)
-				.entity("Sorry, a company with name \'" + getContactFieldValue(NAME)
-					+ "\' already exists ").build());
+			//Key<Contact> companyKey = ContactUtil.getCompanyByName(contactField.value);
+			//this.contact_company_key = companyKey;
 		    }
 		}
 
 	    }
-	}
+	}*/
 
 	convertEmailToLower();
 
@@ -955,8 +949,7 @@ public class Contact extends Cursor
 	{
 	    if (StringUtils.equals(field.name, EMAIL))
 		field.value = (field.value).toLowerCase();
-	    else if (StringUtils.equals(field.name, Contact.NAME))
-		field.value = StringUtils.capitalise(field.value.toLowerCase());
+
 	}
 
     }
@@ -1001,8 +994,7 @@ public class Contact extends Cursor
 		if (contactField != null && StringUtils.isNotEmpty(contactField.value))
 		{
 		    // Create new Company
-		    Key<Contact> companyKey = ContactUtil.getCompanyByName(StringUtils.capitalise(contactField.value
-			    .toLowerCase()));
+		    Key<Contact> companyKey = ContactUtil.getCompanyByName(contactField.value);
 
 		    if (companyKey != null)
 		    {

@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -19,7 +17,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +24,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -334,10 +330,6 @@ public class CSVUtil
 		// empty values
 		if (field.name == null || StringUtils.isEmpty(field.value))
 		    continue;
-		if (field.name.equalsIgnoreCase(Contact.NAME))
-		{
-		    field.value = StringUtils.capitalise(csvValues[j].toLowerCase());
-		}
 
 		field.value = csvValues[j];
 
@@ -573,8 +565,7 @@ public class CSVUtil
 
 		if (field.name.equalsIgnoreCase(Contact.NAME))
 		{
-		    field.value = StringUtils.capitalise(csvValues[j].toLowerCase());
-		    companyName = field.value;
+		    companyName = field.value = csvValues[j];
 		}
 		else
 		{
@@ -591,7 +582,7 @@ public class CSVUtil
 	    if (companyName != null && !companyName.isEmpty())
 	    {
 
-		if (ContactUtil.companyExists(companyName))
+		if (ContactUtil.isCompanyExist(companyName))
 		{
 		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
 		    isMerged = true;
@@ -985,6 +976,16 @@ public class CSVUtil
 	    if (trackMissing == 0 && opportunity.track == null)
 	    {
 		opportunity.track = "Default";
+
+		if (mileStoneValue == null)
+		{
+		    Milestone m = MilestoneUtil.getDefaultMilestones();
+		    String[] values = m.milestones.split(",");
+		    if (values.length > 0 && milestoneFlag)
+		    {
+			opportunity.milestone = values[0];
+		    }
+		}
 	    }
 
 	    // Case: if track exist or mapped and milestone is not mapped then
@@ -995,12 +996,16 @@ public class CSVUtil
 		// case:if milestone get mapped but value is null or empty
 		// string that means it wrong milestone we should fail that deal
 		// by setting milestoneFlag false
-		if (mileStoneValue.isEmpty())
+
+		// if milestone value is null that means its not get mapped in
+		// csv then deals is going in default track of first milestone
+		if (mileStoneValue != null && mileStoneValue.isEmpty())
 		{
 		    milestoneFlag = false;
 		}
 
-		if (list.size() > 0)
+		// if track is exits
+		if (list != null && list.size() > 0)
 		{
 		    Milestone mile = list.get(0);
 		    opportunity.pipeline_id = mile.id;
