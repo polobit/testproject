@@ -359,6 +359,28 @@ public class ContactUtil
     }
 
     /**
+     * Search company
+     */
+
+    public static boolean isCompanyExist(String companyName)
+    {
+	boolean flag = false;
+	List<Contact> contacts = dao.ofy().query(Contact.class).filter("type", Type.COMPANY)
+		.filter("properties.name", Contact.NAME).list();
+	for (Contact contact : contacts)
+	{
+	    ContactField field = contact.getContactFieldByName(Contact.NAME);
+	    if (field.value.equalsIgnoreCase(companyName))
+	    {
+		flag = true;
+		break;
+	    }
+	}
+	return flag;
+
+    }
+
+    /**
      * Gets list of contacts based on array of ids
      * 
      * @param contactsJSONArray
@@ -1009,36 +1031,33 @@ public class ContactUtil
 	System.out.println("Is updated count - " + count);
 	return count > 0 ? true : false;
     }
-	
-	/**
-	 * Removes contacts those if user dont have update privileges
-	 * @param contacts
-	 */
-	public static void processContacts(List<Contact> contacts)
+
+    /**
+     * Removes contacts those if user dont have update privileges
+     * 
+     * @param contacts
+     */
+    public static void processContacts(List<Contact> contacts)
+    {
+
+	if (contacts.size() > 0)
+	    return;
+
+	UserAccessControl control = UserAccessControl.getAccessControl(
+		UserAccessControl.AccessControlClasses.Contact.toString(), null);
+
+	if (control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT))
+	    return;
+
+	Iterator<Contact> i = contacts.iterator();
+	while (i.hasNext())
 	{
-	    
-	    
-		
-	    if(contacts.size() > 0)
-		return;
-	    
-	    UserAccessControl control = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact.toString(), null);
-	    
-	   if(control.hasScope(UserAccessScopes.DELETE_CONTACTS) || control.hasScope(UserAccessScopes.UPDATE_CONTACT))
-	       return;
-	    
-	   
-	  
-	    
-	    Iterator<Contact> i = contacts.iterator();
-	    while(i.hasNext())
-	    {
-		Contact c = i.next();
-		control.setObject(c);
-		if(control.canDelete())
-		    continue;
-		
-		i.remove();
-	    }
+	    Contact c = i.next();
+	    control.setObject(c);
+	    if (control.canDelete())
+		continue;
+
+	    i.remove();
 	}
+    }
 }
