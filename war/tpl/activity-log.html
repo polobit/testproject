@@ -4,6 +4,9 @@
 
         <div class="slate">
             <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
                 
                 <div class="box-right">
                     <h3>No activity found</h3>
@@ -13,34 +16,23 @@
         </div>
         {{/unless}}
 {{#if this.length}}
-
-<table style="display:block;overflow:hidden!important;margin-bottom:-20px;"><tbody><tr><td>
+<div>
 <section>
     <form>
       <div class="ref-log">  
-        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
             <div id="today-heading" style="display: none" class="ref-head"><b >Today</b>	</div>
-			<colgroup><col width="30px"><col width="99%"></colgroup>
-            <tbody id="today-activity" style="display: inline;" class="ref-log"></tbody>
-        </table>
-        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
-            <div id="tomorrow-heading" style="display: none" class="ref-head"><b >YesterDay</b>
+            <div id="today-activity" style="display: inline;" class="ref-log"></div>
+            <div id="tomorrow-heading" style="display: none" class="ref-head"><b >Yesterday</b>
 			</div>
-			<colgroup><col width="30px"><col width="99%"></colgroup>
-            <tbody id="tomorrow-activity" style="display: inline;"></tbody>
-        </table>
-        <table class="table hide agile-ellipsis-dynamic" style="overflow:hidden!important;">
+            <div id="tomorrow-activity" style="display: inline;"></div>
 		<div id="next-week-heading" style="display: none" class="ref-head">
-            <b >Before</b>
+            <b >Earlier</b>
 			</div>
-			<colgroup><col width="30px"><col width="99%"></colgroup>
-            <tbody id="next-week-activity" style="display: inline;"></tbody>
-        </table>
+            <div id="next-week-activity" style="display: inline;"></div>
 </div>
     </form>
 </section>
-</td></tr></tbody></table>
-
+</div>
 
 	<!--<ul style="margin:0px" id="activity-list-log-model-list" ></ul>-->
 
@@ -50,7 +42,7 @@
 
 
 
-	<td style="width:100%!important;">
+
 		{{#if_equals "TASK" entity_type}}
 	{{#if_equals "TASK_ADD" activity_type}}{{#if_equals "Task_owner_name" custom3}}
 	<div >
@@ -323,6 +315,7 @@
 			{{/if}}
 	</div>
 <div class="pull-left">	
+<div>
 Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> 
 	</div>
 <div>	
@@ -522,6 +515,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
 		</small>
 </div>
+</div>
 <div class="clearfix"></div>
 	 
 {{/if_equals}}
@@ -607,7 +601,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left" style="width:95%">
+<div class="pull-left activity-tag" >
 <div>	
  Added Tag {{removeDoubleCoutes custom2}} to {{custom3}} Contacts 
 
@@ -630,7 +624,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left" style="width:95%">
+<div class="pull-left activity-tag">
 <div>	
  Removed Tag  {{removeDoubleCoutes custom2}} on {{custom3}} Contacts 
 
@@ -780,7 +774,7 @@ Sent email to {{custom3}} Contacts
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
 			{{/if}}
 	</div>
-<div class="pull-left" style="width:95%">
+<div class="pull-left activity-tag" >
 <div>	
 Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{label}}</a>
 	</div>
@@ -878,7 +872,7 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 {{/if_equals}}
 {{/if_equals}}
 
-	</td>
+	
 
 
 
@@ -890,7 +884,7 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
         <div class="page-header">
             <h1 class="activity-heading"><span>Activity</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h1>
 		<div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name">All Activity</div>
+                <div class="btn selected_name" id="selectedentity_type">All Activity</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
@@ -905,7 +899,7 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
                 </ul>
             </div>            
 		<div class="btn-group pull-right activity-log-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name">Select User</div>
+                <div class="btn selected_name" id="selectedusername">All users</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
@@ -918,8 +912,9 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
     
 </div>
 
+<div class="row">
+<div class="span12">
 <div id="activity-list-based-condition"></div>
+</div>
+</div>
 </script>
-
-
-

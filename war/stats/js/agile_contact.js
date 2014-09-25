@@ -28,8 +28,9 @@ function agile_createContact(data, callback)
 		}
 	}
 
-	var original_ref = "original_ref";
-	properties.push(agile_propertyJSON(original_ref, agile_read_cookie(agile_guid.cookie_original_ref)));
+	var original_ref = agile_read_cookie(agile_guid.cookie_original_ref);
+	if(original_ref)
+		properties.push(agile_propertyJSON("original_ref", original_ref));
 
 	// Get the tags from cookie
 	var tags_from_cookie = agile_read_cookie("agile-tags");

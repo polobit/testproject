@@ -312,6 +312,13 @@ float:right;
 {
 	width:82%;
 }
+@-moz-document url-prefix() {
+   .task-content-view
+{
+	width:81%;
+}
+}
+
 .task-body-owner .task-content-view
 {
 	width:100%!important;

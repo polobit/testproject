@@ -15,6 +15,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Note;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.session.SessionManager;
@@ -277,6 +278,24 @@ public class Opportunity extends Cursor
 	return 0L;
     }
 
+    @XmlElement(name = "pipeline")
+    public Milestone getPipeline() throws Exception
+    {
+	if (pipeline != null)
+	{
+	    try
+	    {
+		// Gets Domain User Object
+		return MilestoneUtil.getMilestone(pipeline.getId());
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	}
+	return null;
+    }
+
     /**
      * Gets domain user with respect to owner id if exists, otherwise null.
      * 
@@ -495,7 +514,7 @@ public class Opportunity extends Cursor
     public String toString()
     {
 	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-	        + " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
-	        + " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
+		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
     }
 }

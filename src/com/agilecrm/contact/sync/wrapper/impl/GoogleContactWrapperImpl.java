@@ -206,7 +206,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public ContactField getJobTitle()
     {
-	Occupation occupation = entry.getOccupation();
+	/*Occupation occupation = entry.getOccupation();
 	entry.getTitle();
 	if (occupation == null)
 	    return (ContactField) null;
@@ -214,7 +214,13 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	System.out.println(entry.getOccupation());
 
 	// TODO Auto-generated method stub
-	return new ContactField(Contact.TITLE, occupation.getValue(), null);
+	return new ContactField(Contact.TITLE, occupation.getValue(), null);*/
+    	ContactField field = null;
+
+    	if (entry.hasOrganizations())
+    	    if (entry.getOrganizations().get(0).hasOrgTitle() && entry.getOrganizations().get(0).getOrgTitle().hasValue())
+    	    	return new ContactField(Contact.TITLE, entry.getOrganizations().get(0).getOrgTitle().getValue(), null);
+    	return field;
     }
 
     /*
@@ -320,8 +326,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 
 	    if (name.hasGivenName() && name.hasFamilyName())
 	    {
-		if (name.hasGivenName())
-		    field = new ContactField(Contact.FIRST_NAME, name.getGivenName().getValue(), null);
+	    	//If middle name existed append to first name
+	    	if(name.hasGivenName() && name.hasAdditionalName())
+	    		field = new ContactField(Contact.FIRST_NAME, name.getGivenName().getValue()+" "+name.getAdditionalName().getValue(), null);
+	    	else if (name.hasGivenName())
+	    		field = new ContactField(Contact.FIRST_NAME, name.getGivenName().getValue(), null);
 	    }
 	    else if (name.hasFullName())
 		field = new ContactField(Contact.FIRST_NAME, name.getFullName().getValue(), null);

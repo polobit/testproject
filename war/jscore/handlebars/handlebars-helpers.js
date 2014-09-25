@@ -506,13 +506,13 @@ $(function()
 											}
 											else
 											{
-												html += "<div class='milestone-column'><p class='milestone-heading'>" + key + "</p><ul class='milestones' milestone='" + key + "'>";
+												html += "<div class='milestone-column'><div class='dealtitle-angular'><p class='milestone-heading'>" + key + "</p><span></span></div><ul class='milestones' milestone='" + key + "'>";
 												for ( var i in value)
 												{
 													if (value[i].id)
 														html += "<li id='" + value[i].id + "'>" + getTemplate("opportunities-grid-view", value[i]) + "</li>";
 												}
-												html += "</ul><span></span></div>";
+												html += "</ul></div>";
 											}
 										});
 						return html;

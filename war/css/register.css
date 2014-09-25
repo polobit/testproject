@@ -27,7 +27,16 @@ html,body
 color: #fff;
 }
 
- 
+#domain-error a
+ {
+ 	color:#fff;
+ 	text-decoration:underline;
+ 	font-weight:bold;
+ }
+ #domain-error a:hover
+ {
+ 	text-decoration:none;
+ }
     .logpages .form-group
     {
     position:relative;

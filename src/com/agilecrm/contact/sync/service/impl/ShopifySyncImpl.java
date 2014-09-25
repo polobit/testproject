@@ -73,26 +73,39 @@ public class ShopifySyncImpl extends OneWaySyncService
 	lastSyncPoint = prefs.lastSyncCheckPoint;
 	if (shop != null && !shop.isEmpty())
 	{
-	    int total_records = getTotalCustomers(shop);
+	    /*int total_records = getTotalCustomers(shop);
 	    int pages = (int) Math.ceil(total_records / MAX_FETCH_RESULT);
 
 	    if (total_records < MAX_FETCH_RESULT)
-		pages = 1;
+		pages = 1;*/
 
 	    try
 	    {
 
-		while (currentPage <= pages)
+		while (true)
 		{
 		    ArrayList<LinkedHashMap<String, Object>> customers = new ArrayList<LinkedHashMap<String, Object>>();
-		    String newCustomerURl = materializeURL(shop, "customers", currentPage, "new");
+		    /*String newCustomerURl = materializeURL(shop, "customers", currentPage, "new");
 		    String updateCustomerURl = materializeURL(shop, "customers", currentPage, "edited");
 
 		    customers.addAll(getCustomers(newCustomerURl));
 		    if (lastSyncPoint != null)
 		    {
 			customers.addAll(getCustomers(updateCustomerURl));
+		    }*/
+		    ArrayList<LinkedHashMap<String, Object>> newCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
+		    ArrayList<LinkedHashMap<String, Object>> updatedCustomersList= new ArrayList<LinkedHashMap<String, Object>>();
+		    
+		    newCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "new"));
+		    if(lastSyncPoint!=null){
+		    	updatedCustomersList=getCustomers(materializeURL(shop, "customers", currentPage, "edited"));
 		    }
+
+		    customers.addAll(newCustomersList);
+		    customers.addAll(updatedCustomersList);
+		    
+		    if(newCustomersList.size()==0 && updatedCustomersList.size()==0)
+		    	break;
 		    if (!isLimitExceeded())
 		    {
 			for (int i = 0; i < customers.size(); i++)
