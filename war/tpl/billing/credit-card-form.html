@@ -1,0 +1,76 @@
+<script id="credit-card-form-template" type="text/html">
+<div class="modal hide" id="credit-card-form-modal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+		{{#if billingData}}
+        	<h3><i class="icon-plus-sign"></i>  Update Card</h3>
+			{{else}}
+			<h3><i class="icon-plus-sign"></i>  Attach Card</h3>			
+		{{/if}}
+    </div>
+    <div class="modal-body">
+		<form id="CCform" class="form-horizontal card_details"
+			name="card_details">
+			<fieldset>
+
+				<div class="control-group">
+					<label class="control-label">Name<span class="field_req">*</span></label>
+					<div class="controls">
+						<input type="text" name="name" class="input required "
+							placeholder="Cardholder's name" />
+					</div>
+				</div>
+				<div style="display: inline-block">
+					<div class="control-group">
+						<label class="control-label">Card Number <span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<input type="text" name="number" class="input required  digits"
+								placeholder="Enter Your Card Number" />
+						</div>
+					</div>
+						<div class="control-group">
+						<label class="control-label">Expiry<span
+							class="field_req">*</span></label>
+						<div class="controls">
+							<select name="exp_month" id="exp_month"
+								class="input span2  exp_month" placeholder="Expiry Month"
+								style="width: 94px;display:inline" onChange="$(&quot;#exp_year&quot;).valid();"></select>
+							<span style="margin-left: 10px; margin-right: 10px">/ </span> <select
+								name="exp_year" id="exp_year"
+								class="input required  digits span2 exp_year atleastThreeMonths"
+								placeholder="Expiry Year" style="width: 94px;display:inline"></select>
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">CVC<span class="field_req">*</span></label>
+					<div class="controls">
+						<input type="text" name="cvc" class="input required  digits"
+							placeholder="Card security code" />
+					</div>
+				</div>
+				
+				<!-- <div class="control-group">	
+                    <label class="control-label">Gateway<span class="field_req">*</span></label>
+                    <div class="controls">
+                    			<select class="required" name="gateway">
+                    		<option value="">select</option>
+                    		<option value="Stripe">Stripe</option>
+                    		<option value="Paypal">Paypal</option>
+                    	</select>
+                    </div>
+                    </div> -->
+			</fieldset>
+		</form>
+		<form id="gateway" class="form-horizontal hide">
+			<input type="text" name="gateway" class="hidden" value="Stripe" />
+		</form>
+	</div>
+  <div class="modal-footer">
+       <a href="#" type="submit" id="updateCreditCard"
+				class="save btn btn-primary">Save</a> <a href="#"
+				class="btn" data-dismiss="modal">Close</a>
+    </div>
+</div>
+</script>
