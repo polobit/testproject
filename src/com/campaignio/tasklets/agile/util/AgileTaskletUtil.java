@@ -140,6 +140,30 @@ public class AgileTaskletUtil
     }
 
     /**
+     * Returns name from json
+     * 
+     * @param campaignJSON
+     *            - campaignJSON
+     * @return String
+     */
+    public static String getCampaignNameFromJSON(JSONObject campaignJSON)
+    {
+	try
+	{
+	    if (campaignJSON == null || !campaignJSON.has("name"))
+		return null;
+
+	    return campaignJSON.getString("name");
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting campaign name from json..." + e.getMessage());
+	    return null;
+	}
+    }
+
+    /**
      * Converts contact object into json object.
      * 
      * @param contact

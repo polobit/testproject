@@ -10,16 +10,105 @@
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css">
   </head>
   
 <style>
-@media ( min-width : 900px) {
-	body {
-		padding-top: 20px;
-		padding-left:10%;
-	}
+
+
+@media (min-width:400px)
+{
+body
+{
+width:80%;
 }
+.left-view
+{
+display:none;
+}
+}
+@media (min-width:1198px)
+{
+body
+{
+width:1000px;
+}
+.error-container
+{
+font-size:100%;
+}
+.left-view
+{
+width:10%;
+display:block;
+}
+.right-view
+{
+width:90%;
+}
+.sub-head
+{
+width:100%;
+}
+}
+
+	body {
+		background: url("../img/multilogin-bg.png") repeat scroll 0 0;
+margin: 0 auto;
+padding:14px 15px;
+		font-family:'PT Sans',"Helvetica Neue",Helvetica,Arial,sans-serif;
+	}
+	h2,h4
+	{
+	margin:0px;
+	}
+	h2
+	{
+	margin: 6px 0px 2px;
+color: #888;
+}
+
+.subhead,.error-details
+{
+margin: 0px 0px 0px;
+font-weight: normal;
+color: #999;
+}
+.error-details 
+{
+font-size:90%;
+}
+.error-details a
+{
+color: #468aca;
+text-decoration: none;
+}
+.error-details a:hover
+{
+text-decoration:underline;
+}
+.error-container
+{
+box-shadow: 0 0 7px 0px #ddd;
+padding: 10px 23px 15px;
+background: #fff;
+line-height: 30px;
+margin: 10% auto;
+border-radius: 4px;
+}	
+.left-view,.right-view
+{
+float:left;
+}
+.left-view i
+{
+color: #999;
+font-size: 98px;
+margin-top: 2px;
+
+}
+}
+</style>
 <%
 // Get an array of Cookies associated with this domain
 Cookie[] cookies = request.getCookies();
@@ -57,18 +146,21 @@ if(cookieJSON.has("userAgent"))
 
 
 %>
-</style>
+
 
   <body>
    
    <div class="container">
 			<div class="error-container">
-				<h1>Wait!</h1> 
-				<h3>We had to log you out as you seem to have logged in from some other system/browser  <span style="font-size:12px">(<%= agent %>) </span></h3> 
+			<div class="left-view"><i class="fa fa-info-circle"></i></div>
+			<div class="right-view">
+				<h2>Wait!</h2> 
+				<div class="subhead">We had to log you out as you seem to have logged in from some other browser/system  <span style="font-size:12px">(<%= agent %>) </span></div> 
 				<div class="error-details">
-					You may <a href="/login">Re-login</a>. This will log you out in the other system/browser."
+					You may <a href="/login">Re-login</a>. This will log you out in the other browser/system.
 				</div>
-			
+			</div>
+			<div style="clear:both;"></div>
 			</div>
 	</div>
 	

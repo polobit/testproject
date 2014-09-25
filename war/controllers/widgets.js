@@ -974,7 +974,5 @@ var WidgetsRouter = Backbone.Router
 																$("#prefs-tabs-content").html(this.xero_import_settings.render().el);
 
 												}
-
 								});
-
 

@@ -34,7 +34,6 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
@@ -288,9 +287,9 @@ public class Contact extends Cursor
 	String fieldName = field == null ? contactField.name : field.name;
 	FieldType type = FieldType.CUSTOM;
 	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
-		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
-		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
-		|| fieldName.equals(NAME))
+	        || fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
+	        || fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
+	        || fieldName.equals(NAME))
 	    type = FieldType.SYSTEM;
 
 	// If field is null then new contact field is added to properties.
@@ -414,28 +413,6 @@ public class Contact extends Cursor
 
 	    }
 	}
-/*	else if (Type.COMPANY == this.type)
-	{
-	    for (ContactField contactField : this.properties)
-	    {
-		if (!StringUtils.equalsIgnoreCase(contactField.name, "name"))
-		    continue;
-		String companyName = contactField.value;
-
-		if (companyName != null && !companyName.isEmpty())
-		{
-
-		    boolean company = ContactUtil.isCompanyExist(companyName);
-
-		    if (company)
-		    {
-			//Key<Contact> companyKey = ContactUtil.getCompanyByName(contactField.value);
-			//this.contact_company_key = companyKey;
-		    }
-		}
-
-	    }
-	}*/
 
 	convertEmailToLower();
 
@@ -449,6 +426,9 @@ public class Contact extends Cursor
 	    viewed.viewed_time = viewed_time;
 	    viewed.viewer_id = SessionManager.get().getDomainId();
 	}
+
+	// Updates Tag entity, if any new tag is added
+	updateTagsEntity(oldContact, this);
 
 	dao.put(this);
 
@@ -530,7 +510,7 @@ public class Contact extends Cursor
 	// If tags and properties length differ, contact is considered to be
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value || contact.lead_score != lead_score)
+	        || contact.star_value != star_value || contact.lead_score != lead_score)
 	    return true;
 
 	// Checks if tags are changed
@@ -1010,10 +990,10 @@ public class Contact extends Cursor
 			newCompany.type = Type.COMPANY;
 
 			/*
-			 * We already have the owner of contact contact, which
-			 * should also be owner of contact. Instead of fetching
-			 * key from session in prepersist we can use the same.
-			 */
+		         * We already have the owner of contact contact, which
+		         * should also be owner of contact. Instead of fetching
+		         * key from session in prepersist we can use the same.
+		         */
 			newCompany.setContactOwner(owner_key);
 			newCompany.save();
 
@@ -1035,51 +1015,6 @@ public class Contact extends Cursor
 	if (created_time == 0L && id == null)
 	{
 	    created_time = System.currentTimeMillis() / 1000;
-	}
-
-	// If tags are not empty, considering they are simple tags and adds them
-	// to tagsWithTime
-	if (!tags.isEmpty())
-	{
-	    for (String tag : tags)
-	    {
-		Tag tagObject = new Tag(tag);
-		if (!tagsWithTime.contains(tagObject))
-		    tagsWithTime.add(tagObject);
-	    }
-	}
-
-	for (Tag tag : tagsWithTime)
-	{
-	    // Check if it is null, it can be null tag is created using
-	    // developers api
-	    if (tag.createdTime == null || tag.createdTime == 0L)
-		tag.createdTime = System.currentTimeMillis();
-	}
-
-	tags = getContactTags();
-
-	Set<String> cacheTags = null;
-
-	try
-	{
-	    cacheTags = (LinkedHashSet<String>) CacheUtil.getCache(NamespaceManager.get() + "-" + "tags");
-
-	    System.out.println("Cache tags obtained " + cacheTags);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while getting tags from cache... " + e.getMessage());
-	}
-
-	if (cacheTags == null || !cacheTags.containsAll(tags))
-	{
-	    // Update Tags - Create a deferred task
-	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
-
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
 	}
 
     }
@@ -1153,11 +1088,69 @@ public class Contact extends Cursor
 	}
     }
 
+    /**
+     * Updates any new tag w.r.t domain
+     * 
+     * @param oldContact
+     *            - Contact entity before save
+     * @param updatedContact
+     *            - Current contact
+     */
+    private void updateTagsEntity(Contact oldContact, Contact updatedContact)
+    {
+	try
+	{
+	    // If tags are not empty, considering they are simple tags and adds
+	    // them
+	    // to tagsWithTime
+	    if (!tags.isEmpty())
+	    {
+		for (String tag : tags)
+		{
+		    Tag tagObject = new Tag(tag);
+		    if (!tagsWithTime.contains(tagObject))
+			tagsWithTime.add(tagObject);
+		}
+	    }
+
+	    for (Tag tag : tagsWithTime)
+	    {
+		// Check if it is null, it can be null tag is created using
+		// developers api
+		if (tag.createdTime == null || tag.createdTime == 0L)
+		    tag.createdTime = System.currentTimeMillis();
+	    }
+
+	    LinkedHashSet<String> oldTags = null;
+
+	    if (oldContact != null)
+		oldTags = oldContact.getContactTags();
+
+	    tags = getContactTags();
+
+	    if (tags.equals(oldTags))
+		return;
+
+	    // System.out.println("Tag entity need to update....");
+
+	    // Update Tags - Create a deferred task
+	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
+
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
+	}
+    }
+
     @Override
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
-		+ " tags: " + tags + " properties: " + properties;
+	        + " tags: " + tags + " properties: " + properties;
     }
 }
 
