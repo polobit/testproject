@@ -12,6 +12,7 @@ import org.codehaus.jettison.json.JSONObject;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
 
@@ -38,7 +39,7 @@ public class StripeAgileDataMapperService
 	List<ContactField> contactFields = new ArrayList<ContactField>();
 	contact.type = Type.PERSON;
 	contactFields.add(new ContactField(Contact.EMAIL, customer.getEmail(), "work"));
-	Card card = customer.getActiveCard();
+	Card card = StripeUtil.getDefaultCard(customer);
 	contactFields.add(new ContactField(Contact.FIRST_NAME, card.getName(), null));
 	contactFields.add(new ContactField(Contact.ADDRESS, getAddress(card), "office"));
 

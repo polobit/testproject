@@ -172,7 +172,7 @@ public class Subscription
 	{
 	    plan = new Plan(PlanType.FREE.toString(), 2);
 	    gateway = Gateway.Stripe;
-	    planLimits = new FreePlanLimits();
+	    planLimits = PlanLimits.getPlanDetails(plan);
 	}
 	   
     }

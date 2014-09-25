@@ -86,7 +86,7 @@ public class AddonSubscriptionAPI
 	{
 	    AgileBilling billing = subscription.getAgileBilling();
 	    
-	    billing.addSubscriptionAddon(subscription);
+//	    billing.createCustomer(cardDetails, plan)
 	}
 	catch (Exception e)
 	{
