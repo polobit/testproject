@@ -78,63 +78,8 @@ var SubscribeRouter = Backbone.Router.extend({
 	},
 	
 	
-	suscribe_new : function()
-	{
-		var that = this;
-		var counter = 0;
-		
-		/*
-		 * Creates new view with a render callback to setup expiry dates
-		 * field(show dropdown of month and year), countries list and respective
-		 * states list using countries.js plugin account stats in subscription
-		 * page
-		 */
-		$.getJSON("core/api/subscription?reload=true", function(data){
-			getTemplate("subscribe", data, "yes", function(content){
-				$("#content").html(content)
-			
-			
-		
-				/*
-				 * Creates new view with a render callback to setup expiry dates
-				 * field(show dropdown of month and year), countries list and respective
-				 * states list using countries.js plugin account stats in subscription
-				 * page
-				 */
-				var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", isNew : true, data : data, template : "account-plan-details", window : 'subscribe',
-				/*
-				 * postRenderCallback : function(el) { // Setup account statistics
-				 * set_up_account_stats(el); // Load date and year for card expiry
-				 * card_expiry(el); // Load countries and respective states
-				 * head.js(LIB_PATH + 'lib/countries.js', function() {
-				 * print_country($("#country", el)); }); },
-				 */
-				postRenderCallback : function(el)
-				{
-					if(++counter == 1)
-					// that.email_subscription();
-					$("#attach_card_notification", el).live('click', function(e){
-						e.preventDefault();
-						showModalConfirmation("Add credit card", "Before you start, we need a credit card on file. We will not charge unless your choose a plan. Promise!", 
-								
-								function() {
-										Backbone.history.navigate("attach-card", { trigger : true });
-								}, 
-								null, 
-								null, 
-								"Proceed" , "Cancel");
-					})
-				}});
-				
-				console.log(subscribe_account_plan.render().el);
-				$('#plan-details-pane').html(subscribe_account_plan.render().el);
-				
-				that.email_sbuscrption_step1(data);
-			});
-	});
-		
-		
-	},
+
+	
 	
 	/**
 	 * After selecting plan, page is navigated to purchase plan where user enter
@@ -216,10 +161,6 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(card_details.render().el);
 	},
 
-	
-	
-	
-	
 	
 	/**
 	 * Shows form the update plan, uses the same url used to create new
@@ -349,12 +290,17 @@ var SubscribeRouter = Backbone.Router.extend({
 						that.email_sbuscrption_step1(subscription);
 					})
 					
+				},
+				saveCallback : function(data)
+				{
+					console.log(data);
+					that.email_sbuscrption_step1(data);
 				}
 			}
 		
 		if(subscription)
 		{
-			viewParams["data"] = subscription;
+			viewParams["model"] = subscription;
 		}
 		
 		var counter = 0;
@@ -366,7 +312,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		// that.email_subscription();
 
 		$("#email-quantity").bind('keyup', function(e){
-			//	console.log(e.which);
+			// console.log(e.which);
 				var quantity =  $(this).val();
 				if(isNaN(quantity))
 					return;
@@ -394,69 +340,65 @@ var SubscribeRouter = Backbone.Router.extend({
 	},
 	email_sbuscrption_step1 : function(subscription)
 	{
+		
+		var is_model = true;
+		try
+		{
+			subscription.toJSON();
+		}
+		catch (e)
+		{
+			is_model = false;
+		}
 		var that = this;
 		var counter = 0;
+		
+		var params = {
+				url : "core/api/subscription?reload=true", template : "email-plan-details", window : 'subscribe',
+				/*
+				 * postRenderCallback : function(el) { // Setup account statistics
+				 * set_up_account_stats(el); // Load date and year for card expiry
+				 * card_expiry(el); // Load countries and respective states
+				 * head.js(LIB_PATH + 'lib/countries.js', function() {
+				 * print_country($("#country", el)); }); },
+				 */
+				postRenderCallback : function(el)
+				{
+					if(++counter <= 1)
+					{
+						
+						$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+							e.preventDefault();
+							that.email_subscription(subscribe_email_plan.model);
+						})
+						
+					}
+					
+					
+				}
+		}
+		
+		if(is_model)
+			{
+				params["model"] = subscription;
+			}
+		else
+			{
+				params["data"] = subscription;
+			}
 		/*
 		 * Creates new view with a render callback to setup expiry dates
 		 * field(show dropdown of month and year), countries list and respective
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-plan-details", isNew : true, data : subscription, window : 'subscribe',
-		/*
-		 * postRenderCallback : function(el) { // Setup account statistics
-		 * set_up_account_stats(el); // Load date and year for card expiry
-		 * card_expiry(el); // Load countries and respective states
-		 * head.js(LIB_PATH + 'lib/countries.js', function() {
-		 * print_country($("#country", el)); }); },
-		 */
-		postRenderCallback : function(el)
-		{
-			if(++counter <= 1)
-			{
-				
-				$("#account_email_plan_upgrade", el).die().live('click' , function(e){
-					e.preventDefault();
-					that.email_subscription(subscribe_email_plan.model.toJSON());
-				})
-				
-			}
-			
-			
-		}});
+		var subscribe_email_plan = new Base_Model_View(params);
 		
-		$('#email-details-pane').html(subscribe_email_plan.render().el);
+		$('#email-details-pane').html(subscribe_email_plan.render(true).el);
 		
 	},
 	
 	
-	/**
-	 * Shows forms to updates Credit card details, loads subscription details
-	 * from core/api/subscription to deserailize and show credit card details in
-	 * to form, so user can change any details if required render callback sets
-	 * the countries and states and card expiry, also deserialized the values.
-	 * Update credit card details are sent to core/api/subscription, where if
-	 * checks update is for credit card or plan
-	 */
-	addCreditCardNew : function()
-	{
-		var card_details = new Base_Model_View({ url : "core/api/subscription", template : "subscription-card-detail", window : 'purchase-plan', isNew:true,
-			postRenderCallback : function(el)
-			{
-
-				// Load date and year for card expiry
-				card_expiry(el);
-
-				// Load countries and respective states
-				head.js(LIB_PATH + 'lib/countries.js', function()
-				{
-					print_country($("#country", el));
-				});
-
-			} });
-
-		$('#content').html(card_details.render().el);
-	},
 	
 	/**
 	 * Shows forms to updates Credit card details, loads subscription details
@@ -502,6 +444,220 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(card_details.render().el);
 	},
 	
+	
+	/**
+	 * Susbscribe new 
+	 */
+	suscribe_new : function()
+	{
+		var that = this;
+		var counter = 0;
+		
+		/*
+		 * Creates new view with a render callback to setup expiry dates
+		 * field(show dropdown of month and year), countries list and respective
+		 * states list using countries.js plugin account stats in subscription
+		 * page
+		 */
+		$.getJSON("core/api/subscription?reload=true", function(data){
+			$("#content").html(getTemplate("subscribe", data))
+		
+			var subscription_model = new BaseModel(data);
+				
+			that.setup_account_plan(subscription_model);
+			
+			that.setup_email_plan(subscription_model);
+			
+			that.show_card_details(subscription_model);
+	});
+		
+		
+	},
+	setup_account_plan : function(subscription)
+	{
+		var counter = 0;
+		var that = this;
+		/*
+		 * Creates new view with a render callback to setup expiry dates
+		 * field(show dropdown of month and year), countries list and respective
+		 * states list using countries.js plugin account stats in subscription
+		 * page
+		 */
+		var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "account-plan-details", window : 'subscribe',
+		/*
+		 * postRenderCallback : function(el) { // Setup account statistics
+		 * set_up_account_stats(el); // Load date and year for card expiry
+		 * card_expiry(el); // Load countries and respective states
+		 * head.js(LIB_PATH + 'lib/countries.js', function() {
+		 * print_country($("#country", el)); }); },
+		 */
+		postRenderCallback : function(el)
+		{
+			
+			if(++counter <= 1)
+			{
+				$("#attach_card_notification", el).die().live('click' , function(e){
+					e.preventDefault();
+					that.showCreditCardForm(subscribe_account_plan.model, function(model){
+						window.navigate("subscribe", { trigger : true });
+					})
+				})
+			}
+			// that.email_subscription();
+			
+		}});
+		
+		$('#plan-details-pane').html(subscribe_account_plan.render(true).el);
+	},
+	setup_email_plan : function(subscription)
+	{
+		var counter = 0;
+		var that = this;
+		
+		/*
+		 * Creates new view with a render callback to setup expiry dates
+		 * field(show dropdown of month and year), countries list and respective
+		 * states list using countries.js plugin account stats in subscription
+		 * page
+		 */
+		var subscribe_email_plan = new Base_Model_View({ url : "core/api/subscription", template : "email-plan-details", model : subscription, window : 'subscribe',
+		/*
+		 * postRenderCallback : function(el) { // Setup account statistics
+		 * set_up_account_stats(el); // Load date and year for card expiry
+		 * card_expiry(el); // Load countries and respective states
+		 * head.js(LIB_PATH + 'lib/countries.js', function() {
+		 * print_country($("#country", el)); }); },
+		 */
+		postRenderCallback : function(el)
+		{
+				$("#account_email_attach_card", el).die().live('click' , function(e){
+					e.preventDefault();
+					//alert("here");
+					that.showCreditCardForm(subscribe_email_plan.model, function(model){
+						that.email_subscription(subscribe_email_plan.model);
+						//$("#content").html(getTemplate("subscribe", model.toJSON()))
+					});
+				});
+				
+				$("#account_email_plan_upgrade", el).die().live('click' , function(e){
+					e.preventDefault();
+					that.email_subscription(subscribe_email_plan.model);
+					//alert("here");
+						//$("#content").html(getTemplate("subscribe", model.toJSON()))
+					});
+				
+			// that.email_subscription();
+			
+		}});
+		
+		$('#email-details-pane').html(subscribe_email_plan.render(true).el);
+	},
+	showCreditCardForm : function(subscription, callback)
+	{
+		if(!subscription)
+			subscription = new BaseModel({});
+		var counter = 0;
+		$('#credit-card-form-modal-holder').empty();
+		var card_details = new Base_Model_View({ url : "core/api/subscription", 
+			// reload : true,
+			modal : "#credit-card-form-modal",
+			template : "credit-card-form", model:subscription,
+			postRenderCallback : function(el)
+			{
+				// Load date and year for card expiry
+				card_expiry(el);
+				if(++counter <= 1)
+				{
+					
+					$('.modal-backdrop').remove();	
+				
+					
+				}
+			},
+			saveCallback : function(model)
+			{
+				$('.modal-backdrop').remove();	
+				$("#credit-card-form-modal").modal('hide');
+				
+				if(callback && typeof callback == "function")
+					callback(model);
+				
+			}
+			
+		});
+
+		$('#credit-card-form-modal-holder').html(card_details.render(true).el);
+		$("#credit-card-form-modal").modal('show');
+		// console.log(card_details.render(true).el);1
+	},
+	
+	show_card_details : function(subscription)
+	{
+		var that = this;
+		var counter = 0;
+		/*
+		 * Creates new view with a render callback to setup expiry dates
+		 * field(show dropdown of month and year), countries list and respective
+		 * states list using countries.js plugin account stats in subscription
+		 * page
+		 */
+		var stripe_customer_details = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "customer-details-block",
+		/*
+		 * postRenderCallback : function(el) { // Setup account statistics
+		 * set_up_account_stats(el); // Load date and year for card expiry
+		 * card_expiry(el); // Load countries and respective states
+		 * head.js(LIB_PATH + 'lib/countries.js', function() {
+		 * print_country($("#country", el)); }); },
+		 */
+		postRenderCallback : function(el)
+		{
+			$("#change-card", el).die().live('click' , function(e){
+				e.preventDefault();
+				//alert("here");
+				that.showCreditCardForm(stripe_customer_details.model, function(model){
+					//$("#content").html(getTemplate("subscribe", model.toJSON()))
+				});
+			});
+			
+		}});
+		
+		$('#customer-details-holder').html(stripe_customer_details.render(true).el);
+	},
+	
+	/**
+	 * Shows forms to updates Credit card details, loads subscription details
+	 * from core/api/subscription to deserailize and show credit card details in
+	 * to form, so user can change any details if required render callback sets
+	 * the countries and states and card expiry, also deserialized the values.
+	 * Update credit card details are sent to core/api/subscription, where if
+	 * checks update is for credit card or plan
+	 */
+	addCreditCardNew : function(subscription)
+	{
+		var viewParams = { url : "core/api/subscription", template : "subscription-card-detail", window : 'purchase-plan', isNew:true,
+				postRenderCallback : function(el)
+				{
+
+					// Load date and year for card expiry
+					card_expiry(el);
+
+					// Load countries and respective states
+					head.js(LIB_PATH + 'lib/countries.js', function()
+					{
+						print_country($("#country", el));
+					});
+
+				}}
+		
+		if(subscription)
+			{
+				viewParams["model"] = subscription;
+				viewParams["isNew"] = false ;
+			}
+		var card_details = new Base_Model_View();
+
+		$('#content').html(card_details.render().el);
+	},
 	
 
 });

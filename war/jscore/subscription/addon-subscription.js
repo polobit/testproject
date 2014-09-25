@@ -6,6 +6,11 @@ function getSubscription(customer, plan)
 	if(!customer)
 		return null;
 	
+	if(typeof customer != "object")
+		{
+			customer = JSON.parse(customer);
+		}
+	
 	var subscriptions = customer.subscriptions;
 	if(!subscriptions)
 		{
@@ -57,6 +62,11 @@ function getActiveCard(customer)
 {
 	if(!customer)
 		return null;
+	
+	if(typeof customer != "object")
+	{
+		customer = JSON.parse(customer);
+	}
 	
 	return customer.cards.data[0];
 	
