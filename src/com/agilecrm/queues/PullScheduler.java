@@ -37,7 +37,7 @@ public class PullScheduler
      * Pull Queue attributes
      */
     public static int DEFAULT_LEASE_PERIOD = 500;
-    public static int DEFAULT_COUNT_LIMIT = 500;
+    public static int DEFAULT_COUNT_LIMIT = 200;
 
     /**
      * Period to lease tasks from pull queue
@@ -86,11 +86,9 @@ public class PullScheduler
 	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
 	        || StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE))
-	    return 43200;
-
-
+	    return 3600;
 
 	return DEFAULT_LEASE_PERIOD;
     }
@@ -191,22 +189,7 @@ public class PullScheduler
 	    // Verifies backend shutdown or cron limit before processing each
 	    // one
 	    if (shouldContinue())
-	    {
-		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
-
-		if (deferredTask instanceof MailDeferredTask)
-		{
-		    // System.out.println("Executing mandrill mail tasks...");
-		    EmailGatewayUtil.sendMails(tasks);
-		    PullQueueUtil.deleteTasks(queueName, tasks);
-		    return;
-		}
-		else
-		    deferredTask.run();
-
-		// Add to completed list
-		completedTasks.add(taskHandle);
-	    }
+		runTask(queueName, tasks, completedTasks, taskHandle);
 	    else
 		break;
 	}
@@ -214,5 +197,44 @@ public class PullScheduler
 	// Delete completed tasks
 	PullQueueUtil.deleteTasks(queueName, completedTasks);
 
+    }
+
+    /**
+     * Runs each taskHandle
+     * 
+     * @param queueName
+     *            - pull queue name to delete tasks
+     * @param tasks
+     *            - All tasks at once, for sending bulk emails
+     * @param completedTasks
+     *            - tasks that are completed, need to delete
+     * @param taskHandle
+     *            - pull queue task
+     */
+    private void runTask(String queueName, List<TaskHandle> tasks, List<TaskHandle> completedTasks,
+	    TaskHandle taskHandle)
+    {
+	try
+	{
+	    DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
+
+	    if (deferredTask instanceof MailDeferredTask)
+	    {
+		// System.out.println("Executing mandrill mail tasks...");
+		EmailGatewayUtil.sendMails(tasks);
+		PullQueueUtil.deleteTasks(queueName, tasks);
+		return;
+	    }
+	    else
+		deferredTask.run();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while running task..." + e.getMessage());
+	}
+
+	// Add to completed list
+	completedTasks.add(taskHandle);
     }
 }
