@@ -34,7 +34,7 @@ var SettingsRouter = Backbone.Router.extend({
 			"notification-prefs" : "notificationPrefs",
 			
 			/* contact-us help email */
-			"contact-us" : "contactUsEmail",
+			"support" : "contactUsEmail",
 	},
 
 	/**
@@ -432,7 +432,8 @@ var SettingsRouter = Backbone.Router.extend({
 	 */
 	contactUsEmail : function()
 	{
-		$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
+		//$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
+		$("#content").html(getTemplate("help-mail-form"), {});
 	}
 
 });
