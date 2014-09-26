@@ -56,6 +56,14 @@ var Current_Route;
 function currentRoute(route)
 {
 	Current_Route = window.location.hash.split("#")[1];
+	
+	if(SCROLL_POSITION)
+	{
+		var temp = Current_Route;
+		if(!temp.match("contact"))
+			SCROLL_POSITION = 0;
+	}
+	
 	activateInfiniScroll();
 	// set_profile_noty();
 	// Reset it to uncheck checkboxes for bulk actions on route change
