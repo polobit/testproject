@@ -7,7 +7,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Shows page */
-	"activities" : "activities" },
+	"activity" : "activities" },
 
 	activities : function(id)
 	{
