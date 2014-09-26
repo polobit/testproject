@@ -174,7 +174,7 @@ public class FormsUtil
 			}
 		}
 		// Else return fieldName
-		return fieldName.replace("\n", " ") + " " + "agilecustomfield";
+		return fieldName + " " + "agilecustomfield";
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class FormsUtil
 			{
 				String key = (String) keys.next();
 				String value = finalJson.getString(key);
-
+				key = key.replace("\n", " ");
 				// If key contains " "
 				if (StringUtils.contains(key, "agilecustomfield"))
 				{
