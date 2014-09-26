@@ -1,5 +1,7 @@
 package com.agilecrm.queues;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.TaskHandle;
+import com.thirdparty.Mailgun;
 
 /**
  * <code>PullScheduler</code> leases pull tasks from pull-queue for certain
@@ -124,6 +127,8 @@ public class PullScheduler
 		if (tasks == null || tasks.isEmpty())
 		    break;
 
+		System.out.println("Leased tasks size is..." + tasks.size());
+
 		processTasks(queueName, tasks);
 	    }
 	}
@@ -232,6 +237,23 @@ public class PullScheduler
 	{
 	    e.printStackTrace();
 	    System.err.println("Exception occured while running task..." + e.getMessage());
+
+	    try
+	    {
+		// tasks.get(0);
+
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		String errorString = errors.toString();
+
+		Mailgun.sendMail("queue@tasks.com", "Leased tasks Observer", "naresh@faxdesk.com", null, null,
+		        "Exception occured while leasing tasks...", null, null, errorString);
+	    }
+	    catch (Exception ex)
+	    {
+		ex.printStackTrace();
+		System.err.println("Exception occured while sending task queues exception " + e.getMessage());
+	    }
 	}
 
 	// Add to completed list

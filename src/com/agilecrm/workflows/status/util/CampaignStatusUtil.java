@@ -1,5 +1,7 @@
 package com.agilecrm.workflows.status.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +12,7 @@ import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.tasklets.util.TaskletUtil;
+import com.thirdparty.Mailgun;
 
 /**
  * <code>CampaignStatusUtil</code> is the utility class for CampaignStatus. It
@@ -62,6 +65,21 @@ public class CampaignStatusUtil
 	{
 	    e.printStackTrace();
 	    System.err.print("Exception occured while setting campaign-status " + e.getMessage());
+
+	    try
+	    {
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		String errorString = errors.toString();
+
+		Mailgun.sendMail("exception@campaignstatus.com", "CampaignStatus Observer", "naresh@faxdesk.com", null,
+		        null, "Exception occured while setting campaign status...", null, null, errorString);
+	    }
+	    catch (Exception ex)
+	    {
+		ex.printStackTrace();
+		System.err.println("Exception occured while sending campaign status mail " + e.getMessage());
+	    }
 	}
     }
 
