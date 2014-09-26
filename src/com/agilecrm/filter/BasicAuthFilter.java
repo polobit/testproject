@@ -61,12 +61,6 @@ public class BasicAuthFilter implements Filter
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
 	final HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-	if (httpRequest.getRequestURI().contains("shopifyapp") && StringUtils.equals(httpRequest.getMethod(), "GET"))
-	{
-	    chain.doFilter(httpRequest, httpResponse);
-	    return;
-	}
-
 	// Gets the "Authorization" from header, which is set with domain user
 	// and APIKey
 	final String auth = httpRequest.getHeader("Authorization");
