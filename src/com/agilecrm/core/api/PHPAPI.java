@@ -25,12 +25,12 @@ import com.agilecrm.activities.Task;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
-import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
+import com.agilecrm.util.PHPAPIUtil;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 @Path("php/api")
@@ -81,7 +81,7 @@ public class PHPAPI
 		    String value = obj.getString(key);
 		    field.name = key;
 		    field.value = value;
-		    field.type = FieldType.SYSTEM;
+		    field.type = PHPAPIUtil.getFieldTypeFromName(key);
 		    properties.add(field);
 		}
 

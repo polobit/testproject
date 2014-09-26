@@ -220,6 +220,8 @@ function append_activity_log(base_model)
 	// Today
 	if (createdtime == 0)
 	{
+		$('#earllier').show();
+		$('#next-week-heading').addClass("ref-head");
 
 		var heading = $('#today-heading', this.el);
 
@@ -230,7 +232,9 @@ function append_activity_log(base_model)
 	}
 
 	if (createdtime == -1)
-	{
+	{ 
+		$('#earllier').show();
+		$('#next-week-heading').addClass("ref-head");
 
 		var heading = $('#tomorrow-heading', this.el);
 

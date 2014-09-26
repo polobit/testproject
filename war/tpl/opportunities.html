@@ -128,7 +128,7 @@
 
 <script id="opportunity-track-list-collection-template" type="text/html">
 <div class="btn-group right" style='position:relative' id="filters-tour-step">
-	<button class="btn filter-dropdown ">Tracks</button>
+	<button class="btn filter-dropdown "><i class="icon-road" style="margin-right:4px"/></button>
 	<button class="btn dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
   	</button>
@@ -139,8 +139,8 @@
 
 <script id="opportunity-track-list-model-template" type="text/html">
 {{#if name}}
-<a id='{{id}}' class="pipeline" data="{{name}}">{{name}}</a>
+<a id='{{id}}' class="pipeline" data="{{name}}" style="cursor: pointer;">{{name}}</a>
  {{else}}
-<a id='{{id}}' class="pipeline" data="Default">Default</a>
+<a id='{{id}}' class="pipeline" data="Default" style="cursor: pointer;">Default</a>
 {{/if}}
 </script>

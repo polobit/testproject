@@ -228,12 +228,12 @@ function setupDealsTracksList(cel){
 		var tracksArray = trackListView.collection.models;
 		$.each(tracksArray,function(i,value){
 			if(value.id == pipeline_id)
-				$('#deals-tracks .filter-dropdown').append(' : '+value.attributes.name);
+				$('#deals-tracks .filter-dropdown').append(value.attributes.name);
 		});
 		
 		// Add all option for the deals in the list view.
 		if (readCookie("agile_deal_view"))
-			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All">All</a></li>');
+			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All" style="cursor: pointer;">All</a></li>');
 		// Hide the track list if there is only one pipeline.
 		if(tracksArray.length<=1)
 			$('#deals-tracks',cel).hide();

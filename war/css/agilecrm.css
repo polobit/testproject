@@ -801,6 +801,7 @@ tbody a.no-style-a {
 #opportunities-full-screen-model-list ::-webkit-scrollbar, #opportunities-by-milestones-model-list ::-webkit-scrollbar {
  width: 5px;
  margin-right: 4px !important;
+ background:#eee;
 }
 /* Horizontal scroll */
 #opportunities-full-screen-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-milestones-model-list ::-webkit-scrollbar:horizontal {
@@ -1285,5 +1286,37 @@ height: 30px;
 	word-wrap:break-word;
 	width:95%;
 }
-
+.footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a
+{
+	text-decoration:none!important;
+}
 /*activity css code ending*/
+
+
+
+#helpmailForm .control-label {
+ float: left;
+ width: 80px;
+ padding-top: 5px;
+ text-align: left;
+ margin-left: 20px;
+}
+#helpmailForm .controls {
+ margin-left: 80px;
+}
+
+.help-title
+{
+	margin-bottom: 17px;
+border-bottom: 1px solid #ddd;
+padding-bottom: 3px;
+width:75%;
+}
+
+
+
+
+
+
+
+

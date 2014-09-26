@@ -48,7 +48,7 @@
 	<div>
 		<b style="max-width: 78%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
 		
-		<span class="right dealnotes-view">
+		<span class="right dealnotes-view" style="margin-top:-4px;">
 			{{#if notes}}
              <span class="txt-small note-count" title="Notes" >{{notes.length}}</span><a title="Notes" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-container="No Notes" class="deal-notes deal-edit" style="cursor:pointer;text-decoration:none;"><i class="deal-action icon icon-comment-alt deal-notes" data="{{id}}" title="Notes"></i></a>
               
@@ -89,7 +89,7 @@
 </script>
 <script id="opportunity-track-list-collection-template" type="text/html">
 <div class="btn-group right" style='position:relative' id="pipeline-tour-step">
-	<button class="btn filter-dropdown ">Tracks</button>
+	<button class="btn filter-dropdown "><i class="icon-road" style="margin-right:4px"/></button>
 	<button class="btn dropdown-toggle" data-toggle="dropdown">
     	<span class="caret"></span>
   	</button>
@@ -100,8 +100,8 @@
 
 <script id="opportunity-track-list-model-template" type="text/html">
 {{#if name}}
-<a id='{{id}}' class="pipeline" data="{{name}}">{{name}}</a>
+<a id='{{id}}' class="pipeline" data="{{name}}" style="cursor: pointer;">{{name}}</a>
  {{else}}
-<a id='{{id}}' class="pipeline" data="Default">Default</a>
+<a id='{{id}}' class="pipeline" data="Default" style="cursor: pointer;">Default</a>
 {{/if}}
 </script>

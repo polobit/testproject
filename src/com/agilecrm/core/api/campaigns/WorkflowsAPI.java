@@ -30,7 +30,6 @@ import com.agilecrm.workflows.unsubscribe.util.UnsubscribeStatusUtil;
 import com.agilecrm.workflows.util.WorkflowDeleteUtil;
 import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
-import com.google.appengine.api.NamespaceManager;
 
 /**
  * <code>WorkflowsAPI</code> includes REST calls to interact with
@@ -45,325 +44,307 @@ import com.google.appengine.api.NamespaceManager;
  * 
  */
 @Path("/api/workflows")
-public class WorkflowsAPI {
-	/**
-	 * Gets list of workflows based on query parameters page-size and cursor. At
-	 * first only the list of workflows with the page_size are retrieved, when
-	 * cursor scroll down, rest of workflows are retrieved. This method is
-	 * called if TEXT_PLAIN is request.
-	 * 
-	 * @param count
-	 *            Number of workflows for a page.
-	 * @param cursor
-	 *            Points the rest of workflows that are over the limit.
-	 * @return list of workflows.
-	 */
-	
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Workflow> getWorkflows(@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		if (count != null) {
-			return WorkflowUtil
-					.getAllWorkflows(Integer.parseInt(count), cursor);
-		}
-		return WorkflowUtil.getAllWorkflows();
+public class WorkflowsAPI
+{
+    /**
+     * Gets list of workflows based on query parameters page-size and cursor. At
+     * first only the list of workflows with the page_size are retrieved, when
+     * cursor scroll down, rest of workflows are retrieved. This method is
+     * called if TEXT_PLAIN is request.
+     * 
+     * @param count
+     *            Number of workflows for a page.
+     * @param cursor
+     *            Points the rest of workflows that are over the limit.
+     * @return list of workflows.
+     */
+
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Workflow> getWorkflows(@QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	if (count != null)
+	{
+	    return WorkflowUtil.getAllWorkflows(Integer.parseInt(count), cursor);
 	}
+	return WorkflowUtil.getAllWorkflows();
+    }
 
-	
+    /**
+     * Returns single workflow for the given id.
+     * 
+     * @param workflowId
+     *            - workflow id
+     * @return
+     */
+    @Path("{workflow-id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Workflow getWorkflow(@PathParam("workflow-id") String workflowId)
+    {
+	Workflow workflow = WorkflowUtil.getWorkflow(Long.parseLong(workflowId));
+	return workflow;
+    }
 
-	/**
-	 * Returns single workflow for the given id.
-	 * 
-	 * @param workflowId
-	 *            - workflow id
-	 * @return
-	 */
-	@Path("{workflow-id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Workflow getWorkflow(@PathParam("workflow-id") String workflowId) {
-		Workflow workflow = WorkflowUtil
-				.getWorkflow(Long.parseLong(workflowId));
-		return workflow;
-	}
+    /**
+     * Saves new workflow.
+     * 
+     * @param workflow
+     *            Workflow object that is newly created.
+     * @return Created workflow.
+     * @throws PlanRestrictedException
+     */
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Workflow createWorkflow(Workflow workflow) throws PlanRestrictedException, WebApplicationException
+    {
+	workflow.save();
 
-	/**
-	 * Saves new workflow.
-	 * 
-	 * @param workflow
-	 *            Workflow object that is newly created.
-	 * @return Created workflow.
-	 * @throws PlanRestrictedException
-	 */
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Workflow createWorkflow(Workflow workflow)
-			throws PlanRestrictedException, WebApplicationException {
-		workflow.save();
+	return workflow;
+    }
 
-		return workflow;
-	}
+    /**
+     * Updates workflow.
+     * 
+     * @param workflow
+     *            Workflow object that is updated.
+     * @return updated workflow.
+     */
+    @Path("{id}")
+    @PUT
+    @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Workflow updateWorkflow(Workflow workflow) throws Exception
+    {
+	workflow.save();
 
-	/**
-	 * Updates workflow.
-	 * 
-	 * @param workflow
-	 *            Workflow object that is updated.
-	 * @return updated workflow.
-	 */
-	@Path("{id}")
-	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Workflow updateWorkflow(Workflow workflow) throws Exception {
-		workflow.save();
+	return workflow;
+    }
 
-		return workflow;
-	}
+    /**
+     * Deletes single workflow based on id.
+     * 
+     * @param id
+     *            Respective workflow id.
+     */
+    @Path("{id}")
+    @DELETE
+    public void deleteWorkflow(@PathParam("id") Long id)
+    {
+	Workflow workflow = WorkflowUtil.getWorkflow(id);
 
-	/**
-	 * Deletes single workflow based on id.
-	 * 
-	 * @param id
-	 *            Respective workflow id.
-	 */
-	@Path("{id}")
-	@DELETE
-	public void deleteWorkflow(@PathParam("id") Long id) {
-		Workflow workflow = WorkflowUtil.getWorkflow(id);
+	if (workflow != null)
+	    workflow.delete();
+    }
 
-		if (workflow != null)
-			workflow.delete();
-	}
+    /**
+     * Deletes selected workflows using their keys list.Deletes related
+     * campaignStats
+     * 
+     * @param model_ids
+     *            array of workflow ids as String.
+     * @throws JSONException
+     */
+    @Path("bulk")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public void deleteWorkflows(@FormParam("ids") String model_ids) throws JSONException
+    {
+	JSONArray workflowsJSONArray = new JSONArray(model_ids);
 
-	/**
-	 * Deletes selected workflows using their keys list.Deletes related
-	 * campaignStats
-	 * 
-	 * @param model_ids
-	 *            array of workflow ids as String.
-	 * @throws JSONException
-	 */
-	@Path("bulk")
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void deleteWorkflows(@FormParam("ids") String model_ids)
-			throws JSONException {
-		JSONArray workflowsJSONArray = new JSONArray(model_ids);
+	Workflow.dao.deleteBulkByIds(workflowsJSONArray);
 
-		Workflow.dao.deleteBulkByIds(workflowsJSONArray);
+	// Deletes CampaignStats
+	WorkflowDeleteUtil.deleteRelatedEntities(workflowsJSONArray);
 
-		// Deletes CampaignStats
-		WorkflowDeleteUtil.deleteRelatedEntities(workflowsJSONArray);
+    }
 
-	}
+    /**
+     * Returns active subscribers of given campaign.
+     * 
+     * @param workflow_id
+     *            - campaign-id
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("active-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
+    public List<Contact> getActiveContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-"
+	        + CampaignStatus.Status.ACTIVE);
+    }
 
-	/**
-	 * Returns active subscribers of given campaign.
-	 * 
-	 * @param workflow_id
-	 *            - campaign-id
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("active-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8",
-			MediaType.APPLICATION_XML + "; charset=utf-8" })
-	public List<Contact> getActiveContacts(@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count),
-				cursor, workflow_id + "-" + CampaignStatus.Status.ACTIVE);
-	}
+    /**
+     * Returns list of contacts having campaignStatus Done for the given
+     * campaign-id.
+     * 
+     * @param workflow_id
+     *            - workflow id.
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("completed-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8", MediaType.APPLICATION_XML + "; charset=utf-8" })
+    public List<Contact> getCompletedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-"
+	        + CampaignStatus.Status.DONE);
+    }
 
-	/**
-	 * Returns list of contacts having campaignStatus Done for the given
-	 * campaign-id.
-	 * 
-	 * @param workflow_id
-	 *            - workflow id.
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("completed-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON + "; charset=utf-8",
-			MediaType.APPLICATION_XML + "; charset=utf-8" })
-	public List<Contact> getCompletedContacts(
-			@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count),
-				cursor, workflow_id + "-" + CampaignStatus.Status.DONE);
-	}
+    /**
+     * Returns removed subscribers of given campaign.
+     * 
+     * @param workflow_id
+     *            - campaign-id
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("removed-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public List<Contact> getRemovedContacts(@PathParam("id") String workflow_id, @QueryParam("page_size") String count,
+	    @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count), cursor, workflow_id + "-"
+	        + CampaignStatus.Status.REMOVED);
+    }
 
-	/**
-	 * Returns removed subscribers of given campaign.
-	 * 
-	 * @param workflow_id
-	 *            - campaign-id
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("removed-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Contact> getRemovedContacts(
-			@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return CampaignSubscribersUtil.getSubscribers(Integer.parseInt(count),
-				cursor, workflow_id + "-" + CampaignStatus.Status.REMOVED);
-	}
+    /**
+     * Removes subscriber from Cron and updates status to REMOVED
+     * 
+     * @param workflowId
+     *            - workflow id.
+     * @param contactId
+     *            - contact id.
+     */
+    @Path("remove-active-subscriber/{campaign-id}/{contact-id}")
+    @DELETE
+    public void removeActiveSubscriber(@PathParam("campaign-id") String workflowId,
+	    @PathParam("contact-id") String contactId)
+    {
+	// if any one of the path params is empty
+	if (StringUtils.isEmpty(workflowId) || StringUtils.isEmpty(contactId))
+	    return;
 
-	/**
-	 * Removes subscriber from Cron and updates status to REMOVED
-	 * 
-	 * @param workflowId
-	 *            - workflow id.
-	 * @param contactId
-	 *            - contact id.
-	 */
-	@Path("remove-active-subscriber/{campaign-id}/{contact-id}")
-	@DELETE
-	public void removeActiveSubscriber(
-			@PathParam("campaign-id") String workflowId,
-			@PathParam("contact-id") String contactId) {
-		// if any one of the path params is empty
-		if (StringUtils.isEmpty(workflowId) || StringUtils.isEmpty(contactId))
-			return;
+	// Remove from Cron.
+	CronUtil.removeTask(workflowId, contactId);
 
-		// Remove from Cron.
-		CronUtil.removeTask(workflowId, contactId);
+	// Updates CampaignStatus to REMOVE
+	CampaignStatusUtil.setStatusOfCampaign(contactId, workflowId, WorkflowUtil.getCampaignName(workflowId),
+	        CampaignStatus.Status.REMOVED);
+    }
 
-		// Updates CampaignStatus to REMOVE
-		CampaignStatusUtil.setStatusOfCampaign(contactId, workflowId,
-				CampaignStatus.Status.REMOVED);
-	}
+    /**
+     * Returns all subscribers including active, completed and removed
+     * subscribers of given campaign.
+     * 
+     * @param workflow_id
+     *            - workflow id.
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("all-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getAllWorkflowContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getContactsByCampaignId(Integer.parseInt(count), cursor, workflow_id);
+    }
 
-	/**
-	 * Returns all subscribers including active, completed and removed
-	 * subscribers of given campaign.
-	 * 
-	 * @param workflow_id
-	 *            - workflow id.
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("all-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML + "; charset=utf-8",
-			MediaType.APPLICATION_JSON + "; charset=utf-8" })
-	public List<Contact> getAllWorkflowContacts(
-			@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return CampaignSubscribersUtil.getContactsByCampaignId(
-				Integer.parseInt(count), cursor, workflow_id);
-	}
+    /**
+     * Returns Unsubscribed subscribers
+     * 
+     * @param workflow_id
+     *            - campaign-id
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("unsubscribed-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getUnsubscribedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return UnsubscribeStatusUtil.getUnsubscribeContactsByCampaignId(Integer.parseInt(count), cursor, workflow_id);
+    }
 
-	/**
-	 * Returns Unsubscribed subscribers
-	 * 
-	 * @param workflow_id
-	 *            - campaign-id
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("unsubscribed-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML + "; charset=utf-8",
-			MediaType.APPLICATION_JSON + "; charset=utf-8" })
-	public List<Contact> getUnsubscribedContacts(
-			@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return UnsubscribeStatusUtil.getUnsubscribeContactsByCampaignId(
-				Integer.parseInt(count), cursor, workflow_id);
-	}
+    /**
+     * Returns Hard Bounced contacts
+     * 
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("hardbounced-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getHardBouncedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getBoucedContactsByCampaignId(Integer.parseInt(count), cursor,
+	        EmailBounceType.HARD_BOUNCE, workflow_id);
+    }
 
-	/**
-	 * Returns Hard Bounced contacts
-	 * 
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("hardbounced-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML + "; charset=utf-8",
-			MediaType.APPLICATION_JSON + "; charset=utf-8" })
-	public List<Contact> getHardBouncedContacts(
-			@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return CampaignSubscribersUtil.getBoucedContactsByCampaignId(
-				Integer.parseInt(count), cursor, EmailBounceType.HARD_BOUNCE,
-				workflow_id);
-	}
+    /**
+     * Returns Soft Bounced contacts
+     * 
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("softbounced-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getSoftBouncedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getBoucedContactsByCampaignId(Integer.parseInt(count), cursor,
+	        EmailBounceType.SOFT_BOUNCE, workflow_id);
+    }
 
-	/**
-	 * Returns Soft Bounced contacts
-	 * 
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("softbounced-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML + "; charset=utf-8",
-			MediaType.APPLICATION_JSON + "; charset=utf-8" })
-	public List<Contact> getSoftBouncedContacts(
-			@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return CampaignSubscribersUtil.getBoucedContactsByCampaignId(
-				Integer.parseInt(count), cursor, EmailBounceType.SOFT_BOUNCE,
-				workflow_id);
-	}
-
-	/**
-	 * Returns spam reported contacts
-	 * 
-	 * @param count
-	 *            - count (or limit) of subscribers per request
-	 * @param cursor
-	 *            - cursor object
-	 * @return
-	 */
-	@Path("spam-reported-subscribers/{id}")
-	@GET
-	@Produces({ MediaType.APPLICATION_XML + "; charset=utf-8",
-			MediaType.APPLICATION_JSON + "; charset=utf-8" })
-	public List<Contact> getSpamReportedContacts(
-			@PathParam("id") String workflow_id,
-			@QueryParam("page_size") String count,
-			@QueryParam("cursor") String cursor) {
-		return CampaignSubscribersUtil.getBoucedContactsByCampaignId(
-				Integer.parseInt(count), cursor, EmailBounceType.SPAM,
-				workflow_id);
-	}
+    /**
+     * Returns spam reported contacts
+     * 
+     * @param count
+     *            - count (or limit) of subscribers per request
+     * @param cursor
+     *            - cursor object
+     * @return
+     */
+    @Path("spam-reported-subscribers/{id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML + "; charset=utf-8", MediaType.APPLICATION_JSON + "; charset=utf-8" })
+    public List<Contact> getSpamReportedContacts(@PathParam("id") String workflow_id,
+	    @QueryParam("page_size") String count, @QueryParam("cursor") String cursor)
+    {
+	return CampaignSubscribersUtil.getBoucedContactsByCampaignId(Integer.parseInt(count), cursor,
+	        EmailBounceType.SPAM, workflow_id);
+    }
 
 }

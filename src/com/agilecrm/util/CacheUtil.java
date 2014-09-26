@@ -29,10 +29,20 @@ public class CacheUtil
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-	syncCache.put(key, value);
-
-	NamespaceManager.set(oldNamespace);
+	try
+	{
+	    MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	    syncCache.put(key, value);
+	}
+	catch (Exception e)
+	{
+	    System.err.println("Exception occured while setting in cache..." + e.getMessage());
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**
@@ -50,10 +60,20 @@ public class CacheUtil
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-	syncCache.put(key, value, Expiration.byDeltaMillis(timeInMilliSeconds));
-
-	NamespaceManager.set(oldNamespace);
+	try
+	{
+	    MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	    syncCache.put(key, value, Expiration.byDeltaMillis(timeInMilliSeconds));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while setting in cache with time..." + e.getMessage());
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**
@@ -79,11 +99,22 @@ public class CacheUtil
     {
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
+	Object value = null;
 
-	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-	Object value = syncCache.get(key);
-
-	NamespaceManager.set(oldNamespace);
+	try
+	{
+	    MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	    value = syncCache.get(key);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while getting from cache..." + e.getMessage());
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
 
 	return value;
     }
@@ -99,10 +130,20 @@ public class CacheUtil
 	String oldNamespace = NamespaceManager.get();
 	NamespaceManager.set("");
 
-	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-	if (syncCache.contains(key))
-	    syncCache.delete(key);
-
-	NamespaceManager.set(oldNamespace);
+	try
+	{
+	    MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	    if (syncCache.contains(key))
+		syncCache.delete(key);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured while deleting from cache..." + e.getMessage());
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 }
