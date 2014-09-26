@@ -51,7 +51,7 @@ var ActivitylogRouter = Backbone.Router.extend({
 			{
 
 				var activitiesview = new Base_Collection_View({ url : '/core/api/activitylog/getAllActivities', sortKey : 'time', descending : true,
-					templateKey : "activity-list-log", cursor : true, page_size : 25, individual_tag_name : 'li', postRenderCallback : function(el)
+					templateKey : "activity-list-log", cursor : true,scroll_symbol:'scroll', page_size : 25, individual_tag_name : 'li', postRenderCallback : function(el)
 					{
 						head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
 						{
