@@ -228,7 +228,7 @@ function setupDealsTracksList(cel){
 		var tracksArray = trackListView.collection.models;
 		$.each(tracksArray,function(i,value){
 			if(value.id == pipeline_id)
-				$('#deals-tracks .filter-dropdown').append(' : '+value.attributes.name);
+				$('#deals-tracks .filter-dropdown').append(value.attributes.name);
 		});
 		
 		// Add all option for the deals in the list view.
