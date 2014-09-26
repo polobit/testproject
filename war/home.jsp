@@ -130,7 +130,7 @@ boolean debug = true;
 boolean production = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 {
-    debug = true;
+    debug = false;
     production = true;
 }
 
@@ -150,7 +150,8 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
+
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";

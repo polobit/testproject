@@ -2774,7 +2774,6 @@ $(function()
     	}
     	return options.inverse(this);
     	    });
-	    });
     
     Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
     		{	
