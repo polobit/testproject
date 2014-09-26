@@ -286,7 +286,7 @@ public class JSAPI
 	    // If there is no pipeline id, then set it to default.
 	    if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0)
 		opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	    System.out.println(opportunity);
+	    System.out.println(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
 	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
