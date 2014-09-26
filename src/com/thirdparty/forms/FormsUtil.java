@@ -174,7 +174,7 @@ public class FormsUtil
 			}
 		}
 		// Else return fieldName
-		return fieldName + " " + "agilecustomfield";
+		return fieldName.replace("\n", " ") + " " + "agilecustomfield";
 	}
 
 	/**
