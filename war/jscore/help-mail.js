@@ -12,10 +12,11 @@
  */
 $(function() {
 	
-	 $("#show_support").die().live("click", function(e){
+	// To toggle the contact us email
+	$("#show_support").die().live("click", function(e){
 		  e.preventDefault();
 		  $("#helpmailForm").toggle();
-		 });
+	});
 
 	// Prevent default on click
 	$('#helpMail').die().live('click', function(e){
@@ -37,7 +38,7 @@ $(function() {
 		json.body = json.body.replace(/\r\n/g,"<br/>");
         
 		// Build url
-		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
+		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
 		encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 		encodeURIComponent(json.body);
 
