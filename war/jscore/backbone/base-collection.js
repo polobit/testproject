@@ -297,7 +297,10 @@ var Base_Collection_View = Backbone.View
 					 */
 					onFetch : function()
 					{
-						$("table", that.el).after('<div class="scroll-loading" style="margin-left:50%">' + LOADING_ON_CURSOR + '</div>');
+						var element="table"; 
+						if (that.options.scroll_symbol)
+							element="section";
+						$(element, that.el).after('<div class="scroll-loading" style="margin-left:50%">' + LOADING_ON_CURSOR + '</div>');
 					} });
 
 					/*

@@ -1,14 +1,21 @@
+
+2-0(24-sept-2014)
+
+*** jagadeesh ***
+-Activity Log  - UI refinement
+
+
 1-10(19-sept-2014)
-<<<<<<< HEAD
+
 
 ***Saikiran***
 - Refresh icon when any user updates Contact
 - Date customfield issue in company details page.
 - Deals Custom fields in Contact and Company details
-=======
+
 *** jagadeesh ***
 -Activity Log
->>>>>>> 5176a70ad6e4402c24c6c670877bb4b256b26943
+
 
 1-9(12-sept-2014)
 
@@ -65,7 +72,7 @@ Clickdesk live-chat Removed
 *** Bhasuri (28th August)***
 Updated URL visited node
 Added Wait Till node
->>>>>>> Sandbox_master
+
 
 *** Yaswanth (26th August)***
 Added tag management. Added it in admin pannel.

@@ -233,7 +233,7 @@ function setupDealsTracksList(cel){
 		
 		// Add all option for the deals in the list view.
 		if (readCookie("agile_deal_view"))
-			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All">All</a></li>');
+			$('#deals-tracks .dropdown-menu').append('<li><a id="1" class="pipeline" data="All" style="cursor: pointer;">All</a></li>');
 		// Hide the track list if there is only one pipeline.
 		if(tracksArray.length<=1)
 			$('#deals-tracks',cel).hide();

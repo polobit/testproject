@@ -35,7 +35,7 @@ import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.reports.Reports;
-import com.agilecrm.shopifyapp.ShopifyApp;
+import com.agilecrm.shopify.ShopifyApp;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;

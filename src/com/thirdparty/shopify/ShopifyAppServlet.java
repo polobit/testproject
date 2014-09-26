@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.shopifyapp.util.ShopifyAppUtil;
+import com.agilecrm.shopify.util.ShopifyAppUtil;
 import com.google.appengine.api.NamespaceManager;
 
 @SuppressWarnings("serial")
@@ -16,21 +16,22 @@ public class ShopifyAppServlet extends HttpServlet
 {
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-	NamespaceManager.set("");
 	String shopUrl = request.getParameter("shop");
-	String agileDomain = ShopifyAppUtil.getDomainByShop(shopUrl);
+	String apiKey = request.getParameter("agile_apikey");
+	String domain = request.getParameter("agile_domain");
 
-	response.setContentType("text/html");
-	response.setStatus(response.SC_MOVED_TEMPORARILY);
+	String agileDomain = ShopifyAppUtil.getDomainByShop(shopUrl);
 	String redirectURL;
 
 	if (StringUtils.isBlank(agileDomain))
-	    redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php");
+	    redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?shop=" + shopUrl + "&agile_apikey=" + apiKey + "&agile_domain=" + domain);
 	else
 	{
 	    NamespaceManager.set(agileDomain);
 	    redirectURL = new String("https://" + agileDomain + ".agilecrm.com/#shopify/" + shopUrl);
 	}
+	response.setContentType("text/html");
+	response.setStatus(response.SC_MOVED_TEMPORARILY);
 	response.sendRedirect(redirectURL);
 	return;
     }

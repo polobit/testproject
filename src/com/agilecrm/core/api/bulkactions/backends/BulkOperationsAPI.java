@@ -41,6 +41,7 @@ import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -74,10 +75,10 @@ public class BulkOperationsAPI
 	while (fetcher.hasNextSet())
 	{
 	    List<Contact> contacts = fetcher.nextSet();
-	
-	    if(model_ids != null)
+
+	    if (model_ids != null)
 		ContactUtil.processContacts(contacts);
-	    
+
 	    ContactUtil.deleteContacts(contacts);
 	}
 
@@ -116,11 +117,10 @@ public class BulkOperationsAPI
 	while (fetcher.hasNextSet())
 	{
 	    List<Contact> contacts = fetcher.nextSet();
-		
-	    if(contact_ids != null)
+
+	    if (contact_ids != null)
 		ContactUtil.processContacts(contacts);
-	
-	    
+
 	    ContactUtil.changeOwnerToContactsBulk(fetcher.nextSet(), new_owner);
 	}
 
@@ -157,7 +157,7 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	    
+
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), workflowId);
 	}
@@ -166,18 +166,18 @@ public class BulkOperationsAPI
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
 
 	System.out.println("Total contacts subscribed to campaign " + workflowId + " is "
-		+ String.valueOf(fetcher.getAvailableContacts()));
+	        + String.valueOf(fetcher.getAvailableContacts()));
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
-		String.valueOf(fetcher.getAvailableContacts()));
+	        String.valueOf(fetcher.getAvailableContacts()));
 
 	try
 	{
 	    Mailgun.sendMail("campaigns@agile.com", "Campaign Observer", "naresh@agilecrm.com", null, null,
 		    "Campaign Initiated in " + NamespaceManager.get(), null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
-			    + fetcher.getAvailableContacts(), null);
+		            + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
+		            + fetcher.getAvailableContacts(), null);
 	}
 	catch (Exception e)
 	{
@@ -231,16 +231,16 @@ public class BulkOperationsAPI
 	while (fetcher.hasNextSet())
 	{
 	    List<Contact> contacts = fetcher.nextSet();
-		
-	    if(contact_ids != null)
+
+	    if (contact_ids != null)
 		ContactUtil.processContacts(contacts);
-	    
+
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.addTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     @SuppressWarnings("unchecked")
@@ -280,16 +280,16 @@ public class BulkOperationsAPI
 	while (fetcher.hasNextSet())
 	{
 	    List<Contact> contacts = fetcher.nextSet();
-		
-	    if(contact_ids != null)
+
+	    if (contact_ids != null)
 		ContactUtil.processContacts(contacts);
-	    
+
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.removeTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-		.toString(), String.valueOf(fetcher.getAvailableContacts()));
+	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
     }
 
     /**
@@ -414,6 +414,11 @@ public class BulkOperationsAPI
 	// to show in notification
 	int contactSize = 0;
 
+	String campaignName = null;
+
+	if (!StringUtils.isBlank(campaign_id))
+	    campaignName = WorkflowUtil.getCampaignName(campaign_id);
+
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
 	{
@@ -428,7 +433,8 @@ public class BulkOperationsAPI
 		CronUtil.removeTask(campaign_id, contact.id.toString());
 
 		// Updates CampaignStatus to REMOVE
-		CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), campaign_id, Status.REMOVED);
+		CampaignStatusUtil
+		        .setStatusOfCampaign(contact.id.toString(), campaign_id, campaignName, Status.REMOVED);
 	    }
 
 	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
@@ -446,7 +452,8 @@ public class BulkOperationsAPI
 	    CronUtil.removeTask(campaign_id, activeContactsJSONArray.getString(i));
 
 	    // Set REMOVED campaignStatus
-	    CampaignStatusUtil.setStatusOfCampaign(activeContactsJSONArray.getString(i), campaign_id, Status.REMOVED);
+	    CampaignStatusUtil.setStatusOfCampaign(activeContactsJSONArray.getString(i), campaign_id, campaignName,
+		    Status.REMOVED);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS, String.valueOf(contactSize));

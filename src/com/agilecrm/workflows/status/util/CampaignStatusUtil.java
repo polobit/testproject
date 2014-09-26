@@ -32,10 +32,14 @@ public class CampaignStatusUtil
      * @param status
      *            - Campaign Status.
      */
-    public static void setStatusOfCampaign(String contactId, String campaignId, Status status)
+    public static void setStatusOfCampaign(String contactId, String campaignId, String campaignName, Status status)
     {
 	if (StringUtils.isBlank(contactId) || StringUtils.isBlank(campaignId))
 	    return;
+
+	// If campaign name is null or empty, get name
+	if (StringUtils.isEmpty(campaignName))
+	    campaignName = WorkflowUtil.getCampaignName(campaignId);
 
 	try
 	{
@@ -47,12 +51,12 @@ public class CampaignStatusUtil
 	    // ACTIVE status
 	    if (status.equals(Status.ACTIVE))
 	    {
-		setActiveCampaignStatus(contact, campaignId);
+		setActiveCampaignStatus(contact, campaignId, campaignName);
 		return;
 	    }
 
 	    // DONE or REMOVED
-	    setEndCampaignStatus(contact, campaignId, status);
+	    setEndCampaignStatus(contact, campaignId, campaignName, status);
 	}
 	catch (Exception e)
 	{
@@ -75,7 +79,7 @@ public class CampaignStatusUtil
      * @param campaignId
      *            - CampaignId of active campaign.
      */
-    private static void setActiveCampaignStatus(Contact contact, String campaignId)
+    private static void setActiveCampaignStatus(Contact contact, String campaignId, String campaignName)
     {
 	boolean isNew = true;
 
@@ -96,7 +100,7 @@ public class CampaignStatusUtil
 		campaignStatus.start_time = statusTime;
 		campaignStatus.end_time = 0L;
 		campaignStatus.status = campaignId + "-" + Status.ACTIVE;
-		campaignStatus.campaign_name = WorkflowUtil.getCampaignName(campaignId);
+		campaignStatus.campaign_name = campaignName;
 
 		// False to avoid new CampaignStatus to be created
 		isNew = false;
@@ -107,8 +111,8 @@ public class CampaignStatusUtil
 	// if subscribed first-time, add campaignStatus to the list.
 	if (isNew)
 	{
-	    CampaignStatus campaignStatus = new CampaignStatus(statusTime, 0, campaignId, WorkflowUtil.getCampaignName(campaignId),
-		    (campaignId + "-" + Status.ACTIVE));
+	    CampaignStatus campaignStatus = new CampaignStatus(statusTime, 0, campaignId, campaignName, (campaignId
+		    + "-" + Status.ACTIVE));
 	    contact.campaignStatus.add(campaignStatus);
 	}
 
@@ -127,7 +131,7 @@ public class CampaignStatusUtil
      * @param campaignId
      *            - CampaignId of done campaign.
      */
-    private static void setEndCampaignStatus(Contact contact, String campaignId, Status status)
+    private static void setEndCampaignStatus(Contact contact, String campaignId, String campaignName, Status status)
     {
 	long statusTime = System.currentTimeMillis() / 1000;
 

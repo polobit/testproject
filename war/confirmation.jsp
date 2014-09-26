@@ -398,7 +398,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 						contact.addTags(AgileTaskletUtil.normalizeStringSeparatedByDelimiter(',', tag).split(","));
 
 					    // Add Removed status to contact
-					    CampaignStatusUtil.setStatusOfCampaign(contactId, campaignId, Status.REMOVED);
+					    CampaignStatusUtil.setStatusOfCampaign(contactId, campaignId, campaign_name, Status.REMOVED);
 					    
 					    // Delete Related Crons.
 					    CronUtil.removeTask(campaignId, contactId);
