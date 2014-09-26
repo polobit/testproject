@@ -284,7 +284,7 @@ public class JSAPI
 
 	    opportunity.addContactIds(contact.id.toString());
 	    // If there is no pipeline id, then set it to default.
-	    if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0L)
+	    if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0)
 		opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
@@ -300,6 +300,7 @@ public class JSAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println(e.getMessage());
 	    return null;
 	}
     }
