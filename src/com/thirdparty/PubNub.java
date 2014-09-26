@@ -39,6 +39,8 @@ public class PubNub
 	    // Publish Message - response with 0 for any error, 1 for success.
 	    JSONArray response = pubnub.publish(channel, messageJSON);
 
+	    System.out.println("Response " + response);
+
 	    // if error
 	    if (response.length() != 0 && 0 == (Integer) response.get(0))
 	    {
@@ -46,7 +48,6 @@ public class PubNub
 		return;
 	    }
 
-	    System.out.println("Response " + response);
 	}
 	catch (Exception e)
 	{
