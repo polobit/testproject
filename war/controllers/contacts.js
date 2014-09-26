@@ -85,7 +85,11 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view)
 	{
-
+		if(SCROLL_POSITION)
+		{
+			$("body").animate({ scrollTop : SCROLL_POSITION  },1000);
+			SCROLL_POSITION = 0;
+		}
 		
 		// If contacts are selected then un selects them
 		SELECT_ALL = false;
