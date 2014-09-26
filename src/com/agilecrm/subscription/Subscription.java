@@ -16,6 +16,7 @@ import org.codehaus.jettison.json.JSONObject;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.plan.FreePlanLimits;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
@@ -157,6 +158,11 @@ public class Subscription
     
     @NotSaved
     public PlanLimits planLimits;
+    
+    @NotSaved
+    public BillingRestriction cachedData;
+    
+    
 
     private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(Subscription.class);
 

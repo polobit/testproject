@@ -3,6 +3,8 @@ package com.agilecrm.subscription;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.subscription.Subscription.Gateway;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
@@ -31,6 +33,7 @@ public class SubscriptionUtil
 	    
 	    subscription.fillDefaultPlans();
 	}
+	
 
 	return subscription;
     }
@@ -66,6 +69,8 @@ public class SubscriptionUtil
 	{
 	    Customer customer = getCustomer(subscription.billing_data);
 	    subscription.billing_data = StripeUtil.getJSONFromCustomer(customer);
+	    subscription.cachedData = BillingRestrictionUtil.getBillingRestriction(subscription.plan.plan_type.toString(), subscription.plan.quantity);
+	    subscription.cachedData.refresh(true);
 	}
 	catch (StripeException e)
 	{
