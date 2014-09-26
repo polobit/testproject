@@ -1,5 +1,10 @@
-<!-- Indices written at Mon, 22 Sep 2014 14:48:17 IST -->
+<!-- Indices written at Thu, 25 Sep 2014 19:32:00 IST -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
-   
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Widget" ancestor="true" source="auto">
+        <property name="widget_type" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

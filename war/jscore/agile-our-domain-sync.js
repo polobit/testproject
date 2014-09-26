@@ -153,7 +153,7 @@ function add_referrar_info_as_note()
 	{
 		var note = {};
 		note.subject = "Referrer";
-		note.description = "Source:" + utmsource + ",Campaign: " + utmcampaign + ",Medium :" + utmmedium + ",Reference Domain " + utmreferencedomain;
+		note.description = "Source - "+ utmsource +"\n Campaign -  "+ utmcampaign +"\n Medium - " + utmmedium + "\n Reference Domain -" + utmreferencedomain;
 
 		_agile.add_note(note, function(data)
 		{

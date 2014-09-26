@@ -16,17 +16,16 @@
         </div>
         {{/unless}}
 {{#if this.length}}
-<div>
-<section>
+<div >
+<section class="scroll">
     <form>
       <div class="ref-log">  
             <div id="today-heading" style="display: none" class="ref-head"><b >Today</b>	</div>
-            <div id="today-activity" style="display: inline;" class="ref-log"></div>
-            <div id="tomorrow-heading" style="display: none" class="ref-head"><b >Yesterday</b>
-			</div>
+            <div id="today-activity" style="display: inline;"></div>
+            <div id="tomorrow-heading" style="display: none" class="ref-head"><b >Yesterday</b></div>
             <div id="tomorrow-activity" style="display: inline;"></div>
-		<div id="next-week-heading" style="display: none" class="ref-head">
-            <b >Earlier</b>
+		<div id="next-week-heading" style="display: none" class="">
+            <b id="earllier" style="display:none">Earlier</b>
 			</div>
             <div id="next-week-activity" style="display: inline;"></div>
 </div>
@@ -243,9 +242,9 @@
 <div class="pull-left">
 <div>
 {{#if_equals "1" custom2}}
-   {{custom2}} Task Deleted
+  Deleted {{custom2}} Task 
 {{else}} 
-	{{custom2}} Tasks Deleted
+	Deleted {{custom2}} Tasks 
 {{/if_equals}}
 </div>	
 <div>
@@ -477,9 +476,9 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 <div class="pull-left">
 <div>	
     {{#if_equals "1" custom2}}
-   {{custom2}} Deal Deleted
+  Deleted {{custom2}} Deal 
 {{else}} 
-	{{custom2}} Deals Deleted
+	Deleted {{custom2}} Deals 
 {{/if_equals}}
 </div>
 <div>	
@@ -875,9 +874,9 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 <div class="pull-left">
 <div>	
 {{#if_equals "1" custom2}}
-   Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contact
+   Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> on {{custom2}} Contact
 {{else}} 
-	 Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contacts
+	 Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> on {{custom2}} Contacts
 {{/if_equals}}	
 </div>
 <div>
@@ -901,9 +900,9 @@ Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{l
 <div class="pull-left">
 <div>	
     {{#if_equals "1" custom2}}
-   {{custom2}} Document Deleted
+  Deleted {{custom2}} Document 
 {{else}} 
-	{{custom2}} Documents Deleted
+Deleted {{custom2}} Documents 
 {{/if_equals}}	
 </div>
 <div>	

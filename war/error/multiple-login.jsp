@@ -155,7 +155,7 @@ if(cookieJSON.has("userAgent"))
 			<div class="left-view"><i class="fa fa-info-circle"></i></div>
 			<div class="right-view">
 				<h2>Wait!</h2> 
-				<div class="subhead">We had to log you out as you seem to have logged in from some other browser/system  <span style="font-size:12px">(<%= agent %>) </span></div> 
+				<div class="subhead">We had to log you out as you seem to have logged in from some other browser/system  <span style="font-size:12px"><%= agent %> </span></div> 
 				<div class="error-details">
 					You may <a href="/login">Re-login</a>. This will log you out in the other browser/system.
 				</div>

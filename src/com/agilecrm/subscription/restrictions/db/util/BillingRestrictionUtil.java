@@ -177,7 +177,8 @@ public class BillingRestrictionUtil
 	plan = subscription.plan;
 
 	// Namespace and subscription
-	System.err.println("" + NamespaceManager.get() + " domain is having plan - " + plan);
+	// System.out.println("" + NamespaceManager.get() +
+	// " domain is having plan - " + plan);
 
 	// Gets user info and sets plan and sets back in session
 	UserInfo info = SessionManager.get();

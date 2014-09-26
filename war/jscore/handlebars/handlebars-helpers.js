@@ -502,7 +502,7 @@ $(function()
 										{
 											if (count == 1 && key == "")
 											{
-												html += '<div class="slate" style="padding:5px 2px;"><div class="slate-content" style="text-align:center;"><h3>You have no milestones defined</h3></div></div>';
+												html += '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
 											}
 											else
 											{
