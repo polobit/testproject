@@ -8,6 +8,10 @@
  * navigate on clicking the row)
  * 
  */
+
+// For scrolling to recently edited contact in the list
+var SCROLL_POSITION;
+
 $(function() {
 
 	$('.agile-edit-row > tr > td:not(":first-child")').live('click', function(e) {
@@ -15,6 +19,9 @@ $(function() {
 		
 		var route = $('.agile-edit-row').attr('route')
 		var data = $(this).closest('tr').find('.data').attr('data');
+
+		if(route == "contact/")
+			SCROLL_POSITION = window.pageYOffset;
 
 		console.log(data);
 		if (data) {
