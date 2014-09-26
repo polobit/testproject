@@ -54,13 +54,18 @@ public class BasicAuthFilter implements Filter
      * and verifies them to allow access
      */
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-	    throws IOException, ServletException
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException
     {
 	System.out.println("Basic OAuth Filter");
 
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
 	final HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+	if (httpRequest.getRequestURI().contains("shopifyapp") && StringUtils.equals(httpRequest.getMethod(), "GET"))
+	{
+	    chain.doFilter(httpRequest, httpResponse);
+	    return;
+	}
 
 	// Gets the "Authorization" from header, which is set with domain user
 	// and APIKey
@@ -73,8 +78,7 @@ public class BasicAuthFilter implements Filter
 	    final int index = auth.indexOf(' ');
 	    if (index > 0)
 	    {
-		final String[] credentials = StringUtils.split(
-			new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
+		final String[] credentials = StringUtils.split(new String(Base64.decodeBase64(auth.substring(index).getBytes()), Charsets.UTF_8), ':');
 
 		if (credentials.length == 2)
 		{
@@ -86,8 +90,7 @@ public class BasicAuthFilter implements Filter
 		    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(user);
 
 		    // Domain should be checked to avoid saving in other domains
-		    if (domainUser != null && domainUser.domain != null
-			    && domainUser.domain.equals(NamespaceManager.get()) && !StringUtils.isEmpty(password))
+		    if (domainUser != null && domainUser.domain != null && domainUser.domain.equals(NamespaceManager.get()) && !StringUtils.isEmpty(password))
 		    {
 			// If domain user exists and the APIKey matches, request
 			// is
