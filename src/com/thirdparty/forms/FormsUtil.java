@@ -262,6 +262,7 @@ public class FormsUtil
 				String key = (String) keys.next();
 				String value = finalJson.getString(key);
 				key = key.replace("\n", " ");
+
 				// If key contains " "
 				if (StringUtils.contains(key, "agilecustomfield"))
 				{
