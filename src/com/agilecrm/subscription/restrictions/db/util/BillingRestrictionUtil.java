@@ -291,4 +291,14 @@ public class BillingRestrictionUtil
 	info.setUsersCount(plan.quantity);
 
     }
+    
+    public static void addEmails(Integer emails, Plan plan)
+    {
+	BillingRestriction cachedData = getBillingRestriction(plan.plan_type.toString(), plan.quantity);
+	cachedData.one_time_emails_count += emails;
+	
+	cachedData.email_pack_start_time = System.currentTimeMillis() /1000;
+	
+	cachedData.save();
+    }
 }

@@ -14,6 +14,7 @@ import com.agilecrm.Globals;
 import com.agilecrm.subscription.AgileBilling;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
@@ -452,6 +453,8 @@ public class StripeImpl implements AgileBilling
 	    }
 	   
 	    subscription.emailPlan = newPlan;
+	    
+	    BillingRestrictionUtil.addEmails(newPlan.quantity * 1000, subscription.plan);
 	    return StripeUtil.getJSONFromCustomer(Customer.retrieve(customer.getId()));
 	    
 	}

@@ -502,7 +502,23 @@ var SubscribeRouter = Backbone.Router.extend({
 						window.navigate("subscribe", { trigger : true });
 					})
 				})
+				
+				$("#user-plan-details-popover", el).live('click', function(e){
+					  var ele = getTemplate("account-plan-details-popover", subscribe_account_plan.model.get("planLimits"));
+					  console.log(ele);
+				        $(this).attr({
+				        	"rel" : "popover",
+				        	"data-placement" : 'right',
+				        	"data-original-title" : "Plan Details",
+				        	"data-content" :  ele,
+				        	//"trigger" : "hover"
+				        });
+				        $(this).popover('show');
+				});
+				
 			}
+			
+			
 			// that.email_subscription();
 			
 		}});

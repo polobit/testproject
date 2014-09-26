@@ -45,9 +45,9 @@
 			<h3>User plan</h3>
 		</div>
 		<div class="clearfix"></div>
-		{{#getSubscriptionBasedOnPlan billingData plan}}
-		<div class="form-horizontal"
+<div class="form-horizontal"
 			style="margin-left: -33%; margin-top: 10px">
+		{{#getSubscriptionBasedOnPlan billingData plan}}
 			<div class="control-group">
 				<label class="control-label">Plan</label>
 				<div class="controls" style="margin-top: 5px;">
@@ -64,7 +64,6 @@
 					<small>({{quantity}} * {{numeric_operation plan.amount "100" "/"}})</small>
 				</div> 
 			</div>
-			</br>
 			<div class="control-group" style="margin-top: -5%">
 				<label class="control-label" style="margin-top: -2%">Next Invoice</label>
 				<div class="controls">
@@ -73,17 +72,34 @@
 			</div>
 		</div>
 		{{else}}
-		<div class="clearfix"></div>
-		<div style="margin-top: 10%; text-align: center; font-size: 15px">
-			Free <br /> 2 Users
-		</div>
+		<div class="control-group">
+				<label class="control-label">Plan</label>
+				<div class="controls" style="margin-top: 5px;">
+					Free</div>
+			</div>
+			<div class="control-group" style="margin-top: -5%">
+				<label class="control-label" style="margin-top: -2%">Users</label>
+				<div class="controls">2</div>
+			</div>
+</div>
 </div>
 		{{/getSubscriptionBasedOnPlan}} {{#if billingData}} <a
 			class="btn btn-primary" href="#subscribe" id="account_plan_upgrade">
 			Change </a> {{else}} <a class="btn btn-primary" href="#"
 			id="attach_card_notification"> Upgrade </a>
-	 {{/if}}
+	 		{{/if}}
+			<span style="margin-top:6px;color:#167ac6;float:right" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</span>
 </div>
+</script>
+<script id="account-plan-details-popover-template" type="text/html">
+ Contacts   : {{contactLimit}} <br/>
+ Webrules   : {{webRuleLimit}} <br/>
+ Workflows  : {{workflowLimit}} <br/>
+White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}} 
+</script>
+
+<script id="email-plan-details-popover-template" type="text/html">
+	
 </script>
 
 <script id="email-plan-details-template" type="text/html">
