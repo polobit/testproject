@@ -11,6 +11,11 @@
  * @param #helpmailForm
  */
 $(function() {
+	
+	 $("#show_support").die().live("click", function(e){
+		  e.preventDefault();
+		  $("#helpmailForm").toggle();
+		 });
 
 	// Prevent default on click
 	$('#helpMail').die().live('click', function(e){

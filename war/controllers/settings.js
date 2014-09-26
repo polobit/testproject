@@ -34,7 +34,7 @@ var SettingsRouter = Backbone.Router.extend({
 			"notification-prefs" : "notificationPrefs",
 			
 			/* contact-us help email */
-			"contact-us" : "contactUsEmail",
+			"support" : "contactUsEmail",
 	},
 
 	/**
