@@ -42,11 +42,10 @@ public class ShopifyWidgetAPI
      *            {@link String} id of the stripe customer
      * @return {@link String}
      */
-    @Path("{widget-id}/{customerId}")
+    @Path("{widget-id}/{email}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public JSONArray getCustomerOrderDetails(@PathParam("widget-id") Long widgetId,
-	    @PathParam("customerId") String customerId)
+    public JSONArray getCustomerOrderDetails(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
     {
 	try
 	{
@@ -58,8 +57,8 @@ public class ShopifyWidgetAPI
 		return null;
 	    JSONArray customerOrders = new JSONArray();
 
-	    List<LinkedHashMap<String, Object>> orders = ShopifyPluginUtil.getCustomerOrderDetails(widget, customerId);
-	    System.out.println("customers order count " + orders.size());
+	    List<LinkedHashMap<String, Object>> orders = ShopifyPluginUtil.getCustomerOrderDetails(widget, email);
+
 	    Iterator<LinkedHashMap<String, Object>> it = orders.iterator();
 	    while (it.hasNext())
 	    {
@@ -71,19 +70,10 @@ public class ShopifyWidgetAPI
 	    return customerOrders;
 
 	}
-	catch (SocketTimeoutException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occurred. Refresh and Please try again.").build());
-	}
+
 	catch (Exception e)
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+	    throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity(e.getMessage())
 		    .build());
 	}
 
@@ -96,31 +86,28 @@ public class ShopifyWidgetAPI
      * @param customerId
      * @return
      */
-
-    @Path("/customer/{widget-id}/{customerId}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getCustomerDetails(@PathParam("widget-id") Long widgetId, @PathParam("customerId") String customerId)
-    {
-	try
-	{
-	    // Retrieves widget based on its id
-	    Widget widget = WidgetUtil.getWidget(widgetId);
-
-	    if (widget == null)
-		return null;
-
-	    return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
-
-	}
-
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-
-    }
+    /*
+     * @Path("/customer/{widget-id}/{customerId}")
+     * 
+     * @GET
+     * 
+     * @Produces(MediaType.TEXT_PLAIN) public String
+     * getCustomerDetails(@PathParam("widget-id") Long widgetId,
+     * @PathParam("customerId") String customerId) { try { // Retrieves widget
+     * based on its id Widget widget = WidgetUtil.getWidget(widgetId);
+     * 
+     * if (widget == null) return null;
+     * 
+     * // return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
+     * 
+     * }
+     * 
+     * catch (Exception e) { throw new
+     * WebApplicationException(Response.status(Response
+     * .Status.BAD_REQUEST).entity(e.getMessage()) .build()); }
+     * 
+     * }
+     */
 
     /**
      * delete shopify widget

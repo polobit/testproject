@@ -5,6 +5,7 @@ package com.agilecrm.social;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,56 +41,62 @@ public class ShopifyPluginUtil
      * @return {@link JSONObject} form of the response returned from Stripe
      * @throws Exception
      */
-    public static List<LinkedHashMap<String, Object>> getCustomerOrderDetails(Widget widget, String customerId)
+    public static List<LinkedHashMap<String, Object>> getCustomerOrderDetails(Widget widget, String email)
 	    throws SocketTimeoutException, IOException, Exception
     {
 	String token = widget.getProperty("token");
 	String shopName = widget.getProperty("shop");
-
-	if (StringUtils2.isNullOrEmpty(new String[] { customerId }))
-	    throw new Exception("Please provide the Shopify customer id for this contact");
-	String url = getAccessUrl(shopName, customerId);
-	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
-	oAuthRequest.addHeader("X-Shopify-Access-Token", token);
-	try
+	LinkedHashMap<String, Object> customer = getCustomer(widget, email);
+	System.out.println(customer);
+	if (customer != null && customer.size() > 0)
 	{
-	    Response response = oAuthRequest.send();
-	    Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
-		    Map.class);
-	    System.out.println(results);
-	    List<LinkedHashMap<String, Object>> orders = (List<LinkedHashMap<String, Object>>) results.get("orders");
-	    return orders;
+	    String customerId = (String) customer.get("id");
 
-	}
-	catch (OAuthException e)
-	{
-	    e.printStackTrace();
+	    String url = getAccessUrl(shopName, customerId);
+	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
+	    oAuthRequest.addHeader("X-Shopify-Access-Token", token);
+	    try
+	    {
+		Response response = oAuthRequest.send();
+		Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
+			Map.class);
+		System.out.println(results);
+		List<LinkedHashMap<String, Object>> orders = (List<LinkedHashMap<String, Object>>) results
+			.get("orders");
+		return orders;
+
+	    }
+	    catch (OAuthException e)
+	    {
+		e.printStackTrace();
+	    }
 	}
 
 	return null;
 
     }
 
-    public static LinkedHashMap<String, Object> getCustomer(Widget widget, String customerId)
+    private static LinkedHashMap<String, Object> getCustomer(Widget widget, String email)
     {
 	String token = widget.getProperty("token");
 	String shopName = widget.getProperty("shop");
-	String url = "https://" + shopName + "/admin/customers/" + customerId + ".json";
-	return  getCustomer(url, token);
+	String url = "https://" + shopName + "/admin/customers/search.json?query=email:" + email + "";
+	System.out.println(url);
+	return getCustomer(url, token, email);
     }
 
-    private static LinkedHashMap<String, Object> getCustomer(String accessURl, String token)
+    private static LinkedHashMap<String, Object> getCustomer(String accessURl, String token, String email)
     {
 
 	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, accessURl);
 	oAuthRequest.addHeader("X-Shopify-Access-Token", token);
-	LinkedHashMap<String, Object> customer = new LinkedHashMap<String, Object>();
+	List<LinkedHashMap<String, Object>> customer = new ArrayList<LinkedHashMap<String, Object>>();
 	try
 	{
 	    Response response = oAuthRequest.send();
 	    Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
 		    Map.class);
-	    customer = results.get("customer");
+	    customer = (List<LinkedHashMap<String, Object>>) results.get("customers");
 
 	}
 	catch (OAuthException e)
@@ -100,7 +107,11 @@ public class ShopifyPluginUtil
 	{
 	    e.printStackTrace();
 	}
-	return customer;
+	if (customer.size() > 0)
+	{
+	    return customer.get(0);
+	}
+	return new LinkedHashMap<String, Object>();
 
     }
 
