@@ -514,7 +514,8 @@ public class Opportunity extends Cursor
     public String toString()
     {
 	return "id: " + id + " relatesto: " + contact_ids + " close date" + close_date + " name: " + name
-		+ " description:" + description + " expectedValue: " + expected_value + " milestone: " + milestone
-		+ " probability: " + probability + " Track: " + track + " Owner " + owner_id;
+		+ " description:" + description + " expectedValue: " + expected_value + " pipeline: " + pipeline_id
+		+ " milestone: " + milestone + " probability: " + probability + " Track: " + track + " Owner "
+		+ owner_id;
     }
 }
