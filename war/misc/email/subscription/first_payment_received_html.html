@@ -51,24 +51,20 @@
 						     	<tr>
 							    <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Arial,Helvetica,sans-serif">
 							    <br>
-							    Dear  {{Event.data.previousAttributes.user_name}},
+							    Dear  {{user_name}},
 							    <br>
 							    <br>
 							 Thanks for using Agile CRM!
 
                                <br>
-                We have received a payment of ${{HashMap.price}}.<br/>
+                We have received a payment of ${{amount}}.<br/>
                 <br/>
                  <br/>
          <b>Payment Details</b><br/>
-         {{#Event.data.object.lines.data}}
-         	{{#plan.name}}
-         		Plan: {{plan.name}}<br/>
+         		Plan: {{plan}}<br/>
          		Number of Users: {{quantity}}<br/>
-         	{{/plan.name}}
-         {{/Event.data.object.lines.data}}
          
-         Credit card on File (last four): {{Customer.activeCard.last4}}<br/>
+         Credit card on File (last four): {{last4}}<br/>
 <br/>
 This charge will appear on your credit card statement as "AgileCRM.com".
 <br/>
