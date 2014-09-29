@@ -289,7 +289,14 @@ public class JSAPI
 	    System.out.println(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
-	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
+	    try
+	    {
+		opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
+	    }
+	    catch (NullPointerException ne)
+	    {
+		opportunity.owner_id = String.valueOf(APIKey.getAgileUserRelatedToAPIKey(apiKey).id);
+	    }
 	    System.out.println(opportunity);
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
