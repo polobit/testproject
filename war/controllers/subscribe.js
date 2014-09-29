@@ -62,7 +62,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			if(!USER_CREDIRCARD_DETAILS)
 				{
-					Backbone.history.navigate("#subscribe_new");
+					Backbone.history.navigate("subscribe_new");
 					return;
 				}
 			element = setPriceTemplete(data.plan.plan_type, el);
