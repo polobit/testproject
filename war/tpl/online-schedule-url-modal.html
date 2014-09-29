@@ -1,0 +1,29 @@
+<!-- online scheduling Modal views -->
+<script id="scheduleModal-template" type="text/html">
+<div class="modal hide fade" id="scheduleModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-info-sign"></i> Online schedule URL</h3>
+    </div>
+    <div class="modal-body " style="max-height:420px !important">
+        <form id="icalForm" name="icalForm" method="post">
+            <fieldset>
+                     <div id="desctiption">
+                    <b>What is Appointment Scheduling?</b><br/>
+                   <p> Scheduling meeting over email is a mess. The Appointment Scheduler allows  your contacts to schedule a meeting with you by choosing a your free timeslot in your calendar.Just share the below link whenever you want to schedule a meeting with someone. </p> 
+               </div>                     
+
+                     <div class="control-group">
+                       <label class="control-label"><b>Your online appointment scheduling url</b></label>
+                        <div class="controls">
+                        <a href="{{online_schedule_URL}}" target="_blank" name="scheduleurl" id="scheduleurl">{{online_schedule_URL}}</a>
+
+                        </div>
+                    </div>
+             </fieldset>
+         </form>
+  
+         <!-- <a href="#" id="send-schedule-url-email"><i class="icon-envelope-alt"></i> Send your schedule URL via Email</a>-->
+     </div>
+</div>
+</script>

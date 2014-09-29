@@ -117,6 +117,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String name = null;
 
     /**
+     * schedule_id is nothing but name of the domain user at this time we are
+     * not allowing user to change this but in future we give edit feature also
+     */
+    @NotSaved(IfDefault.class)
+    public String schedule_id = null;
+
+    /**
      * Assigns its value to password attribute
      */
     public static final String MASKED_PASSWORD = "PASSWORD";
@@ -612,10 +619,31 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     @PrePersist
     private void PrePersist()
     {
+	DomainUser domainuser = null;
 	// Stores created time in info_json
 	if (!hasInfo(CREATED_TIME))
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
+	if (this.id != null)
+	{
+
+	    domainuser = DomainUserUtil.getDomainUser(id);
+	    if (domainuser.schedule_id == null)
+	    {
+		System.out.println("executing if schedue id is null");
+		this.schedule_id = getScheduleid(domainuser.name);
+
+	    }
+	    else
+	    {
+		System.out.println("executing if schedue id is not null");
+		this.schedule_id = domainuser.schedule_id;
+	    }
+	}
+	else
+	{
+	    this.schedule_id = getScheduleid(this.name);
+	}
 	// Stores password
 	if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
 	{
@@ -628,7 +656,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if (this.id != null)
 	    {
 		// Get Old password
-		DomainUser oldDomainUser = DomainUserUtil.getDomainUser(id);
+		DomainUser oldDomainUser = domainuser;
 		this.encrypted_password = oldDomainUser.encrypted_password;
 
 		// Somewhere name is going null which updating.
@@ -642,7 +670,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if (this.id != null)
 	    {
 		// Get Old password
-		DomainUser oldDomainUser = DomainUserUtil.getDomainUser(id);
+		DomainUser oldDomainUser = domainuser;
 		this.referer.reference_by_domain = oldDomainUser.referer.reference_by_domain;
 	    }
 
@@ -712,16 +740,26 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	}
     }
 
-    /*
-     * @Override public String toString() { return "DomainUser [id=" + id +
-     * ", domain=" + domain + ", email=" + email + ", referer=" + referer +
-     * ", is_admin=" + is_admin + ", is_account_owner=" + is_account_owner +
-     * ", is_disabled=" + is_disabled + ", email_template=" + email_template +
-     * ", scopes=" + scopes + ", menu_scopes=" + menu_scopes + ", name=" + name
-     * + ", password=" + password + ", encrypted_password=" + encrypted_password
-     * + ", info_json_string=" + info_json_string + ", gadget_id=" + gadget_id +
-     * ", info_json=" + info_json + "]"; }
+    /**
+     * 
+     * @param name
+     *            domainuser name
+     * @return online schedule id
      */
+    public String getScheduleid(String name)
+    {
+	String scheduleid = null;
+	if (name.contains(" "))
+	{
+	    scheduleid = name.replace(" ", "_");
+	    return scheduleid;
+	}
+	else
+	{
+	    scheduleid = name;
+	    return scheduleid;
+	}
+    }
 
     // To String
     @Override

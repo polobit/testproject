@@ -76,23 +76,27 @@ body {
 }
 
 tbody.datepickerDays td.datepickerSelected {
-	background: #0198E1 !important;
-	border-radius: 22px;
+ background: #ccc !important;
+ border-radius: 2px;
 }
 
 tbody.datepickerDays td.datepickerSelected a {
-	background: white;
-	border-radius: 22px;
+
+ border-radius: 0px;
+ 
 }
 
 tbody.datepickerDays td:hover {
-	background: #0198E1;
-	border-radius: 22px;
+ background: #ccc !important;
+ border-radius:2px;
+ cursor:pointer;
+
 }
 
 tbody.datepickerDays td:hover a {
-	background: white;
-	border-radius: 22px;
+ 
+ border-radius: 0px;
+ cursor: pointer;
 }
 
 div.datepicker table td {
@@ -254,6 +258,7 @@ div.datepicker table td {
 	margin-left: 0px;
 	max-width: 100%;
 	font-size: small;
+	font-weight:normal;
 }
 
 .segment2 .segmenth {
@@ -326,5 +331,11 @@ div.datepicker table td {
 }
 
 .me-disable {
-	background: beige;
+	background: ##F6F6F6;
+}
+
+.appointment-wrap {
+	width: 500px;
+	margin-top:100px!important;
+	position: relative;
 }
