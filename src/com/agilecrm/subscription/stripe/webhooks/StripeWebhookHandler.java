@@ -37,6 +37,7 @@ public abstract class StripeWebhookHandler
     protected String eventType;
     protected Customer customer = null;
     protected Map<String, Object> plan;
+    private Boolean isEmailPlan = null;
 
     Contact contact;
     DomainUser user;
@@ -370,6 +371,21 @@ public abstract class StripeWebhookHandler
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
+    }
+    
+    protected boolean isEmailAddonPlan()
+    {
+	if(isEmailPlan != null)
+	{
+	    return isEmailPlan;
+	}
+	
+	String plan_id = String.valueOf(getPlanDetails().get("plan_id"));
+	System.out.println("plan :" + plan_id);
+	if (StringUtils.containsIgnoreCase(plan_id, "email"))
+	    return true;
+
+	return false;
     }
 
 }

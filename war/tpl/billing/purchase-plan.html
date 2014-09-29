@@ -94,7 +94,7 @@
 								</div>
 							</div>
 
- 					  {{#if coupon_code}}
+ 				<!--	  {{#if coupon_code}}
 							<div class="control-group" style="margin: 7px 0px;">
 								<label class="control-label" style="padding-top: 0px;">Discount : </label>
 								<div class="controls">
@@ -107,7 +107,7 @@
 									$<b class="coupon_code_discount_amount"><span id="total_cost_with_discount"><img src="img/1-0.gif" height="15px" width="15px" /></span></b>
 								</div>
 							</div>
- 						{{/if}}
+ 						{{/if}} -->
 			</div>
 						<div class="span4" style="float:right; ">
 							{{#if_equals "Monthly" cycle}}
@@ -223,10 +223,8 @@
                     </div> -->
 				</fieldset>
 			</form>
-			{{/if_equals}}
-			<form id="gateway" class="form-horizontal hide">
-				<input type="text" name="gateway" class="hidden" value="Stripe" />
-			</form>
+			{{/if_equals}} 
+		
 
 		
 			<legend>Existing Card Details</legend>
@@ -255,7 +253,10 @@
 						</div>
 					</div>
 				</form>
-			</div>
+			</div> -->
+	<form id="gateway" class="form-horizontal hide">
+				<input type="text" name="gateway" class="hidden" value="Stripe" />
+			</form>
 	<br/>
 			<div class="form-actions" style="padding-left: 160px;">
 				<a href="#" type="submit" id="subscribe"

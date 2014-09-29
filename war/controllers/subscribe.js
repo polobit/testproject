@@ -21,7 +21,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	/* Invoices */
 	"invoice" : "invoice", "invoice/:id" : "invoiceDetails",
-	"suscribe_new" : "suscribe_new" ,
+	"subscribe_new" : "subscribe_new" ,
 	"email_subscription" : "email_subscription",
 	"attach-card" :  "addCreditCardNew",
 	"update-card" : "updateCardNew",
@@ -59,6 +59,11 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
 			
+			if(!USER_CREDIRCARD_DETAILS)
+				{
+					Backbone.history.navigate("#subscribe_new");
+					return;
+				}
 			element = setPriceTemplete(data.plan.plan_type, el);
 
 			// Show Coupon code input field
@@ -283,6 +288,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		var viewParams = {
 				url : "core/api/subscription",
+				isNew : true,
 				template : "email-plan-form",
 				postRenderCallback : function(el) {
 					$("#close", el).click(function(e){
@@ -323,15 +329,18 @@ var SubscribeRouter = Backbone.Router.extend({
 				if(emails < 100000)
 					{
 						$("#emails_total_cost").html(quantity * 4);
+						$("#email_rate").html("$4");
 					}
 				
 				else if(emails <= 1000000)
 				{
 					$("#emails_total_cost").html(quantity * 3);
+					$("#email_rate").html("$3");
 				}
 				else if(emails >= 1000000)
 				{
 					$("#emails_total_cost").html(quantity * 2);
+					$("#email_rate").html("$2");
 				}
 				
 			});
@@ -354,7 +363,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		
 		var params = {
-				url : "core/api/subscription?reload=true", template : "email-plan-details", window : 'subscribe',
+				url : "core/api/subscription?reload=true", template : "email-plan-details", window : 'subscribe', isNew : true,
 				/*
 				 * postRenderCallback : function(el) { // Setup account statistics
 				 * set_up_account_stats(el); // Load date and year for card expiry
@@ -448,10 +457,12 @@ var SubscribeRouter = Backbone.Router.extend({
 	/**
 	 * Susbscribe new 
 	 */
-	suscribe_new : function()
+	subscribe_new : function()
 	{
 		var that = this;
 		var counter = 0;
+		
+		$("#content").html(LOADING_HTML);
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -499,7 +510,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				$("#attach_card_notification", el).die().live('click' , function(e){
 					e.preventDefault();
 					that.showCreditCardForm(subscribe_account_plan.model, function(model){
-						window.navigate("subscribe", { trigger : true });
+						Backbone.history.navigate("subscribe", { trigger : true });
 					})
 				})
 				

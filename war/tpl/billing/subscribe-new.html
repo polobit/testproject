@@ -99,6 +99,11 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 </script>
 
 <script id="email-plan-details-popover-template" type="text/html">
+ Plan Limit   : {{contactLimit}} <br/>
+ Emails    : {{webRuleLimit}} <br/>
+</script>
+
+<script id="email-plan-details-popover-template" type="text/html">
 	
 </script>
 
@@ -175,9 +180,9 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
                     		</div>
 							<div class="control-group">
 								<div class="controls">
-									<span style="color: #FA782D; font-size: 30px;">$<span id="emails_total_cost">0</span></span>
-									<p class="help-block" style="margin-top: 0px">
-										( charged @ <span style="color: #FA782D;" id="email_rate">$5</span> / 1000 emails)
+									<span style="color: #FA782D; font-size: 30px;margin-left:30px">$<span id="emails_total_cost">0</span></span>
+									<p class="help-block" style="margin-top: 0px;margin-left:-30px">
+										( charged @ <span style="color: #FA782D;" id="email_rate">$4</span> / 1000 emails)
 									</p>
 								</div>
 							</div>

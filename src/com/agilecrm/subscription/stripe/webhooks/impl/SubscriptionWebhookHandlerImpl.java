@@ -29,14 +29,17 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	 */
 	if (eventType.equals(StripeWebhookServlet.STRIPE_CUSTOMER_SUBSCRIPTION_CREATED))
 	{
+	    System.out.println("new subscription");
 	    newSubscription();
 	}
 	else if (eventType.equals(StripeWebhookServlet.STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED))
 	{
+	    System.out.println("update subscription");
 	    updateSubscription();
 	}
 	else if (eventType.equals(StripeWebhookServlet.STRIPE_SUBSCRIPTION_DELETED))
 	{
+	    System.out.println("delete subscription");
 	    deleteSubscription();
 	}
 
@@ -78,9 +81,16 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	customizeEventAttributes(user);
 
 	// Send mail to domain user
-	sendMail(SendMail.PLAN_CHANGED_SUBJECT, SendMail.PLAN_CHANGED);
+	sendMail1(SendMail.PLAN_CHANGED_SUBJECT, SendMail.PLAN_CHANGED);
 
+	try
+	{
 	updateContactInOurDomain(getContactFromOurDomain(), user.email, null, getPlanName());
+	}
+	catch(Exception e)
+	{
+	    e.printStackTrace();
+	}
     }
 
     public void deleteSubscription()
@@ -159,16 +169,6 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	    return true;
 
 	else if (attributes.containsKey("quantity"))
-	    return true;
-
-	return false;
-    }
-
-    private boolean isEmailAddonPlan()
-    {
-	String plan_id = String.valueOf(getPlanDetails().get("plan_id"));
-	System.out.println("plan :" + plan_id);
-	if (StringUtils.containsIgnoreCase(plan_id, "email"))
 	    return true;
 
 	return false;

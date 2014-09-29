@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
@@ -45,14 +46,11 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    if (user == null)
 		return;
 
-	    // Set Extra fields to attributes to be used in the template
-	    customizeEventAttributes(user);
-
 	    System.out.println("********** Sending mail ***********");
 	    System.out.println(user.email);
 
 	    System.out.println(getPlanName());
-	    if (StringUtils.containsIgnoreCase(getPlanName(), "email"))
+	    if (isEmailAddonPlan())
 	    {
 		System.out.println("email plan payment made");
 		sendMail1(SendMail.EMAIL_PAYMENT_RECEIVED_SUBJECT, SendMail.EMAIL_PAYMENT_RECEIVED);
@@ -135,9 +133,6 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    }
 
-	    // Call customize attributes based on namespace and user
-	    Event event = customizeEventAttributes(user);
-
 	    SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_FIRST_TIME_SUBJECT,
 		    SendMail.FAILED_BILLINGS_FIRST_TIME, getcustomDataForMail());
 
@@ -161,8 +156,6 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    // Send mail to all domain users
 	    for (DomainUser user : users)
 	    {
-		Event event = customizeEventAttributes(user);
-
 		SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_SECOND_TIME_SUBJECT,
 			SendMail.FAILED_BILLINGS_SECOND_TIME, getcustomDataForMail());
 	    }
@@ -182,7 +175,11 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	{
 	    // Set status and save subscription
 	    Subscription subscription = SubscriptionUtil.getSubscription();
-	    subscription.status = status;
+	    
+	    if(isEmailAddonPlan())
+		subscription.emailStatus = status;
+	    else
+		subscription.status = status;
 	    subscription.save();
 	    return subscription;
 	}
@@ -252,6 +249,8 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	Map<String, Object> details = getPlanDetails();
 	details.put("user_name", user.name);
 	details.put("domain", getDomain());
+	Card card = StripeUtil.getDefaultCard(customer);
+	details.put("last4", card.getLast4());
 	
 	/*
 	 * CustomerCardCollection cardCollection = customer.getCards();
