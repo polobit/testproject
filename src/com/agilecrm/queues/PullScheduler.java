@@ -1,7 +1,5 @@
 package com.agilecrm.queues;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
 import com.google.appengine.api.taskqueue.TaskHandle;
-import com.thirdparty.Mailgun;
 
 /**
  * <code>PullScheduler</code> leases pull tasks from pull-queue for certain
@@ -127,8 +124,6 @@ public class PullScheduler
 		if (tasks == null || tasks.isEmpty())
 		    break;
 
-		System.out.println("Leased tasks size is..." + tasks.size());
-
 		processTasks(queueName, tasks);
 	    }
 	}
@@ -190,11 +185,44 @@ public class PullScheduler
 
 	for (TaskHandle taskHandle : tasks)
 	{
-
 	    // Verifies backend shutdown or cron limit before processing each
 	    // one
 	    if (shouldContinue())
-		runTask(queueName, tasks, completedTasks, taskHandle);
+	    {
+		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
+
+		if (deferredTask instanceof MailDeferredTask)
+		{
+		    try
+		    {
+			// System.out.println("Executing mandrill mail tasks...");
+			EmailGatewayUtil.sendMails(tasks);
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+			System.err.println("Exception occured while runnning mail deferred tasks..." + e.getMessage());
+		    }
+
+		    PullQueueUtil.deleteTasks(queueName, tasks);
+		    return;
+		}
+		else
+		{
+		    try
+		    {
+			deferredTask.run();
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+			System.err.println("Exception occured while running deferred task..." + e.getMessage());
+		    }
+		}
+
+		// Add to completed list
+		completedTasks.add(taskHandle);
+	    }
 	    else
 		break;
 	}
@@ -204,59 +232,4 @@ public class PullScheduler
 
     }
 
-    /**
-     * Runs each taskHandle
-     * 
-     * @param queueName
-     *            - pull queue name to delete tasks
-     * @param tasks
-     *            - All tasks at once, for sending bulk emails
-     * @param completedTasks
-     *            - tasks that are completed, need to delete
-     * @param taskHandle
-     *            - pull queue task
-     */
-    private void runTask(String queueName, List<TaskHandle> tasks, List<TaskHandle> completedTasks,
-	    TaskHandle taskHandle)
-    {
-	try
-	{
-	    DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
-
-	    if (deferredTask instanceof MailDeferredTask)
-	    {
-		// System.out.println("Executing mandrill mail tasks...");
-		EmailGatewayUtil.sendMails(tasks);
-		PullQueueUtil.deleteTasks(queueName, tasks);
-		return;
-	    }
-	    else
-		deferredTask.run();
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while running task..." + e.getMessage());
-
-	    try
-	    {
-		// tasks.get(0);
-
-		StringWriter errors = new StringWriter();
-		e.printStackTrace(new PrintWriter(errors));
-		String errorString = errors.toString();
-
-		Mailgun.sendMail("queue@tasks.com", "Leased tasks Observer", "naresh@faxdesk.com", null, null,
-		        "Exception occured while leasing tasks...", null, null, errorString);
-	    }
-	    catch (Exception ex)
-	    {
-		ex.printStackTrace();
-		System.err.println("Exception occured while sending task queues exception " + e.getMessage());
-	    }
-	}
-
-	// Add to completed list
-	completedTasks.add(taskHandle);
-    }
 }
