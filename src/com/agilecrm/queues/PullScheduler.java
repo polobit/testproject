@@ -36,7 +36,7 @@ public class PullScheduler
     /**
      * Pull Queue attributes
      */
-    public static int DEFAULT_LEASE_PERIOD = 500;
+    public static int DEFAULT_LEASE_PERIOD = 3600;
     public static int DEFAULT_COUNT_LIMIT = 200;
 
     /**
