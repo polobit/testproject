@@ -99,7 +99,12 @@
 	Contacts   : {{contactLimit}} <br/>
 {{/if_greater}}
  Webrules   : {{webRuleLimit}} <br/>
- Workflows  : {{workflowLimit}} <br/>
+{{#if_greater contactLimit 2100000000}}
+ 	Contacts   : Unlimited Workflows <br/>
+{{else}}
+	Workflows   : {{workflowLimit}} <br/>
+{{/if_greater}}
+   :  <br/>
 White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}} 
 </script>
 
