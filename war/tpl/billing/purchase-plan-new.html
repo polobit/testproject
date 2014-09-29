@@ -200,37 +200,6 @@
 			<form id="gateway" class="form-horizontal hide">
 				<input type="text" name="gateway" class="hidden" value="Stripe" />
 			</form>
-
-		<!--	 {{#if_equals "free" current_plan}} {{else}}
-
-			<legend>Existing Card Details</legend>
-			<div class="span8"
-				style="background-color: rgb(221, 232, 248); border-radius: 10px; padding: 5px; margin-bottom: 10px;">
-<a style="float: right; padding: 1px 5px 1px; margin: 10px;" class="btn btn-success" id="change_card" href="#updatecard"><i class="icon-edit"></i> Change Card</a>
-				<form id="change_card" name="change_card"
-					class="form-horizontal change_card">
-					<div class="span6">
-						<div class="control-group" style="margin: 15px 0px 0px;">
-							<label class="control-label" style="padding-top: 0px;">
-								Name : </label> <label id="card-holder-name" class="controls">{{customer.activeCard.name}}</label>
-						</div>
-						<div class="control-group" style="margin: 5px 0px 0px;">
-							<label class="control-label" style="padding-top: 0px;">Card
-								Number : </label> <label id="card-number" class="controls">************{{customer.activeCard.last4}}</label>
-						</div>
-							<div class="control-group" style="margin: 5px 0px 15px;">
-							<label class="control-label" style="padding-top: 0px;">
-								Type  : </label> <label id="expiry-date" class="controls">{{customer.activeCard.type}} </label>
-						</div>
-						<div class="control-group" style="margin: 5px 0px 15px;">
-							<label class="control-label" style="padding-top: 0px;">Expiry
-								Date (Mon / Yr) : </label> <label id="expiry-date" class="controls">{{customer.activeCard.expMonth}}
-								/ {{customer.activeCard.expYear}} </label>
-						</div>
-					</div>
-				</form>
-			</div>
-			{{/if_equals}} -->
 	<br/>
 			<div class="form-actions" style="padding-left: 160px;">
 				<a href="#" type="submit" id="subscribe"
