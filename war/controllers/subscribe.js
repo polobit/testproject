@@ -51,6 +51,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		postRenderCallback : function(el)
 		{
 			var data = subscribe_plan.model.toJSON();
+			var _window = window;
 
 			// Setup account statistics
 			set_up_account_stats(el);
@@ -256,16 +257,10 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				// Discount
 				showCouponDiscountAmount(plan_json, el);
-
-				card_expiry(el);
-				head.js(LIB_PATH + 'lib/countries.js', function()
-				{
-					print_country($("#country", el));
-				});
 			},
 			saveCallback : function(data)
 			{
-				window.navigate("subscribe", { trigger : true });
+				window.navigate("subscribe_new", { trigger : true });
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 			

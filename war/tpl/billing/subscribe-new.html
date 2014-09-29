@@ -59,7 +59,7 @@
 				<div class="controls">{{quantity}}</div>
 			</div>
 			<div class="control-group" style="margin-top: -5%">
-				<label class="control-label" style="margin-top: -2%">Amount</label>
+				<label class="control-label" style="margin-top: -2%">Cost</label>
 				<div class="controls">${{total}} </br>
 					<small>({{quantity}} * {{numeric_operation plan.amount "100" "/"}})</small>
 				</div> 
@@ -67,7 +67,7 @@
 			<div class="control-group" style="margin-top: -5%">
 				<label class="control-label" style="margin-top: -2%">Next Invoice</label>
 				<div class="controls">
-					<time class="time-ago">{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}</time>
+					{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}
 				</div>
 			</div>
 		</div>
@@ -87,24 +87,33 @@
 			class="btn btn-primary" href="#subscribe" id="account_plan_upgrade">
 			Change </a> {{else}} <a class="btn btn-primary" href="#"
 			id="attach_card_notification"> Upgrade </a>
-	 		{{/if}}
-			<span style="margin-top:6px;color:#167ac6;float:right" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</span>
+	 	{{/if}}
+
+	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</a>
 </div>
 </script>
 <script id="account-plan-details-popover-template" type="text/html">
- Contacts   : {{contactLimit}} <br/>
+{{#if_greater contactLimit 2100000000}}
+ 	Contacts   : Unlimited Contacts <br/>
+{{else}}
+	Contacts   : {{contactLimit}} <br/>
+{{/if_greater}}
  Webrules   : {{webRuleLimit}} <br/>
  Workflows  : {{workflowLimit}} <br/>
 White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}} 
 </script>
 
 <script id="email-plan-details-popover-template" type="text/html">
-{{#if emailPlan.quantity}}
+{{#if emailPlan}}
 		 Plan Limit   : {{numeric_operation emailPlan.quantity "1000" "*"}} <br/>
 	{{else}}
 		Plan Limit   : 5000 <small>Powered by Agile CRM</small> <br/>
 {{/if}}
- Emails in account    : {{cachedData.one_time_emails_count}} <br/>
+
+{{#if cachedData.one_time_emails_count}}
+ 	Emails in account    : {{cachedData.one_time_emails_count}} <br/>
+{{/if}}
+
 </script>
 
 <script id="email-plan-details-popover-template" type="text/html">
@@ -133,14 +142,14 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 						{{numeric_operation ../emailPlan.quantity 1000 "*"}} <small>per month</small></div>
 				</div>
 				<div class="control-group" style="margin-top: -5%">
-					<label class="control-label" style="margin-top: -2%">Amount</label>
+					<label class="control-label" style="margin-top: -2%">Cost</label>
 					<div class="controls">${{total}} <br/><small>(Charged @ ${{numeric_operation plan.amount "100" "/"}} per thousand)</small></div>
 				</div>	
 				</br>
 				<div class="control-group" style="margin-top: -5%">
 					<label class="control-label" style="margin-top: -2%">Next Invoice</label>
 					<div class="controls">
-						<time class="time-ago">{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}</time>
+						{{epochToHumanDate "mmm dd, yyyy" currentPeriodEnd}}
 					</div>
 				</div>
 				</div>
@@ -158,7 +167,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 		id="account_email_plan_upgrade">Upgrade </a> {{else}} <a
 		class="btn btn-primary" href="#" id="account_email_attach_card">
 		Upgrade </a> {{/if}}
-<span style="margin-top:6px;color:#167ac6;float:right" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</span>
+	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</span>
 		
 </div>
 </div>
@@ -185,9 +194,10 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
                     		</div>
 							<div class="control-group">
 								<div class="controls">
-									<span style="color: #FA782D; font-size: 30px;margin-left:30px">$<span id="emails_total_cost">0</span></span>
+									<span style="color: #FA782D; font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><small style="margin-left:3px">Per month</small>
+									<br/>
 									<p class="help-block" style="margin-top: 0px;margin-left:-30px">
-										( charged @ <span style="color: #FA782D;" id="email_rate">$4</span> / 1000 emails)
+										 charged @ <span style="color: #FA782D;" id="email_rate">$4</span> / 1000 emails
 									</p>
 								</div>
 							</div>

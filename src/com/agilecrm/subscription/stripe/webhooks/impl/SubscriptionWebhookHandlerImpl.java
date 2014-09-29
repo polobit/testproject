@@ -62,7 +62,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
 	DomainUser user = getUser();
 
-	System.out.println(user);
+	System.out.println(user);	
 	if (user == null)
 	    return;
 
