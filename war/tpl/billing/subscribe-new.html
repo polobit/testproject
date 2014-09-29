@@ -99,8 +99,12 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 </script>
 
 <script id="email-plan-details-popover-template" type="text/html">
- Plan Limit   : {{contactLimit}} <br/>
- Emails    : {{webRuleLimit}} <br/>
+{{#if emailPlan.quantity}}
+		 Plan Limit   : {{numeric_operation emailPlan.quantity "1000" "*"}} <br/>
+	{{else}}
+		Plan Limit   : 5000 <small>Powered by Agile CRM</small> <br/>
+{{/if}}
+ Emails in account    : {{cachedData.one_time_emails_count}} <br/>
 </script>
 
 <script id="email-plan-details-popover-template" type="text/html">
@@ -154,6 +158,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 		id="account_email_plan_upgrade">Upgrade </a> {{else}} <a
 		class="btn btn-primary" href="#" id="account_email_attach_card">
 		Upgrade </a> {{/if}}
+<span style="margin-top:6px;color:#167ac6;float:right" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</span>
 		
 </div>
 </div>

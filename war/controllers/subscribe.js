@@ -573,6 +573,19 @@ var SubscribeRouter = Backbone.Router.extend({
 						//$("#content").html(getTemplate("subscribe", model.toJSON()))
 					});
 				
+				$("#user-plan-details-popover", el).live('click', function(e){
+					  var ele = getTemplate("email-plan-details-popover", subscribe_email_plan.model.toJSON());
+					  console.log(ele);
+				        $(this).attr({
+				        	"rel" : "popover",
+				        	"data-placement" : 'right',
+				        	"data-original-title" : "Plan Details",
+				        	"data-content" :  ele,
+				        	//"trigger" : "hover"
+				        });
+				        $(this).popover('show');
+				});
+				
 			// that.email_subscription();
 			
 		}});
