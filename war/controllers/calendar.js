@@ -24,9 +24,13 @@ var CalendarRouter = Backbone.Router.extend({
 		// change it there too
 		head.js(LIB_PATH + 'lib/jquery-ui.min.js', 'lib/fullcalendar.min.js', function()
 		{
-			showCalendar()
+			showCalendar();
+			
+			
 		});
 
+		getCurrentUserScheduleURL();
+		
 		this.tasksListView = new Base_Collection_View({ url : '/core/api/tasks', restKey : "task", templateKey : "tasks", individual_tag_name : 'tr',
 			postRenderCallback : function(el)
 			{
@@ -89,3 +93,21 @@ var CalendarRouter = Backbone.Router.extend({
 		// Hide owner's and status task selection options from dropdown
 		$(".hide-on-pending").hide();
 	} });
+
+function getCurrentUserScheduleURL(){
+	
+	var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
+
+	var updateduserModel = new updatedCurrentUser();
+
+	updateduserModel.fetch({ success : function(data)
+	{
+		var model = data.toJSON();
+		var scheduleid=model.schedule_id;
+		console.log(scheduleid);
+		var onlineschedulingURL="https://" + model.domain + ".agilecrm.com/schedule/"+scheduleid;
+		ONLINE_SCHEDULING_URL=onlineschedulingURL;
+	
+	}});
+
+}

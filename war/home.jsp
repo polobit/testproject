@@ -169,6 +169,9 @@ var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
 
+//online scheduling url will be filled  only when user goes to calendar route 
+var ONLINE_SCHEDULING_URL ="" ;
+
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
 // Billing Restriction
