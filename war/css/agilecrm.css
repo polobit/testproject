@@ -1175,6 +1175,12 @@ ul.tags-management li.tag a {/*color:#ffffff;*/
 	text-decoration : none;
 }
 /*css updates (author "santhosh")*/
+@media(min-width:1200px){
+#admin-prefs-tabs-content .row-fluid .span11
+{
+	margin-left:0px;
+}
+}
 
 .link-border,.anchor-link:hover {
 	border-bottom: 1px solid;
