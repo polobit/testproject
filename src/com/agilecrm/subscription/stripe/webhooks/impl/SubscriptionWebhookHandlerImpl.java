@@ -10,11 +10,13 @@ import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
+import com.stripe.model.Customer;
 
 public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 {
@@ -224,6 +226,11 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	map.put("domain", getDomain());
 	map.put("user_name", getUser().name);
 	map.put("email", getUser().email);
+	
+	Customer customer = getCustomerFromStripe();
+	
+	if(customer != null)
+	    map.put("last4", StripeUtil.getDefaultCard(customer).getLast4());
 
 	// Get the attibutes from event object
 	Map<String, Object> attributes = getEvent().getData().getPreviousAttributes();
