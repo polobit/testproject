@@ -704,6 +704,6 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>WebEventCalendar</servlet-name>
-		<url-pattern>/webeventcalendar/*</url-pattern>
+		<url-pattern>/schedule/*</url-pattern>
 	</servlet-mapping>
 </web-app>
