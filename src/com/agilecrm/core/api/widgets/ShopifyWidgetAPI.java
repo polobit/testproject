@@ -5,6 +5,7 @@ package com.agilecrm.core.api.widgets;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,7 +20,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.social.ShopifyPluginUtil;
 import com.agilecrm.social.StripePluginUtil;
 import com.agilecrm.widgets.Widget;
@@ -41,51 +45,102 @@ public class ShopifyWidgetAPI
      * @param customerId
      *            {@link String} id of the stripe customer
      * @return {@link String}
+     * @throws Exception
+     * @throws IOException
+     * @throws SocketTimeoutException
      */
-    @Path("{widget-id}/{customerId}")
+    @Path("{widget-id}/{email}")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public JSONArray getCustomerOrderDetails(@PathParam("widget-id") Long widgetId,
-	    @PathParam("customerId") String customerId)
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getCustomerOrderDetails(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
+	    throws SocketTimeoutException, IOException, Exception
     {
-	try
+
+	// Retrieves widget based on its id
+	Widget widget = WidgetUtil.getWidget(widgetId);
+
+	if (widget == null)
+	    return null;
+	JSONArray customerOrders = new JSONArray();
+	boolean customer = ShopifyPluginUtil.isCustomerExist(widget, email);
+	if (customer)
 	{
-	    // Retrieves widget based on its id
-	    Widget widget = WidgetUtil.getWidget(widgetId);
-	    String shopName = widget.getProperty("shop");
-
-	    if (widget == null)
-		return null;
-	    JSONArray customerOrders = new JSONArray();
-
-	    List<LinkedHashMap<String, Object>> orders = ShopifyPluginUtil.getCustomerOrderDetails(widget, customerId);
-	    System.out.println("customers order count " + orders.size());
-	    Iterator<LinkedHashMap<String, Object>> it = orders.iterator();
-	    while (it.hasNext())
+	    List<LinkedHashMap<String, Object>> orders;
+	    orders = ShopifyPluginUtil.getCustomerOrderDetails(widget, email);
+	    if (orders != null && orders.size() > 0)
 	    {
-		LinkedHashMap<String, Object> order = it.next();
-		order.put("shop", shopName);
-		customerOrders.put(order);
+		Iterator<LinkedHashMap<String, Object>> it = orders.iterator();
+		while (it.hasNext())
+		{
+
+		    customerOrders.put(it.next());
+		}
 	    }
-
-	    return customerOrders;
-
 	}
-	catch (SocketTimeoutException e)
+	else
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("Request timed out. Refresh and Please try again.").build());
-	}
-	catch (IOException e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-		    .entity("An error occurred. Refresh and Please try again.").build());
-	}
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+	    throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No Customer found")
 		    .build());
 	}
+
+	if (customerOrders.length() > 0)
+	{
+
+	    return customerOrders.toString();
+	}
+	else
+	{
+
+	    throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No Order found")
+		    .build());
+	}
+
+    }
+
+    /**
+     * add new customer in shopify
+     */
+
+    @Path("add/contact/{widget-id}/{email}")
+    @GET
+    public void addCustomer(@PathParam("widget-id") Long widgetId, @PathParam("email") String email)
+    {
+	Contact contact = ContactUtil.searchContactByEmail(email);
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	if (contact != null)
+	{
+	    ShopifyPluginUtil.addCustomer(widget, contact);
+	}
+    }
+
+    @Path("/items/{widget-id}/{order-id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLineItem(@PathParam("widget-id") Long widgetId, @PathParam("order-id") Long orderId)
+    {
+
+	Widget widget = WidgetUtil.getWidget(widgetId);
+	LinkedHashMap<String, Object> order = ShopifyPluginUtil.getOrder(widget, orderId);
+	JSONArray itemArray = new JSONArray();
+	if (order != null && order.containsKey("line_items"))
+	{
+
+	    ArrayList<LinkedHashMap<String, Object>> lineItems = (ArrayList<LinkedHashMap<String, Object>>) order
+		    .get("line_items");
+
+	    Object currency = order.get("currency");
+
+	    Iterator<LinkedHashMap<String, Object>> it = lineItems.iterator();
+	    while (it.hasNext())
+	    {
+		LinkedHashMap<String, Object> item = it.next();
+		item.put("currency", currency);
+		itemArray.put(item);
+	    }
+
+	}
+
+	return itemArray.toString();
 
     }
 
@@ -96,31 +151,29 @@ public class ShopifyWidgetAPI
      * @param customerId
      * @return
      */
-
-    @Path("/customer/{widget-id}/{customerId}")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getCustomerDetails(@PathParam("widget-id") Long widgetId, @PathParam("customerId") String customerId)
-    {
-	try
-	{
-	    // Retrieves widget based on its id
-	    Widget widget = WidgetUtil.getWidget(widgetId);
-
-	    if (widget == null)
-		return null;
-
-	    return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
-
-	}
-
-	catch (Exception e)
-	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
-		    .build());
-	}
-
-    }
+    /*
+     * @Path("/customer/{widget-id}/{customerId}")
+     * 
+     * @GET
+     * 
+     * @Produces(MediaType.TEXT_PLAIN) public String
+     * getCustomerDetails(@PathParam("widget-id") Long widgetId,
+     * 
+     * @PathParam("customerId") String customerId) { try { // Retrieves widget
+     * based on its id Widget widget = WidgetUtil.getWidget(widgetId);
+     * 
+     * if (widget == null) return null;
+     * 
+     * // return ShopifyPluginUtil.getCustomer(widget, customerId).toString();
+     * 
+     * }
+     * 
+     * catch (Exception e) { throw new
+     * WebApplicationException(Response.status(Response
+     * .Status.BAD_REQUEST).entity(e.getMessage()) .build()); }
+     * 
+     * }
+     */
 
     /**
      * delete shopify widget
