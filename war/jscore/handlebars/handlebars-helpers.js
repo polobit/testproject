@@ -111,7 +111,6 @@ $(function()
 			for (var j = 0; j < data.length; j++)
 			{
 				for (var i = 0; i < exclusive_fields.length; i++)
-=======
 				/**
 				 * Helper function to return the value of a property matched with the given
 				 * name from the array of properties
@@ -124,7 +123,6 @@ $(function()
 				 * @returns value of the matched object
 				 */
 				Handlebars.registerHelper('getPropertyValue', function(items, name)
->>>>>>> refs/heads/Shopify_widget_fix
 				{
 								return getPropertyValue(items, name);
 				});
@@ -314,12 +312,10 @@ $(function()
 											{
 												html += "<div class='milestone-column'><div class='dealtitle-angular'><p class='milestone-heading'>" + key + "</p><span></span></div><ul class='milestones' milestone='" + key + "'>";
 												for ( var i in value)
-=======
 								var exclusive_fields = [];
 								for (var i = 0; i < fields.length; i++)
 								{
 												if (jQuery.inArray(fields[i].name, exclude_by_name) != -1 || (fields[i].subtype && jQuery.inArray(fields[i].subtype, exclude_by_subtype) != -1))
->>>>>>> refs/heads/Shopify_widget_fix
 												{
 																continue;
 												}
@@ -3014,7 +3010,7 @@ $(function()
 								return options.inverse(this);
 				});
 
-});
+
 
 Handlebars.registerHelper("each_index_slice", function(array, index, options)
 {
@@ -3041,16 +3037,12 @@ Handlebars.registerHelper("each_index_slice", function(array, index, options)
 Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
 {
 
-
-/*				var myDate = new Date(dateString);
-				var timestamp = myDate.getTime();
-				var d = new Date(parseInt(timestamp) / 1000).format("dd-MM-yyyy");
-				return d;*/
 				if (dateString.length <= 0)
 								return;
 				var arr = dateString.split("T");
 				console.log("normalize date " + arr[0]);
-			//	var d = new Date(arr[0]).format("dd-MM-yyyy");
 				return arr[0];
 
 });
+
+										});
