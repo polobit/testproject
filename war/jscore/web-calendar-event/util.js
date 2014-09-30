@@ -103,6 +103,15 @@ function get_slots(s_date, s_slot)
 	var end_time = getEpochTimeFromDate(d);
 	console.log(start_time+"  "+end_time);	
 	
+	var currentdate=new Date();
+	var currettime=getEpochTimeFromDate(currentdate);
+	
+	if(currettime>start_time){
+		alert("Selected date should not be less than today. Please change.");
+		selecteddate=currentdate;
+		resetAll();
+		return;
+	}
 	// Send request to get available slot
 	var initialURL = '/core/api/webevents/getslots?&user_name='+User_Name+'&user_id=' + User_Id +'&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime+ "&start_time=" + start_time+ "&end_time=" + end_time;
 	$.getJSON(initialURL, function(data)
@@ -298,7 +307,7 @@ function save_web_event(formId, confirmBtn)
                     +'</div>'
 					+'</div>'
 					+'<div align="right" style="position: absolute;right: 130px;bottom: -80px;">'
-					+'<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Poweredby</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign="'+domainname+'"rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>'
+					+'<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Poweredby</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign='+domainname+'" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>'
 					+'</div>'
 				
                     resetAll();
@@ -325,7 +334,7 @@ function convertToHumanDate(format, date)
 	{
 
 	if (!format)
-		format = "dddd, mmmm d, yyyy,h:MM:ss TT";
+		format = "mmmm d, yyyy,h:MM:ss TT";
 
 	if (!date)
 		return;

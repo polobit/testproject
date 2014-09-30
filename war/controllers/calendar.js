@@ -38,6 +38,7 @@ var CalendarRouter = Backbone.Router.extend({
 				{
 					$(".task-due-time", el).timeago();
 				});
+				$("#appointment-schedular").show();
 
 			} });
 
