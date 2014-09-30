@@ -32,9 +32,13 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactField.FieldType;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.deals.CustomFieldData;
@@ -332,6 +336,40 @@ public class CSVUtil
 		    continue;
 
 		field.value = csvValues[j];
+		
+		if (field.type.equals(FieldType.CUSTOM))
+		{
+		    List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
+			    "DATE");
+		    for (CustomFieldDef customFieldDef : customFields)
+		    {
+			if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+			{
+			    String customDate = csvValues[j];
+			    
+			    if (customDate!= null && !customDate.isEmpty())
+			    {
+				// date is dd/MM/yyyy format
+				String[] data = customDate.split("/");
+				if (data.length == 3)
+				{
+				    Calendar c = Calendar.getInstance();
+				    int year = Integer.parseInt(data[2]);
+				    int month = Integer.parseInt(data[0]);
+				    int day = Integer.parseInt(data[1]);
+				    c.set(year, month - 1, day);
+				    Date date = c.getTime();
+				    field.value = ""+date.getTime() / 1000;
+				}else {
+				    field.value = null;
+				}
+				
+
+			    }
+			  
+			}
+		    }
+		}
 
 		tempContact.properties.add(field);
 
@@ -528,6 +566,8 @@ public class CSVUtil
 		    continue;
 		}
 
+	
+
 		if (Contact.ADDRESS.equals(field.name))
 		{
 		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
@@ -571,6 +611,41 @@ public class CSVUtil
 		{
 		    field.value = csvValues[j];
 		}
+		
+		if (field.type.equals(FieldType.CUSTOM))
+		{
+		    List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY,
+			    "DATE");
+		    for (CustomFieldDef customFieldDef : customFields)
+		    {
+			if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+			{
+			    String customDate = csvValues[j];
+			    
+			    if (customDate!= null && !customDate.isEmpty())
+			    {
+				// date is dd/MM/yyyy format
+				String[] data = customDate.split("/");
+				if (data.length == 3)
+				{
+				    Calendar c = Calendar.getInstance();
+				    int year = Integer.parseInt(data[2]);
+				    int month = Integer.parseInt(data[0]);
+				    int day = Integer.parseInt(data[1]);
+				    c.set(year, month - 1, day);
+				    Date date = c.getTime();
+				    field.value = ""+date.getTime() / 1000;
+				}else {
+				    field.value = null;
+				}
+				
+
+			    }
+			  
+			}
+		    }
+		}
+		
 
 		tempContact.properties.add(field);
 
