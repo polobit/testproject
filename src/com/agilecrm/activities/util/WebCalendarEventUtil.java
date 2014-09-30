@@ -369,7 +369,6 @@ public class WebCalendarEventUtil
 	// Agile user id
 	Long agileUserId = wce.agileUserId;
 
-	Long startdate = null;
 	// Selected slot for email
 	String selectedDateSlot = wce.date;
 
@@ -470,7 +469,7 @@ public class WebCalendarEventUtil
 		newEvnt.title = wce.name.concat(" with ".concat(wce.userName)); // name
 		newEvnt.start = slot.get(0); // start time
 		newEvnt.end = slot.get(1); // end time
-		newEvnt.color = "#36C";
+
 		String cid = contact.id.toString(); // related contact
 
 		// Add contact in event
@@ -482,8 +481,6 @@ public class WebCalendarEventUtil
 
 		// save agile event
 		newEvnt.save();
-
-		startdate = newEvnt.start;
 	    }
 	}
 
@@ -491,9 +488,8 @@ public class WebCalendarEventUtil
 	if (wce.confirmation.equalsIgnoreCase("on"))
 	{
 	    DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
-	    String body = "<p>Your appointment was scheduled with " + user.name + " on "
-		    + getDateFormatForMail(startdate) + "</p><p>Duration: " + wce.slot_time
-		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
+	    String body = "<p>Your appointment was scheduled with " + user.name + " on " + selectedDateSlot
+		    + "</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
 	    // Saves Contact Email
 	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", wce.email, null, null,
@@ -564,19 +560,5 @@ public class WebCalendarEventUtil
 	}
 	return null;
 
-    }
-
-    public static String getDateFormatForMail(Long epoch)
-    {
-
-	String date = new java.text.SimpleDateFormat("MMMM d,yyyy-h:mm aaa").format(new java.util.Date(epoch * 1000));
-
-	/*
-	 * Format formatter = new SimpleDateFormat("MMMM d,yyyy-h:mm a"); String
-	 * s = formatter.format(date);
-	 */
-	System.out.println(date);
-	System.out.println("000000000000000000000000000000000000000000000");
-	return date;
     }
 }
