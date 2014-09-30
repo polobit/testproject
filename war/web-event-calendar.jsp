@@ -5,25 +5,38 @@
 <%@page import="com.agilecrm.user.util.UserPrefsUtil"%>
 <%@page import="com.agilecrm.user.UserPrefs"%>
 <%@page import="com.agilecrm.user.AgileUser"%>
+
 <%
+
+String url = request.getRequestURL().toString();
+String[] ar=url.split("/");
+String scheduleid=ar[ar.length-1];
+System.out.println(scheduleid);
+if(scheduleid.contains("_")){
+    scheduleid=scheduleid.replace("_"," ");
+    System.out.println(scheduleid);
+}
+
+
 // Gets User Name
-String email = request.getParameter("email");
+
 Boolean userAvailable = false;
 Boolean emailAvailable = false;
 String profile_pic = "/img/gravatar.png";
 String user_name = null;
+String domain_name=null;
 Long user_id = 0L;
 Long agile_user_id = 0L;
 
-if (email != null)
+if (scheduleid != null)
 {    
   emailAvailable = true;
-  email = email.toLowerCase();
+ 
   //String email = "farah@agilecrm.com";
   System.out.println("my try");
-  System.out.println(email);
+  System.out.println(scheduleid);
   	
-  DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+  DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid);
   System.out.println("Domain user " + domainUser);
 	  
   if(domainUser != null)
@@ -40,6 +53,7 @@ if (email != null)
 	      user_name = domainUser.name;
 	      user_id = domainUser.id;
 	      agile_user_id = agileUser.id;
+	      domain_name = domainUser.domain;
 	      	
 	      if(StringUtils.isEmpty(userPrefs.pic))
 	          profile_pic  ="/img/gravatar.png";
@@ -53,31 +67,25 @@ ObjectMapper mapper = new ObjectMapper();
 <html>
 <head>
 <title>Agile CRM Dashboard</title>
-<link rel="stylesheet" href="css/web-calendar-event/bootstrap.min.css">
-<link rel="stylesheet" href="css/web-calendar-event/style.css">
+<link rel="stylesheet" href="../css/web-calendar-event/bootstrap.min.css">
+<link rel="stylesheet" href="../css/web-calendar-event/style.css">
 
-<script type="text/javascript" src="lib/web-calendar-event/jquery.js"></script>
-<script type="text/javascript" src="/lib/jquery.validate.min.js"></script>
-<script type="text/javascript">
-	jQuery.validator.setDefaults({ debug : true, success : "valid" });
+<script type="text/javascript" src="../lib/web-calendar-event/jquery.js"></script>
+<script type="text/javascript" src="../lib/jquery.validate.min.js"></script>
+<script type="text/javascript" src="../lib/date-formatter.js"></script>
 
-	jQuery.validator.addMethod("phonevalidation", function(value, element)
-	{
-		return /[0-9 -()+]+$/.test(value);
-	}, "Please enter a valid phone number.");
-</script>
 
-<link rel="stylesheet" href="css/web-calendar-event/datepicker.css"
+<link rel="stylesheet" href="../css/web-calendar-event/datepicker.css"
 	type="text/css" />
 <script type="text/javascript"
-	src="lib/web-calendar-event/datepicker.js"></script>
-<script type="text/javascript" src="lib/web-calendar-event/eye.js"></script>
-<script type="text/javascript" src="lib/web-calendar-event/utils.js"></script>
+	src="../lib/web-calendar-event/datepicker.js"></script>
+<script type="text/javascript" src="../lib/web-calendar-event/eye.js"></script>
+<script type="text/javascript" src="../lib/web-calendar-event/utils.js"></script>
 <script type="text/javascript"
-	src="lib/web-calendar-event/layout.js?ver=1.0.2"></script>
-<script type="text/javascript" src="jscore/web-calendar-event/time.js"></script>
-<script type="text/javascript" src="jscore/web-calendar-event/util.js"></script>
-<script type="text/javascript" src="jscore/web-calendar-event/ui.js"></script>
+	src="../lib/web-calendar-event/layout.js?ver=1.0.2"></script>
+<script type="text/javascript" src="../jscore/web-calendar-event/time.js"></script>
+<script type="text/javascript" src="../jscore/web-calendar-event/util.js"></script>
+<script type="text/javascript" src="../jscore/web-calendar-event/ui.js"></script>
 </head>
 
 <body onload="bodyLoad();">
@@ -150,7 +158,7 @@ ObjectMapper mapper = new ObjectMapper();
 				disabled="disabled" />
 		</form>
 		 <% }else  		   
-		     out.print("Sorry, email id not enrolled with Agile CRM.");  
+		     out.print("Sorry, user is not enrolled with Agile CRM.");  
 		 %> 
 	</div>
 
@@ -158,6 +166,8 @@ ObjectMapper mapper = new ObjectMapper();
  var User_Name = <%=mapper.writeValueAsString(user_name)%>;
  var User_Id = <%=user_id%>;
  var Agile_User_Id = <%=agile_user_id%>;
+ var selecteddate="";
+ var domainname=<%=mapper.writeValueAsString(domain_name)%>;
  </script>
 
 	<script type="text/javascript">
@@ -172,14 +182,13 @@ ObjectMapper mapper = new ObjectMapper();
 				{
 					if(User_Id == 0)
 						return;
-					
+				
 					// Get current date
 					var newDate = new Date();
 					var currMonth = (newDate.getMonth() + 1);
 					if (currMonth < 10)
 						currMonth = "0" + currMonth;
 					var currentDate = newDate.getFullYear() + '-' + currMonth + '-' + newDate.getDate();
-
 					console.log("in doc ready");
 					console.log(currentDate);
 
@@ -193,20 +202,21 @@ ObjectMapper mapper = new ObjectMapper();
 					{
 						console.log("In date picker on change");
 						console.log(formated + "  " + dates);
-
+						selecteddate=dates;
 						// On date change change selected date
-						Selected_Date = formated;						
-
+						Selected_Date = formated;				
 						// Check user select date
 						if ($('.segment2').hasClass('me-disable'))
 							return;
 
+						
 						// Date change in right column above available slot box
 						change_availability_date(dates);
 						
 						// Add loading img
 						$('.checkbox-main-grid').html('<img class="loading-img" src="img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
 
+						console.log(dates+"      "+Selected_Time);
 						// Get available slots With new date
 						get_slots(dates, Selected_Time);
 					} });
@@ -215,15 +225,13 @@ ObjectMapper mapper = new ObjectMapper();
 					$('#addEventForm').validate(
 							{
 								// Specify the validation rules
-								rules : { userName : { required : true, minlength : 3 }, email : { required : true, email : true },
-									phoneNumber : { required : true, minlength : 6, phonevalidation : true } },
+								rules : { userName : { required : true, minlength : 3 }, email : { required : true, email : true } },
 
 								// Specify the validation error messages
 								messages : {
 									userName : { required : "Please specify your name", minlength : jQuery.format("At least {0} characters required!") },
 									email : { required : "We need your email address to contact you",
-										email : "Your email address must be in the format of name@domain.com" },
-									phoneNumber : { required : "Please specify your number", minlength : jQuery.format("At least {0} digits required!") } },
+										email : "Your email address must be in the format of name@domain.com" } },
 
 								submitHandler : function(form)
 								{

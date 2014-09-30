@@ -27,6 +27,14 @@ $(function()
 	});
 
 	/**
+	 * returns online scheduling url of current user
+	 */
+	Handlebars.registerHelper('online_schedule_URL', function()
+			{
+				return ONLINE_SCHEDULING_URL;
+			});
+	
+	/**
 	 * Helper function to return the value of property based on type of the
 	 * property
 	 */

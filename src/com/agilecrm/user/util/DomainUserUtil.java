@@ -414,4 +414,28 @@ public class DomainUserUtil
 	}
     }
 
+    /**
+     * Gets domain user based on his scheduleid
+     * 
+     * @param name
+     *            is nothing but schedule id.and schedule id is nothing but his
+     *            name
+     * 
+     * @return {@link DomainUser} object
+     */
+    public static DomainUser getDomainUserFromScheduleId(String scheduleid)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.getByProperty("schedule_id", scheduleid);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
 }

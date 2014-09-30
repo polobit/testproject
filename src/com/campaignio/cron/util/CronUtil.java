@@ -11,11 +11,15 @@ import org.json.JSONObject;
 
 import com.agilecrm.AgileQueues;
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.queues.cron.CronPullServlet;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.campaignio.cron.Cron;
 import com.campaignio.cron.deferred.CronDeferredTask;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.QueryResultIterator;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Query;
 
@@ -129,7 +133,7 @@ public class CronUtil
 	    searchMap.put("campaign_id", campaignId);
 
 	String oldNamespace = NamespaceManager.get();
-	
+
 	// As Crons exist in empty namespace, namespace is must
 	if (StringUtils.isBlank(oldNamespace))
 	    return;
@@ -316,8 +320,18 @@ public class CronUtil
 		    cron.data_string, cron.subscriber_json_string, cron.node_json_string, wakeupOrInterrupt,
 		    customData.toString());
 
-	    PullQueueUtil.addToPullQueue(size >= 500 ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
-		    : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
+	    // If bulk crons wake up from Wait, add to pull queue
+	    if (wakeupOrInterrupt.equalsIgnoreCase(Cron.CRON_TYPE_TIME_OUT))
+	    {
+		PullQueueUtil.addToPullQueue(size >= CronPullServlet.FETCH_LIMIT ? AgileQueues.BULK_CAMPAIGN_PULL_QUEUE
+		        : AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE, cronDeferredTask, cron.namespace);
+	    }
+	    else
+	    {
+		// Interruptted crons like Click, Open
+		Queue queue = QueueFactory.getQueue(AgileQueues.CRON_QUEUE);
+		queue.add(TaskOptions.Builder.withPayload(cronDeferredTask));
+	    }
 	}
     }
 

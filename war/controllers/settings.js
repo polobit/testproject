@@ -432,7 +432,8 @@ var SettingsRouter = Backbone.Router.extend({
 	 */
 	contactUsEmail : function()
 	{
-		$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
+		//$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
+		$("#content").html(getTemplate("help-mail-form"), {});
 	}
 
 });

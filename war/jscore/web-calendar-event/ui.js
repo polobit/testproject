@@ -9,15 +9,24 @@ $(function()
 		e.preventDefault();
 
 		Selected_Time = $(this).attr('data');
-
+  
+		 if(Selected_Time==15){
+			 Selected_Time=30;
+		 }
+		
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");
 
 		// Make next part enable
 		$('.segment2').removeClass('me-disable');
-
+		
+		if(selecteddate){
+			
+		get_slots(selecteddate, Selected_Time);
+		}
+		
 		// Reset all
-		resetAll();
+		//resetAll();
 	});
 
 	// Confirm filled info with selected slot
