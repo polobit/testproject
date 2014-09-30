@@ -915,10 +915,11 @@ content: "\f075"!important;
 }
 .milestones .ui-sortable-helper,.milestones .ui-sortable-helper:hover
 {
-	box-shadow:0 9px 9px -9px #ddd;
-	-webkit-box-shadow:0 9px 9px -9px #ddd!important;
+	box-shadow:0 9px 9px -9px #bbb;
+	-webkit-box-shadow:0 9px 9px -9px #bbb!important;
 	border:1px solid #ddd!important;
 	background:#fff!important;
+	background:lightyellow!important;
 }
 .milestone-column>ul {
 	height: 468px;
