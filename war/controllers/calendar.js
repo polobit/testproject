@@ -106,7 +106,8 @@ function getCurrentUserScheduleURL(){
 		var model = data.toJSON();
 		var scheduleid=model.schedule_id;
 		console.log(scheduleid);
-		var onlineschedulingURL="https://" + model.domain + ".agilecrm.com/schedule/"+scheduleid;
+		//var onlineschedulingURL="https://" + model.domain + ".agilecrm.com/schedule/"+scheduleid;
+		var onlineschedulingURL="https://" + model.domain + "-dot-sandbox-dot-agilecrmbeta.appspot.com/schedule/"+scheduleid;
 		ONLINE_SCHEDULING_URL=onlineschedulingURL;
 	
 	}});
