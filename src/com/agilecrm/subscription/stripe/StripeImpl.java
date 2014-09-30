@@ -427,7 +427,8 @@ public class StripeImpl implements AgileBilling
 	    else
 	    {
 		// Updates existing
-		com.stripe.model.Subscription x = existingSubscription.update(newSubscriptionParams);
+		com.stripe.model.Subscription x = existingSubscription.cancel(null);
+		existingSubscription = customer.createSubscription(newSubscriptionParams);
 		System.out.println(x);
 	    }
 

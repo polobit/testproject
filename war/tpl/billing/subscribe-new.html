@@ -12,16 +12,27 @@
 	<div class="span11">
 		<div class="span4" id="plan-details-pane"></div>
 		<div class="span4" id="email-details-pane"></div>
+		
 	</div>
 </div>
 <div class="clear-fix"></div>
 <div class="row-fluid" style="margin-top:50px">
-	<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
-		<h3>Your Credit Card Details</h3>
-	</div>
-
 	<div class="clear-fix"></div>
-	<div id="customer-details-holder"></div>
+	<div class="span5">
+		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
+			<h3>Your Credit Card Details</h3>
+		</div>
+		<div id="customer-details-holder">		
+	</div>
+	</div>
+	{{#if billingData}}
+	<div class="span6">
+		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
+			<h3>Recent Payments</h3>
+		</div>
+			<div id="invoice-details-holder"></div>
+	</div>
+	{{/if}}
 <div id="credit-card-form-modal-holder"></div>
 </div>
 </script>
@@ -84,7 +95,7 @@
 </div>
 </div>
 		{{/getSubscriptionBasedOnPlan}} {{#if billingData}} <a
-			class="btn btn-primary" href="#subscribe" id="account_plan_upgrade">
+			class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
 			Change </a> {{else}} <a class="btn btn-primary" href="#"
 			id="attach_card_notification"> Upgrade </a>
 	 	{{/if}}
@@ -104,7 +115,6 @@
 {{else}}
 	Workflows   : {{workflowLimit}} <br/>
 {{/if_greater}}
-   :  <br/>
 White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}} 
 </script>
 
@@ -114,7 +124,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 	{{else}}
 		Plan Limit   : 5000 <small>Powered by Agile CRM</small> <br/>
 {{/if}}
-
+test
 {{#if cachedData.one_time_emails_count}}
  	Emails in account    : {{cachedData.one_time_emails_count}} <br/>
 {{/if}}
@@ -172,7 +182,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 		id="account_email_plan_upgrade">Upgrade </a> {{else}} <a
 		class="btn btn-primary" href="#" id="account_email_attach_card">
 		Upgrade </a> {{/if}}
-	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</span>
+	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="email-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</span>
 		
 </div>
 </div>
@@ -214,4 +224,25 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 					<a class="btn" href="#" id="close"> close </a>
 	</div>
 </div>
+</script>
+
+   <script id="charge-collection-template" type="html/text">
+        <table class="table table-striped" id="sort-table">
+            <thead>
+                <tr>
+                    <th>Amount(USD)</th>
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+            <tbody id="charge-model-list" class="model-list-cursor">
+            </tbody>
+        </table>
+
+</script>
+<script id="charge-model-template" type="text/html">	
+	<td >
+    	${{numeric_operation amount 100 "/"}} {{#if refunded}} - Refunded {{/if}}
+	</td>
+	<td><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>
+	
 </script>

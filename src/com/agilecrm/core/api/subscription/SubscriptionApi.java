@@ -14,6 +14,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.cron.deferred.AccountLimitsRemainderDeferredTask;
@@ -21,6 +24,7 @@ import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.DomainUser;
@@ -29,7 +33,10 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
+import com.stripe.model.Invoice;
 
 /**
  * <code>SubscriptionApi</code> class includes REST calls to interact with
@@ -238,7 +245,7 @@ public class SubscriptionApi
     @Path("/invoices")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List getInvoices()
+    public List<Invoice> getInvoices()
     {
 	try
 	{
@@ -250,6 +257,43 @@ public class SubscriptionApi
 		    .build());
 	}
     }
+    
+    /**
+     * Fetches invoices of subscription details
+     * 
+     * @return {@link List}
+     */
+    @Path("/charges/{customer_id}")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public String getCharges(@PathParam("customer_id") String customerId, @QueryParam("page_size") String page_size)
+    {
+	try
+	{
+	    String customerJSONString = null;
+	    try
+	    {
+		 List<Charge> list =  StripeUtil.getCharges(customerId, Integer.parseInt(page_size));
+		 
+		// Gets customer JSON string from customer object
+		 customerJSONString = new Gson().toJson(list);
+		 return customerJSONString;
+	    }
+	    catch(NumberFormatException e)
+	    {
+		e.printStackTrace();
+		// return StripeUtil.getCharges(customerId);
+	    }
+	   return customerJSONString;
+	}
+	catch (Exception e)
+	{
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
+	}
+    }
+    
+    
 
     /**
      * Deletes subscription object of the domain and deletes related customer

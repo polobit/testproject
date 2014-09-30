@@ -120,7 +120,7 @@ public class SubscriptionUtil
         // Creates customer and adds subscription
         subscription.billing_data = subscription.getAgileBilling().addSubscriptionAddon(plan);
         subscription.emailPlan = plan;
-    
+        
         // Saves new subscription information
         if (subscription.billing_data != null)
             subscription.save();

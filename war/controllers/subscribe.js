@@ -9,7 +9,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Subscription page */
-	"subscribe" : "subscribe", "subscribe/:id" : "subscribe",
+	"subscribe-plan" : "subscribe", "subscribe-plan/:id" : "subscribe",
 	
 	
 	/* Updating subscription details */
@@ -22,6 +22,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	/* Invoices */
 	"invoice" : "invoice", "invoice/:id" : "invoiceDetails",
 	"subscribe_new" : "subscribe_new" ,
+	"subscribe" : "subscribe_new",
 	"email_subscription" : "email_subscription",
 	"attach-card" :  "addCreditCardNew",
 	"update-card" : "updateCardNew",
@@ -288,14 +289,13 @@ var SubscribeRouter = Backbone.Router.extend({
 				postRenderCallback : function(el) {
 					$("#close", el).click(function(e){
 						e.preventDefault();
-						that.email_sbuscrption_step1(subscription);
+						that.setup_email_plan(subscription);
 					})
 					
 				},
 				saveCallback : function(data)
 				{
-					console.log(data);
-					that.email_sbuscrption_step1(data);
+					that.setup_email_plan(subscription);
 				}
 			}
 		
@@ -475,6 +475,8 @@ var SubscribeRouter = Backbone.Router.extend({
 			that.setup_email_plan(subscription_model);
 			
 			that.show_card_details(subscription_model);
+			
+			that.recent_invoice(subscription_model);
 	});
 		
 		
@@ -489,7 +491,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "account-plan-details", window : 'subscribe',
+		var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "account-plan-details", window : 'subscribe-plan',
 		/*
 		 * postRenderCallback : function(el) { // Setup account statistics
 		 * set_up_account_stats(el); // Load date and year for card expiry
@@ -505,7 +507,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				$("#attach_card_notification", el).die().live('click' , function(e){
 					e.preventDefault();
 					that.showCreditCardForm(subscribe_account_plan.model, function(model){
-						Backbone.history.navigate("subscribe", { trigger : true });
+						Backbone.history.navigate("subscribe-plan", { trigger : true });
 					})
 				})
 				
@@ -535,6 +537,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	{
 		var counter = 0;
 		var that = this;
+		
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -568,17 +571,21 @@ var SubscribeRouter = Backbone.Router.extend({
 						//$("#content").html(getTemplate("subscribe", model.toJSON()))
 					});
 				
-				$("#user-plan-details-popover", el).live('click', function(e){
-					  var ele = getTemplate("email-plan-details-popover", subscribe_email_plan.model.toJSON());
-					  console.log(ele);
-				        $(this).attr({
+				getTemplate("email-plan-details-popover", subscribe_email_plan.model.toJSON(), "Yes", function(content){
+					console.log(content)
+					  $("#email-plan-details-popover", el).attr({
 				        	"rel" : "popover",
 				        	"data-placement" : 'right',
 				        	"data-original-title" : "Plan Details",
-				        	"data-content" :  ele,
+				        	"data-content" :  content,
 				        	//"trigger" : "hover"
 				        });
-				        $(this).popover('show');
+					  
+				$("#email-plan-details-popover", el).live('click', function(e){
+						  $(this).popover('show');
+					  });
+				       
+				       
 				});
 				
 			// that.email_subscription();
@@ -694,5 +701,40 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(card_details.render().el);
 	},
 	
+	/*recent_invoice : function()
+	{
+		var invoice_collection = new Base_Collection_View({
+			url : "core/api/subscription/invoices?page_size=3",
+			templateKey : "invoice-partial"
+		});
+		
+		invoice_collection.collection.fetch();
+		$("#invoice-details-holder").html(invoice_collection.render().el)
+	},
+	*/
+	// gets collection of charges of aa paricular customer based on
+	recent_invoice : function(subscription)
+	{
+		if(!subscription.get("billingData"))
+			return;
+		
+		console.log(subscription.get("billingData"));
+		var customerId = null;
+		try
+		{
+			customerId = JSON.parse(subscription.get("billingData")).id;
+		}
+		catch(e)
+		{
+			customerId = subscription.get("billingData").id;
+		}
+		
+		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=3" , templateKey : "charge",
+
+		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
+		invoice_collection.collection.fetch();
+
+		$("#invoice-details-holder").html(invoice_collection.render().el);
+	},
 
 });

@@ -189,6 +189,11 @@ public class StripeUtil
 
     public static List<Charge> getCharges(String customerid) throws StripeException
     {
+	return getCharges(customerid, null);
+    }
+
+    public static List<Charge> getCharges(String customerid, Integer limit) throws StripeException
+    {
 
 	Stripe.apiKey = Globals.STRIPE_API_KEY;
 
@@ -197,6 +202,12 @@ public class StripeUtil
 	// Sets charge parameters (Stripe customer id is required to get
 	// charges of a customer form stripe)
 	chargeParams.put("customer", customerid);
+
+	if (limit != null && limit > 0)
+	    // Sets charge parameters (Stripe customer id is required to get
+	    // charges of a customer form stripe)
+	    chargeParams.put("limit", limit);
+
 	/*
 	 * Fetches all charges for given stripe customer id and returns invoices
 	 */
@@ -231,20 +242,20 @@ public class StripeUtil
 	JSONObject customerJSON = new JSONObject(customerJSONString);
 	return customerJSON;
     }
-    
+
     public static Card getDefaultCard(Customer customer)
     {
 	String cardId = customer.getDefaultCard();
-	
-	if(StringUtils.isEmpty(cardId))
+
+	if (StringUtils.isEmpty(cardId))
 	    return (Card) null;
-	
+
 	CustomerCardCollection cardCollection = customer.getCards();
-	
-	for(Card card  : cardCollection.getData())
+
+	for (Card card : cardCollection.getData())
 	{
-	    if(cardId.equals(card.getId()))
-		    return card;
+	    if (cardId.equals(card.getId()))
+		return card;
 	}
 	return (Card) null;
     }

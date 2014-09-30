@@ -136,7 +136,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
 	    // Email count and according to plan and extra free pack that is
 	    // provided to all users
-	    restriction.emails_count = (count * 1000) + 5000;
+	    restriction.emails_count = (count * 1000);
 	    restriction.save();
 	}
 	finally
