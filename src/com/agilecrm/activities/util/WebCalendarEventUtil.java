@@ -569,7 +569,7 @@ public class WebCalendarEventUtil
     public static String getDateFormatForMail(Long epoch)
     {
 
-	String date = new java.text.SimpleDateFormat("MMMM d,yyyy-h:mm a").format(new java.util.Date(epoch * 1000));
+	String date = new java.text.SimpleDateFormat("MMMM d,yyyy-h:mm aaa").format(new java.util.Date(epoch * 1000));
 
 	/*
 	 * Format formatter = new SimpleDateFormat("MMMM d,yyyy-h:mm a"); String
