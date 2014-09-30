@@ -139,7 +139,7 @@ function displayNoSlotsMsg()
 	$('.checkbox-main-grid').html('');
 
 	// Add msg
-	$('.checkbox-main-grid').append('<label for="no-slots">Slots are not available for selected day.</label>');
+	$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
 }
 
 // Add slots in grid checkbox in checkbox list
@@ -289,12 +289,12 @@ function save_web_event(formId, confirmBtn)
 				
 				
 				var temp='<div style="margin: 25px;font-size:15px;">'
+					
                     +'<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><b>Appointment Scheduled</b></h3>'
-                    +'<p >Your appointment is scheduled with <b>'+User_Name+'</b>'
+                    +'<p >Your appointment was scheduled with <b>'+User_Name+'</b> on '+start
                     +'</div>'
                     +'<div class="row">'
                     +'<div class="col-md-12">'
-                    +'<p>Start time: '+start+'</p>'
                     +'<p>Duration: '+web_calendar_event.slot_time+' Minutes </p>'
                     +'</div>'
                     +'</div>'
@@ -306,7 +306,7 @@ function save_web_event(formId, confirmBtn)
                     +'</div>'
                     +'</div>'
 					+'</div>'
-					+'<div align="right" style="position: absolute;right: 130px;bottom: -80px;">'
+					+'<div align="right" style="position: absolute;right: 280px;bottom: -80px;">'
 					+'<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Poweredby</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign='+domainname+'" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>'
 					+'</div>'
 				
@@ -334,7 +334,7 @@ function convertToHumanDate(format, date)
 	{
 
 	if (!format)
-		format = "mmmm d, yyyy,h:MM:ss TT";
+		format = "mmmm d, yyyy - h:MM TT";
 
 	if (!date)
 		return;
