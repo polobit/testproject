@@ -491,7 +491,7 @@ public class WebCalendarEventUtil
 	if (wce.confirmation.equalsIgnoreCase("on"))
 	{
 	    DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
-	    String body = "<p>Your appointment was scheduled with " + user.name + " on Start time: "
+	    String body = "<p>Your appointment was scheduled with " + user.name + " on "
 		    + getDateFormatForMail(startdate) + "</p><p>Duration: " + wce.slot_time
 		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
