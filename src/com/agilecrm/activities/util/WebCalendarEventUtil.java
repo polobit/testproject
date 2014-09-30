@@ -491,7 +491,7 @@ public class WebCalendarEventUtil
 	if (wce.confirmation.equalsIgnoreCase("on"))
 	{
 	    DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
-	    String body = "<p>Your appointment was scheduled with " + user.name + " on Start time: "
+	    String body = "<p>Your appointment was scheduled with " + user.name + " on "
 		    + getDateFormatForMail(startdate) + "</p><p>Duration: " + wce.slot_time
 		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
@@ -569,7 +569,7 @@ public class WebCalendarEventUtil
     public static String getDateFormatForMail(Long epoch)
     {
 
-	String date = new java.text.SimpleDateFormat("MMMM d,yyyy-h:mm a").format(new java.util.Date(epoch * 1000));
+	String date = new java.text.SimpleDateFormat("MMMM d,yyyy-h:mm aaa").format(new java.util.Date(epoch * 1000));
 
 	/*
 	 * Format formatter = new SimpleDateFormat("MMMM d,yyyy-h:mm a"); String
