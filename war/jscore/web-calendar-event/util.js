@@ -103,7 +103,7 @@ function get_slots(s_date, s_slot)
 	var end_time = getEpochTimeFromDate(d);
 	console.log(start_time+"  "+end_time);	
 	
-	var currentdate=new Date();
+	/*var currentdate=new Date();
 	var currettime=getEpochTimeFromDate(currentdate);
 	
 	if(currettime>start_time){
@@ -111,7 +111,7 @@ function get_slots(s_date, s_slot)
 		selecteddate=currentdate;
 		resetAll();
 		return;
-	}
+	}*/
 	// Send request to get available slot
 	var initialURL = '/core/api/webevents/getslots?&user_name='+User_Name+'&user_id=' + User_Id +'&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime+ "&start_time=" + start_time+ "&end_time=" + end_time;
 	$.getJSON(initialURL, function(data)
