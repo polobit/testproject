@@ -214,7 +214,7 @@ ObjectMapper mapper = new ObjectMapper();
 						change_availability_date(dates);
 						
 						// Add loading img
-						$('.checkbox-main-grid').html('<img class="loading-img" src="img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
+						$('.checkbox-main-grid').html('<img class="loading-img" src="../img/21-0.gif" style="width: 40px;margin-left: 216px;"></img>');
 
 						console.log(dates+"      "+Selected_Time);
 						// Get available slots With new date
