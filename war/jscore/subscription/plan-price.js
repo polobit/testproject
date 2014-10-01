@@ -295,7 +295,7 @@ $(function()
 	        	 	plan_json.bi_yearly_discount = ([cost * 24] - [variable.biennial * quantity * 24]).toFixed(2);
 	        	}
 	        
-	        if((USER_DETAILS.getPlanType(USER_BILLING_PREFS) + "-" + USER_DETAILS.getQuantity(USER_BILLING_PREFS) + "-" + USER_DETAILS.getPlanInterval(USER_BILLING_PREFS)) == (plan + "-" + quantity + "-" + cycle)){
+	        if((USER_DETAILS.getPlanType(USER_BILLING_PREFS) + "-" + USER_DETAILS.getQuantity(USER_BILLING_PREFS) + "-" + USER_DETAILS.getPlanInterval(USER_BILLING_PREFS)) == (plan.toUpperCase() + "-" + quantity + "-" + cycle.toUpperCase())){
 	        	
 	        	alert("Please change the plan to proceed");
 	        	return false;

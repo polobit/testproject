@@ -11,12 +11,15 @@ import org.json.JSONObject;
 
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.SubscriptionUtil;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
+import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookHandler;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.model.Card;
 import com.stripe.model.Customer;
@@ -41,6 +44,11 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    // Get domain owner
 	    DomainUser user = getUser();
 
+	    System.out.println(user);
+	    if (isEmailAddonPlan())
+	    {
+		setEmailsCountBillingRestriction();
+	    }
 	    // Checks whether owner of the domain is not null, if not null
 	    // payment received mail to the domain user
 	    if (user == null)
@@ -49,7 +57,6 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    System.out.println("********** Sending mail ***********");
 	    System.out.println(user.email);
 
-	    System.out.println(getPlanName());
 	    if (isEmailAddonPlan())
 	    {
 		System.out.println("email plan payment made");
@@ -59,8 +66,15 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    sendMail1(SendMail.FIRST_PAYMENT_RECEIVED_SUBJECT, SendMail.FIRST_PAYMENT_RECEIVED);
 
-	    // updateContactInOurDomain(getContactFromOurDomain(), user.email,
-	    // subscription, null);
+	    try
+	    {
+	     updateContactInOurDomain(getContactFromOurDomain(), user.email,
+	     subscription, null);
+	    }
+	    catch(Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	}
 
 	/**
@@ -133,8 +147,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	    }
 
-	    SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_FIRST_TIME_SUBJECT,
-		    SendMail.FAILED_BILLINGS_FIRST_TIME, getcustomDataForMail());
+	    sendMail1(SendMail.FAILED_BILLINGS_FIRST_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FIRST_TIME);
 
 	}
 
@@ -156,8 +169,9 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    // Send mail to all domain users
 	    for (DomainUser user : users)
 	    {
+
 		SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_SECOND_TIME_SUBJECT,
-			SendMail.FAILED_BILLINGS_SECOND_TIME, getcustomDataForMail());
+			SendMail.FAILED_BILLINGS_SECOND_TIME, getMailDetails());
 	    }
 	}
 
@@ -175,9 +189,11 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	{
 	    // Set status and save subscription
 	    Subscription subscription = SubscriptionUtil.getSubscription();
-	    
-	    if(isEmailAddonPlan())
+
+	    if (isEmailAddonPlan())
+	    {
 		subscription.emailStatus = status;
+	    }
 	    else
 		subscription.status = status;
 	    subscription.save();
@@ -193,6 +209,8 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
     private String getPlanName()
     {
+	System.out.println("getting plan details");
+	System.out.println(getPlanDetails());
 	return String.valueOf(getPlanDetails().get("plan"));
     }
 
@@ -204,6 +222,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	// Gets customer JSON string from customer object
 	String stripeJSONString = new Gson().toJson(stripeObject);
+	System.out.println(stripeJSONString);
 	Map<String, Object> plan = new HashMap<String, Object>();
 	try
 	{
@@ -219,16 +238,37 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 		JSONObject planJSON = data.getJSONObject("plan");
 		plan.put("plan", planJSON.get("name"));
 		plan.put("plan_id", planJSON.getString("id"));
-		if (data.has("period"))
+
+	    }
+	    else
+	    {
+		System.out.println("plan details not found ");
+		if(obj.has("metadata"))
 		{
-		    JSONObject period = data.getJSONObject("period");
-		    plan.put("start_date", new Date(Long.parseLong(period.getString("start")) * 1000).toString());
-		    plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
+		    JSONObject metadata = obj.getJSONObject("metadata");
+		    
+		    System.out.println("meta data : " + metadata);
+		    if(metadata != null)
+		    {
+			plan.put("quantity", metadata.get("quantity"));
+			plan.put("plan", metadata.get("plan"));
+		    }
 		}
+	    }
+	    
+	   
+
+	    if (data.has("period"))
+	    {
+		JSONObject period = data.getJSONObject("period");
+		plan.put("start_date", new Date(Long.parseLong(period.getString("start")) * 1000).toString());
+		plan.put("end_date", new Date(Long.parseLong(period.getString("end")) * 1000).toString());
 	    }
 
 	    plan.put("amount", Integer.valueOf(obj.getString("total")) / 100);
 
+	    System.out.println(plan);
+	    
 	    return plan;
 	}
 	catch (JSONException e1)
@@ -251,7 +291,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	details.put("domain", getDomain());
 	Card card = StripeUtil.getDefaultCard(customer);
 	details.put("last4", card.getLast4());
-	
+
 	/*
 	 * CustomerCardCollection cardCollection = customer.getCards();
 	 * 
@@ -265,6 +305,34 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	 */
 	// details.put("last_four", customer.getDefaultCard());
 	return details;
+    }
+
+    private void setEmailsCountBillingRestriction()
+    {
+	String domain = getDomain();
+	if (StringUtils.isEmpty(domain))
+	    return;
+
+	String oldNamespace = NamespaceManager.get();
+
+	try
+	{
+	    Map<String, Object> map = getPlanDetails();
+	    int count = (int) map.get("quantity");
+	    if (count == 0)
+		count = 1;
+	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
+
+	    // Email count and according to plan and extra free pack that is
+	    // provided to all users
+	    restriction.emails_count = (count * 1000);
+	    restriction.save();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
     }
 
 }

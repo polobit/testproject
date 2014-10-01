@@ -51,7 +51,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
     {
 	// Sets billing restrictions email count
 	if (isEmailAddonPlan())
-	    setEmailsCountBillingRestriction();
+	    ;
 
     }
 
@@ -64,7 +64,7 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 
 	DomainUser user = getUser();
 
-	System.out.println(user);	
+	System.out.println(user);
 	if (user == null)
 	    return;
 
@@ -74,22 +74,20 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	if (isEmailAddonPlan())
 	{
 	    System.out.println("email plan");
-	    setEmailsCountBillingRestriction();
+
 	    // Send mail to domain user
 	    sendMail1(SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED);
 	    return;
 	}
-
-	customizeEventAttributes(user);
 
 	// Send mail to domain user
 	sendMail1(SendMail.PLAN_CHANGED_SUBJECT, SendMail.PLAN_CHANGED);
 
 	try
 	{
-	updateContactInOurDomain(getContactFromOurDomain(), user.email, null, getPlanName());
+	    updateContactInOurDomain(getContactFromOurDomain(), user.email, null, getPlanName());
 	}
-	catch(Exception e)
+	catch (Exception e)
 	{
 	    e.printStackTrace();
 	}
@@ -104,48 +102,42 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	if (user == null)
 	    return;
 
-	customizeEventAttributes(user);
-
-	// Send mail to domain user
-	sendMail(SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FINAL_TIME);
-
 	String userDomain = getDomain();
 
 	if (StringUtils.isEmpty(userDomain))
 	    return;
 
-	if(isEmailAddonPlan())
-	  SubscriptionUtil.deleteEmailSubscription(getDomain());
+	if (isEmailAddonPlan())
+	{
+	    System.out.println("deleting subscription");
+	    Map<String, Object> planDetails = getMailDetails();
+	    boolean isDeleted = SubscriptionUtil.deleteEmailSubscription(getDomain(),
+		    String.valueOf(planDetails.get("id")));
+	    System.out.println("is deleted : " + isDeleted);
+	    if (!isDeleted)
+	    {
+		com.stripe.model.Subscription stripeSubscription = StripeUtil.getEmailSubscription(customer, getDomain());
+		System.out.println(stripeSubscription);
+		if (stripeSubscription != null)
+		{
+		    planDetails.put("current_plan", stripeSubscription.getPlan().getName());
+		    planDetails.put("current_quantity", stripeSubscription.getQuantity());
+		}
+		
+		SendMail.sendMail(getUser().email, SendMail.EMAIL_PLAN_CHANGED_SUBJECT, SendMail.EMAIL_PLAN_CHANGED, planDetails);
+	    }
+	    else
+		// Send mail to domain user
+		sendMail1(SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FINAL_TIME);
+
+	}
+
 	else
-	  SubscriptionUtil.deleteUserSubscription(getDomain());
-    }
-
-    private void setEmailsCountBillingRestriction()
-    {
-	String domain = getDomain();
-	if (StringUtils.isEmpty(domain))
-	    return;
-
-	String oldNamespace = NamespaceManager.get();
-
-	try
 	{
-	    Map<String, Object> map = getPlanDetails();
-	    int count = (int) map.get("quantity");
-	    if (count == 0)
-		count = 1;
-	    BillingRestriction restriction = BillingRestrictionUtil.getBillingRestriction(null, null);
-
-	    // Email count and according to plan and extra free pack that is
-	    // provided to all users
-	    restriction.emails_count = (count * 1000);
-	    restriction.save();
+	    SubscriptionUtil.deleteUserSubscription(getDomain());
+	    // Send mail to domain user
+	    sendMail1(SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT, SendMail.FAILED_BILLINGS_FINAL_TIME);
 	}
-	finally
-	{
-	    NamespaceManager.set(oldNamespace);
-	}
-
     }
 
     /************************************************************************************************************
@@ -200,6 +192,8 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	    if (object.has("quantity"))
 		plan.put("quantity", object.get("quantity"));
 
+	    plan.put("id", object.getString("id"));
+
 	    JSONObject planJSON = object.getJSONObject("plan");
 
 	    plan.put("plan", planJSON.getString("name"));
@@ -226,10 +220,10 @@ public class SubscriptionWebhookHandlerImpl extends StripeWebhookHandler
 	map.put("domain", getDomain());
 	map.put("user_name", getUser().name);
 	map.put("email", getUser().email);
-	
+
 	Customer customer = getCustomerFromStripe();
-	
-	if(customer != null)
+
+	if (customer != null)
 	    map.put("last4", StripeUtil.getDefaultCard(customer).getLast4());
 
 	// Get the attibutes from event object

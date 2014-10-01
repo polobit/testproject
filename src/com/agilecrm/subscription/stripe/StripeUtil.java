@@ -15,6 +15,7 @@ import org.json.JSONException;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -260,4 +261,33 @@ public class StripeUtil
 	return (Card) null;
     }
 
+    public static com.stripe.model.Subscription getEmailSubscription(Customer customer, String domain)
+    {
+	String oldNamespace = null;
+	NamespaceManager.set(domain);
+	try
+	{
+
+	    Subscription subscription = SubscriptionUtil.getSubscription();
+	    if (subscription.emailPlan == null)
+		return null;
+
+	    String subscription_id = subscription.emailPlan.subscription_id;
+
+	    if (customer.getSubscriptions() == null)
+		return null;
+
+	    for (com.stripe.model.Subscription stripeSubscription : customer.getSubscriptions().getData())
+	    {
+		if (stripeSubscription.getId().equals(subscription_id))
+		    return stripeSubscription;
+	    }
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
+	return null;
+    }
 }

@@ -292,10 +292,18 @@ var SubscribeRouter = Backbone.Router.extend({
 						that.setup_email_plan(subscription);
 					})
 					
+					$("#email-quantity", el).die().live('keydown', function(e){
+						if(e.which == 13)
+							{
+								e.preventDefault();
+							}
+					})
+					
 				},
 				saveCallback : function(data)
 				{
 					that.setup_email_plan(subscription);
+					showNotyPopUp("information", "Your email package will be updated in a few minutes.", "top");
 				}
 			}
 		
@@ -571,12 +579,13 @@ var SubscribeRouter = Backbone.Router.extend({
 						//$("#content").html(getTemplate("subscribe", model.toJSON()))
 					});
 				
-				getTemplate("email-plan-details-popover", subscribe_email_plan.model.toJSON(), "Yes", function(content){
+				
+				getTemplate("email-plan-subscription-details-popover", subscribe_email_plan.model.toJSON(), "Yes", function(content){
 					console.log(content)
 					  $("#email-plan-details-popover", el).attr({
 				        	"rel" : "popover",
 				        	"data-placement" : 'right',
-				        	"data-original-title" : "Plan Details",
+				        	"data-original-title" : "Usage details",
 				        	"data-content" :  content,
 				        	//"trigger" : "hover"
 				        });
@@ -584,6 +593,8 @@ var SubscribeRouter = Backbone.Router.extend({
 				$("#email-plan-details-popover", el).live('click', function(e){
 						  $(this).popover('show');
 					  });
+				
+				
 				       
 				       
 				});

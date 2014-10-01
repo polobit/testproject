@@ -118,21 +118,16 @@
 White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}} 
 </script>
 
-<script id="email-plan-details-popover-template" type="text/html">
+<script id="email-plan-subscription-details-popover-template" type="text/html">
 {{#if emailPlan}}
 		 Plan Limit   : {{numeric_operation emailPlan.quantity "1000" "*"}} <br/>
 	{{else}}
 		Plan Limit   : 5000 <small>Powered by Agile CRM</small> <br/>
 {{/if}}
-test
 {{#if cachedData.one_time_emails_count}}
  	Emails in account    : {{cachedData.one_time_emails_count}} <br/>
 {{/if}}
 
-</script>
-
-<script id="email-plan-details-popover-template" type="text/html">
-	
 </script>
 
 <script id="email-plan-details-template" type="text/html">
@@ -202,18 +197,18 @@ test
 			</form>
 				<form class="form-horizontal" name="emailPlan" style="margin-left:-40%;margin-top:10px" id="email-plan-form">
 						<div class="control-group">
-                       		 <label class="control-label">Send Rate</label>
+                       		 <label class="control-label" style="margin-top:5px">Send Rate</label>
                         		<div class="controls" style="margin-top: 5px;">
-									<span style="margin-top:5px;float:right"> X 1000 </span><input type="text" class="input input-small required" id="email-quantity" name="quantity"></input>
+									<span style="margin-top:5px;float:right"> X 1000 </span><input type="text" class="input input-small required number" id="email-quantity" name="quantity"></input>
                         		</div>
                     		</div>
 							<div class="control-group">
 								<div class="controls">
-									<span style="color: #FA782D; font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><small style="margin-left:3px">Per month</small>
+									<span style="color: #FA782D; font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><span style="margin-left:3px">Per month</span>
 									<br/>
-									<p class="help-block" style="margin-top: 0px;margin-left:-30px">
+									<small style="margin-top: 0px;margin-left:-30px">
 										 charged @ <span style="color: #FA782D;" id="email_rate">$4</span> / 1000 emails
-									</p>
+									</small>
 								</div>
 							</div>
 				</form>
