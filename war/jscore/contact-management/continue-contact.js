@@ -748,7 +748,7 @@ function isCompanyExist(company)
 				var status = false;
 				$.ajax({ url : 'core/api/contacts/company/validate/' + company,async :false, success : function(response)
 				{
-								if (response)
+								if (response === "true")
 												status = true;
 							
 				} });
