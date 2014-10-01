@@ -15,6 +15,7 @@ import org.json.JSONException;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -189,6 +190,11 @@ public class StripeUtil
 
     public static List<Charge> getCharges(String customerid) throws StripeException
     {
+	return getCharges(customerid, null);
+    }
+
+    public static List<Charge> getCharges(String customerid, Integer limit) throws StripeException
+    {
 
 	Stripe.apiKey = Globals.STRIPE_API_KEY;
 
@@ -197,6 +203,12 @@ public class StripeUtil
 	// Sets charge parameters (Stripe customer id is required to get
 	// charges of a customer form stripe)
 	chargeParams.put("customer", customerid);
+
+	if (limit != null && limit > 0)
+	    // Sets charge parameters (Stripe customer id is required to get
+	    // charges of a customer form stripe)
+	    chargeParams.put("limit", limit);
+
 	/*
 	 * Fetches all charges for given stripe customer id and returns invoices
 	 */
@@ -231,22 +243,51 @@ public class StripeUtil
 	JSONObject customerJSON = new JSONObject(customerJSONString);
 	return customerJSON;
     }
-    
+
     public static Card getDefaultCard(Customer customer)
     {
 	String cardId = customer.getDefaultCard();
-	
-	if(StringUtils.isEmpty(cardId))
+
+	if (StringUtils.isEmpty(cardId))
 	    return (Card) null;
-	
+
 	CustomerCardCollection cardCollection = customer.getCards();
-	
-	for(Card card  : cardCollection.getData())
+
+	for (Card card : cardCollection.getData())
 	{
-	    if(cardId.equals(card.getId()))
-		    return card;
+	    if (cardId.equals(card.getId()))
+		return card;
 	}
 	return (Card) null;
     }
 
+    public static com.stripe.model.Subscription getEmailSubscription(Customer customer, String domain)
+    {
+	String oldNamespace = null;
+	NamespaceManager.set(domain);
+	try
+	{
+
+	    Subscription subscription = SubscriptionUtil.getSubscription();
+	    if (subscription.emailPlan == null)
+		return null;
+
+	    String subscription_id = subscription.emailPlan.subscription_id;
+
+	    if (customer.getSubscriptions() == null)
+		return null;
+
+	    for (com.stripe.model.Subscription stripeSubscription : customer.getSubscriptions().getData())
+	    {
+		if (stripeSubscription.getId().equals(subscription_id))
+		    return stripeSubscription;
+	    }
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+
+	return null;
+    }
 }

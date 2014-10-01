@@ -9,7 +9,7 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	routes : {
 	/* Subscription page */
-	"subscribe" : "subscribe", "subscribe/:id" : "subscribe",
+	"subscribe-plan" : "subscribe", "subscribe-plan/:id" : "subscribe",
 	
 	
 	/* Updating subscription details */
@@ -21,7 +21,8 @@ var SubscribeRouter = Backbone.Router.extend({
 
 	/* Invoices */
 	"invoice" : "invoice", "invoice/:id" : "invoiceDetails",
-	"suscribe_new" : "suscribe_new" ,
+	"subscribe_new" : "subscribe_new" ,
+	"subscribe" : "subscribe_new",
 	"email_subscription" : "email_subscription",
 	"attach-card" :  "addCreditCardNew",
 	"update-card" : "updateCardNew",
@@ -51,6 +52,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		postRenderCallback : function(el)
 		{
 			var data = subscribe_plan.model.toJSON();
+			var _window = window;
 
 			// Setup account statistics
 			set_up_account_stats(el);
@@ -59,6 +61,11 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			USER_CREDIRCARD_DETAILS = subscribe_plan.model.toJSON().billingData;
 			
+			if(!USER_CREDIRCARD_DETAILS)
+				{
+					Backbone.history.navigate("subscribe_new");
+					return;
+				}
 			element = setPriceTemplete(data.plan.plan_type, el);
 
 			// Show Coupon code input field
@@ -251,16 +258,10 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				// Discount
 				showCouponDiscountAmount(plan_json, el);
-
-				card_expiry(el);
-				head.js(LIB_PATH + 'lib/countries.js', function()
-				{
-					print_country($("#country", el));
-				});
 			},
 			saveCallback : function(data)
 			{
-				window.navigate("subscribe", { trigger : true });
+				window.navigate("subscribe_new", { trigger : true });
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 			
@@ -283,18 +284,26 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		var viewParams = {
 				url : "core/api/subscription",
+				isNew : true,
 				template : "email-plan-form",
 				postRenderCallback : function(el) {
 					$("#close", el).click(function(e){
 						e.preventDefault();
-						that.email_sbuscrption_step1(subscription);
+						that.setup_email_plan(subscription);
+					})
+					
+					$("#email-quantity", el).die().live('keydown', function(e){
+						if(e.which == 13)
+							{
+								e.preventDefault();
+							}
 					})
 					
 				},
 				saveCallback : function(data)
 				{
-					console.log(data);
-					that.email_sbuscrption_step1(data);
+					that.setup_email_plan(subscription);
+					showNotyPopUp("information", "Your email package will be updated in a few minutes.", "top");
 				}
 			}
 		
@@ -323,15 +332,18 @@ var SubscribeRouter = Backbone.Router.extend({
 				if(emails < 100000)
 					{
 						$("#emails_total_cost").html(quantity * 4);
+						$("#email_rate").html("$4");
 					}
 				
 				else if(emails <= 1000000)
 				{
 					$("#emails_total_cost").html(quantity * 3);
+					$("#email_rate").html("$3");
 				}
 				else if(emails >= 1000000)
 				{
 					$("#emails_total_cost").html(quantity * 2);
+					$("#email_rate").html("$2");
 				}
 				
 			});
@@ -354,7 +366,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		var counter = 0;
 		
 		var params = {
-				url : "core/api/subscription?reload=true", template : "email-plan-details", window : 'subscribe',
+				url : "core/api/subscription?reload=true", template : "email-plan-details", window : 'subscribe', isNew : true,
 				/*
 				 * postRenderCallback : function(el) { // Setup account statistics
 				 * set_up_account_stats(el); // Load date and year for card expiry
@@ -448,10 +460,12 @@ var SubscribeRouter = Backbone.Router.extend({
 	/**
 	 * Susbscribe new 
 	 */
-	suscribe_new : function()
+	subscribe_new : function()
 	{
 		var that = this;
 		var counter = 0;
+		
+		$("#content").html(LOADING_HTML);
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -469,6 +483,8 @@ var SubscribeRouter = Backbone.Router.extend({
 			that.setup_email_plan(subscription_model);
 			
 			that.show_card_details(subscription_model);
+			
+			that.recent_invoice(subscription_model);
 	});
 		
 		
@@ -483,7 +499,7 @@ var SubscribeRouter = Backbone.Router.extend({
 		 * states list using countries.js plugin account stats in subscription
 		 * page
 		 */
-		var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "account-plan-details", window : 'subscribe',
+		var subscribe_account_plan = new Base_Model_View({ url : "core/api/subscription", model : subscription, template : "account-plan-details", window : 'subscribe-plan',
 		/*
 		 * postRenderCallback : function(el) { // Setup account statistics
 		 * set_up_account_stats(el); // Load date and year for card expiry
@@ -499,7 +515,7 @@ var SubscribeRouter = Backbone.Router.extend({
 				$("#attach_card_notification", el).die().live('click' , function(e){
 					e.preventDefault();
 					that.showCreditCardForm(subscribe_account_plan.model, function(model){
-						window.navigate("subscribe", { trigger : true });
+						Backbone.history.navigate("subscribe-plan", { trigger : true });
 					})
 				})
 				
@@ -529,6 +545,7 @@ var SubscribeRouter = Backbone.Router.extend({
 	{
 		var counter = 0;
 		var that = this;
+		
 		
 		/*
 		 * Creates new view with a render callback to setup expiry dates
@@ -561,6 +578,26 @@ var SubscribeRouter = Backbone.Router.extend({
 					//alert("here");
 						//$("#content").html(getTemplate("subscribe", model.toJSON()))
 					});
+				
+				
+				getTemplate("email-plan-subscription-details-popover", subscribe_email_plan.model.toJSON(), "Yes", function(content){
+					console.log(content)
+					  $("#email-plan-details-popover", el).attr({
+				        	"rel" : "popover",
+				        	"data-placement" : 'right',
+				        	"data-original-title" : "Plan Details",
+				        	"data-content" :  content,
+				        	//"trigger" : "hover"
+				        });
+					  
+				$("#email-plan-details-popover", el).live('click', function(e){
+						  $(this).popover('show');
+					  });
+				
+				
+				       
+				       
+				});
 				
 			// that.email_subscription();
 			
@@ -675,5 +712,40 @@ var SubscribeRouter = Backbone.Router.extend({
 		$('#content').html(card_details.render().el);
 	},
 	
+	/*recent_invoice : function()
+	{
+		var invoice_collection = new Base_Collection_View({
+			url : "core/api/subscription/invoices?page_size=3",
+			templateKey : "invoice-partial"
+		});
+		
+		invoice_collection.collection.fetch();
+		$("#invoice-details-holder").html(invoice_collection.render().el)
+	},
+	*/
+	// gets collection of charges of aa paricular customer based on
+	recent_invoice : function(subscription)
+	{
+		if(!subscription.get("billingData"))
+			return;
+		
+		console.log(subscription.get("billingData"));
+		var customerId = null;
+		try
+		{
+			customerId = JSON.parse(subscription.get("billingData")).id;
+		}
+		catch(e)
+		{
+			customerId = subscription.get("billingData").id;
+		}
+		
+		var invoice_collection = new Base_Collection_View({ url : "core/api/subscription/charges/"+customerId+"?page_size=3" , templateKey : "charge",
+
+		individual_tag_name : 'tr',sortKey : 'createdtime', descending : true });
+		invoice_collection.collection.fetch();
+
+		$("#invoice-details-holder").html(invoice_collection.render().el);
+	},
 
 });

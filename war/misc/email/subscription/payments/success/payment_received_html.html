@@ -38,9 +38,10 @@
 			  <tbody>
 				<tr>
 				 <td width="388" valign="bottom">
-		 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">Your Payment to Agile CRM has Declined Yet Again</h2>
+				 <h2 style="font-family:Arial,Helvetica,sans-serif;font-size:22px;color:#000!important;margin:0;padding:0px;height:48px">Payment Received. Thank you.</h2>
 				 </td>
 				<td width="170" valign="bottom" align="right">
+				
 				<img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" width="150" alt="AgileCRM" style="display:block"></img>
 				</td>
 			   </tr>
@@ -63,47 +64,24 @@
 	  <tr>
 	   <td style="padding-right:20px;padding-left:20px;line-height:20px;font-size:14px;font-family:Lucida Grande,verdana">
 		  <br/>
-		 Dear  {{name}},
+		 Dear  {{user_name}},
+		 <br/>
+		 <br/>
+		Thanks for using Agile CRM!
          <br/>
          <br/>
-         <b>We were unable to charge your account 4 times </b><br/>
-     Your AgileCRM subscription payments towards your enrolled plan has failed for the fourth time.
-        <br/>
+         <b>Payment Received</b><br/>
+         We have received a payment of $ {{amount}}. Thank you.<br/>
          <br/>
-         <b>Credit Card & Plan Details </b><br/>
-         Plan:<br/>
-        Subscription amount: <br/>
-        Credit card on file:Card Type ((last four digits)<br/>
-        Reason given by bank:
+         <b>Payment Details</b><br/>
+         Plan Type: {{plan}}<br/>
+         Number of Users: {{quantity}}<br/>
+         Start : {{start_date}} <br/>
+         End : {{end_date}} <br/>
 <br/>
+This charge will appear on your credit card statement as "AgileCRM.com".
 <br/>
-      <table width="540" cellpadding="0" cellspacing="0" border="0" align="center">
-     <tbody>
-      <tr>
-  <td width="540" style="padding-top:10px;line-height:22px;text-align:left;font-size:15px;font-family:Arial,Helvetica,sans-serif;font-weight:bold;padding-bottom:10px">
-          <table cellpadding="0" cellspacing="0" align="center" style="background-color:#81bd21;border-width:1px;border-style:solid;border-color:#558a0f;border-radius:3px">
-            <tbody>
-            <tr>
-    <td valign="middle" style="padding-top:15px;padding-bottom:15px;padding-right:45px;padding-left:45px;text-align:center">
-    <a href="https://{{domain}}.agilecrm.com/#subscribe" style="font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:14px;color:#fff!important;text-decoration:none" target="_blank">
-                <strong>Update your Card Now</strong>
-    </a>
-   </td>
-      </tr>
-            </tbody>
-            </table>
-      </td>
-      </tr>
-      </tbody>
-     </table>
-<br/>
-<b>Unfortunately, your account is cancelled</b><br/>
-       Having been unable to complete the transaction for the last 15 days, we regret to inform that your subscription has been cancelled fully.<br/>
-        <br/>
-        <b>Data will be deleted automatically in next 48 hrs</b><br/>
-        Your data will be deleted in next 48 hrs. You still have time. You can login to your control panel and reinstate the service by making a payment in the next 24 hrs.
-<br/>
-<br/>
+<br/>  
 <b>Have questions or need help?</b><br/>
 Drop us an <a  href="mailto:care@agilecrm.com" target="_blank">email</a> or <b>call toll-free</b> 1-800-980-0729<br/>
 <br/>

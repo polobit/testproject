@@ -150,7 +150,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
 
 
 var CSS_PATH = "/";
@@ -210,16 +210,18 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
+head.js({"core" : 'jscore/min/js-all-min.js'});
+head.js({"stats" : 'stats/min/agile-min.js'});
+head.ready(["core", "stats"], function(){
+	
+	if(HANDLEBARS_PRECOMPILATION)
+		downloadTemplate("tpl.html");
+		else
+		downloadTemplate("tpl.js");
 
-head.js('jscore/min/js-all-min.js', 'stats/min/agile-min.js', function() {
-
-if(HANDLEBARS_PRECOMPILATION)
-downloadTemplate("tpl.html");
-else
-downloadTemplate("tpl.js");
-
-// Load User voice then
-setTimeout(loadMiscScripts, 10000);
+		// Load User voice then
+		setTimeout(loadMiscScripts, 10000);
+	
 });
 });
 

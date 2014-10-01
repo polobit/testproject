@@ -187,6 +187,10 @@ public class StripeImpl implements AgileBilling
 	if (updateParams.get("prorate").equals("true"))
 	{
 	    Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
+	    Map<String, Object> metaData = new HashMap<String, Object>();
+	    metaData.put("plan", newPlan.getName());
+	    metaData.put("quantity", plan.quantity);
+	    invoiceItemParams.put("metadata", metaData);
 	    invoiceItemParams.put("customer", customer.getId());
 	    try
 	    {
@@ -418,24 +422,24 @@ public class StripeImpl implements AgileBilling
 	    newSubscriptionParams.put("quantity", newPlan.quantity);
 	    newSubscriptionParams.put("prorate", true);
 	    newPlan.count = null;
+	    
+	    com.stripe.model.Subscription newSubscription = null;
 	    // If there is no existing subscription that falls under current
 	    // Category it is considered as new plan subscription
 	    if (existingAddonPlan == null)
 	    {
-		existingSubscription = customer.createSubscription(newSubscriptionParams);
+		newSubscription = customer.createSubscription(newSubscriptionParams);
 	    }
 	    else
 	    {
-		// Updates existing
-		com.stripe.model.Subscription x = existingSubscription.update(newSubscriptionParams);
-		System.out.println(x);
+		newSubscription = customer.createSubscription(newSubscriptionParams);
 	    }
 
-	    newPlan.subscription_id = existingSubscription.getId();
+	    newPlan.subscription_id = newSubscription.getId();
 	    
 	    Map<String, Object> invoiceItemParams = new HashMap<String, Object>();
 	    invoiceItemParams.put("customer", customer.getId());
-	    invoiceItemParams.put("subscription", existingSubscription.getId());
+	    invoiceItemParams.put("subscription", newSubscription.getId());
 	    
 	    try
 	    {
@@ -444,7 +448,7 @@ public class StripeImpl implements AgileBilling
 		Invoice invoice = Invoice.create(invoiceItemParams);
 		if (invoice != null)
 		{
-		    if (invoice.getSubscription().equals(existingSubscription.getId()))
+		    if (invoice.getSubscription().equals(newSubscription.getId()))
 			invoice.pay();
 		}
 	    }
@@ -453,9 +457,14 @@ public class StripeImpl implements AgileBilling
 	    }
 	   
 	    subscription.emailPlan = newPlan;
-	    
-	    BillingRestrictionUtil.addEmails(newPlan.quantity * 1000, subscription.plan);
-	    return StripeUtil.getJSONFromCustomer(Customer.retrieve(customer.getId()));
+	    if(existingSubscription != null)
+	    {
+		subscription.save();
+		existingSubscription.cancel(null);
+	    }
+	    Customer customer_new = Customer.retrieve(customer.getId());
+	   // BillingRestrictionUtil.addEmails(newPlan.quantity * 1000, subscription.plan);
+	    return StripeUtil.getJSONFromCustomer(customer_new);
 	    
 	}
 	catch (StripeException e)

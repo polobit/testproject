@@ -120,7 +120,7 @@ public class SubscriptionUtil
         // Creates customer and adds subscription
         subscription.billing_data = subscription.getAgileBilling().addSubscriptionAddon(plan);
         subscription.emailPlan = plan;
-    
+        
         // Saves new subscription information
         if (subscription.billing_data != null)
             subscription.save();
@@ -131,8 +131,6 @@ public class SubscriptionUtil
     public static String getEmailPlan(Integer quantity)
     {
 	Integer count = quantity * 1000;
-	if(count < 5000)
-	    return null;
 	
 	String plan_id = "";
 	if(count <=  100000)
@@ -151,6 +149,19 @@ public class SubscriptionUtil
 	{
 	    NamespaceManager.set(namespace);
 	    deleteEmailSubscription();
+	} finally 
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    public static boolean deleteEmailSubscription(String namespace, String subscriptionId)
+    {
+	String oldNamespace = NamespaceManager.get();
+	try
+	{
+	    NamespaceManager.set(namespace);
+	   return deleteEmailSubscriptionById(subscriptionId);
 	} finally 
 	{
 	    NamespaceManager.set(oldNamespace);
@@ -178,6 +189,21 @@ public class SubscriptionUtil
 	
 	subscription.emailPlan = null;
 	subscription.save();
+    }
+    
+    public static boolean deleteEmailSubscriptionById(String subscription_id)
+    {
+	Subscription subscription = getSubscription();
+	if(subscription.isFreeEmailPack())
+	    return false;
+	
+	if(subscription.emailPlan==null || !subscription_id.equals(subscription.emailPlan))
+	{
+	    return false;
+	}
+		subscription.emailPlan = null;
+	subscription.save();
+	return true;
     }
     
     public static void deleteUserSubscription()

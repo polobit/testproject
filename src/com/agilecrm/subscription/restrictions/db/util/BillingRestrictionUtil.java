@@ -32,7 +32,7 @@ public class BillingRestrictionUtil
     public static enum ErrorMessages
     {
 	Contact("Contacts limit reached"), WebRule("Web Rules limit reached"), Workflow("Campaigns limit reached"), REPORT(
-	        "This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
+		"This query is not allowed in Free plan"), NOT_DOWNGRADABLE("Plan cannot be dowgraded");
 	private String message;
 
 	ErrorMessages(String message)
@@ -292,14 +292,16 @@ public class BillingRestrictionUtil
 	info.setUsersCount(plan.quantity);
 
     }
-    
+
     public static void addEmails(Integer emails, Plan plan)
     {
 	BillingRestriction cachedData = getBillingRestriction(plan.plan_type.toString(), plan.quantity);
+	if (cachedData.one_time_emails_count == null)
+	    cachedData.one_time_emails_count = 5000;
 	cachedData.one_time_emails_count += emails;
-	
-	cachedData.email_pack_start_time = System.currentTimeMillis() /1000;
-	
+
+	cachedData.email_pack_start_time = System.currentTimeMillis() / 1000;
+
 	cachedData.save();
     }
 }

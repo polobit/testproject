@@ -399,12 +399,14 @@ public class AdminPanelAPI
     @Path("/getcharges")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List getCollectionOfChargesOfCustomer(@QueryParam("d") String customerid)
+    public List<Charge> getCollectionOfChargesOfCustomer(@QueryParam("d") String customerid)
     {
 	try
 	{
 
-	    return StripeUtil.getCharges(customerid);
+	   List<Charge> list = StripeUtil.getCharges(customerid);
+	   System.out.println(list);
+	   return  list;
 	}
 	catch (Exception e)
 	{

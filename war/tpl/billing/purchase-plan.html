@@ -108,7 +108,7 @@
 								</div>
 							</div>
  						{{/if}}
-			</div>
+</div>
 						<div class="span4" style="float:right; ">
 							{{#if_equals "Monthly" cycle}}
 							<div class="info-block" style="margin: 10px;">
@@ -135,127 +135,9 @@
 
 				</fieldset>
 			</form>
-		<!--	{{#if_equals "free" current_plan}}
-			<form id="CCform" class="form-horizontal card_details"
-				name="card_details">
-				<fieldset>
-				<div class="control-group">
-						<label class="control-label">Name<span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="name" class="input required "
-								placeholder="Cardholder's name" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Card Number <span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="number" class="input required  digits"
-								placeholder="Enter Card Number" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Expiry<span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<select name="exp_month" id="exp_month"
-								class="input span2  exp_month" placeholder="Expiry Month"
-								style="width: 94px" onChange="$(&quot;#exp_year&quot;).valid();"></select>
-							<span style="margin-left: 10px; margin-right: 10px">/ </span> <select
-								name="exp_year" id="exp_year"
-								class="input required  digits span2 exp_year atleastThreeMonths"
-								placeholder="Expiry Year" style="width: 94px"></select>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">CVC<span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="cvc" class="input required digits"
-								placeholder="CVC" />
-						</div>
-					</div>
-			
-					<div class="control-group">
-						<label class="control-label">Address<span class="field_req">*</span></label>
-						<div class="controls">
-							<input type="text" name="address_line1" class="required"
-								id="address1" placeholder="address" />
-						</div>
-					</div>
-					<div class="control-group">
-						<div class="controls">
-							<input type="text" name="address_line2" id="address2"
-								placeholder="address" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">ZIP Code<span class="field_req">*</span></label>
-							<div class="controls">
-								<input type="text" name="address_zip" class="required" id="address_zip" placeholder="zip" /><br /> <br />						
-							</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Country<span
-							class="field_req">*</span></label>
-						<div class="controls">
-							<select class="country required" id="country"
-								name="address_country"
-								onchange="print_state('state',this.selectedIndex);"></select>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">State<span class="field_req">*</span></label>
-						<div class="controls">
-							<select class="required" name="address_state" id="state"
-								class="required" name="address_country">
-							</select>
-						</div>
-					</div>
-					<!-- <div class="control-group">	
-                    <label class="control-label">Gateway<span class="field_req">*</span></label>
-                    <div class="controls">
-                    			<select class="required" name="gateway">
-                    		<option value="">select</option>
-                    		<option value="Stripe">Stripe</option>
-                    		<option value="Paypal">Paypal</option>
-                    	</select>
-                    </div>
-                    </div> -->
-				</fieldset>
-			</form>
-			{{/if_equals}}
 			<form id="gateway" class="form-horizontal hide">
 				<input type="text" name="gateway" class="hidden" value="Stripe" />
 			</form>
-
-		
-			<legend>Existing Card Details</legend>
-			<div class="span8"
-				style="background-color: rgb(221, 232, 248); border-radius: 10px; padding: 5px; margin-bottom: 10px;">
-<a style="float: right; padding: 1px 5px 1px; margin: 10px;" class="btn btn-success" id="change_card" href="#updatecard"><i class="icon-edit"></i> Change Card</a>
-				<form id="change_card" name="change_card"
-					class="form-horizontal change_card">
-					<div class="span6">
-						<div class="control-group" style="margin: 15px 0px 0px;">
-							<label class="control-label" style="padding-top: 0px;">
-								Name : </label> <label id="card-holder-name" class="controls">{{customer.activeCard.name}}</label>
-						</div>
-						<div class="control-group" style="margin: 5px 0px 0px;">
-							<label class="control-label" style="padding-top: 0px;">Card
-								Number : </label> <label id="card-number" class="controls">************{{customer.activeCard.last4}}</label>
-						</div>
-							<div class="control-group" style="margin: 5px 0px 15px;">
-							<label class="control-label" style="padding-top: 0px;">
-								Type  : </label> <label id="expiry-date" class="controls">{{customer.activeCard.type}} </label>
-						</div>
-						<div class="control-group" style="margin: 5px 0px 15px;">
-							<label class="control-label" style="padding-top: 0px;">Expiry
-								Date (Mon / Yr) : </label> <label id="expiry-date" class="controls">{{customer.activeCard.expMonth}}
-								/ {{customer.activeCard.expYear}} </label>
-						</div>
-					</div>
-				</form>
-			</div>
 	<br/>
 			<div class="form-actions" style="padding-left: 160px;">
 				<a href="#" type="submit" id="subscribe"
