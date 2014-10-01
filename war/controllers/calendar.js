@@ -107,7 +107,7 @@ function getCurrentUserScheduleURL(){
 		var scheduleid=model.schedule_id;
 		console.log(scheduleid);
 		//var onlineschedulingURL="https://" + model.domain + ".agilecrm.com/schedule/"+scheduleid;
-		var onlineschedulingURL="https://" + model.domain + "-dot-2-2-dot-agile-crm-cloud.appspot.com/schedule/"+scheduleid;
+		var onlineschedulingURL="https://" + model.domain + ".agilecrm.com/schedule/"+scheduleid;
 		ONLINE_SCHEDULING_URL=onlineschedulingURL;
 	
 	}});
