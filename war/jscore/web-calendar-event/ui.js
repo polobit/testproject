@@ -10,9 +10,7 @@ $(function()
 
 		Selected_Time = $(this).attr('data');
   
-		 if(Selected_Time==15){
-			 Selected_Time=30;
-		 }
+		
 		
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");

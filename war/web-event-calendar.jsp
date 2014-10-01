@@ -138,7 +138,7 @@ ObjectMapper mapper = new ObjectMapper();
 							disabled="disabled" /> <input type="text" id="email"
 							name="email" placeholder="Email" class="required me-disable"
 							disabled="disabled" /> <input type="text" id="phoneNumber"
-							name="phoneNumber" placeholder="Skype or Phone #"
+							name="phoneNumber" placeholder="Phone #"
 							class="me-disable" disabled="disabled" />
 						<div class="clearfix"></div>
 						<input type="checkbox" id="confirmation" name="confirmation"
