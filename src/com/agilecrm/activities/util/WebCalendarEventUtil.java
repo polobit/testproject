@@ -469,6 +469,7 @@ public class WebCalendarEventUtil
 		newEvnt.title = wce.name.concat(" with ".concat(wce.userName)); // name
 		newEvnt.start = slot.get(0); // start time
 		newEvnt.end = slot.get(1); // end time
+		newEvnt.color="#36C";
 
 		String cid = contact.id.toString(); // related contact
 

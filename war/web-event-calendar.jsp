@@ -193,7 +193,7 @@ ObjectMapper mapper = new ObjectMapper();
 					console.log(currentDate);
 
 					// Set current date as selected date
-					Selected_Date = currentDate;
+					Selected_Date = newDate;
 
 					// Initialize date picker
 					$('#datepick').DatePicker({ flat : true, date : [
