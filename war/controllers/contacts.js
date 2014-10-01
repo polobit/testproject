@@ -87,7 +87,7 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		if(SCROLL_POSITION)
 		{
-			$("body").animate({ scrollTop : SCROLL_POSITION  },1000);
+			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
 			SCROLL_POSITION = 0;
 		}
 		
