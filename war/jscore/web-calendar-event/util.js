@@ -103,6 +103,15 @@ function get_slots(s_date, s_slot)
 	var end_time = getEpochTimeFromDate(d);
 	console.log(start_time+"  "+end_time);	
 	
+	/*var currentdate=new Date();
+	var currettime=getEpochTimeFromDate(currentdate);
+	
+	if(currettime>start_time){
+		alert("Selected date should not be less than today. Please change.");
+		selecteddate=currentdate;
+		resetAll();
+		return;
+	}*/
 	// Send request to get available slot
 	var initialURL = '/core/api/webevents/getslots?&user_name='+User_Name+'&user_id=' + User_Id +'&timezone=' + timezone + '&date=' + s_date + '&slot_time=' + s_slot + "&timezone_name=" + timezoneAbbr + "&epoch_time=" + epochTime+ "&start_time=" + start_time+ "&end_time=" + end_time;
 	$.getJSON(initialURL, function(data)
@@ -130,7 +139,7 @@ function displayNoSlotsMsg()
 	$('.checkbox-main-grid').html('');
 
 	// Add msg
-	$('.checkbox-main-grid').append('<label for="no-slots">Slots are not available for selected day.</label>');
+	$('.checkbox-main-grid').append('<label for="no-slots" style="margin-left:112px;">Slots are not available for selected day.</label>');
 }
 
 // Add slots in grid checkbox in checkbox list
@@ -263,13 +272,87 @@ function save_web_event(formId, confirmBtn)
 
 	// Send request to save slot, if new then contact, event
 	$.ajax({ url : '/core/api/webevents/save', type : 'PUT', contentType : 'application/json; charset=utf-8', data : JSON.stringify(web_calendar_event),
-		dataType : 'json', complete : function(res, status)
+		dataType : '',complete : function(res, status)
 		{
-			console.log(res);
+			
 			console.log(status);
-			alert("Appointment Scheduled.");
+			//style="border-bottom: 1px solid #ddd;"
+			var dates=JSON.parse(web_calendar_event.selectedSlotsString);
+			var d=dates[0];
+			var start=convertToHumanDate("",d.start);
+			
+			
+			if(status=="success"){
+				
+				
+				$('#mainwrap').addClass("appointment-wrap");
+				
+				
+				var temp='<div style="margin: 25px;font-size:15px;">'
+					
+                    +'<div id="info" ><h3 style="border-bottom: 1px solid #ddd;padding-bottom:8px;margin-bottom:15px;"><b>Appointment Scheduled</b></h3>'
+                    +'<p >Your appointment was scheduled with <b>'+User_Name+'</b> on '+start
+                    +'</div>'
+                    +'<div class="row">'
+                    +'<div class="col-md-12">'
+                    +'<p>Duration: '+web_calendar_event.slot_time+' Minutes </p>'
+                    +'</div>'
+                    +'</div>'
+                    +'<div class="row">'
+                    +'<div class="col-md-12">'
+                    +'<div class="left">'
+                    +'<a class="btn btn-primary" id="create_new_appointment" style="margin-top:20px;">Schedule Another Appointment</a>'
+                    +'</div>'
+                    +'</div>'
+                    +'</div>'
+					+'</div>'
+					+'<div align="right" style="position: absolute;right: 280px;bottom: -80px;">'
+					+'<span style="display: inherit;font-style: italic; font-family: Times New Roman; font-size: 10px; padding-right: 71px;">Poweredby</span> <a href="https://www.agilecrm.com?utm_source=powered-by&amp;medium=event_scheduler&amp;utm_campaign='+domainname+'" rel="nofollow" target="_blank"><img src="https://s3.amazonaws.com/agilecrm/panel/uploaded-logo/1383722651000?id=upload-container" alt="Logo for AgileCRM" style="border: 0;background: white;padding: 0px 10px 5px 2px;height: auto;width: 135px;"></a>'
+					+'</div>'
+				
+                    resetAll();
 
-			// Reset whole form
-			resetAll();
-		} });
+				$(".container").html(temp);
+				
+			
+				
+			}
+			else{
+				alert("Your appointment not scheduled. please try again");
+				resetAll();
+				location.reload(true);
+			}
+			
+			                        
+		
+			
+		}
+		});
 }
+
+function convertToHumanDate(format, date)
+	{
+
+	if (!format)
+		format = "mmmm d, yyyy - h:MM TT";
+
+	if (!date)
+		return;
+
+	if ((date / 100000000000) > 1)
+	{
+		console.log(new Date(parseInt(date)).format(format));
+		return new Date(parseInt(date)).format(format, 0);
+	}
+	// date form milliseconds
+	var d = new Date(parseInt(date) * 1000).format(format);
+
+	return d
+}
+
+$("#create_new_appointment").die().live('click', function(e){
+	
+	location.reload(true);
+});
+
+

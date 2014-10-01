@@ -1,7 +1,7 @@
 <script id="widgets-add-model-template" type="text/html"> 
 <div class="well widget-add" style="width:220px; height:200px;">
    {{#if_equals name "Sip"}}    
-    <span style="font-size: 65px;width: 210px;height: 70px;" class="thumbnail"><i class="icon icon-phone"></i>SIP <span class="label label-important">Beta</span></span>
+    <span style="font-size: 55px;width: 210px;height: 70px; text-align:center;" class="thumbnail"><span style="margin-top: 7px;display: block;><i class="icon icon-phone"></i>SIP <span class="label label-important">Beta</span></span></span>
    {{else}} 
     <img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" />
    {{/if_equals}}
@@ -89,14 +89,14 @@
                 </div><br/>
     </div>
 
-  <div class="span11" style="margin-left:0px;">
+<!--  <div class="span11" style="margin-left:0px;">
         
             <h2 class="widget-head">Ecommerce <small>View Customer Orders Details</small></h2>
       
                 <div id="ecommerce" class="row-fluid">
                 </div><br/>
     </div>
-
+-->
 
 	<div class="span11" style="margin-left:0px;">
 	
@@ -160,7 +160,7 @@
 <script id="widget-settings-template" type="text/html">
 <div class="well" style="width:300px;">
 {{#if_equals name "Sip"}}
-    <center><span style="font-size: 65px;width: 210px;height: 70px;" class="thumbnail"><i class="icon icon-phone"></i>SIP</span></center>
+    <center><span style="font-size: 55px;text-align:center;width: 210px;height: 70px;" class="thumbnail"><span style="margin-top:7px;display:block"><i class="icon icon-phone"></i>SIP</span></span></center>
 {{else}}
     <center><img class="thumbnail" src="{{logo_url}}" style="width:210px; height:70px;" /></center>
 {{/if_equals}}  

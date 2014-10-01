@@ -449,36 +449,8 @@ var WidgetsRouter = Backbone.Router
 															       show_set_up_widget("Shopify", "shopify-login");
 																 }
 																 else{ 
-																 			//	show_set_up_widget("Shopify","shopify-revoke")
-																 				{	$.getJSON("core/api/custom-fields/type/scope?scope=CONTACT&type=TEXT",
-																																									function(data)
-																																									{
-																																													set_up_access("Shopify",'shopify-login',data,null);
-																																									});
-																									return;
-
-																					}
-
-																					$.getJSON("core/api/widgets/Shopify",
-																																					function(data1)
-																																					{
-																																									console.log(data1);
-
-																																									if (data1)
-																																									{
-																																													$.getJSON("core/api/custom-fields/scope?scope=CONTACT&type=TEXT",
-																																																													function(data)
-																																																													{
-																																																																	set_up_access("Shopify",'shopify-login',data,null,data1);
-																																																													});
-																																													return;
-
-																																									}
-																																									else
-																																									{
-																																													show_set_up_widget("Shopify", 'shopify-login');
-																																									}
-																																					});
+																 				show_set_up_widget("Shopify","shopify-revoke-access")
+																 		
 																 }
 												},
 

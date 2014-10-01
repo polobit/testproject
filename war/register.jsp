@@ -204,7 +204,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<div class="form-group regpage-options log-terms" style="margin-bottom:0px;">
 
 					  <!-- <label class="checkbox" style="display:inline-block;">I agree with the <a href="https://www.agilecrm.com/terms.html" target="_blank">Terms and conditions</a><input type="checkbox" checked="checked" name="agree" class="required"></label> -->
-					  By clicking sign up, I agree to  agileCRM's  <a href="https://www.agilecrm.com/terms.html" target="_blank" class="log-text-underline">Terms of service</a>
+					  By clicking sign up, I agree to  AgileCRM  <a href="https://www.agilecrm.com/terms.html" target="_blank" class="log-text-underline">Terms of service</a>
 				  </div>
 			
 				 
