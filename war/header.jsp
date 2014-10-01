@@ -190,8 +190,8 @@
 									<!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
 								 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->
-									<li><a href="#support"><i class="icon-comment"></i>
-											Support</a></li>
+									<li><a href="#help"><i class="icon-comment"></i>
+											Help</a></li>
 									<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
 											Logout</a></li>
 
