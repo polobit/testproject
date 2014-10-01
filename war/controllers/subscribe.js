@@ -585,7 +585,7 @@ var SubscribeRouter = Backbone.Router.extend({
 					  $("#email-plan-details-popover", el).attr({
 				        	"rel" : "popover",
 				        	"data-placement" : 'right',
-				        	"data-original-title" : "Usage details",
+				        	"data-original-title" : "Plan Details",
 				        	"data-content" :  content,
 				        	//"trigger" : "hover"
 				        });
