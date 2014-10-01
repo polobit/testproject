@@ -3,7 +3,7 @@
     "title": "Select Basic",
     "fields": {
       "id": {
-        "label": "ID / Name",
+        "label": "ID",
         "type": "input",
         "value": "selectbasic"
       },
@@ -73,7 +73,7 @@
     "title": "Select Multiple",
     "fields": {
       "id": {
-        "label": "ID / Name",
+        "label": "ID",
         "type": "input",
         "value": "selectmultiple"
       },
