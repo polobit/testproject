@@ -258,28 +258,19 @@ function setup_deals_in_milestones(id){
 		    	  console.log(ui);
 		    	  console.log(ui.item[0]);
 		    	  console.log(ui.item[0].id);
-					var id = ui.item[0].id;
+					var id = ui.item[0].children[0].id;
+						console.log('paging...',id);
+						var old_milestone = $('#'+id).attr('data');
+						console.log('old...',old_milestone);
+						var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : old_milestone });
+						if(!dealPipelineModel)
+							return;
+						var dealModel = dealPipelineModel[0].get('dealCollection').get(id);
+						var newMilestone = ($('#'+id).closest('ul').attr("milestone")).trim();
+						console.log('new...',newMilestone);
+						update_milestone(dealModel, id, newMilestone, old_milestone);
+						$('#'+id).attr('data',newMilestone);
 					
-					var modelJSON = App_Deals.opportunityMilestoneCollectionView.collection.models[0];
-			
-					for(var j in modelJSON.attributes)
-					{
-						var milestone = modelJSON.attributes[j];
-						for(var i in milestone)
-						{
-							if(milestone[i].id == id)
-							{
-								var DealJSON = milestone[i];
-								var newMilestone = ($(this).closest('ul').attr("milestone")).trim();
-
-								var oldMilestone = DealJSON.milestone;
-								// Checks current milestone is different from previous
-								if(newMilestone != oldMilestone)
-									update_milestone(modelJSON, id, newMilestone, oldMilestone);
-								return;
-							}
-						}
-					}
 		        }
 	    });
 
@@ -291,21 +282,11 @@ function setup_deals_in_milestones(id){
  * dropped in other milestone columns and saves or updates deal object.
  */
 function update_milestone(data, id, newMilestone, oldMilestone){
-	// Updates the collection without reloading
-	var milestone = data.get(oldMilestone);
-	var DealJSON;
-	for(var i in milestone)
-	{
-		if(milestone[i].id == id)
-		{
-			milestone[i].owner_id = milestone[i].owner.id;
-			milestone[i].milestone = newMilestone;
-			data.get(newMilestone).push(milestone[i]);
-			DealJSON = milestone[i];
-			milestone.splice(i, 1);
-		}
-	}
 	
+	var DealJSON = data.toJSON();
+	
+	console.log(DealJSON);
+	DealJSON.milestone = newMilestone;
 	// Replace notes object with note ids
 	var notes = [];
 	$.each(DealJSON.notes, function(index, note)
@@ -316,17 +297,46 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 	console.log(notes);
 	
 	DealJSON.notes = notes;
-	
+	if(DealJSON.note_description)
+		delete DealJSON.note_description;
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
 	up_deal.save(DealJSON, {
 		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 		success : function(model, response) {
-			// App_Deals.opportunityMilestoneCollectionView.render(true);
+			console.log('moved deal----',model);
+			update_deal_collection(model.toJSON(), id, newMilestone, oldMilestone);
 		}
 	});
 
+}
+
+/**
+ * Update the deals in the collection when user drag and drops.
+ * @param dealModel 
+ * 			updated deal model.
+ * @param id 
+ * 			id of the updated deal.
+ * @param newMilestone
+ * 			milestone where user drop the deal.
+ * @param oldMilestone 
+ * 			milestone from user drag the deal.
+ */
+function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
+	
+	// Remove the deal from the old milestone collection.
+	var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
+	if(!dealPipelineModel)
+		return;
+	dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+
+	// Add the deal in to new milestone collection.
+	dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
+	if(!dealPipelineModel)
+		return;
+	
+	dealPipelineModel[0].get('dealCollection').add(dealModel, { silent : true });
 }
 
 /**
