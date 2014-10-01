@@ -1,4 +1,4 @@
-<script id="opportunities-by-milestones-collection-template" type="text/html">
+<script id="new-opportunity-header-template" type="text/html">
 <div class="row">
     <div class="span12">
         <div class="page-header">
@@ -32,19 +32,38 @@
 </div>
 <div class="row">
     <div class="span12">
-        <div class="row-fluid">
-			<div id="opportunities-by-milestones-model-list"></div>
+        <div id="new-opportunity-list-paging" class="row-fluid">
+			 <img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
+			<div id="opportunities-by-milestones-model-list">
+			</div>
         </div>
     </div>
 </div>
 </script>
 
-<script id="opportunities-by-milestones-model-template" type="text/html">
-{{#deals_by_milestones this}}{{/deals_by_milestones}}
+<script id="opportunities-by-paging-collection-template" type="text/html">
+<div id="opportunities-by-paging-model-list">
+<div class="milestone-main">
+				</div>
+</div>
+</script>
+<script id="opportunities-by-paging-model-template" type="text/html">
+	<div class='dealtitle-angular'>
+		<p class='milestone-heading'> {{heading}}</p>
+		<span></span>
+	</div>
+	<div id="{{heading}}-list-container" class='milestones' milestone='{{heading}}'>
+		<img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
+	</div>
 </script>
 
-<script id="opportunities-grid-view-template" type="text/html">
-<div data="{{id}}" class="data agile-overflow-ellipsis">
+<script id="deals-by-paging-collection-template" type="text/html">
+<ul id="deals-by-paging-model-list" class="milestones">
+</ul>
+</script>
+
+<script id="deals-by-paging-model-template" type="text/html">
+<div id={{id}} data="{{milestone}}" class="data agile-overflow-ellipsis">
 	<div>
 		<b style="max-width: 78%;overflow: hidden;display: inline-block;text-overflow: ellipsis;line-height: 14px;float:left;">{{name}}</b>
 		
