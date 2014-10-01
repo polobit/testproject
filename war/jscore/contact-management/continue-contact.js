@@ -234,13 +234,20 @@ function serialize_and_save_continue_contact(e, form_id, modal_id, continueConta
 																enable_save_button($(saveBtn));// Remove loading image
 																return;
 												}
-												var status = isCompanyExist(companyName);
-												 if (status)
+												if (!id)
 												{
-																show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
+																var status = isCompanyExist(companyName);
+																if (status)
+																{
+																				show_error(modal_id, form_id, 'duplicate-email', 'Company name already exist.');
 
-																enable_save_button($(saveBtn));// Remove loading image
-																return;
+																				enable_save_button($(saveBtn));// Remove loading image
+																				return;
+																}
+																else
+																{
+																				properties.push(property_JSON('name', form_id + ' #company_name'));
+																}
 												}
 												else
 												{
@@ -746,11 +753,11 @@ function add_model_cursor(app_collection, mdl)
 function isCompanyExist(company)
 {
 				var status = false;
-				$.ajax({ url : 'core/api/contacts/company/validate/' + company,async :false, success : function(response)
+				$.ajax({ url : 'core/api/contacts/company/validate/' + company, async : false, success : function(response)
 				{
 								if (response === "true")
 												status = true;
-							
+
 				} });
 				return status;
 }

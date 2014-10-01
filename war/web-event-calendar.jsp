@@ -12,10 +12,7 @@ String url = request.getRequestURL().toString();
 String[] ar=url.split("/");
 String scheduleid=ar[ar.length-1];
 System.out.println(scheduleid);
-if(scheduleid.contains("_")){
-    scheduleid=scheduleid.replace("_"," ");
-    System.out.println(scheduleid);
-}
+
 
 
 // Gets User Name
