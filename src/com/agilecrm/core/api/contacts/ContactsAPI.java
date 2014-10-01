@@ -910,4 +910,16 @@ public class ContactsAPI
     {
 	return ContactUtil.isContactUpdated(id, updatedTime);
     }
+    
+    /**
+     *  check for company exist
+     * @param companyName
+     * @return
+     */
+    @Path("/company/validate/{company-name}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public boolean isCompanyExist(@PathParam("company-name")String companyName){
+	return ContactUtil.isCompanyExist(companyName);
+    }
 }
