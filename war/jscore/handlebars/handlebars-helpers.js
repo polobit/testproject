@@ -618,6 +618,7 @@ $(function()
 
 		return (monthArray[intMonth] + " " + intDay);
 	});
+	
 
 	/**
 	 * Helper function to return task color based on it's priority
@@ -2890,5 +2891,20 @@ Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
 				return arr[0];
 
 });
+
+/**
+ * Index starts from 1
+ */
+Handlebars.registerHelper("getMonthFromIndex", function(month_index)
+		{
+			var monthArray = [
+	    				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+	    		];
+			if(month_index > 12)
+				return monthArray[11];
+			
+			return monthArray[month_index - 1];
+		});
+
 
 });
