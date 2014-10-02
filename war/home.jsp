@@ -150,7 +150,7 @@ if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Produ
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
 
-var HANDLEBARS_PRECOMPILATION = false || <%=production%>;
+var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
 
 
 var CSS_PATH = "/";
