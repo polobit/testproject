@@ -4,11 +4,6 @@
 		<div class="page-header">
 			<h1>Plan and Upgrade
 				<a href="#" id="cancel-account-request" class="pull-right btn btn-danger" align="center" style="margin-top:10px;">Cancel My Account</a>
-				{{#if billingData}}
-					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:10px;margin-right:10px">Change card</a>
-				{{else}}
-					<a href="#update-card" id="change-card" class="pull-right btn btn-primary" align="center" style="margin-top:10px;margin-right:10px;display:none">Change card</a>
-				{{/if}}
 			</h1>
 		</div>
 	</div>
@@ -21,9 +16,15 @@
 	</div>
 </div>
 <div class="row-fluid" style="margin-top:50px">
-	<div class="span5">
+	<div>
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
-			<h3>Your Credit Card Details</h3>
+			<h3>Your Credit Card Details
+				{{#if billingData}}
+					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:-5px;margin-right:10px">Change card</a>
+				{{else}}
+					<a href="#update-card" id="change-card" class="pull-right btn btn-primary" align="center" style="margin-top:-5px;margin-right:10px;display:none">Change card</a>
+				{{/if}}
+			</h3>
 		</div>
 		<div id="customer-details-holder">		
 	</div>
@@ -31,7 +32,7 @@
 </div>
 	{{#if billingData}}
 	<div class="row-fluid">
-	<div class="span5" style="margin-top:20px">
+	<div style="margin-top:20px">
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
 			<h3>Recent Payments<small style="font-size:11px;margin-left:5px">Thank you</small></h3>
 		</div>
