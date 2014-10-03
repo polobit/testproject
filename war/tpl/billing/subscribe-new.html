@@ -5,7 +5,7 @@
 			<h1>Plan and Upgrade
 				<a href="#" id="cancel-account-request" class="pull-right btn btn-danger" align="center" style="margin-top:10px;">Cancel My Account</a>
 				{{#if billingData}}
-					<a href="#update-card" id="change-card" class="pull-right btn btn-primary" align="center" style="margin-top:10px;margin-right:10px">Change card</a>
+					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:10px;margin-right:10px">Change card</a>
 				{{else}}
 					<a href="#update-card" id="change-card" class="pull-right btn btn-primary" align="center" style="margin-top:10px;margin-right:10px;display:none">Change card</a>
 				{{/if}}
@@ -33,7 +33,7 @@
 	<div class="row-fluid">
 	<div class="span5" style="margin-top:20px">
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
-			<h3>Recent Payments</h3>
+			<h3>Recent Payments<small style="font-size:11px;margin-left:5px">Thank you</small></h3>
 		</div>
 			<div id="invoice-details-holder"></div>
 	</div>
@@ -49,7 +49,7 @@
 	<div class="card-details">
 		Name: {{billingData.cards.data.0.name}} </br>
 		Credit card: **** **** **** {{billingData.cards.data.0.last4}} <br/>
-		Expiration: {{getMonthFromIndex billingData.cards.data.0.expMonth}}, {{billingData.cards.data.0.expYear}}  ({{billingData.cards.data.0.expMonth}} / {{billingData.cards.data.0.expYear}})
+		Expiration: {{getMonthFromIndex billingData.cards.data.0.expMonth}}, {{billingData.cards.data.0.expYear}}  ({{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}} / {{billingData.cards.data.0.expYear}})
 	</div>
 	{{else}}
 		No Credit Cards attached. <a href="#attach-card" id="change-card">Attach card</a>
@@ -69,8 +69,8 @@
 			<div class="control-group">
 				<label class="control-label">Plan</label>
 				<div class="controls" style="margin-top: 5px;">
-					{{getAccountPlanName ../plan.plan_type}} - {{getAccountPlanInteval
-					../plan.plan_type}}</div>
+					{{getAccountPlanName ../plan.plan_type}} ({{getAccountPlanInteval
+					../plan.plan_type}})</div>
 			</div>
 			<div class="control-group" style="margin-top: -5%">
 				<label class="control-label" style="margin-top: -2%">Users</label>
@@ -245,8 +245,8 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
-                    <th>Amount(USD)</th>
-                    <th>Created Date</th>
+				 	<th>Date</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody id="charge-model-list" class="model-list-cursor">
@@ -256,10 +256,11 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 		No recent payments.
 	{{/if}}
 </script>
-<script id="charge-model-template" type="text/html">	
+<script id="charge-model-template" type="text/html">
+	<td><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
 	<td >
     	${{numeric_operation amount 100 "/"}} {{#if refunded}} - Refunded {{/if}}
 	</td>
-	<td><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>
+	
 	
 </script>
