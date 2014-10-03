@@ -32,7 +32,7 @@
 </div>
 	{{#if billingData}}
 	<div class="row-fluid">
-	<div style="margin-top:20px">
+	<div class="span6" style="margin-top:20px">
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
 			<h3>Recent Payments<small style="font-size:11px;margin-left:5px">Thank you</small></h3>
 		</div>
@@ -79,8 +79,7 @@
 			</div>
 			<div class="control-group" style="margin-top: -5%">
 				<label class="control-label" style="margin-top: -2%">Cost</label>
-				<div class="controls">${{total}} </br>
-					<small>({{quantity}} * {{numeric_operation plan.amount "100" "/"}})</small>
+				<div class="controls">${{total}} (<small>({{quantity}} * {{numeric_operation plan.amount "100" "/"}})</small>)
 				</div> 
 			</div>
 			<div class="control-group" style="margin-top: -5%">
