@@ -5,14 +5,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
@@ -23,13 +30,21 @@ import org.json.JSONObject;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
+import com.agilecrm.contact.ContactField.FieldType;
+import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
-import com.agilecrm.contact.sync.ImportStatus;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
+import com.agilecrm.deals.CustomFieldData;
+import com.agilecrm.deals.Milestone;
+import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestriction;
@@ -65,14 +80,16 @@ public class CSVUtil
     public CSVUtil(BillingRestriction billingRestriction)
     {
 	this.billingRestriction = billingRestriction;
-	dBbillingRestriction = (ContactBillingRestriction)DaoBillingRestriction.getInstace(Contact.class.getSimpleName(), this.billingRestriction);
+	dBbillingRestriction = (ContactBillingRestriction) DaoBillingRestriction.getInstace(
+		Contact.class.getSimpleName(), this.billingRestriction);
+
     }
 
     public static enum ImportStatus
     {
 	TOTAL, SAVED_CONTACTS, MERGED_CONTACTS, DUPLICATE_CONTACT, NAME_MANDATORY, EMAIL_REQUIRED, INVALID_EMAIL, TOTAL_FAILED, NEW_CONTACTS, LIMIT_REACHED,
 
-	ACCESS_DENIED;
+	ACCESS_DENIED, TYPE, PROBABILITY, TRACK;
 
     }
 
@@ -115,12 +132,75 @@ public class CSVUtil
     }
 
     /**
-     * Creates contacts from CSV string using a contact prototype built from
-     * import page. It takes owner id to sent contact owner explicitly instead
-     * of using session manager, as there is a chance of getting null in
-     * backends.
+     * Reads CSV data from blob input stream and returns list of string arrays
      * 
-     * Contact is saved only if there is email exists and it is a valid email
+     * @param blobStream
+     * @param encoding_type
+     * @return
+     */
+    private List<String[]> getCSVDataFromStream(InputStream blobStream, String encoding_type)
+    {
+	List<String[]> data = new ArrayList<String[]>();
+
+	// Reads blob data line by line upto first 10 line of file
+	Reader csvStream = null;
+	try
+	{
+	    if (StringUtils.isEmpty(encoding_type))
+		csvStream = new InputStreamReader(blobStream, "UTF-8");
+	    else
+		csvStream = new InputStreamReader(blobStream, encoding_type);
+
+	}
+	catch (UnsupportedEncodingException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	if (csvStream == null)
+	    return data;
+
+	CSVReader reader = new CSVReader(csvStream);
+
+	try
+	{
+	    data = reader.readAll();
+
+	}
+	catch (IOException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    // Closes reader after reading data
+	    try
+	    {
+		reader.close();
+	    }
+	    catch (IOException e)
+	    {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+
+	return data;
+
+    }
+
+    /**
+     * Creates contacts,companies from CSV string using a contact prototype
+     * built from import page. It takes owner id to sent contact owner
+     * explicitly instead of using session manager, as there is a chance of
+     * getting null in backends.
+     * 
+     * Contact is saved only if there is email exists and it is a valid email.
+     * 
+     * Down the line Encoding type should read from request based on user
+     * preference and encode the input stream and read data
      * 
      * @param blobStream
      * @param contact
@@ -132,19 +212,11 @@ public class CSVUtil
     {
 	// Refreshes count of contacts
 	billingRestriction.refreshContacts();
-	billingRestriction.save();
 
-	int availableContacts = billingRestriction.contacts_count;
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
 
-	// Reads blob data line by line upto first 10 line of file
-	Reader csvStream = new InputStreamReader(blobStream, "UTF-8");
-
-	System.out.println(contact);
-	CSVReader reader = new CSVReader(csvStream);
-
-	List<String[]> contacts = reader.readAll();
+	List<String[]> contacts = getCSVDataFromStream(blobStream, "UTF-8");
 
 	if (contacts.isEmpty())
 	    return;
@@ -155,6 +227,7 @@ public class CSVUtil
 
 	LinkedHashSet<String> tags = new LinkedHashSet<String>();
 
+	// Adds new tags to temporary list to save them in all contacts
 	tags.addAll(contact.tags);
 
 	List<ContactField> properties = contact.properties;
@@ -173,22 +246,23 @@ public class CSVUtil
 	int mergedContacts = 0;
 	int limitExceeded = 0;
 	int accessDeniedToUpdate = 0;
-	List<String> emails = new ArrayList<String>();
-	Map<ImportStatus, Integer> status = new HashMap<ImportStatus, Integer>();
+	Map<Object, Object> status = new HashMap<Object, Object>();
+	status.put("type", "Contacts");
 
+	/**
+	 * Iterates through all the records from blob
+	 */
 	for (String[] csvValues : contacts)
 	{
+	    // Set to hold the notes column positions so they can be created
+	    // after a contact is created.
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
 
 	    Contact tempContact = new Contact();
-	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
-	    tempContact.properties = contact.properties;
 
-	    // Sets owner of contact explicitly. If owner is not set,
-	    // contact
-	    // prepersist
-	    // tries to read it from session, and session is not shared with
-	    // backends
+	    // Cloning so that wrong tags don't get to some contact if previous
+	    // contact is merged with exiting contact
+	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
 	    tempContact.setContactOwner(ownerKey);
 
 	    tempContact.properties = new ArrayList<ContactField>();
@@ -250,7 +324,7 @@ public class CSVUtil
 		    }
 		    continue;
 		}
-		if ("notes".equals(field.name))
+		if ("note".equals(field.name))
 		{
 		    notes_positions.add(j);
 		    continue;
@@ -262,6 +336,40 @@ public class CSVUtil
 		    continue;
 
 		field.value = csvValues[j];
+		
+		if (field.type.equals(FieldType.CUSTOM))
+		{
+		    List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
+			    "DATE");
+		    for (CustomFieldDef customFieldDef : customFields)
+		    {
+			if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+			{
+			    String customDate = csvValues[j];
+			    
+			    if (customDate!= null && !customDate.isEmpty())
+			    {
+				// date is dd/MM/yyyy format
+				String[] data = customDate.split("/");
+				if (data.length == 3)
+				{
+				    Calendar c = Calendar.getInstance();
+				    int year = Integer.parseInt(data[2]);
+				    int month = Integer.parseInt(data[0]);
+				    int day = Integer.parseInt(data[1]);
+				    c.set(year, month - 1, day);
+				    Date date = c.getTime();
+				    field.value = ""+date.getTime() / 1000;
+				}else {
+				    field.value = null;
+				}
+				
+
+			    }
+			  
+			}
+		    }
+		}
 
 		tempContact.properties.add(field);
 
@@ -271,16 +379,14 @@ public class CSVUtil
 		continue;
 
 	    boolean isMerged = false;
+
 	    // If contact is duplicate, it fetches old contact and updates data.
 	    if (ContactUtil.isDuplicateContact(tempContact))
 	    {
 		// Checks if user can update the contact
-		/*
-		 * if
-		 * (!UserAccessControlUtil.check(Contact.class.getSimpleName(),
-		 * tempContact, CRUDOperation.DELETE, false)) {
-		 * ++accessDeniedToUpdate; continue; }
-		 */
+
+		// Sets current object to check scope
+
 		tempContact = ContactUtil.mergeContactFields(tempContact);
 		isMerged = true;
 	    }
@@ -291,32 +397,27 @@ public class CSVUtil
 		// and checked with plan limits
 
 		++billingRestriction.contacts_count;
-		try
-		{
-		    if (limitCrossed)
-			continue;
-
-		    if (billingRestriction.contacts_count >= allowedContacts)
-		    {
-			limitCrossed = true;
-		    }
-
-		}
-		catch (PlanRestrictedException e)
+		if (limitCrossed)
 		{
 		    ++limitExceeded;
+		    continue;
+		}
+
+		if (billingRestriction.contacts_count >= allowedContacts)
+		{
+		    limitCrossed = true;
+
 		    continue;
 		}
 	    }
 
 	    try
 	    {
-		tempContact.save(false);
+		tempContact.save();
 	    }
 	    catch (Exception e)
 	    {
-		System.out.println("exception raised while saving contact "
-			+ tempContact.getContactFieldValue(Contact.EMAIL));
+		System.out.println("exception raised while saving contact ");
 		e.printStackTrace();
 
 	    }
@@ -374,20 +475,285 @@ public class CSVUtil
 
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
-	
-	SendMail.sendMail(domainUser.email, SendMail.CSV_IMPORT_NOTIFICATION_SUBJECT, SendMail.CSV_IMPORT_NOTIFICATION,
+
+	SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
 		new Object[] { domainUser, status });
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
-
     }
 
-    public void buildCSVImportStatus(Map<ImportStatus, Integer> statusMap, ImportStatus status, Integer count)
+    /**
+     * create Companies from csv file
+     * 
+     * @param statusMap
+     * @param status
+     * @param count
+     */
+
+    public void createCompaniesFromCSV(InputStream blobStream, Contact contact, String ownerId, String type)
+	    throws PlanRestrictedException, IOException
+    {
+	// Refreshes count of contacts
+	billingRestriction.refreshContacts();
+
+	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
+	boolean limitCrossed = false;
+
+	List<String[]> companies = getCSVDataFromStream(blobStream, "UTF-8");
+
+	if (companies.isEmpty())
+	    return;
+
+	// remove header information form csv
+	String[] headings = companies.remove(0);
+
+	LinkedHashSet<String> tags = new LinkedHashSet<String>();
+
+	tags.addAll(contact.tags);
+
+	// copy contact schema or property
+	List<ContactField> properties = contact.properties;
+
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+	BulkActionUtil.setSessionManager(domainUser);
+
+	System.out.println(companies.size());
+
+	// Counters to count number of contacts saved contacts
+	int savedCompany = 0;
+	int mergedCompany = 0;
+	int limitExceeded = 0;
+	int accessDeniedToUpdate = 0;
+	int failedCompany = 0;
+	int nameMissing = 0;
+	Map<Object, Object> status = new HashMap<Object, Object>();
+	status.put("type", type);
+
+	// creates contacts by iterating contact properties
+
+	for (String[] csvValues : companies)
+	{
+
+	    Contact tempContact = new Contact();
+	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
+
+	    tempContact.type = Type.COMPANY;
+	    tempContact.setContactOwner(ownerKey);
+
+	    tempContact.properties = new ArrayList<ContactField>();
+	    String companyName = null;
+
+	    for (int j = 0; j < csvValues.length; j++)
+	    {
+
+		if (StringUtils.isBlank(csvValues[j]))
+		    continue;
+
+		csvValues[j] = csvValues[j].trim();
+
+		ContactField field = properties.get(j);
+
+		// This is hardcoding but found no way to get
+		// tags
+		// from the CSV file
+		if (field == null)
+		{
+		    continue;
+		}
+
+	
+
+		if (Contact.ADDRESS.equals(field.name))
+		{
+		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
+
+		    JSONObject addressJSON = new JSONObject();
+
+		    try
+		    {
+			if (addressField != null && addressField.value != null)
+			{
+			    addressJSON = new JSONObject(addressField.value);
+			    addressJSON.put(field.value, csvValues[j]);
+			    addressField.value = addressJSON.toString();
+			}
+			else
+			{
+			    addressJSON.put(field.value, csvValues[j]);
+			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+				    field.subtype.toString()));
+			}
+
+		    }
+		    catch (JSONException e)
+		    {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		    continue;
+		}
+
+		// To avoid saving ignore field value/ and avoid fields with
+		// empty values
+		if (field.name == null || StringUtils.isEmpty(field.value))
+		    continue;
+
+		if (field.name.equalsIgnoreCase(Contact.NAME))
+		{
+		    companyName = field.value = csvValues[j];
+		}
+		else
+		{
+		    field.value = csvValues[j];
+		}
+		
+		if (field.type.equals(FieldType.CUSTOM))
+		{
+		    List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY,
+			    "DATE");
+		    for (CustomFieldDef customFieldDef : customFields)
+		    {
+			if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+			{
+			    String customDate = csvValues[j];
+			    
+			    if (customDate!= null && !customDate.isEmpty())
+			    {
+				// date is dd/MM/yyyy format
+				String[] data = customDate.split("/");
+				if (data.length == 3)
+				{
+				    Calendar c = Calendar.getInstance();
+				    int year = Integer.parseInt(data[2]);
+				    int month = Integer.parseInt(data[0]);
+				    int day = Integer.parseInt(data[1]);
+				    c.set(year, month - 1, day);
+				    Date date = c.getTime();
+				    field.value = ""+date.getTime() / 1000;
+				}else {
+				    field.value = null;
+				}
+				
+
+			    }
+			  
+			}
+		    }
+		}
+		
+
+		tempContact.properties.add(field);
+
+	    }
+
+	    boolean isMerged = false;
+
+	    // save contact as company
+	    if (companyName != null && !companyName.isEmpty())
+	    {
+
+		if (ContactUtil.isCompanyExist(companyName))
+		{
+		    tempContact = ContactUtil.mergeCompanyFields(tempContact);
+		    isMerged = true;
+		}
+	    }
+	    else
+	    {
+		++nameMissing;
+		continue;
+	    }
+
+	    /**
+	     * If it is new contacts billingRestriction count is increased and
+	     * checked with plan limits
+	     */
+
+	    ++billingRestriction.contacts_count;
+
+	    if (limitCrossed)
+	    {
+		++limitExceeded;
+		continue;
+	    }
+
+	    if (billingRestriction.contacts_count >= allowedContacts)
+	    {
+		limitCrossed = true;
+	    }
+
+	    try
+	    {
+		tempContact.save();
+	    }
+	    catch (Exception e)
+	    {
+		System.out.println("exception raised while saving company");
+		e.printStackTrace();
+
+		failedCompany++;
+
+	    }
+
+	    if (isMerged)
+	    {
+		mergedCompany++;
+	    }
+	    else
+	    {
+		savedCompany++;
+	    }
+
+	}
+
+	calculateTotalFailedContacts(status);
+
+	buildCSVImportStatus(status, ImportStatus.TOTAL, companies.size());
+
+	if (mergedCompany > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedCompany + mergedCompany);
+	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedCompany);
+	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedCompany);
+	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
+	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	    buildCSVImportStatus(status, ImportStatus.TOTAL_FAILED, failedCompany);
+	    buildCSVImportStatus(status, ImportStatus.NAME_MANDATORY, nameMissing);
+
+	}
+	else
+	{
+	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedCompany);
+	}
+
+	// Sends notification on CSV import completion
+	dBbillingRestriction.send_warning_message();
+
+	SendMail.sendMail(domainUser.email, "CSV Companies Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		new Object[] { domainUser, status });
+
+	// Send notification after contacts save complete
+	if (type.equalsIgnoreCase("Contacts"))
+	{
+	    BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedCompany));
+	}
+	else
+	{
+	    BulkActionNotifications.publishconfirmation(BulkAction.COMPANIES_CSV_IMPORT, String.valueOf(savedCompany));
+	}
+    }
+
+    public void buildCSVImportStatus(Map<Object, Object> statusMap, ImportStatus status, Integer count)
     {
 	if (statusMap.containsKey(status))
 	{
-	    statusMap.put(status, statusMap.get(status) + count);
+	    Integer value = (Integer) statusMap.get(status);
+	    statusMap.put(status, value + count);
 	    statusMap.get(status);
 	    return;
 	}
@@ -396,19 +762,27 @@ public class CSVUtil
 	billingRestriction.refreshContacts();
     }
 
-    public static void calculateTotalFailedContacts(Map<ImportStatus, Integer> status)
+    public static void calculateTotalFailedContacts(Map<Object, Object> status)
     {
 	int total = 0;
-	for (int i : status.values())
+
+	for (Object o : status.values())
 	{
-	    System.out.println(i);
-	    total += i;
+	    System.out.println(o);
+	    if (o.equals("Companies") || o.equals("Contacts"))
+	    {
+		continue;
+	    }
+	    else
+	    {
+		total += (int) o;
+	    }
 	}
 	System.out.println(total);
 	status.put(ImportStatus.TOTAL_FAILED, total);
     }
 
-    public boolean isValidFields(Contact contact, Map<ImportStatus, Integer> statusMap)
+    public boolean isValidFields(Contact contact, Map<Object, Object> statusMap)
     {
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
 		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
@@ -431,4 +805,369 @@ public class CSVUtil
 	 */
 	return true;
     }
+
+    /**
+     * Create Deals from CSV file
+     * 
+     * @param blobStream
+     * @param ownerId
+     * @param type
+     * @throws PlanRestrictedException
+     * @throws IOException
+     */
+
+    public void createDealsFromCSV(InputStream blobStream, ArrayList<LinkedHashMap<String, String>> schema,
+	    String ownerId) throws PlanRestrictedException, IOException
+    {
+	Integer totalDeals = 0;
+	Integer savedDeals = 0;
+	Integer failedDeals = 0;
+	Integer nameMissing = 0;
+	Integer trackMissing = 0;
+	Integer milestoneMissing = 0;
+	boolean milestoneFlag = true;
+	/**
+	 * Reading CSV file from input stream
+	 */
+	Map<String, Object> status = new HashMap<String, Object>();
+	status.put("type", "Deals");
+	List<String[]> deals = getCSVDataFromStream(blobStream, "UTF-8");
+	if (deals.isEmpty())
+	{
+	    return;
+	}
+	// remove header information form csv
+	deals.remove(0);
+
+	// Creates domain user key, which is set as a contact owner
+	Key<DomainUser> ownerKey = new Key<DomainUser>(DomainUser.class, Long.parseLong(ownerId));
+
+	DomainUser domainUser = DomainUserUtil.getDomainUser(ownerKey.getId());
+
+	BulkActionUtil.setSessionManager(domainUser);
+	totalDeals = deals.size();
+	// create Deals by iterating deals properties
+	Iterator<String[]> it = deals.iterator();
+	while (it.hasNext())
+	{
+	    Opportunity opportunity = new Opportunity();
+	    String[] dealPropValues = it.next();
+	    String mileStoneValue = null;
+
+	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
+	    List<Milestone> list = null;
+	    for (int i = 0; i < dealPropValues.length; i++)
+	    {
+
+		LinkedHashMap<String, String> prop = (LinkedHashMap<String, String>) schema.get(i);
+
+		if (prop.size() > 0)
+		{
+
+		    String type = (String) prop.get("type");
+		    String value = prop.get("value");
+		    if (type.equalsIgnoreCase("SYSTEM"))
+		    {
+			if (value.equalsIgnoreCase("name"))
+			{
+			    opportunity.name = dealPropValues[i];
+			}
+
+			else if (value.equalsIgnoreCase("track"))
+			{
+			    String trackName = dealPropValues[i];
+
+			    list = MilestoneUtil.getMilestonesList(trackName);
+			    if (list.size() == 0)
+			    {
+				trackMissing++;
+				break;
+			    }
+			    else
+			    {
+				opportunity.track = trackName;
+			    }
+
+			}
+
+			else if (value.equalsIgnoreCase("description"))
+			{
+			    opportunity.description = dealPropValues[i];
+			}
+			else if (value.equalsIgnoreCase("milestone"))
+			{
+
+			    mileStoneValue = dealPropValues[i];
+
+			    if (mileStoneValue != null && (!mileStoneValue.isEmpty()))
+			    {
+				if (list != null)
+				{
+				    for (Milestone m : list)
+				    {
+					String[] milestonesName = m.milestones.split(",");
+					for (String s : milestonesName)
+					{
+					    if (s.equalsIgnoreCase(mileStoneValue))
+					    {
+						opportunity.milestone = mileStoneValue;
+						opportunity.pipeline_id = m.id;
+						milestoneFlag = true;
+						break;
+					    }
+					    else
+					    {
+						milestoneFlag = false;
+					    }
+
+					}
+				    }
+				}
+
+			    }
+
+			}
+			else if (value.equals("probability"))
+			{
+			    String prob = dealPropValues[i];
+			    if (prob != null && (!prob.isEmpty()))
+			    {
+				try
+				{
+				    Double probability = Double.parseDouble(parse(prob));
+				    if (probability > 100)
+				    {
+					opportunity.probability = 0;
+				    }
+				    else
+				    {
+
+					opportunity.probability = (int) Math.round(probability);
+
+				    }
+				}
+				catch (NumberFormatException | ClassCastException e)
+				{
+				    e.printStackTrace();
+				}
+			    }
+			}
+			else if (value.equalsIgnoreCase("value"))
+			{
+			    String val = dealPropValues[i];
+			    if (val != null && (!val.isEmpty()))
+			    {
+				try
+				{
+				    Double dealValue = Double.parseDouble(parse(val));
+				    if (dealValue > Double.valueOf(1000000000000.0))
+				    {
+					opportunity.expected_value = 0.0;
+				    }
+				    else
+				    {
+					opportunity.expected_value = dealValue;
+				    }
+				}
+				catch (NumberFormatException e)
+				{
+				    e.printStackTrace();
+				}
+			    }
+			}
+			else if (value.equalsIgnoreCase("closeDate"))
+			{
+			    String dealDate = dealPropValues[i];
+			    if (dealDate != null && !dealDate.isEmpty())
+			    {
+				// date is dd/MM/yyyy format
+				String[] data = dealDate.split("/");
+				if (data.length == 3)
+				{
+				    Calendar c = Calendar.getInstance();
+				    int year = Integer.parseInt(data[2]);
+				    int month = Integer.parseInt(data[0]);
+				    int day = Integer.parseInt(data[1]);
+				    c.set(year, month - 1, day);
+				    Date date = c.getTime();
+				    opportunity.close_date = date.getTime() / 1000;
+				}
+				else
+				{
+				    opportunity.close_date = null;
+				}
+
+			    }
+			    else
+			    {
+				opportunity.close_date = null;
+			    }
+
+			}
+			else if (value.equalsIgnoreCase("relatedTo"))
+			{
+			    String data = dealPropValues[i].toLowerCase();
+			    boolean email = isValidEmail(data);
+
+			    if (email)
+			    {
+				try
+				{
+				    Contact contact = ContactUtil.searchContactByEmail(data);
+				    if (contact != null && contact.id != null)
+				    {
+					opportunity.addContactIds(contact.id.toString());
+				    }
+				}
+				catch (NullPointerException e)
+				{
+				    e.printStackTrace();
+				}
+			    }
+			}
+			else if (value.equalsIgnoreCase("note"))
+			{
+			    Note note = new Note();
+			    note.description = dealPropValues[i];
+			    note.save();
+			}
+
+		    }
+		    else
+		    {
+			CustomFieldData custom = new CustomFieldData();
+			custom.name = value;
+			custom.value = dealPropValues[i];
+			customFields.add(custom);
+
+		    }
+		}
+
+	    }
+
+	    opportunity.setOpportunityOwner(ownerKey);
+
+	    // if trackmissing is 0 then track is not mapped set it to default
+	    if (trackMissing == 0 && opportunity.track == null)
+	    {
+		opportunity.track = "Default";
+
+		if (mileStoneValue == null)
+		{
+		    Milestone m = MilestoneUtil.getDefaultMilestones();
+		    String[] values = m.milestones.split(",");
+		    if (values.length > 0 && milestoneFlag)
+		    {
+			opportunity.milestone = values[0];
+		    }
+		}
+	    }
+
+	    // Case: if track exist or mapped and milestone is not mapped then
+	    // deals should go in mapped track's first milestone
+
+	    if (opportunity.track != null && opportunity.milestone == null)
+	    {
+		// case:if milestone get mapped but value is null or empty
+		// string that means it wrong milestone we should fail that deal
+		// by setting milestoneFlag false
+
+		// if milestone value is null that means its not get mapped in
+		// csv then deals is going in default track of first milestone
+		if (mileStoneValue != null && mileStoneValue.isEmpty())
+		{
+		    milestoneFlag = false;
+		}
+
+		// if track is exits
+		if (list != null && list.size() > 0)
+		{
+		    Milestone mile = list.get(0);
+		    opportunity.pipeline_id = mile.id;
+		    String[] values = mile.milestones.split(",");
+		    if (values.length > 0 && milestoneFlag)
+		    {
+			opportunity.milestone = values[0];
+		    }
+		}
+
+	    }
+
+	    // add all custom field in deals
+	    opportunity.custom_data = customFields;
+	    try
+	    {
+		if (opportunity.name != null && (!opportunity.name.isEmpty()) && opportunity.track != null
+			&& opportunity.milestone != null && milestoneFlag)
+		{
+		    opportunity.save();
+		    savedDeals++;
+		}
+		else
+		{
+		    if (opportunity.name == null || opportunity.name.isEmpty())
+		    {
+			nameMissing++;
+		    }
+		    else if (!milestoneFlag)
+		    {
+			buildDealsImportStatus(status, "MILESTONE", ++milestoneMissing);
+		    }
+
+		}
+
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+		failedDeals++;
+	    }
+	}
+
+	buildDealsImportStatus(status, "SAVED", savedDeals);
+	buildDealsImportStatus(status, "FAILED", totalDeals - savedDeals);
+	buildDealsImportStatus(status, "TOTAL", totalDeals);
+	if (nameMissing > 0)
+	{
+	    buildDealsImportStatus(status, "NAMEMISSING", nameMissing);
+	}
+
+	if (trackMissing > 0)
+	{
+	    buildDealsImportStatus(status, "TRACKMISING", trackMissing);
+	}
+	if (milestoneMissing > 0)
+	{
+	    buildDealsImportStatus(status, "MILESTONE", milestoneMissing);
+	}
+
+	SendMail.sendMail(domainUser.email, "CSV Deals Import Status", "csv_deal_import", new Object[] { domainUser,
+		status });
+	BulkActionNotifications.publishconfirmation(BulkAction.DEALS_CSV_IMPORT, String.valueOf(savedDeals));
+
+    }
+
+    private void buildDealsImportStatus(Map<String, Object> statusMap, String status, Integer count)
+    {
+
+	statusMap.put(status, count);
+    }
+
+    private boolean isValidEmail(final String hex)
+    {
+	String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+	Matcher matcher = pattern.matcher(hex);
+	return matcher.matches();
+
+    }
+
+    private String parse(String data)
+    {
+	String val = data.replaceAll("[\\W A-Za-z]", "");
+	System.out.println(val);
+	return val.trim();
+    }
+
 }

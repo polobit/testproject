@@ -8,11 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.agilecrm.AgileQueues;
-import com.agilecrm.account.util.AccountEmailStatsUtil;
-import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
-import com.agilecrm.queues.backend.BackendUtil;
-import com.agilecrm.queues.util.PullQueueUtil;
+import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.util.HttpClientUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.TaskHandle;
@@ -65,36 +61,6 @@ public class MandrillUtil
     }
 
     /**
-     * Adds tasks to pull queue
-     * 
-     * @param fromEmail
-     *            - from email
-     * @param fromName
-     *            - from name
-     * @param to
-     *            - to email
-     * @param subject
-     *            - email subject
-     * @param replyTo
-     *            - reply to
-     * @param html
-     *            - html content
-     * @param text
-     *            - text content
-     */
-    public static void sendMail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
-	    String replyTo, String html, String text, String metadata)
-    {
-	String subaccount = NamespaceManager.get();
-	MandrillDeferredTask mandrillDeferredTask = new MandrillDeferredTask(subaccount, fromEmail, fromName, to, cc,
-	        bcc, subject, replyTo, html, text, metadata);
-
-	PullQueueUtil.addToPullQueue(
-	        "bulk".equals(BackendUtil.getCurrentBackendName()) ? AgileQueues.BULK_EMAIL_PULL_QUEUE
-	                : AgileQueues.NORMAL_EMAIL_PULL_QUEUE, mandrillDeferredTask, fromEmail);
-    }
-
-    /**
      * Sends mails through mandrill. It constructs mail json with merge
      * variables and their content
      * 
@@ -105,13 +71,13 @@ public class MandrillUtil
     {
 	TaskHandle firstTaskHandle = tasks.get(0);
 
-	MandrillDeferredTask firstMandrillDefferedTask = (MandrillDeferredTask) SerializationUtils
-	        .deserialize(firstTaskHandle.getPayload());
+	MailDeferredTask firstMailDefferedTask = (MailDeferredTask) SerializationUtils.deserialize(firstTaskHandle
+	        .getPayload());
 
 	// Initialize mailJSON with common fields
-	JSONObject mailJSON = getMandrillMailJSON(firstMandrillDefferedTask.subaccount,
-	        firstMandrillDefferedTask.fromEmail, firstMandrillDefferedTask.fromName,
-	        firstMandrillDefferedTask.replyTo, firstMandrillDefferedTask.metadata);
+	JSONObject mailJSON = getMandrillMailJSON(firstMailDefferedTask.apiKey, firstMailDefferedTask.domain,
+	        firstMailDefferedTask.fromEmail, firstMailDefferedTask.fromName, firstMailDefferedTask.replyTo,
+	        firstMailDefferedTask.metadata);
 
 	JSONArray mergeVarsArray = new JSONArray();
 	JSONArray toArray = new JSONArray();
@@ -122,28 +88,29 @@ public class MandrillUtil
 
 	try
 	{
-	    //
 	    for (TaskHandle task : tasks)
 	    {
 		flag = false;
 
-		MandrillDeferredTask mandrillDeferredTask = (MandrillDeferredTask) SerializationUtils.deserialize(task
-		        .getPayload());
+		MailDeferredTask mailDeferredTask = (MailDeferredTask) SerializationUtils
+		        .deserialize(task.getPayload());
 
-		// If same To email or cc exists, send email without merging
-		if (!StringUtils.isBlank(mandrillDeferredTask.cc) || !StringUtils.isBlank(mandrillDeferredTask.bcc)
-		        || isToExists(toArray, mandrillDeferredTask.to) || mandrillDeferredTask.to.contains(","))
+		// If same To email (i.e., multiple send-email nodes linked to
+		// each in campaign). If CC or BCC or multiple To with comma
+		// separated given then send email without merging
+		if (!StringUtils.isBlank(mailDeferredTask.cc) || !StringUtils.isBlank(mailDeferredTask.bcc)
+		        || isToExists(toArray, mailDeferredTask.to) || mailDeferredTask.to.contains(","))
 		{
-		    sendWithoutMerging(mandrillDeferredTask);
+		    sendWithoutMerging(mailDeferredTask);
 		    continue;
 		}
 
 		// MergeVars
-		mergeVarsArray.put(getEachMergeJSON(mandrillDeferredTask.to, mandrillDeferredTask.subject,
-		        mandrillDeferredTask.html, mandrillDeferredTask.text));
+		mergeVarsArray.put(getEachMergeJSON(mailDeferredTask.to, mailDeferredTask.subject,
+		        mailDeferredTask.html, mailDeferredTask.text));
 
 		// To array
-		toArray.put(new JSONObject().put(Mandrill.MANDRILL_RECIPIENT_EMAIL, mandrillDeferredTask.to));
+		toArray.put(new JSONObject().put(Mandrill.MANDRILL_RECIPIENT_EMAIL, mailDeferredTask.to));
 
 		// If exceeds Content Size limit, split mailJSON
 		if (toArray.length() > MIN_TO_EMAILS && mergeVarsArray.toString().length() >= MAX_CONTENT_SIZE)
@@ -177,32 +144,12 @@ public class MandrillUtil
 		        + Mandrill.MANDRILL_API_MESSAGE_CALL, mailJSON.toString());
 	    }
 
-	    System.out.println("Mailjson is " + mailJSON.toString());
-
 	}
 	catch (Exception e)
 	{
 	    System.err.println("Got exception in createJSONandSend " + e.getMessage());
 	    e.printStackTrace();
 	}
-
-	try
-	{
-	    Runtime r = Runtime.getRuntime();
-
-	    System.out.println("Free memory in MandrillUtil " + r.freeMemory());
-
-	    System.out.println("Total Memory in MandrillUtil " + r.totalMemory());
-
-	}
-	catch (Exception e)
-	{
-	    System.err.println("Exception occured while getting Runtime..." + e.getMessage());
-
-	}
-
-	// Records email sent count
-	AccountEmailStatsUtil.recordAccountEmailStats(firstMandrillDefferedTask.subaccount, tasks.size());
 
     }
 
@@ -217,13 +164,16 @@ public class MandrillUtil
      *            - from name
      * @return JSONObject
      */
-    public static JSONObject getMandrillMailJSON(String subaccount, String fromEmail, String fromName, String replyTo,
-	    String metadata)
+    public static JSONObject getMandrillMailJSON(String apiKey, String subaccount, String fromEmail, String fromName,
+	    String replyTo, String metadata)
     {
 	try
 	{
+	    if (!StringUtils.isEmpty(apiKey))
+		System.out.println("Sending emails in MandrillUtil through subaccount api..." + apiKey);
+
 	    // Complete mail json to be sent
-	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(subaccount);
+	    JSONObject mailJSON = Mandrill.setMandrillAPIKey(apiKey, subaccount);
 
 	    JSONObject messageJSON = getMessageJSON(subaccount, fromEmail, fromName, replyTo, metadata);
 	    mailJSON.put(Mandrill.MANDRILL_MESSAGE, messageJSON);
@@ -432,20 +382,21 @@ public class MandrillUtil
     /**
      * Sends mail through without using any merge tags.
      * 
-     * @param mandrillDeferredTask
+     * @param mailDeferredTask
      *            - MandrillDeferredTask
      */
-    public static void sendWithoutMerging(MandrillDeferredTask mandrillDeferredTask)
+    public static void sendWithoutMerging(MailDeferredTask mailDeferredTask)
     {
 	String oldNamespace = NamespaceManager.get();
 	try
 	{
-	    NamespaceManager.set(mandrillDeferredTask.subaccount);
+	    // Inorder to set mandrill subaccount
+	    NamespaceManager.set(mailDeferredTask.domain);
 
-	    Mandrill.sendMail(true, mandrillDeferredTask.fromEmail, mandrillDeferredTask.fromName,
-		    mandrillDeferredTask.to, mandrillDeferredTask.cc, mandrillDeferredTask.bcc,
-		    mandrillDeferredTask.subject, mandrillDeferredTask.replyTo, mandrillDeferredTask.html,
-		    mandrillDeferredTask.text, mandrillDeferredTask.metadata);
+	    // Send email
+	    Mandrill.sendMail(mailDeferredTask.apiKey, true, mailDeferredTask.fromEmail, mailDeferredTask.fromName,
+		    mailDeferredTask.to, mailDeferredTask.cc, mailDeferredTask.bcc, mailDeferredTask.subject,
+		    mailDeferredTask.replyTo, mailDeferredTask.html, mailDeferredTask.text, mailDeferredTask.metadata);
 	}
 	catch (Exception e)
 	{

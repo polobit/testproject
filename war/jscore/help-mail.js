@@ -11,6 +11,14 @@
  * @param #helpmailForm
  */
 $(function() {
+	
+/*	// To toggle the contact us email
+	$("#show_support").die().live("click", function(e){
+		  e.preventDefault();
+		  $("#content").html(getTemplate("help-mail-form"), {});
+		 // $("#helpmailForm").toggle();
+		 // $('html, body').animate({ scrollTop : 360  },1000);
+	});*/
 
 	// Prevent default on click
 	$('#helpMail').die().live('click', function(e){
@@ -32,14 +40,9 @@ $(function() {
 		json.body = json.body.replace(/\r\n/g,"<br/>");
         
 		// Build url
-		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + 
+		var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
 		encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + 
 		encodeURIComponent(json.body);
-
-    	// Show message and gif while sending mail and fadeout
-//		$save_info = $('<img src="img/1-0.gif" height="18px" width="18px"></img>&nbsp;&nbsp;<span><p class="text-success" style="color:#008000; font-size:15px; display:inline-block"> <i>Sending mail...</i></p></span>');
-//		$("#msg", this.el).append($save_info);
-//		$save_info.show().delay(2000).fadeOut("slow");
 
 		$.post(url,function(){
 
@@ -48,9 +51,19 @@ $(function() {
 				this.reset();
 			});
 			
-			// Enables Send Email button.
-		    enable_send_button($('#helpMail'));
-		    window.history.back();
+			// Show message and gif while sending mail and fadeout
+			$save_info = $('<span class="text-success" style="color:#008000; font-size:15px; display:inline-block"><i> Email Sent</i></span>');
+			$('#msg').append($save_info);
+			$save_info.show().delay(1000).fadeOut("slow", function(){
+				
+				// Enables Send Email button.
+			    enable_send_button($('#helpMail'));
+				
+				//$("#helpmailForm").hide();
+				
+			    window.history.back();
+			});
+		    
 		});
 	});
 });

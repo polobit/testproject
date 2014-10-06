@@ -8,6 +8,7 @@ var DealsRouter = Backbone.Router.extend({
 
 	/* Deals/Opportunity */
 	"deals" : "deals",
+	"import-deals" :"importDeals",
 	},
 
 	/**
@@ -21,13 +22,17 @@ var DealsRouter = Backbone.Router.extend({
 		// Depending on cookie shows list or milestone view
 		if (!readCookie("agile_deal_view"))
 		{
-			if(!readCookie("agile_full_view"))
-				template_key = "opportunities-by-milestones";
-			else
-				template_key = "opportunities-full-screen";
+			template_key = "opportunities-by-milestones";
+			
+			var pipeline_id = 0;
+			if(readCookie("agile_deal_track"))
+				pipeline_id = readCookie("agile_deal_track");
+			
+			if(pipeline_id == 1)
+				pipeline_id = 0;
 			
 			individual_tag_name = "div";
-			url = 'core/api/opportunity/byMilestone';
+			url = 'core/api/opportunity/byPipeline/based?pipeline_id='+pipeline_id;
 
 			// Fetchs deals by milestones list
 			this.opportunityMilestoneCollectionView = new Base_Collection_View({ url : url, templateKey : template_key,
@@ -36,56 +41,39 @@ var DealsRouter = Backbone.Router.extend({
 					// To show timeago for close date
 					includeTimeAgo(el);
 					
-					var element;
-					
-					if(!readCookie("agile_full_view"))
-						element = $('#opportunities-by-milestones-model-list');
-					else
-						element = $('#opportunities-full-screen-model-list');
+					var element = $('#opportunities-by-milestones-model-list');
 
 					var id = $(element).attr('id');
 					$("#" + id + "> div").addClass("milestone-main");
 					
-					// $('.milestone-main
-					// :last-child').find("ul").closest('div').css({"border-right":"none"});
+					$('.milestone-main div:last-child').css({"border-right":"none"});
 					setup_deals_in_milestones(id);
 					
 					// For adding dynamic width to milestone columns
 					var count;
 					$.ajax({
-						url: '/core/api/milestone',
+						url: '/core/api/milestone/'+pipeline_id,
 						type: 'GET',
 						success: function(data) {
+							if(pipeline_id == 0){
+								pipeline_id = data.id;
+								createCookie("agile_deal_track",pipeline_id);
+							}
 							var milestones = data.milestones;
 							milestones = milestones.split(",");
 							count = milestones.length;
+							if(!count)return;
 							
 							var width;
-							if(readCookie("agile_full_view"))
-							{
-								width = 19.92;
-								if(count < 5)
-									width = (100/count) - 0.12;
-								$('#opportunities-full-screen-model-list').find('.milestone-column').width(width +"%");
-							}
-							else
-							{
-								width = 24.87;
-								if(count < 4)
-									width = (100/count) - 0.12;
-								$('#opportunities-by-milestones-model-list').find('.milestone-column').width(width +"%");
-							}
+							// Setting dynamic auto width
+							width = (100/count);
+							
+							$("#" + id).find('.milestone-column').width(width +"%");
+
 						}
 					});
 					
-					if(!readCookie("agile_full_view"))
-					{
-						// Shows Milestones Pie
-						pieMilestones();
-
-						// Shows deals chart
-						dealsLineChart();
-					}
+					setupDealsTracksList(el);
 
 				} });
 			this.opportunityMilestoneCollectionView.collection.fetch();
@@ -93,80 +81,55 @@ var DealsRouter = Backbone.Router.extend({
 			// Shows deals as milestone list view
 			$('#content').html(this.opportunityMilestoneCollectionView.render().el);
 		}
-		// Fetches deals as list
-		this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity', templateKey : "opportunities", individual_tag_name : 'tr',// cursor : true, page_size : 25,
-			postRenderCallback : function(el)
-			{
-				appendCustomfields(el);
-				// Showing time ago plugin for close date
-				includeTimeAgo(el);
-				// Shows Milestones Pie
-				pieMilestones();
+		else
+		{
 
-				// Shows deals chart
-				dealsLineChart();
-			},
-			appendItemCallback : function(el)
-			{ 
-				// To show timeago for models appended by infini scroll
-				includeTimeAgo(el);
-			}
-			});
-		this.opportunityCollectionView.collection.fetch();
+			var pipeline_id = 0;
+			if(readCookie("agile_deal_track"))
+				pipeline_id = readCookie("agile_deal_track");
+			
+			// Fetches deals as list
+			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
+				postRenderCallback : function(el)
+				{
+					if(pipeline_id == 1)
+						pipeline_id = 0;
+					var cel = App_Deals.opportunityCollectionView.el;
+					appendCustomfieldsHeaders(el);
+					appendCustomfields(el);
+					// Showing time ago plugin for close date
+					includeTimeAgo(el);
+					// Shows Milestones Pie
+					pieMilestonesByPipeline(pipeline_id);
+					// Shows deals chart
+					dealsLineChartByPipeline(pipeline_id);
+					setupDealsTracksList(cel);
+				},
+				appendItemCallback : function(el)
+				{ 
+					appendCustomfields(el);
 
-		// Shows deals as list view
-		if (readCookie("agile_deal_view"))
+					// To show timeago for models appended by infini scroll
+					includeTimeAgo(el);
+				}
+				});
+			this.opportunityCollectionView.collection.fetch();
+
 			$('#content').html(this.opportunityCollectionView.render().el);
-		
+		}
+
 		$(".active").removeClass("active");
 		$("#dealsmenu").addClass("active");
 		setTimeout(function(){$('a.deal-notes').tooltip();}, 2000);
 	},
+	
+	
+	/**
+	 * import deals from a csv file and then upload all deals to databse
+	 */
+	importDeals : function()
+	{
+		$('#content').html(getTemplate("import-deals", {}));
+	},
 
 });
-
-/**
- * Append Deals customfields to the Deals List view.
- */ 
-function appendCustomfields(el){
-	$.ajax({
-		url: 'core/api/custom-fields/scope?scope=DEAL',
-		type: 'GET',
-		dataType: 'json',
-		success: function(customfields){
-			var columns = '';
-			$.each(customfields, function(index,customfield){
-				//console.log(customfield);
-				columns += '<th>'+customfield.field_label+'</th>';
-			});
-			 $(el).find('#deal-list thead tr').append(columns);
-			 var deals = App_Deals.opportunityCollectionView.collection.models;
-			 $(el).find('#opportunities-model-list tr').each(function(index,element){
-				 var row = '';
-				 $.each(customfields, function(i,customfield){
-						console.log(customfield);
-						 row += '<td><div style="width:6em;overflow:visible;">'+dealCustomFieldValue(customfield.field_label,deals[index].attributes.custom_data)+'</div></td>';
-					});
-				 $(this).append(row);
-			 });
-			 
-		}
-	});
-}
-
-/**
- * Returns the value of the custom field.
- * @param name name of the custom field.
- * @param data the name. value pair of the custom fields of the deal.
- * @returns {String} value of the custom field.
- */
-function dealCustomFieldValue(name, data){
-	console.log(data);
-	var value = '';
-	$.each(data,function(index, field){
-		if(field.name == name){
-			value = field.value;
-		}
-	});
-	return value;
-}

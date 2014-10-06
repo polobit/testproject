@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.deals.Opportunity;
+import com.agilecrm.deals.util.MilestoneUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.TaskletAdapter;
@@ -68,7 +69,8 @@ public class AddDeal extends TaskletAdapter
      * @param nodeJSON
      *            - current node json i.e, Add Deal json
      **/
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	/** Reads each value of Add Deal **/
 	String dealName = getStringValue(nodeJSON, subscriberJSON, data, DEAL_NAME);
@@ -91,22 +93,14 @@ public class AddDeal extends TaskletAdapter
 	    // Contact ownerId.
 	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
-	    if (contactOwnerId == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-		return;
-	    }
-
 	    // Add Deal with given values
 	    addDeal(dealName, expectedValue, probability, description, milestone, epochTime, contactId,
 		    AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
 
 	    // Add log
-	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Deal Title: " + dealName + "<br/> Value: "
-		    + expectedValue + "<br/> Milestone: " + milestone + " (" + probability + "%)", LogType.ADD_DEAL.toString());
+	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		    "Deal Title: " + dealName + "<br/> Value: " + expectedValue + "<br/> Milestone: " + milestone
+			    + " (" + probability + "%)", LogType.ADD_DEAL.toString());
 	}
 	catch (Exception e)
 	{
@@ -137,13 +131,13 @@ public class AddDeal extends TaskletAdapter
      * @param ownerId
      *            - Selected owner id
      */
-    private void addDeal(String name, String value, String probability, String description, String milestone, Long closedEpochTime, String contactId,
-	    Long ownerId)
+    private void addDeal(String name, String value, String probability, String description, String milestone,
+	    Long closedEpochTime, String contactId, Long ownerId)
     {
-	Opportunity opportunity = new Opportunity(name, description, Double.parseDouble(value), milestone, Integer.parseInt(probability), null,
-		ownerId.toString());
+	Opportunity opportunity = new Opportunity(name, description, Double.parseDouble(value), milestone,
+		Integer.parseInt(probability), null, ownerId == null ? null : ownerId.toString());
 	opportunity.addContactIds(contactId);
-	opportunity.owner_id = ownerId.toString();
+	opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
 	opportunity.close_date = closedEpochTime;
 	opportunity.save();
     }

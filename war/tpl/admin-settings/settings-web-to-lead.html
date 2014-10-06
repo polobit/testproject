@@ -1,4 +1,4 @@
-<script id="admin-settings-web-to-lead-template" type="text/html">
+<script id="admin-settings-web-to-lead-collection-template" type="text/html">
 <div class="row">
 
 	<div class="span11">
@@ -7,14 +7,11 @@
       </div>
 	  <div class="row-fluid">
 		<div class="span4" style="margin-left:0px;text-align:center;">
-			<div class="well" style="width:220px; height:200px;"><br/>
-				<a href="" target="_blank" style="text-decoration:none;">
-					<img alt="formbuilder-integration" src="img/crm-plugins/formbuilder.png">
-				</a><br/><br/>
-				<h2>Form Builder</h2>
+			<div class="well" style="width:220px; height:200px;">
+			<h1 style="margin: 25px 0 37px 0;">Form Builder <span class="label label-important">Beta</span></h1>
 				<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 38px !important;"  rel="tooltip" title="Build your form using our form builder.">
 					Build your form using our form builder.
-				</div><a href="formbuilder.jsp" target="_blank">Learn More</a>
+				</div><a href="formbuilder" target="_blank">Launch Form Builder</a>
 			</div>
 		</div>
 		<div class="span4" style="margin-left:0px;text-align:center;">
@@ -113,7 +110,7 @@
 	</div>
 	<div class="span11">
       <div class="page-header">
-          <h2> Other <small></small></h2>
+          <h2> Web App Integrations <small></small></h2>
       </div>
 	  <div class="row-fluid">
 		<div class="span4" style="margin-left:0px;text-align:center;">
@@ -129,5 +126,86 @@
 	  </div>
 	</div>
 
+	<div class="span11">
+		<div class="page-header">
+			<h2>Email Gateways</h2>
+		</div>
+		<div class="row-fluid">
+			<div class="span4" style="margin-left:0px;text-align:center;" id="mandrill-email-api-integration">
+				<div class="well" style="width:220px; height:200px;">
+					<div style="position: relative;">
+						<span class="label label-important" style="position: absolute;right: 0;">Beta</span>
+						<img alt="cms-integration" src="img/crm-plugins/mandrill_logo.png" style="top: -5px; position: relative; height: 85px;">
+							<div class="clearfix"></div>
+					</div>
+					<br>
+					<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;"  rel="tooltip" title="Mandrill is a transactional email product by MailChimp.">
+					Send your emails via your Mandrill account. Mandrill is a scalable and affordable email infrastructure service.
+					</div><br/>
+					<div style="float:left;">
+						{{#if this.length}}	
+							{{#gateway_exists "MANDRILL" this}}
+								<a href="#" class="btn btn-danger" id="email-gateway-delete">Disable</a>
+								<a href="#email-gateways/mandrill" class="btn">Settings</a>
+							{{else}}
+								{{#check_plan "FREE"}}
+									<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+								{{else}}
+									<a href="#email-gateways/mandrill" class="btn">Enable</a>
+								{{/check_plan}}	
+							{{/gateway_exists}}
+							{{else}}
+								{{#check_plan "FREE"}}
+									<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+										{{else}}
+											<a href="#email-gateways/mandrill" class="btn">Enable</a> 
+								{{/check_plan}}	
+							{{/if}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="span11" id="SMSGateway">
+		<div class="page-header">
+			<h2>SMS Gateways</h2>
+		</div>
+		<div class="span4" style="margin-left:0px;text-align:center;" id="twilio-sms-api-integration">
+			<div class="well" style="width:220px; height:200px;">
+				<div style="position: relative;">
+					<img alt="sms-integration" src="/img/plugins/twilio-logo.png" style="top: -5px; position: relative; height: 85px;">
+						<div class="clearfix">
+						</div>
+				</div>
+				<br>
+				<div class="ellipsis-multiline" style="-webkit-line-clamp: 3;word-break: break-word;width: 220px !important;height: 55px !important;"  rel="tooltip" title="Stay connected to your users with Twilio phone numbers in 40 countries all over the globe">
+				Stay connected to your users with Twilio phone numbers in 40 countries all over the globe
+				</div><br/>
+				<div style="float:left;"> 
+					{{#if this.length}}	
+						{{#gateway_exists "TWILIO" this}}
+							<a href="#integrations" class="btn btn-danger " id="sms-gateway-delete"  data={{id}} >Disable</a>
+								<a href="#sms-gateways/twilio" class="btn">Settings</a>
+						{{else}}
+							{{#check_plan "FREE"}}
+								<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+							{{else}}
+								<a href="#sms-gateways/twilio" class="btn">Enable</a>
+							{{/check_plan}}	
+						{{/gateway_exists}}
+					{{else}}
+						{{#check_plan "FREE"}}
+							<a class="btn" disabled="disabled><i class="icon-plus" style="margin-right:5px"></i>Enable</a><span style="margin-left:5px"><i>Paid accounts only</i></span>
+						{{else}}
+							<a href="#sms-gateways/twilio" class="btn">Enable</a> 
+						{{/check_plan}}	
+					{{/if}}
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 </script>	
+

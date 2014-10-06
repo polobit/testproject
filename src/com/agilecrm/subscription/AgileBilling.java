@@ -25,6 +25,11 @@ import com.stripe.model.Invoice;
 public interface AgileBilling
 {
     /**
+     * Attaches card/update card in payment gateway 
+     */
+    public JSONObject addCreditCard(CreditCard card) throws Exception;
+    
+    /**
      * Creates customer and return Customer as {@link JSONObject}
      * 
      * @param cardDetails
@@ -35,6 +40,18 @@ public interface AgileBilling
      * @throws Exception
      */
     public JSONObject createCustomer(CreditCard cardDetails, Plan plan) throws Exception;
+    
+    /**
+     * Creates customer and return Customer as {@link JSONObject}
+     * 
+     * @param cardDetails
+     *            {@link CreditCard}, plan {@link Plan}
+     * 
+     * @return {@link JSONObject}
+     * 
+     * @throws Exception
+     */
+    public JSONObject createCustomer(CreditCard cardDetails) throws Exception;
 
     /**
      * Updates customer plan and return Customer as {@link JSONObject}
@@ -94,5 +111,7 @@ public interface AgileBilling
      * @throws Exception
      */
     public void cancelSubscription(JSONObject billingData) throws Exception;
+    
+    public JSONObject addSubscriptionAddon(Plan plan) throws Exception;
 
 }

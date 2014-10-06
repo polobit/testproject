@@ -14,6 +14,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gdata.data.TextContent;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.Occupation;
+import com.google.gdata.data.contacts.Website;
 import com.google.gdata.data.extensions.Email;
 import com.google.gdata.data.extensions.Im;
 import com.google.gdata.data.extensions.Name;
@@ -93,6 +94,14 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     public List<ContactField> getMoreCustomInfo()
     {
 	List<ContactField> fields = new ArrayList<ContactField>();
+	if (entry.hasWebsites())
+	{
+	    for (Website website : entry.getWebsites())
+	    {
+		fields.add(new ContactField(Contact.WEBSITE, website.getHref(), null));
+	    }
+
+	}
 	if (entry.hasImAddresses())
 	    for (Im im : entry.getImAddresses())
 	    {
@@ -125,7 +134,6 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		}
 
 	    }
-
 
 	// If image link there there then it is synced to agile
 	// if (entry.getContactPhotoLink() != null)
@@ -198,7 +206,7 @@ public class GoogleContactWrapperImpl extends ContactWrapper
     @Override
     public ContactField getJobTitle()
     {
-	Occupation occupation = entry.getOccupation();
+	/*Occupation occupation = entry.getOccupation();
 	entry.getTitle();
 	if (occupation == null)
 	    return (ContactField) null;
@@ -206,7 +214,13 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 	System.out.println(entry.getOccupation());
 
 	// TODO Auto-generated method stub
-	return new ContactField(Contact.TITLE, occupation.getValue(), null);
+	return new ContactField(Contact.TITLE, occupation.getValue(), null);*/
+    	ContactField field = null;
+
+    	if (entry.hasOrganizations())
+    	    if (entry.getOrganizations().get(0).hasOrgTitle() && entry.getOrganizations().get(0).getOrgTitle().hasValue())
+    	    	return new ContactField(Contact.TITLE, entry.getOrganizations().get(0).getOrgTitle().getValue(), null);
+    	return field;
     }
 
     /*
@@ -250,11 +264,6 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		String addr = "";
 		if (address.hasStreet())
 		    addr = addr + address.getStreet().getValue();
-		if (address.hasSubregion())
-		    addr = addr + ", " + address.getSubregion().getValue();
-		if (address.hasRegion())
-		    addr = addr + ", " + address.getRegion().getValue();
-
 		try
 		{
 		    if (!StringUtils.isBlank(addr))
@@ -262,6 +271,9 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 
 		    if (address.hasCity() && address.getCity().hasValue())
 			json.put("city", address.getCity().getValue());
+
+		    if (address.hasRegion() && address.getRegion().hasValue())
+			json.put("state", address.getRegion().getValue());
 
 		    if (address.hasCountry() && address.getCountry().hasValue())
 			json.put("country", address.getCountry().getValue());
@@ -273,8 +285,15 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 		{
 		    continue;
 		}
+		// default subtype is postal
+		String subType = "postal";
+		if (address.hasRel())
+		{
+		    String[] labels = address.getRel().split("#");
+		    subType = labels[1];
+		}
 
-		field = new ContactField("address", json.toString(), null);
+		field = new ContactField("address", json.toString(), subType);
 
 	    }
 	return field;
@@ -307,8 +326,11 @@ public class GoogleContactWrapperImpl extends ContactWrapper
 
 	    if (name.hasGivenName() && name.hasFamilyName())
 	    {
-		if (name.hasGivenName())
-		    field = new ContactField(Contact.FIRST_NAME, name.getGivenName().getValue(), null);
+	    	//If middle name existed append to first name
+	    	if(name.hasGivenName() && name.hasAdditionalName())
+	    		field = new ContactField(Contact.FIRST_NAME, name.getGivenName().getValue()+" "+name.getAdditionalName().getValue(), null);
+	    	else if (name.hasGivenName())
+	    		field = new ContactField(Contact.FIRST_NAME, name.getGivenName().getValue(), null);
 	    }
 	    else if (name.hasFullName())
 		field = new ContactField(Contact.FIRST_NAME, name.getFullName().getValue(), null);

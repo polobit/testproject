@@ -24,6 +24,14 @@
 		<task-retry-limit>1</task-retry-limit>
 	</retry-parameters>
   </queue>
+  <queue>
+    <name>periodic-triggers-queue</name>
+    <rate>2/s</rate>
+    <max-concurrent-requests>5</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+  </queue>
     <queue>
     <name>contact-sync-queue</name>
     <rate>2/s</rate>
@@ -113,4 +121,32 @@
   		<task-retry-limit>1</task-retry-limit>
   </retry-parameters>
   </queue>
+  
+
+  <!-- temporary queues -->
+   <queue>
+  <name>pipeline-queue</name>
+  <rate>5/s</rate>
+    <max-concurrent-requests>10</max-concurrent-requests>
+    <retry-parameters>
+		<task-retry-limit>1</task-retry-limit>
+	</retry-parameters>
+  </queue>
+
+  <queue>
+  <name>normal-sms-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+  		<task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
+  
+  <queue>
+  <name>bulk-sms-pull-queue</name>
+  <mode>pull</mode>
+  <retry-parameters>
+  		<task-retry-limit>1</task-retry-limit>
+  </retry-parameters>
+  </queue>
+
 </queue-entries>

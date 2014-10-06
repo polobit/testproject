@@ -7,6 +7,8 @@ import org.json.JSONObject;
 
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
+import com.campaignio.logger.Log.LogType;
+import com.campaignio.logger.util.LogUtil;
 import com.campaignio.tasklets.Tasklet;
 import com.campaignio.tasklets.agile.util.AgileTaskletUtil;
 
@@ -46,7 +48,7 @@ public class TaskletUtil
     /**
      * Workflow id.
      */
-    public static final String CAMPAIGN_WORKFLOW_ID = "workflow_id";
+    public static String CAMPAIGN_WORKFLOW_ID = "workflow_id";
 
     /**
      * Workflow data.
@@ -66,6 +68,12 @@ public class TaskletUtil
     public static final String WORKFLOW_TASKLET_CLASS_NAME = "workflow_tasklet_class_name";
 
     /**
+     * Keeps track of nodes in a workflow. It maps each workflow with number of
+     * nodes which have been already processed.
+     */
+    public static final String HOPS_COUNT = "hop_count";
+
+    /**
      * Executes Tasklet.
      * 
      * @param campaignJSON
@@ -81,9 +89,21 @@ public class TaskletUtil
      *            branches.
      * @throws Exception
      */
-    public static void executeTasklet(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject currentNodeJSON, String branch)
-	    throws Exception
+    public static void executeTasklet(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data,
+	    JSONObject currentNodeJSON, String branch) throws Exception
     {
+
+	// reached maximum limit
+	if (data != null && data.has(HOPS_COUNT))
+	    if ((int) data.get(HOPS_COUNT) > 101)
+	    {
+
+		LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
+		        "Subscriber removed from campaign after reaching maximum limit of 100 actions",
+		        LogType.CAMPAIGN_STOPPED.toString());
+		return;
+	    }
+
 	if (data == null)
 	    data = new JSONObject();
 
@@ -94,6 +114,10 @@ public class TaskletUtil
 	{
 	    nextNode = START_NODE_ID;
 	    data = new JSONObject();
+
+	    // initialize count
+	    data.put(HOPS_COUNT, 0);
+
 	}
 	else
 	{
@@ -111,8 +135,10 @@ public class TaskletUtil
 
 		// Records end-time of campaign and change status to
 		// campaignId-DONE.
-		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON), AgileTaskletUtil.getId(campaignJSON), Status.DONE);
-
+		CampaignStatusUtil.setStatusOfCampaign(AgileTaskletUtil.getId(subscriberJSON),
+		        AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getCampaignNameFromJSON(campaignJSON),
+		        Status.DONE);
+		data.remove(HOPS_COUNT);
 		return;
 	    }
 	}
@@ -127,7 +153,12 @@ public class TaskletUtil
 
 	// Execute tasklet
 	if (tasklet != null)
+	{
+	    // increment the current node count
+	    data.put(HOPS_COUNT, (int) data.get(HOPS_COUNT) + 1);
+
 	    tasklet.run(campaignJSON, subscriberJSON, data, nodeJSON);
+	}
     }
 
     /**
@@ -189,7 +220,8 @@ public class TaskletUtil
      * @throws Exception
      */
     @SuppressWarnings("rawtypes")
-    public static String getNextNodeId(JSONObject campaignJSON, JSONObject currentNodeJSON, String branch) throws Exception
+    public static String getNextNodeId(JSONObject campaignJSON, JSONObject currentNodeJSON, String branch)
+	    throws Exception
     {
 	// Get the States
 	JSONArray states = currentNodeJSON.getJSONArray("States");
@@ -225,6 +257,7 @@ public class TaskletUtil
     public static JSONObject getNodeJSON(JSONObject campaignJSON, String nodeId) throws Exception
     {
 	// Get Workflow Json
+
 	if (!campaignJSON.has(CAMPAIGN_WORKFLOW_JSON))
 	    return null;
 

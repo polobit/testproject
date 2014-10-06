@@ -7,8 +7,8 @@ import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.AgileQueues;
-import com.agilecrm.mandrill.util.MandrillUtil;
-import com.agilecrm.mandrill.util.deferred.MandrillDeferredTask;
+import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.mandrill.util.deferred.MailDeferredTask;
 import com.agilecrm.queues.util.PullQueueUtil;
 import com.google.appengine.api.LifecycleManager;
 import com.google.appengine.api.taskqueue.DeferredTask;
@@ -36,8 +36,8 @@ public class PullScheduler
     /**
      * Pull Queue attributes
      */
-    public static int DEFAULT_LEASE_PERIOD = 500;
-    public static int DEFAULT_COUNT_LIMIT = 500;
+    public static int DEFAULT_LEASE_PERIOD = 3600;
+    public static int DEFAULT_COUNT_LIMIT = 200;
 
     /**
      * Period to lease tasks from pull queue
@@ -84,8 +84,10 @@ public class PullScheduler
     {
 	// Campaigns need more lease period (in secs)
 	if (StringUtils.equals(queueName, AgileQueues.BULK_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
-		|| StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE))
+	        || StringUtils.equals(queueName, AgileQueues.NORMAL_CAMPAIGN_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.CAMPAIGN_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.NORMAL_SMS_PULL_QUEUE)
+	        || StringUtils.equals(queueName, AgileQueues.BULK_SMS_PULL_QUEUE))
 	    return 3600;
 
 	return DEFAULT_LEASE_PERIOD;
@@ -183,23 +185,40 @@ public class PullScheduler
 
 	for (TaskHandle taskHandle : tasks)
 	{
-
 	    // Verifies backend shutdown or cron limit before processing each
 	    // one
 	    if (shouldContinue())
 	    {
 		DeferredTask deferredTask = (DeferredTask) SerializationUtils.deserialize(taskHandle.getPayload());
 
-		if (deferredTask instanceof MandrillDeferredTask)
+		if (deferredTask instanceof MailDeferredTask)
 		{
-		    // System.out.println("Executing mandrill mail tasks...");
+		    try
+		    {
+			// System.out.println("Executing mandrill mail tasks...");
+			EmailGatewayUtil.sendMails(tasks);
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+			System.err.println("Exception occured while runnning mail deferred tasks..." + e.getMessage());
+		    }
 
-		    MandrillUtil.sendMandrillMails(tasks);
 		    PullQueueUtil.deleteTasks(queueName, tasks);
 		    return;
 		}
 		else
-		    deferredTask.run();
+		{
+		    try
+		    {
+			deferredTask.run();
+		    }
+		    catch (Exception e)
+		    {
+			e.printStackTrace();
+			System.err.println("Exception occured while running deferred task..." + e.getMessage());
+		    }
+		}
 
 		// Add to completed list
 		completedTasks.add(taskHandle);

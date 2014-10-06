@@ -1,7 +1,11 @@
 //show addons dialog (Ramesh 12/10/2010)
 function showAddonsTab(){
-
+	
+	 if(!checkMaxNodesCount())
+ 		return;
+   
    $('#addontabs').tabs({
+	   
         select: function (event, ui) {
 
             var id = $(ui.panel).attr('id');  
@@ -35,7 +39,7 @@ function showAddonsTab(){
 
 //Download nodes based on id and construct catalog (Ramesh 12/10/2010)
 function showAddonNodes(id) {
-
+	 
     $('#'+id).html('Loading...');
      
     //Get Nodes based on id 
@@ -62,7 +66,8 @@ function showAddonNodes(id) {
                 	console.log("Errorr...");
                 }
                 
-                addAddonTabTemplate(data,url,constructNodeFromDefinition,'#'+id);
+                            
+                 addAddonTabTemplate(data,url,constructNodeFromDefinition,'#'+id);
         
         });
         
@@ -75,6 +80,9 @@ function showAddonNodes(id) {
 function addAddonTabTemplate(data, url, callback, container)
 {
 
+	if(!checkMaxNodesCount())
+ 		return;
+	
          var catalogTemplate = $('#catalogtemplate').clone();
          catalogTemplate.removeAttr('style');
 
@@ -90,9 +98,18 @@ function addAddonTabTemplate(data, url, callback, container)
          // Add handler for add this                        
          catalogTemplate.find('#add').click(function () {
 
-             // Get JSON and JSONSrc
+        	 // Get JSON and JSONSrc
              var json = $(this).data('json');
-
+            
+             //Has to be changed
+             if(json.name == "Send Message"){
+            	 var list = getTwilioIncomingList();
+            	    	 if($.isEmptyObject(list)){
+            		 alert("Please configure twilio in integrations");
+            		 return;
+            	}
+             } 
+             
              var jsonsrc = $(this).data('jsonsrc');
 
              // Close the dialog

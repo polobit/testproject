@@ -71,7 +71,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    lastSyncCheckPoint = prefs.lastSyncCheckPoint;
 	    syncTime = prefs.othersParams;
 
-	    Map<String, Object> option = new HashMap<String, Object>();
+	    /*Map<String, Object> option = new HashMap<String, Object>();
 	    option.put("limit", 1);
 	    option.put("include[]", "total_count");
 	    if (syncTime.equalsIgnoreCase("second"))
@@ -92,12 +92,14 @@ public class StripeSyncImpl extends OneWaySyncService
 	    if (remain < pageSize)
 	    {
 		pages = pages + 1;
-	    }
+	    }*/
 
-	    while (currentPage <= pages)
+	    while (true)
 	    {
 		CustomerCollection customerCollections = Customer.all(Options(syncTime), prefs.apiKey);
 		List<Customer> customers = customerCollections.getData();
+		if(customers !=null && customers.size()==0)
+			break;
 		for (Customer customer : customers)
 		{
 		    if (!isLimitExceeded())
@@ -120,6 +122,7 @@ public class StripeSyncImpl extends OneWaySyncService
 	    moveCurrentCursorToTop();
 	    prefs.othersParams = "second";
 	    prefs.save();
+	    sendNotification(prefs.type.getNotificationEmailSubject());
 
 	}
 	catch (AuthenticationException | InvalidRequestException | APIConnectionException | CardException

@@ -44,7 +44,7 @@
 	
 	<script type="text/javascript">
 	
-	var LIB_PATH = "https://googleapps-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/";
+	var LIB_PATH = "https://googleapps.agilecrm.com/";
 	
 	function agile_download_scripts (callback)
 	{
@@ -73,7 +73,7 @@
 	{
 		// Open the popup
 		var return_url = "gadget.jsp?o=" + "open_social_id"; 
-		var child = window.open("https://our-dot-mcsandbox-dot-agile-crm-cloud.appspot.com/oauth2?return_url=" + encodeURIComponent(return_url), 'OpenID', 'height=400,width=400');
+		var child = window.open("https://our.agilecrm.com/oauth2?return_url=" + encodeURIComponent(return_url), 'OpenID', 'height=400,width=400');
 	}
 
     // Call init function to initialize and display tabs.
@@ -88,7 +88,8 @@
     
     <link media="screen" rel="stylesheet" type="text/css" href="https://my.agilecrm.com/css/bootstrap-pink.min.css" /> 
 	<link rel="stylesheet" type="text/css" href="https://my.agilecrm.com/css/lib/datepicker-min.css" /> 
-	
+	<!-- Fire to work -->
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	<style type="text/css">
 	#agile-content
 	{

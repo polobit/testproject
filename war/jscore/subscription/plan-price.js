@@ -52,30 +52,30 @@ var USER_BILLING_PREFS;
 
 var USER_DETAILS = {
 		getCurrentPlanName : function(userJSON){
-			if(!userJSON)
+			if(userJSON.plan.plan_type == "FREE")
 				return "free";
-			return userJSON.plan.PlanType;
+			return userJSON.plan.plan_type;
 		},
 		
 		getDomainName : function(userJSON){
-			if(!userJSON)
+			if(userJSON.plan.plan_type == "FREE")
 				return "free";
 			return userJSON.domain_name;
 		},
 		
 		getCurrentPlanId: function(userJSON)
 		{
-			if(!userJSON)
+			if(userJSON.plan.plan_type == "FREE")
 				return "free";
 			return userJSON.plan.plan_id;
 		},
 		getPlanType : function(userJSON){
-			if(!userJSON)
-			return "free";
+			if(userJSON.plan.plan_type == "FREE")
+				return "free";
 		
 			if(userJSON.plan.plan_type)
 			{			
-				if(userJSON.plan.plan_type.split("_").length == 1) return plan;
+				if(userJSON.plan.plan_type.split("_").length == 1) return userJSON.plan.plan_type;
 	
 				// Returns lite-yearly....
 				return userJSON.plan.plan_type.split("_")[0];
@@ -84,18 +84,18 @@ var USER_DETAILS = {
 		},
 		getPlanInterval : function(userJSON){
 			
-			if(!userJSON || !userJSON.plan.plan_type)
+			if(!userJSON || !userJSON.plan.plan_type || userJSON.plan.plan_type == "FREE")
 				return "MONTHLY";
 
 			var plan = userJSON.plan.plan_type
 			
 			if(plan)
-				return plan.split("_")[1];
+			  return plan.split("_")[1];
 			
 		},
 		getQuantity : function(userJSON){
 			
-			if(!userJSON)
+			if(!userJSON || !userJSON.plan || userJSON.plan.plan_type == "FREE")
 				return 2;
 			
 			return userJSON.plan.quantity;
@@ -295,7 +295,7 @@ $(function()
 	        	 	plan_json.bi_yearly_discount = ([cost * 24] - [variable.biennial * quantity * 24]).toFixed(2);
 	        	}
 	        
-	        if((USER_DETAILS.getPlanType(USER_BILLING_PREFS) + "-" + USER_DETAILS.getQuantity(USER_BILLING_PREFS) + "-" + USER_DETAILS.getPlanInterval(USER_BILLING_PREFS)) == (plan + "-" + quantity + "-" + cycle)){
+	        if((USER_DETAILS.getPlanType(USER_BILLING_PREFS) + "-" + USER_DETAILS.getQuantity(USER_BILLING_PREFS) + "-" + USER_DETAILS.getPlanInterval(USER_BILLING_PREFS)) == (plan.toUpperCase() + "-" + quantity + "-" + cycle.toUpperCase())){
 	        	
 	        	alert("Please change the plan to proceed");
 	        	return false;

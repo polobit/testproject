@@ -1,0 +1,964 @@
+<script id="activity-list-log-collection-template" type="text/html">
+
+{{#unless this.length}}
+
+        <div class="slate">
+            <div class="slate-content">
+                <div class="box-left">
+                    <img alt="Clipboard" src="/img/clipboard.png" />
+                </div>
+                
+                <div class="box-right">
+                    <h3>No activity found</h3>
+                    
+                </div>
+            </div>
+        </div>
+        {{/unless}}
+{{#if this.length}}
+<div >
+<section class="scroll">
+    <form>
+      <div class="ref-log">  
+            <div id="today-heading" style="display: none" class="ref-head"><b >Today</b>	</div>
+            <div id="today-activity" style="display: inline;"></div>
+            <div id="tomorrow-heading" style="display: none" class="ref-head"><b >Yesterday</b></div>
+            <div id="tomorrow-activity" style="display: inline;"></div>
+		<div id="next-week-heading" style="display: none" class="">
+            <b id="earllier" style="display:none">Earlier</b>
+			</div>
+            <div id="next-week-activity" style="display: inline;"></div>
+</div>
+    </form>
+</section>
+</div>
+
+	<!--<ul style="margin:0px" id="activity-list-log-model-list" ></ul>-->
+
+{{/if}}
+</script>
+<script id="activity-list-log-model-template" type="text/html">
+
+
+
+
+		{{#if_equals "TASK" entity_type}}
+	{{#if_equals "TASK_ADD" activity_type}}{{#if_equals "Task_owner_name" custom3}}
+	<div >
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Created a Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> for {{custom1}} 
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+
+
+{{/if_equals}}{{/if_equals}}
+
+
+{{#if_equals "TASK_COMPLETED" activity_type}}
+
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Completed Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a>
+	</div>
+<div>
+	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+
+{{#if_equals "TASK_DELETE" activity_type}}
+
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Deleted Task {{label}} 
+</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+
+{{#if_equals "TASK_EDIT" activity_type}}
+
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Modified Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> 
+</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+{{#if_equals "TASK_OWNER_CHANGE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Assigned Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> to  {{custom1}} 
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+
+{{#if_equals "TASK_RELATED_CONTACTS" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Modified Task <a href="" data={{entity_id}} class='activity-task-edit'">{{label}}</a> 
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>	
+{{/if_equals}}
+
+
+{{#if_equals "TASK_PROGRESS_CHANGE" activity_type}}
+	<div>
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> progress changed from {{custom2}}% to {{custom1}}%  
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+
+{{#if_equals "TASK_STATUS_CHANGE" activity_type}}
+	<div>
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Task <a href="" data={{entity_id}} class="activity-task-edit">{{label}}</a> status  changed from {{get_normal_name custom2}} to {{get_normal_name custom1}}  
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+
+{{#if_equals "BULK_DELETE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>	
+<div class="pull-left">
+<div>
+{{#if_equals "1" custom2}}
+  Deleted {{custom2}} Task 
+{{else}} 
+	Deleted {{custom2}} Tasks 
+{{/if_equals}}
+</div>	
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+{{/if_equals}}
+
+
+<!-- starting of deal condition-->
+
+{{#if_equals "DEAL" entity_type}}
+
+	{{#if_equals "DEAL_ADD" activity_type}}{{#if_equals "Deal_owner_name" custom3}}
+
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>	
+<div class="pull-left activity-tag">
+<div>
+ Created a new Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> 
+		</div>	
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+	
+{{/if_equals}}{{/if_equals}}
+{{#if_equals "DEAL_CLOSE" activity_type}}
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Won Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> 
+	</div>	
+		<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DEAL_EDIT" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Modified Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> 
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DEAL_DELETE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Deleted Deal {{label}} 
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DEAL_RELATED_CONTACTS" activity_type}}
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">	
+<div>
+Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> 
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+
+
+
+
+{{#if_equals "NOTE_ADD" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>	
+<div class="pull-left activity-tag">
+<div>
+	Added Note to  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>
+</div>
+<div>		
+<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "DEAL_OWNER_CHANGE" activity_type}}
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Assigned Deal  <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a> to {{custom1}} 
+</div>
+<div>		
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div></div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DEAL_MILESTONE_CHANGE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Changed Milestone of Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>  to {{custom1}} 
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DEAL_LOST" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>	
+<div class="pull-left activity-tag">
+<div>
+  Lost Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+
+{{#if_equals "BULK_DELETE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left">
+<div>	
+    {{#if_equals "1" custom2}}
+  Deleted {{custom2}} Deal 
+{{else}} 
+	Deleted {{custom2}} Deals 
+{{/if_equals}}
+</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+{{/if_equals}}
+	<!-- end of deal condition-->	
+
+
+{{#if_equals "EVENT" entity_type}}
+	{{#if_equals "EVENT_ADD" activity_type}}
+
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Created new Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+</div>
+<div>		
+<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div></div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+
+
+{{#if_equals "EVENT_RELATED_CONTACTS" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a>  
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+
+{{#if_equals "EVENT_DELETE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Deleted Event {{label}}
+</div>
+		<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+	 
+{{/if_equals}}
+{{#if_equals "EVENT_EDIT" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Modified Event <a href="" data={{entity_id}} class='activity-event-edit'">{{label}}</a> 
+</div>
+<div>	
+		
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div></div>
+<div class="clearfix"></div>
+
+
+{{/if_equals}}
+{{/if_equals}}
+
+
+{{#if_equals "CONTACT" entity_type}}
+{{#if_equals "NOTE_ADD" activity_type}}
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" class="edit-note" >Note </a> to  Contact <a href="#contact/{{entity_id}}">{{label}}</a>  
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "EMAIL_SENT" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Sent Email to Contact <a href="#contact/{{entity_id}}">{{label}}</a> 
+</div>
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>	
+{{/if_equals}}
+
+
+{{#if_equals "BULK_ACTION" activity_type}}
+
+{{#if_equals "ADD_TAG" custom1}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag" >
+<div>	
+ Added Tag {{removeDoubleCoutes custom2}} to {{custom3}} Contacts 
+
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>	
+{{/if_equals}}
+
+{{#if_equals "REMOVE_TAG" custom1}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+ Removed Tag  {{removeDoubleCoutes custom2}} on {{custom3}} Contacts 
+
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "ASIGN_WORKFLOW" custom1}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>
+	{{#if_equals "1" custom3}}
+		Added {{custom3}} Contact to Campaign {{custom2}}
+{{else}}
+Added {{custom3}} Contacts to Campaign {{custom2}}
+{{/if_equals}}
+</div>
+<div>
+
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "SEND_EMAIL" custom1}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+Sent email to {{custom3}} Contacts 
+
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>	
+{{/if_equals}}
+
+{{#if_equals "CHANGE_OWNER" custom1}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+{{#if_equals "1" custom3}}
+		Assgined  {{custom3}} Contact to {{custom2}}
+{{else}}
+		Assgined  {{custom3}} Contacts to {{custom2}}
+{{/if_equals}}
+</div>
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DELETE" custom1}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+    Deleted {{custom3}} Contacts
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+
+{{/if_equals}}
+
+
+
+{{#if_equals "CAMPAIGN" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+	Added <a href="#contact/{{entity_id}}">{{label}}</a> to Campaign {{custom2}}
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+
+
+{{#if_equals "TAG_ADD" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag" >
+<div>	
+Added Tag {{removeDoubleCoutes custom1}} to <a href="#contact/{{entity_id}}">{{label}}</a>
+	</div>
+<div>
+		
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>	
+{{/if_equals}}
+
+{{/if_equals}}
+<!-- end of contact-->
+<!-- document added startig-->
+{{#if_equals "DOCUMENT" entity_type}}
+{{#if_equals "DOCUMENT_ADD" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+{{#if_equals "1" custom2}}
+   Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contact
+{{else}} 
+	 Added Document <a href="{{custom1}}" target="_blank">{{label}}</a> to {{custom2}} Contacts
+{{/if_equals}}	
+</div>
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "DOCUMENT_REMOVE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+{{#if_equals "1" custom2}}
+   Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> on {{custom2}} Contact
+{{else}} 
+	 Removed Document <a href="{{custom1}}" target="_blank">{{label}}</a> on {{custom2}} Contacts
+{{/if_equals}}	
+</div>
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
+
+{{#if_equals "BULK_DELETE" activity_type}}
+	
+	<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+    {{#if_equals "1" custom2}}
+  Deleted {{custom2}} Document 
+{{else}} 
+Deleted {{custom2}} Documents 
+{{/if_equals}}	
+</div>
+<div>	
+	<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+
+{{/if_equals}}
+{{/if_equals}}
+
+	
+
+
+
+</script>
+
+<script id="activity-list-header-template" type="text/html">
+<div class="row">
+    <div class="span12">
+        <div class="page-header">
+            <h1 class="activity-heading"><span>Activity</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h1>
+		<div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
+                <div class="btn selected_name" id="selectedentity_type">All Activity</div>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="entity_type">
+					 <li><a href="">All Activity</a></li>
+                     <li><a href="TASK">Tasks</a></li>
+                     <li><a href="DEAL">Deals</a></li>
+					 <li><a href="EVENT">Events</a></li>
+					 <li><a href="CONTACT">Contacts</a></li>
+ 					<li><a href="DOCUMENT">Documents</a></li>
+                    
+                </ul>
+            </div>            
+		<div class="btn-group pull-right activity-log-button" style="cursor:pointer;margin-right:15px;top: -28px;">
+                <div class="btn selected_name" id="selectedusername">All users</div>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="user-select"></ul>
+            </div>
+            
+        </div>
+    </div>
+
+    
+</div>
+
+<div class="row">
+<div class="span12">
+<div id="activity-list-based-condition"></div>
+</div>
+</div>
+</script>

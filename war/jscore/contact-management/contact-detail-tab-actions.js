@@ -48,6 +48,12 @@ $(function(){
 		var el = $("#opportunityForm");
 		$("#opportunityModal").modal('show');
 		
+		add_custom_fields_to_form({}, function(data){
+			var el_custom_fields = show_custom_fields_helper(data["custom_fields"], []);
+			$("#custom-field-deals", $("#opportunityModal")).html($(el_custom_fields));
+			
+		}, "DEAL");
+		
 		// Fills owner select element
 		populateUsers("owners-list", el, undefined, undefined, function(data){
 			
@@ -58,10 +64,18 @@ $(function(){
 		// Contacts type-ahead
 		agile_type_ahead("relates_to", el, contacts_typeahead);
 		
-		// Fills milestone select element
-		populateMilestones(el, undefined, undefined, function(data){
-			$("#milestone", el).html(data);
-			$("#milestone", el).closest('div').find('.loading-img').hide();
+		// Fills the pipelines list in select box.
+		populateTracks(el, undefined, undefined, function(pipelinesList){
+			// Fills milestone select element if there is only one pipeline.
+			if(pipelinesList.length == 1)
+			populateMilestones(el, undefined, 0, undefined, function(data){
+				el.find("#milestone").html(data);
+				if (value.milestone) {
+					$("#milestone", el).find('option[value=\"'+value.milestone+'\"]')
+							.attr("selected", "selected");
+				}
+				$("#milestone", el).closest('div').find('.loading-img').hide();
+			});
 		});
 
 		// Enable the datepicker

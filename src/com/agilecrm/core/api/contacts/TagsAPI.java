@@ -1,9 +1,11 @@
 package com.agilecrm.core.api.contacts;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,14 +14,28 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.RequestWrapper;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.agilecrm.Globals;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Tag;
+import com.agilecrm.contact.TagManagement;
+import com.agilecrm.contact.deferred.TagManagementDeferredTask;
+import com.agilecrm.contact.deferred.TagManagementDeferredTask.Action;
+import com.agilecrm.contact.filter.ContactFilterResultFetcher;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.TagUtil;
+import com.google.appengine.api.backends.BackendService;
+import com.google.appengine.api.backends.BackendServiceFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.TaskOptions.Method;
 
 /**
  * <code>TagsAPI</code> includes REST calls to interact with {@link Tag} class
@@ -57,6 +73,15 @@ public class TagsAPI
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+    
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void saveTag(Tag tag)
+    {
+	Set<Tag> tags = new HashSet<Tag>();
+	tags.add(tag);
+	TagUtil.addTag(tag);
     }
 
     /**
@@ -135,6 +160,56 @@ public class TagsAPI
     }
 
     /**
+     * Returns the statistics of tags and contacts (i.e no.of contacts
+     * associated with each tag) as json object (tag name as key and no.of
+     * contacts with that tag as value)
+     * 
+     * @return JSONObject as string
+     */
+    @Path("stats1")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Tag> getTagsStats1(@QueryParam("reload") boolean reload)
+    {
+	System.out.println("reload : " + reload);
+	return TagUtil.getTags(true);
+    }
+    
+    @Path("stats2")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<Tag> getTagsStats2(@QueryParam("reload") boolean reload, @QueryParam("page_size") String page_size, @QueryParam("cursor") String cursor)
+    {
+	System.out.println("reload : " + reload);
+	if(StringUtils.isEmpty(page_size))
+	    return TagUtil.getStatus();
+	try
+	{
+	    int tags_fetch_size = Integer.parseInt(page_size);
+	    
+	    return TagUtil.getStats(tags_fetch_size, cursor);
+	}
+	catch(NumberFormatException e)
+	{
+	    return TagUtil.getStatus();
+	}
+    }
+    
+    /**
+     * Returns tag with stats (Number of contacts associated with contacts)
+     * @param tag
+     * @return
+     */
+    @Path("getstats/{tag}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Tag getTagStats(@PathParam("tag") String tag)
+    {
+	return TagUtil.getTagWithStats(tag);
+	
+    }
+    
+    /**
      * Creates new tags in tags database
      * 
      * @param tags
@@ -173,6 +248,94 @@ public class TagsAPI
 	Set<String> tags = new HashSet<String>();
 	tags.add(tag);
 	TagUtil.deleteTags(tags);
+    }
+
+    /**
+     * Bulk delete tag operations. If contacts that are to be modified are more
+     * than with in 800, task is carried out but front end of tasklet. For cases
+     * beyond that limit, backend process will be initialized. Although limits
+     * specified are quite less than that the limit that front end instance can
+     * handle, but just to make sure running without missing out any contacts,
+     * limits are set that way
+     * 
+     * @param tag
+     */
+    @Path("bulk/delete")
+    @DELETE
+    public void bulkDeleteTag(@QueryParam("tag") String tag)
+    {
+	TagManagementDeferredTask tagAction = new TagManagementDeferredTask(new Tag(tag), (Tag) null, Action.DELETE);
+
+	// Fetches count of contacts which are related to that tag
+	int count = TagManagement.getAvailableContactsCount(tag);
+
+	// If count is less than 100, task is carried out but frontend instance
+	if (count <= 100)
+	    TagManagement.removeTag(tag);
+
+	// If count is between 100 to 800, task is carried out by taskqueue.
+	else if (count > 100 && count < 800)
+	{
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction);
+
+	    queue.addAsync(taskOptions);
+	}
+
+	// If count is more than 800, tasks are carried out but backends.
+	else
+	{
+	    // Initialize task here
+	    Queue queue = QueueFactory.getDefaultQueue();
+
+	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction).header("Host", url);
+
+	    queue.add(taskOptions);
+	}
+    }
+
+    @Path("bulk/rename")
+    @POST
+    public void renameTag(Tag tag, @QueryParam("tag") String newTag, @Context HttpServletRequest request)
+    {
+	TagManagementDeferredTask tagAction = new TagManagementDeferredTask(tag, new Tag(newTag), Action.RENAME);
+
+	// Fetches count of contacts which are related to that tag
+	int count = TagManagement.getAvailableContactsCount(tag.tag);
+
+	// If count is less than 100, task is carried out but frontend instance
+	if (count <= 100)
+	    tagAction.run();
+
+	// If count is between 100 to 800, task is carried out by taskqueue.
+	else if (count > 100 && count < 800)
+	{
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction);
+
+	    queue.addAsync(taskOptions);
+	}
+
+	// If count is more than 800, tasks are carried out but backends.
+	else
+	{
+	    // Initialize task here
+	    Queue queue = QueueFactory.getDefaultQueue();
+
+	    String url = BackendServiceFactory.getBackendService().getBackendAddress(Globals.BULK_ACTION_BACKENDS_URL);
+
+	    // Create Task and push it into Task Queue
+	    TaskOptions taskOptions = TaskOptions.Builder.withPayload(tagAction).header("Host", url);
+
+	    queue.add(taskOptions);
+	}
     }
 
 }

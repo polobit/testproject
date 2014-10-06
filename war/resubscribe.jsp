@@ -376,7 +376,7 @@ html[dir=rtl] .wrapper,html[dir=rtl] .container,html[dir=rtl] label {
 				        	UnsubscribeStatusUtil.removeUnsubscribeStatus(contact, campaignId);
 				        	
 				        	// Remove campaign status to delete from Removed Subscribers list
-				        	CampaignStatusUtil.setStatusOfCampaign(String.valueOf(contact.id), campaignId, Status.DONE);
+				        	CampaignStatusUtil.setStatusOfCampaign(String.valueOf(contact.id), campaignId, workflow.name, Status.DONE);
 				        	
 				        	// Remove Unsubscribe logs 
 				        	LogUtil.deleteSQLLogs(campaignId, String.valueOf(contact.id), LogType.UNSUBSCRIBED);

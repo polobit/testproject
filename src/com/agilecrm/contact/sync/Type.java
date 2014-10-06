@@ -1,5 +1,6 @@
 /**
- * 
+ * @author jitendra
+ * @since 2014
  */
 package com.agilecrm.contact.sync;
 
@@ -12,20 +13,26 @@ import com.agilecrm.contact.sync.service.impl.ShopifySyncImpl;
 import com.agilecrm.contact.sync.service.impl.StripeSyncImpl;
 import com.agilecrm.contact.sync.service.impl.ZohoSyncImpl;
 import com.thirdparty.quickbook.QuickBookSyncImpl;
+import com.thirdparty.xero.XeroSyncImpl;
 
 /**
- * <code>SyncClient</code> contains various third party client that client need
- * to set for import contact
+ * This Enumeration defines several third party client for Contacts sync service
+ * its full fledged implementation of Enumeration. Each Client will takes their
+ * Sync Implementation class and Email Subject for sending notification after
+ * import as parameter. SyncService will initiate Sync Implementation class and
+ * provide contacts sync service.
  * 
- * @author jitendra
  * 
  */
 public enum Type implements Serializable
 {
-    GOOGLE(GoogleSyncImpl.class, "Google Import Status"), STRIPE(StripeSyncImpl.class, "Stripe Import Status"), ZOHO(
-	    ZohoSyncImpl.class, "Zoho Import Status"), SALESFORCE(SalesforceSync.class, "Salesforce Import Status"), SHOPIFY(
-	    ShopifySyncImpl.class, "Shopify Import Status"),
-	    QUICKBOOK(QuickBookSyncImpl.class,"QuickBook Import Status");
+    GOOGLE(GoogleSyncImpl.class, "Google Import Status"), 
+    STRIPE(StripeSyncImpl.class, "Stripe Import Status"), 
+    ZOHO(ZohoSyncImpl.class, "Zoho Import Status"), 
+    SALESFORCE(SalesforceSync.class, "Salesforce Import Status"),
+    SHOPIFY(ShopifySyncImpl.class, "Shopify Import Status"),
+    QUICKBOOK(QuickBookSyncImpl.class,"QuickBooks Import Status"),
+    XERO(XeroSyncImpl.class,"Xero Import Status");
 
     Class<? extends SyncService> clazz;
     String notificationEmailSubject = "";
@@ -37,7 +44,7 @@ public enum Type implements Serializable
     }
 
     /**
-     * return  clazz of Client.
+     * return clazz of Client.
      * 
      * @return the clazz
      */

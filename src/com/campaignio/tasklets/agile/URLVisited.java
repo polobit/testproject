@@ -15,59 +15,77 @@ import com.google.appengine.api.NamespaceManager;
  * @author Naresh
  * 
  */
-public class URLVisited extends TaskletAdapter
-{
-    /**
-     * Given URL
-     */
-    public static String URL_VALUE = "url_value";
+public class URLVisited extends TaskletAdapter {
+	/**
+	 * Given URL
+	 */
+	public static String URL_VALUE = "url_value";
 
-    /**
-     * Given URL type
-     */
-    public static String TYPE = "type";
+	/**
+	 * Given URL type
+	 */
+	public static String TYPE = "type";
 
-    /**
-     * Exact URL type
-     */
-    public static String EXACT_MATCH = "exact_match";
+	/**
+	 * Exact URL type
+	 */
+	public static String EXACT_MATCH = "exact_match";
 
-    /**
-     * Like URL type
-     */
-    public static String CONTAINS = "contains";
+	/**
+	 * Like URL type
+	 */
+	public static String CONTAINS = "contains";
 
-    /**
-     * Branch Yes
-     */
-    public static String BRANCH_YES = "yes";
+	/**
+	 * Branch Yes
+	 */
+	public static String BRANCH_YES = "yes";
 
-    /**
-     * Branch No
-     */
-    public static String BRANCH_NO = "no";
+	/**
+	 * Branch No
+	 */
+	public static String BRANCH_NO = "no";
 
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
-    {
-	// Get URL value and type
-	String url = getStringValue(nodeJSON, subscriberJSON, data, URL_VALUE);
-	String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
+	/**
+	 * Number of days or hours to be considered
+	 */
+	public static final String DURATION = "duration";
 
-	String email = null;
+	/**
+	 * Days or Hours
+	 */
+	public static final String DURATION_TYPE = "duration_type";
 
-	// Gets email from subscriberJSON
-	if (subscriberJSON.getJSONObject("data").has("email"))
-	    email = subscriberJSON.getJSONObject("data").getString("email");
+	public void run(JSONObject campaignJSON, JSONObject subscriberJSON,
+			JSONObject data, JSONObject nodeJSON) throws Exception {
 
-	// Gets URL count from table.
-	int count = AnalyticsSQLUtil.getCountForGivenURL(url, NamespaceManager.get(), email, type);
+		// Get URL value and type
+		String url = getStringValue(nodeJSON, subscriberJSON, data, URL_VALUE);
+		String type = getStringValue(nodeJSON, subscriberJSON, data, TYPE);
+		String duration = getStringValue(nodeJSON, subscriberJSON, data,
+				DURATION);
+		String durationType = getStringValue(nodeJSON, subscriberJSON, data,
+				DURATION_TYPE);
 
-	if (count == 0)
-	{
-	    TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_NO);
-	    return;
+		int count = 0;
+		String email = null;
+
+		// Gets email from subscriberJSON
+		if (subscriberJSON.getJSONObject("data").has("email"))
+			email = subscriberJSON.getJSONObject("data").getString("email");
+
+		// Gets URL count from table.
+		count = AnalyticsSQLUtil.getCountForGivenURL(url,
+				NamespaceManager.get(), email, type, duration, durationType);
+
+		if (count == 0) {
+			TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+					nodeJSON, BRANCH_NO);
+			return;
+		}
+
+		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data,
+				nodeJSON, BRANCH_YES);
+
 	}
-
-	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, BRANCH_YES);
-    }
 }

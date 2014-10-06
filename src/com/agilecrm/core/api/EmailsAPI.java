@@ -6,7 +6,6 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -16,6 +15,9 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.agilecrm.account.EmailGateway;
+import com.agilecrm.account.util.EmailGatewayUtil;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.email.util.ContactEmailUtil;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.util.EmailUtil;
@@ -93,6 +95,7 @@ public class EmailsAPI
 	// Saves Contact Email.
 	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null,
 	        trackClicks);
+	ActivitySave.createEmailSentActivityToContact(to, subject, body);
 
     }
 
@@ -172,8 +175,16 @@ public class EmailsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public String getEmailActivityFromMandrill() throws Exception
     {
+	EmailGateway emailGateway = EmailGatewayUtil.getEmailGateway();
+
+	String apiKey = null;
+
+	// Get emailGateway api-key
+	if (emailGateway != null)
+	    apiKey = emailGateway.api_key;
+
 	// Returns mandrill subaccount info if created, otherwise error json.
-	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get());
+	String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get(), apiKey);
 
 	// If subaccount did not exist, return null
 	if (StringUtils.contains(info, "Unknown_Subaccount"))
@@ -185,7 +196,4 @@ public class EmailsAPI
 	return info;
     }
 
-    
-   
-    
 }

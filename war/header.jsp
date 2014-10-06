@@ -187,11 +187,11 @@
 									    if (domainUser != null && domainUser.is_admin)
 														out.println("<li><a href='#account-prefs'><i class='icon-fire'></i> Admin Settings</a></li><li><a href='#subscribe'><i class='icon-shopping-cart'></i> Plan & Upgrade</a></li>");
 									%>
-									<li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
+									<!-- <li><a href="https://www.agilecrm.com/support.html" target="_blank"><i class="icon-facetime-video"></i> Help
 											Videos</a></li>
-									<li><a href="#" id="livilyChatLink" class="livilyChatButton ClickdeskChatLink" image="false" onclick="return false;"><i class="icon-comment"></i> Live Chat</a></li>
-									<li><a href="#contact-us"><i class="icon-pencil"></i>
-											Contact Us</a></li>
+								 	<li><a href="#" onclick="$('li#fat-menu').removeClass('open');clickdesk_show_livechat_popup();"><i class="icon-comment"></i> Live Chat</a></li>  -->
+									<li><a href="#help"><i class="icon-question"></i>
+											Help</a></li>
 									<li><a href="<%=logoutURL%>"><i class="icon-off"></i>
 											Logout</a></li>
 

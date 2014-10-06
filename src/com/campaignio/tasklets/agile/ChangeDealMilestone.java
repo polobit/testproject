@@ -36,7 +36,8 @@ public class ChangeDealMilestone extends TaskletAdapter
      */
     public static String OWNER_ID = "owner_id";
 
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	String fromMilestone = getStringValue(nodeJSON, subscriberJSON, data, CURRENT_MILESTONE);
 	String toMilestone = getStringValue(nodeJSON, subscriberJSON, data, NEW_MILESTONE);
@@ -49,21 +50,13 @@ public class ChangeDealMilestone extends TaskletAdapter
 	    // Get Contact Owner Id.
 	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
-	    if (contactOwnerId == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-		return;
-	    }
-
 	    LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		    "Changed Deal's milestone from " + (fromMilestone.equals(ANY_MILESTONE) ? "Any" : fromMilestone) + " to " + toMilestone,
-		    Log.LogType.CHANGED_DEAL_MILESTONE.toString());
+		    "Changed Deal's milestone from " + (fromMilestone.equals(ANY_MILESTONE) ? "Any" : fromMilestone)
+		            + " to " + toMilestone, Log.LogType.CHANGED_DEAL_MILESTONE.toString());
 
 	    // Change milestone with given values
-	    changeMilestoneToRelatedDeals(contactId, fromMilestone, toMilestone, AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
+	    changeMilestoneToRelatedDeals(contactId, fromMilestone, toMilestone,
+		    AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
 	}
 	catch (Exception e)
 	{
@@ -87,14 +80,16 @@ public class ChangeDealMilestone extends TaskletAdapter
      * @param ownerId
      *            - Owner id
      */
-    private void changeMilestoneToRelatedDeals(String contactId, String currentMilestone, String newMilestone, Long ownerId)
+    private void changeMilestoneToRelatedDeals(String contactId, String currentMilestone, String newMilestone,
+	    Long ownerId)
     {
 
 	// If any milestone return null
 	if (StringUtils.equals(currentMilestone, ANY_MILESTONE))
 	    currentMilestone = null;
 
-	List<Opportunity> deals = OpportunityUtil.getDeals(Long.parseLong(contactId), currentMilestone, ownerId);
+	List<Opportunity> deals = OpportunityUtil.getOpportunitiesByFilter(ownerId == null ? null : ownerId.toString(),
+	        currentMilestone, contactId, null, 0, null, null);
 
 	System.out.println("Deals size id " + deals.size());
 

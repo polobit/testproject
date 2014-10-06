@@ -82,13 +82,32 @@ public class Widget
      */
     public static enum WidgetType
     {
-	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM
+
+	SOCIAL, SUPPORT, EMAIL, CALL, BILLING, CUSTOM,ECOMMERCE, INTEGRATIONS
+
     };
 
     /**
      * Widget type which stores info to categorize the widgets
      */
+    @Indexed
     public WidgetType widget_type = null;
+
+    /**
+     * To merge integrations within Widget Entity
+     * 
+     * @author naresh
+     * 
+     */
+    public static enum IntegrationType
+    {
+	EMAIL, SMS
+    };
+
+    /**
+     * To categorize integration type
+     */
+    public IntegrationType integration_type = null;
 
     /**
      * Prefs are access token and secret key to connect to LinkedIn/Twitter.
@@ -130,7 +149,7 @@ public class Widget
     public boolean is_added = false;
 
     // Default constructor
-    Widget()
+   public  Widget()
     {
 
     }
@@ -156,6 +175,31 @@ public class Widget
 	this.fav_ico_url = fav_ico;
 	this.mini_logo_url = mini_logo;
 	this.widget_type = type;
+	this.user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
+    }
+
+    /**
+     * Initializes {@link Widget} with given parameters
+     * 
+     * @param name
+     * @param description
+     * @param url
+     * @param logo
+     * @param mini_logo
+     * @param fav_ico
+     * @param type
+     */
+    public Widget(String name, String description, String url, String logo, String mini_logo, String fav_ico,
+	    WidgetType type, IntegrationType integrationType)
+    {
+	this.name = name;
+	this.description = description;
+	this.url = url;
+	this.logo_url = logo;
+	this.fav_ico_url = fav_ico;
+	this.mini_logo_url = mini_logo;
+	this.widget_type = type;
+	this.integration_type = integrationType;
 	this.user = new Key<AgileUser>(AgileUser.class, AgileUser.getCurrentAgileUser().id);
     }
 

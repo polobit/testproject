@@ -18,8 +18,26 @@ function agile_propertyJSON(name, id, type)
 	 */
 	var json = {};
 
-	if (type == undefined)
-		json.type = "SYSTEM";
+	if (type == undefined){
+		switch(name){
+		case 'first_name':
+		case 'last_name':
+		case 'email':
+		case 'company':
+		case 'title':
+		case 'name':
+		case 'url':
+		case 'website':
+		case 'address':
+		case 'phone':
+		case 'original_ref':
+			json.type = "SYSTEM";
+			break;
+		default:
+			json.type = "CUSTOM";
+			break;
+		}
+	}
 	else
 		json.type = type;
 
@@ -80,7 +98,7 @@ function agile_json(URL, callback)
 	document.getElementsByTagName('body')[0].appendChild((function()
 	{
 		var s = document.createElement('script');
-		s.type = 'text/javascript';
+		s.type = 'application/javascript';
 		s.src = URL.replace('callback=?', 'callback=' + ud);
 		return s;
 	})());

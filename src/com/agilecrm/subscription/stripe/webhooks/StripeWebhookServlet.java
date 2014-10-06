@@ -22,6 +22,7 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
@@ -56,6 +57,7 @@ public class StripeWebhookServlet extends HttpServlet
 	public static final String STRIPE_INVOICE_PAYMENT_FAILED = "invoice.payment_failed";
 	public static final String STRIPE_SUBSCRIPTION_DELETED = "customer.subscription.deleted";
 	public static final String STRIPE_CUSTOMER_DELETED = "customer.deleted";
+	public static final String STRIPE_CUSTOMER_SUBSCRIPTION_CREATED = "customer.subscription.created";
 	public static final String STRIPE_INVOICE_PAYMENT_SUCCEEDED = "invoice.payment_succeeded";
 	public static final String STRIPE_CUSTOMER_SUBSCRIPTION_UPDATED = "customer.subscription.updated";
 	public static final String STRIPE_CHARGE_REFUNDED = "charge.refunded";
@@ -185,7 +187,7 @@ public class StripeWebhookServlet extends HttpServlet
 				event = customizeEventAttributes(event, user);
 
 				// Delete account
-				Subscription.getSubscription().delete();
+				SubscriptionUtil.getSubscription().delete();
 
 				// Send mail to domain user
 				SendMail.sendMail(user.email, SendMail.SUBSCRIPTION_DELETED_SUBJECT, SendMail.SUBSCRIPTION_DELETED,
@@ -215,7 +217,7 @@ public class StripeWebhookServlet extends HttpServlet
 				SendMail.sendMail(user.email, SendMail.FAILED_BILLINGS_FINAL_TIME_SUBJECT,
 						SendMail.FAILED_BILLINGS_FINAL_TIME, getcustomDataForMail(event));
 
-				Subscription subscription = Subscription.getSubscription();
+				Subscription subscription = SubscriptionUtil.getSubscription();
 				subscription.delete();
 
 				// Set flag to SUBSCRIPTION_DELETED
@@ -397,7 +399,7 @@ public class StripeWebhookServlet extends HttpServlet
 		try
 		{
 			// Set status and save subscription
-			Subscription subscription = Subscription.getSubscription();
+			Subscription subscription = SubscriptionUtil.getSubscription();
 			System.out.println(subscription);
 			subscription.status = status;
 			subscription.save();
@@ -640,4 +642,6 @@ public class StripeWebhookServlet extends HttpServlet
 			NamespaceManager.set(oldNamespace);
 		}
 	}
+	
+	
 }

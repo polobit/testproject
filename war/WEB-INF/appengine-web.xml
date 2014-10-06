@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 	<application>agile-crm-cloud</application>
-	<version>1-2</version>
+	<version>2-1</version>
 	<threadsafe>true</threadsafe>
 	<sessions-enabled>true</sessions-enabled>
 	<system-properties>
@@ -62,7 +62,6 @@
 	   <exclude path="/tpl/min/**.js" />
 	   <exclude path="/stats/min/**.js" />
 
-
 	</static-files>
 
 	<!-- End of static files configuration -->
@@ -74,6 +73,9 @@
 		<!-- <url-blacklist>https://*.*.*/war/tpl/min/*.js</url-blacklist> <url-blacklist>https://*.*.*/war/tpl/min/precompiled/*.js</url-blacklist> 
 			<url-blacklist>https://*.*.*/war/tpl/min/precompiled/*.html</url-blacklist> 
 			<url-blacklist>https://*.*.*/war/widgets/*.js</url-blacklist> -->
+		<url-blacklist>https://*/formbuilder/assets/templates/*</url-blacklist>
+		<url-blacklist>https://*/war/misc/formbuilder/*</url-blacklist>
+		<url-blacklist>https://*/misc/modal-templates/*</url-blacklist>
 		<enabled-rewriter>MoveCssToHead</enabled-rewriter>
 		<enabled-rewriter>CombineCss</enabled-rewriter>
 		<enabled-rewriter>MinifyCss</enabled-rewriter>
@@ -82,5 +84,9 @@
 
 	</pagespeed>
 
+	<!-- in bound services -->
+	<inbound-services>
+		<service>mail</service>
+	</inbound-services>
 
 </appengine-web-app>

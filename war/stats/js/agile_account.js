@@ -9,6 +9,7 @@ function agile_setAccount(id, namespace)
 	// Sets the contact account with passed id and namespace
 	agile_id.set(id, namespace);
 	agile_setEmailFromUrl();
+
 }
 
 function agile_setEmailFromUrl()

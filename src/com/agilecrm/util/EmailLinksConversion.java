@@ -73,6 +73,10 @@ public class EmailLinksConversion
      */
     public static String convertLinksUsingJSOUP(String input, String subscriberId, String campaignId, boolean doPush)
     {
+	// If empty return
+	if (StringUtils.isBlank(input))
+	    return input;
+
 	try
 	{
 	    Document doc = Jsoup.parse(input);

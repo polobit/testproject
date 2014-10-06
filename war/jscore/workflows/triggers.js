@@ -14,9 +14,26 @@ $(function()
 		e.preventDefault();
 
 		// Hide trigger milestones div for other trigger conditions.
-		if ($(this).val() !== 'DEAL_MILESTONE_IS_CHANGED')
+		if ($(this).val() !== 'DEAL_MILESTONE_IS_CHANGED'){
 			$('form#addTriggerForm').find('select#trigger-deal-milestone').closest('div.control-group').css('display', 'none');
+		}
+		
+		if($(this).val() !== 'RUNS_DAILY' || $(this).val() !== 'RUNS_WEEKLY' || $(this).val() !== 'RUNS_MONTHLY'){
+			$('form#addTriggerForm').find('select#contact-filter').closest('div.control-group').css('display', 'none');
+		}
 
+		// Hide trigger stripe event div for other trigger conditions.
+		if($(this).val() !== 'STRIPE_CHARGE_EVENT'){
+			$('form#addTriggerForm').find('select#trigger-stripe-event').closest('div.control-group').css('display', 'none');
+			$('form#addTriggerForm').find('select#trigger-stripe-event').val("");
+		}
+		
+		// Hide trigger shopify event div for other trigger conditions.
+		if($(this).val() !== 'SHOPIFY_EVENT'){
+			$('form#addTriggerForm').find('select#trigger-shopify-event').closest('div.control-group').css('display', 'none');
+			$('form#addTriggerForm').find('select#trigger-shopify-event').val("");
+		}
+		
 		// Initialize tags typeahead
 		if ($(this).val() == 'TAG_IS_ADDED' || $(this).val() == 'TAG_IS_DELETED')
 		{
@@ -25,6 +42,13 @@ $(function()
 			// Tags typeahead for tag input field
 			addTagsDefaultTypeahead($('form#addTriggerForm').find('div#RHS'));
 		}
+		
+		// Initialize tags typeahead
+		if ($(this).val() == 'RUNS_DAILY' || $(this).val() == 'RUNS_WEEKLY' || $(this).val() == 'RUNS_MONTHLY')
+		{	
+			populate_contact_filters_in_trigger($('form#addTriggerForm'), 'contact-filter');
+		}
+
 
 		// Show score
 		if ($(this).val() == 'ADD_SCORE')
@@ -35,9 +59,20 @@ $(function()
 		{
 			populate_milestones_in_trigger($('form#addTriggerForm'), 'trigger-deal-milestone');
 		}
-
+		
+		// Show stripe events
+		if($(this).val() == 'STRIPE_CHARGE_EVENT')
+		{
+			populate_stripe_events_in_trigger($('form#addTriggerForm'), 'trigger-stripe-event');
+		}
+		
+		// Show shopify events
+		if($(this).val() == 'SHOPIFY_EVENT')
+		{
+			populate_shopify_events_in_trigger($('form#addTriggerForm'), 'trigger-shopify-event');
+		}
 	});
-
+	
 	// When cancel clicked, take to Back page
 	$('#trigger-cancel').die().live('click', function(e)
 	{
@@ -69,7 +104,7 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 	$('select#' + milestones_select_id).after(getRandomLoadingImg());
 
 	// Fills milestone select element
-	populateMilestones(trigger_form, undefined, undefined, function(data)
+	populateMilestones(trigger_form, undefined, 0, undefined, function(data)
 	{
 		$('.loading').remove();
 
@@ -82,7 +117,63 @@ function populate_milestones_in_trigger(trigger_form, milestones_select_id, trig
 			trigger_form.find('select#' + milestones_select_id).val(trigger_deal_milestone_value).attr('selected', 'selected').trigger('change');
 		}
 	}, "Select new milestone...");
+}
 
+/**
+ * Shows hidden trigger-milestones select element and fills with milestones
+ * data.
+ * 
+ * @param trigger_form -
+ *            trigger form jQuery object
+ * @param filter_select_id -
+ *            contact filter select id
+ * @param trigger_deal_milestone_value -
+ *            trigger milestone value obtained from saved trigger.
+ */
+function populate_contact_filters_in_trigger(trigger_form, filter_select_id, value)
+{
+	// Show milestones select element
+	trigger_form.find('select#' + filter_select_id).closest('div.control-group').css('display', '');
+
+	var optionsTemplate = "<option value='{{id}}'>{{name}}</option>";
+	
+	fillSelect('contact-filter', '/core/api/filters', 'workflow', function fillContactFilter()
+	{
+		if (value)
+		{
+			$('#contact-filter',trigger_form).find('option[value=' + value + ']').attr('selected', 'selected');
+		}
+	}, optionsTemplate, false,undefined,"Select Contact filter");
+}
+
+/**
+ *	Function to populate the stripe event trigger with stripe events
+ * 
+ * @param trigger_form
+ * 				trigger form object
+ * @param stripe_event_select_id
+ * 				stripe event select element id
+ * @param stripe_event_value
+ * 				stripe event type
+ */
+function populate_stripe_events_in_trigger(trigger_form, stripe_event_select_id, stripe_event_value)
+{
+	trigger_form.find('select#' + stripe_event_select_id).closest('div.control-group').css('display','');
+
+	if(stripe_event_value !== undefined)
+	{
+		trigger_form.find('select#' + stripe_event_select_id).val(stripe_event_value).attr('selected', 'selected').trigger('change');
+	}
+}
+
+function populate_shopify_events_in_trigger(trigger_form, shopify_event_select_id, shopify_event_value)
+{
+	trigger_form.find('select#' + shopify_event_select_id).closest('div.control-group').css('display','');
+
+	if(shopify_event_value !== undefined)
+	{
+		trigger_form.find('select#' + shopify_event_select_id).val(shopify_event_value).attr('selected', 'selected').trigger('change');
+	}
 }
 
 /**

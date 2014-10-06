@@ -14,13 +14,16 @@
 .app-content>small,.tweet-body>small {
 	font-size: 0.8571rem
 }
-
+.column-content
+{
+	background:#fff;
+}
 .app-content {
 	position: relative;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	padding: 20px 5px 15px 15px;
+	padding: 0px 0px 15px 0px;
 }
 
 .scroll-v-app-content {
@@ -41,16 +44,20 @@
 
 .column {
 	height: 510px;
-	margin: 0px 5px 8px !important;
+	margin: 0px 30px 25px 0px !important;
 	background-color: #fcfcfc;
 	font-size: 1rem;
 	white-space: normal;
 	overflow: hidden;
 	position: relative;
-	border: 1px solid #a1a1a1;
+	/*border: 1px solid #a1a1a1;*/
+	border: 1px solid #ddd;
 	border-radius: 4px;
 }
-
+ul li.column:nth-child(3n)
+{
+	margin-right:0px!important;
+}
 .column:focus {
 	outline: -webkit-focus-ring-color auto 5px;
 }
@@ -109,8 +116,7 @@
 }
 
 .txt-small {
-	font-size: 0.5571rem
-} /* 0.8571rem */
+	font-size: 12px;} /* 0.8571rem */
 .txt-sub-antialiased {
 	-webkit-font-smoothing: subpixel-antialiased
 }
@@ -356,7 +362,7 @@
 
 .stream-item:hover .tweet-actions {
 	visibility: visible !important;
-	margin-top: 2px !important;
+	margin-top: 0px !important;
 }
 
 .tweet-actions>li {
@@ -573,15 +579,19 @@
 }
 
 .no-tweet,.stream-notifications {
-	border-bottom: 1px solid #e5e5e5;
-	background-color: lightYellow;
+	/* border-bottom: 1px solid #e5e5e5; */
+	background-color: #fff;
 	font-size: 15px;
 	text-align: center;
 }
 
 .no-tweet>p,.stream-notifications>p {
-	padding-top: 6px;
-}
+	/*padding-top: 6px;*/
+	margin: 0px;
+border-bottom: 1px solid #e5e5e5;
+padding: 6px 0 6px 0;
+	background:lightyellow;
+	}
 
 #addStreamModal:focus {
 	outline-style: none;

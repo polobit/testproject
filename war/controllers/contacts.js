@@ -61,15 +61,16 @@ var ContactsRouter = Backbone.Router.extend({
 		var time_int = parseInt($('meta[name="last-login-time"]').attr('content'));
 		var time_date = new Date(time_int * 1000);
 
-		var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
-		$("#content").html(el);
-
-		head.js(LIB_PATH + 'lib/jquery.timeago.js', function()
+		head.js(LIB_PATH + 'lib/jquery.timeago.js', LIB_PATH + 'jscore/handlebars/handlebars-helpers.js', function()
 		{
+			var el = $(getTemplate('dashboard1', { time_sec : (time_date).toString().toLowerCase(), time_format : "" }));
+			$("#content").html(el);
+			
 			$("span#last-login-time").timeago();
+			
+			setup_dashboard(el);
+			// loadDynamicTimeline("my-timeline", el);
 		});
-		setup_dashboard(el);
-		// loadDynamicTimeline("my-timeline", el);
 	},
 	
 	/**
@@ -84,7 +85,11 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	contacts : function(tag_id, filter_id, grid_view)
 	{
-
+		if(SCROLL_POSITION)
+		{
+			$('html, body').animate({ scrollTop : SCROLL_POSITION  },1000);
+			SCROLL_POSITION = 0;
+		}
 		
 		// If contacts are selected then un selects them
 		SELECT_ALL = false;
@@ -348,7 +353,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 					starify(el);
 					show_map(el);
-					fill_owners(el, contact.toJSON());
+					//fill_owners(el, contact.toJSON());
 					// loadWidgets(el, contact.toJSON());
 				} });
 
@@ -400,9 +405,17 @@ var ContactsRouter = Backbone.Router.extend({
 			if (contact_collection != null)
 				contact_detail_view_navigation(id, contact_collection, el);
 
-			fill_owners(el, contact.toJSON());
+			//fill_owners(el, contact.toJSON());
 			start_tour("contact-details", el);
-		} });
+			
+			// For sip
+			if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+				{			
+					$(".contact-make-sip-call").show();
+					$(".make-call").show();				
+					$(".contact-make-call").hide();			
+				}	
+			} });
 
 		var el = this.contactDetailView.render(true).el;
 
@@ -410,6 +423,14 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Check updates in the contact.
 		checkContactUpdated();
+		
+		// For sip
+		if (Sip_Stack != undefined && Sip_Register_Session != undefined && Sip_Start == true)
+			{			
+				$(".contact-make-sip-call").show();
+				$(".make-call").show();				
+				$(".contact-make-call").hide();			
+			}
 	},
 
 	/**
@@ -542,6 +563,7 @@ var ContactsRouter = Backbone.Router.extend({
 	{
 		$('#content').html(getTemplate("import-contacts", {}));
 	},
+	
 
 	/**
 	 * Subscribes a contact to a campaign. Loads the related template

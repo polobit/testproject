@@ -19,24 +19,14 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import com.agilecrm.activities.util.EventUtil;
-import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.deals.Opportunity;
-import com.agilecrm.deals.util.OpportunityUtil;
-import com.agilecrm.document.util.DocumentUtil;
+
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.AccountDeleteUtil;
 import com.agilecrm.util.NamespaceUtil;
-import com.agilecrm.webrules.WebRule;
-import com.agilecrm.webrules.util.WebRuleUtil;
-import com.agilecrm.workflows.Workflow;
-import com.agilecrm.workflows.triggers.util.TriggerUtil;
-import com.agilecrm.workflows.util.WorkflowUtil;
+import com.agilecrm.util.ReferenceUtil;
 import com.google.appengine.api.NamespaceManager;
-import com.google.gson.JsonObject;
 
 /**
  * <code>UsersAPI</code> includes REST calls to interact with {@link DomainUser}
@@ -65,8 +55,7 @@ public class UsersAPI
     {
 	try
 	{
-		
-		
+
 	    String domain = NamespaceManager.get();
 	    // Gets the users and update the password to the masked one
 	    List<DomainUser> users = DomainUserUtil.getUsers(domain);
@@ -79,9 +68,6 @@ public class UsersAPI
 	}
     }
 
-    
-    
-    
     // Send Current User Info
     @Path("current-user")
     @GET
@@ -114,7 +100,7 @@ public class UsersAPI
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public DomainUser createDomainUser(DomainUser domainUser)
     {
-    	
+
 	try
 	{
 	    domainUser.save();
@@ -124,10 +110,10 @@ public class UsersAPI
 	{
 	    e.printStackTrace();
 	    System.out.println(e.getMessage());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
-    
 
     @GET
     @Path("count")
@@ -137,7 +123,6 @@ public class UsersAPI
 	return String.valueOf(DomainUserUtil.count());
     }
 
-    
     /**
      * Updates the existing user
      * 
@@ -153,7 +138,8 @@ public class UsersAPI
 	{
 	    if (domainUser.id == null)
 	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Invalid User").build());
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Invalid User")
+		        .build());
 	    }
 
 	    domainUser.save();
@@ -163,7 +149,8 @@ public class UsersAPI
 	{
 	    e.printStackTrace();
 	    System.out.println(e.getMessage());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
     }
 
@@ -185,17 +172,20 @@ public class UsersAPI
 
 	    // Throws exception, if only one account exists
 	    if (count == 1)
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Can’t delete all users").build());
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		        .entity("Canâ€™t delete all users").build());
 
 	    // Throws exception, if user is owner
 	    if (domainUser.is_account_owner)
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Master account can’t be deleted").build());
+		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		        .entity("Master account canâ€™t be deleted").build());
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
 	    System.out.println(e.getMessage());
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+		    .build());
 	}
 
 	AccountDeleteUtil.deleteRelatedEntities(domainUser.id);
@@ -225,7 +215,6 @@ public class UsersAPI
 	}
     }
 
-    
     // Get Stats for particular name-space
     @Path("/admin/namespace-stats/{namespace}")
     @GET
@@ -236,8 +225,8 @@ public class UsersAPI
 
 	if (StringUtils.isEmpty(domain) || !domain.equals("admin"))
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity("Sorry you don't have privileges to access this page.")
-		    .build());
+	    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+		    .entity("Sorry you don't have privileges to access this page.").build());
 	}
 
 	NamespaceManager.set(namespace);
@@ -259,9 +248,14 @@ public class UsersAPI
     {
 	return AgileUser.getUsers();
     }
-    
-    
 
-    
-    
+    // Get all refered people based on reference code
+    @Path("/getreferedbyme")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public List<DomainUser> getAllReferedPeople(@QueryParam("reference_domain") String referencedomain)
+    {
+	return ReferenceUtil.getAllReferrals(referencedomain);
+    }
+
 }

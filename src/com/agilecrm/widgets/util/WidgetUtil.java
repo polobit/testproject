@@ -1,11 +1,15 @@
 package com.agilecrm.widgets.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.widgets.Widget;
+import com.agilecrm.widgets.Widget.IntegrationType;
+import com.agilecrm.widgets.Widget.WidgetType;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -88,7 +92,26 @@ public class WidgetUtil
 		 * Fetches list of widgets related to AgileUser key and adds is_added
 		 * field as true to default widgets if not present
 		 */
-		return ofy.query(Widget.class).ancestor(userKey).list();
+		List<Widget> widgets = ofy.query(Widget.class).ancestor(userKey)
+				.filter("widget_type !=", WidgetType.INTEGRATIONS).list();
+
+		for (Widget widget : widgets)
+		{
+			if (WidgetType.EMAIL.equals(widget.widget_type))
+			{
+				System.out.println("Converting widget type email to integrations...");
+
+				widget.widget_type = WidgetType.INTEGRATIONS;
+				widget.save();
+
+				// Remove from list
+				widgets.remove(widget);
+
+				break;
+			}
+		}
+
+		return widgets;
 	}
 
 	/**
@@ -116,6 +139,25 @@ public class WidgetUtil
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * Returns widget by name and widget type
+	 * 
+	 * @param name
+	 *            - widget name
+	 * @param widgetType
+	 *            - widget type
+	 * @return
+	 */
+	public static Widget getWidgetByNameAndType(String name, IntegrationType inegrationType)
+	{
+		Map<String, Object> conditionsMap = new HashMap<String, Object>();
+
+		conditionsMap.put("name", name);
+		conditionsMap.put("integration_type", inegrationType);
+
+		return dao.getByProperty(conditionsMap);
 	}
 
 	/**
@@ -198,5 +240,25 @@ public class WidgetUtil
 			return true;
 
 		return false;
+	}
+
+	/**
+	 * Gets a list of integrations which are a part of widgets in datastore. If
+	 * there is none, a temporary widget is created inorder to iniatilse the
+	 * template. Refer setting-web-to-lead.html
+	 * 
+	 * @return
+	 */
+	public static List<Widget> getIntegrationGateways()
+	{
+
+		Objectify ofy = ObjectifyService.begin();
+
+		List<Widget> listOfIntegrations = ofy.query(Widget.class).filter("widget_type", "INTEGRATIONS").list();
+
+		// For current Users
+		listOfIntegrations.addAll(ofy.query(Widget.class).filter("widget_type", WidgetType.EMAIL).list());
+
+		return listOfIntegrations;
 	}
 }

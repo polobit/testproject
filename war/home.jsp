@@ -127,8 +127,13 @@ Use = [<]%@ include file="tpl/min/tpl.js" %[>] -->
 <!-- Determine Console.logging - we log in local boxes -->
 <%
 boolean debug = true;
+boolean production = false;
 if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
-debug = false;
+{
+    debug = false;
+    production = true;
+}
+
 %>
 
 </div>
@@ -144,7 +149,9 @@ debug = false;
 //var LIB_PATH = "//dpm72z3r2fvl4.cloudfront.net/js/";
 //var LIB_PATH = "//cdnapp.agilecrm.com/";
 var LIB_PATH = "/";
-var HANDLEBARS_PRECOMPILATION = true || <%=!debug%>;
+
+var HANDLEBARS_PRECOMPILATION = true || <%=production%>;
+
 
 var CSS_PATH = "/";
 //var CSS_PATH = "//dpm72z3r2fvl4.cloudfront.net/";
@@ -161,6 +168,9 @@ var CURRENT_USER_PREFS = <%=mapper.writeValueAsString(currentUserPrefs)%>;
 
 // Get current domain user json
 var CURRENT_DOMAIN_USER = <%=mapper.writeValueAsString(domainUser)%>;
+
+//online scheduling url will be filled  only when user goes to calendar route 
+var ONLINE_SCHEDULING_URL ="" ;
 
 var HANDLEBARS_LIB = LOCAL_SERVER ? "/lib/handlebars-v1.3.0.js" : "//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js";
 
@@ -200,16 +210,18 @@ head.ready(function() {
 $('body').css('background-image', 'none');
 //$('#content').html('ready');
 $("img.init-loading", $('#content')).attr("src", "/img/ajax-loader-cursor.gif");
+head.js({"core" : 'jscore/min/js-all-min.js'});
+head.js({"stats" : 'stats/min/agile-min.js'});
+head.ready(["core", "stats"], function(){
+	
+	if(HANDLEBARS_PRECOMPILATION)
+		downloadTemplate("tpl.html");
+		else
+		downloadTemplate("tpl.js");
 
-head.js('jscore/min/js-all-min.js', 'stats/min/agile-min.js', function() {
-
-if(HANDLEBARS_PRECOMPILATION)
-downloadTemplate("tpl.html");
-else
-downloadTemplate("tpl.js");
-
-// Load User voice then
-setTimeout(loadMiscScripts, 10000);
+		// Load User voice then
+		setTimeout(loadMiscScripts, 10000);
+	
 });
 });
 
@@ -235,8 +247,9 @@ setTimeout(loadMiscScripts, 10000);
 
   ga('create', 'UA-44894190-1', 'auto');
   ga('send', 'pageview');
-
+ 
 </script>
+
 
 <!-- ClickDesk Live Chat Service for websites -->
 <script type='text/javascript'>

@@ -1,136 +1,3 @@
-RegularSecretASCII✖
-❀
-♫
-♬
-♪
-♩
-♪
-❤
-☀
-ツ
-♬
-♩
-♭
-♪
-☎
-☏
-♨
-♠
-♣
-♧
-♥
-♡
-ஓ
-ﻬ
-ஐ
-ღ
-☆
-★
-♧
-ღ
-♂
-♀
-♥
-♡
-☜
-☞
-◎
-▨
-♨
-▶
-▷
-◀
-◁
-☀
-☁
-☂
-☃
-☻
-☼
-☽
-☾
-♠
-♡
-♢
-♣
-♤
-♥
-♦
-❤
-❥
-❦
-❧
-➳
-➽
-〠
-〄
-㍿
-♝
-♞
-￥
-☸
-❁
-❀
-✿
-✾
-❃
-✺
-❇
-❈
-☜
-☞
-①
-②
-③
-④
-⑤
-⑥
-⑦
-⑧
-⑨
-⑩
-⑪
-⑫
-⑬
-⑭
-⑮
-⑯
-⑰
-⑱
-⑲
-⑳
-Ⓐ
-Ⓑ
-Ⓒ
-Ⓓ
-Ⓔ
-Ⓕ
-Ⓖ
-Ⓗ
-Ⓘ
-Ⓙ
-Ⓚ
-Ⓛ
-Ⓜ
-Ⓝ
-Ⓞ
-Ⓟ
-Ⓠ
-Ⓡ
-Ⓢ
-Ⓣ
-Ⓤ
-Ⓥ
-Ⓦ
-Ⓧ
-Ⓨ
-Ⓩ
-(•ิ_•ิ)
-(•ิ_•ิ)
-(/•ิ_•ิ)
-(︶︹︺)
-(⊙▂⊙✖ )
-Rate us | Share |   Auto Close
 $(function()
 {
 
@@ -1096,6 +963,15 @@ $(function()
 			return options.fn(this);
 		return options.inverse(this);
 	});
+	
+	
+	/**
+	 * returns online scheduling url of current user
+	 */
+	Handlebars.registerHelper('online_schedule_URL', function()
+			{
+				return ONLINE_SCHEDULING_URL;
+			});
 
 	// gets the refernce code of current domain
 

@@ -38,7 +38,12 @@ public class Tag extends Cursor implements Serializable
     private static ObjectifyGenericDao<Tag> dao = new ObjectifyGenericDao<Tag>(Tag.class);
 
     @NotSaved
+    public Integer availableCount = 0;
+    
+    @NotSaved
     public String entity_type = "tag";
+    
+    
 
     /**
      * Default constructor
@@ -91,7 +96,7 @@ public class Tag extends Cursor implements Serializable
 
 	String tagTrimmed = this.tag.trim();
 
-	return tagTrimmed.equalsIgnoreCase(tag.tag.trim());
+	return tagTrimmed.equals(tag.tag.trim());
     }
 
     @Override

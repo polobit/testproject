@@ -1,8 +1,10 @@
+
 /**
  * Creates a backbone router to perform admin activities (account preferences,
  * users management, custom fields, milestones and etc..).
  * 
  */
+var view={};
 var AdminSettingsRouter = Backbone.Router.extend({
 
 	routes : {
@@ -24,7 +26,6 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	/* Milestones */
 	"milestones" : "milestones",
 
-	
 	/* Menu settings - select modules on menu bar */
 	"menu-settings" : "menu_settings",
 
@@ -32,11 +33,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	"email-stats" : "emailStats",
 
 	/* Web to Lead */
-	"integrations" : "integrations"
+	"integrations" : "integrations",
+
+	"tag-management" : "tagManagement",
 	
 
-	},
+	"email-gateways/:id" : "emailGateways",
 	
+	"sms-gateways/:id" : "smsGateways"
+	
+		},
+
 
 	/**
 	 * Show menu-settings modules selection ( calendar, cases, deals, campaign ) &
@@ -121,8 +128,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				if (view.model.get("id"))
 					addTagAgile("User invited");
-				
-				// Binds action 
+
+				// Binds action
 				bindAdminChangeAction(el);
 			} });
 
@@ -133,10 +140,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	},
 
 	/**
-	 * Loads a template to add new user, to a particular domain
-	 * user
+	 * Loads a template to add new user, to a particular domain user
 	 */
-	
+
 	/**
 	 * Edits the existing user by verifying whether the users list view is
 	 * defined or not
@@ -159,9 +165,10 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 		// Gets user from the collection based on id
 		var user = this.usersListView.collection.get(id);
-		
+
 		var needLogout = false;
-		if(CURRENT_DOMAIN_USER.email == user.attributes.email){
+		if (CURRENT_DOMAIN_USER.email == user.attributes.email)
+		{
 			needLogout = true;
 		}
 
@@ -169,18 +176,26 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		 * Creates a Model for users edit, navigates back to 'user' window on
 		 * save success
 		 */
-		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback: function(response){
-				// If user changed his own email, redirect it to the login page.
-				if(needLogout && CURRENT_DOMAIN_USER.email != response.email){
-					console.log('Logging out...');
-					showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
-					var hash = window.location.hash;
-					setTimeout(function(){window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;},5000);
-				} else {
-					Backbone.history.navigate('users', { trigger : true });
-				}
-					
-			}, postRenderCallback: function(el){
+		var view = new Base_Model_View({ url : 'core/api/users', model : user, template : "admin-settings-user-add", saveCallback : function(response)
+		{
+			// If user changed his own email, redirect it to the login page.
+			if (needLogout && CURRENT_DOMAIN_USER.email != response.email)
+			{
+				console.log('Logging out...');
+				showNotyPopUp("information", "You Email has been updated successfully. Logging out...", "top");
+				var hash = window.location.hash;
+				setTimeout(function()
+				{
+					window.location.href = window.location.protocol + "//" + window.location.host + "/login" + hash;
+				}, 5000);
+			}
+			else
+			{
+				Backbone.history.navigate('users', { trigger : true });
+			}
+
+		}, postRenderCallback : function(el)
+		{
 			bindAdminChangeAction(el);
 		} });
 
@@ -236,14 +251,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			var view = new Base_Model_View({ url : '/core/api/api-key', template : "admin-settings-api-key-model", postRenderCallback : function(el)
 			{
 				prettyPrint();
-				if(id)
+				if (id)
 				{
-					$(el).find('#APITab a[href="#'+ id +'"]').trigger('click');
+					$(el).find('#APITab a[href="#' + id + '"]').trigger('click');
 				}
-				
-				//initZeroClipboard("api_track_webrules_code_icon", "api_track_webrules_code");
-				//initZeroClipboard("api_key_code_icon", "api_key_code");
-				//initZeroClipboard("api_track_code_icon", "api_track_code");
+
+				// initZeroClipboard("api_track_webrules_code_icon",
+				// "api_track_webrules_code");
+				// initZeroClipboard("api_key_code_icon", "api_key_code");
+				// initZeroClipboard("api_track_code_icon", "api_track_code");
 
 			} });
 
@@ -291,12 +307,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : '/core/api/milestone', template : "admin-settings-milestones", reload : true, postRenderCallback : function(el)
+		this.pipelineGridView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "admin-settings-milestones", individual_tag_name : 'div', sortKey: "name", postRenderCallback : function(el)
 		{
-			setup_milestones();
+			setup_milestones(el);
 		} });
-
-		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		this.pipelineGridView.collection.fetch();
+		$('#content').find('#admin-prefs-tabs-content').html(this.pipelineGridView.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.milestones-tab').addClass('active');
 	},
@@ -331,8 +347,174 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		$('#content').find('#admin-prefs-tabs-content').html(getTemplate("admin-settings-web-to-lead"), {});
+		
+		this.integrations = new Base_Collection_View({
+			url : 'core/api/widgets/integrations',
+			templateKey: 'admin-settings-web-to-lead'
+		});
+		
+		this.integrations.collection.fetch();
+		
+		$('#content').find('#admin-prefs-tabs-content').html(this.integrations.render().el);
+		
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
-	}
-	});
+	},
+
+	tagManagement : function()
+	{
+		if (!CURRENT_DOMAIN_USER.is_admin)
+		{
+			$('#content').html("You have no Admin Privileges");
+			return;
+		}
+		
+		$("#content").html(getTemplate("admin-settings"), {});
+		
+		this.tagsview1 = new Base_Collection_View({ url : 'core/api/tags/stats1', templateKey : "tag-management", individual_tag_name : 'li', sort_collection: true, sortKey : 'tag', postRenderCallback: function(el){
+		}});
+		this.tagsview1.appendItem = append_tag_management;
+		
+//		var tagsView = new Base_Model_View({ url : 'core/api/tags', template : 'admin-settings-tags-model', });
+		console.log(this.tagsview1);
+		this.tagsview1.collection.fetch();
+		
+		$('#content').find('#admin-prefs-tabs-content').html(this.tagsview1.render().el);
+		
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.tag-management-tab').addClass('active');
+	},
+	
+
+
+	emailGateways : function(id)
+	{
+		console.log(App_Admin_Settings.integrations.collection);
+		$("#content").html(getTemplate("admin-settings"), {});
+
+		// On Reload, navigate to integrations
+		if(!this.integrations || this.integrations.collection==undefined)
+		{
+		    this.navigate("integrations", {trigger: true});
+			return;
+		}
+		
+		var value = 'SEND_GRID';
+
+		if (id == 'mandrill')
+			value = 'MANDRILL';
+		
+
+		
+		 this.email_gateway = new Base_Model_View({url : 'core/api/email-gateway',
+
+			template : 'settings-email-gateway', postRenderCallback : function(el)
+			{
+				// Loads jquery.chained.min.js
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				{
+					var LHS, RHS;
+
+					// Assigning elements with ids LHS
+					// and RHS
+					// in trigger-add.html
+					LHS = $("#LHS", el);
+					RHS = $("#RHS", el);
+
+					// Chaining dependencies of input
+					// fields
+					// with jquery.chained.js
+					RHS.chained(LHS);
+
+					// Trigger change on email api select
+					setTimeout(function()
+					{
+						$('#email-api', el).val(value).attr("selected", "selected").trigger('change')
+					}, 1);
+				});
+			},
+			saveCallback: function()
+			{
+				// On saved, navigate to integrations
+				Backbone.history.navigate("integrations",{trigger:true});
+				
+
+				data = App_Admin_Settings.email_gateway.model.toJSON();
+
+
+				// Add webhook
+				if(data.email_api == "MANDRILL")
+				{
+					// Add mandrill webhook
+					$.getJSON("core/api/email-gateway/add-webhook?api_key="+ data.api_key+"&type="+data.email_api, function(data){
+						
+						console.log(data);
+						
+					});
+				}
+			}
+			
+		});
+		
+		
+		
+
+		$('#content').find('#admin-prefs-tabs-content').html(this.email_gateway.render().el);
+
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.integrations-tab').addClass('active');
+	} ,
+	
+	smsGateways : function(id)
+	{
+		console.log("inside sms gateways");
+		$("#content").html(getTemplate("admin-settings"), {});
+
+		// On Reload, navigate to integrations
+		if(!this.integrations || this.integrations.collection==undefined)
+		{
+		    this.navigate("integrations", {trigger: true});
+			return;
+		}
+	
+		
+		 view = new Base_Model_View({ model : App_Admin_Settings.integrations.collection.where({name:"SMS-Gateway"})[0], url : 'core/api/sms-gateway',
+			template : 'settings-sms-gateway',prePersist: function(model){
+				view=model.attributes.account_sid;
+				var prefJSON={
+						account_sid:model.attributes.account_sid,
+						auth_token:model.attributes.auth_token,
+						endpoint:model.attributes.endpoint,
+						sms_api:"TWILIO"
+							};
+				
+				model.set({prefs : JSON.stringify(prefJSON)}, {silent:true});
+				}, postRenderCallback : function(el)
+					{
+				// Loads jquery.chained.min.js
+				head.js(LIB_PATH + 'lib/agile.jquery.chained.min.js', function()
+				{
+					var LHS, RHS;
+					LHS = $("#LHS", el);
+					RHS = $("#RHS", el);
+					RHS.chained(LHS);
+					setTimeout(function()
+					{
+						$('#sms-api', el).val(value).attr("selected", "selected").trigger('change')
+					}, 1);
+				});
+			},
+			saveCallback: function(data)
+			{
+				// On saved, navigate to integrations
+				Backbone.history.navigate("integrations",{trigger:true});
+			}
+			
+		});
+
+		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
+		$('#content').find('#AdminPrefsTab .active').removeClass('active');
+		$('#content').find('.integrations-tab').addClass('active');
+	} 
+	
+});

@@ -22,6 +22,15 @@ public class BulkActionNotifications
 	 */
 	CONTACTS_IMPORT_MESSAGE("%s"), CONTACTS_CSV_IMPORT("%s contacts imported"), EXPORT_CONTACTS_CSV(
 		"Contact export operation is complete. Email is sent to you with the CSV file."),
+		
+	/**
+	 * Import company bulk action notification
+	 */
+	COMPANIES_CSV_IMPORT("%s companies imported"),
+	/**
+	 * Import Deals Bulk action notification
+	 */
+	DEALS_CSV_IMPORT("%s deals imported"),
 
 	/**
 	 * Campaign bulk action
@@ -67,6 +76,7 @@ public class BulkActionNotifications
 	JSONObject messageJSON = new JSONObject();
 	try
 	{
+	    System.out.println("message to send in notification " + message);
 	    messageJSON.put("message", message);
 	    messageJSON.put("type", BulkAction.BULK_ACTIONS);
 	    messageJSON.put("sub_type", BulkAction.BULK_ACTIONS);

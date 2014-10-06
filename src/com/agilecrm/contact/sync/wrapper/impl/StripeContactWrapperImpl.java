@@ -19,6 +19,7 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.sync.wrapper.ContactWrapper;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
+import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
 import com.stripe.model.Card;
@@ -120,7 +121,7 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	@Override
 	public ContactField getFirstName()
 	{
-		Card card = customer.getActiveCard();
+		Card card = StripeUtil.getDefaultCard(customer);
 		if (card != null)
 		{
 			return new ContactField(Contact.FIRST_NAME, card.getName(), null);
@@ -149,7 +150,7 @@ public class StripeContactWrapperImpl extends ContactWrapper
 	@Override
 	public ContactField getAddress()
 	{
-		Card card = customer.getActiveCard();
+	    Card card = StripeUtil.getDefaultCard(customer);
 
 		ContactField field = null;
 		if (card != null)

@@ -35,6 +35,7 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.prefs.AccountPrefsAPI.class);
 	s.add(com.agilecrm.core.api.deals.MilestoneAPI.class);
 	s.add(com.agilecrm.core.api.prefs.IMAPAPI.class);
+	s.add(com.agilecrm.core.api.prefs.OfficePrefsAPI.class);
 	s.add(com.agilecrm.core.api.campaigns.CampaignReportsAPI.class);
 	s.add(com.agilecrm.core.api.prefs.EmailTemplatesPrefsAPI.class);
 	s.add(com.agilecrm.core.api.search.SearchAPI.class);
@@ -76,6 +77,7 @@ public class JerseyApplication extends Application
 	s.add(com.thirdparty.zoho.ZohoImportAPI.class);
 	s.add(com.thirdparty.stripe.StripeDataService.class);
 	s.add(com.thirdparty.quickbook.QuickBookController.class);
+	s.add(com.thirdparty.xero.XeroController.class);
 	s.add(com.thirdparty.shopify.ShopifyImportAPI.class);
 	s.add(com.agilecrm.gmap.GmapQueryAPI.class);
 	s.add(com.agilecrm.core.api.webrule.WebRuleAPI.class);
@@ -83,6 +85,12 @@ public class JerseyApplication extends Application
 	s.add(com.agilecrm.core.api.calendar.GoogleCalendarPrefsAPI.class);
 	s.add(com.agilecrm.core.api.calendar.WebCalendarEventsAPI.class);
 	s.add(com.agilecrm.core.api.AdminPanelAPI.class);
+	s.add(com.agilecrm.core.api.EmailGatewayAPI.class);
+	s.add(com.agilecrm.core.api.widgets.ShopifyWidgetAPI.class);
+	s.add(com.agilecrm.core.api.subscription.addon.AddonSubscriptionAPI.class);
+	s.add(com.agilecrm.core.api.ActivityApi.class);
+	s.add(com.agilecrm.core.api.SMSGatewayAPI.class);
+	s.add(com.agilecrm.core.api.shopify.ShopifyAppAPI.class);
 	return s;
     }
 }

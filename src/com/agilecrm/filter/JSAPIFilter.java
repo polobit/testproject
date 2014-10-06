@@ -43,8 +43,7 @@ public class JSAPIFilter implements Filter
      * domain in the url), if key matches request it allowed for further access
      */
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
-	    throws IOException, ServletException
+    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException
     {
 
 	final HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -61,8 +60,7 @@ public class JSAPIFilter implements Filter
 	    // Check if ApiKey
 	    if (APIKey.isValidJSKey(agileId) || APIKey.isPresent(agileId))
 	    {
-		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(
-			SessionManager.AUTH_SESSION_COOKIE_NAME);
+		UserInfo userInfo = (UserInfo) httpRequest.getSession().getAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME);
 
 		// Get AgileUser
 		DomainUser domainUser = null;
@@ -88,8 +86,7 @@ public class JSAPIFilter implements Filter
 		JSAPIUtil.generateJSONErrorResponse(JSAPIUtil.Errors.API_KEY_MISSING));
     }
 
-    private void sendJSONErrorResponse(HttpServletRequest request, HttpServletResponse response, String responseString)
-	    throws IOException
+    private void sendJSONErrorResponse(HttpServletRequest request, HttpServletResponse response, String responseString) throws IOException
     {
 	if (!isJSONPRequest(request))
 	{
@@ -104,7 +101,7 @@ public class JSAPIFilter implements Filter
 	out.println(responseString);
 	out.println(");");
 
-	response.setContentType("text/javascript");
+	response.setContentType("application/javascript");
     }
 
     /**

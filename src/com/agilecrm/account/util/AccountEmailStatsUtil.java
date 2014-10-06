@@ -16,7 +16,8 @@ import com.thirdparty.mandrill.subaccounts.MandrillSubAccounts;
  */
 public class AccountEmailStatsUtil
 {
-    private static ObjectifyGenericDao<AccountEmailStats> dao = new ObjectifyGenericDao<AccountEmailStats>(AccountEmailStats.class);
+    private static ObjectifyGenericDao<AccountEmailStats> dao = new ObjectifyGenericDao<AccountEmailStats>(
+	    AccountEmailStats.class);
 
     public static AccountEmailStats getAccountEmailStats(String subAccount)
     {
@@ -41,11 +42,11 @@ public class AccountEmailStatsUtil
 	    // if null add AccountEmailStats
 	    if (as == null)
 	    {
-		String info = MandrillSubAccounts.getSubAccountInfo(subAccount);
+		String info = MandrillSubAccounts.getSubAccountInfo(subAccount, null);
 
 		// If subaccount doesn't exist, create new one
 		if (StringUtils.contains(info, "Unknown_Subaccount"))
-		    MandrillSubAccounts.createMandrillSubAccount(subAccount);
+		    MandrillSubAccounts.createMandrillSubAccount(subAccount, null);
 
 		as = new AccountEmailStats(subAccount, 0);
 	    }

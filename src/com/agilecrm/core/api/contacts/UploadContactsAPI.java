@@ -143,15 +143,32 @@ public class UploadContactsAPI
 	    // Task is created setting host as backends url. It takes payload
 	    // and blobkey, current domain user id as path parameters. current
 	    // owner id is required to set owner of uploaded contacts
-	    TaskOptions taskOptions = TaskOptions.Builder
-		    .withUrl(
-			    "/core/api/bulk-actions/upload/"
-				    + String.valueOf(SessionManager.get().getDomainId() + "/"
-					    + request.getParameter("key"))).payload(bytes)
-		    .header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
+	    String s = request.getParameter("type");
+	    if (s.equalsIgnoreCase("deals"))
+	    {
+		TaskOptions taskOptions = TaskOptions.Builder
+			.withUrl(
+				"/core/api/bulk-actions/upload-deals/"
+					+ String.valueOf(SessionManager.get().getDomainId() + "/"
+						+ request.getParameter("key"))).payload(bytes)
+			.header("Content-Type", request.getContentType()).header("Host", postURL).method(Method.POST);
 
-	    // Task is added into queue
-	    queue.addAsync(taskOptions);
+		// Task is added into queue
+		queue.addAsync(taskOptions);
+	    }
+	    else
+	    {
+		TaskOptions taskOptions = TaskOptions.Builder
+			.withUrl(
+				"/core/api/bulk-actions/upload/"
+					+ String.valueOf(SessionManager.get().getDomainId() + "/"
+						+ request.getParameter("key") + "/" + request.getParameter("type")))
+			.payload(bytes).header("Content-Type", request.getContentType()).header("Host", postURL)
+			.method(Method.POST);
+
+		// Task is added into queue
+		queue.addAsync(taskOptions);
+	    }
 
 	    System.out.println("completed");
 	}

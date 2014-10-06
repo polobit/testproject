@@ -78,16 +78,17 @@ public class UserInfo implements Serializable
 	if (domainUser != null)
 	{
 	    setDomainId(domainUser.id);
+	    
+	    try
+	    {
+		BillingRestrictionUtil.setPlan(this, domainUser.domain);
+	    }
+	    catch (Exception e)
+	    {
+		e.printStackTrace();
+	    }
 	}
 
-	try
-	{
-	    BillingRestrictionUtil.setPlan(this);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	}
     }
 
     /**

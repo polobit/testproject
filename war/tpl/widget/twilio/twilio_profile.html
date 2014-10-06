@@ -18,8 +18,11 @@
 		<div class="row-fluid">
 			<a href="#call" class="btn pull-right" id="twilio_call" style="display:none;"><i class="icon-phone"></i>Call</a>
 			<a href="#hangup" class="btn btn-danger pull-right" id="twilio_hangup" style="display:none;">Hang up</a>
+            <a href="#dialpad" class="btn pull-right" id="twilio_dialpad" style="margin-right:5px;display:none;">Dialpad</a>
 			<a href="#note" class="right contact-add-note" id="twilio_note" style="margin: 5px;">Add Note</a>
 		</div>
+
+
  	</div>
 	<div class="sub_header">
 		<h4>Call History</h4>
@@ -166,7 +169,7 @@
 				</p>
 	{{/if_equals}}
 				<p style='margin: 10px 0px 5px 0px;' >
-					<a class='btn btn-primary' style='text-decoration: none;' widget-name="Twilio" id="widget-prefs-save">Save</a>
+					<a class='btn btn-primary' style='text-decoration: none;min-width:50px;' widget-name="Twilio" id="widget-prefs-save">Save</a>
 					<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="Twilio">Revoke Access</a>
 					<a href="#add-widget" class='btn ml_5' style='text-decoration: none;' widget-name="Twilio">Cancel</a>
 				</p> 
@@ -177,3 +180,29 @@
 </script>
 
 
+<script id="twilio-dialpad-template" type="text/html">
+<div id="dialpad_in_twilio" style="display:none;"> 
+  <table>
+    <tr>
+    <td><input type="button" value="1" class="button1" id="button1" onclick="twilioSendDTMF('1');"></td>
+    <td><input type="button" value="2" class="button2" id="button2" onclick="twilioSendDTMF('2');"></td>
+    <td><input type="button" value="3" class="button3" id="button3" onclick="twilioSendDTMF('3');"></td>
+    </tr>
+    <tr>
+    <td><input type="button" value="4" class="button4" id="button4" onclick="twilioSendDTMF('4');"></td>
+    <td><input type="button" value="5" class="button5" id="button5" onclick="twilioSendDTMF('5');"></td>
+    <td><input type="button" value="6" class="button6" id="button6" onclick="twilioSendDTMF('6');"></td>
+    </tr>
+    <tr>
+    <td><input type="button" value="7" class="button7" id="button7" onclick="twilioSendDTMF('7');"></td>
+    <td><input type="button" value="8" class="button8" id="button8" onclick="twilioSendDTMF('8');"></td>
+    <td><input type="button" value="9" class="button9" id="button9" onclick="twilioSendDTMF('9');"></td>
+    </tr>
+    <tr>
+    <td><input type="button" value="*" class="buttonstar" id="buttonstar" onclick="twilioSendDTMF('*');"></td>
+    <td><input type="button" value="0" class="button0" id="button0" onclick="twilioSendDTMF('0');"></td>
+    <td><input type="button" value="#" class="buttonpound" id="buttonpound" onclick="twilioSendDTMF('#');"></td>
+    </tr>
+    </table>
+</div>
+</script>

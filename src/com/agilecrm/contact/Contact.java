@@ -1,11 +1,9 @@
 package com.agilecrm.contact;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Embedded;
@@ -36,7 +34,6 @@ import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.notification.util.ContactNotificationPrefsUtil;
 import com.agilecrm.user.util.DomainUserUtil;
-import com.agilecrm.util.CacheUtil;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.triggers.util.ContactTriggerUtil;
 import com.agilecrm.workflows.unsubscribe.UnsubscribeStatus;
@@ -290,9 +287,9 @@ public class Contact extends Cursor
 	String fieldName = field == null ? contactField.name : field.name;
 	FieldType type = FieldType.CUSTOM;
 	if (fieldName.equals(FIRST_NAME) || fieldName.equals(LAST_NAME) || fieldName.equals(EMAIL)
-		|| fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
-		|| fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
-		|| fieldName.equals(NAME))
+	        || fieldName.equals(TITLE) || fieldName.equals(WEBSITE) || fieldName.equals(COMPANY)
+	        || fieldName.equals(ADDRESS) || fieldName.equals(URL) || fieldName.equals(PHONE)
+	        || fieldName.equals(NAME))
 	    type = FieldType.SYSTEM;
 
 	// If field is null then new contact field is added to properties.
@@ -379,18 +376,6 @@ public class Contact extends Cursor
 	    {
 		owner_key = oldContact.owner_key;
 	    }
-	    //
-	    // if (Type.COMPANY == type
-	    // &&
-	    // !getContactFieldValue(NAME).equalsIgnoreCase(oldContact.getContactFieldValue(NAME))
-	    // && ContactUtil.companyExists(getContactFieldValue(NAME)))
-	    // {
-	    // throw new
-	    // WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-	    // .entity("Sorry, a company with name \'" +
-	    // getContactFieldValue(NAME) + "\' already exists ")
-	    // .build());
-	    // }
 
 	    // Sets tags into tags, so they can be compared in
 	    // notifications/triggers with new tags
@@ -399,33 +384,38 @@ public class Contact extends Cursor
 
 	// Check for already existing email if any,
 	// loop through for checking multiple emails
-	for (ContactField contactField : this.properties)
+	if (Type.PERSON == type)
 	{
-	    if (!StringUtils.equalsIgnoreCase(contactField.name, "EMAIL"))
-		continue;
-
-	    String myMail = contactField.value;
-	    int countEmails = 0; // to allow if this new entry doesn't have
-	    // email-id
-
-	    if (myMail != null && !myMail.isEmpty())
+	    for (ContactField contactField : this.properties)
 	    {
-		Map<String, Object> searchMap = new HashMap<String, Object>();
-		searchMap.put("properties.name = ", EMAIL);
-		searchMap.put("properties.value = ", myMail);
+		if (!StringUtils.equalsIgnoreCase(contactField.name, "EMAIL"))
+		    continue;
 
-		countEmails = dao.getCountByProperty(searchMap);
-	    }
-	    // Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
-	    // otherwise if countEmails==1, make sure its not due to previous
-	    // value of this(current) Contact
-	    if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
-	    {
-		throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
-			.entity("Sorry, a contact with this email already exists " + myMail).build());
-	    }
+		String myMail = contactField.value;
+		int countEmails = 0; // to allow if this new entry doesn't have
+		// email-id
 
+		if (myMail != null && !myMail.isEmpty())
+		{
+		    countEmails = ContactUtil.searchContactCountByEmailAndType(myMail, type);
+		    // countEmails =
+		    // ContactUtil.searchContactCountByEmail(myMail);
+		}
+		// Throw BAD_REQUEST if countEmails>=2 (sure duplicate contact)
+		// otherwise if countEmails==1, make sure its not due to
+		// previous
+		// value of this(current) Contact
+		if (countEmails >= 2 || (countEmails == 1 && (id == null || !oldContact.isEmailExists(myMail))))
+		{
+		    throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+			    .entity("Sorry, a contact with this email already exists " + myMail).build());
+		}
+
+	    }
 	}
+	
+
+	convertEmailToLower();
 
 	// Updated time is updated only if particular fields are changed.
 	if (oldContact != null && isDocumentUpdateRequired(oldContact))
@@ -437,6 +427,9 @@ public class Contact extends Cursor
 	    viewed.viewed_time = viewed_time;
 	    viewed.viewer_id = SessionManager.get().getDomainId();
 	}
+
+	// Updates Tag entity, if any new tag is added
+	updateTagsEntity(oldContact, this);
 
 	dao.put(this);
 
@@ -518,7 +511,7 @@ public class Contact extends Cursor
 	// If tags and properties length differ, contact is considered to be
 	// changed
 	if (contact.tags.size() != currentContactTags.size() || contact.properties.size() != properties.size()
-		|| contact.star_value != star_value || contact.lead_score != lead_score)
+	        || contact.star_value != star_value || contact.lead_score != lead_score)
 	    return true;
 
 	// Checks if tags are changed
@@ -673,15 +666,15 @@ public class Contact extends Cursor
 
 	this.save();
     }
-    
+
     public boolean addTag(Tag tag)
     {
 	// Adds to list if there it is a new tag
 	if (tagsWithTime.contains(tag))
-		return false;
+	    return false;
 
 	tagsWithTime.add(tag);
-	
+
 	return true;
     }
 
@@ -921,10 +914,25 @@ public class Contact extends Cursor
     {
 	for (ContactField field : properties)
 	{
-	    if (StringUtils.equals(field.name, EMAIL) && StringUtils.equals(field.value, email))
+	    if (StringUtils.equals(field.name, EMAIL)
+		    && StringUtils.equals((field.value).toLowerCase(), email.toLowerCase()))
 		return true;
 	}
 	return false;
+    }
+
+    /**
+     * To convert EmailId of contact to lower case
+     */
+    public void convertEmailToLower()
+    {
+	for (ContactField field : properties)
+	{
+	    if (StringUtils.equals(field.name, EMAIL))
+		field.value = (field.value).toLowerCase();
+
+	}
+
     }
 
     /**
@@ -983,10 +991,10 @@ public class Contact extends Cursor
 			newCompany.type = Type.COMPANY;
 
 			/*
-			 * We already have the owner of contact contact, which
-			 * should also be owner of contact. Instead of fetching
-			 * key from session in prepersist we can use the same.
-			 */
+		         * We already have the owner of contact contact, which
+		         * should also be owner of contact. Instead of fetching
+		         * key from session in prepersist we can use the same.
+		         */
 			newCompany.setContactOwner(owner_key);
 			newCompany.save();
 
@@ -1010,51 +1018,6 @@ public class Contact extends Cursor
 	    created_time = System.currentTimeMillis() / 1000;
 	}
 
-	// If tags are not empty, considering they are simple tags and adds them
-	// to tagsWithTime
-	if (!tags.isEmpty())
-	{
-	    for (String tag : tags)
-	    {
-		Tag tagObject = new Tag(tag);
-		if (!tagsWithTime.contains(tagObject))
-		    tagsWithTime.add(tagObject);
-	    }
-	}
-
-	for (Tag tag : tagsWithTime)
-	{
-	    // Check if it is null, it can be null tag is created using
-	    // developers api
-	    if (tag.createdTime == null || tag.createdTime == 0L)
-		tag.createdTime = System.currentTimeMillis();
-	}
-
-	tags = getContactTags();
-
-	Set<String> cacheTags = null;
-
-	try
-	{
-	    cacheTags = (LinkedHashSet<String>) CacheUtil.getCache(NamespaceManager.get() + "-" + "tags");
-
-	    System.out.println("Cache tags obtained " + cacheTags);
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    System.err.println("Exception occured while getting tags from cache... " + e.getMessage());
-	}
-
-	if (cacheTags == null || !cacheTags.containsAll(tags))
-	{
-	    // Update Tags - Create a deferred task
-	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
-
-	    Queue queue = QueueFactory.getDefaultQueue();
-	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
-	}
-
     }
 
     /**
@@ -1075,8 +1038,11 @@ public class Contact extends Cursor
 	if (field != null)
 	{
 	    field.value = LinkedInUtil.changeImageUrl(field.value);
-	    if (StringUtils.contains(field.value, "twimg0-") || StringUtils.contains(field.value, "twimg.com"))
-		properties.remove(field);
+	    /*
+	     * if (StringUtils.contains(field.value, "twimg0-") ||
+	     * StringUtils.contains(field.value, "twimg.com"))
+	     * properties.remove(field);
+	     */
 	}
 
 	if (contact_company_key != null) // fill company name in
@@ -1123,11 +1089,69 @@ public class Contact extends Cursor
 	}
     }
 
+    /**
+     * Updates any new tag w.r.t domain
+     * 
+     * @param oldContact
+     *            - Contact entity before save
+     * @param updatedContact
+     *            - Current contact
+     */
+    private void updateTagsEntity(Contact oldContact, Contact updatedContact)
+    {
+	try
+	{
+	    // If tags are not empty, considering they are simple tags and adds
+	    // them
+	    // to tagsWithTime
+	    if (!tags.isEmpty())
+	    {
+		for (String tag : tags)
+		{
+		    Tag tagObject = new Tag(tag);
+		    if (!tagsWithTime.contains(tagObject))
+			tagsWithTime.add(tagObject);
+		}
+	    }
+
+	    for (Tag tag : tagsWithTime)
+	    {
+		// Check if it is null, it can be null tag is created using
+		// developers api
+		if (tag.createdTime == null || tag.createdTime == 0L)
+		    tag.createdTime = System.currentTimeMillis();
+	    }
+
+	    LinkedHashSet<String> oldTags = null;
+
+	    if (oldContact != null)
+		oldTags = oldContact.getContactTags();
+
+	    tags = getContactTags();
+
+	    if (tags.equals(oldTags))
+		return;
+
+	    // System.out.println("Tag entity need to update....");
+
+	    // Update Tags - Create a deferred task
+	    TagsDeferredTask tagsDeferredTask = new TagsDeferredTask(tags);
+
+	    Queue queue = QueueFactory.getDefaultQueue();
+	    queue.addAsync(TaskOptions.Builder.withPayload(tagsDeferredTask));
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in updateTagsEntity..." + e.getMessage());
+	}
+    }
+
     @Override
     public String toString()
     {
 	return "id: " + id + " created_time: " + created_time + " updated_time" + updated_time + " type: " + type
-		+ " tags: " + tags + " properties: " + properties;
+	        + " tags: " + tags + " properties: " + properties;
     }
 }
 

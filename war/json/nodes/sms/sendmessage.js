@@ -2,34 +2,40 @@
     "name": "Send Message",
     "thumbnail": "json/nodes/images/sms/sendmessage.png",
     "icon": "json/nodes/icons/sms/sendmessage.png",
-    "info": "Send text messages (SMS) anywhere in the world",
-    "help": "Send text messages (SMS) anywhere in the world. ",
-    "author": "John",
+    "info": "Send SMS to the contact using the Twilio Integration",
+    "help": "You can enable Twilio integration from Admin settings -> Integrations.",
+    "author": "Bhasuri",
     "company": "mantra",
     "language": "en",
     "branches": "yes",
     "workflow_tasklet_class_name": "com.campaignio.tasklets.sms.SendMessage",
-    "category": "Mobile",
+    "category": "URL",
     "ui": [{
 			"label": " From:",
 			"required": "required",	
             "category": "Settings",
 			"name": "from",
             "id":"from",
-			"value": "$subscriber.Sender",
-           	"title": "Enter 'From' CallerId should match the numbers on your account.",
-			"fieldType": "input",
-            "type": "text"		
+           	"title": "Select Twilio Number",
+			"fieldType": "twilio_incoming_list",
+            "type": "select",
+            "style": {
+                "width": "66%"
+            }
+			
 		},{
 			"label": "To:",
 			"required": "required",	
             "category": "Settings",
 			"name": "to",
             "id":"to",
-			"value": "$subscriber.Number",
-           	"title": "Enter the recipient number. If you are using a list - you can use $subscriber.Number",
+           	"title": "Enter the recipient number or {{phone}}",
 			"fieldType": "input",
-            "type": "text"
+            "type": "text",
+            "placeholder":"{{phone}}",
+            "style": {
+                "width": "64%"
+            }
 		},
 		{   
 			"label": "Message",
@@ -42,8 +48,9 @@
             "rows": "10",
 			"fieldType": "textarea",
 			"type": "textarea" 
-         },{
-            "label": "ContactSpot can send text messages anywhere in the world.",
+         },
+         {
+            "label": "Send SMS to the contact using the Twilio Integration.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

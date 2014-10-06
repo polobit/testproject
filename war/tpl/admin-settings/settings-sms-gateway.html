@@ -1,0 +1,44 @@
+<script id="settings-sms-gateway-template" type="text/html">
+	<div class="well widget-add" style="width:220px;">
+		<form style="border-bottom:none;margin-top:-10px;margin-bottom: 0px;" id="twilio-integration-form">
+	    	<fieldset>
+				<legend style="margin-bottom: 16px;font-size: 16px;line-height: 30px;">Enter your account details</legend>
+				<div class="control-group" style="margin-bottom:0px" rel="tooltip" title="Stay connected to your users with Twilio phone numbers in 40 countries all over the globe">
+					<div class="controls" id="LHS">
+						<select name="sms_api" id="sms-api" class="required" style="width:94%">
+							<option value="TWILIO">Twilio</option> 
+						</select>
+					</div>
+				</div>
+				<div class="control-group" style="margin-bottom:0px" id="RHS">
+					<div class="controls">
+						<input type="hidden" class="input-medium required TWILIO" style="width:90%" name="id" value="{{id}}"/>
+						<input type="hidden" class="input-medium required TWILIO" style="width:90%"  value="SMS-Gateway" name="name"/>
+                        <input type="hidden" class="input-medium required TWILIO" style="width:90%"  value="INTEGRATIONS" name="widget_type"/>
+                        <input type="hidden" class="input-medium required TWILIO" style="width:90%"  value="TBD" name="description"/>
+						<input type="hidden" class="input-medium required TWILIO" style="width:90%" name="endpoint" value="https://api.twilio.com"/>  
+						{{#if_equals "INTEGRATIONS" widget_type}}
+							{{#if_equals  "SMS-Gateway" name}}
+								{{#if prefs}}
+										{{#stringToJSON this "prefs"}}
+											 <input type="text" class="input-medium required TWILIO" style="width:90%" name="account_sid" value="{{account_sid}}"/>                                   
+											 <input type="text" class="input-medium required TWILIO" style="width:90%" name="auth_token" value="{{auth_token}}"/> 
+										{{/stringToJSON}}
+								{{/if}}
+							{{/if_equals}}
+						{{else}}
+									<input type="hidden" class="input-medium required TWILIO" style="width:90%" name="id"  />
+                        		 	<input type="text" class="input-medium required TWILIO" style="width:90%" placeholder="ACCOUNT SID"  name="account_sid" />                                  
+								 	<input type="text" class="input-medium required TWILIO" style="width:90%" placeholder="AUTH TOKEN "  name="auth_token"/> 
+						    
+						{{/if_equals}}
+					</div>
+				</div>
+				<div class="form-actions" style="padding: 15px 20px 0px;margin-top: 14px;margin-bottom: 0px;">
+               		<a type="submit" class="save btn btn-primary">Save</a>
+               		<a type="reset" class="btn" href="#integrations">Cancel</a>
+             	</div>
+			 </fieldset>
+	    </form>
+	</div>
+</script>

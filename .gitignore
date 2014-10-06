@@ -15,3 +15,12 @@ war/continue.js
 *.DS_Store
 /war/jscore/min
 /war/tpl/min
+war/WEB-INF/appengine-generated/datastore-indexes-auto.xml
+war/WEB-INF/appengine-web.xml
+war/WEB-INF/web.xml
+war/WEB-INF/appengine-generated/datastore-indexes-auto.xml
+war/WEB-INF/appengine-web.xml
+war/WEB-INF/web.xml
+war/WEB-INF/appengine-generated/datastore-indexes-auto.xml
+war/WEB-INF/appengine-web.xml
+war/WEB-INF/web.xml

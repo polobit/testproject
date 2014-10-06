@@ -7,7 +7,7 @@
 				<div class="page-header"
 					style="padding: 20px; border: 1px solid #f5f5f5; margin: 0px">
 					<div style="display: inline">
-						<div style="display: inline">
+						<div style="float:left;">
 							<form style='display: inline; padding-right: 10px; height: auto;'
 								id="contact-container">
 								<a href="#" class="tooltip_info" data-placement="top"
@@ -22,9 +22,9 @@
 							</form>
 						</div>
 						<div
-							style='margin-top: 0%; width: 20em; display: inline-block; vertical-align: middle'>
+							style='margin-top: 0%; float:left; vertical-align: middle'>
 							<div
-								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+								style="height: auto; text-overflow: ellipsis; white-space:nowrap;width:20em;padding-top:5px;overflow: hidden;">
 								<b style="font-size:2em;">{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}
 								</b>{{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}}
@@ -54,12 +54,19 @@
 											class="{{get_social_icon "
 											SKYPE"}}" style="font-size: 1.4em !important"></i>
 									</a>
+									</span>{{else}} {{#if_equals subtype "FACEBOOK"}} <span
+										style="margin-right: 5px"><a target="_blank"
+										href="https://www.facebook.com/app_scoped_user_id/{{getFacebookURL value}}/"
+										style="text-decoration: none"> <i
+											class="{{get_social_icon "
+											FACEBOOK"}}" style="font-size: 1.4em !important"></i>
+									</a>
 									</span>{{else}}<span style="margin-right: 5px"> <a
 										target="_blank" href="{{getHyperlinkFromURL value}}" style="text-decoration: none">
 											<i class="{{get_social_icon subtype}}"
 											style="font-size: 1.4em !important"></i>
 									</a>
-									</span> {{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
+									</span> {{/if_equals}} {{/if_equals}} {{/if_equals}} {{/each}} {{/multiple_Property_Element}}
 									{{/property_is_exists}}
 								</div>
 							</div>
@@ -90,8 +97,11 @@
 									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
 											Duplicate</a></li>
 
+								{{#canEditContact owner.id}}
 									<li><a href='#' id='contact-actions-delete'><i
 											class="icon-trash"></i> Delete</a></li>
+								{{/canEditContact}}
+									
 
                                     {{#property_is_exists "phone" properties}}
                                     <li style="display:none;"><a href='#' class="make-call" style="display:none;" fname="{{getPropertyValue properties
@@ -121,6 +131,7 @@
 										style="font-size: 28px; padding-left: 12px;">0</span>&nbsp;
 									{{/if}}
 								</div>
+							{{#canEditContact owner.id}}
 								<div style="display: inline-block">
 									<ul
 										style="display: inline-block; list-style-type: none; margin-left: 2px">
@@ -130,17 +141,20 @@
 											style="height: 10px; cursor: pointer"></i></li>
 									</ul>
 								</div>
+							{{/canEditContact}}
 							</div>
 						</div>
 
 					</div>
+<div class="clearfix"></div>
 					<!-- Owner block -->
-					<br />
-					<div style="float: right; margin-top: -15px;">
+				
+					<div style="float: right; margin-top: -21px;">
 						<div class="change-owner-succes"></div>
 						<span title="Owner"><strong style="color: gray">Owner:</strong>&nbsp;&nbsp;<span
 							id="contact-owner" data={{owner.id}}
 							style="display: inline-block">{{owner.name}}</span> <span>
+						{{#canEditContact owner.id}}
 								<a href="#"> <i class="icon-edit"
 									style="vertical-align: middle;" rel="popover"
 									data-placement="top" data-title="Lead Owner"
@@ -157,7 +171,9 @@
 							</div> <!--<select id='contact-detail-owner' class="input-block-level">
                                 <option class="contact-detail-owner" value="">Select..</option>
                             </select>--> </span>
+						{{/canEditContact}}
 					</div>
+					<div class="clearfix"></div>
 				</div>
 
 			</div>
@@ -165,11 +181,22 @@
 				<div style="padding: 20px 10px 20px 23px">
 					<ul id="added-tags-ul" class="tagsinput"
 						style="display: inline; vertical-align: top; margin-bottom: 10px">
-						{{#if tagsWithTime.length}} {{#each tagsWithTime}}
-						<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
+							{{#if tagsWithTime.length}} 
+							 {{#canEditContact owner.id}}
+								{{#each tagsWithTime}}
+										<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
 								class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a><a
-								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> {{/each}}
-						{{/if}}
+								class="close remove-tags" tag="{{this.tag}}">&times</a></span></li> 
+								{{/each}}
+								{{else}}
+									{{#each tagsWithTime}}
+										<li style="display: inline-block;" class="tag" data="{{this.tag}}"><span><a
+											class="anchor" href="#tags/{{encodeString this.tag}}">{{this.tag}}</a></span></li> 
+									{{/each}}
+							 {{/canEditContact}}
+							{{/if}}
+						 
+						
 					</ul>
 					<div style="display: inline-block; margin-top: 3px;">
 						<form id="addTagsForm" style="display: none; margin-bottom: 0px;">
@@ -181,9 +208,13 @@
 									style="margin-left: 10px; margin-right: 5px">Add</a></span>
 							</div>
 						</form>
-						<a href="#" id="add-tags" rel="tooltip"
+						{{#canEditContact owner.id}}
+			<a href="#" id="add-tags" rel="tooltip"
 							data-original-title="addtag" data-placement="top"><i
 							class="icon-plus-sign"></i> <span>Add tags</span></a>
+						{{/canEditContact}}
+
+						
 					</div>
 				</div>
 			</div>

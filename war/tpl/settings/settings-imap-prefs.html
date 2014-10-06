@@ -1,5 +1,4 @@
 <script id="settings-imap-prefs-template" type="text/html">
-<div class="span1"><div style="font-size: 22px;margin: 10px;padding-top: 80px;"> Or </div></div>
 <div class="span3 well" style="margin-left:5px;">
     <form id="imap-prefs-form">
         <legend>IMAP</legend>
@@ -17,13 +16,13 @@
             <div class="control-group">
                 <label class="control-label">Server (Host) <span class="field_req">*</span></label>
                 <div class="controls">
-                    <input name="server_name" type="text" class="required" placeholder="Server name" value="{{server_name}}" autocapitalize="off" />
+                    <input name="server_name" type="text" class="required" placeholder="Server Name" value="{{server_name}}" autocapitalize="off" />
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">User Name <span class="field_req">*</span></label>
                 <div class="controls">
-                    <input name="user_name" type="text" class="required" placeholder="User name" value="{{user_name}}" autocapitalize="off" />
+                    <input name="user_name" type="text" class="required" placeholder="User Name" value="{{user_name}}" autocapitalize="off" />
                 </div>
             </div>
             <div class="control-group">
@@ -42,15 +41,9 @@
             </div>
             <div class="form-actions"> 
                 <button type="submit" class="save btn btn-primary" style="margin-left:-15pt">Save </button>
-                {{#if id}}
-                <button class="delete btn">Delete </button>
-                {{/if}}
+                <a href="#email" class="btn">Cancel</a>
             </div>
         </fieldset>
     </form>
-</div>
-<div class="clearfix"></div>
-<div style="margin-left:60px">
-    Please provide either your Google Apps or Google Mail preferences. When both are provided, your gmail preferences are used.
 </div>
 </script>

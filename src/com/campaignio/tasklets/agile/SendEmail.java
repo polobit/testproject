@@ -10,9 +10,9 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.agilecrm.Globals;
+import com.agilecrm.account.util.EmailGatewayUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
-import com.agilecrm.mandrill.util.MandrillUtil;
 import com.agilecrm.util.DateUtil;
 import com.agilecrm.util.EmailLinksConversion;
 import com.agilecrm.util.EmailUtil;
@@ -453,7 +453,6 @@ public class SendEmail extends TaskletAdapter
 	String subject = getStringValue(nodeJSON, subscriberJSON, data, SUBJECT);
 
 	String html = getStringValue(nodeJSON, subscriberJSON, data, HTML_EMAIL);
-
 	String text = getStringValue(nodeJSON, subscriberJSON, data, TEXT_EMAIL);
 
 	String replyTo = getStringValue(nodeJSON, subscriberJSON, data, REPLY_TO);
@@ -572,14 +571,19 @@ public class SendEmail extends TaskletAdapter
     private void sendEmail(String fromEmail, String fromName, String to, String cc, String bcc, String subject,
 	    String replyTo, String html, String text, String mandrillMetadata)
     {
+	String domain = NamespaceManager.get();
+
 	// For domain "clickdeskengage" - use SendGrid API
-	if (StringUtils.equals(NamespaceManager.get(), Globals.CLICKDESK_ENGAGE_DOMAIN))
+	if (StringUtils.equals(domain, Globals.CLICKDESK_ENGAGE_DOMAIN))
 	{
-	    SendGrid.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text);
+	    SendGrid.sendMail(Globals.CLICKDESK_SENDGRID_API_USER_NAME, Globals.CLICKDESK_SENDGRID_API_KEY, fromEmail,
+		    fromName, to, cc, bcc, subject, replyTo, html, text, null);
 	    return;
 	}
 
-	MandrillUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text, mandrillMetadata);
-    }
+	// Send Email using email gateway
+	EmailGatewayUtil.sendBulkEmail(domain, fromEmail, fromName, to, cc, bcc, subject, replyTo, html, text,
+	        mandrillMetadata);
 
+    }
 }

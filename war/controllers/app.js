@@ -4,7 +4,7 @@
  */
 
 // All Routers are global
-var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets;
+var App_Contacts, App_Contact_Search, App_Contact_Bulk_Actions, App_Contact_Filters, App_Contact_Views, App_Workflows, App_Deals, App_Admin_Settings, App_Calendar, App_Settings, App_Reports, App_Cases, App_Subscription, App_Visitors, App_WebReports, App_Documents, App_Widgets, App_ShopifyApp;
 var Collection_View = {};
 $(function()
 {
@@ -27,6 +27,9 @@ $(function()
 	App_Widgets = new WidgetsRouter();
 	App_Configuration = new AgileConfigRouter();
 	App_Adminpanel = new AdminPanelRouter();
+	App_ReferelRouter = new ReferelRouter();
+	App_Activity_log = new ActivitylogRouter();
+	App_ShopifyApp = new ShopifyRouter();
 
 	// Binds an event to activate infinite page scrolling
 	Backbone.history.bind("all", currentRoute)
@@ -53,6 +56,14 @@ var Current_Route;
 function currentRoute(route)
 {
 	Current_Route = window.location.hash.split("#")[1];
+	
+	if(SCROLL_POSITION)
+	{
+		var temp = Current_Route;
+		if(!temp.match("contact"))
+			SCROLL_POSITION = 0;
+	}
+	
 	activateInfiniScroll();
 	// set_profile_noty();
 	// Reset it to uncheck checkboxes for bulk actions on route change
@@ -68,6 +79,28 @@ function currentRoute(route)
 		_agile_execute_web_rules();
 	}
 	// disposeEvents();
-	load_clickdesk_code()
+
+	 load_clickdesk_code();
+
 }
 
+/**
+ * Clickdesk Widget
+ */
+function load_clickdesk_code()
+{
+
+	if (CLICKDESK_CODE_LOADED)
+		return;
+
+	console.log("loading clickdesk..");
+
+	CLICKDESK_CODE_LOADED = true;
+
+	var glcspt = document.createElement('script');
+	glcspt.type = 'text/javascript';
+	glcspt.async = true;
+	glcspt.src = glcpath + 'livechat-new.js';
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(glcspt, s);
+}

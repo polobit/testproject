@@ -197,6 +197,19 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     		options = getMergeFields();
     }
     	
+    if(uiFieldDefinition.fieldType == "update_field")
+    {
+    	
+    	options = getUpdateFields("update_field");
+    }
+    
+    
+    if(uiFieldDefinition.fieldType == "twilio_incoming_list")
+    {
+    	options = getTwilioIncomingList("twilio_incoming_list");
+    	
+    }
+    
     // Populate Options
     $.each(
     options, function (key, value) {
@@ -209,18 +222,20 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
         	selectOptionAttributes += "<option value='" + value + "'>" + key + "</option>";
     });
     
+    
+    (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )
     // Returns select option with onchange EventHandler - Naresh
     if(selectEventHandler && selectEventHandler.indexOf("insertSelectedMergeField") === 0)
     	{
            // Needed right align for Text and Html tab of Send Email node.
-    	   return "<select style='position:relative;float:right;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+    	   return "<select style='position:relative;float:right;cursor:pointer' onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'" + (uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
     	}
      
     if(selectEventHandler)
-    	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'> " + selectOptionAttributes + "</select>";
+    	return "<select onchange="+ selectEventHandler + "(this,'"+ uiFieldDefinition.target_type +"') +  name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "' id='" + uiFieldDefinition.id + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
     
 	  // retun select field with name and title attributes(Yasin(14-09-10)) 
-    return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'> " + selectOptionAttributes + "</select>";
+    return "<select name='" + uiFieldDefinition.name + "' title='" + uiFieldDefinition.title + "'"+(uiFieldDefinition.required ? ("required =" + uiFieldDefinition.required) : "" )+"> " + selectOptionAttributes + "</select>";
            
 }
 
@@ -297,6 +312,10 @@ function generateDefaultUI(uiFieldDefinition) {
 		    	 	attributes += " checked "; 		    	 	
 					continue;
 		 	}
+        	
+        	//style is appended at the end. Refer getStyleAttribute(styleAttributes)
+        	if( key == "style")
+        		continue;
 
             attributes += (key + "=\"" + uiFieldDefinition[key] + "\" ");
         }
@@ -318,8 +337,23 @@ function generateDefaultUI(uiFieldDefinition) {
 		 return ("<" + tagName + " " + attributes + " />");
 	}else
 
-    return ("<" + tagName + " " + attributes + " style='width:75%'/>");
+    return "<" + tagName + " " + attributes + getStyleAttribute(uiFieldDefinition.style);
+
 }
+//Bhasuri 
+function getStyleAttribute(styleAttributes)
+{
+	if(styleAttributes == undefined)
+		return " style='width:75%'/>";
+	
+	var style=" style='";
+	$.each(
+			styleAttributes, function (key, value){
+				style+=key+":"+value+";";
+			} );
+	
+		return style+"'/>";
+	}
 
 function loadTinyMCE(name)
 {
@@ -369,7 +403,7 @@ function generateHTMLEditor(uiFieldDefinition, container) {
 
 	var htmlDiv = "<label>HTML: <a href='#' onclick='load_email_templates()'>(Select a Template / Load from Editor)</a></label><br/><br/>";	
 	htmlDiv += "<textarea  id='tinyMCE" + textAreaName + "' name='" + textAreaName + "' rows='13' cols='75'>" + value + "</textarea>";		
-	htmlDiv += "<br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
+	htmlDiv += "<div style='clear:both;'></div><br/><p><i>You can leave empty if you do not wish to send html emails. Plain text emails would be sent. Only HTML emails would be tracked.</i></p>";	
 
 	$(htmlDiv).appendTo(container);	
 }
@@ -467,6 +501,9 @@ function _generateUIFields(selector, ui) {
             continue;
         }
 
+        if (uiFieldDefinition.fieldType == "button") {
+            continue;
+        }
 
         var uiField = undefined;
         var uiFieldType = uiFieldDefinition.fieldType;
@@ -549,6 +586,18 @@ function _generateUIFields(selector, ui) {
            continue;
         }
         
+        //update contacts
+        if(uiFieldType == "update_field")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
+        }
+        
         if(uiFieldType == "milestones")
         {
         	addLabel(uiFieldDefinition.label, container);
@@ -600,6 +649,17 @@ function _generateUIFields(selector, ui) {
 			//$(uiField).removeAttr('value').text(uiFieldDefinition.value).appendTo(container);				                                                               
             continue;               
                 
+        }
+        
+        if(uiFieldType == "twilio_incoming_list")
+        {
+           addLabel(uiFieldDefinition.label, container);
+          
+           
+           uiField = generateSelectUI(uiFieldDefinition);
+           
+           $(uiField).appendTo(container);
+           continue;
         }
         
         // Else Input, textarea,		                

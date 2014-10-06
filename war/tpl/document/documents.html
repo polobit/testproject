@@ -62,10 +62,17 @@
 
 <script id="documents-model-template" type="text/html">
 <td data="{{id}}" class="data">
-	<b style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:15em; overflow:hidden;display:inline-block;">{{name}}</b>
+<div style="height:20px;">	
+<div class="pull-left" style="height:auto;text-overflow:ellipsis;white-space:nowrap;width:auto; max-width:15em; overflow:hidden;display:inline-block;"><b>{{name}}</b></div>
+<div class="pull-left" style="margin-left:5px;">
+<b class="activate-link" style="display:none;"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
+</div>
+<div class="clearfix"></div>
+</div>
 	<div>
-		<span style="vertical-align:top;">{{network network_type}}&nbsp;&nbsp;</span><b class="activate-link" style="display:none;"><a href="{{url}}" target="_blank"><i class="icon-external-link" title="Open Document"></i></a></b>
+		<span style="vertical-align:top;">{{network network_type}}&nbsp;&nbsp;</span>
 	</div>
+</div>
 </td>
 <td>
 	<div style="white-space:nowrap;width:210px;overflow:hidden;height:50px;">

@@ -33,6 +33,7 @@ import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.MilestoneUtil;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.gadget.GadgetTemplate;
+import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.util.JSAPIUtil;
 import com.agilecrm.util.JSAPIUtil.Errors;
 import com.agilecrm.webrules.WebRule;
@@ -143,8 +144,15 @@ public class JSAPI
 	    // Sets owner key to contact before saving
 	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
 
-	    // If zero, save it
-	    contact.save();
+	    try
+	    {
+		// If zero, save it
+		contact.save();
+	    }
+	    catch (PlanRestrictedException e)
+	    {
+		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	    }
 
 	    return mapper.writeValueAsString(contact);
 	}
@@ -275,11 +283,21 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    opportunity.addContactIds(contact.id.toString());
-
+	    // If there is no pipeline id, then set it to default.
+	    if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0)
+		opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
+	    System.out.println(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
 	    // Set, owner id to opportunity (owner of the apikey is set as owner
 	    // to opportunity)
-	    opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
-
+	    try
+	    {
+		opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
+	    }
+	    catch (NullPointerException ne)
+	    {
+		opportunity.owner_id = String.valueOf(APIKey.getAgileUserRelatedToAPIKey(apiKey).id);
+	    }
+	    System.out.println(opportunity);
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
 
@@ -289,6 +307,7 @@ public class JSAPI
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	    System.out.println(e.getMessage());
 	    return null;
 	}
     }
@@ -1166,7 +1185,8 @@ public class JSAPI
 	    Workflow workflow = mapper.readValue(json, Workflow.class);
 
 	    CronUtil.removeTask(workflow.id.toString(), contact.id.toString());
-	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), Status.REMOVED);
+	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), workflow.name,
+		    Status.REMOVED);
 
 	    return mapper.writeValueAsString(contact);
 	}

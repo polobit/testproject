@@ -11,18 +11,28 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.codehaus.jettison.json.JSONObject;
+import org.json.JSONException;
 
 import com.agilecrm.Globals;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.APIException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.CardException;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Card;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
+import com.stripe.model.CustomerCardCollection;
+import com.stripe.model.Event;
 
 /**
  * <code>StripeUtil</code> is utility class used to process data, to support
@@ -42,131 +52,242 @@ import com.stripe.model.Customer;
 public class StripeUtil
 {
 
-	/**
-	 * Creates a map of customer card details, plan and other details required
-	 * to create a customer in stripe
-	 * 
-	 * @param customerCard
-	 *            {@link CreditCard}
-	 * @param plan
-	 *            {@link Plan}
-	 * @return {@link Map}
-	 * @throws JsonParseException
-	 * @throws JsonMappingException
-	 * @throws IOException
+    /**
+     * Creates a map of customer card details, plan and other details required
+     * to create a customer in stripe
+     * 
+     * @param customerCard
+     *            {@link CreditCard}
+     * @param plan
+     *            {@link Plan}
+     * @return {@link Map}
+     * @throws JsonParseException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    public static Map<String, Object> getCustomerParams(CreditCard customerCard, Plan plan) throws JsonParseException,
+	    JsonMappingException, IOException
+    {
+	Map<String, Object> customerParams = new HashMap<String, Object>();
+
+	// Gets credit card details map
+	customerParams.put("card", getCardParams(customerCard));
+
+	// Gets plan details map
+	customerParams.put("plan", plan.plan_id);
+	customerParams.put("quantity", plan.quantity);
+
+	if (!StringUtils.isEmpty(plan.coupon))
+	    customerParams.put("coupon", plan.coupon);
+
+	// Sets Description and Email for subscription
+	customerParams.put("description", NamespaceManager.get());
+	customerParams.put("email", DomainUserUtil.getCurrentDomainUser().email);
+
+	return customerParams;
+    }
+
+    /**
+     * Creates map to create customer without any subscription just by adding
+     * credit card
+     */
+    public static Map<String, Object> getCustomerParams(CreditCard customerCard) throws JsonParseException,
+	    JsonMappingException, IOException
+    {
+	Map<String, Object> customerParams = new HashMap<String, Object>();
+
+	// Gets credit card details map
+	customerParams.put("card", getCardParams(customerCard));
+
+	// Sets Description and Email for subscription
+	customerParams.put("description", NamespaceManager.get());
+	customerParams.put("email", DomainUserUtil.getCurrentDomainUser().email);
+
+	return customerParams;
+    }
+
+    /**
+     * This method creates a Map with creditcard details as requirement of
+     * stripe
+     * 
+     * @param cardDetails
+     *            {@link CreditCard}
+     * @return {@link Map}
+     * @throws JsonParseException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
+    public static Map<String, Object> getCardParams(CreditCard cardDetails) throws JsonParseException,
+	    JsonMappingException, IOException
+    {
+
+	// Converts CreditCard object in to JSON string
+	String creditCardJSON = new Gson().toJson(cardDetails);
+
+	// Creates HashMap from CreditCard JSON string
+	HashMap<String, Object> cardParams = new ObjectMapper().readValue(creditCardJSON,
+		new TypeReference<HashMap<String, Object>>()
+		{
+		});
+
+	return cardParams;
+    }
+
+    /**
+     * Converts JSONObject(converted from {@link Customer}) to Stripe
+     * {@link Customer} object and fetches {@link Customer} from stripe with id
+     * to ensure the {@link Customer} is latest(If any changes made in stripe
+     * manually)
+     * 
+     * @param customerJSON
+     *            {@link JSONObject}
+     * @return {@link Customer}
+     * @throws StripeException
+     */
+    public static Customer getCustomerFromJson(JSONObject customerJSON) throws StripeException
+    {
+	Stripe.apiKey = Globals.STRIPE_API_KEY;
+	// Converts Customer JSON to customer object
+	Customer customer = new Gson().fromJson(customerJSON.toString(), Customer.class);
+	// Retrieves the customer from stripe based on id
+	return Customer.retrieve(customer.getId(), Stripe.apiKey);
+    }
+
+    /**
+     * Wraps event JSON to Stripe {@link Event} object
+     * 
+     * @param customerid
+     * @return
+     * @throws APIException
+     * @throws CardException
+     * @throws APIConnectionException
+     * @throws InvalidRequestException
+     * @throws AuthenticationException
+     * @throws StripeException
+     */
+    public static Event getEventFromJSON(String event_json_string) throws AuthenticationException,
+	    InvalidRequestException, APIConnectionException, CardException, APIException
+    {
+	System.out.println();
+
+	try
+	{
+	    org.json.JSONObject ob = new org.json.JSONObject(event_json_string);
+	    System.out.println("event id" + ob.getString("id"));
+	    // Converts Customer JSON to1 customer object
+	    Event event = Event.retrieve(ob.getString("id"), Globals.STRIPE_API_KEY);
+	    // Retrieves the customer from stripe based on id
+	    return event;
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
+
+    }
+
+    public static List<Charge> getCharges(String customerid) throws StripeException
+    {
+	return getCharges(customerid, null);
+    }
+
+    public static List<Charge> getCharges(String customerid, Integer limit) throws StripeException
+    {
+
+	Stripe.apiKey = Globals.STRIPE_API_KEY;
+
+	Map<String, Object> chargeParams = new HashMap<String, Object>();
+
+	// Sets charge parameters (Stripe customer id is required to get
+	// charges of a customer form stripe)
+	chargeParams.put("customer", customerid);
+
+	if (limit != null && limit > 0)
+	    // Sets charge parameters (Stripe customer id is required to get
+	    // charges of a customer form stripe)
+	    chargeParams.put("limit", limit);
+
+	/*
+	 * Fetches all charges for given stripe customer id and returns invoices
 	 */
-	public static Map<String, Object> getCustomerParams(CreditCard customerCard, Plan plan) throws JsonParseException,
-			JsonMappingException, IOException
+	return Charge.all(chargeParams, Stripe.apiKey).getData();
+    }
+
+    // based on charge id, that charge will be refunded
+    public static Charge createRefund(String chargeid) throws StripeException
+    {
+
+	Stripe.apiKey = Globals.STRIPE_API_KEY;
+
+	Charge ch = Charge.retrieve(chargeid);
+
+	return ch.refund(Stripe.apiKey);
+    }
+
+    /**
+     * Converts {@link Customer} of stripe to a {@link JSONObject}
+     * 
+     * @param customer
+     *            {@link Customer}
+     * @return {@link JSONObject}
+     * @throws Exception
+     */
+    public static JSONObject getJSONFromCustomer(Customer customer) throws Exception
+    {
+	// Gets customer JSON string from customer object
+	String customerJSONString = new Gson().toJson(customer);
+
+	// Creates customer JSONObject from customer JSON string
+	JSONObject customerJSON = new JSONObject(customerJSONString);
+	return customerJSON;
+    }
+
+    public static Card getDefaultCard(Customer customer)
+    {
+	String cardId = customer.getDefaultCard();
+
+	if (StringUtils.isEmpty(cardId))
+	    return (Card) null;
+
+	CustomerCardCollection cardCollection = customer.getCards();
+
+	for (Card card : cardCollection.getData())
 	{
-		Map<String, Object> customerParams = new HashMap<String, Object>();
-
-		// Gets credit card details map
-		customerParams.put("card", getCardParams(customerCard));
-
-		// Gets plan details map
-		customerParams.put("plan", plan.plan_id);
-		customerParams.put("quantity", plan.quantity);
-
-		if (!StringUtils.isEmpty(plan.coupon))
-			customerParams.put("coupon", plan.coupon);
-
-		// Sets Description and Email for subscription
-		customerParams.put("description", NamespaceManager.get());
-		customerParams.put("email", DomainUserUtil.getCurrentDomainUser().email);
-
-		return customerParams;
+	    if (cardId.equals(card.getId()))
+		return card;
 	}
+	return (Card) null;
+    }
 
-	/**
-	 * This method creates a Map with creditcard details as requirement of
-	 * stripe
-	 * 
-	 * @param cardDetails
-	 *            {@link CreditCard}
-	 * @return {@link Map}
-	 * @throws JsonParseException
-	 * @throws JsonMappingException
-	 * @throws IOException
-	 */
-	public static Map<String, Object> getCardParams(CreditCard cardDetails) throws JsonParseException,
-			JsonMappingException, IOException
-	{
-
-		// Converts CreditCard object in to JSON string
-		String creditCardJSON = new Gson().toJson(cardDetails);
-
-		// Creates HashMap from CreditCard JSON string
-		HashMap<String, Object> cardParams = new ObjectMapper().readValue(creditCardJSON,
-				new TypeReference<HashMap<String, Object>>()
-				{
-				});
-
-		return cardParams;
-	}
-
-	/**
-	 * Converts JSONObject(converted from {@link Customer}) to Stripe
-	 * {@link Customer} object and fetches {@link Customer} from stripe with id
-	 * to ensure the {@link Customer} is latest(If any changes made in stripe
-	 * manually)
-	 * 
-	 * @param customerJSON
-	 *            {@link JSONObject}
-	 * @return {@link Customer}
-	 * @throws StripeException
-	 */
-	public static Customer getCustomerFromJson(JSONObject customerJSON) throws StripeException
-	{
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
-		// Converts Customer JSON to customer object
-		Customer customer = new Gson().fromJson(customerJSON.toString(), Customer.class);
-		// Retrieves the customer from stripe based on id
-		return Customer.retrieve(customer.getId(), Stripe.apiKey);
-	}
-
-	public static List<Charge> getCharges(String customerid) throws StripeException
+    public static com.stripe.model.Subscription getEmailSubscription(Customer customer, String domain)
+    {
+	String oldNamespace = null;
+	NamespaceManager.set(domain);
+	try
 	{
 
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
+	    Subscription subscription = SubscriptionUtil.getSubscription();
+	    if (subscription.emailPlan == null)
+		return null;
 
-		Map<String, Object> chargeParams = new HashMap<String, Object>();
+	    String subscription_id = subscription.emailPlan.subscription_id;
 
-		// Sets charge parameters (Stripe customer id is required to get
-		// charges of a customer form stripe)
-		chargeParams.put("customer", customerid);
-		/*
-		 * Fetches all charges for given stripe customer id and returns invoices
-		 */
-		return Charge.all(chargeParams, Stripe.apiKey).getData();
+	    if (customer.getSubscriptions() == null)
+		return null;
+
+	    for (com.stripe.model.Subscription stripeSubscription : customer.getSubscriptions().getData())
+	    {
+		if (stripeSubscription.getId().equals(subscription_id))
+		    return stripeSubscription;
+	    }
 	}
-
-	// based on charge id, that charge will be refunded
-	public static Charge createRefund(String chargeid) throws StripeException
+	finally
 	{
-
-		Stripe.apiKey = Globals.STRIPE_API_KEY;
-
-		Charge ch = Charge.retrieve(chargeid);
-
-		return ch.refund(Stripe.apiKey);
+	    NamespaceManager.set(oldNamespace);
 	}
 
-	/**
-	 * Converts {@link Customer} of stripe to a {@link JSONObject}
-	 * 
-	 * @param customer
-	 *            {@link Customer}
-	 * @return {@link JSONObject}
-	 * @throws Exception
-	 */
-	public static JSONObject getJSONFromCustomer(Customer customer) throws Exception
-	{
-		// Gets customer JSON string from customer object
-		String customerJSONString = new Gson().toJson(customer);
-
-		// Creates customer JSONObject from customer JSON string
-		JSONObject customerJSON = new JSONObject(customerJSONString);
-		return customerJSON;
-	}
-
+	return null;
+    }
 }

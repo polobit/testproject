@@ -17,6 +17,9 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.agilecrm.activities.Activity.EntityType;
+import com.agilecrm.activities.util.ActivitySave;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
 
@@ -102,6 +105,16 @@ public class DocumentsAPI
     public Document createDocument(Document document)
     {
 	document.save();
+
+	try
+	{
+	    ActivitySave.createDocumentAddActivity(document);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	return document;
     }
 
@@ -117,12 +130,24 @@ public class DocumentsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Document updateDocument(Document document)
     {
+
+	try
+	{
+	    ActivitySave.createDocumentUpdateActivity(document);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	document.save();
 	return document;
     }
 
     /**
      * Deletes documents bulk
+     * 
+     * 
      * 
      * @param model_ids
      *            document ids, read as form parameter from request url
@@ -134,6 +159,8 @@ public class DocumentsAPI
     public void deleteDocuments(@FormParam("ids") String model_ids) throws JSONException
     {
 	JSONArray documentsJSONArray = new JSONArray(model_ids);
+	ActivityUtil.createBulkDeleteActivity(EntityType.DOCUMENT, "", String.valueOf(documentsJSONArray.length()),
+	        "documents deleted");
 
 	Document.dao.deleteBulkByIds(documentsJSONArray);
     }

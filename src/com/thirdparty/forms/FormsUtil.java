@@ -261,6 +261,7 @@ public class FormsUtil
 			{
 				String key = (String) keys.next();
 				String value = finalJson.getString(key);
+				key = key.replace("\n", " ");
 
 				// If key contains " "
 				if (StringUtils.contains(key, "agilecustomfield"))
@@ -271,7 +272,7 @@ public class FormsUtil
 						notes.add(note);
 					}
 					else if (StringUtils.contains(key, "agilecheckbox"))
-						properties.add(buildProperty(key.replace(" agilecheckbox agilecutomfield", ""), value, null));
+						properties.add(buildProperty(key.replace(" agilecheckbox agilecustomfield", ""), value, null));
 					else
 						properties.add(buildProperty(key.replace(" agilecustomfield", ""), value, null));
 				}

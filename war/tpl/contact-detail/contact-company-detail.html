@@ -197,7 +197,7 @@
 									</div>
 									{{/multiple_Property_Element}}
 								</div>
-								{{/property_is_exists}} {{#getContactCustomProperties properties}}
+								{{/property_is_exists}} <div class="custom-data"> {{#getContactCustomPropertiesExclusively properties}}
 								<div class="pull-left row-fluid">
 									{{#each_with_index this}}
 									<div class="pull-left row-fluid">
@@ -216,8 +216,8 @@
 										</div>
 										{{/each_with_index}}
 									</div>
-									{{/getContactCustomProperties}}
-
+									{{/getContactCustomPropertiesExclusively}}
+									</div>
  									{{#property_is_exists "address" properties}}
 										<div class="pull-left row-fluid " style="padding-bottom:5px;margin-top:0px">
 											{{#address_Element properties}}{{/address_Element}}</div>

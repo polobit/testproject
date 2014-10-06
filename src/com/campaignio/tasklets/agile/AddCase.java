@@ -40,7 +40,8 @@ public class AddCase extends TaskletAdapter
      */
     public static String DESCRIPTION = "description";
 
-    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON) throws Exception
+    public void run(JSONObject campaignJSON, JSONObject subscriberJSON, JSONObject data, JSONObject nodeJSON)
+	    throws Exception
     {
 	// Gets given parameters
 	String title = getStringValue(nodeJSON, subscriberJSON, data, TITLE);
@@ -55,15 +56,6 @@ public class AddCase extends TaskletAdapter
 	    // Get Contact Owner Id.
 	    Long contactOwnerId = ContactUtil.getContactOwnerId(Long.parseLong(contactId));
 
-	    if (contactOwnerId == null)
-	    {
-		System.out.println("No owner");
-
-		// Execute Next One in Loop
-		TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
-		return;
-	    }
-
 	    // Add Case with given values
 	    addCase(title, status, description, contactId, AgileTaskletUtil.getOwnerId(givenOwnerId, contactOwnerId));
 	}
@@ -74,8 +66,8 @@ public class AddCase extends TaskletAdapter
 	}
 
 	// Creates log for case
-	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON),
-		"Title: " + title + "<br>Status: " + StringUtils.capitalize(status.toLowerCase()), LogType.ADD_CASE.toString());
+	LogUtil.addLogToSQL(AgileTaskletUtil.getId(campaignJSON), AgileTaskletUtil.getId(subscriberJSON), "Title: "
+	        + title + "<br>Status: " + StringUtils.capitalize(status.toLowerCase()), LogType.ADD_CASE.toString());
 
 	// Execute Next One in Loop
 	TaskletUtil.executeTasklet(campaignJSON, subscriberJSON, data, nodeJSON, null);
@@ -102,7 +94,7 @@ public class AddCase extends TaskletAdapter
 	agileCase.status = Case.Status.valueOf(status);
 	agileCase.description = description;
 	agileCase.addContactToCase(contactId);
-	agileCase.owner_id = ownerId.toString();
+	agileCase.owner_id = ownerId == null ? null : ownerId.toString();
 
 	agileCase.save();
     }

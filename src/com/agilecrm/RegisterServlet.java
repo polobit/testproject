@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
+import com.agilecrm.util.ReferenceUtil;
 import com.agilecrm.util.RegisterUtil;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.utils.SystemProperty;
@@ -61,6 +63,7 @@ public class RegisterServlet extends HttpServlet
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
     {
 	String type = request.getParameter("type");
+	System.out.println("type   " + type);
 
 	// Type the type of registration for the user - oauth or agile
 	try
@@ -87,7 +90,6 @@ public class RegisterServlet extends HttpServlet
 	    return;
 	}
 
-	// Return to Login Page
 	request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
@@ -116,6 +118,7 @@ public class RegisterServlet extends HttpServlet
 	    if (DomainUserUtil.count() == 0)
 	    {
 		DomainUser domainUser = createUser(request, response, userInfo, "");
+
 		response.sendRedirect("https://" + domainUser.domain + ".agilecrm.com/");
 		return;
 	    }
@@ -163,6 +166,7 @@ public class RegisterServlet extends HttpServlet
      */
     void registerAgile(HttpServletRequest request, HttpServletResponse response) throws Exception
     {
+
 	// Get User Name
 	String email = request.getParameter("email");
 
@@ -172,6 +176,8 @@ public class RegisterServlet extends HttpServlet
 	// Get Name
 	String name = request.getParameter("name");
 
+	// Get reference code
+
 	if (email == null || password == null)
 	    throw new Exception("Invalid Input. Email or password has been left blank.");
 
@@ -179,6 +185,7 @@ public class RegisterServlet extends HttpServlet
 
 	// Create User
 	UserInfo userInfo = new UserInfo("agilecrm.com", email, name);
+
 	DomainUser domainUser = createUser(request, response, userInfo, password);
 
 	// Redirect to home page
@@ -204,6 +211,7 @@ public class RegisterServlet extends HttpServlet
     DomainUser createUser(HttpServletRequest request, HttpServletResponse response, UserInfo userInfo, String password)
 	    throws Exception
     {
+
 	// Get Domain
 	String domain = NamespaceManager.get();
 	if (StringUtils.isEmpty(domain))
@@ -224,8 +232,12 @@ public class RegisterServlet extends HttpServlet
 
 	request.getSession().setAttribute(SessionManager.AUTH_SESSION_COOKIE_NAME, userInfo);
 
+	String reference_domain = getReferenceDomainFromCookie(request);
+
+	System.out.println("reference domain in register servlet " + reference_domain);
 	// Create Domain User, Agile User
-	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true);
+	domainUser = new DomainUser(domain, userInfo.getEmail(), userInfo.getName(), password, true, true,
+	        reference_domain);
 
 	// Set IP Address
 	domainUser.setInfo(DomainUser.IP_ADDRESS, "");
@@ -235,7 +247,48 @@ public class RegisterServlet extends HttpServlet
 
 	domainUser.save();
 
+	if (domainUser != null && reference_domain != null)
+	{
+	    ReferenceUtil.updateReferralCount(reference_domain);
+	}
 	userInfo.setDomainId(domainUser.id);
 	return domainUser;
+    }
+
+    /**
+     * 
+     * @param request
+     * @return reads all cookies and check for reference_domain cookie and
+     *         returns
+     */
+    public String getReferenceDomainFromCookie(HttpServletRequest request)
+    {
+
+	Cookie[] cookies = request.getCookies();
+
+	System.out.println("reading cookies");
+	if (cookies != null && cookies.length > 0)
+	{
+	    System.out.println("inside cookie length");
+	    for (int i = 0; i < cookies.length; i++)
+	    {
+		Cookie c = cookies[i];
+		System.out.println("cookie " + c);
+		if (c.getName().equals("agile_reference_domain"))
+		{
+		    String reference_domain = c.getValue();
+		    System.out.println("reference domain cookie " + reference_domain);
+		    if (reference_domain != null)
+		    {
+			if (ReferenceUtil.checkReferenceDomainExistance(reference_domain))
+			    return reference_domain;
+
+		    }
+
+		}
+
+	    }
+	}
+	return null;
     }
 }

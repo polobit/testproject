@@ -15,6 +15,12 @@ $(function(){
 
 	});
 	
+	$('#opportunity-track-list-model-list a.pipeline').live('click',function(e){
+		e.preventDefault();
+		createCookie("agile_deal_track", $(this).attr('id'));
+		App_Deals.deals();
+	});
+	
 	/**
 	 * If Pipelined View is selected, deals are loaded with pipelined view and 
 	 * creates the pipelined view cookie
@@ -29,32 +35,78 @@ $(function(){
 		App_Deals.deals();
 
 	});
-	
 	/**
-	 * Full screen view
+	 * If Pipelined View is selected, deals are loaded with pipelined view and 
+	 * creates the pipelined view cookie
 	 */
-	$('#deals-full-screen').live('click', function(e){
-		e.preventDefault();
-		
-		// Creates the cookie
-		createCookie("agile_full_view", "full_view");
-		
-		// Loads the deals
-		App_Deals.deals();
-
-    });
-	
-	/**
-	 * Small screen view
-	 */
-	$('#deals-small-screen').die().live('click', function(e) {
+	$('.deals-export-csv').die().live('click', function(e) {
 		e.preventDefault();
 
-		// Erases the cookie
-		eraseCookie("agile_full_view");
+		console.log('Exporting ...');
+		var deals_csv_modal = $(getTemplate('deals-export-csv-modal'),{});
+		deals_csv_modal.modal('show');
+		
+		// If Yes clicked
+		$('#deals-export-csv-confirm').die().live('click',function(e){
+			e.preventDefault();
+			if($(this).attr('disabled'))
+		   	     return;
+			
+			$(this).attr('disabled', 'disabled');
+			
+			 // Shows message
+		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Email will be sent shortly.</i></small></span>');
+		    $(this).parent('.modal-footer').find('.deals-export-csv-message').append($save_info);
+			$save_info.show();
+			// Export Deals.
+			$.ajax({
+				url: '/core/api/opportunity/export',
+				type: 'GET',
+				success: function() {
+					console.log('Exported!');
+					deals_csv_modal.modal('hide');
+				}
+			});
+		});
+		
 
-		// Loads the deals
-		App_Deals.deals();
+	});
+	
+	/**
+	 * If Pipelined View is selected, deals are loaded with pipelined view and 
+	 * creates the pipelined view cookie
+	 */
+	$('.pipeline-delete').die().live('click', function(e) {
+		e.preventDefault();
+		var id = $(this).attr('id');
+		var name = $(this).attr('data');
+		$('#track-name').text(name);
+		// If Yes clicked
+		$('#pipeline-delete-confirm').die().live('click',function(e){
+			e.preventDefault();
+			if($(this).attr('disabled'))
+		   	     return;
+			
+			$(this).attr('disabled', 'disabled');
+			
+			 // Shows message
+		    $save_info = $('<img src="img/1-0.gif" height="18px" width="18px" style="opacity:0.5;"></img>&nbsp;&nbsp;<span><small class="text-success" style="font-size:15px; display:inline-block"><i>Deleting track.</i></small></span>');
+		    $(this).parent('.modal-footer').find('.pipeline-delete-message').append($save_info);
+			$save_info.show();
+			// Export Deals.
+			$.ajax({
+				url: '/core/api/milestone/pipelines/'+id,
+				type: 'DELETE',
+				success: function() {
+					console.log('Deleted!');
+					$('#pipeline-delete-modal').modal('hide');
+					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
+						eraseCookie("agile_deal_track");
+					App_Admin_Settings.milestones();
+				}
+			});
+		});
+		
 
 	});
 
@@ -65,29 +117,32 @@ $(function(){
 	$(".milestone-delete").die().live('click', function(e){
 		e.preventDefault();
 		$(this).closest('li').css("display", "none");
-		fill_ordered_milestone();
+		fill_ordered_milestone($(this).closest('form').attr('id'));
 	});
 	
 	/**
 	 * Shows input field to add new milestone.
 	 */
-    $("#show_milestone_field").die().live('click', function(e){
+    $(".show_milestone_field").die().live('click', function(e){
     	e.preventDefault();
+    	var form = $(this).closest('form');
+    	console.log('New Milestone to - ',form.attr('id'));
     	$(this).css("display","none");
-    	$('.show_field').css("display","block");
-    	$("#add_new_milestone").focus();
+    	form.find('.show_field').css("display","block");
+    	form.find(".add_new_milestone").focus();
     });
     
 	/**
 	 * Adds new milestone to the sortable list.
 	 */
-    $("#add_milestone").die().live('click', function(e){
+    $(".add_milestone").die().live('click', function(e){
     	
     	e.preventDefault();
-    	$('.show_field').css("display","none");
-    	$("#show_milestone_field").css("display","block");
+    	var form = $(this).closest('form');
+    	form.find('.show_field').css("display","none");
+    	form.find(".show_milestone_field").css("display","inline-block");
     	
-    	var new_milestone = $("#add_new_milestone").val().trim();
+    	var new_milestone = form.find(".add_new_milestone").val().trim();
     	
     	if(!new_milestone || new_milestone.length <= 0 || (/^\s*$/).test(new_milestone))
 		{
@@ -100,9 +155,9 @@ $(function(){
     		e.preventDefault();
     	
     		// Prevents comma (",") as an argument to the input field
-    		$("#add_new_milestone").val("");
+    		form.find(".add_new_milestone").val("");
         	
-    		var milestone_list = $(this).closest(".control-group").find('ul.milestone-value-list');
+    		var milestone_list = form.find('ul.milestone-value-list');
     		var add_milestone = true;
     		
     		// Iterate over already present milestones, to check if this is a new milestone
@@ -117,11 +172,63 @@ $(function(){
     		if(add_milestone)
     		{
     			milestone_list.append("<li data='" + new_milestone + "'><div><span>" + new_milestone + "</span><a class='milestone-delete right' href='#'>&times</a></div></li>");
-    			fill_ordered_milestone();
+    			fill_ordered_milestone(form.attr('id'));
     		}
     	}
     });
     
+    $(".save-pipelines").die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	$('#admin-settings-milestones-model-list').find('form').each(function(index){
+    		var mile = serializeForm($(this).attr('id'));
+        	console.log('---------',mile);
+        	// Saving that pipeline object
+        	var pipeline = new Backbone.Model();
+        	pipeline.url = '/core/api/milestone';
+        	pipeline.save(mile, {
+        		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+        		success : function(model, response) {
+        			App_Admin_Settings.milestones();
+        		}
+        	});
+    	});
+    	
+    });
+    
+    $("#pipeline_validate").die().live('click', function(e){
+    	e.preventDefault();
+    	
+    	// Returns, if the save button has disabled attribute
+    	if ($(this).attr('disabled'))
+    		return;
+
+    	// Disables save button to prevent multiple click event issues
+    	disable_save_button($(this));//$(saveBtn).attr('disabled', 'disabled');
+    	
+    	if (!isValidForm('#pipelineForm')) {
+    		// Removes disabled attribute of save button
+    		enable_save_button($(this));//$(saveBtn).removeAttr('disabled');
+    		return false;
+    	}
+    	
+    	var mile = serializeForm('pipelineForm');
+    	console.log(mile);
+    	// Saving that pipeline object
+    	var pipeline = new Backbone.Model();
+    	pipeline.url = '/core/api/milestone/pipelines';
+    	pipeline.save(mile, {
+    		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
+    		success : function(model, response) {
+    			// Removes disabled attribute of save button
+    			enable_save_button($(this));
+    			$('#pipelineModal').modal('hide');
+    			App_Admin_Settings.milestones();
+    	    	
+    		}
+    	});
+    	
+    });
 });
 
 
@@ -130,7 +237,6 @@ $(function(){
  * using sortable.js when it is dropped in middle or dragged over.
  */
 function setup_deals_in_milestones(id){
-	 console.log(App_Deals.opportunityCollectionView.collection);
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
 		$('ul.milestones').sortable({
 		      connectWith : "ul",
@@ -153,12 +259,27 @@ function setup_deals_in_milestones(id){
 		    	  console.log(ui.item[0]);
 		    	  console.log(ui.item[0].id);
 					var id = ui.item[0].id;
-					var DealJSON = App_Deals.opportunityCollectionView.collection.get(id).toJSON();
-					var oldMilestone = DealJSON.milestone;
-					var newMilestone = ($(this).closest('ul').attr("milestone")).trim();
-						// Checks current milestone is different from previous
-						if(newMilestone != oldMilestone)
-							update_milestone(App_Deals.opportunityMilestoneCollectionView.collection.models[0], id, newMilestone, oldMilestone);
+					
+					var modelJSON = App_Deals.opportunityMilestoneCollectionView.collection.models[0];
+			
+					for(var j in modelJSON.attributes)
+					{
+						var milestone = modelJSON.attributes[j];
+						for(var i in milestone)
+						{
+							if(milestone[i].id == id)
+							{
+								var DealJSON = milestone[i];
+								var newMilestone = ($(this).closest('ul').attr("milestone")).trim();
+
+								var oldMilestone = DealJSON.milestone;
+								// Checks current milestone is different from previous
+								if(newMilestone != oldMilestone)
+									update_milestone(modelJSON, id, newMilestone, oldMilestone);
+								return;
+							}
+						}
+					}
 		        }
 	    });
 
@@ -184,15 +305,25 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 			milestone.splice(i, 1);
 		}
 	}
+	
+	// Replace notes object with note ids
+	var notes = [];
+	$.each(DealJSON.notes, function(index, note)
+	{
+		notes.push(note.id);
+	});
+	
+	console.log(notes);
+	
+	DealJSON.notes = notes;
+	
    // Saving that deal object
 	var up_deal = new Backbone.Model();
 	up_deal.url = '/core/api/opportunity';
 	up_deal.save(DealJSON, {
 		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
 		success : function(model, response) {
-			App_Deals.opportunityCollectionView.collection.remove(DealJSON);
-			App_Deals.opportunityCollectionView.collection.add(model);
-			App_Deals.opportunityCollectionView.render(true);
+			// App_Deals.opportunityMilestoneCollectionView.render(true);
 		}
 	});
 
@@ -201,15 +332,19 @@ function update_milestone(data, id, newMilestone, oldMilestone){
 /**
  * Sets milestones as sortable list.
  */
-function setup_milestones(){
+function setup_milestones(el){
 	head.js(LIB_PATH + 'lib/jquery-ui.min.js', function() {
-		$('ul.milestone-value-list').sortable({
-		      containment : "#milestone-values",
-		      // When milestone is dropped its input value is changed 
-		      update : function(event, ui) {
-		    	  fill_ordered_milestone();
-		        }
-	    });
+		$(el).find('ul.milestone-value-list').each(function(index){
+			var id = $(this).closest('form').find('input[name="id"]').val();
+			$(this).sortable({
+			      containment : "#milestone-values-"+id,
+			      // When milestone is dropped its input value is changed 
+			      update : function(event, ui) {
+			    	  console.log($(ui.item).attr('data'));
+			    	  fill_ordered_milestone($(ui.item).closest('form').attr('id'));
+			        }
+		    });
+		});
 	});
 }
 
@@ -226,9 +361,9 @@ function capitalize_string(str){
 /**
  * Edits the value of milestone when sorted or added new or removes milestone.
  */
-function fill_ordered_milestone(){
+function fill_ordered_milestone(formId){
    	var values;
-   	$.each($("ul.milestone-value-list").children(), function(index, data) { 
+   	$('#'+formId).find("ul.milestone-value-list li").each(function(index, data) { 
    		if($(data).is( ":visible"))
    		{
    			// To capitalize the string
@@ -243,5 +378,5 @@ function fill_ordered_milestone(){
    	if(values && values.charAt((values.length)-1) == ",")
    		values = values.slice(0, -1);
 
-   	$("#milestonesForm").find( 'input[name="milestones"]' ).val(values); 
+   	$("#"+formId).find( 'input[name="milestones"]' ).val(values); 
 }

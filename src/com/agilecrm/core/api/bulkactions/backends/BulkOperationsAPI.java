@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -25,8 +26,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.export.util.ContactExportEmailUtil;
-import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.filter.ContactFilterResultFetcher;
+import com.agilecrm.contact.sync.SyncFrequency;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications;
@@ -40,6 +41,7 @@ import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.status.util.CampaignSubscribersUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
+import com.agilecrm.workflows.util.WorkflowUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -48,7 +50,6 @@ import com.google.appengine.api.blobstore.BlobstoreInputStream;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.thirdparty.Mailgun;
 import com.thirdparty.google.ContactPrefs;
-import com.thirdparty.google.ContactPrefs.SYNC_TYPE;
 import com.thirdparty.google.contacts.ContactSyncUtil;
 import com.thirdparty.google.utl.ContactPrefsUtil;
 
@@ -73,7 +74,12 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
-	    ContactUtil.deleteContacts(fetcher.nextSet());
+	    List<Contact> contacts = fetcher.nextSet();
+
+	    if (model_ids != null)
+		ContactUtil.processContacts(contacts);
+
+	    ContactUtil.deleteContacts(contacts);
 	}
 
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
@@ -110,6 +116,11 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+	    List<Contact> contacts = fetcher.nextSet();
+
+	    if (contact_ids != null)
+		ContactUtil.processContacts(contacts);
+
 	    ContactUtil.changeOwnerToContactsBulk(fetcher.nextSet(), new_owner);
 	}
 
@@ -146,6 +157,7 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    WorkflowSubscribeUtil.subscribeDeferred(fetcher.nextSet(), workflowId);
 	}
@@ -208,7 +220,6 @@ public class BulkOperationsAPI
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
@@ -219,6 +230,11 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+	    List<Contact> contacts = fetcher.nextSet();
+
+	    if (contact_ids != null)
+		ContactUtil.processContacts(contacts);
+
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.addTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
@@ -253,7 +269,6 @@ public class BulkOperationsAPI
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
 
@@ -264,6 +279,11 @@ public class BulkOperationsAPI
 
 	while (fetcher.hasNextSet())
 	{
+	    List<Contact> contacts = fetcher.nextSet();
+
+	    if (contact_ids != null)
+		ContactUtil.processContacts(contacts);
+
 	    // ContactUtil.deleteContactsbyListSupressNotification(fetcher.nextSet());
 	    ContactUtil.removeTagsToContactsBulk(fetcher.nextSet(), tagsArray);
 	}
@@ -281,10 +301,11 @@ public class BulkOperationsAPI
      * @param ownerId
      * @param key
      */
-    @Path("/upload/{owner_id}/{key}")
+    @Path("/upload/{owner_id}/{key}/{type}")
     @POST
     @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public void contactsBulkSave(Contact contact, @PathParam("owner_id") String ownerId, @PathParam("key") String key)
+    public void contactsBulkSave(Contact contact, @PathParam("owner_id") String ownerId, @PathParam("key") String key,
+	    @PathParam("type") String type)
     {
 	System.out.println("backend running");
 
@@ -303,11 +324,62 @@ public class BulkOperationsAPI
 	    // Calls utility method to save contacts in csv with owner id,
 	    // according to contact prototype sent
 	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
-	    new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
+
+	    if (type.equalsIgnoreCase("contacts"))
+	    {
+		new CSVUtil(restrictions).createContactsFromCSV(blobStream, contact, ownerId);
+	    }
+	    else if (type.equalsIgnoreCase("companies"))
+	    {
+		new CSVUtil(restrictions).createCompaniesFromCSV(blobStream, contact, ownerId, type);
+	    }
 	}
 	catch (IOException e)
 	{
-	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    CacheUtil.deleteCache(key);
+
+	    // Delete blob data after contacts are created
+	    BlobstoreServiceFactory.getBlobstoreService().delete(blobKey);
+	}
+    }
+
+    /**
+     * 
+     */
+    @Path("/upload-deals/{owner_id}/{key}")
+    @POST
+    @Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public void dealsBulkSave(Object deal, @PathParam("owner_id") String ownerId, @PathParam("key") String key)
+    {
+	System.out.println("backend running");
+
+	System.out.println(key);
+
+	// Creates a blobkey object from blobkey string
+	BlobKey blobKey = new BlobKey(key);
+
+	// Reads the stream from blobstore
+	InputStream blobStream;
+	try
+	{
+	    blobStream = new BlobstoreInputStream(blobKey);
+	    // Converts stream data into valid string data
+
+	    // Calls utility method to save contacts in csv with owner id,
+	    // according to contact prototype sent
+	    BillingRestriction restrictions = BillingRestrictionUtil.getBillingRestriction(true);
+	    LinkedHashMap<String, Object> dealMap = (LinkedHashMap<String, Object>) deal;
+	    ArrayList<LinkedHashMap<String, String>> props = (ArrayList<LinkedHashMap<String, String>>) dealMap
+		    .get("properties");
+	    new CSVUtil(restrictions).createDealsFromCSV(blobStream, props, ownerId);
+
+	}
+	catch (IOException e)
+	{
 	    e.printStackTrace();
 	}
 	finally
@@ -342,6 +414,11 @@ public class BulkOperationsAPI
 	// to show in notification
 	int contactSize = 0;
 
+	String campaignName = null;
+
+	if (!StringUtils.isBlank(campaign_id))
+	    campaignName = WorkflowUtil.getCampaignName(campaign_id);
+
 	// if all active subscribers are selected
 	if (!StringUtils.isEmpty(allActiveSubscribers) && allActiveSubscribers.equals("all-active-subscribers"))
 	{
@@ -356,7 +433,8 @@ public class BulkOperationsAPI
 		CronUtil.removeTask(campaign_id, contact.id.toString());
 
 		// Updates CampaignStatus to REMOVE
-		CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), campaign_id, Status.REMOVED);
+		CampaignStatusUtil
+		        .setStatusOfCampaign(contact.id.toString(), campaign_id, campaignName, Status.REMOVED);
 	    }
 
 	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,
@@ -374,7 +452,8 @@ public class BulkOperationsAPI
 	    CronUtil.removeTask(campaign_id, activeContactsJSONArray.getString(i));
 
 	    // Set REMOVED campaignStatus
-	    CampaignStatusUtil.setStatusOfCampaign(activeContactsJSONArray.getString(i), campaign_id, Status.REMOVED);
+	    CampaignStatusUtil.setStatusOfCampaign(activeContactsJSONArray.getString(i), campaign_id, campaignName,
+		    Status.REMOVED);
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS, String.valueOf(contactSize));
@@ -564,7 +643,6 @@ public class BulkOperationsAPI
 	    }
 	    catch (Exception e)
 	    {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	}
@@ -600,7 +678,6 @@ public class BulkOperationsAPI
 	}
 	catch (Exception e)
 	{
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }

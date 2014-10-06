@@ -16,8 +16,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.agilecrm.activities.Activity.ActivityType;
+import com.agilecrm.activities.util.ActivityUtil;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
 import com.agilecrm.workflows.util.WorkflowSubscribeUtil;
@@ -70,6 +73,8 @@ public class CampaignsAPI
 	contactList.add(contact);
 
 	WorkflowSubscribeUtil.subscribeDeferred(contactList, workflowId);
+	Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
+	ActivityUtil.createContactActivity(ActivityType.CAMPAIGN, contact, "", workflow.name, "");
 	// return "true";
     }
 
@@ -210,11 +215,15 @@ public class CampaignsAPI
 
 	    ObjectMapper mapper = new ObjectMapper();
 
+	    String campaignId = workflowId.toString();
+	    String campaignName = WorkflowUtil.getCampaignName(campaignId);
+
 	    // Remove the task related the contact for this campaign from
 	    // CronJobs.
-	    CronUtil.removeTask(workflowId.toString(), contact.id.toString());
+	    CronUtil.removeTask(campaignId, contact.id.toString());
+
 	    // Set the status as removed for the campaign in the Contact.
-	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflowId.toString(), Status.REMOVED);
+	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), campaignId, campaignName, Status.REMOVED);
 
 	    return mapper.writeValueAsString(contact);
 	}

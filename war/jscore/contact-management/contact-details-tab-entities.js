@@ -172,10 +172,17 @@ var contact_details_tab = {
 	          			 function(data){
 	          		     imap = data;
 	          	 });
+	          	 
+	          	 var office_exchange;
+	          	 queueGetRequest('email_prefs_queue','/core/api/office','json', 
+	          			 function(data){
+	          		office_exchange = data;
+	          	 });
+	          	 
 
 	          	 queueGetRequest('email_prefs_queue','/core/api/social-prefs/GMAIL', 'json',
 	          			 function(gmail){
-	          		 if(!imap && !gmail)
+	          		 if(!imap && !office_exchange && !gmail)
 	              		 $('#email-prefs-verification',el).css('display','block');
 	             });
 	            }

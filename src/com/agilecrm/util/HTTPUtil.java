@@ -99,9 +99,9 @@ public class HTTPUtil
 	    while ((inputLine = reader.readLine()) != null)
 	    {
 		/*
-		 * new line is added at the end of each line since it not
-		 * appending a new line for enter
-		 */
+	         * new line is added at the end of each line since it not
+	         * appending a new line for enter
+	         */
 		output += inputLine;
 	    }
 
@@ -134,6 +134,11 @@ public class HTTPUtil
 	URL url = new URL(postURL);
 	URLConnection conn = url.openConnection();
 	conn.setDoOutput(true);
+
+	// Set Connection Timeout as Google AppEngine has 5 secs timeout
+	conn.setConnectTimeout(600000);
+	conn.setReadTimeout(600000);
+
 	OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
 	if (data != null)
 	{

@@ -151,6 +151,7 @@
 									Contacts
 							</a>
 						</li>
+						{{#hasMenuScope "CALENDAR"}}
 						<li>
 							<a href="#tasks" title="" data-original-title="">
 								<div style="padding:20px 10px 10px 16px;">
@@ -159,6 +160,8 @@
 									Tasks
 							</a>
 						</li>
+						{{/hasMenuScope}}
+						{{#hasMenuScope "DEALS"}}
 						<li>
 							<a href="#deals" title="" data-original-title="">
 								<div style="padding:20px 13px 10px;">
@@ -167,12 +170,23 @@
 									Deals
 							</a>
 						</li>
+						{{/hasMenuScope}}
+						{{#hasMenuScope "CAMPAIGN"}}
 						<li>
 							<a href="#workflows" title="" data-original-title="">
 								<div style="padding:20px 13px 10px;">
 									<i class="icon-sitemap icon-3x"></i>
 								</div>
 								Campaigns
+							</a>
+						</li>
+						{{/hasMenuScope}}
+						<li>
+							<a href="#activity" title="" data-original-title="">
+								<div style="padding:20px 13px 10px;">
+									<i class="icon-cogs icon-3x"></i>
+								</div>							
+									Activity
 							</a>
 						</li>
 						<li>

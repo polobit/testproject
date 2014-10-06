@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -20,6 +21,7 @@ import com.agilecrm.account.NavbarConstants;
 import com.agilecrm.cursor.Cursor;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.MD5Util;
@@ -41,6 +43,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * (MASKED_PASSWORD) to travel through the network along with encrypted, by
  * assigning the default one to its "password" attribute.
  * </p>
+ * region
  * <p>
  * Accessibility of the user is limited based on "is_admin" attribute value of
  * the user.
@@ -67,6 +70,11 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * Email of the user
      */
     public String email;
+
+    /** The Reference tracking object represents referercount and referece key */
+
+    @Embedded
+    public Referer referer = new Referer();
 
     /**
      * Specifies the user accessibility
@@ -107,6 +115,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      */
     @NotSaved(IfDefault.class)
     public String name = null;
+
+    /**
+     * schedule_id is nothing but name of the domain user at this time we are
+     * not allowing user to change this but in future we give edit feature also
+     */
+    @NotSaved(IfDefault.class)
+    public String schedule_id = null;
 
     /**
      * Assigns its value to password attribute
@@ -182,6 +197,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
      * @param isAccountOwner
      *            specifies ownership
      */
+
     public DomainUser(String domain, String email, String name, String password, boolean isAdmin, boolean isAccountOwner)
     {
 	this.domain = domain;
@@ -193,8 +209,67 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     }
 
     /**
+     * Constructs new {@link DomainUser} entity with the following parameters
+     * domain user gets created whrn registering and domain user is created with
+     * reference code
+     * 
+     * @param domain
+     *            domain of the user
+     * @param email
+     *            email of the user to login into agileCRM
+     * @param name
+     *            name of the user
+     * @param password
+     *            password to login into agileCRM
+     * @param isAdmin
+     *            specifies the accessibility of the user
+     * @param isAccountOwner
+     *            specifies ownership
+     */
+    /*
+     * public DomainUser(String domain, String email, String name, String
+     * password, boolean isAdmin, boolean isAccountOwner, String referencecode)
+     * { this.domain = domain; this.email = email; this.name = name;
+     * this.password = password; this.is_admin = isAdmin; this.is_account_owner
+     * = isAccountOwner;
+     * 
+     * // added by jagadeesh for referral trackingm // creates new reference
+     * code and stores in DoaminUser this.referer.reference_code =
+     * ReferenceUtil.getReferanceNumber();
+     * 
+     * this.referer.referral_count = 0;// stores referelcount 0 when creating //
+     * domain
+     * 
+     * this.referer.reference_by = referencecode;
+     * System.out.println(this.referer.reference_code + "  " +
+     * this.referer.referral_count + "   " + this.referer.reference_by); }
+     */
+    /**
      * Sends notification on disabling or enabling the domain user
      */
+
+    public DomainUser(String domain, String email, String name, String password, boolean isAdmin,
+	    boolean isAccountOwner, String referenced_domain_name)
+    {
+	this.domain = domain;
+	this.email = email;
+	this.name = name;
+	this.password = password;
+	this.is_admin = isAdmin;
+	this.is_account_owner = isAccountOwner;
+
+	// added by jagadeesh for referral trackingm // creates new reference
+	// code and stores in DoaminUser
+
+	this.referer.referral_count = 0;// stores referelcount 0 when creating
+
+	this.referer.reference_by_domain = referenced_domain_name;
+
+	System.out.println(this.referer.referral_count + "   " + this.referer.reference_by_domain);
+    }
+
+    // Sends notification on disabling or enabling the domain user
+
     private void sendNotification()
     {
 	try
@@ -222,19 +297,19 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	if (DomainUserUtil.count() != 0)
 	{
 	    // Get subscription details of account
-	    Subscription subscription = Subscription.getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 
 	    // If subscription is null, it indicates user is in free plan.
 	    // Limits users to global trail users count
-	    if (subscription == null && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
+	    if (subscription.isFreePlan() && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
 		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-			+ " users in the free plan");
+		        + " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
-	    if (subscription != null && DomainUserUtil.count() >= subscription.plan.quantity)
+	    if (!subscription.isFreePlan() && DomainUserUtil.count() >= subscription.plan.quantity)
 		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-			+ " users in the current plan");
+		        + " users in the current plan");
 
 	    return false;
 	}
@@ -325,7 +400,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	    if (!is_admin)
 		throw new Exception(user.name + " is the owner of '" + user.domain
-			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
+		        + "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
     }
 
@@ -393,7 +468,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
 		throw new Exception("User with this email address " + domainUser.email + " already exists in "
-			+ domainUser.domain + " domain.");
+		        + domainUser.domain + " domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -413,6 +488,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	}
 
 	// Check if namespace is null or empty. Then, do not allow to be created
+
 	if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production)
 	    if (StringUtils.isEmpty(this.domain))
 	    {
@@ -443,7 +519,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	     */
 	    // System.out.println("savined user info scopes : " +
 	    // info.getScopes());
-	  //  System.out.println("savined user info scopes : " + info.getScopes());
+	    // System.out.println("savined user info scopes : " +
+	    // info.getScopes());
 
 	}
 	finally
@@ -542,10 +619,31 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     @PrePersist
     private void PrePersist()
     {
+	DomainUser domainuser = null;
 	// Stores created time in info_json
 	if (!hasInfo(CREATED_TIME))
 	    setInfo(CREATED_TIME, new Long(System.currentTimeMillis() / 1000));
 
+	if (this.id != null)
+	{
+
+	    domainuser = DomainUserUtil.getDomainUser(id);
+	    if (domainuser.schedule_id == null)
+	    {
+		System.out.println("executing if schedue id is null");
+		this.schedule_id = getScheduleid(domainuser.name);
+
+	    }
+	    else
+	    {
+		System.out.println("executing if schedue id is not null");
+		this.schedule_id = domainuser.schedule_id;
+	    }
+	}
+	else
+	{
+	    this.schedule_id = getScheduleid(this.name);
+	}
 	// Stores password
 	if (!StringUtils.isEmpty(password) && !password.equals(MASKED_PASSWORD))
 	{
@@ -558,7 +656,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if (this.id != null)
 	    {
 		// Get Old password
-		DomainUser oldDomainUser = DomainUserUtil.getDomainUser(id);
+		DomainUser oldDomainUser = domainuser;
 		this.encrypted_password = oldDomainUser.encrypted_password;
 
 		// Somewhere name is going null which updating.
@@ -566,31 +664,51 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		    this.name = oldDomainUser.name;
 	    }
 	}
-
-	System.out.println(" id in domain user before :" + id);
-
-	if (scopes == null || scopes.size() == 0)
+	if (this.is_account_owner)
 	{
 
-	    System.out.println(" id in domain user :" + id);
-	    if (id == null)
+	    if (this.id != null)
 	    {
-
-		scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
-
+		// Get Old password
+		DomainUser oldDomainUser = domainuser;
+		this.referer.reference_by_domain = oldDomainUser.referer.reference_by_domain;
 	    }
-	    else
-	    {
-		scopes = new LinkedHashSet<UserAccessScopes>();
-		scopes.add(UserAccessScopes.RESTRICTED);
-	    }
+
 	}
+
+	// Sets user scopes
+	setScopes();
 
 	info_json_string = info_json.toString();
 
 	// Lowercase
 	email = StringUtils.lowerCase(email);
 	domain = StringUtils.lowerCase(domain);
+    }
+
+    private void setScopes()
+    {
+	System.out.println(" id in domain user before :" + id);
+
+	scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+
+	/*
+	 * if (scopes == null || scopes.size() == 0) {
+	 * 
+	 * System.out.println(" id in domain user :" + id);
+	 * 
+	 * scopes = new
+	 * LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes
+	 * .values()));
+	 * 
+	 * if (id == null) { scopes = new
+	 * LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues()); }
+	 * else { scopes = new LinkedHashSet<UserAccessScopes>();
+	 * scopes.add(UserAccessScopes.RESTRICTED_ACCESS); } } else
+	 * if(scopes.size() == 1 &&
+	 * scopes.contains(UserAccessScopes.RESTRICTED)) { scopes = new
+	 * LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues()); }
+	 */
     }
 
     /**
@@ -608,17 +726,38 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		info_json = new JSONObject(info_json_string);
 
 	    // If no scopes are set, then all scopes are added
-	    if (scopes == null)
-		scopes = new LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
+	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
 	    if (menu_scopes == null)
 	    {
 		menu_scopes = new LinkedHashSet<NavbarConstants>(Arrays.asList(NavbarConstants.values()));
 	    }
+
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * 
+     * @param name
+     *            domainuser name
+     * @return online schedule id
+     */
+    public String getScheduleid(String name)
+    {
+	String scheduleid = null;
+	if (name.contains(" "))
+	{
+	    scheduleid = name.replace(" ", "_");
+	    return scheduleid;
+	}
+	else
+	{
+	    scheduleid = name;
+	    return scheduleid;
 	}
     }
 
@@ -627,6 +766,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String toString()
     {
 	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-		+ this.id + " Name: " + this.name + "\n " + info_json;
+	        + this.id + " Name: " + this.name + "\n " + info_json;
     }
+
 }

@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.agilecrm.contact.Contact;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
@@ -65,22 +64,22 @@ public class DomainUserUtil
     public static DomainUser generateForgotPassword(String email) throws Exception
     {
 	DomainUser user = generateNewPassword(email);
-	
-	if(user == null)
+
+	if (user == null)
 	    return null;
-	
-	// Set password in different variable as current password will be encrypted before saving.
+
+	// Set password in different variable as current password will be
+	// encrypted before saving.
 	String password = user.password;
-	
+
 	user.save();
-	
+
 	user.password = password;
-	
-	SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT,
-		 SendMail.FORGOT_PASSWORD, user);
-	
+
+	SendMail.sendMail(email, SendMail.FORGOT_PASSWORD_SUBJECT, SendMail.FORGOT_PASSWORD, user);
+
 	return user;
-	
+
     }
 
     private static DomainUser generateNewPassword(String email)
@@ -98,6 +97,7 @@ public class DomainUserUtil
 	return domainUser;
 
     }
+
     /**
      * Gets a user based on its id
      * 
@@ -307,10 +307,13 @@ public class DomainUserUtil
 
 	try
 	{
-		
-		//return dao.fetchAllByOrder(max, cursor, null, true, false, "-created_time");
-		//return dao.ofy().query(DomainUser.class).order("-created_time").list();
-		// return DomainUser.dao.fetchAllByOrder(max, cursor, null, true, true, "-created_time");
+
+	    // return dao.fetchAllByOrder(max, cursor, null, true, false,
+	    // "-created_time");
+	    // return
+	    // dao.ofy().query(DomainUser.class).order("-created_time").list();
+	    // return DomainUser.dao.fetchAllByOrder(max, cursor, null, true,
+	    // true, "-created_time");
 	    return dao.fetchAll(max, cursor);
 	}
 	finally
@@ -380,6 +383,66 @@ public class DomainUserUtil
 
 	info.setScopes(user.scopes);
 	SessionManager.set(info);
+    }
+
+    /**
+     * Gets a List of users based on referencecode it is used to display
+     * referrals in that patcular domain
+     * 
+     * all domains it was referred by this domain code
+     * 
+     * @param id
+     * @return
+     */
+    public static List<DomainUser> getAllDomainUsersBasedOnReferenceDomain(String referencecode)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    return dao.listByProperty("referer.reference_by_domain", referencecode);
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+
+    /**
+     * Gets domain user based on his scheduleid
+     * 
+     * @param name
+     *            is nothing but schedule id.and schedule id is nothing but his
+     *            name
+     * 
+     * @return {@link DomainUser} object
+     */
+    public static DomainUser getDomainUserFromScheduleId(String scheduleid, String namespace)
+    {
+	String oldnamespace = NamespaceManager.get();
+
+	if (StringUtils.isEmpty(namespace))
+	    return null;
+
+	NamespaceManager.set("");
+
+	try
+	{
+	    Map<String, Object> searchMap = new HashMap<String, Object>();
+	    searchMap.put("schedule_id", scheduleid);
+	    searchMap.put("domain", namespace);
+	    return dao.getByProperty(searchMap);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldnamespace);
+	}
     }
 
 }

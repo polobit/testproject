@@ -27,7 +27,7 @@ public class UploadServlet extends HttpServlet
     {
 
 	System.out.println("blob services");
-
+	String fileType = req.getParameter("type");
 	/*
 	 * Reads blobs in the request.
 	 */
@@ -49,7 +49,14 @@ public class UploadServlet extends HttpServlet
 	try
 	{
 	    // Forward request back to JSP with blobkey as parameter
-	    res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString());
+
+	    if (fileType != null)
+	    {
+
+		res.sendRedirect("/upload-contacts.jsp?key=" + blobKey.getKeyString() + "&type=" + fileType);
+
+	    }
+
 	}
 	catch (IOException e)
 	{

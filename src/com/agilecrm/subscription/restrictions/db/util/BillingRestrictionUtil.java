@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
 import com.agilecrm.subscription.Subscription;
+import com.agilecrm.subscription.SubscriptionUtil;
 import com.agilecrm.subscription.limits.PlanLimits;
 import com.agilecrm.subscription.limits.PlanLimits.PlanClasses;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
@@ -134,7 +135,12 @@ public class BillingRestrictionUtil
 	UserInfo info = SessionManager.get();
 
 	if (info == null)
+	{
+	    System.out.println("UserInfo is null...");
 	    return BillingRestriction.getInstance(null, null);
+	}
+
+	System.out.println("Plan in UserInfo is " + info.getPlan() + " and users count is " + info.getUsersCount());
 
 	return BillingRestriction.getInstance(info.getPlan(), info.getUsersCount());
     }
@@ -165,10 +171,14 @@ public class BillingRestrictionUtil
 	    return new Plan(planName, users);
 
 	// Fetches account subscription
-	Subscription subscription = Subscription.getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	// If plan is null then it is considered free plan.
-	plan = subscription == null ? new Plan("FREE", 2) : subscription.plan;
+	plan = subscription.plan;
+
+	// Namespace and subscription
+	// System.out.println("" + NamespaceManager.get() +
+	// " domain is having plan - " + plan);
 
 	// Gets user info and sets plan and sets back in session
 	UserInfo info = SessionManager.get();
@@ -190,11 +200,38 @@ public class BillingRestrictionUtil
      */
     public static void setPlan(UserInfo info)
     {
-	Subscription subscription = Subscription.getSubscription();
-	Plan plan = subscription == null ? new Plan(PlanType.FREE.toString(), 2) : subscription.plan;
+	Subscription subscription = SubscriptionUtil.getSubscription();
+	Plan plan = subscription.plan;
 
 	info.setPlan(plan.plan_type.toString());
 	info.setUsersCount(plan.quantity);
+    }
+
+    /**
+     * Sets plan in user info
+     * 
+     * @param info
+     */
+    public static void setPlan(UserInfo info, String domain)
+    {
+	if (StringUtils.isEmpty(domain))
+	    return;
+
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set(domain);
+	try
+	{
+	    Subscription subscription = SubscriptionUtil.getSubscription();
+
+	    Plan plan = subscription.plan;
+
+	    info.setPlan(plan.plan_type.toString());
+	    info.setUsersCount(plan.quantity);
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 
     /**
@@ -254,5 +291,17 @@ public class BillingRestrictionUtil
 	info.setPlan(plan.getPlanName());
 	info.setUsersCount(plan.quantity);
 
+    }
+
+    public static void addEmails(Integer emails, Plan plan)
+    {
+	BillingRestriction cachedData = getBillingRestriction(plan.plan_type.toString(), plan.quantity);
+	if (cachedData.one_time_emails_count == null)
+	    cachedData.one_time_emails_count = 5000;
+	cachedData.one_time_emails_count += emails;
+
+	cachedData.email_pack_start_time = System.currentTimeMillis() / 1000;
+
+	cachedData.save();
     }
 }

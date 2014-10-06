@@ -35,6 +35,7 @@ import com.agilecrm.deals.Milestone;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.reports.Reports;
+import com.agilecrm.shopify.ShopifyApp;
 import com.agilecrm.subscription.Subscription;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
@@ -42,6 +43,7 @@ import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.IMAPEmailPrefs;
+import com.agilecrm.user.OfficeEmailPrefs;
 import com.agilecrm.user.SocialPrefs;
 import com.agilecrm.user.UserPrefs;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
@@ -117,6 +119,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	ObjectifyService.register(Workflow.class);
 	ObjectifyService.register(WorkflowTemplate.class);
 	ObjectifyService.register(IMAPEmailPrefs.class);
+	ObjectifyService.register(OfficeEmailPrefs.class);
 	ObjectifyService.register(EmailTemplates.class);
 	ObjectifyService.register(APIKey.class);
 	ObjectifyService.register(Opportunity.class);
@@ -134,6 +137,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	// widgets
 	ObjectifyService.register(Widget.class);
 	ObjectifyService.register(CustomWidget.class);
+	ObjectifyService.register(ShopifyApp.class);
 
 	// Stripe
 	ObjectifyService.register(Subscription.class);
@@ -166,6 +170,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 
 	// For all Activities
 	ObjectifyService.register(Activity.class);
+
     }
 
     /**
@@ -508,8 +513,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	return fetchAllWithCursor(max, cursor, query, forceLoad, cache);
     }
 
-    public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache,
-	    String orderBy)
+    public List<T> fetchAllByOrder(int max, String cursor, Map<String, Object> map, boolean forceLoad, boolean cache, String orderBy)
     {
 	Query<T> query = ofy().query(clazz);
 	if (map != null)
@@ -556,8 +560,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 		{
 
 		    com.agilecrm.cursor.Cursor agileCursor = (com.agilecrm.cursor.Cursor) result;
-		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_"
-			    + NamespaceManager.get() + "_count");
+		    Object object = forceLoad ? null : CacheUtil.getCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count");
 
 		    if (object != null)
 			agileCursor.count = (Integer) object;
@@ -567,8 +570,7 @@ public class ObjectifyGenericDao<T> extends DAOBase
 			agileCursor.count = query.count();
 			long endTime = System.currentTimeMillis();
 			if ((endTime - startTime) > 3 * 1000 && cache)
-			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count",
-				    agileCursor.count, 2 * 60 * 60 * 1000);
+			    CacheUtil.setCache(this.clazz.getSimpleName() + "_" + NamespaceManager.get() + "_count", agileCursor.count, 2 * 60 * 60 * 1000);
 		    }
 
 		}
@@ -732,9 +734,8 @@ public class ObjectifyGenericDao<T> extends DAOBase
 	for (Field field : clazz.getDeclaredFields())
 	{
 	    // Ignore transient, embedded, array, and collection properties
-	    if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class))
-		    || (field.getType().isArray()) || (Collection.class.isAssignableFrom(field.getType()))
-		    || ((field.getModifiers() & BAD_MODIFIERS) != 0))
+	    if (field.isAnnotationPresent(Transient.class) || (field.isAnnotationPresent(Embedded.class)) || (field.getType().isArray())
+		    || (Collection.class.isAssignableFrom(field.getType())) || ((field.getModifiers() & BAD_MODIFIERS) != 0))
 		continue;
 
 	    field.setAccessible(true);

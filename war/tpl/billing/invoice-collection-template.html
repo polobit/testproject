@@ -36,3 +36,31 @@
 {{/if}}
 {{/each}}		
 </script>
+
+<script id="invoice-partial-collection-template" type="html/text">
+        <table class="table table-striped" id="sort-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="invoice-partial-model-list" class="model-list-cursor">
+            </tbody>
+        </table>
+</script>
+<script id="invoice-partial-model-template" type="text/html">
+	{{#each lines.data}}	
+{{#if this.plan}}
+	<td class="data" data="{{this.id}}">
+    	{{this.plan.name}}
+	</td>
+	<td>{{epochToHumanDate "mm/dd/yyyy" period.start}}</td>
+	<td>{{epochToHumanDate "mm/dd/yyyy" period.end}}</td>
+	<td>{{this.plan.amount}}</td>
+
+{{/if}}
+{{/each}}		
+</script>

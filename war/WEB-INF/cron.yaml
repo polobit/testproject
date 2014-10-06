@@ -22,6 +22,19 @@ cron:
 - description: Weekly reports
   url: /backend/cron/reports?duration=WEEKLY
   schedule: every friday 23:50 
+
+- description: daily triggers
+  url: /backend/cron/triggers?period=DAILY
+  schedule: every day 01:00
+  
+- description: Monthly triggers
+  url: /backend/cron/triggers?period=MONTHLY
+  schedule: 1st monday of month 01:00
+  
+- description: Weekly triggers
+  url: /backend/cron/triggers?period=WEEKLY
+  schedule: every monday 01:00
+
   
 - description: Due Tasks Reminder
   url: /backend/cron/tasks
@@ -79,6 +92,12 @@ cron:
   url: /backend/cron/cron-pull?q=bulk-campaign-pull-queue
   schedule: every 1 mins
 
+- description: Bulk SMS Cron
+  url: /backend/cron/cron-pull?q=bulk-sms-pull-queue
+  schedule: every 1 mins
 
+- description: Bulk Normal SMS Cron
+  url: /backend/cron/cron-pull?q=normal-sms-pull-queue
+  schedule: every 1 mins
 
 

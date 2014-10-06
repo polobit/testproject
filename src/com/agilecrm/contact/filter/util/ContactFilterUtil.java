@@ -15,6 +15,8 @@ import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.DateUtil;
 import com.google.appengine.api.datastore.Cursor;
 import com.googlecode.objectify.Key;
@@ -62,7 +64,10 @@ public class ContactFilterUtil
 	    rule.CONDITION = RuleCondition.EQUALS;
 	    rule.RHS = "PERSON";
 	    filter.rules.add(rule);
-
+	    
+	    // Sets ACL condition
+	    UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+	    
 	    /*
 	     * if(filter.rules != null) { // Search rule to specify type is
 	     * person SearchRule rule = new SearchRule(); rule.RHS = "PERSON";

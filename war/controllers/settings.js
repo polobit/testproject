@@ -17,6 +17,12 @@ var SettingsRouter = Backbone.Router.extend({
 
 			/* Email (Gmail / IMAP) */
 			"email" : "email",
+			
+			/* IMAP prefs */
+			"imap" : "imap",
+			
+			/* Office prefs */
+			"office" : "office",			
 
 			/* Social preferences */
 			"social-prefs" : "socialPrefs",
@@ -27,8 +33,11 @@ var SettingsRouter = Backbone.Router.extend({
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 			
+			/* support page */
+			"help" : "support",
+			
 			/* contact-us help email */
-			"contact-us" : "contactUsEmail",
+			"contact-us" : "contactUsEmail"
 	},
 
 	/**
@@ -81,73 +90,70 @@ var SettingsRouter = Backbone.Router.extend({
 
 		// Save button action of change password form, If it is out of
 		// this router wont navigate properly
-		$("#saveNewPassword").on(
-				"click",
-				function(e)
+		$("#saveNewPassword").on("click", function(e) {
+
+			e.preventDefault();
+			var saveBtn = $(this);
+
+			// Returns, if the save button has disabled
+			// attribute
+			if ($(saveBtn).attr('disabled'))
+				return;
+
+			// Disables save button to prevent multiple click
+			// event issues
+			disable_save_button($(saveBtn));
+
+			var form_id = $(this).closest('form').attr("id");
+
+			if (!isValidForm('#' + form_id))
+			{
+
+				// Removes disabled attribute of save button
+				enable_save_button($(saveBtn));
+				return false;
+			}
+			// Returns if same password is given
+			if ($("#current_pswd").val() == $("#new_pswd").val())
+			{
+				$('#changePasswordForm').find('span.save-status').html(
+						"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same</span>");
+				$('#changePasswordForm').find('span.save-status').find("span").fadeOut(5000);
+				enable_save_button($(saveBtn));
+				return false;
+			}
+
+			// Show loading symbol until model get saved
+			$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
+
+			var json = serializeForm(form_id);
+
+			$.ajax({
+				url : '/core/api/user-prefs/changePassword',
+				type : 'PUT',
+				data : json,
+				success : function()
 				{
-
-					e.preventDefault();
-					var saveBtn = $(this);
-
-					// Returns, if the save button has disabled
-					// attribute
-					if ($(saveBtn).attr('disabled'))
-						return;
-
-					// Disables save button to prevent multiple click
-					// event issues
-					disable_save_button($(saveBtn));
-
-					var form_id = $(this).closest('form').attr("id");
-
-					if (!isValidForm('#' + form_id))
+					$('#changePasswordForm').find('span.save-status').html(
+							"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
+					enable_save_button($(saveBtn));
+					$('#' + form_id).each(function()
 					{
+						this.reset();
+					});
+					history.back(-1);
+				},
+				error : function(response)
+				{
+					$('#changePasswordForm').find('span.save-status').html("");
+					$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
+							"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
+					$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
+					$('#changePasswordForm').find('input[name="current_pswd"]').focus();
+					enable_save_button($(saveBtn));
+				} });
 
-						// Removes disabled attribute of save button
-						enable_save_button($(saveBtn));
-						return false;
-					}
-					// Returns if same password is given
-					if ($("#current_pswd").val() == $("#new_pswd").val())
-					{
-						$('#changePasswordForm').find('span.save-status').html(
-								"<span style='color:red;margin-left:10px;'>Current and New Password can not be the same</span>");
-						$('#changePasswordForm').find('span.save-status').find("span").fadeOut(5000);
-						enable_save_button($(saveBtn));
-						return false;
-					}
-
-					// Show loading symbol until model get saved
-					$('#changePasswordForm').find('span.save-status').html(getRandomLoadingImg());
-
-					var json = serializeForm(form_id);
-
-					$.ajax({
-						url : '/core/api/user-prefs/changePassword',
-						type : 'PUT',
-						data : json,
-						success : function()
-						{
-							$('#changePasswordForm').find('span.save-status').html(
-									"<span style='color:green;margin-left:10px;'>Password changed successfully</span>").fadeOut(5000);
-							enable_save_button($(saveBtn));
-							$('#' + form_id).each(function()
-							{
-								this.reset();
-							});
-							history.back(-1);
-						},
-						error : function(response)
-						{
-							$('#changePasswordForm').find('span.save-status').html("");
-							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").append(
-									"<span style='color:red;margin-left:10px;'>Incorrect Password</span>");
-							$('#changePasswordForm').find('input[name="current_pswd"]').closest(".controls").find("span").fadeOut(5000);
-							$('#changePasswordForm').find('input[name="current_pswd"]').focus();
-							enable_save_button($(saveBtn));
-						} });
-
-				});
+		});
 	},
 
 	/**
@@ -175,29 +181,120 @@ var SettingsRouter = Backbone.Router.extend({
 	 * communicated mails between contact and logged in preference.
 	 */
 	email : function()
-	{
+	{ 
 		$("#content").html(getTemplate("settings"), {});
+
+		$('#prefs-tabs-content').html(getTemplate("settings-email-prefs"), {});
+		
 		// Gets Social Prefs (Same as Linkedin/Twitter) for Gmail
 		var data = { "service" : "Gmail", "return_url" : encodeURIComponent(window.location.href) };
 		var itemView = new Base_Model_View({ url : '/core/api/social-prefs/GMAIL', template : "settings-social-prefs", data : data });
 		itemView.model.fetch();
-
-		// Adds header
-		$('#prefs-tabs-content').html("<div><h3><strong>Link your Email Account</strong></h3><br/></div>");
-
+		
 		// Adds Gmail Prefs
-		$('#prefs-tabs-content').append(itemView.render().el);
+		$('#prefs-tabs-content').find("#social-prefs").html(itemView.render().el);
+		
+		$.getJSON("/core/api/imap",  function(data){
+			$('#prefs-tabs-content').find("#imap-prefs").html($(getTemplate("settings-imap-access", data)));
+		});
+		
+		$.getJSON("/core/api/office",  function(data){
+			$('#prefs-tabs-content').find("#office-prefs").html($(getTemplate("settings-office-access", data)));
+		});
+		
+		$('#PrefsTab .active').removeClass('active');
+		$('.email-tab').addClass('active');
+		
+		$("#office-prefs-delete, #imap-prefs-delete").live("click", function(e) {
+
+			e.preventDefault();
+			
+			var saveBtn = $(this);
+
+			// Returns, if the save button has disabled attribute
+			if ($(saveBtn).attr('disabled'))
+				return;
+			
+			if(!confirm("Are you sure you want to delete?"))
+	    		return false;
+			
+			// Disables save button to prevent multiple click event issues
+			disable_save_button($(saveBtn));
+
+			var button_id = $(saveBtn).attr("name");
+
+			$.ajax({
+				url : '/core/api/' + button_id,
+				type : 'DELETE',
+				success : function()
+				{
+					enable_save_button($(saveBtn));
+					App_Settings.email();
+					return;
+				}
+			});
+
+		});
+	},
+
+	/**
+	 * Imap settings
+	 */
+	imap : function()
+	{
+		$("#content").html(getTemplate("settings"), {});
 
 		// Gets IMAP Prefs
 		var itemView2 = new Base_Model_View({ url : '/core/api/imap', template : "settings-imap-prefs", postRenderCallback : function(el){
 			itemView2.model.set("password","");
+		}, saveCallback : function(){
+/*			$save_info = $('<div style="display:inline-block"><small><p style="color:#2D8130; font-size:14px">Saved Successfully</p></small></div>');
+
+			// Appends error info to form actions block.
+			$("#imap-prefs-form").find(".form-actions").append($save_info);
+
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);*/
+			App_Settings.navigate("email", { trigger : true });
+			return;
 		} });
 		
-		
 		// Appends IMAP
-		$('#prefs-tabs-content').append(itemView2.render().el);
+		$('#prefs-tabs-content').html(itemView2.render().el);
 		$('#PrefsTab .active').removeClass('active');
 		$('.email-tab').addClass('active');
+		
+	},
+	
+	/**
+	 * Office settings
+	 */
+	office : function()
+	{
+		$("#content").html(getTemplate("settings"), {});
+	
+		// Gets Office Prefs
+		var itemView3 = new Base_Model_View({ url : '/core/api/office', template : "settings-office-prefs", postRenderCallback : function(el){
+			itemView3.model.set("password","");
+		}, saveCallback : function(){
+			$("#office-prefs-form").find("#office-password").val("");
+/*			$save_info = $('<div style="display:inline-block"><small><p style="color:#2D8130; font-size:14px">Saved Successfully</p></small></div>');
+
+			// Appends error info to form actions block.
+			$("#office-prefs-form").find(".form-actions").append($save_info);
+
+			// Hides the error message after 3 seconds
+			$save_info.show().delay(3000).hide(1);*/
+			App_Settings.navigate("email", { trigger : true });
+			return;
+			
+		}  });
+		
+		// Appends Office
+		$('#prefs-tabs-content').html(itemView3.render().el);
+		$('#PrefsTab .active').removeClass('active');
+		$('.email-tab').addClass('active');
+		
 	},
 
 	/**
@@ -332,13 +429,22 @@ var SettingsRouter = Backbone.Router.extend({
 		$('.notification-prefs-tab').addClass('active');
 		// $('#content').html(view.render().el);
 	},
+	
+	/**
+	 * Support page
+	 */
+	support : function()
+	{
+		$("#content").html(getTemplate("support-form"), {});
+	},
 
 	/**
 	 * Contact us email
 	 */
 	contactUsEmail : function()
 	{
-		$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
+		//$("#content").html(getTemplate("help-mail-form", CURRENT_DOMAIN_USER));
+		$("#content").html(getTemplate("help-mail-form"), {});
 	}
 
 });

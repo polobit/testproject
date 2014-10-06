@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import com.agilecrm.activities.Event;
 import com.agilecrm.activities.Task;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.activities.util.EventUtil;
 import com.agilecrm.activities.util.TaskUtil;
 import com.agilecrm.cases.Case;
@@ -176,7 +177,15 @@ public class ContactsAPI
 	}
 
 	contact.save();
-
+	try
+	{
+	    ActivitySave.createTagAddActivity(contact);
+	}
+	catch (JSONException e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	System.out.println("Contacts properties = ");
 	for (ContactField f : contact.properties)
 	{
@@ -198,6 +207,7 @@ public class ContactsAPI
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Contact updateContact(Contact contact)
     {
+
 	contact.save();
 	System.out.println("returned tags : " + contact.tags);
 	return contact;
@@ -895,8 +905,21 @@ public class ContactsAPI
      */
     @Path("/{contact-id}/isUpdated")
     @GET
+    @Produces(MediaType.TEXT_PLAIN)
     public boolean isContactUpdated(@PathParam("contact-id") Long id, @QueryParam("updated_time") Long updatedTime)
     {
 	return ContactUtil.isContactUpdated(id, updatedTime);
+    }
+    
+    /**
+     *  check for company exist
+     * @param companyName
+     * @return
+     */
+    @Path("/company/validate/{company-name}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public boolean isCompanyExist(@PathParam("company-name")String companyName){
+	return ContactUtil.isCompanyExist(companyName);
     }
 }

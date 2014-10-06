@@ -10,27 +10,29 @@ import javax.ws.rs.Produces;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.agilecrm.db.ObjectifyGenericDao;
+import com.agilecrm.subscription.limits.PlanLimits;
+import com.agilecrm.subscription.limits.plan.FreePlanLimits;
+import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.subscription.stripe.StripeImpl;
-import com.agilecrm.subscription.stripe.StripeUtil;
 import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
+import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.appengine.api.NamespaceManager;
 import com.google.gson.Gson;
-import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.annotation.Cached;
 import com.googlecode.objectify.annotation.NotSaved;
 import com.googlecode.objectify.condition.IfDefault;
-import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
@@ -77,6 +79,10 @@ public class Subscription
     @NotSaved(IfDefault.class)
     public Plan plan = null;
 
+    @Embedded
+    @NotSaved(IfDefault.class)
+    public Plan emailPlan = null;
+
     /**
      * The card_details variable is used for serialization of card details from
      * form this field is not saved only encrypted card details will be saved
@@ -96,6 +102,12 @@ public class Subscription
     @NotSaved(IfDefault.class)
     public BillingStatus status;
 
+    /**
+     * The status {@link Enum} type variable holds status of Subscription status
+     */
+    @NotSaved(IfDefault.class)
+    public BillingStatus emailStatus;
+
     /** The created_time variable represents when subscription object is created */
     @NotSaved(IfDefault.class)
     public Long created_time = 0L;
@@ -111,9 +123,8 @@ public class Subscription
      */
     @NotSaved(IfDefault.class)
     public String billing_data_json_string = null;
-   
-    
-    //used when upgrade subscription from adminpanel
+
+    // used when upgrade subscription from adminpanel
     @NotSaved
     public String domain_name = null;
 
@@ -142,7 +153,14 @@ public class Subscription
      * {@link Customer} as {@link JSONObject}
      */
     @NotSaved
-    private JSONObject billing_data;
+    @JsonIgnore
+    JSONObject billing_data;
+
+    @NotSaved
+    public PlanLimits planLimits;
+
+    @NotSaved
+    public BillingRestriction cachedData;
 
     private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(Subscription.class);
 
@@ -151,15 +169,16 @@ public class Subscription
 
     }
 
-    /**
-     * Returns {@link Subscription} object of current domain
-     * 
-     * @return {@link Subscription}
-     * */
-    public static Subscription getSubscription()
+    void fillDefaultPlans()
     {
-	Objectify ofy = ObjectifyService.begin();
-	return ofy.query(Subscription.class).get();
+
+	if (plan == null)
+	{
+	    plan = new Plan(PlanType.FREE.toString(), 2);
+	    gateway = Gateway.Stripe;
+	    planLimits = PlanLimits.getPlanDetails(plan);
+	}
+
     }
 
     /**
@@ -173,7 +192,7 @@ public class Subscription
 	try
 	{
 	    NamespaceManager.set(namespace);
-	    Subscription subscription = getSubscription();
+	    Subscription subscription = SubscriptionUtil.getSubscription();
 	    if (subscription != null)
 		subscription.cancelSubscription();
 
@@ -199,45 +218,31 @@ public class Subscription
 	try
 	{
 	    NamespaceManager.set(namespace);
-	    
-	    Subscription subscription = getSubscription();
 
-	    if (subscription != null){
-		    subscription.domain_name=namespace;
-	      return subscription;
+	    Subscription subscription = SubscriptionUtil.getSubscription();
+
+	    if (subscription != null)
+	    {
+		subscription.domain_name = namespace;
+		return subscription;
 	    }
 
 	}
 	catch (Exception e)
 	{
 	    e.printStackTrace();
-    
+
 	}
 	finally
 	{
 	    NamespaceManager.set(oldNamespace);
 	}
-	 return null;
+	return null;
     }
 
-    
-    public static Customer getCustomer(String namespace) throws StripeException
-    {
-	    Subscription subscription = getSubscriptionOfParticularDomain(namespace);
-	    if (subscription != null){
-	      JSONObject billing=subscription.billing_data;
-	   System.out.println(billing+" in subscription.java");
-	     return StripeUtil.getCustomerFromJson(billing);
-	    }
-		return null;
-
-    }
-    
-    
-    
     public void save()
     {
-	Subscription subscription = Subscription.getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 	// If Subscription object already exists, update it(Only one
 	// subscription object per domain)
 	if (subscription != null)
@@ -267,6 +272,13 @@ public class Subscription
 	return this;
     }
 
+    public Subscription createNewCustomer() throws Exception
+    {
+	billing_data = getAgileBilling().createCustomer(card_details);
+	save();
+	return this;
+    }
+
     /**
      * Returns number of users in account along with subscription details
      */
@@ -289,8 +301,20 @@ public class Subscription
     public static Subscription updatePlan(Plan plan) throws PlanRestrictedException, Exception
     {
 	// Gets subscription object of current domain
-	Subscription subscription = getSubscription();
-	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
+	Subscription subscription = SubscriptionUtil.getSubscription();
+
+	if (subscription.plan != null && subscription.plan.plan_type == PlanType.FREE)
+	{
+	    int count = DomainUserUtil.count();
+	    System.out.println("existing users cout in free plan " + count);
+	    if (plan.quantity < count)
+	    {
+		BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.NOT_DOWNGRADABLE);
+		return null;
+	    }
+		
+	}
+	else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
 		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
 	{
 	    System.out.println("plan upgrade not possible");
@@ -328,11 +352,15 @@ public class Subscription
     {
 
 	// Gets subscription of current domain
-	Subscription subscription = getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 
-	// Updates credit card details in related gateway
-	subscription.billing_data = subscription.getAgileBilling().updateCreditCard(subscription.billing_data,
-		cardDetails);
+	AgileBilling billing = subscription.getAgileBilling();
+
+	if (subscription.billing_data != null)
+	    // Updates credit card details in related gateway
+	    subscription.billing_data = billing.updateCreditCard(subscription.billing_data, cardDetails);
+	else
+	    subscription.billing_data = billing.addCreditCard(cardDetails);
 
 	// Assigns details which will be encrypted before saving
 	// subscription entity
@@ -345,14 +373,14 @@ public class Subscription
     }
 
     /**
-     * Fetchs {@link List} of {@link Invoice} from respective gateway
+     * Fetches {@link List} of {@link Invoice} from respective gateway
      * 
      * @return {@link List} of {@link Invoice}
      * @throws Exception
      */
     public static List<Invoice> getInvoices() throws Exception
     {
-	Subscription subscription = getSubscription();
+	Subscription subscription = SubscriptionUtil.getSubscription();
 
 	// If current domain has subscription object get invoices for that
 	// domain
@@ -378,8 +406,7 @@ public class Subscription
 	    return null;
 	return subscription.getAgileBilling().getInvoices(subscription.billing_data);
     }
-    
-    
+
     /**
      * Cancels the subscription in its respective gateway
      * 
@@ -432,8 +459,11 @@ public class Subscription
      */
     @XmlElement
     @Produces("application/json")
-    public String getBillingData() throws Exception
+    public String getBillingData()
     {
+	if (billing_data == null)
+	    return null;
+
 	return billing_data.toString();
     }
 
@@ -442,12 +472,19 @@ public class Subscription
     {
 	try
 	{
-		
+	    if (this.plan == null)
+	    {
+		plan = new Plan(PlanType.FREE.toString(), 2);
+	    }
+
+	    planLimits = PlanLimits.getPlanDetails(plan);
+
+	    // sets domain name in subscription obj before returning
+	    this.domain_name = NamespaceManager.get();
+
 	    if (billing_data_json_string != null)
 		billing_data = new JSONObject(billing_data_json_string);
-	 
-	    //sets domain name  in subscription obj before returning 
-	    this.domain_name=NamespaceManager.get();  
+
 	}
 	catch (Exception e)
 	{
@@ -461,7 +498,8 @@ public class Subscription
      * @return {@link AgileBilling}
      * @throws Exception
      */
-    private AgileBilling getAgileBilling() throws Exception
+    @JsonIgnore
+    public AgileBilling getAgileBilling() throws Exception
     {
 	/*
 	 * Respective gateway implementation is expected to be in sub package of
@@ -494,6 +532,20 @@ public class Subscription
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    public boolean isFreePlan()
+    {
+	if (plan.plan_type == PlanType.FREE)
+	    return true;
+	return false;
+    }
+
+    public boolean isFreeEmailPack()
+    {
+	if (emailPlan == null)
+	    return true;
+	return false;
     }
 
     @Override

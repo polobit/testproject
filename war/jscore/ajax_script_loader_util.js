@@ -32,7 +32,7 @@ function loadMiscScripts()
 
 	load_urls_on_ajax_stop('//static.getclicky.com/js');
 	
-	load_clickdesk_code();
+	// load_clickdesk_code();
 	
 	// Clicky code
 	load_urls_on_ajax_stop('//static.getclicky.com/js', function()
@@ -57,9 +57,10 @@ function loadMiscScripts()
 
 /**
  * Clickdesk Widget
- */
+ *//*
 function load_clickdesk_code()
 {
+	return;
 	
 	if (CLICKDESK_CODE_LOADED)
 		return;
@@ -72,7 +73,7 @@ function load_clickdesk_code()
 		CLICKDESK_CODE_LOADED = true;
 	})
 
-}
+}*/
 
 
 

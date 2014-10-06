@@ -59,6 +59,7 @@ public class ScribeServlet extends HttpServlet
     // OAuth login
     public static final String SERVICE_TYPE_OAUTH_LOGIN = "oauth_login";
     public static final String SHOPIFY_SERVICE = "shopify";
+    public static final String XERO_SERVICE = "xero";
 
     /**
      * Process the post request to servlet request, request can be sent either
@@ -126,6 +127,8 @@ public class ScribeServlet extends HttpServlet
 	if (serviceType != null && serviceType.equalsIgnoreCase(SHOPIFY_SERVICE))
 	{
 	    String shop = req.getParameter("shop");
+	    String callback = req.getParameter("url");
+	    req.getSession().setAttribute("url", callback);
 	    if (shop.contains(".myshopify.com"))
 	    {
 		shop = shop.split("\\.")[0];
@@ -194,7 +197,6 @@ public class ScribeServlet extends HttpServlet
 	}
 
 	OAuthService service = ScribeUtil.getService(req, resp, serviceName);
-	;
 	String url = null;
 	Token token = null;
 

@@ -4,6 +4,7 @@ import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.agilecrm.contact.filter.ContactFilter;
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.util.WorkflowUtil;
@@ -15,6 +16,12 @@ import com.googlecode.objectify.condition.IfDefault;
  * Trigger is a base class for all triggers which allow application to run
  * campaign automatically. The Trigger Object encapsulates the trigger details
  * which includes name of a trigger, type and campaign.
+ * 
+ * <p>
+ * Triggers can run periodically (Daily,Weekly,Monthly), these periodic triggers
+ * allows user to select contact filters then trigger runs on those matching contacts.
+ * </p>
+ * 
  * <p>
  * Trigger uses these conditions
  * <ul>
@@ -24,12 +31,14 @@ import com.googlecode.objectify.condition.IfDefault;
  * <li>When new deal is created.</li>
  * <li>When deal is deleted.</li>
  * <li>When score of contact reaches the trigger score.</li>
+ * <li>Uses contact filter to run campaign specific contacts. </li>
+ * <li>
  * </ul>
  * <p>
  * Some important points to consider are campaigns should not be empty while
  * creating trigger. Trigger use DeferredTask to run different trigger tasks.
  * 
- * @author Naresh
+ * @author Naresh,Ramesh
  * 
  */
 
@@ -55,7 +64,7 @@ public class Trigger
      */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT,RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY
     };
 
     /**
@@ -88,6 +97,26 @@ public class Trigger
      */
     @NotSaved(IfDefault.class)
     public String trigger_deal_milestone = null;
+
+    /**
+     * Stripe event for STRIPE_CHARGE_EVENT trigger
+     */
+    @NotSaved(IfDefault.class)
+    public String trigger_stripe_event = null;
+
+    /**
+     * Shopify event for SHOPIFY_EVENT trigger
+     */
+    @NotSaved(IfDefault.class)
+    public String trigger_shopify_event = null;
+    
+    /**
+	 * ContactFilter id of a contact. Contact Filter details can be retrieved
+	 * using contact filter id.
+	 */
+	@NotSaved(IfDefault.class)
+	public Long contact_filter_id = null;
+
 
     /**
      * Initialize DataAccessObject.
@@ -141,6 +170,30 @@ public class Trigger
 
 	return "?";
     }
+    
+    /**
+	 * Returns contactFilter name as an xml element which is retrieved using
+	 * contactFilter-id.
+	 * 
+	 * @return The contactFilter name as an xml element based on contactFilter
+	 *         id if exists otherwise return '?'.
+	 * @throws Exception
+	 *             When contactFilter doesn't exist for given campaign id.
+	 */
+	@XmlElement(name = "contactFilter")
+	public String getContactFilter() throws Exception {
+		if (contact_filter_id == null)
+			return " ";
+
+		ContactFilter contactFilter = null;
+		contactFilter = ContactFilter.getContactFilter(contact_filter_id);
+
+		if (contactFilter != null)
+			return contactFilter.name;
+
+		return "?";
+	}
+
 
     /**
      * Saves trigger in database.

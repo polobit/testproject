@@ -2,9 +2,12 @@ package com.agilecrm.contact.email.util;
 
 import java.net.URLEncoder;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.IMAPEmailPrefs;
 import com.agilecrm.user.util.IMAPEmailPrefsUtil;
+import com.google.appengine.api.utils.SystemProperty;
 
 public class ContactImapUtil
 {
@@ -58,11 +61,21 @@ public class ContactImapUtil
 
 	String url = null;
 
+	String hostUrl = "https://agile-imap.appspot.com";
+
+	String applicationId = SystemProperty.applicationId.get();
+
+	System.out.println("Application id is " + applicationId);
+
+	if (StringUtils.equals(applicationId, "agilecrmbeta"))
+	    hostUrl = "https://naresh-dot-imap-dot-agilecrmbeta.appspot.com";
+
 	try
 	{
-	    url = "https://agile-imap.appspot.com/imap?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&search_email=" + searchEmail + "&host="
-		    + URLEncoder.encode(host, "UTF-8") + "&port=" + URLEncoder.encode(port, "UTF-8") + "&offset=" + offset + "&count=" + count
-		    + "&command=imap_email&password=" + URLEncoder.encode(password, "UTF-8");
+	    url = hostUrl + "/imap?user_name=" + URLEncoder.encode(userName, "UTF-8") + "&search_email=" + searchEmail
+		    + "&host=" + URLEncoder.encode(host, "UTF-8") + "&port=" + URLEncoder.encode(port, "UTF-8")
+		    + "&offset=" + offset + "&count=" + count + "&command=imap_email&password="
+		    + URLEncoder.encode(password, "UTF-8");
 	}
 	catch (Exception e)
 	{
