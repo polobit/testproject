@@ -185,8 +185,12 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
      */
     public Subscription setSubscriptionFlag(Subscription.BillingStatus status)
     {
+	String domain = getDomain();
+	
+	String oldNamespace = NamespaceManager.get();
 	try
 	{
+	    NamespaceManager.set(domain);
 	    // Set status and save subscription
 	    Subscription subscription = SubscriptionUtil.getSubscription();
 
@@ -200,9 +204,12 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 	    return subscription;
 	}
 	catch (Exception e)
-
 	{
-
+	    e.printStackTrace();
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
 	}
 	return null;
     }
