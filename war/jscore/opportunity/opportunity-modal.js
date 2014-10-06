@@ -440,7 +440,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							if(!dealPipelineModel)
 								return;
 							
-							dealPipelineModel[0].get('dealCollection').add(deal, {silent:true});
+							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal), {silent:true});
 							console.log('Updating html - ',deal);
 							$("#" + newMilestone).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
 						}
