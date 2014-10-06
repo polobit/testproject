@@ -54,8 +54,8 @@ body {
 }
 
 .segment2 {
-	min-height: 290px;
-	overflow: auto;
+	/* min-height: 290px;
+	overflow: auto; */
 }
 
 .segmenth {
@@ -71,7 +71,7 @@ body {
 }
 
 .datepickerContainer {
-	border: 1px solid #aaa;
+	
 	padding: 3px;
 }
 
