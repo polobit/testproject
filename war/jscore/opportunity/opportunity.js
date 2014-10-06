@@ -222,11 +222,16 @@ function populateMilestones(el, dealsDetails, pipeline, value, callback, default
  */
 function setupDealsTracksList(cel){
 	this.trackListView = new Base_Collection_View({ url : '/core/api/milestone/pipelines', templateKey : "opportunity-track-list", individual_tag_name : 'li', postRenderCallback : function(el){
-		var pipeline_id = 0;
-		if(readCookie("agile_deal_track"))
-			pipeline_id = readCookie("agile_deal_track");
+		
 		var tracksArray = trackListView.collection.models;
 		$.each(tracksArray,function(i,value){
+			console.log(value.toJSON());
+			if(pipeline_id == 0 && value.toJSON().name == 'Default'){
+				pipeline_id = value.id;
+				console.log('default pipeline set.');
+				createCookie('agile_deal_track',pipeline_id);
+			}
+				
 			if(value.id == pipeline_id)
 				$('#deals-tracks .filter-dropdown').append(value.attributes.name);
 		});
