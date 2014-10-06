@@ -249,6 +249,20 @@ function setupDealsTracksList(cel){
 }
 
 /**
+ * Copy the cursor in the last model of collection to the new model while adding it to the collection. 
+ * @param dealPipelineModel
+ * @param newDeal
+ * @returns
+ */
+function copyCursor(dealPipelineModel, newDeal){
+	var dealColl = dealPipelineModel[0].get('dealCollection');
+	if(dealColl.length > 0 && dealColl.at(dealColl.length -1).get('cursor'))
+		newDeal.cursor = dealColl.at(dealColl.length -1).get('cursor');
+	
+	return newDeal;
+}
+
+/**
  * Append Column names for Deals customfields to the Deals List view.
  */
 function appendCustomfieldsHeaders(el){
