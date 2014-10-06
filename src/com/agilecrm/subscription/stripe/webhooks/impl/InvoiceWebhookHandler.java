@@ -317,6 +317,7 @@ public class InvoiceWebhookHandler extends StripeWebhookHandler
 
 	try
 	{
+	    NamespaceManager.set(domain);
 	    Map<String, Object> map = getPlanDetails();
 	    int count = (int) map.get("quantity");
 	    if (count == 0)
