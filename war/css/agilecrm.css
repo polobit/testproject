@@ -1556,7 +1556,10 @@ width:75%;
 	
   margin-bottom: 0;
 }
-
+#plan-details-pane .btn
+{
+	margin-top:20px;
+}
 /*ending corousel slider*/
 
 
