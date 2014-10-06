@@ -9,15 +9,27 @@ $(function()
 		e.preventDefault();
 
 		Selected_Time = $(this).attr('data');
-
+  
+		
+		
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");
 
 		// Make next part enable
 		$('.segment2').removeClass('me-disable');
-
+		$( ".segment2" ).fadeIn("slow");
+		
+		if(!selecteddate)
+		{
+			selecteddate=new Date();
+		}
+		if(selecteddate){
+			
+		get_slots(selecteddate, Selected_Time);
+		}
+		
 		// Reset all
-		resetAll();
+		//resetAll();
 	});
 
 	// Confirm filled info with selected slot
@@ -41,5 +53,11 @@ $(function()
 
 		// Make next part enable
 		enableSegment3();
+		
+		$( ".segment3" ).fadeIn( "slow");
+		$( "#confirm" ).show();
+		
+	
+		
 	});	
 });

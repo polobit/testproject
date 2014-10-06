@@ -1,0 +1,36 @@
+<!-- online scheduling Modal views -->
+<script id="scheduleModal-template" type="text/html">
+<div class="modal hide fade" id="scheduleModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3><i class="icon-info-sign"></i> Online Appointment Scheduling</h3>
+    </div>
+    <div class="modal-body " style="max-height:420px !important">
+        <form id="icalForm" name="icalForm" method="post">
+            <fieldset>
+               
+                   
+  <div id="desctiption">
+                    <label class="control-label"><b>What is Online Appointment Scheduling?</b></label>
+                   <p> Scheduling meetings over email or phone is tedious. Agile allows your customers to schedule a meeting with you directly with just a few clicks. </p> 
+               </div>                     
+
+                     <div class="control-group">
+                       <label class="control-label"><b>Your Personalized Link </b></label>
+                        <div class="controls">
+                        <a href="{{online_schedule_URL}}" target="_blank" name="scheduleurl" id="scheduleurl">{{online_schedule_URL}}</a>
+
+                        </div>
+                    </div>
+               <div id="tip">
+                   <p> Tip: put this link in the signature or in your automated emails</p> 
+               </div>    
+            
+         
+             </fieldset>
+         </form>
+  
+         <!-- <a href="#" id="send-schedule-url-email"><i class="icon-envelope-alt"></i> Send your schedule URL via Email</a>-->
+     </div>
+</div>
+</script>
