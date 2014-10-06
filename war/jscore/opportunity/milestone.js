@@ -335,8 +335,8 @@ function update_deal_collection(dealModel, id, newMilestone, oldMilestone) {
 	dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 	if(!dealPipelineModel)
 		return;
-	
-	dealPipelineModel[0].get('dealCollection').add(dealModel, { silent : true });
+
+	dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel, dealModel), { silent : true });
 }
 
 /**

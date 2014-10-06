@@ -433,7 +433,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							if(!dealPipelineModel)
 								return;
 							
-							dealPipelineModel[0].get('dealCollection').add(deal);
+							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 							$("#" + oldMilestone).find("#" + id).parent().remove();
 						}else {
 							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
@@ -450,7 +450,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 						if(!dealPipelineModel)
 							return;
 						
-						dealPipelineModel[0].get('dealCollection').add(deal);
+						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 					}
 				}else 
 				{
