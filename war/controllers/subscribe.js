@@ -149,10 +149,6 @@ var SubscribeRouter = Backbone.Router.extend({
 				USER_CREDIRCARD_DETAILS = card_data;
 				plan_json.customer = JSON.parse(USER_CREDIRCARD_DETAILS);
 
-				// Load countries and respective states
-				head.js(LIB_PATH + 'lib/countries.js', function()
-				{
-					print_country($("#country", el));
 
 					// Deserialize card details
 					if (!$.isEmptyObject(card_data))
@@ -161,9 +157,13 @@ var SubscribeRouter = Backbone.Router.extend({
 						// agile_billing.js
 						deserialize_card_details(JSON.parse(card_data), $(card_detail_form));
 					}
-				});
 
-			} });
+			},
+			saveCallback : function(data)
+			{
+				$("#change-card").show();
+			}
+		});
 
 		$('#content').html(card_details.render().el);
 	},
@@ -438,10 +438,6 @@ var SubscribeRouter = Backbone.Router.extend({
 				var activeCard = getActiveCard (plan_json.customer);
 				
 				// Load countries and respective states
-				head.js(LIB_PATH + 'lib/countries.js', function()
-				{
-					print_country($("#country", el));
-
 					// Deserialize card details
 					if (!$.isEmptyObject(card_data))
 					{
@@ -449,9 +445,9 @@ var SubscribeRouter = Backbone.Router.extend({
 						// agile_billing.js
 						deserialize_card_details(activeCard, $(card_detail_form));
 					}
-				});
 
-			} });
+			}
+		});
 
 		$('#content').html(card_details.render().el);
 	},
@@ -477,6 +473,14 @@ var SubscribeRouter = Backbone.Router.extend({
 			$("#content").html(getTemplate("subscribe", data))
 		
 			var subscription_model = new BaseModel(data);
+			
+			$("#change-card").die().live('click' , function(e){
+				e.preventDefault();
+				//alert("here");
+				that.showCreditCardForm(subscription_model, function(model){
+					//$("#content").html(getTemplate("subscribe", model.toJSON()))
+				});
+			});
 				
 			that.setup_account_plan(subscription_model);
 			
@@ -631,6 +635,8 @@ var SubscribeRouter = Backbone.Router.extend({
 			{
 				$('.modal-backdrop').remove();	
 				$("#credit-card-form-modal").modal('hide');
+				
+				$("#change-card").show();
 				
 				if(callback && typeof callback == "function")
 					callback(model);

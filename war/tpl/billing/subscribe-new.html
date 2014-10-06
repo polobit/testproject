@@ -8,41 +8,49 @@
 		</div>
 	</div>
 </div>
-<div class="row">
+<div class="row-fluid">
 	<div class="span11">
 		<div class="span4" id="plan-details-pane"></div>
 		<div class="span4" id="email-details-pane"></div>
 		
 	</div>
 </div>
-<div class="clear-fix"></div>
 <div class="row-fluid" style="margin-top:50px">
-	<div class="clear-fix"></div>
-	<div class="span5">
+	<div>
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
-			<h3>Your Credit Card Details</h3>
+			<h3>Your Credit Card Details
+				{{#if billingData}}
+					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:-5px;margin-right:10px">Change card</a>
+				{{else}}
+					<a href="#update-card" id="change-card" class="pull-right btn btn-primary" align="center" style="margin-top:-5px;margin-right:10px;display:none">Change card</a>
+				{{/if}}
+			</h3>
 		</div>
 		<div id="customer-details-holder">		
 	</div>
 	</div>
+</div>
 	{{#if billingData}}
-	<div class="span6">
+	<div class="row-fluid">
+	<div class="span6" style="margin-top:20px">
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
-			<h3>Recent Payments</h3>
+			<h3>Recent Payments<small style="font-size:11px;margin-left:5px">Thank you</small></h3>
 		</div>
 			<div id="invoice-details-holder"></div>
 	</div>
+	</div>
 	{{/if}}
 <div id="credit-card-form-modal-holder"></div>
-</div>
+
 </script>
 
 <script id="customer-details-block-template" type="text/html">
 {{#stringToJSON this "billingData"}}{{/stringToJSON}}
 {{#if billingData}}
 	<div class="card-details">
-		Name : {{billingData.cards.data.0.name}} </br> Credit card : ends with {{billingData.cards.data.0.last4}} (Expiry : {{billingData.cards.data.0.expMonth}} / {{billingData.cards.data.0.expYear}}) <a
-			href="#update-card" id="change-card">Change card</a>
+		Name: {{billingData.cards.data.0.name}} </br>
+		Credit card: **** **** **** {{billingData.cards.data.0.last4}} <br/>
+		Expiration: {{getMonthFromIndex billingData.cards.data.0.expMonth}}, {{billingData.cards.data.0.expYear}}  ({{#if_less_than billingData.cards.data.0.expMonth 9}}0{{billingData.cards.data.0.expMonth}}{{else}}{{billingData.cards.data.0.expMonth}}{{/if_less_than}} / {{billingData.cards.data.0.expYear}})
 	</div>
 	{{else}}
 		No Credit Cards attached. <a href="#attach-card" id="change-card">Attach card</a>
@@ -53,7 +61,7 @@
 <div class="well" style="width: 220px; height: 200px;">
 	<div style="width: 220px; height: 180px;">
 		<div style="border-bottom: 1px solid #e5e5e5">
-			<h3>User plan</h3>
+		<h3><i class="icon-group" style="margin-right:5px"></i>Users</h3>
 		</div>
 		<div class="clearfix"></div>
 <div class="form-horizontal"
@@ -62,8 +70,8 @@
 			<div class="control-group">
 				<label class="control-label">Plan</label>
 				<div class="controls" style="margin-top: 5px;">
-					{{getAccountPlanName ../plan.plan_type}} - {{getAccountPlanInteval
-					../plan.plan_type}}</div>
+					{{getAccountPlanName ../plan.plan_type}} ({{getAccountPlanInteval
+					../plan.plan_type}})</div>
 			</div>
 			<div class="control-group" style="margin-top: -5%">
 				<label class="control-label" style="margin-top: -2%">Users</label>
@@ -71,8 +79,7 @@
 			</div>
 			<div class="control-group" style="margin-top: -5%">
 				<label class="control-label" style="margin-top: -2%">Cost</label>
-				<div class="controls">${{total}} </br>
-					<small>({{quantity}} * {{numeric_operation plan.amount "100" "/"}})</small>
+				<div class="controls">${{total}} <small>({{quantity}} * {{numeric_operation plan.amount "100" "/"}})</small>
 				</div> 
 			</div>
 			<div class="control-group" style="margin-top: -5%">
@@ -94,13 +101,20 @@
 			</div>
 </div>
 </div>
-		{{/getSubscriptionBasedOnPlan}} {{#if billingData}} <a
-			class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
-			Change </a> {{else}} <a class="btn btn-primary" href="#"
-			id="attach_card_notification"> Upgrade </a>
+		{{/getSubscriptionBasedOnPlan}} 
+		{{#if billingData}} 
+			{{#check_plan "FREE"}}
+				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
+				Update </a> 
+				{{else}}
+				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
+				Change </a> 
+			{{/check_plan}}
+			{{else}} 
+				<a class="btn btn-primary" href="#" id="attach_card_notification"> Upgrade </a>
 	 	{{/if}}
 
-	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</a>
+	<!--<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="user-plan-details-popover"><i class="icon-info-sign"></i> Plan Details</a> -->
 </div>
 </script>
 <script id="account-plan-details-popover-template" type="text/html">
@@ -135,7 +149,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 	<div class="well" style="width: 220px; height: 200px;">
 		<div style="width: 220px; height: 180px;">
 			<div style="border-bottom: 1px solid #e5e5e5;">
-				<h3>Email plan</h3>
+				<h3><i class="icon-envelope" style="margin-right:5px"></i>Emails</h3>
 			</div>
 			<div class="clearfix"></div>
 
@@ -166,18 +180,23 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 </div>
 				{{else}}
 				<div style="margin-top: 10%; text-align: center; font-size: 15px">
-					5000 Emails <br /> Powered by Agile CRM
+					5000 Emails <br />
+				<div style="margin-top:10px"><small> Powered by Agile CRM </small></div>
 				</div>
 </div>
 			{{/getSubscriptionBasedOnPlan}}
 
 			<div class="clearfix"></div>
 			{{#if billingData}}
-	<a class="btn btn-primary" href="#subscribe"
-		id="account_email_plan_upgrade">Change </a> {{else}} <a
-		class="btn btn-primary" href="#" id="account_email_attach_card">
-		Upgrade </a> {{/if}}
-	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="email-plan-details-popover"><i class="icon-info-sign"></i> Usage Details</span>
+			{{#if emailPlan}}
+					<a class="btn btn-primary" href="#subscribe" id="account_email_plan_upgrade">Change </a>
+				{{else}}
+					<a class="btn btn-primary" href="#subscribe" id="account_email_plan_upgrade">Upgrade </a>
+			{{/if}}
+			{{else}} 
+				<a class="btn btn-primary" href="#" id="account_email_attach_card"> Upgrade </a> 
+			{{/if}}
+<!--	<a style="margin-top:6px;float:right;cursor:pointer;text-decoration:none" id="email-plan-details-popover"><i class="icon-info-sign"></i> Usage Details</span> -->
 		
 </div>
 </div>
@@ -222,22 +241,26 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 </script>
 
    <script id="charge-collection-template" type="html/text">
+	{{#if this.length}}
         <table class="table table-striped" id="sort-table">
             <thead>
                 <tr>
-                    <th>Amount(USD)</th>
-                    <th>Created Date</th>
+				 	<th>Date</th>
+                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody id="charge-model-list" class="model-list-cursor">
             </tbody>
         </table>
-
+	{{else}}
+		No recent payments.
+	{{/if}}
 </script>
-<script id="charge-model-template" type="text/html">	
+<script id="charge-model-template" type="text/html">
+	<td><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>	
 	<td >
     	${{numeric_operation amount 100 "/"}} {{#if refunded}} - Refunded {{/if}}
 	</td>
-	<td><time class="time-ago" datetime="{{epochToHumanDate "" created}}">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" created}}</time></td>
+	
 	
 </script>

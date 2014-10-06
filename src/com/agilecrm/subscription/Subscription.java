@@ -25,6 +25,7 @@ import com.agilecrm.subscription.stripe.webhooks.StripeWebhookServlet;
 import com.agilecrm.subscription.ui.serialize.CreditCard;
 import com.agilecrm.subscription.ui.serialize.Plan;
 import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.ClickDeskEncryption;
 import com.google.appengine.api.NamespaceManager;
@@ -154,15 +155,12 @@ public class Subscription
     @NotSaved
     @JsonIgnore
     JSONObject billing_data;
-    
-    
+
     @NotSaved
     public PlanLimits planLimits;
-    
+
     @NotSaved
     public BillingRestriction cachedData;
-    
-    
 
     private static ObjectifyGenericDao<Subscription> dao = new ObjectifyGenericDao<Subscription>(Subscription.class);
 
@@ -173,14 +171,14 @@ public class Subscription
 
     void fillDefaultPlans()
     {
-	
+
 	if (plan == null)
 	{
 	    plan = new Plan(PlanType.FREE.toString(), 2);
 	    gateway = Gateway.Stripe;
 	    planLimits = PlanLimits.getPlanDetails(plan);
 	}
-	   
+
     }
 
     /**
@@ -304,7 +302,19 @@ public class Subscription
     {
 	// Gets subscription object of current domain
 	Subscription subscription = SubscriptionUtil.getSubscription();
-	if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
+
+	if (subscription.plan != null && subscription.plan.plan_type == PlanType.FREE)
+	{
+	    int count = DomainUserUtil.count();
+	    System.out.println("existing users cout in free plan " + count);
+	    if (plan.quantity < count)
+	    {
+		BillingRestrictionUtil.throwLimitExceededException(ErrorMessages.NOT_DOWNGRADABLE);
+		return null;
+	    }
+		
+	}
+	else if (BillingRestrictionUtil.isLowerPlan(subscription.plan, plan)
 		&& !BillingRestrictionUtil.getInstanceTemporary(plan).isDowngradable())
 	{
 	    System.out.println("plan upgrade not possible");
@@ -466,9 +476,9 @@ public class Subscription
 	    {
 		plan = new Plan(PlanType.FREE.toString(), 2);
 	    }
-	    
+
 	    planLimits = PlanLimits.getPlanDetails(plan);
-	    
+
 	    // sets domain name in subscription obj before returning
 	    this.domain_name = NamespaceManager.get();
 
@@ -523,17 +533,17 @@ public class Subscription
 	    e.printStackTrace();
 	}
     }
-    
+
     public boolean isFreePlan()
     {
-	if(plan.plan_type == PlanType.FREE)
+	if (plan.plan_type == PlanType.FREE)
 	    return true;
 	return false;
     }
-    
+
     public boolean isFreeEmailPack()
     {
-	if(emailPlan == null)
+	if (emailPlan == null)
 	    return true;
 	return false;
     }
