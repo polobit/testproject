@@ -140,6 +140,7 @@ function dealsFetch(index,milestones)
 		{
 			$('ul.milestones',el).attr('milestone',base_model.get("heading"));
 			deal_infi_scroll($('#'+base_model.get("heading")+'-list-container')[0], dealCollection);
+			includeTimeAgo(el);
 		} });
 
 	// Fetch task from DB for sub collection
@@ -183,18 +184,15 @@ console.log(targetCollection);
 				targetCollection.infiniScroll.disableFetch();
 			}
 
-			// Maintain changes in UI
-			displaySettings();
-
 			// Remove loading icon
-			$(targetCollection.infiniScroll.options.target.nextElementSibling).html('');
+			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
 		},
 		onFetch : function()
 		{
 			console.log('in fetch');
 
 			// Add loading icon
-			$(targetCollection.infiniScroll.options.target.nextElementSibling).html(
+			$(targetCollection.infiniScroll.options.target).append(
 					'<div class="scroll-loading"> <img src="/img/ajax-loader.gif" style="margin-left: 44%;"> </div>');
 		} });
 }

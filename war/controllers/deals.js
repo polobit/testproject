@@ -32,7 +32,6 @@ var DealsRouter = Backbone.Router.extend({
 				pipeline_id = 0;
 			
 			$('#content').html(getTemplate("new-opportunity-header", {}));
-			pipeline_id = readCookie("agile_deal_track");
 			pipeline_count = 0;
 			deal_fetching = false;
 			setupDealsTracksList();

@@ -445,7 +445,7 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							$("#" + newMilestone).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
 						}
 						
-					} else if(!checkPipeline(deal.pipeline_id)){
+					} else if(checkPipeline(deal.pipeline_id)){
 						var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
 						if(!dealPipelineModel)
 							return;
