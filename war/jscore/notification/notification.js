@@ -26,7 +26,7 @@ function downloadAndRegisterForNotifications()
 
 		// Gets domain
 		getDomainFromCurrentUser();
-		showUpgradeNoty();
+		//showUpgradeNoty();
 	} });
 }
 
