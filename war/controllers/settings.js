@@ -33,8 +33,11 @@ var SettingsRouter = Backbone.Router.extend({
 			/* Notifications */
 			"notification-prefs" : "notificationPrefs",
 			
+			/* support page */
+			"help" : "support",
+			
 			/* contact-us help email */
-			"help" : "contactUsEmail",
+			"contact-us" : "contactUsEmail"
 	},
 
 	/**
@@ -425,6 +428,14 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#PrefsTab .active').removeClass('active');
 		$('.notification-prefs-tab').addClass('active');
 		// $('#content').html(view.render().el);
+	},
+	
+	/**
+	 * Support page
+	 */
+	support : function()
+	{
+		$("#content").html(getTemplate("support-form"), {});
 	},
 
 	/**

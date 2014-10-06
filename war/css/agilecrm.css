@@ -1382,6 +1382,8 @@ height: 30px;
 
 
 
+/* 
+
 #helpmailForm .control-label {
  float: left;
  width: 80px;
@@ -1393,6 +1395,10 @@ height: 30px;
  margin-left: 80px;
 }
 
+#helpmailForm .single-error span {
+ margin-left: 20px;
+}
+ */
 .help-title
 {
 	margin-bottom: 17px;

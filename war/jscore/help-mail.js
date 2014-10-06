@@ -12,11 +12,13 @@
  */
 $(function() {
 	
-	// To toggle the contact us email
+/*	// To toggle the contact us email
 	$("#show_support").die().live("click", function(e){
 		  e.preventDefault();
-		  $("#helpmailForm").toggle();
-	});
+		  $("#content").html(getTemplate("help-mail-form"), {});
+		 // $("#helpmailForm").toggle();
+		 // $('html, body').animate({ scrollTop : 360  },1000);
+	});*/
 
 	// Prevent default on click
 	$('#helpMail').die().live('click', function(e){
@@ -57,9 +59,9 @@ $(function() {
 				// Enables Send Email button.
 			    enable_send_button($('#helpMail'));
 				
-				$("#helpmailForm").hide();
+				//$("#helpmailForm").hide();
 				
-			    //window.history.back();
+			    window.history.back();
 			});
 		    
 		});
