@@ -1,19 +1,29 @@
 /** The function is commented inorder to implement later. It shows Upgrade message to free users**/
 
-$(function(){
-	setTimeout(function(){
-		showUpgradeNoty();
-	}, 3000);
-});
-
+var Nagger_Noty;
 function showUpgradeNoty()
 {
 
+	// Returns if account if paid account
 	if(!_billing_restriction.currentLimits.freePlan)
 		return;
 	
+	// If route is subscribe, it will remove existing noty and returns. If there is not existy nagger noty, it will just return
+	if(Current_Route == "subscribe")
+	{
+		if(Nagger_Noty)
+			$.noty.close(Nagger_Noty);
+		return;
+	}
+	
+	// If Noty is present already, then noty is initiated again
+	if(Nagger_Noty && $("#" +Nagger_Noty).length > 0)
+		return;
+	
+	
 		// Show the first one after 3 secs
 	showNotyPopUp("warning", get_random_message(), "bottom", "none", function(){
+			Nagger_Noty = null;
 			Backbone.history.navigate('subscribe', {
 				 trigger : true
 				 });
@@ -59,14 +69,14 @@ function bulkActivitiesNoty(type, message, position) {
  * @param position -
  *             position of noty like bottomRight, top etc.
  */
-function showNotyPopUp(type, message, position, timeout, closeCallback) {
+function showNotyPopUp(type, message, position, timeout, clickCallback) {
 	
 	// for top position
 	if(position == "top")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 		+ 'lib/noty/layouts/top.js', LIB_PATH
 		+ 'lib/noty/themes/default.js', function(){
-			notySetup(type, message, position, timeout, closeCallback)
+			notySetup(type, message, position, timeout, clickCallback)
 		});
 	
 	// for bottomRight position
@@ -75,7 +85,7 @@ function showNotyPopUp(type, message, position, timeout, closeCallback) {
 				+ 'lib/noty/layouts/bottom.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-					notySetup(type, message, position, timeout, closeCallback)
+					notySetup(type, message, position, timeout, clickCallback)
 				});
 	
 	// for bottomLeft position
@@ -83,14 +93,14 @@ function showNotyPopUp(type, message, position, timeout, closeCallback) {
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-						notySetup(type, message, position, timeout, closeCallback)
+						notySetup(type, message, position, timeout, clickCallback)
 				});	
 	
 	// for bottomLeft position
 	if(position == "bottom")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-						notySetup(type, message, position, timeout, closeCallback)
+						notySetup(type, message, position, timeout, clickCallback)
 				});	
 }
 
@@ -103,7 +113,7 @@ function showNotyPopUp(type, message, position, timeout, closeCallback) {
  *             message to be shown on noty.
  * @param position -
  *             position of noty like bottomRight, top etc.*/
-function notySetup(type, message, position, noty_timeout, onCloseCallback) {
+function notySetup(type, message, position, noty_timeout, clickCallback) {
 		
 	    // close all other noty before showing current
 	    $.noty.closeAll()
@@ -126,20 +136,15 @@ function notySetup(type, message, position, noty_timeout, onCloseCallback) {
 			timeout : noty_timeout == undefined ? noty_timeout : (noty_timeout == "none" ? undefined : 20000), // delay for closing event. Set false for sticky
 							// notifications
 					
-			closeCallback : (onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
-			
-			callback : {
-					// If on close callback is defined, callback is called after noty is closed. Small hack; because noty close callback in lib is badly implemented 
-					// and one callback gets called on other noty action
-					onClose : function(){
-						console.log(this);
-						if(this.options.closeCallback && typeof this.options.closeCallback == 'function')
-							{
-								this.options.closeCallback ();
-							}
-						}
-					}
 		});
+	    
+	    if(clickCallback && typeof clickCallback == "function" && n.options.id)
+	    {
+	    	Nagger_Noty = n.options.id;
+	    	$("#" + n.options.id).die().live('click', function(e){
+	    		clickCallback();
+	    	})
+	    }
 	}
 
 function get_random_message() {
