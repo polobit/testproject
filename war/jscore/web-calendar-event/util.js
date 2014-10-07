@@ -226,6 +226,7 @@ function save_web_event(formId, confirmBtn)
 	web_calendar_event["domainUserId"] = User_Id;
 	web_calendar_event["agileUserId"] = Agile_User_Id;
 	web_calendar_event["selectedSlotsString"] = [];
+	web_calendar_event["timezone"] = -new Date().getTimezoneOffset();
 
 	// Get selected slots in UI from available slots list.
 	var i = 0;
@@ -259,6 +260,8 @@ function save_web_event(formId, confirmBtn)
       $('#confirm').attr('disabled','disabled');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
+	
+	
 	console.log(web_calendar_event);
 	console.log(JSON.stringify(web_calendar_event));
 
