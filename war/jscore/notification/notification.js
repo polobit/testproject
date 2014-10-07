@@ -26,7 +26,6 @@ function downloadAndRegisterForNotifications()
 
 		// Gets domain
 		getDomainFromCurrentUser();
-		//showUpgradeNoty();
 	} });
 }
 
@@ -422,13 +421,22 @@ function showNoty(type, message, position, notification_type, onCloseCallback)
 			LIB_PATH + 'lib/noty/themes/default.js', function()
 			{
 
-				var n = noty({ text : message, layout : position, type : type, timeout : 30000,
-					callback : {
-						// If on close callback is defined, callback is called after noty is closed
-						onClose : (onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : function(){
-						}
+			var n = noty({ text : message, layout : position, type : type, timeout : 30000, 
+			
+				closeCallback : 
+					(onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
+				callback : {
+					// If on close callback is defined, callback is called after noty is closed. Small hack; because noty close callback in lib is badly implemented 
+					// and one callback gets called on other noty action
+					onClose : function(){
+						console.log(this);
+						if(this.options.closeCallback && typeof this.options.closeCallback == 'function')
+							{
+								this.options.closeCallback ();
+							}
 					}
-				});
+				}
+			});
 				
 				console.log(n);
 

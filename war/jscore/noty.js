@@ -1,13 +1,19 @@
 /** The function is commented inorder to implement later. It shows Upgrade message to free users**/
 
+$(function(){
+	setTimeout(function(){
+		showUpgradeNoty();
+	}, 3000);
+});
+
 function showUpgradeNoty()
 {
 
-	if(_billing_restriction.currentLimits.freePlan)
+	if(!_billing_restriction.currentLimits.freePlan)
 		return;
 	
 		// Show the first one after 3 secs
-		showNoty("warning", get_random_message(), "bottom", 3000, function(){
+	showNotyPopUp("warning", get_random_message(), "bottom", "none", function(){
 			Backbone.history.navigate('subscribe', {
 				 trigger : true
 				 });
@@ -53,14 +59,14 @@ function bulkActivitiesNoty(type, message, position) {
  * @param position -
  *             position of noty like bottomRight, top etc.
  */
-function showNotyPopUp(type, message, position, timeout) {
+function showNotyPopUp(type, message, position, timeout, closeCallback) {
 	
 	// for top position
 	if(position == "top")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 		+ 'lib/noty/layouts/top.js', LIB_PATH
 		+ 'lib/noty/themes/default.js', function(){
-			notySetup(type, message, position, timeout)
+			notySetup(type, message, position, timeout, closeCallback)
 		});
 	
 	// for bottomRight position
@@ -69,7 +75,7 @@ function showNotyPopUp(type, message, position, timeout) {
 				+ 'lib/noty/layouts/bottom.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-					notySetup(type, message, position, timeout)
+					notySetup(type, message, position, timeout, closeCallback)
 				});
 	
 	// for bottomLeft position
@@ -77,8 +83,15 @@ function showNotyPopUp(type, message, position, timeout) {
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-						notySetup(type, message, position, timeout)
-				});		
+						notySetup(type, message, position, timeout, closeCallback)
+				});	
+	
+	// for bottomLeft position
+	if(position == "bottom")
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH
+				+ 'lib/noty/themes/default.js', function(){
+						notySetup(type, message, position, timeout, closeCallback)
+				});	
 }
 
 /**
@@ -90,7 +103,7 @@ function showNotyPopUp(type, message, position, timeout) {
  *             message to be shown on noty.
  * @param position -
  *             position of noty like bottomRight, top etc.*/
-function notySetup(type, message, position, noty_timeout) {
+function notySetup(type, message, position, noty_timeout, onCloseCallback) {
 		
 	    // close all other noty before showing current
 	    $.noty.closeAll()
@@ -110,8 +123,22 @@ function notySetup(type, message, position, noty_timeout) {
 				speed : 500
 				// opening & closing animation speed
 			},
-			timeout : noty_timeout ? noty_timeout : 20000, // delay for closing event. Set false for sticky
+			timeout : noty_timeout == undefined ? noty_timeout : (noty_timeout == "none" ? undefined : 20000), // delay for closing event. Set false for sticky
 							// notifications
+					
+			closeCallback : (onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
+			
+			callback : {
+					// If on close callback is defined, callback is called after noty is closed. Small hack; because noty close callback in lib is badly implemented 
+					// and one callback gets called on other noty action
+					onClose : function(){
+						console.log(this);
+						if(this.options.closeCallback && typeof this.options.closeCallback == 'function')
+							{
+								this.options.closeCallback ();
+							}
+						}
+					}
 		});
 	}
 
