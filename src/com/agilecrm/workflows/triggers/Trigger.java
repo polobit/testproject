@@ -19,7 +19,8 @@ import com.googlecode.objectify.condition.IfDefault;
  * 
  * <p>
  * Triggers can run periodically (Daily,Weekly,Monthly), these periodic triggers
- * allows user to select contact filters then trigger runs on those matching contacts.
+ * allows user to select contact filters then trigger runs on those matching
+ * contacts.
  * </p>
  * 
  * <p>
@@ -31,7 +32,7 @@ import com.googlecode.objectify.condition.IfDefault;
  * <li>When new deal is created.</li>
  * <li>When deal is deleted.</li>
  * <li>When score of contact reaches the trigger score.</li>
- * <li>Uses contact filter to run campaign specific contacts. </li>
+ * <li>Uses contact filter to run campaign specific contacts.</li>
  * <li>
  * </ul>
  * <p>
@@ -64,7 +65,7 @@ public class Trigger
      */
     public enum Type
     {
-	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT,RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY
+	TAG_IS_ADDED, TAG_IS_DELETED, CONTACT_IS_ADDED, DEAL_IS_ADDED, DEAL_IS_DELETED, DEAL_MILESTONE_IS_CHANGED, ADD_SCORE, STRIPE_CHARGE_EVENT, SHOPIFY_EVENT, RUNS_DAILY, RUNS_WEEKLY, RUNS_MONTHLY, SOFT_BOUNCE, HARD_BOUNCE
     };
 
     /**
@@ -109,14 +110,13 @@ public class Trigger
      */
     @NotSaved(IfDefault.class)
     public String trigger_shopify_event = null;
-    
-    /**
-	 * ContactFilter id of a contact. Contact Filter details can be retrieved
-	 * using contact filter id.
-	 */
-	@NotSaved(IfDefault.class)
-	public Long contact_filter_id = null;
 
+    /**
+     * ContactFilter id of a contact. Contact Filter details can be retrieved
+     * using contact filter id.
+     */
+    @NotSaved(IfDefault.class)
+    public Long contact_filter_id = null;
 
     /**
      * Initialize DataAccessObject.
@@ -170,30 +170,30 @@ public class Trigger
 
 	return "?";
     }
-    
+
     /**
-	 * Returns contactFilter name as an xml element which is retrieved using
-	 * contactFilter-id.
-	 * 
-	 * @return The contactFilter name as an xml element based on contactFilter
-	 *         id if exists otherwise return '?'.
-	 * @throws Exception
-	 *             When contactFilter doesn't exist for given campaign id.
-	 */
-	@XmlElement(name = "contactFilter")
-	public String getContactFilter() throws Exception {
-		if (contact_filter_id == null)
-			return " ";
+     * Returns contactFilter name as an xml element which is retrieved using
+     * contactFilter-id.
+     * 
+     * @return The contactFilter name as an xml element based on contactFilter
+     *         id if exists otherwise return '?'.
+     * @throws Exception
+     *             When contactFilter doesn't exist for given campaign id.
+     */
+    @XmlElement(name = "contactFilter")
+    public String getContactFilter() throws Exception
+    {
+	if (contact_filter_id == null)
+	    return " ";
 
-		ContactFilter contactFilter = null;
-		contactFilter = ContactFilter.getContactFilter(contact_filter_id);
+	ContactFilter contactFilter = null;
+	contactFilter = ContactFilter.getContactFilter(contact_filter_id);
 
-		if (contactFilter != null)
-			return contactFilter.name;
+	if (contactFilter != null)
+	    return contactFilter.name;
 
-		return "?";
-	}
-
+	return "?";
+    }
 
     /**
      * Saves trigger in database.

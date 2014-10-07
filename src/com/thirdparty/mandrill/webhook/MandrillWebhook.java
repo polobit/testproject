@@ -14,6 +14,8 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus;
 import com.agilecrm.contact.email.bounce.EmailBounceStatus.EmailBounceType;
 import com.agilecrm.contact.util.ContactUtil;
+import com.agilecrm.workflows.triggers.Trigger;
+import com.agilecrm.workflows.triggers.util.EmailBounceTriggerUtil;
 import com.campaignio.logger.Log.LogType;
 import com.campaignio.logger.util.LogUtil;
 import com.google.appengine.api.NamespaceManager;
@@ -67,8 +69,8 @@ public class MandrillWebhook extends HttpServlet
 
 		// Set to contact if event is HardBounce or SoftBounce
 		if (StringUtils.equalsIgnoreCase(event, HARD_BOUNCE)
-			|| StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
-			|| StringUtils.equalsIgnoreCase(event, SPAM))
+		        || StringUtils.equalsIgnoreCase(event, SOFT_BOUNCE)
+		        || StringUtils.equalsIgnoreCase(event, SPAM))
 		    setBounceStatusToContact(eventJSON);
 	    }
 	}
@@ -200,6 +202,10 @@ public class MandrillWebhook extends HttpServlet
 	    }
 
 	    contact.save();
+
+	    // Executes Trigger for only Bounce
+	    if (!EmailBounceType.SPAM.equals(emailBounceType))
+		executeTriggerForBounce(contact, emailBounceType);
 	}
 	catch (Exception e)
 	{
@@ -245,7 +251,7 @@ public class MandrillWebhook extends HttpServlet
 	    if (emailBounceType.equals(EmailBounceType.SPAM))
 	    {
 		message = "There was a spam complaint from email \'" + email + "\' <br><br> Email subject: "
-			+ emailSubject;
+		        + emailSubject;
 		logType = LogType.EMAIL_SPAM.toString();
 	    }
 
@@ -256,5 +262,25 @@ public class MandrillWebhook extends HttpServlet
 	    e.printStackTrace();
 	    System.err.println("Exception occured while setting bounce log..." + e.getMessage());
 	}
+    }
+
+    /**
+     * Executes trigger for email bounce
+     * 
+     * @param contact
+     *            - Bounced email contact
+     * @param emailBounceType
+     *            - Soft or Hard bounce
+     */
+    public static void executeTriggerForBounce(Contact contact, EmailBounceType emailBounceType)
+    {
+	// Trigger for Soft Bounce
+	if (emailBounceType.equals(EmailBounceType.SOFT_BOUNCE))
+	    EmailBounceTriggerUtil.executeTriggerForBounce(contact, Trigger.Type.SOFT_BOUNCE);
+
+	// Trigger for Hard Bounce
+	if (emailBounceType.equals(EmailBounceType.HARD_BOUNCE))
+	    EmailBounceTriggerUtil.executeTriggerForBounce(contact, Trigger.Type.HARD_BOUNCE);
+
     }
 }
