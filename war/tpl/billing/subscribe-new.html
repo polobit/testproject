@@ -221,11 +221,11 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 		{{/getSubscriptionBasedOnPlan}} 
 		{{#if billingData}} 
 			{{#if plan.plan_id}}
+					<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
+					Modify </a>
+				{{else}} 
 				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
 				Upgrade </a> 
-				{{else}}
-				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
-				Modify </a> 
 			{{/if}}
 			{{else}} 
 				<a class="btn btn-primary" href="#" id="attach_card_notification"> Upgrade </a>
