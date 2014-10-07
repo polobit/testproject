@@ -280,6 +280,7 @@ div.datepicker table td {
 	font-weight: bold;
 	font-size: 16px;
 	margin-bottom: 10px;
+	width:100px;
 }
 
 #confirm:hover {
