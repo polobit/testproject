@@ -148,7 +148,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 	</div>
 </div>
 	{{#if billingData}}
-	<div class="row-fluid">
+	<div class="row-fluid" style="margin-top:50px">
 	<div class="span6" style="margin-top:20px">
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
 			<h3>Recent Payments<small style="font-size:11px;margin-left:5px">Thank you</small></h3>
@@ -340,10 +340,10 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
                     		</div>
 							<div class="control-group">
 								<div class="controls">
-									<span style="color: #FA782D; font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><span style="margin-left:3px">Per month</span>
+									<span style="font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><span style="margin-left:3px">/ month</span>
 									<br/>
 									<small style="margin-top: 0px;margin-left:-30px">
-										 charged @ <span style="color: #FA782D;" id="email_rate">$4</span> / 1000 emails
+										 charged @ <span id="email_rate">$4</span> / 1000 emails
 									</small>
 								</div>
 							</div>
@@ -352,7 +352,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 <div class="clearfix"></div>
 					<a class="btn btn-primary save" href="#"> Purchase </a>
 
-					<a class="btn" href="#" id="close"> close </a>
+					<a class="btn" href="#" id="close"> Cancel </a>
 	</div>
 </div>
 </script>
