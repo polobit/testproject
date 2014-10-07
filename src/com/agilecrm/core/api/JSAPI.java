@@ -181,7 +181,7 @@ public class JSAPI
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 
 	    if (contact == null)
-		JSAPIUtil.generateContactMissingError();
+		return JSAPIUtil.generateContactMissingError();
 
 	    contact.delete();
 	    JSONObject obj = new JSONObject();
