@@ -623,7 +623,7 @@ function _generateUIFields(selector, ui) {
 	      
         	  $(uiField).appendTo(container);
         	  
-        	if(uiFieldDefinition.id == "button_email") 
+        	if(uiFieldDefinition.id == "button_email" || uiFieldDefinition.id == "button_email_html") 
         		 $("<div style='clear:both'></div>").appendTo(container);
 			 //Add label to the checkbox and radio buttons(yasin(13-09-10))
         	
