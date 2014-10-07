@@ -583,7 +583,7 @@ var ContactsRouter = Backbone.Router.extend({
 	 * populate_send_email_details is called from the
 	 * postRenderCallback.
 	 */
-	sendEmail : function(id)
+	sendEmail : function(id, subject, body)
 	{
 		
 		var model = {};
@@ -616,15 +616,22 @@ var ContactsRouter = Backbone.Router.extend({
 		// Populate from address and templates
 		populate_send_email_details(el);
 		
+		if(subject)
+			$("#emailForm",el).find('input[name="subject"]').val(subject);
+		
 		// Setup HTML Editor
 		if(id)
-			setupTinyMCEEditor('textarea#email-body', false, function(){
+			setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
+				
+				if(!body)
+					body = '';
 				
 				// Reset tinymce content
-				set_tinymce_content('email-body', '');
+				set_tinymce_content('email-body', body);
+				
 			});
 		else
-			setupTinyMCEEditor('textarea#email-body', true, function(){
+			setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
 				
 				// Reset tinymce content
 				set_tinymce_content('email-body', '');

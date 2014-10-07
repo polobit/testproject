@@ -326,7 +326,7 @@ $(function()
 			populate_send_email_details();
 			
 			// Setup HTML Editor
-			setupTinyMCEEditor('textarea#email-body', false, function(){
+			setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 				
 				// Reset tinymce content
 				set_tinymce_content('email-body', '');

@@ -205,26 +205,11 @@ public class EmailUtil
 	        || StringUtils.contains(html, "Sent using <a href=\"https://www.agilecrm.com"))
 	    return html;
 
-	// If body tag exists, add link before body tag ends
-	if (StringUtils.contains(html, "</body>"))
-	{
-	    // For Campaign HTML emails, Powered by should be right aligned
-	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-		html = StringUtils.replace(html, "</body>",
-		        "<div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div></body>");
-	    else
-		html = StringUtils.replace(html, "</body>", getPoweredByAgileLink(medium, labelText) + "</body>");
-
-	}
+	// For Campaign HTML emails, Powered by should be right aligned
+	if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
+	    html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText) + "</div>";
 	else
-	{
-	    // For Campaign HTML emails, Powered by should be right aligned
-	    if (StringUtils.equals(labelText, "Powered by") && StringUtils.equals(medium, "campaign"))
-		html = html + "<br><br><div style=\"float:right;\">" + getPoweredByAgileLink(medium, labelText)
-		        + "</div>";
-	    else
-		html = html + "<br><br>" + getPoweredByAgileLink(medium, labelText);
-	}
+	    html = html + "<br><br>" + getPoweredByAgileLink(medium, labelText);
 
 	return html;
     }

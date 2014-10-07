@@ -376,6 +376,25 @@ $(function(){
 		
 		window.history.back();
 	});	
+	
+	$('#email-reply').die('hover').live('click', function(e){
+		e.preventDefault();
+	
+		var from = $(this).data('from');
+		
+		// Change url only without triggerring function
+		App_Contacts.navigate('send-email/'+ from);
+		
+		// Trigger route callback
+		App_Contacts.sendEmail($(this).data('from'), "Re: " +$(this).parent().parent().find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $(this).parent().parent().find('.email-body').html()+'</blockquote>');
+		
+	});
+	
+	$('#email-reply').live('hover', function(e){
+		e.preventDefault();
+		
+		$(this).find('i').toggle();
+	});
 
 	/**
 	 * Delete functionality for activity blocks in contact details

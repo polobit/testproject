@@ -67,7 +67,7 @@ var SettingsRouter = Backbone.Router.extend({
 						postRenderCallback: function(el)
 						{
 							// setup TinyMCE
-							setupTinyMCEEditor('textarea#WYSItextarea', true);
+							setupTinyMCEEditor('textarea#WYSItextarea', true, ["textcolor link image preview code"]);
 						}
 			 		});
 		
@@ -330,7 +330,7 @@ var SettingsRouter = Backbone.Router.extend({
 		$('#prefs-tabs-content').html(view.render().el);
 		
 		// set up TinyMCE Editor
-		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+		setupTinyMCEEditor('textarea#email-template-html', false, undefined, function(){
 			
 			// Reset tinymce
 			set_tinymce_content('email-template-html', '');			
@@ -373,7 +373,7 @@ var SettingsRouter = Backbone.Router.extend({
 		/** TinyMCE **/
 		
 		// set up TinyMCE Editor
-		setupTinyMCEEditor('textarea#email-template-html', false, function(){
+		setupTinyMCEEditor('textarea#email-template-html', false, undefined, function(){
 			
 			// Insert content into tinymce
 			set_tinymce_content('email-template-html', currentTemplate.toJSON().text);			

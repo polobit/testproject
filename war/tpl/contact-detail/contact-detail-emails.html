@@ -58,7 +58,7 @@
 			</h4></br>
 			<div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{id}}">
 				<div>
-         			<p>{{{message}}}</p>
+         			<div class="email-body">{{{message}}}</div>
 				</div>
       		</div>
 			<div id="collapse-{{id}}" class="collapse activity-email-collapse">
@@ -86,12 +86,15 @@
           			</li>
                     {{/if}}
            		</ul>
-       			<p style="margin-top:10px">{{#if message}}{{{message}}}{{/if}}</p>
+       			<div style="margin-top:10px" class="email-body">{{#if message}}{{{message}}}{{/if}}</div>
     		</div>
 		<div>
 		<small class="edit-hover"> 
 			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date_secs}}</time>
 		</small>
+
+		<a href="#" data-from ="{{#extractEmail from}}{{this}}{{/extractEmail}}" id='email-reply' style="float: right; text-decoration: none;"><i class="icon-mail-reply-all" style="display:none;"></i> Reply</a>
+       
 {{/if}}
 	</div>	
 </div>

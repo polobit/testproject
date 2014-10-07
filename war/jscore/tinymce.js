@@ -15,7 +15,7 @@ var CONTACT_CUSTOM_FIELDS = undefined;
  *            id of HTML element e.g., textarea#email-body
  * 
  */
-function setupTinyMCEEditor(selector, noAgileContactFields, callback)
+function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 {
 	
 	// Id undefined
@@ -33,6 +33,12 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 	// Remove Agile Contact fields button
 	if(noAgileContactFields)
 		toolbar_2 = "bullist numlist | outdent indent blockquote | forecolor backcolor | preview | code";
+	
+	var default_plugins = ["textcolor link image preview code fullpage"];
+	
+	// If no plugins, assign default
+	if(!plugins)
+		plugins = default_plugins;
 	
 	// Init tinymce first time
 	if (typeof (tinymce) === "undefined")
@@ -56,8 +62,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 			$(selector).css('display', '');
 			$('#loading-editor').html("");
 			
-			tinymce.init({ mode : "exact", selector : selector, plugins : [
-			    "textcolor link image preview code fullpage"], 
+			tinymce.init({ mode : "exact", selector : selector, plugins : plugins,
 			    menubar : false,
 				toolbar1 : "bold italic underline | alignleft aligncenter alignright alignjustify | link image | formatselect | fontselect | fontsizeselect",
 				toolbar2 : toolbar_2, valid_elements : "*[*]",
@@ -67,8 +72,11 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
-				} });
+				},
+				init_instance_callback : callback
+				});
 		});
+    	
 		return;
 	}
 
@@ -78,6 +86,9 @@ function setupTinyMCEEditor(selector, noAgileContactFields, callback)
 
 	// Add custom toolbar
 	tinymce.settings.toolbar2 = toolbar_2;
+	
+	// Add required plugins
+	tinymce.settings.plugins = plugins;
 	
 	// reinitialize tinymce
 	reinitialize_tinymce_editor_instance(selector, callback);
@@ -98,7 +109,9 @@ function set_tinymce_content(selector, content)
 	try
 	{
 		if(typeof (tinymce) !== "undefined")
+		{
 			tinymce.get(selector).setContent(content);
+		}
 	}
 	catch (err)
 	{
