@@ -9,7 +9,7 @@ function showUpgradeNoty()
 		return;
 	
 	// If route is subscribe, it will remove existing noty and returns. If there is not existy nagger noty, it will just return
-	if(Current_Route == "subscribe")
+	if(Current_Route == "subscribe" || Current_Route == "#subscribe-plan" || Current_Route == "#purchase-plan")
 	{
 		if(Nagger_Noty)
 			$.noty.close(Nagger_Noty);
