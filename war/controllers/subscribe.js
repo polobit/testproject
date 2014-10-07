@@ -63,7 +63,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			
 			if(!USER_CREDIRCARD_DETAILS)
 				{
-					Backbone.history.navigate("subscribe_new");
+					Backbone.history.navigate("subscribe");
 					return;
 				}
 			element = setPriceTemplete(data.plan.plan_type, el);
@@ -261,7 +261,7 @@ var SubscribeRouter = Backbone.Router.extend({
 			},
 			saveCallback : function(data)
 			{
-				window.navigate("subscribe_new", { trigger : true });
+				window.navigate("subscribe", { trigger : true });
 				showNotyPopUp("information", "You have been upgraded successfully. Please logout and login again for the new changes to apply.", "top");
 			}
 			
