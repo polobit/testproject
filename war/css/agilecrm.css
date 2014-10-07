@@ -1571,13 +1571,15 @@ width:75%;
 	
   margin-bottom: 0;
 }
+#plan-details-pane
+{
+	position:relative;
+}
+}
 #plan-details-pane .btn
 {
-	margin-top:20px;
-}
-#attach_card_notification,#account_plan_upgrade
-{
-	margin-top:0px!important;
+	position:absolute;
+	bottom:31px;
 }
 /*ending corousel slider*/
 
