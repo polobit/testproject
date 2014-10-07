@@ -1570,6 +1570,19 @@ width:75%;
 {
 	margin-top:0px!important;
 }
+
+#plan-details-pane
+{
+	position:relative;
+}
+}
+#plan-details-pane .btn
+{
+	position:absolute;
+	bottom:31px;
+}
+
+
 /*ending corousel slider*/
 
 
