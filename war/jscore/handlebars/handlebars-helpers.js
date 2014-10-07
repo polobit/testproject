@@ -387,6 +387,24 @@ $(function()
 
 	});
 
+	/**
+	 * this is useful in activity when note characters exceeds abouve 50 simply
+	 * show dots
+	 */
+	Handlebars.registerHelper('add_dots_end', function(value)
+	{
+
+		if (value.length > 50)
+		{
+			var subst = value.substr(0, 50);
+			subst = subst + "....";
+			return subst;
+		}
+
+		return value;
+
+	});
+
 	// Tip on using Gravar with JS:
 	// http://www.deluxeblogtips.com/2010/04/get-gravatar-using-only-javascript.html
 	/**
@@ -610,7 +628,6 @@ $(function()
 
 		return (monthArray[intMonth] + " " + intDay);
 	});
-	
 
 	/**
 	 * Helper function to return task color based on it's priority
@@ -963,15 +980,14 @@ $(function()
 			return options.fn(this);
 		return options.inverse(this);
 	});
-	
-	
+
 	/**
 	 * returns online scheduling url of current user
 	 */
 	Handlebars.registerHelper('online_schedule_URL', function()
-			{
-				return ONLINE_SCHEDULING_URL;
-			});
+	{
+		return ONLINE_SCHEDULING_URL;
+	});
 
 	// gets the refernce code of current domain
 
@@ -2765,147 +2781,154 @@ $(function()
 	});
 
 	Handlebars.registerHelper('gateway_exists', function(value, target, options)
-    	    {
-    	 
-    	for(var i = 0; i<target.length;i++){
-    		
-    		var prefs = JSON.parse(target[i].prefs);
-    		
-    		if(target[i].name=="EmailGateway"){
-    			
-    			if(prefs.email_api==value)
-    				return options.fn(target[i]);
-    		}
-    		
-    		if(target[i].name=="SMS-Gateway"){
-    			if(prefs.sms_api==value)
-    				return options.fn(target[i]);
-    		}
-    	}
-    	return options.inverse(this);
-    	    });
+	{
 
+		for (var i = 0; i < target.length; i++)
+		{
+
+			var prefs = JSON.parse(target[i].prefs);
+
+			if (target[i].name == "EmailGateway")
+			{
+
+				if (prefs.email_api == value)
+					return options.fn(target[i]);
+			}
+
+			if (target[i].name == "SMS-Gateway")
+			{
+				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+		}
+		return options.inverse(this);
+	});
 
 	Handlebars.registerHelper("each_index_slice", function(array, index, options)
-{
-				var buffer = "";
-				for (var i = index; i < array.length; i++)
-				{
-								var item = array[i];
-
-								// stick an index property onto the item, starting with 1, may make
-								// configurable later
-								// item.index = i + 1;
-
-								console.log(item);
-								// show the inside of the block
-								buffer += options.fn(item);
-				}
-
-				// return the finished buffer
-				return buffer;
-
-});
-
-Handlebars.registerHelper('gateway_exists', function(value, target, options)
-	    {
-	 
-	for(var i = 0; i<target.length;i++){
-		
-		var prefs = JSON.parse(target[i].prefs);
-		
-		if(target[i].name=="EmailGateway"){
-			
-			if(prefs.email_api==value)
-				return options.fn(target[i]);
-		}
-		
-		if(target[i].name=="SMS-Gateway"){
-			if(prefs.sms_api==value)
-				return options.fn(target[i]);
-		}
-	}
-	return options.inverse(this);
-	    });
-
-Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
-		{	
-	
-				if(CURRENT_DOMAIN_USER.id == owner_id)
-					return options.fn(this);
-				return options.inverse(this); 
-		});
-
-Handlebars.registerHelper('canEditContact', function(owner_id, options){
-	return options.fn(this);
-	
-	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
-		return options.fn(this);
-	
-	return options.inverse(this)
-});
-
-Handlebars.registerHelper('getAccountPlanName', function(plan_name){
-	if(!plan_name)
-		return "Free";
-	
-	var plan_fragments = plan_name.split("_");
-	
-	return ucfirst(plan_fragments[0]);
-		
-	
-});
-
-Handlebars.registerHelper('getAccountPlanInteval', function(plan_name){
-	if(!plan_name)
-		return "Monthly";
-	
-	var plan_fragments = plan_name.split("_");
-	
-	return ucfirst(plan_fragments[1]);
-	
-});
-
-Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options){
-	var subscription = getSubscriptionWithAmount(customer, plan);
-	
-	if(subscription != null)
-		return options.fn(subscription);
-	
-	return options.inverse(this);
-});
-
-// handling with iso date
-Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
-{
-
-
-/*				var myDate = new Date(dateString);
-				var timestamp = myDate.getTime();
-				var d = new Date(parseInt(timestamp) / 1000).format("dd-MM-yyyy");
-				return d;*/
-				if (dateString.length <= 0)
-								return;
-				var arr = dateString.split("T");
-				console.log("normalize date " + arr[0]);
-			//	var d = new Date(arr[0]).format("dd-MM-yyyy");
-				return arr[0];
-
-});
-
-/**
- * Index starts from 1
- */
-Handlebars.registerHelper("getMonthFromIndex", function(month_index)
+	{
+		var buffer = "";
+		for (var i = index; i < array.length; i++)
 		{
-			var monthArray = [
-	    				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-	    		];
-			if(month_index > 12)
-				return monthArray[11];
-			
-			return monthArray[month_index - 1];
-		});
+			var item = array[i];
 
+			// stick an index property onto the item, starting with 1, may make
+			// configurable later
+			// item.index = i + 1;
+
+			console.log(item);
+			// show the inside of the block
+			buffer += options.fn(item);
+		}
+
+		// return the finished buffer
+		return buffer;
+
+	});
+
+	Handlebars.registerHelper('gateway_exists', function(value, target, options)
+	{
+
+		for (var i = 0; i < target.length; i++)
+		{
+
+			var prefs = JSON.parse(target[i].prefs);
+
+			if (target[i].name == "EmailGateway")
+			{
+
+				if (prefs.email_api == value)
+					return options.fn(target[i]);
+			}
+
+			if (target[i].name == "SMS-Gateway")
+			{
+				if (prefs.sms_api == value)
+					return options.fn(target[i]);
+			}
+		}
+		return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('isOwnerOfContact', function(owner_id, options)
+	{
+
+		if (CURRENT_DOMAIN_USER.id == owner_id)
+			return options.fn(this);
+		return options.inverse(this);
+	});
+
+	Handlebars.registerHelper('canEditContact', function(owner_id, options)
+	{
+		return options.fn(this);
+
+		if ((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+			return options.fn(this);
+
+		return options.inverse(this)
+	});
+
+	Handlebars.registerHelper('getAccountPlanName', function(plan_name)
+	{
+		if (!plan_name)
+			return "Free";
+
+		var plan_fragments = plan_name.split("_");
+
+		return ucfirst(plan_fragments[0]);
+
+	});
+
+	Handlebars.registerHelper('getAccountPlanInteval', function(plan_name)
+	{
+		if (!plan_name)
+			return "Monthly";
+
+		var plan_fragments = plan_name.split("_");
+
+		return ucfirst(plan_fragments[1]);
+
+	});
+
+	Handlebars.registerHelper('getSubscriptionBasedOnPlan', function(customer, plan, options)
+	{
+		var subscription = getSubscriptionWithAmount(customer, plan);
+
+		if (subscription != null)
+			return options.fn(subscription);
+
+		return options.inverse(this);
+	});
+
+	// handling with iso date
+	Handlebars.registerHelper("iso_date_to_normalizeDate", function(dateString)
+	{
+
+		/*
+		 * var myDate = new Date(dateString); var timestamp = myDate.getTime();
+		 * var d = new Date(parseInt(timestamp) / 1000).format("dd-MM-yyyy");
+		 * return d;
+		 */
+		if (dateString.length <= 0)
+			return;
+		var arr = dateString.split("T");
+		console.log("normalize date " + arr[0]);
+		// var d = new Date(arr[0]).format("dd-MM-yyyy");
+		return arr[0];
+
+	});
+
+	/**
+	 * Index starts from 1
+	 */
+	Handlebars.registerHelper("getMonthFromIndex", function(month_index)
+	{
+		var monthArray = [
+				"January", "february", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+		];
+		if (month_index > 12)
+			return monthArray[11];
+
+		return monthArray[month_index - 1];
+	});
 
 });
