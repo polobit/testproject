@@ -207,14 +207,14 @@ td.datepickerSpecial a {
 td.datepickerSpecial.datepickerSelected a {
 	background: #a00;
 }
-.datepickerViewDays th a span
+.datepickerViewDays th a span,.datepickerViewMonths th a span
 {
 font-size: 28px;
 color: #888;
 margin: 0px 9px;
 cursor: pointer;	
 }
-.datepickerViewDays th a span:hover
+.datepickerViewDays th a span:hover,.datepickerViewMonths th a span:hover
 {
 	color:#555;
 }
