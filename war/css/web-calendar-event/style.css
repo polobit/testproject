@@ -13,9 +13,15 @@
 	src: url(ProximaNova-Light.otf);
 }
 
+@font-face {
+	font-family:fontawesome;
+	src: url(FontAwesome.otf);
+}
+
+
 body {
 	background: #F6F6F6;
-	font-family: ProximaNova-Regular;
+	/*font-family: ProximaNova-Regular;*/
 }
 
 .minutes.activemin {
@@ -32,17 +38,23 @@ body {
 	max-width: 80%;
 	margin-right: auto;
 	margin-left: auto;
+	margin-top:35px;
+	margin-bottom:35px;
 }
 
 .segment {
 	margin: 0 auto;
 	float: none;
-	border: 1px solid #bbb;
-	border-radius: 6px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
 	padding: 12px 25px 25px 25px;
 	position: relative;
 	margin-bottom: 50px;
 	min-height: 140px;
+}
+.segment:hover
+{
+	box-shadow: 0 0 14px 1px #eee;
 }
 
 .segment p {
@@ -54,8 +66,9 @@ body {
 }
 
 .segment2 {
-	/* min-height: 290px;
-	overflow: auto; */
+	 min-height: 331px;
+	
+	
 }
 
 .segmenth {
@@ -83,12 +96,13 @@ tbody.datepickerDays td.datepickerSelected {
 tbody.datepickerDays td.datepickerSelected a {
 
  border-radius: 0px;
+ color:#fff!important;
  
 }
 
 tbody.datepickerDays td:hover {
- background: #ccc !important;
- border-radius:2px;
+ background: #4A90E2;
+ border-radius:0px;
  cursor:pointer;
 
 }
@@ -97,6 +111,7 @@ tbody.datepickerDays td:hover a {
  
  border-radius: 0px;
  cursor: pointer;
+ color:#fff!important;
 }
 
 div.datepicker table td {
@@ -105,14 +120,15 @@ div.datepicker table td {
 
 .numberlt {
 	position: absolute;
-	background: #4A90E2;
-	font-size: 22px;
-	color: white;
-	left: -17px;
-	top: -14px;
-	padding: 0 13px;
-	font-family: arial;
-	border-radius: 18px;
+background: #4A90E2;
+font-size: 14px;
+color: white;
+left: -15px;
+top: -13px;
+padding: 4px 10px;
+font-family: arial;
+border-radius: 50%;
+vertical-align: middle;
 }
 
 .timezone {
@@ -122,14 +138,19 @@ div.datepicker table td {
 }
 
 .timezone1 {
-	font-family: ProximaNova-Bold;
+	
+	color: #000;
+font-size: 15px;
 }
 
 .availability {
-	font-size: 14px;
+	font-size: 17px;
 	color: #666;
 	text-align: center;
 	margin-top: 20px;
+	margin-bottom:15px!important;
+	margin-top:22px!important;
+	
 }
 
 .segment3 input,.segment3 textarea {
@@ -147,6 +168,7 @@ div.datepicker table td {
 	border: 1px solid #EBEBEC;
 	border-radius: 6px;
 	margin-top: 20px;
+	margin-bottom:30px;
 }
 
 .datepicker>div {
@@ -164,9 +186,9 @@ div.datepicker table td {
 }
 
 .datepickerMonth a span {
-	color: black;
-	font-weight: bold;
-	font-size: 14px;
+	color:#444;
+	
+	font-size: 16px;
 }
 
 #mainwrap div.datepicker a {
@@ -194,6 +216,7 @@ div.datepicker table td {
 	display: block;
 	float: none;
 	margin-left: -24px;
+	margin-bottom:7px;
 }
 
 .checkbox-grid li label {
@@ -270,20 +293,21 @@ div.datepicker table td {
 }
 
 #confirm {
-	padding: 10px;
-	margin: 0 auto;
+	padding: 10px 24px;
+	margin: 10px auto 20px;
 	display: block;
 	background: #5DB85C;
 	border: 1px solid #4BAD4B;
-	border-radius: 6px;
+	border-radius: 3px;
 	color: white;
-	font-weight: bold;
+
 	font-size: 16px;
-	margin-bottom: 10px;
+	
 }
 
 #confirm:hover {
-	background: #6Dc86C;
+	background: #284e8e;
+	border:1px solid #3276b1;
 }
 
 @media screen and (max-width: 991px) {
@@ -338,4 +362,22 @@ div.datepicker table td {
 	width: 680px;
 	margin-top:100px!important;
 	position: relative;
+}
+.event-title
+{
+	margin:0px 13px 18px;
+border-bottom: 1px solid #ddd;
+padding: 0px;
+padding-bottom: 4px;
+font-size: 17px;
+text-transform: capitalize;
+color: #8E8F8F;
+}
+#datepick table td table
+{
+	border:1px solid #ddd;
+}
+.green-bg
+{
+	background:#5db85c;
 }

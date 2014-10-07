@@ -1374,7 +1374,7 @@ height: 30px;
 	word-wrap:break-word;
 	width:95%;
 }
-.footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a
+.footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a,#show-schedule-url,#subscribe-ical,span[title='Owner'] i,#contact-documents-model-list i
 {
 	text-decoration:none!important;
 }
@@ -1562,14 +1562,6 @@ width:75%;
 	
   margin-bottom: 0;
 }
-#plan-details-pane .btn
-{
-	margin-top:20px;
-}
-#attach_card_notification
-{
-	margin-top:0px!important;
-}
 
 #plan-details-pane
 {
@@ -1584,6 +1576,4 @@ width:75%;
 
 
 /*ending corousel slider*/
-
-
 
