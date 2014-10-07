@@ -798,14 +798,15 @@ tbody a.no-style-a {
 
 /* For scroll in deals milestones */
 /* Vertical scroll */
-#opportunities-full-screen-model-list ::-webkit-scrollbar, #opportunities-by-milestones-model-list ::-webkit-scrollbar {
+#opportunities-full-screen-model-list ::-webkit-scrollbar, #opportunities-by-milestones-model-list ::-webkit-scrollbar, #opportunities-by-paging-model-list ::-webkit-scrollbar {
  width: 5px;
  margin-right: 4px !important;
  background:#eee;
 }
 /* Horizontal scroll */
-#opportunities-full-screen-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-milestones-model-list ::-webkit-scrollbar:horizontal {
+#opportunities-full-screen-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-milestones-model-list ::-webkit-scrollbar:horizontal, #opportunities-by-paging-model-list ::-webkit-scrollbar {
  height: 10px;
+ background:#eee;
 }
 /* Track */
 #opportunities-full-screen-model-list ::-webkit-scrollbar-track, #opportunities-by-milestones-model-list ::-webkit-scrollbar-track {
@@ -815,7 +816,7 @@ tbody a.no-style-a {
  
 }
 /* Handle */
-#opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb {
+#opportunities-full-screen-model-list ::-webkit-scrollbar-thumb, #opportunities-by-milestones-model-list ::-webkit-scrollbar-thumb, #opportunities-by-paging-model-list  ::-webkit-scrollbar-thumb {
 /* -webkit-border-radius: 10px;
  border-radius: 10px;
  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);*/
@@ -921,14 +922,22 @@ content: "\f075"!important;
 	background:#fff!important;
 	background:lightyellow!important;
 }
-.milestone-column>ul {
+.milestone-column>ul, .milestone-column>div.milestones {
 	height: 468px;
 	overflow-y: auto !important;
 	list-style: none;
 	margin-left: 0px;
 	margin-bottom: 0px;
 }
-#opportunities-by-milestones-model-list .milestone-column>ul>li
+
+.milestone-column>div.milestones ul{
+	list-style: none;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	min-height: 468px;
+}
+
+#opportunities-by-milestones-model-list .milestone-column>ul>li, #deals-by-paging-model-list li
 {
 margin:0px;
 	cursor: move;
@@ -1407,6 +1416,10 @@ padding-bottom: 3px;
 width:75%;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ee436e... scheduling UI changes
 /*corousel slider */
 
 .carousel {
@@ -1562,11 +1575,9 @@ width:75%;
 	
   margin-bottom: 0;
 }
-
 #plan-details-pane
 {
 	position:relative;
-}
 }
 #plan-details-pane .btn
 {
@@ -1576,4 +1587,3 @@ width:75%;
 
 
 /*ending corousel slider*/
-
