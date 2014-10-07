@@ -137,8 +137,8 @@ ObjectMapper mapper = new ObjectMapper();
 
 				<div class="col-sm-10 segment segment3 me-disable" style="display:none">
 					<div class="numberlt">3</div>
-					<p class="segmenth">
-						Contact Info</span>
+					<p class="segmenth" style="margin-bottom: 10px;margin-top: 5px;font-size: 17px;">
+						Contact Info
 					</p>
 
 					<div class="col-sm-4">
