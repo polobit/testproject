@@ -100,6 +100,21 @@
 		            "type": "textarea" 
 		        },
 		        {
+					"category": "Text",
+		            "name": "button_email",
+		            "id": "button_email",
+		            "title": "Send test Email",
+		            "required": "required",
+		            "value":"Test Email",
+		           "fieldType": "input",
+		            "type": "button",
+		            "class":"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
+		            "style":{
+		             "float": "right",
+					 "margin-right": "13px"
+		            }
+		        },
+		        {
 				   "label": "",
 		           "category": "HTML",
 		           "name": "merge_fields",
@@ -118,6 +133,21 @@
 					"fieldType": "html",
 					"type": "html" 
 		         },
+		         {
+					"category": "HTML",
+		            "name": "button_email",
+		            "id": "button_email",
+		            "title": "Send test Email",
+		            "required": "required",
+		            "value":"Test Email",
+		           "fieldType": "input",
+		            "type": "button",
+		            "class":"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
+		            "style":{
+		             "float": "right",
+					 "margin-right": "13px"
+		            }
+		        },
 		        {
 		            "label": "Track Clicks:",
 		            "required": "No",

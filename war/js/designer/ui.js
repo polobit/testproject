@@ -317,6 +317,7 @@ function generateDefaultUI(uiFieldDefinition) {
         	if( key == "style")
         		continue;
 
+        	
             attributes += (key + "=\"" + uiFieldDefinition[key] + "\" ");
         }
     }
@@ -614,14 +615,16 @@ function _generateUIFields(selector, ui) {
         
         //Checking the Checkbox and Radio buttons.(yasin(13-09-10))
         
-         if (uiFieldType == "input" && (uiInputType == "checkbox" || uiInputType == "radio")) {
+         if (uiFieldType == "input" && (uiInputType == "checkbox" || uiInputType == "radio" || uiInputType == "button")) {
         	// Else Input, textarea,		                	        
 	        if (uiField == undefined) 
 	        
 	        uiField = generateDefaultUI(uiFieldDefinition);
 	      
         	  $(uiField).appendTo(container);
-        	 
+        	  
+        	if(uiFieldDefinition.id == "button_email") 
+        		 $("<div style='clear:both'></div>").appendTo(container);
 			 //Add label to the checkbox and radio buttons(yasin(13-09-10))
         	
              addLabel(uiFieldDefinition.label, container,uiInputType);   

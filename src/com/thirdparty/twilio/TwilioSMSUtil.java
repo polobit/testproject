@@ -123,6 +123,71 @@ public class TwilioSMSUtil
 
 	}
 
+	/**
+	 * Returns a list of Twilio from numbers
+	 */
+	public static JSONArray getTwilioLogs(String account_SID, String auth_token)
+	{
+
+		JSONArray incomingNumberArray = null;
+
+		JSONArray logsArray = null;
+		if (account_SID == null || auth_token == null)
+			return null;
+		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
+		List<String> verifiredTwilioNumbers = new ArrayList<String>();
+		try
+		{
+			TwilioRestResponse response = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
+					+ account_SID + "/" + TWILIO_MESSAGES, "GET", null);
+
+			/*
+			 * If error occurs, return null
+			 */
+			if (response.isError())
+				return null;
+
+			JSONArray result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
+					.getJSONObject("Messages").getJSONArray("Message");
+			System.out.println(result);
+			// incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
+
+			// int incomingNumberCount =
+			// result.getJSONArray("IncomingPhoneNumber").length();
+
+			// or (int i = 0; i < incomingNumberCount; i++)
+			// verifiredTwilioNumbers.add(incomingNumberArray.getJSONObject(i).get("PhoneNumber").toString());
+
+			logsArray = new JSONArray();
+			for (int i = 0; i < result.length(); i++)
+			{
+				JSONObject tempLog = new JSONObject();
+
+				tempLog.put("DateSent", result.getJSONObject(i).get("DateSent"));
+				tempLog.put("To", result.getJSONObject(i).get("To"));
+				tempLog.put("From", result.getJSONObject(i).get("From"));
+				tempLog.put("Status", result.getJSONObject(i).get("Status"));
+				tempLog.put("Price", result.getJSONObject(i).get("Price"));
+				tempLog.put("ErrorCode", result.getJSONObject(i).get("ErrorCode"));
+				tempLog.put("ErrorMessage", result.getJSONObject(i).get("ErrorMessage"));
+
+				logsArray.put(tempLog);
+			}
+
+			System.out.println(logsArray);
+			System.out.println(logsArray);
+		}
+
+		catch (Exception e)
+		{
+			System.out.println("Exception in TwilioSMS");
+			e.printStackTrace();
+		}
+
+		return logsArray;
+
+	}
+
 	public static String sendSMS(String account_sid, String auth_token, String smsEndpoint, String version,
 			String fromNumber, String toNumber, String message, String metadata) throws TwilioRestException
 	{
@@ -183,5 +248,33 @@ public class TwilioSMSUtil
 			return null;
 
 		return TwilioSMSUtil.verifiedTwilioNumbers(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+	}
+
+	public static JSONArray currentTwilioLogs()
+	{
+		Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
+
+		if (widget == null)
+			return null;
+
+		try
+		{
+			String prefs = widget.prefs;
+			JSONObject prefsJSON = new JSONObject(prefs);
+			TWILIO_ACCOUNT_SID = prefsJSON.getString("account_sid");
+			TWILIO_AUTH_TOKEN = prefsJSON.getString("auth_token");
+
+		}
+		catch (Exception e)
+		{
+
+			System.out.println("Inside getVerifiedTwilioNumbers");
+			e.printStackTrace();
+		}
+
+		if (TWILIO_ACCOUNT_SID == null || TWILIO_AUTH_TOKEN == null)
+			return null;
+
+		return TwilioSMSUtil.getTwilioLogs(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 	}
 }
