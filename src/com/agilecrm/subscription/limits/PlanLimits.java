@@ -205,4 +205,12 @@ public class PlanLimits
     {
 	return whiteLabelEnabled;
     }
+    
+    public boolean isFreePlan()
+    {
+	if(plan.plan_type == null)
+	    return false;
+		
+	return (plan.plan_type == PlanType.FREE) ? true : false;
+    }
 }

@@ -124,18 +124,16 @@ $(function(){
 	 */
 	$('.deal-edit').live('click', function(e) {
 		e.preventDefault();
-        var id = $(this).closest('.data').attr('data');
+        var id = $(this).closest('.data').attr('id');
         var milestone = ($(this).closest('ul').attr("milestone")).trim();
         var currentDeal;
         
-		// Checks and obtains the deal from milestone array
-		var milestone_array = App_Deals.opportunityMilestoneCollectionView.collection.models[0].get(milestone);
-		for(var i in milestone_array)
-		{
-			if(milestone_array[i].id == id)
-				currentDeal = milestone_array[i];
-		}
-		
+        // Get the current deal model from the collection.
+        var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+    	if(!dealPipelineModel)
+    		return;
+    	currentDeal = dealPipelineModel[0].get('dealCollection').get(id).toJSON();
+        
 		if(currentDeal)
         	updateDeal(currentDeal, true);
 	});
@@ -148,7 +146,7 @@ $(function(){
         if(!confirm("Are you sure you want to delete?"))
 			return;
         
-        var id = $(this).closest('.data').attr('data');
+        var id = $(this).closest('.data').attr('id');
         var milestone = ($(this).closest('ul').attr("milestone")).trim();
         var id_array = [];
 		var id_json = {};
@@ -166,15 +164,12 @@ $(function(){
 			type: 'POST',
 			data: id_json,
 			success: function() {
-
-				// Checks and deletes the deal from milestone array
-				var milestone_array = App_Deals.opportunityMilestoneCollectionView.collection.models[0].get(milestone);
-				for(var i in milestone_array)
-				{
-					if(milestone_array[i].id == id)
-						milestone_array.splice(i, 1);
-				}
-	
+				// Remove the deal from the collection and remove the UI element.
+				var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : milestone });
+				if(!dealPipelineModel)
+					return;
+				dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+				
 				// Removes deal from list
 				$(that).closest('li').css("display","none");
 				
@@ -415,43 +410,53 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 
 				if(!readCookie("agile_deal_view")) {
 					
-					var modelJSON = App_Deals.opportunityMilestoneCollectionView.collection.models[0];
-					var newMilestone = json.milestone;
+					var newMilestone = deal.milestone;
+					
 					if (isUpdate)
 					{
-						for(var j in modelJSON.attributes)
-						{
-							var milestone = modelJSON.attributes[j];
-							for(var i in milestone)
-							{
-								if(milestone[i].id == json.id)
-								{
-									var oldDealJSON = milestone[i];
-									var oldMilestone = oldDealJSON.milestone;
-									if(newMilestone != oldMilestone)
-									{
-										milestone[i].owner_id = milestone[i].owner.id;
-										//milestone[i].milestone = newMilestone;
-										//modelJSON.get(newMilestone).push(milestone[i]);
-										modelJSON.get(newMilestone).push(deal);
-										milestone.splice(i, 1);
-									}
-									else 
-									{
-										deal.owner_id = milestone[i].owner.id;
-										milestone.splice(i, 1);
-										modelJSON.get(oldMilestone).push(deal);
-									}
-								}
-							}
+						
+						var id = deal.id;
+						var oldMilestone = $('#'+id).attr('data');
+						//update_deal_collection(deal, id, newMilestone, oldMilestone);
+						
+						var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : oldMilestone });
+						if(!dealPipelineModel)
+							return;
+						dealPipelineModel[0].get('dealCollection').remove(dealPipelineModel[0].get('dealCollection').get(id));
+						
+						if(!checkPipeline(deal.pipeline_id)){
+							console.log('removing the deal');
+							$("#" + oldMilestone).find("#" + id).parent().remove();
+						}else if(newMilestone != oldMilestone){
+							
+							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
+							if(!dealPipelineModel)
+								return;
+							
+							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
+							includeTimeAgo($("#" + newMilestone));
+							$('a.deal-notes').tooltip();
+							$("#" + oldMilestone).find("#" + id).parent().remove();
+						}else {
+							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
+							if(!dealPipelineModel)
+								return;
+							
+							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal), {silent:true});
+							console.log('Updating html - ',deal);
+							$("#" + newMilestone).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
+							includeTimeAgo($("#" + newMilestone));
+							$('a.deal-notes').tooltip();
 						}
+						
+					} else if(checkPipeline(deal.pipeline_id)){
+						var dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
+						if(!dealPipelineModel)
+							return;
+						
+						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 					}
-					else if(checkPipeline(deal.pipeline_id))
-					  modelJSON.get(newMilestone).push(deal);
-					
-					App_Deals.opportunityMilestoneCollectionView.render(true);
-				}
-				else
+				}else 
 				{
 					if (isUpdate)
 						 App_Deals.opportunityCollectionView.collection.remove(json);

@@ -1,77 +1,34 @@
 /** The function is commented inorder to implement later. It shows Upgrade message to free users**/
-//$(function(){
-//
-//	var accountprefs = Backbone.Model.extend({
-//		url:'core/api/account-prefs'
-//	});
-//	
-//	var accountPrefs = new accountprefs();
-//	accountPrefs.fetch({
-//		success: function(data)
-//		{
-//			var json = data.toJSON();
-//			
-//			console.log(json);
-//			
-//			// Allow only for free users
-//			try{
-//				
-//				// if json consists of plan, then return
-//				if(json.plan)
-//					return;	
-//				
-//			}
-//			catch(err){}	
-//	
-//	// Show the first one after 3 secs
-//	setTimeout(function(){
-//		showNoty("warning", get_random_message(), "bottom");
-//	}, 3000);
-//	
-////	// Set the periodically
-////	setInterval(function(){
-////		showNoty("warning", get_random_message(), "bottom");
-////	}, 30000);
-//	
-//		}
-//	});
-//	
-//});
 
-//function showNotyP(type, message, position)
-//{
-//	// Download the lib
-//	head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH + 'lib/noty/layouts/top.js', LIB_PATH + 'lib/noty/themes/default.js',
-//       		function()
-//       		{
-//		
-//				// Close all
-//				$.noty.closeAll()
-//		
-//				var n = noty({
-//		    			 text: message,
-//		    			 layout: position,
-//		    			 type: type
-//		    	});
-//				
-//			        // Set the handler for click
-//				     $('.noty_bar').die().live('click', function(){
-//					
-//					// Close all
-//					$.noty.closeAll();
-//					
-//					if(n.options.type == "warning"){
-//					
-//						// Send to upgrade page
-//					Backbone.history.navigate('subscribe', {
-//						trigger : true
-//					});
-//					
-//					}
-//				});
-//	   });
-//	 
-//}
+var Nagger_Noty;
+function showUpgradeNoty()
+{
+
+	// Returns if account if paid account
+	if(!_billing_restriction.currentLimits.freePlan)
+		return;
+	
+	// If route is subscribe, it will remove existing noty and returns. If there is not existy nagger noty, it will just return
+	if(Current_Route == "subscribe" || Current_Route == "subscribe-plan" || Current_Route == "purchase-plan")
+	{
+		if(Nagger_Noty)
+			$.noty.close(Nagger_Noty);
+		return;
+	}
+	
+	// If Noty is present already, then noty is initiated again
+	if(Nagger_Noty && $("#" +Nagger_Noty).length > 0)
+		return;
+	
+	
+		// Show the first one after 3 secs
+	showNotyPopUp("warning", get_random_message(), "bottom", "none", function(){
+			Nagger_Noty = null;
+			Backbone.history.navigate('subscribe', {
+				 trigger : true
+				 });
+		});
+}
 
 var CONTACTS_HARD_RELOAD = false;
 
@@ -112,14 +69,14 @@ function bulkActivitiesNoty(type, message, position) {
  * @param position -
  *             position of noty like bottomRight, top etc.
  */
-function showNotyPopUp(type, message, position, timeout) {
+function showNotyPopUp(type, message, position, timeout, clickCallback) {
 	
 	// for top position
 	if(position == "top")
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 		+ 'lib/noty/layouts/top.js', LIB_PATH
 		+ 'lib/noty/themes/default.js', function(){
-			notySetup(type, message, position, timeout)
+			notySetup(type, message, position, timeout, clickCallback)
 		});
 	
 	// for bottomRight position
@@ -128,7 +85,7 @@ function showNotyPopUp(type, message, position, timeout) {
 				+ 'lib/noty/layouts/bottom.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomRight.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-					notySetup(type, message, position, timeout)
+					notySetup(type, message, position, timeout, clickCallback)
 				});
 	
 	// for bottomLeft position
@@ -136,8 +93,15 @@ function showNotyPopUp(type, message, position, timeout) {
 		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH
 				+ 'lib/noty/layouts/bottomLeft.js', LIB_PATH
 				+ 'lib/noty/themes/default.js', function(){
-						notySetup(type, message, position, timeout)
-				});		
+						notySetup(type, message, position, timeout, clickCallback)
+				});	
+	
+	// for bottomLeft position
+	if(position == "bottom")
+		head.js(LIB_PATH + 'lib/noty/jquery.noty.js', LIB_PATH + 'lib/noty/layouts/bottom.js', LIB_PATH
+				+ 'lib/noty/themes/default.js', function(){
+						notySetup(type, message, position, timeout, clickCallback)
+				});	
 }
 
 /**
@@ -149,7 +113,7 @@ function showNotyPopUp(type, message, position, timeout) {
  *             message to be shown on noty.
  * @param position -
  *             position of noty like bottomRight, top etc.*/
-function notySetup(type, message, position, noty_timeout) {
+function notySetup(type, message, position, noty_timeout, clickCallback) {
 		
 	    // close all other noty before showing current
 	    $.noty.closeAll()
@@ -169,17 +133,26 @@ function notySetup(type, message, position, noty_timeout) {
 				speed : 500
 				// opening & closing animation speed
 			},
-			timeout : noty_timeout ? noty_timeout : 20000, // delay for closing event. Set false for sticky
+			timeout : noty_timeout == undefined ? noty_timeout : (noty_timeout == "none" ? undefined : 20000), // delay for closing event. Set false for sticky
 							// notifications
+					
 		});
+	    
+	    if(clickCallback && typeof clickCallback == "function" && n.options.id)
+	    {
+	    	Nagger_Noty = n.options.id;
+	    	$("#" + n.options.id).die().live('click', function(e){
+	    		clickCallback();
+	    	})
+	    }
 	}
 
-/*function get_random_message() {
+function get_random_message() {
 
-	var messages = [ "Thanks for trying Agile CRM.", "You can upgrade here." ];
+	var messages = ["Thanks for trying Agile CRM. You can upgrade here."];
 
 	var random = Math.floor((Math.random() * messages.length));
 	// console.log(random + messages[random]);
 
 	return messages[random];
-}*/
+}

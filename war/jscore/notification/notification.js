@@ -383,7 +383,7 @@ function showSwitchChanges(el)
  * @param notification_type -
  *            notification type - TAG_CREATED, TAG_DELETED etc.
  */
-function showNoty(type, message, position, notification_type)
+function showNoty(type, message, position, notification_type, onCloseCallback)
 {
 	// Don't show notifications when disabled by user. Neglect campaign ones
 	if (notification_type != "CAMPAIGN_NOTIFY" && !notification_prefs.control_notifications)
@@ -421,7 +421,24 @@ function showNoty(type, message, position, notification_type)
 			LIB_PATH + 'lib/noty/themes/default.js', function()
 			{
 
-				var n = noty({ text : message, layout : position, type : type, timeout : 30000 });
+			var n = noty({ text : message, layout : position, type : type, timeout : 30000, 
+			
+				closeCallback : 
+					(onCloseCallback && typeof onCloseCallback == 'function') ? onCloseCallback : undefined,
+				callback : {
+					// If on close callback is defined, callback is called after noty is closed. Small hack; because noty close callback in lib is badly implemented 
+					// and one callback gets called on other noty action
+					onClose : function(){
+						console.log(this);
+						if(this.options.closeCallback && typeof this.options.closeCallback == 'function')
+							{
+								this.options.closeCallback ();
+							}
+					}
+				}
+			});
+				
+				console.log(n);
 
 				// Play sounds for only user notifications
 				if (n.options.type == 'information')

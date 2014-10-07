@@ -137,9 +137,9 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
 			<h3>Your Credit Card Details
 				{{#if billingData}}
-					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:-5px;margin-right:10px">Change card</a>
+					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:-5px;margin-right:10px">Change Card</a>
 				{{else}}
-					<a href="#update-card" id="change-card" class="pull-right btn btn-primary" align="center" style="margin-top:-5px;margin-right:10px;display:none">Change card</a>
+					<a href="#update-card" id="change-card" class="pull-right btn" align="center" style="margin-top:-5px;margin-right:10px;display:none">Change Card</a>
 				{{/if}}
 			</h3>
 		</div>
@@ -148,7 +148,7 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 	</div>
 </div>
 	{{#if billingData}}
-	<div class="row-fluid">
+	<div class="row-fluid" style="margin-top:50px">
 	<div class="span6" style="margin-top:20px">
 		<div style="border-bottom:1px solid #f5f5f5;margin-bottom:20px">
 			<h3>Recent Payments<small style="font-size:11px;margin-left:5px">Thank you</small></h3>
@@ -220,13 +220,13 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 </div>
 		{{/getSubscriptionBasedOnPlan}} 
 		{{#if billingData}} 
-			{{#check_plan "FREE"}}
+			{{#if_equals plan.plan_type "FREE"}}
 				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
-				Update </a> 
+				Upgrade </a> 
 				{{else}}
 				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
 				Modify </a> 
-			{{/check_plan}}
+			{{/if_equals}}
 			{{else}} 
 				<a class="btn btn-primary" href="#" id="attach_card_notification"> Upgrade </a>
 	 	{{/if}}
@@ -334,16 +334,16 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 				<form class="form-horizontal" name="emailPlan" style="margin-left:-40%;margin-top:10px" id="email-plan-form">
 						<div class="control-group">
                        		 <label class="control-label" style="margin-top:5px">Send Rate</label>
-                        		<div class="controls" style="margin-top: 5px;">
-									<span style="margin-top:5px;float:right"> X 1000 </span><input type="text" class="input input-small required number" id="email-quantity" name="quantity" min="5"></input>
+                        		<div class="controls" style="margin-top: 5px;margin-left:150px">
+									<span style="margin-top:5px;float:right"> X 1000 </span><input type="text" class="input input-small required number" id="email-quantity" style="width:105px" name="quantity" min="5" placeholder="Number of emails"></input>
                         		</div>
                     		</div>
 							<div class="control-group">
 								<div class="controls">
-									<span style="color: #FA782D; font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><span style="margin-left:3px">Per month</span>
+									<span style="font-size: 30px;margin-left:0px">$<span id="emails_total_cost">0</span></span><span style="margin-left:3px">/ month</span>
 									<br/>
 									<small style="margin-top: 0px;margin-left:-30px">
-										 charged @ <span style="color: #FA782D;" id="email_rate">$4</span> / 1000 emails
+										 charged @ <span id="email_rate">$4</span> / 1000 emails
 									</small>
 								</div>
 							</div>
@@ -352,7 +352,7 @@ White Label : {{#if whiteLabelEnabled}} Yes {{else}} No{{/if}}
 <div class="clearfix"></div>
 					<a class="btn btn-primary save" href="#"> Purchase </a>
 
-					<a class="btn" href="#" id="close"> close </a>
+					<a class="btn" href="#" id="close"> Cancel </a>
 	</div>
 </div>
 </script>
