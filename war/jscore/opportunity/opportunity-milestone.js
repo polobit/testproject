@@ -186,6 +186,8 @@ console.log(targetCollection);
 
 			// Remove loading icon
 			$(targetCollection.infiniScroll.options.target).find('.scroll-loading').remove();
+			includeTimeAgo($(targetCollection.infiniScroll.options.target));
+			$('a.deal-notes').tooltip();
 		},
 		onFetch : function()
 		{
