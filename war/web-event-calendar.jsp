@@ -164,6 +164,7 @@ ObjectMapper mapper = new ObjectMapper();
 						<textarea class="inputtext me-disable" rows="7" cols="90"
 							id="notes" name="notes" placeholder="Notes" disabled="disabled"></textarea>
 					</div>
+					<div class="clearfix"></div>
 				</div>
 
 			</fieldset>
