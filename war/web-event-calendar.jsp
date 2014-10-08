@@ -175,6 +175,7 @@ ObjectMapper mapper = new ObjectMapper();
  var User_Id = <%=user_id%>;
  var Agile_User_Id = <%=agile_user_id%>;
  var selecteddate="";
+ var current_date_mozilla="";
  var domainname=<%=mapper.writeValueAsString(domain_name)%>;
  </script>
 
