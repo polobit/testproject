@@ -214,6 +214,7 @@ color: #888;
 margin: 0px 9px;
 cursor: pointer;	
 }
+
 .datepickerViewDays th a span:hover,.datepickerViewMonths th a span:hover,.datepickerViewYears th a span:hover 
 {
 	color:#555;
