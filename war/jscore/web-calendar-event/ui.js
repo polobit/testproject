@@ -9,34 +9,36 @@ $(function()
 		e.preventDefault();
 
 		Selected_Time = $(this).attr('data');
-  
-		
-		
+
 		$(".activemin").removeClass("activemin");
 		$(this).find('.minutes').addClass("activemin");
 
 		// Make next part enable
 		$('.segment2').removeClass('me-disable');
-		$( ".segment2" ).fadeIn("slow");
+		$(".segment2").fadeIn("slow");
+		$('#one').addClass('green-bg').html('<i class="fa fa-check"></i>');
 		
-		if(!selecteddate)
+
+		if (!selecteddate)
 		{
-			selecteddate=new Date();
+			selecteddate = new Date();
 		}
-		if(selecteddate){
-			
-		get_slots(selecteddate, Selected_Time);
+		if (selecteddate)
+		{
+
+			get_slots(selecteddate, Selected_Time);
 		}
-		
+		autoscrol(".segment2");
+
 		// Reset all
-		//resetAll();
+		// resetAll();
 	});
 
 	// Confirm filled info with selected slot
 	$('#confirm').click(function(e)
 	{
 		e.preventDefault();
-
+		$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 		// Save scheduled slot
 		save_web_event('addEventForm', this);
 	});
@@ -53,11 +55,26 @@ $(function()
 
 		// Make next part enable
 		enableSegment3();
-		
-		$( ".segment3" ).fadeIn( "slow");
-		$( "#confirm" ).show();
-		
-	
-		
-	});	
+
+		$(".segment3").fadeIn("slow");
+		$("#confirm").show();
+		$('#two').addClass('green-bg').html('<i class="fa fa-check"></i>');
+		autoscrol(".segment3");
+
+	});
+
+	function autoscrol(divclass)
+	{
+
+		var windowPos = $(divclass).offset().top;
+
+		setTimeout(enableAutoScroll, 0);
+
+		function enableAutoScroll()
+		{
+			$("body,html").animate({ scrollTop : windowPos }, 1000);
+		}
+
+	}
+
 });
