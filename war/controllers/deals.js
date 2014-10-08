@@ -32,8 +32,14 @@ var DealsRouter = Backbone.Router.extend({
 				pipeline_id = 0;
 			
 			$('#content').html(getTemplate("new-opportunity-header", {}));
+			// Add row-fluid if user prefs are set to fluid
+			if (IS_FLUID)
+			{
+				$('#content').find('div.row').removeClass('row').addClass('row-fluid');
+			}
 			pipeline_count = 0;
 			deal_fetching = false;
+			DEALS_LIST_COLLECTION = null;
 			setupDealsTracksList();
 		}
 		else
