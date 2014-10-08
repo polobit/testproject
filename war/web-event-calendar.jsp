@@ -42,6 +42,9 @@ if (scheduleid != null)
   System.out.println(scheduleid);
   	
   DomainUser domainUser = DomainUserUtil.getDomainUserFromScheduleId(scheduleid,d_name);
+		  
+  //DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail("sukanya.552@gmail.com");
+		  
   System.out.println("Domain user " + domainUser);
 	  
   if(domainUser != null)
@@ -71,10 +74,12 @@ ObjectMapper mapper = new ObjectMapper();
 <%@page import="com.google.appengine.api.utils.SystemProperty"%>
 <html>
 <head>
+
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../css/web-calendar-event/style.css">
-<link rel="stylesheet" href="../css/web-calendar-event/font-awesome.min.css">
+<!-- <link rel="stylesheet" href="../css/web-calendar-event/font-awesome.min.css"> -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 
 <script type="text/javascript" src="../lib/web-calendar-event/jquery.js"></script>
 <script type="text/javascript" src="../lib/jquery.validate.min.js"></script>
@@ -105,8 +110,8 @@ ObjectMapper mapper = new ObjectMapper();
 			instructions to add an event to my calendar.</p>
 
 		<div class="col-sm-10 segment segment1">
-			<div class="numberlt">1</div>
-			<div class="event-title">Choose a time slot</div>
+			<div class="numberlt" id="one">1</div>
+			<div class="event-title">Choose a Time Slot</div>
 
 		</div>
 
@@ -115,10 +120,10 @@ ObjectMapper mapper = new ObjectMapper();
 				
 				<div class="col-sm-10 segment segment2 me-disable "
 					style="display: table;display:none">
-					<div class="numberlt">2</div>
+					<div class="numberlt" id="two">2</div>
 					<div class="event-title" style="margin-bottom:7px;">
-						Select date and time <span class="timezone"> <span
-							class="timezone1">Timezone</span>
+						Select Date and Time <span class="timezone"> <span
+							class="timezone1">Timezone </span>
 						</span>
 					</div>
 					<div class="col-sm-4">
@@ -136,10 +141,10 @@ ObjectMapper mapper = new ObjectMapper();
 		
 
 				<div class="col-sm-10 segment segment3 me-disable" style="display:none">
-					<div class="numberlt">3</div>
-					<p class="segmenth" style="margin-bottom: 10px;margin-top: 5px;font-size: 17px;">
-						Contact Info
-					</p>
+
+					<div class="numberlt" id="three">3</div>
+					<div class="event-title" style="margin-bottom:20;margin-top: 5px;">
+						Contact Info</div>
 
 					<div class="col-sm-4">
 						<input type="text" id="userName" name="userName"

@@ -136,10 +136,7 @@ div.datepicker tbody a {
 td.datepickerNotInMonth a {
 	color: #666;
 }
-tbody.datepickerDays td.datepickerSelected{
-	background: #aadbff!important;
-border-radius: 0px;
-}
+
 tbody.datepickerDays td.datepickerNotInMonth.datepickerSelected {
 	background: #17384d;
 }
@@ -214,8 +211,11 @@ color: #888;
 margin: 0px 9px;
 cursor: pointer;	
 }
-
-.datepickerViewDays th a span:hover,.datepickerViewMonths th a span:hover,.datepickerViewYears th a span:hover 
+.datepickerViewDays th a span:hover,.datepickerViewMonths th a span:hover,.datepickerViewYears th a span:hover
 {
 	color:#555;
+}
+.datepickerGoNext
+{
+	border-right:1px solid #ddd;
 }
