@@ -200,7 +200,7 @@ ObjectMapper mapper = new ObjectMapper();
 					var currentDate = newDate.getFullYear() + '-' + currMonth + '-' + newDate.getDate();
 					console.log("in doc ready");
 					console.log(currentDate);
-
+                                    current_date_mozilla=currentDate;
 					// Set current date as selected date
 					Selected_Date = newDate;
 
