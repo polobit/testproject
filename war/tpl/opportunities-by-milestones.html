@@ -49,11 +49,11 @@
 </script>
 <script id="opportunities-by-paging-model-template" type="text/html">
 	<div class='dealtitle-angular'>
-		<p class='milestone-heading'> {{heading}}</p>
+		<p class='milestone-heading'> {{heading}}<span class="pull-right"><img class="loading_img" src="/img/ajax-loader-cursor.gif"></span></p>
 		<span></span>
 	</div>
-	<div id="{{heading}}-list-container" class='milestones' milestone='{{heading}}'>
-		<img class="loading_img" style="padding-right:5px;" height="32px" width="32px" src= "img/21-0.gif"></img>
+	<div id="{{remove_spaces heading}}-list-container" class='milestones' milestone='{{heading}}'>
+		
 	</div>
 </script>
 
