@@ -57,6 +57,7 @@ function createDealsNestedCollection(pipeline_id,milestones)
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
 
+	pipeline_count = 0;
 	// Fetch tasks from DB for first task list
 	fetchForNextDealsList(milestones);
 }
