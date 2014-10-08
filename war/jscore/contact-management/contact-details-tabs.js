@@ -385,8 +385,10 @@ $(function(){
 		// Change url only without triggerring function
 		App_Contacts.navigate('send-email/'+ from);
 		
+		var $parent_element = $(this).parent().parent();
+		
 		// Trigger route callback
-		App_Contacts.sendEmail($(this).data('from'), "Re: " +$(this).parent().parent().find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $(this).parent().parent().find('.email-body').html()+'</blockquote>');
+		App_Contacts.sendEmail(from, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>');
 		
 	});
 	
