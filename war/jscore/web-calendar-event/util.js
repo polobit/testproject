@@ -8,7 +8,7 @@ function change_availability_date(selected_date)
 	console.log(date);
 
 	$('.availability').html("Availability on " + date.getDayName() + ", " + date.getMonthName() + ", " + date.getDate());
-	$('.timezone').html('<span class="timezone1">Timezone</span> ' + /\((.*)\)/.exec(new Date().toString())[1]);
+	$('.timezone').html('<span class="timezone1">Timezone -</span> ' + /\((.*)\)/.exec(new Date().toString())[1]);
 }
 
 // Get slot details time n description
@@ -326,7 +326,7 @@ function convertToHumanDate(format, date)
 	{
 
 	if (!format)
-		format = "mmmm d, yyyy - h:MM TT";
+		format = "mmmm d yyyy, h:MM TT";
 
 	if (!date)
 		return;
