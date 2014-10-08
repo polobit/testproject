@@ -147,7 +147,10 @@ function dealsFetch(index,milestones)
 		postRenderCallback : function(el)
 		{
 			$('ul.milestones',el).attr('milestone',base_model.get("heading"));
+			
+			if (!readCookie("agile_deal_view"))
 			deal_infi_scroll($('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container')[0], dealCollection);
+			
 			includeTimeAgo(el);
 		} });
 

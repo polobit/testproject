@@ -44,7 +44,7 @@ var DealsRouter = Backbone.Router.extend({
 		}
 		else
 		{
-
+			DEALS_LIST_COLLECTION = null;
 			// Fetches deals as list
 			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
 				postRenderCallback : function(el)
