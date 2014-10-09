@@ -616,7 +616,9 @@ function _generateUIFields(selector, ui) {
         //Checking the Checkbox and Radio buttons.(yasin(13-09-10))
         
          if (uiFieldType == "input" && (uiInputType == "checkbox" || uiInputType == "radio" || uiInputType == "button")) {
-        	// Else Input, textarea,		                	        
+        	// Else Input, textarea, button
+        	 if(uiFieldDefinition.id == "button_email")
+        		 $("<br>").appendTo(container);
 	        if (uiField == undefined) 
 	        
 	        uiField = generateDefaultUI(uiFieldDefinition);
