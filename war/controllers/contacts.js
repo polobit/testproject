@@ -621,21 +621,28 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		// Setup HTML Editor
 		if(id)
+		{		
 			setupTinyMCEEditor('textarea#email-body', false, undefined, function(){
 				
-				if(!body)
-					body = '';
+					if(!body)
+						body = '';
 				
-				// Reset tinymce content
-				set_tinymce_content('email-body', body);
-				
-			});
+					setTimeout(function(){
+						// Reset tinymce content
+						set_tinymce_content('email-body', body);}, 1);
+			
+				});
+		}
 		else
+		{	
 			setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
 				
-				// Reset tinymce content
-				set_tinymce_content('email-body', '');
+				setTimeout(function(){
+					// Reset tinymce content
+				set_tinymce_content('email-body', '');},1);
+				
 			});
+		}
 		
 	},
 	

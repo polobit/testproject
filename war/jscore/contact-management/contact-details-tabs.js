@@ -377,25 +377,45 @@ $(function(){
 		window.history.back();
 	});	
 	
-	$('#email-reply').die('hover').live('click', function(e){
+	$('#email-reply').die().live('click', function(e){
 		e.preventDefault();
 	
 		var from = $(this).data('from');
 		
-		// Change url only without triggerring function
-		App_Contacts.navigate('send-email/'+ from);
-		
 		var $parent_element = $(this).parent().parent();
 		
+		var to_emails = $parent_element.find('.to-emails').data('to');
+		
+		if(to_emails){
+			
+			var to_array = to_emails.split(',');
+		
+			to_emails = "";
+			
+			for(var i=0, len = to_array.length; i < len; i++)
+			{
+
+				to_emails += to_array[i].match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi)[0];
+				
+				// Append comma without trailing
+				if(i < len-1)
+					to_emails += ', ';
+			
+			}
+		}
+		
+		// Change url only without triggerring function
+		App_Contacts.navigate('send-email');
+		
 		// Trigger route callback
-		App_Contacts.sendEmail(from, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>');
+		App_Contacts.sendEmail(to_emails, "Re: " + $parent_element.find('.email-subject').text(), '<p></p><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex;">'+ $parent_element.find('.email-body').html()+'</blockquote>');
 		
 	});
 	
-	$('#email-reply').live('hover', function(e){
+	$('#email-reply-div').live('hover', function(e){
 		e.preventDefault();
-		
-		$(this).find('i').toggle();
+
+		$(this).find('#email-reply').toggle();
 	});
 
 	/**
