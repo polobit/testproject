@@ -493,7 +493,7 @@ public class WebCalendarEventUtil
 		    + "</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
 	    // Saves Contact Email
-	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", wce.email, null, null,
+	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", wce.email, user.email, null,
 		    "Appointment Scheduled", body, "-", contact, false);
 	}
 	return "Done";
