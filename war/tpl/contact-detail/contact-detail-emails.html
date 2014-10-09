@@ -39,7 +39,7 @@
     <span class="activity-block-owner">	
 			<img class="user-img thumbnail" width="40" height="40" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
 	</span>
-		<div>
+		<div id="email-reply-div">
         
 			<h4>
 	{{#containString owner_email from}}
@@ -88,7 +88,7 @@
            		</ul>
        			<div style="margin-top:10px" class="email-body">{{#if message}}{{{message}}}{{/if}}</div>
     		</div>
-		<div id="email-reply-div" style="padding-top: 5px;">
+		<div style="padding-top: 5px;">
 		<small class="edit-hover"> 
 			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date_secs}}</time>
 		</small>
