@@ -130,7 +130,7 @@ public class ReportsUtil
      */
     public static Map<String, Object> processReports(Reports report)
     {
-	SearchRule.addContactTypeRule(report.rules, Type.COMPANY);
+	SearchRule.addContactTypeRule(report.rules, Type.CONTACT);
 
 	// Iterate through each filter and add results collection
 	// To store reports in collection
