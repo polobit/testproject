@@ -135,8 +135,8 @@
 		         },
 		         {
 					"category": "HTML",
-		            "name": "button_email",
-		            "id": "button_email",
+		            "name": "button_email_html",
+		            "id": "button_email_html",
 		            "title": "Send test Email",
 		            "required": "required",
 		            "value":"Test Email",
