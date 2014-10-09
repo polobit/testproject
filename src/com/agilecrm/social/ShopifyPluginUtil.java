@@ -256,4 +256,40 @@ public class ShopifyPluginUtil
 	return orders;
     }
 
+    public static boolean isShopExpired(Widget widget){
+	boolean status = false;
+	String token = widget.getProperty("token");
+	String shopName = widget.getProperty("shop");
+	String url = "https://"+shopName+"/admin/shop.json";
+	OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
+	oAuthRequest.addHeader("X-Shopify-Access-Token", token);
+	try
+	{
+	    Response response = oAuthRequest.send();
+	    Map<String, LinkedHashMap<String, Object>> results = new ObjectMapper().readValue(response.getStream(),
+		    Map.class);
+	    
+	    for(Map.Entry<String, LinkedHashMap<String, Object>> m:results.entrySet()){
+		String key = m.getKey();
+		if(key.equalsIgnoreCase("errors")){
+		    status = true;
+		    break;
+		}
+	    }
+	  
+
+	}
+	catch (OAuthException e)
+	{
+	    e.printStackTrace();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+	return status;
+	
+    }
+
 }
