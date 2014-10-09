@@ -43,7 +43,7 @@ $(function()
 	$('#confirm').click(function(e)
 	{
 		e.preventDefault();
-		$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
+		
 		// Save scheduled slot
 		save_web_event('addEventForm', this);
 	});

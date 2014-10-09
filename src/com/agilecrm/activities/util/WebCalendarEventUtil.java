@@ -568,7 +568,7 @@ public class WebCalendarEventUtil
     {
 	System.out.println(timeZone);
 
-	DateFormat dateFormat = new SimpleDateFormat("MMMM d yyyy, h:mm a");
+	DateFormat dateFormat = new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a");
 	return getGMTDateInMilliSecFromTimeZoneId(timeZone, timeInMilliSecs * 1000, dateFormat);
     }
 
