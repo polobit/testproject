@@ -40,3 +40,8 @@ function getProperty(items, name)
 			return items[i];
 	}
 }
+
+function ucfirst(value)
+{
+ return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
+}
