@@ -57,18 +57,13 @@ public class ShopifyPluginUtil
      * @return {@link JSONObject} form of the response returned from Stripe
      * @throws Exception
      */
-    public static List<LinkedHashMap<String, Object>> getCustomerOrderDetails(Widget widget, String email)
+    public static List<LinkedHashMap<String, Object>> getCustomerOrderDetails(Widget widget,Integer customer_id)
 	    throws SocketTimeoutException, IOException, Exception
     {
 	String token = widget.getProperty("token");
 	String shopName = widget.getProperty("shop");
-	LinkedHashMap<String, Object> customer = getCustomer(widget, email);
-	System.out.println(customer);
-	if (customer != null && customer.size() > 0)
-	{
-	    Integer customerId = (Integer) customer.get("id");
 
-	    String url = getAccessUrl(shopName, customerId.toString());
+	    String url = getAccessUrl(shopName, customer_id.toString());
 	    OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, url);
 	    oAuthRequest.addHeader("X-Shopify-Access-Token", token);
 	    try
@@ -86,18 +81,18 @@ public class ShopifyPluginUtil
 	    {
 		e.printStackTrace();
 	    }
-	}
+	
 
 	return null;
 
     }
 
-    public static boolean isCustomerExist(Widget widget, String email)
+    public static Integer isCustomerExist(Widget widget, String email)
     {
 	LinkedHashMap<String, Object> customer = getCustomer(widget, email);
-	if (customer.size() == 0)
-	    return false;
-	return true;
+	if (customer != null && customer.size() > 0)
+	    return (Integer) customer.get("id");
+	return null;
     }
 
     public static LinkedHashMap<String, Object> getCustomer(Widget widget, String email)
@@ -141,7 +136,7 @@ public class ShopifyPluginUtil
 
     private static String getAccessUrl(String shop, String customer_id)
     {
-	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + customer_id);
+	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + customer_id+"&status=any");
 	System.out.println("Access url " + sb.toString());
 	return sb.toString();
     }
@@ -255,7 +250,7 @@ public class ShopifyPluginUtil
 
 	return orders;
     }
-
+    
     public static boolean isShopExpired(Widget widget){
 	boolean status = false;
 	String token = widget.getProperty("token");

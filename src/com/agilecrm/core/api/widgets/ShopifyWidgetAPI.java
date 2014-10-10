@@ -62,11 +62,10 @@ public class ShopifyWidgetAPI
 	if (widget == null)
 	    return null;
 	JSONArray customerOrders = new JSONArray();
-	boolean customer = ShopifyPluginUtil.isCustomerExist(widget, email);
-	if (customer)
+	Integer customer_id = ShopifyPluginUtil.isCustomerExist(widget, email);
+	if (customer_id != null)
 	{
-	    List<LinkedHashMap<String, Object>> orders;
-	    orders = ShopifyPluginUtil.getCustomerOrderDetails(widget, email);
+	    List<LinkedHashMap<String, Object>> orders = ShopifyPluginUtil.getCustomerOrderDetails(widget, customer_id);
 	    if (orders != null && orders.size() > 0)
 	    {
 		Iterator<LinkedHashMap<String, Object>> it = orders.iterator();
@@ -79,8 +78,18 @@ public class ShopifyWidgetAPI
 	}
 	else
 	{
-	    throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).entity("No Customer found")
-		    .build());
+	    // check if token or shop expired
+	    if (ShopifyPluginUtil.isShopExpired(widget))
+	    {
+		throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+			.entity("Shop expired choose a plan").build());
+	    }
+	    else
+	    {
+
+		throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+			.entity("No Customer found").build());
+	    }
 	}
 
 	if (customerOrders.length() > 0)
