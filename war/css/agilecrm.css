@@ -1416,10 +1416,7 @@ padding-bottom: 3px;
 width:75%;
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 8ee436e... scheduling UI changes
 /*corousel slider */
 
 .carousel {
@@ -1485,6 +1482,7 @@ width:75%;
 .carousel-inner > .active.left {
   left: -100%;
 }
+
 
 .carousel-inner > .active.right {
   left: 100%;
@@ -1575,10 +1573,21 @@ width:75%;
 	
   margin-bottom: 0;
 }
+#plan-details-pane .btn
+{
+	margin-top:20px;
+}
+#attach_card_notification
+{
+	margin-top:0px!important;
+}
+/*ending corousel slider*/
+
 #plan-details-pane
 {
 	position:relative;
 }
+
 #plan-details-pane .btn
 {
 	position:absolute;
@@ -1586,4 +1595,6 @@ width:75%;
 }
 
 
-/*ending corousel slider*/
+
+
+

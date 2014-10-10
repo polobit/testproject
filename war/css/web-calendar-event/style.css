@@ -17,7 +17,13 @@
 	font-family:fontawesome;
 	src: url(FontAwesome.otf);
 }
-
+@font-face {
+	font-family:fontawesome;
+	src: url('FontAwesome.otf') format('otf'),
+	     url('fontawesome-webfont.woff.woff') format('woff'), 
+       url('fontawesome-webfont.ttf') format('truetype'), 
+       url('fontawesome-webfont.svg#webfontg8dbVmxj') format('svg');
+}
 
 body {
 	background: #F6F6F6;
@@ -99,19 +105,33 @@ tbody.datepickerDays td.datepickerSelected a {
  color:#fff!important;
  
 }
+.datepickerMonths td:hover a,.datepickerViewYears td:hover a
+{
+	color:#000!important;
+	cursor:pointer;
+}
 
-tbody.datepickerDays td:hover {
- background: #4A90E2;
+tbody.datepickerDays td:hover,tbody.datepickerMonths td:hover,.datepickerViewYears td:hover{
+ background:#ddd;
  border-radius:0px;
  cursor:pointer;
+ 
 
 }
 
+tbody.datepickerDays td.datepickerSelected,.datepickerMonths td.datepickerSelected,.datepickerViewYears td.datepickerSelected{
+	background:#4A90E2!important;
+border-radius: 0px;
+}
+tbody.datepickerDays td.datepickerSelected a:hover
+{
+	color:#fff!important;
+}
 tbody.datepickerDays td:hover a {
  
  border-radius: 0px;
  cursor: pointer;
- color:#fff!important;
+ color:#000!important;
 }
 
 div.datepicker table td {
@@ -223,7 +243,8 @@ div.datepicker table td {
 	margin-left: 5px;
 	font-weight: 500;
 	color: #8E8F8F;
-	font-size: 16px;
+	font-size: 14px;
+	vertical-align:middle;
 }
 
 .segment1 p.choose {
@@ -302,7 +323,7 @@ div.datepicker table td {
 	color: white;
 
 	font-size: 16px;
-	
+
 }
 
 #confirm:hover {
@@ -362,6 +383,7 @@ div.datepicker table td {
 	width: 680px;
 	margin-top:100px!important;
 	position: relative;
+
 }
 .event-title
 {
@@ -370,7 +392,7 @@ border-bottom: 1px solid #ddd;
 padding: 0px;
 padding-bottom: 4px;
 font-size: 17px;
-text-transform: capitalize;
+
 color: #8E8F8F;
 }
 #datepick table td table
@@ -380,4 +402,9 @@ color: #8E8F8F;
 .green-bg
 {
 	background:#5db85c;
+	padding: 4px 7px!important;
+}
+.segment3 input[type="checkbox"]
+{
+	box-shadow:none;
 }

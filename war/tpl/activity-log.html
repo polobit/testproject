@@ -386,7 +386,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 	</div>	
 <div class="pull-left activity-tag">
 <div>
-	Added Note to  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>
+	Added Note ({{add_dots_end custom2}}) to  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}}</a>
 </div>
 <div>		
 <small class="edit-hover pull-left" > 
@@ -600,7 +600,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 	</div>
 <div class="pull-left activity-tag">
 <div>	
- Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" class="edit-note" >Note </a> to  Contact <a href="#contact/{{entity_id}}">{{label}}</a>  
+ Added <a href="" class="activity-edit-note" data={{custom3}} data-toggle="modal" >Note</a> ({{add_dots_end custom2}}) to  Contact <a href="#contact/{{entity_id}}">{{label}}</a>  
 	</div>
 <div>	
 		<small class="edit-hover pull-left" > 
@@ -768,8 +768,12 @@ Sent email to {{custom3}} Contacts
 			{{/if}}
 	</div>
 <div class="pull-left activity-tag">
-<div>	
+<div>
+{{#if_equals "1" custom3}}
+		Deleted {{custom3}} Contact
+{{else}}	
     Deleted {{custom3}} Contacts
+{{/if_equals}}
 	</div>
 <div>	
 		<small class="edit-hover pull-left" > 
@@ -926,14 +930,14 @@ Deleted {{custom2}} Documents
 <div class="row">
     <div class="span12">
         <div class="page-header">
-            <h1 class="activity-heading"><span>Activity</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h1>
+            <h1 class="activity-heading"><span>Activities</span>&nbsp;<small class="activity-sub-heading" ></small>&nbsp;<small class="activity-user" ></small></h1>
 		<div class="btn-group pull-right type-task-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name" id="selectedentity_type">All Activity</div>
+                <div class="btn selected_name" id="selectedentity_type">All Activities</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" id="entity_type">
-					 <li><a href="">All Activity</a></li>
+					 <li><a href="">All Activities</a></li>
                      <li><a href="TASK">Tasks</a></li>
                      <li><a href="DEAL">Deals</a></li>
 					 <li><a href="EVENT">Events</a></li>
@@ -943,7 +947,7 @@ Deleted {{custom2}} Documents
                 </ul>
             </div>            
 		<div class="btn-group pull-right activity-log-button" style="cursor:pointer;margin-right:15px;top: -28px;">
-                <div class="btn selected_name" id="selectedusername">All users</div>
+                <div class="btn selected_name" id="selectedusername">All Users</div>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span>
                 </a>

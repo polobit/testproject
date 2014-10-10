@@ -131,7 +131,6 @@ function showCalendar() {
             } else {
               // $('#loading').hide();
             	 $("#loading_calendar_events").hide();
-                $('#subscribe-ical').css('display','block');
                 start_tour('calendar');
             }
         },

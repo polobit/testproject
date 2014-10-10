@@ -177,6 +177,7 @@ ObjectMapper mapper = new ObjectMapper();
  var User_Id = <%=user_id%>;
  var Agile_User_Id = <%=agile_user_id%>;
  var selecteddate="";
+ var current_date_mozilla="";
  var domainname=<%=mapper.writeValueAsString(domain_name)%>;
  </script>
 
@@ -201,7 +202,7 @@ ObjectMapper mapper = new ObjectMapper();
 					var currentDate = newDate.getFullYear() + '-' + currMonth + '-' + newDate.getDate();
 					console.log("in doc ready");
 					console.log(currentDate);
-
+                                    current_date_mozilla=currentDate;
 					// Set current date as selected date
 					Selected_Date = newDate;
 
