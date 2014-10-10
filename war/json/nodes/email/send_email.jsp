@@ -105,13 +105,13 @@
 		            "id": "button_email",
 		            "title": "Send test Email",
 		            "required": "required",
-		            "value":"Test Email",
+		            "value":"Send Test Email",
 		           "fieldType": "input",
 		            "type": "button",
 		            "class":"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
 		            "style":{
 		             "float": "right",
-					 "margin-right": "13px"
+					 "margin-right": "3px"
 		            }
 		        },
 		        {
@@ -139,13 +139,13 @@
 		            "id": "button_email_html",
 		            "title": "Send test Email",
 		            "required": "required",
-		            "value":"Test Email",
+		            "value":"Send Test Email",
 		           "fieldType": "input",
 		            "type": "button",
 		            "class":"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary",
 		            "style":{
 		             "float": "right",
-					 "margin-right": "13px"
+					 "margin-right": "3px"
 		            }
 		        },
 		        {

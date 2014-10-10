@@ -459,36 +459,35 @@ function removeNodeSelection() {
 
 $("#button_email").die().live("click", function(e){
     e.preventDefault();
-    $(this).css('color','gray');
     testMailButton("#button_email");
-    $(this).css('color','');
         });
 
 $("#button_email_html").die().live("click", function(e){
     e.preventDefault();
-    $(this).css('color','gray');
+   
     testMailButton("#button_email_html");
-    $(this).css('color','');
         });
 
 
 function testMailButton(button){
     
-	
     if($(button).is(':disabled'))
     return;
    
+    $(button).css('color','gray');
     $(button).attr('disabled', 'disabled');
     
     var fromEmailValidator = $("#from_email").validator({effect : 'wall',container: '#errorsdiv'});  
     if(!fromEmailValidator.data("validator").checkValidity()){
     	 $(button).removeAttr('disabled', 'disabled');
+    	 $(button).css('color','');
     	return;
     }
     
     var subjectValidator = $("#subject").validator({effect : 'wall',container: '#errorsdiv'});
     if(!subjectValidator.data("validator").checkValidity()){
 			  $(button).removeAttr('disabled', 'disabled');
+			  $(button).css('color','');
     	return;
     }
 
@@ -500,29 +499,34 @@ function testMailButton(button){
     
     	 if(!htmlEmailValidator.data("validator").checkValidity() || !texValidator.data("validator").checkValidity() ){
     				  $(button).removeAttr('disabled', 'disabled');
+    				  $(button).css('color','');
     	    	return;
     	    }
     
         var jsonValues = serializeNodeForm();
-        
+        $(button).css('color','gray');
         $.ajax({
     		  url: 'core/api/emails/send-test-email',
     		  type: "POST",
     		  data:jsonValues,
     		  async:false,
     		  success: function (email) {
+    			 
     			 $('#errorsdiv').text("sfasd"+email);
     			 $(button).before("<span id='confirmation-text'style='margin: 5px 2px 0px;display: inline-block;text-align: center;float: left;width: 75%; color: red;font-style: italic;'>Email has been sent to "+email+"</span>");
    			   $("#confirmation-text").fadeOut(8000,function(){
+   				
    				  $("#confirmation-text").remove();
    				  $(button).removeAttr('disabled', 'disabled');
+   				$(button).css('color','');
    			  });
     		},
     		error: function(Error){
                 console.log(Error);
+                $(button).css('color','');
             }
     	});
-        
+       
         return;
         
         }
