@@ -406,7 +406,7 @@ public class ShopifySyncImpl extends OneWaySyncService
      */
     public String getOrderUrl(String custId, String status)
     {
-	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + custId);
+	StringBuilder sb = new StringBuilder("https://" + shop + "/admin/orders.json?customer_id=" + custId+"&status=any");
 	if (lastSyncPoint != null)
 	{
 	    if (status.equalsIgnoreCase("new"))
