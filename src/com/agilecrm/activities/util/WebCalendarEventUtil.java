@@ -54,7 +54,7 @@ public class WebCalendarEventUtil
     {
 	System.out.println("In getSlots");
 	System.out.println(username + " " + slotTime + " " + date + " " + timezone + " " + timezoneName + " "
-	        + epochTime + " " + startTime + " " + endTime);
+		+ epochTime + " " + startTime + " " + endTime);
 
 	// Get all permutations possible based on selected slottime(duration) in
 	// 24 Hr.
@@ -75,7 +75,7 @@ public class WebCalendarEventUtil
 
 	// Get all filled slots from Google calendar.
 	List<List<Long>> filledGoogleSlots = GoogleCalendarUtil.getFilledGoogleSlots(userid, slotTime, timezone,
-	        timezoneName, startTime, endTime);
+		timezoneName, startTime, endTime);
 
 	if (filledGoogleSlots != null)
 	{
@@ -308,11 +308,11 @@ public class WebCalendarEventUtil
 		List<Long> fitSlot = fit.next();
 
 		/*
-	         * Start/end time of filled slot is in between available slot so
-	         * remove available slot
-	         */
+		 * Start/end time of filled slot is in between available slot so
+		 * remove available slot
+		 */
 		if ((fitSlot.get(0) > pitSlot.get(0) && fitSlot.get(0) < pitSlot.get(1))
-		        || (fitSlot.get(1) > pitSlot.get(0) && fitSlot.get(1) < pitSlot.get(1)))
+			|| (fitSlot.get(1) > pitSlot.get(0) && fitSlot.get(1) < pitSlot.get(1)))
 		{
 		    // Remove possible slot
 		    pit.remove();
@@ -372,6 +372,9 @@ public class WebCalendarEventUtil
 	// Selected slot for email
 	String selectedDateSlot = wce.date;
 
+	String timezone = wce.timezone;
+
+	Long epoch_start_date = null;
 	// Add properties value in contact entity
 	contact.properties = new ArrayList<ContactField>();
 	contact.properties.add(new ContactField(Contact.FIRST_NAME, wce.userName, null));
@@ -471,6 +474,7 @@ public class WebCalendarEventUtil
 		newEvnt.end = slot.get(1); // end time
 		newEvnt.color = "#36C";
 
+		epoch_start_date = newEvnt.start;
 		String cid = contact.id.toString(); // related contact
 
 		// Add contact in event
@@ -489,8 +493,9 @@ public class WebCalendarEventUtil
 	if (wce.confirmation.equalsIgnoreCase("on"))
 	{
 	    DomainUser user = DomainUserUtil.getDomainUser(domainUserId);
-	    String body = "<p>Your appointment was scheduled with " + user.name + " on " + selectedDateSlot
-		    + "</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes + "</p>";
+	    String body = "<p>Your appointment was scheduled with " + user.name + " on "
+		    + getNearestDateOnlyFromEpoch(epoch_start_date, timezone) + "</p><p>Duration - " + wce.slot_time
+		    + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
 	    // Saves Contact Email
 	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", wce.email, user.email, null,

@@ -32,13 +32,19 @@ var DealsRouter = Backbone.Router.extend({
 				pipeline_id = 0;
 			
 			$('#content').html(getTemplate("new-opportunity-header", {}));
+			// Add row-fluid if user prefs are set to fluid
+			if (IS_FLUID)
+			{
+				$('#content').find('div.row').removeClass('row').addClass('row-fluid');
+			}
 			pipeline_count = 0;
 			deal_fetching = false;
+			DEALS_LIST_COLLECTION = null;
 			setupDealsTracksList();
 		}
 		else
 		{
-
+			DEALS_LIST_COLLECTION = null;
 			// Fetches deals as list
 			this.opportunityCollectionView = new Base_Collection_View({ url : 'core/api/opportunity/based?pipeline_id='+pipeline_id, templateKey : "opportunities", individual_tag_name : 'tr', sort_collection : false, cursor : true, page_size : 25,
 				postRenderCallback : function(el)

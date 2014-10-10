@@ -2,6 +2,13 @@
 function startGettingDeals(criteria, pending)
 {
 	console.log('------started-----',pipeline_id);
+	var milestoneString = trackListView.collection.get(pipeline_id).toJSON().milestones;
+	if(milestoneString.trim().length == 0){
+		var html = '<div class="slate" style="margin:0px;"><div class="slate-content"><div class="box-left"><img alt="Clipboard" src="/img/clipboard.png"></div><div class="box-right"><h3>You have no milestones defined</h3><br><a href="#milestones" class="btn"><i class="icon icon-plus-sign"></i> Add Milestones</a></div></div></div>';
+		$('#new-opportunity-list-paging').html(html);
+		return;
+	}
+		
 	var milestones = trackListView.collection.get(pipeline_id).toJSON().milestones.split(',');
 	console.log(milestones);
 	createDealsNestedCollection(pipeline_id,milestones);
@@ -50,6 +57,7 @@ function createDealsNestedCollection(pipeline_id,milestones)
 	// Render it
 	$('#new-opportunity-list-paging').html(DEALS_LIST_COLLECTION.render(true).el);
 
+	pipeline_count = 0;
 	// Fetch tasks from DB for first task list
 	fetchForNextDealsList(milestones);
 }
@@ -82,7 +90,7 @@ function initDealListCollection(milestones)
 function dealAppend(base_model)
 {
 	var dealsListModel = new Base_List_View({ model : base_model, "view" : "inline", template : "opportunities-by-paging-model", tagName : 'div',
-		className : "milestone-column", id : base_model.get("heading") });
+		className : "milestone-column", id : base_model.get("heading").replace(/ +/g, '') });
 
 	// Render model in main collection
 	var el = dealsListModel.render().el;
@@ -139,16 +147,22 @@ function dealsFetch(index,milestones)
 		postRenderCallback : function(el)
 		{
 			$('ul.milestones',el).attr('milestone',base_model.get("heading"));
-			deal_infi_scroll($('#'+base_model.get("heading")+'-list-container')[0], dealCollection);
+			
+			if (!readCookie("agile_deal_view"))
+			deal_infi_scroll($('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container')[0], dealCollection);
+			
 			includeTimeAgo(el);
 		} });
 
 	// Fetch task from DB for sub collection
 	dealCollection.collection.fetch({ success : function(data)
-	{
+	{	
 		// Add sub collection in model of main collection.
 		base_model.set('dealCollection', dealCollection.collection);
-		$('#'+base_model.get("heading")+'-list-container').html(dealCollection.render(true).el)
+		$('#'+base_model.get("heading").replace(/ +/g, '')+'-list-container').html(dealCollection.render(true).el)
+		console.log($('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').length);
+		$('#'+base_model.get("heading").replace(/ +/g, '')).find('img.loading_img').hide();
+		$('a.deal-notes').tooltip();
 		// Counter to fetch next sub collection
 		pipeline_count++;
 		setup_deals_in_milestones('opportunities-by-paging-model-list');

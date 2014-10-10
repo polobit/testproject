@@ -434,8 +434,6 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 								return;
 							
 							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
-							includeTimeAgo($("#" + newMilestone));
-							$('a.deal-notes').tooltip();
 							$("#" + oldMilestone).find("#" + id).parent().remove();
 						}else {
 							dealPipelineModel = DEALS_LIST_COLLECTION.collection.where({ heading : newMilestone });
@@ -445,8 +443,6 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 							dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal), {silent:true});
 							console.log('Updating html - ',deal);
 							$("#" + newMilestone).find("#" + id).parent().html(getTemplate('deals-by-paging-model', deal));
-							includeTimeAgo($("#" + newMilestone));
-							$('a.deal-notes').tooltip();
 						}
 						
 					} else if(checkPipeline(deal.pipeline_id)){
@@ -456,6 +452,8 @@ function saveDeal(formId, modalId, saveBtn, json, isUpdate){
 						
 						dealPipelineModel[0].get('dealCollection').add(copyCursor(dealPipelineModel,deal));
 					}
+					includeTimeAgo($("#" + newMilestone));
+					$('a.deal-notes').tooltip();
 				}else 
 				{
 					if (isUpdate)

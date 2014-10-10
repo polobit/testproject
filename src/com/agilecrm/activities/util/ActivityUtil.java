@@ -338,8 +338,8 @@ public class ActivityUtil
     {
 	try
 	{
-	
-	 System.out.println("user " + new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
+
+	    System.out.println("user " + new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId()));
 	    Query<Activity> query = dao.ofy().query(Activity.class);
 	    query.filter("user =", new Key<DomainUser>(DomainUser.class, SessionManager.get().getDomainId())).order(
 		    "time");
@@ -350,7 +350,7 @@ public class ActivityUtil
 	}
 	catch (Exception e)
 	{
-	    System.out.println("error in fetching activities of current domain user "+e.getMessage());
+	    System.out.println("error in fetching activities of current domain user " + e.getMessage());
 	    e.printStackTrace();
 	    return null;
 	}
@@ -519,8 +519,6 @@ public class ActivityUtil
 		    mapvalue[0] = obj.milestone;
 		    mapvalue[1] = oldobj.milestone;
 		    mapvalue[2] = "milestone";
-		    mapvalue[3] = obj.name;
-		    mapvalue[4] = DomainUserUtil.getDomainUser(Long.parseLong(obj.owner_id)).name;
 		    dealmap.put("milestone", mapvalue);
 		}
 	    JSONObject js = new JSONObject(new Gson().toJson(obj));
@@ -548,6 +546,7 @@ public class ActivityUtil
 	}
 	catch (Exception e)
 	{
+	    System.out.println("in catech block in Activity Util " + e.getMessage());
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
@@ -686,6 +685,7 @@ public class ActivityUtil
 	}
 	catch (Exception e)
 	{
+	    System.out.println("in catech block in Activity Util " + e.getMessage());
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
@@ -814,6 +814,7 @@ public class ActivityUtil
 	}
 	catch (Exception e)
 	{
+	    System.out.println("in catech block in Activity Util " + e.getMessage());
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}

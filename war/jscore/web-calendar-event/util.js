@@ -195,6 +195,7 @@ function save_web_event(formId, confirmBtn)
 	
 	// Get details
 	var data = $('#' + formId).serializeArray();
+	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	console.log(data);
 	
 	// Make json
@@ -225,6 +226,7 @@ function save_web_event(formId, confirmBtn)
 	web_calendar_event["domainUserId"] = User_Id;
 	web_calendar_event["agileUserId"] = Agile_User_Id;
 	web_calendar_event["selectedSlotsString"] = [];
+	web_calendar_event["timezone"] = -new Date().getTimezoneOffset();
 
 	// Get selected slots in UI from available slots list.
 	var i = 0;
@@ -259,10 +261,6 @@ function save_web_event(formId, confirmBtn)
 	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
 	// Add selected slots to input json
 	web_calendar_event["selectedSlotsString"] = JSON.stringify(web_calendar_event["selectedSlotsString"]);
-<<<<<<< HEAD
-=======
-
->>>>>>> 5f6e17f... added week day to date in main
 	console.log(web_calendar_event);
 	console.log(JSON.stringify(web_calendar_event));
 

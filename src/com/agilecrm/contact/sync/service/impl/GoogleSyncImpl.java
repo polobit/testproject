@@ -74,7 +74,7 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	    e.printStackTrace();
 	}
 
-	while (i <= MAX_SYNC_LIMIT)
+	while (i < MAX_SYNC_LIMIT)
 	{
 
 	    /**
@@ -190,7 +190,8 @@ public class GoogleSyncImpl extends TwoWaySyncService
 	Query query = null;
 	query = new Query(feedUrl);
 	query.setStartIndex(index);
-	++index;
+	//++index;
+	index+=MAX_FETCH_LIMIT_FOR_GOOGLE;
 	if (previous_synced_time == last_synced_from_client)
 	{
 	    // last_synced_from_client += 4000;

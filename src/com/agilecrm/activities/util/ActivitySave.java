@@ -58,10 +58,10 @@ public class ActivitySave
 	    {
 		if (milestone[0].toString().equalsIgnoreCase("Won"))
 		    ActivityUtil.createDealActivity(ActivityType.DEAL_CLOSE, opportunity, milestone[0].toString(),
-			    milestone[4].toString(), milestone[3].toString());
+			    milestone[1].toString(), milestone[2].toString());
 		else if (milestone[0].toString().equalsIgnoreCase("Lost"))
 		    ActivityUtil.createDealActivity(ActivityType.DEAL_LOST, opportunity, milestone[0].toString(),
-			    milestone[4].toString(), milestone[3].toString());
+			    milestone[1].toString(), milestone[2].toString());
 		else
 		    ActivityUtil.createDealActivity(ActivityType.DEAL_MILESTONE_CHANGE, opportunity,
 			    milestone[0].toString(), milestone[1].toString(), milestone[2].toString());
@@ -523,10 +523,10 @@ public class ActivitySave
 		        String.valueOf(jsn.length()), "Related contact to this Document");
 	    }
 	}
-	
+
 	else
 	{
-	System.out.println("contacts size in else condition "+contactids.size());
+	    System.out.println("contacts size in else condition " + contactids.size());
 	    if (contactids.size() > 0)
 	    {
 		ActivityUtil.createDocumentActivity(ActivityType.DOCUMENT_REMOVE, document, document.url,
