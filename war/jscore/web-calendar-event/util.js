@@ -195,7 +195,7 @@ function save_web_event(formId, confirmBtn)
 	
 	// Get details
 	var data = $('#' + formId).serializeArray();
-	$('#three').addClass('green-bg').html('<i class="fa fa-check"></i>');
+
 	console.log(data);
 	
 	// Make json
