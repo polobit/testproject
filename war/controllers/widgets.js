@@ -23,6 +23,8 @@ var WidgetsRouter = Backbone.Router
 												"Sip" : "Sip", "Sip/:id" : "Sip",
 
 												"Twilio" : "Twilio", "Twilio/:id" : "Twilio",
+												
+												"TwilioIO" : "TwilioIO", "TwilioIO/:id" : "TwilioIO",
 
 												"FreshBooks" : "FreshBooks", "FreshBooks/:id" : "FreshBooks",
 
@@ -283,6 +285,20 @@ var WidgetsRouter = Backbone.Router
 																else
 																				fill_form(id, "Sip", 'sip-login');
 
+												},
+												
+												/**
+												 * Manages TwilioIO widget
+												 */
+												TwilioIO : function(id)
+												{
+													if (!id)
+														show_set_up_widget("TwilioIO", 'twilioio-login');
+													else
+														{
+														  fill_form(id, "TwilioIO", 'twilioio-login');
+														  fill_twilioio_numbers();
+														}
 												},
 
 												/**
