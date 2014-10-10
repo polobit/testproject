@@ -1383,7 +1383,7 @@ height: 30px;
 	word-wrap:break-word;
 	width:95%;
 }
-.footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a
+.footer-left a,#refresh-tags,#documents-model-list a,#admin-prefs-tabs-content .tab-content a,#show-schedule-url,#subscribe-ical,span[title='Owner'] i,#contact-documents-model-list i
 {
 	text-decoration:none!important;
 }
@@ -1415,6 +1415,7 @@ border-bottom: 1px solid #ddd;
 padding-bottom: 3px;
 width:75%;
 }
+
 
 /*corousel slider */
 
@@ -1481,6 +1482,7 @@ width:75%;
 .carousel-inner > .active.left {
   left: -100%;
 }
+
 
 .carousel-inner > .active.right {
   left: 100%;
@@ -1571,17 +1573,28 @@ width:75%;
 	
   margin-bottom: 0;
 }
+#plan-details-pane .btn
+{
+	margin-top:20px;
+}
+#attach_card_notification
+{
+	margin-top:0px!important;
+}
+/*ending corousel slider*/
+
 #plan-details-pane
 {
 	position:relative;
 }
-}
+
 #plan-details-pane .btn
 {
 	position:absolute;
 	bottom:31px;
 }
-/*ending corousel slider*/
+
+
 
 
 

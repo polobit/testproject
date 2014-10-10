@@ -74,6 +74,7 @@ ObjectMapper mapper = new ObjectMapper();
 <title>Online Appointment Scheduling - <%=user_name %></title>
 <link rel="stylesheet" href="../css/web-calendar-event/bootstrap.min.css">
 <link rel="stylesheet" href="../css/web-calendar-event/style.css">
+<link rel="stylesheet" href="../css/web-calendar-event/font-awesome.min.css">
 
 <script type="text/javascript" src="../lib/web-calendar-event/jquery.js"></script>
 <script type="text/javascript" src="../lib/jquery.validate.min.js"></script>
@@ -99,13 +100,13 @@ ObjectMapper mapper = new ObjectMapper();
        {
      %>
 	
-		<img src="<%=profile_pic%>" id="avatar" title="<%=user_name%>"/>
-		<p class="lead">Welcome to my scheduling page. Please follow the
+		<img src="<%=profile_pic%>" id="avatar" class="thumbnail" title="<%=user_name%>"/>
+		<p class="lead" style="color: #777;font-size: 19px;text-align: center;font-weight:normal">Welcome to my scheduling page. Please follow the
 			instructions to add an event to my calendar.</p>
 
 		<div class="col-sm-10 segment segment1">
 			<div class="numberlt">1</div>
-			<p class="segmenth">Choose a time slot</p>
+			<div class="event-title">Choose a time slot</div>
 
 		</div>
 
@@ -115,11 +116,11 @@ ObjectMapper mapper = new ObjectMapper();
 				<div class="col-sm-10 segment segment2 me-disable "
 					style="display: table;display:none">
 					<div class="numberlt">2</div>
-					<p class="segmenth">
+					<div class="event-title" style="margin-bottom:7px;">
 						Select date and time <span class="timezone"> <span
 							class="timezone1">Timezone</span>
 						</span>
-					</p>
+					</div>
 					<div class="col-sm-4">
 						<div id="datepick" style="height:215px;"></div>
 					</div>
@@ -136,8 +137,8 @@ ObjectMapper mapper = new ObjectMapper();
 
 				<div class="col-sm-10 segment segment3 me-disable" style="display:none">
 					<div class="numberlt">3</div>
-					<p class="segmenth">
-						Contact Info</span>
+					<p class="segmenth" style="margin-bottom: 10px;margin-top: 5px;font-size: 17px;">
+						Contact Info
 					</p>
 
 					<div class="col-sm-4">
@@ -161,9 +162,10 @@ ObjectMapper mapper = new ObjectMapper();
 				</div>
 
 			</fieldset>
-
+<div align="center" style="margin:0 auto;width:105px;">
 			<input type="submit" value="Confirm" id="confirm" class="me-disable" style="display:none"
 				disabled="disabled" />
+				</div>
 		</form>
 		 <% }else  		   
 		     out.print("Sorry, user is not enrolled with Agile CRM.");  

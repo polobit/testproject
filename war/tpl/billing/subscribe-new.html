@@ -3,7 +3,7 @@
 	<div class="span12">
 		<div class="page-header">
 			<h1>Plan and Upgrade
-				<a href="#" id="cancel-account-request" class="pull-right btn btn-danger" align="center" style="margin-top:10px;">Cancel My Account</a>
+				<a href="#" {{#check_plan "FREE"}} id="cancel-account" {{else}} id="cancel-account-request" {{/check_plan}} class="pull-right btn btn-danger" align="center" style="margin-top:10px;">Cancel My Account</a>
 			</h1>
 		</div>
 	</div>
@@ -220,13 +220,13 @@ For a startup that relies a lot on on-line business, Agile CRM has been an inval
 </div>
 		{{/getSubscriptionBasedOnPlan}} 
 		{{#if billingData}} 
-			{{#if_equals plan.plan_type "FREE"}}
+			{{#check_plan "FREE"}}
 				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
 				Upgrade </a> 
 				{{else}}
 				<a class="btn btn-primary" href="#subscribe-plan" id="account_plan_upgrade">
 				Modify </a> 
-			{{/if_equals}}
+			{{/check_plan}}
 			{{else}} 
 				<a class="btn btn-primary" href="#" id="attach_card_notification"> Upgrade </a>
 	 	{{/if}}

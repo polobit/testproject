@@ -1,8 +1,11 @@
 package com.agilecrm.search.ui.serialize;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.agilecrm.contact.Contact.Type;
 
 /**
  * <code>SearchRule</code> includes details about the search condition built,
@@ -71,5 +74,15 @@ public class SearchRule implements Serializable
     {
 	return LHS + " " + CONDITION + " " + RHS + " " + RHS_NEW + " " + nested_condition + " " + nested_lhs + " "
 		+ nested_rhs;
+    }
+
+    public static void addContactTypeRule(List<SearchRule> rules, Type type)
+    {
+	SearchRule rule = new SearchRule();
+	rule.LHS = "type";
+	rule.CONDITION = RuleCondition.EQUALS;
+	rule.RHS = String.valueOf(type);
+
+	rules.add(rule);
     }
 }

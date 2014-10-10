@@ -25,6 +25,7 @@ import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
@@ -385,30 +386,48 @@ public class ContactUtil
     }
 
     /**
-     * Company Search rule
+     * Company Search rule.
+     * 
+     * Handle exception to avoid search exception if value has special
+     * characters in it
      * 
      * @param companyName
      * @return
      */
-    private static Collection createSearchRule(String companyName)
+    private static Collection<Contact> createSearchRule(String companyName)
     {
 	SearchRule rule = new SearchRule();
 	rule.LHS = "type";
-	rule.CONDITION = rule.CONDITION.EQUALS;
+	rule.CONDITION = RuleCondition.EQUALS;
 	rule.RHS = Contact.COMPANY;
 
 	SearchRule rule1 = new SearchRule();
 	rule1.LHS = "name";
-	rule1.CONDITION = rule.CONDITION.EQUALS;
+	rule1.CONDITION = RuleCondition.EQUALS;
 	rule1.RHS = companyName;
 
 	List<SearchRule> rules = new ArrayList<SearchRule>();
 	rules.add(rule);
 	rules.add(rule1);
 
-	Collection<Contact> c = (Collection<Contact>) new AppengineSearch(Contact.class)
-		.getAdvacnedSearchResults(rules);
-	return c;
+	try
+	{
+	    @SuppressWarnings("unchecked")
+	    Collection<Contact> c = (Collection<Contact>) new AppengineSearch<Contact>(Contact.class)
+		    .getAdvacnedSearchResults(rules);
+	    return c;
+	}
+	catch (ClassCastException e)
+	{
+	    e.printStackTrace();
+	    return new ArrayList<Contact>();
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return new ArrayList<Contact>();
+	}
+
     }
 
     /**
@@ -417,12 +436,14 @@ public class ContactUtil
     public static Contact searchCompany(String companyName)
     {
 	Contact oldContact = null;
-	Collection<Contact>search = createSearchRule(companyName);
-	for(Contact contact:search){
+	Collection<Contact> search = createSearchRule(companyName);
+	for (Contact contact : search)
+	{
 	    ContactField company = contact.getContactFieldByName(Contact.NAME);
-	    if(company.value.equalsIgnoreCase(companyName)){
-		 oldContact = contact;
-		 break;
+	    if (company.value.equalsIgnoreCase(companyName))
+	    {
+		oldContact = contact;
+		break;
 	    }
 	}
 	return oldContact;
@@ -668,10 +689,11 @@ public class ContactUtil
      */
     public static Key<Contact> getCompanyByName(String companyName)
     {
-	Contact contact =  searchCompany(companyName);
-	if(contact != null){
-	    
-	    return new Key(Contact.class,contact.id);
+	Contact contact = searchCompany(companyName);
+	if (contact != null)
+	{
+
+	    return new Key(Contact.class, contact.id);
 	}
 	return null;
 

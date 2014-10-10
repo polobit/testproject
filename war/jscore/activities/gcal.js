@@ -42,7 +42,7 @@ function agile_transform_options(sourceOptions, start, end)
 		return;
 	}
 	
-	head.js('https://apis.google.com/js/client.js', 'https://rawgithub.com/dr-skot/gapi-helper/master/gapi-helper.js', function() {
+	head.js('https://apis.google.com/js/client.js', '/lib/calendar/gapi-helper.js', function() {
 	setupGC(function(){
 			_fetchGCAndAddEvents(sourceOptions, start, end);
 			});
