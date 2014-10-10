@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.channels.Channels;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -28,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.Contact.Type;
@@ -36,6 +38,7 @@ import com.agilecrm.contact.ContactField.FieldType;
 import com.agilecrm.contact.CustomFieldDef;
 import com.agilecrm.contact.CustomFieldDef.SCOPE;
 import com.agilecrm.contact.Note;
+import com.agilecrm.contact.export.util.ContactExportBlobUtil;
 import com.agilecrm.contact.util.BulkActionUtil;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
@@ -53,6 +56,10 @@ import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
+import com.google.appengine.api.files.AppEngineFile;
+import com.google.appengine.api.files.FileService;
+import com.google.appengine.api.files.FileServiceFactory;
+import com.google.appengine.api.files.FileWriteChannel;
 import com.googlecode.objectify.Key;
 
 /**
@@ -215,13 +222,15 @@ public class CSVUtil
 
 	int allowedContacts = billingRestriction.getCurrentLimits().getContactLimit();
 	boolean limitCrossed = false;
+	// stores list of failed contacts in beans with causes
+	List<FailedContactBean> failedContacts = new ArrayList<FailedContactBean>();
 
-	List<String[]> contacts = getCSVDataFromStream(blobStream, "UTF-8");
+	List<String[]> csvData = getCSVDataFromStream(blobStream, "UTF-8");
 
-	if (contacts.isEmpty())
+	if (csvData.isEmpty())
 	    return;
-
-	String[] headings = contacts.remove(0);
+	// extract csv heading from csv file
+	String[] headings = csvData.remove(0);
 
 	contact.type = Contact.Type.PERSON;
 
@@ -239,7 +248,7 @@ public class CSVUtil
 
 	BulkActionUtil.setSessionManager(domainUser);
 
-	System.out.println(contacts.size());
+	System.out.println(csvData.size());
 
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
@@ -252,175 +261,223 @@ public class CSVUtil
 	/**
 	 * Iterates through all the records from blob
 	 */
-	for (String[] csvValues : contacts)
+	for (String[] csvValues : csvData)
 	{
 	    // Set to hold the notes column positions so they can be created
 	    // after a contact is created.
 	    Set<Integer> notes_positions = new TreeSet<Integer>();
-
 	    Contact tempContact = new Contact();
 
-	    // Cloning so that wrong tags don't get to some contact if previous
-	    // contact is merged with exiting contact
-	    tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
-	    tempContact.setContactOwner(ownerKey);
-
-	    tempContact.properties = new ArrayList<ContactField>();
-
-	    for (int j = 0; j < csvValues.length; j++)
-	    {
-
-		if (StringUtils.isBlank(csvValues[j]))
-		    continue;
-
-		csvValues[j] = csvValues[j].trim();
-
-		ContactField field = properties.get(j);
-
-		// This is hardcoding but found no way to get
-		// tags
-		// from the CSV file
-		if (field == null)
-		{
-		    continue;
-		}
-
-		if ("tags".equals(field.name))
-		{
-		    // Multiple tags are supported. Multiple tags are added
-		    // split at , or ;
-		    String[] tagsArray = csvValues[j].split("[,;]+");
-
-		    for (String tag : tagsArray)
-			tempContact.tags.add(tag);
-		    continue;
-		}
-		if (Contact.ADDRESS.equals(field.name))
-		{
-		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
-
-		    JSONObject addressJSON = new JSONObject();
-
-		    try
-		    {
-			if (addressField != null && addressField.value != null)
-			{
-			    addressJSON = new JSONObject(addressField.value);
-			    addressJSON.put(field.value, csvValues[j]);
-			    addressField.value = addressJSON.toString();
-			}
-			else
-			{
-			    addressJSON.put(field.value, csvValues[j]);
-			    tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
-				    field.type.toString()));
-			}
-
-		    }
-		    catch (JSONException e)
-		    {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
-		    continue;
-		}
-		if ("note".equals(field.name))
-		{
-		    notes_positions.add(j);
-		    continue;
-		}
-
-		// To avoid saving ignore field value/ and avoid fields with
-		// empty values
-		if (field.name == null || StringUtils.isEmpty(field.value))
-		    continue;
-
-		field.value = csvValues[j];
-		
-		if (field.type.equals(FieldType.CUSTOM))
-		{
-		    List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.CONTACT,
-			    "DATE");
-		    for (CustomFieldDef customFieldDef : customFields)
-		    {
-			if (field.name.equalsIgnoreCase(customFieldDef.field_label))
-			{
-			    String customDate = csvValues[j];
-			    
-			    if (customDate!= null && !customDate.isEmpty())
-			    {
-				// date is dd/MM/yyyy format
-				String[] data = customDate.split("/");
-				if (data.length == 3)
-				{
-				    Calendar c = Calendar.getInstance();
-				    int year = Integer.parseInt(data[2]);
-				    int month = Integer.parseInt(data[0]);
-				    int day = Integer.parseInt(data[1]);
-				    c.set(year, month - 1, day);
-				    Date date = c.getTime();
-				    field.value = ""+date.getTime() / 1000;
-				}else {
-				    field.value = null;
-				}
-				
-
-			    }
-			  
-			}
-		    }
-		}
-
-		tempContact.properties.add(field);
-
-	    }
-
-	    if (!isValidFields(tempContact, status))
-		continue;
-
 	    boolean isMerged = false;
-
-	    // If contact is duplicate, it fetches old contact and updates data.
-	    if (ContactUtil.isDuplicateContact(tempContact))
-	    {
-		// Checks if user can update the contact
-
-		// Sets current object to check scope
-
-		tempContact = ContactUtil.mergeContactFields(tempContact);
-		isMerged = true;
-	    }
-	    else
-	    {
-
-		// If it is new contacts billingRestriction count is increased
-		// and checked with plan limits
-
-		++billingRestriction.contacts_count;
-		if (limitCrossed)
-		{
-		    ++limitExceeded;
-		    continue;
-		}
-
-		if (billingRestriction.contacts_count >= allowedContacts)
-		{
-		    limitCrossed = true;
-
-		    continue;
-		}
-	    }
-
 	    try
 	    {
+		// create dummy contact
+
+		// Cloning so that wrong tags don't get to some contact if
+		// previous
+		// contact is merged with exiting contact
+		tempContact.tags = (LinkedHashSet<String>) contact.tags.clone();
+		tempContact.setContactOwner(ownerKey);
+
+		tempContact.properties = new ArrayList<ContactField>();
+
+		for (int j = 0; j < csvValues.length; j++)
+		{
+
+		    if (StringUtils.isBlank(csvValues[j]))
+			continue;
+
+		    csvValues[j] = csvValues[j].trim();
+
+		    ContactField field = properties.get(j);
+
+		    // This is hardcoding but found no way to get
+		    // tags
+		    // from the CSV file
+		    if (field == null)
+		    {
+			continue;
+		    }
+
+		    if ("tags".equals(field.name))
+		    {
+			// Multiple tags are supported. Multiple tags are added
+			// split at , or ;
+			String[] tagsArray = csvValues[j].split("[,;]+");
+
+			for (String tag : tagsArray)
+			    tempContact.tags.add(tag);
+			continue;
+		    }
+		    if (Contact.ADDRESS.equals(field.name))
+		    {
+			ContactField addressField = tempContact.getContactField(contact.ADDRESS);
+
+			JSONObject addressJSON = new JSONObject();
+
+			try
+			{
+			    if (addressField != null && addressField.value != null)
+			    {
+				addressJSON = new JSONObject(addressField.value);
+				addressJSON.put(field.value, csvValues[j]);
+				addressField.value = addressJSON.toString();
+			    }
+			    else
+			    {
+				addressJSON.put(field.value, csvValues[j]);
+				tempContact.properties.add(new ContactField(Contact.ADDRESS, addressJSON.toString(),
+					field.type.toString()));
+			    }
+
+			}
+			catch (JSONException e)
+			{
+			    e.printStackTrace();
+			}
+			continue;
+		    }
+		    if ("note".equals(field.name))
+		    {
+			notes_positions.add(j);
+			continue;
+		    }
+
+		    // To avoid saving ignore field value/ and avoid fields with
+		    // empty values
+		    if (field.name == null)
+			continue;
+
+		    field.value = csvValues[j];
+
+		    if (field.type.equals(FieldType.CUSTOM))
+		    {
+			List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
+				SCOPE.CONTACT, "DATE");
+			for (CustomFieldDef customFieldDef : customFields)
+			{
+			    if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+			    {
+				String customDate = csvValues[j];
+
+				if (customDate != null && !customDate.isEmpty())
+				{
+				    // date is dd/MM/yyyy format
+				    String[] data = customDate.split("-");
+				    if (data.length == 3)
+				    {
+					try
+					{
+					    Calendar c = Calendar.getInstance();
+					    int year = Integer.parseInt(data[2].trim());
+					    int month = Integer.parseInt(data[1].trim());
+					    int day = Integer.parseInt(data[0].trim());
+					    c.set(year, month - 1, day);
+					    Date date = c.getTime();
+					    if (month > 11)
+					    {
+						field.value = null;
+					    }
+					    else
+					    {
+						field.value = "" + date.getTime() / 1000;
+					    }
+					}
+					catch (NumberFormatException e)
+					{
+					    e.printStackTrace();
+					}
+
+				    }
+				    else
+				    {
+					field.value = null;
+				    }
+
+				}
+
+			    }
+			}
+
+			// set image in custom fields
+			if (field.name.equalsIgnoreCase(Contact.IMAGE))
+			{
+			    List<CustomFieldDef> imagefield = CustomFieldDefUtil.getCustomFieldsByScopeAndType(
+				    SCOPE.CONTACT, "text");
+
+			    for (CustomFieldDef customFieldDef : imagefield)
+			    {
+				if (field.name.equalsIgnoreCase(customFieldDef.field_label))
+				{
+				    String img = csvValues[j];
+				    if (!StringUtils.isBlank(img))
+				    {
+					field.value = img;
+				    }
+				}
+			    }
+			}
+
+		    }
+
+		    tempContact.properties.add(field);
+
+		}// end of inner for loop
+
+		// Contact dummy = getDummyContact(properties, csvValues);
+
+		if (!isValidFields(tempContact, status, failedContacts, properties, csvValues))
+
+		    continue;
+
+		// If contact is duplicate, it fetches old contact and updates
+		// data.
+		if (ContactUtil.isDuplicateContact(tempContact))
+		{
+		    // Checks if user can update the contact
+
+		    // Sets current object to check scope
+
+		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    isMerged = true;
+		}
+		else
+		{
+
+		    // If it is new contacts billingRestriction count is
+		    // increased
+		    // and checked with plan limits
+
+		    ++billingRestriction.contacts_count;
+		    if (limitCrossed)
+		    {
+			++limitExceeded;
+			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+				"limit is exceeded"));
+			continue;
+		    }
+
+		    if (billingRestriction.contacts_count >= allowedContacts)
+		    {
+			limitCrossed = true;
+
+			continue;
+		    }
+		}
+
 		tempContact.save();
-	    }
+	    }// end of try
 	    catch (Exception e)
 	    {
+
 		System.out.println("exception raised while saving contact ");
 		e.printStackTrace();
 
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getCause()
+			.getMessage()));
+
 	    }
+
 	    if (isMerged)
 	    {
 		mergedContacts++;
@@ -453,11 +510,11 @@ public class CSVUtil
 		e.printStackTrace();
 	    }
 
-	}
+	}// end of for loop
 
 	calculateTotalFailedContacts(status);
 
-	buildCSVImportStatus(status, ImportStatus.TOTAL, contacts.size());
+	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
 
 	if (mergedContacts > 0)
 	{
@@ -481,6 +538,11 @@ public class CSVUtil
 
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
+	// create failed contact csv
+	if (failedContacts.size() > 0)
+	{
+	    buildFailedContacts(domainUser.email, failedContacts, headings);
+	}
     }
 
     /**
@@ -566,8 +628,6 @@ public class CSVUtil
 		    continue;
 		}
 
-	
-
 		if (Contact.ADDRESS.equals(field.name))
 		{
 		    ContactField addressField = tempContact.getContactField(contact.ADDRESS);
@@ -611,7 +671,7 @@ public class CSVUtil
 		{
 		    field.value = csvValues[j];
 		}
-		
+
 		if (field.type.equals(FieldType.CUSTOM))
 		{
 		    List<CustomFieldDef> customFields = CustomFieldDefUtil.getCustomFieldsByScopeAndType(SCOPE.COMPANY,
@@ -621,31 +681,47 @@ public class CSVUtil
 			if (field.name.equalsIgnoreCase(customFieldDef.field_label))
 			{
 			    String customDate = csvValues[j];
-			    
-			    if (customDate!= null && !customDate.isEmpty())
+
+			    if (customDate != null && !customDate.isEmpty())
 			    {
-				// date is dd/MM/yyyy format
-				String[] data = customDate.split("/");
+				// date is dd-MM-yyyy format
+				String[] data = customDate.split("-");
 				if (data.length == 3)
 				{
-				    Calendar c = Calendar.getInstance();
-				    int year = Integer.parseInt(data[2]);
-				    int month = Integer.parseInt(data[0]);
-				    int day = Integer.parseInt(data[1]);
-				    c.set(year, month - 1, day);
-				    Date date = c.getTime();
-				    field.value = ""+date.getTime() / 1000;
-				}else {
+
+				    try
+				    {
+					Calendar c = Calendar.getInstance();
+					int year = Integer.parseInt(data[2].trim());
+					int month = Integer.parseInt(data[1].trim());
+					int day = Integer.parseInt(data[0].trim());
+					c.set(year, month - 1, day);
+					Date date = c.getTime();
+					if (month > 11)
+					{
+					    field.value = null;
+					}
+					else
+					{
+					    field.value = "" + date.getTime() / 1000;
+					}
+				    }
+				    catch (NumberFormatException e)
+				    {
+					e.printStackTrace();
+				    }
+
+				}
+				else
+				{
 				    field.value = null;
 				}
-				
 
 			    }
-			  
+
 			}
 		    }
 		}
-		
 
 		tempContact.properties.add(field);
 
@@ -782,27 +858,29 @@ public class CSVUtil
 	status.put(ImportStatus.TOTAL_FAILED, total);
     }
 
-    public boolean isValidFields(Contact contact, Map<Object, Object> statusMap)
+    public boolean isValidFields(Contact contact, Map<Object, Object> statusMap, List<FailedContactBean> failed,
+	    List<ContactField> properties, String[] csvValues)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
-		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "First name field can't be blank"));
+	    return false;
+	}
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
+	{
+	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Last name field can't be blank"));
 	    return false;
 	}
 
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Email field can't be blank"));
 	    return false;
 	}
 
-	/*
-	 * Iterator<ContactField> iterator = contact.properties.iterator();
-	 * while (iterator.hasNext()) { ContactField field = iterator.next(); if
-	 * (Contact.WEBSITE.equals(field.name) && !isValidURL(field.value))
-	 * iterator.remove(); }
-	 */
 	return true;
     }
 
@@ -825,7 +903,7 @@ public class CSVUtil
 	Integer nameMissing = 0;
 	Integer trackMissing = 0;
 	Integer milestoneMissing = 0;
-	boolean milestoneFlag = true;
+
 	/**
 	 * Reading CSV file from input stream
 	 */
@@ -853,7 +931,9 @@ public class CSVUtil
 	    Opportunity opportunity = new Opportunity();
 	    String[] dealPropValues = it.next();
 	    String mileStoneValue = null;
-
+	    boolean trackFound = false;
+	    boolean milestoneFound = false;
+	    boolean wrongMilestone = false;
 	    ArrayList<CustomFieldData> customFields = new ArrayList<CustomFieldData>();
 	    List<Milestone> list = null;
 	    for (int i = 0; i < dealPropValues.length; i++)
@@ -876,6 +956,7 @@ public class CSVUtil
 			else if (value.equalsIgnoreCase("track"))
 			{
 			    String trackName = dealPropValues[i];
+			    trackFound = true;
 
 			    list = MilestoneUtil.getMilestonesList(trackName);
 			    if (list.size() == 0)
@@ -898,32 +979,60 @@ public class CSVUtil
 			{
 
 			    mileStoneValue = dealPropValues[i];
-
-			    if (mileStoneValue != null && (!mileStoneValue.isEmpty()))
+			    milestoneFound = true;
+			    if (trackFound)
 			    {
-				if (list != null)
+				// check list of milestone if track is correct
+				// then list may have some value
+				if (!StringUtils.isBlank(mileStoneValue) && list.size() > 0)
 				{
 				    for (Milestone m : list)
 				    {
-					String[] milestonesName = m.milestones.split(",");
-					for (String s : milestonesName)
+					String[] values = m.milestones.split(",");
+					for (String s : values)
 					{
 					    if (s.equalsIgnoreCase(mileStoneValue))
 					    {
-						opportunity.milestone = mileStoneValue;
+						opportunity.milestone = s;
 						opportunity.pipeline_id = m.id;
-						milestoneFlag = true;
+						wrongMilestone = false;
 						break;
 					    }
 					    else
 					    {
-						milestoneFlag = false;
+						wrongMilestone = true;
 					    }
-
 					}
 				    }
 				}
-
+			    }
+			    else
+			    {
+				Milestone defaultMilestone = MilestoneUtil.getMilestones();
+				if (defaultMilestone != null)
+				{
+				    String[] values = defaultMilestone.milestones.split(",");
+				    // search milestone in default track
+				    if (!StringUtils.isEmpty(mileStoneValue))
+				    {
+					for (String s : values)
+					{
+					    if (s.equalsIgnoreCase(mileStoneValue))
+					    {
+						opportunity.milestone = s;
+						wrongMilestone = false;
+						break;
+					    }
+					    else
+					    {
+						wrongMilestone = true;
+					    }
+					}
+				    }
+				}
+				// set deals to default track
+				opportunity.pipeline_id = defaultMilestone.id;
+				// get default track
 			    }
 
 			}
@@ -980,17 +1089,31 @@ public class CSVUtil
 			    String dealDate = dealPropValues[i];
 			    if (dealDate != null && !dealDate.isEmpty())
 			    {
-				// date is dd/MM/yyyy format
-				String[] data = dealDate.split("/");
+				// date is dd-MM-yyyy format
+				String[] data = dealDate.split("-");
 				if (data.length == 3)
 				{
-				    Calendar c = Calendar.getInstance();
-				    int year = Integer.parseInt(data[2]);
-				    int month = Integer.parseInt(data[0]);
-				    int day = Integer.parseInt(data[1]);
-				    c.set(year, month - 1, day);
-				    Date date = c.getTime();
-				    opportunity.close_date = date.getTime() / 1000;
+				    try
+				    {
+					Calendar c = Calendar.getInstance();
+					int year = Integer.parseInt(data[2].trim());
+					int month = Integer.parseInt(data[1].trim());
+					int day = Integer.parseInt(data[0].trim());
+					c.set(year, month - 1, day);
+					Date date = c.getTime();
+					if (month > 11)
+					{
+					    opportunity.close_date = null;
+					}
+					else
+					{
+					    opportunity.close_date = date.getTime() / 1000;
+					}
+				    }
+				    catch (NumberFormatException e)
+				    {
+					e.printStackTrace();
+				    }
 				}
 				else
 				{
@@ -1047,69 +1170,51 @@ public class CSVUtil
 
 	    opportunity.setOpportunityOwner(ownerKey);
 
-	    // if trackmissing is 0 then track is not mapped set it to default
-	    if (trackMissing == 0 && opportunity.track == null)
+	    // case2: if track is mapped and milestone is not mapped then deal
+	    // should
+	    // go in that track and first milestone value
+	    if (StringUtils.isEmpty(opportunity.milestone) && trackFound && list.size() > 0)
 	    {
-		opportunity.track = "Default";
-
-		if (mileStoneValue == null)
+		Milestone milestone = list.get(0);
+		if (milestone != null)
 		{
-		    Milestone m = MilestoneUtil.getDefaultMilestones();
-		    String[] values = m.milestones.split(",");
-		    if (values.length > 0 && milestoneFlag)
-		    {
-			opportunity.milestone = values[0];
-		    }
+		    String[] values = milestone.milestones.split(",");
+		    opportunity.milestone = values[0];
+		    opportunity.pipeline_id = milestone.id;
 		}
 	    }
 
-	    // Case: if track exist or mapped and milestone is not mapped then
-	    // deals should go in mapped track's first milestone
-
-	    if (opportunity.track != null && opportunity.milestone == null)
+	    // case3: if track and milestone both are not mapped then deal
+	    // should go
+	    // in default track of first milestone
+	    if (!trackFound && !milestoneFound)
 	    {
-		// case:if milestone get mapped but value is null or empty
-		// string that means it wrong milestone we should fail that deal
-		// by setting milestoneFlag false
-
-		// if milestone value is null that means its not get mapped in
-		// csv then deals is going in default track of first milestone
-		if (mileStoneValue != null && mileStoneValue.isEmpty())
+		Milestone milestone = MilestoneUtil.getMilestones();
+		if (milestone != null)
 		{
-		    milestoneFlag = false;
+		    opportunity.pipeline_id = milestone.id;
+		    String[] values = milestone.milestones.split(",");
+		    opportunity.milestone = values[0];
 		}
-
-		// if track is exits
-		if (list != null && list.size() > 0)
-		{
-		    Milestone mile = list.get(0);
-		    opportunity.pipeline_id = mile.id;
-		    String[] values = mile.milestones.split(",");
-		    if (values.length > 0 && milestoneFlag)
-		    {
-			opportunity.milestone = values[0];
-		    }
-		}
-
 	    }
 
 	    // add all custom field in deals
 	    opportunity.custom_data = customFields;
 	    try
 	    {
-		if (opportunity.name != null && (!opportunity.name.isEmpty()) && opportunity.track != null
-			&& opportunity.milestone != null && milestoneFlag)
+		if (!StringUtils.isEmpty(opportunity.name) && opportunity.pipeline_id != null
+			&& opportunity.milestone != null && !wrongMilestone)
 		{
 		    opportunity.save();
 		    savedDeals++;
 		}
 		else
 		{
-		    if (opportunity.name == null || opportunity.name.isEmpty())
+		    if (StringUtils.isEmpty(opportunity.name))
 		    {
 			nameMissing++;
 		    }
-		    else if (!milestoneFlag)
+		    if (wrongMilestone)
 		    {
 			buildDealsImportStatus(status, "MILESTONE", ++milestoneMissing);
 		    }
@@ -1163,11 +1268,203 @@ public class CSVUtil
 
     }
 
+    /**
+     * parse string data
+     * 
+     * @param data
+     * @return
+     */
     private String parse(String data)
     {
-	String val = data.replaceAll("[\\W A-Za-z]", "");
-	System.out.println(val);
-	return val.trim();
+	String parseVal = data.replaceAll("[\\W A-Za-z]", "");
+	System.out.println(parseVal);
+	return parseVal.trim();
+    }
+
+    /**
+     * build failed contact csv file
+     * 
+     * @param contact
+     */
+    private void buildFailedContacts(String domainUser, List<FailedContactBean> failedContacts, String[] headings)
+    {
+	String path = null;
+	try
+	{
+	    // Get a file service
+	    FileService fileService = FileServiceFactory.getFileService();
+
+	    // Create a new Blob file with mime-type "text/csv"
+	    AppEngineFile file = fileService.createNewBlobFile("text/csv", "Failed Contacts.csv");
+
+	    // Open a channel to write to it
+	    boolean lock = false;
+	    FileWriteChannel writeChannel = fileService.openWriteChannel(file, lock);
+
+	    // Builds Contact CSV
+	    writeFailedContactsInCSV(writeChannel, failedContacts, headings);
+
+	    // Blob file Path
+	    path = file.getFullPath();
+
+	    lock = true;
+	    writeChannel = fileService.openWriteChannel(file, lock);
+
+	    writeChannel.closeFinally();
+
+	    // Retrieves partitions of data of a file having given path
+	    List<String> fileData = ContactExportBlobUtil.retrieveBlobFileData(path);
+
+	    // Send every partition as separate email
+	    for (String partition : fileData)
+		sendFailedContactImportFile(domainUser, partition, String.valueOf(failedContacts.size()));
+
+	    // Deletes blob
+	    ContactExportBlobUtil.deleteBlobFile(path);
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	}
+
+    }
+
+    /**
+     * write contacts in csv file
+     * 
+     * @param contact
+     * @return
+     */
+
+    public void writeFailedContactsInCSV(FileWriteChannel channel, List<FailedContactBean> failedContacts,
+	    String[] headings)
+    {
+	try
+	{
+	    CSVWriter writer = new CSVWriter(Channels.newWriter(channel, "UTF8"));
+
+	    writer.writeNext(getHeading(headings));
+	    for (FailedContactBean bean : failedContacts)
+	    {
+
+		writer.writeNext(toArray(toList(bean.getContact().properties), bean.getCauses()));
+
+	    }
+
+	    writer.close();
+
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    System.err.println("Exception occured in writeContactCSV " + e.getMessage());
+	}
+    }
+
+    /**
+     * helper function which convert contact property into Array of string for
+     * write data in file
+     * 
+     * @param contact
+     * @return
+     */
+    private String[] getHeading(String[] csvHeading)
+    {
+	String[] headings = new String[csvHeading.length + 1];
+	int i = 0;
+	for (String s : csvHeading)
+	{
+	    headings[i++] = s;
+	}
+	headings[i] = "Error";
+	return headings;
+
+    }
+
+    private String[] toArray(List<String> properties, String errorMsg)
+    {
+
+	properties.add(errorMsg);
+	String[] values = new String[properties.size()];
+
+	int i = 0;
+	for (String s : properties)
+	{
+	    values[i++] = s;
+	}
+
+	return values;
+
+    }
+
+    /**
+     * helper function which convert contact property into Array of string for
+     * write data in file
+     * 
+     * @param contact
+     * @return
+     */
+    private List<String> toList(List<ContactField> contactProperties)
+    {
+	List<String> list = new ArrayList<String>();
+	for (ContactField field : contactProperties)
+	{
+	    list.add(field.value);
+	}
+
+	return list;
+    }
+
+    /**
+     * send failed contact csv in mail
+     * 
+     */
+    public void sendFailedContactImportFile(String currentUserEmail, String csvData, String totalRecords)
+    {
+	if (csvData == null)
+	{
+	    System.out.println("Rejected to export csv. Data is null.");
+	    return;
+	}
+
+	System.out.println("Domain User email is " + currentUserEmail);
+
+	// Mandrill attachment should contain mime-type, file-name and
+	// file-content.
+	String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
+
+	System.out.println("Data size is " + csvData.length());
+
+	HashMap<String, String> map = new HashMap<String, String>();
+	map.put("count", totalRecords);
+
+	SendMail.sendMail(currentUserEmail, "Failed Contacts", SendMail.EXPORT_CONTACTS_CSV, map,
+		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+    }
+
+    /**
+     * Helper function create dummy contact
+     * 
+     * @param schema
+     * @param csvData
+     * @return Contact
+     */
+    public Contact getDummyContact(List<ContactField> contactProperties, String[] csvData)
+    {
+
+	Contact dummyContact = new Contact();
+
+	for (int j = 0; j < csvData.length; j++)
+	{
+
+	    ContactField temp = contactProperties.get(j);
+
+	    ContactField field = new ContactField(temp.name, csvData[j], temp.subtype);
+
+	    dummyContact.properties.add(field);
+	}
+	return dummyContact;
     }
 
 }
