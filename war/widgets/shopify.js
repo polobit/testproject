@@ -113,7 +113,7 @@ function showShopifyClient(shop)
 												var name = agile_crm_get_contact_property("first_name") + " " + agile_crm_get_contact_property("last_name");
 												var d = data;
 												console.log("total spent " + d[0].customer.total_spent);
-												data.unshift({ "name" : name, "shop" : shop, "total_spent" : d[0].customer.total_spent, "currency" : d[0].currency });
+												data.unshift({ "name" : name,"id":d[0].customer.id, "shop" : shop, "total_spent" : d[0].customer.total_spent, "currency" : d[0].currency });
 												console.log("customer info " + name);
 												console.log("final data " + data);
 												var template = getTemplate('shopify-profile', data);

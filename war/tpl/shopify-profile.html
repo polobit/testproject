@@ -61,7 +61,7 @@
 <div class="widget_content">
 
 
-<li><a href="https://{{this.0.shop}}/admin/customers" target="_blank">{{this.0.name}}</a></li>
+<li><a href="https://{{this.0.shop}}/admin/customers/{{this.0.id}}" target="_blank">{{this.0.name}}</a></li>
 
 <div>Total spent &nbsp;&nbsp;{{this.0.currency}}&nbsp; {{this.0.total_spent}}</div>
 </div>
@@ -85,7 +85,7 @@
 
 
 <div class="pull-left">
-<small><time class="time-ago pull-left" datetime="{{created_at}}">{{iso_date_to_normalizeDate created_at}}</time></small></div>					
+<small><time class="time-ago pull-left" datetime="{{updated_at}}">{{iso_date_to_normalizeDate updated_at}}</time></small></div>					
 <div class="pull-right"><span class="badge">{{financial_status}}</span></div><br>
 </li>
 </ul>
