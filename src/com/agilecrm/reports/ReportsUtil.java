@@ -17,8 +17,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Contact.Type;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.reports.deferred.ReportsInstantEmailDeferredTask;
+import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.search.util.SearchUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.ErrorMessages;
@@ -128,6 +130,7 @@ public class ReportsUtil
      */
     public static Map<String, Object> processReports(Reports report)
     {
+	SearchRule.addContactTypeRule(report.rules, Type.PERSON);
 
 	// Iterate through each filter and add results collection
 	// To store reports in collection

@@ -105,7 +105,7 @@ function addAddonTabTemplate(data, url, callback, container)
              if(json.name == "Send Message"){
             	 var list = getTwilioIncomingList();
             	    	 if($.isEmptyObject(list)){
-            		 alert("Please configure twilio in integrations");
+            		 alert("You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations");
             		 return;
             	}
              } 

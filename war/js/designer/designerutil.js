@@ -94,7 +94,7 @@ function getMergeFields(type)
 function getUpdateFields(type)
 {
 	 
-	var options = 
+	var options=
 	{
 		
 		"First Name": "first_name",

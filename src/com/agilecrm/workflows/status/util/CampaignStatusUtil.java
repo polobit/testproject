@@ -65,21 +65,6 @@ public class CampaignStatusUtil
 	{
 	    e.printStackTrace();
 	    System.err.print("Exception occured while setting campaign-status " + e.getMessage());
-
-	    try
-	    {
-		StringWriter errors = new StringWriter();
-		e.printStackTrace(new PrintWriter(errors));
-		String errorString = errors.toString();
-
-		Mailgun.sendMail("exception@campaignstatus.com", "CampaignStatus Observer", "naresh@faxdesk.com", null,
-		        null, "Exception occured while setting campaign status...", null, null, errorString);
-	    }
-	    catch (Exception ex)
-	    {
-		ex.printStackTrace();
-		System.err.println("Exception occured while sending campaign status mail " + e.getMessage());
-	    }
 	}
     }
 

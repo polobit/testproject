@@ -469,7 +469,7 @@ public class WebCalendarEventUtil
 		newEvnt.title = wce.name.concat(" with ".concat(wce.userName)); // name
 		newEvnt.start = slot.get(0); // start time
 		newEvnt.end = slot.get(1); // end time
-		newEvnt.color="#36C";
+		newEvnt.color = "#36C";
 
 		String cid = contact.id.toString(); // related contact
 
@@ -493,7 +493,7 @@ public class WebCalendarEventUtil
 		    + "</p><p>Duration - " + wce.slot_time + " minutes</p><p>Note message : " + wce.notes + "</p>";
 
 	    // Saves Contact Email
-	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", wce.email, null, null,
+	    ContactEmailUtil.saveContactEmailAndSend("noreply@agilecrm.com", "Agile CRM", wce.email, user.email, null,
 		    "Appointment Scheduled", body, "-", contact, false);
 	}
 	return "Done";
@@ -562,4 +562,58 @@ public class WebCalendarEventUtil
 	return null;
 
     }
+
+    // Get Nearest Date only (12am)
+    public static String getNearestDateOnlyFromEpoch(long timeInMilliSecs, String timeZone)
+    {
+	System.out.println(timeZone);
+
+	DateFormat dateFormat = new SimpleDateFormat("EEE, MMMM d yyyy, h:mm a");
+	return getGMTDateInMilliSecFromTimeZoneId(timeZone, timeInMilliSecs * 1000, dateFormat);
+    }
+
+    // Get string of date based on timeZone
+    public static String getGMTDateInMilliSecFromTimeZoneId(String timeZoneId, long timeInMilliSecs,
+	    DateFormat dateFormat)
+    {
+
+	if (dateFormat == null)
+	{
+	    dateFormat = new SimpleDateFormat();
+	}
+
+	if (timeZoneId == null || timeZoneId.trim().length() == 0)
+	{
+	    return dateFormat.format(new Date());
+	}
+
+	Calendar cal = Calendar.getInstance();
+	cal.setTimeInMillis(timeInMilliSecs);
+	try
+	{
+	    // Convert timezone id
+	    // timeZoneId = (timeZoneId.startsWith("-")) ?
+	    // timeZoneId.replace("-", "") : "-" + timeZoneId.replace("+", "");
+	    // timeZoneId = timeZoneId.replace("-", "");
+
+	    // converting offset time to milliseconds
+	    int offset = Integer.parseInt(timeZoneId) * 60 * 1000;
+
+	    // zone id's based on offset
+	    String[] idsArr = TimeZone.getAvailableIDs(offset);
+
+	    TimeZone tz = TimeZone.getTimeZone(idsArr[0]);
+	    dateFormat.setTimeZone(tz);
+	    cal.setTimeZone(tz);
+	    return dateFormat.format(cal.getTime());
+	}
+	catch (Exception e)
+	{
+	    // TODO: handle exception
+	    e.printStackTrace();
+	}
+
+	return dateFormat.format(new Date());
+    }
+
 }

@@ -14,15 +14,16 @@ import com.agilecrm.subscription.limits.PlanLimits;
 public class ProPlanLimits extends PlanLimits
 {
 
-    {
-	contactLimit = Integer.MAX_VALUE;
-	emailsLimit = 5000;
-	workflowLimit = Integer.MAX_VALUE;
-	googleContactsLimit = 1000;
-	webRuleLimit = 10;
-	pageViewsLimit = 20000;
-	reporting = "ALL";
-	whiteLabelEnabled = true;
-    }
+	{
+		contactLimit = Integer.MAX_VALUE;
+		emailsLimit = 5000;
+		workflowLimit = Integer.MAX_VALUE;
+		googleContactsLimit = 1000;
+		webRuleLimit = 10;
+		pageViewsLimit = 20000;
+		reporting = "ALL";
+		whiteLabelEnabled = true;
+		campaignNodesLimit = 50;
+	}
 
 }
