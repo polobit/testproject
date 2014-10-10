@@ -525,7 +525,8 @@ var ContactsRouter = Backbone.Router.extend({
 				$(".contact-make-twilio-call").hide();
 				$(".contact-make-call").hide();
 			}
-			else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+			else if(Twilio_Start == true)
+			//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")			
 			{
 				$(".contact-make-sip-call").hide();
 				$(".contact-make-twilio-call").show();
@@ -547,7 +548,8 @@ var ContactsRouter = Backbone.Router.extend({
 			$(".contact-make-twilio-call").hide();
 			$(".contact-make-call").hide();
 		}
-		else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+		//else if (Twilio.Device.status() == "ready" || Twilio.Device.status() == "busy")
+		else if(Twilio_Start == true)
 		{
 			$(".contact-make-sip-call").hide();
 			$(".contact-make-twilio-call").show();

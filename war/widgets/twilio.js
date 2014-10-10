@@ -105,7 +105,7 @@ $(function()
 // If twilio call is in progress and tab/page is changed so display call noty.
 function hashchanged()
 {
-	console.log("window.location.href");
+	/*console.log("window.location.href");
 	console.log(window.location.href);
 	console.log(Twilio_Call_Noty);
 	console.log(Twilio.Device.status());
@@ -116,7 +116,7 @@ function hashchanged()
 	if (Twilio.Device.status() == "busy" && Twilio_Call_Noty == undefined)
 	{
 		showCallNotyPopup("connected", "Twilio", "<b>On call : </b><br>" + To_Name + "   " + To_Number + "<br>", false);
-	}
+	}*/
 }
 
 /**
