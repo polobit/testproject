@@ -459,14 +459,16 @@ function removeNodeSelection() {
 
 $("#button_email").die().live("click", function(e){
     e.preventDefault();
-    $("#button_email").css('color','gray');
+    $(this).css('color','gray');
     testMailButton("#button_email");
+    $(this).css('color','');
         });
 
 $("#button_email_html").die().live("click", function(e){
     e.preventDefault();
-    $("#button_email_html").css('color','gray');
-    testMailButton("#button_email_html")
+    $(this).css('color','gray');
+    testMailButton("#button_email_html");
+    $(this).css('color','');
         });
 
 
@@ -514,7 +516,6 @@ function testMailButton(button){
    			   $("#confirmation-text").fadeOut(8000,function(){
    				  $("#confirmation-text").remove();
    				  $(button).removeAttr('disabled', 'disabled');
-   				 $(button).css('color','');
    			  });
     		},
     		error: function(Error){
