@@ -133,8 +133,14 @@
 					<option value="url">URL</option> 
 				</select></div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls">
-					<textarea rows="4" class="required" name="script" id="script" value="" style="" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
-					<input type="url" id="url" class="input-medium required widget_input_box" style="width:90%;display:none;" placeholder="Script URL" value="" name="url"></input>
+					<span id="script_div">
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></span>
+						<textarea rows="4" class="required" name="script" id="script" value="" style="" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
+					</span>
+					<span id="url_div" style="display:none;">
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></span>
+						<input type="url" id="url" class="input-medium required widget_input_box" style="width:90%;" placeholder="Webhook URL" value="" name="url"></input>
+					</span>
 				</div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Logo URL" value="" name="logo_url"></input></div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value="" name="mini_logo_url"></input></div></div>
@@ -191,8 +197,14 @@
 					<option value="url">URL</option> 
 				</select></div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls">
-					<textarea rows="4" class="required" name="script" id="script" value={{script}} style="" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
-					<input type="url" id="url" class="input-medium required widget_input_box" style="width:90%;display:none;" placeholder="Script URL" value={{url}} name="url"></input>
+					<span id="script_div">
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-html" target="_blank">widget JS API</a></span>
+						<textarea rows="4" class="required" name="script" id="script" value={{script}} style="" placeholder="Paste your HTML source of widget. It may contain embedded script that make use of Agile widgets API"></textarea>
+					</span>
+					<span id="url_div" style="display:none;">
+						<span class="help-block">Documentation for <a href="https://github.com/agilecrm/widget-api-backend" target="_blank">widget backend API</a></span>
+						<input type="url" id="url" class="input-medium required widget_input_box" style="width:90%;" placeholder="Webhook URL" value={{url}} name="url"></input>
+					</span>
 				</div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Logo URL" value={{logo_url}} name="logo_url"></input></div></div>
 				<div class="control-group" style="margin-bottom:0px"><div class="controls"><input type="url" id="mini_logo_url" class="input-medium required widget_input_box" style="width:90%" placeholder="Mini logo URL" value={{mini_logo_url}} name="mini_logo_url"></input></div></div>

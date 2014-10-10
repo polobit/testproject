@@ -245,15 +245,15 @@ function build_custom_widget_form(el)
 							var script_type = $('#script_type').val();
 							if (script_type == "script")
 							{
-								$('#script').show();
-								$('#url').hide();
+								$('#script_div').show();
+								$('#url_div').hide();
 								return;
 							}
 
 							if (script_type == "url")
 							{
-								$('#script').hide();
-								$('#url').show();
+								$('#script_div').hide();
+								$('#url_div').show();
 							}
 						});
 

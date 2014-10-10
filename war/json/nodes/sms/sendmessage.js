@@ -2,8 +2,8 @@
     "name": "Send Message",
     "thumbnail": "json/nodes/images/sms/sendmessage.png",
     "icon": "json/nodes/icons/sms/sendmessage.png",
-    "info": "Send SMS to the contact using the Twilio Integration",
-    "help": "You can enable Twilio integration from Admin settings -> Integrations.",
+    "info": "Send SMS to the contact using SMS Gateway Integration",
+    "help": "You can enable SMS Gateway Integration from Admin settings -> Integrations",
     "author": "Bhasuri",
     "company": "mantra",
     "language": "en",
@@ -21,7 +21,7 @@
             "type": "select",
             "style": {
                 "width": "66%"
-            }
+                }
 			
 		},{
 			"label": "To:",
@@ -50,7 +50,7 @@
 			"type": "textarea" 
          },
          {
-            "label": "Send SMS to the contact using the Twilio Integration.",
+            "label": "Send SMS to the contact using the SMS Gateway Integration.",
             "category": "Help",
             "fieldType": "label",
             "type": "label" 

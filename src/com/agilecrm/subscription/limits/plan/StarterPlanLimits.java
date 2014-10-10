@@ -13,14 +13,15 @@ import com.agilecrm.subscription.limits.PlanLimits;
 @XmlRootElement
 public class StarterPlanLimits extends PlanLimits
 {
-    {
-	contactLimit = 10000;
-	emailsLimit = 1500;
-	workflowLimit = 3;
-	googleContactsLimit = 1000;
-	webRuleLimit = 3;
-	pageViewsLimit = 1000;
-	reporting = "ALL";
-	whiteLabelEnabled = true;
-    }
+	{
+		contactLimit = 10000;
+		emailsLimit = 1500;
+		workflowLimit = 3;
+		googleContactsLimit = 1000;
+		webRuleLimit = 3;
+		pageViewsLimit = 1000;
+		reporting = "ALL";
+		whiteLabelEnabled = true;
+		campaignNodesLimit = 10;
+	}
 }

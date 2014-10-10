@@ -26,191 +26,196 @@ import com.agilecrm.subscription.ui.serialize.Plan.PlanType;
 @XmlRootElement
 public class PlanLimits
 {
-    /**
-     * Limits
-     */
-    protected String planId;
-    protected String planName;
-    protected Float price;
-    protected Integer contactLimit;
-    protected Integer emailsLimit;
-    protected Integer workflowLimit;
-    protected Integer googleContactsLimit;
-    protected Integer webRuleLimit;
-    protected Integer pageViewsLimit;
-    protected String reporting;
-    protected boolean whiteLabelEnabled;
-
-    /**
-     * Plan obect which is used to fetch respective plan limits and also number
-     * user to calculate per user limit
-     */
-    Plan plan;
-
-    /**
-     * Child classes of {@link PlanLimits} class used to create instance based
-     * on plan. It make retrieving respective limits class object easy and
-     * flexible than hardcoding class pacakges and creating instance using
-     * forName method
-     */
-    public static enum PlanClasses
-    {
 	/**
-	 * Constructor takes respective class, rank (order of plan which is used
-	 * to determine whether plan is being downgraded)
+	 * Limits
 	 */
-	FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
-		ProPlanLimits.class, 3),
+	protected String planId;
+	protected String planName;
+	protected Float price;
+	protected Integer contactLimit;
+	protected Integer emailsLimit;
+	protected Integer workflowLimit;
+	protected Integer googleContactsLimit;
+	protected Integer webRuleLimit;
+	protected Integer pageViewsLimit;
+	protected String reporting;
+	protected boolean whiteLabelEnabled;
+	protected Integer campaignNodesLimit;
+	/**
+	 * Plan obect which is used to fetch respective plan limits and also number
+	 * user to calculate per user limit
+	 */
+	Plan plan;
 
-	// Legacy plans
-	LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(
-		ProPlanLimits.class, 3);
-
-	Class<? extends PlanLimits> clazz;
-
-	public int rank = 0;
-
-	private PlanClasses(Class<? extends PlanLimits> clazz, int rank)
+	/**
+	 * Child classes of {@link PlanLimits} class used to create instance based
+	 * on plan. It make retrieving respective limits class object easy and
+	 * flexible than hardcoding class pacakges and creating instance using
+	 * forName method
+	 */
+	public static enum PlanClasses
 	{
-	    this.rank = rank;
-	    this.clazz = clazz;
+		/**
+		 * Constructor takes respective class, rank (order of plan which is used
+		 * to determine whether plan is being downgraded)
+		 */
+		FREE(FreePlanLimits.class, 0), STARTER(StarterPlanLimits.class, 1), REGULAR(RegularPlanLimits.class, 2), PRO(
+				ProPlanLimits.class, 3),
+
+		// Legacy plans
+		LITE(StarterPlanLimits.class, 0), BASIC(StarterPlanLimits.class, 1), PROFESSIONAL(RegularPlanLimits.class, 2), ENTERPRISE(
+				ProPlanLimits.class, 3);
+
+		Class<? extends PlanLimits> clazz;
+
+		public int rank = 0;
+
+		private PlanClasses(Class<? extends PlanLimits> clazz, int rank)
+		{
+			this.rank = rank;
+			this.clazz = clazz;
+		}
+
+		public Class<? extends PlanLimits> getClazz()
+		{
+			return clazz;
+		}
 	}
 
-	public Class<? extends PlanLimits> getClazz()
+	/**
+	 * Made protected to narrow access and restrict constructors being used
+	 * directly
+	 */
+	protected PlanLimits()
 	{
-	    return clazz;
-	}
-    }
 
-    /**
-     * Made protected to narrow access and restrict constructors being used
-     * directly
-     */
-    protected PlanLimits()
-    {
-
-    }
-
-    protected PlanLimits(Plan plan)
-    {
-	this.plan = plan;
-    }
-
-    /**
-     * Creates respective limits class object based on plan name.
-     * 
-     * @param plan
-     * @return
-     */
-    @JsonIgnore
-    public static PlanLimits getPlanDetails(Plan plan)
-    {
-	// Gets plan name from plan object
-	String planName = plan.getPlanName();
-	try
-	{
-	    // Gets respective child class according to plan name
-	    PlanLimits planDetails = PlanClasses.valueOf(planName).clazz.newInstance();
-
-	    // Assigns plan to current object, as it can be used for calculate
-	    // limits based on user quantity
-	    planDetails.plan = plan;
-	    return planDetails;
-	}
-	catch (Exception e)
-	{
-	    e.printStackTrace();
-	    return null;
 	}
 
-    }
+	protected PlanLimits(Plan plan)
+	{
+		this.plan = plan;
+	}
 
-    /**
-     * Numer user that can be added in current domain. It is returned based on
-     * plan object used to initialize current PlanLimits object
-     * 
-     * @return
-     */
-    public Integer getAllowedUsers()
-    {
-	return plan.quantity;
-    }
+	/**
+	 * Creates respective limits class object based on plan name.
+	 * 
+	 * @param plan
+	 * @return
+	 */
+	@JsonIgnore
+	public static PlanLimits getPlanDetails(Plan plan)
+	{
+		// Gets plan name from plan object
+		String planName = plan.getPlanName();
+		try
+		{
+			// Gets respective child class according to plan name
+			PlanLimits planDetails = PlanClasses.valueOf(planName).clazz.newInstance();
 
-    /**
-     * Returns plan ID
-     * 
-     * @return
-     */
-    public String getPlanId()
-    {
-	planId = plan.plan_id == null ? PlanType.FREE.toString() : plan.plan_id.toString();
+			// Assigns plan to current object, as it can be used for calculate
+			// limits based on user quantity
+			planDetails.plan = plan;
+			return planDetails;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 
-	return planId;
-    }
+	}
 
-    public String getPlanName()
-    {
-	return plan.getPlanName();
-    }
+	/**
+	 * Numer user that can be added in current domain. It is returned based on
+	 * plan object used to initialize current PlanLimits object
+	 * 
+	 * @return
+	 */
+	public Integer getAllowedUsers()
+	{
+		return plan.quantity;
+	}
 
-    /**
-     * Returns price
-     * 
-     * @return
-     */
-    public Float getPrice()
-    {
-	return price;
-    }
+	/**
+	 * Returns plan ID
+	 * 
+	 * @return
+	 */
+	public String getPlanId()
+	{
+		planId = plan.plan_id == null ? PlanType.FREE.toString() : plan.plan_id.toString();
 
-    public Integer getContactLimit()
-    {
-	return contactLimit;
-    }
+		return planId;
+	}
 
-    public Integer getEmailsLimit()
-    {
-	return emailsLimit * plan.quantity;
-    }
+	public String getPlanName()
+	{
+		return plan.getPlanName();
+	}
 
-    public Integer getWorkflowLimit()
-    {
-	if (workflowLimit == Integer.MAX_VALUE)
-	    return workflowLimit;
+	/**
+	 * Returns price
+	 * 
+	 * @return
+	 */
+	public Float getPrice()
+	{
+		return price;
+	}
 
-	return workflowLimit;
-    }
+	public Integer getContactLimit()
+	{
+		return contactLimit;
+	}
 
-    public Integer getGoogleContactsLimit()
-    {
-	return googleContactsLimit * plan.quantity;
-    }
+	public Integer getEmailsLimit()
+	{
+		return emailsLimit * plan.quantity;
+	}
 
-    public Integer getWebRuleLimit()
-    {
-	return webRuleLimit;
-    }
+	public Integer getWorkflowLimit()
+	{
+		if (workflowLimit == Integer.MAX_VALUE)
+			return workflowLimit;
 
-    public Integer getPageViewsLimit()
-    {
-	return pageViewsLimit;
-    }
+		return workflowLimit;
+	}
 
-    public String getReporting()
-    {
-	return reporting;
-    }
+	public Integer getGoogleContactsLimit()
+	{
+		return googleContactsLimit * plan.quantity;
+	}
 
-    public boolean isWhiteLabelEnabled()
-    {
-	return whiteLabelEnabled;
-    }
-    
-    public boolean isFreePlan()
-    {
-	if(plan.plan_type == null)
-	    return false;
-		
-	return (plan.plan_type == PlanType.FREE) ? true : false;
-    }
+	public Integer getWebRuleLimit()
+	{
+		return webRuleLimit;
+	}
+
+	public Integer getPageViewsLimit()
+	{
+		return pageViewsLimit;
+	}
+
+	public String getReporting()
+	{
+		return reporting;
+	}
+
+	public boolean isWhiteLabelEnabled()
+	{
+		return whiteLabelEnabled;
+	}
+
+	public boolean isFreePlan()
+	{
+		if (plan.plan_type == null)
+			return false;
+
+		return (plan.plan_type == PlanType.FREE) ? true : false;
+	}
+
+	public Integer getCampaignNodesLimit()
+	{
+		return campaignNodesLimit;
+	}
 }

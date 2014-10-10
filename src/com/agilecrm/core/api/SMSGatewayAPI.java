@@ -13,6 +13,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
+
 import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.widgets.Widget;
 import com.thirdparty.twilio.TwilioSMSUtil;
@@ -100,4 +102,14 @@ public class SMSGatewayAPI
 		return null;
 	}
 
+	@Path("{widget_name}/logs")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public JSONArray getLogs(@PathParam("widget_name") String name) 
+	{
+
+		if (name.equals("twilio"))
+			return TwilioSMSUtil.currentTwilioLogs();
+		return null;
+	}
 }
