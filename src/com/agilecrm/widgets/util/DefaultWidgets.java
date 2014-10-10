@@ -88,7 +88,7 @@ public class DefaultWidgets
 		"Facebook is a social utility that connects people with friends and others who work, study and live around them",
 		"/widgets/facebook.js", "/widgets/facebook.png", "/widgets/Fb24x24icon.png", null,
 		WidgetType.SOCIAL));
-	/*widgets.add(new Widget(
+	/**widgets.add(new Widget(
 		"Shopify",
 		"Shopify is a powerful ecommerce solution that includes everything you need to create an online store",
 <<<<<<< HEAD
