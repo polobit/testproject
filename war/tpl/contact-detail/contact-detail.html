@@ -7,7 +7,7 @@
 				<div class="page-header"
 					style="padding: 20px; border: 1px solid #f5f5f5; margin: 0px">
 					<div style="display: inline">
-						<div style="display: inline">
+						<div style="float:left;">
 							<form style='display: inline; padding-right: 10px; height: auto;'
 								id="contact-container">
 								<a href="#" class="tooltip_info" data-placement="top"
@@ -22,9 +22,9 @@
 							</form>
 						</div>
 						<div
-							style='margin-top: 0%; width: 20em; display: inline-block; vertical-align: middle'>
+							style='margin-top: 0%; float:left; vertical-align: middle'>
 							<div
-								style="height: auto; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+								style="height: auto; text-overflow: ellipsis; white-space:nowrap;width:20em;padding-top:5px;overflow: hidden;">
 								<b style="font-size:2em;">{{getPropertyValue properties
 										"first_name"}} {{getPropertyValue properties "last_name"}}
 								</b>{{#if_propertyName "email"}}</br> <a href='#send-email/{{value}}'>{{value}}</a>{{/if_propertyName}}
@@ -80,7 +80,7 @@
 								<ul class="dropdown-menu">
 
 									<li><a href='#' class="contact-add-note"><i
-											class="icon-file"></i> Add Note1</a></li>
+											class="icon-file"></i> Add Note</a></li>
 									<li><a href='#' class="contact-add-task"><i
 											class="icon-tasks"></i> Add Task</a></li>
 									<li><a href='#' class="contact-add-deal"><i class="icon-money"></i>
@@ -94,10 +94,9 @@
 											class="icon-envelope-alt"></i> Send Email</a></li>
 
 									<li class='divider'></li>
-									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-copy"></i>
+									<li><a href='#contact-duplicate'><i class="icon-copy"></i>
 											Duplicate</a></li>
-
-								   <li class='divider'></li>
+											
 									<li><a href='#duplicate-contacts/{{id}}'><i class="icon-code-fork"></i>
 											Merge Duplicates</a></li>
 
@@ -150,9 +149,10 @@
 						</div>
 
 					</div>
+<div class="clearfix"></div>
 					<!-- Owner block -->
-					<br />
-					<div style="float: right; margin-top: -15px;">
+				
+					<div style="float: right; margin-top: -21px;">
 						<div class="change-owner-succes"></div>
 						<span title="Owner"><strong style="color: gray">Owner:</strong>&nbsp;&nbsp;<span
 							id="contact-owner" data={{owner.id}}
@@ -176,6 +176,7 @@
                             </select>--> </span>
 						{{/canEditContact}}
 					</div>
+					<div class="clearfix"></div>
 				</div>
 
 			</div>
@@ -335,7 +336,11 @@
                                            image="{{getCurrentContactProperty "image"}}" 
                                            phone="{{value}}">
                                            {{value}}
-                                        </a>                                       
+                                        </a>            
+                                        <a href='#' class="contact-make-twilio-call" style="display:none;"                                           
+                                           phone="{{value}}">
+                                           {{value}}
+                                        </a>    
 										<a href="tel:{{value}}" class="contact-make-call">{{value}}</a> 
                                         {{#if subtype}}<span class="label">{{subtype}}</span> {{/if}}
 									</div>
