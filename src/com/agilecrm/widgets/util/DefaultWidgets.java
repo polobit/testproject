@@ -89,7 +89,7 @@ public class DefaultWidgets
 				"Shopify is a powerful ecommerce solution that includes everything you need to create an online store",
 				"/widgets/shopify.js", "/widgets/shopify.png", "/widgets/shopifysm.png", null, WidgetType.ECOMMERCE));
 		widgets.add(new Widget("TwilioIO", "Make and receive calls from your contacts using your Twilio account.",
-				"/widgets/twilioio.js", "/img/plugins/twilio-logo.png", "/widgets/twilio-small-logo.png", null,
+				"/widgets/twilioio.js", "/img/plugins/twilio.png", "/widgets/twilio-small-logo.png", null,
 				WidgetType.CALL));
 
 		System.out.println("Default widgets ");

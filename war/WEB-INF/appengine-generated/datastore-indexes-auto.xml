@@ -1,21 +1,40 @@
-<!-- Indices written at Fri, 10 Oct 2014 15:07:55 IST -->
+<!-- Indices written at Mon, 13 Oct 2014 11:18:13 IST -->
 
 <datastore-indexes>
 
-    <!-- Used 14 times in query history -->
-    <datastore-index kind="Widget" ancestor="true" source="auto">
-        <property name="widget_type" direction="asc"/>
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
     </datastore-index>
 
     <!-- Used 4 times in query history -->
+    <datastore-index kind="Contact" ancestor="false" source="auto">
+        <property name="viewed.viewer_id" direction="asc"/>
+        <property name="viewed.viewed_time" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="Task" ancestor="false" source="auto">
+        <property name="is_complete" direction="asc"/>
+        <property name="owner" direction="asc"/>
+        <property name="due" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 5 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="__key__" direction="asc"/>
         <property name="updated_time" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 4 times in query history -->
-    <datastore-index kind="Note" ancestor="false" source="auto">
-        <property name="related_contacts" direction="asc"/>
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="Widget" ancestor="true" source="auto">
+        <property name="widget_type" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="pipeline" direction="asc"/>
         <property name="created_time" direction="desc"/>
     </datastore-index>
 
@@ -24,10 +43,12 @@
         <property name="widget_type" direction="asc"/>
     </datastore-index>
     
-     <datastore-index kind="Opportunity" ancestor="false" source="manual">
+
+    <!-- Used 5 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
         <property name="milestone" direction="asc"/>
         <property name="pipeline" direction="asc"/>
-        <property name="created_time" direction="desc"/>
+        <property name="close_date" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
