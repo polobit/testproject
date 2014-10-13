@@ -143,7 +143,7 @@ function showShopifyClient(shop)
 								var resText = data.responseText;
 								if (resText.indexOf('No Customer found') != -1)
 								{
-												console.log("no customer found")
+												console.log("No customer found")
 												createContact(resText);
 								}
 
