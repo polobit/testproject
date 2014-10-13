@@ -171,6 +171,13 @@ $(function()
 	{
 		e.preventDefault();
 		var nextPageToken = $(this).attr("ntoken");
+
+		if (nextPageToken == "")
+		{
+			$('#gplusstreammore').html("No more posts.");
+			return;
+		}
+
 		$('#spinnerspan').show();
 		showGooglePlusPosts(contactGooglePlusId, nextPageToken);
 		$('#spinnerspan').hide();
@@ -214,7 +221,7 @@ function showMatchedPeople(search)
 	}
 	else
 	{
-//		console.log(retData);
+		// console.log(retData);
 		return;
 	}
 
@@ -223,13 +230,15 @@ function showMatchedPeople(search)
 function showGooglePlusProfile(id)
 {
 	var resData = {};
-	
-	if (typeof PROFILE_DATA["" + id] == "undefined") {
+
+	if (typeof PROFILE_DATA["" + id] == "undefined")
+	{
 		resData = getGooglePlusUserDetails(id);
-	} else {
+	}
+	else
+	{
 		resData = PROFILE_DATA["" + id];
 	}
-	
 
 	var resData = getGooglePlusUserDetails(id);
 
@@ -243,7 +252,7 @@ function showGooglePlusProfile(id)
 	}
 	else
 	{
-//		console.log(resData);
+		// console.log(resData);
 		return;
 	}
 }
@@ -260,13 +269,13 @@ function showGooglePlusPosts(id, nextPageToken)
 	{
 		GPostsData = getGooglePlusPosts(id);
 	}
-	
-//	console.log(GPostsData);
+
+	// console.log(GPostsData);
 
 	if (typeof nextPageToken != "undefined")
 	{
 		$('#gplus_social_stream').append(getTemplate("googleplus-posts", GPostsData));
-		$('#gplusstreammore').attr("ntoken",GPostsData['nextPageToken']);
+		$('#gplusstreammore').attr("ntoken", GPostsData['nextPageToken']);
 	}
 	else
 	{
@@ -347,7 +356,7 @@ function googlePlusApiCall(apiURL, reqData)
 		// alert(errorObj.code + " " + errorObj.message);
 		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
 		{
-//			alert("Refreshing access token");
+			// alert("Refreshing access token");
 			refreshAccessToken();
 			googlePlusApiCall(apiURL, reqData);
 		}

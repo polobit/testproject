@@ -89,7 +89,7 @@ Google+ is a social utility that connects people with friends and others who wor
 	<div class="pull-left ml_5 span8">
 		<p class="title_txt"><a href="{{url}}" target="_blank" >{{displayName}}</a></p>
 <p>{{placesLived.0.value}}</p>
-<p>{{occupation}}</p>
+<p>{{occupation}}</p> <p>{{organizations.0.name}} - {{organizations.0.title}}</p>
 	</div>
 	<div class="clearfix"></div>	
 	<p style="word-wrap:break-word;word-break:normal;">{{show_link_in_statement tagline}}</p>					
@@ -125,11 +125,14 @@ Google+ is a social utility that connects people with friends and others who wor
 			</li>
 {{/each}}
 		</ul>
-		
+		{{#if_equals items.length 0}}
+<div style="font-size: 16px;padding: 5px;"><small>No posts.</small></div>
+{{else}}
 		<div class="widget_tab_footer" align="center">
 			<a href="" class="gplus_stream" id="gplusstreammore" rel="tooltip" ntoken="{{nextPageToken}}" title="Click to see more posts">Show More</a>
 			<span id="spinnerspan" style="display:none;"><img src="img/ajax-spinner.gif" id="spinner-gplus"></img><span>
 		</div>
+{{/if_equals}}
 	</div>
 	
 </div>
