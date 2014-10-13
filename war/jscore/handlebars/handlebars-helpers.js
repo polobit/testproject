@@ -407,6 +407,18 @@ $(function()
 			return ucfirst(value);
 
 	});
+	
+	
+	/**
+	 * Adds Custom Fields to contact merge form, where this helper function is called
+	 */
+	Handlebars.registerHelper('show_custom_fields_for_merge', function(custom_fields, contacts)
+	{
+
+		var el = show_custom_fields_helper_for_merge(custom_fields, contacts);
+		return new Handlebars.SafeString(fill_custom_field_values($(el), contacts[0].properties));
+
+	});
 
 	/**
 	 * this is useful in activity when note characters exceeds abouve 50 simply
