@@ -72,9 +72,14 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 				extended_valid_elements : "*[*]", setup : function(editor)
 				{
 					editor.addButton('merge_fields', { type : 'menubutton', text : 'Agile Contact Fields', icon : false, menu : set_up_merge_fields(editor) });
-				},
-				init_instance_callback : callback
+				}
 				});
+			
+			// callback after tinymce initialised
+	    	setTimeout(function(){
+	    		if(callback != undefined && typeof (callback) === "function")
+	    		callback();
+	    		},500);
 		});
     	
 		return;

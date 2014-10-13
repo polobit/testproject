@@ -627,20 +627,20 @@ var ContactsRouter = Backbone.Router.extend({
 					if(!body)
 						body = '';
 				
-					setTimeout(function(){
-						// Reset tinymce content
-						set_tinymce_content('email-body', body);}, 1);
+					// Add tinymce content
+					set_tinymce_content('email-body', body);
 			
 				});
 		}
 		else
 		{	
 			setupTinyMCEEditor('textarea#email-body', true, undefined, function(){
+
+					if(!body)
+						body = '';
 				
-				setTimeout(function(){
-					// Reset tinymce content
-				set_tinymce_content('email-body', '');},1);
-				
+					// Add tinymce content
+					set_tinymce_content('email-body', body);
 			});
 		}
 		
