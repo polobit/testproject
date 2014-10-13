@@ -1,6 +1,5 @@
 package com.agilecrm.user.access;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -49,12 +48,8 @@ public abstract class UserAccessControl
 	{
 	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 	}
-	
+
 	// To give all scopes as of now.
-	int i = 0;
-	
-	if(i + 0 == 0)
-	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
 	// If scopes in info is not set, scopes are fetched from current domain
 	// user, set in user info, and returned.
@@ -74,7 +69,7 @@ public abstract class UserAccessControl
     public boolean hasScope(UserAccessScopes scope)
     {
 	HashSet<UserAccessScopes> scopes = getCurrentUserScopes();
-	
+
 	return scopes.contains(scope);
     }
 
@@ -88,11 +83,9 @@ public abstract class UserAccessControl
 	{
 	    return null;
 	}
-	
-	
+
     }
-    
-    
+
     public static UserAccessControl getAccessControl(AccessControlClasses access, Object entityObject)
     {
 	try
@@ -107,7 +100,7 @@ public abstract class UserAccessControl
 	    return null;
 	}
     }
-    
+
     public void setObject(Object object)
     {
 	entityObject = object;

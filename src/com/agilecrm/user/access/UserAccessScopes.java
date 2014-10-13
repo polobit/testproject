@@ -13,13 +13,17 @@ import java.util.List;
  */
 public enum UserAccessScopes
 {
-    DEFAULT, RESTRICTED, CREATE_CONTACT, UPDATE_CONTACT, IMPORT_CONTACTS, EXPORT_CONTACTS, DELETE_CONTACTS, VIEW_CONTACTS, RESTRICTED_ACCESS;
-    
+    IMPORT_CONTACTS, CREATE_CONTACT, UPDATE_CONTACT, VIEW_CONTACTS, RESTRICTED,
+
+    DEFAULT, EXPORT_CONTACTS, DELETE_CONTACTS, RESTRICTED_ACCESS;
+
     public static List<UserAccessScopes> customValues()
     {
 	List<UserAccessScopes> defaultScopes = new ArrayList<UserAccessScopes>(Arrays.asList(UserAccessScopes.values()));
 	defaultScopes.remove(UserAccessScopes.RESTRICTED_ACCESS);
 	defaultScopes.remove(UserAccessScopes.RESTRICTED);
+	defaultScopes.remove(EXPORT_CONTACTS);
+
 	return defaultScopes;
     }
 }

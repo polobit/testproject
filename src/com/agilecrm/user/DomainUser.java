@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Id;
@@ -104,8 +105,14 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     /**
      * Stores user access scopes
      */
-    @NotSaved(IfDefault.class)
+    @NotSaved
     public HashSet<UserAccessScopes> scopes = null;
+
+    @NotSaved
+    public HashSet<UserAccessScopes> newscopes = null;
+
+    @NotSaved(IfDefault.class)
+    public HashSet<UserAccessScopes> restricted_scopes = null;
 
     @NotSaved(IfDefault.class)
     public LinkedHashSet<NavbarConstants> menu_scopes = null;
@@ -303,13 +310,13 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    // Limits users to global trail users count
 	    if (subscription.isFreePlan() && DomainUserUtil.count() >= Globals.TRIAL_USERS_COUNT)
 		throw new Exception("Please upgrade. You cannot add more than " + Globals.TRIAL_USERS_COUNT
-		        + " users in the free plan");
+			+ " users in the free plan");
 
 	    // If Subscription is not null then limits users to current plan
 	    // quantity).
 	    if (!subscription.isFreePlan() && DomainUserUtil.count() >= subscription.plan.quantity)
 		throw new Exception("Please upgrade. You cannot add more than " + subscription.plan.quantity
-		        + " users in the current plan");
+			+ " users in the current plan");
 
 	    return false;
 	}
@@ -400,7 +407,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 
 	    if (!is_admin)
 		throw new Exception(user.name + " is the owner of '" + user.domain
-		        + "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
+			+ "' domain and should be an <b>admin</b>. You can change the Email and Name instead.");
 	}
     }
 
@@ -468,7 +475,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    if (this.id == null || (this.id != null && !this.id.equals(domainUser.id)))
 	    {
 		throw new Exception("User with this email address " + domainUser.email + " already exists in "
-		        + domainUser.domain + " domain.");
+			+ domainUser.domain + " domain.");
 	    }
 
 	    // Checks if super user is disabled, and throws exception if super
@@ -691,25 +698,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     {
 	System.out.println(" id in domain user before :" + id);
 
-	scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	if (scopes == null || scopes.size() == 0)
+	{
 
-	/*
-	 * if (scopes == null || scopes.size() == 0) {
-	 * 
-	 * System.out.println(" id in domain user :" + id);
-	 * 
-	 * scopes = new
-	 * LinkedHashSet<UserAccessScopes>(Arrays.asList(UserAccessScopes
-	 * .values()));
-	 * 
-	 * if (id == null) { scopes = new
-	 * LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues()); }
-	 * else { scopes = new LinkedHashSet<UserAccessScopes>();
-	 * scopes.add(UserAccessScopes.RESTRICTED_ACCESS); } } else
-	 * if(scopes.size() == 1 &&
-	 * scopes.contains(UserAccessScopes.RESTRICTED)) { scopes = new
-	 * LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues()); }
-	 */
+	    return;
+	}
+
+	List<UserAccessScopes> defaultScopes = UserAccessScopes.customValues();
+
+	defaultScopes.removeAll(scopes);
+
+	restricted_scopes = new LinkedHashSet<UserAccessScopes>(defaultScopes);
     }
 
     /**
@@ -727,7 +726,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 		info_json = new JSONObject(info_json_string);
 
 	    // If no scopes are set, then all scopes are added
-	    scopes = new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	    loadScopes();
 
 	    if (menu_scopes == null)
 	    {
@@ -739,6 +738,16 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 	    e.printStackTrace();
 	}
+    }
+
+    public void loadScopes()
+    {
+	List<UserAccessScopes> defaultScopes = UserAccessScopes.customValues();
+
+	if (restricted_scopes != null)
+	    defaultScopes.removeAll(restricted_scopes);
+
+	scopes = new HashSet<UserAccessScopes>(defaultScopes);
     }
 
     /**
@@ -767,7 +776,7 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     public String toString()
     {
 	return "\n Email: " + this.email + " Domain: " + this.domain + "\n IsAdmin: " + this.is_admin + " DomainId: "
-	        + this.id + " Name: " + this.name + "\n " + info_json;
+		+ this.id + " Name: " + this.name + "\n " + info_json;
     }
 
 }
