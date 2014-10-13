@@ -266,6 +266,7 @@ function showGooglePlusPosts(id, nextPageToken)
 	if (typeof nextPageToken != "undefined")
 	{
 		$('#gplus_social_stream').append(getTemplate("googleplus-posts", GPostsData));
+		$('#gplusstreammore').attr("ntoken",GPostsData['nextPageToken']);
 	}
 	else
 	{
@@ -289,11 +290,10 @@ function getGooglePlusUserDetails(id)
 
 function getGooglePlusPosts(id, nextPageToken)
 {
-
 	var apiURL = "https://www.googleapis.com/plus/v1/people/" + id + "/activities/public";
 	var reqData = "fields=id%2Citems(actor(displayName%2Cid%2Cimage%2Curl)%2Cid%2Ckind%2Clocation%2Cobject(actor%2Cattachments(content%2CdisplayName%2Cid%2Cimage%2CobjectType%2Cthumbnails%2Curl)%2Ccontent%2Cid%2CobjectType%2CoriginalContent%2Curl)%2Cpublished%2Ctitle%2Cupdated%2Curl%2Cverb)%2CnextPageToken%2CselfLink%2Cupdated&maxResults=4";
 	if (typeof nextPageToken != "undefined")
-		reqData += "&nextPageToken=" + nextPageToken;
+		reqData += "&pageToken=" + nextPageToken;
 	return googlePlusApiCall(apiURL, reqData);
 
 }
