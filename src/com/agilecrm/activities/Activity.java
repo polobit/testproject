@@ -101,6 +101,9 @@ public class Activity extends Cursor
     @NotSaved(IfDefault.class)
     public String custom3 = null;
 
+    @NotSaved(IfDefault.class)
+    public String custom4 = null;
+
     // Dao
     private static ObjectifyGenericDao<Activity> dao = new ObjectifyGenericDao<Activity>(Activity.class);
 

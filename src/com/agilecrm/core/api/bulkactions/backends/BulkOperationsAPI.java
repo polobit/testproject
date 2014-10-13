@@ -20,8 +20,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import com.agilecrm.account.util.AccountEmailStatsUtil;
+import com.agilecrm.activities.util.ActivitySave;
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.email.util.ContactBulkEmailUtil;
 import com.agilecrm.contact.export.util.ContactExportBlobUtil;
@@ -34,8 +36,11 @@ import com.agilecrm.contact.util.bulk.BulkActionNotifications;
 import com.agilecrm.contact.util.bulk.BulkActionNotifications.BulkAction;
 import com.agilecrm.subscription.restrictions.db.BillingRestriction;
 import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.CSVUtil;
 import com.agilecrm.util.CacheUtil;
+import com.agilecrm.workflows.Workflow;
 import com.agilecrm.workflows.status.CampaignStatus;
 import com.agilecrm.workflows.status.CampaignStatus.Status;
 import com.agilecrm.workflows.status.util.CampaignStatusUtil;
@@ -70,6 +75,7 @@ public class BulkOperationsAPI
     public void deleteContacts(@FormParam("ids") String model_ids, @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user_id) throws JSONException
     {
+	System.out.println(model_ids + " model ids " + filter + " filter " + current_user_id + " current user");
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, model_ids, current_user_id);
 
 	while (fetcher.hasNextSet())
@@ -80,6 +86,7 @@ public class BulkOperationsAPI
 		ContactUtil.processContacts(contacts);
 
 	    ContactUtil.deleteContacts(contacts);
+
 	}
 
 	System.out.println("contacts : " + fetcher.getAvailableContacts());
@@ -87,11 +94,18 @@ public class BulkOperationsAPI
 
 	String message = "";
 	if (fetcher.getAvailableContacts() > 0)
+	{
 	    message = fetcher.getAvailableContacts() + " Contacts deleted";
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "DELETE", "", "contacts", "");
+	}
 	else if (fetcher.getAvailableCompanies() > 0)
+	{
 	    message = fetcher.getAvailableCompanies() + " Companies deleted";
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "DELETE", "", "companies", "");
+	}
 
 	BulkActionNotifications.publishNotification(message);
+
     }
 
     /**
@@ -111,6 +125,7 @@ public class BulkOperationsAPI
 	    @PathParam("new_owner") String new_owner, @FormParam("filter") String filter,
 	    @PathParam("current_user") Long current_user) throws JSONException
     {
+	System.out.println(contact_ids + " model ids " + filter + " filter " + new_owner + " new_owner");
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user);
 
@@ -126,10 +141,19 @@ public class BulkOperationsAPI
 
 	String message = "Owner changed for ";
 	if (fetcher.getAvailableContacts() > 0)
+	{
 	    message = message + fetcher.getAvailableContacts() + " Contacts";
+	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "CHANGE_OWNER", user.name,
+		    "contacts", "");
+	}
 	else if (fetcher.getAvailableCompanies() > 0)
+	{
 	    message = message + fetcher.getAvailableCompanies() + " Companies";
-
+	    DomainUser user = DomainUserUtil.getDomainUser(Long.parseLong(new_owner));
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "CHANGE_OWNER", user.name,
+		    "companies", "");
+	}
 	BulkActionNotifications.publishNotification(message);
 
 	// BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
@@ -153,6 +177,8 @@ public class BulkOperationsAPI
 	    @PathParam("workflow-id") Long workflowId, @FormParam("filter") String filter,
 	    @PathParam("current_user_id") Long current_user_id) throws JSONException
     {
+	System.out.println(contact_ids + " model ids " + filter + " filter " + workflowId + " workflow id");
+
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, current_user_id);
 
 	while (fetcher.hasNextSet())
@@ -184,6 +210,13 @@ public class BulkOperationsAPI
 	    e.printStackTrace();
 	    System.err.println("Exception occured while sending campaign initiated mail " + e.getMessage());
 	}
+
+	Workflow workflow = WorkflowUtil.getWorkflow(workflowId);
+	String workflowname = workflow.name;
+
+	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "ASIGN_WORKFLOW", workflowname,
+	        "contacts", "");
+
     }
 
     /**
@@ -207,6 +240,8 @@ public class BulkOperationsAPI
 	System.out.println("domain : " + NamespaceManager.get());
 	System.out.println(contact_ids);
 	System.out.println(tagsString);
+
+	System.out.println(contact_ids + " model ids " + filter + " filter " + tagsString + " tagsString");
 
 	if (StringUtils.isEmpty(tagsString))
 	    return;
@@ -241,6 +276,8 @@ public class BulkOperationsAPI
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
 	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
+
+	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "ADD_TAG", tagsString, "contacts", "");
     }
 
     @SuppressWarnings("unchecked")
@@ -256,6 +293,7 @@ public class BulkOperationsAPI
 	System.out.println("domain : " + NamespaceManager.get());
 	System.out.println(contact_ids);
 	System.out.println(tagsString);
+	System.out.println(contact_ids + " model ids " + filter + " filter " + tagsString + " tagsString");
 
 	if (StringUtils.isEmpty(tagsString))
 	    return;
@@ -290,6 +328,9 @@ public class BulkOperationsAPI
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
 	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
+
+	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "REMOVE_TAG", tagsString, "contacts", "");
+
     }
 
     /**
@@ -483,7 +524,8 @@ public class BulkOperationsAPI
 	int count = 0;
 
 	JSONObject emailData = new JSONObject(data);
-
+	System.out.println(emailData);
+	System.out.println("-------------------------------------------------------------------");
 	List<Contact> contacts_list = new ArrayList<Contact>();
 
 	ContactFilterResultFetcher fetcher = new ContactFilterResultFetcher(filter, 200, contact_ids, currentUserId);
@@ -501,9 +543,17 @@ public class BulkOperationsAPI
 
 	String message = "";
 	if (fetcher.getAvailableContacts() > 0)
+	{
 	    message = fetcher.getAvailableContacts() + " Contacts deleted";
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "SEND_EMAIL",
+		    html2text(emailData.getString("body")), "contacts", html2text(emailData.getString("subject")));
+	}
 	else if (fetcher.getAvailableCompanies() > 0)
+	{
 	    message = fetcher.getAvailableCompanies() + " Companies deleted";
+	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "SEND_EMAIL",
+		    html2text(emailData.getString("body")), "companies", html2text(emailData.getString("subject")));
+	}
 
 	if (fetcher.getAvailableContacts() > 0)
 	    BulkActionNotifications.publishNotification("Email successfully sent to " + count + " Contacts");
@@ -722,5 +772,10 @@ public class BulkOperationsAPI
 	    e.printStackTrace();
 	    System.err.println("Exception occured while deleting workflow related entities" + e.getMessage());
 	}
+    }
+
+    public static String html2text(String html)
+    {
+	return Jsoup.parse(html).text();
     }
 }

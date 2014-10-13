@@ -60,12 +60,12 @@ public class ActivityApi
 
     @Path("{id}")
     @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public String getActivity(@PathParam("id") Long id)
+    @Produces({ MediaType.APPLICATION_JSON })
+    public Activity getActivity(@PathParam("id") Long id)
     {
 	Activity activity = ActivityUtil.getActivity(id);
 	System.out.println("task id " + activity);
 
-	return activity.custom3;
+	return activity;
     }
 }

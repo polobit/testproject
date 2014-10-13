@@ -285,10 +285,11 @@ public class ActivityUtil
 	return activity;
     }
 
-    public static Activity createBulkActionActivity(String new_data, String old_data, String changed_field)
+    public static Activity createBulkActionActivity(String new_data, String old_data, String changed_field,
+	    String label, String bulk_email_subject)
     {
 	Activity activity = new Activity();
-	activity.label = "bulk Action performed to Contacts";
+	activity.label = label;
 	activity.activity_type = ActivityType.BULK_ACTION;
 	activity.entity_type = EntityType.CONTACT;
 
@@ -298,6 +299,8 @@ public class ActivityUtil
 	    activity.custom2 = old_data;
 	if (StringUtils.isNotEmpty(changed_field))
 	    activity.custom3 = changed_field;
+	if (StringUtils.isNotEmpty(changed_field))
+	    activity.custom4 = bulk_email_subject;
 
 	activity.save();
 	return activity;
