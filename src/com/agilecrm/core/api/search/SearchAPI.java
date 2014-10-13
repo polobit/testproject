@@ -1,6 +1,7 @@
 package com.agilecrm.core.api.search;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.Document;
 import com.agilecrm.search.query.QueryDocument;
@@ -108,4 +110,47 @@ public class SearchAPI
 	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
 		cursor, type);
     }
+    
+    /**
+	 * It initializes AppengineSearch, which is used to build query based on the
+	 * search keyword. AppengineSearch calls {@link QueryDocument} to perform
+	 * search, based on the keyword and cursor sent. It searchs on all the
+	 * entities (contacts, deals, cases)
+	 * 
+	 * @param keyword
+	 * @param count
+	 * @param cursor
+	 * @param type
+	 * @return
+	 */
+	@Path("/duplicateContacts/{id}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Collection getDuplicateContacts(@PathParam("id") String id, @QueryParam("page_size") String count,
+			@QueryParam("cursor") String cursor)
+	{
+		Contact contact = ContactUtil.getContact(Long.valueOf(id));
+		String firstName = contact.getContactFieldValue("first_name");
+		String lastName = contact.getContactFieldValue("last_name");
+		String phone = contact.getContactFieldValue("phone");
+		String email = contact.getContactFieldValue("email");
+		int pageSize = Integer.parseInt(count) + 1;
+
+		String query = "(first_name=" + firstName + " AND " + "last_name=" + lastName + ") OR " + "phone=" + phone + " OR "
+				+ "email=" + email;
+
+		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
+		Collection collection = appEngineSearch.getSearchResults(query,pageSize, cursor);
+		Iterator iterator = collection.iterator();
+		while (iterator.hasNext())
+		{
+			Contact ctc = (Contact) iterator.next();
+			if (ctc.id.longValue() == contact.id.longValue())
+			{
+				iterator.remove();
+				return collection;
+			}
+		}
+		return collection;
+	}
 }

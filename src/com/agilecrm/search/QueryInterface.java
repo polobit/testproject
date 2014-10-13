@@ -93,5 +93,7 @@ public interface QueryInterface
     int advancedSearchCount(List<SearchRule> rules);
 
     public Long getCount(List<SearchRule> rules);
+    
+    public Collection<?> processQuery(String query, Integer page, String cursor);
 
 }

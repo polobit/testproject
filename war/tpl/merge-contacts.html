@@ -1,0 +1,193 @@
+<script id="merge-contacts-template" type="text/html">
+	<div class="row">
+	<div class="span12">
+	<div class="page-header">
+	<h1><span id="contact-heading">Merge Duplicate Contacts</span></h1>
+	</div>
+	</div>
+	</div>
+	<table id="merge-contacts-table" width="100%" border="0" cellpadding="4" cellspacing="0" class="mergeTable" table-layout: fixed;>
+	<tr>
+	<td style="background-color:#f3f3f3"></td>
+	{{#each_with_index  contacts}}
+	{{#if_equals index "1"}}
+	<td style="background-color:#f3f3f3">
+	Master Record:
+	</td>
+	{{else}}
+	<td style="background-color:#f3f3f3">
+	Duplicate Record: {{get_correct_count index}}
+	</td>
+	{{/if_equals}}
+	{{/each_with_index}}
+	</tr>
+	<tr>
+	<td style="background-color:#f3f3f3">First Name</td>
+	{{#each_with_index  contacts}}
+	{{#property_is_exists "first_name" properties}}
+	{{#if_equals index "1"}}
+	<td>
+	<input type="radio" name="first_name_radio" data="{{getPropertyValue properties "first_name"}}" field="first_name" checked="checked" oid={{id}}>{{getPropertyValue properties "first_name"}}</b>
+	</td>
+	{{else}}
+	<td>
+	<input type="radio" name="first_name_radio" data="{{getPropertyValue properties "first_name"}}" field="first_name" oid={{id}}>{{getPropertyValue properties "first_name"}}</b>
+	</td>
+	{{/if_equals}}
+	{{else}}
+	<td></td>
+	{{/property_is_exists}}
+	{{/each_with_index}}
+	</tr>
+	<tr>
+	<td style="background-color:#f3f3f3">Last Name</td>
+	{{#each_with_index  contacts}}
+	{{#property_is_exists "last_name" properties}}
+	{{#if_equals index "1"}}
+	<td>
+	<input type="radio" name="last_name_radio" data="{{getPropertyValue properties "last_name"}}" field="last_name" checked="checked" oid={{id}}>{{getPropertyValue properties "last_name"}}</b>
+	</td>
+	{{else}}
+	<td>
+	<input type="radio" name="last_name_radio" data="{{getPropertyValue properties "last_name"}}" field="last_name" oid={{id}}>{{getPropertyValue properties "last_name"}}</b>
+	</td>
+	{{/if_equals}}
+	{{else}}
+	<td></td>
+	{{/property_is_exists}}
+	{{/each_with_index}}
+	</tr>
+	<tr>
+	<td style="background-color:#f3f3f3">Title</td>
+	{{#each_with_index  contacts}}
+	{{#property_is_exists "title" properties}}
+	{{#if_equals index "1"}}
+	<td>
+	<input type="radio" name="title_radio" data="{{getPropertyValue properties "title"}}" field="title" checked="checked" oid={{id}}>{{getPropertyValue properties "title"}}</b>
+	</td>
+	{{else}}
+	<td>
+	<input type="radio" name="title_radio" data="{{getPropertyValue properties "title"}}" field="title" oid={{id}}>{{getPropertyValue properties "title"}}</b>
+	</td>
+	{{/if_equals}}
+	{{else}}
+	<td></td>
+	{{/property_is_exists}}
+	{{/each_with_index}}
+	</tr>
+	<td style="background-color:#f3f3f3">Phone</td>
+	{{#each_with_index  contacts}}
+	{{#if_equals index "1"}}
+	<td>
+	{{#getPropertyValueInCheckbox properties "phone" id "checked"}}
+
+	{{/getPropertyValueInCheckbox}}
+	</td>
+	{{else}}
+	<td>
+	{{#getPropertyValueInCheckbox properties "phone" id ''}}
+
+	{{/getPropertyValueInCheckbox}}
+	</td>
+	{{/if_equals}}
+	{{/each_with_index}}
+	</tr>
+	<td style="background-color:#f3f3f3">Company</td>
+	{{#each_with_index  contacts}}
+	{{#property_is_exists "company" properties}}
+	{{#if_equals index "1"}}
+	<td>
+	<input type="radio" name="company_radio" data="{{getPropertyValue properties "company"}}" field="company" checked="checked" oid={{id}} company_id={{contact_company_id}}>{{getPropertyValue properties "company"}}</b>
+	</td>
+	{{else}}
+	<td>
+	<input type="radio" name="company_radio" data="{{getPropertyValue properties "company"}}" field="company" oid={{id}} company_id={{contact_company_id}}>{{getPropertyValue properties "company"}}</b>
+	</td>
+	{{/if_equals}}
+	{{else}}
+	<td></td>
+	{{/property_is_exists}}
+	{{/each_with_index}}
+	</tr>
+	<tr>
+	<td style="background-color:#f3f3f3">Tags</td>
+	{{#each_with_index  contacts}}
+	{{#if_equals index "1"}}
+	<td>
+	{{#each tags}}
+	<input type="checkbox" name= "tags" field="tags" data="{{this}}" checked="checked" oid={{id}}>{{this}}<br>
+	{{/each}}
+	</td>
+	{{else}}
+	<td>
+	{{#each tags}}
+	<input type="checkbox" name= "tags" field="tags" data="{{this}}" oid={{id}}>{{this}}<br>
+	{{/each}}
+	</td>
+	{{/if_equals}}
+	{{/each_with_index}}
+	</tr>
+	<tr>
+	<td style="background-color:#f3f3f3">Address</td>
+	{{#each_with_index  contacts}}
+	{{#property_is_exists "address" properties}}
+	{{#if_equals index "1"}}
+	<td>
+	<input type="radio" name="address radio" field="address" checked="checked" data="{{getPropertyValue properties "address"}}" oid={{id}}>{{address_Template properties}}</b>
+	</td>
+	{{else}}
+	<td>
+	<input type="radio" name="address radio" field="address" data="{{getPropertyValue properties "address"}}" oid={{id}}>{{address_Template properties}}</b>
+	</td>
+	{{/if_equals}}
+	{{else}}
+	<td></td>
+	{{/property_is_exists}}
+	{{/each_with_index}}
+	</tr>
+	<tr>
+	<td style="background-color:#f3f3f3">Website</td><!--  -->
+	{{#each_with_index  contacts}}
+	{{#if_equals index "1"}}
+	<td>
+	{{#getPropertyValueInCheckbox properties "website" id "checked"}}
+
+	{{/getPropertyValueInCheckbox}}
+	</td>
+	{{else}}
+	<td>
+	{{#getPropertyValueInCheckbox properties "website" id ''}}
+
+	{{/getPropertyValueInCheckbox}}
+	</td>
+	{{/if_equals}}
+	{{/each_with_index}}
+	</tr>
+	<tr>
+	<td style="background-color:#f3f3f3">Email</td>
+	{{#each_with_index  contacts}}
+	{{#if_equals index "1"}}
+	<td>
+	{{#getPropertyValueInCheckbox properties "email" id "checked"}}
+
+	{{/getPropertyValueInCheckbox}}
+	</td>
+	{{else}}
+	<td>
+	{{#getPropertyValueInCheckbox properties "email" id ''}}
+
+	{{/getPropertyValueInCheckbox}}
+	</td>
+	{{/if_equals}}
+	{{/each_with_index}}
+	</tr>
+	{{show_custom_fields_for_merge custom_fields contacts}}
+	</table>
+	<div class="row-fluid">
+	<div class="span6  select-none">
+	</div>
+	</div>
+	<a href="#" class="btn btn-primary" id="merge-contacts-model" style="margin-bottom: 15px;position:relative">Merge</a>
+	<a href="#" class="btn" style="margin-bottom: 15px; id="contact-merge-cancel">Cancel</a>
+	</div>
+</script>

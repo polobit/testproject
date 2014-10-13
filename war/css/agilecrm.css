@@ -1597,7 +1597,48 @@ width:75%;
 	position:absolute;
 	bottom:31px;
 }
+.mergeTable{
+border-collapse: collapse;
+border-spacing: 0px;
+margin-bottom: 10px;
+margin-top: 5px;
+border-left: 1px dotted #f5f5f5;
+border-right: 1px dotted #f5f5f5;
+table-layout: fixed;
+}
+.mergeTable th, .mergeTable td {
+border-bottom: 1px solid #eee;
+empty-cells: show;
+padding: 9px 0px 9px 12px;
+vertical-align: top;
+font-weight: normal;
+text-align: left;
+overflow: hidden;
+}
 
+.mergeTable 
+{
+	margin-top:10px;
+	border:1px solid #eee;
+}
+.mergeTable tr td:first-child
+{
+	width:18%;
+}
+.mergeTable tr td{
+	
+	border-right:1px solid #eee;
+}
+.mergeTable input[type="radio"],.mergeTable input[type="checkbox"] {
+margin: 3px 3px 3px 0px;
+line-height: normal;
+cursor: pointer;
+}
+.mergeTable tr td 
+{
+	font-size:14px;
+	margin-right:8px;
+}
 
 
 

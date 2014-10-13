@@ -16,6 +16,27 @@ $(function()
 	{
 		return getPropertyValue(items, name);
 	});
+	
+	/**
+	 * Helper function to return the checkbox html element with value of a property matched with the given
+	 * name from the array of properties
+	 * 
+	 * @method getPropertyValue
+	 * @param {Object}
+	 *            items array of objects
+	 * @param {String}
+	 *            name to get matched object value
+	 * @returns heckbox html element with value of the matched object
+	 */
+	Handlebars.registerHelper('getPropertyValueInCheckbox', function(items, name, separator,checked)
+			{
+				return getPropertyValueInCheckbox(items, name, separator,checked);
+			});
+	
+	Handlebars.registerHelper('get_correct_count', function(count)
+			{
+				return count-1;
+			});
 
 	/**
 	 * Helper function to return the value of property based on sub-type of the
@@ -1387,6 +1408,25 @@ $(function()
 
 						return new Handlebars.SafeString(count_message);
 					});
+	
+	Handlebars
+	.registerHelper(
+			'duplicate_contacts_count',
+			function()
+			{
+				var count_message;
+				if (this[0] && this[0].count && (this[0].count != -1))
+				{
+					var count = this[0].count-1;
+					count_message = "<small> (" + count + " Total) </small>";
+				}
+				else
+					count_message = "<small> (" + this.length + " Total) </small>";
+
+				return new Handlebars.SafeString(count_message);
+			});
+	
+	
 
 	/**
 	 * 

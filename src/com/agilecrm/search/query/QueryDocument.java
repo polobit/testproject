@@ -185,7 +185,7 @@ public class QueryDocument<T> implements QueryInterface
      * @param cursor
      * @return
      */
-    private Collection<T> processQuery(String query, Integer page, String cursor)
+    public Collection<T> processQuery(String query, Integer page, String cursor)
     {
 	// If page size is not specified, returns results with out any limit
 	// (Returns are entities )

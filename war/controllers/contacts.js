@@ -28,6 +28,10 @@ var ContactsRouter = Backbone.Router.extend({
 		
 		"contact-duplicate" : "duplicateContact",
 		
+		"duplicate-contacts/:id" : "duplicateContacts",
+
+		"merge-contacts" : "mergeContacts",
+		
 		"tags/:tag" : "contacts", 
 		
 		"send-email" : "sendEmail",
@@ -264,6 +268,122 @@ var ContactsRouter = Backbone.Router.extend({
 
 		$('#content').html(this.contactsListView.render().el);
 
+		$(".active").removeClass("active");
+		$("#contactsmenu").addClass("active");
+
+	},
+	
+	/**
+	 * Fetches all the duplicate contacts (persons) for the given
+	 * contact and shows as list
+	 */
+	duplicateContacts : function(contact_id)
+	{
+
+		dup_contacts1_array.length = 0;
+		var max_contacts_count = 20;
+		var individual_tag_name = "tr";
+
+		// Default url for contacts route
+		this.contact_id = contact_id;
+		var url = '/core/api/search/duplicateContacts/' + contact_id;
+		var collection_is_reverse = false;
+		template_key = "duplicate-contacts";
+
+		if (App_Contacts.contactDetailView == undefined)
+		{
+			Backbone.history.navigate("contact/" + contact_id, { trigger : true });
+			return;
+		}
+
+		// var contact_details_model = Backbone.Model.extend({ url :
+		// function()
+		// {
+		// return '/core/api/contacts/' + id;
+		// } });
+		//
+		// var model = new contact_details_model();
+		//
+		// model.fetch({ success : function(contact)
+		// {
+		//
+		// // Call Contact edit again with downloaded contact
+		// // details
+		// App_Contacts.editContact(contact.toJSON());
+		// } });
+
+		/*
+		 * cursor and page_size options are taken to activate
+		 * infiniScroll
+		 */
+		this.duplicateContactsListView = new Base_Collection_View({ url : url, templateKey : template_key, individual_tag_name : 'tr', cursor : true,
+			page_size : 25, sort_collection : collection_is_reverse, slateKey : null, postRenderCallback : function(el)
+			{
+				// this.duplicateContactsListView.collection.forEach(function(model,
+				// index) {
+				// model.set('master_id',contact_id);
+				// });
+			} });
+
+		// Contacts are fetched when the app loads in the initialize
+		this.duplicateContactsListView.collection.fetch();
+
+		$('#content').html(this.duplicateContactsListView.render().el);
+
+		$(".active").removeClass("active");
+		$("#contactsmenu").addClass("active");
+
+	},
+
+	/**
+	 * Merges duplicate contacts(persons) into a single master contact,
+	 * at a time we can merge 3 contacts
+	 */
+	mergeContacts : function()
+	{
+
+		var id = dup_contacts1_array[0];
+
+		var max_contacts_count = 20;
+		var individual_tag_name = "table";
+
+		var collection_is_reverse = false;
+		template_key = "merge-contacts";
+
+		if (App_Contacts.duplicateContactsListView == undefined || dup_contacts1_array.length<1)
+		{
+			Backbone.history.navigate("contacts", { trigger : true });
+			return;
+		}
+
+		var contacts = [];
+		for (var i = 0; i < dup_contacts1_array.length; i++)
+		{
+			var contact_id = Number(dup_contacts1_array[i]);
+			var data = App_Contacts.duplicateContactsListView.collection.where({ id : contact_id });
+			var temp = contacts.concat(data);
+			contacts = temp;
+		}
+		var bigObject = {};
+		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		bigObject['custom_fields'] = get_custom_fields();
+		var objects = []
+		var length = 0;
+		objects[0] = master_record;
+		for (i = 0; i < contacts.length; i++)
+		{
+			objects[i + 1] = contacts[i].toJSON();
+			length++;
+		}
+		bigObject["contacts"] = objects;
+		bigObject["length"] = length;
+		console.log(bigObject);
+		this.mergeContactsView = new Base_Model_View({ template : template_key, data : bigObject, postRenderCallback : function(el)
+		{
+			// g_id_array.length = 0;
+		} });
+
+		$('#content').html(this.mergeContactsView.render(true).el);
 		$(".active").removeClass("active");
 		$("#contactsmenu").addClass("active");
 
