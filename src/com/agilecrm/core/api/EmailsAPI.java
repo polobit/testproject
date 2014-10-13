@@ -183,7 +183,7 @@ public class EmailsAPI
 			apiKey = emailGateway.api_key;
 
 		// Returns mandrill subaccount info if created, otherwise error json.
-		String info = MandrillSubAccounts.getSubAccountInfo("our", apiKey);
+		String info = MandrillSubAccounts.getSubAccountInfo(NamespaceManager.get(), apiKey);
 
 		// If subaccount did not exist, return null
 		if (StringUtils.contains(info, "Unknown_Subaccount"))
