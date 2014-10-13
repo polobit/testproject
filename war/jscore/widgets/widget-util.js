@@ -477,7 +477,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 												{
 
 																$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
-												}else if(models[0].attributes.id){
+												}else if(models[0].attributes.id){ 
 																$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(models[0].attributes.prefs) }));
 												}
 								}else{
