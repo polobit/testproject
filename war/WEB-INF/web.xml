@@ -40,6 +40,15 @@
 		<servlet-name>ShopifyApp</servlet-name>
 		<url-pattern>/shopifyapp</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ShopifyAppUnInstall</servlet-name>
+		<servlet-class>com.thirdparty.shopify.ShopifyAppUnInstallServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ShopifyAppUnInstall</servlet-name>
+		<url-pattern>/uninstallshopifyapp</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>OAuth2</servlet-name>
