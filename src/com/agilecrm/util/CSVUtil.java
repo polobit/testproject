@@ -473,7 +473,7 @@ public class CSVUtil
 		System.out.println("exception raised while saving contact ");
 		e.printStackTrace();
                 
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), e.getMessage()));
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), "Exception raised"));
 
 	    }
 
