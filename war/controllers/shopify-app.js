@@ -3,11 +3,31 @@ var ShopifyRouter = Backbone.Router.extend({
 		"shopify/:shopurl" : "shopify"
 	},
 	shopify: function(shopurl){
-		var post_url = "core/shopifyapp?shop=" + shopurl; 
-		console.log(post_url);
+		var t_url = "core/shopifyapp?shop=" + shopurl;
+		var response = {}; response["shopurl"] = shopurl;
+		
 		$.ajax({
-			type : "POST",
-			url : post_url
+			type : "GET",
+			url : t_url,
+			success: function(data){
+				if(data){
+					response["installed"] = true;
+					$("#content").html(getTemplate("shopify", response));
+					return;
+				}
+				else{
+					$.ajax({
+						type : "POST",
+						url : t_url,
+						success: function(data){
+							response["installed"] = false;
+							$("#content").html(getTemplate("shopify", response));
+							return;
+						}
+					});
+				}
+			}
 		});
+		
 	}
 });
