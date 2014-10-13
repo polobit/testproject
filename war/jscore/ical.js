@@ -144,21 +144,97 @@ function send_ical_info_email(emailModal)
 					});
 }
 
+$(function(){
+
 $('#show-schedule-url').live('click', function(e)
 {
 	e.preventDefault();
 	
-	if ($("#scheduleModal").size() != 0){
-		$("#scheduleModal").modal('hide');
-		//alert($("#scheduleModal").size());
-	}
-	var scheduleModel = $(getTemplate("scheduleModal", {}));
 	
 	
-	scheduleModel.modal('show');
+	var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
+
+	var updateduserModel = new updatedCurrentUser();
+
+	updateduserModel.fetch({ success : function(data)
+	{
+		var model = data.toJSON();
+		
+		if ($("#scheduleModal").size() > 1){
+			 $('#scheduleModal').modal('hide').remove();
+		       
+		}
+		var scheduleModel = $(getTemplate("scheduleModal", model));
+		
+		var  onlineschedulingURL = "https://" + model.domain + ".agilecrm.com/calendar/" + model.schedule_id;;
+		
+		$("#scheduleurl").attr("href",onlineschedulingURL);
+		$("#schedule_id").html(model.schedule_id);
+		$("#save-scheduleurl").attr("id", "edit-schedule-id");
+		$(".edit-schedule-id").attr("value", "Edit");
+		$("#scheduleurl").removeClass("nounderline");
+
+		if ($("#scheduleModal").size() == 0)
+		scheduleModel.modal('show');
+		
+		
+
+	} });
+	
+	
 	
 });
 
+
+
+$("#edit-schedule-id")
+.die()
+.live(
+		'click',
+		function(e)
+		{
+			
+			e.preventDefault();
+			var data=$('#schedule_id').text();
+			$("#scheduleurl").removeAttr("href");
+			$('#schedule_id')
+					.html(
+						"<input type='text' style='position: relative;top: 4px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/>");
+			
+			$("#edit-schedule-id").attr("id", "save-scheduleurl");
+			$(".edit-schedule-id").attr("value", "save");
+			
+			$("#scheduleurl").addClass("nounderline");
+			$('#scheduleModal').data('modal', null);
+			
+		});
+
+$("#save-scheduleurl").die().live('click', function(e)
+{
+e.preventDefault();
+
+var data = $("#url").val();
+
+$.ajax({ url : 'core/api/users/updatescheduleid?scheduleid=' + data, type : 'GET', success : function(user)
+{
+var  onlineschedulingURL = "https://" + user.domain + ".agilecrm.com/calendar/" + user.schedule_id;;
+$("#scheduleurl").attr("href",onlineschedulingURL);
+$("#schedule_id").text(user.schedule_id);
+$("#save-scheduleurl").attr("id", "edit-schedule-id");
+$(".edit-schedule-id").attr("value", "Edit");
+$("#scheduleurl").removeClass("nounderline");
+
+}, error : function(user)
+{
+
+alert("error");
+} });
+
+
+});
+
+
+});
 $('#send-schedule-url-email').live('click', function(e)
 		{
 			e.preventDefault();
@@ -180,12 +256,10 @@ $('#send-schedule-url-email').live('click', function(e)
 				emailModal.modal('show');
 
 				// Send schedule url by email
-			//	send_schedule_url_email(emailModal);
+			// send_schedule_url_email(emailModal);
 		
 			
 		});
-
-
 
 /**
  * Sends email with ical data to current-user email.

@@ -15,16 +15,18 @@
                    <p> Scheduling meetings over email or phone is tedious. Agile allows your customers to schedule a meeting with you directly in just a few clicks. </p> 
                </div>                     
 
-                     <div class="control-group">
+                     <div class="control-group" style="float:left;">
                        <label class="control-label"><b>Your Personalized Link </b></label>
-                        <div class="controls">
-                        <a href="{{online_schedule_URL}}" target="_blank" name="scheduleurl" id="scheduleurl">{{online_schedule_URL}}</a>
-
+                        <div class="controls schedule_url_online" id="schedule-url-id" style="width:451px;word-wrap:break-word;">
+                        <a href="https://{{this.domain}}.agilecrm.com/calendar/{{this.schedule_id}}" target="_blank" name="scheduleurl" id="scheduleurl">https://{{this.domain}}.agilecrm.com/calendar/<span id="schedule_id">{{this.schedule_id}}</span></a>
                         </div>
+            <div id="tip">
+                   <p style="margin:6px 0px 0px"><i class="icon-lightbulb" style="font-size:17px;"></i> Put this link in the signature or in your automated emails</p> 
+               </div> 
+
                     </div>
-               <div id="tip">
-                   <p><i class="icon-lightbulb" style="font-size:17px;"></i> Put this link in the signature or in your automated emails</p> 
-               </div>    
+<div class="pull-right" id="edit" style="margin:16px 0px 0px 0px;"><input type="submit" style="margin-top: 3px;" id="edit-schedule-id" class="btn  edit-schedule-id" value="Edit"></></div>
+  <div class="clearfix"></div>               
             
          
              </fieldset>

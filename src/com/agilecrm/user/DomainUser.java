@@ -628,16 +628,17 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	{
 
 	    domainuser = DomainUserUtil.getDomainUser(id);
-	    if (domainuser.schedule_id == null)
+	    if (StringUtils.isEmpty(domainuser.schedule_id))
 	    {
-		System.out.println("executing if schedue id is null");
 		this.schedule_id = getScheduleid(domainuser.name);
 
 	    }
 	    else
 	    {
-		System.out.println("executing if schedue id is not null");
-		this.schedule_id = domainuser.schedule_id;
+		if (StringUtils.isNotEmpty(this.schedule_id))
+		    this.schedule_id = getScheduleid(this.schedule_id);
+		else
+		    this.schedule_id = domainuser.schedule_id;
 	    }
 	}
 	else
