@@ -472,13 +472,17 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				{
 								if (widget_name == "Shopify")
 								{
-												$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
+												if (model)
+												{
+
+																$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
+												}else{
+																$('#widget-settings', el).html(getTemplate(template_id, {}));
+												}
+								}else{
+												('#widget-settings', el).html(getTemplate(template_id, {}));
 								}
-								else
-								{
-												$('#widget-settings', el).html(getTemplate(template_id, {}));
-												console.log(el);
-								}
+								
 				}
 
 				$('#prefs-tabs-content').html(el);
