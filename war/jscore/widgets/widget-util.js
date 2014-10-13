@@ -470,7 +470,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				}
 				else
 				{
-								if (widget_name == "Shopify")
+						/*		if (widget_name == "Shopify" && (model||models[0].attributes.id))
 								{
 												
 												if (model)
@@ -482,7 +482,10 @@ function show_set_up_widget(widget_name, template_id, url, model)
 												}
 								}else{
 												('#widget-settings', el).html(getTemplate(template_id, {}));
-								}
+								}*/
+								
+								$('#widget-settings', el).html(getTemplate(template_id, {}));
+								console.log(el);
 								
 				}
 
