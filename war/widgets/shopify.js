@@ -163,7 +163,7 @@ function createContact(message)
 
 function addContactToShopify(shop)
 {
-				var url = "https://" + shop + "/admin/customers";
+				var url = "https://" + shop + "/admin/customers/new";
 				window.open(url, "_blank");
 
 }
