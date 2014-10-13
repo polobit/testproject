@@ -21,6 +21,8 @@ pageEncoding="UTF-8"%>
 <meta name="description" content="">
 <meta name="author" content="">
 <meta name="globalsign-domain-verification" content="-r3RJ0a7Q59atalBdQQIvI2DYIhVYtVrtYuRdNXENx" />
+<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eofoblinhpjfhkjlfckmeidagfogclib">
+
 
 <%
     //Check if it is being access directly and not through servlet
@@ -233,6 +235,7 @@ head.ready(["core", "stats"], function(){
 <link rel="stylesheet" type="text/css" href="css/misc/agile-social-suite.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-timline.css"></link>
  <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/agile-widgets.css"></link>
+ <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/chrome-extension-check.css"></link>
 <!-- <link rel="stylesheet" type="text/css" href="<%=CSS_PATH%>css/misc/date-picker.css"></link> -->
 
 

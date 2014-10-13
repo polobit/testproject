@@ -1,12 +1,6 @@
-<!-- Indices written at Mon, 13 Oct 2014 11:18:13 IST -->
+<!-- Indices written at Mon, 13 Oct 2014 13:00:12 IST -->
 
 <datastore-indexes>
-
-    <!-- Used 4 times in query history -->
-    <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="ownerKey" direction="asc"/>
-        <property name="close_date" direction="asc"/>
-    </datastore-index>
 
     <!-- Used 4 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
@@ -44,10 +38,9 @@
     </datastore-index>
     
 
-    <!-- Used 5 times in query history -->
+    <!-- Used 4 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
-        <property name="milestone" direction="asc"/>
-        <property name="pipeline" direction="asc"/>
+        <property name="ownerKey" direction="asc"/>
         <property name="close_date" direction="asc"/>
     </datastore-index>
 
