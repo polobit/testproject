@@ -449,6 +449,8 @@ var WidgetsRouter = Backbone.Router
 															       show_set_up_widget("Shopify", "shopify-login");
 																 }
 																 else{ 
+																 			
+																 				
 																 				show_set_up_widget("Shopify","shopify-revoke-access")
 																 		
 																 }
