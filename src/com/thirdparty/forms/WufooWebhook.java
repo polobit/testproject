@@ -90,6 +90,7 @@ public class WufooWebhook extends HttpServlet
 		for (Note note : notes)
 		{
 		    note.addRelatedContacts(contact.id.toString());
+		    note.created_time = System.currentTimeMillis() / 1000;
 		    note.setOwner(user);
 		    note.save();
 		}
