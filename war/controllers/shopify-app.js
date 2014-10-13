@@ -4,7 +4,7 @@ var ShopifyRouter = Backbone.Router.extend({
 	},
 	shopify: function(shopurl){
 		var t_url = "core/shopifyapp?shop=" + shopurl;
-		var response["shopurl"] = shopurl;
+		var response = {}; response["shopurl"] = shopurl;
 		
 		$.ajax({
 			type : "GET",
