@@ -219,18 +219,16 @@ function show_custom_fields_helper(custom_fields, properties){
 				if(field.scope=="DEAL"){
 					if(field.is_required)
 						el = el.concat('<div class="control-group">	<label class="control-label">'
-									+field.field_label
-									+' <span class="field_req">*</span><input type="'
+									+'<span class="field_req">*</span><input type="'
 									+field_type
 									+'" class="'
 									+field.field_type.toLowerCase()
 									+'_input custom_field required" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin-left: 5px;"></label></div></div>');
+									+'" style="margin: 0px 5px;">'+field.field_label+'</label></div></div>');
 					else
 						el = el.concat('<div class="control-group">	<label class="control-label">'
-									+field.field_label
 									+'<input type="'
 									+field_type
 									+'" class="'
@@ -238,7 +236,7 @@ function show_custom_fields_helper(custom_fields, properties){
 									+'_input custom_field" id='
 									+field.id+' name="'
 									+field.field_label
-									+'" style="margin-left: 5px;"></label></div>');
+									+'" style="margin: 0px 5px;">'+field.field_label+'</label></div>');
 					return;
 				}
 				
