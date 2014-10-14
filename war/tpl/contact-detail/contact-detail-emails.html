@@ -39,7 +39,7 @@
     <span class="activity-block-owner">	
 			<img class="user-img thumbnail" width="40" height="40" src="{{#extractEmail from}}{{emailGravatarurl 40 this}}{{/extractEmail}}">
 	</span>
-		<div id="email-reply-div">
+		<div>
         
 			<h4>
 	{{#containString owner_email from}}
@@ -58,7 +58,7 @@
 			</h4></br>
 			<div style="height:70px;margin-bottom:5px" class="ellipsis-multi-line collapse-{{id}}">
 				<div>
-					<div class="email-body">{{{message}}}</div>
+         			<p>{{{message}}}</p>
 				</div>
       		</div>
 			<div id="collapse-{{id}}" class="collapse activity-email-collapse">
@@ -66,7 +66,7 @@
                 	<li><strong>From:</strong> {{from}}</li> 
 						
                 	<li>
-						<div class="caption to-emails" data-to="{{to}}" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
+						<div class="caption" id="tl-mail-to-popover" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden" rel="popover" data-placement="right" data-content="message:" data-trigger="hover">
 							<strong>To:</strong> {{to}}
 						</div>
 					</li>
@@ -86,15 +86,12 @@
           			</li>
                     {{/if}}
            		</ul>
-       			<div style="margin-top:10px" class="email-body">{{#if message}}{{{message}}}{{/if}}</div>
+       			<p style="margin-top:10px">{{#if message}}{{{message}}}{{/if}}</p>
     		</div>
-		<div style="padding-top: 5px;">
+		<div>
 		<small class="edit-hover"> 
 			<time class="email-sent-time" datetime="{{epochToHumanDate "" date_secs}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" date_secs}}</time>
 		</small>
-
-		<a href="#" data-from ="{{#extractEmail from}}{{this}}{{/extractEmail}}" id='email-reply' style="float: right; text-decoration: none; display:none;"><i class="icon-mail-reply-all"></i> Reply</a>
-       
 {{/if}}
 	</div>	
 </div>

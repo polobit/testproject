@@ -286,7 +286,7 @@ var ContactsRouter = Backbone.Router.extend({
 
 		// Default url for contacts route
 		this.contact_id = contact_id;
-		var url = '/core/api/search/duplicateContacts/' + contact_id;
+		var url = '/core/api/search/duplicate-contacts/' + contact_id;
 		var collection_is_reverse = false;
 		template_key = "duplicate-contacts";
 

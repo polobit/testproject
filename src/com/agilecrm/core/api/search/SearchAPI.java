@@ -29,89 +29,37 @@ import com.agilecrm.search.query.QueryDocument;
 @Path("api/search")
 public class SearchAPI
 {
-    /**
-     * It initializes AppengineSearch, which is used to build query based on the
-     * search keyword. AppengineSearch calls {@link QueryDocument} to perform
-     * search, based on the keyword and cursor sent.
-     * 
-     * @param keyword
-     * @param count
-     * @param cursor
-     * @param type
-     * @return
-     */
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection searchContacts(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
-    {
-	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
-		cursor, type);
-    }
+	/**
+	 * It initializes AppengineSearch, which is used to build query based on the
+	 * search keyword. AppengineSearch calls {@link QueryDocument} to perform
+	 * search, based on the keyword and cursor sent.
+	 * 
+	 * @param keyword
+	 * @param count
+	 * @param cursor
+	 * @param type
+	 * @return
+	 */
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Collection searchContacts(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
+			@QueryParam("cursor") String cursor, @QueryParam("type") String type)
+	{
+		return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
+				cursor, type);
+	}
 
-    @Path("{keyword}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection searchContactsOld(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
-    {
-	return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
-		cursor, type);
-    }
+	@Path("{keyword}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Collection searchContactsOld(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
+			@QueryParam("cursor") String cursor, @QueryParam("type") String type)
+	{
+		return new AppengineSearch<Contact>(Contact.class).getSimpleSearchResults(keyword, Integer.parseInt(count),
+				cursor, type);
+	}
 
-    /**
-     * It initializes AppengineSearch, which is used to build query based on the
-     * search keyword. AppengineSearch calls {@link QueryDocument} to perform
-     * search, based on the keyword and cursor sent. It searchs on all the
-     * entities (contacts, deals, cases)
-     * 
-     * @param keyword
-     * @param count
-     * @param cursor
-     * @param type
-     * @return
-     */
-    @Path("/all/keyword")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection searchAll(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
-    {
-
-	if (StringUtils.isEmpty(type))
-	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
-
-	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
-		cursor, type);
-    }
-
-    /**
-     * It initializes AppengineSearch, which is used to build query based on the
-     * search keyword. AppengineSearch calls {@link QueryDocument} to perform
-     * search, based on the keyword and cursor sent. It searchs on all the
-     * entities (contacts, deals, cases)
-     * 
-     * @param keyword
-     * @param count
-     * @param cursor
-     * @param type
-     * @return
-     */
-    @Path("/all/{keyword}")
-    @GET
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Collection searchAllOld(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
-	    @QueryParam("cursor") String cursor, @QueryParam("type") String type)
-    {
-
-	if (StringUtils.isEmpty(type))
-	    return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
-
-	return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
-		cursor, type);
-    }
-    
-    /**
+	/**
 	 * It initializes AppengineSearch, which is used to build query based on the
 	 * search keyword. AppengineSearch calls {@link QueryDocument} to perform
 	 * search, based on the keyword and cursor sent. It searchs on all the
@@ -123,7 +71,59 @@ public class SearchAPI
 	 * @param type
 	 * @return
 	 */
-	@Path("/duplicateContacts/{id}")
+	@Path("/all/keyword")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Collection searchAll(@QueryParam("q") String keyword, @QueryParam("page_size") String count,
+			@QueryParam("cursor") String cursor, @QueryParam("type") String type)
+	{
+
+		if (StringUtils.isEmpty(type))
+			return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+
+		return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
+				cursor, type);
+	}
+
+	/**
+	 * It initializes AppengineSearch, which is used to build query based on the
+	 * search keyword. AppengineSearch calls {@link QueryDocument} to perform
+	 * search, based on the keyword and cursor sent. It searchs on all the
+	 * entities (contacts, deals, cases)
+	 * 
+	 * @param keyword
+	 * @param count
+	 * @param cursor
+	 * @param type
+	 * @return
+	 */
+	@Path("/all/{keyword}")
+	@GET
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Collection searchAllOld(@PathParam("keyword") String keyword, @QueryParam("page_size") String count,
+			@QueryParam("cursor") String cursor, @QueryParam("type") String type)
+	{
+
+		if (StringUtils.isEmpty(type))
+			return new QueryDocument(new Document().index, null).simpleSearch(keyword, Integer.parseInt(count), cursor);
+
+		return new QueryDocument(new Document().index, null).simpleSearchWithType(keyword, Integer.parseInt(count),
+				cursor, type);
+	}
+
+	/**
+	 * It initializes AppengineSearch, which is used to build query based on the
+	 * search keyword. AppengineSearch calls {@link QueryDocument} to perform
+	 * search, based on the keyword and cursor sent. It searchs on all the
+	 * entities (contacts, deals, cases)
+	 * 
+	 * @param keyword
+	 * @param count
+	 * @param cursor
+	 * @param type
+	 * @return
+	 */
+	@Path("/duplicate-contacts/{id}")
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Collection getDuplicateContacts(@PathParam("id") String id, @QueryParam("page_size") String count,
@@ -136,11 +136,11 @@ public class SearchAPI
 		String email = contact.getContactFieldValue("email");
 		int pageSize = Integer.parseInt(count) + 1;
 
-		String query = "(first_name=" + firstName + " AND " + "last_name=" + lastName + ") OR " + "phone=" + phone + " OR "
-				+ "email=" + email;
+		String query = "(first_name=" + firstName + " AND " + "last_name=" + lastName + ") OR " + "phone=" + phone
+				+ " OR " + "email=" + email;
 
 		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
-		Collection collection = appEngineSearch.getSearchResults(query,pageSize, cursor);
+		Collection collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
 		Iterator iterator = collection.iterator();
 		while (iterator.hasNext())
 		{
