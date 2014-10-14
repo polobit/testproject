@@ -91,12 +91,11 @@ public class JSAPIFilter implements Filter
 	}
 	else if (domain != null && password != null && username != null)
 	{
-	    System.out.println("started process");
 	    // Get AgileUser
 	    DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(username);
-	    System.out.println("Domain - " + NamespaceManager.get());
 	    // Domain should be checked to avoid saving in other domains
-	    if (domainUser != null && !StringUtils.isEmpty(password))
+	    if (domainUser != null && domainUser.domain != null && domainUser.domain.equals(NamespaceManager.get())
+		    && !StringUtils.isEmpty(password))
 	    {
 		// If domain user exists and the APIKey matches, request is
 		// given access
@@ -109,13 +108,11 @@ public class JSAPIFilter implements Filter
 		    chain.doFilter(httpRequest, httpResponse);
 		    return;
 		}
-		System.out.println("password wrong");
 		sendJSONErrorResponse((HttpServletRequest) request, (HttpServletResponse) response,
 			JSAPIUtil.generateJSONErrorResponse(JSAPIUtil.Errors.UNAUTHORIZED));
 		return;
 	    }
 	}
-	System.out.println("All wrong");
 	sendJSONErrorResponse((HttpServletRequest) request, (HttpServletResponse) response,
 		JSAPIUtil.generateJSONErrorResponse(JSAPIUtil.Errors.API_KEY_MISSING));
     }
