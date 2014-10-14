@@ -345,7 +345,7 @@ function merge_duplicate_contacts(master_record, properties, selected_fields,
 function delete_duplicate_contacts(url, id_array, master_record) {
 	for (var i = 0; i < id_array.length; i++) {
 		$.ajax({
-			url : '/core/api/contacts/' + id_array[0],
+			url : '/core/api/contacts/' + id_array[i],
 			type : 'DELETE',
 			async : false,
 			success : function() {

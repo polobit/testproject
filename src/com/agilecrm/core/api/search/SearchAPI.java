@@ -1,7 +1,9 @@
 package com.agilecrm.core.api.search;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.lang.StringUtils;
 
 import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.AppengineSearch;
 import com.agilecrm.search.document.Document;
@@ -132,12 +135,53 @@ public class SearchAPI
 		Contact contact = ContactUtil.getContact(Long.valueOf(id));
 		String firstName = contact.getContactFieldValue("first_name");
 		String lastName = contact.getContactFieldValue("last_name");
-		String phone = contact.getContactFieldValue("phone");
-		String email = contact.getContactFieldValue("email");
+		StringBuffer emailBuffer = new StringBuffer();
+		StringBuffer phoneBuffer = new StringBuffer();
+		StringBuffer stringBuffer = new StringBuffer();
+		List<String> emails = new ArrayList<String>();
+		List<String> phones = new ArrayList<String>();
+		stringBuffer.append("(first_name=" + firstName + " AND " + "last_name=" + lastName + ")");
+		List<ContactField> properties = contact.getProperties();
+		for (int i = 0; i < properties.size(); i++)
+		{
+			ContactField contactField = properties.get(i);
+			if (contactField.name.equalsIgnoreCase("phone"))
+				phones.add(contactField.value);
+			if (contactField.name.equalsIgnoreCase("email"))
+				emails.add(contactField.value);
+		}
+		if (emails.size() > 0)
+		{
+			emailBuffer.append(" OR email=(");
+			for (int i = 0; i < emails.size(); i++)
+			{
+				emailBuffer.append(emails.get(i));
+				if (!(i == emails.size() - 1))
+					emailBuffer.append(" OR ");
+				else
+					emailBuffer.append(")");
+			}
+		}
+		if (phones.size() > 0)
+		{
+			phoneBuffer.append(" OR phone=(");
+			for (int i = 0; i < phones.size(); i++)
+			{
+				phoneBuffer.append(phones.get(i));
+				if (!(i == phones.size() - 1))
+					phoneBuffer.append(" OR ");
+				else
+					phoneBuffer.append(")");
+			}
+		}
 		int pageSize = Integer.parseInt(count) + 1;
 
-		String query = "(first_name=" + firstName + " AND " + "last_name=" + lastName + ") OR " + "phone=" + phone
-				+ " OR " + "email=" + email;
+		stringBuffer.append(phoneBuffer.toString());
+		stringBuffer.append(emailBuffer.toString());
+
+		String query = stringBuffer.toString();
+
+		System.out.println(query);
 
 		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
 		Collection collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
