@@ -42,6 +42,7 @@ import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
@@ -399,14 +400,15 @@ public class AdminPanelAPI
     @Path("/getcharges")
     @GET
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<Charge> getCollectionOfChargesOfCustomer(@QueryParam("d") String customerid)
+    public String getCollectionOfChargesOfCustomer(@QueryParam("d") String customerid)
     {
 	try
 	{
 
-	   List<Charge> list = StripeUtil.getCharges(customerid);
-	   System.out.println(list);
-	   return  list;
+	    List<Charge> list = StripeUtil.getCharges(customerid);
+	    System.out.println(list);
+	    String customerJSONString = new Gson().toJson(list);
+	    return customerJSONString;
 	}
 	catch (Exception e)
 	{
