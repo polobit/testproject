@@ -12,7 +12,7 @@ var Twilio_Start = false;
 var Restart_Twilio = false;
 
 $(function()
-{	
+{
 	// After 15 sec procedure will start.
 	setTimeout(function()
 	{
@@ -61,7 +61,7 @@ $(function()
 		console.log("Twilio call canceld from noty");
 
 		globalconnection.disconnect();
-		
+
 		Twilio.Device.disconnectAll();
 	});
 
@@ -102,9 +102,8 @@ $(function()
 	$("#twilio_number").die().live('change', function(e)
 	{
 		e.preventDefault();
-		
 		$("#error-number-not-selected").hide();
-		
+
 		var numberSID = $("#twilio_number option:selected").attr("data");
 		console.log("twilio_number change");
 		console.log("twilio_number " + $(this).val() + " clicked " + numberSID);
@@ -113,12 +112,11 @@ $(function()
 	});
 
 	$("#twilio_from_number").die().live('change', function(e)
-			{
-				e.preventDefault();
-				
-				$("#error-number-not-selected").hide();				
-			});
-	
+	{
+		e.preventDefault();
+		$("#error-number-not-selected").hide();
+	});
+
 	$(".contact-make-twilio-call").die().live('click', function(e)
 	{
 		e.preventDefault();
@@ -132,6 +130,12 @@ $(function()
 		console.log("phone: " + $(this).attr("phone"));
 
 		twiliocall($(this).attr("phone"), getTwilioIOContactName());
+	});
+
+	$("#twilio_acc_sid", "#twilio_auth_token").die().live('click', function(e)
+	{
+		e.preventDefault();
+		$("#note-number-not-available").hide();
 	});
 });
 
@@ -215,62 +219,124 @@ function getValidateAndVerfiedCallerId(acc_sid, auth_token, callback)
 		console.log("Twilio validate account " + result);
 		console.log(result);
 		result = eval("(" + result + ")");
-		console.log("Twilio verified number " + result[0].PhoneNumber);
+		console.log("Twilio validate account " + result);
 
-		// If no numbers
-		if (!result[0].PhoneNumber)
+		if (result)
 		{
-			alert("You have no numbers verified. Please verify a number in your Twilio account.");
-			return;
+			// Get twilio number
+			getTwilioNumbers(acc_sid, auth_token, function(twilioNumbers)
+			{
+				// Get verified number
+				getVerifiedNumbers(acc_sid, auth_token, function(verifiedNumbers)
+				{
+					addNumbersInUI(twilioNumbers, verifiedNumbers);
+
+					// If defined, execute the callback function
+					if (callback && typeof (callback) === "function")
+						callback(result);
+				});
+			});
 		}
-
-		// Add verified number in UI
-		addVerifiedCallerIdInUI(result);
-
-		// Get twilio number
-		getTwilioNumbers(acc_sid, auth_token, function(data)
-		{ // If defined, execute the callback function
-			if (callback && typeof (callback) === "function")
-				callback(result);
-		});
-
+		else
+			setToValidate(result, true);
 	}).error(function(data)
 	{
-		// Change validate to validating
-		$("#validate_account").text("Validate");
-		$("#validate_account").attr("disabled", false);
-
-		console.log("Twilio validate account error ");
-		console.log(data);
-
-		alert("Please enter valid details.");
-
-		// Reset form fields after sending email
-		$("#twilioio_login_form").each(function()
-		{
-			this.reset();
-		});
+		console.log("Twilio validate account error");
+		setToValidate(data, true);
 	});
 }
 
-function getTwilioNumbers(acc_sid, auth_token, callback)
+function addNumbersInUI(twilioNumbers, verifiedNumbers)
 {
-	$.get("/core/api/widgets/twilio/gettwilionumbers/" + acc_sid + "/" + auth_token, function(result)
+	console.log("Twilio twilio number " + twilioNumbers + "  " + verifiedNumbers);
+	console.log("Twilio twilio number " + twilioNumbers.length + "  " + verifiedNumbers.length);
+	// console.log("Twilio twilio number " + twilioNumbers[0].PhoneNumber+" "
+	// +verifiedNumbers[0].PhoneNumber );
+
+	// no twilio # as well as no verified #
+	if (twilioNumbers.length == 0 && verifiedNumbers.length == 0)
 	{
-		console.log("Twilio getTwilioNumbers " + result);
-		console.log(result);
-		result = eval("(" + result + ")");
-		console.log("Twilio twilio number " + result[0].PhoneNumber);
+		// Reset form
+		setToValidate("no number", false);
+
+		// Add error msg at bottom of form
+		$("#note-number-not-available").html("You have no twilio numbers and verified numbers.");
+		$("#note-number-not-available").show();
+	}
+	// twilio # is available but no verified #
+	else if (twilioNumbers.length != 0 && verifiedNumbers.length == 0)
+	{
+		// Add note at bottom you do not have verified #
+		$("#note-number-not-available").html("You have no verified numbers. Please verify number in your Twilio account.");
+		$("#note-number-not-available").show();
 
 		// If no numbers
-		if (!result[0].PhoneNumber)
+		if (!twilioNumbers[0].PhoneNumber)
 		{
 			alert("You have no twilio numbers. Please buy or port a number in your Twilio account.");
 			return;
 		}
 
+		console.log("Twilio twilio number " + twilioNumbers[0].PhoneNumber);
+
 		// Add verified number in UI
-		addTwilioNumbersInUI(result);
+		addTwilioNumbersInUI(twilioNumbers);
+
+		// Hide validate button
+		$("#validate_account").hide();
+
+		// Show save button
+		$("#save_prefs").show();
+
+		// Hide twilio from numbers list
+		$("#twilio_from_numbers").hide();
+
+		// Show twilio numbers list
+		$("#twilio_numbers").show();
+		
+		$("#twilio_number").addClass("required");
+	}
+	// verified # is available but no twilio #
+	else if (twilioNumbers.length == 0 && verifiedNumbers.length != 0)
+	{
+		// Add note at bottom you do not have twilio #
+		$("#note-number-not-available").html("You have no twilio numbers. Please buy or port a number in your Twilio account.");
+		$("#note-number-not-available").show();
+
+		// If no numbers
+		if (!verifiedNumbers[0].PhoneNumber)
+		{
+			alert("You have no verified numbers. Please verify number in your Twilio account.");
+			return;
+		}
+
+		console.log("Twilio verified number " + verifiedNumbers[0].PhoneNumber);
+
+		// Add verified number in UI
+		addVerifiedCallerIdInUI(verifiedNumbers);
+
+		// Hide validate button
+		$("#validate_account").hide();
+
+		// Show save button
+		$("#save_prefs").show();
+
+		// Show twilio from numbers list
+		$("#twilio_from_numbers").show();
+
+		// Hide twilio numbers list
+		$("#twilio_numbers").hide();
+		
+		$("#twilio_from_number").addClass("required");
+	}
+	// both available
+	else if (twilioNumbers.length != 0 && verifiedNumbers.length != 0)
+	{
+		// Add verified number in UI
+		addTwilioNumbersInUI(twilioNumbers);
+
+		// Add verified number in UI
+		addVerifiedCallerIdInUI(verifiedNumbers);
 
 		// Hide validate button
 		$("#validate_account").hide();
@@ -283,26 +349,63 @@ function getTwilioNumbers(acc_sid, auth_token, callback)
 
 		// Show twilio numbers list
 		$("#twilio_numbers").show();
+	}
+}
+
+function setToValidate(data, showAlert)
+{
+	// Change validate to validating
+	$("#validate_account").text("Validate");
+	$("#validate_account").attr("disabled", false);
+
+	console.log("Twilio error ");
+	console.log(data);
+
+	if (showAlert)
+		alert("Please enter valid details.");
+
+	// Reset form fields after sending email
+	$("#twilioio_login_form").each(function()
+	{
+		this.reset();
+	});
+}
+
+function getTwilioNumbers(acc_sid, auth_token, callback)
+{
+	$.get("/core/api/widgets/twilio/gettwilionumbers/" + acc_sid + "/" + auth_token, function(result)
+	{
+		console.log("Twilio getTwilioNumbers " + result);
+		console.log(result);
+		result = eval("(" + result + ")");
+		console.log("Twilio getTwilioNumbers " + result);
 
 		// If defined, execute the callback function
 		if (callback && typeof (callback) === "function")
 			callback(result);
 	}).error(function(data)
 	{
-		// Change validate to validating
-		$("#validate_account").text("Validate");
-		$("#validate_account").attr("disabled", false);
+		console.log("error in getTwilioNumbers");
+		setToValidate(data, true);
+	});
+}
 
-		console.log("Twilio get twilio number error ");
-		console.log(data);
+function getVerifiedNumbers(acc_sid, auth_token, callback)
+{
+	$.get("/core/api/widgets/twilio/getverifiednumbers/" + acc_sid + "/" + auth_token, function(result)
+	{
+		console.log("Twilio getVerifiedNumbers " + result);
+		console.log(result);
+		result = eval("(" + result + ")");
+		console.log("Twilio getVerifiedNumbers " + result);
 
-		alert("Please enter valid details.");
-
-		// Reset form fields after sending email
-		$("#twilioio_login_form").each(function()
-		{
-			this.reset();
-		});
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(result);
+	}).error(function(data)
+	{
+		console.log("error in getVerifiedNumbers");
+		setToValidate(data, true);
 	});
 }
 
@@ -342,43 +445,43 @@ function addVerifiedCallerIdInUI(result)
 function createAppSid(twilioio_prefs, callback)
 {
 	console.log("In createAppSid");
+	var numberSid = "None";
+	if (twilioio_prefs.twilio_number_sid != "")
+		numberSid = twilioio_prefs.twilio_number_sid;
 
-	$
-			.get(
-					"/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + twilioio_prefs.twilio_number_sid,
-					function(result)
-					{
-						console.log("Twilio createAppSid " + result);
+	$.get("/core/api/widgets/twilio/createappsid/" + twilioio_prefs.twilio_acc_sid + "/" + twilioio_prefs.twilio_auth_token + "/" + numberSid, function(result)
+	{
+		console.log("Twilio createAppSid " + result);
 
-						// If defined, execute the callback function
-						if (callback && typeof (callback) === "function")
-							callback(result);
-					}).error(function(data)
-			{
-				console.log("Twilio get app sid error ");
-				console.log(data);
+		// If defined, execute the callback function
+		if (callback && typeof (callback) === "function")
+			callback(result);
+	}).error(function(data)
+	{
+		console.log("Twilio get app sid error ");
+		console.log(data);
 
-				alert("Please try again with valid details.");
+		alert("Please try again with valid details.");
 
-				$("#save_prefs").text("Save");
-				$("#save_prefs").attr("disabled", false);
-				$("#save_prefs").hide();
-				$("#validate_account").text("Validate");
-				$("#validate_account").attr("disabled", false);
-				$("#validate_account").show();
+		$("#save_prefs").text("Save");
+		$("#save_prefs").attr("disabled", false);
+		$("#save_prefs").hide();
+		$("#validate_account").text("Validate");
+		$("#validate_account").attr("disabled", false);
+		$("#validate_account").show();
 
-				// Show twilio from numbers list
-				$("#twilio_from_numbers").hide();
+		// Show twilio from numbers list
+		$("#twilio_from_numbers").hide();
 
-				// Show twilio numbers list
-				$("#twilio_numbers").hide();
+		// Show twilio numbers list
+		$("#twilio_numbers").hide();
 
-				// Reset form fields after sending email
-				$("#twilioio_login_form").each(function()
-				{
-					this.reset();
-				});
-			});
+		// Reset form fields after sending email
+		$("#twilioio_login_form").each(function()
+		{
+			this.reset();
+		});
+	});
 }
 
 function fill_twilioio_numbers()

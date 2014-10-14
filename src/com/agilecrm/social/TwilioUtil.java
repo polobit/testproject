@@ -667,27 +667,29 @@ public class TwilioUtil
 		String appSid = new JSONObject(response.getResponseText()).getString("sid");
 
 		System.out.println("appSid" + appSid);
+
 		/* ****** Add application to twilio number ***** */
+		if (!numberSid.equalsIgnoreCase("None"))
+		{
+			// parameters required to create application
+			params = new HashMap<String, String>();
+			params.put("VoiceApplicationSid", appSid);
 
-		// parameters required to create application
-		params = new HashMap<String, String>();
-		params.put("VoiceApplicationSid", appSid);
+			System.out.println("params" + params.toString());
+			// Make a POST request to add application to twilio number
+			// /IncomingPhoneNumbers/PNa96612e977cc4a8c8b6cb0c14dd43e88
+			response = client.request("/2010-04-01/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers/"
+					+ numberSid, "POST", params);
 
-		System.out.println("params" + params.toString());
-		// Make a POST request to add application to twilio number
-		// /IncomingPhoneNumbers/PNa96612e977cc4a8c8b6cb0c14dd43e88
-		response = client.request("/2010-04-01/Accounts/" + client.getAccountSid() + "/IncomingPhoneNumbers/"
-				+ numberSid, "POST", params);
+			System.out.println("Twilio app added to number : " + response.getResponseText());
 
-		System.out.println("Twilio app added to number : " + response.getResponseText());
-
-		/*
-		 * If error occurs, throw exception based on its status else return
-		 * application SID
-		 */
-		if (response.isError())
-			throwProperException(response);
-
+			/*
+			 * If error occurs, throw exception based on its status else return
+			 * application SID
+			 */
+			if (response.isError())
+				throwProperException(response);
+		}
 		return appSid;
 	}
 }

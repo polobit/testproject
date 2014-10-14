@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import com.agilecrm.social.TwilioUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.WidgetUtil;
+import com.thirdparty.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.client.TwilioCapability;
+import com.twilio.sdk.client.TwilioCapability.DomainException;
 
 /**
  * <code>TwilioWidgetsAPI</code> class includes REST calls to interact with
@@ -287,4 +290,192 @@ public class TwilioWidgetsAPI
 					.build());
 		}
 	}
+
+	/**
+	 * Create token for twilio io.
+	 * 
+	 * @return {@link String} Generated token
+	 */
+	@Path("getglobaltoken")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getGlobalToken()
+	{
+		Widget twilioio = WidgetUtil.getWidget("TwilioIO");
+
+		// Find an application Sid from twilio.com/user/account/apps
+		String applicationSid = twilioio.getProperty("twilio_app_sid");
+		TwilioCapability capability = new TwilioCapability(twilioio.getProperty("twilio_acc_sid"),
+				twilioio.getProperty("twilio_auth_token"));
+		capability.allowClientOutgoing(applicationSid);
+		capability.allowClientIncoming("jenny");
+
+		String token = null;
+
+		try
+		{
+			token = capability.generateToken(86400); // 600sec 10min,86400sec
+														// 24hr
+			System.out.println("token:" + token);
+		}
+		catch (DomainException e)
+		{
+			e.printStackTrace();
+		}
+		return token;
+	}
+
+	/**
+	 * Validate entered details of twilio account for twilio saga and return
+	 * twilio number if valid.
+	 * 
+	 * @return {@link String} Generated token
+	 * @throws Exception
+	 */
+	@Path("validateaccount/{acc-sid}/{auth-token}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public boolean validateTwilioAccount(@PathParam("acc-sid") String accountSID,
+			@PathParam("auth-token") String authToken)
+	{
+		System.out.println("In validateaccount" + accountSID + " " + authToken);
+		/*
+		 * TwilioRestClient client = new TwilioRestClient(accountSID, authToken,
+		 * null); System.out.println(client.getAccountSid());
+		 */
+		try
+		{
+			/*
+			 * // Calls TwilioUtil method to retrieve numbers return
+			 * TwilioUtil.getOutgoingNumberTwilioIO(client).toString();
+			 */
+			return TwilioUtil.checkCredentials(accountSID, authToken);
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
+	/**
+	 * Validate entered details of twilio account for twilio io and return
+	 * verified number if valid.
+	 * 
+	 * @return {@link String} Generated token
+	 * @throws Exception
+	 */
+	@Path("getverifiednumbers/{acc-sid}/{auth-token}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getVerifiedNumbers(@PathParam("acc-sid") String accountSID, @PathParam("auth-token") String authToken)
+	{
+		System.out.println("In getverifiednumbers" + accountSID + " " + authToken);
+		TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
+		System.out.println(client.getAccountSid());
+		try
+		{
+			// Calls TwilioUtil method to retrieve numbers
+			return TwilioUtil.getOutgoingNumberTwilioIO(client).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
+	/**
+	 * Validate entered details of twilio account for twilio io and return
+	 * twilio number if valid.
+	 * 
+	 * @return {@link String} Generated token
+	 * @throws Exception
+	 */
+	@Path("gettwilionumbers/{acc-sid}/{auth-token}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getTwilioNumbers(@PathParam("acc-sid") String accountSID, @PathParam("auth-token") String authToken)
+	{
+		System.out.println("In gettwilionumbers" + accountSID + " " + authToken);
+		TwilioRestClient client = new TwilioRestClient(accountSID, authToken, null);
+		System.out.println(client.getAccountSid());
+		try
+		{
+			// Calls TwilioUtil method to retrieve numbers
+			return TwilioUtil.getIncomingNumberTwilioIO(client).toString();
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+
+	}
+
+	@Path("createappsid/{acc-sid}/{auth-token}/{number-sid}")
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String createAppSid(@PathParam("acc-sid") String accountSID, @PathParam("auth-token") String authToken,
+			@PathParam("number-sid") String numberSid)
+	{
+		System.out.println("In createAppSid" + accountSID + " " + authToken + " " + numberSid);
+
+		try
+		{
+			/*
+			 * Create a Twilio Application for Agile in Agile User Twilio
+			 * account
+			 */
+			return TwilioUtil.createAppSidTwilioIO(accountSID, authToken, numberSid);
+		}
+		catch (SocketTimeoutException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("Request timed out. Refresh and Please try again.").build());
+		}
+		catch (IOException e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST)
+					.entity("An error occurred. Refresh and Please try again.").build());
+		}
+		catch (Exception e)
+		{
+			throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage())
+					.build());
+		}
+	}
+
 }

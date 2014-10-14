@@ -1,83 +1,86 @@
 /**
  * Chrome extension id
  */
-var Chrome_Extension_Id = "eofoblinhpjfhkjlfckmeidagfogclib"; 
+var Chrome_Extension_Id = "eofoblinhpjfhkjlfckmeidagfogclib";
 
 /**
  * Chrome extension resource path to detect extension
  */
-var Chrome_Extension_Accesible_Resource = "/js/xhr_override.js"; 
+var Chrome_Extension_Accesible_Resource = "/js/xhr_override.js";
 
 /**
  * Chrome extension webstore url
  */
-var Chrome_Extension_Webstore_Url = "https://chrome.google.com/webstore/detail/"
-		+ Chrome_Extension_Id;
+var Chrome_Extension_Webstore_Url = "https://chrome.google.com/webstore/detail/" + Chrome_Extension_Id;
 
 /**
  * Detect chrome extension on load
  */
-$(function() {
+$(function()
+{
 
 	console.log("**chrome extension**");
-	
+
 	// Check chrome browser
 	var chrome = window.chrome || {};
-	console.log("chrome: "+chrome);
-	
-	if (!chrome.app || !chrome.webstore)
-		return;
+	console.log("chrome: " + chrome);
 
-	//console.log("readCookie: "+readCookie("agile_chrome_extension")+" "+ readCookie("prevent_extension_request"));
-	
-	// Read cookie to notify once per session
-	/*if (readCookie("agile_chrome_extension")
-			|| readCookie("prevent_extension_request"))
+	if (!chrome.app || !chrome.webstore)
+	{
+		console.log("***no chrome***")
+		return;
+	}
+
+	// After clicking on logout, erase cookie to show notification after
+	// login about chrome extension again if not install.
+	$('a').click(function(event)
+	{
+		var herfLogout = $(this).attr("href");
+		if (herfLogout == "/login")
 		{
+			// erase field to notification about chrome extension
+			eraseCookie("agile_chrome_extension");
+		}
+	});
+
+	console.log("readCookie: " + readCookie("agile_chrome_extension") + " " + readCookie("prevent_extension_request"));
+
+	// Read cookie to notify once per session
+	if (readCookie("agile_chrome_extension") || readCookie("prevent_extension_request"))
+	{
 		console.log("return now");
 		return;
-		}*/
-		
+	}
 
 	// Detect extension
 	Detect_Chrome_Extension(Toggle_Extension_Request_Ui);
 });
 
-
 /**
  * Detect chrome extension by sending image request
  */
-function Detect_Chrome_Extension(callback) {
-
+function Detect_Chrome_Extension(callback)
+{
 	console.log("In Detect_Chrome_Extension");
-	
-	s = document.createElement('script');
-	s.type = "text/javascript";
-	s.src = "chrome-extension://" + Chrome_Extension_Id
-	+ Chrome_Extension_Accesible_Resource;
-	
-	console.log(s);
-	
-	s.onload = function() {
 
-		console.log("s.onload ");
+	if (document.getElementById('agilecrm_extension'))
+	{
+		console.log("crome extension installed.");
 		if (callback)
 			callback(true);
-	};
-	s.onerror = function() {
+	}
+	else
+	{
+		console.log("crome extension is not installed.");
 
-		console.log("s.onerror ");
-		
 		// Create visit type cookie to notify once per session
-		//createCookie("agile_chrome_extension", "notified");
+		createCookie("agile_chrome_extension", "notified");
 
 		if (callback)
 			callback(false);
 
 		Initialize_Chrome_Webstore_events();
-	};
-	
-	document.body.appendChild(s);	
+	}
 }
 
 /**
@@ -85,11 +88,13 @@ function Detect_Chrome_Extension(callback) {
  * 
  * @param hide
  */
-function Toggle_Extension_Request_Ui(hide) {
+function Toggle_Extension_Request_Ui(hide)
+{
 
-	console.log("in Toggle_Extension_Request_Ui:"+ hide);
-	
-	if ($("#chrome_extension").length >= 1) {
+	console.log("in Toggle_Extension_Request_Ui:" + hide);
+
+	if ($("#chrome_extension").length >= 1)
+	{
 		$("#chrome_extension").remove();
 		toggle_navbar_position("slide_up");
 	}
@@ -104,27 +109,31 @@ function Toggle_Extension_Request_Ui(hide) {
 
 function toggle_navbar_position(positionToChange)
 {
-	console.log("in toggle_navbar_position: "+positionToChange);
-	
-if(positionToChange == "slide_up")
-	$(".navbar-fixed-top").removeClass("navbar-slide-down");
-else if(positionToChange == "slide_down")
-	$(".navbar-fixed-top").addClass("navbar-slide-down");
-}
+	console.log("in toggle_navbar_position: " + positionToChange);
 
+	if (positionToChange == "slide_up")
+		$(".navbar-fixed-top").removeClass("navbar-slide-down");
+	else if (positionToChange == "slide_down")
+		$(".navbar-fixed-top").addClass("navbar-slide-down");
+}
 
 /**
  * Initilaize webstore events to install the extension
  */
-function Initialize_Chrome_Webstore_events() {
+function Initialize_Chrome_Webstore_events()
+{
 
 	console.log("in Initialize_Chrome_Webstore_events");
-	
+
 	/**
 	 * To dismiss chrome extension popup
 	 */
-	$('#chrome_extension #dismiss').die().live('click', function(e) {
+	$('#chrome_extension #dismiss').die().live('click', function(e)
+	{
 		e.stopPropagation();
+
+		// To prevent notify user permanantly
+		createCookie("prevent_extension_request", "true");
 
 		Toggle_Extension_Request_Ui(true);
 	});
@@ -132,50 +141,49 @@ function Initialize_Chrome_Webstore_events() {
 	/**
 	 * To prevent notify user on each session
 	 */
-	$("#chrome_extension #prevent_extension_request").die().live('click',
-			function() {
+	$("#chrome_extension #prevent_extension_request").die().live('click', function()
+	{
 
-				// To prevent notify user permanantly
-		        //createCookie("prevent_extension_request", "true");
+		// To prevent notify user permanantly
+		createCookie("prevent_extension_request", "true");
 
-				Toggle_Extension_Request_Ui(true);
-			});
+		Toggle_Extension_Request_Ui(true);
+	});
 
 	/**
 	 * Install extension
 	 */
-	$('#chrome_install_button').die().live(
-			'click',
-			function(e) {
+	$('#chrome_extension #chrome_install_button').die().live('click', function(e)
+	{
 
-				e.stopPropagation();
+		e.stopPropagation();
 
-				var $this = $(this);
+		var $this = $(this);
 
-				Toggle_Extension_Loader("inline");
+		Toggle_Extension_Loader("inline");
 
-				try {
-					chrome.webstore.install(Chrome_Extension_Webstore_Url,
-							function(success) {
+		try
+		{
+			chrome.webstore.install(Chrome_Extension_Webstore_Url, function(success)
+			{
 
-						        console.log(success);
-								Toggle_Extension_Request_Ui(true);
+				console.log(success);
+				Toggle_Extension_Request_Ui(true);
 
-							}, function(error) {
-								console.log(error);
-								Toggle_Extension_Loader("none");
-							});
-				} catch (e) {
-					console.log(e);
-					Toggle_Extension_Loader("none");
-				}
-
-				/*// Register event
-				Agent_Panel_Event_Tracker
-						.track_event("Sticky Bar Chrome Extension");*/
-
-				return false;
+			}, function(error)
+			{
+				console.log(error);
+				Toggle_Extension_Loader("none");
 			});
+		}
+		catch (e)
+		{
+			console.log(e);
+			Toggle_Extension_Loader("none");
+		}
+
+		return false;
+	});
 }
 
 /**
@@ -183,22 +191,13 @@ function Initialize_Chrome_Webstore_events() {
  * 
  * @param type
  */
-function Toggle_Extension_Loader(type) {
+function Toggle_Extension_Loader(type)
+{
 
-	console.log("In Toggle_Extension_Loader: "+type);
-	
+	console.log("In Toggle_Extension_Loader: " + type);
+
 	if (!type)
 		return;
 
 	$("#chrome_extension").find("#loading").css('display', type);
-}
-
-function chrome_extension_error(e)
-{
-console.log(e);	
-}
-
-function chrome_extension_done(e)
-{
-console.log(e);	
 }

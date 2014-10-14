@@ -22,7 +22,7 @@
 	color: rgb(143, 127, 127) !important;
 	font-weight: bold !important;
 	padding: 8px 0 6px;
-    height: 20px;
+	height: 20px;
 }
 
 .close-noty {
@@ -37,4 +37,8 @@
 	display: block;
 	cursor: pointer;
 	margin-top: -2px;
+}
+
+.anchor-link {
+	
 }
