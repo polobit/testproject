@@ -528,6 +528,22 @@ function get_website_icon(item){
 	return str;
 }
 
+function get_social_icon(name){
+	if (!name)
+	return;
+
+    var icon_json = { "TWITTER" : "icon-twitter-sign", "LINKEDIN" : "icon-linkedin-sign", "URL" : "icon-globe", "GOOGLE-PLUS" : "icon-google-plus-sign",
+	"FACEBOOK" : "icon-facebook-sign", "GITHUB" : "icon-github", "FEED" : "icon-rss", "XING" : "icon-xing-sign", "SKYPE" : "icon-skype",
+	"YOUTUBE" : "icon-youtube", "FLICKR" : "icon-flickr" };
+
+    name = name.trim();
+
+    if (icon_json[name])
+	return icon_json[name];
+
+    return "icon-globe";
+}
+
 function get_subtype(item){
 	
 	if(item.subtype!=undefined && item.subtype!=""){
