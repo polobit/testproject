@@ -215,9 +215,16 @@ div.datepicker table td {
 	color: #000;
 }
 
-.datepickerDoW {
-	display: none;
+.datepickerDoW th
+{
+	text-align:center!important;
 }
+
+.datepickerDoW th:first-child
+{
+	display:none;
+}
+
 
 .datepickerNotInMonth a span {
 	color: #a9a9a9;
