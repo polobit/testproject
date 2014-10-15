@@ -79,7 +79,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 	    	setTimeout(function(){
 	    		if(callback != undefined && typeof (callback) === "function")
 	    		callback();
-	    		},500);
+	    		},1500);
 		});
     	
 		return;
@@ -121,7 +121,7 @@ function set_tinymce_content(selector, content)
 	catch (err)
 	{
 		console.log("error occured while setting content...");
-		console.log(err)
+		console.log(err);
 	}
 }
 
