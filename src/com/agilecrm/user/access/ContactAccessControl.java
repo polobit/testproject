@@ -45,6 +45,15 @@ public class ContactAccessControl extends UserAccessControl
 	}
     }
 
+    @Override
+    public void setObject(Object object)
+    {
+	if (object != null)
+	    contact = (Contact) object;
+	else
+	    contact = new Contact();
+    }
+
     public boolean canCreate()
     {
 	// If contact is defined it checks for update operation if owner in the

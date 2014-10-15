@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
 
 /**
@@ -51,10 +53,16 @@ public class ContactFilterResultFetcher
 
     private Long domainUserId = null;
 
+    UserAccessControl access = null;
+
     /**
      * Search map
      */
     private Map<String, Object> searchMap;
+
+    {
+	access = UserAccessControl.getAccessControl(UserAccessControl.AccessControlClasses.Contact, null);
+    }
 
     ContactFilterResultFetcher()
     {
@@ -84,6 +92,7 @@ public class ContactFilterResultFetcher
     {
 	this.max_fetch_set_size = max_fetch_set_size;
 	this.contact_ids = contact_ids;
+	domainUserId = currentDomainUserId;
 	try
 	{
 	    Long filterId = Long.parseLong(filter_id);
@@ -98,9 +107,7 @@ public class ContactFilterResultFetcher
 		this.systemFilter = getSystemFilter(filter_id);
 	}
 
-	domainUserId = currentDomainUserId;
-
-	BulkActionUtil.setSessionManager(currentDomainUserId);
+	BulkActionUtil.setSessionManager(domainUserId);
 
 	setAvailableCount();
 
@@ -282,6 +289,21 @@ public class ContactFilterResultFetcher
 		if (contacts.size() == 0)
 		{
 		    return contacts;
+		}
+
+		if (access != null
+			&& !(access.hasScope(UserAccessScopes.VIEW_CONTACTS) && access
+				.hasScope(UserAccessScopes.UPDATE_CONTACT)))
+		{
+
+		    Iterator<Contact> iterator = contacts.iterator();
+		    while (iterator.hasNext())
+		    {
+			Contact contact = iterator.next();
+			access.setObject(contact);
+			if (!access.canDelete())
+			    iterator.remove();
+		    }
 		}
 
 		Contact contact = contacts.get(0);

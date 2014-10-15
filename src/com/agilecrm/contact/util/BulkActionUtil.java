@@ -58,7 +58,7 @@ public class BulkActionUtil
 	 */
 	ActionType(String url)
 	{
-	    this.url = url + "/" + SessionManager.get().getDomainId();
+	    this.url = url;
 	}
 
 	/*
@@ -66,7 +66,7 @@ public class BulkActionUtil
 	 */
 	public String getUrl()
 	{
-	    return url;
+	    return url + "/" + SessionManager.get().getDomainId();
 	}
     }
 
