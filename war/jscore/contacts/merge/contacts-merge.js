@@ -82,9 +82,9 @@ $(function() {
 						if (dup_contacts1_array.length > 1) {
 							if (!confirm(" Delete the "
 									+ dup_contacts1_array.length
-									+ " duplicate contacts and merge data to master record??"))
+									+ " duplicate contacts and merge data to master record?"))
 								return;
-						} else if (!confirm(" Delete the 1 duplicate contact and merge data to master record??"))
+						} else if (!confirm(" Delete the 1 duplicate contact and merge data to master record?"))
 							return;
 						$(this).attr('disabled', 'disabled');
 						$('#contact-merge-cancel').attr('disabled', 'disabled');

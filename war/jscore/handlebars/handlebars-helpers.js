@@ -416,7 +416,7 @@ $(function()
 	{
 
 		var el = show_custom_fields_helper_for_merge(custom_fields, contacts);
-		return new Handlebars.SafeString(fill_custom_field_values($(el), contacts[0].properties));
+		return new Handlebars.SafeString(el);
 
 	});
 

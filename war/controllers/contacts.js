@@ -366,7 +366,8 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		var bigObject = {};
 		var master_record = App_Contacts.contactDetailView.model.toJSON();
-		bigObject['custom_fields'] = get_custom_fields();
+		console.log(master_record);
+//		bigObject['custom_fields'] = get_custom_fields();
 		var objects = []
 		var length = 0;
 		objects[0] = master_record;
@@ -377,16 +378,20 @@ var ContactsRouter = Backbone.Router.extend({
 		}
 		bigObject["contacts"] = objects;
 		bigObject["length"] = length;
-		console.log(bigObject);
-		this.mergeContactsView = new Base_Model_View({ template : template_key, data : bigObject, postRenderCallback : function(el)
+		
+		// Contact Edit - take him to continue-contact form
+		add_custom_fields_to_form(bigObject, function(contact)
 		{
-			// g_id_array.length = 0;
-		} });
+			this.mergeContactsView = new Base_Model_View({ template : template_key, data : bigObject, postRenderCallback : function(el)
+			{
+				// g_id_array.length = 0;
+			} });
 
-		$('#content').html(this.mergeContactsView.render(true).el);
-		$(".active").removeClass("active");
-		$("#contactsmenu").addClass("active");
+			$('#content').html(this.mergeContactsView.render(true).el);
+			$(".active").removeClass("active");
+			$("#contactsmenu").addClass("active");
 
+		}, master_record.type);	
 	},
 
 	/**

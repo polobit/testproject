@@ -1,9 +1,10 @@
 package com.agilecrm.core.api.search;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -138,25 +139,35 @@ public class SearchAPI
 		StringBuffer emailBuffer = new StringBuffer();
 		StringBuffer phoneBuffer = new StringBuffer();
 		StringBuffer stringBuffer = new StringBuffer();
-		List<String> emails = new ArrayList<String>();
-		List<String> phones = new ArrayList<String>();
+		Set<String> emails = new HashSet<String>();
+		Set<String> phones = new HashSet<String>();
 		stringBuffer.append("(first_name=" + firstName + " AND " + "last_name=" + lastName + ")");
 		List<ContactField> properties = contact.getProperties();
 		for (int i = 0; i < properties.size(); i++)
 		{
 			ContactField contactField = properties.get(i);
 			if (contactField.name.equalsIgnoreCase("phone"))
-				phones.add(contactField.value);
+			{
+				if (StringUtils.isNotBlank(contactField.value))
+					phones.add(contactField.value);
+			}
 			if (contactField.name.equalsIgnoreCase("email"))
-				emails.add(contactField.value);
+			{
+				if (StringUtils.isNotBlank(contactField.value))
+					emails.add(contactField.value);
+			}
 		}
 		if (emails.size() > 0)
 		{
-			emailBuffer.append(" OR email=(");
-			for (int i = 0; i < emails.size(); i++)
+			Object[] emailsArray = emails.toArray();
+			for (int i = 0; i < emailsArray.length; i++)
 			{
-				emailBuffer.append(emails.get(i));
-				if (!(i == emails.size() - 1))
+				if (i == 0)
+				{
+					emailBuffer.append(" OR email=(");
+				}
+				emailBuffer.append(emailsArray[i]);
+				if (!(i == emailsArray.length - 1))
 					emailBuffer.append(" OR ");
 				else
 					emailBuffer.append(")");
@@ -164,11 +175,15 @@ public class SearchAPI
 		}
 		if (phones.size() > 0)
 		{
-			phoneBuffer.append(" OR phone=(");
-			for (int i = 0; i < phones.size(); i++)
+			Object[] phonesArray = phones.toArray();
+			for (int i = 0; i < phonesArray.length; i++)
 			{
-				phoneBuffer.append(phones.get(i));
-				if (!(i == phones.size() - 1))
+				if (i == 0)
+				{
+					phoneBuffer.append(" OR phone=(");
+				}
+				phoneBuffer.append(phonesArray[i]);
+				if (!(i == phonesArray.length - 1))
 					phoneBuffer.append(" OR ");
 				else
 					phoneBuffer.append(")");
