@@ -354,7 +354,7 @@ function delete_duplicate_contacts(url, id_array, master_record) {
 			success : function() {
 				if (i === id_array.length - 1) {
 					master_record.save({}, {
-						url : '/core/api/contacts1/',
+						url : '/core/api/contacts/',
 						success : function() {
 							$(".contact-merge-loading").remove();	
 							CONTACTS_HARD_RELOAD = true;
