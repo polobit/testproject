@@ -698,11 +698,12 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
     {
 	System.out.println(" id in domain user before :" + id);
 
-	if (scopes == null || scopes.size() == 0)
+	if (newscopes == null)
 	{
-
 	    return;
 	}
+
+	scopes = newscopes;
 
 	List<UserAccessScopes> defaultScopes = UserAccessScopes.customValues();
 
@@ -748,6 +749,8 @@ public class DomainUser extends Cursor implements Cloneable, Serializable
 	    defaultScopes.removeAll(restricted_scopes);
 
 	scopes = new HashSet<UserAccessScopes>(defaultScopes);
+
+	newscopes = scopes;
     }
 
     /**

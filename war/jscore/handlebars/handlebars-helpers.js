@@ -2737,6 +2737,14 @@ $(function()
 
 		return options.inverse(this);
 	});
+	
+	Handlebars.registerHelper("canSyncContacts", function(options)
+			{
+				if(canImportcontacts())
+					return options.fn(this);
+
+				return options.inverse(this);
+			});
 
 	/**
 	 * To check Access controls for showing icons on dashboard

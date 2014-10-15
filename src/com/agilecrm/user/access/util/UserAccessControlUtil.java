@@ -2,12 +2,10 @@ package com.agilecrm.user.access.util;
 
 import java.util.List;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import com.agilecrm.contact.Contact;
 import com.agilecrm.search.ui.serialize.SearchRule;
 import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.exception.AccessDeniedException;
 import com.googlecode.objectify.Query;
 
 /**
@@ -21,9 +19,35 @@ public class UserAccessControlUtil
 {
     public enum CRUDOperation
     {
-	CREATE, READ, UPDATE, DELETE, IMPORT, EXPORT;
+	CREATE("Contact creation access denied. Contact account administrator"),
+
+	READ("Contact view access denied. Contact account administrator"),
+
+	UPDATE("Contact update access denied. Contact account administrator"),
+
+	DELETE("Contact delete access denied. Contact account administrator"),
+
+	IMPORT("Contact import access denied. Contact account administrator"),
+
+	EXPORT("Contact export access denied. Contact account administrator");
 
 	String errorMessage = "Access Denied. Contact account administrator";
+
+	CRUDOperation(String errorMessage)
+	{
+	    this.errorMessage = errorMessage;
+	}
+
+	public String getErrorMessage()
+	{
+	    return errorMessage;
+	}
+
+	public void throwException()
+	{
+	    throw new AccessDeniedException(this.errorMessage);
+	}
+
     }
 
     /*
@@ -56,8 +80,7 @@ public class UserAccessControlUtil
 	    isOperationAllowed = acccessControl.canRead();
 
 	if (throwException && !isOperationAllowed)
-	    throw new WebApplicationException(Response.status(Response.Status.FORBIDDEN).entity(operation.errorMessage)
-		    .build());
+	    operation.throwException();
 
 	return isOperationAllowed;
     }
