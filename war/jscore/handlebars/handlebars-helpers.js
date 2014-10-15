@@ -2740,7 +2740,7 @@ $(function()
 	
 	Handlebars.registerHelper("canSyncContacts", function(options)
 			{
-				if(canImportcontacts())
+				if(canImportContacts())
 					return options.fn(this);
 
 				return options.inverse(this);

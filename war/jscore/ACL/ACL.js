@@ -34,7 +34,7 @@ function canCreateContacts()
 	return hasScope("CREATE_CONTACT");
 }
 
-function canImportcontacts()
+function canImportContacts()
 {
 	if(!hasScope("CREATE_CONTACT"))
 		return false; 
