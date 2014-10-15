@@ -12,7 +12,8 @@ $(function() {
 	$('#duplicate-contacts-cancel').die().live('click', function(event) {
 		event.preventDefault();
 		dup_contacts1_array.length = 0;
-		Backbone.history.navigate("contacts", {
+		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		Backbone.history.navigate("contact/"+master_record.id, {
 			trigger : true
 		});
 	});
@@ -20,9 +21,13 @@ $(function() {
 	$('#contact-merge-cancel').die().live('click', function(event) {
 		event.preventDefault();
 		dup_contacts1_array.length = 0;
-		Backbone.history.navigate("contacts", {
+		var master_record = App_Contacts.contactDetailView.model.toJSON();
+		Backbone.history.navigate("duplicate-contacts/"+master_record.id, {
 			trigger : true
 		});
+//		Backbone.history.navigate("contacts", {
+//			trigger : true
+//		});
 	});
 
 	/**
@@ -268,7 +273,6 @@ function merge_duplicate_contacts(master_record, properties, selected_fields,
 			if (properties[k].name.toLowerCase() === element['name']
 					.toLowerCase()) {
 				properties[k].value = element['value'];
-				// alert(properties[k].value);
 				break;
 			} else if (k == properties.length - 1) {
 				var object = {};
@@ -338,7 +342,6 @@ function merge_duplicate_contacts(master_record, properties, selected_fields,
 	master_record.set({
 		"properties" : properties
 	});
-	console.log(master_record.toJSON().properties);
 	delete_duplicate_contacts('/core/api/bulk/update?action_type=DELETE',
 			dup_contacts1_array, master_record);
 }
@@ -351,7 +354,7 @@ function delete_duplicate_contacts(url, id_array, master_record) {
 			success : function() {
 				if (i === id_array.length - 1) {
 					master_record.save({}, {
-						url : '/core/api/contacts/',
+						url : '/core/api/contacts1/',
 						success : function() {
 							$(".contact-merge-loading").remove();	
 							CONTACTS_HARD_RELOAD = true;
