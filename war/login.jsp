@@ -180,7 +180,7 @@ if(isIE || isIENew)
 					
 					<div id="openid_btns" style="padding: 5px 0 15px;">
 						<input type='hidden' name='type' value='agile'></input>
-						<input class="input-xlarge required email field" name='email' type="text" maxlength="50" minlength="6" placeholder="User ID (Your Email Address)" autocapitalize="off"
+						<input class="input-xlarge required email field" name='email' type="text" maxlength="50" minlength="6" placeholder="User ID (Your Email Address)" autocapitalize="off" autofocus
 						<%if(request.getAttribute("agile_email")  != null) {%> value="<%=request.getAttribute("agile_email") %>" <%}%>>
 						
 					    <input class="input-xlarge required field " maxlength="20" minlength="4" name='password' type="password" placeholder="Password" autocapitalize="off">
