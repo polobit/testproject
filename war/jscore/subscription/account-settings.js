@@ -193,7 +193,14 @@ $(function()
 					});
 					
 					// Adds "Cancellation Request" tag in "Our" domain
-					addTagAgile("Cancellation Request");
+					addTagAgile("Cancellation Request");	
+					
+					// Adds note in "Our" domain
+					var note = {};
+					note.subject = "Cancellation Request";
+					note.description = reason;
+					
+					agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
 					
 					// Enables Send Email button.
 				    enable_send_button($('#send-delete-request'));
