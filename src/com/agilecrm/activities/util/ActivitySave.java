@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
@@ -16,7 +17,6 @@ import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.ContactField;
 import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
-import com.agilecrm.core.api.bulkactions.backends.BulkOperationsAPI;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.document.Document;
 import com.agilecrm.document.util.DocumentUtil;
@@ -450,7 +450,7 @@ public class ActivitySave
      */
     public static void createEmailSentActivityToContact(String to, String subject, String body)
     {
-	String emailbody = BulkOperationsAPI.html2text(body);
+	String emailbody = html2text(body);
 	System.out.println(emailbody);
 	Contact contact = ContactUtil.searchContactByEmail(to);
 	if (contact != null)
@@ -633,6 +633,11 @@ public class ActivitySave
 	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactidscount), label,
 	        bulk_email_subject);
 
+    }
+
+    public static String html2text(String html)
+    {
+	return Jsoup.parse(html).text();
     }
 
 }

@@ -20,7 +20,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 
 import com.agilecrm.account.util.AccountEmailStatsUtil;
 import com.agilecrm.activities.util.ActivitySave;
@@ -546,13 +545,15 @@ public class BulkOperationsAPI
 	{
 	    message = fetcher.getAvailableContacts() + " Contacts deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "SEND_EMAIL",
-		    html2text(emailData.getString("body")), "contacts", html2text(emailData.getString("subject")));
+		    ActivitySave.html2text(emailData.getString("body")), "contacts",
+		    ActivitySave.html2text(emailData.getString("subject")));
 	}
 	else if (fetcher.getAvailableCompanies() > 0)
 	{
 	    message = fetcher.getAvailableCompanies() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "SEND_EMAIL",
-		    html2text(emailData.getString("body")), "companies", html2text(emailData.getString("subject")));
+		    ActivitySave.html2text(emailData.getString("body")), "companies",
+		    ActivitySave.html2text(emailData.getString("subject")));
 	}
 
 	if (fetcher.getAvailableContacts() > 0)
@@ -774,8 +775,4 @@ public class BulkOperationsAPI
 	}
     }
 
-    public static String html2text(String html)
-    {
-	return Jsoup.parse(html).text();
-    }
 }
