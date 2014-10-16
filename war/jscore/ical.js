@@ -144,122 +144,130 @@ function send_ical_info_email(emailModal)
 					});
 }
 
-$(function(){
+$(function()
+{
 
-$('#show-schedule-url').live('click', function(e)
+	$('#show-schedule-url').live('click', function(e)
+	{
+		e.preventDefault();
+		$("#specialchar").hide();$("#charlength").hide();
+		var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
+
+		var updateduserModel = new updatedCurrentUser();
+
+		updateduserModel.fetch({ success : function(data)
+		{
+			var model = data.toJSON();
+
+			if ($("#scheduleModal").size() > 1)
+			{
+				$('#scheduleModal').modal('hide').remove();
+
+			}
+			var scheduleModel = $(getTemplate("scheduleModal", model));
+
+			var onlineschedulingURL = "https://" + model.domain + ".agilecrm.com/calendar/" + model.schedule_id;
+
+			$("#scheduleurl").attr("href", onlineschedulingURL);
+			$("#schedule_id").html(model.schedule_id);
+			$("#edit").show();
+			$("#scheduleurl").removeClass("nounderline");
+
+			if ($("#scheduleModal").size() == 0)
+				scheduleModel.modal('show');
+
+		} });
+
+	});
+
+	$("#edit-schedule-id").die().live('click', function(e)
+	{
+
+		e.preventDefault();
+		var data = $('#schedule_id').text();
+		$("#edit").hide();
+		$("#scheduleurl").removeAttr("href");
+		$('#schedule_id').html("<input class='input-small' type='text' style='position: relative;top: 6px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/><buttion class='btn' style='display:inline-block;margin-left:30px;margin-bottom:5px;' id='save-scheduleurl'>Save</button>");
+
+
+		$("#scheduleurl").addClass("nounderline");
+		$('#scheduleModal').data('modal', null);
+
+	});
+
+	$("#save-scheduleurl").die().live('click', function(e)
+	{
+		e.preventDefault();
+		var data = $("#url").val();
+		if(data.length<4){
+			$('#charlength').fadeIn('slow');
+            setTimeout(function() {
+         	    $('#charlength').fadeOut('slow');
+         	}, 2000);
+	    	return;
+		}
+		
+		 var regex = /^[0-9a-zA-Z\_]+$/
+			    if(!(regex.test(data)))
+			    	{
+			    	 $('#specialchar').fadeIn('slow');
+                       setTimeout(function() {
+                    	    $('#specialchar').fadeOut('slow');
+                    	}, 2000);
+			    	return;
+			    	}
+		   
+		var saveBtn = $(this);
+		disable_save_button($(saveBtn));
+		$.ajax({ url : 'core/api/users/updatescheduleid?scheduleid=' + data, type : 'GET', success : function(user)
+		{
+			var onlineschedulingURL = "https://" + user.domain + ".agilecrm.com/calendar/" + user.schedule_id;
+			;
+			$("#scheduleurl").attr("href", onlineschedulingURL);
+			$("#schedule_id").text(user.schedule_id);
+			enable_save_button($(saveBtn));
+			$("#edit").show();	$("#specialchar").hide();$("#charlength").hide();	
+			$("#scheduleurl").removeClass("nounderline");
+			
+
+		}, error : function(user)
+		{
+
+			alert("Error occured while saving please try again");
+			enable_save_button($(saveBtn));
+		} });
+
+	});
+
+});
+
+
+
+
+$('#send-schedule-url-email').live('click', function(e)
 {
 	e.preventDefault();
-	
-	
-	
-	var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
 
-	var updateduserModel = new updatedCurrentUser();
+	$("#scheduleModal").modal('hide');
 
-	updateduserModel.fetch({ success : function(data)
-	{
-		var model = data.toJSON();
-		
-		if ($("#scheduleModal").size() > 1){
-			 $('#scheduleModal').modal('hide').remove();
-		       
-		}
-		var scheduleModel = $(getTemplate("scheduleModal", model));
-		
-		var  onlineschedulingURL = "https://" + model.domain + ".agilecrm.com/calendar/" + model.schedule_id;;
-		
-		$("#scheduleurl").attr("href",onlineschedulingURL);
-		$("#schedule_id").html(model.schedule_id);
-		$("#save-scheduleurl").attr("id", "edit-schedule-id");
-		$(".edit-schedule-id").attr("value", "Edit");
-		$("#scheduleurl").removeClass("nounderline");
+	// Removes previous modals if exist.
+	if ($('#scheduleModal').size() != 0)
+		$('#scheduleModal').remove();
 
-		if ($("#scheduleModal").size() == 0)
-		scheduleModel.modal('show');
-		
-		
+	var emailModal = $(getTemplate("share-schedule-url-by-email", {}));
 
-	} });
-	
-	
-	
-});
+	var description = $(emailModal).find('textarea').val();
 
+	description = description.replace(/<br\/>/g, "\r\n");
 
+	$(emailModal).find('textarea').val(description);
 
-$("#edit-schedule-id")
-.die()
-.live(
-		'click',
-		function(e)
-		{
-			
-			e.preventDefault();
-			var data=$('#schedule_id').text();
-			$("#scheduleurl").removeAttr("href");
-			$('#schedule_id')
-					.html(
-						"<input type='text' style='position: relative;top: 4px;left: 5px;margin-top:-9px;' name='url' id='url' value='" + data + "'/>");
-			
-			$("#edit-schedule-id").attr("id", "save-scheduleurl");
-			$(".edit-schedule-id").attr("value", "save");
-			
-			$("#scheduleurl").addClass("nounderline");
-			$('#scheduleModal').data('modal', null);
-			
-		});
+	emailModal.modal('show');
 
-$("#save-scheduleurl").die().live('click', function(e)
-{
-e.preventDefault();
-
-var data = $("#url").val();
-
-$.ajax({ url : 'core/api/users/updatescheduleid?scheduleid=' + data, type : 'GET', success : function(user)
-{
-var  onlineschedulingURL = "https://" + user.domain + ".agilecrm.com/calendar/" + user.schedule_id;;
-$("#scheduleurl").attr("href",onlineschedulingURL);
-$("#schedule_id").text(user.schedule_id);
-$("#save-scheduleurl").attr("id", "edit-schedule-id");
-$(".edit-schedule-id").attr("value", "Edit");
-$("#scheduleurl").removeClass("nounderline");
-
-}, error : function(user)
-{
-
-alert("error");
-} });
-
+	// Send schedule url by email
+	// send_schedule_url_email(emailModal);
 
 });
-
-
-});
-$('#send-schedule-url-email').live('click', function(e)
-		{
-			e.preventDefault();
-
-			$("#scheduleModal").modal('hide');
-		
-			// Removes previous modals if exist.
-			if ($('#scheduleModal').size() != 0)
-				$('#scheduleModal').remove();
-
-			    var emailModal = $(getTemplate("share-schedule-url-by-email", {}));
-
-				var description = $(emailModal).find('textarea').val();
-
-				description = description.replace(/<br\/>/g, "\r\n");
-
-				$(emailModal).find('textarea').val(description);
-
-				emailModal.modal('show');
-
-				// Send schedule url by email
-			// send_schedule_url_email(emailModal);
-		
-			
-		});
 
 /**
  * Sends email with ical data to current-user email.
@@ -285,7 +293,7 @@ function send_schedule_url_email(emailModal)
 
 						var json = serializeForm("sharescheduleurlmailForm");
 						json.body = json.body.replace(/\r\n/g, "<br/>");
-				
+
 						var url = 'core/api/emails/send-email?from=' + encodeURIComponent(json.from) + '&to=' + encodeURIComponent(json.to) + '&subject=' + encodeURIComponent(json.subject) + '&body=' + encodeURIComponent(json.body);
 
 						// Shows message
@@ -301,4 +309,3 @@ function send_schedule_url_email(emailModal)
 
 					});
 }
-

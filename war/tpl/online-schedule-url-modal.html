@@ -8,25 +8,30 @@
     <div class="modal-body " style="max-height:420px !important">
         <form id="icalForm" name="icalForm" method="post">
             <fieldset>
-               
-                   
-  <div id="desctiption">
-                    <label class="control-label"><b>What is Online Appointment Scheduling?</b></label>
-                   <p> Scheduling meetings over email or phone is tedious. Agile allows your customers to schedule a meeting with you directly in just a few clicks. </p> 
-               </div>                     
 
                      <div class="control-group" style="float:left;">
                        <label class="control-label"><b>Your Personalized Link </b></label>
-                        <div class="controls schedule_url_online" id="schedule-url-id" style="width:451px;word-wrap:break-word;">
+                        <div class="controls schedule_url_online" id="schedule-url-id" style="width:540px;word-wrap:break-word;display:inline-block;">
                         <a href="https://{{this.domain}}.agilecrm.com/calendar/{{this.schedule_id}}" target="_blank" name="scheduleurl" id="scheduleurl">https://{{this.domain}}.agilecrm.com/calendar/<span id="schedule_id">{{this.schedule_id}}</span></a>
-                        </div>
-            <div id="tip">
+<div class="" id="edit" style="display:inline;"><a href="" style="margin-top: 3px;" id="edit-schedule-id" class="edit-schedule-id nounderline"><i title="Edit" class="icon-edit" style="margin-left: 30px;"></i></a></div>
+                     
+ </div>
+<div id="specialchar" style="color: red;display:none;">Special characters are not allowed except underscore.</div>
+<div id="charlength" style="color: red;display:none;">Please enter at least 4 letters.</div>
+<div class="clearfix"></div> 
+ <div id="desctiption" style="margin-top: 7px;">
+                    <label class="control-label"><b>What is Online Appointment Scheduling?</b></label>
+                   <p> Scheduling meetings over email or phone is tedious. Agile allows your customers to schedule a meeting with you directly in just a few clicks. </p> 
+               </div>  
+<div id="suggestion" >
+                    <label class="control-label"><b>How can I define my daily available timeslots?</b></label>
+                   <p>We don't have this option yet. But you can try this workaround for now - Link your Google calendar with Agile from Preferences -> Sync. In your Google Calendar, create an event that covers all your unavailable time, and make it repeat everyday. </p> 
+               </div> 
+ <div id="tip">
                    <p style="margin:6px 0px 0px"><i class="icon-lightbulb" style="font-size:17px;"></i> Put this link in the signature or in your automated emails</p> 
                </div> 
-
                     </div>
-<div class="pull-right" id="edit" style="margin:16px 0px 0px 0px;"><input type="submit" style="margin-top: 3px;" id="edit-schedule-id" class="btn  edit-schedule-id" value="Edit"></></div>
-  <div class="clearfix"></div>               
+               
             
          
              </fieldset>
