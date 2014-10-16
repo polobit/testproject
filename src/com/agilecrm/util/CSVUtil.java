@@ -54,6 +54,8 @@ import com.agilecrm.subscription.restrictions.entity.impl.ContactBillingRestrict
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
 import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessControl.AccessControlClasses;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.files.AppEngineFile;
@@ -78,6 +80,8 @@ public class CSVUtil
 {
     BillingRestriction billingRestriction;
     private ContactBillingRestriction dBbillingRestriction;
+
+    private UserAccessControl accessControl = UserAccessControl.getAccessControl(AccessControlClasses.Contact, null);
 
     private CSVUtil()
     {
@@ -472,8 +476,9 @@ public class CSVUtil
 
 		System.out.println("exception raised while saving contact ");
 		e.printStackTrace();
-                
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues), "Exception raised"));
+
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+			"Exception raise while saving contact"));
 
 	    }
 
@@ -507,6 +512,8 @@ public class CSVUtil
 	    {
 		System.out.println("exception while saving contacts");
 		e.printStackTrace();
+		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+			"Exception raised while saving notes related to this contacts"));
 	    }
 
 	}// end of for loop
@@ -515,13 +522,23 @@ public class CSVUtil
 
 	buildCSVImportStatus(status, ImportStatus.TOTAL, csvData.size());
 
+	if (savedContacts > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+	}
 	if (mergedContacts > 0)
 	{
 	    buildCSVImportStatus(status, ImportStatus.SAVED_CONTACTS, savedContacts + mergedContacts);
-	    buildCSVImportStatus(status, ImportStatus.NEW_CONTACTS, savedContacts);
+
 	    buildCSVImportStatus(status, ImportStatus.MERGED_CONTACTS, mergedContacts);
-	    buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
-	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	    if (limitExceeded > 0)
+	    {
+		buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
+	    }
+	    if (accessDeniedToUpdate > 0)
+	    {
+		buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
+	    }
 
 	}
 	else
@@ -532,16 +549,12 @@ public class CSVUtil
 	// Sends notification on CSV import completion
 	dBbillingRestriction.send_warning_message();
 
-	SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
-		new Object[] { domainUser, status });
-
 	// Send notification after contacts save complete
 	BulkActionNotifications.publishconfirmation(BulkAction.CONTACTS_CSV_IMPORT, String.valueOf(savedContacts));
 	// create failed contact csv
-	if (failedContacts.size() > 0)
-	{
-	    buildFailedContacts(domainUser.email, failedContacts, headings);
-	}
+
+	buildFailedContacts(domainUser, failedContacts, headings, status);
+
     }
 
     /**
@@ -833,7 +846,10 @@ public class CSVUtil
 	    return;
 	}
 
-	statusMap.put(status, count);
+	if (count > 0)
+	{
+	    statusMap.put(status, count);
+	}
 	billingRestriction.refreshContacts();
     }
 
@@ -854,7 +870,10 @@ public class CSVUtil
 	    }
 	}
 	System.out.println(total);
-	status.put(ImportStatus.TOTAL_FAILED, total);
+	if (total > 0)
+	{
+	    status.put(ImportStatus.TOTAL_FAILED, total);
+	}
     }
 
     public boolean isValidFields(Contact contact, Map<Object, Object> statusMap, List<FailedContactBean> failed,
@@ -1285,7 +1304,8 @@ public class CSVUtil
      * 
      * @param contact
      */
-    private void buildFailedContacts(String domainUser, List<FailedContactBean> failedContacts, String[] headings)
+    private void buildFailedContacts(DomainUser domainUser, List<FailedContactBean> failedContacts, String[] headings,
+	    Map<Object, Object> status)
     {
 	String path = null;
 	try
@@ -1316,7 +1336,7 @@ public class CSVUtil
 
 	    // Send every partition as separate email
 	    for (String partition : fileData)
-		sendFailedContactImportFile(domainUser, partition, String.valueOf(failedContacts.size()));
+		sendFailedContactImportFile(domainUser, partition, failedContacts.size(), status);
 
 	    // Deletes blob
 	    ContactExportBlobUtil.deleteBlobFile(path);
@@ -1416,30 +1436,32 @@ public class CSVUtil
     }
 
     /**
-     * send failed contact csv in mail
+     * helper function for send mail of import contacts status with failed
+     * contact csv attachment if failed contacts are found then it will send
+     * with failed contact csv file other wise send normal status mail
      * 
      */
-    public void sendFailedContactImportFile(String currentUserEmail, String csvData, String totalRecords)
+    public void sendFailedContactImportFile(DomainUser domainUser, String csvData, int totalRecords,
+	    Map<Object, Object> status)
     {
-	if (csvData == null)
+
+	/*
+	 * HashMap<String, String> map = new HashMap<String, String>();
+	 * map.put("count", totalRecords);
+	 */
+
+	if (totalRecords >= 1)
 	{
-	    System.out.println("Rejected to export csv. Data is null.");
-	    return;
+	    String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
+	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		    new Object[] { domainUser, status }, SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
+	}
+	else
+	{
+	    SendMail.sendMail(domainUser.email, "CSV Contacts Import Status", SendMail.CSV_IMPORT_NOTIFICATION,
+		    new Object[] { domainUser, status });
 	}
 
-	System.out.println("Domain User email is " + currentUserEmail);
-
-	// Mandrill attachment should contain mime-type, file-name and
-	// file-content.
-	String[] strArr = { "text/csv", "FailedContacts.csv", csvData };
-
-	System.out.println("Data size is " + csvData.length());
-
-	HashMap<String, String> map = new HashMap<String, String>();
-	map.put("count", totalRecords);
-
-	SendMail.sendMail(currentUserEmail, "Failed Contacts", SendMail.EXPORT_CONTACTS_CSV, map,
-		SendMail.AGILE_FROM_EMAIL, SendMail.AGILE_FROM_NAME, strArr);
     }
 
     /**
