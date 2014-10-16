@@ -79,7 +79,7 @@ function setupTinyMCEEditor(selector, noAgileContactFields, plugins, callback)
 	    	setTimeout(function(){
 	    		if(callback != undefined && typeof (callback) === "function")
 	    		callback();
-	    		},1500);
+	    		},500);
 		});
     	
 		return;
@@ -183,7 +183,7 @@ function reinitialize_tinymce_editor_instance(selector, callback)
 
 	    	// Show textarea and remove loading img
 	    	$('#loading-editor').html("");
-//	    	$('#'+ selector).css('display', '');
+	    	$('#'+ selector).css('display', '');
 			
 	    	tinymce.EditorManager.execCommand('mceAddEditor', true, selector);
 	    	
@@ -192,9 +192,9 @@ function reinitialize_tinymce_editor_instance(selector, callback)
 	    		callback();
 	    		
 	    	// Show hidden tinymce
-	    	$('.mce-tinymce').css('display','');
+	    	$('.mce-tinymce').css('display', '');
 
-	    }, 1);
+	    }, 100);
 	
 	}
 	catch (err)
