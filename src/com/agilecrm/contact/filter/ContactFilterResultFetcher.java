@@ -5,6 +5,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,15 @@ import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.search.document.ContactDocument;
 import com.agilecrm.search.query.QueryDocument;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.search.ui.serialize.SearchRule.RuleCondition;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.util.DomainUserUtil;
+import com.googlecode.objectify.Key;
 
 /**
  * Fetches filter results for backend operations. It has similar methods as
@@ -54,6 +61,10 @@ public class ContactFilterResultFetcher
     private Long domainUserId = null;
 
     UserAccessControl access = null;
+
+    private DomainUser user = null;
+
+    private HashSet<UserAccessScopes> scopes = null;
 
     /**
      * Search map
@@ -98,8 +109,7 @@ public class ContactFilterResultFetcher
 	    Long filterId = Long.parseLong(filter_id);
 	    this.filter = ContactFilter.getContactFilter(filterId);
 	    if (this.filter != null)
-		UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
-			UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+		modifyFilterCondition();
 	}
 	catch (NumberFormatException e)
 	{
@@ -190,6 +200,8 @@ public class ContactFilterResultFetcher
     {
 	searchMap = new HashMap<String, Object>();
 
+	modifyDAOCondition();
+
 	// Checks if Filter id contacts "system", which indicates the
 	// request is to load results based on the default filters provided
 	if (id.contains("system-"))
@@ -257,6 +269,7 @@ public class ContactFilterResultFetcher
      */
     private List<Contact> fetchNextSet()
     {
+	System.out.println("**fetching next set***");
 	// Flag to set that fetch is done atleast once
 	init_fetch = true;
 
@@ -283,6 +296,7 @@ public class ContactFilterResultFetcher
 
 	else if (contact_ids != null)
 	{
+	    System.out.println("fetching contacts");
 	    try
 	    {
 		contacts = ContactUtil.getContactsBulk(new JSONArray(contact_ids));
@@ -291,6 +305,8 @@ public class ContactFilterResultFetcher
 		    return contacts;
 		}
 
+		System.out.println("scopes : " + access.getCurrentUserScopes());
+		System.out.println("info" + SessionManager.get());
 		if (access != null
 			&& !(access.hasScope(UserAccessScopes.VIEW_CONTACTS) && access
 				.hasScope(UserAccessScopes.UPDATE_CONTACT)))
@@ -302,8 +318,16 @@ public class ContactFilterResultFetcher
 			Contact contact = iterator.next();
 			access.setObject(contact);
 			if (!access.canDelete())
+			{
+			    System.out.println("Excluding contact " + contact.id);
 			    iterator.remove();
+			}
 		    }
+		}
+
+		if (contacts.size() == 0)
+		{
+		    return contacts;
 		}
 
 		Contact contact = contacts.get(0);
@@ -435,5 +459,82 @@ public class ContactFilterResultFetcher
 	    ++current_index;
 	}
 	return contact;
+    }
+
+    private DomainUser getDomainUser()
+    {
+	if (user != null)
+	    return user;
+
+	if (domainUserId != null)
+	{
+	    user = DomainUserUtil.getDomainUser(domainUserId);
+	    return user;
+	}
+
+	UserInfo info = SessionManager.get();
+	if (info == null)
+	    return (DomainUser) user;
+
+	domainUserId = info.getDomainId();
+
+	if (domainUserId == null)
+	    return (DomainUser) user;
+
+	return getDomainUser();
+    }
+
+    private HashSet<UserAccessScopes> getScopes()
+    {
+	if (scopes != null)
+	    return scopes;
+
+	getDomainUser();
+
+	if (user == null)
+	{
+	    scopes = new HashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	    return scopes;
+	}
+
+	scopes = user.scopes;
+
+	return scopes;
+    }
+
+    private boolean hasScope(UserAccessScopes scope)
+    {
+	return getScopes().contains(scope);
+    }
+
+    private void modifyDAOCondition()
+    {
+	if (!hasScope(UserAccessScopes.UPDATE_CONTACT))
+	{
+	    if (domainUserId == null)
+		return;
+
+	    Key<DomainUser> key = new Key<DomainUser>(DomainUser.class, domainUserId);
+	    searchMap.put("owner_key", key);
+	}
+    }
+
+    private void modifyFilterCondition()
+    {
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(
+		UserAccessControl.AccessControlClasses.Contact.toString(), filter.rules);
+
+	if (hasScope(UserAccessScopes.VIEW_CONTACTS) && !hasScope(UserAccessScopes.UPDATE_CONTACT))
+	{
+	    if (domainUserId == null)
+		return;
+
+	    SearchRule rule = new SearchRule();
+	    rule.RHS = String.valueOf(domainUserId);
+	    rule.CONDITION = RuleCondition.EQUALS;
+	    rule.LHS = "owner_id";
+
+	    filter.rules.add(rule);
+	}
     }
 }
