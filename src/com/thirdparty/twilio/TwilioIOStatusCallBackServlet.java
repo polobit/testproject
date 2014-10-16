@@ -149,9 +149,10 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		DomainUser user = DomainUserUtil.getCurrentDomainUser();
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
-		String clientName = "C".concat((agileUser.id).toString());
-		System.out.println("clientName: " + clientName);
-
+		/*
+		 * String clientName = "c".concat((agileUser.id).toString());
+		 * System.out.println("clientName: " + clientName);
+		 */
 		if (Duration.equalsIgnoreCase("0"))
 			callDuration = Status.concat(".");
 		else
@@ -160,7 +161,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		System.out.println("callDuration: " + callDuration);
 
 		// Outgoing call
-		if (From.equalsIgnoreCase(clientName) || From.equalsIgnoreCase(widget.getProperty("twilio_number"))
+		if (From.equalsIgnoreCase("agileclient") || From.equalsIgnoreCase(widget.getProperty("twilio_number"))
 				|| From.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
 		{
 			state = "Outgoing call by " + user.domain + ". ";
@@ -168,7 +169,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		}
 
 		// Incoming call
-		else if (To.equalsIgnoreCase(clientName) || To.equalsIgnoreCase(widget.getProperty("twilio_number"))
+		else if (To.equalsIgnoreCase("agileclient") || To.equalsIgnoreCase(widget.getProperty("twilio_number"))
 				|| To.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
 		{
 			if (Duration.equalsIgnoreCase("0"))

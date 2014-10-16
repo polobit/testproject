@@ -656,10 +656,9 @@ public class TwilioUtil
 		params.put(
 				"VoiceUrl",
 				"https://" + NamespaceManager.get()
-						+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice?agileuserid="
-						+ AgileUser.getCurrentAgileUser().id);
+						+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice");
 		params.put("VoiceMethod", "GET");
-		// params.put("StatusCallback",
+		// params.put("StatusCallback",+
 		// "http://1-dot-bothservlet.appspot.com/backend/twilioiostatuscallback");
 		params.put("StatusCallback", "https://" + NamespaceManager.get()
 				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiostatuscallback?sessionmngrid="

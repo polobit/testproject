@@ -23,16 +23,17 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		String phoneNumber = request.getParameter("PhoneNumber");
 		System.out.println("Twilio phone number : " + phoneNumber);
 
-		String agileuserid = request.getParameter("agileuserid");
-		System.out.println("Twilio agileuserid : " + agileuserid);
-
+		/*
+		 * String agileuserid = request.getParameter("agileuserid");
+		 * System.out.println("Twilio agileuserid : " + agileuserid);
+		 */
 		/* Caller Id from which call is initiated */
 		String callerId = request.getParameter("from");
 
-		String clientName = "C";
-		clientName = clientName.concat(agileuserid);
-
-		System.out.println("clientName: " + clientName);
+		/*
+		 * String clientName = "c"; clientName = clientName.concat(agileuserid);
+		 */
+		// System.out.println("clientName: " + clientName);
 
 		TwiMLResponse twiml = new TwiMLResponse();
 		Dial dial = new Dial();
@@ -48,7 +49,7 @@ public class TwilioIOVoiceServlet extends HttpServlet
 			{
 				System.out.println("Incoming call");
 				// dial.append(new Client("jenny"));
-				dial.append(new Client(clientName));
+				dial.append(new Client("agileclient"));
 			}
 			twiml.append(dial);
 
