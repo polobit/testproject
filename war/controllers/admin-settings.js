@@ -518,6 +518,17 @@ var AdminSettingsRouter = Backbone.Router.extend({
 			{
 				// On saved, navigate to integrations
 				Backbone.history.navigate("integrations",{trigger:true});
+
+			},
+			errorCallback: function(data){
+				
+				
+				if($("#twilio-error").is(":visible"))
+					$("#twilio-error").remove();
+				
+				$responceText="<div style='color:#B94A48; font-size:14px' id='twilio-error'><i>"+data.responseText+"</i></div>";
+				$(".form-actions", this.el).append($responceText);
+
 			}
 			
 		});
