@@ -63,13 +63,14 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		catch (TwiMLException e)
 		{
 			System.out.println("error in voice srvlet.");
-			System.out.println(e.getMessage());
-			System.out.println(e.getStackTrace().toString());
 
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
 			System.out.println(sw.toString());
+
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace().toString());
 		}
 		response.setContentType("application/xml");
 		response.getWriter().print(twiml.toXML());

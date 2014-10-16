@@ -80,15 +80,14 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		catch (Exception e)
 		{
 			System.out.println("error in TwilioIOStatusCallBackServlet");
-			System.out.println(e.getMessage());
-			System.out.println(e.getStackTrace().toString());
 
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
 			System.out.println(sw.toString());
 
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace().toString());
 		}
 	}
 
@@ -127,6 +126,12 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		JSONObject callStatus = XML.toJSONObject(response.getResponseText());
 		System.out.println(callStatus);
 
+		if (!callStatus.getJSONObject("TwilioResponse").getJSONObject("Calls").has("Call"))
+		{
+			System.out.println("No call status.");
+			return;
+		}
+
 		JSONObject call = callStatus.getJSONObject("TwilioResponse").getJSONObject("Calls").getJSONObject("Call");
 
 		String Duration = call.getString("Duration");
@@ -150,16 +155,12 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		 * secs Incoming call rejected by {{xxxx}}.
 		 */
 
-		String searchContactFor = null;
 		String state = "";
 		String callDuration = "";
 		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
-		/*
-		 * String clientName = "c".concat((agileUser.id).toString());
-		 * System.out.println("clientName: " + clientName);
-		 */
 		if (Duration.equalsIgnoreCase("0"))
 			callDuration = Status.concat(".");
 		else
