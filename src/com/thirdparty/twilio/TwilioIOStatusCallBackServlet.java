@@ -80,6 +80,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		{
 			System.out.println("error in TwilioIOStatusCallBackServlet");
 			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 	}
@@ -156,6 +157,8 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		else
 			callDuration = "Call connected for " + Duration + ".";
 
+		System.out.println("callDuration: " + callDuration);
+
 		// Outgoing call
 		if (From.equalsIgnoreCase(clientName) || From.equalsIgnoreCase(widget.getProperty("twilio_number"))
 				|| From.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
@@ -165,7 +168,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		}
 
 		// Incoming call
-		if (To.equalsIgnoreCase(clientName) || To.equalsIgnoreCase(widget.getProperty("twilio_number"))
+		else if (To.equalsIgnoreCase(clientName) || To.equalsIgnoreCase(widget.getProperty("twilio_number"))
 				|| To.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
 		{
 			if (Duration.equalsIgnoreCase("0"))
@@ -175,6 +178,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 			searchContactFor = From;
 		}
 
+		System.out.println("searchContactFor: " + searchContactFor);
 		System.out.println("state + call duraton: " + state + callDuration);
 
 		// Search contact
