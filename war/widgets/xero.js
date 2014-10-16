@@ -23,9 +23,21 @@ $(function()
 	 * button or to fetch details. If undefined - considering first time usage
 	 * of widget, setupXeroOAuth is shown and returned
 	 */
+
 	if (xero_widget.prefs == undefined)
 	{
-		setupXeroOAuth();
+		xeroError(Xero_PLUGIN_NAME, 'Authentication Error. The access token has expired. Please reconfigure your Xero widget.');
+		return;
+	}
+
+	var xeroWidgetPref = JSON.parse(xero_widget.prefs);
+
+	var orgObj = JSON.parse(xeroWidgetPref.xero_org_info);
+	SHORT_CODE = orgObj.Organisations.Organisation.ShortCode;	
+
+	if (typeof SHORT_CODE == "undefined")
+	{
+		xeroError(Xero_PLUGIN_NAME, "Authentication Error. The access token has expired. Please reconfigure your Xero widget.");
 		return;
 	}
 
@@ -38,9 +50,9 @@ $(function()
 	var first_name = agile_crm_get_contact_property("first_name");
 	var last_name = agile_crm_get_contact_property("last_name");
 
-	if(last_name==undefined||last_name==null)
+	if (last_name == undefined || last_name == null)
 		last_name = ' ';
-	
+
 	showXeroClient();
 
 	$('#xero_add_contact').die().live('click', function(e)
@@ -98,7 +110,7 @@ function showXeroClient()
 		return;
 	}
 	var emailArray = [];
-	for ( var i = 0; i < EmailList.length; i++)
+	for (var i = 0; i < EmailList.length; i++)
 	{
 		emailArray[i] = EmailList[i].value;
 	}
@@ -220,7 +232,7 @@ function addContactToXero(first_name, last_name)
 		}
 		else
 		{
-			xeroError(Xero_PLUGIN_NAME, data)
+			xeroError(Xero_PLUGIN_NAME, data);
 		}
 		$("#xero_add_contact").removeAttr("disabled");
 	});

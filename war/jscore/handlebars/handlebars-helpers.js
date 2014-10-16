@@ -2982,5 +2982,13 @@ $(function()
 
 		return monthArray[month_index - 1];
 	});
+	
+	Handlebars.registerHelper('xeroOrganisationShortCode', function(block) {
+		if(typeof SHORT_CODE == "undefined" || SHORT_CODE == "") {
+			return false;
+		} else {
+			return SHORT_CODE;
+		}
+	});
 
 });
