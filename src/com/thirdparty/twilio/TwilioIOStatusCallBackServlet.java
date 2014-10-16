@@ -165,7 +165,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 				|| From.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
 		{
 			state = "Outgoing call by " + user.domain + ". ";
-			searchContactFor = To;
+			searchContactFor(To, state, callDuration);
 		}
 
 		// Incoming call
@@ -176,9 +176,13 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 				state = "Incoming call for " + user + ". ";
 			else
 				state = "Incoming call answered by " + user + ". ";
-			searchContactFor = From;
+			searchContactFor(From, state, callDuration);
 		}
 
+	}
+
+	private void searchContactFor(String searchContactFor, String state, String callDuration)
+	{
 		System.out.println("searchContactFor: " + searchContactFor);
 		System.out.println("state + call duraton: " + state + callDuration);
 
@@ -203,6 +207,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 			}
 
 		}
+
 	}
 
 	/**
