@@ -476,9 +476,11 @@ public class CSVUtil
 
 		System.out.println("exception raised while saving contact ");
 		e.printStackTrace();
-
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			"Exception raise while saving contact"));
+		if (tempContact.id != null)
+		{
+		    failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+			    "Exception raise while saving contact"));
+		}
 
 	    }
 
@@ -512,8 +514,6 @@ public class CSVUtil
 	    {
 		System.out.println("exception while saving contacts");
 		e.printStackTrace();
-		failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-			"Exception raised while saving notes related to this contacts"));
 	    }
 
 	}// end of for loop
