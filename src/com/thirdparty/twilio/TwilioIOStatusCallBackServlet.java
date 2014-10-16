@@ -79,10 +79,9 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		catch (Exception e)
 		{
 			System.out.println("error in TwilioIOStatusCallBackServlet");
-			e.printStackTrace();
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
-
 	}
 
 	private void getCallDetails(String callSid, String sessionmngrid) throws Exception
@@ -160,17 +159,21 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 
 		System.out.println("callDuration: " + callDuration);
 
+		String twilioNumber = widget.getProperty("twilio_number");
+		String twilioVerifiedNumber = widget.getProperty("twilio_from_number");
+		System.out.println("twilioNumber: " + twilioNumber + " twilioVerifiedNumber: " + twilioVerifiedNumber);
+
 		// Outgoing call
-		if (From.equalsIgnoreCase("agileclient") || From.equalsIgnoreCase(widget.getProperty("twilio_number"))
-				|| From.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
+		if (From.equalsIgnoreCase("agileclient") || From.equalsIgnoreCase(twilioNumber)
+				|| From.equalsIgnoreCase(twilioVerifiedNumber))
 		{
 			state = "Outgoing call by " + user.domain + ". ";
 			searchContactFor(To, state, callDuration);
 		}
 
 		// Incoming call
-		else if (To.equalsIgnoreCase("agileclient") || To.equalsIgnoreCase(widget.getProperty("twilio_number"))
-				|| To.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
+		else if (To.equalsIgnoreCase("agileclient") || To.equalsIgnoreCase(twilioNumber)
+				|| To.equalsIgnoreCase(twilioVerifiedNumber))
 		{
 			if (Duration.equalsIgnoreCase("0"))
 				state = "Incoming call for " + user + ". ";
@@ -178,7 +181,6 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 				state = "Incoming call answered by " + user + ". ";
 			searchContactFor(From, state, callDuration);
 		}
-
 	}
 
 	private void searchContactFor(String searchContactFor, String state, String callDuration)
@@ -205,9 +207,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 				System.out.println("Note: " + note.subject);
 				System.out.println("Note: " + note.id);
 			}
-
 		}
-
 	}
 
 	/**
