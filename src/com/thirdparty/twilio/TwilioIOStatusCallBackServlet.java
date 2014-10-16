@@ -19,7 +19,7 @@ import com.agilecrm.session.UserInfo;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
-import com.agilecrm.widgets.util.DefaultWidgets;
+import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
 
@@ -84,7 +84,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 	{
 		System.out.println("In getCallDetails: " + callSid + " sessionmngrid: " + sessionmngrid);
 
-		Widget widget = DefaultWidgets.getDefaultWidgetByName("TwilioIO");
+		Widget widget = WidgetUtil.getWidget("TwilioIO");
 
 		System.out.println("widget" + widget);
 		System.out.println("widget.getProperty twilio_acc_sid: " + widget.getProperty("twilio_acc_sid"));
@@ -130,17 +130,25 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		System.out.println("Direction: " + Direction);
 
 		/*
-		 * if (To.contentEquals("")) {} String callee = ""; String state = "";
+		 * Outbound call by {{name}}. Call connected for .. hrs mins secs (eg: 2
+		 * mins 5 secs, 10 secs, 1 hr 24 mins) Outbound call by {{xxx}}. Busy.
+		 * Outbound call by {{xxx}}. No Answer.
 		 * 
-		 * Outgoing call state = "Outgoing call by "+
-		 * AgileUser.getcurrentuser().name +"."; callee = To;
+		 * Incoming call answered by {{xxx}}. Call connected for xxx hrs min
+		 * secs Incoming call rejected by {{xxxx}}.
 		 * 
-		 * Incoming call state = "Incoming call answered by "+
-		 * AgileUser.getcurrentuser().name +"."; callee = From;
-		 * 
-		 * String callDuration ="";
+		 * String searContactFor = ""; String state = ""; String callDuration
+		 * =""; String user = AgileUser.getcurrentuser().name;
 		 * 
 		 * if (Duration != 0) callDuration = "Call connected for "+Duration;
+		 * 
+		 * if Outgoing call state = "Outgoing call by "+ user+".";
+		 * searContactFor = To;
+		 * 
+		 * if Incoming call state = "Incoming call answered by "+ user +".";
+		 * searContactFor = From;
+		 * 
+		 * 
 		 * 
 		 * find contact
 		 */
