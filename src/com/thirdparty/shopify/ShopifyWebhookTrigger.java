@@ -62,52 +62,57 @@ public class ShopifyWebhookTrigger extends HttpServlet
 	    JSONObject shopifyJson = new JSONObject(shopifyData);
 	    System.out.println("Shopify json is " + shopifyJson);
 
-	    String customerEmail = shopifyJson.getString("email");
-	    System.out.println("Customer email is " + customerEmail);
-
-	    String[] tags = getCustomerTags(shopifyEvent, shopifyJson);
-
-	    Contact contact = ContactUtil.searchContactByEmail(customerEmail);
-	    if (contact == null)
-		contact = new Contact();
-	    List<ContactField> contactProperties = new ArrayList<ContactField>();
-
-	    JSONObject customerJson = getCustomerDetails(shopifyEvent, shopifyJson);
-	    Iterator<?> keys = customerJson.keys();
-	    while (keys.hasNext())
-	    {
-		String key = (String) keys.next();
-		String value = customerJson.getString(key);
-		contactProperties.add(new ContactField(key, value, null));
-	    }
-
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
 	    for (Trigger trigger : triggers)
 	    {
 		if (StringUtils.equals(shopifyEvent.replace('/', '_').toUpperCase(), trigger.trigger_shopify_event))
 		{
+		    String customerEmail = shopifyJson.getString("email");
+		    System.out.println("Customer email is " + customerEmail);
+
+		    String[] tags = getCustomerTags(shopifyEvent, shopifyJson);
+
+		    Contact contact = ContactUtil.searchContactByEmail(customerEmail);
+		    if (contact == null)
+			contact = new Contact();
+		    List<ContactField> contactProperties = new ArrayList<ContactField>();
+
+		    JSONObject customerJson = getCustomerDetails(shopifyEvent, shopifyJson);
+		    if (customerJson == null)
+		    {
+			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		    }
+		    Iterator<?> keys = customerJson.keys();
+		    while (keys.hasNext())
+		    {
+			String key = (String) keys.next();
+			String value = customerJson.getString(key);
+			contactProperties.add(new ContactField(key, value, null));
+		    }
+
 		    System.out.println("Assigning campaign to contact ...");
 		    WorkflowSubscribeUtil.subscribe(contact, trigger.id);
+
+		    if (contact.properties.isEmpty())
+			contact.properties = contactProperties;
+		    else
+			contact.properties = updateContactPropList(contact.properties, contactProperties);
+
+		    System.out.println("Contact properties are " + contact.properties);
+		    contact.setContactOwner(owner);
+		    contact.addTags(tags);
+		    contact.save();
+
+		    if (!StringUtils.isBlank(shopifyJson.getString("note")))
+		    {
+			System.out.println("Saving note ...");
+			Note note = new Note("Shopify Note", shopifyJson.getString("note"));
+			note.addRelatedContacts(contact.id.toString());
+			note.setOwner(new Key<AgileUser>(AgileUser.class, owner.getId()));
+			note.save();
+		    }
 		}
-	    }
-
-	    if (contact.properties.isEmpty())
-		contact.properties = contactProperties;
-	    else
-		contact.properties = updateContactPropList(contact.properties, contactProperties);
-
-	    System.out.println("Contact properties are " + contact.properties);
-	    contact.setContactOwner(owner);
-	    contact.addTags(tags);
-	    contact.save();
-
-	    if (!StringUtils.isBlank(shopifyJson.getString("note")))
-	    {
-		System.out.println("Saving note ...");
-		Note note = new Note("Shopify Note", shopifyJson.getString("note"));
-		note.addRelatedContacts(contact.id.toString());
-		note.setOwner(new Key<AgileUser>(AgileUser.class, owner.getId()));
-		note.save();
 	    }
 	}
 	catch (JSONException e)
@@ -123,8 +128,7 @@ public class ShopifyWebhookTrigger extends HttpServlet
 
 	for (ContactField oldProperty : oldProperties)
 	    for (ContactField newProperty : newProperties)
-		if (StringUtils.equals(oldProperty.name, newProperty.name)
-			&& StringUtils.equals(oldProperty.subtype, newProperty.subtype))
+		if (StringUtils.equals(oldProperty.name, newProperty.name) && StringUtils.equals(oldProperty.subtype, newProperty.subtype))
 		    outDatedProperties.add(oldProperty);
 	oldProperties.removeAll(outDatedProperties);
 	newProperties.addAll(oldProperties);

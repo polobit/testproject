@@ -67,25 +67,6 @@ public class StripeChargeWebhook extends HttpServlet
 		return;
 	    }
 
-	    String email = getStripeEmail(stripeJson, eventType);
-	    Contact contact = ContactUtil.searchContactByEmail(email);
-
-	    List<ContactField> contactProperties = new ArrayList<ContactField>();
-	    if (contact == null)
-	    {
-		contact = new Contact();
-		contactProperties.add(new ContactField(Contact.EMAIL, email, null));
-	    }
-
-	    JSONObject agileJson = getAgileJson(stripeEventJson);
-	    Iterator<?> keys = agileJson.keys();
-	    while (keys.hasNext())
-	    {
-		String key = (String) keys.next();
-		String value = agileJson.getString(key);
-		contactProperties.add(new ContactField(key, value, null));
-	    }
-
 	    List<Trigger> triggers = TriggerUtil.getAllTriggers();
 	    for (Trigger trigger : triggers)
 	    {
@@ -94,18 +75,38 @@ public class StripeChargeWebhook extends HttpServlet
 
 		if (StringUtils.equals(trigger.trigger_stripe_event, eventType.replace(".", "_").toUpperCase()))
 		{
+		    String email = getStripeEmail(stripeJson, eventType);
+		    Contact contact = ContactUtil.searchContactByEmail(email);
+
+		    List<ContactField> contactProperties = new ArrayList<ContactField>();
+		    if (contact == null)
+		    {
+			contact = new Contact();
+			if (!StringUtils.isBlank(email))
+			    contactProperties.add(new ContactField(Contact.EMAIL, email, null));
+		    }
+
+		    JSONObject agileJson = getAgileJson(stripeEventJson);
+		    Iterator<?> keys = agileJson.keys();
+		    while (keys.hasNext())
+		    {
+			String key = (String) keys.next();
+			String value = agileJson.getString(key);
+			contactProperties.add(new ContactField(key, value, null));
+		    }
+
 		    System.out.println("Assigning campaign to contact ... ");
 		    WorkflowSubscribeUtil.subscribe(contact, trigger.campaign_id);
+
+		    if (contact.properties.isEmpty())
+			contact.properties = contactProperties;
+		    else
+			contact.properties = updateAgileContactProperties(contact.properties, contactProperties);
+
+		    contact.setContactOwner(owner);
+		    contact.save();
 		}
 	    }
-
-	    if (contact.properties.isEmpty())
-		contact.properties = contactProperties;
-	    else
-		contact.properties = updateAgileContactProperties(contact.properties, contactProperties);
-
-	    contact.setContactOwner(owner);
-	    contact.save();
 	}
 	catch (JSONException e)
 	{
