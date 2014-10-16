@@ -1,6 +1,6 @@
-<!-- Indices written at Wed, 15 Oct 2014 14:35:46 UTC -->
+<!-- Indices written at Wed, 17 Sep 2014 11:06:50 IST -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
     <!-- Used 9 times in query history -->
     <datastore-index kind="Opportunity" ancestor="false" source="auto">
@@ -8,21 +8,26 @@
         <property name="close_date" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 9 times in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="viewed.viewer_id" direction="asc"/>
         <property name="viewed.viewed_time" direction="desc"/>
     </datastore-index>
 
-    <!-- Used 9 times in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Task" ancestor="false" source="auto">
         <property name="is_complete" direction="asc"/>
         <property name="owner" direction="asc"/>
         <property name="due" direction="asc"/>
     </datastore-index>
 
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Opportunity" ancestor="false" source="auto">
+        <property name="ownerKey" direction="asc"/>
+        <property name="close_date" direction="asc"/>
+    </datastore-index>
 
-    <!-- Used 5 times in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="__key__" direction="asc"/>
         <property name="updated_time" direction="asc"/>
@@ -46,7 +51,7 @@
     
 
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="Note" ancestor="false" source="auto">
         <property name="related_contacts" direction="asc"/>
         <property name="created_time" direction="desc"/>

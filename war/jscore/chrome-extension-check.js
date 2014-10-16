@@ -1,21 +1,21 @@
 /**
  * Chrome extension id
- */
+ *//*
 var Chrome_Extension_Id = "eofoblinhpjfhkjlfckmeidagfogclib";
 
-/**
+*//**
  * Chrome extension resource path to detect extension
- */
+ *//*
 var Chrome_Extension_Accesible_Resource = "/js/xhr_override.js";
 
-/**
+*//**
  * Chrome extension webstore url
- */
+ *//*
 var Chrome_Extension_Webstore_Url = "https://chrome.google.com/webstore/detail/" + Chrome_Extension_Id;
 
-/**
+*//**
  * Detect chrome extension on load
- */
+ *//*
 $(function()
 {
 
@@ -56,9 +56,9 @@ $(function()
 	Detect_Chrome_Extension(Toggle_Extension_Request_Ui);
 });
 
-/**
+*//**
  * Detect chrome extension by sending image request
- */
+ *//*
 function Detect_Chrome_Extension(callback)
 {
 	console.log("In Detect_Chrome_Extension");
@@ -83,11 +83,11 @@ function Detect_Chrome_Extension(callback)
 	}
 }
 
-/**
+*//**
  * Toggle extension installer UI
  * 
  * @param hide
- */
+ *//*
 function Toggle_Extension_Request_Ui(hide)
 {
 
@@ -117,17 +117,17 @@ function toggle_navbar_position(positionToChange)
 		$(".navbar-fixed-top").addClass("navbar-slide-down");
 }
 
-/**
+*//**
  * Initilaize webstore events to install the extension
- */
+ *//*
 function Initialize_Chrome_Webstore_events()
 {
 
 	console.log("in Initialize_Chrome_Webstore_events");
 
-	/**
+	*//**
 	 * To dismiss chrome extension popup
-	 */
+	 *//*
 	$('#chrome_extension #dismiss').die().live('click', function(e)
 	{
 		e.stopPropagation();
@@ -138,9 +138,9 @@ function Initialize_Chrome_Webstore_events()
 		Toggle_Extension_Request_Ui(true);
 	});
 
-	/**
+	*//**
 	 * To prevent notify user on each session
-	 */
+	 *//*
 	$("#chrome_extension #prevent_extension_request").die().live('click', function()
 	{
 
@@ -150,9 +150,9 @@ function Initialize_Chrome_Webstore_events()
 		Toggle_Extension_Request_Ui(true);
 	});
 
-	/**
+	*//**
 	 * Install extension
-	 */
+	 *//*
 	$('#chrome_extension #chrome_install_button').die().live('click', function(e)
 	{
 
@@ -186,11 +186,11 @@ function Initialize_Chrome_Webstore_events()
 	});
 }
 
-/**
+*//**
  * Toggle loader image
  * 
  * @param type
- */
+ *//*
 function Toggle_Extension_Loader(type)
 {
 
@@ -201,3 +201,4 @@ function Toggle_Extension_Loader(type)
 
 	$("#chrome_extension").find("#loading").css('display', type);
 }
+*/

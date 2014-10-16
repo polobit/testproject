@@ -30,6 +30,8 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		String clientName = "C";
 		clientName = clientName.concat((AgileUser.getCurrentAgileUser().id).toString());
 
+		System.out.println("clientName: " + clientName);
+
 		TwiMLResponse twiml = new TwiMLResponse();
 		Dial dial = new Dial();
 		try

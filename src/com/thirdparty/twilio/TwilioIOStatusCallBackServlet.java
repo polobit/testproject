@@ -67,6 +67,8 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		Widget widget = DefaultWidgets.getDefaultWidgetByName("TwilioIO");
 
 		System.out.println("widget" + widget);
+		System.out.println("widget.getProperty twilio_acc_sid:" + widget.getProperty("twilio_acc_sid"));
+		System.out.println("widget.getProperty twilio_auth_token:" + widget.getProperty("twilio_auth_token"));
 
 		// Get Twilio client configured with account SID and authToken
 		TwilioRestClient client = new TwilioRestClient(widget.getProperty("twilio_acc_sid"),
