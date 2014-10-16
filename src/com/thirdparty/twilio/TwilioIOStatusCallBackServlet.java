@@ -149,6 +149,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		AgileUser agileUser = AgileUser.getCurrentAgileUser();
 
 		String clientName = "C".concat((agileUser.id).toString());
+		System.out.println("clientName: " + clientName);
 
 		if (Duration.equalsIgnoreCase("0"))
 			callDuration = Status.concat(".");
@@ -174,17 +175,26 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 			searchContactFor = From;
 		}
 
+		System.out.println("state + call duraton: " + state + callDuration);
+
 		// Search contact
 		if (searchContactFor != null)
 		{
+			System.out.println("Search contact");
 			Contact contact = ContactUtil.searchContactByPhoneNumber(searchContactFor);
 
+			System.out.println("contact: " + contact.FIRST_NAME);
 			if (contact != null)
 			{
+				System.out.println("In save note");
 				Long contactId = contact.id;
 				Note note = new Note("Call Status", state + callDuration);
 				note.addRelatedContacts(contactId.toString());
 				note.save();
+
+				System.out.println("Note: " + note.description);
+				System.out.println("Note: " + note.subject);
+				System.out.println("Note: " + note.id);
 			}
 
 		}

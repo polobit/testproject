@@ -40,15 +40,19 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		{
 			if (phoneNumber != null)
 			{
+				System.out.println("Outgoing call");
 				dial.append(new Number(phoneNumber));
 				dial.setCallerId(callerId);
 			}
 			else
 			{
+				System.out.println("Incoming call");
 				// dial.append(new Client("jenny"));
 				dial.append(new Client(clientName));
 			}
 			twiml.append(dial);
+
+			System.out.println(twiml.toXML());
 		}
 		catch (TwiMLException e)
 		{
