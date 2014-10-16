@@ -150,7 +150,7 @@ $(function()
 	$('#show-schedule-url').live('click', function(e)
 	{
 		e.preventDefault();
-		$("#specialchar").hide();$("#charlength").hide();
+		$("#specialchar").hide();$("#charlength").hide();$("#edit").show();
 		var updatedCurrentUser = Backbone.Model.extend({ url : '/core/api/users/current-user', restKey : "domainUser" });
 
 		var updateduserModel = new updatedCurrentUser();
@@ -170,7 +170,7 @@ $(function()
 
 			$("#scheduleurl").attr("href", onlineschedulingURL);
 			$("#schedule_id").html(model.schedule_id);
-			$("#edit").show();
+			
 			$("#scheduleurl").removeClass("nounderline");
 
 			if ($("#scheduleModal").size() == 0)
