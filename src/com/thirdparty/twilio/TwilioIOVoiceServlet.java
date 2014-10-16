@@ -24,6 +24,9 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		String phoneNumber = request.getParameter("PhoneNumber");
 		System.out.println("Twilio phone number : " + phoneNumber);
 
+		String state = request.getParameter("state");
+		System.out.println("Twilio state : " + state);
+
 		/* Caller Id from which call is initiated */
 		String callerId = request.getParameter("from");
 

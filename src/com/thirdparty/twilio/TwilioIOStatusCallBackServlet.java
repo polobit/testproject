@@ -37,6 +37,9 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		String CallSid = request.getParameter("CallSid");
 		System.out.println("Twilio CallSid  : " + CallSid);
 
+		String state = request.getParameter("state");
+		System.out.println("Twilio state  : " + state);
+
 		System.out.println("Parent Call SID");
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();

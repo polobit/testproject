@@ -1,4 +1,4 @@
-<!-- Indices written at Thu, 16 Oct 2014 12:24:20 IST -->
+<!-- Indices written at Thu, 16 Oct 2014 13:21:34 IST -->
 
 <datastore-indexes>
 
@@ -43,14 +43,18 @@
         <property name="widget_type" direction="asc"/>
     </datastore-index>
     
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="Note" ancestor="false" source="auto">
+        <property name="related_contacts" direction="asc"/>
+        <property name="created_time" direction="desc"/>
+    </datastore-index>
 
-
-    <!-- Used 2 times in query history -->
+    <!-- Used 4 times in query history -->
     <datastore-index kind="Widget" ancestor="true" source="auto">
         <property name="widget_type" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="Contact" ancestor="false" source="auto">
         <property name="__key__" direction="asc"/>
         <property name="updated_time" direction="asc"/>
