@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import com.agilecrm.activities.Activity.ActivityType;
 import com.agilecrm.activities.Activity.EntityType;
@@ -449,12 +450,12 @@ public class ActivitySave
      */
     public static void createEmailSentActivityToContact(String to, String subject, String body)
     {
-	String emailbody = body.replaceAll("\\<.*?>", "");
+	String emailbody = html2text(body);
 	System.out.println(emailbody);
 	Contact contact = ContactUtil.searchContactByEmail(to);
 	if (contact != null)
 
-	    ActivityUtil.createContactActivity(ActivityType.EMAIL_SENT, contact, to, subject, emailbody);
+	    ActivityUtil.createContactActivity(ActivityType.EMAIL_SENT, contact, to, emailbody, subject);
 
     }
 
@@ -625,12 +626,18 @@ public class ActivitySave
      * @throws JSONException
      * 
      */
-    public static void createBulkActionActivity(int contactidscount, String actiontype, String data)
-	    throws JSONException
+    public static void createBulkActionActivity(int contactidscount, String actiontype, String data, String label,
+	    String bulk_email_subject) throws JSONException
     {
 
-	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactidscount));
+	ActivityUtil.createBulkActionActivity(actiontype, data, String.valueOf(contactidscount), label,
+	        bulk_email_subject);
 
+    }
+
+    public static String html2text(String html)
+    {
+	return Jsoup.parse(html).text();
     }
 
 }

@@ -177,8 +177,10 @@ $(function()
 				
 				var json = serializeForm("cancelation-request-form");
 				
+				var info = json.account_cancel_reason;
+				
 				// Replace \r\n with <br> tags as email is sent as text/html
-				var reason = json.account_cancel_reason.replace(/\r\n/g,"<br/>");
+				var reason = info.replace(/\r\n/g,"<br/>");
 				
 				// Build url
 				var url =  'core/api/emails/send-email?from=' + encodeURIComponent(CURRENT_DOMAIN_USER.email) + '&to=' + 
@@ -193,7 +195,14 @@ $(function()
 					});
 					
 					// Adds "Cancellation Request" tag in "Our" domain
-					addTagAgile("Cancellation Request");
+					add_tag_our_domain("Cancellation Request");
+					
+					// Adds note in "Our" domain
+					var note = {};
+					note.subject = "Cancellation Request";
+					note.description = info;
+					
+					agile_addNote(note,'', CURRENT_DOMAIN_USER.email);
 					
 					// Enables Send Email button.
 				    enable_send_button($('#send-delete-request'));

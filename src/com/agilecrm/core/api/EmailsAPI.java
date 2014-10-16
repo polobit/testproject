@@ -94,7 +94,7 @@ public class EmailsAPI
 
 	// Saves Contact Email.
 	ContactEmailUtil.saveContactEmailAndSend(fromEmail, fromName, to, cc, bcc, subject, body, signature, null,
-		trackClicks);
+	        trackClicks);
 	ActivitySave.createEmailSentActivityToContact(to, subject, body);
 
     }
@@ -132,7 +132,7 @@ public class EmailsAPI
 	    if (url == null)
 	    {
 		JSONArray contactEmails = ContactEmailUtil.mergeContactEmails(StringUtils.split(searchEmail, ",")[0],
-			null);
+		        null);
 
 		// return in the same format {emails:[]}
 		return new JSONObject().put("emails", contactEmails).toString();

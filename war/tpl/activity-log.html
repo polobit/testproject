@@ -622,7 +622,7 @@ Modified  Deal <a href="" data={{entity_id}} class="activity-deal-edit">{{label}
 	</div>
 <div class="pull-left activity-tag">
 <div>	
- Sent Email to Contact <a href="#contact/{{entity_id}}">{{label}}</a> 
+ Sent <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom3}}({{add_dots_end custom3}}){{/if}} to Contact <a href="#contact/{{entity_id}}">{{label}}</a> 
 </div>
 <div>
 		<small class="edit-hover pull-left" > 
@@ -710,7 +710,32 @@ Added {{custom3}} Contacts to Campaign {{custom2}}
 {{/if_equals}}
 
 {{#if_equals "SEND_EMAIL" custom1}}
+{{#if_equals "contacts" label}}	
 	
+<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div >
+{{#if_equals "1" custom3}}	
+Sent <a href="" class="email-details" data={{id}}>Email</a>{{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Contact 
+{{else}}
+Sent <a href="" class="email-details" data={{id}}>Email</a> {{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Contacts 
+{{/if_equals}}
+
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{else}}
 	<div style="margin-right:15px;" class="pull-left">
 			{{#if this.userPic}}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
@@ -720,7 +745,11 @@ Added {{custom3}} Contacts to Campaign {{custom2}}
 	</div>
 <div class="pull-left activity-tag">
 <div>	
-Sent email to {{custom3}} Contacts 
+{{#if_equals "1" custom3}}
+Sent <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Company
+{{else}}
+Sent <a href="" class="email-details" data="{{id}}">Email</a> {{#if custom4}}({{add_dots_end custom4}}){{/if}} to {{custom3}} Companies
+{{/if_equals}}
 
 	</div>
 <div>	
@@ -729,12 +758,15 @@ Sent email to {{custom3}} Contacts
 		</small>
 </div>
 </div>
-<div class="clearfix"></div>	
+<div class="clearfix"></div>
+
+{{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "CHANGE_OWNER" custom1}}
 	
-	<div style="margin-right:15px;" class="pull-left">
+{{#if_equals "contacts" label}}	
+<div style="margin-right:15px;" class="pull-left">
 			{{#if this.userPic}}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
 			{{else}}
@@ -756,11 +788,36 @@ Sent email to {{custom3}} Contacts
 </div>
 </div>
 <div class="clearfix"></div>
+{{else}}
+<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>	
+{{#if_equals "1" custom3}}
+		Assgined  {{custom3}} Company to {{custom2}}
+{{else}}
+		Assgined  {{custom3}} Companies to {{custom2}}
+{{/if_equals}}
+</div>
+<div>
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
 {{/if_equals}}
 
 {{#if_equals "DELETE" custom1}}
 	
-	<div style="margin-right:15px;" class="pull-left">
+{{#if_equals "contacts" label}}	
+<div style="margin-right:15px;" class="pull-left">
 			{{#if this.userPic}}
 				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
 			{{else}}
@@ -782,6 +839,30 @@ Sent email to {{custom3}} Contacts
 </div>
 </div>
 <div class="clearfix"></div>
+{{else}}
+<div style="margin-right:15px;" class="pull-left">
+			{{#if this.userPic}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{userPic}}" title="{{this.user.name}}">
+			{{else}}
+				<img class="user-img ref-roundedimg" width="20" height="20" alt="" src="{{defaultGravatarurl 40}}" title="{{this.user.name}}" >
+			{{/if}}
+	</div>
+<div class="pull-left activity-tag">
+<div>
+{{#if_equals "1" custom3}}
+		Deleted {{custom3}} company
+{{else}}	
+    Deleted {{custom3}} Companies
+{{/if_equals}}
+	</div>
+<div>	
+		<small class="edit-hover pull-left" > 
+			<time class="pull-right" datetime="{{epochToHumanDate "" time}}" style="border-bottom:dotted 1px #999">{{epochToHumanDate "ddd mmm dd yyyy HH:MM:ss" time}}</time>
+		</small>
+</div>
+</div>
+<div class="clearfix"></div>
+{{/if_equals}}
 {{/if_equals}}
 
 
@@ -953,6 +1034,7 @@ Deleted {{custom2}} Documents
                 </a>
                 <ul class="dropdown-menu" id="user-select"></ul>
             </div>
+
             
         </div>
     </div>

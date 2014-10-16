@@ -29,7 +29,7 @@ function agile_get_emails()
 // Convert 2d to 1d
 function parse_emails(emails)
 {
-	return $.merge(collate_emails(emails, "to"), collate_emails(emails, "from")).concat(collate_emails(emails, "cc")).concat(agile_grep(emails, "email"));
+	return $.merge(collate_emails(emails, "from"), collate_emails(emails, "to")).concat(collate_emails(emails, "cc")).concat(agile_grep(emails, "email"));
 }
 
 // Finds email_key and then finds name_key and collates them

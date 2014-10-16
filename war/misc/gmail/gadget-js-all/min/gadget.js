@@ -92,7 +92,7 @@ function agile_get_emails()
 // Convert 2d to 1d
 function parse_emails(emails)
 {
-	return $.merge(collate_emails(emails, "to"), collate_emails(emails, "from")).concat(collate_emails(emails, "cc")).concat(agile_grep(emails, "email"));
+	return $.merge(collate_emails(emails, "from"), collate_emails(emails, "to")).concat(collate_emails(emails, "cc")).concat(agile_grep(emails, "email"));
 }
 
 // Finds email_key and then finds name_key and collates them
@@ -188,7 +188,7 @@ function agile_init_gadget() {
 		// Lib Path 
 		LIB_PATH = "http://localhost:8888/";
 		
-		_agile.set_account('ul7kqmuh1g7o6fsn1s8timpi4o', 'localhost');	
+		_agile.set_account('najgcc239kine9ungm8ip2ftj0', 'localhost');	
 		
 		agile_user_associated();
 		
@@ -259,7 +259,7 @@ function agile_user_associated() {
 	{
 		Contacts_Json[value.email] = value;
 	});
-	
+	console.log(Contacts_Json);
 	head.js(LIB_PATH + 'lib/bootstrap.min.js', LIB_PATH + 'jscore/md5.js', function() {
 		
 		set_html($('#agile_content'), 'search', emails);
@@ -653,6 +653,11 @@ function getProperty(items, name)
 		if (items[i].name == name)
 			return items[i];
 	}
+}
+
+function ucfirst(value)
+{
+ return (value && typeof value === 'string') ? (value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()) : '';
 }$(function()
 {
 

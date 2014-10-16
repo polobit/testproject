@@ -217,11 +217,15 @@ function our_domain_sync()
 		}, function(data)
 		{
 			var name = CURRENT_DOMAIN_USER['name'];
-			var first_name = name, last_name = name;
+			
+			//var first_name = name, last_name = name;
+			name = name.trim();
+			var first_name = name.split(" ")[0].trim();
+			var last_name  = (first_name.length < name.length) ? name.substring(first_name.length + 1).trim() : '';
+			
 			// Creates a new contact and assigns it to global value
 			_agile.create_contact({ "email" : CURRENT_DOMAIN_USER['email'], "first_name" : first_name, "last_name" : last_name }, function(data)
 			{
-				
 				Agile_Contact = data;
 				// Shows noty
 				// set_profile_noty();
@@ -390,4 +394,23 @@ function add_property(name, value, type, callback)
 		if (callback && typeof callback == "function")
 			callback(data);
 	});
+}
+
+/**
+ * adds user info as a note to account owner when user created called from
+ * user-add route
+ */
+function add_created_user_info_as_note_to_owner(owner, callback)
+{
+		var note = {};
+		note.subject = "User created";
+		note.description = "Domain - " + owner['domain']+"\n User Email -  " + owner['created_user_email'];
+		_agile.add_note(note, function(data)
+		{
+			if (callback && typeof callback == "function")
+				callback(data);
+
+		},owner['email']);
+		
+	
 }

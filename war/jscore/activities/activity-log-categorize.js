@@ -69,6 +69,18 @@ $('.activity-task-edit').live('click', function(e)
 	updateactivity__task(currenttask);
 });
 
+$('.email-details').live('click', function(e)
+		{
+			e.preventDefault();
+			var data = $(this).closest('a').attr("data");
+			
+			var obj=getActivityObject(data);
+			console.log(obj);
+			var emailinfo = $(getTemplate("infoModal", JSON.parse(obj)));
+			emailinfo.modal('show');
+		
+		});
+
 function getDealObject(id)
 {
 
@@ -111,6 +123,12 @@ function update_event_activity(ele)
 	deserializeForm(value, $("#updateActivityForm"));
 	$("#updateActivityModal").modal('show');
 
+}
+
+function getModal(){
+	 var activity_object = App_Activity_log.activitiesview.collection.models[this];
+	 alert(activity_object);
+	 console.log(activity_object);
 }
 
 function updateactivity__task(ele)

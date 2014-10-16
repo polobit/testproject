@@ -25,7 +25,7 @@ function agile_init_gadget() {
 		// Lib Path 
 		LIB_PATH = "http://localhost:8888/";
 		
-		_agile.set_account('ul7kqmuh1g7o6fsn1s8timpi4o', 'localhost');	
+		_agile.set_account('najgcc239kine9ungm8ip2ftj0', 'localhost');	
 		
 		agile_user_associated();
 		
