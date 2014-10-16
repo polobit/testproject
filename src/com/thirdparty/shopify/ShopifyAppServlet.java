@@ -28,7 +28,7 @@ public class ShopifyAppServlet extends HttpServlet
 	    String shopFromDb = ShopifyAppUtil.getShopFromDomain(domainFromURL);
 	    if(StringUtils.isBlank(shopFromDb))
 	    {
-		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString());
+		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString() + "&error=");
 	    }
 	    else
 	    {
