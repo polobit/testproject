@@ -1,6 +1,8 @@
 package com.thirdparty.twilio;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +62,14 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		}
 		catch (TwiMLException e)
 		{
-			e.printStackTrace();
+			System.out.println("error in voice srvlet.");
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace().toString());
+
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			System.out.println(sw.toString());
 		}
 		response.setContentType("application/xml");
 		response.getWriter().print(twiml.toXML());

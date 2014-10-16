@@ -2,6 +2,7 @@ package com.thirdparty.twilio;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,6 +81,13 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		{
 			System.out.println("error in TwilioIOStatusCallBackServlet");
 			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace().toString());
+
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			System.out.println(sw.toString());
+
 			e.printStackTrace();
 		}
 	}
