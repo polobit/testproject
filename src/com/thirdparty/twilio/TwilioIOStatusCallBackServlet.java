@@ -14,6 +14,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
 import com.agilecrm.widgets.util.DefaultWidgets;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
@@ -37,8 +41,21 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		String CallSid = request.getParameter("CallSid");
 		System.out.println("Twilio CallSid  : " + CallSid);
 
-		String state = request.getParameter("state");
-		System.out.println("Twilio state  : " + state);
+		String sessionmngrid = request.getParameter("sessionmngrid");
+		System.out.println("Twilio sessionmngrid  : " + sessionmngrid);
+
+		Long sessionmngridlong = Long.valueOf(sessionmngrid);
+
+		DomainUser domainUser = DomainUserUtil.getDomainUser(sessionmngridlong);
+
+		if (domainUser == null)
+			return;
+
+		System.out.println("domainUser : " + domainUser.email);
+
+		UserInfo userInfo = new UserInfo(domainUser);
+
+		SessionManager.set(userInfo);
 
 		System.out.println("Parent Call SID");
 		response.setContentType("text/html");
@@ -52,7 +69,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		{
 
 			System.out.println("Child Call SID");
-			getCallDetails(CallSid);
+			getCallDetails(CallSid, sessionmngrid);
 
 		}
 		catch (Exception e)
@@ -63,15 +80,15 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 
 	}
 
-	private void getCallDetails(String callSid) throws Exception
+	private void getCallDetails(String callSid, String sessionmngrid) throws Exception
 	{
-		System.out.println("In getCallDetails:" + callSid);
+		System.out.println("In getCallDetails: " + callSid + " sessionmngrid: " + sessionmngrid);
 
 		Widget widget = DefaultWidgets.getDefaultWidgetByName("TwilioIO");
 
 		System.out.println("widget" + widget);
-		System.out.println("widget.getProperty twilio_acc_sid:" + widget.getProperty("twilio_acc_sid"));
-		System.out.println("widget.getProperty twilio_auth_token:" + widget.getProperty("twilio_auth_token"));
+		System.out.println("widget.getProperty twilio_acc_sid: " + widget.getProperty("twilio_acc_sid"));
+		System.out.println("widget.getProperty twilio_auth_token: " + widget.getProperty("twilio_auth_token"));
 
 		// Get Twilio client configured with account SID and authToken
 		TwilioRestClient client = new TwilioRestClient(widget.getProperty("twilio_acc_sid"),
@@ -106,24 +123,31 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		String Status = call.getString("Status");
 		String Direction = call.getString("Direction");
 
-		System.out.println("Duration" + Duration);
-		System.out.println("To" + To);
-		System.out.println("From" + From);
-		System.out.println("Status" + Status);
-		System.out.println("Direction" + Direction);
+		System.out.println("Duration: " + Duration);
+		System.out.println("To: " + To);
+		System.out.println("From: " + From);
+		System.out.println("Status: " + Status);
+		System.out.println("Direction: " + Direction);
 
 		/*
-		 * if (To.contentEquals("")) {
+		 * if (To.contentEquals("")) {} String callee = ""; String state = "";
 		 * 
-		 * }
+		 * Outgoing call state = "Outgoing call by "+
+		 * AgileUser.getcurrentuser().name +"."; callee = To;
 		 * 
-		 * Note note = new Note("", "");
+		 * Incoming call state = "Incoming call answered by "+
+		 * AgileUser.getcurrentuser().name +"."; callee = From;
 		 * 
-		 * List<String> contact_ids = new ArrayList<String>();
+		 * String callDuration ="";
 		 * 
-		 * note.save();
+		 * if (Duration != 0) callDuration = "Call connected for "+Duration;
+		 * 
+		 * find contact
 		 */
-
+		/*
+		 * String contactId = ""; Note note = new Note("Call Status",
+		 * "state.  "); note.addRelatedContacts(contactId); note.save();
+		 */
 	}
 
 	/**

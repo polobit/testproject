@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.agilecrm.user.AgileUser;
 import com.twilio.sdk.verbs.Client;
 import com.twilio.sdk.verbs.Dial;
 import com.twilio.sdk.verbs.Number;
@@ -24,14 +23,14 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		String phoneNumber = request.getParameter("PhoneNumber");
 		System.out.println("Twilio phone number : " + phoneNumber);
 
-		String state = request.getParameter("state");
-		System.out.println("Twilio state : " + state);
+		String agileuserid = request.getParameter("agileuserid");
+		System.out.println("Twilio agileuserid : " + agileuserid);
 
 		/* Caller Id from which call is initiated */
 		String callerId = request.getParameter("from");
 
 		String clientName = "C";
-		clientName = clientName.concat((AgileUser.getCurrentAgileUser().id).toString());
+		clientName = clientName.concat(agileuserid);
 
 		System.out.println("clientName: " + clientName);
 

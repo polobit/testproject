@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -26,97 +28,108 @@ import com.googlecode.objectify.annotation.Cached;
 public class AgileUser
 {
 
-    // Key
-    @Id
-    public Long id;
+	// Key
+	@Id
+	public Long id;
 
-    /**
-     * Associate outer domain user Id
-     */
-    public Long domain_user_id;
+	/**
+	 * Associate outer domain user Id
+	 */
+	public Long domain_user_id;
 
-    // Dao
-    private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
+	// Dao
+	private static ObjectifyGenericDao<AgileUser> dao = new ObjectifyGenericDao<AgileUser>(AgileUser.class);
 
-    /**
-     * Default constructor
-     */
-    public AgileUser()
-    {
-    }
+	/**
+	 * Default constructor
+	 */
+	public AgileUser()
+	{
+	}
 
-    /**
-     * Creates an agile user, associate to a domain user using its id
-     * 
-     * @param domain_user_id
-     *            domain user id
-     */
-    public AgileUser(Long domain_user_id)
-    {
-	this.domain_user_id = domain_user_id;
-    }
+	/**
+	 * Creates an agile user, associate to a domain user using its id
+	 * 
+	 * @param domain_user_id
+	 *            domain user id
+	 */
+	public AgileUser(Long domain_user_id)
+	{
+		this.domain_user_id = domain_user_id;
+	}
 
-    /**
-     * Fetches all agile users
-     * 
-     * @return list of agile users
-     */
-    public static List<AgileUser> getUsers()
-    {
-	return dao.fetchAll();
-    }
+	/**
+	 * Fetches all agile users
+	 * 
+	 * @return list of agile users
+	 */
+	public static List<AgileUser> getUsers()
+	{
+		return dao.fetchAll();
+	}
 
-    /**
-     * Gets agile user associated with the current domain user
-     * 
-     * @return current agile user
-     */
-    public static AgileUser getCurrentAgileUser()
-    {
-	// Gets user from Domain_id
-	return getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
-    }
+	/**
+	 * Gets agile user associated with the current domain user
+	 * 
+	 * @return current agile user
+	 */
+	public static AgileUser getCurrentAgileUser()
+	{
+		// Gets user from Domain_id
+		return getCurrentAgileUserFromDomainUser(SessionManager.get().getDomainId());
+	}
 
-    /**
-     * Gets agile user based on domain user id
-     * 
-     * @param domain_user_id
-     *            domain user id to get its associated agile user
-     * @return agile user corresponding to a domain user
-     */
-    public static AgileUser getCurrentAgileUserFromDomainUser(Long domain_user_id)
-    {
-	return dao.getByProperty("domain_user_id", domain_user_id);
-    }
+	/**
+	 * Gets agile user based on domain user id
+	 * 
+	 * @param domain_user_id
+	 *            domain user id to get its associated agile user
+	 * @return agile user corresponding to a domain user
+	 */
+	public static AgileUser getCurrentAgileUserFromDomainUser(Long domain_user_id)
+	{
+		return dao.getByProperty("domain_user_id", domain_user_id);
+	}
 
-    /**
-     * Gets domain user based on the id
-     * 
-     * @return {@link DomainUser}
-     */
-    public DomainUser getDomainUser()
-    {
-	return DomainUserUtil.getDomainUser(domain_user_id);
-    }
+	/**
+	 * Gets domain user based on the id
+	 * 
+	 * @return {@link DomainUser}
+	 */
+	public DomainUser getDomainUser()
+	{
+		return DomainUserUtil.getDomainUser(domain_user_id);
+	}
 
-    /**
-     * Stores an agile user in database
-     */
-    public void save()
-    {
-	dao.put(this);
-    }
+	/**
+	 * Gets agile user based on the id
+	 * 
+	 * @return {@link AgileUser}
+	 */
+	@JsonIgnore
+	public AgileUser getAgileUser(Long agile_user_id)
+	{
+		return dao.getByProperty("id", agile_user_id);
+	}
 
-    /**
-     * Deletes agile user from database
-     */
-    public void delete()
-    {
-	dao.delete(this);
-    }
+	/**
+	 * Stores an agile user in database
+	 */
+	public void save()
+	{
+		dao.put(this);
+	}
 
-    public String toString()
-    {
-	return "Id: " + id + " domain_user_id " + domain_user_id;
-    }
+	/**
+	 * Deletes agile user from database
+	 */
+	public void delete()
+	{
+		dao.delete(this);
+	}
+
+	public String toString()
+	{
+		return "Id: " + id + " domain_user_id " + domain_user_id;
+	}
 }

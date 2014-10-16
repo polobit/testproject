@@ -29,150 +29,168 @@ import com.agilecrm.user.util.DomainUserUtil;
  */
 public class UserInfo implements Serializable
 {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String claimedId;
+	private String claimedId;
 
-    /**
-     * Email address of the user logged in
-     */
-    private String email;
+	/**
+	 * Email address of the user logged in
+	 */
+	private String email;
 
-    /**
-     * Name of the user logged in
-     */
-    private String name;
+	/**
+	 * Name of the user logged in
+	 */
+	private String name;
 
-    /**
-     * Domain user id logged in
-     */
-    private Long domainId = 0L;
+	/**
+	 * Domain user id logged in
+	 */
+	private Long domainId = 0L;
 
-    private HashSet<UserAccessScopes> scopes;
-    /**
-     * Number of users allowed in current plan
-     */
-    private Integer usersCount = 0;
+	private HashSet<UserAccessScopes> scopes;
+	/**
+	 * Number of users allowed in current plan
+	 */
+	private Integer usersCount = 0;
 
-    /**
-     * Plan name
-     */
-    private String plan;
+	/**
+	 * Plan name
+	 */
+	private String plan;
 
-    public UserInfo()
-    {
-    }
-
-    public UserInfo(String claimedId, String email, String name)
-    {
-	this.claimedId = claimedId;
-	this.email = email;
-	this.name = name;
-
-	// Lower case
-	if (this.email != null)
-	    this.email.toLowerCase();
-
-	// Get Domain User for this email and store the id
-	DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
-	if (domainUser != null)
+	public UserInfo()
 	{
-	    setDomainId(domainUser.id);
-	    
-	    try
-	    {
-		BillingRestrictionUtil.setPlan(this, domainUser.domain);
-	    }
-	    catch (Exception e)
-	    {
-		e.printStackTrace();
-	    }
 	}
 
-    }
+	public UserInfo(String claimedId, String email, String name)
+	{
+		this.claimedId = claimedId;
+		this.email = email;
+		this.name = name;
 
-    /**
-     * Returns claimedId
-     * 
-     * @return {@link String} claimedId
-     */
-    public String getClaimedId()
-    {
-	return claimedId;
-    }
+		// Lower case
+		if (this.email != null)
+			this.email.toLowerCase();
 
-    /**
-     * Returns email of user
-     * 
-     * @return {@link String} email
-     */
-    public String getEmail()
-    {
-	return email;
-    }
+		// Get Domain User for this email and store the id
+		DomainUser domainUser = DomainUserUtil.getDomainUserFromEmail(email);
+		if (domainUser != null)
+		{
+			setDomainId(domainUser.id);
 
-    /**
-     * Returns name of the user
-     * 
-     * @return {@link String} name
-     */
-    public String getName()
-    {
-	return name;
-    }
+			try
+			{
+				BillingRestrictionUtil.setPlan(this, domainUser.domain);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 
-    public String toString()
-    {
-	return name + " (" + email + ") DomainId " + domainId;
-    }
+	}
 
-    /**
-     * Sets domain id
-     * 
-     * @param domainId
-     */
-    public void setDomainId(Long domainId)
-    {
-	this.domainId = domainId;
-    }
+	// For Twilio IO
+	public UserInfo(DomainUser domainUser)
+	{
+		if (domainUser != null)
+		{
+			setDomainId(domainUser.id);
 
-    /**
-     * Returns the domain id of the user logged ins
-     * 
-     * @return {@link Long} domain user id
-     */
-    public Long getDomainId()
-    {
-	return domainId;
-    }
+			try
+			{
+				BillingRestrictionUtil.setPlan(this, domainUser.domain);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public Integer getUsersCount()
-    {
-	return usersCount;
-    }
+	/**
+	 * Returns claimedId
+	 * 
+	 * @return {@link String} claimedId
+	 */
+	public String getClaimedId()
+	{
+		return claimedId;
+	}
 
-    public void setUsersCount(Integer usersCount)
-    {
-	this.usersCount = usersCount;
-    }
+	/**
+	 * Returns email of user
+	 * 
+	 * @return {@link String} email
+	 */
+	public String getEmail()
+	{
+		return email;
+	}
 
-    public String getPlan()
-    {
-	return plan;
-    }
+	/**
+	 * Returns name of the user
+	 * 
+	 * @return {@link String} name
+	 */
+	public String getName()
+	{
+		return name;
+	}
 
-    public void setPlan(String plan)
-    {
-	this.plan = plan;
-    }
+	public String toString()
+	{
+		return name + " (" + email + ") DomainId " + domainId;
+	}
 
-    public HashSet<UserAccessScopes> getScopes()
-    {
-	return this.scopes;
-    }
+	/**
+	 * Sets domain id
+	 * 
+	 * @param domainId
+	 */
+	public void setDomainId(Long domainId)
+	{
+		this.domainId = domainId;
+	}
 
-    public void setScopes(HashSet<UserAccessScopes> scopes)
-    {
-	this.scopes = scopes;
-    }
+	/**
+	 * Returns the domain id of the user logged ins
+	 * 
+	 * @return {@link Long} domain user id
+	 */
+	public Long getDomainId()
+	{
+		return domainId;
+	}
+
+	public Integer getUsersCount()
+	{
+		return usersCount;
+	}
+
+	public void setUsersCount(Integer usersCount)
+	{
+		this.usersCount = usersCount;
+	}
+
+	public String getPlan()
+	{
+		return plan;
+	}
+
+	public void setPlan(String plan)
+	{
+		this.plan = plan;
+	}
+
+	public HashSet<UserAccessScopes> getScopes()
+	{
+		return this.scopes;
+	}
+
+	public void setScopes(HashSet<UserAccessScopes> scopes)
+	{
+		this.scopes = scopes;
+	}
 }
