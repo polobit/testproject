@@ -29,17 +29,18 @@
 									&nbsp;- Merged {{HashMap.type}}: {{HashMap.MERGED_CONTACTS}}
 									{{/HashMap.MERGED_CONTACTS}}<br />
 								{{#HashMap.TOTAL_FAILED}} 
-								 <b>Failed {{HashMap.type}} : {{HashMap.TOTAL_FAILED}}</b> <br />
+								 <b>Failed {{HashMap.type}} : {{HashMap.TOTAL_FAILED}}*</b> <br />
 								{{/HashMap.TOTAL_FAILED}}
 								 
 								{{#HashMap.NAME_MANDATORY}} 
 									&nbsp;- Name missing : {{HashMap.NAME_MANDATORY}}<br /> 
 								{{/HashMap.NAME_MANDATORY}}
+								
 								{{#HashMap.EMAIL_REQUIRED}} 
-									&nbsp;- Email missing/Invalid : {{HashMap.EMAIL_REQUIRED}} 
+									&nbsp;- Email missing/Invalid : {{HashMap.EMAIL_REQUIRED}} <br/>
 								{{/HashMap.EMAIL_REQUIRED}}
 								{{#HashMap.LIMIT_REACHED}} 
-									&nbsp;- Limit exceeded : {{HashMap.LIMIT_REACHED}} 
+									&nbsp;- Limit exceeded : {{HashMap.LIMIT_REACHED}} <br/>
 								{{/HashMap.LIMIT_REACHED}}
 								{{#HashMap.ACCESS_DENIED}} 
 									&nbsp;- Access denied to create/update : {{HashMap.ACCESS_DENIED}} 
@@ -49,6 +50,9 @@
 						</tr>
 					</tbody>
 				</table>
+				{{#HashMap.TOTAL_FAILED}} 
+				<div><b>*</b> Attached CSV file contains the failed contacts along with the reason for failure. You may correct the data and upload the file again</div>
+				{{/HashMap.TOTAL_FAILED}}
 				<p style="font-weight: bold;">Have questions or need help?</p>
 				<p>Our customer service and support team is here to help you any
 					way we can. Please email us at care@agilecrm.com</p>
