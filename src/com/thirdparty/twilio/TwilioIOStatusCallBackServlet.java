@@ -14,8 +14,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
+import com.agilecrm.contact.Contact;
+import com.agilecrm.contact.Note;
+import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
@@ -30,6 +34,8 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 	{
 
 		System.out.println("in TwilioStatusCallBack Servlet");
+
+		System.out.println("Parent Call SID");
 
 		// number to which call is made
 		String CallDuration = request.getParameter("CallDuration");
@@ -57,20 +63,18 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 
 		SessionManager.set(userInfo);
 
-		System.out.println("Parent Call SID");
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-
-		printRequestAttributes(request, out);
-
-		printRequestParameters(request, out);
-
+		/*
+		 * response.setContentType("text/html"); PrintWriter out =
+		 * response.getWriter();
+		 * 
+		 * printRequestAttributes(request, out);
+		 * 
+		 * printRequestParameters(request, out);
+		 */
 		try
 		{
-
 			System.out.println("Child Call SID");
 			getCallDetails(CallSid, sessionmngrid);
-
 		}
 		catch (Exception e)
 		{
@@ -136,26 +140,54 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		 * 
 		 * Incoming call answered by {{xxx}}. Call connected for xxx hrs min
 		 * secs Incoming call rejected by {{xxxx}}.
-		 * 
-		 * String searContactFor = ""; String state = ""; String callDuration
-		 * =""; String user = AgileUser.getcurrentuser().name;
-		 * 
-		 * if (Duration != 0) callDuration = "Call connected for "+Duration;
-		 * 
-		 * if Outgoing call state = "Outgoing call by "+ user+".";
-		 * searContactFor = To;
-		 * 
-		 * if Incoming call state = "Incoming call answered by "+ user +".";
-		 * searContactFor = From;
-		 * 
-		 * 
-		 * 
-		 * find contact
 		 */
-		/*
-		 * String contactId = ""; Note note = new Note("Call Status",
-		 * "state.  "); note.addRelatedContacts(contactId); note.save();
-		 */
+
+		String searchContactFor = null;
+		String state = "";
+		String callDuration = "";
+		DomainUser user = DomainUserUtil.getCurrentDomainUser();
+		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+
+		String clientName = "C".concat((agileUser.id).toString());
+
+		if (Duration.equalsIgnoreCase("0"))
+			callDuration = Status.concat(".");
+		else
+			callDuration = "Call connected for " + Duration + ".";
+
+		// Outgoing call
+		if (From.equalsIgnoreCase(clientName) || From.equalsIgnoreCase(widget.getProperty("twilio_number"))
+				|| From.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
+		{
+			state = "Outgoing call by " + user.domain + ". ";
+			searchContactFor = To;
+		}
+
+		// Incoming call
+		if (To.equalsIgnoreCase(clientName) || To.equalsIgnoreCase(widget.getProperty("twilio_number"))
+				|| To.equalsIgnoreCase(widget.getProperty("twilio_from_number")))
+		{
+			if (Duration.equalsIgnoreCase("0"))
+				state = "Incoming call for " + user + ". ";
+			else
+				state = "Incoming call answered by " + user + ". ";
+			searchContactFor = From;
+		}
+
+		// Search contact
+		if (searchContactFor != null)
+		{
+			Contact contact = ContactUtil.searchContactByPhoneNumber(searchContactFor);
+
+			if (contact != null)
+			{
+				Long contactId = contact.id;
+				Note note = new Note("Call Status", state + callDuration);
+				note.addRelatedContacts(contactId.toString());
+				note.save();
+			}
+
+		}
 	}
 
 	/**
