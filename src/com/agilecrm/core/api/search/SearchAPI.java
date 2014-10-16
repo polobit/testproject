@@ -159,7 +159,7 @@ public class SearchAPI
 				if (contactField.name.equalsIgnoreCase("phone"))
 				{
 					if (StringUtils.isNotBlank(contactField.value))
-						phones.add((contactField.value).trim());
+						phones.add((contactField.value));
 				}
 				if (contactField.name.equalsIgnoreCase("email"))
 				{
