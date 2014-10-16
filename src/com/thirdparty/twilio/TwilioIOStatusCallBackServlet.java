@@ -176,6 +176,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		if (From.equalsIgnoreCase("agileclient") || From.equalsIgnoreCase(twilioNumber)
 				|| From.equalsIgnoreCase(twilioVerifiedNumber))
 		{
+			System.out.println("In Outgoing call");
 			state = "Outgoing call by " + user.domain + ". ";
 			searchContactFor(To, state, callDuration);
 		}
@@ -184,6 +185,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		else if (To.equalsIgnoreCase("agileclient") || To.equalsIgnoreCase(twilioNumber)
 				|| To.equalsIgnoreCase(twilioVerifiedNumber))
 		{
+			System.out.println("In Incoming call");
 			if (Duration.equalsIgnoreCase("0"))
 				state = "Incoming call for " + user + ". ";
 			else
@@ -194,6 +196,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 
 	private void searchContactFor(String searchContactFor, String state, String callDuration)
 	{
+		System.out.println("In searchContactFor");
 		System.out.println("searchContactFor: " + searchContactFor);
 		System.out.println("state + call duraton: " + state + callDuration);
 

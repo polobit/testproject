@@ -55,6 +55,7 @@ public class TwilioIOVoiceServlet extends HttpServlet
 				System.out.println("Incoming call");
 				// dial.append(new Client("jenny"));
 				dial.append(new Client("agileclient"));
+				System.out.println("After dial append");
 			}
 			twiml.append(dial);
 
