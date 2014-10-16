@@ -5,8 +5,6 @@ import java.util.List;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.agilecrm.db.ObjectifyGenericDao;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.util.DomainUserUtil;
@@ -99,17 +97,6 @@ public class AgileUser
 	public DomainUser getDomainUser()
 	{
 		return DomainUserUtil.getDomainUser(domain_user_id);
-	}
-
-	/**
-	 * Gets agile user based on the id
-	 * 
-	 * @return {@link AgileUser}
-	 */
-	@JsonIgnore
-	public AgileUser getAgileUser(Long agile_user_id)
-	{
-		return dao.getByProperty("id", agile_user_id);
 	}
 
 	/**
