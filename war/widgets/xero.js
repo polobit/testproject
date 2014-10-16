@@ -31,9 +31,8 @@ $(function()
 	}
 
 	var xeroWidgetPref = JSON.parse(xero_widget.prefs);
-
-	var orgObj = JSON.parse(xeroWidgetPref.xero_org_info);
-	SHORT_CODE = orgObj.Organisations.Organisation.ShortCode;	
+	
+	SHORT_CODE = xeroWidgetPref.xero_org_shortcode;	
 
 	if (typeof SHORT_CODE == "undefined")
 	{
