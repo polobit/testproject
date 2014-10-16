@@ -102,6 +102,10 @@ public class BulkOperationsAPI
 	    message = fetcher.getAvailableCompanies() + " Companies deleted";
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "DELETE", "", "companies", "");
 	}
+	else
+	{
+	    message = fetcher.getAvailableCompanies() + " Contacts/Companies deleted";
+	}
 
 	BulkActionNotifications.publishNotification(message);
 
@@ -153,6 +157,10 @@ public class BulkOperationsAPI
 	    ActivitySave.createBulkActionActivity(fetcher.getAvailableCompanies(), "CHANGE_OWNER", user.name,
 		    "companies", "");
 	}
+	else
+	{
+	    message = message + fetcher.getAvailableCompanies() + " Companies/Contacts";
+	}
 	BulkActionNotifications.publishNotification(message);
 
 	// BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.OWNER_CHANGE,
@@ -191,18 +199,18 @@ public class BulkOperationsAPI
 	System.out.println("companies : " + fetcher.getAvailableCompanies());
 
 	System.out.println("Total contacts subscribed to campaign " + workflowId + " is "
-	        + String.valueOf(fetcher.getAvailableContacts()));
+		+ String.valueOf(fetcher.getAvailableContacts()));
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ENROLL_CAMPAIGN,
-	        String.valueOf(fetcher.getAvailableContacts()));
+		String.valueOf(fetcher.getAvailableContacts()));
 
 	try
 	{
 	    Mailgun.sendMail("campaigns@agile.com", "Campaign Observer", "naresh@agilecrm.com", null, null,
 		    "Campaign Initiated in " + NamespaceManager.get(), null,
 		    "Hi Naresh,<br><br> Campaign Initiated:<br><br> User id: " + current_user_id
-		            + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
-		            + fetcher.getAvailableContacts(), null);
+			    + "<br><br>Campaign-id: " + workflowId + "<br><br>Filter-id: " + filter + "<br><br>Count: "
+			    + fetcher.getAvailableContacts(), null);
 	}
 	catch (Exception e)
 	{
@@ -214,7 +222,7 @@ public class BulkOperationsAPI
 	String workflowname = workflow.name;
 
 	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "ASIGN_WORKFLOW", workflowname,
-	        "contacts", "");
+		"contacts", "");
 
     }
 
@@ -274,7 +282,7 @@ public class BulkOperationsAPI
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.ADD_TAGS, Arrays.asList(tagsArray)
-	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(fetcher.getAvailableContacts()));
 
 	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "ADD_TAG", tagsString, "contacts", "");
     }
@@ -326,7 +334,7 @@ public class BulkOperationsAPI
 	}
 
 	BulkActionNotifications.publishconfirmation(BulkAction.BULK_ACTIONS.REMOVE_TAGS, Arrays.asList(tagsArray)
-	        .toString(), String.valueOf(fetcher.getAvailableContacts()));
+		.toString(), String.valueOf(fetcher.getAvailableContacts()));
 
 	ActivitySave.createBulkActionActivity(fetcher.getAvailableContacts(), "REMOVE_TAG", tagsString, "contacts", "");
 
@@ -474,7 +482,7 @@ public class BulkOperationsAPI
 
 		// Updates CampaignStatus to REMOVE
 		CampaignStatusUtil
-		        .setStatusOfCampaign(contact.id.toString(), campaign_id, campaignName, Status.REMOVED);
+			.setStatusOfCampaign(contact.id.toString(), campaign_id, campaignName, Status.REMOVED);
 	    }
 
 	    BulkActionNotifications.publishconfirmation(BulkAction.REMOVE_ACTIVE_SUBSCRIBERS,

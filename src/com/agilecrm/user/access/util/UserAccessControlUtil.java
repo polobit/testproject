@@ -19,17 +19,17 @@ public class UserAccessControlUtil
 {
     public enum CRUDOperation
     {
-	CREATE("Access denied. Contact account administrator"),
+	CREATE("Contact create access denied. Contact account administrator"),
 
-	READ("Access denied. Contact account administrator"),
+	READ("Contact read denied. Contact account administrator"),
 
-	UPDATE("Access denied. Contact account administrator"),
+	UPDATE("Contact update access denied. Contact account administrator"),
 
-	DELETE("Access denied. Contact account administrator"),
+	DELETE("Contact delete access denied. Contact account administrator"),
 
-	IMPORT("Access denied. Contact account administrator"),
+	IMPORT("Contact import access denied. Contact account administrator"),
 
-	EXPORT("Access denied. Contact account administrator");
+	EXPORT("Contact export access denied. Contact account administrator");
 
 	String errorMessage = "Access Denied. Contact account administrator";
 
