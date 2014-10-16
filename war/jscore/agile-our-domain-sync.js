@@ -395,3 +395,22 @@ function add_property(name, value, type, callback)
 			callback(data);
 	});
 }
+
+/**
+ * adds user info as a note to account owner when user created called from
+ * user-add route
+ */
+function add_created_user_info_as_note_to_owner(owner, callback)
+{
+		var note = {};
+		note.subject = "User created";
+		note.description = "Domain - " + owner['domain']+"\n User Email -  " + owner['created_user_email'];
+		_agile.add_note(note, function(data)
+		{
+			if (callback && typeof callback == "function")
+				callback(data);
+
+		},owner['email']);
+		
+	
+}

@@ -258,4 +258,56 @@ public class UsersAPI
 	return ReferenceUtil.getAllReferrals(referencedomain);
     }
 
+    /**
+     * method used to update scheduleid for current domain user
+     */
+    @Path("/updatescheduleid")
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    public DomainUser updateScheduleid(@QueryParam("scheduleid") String scheduleid)
+    {
+	DomainUser user = DomainUserUtil.getCurrentDomainUser();
+
+	user.schedule_id = scheduleid;
+	try
+	{
+	    user.save();
+
+	    System.out.println(user);
+	    System.out.println("updates user ===============================");
+	    return user;
+	}
+	catch (Exception e)
+	{
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return null;
+
+    }
+
+    // Send Current User Info
+    @Path("current-owner")
+    @GET
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public DomainUser getCurrentOwner()
+    {
+	try
+	{
+	    String domain = NamespaceManager.get();
+	    // Fetches current domain user based on user info set in thread
+	    if (StringUtils.isNotEmpty(domain))
+	    {
+		DomainUser domainUser = DomainUserUtil.getDomainOwner(domain);
+		return domainUser;
+	    }
+	}
+	catch (Exception e)
+	{
+	    e.printStackTrace();
+	    return null;
+	}
+	return null;
+    }
+
 }

@@ -117,20 +117,30 @@ var AdminSettingsRouter = Backbone.Router.extend({
 	 */
 	usersAdd : function()
 	{
+		var self = this;
 		if (!CURRENT_DOMAIN_USER.is_admin)
 		{
 			$('#content').html("You have no Admin Privileges");
 			return;
 		}
 		$("#content").html(getTemplate("admin-settings"), {});
-		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : true,
+		var view = new Base_Model_View({ url : 'core/api/users', template : "admin-settings-user-add", isNew : true, window : 'users', reload : false,
 			postRenderCallback : function(el)
 			{
 				if (view.model.get("id"))
 					addTagAgile("User invited");
-
+              
 				// Binds action
 				bindAdminChangeAction(el);
+			}, saveCallback : function(response)
+			{
+				$.getJSON("core/api/users/current-owner", function(data)
+						{
+					data["created_user_email"]=response.email;
+							
+							add_created_user_info_as_note_to_owner(data);
+
+						});
 			} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
