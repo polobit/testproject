@@ -103,6 +103,10 @@ $(function(){
 					if(readCookie("agile_deal_track") && readCookie("agile_deal_track") == id)
 						eraseCookie("agile_deal_track");
 					App_Admin_Settings.milestones();
+				},
+				error: function(jqXHR, status, errorThrown){
+					console.log(status);
+					$('#pipeline-delete-modal').find('.pipeline-delete-message').text(status.responseText);
 				}
 			});
 		});
@@ -190,7 +194,10 @@ $(function(){
         		// If the milestone is changed, to show that change in edit popup if opened without reloading the app.
         		success : function(model, response) {
         			App_Admin_Settings.milestones();
-        		}
+        		},
+				error: function(data,response){
+					console.log(response);
+				}
         	});
     	});
     	
@@ -225,7 +232,12 @@ $(function(){
     			$('#pipelineModal').modal('hide');
     			App_Admin_Settings.milestones();
     	    	
-    		}
+    		},
+			error: function(data,response){
+				console.log(response,data);
+				$('#pipelineModal').find('.save-status').text(response.responseText);
+				enable_save_button($("#pipeline_validate"));
+			}
     	});
     	
     });

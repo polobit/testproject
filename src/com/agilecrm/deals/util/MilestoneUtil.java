@@ -116,4 +116,20 @@ public class MilestoneUtil
 	}
     }
 
+    public static boolean isDuplicate(Milestone milestone, boolean isUpdate)
+    {
+	List<Milestone> milestones = getMilestonesList();
+	int count = 0;
+	if (milestones.size() > 0)
+	    for (Milestone track : milestones)
+	    {
+		if (milestone.name.equals(track.name))
+		    count++;
+	    }
+	if ((isUpdate && count == 1) || count == 0)
+	    return false;
+
+	return true;
+    }
+
 }

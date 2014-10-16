@@ -86,9 +86,7 @@
     			<input type="text" name="name" class="hide" value={{name}}>
     		{{/if}} 		
     		<legend style="margin-bottom:0px;font-size: 16px;">{{name}}
-			{{#if_equals "Default" name}} {{else}}
 			 <a href="#pipeline-delete-modal" role="button" data-toggle="modal" class="pipeline-delete" id="{{id}}" data="{{name}}" style="float: right;font-size: 18px;cursor: pointer;text-decoration: none;"><i class="task-action icon icon-trash" data="{{id}}" title="Delete Track"></i></a>
-			{{/if_equals}}
 			</legend>
 			<fieldset>
     		<div class="control-group">  	 
