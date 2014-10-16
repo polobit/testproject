@@ -696,6 +696,7 @@ public class PHPAPI
 	{
 	    // Get data and check if email is present
 	    JSONObject obj = new JSONObject(data);
+	    String[] tags = new String[0];
 	    ObjectMapper mapper = new ObjectMapper();
 	    if (!obj.has("email"))
 		return null;
@@ -712,14 +713,27 @@ public class PHPAPI
 		String key = (String) keys.next();
 		if (key.equals("email"))
 		    continue;
-
-		// Create and add contact field to contact
-		JSONObject json = new JSONObject();
-		json.put("name", key);
-		json.put("value", obj.getString(key));
-		ContactField field = mapper.readValue(json.toString(), ContactField.class);
-		contact.addProperty(field);
+		else if (key.equals("tags"))
+		{
+		    String tagString = obj.getString(key);
+		    tagString = tagString.trim();
+		    tagString = tagString.replace("/ /g", " ");
+		    tagString = tagString.replace("/, /g", ",");
+		    tags = tagString.split(",");
+		}
+		else
+		{
+		    // Create and add contact field to contact
+		    JSONObject json = new JSONObject();
+		    json.put("name", key);
+		    json.put("value", obj.getString(key));
+		    ContactField field = mapper.readValue(json.toString(), ContactField.class);
+		    contact.addProperty(field);
+		}
 	    }
+	    if(tags.length > 0)
+		contact.addTags(tags);
+
 	    // Return contact object as String
 	    return mapper.writeValueAsString(contact);
 	}

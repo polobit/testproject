@@ -178,7 +178,7 @@ boolean isMSIE = ( ua != null && ua.indexOf( "MSIE" ) != -1 );
 					<input type='hidden' name='type' value='agile'></input>
 					<div class="form-group login-userid" >
 					<span class="regpage-uname"></span>
-					<input class="input-xlarge field required form-control" name='name' type="text" maxlength="50" minlength="3" placeholder="Full Name" autocapitalize="off">
+					<input class="input-xlarge field required form-control" name='name' type="text" maxlength="50" minlength="3" placeholder="Full Name" autocapitalize="off" autofocus>
                    </div>
                     <div class="form-group login-email">
                     <span class="regpage-mail"></span>
