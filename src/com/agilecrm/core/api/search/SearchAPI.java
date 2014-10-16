@@ -207,6 +207,7 @@ public class SearchAPI
 
 			stringBuffer.append(phoneBuffer.toString());
 			stringBuffer.append(emailBuffer.toString());
+			stringBuffer.append(" AND type=PERSON");
 
 			String query = stringBuffer.toString();
 
