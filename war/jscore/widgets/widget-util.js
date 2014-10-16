@@ -459,8 +459,7 @@ function show_set_up_widget(widget_name, template_id, url, model)
 
 				else if (widget_name == "Chargify")
 								chargify_save_widget_prefs();
-				else if (widget_name == "Shopify")
-								shopify_save_widget_prefs(model);
+			
 
 				// Shows available widgets in the content
 				if (url)
@@ -470,22 +469,25 @@ function show_set_up_widget(widget_name, template_id, url, model)
 				}
 				else
 				{
-						/*		if (widget_name == "Shopify" && (model||models[0].attributes.id))
+								if (widget_name == "Shopify" && (model||models[0].attributes.id))
 								{
 												
 												if (model)
 												{
 
 																$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(model.prefs) }));
+																
 												}else if(models[0].attributes.id){ 
 																$('#widget-settings', el).html(getTemplate(template_id, { "data" : jQuery.parseJSON(models[0].attributes.prefs) }));
 												}
 								}else{
-												('#widget-settings', el).html(getTemplate(template_id, {}));
-								}*/
+								
 								
 								$('#widget-settings', el).html(getTemplate(template_id, {}));
-								console.log(el);
+							//	console.log(el);
+								}
+								
+						
 								
 				}
 
@@ -688,12 +690,7 @@ function setUpError(widget_name, template_id, error_data, error_url, model)
 				$('.add-widget-prefs-tab').addClass('active');
 
 }
-function shopify_save_widget_prefs(model)
-{
-				console.log("function called");
-				console.log(model);
 
-}
 
 function xero_save_widget_prefs()
 {
