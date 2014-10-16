@@ -1,7 +1,6 @@
 package com.thirdparty.shopify;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +31,7 @@ public class ShopifyAppServlet extends HttpServlet
 	    }
 	    else
 	    {
-		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString() + "&error=" + URLEncoder.encode("true", "UTF-8"));
+		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString() + "&error=true");
 	    }
 	}
 	else
@@ -47,7 +46,7 @@ public class ShopifyAppServlet extends HttpServlet
 	}
 	response.setContentType("text/html");
 	response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-	response.sendRedirect(redirectURL);
+	response.sendRedirect(response.encodeRedirectURL(redirectURL));
 	return;
     }
 }
