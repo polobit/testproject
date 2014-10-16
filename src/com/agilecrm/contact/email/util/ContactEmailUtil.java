@@ -116,7 +116,7 @@ public class ContactEmailUtil
 					}
 				}
 			}
-
+ 
 		}
 		catch (Exception e)
 		{
@@ -136,7 +136,7 @@ public class ContactEmailUtil
 		}
 
 		// combine body and signature.
-		body = body + "<div><br/>" + signature + "</div>";
+		body = body.replace("</body>", "<div><br/>" + signature + "</div></body>");
 
 		// Sends email
 		EmailUtil.sendMail(fromEmail, fromName, to, cc, bcc, subject, null, body, null);
