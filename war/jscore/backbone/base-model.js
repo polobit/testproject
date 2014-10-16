@@ -202,7 +202,7 @@ var Base_Model_View = Backbone.View
 				
 				var saveCallback = this.options.saveCallback;
 				
-				
+				var errorCallback = this.options.errorCallback;
 				
 				// Represents form element
 				var $form = $('#' + formId);
@@ -417,6 +417,11 @@ var Base_Model_View = Backbone.View
 										// Removes disabled attribute of save button
 										enable_save_button($(e.currentTarget));
 										console.log(response);
+										
+										if (errorCallback && typeof (errorCallback) === "function") {
+											errorCallback(response);
+										     return;
+										    }
 										// Hide loading on error
 										//$save_info.hide();
 

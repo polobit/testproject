@@ -100,14 +100,18 @@ function addAddonTabTemplate(data, url, callback, container)
 
         	 // Get JSON and JSONSrc
              var json = $(this).data('json');
-            
+             
              //Has to be changed
              if(json.name == "Send Message"){
             	 var list = getTwilioIncomingList();
-            	    	 if($.isEmptyObject(list)){
-            		 alert("You need to enable SMS Gateway integration to use this option. Please enable it in Admin Settings -> Integrations");
-            		 return;
-            	}
+            	 if(list == null){
+            		window.parent.campaignAlert("UnauthorisedTwilio");
+            		return; 
+            	 }
+       	    	 if($.isEmptyObject(list)){
+       	    		window.parent.campaignAlert("EmptyTwilio");
+	    		 return;
+            	 }
              } 
              
              var jsonsrc = $(this).data('jsonsrc');
