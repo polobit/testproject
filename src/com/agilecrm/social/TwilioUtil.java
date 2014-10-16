@@ -35,7 +35,7 @@ public class TwilioUtil
 	 * Twilio authentication token of the account which contains Agile
 	 * application
 	 */
-	public static final String authToken = "5e7085bb019e378fb18822f319a3ec46";
+	public static final String authToken = "5e7085bb019e378fb18822f319a3ec46"; // default
 
 	/**
 	 * Creates a {@link TwilioRestClient} instance and sets the account SID of
@@ -648,8 +648,19 @@ public class TwilioUtil
 		// parameters required to create application
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("FriendlyName", "Agile CRM Twilio Saga");
-		params.put("VoiceUrl", "http://1-dot-onlyvoiceservlet.appspot.com/voice");
+		// params.put("VoiceUrl",
+		// "http://1-dot-onlyvoiceservlet.appspot.com/voice");
+
+		// params.put("VoiceUrl",
+		// "http://1-dot-bothservlet.appspot.com/backend/twilioiovoice");
+		params.put("VoiceUrl", "https://" + NamespaceManager.get()
+				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiovoice");
 		params.put("VoiceMethod", "GET");
+		// params.put("StatusCallback",
+		// "http://1-dot-bothservlet.appspot.com/backend/twilioiostatuscallback");
+		params.put("StatusCallback", "https://" + NamespaceManager.get()
+				+ "-dot-sandbox-dot-agilecrmbeta.appspot.com/twilioiostatuscallback");
+		params.put("StatusCallbackMethod", "GET");
 
 		// Make a POST request to create application
 		TwilioRestResponse response = client.request("/2010-04-01/Accounts/" + client.getAccountSid()
