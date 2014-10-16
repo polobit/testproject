@@ -133,82 +133,102 @@ public class SearchAPI
 	public Collection getDuplicateContacts(@PathParam("id") String id, @QueryParam("page_size") String count,
 			@QueryParam("cursor") String cursor)
 	{
-		Contact contact = ContactUtil.getContact(Long.valueOf(id));
-		String firstName = contact.getContactFieldValue("first_name");
-		String lastName = contact.getContactFieldValue("last_name");
-		StringBuffer emailBuffer = new StringBuffer();
-		StringBuffer phoneBuffer = new StringBuffer();
-		StringBuffer stringBuffer = new StringBuffer();
-		Set<String> emails = new HashSet<String>();
-		Set<String> phones = new HashSet<String>();
-		stringBuffer.append("(first_name=" + firstName + " AND " + "last_name=" + lastName + ")");
-		List<ContactField> properties = contact.getProperties();
-		for (int i = 0; i < properties.size(); i++)
+		Collection collection = null;
+		try
 		{
-			ContactField contactField = properties.get(i);
-			if (contactField.name.equalsIgnoreCase("phone"))
+			Contact contact = ContactUtil.getContact(Long.valueOf(id));
+			String firstName = contact.getContactFieldValue("first_name");
+			String lastName = contact.getContactFieldValue("last_name");
+			StringBuffer emailBuffer = new StringBuffer();
+			StringBuffer phoneBuffer = new StringBuffer();
+			StringBuffer stringBuffer = new StringBuffer();
+			Set<String> emails = new HashSet<String>();
+			Set<String> phones = new HashSet<String>();
+			String fName = firstName.replaceAll("\"", "\\\\\"");
+			if (StringUtils.isNotBlank(lastName))
 			{
-				if (StringUtils.isNotBlank(contactField.value))
-					phones.add(contactField.value);
+				String lName = lastName.replaceAll("\"", "\\\\\"");
+				stringBuffer.append("(first_name=\"" + fName + "\" AND " + "last_name=\"" + lName + "\")");
 			}
-			if (contactField.name.equalsIgnoreCase("email"))
+			else
+				stringBuffer.append("first_name=" + firstName);
+			List<ContactField> properties = contact.getProperties();
+			for (int i = 0; i < properties.size(); i++)
 			{
-				if (StringUtils.isNotBlank(contactField.value))
-					emails.add(contactField.value);
-			}
-		}
-		if (emails.size() > 0)
-		{
-			Object[] emailsArray = emails.toArray();
-			for (int i = 0; i < emailsArray.length; i++)
-			{
-				if (i == 0)
+				ContactField contactField = properties.get(i);
+				if (contactField.name.equalsIgnoreCase("phone"))
 				{
-					emailBuffer.append(" OR email=(");
+					if (StringUtils.isNotBlank(contactField.value))
+						phones.add((contactField.value).trim());
 				}
-				emailBuffer.append(emailsArray[i]);
-				if (!(i == emailsArray.length - 1))
-					emailBuffer.append(" OR ");
-				else
-					emailBuffer.append(")");
-			}
-		}
-		if (phones.size() > 0)
-		{
-			Object[] phonesArray = phones.toArray();
-			for (int i = 0; i < phonesArray.length; i++)
-			{
-				if (i == 0)
+				if (contactField.name.equalsIgnoreCase("email"))
 				{
-					phoneBuffer.append(" OR phone=(");
+					if (StringUtils.isNotBlank(contactField.value))
+						emails.add(contactField.value);
 				}
-				phoneBuffer.append(phonesArray[i]);
-				if (!(i == phonesArray.length - 1))
-					phoneBuffer.append(" OR ");
-				else
-					phoneBuffer.append(")");
 			}
-		}
-		int pageSize = Integer.parseInt(count) + 1;
-
-		stringBuffer.append(phoneBuffer.toString());
-		stringBuffer.append(emailBuffer.toString());
-
-		String query = stringBuffer.toString();
-
-		System.out.println(query);
-
-		AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
-		Collection collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
-		Iterator iterator = collection.iterator();
-		while (iterator.hasNext())
-		{
-			Contact ctc = (Contact) iterator.next();
-			if (ctc.id.longValue() == contact.id.longValue())
+			if (emails.size() > 0)
 			{
-				iterator.remove();
-				return collection;
+				Object[] emailsArray = emails.toArray();
+				for (int i = 0; i < emailsArray.length; i++)
+				{
+					if (i == 0)
+					{
+						emailBuffer.append(" OR email=(");
+					}
+					emailBuffer.append("\"");
+					emailBuffer.append(emailsArray[i]);
+					emailBuffer.append("\"");
+					if (!(i == emailsArray.length - 1))
+						emailBuffer.append(" OR ");
+					else
+						emailBuffer.append(")");
+				}
 			}
+			if (phones.size() > 0)
+			{
+				Object[] phonesArray = phones.toArray();
+				for (int i = 0; i < phonesArray.length; i++)
+				{
+					if (i == 0)
+					{
+						phoneBuffer.append(" OR phone=(");
+					}
+					phoneBuffer.append("\"");
+					phoneBuffer.append(phonesArray[i]);
+					phoneBuffer.append("\"");
+					if (!(i == phonesArray.length - 1))
+						phoneBuffer.append(" OR ");
+					else
+						phoneBuffer.append(")");
+				}
+			}
+			int pageSize = Integer.parseInt(count) + 1;
+
+			stringBuffer.append(phoneBuffer.toString());
+			stringBuffer.append(emailBuffer.toString());
+
+			String query = stringBuffer.toString();
+
+			System.out.println(query);
+
+			AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
+			collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
+			Iterator iterator = collection.iterator();
+			while (iterator.hasNext())
+			{
+				Contact ctc = (Contact) iterator.next();
+				if (ctc.id.longValue() == contact.id.longValue())
+				{
+					iterator.remove();
+					return collection;
+				}
+			}
+			return collection;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
 		}
 		return collection;
 	}

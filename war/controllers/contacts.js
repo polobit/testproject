@@ -290,27 +290,11 @@ var ContactsRouter = Backbone.Router.extend({
 		var collection_is_reverse = false;
 		template_key = "duplicate-contacts";
 
-		if (App_Contacts.contactDetailView == undefined)
+		if (App_Contacts.contactDetailView === undefined)
 		{
 			Backbone.history.navigate("contact/" + contact_id, { trigger : true });
 			return;
 		}
-
-		// var contact_details_model = Backbone.Model.extend({ url :
-		// function()
-		// {
-		// return '/core/api/contacts/' + id;
-		// } });
-		//
-		// var model = new contact_details_model();
-		//
-		// model.fetch({ success : function(contact)
-		// {
-		//
-		// // Call Contact edit again with downloaded contact
-		// // details
-		// App_Contacts.editContact(contact.toJSON());
-		// } });
 
 		/*
 		 * cursor and page_size options are taken to activate
@@ -341,7 +325,8 @@ var ContactsRouter = Backbone.Router.extend({
 	 */
 	mergeContacts : function()
 	{
-
+		
+		
 		var id = dup_contacts1_array[0];
 
 		var max_contacts_count = 20;
@@ -355,7 +340,6 @@ var ContactsRouter = Backbone.Router.extend({
 			Backbone.history.navigate("contacts", { trigger : true });
 			return;
 		}
-
 		var contacts = [];
 		for (var i = 0; i < dup_contacts1_array.length; i++)
 		{
@@ -388,6 +372,7 @@ var ContactsRouter = Backbone.Router.extend({
 			} });
 
 			$('#content').html(this.mergeContactsView.render(true).el);
+			$( window ).scrollTop( 0 );
 			$(".active").removeClass("active");
 			$("#contactsmenu").addClass("active");
 
