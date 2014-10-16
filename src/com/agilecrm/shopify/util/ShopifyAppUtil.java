@@ -36,8 +36,53 @@ public class ShopifyAppUtil
 
     public static void setShopifyAppPrefs(String shop, String domain)
     {
-	ShopifyApp shopifyApp = new ShopifyApp(shop, domain);
-	shopifyApp.save();
-	return;
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+
+	try
+	{
+	    Query<ShopifyApp> query = dao.ofy().query(ShopifyApp.class);
+	    query.filter("shop", shop);
+	    ShopifyApp shopifyApp = query.get();
+	    if (shopifyApp == null)
+		shopifyApp = new ShopifyApp(shop, domain);
+	    else
+		shopifyApp.domain = domain;
+	    shopifyApp.save();
+	    return;
+	}
+	catch (Exception e)
+	{
+	    return;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
+    }
+    
+    public static String getShopFromDomain(String domain)
+    {
+	String oldNamespace = NamespaceManager.get();
+	NamespaceManager.set("");
+	
+	try
+	{
+	    Query<ShopifyApp> query = dao.ofy().query(ShopifyApp.class);
+	    query.filter("domain", domain);
+	    ShopifyApp shopifyApp = query.get();
+	    if(shopifyApp == null)
+		return null;
+	    else
+		return shopifyApp.shop;
+	}
+	catch(Exception e)
+	{
+	    return null;
+	}
+	finally
+	{
+	    NamespaceManager.set(oldNamespace);
+	}
     }
 }
