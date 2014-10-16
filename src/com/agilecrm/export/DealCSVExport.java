@@ -36,7 +36,7 @@ public class DealCSVExport
     public static final String OWNER = "Owner";
     public static final String RELATED_TO = "Related Conatacts";
 
-    private static final DateFormat date = new SimpleDateFormat("EEE, MMM d yyyy");
+    private static final DateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 
     /**
      * Inserts contact properties into CSV w.r.t header name.
