@@ -417,6 +417,8 @@
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
 		<url-pattern>/auth/*</url-pattern>
+		<url-pattern>/twilioiovoice</url-pattern>
+		<url-pattern>/twilioiostatuscallback</url-pattern>
 
 	</filter-mapping>
 
