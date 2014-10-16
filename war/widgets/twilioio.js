@@ -26,14 +26,14 @@ $(function()
 			return;
 		}
 
-		twiliocall($('#twilioio_contact_number').val(), getTwilioIOContactName());
+		twiliocall($('#twilioio_contact_number').val(), getTwilioIOContactName1());
 	});
 
 	
 });
 
 // Get name of contact
-function getTwilioIOContactName()
+function getTwilioIOContactName1()
 {
 	var contactName = "";
 	var firstName = agile_crm_get_contact_property('first_name');

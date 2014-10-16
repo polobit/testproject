@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.NamespaceManager;
 import com.twilio.sdk.verbs.Client;
 import com.twilio.sdk.verbs.Dial;
 import com.twilio.sdk.verbs.Number;
@@ -22,6 +23,8 @@ public class TwilioIOVoiceServlet extends HttpServlet
 		// number to which call is made
 		String phoneNumber = request.getParameter("PhoneNumber");
 		System.out.println("Twilio phone number : " + phoneNumber);
+
+		System.out.println("namespaceManager.get(): " + NamespaceManager.get());
 
 		/*
 		 * String agileuserid = request.getParameter("agileuserid");

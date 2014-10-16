@@ -526,6 +526,21 @@ function fill_twilioio_numbers()
 	});
 }
 
+//Get name of contact
+function getTwilioIOContactName()
+{
+	var contactName = "";
+	var firstName = agile_crm_get_contact_property('first_name');
+	var lastName = agile_crm_get_contact_property('last_name');
+
+	if (firstName)
+		contactName = firstName + " ";
+	if (lastName)
+		contactName = contactName + lastName;
+
+	return contactName;
+}
+
 function setUpGlobalTwilio()
 {
 	// Loads twilio min.js to intiliaze twilio call events
