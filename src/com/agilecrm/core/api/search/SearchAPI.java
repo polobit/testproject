@@ -137,34 +137,42 @@ public class SearchAPI
 		try
 		{
 			Contact contact = ContactUtil.getContact(Long.valueOf(id));
-			String firstName = contact.getContactFieldValue("first_name");
-			String lastName = contact.getContactFieldValue("last_name");
+			String firstName = contact.getContactFieldValue(Contact.FIRST_NAME);
+			String lastName = contact.getContactFieldValue(Contact.LAST_NAME);
 			StringBuffer emailBuffer = new StringBuffer();
 			StringBuffer phoneBuffer = new StringBuffer();
 			StringBuffer stringBuffer = new StringBuffer();
 			Set<String> emails = new HashSet<String>();
 			Set<String> phones = new HashSet<String>();
-			String fName = firstName.replaceAll("\"", "\\\\\"");
-			if (StringUtils.isNotBlank(lastName))
+			if (StringUtils.isNotBlank(firstName) && StringUtils.isNotBlank(lastName))
 			{
-				String lName = lastName.replaceAll("\"", "\\\\\"");
+				String fName = firstName.trim().replaceAll("\"", "\\\\\"");
+				String lName = lastName.trim().replaceAll("\"", "\\\\\"");
 				stringBuffer.append("(first_name=\"" + fName + "\" AND " + "last_name=\"" + lName + "\")");
 			}
-			else
-				stringBuffer.append("first_name=" + firstName);
+			else if (StringUtils.isNotBlank(firstName) && StringUtils.isBlank(lastName))
+			{
+				String fName = firstName.trim().replaceAll("\"", "\\\\\"");
+				stringBuffer.append("first_name=\"" + fName + "\")");
+			}
+			else if (StringUtils.isBlank(firstName) && StringUtils.isNotBlank(lastName))
+			{
+				String lName = lastName.trim().replaceAll("\"", "\\\\\"");
+				stringBuffer.append("last_name=\"" + lName + "\")");
+			}
 			List<ContactField> properties = contact.getProperties();
 			for (int i = 0; i < properties.size(); i++)
 			{
 				ContactField contactField = properties.get(i);
-				if (contactField.name.equalsIgnoreCase("phone"))
+				if (contactField.name.equalsIgnoreCase(Contact.PHONE))
 				{
 					if (StringUtils.isNotBlank(contactField.value))
-						phones.add((contactField.value));
+						phones.add((contactField.value).trim());
 				}
-				if (contactField.name.equalsIgnoreCase("email"))
+				if (contactField.name.equalsIgnoreCase(Contact.EMAIL))
 				{
 					if (StringUtils.isNotBlank(contactField.value))
-						emails.add(contactField.value);
+						emails.add((contactField.value).trim());
 				}
 			}
 			if (emails.size() > 0)

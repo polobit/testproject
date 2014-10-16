@@ -524,7 +524,7 @@ function getPropertyValueInCheckbox(items, name, id, checked)
 
 function get_website_icon(item){
 	var icon = get_social_icon(item.subtype);
-	var str = "<i class=\"".concat(icon).concat("\"").concat(" style=\"font-size: 1.4em !important; margin-left:10px \"></i> <br>");
+	var str = "<i class=\"".concat(icon).concat("\"").concat(" style=\"font-size: 1.3em !important; margin-left:10px \"></i> <br>");
 	return str;
 }
 
