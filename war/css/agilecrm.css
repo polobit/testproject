@@ -1630,7 +1630,7 @@ overflow: hidden;
 	border-right:1px solid #eee;
 }
 .mergeTable input[type="radio"],.mergeTable input[type="checkbox"] {
-margin: 3px 3px 3px 0px;
+margin: 3px 4px 3px 0px;
 line-height: normal;
 cursor: pointer;
 }
