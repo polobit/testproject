@@ -40,7 +40,9 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 	"email-gateways/:id" : "emailGateways",
 	
+
 	"sms-gateways/:id" : "smsGateways"
+
 	
 		},
 
@@ -421,10 +423,12 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					LHS = $("#LHS", el);
 					RHS = $("#RHS", el);
 
+
 					// Chaining dependencies of input
 					// fields
 					// with jquery.chained.js
 					RHS.chained(LHS);
+
 
 					// Trigger change on email api select
 					setTimeout(function()
@@ -498,7 +502,7 @@ var AdminSettingsRouter = Backbone.Router.extend({
 					LHS = $("#LHS", el);
 					RHS = $("#RHS", el);
 					RHS.chained(LHS);
-				});
+					});
 			},
 			saveCallback: function(data)
 			{
@@ -518,6 +522,8 @@ var AdminSettingsRouter = Backbone.Router.extend({
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);
 		$('#content').find('#AdminPrefsTab .active').removeClass('active');
 		$('#content').find('.integrations-tab').addClass('active');
+
 	} 
+
 	
 });
