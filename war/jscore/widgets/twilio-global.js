@@ -642,10 +642,9 @@ function setUpGlobalTwilio()
 
 						showCallNotyPopup("missedCall", "error", "<b>Missed call : </b><br>" + conn.parameters.From + "<br>", 5000);
 
-						conn.disconnect();
+						conn.reject();						
 						if (conn)
-							conn.reject();
-
+							conn.disconnect();
 						return;
 					}
 

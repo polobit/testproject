@@ -32,8 +32,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 
-		System.out.println("in TwilioStatusCallBack Servlet");
-		System.out.println("in TwilioStatusCallBack Servlet****************************1");
+		System.out.println("In TwilioStatusCallBack Servlet for final test");
 
 		System.out.println("Parent Call SID");
 
@@ -150,15 +149,6 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 
 		String newStatus = formatStatus(Status);
 		System.out.println("new newStatus: " + newStatus);
-
-		/*
-		 * Outbound call by {{name}}. Call connected for .. hrs mins secs (eg: 2
-		 * mins 5 secs, 10 secs, 1 hr 24 mins) Outbound call by {{xxx}}. Busy.
-		 * Outbound call by {{xxx}}. No Answer.
-		 * 
-		 * Incoming call answered by {{xxx}}. Call connected for xxx hrs min
-		 * secs Incoming call rejected by {{xxxx}}.
-		 */
 
 		String state = "";
 		String callDuration = "";

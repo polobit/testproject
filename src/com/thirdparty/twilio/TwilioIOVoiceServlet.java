@@ -20,7 +20,7 @@ public class TwilioIOVoiceServlet extends HttpServlet
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 
-		System.out.println("in voice servlet");
+		System.out.println("In TwilioIOVoiceServlet for final test");
 
 		// number to which call is made
 		String phoneNumber = request.getParameter("PhoneNumber");
