@@ -421,6 +421,9 @@ function addTwilioNumbersInUI(result)
 		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	});
 
+	optionHtml = '<option data="" value="">None</option>';
+	phoneNumberHtml = phoneNumberHtml + optionHtml;
+	
 	// Add verified number in list
 	$("#twilio_number").html(phoneNumberHtml);
 }
@@ -437,6 +440,9 @@ function addVerifiedCallerIdInUI(result)
 		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	});
 
+	optionHtml = '<option data="" value="">None</option>';
+	phoneNumberHtml = phoneNumberHtml + optionHtml;
+	
 	// Add verified number in list
 	$("#twilio_from_number").html(phoneNumberHtml);
 }
