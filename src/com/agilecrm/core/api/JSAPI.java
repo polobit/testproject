@@ -142,7 +142,7 @@ public class JSAPI
 		return JSAPIUtil.generateJSONErrorResponse(Errors.DUPLICATE_CONTACT, email);
 	    }
 	    // Sets owner key to contact before saving
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 
 	    try
 	    {
@@ -214,8 +214,7 @@ public class JSAPI
     @Path("/task")
     @GET
     @Produces("application/x-javascript")
-    public String createTask(@QueryParam("email") String email, @QueryParam("task") String json,
-	    @QueryParam("id") String key)
+    public String createTask(@QueryParam("email") String email, @QueryParam("task") String json, @QueryParam("id") String key)
     {
 	try
 	{
@@ -231,7 +230,7 @@ public class JSAPI
 
 	    // task.setOwner(new Key<AgileUser>(AgileUser.class,
 	    // APIKey.getAgileUserRelatedToAPIKey(key).id));
-	    task.setOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(key));
+	    task.setOwner(JSAPIUtil.getDomainUserKeyFromInputKey(key));
 
 	    task.contacts = new ArrayList<String>();
 	    task.contacts.add(contact.id.toString());
@@ -268,14 +267,12 @@ public class JSAPI
     @Path("/opportunity")
     @GET
     @Produces("application/x-javascript")
-    public String createOpportunity(@QueryParam("email") String email, @QueryParam("opportunity") String json,
-	    @QueryParam("id") String apiKey)
+    public String createOpportunity(@QueryParam("email") String email, @QueryParam("opportunity") String json, @QueryParam("id") String apiKey)
     {
 	try
 	{
 	    ObjectMapper mapper = new ObjectMapper();
 	    Opportunity opportunity = mapper.readValue(json, Opportunity.class);
-	    System.out.println(opportunity);
 
 	    // Get Contact
 	    Contact contact = ContactUtil.searchContactByEmail(email);
@@ -283,21 +280,11 @@ public class JSAPI
 		return JSAPIUtil.generateContactMissingError();
 
 	    opportunity.addContactIds(contact.id.toString());
-	    // If there is no pipeline id, then set it to default.
+
 	    if (opportunity.pipeline_id == null || opportunity.pipeline_id == 0)
 		opportunity.pipeline_id = MilestoneUtil.getMilestones().id;
-	    System.out.println(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
-	    // Set, owner id to opportunity (owner of the apikey is set as owner
-	    // to opportunity)
-	    try
-	    {
-		opportunity.owner_id = String.valueOf(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey).getId());
-	    }
-	    catch (NullPointerException ne)
-	    {
-		opportunity.owner_id = String.valueOf(APIKey.getAgileUserRelatedToAPIKey(apiKey).id);
-	    }
-	    System.out.println(opportunity);
+
+	    opportunity.owner_id = String.valueOf(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey).getId());
 	    opportunity.save();
 	    System.out.println("opportunitysaved");
 
@@ -961,8 +948,7 @@ public class JSAPI
     @Path("contact/update")
     @GET
     @Produces("application / x-javascript")
-    public String updateContact(@QueryParam("email") String email, @QueryParam("data") String json,
-	    @QueryParam("id") String apiKey)
+    public String updateContact(@QueryParam("email") String email, @QueryParam("data") String json, @QueryParam("id") String apiKey)
     {
 	try
 	{
@@ -982,7 +968,7 @@ public class JSAPI
 		ContactField field = mapper.readValue(jobj.toString(), ContactField.class);
 		contact.addProperty(field);
 	    }
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 	    contact.save();
 	    return mapper.writeValueAsString(contact);
 	}
@@ -1035,8 +1021,15 @@ public class JSAPI
 	    ObjectMapper mapper = new ObjectMapper();
 	    Contact contact = mapper.readValue(json, Contact.class);
 	    contact.type = Type.COMPANY;
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
-	    contact.save();
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    try
+	    {
+		contact.save();
+	    }
+	    catch (PlanRestrictedException e)
+	    {
+		return JSAPIUtil.generateJSONErrorResponse(Errors.CONTACT_LIMIT_REACHED);
+	    }
 	    return mapper.writeValueAsString(contact);
 	}
 	catch (Exception e)
@@ -1082,17 +1075,18 @@ public class JSAPI
     @Path("contacts/remove-property")
     @GET
     @Produces("application / x-javascript")
-    public String removeProperty(@QueryParam("name") String name, @QueryParam("email") String email,
-	    @QueryParam("id") String apiKey)
+    public String removeProperty(@QueryParam("name") String name, @QueryParam("email") String email, @QueryParam("id") String apiKey)
     {
 	try
 	{
 	    Contact contact = ContactUtil.searchContactByEmail(email);
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
+	    if (contact.getContactField(name) == null)
+		return JSAPIUtil.generateJSONErrorResponse(Errors.PROPERTY_MISSING);
 
 	    contact.removeProperty(name);
-	    contact.setContactOwner(APIKey.getDomainUserKeyRelatedToJSAPIKey(apiKey));
+	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
 	    contact.save();
 	    ObjectMapper mapper = new ObjectMapper();
 	    return mapper.writeValueAsString(contact);
@@ -1185,8 +1179,7 @@ public class JSAPI
 	    Workflow workflow = mapper.readValue(json, Workflow.class);
 
 	    CronUtil.removeTask(workflow.id.toString(), contact.id.toString());
-	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), workflow.name,
-		    Status.REMOVED);
+	    CampaignStatusUtil.setStatusOfCampaign(contact.id.toString(), workflow.id.toString(), workflow.name, Status.REMOVED);
 
 	    return mapper.writeValueAsString(contact);
 	}

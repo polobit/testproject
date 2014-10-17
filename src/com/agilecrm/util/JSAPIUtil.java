@@ -3,13 +3,16 @@ package com.agilecrm.util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.agilecrm.account.APIKey;
+import com.agilecrm.user.DomainUser;
+import com.googlecode.objectify.Key;
+
 public class JSAPIUtil
 {
     public static enum Errors
     {
-	UNAUTHORIZED("Invalid API key"), CONTACT_MISSING("Contact not found"), INVALID_PARAMETERS("Invalid parameter"), API_KEY_MISSING(
-		"API key missing"), DUPLICATE_CONTACT("Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED(
-		"Contacts limit reached");
+	UNAUTHORIZED("Invalid API key"), CONTACT_MISSING("Contact not found"), INVALID_PARAMETERS("Invalid parameter"), API_KEY_MISSING("API key missing"), DUPLICATE_CONTACT(
+		"Duplicate found for \"%s\""), CONTACT_LIMIT_REACHED("Contacts limit reached"), PROPERTY_MISSING("Property not found for contact");
 
 	String errorMessage;
 
@@ -60,5 +63,14 @@ public class JSAPIUtil
     public static String generateContactMissingError()
     {
 	return generateJSONErrorResponse(Errors.CONTACT_MISSING);
+    }
+
+    public static Key<DomainUser> getDomainUserKeyFromInputKey(String key)
+    {
+	if (APIKey.isPresent(key))
+	    return APIKey.getDomainUserKeyRelatedToAPIKey(key);
+	else if (APIKey.isValidJSKey(key))
+	    return APIKey.getDomainUserKeyRelatedToJSAPIKey(key);
+	return null;
     }
 }
