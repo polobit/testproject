@@ -957,18 +957,32 @@ public class JSAPI
 	    if (contact == null)
 		return JSAPIUtil.generateContactMissingError();
 
+	    String tags[] = new String[0];
 	    JSONObject obj = new JSONObject(json);
 	    Iterator<?> keys = obj.keys();
 	    while (keys.hasNext())
 	    {
 		String key = (String) keys.next();
-		JSONObject jobj = new JSONObject();
-		jobj.put("name", key);
-		jobj.put("value", obj.getString(key));
-		ContactField field = mapper.readValue(jobj.toString(), ContactField.class);
-		contact.addProperty(field);
+		if (key.equals("tags"))
+		{
+		    String tagString = obj.getString(key);
+		    tagString = tagString.trim();
+		    tagString = tagString.replace("/ /g", " ");
+		    tagString = tagString.replace("/, /g", ",");
+		    tags = tagString.split(",");
+		}
+		else
+		{
+		    JSONObject jobj = new JSONObject();
+		    jobj.put("name", key);
+		    jobj.put("value", obj.getString(key));
+		    ContactField field = mapper.readValue(jobj.toString(), ContactField.class);
+		    contact.addProperty(field);
+		}
 	    }
 	    contact.setContactOwner(JSAPIUtil.getDomainUserKeyFromInputKey(apiKey));
+	    if (tags.length > 0)
+		contact.addTags(tags);
 	    contact.save();
 	    return mapper.writeValueAsString(contact);
 	}
