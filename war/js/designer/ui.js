@@ -212,7 +212,7 @@ function generateSelectUI(uiFieldDefinition, selectEventHandler) {
     }
     
     if(options == null)
-    	return;
+    	options = "";
     
     // Populate Options
     $.each(
