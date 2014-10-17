@@ -70,30 +70,12 @@ var _agile_synch_form_v2 = function()
 	{
 		if (data.error.indexOf('Duplicate') != -1)
 		{
-			var agile_tags = agile_contact.tags;
-			if (agile_tags)
-				delete agile_contact.tags;
-
 			// Update contact if duplicate
 			_agile.update_contact(agile_contact, { success : function(data)
 			{
-				// If agile_tags add tags to contact
-				if (agile_tags)
-					_agile.add_tag(agile_tags, { success : function(data)
-					{
-						agile_formCallback([
-								"", agile_error_msg
-						], agile_button, agile_redirect_url);
-					}, error : function(data)
-					{
-						agile_formCallback([
-								"There was an error in sending data", agile_error_msg
-						], agile_button, agile_redirect_url, data);
-					} });
-				else
-					agile_formCallback([
-							"", agile_error_msg
-					], agile_button, agile_redirect_url);
+				agile_formCallback([
+						"", agile_error_msg
+				], agile_button, agile_redirect_url);
 			}, error : function(data)
 			{
 				agile_formCallback([
@@ -157,61 +139,44 @@ var _agile_synch_form = function()
 
 	// If email, api, domain present execute JSAPI
 	var agile_email = agile_contact.email;
-	if (agile_api && agile_domain)
+
+	// Set account, tracking
+	if (!(agile_id.get() && agile_id.getNamespace()))
 	{
-		// Set account, tracking
 		_agile.set_account(agile_api, agile_domain);
 		_agile.track_page_view();
+	}
 
-		// Set email
-		if (agile_email)
-			_agile.set_email(agile_email);
+	// Set email
+	if (agile_email)
+		_agile.set_email(agile_email);
 
-		// Create contact
-		_agile.create_contact(agile_contact, { success : function(data)
+	// Create contact
+	_agile.create_contact(agile_contact, { success : function(data)
+	{
+		agile_formCallback([
+				"", agile_error_msg
+		], agile_button, agile_redirect_url);
+	}, error : function(data)
+	{
+		if (data.error.indexOf('Duplicate') != -1)
 		{
-			agile_formCallback([
-					"", agile_error_msg
-			], agile_button, agile_redirect_url);
-		}, error : function(data)
-		{
-			if (data.error.indexOf('Duplicate') != -1)
+			// Update contact if duplicate
+			_agile.update_contact(agile_contact, { success : function(data)
 			{
-				var agile_tags = agile_contact.tags;
-				if (agile_tags)
-					delete agile_contact.tags;
-
-				// Update contact if duplicate
-				_agile.update_contact(agile_contact, { success : function(data)
-				{
-					// If agile_tags add tags to contact
-					if (agile_tags)
-						_agile.add_tag(agile_tags, { success : function(data)
-						{
-							agile_formCallback([
-									"", agile_error_msg
-							], agile_button, agile_redirect_url);
-						}, error : function(data)
-						{
-							agile_formCallback([
-									"There was an error in sending data", agile_error_msg
-							], agile_button, agile_redirect_url, data);
-						} });
-					else
-						agile_formCallback([
-								"", agile_error_msg
-						], agile_button, agile_redirect_url);
-				}, error : function(data)
-				{
-					agile_formCallback([
-							"There was an error in sending data", agile_error_msg
-					], agile_button, agile_redirect_url, data);
-				} });
-			}
-			else
+				agile_formCallback([
+						"", agile_error_msg
+				], agile_button, agile_redirect_url);
+			}, error : function(data)
+			{
 				agile_formCallback([
 						"There was an error in sending data", agile_error_msg
 				], agile_button, agile_redirect_url, data);
-		} });
-	}
+			} });
+		}
+		else
+			agile_formCallback([
+					"There was an error in sending data", agile_error_msg
+			], agile_button, agile_redirect_url, data);
+	} });
 };
