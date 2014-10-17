@@ -97,7 +97,9 @@ public class UserInfo implements Serializable
 		if (domainUser != null)
 		{
 			setDomainId(domainUser.id);
+
 			this.email = domainUser.email;
+
 			try
 			{
 				BillingRestrictionUtil.setPlan(this, domainUser.domain);
