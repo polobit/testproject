@@ -221,7 +221,14 @@ ObjectMapper mapper = new ObjectMapper();
 						console.log(formated + "  " + dates);
 						selecteddate=dates;
 						// On date change change selected date
-						Selected_Date = formated;		
+						Selected_Date = formated;
+						
+						current_date_mozilla=Selected_Date;
+						var isFirefox = typeof InstallTrigger !== 'undefined';
+						 if(isFirefox){
+							 $('#datepick').DatePickerSetDate(current_date_mozilla, true);
+							
+						 }
 						// Check user select date
 						if ($('.segment2').hasClass('me-disable'))
 							return;
