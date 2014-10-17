@@ -173,8 +173,9 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		String twilioVerifiedNumber = widget.getProperty("twilio_from_number");
 		System.out.println("twilioNumber: " + twilioNumber + " twilioVerifiedNumber: " + twilioVerifiedNumber);
 
-		System.out.println((To.equalsIgnoreCase("client:agileclient") || To.equalsIgnoreCase(twilioNumber) || To
-				.equalsIgnoreCase(twilioVerifiedNumber)));
+		System.out.println("farah : "
+				+ (To.equalsIgnoreCase("client:agileclient") || To.equalsIgnoreCase(twilioNumber) || To
+						.equalsIgnoreCase(twilioVerifiedNumber)));
 
 		// Outgoing call
 		if (From.equalsIgnoreCase("client:agileclient") || From.equalsIgnoreCase(twilioNumber)
