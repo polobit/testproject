@@ -1,11 +1,15 @@
 package com.thirdparty.twilio;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -124,67 +128,127 @@ public class TwilioSMSUtil
 	}
 
 	/**
-	 * Returns a list of Twilio from numbers
+	 * Returns a log of a Twilio number
 	 */
-	public static JSONArray getTwilioLogs(String account_SID, String auth_token)
+	public static JSONObject getTwilioLogs(String account_SID, String auth_token)
 	{
 
-		JSONArray incomingNumberArray = null;
+		JSONObject logJSON = new JSONObject();
+		int thisMonthCount = 0;
+		int lastMonthCount = 0;
+		int todaysCount = 0;
+		int yesterdaysCount = 0;
+		int deliveredCount = 0;
+		int queuedCount = 0;
+		int undeliveredCount = 0;
+		int failedCount = 0;
 
-		JSONArray logsArray = null;
 		if (account_SID == null || auth_token == null)
 			return null;
+
 		TwilioRestClient client = new TwilioRestClient(account_SID, auth_token, TWILIO_ENDPOINT);
-		List<String> verifiredTwilioNumbers = new ArrayList<String>();
 		try
 		{
-			TwilioRestResponse response = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
-					+ account_SID + "/" + TWILIO_MESSAGES, "GET", null);
-
+			TwilioRestResponse messages = client.request("/" + TWILIO_VERSION + "/" + TWILIO_ACCOUNTS + "/"
+					+ account_SID + "/" + "Messages.json?DateSent%3E%3D2014-09-08%26DateSent%3C%3D2014-10-08%26"
 			/*
-			 * If error occurs, return null
-			 */
-			if (response.isError())
+			 * + "DateSent>=" + oneMonthBack + "&DateSent<=" + currentDate
+			 */, "GET", null);
+
+			if (messages.isError())
 				return null;
 
-			JSONArray result = XML.toJSONObject(response.getResponseText()).getJSONObject(TWILIO_RESPONSE)
-					.getJSONObject("Messages").getJSONArray("Message");
-			System.out.println(result);
-			// incomingNumberArray = result.getJSONArray("IncomingPhoneNumber");
+			JSONObject responseMessageText = new JSONObject(messages.getResponseText());
+			JSONArray messageArray = responseMessageText.getJSONArray("messages");
+			int numberOfMessages = messageArray.length();
 
-			// int incomingNumberCount =
-			// result.getJSONArray("IncomingPhoneNumber").length();
+			SimpleDateFormat sdfActual = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+			SimpleDateFormat sdfConverted = new SimpleDateFormat("dd MMM yyyy");
 
-			// or (int i = 0; i < incomingNumberCount; i++)
-			// verifiredTwilioNumbers.add(incomingNumberArray.getJSONObject(i).get("PhoneNumber").toString());
+			Date messageDate = null;
+			Date oneMonthBackEnd = null;
+			Date oneMonthBackStart = null;
+			Date currentdate = null;
+			Date thisMonthDate = null;
+			Date yesterdayDate = null;
 
-			logsArray = new JSONArray();
-			for (int i = 0; i < result.length(); i++)
+			currentdate = sdfConverted.parse(sdfConverted.format(Calendar.getInstance().getTime()));
+
+			Calendar calDate = Calendar.getInstance();
+
+			calDate.add(Calendar.DATE, -1);
+			yesterdayDate = sdfConverted.parse(sdfConverted.format(calDate.getTime()));
+
+			calDate.set(Calendar.DATE, 1);
+			thisMonthDate = sdfConverted.parse(sdfConverted.format(calDate.getTime()));
+			calDate.add(Calendar.MONTH, -1);
+			oneMonthBackStart = sdfConverted.parse(sdfConverted.format(calDate.getTime()));
+			Calendar calMonth = Calendar.getInstance();
+			calMonth.add(Calendar.MONTH, -1);
+			calMonth.set(Calendar.DAY_OF_MONTH, calMonth.getActualMaximum(Calendar.DAY_OF_MONTH));
+			oneMonthBackEnd = sdfConverted.parse(sdfConverted.format(calMonth.getTime()));
+
+			try
 			{
-				JSONObject tempLog = new JSONObject();
+				for (int i = 0; i < numberOfMessages; i++)
+				{
+					Object status = messageArray.getJSONObject(i).get("status");
+					String date = (String) messageArray.getJSONObject(i).get("date_updated");
+					messageDate = sdfActual.parse(date);
+					messageDate = sdfConverted.parse(sdfConverted.format(messageDate));
 
-				tempLog.put("DateSent", result.getJSONObject(i).get("DateSent"));
-				tempLog.put("To", result.getJSONObject(i).get("To"));
-				tempLog.put("From", result.getJSONObject(i).get("From"));
-				tempLog.put("Status", result.getJSONObject(i).get("Status"));
-				tempLog.put("Price", result.getJSONObject(i).get("Price"));
-				tempLog.put("ErrorCode", result.getJSONObject(i).get("ErrorCode"));
-				tempLog.put("ErrorMessage", result.getJSONObject(i).get("ErrorMessage"));
+					if (status.toString().equals("delivered"))
+						deliveredCount++;
 
-				logsArray.put(tempLog);
+					if (status.toString().equals("queued"))
+						queuedCount++;
+
+					if (status.toString().equals("undelivered"))
+						undeliveredCount++;
+
+					if (status.toString().equals("failed"))
+						failedCount++;
+
+					if (messageDate.compareTo(thisMonthDate) >= 0)
+						thisMonthCount++;
+
+					if (messageDate.compareTo(oneMonthBackStart) >= 0 && messageDate.compareTo(oneMonthBackEnd) <= 0)
+						lastMonthCount++;
+
+					if (messageDate.compareTo(currentdate) >= 0)
+						todaysCount++;
+
+					if (messageDate.compareTo(yesterdayDate) == 0)
+						yesterdaysCount++;
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("inside twilio getTwilioLogs for loop");
+				e.printStackTrace();
 			}
 
-			System.out.println(logsArray);
-			System.out.println(logsArray);
+			logJSON.put("delivered", deliveredCount);
+			logJSON.put("queued", queuedCount);
+			logJSON.put("undelivered", undeliveredCount);
+			logJSON.put("failed", failedCount);
+			logJSON.put("ThisMonth", thisMonthCount);
+			logJSON.put("LastMonth", lastMonthCount);
+			logJSON.put("Today", todaysCount);
+			logJSON.put("Yesterday", yesterdaysCount);
 		}
-
+		catch (JSONException e)
+		{
+			System.out.println("Exception in getTwilioLogs JSONException");
+			e.printStackTrace();
+		}
 		catch (Exception e)
 		{
-			System.out.println("Exception in TwilioSMS");
+			System.out.println("Exception in getTwilioLogs");
 			e.printStackTrace();
 		}
 
-		return logsArray;
+		return logJSON;
 
 	}
 
@@ -250,7 +314,7 @@ public class TwilioSMSUtil
 		return TwilioSMSUtil.verifiedTwilioNumbers(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 	}
 
-	public static JSONArray currentTwilioLogs()
+	public static JSONObject currentTwilioLogs()
 	{
 		Widget widget = SMSGatewayUtil.getSMSGatewayWidget();
 
@@ -276,5 +340,34 @@ public class TwilioSMSUtil
 			return null;
 
 		return TwilioSMSUtil.getTwilioLogs(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+	}
+
+	public static boolean isIncomingNumbersEmpty(Widget widget)
+	{
+		if (widget == null)
+			return true;
+
+		try
+		{
+			String prefs = widget.prefs;
+			JSONObject prefsJSON = new JSONObject(prefs);
+			TWILIO_ACCOUNT_SID = prefsJSON.getString("account_sid");
+			TWILIO_AUTH_TOKEN = prefsJSON.getString("auth_token");
+
+		}
+		catch (Exception e)
+		{
+
+			System.out.println("Inside getVerifiedTwilioNumbers");
+			e.printStackTrace();
+		}
+
+		if (TWILIO_ACCOUNT_SID == null || TWILIO_AUTH_TOKEN == null)
+			return false;
+
+		if (verifiedTwilioNumbers(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN).isEmpty())
+			return true;
+		return false;
+
 	}
 }

@@ -185,12 +185,9 @@ function checkMaxNodesCount(){
 	var currentLimits=window.parent._billing_restriction.currentLimits;
 	var campaignNodeLimit=currentLimits.campaignNodesLimit;
 	if($('#paintarea >div.contextMenuForNode').length>campaignNodeLimit){
-		plan=currentLimits.planName;
- 	     window.parent.$("#workflow-edit-msg").hide();
- 		 window.parent.$("#nodes-limit-reached").show();
- 		 alert("You have reached the limit of " +campaignNodeLimit+" nodes in your current plan "+plan+". Please consider upgrading or splitting the campaign and use the 'Transfer' option.");
- 		 console.log("You have reached maximum number of nodes");
- 		 
+		window.parent.$("#workflow-edit-msg").hide();
+ 		window.parent.$("#nodes-limit-reached").show();
+ 		window.parent.campaignAlert("nodeLimit");
  		return false;
  	}
 	else 

@@ -13,7 +13,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.agilecrm.account.util.SMSGatewayUtil;
 import com.agilecrm.widgets.Widget;
@@ -70,18 +70,20 @@ public class SMSGatewayAPI
 		{
 
 			if (!SMSGatewayUtil.checkCredentials(smsGatewayWidget))
-			{
 				throw new Exception("Incorrect Authentication SID or Auth token");
-			}
 
+			if (TwilioSMSUtil.isIncomingNumbersEmpty(smsGatewayWidget))
+				throw new Exception(
+						"You do not have a number purchased from Twilio for this account. You can purchase one <a href='https://www.twilio.com/user/account/phone-numbers/incoming' target='_blank'>"
+								+ "here" + "</a>");
+
+			smsGatewayWidget.save();
 		}
 		catch (Exception e)
 		{
 			throw new WebApplicationException(Response.status(javax.ws.rs.core.Response.Status.BAD_REQUEST)
 					.entity(e.getMessage()).build());
 		}
-
-		smsGatewayWidget.save();
 
 		return smsGatewayWidget;
 	}
@@ -105,7 +107,7 @@ public class SMSGatewayAPI
 	@Path("{widget_name}/logs")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	public JSONArray getLogs(@PathParam("widget_name") String name) 
+	public JSONObject getLogs(@PathParam("widget_name") String name)
 	{
 
 		if (name.equals("twilio"))
