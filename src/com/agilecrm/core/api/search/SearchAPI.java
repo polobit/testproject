@@ -224,14 +224,31 @@ public class SearchAPI
 			AppengineSearch<Contact> appEngineSearch = new AppengineSearch<Contact>(Contact.class);
 			collection = appEngineSearch.getSearchResults(query, pageSize, cursor);
 			Iterator iterator = collection.iterator();
+			int counter = 0;
 			while (iterator.hasNext())
 			{
 				Contact ctc = (Contact) iterator.next();
 				if (ctc.id.longValue() == contact.id.longValue())
 				{
-					iterator.remove();
-					return collection;
+					if (counter == 0)
+					{
+						int collCount = ctc.count;
+						iterator.remove();
+						if (iterator.hasNext())
+						{
+							Contact ctc1 = (Contact) iterator.next();
+							ctc1.count = collCount;
+						}
+						return collection;
+					}
+					else
+					{
+						iterator.remove();
+						return collection;
+					}
+
 				}
+				counter++;
 			}
 			return collection;
 		}
