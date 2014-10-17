@@ -1,12 +1,17 @@
 package com.agilecrm.core.api.widgets;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.json.JSONObject;
 
@@ -29,6 +34,8 @@ import com.agilecrm.widgets.util.WidgetUtil;
 @Path("/api/widgets/xero")
 public class XeroWidgetsAPI
 {
+	
+	@Context UriInfo uriInfo;
 
 	/**
 	 * Retrieves clients from agent's Xero account based on contact email
@@ -51,6 +58,7 @@ public class XeroWidgetsAPI
 			return null;
 
 		XeroUtil utilObj = new XeroUtil();
+		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 
 		try
 		{
@@ -91,6 +99,7 @@ public class XeroWidgetsAPI
 			return null;
 
 		XeroUtil utilObj = new XeroUtil();
+		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 		try
 		{
 			// calls XeroUtil method to add Contact to Xero account
@@ -121,7 +130,7 @@ public class XeroWidgetsAPI
 			return null;
 
 		XeroUtil utilObj = new XeroUtil();
-
+		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 		try
 		{
 			// Calls XeroUtil metod to retrieve invoices
@@ -145,7 +154,7 @@ public class XeroWidgetsAPI
 			return null;
 
 		XeroUtil utilObj = new XeroUtil();
-
+		utilObj.callbackUrl = String.format(utilObj.callbackUrl,getReqDomainURL());
 		try
 		{
 			// Calls XeroUtil method to retrieve organisation info
@@ -157,5 +166,26 @@ public class XeroWidgetsAPI
 					.build());
 		}
 	}
+	
+	
+	public String getReqDomainURL() {
+		
+		URL url = null;
+		String requestURL = "";
+		try
+		{
+			url = uriInfo.getBaseUri().toURL();
+			requestURL = url.getProtocol() + "://" + url.getAuthority();			
+		}
+		catch (MalformedURLException e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		return requestURL;
+	}
+	
+	
+	
 
 }

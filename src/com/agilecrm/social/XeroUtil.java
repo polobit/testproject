@@ -17,7 +17,7 @@ import com.agilecrm.widgets.Widget;
 public class XeroUtil
 {
 
-	private String callbackUrl = "https://agilecrmbeta.appspot.com/XeroServlet?data=";
+	public String callbackUrl = "%s/XeroServlet?data=";
 	// http://integrations.clickdesk.com:8080/
 	//if use local use http://localhost:8080/
 	private String xeroPluginurl = "http://integrations.clickdesk.com:8080/ClickdeskPlugins/core/agile/xero";
@@ -39,7 +39,7 @@ public class XeroUtil
 	public String getInvoicesOfClient(Widget widget, String email) throws Exception
 	{
 		String widget_id = widget.id.toString();
-
+		System.out.println("callbackUrl in XeroUtil : " + callbackUrl);
 		// get invoices from url
 		String res = HTTPUtil.accessHTTPURL(xeroPluginurl + "/invoice",
 				(new JSONObject(widget.prefs).put("email", email).put("widget_id", widget_id).put("callbackUrl",
