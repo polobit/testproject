@@ -10,6 +10,16 @@
 <script id="googleplus-revoke-access-template" type="text/html">
 <div class='widget_content' style='border-bottom:none;line-height: 160%;'>
 Google+ is a social utility that connects people with friends and others who work, study and live around them.
+{{#if custom_data.image.url}}	
+<div class="row-fluid">
+		<div class="span4">
+			<img src="{{custom_data.image.url}}&sz=70" width="70" height="70" alt="" class="thumbnail"/>
+		</div>
+		<div class="span7">
+			<p class="title_txt"><a href="{{custom_data.url}}" target="_blank" >{{custom_data.displayName}}</a></p>
+		</div>
+	</div>
+{{/if}}
 	<div>
 		<p style='margin: 10px 0px 5px 0px;' >
 			<a class='btn revoke-widget ml_5' style='text-decoration: none;' widget-name="GooglePlus">Revoke Access</a>

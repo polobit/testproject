@@ -293,6 +293,25 @@ function getGooglePlusUserDetails(id)
 {
 	var apiURL = "https://www.googleapis.com/plus/v1/people/" + id;
 	var reqData = "fields=aboutMe%2CcurrentLocation%2CdisplayName%2Cdomain%2Cgender%2Cid%2Cimage%2CisPlusUser%2Coccupation%2Corganizations%2CplacesLived%2Curl";
+		
+	var apiCallReturnData = googlePlusApiCall(apiURL, reqData);	
+	var errorObj = apiCallReturnData.error;	
+	if(typeof errorObj != "undefined") {
+		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
+		{
+			alert("Refreshing access token");
+			refreshAccessToken();
+		}
+		else
+		{
+			displayError(WIDGET_NAME, errorObj.message);
+			return;
+		}
+	}
+	else {
+		return apiCallReturnData;
+	}
+	
 	return googlePlusApiCall(apiURL, reqData);
 
 }
@@ -303,6 +322,25 @@ function getGooglePlusPosts(id, nextPageToken)
 	var reqData = "fields=id%2Citems(actor(displayName%2Cid%2Cimage%2Curl)%2Cid%2Ckind%2Clocation%2Cobject(actor%2Cattachments(content%2CdisplayName%2Cid%2Cimage%2CobjectType%2Cthumbnails%2Curl)%2Ccontent%2Cid%2CobjectType%2CoriginalContent%2Curl)%2Cpublished%2Ctitle%2Cupdated%2Curl%2Cverb)%2CnextPageToken%2CselfLink%2Cupdated&maxResults=4";
 	if (typeof nextPageToken != "undefined")
 		reqData += "&pageToken=" + nextPageToken;
+	
+	var apiCallReturnData = googlePlusApiCall(apiURL, reqData);	
+	var errorObj = apiCallReturnData.error;	
+	if(typeof errorObj != "undefined") {
+		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
+		{
+			alert("Refreshing access token");
+			refreshAccessToken();
+		}
+		else
+		{
+			displayError(WIDGET_NAME, errorObj.message);
+			return;
+		}
+	}
+	else {
+		return apiCallReturnData;
+	}
+	
 	return googlePlusApiCall(apiURL, reqData);
 
 }
@@ -311,6 +349,23 @@ function getMatchingPeople(search)
 {
 	var apiURL = "https://www.googleapis.com/plus/v1/people";
 	var reqData = "query=" + search + "&maxResults=20";
+	var apiCallReturnData = googlePlusApiCall(apiURL, reqData);	
+	var errorObj = apiCallReturnData.error;	
+	if(typeof errorObj != "undefined") {
+		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
+		{
+			alert("Refreshing access token");
+			refreshAccessToken();
+		}
+		else
+		{
+			displayError(WIDGET_NAME, errorObj.message);
+			return;
+		}
+	}
+	else {
+		return apiCallReturnData;
+	}
 	return googlePlusApiCall(apiURL, reqData);
 }
 
@@ -342,31 +397,6 @@ function googlePlusApiCall(apiURL, reqData)
 {
 
 	var jsonRequest = $.ajax({ type : "GET", url : apiURL, async : false, data : reqData + "&access_token=" + widgetPref['access_token'], dataType : "json" });
-
-	// jsonRequest.done(function(jsondata)
-	// {
-	// console.log("In done " + jsondata);
-	// });
-
-	jsonRequest.fail(function(jqxhr, textStatus, error)
-	{
-		var err = textStatus + ", " + error;
-		// console.log( "Request Failed: " + err );
-		var errorObj = $.parseJSON(jqxhr.responseText).error;
-		// alert(errorObj.code + " " + errorObj.message);
-		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
-		{
-			// alert("Refreshing access token");
-			refreshAccessToken();
-			googlePlusApiCall(apiURL, reqData);
-		}
-		else
-		{
-			displayError(WIDGET_NAME, err);
-		}
-
-	});
-
 	return $.parseJSON(jsonRequest.responseText);
 
 }
