@@ -299,7 +299,7 @@ function getGooglePlusUserDetails(id)
 	if(typeof errorObj != "undefined") {
 		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
 		{
-			alert("Refreshing access token");
+//			alert("Refreshing access token");
 			refreshAccessToken();
 		}
 		else
@@ -328,7 +328,7 @@ function getGooglePlusPosts(id, nextPageToken)
 	if(typeof errorObj != "undefined") {
 		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
 		{
-			alert("Refreshing access token");
+//			alert("Refreshing access token");
 			refreshAccessToken();
 		}
 		else
@@ -354,7 +354,7 @@ function getMatchingPeople(search)
 	if(typeof errorObj != "undefined") {
 		if (errorObj.code == 401 && errorObj.message == "Invalid Credentials")
 		{
-			alert("Refreshing access token");
+//			alert("Refreshing access token");
 			refreshAccessToken();
 		}
 		else
