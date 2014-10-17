@@ -174,7 +174,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		System.out.println("twilioNumber: " + twilioNumber + " twilioVerifiedNumber: " + twilioVerifiedNumber);
 
 		// Outgoing call
-		if (From.equalsIgnoreCase("agileclient") || From.equalsIgnoreCase(twilioNumber)
+		if (From.equalsIgnoreCase("client:agileclient") || From.equalsIgnoreCase(twilioNumber)
 				|| From.equalsIgnoreCase(twilioVerifiedNumber))
 		{
 			System.out.println("In Outgoing call");
@@ -183,7 +183,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		}
 
 		// Incoming call
-		else if (To.equalsIgnoreCase("agileclient") || To.equalsIgnoreCase(twilioNumber)
+		else if (To.equalsIgnoreCase("client:agileclient") || To.equalsIgnoreCase(twilioNumber)
 				|| To.equalsIgnoreCase(twilioVerifiedNumber))
 		{
 			System.out.println("In Incoming call");
