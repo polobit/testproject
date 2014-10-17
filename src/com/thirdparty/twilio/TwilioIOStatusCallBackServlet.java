@@ -20,7 +20,6 @@ import com.agilecrm.contact.Note;
 import com.agilecrm.contact.util.ContactUtil;
 import com.agilecrm.session.SessionManager;
 import com.agilecrm.session.UserInfo;
-import com.agilecrm.user.AgileUser;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.util.DomainUserUtil;
 import com.agilecrm.widgets.Widget;
@@ -160,7 +159,8 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		String callDuration = "";
 		DomainUser user = DomainUserUtil.getCurrentDomainUser();
 
-		AgileUser agileUser = AgileUser.getCurrentAgileUser();
+		System.out.println("user: " + user);
+		System.out.println("user: " + user.domain);
 
 		if (Duration.equalsIgnoreCase("0"))
 			callDuration = Status.concat(".");
