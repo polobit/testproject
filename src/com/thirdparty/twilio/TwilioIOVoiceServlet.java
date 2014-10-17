@@ -21,7 +21,6 @@ public class TwilioIOVoiceServlet extends HttpServlet
 	{
 
 		System.out.println("in voice servlet");
-		System.out.println("in voice servlet********************");
 
 		// number to which call is made
 		String phoneNumber = request.getParameter("PhoneNumber");

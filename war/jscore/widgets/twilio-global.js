@@ -629,6 +629,13 @@ function setUpGlobalTwilio()
 				.incoming(function(conn)
 				{
 					console.log("Incoming connection from " + conn.parameters.From);
+					
+					if (Twilio.Device.status() == "busy")
+					{
+						console.log("getting one more call.");
+						conn.disconnect();
+						return;
+					}
 
 					globalconnection = conn;
 
