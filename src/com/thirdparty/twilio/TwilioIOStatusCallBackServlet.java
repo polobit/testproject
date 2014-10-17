@@ -195,9 +195,9 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		{
 			System.out.println("In Incoming call");
 			if (Duration.equalsIgnoreCase("0"))
-				state = "Incoming call for " + user + ". ";
+				state = "Incoming call for " + user.domain + ". ";
 			else
-				state = "Incoming call answered by " + user + ". ";
+				state = "Incoming call answered by " + user.domain + ". ";
 			searchContactFor(From, state, callDuration);
 		}
 	}
@@ -247,9 +247,9 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		if (mins > 1)
 			result = result + mins + " mins ";
 		if (secs == 1)
-			result = result + secs + " sec ";
+			result = result + secs + " sec";
 		if (secs > 1)
-			result = result + secs + " secs ";
+			result = result + secs + " secs";
 
 		System.out.println("result: " + result);
 
