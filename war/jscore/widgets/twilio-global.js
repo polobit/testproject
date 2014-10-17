@@ -634,6 +634,7 @@ function setUpGlobalTwilio()
 					{
 						console.log("getting one more call.");
 						conn.disconnect();
+						conn.reject();
 						return;
 					}
 

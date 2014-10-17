@@ -29,7 +29,6 @@ import com.thirdparty.twilio.sdk.TwilioRestResponse;
 
 public class TwilioIOStatusCallBackServlet extends HttpServlet
 {
-
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
 	{
 
@@ -146,6 +145,12 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		System.out.println("Status: " + Status);
 		System.out.println("Direction: " + Direction);
 
+		String newDuration = formatSecToTime(Duration);
+		System.out.println("new duration format: " + newDuration);
+
+		String newStatus = formatStatus(Status);
+		System.out.println("new newStatus: " + newStatus);
+
 		/*
 		 * Outbound call by {{name}}. Call connected for .. hrs mins secs (eg: 2
 		 * mins 5 secs, 10 secs, 1 hr 24 mins) Outbound call by {{xxx}}. Busy.
@@ -163,9 +168,9 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		System.out.println("user: " + user.domain);
 
 		if (Duration.equalsIgnoreCase("0"))
-			callDuration = Status.concat(".");
+			callDuration = newStatus;
 		else
-			callDuration = "Call connected for " + Duration + ".";
+			callDuration = "Call connected for " + newDuration + ".";
 
 		System.out.println("callDuration: " + callDuration);
 
@@ -182,7 +187,7 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 				|| From.equalsIgnoreCase(twilioVerifiedNumber))
 		{
 			System.out.println("In Outgoing call");
-			state = "Outgoing call by " + user.domain + ". ";
+			state = "Outbound call by " + user.domain + ". ";
 			searchContactFor(To, state, callDuration);
 		}
 		else if (To.equalsIgnoreCase("client:agileclient") || To.equalsIgnoreCase(twilioNumber)
@@ -195,6 +200,60 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 				state = "Incoming call answered by " + user + ". ";
 			searchContactFor(From, state, callDuration);
 		}
+	}
+
+	private String formatStatus(String status)
+	{
+		System.out.println("in formatStatus");
+		if (status.equalsIgnoreCase("completed"))
+			return "Completed.";
+		if (status.equalsIgnoreCase("busy"))
+			return "Busy.";
+		if (status.equalsIgnoreCase("no-answer"))
+			return "No Answer.";
+		if (status.equalsIgnoreCase("failed"))
+			return "Failed.";
+		if (status.equalsIgnoreCase("canceled"))
+			return "Canceled.";
+
+		return status;
+	}
+
+	private String formatSecToTime(String duration)
+	{
+		System.out.println("in formatSecToTime");
+
+		if (duration.equalsIgnoreCase("0"))
+			return duration;
+
+		long longVal = Long.parseLong(duration);
+		int hours = (int) longVal / 3600;
+		int remainder = (int) longVal - hours * 3600;
+		int mins = remainder / 60;
+		remainder = remainder - mins * 60;
+		int secs = remainder;
+
+		System.out.println(hours);
+		System.out.println(mins);
+		System.out.println(secs);
+
+		String result = "";
+		if (hours == 1)
+			result = result + hours + " hr ";
+		if (hours > 1)
+			result = result + hours + " hrs ";
+		if (mins == 1)
+			result = result + mins + " min ";
+		if (mins > 1)
+			result = result + mins + " mins ";
+		if (secs == 1)
+			result = result + secs + " sec ";
+		if (secs > 1)
+			result = result + secs + " secs ";
+
+		System.out.println("result: " + result);
+
+		return result;
 	}
 
 	private void searchContactFor(String searchContactFor, String state, String callDuration)
