@@ -74,6 +74,19 @@ public class TwilioIOVoiceServlet extends HttpServlet
 			System.out.println(e.getMessage());
 			System.out.println(e.getStackTrace().toString());
 		}
+		catch (Exception e)
+		{
+			System.out.println("error in voice Exception.");
+
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			System.out.println(sw.toString());
+
+			System.out.println(e.getMessage());
+			System.out.println(e.getStackTrace().toString());
+
+		}
 		response.setContentType("application/xml");
 		response.getWriter().print(twiml.toXML());
 	}
