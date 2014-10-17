@@ -131,6 +131,15 @@ var AdminSettingsRouter = Backbone.Router.extend({
 
 				// Binds action
 				bindAdminChangeAction(el);
+			}, saveCallback : function(response)
+			{
+				$.getJSON("core/api/users/current-owner", function(data)
+				{
+					data["created_user_email"] = response.email;
+
+					add_created_user_info_as_note_to_owner(data);
+
+				});
 			} });
 
 		$('#content').find('#admin-prefs-tabs-content').html(view.render().el);

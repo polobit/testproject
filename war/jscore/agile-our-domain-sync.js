@@ -213,6 +213,12 @@ function our_domain_sync()
 			// Adds signup tag, if it is not added previously.
 			// set_profile_noty();
 			add_custom_fields_to_our_domain();
+		
+			if (CURRENT_DOMAIN_USER['is_account_owner'])
+			{
+				add_tag_our_domain("Domain Owner");
+
+			}
 			initWebrules();
 		}, function(data)
 		{
