@@ -645,6 +645,7 @@ function setUpGlobalTwilio()
 						conn.disconnect();
 						if (conn)
 							conn.reject();
+
 						return;
 					}
 
