@@ -173,6 +173,9 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 		String twilioVerifiedNumber = widget.getProperty("twilio_from_number");
 		System.out.println("twilioNumber: " + twilioNumber + " twilioVerifiedNumber: " + twilioVerifiedNumber);
 
+		System.out.println((To.equalsIgnoreCase("client:agileclient") || To.equalsIgnoreCase(twilioNumber) || To
+				.equalsIgnoreCase(twilioVerifiedNumber)));
+
 		// Outgoing call
 		if (From.equalsIgnoreCase("client:agileclient") || From.equalsIgnoreCase(twilioNumber)
 				|| From.equalsIgnoreCase(twilioVerifiedNumber))
@@ -181,10 +184,8 @@ public class TwilioIOStatusCallBackServlet extends HttpServlet
 			state = "Outgoing call by " + user.domain + ". ";
 			searchContactFor(To, state, callDuration);
 		}
-
-		// Incoming call
 		else if (To.equalsIgnoreCase("client:agileclient") || To.equalsIgnoreCase(twilioNumber)
-				|| To.equalsIgnoreCase(twilioVerifiedNumber))
+				|| To.equalsIgnoreCase(twilioVerifiedNumber)) // Incoming call
 		{
 			System.out.println("In Incoming call");
 			if (Duration.equalsIgnoreCase("0"))
