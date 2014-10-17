@@ -484,7 +484,7 @@ function setUpTwilio(token, from_number)
 			// Add dialpad template in twilio content
 			if ($('#Twilio').find('.widget_content').find("#dialpad_in_twilio").length == 0)
 			{
-				var dialpad = $(getTemplate("twilio-dialpad"), {});
+				var dialpad = $(getTemplate("twilioio-dialpad"), {});
 				$('#Twilio').find('.widget_content').append(dialpad);
 			}
 

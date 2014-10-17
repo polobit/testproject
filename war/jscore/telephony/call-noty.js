@@ -108,7 +108,7 @@ function connectedCallNoty(message, type)
 		] });
 
 		// Add dialpad template in twilio content
-		var dialpad = $(getTemplate("twilio-dialpad"), {});
+		var dialpad = $(getTemplate("twilioio-dialpad"), {});
 		$('.noty_buttons').prepend(dialpad);
 
 		return;
