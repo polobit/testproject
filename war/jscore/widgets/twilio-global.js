@@ -293,7 +293,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 
 		// Show twilio numbers list
 		$("#twilio_numbers").show();
-		
+
 		$("#twilio_number").addClass("required");
 	}
 	// verified # is available but no twilio #
@@ -326,7 +326,7 @@ function addNumbersInUI(twilioNumbers, verifiedNumbers)
 
 		// Hide twilio numbers list
 		$("#twilio_numbers").hide();
-		
+
 		$("#twilio_from_number").addClass("required");
 	}
 	// both available
@@ -421,6 +421,9 @@ function addTwilioNumbersInUI(result)
 		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	});
 
+	optionHtml = '<option data="" value="">None</option>';
+	phoneNumberHtml = phoneNumberHtml + optionHtml;
+	
 	// Add verified number in list
 	$("#twilio_number").html(phoneNumberHtml);
 }
@@ -437,6 +440,9 @@ function addVerifiedCallerIdInUI(result)
 		phoneNumberHtml = phoneNumberHtml + optionHtml;
 	});
 
+	optionHtml = '<option data="" value="">None</option>';
+	phoneNumberHtml = phoneNumberHtml + optionHtml;
+	
 	// Add verified number in list
 	$("#twilio_from_number").html(phoneNumberHtml);
 }
@@ -526,7 +532,7 @@ function fill_twilioio_numbers()
 	});
 }
 
-//Get name of contact
+// Get name of contact
 function getTwilioIOContactName()
 {
 	var contactName = "";
@@ -629,11 +635,17 @@ function setUpGlobalTwilio()
 				.incoming(function(conn)
 				{
 					console.log("Incoming connection from " + conn.parameters.From);
-					
+
 					if (Twilio.Device.status() == "busy")
 					{
 						console.log("getting one more call.");
+
+						showCallNotyPopup("missedCall", "error", "<b>Missed call : </b><br>" + conn.parameters.From + "<br>", 5000);
+
 						conn.disconnect();
+						if (conn)
+							conn.reject();
+
 						return;
 					}
 
