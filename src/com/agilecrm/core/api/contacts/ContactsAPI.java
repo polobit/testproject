@@ -45,6 +45,9 @@ import com.agilecrm.contact.util.NoteUtil;
 import com.agilecrm.deals.Opportunity;
 import com.agilecrm.deals.util.OpportunityUtil;
 import com.agilecrm.document.util.DocumentUtil;
+import com.agilecrm.user.access.exception.AccessDeniedException;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
+import com.agilecrm.user.access.util.UserAccessControlUtil.CRUDOperation;
 import com.agilecrm.util.HTTPUtil;
 import com.agilecrm.util.JSAPIUtil;
 
@@ -240,9 +243,12 @@ public class ContactsAPI
     @Path("/{contact-id}")
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public Contact getContact(@PathParam("contact-id") Long id)
+    public Contact getContact(@PathParam("contact-id") Long id) throws AccessDeniedException
     {
 	Contact contact = ContactUtil.getContact(id);
+
+	UserAccessControlUtil.check(Contact.class.getSimpleName(), contact, CRUDOperation.READ, true);
+
 	return contact;
     }
 
@@ -910,16 +916,18 @@ public class ContactsAPI
     {
 	return ContactUtil.isContactUpdated(id, updatedTime);
     }
-    
+
     /**
-     *  check for company exist
+     * check for company exist
+     * 
      * @param companyName
      * @return
      */
     @Path("/company/validate/{company-name}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public boolean isCompanyExist(@PathParam("company-name")String companyName){
+    public boolean isCompanyExist(@PathParam("company-name") String companyName)
+    {
 	return ContactUtil.isCompanyExist(companyName);
     }
 }

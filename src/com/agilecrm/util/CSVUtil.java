@@ -443,6 +443,15 @@ public class CSVUtil
 		    // Sets current object to check scope
 
 		    tempContact = ContactUtil.mergeContactFields(tempContact);
+		    accessControl.setObject(tempContact);
+		    if (!accessControl.canDelete())
+		    {
+			accessDeniedToUpdate++;
+			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
+				"Exception raise while saving contact"));
+
+			return;
+		    }
 		    isMerged = true;
 		}
 		else

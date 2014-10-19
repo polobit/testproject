@@ -30,6 +30,7 @@ import com.agilecrm.session.SessionManager;
 import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
 import com.agilecrm.user.access.UserAccessScopes;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.campaignio.cron.util.CronUtil;
 import com.campaignio.logger.util.LogUtil;
 import com.campaignio.twitter.util.TwitterJobQueueUtil;
@@ -105,6 +106,18 @@ public class ContactUtil
 	    e.printStackTrace();
 	    return null;
 	}
+    }
+
+    /**
+     * Fetch contacts with ACL condition
+     */
+    public static Contact getContactWithACL(long id)
+    {
+	if (UserAccessControlUtil.hasScope(UserAccessScopes.VIEW_CONTACTS))
+	    return getContact(id);
+
+	// User property query because
+	return dao.getByProperty("id", id);
     }
 
     /**

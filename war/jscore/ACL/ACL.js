@@ -40,3 +40,22 @@ function canImportContacts()
 		return false; 
 	return hasScope("IMPORT_CONTACTS");
 }
+
+function canEditContact(owner_id)
+{
+	if((hasScope('UPDATE_CONTACTS') || hasScope('DELETE_CONTACTS')) || CURRENT_DOMAIN_USER.id == owner_id)
+		return true;
+	
+	return false;
+}
+
+function canEditCurrentContact()
+{
+	var contact_model = App_Contacts.contactDetailView.model;
+	
+	if(!contact_model)
+		return;
+	var contact = contact_model.toJSON();
+	
+	return canEditContact(contact.owner.id);
+}

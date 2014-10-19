@@ -1,11 +1,18 @@
 package com.agilecrm.user.access.util;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.search.ui.serialize.SearchRule;
+import com.agilecrm.session.SessionManager;
+import com.agilecrm.session.UserInfo;
+import com.agilecrm.user.DomainUser;
 import com.agilecrm.user.access.UserAccessControl;
+import com.agilecrm.user.access.UserAccessScopes;
 import com.agilecrm.user.access.exception.AccessDeniedException;
+import com.agilecrm.user.util.DomainUserUtil;
 import com.googlecode.objectify.Query;
 
 /**
@@ -21,7 +28,7 @@ public class UserAccessControlUtil
     {
 	CREATE("Contact create access denied. Contact account administrator"),
 
-	READ("Contact read denied. Contact account administrator"),
+	READ("Contact read access denied. Contact account administrator"),
 
 	UPDATE("Contact update access denied. Contact account administrator"),
 
@@ -117,6 +124,40 @@ public class UserAccessControlUtil
     public static UserAccessControl getAccessControl(String className, Object object)
     {
 	return UserAccessControl.getAccessControl(className, object);
+    }
+
+    // Returns current user scopes
+    public static HashSet<UserAccessScopes> getCurrentUserScopes()
+    {
+	// Gets user info from session manager
+	UserInfo info = SessionManager.get();
+
+	// If info is null then scopes are returned from domain user. It barely
+	// occurs
+	if (info == null)
+	{
+	    return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+	}
+
+	// To give all scopes as of now.
+
+	// If scopes in info is not set, scopes are fetched from current domain
+	// user, set in user info, and returned.
+	if (info.getScopes() == null)
+	{
+	    DomainUser user = DomainUserUtil.getCurrentDomainUser();
+	    if (user == null)
+		return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
+
+	    info.setScopes(DomainUserUtil.getCurrentDomainUser().scopes);
+	}
+
+	return info.getScopes();
+    }
+
+    public static boolean hasScope(UserAccessScopes scope)
+    {
+	return getCurrentUserScopes().contains(scope);
     }
 
 }
