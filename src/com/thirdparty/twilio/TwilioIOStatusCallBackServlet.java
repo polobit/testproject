@@ -27,6 +27,7 @@ import com.agilecrm.widgets.util.WidgetUtil;
 import com.thirdparty.twilio.sdk.TwilioRestClient;
 import com.thirdparty.twilio.sdk.TwilioRestResponse;
 
+@SuppressWarnings("serial")
 public class TwilioIOStatusCallBackServlet extends HttpServlet
 {
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException

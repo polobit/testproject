@@ -15,6 +15,7 @@ import com.twilio.sdk.verbs.Number;
 import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
 
+@SuppressWarnings("serial")
 public class TwilioIOVoiceServlet extends HttpServlet
 {
 	public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
