@@ -448,9 +448,9 @@ public class CSVUtil
 		    {
 			accessDeniedToUpdate++;
 			failedContacts.add(new FailedContactBean(getDummyContact(properties, csvValues),
-				"Exception raise while saving contact"));
+				"Access denied to update contact"));
 
-			return;
+			continue;
 		    }
 		    isMerged = true;
 		}
