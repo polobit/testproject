@@ -19,7 +19,7 @@ public class ShopifyAppUtil
 	    Query<ShopifyApp> query = dao.ofy().query(ShopifyApp.class);
 	    query.filter("shop", shop);
 	    ShopifyApp shopifyApp = query.get();
-	    if (shopifyApp.domain == null)
+	    if (shopifyApp == null)
 		return null;
 	    else
 		return shopifyApp.domain;
