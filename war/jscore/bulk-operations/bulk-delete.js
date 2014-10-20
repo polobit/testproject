@@ -38,31 +38,73 @@ $(function(){
 		});
 		if(checked){
 			
-			// customize delete confirmation message
-			if(!customize_delete_message(table))
-				return;
-			
-			// Customize the bulk delete operations
-			if(!customize_bulk_delete(id_array, data_array))
-				return;
-			
-			
-			$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
-			
-			var url = $(table).attr('url');
-			if(SELECT_ALL == true)
+			if(!canRunBulkOperations())
 			{
-				if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
-					url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+				showModalConfirmation("Bulk action", 
+						"You may not have permission to update some of the contacts selected. " +
+						"Proceeding with this operation will change the owner for only the contacts " +
+						"you are allowed to update.<br/><br/> Do you want to proceed?", 
+						function (){
+					
+					// Customize the bulk delete operations
+					if(!customize_bulk_delete(id_array, data_array))
+						return;
+					
+					
+					$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+					
+					var url = $(table).attr('url');
+					if(SELECT_ALL == true)
+					{
+						if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
+							url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+					}
+					
+					// For Active Subscribers table
+					if(SUBSCRIBERS_SELECT_ALL == true){	
+						if($(table).attr('id') == "active-campaign")
+							url = url + "&filter=all-active-subscribers";
+					}
+					
+					bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						}, 
+						function(){
+							
+							return;
+						},
+						function() {
+							
+						});
 			}
-			
-			// For Active Subscribers table
-			if(SUBSCRIBERS_SELECT_ALL == true){	
-				if($(table).attr('id') == "active-campaign")
-					url = url + "&filter=all-active-subscribers";
+			else
+			{
+				// customize delete confirmation message
+				if(!customize_delete_message(table))
+					return;
+				
+				// Customize the bulk delete operations
+				if(!customize_bulk_delete(id_array, data_array))
+					return;
+				
+				
+				$(this).after('<img class="bulk-delete-loading" style="padding-right:5px;margin-bottom:15px" src= "img/21-0.gif"></img>');
+				
+				var url = $(table).attr('url');
+				if(SELECT_ALL == true)
+				{
+					if($(table).attr('id') == "contacts" || $(table).attr('id') == "companies" )
+						url = url + "&filter=" + encodeURIComponent(getSelectionCriteria());
+				}
+				
+				// For Active Subscribers table
+				if(SUBSCRIBERS_SELECT_ALL == true){	
+					if($(table).attr('id') == "active-campaign")
+						url = url + "&filter=all-active-subscribers";
+				}
+				
+				bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
 			}
-			
-			bulk_delete_operation(url, id_array, index_array, table, undefined, data_array);
+						
 		}	
 		else
 		{
