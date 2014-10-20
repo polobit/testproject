@@ -322,10 +322,29 @@
 		<url-pattern>/backend/voice</url-pattern>
 		<url-pattern>/verification</url-pattern>
 	</servlet-mapping>
+	
 
-
-
-
+    <servlet>
+        <servlet-name>TwilioIOVoiceServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOVoiceServlet</servlet-class>
+    </servlet>  
+ 
+    <servlet-mapping>
+        <servlet-name>TwilioIOVoiceServlet</servlet-name>
+        <url-pattern>/twilioiovoice</url-pattern>
+    </servlet-mapping>
+	
+	<servlet>
+        <servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
+        <servlet-class>com.thirdparty.twilio.TwilioIOStatusCallBackServlet</servlet-class>
+    </servlet>   
+ 
+    <servlet-mapping>
+        <servlet-name>TwilioIOStatusCallBackServlet</servlet-name>
+        <url-pattern>/twilioiostatuscallback</url-pattern>
+    </servlet-mapping>
+    
+    
 	<servlet>
 		<servlet-name>ForgotDomain</servlet-name>
 		<jsp-file>/forgot-domain.jsp</jsp-file>
@@ -397,8 +416,7 @@
 		<url-pattern>/upload-google-document.jsp</url-pattern>
 		<url-pattern>/XeroServlet</url-pattern>
 		<url-pattern>/shopify</url-pattern>
-		<url-pattern>/auth/*</url-pattern>
-
+		<url-pattern>/auth/*</url-pattern>		
 	</filter-mapping>
 
 	<filter-mapping>

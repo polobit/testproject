@@ -209,9 +209,17 @@ function getTemplateUrls(templateName)
 	{
 		template_relative_urls.push("stripe.js");
 	}
+	else if (templateName.indexOf("twilioio") == 0)
+	{
+	template_relative_urls.push("twilioio.js");
+	}
 	else if (templateName.indexOf("twilio") == 0)
 	{
 		template_relative_urls.push("twilio.js");
+	}	
+	else if (templateName.indexOf("sip") == 0)
+	{
+	template_relative_urls.push("sip.js");
 	}
 	else if (templateName.indexOf("twitter") == 0)
 	{

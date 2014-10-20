@@ -11,10 +11,10 @@ $(function()
 		e.preventDefault();
 
 		// If noty do not have dialpad then add
-		if ($('.noty_message').find('.dialpad_btns').html() == null)
+		if ($('.noty_buttons').find('.dialpad_btns').html() == null)
 		{
 			var dialpad = $(getTemplate("dialpad"), {});
-			$(".noty_message").append(dialpad);
+			$(".noty_buttons").prepend(dialpad);
 		}
 		else
 		{

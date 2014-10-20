@@ -110,10 +110,9 @@ function sipSessionEventsListener(e /* SIPml.Session.Event */)
 			$(".contact-make-sip-call").show();
 			
 			// Contact with tel: is hidden
-			$(".contact-make-call").hide();
+			$(".contact-make-call").hide();		
+			$(".contact-make-twilio-call").hide();
 			
-			$(".make-call").show();
-
 			// enable notifications if not already done
 			if (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0)
 			{
