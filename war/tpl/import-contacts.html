@@ -15,11 +15,11 @@
 		</div>
 <input type="hidden" id ="type" value="contacts"/>
         <fieldset>
-			{{#hasScope "IMPORT_CONTACTS"}}
+			{{#canSyncContacts}}
            		<div class="btn upload" style="display:inline-block;">Upload CSV file</div>
 					{{else}}
            				<div class="btn" style="display:inline-block;" disabled>Upload CSV file</div>
-			{{/hasScope}}
+			{{/canSyncContacts}}
            
         </fieldset>
     </form>
@@ -34,11 +34,11 @@
 		</div>
 <input type="hidden" id ="type" value="company"/>
         <fieldset>
-			{{#hasScope "IMPORT_CONTACTS"}}
+			{{#canSyncContacts}}
            		<div class="btn upload" style="display:inline-block;">Upload CSV file</div>
 					{{else}}
            				<div class="btn" style="display:inline-block;" disabled>Upload CSV file</div>
-			{{/hasScope}}
+			{{/canSyncContacts}}
            
         </fieldset>
     </form>
