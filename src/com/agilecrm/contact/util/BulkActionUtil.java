@@ -405,7 +405,7 @@ public class BulkActionUtil
 
     public static void setSessionManager(DomainUser user)
     {
-	SessionManager.set(new UserInfo(null, user.email, user.name));
+	SessionManager.set(new UserInfo(user));
 	SessionManager.get().setDomainId(user.id);
     }
 

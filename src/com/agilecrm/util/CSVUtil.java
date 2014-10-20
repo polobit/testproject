@@ -254,6 +254,9 @@ public class CSVUtil
 
 	System.out.println(csvData.size());
 
+	System.out.println("available scopes for user " + domainUser.email + ", scopes = "
+		+ accessControl.getCurrentUserScopes());
+
 	// Counters to count number of contacts saved contacts
 	int savedContacts = 0;
 	int mergedContacts = 0;

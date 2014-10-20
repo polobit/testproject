@@ -24,6 +24,8 @@ public abstract class UserAccessControl
 
     protected Object entityObject = null;
 
+    private HashSet<UserAccessScopes> scopes = null;
+
     public static enum AccessControlClasses
     {
 	Contact(ContactAccessControl.class);
@@ -39,6 +41,9 @@ public abstract class UserAccessControl
     // Returns current user scopes
     public HashSet<UserAccessScopes> getCurrentUserScopes()
     {
+	if (scopes != null)
+	    return scopes;
+
 	// Gets user info from session manager
 	UserInfo info = SessionManager.get();
 
@@ -59,7 +64,9 @@ public abstract class UserAccessControl
 	    if (user == null)
 		return new LinkedHashSet<UserAccessScopes>(UserAccessScopes.customValues());
 
-	    info.setScopes(DomainUserUtil.getCurrentDomainUser().scopes);
+	    info.setScopes(user.scopes);
+
+	    scopes = user.scopes;
 	}
 
 	return info.getScopes();
