@@ -19,13 +19,14 @@ public class ShopifyAppServlet extends HttpServlet
 	String shopUrl = request.getParameter("shop");
 	String domainFromURL = request.getParameter("agile_domain");
 	String agileDomain = ShopifyAppUtil.getDomainByShop(shopUrl);
+	String fromAppPreferences = request.getParameter("pref");
+	String fromIndex = request.getParameter("i");
 	String redirectURL;
 
-	String fromIndex = request.getParameter("i");
 	if (StringUtils.equals(fromIndex, "yes"))
 	{
 	    String shopFromDb = ShopifyAppUtil.getShopFromDomain(domainFromURL);
-	    if(StringUtils.isBlank(shopFromDb))
+	    if (StringUtils.isBlank(shopFromDb))
 	    {
 		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString() + "&error=");
 	    }
@@ -33,6 +34,10 @@ public class ShopifyAppServlet extends HttpServlet
 	    {
 		redirectURL = new String("https://widgets.agilecrm.com/shopify/index.php?" + request.getQueryString() + "&error=true");
 	    }
+	}
+	else if (StringUtils.equals(fromAppPreferences, "yes"))
+	{
+	    redirectURL = new String("https://" + agileDomain + ".agilecrm.com/#web-rules");
 	}
 	else
 	{
