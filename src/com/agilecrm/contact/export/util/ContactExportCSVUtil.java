@@ -11,6 +11,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import com.agilecrm.contact.Contact;
 import com.agilecrm.contact.CustomFieldDef;
+import com.agilecrm.contact.Note;
 import com.agilecrm.contact.export.ContactCSVExport;
 import com.agilecrm.contact.util.CustomFieldDefUtil;
 import com.google.appengine.api.files.FileWriteChannel;
@@ -116,13 +117,68 @@ public class ContactExportCSVUtil
      */
     public static Map<String, Integer> getIndexMapOfCSVHeaders(String[] headers)
     {
-        Map<String, Integer> indexMap = new HashMap<String, Integer>();
-    
-        // Map with header name as key and their index as value
-        for (int i = 0; i < headers.length; i++)
-            indexMap.put(headers[i], i);
-    
-        return indexMap;
+	Map<String, Integer> indexMap = new HashMap<String, Integer>();
+
+	// Map with header name as key and their index as value
+	for (int i = 0; i < headers.length; i++)
+	    indexMap.put(headers[i], i);
+
+	return indexMap;
+    }
+
+    /**
+     * helper function will append note in contact entity this will add five
+     * note max for each contact if notes are more than 5 then it will ignore
+     * rest of notes
+     */
+    private static String[] addNotes(String[] contactData, List<Note> notes)
+    {
+	List<String> data = new ArrayList<String>();
+	data.addAll(Arrays.asList(contactData));
+	int count = 0;
+	for (Note note : notes)
+	{
+	    StringBuilder sb = new StringBuilder();
+	    sb.append(note.subject.trim()).append("\n"+note.description);
+	    data.add(sb.toString());
+	    count++;
+	    if (count == 5)
+		break;
+	}
+	// convert all data into string array
+	String[] finalData = new String[data.size()];
+	int i = 0;
+	for (String s : data)
+	{
+	    finalData[i] = s;
+	    i++;
+	}
+	return finalData;
+    }
+
+    /**
+     * helper function modify original header and add new Note value in header
+     * this function will add five header only as note
+     * 
+     * @param originalValues
+     * @return
+     */
+    private static String[] getHeaders(String[] originalValues)
+    {
+	ArrayList<String> data = new ArrayList<String>();
+	data.addAll(Arrays.asList(originalValues));
+	data.add("Note1");
+	data.add("Note2");
+	data.add("Note3");
+	data.add("Note4");
+	data.add("Note5");
+	String[] headers = new String[data.size()];
+	int i = 0;
+	for (String s : data)
+	{
+	    headers[i++] = s;
+	}
+	return headers;
     }
 
 }
