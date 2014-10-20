@@ -27,6 +27,7 @@ import com.agilecrm.subscription.restrictions.db.util.BillingRestrictionUtil.Err
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction;
 import com.agilecrm.subscription.restrictions.entity.DaoBillingRestriction.ClassEntities;
 import com.agilecrm.subscription.restrictions.exception.PlanRestrictedException;
+import com.agilecrm.user.access.util.UserAccessControlUtil;
 import com.agilecrm.util.email.SendMail;
 import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -131,6 +132,8 @@ public class ReportsUtil
     public static Map<String, Object> processReports(Reports report)
     {
 	SearchRule.addContactTypeRule(report.rules, Type.PERSON);
+
+	UserAccessControlUtil.checkReadAccessAndModifyTextSearchQuery(Contact.class.getSimpleName(), report.rules);
 
 	// Iterate through each filter and add results collection
 	// To store reports in collection
