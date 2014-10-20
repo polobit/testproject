@@ -879,19 +879,13 @@ public class CSVUtil
     public boolean isValidFields(Contact contact, Map<Object, Object> statusMap, List<FailedContactBean> failed,
 	    List<ContactField> properties, String[] csvValues)
     {
-	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME)))
+	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.FIRST_NAME))
+		&& StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "First name field can't be blank"));
+	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Name field can't be blank"));
 	    return false;
 	}
-	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.LAST_NAME)))
-	{
-	    buildCSVImportStatus(statusMap, ImportStatus.NAME_MANDATORY, 1);
-	    failed.add(new FailedContactBean(getDummyContact(properties, csvValues), "Last name field can't be blank"));
-	    return false;
-	}
-
 	if (StringUtils.isBlank(contact.getContactFieldValue(Contact.EMAIL)))
 	{
 	    buildCSVImportStatus(statusMap, ImportStatus.EMAIL_REQUIRED, 1);
