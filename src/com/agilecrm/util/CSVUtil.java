@@ -547,11 +547,10 @@ public class CSVUtil
 	    {
 		buildCSVImportStatus(status, ImportStatus.LIMIT_REACHED, limitExceeded);
 	    }
-	    if (accessDeniedToUpdate > 0)
-	    {
-		buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
-	    }
-
+	}
+	if (accessDeniedToUpdate > 0)
+	{
+	    buildCSVImportStatus(status, ImportStatus.ACCESS_DENIED, accessDeniedToUpdate);
 	}
 	else
 	{
