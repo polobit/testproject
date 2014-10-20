@@ -22,7 +22,7 @@ $(function()
 
 		if(!canRunBulkOperations())
 			{
-				showModalConfirmation("Bulk action", 
+				showModalConfirmation("Bulk Change Owner", 
 						"You may not have permission to update some of the contacts selected. " +
 						"Proceeding with this operation will change the owner for only the contacts " +
 						"you are allowed to update.<br/><br/> Do you want to proceed?", 
@@ -107,7 +107,7 @@ $(function()
 		
 		if(!canRunBulkOperations())
 		{
-			showModalConfirmation("Bulk action", 
+			showModalConfirmation("Bulk Assign Campaign", 
 					"You may not be the owner for some of the contacts selected. Proceeding with this operation will add only your contacts to the campaign.<br/><br/>Do you want to proceed?", 
 					show_bulk_campaign_assign_page
 					, function(){
@@ -188,8 +188,8 @@ $(function()
 
 		if(!canRunBulkOperations())
 		{
-			showModalConfirmation("Bulk action", 
-					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add/delete Tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+			showModalConfirmation("Bulk Add Tag", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add Tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
  
 					show_add_tag_bulkaction_form
 					, function(){
@@ -296,8 +296,8 @@ $(function()
 
 		if(!canRunBulkOperations())
 		{
-			showModalConfirmation("Bulk action", 
-					"You may not have permission to update some of the contacts selected. Proceeding with this operation will add/delete Tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
+			showModalConfirmation("Bulk Remove Tag", 
+					"You may not have permission to update some of the contacts selected. Proceeding with this operation will delete Tag to only the contacts you are allowed to update.<br/><br/> Do you want to proceed?" ,
  
 					show_remove_tag_bulkaction_form
 					, function(){
@@ -408,7 +408,7 @@ $(function()
 		
 		if(!canRunBulkOperations())
 		{
-			showModalConfirmation("Bulk action", 
+			showModalConfirmation("Bulk Email", 
 					"You may not be the owner for some of the contacts selected. Proceeding with this operation will send email to only your contacts.<br/><br/> Do you want to proceed?" ,
  
 					show_bulk_email_form

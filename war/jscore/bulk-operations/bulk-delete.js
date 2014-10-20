@@ -40,7 +40,7 @@ $(function(){
 			
 			if(!canRunBulkOperations())
 			{
-				showModalConfirmation("Bulk action", 
+				showModalConfirmation("Bulk Delete", 
 						"You may not have permission to update some of the contacts selected. " +
 						"Proceeding with this operation will change the owner for only the contacts " +
 						"you are allowed to update.<br/><br/> Do you want to proceed?", 
@@ -149,7 +149,7 @@ $(function(){
 				
 				if(!canRunBulkOperations())
 				{
-					showModalConfirmation("Bulk action", 
+					showModalConfirmation("Bulk Delete", 
 							"You may not have permission to update some of the contacts selected. " +
 							"Proceeding with this operation will change the owner for only the contacts " +
 							"you are allowed to update.<br/><br/> Do you want to proceed?", 
